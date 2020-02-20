@@ -1,45 +1,47 @@
 From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Thu, 20 Feb 2020 17:01:16 +0100
-Subject: [Buildroot] [PATCH v3 07/10] docs/manual/adding-packages-cargo:
- update doc for new infra
+Date: Thu, 20 Feb 2020 17:01:17 +0100
+Subject: [Buildroot] [PATCH v3 08/10] package/ripgrep: bump to version 11.0.1
 In-Reply-To: <20200220160119.3407-1-patrick.havelange@essensium.com>
 References: <20200220160119.3407-1-patrick.havelange@essensium.com>
-Message-ID: <20200220160119.3407-7-patrick.havelange@essensium.com>
+Message-ID: <20200220160119.3407-8-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This bump is needed because the old cached archive of the
+tarball of ripgrep is still using the old format and can't
+be used anymore (as the expected content of the final archive has
+changed with the recent infrastructure changes for cargo packages).
+
 Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
 ---
- docs/manual/adding-packages-cargo.txt | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+ package/ripgrep/ripgrep.hash | 2 +-
+ package/ripgrep/ripgrep.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
-index 9a496224e3..e7d03eb7b5 100644
---- a/docs/manual/adding-packages-cargo.txt
-+++ b/docs/manual/adding-packages-cargo.txt
-@@ -61,16 +61,8 @@ Those will then replace the commands from the cargo infrastructure.
- ==== About Dependencies Management
+diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
+index 8c48458cd8..1e70cbae5a 100644
+--- a/package/ripgrep/ripgrep.hash
++++ b/package/ripgrep/ripgrep.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 cb895cff182740c219fefbbaaf903e60f005a4ac4688cac1e43e5fbbbccc5a94 ripgrep-0.8.1.tar.gz
++sha256 c02fe3077c95872175b098d002f872a619195436569a7dff443bbb605bc27474 ripgrep-11.0.1.tar.gz
+ sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f LICENSE-MIT
+diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+index 97e9e2ce5f..1023b4bad8 100644
+--- a/package/ripgrep/ripgrep.mk
++++ b/package/ripgrep/ripgrep.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- A crate can depend on other libraries from crates.io or git repositories, listed
--in its Cargo.toml file. Before starting a build, Cargo usually downloads
--automatically them. This step can also be performed independently, via the
--+cargo fetch+ command.
-+in its Cargo.toml file. Before starting a build, the +cargo vendor+ command
-+will be run and will take care of downloading those dependencies.
- 
--Cargo maintains a local cache of the registry index and of git checkouts of the
--crates, whose location is given by +$CARGO_HOME+. As seen in the package
--Makefile example at line 15, this environment variable is set to
--+$(HOST_DIR)/share/cargo+.
--
--This dependency download mechanism is not convenient when performing an offline
--build, as Cargo will fail to fetch the dependencies. In that case, it is advised
--to generate a tarball of the dependencies using the +cargo vendor+ and add it to
--+FOO_EXTRA_DOWNLOADS+.
-+The final source tarball will contain all the required dependencies, effectively
-+permitting us to do an offline build.
+-RIPGREP_VERSION = 0.8.1
++RIPGREP_VERSION = 11.0.1
+ RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
+ RIPGREP_LICENSE = MIT
+ RIPGREP_LICENSE_FILES = LICENSE-MIT
 -- 
 2.17.1
