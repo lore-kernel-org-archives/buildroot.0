@@ -1,78 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 20 Feb 2020 19:59:17 +0100
-Subject: [Buildroot] [PATCH/next 2/2] replace MESA_EGL_NO_X11_HEADERS hack
- with upstream EGL_NO_X11
-In-Reply-To: <20200220185917.37908-1-bernd.kuhls@t-online.de>
-References: <20200220185917.37908-1-bernd.kuhls@t-online.de>
-Message-ID: <20200220185917.37908-2-bernd.kuhls@t-online.de>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Thu, 20 Feb 2020 13:57:29 -0600
+Subject: [Buildroot] [PATCH 1/2] package/nvidia-driver: fixup libraries
+ according to README
+Message-ID: <20200220195730.5011-1-vfazio@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mesa3d 20.0.0 deprecated MESA_EGL_NO_X11_HEADERS:
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=6202a13b71e18dc31ba7e2f4ea915b67eacc1ddb
+Create a symlink for libglx.so and drop libnvidia-wfb.so (aka libwfb.so)
+since all selectable xserver versions in Buildroot provide their own.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+https://download.nvidia.com/XFree86/Linux-x86_64/390.67/README/installedcomponents.html
+
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 ---
- package/mali-t76x/egl.pc                                  | 2 +-
- package/mali-t76x/glesv2.pc                               | 2 +-
- package/nvidia-driver/gl.pc                               | 2 +-
- ...e-forward-cflags-from-.pc-files-to-waffle-cflags.patch | 8 ++++----
- 4 files changed, 7 insertions(+), 7 deletions(-)
+Depends on http://patchwork.ozlabs.org/patch/1181847/
 
-diff --git a/package/mali-t76x/egl.pc b/package/mali-t76x/egl.pc
-index 614b700d64..3de3c3ffd3 100644
---- a/package/mali-t76x/egl.pc
-+++ b/package/mali-t76x/egl.pc
-@@ -8,4 +8,4 @@ Description: ARM Mali implementation of EGL
- Version: 1.5
- Requires:
- Libs: -L${libdir} -lEGL -lGLESv2
--Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-+Cflags: -I${includedir} -DEGL_NO_X11
-diff --git a/package/mali-t76x/glesv2.pc b/package/mali-t76x/glesv2.pc
-index 5997eac63f..6521a3862d 100644
---- a/package/mali-t76x/glesv2.pc
-+++ b/package/mali-t76x/glesv2.pc
-@@ -8,4 +8,4 @@ Description: ARM Mali implementation of OpenGL ESv2
- Version: 2.0
- Requires:
- Libs: -L${libdir} -lGLESv2 -lGLESv1_CM
--Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-+Cflags: -I${includedir} -DEGL_NO_X11
-diff --git a/package/nvidia-driver/gl.pc b/package/nvidia-driver/gl.pc
-index d822763f57..d01f5d6944 100644
---- a/package/nvidia-driver/gl.pc
-+++ b/package/nvidia-driver/gl.pc
-@@ -7,5 +7,5 @@ Name: gl
- Description: Nvidia OpenGL library
- Version: 10.4.2
- Libs: -L${libdir} -lGL -lm -lXext -lX11 -ldl
--Cflags: -I${includedir}  -DMESA_EGL_NO_X11_HEADERS
-+Cflags: -I${includedir}  -DEGL_NO_X11
- glx_tls: no
-diff --git a/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch b/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
-index ffc1b5b8b1..126aa93300 100644
---- a/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
-+++ b/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
-@@ -4,12 +4,12 @@ Date: Sun, 24 Dec 2017 00:11:45 +0100
- Subject: [PATCH] cmake: forward cflags from *.pc files to waffle cflags
+ package/nvidia-driver/nvidia-driver.mk | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index baf2ba2be5..b0ff277640 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -94,8 +94,7 @@ endif
+ # We refer to the destination path; the origin file has no directory component
+ NVIDIA_DRIVER_X_MODS = \
+ 	drivers/nvidia_drv.so \
+-	extensions/libglx.so.$(NVIDIA_DRIVER_VERSION) \
+-	libnvidia-wfb.so.$(NVIDIA_DRIVER_VERSION)
++	extensions/libglx.so.$(NVIDIA_DRIVER_VERSION)
  
- When building mesa egl without x11 and gles2 the headers need a
--MESA_EGL_NO_X11_HEADERS define to avoid including X11 headers.
-+EGL_NO_X11 define to avoid including X11 headers.
+ endif # X drivers
  
--This define MESA_EGL_NO_X11_HEADERS  is lost while building waffle
--since CGLAGS defined by pc files are not used.
-+This define EGL_NO_X11 is lost while building waffle
-+since CFLAGS defined by pc files are not used.
+@@ -195,4 +194,14 @@ define NVIDIA_DRIVER_INSTALL_TARGET_CMDS
+ 	$(NVIDIA_DRIVER_INSTALL_KERNEL_MODULE)
+ endef
  
--MESA_EGL_NO_X11_HEADERS is defined in CFLAGS from egl.pc.
-+EGL_NO_X11 is defined in CFLAGS from egl.pc.
- 
- Signed-off-by: Romain Naour <romain.naour@gmail.com>
- ---
++define NVIDIA_DRIVER_SYMLINK_LIBGLX
++	# libglx needs a symlink according to the driver README. It has no SONAME
++	ln -sf libglx.so.$(NVIDIA_DRIVER_VERSION) \
++		$(TARGET_DIR)/usr/lib/xorg/modules/extensions/libglx.so
++endef
++
++# Due to a conflict with xserver_xorg-server, this needs to be done as part of
++# finalizing the target filesystem, otherwise the wrong version is used.
++NVIDIA_DRIVER_TARGET_FINALIZE_HOOKS += NVIDIA_DRIVER_SYMLINK_LIBGLX
++
+ $(eval $(generic-package))
 -- 
-2.20.1
+2.25.1
