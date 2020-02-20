@@ -1,93 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Feb 2020 19:15:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/restorecond: Fix restorecond
- init script.
-In-Reply-To: <20200204100942.421804-1-aduskett@gmail.com>
-References: <20200204100942.421804-1-aduskett@gmail.com>
-Message-ID: <20200220191528.09723ed0@windsurf>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Thu, 20 Feb 2020 19:27:23 +0100
+Subject: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: iterate over
+ CVEs in streaming
+Message-ID: <20200220182723.52615-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The NVD files that are used to build the list of CVEs affecting
+Buildroot packages are quite large (a few hundreds MB of json),
+and cause the pkg-stats scripts to have a huge memory footprint
+(a few GB with Python 2.7).
 
-On Tue,  4 Feb 2020 02:09:42 -0800
-Adam Duskett <aduskett@gmail.com> wrote:
+However, because we only need to iterate on CVE items one by one,
+we can process them in streaming (ie decoding one CVE at a time
+from the JSON representation). Because the json module from the
+python standard library does not support such a mode of operation,
+we switch to the third-party package ijson, which is compatible
+with both Python 2 and Python3.
 
-> diff --git a/package/restorecond/S20restorecond b/package/restorecond/S20restorecond
-> new file mode 100644
-> index 0000000000..1abf678177
-> --- /dev/null
-> +++ b/package/restorecond/S20restorecond
+To run the script with these modifications, one should install
+the ijson python package. This can be done with pip:
+`pip install ijson`. On Debian based distributions, this can
+also be done with the apt package manager:
+`apt install python-ijson`.
 
-This script needs to be rewritten to follow the coding style / best
-practices of package/busybox/S01syslogd, which is our reference init
-script.
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ support/scripts/pkg-stats | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> @@ -0,0 +1,45 @@
-> +#!/bin/sh
-> +RESTORECOND=/usr/sbin/restorecond
-> +PIDFILE=/run/restorecond.pid
-> +if [ -x /usr/sbin/selinuxenabled ]; then
-
-Do we need to check if it's available ? Isn't selinuxenabled one of the
-dependencies of this package anyway ?
-
-> +  if ! /usr/sbin/selinuxenabled; then
-> +    echo "Selinux is not enabled!"
-> +    exit 7
-
-Why 7 ?
-
-> +  fi
-> +fi
-> +
-> +# Check that we are root ... so non-root users stop here
-> +if [ $EUID != 0 ]; then
-> +  echo "Restorecond must be ran as root!"
-
-Useless, init scripts in Buildroot are executed as root.
-
-> +  exit 4
-> +fi
-> +
-> +test -x /usr/sbin/restorecond  || exit 5
-> +test -f /etc/selinux/restorecond.conf  || exit 6
-
-Please drop these checks as well.
-
-> +
-> +case "$1" in
-> +  start)
-> +    echo "Starting restorecond..."
-> +    unset HOME MAIL USER USERNAME
-> +    start-stop-daemon -S -x "${RESTORECOND}" -p "${PIDFILE}"
-> +  ;;
-> +  stop)
-> +  echo "Stopping restorecond..."
-> +  start-stop-daemon -K -x "${RESTORECOND}" -p "${PIDFILE}" -o
-> +  ;;
-> +  reload|force-reload)
-> +  echo "Reloading restorecond..."
-> +  restart
-> +  ;;
-> +  restart)
-> +  stop
-> +  start
-
-Follow the coding style of package/busybox/S01syslogd here.
-
-> +  condrestart)
-> +  [ -e /var/lock/subsys/restorecond ] && restart
-
-We don't have any condrestart target in any other script.
-
-Best regards,
-
-Thomas
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index c113cf9606..7721d98459 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -25,6 +25,7 @@ import re
+ import subprocess
+ import requests  # URL checking
+ import json
++import ijson
+ import certifi
+ import distutils.version
+ import time
+@@ -231,11 +232,11 @@ class CVE:
+         for year in range(NVD_START_YEAR, datetime.datetime.now().year + 1):
+             filename = CVE.download_nvd_year(nvd_dir, year)
+             try:
+-                content = json.load(gzip.GzipFile(filename))
++                content = ijson.items(gzip.GzipFile(filename), 'CVE_Items.item')
+             except:
+                 print("ERROR: cannot read %s. Please remove the file then rerun this script" % filename)
+                 raise
+-            for cve in content["CVE_Items"]:
++            for cve in content:
+                 yield cls(cve['cve'])
+ 
+     def each_product(self):
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.24.1
