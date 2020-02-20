@@ -1,61 +1,54 @@
-From: Julien Olivain <juju@cotds.org>
-Date: Thu, 20 Feb 2020 21:28:49 +0100
-Subject: [Buildroot] [PATCH 2/2] package/freescale-imx/firmware-imx:
- install mx8qm-ahab-container.img
-In-Reply-To: <20200220021858.700249-2-thomas.petazzoni@bootlin.com>
-References: <20200220021858.700249-1-thomas.petazzoni@bootlin.com>
- <20200220021858.700249-2-thomas.petazzoni@bootlin.com>
-Message-ID: <7545eeef70f4b10fee1944b35832e152@cotds.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 Feb 2020 21:31:59 +0100
+Subject: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: iterate over
+ CVEs in streaming
+In-Reply-To: <CAAXf6LXfTgKQT8Ua8Hqs0MZDp0961Eh+-_aMcxqC_VE8mMSqmQ@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Thu, 20 Feb 2020 21:11:15
+ +0100")
+References: <20200220182723.52615-1-titouan.christophe@railnova.eu>
+ <CAAXf6LXfTgKQT8Ua8Hqs0MZDp0961Eh+-_aMcxqC_VE8mMSqmQ@mail.gmail.com>
+Message-ID: <87a75d2e68.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-Patch looks good. Thanks.
+ > Hi Titouan,
+ > El jue., 20 feb. 2020 a las 19:27, Titouan Christophe
+ > (<titouan.christophe@railnova.eu>) escribi?:
+ >> 
+ >> The NVD files that are used to build the list of CVEs affecting
+ >> Buildroot packages are quite large (a few hundreds MB of json),
+ >> and cause the pkg-stats scripts to have a huge memory footprint
+ >> (a few GB with Python 2.7).
+ >> 
+ >> However, because we only need to iterate on CVE items one by one,
+ >> we can process them in streaming (ie decoding one CVE at a time
+ >> from the JSON representation). Because the json module from the
+ >> python standard library does not support such a mode of operation,
+ >> we switch to the third-party package ijson, which is compatible
+ >> with both Python 2 and Python3.
+ >> 
+ >> To run the script with these modifications, one should install
+ >> the ijson python package. This can be done with pip:
+ >> `pip install ijson`. On Debian based distributions, this can
+ >> also be done with the apt package manager:
+ >> `apt install python-ijson`.
+ >> 
+ >> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
-On 2020-02-20 03:18, Thomas Petazzoni wrote:
-> This commit ensures the mx8qm-ahab-container.img file gets installed
-> for the i.MX8 platform (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8). This
-> is needed for board/freescale/common/imx/imx8-bootloader-prepare.sh to
-> find this file when creating the bootloader image.
-> 
-> Note that it means that the default FIRMWARE_IMX_INSTALL_TARGET_CMDS
-> that applies to all platforms except i.MX8M, i.MX8MM and i.MX8X also
-> no longer applies to i.MX8. But this is anyway probably relevant, as
-> most likely i.MX8 also needs a special variant of
-> FIRMWARE_IMX_INSTALL_TARGET_CMDS.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> NOTE: some review on this patch from i.MX people would be greatly
-> appreciated. Thanks!
-> ---
->  package/freescale-imx/firmware-imx/firmware-imx.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk
-> b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> index b251fcda2a..b79973a104 100644
-> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> @@ -59,6 +59,14 @@ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
->  	$(INSTALL) -D -m 0644 $(@D)/firmware/vpu/vpu_fw_imx8_enc.bin \
->  		$(TARGET_DIR)/lib/firmware/vpu/vpu_fw_imx8_enc.bin
->  endef
-> +else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
-> +FIRMWARE_IMX_INSTALL_IMAGES = YES
-> +define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
-> +	# SECO firmware is needed when generating imx8-boot-sd.bin which
-> +	# is done in post-image script.
-> +	cp $(@D)/firmware/seco/mx8qm-ahab-container.img \
-> +		$(BINARIES_DIR)/ahab-container.img
-> +endef
->  else
->  define FIRMWARE_IMX_INSTALL_TARGET_CMDS
->  	mkdir -p $(TARGET_DIR)/lib/firmware/imx
+ > This is _way_ better. In my test run observing top output, resident
+ > memory stayed around 50 MB.
 
-Reviewed-by: Julien Olivain <juju@cotds.org>
-Tested-by: Julien Olivain <juju@cotds.org>
+Nice!
+
+ > Reviewed-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
