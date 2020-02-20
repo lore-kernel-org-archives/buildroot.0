@@ -1,61 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Feb 2020 21:32:23 +0100
-Subject: [Buildroot] [git commit] docs/website: add commercial support
- section
-Message-ID: <20200220202309.74C428E5C1@busybox.osuosl.org>
+Date: Thu, 20 Feb 2020 21:31:05 +0100
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: iterate over
+ CVEs in streaming
+Message-ID: <20200220202309.66BFE8E604@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d84b08507d04884c18a2c14e196fa5052bcc448
+commit: https://git.buildroot.net/buildroot/commit/?id=712f81c41cde9d58c750ae2b1617831c0b07ccbd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a section to the support page for commercial support.
+The NVD files that are used to build the list of CVEs affecting
+Buildroot packages are quite large (a few hundreds MB of json),
+and cause the pkg-stats scripts to have a huge memory footprint
+(a few GB with Python 2.7).
 
-Add Mind, Bootlin and Smile in that section.
+However, because we only need to iterate on CVE items one by one,
+we can process them in streaming (ie decoding one CVE at a time
+from the JSON representation). Because the json module from the
+python standard library does not support such a mode of operation,
+we switch to the third-party package ijson, which is compatible
+with both Python 2 and Python3.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Romain Naour <romain.naour@smile.fr>
+To run the script with these modifications, one should install
+the ijson python package. This can be done with pip:
+`pip install ijson`. On Debian based distributions, this can
+also be done with the apt package manager:
+`apt install python-ijson`.
+
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Reviewed-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Tested-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/support.html | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ support/scripts/pkg-stats | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/docs/website/support.html b/docs/website/support.html
-index 1a5ce9e225..6c602b42d2 100644
---- a/docs/website/support.html
-+++ b/docs/website/support.html
-@@ -92,6 +92,31 @@
-     </div>
-   </div>
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index c113cf9606..7721d98459 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -25,6 +25,7 @@ import re
+ import subprocess
+ import requests  # URL checking
+ import json
++import ijson
+ import certifi
+ import distutils.version
+ import time
+@@ -231,11 +232,11 @@ class CVE:
+         for year in range(NVD_START_YEAR, datetime.datetime.now().year + 1):
+             filename = CVE.download_nvd_year(nvd_dir, year)
+             try:
+-                content = json.load(gzip.GzipFile(filename))
++                content = ijson.items(gzip.GzipFile(filename), 'CVE_Items.item')
+             except:
+                 print("ERROR: cannot read %s. Please remove the file then rerun this script" % filename)
+                 raise
+-            for cve in content["CVE_Items"]:
++            for cve in content:
+                 yield cls(cve['cve'])
  
-+  <div class="panel panel-primary">
-+    <div class="panel-heading">Commercial support</div>
-+    <div class="panel-body">
-+      <p>In addition, the following companies are able to provide commercial
-+	 support. Only companies heavily involved in Buildroot maintenance and
-+	 community are listed here.</p>
-+
-+      <div class="row">
-+	<div class="col-sm-12">
-+	  <center>
-+	    <a href="https://bootlin.com/engineering/">
-+	      <img src="images/bootlin-logo.png" style="max-width:200px; margin-right:40px;"/>
-+	    </a>
-+	    <a href="https://mind.be/services/buildroot.html">
-+	      <img src="images/mind-logo.png" style="max-width:200px; margin-right:40px;"/>
-+	    </a>
-+	    <a href="https://www.smile.eu/en/offers/embedded-iot">
-+	      <img src="images/smile-logo.png" style="max-width:200px; margin-right:40px;"/>
-+	    </a>
-+	  </center>
-+	</div>
-+      </div>
-+    </div>
-+  </div>
-+
- </div><!--/.col-sm-10 -->
- </div><!--/.row -->
- </div>
+     def each_product(self):
