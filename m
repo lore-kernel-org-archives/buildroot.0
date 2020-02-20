@@ -1,111 +1,66 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 20 Feb 2020 23:56:41 +0100
-Subject: [Buildroot] QtWebEngine on RPI 0 W
-In-Reply-To: <20200218145224.3f449bac@gmx.net>
-References: <1579861270269-0.post@n4.nabble.com>
- <20200125172550.45366ce5@gmx.net>
- <1580197267384-0.post@n4.nabble.com>
- <20200128085828.5959e493@gmx.net> <20200128104326.030b51d9@gmx.net>
- <1580384329954-0.post@n4.nabble.com>
- <20200130132047.5d82cab0@gmx.net>
- <1580734278053-0.post@n4.nabble.com>
- <1580902462241-0.post@n4.nabble.com>
- <20200205141214.075cf5a3@gmx.net>
- <1580908839250-0.post@n4.nabble.com>
- <20200218145224.3f449bac@gmx.net>
-Message-ID: <20200220235641.1b8be4c1@gmx.net>
+Date: Fri, 21 Feb 2020 00:02:19 +0100
+Subject: [Buildroot] [PATCH v1] package/qt5webengine: fix translations
+ target install path
+In-Reply-To: <20200220074148.8026-1-ps.report@gmx.net>
+References: <20200220074148.8026-1-ps.report@gmx.net>
+Message-ID: <20200221000219.1351a2fd@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Rafa,
+On Thu, 20 Feb 2020 08:41:48 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
 
-On Tue, 18 Feb 2020 14:52:24 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
-
-> Hello Rafa,
+> Through the evolution of the qt5webengine package patch ([1], [2])
+> until the initial commit ([3]) the translations target install
+> path got mangled resulting in a double trailing qtwebengine_locales
+> path:
+>   /usr/translations/qtwebengine_locales/qtwebengine_locales
+> Instead of:
+>   /usr/translations/qtwebengine_locales
 >
-> On Wed, 5 Feb 2020 07:20:39 -0600 (CST), rscr <rafacrespiramon@gmail.com> wrote:
+> Fixes the translations runtime access failure resulting in the
+> following warning:
 >
-> > > Hi again,
-> > >
-> > > I have tested the QtWebEngine with a qt example and I got:
-> > >
-> > > # ./minimal -platform eglfs
-> > > Illegal instruction
-> > >
-> > > Any idea of what could be causing it?
-> > >
-> > >Hard to say without further information..., did your compile
-> > >minimal yourself or did you enable 'BR2_PACKAGE_QT5BASE_EXAMPLES=y'
-> > >and used the one installed as
-> > '/usr/lib/qt/examples/webenginewidgets/minimal/minimal'
-> > >on the target?
-> >
-> > I had enabled 'BR2_PACKAGE_QT5BASE_EXAMPLES=y' and I have used the one in
-> > '/usr/lib/qt/examples/webenginewidgets/minimal/minimal'
-> >
-> > Result of 'file minimal':
-> >
-> > minimal: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically
-> > linked, interpreter /lib/ld-, for GNU/Linux 4.19.0, stripped
-> >
-> > I have no problems running other samples like the qtvirtualkeyboard or touch
-> > ones
-> >
-> >
-> > >Please provide a complete .config (or defconfig) file...
-> >
-> > Here my defconfig:  cp4_defconfig.cp4_defconfig
-> > <http://buildroot-busybox.2317881.n4.nabble.com/file/t2824/cp4_defconfig.cp4_defconfig>
-> >
-> >
-> > >Still using buildroot-2019.02.09?
-> >
-> > Yes
+>   WARNING:resource_bundle_qt.cpp(116): locale_file_path.empty() for locale
 >
-> I can confirm your crash/illegal instruction with the provided config
-> using minimal example on RPi0 (it crashes somewhere in the static
-> constructors)...
+> [1] http://lists.busybox.net/pipermail/buildroot/2015-July/132010.html
+> [2] https://patchwork.ozlabs.org/patch/640633
+> [3] https://git.buildroot.net/buildroot/commit/?id=89080bac9bc47946a09c1e74f2f872363bf6785b
+>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/qt5/qt5webengine/qt5webengine.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+> index 1d5ee8d819..2b41ab79d0 100644
+> --- a/package/qt5/qt5webengine/qt5webengine.mk
+> +++ b/package/qt5/qt5webengine/qt5webengine.mk
+> @@ -90,8 +90,7 @@ define QT5WEBENGINE_INSTALL_TARGET_LIBS
+>  	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebEngine*.so.* $(TARGET_DIR)/usr/lib
+>  	cp -dpf $(STAGING_DIR)/usr/libexec/QtWebEngineProcess $(TARGET_DIR)/usr/libexec/
+>  	cp -dpfr $(STAGING_DIR)/usr/resources/ $(TARGET_DIR)/usr/
+> -	mkdir -p $(TARGET_DIR)/usr/translations/qtwebengine_locales/
+> -	cp -dpfr $(STAGING_DIR)/usr/translations/qtwebengine_locales $(TARGET_DIR)/usr/translations/qtwebengine_locales/
+> +	cp -dpfr $(STAGING_DIR)/usr/translations/qtwebengine_locales $(TARGET_DIR)/usr/translations/
 
-And finally found the root cause of the problem, the qtwebengine configure step
-determines the wrong compile flags for the chromium build system, simple
-using some (wrong) ARMv7 arm defaults instead ARMv6 for the rpi zero...
+My latest complete build for the rpi zero case resulted in all the *.pak files directly
+under /usr/translations (instead of /usr/translations/qtwebengine_locales), seems the
+removing of the mkdir command was a mistake..., seems I did only
+  rm -r target/usr/translations/qtwebengine_locales
+instead of
+  rm -r target/usr/translations
+for the test...
 
-A proof-of-concept patch sent to the mailing list, see [1]...
-
-With the patch applied I can start qtwebengine examples minimal
-and quicknanobrowser...
+Updated patch will follow...
 
 Regards,
 Peter
 
-[1] https://patchwork.ozlabs.org/patch/1241702/
 
+>  endef
+>  endif
 >
-> Regards,
-> Peter
->
-> >
-> > >Regards,
-> > >Peter
-> >
-> > Kind Regards,
-> >
-> > Rafa
-> >
-> >
-> >
-> >
-> > --
-> > Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
