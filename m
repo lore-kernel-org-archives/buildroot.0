@@ -1,48 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Feb 2020 03:01:14 +0100
-Subject: [Buildroot] [PATCH 1/3] toolchain: add hidden
- BR2_TOOLCHAIN_HAS_SSP_STRONG boolean
+Date: Thu, 20 Feb 2020 03:01:15 +0100
+Subject: [Buildroot] [PATCH 2/3]
+ toolchain/toolchain-external/toolchain-external-custom: add option to
+ indicate SSP_STRONG support
 In-Reply-To: <20200220020117.695236-1-thomas.petazzoni@bootlin.com>
 References: <20200220020117.695236-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200220020117.695236-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20200220020117.695236-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will allow toolchain to indicate if they support
--fstack-protector-strong or not.
+This commit adds a user-visible option
+BR2_TOOLCHAIN_EXTERNAL_HAS_SSP_STRONG, which will allow the user to
+indicate if the custom external toolchain does or does not have
+SSP_STRONG support. Depending on this, the user will be able to use
+(or not) the BR2_SSP_STRONG option.
 
-Whenever the gcc version is >= 4.9, we always have SSP_STRONG support
-if we have SSP support. However, some toolchains older than gcc 4.9
-might have backported SSP_STRONG support, which is why we cannot rely
-just on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9.
+Checking if what the user said is true or not about this is already
+done in toolchain/toolchain-external/pkg-toolchain-external.mk:
 
-Having this "default" value allows to avoid adding a "select
-BR2_TOOLCHAIN_HAS_SSP_STRONG" in the internal toolchain logic plus in
-almost external toolchains. But it allows custom external toolchains
-that are pre-4.9 to potentially declare that they support strong SSP.
+        $$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC),$(BR2_SSP_OPTION))
+
+If the user selects BR2_SSP_STRONG, this will check if
+-fstack-protector-strong is really supported.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- toolchain/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../toolchain-external-custom/Config.in.options      | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 973c03254f..87509f3d64 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -189,6 +189,10 @@ config BR2_TOOLCHAIN_HAS_THREADS_NPTL
- config BR2_TOOLCHAIN_HAS_SSP
- 	bool
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 302f6babac..c8cd2c03cc 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -410,6 +410,18 @@ config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
+ 	  leave the default value, Buildroot will tell you if it's
+ 	  correct or not.
  
-+config BR2_TOOLCHAIN_HAS_SSP_STRONG
-+	bool
-+	default y if BR2_TOOLCHAIN_HAS_SSP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP_STRONG
++	bool "Toolchain has SSP strong support?"
++	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 && BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 && BR2_TOOLCHAIN_EXTERNAL_MUSL
++	depends on BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
++	select BR2_TOOLCHAIN_HAS_SSP_STRONG
++	help
++	  Selection this option if your external toolchain has strong
++	  Stack Smashing Protection support enabled. If you don't
++	  know, leave the default value, Buildroot will tell you if
++	  it's correct or not.
 +
- config BR2_TOOLCHAIN_HAS_UCONTEXT
- 	bool
- 
+ config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
+ 	bool "Toolchain has RPC support?"
+ 	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
 -- 
 2.24.1
