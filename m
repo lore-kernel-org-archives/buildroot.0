@@ -1,40 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Feb 2020 08:03:11 +0100
-Subject: [Buildroot] [PATCH v3 1/2] support/scripts/pkg-stats: add
- support for CVE reporting
-In-Reply-To: <CAAXf6LWgtJ2LvtFArhbGk7Bg4__eqX1bC7At=VNYn=ROFP=GvA@mail.gmail.com>
- (Thomas De Schampheleire's message of "Thu, 20 Feb 2020 07:31:37
- +0100")
-References: <20200215124417.236492-1-titouan.christophe@railnova.eu>
- <20200215124417.236492-2-titouan.christophe@railnova.eu>
- <20200219194858.11b317f6@windsurf>
- <CAAXf6LV8MSXPGrQW2GUhJcR4pjupw2EHFb7H6x4R0OkbrYFiMQ@mail.gmail.com>
- <87mu9ecldc.fsf@dell.be.48ers.dk>
- <CAAXf6LWgtJ2LvtFArhbGk7Bg4__eqX1bC7At=VNYn=ROFP=GvA@mail.gmail.com>
-Message-ID: <875zg1d9lc.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 20 Feb 2020 07:27:15 +0000
+Subject: [Buildroot] [Bug 12416] qt5webengine should not use WEBENGINE_CONFIG
+In-Reply-To: <bug-12416-163@https.bugs.busybox.net/>
+References: <bug-12416-163@https.bugs.busybox.net/>
+Message-ID: <bug-12416-163-8swI6dU7YE@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=12416
 
-Hi,
+--- Comment #2 from JeffyCN <jeffy.chen@rock-chips.com> ---
+(In reply to Peter Seiderer from comment #1)
+Hi Peter,
 
- >> Or perhaps something that doesn't load the entire json structure into
- >> memory? Jsonslicer seems like a possible solution:
- >> 
- >> https://pypi.org/project/jsonslicer/
+Thanks for noticing that.
 
- > Interesting, I hadn't seen it.
- > Note that we'll need to make the code py3-ready because jsonslicer is
- > python 3.4+ only.
+We are using a custom version of buildroot(2018.02-rc3 with qt5 bumpped to
+5.12.2):
+https://github.com/rockchip-linux/buildroot/tree/rockchip/2018.02-rc3
 
-Another option is ijson: https://pypi.org/project/ijson/
+Configs: rockchip_*_defconfig, running on a few arm/arm64 based
+platforms(rockchip evb boards)
 
-Which is available for both python 2.x and 3.x and is packaged in Debian
-(and perhaps elsewhere).
+We've tested minimal too, did see some issues on arm 32bit platforms:
+1/ 5.12.2 would report segfaults, should be fine for the newer versions(e.g.
+5.12.5):
+https://github.com/rockchip-linux/buildroot/commit/6e4fc810cdea122b1bd86c8649d276c485f794f9
+
+2/ I can't recall the exact phenomenon, could be the same as RaspberryPi's...
+
+It seems like the chromium might be compiled with different fpu setting than
+the other packages on arm 32bit platform, which is because it would try to
+detect neon support from the qt5base's CFLAGS and currently buildroot would not
+specify that there, but embedded in the gcc toolchain instead:
+
+qt5webengine-5.12.2$ vi src/core/config/linux.pri
+    # TODO: use neon detection from qtbase
+    !lessThan(MARMV, 8) {
+        gn_args += arm_use_neon=true
+    } else {
+        MFPU = $$extractCFlag("-mfpu=.*")
+        !isEmpty(MFPU):contains(MFPU, ".*neon.*") {
+            gn_args += arm_use_neon=true
+        } else {
+            gn_args += arm_use_neon=false
+            # If the toolchain does not explicitly specify to use NEON
+instructions
+            # we use arm_neon_optional for ARMv7
+            equals(MARMV, 7): gn_args += arm_optionally_use_neon=true
+        }
+    }
+
+https://github.com/rockchip-linux/buildroot/commit/8e832026edbb6e70df283629dadca981854866ad
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
