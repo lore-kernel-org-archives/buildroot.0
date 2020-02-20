@@ -1,267 +1,112 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 20 Feb 2020 09:53:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5webengine: Fix building
- against system ffmpeg
-In-Reply-To: <CAOgXH4fOzewfqw2JOK-R8O1QbzwFi6nT+ivFD7ZcN0H0tQ19mg@mail.gmail.com>
-References: <CAOgXH4cKir4gopXC8vi0rENaamo4aw=Epv2dShmCgRv3wwNFQg@mail.gmail.com>
- <20200218143854.1cbe341e@gmx.net>
- <CAOgXH4fOzewfqw2JOK-R8O1QbzwFi6nT+ivFD7ZcN0H0tQ19mg@mail.gmail.com>
-Message-ID: <20200220095326.63f3783a@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 Feb 2020 10:05:58 +0100
+Subject: [Buildroot] [PATCH 3/3] package/pkg-meson.mk: explicitly
+ specify pkg-config settings
+In-Reply-To: <20200219213841.3a1fb7a5@windsurf>
+References: <20200205103304.2515942-1-arnout@mind.be>
+ <20200205103304.2515942-3-arnout@mind.be> <20200219213841.3a1fb7a5@windsurf>
+Message-ID: <96557720-64d3-67d3-537d-f30dcb69c0bf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nathan,
 
-On Wed, 19 Feb 2020 15:04:24 -0500, Nathan Ford <nford@westpond.com> wrote:
 
-> Hello Peter,
->
-> On Tue, Feb 18, 2020 at 8:38 AM Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > Hello Nathan,
-> >
-> > thanks for taking care of bug 12416 and the provided patch!
-> >
-> > On Wed, 22 Jan 2020 11:19:22 -0500, Nathan Ford <nford@westpond.com> wrote:
-> >
-> > >  As of QT 5.10 the WEBENGINE_CONFIG options have been
-> > >  removed in favor of configure command line options.
-> > >  dist/changes-5.9.0 and dist/changes-5.10.0 document
-> > >  this.
-> >
-> > No need for additional indent here...
-> >
-> > >
-> > > qt5webengine also now requires webp mux support or the auto
-> > > detection of ffmpeg will fail.
-> > >
-> > > This fixes bug 12416
-> >
-> > Your patch is based on the one provided in the bug report [1]
-> > (plus the additional webp_mux and alsa changes)?
-> >
-> > If so mention it here ;-)
->
-> My Bad. Will fix.
+On 19/02/2020 21:38, Thomas Petazzoni wrote:
+> Hello Arnout,
+> 
+> On Wed,  5 Feb 2020 11:33:04 +0100
+> "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+> 
+>> meson is able to distinguish between host (= native) and target (=
+>> cross) compilation. It will explicitly pass different options to
+>> pkg-config to distinguish them. Therefore, we don't need to use the
+>> pkg-config wrapper when using meson, and can instead pass the pkg-config
+>> settings through the cross-compilation.conf.
+>>
+>> This is important because in some situations (e.g. for the Python
+>> configuration), meson sets the PKG_CONFIG_LIBDIR variable to a different
+>> value before calling pkg-config. Relying on our wrapper script doesn't
+>> work in that case (except if the script would unconditionally set
+>> PKG_CONFIG_LIBDIR, which it doesn't do at the moment).
+>>
+>> Add the sys_root and pkg_config_lib settings to cross-compilation.conf
+>> and use pkgconf directly instead of the wrapper.
+>>
+>> Note that this requires us to substitute STAGING_DIR as well, with an
+>> absolute path. This is not a big deal since cross-compilation.conf is
+>> regenerated for every package.
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> Unfortunately, this breaks the build of libglib2 in static linking
+> scenarios:
+> 
+>   http://autobuild.buildroot.net/results/35c/35ce460192581a3ce2866ef5d3cb5391afd68cc5/build-end.log
+> 
+> And now that I have merged the fixes for the erlang an sdbusplus
+> issues, this libglib2 issue is the #1 issue hitting the autobuilders on
+> master.
+> 
+> The problem comes from the fact that by skipping the wrapper, you are
+> no longer passing the --static option to pkg-config when building
+> statically.
+> 
+> From a quick look at build/lib/mesonbuild/dependencies/base.py in the
+> Meson code base, it seems like there is some way to have it pass
+> --static to pkg-config:
+> 
+>         if self.static:
+>             libcmd.append('--static')
 
-And one more minor nitpick, can your change the commit title to (or
-something similar):
+ self.static is set based on settings in the project, not anything that we can
+control from the outside (at least from a quick look at the source).
 
-	package/qt5/qt5webengine: fix ffmpeg/alsa option handling for latest
->
-> > >
-> > > Signed-off-by: Nathan Ford <nford@westpond.com>
-> > >
-> > > diff --git a/package/qt5/qt5webengine/Config.in
-> > > b/package/qt5/qt5webengine/Config.in
-> > > index 0e776ec..18e4418 100644
-> > > --- a/package/qt5/qt5webengine/Config.in
-> > > +++ b/package/qt5/qt5webengine/Config.in
-> > > @@ -42,6 +42,7 @@ config BR2_PACKAGE_QT5WEBENGINE
-> > >         select BR2_PACKAGE_OPUS
-> > >         select BR2_PACKAGE_WEBP
-> > >         select BR2_PACKAGE_WEBP_DEMUX
-> > > +       select BR2_PACKAGE_WEBP_MUX
-> > >         select BR2_PACKAGE_QT5BASE_DBUS
-> > >         select BR2_PACKAGE_QT5BASE_EGLFS
-> > >         select BR2_PACKAGE_QT5BASE_FONTCONFIG
-> > > diff --git a/package/qt5/qt5webengine/qt5webengine.mk
-> > > b/package/qt5/qt5webengine/qt5webengine.mk
-> > > index 1d5ee8d..5a2ca6d 100644
-> > > --- a/package/qt5/qt5webengine/qt5webengine.mk
-> > > +++ b/package/qt5/qt5webengine/qt5webengine.mk
-> > > @@ -30,16 +30,16 @@ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> > >  QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
-> > >  endif
-> > >
-> > > -QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_system_ffmpeg
-> > > +QT5WEBENGINE_QMAKEFLAGS += -webengine-ffmpeg
-> >
-> > Buildroot still supports two qt versions, Qt-latest (5.12.7) and Qt-LTS
-> > (5.6.x)..., so there is the need to support both configure methods (unless
-> > the new one although works for 5.6.x)...
->
-> Looks like 5.6.x pre-dates the changes. Would the best way to handle
-> this be an outer conditional for the version, with the inner
-> conditionals for the options?
 
-Or the other way round, would suggest (untested):
+> But it's not clear to me how that happens. Perhaps with your better
+> knowledge of the Meson code base you will have an idea here ?
+> 
+> Of course, we don't want to unconditionally pass --static, as --static
+> should be passed when using pkg-config to look up for target libraries,
+> but not when looking up for host libraries, and the whole point of your
+> initial patch was precisely to leave it up to meson to invoke
+> pkg-config the "right" way depending on whether it was cross-compiling
+> something or natively compiling.
 
---- a/package/qt5/qt5webengine/qt5webengine.mk
-+++ b/package/qt5/qt5webengine/qt5webengine.mk
-@@ -30,17 +30,29 @@ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
- endif
+ No it wasn't. meson only uses cross-compilation.conf for target compile. So for
+native compile, it will use the pkg-config from PATH (which indeed is also wrong
+because it will still give target settings). I had another patch that pointed
+meson to pkgconf directly as well for native compilation. (This is all from
+memory, I may be mistaken...)
 
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBENGINE_QMAKEOPTS += -webengine-ffmpeg
-+else
- QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_system_ffmpeg
-+endif
+ The point of that patch was to make sure that meson knows about the
+PKG_CONFIG_LIBDIR that we want it to use, because otherwise it is going to set
+the PKG_CONFIG_LIBDIR variable itself to a wrong value and thus bypass the
+setting we do in the pkg-config wrapper.
 
- ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBENGINE_QMAKEOPTS += -webengine-proprietary-codecs
-+else
- QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_proprietary_codecs
- endif
-+endif
+ It is true that I completely forgot about the --static (and --keep-system-libs,
+but I'm not sure why we pass *that*...).
 
- ifeq ($(BR2_PACKAGE_QT5WEBENGINE_ALSA),y)
- QT5WEBENGINE_DEPENDENCIES += alsa-lib
- else
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBENGINE_QMAKEOPTS += -no-webengine-alsa
-+else
- QT5WEBENGINE_QMAKEFLAGS += QT_CONFIG-=alsa
- endif
-+endif
+ For the problem addressed by my original patch, I think we can in fact *still*
+call the wrapper, but also set the pkg_config_libdir and sys_root meson configs.
+That way, PKG_CONFIG_LIBDIR will always be set in the environment when calling
+pkg-config, so that part of the wrapper gets overridden, but the rest still
+applies. If the wrapper is still called, the sys_root part is probably not
+needed any more either since the wrapper sets PKG_CONFIG_SYSROOT_DIR, and meson
+only overrides it when sys_root is set (again, as far as I can see from a quick
+scan of the source).
 
- # QtWebengine's build system uses python, but only supports python2. We work
- # around this by forcing python2 early in the PATH, via a python->python2
-@@ -64,7 +76,7 @@ QT5WEBENGINE_ENV += GN_PKG_CONFIG_HOST=$(@D)/host-bin/host-pkg-config
- endif
 
- define QT5WEBENGINE_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV) $(HOST_DIR)/bin/qmake $(QT5WEBENGINE_QMAKEFLAGS))
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV) $(HOST_DIR)/bin/qmake $(QT5WEBENGINE_QMAKEFLAGS) -- $(QT5WEBENGINE_QMAKEOPTS))
- endef
+ Regards,
+ Arnout
 
- define QT5WEBENGINE_BUILD_CMDS
 
->
-> > >
-> > >  ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
-> > > -QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_proprietary_codecs
-> > > +QT5WEBENGINE_QMAKEFLAGS += -webengine-proprietary-codecs
-> > >  endif
-> > >
-> > >  ifeq ($(BR2_PACKAGE_QT5WEBENGINE_ALSA),y)
-> > >  QT5WEBENGINE_DEPENDENCIES += alsa-lib
-> > >  else
-> > > -QT5WEBENGINE_QMAKEFLAGS += QT_CONFIG-=alsa
-> > > +QT5WEBENGINE_QMAKEFLAGS += -no-webengine-alsa
-> > >  endif
-> > >
-> > >  # QtWebengine's build system uses python, but only supports python2. We work
-> > > @@ -64,7 +64,7 @@ QT5WEBENGINE_ENV +=
-> > > GN_PKG_CONFIG_HOST=$(@D)/host-bin/host-pkg-config
-> > >  endif
-> > >
-> > >  define QT5WEBENGINE_CONFIGURE_CMDS
-> > > -       (cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV)
-> > > $(HOST_DIR)/bin/qmake $(QT5WEBENGINE_QMAKEFLAGS))
-> > > +       (cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV)
-> > > $(HOST_DIR)/bin/qmake -- $(QT5WEBENGINE_QMAKEFLAGS))
-> > >  endef
-> > >
-> > >  define QT5WEBENGINE_BUILD_CMDS
-> >
-> > Your patch got somewhere garbled (see e.g. [2]), I get the
-> > following errors while applying:
-> >
-> >         $ git am patch-qt5webengine-nathan-ford-001.diff
-> > Applying: As of QT 5.10 the WEBENGINE_CONFIG options have been
-> > error: git diff header lacks filename information when removing 1 leading pathname component (line 2)
-> > Patch failed at 0001 As of QT 5.10 the WEBENGINE_CONFIG options have been
->
-> I noticed that patchwork had trouble with it. Not sure what happened.
->
-> > Checked your patch after applying manually, seems to work as expected with
-> > the following buildroot config snippet:
-> >
-> > BR2_PACKAGE_QT5WEBENGINE=y
-> > BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS=y
-> > # BR2_PACKAGE_QT5WEBENGINE_ALSA is not set
-> >
-> >         $ diff -u build/qt5webengine-5.12.7_orig/config.summary build/qt5webengine-5.12.7/config.summary
-> > --- build/qt5webengine-5.12.7_orig/config.summary       2020-02-18 12:21:02.354085462 +0100
-> > +++ build/qt5webengine-5.12.7/config.summary    2020-02-18 13:21:59.772558050 +0100
-> > @@ -3,7 +3,7 @@
-> >    Full debug information ................. no
-> >    Pepper Plugins ......................... no
-> >    Printing and PDF ....................... no
-> > -  Proprietary Codecs ..................... no
-> > +  Proprietary Codecs ..................... yes
-> >    Spellchecker ........................... yes
-> >    Native Spellchecker .................... no
-> >    WebRTC ................................. no
-> > @@ -14,14 +14,14 @@
-> >    Kerberos Authentication ................ no
-> >    Support qpa-xcb ........................ no
-> >    Building v8 snapshot supported ......... yes
-> > -  Use ALSA ............................... yes
-> > +  Use ALSA ............................... no
-> >    Use PulseAudio ......................... no
-> >    Optional system libraries used:
-> >      re2 .................................. no
-> >      icu .................................. no
-> > -    libwebp, libwebpmux and libwebpdemux . no
-> > +    libwebp, libwebpmux and libwebpdemux . yes
-> >      opus ................................. yes
-> > -    ffmpeg ............................... no
-> > +    ffmpeg ............................... yes
-> >      libvpx ............................... yes
-> >      snappy ............................... no
-> >      glib ................................. yes
-> > @@ -49,5 +49,3 @@
-> >      xcursor .............................. no
-> >      xi ................................... no
-> >      xtst ................................. no
-> >
-> >
-> > Care to re-send (best using git format-patch/send-email, see [3])?
->
-> Will do. I have some additional changes that I made after I submitted
-> the patch. Specifically I added build deps for the packages that
-> qtwebengine will auto detect and use if present ( otherwise building
-> its own copy ). Should I include this in the V2, or should it be
-> submitted separately?
-
-Preferred separately (easier to review)...
-
->
-> > One further question out of interest, on which hardware do you run
-> > qtwebengine and how (or which buildroot config/defconfig do you use)?
-> >
-> > There is a report from one buildroot user not to be able to run
-> > the minimal example on RaspberryPi Zero (see [4] and [5])...
->
-> I use it on a few different pieces of hardware, some generic some
-> custom, most of which are x86_64. One of them is armv7 ( Marvell Dove
-> pj4 ). I have a qt application that wraps an instance of webengine.
-> All of this is on eglfs. The config is custom, using an external
-> toolchain. I was on gcc 6.3 ( x86_64 ) but now I am on gcc 8.3 (
-> x86_64 and armv7 ). I looked at that email thread and I have not
-> encountered the error they see.
-
-Thanks for the info...
-
-Regards,
-Peter
-
->
-> > Regards,
-> > Peter
-> >
-> >
-> > [1] https://bugs.busybox.net/show_bug.cgi?id=12416
-> > [2] https://patchwork.ozlabs.org/patch/1227357/
-> > [3] https://buildroot.org/downloads/manual/manual.html#submitting-patches
-> > [4] http://lists.busybox.net/pipermail/buildroot/2020-February/273320.html
-> > [5] http://lists.busybox.net/pipermail/buildroot/2020-February/273329.html
-> >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
-> --Nate
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> Could you help here ?
+> 
+> Thanks!
+> 
+> Thomas
+> 
