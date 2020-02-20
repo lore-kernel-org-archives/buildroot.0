@@ -1,35 +1,92 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Feb 2020 13:16:58 +0100
-Subject: [Buildroot] [git commit] package/ipsec-tools: annotate _IGNORE_CVES
- for the included security patches
-Message-ID: <20200220120646.9F0CF82DF2@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 20 Feb 2020 12:37:19 +0000
+Subject: [Buildroot] [Bug 12571] New: ltp-testsuite : Build failure
+Message-ID: <bug-12571-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dde8aa05b982f80febdc2837da7eaa5e79606e14
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=12571
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ipsec-tools/ipsec-tools.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+            Bug ID: 12571
+           Summary: ltp-testsuite : Build failure
+           Product: buildroot
+           Version: 2019.11.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: learn2kab at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
-index 634d752661..72bd8c196c 100644
---- a/package/ipsec-tools/ipsec-tools.mk
-+++ b/package/ipsec-tools/ipsec-tools.mk
-@@ -15,6 +15,11 @@ IPSEC_TOOLS_DEPENDENCIES = openssl flex host-pkgconf host-flex host-bison
- # we patch configure.ac
- IPSEC_TOOLS_AUTORECONF = YES
- 
-+# 0004-CVE-2015-4047.patch
-+IPSEC_TOOLS_IGNORE_CVES += CVE-2015-4047
-+# 0005-CVE-2016-10396.patch
-+IPSEC_TOOLS_IGNORE_CVES += CVE-2016-10396
-+
- # configure hardcodes -Werror, so override CFLAGS on make invocation
- IPSEC_TOOLS_MAKE_OPTS = CFLAGS='$(TARGET_CFLAGS)'
- 
+Hello,
+
+While trying to prepare images for Beaglebone Black with "ltp-testsuite"
+included (keeping other parameters to their default values),the build process
+breaks .
+
+
+-----------------------------
+Error Message with Default Settings:
+-----------------------------
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (4096 blocks): done
+Copying files into the device: __populate_fs: Could not allocate block in ext2
+filesystem while writing file "fanotify10"
+mkfs.ext4: Could not allocate block in ext2 filesystem while populating file
+system
+*** Maybe you need to increase the filesystem size
+(BR2_TARGET_ROOTFS_EXT2_SIZE)
+fs/ext2/ext2.mk:46: recipe for target
+'/home/workpc/dir_buildroot/buildroot-2019.11.1/output/images/rootfs.ext2'
+failed
+make[1]: ***
+[/home/workpc/dir_buildroot/buildroot-2019.11.1/output/images/rootfs.ext2]
+Error 1
+Makefile:84: recipe for target '_all' failed
+make: *** [_all] Error 2
+-----------------------------
+
+
+Updated the value of "BR2_TARGET_ROOTFS_EXT2_SIZE" from 60M to 64G.
+An error message mentioning 
+"part rootfs size (536870912) too small for rootfs.ext4 (68719476736)"
+ (as below) appears in the build log.
+
+
+-------------------------------
+Error Message with Modified Values:
+-------------------------------
+INFO: cmd: "find
+'/home/workpc/dir_buildroot/buildroot-2019.11.1/output/build/genimage.tmp/root'
+-depth -type d -printf '%P\0' | xargs -0 -I {} touch -r
+'/tmp/tmp.7ROXYVc0KU/{}'
+'/home/workpc/dir_buildroot/buildroot-2019.11.1/output/build/genimage.tmp/root/{}'"
+(stderr):
+ERROR: hdimage(sdcard.img): part rootfs size (536870912) too small for
+rootfs.ext4 (68719476736)
+Makefile:809: recipe for target 'target-post-image' failed
+make[1]: *** [target-post-image] Error 1
+Makefile:84: recipe for target '_all' failed
+make: *** [_all] Error 2
+
+
+--------------------------------
+
+What would be the apt value for this parameter??
+Should any other parameter be accordingly modified?? 
+Please advice.
+
+Regards,
+Adarsh
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
