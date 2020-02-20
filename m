@@ -1,48 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Feb 2020 22:58:02 +0100
-Subject: [Buildroot] [git commit] toolchain: add hidden
- BR2_TOOLCHAIN_HAS_SSP_STRONG boolean
-Message-ID: <20200220215137.DCC778E69B@busybox.osuosl.org>
+Date: Thu, 20 Feb 2020 22:58:03 +0100
+Subject: [Buildroot] [git commit] Config.in: ensure BR2_SSP_STRONG can only
+ be selected if supported
+Message-ID: <20200220215137.F06138E687@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b751143929d2634c8927e3a392b0202708c4232
+commit: https://git.buildroot.net/buildroot/commit/?id=058dc9aa0bff837ddeb1d2fc4276bc9260e0b5d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This will allow toolchain to indicate if they support
--fstack-protector-strong or not.
+This commit ensures that BR2_SSP_STRONG cannot be chosen if the
+toolchain doesn't support strong SSP.
 
-Whenever the gcc version is >= 4.9, we always have SSP_STRONG support
-if we have SSP support. However, some toolchains older than gcc 4.9
-might have backported SSP_STRONG support, which is why we cannot rely
-just on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9.
+Fixes:
 
-Having this "default" value allows to avoid adding a "select
-BR2_TOOLCHAIN_HAS_SSP_STRONG" in the internal toolchain logic plus in
-almost external toolchains. But it allows custom external toolchains
-that are pre-4.9 to potentially declare that they support strong SSP.
+  http://autobuild.buildroot.net/results/cba93a681d10692c4e4c5584e4c962bd18a608d4/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- toolchain/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 973c03254f..87509f3d64 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -189,6 +189,10 @@ config BR2_TOOLCHAIN_HAS_THREADS_NPTL
- config BR2_TOOLCHAIN_HAS_SSP
- 	bool
+diff --git a/Config.in b/Config.in
+index 5a4239bc9a..2913d39ec8 100644
+--- a/Config.in
++++ b/Config.in
+@@ -758,6 +758,7 @@ config BR2_SSP_REGULAR
  
-+config BR2_TOOLCHAIN_HAS_SSP_STRONG
-+	bool
-+	default y if BR2_TOOLCHAIN_HAS_SSP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+
- config BR2_TOOLCHAIN_HAS_UCONTEXT
- 	bool
- 
+ config BR2_SSP_STRONG
+ 	bool "-fstack-protector-strong"
++	depends on BR2_TOOLCHAIN_HAS_SSP_STRONG
+ 	help
+ 	  Like -fstack-protector but includes additional functions to be
+ 	  protected - those that have local array definitions, or have
