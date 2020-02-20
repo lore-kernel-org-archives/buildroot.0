@@ -1,39 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Feb 2020 22:07:17 +0100
-Subject: [Buildroot] [git commit branch/next] package/gdb: depend on
- libiberty
-Message-ID: <20200220212007.6AF0B8E650@busybox.osuosl.org>
+Date: Thu, 20 Feb 2020 22:11:16 +0100
+Subject: [Buildroot] [git commit branch/next] package/pkgconf: prepend
+ sysroot paths to common gobject-introspection utils
+Message-ID: <20200220212007.81B558E650@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0a583ddc4c2cab121330284e316f54229dee492
+commit: https://git.buildroot.net/buildroot/commit/?id=0157b6032d600f9b12778e425316076dffca9cab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If present, GDB may use a system installed libiberty. As such, we must ensure
-that host-libiberty is installed first.
+Many autotools packages call pkg-conf to inquire as to where the following
+utilities are:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+g_ir_scanner
+g_ir_compiler
+g_ir_generate
+
+Because gobject uses wrappers to call qemu, prepending the sysroot to the paths
+of these compilers is necessary.
+
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gdb/gdb.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ ...Only-prefix-with-the-sysroot-a-subset-of-variables.patch | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 46d745a897..01f7e14460 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -35,7 +35,9 @@ endif
- # For the host variant, we really want to build with XML support,
- # which is needed to read XML descriptions of target architectures. We
- # also need ncurses.
--HOST_GDB_DEPENDENCIES = host-expat host-ncurses
-+# As for libiberty, gdb may use a system-installed one if present, so
-+# we must ensure ours is installed first.
-+HOST_GDB_DEPENDENCIES = host-expat host-libiberty host-ncurses
+diff --git a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
+index 5a9713d651..a7811752d2 100644
+--- a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
++++ b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
+@@ -15,11 +15,13 @@ be prefixed by the sysroot, and which path should not be prefixed by
+ the sysroot.
  
- # Disable building documentation
- GDB_MAKE_OPTS += MAKEINFO=true
+ So, let's simply have a whitelist of paths that should be prefixed:
+-includedir, libdir, mapdir, pkgdatadir and sdkdir. This list of
+-variables was collected over years of Buildroot development. All other
+-paths are not prefixed by the sysroot.
++g_ir_scanner, g_ir_compiler, g_ir_generate, includedir, libdir, mapdir,
++pkgdatadir and sdkdir. This list of variables was collected over years of
++Buildroot development. All other paths are not prefixed by the sysroot.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++[Updated to include gobject-introspection paths]
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ ---
+  libpkgconf/tuple.c | 60 ++++++++++++++++++++++++++++++++--------------
+  1 file changed, 42 insertions(+), 18 deletions(-)
+@@ -28,7 +30,7 @@ diff --git a/libpkgconf/tuple.c b/libpkgconf/tuple.c
+ index 8523709..7cd2fff 100644
+ --- a/libpkgconf/tuple.c
+ +++ b/libpkgconf/tuple.c
+-@@ -160,6 +160,18 @@ dequote(const char *value)
++@@ -160,6 +160,21 @@ dequote(const char *value)
+  	return buf;
+  }
+  
+@@ -36,6 +38,9 @@ index 8523709..7cd2fff 100644
+ +pkgconf_tuple_parse_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, bool add_sysroot);
+ +
+ +const char *sysrooted_keys[] = {
+++	"g_ir_scanner",
+++	"g_ir_compiler",
+++	"g_ir_generate",
+ +	"includedir",
+ +	"libdir",
+ +	"mapdir",
