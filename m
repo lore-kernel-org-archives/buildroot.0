@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Feb 2020 13:16:19 +0100
-Subject: [Buildroot] [PATCH 3/5] package/libtomcrypt: annotate
+Date: Thu, 20 Feb 2020 13:16:25 +0100
+Subject: [Buildroot] [PATCH 5/5] package/ipsec-tools: annotate
  _IGNORE_CVES for the included security patches
-In-Reply-To: <20200219160203.874-3-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 19 Feb 2020 17:02:00 +0100")
+In-Reply-To: <20200219160203.874-5-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 19 Feb 2020 17:02:02 +0100")
 References: <20200219160203.874-1-peter@korsgaard.com>
- <20200219160203.874-3-peter@korsgaard.com>
-Message-ID: <87o8ttbgj0.fsf@dell.be.48ers.dk>
+ <20200219160203.874-5-peter@korsgaard.com>
+Message-ID: <87k14hbgiu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
