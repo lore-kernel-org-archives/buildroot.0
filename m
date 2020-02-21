@@ -1,40 +1,53 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 21 Feb 2020 07:34:42 +0200
-Subject: [Buildroot] [PATCH] docs/manual: clarify the
- <PKG>_PATCH_DEPENDENCIES guarantee
-Message-ID: <0129871638f614e8794dcf2576131d41bf64986d.1582263282.git.baruch@tkos.co.il>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 21 Feb 2020 08:33:31 +0100
+Subject: [Buildroot] [PATCH v2] package/qt5webengine: fix translations
+ target install path
+Message-ID: <20200221073331.9942-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Unlike <PKG>_DEPENDENCIES, <PKG>_PATCH_DEPENDENCIES only guarantees
-extract and patch of listed dependencies, not build. Make this subtlety
-more explicit in the documentation.
+Through the evolution of the qt5webengine package patch ([1], [2])
+until the initial commit ([3]) the translations target install
+path got mangled resulting in a double trailing qtwebengine_locales
+path:
+  /usr/translations/qtwebengine_locales/qtwebengine_locales
+Instead of:
+  /usr/translations/qtwebengine_locales
 
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes the translations runtime access failure resulting in the
+following warning:
+
+  WARNING:resource_bundle_qt.cpp(116): locale_file_path.empty() for locale
+
+[1] http://lists.busybox.net/pipermail/buildroot/2015-July/132010.html
+[2] https://patchwork.ozlabs.org/patch/640633
+[3] https://git.buildroot.net/buildroot/commit/?id=89080bac9bc47946a09c1e74f2f872363bf6785b
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- docs/manual/adding-packages-generic.txt | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes v1 -> v2:
+  - re-add mkdir to fix translation installation path
+---
+ package/qt5/qt5webengine/qt5webengine.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 59cdb7ffd72d..82d97854dde4 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -374,9 +374,9 @@ not and can not work as people would expect it should:
- * +LIBFOO_PATCH_DEPENDENCIES+ lists the dependencies (in terms of
-   package name) that are required for the current package to be
-   patched. These dependencies are guaranteed to be extracted and
--  patched before the current package is patched. In a similar way,
--  +HOST_LIBFOO_PATCH_DEPENDENCIES+ lists the dependencies for the
--  current host package.
-+  patched (but not necessarily be built) before the current package
-+  is patched. In a similar way, +HOST_LIBFOO_PATCH_DEPENDENCIES+ lists
-+  the dependencies for the current host package.
-   This is seldom used; usually, +LIBFOO_DEPENDENCIES+ is what you
-   really want to use.
+diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+index 1d5ee8d819..898725937b 100644
+--- a/package/qt5/qt5webengine/qt5webengine.mk
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -90,8 +90,8 @@ define QT5WEBENGINE_INSTALL_TARGET_LIBS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebEngine*.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpf $(STAGING_DIR)/usr/libexec/QtWebEngineProcess $(TARGET_DIR)/usr/libexec/
+ 	cp -dpfr $(STAGING_DIR)/usr/resources/ $(TARGET_DIR)/usr/
+-	mkdir -p $(TARGET_DIR)/usr/translations/qtwebengine_locales/
+-	cp -dpfr $(STAGING_DIR)/usr/translations/qtwebengine_locales $(TARGET_DIR)/usr/translations/qtwebengine_locales/
++	mkdir -p $(TARGET_DIR)/usr/translations/
++	cp -dpfr $(STAGING_DIR)/usr/translations/qtwebengine_locales $(TARGET_DIR)/usr/translations/
+ endef
+ endif
  
 -- 
 2.25.0
