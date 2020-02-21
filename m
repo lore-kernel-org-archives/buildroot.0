@@ -1,8 +1,8 @@
 From: Gervais, Francois <FGervais@distech-controls.com>
-Date: Fri, 21 Feb 2020 22:00:25 +0000
+Date: Fri, 21 Feb 2020 22:10:29 +0000
 Subject: [Buildroot] [v5,
- 4/9] package/qoriq-rcw: add target rcw binary support
-Message-ID: <DM6PR01MB5849DB1F91ABFC7663CCDACCF3120@DM6PR01MB5849.prod.exchangelabs.com>
+ 3/9] package/qoriq-rcw: bump to version LSDK-19.09
+Message-ID: <DM6PR01MB58498E8B6D7E4DFB76C2F121F3120@DM6PR01MB5849.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,17 +11,12 @@ To: buildroot@busybox.net
 
 Hi Jerry,
 
-I'm not sure if "Custom RCW" is the right menu name for
-BR2_PACKAGE_HOST_QORIQ_RCW_BIN.
+I think this patch breaks:
 
-To me, BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH is the custom
-rcw as it is provided by the user. 
+define HOST_QORIQ_RCW_BUILD_CMDS
+        python $(@D)/rcw.py -i $(@D)/custom_board/rcw/$(QORIQ_RCW_PROJECT) -I $(@D)/custom_board -o $(@D)/PBL.bin
+endef
 
-I feel BR2_PACKAGE_HOST_QORIQ_RCW_BIN is the opposite of
-custom actually as it builds a manufacturer provided RCW file.
+host-qoriq-rcw-LSDK-19.09/rcw.py fails with:
 
-What do you think?
-
-Also should it really depends on "!BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH"?
-What prevents a user from building 2 RCWs for some reason, 1 user provided
-and 1 officially provided through qoriq-rcw-LSDK-19.09.tar.gz?
+"Only Python versions 3.0+ are supported."
