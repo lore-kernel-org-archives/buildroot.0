@@ -1,79 +1,55 @@
-From: Hammami Omar <omar18hammami@gmail.com>
-Date: Fri, 21 Feb 2020 17:16:58 +0100
-Subject: [Buildroot] SSH server starts too late
-In-Reply-To: <CAGSpp9nYVE28LS2F5y97Xc0X_oXVJa8HDOiZKj73N7LOgMyGMA@mail.gmail.com>
-References: <CAGSpp9=qDFdtuETT8shQPXim25V7Yw2jvpjihbJgrttozOBVSQ@mail.gmail.com>
- <20200221111947.33e4677d@gmx.net>
- <CAGSpp9nYVE28LS2F5y97Xc0X_oXVJa8HDOiZKj73N7LOgMyGMA@mail.gmail.com>
-Message-ID: <CAGSpp9kqbHNk=YQtmxRTWZSHesEW-BNDZkiwSgJ_2wjHHPOorw@mail.gmail.com>
+From: Gervais, Francois <FGervais@distech-controls.com>
+Date: Fri, 21 Feb 2020 16:33:03 +0000
+Subject: [Buildroot] [PATCH 1/1] package/rcw: allow not having custom
+ rcwi files
+In-Reply-To: <20200221144023.25481-1-fgervais@distech-controls.com>
+References: <20200221144023.25481-1-fgervais@distech-controls.com>
+Message-ID: <DM6PR01MB58499CB954F2053B6D17CFE7F3120@DM6PR01MB5849.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+I must say, this patch will conflict with this pending one:
 
-I have added the package haveged to my Linux image. However, the problem is
-not resolved. In fact, the ssh server have started too late.
+[v5,2/9] package/qoriq-rcw: move rcw into nxp and rename it
+https://patchwork.ozlabs.org/patch/1234790/
 
-Regards,
-omar
+If the patch from Changming Huang is close to being pulled-in, we might want to
+delay the inclusion of mine and I'll update it based on Changming's work.
 
-Le ven. 21 f?vr. 2020 ? 15:50, Hammami Omar <omar18hammami@gmail.com> a
-?crit :
+One way or the other is fine with me.
 
-> Hello Peter,
->
-> Thank you very much for your response.
->
-> By too late, I mean that my ssh server starts ~20 seconds later comparing
-> to the normal  (Old buildroot version in my case).
-> Also, I am using the busybox init system. And I am thinking to use the
-> systemd init system, so that I can see the dependencies of the ssh process
-> and their execution time.
->
-> Now I have one question about haveged:
-> Is haveged used only with systemd init system ? Or it can be used also
-> with busybox init system ?
-> Is it possible to enable havged from menuconfig of buildroot ?
->
-> Best regards,
-> omar
->
-> Le ven. 21 f?vr. 2020 ? 11:19, Peter Seiderer <ps.report@gmx.net> a
-> ?crit :
->
->> Hello Hammami,
->>
->> On Fri, 21 Feb 2020 10:13:17 +0100, Hammami Omar <omar18hammami@gmail.com>
->> wrote:
->>
->> > Hello,
->> >
->> > I am using the buildroot version "2019.11.1" and I have noticed that my
->> SSH
->> > server starts too late.
->> > I was using an old version "2017.08" and the SSH server was starting
->> > normally.
->> > Are you aware of this issue please ?
->> > And do you propose a workaround for this ?
->>
->> What exactly do you mean by 'to late'? Which init system do you use?
->>
->> On first boot the ssh keys must be generated (which can use some time
->> depending on the hardware and the random source)...., random generation
->> can be speed up by e.g. using/enabling haveged...
->>
->> Regards,
->> Peter
->>
->> > And thank you very much.
->> >
->> > Best regards,
->> > omar
->>
->>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200221/deabe4cc/attachment.html>
+
+> -----Original Message-----
+> From: Francois Gervais <fgervais@distech-controls.com>
+> Sent: February 21, 2020 9:40 AM
+> To: buildroot at buildroot.org
+> Cc: Matt Weber <matthew.weber@rockwellcollins.com>; Gervais, Francois <FGervais@distech-controls.com>
+> Subject: [PATCH 1/1] package/rcw: allow not having custom rcwi files
+> 
+> A project could quite possibly have a custom rcw file that does not rely on any custom rcw include files (rcwi).
+> 
+> Allow the build to succeed if this is the case.
+> 
+> Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
+> ---
+>  package/rcw/rcw.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk index 36d2da61b5..c1fb63b91b 100644
+> --- a/package/rcw/rcw.mk
+> +++ b/package/rcw/rcw.mk
+> @@ -25,7 +25,9 @@ endif
+> 
+>  define HOST_RCW_ADD_CUSTOM_RCW_FILES
+>  	mkdir -p $(@D)/custom_board/rcw
+> -	cp -f $(filter-out %.rcw,$(RCW_FILES)) $(@D)/custom_board
+> +	if [ -n "$(filter-out %.rcw,$(RCW_FILES))" ]; then \
+> +		cp -f $(filter-out %.rcw,$(RCW_FILES)) $(@D)/custom_board; \
+> +	fi
+>  	cp -f $(filter %.rcw,$(RCW_FILES)) $(@D)/custom_board/rcw  endef  HOST_RCW_POST_PATCH_HOOKS +=
+> HOST_RCW_ADD_CUSTOM_RCW_FILES
+> --
+> 2.20.1
