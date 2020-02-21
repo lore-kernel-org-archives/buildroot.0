@@ -1,75 +1,40 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 21 Feb 2020 07:15:39 +0200
-Subject: [Buildroot] [PATCH] package/fail2ban: fix python3 2to3
- dependency
-In-Reply-To: <20200218184311.25806bcb@windsurf>
-References: <618874172809ae3de7cd82f6b27141c1ba13c806.1581943931.git.baruch@tkos.co.il>
- <20200218184311.25806bcb@windsurf>
-Message-ID: <87d0a8zfk4.fsf@tarshish>
+Date: Fri, 21 Feb 2020 07:34:42 +0200
+Subject: [Buildroot] [PATCH] docs/manual: clarify the
+ <PKG>_PATCH_DEPENDENCIES guarantee
+Message-ID: <0129871638f614e8794dcf2576131d41bf64986d.1582263282.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Unlike <PKG>_DEPENDENCIES, <PKG>_PATCH_DEPENDENCIES only guarantees
+extract and patch of listed dependencies, not build. Make this subtlety
+more explicit in the documentation.
 
-On Tue, Feb 18 2020, Thomas Petazzoni wrote:
-> On Mon, 17 Feb 2020 14:52:11 +0200
-> Baruch Siach <baruch@tkos.co.il> wrote:
->
->> The 2to3 utility is needed in the patch phase. Use the correct
->> dependency for that.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/dd8e225e2a49cfa6735bed11459007003a37c137/
->> http://autobuild.buildroot.net/results/e688c3652bd474ac682984e2e5947701942f0f57/
->>
->> Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> Cc: Pascal de Bruijn <p.debruijn@unilogic.nl>
->> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> ---
->>  package/fail2ban/fail2ban.mk | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
->> index 6f023b48a181..0f8e5ab6e694 100644
->> --- a/package/fail2ban/fail2ban.mk
->> +++ b/package/fail2ban/fail2ban.mk
->> @@ -14,7 +14,7 @@ ifeq ($(BR2_PACKAGE_PYTHON3),y)
->>  define FAIL2BAN_PYTHON_2TO3
->>  	$(HOST_DIR)/bin/2to3 --write --nobackups --no-diffs $(@D)/bin/* $(@D)/fail2ban
->>  endef
->> -FAIL2BAN_DEPENDENCIES += host-python3
->> +FAIL2BAN_PATCH_DEPENDENCIES += host-python3
->>  FAIL2BAN_POST_PATCH_HOOKS += FAIL2BAN_PYTHON_2TO3
->
-> I don't think this solves the problem. Indeed, patch dependencies are
-> special. When you do:
->
-> FAIL2BAN_PATCH_DEPENDENCIES += host-python3
->
-> You're in fact adding a dependency of fail2ban-patch on
-> host-python3-patch, and not on host-python3.
->
-> See in pkg-generic.mk:
->
-> $$($(2)_TARGET_PATCH):  | $$(patsubst %,%-patch,$$($(2)_FINAL_PATCH_DEPENDENCIES))
->
-> See the nice patsubst here ? :-)
->
-> And this intentional, and really needed for some Linux extensions
-> (Xenomai ? RTAI ? don't remember which one of the two).
->
-> So for this fail2ban thing, I guess the easier is to move the 2to3
-> execution to a PRE_CONFIGURE_HOOKS, with a good comment above.
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ docs/manual/adding-packages-generic.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-How would that fix the issue? Is host-python3 guaranteed to build before
-fail2ban PRE_CONFIGURE_HOOKS run unlike POST_PATCH_HOOKS?
-
-baruch
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 59cdb7ffd72d..82d97854dde4 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -374,9 +374,9 @@ not and can not work as people would expect it should:
+ * +LIBFOO_PATCH_DEPENDENCIES+ lists the dependencies (in terms of
+   package name) that are required for the current package to be
+   patched. These dependencies are guaranteed to be extracted and
+-  patched before the current package is patched. In a similar way,
+-  +HOST_LIBFOO_PATCH_DEPENDENCIES+ lists the dependencies for the
+-  current host package.
++  patched (but not necessarily be built) before the current package
++  is patched. In a similar way, +HOST_LIBFOO_PATCH_DEPENDENCIES+ lists
++  the dependencies for the current host package.
+   This is seldom used; usually, +LIBFOO_DEPENDENCIES+ is what you
+   really want to use.
+ 
+-- 
+2.25.0
