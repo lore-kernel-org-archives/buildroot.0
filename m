@@ -1,38 +1,42 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 21 Feb 2020 11:19:47 +0100
-Subject: [Buildroot] SSH server starts too late
-In-Reply-To: <CAGSpp9=qDFdtuETT8shQPXim25V7Yw2jvpjihbJgrttozOBVSQ@mail.gmail.com>
-References: <CAGSpp9=qDFdtuETT8shQPXim25V7Yw2jvpjihbJgrttozOBVSQ@mail.gmail.com>
-Message-ID: <20200221111947.33e4677d@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 21 Feb 2020 12:46:26 +0100
+Subject: [Buildroot] [PATCH] package/fail2ban: fix python3 2to3
+ dependency
+In-Reply-To: <87d0a8zfk4.fsf@tarshish>
+References: <618874172809ae3de7cd82f6b27141c1ba13c806.1581943931.git.baruch@tkos.co.il>
+ <20200218184311.25806bcb@windsurf> <87d0a8zfk4.fsf@tarshish>
+Message-ID: <20200221124626.55f97073@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Hammami,
+Hello Baruch,
 
-On Fri, 21 Feb 2020 10:13:17 +0100, Hammami Omar <omar18hammami@gmail.com> wrote:
+On Fri, 21 Feb 2020 07:15:39 +0200
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-> Hello,
->
-> I am using the buildroot version "2019.11.1" and I have noticed that my SSH
-> server starts too late.
-> I was using an old version "2017.08" and the SSH server was starting
-> normally.
-> Are you aware of this issue please ?
-> And do you propose a workaround for this ?
+> > So for this fail2ban thing, I guess the easier is to move the 2to3
+> > execution to a PRE_CONFIGURE_HOOKS, with a good comment above.  
+> 
+> How would that fix the issue? Is host-python3 guaranteed to build before
+> fail2ban PRE_CONFIGURE_HOOKS run unlike POST_PATCH_HOOKS?
 
-What exactly do you mean by 'to late'? Which init system do you use?
+Absolutely. The dependencies listed in <pkg>_DEPENDENCIES are
+guaranteed to be built and installed before the configure step of <pkg>
+starts.
 
-On first boot the ssh keys must be generated (which can use some time
-depending on the hardware and the random source)...., random generation
-can be speed up by e.g. using/enabling haveged...
+See:
 
-Regards,
-Peter
+$$($(2)_TARGET_CONFIGURE):	| $$($(2)_FINAL_DEPENDENCIES)
 
-> And thank you very much.
->
-> Best regards,
-> omar
+in package/pkg-generic.mk.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
