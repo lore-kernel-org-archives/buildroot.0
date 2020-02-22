@@ -1,70 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 22 Feb 2020 22:33:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/luv: fix build with gcc 4.8
-Message-ID: <20200222213328.366748-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 22 Feb 2020 22:40:32 +0100
+Subject: [Buildroot] [git commit branch/next] package/gobject-introspection:
+ depend on python3
+Message-ID: <20200222213147.943BB8E755@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/83b34e606b128546da8a70836d039090e334a1ec
+commit: https://git.buildroot.net/buildroot/commit/?id=6da6cb2c312c6b22f1c2af2b9068d2e68baffa09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Currently, the Config.in file has the line:
+select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+
+This line is incorrect as gobject-introspection does not support python2.
+Instead, remove the select line and make python3 a dependency with a new
+message that explains that gobject-introspection requires python3.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[yann.morin.1998 at free.fr:
+  - move the explanations from the commit log to the code
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...01-src-lreq.c-fix-build-with-gcc-4.8.patch | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/luv/0001-src-lreq.c-fix-build-with-gcc-4.8.patch
+ package/gobject-introspection/Config.in | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/luv/0001-src-lreq.c-fix-build-with-gcc-4.8.patch b/package/luv/0001-src-lreq.c-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..e9fd6430fb
---- /dev/null
-+++ b/package/luv/0001-src-lreq.c-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,43 @@
-+From d05134115ec8fcfc87188899cec336a8b4df7e62 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 22 Feb 2020 22:17:19 +0100
-+Subject: [PATCH] src/lreq.c: fix build with gcc 4.8
+diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
+index 0537cc0404..e312852cf2 100644
+--- a/package/gobject-introspection/Config.in
++++ b/package/gobject-introspection/Config.in
+@@ -9,11 +9,18 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
+ 	# can be verified.
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
++	# gobject-introspection does not require python3 to run on the
++	# target; however, because the tools run in a qemu wrapper, a
++	# cross-compiled python3 must be installed to staging. As there
++	# is no current mechanism to tell Buildroot only to install
++	# python to staging, then python must also be installed
++	# unconditionally to the target when building
++	# gobject-introspection.
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_HOST_QEMU
+ 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
+ 	select BR2_PACKAGE_LIBFFI
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  GObject introspection is a middleware layer between C
+@@ -25,6 +32,9 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
+ 
+ 	  https://wiki.gnome.org/action/show/Projects/GObjectIntrospection
+ 
++comment "gobject-introspection needs python3"
++	depends on !BR2_PACKAGE_PYTHON3
 +
-+Since commit 3e34390cc15101d7fc46ea26f5adf9ac022c2029, build fails with
-+gcc 4.8.3 on:
-+
-+In file included from /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output/build/luv-1.34.1-1/src/luv.c:27:0:
-+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output/build/luv-1.34.1-1/src/lreq.c: In function 'luv_cleanup_req':
-+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output/build/luv-1.34.1-1/src/lreq.c:70:5: error: 'for' loop initial declarations are only allowed in C99 mode
-+     for (int i = 0; ((int*)(data->data))[i] != LUA_NOREF; i++) {
-+     ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/83b34e606b128546da8a70836d039090e334a1ec
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/luvit/luv/pull/456]
-+---
-+ src/lreq.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/lreq.c b/src/lreq.c
-+index c8e07eb..b12ec4f 100644
-+--- a/src/lreq.c
-++++ b/src/lreq.c
-+@@ -64,10 +64,11 @@ static void luv_fulfill_req(lua_State* L, luv_req_t* data, int nargs) {
-+ }
-+ 
-+ static void luv_cleanup_req(lua_State* L, luv_req_t* data) {
-++  int i;
-+   luaL_unref(L, LUA_REGISTRYINDEX, data->req_ref);
-+   luaL_unref(L, LUA_REGISTRYINDEX, data->callback_ref);
-+   if (data->data_ref == LUV_REQ_MULTIREF) {
-+-    for (int i = 0; ((int*)(data->data))[i] != LUA_NOREF; i++) {
-++    for (i = 0; ((int*)(data->data))[i] != LUA_NOREF; i++) {
-+       luaL_unref(L, LUA_REGISTRYINDEX, ((int*)(data->data))[i]);
-+     }
-+   }
-+-- 
-+2.25.0
-+
--- 
-2.25.0
+ comment "gobject-introspection needs a glibc toolchain, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
