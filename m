@@ -1,86 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 Feb 2020 22:44:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gobject-introspection: depend
- on python3
-In-Reply-To: <20200222213142.2213941-1-aduskett@gmail.com>
-References: <20200222213142.2213941-1-aduskett@gmail.com>
-Message-ID: <20200222214425.GB8743@scaer>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sat, 22 Feb 2020 22:44:39 +0100
+Subject: [Buildroot] [PATCH] package/libsvgtiny: fix parallel build
+Message-ID: <20200222214439.18588-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Fix previous commit[1] which purpose was to fix parallel build. It
+didn't work since it assigned $(MAKE1) to LIBSVGTINY_MAKE, but this is a
+generic-package and building is done using $(MAKE), then LIBSVGTINY_MAKE
+was ignored. Let's substitute instead $(MAKE) with $(MAKE1) in
+LIBSVGTINY_BUILD_CMDS.
 
-On 2020-02-22 13:31 -0800, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Currently, the Config.in file has the line:
-> select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
-> 
-> This line is incorrect as gobject-introspection does not support python2.
-> Instead, remove the select line and make python3 a dependency with a new
-> message that explains that gobject-introspection requires python3.
-> 
-> Note:
-> gobject-introspection does not require python3 to run on the target; however,
-> because the tools run in a qemu wrapper, a cross-compiled python3 must be
-> installed to staging. As there is no current mechanism to tell Buildroot only
-> to install python to staging, then python must also be installed
-> unconditionally to the target when building gobject-introspection.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[1]:
+https://git.buildroot.net/buildroot/commit/?id=26d67a2599d6c88facd5178de853fa355244e7c2
 
-I've moved the big note to the code next to the select, and pushed to
-next, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/67d/67d341c0cc272323d6e231a20796a6848c21d760/
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libsvgtiny/libsvgtiny.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-> ---
->  package/gobject-introspection/Config.in | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
-> index 0537cc0404..26ca5d6e3a 100644
-> --- a/package/gobject-introspection/Config.in
-> +++ b/package/gobject-introspection/Config.in
-> @@ -9,11 +9,11 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
->  	# can be verified.
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->  	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	depends on BR2_PACKAGE_PYTHON3
->  	select BR2_PACKAGE_HOST_QEMU
->  	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
->  	select BR2_PACKAGE_LIBFFI
->  	select BR2_PACKAGE_LIBGLIB2
-> -	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
->  	select BR2_PACKAGE_ZLIB
->  	help
->  	  GObject introspection is a middleware layer between C
-> @@ -25,6 +25,9 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
->  
->  	  https://wiki.gnome.org/action/show/Projects/GObjectIntrospection
->  
-> +comment "gobject-introspection needs python3"
-> +	depends on !BR2_PACKAGE_PYTHON3
-> +
->  comment "gobject-introspection needs a glibc toolchain, gcc >= 4.9"
->  	depends on BR2_USE_MMU
->  	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+index fe7dc0a6d2..a2165d5b7e 100644
+--- a/package/libsvgtiny/libsvgtiny.mk
++++ b/package/libsvgtiny/libsvgtiny.mk
+@@ -12,8 +12,6 @@ LIBSVGTINY_DEPENDENCIES = \
+ 	libxml2 host-gperf host-pkgconf host-netsurf-buildsystem
+ LIBSVGTINY_LICENSE = MIT
+ LIBSVGTINY_LICENSE_FILES = README
+-# Package does not build in parallel due to improper make rules
+-LIBSVGTINY_MAKE = $(MAKE1)
+ 
+ # The libsvgtiny build system cannot build both the shared and static
+ # libraries. So when the Buildroot configuration requests to build
+@@ -29,7 +27,8 @@ define LIBSVGTINY_CONFIGURE_CMDS
+ endef
+ 
+ define LIBSVGTINY_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=/usr \
++# Use $(MAKE1) since parallel build fails
++	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) PREFIX=/usr \
+ 		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE)
+ endef
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
