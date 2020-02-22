@@ -1,69 +1,57 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 22 Feb 2020 11:47:06 -0300
-Subject: [Buildroot] [PATCH] package/radvd: disable by default in systemd
- preset-all
-Message-ID: <20200222144706.7896-1-unixmania@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 22 Feb 2020 17:01:01 +0100
+Subject: [Buildroot] [PATCH] package/mesa3d: select gbm if no glx,
+ no egl and no osmesa-classic
+Message-ID: <20200222160101.107362-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+This issue has been trigged since [1]:
+"package/mesa3d: add option to configure gbm support"
 
-We don't provide a configuration file, so disable radvd by default.
+Before the patch, the gbm support was autodetected by meson and enabled
+only when at least one dri driver was enabled [2].
 
-Update the help message with instructions on how to enable radvd at
-build time with systemd.
+On the Buildroot side, the gbm support was explicitely enabled only when
+BR2_PACKAGE_MESA3D_OPENGL_EGL was set.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Now, the gbm support is explicitely disabled but the meson build system
+check if at least one option OpenGL GLX or OpenGL EGL or GBM or
+OSMesa (classic) library is enabled [3].
+
+The previous behavious was to enable GBM when GLX, EGL and OSMesa are
+disabled. So select GBM symbol for this case.
+
+Fixes:
+http://autobuild.buildroot.net/results/a14f329560f8022f7ba8ec43ad8eed84e005d226
+
+[1] b6c051acf787c804e732bc58ba8d7e440701a168
+[2] https://gitlab.freedesktop.org/mesa/mesa/blob/19.3/meson.build#L348
+[3] https://gitlab.freedesktop.org/mesa/mesa/blob/19.3/meson.build#L449
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/radvd/50-radvd.preset | 1 +
- package/radvd/Config.in       | 8 ++++++++
- package/radvd/radvd.mk        | 6 ++++++
- 3 files changed, 15 insertions(+)
- create mode 100644 package/radvd/50-radvd.preset
+ package/mesa3d/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/radvd/50-radvd.preset b/package/radvd/50-radvd.preset
-new file mode 100644
-index 0000000000..90d0ee4bbc
---- /dev/null
-+++ b/package/radvd/50-radvd.preset
-@@ -0,0 +1 @@
-+disable radvd.service
-diff --git a/package/radvd/Config.in b/package/radvd/Config.in
-index 48aeedc08f..fa5a20c4c1 100644
---- a/package/radvd/Config.in
-+++ b/package/radvd/Config.in
-@@ -5,4 +5,12 @@ config BR2_PACKAGE_RADVD
- 	help
- 	  IPv6 Router Advertisement Daemon.
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 0788f47137..1b4b281970 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -61,6 +61,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	bool
+ 	select BR2_PACKAGE_MESA3D_DRIVER
++	select BR2_PACKAGE_MESA3D_GBM if \
++		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
++		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
++		!BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
+ 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
+ 		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
  
-+	  On busybox and sysvinit systems, radvd will be started only if
-+	  a /etc/radvd.conf exists.
-+
-+	  To enable it at build time with systemd, add /etc/radvd.conf
-+	  and a /etc/systemd/system-preset/40-radvd.preset file with
-+
-+	    enable radvd.service
-+
- 	  http://www.litech.org/radvd/
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 5679e613d4..3358264f18 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -17,6 +17,12 @@ RADVD_AUTORECONF = YES
- RADVD_LICENSE = BSD-4-Clause-like
- RADVD_LICENSE_FILES = COPYRIGHT
- 
-+# We don't provide /etc/radvd.conf, so disable the service by default.
-+define RADVD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 package/radvd/50-radvd.preset \
-+		$(TARGET_DIR)/usr/lib/systemd/system-preset/50-radvd.preset
-+endef
-+
- define RADVD_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/radvd/S50radvd $(TARGET_DIR)/etc/init.d/S50radvd
- endef
 -- 
-2.18.2
+2.24.1
