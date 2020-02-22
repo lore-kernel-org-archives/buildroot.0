@@ -1,52 +1,144 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sat, 22 Feb 2020 22:44:39 +0100
-Subject: [Buildroot] [PATCH] package/libsvgtiny: fix parallel build
-Message-ID: <20200222214439.18588-1-giulio.benetti@benettiengineering.com>
+Date: Sat, 22 Feb 2020 22:48:39 +0100
+Subject: [Buildroot] Analysis of build results
+In-Reply-To: <CAPi7W83PUi3H3+G6-Drk=-nWe+7j_Ffn7nkT4WvXj5jYwbcHWA@mail.gmail.com>
+References: <20200219074844.F3D6C85D78@fraxinus.osuosl.org>
+ <20200220034343.2370e4e4@windsurf>
+ <94c8edad-773d-2b36-5daf-b6ee60dd747f@micronovasrl.com>
+ <3e7b016b-eca6-b768-3fca-8fd7e44d0299@micronovasrl.com>
+ <20200220190807.505b4fb2@windsurf>
+ <00751b5d-ca05-fe42-0e9b-6a1005a09e6d@micronovasrl.com>
+ <20200220192344.03785f04@windsurf>
+ <bcc10a0e-c54e-5b75-9b77-8922b85a925a@micronovasrl.com>
+ <fe7d07df-71a0-e317-6b91-ade479545ec4@smile.fr>
+ <28258465-4f79-3f47-189d-bb066b0aa9f7@micronovasrl.com>
+ <54468015-dded-6cd7-e36d-67553a54455e@smile.fr>
+ <b9b88aef-7173-9746-95cb-b9ea6a9718fb@micronovasrl.com>
+ <CAPi7W83PUi3H3+G6-Drk=-nWe+7j_Ffn7nkT4WvXj5jYwbcHWA@mail.gmail.com>
+Message-ID: <c5bea921-0cc9-66e4-0b9d-3d46d53c0044@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix previous commit[1] which purpose was to fix parallel build. It
-didn't work since it assigned $(MAKE1) to LIBSVGTINY_MAKE, but this is a
-generic-package and building is done using $(MAKE), then LIBSVGTINY_MAKE
-was ignored. Let's substitute instead $(MAKE) with $(MAKE1) in
-LIBSVGTINY_BUILD_CMDS.
+Hi Fabrice,
 
-[1]:
-https://git.buildroot.net/buildroot/commit/?id=26d67a2599d6c88facd5178de853fa355244e7c2
+On 2/22/20 10:11 PM, Fabrice Fontaine wrote:
+> Dear all,
+> 
+> Le sam. 22 f?vr. 2020 ? 20:44, Giulio Benetti
+> <giulio.benetti@micronovasrl.com> a ?crit :
+>>
+>> Hi Romain,
+>>
+>> +Cc me @benettiengineering.com and...
+>>
+>> Il 22/02/2020 20:10, Romain Naour ha scritto:
+>>> Hi Giulio,
+>>>
+>>> CC: buildroot <buildroot@buildroot.org>
+>>>
+>>> Le 22/02/2020 ? 19:57, Giulio Benetti a ?crit :
+>>>> Hi Romain,
+>>>>
+>>>> Il 22/02/2020 19:18, Romain Naour ha scritto:
+>>>>> Hi Giulio,
+>>>>>
+>>>>> Le 21/02/2020 ? 00:09, Giulio Benetti a ?crit :
+>>>>>> Hi Thomas,
+>>>>>>
+>>>>>> Il 20/02/2020 19:23, Thomas Petazzoni ha scritto:
+>>>>>>> On Thu, 20 Feb 2020 19:16:37 +0100
+>>>>>>> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+>>>>>>>
+>>>>>>>> So something like:
+>>>>>>>> # while true; do make foo && make foo-dirclean; done
+>>>>>>>>
+>>>>>>>> but please do you have a 'standard' form where it escapes on error?
+>>>>>>>
+>>>>>>> while true; do make foo && make foo-dirclean || break ; done
+>>>>>>
+>>>>>> Unfortunately the problem doesn't show up, I've also accelerated the building
+>>>>>> launching a local script in build/libsvgtiny-xxx/ that call make -j17 && make
+>>>>>> clean with all the arguments Buildroot provides to accelerate, but nothing. I've
+>>>>>> tried on my Workstation, my laptop and 1 of my autobuilders.
+>>>>>>
+>>>>>> Romain, have you had the chance to try that patch? Can I do something to ease
+>>>>>> the thing? Also, which specific distro(Distro name, kernel version) do you have?
+>>>>>
+>>>>> This a a Fedora 31 disto regularly updated.
+>>>>>
+>>>>> This is weird since we already disabled parallel build [1]
+>>>>
+>>>> Ah good finding, with this I've also found that [1] is wrong, since this is a
+>>>> generic package, so need to build with $(MAKE1) instead of $(MAKE) without
+>>>> LIBSVGTINY_MAKE = $(MAKE1)
+>>>> but maybe the patch i've sent you could work.
+>>>>
+>>>> Can you give a try?
+>>>
+>>> I tried to reproduce the issue but libsvgtiny still build fine here...
+>>>
+>>>>
+>>>> If it still fails, since this package contains 4 source files, I could send a
+>>>> patch that really avoid parallel build. And it must sent anyway a patch to fix
+>>>> that error.
+>>>
+>>> Maybe we can just fix the patch [1] ?
+>>> Can you send the patch ?
+>>
+>> ...yes, I'm going to send it soon.
+>>
+>>> BTW, who is using libsvgtiny? There is no package using it, no DEVELOPERS entry,
+>>> a fragile build system and the version we use is out of date (2011-03-21).
+>>> Maybe we can drop it?
+>>
+>> Yes, it should at least be bumped, I could take care of it, but I don't
+>> know if someone uses this package. Anyway I've seen that tags are set
+>> per year, so my effort would be very few to bump it and keep it up to date.
+> It should be noted that to bump it, you'll also have to bump
+> netsurf-buildsystem as well as add libdom package which is used
+> instead of libxml2 since
+> https://source.netsurf-browser.org/libsvgtiny.git/commit/?id=d03a7471001c4701e1fea976aee162b0de375f52
+> libdom depends on libparserutils and libwapcaplet which also need to
+> be added to buildroot.
+> So that's probably a lot of work for a package that is not used
+> currently by any package.
 
-Fixes:
-http://autobuild.buildroot.net/results/67d/67d341c0cc272323d6e231a20796a6848c21d760/
+Fortunately you've described all the implications for bumping this 
+package, thank you! After this I can tell I won't bump and maintain that 
+package.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libsvgtiny/libsvgtiny.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Well, I've just sent the patch to fix parallel build:
+https://patchwork.ozlabs.org/patch/1242561/
 
-diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
-index fe7dc0a6d2..a2165d5b7e 100644
---- a/package/libsvgtiny/libsvgtiny.mk
-+++ b/package/libsvgtiny/libsvgtiny.mk
-@@ -12,8 +12,6 @@ LIBSVGTINY_DEPENDENCIES = \
- 	libxml2 host-gperf host-pkgconf host-netsurf-buildsystem
- LIBSVGTINY_LICENSE = MIT
- LIBSVGTINY_LICENSE_FILES = README
--# Package does not build in parallel due to improper make rules
--LIBSVGTINY_MAKE = $(MAKE1)
- 
- # The libsvgtiny build system cannot build both the shared and static
- # libraries. So when the Buildroot configuration requests to build
-@@ -29,7 +27,8 @@ define LIBSVGTINY_CONFIGURE_CMDS
- endef
- 
- define LIBSVGTINY_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=/usr \
-+# Use $(MAKE1) since parallel build fails
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) PREFIX=/usr \
- 		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE)
- endef
- 
+Kind regards
 -- 
-2.20.1
+Giulio Benetti
+Benetti Engineering sas
+
+>>
+>> Thomas, please let me know if it is a good idea or better drop it.
+>>
+>> --
+>> Giulio Benetti
+>>
+>>> Best regards,
+>>> Romain
+>>>
+>>>>
+>>>> Please let me know
+>>>> Thank you
+>>>>
+>>>> Best regards!
+>>>
+>>
+> Best Regards,
+> 
+> Fabrice
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
