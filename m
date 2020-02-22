@@ -1,154 +1,62 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 22 Feb 2020 23:00:01 +0100
-Subject: [Buildroot] Analysis of build results
-In-Reply-To: <c5bea921-0cc9-66e4-0b9d-3d46d53c0044@benettiengineering.com>
-References: <20200219074844.F3D6C85D78@fraxinus.osuosl.org>
- <20200220034343.2370e4e4@windsurf>
- <94c8edad-773d-2b36-5daf-b6ee60dd747f@micronovasrl.com>
- <3e7b016b-eca6-b768-3fca-8fd7e44d0299@micronovasrl.com>
- <20200220190807.505b4fb2@windsurf>
- <00751b5d-ca05-fe42-0e9b-6a1005a09e6d@micronovasrl.com>
- <20200220192344.03785f04@windsurf>
- <bcc10a0e-c54e-5b75-9b77-8922b85a925a@micronovasrl.com>
- <fe7d07df-71a0-e317-6b91-ade479545ec4@smile.fr>
- <28258465-4f79-3f47-189d-bb066b0aa9f7@micronovasrl.com>
- <54468015-dded-6cd7-e36d-67553a54455e@smile.fr>
- <b9b88aef-7173-9746-95cb-b9ea6a9718fb@micronovasrl.com>
- <CAPi7W83PUi3H3+G6-Drk=-nWe+7j_Ffn7nkT4WvXj5jYwbcHWA@mail.gmail.com>
- <c5bea921-0cc9-66e4-0b9d-3d46d53c0044@benettiengineering.com>
-Message-ID: <CAPi7W82MAQ59gRu+9eikoyMnqyVtqA_+PZQx5w93BduoE-PGcg@mail.gmail.com>
+Date: Sat, 22 Feb 2020 23:08:55 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/smartmontools: bump to version
+ 7.1
+Message-ID: <20200222220855.485064-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le sam. 22 f?vr. 2020 ? 22:48, Giulio Benetti
-<giulio.benetti@benettiengineering.com> a ?crit :
->
-> Hi Fabrice,
->
-> On 2/22/20 10:11 PM, Fabrice Fontaine wrote:
-> > Dear all,
-> >
-> > Le sam. 22 f?vr. 2020 ? 20:44, Giulio Benetti
-> > <giulio.benetti@micronovasrl.com> a ?crit :
-> >>
-> >> Hi Romain,
-> >>
-> >> +Cc me @benettiengineering.com and...
-> >>
-> >> Il 22/02/2020 20:10, Romain Naour ha scritto:
-> >>> Hi Giulio,
-> >>>
-> >>> CC: buildroot <buildroot@buildroot.org>
-> >>>
-> >>> Le 22/02/2020 ? 19:57, Giulio Benetti a ?crit :
-> >>>> Hi Romain,
-> >>>>
-> >>>> Il 22/02/2020 19:18, Romain Naour ha scritto:
-> >>>>> Hi Giulio,
-> >>>>>
-> >>>>> Le 21/02/2020 ? 00:09, Giulio Benetti a ?crit :
-> >>>>>> Hi Thomas,
-> >>>>>>
-> >>>>>> Il 20/02/2020 19:23, Thomas Petazzoni ha scritto:
-> >>>>>>> On Thu, 20 Feb 2020 19:16:37 +0100
-> >>>>>>> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
-> >>>>>>>
-> >>>>>>>> So something like:
-> >>>>>>>> # while true; do make foo && make foo-dirclean; done
-> >>>>>>>>
-> >>>>>>>> but please do you have a 'standard' form where it escapes on error?
-> >>>>>>>
-> >>>>>>> while true; do make foo && make foo-dirclean || break ; done
-> >>>>>>
-> >>>>>> Unfortunately the problem doesn't show up, I've also accelerated the building
-> >>>>>> launching a local script in build/libsvgtiny-xxx/ that call make -j17 && make
-> >>>>>> clean with all the arguments Buildroot provides to accelerate, but nothing. I've
-> >>>>>> tried on my Workstation, my laptop and 1 of my autobuilders.
-> >>>>>>
-> >>>>>> Romain, have you had the chance to try that patch? Can I do something to ease
-> >>>>>> the thing? Also, which specific distro(Distro name, kernel version) do you have?
-> >>>>>
-> >>>>> This a a Fedora 31 disto regularly updated.
-> >>>>>
-> >>>>> This is weird since we already disabled parallel build [1]
-> >>>>
-> >>>> Ah good finding, with this I've also found that [1] is wrong, since this is a
-> >>>> generic package, so need to build with $(MAKE1) instead of $(MAKE) without
-> >>>> LIBSVGTINY_MAKE = $(MAKE1)
-> >>>> but maybe the patch i've sent you could work.
-> >>>>
-> >>>> Can you give a try?
-> >>>
-> >>> I tried to reproduce the issue but libsvgtiny still build fine here...
-> >>>
-> >>>>
-> >>>> If it still fails, since this package contains 4 source files, I could send a
-> >>>> patch that really avoid parallel build. And it must sent anyway a patch to fix
-> >>>> that error.
-> >>>
-> >>> Maybe we can just fix the patch [1] ?
-> >>> Can you send the patch ?
-> >>
-> >> ...yes, I'm going to send it soon.
-> >>
-> >>> BTW, who is using libsvgtiny? There is no package using it, no DEVELOPERS entry,
-> >>> a fragile build system and the version we use is out of date (2011-03-21).
-> >>> Maybe we can drop it?
-> >>
-> >> Yes, it should at least be bumped, I could take care of it, but I don't
-> >> know if someone uses this package. Anyway I've seen that tags are set
-> >> per year, so my effort would be very few to bump it and keep it up to date.
-> > It should be noted that to bump it, you'll also have to bump
-> > netsurf-buildsystem as well as add libdom package which is used
-> > instead of libxml2 since
-> > https://source.netsurf-browser.org/libsvgtiny.git/commit/?id=d03a7471001c4701e1fea976aee162b0de375f52
-> > libdom depends on libparserutils and libwapcaplet which also need to
-> > be added to buildroot.
-> > So that's probably a lot of work for a package that is not used
-> > currently by any package.
->
-> Fortunately you've described all the implications for bumping this
-> package, thank you! After this I can tell I won't bump and maintain that
-> package.
-That's perfectly understandable and I won't do it either so I would
-"vote" to drop this package as suggested by Romain.
->
-> Well, I've just sent the patch to fix parallel build:
-> https://patchwork.ozlabs.org/patch/1242561/
->
-> Kind regards
-> --
-> Giulio Benetti
-> Benetti Engineering sas
->
-> >>
-> >> Thomas, please let me know if it is a good idea or better drop it.
-> >>
-> >> --
-> >> Giulio Benetti
-> >>
-> >>> Best regards,
-> >>> Romain
-> >>>
-> >>>>
-> >>>> Please let me know
-> >>>> Thank you
-> >>>>
-> >>>> Best regards!
-> >>>
-> >>
-> > Best Regards,
-> >
-> > Fabrice
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
-Best Regards,
+- systemd optional dependency has been added in version 7.0
+- Update indentation of hash file (two spaces)
 
-Fabrice
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/smartmontools/smartmontools.hash | 8 +++++---
+ package/smartmontools/smartmontools.mk   | 9 ++++++++-
+ 2 files changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/package/smartmontools/smartmontools.hash b/package/smartmontools/smartmontools.hash
+index ffa1e8f97e..bec007aabd 100644
+--- a/package/smartmontools/smartmontools.hash
++++ b/package/smartmontools/smartmontools.hash
+@@ -1,5 +1,7 @@
+-# From http://sourceforge.net/projects/smartmontools/files/smartmontools/6.5/
+-md5	093aeec3f8f39fa9a37593c4012d3156	smartmontools-6.5.tar.gz
+-sha1	7e788b429534a4ae627858fbcc826b93402cee7e	smartmontools-6.5.tar.gz
++# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.1/
++md5  430cd5f64caa4524018b536e5ecd9c29  smartmontools-7.1.tar.gz
++sha1  207dc2b50cab1c6fba7bc248665fbbe3189374e1  smartmontools-7.1.tar.gz
++
+ # Locally computed
++sha256  3f734d2c99deb1e4af62b25d944c6252de70ca64d766c4c7294545a2e659b846  smartmontools-7.1.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
+index bad7da2d16..77eedfabd8 100644
+--- a/package/smartmontools/smartmontools.mk
++++ b/package/smartmontools/smartmontools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SMARTMONTOOLS_VERSION = 6.5
++SMARTMONTOOLS_VERSION = 7.1
+ SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
+ SMARTMONTOOLS_LICENSE = GPL-2.0+
+ SMARTMONTOOLS_LICENSE_FILES = COPYING
+@@ -23,4 +23,11 @@ else
+ SMARTMONTOOLS_CONF_OPTS += --without-selinux
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++SMARTMONTOOLS_CONF_OPTS += --with-libsystemd
++SMARTMONTOOLS_DEPENDENCIES += systemd
++else
++SMARTMONTOOLS_CONF_OPTS += --without-libsystemd
++endif
++
+ $(eval $(autotools-package))
+-- 
+2.25.0
