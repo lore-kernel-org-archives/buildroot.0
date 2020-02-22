@@ -1,67 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 22 Feb 2020 10:50:35 +0100
-Subject: [Buildroot] [PATCH 2/2] package/bash: fix build on uclibc
-In-Reply-To: <20200222095035.298539-1-fontaine.fabrice@gmail.com>
-References: <20200222095035.298539-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200222095035.298539-2-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 22 Feb 2020 11:38:47 +0100
+Subject: [Buildroot] [PATCH] infra: don't be verbose when calling the
+ instrumentation steps
+Message-ID: <20200222103848.10236-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/2ae2eca969e6d1febcacb8b0423ced3aad7505a2
+Commit 509db3b88a added calls to (parts of) the instrumentation steps.
+However, those calls are echoed, unlike the other places where we call
+them (in the package infra).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- ...put.h-add-missing-include-on-stdio.h.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/bash/0017-input.h-add-missing-include-on-stdio.h.patch
+ Makefile | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/bash/0017-input.h-add-missing-include-on-stdio.h.patch b/package/bash/0017-input.h-add-missing-include-on-stdio.h.patch
-new file mode 100644
-index 0000000000..fd008e9472
---- /dev/null
-+++ b/package/bash/0017-input.h-add-missing-include-on-stdio.h.patch
-@@ -0,0 +1,38 @@
-+From 4fa85c85b9a76afd3b19ed75bf17ccd2940f1f55 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 16 Feb 2020 16:18:48 +0100
-+Subject: [PATCH] input.h: add missing include on stdio.h
-+
-+This will fix the following build failure on uclibc:
-+
-+test -n "/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/host/bin/arm-linux-ranlib" && /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-2/output/host/bin/arm-linux-ranlib libsh.a
-+In file included from ./exec.def:71:
-+../input.h:76:3: error: unknown type name 'FILE'
-+   FILE *file;
-+   ^~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/bfca306868df54c567215c45c8cdac838d02f567
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://savannah.gnu.org/support/?110196]
-+---
-+ input.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/input.h b/input.h
-+index 6aef1269..08b0fdea 100644
-+--- a/input.h
-++++ b/input.h
-+@@ -21,6 +21,8 @@
-+ #if !defined (_INPUT_H_)
-+ #define _INPUT_H_
-+ 
-++#include <stdio.h>
-++
-+ #include "stdc.h"
-+ 
-+ /* Function pointers can be declared as (Function *)foo. */
-+-- 
-+2.24.1
-+
+diff --git a/Makefile b/Makefile
+index 9662987bb4..b61a20a354 100644
+--- a/Makefile
++++ b/Makefile
+@@ -807,12 +807,12 @@ endif # merged /usr
+ # AFTER ALL FILE-CHANGING ACTIONS:
+ # Update timestamps in internal file list to fix attribution of files
+ # to packages on subsequent builds
+-	$(call step_pkg_size_file_list,$(TARGET_DIR))
+-	$(call step_pkg_size_finalize)
+-	$(call step_pkg_size_file_list,$(STAGING_DIR),-staging)
+-	$(call step_pkg_size_finalize,-staging)
+-	$(call step_pkg_size_file_list,$(HOST_DIR),-host)
+-	$(call step_pkg_size_finalize,-host)
++	@$(call step_pkg_size_file_list,$(TARGET_DIR))
++	@$(call step_pkg_size_finalize)
++	@$(call step_pkg_size_file_list,$(STAGING_DIR),-staging)
++	@$(call step_pkg_size_finalize,-staging)
++	@$(call step_pkg_size_file_list,$(HOST_DIR),-host)
++	@$(call step_pkg_size_finalize,-host)
+ 
+ .PHONY: target-post-image
+ target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
 -- 
-2.25.0
+2.20.1
