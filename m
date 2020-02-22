@@ -1,146 +1,104 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 Feb 2020 20:41:59 +0100
-Subject: [Buildroot] [PATCH] package/mesa3d: gbm needs a DRI driver or a
- Gallium driver w/ EGL
-In-Reply-To: <20200222194041.GK17342@scaer>
-References: <20200219191013.17818-1-romain.naour@smile.fr>
- <20200222194041.GK17342@scaer>
-Message-ID: <20200222194159.GL17342@scaer>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sat, 22 Feb 2020 20:44:00 +0100
+Subject: [Buildroot] Analysis of build results
+In-Reply-To: <54468015-dded-6cd7-e36d-67553a54455e@smile.fr>
+References: <20200219074844.F3D6C85D78@fraxinus.osuosl.org>
+ <20200220034343.2370e4e4@windsurf>
+ <94c8edad-773d-2b36-5daf-b6ee60dd747f@micronovasrl.com>
+ <3e7b016b-eca6-b768-3fca-8fd7e44d0299@micronovasrl.com>
+ <20200220190807.505b4fb2@windsurf>
+ <00751b5d-ca05-fe42-0e9b-6a1005a09e6d@micronovasrl.com>
+ <20200220192344.03785f04@windsurf>
+ <bcc10a0e-c54e-5b75-9b77-8922b85a925a@micronovasrl.com>
+ <fe7d07df-71a0-e317-6b91-ade479545ec4@smile.fr>
+ <28258465-4f79-3f47-189d-bb066b0aa9f7@micronovasrl.com>
+ <54468015-dded-6cd7-e36d-67553a54455e@smile.fr>
+Message-ID: <b9b88aef-7173-9746-95cb-b9ea6a9718fb@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Hi Romain,
 
-On 2020-02-22 20:40 +0100, Yann E. MORIN spake thusly:
-> On 2020-02-19 20:10 +0100, Romain Naour spake thusly:
-> > src/gbm/cd6bfad@@gbm at sha/main_backend.c.o: In function `_gbm_create_device':
-> > backend.c:(.text+0x38): undefined reference to `gbm_dri_backend'
-> > backend.c:(.text+0x40): undefined reference to `gbm_dri_backend'
-> > backend.c:(.text+0x74): undefined reference to `gbm_dri_backend'
-> > backend.c:(.text+0x78): undefined reference to `gbm_dri_backend'
-> > collect2: error: ld returned 1 exit status
-> > 
-> > This issue has been trigged since [1]:
-> > "package/mesa3d: add option to configure gbm support"
-> > 
-> > Before the patch, the gbm support was autodetected by meson and enabled
-> > only when at least one dri driver was enabled [2].
-> > 
-> > On the Buildroot side, the gbm support was explicitely enabled only when
-> > BR2_PACKAGE_MESA3D_OPENGL_EGL was set.
-> > 
-> > We have two cases:
-> > - At least one DRI driver.
-> > - No DRI driver but one Gallium w/ EGL enable (EGL selected or not by the
-> >   Gallium driver). In this case the meson build system set with_dri to true
-> >   (even if no DRI driver is enabled) to use the builtin:egl_dri2 [3].
-> > 
-> > The gbm's meson build system seems to handle the case where no dri driver is
-> > enabled [4] but it still use main/backend.c source file [6] that use
-> > gbm_dri_backend [7]. So with_dri2 must always be set.
-> > 
-> > Probably a missing check in meson.build:
-> > 
-> >  if with_gbm and not with_dri
-> >    error('GBM backend needs a dri driver or a gallium driver w/ EGL support.')
-> >  endif
-> > 
-> > Add a dependency on GBM option:
-> > 
-> >  depends on BR2_PACKAGE_MESA3D_DRI_DRIVER \
-> >          || (BR2_PACKAGE_MESA3D_GALLIUM_DRIVER && BR2_PACKAGE_MESA3D_OPENGL_EGL)
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/b9b6281983388dc22d929887d653da3db60f1f2c
-> > 
-> > [1] b6c051acf787c804e732bc58ba8d7e440701a168
-> > [2] https://gitlab.freedesktop.org/mesa/mesa/blob/19.3/meson.build#L348
-> > [3] https://gitlab.freedesktop.org/mesa/mesa/blob/19.3/meson.build#L212
-> > [4] https://gitlab.freedesktop.org/mesa/mesa/blob/19.3/src/gbm/meson.build#L37
-> > [5] https://gitlab.freedesktop.org/mesa/mesa/blob/19.3/src/gbm/meson.build#L24
-> > [6] https://gitlab.freedesktop.org/mesa/mesa/blob/19.3/src/gbm/main/backend.c#L38
-> > [7] http://lists.busybox.net/pipermail/buildroot/2020-February/274425.html
-> > 
-> > Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
++Cc me @benettiengineering.com and...
 
-And,,, Applied to master, thanks.
+Il 22/02/2020 20:10, Romain Naour ha scritto:
+> Hi Giulio,
+> 
+> CC: buildroot <buildroot@buildroot.org>
+> 
+> Le 22/02/2020 ? 19:57, Giulio Benetti a ?crit?:
+>> Hi Romain,
+>>
+>> Il 22/02/2020 19:18, Romain Naour ha scritto:
+>>> Hi Giulio,
+>>>
+>>> Le 21/02/2020 ? 00:09, Giulio Benetti a ?crit?:
+>>>> Hi Thomas,
+>>>>
+>>>> Il 20/02/2020 19:23, Thomas Petazzoni ha scritto:
+>>>>> On Thu, 20 Feb 2020 19:16:37 +0100
+>>>>> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+>>>>>
+>>>>>> So something like:
+>>>>>> # while true; do make foo && make foo-dirclean; done
+>>>>>>
+>>>>>> but please do you have a 'standard' form where it escapes on error?
+>>>>>
+>>>>> while true; do make foo && make foo-dirclean || break ; done
+>>>>
+>>>> Unfortunately the problem doesn't show up, I've also accelerated the building
+>>>> launching a local script in build/libsvgtiny-xxx/ that call make -j17 && make
+>>>> clean with all the arguments Buildroot provides to accelerate, but nothing. I've
+>>>> tried on my Workstation, my laptop and 1 of my autobuilders.
+>>>>
+>>>> Romain, have you had the chance to try that patch? Can I do something to ease
+>>>> the thing? Also, which specific distro(Distro name, kernel version) do you have?
+>>>
+>>> This a a Fedora 31 disto regularly updated.
+>>>
+>>> This is weird since we already disabled parallel build [1]
+>>
+>> Ah good finding, with this I've also found that [1] is wrong, since this is a
+>> generic package, so need to build with $(MAKE1) instead of $(MAKE) without
+>> LIBSVGTINY_MAKE = $(MAKE1)
+>> but maybe the patch i've sent you could work.
+>>
+>> Can you give a try?
+> 
+> I tried to reproduce the issue but libsvgtiny still build fine here...
+> 
+>>
+>> If it still fails, since this package contains 4 source files, I could send a
+>> patch that really avoid parallel build. And it must sent anyway a patch to fix
+>> that error.
+> 
+> Maybe we can just fix the patch [1] ?
+> Can you send the patch ?
 
-Regards,
-Yann E. MORIN.
+...yes, I'm going to send it soon.
 
-> So, with the other patch you sent later (and that I already applied),
-> the conditions for gbm are now very strict, to the point where there is
-> only three conditions under wich it is freely selectable: one of the DRI
-> drivers is enabled, *and* OSMesa is enabled.
-> 
-> Now, gbm depends on Galium and EGL, but EGL forcibly selects GBM.
-> 
-> So the comment that states "gbm needs [...] gallium and EGL", alrhough
-> technically correct, is totally useless, because enabling EGL gives no
-> choice as it forcibly enables gbm.
-> 
-> I know mesa3d is complex, but our packaging of it really looks like it
-> is overly complicated for no good reasons. It evolved organically over
-> the years, and probably now is a good time for a full revamp of the
-> package.
-> 
-> Any taker?
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > ---
-> >  package/mesa3d/Config.in | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> > index dbfc59bad5..0788f47137 100644
-> > --- a/package/mesa3d/Config.in
-> > +++ b/package/mesa3d/Config.in
-> > @@ -400,9 +400,15 @@ comment "OpenGL API Support"
-> >  
-> >  config BR2_PACKAGE_MESA3D_GBM
-> >  	bool "gbm"
-> > +	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER \
-> > +		|| (BR2_PACKAGE_MESA3D_GALLIUM_DRIVER && BR2_PACKAGE_MESA3D_OPENGL_EGL)
-> >  	help
-> >  	  Enable Generic Buffer Management (gbm)
-> >  
-> > +comment "gbm support needs a dri driver or a gallium driver w/ EGL support."
-> > +	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER \
-> > +		|| !(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER && BR2_PACKAGE_MESA3D_OPENGL_EGL)
-> > +
-> >  config BR2_PACKAGE_MESA3D_OPENGL_GLX
-> >  	bool "OpenGL GLX"
-> >  	depends on BR2_PACKAGE_XORG7
-> > -- 
-> > 2.21.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> BTW, who is using libsvgtiny? There is no package using it, no DEVELOPERS entry,
+> a fragile build system and the version we use is out of date (2011-03-21).
+> Maybe we can drop it?
+
+Yes, it should at least be bumped, I could take care of it, but I don't 
+know if someone uses this package. Anyway I've seen that tags are set 
+per year, so my effort would be very few to bump it and keep it up to date.
+
+Thomas, please let me know if it is a good idea or better drop it.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Giulio Benetti
+
+> Best regards,
+> Romain
+> 
+>>
+>> Please let me know
+>> Thank you
+>>
+>> Best regards!
+> 
