@@ -1,35 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 Feb 2020 22:30:40 +0100
-Subject: [Buildroot] [PATCH] infra: don't be verbose when calling the
- instrumentation steps
-In-Reply-To: <CAAXf6LUf4+9qbx-mUvcdOaRGE-z5EMk0+8m7fQ2s3hd9RHXxOg@mail.gmail.com>
-References: <20200222103848.10236-1-yann.morin.1998@free.fr>
- <CAAXf6LX6G0c72v8rx1W9maf4ERKffKyo9qsSaN+qdsd=OOG-7g@mail.gmail.com>
- <20200222110541.GE17342@scaer>
- <CAAXf6LUDaJ5eKtPCmYOsni0=VYOEF1q8zouwrkvB7Bqrh_ai-g@mail.gmail.com>
- <20200222202810.GM17342@scaer>
- <CAAXf6LUf4+9qbx-mUvcdOaRGE-z5EMk0+8m7fQ2s3hd9RHXxOg@mail.gmail.com>
-Message-ID: <20200222213040.GA8743@scaer>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sat, 22 Feb 2020 13:31:42 -0800
+Subject: [Buildroot] [PATCH 1/1] package/gobject-introspection: depend on
+ python3
+Message-ID: <20200222213142.2213941-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On 2020-02-22 22:14 +0100, Thomas De Schampheleire spake thusly:
-> Acked-by: Thomas De Schampheleire < [4]thomas.de_schampheleire@nokia.com>
+Currently, the Config.in file has the line:
+select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
 
-Applied to master, thanks! :-)
+This line is incorrect as gobject-introspection does not support python2.
+Instead, remove the select line and make python3 a dependency with a new
+message that explains that gobject-introspection requires python3.
 
-Regards,
-Yann E. MORIN.
+Note:
+gobject-introspection does not require python3 to run on the target; however,
+because the tools run in a qemu wrapper, a cross-compiled python3 must be
+installed to staging. As there is no current mechanism to tell Buildroot only
+to install python to staging, then python must also be installed
+unconditionally to the target when building gobject-introspection.
 
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/gobject-introspection/Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
+index 0537cc0404..26ca5d6e3a 100644
+--- a/package/gobject-introspection/Config.in
++++ b/package/gobject-introspection/Config.in
+@@ -9,11 +9,11 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
+ 	# can be verified.
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_HOST_QEMU
+ 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
+ 	select BR2_PACKAGE_LIBFFI
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  GObject introspection is a middleware layer between C
+@@ -25,6 +25,9 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
+ 
+ 	  https://wiki.gnome.org/action/show/Projects/GObjectIntrospection
+ 
++comment "gobject-introspection needs python3"
++	depends on !BR2_PACKAGE_PYTHON3
++
+ comment "gobject-introspection needs a glibc toolchain, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.24.1
