@@ -1,48 +1,76 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat, 22 Feb 2020 09:57:06 +0100
-Subject: [Buildroot] [PATCH v3 02/12] support/scripts/pkg-stats: store patch
- files for the package
+Date: Sat, 22 Feb 2020 09:57:07 +0100
+Subject: [Buildroot] [PATCH v3 03/12] support/scripts/pkg-stats: set
+ developers info
 In-Reply-To: <20200222085715.23769-1-heiko.thiery@gmail.com>
 References: <20200222085715.23769-1-heiko.thiery@gmail.com>
-Message-ID: <20200222085715.23769-3-heiko.thiery@gmail.com>
+Message-ID: <20200222085715.23769-4-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Thiery <heiko.thiery@kontron.com>
+Use the function 'parse_developers' function from getdeveloperlib that
+collect the information about the developers and the files they
+maintain. Then set the maintainer(s) to each package.
 
-Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- support/scripts/pkg-stats | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 8cc78f2f66..4c963cef0f 100755
+index 4c963cef0f..643272e9d2 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -65,6 +65,7 @@ class Package:
-         self.has_license_files = False
-         self.has_hash = False
-         self.patch_count = 0
-+        self.patch_files = []
-         self.warnings = 0
-         self.current_version = None
-         self.url = None
-@@ -131,10 +132,10 @@ class Package:
-         """
-         Fills in the .patch_count field
-         """
--        self.patch_count = 0
-         pkgdir = os.path.dirname(self.path)
-         for subdir, _, _ in os.walk(pkgdir):
--            self.patch_count += len(fnmatch.filter(os.listdir(subdir), '*.patch'))
-+            self.patch_files = fnmatch.filter(os.listdir(subdir), '*.patch')
-+            self.patch_count = len(self.patch_files)
+@@ -30,10 +30,14 @@ import certifi
+ import distutils.version
+ import time
+ import gzip
++import sys
+ from urllib3 import HTTPSConnectionPool
+ from urllib3.exceptions import HTTPError
+ from multiprocessing import Pool
  
-     def set_current_version(self):
++sys.path.append('utils/')
++from getdeveloperlib import parse_developers
++
+ NVD_START_YEAR = 2002
+ NVD_JSON_VERSION = "1.0"
+ NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
+@@ -169,6 +173,15 @@ class Package:
          """
+         return cve in self.all_ignored_cves.get(self.pkgvar(), [])
+ 
++    def set_developers(self, developers):
++        """
++        Fills in the .developers field
++        """
++        self.developers = list()
++        for dev in developers:
++            if dev.hasfile(self.path):
++                self.developers.append((dev.name))
++
+     def __eq__(self, other):
+         return self.path == other.path
+ 
+@@ -891,6 +904,8 @@ def __main__():
+                                       'HEAD']).splitlines()[0]
+     print("Build package list ...")
+     packages = get_pkglist(args.npackages, package_list)
++    print("Getting developers ...")
++    developers = parse_developers()
+     print("Getting package make info ...")
+     package_init_make_info()
+     print("Getting package details ...")
+@@ -902,6 +917,7 @@ def __main__():
+         pkg.set_check_package_warnings()
+         pkg.set_current_version()
+         pkg.set_url()
++        pkg.set_developers(developers)
+     print("Checking URL status")
+     check_package_urls(packages)
+     print("Getting latest versions ...")
 -- 
 2.20.1
