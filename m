@@ -1,57 +1,82 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 22 Feb 2020 17:01:01 +0100
-Subject: [Buildroot] [PATCH] package/mesa3d: select gbm if no glx,
- no egl and no osmesa-classic
-Message-ID: <20200222160101.107362-1-romain.naour@gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sat, 22 Feb 2020 17:35:28 +0100
+Subject: [Buildroot] [PATCH 1/3] package/libosip2: bump to version 5.1.1
+Message-ID: <20200222163530.17015-1-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This issue has been trigged since [1]:
-"package/mesa3d: add option to configure gbm support"
+Removed patch that was applied upstream
 
-Before the patch, the gbm support was autodetected by meson and enabled
-only when at least one dri driver was enabled [2].
-
-On the Buildroot side, the gbm support was explicitely enabled only when
-BR2_PACKAGE_MESA3D_OPENGL_EGL was set.
-
-Now, the gbm support is explicitely disabled but the meson build system
-check if at least one option OpenGL GLX or OpenGL EGL or GBM or
-OSMesa (classic) library is enabled [3].
-
-The previous behavious was to enable GBM when GLX, EGL and OSMesa are
-disabled. So select GBM symbol for this case.
-
-Fixes:
-http://autobuild.buildroot.net/results/a14f329560f8022f7ba8ec43ad8eed84e005d226
-
-[1] b6c051acf787c804e732bc58ba8d7e440701a168
-[2] https://gitlab.freedesktop.org/mesa/mesa/blob/19.3/meson.build#L348
-[3] https://gitlab.freedesktop.org/mesa/mesa/blob/19.3/meson.build#L449
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/mesa3d/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ ...r-109133-Heap-buffer-overflow-in-uti.patch | 30 -------------------
+ package/libosip2/libosip2.hash                |  2 +-
+ package/libosip2/libosip2.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 32 deletions(-)
+ delete mode 100644 package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 0788f47137..1b4b281970 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -61,6 +61,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- config BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	bool
- 	select BR2_PACKAGE_MESA3D_DRIVER
-+	select BR2_PACKAGE_MESA3D_GBM if \
-+		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
-+		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
-+		!BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
- 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
- 		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
+diff --git a/package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch b/package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch
+deleted file mode 100644
+index 7f2c2d46d2..0000000000
+--- a/package/libosip2/0001-fix-bug-report-sr-109133-Heap-buffer-overflow-in-uti.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 7e0793e15e21f68337e130c67b031ca38edf055f Mon Sep 17 00:00:00 2001
+-From: Aymeric Moizard <amoizard@gmail.com>
+-Date: Mon, 5 Sep 2016 15:01:53 +0200
+-Subject: [PATCH]  * fix bug report: sr #109133: Heap buffer overflow in
+- utility function *osip_clrncpy*    https://savannah.gnu.org/support/?109133
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/osipparser2/osip_port.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/osipparser2/osip_port.c b/src/osipparser2/osip_port.c
+-index 0e64147..d8941b0 100644
+---- a/src/osipparser2/osip_port.c
+-+++ b/src/osipparser2/osip_port.c
+-@@ -1291,8 +1291,10 @@ osip_clrncpy (char *dst, const char *src, size_t len)
+- 	char *p;
+- 	size_t spaceless_length;
+- 
+--	if (src == NULL)
+-+	if (src == NULL || len == 0) {
+-+		*dst = '\0';
+- 		return NULL;
+-+	}
+- 
+- 	/* find the start of relevant text */
+-	pbeg = src;
+--- 
+-2.11.0
+-
+diff --git a/package/libosip2/libosip2.hash b/package/libosip2/libosip2.hash
+index c6df5f2362..76bc29d5fe 100644
+--- a/package/libosip2/libosip2.hash
++++ b/package/libosip2/libosip2.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	c9a18b0c760506d150017cdb1fa5c1cefe12b8dcbbf9a7e784eb75af376e96cd	libosip2-3.6.0.tar.gz
++sha256	61bb28317221a630e47f65389d5ff3e4693996d3128e9e0d5d1399e4feebf64d	libosip2-5.1.1.tar.gz
  
+ # Hash for license file:
+ sha256	8d9e95ed0e48df46dc758eb0d86df611f771eab4eed94bebb77dca87f1c897de	COPYING
+diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
+index 9302b9912e..e608f671c8 100644
+--- a/package/libosip2/libosip2.mk
++++ b/package/libosip2/libosip2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSIP2_VERSION = 3.6.0
++LIBOSIP2_VERSION = 5.1.1
+ LIBOSIP2_SITE = $(BR2_GNU_MIRROR)/osip
+ LIBOSIP2_INSTALL_STAGING = YES
+ LIBOSIP2_LICENSE = LGPL-2.1+
 -- 
-2.24.1
+2.17.1
