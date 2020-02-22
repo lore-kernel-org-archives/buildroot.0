@@ -1,62 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 22 Feb 2020 23:08:55 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/smartmontools: bump to version
- 7.1
-Message-ID: <20200222220855.485064-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 23 Feb 2020 00:48:38 +0100
+Subject: [Buildroot] Analysis of build results
+In-Reply-To: <20200220034343.2370e4e4@windsurf>
+References: <20200219074844.F3D6C85D78@fraxinus.osuosl.org>
+ <20200220034343.2370e4e4@windsurf>
+Message-ID: <93002ccc-73ca-d4ff-81d9-bf524a16840a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- systemd optional dependency has been added in version 7.0
-- Update indentation of hash file (two spaces)
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/smartmontools/smartmontools.hash | 8 +++++---
- package/smartmontools/smartmontools.mk   | 9 ++++++++-
- 2 files changed, 13 insertions(+), 4 deletions(-)
+Le 20/02/2020 ? 03:43, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Wed, 19 Feb 2020 07:48:39 -0000
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+>>     master   | 92  | 67  |  0  | 159 |
+> 
+> These results are not really good, so we need to put some effort into
+> reducing the number of build failures in the autobuilders. See below
+> for an analysis of the different build failures. Your help is
+> appreciated to fix those issues.
+> 
 
-diff --git a/package/smartmontools/smartmontools.hash b/package/smartmontools/smartmontools.hash
-index ffa1e8f97e..bec007aabd 100644
---- a/package/smartmontools/smartmontools.hash
-+++ b/package/smartmontools/smartmontools.hash
-@@ -1,5 +1,7 @@
--# From http://sourceforge.net/projects/smartmontools/files/smartmontools/6.5/
--md5	093aeec3f8f39fa9a37593c4012d3156	smartmontools-6.5.tar.gz
--sha1	7e788b429534a4ae627858fbcc826b93402cee7e	smartmontools-6.5.tar.gz
-+# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.1/
-+md5  430cd5f64caa4524018b536e5ecd9c29  smartmontools-7.1.tar.gz
-+sha1  207dc2b50cab1c6fba7bc248665fbbe3189374e1  smartmontools-7.1.tar.gz
-+
- # Locally computed
-+sha256  3f734d2c99deb1e4af62b25d944c6252de70ca64d766c4c7294545a2e659b846  smartmontools-7.1.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-index bad7da2d16..77eedfabd8 100644
---- a/package/smartmontools/smartmontools.mk
-+++ b/package/smartmontools/smartmontools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SMARTMONTOOLS_VERSION = 6.5
-+SMARTMONTOOLS_VERSION = 7.1
- SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
- SMARTMONTOOLS_LICENSE = GPL-2.0+
- SMARTMONTOOLS_LICENSE_FILES = COPYING
-@@ -23,4 +23,11 @@ else
- SMARTMONTOOLS_CONF_OPTS += --without-selinux
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+SMARTMONTOOLS_CONF_OPTS += --with-libsystemd
-+SMARTMONTOOLS_DEPENDENCIES += systemd
-+else
-+SMARTMONTOOLS_CONF_OPTS += --without-libsystemd
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.25.0
+> 
+>>     arm      |           efl-1.22.3           | NOK | http://autobuild.buildroot.net/results/4d7861fd5908c59546de19f6af3c27d061fed60b |     
+> 
+> /data/buildroot/buildroot-test/instance-0/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/poppler/cpp/poppler-page.h:39:22: error: expected ',' or '...' before '&&' token
+> 
+> Some C++ mess it seems. Romain, any idea ?
+
+This is an issue related to poppler dependency that is built with C++11 standard:
+
+sysroot/usr/include/poppler/cpp/poppler-page.h:70:10:
+ "error: 'unique_ptr' in namespace 'std' does not name a template type"
+
+But with this toolchain based on gcc-5, the default C++ standard is gnu++98 [2].
+
+The efl libraries should be built with -std=c++11 in CFLAGS (see [1] for similar
+issue).
+
+Or maybe we should bump the poppler's package gcc dependency (gcc 5 to gcc 6)
+[3]. Doing so, the C++ standard for poppler and efl are the same (C++14).
+
+Otherwise, I don't see how the efl package can know the C++ standard to use.
+
+[1]
+https://git.buildroot.net/buildroot/commit/?id=995fb9a4ebca3acb5dc6eb22edee039b67bf5303
+
+[2] https://gcc.gnu.org/gcc-6/changes.html
+
+[3]
+https://git.buildroot.net/buildroot/tree/package/poppler/Config.in?h=2020.02-rc1#n7
+
+Best regards,
+Romain
+
+> Thomas
+> 
