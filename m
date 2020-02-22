@@ -1,64 +1,86 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 Feb 2020 22:40:32 +0100
-Subject: [Buildroot] [git commit branch/next] package/gobject-introspection:
- depend on python3
-Message-ID: <20200222213147.943BB8E755@busybox.osuosl.org>
+Date: Sat, 22 Feb 2020 22:44:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gobject-introspection: depend
+ on python3
+In-Reply-To: <20200222213142.2213941-1-aduskett@gmail.com>
+References: <20200222213142.2213941-1-aduskett@gmail.com>
+Message-ID: <20200222214425.GB8743@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6da6cb2c312c6b22f1c2af2b9068d2e68baffa09
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Adam, All,
 
-Currently, the Config.in file has the line:
-select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+On 2020-02-22 13:31 -0800, aduskett at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Currently, the Config.in file has the line:
+> select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+> 
+> This line is incorrect as gobject-introspection does not support python2.
+> Instead, remove the select line and make python3 a dependency with a new
+> message that explains that gobject-introspection requires python3.
+> 
+> Note:
+> gobject-introspection does not require python3 to run on the target; however,
+> because the tools run in a qemu wrapper, a cross-compiled python3 must be
+> installed to staging. As there is no current mechanism to tell Buildroot only
+> to install python to staging, then python must also be installed
+> unconditionally to the target when building gobject-introspection.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-This line is incorrect as gobject-introspection does not support python2.
-Instead, remove the select line and make python3 a dependency with a new
-message that explains that gobject-introspection requires python3.
+I've moved the big note to the code next to the select, and pushed to
+next, thanks.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-[yann.morin.1998 at free.fr:
-  - move the explanations from the commit log to the code
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/gobject-introspection/Config.in | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
-index 0537cc0404..e312852cf2 100644
---- a/package/gobject-introspection/Config.in
-+++ b/package/gobject-introspection/Config.in
-@@ -9,11 +9,18 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
- 	# can be verified.
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	# gobject-introspection does not require python3 to run on the
-+	# target; however, because the tools run in a qemu wrapper, a
-+	# cross-compiled python3 must be installed to staging. As there
-+	# is no current mechanism to tell Buildroot only to install
-+	# python to staging, then python must also be installed
-+	# unconditionally to the target when building
-+	# gobject-introspection.
-+	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_HOST_QEMU
- 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
- 	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  GObject introspection is a middleware layer between C
-@@ -25,6 +32,9 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
- 
- 	  https://wiki.gnome.org/action/show/Projects/GObjectIntrospection
- 
-+comment "gobject-introspection needs python3"
-+	depends on !BR2_PACKAGE_PYTHON3
-+
- comment "gobject-introspection needs a glibc toolchain, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+> ---
+>  package/gobject-introspection/Config.in | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
+> index 0537cc0404..26ca5d6e3a 100644
+> --- a/package/gobject-introspection/Config.in
+> +++ b/package/gobject-introspection/Config.in
+> @@ -9,11 +9,11 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
+>  	# can be verified.
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	depends on BR2_PACKAGE_PYTHON3
+>  	select BR2_PACKAGE_HOST_QEMU
+>  	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
+>  	select BR2_PACKAGE_LIBFFI
+>  	select BR2_PACKAGE_LIBGLIB2
+> -	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+>  	select BR2_PACKAGE_ZLIB
+>  	help
+>  	  GObject introspection is a middleware layer between C
+> @@ -25,6 +25,9 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
+>  
+>  	  https://wiki.gnome.org/action/show/Projects/GObjectIntrospection
+>  
+> +comment "gobject-introspection needs python3"
+> +	depends on !BR2_PACKAGE_PYTHON3
+> +
+>  comment "gobject-introspection needs a glibc toolchain, gcc >= 4.9"
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
