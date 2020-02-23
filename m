@@ -1,87 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2020 21:45:20 +0100
-Subject: [Buildroot] [PATCH 2/3] package/gobject-introspection: export
- cc in g-ir-scanner
-In-Reply-To: <20200221224313.854089-3-aduskett@gmail.com>
-References: <20200221224313.854089-1-aduskett@gmail.com>
- <20200221224313.854089-3-aduskett@gmail.com>
-Message-ID: <20200223204520.GU8743@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 23 Feb 2020 21:46:22 +0100
+Subject: [Buildroot] [git commit] package/openvmtools: fix build with NLS
+Message-ID: <20200223203431.04C918E845@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6b4581e7b3eddfa82a59bed6d9d44a3641b7f619
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-02-21 14:43 -0800, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Without this export, the host variant of g-ir-scanner will call the host
-> gcc for linking.
-> 
-> For autotools packages, this is not an issue as they use
-> Makefile.introspection, which will export the cross-cc, however for meson,
-> this is not the case, and linking errors occur when meson packages generate
-> .gir and .typelib files.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/gobject-introspection/g-ir-scanner.in          | 2 ++
->  package/gobject-introspection/gobject-introspection.mk | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
-> index 9f97497b7e..c5066bd635 100644
-> --- a/package/gobject-introspection/g-ir-scanner.in
-> +++ b/package/gobject-introspection/g-ir-scanner.in
-> @@ -1,6 +1,8 @@
->  #!/usr/bin/env bash
->  
->  export GI_SCANNER_DISABLE_CACHE=1
-> +export CC="@TARGET_CC@"
-> +
->  ${HOST_DIR}/bin/g-ir-scanner \
->  --lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
->  --use-binary-wrapper=$(dirname $0)/g-ir-scanner-qemuwrapper \
-> diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-> index e719588437..b24441b87a 100644
-> --- a/package/gobject-introspection/gobject-introspection.mk
-> +++ b/package/gobject-introspection/gobject-introspection.mk
-> @@ -101,6 +101,8 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
->  		$(INSTALL) -D -m 755 \
->  			$(GOBJECT_INTROSPECTION_PKGDIR)/$(w).in $(STAGING_DIR)/usr/bin/$(w)
->  	)
-> +	$(SED) "s%@TARGET_CC@%$(TARGET_CC)%g" $(STAGING_DIR)/usr/bin/g-ir-scanner
+Fixes:
+ - http://autobuild.buildroot.org/results/e0e7ed448df8bdd6cb13a0989d7a6c7dbaa5bc4e
 
-That makes the wrapper no longer relocatable... :-(
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openvmtools/openvmtools.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-What about:
-
-    export CC="$(dirname "${0}")/@iBASENAME_TARGET_CC@"
-
-With:
-
-    $(SED) "s%@BASENAME_TARGET_CC@%$(notdir $(TARGET_CC))%g" $(STAGING_DIR)/usr/bin/g-ir-scanner
-
-Regards,
-Yann E. MORIN.
-
->  	# Gobject-introspection installs Makefile.introspection in
->  	# $(STAGING_DIR)/usr/share which is needed for autotools-based programs to
->  	# build .gir and .typelib files. Unfortuantly, gobject-introspection-1.0.pc
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 68afa17078..4201c6daa0 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -17,8 +17,14 @@ OPENVMTOOLS_CONF_OPTS = --with-dnet \
+ 	--without-icu --without-x --without-gtk2 \
+ 	--without-gtkmm --without-kernel-modules \
+ 	--disable-deploypkg --without-xerces
+-OPENVMTOOLS_CONF_ENV += CUSTOM_DNET_CPPFLAGS=" "
+-OPENVMTOOLS_DEPENDENCIES = host-nfs-utils libglib2 libdnet
++OPENVMTOOLS_CONF_ENV += \
++	CUSTOM_DNET_CPPFLAGS=" " \
++	LIBS=$(TARGET_NLS_LIBS)
++OPENVMTOOLS_DEPENDENCIES = \
++	host-nfs-utils \
++	libglib2 \
++	libdnet \
++	$(TARGET_NLS_DEPENDENCIES)
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ OPENVMTOOLS_DEPENDENCIES += libtirpc
