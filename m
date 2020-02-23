@@ -1,46 +1,43 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sun, 23 Feb 2020 10:18:01 +0100
-Subject: [Buildroot] [PATCH 2/4] package/libubootenv: bump version to git
- ba952d05ec9ab16029816a06d956bac7fb4e9832.
+Date: Sun, 23 Feb 2020 10:18:02 +0100
+Subject: [Buildroot] [PATCH 3/4] package/iwd: bump to version 1.5
 In-Reply-To: <20200223091803.1007790-1-mc5686@mclink.it>
 References: <20200223091803.1007790-1-mc5686@mclink.it>
-Message-ID: <20200223091803.1007790-2-mc5686@mclink.it>
+Message-ID: <20200223091803.1007790-3-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It has bugfixes needed by swupdate.
-
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/libubootenv/libubootenv.hash | 2 +-
- package/libubootenv/libubootenv.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/iwd/iwd.hash | 3 +--
+ package/iwd/iwd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
-index bde2ac3..383f550 100644
---- a/package/libubootenv/libubootenv.hash
-+++ b/package/libubootenv/libubootenv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 332c45d46401f1859f0781fd0fd316bb1c251264674677c26a4d9b9e1c592719 libubootenv-879c0731fa0725785b9fa4499bbf6aacd04ee4c2.tar.gz
-+sha256 dc84eefd7dcde46e6754517be37dc0c5a6cd07d38db06564eb54acd9b9ff936e libubootenv-ba952d05ec9ab16029816a06d956bac7fb4e9832.tar.gz
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 Licenses/lgpl-2.1.txt
-diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
-index 99cbd0d..3912fda 100644
---- a/package/libubootenv/libubootenv.mk
-+++ b/package/libubootenv/libubootenv.mk
-@@ -4,7 +4,8 @@
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index e7ba107..cdf28d2 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
+@@ -1,5 +1,4 @@
+ # Locally computed
+-sha256 f52ed3cc0dae1f9a82c601df638977f0f6d8d4629ba5e333b4743748a907c0e7 iwd-0.22.tar.gz
+-
++sha256 4d7c92b9fdbf14f46f208f1b053597a7e5225a4ad42369a3c28bcdb595087833  iwd-1.5.tar.gz
+ # License files
+ sha256 ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5 COPYING
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index fc8b83d..799e631 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUBOOTENV_VERSION = 879c0731fa0725785b9fa4499bbf6aacd04ee4c2
-+#LIBUBOOTENV_VERSION = 879c0731fa0725785b9fa4499bbf6aacd04ee4c2
-+LIBUBOOTENV_VERSION = ba952d05ec9ab16029816a06d956bac7fb4e9832
- LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
- LIBUBOOTENV_LICENSE = LGPL-2.1
- LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
+-IWD_VERSION = 0.22
++IWD_VERSION = 1.5
+ IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
+ IWD_SITE_METHOD = git
+ IWD_LICENSE = LGPL-2.1+
 -- 
 2.25.1
