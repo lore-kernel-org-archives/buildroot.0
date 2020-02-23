@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 23 Feb 2020 11:31:19 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/{mesa3d,
+Date: Sun, 23 Feb 2020 11:32:57 +0100
+Subject: [Buildroot] [PATCH/next v3 1/1] package/{mesa3d,
  mesa3d-headers}: bump version to 20.0.0
-Message-ID: <20200223103119.1019036-1-bernd.kuhls@t-online.de>
+Message-ID: <20200223103257.1019092-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,6 +18,7 @@ https://cgit.freedesktop.org/mesa/mesa/commit/?id=6202a13b71e18dc31ba7e2f4ea915b
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v3: added "/next" prefix
 v2: squashed EGL_NO_X11 patch (Yann)
 
  package/mali-t76x/egl.pc                                 | 2 +-
