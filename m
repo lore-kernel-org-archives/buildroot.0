@@ -1,109 +1,73 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sat, 22 Feb 2020 16:32:33 -0800
-Subject: [Buildroot] [PATCH/next 2/2] support/testing: update python-gobject
- test
-In-Reply-To: <20200223003234.4062316-1-aduskett@gmail.com>
-References: <20200223003234.4062316-1-aduskett@gmail.com>
-Message-ID: <20200223003234.4062316-2-aduskett@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Feb 2020 08:48:01 +0100
+Subject: [Buildroot] [git commit] package/libsvgtiny: fix parallel build
+Message-ID: <20200223073624.3917E8E771@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=f36c045e7b6e1ba9b07aed6b10fc2bf24462f073
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Because gobject-introspection is now a dependency of python-gobject, the test
-must be updated.
+Fix previous commit[1] which purpose was to fix parallel build. It
+didn't work since it assigned $(MAKE1) to LIBSVGTINY_MAKE, but this is a
+generic-package and building is done using $(MAKE), then LIBSVGTINY_MAKE
+was ignored. Let's substitute instead $(MAKE) with $(MAKE1) in
+LIBSVGTINY_BUILD_CMDS.
 
- - Change TestPythonPy2Gobject to TestPythonPy3Gobject as
-   gobject-introspection requires python3.
+[1]:
+https://git.buildroot.net/buildroot/commit/?id=26d67a2599d6c88facd5178de853fa355244e7c2
 
- - Refactor test_python_gobject.py to no longer inherit the
-   TestPythonPackageBase class, as this class uses a base config that does not
-   support gobject-introspection.
+Fixes:
+http://autobuild.buildroot.net/results/67d/67d341c0cc272323d6e231a20796a6848c21d760/
 
- - Update sample_python_gobject to use Glib to find the path of sh.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[yann.morin.1998 at free.fr:
+  - use $(MAKE1) in all three step
+  - move comment out of the define
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .gitlab-ci.yml                                |  2 +-
- .../tests/package/sample_python_gobject.py    | 13 +++++++-
- .../tests/package/test_python_gobject.py      | 30 ++++++++++++++++---
- 3 files changed, 39 insertions(+), 6 deletions(-)
+ package/libsvgtiny/libsvgtiny.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index a6436a8417..c18c6a5fa7 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -458,7 +458,7 @@ tests.package.test_python_cryptography.TestPythonPy3Cryptography: { extends: .ru
- tests.package.test_python_django.TestPythonPy3Django: { extends: .runtime_test }
- tests.package.test_python_gitdb2.TestPythonPy2Gitdb2: { extends: .runtime_test }
- tests.package.test_python_gitdb2.TestPythonPy3Gitdb2: { extends: .runtime_test }
--tests.package.test_python_gobject.TestPythonPy2Gobject: { extends: .runtime_test }
-+tests.package.test_python_gobject.TestPythonPy3Gobject: { extends: .runtime_test }
- tests.package.test_python_incremental.TestPythonPy2Incremental: { extends: .runtime_test }
- tests.package.test_python_incremental.TestPythonPy3Incremental: { extends: .runtime_test }
- tests.package.test_python_passlib.TestPythonPy2Passlib: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/sample_python_gobject.py b/support/testing/tests/package/sample_python_gobject.py
-index 84ebee7362..ecce0b0575 100644
---- a/support/testing/tests/package/sample_python_gobject.py
-+++ b/support/testing/tests/package/sample_python_gobject.py
-@@ -1 +1,12 @@
--import gobject  # noqa
-+#!/usr/bin/env python
-+"""A simple test that uses python-gobject to find the path of sh."""
-+from gi.repository import GLib
-+
-+def main():
-+    sh_path = GLib.find_program_in_path('sh')
-+    if sh_path == "/bin/sh":
-+      return True
-+    return False
-+
-+if __name__ == '__main__':
-+    main()
-diff --git a/support/testing/tests/package/test_python_gobject.py b/support/testing/tests/package/test_python_gobject.py
-index 0a59447adb..a673d554a4 100644
---- a/support/testing/tests/package/test_python_gobject.py
-+++ b/support/testing/tests/package/test_python_gobject.py
-@@ -1,11 +1,33 @@
-+import os
- from tests.package.test_python import TestPythonPackageBase
+diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+index fe7dc0a6d2..55ce4327fe 100644
+--- a/package/libsvgtiny/libsvgtiny.mk
++++ b/package/libsvgtiny/libsvgtiny.mk
+@@ -12,8 +12,6 @@ LIBSVGTINY_DEPENDENCIES = \
+ 	libxml2 host-gperf host-pkgconf host-netsurf-buildsystem
+ LIBSVGTINY_LICENSE = MIT
+ LIBSVGTINY_LICENSE_FILES = README
+-# Package does not build in parallel due to improper make rules
+-LIBSVGTINY_MAKE = $(MAKE1)
  
--
--class TestPythonPy2Gobject(TestPythonPackageBase):
-+class TestPythonPy3Gobject(TestPythonPackageBase):
-     __test__ = True
--    config = TestPythonPackageBase.config + \
-+    config = \
-         """
--        BR2_PACKAGE_PYTHON=y
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        BR2_PACKAGE_GOBJECT_INTROSPECTION=y
-+        BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_GOBJECT=y
-         """
-+
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
-+        self.emulator.login()
-+
-     sample_scripts = ["tests/package/sample_python_gobject.py"]
--- 
-2.24.1
+ # The libsvgtiny build system cannot build both the shared and static
+ # libraries. So when the Buildroot configuration requests to build
+@@ -28,20 +26,21 @@ define LIBSVGTINY_CONFIGURE_CMDS
+ 	ln -sf $(HOST_DIR)/share/netsurf-buildsystem $(@D)/build
+ endef
+ 
++# Use $(MAKE1) since parallel build fails
+ define LIBSVGTINY_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=/usr \
++	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) PREFIX=/usr \
+ 		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE)
+ endef
+ 
+ define LIBSVGTINY_INSTALL_STAGING_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) \
+-		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) \
++		$(MAKE1) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) \
+ 		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE) install
+ endef
+ 
+ define LIBSVGTINY_INSTALL_TARGET_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) \
+-		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) \
++		$(MAKE1) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) \
+ 		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE) install
+ endef
+ 
