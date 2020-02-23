@@ -1,41 +1,46 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sun, 23 Feb 2020 10:18:00 +0100
-Subject: [Buildroot] [PATCH 1/4] package/ell: bump to version 0.28
-Message-ID: <20200223091803.1007790-1-mc5686@mclink.it>
+Date: Sun, 23 Feb 2020 10:18:01 +0100
+Subject: [Buildroot] [PATCH 2/4] package/libubootenv: bump version to git
+ ba952d05ec9ab16029816a06d956bac7fb4e9832.
+In-Reply-To: <20200223091803.1007790-1-mc5686@mclink.it>
+References: <20200223091803.1007790-1-mc5686@mclink.it>
+Message-ID: <20200223091803.1007790-2-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/ell/ell.hash | 2 +-
- package/ell/ell.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+It has bugfixes needed by swupdate.
 
-diff --git a/package/ell/ell.hash b/package/ell/ell.hash
-index 02e6e27..cbf83e4 100644
---- a/package/ell/ell.hash
-+++ b/package/ell/ell.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 b6a4b46807391ea69f9271074cc778aa74263af2bea3f797ab0c092e8dedd21f ell-0.24.tar.gz
-+sha256 f7d41781eebcec5795554249400895532460bcf533f2a55ee0c3b9c792dda42d  ell-0.28.tar.gz
- 
- # License files
- sha256 ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5 COPYING
-diff --git a/package/ell/ell.mk b/package/ell/ell.mk
-index 6cafdd7..664976a 100644
---- a/package/ell/ell.mk
-+++ b/package/ell/ell.mk
-@@ -4,7 +4,7 @@
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+---
+ package/libubootenv/libubootenv.hash | 2 +-
+ package/libubootenv/libubootenv.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index bde2ac3..383f550 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 332c45d46401f1859f0781fd0fd316bb1c251264674677c26a4d9b9e1c592719 libubootenv-879c0731fa0725785b9fa4499bbf6aacd04ee4c2.tar.gz
++sha256 dc84eefd7dcde46e6754517be37dc0c5a6cd07d38db06564eb54acd9b9ff936e libubootenv-ba952d05ec9ab16029816a06d956bac7fb4e9832.tar.gz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index 99cbd0d..3912fda 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,7 +4,8 @@
  #
  ################################################################################
  
--ELL_VERSION = 0.24
-+ELL_VERSION = 0.28
- ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
- ELL_SITE_METHOD = git
- ELL_LICENSE = LGPL-2.1+
+-LIBUBOOTENV_VERSION = 879c0731fa0725785b9fa4499bbf6aacd04ee4c2
++#LIBUBOOTENV_VERSION = 879c0731fa0725785b9fa4499bbf6aacd04ee4c2
++LIBUBOOTENV_VERSION = ba952d05ec9ab16029816a06d956bac7fb4e9832
+ LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
 -- 
 2.25.1
