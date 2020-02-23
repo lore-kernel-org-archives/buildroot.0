@@ -1,47 +1,68 @@
 From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sun, 23 Feb 2020 16:20:56 +0100
-Subject: [Buildroot] [PATCH v3 07/12] support/scripts/pkg-stats: store
- pkg dir path
-In-Reply-To: <20200222085715.23769-8-heiko.thiery@gmail.com>
+Date: Sun, 23 Feb 2020 16:27:06 +0100
+Subject: [Buildroot] [PATCH v3 04/12] support/scripts/pkg-stats: store
+ licences of package
+In-Reply-To: <20200222085715.23769-5-heiko.thiery@gmail.com>
 References: <20200222085715.23769-1-heiko.thiery@gmail.com>
- <20200222085715.23769-8-heiko.thiery@gmail.com>
-Message-ID: <9e7667c9-99e5-5c00-e413-415876cc5b61@railnova.eu>
+ <20200222085715.23769-5-heiko.thiery@gmail.com>
+Message-ID: <67598cb0-9852-4829-a0bb-2ee1efdaa9c7@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Heiko,
+Heiko and all,
+
 On 2/22/20 9:57 AM, Heiko Thiery wrote:
-> This value can be used for later processing.
-> 
-> In the buildroot-stats application this is used to create links pointing
-> to the git repo of buildroot.
-> 
 > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
 Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Tested-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
 > ---
->   support/scripts/pkg-stats | 1 +
->   1 file changed, 1 insertion(+)
+>   support/scripts/pkg-stats | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
 > 
 > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index 90afcc2332..36b33586ef 100755
+> index 643272e9d2..ebaf04465e 100755
 > --- a/support/scripts/pkg-stats
 > +++ b/support/scripts/pkg-stats
-> @@ -64,6 +64,7 @@ class Package:
->       def __init__(self, name, path):
+> @@ -56,7 +56,7 @@ http_pool = None
+>   
+>   
+>   class Package:
+> -    all_licenses = list()
+> +    all_licenses = dict()
+>       all_license_files = list()
+>       all_versions = dict()
+>       all_ignored_cves = dict()
+> @@ -65,6 +65,7 @@ class Package:
 >           self.name = name
 >           self.path = path
-> +        self.pkg_path = os.path.dirname(path)
 >           self.infras = None
->           self.license = None
->           self.patch_count = 0
+> +        self.license = None
+>           self.has_license = False
+>           self.has_license_files = False
+>           self.has_hash = False
+> @@ -122,6 +123,7 @@ class Package >           var = self.pkgvar()
+>           if var in self.all_licenses:
+>               self.has_license = True
+> +            self.license = self.all_licenses[var]
+>           if var in self.all_license_files:
+>               self.has_license_files = True
+>   
+> @@ -384,7 +386,7 @@ def package_init_make_info():
+>               if value == "unknown":
+>                   continue
+>               pkgvar = pkgvar[:-8]
+> -            Package.all_licenses.append(pkgvar)
+> +            Package.all_licenses[pkgvar] = value
+>   
+>           elif pkgvar.endswith("_LICENSE_FILES"):
+>               if pkgvar.endswith("_MANIFEST_LICENSE_FILES"):
 > 
 
-Regards,
+Best regards,
 
 Titouan
