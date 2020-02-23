@@ -1,12 +1,12 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 23 Feb 2020 22:37:29 +0100
-Subject: [Buildroot] [PATCH v3 03/12] support/scripts/pkg-stats: set
- developers info
-In-Reply-To: <d2c5c7c7-3fd6-7cf7-3108-091d3b15a114@railnova.eu>
+Date: Sun, 23 Feb 2020 22:41:24 +0100
+Subject: [Buildroot] [PATCH v3 01/12] support/scripts/pkg-stats: store
+ latest version in a dict
+In-Reply-To: <55ac6156-ea67-a5f1-b818-5219db34ba8e@railnova.eu>
 References: <20200222085715.23769-1-heiko.thiery@gmail.com>
- <20200222085715.23769-4-heiko.thiery@gmail.com>
- <d2c5c7c7-3fd6-7cf7-3108-091d3b15a114@railnova.eu>
-Message-ID: <CAEyMn7a0QXPLJJ+-dkgJh0EasxGie-NC2pe36byvieMVRCOrow@mail.gmail.com>
+ <20200222085715.23769-2-heiko.thiery@gmail.com>
+ <55ac6156-ea67-a5f1-b818-5219db34ba8e@railnova.eu>
+Message-ID: <CAEyMn7bRoqO72rXeTD3GfVgwO2E8tfKdUhkceFbYt=AsCE8-0A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,80 +15,70 @@ To: buildroot@busybox.net
 
 Hi Titouan and all,
 
-Am So., 23. Feb. 2020 um 14:45 Uhr schrieb Titouan Christophe
+Am So., 23. Feb. 2020 um 14:26 Uhr schrieb Titouan Christophe
 <titouan.christophe@railnova.eu>:
 >
-> Heiko, all,
+> Hello Heiko and all,
+>
 > On 2/22/20 9:57 AM, Heiko Thiery wrote:
-> > Use the function 'parse_developers' function from getdeveloperlib that
-> > collect the information about the developers and the files they
-> > maintain. Then set the maintainer(s) to each package.
+> > From: Heiko Thiery <heiko.thiery@kontron.com>
 > >
+> > This patch changes the type of the latest_version variable to a dict.
+> > This is for better readability/usability of the data. With this the json
+> > output is more descriptive in later processing of the json output.
+> >
+> > Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
 > > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+>
+> You signed off with both your personal and work email addresses, was
+> this intended ?
+
+No that was not intended. Thank you.
+
 > > ---
-> >   support/scripts/pkg-stats | 16 ++++++++++++++++
-> >   1 file changed, 16 insertions(+)
+> >   support/scripts/pkg-stats | 33 +++++++++++++++++----------------
+> >   1 file changed, 17 insertions(+), 16 deletions(-)
 > >
 > > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> > index 4c963cef0f..643272e9d2 100755
+> > index 7721d98459..8cc78f2f66 100755
 > > --- a/support/scripts/pkg-stats
 > > +++ b/support/scripts/pkg-stats
-> > @@ -30,10 +30,14 @@ import certifi
-> >   import distutils.version
-> >   import time
-> >   import gzip
-> > +import sys
-> >   from urllib3 import HTTPSConnectionPool
-> >   from urllib3.exceptions import HTTPError
-> >   from multiprocessing import Pool
+> > @@ -71,7 +71,7 @@ class Package:
+> >           self.url_status = None
+> >           self.url_worker = None
+> >           self.cves = list()
+> > -        self.latest_version = (RM_API_STATUS_ERROR, None, None)
+> > +        self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
 > >
-> > +sys.path.append('utils/')
-> > +from getdeveloperlib import parse_developers
-> > + >   NVD_START_YEAR = 2002
-> >   NVD_JSON_VERSION = "1.0"
-> >   NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
-> > @@ -169,6 +173,15 @@ class Package:
-> >           """
-> >           return cve in self.all_ignored_cves.get(self.pkgvar(), [])
+> >       def pkgvar(self):
+> >           return self.name.upper().replace("-", "_")
+> > @@ -460,9 +460,8 @@ def check_package_latest_version(packages):
+> >       """
+> >       Fills in the .latest_version field of all Package objects
 > >
-> > +    def set_developers(self, developers):
-> > +        """
-> > +        Fills in the .developers field
-> > +        """
-> > +        self.developers = list()
-> > +        for dev in developers:
-> > +            if dev.hasfile(self.path):
-> > +                self.developers.append((dev.name))
->
-> Bikeshedding again, but maybe more elegant like this:
-
-Indeed this is more elegant. I will change that.
-
-> self.developers = [
->      dev.name
->      for dev in developers
->      if dev.hasfile(self.path)
-> ]
->
+> > -    This field has a special format:
+> > -      (status, version, id)
+> > -    with:
+> > +    This field is a dict and has the following keys:
 > > +
-> >       def __eq__(self, other):
-> >           return self.path == other.path
-> >
-> > @@ -891,6 +904,8 @@ def __main__():
-> >                                         'HEAD']).splitlines()[0]
-> >       print("Build package list ...")
-> >       packages = get_pkglist(args.npackages, package_list)
-> > +    print("Getting developers ...")
-> > +    developers = parse_developers()
-> >       print("Getting package make info ...")
-> >       package_init_make_info()
-> >       print("Getting package details ...")
-> > @@ -902,6 +917,7 @@ def __main__():
-> >           pkg.set_check_package_warnings()
-> >           pkg.set_current_version()
-> >           pkg.set_url()
-> > +        pkg.set_developers(developers)
-> >       print("Checking URL status")
-> >       check_package_urls(packages)
-> >       print("Getting latest versions ...")
-> >
+> >       - status: one of RM_API_STATUS_ERROR,
+> >         RM_API_STATUS_FOUND_BY_DISTRO, RM_API_STATUS_FOUND_BY_PATTERN,
+> >         RM_API_STATUS_NOT_FOUND
+> > @@ -478,7 +477,9 @@ def check_package_latest_version(packages):
+> >       worker_pool = Pool(processes=64)
+> >       results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
+> >       for pkg, r in zip(packages, results):
+> > -        pkg.latest_version = r
+> > +        pkg.latest_version['status'] = r[0]
+> > +        pkg.latest_version['version'] = r[1]
+> > +        pkg.latest_version['id'] = r[2]
+>
+> Bikeshedding, but maybe more elegant:
+>
+> pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
+
+Yes, this is bikeshedding ;-) but a good one! I will change that.
+
+Thank you
+--
+Heiko
