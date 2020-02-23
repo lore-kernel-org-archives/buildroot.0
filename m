@@ -1,174 +1,72 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2020 09:19:06 +0100
-Subject: [Buildroot] [PATCH/next 1/2] package/python-gobject: bump
- version to 3.34.0
-In-Reply-To: <20200223003234.4062316-1-aduskett@gmail.com>
-References: <20200223003234.4062316-1-aduskett@gmail.com>
-Message-ID: <20200223081906.GE8743@scaer>
+Date: Sun, 23 Feb 2020 09:26:10 +0100
+Subject: [Buildroot] [git commit] package/luv: fix build with gcc 4.8
+Message-ID: <20200223081445.D32FE8E77B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=62e65fd50dc64500f8aa07127ef5ac1e8cc48d6e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-02-22 16:32 -0800, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Other changes:
->   - Convert the package to a meson package.
->   - Remove 0001-add-PYTHON_INCLUDES-override.patch as it no longer applies.
->   - Add gobject-introspection as a dependency.
->   - Add the package under myself in the DEVELOPERS file.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/83b34e606b128546da8a70836d039090e334a1ec
 
-Thanks for continuing yout GOI efforts! :-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: mark patch accepted upstream]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0001-src-lreq.c-fix-build-with-gcc-4.8.patch   | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-[--SNIP--]
-> diff --git a/package/python-gobject/Config.in b/package/python-gobject/Config.in
-> index 36ddffebb0..fd647e62f6 100644
-> --- a/package/python-gobject/Config.in
-> +++ b/package/python-gobject/Config.in
-> @@ -1,16 +1,17 @@
->  config BR2_PACKAGE_PYTHON_GOBJECT
->  	bool "python-gobject"
-> -	depends on BR2_USE_WCHAR # libglib2
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> -	depends on BR2_USE_MMU # libglib2
-> -	depends on BR2_PACKAGE_PYTHON # Broken with python 3.8
-> -	select BR2_PACKAGE_LIBGLIB2
-
-Here you remove the select to libglib2, but it is still listed in the
-build dependencies, below...
-
-So, either pytgon-gobject needs libglib2 in which case it should select
-it (and depend on all the reverse dependencies) as well as build-depend
-on it, or it does not depend on it at all and thus should drop it even
-from the build-dependencies [0].
-
-That gobject-introspection already caries those dependencies is not a
-reason to drop them from pygobject.
-
-> +	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS # gobject-introspection
-> +	depends on BR2_PACKAGE_PYTHON3 # gobject-introspection
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gobject-introspection
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
-
-Dependencies order is:
-  - arch deps
-  - toolchain deps
-  - package deps
-
-> +	select BR2_PACKAGE_GOBJECT_INTROSPECTION
->  	help
->  	  Python bindings for the GLib/GObject library
->  
->  	  https://wiki.gnome.org/action/show/Projects/PyGObject
->  
-> -comment "python-gobject needs a toolchain w/ wchar, threads"
-> -	depends on BR2_PACKAGE_PYTHON
-> +comment "python-gobject needs a glibc toolchain, gcc >= 4.9"
->  	depends on BR2_USE_MMU
-
-You dropped the dependency on MMU in the main symbol, but not here.
-(Hint: I think you should not drop it.)
-
-> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
-> index 0c093f3306..958c022a18 100644
-> --- a/package/python-gobject/python-gobject.hash
-> +++ b/package/python-gobject/python-gobject.hash
-> @@ -1,4 +1,3 @@
-> -# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/2.28/pygobject-2.28.6.sha256sum
-> -sha256	fb8a1d4f665130a125011659bd347c7339c944232163dbb9a34fd0686577adb8  pygobject-2.28.6.tar.xz
-> -# Locally computed
-> +# from http://ftp.gnome.org/pub/GNOME/sources/pygobject/3.34/pygobject-3.34.0.sha256sum
-> +sha256  87e2c9aa785f352ef111dcc5f63df9b85cf6e05e52ff04f803ffbebdacf5271a  pygobject-3.34.0.tar.xz
->  sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
-> diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
-> index cf5c874151..427e7b60ac 100644
-> --- a/package/python-gobject/python-gobject.mk
-> +++ b/package/python-gobject/python-gobject.mk
-> @@ -4,36 +4,29 @@
->  #
->  ################################################################################
->  
-> -PYTHON_GOBJECT_VERSION_MAJOR = 2.28
-> -PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).6
-> +PYTHON_GOBJECT_VERSION_MAJOR = 3.34
-> +PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).0
->  PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.xz
-> -PYTHON_GOBJECT_SITE = http://ftp.gnome.org/pub/gnome/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
-> +PYTHON_GOBJECT_SITE = https://ftp.gnome.org/pub/gnome/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
->  PYTHON_GOBJECT_LICENSE = LGPL-2.1+
->  PYTHON_GOBJECT_LICENSE_FILES = COPYING
-> -PYTHON_GOBJECT_DEPENDENCIES = host-pkgconf libglib2
-> -PYTHON_GOBJECT_CONF_OPTS = --disable-introspection
-> -# for 0001-add-PYTHON_INCLUDES-override.patch
-> -PYTHON_GOBJECT_AUTORECONF = YES
-> +PYTHON_GOBJECT_INSTALL_STAGING = YES
-> +PYTHON_GOBJECT_DEPENDENCIES = \
-> +	gobject-introspection \
-> +	host-pkgconf \
-> +	libglib2 \
-
-[0] here.
-
-Regards,
-Yann E. MORIN.
-
-> +	python3
->  
-> -ifeq ($(BR2_PACKAGE_PYTHON),y)
-> -PYTHON_GOBJECT_DEPENDENCIES += python host-python
-> +PYTHON_GOBJECT_CONF_OPTS += \
-> +	-Dpycairo=false \
-> +	-Dtests=false
->  
-> -PYTHON_GOBJECT_CONF_ENV = \
-> -	PYTHON=$(HOST_DIR)/bin/python2 \
-> -	PYTHON_INCLUDES="`$(STAGING_DIR)/usr/bin/python2-config --includes`"
-> -else
-> -PYTHON_GOBJECT_DEPENDENCIES += python3 host-python3
-> +# A sysconfigdata_name must be manually specified or the resulting .so
-> +# will have a x86_64 prefix, which causes "import gi" to fail.
-> +# A pythonpath must be specified or the host python path will be used resulting
-> +# in a "not a valid python" error.
-> +PYTHON_GOBJECT_CONF_ENV += \
-> +	_PYTHON_SYSCONFIGDATA_NAME=$(PKG_PYTHON_SYSCONFIGDATA_NAME) \
-> +	PYTHONPATH=$(PYTHON3_PATH)
->  
-> -PYTHON_GOBJECT_CONF_ENV = \
-> -	PYTHON=$(HOST_DIR)/bin/python3 \
-> -	PYTHON_INCLUDES="`$(STAGING_DIR)/usr/bin/python3-config --includes`"
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_LIBFFI),y)
-> -PYTHON_GOBJECT_CONF_OPTS += --with-ffi
-> -PYTHON_GOBJECT_DEPENDENCIES += libffi
-> -else
-> -PYTHON_GOBJECT_CONF_OPTS += --without-ffi
-> -endif
-> -
-> -$(eval $(autotools-package))
-> +$(eval $(meson-package))
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/luv/0001-src-lreq.c-fix-build-with-gcc-4.8.patch b/package/luv/0001-src-lreq.c-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..7f7c480ca5
+--- /dev/null
++++ b/package/luv/0001-src-lreq.c-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,43 @@
++From d05134115ec8fcfc87188899cec336a8b4df7e62 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 22 Feb 2020 22:17:19 +0100
++Subject: [PATCH] src/lreq.c: fix build with gcc 4.8
++
++Since commit 3e34390cc15101d7fc46ea26f5adf9ac022c2029, build fails with
++gcc 4.8.3 on:
++
++In file included from /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output/build/luv-1.34.1-1/src/luv.c:27:0:
++/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output/build/luv-1.34.1-1/src/lreq.c: In function 'luv_cleanup_req':
++/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output/build/luv-1.34.1-1/src/lreq.c:70:5: error: 'for' loop initial declarations are only allowed in C99 mode
++     for (int i = 0; ((int*)(data->data))[i] != LUA_NOREF; i++) {
++     ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/83b34e606b128546da8a70836d039090e334a1ec
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Accepted status: https://github.com/luvit/luv/pull/456]
++---
++ src/lreq.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/lreq.c b/src/lreq.c
++index c8e07eb..b12ec4f 100644
++--- a/src/lreq.c
+++++ b/src/lreq.c
++@@ -64,10 +64,11 @@ static void luv_fulfill_req(lua_State* L, luv_req_t* data, int nargs) {
++ }
++ 
++ static void luv_cleanup_req(lua_State* L, luv_req_t* data) {
+++  int i;
++   luaL_unref(L, LUA_REGISTRYINDEX, data->req_ref);
++   luaL_unref(L, LUA_REGISTRYINDEX, data->callback_ref);
++   if (data->data_ref == LUV_REQ_MULTIREF) {
++-    for (int i = 0; ((int*)(data->data))[i] != LUA_NOREF; i++) {
+++    for (i = 0; ((int*)(data->data))[i] != LUA_NOREF; i++) {
++       luaL_unref(L, LUA_REGISTRYINDEX, ((int*)(data->data))[i]);
++     }
++   }
++-- 
++2.25.0
++
