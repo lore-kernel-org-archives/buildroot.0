@@ -1,41 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 23 Feb 2020 18:29:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvmtools: fix build with NLS
-Message-ID: <20200223172902.2466208-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 23 Feb 2020 18:36:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi-visualisation-fishbmc: remove
+ opengl dependency
+Message-ID: <20200223173646.610648-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/e0e7ed448df8bdd6cb13a0989d7a6c7dbaa5bc4e
+The addon can also be used with OpenGLES:
+https://github.com/xbmc/visualization.fishbmc/blob/Leia/CMakeLists.txt
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Updated project URL forgotten in
+https://git.buildroot.net/buildroot/commit/?id=4726e93c63d51fe287c62628a9c71c04517d727c
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/openvmtools/openvmtools.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/kodi-visualisation-fishbmc/Config.in | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index 68afa17078..4201c6daa0 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -17,8 +17,14 @@ OPENVMTOOLS_CONF_OPTS = --with-dnet \
- 	--without-icu --without-x --without-gtk2 \
- 	--without-gtkmm --without-kernel-modules \
- 	--disable-deploypkg --without-xerces
--OPENVMTOOLS_CONF_ENV += CUSTOM_DNET_CPPFLAGS=" "
--OPENVMTOOLS_DEPENDENCIES = host-nfs-utils libglib2 libdnet
-+OPENVMTOOLS_CONF_ENV += \
-+	CUSTOM_DNET_CPPFLAGS=" " \
-+	LIBS=$(TARGET_NLS_LIBS)
-+OPENVMTOOLS_DEPENDENCIES = \
-+	host-nfs-utils \
-+	libglib2 \
-+	libdnet \
-+	$(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/kodi-visualisation-fishbmc/Config.in b/package/kodi-visualisation-fishbmc/Config.in
+index 9e2eabbdbc..66c1565bd7 100644
+--- a/package/kodi-visualisation-fishbmc/Config.in
++++ b/package/kodi-visualisation-fishbmc/Config.in
+@@ -1,10 +1,6 @@
+ config BR2_PACKAGE_KODI_VISUALISATION_FISHBMC
+ 	bool "kodi-visualisation-fishbmc"
+-	depends on BR2_PACKAGE_HAS_LIBGL
+ 	help
+ 	  Fische visualiser for Kodi
  
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- OPENVMTOOLS_DEPENDENCIES += libtirpc
+-	  https://github.com/notspiff/visualization.fishbmc
+-
+-comment "kodi-visualisation-fishbmc needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
++	  https://github.com/xbmc/visualization.fishbmc
 -- 
-2.25.0
+2.20.1
