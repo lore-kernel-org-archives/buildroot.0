@@ -1,84 +1,70 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 23 Feb 2020 22:41:24 +0100
-Subject: [Buildroot] [PATCH v3 01/12] support/scripts/pkg-stats: store
- latest version in a dict
-In-Reply-To: <55ac6156-ea67-a5f1-b818-5219db34ba8e@railnova.eu>
-References: <20200222085715.23769-1-heiko.thiery@gmail.com>
- <20200222085715.23769-2-heiko.thiery@gmail.com>
- <55ac6156-ea67-a5f1-b818-5219db34ba8e@railnova.eu>
-Message-ID: <CAEyMn7bRoqO72rXeTD3GfVgwO2E8tfKdUhkceFbYt=AsCE8-0A@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 24 Feb 2020 00:20:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kvm-unit-tests: fix build with SSP
+Message-ID: <20200223232005.3178422-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Titouan and all,
+Thanks to this patch, kvm-unit-tests will always be built without SSP as
+intented by upstream. This will fix the build on ppc64 with SSP that
+started to fail for an unknown reason since November 27th.
 
-Am So., 23. Feb. 2020 um 14:26 Uhr schrieb Titouan Christophe
-<titouan.christophe@railnova.eu>:
->
-> Hello Heiko and all,
->
-> On 2/22/20 9:57 AM, Heiko Thiery wrote:
-> > From: Heiko Thiery <heiko.thiery@kontron.com>
-> >
-> > This patch changes the type of the latest_version variable to a dict.
-> > This is for better readability/usability of the data. With this the json
-> > output is more descriptive in later processing of the json output.
-> >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
->
-> You signed off with both your personal and work email addresses, was
-> this intended ?
+Moreover, the Arch Linux workaround could also be removed in a follow-up
+patch.
 
-No that was not intended. Thank you.
+Fixes:
+ - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
 
-> > ---
-> >   support/scripts/pkg-stats | 33 +++++++++++++++++----------------
-> >   1 file changed, 17 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> > index 7721d98459..8cc78f2f66 100755
-> > --- a/support/scripts/pkg-stats
-> > +++ b/support/scripts/pkg-stats
-> > @@ -71,7 +71,7 @@ class Package:
-> >           self.url_status = None
-> >           self.url_worker = None
-> >           self.cves = list()
-> > -        self.latest_version = (RM_API_STATUS_ERROR, None, None)
-> > +        self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
-> >
-> >       def pkgvar(self):
-> >           return self.name.upper().replace("-", "_")
-> > @@ -460,9 +460,8 @@ def check_package_latest_version(packages):
-> >       """
-> >       Fills in the .latest_version field of all Package objects
-> >
-> > -    This field has a special format:
-> > -      (status, version, id)
-> > -    with:
-> > +    This field is a dict and has the following keys:
-> > +
-> >       - status: one of RM_API_STATUS_ERROR,
-> >         RM_API_STATUS_FOUND_BY_DISTRO, RM_API_STATUS_FOUND_BY_PATTERN,
-> >         RM_API_STATUS_NOT_FOUND
-> > @@ -478,7 +477,9 @@ def check_package_latest_version(packages):
-> >       worker_pool = Pool(processes=64)
-> >       results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
-> >       for pkg, r in zip(packages, results):
-> > -        pkg.latest_version = r
-> > +        pkg.latest_version['status'] = r[0]
-> > +        pkg.latest_version['version'] = r[1]
-> > +        pkg.latest_version['id'] = r[2]
->
-> Bikeshedding, but maybe more elegant:
->
-> pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...3-Makefile-fix-stack-protector-tests.patch | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
 
-Yes, this is bikeshedding ;-) but a good one! I will change that.
-
-Thank you
---
-Heiko
+diff --git a/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
+new file mode 100644
+index 0000000000..be819f27c6
+--- /dev/null
++++ b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
+@@ -0,0 +1,36 @@
++From 9bf9155804652c0b3a94af9723c79b6de430187b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 24 Feb 2020 00:04:06 +0100
++Subject: [PATCH] Makefile: fix stack-protector tests
++
++Rename fnostack_protector into fno_stack_protector and
++fnostack_protector_all into fnostack_protector_all otherwise build will
++fail if -fstack-protector is passed by the toolchain
++
++Fixes:
++ - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to kvm at vger.kernel.org]
++---
++ Makefile | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 767b6c6..754ed65 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -55,8 +55,8 @@ COMMON_CFLAGS += -Wignored-qualifiers -Werror
++ 
++ frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
++ fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
++-fnostack_protector := $(call cc-option, -fno-stack-protector, "")
++-fnostack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
+++fno_stack_protector := $(call cc-option, -fno-stack-protector, "")
+++fno_stack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
++ wno_frame_address := $(call cc-option, -Wno-frame-address, "")
++ fno_pic := $(call cc-option, -fno-pic, "")
++ no_pie := $(call cc-option, -no-pie, "")
++-- 
++2.25.0
++
+-- 
+2.25.0
