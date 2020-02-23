@@ -1,52 +1,117 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sun, 23 Feb 2020 14:21:22 -0300
-Subject: [Buildroot] [PATCH] package/tpm2-tss: wip: bump to version 2.3.3
-In-Reply-To: <87o8tp1cug.fsf@dell.be.48ers.dk>
-References: <20200220214530.20200-1-peter@korsgaard.com>
- <20200223084000.GI8743@scaer> <87o8tp1cug.fsf@dell.be.48ers.dk>
-Message-ID: <CAJ4jsadpLNVj3Q2V1e_zVvp03VO2abySUQkQT1YwRWwY6NHgng@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 23 Feb 2020 18:25:29 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/smartmontools: fix build
+ without stack-protector
+In-Reply-To: <20200223165031.GQ8743@scaer>
+References: <20200223153638.1109360-1-fontaine.fabrice@gmail.com>
+ <20200223165031.GQ8743@scaer>
+Message-ID: <CAPi7W81Ykb+kRn1oG=VPVB7P-sAzM61nkuVCv=vBrJYiVnuMmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 23, 2020 at 1:35 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->
->  > Peter, All,
->  > Title fixed.
->
-> Thanks ;)
->
->  > On 2020-02-20 22:45 +0100, Peter Korsgaard spake thusly:
->  >> Bugfix release, fixing a number of issues:
->  > [--SNIP--]
->  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->  > [--SNIP--]
->  >> diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
->  >> index 08090204ff..470020857a 100644
->  >> --- a/package/tpm2-tss/tpm2-tss.mk
->  >> +++ b/package/tpm2-tss/tpm2-tss.mk
->  > [--SNIP--]
->  >> @@ -17,4 +17,13 @@ TPM2_TSS_AUTORECONF = YES
->  >> # uses C99 code but forgets to pass -std=c99 when --disable-defaultflags is used
->  >> TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
->  >>
->  >> +# The 2.3.3 tarball accidently contains a Makefile-fuzz-generated.am
->  >> +# with content from a fuzz testing run rather than an empty file,
->  >> +# confusing autoreconf with
->  >> +# 0001-configure-Only-use-CXX-when-fuzzing.patch
->  >> +define TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
->  >> +   truncate -s 0 $(@D)/Makefile-fuzz-generated.am
->
->  > Use of truncate is rather heavy-handed here...
->  >     printf '' >$(@D)/Makefile-fuzz-generated.am
->
-> True - But as truncate is part of coreutils it should be fine.
+Hi Yann,
 
-    : > $(@D)/Makefile-fuzz-generated.am
+Le dim. 23 f?vr. 2020 ? 17:50, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+>
+> Fabrice, All,
+>
+> On 2020-02-23 16:36 +0100, Fabrice Fontaine spake thusly:
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/0de9f2a69fa2a39164211299f8a429d2fec6935a
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  ...ure.ac-fix-stack-protector-detection.patch | 38 +++++++++++++++++++
+> >  package/smartmontools/smartmontools.mk        |  2 +
+> >  2 files changed, 40 insertions(+)
+> >  create mode 100644 package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch
+> >
+> > diff --git a/package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch b/package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch
+> > new file mode 100644
+> > index 0000000000..63f51fc9bc
+> > --- /dev/null
+> > +++ b/package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch
+> > @@ -0,0 +1,38 @@
+> > +From 6bd18b0b7b4d916e474ba84707eb784a643b3e71 Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +Date: Sun, 23 Feb 2020 16:23:20 +0100
+> > +Subject: [PATCH] configure.ac: fix stack-protector detection
+> > +
+> > +Use AC_LINK_IFELSE instead of AC_COMPILE_IFELSE to check for
+> > +stack-protector availability as some compilers could missed the needed
+> > +library (-lssp or -lssp_nonshared) at linking step:
+> > +
+> > +/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/x86_64-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wall -W -Wformat=2 -fstack-protector-strong   -o smartctl smartctl.o atacmdnames.o atacmds.o ataidentify.o ataprint.o dev_ata_cmd_set.o dev_intelliprop.o dev_interface.o dev_jmb39x_raid.o json.o knowndrives.o nvmecmds.o nvmeprint.o scsicmds.o scsiata.o scsinvme.o scsiprint.o utility.o     os_linux.o cciss.o dev_areca.o    -lselinux
+> > +/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp_nonshared
+> > +/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp
+> > +
+> > +Fixes:
+> > + - http://autobuild.buildroot.org/results/0de9f2a69fa2a39164211299f8a429d2fec6935a
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +[Upstream status: https://www.smartmontools.org/ticket/1302]
+> > +---
+> > + configure.ac | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/configure.ac b/configure.ac
+> > +index 87470d8a..ccb457e1 100644
+> > +--- a/configure.ac
+> > ++++ b/configure.ac
+> > +@@ -770,7 +770,7 @@ if test "$GXX" = "yes"; then
+> > +     AC_MSG_CHECKING([whether $CXX supports $option])
+> > +     save_CXXFLAGS=$CXXFLAGS
+> > +     CXXFLAGS="$CXXFLAGS $option"
+> > +-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [res=yes], [res=no; CXXFLAGS=$save_CXXFLAGS])
+> > ++    AC_LINK_IFELSE([AC_LANG_PROGRAM()], [res=yes], [res=no; CXXFLAGS=$save_CXXFLAGS])
+> > +     AC_MSG_RESULT([$res])
+> > +   done
+> > + else
+> > +--
+> > +2.25.0
+> > +
+> > diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
+> > index 77eedfabd8..9dc2f789cc 100644
+> > --- a/package/smartmontools/smartmontools.mk
+> > +++ b/package/smartmontools/smartmontools.mk
+> > @@ -8,6 +8,8 @@ SMARTMONTOOLS_VERSION = 7.1
+> >  SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
+> >  SMARTMONTOOLS_LICENSE = GPL-2.0+
+> >  SMARTMONTOOLS_LICENSE_FILES = COPYING
+> > +# We're patching configure.ac
+>
+> I've changed that to just list the patch that touches configue.ac. That
+> way, it is easier to notice to drop autoreconf when we drop the patch.
+>
+> Applied to master, thanks.
+Patch was for next as stated in commit title, not for master (perhaps
+I should also have specified it in the commit message).
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > +SMARTMONTOOLS_AUTORECONF = YES
+> >
+> >  ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+> >  SMARTMONTOOLS_CONF_OPTS += --with-libcap-ng
+> > --
+> > 2.25.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+Best Regards,
 
--- 
-Carlos Santos <unixmania@gmail.com>
+Fabrice
