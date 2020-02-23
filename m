@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 20:47:47 +0100
-Subject: [Buildroot] [git commit] package/kvm-unit-tests: drop x86_64
- workaround
-Message-ID: <20200309140905.72A618FFE4@busybox.osuosl.org>
+Date: Sun, 23 Feb 2020 21:44:16 +0100
+Subject: [Buildroot] [git commit] package/sispmctl: bump to version 4.2
+Message-ID: <20200309140904.946B781298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d183146b5c7a1a8d1a3c828bd3b6d0660d97efc0
+commit: https://git.buildroot.net/buildroot/commit/?id=d71bae7af73ead6209ede8b8dc608be304132f6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This workaround is not needed since commit
-0788e921f961e36a50a94f8bb98f7eb75b312245 which disables stack-protector
-for all architectures as intended by upstream
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kvm-unit-tests/kvm-unit-tests.mk | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ package/sispmctl/sispmctl.hash | 2 +-
+ package/sispmctl/sispmctl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-index 2637066701..d83d31d2ee 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.mk
-+++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-@@ -35,13 +35,7 @@ KVM_UNIT_TESTS_CONF_OPTS =\
- # compiler. However, for x86-64, we use the host compiler, as
- # kvm-unit-tests builds 32 bit code, which Buildroot toolchains for
- # x86-64 cannot do.
--ifeq ($(BR2_x86_64),y)
--# Arch Linux adds -fstack-protector even when building with -ffreestanding, but
--# it doesn't link with the stack-protector library when -nostdlib is passed,
--# which leads to a link error. Therefore, disable it explicitly to work around
--# this bug in Arch Linux. https://bugs.archlinux.org/task/64270
--KVM_UNIT_TESTS_MAKE_OPTS += EXTRA_CFLAGS=-fno-stack-protector
--else
-+ifeq ($(BR2_x86_64),)
- KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
- endif
+diff --git a/package/sispmctl/sispmctl.hash b/package/sispmctl/sispmctl.hash
+index f1090c4b8a..941eb3dfda 100644
+--- a/package/sispmctl/sispmctl.hash
++++ b/package/sispmctl/sispmctl.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  bf5177e085cb0168e18e4cfb69645c3095da149ed46f5659d6e757bde3548e40  sispmctl-4.1.tar.gz
++sha256  300adc32ab35a4f9260705f8f57ccd83c3c6601fc493dbe7d259335938819aaf  sispmctl-4.2.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/sispmctl/sispmctl.mk b/package/sispmctl/sispmctl.mk
+index 93e7de7694..ed0c8c2958 100644
+--- a/package/sispmctl/sispmctl.mk
++++ b/package/sispmctl/sispmctl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-SISPMCTL_VERSION = 4.1
++SISPMCTL_VERSION = 4.2
+ SISPMCTL_SITE = http://downloads.sourceforge.net/project/sispmctl/sispmctl/sispmctl-$(SISPMCTL_VERSION)
+ SISPMCTL_LICENSE = GPL-2.0+
+ SISPMCTL_LICENSE_FILES = COPYING
