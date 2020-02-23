@@ -1,64 +1,69 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 23 Feb 2020 00:48:38 +0100
-Subject: [Buildroot] Analysis of build results
-In-Reply-To: <20200220034343.2370e4e4@windsurf>
-References: <20200219074844.F3D6C85D78@fraxinus.osuosl.org>
- <20200220034343.2370e4e4@windsurf>
-Message-ID: <93002ccc-73ca-d4ff-81d9-bf524a16840a@gmail.com>
+Date: Sun, 23 Feb 2020 01:01:38 +0100
+Subject: [Buildroot] [PATCH] package/libsvgtiny: fix parallel build
+In-Reply-To: <20200222214439.18588-1-giulio.benetti@benettiengineering.com>
+References: <20200222214439.18588-1-giulio.benetti@benettiengineering.com>
+Message-ID: <da794688-22a0-ef32-456a-7b39e8882c24@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Giulio,
 
-Le 20/02/2020 ? 03:43, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Wed, 19 Feb 2020 07:48:39 -0000
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
->>     master   | 92  | 67  |  0  | 159 |
-> 
-> These results are not really good, so we need to put some effort into
-> reducing the number of build failures in the autobuilders. See below
-> for an analysis of the different build failures. Your help is
-> appreciated to fix those issues.
-> 
+Le 22/02/2020 ? 22:44, Giulio Benetti a ?crit?:
+> Fix previous commit[1] which purpose was to fix parallel build. It
+> didn't work since it assigned $(MAKE1) to LIBSVGTINY_MAKE, but this is a
+> generic-package and building is done using $(MAKE), then LIBSVGTINY_MAKE
+> was ignored. Let's substitute instead $(MAKE) with $(MAKE1) in
+> LIBSVGTINY_BUILD_CMDS.
+
+Nice catch!
 
 > 
->>     arm      |           efl-1.22.3           | NOK | http://autobuild.buildroot.net/results/4d7861fd5908c59546de19f6af3c27d061fed60b |     
+> [1]:
+> https://git.buildroot.net/buildroot/commit/?id=26d67a2599d6c88facd5178de853fa355244e7c2
 > 
-> /data/buildroot/buildroot-test/instance-0/output/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/poppler/cpp/poppler-page.h:39:22: error: expected ',' or '...' before '&&' token
+> Fixes:
+> http://autobuild.buildroot.net/results/67d/67d341c0cc272323d6e231a20796a6848c21d760/
 > 
-> Some C++ mess it seems. Romain, any idea ?
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/libsvgtiny/libsvgtiny.mk | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+> index fe7dc0a6d2..a2165d5b7e 100644
+> --- a/package/libsvgtiny/libsvgtiny.mk
+> +++ b/package/libsvgtiny/libsvgtiny.mk
+> @@ -12,8 +12,6 @@ LIBSVGTINY_DEPENDENCIES = \
+>  	libxml2 host-gperf host-pkgconf host-netsurf-buildsystem
+>  LIBSVGTINY_LICENSE = MIT
+>  LIBSVGTINY_LICENSE_FILES = README
+> -# Package does not build in parallel due to improper make rules
+> -LIBSVGTINY_MAKE = $(MAKE1)
+>  
+>  # The libsvgtiny build system cannot build both the shared and static
+>  # libraries. So when the Buildroot configuration requests to build
+> @@ -29,7 +27,8 @@ define LIBSVGTINY_CONFIGURE_CMDS
+>  endef
+>  
+(*) here.
+>  define LIBSVGTINY_BUILD_CMDS
+> -	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=/usr \
+Usually comments are outside of the define (*)
+> +# Use $(MAKE1) since parallel build fails
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) PREFIX=/usr \
+>  		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE)
 
-This is an issue related to poppler dependency that is built with C++11 standard:
-
-sysroot/usr/include/poppler/cpp/poppler-page.h:70:10:
- "error: 'unique_ptr' in namespace 'std' does not name a template type"
-
-But with this toolchain based on gcc-5, the default C++ standard is gnu++98 [2].
-
-The efl libraries should be built with -std=c++11 in CFLAGS (see [1] for similar
-issue).
-
-Or maybe we should bump the poppler's package gcc dependency (gcc 5 to gcc 6)
-[3]. Doing so, the C++ standard for poppler and efl are the same (C++14).
-
-Otherwise, I don't see how the efl package can know the C++ standard to use.
-
-[1]
-https://git.buildroot.net/buildroot/commit/?id=995fb9a4ebca3acb5dc6eb22edee039b67bf5303
-
-[2] https://gcc.gnu.org/gcc-6/changes.html
-
-[3]
-https://git.buildroot.net/buildroot/tree/package/poppler/Config.in?h=2020.02-rc1#n7
+I would add MAKE1 for other steps (LIBSVGTINY_INSTALL_STAGING_CMDS and
+LIBSVGTINY_INSTALL_TARGET_CMDS).
 
 Best regards,
 Romain
 
-> Thomas
+
+>  endef
+>  
 > 
