@@ -1,33 +1,94 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Feb 2020 22:27:02 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/avahi: bump to version 0.8
-In-Reply-To: <20200220091526.232214-1-joerg.krause@embedded.rocks>
-References: <20200220091526.232214-1-joerg.krause@embedded.rocks>
-Message-ID: <20200223222702.57d081b3@windsurf>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun, 23 Feb 2020 22:37:29 +0100
+Subject: [Buildroot] [PATCH v3 03/12] support/scripts/pkg-stats: set
+ developers info
+In-Reply-To: <d2c5c7c7-3fd6-7cf7-3108-091d3b15a114@railnova.eu>
+References: <20200222085715.23769-1-heiko.thiery@gmail.com>
+ <20200222085715.23769-4-heiko.thiery@gmail.com>
+ <d2c5c7c7-3fd6-7cf7-3108-091d3b15a114@railnova.eu>
+Message-ID: <CAEyMn7a0QXPLJJ+-dkgJh0EasxGie-NC2pe36byvieMVRCOrow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 20 Feb 2020 10:15:26 +0100
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+Hi Titouan and all,
 
-> This bump also includes:
->  * Drop upstream security patch which is included in the new version
->  * Unconditionally disable support for Qt5 [1] (same as Qt3 and Qt4)
->  * Drop dependency on host-inttool, as avahi switched to host-gettext [2]
->  * Conditionally enable support for libevent [3]
->  * Drop disabling support for Qt3, Qt4, and GTK, which are disabled by
->    default now
+Am So., 23. Feb. 2020 um 14:45 Uhr schrieb Titouan Christophe
+<titouan.christophe@railnova.eu>:
+>
+> Heiko, all,
+> On 2/22/20 9:57 AM, Heiko Thiery wrote:
+> > Use the function 'parse_developers' function from getdeveloperlib that
+> > collect the information about the developers and the files they
+> > maintain. Then set the maintainer(s) to each package.
+> >
+> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> > ---
+> >   support/scripts/pkg-stats | 16 ++++++++++++++++
+> >   1 file changed, 16 insertions(+)
+> >
+> > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+> > index 4c963cef0f..643272e9d2 100755
+> > --- a/support/scripts/pkg-stats
+> > +++ b/support/scripts/pkg-stats
+> > @@ -30,10 +30,14 @@ import certifi
+> >   import distutils.version
+> >   import time
+> >   import gzip
+> > +import sys
+> >   from urllib3 import HTTPSConnectionPool
+> >   from urllib3.exceptions import HTTPError
+> >   from multiprocessing import Pool
+> >
+> > +sys.path.append('utils/')
+> > +from getdeveloperlib import parse_developers
+> > + >   NVD_START_YEAR = 2002
+> >   NVD_JSON_VERSION = "1.0"
+> >   NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
+> > @@ -169,6 +173,15 @@ class Package:
+> >           """
+> >           return cve in self.all_ignored_cves.get(self.pkgvar(), [])
+> >
+> > +    def set_developers(self, developers):
+> > +        """
+> > +        Fills in the .developers field
+> > +        """
+> > +        self.developers = list()
+> > +        for dev in developers:
+> > +            if dev.hasfile(self.path):
+> > +                self.developers.append((dev.name))
+>
+> Bikeshedding again, but maybe more elegant like this:
 
-I've left the explicit disabling of qt4, qt4 and gtk support, and
-applied to next.
+Indeed this is more elegant. I will change that.
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> self.developers = [
+>      dev.name
+>      for dev in developers
+>      if dev.hasfile(self.path)
+> ]
+>
+> > +
+> >       def __eq__(self, other):
+> >           return self.path == other.path
+> >
+> > @@ -891,6 +904,8 @@ def __main__():
+> >                                         'HEAD']).splitlines()[0]
+> >       print("Build package list ...")
+> >       packages = get_pkglist(args.npackages, package_list)
+> > +    print("Getting developers ...")
+> > +    developers = parse_developers()
+> >       print("Getting package make info ...")
+> >       package_init_make_info()
+> >       print("Getting package details ...")
+> > @@ -902,6 +917,7 @@ def __main__():
+> >           pkg.set_check_package_warnings()
+> >           pkg.set_current_version()
+> >           pkg.set_url()
+> > +        pkg.set_developers(developers)
+> >       print("Checking URL status")
+> >       check_package_urls(packages)
+> >       print("Getting latest versions ...")
+> >
