@@ -1,94 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2020 09:26:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/luv: fix build with gcc 4.8
-In-Reply-To: <20200222213328.366748-1-fontaine.fabrice@gmail.com>
-References: <20200222213328.366748-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200223082643.GF8743@scaer>
+Date: Sun, 23 Feb 2020 09:27:49 +0100
+Subject: [Buildroot] [git commit] package/mbedtls: security bump to version
+ 2.16.5
+Message-ID: <20200223081606.7B2538E781@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=07fd2da5958b312aaa68d10b0496f9d120c37941
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-02-22 22:33 +0100, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/83b34e606b128546da8a70836d039090e334a1ec
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- Fix potential memory overread when performing an ECDSA signature
+   operation. The overread only happens with cryptographically low
+   probability (of the order of 2^-n where n is the bitsize of the
+   curve) unless the RNG is broken, and could result in information
+   disclosure or denial of service (application crash or extra resource
+   consumption).
+ - To avoid a side channel vulnerability when parsing an RSA private
+   key, read all the CRT parameters from the DER structure rather than
+   reconstructing them.
+ - Update indentation of hash file (two spaces)
 
-Applied to master, after markign the patch as accepted upstream. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/mbedtls/mbedtls.hash | 8 ++++----
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...01-src-lreq.c-fix-build-with-gcc-4.8.patch | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 package/luv/0001-src-lreq.c-fix-build-with-gcc-4.8.patch
-> 
-> diff --git a/package/luv/0001-src-lreq.c-fix-build-with-gcc-4.8.patch b/package/luv/0001-src-lreq.c-fix-build-with-gcc-4.8.patch
-> new file mode 100644
-> index 0000000000..e9fd6430fb
-> --- /dev/null
-> +++ b/package/luv/0001-src-lreq.c-fix-build-with-gcc-4.8.patch
-> @@ -0,0 +1,43 @@
-> +From d05134115ec8fcfc87188899cec336a8b4df7e62 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sat, 22 Feb 2020 22:17:19 +0100
-> +Subject: [PATCH] src/lreq.c: fix build with gcc 4.8
-> +
-> +Since commit 3e34390cc15101d7fc46ea26f5adf9ac022c2029, build fails with
-> +gcc 4.8.3 on:
-> +
-> +In file included from /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output/build/luv-1.34.1-1/src/luv.c:27:0:
-> +/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output/build/luv-1.34.1-1/src/lreq.c: In function 'luv_cleanup_req':
-> +/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output/build/luv-1.34.1-1/src/lreq.c:70:5: error: 'for' loop initial declarations are only allowed in C99 mode
-> +     for (int i = 0; ((int*)(data->data))[i] != LUA_NOREF; i++) {
-> +     ^
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/83b34e606b128546da8a70836d039090e334a1ec
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/luvit/luv/pull/456]
-> +---
-> + src/lreq.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/src/lreq.c b/src/lreq.c
-> +index c8e07eb..b12ec4f 100644
-> +--- a/src/lreq.c
-> ++++ b/src/lreq.c
-> +@@ -64,10 +64,11 @@ static void luv_fulfill_req(lua_State* L, luv_req_t* data, int nargs) {
-> + }
-> + 
-> + static void luv_cleanup_req(lua_State* L, luv_req_t* data) {
-> ++  int i;
-> +   luaL_unref(L, LUA_REGISTRYINDEX, data->req_ref);
-> +   luaL_unref(L, LUA_REGISTRYINDEX, data->callback_ref);
-> +   if (data->data_ref == LUV_REQ_MULTIREF) {
-> +-    for (int i = 0; ((int*)(data->data))[i] != LUA_NOREF; i++) {
-> ++    for (i = 0; ((int*)(data->data))[i] != LUA_NOREF; i++) {
-> +       luaL_unref(L, LUA_REGISTRYINDEX, ((int*)(data->data))[i]);
-> +     }
-> +   }
-> +-- 
-> +2.25.0
-> +
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index db9d29d1d5..92e7d35a64 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,5 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.4-and-2.7.13-released
+-sha1	e446cbac7d24fc3ff1b1c4ee7c021694ede86db6	mbedtls-2.16.4-apache.tgz
+-sha256	3441f32bda9c8ef58acc9e18028d09eb9c17d199eb27141bec074905152fb2fb	mbedtls-2.16.4-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.5-and-2.7.14-released
++sha1  c36962183e05467aa1dadafcaacf90216a737866  mbedtls-2.16.5-apache.tgz
++sha256  65b4c6cec83e048fd1c675e9a29a394ea30ad0371d37b5742453f74084e7b04d  mbedtls-2.16.5-apache.tgz
+ # Locally calculated
+-sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index c6a7adc72a..5d0dd87339 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.16.4
++MBEDTLS_VERSION = 2.16.5
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
