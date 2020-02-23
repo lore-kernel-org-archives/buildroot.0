@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Feb 2020 22:38:29 +0100
-Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 1.4.6
-Message-ID: <20200309140904.C58AA7FCEA@busybox.osuosl.org>
+Date: Sun, 23 Feb 2020 22:22:28 +0100
+Subject: [Buildroot] [git commit] package/kodi-visualisation-fishbmc: remove
+ opengl dependency
+Message-ID: <20200309140904.9E7237F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ef6ed667238a13c1a4a6c691a0a8f33824bba02
+commit: https://git.buildroot.net/buildroot/commit/?id=fef10aee3de6912897cc5477831b6e175ce4777c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The addon can also be used with OpenGLES:
+https://github.com/xbmc/visualization.fishbmc/blob/Leia/CMakeLists.txt
+
+Updated project URL forgotten in
+https://git.buildroot.net/buildroot/commit/?id=4726e93c63d51fe287c62628a9c71c04517d727c
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/upmpdcli/upmpdcli.hash | 4 ++--
- package/upmpdcli/upmpdcli.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi-visualisation-fishbmc/Config.in | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index 33003a406e..fe1d82202d 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
-@@ -1,5 +1,5 @@
--# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.5.tar.gz.sha256:
--sha256  af0c13b6ab8720d98451307010c33462e9a3f50178bae82c593fd2dd12e31b0e  upmpdcli-1.4.5.tar.gz
-+# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.6.tar.gz.sha256:
-+sha256  80ed85a323a1721a9e2ceb64923cedbf69c45f22fb9bc6853c9c11b46dc83a1d  upmpdcli-1.4.6.tar.gz
+diff --git a/package/kodi-visualisation-fishbmc/Config.in b/package/kodi-visualisation-fishbmc/Config.in
+index 9e2eabbdbc..66c1565bd7 100644
+--- a/package/kodi-visualisation-fishbmc/Config.in
++++ b/package/kodi-visualisation-fishbmc/Config.in
+@@ -1,10 +1,6 @@
+ config BR2_PACKAGE_KODI_VISUALISATION_FISHBMC
+ 	bool "kodi-visualisation-fishbmc"
+-	depends on BR2_PACKAGE_HAS_LIBGL
+ 	help
+ 	  Fische visualiser for Kodi
  
- # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 290cdcb1f2..67d805f0cc 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UPMPDCLI_VERSION = 1.4.5
-+UPMPDCLI_VERSION = 1.4.6
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = LGPL-2.1+
- UPMPDCLI_LICENSE_FILES = COPYING
+-	  https://github.com/notspiff/visualization.fishbmc
+-
+-comment "kodi-visualisation-fishbmc needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
++	  https://github.com/xbmc/visualization.fishbmc
