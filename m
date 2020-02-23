@@ -1,11 +1,11 @@
 From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sun, 23 Feb 2020 15:37:45 +0100
-Subject: [Buildroot] [PATCH v3 08/12] support/scripts/pkg-stats: add
- defconfig support
-In-Reply-To: <20200222085715.23769-9-heiko.thiery@gmail.com>
+Date: Sun, 23 Feb 2020 15:40:56 +0100
+Subject: [Buildroot] [PATCH v3 06/12] support/scripts/pkg-stats: add
+ package count to stats
+In-Reply-To: <20200222085715.23769-7-heiko.thiery@gmail.com>
 References: <20200222085715.23769-1-heiko.thiery@gmail.com>
- <20200222085715.23769-9-heiko.thiery@gmail.com>
-Message-ID: <1284f86f-bdce-c23b-c8a7-9c8e0ab943d0@railnova.eu>
+ <20200222085715.23769-7-heiko.thiery@gmail.com>
+Message-ID: <00aac7d9-ab5c-e92b-3188-132f32de86d0@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,115 +14,26 @@ To: buildroot@busybox.net
 
 Heiko, all,
 
-Nice to add the defconfigs to the stats !
-
 On 2/22/20 9:57 AM, Heiko Thiery wrote:
-> Scan configs directory and create Defconfig objects.
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Signed-off-by: Heiko Thiery <heiko.thiery at gmail.
+
+Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Tested-by: Titouan Christophe <titouan.christophe@railnova.eu>
+
 > ---
->   support/scripts/pkg-stats | 42 +++++++++++++++++++++++++++++++++++++--
->   1 file changed, 40 insertions(+), 2 deletions(-)
+>   support/scripts/pkg-stats | 1 +
+>   1 file changed, 1 insertion(+)
 > 
 > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index 36b33586ef..ae70f90485 100755
+> index 7c8cc81cf2..90afcc2332 100755
 > --- a/support/scripts/pkg-stats
 > +++ b/support/scripts/pkg-stats
-> @@ -54,6 +54,33 @@ RM_API_STATUS_NOT_FOUND = 4
->   # because it's used by sub-processes.
->   http_pool = None
+> @@ -544,6 +544,7 @@ def check_package_cves(nvd_path, packages):
 >   
-> +class Defconfig:
-> +    def __init__(self, name, path):
-> +        self.name = name
-> +        self.path = path
-> +        self.developers = None
-> +
-> +    def set_developers(self, developers):
-> +        """
-> +        Fills in the .developers field
-> +        """
-> +        self.developers = list()
-> +        for dev in developers:
-> +            if dev.hasfile(self.path):
-> +                self.developers.append(dev.name)
-
-self.developers = [
-     dev.name
-     for dev in developers
-     if dev.hasfile(self.path)
-]
-
-> +
-> +def get_defconfig_list():
-> +     """
-> +     Builds the list of Buildroot defconfigs, returning a list of Defconfig
-> +     objects.
-> +     """
-> +     defconfigs = list()
-> +     files = [f for f in os.listdir('configs')]
-> +     for name in files:
-> +         d = Defconfig(name[:-10], os.path.join('configs', name))
-> +         defconfigs.append(d)
-> +     return defconfigs
-
-return [
-     Defconfig(name[:-10], os.path.join('configs', name))
-     for name in os.listdir('configs')
-]
-
-> +
->   
->   class Package:
->       all_licenses = dict()
-> @@ -882,7 +909,7 @@ def dump_html(packages, stats, date, commit, output):
->           f.write(html_footer)
->   
->   
-> -def dump_json(packages, stats, date, commit, output):
-> +def dump_json(packages, defconfigs, stats, date, commit, output):
->       # Format packages as a dictionnary instead of a list
->       # Exclude local field that does not contains real date
->       excluded_fields = ['url_worker', 'name']
-> @@ -893,6 +920,12 @@ def dump_json(packages, stats, date, commit, output):
->               if k not in excluded_fields
->           } for pkg in packages
->       }
-> +    defconfigs = {
-> +        d.name: {
-> +            k: v
-> +            for k, v in d.__dict__.items()
-> +        } for d in defconfigs
-> +    }
->       # Aggregate infrastructures into a single dict entry
->       statistics = {
->           k: v
-> @@ -903,6 +936,7 @@ def dump_json(packages, stats, date, commit, output):
->       # The actual structure to dump, add commit and date to it
->       final = {'packages': pkgs,
->                'stats': statistics,
-> +             'defconfigs': defconfigs,
->                'commit': commit,
->                'date': str(date)}
->   
-> @@ -944,6 +978,10 @@ def __main__():
->       packages = get_pkglist(args.npackages, package_list)
->       print("Getting developers ...")
->       developers = parse_developers()
-> +    print("Build defconfig list ...")
-> +    defconfigs = get_defconfig_list()
-> +    for d in defconfigs:
-> +        d.set_developers(developers)
->       print("Getting package make info ...")
->       package_init_make_info()
->       print("Getting package details ...")
-> @@ -970,7 +1008,7 @@ def __main__():
->           dump_html(packages, stats, date, commit, args.html)
->       if args.json:
->           print("Write JSON")
-> -        dump_json(packages, stats, date, commit, args.json)
-> +        dump_json(packages, defconfigs, stats, date, commit, args.json)
->   
->   
->   __main__()
+>   def calculate_stats(packages):
+>       stats = defaultdict(int)
+> +    stats['packages'] = len(packages)
+>       for pkg in packages:
+>           # If packages have multiple infra, take the first one. For the
+>           # vast majority of packages, the target and host infra are the
 > 
