@@ -1,59 +1,92 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2020 09:40:00 +0100
-Subject: [Buildroot] [PATCH] package/tpm2-tss: wip: bump to version 2.3.3
-In-Reply-To: <20200220214530.20200-1-peter@korsgaard.com>
-References: <20200220214530.20200-1-peter@korsgaard.com>
-Message-ID: <20200223084000.GI8743@scaer>
+Date: Sun, 23 Feb 2020 09:41:20 +0100
+Subject: [Buildroot] [PATCH/next 2/2] replace MESA_EGL_NO_X11_HEADERS
+ hack with upstream EGL_NO_X11
+In-Reply-To: <20200220185917.37908-2-bernd.kuhls@t-online.de>
+References: <20200220185917.37908-1-bernd.kuhls@t-online.de>
+ <20200220185917.37908-2-bernd.kuhls@t-online.de>
+Message-ID: <20200223084120.GJ8743@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Bernd, All,
 
-Title fixed.
+On 2020-02-20 19:59 +0100, Bernd Kuhls spake thusly:
+> Mesa3d 20.0.0 deprecated MESA_EGL_NO_X11_HEADERS:
+> https://cgit.freedesktop.org/mesa/mesa/commit/?id=6202a13b71e18dc31ba7e2f4ea915b67eacc1ddb
 
-On 2020-02-20 22:45 +0100, Peter Korsgaard spake thusly:
-> Bugfix release, fixing a number of issues:
-[--SNIP--]
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[--SNIP--]
-> diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-> index 08090204ff..470020857a 100644
-> --- a/package/tpm2-tss/tpm2-tss.mk
-> +++ b/package/tpm2-tss/tpm2-tss.mk
-[--SNIP--]
-> @@ -17,4 +17,13 @@ TPM2_TSS_AUTORECONF = YES
->  # uses C99 code but forgets to pass -std=c99 when --disable-defaultflags is used
->  TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
->  
-> +# The 2.3.3 tarball accidently contains a Makefile-fuzz-generated.am
-> +# with content from a fuzz testing run rather than an empty file,
-> +# confusing autoreconf with
-> +# 0001-configure-Only-use-CXX-when-fuzzing.patch
-> +define TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
-> +	truncate -s 0 $(@D)/Makefile-fuzz-generated.am
-
-Use of truncate is rather heavy-handed here...
-    printf '' >$(@D)/Makefile-fuzz-generated.am
-
-But I just applied to master as-is, thanks.
+I think this change should be folded in the previous commit: indeed,
+that's the bump of mesa3d that causes the trouble.
 
 Regards,
 Yann E. MORIN.
 
-> +endef
-> +TPM2_TSS_POST_PATCH_HOOKS += TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
-> +
->  $(eval $(autotools-package))
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mali-t76x/egl.pc                                  | 2 +-
+>  package/mali-t76x/glesv2.pc                               | 2 +-
+>  package/nvidia-driver/gl.pc                               | 2 +-
+>  ...e-forward-cflags-from-.pc-files-to-waffle-cflags.patch | 8 ++++----
+>  4 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/mali-t76x/egl.pc b/package/mali-t76x/egl.pc
+> index 614b700d64..3de3c3ffd3 100644
+> --- a/package/mali-t76x/egl.pc
+> +++ b/package/mali-t76x/egl.pc
+> @@ -8,4 +8,4 @@ Description: ARM Mali implementation of EGL
+>  Version: 1.5
+>  Requires:
+>  Libs: -L${libdir} -lEGL -lGLESv2
+> -Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
+> +Cflags: -I${includedir} -DEGL_NO_X11
+> diff --git a/package/mali-t76x/glesv2.pc b/package/mali-t76x/glesv2.pc
+> index 5997eac63f..6521a3862d 100644
+> --- a/package/mali-t76x/glesv2.pc
+> +++ b/package/mali-t76x/glesv2.pc
+> @@ -8,4 +8,4 @@ Description: ARM Mali implementation of OpenGL ESv2
+>  Version: 2.0
+>  Requires:
+>  Libs: -L${libdir} -lGLESv2 -lGLESv1_CM
+> -Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
+> +Cflags: -I${includedir} -DEGL_NO_X11
+> diff --git a/package/nvidia-driver/gl.pc b/package/nvidia-driver/gl.pc
+> index d822763f57..d01f5d6944 100644
+> --- a/package/nvidia-driver/gl.pc
+> +++ b/package/nvidia-driver/gl.pc
+> @@ -7,5 +7,5 @@ Name: gl
+>  Description: Nvidia OpenGL library
+>  Version: 10.4.2
+>  Libs: -L${libdir} -lGL -lm -lXext -lX11 -ldl
+> -Cflags: -I${includedir}  -DMESA_EGL_NO_X11_HEADERS
+> +Cflags: -I${includedir}  -DEGL_NO_X11
+>  glx_tls: no
+> diff --git a/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch b/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
+> index ffc1b5b8b1..126aa93300 100644
+> --- a/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
+> +++ b/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
+> @@ -4,12 +4,12 @@ Date: Sun, 24 Dec 2017 00:11:45 +0100
+>  Subject: [PATCH] cmake: forward cflags from *.pc files to waffle cflags
+>  
+>  When building mesa egl without x11 and gles2 the headers need a
+> -MESA_EGL_NO_X11_HEADERS define to avoid including X11 headers.
+> +EGL_NO_X11 define to avoid including X11 headers.
+>  
+> -This define MESA_EGL_NO_X11_HEADERS  is lost while building waffle
+> -since CGLAGS defined by pc files are not used.
+> +This define EGL_NO_X11 is lost while building waffle
+> +since CFLAGS defined by pc files are not used.
+>  
+> -MESA_EGL_NO_X11_HEADERS is defined in CFLAGS from egl.pc.
+> +EGL_NO_X11 is defined in CFLAGS from egl.pc.
+>  
+>  Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>  ---
 > -- 
 > 2.20.1
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
