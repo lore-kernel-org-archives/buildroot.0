@@ -1,53 +1,81 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Feb 2020 17:35:03 +0100
-Subject: [Buildroot] [PATCH] package/tpm2-tss: wip: bump to version 2.3.3
-In-Reply-To: <20200223084000.GI8743@scaer> (Yann E. MORIN's message of "Sun,
- 23 Feb 2020 09:40:00 +0100")
-References: <20200220214530.20200-1-peter@korsgaard.com>
- <20200223084000.GI8743@scaer>
-Message-ID: <87o8tp1cug.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Feb 2020 17:48:47 +0100
+Subject: [Buildroot] [git commit] package/smartmontools: fix build without
+ stack-protector
+Message-ID: <20200223163706.AEC2B8E818@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=dc171f123c6b320c4930ba00debeb34fede82d99
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Peter, All,
- > Title fixed.
+Fixes:
+ - http://autobuild.buildroot.org/results/0de9f2a69fa2a39164211299f8a429d2fec6935a
 
-Thanks ;)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...onfigure.ac-fix-stack-protector-detection.patch | 38 ++++++++++++++++++++++
+ package/smartmontools/smartmontools.mk             |  2 ++
+ 2 files changed, 40 insertions(+)
 
- > On 2020-02-20 22:45 +0100, Peter Korsgaard spake thusly:
- >> Bugfix release, fixing a number of issues:
- > [--SNIP--]
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > [--SNIP--]
- >> diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
- >> index 08090204ff..470020857a 100644
- >> --- a/package/tpm2-tss/tpm2-tss.mk
- >> +++ b/package/tpm2-tss/tpm2-tss.mk
- > [--SNIP--]
- >> @@ -17,4 +17,13 @@ TPM2_TSS_AUTORECONF = YES
- >> # uses C99 code but forgets to pass -std=c99 when --disable-defaultflags is used
- >> TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
- >> 
- >> +# The 2.3.3 tarball accidently contains a Makefile-fuzz-generated.am
- >> +# with content from a fuzz testing run rather than an empty file,
- >> +# confusing autoreconf with
- >> +# 0001-configure-Only-use-CXX-when-fuzzing.patch
- >> +define TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
- >> +	truncate -s 0 $(@D)/Makefile-fuzz-generated.am
-
- > Use of truncate is rather heavy-handed here...
- >     printf '' >$(@D)/Makefile-fuzz-generated.am
-
-True - But as truncate is part of coreutils it should be fine.
-
- > But I just applied to master as-is, thanks.
-
-Thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch b/package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch
+new file mode 100644
+index 0000000000..63f51fc9bc
+--- /dev/null
++++ b/package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch
+@@ -0,0 +1,38 @@
++From 6bd18b0b7b4d916e474ba84707eb784a643b3e71 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 23 Feb 2020 16:23:20 +0100
++Subject: [PATCH] configure.ac: fix stack-protector detection
++
++Use AC_LINK_IFELSE instead of AC_COMPILE_IFELSE to check for
++stack-protector availability as some compilers could missed the needed
++library (-lssp or -lssp_nonshared) at linking step:
++
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/x86_64-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wall -W -Wformat=2 -fstack-protector-strong   -o smartctl smartctl.o atacmdnames.o atacmds.o ataidentify.o ataprint.o dev_ata_cmd_set.o dev_intelliprop.o dev_interface.o dev_jmb39x_raid.o json.o knowndrives.o nvmecmds.o nvmeprint.o scsicmds.o scsiata.o scsinvme.o scsiprint.o utility.o     os_linux.o cciss.o dev_areca.o    -lselinux
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp_nonshared
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp
++
++Fixes:
++ - http://autobuild.buildroot.org/results/0de9f2a69fa2a39164211299f8a429d2fec6935a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://www.smartmontools.org/ticket/1302]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 87470d8a..ccb457e1 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -770,7 +770,7 @@ if test "$GXX" = "yes"; then
++     AC_MSG_CHECKING([whether $CXX supports $option])
++     save_CXXFLAGS=$CXXFLAGS
++     CXXFLAGS="$CXXFLAGS $option"
++-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [res=yes], [res=no; CXXFLAGS=$save_CXXFLAGS])
+++    AC_LINK_IFELSE([AC_LANG_PROGRAM()], [res=yes], [res=no; CXXFLAGS=$save_CXXFLAGS])
++     AC_MSG_RESULT([$res])
++   done
++ else
++-- 
++2.25.0
++
+diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
+index bad7da2d16..89831089c9 100644
+--- a/package/smartmontools/smartmontools.mk
++++ b/package/smartmontools/smartmontools.mk
+@@ -8,6 +8,8 @@ SMARTMONTOOLS_VERSION = 6.5
+ SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
+ SMARTMONTOOLS_LICENSE = GPL-2.0+
+ SMARTMONTOOLS_LICENSE_FILES = COPYING
++# 0001-configure.ac-fix-stack-protector-detection.patch
++SMARTMONTOOLS_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+ SMARTMONTOOLS_CONF_OPTS += --with-libcap-ng
