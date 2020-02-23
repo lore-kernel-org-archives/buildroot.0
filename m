@@ -1,107 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2020 21:13:43 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/smartmontools: fix build
- without stack-protector
-In-Reply-To: <20200223153638.1109360-1-fontaine.fabrice@gmail.com>
-References: <20200223153638.1109360-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200223201343.GS8743@scaer>
+Date: Sun, 23 Feb 2020 21:22:52 +0100
+Subject: [Buildroot] [git commit branch/next] package/gobject-introspection:
+ add missing newline at end of wrappers
+Message-ID: <20200223201153.5A2548E833@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=4a81bc26c986cbad02fbb6a1dfd8e548da91bc36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2020-02-23 16:36 +0100, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/0de9f2a69fa2a39164211299f8a429d2fec6935a
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/gobject-introspection/g-ir-compiler.in            | 2 +-
+ package/gobject-introspection/g-ir-scanner-lddwrapper.in  | 2 +-
+ package/gobject-introspection/g-ir-scanner-qemuwrapper.in | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to next, now. Thanks!
-
-(except this time I just forgot to update the comment in the .mk
-Oh well...)
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...ure.ac-fix-stack-protector-detection.patch | 38 +++++++++++++++++++
->  package/smartmontools/smartmontools.mk        |  2 +
->  2 files changed, 40 insertions(+)
->  create mode 100644 package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch
-> 
-> diff --git a/package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch b/package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch
-> new file mode 100644
-> index 0000000000..63f51fc9bc
-> --- /dev/null
-> +++ b/package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch
-> @@ -0,0 +1,38 @@
-> +From 6bd18b0b7b4d916e474ba84707eb784a643b3e71 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 23 Feb 2020 16:23:20 +0100
-> +Subject: [PATCH] configure.ac: fix stack-protector detection
-> +
-> +Use AC_LINK_IFELSE instead of AC_COMPILE_IFELSE to check for
-> +stack-protector availability as some compilers could missed the needed
-> +library (-lssp or -lssp_nonshared) at linking step:
-> +
-> +/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/x86_64-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wall -W -Wformat=2 -fstack-protector-strong   -o smartctl smartctl.o atacmdnames.o atacmds.o ataidentify.o ataprint.o dev_ata_cmd_set.o dev_intelliprop.o dev_interface.o dev_jmb39x_raid.o json.o knowndrives.o nvmecmds.o nvmeprint.o scsicmds.o scsiata.o scsinvme.o scsiprint.o utility.o     os_linux.o cciss.o dev_areca.o    -lselinux
-> +/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp_nonshared
-> +/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/0de9f2a69fa2a39164211299f8a429d2fec6935a
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://www.smartmontools.org/ticket/1302]
-> +---
-> + configure.ac | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 87470d8a..ccb457e1 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -770,7 +770,7 @@ if test "$GXX" = "yes"; then
-> +     AC_MSG_CHECKING([whether $CXX supports $option])
-> +     save_CXXFLAGS=$CXXFLAGS
-> +     CXXFLAGS="$CXXFLAGS $option"
-> +-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [res=yes], [res=no; CXXFLAGS=$save_CXXFLAGS])
-> ++    AC_LINK_IFELSE([AC_LANG_PROGRAM()], [res=yes], [res=no; CXXFLAGS=$save_CXXFLAGS])
-> +     AC_MSG_RESULT([$res])
-> +   done
-> + else
-> +-- 
-> +2.25.0
-> +
-> diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-> index 77eedfabd8..9dc2f789cc 100644
-> --- a/package/smartmontools/smartmontools.mk
-> +++ b/package/smartmontools/smartmontools.mk
-> @@ -8,6 +8,8 @@ SMARTMONTOOLS_VERSION = 7.1
->  SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
->  SMARTMONTOOLS_LICENSE = GPL-2.0+
->  SMARTMONTOOLS_LICENSE_FILES = COPYING
-> +# We're patching configure.ac
-> +SMARTMONTOOLS_AUTORECONF = YES
->  
->  ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
->  SMARTMONTOOLS_CONF_OPTS += --with-libcap-ng
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gobject-introspection/g-ir-compiler.in b/package/gobject-introspection/g-ir-compiler.in
+index 02d7c15c38..3313cc501f 100644
+--- a/package/gobject-introspection/g-ir-compiler.in
++++ b/package/gobject-introspection/g-ir-compiler.in
+@@ -1,3 +1,3 @@
+ #!/usr/bin/env bash
+ 
+-$(dirname $0)/g-ir-scanner-qemuwrapper $(dirname $0)/g-ir-compiler.real "$@"
+\ No newline at end of file
++$(dirname $0)/g-ir-scanner-qemuwrapper $(dirname $0)/g-ir-compiler.real "$@"
+diff --git a/package/gobject-introspection/g-ir-scanner-lddwrapper.in b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
+index d7639c5c81..c19314566a 100644
+--- a/package/gobject-introspection/g-ir-scanner-lddwrapper.in
++++ b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
+@@ -1,3 +1,3 @@
+ #!/usr/bin/env bash
+ 
+-${HOST_DIR}/sbin/prelink-rtld --root=$(dirname $0)/../../ "$@"
+\ No newline at end of file
++${HOST_DIR}/sbin/prelink-rtld --root=$(dirname $0)/../../ "$@"
+diff --git a/package/gobject-introspection/g-ir-scanner-qemuwrapper.in b/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+index 6e433eb300..cad7ef875e 100644
+--- a/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
++++ b/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+@@ -14,4 +14,4 @@ if [[ $? -ne 0 ]]; then
+     echo "If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help."
+     echo 'Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"'
+     exit 1
+-fi
+\ No newline at end of file
++fi
