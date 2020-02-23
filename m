@@ -1,82 +1,53 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sun, 23 Feb 2020 17:26:54 +0100
-Subject: [Buildroot] [PATCH v3 00/12] pkg-stats json output improvements
-In-Reply-To: <20200222085715.23769-1-heiko.thiery@gmail.com>
-References: <20200222085715.23769-1-heiko.thiery@gmail.com>
-Message-ID: <0e7ad1bf-5b5e-583e-2812-2f99f577cefb@railnova.eu>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Feb 2020 17:35:03 +0100
+Subject: [Buildroot] [PATCH] package/tpm2-tss: wip: bump to version 2.3.3
+In-Reply-To: <20200223084000.GI8743@scaer> (Yann E. MORIN's message of "Sun,
+ 23 Feb 2020 09:40:00 +0100")
+References: <20200220214530.20200-1-peter@korsgaard.com>
+ <20200223084000.GI8743@scaer>
+Message-ID: <87o8tp1cug.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Heiko,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-I tested your patchset, along with your buildroot-stat application, and 
-overall this is great ! The generated HTML is nice and very comfortable 
-to navigate.
+ > Peter, All,
+ > Title fixed.
 
+Thanks ;)
 
-I replied to individual patches, most of the time for cosmetic reasons:
+ > On 2020-02-20 22:45 +0100, Peter Korsgaard spake thusly:
+ >> Bugfix release, fixing a number of issues:
+ > [--SNIP--]
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > [--SNIP--]
+ >> diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
+ >> index 08090204ff..470020857a 100644
+ >> --- a/package/tpm2-tss/tpm2-tss.mk
+ >> +++ b/package/tpm2-tss/tpm2-tss.mk
+ > [--SNIP--]
+ >> @@ -17,4 +17,13 @@ TPM2_TSS_AUTORECONF = YES
+ >> # uses C99 code but forgets to pass -std=c99 when --disable-defaultflags is used
+ >> TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
+ >> 
+ >> +# The 2.3.3 tarball accidently contains a Makefile-fuzz-generated.am
+ >> +# with content from a fuzz testing run rather than an empty file,
+ >> +# confusing autoreconf with
+ >> +# 0001-configure-Only-use-CXX-when-fuzzing.patch
+ >> +define TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
+ >> +	truncate -s 0 $(@D)/Makefile-fuzz-generated.am
 
-* Using list/dict comprehensions in place of for-append loops
-* Make use of Python properties
-* if xxx == False >>> if not xxx
+ > Use of truncate is rather heavy-handed here...
+ >     printf '' >$(@D)/Makefile-fuzz-generated.am
 
-As this is mostly a matter of taste, if you (or others) don't agree with 
-me, I will add a Reviewed-by anyway.
+True - But as truncate is part of coreutils it should be fine.
 
+ > But I just applied to master as-is, thanks.
 
-There are also a few required changes:
+Thanks!
 
-* You signed off with 2 distinct email addresses for 2 patches in the series
-* Prefer to update the package status after entirely processing a status 
-check (instead of updating at each change during a loop)
-* Consistency in the generated status (warning vs. error), and improve 
-the status messages
-
-Best regards,
-
-Titouan
-On 2/22/20 9:57 AM, Heiko Thiery wrote:
-> This patchset adds several improvements for the json output of the
-> pkg-stats script.
-> 
-> - add developers information to the packages
-> - add supported defconfigs to json
-> - add license information to json
-> - add more generic status field to the packages for easier post
->    processing
-> 
-> ---
-> v2 -> v3:
-> - keep variable latest_release but change format
-> - add check for license file hashes
-> - introduce a na status for the checks
-> - add a list of all possible checks to the json output
-> - add the cve check status
-> 
-> v1 -> v2:
-> - cleanup and recreation of patches
-> - remove pkg name from dumping to json
-> - use patch_files instead of combine count and files in dict
-> - include getdevelopers.py to reuse Developers class
-> 
-> ---
-> Heiko Thiery (12):
->    support/scripts/pkg-stats: store latest version in a dict
->    support/scripts/pkg-stats: store patch files for the package
->    support/scripts/pkg-stats: set developers info
->    support/scripts/pkg-stats: store licences of package
->    support/scripts/pkg-stats: add package status
->    support/scripts/pkg-stats: add package count to stats
->    support/scripts/pkg-stats: store pkg dir path
->    support/scripts/pkg-stats: add defconfig support
->    support/scripts/pkg-stats: add support for license hash check
->    support/scripts/pkg-stats: set status to 'na' for virtual packages
->    support/scripts/pkg-stats: initialize all package status checks
->    support/scripts/pkg-stats: add status for cve check
-> 
->   support/scripts/pkg-stats | 272 +++++++++++++++++++++++++++++---------
->   1 file changed, 212 insertions(+), 60 deletions(-)
-> 
+-- 
+Bye, Peter Korsgaard
