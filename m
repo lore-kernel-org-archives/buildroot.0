@@ -1,107 +1,187 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2020 17:50:31 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/smartmontools: fix build
- without stack-protector
-In-Reply-To: <20200223153638.1109360-1-fontaine.fabrice@gmail.com>
-References: <20200223153638.1109360-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200223165031.GQ8743@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 23 Feb 2020 18:01:06 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/kmod: bump to version 27
+Message-ID: <20200223170106.1995474-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+- Drop second and third patches (already in version)
+- Update indentation of hash file (two spaces)
 
-On 2020-02-23 16:36 +0100, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/0de9f2a69fa2a39164211299f8a429d2fec6935a
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ure.ac-fix-stack-protector-detection.patch | 38 +++++++++++++++++++
->  package/smartmontools/smartmontools.mk        |  2 +
->  2 files changed, 40 insertions(+)
->  create mode 100644 package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch
-> 
-> diff --git a/package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch b/package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch
-> new file mode 100644
-> index 0000000000..63f51fc9bc
-> --- /dev/null
-> +++ b/package/smartmontools/0001-configure.ac-fix-stack-protector-detection.patch
-> @@ -0,0 +1,38 @@
-> +From 6bd18b0b7b4d916e474ba84707eb784a643b3e71 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 23 Feb 2020 16:23:20 +0100
-> +Subject: [PATCH] configure.ac: fix stack-protector detection
-> +
-> +Use AC_LINK_IFELSE instead of AC_COMPILE_IFELSE to check for
-> +stack-protector availability as some compilers could missed the needed
-> +library (-lssp or -lssp_nonshared) at linking step:
-> +
-> +/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/x86_64-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wall -W -Wformat=2 -fstack-protector-strong   -o smartctl smartctl.o atacmdnames.o atacmds.o ataidentify.o ataprint.o dev_ata_cmd_set.o dev_intelliprop.o dev_interface.o dev_jmb39x_raid.o json.o knowndrives.o nvmecmds.o nvmeprint.o scsicmds.o scsiata.o scsinvme.o scsiprint.o utility.o     os_linux.o cciss.o dev_areca.o    -lselinux
-> +/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp_nonshared
-> +/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/0de9f2a69fa2a39164211299f8a429d2fec6935a
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://www.smartmontools.org/ticket/1302]
-> +---
-> + configure.ac | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 87470d8a..ccb457e1 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -770,7 +770,7 @@ if test "$GXX" = "yes"; then
-> +     AC_MSG_CHECKING([whether $CXX supports $option])
-> +     save_CXXFLAGS=$CXXFLAGS
-> +     CXXFLAGS="$CXXFLAGS $option"
-> +-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [res=yes], [res=no; CXXFLAGS=$save_CXXFLAGS])
-> ++    AC_LINK_IFELSE([AC_LANG_PROGRAM()], [res=yes], [res=no; CXXFLAGS=$save_CXXFLAGS])
-> +     AC_MSG_RESULT([$res])
-> +   done
-> + else
-> +-- 
-> +2.25.0
-> +
-> diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-> index 77eedfabd8..9dc2f789cc 100644
-> --- a/package/smartmontools/smartmontools.mk
-> +++ b/package/smartmontools/smartmontools.mk
-> @@ -8,6 +8,8 @@ SMARTMONTOOLS_VERSION = 7.1
->  SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
->  SMARTMONTOOLS_LICENSE = GPL-2.0+
->  SMARTMONTOOLS_LICENSE_FILES = COPYING
-> +# We're patching configure.ac
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-undefined-symbols-when-building-the.patch | 75 -------------------
+ ...3-Makefile.am-filter-Wl-no-undefined.patch | 43 -----------
+ package/kmod/kmod.hash                        |  6 +-
+ package/kmod/kmod.mk                          |  4 +-
+ 4 files changed, 4 insertions(+), 124 deletions(-)
+ delete mode 100644 package/kmod/0002-Do-not-check-for-undefined-symbols-when-building-the.patch
+ delete mode 100644 package/kmod/0003-Makefile.am-filter-Wl-no-undefined.patch
 
-I've changed that to just list the patch that touches configue.ac. That
-way, it is easier to notice to drop autoreconf when we drop the patch.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> +SMARTMONTOOLS_AUTORECONF = YES
->  
->  ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
->  SMARTMONTOOLS_CONF_OPTS += --with-libcap-ng
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/kmod/0002-Do-not-check-for-undefined-symbols-when-building-the.patch b/package/kmod/0002-Do-not-check-for-undefined-symbols-when-building-the.patch
+deleted file mode 100644
+index 3be40d4993..0000000000
+--- a/package/kmod/0002-Do-not-check-for-undefined-symbols-when-building-the.patch
++++ /dev/null
+@@ -1,75 +0,0 @@
+-From 55a0a0aac503f5012ff2df7af37107544c757f19 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Tue, 22 Oct 2019 09:56:32 +0200
+-Subject: [PATCH kmod] Do not check for undefined symbols when building the
+- Python modules
+-
+-kmod's configure.ac uses the -Wl,--no-undefined linker flag to verify
+-at link time that all symbols of shared libraries are available, and
+-that there are no undefined symbols.
+-
+-This make perfect sense for regular shared libraries. However, for
+-Python extensions, which will be dlopen()ed inside the Python
+-interpreter, it makes less sense.
+-
+-Since Python 3.8, there is a change in python-config script and
+-Python's pkg-config file: it no longer links Python extensions with
+-the libpython library. See
+-https://docs.python.org/dev/whatsnew/3.8.html#debug-build-uses-the-same-abi-as-release-build
+-which states:
+-
+-  On the other hand, pkg-config python3.8 --libs no longer contains
+-  -lpython3.8. C extensions must not be linked to libpython (except on
+-  Android and Cygwin, whose cases are handled by the script); this
+-  change is backward incompatible on purpose. (Contributed by Victor
+-  Stinner in bpo-36721.)
+-
+-So, when linking the kmod Python extensions, it currently fails with
+-numerous unresolved symbols, that were previously provided by
+-libpython:
+-
+-/home/test/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/7.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: libkmod/python/kmod/.libs/list_la-list.o: in function `__Pyx_PyObject_GetAttrStr':
+-list.c:(.text.__Pyx_PyObject_GetAttrStr+0x48): undefined reference to `PyObject_GetAttr'
+-/home/test/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/7.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: libkmod/python/kmod/.libs/list_la-list.o: in function `__pyx_tp_dealloc_4kmod_4list_ModListItem':
+-list.c:(.text.__pyx_tp_dealloc_4kmod_4list_ModListItem+0x78): undefined reference to `PyObject_CallFinalizerFromDealloc'
+-/home/test/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/7.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: libkmod/python/kmod/.libs/list_la-list.o: in function `__pyx_tp_dealloc_4kmod_4list_ModList':
+-list.c:(.text.__pyx_tp_dealloc_4kmod_4list_ModList+0x30): undefined reference to `PyErr_Fetch'
+-
+-[Complete log at http://autobuild.buildroot.net/results/79a/79a5a0398723e8cfea0d0aa3dec5f7649aee4c63/build-end.log]
+-
+-Linking with libpython is no longer recommended: those symbols should
+-remain unresolved in the Python extensions, as they wil be properly
+-resolved when the Python extension gets loaded into the Python
+-interpreter.
+-
+-Since we want to keep -Wl,--no-undefined globally in kmod, we leave
+-the configure.ac file unchanged, and instead, specifically in the
+-LDFLAGS used to build the Python extensions, we override
+--Wl,--no-undefined with -Wl,-z,undefs. Ideally, -Wl,--no-undefined is
+-the same as -Wl,-z,defs, and the effect of these options can be
+-canceled on the linker command line by a following -Wl,-z,undefs (see
+-the ld man page for details).
+-
+-Upstream: https://lore.kernel.org/linux-modules/20191024174710.9441-1-thomas.petazzoni at bootlin.com/
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Cc: Victor Stinner <victor.stinner@gmail.com>
+----
+- Makefile.am | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index c5c2f06..8e9c90d 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -173,7 +173,7 @@ CPYTHON_MODULE_CFLAGS = \
+- 	$(AM_CFLAGS) -DCPYTHON_COMPILING_IN_PYPY=0 \
+- 	$(PYTHON_NOWARN) $(PYTHON_CFLAGS) \
+- 	-fvisibility=default
+--CPYTHON_MODULE_LDFLAGS = $(AM_LDFLAGS) -module -avoid-version -shared
+-+CPYTHON_MODULE_LDFLAGS = $(AM_LDFLAGS) -module -avoid-version -shared -Wl,-z,undefs
+- 
+- if BUILD_PYTHON
+- pkgpyexec_LTLIBRARIES = \
+--- 
+-2.21.0
+-
+diff --git a/package/kmod/0003-Makefile.am-filter-Wl-no-undefined.patch b/package/kmod/0003-Makefile.am-filter-Wl-no-undefined.patch
+deleted file mode 100644
+index f4d90d4c24..0000000000
+--- a/package/kmod/0003-Makefile.am-filter-Wl-no-undefined.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 7a55f18e14f606500fdeab6bc116ec74f3e5b1c3 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 16 Nov 2019 17:40:32 +0100
+-Subject: [PATCH] Makefile.am: filter -Wl,--no-undefined
+-
+-Commit 1d14ef82f4a3be741bcdf6b1c6d51ce9dce43567 does not completely fix
+-the build with python 3.8 as we still get link failure due to
+-'-z undefs' being ignored by some versions of ld:
+-
+-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/../../../../mips-linux-gnu/bin/ld: warning: -z undefs ignored.
+-
+-/home/naourr/work/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64_be-linux-gnu/7.3.1/../../../../aarch64_be-linux-gnu/bin/ld: warning: -z undefs ignored.
+-
+-So filter -Wl,--no-undefined to fix the issue
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/e9645d9969481b09f507f6e0d0b35faaa283eb60
+- - http://autobuild.buildroot.org/results/06a6d865b6b7d8ebd793bde214f4a4c40e0962e1
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile.am | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 8e9c90d..47505c1 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -173,7 +173,10 @@ CPYTHON_MODULE_CFLAGS = \
+- 	$(AM_CFLAGS) -DCPYTHON_COMPILING_IN_PYPY=0 \
+- 	$(PYTHON_NOWARN) $(PYTHON_CFLAGS) \
+- 	-fvisibility=default
+--CPYTHON_MODULE_LDFLAGS = $(AM_LDFLAGS) -module -avoid-version -shared -Wl,-z,undefs
+-+# Filter -Wl,--no-undefined to fix build with python 3.8
+-+comma = ,
+-+CPYTHON_MODULE_LDFLAGS = $(subst -Wl$(comma)--no-undefined,,$(AM_LDFLAGS))
+-+CPYTHON_MODULE_LDFLAGS += -module -avoid-version -shared
+- 
+- if BUILD_PYTHON
+- pkgpyexec_LTLIBRARIES = \
+--- 
+-2.24.0
+-
+diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+index dea5c0c107..3cb60b2dd3 100644
+--- a/package/kmod/kmod.hash
++++ b/package/kmod/kmod.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+-sha256 57bb22c8bb56435991f6b0810a042b0a65e2f1e217551efa58235b7034cdbb9d  kmod-26.tar.xz
++sha256  c1d3fbf16ca24b95f334c1de1b46f17bbe5a10b0e81e72668bdc922ebffbbc0c  kmod-27.tar.xz
+ 
+ # Locally calculated
+-sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
+-sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index e21f40a845..e2dfea5c7b 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-KMOD_VERSION = 26
++KMOD_VERSION = 27
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
+-# 0002-Do-not-check-for-undefined-symbols-when-building-the.patch
+-KMOD_AUTORECONF = YES
+ KMOD_DEPENDENCIES = host-pkgconf
+ HOST_KMOD_DEPENDENCIES = host-pkgconf
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.0
