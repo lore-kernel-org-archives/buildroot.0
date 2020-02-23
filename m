@@ -1,61 +1,52 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sun, 23 Feb 2020 10:18:03 +0100
-Subject: [Buildroot] [PATCH 4/4] package/swupdate: bump version to git
- 119173d1cfa061140a809cb7589fa1970fb3f44e.
-In-Reply-To: <20200223091803.1007790-1-mc5686@mclink.it>
-References: <20200223091803.1007790-1-mc5686@mclink.it>
-Message-ID: <20200223091803.1007790-4-mc5686@mclink.it>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Feb 2020 11:04:55 +0100
+Subject: [Buildroot] [PATCH/next 2/2] replace MESA_EGL_NO_X11_HEADERS
+ hack with upstream EGL_NO_X11
+In-Reply-To: <t2r9igxv9o.ln2@ID-313208.user.individual.net>
+References: <20200220185917.37908-1-bernd.kuhls@t-online.de>
+ <20200220185917.37908-2-bernd.kuhls@t-online.de>
+ <20200223084120.GJ8743@scaer>
+ <t2r9igxv9o.ln2@ID-313208.user.individual.net>
+Message-ID: <20200223100455.GL8743@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It has bugfixes for clering U-Boot variables (needs fixed libubootenv).
-Implements support for toolchains without locale.
+Bernd, All,
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- package/swupdate/swupdate.hash | 2 +-
- package/swupdate/swupdate.mk   | 8 +++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+On 2020-02-23 09:52 +0100, Bernd Kuhls spake thusly:
+> Am Sun, 23 Feb 2020 09:41:20 +0100 schrieb Yann E. MORIN:
+> > On 2020-02-20 19:59 +0100, Bernd Kuhls spake thusly:
+> >> Mesa3d 20.0.0 deprecated MESA_EGL_NO_X11_HEADERS:
+> >> https://cgit.freedesktop.org/mesa/mesa/commit/?
+> id=6202a13b71e18dc31ba7e2f4ea915b67eacc1ddb
+> > I think this change should be folded in the previous commit: indeed,
+> > that's the bump of mesa3d that causes the trouble.
+> even with mesa being bumped to 20.x old code still builds,
 
-diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
-index 3de8d25..8c43e7e 100644
---- a/package/swupdate/swupdate.hash
-+++ b/package/swupdate/swupdate.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  31b2561c9c91ab1e8b6f73704f9a3560816961c2cade4f5d5fc15f55c77ec819  swupdate-2019.11.tar.gz
-+sha256  205b2dccd97285d5535cdb2bc50f808226131825d386f01838863c2d552f1612  swupdate-119173d1cfa061140a809cb7589fa1970fb3f44e.tar.gz
- sha256  43492b377cf2fb67942d1dd231146bd4e6578646ad13ef289297c9dd75cbc478  Licenses/Exceptions
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 60dc0e9..26af1fa 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SWUPDATE_VERSION = 2019.11
-+SWUPDATE_VERSION = 119173d1cfa061140a809cb7589fa1970fb3f44e
- SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
- SWUPDATE_LICENSE = GPL-2.0+ with OpenSSL exception, LGPL-2.1+, MIT
- SWUPDATE_LICENSE_FILES = Licenses/Exceptions Licenses/gpl-2.0.txt \
-@@ -145,6 +145,12 @@ ifeq ($(BR2_PACKAGE_LIBRSYNC),y)
- SWUPDATE_DEPENDENCIES += librsync
- endif
- 
-+ifeq ($(BR2_ENABLE_LOCALE),y)
-+SWUPDATE_MAKE_ENV += LOCALE=y
-+else
-+SWUPDATE_MAKE_ENV += LOCALE=n
-+endif
-+
- SWUPDATE_BUILD_CONFIG = $(@D)/.config
- 
- SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
+Before, the code built without warnings, now it builds with warnings.
+
+> mesa3d 20.0.0
+> just added a warning about the old define being deprecated. Splitting 
+> both topics, version bump and EGL_NO_X11, still creates a bisectable 
+> history and makes it easier to pinpoint problems to either one of these 
+> topics so I would still vote for two patches.
+
+Since that's us, Buildroot, adding the define in the first place, it's
+our fault that the warnings appear.
+
+So, the bump introduces a regression, that is a build without warnigns
+now has warnings, and so the bump should come with the fix.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
