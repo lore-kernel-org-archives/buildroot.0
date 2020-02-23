@@ -1,83 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2020 21:58:57 +0100
-Subject: [Buildroot] [PATCH 3/3] package/meson: add
- gobject-introspection tools to cross-compilation.conf.in
-In-Reply-To: <20200221224313.854089-4-aduskett@gmail.com>
-References: <20200221224313.854089-1-aduskett@gmail.com>
- <20200221224313.854089-4-aduskett@gmail.com>
-Message-ID: <20200223205857.GV8743@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 23 Feb 2020 22:07:51 +0100
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.15.2
+Message-ID: <20200223205743.1E1BF8E84C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=efec7980f79fd30f44306cff17f0ba53da5399c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-02-21 14:43 -0800, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> These paths are hardcoded by default to the host directory; however, because
-> Buildroot is using wrappers for gobject-introspection, the sysroot paths to
-> these tools must be explicitly called instead.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/meson/cross-compilation.conf.in | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-> index 369e225b3e..565ea67240 100644
-> --- a/package/meson/cross-compilation.conf.in
-> +++ b/package/meson/cross-compilation.conf.in
-> @@ -9,6 +9,8 @@ cpp = '@TARGET_CROSS at g++'
->  ar = '@TARGET_CROSS at ar'
->  strip = '@TARGET_CROSS at strip'
->  pkgconfig = '@HOST_DIR@/bin/pkgconf'
-> +g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
-> +g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
+For details see [1].
 
-On first sight, it would seem pretty obvious. However, not so much...
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-February/041227.html
 
-We already had a similar situation with llvm and llvm-config: packages,
-such as mesa3d, may need to know where it is stored, but we did not want
-the meson infra to hard-code all these per-package utilities.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libinput/libinput.hash | 10 +++++-----
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Instead, packages that need them can specify them in their
-FOO_MESON_EXTRA_BINARIES, and they get added to that package's
-cross-compilation.conf.
-
-So I'd like that the git toolset be handled the same.
-
-Of course, to avoid repeating tedious path, you could have GOI set the
-variables:
-
-    GIR_COMPILER = $(STAGING_DIR)/usr/bin/g-ir-compiler
-    GIR_SCANNER = $(STAGING_DIR)/usr/bin/g-ir-scanner
-
-And then packages that need themwould do:
-
-    FOO_MESON_EXTRA_BINARIES = \
-        g-ir-compiler=$(GIR_COMPILER) \
-        g-ir-scanner=$(GIR_SCANNER)
-
-Regards,
-Yann E. MORIN.
-
->  [properties]
->  needs_exe_wrapper = true
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 235025768b..18cc257b72 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-February/041186.html
+-md5 93850756b6c07aafb49d5226e88fdc81 libinput-1.15.1.tar.xz
+-sha1 1b311c407c21210ad9d13b059e9eab4b85f19fb5 libinput-1.15.1.tar.xz
+-sha256 6b2f57495c6f173ecf49ee19d3e10087d9916a52711e1b5eb01e0d9635950c16 libinput-1.15.1.tar.xz
+-sha512 634810359bc4d86f2c4c75f472bee5eaed04ed93af3c91c4bc46a596402323941f9cc90173e278bfa7e5cbda6b7a20adc59bd09520dd4152fc961302b7e57904 libinput-1.15.1.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-February/041227.html
++md5 eb6bd2907ad33d53954d70dfb881a643 libinput-1.15.2.tar.xz
++sha1 2a0c4ce80ee43a9a1b274bfe40ca638037716584 libinput-1.15.2.tar.xz
++sha256 971c3fbfb624f95c911adeb2803c372e4e3647d1b98f278f660051f834597747 libinput-1.15.2.tar.xz
++sha512 f6b50dbdf6ee6b65f88e020c4292c94c3178125d58629f27c2e52f92b658ccd67e0c5604fbf0b303621ff0386637ce1e291daaa991761d4145e8bcda4dd128a2 libinput-1.15.2.tar.xz
+ 
+ # License files
+ sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index ac7fbb3b2e..1d5446e444 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.15.1
++LIBINPUT_VERSION = 1.15.2
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
