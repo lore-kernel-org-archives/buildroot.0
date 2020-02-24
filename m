@@ -1,56 +1,74 @@
-From: Hammami Omar <omar18hammami@gmail.com>
-Date: Mon, 24 Feb 2020 10:29:42 +0100
-Subject: [Buildroot] SSH server starts too late
-In-Reply-To: <33327ed4301c921b1ded444b5b7c3b89@umbiko.net>
-References: <mailman.11.1582286403.41897.buildroot@busybox.net>
- <33327ed4301c921b1ded444b5b7c3b89@umbiko.net>
-Message-ID: <CAGSpp9=Ji6HASueKR3m_LbFAm6vR6Lb_2SvAsFHsGY9qmmDyZA@mail.gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Mon, 24 Feb 2020 10:35:56 +0100
+Subject: [Buildroot] [PATCH v3 12/12] support/scripts/pkg-stats: add
+ status for cve check
+In-Reply-To: <CAEyMn7aMdCg+20XLEOWA1Kp5QfEJg9Jd39JE9HeU0AQK3jH6NA@mail.gmail.com>
+References: <20200222085715.23769-1-heiko.thiery@gmail.com>
+ <20200222085715.23769-13-heiko.thiery@gmail.com>
+ <6d3836ec-e228-77ef-df6c-6f3bd40fdf71@railnova.eu>
+ <CAEyMn7aMdCg+20XLEOWA1Kp5QfEJg9Jd39JE9HeU0AQK3jH6NA@mail.gmail.com>
+Message-ID: <eee5a274-dc79-6797-a52e-7416a9d0577a@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andreas,
 
-Thank you for your response.
-In fact, I have tried to add extra randomnes by enabling "haveged". The
-entropy has increased but the problem is the same.
-Is it possible that the entropy value is always less than the wanted one ?
+On 2/24/20 8:06 AM, Heiko Thiery wrote:
+> Hi Titouan and all,
+> 
+> Am So., 23. Feb. 2020 um 15:24 Uhr schrieb Titouan Christophe
+> <titouan.christophe@railnova.eu>:
+>>
+>> Heiko, all,
+>>
+>> On 2/22/20 9:57 AM, Heiko Thiery wrote:
+>>> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
-Kind regards,
-Omar
+[--SNIP--]
 
-Le ven. 21 f?vr. 2020 ? 13:51, Andreas Ziegler <br015@umbiko.net> a ?crit :
+> 
+>>
+>> I would rather write it like this:
+>>
+>> ########################
+>> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+>> index ed22f6b650..91477d583e 100755
+>> --- a/support/scripts/pkg-stats
+>> +++ b/support/scripts/pkg-stats
+>> @@ -620,6 +620,12 @@ def check_package_cves(nvd_path, packages):
+>>                if pkg_name in packages and cve.affects(packages[pkg_name]):
+>>                    packages[pkg_name].cves.append(cve.identifier)
+>>
+>> +    for pkg_name, pkg in packages.items():
+>> +        if len(pkg.cves) > 0:
+>> +            pkg.status['cve'] = ('error', 'affected by CVE(s)')
+>> +        else:
+>> +            pkg.status['cve'] = ('ok', 'no CVE found')
+>> +
+> 
+> Isn't it right that we loop then (depending on the amount of nvd
+> pathes) several thousend times?
+> 
+> e.g. packages ~2600, nvds ~ 20 => 20*2600=52000
 
-> Hi Omar,
->
-> On 2020-02-21 13:00, Hammami Omar <omar18hammami@gmail.com> wrote
-> > I am using the buildroot version "2019.11.1" and I have noticed that my
-> > SSH
-> > server starts too late.
-> > I was using an old version "2017.08" and the SSH server was starting
-> > normally.
->
-> This issue is not related to Buildroot, but caused by changes in
-> libopenssl (which in turn is used by OpenSSH), starting around the
-> middle of last year. You will find a lot of background information when
-> you search the www for 'boot-time entropy starvation'; the cause is,
-> reading random data from /dev/urandom blocks until the kernel entropy
-> pool has been initialized.
->
-> Workarounds:
->
-> (a) Patch libopenssl (not recommended for nodes directly connected to
-> the WAN).
-> (b) Use a more recent kernel; version 5.4.y introduced a temporary fix
-> for this issue.
-> (c) Use other sources of extra randomness, as proposed by Peter
-> Seiderer.
->
-> Kind regards,
-> Andreas
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200224/28027cac/attachment.html>
+Except that each NVD file contains a few thousands CVEs :).
+
+> 
+> On the other hand we loop over the list of packages all over the place ;-/
+
+Looping over all CVEs in a single NVD file yields 5 to 10 more 
+iterations than looping over all packages (for instance year 2018 alone 
+has 16039 CVE items)
+
+> 
+>>
+>>    def calculate_stats(packages):
+>>        stats = defaultdict(int)
+>> ########################
+>>
+>>
+>> Best regards,
+>>
+>> Titouan
