@@ -1,88 +1,99 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 23 Feb 2020 22:15:48 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-flatbuffers: new package
-Message-ID: <20200224051548.62860-1-james.hilliard1@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 24 Feb 2020 08:06:18 +0100
+Subject: [Buildroot] [PATCH v3 12/12] support/scripts/pkg-stats: add
+ status for cve check
+In-Reply-To: <6d3836ec-e228-77ef-df6c-6f3bd40fdf71@railnova.eu>
+References: <20200222085715.23769-1-heiko.thiery@gmail.com>
+ <20200222085715.23769-13-heiko.thiery@gmail.com>
+ <6d3836ec-e228-77ef-df6c-6f3bd40fdf71@railnova.eu>
+Message-ID: <CAEyMn7aMdCg+20XLEOWA1Kp5QfEJg9Jd39JE9HeU0AQK3jH6NA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- package/python-flatbuffers/Config.in               |  6 ++++++
- package/python-flatbuffers/python-flatbuffers.hash |  3 +++
- package/python-flatbuffers/python-flatbuffers.mk   | 13 +++++++++++++
- 5 files changed, 24 insertions(+)
- create mode 100644 package/python-flatbuffers/Config.in
- create mode 100644 package/python-flatbuffers/python-flatbuffers.hash
- create mode 100644 package/python-flatbuffers/python-flatbuffers.mk
+Hi Titouan and all,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 24b68ebe11..8f6a52b4fb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1167,6 +1167,7 @@ F:	package/python-async-lru/
- F:	package/python-async-timeout/
- F:	package/python-brotli/
- F:	package/python-cchardet/
-+F:	package/python-flatbuffers/
- F:	package/python-frozenlist/
- F:	package/python-janus/
- F:	package/python-logstash/
-diff --git a/package/Config.in b/package/Config.in
-index 2edcee01a5..9d83d3948d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -942,6 +942,7 @@ menu "External python modules"
- 	source "package/python-flask-jsonrpc/Config.in"
- 	source "package/python-flask-login/Config.in"
- 	source "package/python-flask-sqlalchemy/Config.in"
-+	source "package/python-flatbuffers/Config.in"
- 	source "package/python-flup/Config.in"
- 	source "package/python-frozenlist/Config.in"
- 	source "package/python-functools32/Config.in"
-diff --git a/package/python-flatbuffers/Config.in b/package/python-flatbuffers/Config.in
-new file mode 100644
-index 0000000000..b24b5aaf64
---- /dev/null
-+++ b/package/python-flatbuffers/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_FLATBUFFERS
-+	bool "python-flatbuffers"
-+	help
-+	  The FlatBuffers serialization format for Python.
-+
-+	  https://github.com/google/flatbuffers
-diff --git a/package/python-flatbuffers/python-flatbuffers.hash b/package/python-flatbuffers/python-flatbuffers.hash
-new file mode 100644
-index 0000000000..a9dc245c5b
---- /dev/null
-+++ b/package/python-flatbuffers/python-flatbuffers.hash
-@@ -0,0 +1,3 @@
-+# md5, sha256 from https://pypi.org/pypi/flatbuffers/json
-+md5	b5f6c2246f45636dd49d9ff8a00d7f1c  flatbuffers-1.11.tar.gz
-+sha256	f24185db54193540e3d684dc98aa7c2d89882341641548ceb36fd2589fef6c4e  flatbuffers-1.11.tar.gz
-diff --git a/package/python-flatbuffers/python-flatbuffers.mk b/package/python-flatbuffers/python-flatbuffers.mk
-new file mode 100644
-index 0000000000..d0374c4787
---- /dev/null
-+++ b/package/python-flatbuffers/python-flatbuffers.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-flatbuffers
-+#
-+################################################################################
-+
-+PYTHON_FLATBUFFERS_VERSION = 1.11
-+PYTHON_FLATBUFFERS_SOURCE = flatbuffers-$(PYTHON_FLATBUFFERS_VERSION).tar.gz
-+PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/c6/b6/21478b76aa7ccab58da3beb85746b6844dee2112c0cc25b51ec64b46bdbb
-+PYTHON_FLATBUFFERS_LICENSE = Apache-2.0
-+PYTHON_FLATBUFFERS_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
--- 
-2.20.1
+Am So., 23. Feb. 2020 um 15:24 Uhr schrieb Titouan Christophe
+<titouan.christophe@railnova.eu>:
+>
+> Heiko, all,
+>
+> On 2/22/20 9:57 AM, Heiko Thiery wrote:
+> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> > ---
+> >   support/scripts/pkg-stats | 10 ++++++++--
+> >   1 file changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+> > index ed22f6b650..4efff8624f 100755
+> > --- a/support/scripts/pkg-stats
+> > +++ b/support/scripts/pkg-stats
+> > @@ -617,8 +617,14 @@ def check_package_cves(nvd_path, packages):
+> >
+> >       for cve in CVE.read_nvd_dir(nvd_path):
+> >           for pkg_name in cve.pkg_names:
+> > -            if pkg_name in packages and cve.affects(packages[pkg_name]):
+> > -                packages[pkg_name].cves.append(cve.identifier)
+> > +            if pkg_name in packages:
+> > +                if cve.affects(packages[pkg_name]):
+> > +                    packages[pkg_name].cves.append(cve.identifier)
+> > +                if len(packages[pkg_name].cves):
+> > +                    packages[pkg_name].status['cve'] = ('error', 'affected by cve')
+> > +                else:
+> > +                    packages[pkg_name].status['cve'] = ('ok', 'no cve found')
+> > +
+> >
+> >
+> >   def calculate_stats(packages):
+> >
+>
+> In the current state, that would give:
+>
+> * If a CVE applies to a br package -> error
+> * If a CVE does not applies to a br package -> ok
+> * If no CVE points to a br package -> na (no status check done)
+>
+> I would argue that the latest case is not correct. The status should be
+> ok, because we ran through the whole list of CVEs from the NVD feed, and
+> we did not find any of them that applies to this package.
+
+I see .. I think you are right. This will lead to a wrong status. I
+will remove the initializer for the status.
+
+>
+> I would rather write it like this:
+>
+> ########################
+> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+> index ed22f6b650..91477d583e 100755
+> --- a/support/scripts/pkg-stats
+> +++ b/support/scripts/pkg-stats
+> @@ -620,6 +620,12 @@ def check_package_cves(nvd_path, packages):
+>               if pkg_name in packages and cve.affects(packages[pkg_name]):
+>                   packages[pkg_name].cves.append(cve.identifier)
+>
+> +    for pkg_name, pkg in packages.items():
+> +        if len(pkg.cves) > 0:
+> +            pkg.status['cve'] = ('error', 'affected by CVE(s)')
+> +        else:
+> +            pkg.status['cve'] = ('ok', 'no CVE found')
+> +
+
+Isn't it right that we loop then (depending on the amount of nvd
+pathes) several thousend times?
+
+e.g. packages ~2600, nvds ~ 20 => 20*2600=52000
+
+On the other hand we loop over the list of packages all over the place ;-/
+
+>
+>   def calculate_stats(packages):
+>       stats = defaultdict(int)
+> ########################
+>
+>
+> Best regards,
+>
+> Titouan
