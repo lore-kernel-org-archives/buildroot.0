@@ -1,49 +1,61 @@
-From: Jerry Huang <jerry.huang@nxp.com>
-Date: Mon, 24 Feb 2020 14:44:03 +0000
-Subject: [Buildroot] [EXT] Re: [v5,
- 4/9] package/qoriq-rcw: add target rcw binary support
-In-Reply-To: <DM6PR01MB5849DB1F91ABFC7663CCDACCF3120@DM6PR01MB5849.prod.exchangelabs.com>
-References: <DM6PR01MB5849DB1F91ABFC7663CCDACCF3120@DM6PR01MB5849.prod.exchangelabs.com>
-Message-ID: <VI1PR04MB513623F6B6C06A9C9BFA1D01FEEC0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+From: Gervais, Francois <FGervais@distech-controls.com>
+Date: Mon, 24 Feb 2020 15:22:50 +0000
+Subject: [Buildroot] [PATCH 1/1] package/rcw: allow not having custom
+ rcwi files
+In-Reply-To: <20200223211828.GW8743@scaer>
+References: <20200221144023.25481-1-fgervais@distech-controls.com>
+ <20200223211828.GW8743@scaer>
+Message-ID: <DM6PR01MB584984058E65E121A3F83712F3EC0@DM6PR01MB5849.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi, 
-
-Best Regards
-Jerry Huang
-
 > -----Original Message-----
-> From: Gervais, Francois <FGervais@distech-controls.com>
-> Sent: Saturday, February 22, 2020 6:00 AM
-> To: buildroot at buildroot.org
-> Cc: Jerry Huang <jerry.huang@nxp.com>
-> Subject: [EXT] Re: [v5,4/9] package/qoriq-rcw: add target rcw binary support
+> From: Yann E. MORIN <yann.morin.1998@free.fr>
+> Sent: February 23, 2020 4:18 PM
+> To: Gervais, Francois <FGervais@distech-controls.com>
+> Cc: buildroot at buildroot.org; Matt Weber <matthew.weber@rockwellcollins.com>
+> Subject: Re: [Buildroot] [PATCH 1/1] package/rcw: allow not having custom rcwi files
 > 
-> Caution: EXT Email
+> Fran?ois, All,
 > 
-> Hi Jerry,
+> On 2020-02-21 09:40 -0500, Francois Gervais spake thusly:
+> > A project could quite possibly have a custom rcw file that does not
+> > rely on any custom rcw include files (rcwi).
+> >
+> > Allow the build to succeed if this is the case.
+> >
+> > Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
+> > ---
+> >  package/rcw/rcw.mk | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk index
+> > 36d2da61b5..c1fb63b91b 100644
+> > --- a/package/rcw/rcw.mk
+> > +++ b/package/rcw/rcw.mk
+> > @@ -25,7 +25,9 @@ endif
+> >
+> >  define HOST_RCW_ADD_CUSTOM_RCW_FILES
+> >  	mkdir -p $(@D)/custom_board/rcw
+> > -	cp -f $(filter-out %.rcw,$(RCW_FILES)) $(@D)/custom_board
+> > +	if [ -n "$(filter-out %.rcw,$(RCW_FILES))" ]; then \
+> > +		cp -f $(filter-out %.rcw,$(RCW_FILES)) $(@D)/custom_board; \
+> > +	fi
 > 
-> I'm not sure if "Custom RCW" is the right menu name for
-> BR2_PACKAGE_HOST_QORIQ_RCW_BIN.
-The menu name may be changed to others, like this "RCW binary name"
+> I've changed that to use a separate hook for the includes, and pushed that to master.
+> 
+> Please review the commit in case I borked anything. Thanks! ;-)
 
-> To me, BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH is the custom rcw as
-> it is provided by the user.
-> 
-> I feel BR2_PACKAGE_HOST_QORIQ_RCW_BIN is the opposite of custom actually
-> as it builds a manufacturer provided RCW file.
-BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH: used for customer
-BR2_PACKAGE_HOST_QORIQ_RCW_BIN: used for NXP qoriq platforms
+I confirm, the version in master works fine. Thank you for showing me a better version of my patch.
 
-> What do you think?
 > 
-> Also should it really depends on
-> "!BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH"?
-> What prevents a user from building 2 RCWs for some reason, 1 user provided
-> and 1 officially provided through qoriq-rcw-LSDK-19.09.tar.gz?
-I think for one board, just 1 RCW binary is needed.
-If customer need two RCW binary as you said, I think customer should be have two different defconfig.
+> Regards,
+> Yann E. MORIN.
+> 
+> >  	cp -f $(filter %.rcw,$(RCW_FILES)) $(@D)/custom_board/rcw  endef
+> > HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
+> > --
+> > 2.20.1
