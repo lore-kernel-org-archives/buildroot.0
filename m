@@ -1,197 +1,56 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Mon, 24 Feb 2020 14:52:04 +0530
-Subject: [Buildroot] [PATCH v2 4/4] configs/roc-rk3399-pc: new defconfig
-In-Reply-To: <1581590685-31680-5-git-send-email-sunil@amarulasolutions.com>
-References: <1581590685-31680-1-git-send-email-sunil@amarulasolutions.com>
- <1581590685-31680-5-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <CAMty3ZA7bvZzJGdFNxJhFi7gbZfxQUq2V-95y=1h6spU=KSA4g@mail.gmail.com>
+From: Hammami Omar <omar18hammami@gmail.com>
+Date: Mon, 24 Feb 2020 10:29:42 +0100
+Subject: [Buildroot] SSH server starts too late
+In-Reply-To: <33327ed4301c921b1ded444b5b7c3b89@umbiko.net>
+References: <mailman.11.1582286403.41897.buildroot@busybox.net>
+ <33327ed4301c921b1ded444b5b7c3b89@umbiko.net>
+Message-ID: <CAGSpp9=Ji6HASueKR3m_LbFAm6vR6Lb_2SvAsFHsGY9qmmDyZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 13, 2020 at 4:15 PM <sunil@amarulasolutions.com> wrote:
->
-> From: Suniel Mahesh <sunil@amarulasolutions.com>
->
-> This initial support includes:
-> Linux 5.4
-> U-Boot 2020.01
-> Arm Trusted Firmware v2.2
-> Buildroot default packages.
->
-> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
-> ---
-> Changes for v2:
-> - update readme.txt.
-> - changed file permissions to 'x' for post-build.sh.
-> ---
->  .gitlab-ci.yml                            |  1 +
->  DEVELOPERS                                |  4 +++
->  board/firefly/roc-rk3399-pc/extlinux.conf |  4 +++
->  board/firefly/roc-rk3399-pc/genimage.cfg  | 22 +++++++++++++
->  board/firefly/roc-rk3399-pc/post-build.sh |  5 +++
->  board/firefly/roc-rk3399-pc/readme.txt    | 48 ++++++++++++++++++++++++++++
->  configs/roc_pc_rk3399_defconfig           | 53 +++++++++++++++++++++++++++++++
->  7 files changed, 137 insertions(+)
->  create mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf
->  create mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg
->  create mode 100755 board/firefly/roc-rk3399-pc/post-build.sh
->  create mode 100644 board/firefly/roc-rk3399-pc/readme.txt
->  create mode 100644 configs/roc_pc_rk3399_defconfig
->
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index a6436a8..8140243 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -301,6 +301,7 @@ raspberrypi4_64_defconfig: { extends: .defconfig }
->  raspberrypi4_defconfig: { extends: .defconfig }
->  raspberrypi_defconfig: { extends: .defconfig }
->  riotboard_defconfig: { extends: .defconfig }
-> +roc_pc_rk3399_defconfig: { extends: .defconfig }
->  rock64_defconfig: { extends: .defconfig }
->  roseapplepi_defconfig: { extends: .defconfig }
->  s6lx9_microboard_defconfig: { extends: .defconfig }
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index cb13035..a60c9fd 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2342,6 +2342,10 @@ N:       Steven Noonan <steven@uplinklabs.net>
->  F:     package/hwloc/
->  F:     package/powertop/
->
-> +N:     Suniel Mahesh <sunil@amarulasolutions.com>
-> +F:     board/firefly/
-> +F:     configs/roc_pc_rk3399_defconfig
-> +
->  N:     Sven Haardiek <sven.haardiek@iotec-gmbh.de>
->  F:     package/lcdproc/
->  F:     package/python-influxdb/
-> diff --git a/board/firefly/roc-rk3399-pc/extlinux.conf b/board/firefly/roc-rk3399-pc/extlinux.conf
-> new file mode 100644
-> index 0000000..50a358f
-> --- /dev/null
-> +++ b/board/firefly/roc-rk3399-pc/extlinux.conf
-> @@ -0,0 +1,4 @@
-> +label RK3399RocPC linux
-> +  kernel /boot/Image
-> +  devicetree /boot/rk3399-roc-pc.dtb
-> +  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk0p1 rootwait
-> diff --git a/board/firefly/roc-rk3399-pc/genimage.cfg b/board/firefly/roc-rk3399-pc/genimage.cfg
-> new file mode 100644
-> index 0000000..966c869
-> --- /dev/null
-> +++ b/board/firefly/roc-rk3399-pc/genimage.cfg
-> @@ -0,0 +1,22 @@
-> +image sdcard.img {
-> +       hdimage {
-> +       }
-> +
-> +       partition u-boot-tpl-spl-dtb {
-> +               in-partition-table = "no"
-> +               image = "idbloader.img"
-> +               offset = 32K
-> +       }
-> +
-> +       partition u-boot-dtb {
-> +               in-partition-table = "no"
-> +               image = "u-boot.itb"
-> +               offset = 8M
-> +               size = 30M
-> +       }
-> +
-> +       partition rootfs {
-> +               partition-type = 0x83
-> +               image = "rootfs.ext4"
-> +       }
-> +}
-> diff --git a/board/firefly/roc-rk3399-pc/post-build.sh b/board/firefly/roc-rk3399-pc/post-build.sh
-> new file mode 100755
-> index 0000000..1f5ff6a
-> --- /dev/null
-> +++ b/board/firefly/roc-rk3399-pc/post-build.sh
-> @@ -0,0 +1,5 @@
-> +#!/bin/sh
-> +
-> +BOARD_DIR="$(dirname $0)"
-> +
-> +install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-> diff --git a/board/firefly/roc-rk3399-pc/readme.txt b/board/firefly/roc-rk3399-pc/readme.txt
-> new file mode 100644
-> index 0000000..ebf91c1
-> --- /dev/null
-> +++ b/board/firefly/roc-rk3399-pc/readme.txt
-> @@ -0,0 +1,48 @@
-> +Libre Computer Board ROC-RK3399-PC
-> +===================================
-> +
-> +ROC-RK3399-PC is highest performance platforms leveraging the popular
-> +Rockchip RK3399 SoC from Firefly and Libretech.
-> +
-> +Build:
-> +
-> +  $ make roc_pc_rk3399_defconfig
-> +  $ make
-> +
-> +Files created in output directory
-> +=================================
-> +
-> +output/images
-> +
-> +??? bl31.elf
-> +??? idbloader.img
-> +??? Image
-> +??? rk3399-roc-pc.dtb
-> +??? rootfs.ext2
-> +??? rootfs.ext4 -> rootfs.ext2
-> +??? rootfs.tar
-> +??? sdcard.img
-> +??? u-boot.bin
-> +??? u-boot.itb
-> +
-> +Creating bootable SD card:
-> +==========================
-> +
-> +Simply invoke (as root)
-> +
-> +sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
-> +
-> +Where X is your SD card device
-> +
-> +Serial console
-> +--------------
-> +
-> +Baudrate for this board is 1500000
-> +
-> +
-> +Wiki link:
-> +https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/roc-rk3399-pc.html
-> +
-> +--
-> +Suniel Mahesh <sunil@amarulasolutions.com>
-> +10-Feb-2020
-> diff --git a/configs/roc_pc_rk3399_defconfig b/configs/roc_pc_rk3399_defconfig
-> new file mode 100644
-> index 0000000..e5a82da
-> --- /dev/null
-> +++ b/configs/roc_pc_rk3399_defconfig
-> @@ -0,0 +1,53 @@
-> +# Architecture
-> +BR2_aarch64=y
-> +BR2_cortex_a72_a53=y
-> +
-> +# Linux headers same as kernel, a 5.4 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-> +
-> +# Firmware
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.2"
+Hello Andreas,
 
-Mainline Linux can't reboot with v2.2. ATF has some changes related
-pmu on master better use one of the sha1 related to rockchip. May be
-11a0a46a899fcc3b1fdb214b382f3d7495d88eca
+Thank you for your response.
+In fact, I have tried to add extra randomnes by enabling "haveged". The
+entropy has increased but the problem is the same.
+Is it possible that the entropy value is always less than the wanted one ?
 
-Jagan.
+Kind regards,
+Omar
+
+Le ven. 21 f?vr. 2020 ? 13:51, Andreas Ziegler <br015@umbiko.net> a ?crit :
+
+> Hi Omar,
+>
+> On 2020-02-21 13:00, Hammami Omar <omar18hammami@gmail.com> wrote
+> > I am using the buildroot version "2019.11.1" and I have noticed that my
+> > SSH
+> > server starts too late.
+> > I was using an old version "2017.08" and the SSH server was starting
+> > normally.
+>
+> This issue is not related to Buildroot, but caused by changes in
+> libopenssl (which in turn is used by OpenSSH), starting around the
+> middle of last year. You will find a lot of background information when
+> you search the www for 'boot-time entropy starvation'; the cause is,
+> reading random data from /dev/urandom blocks until the kernel entropy
+> pool has been initialized.
+>
+> Workarounds:
+>
+> (a) Patch libopenssl (not recommended for nodes directly connected to
+> the WAN).
+> (b) Use a more recent kernel; version 5.4.y introduced a temporary fix
+> for this issue.
+> (c) Use other sources of extra randomness, as proposed by Peter
+> Seiderer.
+>
+> Kind regards,
+> Andreas
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200224/28027cac/attachment.html>
