@@ -1,44 +1,43 @@
-From: vadim4j at gmail.com <vadim4j@gmail.com>
-Date: Mon, 24 Feb 2020 23:00:46 +0200
-Subject: [Buildroot] [PATCH 2/3] package/rtrlib: new package
-In-Reply-To: <20200224205313.109d44bd@windsurf>
-References: <20200224172652.30932-1-vadim4j@gmail.com>
- <20200224172652.30932-3-vadim4j@gmail.com>
- <20200224205313.109d44bd@windsurf>
-Message-ID: <20200224210046.GB34982@archlinux>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 24 Feb 2020 22:17:39 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/upmpdcli: bump to version 1.4.6
+Message-ID: <20200224211739.3935449-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Mon, Feb 24, 2020 at 08:53:13PM +0100, Thomas Petazzoni wrote:
-> Hello Vadim,
-> 
-> On Mon, 24 Feb 2020 19:26:51 +0200
-> Vadim Kochan <vadim4j@gmail.com> wrote:
-> 
-> > diff --git a/package/rtrlib/Config.in b/package/rtrlib/Config.in
-> > new file mode 100644
-> > index 0000000000..440eeb5d63
-> > --- /dev/null
-> > +++ b/package/rtrlib/Config.in
-> > @@ -0,0 +1,13 @@
-> > +config BR2_PACKAGE_RTRLIB
-> > +	bool "rtrlib"
-> > +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> > +	depends on BR2_TOOLCHAIN_HAS_SSP
-> 
-> It's pretty uncommon for a package to require SSP support. Can you tell
-> it instead to not pass -fstack-protector when building, and let
-> Buildroot decide when to pass it ?
-> 
-
-I will try, but actually actually I was wrong that this package is
-required by ffr, it is required but optionally for rpki support. So,
-this patch might be dropped with not enabled rpki feature in frr.
-
-Thanks,
-Vadim Kochan
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 33003a406e..fe1d82202d 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,5 +1,5 @@
+-# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.5.tar.gz.sha256:
+-sha256  af0c13b6ab8720d98451307010c33462e9a3f50178bae82c593fd2dd12e31b0e  upmpdcli-1.4.5.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.6.tar.gz.sha256:
++sha256  80ed85a323a1721a9e2ceb64923cedbf69c45f22fb9bc6853c9c11b46dc83a1d  upmpdcli-1.4.6.tar.gz
+ 
+ # Hash for license file:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 290cdcb1f2..67d805f0cc 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UPMPDCLI_VERSION = 1.4.5
++UPMPDCLI_VERSION = 1.4.6
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = LGPL-2.1+
+ UPMPDCLI_LICENSE_FILES = COPYING
+-- 
+2.25.0
