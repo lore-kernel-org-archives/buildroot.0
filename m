@@ -1,10 +1,9 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Feb 2020 23:20:44 +0100
-Subject: [Buildroot] [PATCH 27/36] package/qt5webkit-examples: drop qt 5.6
- support
+Date: Mon, 24 Feb 2020 23:20:33 +0100
+Subject: [Buildroot] [PATCH 16/36] package/qt5scxml: drop qt 5.6 support
 In-Reply-To: <20200224222054.2686-1-peter@korsgaard.com>
 References: <20200224222054.2686-1-peter@korsgaard.com>
-Message-ID: <20200224222054.2686-27-peter@korsgaard.com>
+Message-ID: <20200224222054.2686-16-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +12,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5webkit-examples/qt5webkit-examples.hash | 3 ---
- package/qt5/qt5webkit-examples/qt5webkit-examples.mk   | 7 -------
- 2 files changed, 10 deletions(-)
+ package/qt5/qt5scxml/Config.in | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-index 0d48ecdffa..736dbef5e9 100644
---- a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-+++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-@@ -1,6 +1,3 @@
--# Hash from: https://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-examples-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256  2d6ce7146298d03b443cca4390bbfee17c4c0b08a31efcbf9fe0732291a6169e  qtwebkit-examples-opensource-src-5.6.3.tar.xz
+diff --git a/package/qt5/qt5scxml/Config.in b/package/qt5/qt5scxml/Config.in
+index d94b5ea1c6..5510821d24 100644
+--- a/package/qt5/qt5scxml/Config.in
++++ b/package/qt5/qt5scxml/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_QT5SCXML
+ 	bool "qt5scxml"
+-	depends on BR2_PACKAGE_QT5_VERSION_LATEST
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
+ 	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5DECLARATIVE
+@@ -12,7 +11,3 @@ config BR2_PACKAGE_QT5SCXML
+ 	  machines from SCXML files.
+ 
+ 	  https://doc.qt.io/qt-5/qtscxml-index.html
 -
- # Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-examples-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256  e4ce4de6b468243abad2baabbe8ddfb05d25b186529bfe88cb8662fc983f54d0  qtwebkit-examples-opensource-src-5.9.1.tar.xz
- 
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-index 94153fd652..6dab61d913 100644
---- a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-+++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-@@ -4,15 +4,8 @@
- #
- ################################################################################
- 
--# no 5.10 package available, fall back to 5.9.1 version
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5WEBKIT_EXAMPLES_VERSION = 5.9.1
- QT5WEBKIT_EXAMPLES_SITE = https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules
--else
--QT5WEBKIT_EXAMPLES_VERSION = $(QT5_VERSION)
--QT5WEBKIT_EXAMPLES_SITE = https://download.qt.io/community_releases/5.6/$(QT5_VERSION)
--endif
--
- QT5WEBKIT_EXAMPLES_SOURCE = qtwebkit-examples-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
- QT5WEBKIT_EXAMPLES_DEPENDENCIES = qt5base qt5webkit
- 
+-comment "qt5scxml needs at least qt-5.9"
+-	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+-	depends on !BR2_PACKAGE_QT5_VERSION_LATEST
 -- 
 2.20.1
