@@ -1,64 +1,40 @@
-From: Hammami Omar <omar18hammami@gmail.com>
-Date: Mon, 24 Feb 2020 16:16:24 +0100
-Subject: [Buildroot] SSH server starts too late
-In-Reply-To: <CAGSpp9ncGeF4REnvmGL-StkiSthT1cA3sE86wjPZC4nGWL+WFw@mail.gmail.com>
-References: <mailman.11.1582286403.41897.buildroot@busybox.net>
- <33327ed4301c921b1ded444b5b7c3b89@umbiko.net>
- <CAGSpp9=Ji6HASueKR3m_LbFAm6vR6Lb_2SvAsFHsGY9qmmDyZA@mail.gmail.com>
- <1d91f38acaeecb790f5a44d104ae0ca1@umbiko.net>
- <CAGSpp9ng2yxCK=RZeq1Z_Bce4pwij9FQED23SpGuvjqm5awHhg@mail.gmail.com>
- <ab1578656655630d72babe9984a136b8@umbiko.net>
- <CAGSpp9ncGeF4REnvmGL-StkiSthT1cA3sE86wjPZC4nGWL+WFw@mail.gmail.com>
-Message-ID: <CAGSpp9kDNe0jawS4BVQCtR2SAFM_bpKwGiy1WN6v-P4OAwqgzQ@mail.gmail.com>
+From: Jerry Huang <jerry.huang@nxp.com>
+Date: Mon, 24 Feb 2020 14:44:05 +0000
+Subject: [Buildroot] [EXT] Re: [v5,
+ 3/9] package/qoriq-rcw: bump to version LSDK-19.09
+In-Reply-To: <DM6PR01MB58498E8B6D7E4DFB76C2F121F3120@DM6PR01MB5849.prod.exchangelabs.com>
+References: <DM6PR01MB58498E8B6D7E4DFB76C2F121F3120@DM6PR01MB5849.prod.exchangelabs.com>
+Message-ID: <VI1PR04MB5136F11FD4D66183033821DFFEEC0@VI1PR04MB5136.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-Does anyone know the modification or the patch that was applied to resolve
-the problem in the kernel version 5.4.y ?
 
-Regards,
-Omar
+Best Regards
+Jerry Huang
 
-Le lun. 24 f?vr. 2020 ? 15:07, Hammami Omar <omar18hammami@gmail.com> a
-?crit :
-
-> Hi,
-> In fact, my problem is not seen in my PC. Rather, it is seen in my
-> embedded board which has a Linux OS.
-> That is why I cannot use a keyboard.
->
->
-> Le lun. 24 f?vr. 2020 ? 14:22, Andreas Ziegler <br015@umbiko.net> a
-> ?crit :
->
->> On 2020-02-24 13:33, Hammami Omar wrote:
->>
->> Hi Omar,
->>
->> > The problem is that, in kernel logs, I cannot see that my ssh server
->> > was blocked.
->> > That is why, I am thinking if my problem is really du to entropy or
->> > no.
->>
->> You should experience a time lag in kernel log time stamps when that
->> happens. If this lag is caused by an entropy issue, starting to type
->> randomly on the keyboard should resolve it quite fast. This will speed
->> up the time until you see the final random output:
->>
->> > [   77.847665] random: nonblocking pool is initialized
->>
->> The SSH server will definitely not be operative until this pool is
->> initialized.
->>
->> Kind regards,
->> Andreas
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200224/3782cf87/attachment.html>
+> -----Original Message-----
+> From: Gervais, Francois <FGervais@distech-controls.com>
+> Sent: Saturday, February 22, 2020 6:10 AM
+> To: buildroot at buildroot.org
+> Cc: Jerry Huang <jerry.huang@nxp.com>
+> Subject: [EXT] Re: [v5,3/9] package/qoriq-rcw: bump to version LSDK-19.09
+> 
+> Caution: EXT Email
+> 
+> Hi Jerry,
+> 
+> I think this patch breaks:
+> 
+> define HOST_QORIQ_RCW_BUILD_CMDS
+>         python $(@D)/rcw.py -i
+> $(@D)/custom_board/rcw/$(QORIQ_RCW_PROJECT) -I $(@D)/custom_board -o
+> $(@D)/PBL.bin endef
+> 
+> host-qoriq-rcw-LSDK-19.09/rcw.py fails with:
+> 
+> "Only Python versions 3.0+ are supported."
+Python3 is the future ?.
