@@ -1,71 +1,48 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Mon, 24 Feb 2020 17:52:55 -0300
-Subject: [Buildroot] [PATCH] package/eudev: add openrc init support
-Message-ID: <20200224205255.9138-1-unixmania@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 24 Feb 2020 21:58:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version 2.1.1
+Message-ID: <20200224205850.3922373-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+- This will fix a static build failure with readline thanks to
+  https://github.com/FluidSynth/fluidsynth/commit/c538c9fa7e392ce16c3354696e7dc7781a78a300
+- Update indentation of hash file (two spaces)
 
-Use the Gentoo scripts for openrc.
+Fixes:
+ - http://autobuild.buildroot.org/results/88609eefe55af2ca50d43e17d3424b923528b07a
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/eudev/eudev.hash |  1 +
- package/eudev/eudev.mk   | 20 ++++++++++++++++++++
- 2 files changed, 21 insertions(+)
+ package/fluidsynth/fluidsynth.hash | 4 ++--
+ package/fluidsynth/fluidsynth.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
-index e6a319ac44..24886e4156 100644
---- a/package/eudev/eudev.hash
-+++ b/package/eudev/eudev.hash
-@@ -1,5 +1,6 @@
- # From http://dev.gentoo.org/~blueness/eudev/
- md5 dedfb1964f6098fe9320de827957331f  eudev-3.2.9.tar.gz
- # Locally calculated
-+sha256 b206f72c93cd2e51ed59061931918a9c23c3c1f7e6caffacc9d4f8915a42c30a  udev-gentoo-scripts-33.tar.bz2
- sha256 89618619084a19e1451d373c43f141b469c9fd09767973d73dd268b92074d4fc  eudev-3.2.9.tar.gz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 99b5befd09..8b19eebb8a 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -10,6 +10,18 @@ EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- EUDEV_LICENSE_FILES = COPYING
- EUDEV_INSTALL_STAGING = YES
+diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+index 5c5c226cbc..f7c9c88cd2 100644
+--- a/package/fluidsynth/fluidsynth.hash
++++ b/package/fluidsynth/fluidsynth.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 526addc6d8445035840d3af7282d3ba89567df209d28e183da04a1a877da2da3  fluidsynth-2.1.0.tar.gz
+-sha256 9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
++sha256  966d0393591b505d694e51cbf653387007144e9ae0b8705d82ec7d943d31d348  fluidsynth-2.1.1.tar.gz
++sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index ae0e395cfe..fbfaaa12c0 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_INIT_OPENRC),y)
-+EUDEV_OPENRC_INIT_VERSION = 33
-+EUDEV_OPENRC_INIT = udev-gentoo-scripts-$(EUDEV_OPENRC_INIT_VERSION).tar.bz2
-+EUDEV_EXTRA_DOWNLOADS = https://gitweb.gentoo.org/proj/udev-gentoo-scripts.git/snapshot/$(EUDEV_OPENRC_INIT)
-+define EUDEV_OPENRC_INIT_EXTRACT
-+	$(call suitable-extractor,$(notdir $(EUDEV_OPENRC_INIT))) \
-+		$(EUDEV_DL_DIR)/$(notdir $(EUDEV_OPENRC_INIT)) | \
-+		$(TAR) -C $(@D) $(TAR_OPTIONS) -
-+endef
-+EUDEV_POST_EXTRACT_HOOKS += EUDEV_OPENRC_INIT_EXTRACT
-+endif
-+
- EUDEV_CONF_OPTS = \
- 	--disable-manpages \
- 	--sbindir=/sbin \
-@@ -48,6 +60,14 @@ define EUDEV_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
- endef
- 
-+define EUDEV_INSTALL_INIT_OPENRC
-+	$(MAKE1) -C $(@D)/udev-gentoo-scripts-$(EUDEV_OPENRC_INIT_VERSION) \
-+		install DESTDIR=$(TARGET_DIR)
-+	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/runlevels/sysinit
-+	ln -s -f /etc/init.d/udev-settle /etc/init.d/udev-trigger \
-+		$(TARGET_DIR)/etc/runlevels/sysinit
-+endef
-+
- # Required by default rules for input devices
- define EUDEV_USERS
- 	- - input -1 * - - - Input device group
+-FLUIDSYNTH_VERSION = 2.1.0
++FLUIDSYNTH_VERSION = 2.1.1
+ FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+ FLUIDSYNTH_LICENSE = LGPL-2.1+
+ FLUIDSYNTH_LICENSE_FILES = LICENSE
 -- 
-2.18.2
+2.25.0
