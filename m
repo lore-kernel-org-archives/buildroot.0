@@ -1,74 +1,85 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon, 24 Feb 2020 10:35:56 +0100
-Subject: [Buildroot] [PATCH v3 12/12] support/scripts/pkg-stats: add
- status for cve check
-In-Reply-To: <CAEyMn7aMdCg+20XLEOWA1Kp5QfEJg9Jd39JE9HeU0AQK3jH6NA@mail.gmail.com>
-References: <20200222085715.23769-1-heiko.thiery@gmail.com>
- <20200222085715.23769-13-heiko.thiery@gmail.com>
- <6d3836ec-e228-77ef-df6c-6f3bd40fdf71@railnova.eu>
- <CAEyMn7aMdCg+20XLEOWA1Kp5QfEJg9Jd39JE9HeU0AQK3jH6NA@mail.gmail.com>
-Message-ID: <eee5a274-dc79-6797-a52e-7416a9d0577a@railnova.eu>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 24 Feb 2020 10:59:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kvm-unit-tests: fix build with
+ SSP
+In-Reply-To: <20200223232005.3178422-1-fontaine.fabrice@gmail.com>
+References: <20200223232005.3178422-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAPi7W82Q31qDw0K2R_aXY2T8w5Q33xcyMeqkQYqhrjtxKFetdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear all,
 
-On 2/24/20 8:06 AM, Heiko Thiery wrote:
-> Hi Titouan and all,
-> 
-> Am So., 23. Feb. 2020 um 15:24 Uhr schrieb Titouan Christophe
-> <titouan.christophe@railnova.eu>:
->>
->> Heiko, all,
->>
->> On 2/22/20 9:57 AM, Heiko Thiery wrote:
->>> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Le lun. 24 f?vr. 2020 ? 00:19, Fabrice Fontaine
+<fontaine.fabrice@gmail.com> a ?crit :
+>
+> Thanks to this patch, kvm-unit-tests will always be built without SSP as
+> intented by upstream. This will fix the build on ppc64 with SSP that
+> started to fail for an unknown reason since November 27th.
+>
+> Moreover, the Arch Linux workaround could also be removed in a follow-up
+> patch.
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...3-Makefile-fix-stack-protector-tests.patch | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
+>
+> diff --git a/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
+> new file mode 100644
+> index 0000000000..be819f27c6
+> --- /dev/null
+> +++ b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
+> @@ -0,0 +1,36 @@
+> +From 9bf9155804652c0b3a94af9723c79b6de430187b Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Mon, 24 Feb 2020 00:04:06 +0100
+> +Subject: [PATCH] Makefile: fix stack-protector tests
+> +
+> +Rename fnostack_protector into fno_stack_protector and
+> +fnostack_protector_all into fnostack_protector_all otherwise build will
+> +fail if -fstack-protector is passed by the toolchain
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: sent to kvm at vger.kernel.org]
+It should be noted that upstream answered that the same patch was
+already in their pull box:
+https://patchwork.kernel.org/patch/11368845/
+> +---
+> + Makefile | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/Makefile b/Makefile
+> +index 767b6c6..754ed65 100644
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -55,8 +55,8 @@ COMMON_CFLAGS += -Wignored-qualifiers -Werror
+> +
+> + frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
+> + fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
+> +-fnostack_protector := $(call cc-option, -fno-stack-protector, "")
+> +-fnostack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
+> ++fno_stack_protector := $(call cc-option, -fno-stack-protector, "")
+> ++fno_stack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
+> + wno_frame_address := $(call cc-option, -Wno-frame-address, "")
+> + fno_pic := $(call cc-option, -fno-pic, "")
+> + no_pie := $(call cc-option, -no-pie, "")
+> +--
+> +2.25.0
+> +
+> --
+> 2.25.0
+>
+Best Regards,
 
-[--SNIP--]
-
-> 
->>
->> I would rather write it like this:
->>
->> ########################
->> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
->> index ed22f6b650..91477d583e 100755
->> --- a/support/scripts/pkg-stats
->> +++ b/support/scripts/pkg-stats
->> @@ -620,6 +620,12 @@ def check_package_cves(nvd_path, packages):
->>                if pkg_name in packages and cve.affects(packages[pkg_name]):
->>                    packages[pkg_name].cves.append(cve.identifier)
->>
->> +    for pkg_name, pkg in packages.items():
->> +        if len(pkg.cves) > 0:
->> +            pkg.status['cve'] = ('error', 'affected by CVE(s)')
->> +        else:
->> +            pkg.status['cve'] = ('ok', 'no CVE found')
->> +
-> 
-> Isn't it right that we loop then (depending on the amount of nvd
-> pathes) several thousend times?
-> 
-> e.g. packages ~2600, nvds ~ 20 => 20*2600=52000
-
-Except that each NVD file contains a few thousands CVEs :).
-
-> 
-> On the other hand we loop over the list of packages all over the place ;-/
-
-Looping over all CVEs in a single NVD file yields 5 to 10 more 
-iterations than looping over all packages (for instance year 2018 alone 
-has 16039 CVE items)
-
-> 
->>
->>    def calculate_stats(packages):
->>        stats = defaultdict(int)
->> ########################
->>
->>
->> Best regards,
->>
->> Titouan
+Fabrice
