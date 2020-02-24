@@ -1,53 +1,48 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 24 Feb 2020 15:01:58 -0700
-Subject: [Buildroot] [PATCH v2 1/1] package/python-markdown: bump to version
- 3.2.1
-Message-ID: <20200224220158.69440-1-james.hilliard1@gmail.com>
+Date: Mon, 24 Feb 2020 15:06:30 -0700
+Subject: [Buildroot] [PATCH 1/1] utils/scanpypi: update hash file
+ indentation formatting
+Message-ID: <20200224220630.69977-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation of hash file (two spaces)
+The new .hash convention is to use 2 spaces between fields.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Changes v1 -> v2:
-  - change hash file format
----
- package/python-markdown/python-markdown.hash | 6 +++---
- package/python-markdown/python-markdown.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ utils/scanpypi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
-index 6eff2035bb..4d54ce9243 100644
---- a/package/python-markdown/python-markdown.hash
-+++ b/package/python-markdown/python-markdown.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markdown/json
--md5	d84732ecc65b3a1bff693d9d4c24277f  Markdown-3.1.1.tar.gz
--sha256	2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a  Markdown-3.1.1.tar.gz
-+md5  7a894dc55992b37cdbcba5c4049455fc  Markdown-3.2.1.tar.gz
-+sha256  90fee683eeabe1a92e149f7ba74e5ccdc81cd397bd6c516d93a8da0ef90b6902  Markdown-3.2.1.tar.gz
- # Locally computed sha256
--sha256	6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
-+sha256  6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
-diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
-index a8311168f5..1f352fd7f1 100644
---- a/package/python-markdown/python-markdown.mk
-+++ b/package/python-markdown/python-markdown.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MARKDOWN_VERSION = 3.1.1
-+PYTHON_MARKDOWN_VERSION = 3.2.1
- PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
--PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/ac/df/0ae25a9fd5bb528fe3c65af7143708160aa3b47970d5272003a1ad5c03c6
-+PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/98/79/ce6984767cb9478e6818bd0994283db55c423d733cc62a88a3ffb8581e11
- PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
- PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
- PYTHON_MARKDOWN_SETUP_TYPE = setuptools
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 387755bbb8..212dbea85e 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -568,12 +568,12 @@ class BuildrootPackage():
+             hash_header = '# md5, sha256 from {url}\n'.format(
+                 url=self.metadata_url)
+             lines.append(hash_header)
+-            hash_line = '{method}\t{digest}  {filename}\n'.format(
++            hash_line = '{method}  {digest}  {filename}\n'.format(
+                 method='md5',
+                 digest=self.used_url['digests']['md5'],
+                 filename=self.filename)
+             lines.append(hash_line)
+-            hash_line = '{method}\t{digest}  {filename}\n'.format(
++            hash_line = '{method}  {digest}  {filename}\n'.format(
+                 method='sha256',
+                 digest=self.used_url['digests']['sha256'],
+                 filename=self.filename)
+@@ -589,7 +589,7 @@ class BuildrootPackage():
+                     if not data:
+                         break
+                     sha256.update(data)
+-            hash_line = '{method}\t{digest}  {filename}\n'.format(
++            hash_line = '{method}  {digest}  {filename}\n'.format(
+                 method='sha256',
+                 digest=sha256.hexdigest(),
+                 filename=license_file.replace(self.tmp_extract, '')[1:])
 -- 
 2.20.1
