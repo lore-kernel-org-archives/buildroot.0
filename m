@@ -1,85 +1,49 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 24 Feb 2020 08:28:06 +0100
-Subject: [Buildroot] [PATCH v3 11/12] support/scripts/pkg-stats:
- initialize all package status checks
-In-Reply-To: <f7d4f63e-19ad-96b3-5b8f-a2b4391cd77d@railnova.eu>
-References: <20200222085715.23769-1-heiko.thiery@gmail.com>
- <20200222085715.23769-12-heiko.thiery@gmail.com>
- <f7d4f63e-19ad-96b3-5b8f-a2b4391cd77d@railnova.eu>
-Message-ID: <CAEyMn7ZT8wHap4gUyMTLbtbHFG8gxJKSdof-+Btss9xfoSa6aA@mail.gmail.com>
+From: Eugen Hristev <eugen.hristev@microchip.com>
+Date: Mon, 24 Feb 2020 09:41:46 +0200
+Subject: [Buildroot] [PATCH v2] package/fswebcam: bump to latest git version
+Message-ID: <20200224074146.3008-1-eugen.hristev@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Titouan,
+Bump to latest git version.
 
-Am So., 23. Feb. 2020 um 15:09 Uhr schrieb Titouan Christophe
-<titouan.christophe@railnova.eu>:
->
-> Heiko, all,
->
-> On 2/22/20 9:57 AM, Heiko Thiery wrote:
-> > Also the list of status checks is added to the json output.
-> >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com> > ---
-> >   support/scripts/pkg-stats | 14 ++++++++++++++
-> >   1 file changed, 14 insertions(+)
-> >
-> > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> > index be3b6d7e71..ed22f6b650 100755
-> > --- a/support/scripts/pkg-stats
-> > +++ b/support/scripts/pkg-stats
-> > @@ -87,6 +87,11 @@ class Package:
-> >       all_license_files = dict()
-> >       all_versions = dict()
-> >       all_ignored_cves = dict()
-> > +    # This is the list of all possible checks. Add new checks to this list so
-> > +    # a tool that post-processeds the json output knows the checks before
-> > +    # iterating over the packages.
-> > +    status_checks = ['cve', 'developers', 'hash', 'hash-license', 'license',
-> > +                     'license-files', 'patches', 'pkg-check', 'url', 'version']
-> >
-> >       def __init__(self, name, path):
-> >           self.name = name
-> > @@ -103,7 +108,15 @@ class Package:
-> >           self.url_worker = None
-> >           self.cves = list()
-> >           self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
-> > +        self.init_check_status()
-> > +
-> > +    def init_check_status(self):
-> > +        """
-> > +        Set the status of all check to 'na'.
-> > +        """
-> >           self.status = {}
-> > +        for check in self.status_checks:
-> > +            self.status[check] = ("na", "no status check done")
->
-> In my opinion, it would be better to leave this dictionary empty at
-> initialization.
->
-> Because we know the list of status checks that have been run (from the
-> 'package_status_checks' list you introduce below), we can tell that a
-> particular status check has not been done if its name is missing from
-> the status dictionary. This would make the outputted json a tad smaller.
->
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
+Changes in v2:
+- use buildroot github API to call for tar download
 
-No problem. As for the cve check this can lead to wrong status.
 
-> >
-> >       def pkgvar(self):
-> >           return self.name.upper().replace("-", "_")
-> > @@ -975,6 +988,7 @@ def dump_json(packages, defconfigs, stats, date, commit, output):
-> >       final = {'packages': pkgs,
-> >                'stats': statistics,
-> >                'defconfigs': defconfigs,
-> > +             'package_status_checks': Package.status_checks,
-> >                'commit': commit,
-> >                'date': str(date)}
-> >
-> >
+ package/fswebcam/fswebcam.hash | 1 +
+ package/fswebcam/fswebcam.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thank you,
-Heiko
+diff --git a/package/fswebcam/fswebcam.hash b/package/fswebcam/fswebcam.hash
+index 28f604547c..ee9bebd106 100644
+--- a/package/fswebcam/fswebcam.hash
++++ b/package/fswebcam/fswebcam.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+ sha256  444d6a8a82102e09e935540c64a731021de36db03e1e74181f41ca6f39aa6474  fswebcam-20140113.tar.xz
++sha256  fe178a0f37ee203103eceaaf9a81a8669edb49923250e8a2ec7459543a8175b0  fswebcam-9a995d6a5369ddd158e352766e015dae20982318.tar.gz
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/fswebcam/fswebcam.mk b/package/fswebcam/fswebcam.mk
+index 8f823f4d04..5887c0b92b 100644
+--- a/package/fswebcam/fswebcam.mk
++++ b/package/fswebcam/fswebcam.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-FSWEBCAM_VERSION = 20140113
+-FSWEBCAM_SOURCE = fswebcam-$(FSWEBCAM_VERSION).tar.xz
+-FSWEBCAM_SITE = http://www.firestorm.cx/fswebcam/files
++FSWEBCAM_VERSION = 9a995d6a5369ddd158e352766e015dae20982318
++FSWEBCAM_SITE = $(call github,fsphil,fswebcam,$(FSWEBCAM_VERSION))
+ FSWEBCAM_LICENSE = GPL-2.0
+ FSWEBCAM_LICENSE_FILES = LICENSE
+ 
+-- 
+2.20.1
