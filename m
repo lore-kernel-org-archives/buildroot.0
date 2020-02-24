@@ -1,113 +1,50 @@
-From: vadim4j at gmail.com <vadim4j@gmail.com>
-Date: Mon, 24 Feb 2020 23:36:54 +0200
-Subject: [Buildroot] [PATCH 3/3] package/frr: new package
-In-Reply-To: <20200224223246.32aacd46@windsurf>
-References: <20200224172652.30932-1-vadim4j@gmail.com>
- <20200224172652.30932-4-vadim4j@gmail.com>
- <20200224210601.4e3d9a3c@windsurf>
- <20200224211427.GC34982@archlinux>
- <20200224223246.32aacd46@windsurf>
-Message-ID: <20200224213654.GA41047@archlinux>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 24 Feb 2020 22:38:42 +0100
+Subject: [Buildroot] [git commit branch/next] package/sed: bump to version
+ 4.8
+Message-ID: <20200224213409.A9E068E8D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 24, 2020 at 10:32:46PM +0100, Thomas Petazzoni wrote:
-> On Mon, 24 Feb 2020 23:14:27 +0200
-> vadim4j at gmail.com wrote:
-> 
-> > > > diff --git a/package/frr/Config.in b/package/frr/Config.in
-> > > > new file mode 100644
-> > > > index 0000000000..01673eb837
-> > > > --- /dev/null
-> > > > +++ b/package/frr/Config.in
-> > > > @@ -0,0 +1,23 @@
-> > > > +config BR2_PACKAGE_FRR
-> > > > +	bool "frr"
-> > > > +	depends on BR2_USE_MMU # fork()
-> > > > +	depends on BR2_PACKAGE_BASH # init
-> > > > +	select BR2_PACKAGE_RTRLIB
-> > > > +	select BR2_PACKAGE_READLINE
-> > > > +	select BR2_PACKAGE_JSON_C
-> > > > +	select BR2_PACKAGE_LIBYANG
-> > > > +	select BR2_PACKAGE_LIBCAP
-> > > > +	select BR2_PACKAGE_LIBNL
-> > > > +	select BR2_PACKAGE_NCURSES
-> > > > +	select BR2_PACKAGE_NETSNMP
-> > > > +	select BR2_PACKAGE_C_ARES  
-> > > 
-> > > That's a lot of packages that you select here, are you sure you
-> > > properly propagated the "depends on" of all those packages in this
-> > > Config.in ?  
-> > will try to check by disabling one by one.
-> 
-> Huh? That's not what I'm asking here. I'm just asking that you look at
-> the definition of each of those options, and if any of them has some
-> "depends on" dependency, you need to replicate them into the frr
-> package Config.in file.
-Hmmm, you mean to add here "depends on" from selected packages ?
+commit: https://git.buildroot.net/buildroot/commit/?id=c68d3d07268e3f1e33427897d47fafb2e348fa9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> 
-> Of course, you have to ensure that all these packages are really useful
-> for you.
-> 
-> BTW: the list should be sorted alphabetically.
-> 
-> > > > +	help
-> > > > +	  The FRRouting Protocol Suite.
-> > > > +
-> > > > +	  FRR is free software that implements and manages various IPv4 and
-> > > > +	  IPv6 routing protocols.
-> > > > +
-> > > > +	  https://frrouting.org
-> > > > +
-> > > > +comment "frr requires BASH for init service"
-> > > > +	depends on !BR2_PACKAGE_BASH  
-> > > 
-> > > So it's the frrinit.sh script that requires bash ?  
-> > Yes, this is runtime dependency.
-> 
-> And using this script is important?
-Well, it runs daemons on system init to handle routing
-protocols.
+Update indentation of hash file (two spaces)
 
-> 
-> 
-> > > > +# for some reason the normal 'install' target fails  
-> > > 
-> > > Why? Can it be fixed? At least reported to the upstream developers?  
-> > Ohhh, so, there is some miss-behave in case of cross-compilation that:
-> > 1) for some frr daemon installation uses -L/usr/lib
-> > 
-> > 2) install tries to install binaries (apps & libs) to $(TARGET)/$(O)
-> > path which is invalid.
-> > 
-> > So, I just gave up and tried to do a bit manual way. Would be great if
-> > can suggest some generic hint with $(TARGET)$(O) issue.
-> 
-> Would need to reproduce the issue and investigate to provide some
-> hints, I'm not sure I'll have the time soon. Maybe someone else can
-> help here, and provide some suggestions ?
-> 
-> 
-> > > > +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/log/frr
-> > > > +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/run/frr  
-> > > 
-> > > I'm not sure this is going to work well, as /var/log and /var/run are
-> > > symlinks to /tmp by default, and a tmpfs is mounted to /tmp.
-> > > 
-> > > These directories need to be created at runtime.  
-> > So in case of systemd it can be handled by tmpfs file, but in
-> > case of sysv is it OK to do it in init script ?
-> 
-> Yes, it is OK.
-> 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sed/sed.hash | 6 +++---
+ package/sed/sed.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/sed/sed.hash b/package/sed/sed.hash
+index cc3bebafe1..bb48128526 100644
+--- a/package/sed/sed.hash
++++ b/package/sed/sed.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/sed/sed-4.7.tar.xz.sig
++# https://ftp.gnu.org/gnu/sed/sed-4.8.tar.xz.sig
+ # with the key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+-sha256	2885768cd0a29ff8d58a6280a270ff161f6a3deb5690b2be6c49f46d4c67bd6a	sed-4.7.tar.xz
++sha256  f79b0cfea71b37a8eeec8490db6c5f7ae7719c35587f21edb0617f370eeff633  sed-4.8.tar.xz
+ # Locally calculated
+-sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	COPYING
++sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+diff --git a/package/sed/sed.mk b/package/sed/sed.mk
+index 6fee598f66..6bb3220553 100644
+--- a/package/sed/sed.mk
++++ b/package/sed/sed.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SED_VERSION = 4.7
++SED_VERSION = 4.8
+ SED_SOURCE = sed-$(SED_VERSION).tar.xz
+ SED_SITE = $(BR2_GNU_MIRROR)/sed
+ SED_LICENSE = GPL-3.0
