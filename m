@@ -1,67 +1,35 @@
 From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon, 24 Feb 2020 19:26:49 +0200
-Subject: [Buildroot] [PATCH 0/3] add frr package
-Message-ID: <20200224172652.30932-1-vadim4j@gmail.com>
+Date: Mon, 24 Feb 2020 19:26:50 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libyang: enable LYD_PRIV option
+In-Reply-To: <20200224172652.30932-1-vadim4j@gmail.com>
+References: <20200224172652.30932-1-vadim4j@gmail.com>
+Message-ID: <20200224172652.30932-2-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-FRR is free software that implements and manages various IPv4 and IPv6
-routing protocols. It runs on nearly all distributions of Linux and BSD
-as well as Solaris and supports all modern CPU architectures.
+This option is required by frr package, so enable it by default.
 
-FRR currently supports the following protocols:
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
+ package/libyang/libyang.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-    BGP
-    OSPFv2
-    OSPFv3
-    RIPv1
-    RIPv2
-    RIPng
-    IS-IS
-    PIM-SM/MSDP
-    LDP
-    BFD
-    Babel
-    PBR
-    OpenFabric
-    VRRP
-    EIGRP (alpha)
-    NHRP (alpha)
-
-FRR package requires rtrlib which is added in separate
-patch. There was issues on target 'make install' which
-I could not fix otherway than adding half-custom install
-hook to install binaries and configs.
-
-RTRLib package requires LYD_PRIV option to be enabled in
-libyang package, hence enabled it in separate patch.
-
-Vadim Kochan (3):
-  package/libyang: enable LYD_PRIV option
-  package/rtrlib: new package
-  package/frr: new package
-
- DEVELOPERS                 |   2 +
- package/Config.in          |   2 +
- package/frr/Config.in      |  23 ++++++++
- package/frr/S50frr         |  38 ++++++++++++++
- package/frr/frr.hash       |   2 +
- package/frr/frr.mk         | 105 +++++++++++++++++++++++++++++++++++++
- package/libyang/libyang.mk |   3 +-
- package/rtrlib/Config.in   |  13 +++++
- package/rtrlib/rtrlib.hash |   2 +
- package/rtrlib/rtrlib.mk   |  20 +++++++
- 10 files changed, 209 insertions(+), 1 deletion(-)
- create mode 100644 package/frr/Config.in
- create mode 100644 package/frr/S50frr
- create mode 100644 package/frr/frr.hash
- create mode 100644 package/frr/frr.mk
- create mode 100644 package/rtrlib/Config.in
- create mode 100644 package/rtrlib/rtrlib.hash
- create mode 100644 package/rtrlib/rtrlib.mk
-
+diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+index 648ffeb6a3..e701c6f448 100644
+--- a/package/libyang/libyang.mk
++++ b/package/libyang/libyang.mk
+@@ -15,7 +15,8 @@ HOST_LIBYANG_DEPENDENCIES = host-pcre
+ 
+ LIBYANG_CONF_OPTS = \
+ 	-DENABLE_VALGRIND_TESTS=OFF \
+-	-DGEN_PYTHON_BINDINGS=OFF
++	-DGEN_PYTHON_BINDINGS=OFF \
++	-DENABLE_LYD_PRIV=ON
+ 
+ HOST_LIBYANG_CONF_OPTS = \
+ 	-DENABLE_VALGRIND_TESTS=OFF \
 -- 
 2.17.1
