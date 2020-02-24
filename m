@@ -1,46 +1,88 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 24 Feb 2020 02:09:54 +0000
-Subject: [Buildroot] [Bug 12576] New: 2020.02-RC1: error while loading
- shared libraries: libsystemd-shared-244.so
-Message-ID: <bug-12576-163@https.bugs.busybox.net/>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 23 Feb 2020 22:15:48 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-flatbuffers: new package
+Message-ID: <20200224051548.62860-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12576
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-flatbuffers/Config.in               |  6 ++++++
+ package/python-flatbuffers/python-flatbuffers.hash |  3 +++
+ package/python-flatbuffers/python-flatbuffers.mk   | 13 +++++++++++++
+ 5 files changed, 24 insertions(+)
+ create mode 100644 package/python-flatbuffers/Config.in
+ create mode 100644 package/python-flatbuffers/python-flatbuffers.hash
+ create mode 100644 package/python-flatbuffers/python-flatbuffers.mk
 
-            Bug ID: 12576
-           Summary: 2020.02-RC1: error while loading shared libraries:
-                    libsystemd-shared-244.so
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: All
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: melanie at trash-mail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-My post-build script contains the following line:
-
-systemd-machine-id-setup --root=$1
-
-My post-build script runs successful with previous buildroot versions
-but since 2020.02-RC1 the command fails with the following error message:
-
->>>   Executing post-build script
-systemd-machine-id-setup: error while loading shared libraries:
-libsystemd-shared-244.so: cannot open shared object file: No such file or
-directory
-make[1]: *** [Makefile:760: target-finalize] Error 127
-make: *** [Makefile:84: _all] Error 2
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 24b68ebe11..8f6a52b4fb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1167,6 +1167,7 @@ F:	package/python-async-lru/
+ F:	package/python-async-timeout/
+ F:	package/python-brotli/
+ F:	package/python-cchardet/
++F:	package/python-flatbuffers/
+ F:	package/python-frozenlist/
+ F:	package/python-janus/
+ F:	package/python-logstash/
+diff --git a/package/Config.in b/package/Config.in
+index 2edcee01a5..9d83d3948d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -942,6 +942,7 @@ menu "External python modules"
+ 	source "package/python-flask-jsonrpc/Config.in"
+ 	source "package/python-flask-login/Config.in"
+ 	source "package/python-flask-sqlalchemy/Config.in"
++	source "package/python-flatbuffers/Config.in"
+ 	source "package/python-flup/Config.in"
+ 	source "package/python-frozenlist/Config.in"
+ 	source "package/python-functools32/Config.in"
+diff --git a/package/python-flatbuffers/Config.in b/package/python-flatbuffers/Config.in
+new file mode 100644
+index 0000000000..b24b5aaf64
+--- /dev/null
++++ b/package/python-flatbuffers/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_FLATBUFFERS
++	bool "python-flatbuffers"
++	help
++	  The FlatBuffers serialization format for Python.
++
++	  https://github.com/google/flatbuffers
+diff --git a/package/python-flatbuffers/python-flatbuffers.hash b/package/python-flatbuffers/python-flatbuffers.hash
+new file mode 100644
+index 0000000000..a9dc245c5b
+--- /dev/null
++++ b/package/python-flatbuffers/python-flatbuffers.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/flatbuffers/json
++md5	b5f6c2246f45636dd49d9ff8a00d7f1c  flatbuffers-1.11.tar.gz
++sha256	f24185db54193540e3d684dc98aa7c2d89882341641548ceb36fd2589fef6c4e  flatbuffers-1.11.tar.gz
+diff --git a/package/python-flatbuffers/python-flatbuffers.mk b/package/python-flatbuffers/python-flatbuffers.mk
+new file mode 100644
+index 0000000000..d0374c4787
+--- /dev/null
++++ b/package/python-flatbuffers/python-flatbuffers.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-flatbuffers
++#
++################################################################################
++
++PYTHON_FLATBUFFERS_VERSION = 1.11
++PYTHON_FLATBUFFERS_SOURCE = flatbuffers-$(PYTHON_FLATBUFFERS_VERSION).tar.gz
++PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/c6/b6/21478b76aa7ccab58da3beb85746b6844dee2112c0cc25b51ec64b46bdbb
++PYTHON_FLATBUFFERS_LICENSE = Apache-2.0
++PYTHON_FLATBUFFERS_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
