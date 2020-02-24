@@ -1,306 +1,188 @@
-From: vadim4j at gmail.com <vadim4j@gmail.com>
-Date: Mon, 24 Feb 2020 23:14:27 +0200
-Subject: [Buildroot] [PATCH 3/3] package/frr: new package
-In-Reply-To: <20200224210601.4e3d9a3c@windsurf>
-References: <20200224172652.30932-1-vadim4j@gmail.com>
- <20200224172652.30932-4-vadim4j@gmail.com>
- <20200224210601.4e3d9a3c@windsurf>
-Message-ID: <20200224211427.GC34982@archlinux>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 24 Feb 2020 22:22:04 +0100
+Subject: [Buildroot] [git commit branch/next] package/kmod: bump to version
+ 27
+Message-ID: <20200224211042.E2AFE8E8CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 24, 2020 at 09:06:01PM +0100, Thomas Petazzoni wrote:
-> Hello Vadim,
-> 
-> On Mon, 24 Feb 2020 19:26:52 +0200
-> Vadim Kochan <vadim4j@gmail.com> wrote:
-> 
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index e07236937b..ef6592afa0 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -2480,6 +2480,7 @@ F:	package/brcm-patchram-plus/
-> >  F:	package/gettext-tiny/
-> >  F:	package/tinyssh/
-> >  F:	package/rtrlib/
-> > +F:	package/frr/
-> 
-> Alphabetic ordering is not good here.
-OK
+commit: https://git.buildroot.net/buildroot/commit/?id=94e024e942c0db2d95570f4bed90c525837050c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> 
-> > diff --git a/package/frr/Config.in b/package/frr/Config.in
-> > new file mode 100644
-> > index 0000000000..01673eb837
-> > --- /dev/null
-> > +++ b/package/frr/Config.in
-> > @@ -0,0 +1,23 @@
-> > +config BR2_PACKAGE_FRR
-> > +	bool "frr"
-> > +	depends on BR2_USE_MMU # fork()
-> > +	depends on BR2_PACKAGE_BASH # init
-> > +	select BR2_PACKAGE_RTRLIB
-> > +	select BR2_PACKAGE_READLINE
-> > +	select BR2_PACKAGE_JSON_C
-> > +	select BR2_PACKAGE_LIBYANG
-> > +	select BR2_PACKAGE_LIBCAP
-> > +	select BR2_PACKAGE_LIBNL
-> > +	select BR2_PACKAGE_NCURSES
-> > +	select BR2_PACKAGE_NETSNMP
-> > +	select BR2_PACKAGE_C_ARES
-> 
-> That's a lot of packages that you select here, are you sure you
-> properly propagated the "depends on" of all those packages in this
-> Config.in ?
-will try to check by disabling one by one.
+- Drop second and third patches (already in version)
+- Update indentation of hash file (two spaces)
 
-> 
-> For example, rtrlib depends on threads and SSP, so these need to be
-> propagated here (of course, except if you get rid of the SSP dependency
-> in rtrlib, as suggested in my review of PATCH 2/3).
-> 
-> > +	help
-> > +	  The FRRouting Protocol Suite.
-> > +
-> > +	  FRR is free software that implements and manages various IPv4 and
-> > +	  IPv6 routing protocols.
-> > +
-> > +	  https://frrouting.org
-> > +
-> > +comment "frr requires BASH for init service"
-> > +	depends on !BR2_PACKAGE_BASH
-> 
-> So it's the frrinit.sh script that requires bash ?
-Yes, this is runtime dependency.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...k-for-undefined-symbols-when-building-the.patch | 75 ----------------------
+ .../0003-Makefile.am-filter-Wl-no-undefined.patch  | 43 -------------
+ package/kmod/kmod.hash                             |  6 +-
+ package/kmod/kmod.mk                               |  4 +-
+ 4 files changed, 4 insertions(+), 124 deletions(-)
 
-> 
-> This comment also need a BR2_USE_MMU dependency, so that it doesn't
-> show up on noMMU systems.
-> 
-> > diff --git a/package/frr/S50frr b/package/frr/S50frr
-> > new file mode 100644
-> > index 0000000000..dec7d82a88
-> > --- /dev/null
-> > +++ b/package/frr/S50frr
-> > @@ -0,0 +1,38 @@
-> > +#!/bin/sh
-> > +#
-> > +# Starts frr.
-> > +#
-> > +
-> > +start() {
-> > +	printf "Starting frr: "
-> > +	start-stop-daemon -S -q -b \
-> > +		--exec /usr/sbin/frrinit.sh -- start
-> > +	[ $? = 0 ] && echo "OK" || echo "FAIL"
-> > +}
-> > +stop() {
-> > +	printf "Stopping frr: "
-> > +	/usr/sbin/frrinit.sh stop
-> > +	start-stop-daemon -K -q -p /run/frr.pid
-> 
-> This looks odd. Why do you need to call frrinit.sh stop and then use
-> start-stop-daemon ?
-Sorry, I thought to call 'frrinit.sh stop' to first stop all the daemons
-executed by 'frrinit.sh start' and then stop the main daemon process.
-
-> 
-> Also, make sure to use package/busybox/S01sysklogd as a template for
-> your init scripts.
-OK
-
-> 
-> 
-> > diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-> > new file mode 100644
-> > index 0000000000..c53e9bb4b0
-> > --- /dev/null
-> > +++ b/package/frr/frr.mk
-> > @@ -0,0 +1,105 @@
-> > +################################################################################
-> > +#
-> > +# frr
-> > +#
-> > +################################################################################
-> > +
-> > +FRR_VERSION = 7.3
-> > +FRR_SOURCE = frr-$(FRR_VERSION).tar.gz
-> > +FRR_SITE = https://github.com/FRRouting/frr/archive
-> > +FRR_LICENSE = GPL-2.0
-> > +FRR_LICENSE_FILES = COPYING
-> > +
-> > +FRR_DEPENDENCIES = rtrlib readline json-c libyang libcap libnl \
-> > +		   ncurses host-frr c-ares
-> 
-> Only one tab to indent the second line.
-> 
-> > +
-> > +HOST_FRR_DEPENDENCIES = host-flex host-bison host-python
-> > +
-> > +FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
-> > +		--sysconfdir=/etc/frr \
-> > +		--localstatedir=/var/run/frr \
-> > +		--with-moduledir=/usr/lib/frr/modules \
-> > +		--enable-configfile-mask=0640 \
-> > +		--enable-logfile-mask=0640 \
-> > +		--enable-multipath=256 \
-> > +		--disable-ospfclient \
-> > +		--enable-shell-access \
-> > +		--enable-user=frr \
-> > +		--enable-group=frr \
-> > +		--enable-vty-group=frrvty \
-> > +		--disable-exampledir \
-> > +		--enable-rpki \
-> > +		--enable-fpm
-> 
-> Ditto, only one tab to indent the continuation lines.
-OK
-
-> 
-> > +
-> > +HOST_FRR_CONF_OPTS = --enable-clippy-only
-> > +
-> > +define FRR_RUN_BOOTSTRAP
-> > +	(cd $(@D) && PATH=$(BR_PATH) ./bootstrap.sh)
-> > +endef
-> > +FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
-> > +HOST_FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
-> 
-> This won't work as you don't have any guarantee that host-autoconf and
-> host-automake will be built before. Can you use FRR_AUTORECONF = YES,
-> as this is really the best solution ? If not, you need to keep your
-> hooks, but explicitly add host-autoconf and host-automake to the
-> package dependencies.
-Thanks, will check.
-
-> 
-> > +define HOST_FRR_INSTALL_CMDS
-> > +	$(INSTALL) -D -m 0755 $(@D)/lib/clippy $(HOST_DIR)/bin/clippy
-> > +endef
-> > +
-> > +
-> > +# for some reason the normal 'install' target fails
-> 
-> Why? Can it be fixed? At least reported to the upstream developers?
-Ohhh, so, there is some miss-behave in case of cross-compilation that:
-1) for some frr daemon installation uses -L/usr/lib
-
-2) install tries to install binaries (apps & libs) to $(TARGET)/$(O)
-path which is invalid.
-
-So, I just gave up and tried to do a bit manual way. Would be great if
-can suggest some generic hint with $(TARGET)$(O) issue.
-
-> 
-> > +FRR_INSTALL_TARGET_OPTS = DESTDIR="$(TARGET_DIR)" libdir="/usr/lib" \
-> > +			  install-binPROGRAMS \
-> > +			  install-sbinPROGRAMS \
-> > +			  install-sbinSCRIPTS \
-> > +			  installdirs
-> 
-> Only one tab to indent the continuation lines.
-OK
-
-> 
-> > +
-> > +define FRR_INSTALL_CONFIG_FILES
-> > +	(cd $(@D) && PATH=$(BR_PATH) ./bootstrap.sh)
-> 
-> Calling bootstrap.sh during the installation? Why?
-OK, might be some copy&paste issue.
-> 
-> > +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/log/frr
-> > +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/run/frr
-> 
-> I'm not sure this is going to work well, as /var/log and /var/run are
-> symlinks to /tmp by default, and a tmpfs is mounted to /tmp.
-> 
-> These directories need to be created at runtime.
-So in case of systemd it can be handled by tmpfs file, but in
-case of sysv is it OK to do it in init script ?
-
-> 
-> > +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/frr
-> 
-> Not needed, as the -D option to the $(INSTALL) commands above will
-> create this folder.
-> 
-> > +	$(INSTALL) -D -m 0644 $(@D)/tools/etc/frr/daemons $(TARGET_DIR)/etc/frr/daemons
-> > +	$(INSTALL) -D -m 0644 $(@D)/tools/etc/frr/daemons.conf $(TARGET_DIR)/etc/frr/daemons.conf
-> > +	$(INSTALL) -D -m 0644 $(@D)/tools/etc/frr/frr.conf $(TARGET_DIR)/etc/frr/frr.conf
-> > +	$(INSTALL) -D -m 0644 $(@D)/tools/etc/frr/vtysh.conf $(TARGET_DIR)/etc/frr/vtysh.conf
-> > +	$(INSTALL) -D -m 0644 $(@D)/tools/etc/frr/support_bundle_commands.conf $(TARGET_DIR)/etc/frr/support_bundle_commands.conf
-> 
-> This probably calls for a for loop:
-> 
-> 	$(foreach f,daemons daemons.conf frr.conf vtysh.conf support_bundle_commands.conf,\
-> 		$(INSTALL) -D -m 0644 $(@D)/tools/etc/frr/$(f) \
-> 			$(TARGET_DIR)/etc/frr/$(f)
-> 	)
-Thanks, will use it.
-
-> 
-> > +	$(INSTALL) -m 0644 /dev/null $(TARGET_DIR)/etc/frr/zebra.conf
-> > +	$(INSTALL) -m 0644 /dev/null $(TARGET_DIR)/etc/frr/bgpd.conf
-> > +	$(INSTALL) -m 0644 /dev/null $(TARGET_DIR)/etc/frr/ospfd.conf
-> > +	$(INSTALL) -m 0644 /dev/null $(TARGET_DIR)/etc/frr/ospf6d.conf
-> > +	$(INSTALL) -m 0644 /dev/null $(TARGET_DIR)/etc/frr/isisd.conf
-> > +	$(INSTALL) -m 0644 /dev/null $(TARGET_DIR)/etc/frr/ripd.conf
-> > +	$(INSTALL) -m 0644 /dev/null $(TARGET_DIR)/etc/frr/ripngd.conf
-> > +	$(INSTALL) -m 0644 /dev/null $(TARGET_DIR)/etc/frr/pimd.conf
-> > +	$(INSTALL) -m 0644 /dev/null $(TARGET_DIR)/etc/frr/ldpd.conf
-> > +	$(INSTALL) -m 0644 /dev/null $(TARGET_DIR)/etc/frr/nhrpd.conf
-> 
-> Installing /dev/null ? Here is just creates an empty regular file. Does
-> it really makes sense? What are you trying to do here ?
-> 
-Will check if these files are needed, I followed of build instructions
-for several distros on frr docs site.
-
-> > +endef
-> > +FRR_POST_INSTALL_TARGET_HOOKS += FRR_INSTALL_CONFIG_FILES
-> > +
-> > +define FRR_PERMISSIONS
-> > +	/var/log/frr d 755 frr frr - - - - -
-> > +	/var/run/frr d 755 frr frr - - - - -
-> 
-> This is not going to work, as explained above.
-> 
-> > +	/etc/frr/zebra.conf f 644 frr frr - - - - -
-> > +	/etc/frr/bgpd.conf f 644 frr frr - - - - -
-> > +	/etc/frr/ospfd.conf f 644 frr frr - - - - -
-> > +	/etc/frr/ospf6d.conf f 644 frr frr - - - - -
-> > +	/etc/frr/isisd.conf f 644 frr frr - - - - -
-> > +	/etc/frr/ripd.conf f 644 frr frr - - - - -
-> > +	/etc/frr/ripngd.conf f 644 frr frr - - - - -
-> > +	/etc/frr/pimd.conf f 644 frr frr - - - - -
-> > +	/etc/frr/ldpd.conf f 644 frr frr - - - - -
-> > +	/etc/frr/nhrpd.conf f 644 frr frr - - - - -
-> 
-> So all these empty files need to be writable ?
-> 
-> > +	/etc/frr/vtysh.conf f 644 frr frrvty - - - - -
-> > +endef
-> > +
-> > +define FRR_USERS
-> > +	frr -1 frr -1 * /var/run/frr - frrvty FRR user priv
-> > +endef
-> > +
-> > +define FRR_INSTALL_INIT_SYSV
-> > +	$(INSTALL) -D -m 755 $(FRR_PKGDIR)/S50frr \
-> > +		$(TARGET_DIR)/etc/init.d/S50frr
-> > +endef
-> > +
-> > +$(eval $(autotools-package))
-> > +$(eval $(host-autotools-package))
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/kmod/0002-Do-not-check-for-undefined-symbols-when-building-the.patch b/package/kmod/0002-Do-not-check-for-undefined-symbols-when-building-the.patch
+deleted file mode 100644
+index 3be40d4993..0000000000
+--- a/package/kmod/0002-Do-not-check-for-undefined-symbols-when-building-the.patch
++++ /dev/null
+@@ -1,75 +0,0 @@
+-From 55a0a0aac503f5012ff2df7af37107544c757f19 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Tue, 22 Oct 2019 09:56:32 +0200
+-Subject: [PATCH kmod] Do not check for undefined symbols when building the
+- Python modules
+-
+-kmod's configure.ac uses the -Wl,--no-undefined linker flag to verify
+-at link time that all symbols of shared libraries are available, and
+-that there are no undefined symbols.
+-
+-This make perfect sense for regular shared libraries. However, for
+-Python extensions, which will be dlopen()ed inside the Python
+-interpreter, it makes less sense.
+-
+-Since Python 3.8, there is a change in python-config script and
+-Python's pkg-config file: it no longer links Python extensions with
+-the libpython library. See
+-https://docs.python.org/dev/whatsnew/3.8.html#debug-build-uses-the-same-abi-as-release-build
+-which states:
+-
+-  On the other hand, pkg-config python3.8 --libs no longer contains
+-  -lpython3.8. C extensions must not be linked to libpython (except on
+-  Android and Cygwin, whose cases are handled by the script); this
+-  change is backward incompatible on purpose. (Contributed by Victor
+-  Stinner in bpo-36721.)
+-
+-So, when linking the kmod Python extensions, it currently fails with
+-numerous unresolved symbols, that were previously provided by
+-libpython:
+-
+-/home/test/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/7.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: libkmod/python/kmod/.libs/list_la-list.o: in function `__Pyx_PyObject_GetAttrStr':
+-list.c:(.text.__Pyx_PyObject_GetAttrStr+0x48): undefined reference to `PyObject_GetAttr'
+-/home/test/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/7.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: libkmod/python/kmod/.libs/list_la-list.o: in function `__pyx_tp_dealloc_4kmod_4list_ModListItem':
+-list.c:(.text.__pyx_tp_dealloc_4kmod_4list_ModListItem+0x78): undefined reference to `PyObject_CallFinalizerFromDealloc'
+-/home/test/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/7.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: libkmod/python/kmod/.libs/list_la-list.o: in function `__pyx_tp_dealloc_4kmod_4list_ModList':
+-list.c:(.text.__pyx_tp_dealloc_4kmod_4list_ModList+0x30): undefined reference to `PyErr_Fetch'
+-
+-[Complete log at http://autobuild.buildroot.net/results/79a/79a5a0398723e8cfea0d0aa3dec5f7649aee4c63/build-end.log]
+-
+-Linking with libpython is no longer recommended: those symbols should
+-remain unresolved in the Python extensions, as they wil be properly
+-resolved when the Python extension gets loaded into the Python
+-interpreter.
+-
+-Since we want to keep -Wl,--no-undefined globally in kmod, we leave
+-the configure.ac file unchanged, and instead, specifically in the
+-LDFLAGS used to build the Python extensions, we override
+--Wl,--no-undefined with -Wl,-z,undefs. Ideally, -Wl,--no-undefined is
+-the same as -Wl,-z,defs, and the effect of these options can be
+-canceled on the linker command line by a following -Wl,-z,undefs (see
+-the ld man page for details).
+-
+-Upstream: https://lore.kernel.org/linux-modules/20191024174710.9441-1-thomas.petazzoni at bootlin.com/
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Cc: Victor Stinner <victor.stinner@gmail.com>
+----
+- Makefile.am | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index c5c2f06..8e9c90d 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -173,7 +173,7 @@ CPYTHON_MODULE_CFLAGS = \
+- 	$(AM_CFLAGS) -DCPYTHON_COMPILING_IN_PYPY=0 \
+- 	$(PYTHON_NOWARN) $(PYTHON_CFLAGS) \
+- 	-fvisibility=default
+--CPYTHON_MODULE_LDFLAGS = $(AM_LDFLAGS) -module -avoid-version -shared
+-+CPYTHON_MODULE_LDFLAGS = $(AM_LDFLAGS) -module -avoid-version -shared -Wl,-z,undefs
+- 
+- if BUILD_PYTHON
+- pkgpyexec_LTLIBRARIES = \
+--- 
+-2.21.0
+-
+diff --git a/package/kmod/0003-Makefile.am-filter-Wl-no-undefined.patch b/package/kmod/0003-Makefile.am-filter-Wl-no-undefined.patch
+deleted file mode 100644
+index f4d90d4c24..0000000000
+--- a/package/kmod/0003-Makefile.am-filter-Wl-no-undefined.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 7a55f18e14f606500fdeab6bc116ec74f3e5b1c3 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 16 Nov 2019 17:40:32 +0100
+-Subject: [PATCH] Makefile.am: filter -Wl,--no-undefined
+-
+-Commit 1d14ef82f4a3be741bcdf6b1c6d51ce9dce43567 does not completely fix
+-the build with python 3.8 as we still get link failure due to
+-'-z undefs' being ignored by some versions of ld:
+-
+-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/../../../../mips-linux-gnu/bin/ld: warning: -z undefs ignored.
+-
+-/home/naourr/work/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64_be-linux-gnu/7.3.1/../../../../aarch64_be-linux-gnu/bin/ld: warning: -z undefs ignored.
+-
+-So filter -Wl,--no-undefined to fix the issue
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/e9645d9969481b09f507f6e0d0b35faaa283eb60
+- - http://autobuild.buildroot.org/results/06a6d865b6b7d8ebd793bde214f4a4c40e0962e1
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile.am | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 8e9c90d..47505c1 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -173,7 +173,10 @@ CPYTHON_MODULE_CFLAGS = \
+- 	$(AM_CFLAGS) -DCPYTHON_COMPILING_IN_PYPY=0 \
+- 	$(PYTHON_NOWARN) $(PYTHON_CFLAGS) \
+- 	-fvisibility=default
+--CPYTHON_MODULE_LDFLAGS = $(AM_LDFLAGS) -module -avoid-version -shared -Wl,-z,undefs
+-+# Filter -Wl,--no-undefined to fix build with python 3.8
+-+comma = ,
+-+CPYTHON_MODULE_LDFLAGS = $(subst -Wl$(comma)--no-undefined,,$(AM_LDFLAGS))
+-+CPYTHON_MODULE_LDFLAGS += -module -avoid-version -shared
+- 
+- if BUILD_PYTHON
+- pkgpyexec_LTLIBRARIES = \
+--- 
+-2.24.0
+-
+diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+index dea5c0c107..3cb60b2dd3 100644
+--- a/package/kmod/kmod.hash
++++ b/package/kmod/kmod.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+-sha256 57bb22c8bb56435991f6b0810a042b0a65e2f1e217551efa58235b7034cdbb9d  kmod-26.tar.xz
++sha256  c1d3fbf16ca24b95f334c1de1b46f17bbe5a10b0e81e72668bdc922ebffbbc0c  kmod-27.tar.xz
+ 
+ # Locally calculated
+-sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
+-sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index e21f40a845..e2dfea5c7b 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-KMOD_VERSION = 26
++KMOD_VERSION = 27
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
+-# 0002-Do-not-check-for-undefined-symbols-when-building-the.patch
+-KMOD_AUTORECONF = YES
+ KMOD_DEPENDENCIES = host-pkgconf
+ HOST_KMOD_DEPENDENCIES = host-pkgconf
+ 
