@@ -1,33 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Feb 2020 23:20:51 +0100
-Subject: [Buildroot] [PATCH 34/36] package/kf5: drop QT5_VERSION_LATEST logic
+Date: Mon, 24 Feb 2020 23:20:46 +0100
+Subject: [Buildroot] [PATCH 29/36] package/qt5webview: drop qt 5.6 support
 In-Reply-To: <20200224222054.2686-1-peter@korsgaard.com>
 References: <20200224222054.2686-1-peter@korsgaard.com>
-Message-ID: <20200224222054.2686-34-peter@korsgaard.com>
+Message-ID: <20200224222054.2686-29-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that the version selection has been removed.
-
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kf5/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/qt5/qt5webview/qt5webview.hash | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/kf5/Config.in b/package/kf5/Config.in
-index aecbb932f5..030759f376 100644
---- a/package/kf5/Config.in
-+++ b/package/kf5/Config.in
-@@ -1,7 +1,6 @@
- menuconfig BR2_PACKAGE_KF5
- 	bool "KF5"
- 	depends on BR2_PACKAGE_QT5
--	depends on BR2_PACKAGE_QT5_VERSION_LATEST
- 	help
- 	  This option enables the KF5 KDE Frameworks. Sub-options
- 	  allow to select which modules should be built.
+diff --git a/package/qt5/qt5webview/qt5webview.hash b/package/qt5/qt5webview/qt5webview.hash
+index d9d340479b..7bbb23556b 100644
+--- a/package/qt5/qt5webview/qt5webview.hash
++++ b/package/qt5/qt5webview/qt5webview.hash
+@@ -1,6 +1,3 @@
+-# Hash from: https://download.qt.io/archive/qt/5.6/5.6.3/submodules/qtwebview-opensource-src-5.6.3.tar.xz.sha256
+-sha256 768a456e89f0fd7cbf39ac6b282e078a098e7426651c0b3d453b10c5c44bd81c qtwebview-opensource-src-5.6.3.tar.xz
+-
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtwebview-everywhere-src-5.12.7.tar.xz.sha256
+ sha256 d3f82d2ceab59dc4dee3b6f54f4b70869c199d63f4534b299d900cdacc9b7be7 qtwebview-everywhere-src-5.12.7.tar.xz
+ 
 -- 
 2.20.1
