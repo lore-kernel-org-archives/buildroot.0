@@ -1,57 +1,67 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 24 Feb 2020 09:09:28 -0800
-Subject: [Buildroot] [PATCH v2 2/3] package/gobject-introspection: export cc
- in g-ir-scanner
-In-Reply-To: <20200224170929.8209-1-aduskett@gmail.com>
-References: <20200224170929.8209-1-aduskett@gmail.com>
-Message-ID: <20200224170929.8209-2-aduskett@gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Mon, 24 Feb 2020 19:26:49 +0200
+Subject: [Buildroot] [PATCH 0/3] add frr package
+Message-ID: <20200224172652.30932-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+FRR is free software that implements and manages various IPv4 and IPv6
+routing protocols. It runs on nearly all distributions of Linux and BSD
+as well as Solaris and supports all modern CPU architectures.
 
-Without this export, the host variant of g-ir-scanner will call the host
-gcc for linking.
+FRR currently supports the following protocols:
 
-For autotools packages, this is not an issue as they use
-Makefile.introspection, which will export the cross-cc, however for meson,
-this is not the case, and linking errors occur when meson packages generate
-.gir and .typelib files.
+    BGP
+    OSPFv2
+    OSPFv3
+    RIPv1
+    RIPv2
+    RIPng
+    IS-IS
+    PIM-SM/MSDP
+    LDP
+    BFD
+    Babel
+    PBR
+    OpenFabric
+    VRRP
+    EIGRP (alpha)
+    NHRP (alpha)
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/gobject-introspection/g-ir-scanner.in          | 2 ++
- package/gobject-introspection/gobject-introspection.mk | 2 ++
- 2 files changed, 4 insertions(+)
+FRR package requires rtrlib which is added in separate
+patch. There was issues on target 'make install' which
+I could not fix otherway than adding half-custom install
+hook to install binaries and configs.
 
-diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
-index 9f97497b7e..d5847ad063 100644
---- a/package/gobject-introspection/g-ir-scanner.in
-+++ b/package/gobject-introspection/g-ir-scanner.in
-@@ -1,6 +1,8 @@
- #!/usr/bin/env bash
- 
- export GI_SCANNER_DISABLE_CACHE=1
-+export CC="$(dirname "${0}")/../../../../bin/@BASENAME_TARGET_CC@"
-+
- ${HOST_DIR}/bin/g-ir-scanner \
- --lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
- --use-binary-wrapper=$(dirname $0)/g-ir-scanner-qemuwrapper \
-diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-index e28748be2e..6472f89c52 100644
---- a/package/gobject-introspection/gobject-introspection.mk
-+++ b/package/gobject-introspection/gobject-introspection.mk
-@@ -101,6 +101,8 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
- 		$(INSTALL) -D -m 755 \
- 			$(GOBJECT_INTROSPECTION_PKGDIR)/$(w).in $(STAGING_DIR)/usr/bin/$(w)
- 	)
-+	$(SED) "s%@BASENAME_TARGET_CC@%$(notdir $(TARGET_CC))%g" $(STAGING_DIR)/usr/bin/g-ir-scanner
-+
- 	# Gobject-introspection installs Makefile.introspection in
- 	# $(STAGING_DIR)/usr/share which is needed for autotools-based programs to
- 	# build .gir and .typelib files. Unfortuantly, gobject-introspection-1.0.pc
+RTRLib package requires LYD_PRIV option to be enabled in
+libyang package, hence enabled it in separate patch.
+
+Vadim Kochan (3):
+  package/libyang: enable LYD_PRIV option
+  package/rtrlib: new package
+  package/frr: new package
+
+ DEVELOPERS                 |   2 +
+ package/Config.in          |   2 +
+ package/frr/Config.in      |  23 ++++++++
+ package/frr/S50frr         |  38 ++++++++++++++
+ package/frr/frr.hash       |   2 +
+ package/frr/frr.mk         | 105 +++++++++++++++++++++++++++++++++++++
+ package/libyang/libyang.mk |   3 +-
+ package/rtrlib/Config.in   |  13 +++++
+ package/rtrlib/rtrlib.hash |   2 +
+ package/rtrlib/rtrlib.mk   |  20 +++++++
+ 10 files changed, 209 insertions(+), 1 deletion(-)
+ create mode 100644 package/frr/Config.in
+ create mode 100644 package/frr/S50frr
+ create mode 100644 package/frr/frr.hash
+ create mode 100644 package/frr/frr.mk
+ create mode 100644 package/rtrlib/Config.in
+ create mode 100644 package/rtrlib/rtrlib.hash
+ create mode 100644 package/rtrlib/rtrlib.mk
+
 -- 
-2.21.1 (Apple Git-122.3)
+2.17.1
