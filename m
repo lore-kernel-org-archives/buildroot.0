@@ -1,50 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Feb 2020 22:38:42 +0100
-Subject: [Buildroot] [git commit branch/next] package/sed: bump to version
- 4.8
-Message-ID: <20200224213409.A9E068E8D0@busybox.osuosl.org>
+Date: Mon, 24 Feb 2020 22:38:29 +0100
+Subject: [Buildroot] [git commit branch/next] package/upmpdcli: bump to
+ version 1.4.6
+Message-ID: <20200224213409.9E7388E90A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c68d3d07268e3f1e33427897d47fafb2e348fa9a
+commit: https://git.buildroot.net/buildroot/commit/?id=0ef6ed667238a13c1a4a6c691a0a8f33824bba02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sed/sed.hash | 6 +++---
- package/sed/sed.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sed/sed.hash b/package/sed/sed.hash
-index cc3bebafe1..bb48128526 100644
---- a/package/sed/sed.hash
-+++ b/package/sed/sed.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/sed/sed-4.7.tar.xz.sig
-+# https://ftp.gnu.org/gnu/sed/sed-4.8.tar.xz.sig
- # with the key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
--sha256	2885768cd0a29ff8d58a6280a270ff161f6a3deb5690b2be6c49f46d4c67bd6a	sed-4.7.tar.xz
-+sha256  f79b0cfea71b37a8eeec8490db6c5f7ae7719c35587f21edb0617f370eeff633  sed-4.8.tar.xz
- # Locally calculated
--sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	COPYING
-+sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-diff --git a/package/sed/sed.mk b/package/sed/sed.mk
-index 6fee598f66..6bb3220553 100644
---- a/package/sed/sed.mk
-+++ b/package/sed/sed.mk
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 33003a406e..fe1d82202d 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,5 +1,5 @@
+-# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.5.tar.gz.sha256:
+-sha256  af0c13b6ab8720d98451307010c33462e9a3f50178bae82c593fd2dd12e31b0e  upmpdcli-1.4.5.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.6.tar.gz.sha256:
++sha256  80ed85a323a1721a9e2ceb64923cedbf69c45f22fb9bc6853c9c11b46dc83a1d  upmpdcli-1.4.6.tar.gz
+ 
+ # Hash for license file:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 290cdcb1f2..67d805f0cc 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SED_VERSION = 4.7
-+SED_VERSION = 4.8
- SED_SOURCE = sed-$(SED_VERSION).tar.xz
- SED_SITE = $(BR2_GNU_MIRROR)/sed
- SED_LICENSE = GPL-3.0
+-UPMPDCLI_VERSION = 1.4.5
++UPMPDCLI_VERSION = 1.4.6
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = LGPL-2.1+
+ UPMPDCLI_LICENSE_FILES = COPYING
