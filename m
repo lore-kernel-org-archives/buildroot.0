@@ -1,11 +1,11 @@
 From: Gervais, Francois <FGervais@distech-controls.com>
-Date: Mon, 24 Feb 2020 15:22:50 +0000
-Subject: [Buildroot] [PATCH 1/1] package/rcw: allow not having custom
- rcwi files
-In-Reply-To: <20200223211828.GW8743@scaer>
-References: <20200221144023.25481-1-fgervais@distech-controls.com>
- <20200223211828.GW8743@scaer>
-Message-ID: <DM6PR01MB584984058E65E121A3F83712F3EC0@DM6PR01MB5849.prod.exchangelabs.com>
+Date: Mon, 24 Feb 2020 15:50:01 +0000
+Subject: [Buildroot] [EXT] Re: [v5,
+ 3/9] package/qoriq-rcw: bump to version LSDK-19.09
+In-Reply-To: <VI1PR04MB5136F11FD4D66183033821DFFEEC0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+References: <DM6PR01MB58498E8B6D7E4DFB76C2F121F3120@DM6PR01MB5849.prod.exchangelabs.com>
+ <VI1PR04MB5136F11FD4D66183033821DFFEEC0@VI1PR04MB5136.eurprd04.prod.outlook.com>
+Message-ID: <DM6PR01MB58493BFD2C2487BC6AD7AE6EF3EC0@DM6PR01MB5849.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +13,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 > -----Original Message-----
-> From: Yann E. MORIN <yann.morin.1998@free.fr>
-> Sent: February 23, 2020 4:18 PM
-> To: Gervais, Francois <FGervais@distech-controls.com>
-> Cc: buildroot at buildroot.org; Matt Weber <matthew.weber@rockwellcollins.com>
-> Subject: Re: [Buildroot] [PATCH 1/1] package/rcw: allow not having custom rcwi files
+> From: Jerry Huang <jerry.huang@nxp.com>
+> Sent: February 24, 2020 9:44 AM
+> To: Gervais, Francois <FGervais@distech-controls.com>; buildroot at buildroot.org
+> Subject: RE: [EXT] Re: [v5,3/9] package/qoriq-rcw: bump to version LSDK-19.09
 > 
-> Fran?ois, All,
 > 
-> On 2020-02-21 09:40 -0500, Francois Gervais spake thusly:
-> > A project could quite possibly have a custom rcw file that does not
-> > rely on any custom rcw include files (rcwi).
-> >
-> > Allow the build to succeed if this is the case.
-> >
-> > Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
-> > ---
-> >  package/rcw/rcw.mk | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk index
-> > 36d2da61b5..c1fb63b91b 100644
-> > --- a/package/rcw/rcw.mk
-> > +++ b/package/rcw/rcw.mk
-> > @@ -25,7 +25,9 @@ endif
-> >
-> >  define HOST_RCW_ADD_CUSTOM_RCW_FILES
-> >  	mkdir -p $(@D)/custom_board/rcw
-> > -	cp -f $(filter-out %.rcw,$(RCW_FILES)) $(@D)/custom_board
-> > +	if [ -n "$(filter-out %.rcw,$(RCW_FILES))" ]; then \
-> > +		cp -f $(filter-out %.rcw,$(RCW_FILES)) $(@D)/custom_board; \
-> > +	fi
 > 
-> I've changed that to use a separate hook for the includes, and pushed that to master.
+> Best Regards
+> Jerry Huang
 > 
-> Please review the commit in case I borked anything. Thanks! ;-)
+> > -----Original Message-----
+> > From: Gervais, Francois <FGervais@distech-controls.com>
+> > Sent: Saturday, February 22, 2020 6:10 AM
+> > To: buildroot at buildroot.org
+> > Cc: Jerry Huang <jerry.huang@nxp.com>
+> > Subject: [EXT] Re: [v5,3/9] package/qoriq-rcw: bump to version
+> > LSDK-19.09
+> >
+> > Caution: EXT Email
+> >
+> > Hi Jerry,
+> >
+> > I think this patch breaks:
+> >
+> > define HOST_QORIQ_RCW_BUILD_CMDS
+> >         python $(@D)/rcw.py -i
+> > $(@D)/custom_board/rcw/$(QORIQ_RCW_PROJECT) -I $(@D)/custom_board -o
+> > $(@D)/PBL.bin endef
+> >
+> > host-qoriq-rcw-LSDK-19.09/rcw.py fails with:
+> >
+> > "Only Python versions 3.0+ are supported."
+> Python3 is the future ?.
 
-I confirm, the version in master works fine. Thank you for showing me a better version of my patch.
+I agree.
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> >  	cp -f $(filter %.rcw,$(RCW_FILES)) $(@D)/custom_board/rcw  endef
-> > HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
-> > --
-> > 2.20.1
+Would simply calling "python3" instead of "python" be a good fix in this case?
+
+I'm not really sure which python is used, is it a buildroot built python or a buildroot
+dependency python? If it's the dependency python then the buildroot manual still
+calls for 2.7+ so calling simply calling python3 might not be an acceptable fix.
