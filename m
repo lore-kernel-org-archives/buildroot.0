@@ -1,43 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 24 Feb 2020 18:44:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive: update
- LICENSE_FILES
-Message-ID: <20200224174417.19085-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Feb 2020 18:37:32 +0100
+Subject: [Buildroot] [git commit] package/skeleton-init-openrc: fix root
+ filesystem ro/rw remount
+Message-ID: <20200224182233.39FD08E8C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use LICENSE.GPL instead of src/main.cpp.
+commit: https://git.buildroot.net/buildroot/commit/?id=c51c981a060d11f2cbc7c389ab649f84029c4646
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The regular expressions used in the sed commands assumes that there is a
+space after '/dev/root' but the skeleton file contains a tab. Use a more
+flexible '[[:blank:]]', instead.
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/skeleton-init-openrc/skeleton-init-openrc.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 5704976e3c..60bc0031b6 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,3 +1,3 @@
- # Locally computed
- sha256 e47263240ac9276546ead439ba14ee26c3f3b45f2882351a9081e5502e296329  kodi-inputstream-adaptive-2.4.2-Leia.tar.gz
--sha256 9070a4ff46077f9358b079445c5cf2109f1711e05f4b9cb283d89ecac7aad161  src/main.cpp
-+sha256 89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 90958bdf1a..1a083b188b 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -7,7 +7,7 @@
- KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.2-Leia
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
--KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
-+KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
- KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
+diff --git a/package/skeleton-init-openrc/skeleton-init-openrc.mk b/package/skeleton-init-openrc/skeleton-init-openrc.mk
+index 656fc531d7..b0538ad03f 100644
+--- a/package/skeleton-init-openrc/skeleton-init-openrc.mk
++++ b/package/skeleton-init-openrc/skeleton-init-openrc.mk
+@@ -19,13 +19,13 @@ ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
+ # Comment /dev/root entry in fstab. When openrc does not find fstab entry for
+ # "/", it will try to remount "/" as "rw".
+ define SKELETON_INIT_OPENRC_ROOT_RO_OR_RW
+-	$(SED) '\:^/dev/root :s/^/# /' $(TARGET_DIR)/etc/fstab
++	$(SED) '\:^/dev/root[[:blank:]]:s/^/# /' $(TARGET_DIR)/etc/fstab
+ endef
+ else
+ # Uncomment /dev/root entry in fstab which has "ro" option so openrc notices
+ # it and doesn't remount root to rw.
+ define SKELETON_INIT_OPENRC_ROOT_RO_OR_RW
+-	$(SED) '\:^# /dev/root:s/^# //' $(TARGET_DIR)/etc/fstab
++	$(SED) '\:^#[[:blank:]]*/dev/root[[:blank:]]:s/^# //' $(TARGET_DIR)/etc/fstab
+ endef
+ endif # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
  
- $(eval $(cmake-package))
--- 
-2.20.1
