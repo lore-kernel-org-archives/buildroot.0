@@ -1,85 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 24 Feb 2020 10:59:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kvm-unit-tests: fix build with
- SSP
-In-Reply-To: <20200223232005.3178422-1-fontaine.fabrice@gmail.com>
-References: <20200223232005.3178422-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAPi7W82Q31qDw0K2R_aXY2T8w5Q33xcyMeqkQYqhrjtxKFetdw@mail.gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 24 Feb 2020 11:12:52 +0100
+Subject: [Buildroot] [PATCH] package/swig: create a symlink for swig3.0
+Message-ID: <20200224101252.29177-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Le lun. 24 f?vr. 2020 ? 00:19, Fabrice Fontaine
-<fontaine.fabrice@gmail.com> a ?crit :
->
-> Thanks to this patch, kvm-unit-tests will always be built without SSP as
-> intented by upstream. This will fix the build on ppc64 with SSP that
-> started to fail for an unknown reason since November 27th.
->
-> Moreover, the Arch Linux workaround could also be removed in a follow-up
-> patch.
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...3-Makefile-fix-stack-protector-tests.patch | 36 +++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
->
-> diff --git a/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
-> new file mode 100644
-> index 0000000000..be819f27c6
-> --- /dev/null
-> +++ b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
-> @@ -0,0 +1,36 @@
-> +From 9bf9155804652c0b3a94af9723c79b6de430187b Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Mon, 24 Feb 2020 00:04:06 +0100
-> +Subject: [PATCH] Makefile: fix stack-protector tests
-> +
-> +Rename fnostack_protector into fno_stack_protector and
-> +fnostack_protector_all into fnostack_protector_all otherwise build will
-> +fail if -fstack-protector is passed by the toolchain
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: sent to kvm at vger.kernel.org]
-It should be noted that upstream answered that the same patch was
-already in their pull box:
-https://patchwork.kernel.org/patch/11368845/
-> +---
-> + Makefile | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index 767b6c6..754ed65 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -55,8 +55,8 @@ COMMON_CFLAGS += -Wignored-qualifiers -Werror
-> +
-> + frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
-> + fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
-> +-fnostack_protector := $(call cc-option, -fno-stack-protector, "")
-> +-fnostack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
-> ++fno_stack_protector := $(call cc-option, -fno-stack-protector, "")
-> ++fno_stack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
-> + wno_frame_address := $(call cc-option, -Wno-frame-address, "")
-> + fno_pic := $(call cc-option, -fno-pic, "")
-> + no_pie := $(call cc-option, -no-pie, "")
-> +--
-> +2.25.0
-> +
-> --
-> 2.25.0
->
-Best Regards,
+For now swig package creates a symlink to the latest swig version
+i.e. swig4.0. If the host already has both CMake 3.10 and earlier
+swig version then the earlier version (swig2.0 or swig3.0) will
+be detected. This happens because CMake 3.10 doesn't know about
+swig4.0 and thus searches for swig3.0 first and finds it on the
+host.
 
-Fabrice
+With the new symlink CMake will find buildroot's swig binary.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/swig/swig.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+index 3dba3425cf..5881a0e423 100644
+--- a/package/swig/swig.mk
++++ b/package/swig/swig.mk
+@@ -27,6 +27,7 @@ SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
+ 
+ define HOST_SWIG_INSTALL_SYMLINK
+ 	ln -fs swig $(HOST_DIR)/bin/swig$(SWIG_VERSION_MAJOR)
++	ln -fs swig $(HOST_DIR)/bin/swig3.0
+ endef
+ 
+ HOST_SWIG_POST_INSTALL_HOOKS += HOST_SWIG_INSTALL_SYMLINK
+-- 
+2.17.0
