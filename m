@@ -1,71 +1,81 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 23:52:12 +0100
-Subject: [Buildroot] [git commit] package/qt5location: drop qt 5.6 support
-Message-ID: <20200309140907.6587A8E780@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 25 Feb 2020 23:14:20 +0100
+Subject: [Buildroot] [git commit] package/pcre: bump to version 8.44
+Message-ID: <20200309140904.D6F7B7FCEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bc2eca708fddc318f5c83123d415336e46f0ec1
+commit: https://git.buildroot.net/buildroot/commit/?id=a92e06c352a838a4ee72069aeee7ba5ffea6c32b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt5location/qt5location.hash | 8 --------
- package/qt5/qt5location/qt5location.mk   | 7 -------
- 2 files changed, 15 deletions(-)
+- Update first patch
+- Update hash of license file (update in year)
+- Update indentation of hash file (two spaces)
 
-diff --git a/package/qt5/qt5location/qt5location.hash b/package/qt5/qt5location/qt5location.hash
-index 80bcfaf0ab..3c94df0079 100644
---- a/package/qt5/qt5location/qt5location.hash
-+++ b/package/qt5/qt5location/qt5location.hash
-@@ -1,17 +1,9 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtlocation-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 b7a81c58cc331fb15bea8fba21d3c9a59f6dc6ad2e4855e30a14ce59a2af1466 qtlocation-opensource-src-5.6.3.tar.xz
--
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtlocation-everywhere-src-5.12.7.tar.xz.sha256
- sha256 d1e905b80befda3c9aaad92ea984e6dbf722568b5c91e8d15b027bc5bc22781f qtlocation-everywhere-src-5.12.7.tar.xz
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pcre/0001-Kill-compatibility-bits.patch | 7 +++++--
+ package/pcre/pcre.hash                          | 4 ++--
+ package/pcre/pcre.mk                            | 2 +-
+ 3 files changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/package/pcre/0001-Kill-compatibility-bits.patch b/package/pcre/0001-Kill-compatibility-bits.patch
+index 3563e4b714..d2cf76bf8d 100644
+--- a/package/pcre/0001-Kill-compatibility-bits.patch
++++ b/package/pcre/0001-Kill-compatibility-bits.patch
+@@ -7,6 +7,8 @@ Kill ABI compatibility bits, we don't need them.
+ Fixes build failures on non-ELF targets.
  
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
--sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
--sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
- sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
- sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
--sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
- sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
--sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
--sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
-diff --git a/package/qt5/qt5location/qt5location.mk b/package/qt5/qt5location/qt5location.mk
-index a69e8f41a6..5edb9170a6 100644
---- a/package/qt5/qt5location/qt5location.mk
-+++ b/package/qt5/qt5location/qt5location.mk
-@@ -10,13 +10,8 @@ QT5LOCATION_SOURCE = qtlocation-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5LOCATION_VERSI
- QT5LOCATION_DEPENDENCIES = qt5base
- QT5LOCATION_INSTALL_STAGING = YES
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++[Fabrice: update for 8.44]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  pcrecpp.cc | 16 ----------------
+  1 file changed, 16 deletions(-)
+@@ -15,7 +17,7 @@ diff --git a/pcrecpp.cc b/pcrecpp.cc
+ index d09c9ab..6910db0 100644
+ --- a/pcrecpp.cc
+ +++ b/pcrecpp.cc
+-@@ -58,22 +58,6 @@ static const int kVecSize = (1 + kMaxArgs) * 3;  // results + PCRE workspace
++@@ -58,23 +58,6 @@ static const int kVecSize = (1 + kMaxArgs) * 3;  // results + PCRE workspace
+  // Special object that stands-in for no argument
+  Arg RE::no_arg((void*)NULL);
+  
+@@ -27,7 +29,8 @@ index d09c9ab..6910db0 100644
+ -// inclusive test if we ever needed it.  (Note that not only the
+ -// __attribute__ syntax, but also __USER_LABEL_PREFIX__, are
+ -// gnu-specific.)
+--#if defined(__GNUC__) && __GNUC__ >= 3 && defined(__ELF__) && !defined(__INTEL_COMPILER)
++-#if defined(__GNUC__) && __GNUC__ >= 3 && defined(__ELF__) \
++-       && !defined(__INTEL_COMPILER) && !defined(__LCC__)
+ -# define ULP_AS_STRING(x)            ULP_AS_STRING_INTERNAL(x)
+ -# define ULP_AS_STRING_INTERNAL(x)   #x
+ -# define USER_LABEL_PREFIX_STR       ULP_AS_STRING(__USER_LABEL_PREFIX__)
+diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
+index 7513d5f198..628d617353 100644
+--- a/package/pcre/pcre.hash
++++ b/package/pcre/pcre.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256 91e762520003013834ac1adb4a938d53b22a216341c061b0cf05603b290faf6b  pcre-8.43.tar.bz2
++sha256  19108658b23b3ec5058edc9f66ac545ea19f9537234be1ec62b714c84399366d  pcre-8.44.tar.bz2
+ # License files, locally calculated
+-sha256 a5fce68baf797e0918463a4437ef75984c41118f43850ddeabda1b5a90154309  LICENCE
++sha256  0dd9c13864dbb9ee4d77a1557e96be29b2d719fb6584192ee36611aae264c4a3  LICENCE
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index 595cda8a53..3c280e593f 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5LOCATION_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
- QT5LOCATION_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
--else
--QT5LOCATION_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
--QT5LOCATION_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
--endif
- 
- ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
- QT5LOCATION_DEPENDENCIES += qt5declarative
-@@ -43,11 +38,9 @@ define QT5LOCATION_INSTALL_TARGET_LOCATION
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Location.so.* $(TARGET_DIR)/usr/lib
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geoservices $(TARGET_DIR)/usr/lib/qt/plugins/
- endef
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- define QT5LOCATION_INSTALL_TARGET_POSITION_QUICK
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5PositioningQuick.so.* $(TARGET_DIR)/usr/lib
- endef
--endif
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- define QT5LOCATION_INSTALL_TARGET_EXAMPLES
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/location $(TARGET_DIR)/usr/lib/qt/examples/
+-PCRE_VERSION = 8.43
++PCRE_VERSION = 8.44
+ PCRE_SITE = https://ftp.pcre.org/pub/pcre
+ PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
+ PCRE_LICENSE = BSD-3-Clause
