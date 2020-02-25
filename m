@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 25 Feb 2020 23:23:03 +0100
-Subject: [Buildroot] [PATCH] Config.in: add BR2_HOST_GCC_AT_LEAST_9
-In-Reply-To: <20200225212213.22680-1-romain.naour@smile.fr>
-References: <20200225212213.22680-1-romain.naour@smile.fr>
-Message-ID: <20200225232303.1cad5408@windsurf>
+Date: Tue, 25 Feb 2020 23:24:34 +0100
+Subject: [Buildroot] [git commit] package/armadillo: fix license
+Message-ID: <20200225221300.6F42C814E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 25 Feb 2020 22:22:13 +0100
-Romain Naour <romain.naour@smile.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9918596544323bc0bceb1c40363b208962462f36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fedora 30 switched to GCC 9.x. [1]
-> 
-> [1] https://fedoraproject.org/wiki/Changes/GCC9
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+License is Apache-2.0 since version 7.800:
+http://arma.sourceforge.net/license.html
 
-Thanks, but this was not sufficiently tested it seems: on my Fedora
-system with gcc 9.x, BR2_HOST_GCC_VERSION was still 8, and therefore
-BR2_HOST_GCC_AT_LEAST_9 was not "y". This is because the main Buildroot
-Makefile HOSTCC_MAX_VERSION variable needs to be updated as well.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/armadillo/armadillo.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I fixed that up and applied to master. Thanks!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index b5fe403a7a..5d9e3eda57 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -9,7 +9,7 @@ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_DEPENDENCIES = clapack
+ ARMADILLO_INSTALL_STAGING = YES
+-ARMADILLO_LICENSE = MPL-2.0
++ARMADILLO_LICENSE = Apache-2.0
+ ARMADILLO_LICENSE_FILES = LICENSE.txt
+ 
+ $(eval $(cmake-package))
