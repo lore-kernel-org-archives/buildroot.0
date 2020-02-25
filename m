@@ -1,53 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 10:03:47 +0100
-Subject: [Buildroot] [git commit] package/{protobuf,
- python-protobuf}: bump to version 3.11.3
-Message-ID: <20200309140906.CC748821F7@busybox.osuosl.org>
+Date: Tue, 25 Feb 2020 23:14:25 +0100
+Subject: [Buildroot] [git commit] package/pcre2: bump to version 10.34
+Message-ID: <20200309140904.E19A981298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3abd22a28237e2e9a1c62d488e4ae2419380e29
+commit: https://git.buildroot.net/buildroot/commit/?id=040780696288dba6e5c7792454d0007365c05641
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Update indentation of hash file (two spaces)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/pcre2/pcre2.hash | 6 +++---
+ package/pcre2/pcre2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 5ebf99a993..c82ae84f22 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	5abfd5bf11dc0a14bb2303883fa76ecde48a4b447eb2f9f90b84592ce8b8707c  protobuf-cpp-3.11.0.tar.gz
-+sha256	9ffb1fe6091240f2e7bcaca5b65fb19cb7b951ffc9a60d8b2c9d73f89f0e0a51  protobuf-cpp-3.11.3.tar.gz
- sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index ed21f13c41..1531bfffb2 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works, as they share the same
- # version/site variables.
--PROTOBUF_VERSION = 3.11.0
-+PROTOBUF_VERSION = 3.11.3
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index e299b8c760..0ede47ec20 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	a5ef6dccfe29f46168af8ab5194147f24701727a84661611fe80532ba83d3edd  protobuf-python-3.11.0.tar.gz
-+sha256	a9c6c3821ece08f8db55392edbbec4d4a5392fa5df148188309ed6c5a842e3b7  protobuf-python-3.11.3.tar.gz
- sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
+index 03f7eb32db..9b83ccf135 100644
+--- a/package/pcre2/pcre2.hash
++++ b/package/pcre2/pcre2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.33.tar.bz2.sig
+-sha256 35514dff0ccdf02b55bd2e9fa586a1b9d01f62332c3356e379eabb75f789d8aa  pcre2-10.33.tar.bz2
++# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.34.tar.bz2.sig
++sha256  74c473ffaba9e13db6951fd146e0143fe9887852ce73406a03277af1d9b798ca  pcre2-10.34.tar.bz2
+ # Locally computed
+-sha256 982293becea3f18eb4e3ce2145f66638e46d105a27b88418766caf321a684d03  LICENCE
++sha256  982293becea3f18eb4e3ce2145f66638e46d105a27b88418766caf321a684d03  LICENCE
+diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+index 61f41e06ea..cedf4652a8 100644
+--- a/package/pcre2/pcre2.mk
++++ b/package/pcre2/pcre2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PCRE2_VERSION = 10.33
++PCRE2_VERSION = 10.34
+ PCRE2_SITE = https://ftp.pcre.org/pub/pcre
+ PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
+ PCRE2_LICENSE = BSD-3-Clause
