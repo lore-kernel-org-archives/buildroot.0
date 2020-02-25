@@ -1,213 +1,94 @@
-From: Michael Walle <michael@walle.cc>
-Date: Tue, 25 Feb 2020 13:41:36 +0100
-Subject: [Buildroot] CVEs not matching buildroot packages
-In-Reply-To: <20200225112943.0a2dd6e6@windsurf>
-References: <e9268b49623925add8aeac91e8059012@walle.cc>
- <20200225104600.0f295783@windsurf>
- <83c7598984b7c6eb22cc5a5bb11af4fc@walle.cc>
- <20200225112943.0a2dd6e6@windsurf>
-Message-ID: <11370f3cd0ea3d53ee8002c59dc600a9@walle.cc>
+From: Ludovic Desroches <ludovic.desroches@microchip.com>
+Date: Tue, 25 Feb 2020 16:01:49 +0100
+Subject: [Buildroot] external, how to achieve our needs?
+Message-ID: <20200225150149.zvyqbn34swfizg72@M43218.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 2020-02-25 11:29, schrieb Thomas Petazzoni:
-> Hello Michael,
-> 
-> On Tue, 25 Feb 2020 11:19:20 +0100
-> Michael Walle <michael@walle.cc> wrote:
-> 
->> > LINUX_CPE_VENDOR = linux
->> > LINUX_CPE_PRODUCT = linux_kernel
->> 
->> I've left this out on purpose for simplicity ;)
-> 
-> OK.
-> 
->> You could assume that
->> the product name is unique and if its not you could add the vendor.
->> Like for example:
->> 
->>   _CPE = linux_kernel
->>   _CPE = linux:linux_kernel
->> 
->> eg. something like that:
->>   pkg_CPE = [vendor:]product
->> 
->> Maybe it shouldn't be named CPE after all.. But I wanted to avoid
->> this discussion for now, because it doesn't matter for the mapping
->> problem ;)
-> 
-> Sure.
-> 
->> > Yes. With the release-monitoring.org matching, we are able to know if
->> > the match was found thanks to an explicit mapping of the Buildroot
->> > distribution, or if it was found by "luck". That's the difference
->> > between "found by distro" and "found by guess" in
->> > http://autobuild.buildroot.net/stats/.
->> 
->> Mhh, I don't think I can follow you here. Even if the package is found
->> in release-monitoring.org it doesn't map to any CVEs/CPEs, does it?
->> Or should this be an example on already existing fuzzy matching in
->> buildroot?
-> 
-> Of course release-monitoring.org is completely unrelated from
-> CVEs/CPEs. I was mentioning release-monitoring.org as another case in
-> Buildroot where we have an issue with mapping Buildroot package names
-> with package/project names used by another entity.
-> 
-> But now that I think of it, why not rely a bit more on
-> release-monitoring.org after all? We could add a NVD distribution to
-> release-monitoring.org, and use it to store the mapping between
-> release-monitoring.org projects and their corresponding CPE IDs.
-> 
-> Then, Buildroot can query release-monitoring.org to find the CPE IDs.
-> One advantage of this approach is that this CPE ID information in
-> release-monitoring.org is not only useful for Buildroot, but
-> potentially for any other project using release-monitoring.org.
+Hi,
 
-Haha, actually Heiko had the same idea ;) But I'm not in favor of
-relying on too many external stuff and putting in one more layer
-of indirection. But thats just my opinion.
+We are currently using it for linux4sam but it seems it has limitations
+and I would like to know if you have advice to share or the same issue.
+I did a quick search in the mailing list, I found a discussion with few
+answers and patches from Yann for external toolchains, jpeg and openssl.
+Unfortunately, it doesn't cover all our use cases.
 
-But even then you'd have to map the buildroot packages to
-release-monitoring.org URLs (which we have to have anyway, I know ;).
+At the beginning, we forked buildroot in the buildroot-at91 tree. It was
+mostly done to put patches we sent upstream. We release a distribution
+called linux4sam which contains bootloaders, kernel and rootfs. We can't
+wait for the next release of Buildroot to get our patches. It was also
+useful to handle additional defconfigs, buildroot bug fixes and sometimes
+patches that are not accepted upstream.
 
-But.. once release-monitors.org would have CPE mappings, we could just
-pull the information to help creating our own mapping. I mean the CPEs
-won't change anymore and could be easily added to the recipes.
+When the external feature was released, we thought that it should be better
+to rely on Buildroot vanilla and to release only our external. The goal was
+to remove the buildroot-at91 fork. At least, it was the plan...
 
->> > On the other hand, as explained above, the CPE information is not just
->> > a package name, it's also a vendor name. So in practice the default of
->> > using the package name doesn't really work.
->> 
->> correct. unless you only match only parts of the CPE. But yes. If 
->> there
->> would be a variable pkg_CPE which should contain the correct CPE, that
->> would not work with the default.
-> 
-> Right.
-> 
->> > One question is how will you distinguish packages that don't have any
->> > CPE information because no CVE has ever been reported and therefore we
->> > don't know which CPE vendor/product IDs will be used, and packages that
->> > don't have CPE information because nobody has done the work of checking
->> > the NVD database and adding the mapping.
->> 
->> IMHO you cannot distiguish between these two, can you? Only if there
->> would be another CPE database for all software out there. Otherwise if 
->> there
->> is no CPE without and actual CVE, you can't do anything about it.
-> 
-> But then if we cannot distinguish between these two, it means there is
-> no point in forcing to have a <pkg>_CPE variable in each package. We
-> could rely on the default being the package name, as we're doing today,
-> and simply add <pkg>_CPE to override that default.
+Now, we still have buildroot-at91 + buildroot-external-microchip trees. We
+faced several problems which make difficult to only provide an external.
 
-The point here is that in the good case you have the information if 
-actually
-anyone looked into it; eg. changed PPPD_CPE from pppd (the default) to
-PPPD_CPE = point-to-point_protocol. So a script can find out what 
-packages
-are not looked at. And yes, in the case there is no CPE yet it would be 
-the
-same as you didn't looked at it yet. But thats another problem IMHO. Eg 
-you
-could tag a package with a date you looked at it last time and found no 
-CPE.
+One of the latest issue is we are adding support for a GPU in cairo and
+this work is not upstream yet. It involves patching cairo sources
+(that's not a big deal) but also to modify cairo.mk to add dependencies and
+new configure options. I discussed with Thomas who helped me to achieve it
+with some tricks. I added a cairo_microchip package, I had to patch some
+libraries to link with this version of cairo and use the external.mk to
+force extra dependencies for cairo and pango. Honestly, even if it works,
+I am not pleased with the solution. It will be so much easier and cleaner
+to do this in buildroot-at91 instead of buildroot-external-microchip. We
+discussed again, internally, about the external and the fork of buildroot
+but we have different opinions. I would like to emphasize that recent
+changes in buildroot make us think that it won't be easy to get rid of
+buildroot-at91: devmem2 deprecated, rgnd which increases the boot time
+since it uses the lib jitterentropy, curl library name change and others.
 
-You might have both worlds. Eg. have the default and tell the script if
-someone looked at it: allow setting the "pkg_CPE = pkg" in the .mk (eg.
-the same value as the default). So you can find out in which zone you 
-are.
-If you have pkg_CPE in the .mk you're either in the red or green zone. 
-If
-you don't have the pkg_CPE variable, then the default applies and you're 
-in
-the yellow zone (even if a CVE applies!).
+My feeling is that the external is not flexible enough to allow us to
+remove buildroot-at91. Is it planned to offer a way to modify package
+configs and makefiles or is it totally against Buildroot philosophy? I
+think this is a strength of the Yocto layers but it's also a weakness as
+it becomes difficult to know what is built and how. I also wonder if we can
+have one version of the external to support several versions of buildroot
+or if we'll need to tag it according to the version of buildroot it has
+been tested against. Do we put too much hope in the external?
 
-> Your initial statement was:
-> 
->>> BUT in my optinion there MUST NOT be a default value for this 
->>> mapping,
->>> because then you cannot distiguish between a package which just
->>> uses the default name and a package which wasn't ever touched
->>> regarding CVEs.
-> 
-> However, we will anyway never be able to distinguish between a package
-> that does not have a <pkg>_CPE variable because there is no known CPE
-> ID for this package, or because nobody did the effort.
+If I try to summarize our options with their pros and cons:
 
-Correct.
+- buildroot fork:
+  - pros:
+    - one tree
+    - full control, can do whatever we want
+  - cons:
+    - fork
+    - need to rebase patches for new releases
+    - may not be able to keep the pace of buildroot releases
 
->> So the
->> package would still be unknown. A counterexample, let's assume you add
-> 
->> 
->>   pkg_CPE = <unknown>
->> 
->> to indicate you've manually checked that there is currently no CVE
->> matching this package and thus no CPE exists. Now, if there is 
->> actually
->> a CVE/CPE the recipe won't be updated or worse the CVE matching would
->> report nothing.
-> 
-> Indeed, that makes the whole <pkg>_CPE = <unknown> idea a bit useless.
-> 
->> So I don't think you can do anything about that other than just saying
->> we don't know anything about this package.
->> 
->> > Indeed, in our 2500+ packages, I'm pretty sure a significant number of
->> > them never had any CVE, and therefore we have no idea what their CPE ID
->> > would be.
->> >
->> > Any idea on this ?
->> 
->> Well I'd imaging three states in the stats:
->>   - green, no CVE applies, we know the CPE
->>   - red, CVE applies, we know the CPE
->>   - yellow, CPE unknown, for whatever reason
+- buildroot external:
+  - pros:
+    - one tree
+    - not dependent on buildroot version (in theory) so no rebase to do
+  - cons:
+    - can't modify buildroot package makefiles, only the source code
+    - can't quickly solve bugs in buildroot
+    - may have dependency on the buildroot version
 
-So taking the default from above we'd also have forth one:
-- yellow, CPE guessed, CVE applies.
+- buildroot fork + external:
+  - pros:
+    - full control, can do whatever we want
+    - less patches to rebase (only the ones on top of buildroot)
+  - cons:
+    - fork
+    - two trees
+    - may not be able to keep the pace of buildroot releases
+    - may have buildroot fork with no patches on top of it sometime
 
->> If you're right with "a significant number of them never had any CVE",
->> then many would be yellow. But I don't see any drawback on this. At 
->> the
->> of the day what really matters are the packages in the red category.
-> 
-> No, because the yellow category could very well be "there are some
-> serious CVEs potentially affecting some packages, but nobody has added
-> the CPE ID information for the moment". So in the end, this yellow zone
-> is as dangerous as the red zone.
 
-Correct, but it would be an easy step to convert a package from the 
-yellow
-zone to the red zone. Eg. just verify that this CVE maps to the package,
-then add pkg_CPE to the recipe. So ultimately there shouldn't be a CVE
-matching in the yellow zone. Only packages where no CVEs match. So for
-packages which have a CVE and the "CPE" matches the buildroot package
-name, this would be an easy task.
+If you have any suggestions, about improvements for Buildroot or the way we
+manage our Buildroot offer, I would be happy to hear them.
 
-Going through all the other packages which are yellow but no CVE matches
-is a more daunting task. And yes, if no CPE is found for now, this
-information should also be stored somewhere.
 
->> And of course, how we can get as many packages as possibe from yellow
->> to green/red.
->> 
->> What could also be done is a seperate script which loops over the CVEs
->> and prints if no mapping to a buildroot package is found. So someone
->> could look at it and say, oh this CVE looks like it should match one
->> of our packages.
-> 
-> This is going to be horrible: the NVD database contains CVEs for
-> zillions of proprietary products that are completely irrelevant to
-> Buildroot. Looking through all of this data is going to be really
-> atrocious.
+Regards,
 
-I see. I guess there is no matching for "!= commercial"? ;)
-
--michael
+Ludovic
