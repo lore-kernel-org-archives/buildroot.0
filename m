@@ -1,55 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 25 Feb 2020 18:47:57 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/kvm-unit-tests: drop
- x86_64 workaround
-In-Reply-To: <20200225164214.122934-1-fontaine.fabrice@gmail.com>
-References: <20200225164214.122934-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200225164757.m5khutxpbnm57voj@sapphire.tkos.co.il>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 25 Feb 2020 17:54:19 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/drbd-utils: bump to version
+ 9.12.0
+Message-ID: <20200225165419.126220-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Update indentation of hash file (two spaces)
 
-On Tue, Feb 25, 2020 at 05:42:14PM +0100, Fabrice Fontaine wrote:
-> This workaround is not needed since commit
-> 0788e921f961e36a50a94f8bb98f7eb75b312245 which disables stack-protector
-> for all architectures as intended by upstream
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/kvm-unit-tests/kvm-unit-tests.mk | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-> index 2637066701..519063406e 100644
-> --- a/package/kvm-unit-tests/kvm-unit-tests.mk
-> +++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-> @@ -35,13 +35,7 @@ KVM_UNIT_TESTS_CONF_OPTS =\
->  # compiler. However, for x86-64, we use the host compiler, as
->  # kvm-unit-tests builds 32 bit code, which Buildroot toolchains for
->  # x86-64 cannot do.
-> -ifeq ($(BR2_x86_64),y)
-> -# Arch Linux adds -fstack-protector even when building with -ffreestanding, but
-> -# it doesn't link with the stack-protector library when -nostdlib is passed,
-> -# which leads to a link error. Therefore, disable it explicitly to work around
-> -# this bug in Arch Linux. https://bugs.archlinux.org/task/64270
-> -KVM_UNIT_TESTS_MAKE_OPTS += EXTRA_CFLAGS=-fno-stack-protector
-> -else
-> +ifneq ($(BR2_x86_64),y)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/drbd-utils/drbd-utils.hash | 4 ++--
+ package/drbd-utils/drbd-utils.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Positive logic is usually preferred:
-
-  ifeq ($(BR2_x86_64),)
-
-baruch
-
->  KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
->  endif
-
+diff --git a/package/drbd-utils/drbd-utils.hash b/package/drbd-utils/drbd-utils.hash
+index 884d6790ec..79914af508 100644
+--- a/package/drbd-utils/drbd-utils.hash
++++ b/package/drbd-utils/drbd-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 e07d156ce6e3d93ac1b69fa9bf8695038e6e5edfb2c80c91a1098d1477478ecb  drbd-utils-9.11.0.tar.gz
+-sha256 1ca3e8f71b7de618968e7ea9fe47822d9e704dc476aef8544033abedec355225  COPYING
++sha256  16a6d000aac7f746419839a2c2afcb71fa8779fe0b5898e967767791cb8f4bc7  drbd-utils-9.12.0.tar.gz
++sha256  1ca3e8f71b7de618968e7ea9fe47822d9e704dc476aef8544033abedec355225  COPYING
+diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
+index 55ac9d9dc0..a24cc4ade6 100644
+--- a/package/drbd-utils/drbd-utils.mk
++++ b/package/drbd-utils/drbd-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DRBD_UTILS_VERSION = 9.11.0
++DRBD_UTILS_VERSION = 9.12.0
+ DRBD_UTILS_SITE = http://www.linbit.com/downloads/drbd/utils
+ DRBD_UTILS_LICENSE = GPL-2.0+
+ DRBD_UTILS_LICENSE_FILES = COPYING
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.25.0
