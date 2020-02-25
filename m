@@ -1,183 +1,62 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 25 Feb 2020 09:25:48 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/frr: new package
-In-Reply-To: <20200225025850.17209-3-vadim4j@gmail.com>
-References: <20200225025850.17209-1-vadim4j@gmail.com>
- <20200225025850.17209-3-vadim4j@gmail.com>
-Message-ID: <CAEyMn7ZxLyN6meBXH37RKFpQNwbkeANN=UTPJbLOXcVETjeSoA@mail.gmail.com>
+From: Michael Walle <michael@walle.cc>
+Date: Tue, 25 Feb 2020 09:58:27 +0100
+Subject: [Buildroot] CVEs not matching buildroot packages
+Message-ID: <e9268b49623925add8aeac91e8059012@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vadim and all,
+Hi,
 
-Am Di., 25. Feb. 2020 um 03:59 Uhr schrieb Vadim Kochan <vadim4j@gmail.com>:
->
-> FRR is free software that implements and manages various IPv4 and IPv6
-> routing protocols. It runs on nearly all distributions of Linux and BSD
-> as well as Solaris and supports all modern CPU architectures.
->
-> FRR currently supports the following protocols:
->
->     BGP
->     OSPFv2
->     OSPFv3
->     RIPv1
->     RIPv2
->     RIPng
->     IS-IS
->     PIM-SM/MSDP
->     LDP
->     BFD
->     Babel
->     PBR
->     OpenFabric
->     VRRP
->     EIGRP (alpha)
->     NHRP (alpha)
->
-> Some not-needed features were disabled to minimize package dependencies:
->
->     - POSIX capabilities
->     - RPKi
->
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
->  DEVELOPERS            |  1 +
->  package/Config.in     |  1 +
->  package/frr/Config.in | 25 +++++++++++++++
->  package/frr/S50frr    | 46 ++++++++++++++++++++++++++
->  package/frr/frr.hash  |  2 ++
->  package/frr/frr.mk    | 75 +++++++++++++++++++++++++++++++++++++++++++
->  6 files changed, 150 insertions(+)
->  create mode 100644 package/frr/Config.in
->  create mode 100644 package/frr/S50frr
->  create mode 100644 package/frr/frr.hash
->  create mode 100644 package/frr/frr.mk
->
+Yesterday, Heiko noticed that CVE-2020-8597 doesn't match the
+pppd package, because the product name doesn't match the package
+name.
 
-[SNIP]
+So apparently there need to be a mapping between these two. But
+that comes with some caveats. Let's assume there would be a
+pkg_NVD_CPE variable. One could think of having a default value
+of this variable, eg by default "pkg_NVD_CPE = pkg". [This is,
+as far as I understand it, the current behaviour, because there
+is no mapping right now; correct me if I'm wrong]. BUT in my
+optinion there MUST NOT be a default value for this mapping,
+because then you cannot distiguish between a package which just
+uses the default name and a package which wasn't ever touched
+regarding CVEs. And this is really bad for statistics, eg you
+can't even say we have this many packages checked for CVEs,
+because you don't know which packages actually has a correct
+mapping.
 
-> diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-> new file mode 100644
-> index 0000000000..448aa56690
-> --- /dev/null
-> +++ b/package/frr/frr.mk
-> @@ -0,0 +1,75 @@
-> +################################################################################
-> +#
-> +# frr
-> +#
-> +################################################################################
-> +
-> +FRR_VERSION = 7.3
-> +FRR_SOURCE = frr-$(FRR_VERSION).tar.gz
+So if a pkg_NVD_CPE variable is introduced this would need to
+done manually per package; which would mean a lot of work. Of
+course there could be some scripts which check if there was ever
+a CVE for package x and x is a buildroot package. That would be
+a strong indication that this is a correct mapping. There could
+also be a checkpackage script which checks if pkg has no
+pkg_NVD_CPE variable, but there is a CVE for that package name.
 
-You can remove FRR_SOURCE because it is not needed. Buildroot will
-automatically set this to "frr-$(FRR_VERSION).tar.gz".
+Then a statistics script could gather:
+   (1) how many packages don't have a mapping, eg. the CVE status
+       is unknown. [package has no pkg_NVD_CPE]
+   (2) how many packages are not affected by a CVE [package has
+       pkg_NVD_CPE and doesn't match any CVEs]
+   (3) how many packages are affected by a CVE [package has
+       pkg_NVD_CPE and doesn't match any CVEs]
 
-> +FRR_SITE = https://github.com/FRRouting/frr/archive
-> +FRR_LICENSE = GPL-2.0
-> +FRR_LICENSE_FILES = COPYING
-> +FRR_AUTORECONF = YES
-> +
-> +FRR_DEPENDENCIES = host-frr readline json-c \
-> +       libyang libnl c-ares
-> +
-> +HOST_FRR_DEPENDENCIES = host-flex host-bison host-python
-> +
-> +FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
-> +       --sysconfdir=/etc/frr \
-> +       --localstatedir=/var/run/frr \
-> +       --with-moduledir=/usr/lib/frr/modules \
-> +       --enable-configfile-mask=0640 \
-> +       --enable-logfile-mask=0640 \
-> +       --enable-multipath=256 \
-> +       --disable-ospfclient \
-> +       --enable-shell-access \
-> +       --enable-user=frr \
-> +       --enable-group=frr \
-> +       --enable-vty-group=frrvty \
-> +       --disable-exampledir \
-> +       --disable-capabilities \
-> +       --enable-fpm
-> +
-> +HOST_FRR_CONF_OPTS = --enable-clippy-only
-> +
-> +define FRR_RUN_BOOTSTRAP
-> +       (cd $(@D) && PATH=$(BR_PATH) ./bootstrap.sh)
-> +endef
-> +FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
-> +HOST_FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
+To minimize efforts in the beginning (1) could be split into
+  (1a) how many packages don't have a mapping and no CVE matches
+       the package name, therefore the status is still unknown
+       [package has no pkg_NVD_CPE and there is no CVE matching
+       the package name]
+  (1b) how many packages don't have a mapping but there is a CVE
+       matching the package name. Thus there is a high chance
+       this package is actually affected by this CVE, but this
+       is just a strong indication and would need further manual
+       steps, eg. adding pkg_NVE_CPE to the package .mk.
 
-Do we realy need to call the bootstrap.sh? The only thing done here is
-to call "autoreconf -i". This is automatically called by buildroot
-when setting "FRR_AUTORECONF = YES".
+So packages could incrementally moved from (1a) to (1b).
 
-@@ -34,12 +33,6 @@ FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
+Any comments? ;)
 
- HOST_FRR_CONF_OPTS = --enable-clippy-only
-
--define FRR_RUN_BOOTSTRAP
--       (cd $(@D) && PATH=$(BR_PATH) ./bootstrap.sh)
--endef
--FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
--HOST_FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
--
- define HOST_FRR_INSTALL_CMDS
-        $(INSTALL) -D -m 0755 $(@D)/lib/clippy $(HOST_DIR)/bin/clippy
- endef
-
-
-> +
-> +define HOST_FRR_INSTALL_CMDS
-> +       $(INSTALL) -D -m 0755 $(@D)/lib/clippy $(HOST_DIR)/bin/clippy
-> +endef
-> +
-> +define FRR_INSTALL_CONFIG_FILES
-> +       $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/frr
-> +
-> +       $(foreach f,daemons daemons.conf frr.conf vtysh.conf support_bundle_commands.conf,\
-> +               $(INSTALL) -D -m 0640 $(@D)/tools/etc/frr/$(f) \
-> +               $(TARGET_DIR)/etc/frr/$(f)
-> +       )
-> +endef
-> +FRR_POST_INSTALL_TARGET_HOOKS += FRR_INSTALL_CONFIG_FILES
-> +
-> +define FRR_PERMISSIONS
-> +       /etc/frr/daemons f 640 frr frr - - - - -
-> +       /etc/frr/daemons.conf f 640 frr frr - - - - -
-> +       /etc/frr/frr.conf f 640 frr frr - - - - -
-> +       /etc/frr/vtysh.conf f 640 frr frrvty - - - - -
-> +       /etc/frr/support_bundle_commands.conf f 640 frr frr
-> +endef
-> +
-> +define FRR_USERS
-> +       frr -1 frr -1 * /var/run/frr - frrvty FRR user priv
-> +endef
-> +
-> +define FRR_INSTALL_INIT_SYSV
-> +       $(INSTALL) -D -m 755 $(FRR_PKGDIR)/S50frr \
-> +               $(TARGET_DIR)/etc/init.d/S50frr
-> +endef
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> --
-> 2.17.1
->
-
-Also some warnings from "utils/check-package package/frr/*":
-
-package/frr/Config.in:16: help text: <tab><2 spaces><62 chars>
-(http://nightly.buildroot.org/#writing-rules-config-in)
-package/frr/frr.mk:8: remove default value of _SOURCE variable
-(http://nightly.buildroot.org/#generic-package-reference)
-102 lines processed
-2 warnings generated
-
-BR
---
-Heiko
+-michael
