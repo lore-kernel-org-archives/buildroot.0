@@ -1,118 +1,58 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Mon, 24 Feb 2020 23:43:59 -0300
+From: Carlos Santos <unixmania@gmail.com>
+Date: Mon, 24 Feb 2020 23:54:16 -0300
 Subject: [Buildroot] [PATCH] package/eudev: add openrc init support
-Message-ID: <20200225024359.27220-1-unixmania@gmail.com>
+In-Reply-To: <20200224223809.0d780063@windsurf>
+References: <20200224205255.9138-1-unixmania@gmail.com>
+ <20200224223809.0d780063@windsurf>
+Message-ID: <CAJ4jsaf6gCoLbc3U6=Haf0_uiGSXFfhx1nni7tzsARM1cvuv8w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+On Mon, Feb 24, 2020 at 6:38 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Mon, 24 Feb 2020 17:52:55 -0300
+> unixmania at gmail.com wrote:
+>
+> > From: Carlos Santos <unixmania@gmail.com>
+> >
+> > Use the Gentoo scripts for openrc.
+> >
+> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+>
+> Thanks! Glad to see you're picking up some of the OpenRC effort.
+>
+> > +ifeq ($(BR2_INIT_OPENRC),y)
+> > +EUDEV_OPENRC_INIT_VERSION = 33
+> > +EUDEV_OPENRC_INIT = udev-gentoo-scripts-$(EUDEV_OPENRC_INIT_VERSION).tar.bz2
+> > +EUDEV_EXTRA_DOWNLOADS = https://gitweb.gentoo.org/proj/udev-gentoo-scripts.git/snapshot/$(EUDEV_OPENRC_INIT)
+> > +define EUDEV_OPENRC_INIT_EXTRACT
+> > +     $(call suitable-extractor,$(notdir $(EUDEV_OPENRC_INIT))) \
+> > +             $(EUDEV_DL_DIR)/$(notdir $(EUDEV_OPENRC_INIT)) | \
+> > +             $(TAR) -C $(@D) $(TAR_OPTIONS) -
+> > +endef
+> > +EUDEV_POST_EXTRACT_HOOKS += EUDEV_OPENRC_INIT_EXTRACT
+> > +endif
+>
+> I think I would really prefer this to be handled by a separate package,
+> because that's really what you're doing here. So let's have a
+> udev-gentoo-scripts package, which eudev can select when OpenRC is the
+> init system. I suppose there is no need for a build-time dependency
+> between the two, so just selecting at the Config.in level is probably
+> enough.
+>
+> What do you think ?
 
-Add a udev-gentoo-scripts subpackage with the Gentoo scripts for openrc
-and select it when BR2_INIT_OPENRC=y.
+I sent a second patch but quite frankly I don't think it's worthwhile
+to add a packge.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
-I think this is worst than https://patchwork.ozlabs.org/patch/1243458/
----
- package/eudev/Config.in                       |  3 +++
- package/eudev/eudev.mk                        |  7 +++++++
- package/eudev/udev-gentoo-scripts/Config.in   |  6 ++++++
- .../udev-gentoo-scripts.hash                  |  3 +++
- .../udev-gentoo-scripts.mk                    | 20 +++++++++++++++++++
- 5 files changed, 39 insertions(+)
- create mode 100644 package/eudev/udev-gentoo-scripts/Config.in
- create mode 100644 package/eudev/udev-gentoo-scripts/udev-gentoo-scripts.hash
- create mode 100644 package/eudev/udev-gentoo-scripts/udev-gentoo-scripts.mk
+BTW, that hack required to prevent installing the sysvinit script in
+eudev.mk is ugly.
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index b1d2f37a72..ef5da7dfb1 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_EUDEV
- 	depends on BR2_USE_WCHAR # needs C99 compiler
- 	depends on !BR2_STATIC_LIBS # kmod
- 	select BR2_PACKAGE_HAS_UDEV
-+	select BR2_PACKAGE_UDEV_GENTOO_SCRIPTS if BR2_INIT_OPENRC
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_KMOD
-@@ -42,3 +43,5 @@ comment "eudev needs eudev /dev management"
- comment "eudev needs a toolchain w/ wchar, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+
-+source package/eudev/udev-gentoo-scripts/Config.in
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 99b5befd09..ff06ae7d3b 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -48,6 +48,11 @@ define EUDEV_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
- endef
- 
-+# Avoid installing S10udev
-+define EUDEV_INSTALL_INIT_OPENRC
-+	true
-+endef
-+
- # Required by default rules for input devices
- define EUDEV_USERS
- 	- - input -1 * - - - Input device group
-@@ -92,3 +97,5 @@ HOST_EUDEV_ROOTFS_PRE_CMD_HOOKS += HOST_EUDEV_RM_HWDB_SRC
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-+
-+include package/eudev/udev-gentoo-scripts/udev-gentoo-scripts.mk
-diff --git a/package/eudev/udev-gentoo-scripts/Config.in b/package/eudev/udev-gentoo-scripts/Config.in
-new file mode 100644
-index 0000000000..9d6944354d
---- /dev/null
-+++ b/package/eudev/udev-gentoo-scripts/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_UDEV_GENTOO_SCRIPTS
-+	bool
-+	depends on BR2_PACKAGE_EUDEV
-+	depends on BR2_INIT_OPENRC
-+	help
-+	  Init scripts for eudev.
-diff --git a/package/eudev/udev-gentoo-scripts/udev-gentoo-scripts.hash b/package/eudev/udev-gentoo-scripts/udev-gentoo-scripts.hash
-new file mode 100644
-index 0000000000..60563baae0
---- /dev/null
-+++ b/package/eudev/udev-gentoo-scripts/udev-gentoo-scripts.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 b206f72c93cd2e51ed59061931918a9c23c3c1f7e6caffacc9d4f8915a42c30a  udev-gentoo-scripts-33.tar.bz2
-+sha256 329f95829088b95650b9012ae688f09baa1637985425a7964d33683363f48702  init.d/udev-settle
-diff --git a/package/eudev/udev-gentoo-scripts/udev-gentoo-scripts.mk b/package/eudev/udev-gentoo-scripts/udev-gentoo-scripts.mk
-new file mode 100644
-index 0000000000..c8a642ece3
---- /dev/null
-+++ b/package/eudev/udev-gentoo-scripts/udev-gentoo-scripts.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# udev-gentoo-scripts
-+#
-+################################################################################
-+
-+UDEV_GENTOO_SCRIPTS_VERSION = 33
-+UDEV_GENTOO_SCRIPTS_SOURCE = udev-gentoo-scripts-$(UDEV_GENTOO_SCRIPTS_VERSION).tar.bz2
-+UDEV_GENTOO_SCRIPTS_SITE = https://gitweb.gentoo.org/proj/udev-gentoo-scripts.git/snapshot
-+UDEV_GENTOO_SCRIPTS_LICENSE = GPL-2.0
-+UDEV_GENTOO_SCRIPTS_LICENSE_FILES = init.d/udev-settle
-+
-+define UDEV_GENTOO_SCRIPTS_INSTALL_INIT_OPENRC
-+	$(MAKE1) -C $(@D) install DESTDIR=$(TARGET_DIR)
-+	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/runlevels/sysinit
-+	ln -s -f /etc/init.d/udev-settle /etc/init.d/udev-trigger \
-+		$(TARGET_DIR)/etc/runlevels/sysinit
-+endef
-+
-+$(eval $(generic-package))
 -- 
-2.18.2
+Carlos Santos <unixmania@gmail.com>
