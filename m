@@ -1,58 +1,90 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Mon, 24 Feb 2020 23:54:16 -0300
-Subject: [Buildroot] [PATCH] package/eudev: add openrc init support
-In-Reply-To: <20200224223809.0d780063@windsurf>
-References: <20200224205255.9138-1-unixmania@gmail.com>
- <20200224223809.0d780063@windsurf>
-Message-ID: <CAJ4jsaf6gCoLbc3U6=Haf0_uiGSXFfhx1nni7tzsARM1cvuv8w@mail.gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue, 25 Feb 2020 04:58:48 +0200
+Subject: [Buildroot] [PATCH v2 0/2] add frr package
+Message-ID: <20200225025850.17209-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 24, 2020 at 6:38 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Mon, 24 Feb 2020 17:52:55 -0300
-> unixmania at gmail.com wrote:
->
-> > From: Carlos Santos <unixmania@gmail.com>
-> >
-> > Use the Gentoo scripts for openrc.
-> >
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
->
-> Thanks! Glad to see you're picking up some of the OpenRC effort.
->
-> > +ifeq ($(BR2_INIT_OPENRC),y)
-> > +EUDEV_OPENRC_INIT_VERSION = 33
-> > +EUDEV_OPENRC_INIT = udev-gentoo-scripts-$(EUDEV_OPENRC_INIT_VERSION).tar.bz2
-> > +EUDEV_EXTRA_DOWNLOADS = https://gitweb.gentoo.org/proj/udev-gentoo-scripts.git/snapshot/$(EUDEV_OPENRC_INIT)
-> > +define EUDEV_OPENRC_INIT_EXTRACT
-> > +     $(call suitable-extractor,$(notdir $(EUDEV_OPENRC_INIT))) \
-> > +             $(EUDEV_DL_DIR)/$(notdir $(EUDEV_OPENRC_INIT)) | \
-> > +             $(TAR) -C $(@D) $(TAR_OPTIONS) -
-> > +endef
-> > +EUDEV_POST_EXTRACT_HOOKS += EUDEV_OPENRC_INIT_EXTRACT
-> > +endif
->
-> I think I would really prefer this to be handled by a separate package,
-> because that's really what you're doing here. So let's have a
-> udev-gentoo-scripts package, which eudev can select when OpenRC is the
-> init system. I suppose there is no need for a build-time dependency
-> between the two, so just selecting at the Config.in level is probably
-> enough.
->
-> What do you think ?
+FRR is free software that implements and manages various IPv4 and IPv6
+routing protocols. It runs on nearly all distributions of Linux and BSD
+as well as Solaris and supports all modern CPU architectures.
 
-I sent a second patch but quite frankly I don't think it's worthwhile
-to add a packge.
+FRR currently supports the following protocols:
 
-BTW, that hack required to prevent installing the sysvinit script in
-eudev.mk is ugly.
+    BGP
+    OSPFv2
+    OSPFv3
+    RIPv1
+    RIPv2
+    RIPng
+    IS-IS
+    PIM-SM/MSDP
+    LDP
+    BFD
+    Babel
+    PBR
+    OpenFabric
+    VRRP
+    EIGRP (alpha)
+    NHRP (alpha)
+
+FRR package requires LYD_PRIV option to be enabled in
+libyang package, so enabled it in separate patch if
+frr is selected.
+
+Disabled some options for frr package like:
+
+    - POSIX capabilities
+    - RPKi
+
+v2:
+    1) fixed TAB indent on multiline var assignment
+
+    2) fixed ABC ordering
+
+    3) add missing 'depends on' from selected libs by frr
+
+    4) directly call /usr/sbin/frrinit.sh S50frr init script
+       w/o start-stop-daemon tool, frr cares of daemons stopping/
+       running.
+
+    5) Removed not-needed empty daemons *.conf files installation,
+       it was taken from building instructions in frr docs, but
+       really it is not required.
+
+    6) Use 0644 mask for conf files.
+
+    7) Enable LYD_PRIV option for libyang only if frr selected.
+
+    8) Drop patch with rtrlib package which is needed only for
+       RPKi support which is disabled by default.
+
+    9) Add AUTORECONF for bootstrap invocation.
+
+    10) Get rid of manual binaries target invocation. After frr.mk
+        cleanup it starts to work.
+
+    11) Install var/log/frr and /var/run/frr at runtime from init.
+
+Vadim Kochan (2):
+  package/libyang: enable LYD_PRIV option for frr package
+  package/frr: new package
+
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/frr/Config.in      | 25 +++++++++++++
+ package/frr/S50frr         | 46 +++++++++++++++++++++++
+ package/frr/frr.hash       |  2 +
+ package/frr/frr.mk         | 75 ++++++++++++++++++++++++++++++++++++++
+ package/libyang/libyang.mk |  4 ++
+ 7 files changed, 154 insertions(+)
+ create mode 100644 package/frr/Config.in
+ create mode 100644 package/frr/S50frr
+ create mode 100644 package/frr/frr.hash
+ create mode 100644 package/frr/frr.mk
 
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.17.1
