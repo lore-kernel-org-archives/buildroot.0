@@ -1,160 +1,71 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Tue, 25 Feb 2020 13:47:52 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/frr: new package
-In-Reply-To: <CAEyMn7ZxLyN6meBXH37RKFpQNwbkeANN=UTPJbLOXcVETjeSoA@mail.gmail.com>
-References: <20200225025850.17209-1-vadim4j@gmail.com>
- <20200225025850.17209-3-vadim4j@gmail.com>
- <CAEyMn7ZxLyN6meBXH37RKFpQNwbkeANN=UTPJbLOXcVETjeSoA@mail.gmail.com>
-Message-ID: <CAMw6YJJaxipADUtTrtKHWaNCs+FiUevv=kwww+b9eu102A3JFw@mail.gmail.com>
+From: Alexey Lukyanchuk <skif@skif-web.ru>
+Date: Tue, 25 Feb 2020 15:29:13 +0300
+Subject: [Buildroot] [PATCH 1/1] package/aufs: add support for linux 5.x
+Message-ID: <20200225122913.8255-1-skif@skif-web.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 25, 2020 at 10:26 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> Hi Vadim and all,
->
-> Am Di., 25. Feb. 2020 um 03:59 Uhr schrieb Vadim Kochan <vadim4j@gmail.com>:
-> >
-> > FRR is free software that implements and manages various IPv4 and IPv6
-> > routing protocols. It runs on nearly all distributions of Linux and BSD
-> > as well as Solaris and supports all modern CPU architectures.
-> >
-> > FRR currently supports the following protocols:
-> >
-> >     BGP
-> >     OSPFv2
-> >     OSPFv3
-> >     RIPv1
-> >     RIPv2
-> >     RIPng
-> >     IS-IS
-> >     PIM-SM/MSDP
-> >     LDP
-> >     BFD
-> >     Babel
-> >     PBR
-> >     OpenFabric
-> >     VRRP
-> >     EIGRP (alpha)
-> >     NHRP (alpha)
-> >
-> > Some not-needed features were disabled to minimize package dependencies:
-> >
-> >     - POSIX capabilities
-> >     - RPKi
-> >
-> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> > ---
-> >  DEVELOPERS            |  1 +
-> >  package/Config.in     |  1 +
-> >  package/frr/Config.in | 25 +++++++++++++++
-> >  package/frr/S50frr    | 46 ++++++++++++++++++++++++++
-> >  package/frr/frr.hash  |  2 ++
-> >  package/frr/frr.mk    | 75 +++++++++++++++++++++++++++++++++++++++++++
-> >  6 files changed, 150 insertions(+)
-> >  create mode 100644 package/frr/Config.in
-> >  create mode 100644 package/frr/S50frr
-> >  create mode 100644 package/frr/frr.hash
-> >  create mode 100644 package/frr/frr.mk
-> >
->
-> [SNIP]
->
-> > diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-> > new file mode 100644
-> > index 0000000000..448aa56690
-> > --- /dev/null
-> > +++ b/package/frr/frr.mk
-> > @@ -0,0 +1,75 @@
-> > +################################################################################
-> > +#
-> > +# frr
-> > +#
-> > +################################################################################
-> > +
-> > +FRR_VERSION = 7.3
-> > +FRR_SOURCE = frr-$(FRR_VERSION).tar.gz
->
-> You can remove FRR_SOURCE because it is not needed. Buildroot will
-> automatically set this to "frr-$(FRR_VERSION).tar.gz".
->
-> > +FRR_SITE = https://github.com/FRRouting/frr/archive
-> > +FRR_LICENSE = GPL-2.0
-> > +FRR_LICENSE_FILES = COPYING
-> > +FRR_AUTORECONF = YES
-> > +
-> > +FRR_DEPENDENCIES = host-frr readline json-c \
-> > +       libyang libnl c-ares
-> > +
-> > +HOST_FRR_DEPENDENCIES = host-flex host-bison host-python
-> > +
-> > +FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
-> > +       --sysconfdir=/etc/frr \
-> > +       --localstatedir=/var/run/frr \
-> > +       --with-moduledir=/usr/lib/frr/modules \
-> > +       --enable-configfile-mask=0640 \
-> > +       --enable-logfile-mask=0640 \
-> > +       --enable-multipath=256 \
-> > +       --disable-ospfclient \
-> > +       --enable-shell-access \
-> > +       --enable-user=frr \
-> > +       --enable-group=frr \
-> > +       --enable-vty-group=frrvty \
-> > +       --disable-exampledir \
-> > +       --disable-capabilities \
-> > +       --enable-fpm
-> > +
-> > +HOST_FRR_CONF_OPTS = --enable-clippy-only
-> > +
-> > +define FRR_RUN_BOOTSTRAP
-> > +       (cd $(@D) && PATH=$(BR_PATH) ./bootstrap.sh)
-> > +endef
-> > +FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
-> > +HOST_FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
->
-> Do we realy need to call the bootstrap.sh? The only thing done here is
-> to call "autoreconf -i". This is automatically called by buildroot
-> when setting "FRR_AUTORECONF = YES".
->
-> @@ -34,12 +33,6 @@ FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
->
->  HOST_FRR_CONF_OPTS = --enable-clippy-only
->
-> -define FRR_RUN_BOOTSTRAP
-> -       (cd $(@D) && PATH=$(BR_PATH) ./bootstrap.sh)
-> -endef
-> -FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
-> -HOST_FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
-> -
->  define HOST_FRR_INSTALL_CMDS
->         $(INSTALL) -D -m 0755 $(@D)/lib/clippy $(HOST_DIR)/bin/clippy
->  endef
->
->
-[SNIP]
-...
-Thanks! all your suggestions works!
-...
-[SNIP]
-> > +
-> > +$(eval $(autotools-package))
-> > +$(eval $(host-autotools-package))
-> > --
-> > 2.17.1
-> >
->
-> Also some warnings from "utils/check-package package/frr/*":
->
-> package/frr/Config.in:16: help text: <tab><2 spaces><62 chars>
-> (http://nightly.buildroot.org/#writing-rules-config-in)
-> package/frr/frr.mk:8: remove default value of _SOURCE variable
-> (http://nightly.buildroot.org/#generic-package-reference)
-> 102 lines processed
-> 2 warnings generated
->
-> BR
-> --
-> Heiko
+Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+---
+ linux/Config.ext.in  | 9 ++++++++-
+ package/aufs/aufs.mk | 2 ++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 14140d352c..a66b28a381 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -102,7 +102,8 @@ choice
+ 	help
+ 	  Select the major series of this version. This must match the
+ 	  major version of your kernel (e.g. for kernels 3.x, select
+-	  aufs3.x; for kernels 4.x, select aufs4.x).
++	  aufs3.x; for kernels 4.x, select aufs4.x; for kernels 5.x, 
++	  select aufs5.x ).
+ 
+ 	  Note: neither aufs1.x nor aufs2.x (both for kernels older than
+ 	  3.x) are supported.
+@@ -113,12 +114,16 @@ config BR2_LINUX_KERNEL_EXT_AUFS_SERIES_3
+ config BR2_LINUX_KERNEL_EXT_AUFS_SERIES_4
+ 	bool "aufs4.x"
+ 
++config BR2_LINUX_KERNEL_EXT_AUFS_SERIES_5
++	bool "aufs5.x"
++
+ endchoice
+ 
+ config BR2_LINUX_KERNEL_EXT_AUFS_SERIES
+ 	int
+ 	default 3 if BR2_LINUX_KERNEL_EXT_AUFS_SERIES_3
+ 	default 4 if BR2_LINUX_KERNEL_EXT_AUFS_SERIES_4
++	default 5 if BR2_LINUX_KERNEL_EXT_AUFS_SERIES_5
+ 
+ config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
+ 	string "aufs-standalone version"
+@@ -135,6 +140,8 @@ config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
+ 	  https://sourceforge.net/p/aufs/aufs3-standalone/ref/master/branches/
+ 	  For aufs4.x:
+ 	  https://github.com/sfjro/aufs4-standalone/branches/all
++	  For aufs5.x:
++	  https://github.com/sfjro/aufs5-standalone/branches/all
+ 
+ endif # aufs
+ 
+diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
+index 55dbf942df..4e95a350a0 100644
+--- a/package/aufs/aufs.mk
++++ b/package/aufs/aufs.mk
+@@ -13,6 +13,8 @@ AUFS_SITE = http://git.code.sf.net/p/aufs/aufs3-standalone
+ AUFS_SITE_METHOD = git
+ else ifeq ($(BR2_PACKAGE_AUFS_SERIES),4)
+ AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
++else ifeq ($(BR2_PACKAGE_AUFS_SERIES),5)
++AUFS_SITE = $(call github,sfjro,aufs5-standalone,$(AUFS_VERSION))
+ endif
+ 
+ ifeq ($(BR_BUILDING):$(BR2_PACKAGE_AUFS):$(AUFS_VERSION),y:y:)
+-- 
+2.24.1
