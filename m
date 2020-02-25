@@ -1,94 +1,57 @@
-From: Ludovic Desroches <ludovic.desroches@microchip.com>
-Date: Tue, 25 Feb 2020 16:01:49 +0100
-Subject: [Buildroot] external, how to achieve our needs?
-Message-ID: <20200225150149.zvyqbn34swfizg72@M43218.corp.atmel.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue, 25 Feb 2020 17:37:11 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/frr: new package
+In-Reply-To: <CAEyMn7YC8Wtk+ayQK_BR35W3tHz8jug-QKqk7gAXFgpsJRMA=Q@mail.gmail.com>
+References: <20200225025850.17209-1-vadim4j@gmail.com>
+ <20200225025850.17209-3-vadim4j@gmail.com>
+ <CAEyMn7Z7LiHmSxE+7VYdWRgeyPwQ1F-s-MxKjMW_OjXhK1_rtA@mail.gmail.com>
+ <CAMw6YJJH8utQ8kSf7G2f55N91qX66vpFwJytn1gN5fd1G=Y5wA@mail.gmail.com>
+ <CAEyMn7YC8Wtk+ayQK_BR35W3tHz8jug-QKqk7gAXFgpsJRMA=Q@mail.gmail.com>
+Message-ID: <CAMw6YJL=_PMchXuVpMrSrUFp545JiUVvVUXux9QaiXhXrWScUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Tue, Feb 25, 2020 at 2:39 PM Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> Hi Vadim and all,
+>
+> > >
+> > > I see that thei install step installs examples in a directory where (I
+> > > think) it never should install stuff! It is the targetno directory.
+> > >
+> > >  /usr/bin/install -c -m 644 zebra/zebra.conf.sample
+> > > bgpd/bgpd.conf.sample bgpd/bgpd.conf.sample2 bgpd/bgpd.conf.vnc.sample
+> > > ripd/ripd.conf.sample ripngd/ripngd.conf.sample
+> > > ospfd/ospfd.conf.sample ospf6d/ospf6d.conf.sample
+> > > isisd/isisd.conf.sample isisd/fabricd.conf.sample
+> > > ldpd/ldpd.conf.sample babeld/babeld.conf.sample
+> > > eigrpd/eigrpd.conf.sample pimd/pimd.conf.sample pbrd/pbrd.conf.sample
+> > > staticd/staticd.conf.sample bfdd/bfdd.conf.sample
+> > > vtysh/vtysh.conf.sample
+> > > '/home/hthiery/sources/mainline/buildroot/output/targetno'
+> > >
+> > >
+> > > I cannot see how it is possible to properly disable the install of
+> > > examples. I see that you already have set the option
+> > > --disable-exampledir. But this seems not to be enought, or it is
+> > > broken.
+> >
+> > Wow! Nice catch, I did not realize this, so there are like at least 2 options ?
+> > 1) remove it in hook
+> > 2) patch the frr build scripts (which looks like more safer?)
+>
+> I think reporting that upstream and patching would be the best solution.
+>
+Hm, problem is that this --enable-exampledir is used as bool option to specify
+alternative path for installing config samples, and because I set it
+to "--disable-exampledir"
+then this value is set to "no" and eventually is appended to DESTDIR
+which is $(TARGET_DIR),
+which is evaluated to .../targetno.
 
-We are currently using it for linux4sam but it seems it has limitations
-and I would like to know if you have advice to share or the same issue.
-I did a quick search in the mailing list, I found a discussion with few
-answers and patches from Yann for external toolchains, jpeg and openssl.
-Unfortunately, it doesn't cover all our use cases.
-
-At the beginning, we forked buildroot in the buildroot-at91 tree. It was
-mostly done to put patches we sent upstream. We release a distribution
-called linux4sam which contains bootloaders, kernel and rootfs. We can't
-wait for the next release of Buildroot to get our patches. It was also
-useful to handle additional defconfigs, buildroot bug fixes and sometimes
-patches that are not accepted upstream.
-
-When the external feature was released, we thought that it should be better
-to rely on Buildroot vanilla and to release only our external. The goal was
-to remove the buildroot-at91 fork. At least, it was the plan...
-
-Now, we still have buildroot-at91 + buildroot-external-microchip trees. We
-faced several problems which make difficult to only provide an external.
-
-One of the latest issue is we are adding support for a GPU in cairo and
-this work is not upstream yet. It involves patching cairo sources
-(that's not a big deal) but also to modify cairo.mk to add dependencies and
-new configure options. I discussed with Thomas who helped me to achieve it
-with some tricks. I added a cairo_microchip package, I had to patch some
-libraries to link with this version of cairo and use the external.mk to
-force extra dependencies for cairo and pango. Honestly, even if it works,
-I am not pleased with the solution. It will be so much easier and cleaner
-to do this in buildroot-at91 instead of buildroot-external-microchip. We
-discussed again, internally, about the external and the fork of buildroot
-but we have different opinions. I would like to emphasize that recent
-changes in buildroot make us think that it won't be easy to get rid of
-buildroot-at91: devmem2 deprecated, rgnd which increases the boot time
-since it uses the lib jitterentropy, curl library name change and others.
-
-My feeling is that the external is not flexible enough to allow us to
-remove buildroot-at91. Is it planned to offer a way to modify package
-configs and makefiles or is it totally against Buildroot philosophy? I
-think this is a strength of the Yocto layers but it's also a weakness as
-it becomes difficult to know what is built and how. I also wonder if we can
-have one version of the external to support several versions of buildroot
-or if we'll need to tag it according to the version of buildroot it has
-been tested against. Do we put too much hope in the external?
-
-If I try to summarize our options with their pros and cons:
-
-- buildroot fork:
-  - pros:
-    - one tree
-    - full control, can do whatever we want
-  - cons:
-    - fork
-    - need to rebase patches for new releases
-    - may not be able to keep the pace of buildroot releases
-
-- buildroot external:
-  - pros:
-    - one tree
-    - not dependent on buildroot version (in theory) so no rebase to do
-  - cons:
-    - can't modify buildroot package makefiles, only the source code
-    - can't quickly solve bugs in buildroot
-    - may have dependency on the buildroot version
-
-- buildroot fork + external:
-  - pros:
-    - full control, can do whatever we want
-    - less patches to rebase (only the ones on top of buildroot)
-  - cons:
-    - fork
-    - two trees
-    - may not be able to keep the pace of buildroot releases
-    - may have buildroot fork with no patches on top of it sometime
-
-
-If you have any suggestions, about improvements for Buildroot or the way we
-manage our Buildroot offer, I would be happy to hear them.
-
-
-Regards,
-
-Ludovic
+But is this a problem if config samples will be installed to
+$(TARGET_DIR)/etc/frr (which is default
+if to remove --disable-exampledir) ?
