@@ -1,20 +1,18 @@
 From: Vadim Kochan <vadim4j@gmail.com>
-Date: Tue, 25 Feb 2020 13:46:49 +0200
+Date: Tue, 25 Feb 2020 13:47:52 +0200
 Subject: [Buildroot] [PATCH v2 2/2] package/frr: new package
-In-Reply-To: <CAEyMn7Z7LiHmSxE+7VYdWRgeyPwQ1F-s-MxKjMW_OjXhK1_rtA@mail.gmail.com>
+In-Reply-To: <CAEyMn7ZxLyN6meBXH37RKFpQNwbkeANN=UTPJbLOXcVETjeSoA@mail.gmail.com>
 References: <20200225025850.17209-1-vadim4j@gmail.com>
  <20200225025850.17209-3-vadim4j@gmail.com>
- <CAEyMn7Z7LiHmSxE+7VYdWRgeyPwQ1F-s-MxKjMW_OjXhK1_rtA@mail.gmail.com>
-Message-ID: <CAMw6YJJH8utQ8kSf7G2f55N91qX66vpFwJytn1gN5fd1G=Y5wA@mail.gmail.com>
+ <CAEyMn7ZxLyN6meBXH37RKFpQNwbkeANN=UTPJbLOXcVETjeSoA@mail.gmail.com>
+Message-ID: <CAMw6YJJaxipADUtTrtKHWaNCs+FiUevv=kwww+b9eu102A3JFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Heiko,
-
-On Tue, Feb 25, 2020 at 12:13 PM Heiko Thiery <heiko.thiery@gmail.com> wrote:
+On Tue, Feb 25, 2020 at 10:26 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
 >
 > Hi Vadim and all,
 >
@@ -50,6 +48,18 @@ On Tue, Feb 25, 2020 at 12:13 PM Heiko Thiery <heiko.thiery@gmail.com> wrote:
 > >
 > > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 > > ---
+> >  DEVELOPERS            |  1 +
+> >  package/Config.in     |  1 +
+> >  package/frr/Config.in | 25 +++++++++++++++
+> >  package/frr/S50frr    | 46 ++++++++++++++++++++++++++
+> >  package/frr/frr.hash  |  2 ++
+> >  package/frr/frr.mk    | 75 +++++++++++++++++++++++++++++++++++++++++++
+> >  6 files changed, 150 insertions(+)
+> >  create mode 100644 package/frr/Config.in
+> >  create mode 100644 package/frr/S50frr
+> >  create mode 100644 package/frr/frr.hash
+> >  create mode 100644 package/frr/frr.mk
+> >
 >
 > [SNIP]
 >
@@ -67,6 +77,10 @@ On Tue, Feb 25, 2020 at 12:13 PM Heiko Thiery <heiko.thiery@gmail.com> wrote:
 > > +
 > > +FRR_VERSION = 7.3
 > > +FRR_SOURCE = frr-$(FRR_VERSION).tar.gz
+>
+> You can remove FRR_SOURCE because it is not needed. Buildroot will
+> automatically set this to "frr-$(FRR_VERSION).tar.gz".
+>
 > > +FRR_SITE = https://github.com/FRRouting/frr/archive
 > > +FRR_LICENSE = GPL-2.0
 > > +FRR_LICENSE_FILES = COPYING
@@ -100,37 +114,31 @@ On Tue, Feb 25, 2020 at 12:13 PM Heiko Thiery <heiko.thiery@gmail.com> wrote:
 > > +endef
 > > +FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
 > > +HOST_FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
-> > +
-> > +define HOST_FRR_INSTALL_CMDS
-> > +       $(INSTALL) -D -m 0755 $(@D)/lib/clippy $(HOST_DIR)/bin/clippy
-> > +endef
-> > +
-> > +define FRR_INSTALL_CONFIG_FILES
-> > +       $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/frr
-> > +
-> > +       $(foreach f,daemons daemons.conf frr.conf vtysh.conf support_bundle_commands.conf,\
-> > +               $(INSTALL) -D -m 0640 $(@D)/tools/etc/frr/$(f) \
-> > +               $(TARGET_DIR)/etc/frr/$(f)
-> > +       )
-> > +endef
-> > +FRR_POST_INSTALL_TARGET_HOOKS += FRR_INSTALL_CONFIG_FILES
-> > +
-> > +define FRR_PERMISSIONS
-> > +       /etc/frr/daemons f 640 frr frr - - - - -
-> > +       /etc/frr/daemons.conf f 640 frr frr - - - - -
-> > +       /etc/frr/frr.conf f 640 frr frr - - - - -
-> > +       /etc/frr/vtysh.conf f 640 frr frrvty - - - - -
-> > +       /etc/frr/support_bundle_commands.conf f 640 frr frr
-> > +endef
-> > +
-> > +define FRR_USERS
-> > +       frr -1 frr -1 * /var/run/frr - frrvty FRR user priv
-> > +endef
-> > +
-> > +define FRR_INSTALL_INIT_SYSV
-> > +       $(INSTALL) -D -m 755 $(FRR_PKGDIR)/S50frr \
-> > +               $(TARGET_DIR)/etc/init.d/S50frr
-> > +endef
+>
+> Do we realy need to call the bootstrap.sh? The only thing done here is
+> to call "autoreconf -i". This is automatically called by buildroot
+> when setting "FRR_AUTORECONF = YES".
+>
+> @@ -34,12 +33,6 @@ FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
+>
+>  HOST_FRR_CONF_OPTS = --enable-clippy-only
+>
+> -define FRR_RUN_BOOTSTRAP
+> -       (cd $(@D) && PATH=$(BR_PATH) ./bootstrap.sh)
+> -endef
+> -FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
+> -HOST_FRR_PRE_CONFIGURE_HOOKS += FRR_RUN_BOOTSTRAP
+> -
+>  define HOST_FRR_INSTALL_CMDS
+>         $(INSTALL) -D -m 0755 $(@D)/lib/clippy $(HOST_DIR)/bin/clippy
+>  endef
+>
+>
+[SNIP]
+...
+Thanks! all your suggestions works!
+...
+[SNIP]
 > > +
 > > +$(eval $(autotools-package))
 > > +$(eval $(host-autotools-package))
@@ -138,26 +146,15 @@ On Tue, Feb 25, 2020 at 12:13 PM Heiko Thiery <heiko.thiery@gmail.com> wrote:
 > > 2.17.1
 > >
 >
-> I see that thei install step installs examples in a directory where (I
-> think) it never should install stuff! It is the targetno directory.
+> Also some warnings from "utils/check-package package/frr/*":
 >
->  /usr/bin/install -c -m 644 zebra/zebra.conf.sample
-> bgpd/bgpd.conf.sample bgpd/bgpd.conf.sample2 bgpd/bgpd.conf.vnc.sample
-> ripd/ripd.conf.sample ripngd/ripngd.conf.sample
-> ospfd/ospfd.conf.sample ospf6d/ospf6d.conf.sample
-> isisd/isisd.conf.sample isisd/fabricd.conf.sample
-> ldpd/ldpd.conf.sample babeld/babeld.conf.sample
-> eigrpd/eigrpd.conf.sample pimd/pimd.conf.sample pbrd/pbrd.conf.sample
-> staticd/staticd.conf.sample bfdd/bfdd.conf.sample
-> vtysh/vtysh.conf.sample
-> '/home/hthiery/sources/mainline/buildroot/output/targetno'
+> package/frr/Config.in:16: help text: <tab><2 spaces><62 chars>
+> (http://nightly.buildroot.org/#writing-rules-config-in)
+> package/frr/frr.mk:8: remove default value of _SOURCE variable
+> (http://nightly.buildroot.org/#generic-package-reference)
+> 102 lines processed
+> 2 warnings generated
 >
->
-> I cannot see how it is possible to properly disable the install of
-> examples. I see that you already have set the option
-> --disable-exampledir. But this seems not to be enought, or it is
-> broken.
-
-Wow! Nice catch, I did not realize this, so there are like at least 2 options ?
-1) remove it in hook
-2) patch the frr build scripts (which looks like more safer?)
+> BR
+> --
+> Heiko
