@@ -1,43 +1,135 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 16:35:43 +0100
-Subject: [Buildroot] [git commit] package/fail2ban: The (host-python3) 2to3
- utility needs to be present
-Message-ID: <20200226152402.6035A8E9CF@busybox.osuosl.org>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Wed, 26 Feb 2020 17:03:26 +0100
+Subject: [Buildroot] [PATCH/next] package/psplash: bump to revision fd33a9b
+Message-ID: <1582733006-22049-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdc9364ffae64623158830698a4f84fb2a179910
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This includes the following changes:
 
-During _POST_PATCH_HOOKS _DEPENDANCIES aren't guaranteed to be built,
-however during _PRE_CONFIGURE_HOOKS they should be built.
+66c8f65 Makefile.am: use BUILT_SOURCES instead of BUILD_SOURCES
+f7a354d Generate image headers from their PNG source, while still including them in dist tarball
+983837e Import png source for images, extracted from headers
+3bd1557 Cleanup poky logo
+773a397 Add configure flags for fullscreen logo and no startup message
+2913c24 Double buffering support
+8188d68 Support --with-font configure option to use other font headers
+88c4b71 Add SPDX License information to files, drop boilerplate
+904f4aa add systemd support
+e94bd11 process consecutive commands
+568f28e use /run for communication FIFO
+ee053e0 add recovered bar.png
+2015f70 Fix text width calculation.
 
-Should fix:
-http://autobuild.buildroot.net/results/dd8e225e2a49cfa6735bed11459007003a37c137/
-http://autobuild.buildroot.net/results/e688c3652bd474ac682984e2e5947701942f0f57/
+Also:
+ - remove the 'psplash-quit.service' unit file
+ - add 'psplash-systemd.service' to use the new systemd support in psplash
 
-Cc: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/fail2ban/fail2ban.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/psplash/psplash-quit.service    | 11 -----------
+ package/psplash/psplash-start.service   |  3 +--
+ package/psplash/psplash-systemd.service | 12 ++++++++++++
+ package/psplash/psplash.hash            |  2 +-
+ package/psplash/psplash.mk              | 14 +++++++++++---
+ 5 files changed, 25 insertions(+), 17 deletions(-)
+ delete mode 100644 package/psplash/psplash-quit.service
+ create mode 100644 package/psplash/psplash-systemd.service
 
-diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-index 6f023b48a1..a0a2dc704b 100644
---- a/package/fail2ban/fail2ban.mk
-+++ b/package/fail2ban/fail2ban.mk
-@@ -15,7 +15,9 @@ define FAIL2BAN_PYTHON_2TO3
- 	$(HOST_DIR)/bin/2to3 --write --nobackups --no-diffs $(@D)/bin/* $(@D)/fail2ban
- endef
- FAIL2BAN_DEPENDENCIES += host-python3
--FAIL2BAN_POST_PATCH_HOOKS += FAIL2BAN_PYTHON_2TO3
-+# We can't use _POST_PATCH_HOOKS because dependencies are not guaranteed
-+# to build and install before _POST_PATCH_HOOKS run.
-+FAIL2BAN_PRE_CONFIGURE_HOOKS += FAIL2BAN_PYTHON_2TO3
- endif
+diff --git a/package/psplash/psplash-quit.service b/package/psplash/psplash-quit.service
+deleted file mode 100644
+index 14bd499..0000000
+--- a/package/psplash/psplash-quit.service
++++ /dev/null
+@@ -1,11 +0,0 @@
+-[Unit]
+-Description=Terminate Psplash Boot Screen
+-After=psplash-start.service
+-
+-[Service]
+-Type=oneshot
+-ExecStart=/usr/bin/psplash-write QUIT
+-TimeoutSec=20
+-
+-[Install]
+-WantedBy=multi-user.target
+diff --git a/package/psplash/psplash-start.service b/package/psplash/psplash-start.service
+index 2de3cfc..b97e883 100644
+--- a/package/psplash/psplash-start.service
++++ b/package/psplash/psplash-start.service
+@@ -1,8 +1,7 @@
+ [Unit]
+ Description=Starts Psplash Boot screen
+-Wants=systemd-vconsole-setup.service
+-After=systemd-vconsole-setup.service systemd-udev-trigger.service systemd-udevd.service
+ DefaultDependencies=no
++RequiresMountsFor=/run
  
- define FAIL2BAN_FIX_DEFAULT_CONFIG
+ [Service]
+ ExecStart=/usr/bin/psplash -n
+diff --git a/package/psplash/psplash-systemd.service b/package/psplash/psplash-systemd.service
+new file mode 100644
+index 0000000..249aa54
+--- /dev/null
++++ b/package/psplash/psplash-systemd.service
+@@ -0,0 +1,12 @@
++[Unit]
++Description=Start psplash-systemd progress communication helper
++DefaultDependencies=no
++After=systemd-start.service
++Requires=psplash-start.service
++RequiresMountsFor=/run
++
++[Service]
++ExecStart=/usr/bin/psplash-systemd
++
++[Install]
++WantedBy=sysinit.target
+diff --git a/package/psplash/psplash.hash b/package/psplash/psplash.hash
+index c886569..46d5e12 100644
+--- a/package/psplash/psplash.hash
++++ b/package/psplash/psplash.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 aaddb20ef892dfb03d4e046cc634159bbcdfe555f7291652dde2b7d4cf491289  psplash-5b3c1cc28f5abdc2c33830150b48b278cc4f7bca.tar.gz
++sha256 0042192bf94be4f5792d9ff6b7a2ddff77c79e51274745180d14be5815b3a0f4  psplash-fd33a9b3d68c89fa22ff6873f4f9fd28bd85830c.tar.gz
+ sha256 f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
+diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+index 3dd2f4d..39fcc22 100644
+--- a/package/psplash/psplash.mk
++++ b/package/psplash/psplash.mk
+@@ -4,18 +4,26 @@
+ #
+ ################################################################################
+ 
+-PSPLASH_VERSION = 5b3c1cc28f5abdc2c33830150b48b278cc4f7bca
++PSPLASH_VERSION = fd33a9b3d68c89fa22ff6873f4f9fd28bd85830c
+ PSPLASH_SITE = git://git.yoctoproject.org/psplash
+ PSPLASH_LICENSE = GPL-2.0+
+ PSPLASH_LICENSE_FILES = COPYING
+ PSPLASH_AUTORECONF = YES
++PSPLASH_DEPENDENCIES = host-pkgconf
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++PSPLASH_DEPENDENCIES += systemd
++PSPLASH_CONF_OPTS += --with-systemd
++else
++PSPLASH_CONF_OPTS += --without-systemd
++endif
+ 
+ define PSPLASH_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/psplash/psplash-start.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/psplash-start.service
+ 
+-	$(INSTALL) -D -m 644 package/psplash/psplash-quit.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/psplash-quit.service
++	$(INSTALL) -D -m 644 package/psplash/psplash-systemd.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/psplash-systemd.service
+ endef
+ 
+ $(eval $(autotools-package))
+-- 
+2.7.4
