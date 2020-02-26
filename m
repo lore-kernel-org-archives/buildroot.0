@@ -1,57 +1,136 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 15:45:34 +0100
-Subject: [Buildroot] [PATCH v2 03/37] package/qt53d: drop 5.6 support
-In-Reply-To: <20200226144608.12529-1-peter@korsgaard.com>
-References: <20200226144608.12529-1-peter@korsgaard.com>
-Message-ID: <20200226144608.12529-3-peter@korsgaard.com>
+Date: Wed, 26 Feb 2020 15:45:32 +0100
+Subject: [Buildroot] [PATCH v2 01/37] package/qt5: drop 5.6 support
+Message-ID: <20200226144608.12529-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+As discussed during the FOSDEM2019 develop days, Qt 5.6 is very old (5.6.3
+was released in September 2017, and 5.6.x became EOL in March 2019), so drop
+it before the new Buildroot LTS release:
+
+https://elinux.org/Buildroot:DeveloperDaysFOSDEM2019#Qt5_versions_to_support:_keep_5.6_or_a_newer_LTS.3F
+
+And add legacy handling for it.
+
+There are a number of places where code checks for
+BR2_PACKAGE_QT5_VERSION_LATEST, so leave that as a blind option for now to
+not break the build.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt53d/qt53d.hash |  3 ---
- package/qt5/qt53d/qt53d.mk   | 10 ++--------
- 2 files changed, 2 insertions(+), 11 deletions(-)
+Changes since v1:
+- Leave BR2_PACKAGE_QT5_VERSION_LATEST as a blind option for
+  bisectability
 
-diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
-index 1ccc9f00e9..54dbda367d 100644
---- a/package/qt5/qt53d/qt53d.hash
-+++ b/package/qt5/qt53d/qt53d.hash
-@@ -1,6 +1,3 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qt3d-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 10d05a30e925fcad971126c7f47a5e32c39f007dab96b298b2094501f9607ffe qt3d-opensource-src-5.6.3.tar.xz
+ Config.in.legacy      |  7 +++++++
+ package/qt5/Config.in | 38 ++++++++++++--------------------------
+ package/qt5/qt5.mk    |  6 ------
+ 3 files changed, 19 insertions(+), 32 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 87966facb4..6a33ce9e1c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2020.02"
+ 
++config BR2_PACKAGE_QT5_VERSION_5_6
++	bool "qt 5.6 support removed"
++	select BR2_LEGACY
++	help
++	  Support for Qt 5.6 is EOL and has been removed. The current
++	  version (5.12 or later) has been selected instead.
++
+ config BR2_PACKAGE_CURL
+ 	bool "BR2_PACKAGE_CURL was renamed"
+ 	select BR2_PACKAGE_LIBCURL_CURL
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index def79fa680..7051bf517a 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -11,14 +11,22 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	# ARM needs BLX, so v5t+
+ 	depends on !BR2_ARM_CPU_ARMV4
+ 
+-comment "Qt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++comment "Qt5 needs a toolchain w/ gcc >= 4.8, wchar, NPTL, C++, dynamic library"
++	depends on !BR2_ARM_CPU_ARMV4
++	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ menuconfig BR2_PACKAGE_QT5
+ 	bool "Qt5"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
++	# no built-in double-conversion support
++	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_QT5BASE
+ 	help
+@@ -29,31 +37,9 @@ menuconfig BR2_PACKAGE_QT5
+ 
+ if BR2_PACKAGE_QT5
+ 
+-choice
+-	prompt "Qt5 version"
 -
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qt3d-everywhere-src-5.12.7.tar.xz.sha256
- sha256 2030de3dc93fd4062f677f61938229af9cd7aa4c3d2932cdda2ccb663d681126 qt3d-everywhere-src-5.12.7.tar.xz
+ config BR2_PACKAGE_QT5_VERSION_LATEST
+-	bool "Latest (5.12)"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+-	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
+-	# no built-in double-conversion support
+-	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
+-	help
+-	  This option builds Qt 5.12, which is licensed under
+-	  (L)GPL-3.0+.
+-
+-comment "Latest Qt version needs a toolchain w/ gcc >= 4.8"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+-	depends on !BR2_ARM_CPU_ARMV4
+-	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
+-
+-config BR2_PACKAGE_QT5_VERSION_5_6
+-	bool "LTS (5.6)"
+-	help
+-	  This option builds Qt 5.6, which is licensed under
+-	  (L)GPL-2.0+.
+-
+-endchoice
++	bool
++	default y
  
-diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-index 7674b44558..1028dd6a65 100644
---- a/package/qt5/qt53d/qt53d.mk
-+++ b/package/qt5/qt53d/qt53d.mk
-@@ -36,19 +36,13 @@ endef
- endif
+ source "package/qt5/qt53d/Config.in"
+ source "package/qt5/qt5base/Config.in"
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index d94d9cc99f..7805b575f5 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -4,15 +4,9 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_STATIC_LIBS),)
 -ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
--# Available since 5.9
--define QT53D_INSTALL_TARGET_LATEST
--	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
--	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
--endef
+ QT5_VERSION_MAJOR = 5.12
+ QT5_VERSION = $(QT5_VERSION_MAJOR).7
+ QT5_SOURCE_TARBALL_PREFIX = everywhere-src
+-else
+-QT5_VERSION_MAJOR = 5.6
+-QT5_VERSION = $(QT5_VERSION_MAJOR).3
+-QT5_SOURCE_TARBALL_PREFIX = opensource-src
 -endif
- define QT53D_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
--	$(QT53D_INSTALL_TARGET_LATEST)
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
- 	$(QT53D_INSTALL_TARGET_EXAMPLES)
- endef
- endif
+ QT5_SITE = https://download.qt.io/archive/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+ 
+ include $(sort $(wildcard package/qt5/*/*.mk))
 -- 
 2.20.1
