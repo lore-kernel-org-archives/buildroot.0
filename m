@@ -1,50 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 26 Feb 2020 14:05:09 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/armadillo: bump to version
- 9.850.1
-Message-ID: <20200226130509.1912690-1-fontaine.fabrice@gmail.com>
+From: Ludovic Desroches <ludovic.desroches@microchip.com>
+Date: Wed, 26 Feb 2020 14:20:57 +0100
+Subject: [Buildroot] external, how to achieve our needs?
+In-Reply-To: <87imjtoqpr.fsf@tarshish>
+References: <20200225150149.zvyqbn34swfizg72@M43218.corp.atmel.com>
+ <87imjtoqpr.fsf@tarshish>
+Message-ID: <20200226132057.zs2lgpm3bkwtjmj2@M43218.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation of hash file (two spaces)
+Hi Baruch,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/armadillo/armadillo.hash | 8 ++++----
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Wed, Feb 26, 2020 at 07:36:00AM +0200, Baruch Siach wrote:
+> Hi Ludovic,
+> 
+> On Tue, Feb 25 2020, Ludovic Desroches wrote:
+> > I would like to emphasize that recent changes in buildroot make us
+> > think that it won't be easy to get rid of buildroot-at91: devmem2
+> > deprecated, rgnd which increases the boot time since it uses the lib
+> > jitterentropy, curl library name change and others.
+> 
+> The curl library name has not changed in the last few year. Do you refer
+> to the curl binary Kconfig symbol name change (commit 2a057339cc12)? How
+> does that affect your use case? Do you need to support several Buildroot
+> versions in a single config?
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index 6b3c4a855f..aa21570803 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,7 +1,7 @@
- # From http://sourceforge.net/projects/arma/files/?source=navbar
--md5 5ef71763bd429a3d481499878351f3be  armadillo-7.900.1.tar.xz
--sha1 8118faf1c6a7a39c55a1103a1f90e85e613cc377  armadillo-7.900.1.tar.xz
-+md5  12c3b63c301d414659d7592ff58a71cb  armadillo-9.850.1.tar.xz
-+sha1  0a2d3ef140fd8587867def7359fe45f9df4a925a  armadillo-9.850.1.tar.xz
- # Locally computed:
--sha256 33eec7013990b5477ccc5ad3abc68bc2326c7a7a2790014d625cfcf37c0e07d3  armadillo-7.900.1.tar.xz
-+sha256  d4c389b9597a5731500ad7a2656c11a6031757aaaadbcafdea5cc8ac0fd2c01f  armadillo-9.850.1.tar.xz
- # License files, locally calculated
--sha256 3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-+sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index 5d9e3eda57..d9a28e9878 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ARMADILLO_VERSION = 7.900.1
-+ARMADILLO_VERSION = 9.850.1
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_DEPENDENCIES = clapack
--- 
-2.25.0
+Yes, that's the Kconfig symbol.
+
+That's one of the pending question, is it possible to support different
+versions of Buildroot. When we start using the external, one benefit we had
+in mind was we won't have to check/update the external at each new release
+of Buildroot. It seems we were wrong, it could only save us to rebase
+patches in comparison to the buildroot fork solution.
+
+Regards,
+
+Ludovic
+
+> 
+> baruch
+> 
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
