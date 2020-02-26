@@ -1,80 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 20:55:28 +0100
-Subject: [Buildroot] [git commit branch/next] package/libxkbcommon: bump to
- version 0.10.0 and convert to meson
-Message-ID: <20200226200503.648AD8EA83@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 21:17:14 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-markdown: bump
+ to version 3.2.1
+Message-ID: <20200226200619.D835C81191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=474b4832c109be75efd0a216a5dcbacac3da3d6a
+commit: https://git.buildroot.net/buildroot/commit/?id=6e538bf642d3584032d63bb54d24b88ab57e4283
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since version 0.9.x the autotools build system is removed from libxkbcommon
-([1]), so convert to meson build system.
-
-Remove the CFLAGS force of '-std=gnu99', believing meson sets it
-automatically (a test build used '-std=c99').
-
-For details see [1].
-
-[1] https://lists.freedesktop.org/archives/wayland-devel/2019-October/040962.html
+Update indentation of hash file (two spaces)
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libxkbcommon/libxkbcommon.hash |  8 ++++----
- package/libxkbcommon/libxkbcommon.mk   | 12 +++++-------
- 2 files changed, 9 insertions(+), 11 deletions(-)
+ package/python-markdown/python-markdown.hash | 6 +++---
+ package/python-markdown/python-markdown.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
-index c734f3ad9f..5d4c3af10a 100644
---- a/package/libxkbcommon/libxkbcommon.hash
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -1,7 +1,7 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2019-February/040102.html
--md5 3c4409058dfd203f641a563358e0187d  libxkbcommon-0.8.4.tar.xz
--sha1 0ce9df42239d451f61b2112c6ba8d0a1a0879009  libxkbcommon-0.8.4.tar.xz
--sha256 60ddcff932b7fd352752d51a5c4f04f3d0403230a584df9a2e0d5ed87c486c8b  libxkbcommon-0.8.4.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-January/041133.html
-+md5 2d9ad3a46b317138b5e72a91cf105451  libxkbcommon-0.10.0.tar.xz
-+sha1 d8f956f4bc5382d5d8e0e4dd590c4f090e0e985a  libxkbcommon-0.10.0.tar.xz
-+sha256 57c3630cdc38fb4734cd57fa349e92244f5ae3862813e533cedbd86721a0b6f2  libxkbcommon-0.10.0.tar.xz
- 
- # License file:
- sha256 086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb LICENSE
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index 1f54de4267..3923d69c8d 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -4,22 +4,20 @@
+diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
+index 6eff2035bb..4d54ce9243 100644
+--- a/package/python-markdown/python-markdown.hash
++++ b/package/python-markdown/python-markdown.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/markdown/json
+-md5	d84732ecc65b3a1bff693d9d4c24277f  Markdown-3.1.1.tar.gz
+-sha256	2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a  Markdown-3.1.1.tar.gz
++md5  7a894dc55992b37cdbcba5c4049455fc  Markdown-3.2.1.tar.gz
++sha256  90fee683eeabe1a92e149f7ba74e5ccdc81cd397bd6c516d93a8da0ef90b6902  Markdown-3.2.1.tar.gz
+ # Locally computed sha256
+-sha256	6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
++sha256  6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
+diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
+index a8311168f5..1f352fd7f1 100644
+--- a/package/python-markdown/python-markdown.mk
++++ b/package/python-markdown/python-markdown.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBXKBCOMMON_VERSION = 0.8.4
-+LIBXKBCOMMON_VERSION = 0.10.0
- LIBXKBCOMMON_SITE = http://xkbcommon.org/download
- LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
- LIBXKBCOMMON_LICENSE = MIT/X11
- LIBXKBCOMMON_LICENSE_FILES = LICENSE
- LIBXKBCOMMON_INSTALL_STAGING = YES
- LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
--LIBXKBCOMMON_CONF_OPTS = --disable-wayland
--# uses C99 features
--LIBXKBCOMMON_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
-+LIBXKBCOMMON_CONF_OPTS = -Denable-docs=false -Denable-wayland=false
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
--LIBXKBCOMMON_CONF_OPTS += --enable-x11
-+LIBXKBCOMMON_CONF_OPTS += -Denable-x11=true
- LIBXKBCOMMON_DEPENDENCIES += libxcb
- else
--LIBXKBCOMMON_CONF_OPTS += --disable-x11
-+LIBXKBCOMMON_CONF_OPTS += -Denable-x11=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+-PYTHON_MARKDOWN_VERSION = 3.1.1
++PYTHON_MARKDOWN_VERSION = 3.2.1
+ PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
+-PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/ac/df/0ae25a9fd5bb528fe3c65af7143708160aa3b47970d5272003a1ad5c03c6
++PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/98/79/ce6984767cb9478e6818bd0994283db55c423d733cc62a88a3ffb8581e11
+ PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
+ PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
+ PYTHON_MARKDOWN_SETUP_TYPE = setuptools
