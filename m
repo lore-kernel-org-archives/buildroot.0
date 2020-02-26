@@ -1,46 +1,96 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 18:59:04 +0100
-Subject: [Buildroot] [git commit branch/next] package/i2pd: bump to version
- 2.30.0
-Message-ID: <20200226175236.C648D8EA31@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 19:00:04 +0100
+Subject: [Buildroot] [git commit branch/next] package/meson: bump version to
+ 0.53.2
+Message-ID: <20200226175236.EF5BF8EA32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bc2bf7c4471bca17a1b6fc4c00f598d028455ee
+commit: https://git.buildroot.net/buildroot/commit/?id=10c0bf73be91c0dff86b71038a9d98c2f0c24504
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update indentation of hash file (two spaces)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/i2pd/i2pd.hash | 4 ++--
- package/i2pd/i2pd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch | 2 +-
+ .../0002-Prefer-ext-static-libs-when-default-library-static.patch     | 2 +-
+ package/meson/0003-envconfig-add-pkg_config_libdir-property.patch     | 4 ++--
+ package/meson/meson.hash                                              | 4 ++--
+ package/meson/meson.mk                                                | 2 +-
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
-index 0ae6ea05fb..26d3be6914 100644
---- a/package/i2pd/i2pd.hash
-+++ b/package/i2pd/i2pd.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	fd0474c33b411593b9dc8197f3799d37d68455c11a9ee3994ec993a96388ec06	i2pd-2.29.0.tar.gz
--sha256	d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c	LICENSE
-+sha256  25915cbd33a9f53c89ddf7fbd68fccc5ffc89ab40d4445ccc813da74fae154f2  i2pd-2.30.0.tar.gz
-+sha256  d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c  LICENSE
-diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
-index c031145472..56af5cb44b 100644
---- a/package/i2pd/i2pd.mk
-+++ b/package/i2pd/i2pd.mk
+diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+index a7b66c1067..79e99adf4a 100644
+--- a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
++++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+@@ -14,7 +14,7 @@ diff --git a/mesonbuild/minstall.py b/mesonbuild/minstall.py
+ index 8ac6aab1..7ef04116 100644
+ --- a/mesonbuild/minstall.py
+ +++ b/mesonbuild/minstall.py
+-@@ -478,8 +478,14 @@ class Installer:
++@@ -489,8 +489,14 @@ class Installer:
+                          printed_symlink_error = True
+              if os.path.isfile(outname):
+                  try:
+diff --git a/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
+index 798cd65299..b859d8372e 100644
+--- a/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
++++ b/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
+@@ -30,7 +30,7 @@ diff --git a/mesonbuild/compilers/mixins/clike.py b/mesonbuild/compilers/mixins/
+ index 5d50b7d..8f5f1c6 100644
+ --- a/mesonbuild/compilers/mixins/clike.py
+ +++ b/mesonbuild/compilers/mixins/clike.py
+-@@ -858,6 +858,9 @@ class CLikeCompiler:
++@@ -857,6 +857,9 @@ class CLikeCompiler:
+          elif env.machines[self.for_machine].is_cygwin():
+              shlibext = ['dll', 'dll.a']
+              prefixes = ['cyg'] + prefixes
+diff --git a/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch b/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
+index ae40ab8b1c..8ae34b999d 100644
+--- a/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
++++ b/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
+@@ -53,7 +53,7 @@ diff --git a/run_unittests.py b/run_unittests.py
+ index 676604f4..382c0964 100755
+ --- a/run_unittests.py
+ +++ b/run_unittests.py
+-@@ -3621,6 +3621,34 @@ recommended as it is not supported on some platforms''')
++@@ -3629,6 +3629,34 @@ recommended as it is not supported on some platforms''')
+          self.wipe()
+          self.init(testdir, extra_args=['-Dstart_native=true'], override_envvars=env)
+  
+@@ -88,7 +88,7 @@ index 676604f4..382c0964 100755
+      def __reconfigure(self, change_minor=False):
+          # Set an older version to force a reconfigure from scratch
+          filename = os.path.join(self.privatedir, 'coredata.dat')
+-@@ -6847,7 +6875,7 @@ class NativeFileTests(BasePlatformTests):
++@@ -6863,7 +6891,7 @@ class NativeFileTests(BasePlatformTests):
+  
+  class CrossFileTests(BasePlatformTests):
+  
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 881d4211cf..3777a51542 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.53.1/meson-0.53.1.tar.gz.asc
+-sha256 ec1ba33eea701baca2c1607dac458152dc8323364a51fdef6babda2623413b04 meson-0.53.1.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.53.2/meson-0.53.2.tar.gz.asc
++sha256 3e8f830f33184397c2eb0b651ec502adb63decb28978bdc84b3558d71284c21f meson-0.53.2.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 810c84690a..29c7ed1800 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--I2PD_VERSION = 2.29.0
-+I2PD_VERSION = 2.30.0
- I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
- I2PD_LICENSE = BSD-3-Clause
- I2PD_LICENSE_FILES = LICENSE
+-MESON_VERSION = 0.53.1
++MESON_VERSION = 0.53.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
