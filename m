@@ -1,113 +1,52 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 26 Feb 2020 10:52:44 -0800
-Subject: [Buildroot] [PATCH/next v3 3/3] package/meson: determine
- g-ir-scanner and g-ir-compiler paths from pkgconfig
-In-Reply-To: <20200226185244.31556-1-aduskett@gmail.com>
-References: <20200226185244.31556-1-aduskett@gmail.com>
-Message-ID: <20200226185244.31556-3-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Feb 2020 20:43:42 +0100
+Subject: [Buildroot] [PATCH 0/2] Fix file listing logic for top-level
+ parallel build
+Message-ID: <20200226194345.1087529-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hello,
 
-Currently, meson hard codes the paths of these binaries which results in
-cross-compiled environments to run the host versions of these tools.
-However, GObject-introspection provides the appropriate paths to these
-utilities via pkg-config
+The current logic in pkg-generic.mk that calculates the list of files
+installed by packages is not compatible with top-level parallel
+build. Indeed, when package N-1 has been finished installing, we keep
+a file that is then used after package N is installed to calculate
+which files were installed by package N. This is inherently broken for
+top-level parallel build, and we have seen build failures caused by
+this in top-level parallel build mode.
 
-find_program is needed in the case g-i is built as a subproject. If
-g-ir-scanner or g-ir-compiler are in the build or source directory use those.
-If they aren't found in the source directory, use the results from pkg-config.
+For example:
 
-Current upstream-status: merged
-https://github.com/mesonbuild/meson/pull/6687
-https://github.com/mesonbuild/meson/pull/6696
+  http://autobuild.buildroot.net/results/4e6/4e60fa31b1cd08bc7fdf9c5dd3a3f4941e029ba3/build-end.log
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
-Changes v1 -> v3:
-  - Use a upstream patch that fixes this issue permanently.
+shows:
 
- ...canner-and-g-ir-compiler-paths-from-.patch | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100644 package/meson/0004-determine-g-ir-scanner-and-g-ir-compiler-paths-from-.patch
+>>> capnproto 0.7.0 Installing to staging directory
+comm: /home/giuliobenetti/autobuild/run/instance-0/output-1/build/.files-list-staging.new: No such file or directory
+package/pkg-generic.mk:311: recipe for target '/home/giuliobenetti/autobuild/run/instance-0/output-1/build/c-ares-1.15.0/.stamp_staging_installed' failed
 
-diff --git a/package/meson/0004-determine-g-ir-scanner-and-g-ir-compiler-paths-from-.patch b/package/meson/0004-determine-g-ir-scanner-and-g-ir-compiler-paths-from-.patch
-new file mode 100644
-index 0000000000..4f765e2157
---- /dev/null
-+++ b/package/meson/0004-determine-g-ir-scanner-and-g-ir-compiler-paths-from-.patch
-@@ -0,0 +1,68 @@
-+From e8c2c21aabb4a06915b2e3a2c8e99bd74999db92 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Aduskett@gmail.com>
-+Date: Wed, 26 Feb 2020 10:42:54 -0800
-+Subject: [PATCH] determine g-ir-scanner and g-ir-compiler paths from pkgconfig
-+
-+Currently, meson hard codes the paths of these binaries which results in
-+cross-compiled environments to run the host versions of these tools.
-+However, GObject-introspection provides the appropriate paths to these
-+utilities via pkg-config
-+
-+find_program is needed in the case g-i is built as a subproject. If
-+g-ir-scanner or g-ir-compiler are in the build or source directory use those.
-+If they aren't found in the source directory, use the results from pkg-config.
-+
-+Cherry picked from:
-+https://github.com/mesonbuild/meson/commit/f66b04b0996eae5cd7b0ad007435d5a51f28b691
-+https://github.com/mesonbuild/meson/commit/6ba034c37d8004a72d392f37f66e709c593d8983
-+
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-+---
-+ mesonbuild/modules/gnome.py | 25 ++++++++++++++++++++++---
-+ 1 file changed, 22 insertions(+), 3 deletions(-)
-+
-+diff --git a/mesonbuild/modules/gnome.py b/mesonbuild/modules/gnome.py
-+index 9bd7a99..df01409 100644
-+--- a/mesonbuild/modules/gnome.py
-++++ b/mesonbuild/modules/gnome.py
-+@@ -736,15 +736,34 @@ class GnomeModule(ExtensionModule):
-+         if kwargs.get('install_dir'):
-+             raise MesonException('install_dir is not supported with generate_gir(), see "install_dir_gir" and "install_dir_typelib"')
-+ 
-+-        giscanner = self.interpreter.find_program_impl('g-ir-scanner')
-+-        gicompiler = self.interpreter.find_program_impl('g-ir-compiler')
-+-
-+         girtargets = [self._unwrap_gir_target(arg, state) for arg in args]
-+ 
-+         if len(girtargets) > 1 and any([isinstance(el, build.Executable) for el in girtargets]):
-+             raise MesonException('generate_gir only accepts a single argument when one of the arguments is an executable')
-+ 
-+         self.gir_dep, pkgargs = self._get_gir_dep(state)
-++        # find_program is needed in the case g-i is built as subproject.
-++        # In that case it uses override_find_program so the gobject utilities
-++        # can be used from the build dir instead of from the system.
-++        # However, GObject-introspection provides the appropriate paths to
-++        # these utilities via pkg-config, so it would be best to use the
-++        # results from pkg-config when possible.
-++        gi_util_dirs_check = [state.environment.get_build_dir(), state.environment.get_source_dir()]
-++        giscanner = self.interpreter.find_program_impl('g-ir-scanner')
-++        if giscanner.found():
-++            giscanner_path = giscanner.get_command()[0]
-++            if not any(x in giscanner_path for x in gi_util_dirs_check):
-++                giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
-++        else:
-++            giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
-++
-++        gicompiler = self.interpreter.find_program_impl('g-ir-compiler')
-++        if gicompiler.found():
-++            gicompiler_path = gicompiler.get_command()[0]
-++            if not any(x in gicompiler_path for x in gi_util_dirs_check):
-++                gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
-++        else:
-++            gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
-+ 
-+         ns = kwargs.pop('namespace')
-+         nsversion = kwargs.pop('nsversion')
-+-- 
-+2.24.1
-+
+which is an example of that: the .new file has been deleted in the
+mean time by another package being built.
+
+This paytch series fixes that by making the installed file calculation
+a per-package logic, until target-finalize which will use the
+per-package file lists and gather them in a single global file list.
+
+Thanks!
+
+Thomas
+
+Thomas Petazzoni (2):
+  package/pkg-generic.mk: simplify step_pkg_size
+  package/pkg-generic: make file list logic parallel build compatible
+
+ Makefile               | 15 ++++------
+ package/pkg-generic.mk | 65 +++++++++++++++++++-----------------------
+ 2 files changed, 36 insertions(+), 44 deletions(-)
+
 -- 
 2.24.1
