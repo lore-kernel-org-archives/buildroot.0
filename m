@@ -1,74 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 20:47:39 +0100
-Subject: [Buildroot] [git commit branch/next] package/kvm-unit-tests: fix
- build with SSP
-Message-ID: <20200226193548.8A83C8EA6D@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 20:47:47 +0100
+Subject: [Buildroot] [git commit branch/next] package/kvm-unit-tests: drop
+ x86_64 workaround
+Message-ID: <20200226193548.94B498EA6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc006056bb06352a853a27d6691deac8842b6b20
+commit: https://git.buildroot.net/buildroot/commit/?id=d183146b5c7a1a8d1a3c828bd3b6d0660d97efc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a patch to correct a typo in the Makefile, so -fno-stack-protector /
--fno-stack-protector-all are really used.  With this applied, kvm-unit-tests
-will always be built without SSP as intented by upstream.  This will fix the
-build on ppc64 with SSP that started to fail for an unknown reason since
-November 27th.
-
-Moreover, the Arch Linux workaround could also be removed in a follow-up
-patch.
-
-Fixes:
- - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
+This workaround is not needed since commit
+0788e921f961e36a50a94f8bb98f7eb75b312245 which disables stack-protector
+for all architectures as intended by upstream
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0003-Makefile-fix-stack-protector-tests.patch  | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/kvm-unit-tests/kvm-unit-tests.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
-new file mode 100644
-index 0000000000..be819f27c6
---- /dev/null
-+++ b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
-@@ -0,0 +1,36 @@
-+From 9bf9155804652c0b3a94af9723c79b6de430187b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 24 Feb 2020 00:04:06 +0100
-+Subject: [PATCH] Makefile: fix stack-protector tests
-+
-+Rename fnostack_protector into fno_stack_protector and
-+fnostack_protector_all into fnostack_protector_all otherwise build will
-+fail if -fstack-protector is passed by the toolchain
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to kvm at vger.kernel.org]
-+---
-+ Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 767b6c6..754ed65 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -55,8 +55,8 @@ COMMON_CFLAGS += -Wignored-qualifiers -Werror
-+ 
-+ frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
-+ fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
-+-fnostack_protector := $(call cc-option, -fno-stack-protector, "")
-+-fnostack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
-++fno_stack_protector := $(call cc-option, -fno-stack-protector, "")
-++fno_stack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
-+ wno_frame_address := $(call cc-option, -Wno-frame-address, "")
-+ fno_pic := $(call cc-option, -fno-pic, "")
-+ no_pie := $(call cc-option, -no-pie, "")
-+-- 
-+2.25.0
-+
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index 2637066701..d83d31d2ee 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -35,13 +35,7 @@ KVM_UNIT_TESTS_CONF_OPTS =\
+ # compiler. However, for x86-64, we use the host compiler, as
+ # kvm-unit-tests builds 32 bit code, which Buildroot toolchains for
+ # x86-64 cannot do.
+-ifeq ($(BR2_x86_64),y)
+-# Arch Linux adds -fstack-protector even when building with -ffreestanding, but
+-# it doesn't link with the stack-protector library when -nostdlib is passed,
+-# which leads to a link error. Therefore, disable it explicitly to work around
+-# this bug in Arch Linux. https://bugs.archlinux.org/task/64270
+-KVM_UNIT_TESTS_MAKE_OPTS += EXTRA_CFLAGS=-fno-stack-protector
+-else
++ifeq ($(BR2_x86_64),)
+ KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
+ endif
+ 
