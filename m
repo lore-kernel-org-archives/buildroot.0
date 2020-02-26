@@ -1,52 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Feb 2020 21:22:52 +0100
-Subject: [Buildroot] [git commit] package/gobject-introspection: add missing
- newline at end of wrappers
-Message-ID: <20200309140904.8BE1B7F8C1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Feb 2020 20:47:47 +0100
+Subject: [Buildroot] [git commit] package/kvm-unit-tests: drop x86_64
+ workaround
+Message-ID: <20200309140905.72A618FFE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a81bc26c986cbad02fbb6a1dfd8e548da91bc36
+commit: https://git.buildroot.net/buildroot/commit/?id=d183146b5c7a1a8d1a3c828bd3b6d0660d97efc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/gobject-introspection/g-ir-compiler.in            | 2 +-
- package/gobject-introspection/g-ir-scanner-lddwrapper.in  | 2 +-
- package/gobject-introspection/g-ir-scanner-qemuwrapper.in | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+This workaround is not needed since commit
+0788e921f961e36a50a94f8bb98f7eb75b312245 which disables stack-protector
+for all architectures as intended by upstream
 
-diff --git a/package/gobject-introspection/g-ir-compiler.in b/package/gobject-introspection/g-ir-compiler.in
-index 02d7c15c38..3313cc501f 100644
---- a/package/gobject-introspection/g-ir-compiler.in
-+++ b/package/gobject-introspection/g-ir-compiler.in
-@@ -1,3 +1,3 @@
- #!/usr/bin/env bash
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kvm-unit-tests/kvm-unit-tests.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index 2637066701..d83d31d2ee 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -35,13 +35,7 @@ KVM_UNIT_TESTS_CONF_OPTS =\
+ # compiler. However, for x86-64, we use the host compiler, as
+ # kvm-unit-tests builds 32 bit code, which Buildroot toolchains for
+ # x86-64 cannot do.
+-ifeq ($(BR2_x86_64),y)
+-# Arch Linux adds -fstack-protector even when building with -ffreestanding, but
+-# it doesn't link with the stack-protector library when -nostdlib is passed,
+-# which leads to a link error. Therefore, disable it explicitly to work around
+-# this bug in Arch Linux. https://bugs.archlinux.org/task/64270
+-KVM_UNIT_TESTS_MAKE_OPTS += EXTRA_CFLAGS=-fno-stack-protector
+-else
++ifeq ($(BR2_x86_64),)
+ KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
+ endif
  
--$(dirname $0)/g-ir-scanner-qemuwrapper $(dirname $0)/g-ir-compiler.real "$@"
-\ No newline at end of file
-+$(dirname $0)/g-ir-scanner-qemuwrapper $(dirname $0)/g-ir-compiler.real "$@"
-diff --git a/package/gobject-introspection/g-ir-scanner-lddwrapper.in b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
-index d7639c5c81..c19314566a 100644
---- a/package/gobject-introspection/g-ir-scanner-lddwrapper.in
-+++ b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
-@@ -1,3 +1,3 @@
- #!/usr/bin/env bash
- 
--${HOST_DIR}/sbin/prelink-rtld --root=$(dirname $0)/../../ "$@"
-\ No newline at end of file
-+${HOST_DIR}/sbin/prelink-rtld --root=$(dirname $0)/../../ "$@"
-diff --git a/package/gobject-introspection/g-ir-scanner-qemuwrapper.in b/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
-index 6e433eb300..cad7ef875e 100644
---- a/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
-+++ b/package/gobject-introspection/g-ir-scanner-qemuwrapper.in
-@@ -14,4 +14,4 @@ if [[ $? -ne 0 ]]; then
-     echo "If the above error message is about missing .so libraries, then setting up GIR_EXTRA_LIBS_PATH in the .mk file should help."
-     echo 'Typically like this: PKG_MAKE_ENV += GIR_EXTRA_LIBS_PATH="$(@D)/.libs"'
-     exit 1
--fi
-\ No newline at end of file
-+fi
