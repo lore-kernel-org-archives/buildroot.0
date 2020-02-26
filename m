@@ -1,7 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 26 Feb 2020 14:03:23 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/openblas: bump to version 0.3.8
-Message-ID: <20200226130323.1898464-1-fontaine.fabrice@gmail.com>
+Date: Wed, 26 Feb 2020 14:05:09 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/armadillo: bump to version
+ 9.850.1
+Message-ID: <20200226130509.1912690-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +13,38 @@ Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/openblas/openblas.hash | 4 ++--
- package/openblas/openblas.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/armadillo/armadillo.hash | 8 ++++----
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
-index 5b1fb17fa7..0683d2a646 100644
---- a/package/openblas/openblas.hash
-+++ b/package/openblas/openblas.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 bde136122cef3dd6efe2de1c6f65c10955bbb0cc01a520c2342f5287c28f9379  openblas-0.3.7.tar.gz
--sha256 190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
-+sha256  8f86ade36f0dbed9ac90eb62575137388359d97d8f93093b38abe166ad7ef3a8  openblas-0.3.8.tar.gz
-+sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index f068402269..105c03713b 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index 6b3c4a855f..aa21570803 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,7 +1,7 @@
+ # From http://sourceforge.net/projects/arma/files/?source=navbar
+-md5 5ef71763bd429a3d481499878351f3be  armadillo-7.900.1.tar.xz
+-sha1 8118faf1c6a7a39c55a1103a1f90e85e613cc377  armadillo-7.900.1.tar.xz
++md5  12c3b63c301d414659d7592ff58a71cb  armadillo-9.850.1.tar.xz
++sha1  0a2d3ef140fd8587867def7359fe45f9df4a925a  armadillo-9.850.1.tar.xz
+ # Locally computed:
+-sha256 33eec7013990b5477ccc5ad3abc68bc2326c7a7a2790014d625cfcf37c0e07d3  armadillo-7.900.1.tar.xz
++sha256  d4c389b9597a5731500ad7a2656c11a6031757aaaadbcafdea5cc8ac0fd2c01f  armadillo-9.850.1.tar.xz
+ # License files, locally calculated
+-sha256 3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
++sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 5d9e3eda57..d9a28e9878 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENBLAS_VERSION = 0.3.7
-+OPENBLAS_VERSION = 0.3.8
- OPENBLAS_SITE = $(call github,xianyi,OpenBLAS,v$(OPENBLAS_VERSION))
- OPENBLAS_LICENSE = BSD-3-Clause
- OPENBLAS_LICENSE_FILES = LICENSE
+-ARMADILLO_VERSION = 7.900.1
++ARMADILLO_VERSION = 9.850.1
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_DEPENDENCIES = clapack
 -- 
 2.25.0
