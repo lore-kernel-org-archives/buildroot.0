@@ -1,194 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 20:43:44 +0100
-Subject: [Buildroot] [PATCH 2/2] package/pkg-generic: make file list logic
- parallel build compatible
-In-Reply-To: <20200226194345.1087529-1-thomas.petazzoni@bootlin.com>
-References: <20200226194345.1087529-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200226194345.1087529-3-thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Feb 2020 20:46:18 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-msgpack: bump
+ to version 1.0.0
+Message-ID: <20200226193424.722F98EA64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current solution use to collect the list of files installed by
-packages does not work for top-level parallel build. Indeed, we rely
-on a file created after the installation of the previous package to
-build the list of files installed by the current package.
+commit: https://git.buildroot.net/buildroot/commit/?id=23ae45825f8bc6d5633812ea56359a70b2260d91
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This works well when packages are built sequentially, but badly fails
-when using top-level parallel build.
-
-More specifically, top-level parallel build can fail with:
-
-comm: /home/thomas/buildroot/output/build/.files-list-host.new: No such file or directory
-
-Because that file has been removed concurrently by the build process
-of another package.
-
-This commit reworks the logic in a very straight-forward way. Before
-the installation of each package, we store the list of files that are
-already installed and store it in the package build directory. After
-the installation of each package, we store again that list of files,
-calculate the difference with the before file, and store that as the
-list of files installed by that package, still in the package build
-directory.
-
-At the end of the build, in target-finalize we collect all the
-collected information into the global package file lists, that
-continue to be installed in the same location as before, with the same
-name.
-
-There are however some differences:
-
- (1) The files are no longer ordered in build order, but by alphabetic
-     ordering of packages. Indeed, "build order" no longer makes any
-     sense in the context of top-level parallel build.
-
- (2) Some files which were incorrectly tracked are no longer
-     tracked. For example, the toolchain package is a target package,
-     but it installs files in $(HOST_DIR). In the previous logic, the
-     files installed by the toolchain package in $(HOST_DIR) were
-     incorrectly affected to the next host package that was installed
-     after the toolchain package. With our new logic, those files are
-     no longer tracked at all. To fix this, we would have to change
-     the logic to scan HOST_DIR/TARGET_DIR/STAGING_DIR for all
-     installation steps, not just for the install-host, install-target
-     and install-staging steps respecitively. But the result was
-     already incorrect anyway, and therefore this should be fixed
-     separately.
-
-Note that the check_bin_arch hook needs to be adjusted: it was using
-the global package-file-list.txt file, but this file is now created
-only at the very end of the build. So instead, we use the current
-package .file-list.txt file to know which packages have been installed
-by the current package in $(TARGET_DIR).
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/4e60fa31b1cd08bc7fdf9c5dd3a3f4941e029ba3/
-
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Makefile               | 15 +++++------
- package/pkg-generic.mk | 59 +++++++++++++++++++-----------------------
- 2 files changed, 33 insertions(+), 41 deletions(-)
+ package/python-msgpack/python-msgpack.hash | 6 +++---
+ package/python-msgpack/python-msgpack.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 40e71ffbf4..63e0dec392 100644
---- a/Makefile
-+++ b/Makefile
-@@ -804,15 +804,12 @@ endif # merged /usr
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
+index e58537d062..e34ea118ed 100644
+--- a/package/python-msgpack/python-msgpack.hash
++++ b/package/python-msgpack/python-msgpack.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/msgpack/json
+-md5	ba46fdee995565f40e332bd7eea882f1  msgpack-0.6.2.tar.gz
+-sha256	ea3c2f859346fcd55fc46e96885301d9c2f7a36d453f5d8f2967840efa1e1830  msgpack-0.6.2.tar.gz
+-# Locally computed sha256
++md5  c35ee8f991dad3969884e9585e56ebba  msgpack-1.0.0.tar.gz
++sha256  9534d5cc480d4aff720233411a1f765be90885750b07df772380b34c10ecb5c0  msgpack-1.0.0.tar.gz
++# Locally computed sha256 checksums
+ sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index f4e059f5ea..18d5a998ff 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- 	touch $(TARGET_DIR)/usr
- 
--# AFTER ALL FILE-CHANGING ACTIONS:
--# Update timestamps in internal file list to fix attribution of files
--# to packages on subsequent builds
--	@$(call step_pkg_size_file_list,$(TARGET_DIR))
--	@$(call step_pkg_size_finalize)
--	@$(call step_pkg_size_file_list,$(STAGING_DIR),-staging)
--	@$(call step_pkg_size_finalize,-staging)
--	@$(call step_pkg_size_file_list,$(HOST_DIR),-host)
--	@$(call step_pkg_size_finalize,-host)
-+	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt)) > \
-+		$(BUILD_DIR)/packages-file-list.txt
-+	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt)) > \
-+		$(BUILD_DIR)/packages-file-list-host.txt
-+	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
-+		$(BUILD_DIR)/packages-file-list-staging.txt
- 
- .PHONY: target-post-image
- target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6687ac9198..7b240ca012 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -57,50 +57,45 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
- 
- # Hooks to collect statistics about installed files
- 
--# Helper function to create the file list -- also used from target-finalize
--# $(1): base directory to search in
--# $(2): suffix of file  (optional)
--define step_pkg_size_file_list
--	cd $(1); \
-+# $(1): package name
-+# $(2): base directory to search in
-+# $(3): suffix of file (optional)
-+define step_pkg_size_before
-+	cd $(2); \
- 	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
--		| LC_ALL=C sort > $(BUILD_DIR)/.files-list$(2).new
--endef
--
--# Helper function to mark the latest file list as the reference for next
--# iteration -- also used from target-finalize
--# $(1): suffix of file  (optional)
--define step_pkg_size_finalize
--	mv $(BUILD_DIR)/.files-list$(1).new \
--		$(BUILD_DIR)/.files-list$(1).stat
-+		| LC_ALL=C sort > $($(PKG)_BUILDDIR)/.files-list$(3).before
- endef
- 
--# The suffix is typically empty for the target variant, for legacy backward
--# compatibility.
- # $(1): package name
- # $(2): base directory to search in
--# $(3): suffix of file  (optional)
--define step_pkg_size_inner
--	@touch $(BUILD_DIR)/.files-list$(3).stat
--	@touch $(BUILD_DIR)/packages-file-list$(3).txt
--	$(SED) '/^$(1),/d' $(BUILD_DIR)/packages-file-list$(3).txt
--	$(call step_pkg_size_file_list,$(2),$(3))
-+# $(3): suffix of file (optional)
-+define step_pkg_size_after
-+	cd $(2); \
-+	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
-+		| LC_ALL=C sort > $($(PKG)_BUILDDIR)/.files-list$(3).after
- 	LC_ALL=C comm -13 \
--		$(BUILD_DIR)/.files-list$(3).stat \
--		$(BUILD_DIR)/.files-list$(3).new \
-+		$($(PKG)_BUILDDIR)/.files-list$(3).before \
-+		$($(PKG)_BUILDDIR)/.files-list$(3).after \
-+		| sed -r -e 's/^[^,]+/$(1)/' \
- 		> $($(PKG)_BUILDDIR)/.files-list$(3).txt
--	sed -r -e 's/^[^,]+/$(1)/' \
--		$($(PKG)_BUILDDIR)/.files-list$(3).txt \
--		>> $(BUILD_DIR)/packages-file-list$(3).txt
--	$(call step_pkg_size_finalize,$(3))
-+	rm -f $($(PKG)_BUILDDIR)/.files-list$(3).before
-+	rm -f $($(PKG)_BUILDDIR)/.files-list$(3).after
- endef
- 
- define step_pkg_size
-+	$(if $(filter start-install-target,$(1)-$(2)),\
-+		$(call step_pkg_size_before,$(3),$(TARGET_DIR)))
-+	$(if $(filter start-install-staging,$(1)-$(2)),\
-+		$(call step_pkg_size_before,$(3),$(STAGING_DIR),-staging))
-+	$(if $(filter start-install-host,$(1)-$(2)),\
-+		$(call step_pkg_size_before,$(3),$(HOST_DIR),-host))
-+
- 	$(if $(filter end-install-target,$(1)-$(2)),\
--		$(call step_pkg_size_inner,$(3),$(TARGET_DIR)))
-+		$(call step_pkg_size_after,$(3),$(TARGET_DIR)))
- 	$(if $(filter end-install-staging,$(1)-$(2)),\
--		$(call step_pkg_size_inner,$(3),$(STAGING_DIR),-staging))
-+		$(call step_pkg_size_after,$(3),$(STAGING_DIR),-staging))
- 	$(if $(filter end-install-host,$(1)-$(2)),\
--		$(call step_pkg_size_inner,$(3),$(HOST_DIR),-host))
-+		$(call step_pkg_size_after,$(3),$(HOST_DIR),-host))
- endef
- GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
- 
-@@ -108,7 +103,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
- define check_bin_arch
- 	$(if $(filter end-install-target,$(1)-$(2)),\
- 		support/scripts/check-bin-arch -p $(3) \
--			-l $(BUILD_DIR)/packages-file-list.txt \
-+			-l $($(PKG)_BUILDDIR)/.files-list.txt \
- 			$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
- 			-r $(TARGET_READELF) \
- 			-a $(BR2_READELF_ARCH_NAME))
--- 
-2.24.1
+-PYTHON_MSGPACK_VERSION = 0.6.2
++PYTHON_MSGPACK_VERSION = 1.0.0
+ PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
+-PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/74/0a/de673c1c987f5779b65ef69052331ec0b0ebd22958bda77a8284be831964
++PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/e4/4f/057549afbd12fdd5d9aae9df19a6773a3d91988afe7be45b277e8cee2f4d
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
+ PYTHON_MSGPACK_LICENSE_FILES = COPYING
+ PYTHON_MSGPACK_SETUP_TYPE = setuptools
