@@ -1,73 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 20:47:39 +0100
-Subject: [Buildroot] [git commit] package/kvm-unit-tests: fix build with SSP
-Message-ID: <20200309140905.65ECB81298@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 22:37:17 +0100
+Subject: [Buildroot] [git commit] package/syslog-ng: bump version to 3.25.1
+Message-ID: <20200309140905.DD383821F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc006056bb06352a853a27d6691deac8842b6b20
+commit: https://git.buildroot.net/buildroot/commit/?id=cc5ec1a5c528d357ea4397f505d7d466b7556599
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch to correct a typo in the Makefile, so -fno-stack-protector /
--fno-stack-protector-all are really used.  With this applied, kvm-unit-tests
-will always be built without SSP as intented by upstream.  This will fix the
-build on ppc64 with SSP that started to fail for an unknown reason since
-November 27th.
-
-Moreover, the Arch Linux workaround could also be removed in a follow-up
-patch.
-
-Fixes:
- - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0003-Makefile-fix-stack-protector-tests.patch  | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/syslog-ng/syslog-ng.conf | 2 +-
+ package/syslog-ng/syslog-ng.hash | 2 +-
+ package/syslog-ng/syslog-ng.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
-new file mode 100644
-index 0000000000..be819f27c6
---- /dev/null
-+++ b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
-@@ -0,0 +1,36 @@
-+From 9bf9155804652c0b3a94af9723c79b6de430187b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 24 Feb 2020 00:04:06 +0100
-+Subject: [PATCH] Makefile: fix stack-protector tests
-+
-+Rename fnostack_protector into fno_stack_protector and
-+fnostack_protector_all into fnostack_protector_all otherwise build will
-+fail if -fstack-protector is passed by the toolchain
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to kvm at vger.kernel.org]
-+---
-+ Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 767b6c6..754ed65 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -55,8 +55,8 @@ COMMON_CFLAGS += -Wignored-qualifiers -Werror
-+ 
-+ frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
-+ fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
-+-fnostack_protector := $(call cc-option, -fno-stack-protector, "")
-+-fnostack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
-++fno_stack_protector := $(call cc-option, -fno-stack-protector, "")
-++fno_stack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
-+ wno_frame_address := $(call cc-option, -Wno-frame-address, "")
-+ fno_pic := $(call cc-option, -fno-pic, "")
-+ no_pie := $(call cc-option, -no-pie, "")
-+-- 
-+2.25.0
-+
+diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+index e8b9f1fba4..a04a4770b1 100644
+--- a/package/syslog-ng/syslog-ng.conf
++++ b/package/syslog-ng/syslog-ng.conf
+@@ -1,4 +1,4 @@
+- at version: 3.24
++ at version: 3.25
+ 
+ source s_sys {
+ 	file("/proc/kmsg" program_override("kernel"));
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index 62bc48a7af..962c354b4c 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 d4d0a0357b452be96b69d6f741129275530d8f0451e35adc408ad5635059fa3d  syslog-ng-3.24.1.tar.gz
++sha256 34cb9673bcde58d543890e6c1189f466f938e199f227c524a6fa2f47f4db6817  syslog-ng-3.25.1.tar.gz
+ sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607  COPYING
+ sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 68260172a2..9b7e9a1317 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please check at runtime if the version in
+ # syslog-ng.conf header needs to be updated
+-SYSLOG_NG_VERSION = 3.24.1
++SYSLOG_NG_VERSION = 3.25.1
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
