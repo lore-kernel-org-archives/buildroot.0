@@ -1,41 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 22:45:34 +0100
-Subject: [Buildroot] [git commit] package/openlayers: bump version to 6.2.1
-Message-ID: <20200309140905.F043D80404@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Feb 2020 19:00:04 +0100
+Subject: [Buildroot] [git commit] package/meson: bump version to 0.53.2
+Message-ID: <20200309140905.2F33881298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76ecf375941a90ec0a7e045b63d67a9c05152e4b
+commit: https://git.buildroot.net/buildroot/commit/?id=10c0bf73be91c0dff86b71038a9d98c2f0c24504
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openlayers/openlayers.hash | 2 +-
- package/openlayers/openlayers.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch | 2 +-
+ .../0002-Prefer-ext-static-libs-when-default-library-static.patch     | 2 +-
+ package/meson/0003-envconfig-add-pkg_config_libdir-property.patch     | 4 ++--
+ package/meson/meson.hash                                              | 4 ++--
+ package/meson/meson.mk                                                | 2 +-
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-index b9efd448a1..f1678507d7 100644
---- a/package/openlayers/openlayers.hash
-+++ b/package/openlayers/openlayers.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	9513cf83d5a2c6093e8c4321fc50ef03cb16fb7c455858924059f5924b0fa20c	v6.1.1-dist.zip
-+sha256	e133a2ad952f4a31002b1a3217f6b4b68bc9f02bcf6c0b9970638a2627887101	v6.2.1-dist.zip
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-index 85003b620d..65a1fe00fa 100644
---- a/package/openlayers/openlayers.mk
-+++ b/package/openlayers/openlayers.mk
+diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+index a7b66c1067..79e99adf4a 100644
+--- a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
++++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+@@ -14,7 +14,7 @@ diff --git a/mesonbuild/minstall.py b/mesonbuild/minstall.py
+ index 8ac6aab1..7ef04116 100644
+ --- a/mesonbuild/minstall.py
+ +++ b/mesonbuild/minstall.py
+-@@ -478,8 +478,14 @@ class Installer:
++@@ -489,8 +489,14 @@ class Installer:
+                          printed_symlink_error = True
+              if os.path.isfile(outname):
+                  try:
+diff --git a/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
+index 798cd65299..b859d8372e 100644
+--- a/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
++++ b/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
+@@ -30,7 +30,7 @@ diff --git a/mesonbuild/compilers/mixins/clike.py b/mesonbuild/compilers/mixins/
+ index 5d50b7d..8f5f1c6 100644
+ --- a/mesonbuild/compilers/mixins/clike.py
+ +++ b/mesonbuild/compilers/mixins/clike.py
+-@@ -858,6 +858,9 @@ class CLikeCompiler:
++@@ -857,6 +857,9 @@ class CLikeCompiler:
+          elif env.machines[self.for_machine].is_cygwin():
+              shlibext = ['dll', 'dll.a']
+              prefixes = ['cyg'] + prefixes
+diff --git a/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch b/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
+index ae40ab8b1c..8ae34b999d 100644
+--- a/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
++++ b/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
+@@ -53,7 +53,7 @@ diff --git a/run_unittests.py b/run_unittests.py
+ index 676604f4..382c0964 100755
+ --- a/run_unittests.py
+ +++ b/run_unittests.py
+-@@ -3621,6 +3621,34 @@ recommended as it is not supported on some platforms''')
++@@ -3629,6 +3629,34 @@ recommended as it is not supported on some platforms''')
+          self.wipe()
+          self.init(testdir, extra_args=['-Dstart_native=true'], override_envvars=env)
+  
+@@ -88,7 +88,7 @@ index 676604f4..382c0964 100755
+      def __reconfigure(self, change_minor=False):
+          # Set an older version to force a reconfigure from scratch
+          filename = os.path.join(self.privatedir, 'coredata.dat')
+-@@ -6847,7 +6875,7 @@ class NativeFileTests(BasePlatformTests):
++@@ -6863,7 +6891,7 @@ class NativeFileTests(BasePlatformTests):
+  
+  class CrossFileTests(BasePlatformTests):
+  
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 881d4211cf..3777a51542 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.53.1/meson-0.53.1.tar.gz.asc
+-sha256 ec1ba33eea701baca2c1607dac458152dc8323364a51fdef6babda2623413b04 meson-0.53.1.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.53.2/meson-0.53.2.tar.gz.asc
++sha256 3e8f830f33184397c2eb0b651ec502adb63decb28978bdc84b3558d71284c21f meson-0.53.2.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 810c84690a..29c7ed1800 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENLAYERS_VERSION = 6.1.1
-+OPENLAYERS_VERSION = 6.2.1
- OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
- OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
- OPENLAYERS_LICENSE = BSD-2-Clause
+-MESON_VERSION = 0.53.1
++MESON_VERSION = 0.53.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
