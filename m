@@ -1,31 +1,25 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 26 Feb 2020 07:36:00 +0200
-Subject: [Buildroot] external, how to achieve our needs?
-In-Reply-To: <20200225150149.zvyqbn34swfizg72@M43218.corp.atmel.com>
-References: <20200225150149.zvyqbn34swfizg72@M43218.corp.atmel.com>
-Message-ID: <87imjtoqpr.fsf@tarshish>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 26 Feb 2020 08:09:35 +0000
+Subject: [Buildroot] [Bug 12581] 2020.02-rc1 glibc failing to build on
+ fedora 31
+In-Reply-To: <bug-12581-163@https.bugs.busybox.net/>
+References: <bug-12581-163@https.bugs.busybox.net/>
+Message-ID: <bug-12581-163-SK0pcIzzme@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ludovic,
+https://bugs.busybox.net/show_bug.cgi?id=12581
 
-On Tue, Feb 25 2020, Ludovic Desroches wrote:
-> I would like to emphasize that recent changes in buildroot make us
-> think that it won't be easy to get rid of buildroot-at91: devmem2
-> deprecated, rgnd which increases the boot time since it uses the lib
-> jitterentropy, curl library name change and others.
+--- Comment #3 from romain.naour at gmail.com ---
+Hi, I'm unable to reproduce the issue.
+Can you test without ccache enabled?
 
-The curl library name has not changed in the last few year. Do you refer
-to the curl binary Kconfig symbol name change (commit 2a057339cc12)? How
-does that affect your use case? Do you need to support several Buildroot
-versions in a single config?
+Best regards,
+Romain
 
-baruch
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
