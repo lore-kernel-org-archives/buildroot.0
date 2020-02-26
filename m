@@ -1,55 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 23:50:57 +0100
-Subject: [Buildroot] [git commit] package/qt5canvas3d: drop qt 5.6 support
-Message-ID: <20200309140907.26E3C8E780@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Feb 2020 20:49:44 +0100
+Subject: [Buildroot] [git commit] package/vala: bump version to 0.46.6
+Message-ID: <20200309140905.8238B7F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50a3409a91b71cfa4ff87ec5de560e3012aa9a3f
+commit: https://git.buildroot.net/buildroot/commit/?id=2723ff3333f4f31a06628692bb644552681f8226
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt5canvas3d/qt5canvas3d.hash | 6 ------
- package/qt5/qt5canvas3d/qt5canvas3d.mk   | 5 -----
- 2 files changed, 11 deletions(-)
+Also add the line "HOST_VALA_CONF_OPTS += --disable-valadoc"
+as valadoc requires libgvc which is not available in Buildroot.
 
-diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.hash b/package/qt5/qt5canvas3d/qt5canvas3d.hash
-index 2c7046a87e..c6eca2e779 100644
---- a/package/qt5/qt5canvas3d/qt5canvas3d.hash
-+++ b/package/qt5/qt5canvas3d/qt5canvas3d.hash
-@@ -1,6 +1,3 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcanvas3d-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 e99e0e159f2fba539b7947a1921072f6807f20958d32809edbf12aac571f56ff qtcanvas3d-opensource-src-5.6.3.tar.xz
--
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtcanvas3d-everywhere-src-5.12.7.tar.xz.sha256
- sha256 b63a513a2ee11548b122e0fd640b1fa22d3eb83cdc51ddfdf3b97c2ecd0d0c50 qtcanvas3d-everywhere-src-5.12.7.tar.xz
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index 7b3f0c9f76..319c7ef2f4 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/vala/0.34/vala-0.34.7.sha256sum
+-sha256  1b2cb14f377d4c41fa3a86d3d01b93017015ce91b6714a85f27346073b4034fa  vala-0.34.7.tar.xz
++# From https://download.gnome.org/sources/vala/0.46/vala-0.46.6.sha256sum
++sha256  ef31649932872f094971d46453b21c60a41661670f98afa334062425b4aec47a  vala-0.46.6.tar.xz
+ # Locally computed
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index ad0a5650f7..b8a69f8c5e 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-@@ -9,6 +6,3 @@ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
- sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
- sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
--sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
--sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
--sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
-diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.mk b/package/qt5/qt5canvas3d/qt5canvas3d.mk
-index b550ff00f2..2366afb352 100644
---- a/package/qt5/qt5canvas3d/qt5canvas3d.mk
-+++ b/package/qt5/qt5canvas3d/qt5canvas3d.mk
-@@ -10,13 +10,8 @@ QT5CANVAS3D_SOURCE = qtcanvas3d-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5CANVAS3D_VERSI
- QT5CANVAS3D_DEPENDENCIES = qt5base qt5declarative
- QT5CANVAS3D_INSTALL_STAGING = YES
+-VALA_VERSION_MAJOR = 0.34
+-VALA_VERSION = $(VALA_VERSION_MAJOR).7
++VALA_VERSION_MAJOR = 0.46
++VALA_VERSION = $(VALA_VERSION_MAJOR).6
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPL-2.1+
+@@ -15,6 +15,7 @@ HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
+ # Yes, the autoconf script understands ':' as "xsltproc is not
+ # available".
+ HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
++HOST_VALA_CONF_OPTS += --disable-valadoc
  
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5CANVAS3D_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools)
- QT5CANVAS3D_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3
--else
--QT5CANVAS3D_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0
--QT5CANVAS3D_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3
--endif
- 
- define QT5CANVAS3D_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
+ # We wrap vala & valac to point to the proper gir and vapi data dirs
+ # Otherwise we'll get host directory data which isn't enough
