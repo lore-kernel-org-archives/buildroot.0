@@ -1,57 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 26 Feb 2020 10:41:59 +0200
-Subject: [Buildroot] [PATCH] package/fail2ban: The (host-python3) 2to3
- utility needs to be present
-In-Reply-To: <20200226082818.5066-1-p.debruijn@unilogic.nl>
-References: <20200226082818.5066-1-p.debruijn@unilogic.nl>
-Message-ID: <87h7zdoi3s.fsf@tarshish>
+From: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Date: Wed, 26 Feb 2020 09:53:32 +0100
+Subject: [Buildroot] [PATCH] package/linux-tools: filter debugging symbols
+ for hyperv
+Message-ID: <20200226085332.5484-1-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pascal,
+Workaround for:
 
-On Wed, Feb 26 2020, Pascal de Bruijn wrote:
-> During _POST_PATCH_HOOKS _DEPENDANCIES aren't guaranteed to be built,
-> however during _PRE_CONFIGURE_HOOKS they should be built.
->
-> Should fix:
-> http://autobuild.buildroot.net/results/dd8e225e2a49cfa6735bed11459007003a37c137/
-> http://autobuild.buildroot.net/results/e688c3652bd474ac682984e2e5947701942f0f57/
+ld: hv_vss_daemon.o: unable to initialize decompress status for section .debug_info
+ld: hv_vss_daemon.o: unable to initialize decompress status for section .debug_info
+hv_vss_daemon.o: file not recognized: File format not recognized
 
-Thanks for following up on this.
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+---
+ package/linux-tools/linux-tool-hv.mk.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> ---
->  package/fail2ban/fail2ban.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-> index 6f023b48a1..6cb77c2514 100644
-> --- a/package/fail2ban/fail2ban.mk
-> +++ b/package/fail2ban/fail2ban.mk
-> @@ -15,7 +15,7 @@ define FAIL2BAN_PYTHON_2TO3
->  	$(HOST_DIR)/bin/2to3 --write --nobackups --no-diffs $(@D)/bin/* $(@D)/fail2ban
->  endef
->  FAIL2BAN_DEPENDENCIES += host-python3
-> -FAIL2BAN_POST_PATCH_HOOKS += FAIL2BAN_PYTHON_2TO3
-> +FAIL2BAN_PRE_CONFIGURE_HOOKS += FAIL2BAN_PYTHON_2TO3
-
-As Thomas suggested please add a comment here. Something like:
-
-# We can't use _POST_PATCH_HOOKS because dependencies are not guaranteed
-# to build and install before _POST_PATCH_HOOKS run.
-
-baruch
-
->  endif
->
->  define FAIL2BAN_FIX_DEFAULT_CONFIG
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/linux-tools/linux-tool-hv.mk.in b/package/linux-tools/linux-tool-hv.mk.in
+index 6996c55271..e638fecfc6 100644
+--- a/package/linux-tools/linux-tool-hv.mk.in
++++ b/package/linux-tools/linux-tool-hv.mk.in
+@@ -16,7 +16,7 @@ HV_hv_kvp_daemon = hypervkvpd
+ HV_hv_fcopy_daemon = hypervfcopyd
+ HV_hv_vss_daemon = hypervvssd
+ 
+-HV_MAKE_OPTS = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
++HV_MAKE_OPTS = CC="$(TARGET_CC)" CFLAGS="$(filter-out -g%,$(TARGET_CFLAGS))"
+ 
+ define HV_BUILD_CMDS
+ 	$(Q)for prog in $(HV_PROGS_y); do \
+-- 
+2.17.1
