@@ -1,135 +1,48 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Wed, 26 Feb 2020 17:03:26 +0100
-Subject: [Buildroot] [PATCH/next] package/psplash: bump to revision fd33a9b
-Message-ID: <1582733006-22049-1-git-send-email-pjtexier@koncepto.io>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed, 26 Feb 2020 09:04:26 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-msgpack: bump to version
+ 1.0.0
+Message-ID: <20200226160426.24450-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This includes the following changes:
-
-66c8f65 Makefile.am: use BUILT_SOURCES instead of BUILD_SOURCES
-f7a354d Generate image headers from their PNG source, while still including them in dist tarball
-983837e Import png source for images, extracted from headers
-3bd1557 Cleanup poky logo
-773a397 Add configure flags for fullscreen logo and no startup message
-2913c24 Double buffering support
-8188d68 Support --with-font configure option to use other font headers
-88c4b71 Add SPDX License information to files, drop boilerplate
-904f4aa add systemd support
-e94bd11 process consecutive commands
-568f28e use /run for communication FIFO
-ee053e0 add recovered bar.png
-2015f70 Fix text width calculation.
-
-Also:
- - remove the 'psplash-quit.service' unit file
- - add 'psplash-systemd.service' to use the new systemd support in psplash
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/psplash/psplash-quit.service    | 11 -----------
- package/psplash/psplash-start.service   |  3 +--
- package/psplash/psplash-systemd.service | 12 ++++++++++++
- package/psplash/psplash.hash            |  2 +-
- package/psplash/psplash.mk              | 14 +++++++++++---
- 5 files changed, 25 insertions(+), 17 deletions(-)
- delete mode 100644 package/psplash/psplash-quit.service
- create mode 100644 package/psplash/psplash-systemd.service
+ package/python-msgpack/python-msgpack.hash | 6 +++---
+ package/python-msgpack/python-msgpack.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/psplash/psplash-quit.service b/package/psplash/psplash-quit.service
-deleted file mode 100644
-index 14bd499..0000000
---- a/package/psplash/psplash-quit.service
-+++ /dev/null
-@@ -1,11 +0,0 @@
--[Unit]
--Description=Terminate Psplash Boot Screen
--After=psplash-start.service
--
--[Service]
--Type=oneshot
--ExecStart=/usr/bin/psplash-write QUIT
--TimeoutSec=20
--
--[Install]
--WantedBy=multi-user.target
-diff --git a/package/psplash/psplash-start.service b/package/psplash/psplash-start.service
-index 2de3cfc..b97e883 100644
---- a/package/psplash/psplash-start.service
-+++ b/package/psplash/psplash-start.service
-@@ -1,8 +1,7 @@
- [Unit]
- Description=Starts Psplash Boot screen
--Wants=systemd-vconsole-setup.service
--After=systemd-vconsole-setup.service systemd-udev-trigger.service systemd-udevd.service
- DefaultDependencies=no
-+RequiresMountsFor=/run
- 
- [Service]
- ExecStart=/usr/bin/psplash -n
-diff --git a/package/psplash/psplash-systemd.service b/package/psplash/psplash-systemd.service
-new file mode 100644
-index 0000000..249aa54
---- /dev/null
-+++ b/package/psplash/psplash-systemd.service
-@@ -0,0 +1,12 @@
-+[Unit]
-+Description=Start psplash-systemd progress communication helper
-+DefaultDependencies=no
-+After=systemd-start.service
-+Requires=psplash-start.service
-+RequiresMountsFor=/run
-+
-+[Service]
-+ExecStart=/usr/bin/psplash-systemd
-+
-+[Install]
-+WantedBy=sysinit.target
-diff --git a/package/psplash/psplash.hash b/package/psplash/psplash.hash
-index c886569..46d5e12 100644
---- a/package/psplash/psplash.hash
-+++ b/package/psplash/psplash.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 aaddb20ef892dfb03d4e046cc634159bbcdfe555f7291652dde2b7d4cf491289  psplash-5b3c1cc28f5abdc2c33830150b48b278cc4f7bca.tar.gz
-+sha256 0042192bf94be4f5792d9ff6b7a2ddff77c79e51274745180d14be5815b3a0f4  psplash-fd33a9b3d68c89fa22ff6873f4f9fd28bd85830c.tar.gz
- sha256 f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
-diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
-index 3dd2f4d..39fcc22 100644
---- a/package/psplash/psplash.mk
-+++ b/package/psplash/psplash.mk
-@@ -4,18 +4,26 @@
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
+index e58537d062..e34ea118ed 100644
+--- a/package/python-msgpack/python-msgpack.hash
++++ b/package/python-msgpack/python-msgpack.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/msgpack/json
+-md5	ba46fdee995565f40e332bd7eea882f1  msgpack-0.6.2.tar.gz
+-sha256	ea3c2f859346fcd55fc46e96885301d9c2f7a36d453f5d8f2967840efa1e1830  msgpack-0.6.2.tar.gz
+-# Locally computed sha256
++md5  c35ee8f991dad3969884e9585e56ebba  msgpack-1.0.0.tar.gz
++sha256  9534d5cc480d4aff720233411a1f765be90885750b07df772380b34c10ecb5c0  msgpack-1.0.0.tar.gz
++# Locally computed sha256 checksums
+ sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index f4e059f5ea..18d5a998ff 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PSPLASH_VERSION = 5b3c1cc28f5abdc2c33830150b48b278cc4f7bca
-+PSPLASH_VERSION = fd33a9b3d68c89fa22ff6873f4f9fd28bd85830c
- PSPLASH_SITE = git://git.yoctoproject.org/psplash
- PSPLASH_LICENSE = GPL-2.0+
- PSPLASH_LICENSE_FILES = COPYING
- PSPLASH_AUTORECONF = YES
-+PSPLASH_DEPENDENCIES = host-pkgconf
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+PSPLASH_DEPENDENCIES += systemd
-+PSPLASH_CONF_OPTS += --with-systemd
-+else
-+PSPLASH_CONF_OPTS += --without-systemd
-+endif
- 
- define PSPLASH_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/psplash/psplash-start.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/psplash-start.service
- 
--	$(INSTALL) -D -m 644 package/psplash/psplash-quit.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/psplash-quit.service
-+	$(INSTALL) -D -m 644 package/psplash/psplash-systemd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/psplash-systemd.service
- endef
- 
- $(eval $(autotools-package))
+-PYTHON_MSGPACK_VERSION = 0.6.2
++PYTHON_MSGPACK_VERSION = 1.0.0
+ PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
+-PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/74/0a/de673c1c987f5779b65ef69052331ec0b0ebd22958bda77a8284be831964
++PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/e4/4f/057549afbd12fdd5d9aae9df19a6773a3d91988afe7be45b277e8cee2f4d
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
+ PYTHON_MSGPACK_LICENSE_FILES = COPYING
+ PYTHON_MSGPACK_SETUP_TYPE = setuptools
 -- 
-2.7.4
+2.20.1
