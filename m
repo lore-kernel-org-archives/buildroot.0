@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 15:46:05 +0100
-Subject: [Buildroot] [PATCH v2 34/37] package/kf5: drop QT5_VERSION_LATEST
- logic
+Date: Wed, 26 Feb 2020 15:46:06 +0100
+Subject: [Buildroot] [PATCH v2 35/37] package/libmediaart: drop
+ QT5_VERSION_LATEST logic
 In-Reply-To: <20200226144608.12529-1-peter@korsgaard.com>
 References: <20200226144608.12529-1-peter@korsgaard.com>
-Message-ID: <20200226144608.12529-34-peter@korsgaard.com>
+Message-ID: <20200226144608.12529-35-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +15,22 @@ Now that the version selection has been removed.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kf5/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/libmediaart/libmediaart.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/kf5/Config.in b/package/kf5/Config.in
-index aecbb932f5..030759f376 100644
---- a/package/kf5/Config.in
-+++ b/package/kf5/Config.in
-@@ -1,7 +1,6 @@
- menuconfig BR2_PACKAGE_KF5
- 	bool "KF5"
- 	depends on BR2_PACKAGE_QT5
--	depends on BR2_PACKAGE_QT5_VERSION_LATEST
- 	help
- 	  This option enables the KF5 KDE Frameworks. Sub-options
- 	  allow to select which modules should be built.
+diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
+index a81542ac69..4933b74c19 100644
+--- a/package/libmediaart/libmediaart.mk
++++ b/package/libmediaart/libmediaart.mk
+@@ -22,9 +22,7 @@ LIBMEDIAART_CONF_OPTS += \
+ 	--disable-qt
+ else ifeq ($(BR2_PACKAGE_LIBMEDIAART_BACKEND_QT),y)
+ # qt5 needs c++11 (since qt-5.7)
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ LIBMEDIAART_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
+-endif
+ LIBMEDIAART_DEPENDENCIES += qt5base
+ LIBMEDIAART_CONF_OPTS += \
+ 	--disable-gdkpixbuf \
 -- 
 2.20.1
