@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 15:45:40 +0100
-Subject: [Buildroot] [PATCH v2 09/37] package/qt5graphicaleffects: drop qt
- 5.6 support
+Date: Wed, 26 Feb 2020 15:45:42 +0100
+Subject: [Buildroot] [PATCH v2 11/37] package/qt5location: drop qt 5.6
+ support
 In-Reply-To: <20200226144608.12529-1-peter@korsgaard.com>
 References: <20200226144608.12529-1-peter@korsgaard.com>
-Message-ID: <20200226144608.12529-9-peter@korsgaard.com>
+Message-ID: <20200226144608.12529-11-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,47 +13,61 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash | 8 --------
- package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk   | 5 -----
- 2 files changed, 13 deletions(-)
+ package/qt5/qt5location/qt5location.hash | 8 --------
+ package/qt5/qt5location/qt5location.mk   | 7 -------
+ 2 files changed, 15 deletions(-)
 
-diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-index 8e327de296..ae800fe07a 100644
---- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-+++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-@@ -1,6 +1,3 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtgraphicaleffects-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 c742592d5e45b122b29df60b69be23ba7c817f2dc471db86e054f6ea24a999ed qtgraphicaleffects-opensource-src-5.6.3.tar.xz
+diff --git a/package/qt5/qt5location/qt5location.hash b/package/qt5/qt5location/qt5location.hash
+index 80bcfaf0ab..3c94df0079 100644
+--- a/package/qt5/qt5location/qt5location.hash
++++ b/package/qt5/qt5location/qt5location.hash
+@@ -1,17 +1,9 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtlocation-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 b7a81c58cc331fb15bea8fba21d3c9a59f6dc6ad2e4855e30a14ce59a2af1466 qtlocation-opensource-src-5.6.3.tar.xz
 -
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtgraphicaleffects-everywhere-src-5.12.7.tar.xz.sha256
- sha256 02f0328420c623da8f9ae949fec01e99ba84213dd2ad559cb00c204502bbcace qtgraphicaleffects-everywhere-src-5.12.7.tar.xz
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtlocation-everywhere-src-5.12.7.tar.xz.sha256
+ sha256 d1e905b80befda3c9aaad92ea984e6dbf722568b5c91e8d15b027bc5bc22781f qtlocation-everywhere-src-5.12.7.tar.xz
  
-@@ -10,8 +7,3 @@ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+-sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+-sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
  sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
  sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
+-sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
  sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
--sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
--sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
 -sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
 -sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
--sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
-diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
-index c5011a94f0..2961c89fcb 100644
---- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
-+++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
-@@ -10,13 +10,8 @@ QT5GRAPHICALEFFECTS_SOURCE = qtgraphicaleffects-$(QT5_SOURCE_TARBALL_PREFIX)-$(Q
- QT5GRAPHICALEFFECTS_DEPENDENCIES = qt5base qt5declarative
- QT5GRAPHICALEFFECTS_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5location/qt5location.mk b/package/qt5/qt5location/qt5location.mk
+index a69e8f41a6..5edb9170a6 100644
+--- a/package/qt5/qt5location/qt5location.mk
++++ b/package/qt5/qt5location/qt5location.mk
+@@ -10,13 +10,8 @@ QT5LOCATION_SOURCE = qtlocation-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5LOCATION_VERSI
+ QT5LOCATION_DEPENDENCIES = qt5base
+ QT5LOCATION_INSTALL_STAGING = YES
  
 -ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5GRAPHICALEFFECTS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
- QT5GRAPHICALEFFECTS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
+ QT5LOCATION_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5LOCATION_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
 -else
--QT5GRAPHICALEFFECTS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
--QT5GRAPHICALEFFECTS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+-QT5LOCATION_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+-QT5LOCATION_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
 -endif
  
- define QT5GRAPHICALEFFECTS_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5LOCATION_DEPENDENCIES += qt5declarative
+@@ -43,11 +38,9 @@ define QT5LOCATION_INSTALL_TARGET_LOCATION
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Location.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geoservices $(TARGET_DIR)/usr/lib/qt/plugins/
+ endef
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ define QT5LOCATION_INSTALL_TARGET_POSITION_QUICK
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5PositioningQuick.so.* $(TARGET_DIR)/usr/lib
+ endef
+-endif
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ define QT5LOCATION_INSTALL_TARGET_EXAMPLES
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/location $(TARGET_DIR)/usr/lib/qt/examples/
 -- 
 2.20.1
