@@ -1,45 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 22:45:54 +0100
-Subject: [Buildroot] [git commit] package/libmbim: bump to version 1.22.0
-Message-ID: <20200309140906.0812080404@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 20:47:39 +0100
+Subject: [Buildroot] [git commit] package/kvm-unit-tests: fix build with SSP
+Message-ID: <20200309140905.65ECB81298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=192690d080cd1540e491c0df710997f49942f3b1
+commit: https://git.buildroot.net/buildroot/commit/?id=dc006056bb06352a853a27d6691deac8842b6b20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://lists.freedesktop.org/archives/libmbim-devel/2020-January/001102.html
+Add a patch to correct a typo in the Makefile, so -fno-stack-protector /
+-fno-stack-protector-all are really used.  With this applied, kvm-unit-tests
+will always be built without SSP as intented by upstream.  This will fix the
+build on ppc64 with SSP that started to fail for an unknown reason since
+November 27th.
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Moreover, the Arch Linux workaround could also be removed in a follow-up
+patch.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmbim/libmbim.hash | 2 +-
- package/libmbim/libmbim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0003-Makefile-fix-stack-protector-tests.patch  | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
-index bbf2c63afc..828bea0f92 100644
---- a/package/libmbim/libmbim.hash
-+++ b/package/libmbim/libmbim.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  ac2708a409b09f1f6f1786a8a9e39c36619aa8d6f285ea943daa7a48ea36d3e8  libmbim-1.20.4.tar.xz
-+sha256  5c0778eb1cd12c3604523134e55183f5147b0cae71150e875b583768f7aa1f38  libmbim-1.22.0.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index dc5c9a59de..67cfd2bc0b 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBMBIM_VERSION = 1.20.4
-+LIBMBIM_VERSION = 1.22.0
- LIBMBIM_SITE = https://www.freedesktop.org/software/libmbim
- LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
- LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+diff --git a/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
+new file mode 100644
+index 0000000000..be819f27c6
+--- /dev/null
++++ b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
+@@ -0,0 +1,36 @@
++From 9bf9155804652c0b3a94af9723c79b6de430187b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 24 Feb 2020 00:04:06 +0100
++Subject: [PATCH] Makefile: fix stack-protector tests
++
++Rename fnostack_protector into fno_stack_protector and
++fnostack_protector_all into fnostack_protector_all otherwise build will
++fail if -fstack-protector is passed by the toolchain
++
++Fixes:
++ - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to kvm at vger.kernel.org]
++---
++ Makefile | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 767b6c6..754ed65 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -55,8 +55,8 @@ COMMON_CFLAGS += -Wignored-qualifiers -Werror
++ 
++ frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
++ fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
++-fnostack_protector := $(call cc-option, -fno-stack-protector, "")
++-fnostack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
+++fno_stack_protector := $(call cc-option, -fno-stack-protector, "")
+++fno_stack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
++ wno_frame_address := $(call cc-option, -Wno-frame-address, "")
++ fno_pic := $(call cc-option, -fno-pic, "")
++ no_pie := $(call cc-option, -no-pie, "")
++-- 
++2.25.0
++
