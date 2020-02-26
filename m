@@ -1,45 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 22:26:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/connman: bump to 1.38
-In-Reply-To: <20200219231616.19489-1-petr.vorel@gmail.com>
-References: <20200219231616.19489-1-petr.vorel@gmail.com>
-Message-ID: <20200226222626.2e7ca69f@windsurf>
+Date: Wed, 26 Feb 2020 22:27:59 +0100
+Subject: [Buildroot] [git commit] board/freescale: use correct
+ ahab-container.img file name
+Message-ID: <20200226211558.63C808EB5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Petr,
+commit: https://git.buildroot.net/buildroot/commit/?id=538940be388842d5ed3bdddaa6a5e56b34257db1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 20 Feb 2020 00:16:16 +0100
-Petr Vorel <petr.vorel@gmail.com> wrote:
+Commit 3f8ace002831a01ed6aec59b704bd92c8a3b957f
+("board/freescale/common/imx: add support for i.MX8") had its
+conflicts incorrectly tweaked when applied to Buildroot. The
+ahab-container.img is installed with this name (ahab-container.img) by
+the imx-firmware package, and not mx8qm-ahab-container.img or
+mx8qx-ahab-container.img.
 
-> This release requires libmnl (WireGuard dependency).
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Julien Olivain <juju@cotds.org>
+Tested-by: Julien Olivain <juju@cotds.org>
+Reported-by: Fabio Estevam <festevam@gmail.com>
+Tested-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/freescale/common/imx/imx8-bootloader-prepare.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-My reading of configure.ac is that it doesn't require libmnl. It only
-needs it if WireGuard support is enabled:
-
-found_libmnl="no"
-if (test "${firewall_type}" = "nftables" -o \
-                "${enable_wireguard}" != "no"); then
-        PKG_CHECK_MODULES(LIBMNL, [libmnl >= 1.0.0], [found_libmnl="yes"],
-                AC_MSG_ERROR([libmnl >= 1.0.0 not found]))
-        AC_SUBST(LIBMNL_CFLAGS)
-        AC_SUBST(LIBMNL_LIBS)
-fi
-AM_CONDITIONAL(LIBMNL, test "${found_libmnl}" != "no")
-
-The connman package probably needs to be extended to support either
-iptables or nftables as firewall types, and other options to
-enable/disable wireguard support.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+index 302fd00658..45c648e360 100755
+--- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
++++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+@@ -28,9 +28,9 @@ main ()
+ 		cp ${BINARIES_DIR}/bl31.bin ${BINARIES_DIR}/u-boot-atf.bin
+ 		dd if=${BINARIES_DIR}/u-boot-hash.bin of=${BINARIES_DIR}/u-boot-atf.bin bs=1K seek=128
+ 		if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y$" ${BR2_CONFIG}; then
+-			${HOST_DIR}/bin/mkimage_imx8 -soc QM -rev B0 -append ${BINARIES_DIR}/mx8qm-ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qm-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a53 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
++			${HOST_DIR}/bin/mkimage_imx8 -soc QM -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qm-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a53 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+ 		else
+-			${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append ${BINARIES_DIR}/mx8qx-ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
++			${HOST_DIR}/bin/mkimage_imx8 -soc QX -rev B0 -append ${BINARIES_DIR}/ahab-container.img -c -scfw ${BINARIES_DIR}/mx8qx-mek-scfw-tcm.bin -ap ${BINARIES_DIR}/u-boot-atf.bin a35 0x80000000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+ 		fi
+ 	fi
+ 
