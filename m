@@ -1,23 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 18:59:49 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/armadillo: bump to version
- 9.850.1
-In-Reply-To: <20200226130509.1912690-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 26 Feb 2020 14:05:09 +0100")
-References: <20200226130509.1912690-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v9nt5iwa.fsf@dell.be.48ers.dk>
+Date: Wed, 26 Feb 2020 19:00:33 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/meson: bump version to
+ 0.53.2
+In-Reply-To: <20200226143007.25595-1-aduskett@gmail.com> (aduskett's message
+ of "Wed, 26 Feb 2020 06:30:07 -0800")
+References: <20200226143007.25595-1-aduskett@gmail.com>
+Message-ID: <87r1yh5iv2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
 
- > Update indentation of hash file (two spaces)
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > From: Adam Duskett <Aduskett@gmail.com>
+ > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-Committed, thanks.
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
