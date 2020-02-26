@@ -1,95 +1,57 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 26 Feb 2020 06:30:07 -0800
-Subject: [Buildroot] [PATCH/next 1/1] package/meson: bump version to 0.53.2
-Message-ID: <20200226143007.25595-1-aduskett@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Feb 2020 15:45:34 +0100
+Subject: [Buildroot] [PATCH v2 03/37] package/qt53d: drop 5.6 support
+In-Reply-To: <20200226144608.12529-1-peter@korsgaard.com>
+References: <20200226144608.12529-1-peter@korsgaard.com>
+Message-ID: <20200226144608.12529-3-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch   | 2 +-
- ...2-Prefer-ext-static-libs-when-default-library-static.patch | 2 +-
- .../meson/0003-envconfig-add-pkg_config_libdir-property.patch | 4 ++--
- package/meson/meson.hash                                      | 4 ++--
- package/meson/meson.mk                                        | 2 +-
- 5 files changed, 7 insertions(+), 7 deletions(-)
+ package/qt5/qt53d/qt53d.hash |  3 ---
+ package/qt5/qt53d/qt53d.mk   | 10 ++--------
+ 2 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-index a7b66c1067..79e99adf4a 100644
---- a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-+++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-@@ -14,7 +14,7 @@ diff --git a/mesonbuild/minstall.py b/mesonbuild/minstall.py
- index 8ac6aab1..7ef04116 100644
- --- a/mesonbuild/minstall.py
- +++ b/mesonbuild/minstall.py
--@@ -478,8 +478,14 @@ class Installer:
-+@@ -489,8 +489,14 @@ class Installer:
-                          printed_symlink_error = True
-              if os.path.isfile(outname):
-                  try:
-diff --git a/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
-index 798cd65299..b859d8372e 100644
---- a/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
-+++ b/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
-@@ -30,7 +30,7 @@ diff --git a/mesonbuild/compilers/mixins/clike.py b/mesonbuild/compilers/mixins/
- index 5d50b7d..8f5f1c6 100644
- --- a/mesonbuild/compilers/mixins/clike.py
- +++ b/mesonbuild/compilers/mixins/clike.py
--@@ -858,6 +858,9 @@ class CLikeCompiler:
-+@@ -857,6 +857,9 @@ class CLikeCompiler:
-          elif env.machines[self.for_machine].is_cygwin():
-              shlibext = ['dll', 'dll.a']
-              prefixes = ['cyg'] + prefixes
-diff --git a/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch b/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
-index ae40ab8b1c..8ae34b999d 100644
---- a/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
-+++ b/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
-@@ -53,7 +53,7 @@ diff --git a/run_unittests.py b/run_unittests.py
- index 676604f4..382c0964 100755
- --- a/run_unittests.py
- +++ b/run_unittests.py
--@@ -3621,6 +3621,34 @@ recommended as it is not supported on some platforms''')
-+@@ -3629,6 +3629,34 @@ recommended as it is not supported on some platforms''')
-          self.wipe()
-          self.init(testdir, extra_args=['-Dstart_native=true'], override_envvars=env)
-  
-@@ -88,7 +88,7 @@ index 676604f4..382c0964 100755
-      def __reconfigure(self, change_minor=False):
-          # Set an older version to force a reconfigure from scratch
-          filename = os.path.join(self.privatedir, 'coredata.dat')
--@@ -6847,7 +6875,7 @@ class NativeFileTests(BasePlatformTests):
-+@@ -6863,7 +6891,7 @@ class NativeFileTests(BasePlatformTests):
-  
-  class CrossFileTests(BasePlatformTests):
-  
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 881d4211cf..3777a51542 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.53.1/meson-0.53.1.tar.gz.asc
--sha256 ec1ba33eea701baca2c1607dac458152dc8323364a51fdef6babda2623413b04 meson-0.53.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.53.2/meson-0.53.2.tar.gz.asc
-+sha256 3e8f830f33184397c2eb0b651ec502adb63decb28978bdc84b3558d71284c21f meson-0.53.2.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 810c84690a..29c7ed1800 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
+index 1ccc9f00e9..54dbda367d 100644
+--- a/package/qt5/qt53d/qt53d.hash
++++ b/package/qt5/qt53d/qt53d.hash
+@@ -1,6 +1,3 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qt3d-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 10d05a30e925fcad971126c7f47a5e32c39f007dab96b298b2094501f9607ffe qt3d-opensource-src-5.6.3.tar.xz
+-
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qt3d-everywhere-src-5.12.7.tar.xz.sha256
+ sha256 2030de3dc93fd4062f677f61938229af9cd7aa4c3d2932cdda2ccb663d681126 qt3d-everywhere-src-5.12.7.tar.xz
  
--MESON_VERSION = 0.53.1
-+MESON_VERSION = 0.53.2
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
+index 7674b44558..1028dd6a65 100644
+--- a/package/qt5/qt53d/qt53d.mk
++++ b/package/qt5/qt53d/qt53d.mk
+@@ -36,19 +36,13 @@ endef
+ endif
+ 
+ ifeq ($(BR2_STATIC_LIBS),)
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+-# Available since 5.9
+-define QT53D_INSTALL_TARGET_LATEST
+-	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
+-	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
+-endef
+-endif
+ define QT53D_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
+-	$(QT53D_INSTALL_TARGET_LATEST)
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
+ 	$(QT53D_INSTALL_TARGET_EXAMPLES)
+ endef
+ endif
 -- 
-2.21.1 (Apple Git-122.3)
+2.20.1
