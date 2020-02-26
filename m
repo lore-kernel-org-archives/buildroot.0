@@ -1,44 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 21:38:01 +0100
-Subject: [Buildroot] [PATCH v2] package/fswebcam: bump to latest git
- version
-In-Reply-To: <20200224074146.3008-1-eugen.hristev@microchip.com>
-References: <20200224074146.3008-1-eugen.hristev@microchip.com>
-Message-ID: <20200226213801.64454e3c@windsurf>
+Date: Wed, 26 Feb 2020 21:38:10 +0100
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: update
+ LICENSE_FILES
+Message-ID: <20200226203823.AFCC68EB3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 24 Feb 2020 09:41:46 +0200
-Eugen Hristev <eugen.hristev@microchip.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=96556bbf5176ecc74de355301e30aa307438aa25
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Bump to latest git version.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> ---
-> Changes in v2:
-> - use buildroot github API to call for tar download
-> 
-> 
->  package/fswebcam/fswebcam.hash | 1 +
->  package/fswebcam/fswebcam.mk   | 5 ++---
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/fswebcam/fswebcam.hash b/package/fswebcam/fswebcam.hash
-> index 28f604547c..ee9bebd106 100644
-> --- a/package/fswebcam/fswebcam.hash
-> +++ b/package/fswebcam/fswebcam.hash
-> @@ -1,3 +1,4 @@
->  # Locally calculated
->  sha256  444d6a8a82102e09e935540c64a731021de36db03e1e74181f41ca6f39aa6474  fswebcam-20140113.tar.xz
+Use LICENSE.GPL instead of src/main.cpp.
 
-You forgot to remove the hash of the old tarball here. So I dropped
-this, and applied your patch to our next branch. Thanks!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 5704976e3c..60bc0031b6 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256 e47263240ac9276546ead439ba14ee26c3f3b45f2882351a9081e5502e296329  kodi-inputstream-adaptive-2.4.2-Leia.tar.gz
+-sha256 9070a4ff46077f9358b079445c5cf2109f1711e05f4b9cb283d89ecac7aad161  src/main.cpp
++sha256 89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 90958bdf1a..1a083b188b 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -7,7 +7,7 @@
+ KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.2-Leia
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+-KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
++KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+ KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
+ 
+ $(eval $(cmake-package))
