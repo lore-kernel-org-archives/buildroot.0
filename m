@@ -1,40 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 15:46:08 +0100
-Subject: [Buildroot] [PATCH v2 37/37] package/qt5: drop QT5_VERSION_LATEST
- symbol
-In-Reply-To: <20200226144608.12529-1-peter@korsgaard.com>
-References: <20200226144608.12529-1-peter@korsgaard.com>
-Message-ID: <20200226144608.12529-37-peter@korsgaard.com>
+Date: Wed, 26 Feb 2020 15:54:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/minicom: fix static linking
+ with ncurses
+In-Reply-To: <20200226124919.1892235-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 26 Feb 2020 13:49:19 +0100")
+References: <20200226124919.1892235-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a7558km4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that all the references to this symbol are gone, remove the blind
-symbol.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
-New in v2
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/d3edbab1f2cd0f7b790e2559dc8d489497ae02f3
 
-package/qt5/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 7051bf517a..4bbc688249 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -37,10 +37,6 @@ menuconfig BR2_PACKAGE_QT5
- 
- if BR2_PACKAGE_QT5
- 
--config BR2_PACKAGE_QT5_VERSION_LATEST
--	bool
--	default y
--
- source "package/qt5/qt53d/Config.in"
- source "package/qt5/qt5base/Config.in"
- source "package/qt5/qt5canvas3d/Config.in"
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
