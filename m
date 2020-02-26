@@ -1,65 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 22:35:09 +0100
-Subject: [Buildroot] [git commit] package/linux-firmware: bump to version
- 20200122
-Message-ID: <20200309140905.CA9BE81298@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Feb 2020 18:59:25 +0100
+Subject: [Buildroot] [git commit] package/openblas: bump to version 0.3.8
+Message-ID: <20200309140905.16C8D81298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48cc1a89ae0451f6b7de3e8fe2181aa38aac68eb
+commit: https://git.buildroot.net/buildroot/commit/?id=8dd444fa401603311a31993dd9fb342fac31058b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added new r8169 firmware files.
+Update indentation of hash file (two spaces)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-firmware/linux-firmware.hash | 2 +-
- package/linux-firmware/linux-firmware.mk   | 6 +++++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/openblas/openblas.hash | 4 ++--
+ package/openblas/openblas.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index b7c9753955..eff0c4cbb2 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
+index 5b1fb17fa7..0683d2a646 100644
+--- a/package/openblas/openblas.hash
++++ b/package/openblas/openblas.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256 270f4b2dd89feb6ed7d9e166bb1677f27d8f93da9d95312e6d188b0e1efaba73 linux-firmware-20190717.tar.gz
-+sha256 83646c58fc4e3ee9a73f4fa74213c849109f48c719322346393f3e5b0fa55044 linux-firmware-20200122.tar.gz
- sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
- sha256 ac7c42c8331ef69221039f770193a2120bc67c7bba357e51a5b3f557bca0037c LICENSE.amdgpu
- sha256 2d6062d63b91eb750bf741498691604f75184b9fee97608ec537cd09bd6a42b4 LICENCE.Marvell
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 9d86ce57b2..fd90f261fa 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
+-sha256 bde136122cef3dd6efe2de1c6f65c10955bbb0cc01a520c2342f5287c28f9379  openblas-0.3.7.tar.gz
+-sha256 190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
++sha256  8f86ade36f0dbed9ac90eb62575137388359d97d8f93093b38abe166ad7ef3a8  openblas-0.3.8.tar.gz
++sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index f068402269..105c03713b 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUX_FIRMWARE_VERSION = 20190717
-+LINUX_FIRMWARE_VERSION = 20200122
- LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
- 
-@@ -467,6 +467,9 @@ LINUX_FIRMWARE_FILES += \
- 	rtl_nic/rtl8105e-1.fw \
- 	rtl_nic/rtl8106e-1.fw \
- 	rtl_nic/rtl8106e-2.fw \
-+	rtl_nic/rtl8107e-1.fw \
-+	rtl_nic/rtl8107e-2.fw \
-+	rtl_nic/rtl8125a-3.fw \
- 	rtl_nic/rtl8168d-1.fw \
- 	rtl_nic/rtl8168d-2.fw \
- 	rtl_nic/rtl8168e-1.fw \
-@@ -474,6 +477,7 @@ LINUX_FIRMWARE_FILES += \
- 	rtl_nic/rtl8168e-3.fw \
- 	rtl_nic/rtl8168f-1.fw \
- 	rtl_nic/rtl8168f-2.fw \
-+	rtl_nic/rtl8168fp-3.fw \
- 	rtl_nic/rtl8168g-2.fw \
- 	rtl_nic/rtl8168g-3.fw \
- 	rtl_nic/rtl8168h-1.fw \
+-OPENBLAS_VERSION = 0.3.7
++OPENBLAS_VERSION = 0.3.8
+ OPENBLAS_SITE = $(call github,xianyi,OpenBLAS,v$(OPENBLAS_VERSION))
+ OPENBLAS_LICENSE = BSD-3-Clause
+ OPENBLAS_LICENSE_FILES = LICENSE
