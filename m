@@ -1,43 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 20:47:47 +0100
-Subject: [Buildroot] [git commit branch/next] package/kvm-unit-tests: drop
- x86_64 workaround
-Message-ID: <20200226193548.94B498EA6D@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 20:48:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-msgpack: bump to version
+ 1.0.0
+In-Reply-To: <20200226160426.24450-1-james.hilliard1@gmail.com>
+References: <20200226160426.24450-1-james.hilliard1@gmail.com>
+Message-ID: <20200226204841.09f6dd32@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d183146b5c7a1a8d1a3c828bd3b6d0660d97efc0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Wed, 26 Feb 2020 09:04:26 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-This workaround is not needed since commit
-0788e921f961e36a50a94f8bb98f7eb75b312245 which disables stack-protector
-for all architectures as intended by upstream
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-msgpack/python-msgpack.hash | 6 +++---
+>  package/python-msgpack/python-msgpack.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kvm-unit-tests/kvm-unit-tests.mk | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-index 2637066701..d83d31d2ee 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.mk
-+++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-@@ -35,13 +35,7 @@ KVM_UNIT_TESTS_CONF_OPTS =\
- # compiler. However, for x86-64, we use the host compiler, as
- # kvm-unit-tests builds 32 bit code, which Buildroot toolchains for
- # x86-64 cannot do.
--ifeq ($(BR2_x86_64),y)
--# Arch Linux adds -fstack-protector even when building with -ffreestanding, but
--# it doesn't link with the stack-protector library when -nostdlib is passed,
--# which leads to a link error. Therefore, disable it explicitly to work around
--# this bug in Arch Linux. https://bugs.archlinux.org/task/64270
--KVM_UNIT_TESTS_MAKE_OPTS += EXTRA_CFLAGS=-fno-stack-protector
--else
-+ifeq ($(BR2_x86_64),)
- KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
- endif
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
