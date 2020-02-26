@@ -1,28 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 20:53:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/aufs: add support for linux 5.x
-In-Reply-To: <20200225122913.8255-1-skif@skif-web.ru>
-References: <20200225122913.8255-1-skif@skif-web.ru>
-Message-ID: <20200226205318.5ad5248e@windsurf>
+Date: Wed, 26 Feb 2020 20:53:33 +0100
+Subject: [Buildroot] [git commit branch/next] utils/scanpypi: update hash
+ file indentation formatting
+Message-ID: <20200226194136.6FDF08EA7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 25 Feb 2020 15:29:13 +0300
-Alexey Lukyanchuk <skif@skif-web.ru> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9fbbf4fd2a26c839863acc10aee7622821ed0ad9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
-> ---
->  linux/Config.ext.in  | 9 ++++++++-
->  package/aufs/aufs.mk | 2 ++
->  2 files changed, 10 insertions(+), 1 deletion(-)
+The new .hash convention is to use 2 spaces between fields.
 
-Applied to master, thanks.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/scanpypi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 387755bbb8..212dbea85e 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -568,12 +568,12 @@ class BuildrootPackage():
+             hash_header = '# md5, sha256 from {url}\n'.format(
+                 url=self.metadata_url)
+             lines.append(hash_header)
+-            hash_line = '{method}\t{digest}  {filename}\n'.format(
++            hash_line = '{method}  {digest}  {filename}\n'.format(
+                 method='md5',
+                 digest=self.used_url['digests']['md5'],
+                 filename=self.filename)
+             lines.append(hash_line)
+-            hash_line = '{method}\t{digest}  {filename}\n'.format(
++            hash_line = '{method}  {digest}  {filename}\n'.format(
+                 method='sha256',
+                 digest=self.used_url['digests']['sha256'],
+                 filename=self.filename)
+@@ -589,7 +589,7 @@ class BuildrootPackage():
+                     if not data:
+                         break
+                     sha256.update(data)
+-            hash_line = '{method}\t{digest}  {filename}\n'.format(
++            hash_line = '{method}  {digest}  {filename}\n'.format(
+                 method='sha256',
+                 digest=sha256.hexdigest(),
+                 filename=license_file.replace(self.tmp_extract, '')[1:])
