@@ -1,33 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 20:49:22 +0100
-Subject: [Buildroot] [PATCH/next v2,
- 1/1] package/kvm-unit-tests: drop x86_64 workaround
-In-Reply-To: <20200225173028.349643-1-fontaine.fabrice@gmail.com>
-References: <20200225173028.349643-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200226204922.4bc77233@windsurf>
+Date: Wed, 26 Feb 2020 20:49:44 +0100
+Subject: [Buildroot] [git commit branch/next] package/vala: bump version to
+ 0.46.6
+Message-ID: <20200226193744.22B668EA73@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 25 Feb 2020 18:30:28 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2723ff3333f4f31a06628692bb644552681f8226
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> This workaround is not needed since commit
-> 0788e921f961e36a50a94f8bb98f7eb75b312245 which disables stack-protector
-> for all architectures as intended by upstream
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Baruch Siach):
->  - Use positive logic
+Also add the line "HOST_VALA_CONF_OPTS += --disable-valadoc"
+as valadoc requires libgvc which is not available in Buildroot.
 
-Applied to next, after cherry-picking
-0788e921f961e36a50a94f8bb98f7eb75b312245 into next. Thanks!
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index 7b3f0c9f76..319c7ef2f4 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/vala/0.34/vala-0.34.7.sha256sum
+-sha256  1b2cb14f377d4c41fa3a86d3d01b93017015ce91b6714a85f27346073b4034fa  vala-0.34.7.tar.xz
++# From https://download.gnome.org/sources/vala/0.46/vala-0.46.6.sha256sum
++sha256  ef31649932872f094971d46453b21c60a41661670f98afa334062425b4aec47a  vala-0.46.6.tar.xz
+ # Locally computed
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index ad0a5650f7..b8a69f8c5e 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-VALA_VERSION_MAJOR = 0.34
+-VALA_VERSION = $(VALA_VERSION_MAJOR).7
++VALA_VERSION_MAJOR = 0.46
++VALA_VERSION = $(VALA_VERSION_MAJOR).6
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPL-2.1+
+@@ -15,6 +15,7 @@ HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
+ # Yes, the autoconf script understands ':' as "xsltproc is not
+ # available".
+ HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
++HOST_VALA_CONF_OPTS += --disable-valadoc
+ 
+ # We wrap vala & valac to point to the proper gir and vapi data dirs
+ # Otherwise we'll get host directory data which isn't enough
