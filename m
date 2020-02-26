@@ -1,136 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 19:03:05 +0100
-Subject: [Buildroot] [git commit branch/next] package/psplash: bump to
- revision fd33a9b
-Message-ID: <20200226175237.144FD8E951@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 19:01:59 +0100
+Subject: [Buildroot] [git commit branch/next] package/libsecret: bump to
+ version 0.20.1
+Message-ID: <20200226175237.050658E951@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=113701d5900997e8408d34f06c3001ae97f184f9
+commit: https://git.buildroot.net/buildroot/commit/?id=e0de8a34029d23c59a493dcac58e69ebaceae50d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This includes the following changes:
+- Drop patch (already in version)
+- Update indentation of hash file (two spaces)
 
-66c8f65 Makefile.am: use BUILT_SOURCES instead of BUILD_SOURCES
-f7a354d Generate image headers from their PNG source, while still including them in dist tarball
-983837e Import png source for images, extracted from headers
-3bd1557 Cleanup poky logo
-773a397 Add configure flags for fullscreen logo and no startup message
-2913c24 Double buffering support
-8188d68 Support --with-font configure option to use other font headers
-88c4b71 Add SPDX License information to files, drop boilerplate
-904f4aa add systemd support
-e94bd11 process consecutive commands
-568f28e use /run for communication FIFO
-ee053e0 add recovered bar.png
-2015f70 Fix text width calculation.
-
-Also:
- - remove the 'psplash-quit.service' unit file
- - add 'psplash-systemd.service' to use the new systemd support in psplash
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/psplash/psplash-quit.service    | 11 -----------
- package/psplash/psplash-start.service   |  3 +--
- package/psplash/psplash-systemd.service | 12 ++++++++++++
- package/psplash/psplash.hash            |  2 +-
- package/psplash/psplash.mk              | 14 +++++++++++---
- 5 files changed, 25 insertions(+), 17 deletions(-)
+ ...t.pc-add-Libs.private-field-for-libgcrypt.patch | 38 ----------------------
+ package/libsecret/libsecret.hash                   |  6 ++--
+ package/libsecret/libsecret.mk                     |  4 +--
+ 3 files changed, 5 insertions(+), 43 deletions(-)
 
-diff --git a/package/psplash/psplash-quit.service b/package/psplash/psplash-quit.service
+diff --git a/package/libsecret/0001-libsecret.pc-add-Libs.private-field-for-libgcrypt.patch b/package/libsecret/0001-libsecret.pc-add-Libs.private-field-for-libgcrypt.patch
 deleted file mode 100644
-index 14bd4994b5..0000000000
---- a/package/psplash/psplash-quit.service
+index 62bc84c87e..0000000000
+--- a/package/libsecret/0001-libsecret.pc-add-Libs.private-field-for-libgcrypt.patch
 +++ /dev/null
-@@ -1,11 +0,0 @@
--[Unit]
--Description=Terminate Psplash Boot Screen
--After=psplash-start.service
+@@ -1,38 +0,0 @@
+-From 754897490d9478025d174c2b1c1849305f728324 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 28 Dec 2015 12:13:07 +0100
+-Subject: [PATCH] libsecret.pc: add Libs.private field for libgcrypt
 -
--[Service]
--Type=oneshot
--ExecStart=/usr/bin/psplash-write QUIT
--TimeoutSec=20
+-When libgcrypt is available, libsecret links with it. When dynamic
+-linking is used, there is no problem: libsecret.so has a NEEDED
+-pointing to libgcrypt, so linking an application with -lsecret works
+-fine. However, when doing static linking, you must specify the entire
+-chain of libraries, otherwise you get unresolved symbols errors, such
+-as:
 -
--[Install]
--WantedBy=multi-user.target
-diff --git a/package/psplash/psplash-start.service b/package/psplash/psplash-start.service
-index 2de3cfce22..b97e883e54 100644
---- a/package/psplash/psplash-start.service
-+++ b/package/psplash/psplash-start.service
-@@ -1,8 +1,7 @@
- [Unit]
- Description=Starts Psplash Boot screen
--Wants=systemd-vconsole-setup.service
--After=systemd-vconsole-setup.service systemd-udev-trigger.service systemd-udevd.service
- DefaultDependencies=no
-+RequiresMountsFor=/run
+-host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libsecret-1.a(libsecret_1_la-secret-session.o): In function `request_open_session_aes':
+-build/libsecret-0.18.3/libsecret/secret-session.c:99: undefined reference to `gcry_mpi_release'
+-build/libsecret-0.18.3/libsecret/secret-session.c:101: undefined reference to `gcry_mpi_aprint'
+-build/libsecret-0.18.3/libsecret/secret-session.c:107: undefined reference to `gcry_free'
+-
+-In order to solve this, we simply need to indicate in the Libs.private
+-field of the .pc file that we depend on libgcrypt.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- libsecret/libsecret.pc.in | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/libsecret/libsecret.pc.in b/libsecret/libsecret.pc.in
+-index 0c342ef..d99cf44 100644
+---- a/libsecret/libsecret.pc.in
+-+++ b/libsecret/libsecret.pc.in
+-@@ -11,4 +11,5 @@ Description: GObject bindings for Secret Service API
+- Version: @VERSION@
+- Requires: glib-2.0 gobject-2.0 gio-2.0
+- Libs: -L${libdir} -lsecret- at SECRET_MAJOR@
+-+Libs.private: @LIBGCRYPT_LIBS@
+- Cflags: -I${includedir}/libsecret- at SECRET_MAJOR@
+--- 
+-2.6.4
+-
+diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
+index 00fdfd06f6..3a256fd700 100644
+--- a/package/libsecret/libsecret.hash
++++ b/package/libsecret/libsecret.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.8.sha256sum
+-sha256	3bfa889d260e0dbabcf5b9967f2aae12edcd2ddc9adc365de7a5cc840c311d15	libsecret-0.18.8.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.20/libsecret-0.20.1.sha256sum
++sha256  57f73e94ec6263a17a077fb809cf8cf424637a897a7f15b4eec42ce4aef52447  libsecret-0.20.1.tar.xz
  
- [Service]
- ExecStart=/usr/bin/psplash -n
-diff --git a/package/psplash/psplash-systemd.service b/package/psplash/psplash-systemd.service
-new file mode 100644
-index 0000000000..249aa54039
---- /dev/null
-+++ b/package/psplash/psplash-systemd.service
-@@ -0,0 +1,12 @@
-+[Unit]
-+Description=Start psplash-systemd progress communication helper
-+DefaultDependencies=no
-+After=systemd-start.service
-+Requires=psplash-start.service
-+RequiresMountsFor=/run
-+
-+[Service]
-+ExecStart=/usr/bin/psplash-systemd
-+
-+[Install]
-+WantedBy=sysinit.target
-diff --git a/package/psplash/psplash.hash b/package/psplash/psplash.hash
-index c8865697c4..46d5e12ceb 100644
---- a/package/psplash/psplash.hash
-+++ b/package/psplash/psplash.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 aaddb20ef892dfb03d4e046cc634159bbcdfe555f7291652dde2b7d4cf491289  psplash-5b3c1cc28f5abdc2c33830150b48b278cc4f7bca.tar.gz
-+sha256 0042192bf94be4f5792d9ff6b7a2ddff77c79e51274745180d14be5815b3a0f4  psplash-fd33a9b3d68c89fa22ff6873f4f9fd28bd85830c.tar.gz
- sha256 f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
-diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
-index 3dd2f4d579..39fcc2235f 100644
---- a/package/psplash/psplash.mk
-+++ b/package/psplash/psplash.mk
-@@ -4,18 +4,26 @@
+ # Hash for license file:
+-sha256	a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b	COPYING
++sha256  a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b  COPYING
+diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+index c699e16d99..b48d2e7086 100644
+--- a/package/libsecret/libsecret.mk
++++ b/package/libsecret/libsecret.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PSPLASH_VERSION = 5b3c1cc28f5abdc2c33830150b48b278cc4f7bca
-+PSPLASH_VERSION = fd33a9b3d68c89fa22ff6873f4f9fd28bd85830c
- PSPLASH_SITE = git://git.yoctoproject.org/psplash
- PSPLASH_LICENSE = GPL-2.0+
- PSPLASH_LICENSE_FILES = COPYING
- PSPLASH_AUTORECONF = YES
-+PSPLASH_DEPENDENCIES = host-pkgconf
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+PSPLASH_DEPENDENCIES += systemd
-+PSPLASH_CONF_OPTS += --with-systemd
-+else
-+PSPLASH_CONF_OPTS += --without-systemd
-+endif
- 
- define PSPLASH_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/psplash/psplash-start.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/psplash-start.service
- 
--	$(INSTALL) -D -m 644 package/psplash/psplash-quit.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/psplash-quit.service
-+	$(INSTALL) -D -m 644 package/psplash/psplash-systemd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/psplash-systemd.service
- endef
- 
- $(eval $(autotools-package))
+-LIBSECRET_VERSION_MAJOR = 0.18
+-LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).8
++LIBSECRET_VERSION_MAJOR = 0.20
++LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).1
+ LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
+ LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
+ LIBSECRET_INSTALL_STAGING = YES
