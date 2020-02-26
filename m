@@ -1,52 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 21:17:14 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-markdown: bump
- to version 3.2.1
-Message-ID: <20200226200619.D835C81191@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 21:18:48 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/libxkbcommon: bump to
+ version 0.10.0 and convert to meson
+In-Reply-To: <20200224214716.68647-1-james.hilliard1@gmail.com>
+References: <20200224214716.68647-1-james.hilliard1@gmail.com>
+Message-ID: <20200226211848.377002ab@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e538bf642d3584032d63bb54d24b88ab57e4283
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Mon, 24 Feb 2020 14:47:16 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Update indentation of hash file (two spaces)
+> Since version 0.9.x the autotools build system is removed from libxkbcommon
+> ([1]), so convert to meson build system.
+> 
+> Remove the CFLAGS force of '-std=gnu99', believing meson sets it
+> automatically (a test build used '-std=c99').
+> 
+> For details see [1].
+> 
+> [1] https://lists.freedesktop.org/archives/wayland-devel/2019-October/040962.html
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v1 -> v2:
+>   - add more detailed commit message from http://lists.busybox.net/pipermail/buildroot/2019-October/264740.html
+> ---
+>  package/libxkbcommon/libxkbcommon.hash |  8 ++++----
+>  package/libxkbcommon/libxkbcommon.mk   | 12 +++++-------
+>  2 files changed, 9 insertions(+), 11 deletions(-)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-markdown/python-markdown.hash | 6 +++---
- package/python-markdown/python-markdown.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
-index 6eff2035bb..4d54ce9243 100644
---- a/package/python-markdown/python-markdown.hash
-+++ b/package/python-markdown/python-markdown.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markdown/json
--md5	d84732ecc65b3a1bff693d9d4c24277f  Markdown-3.1.1.tar.gz
--sha256	2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a  Markdown-3.1.1.tar.gz
-+md5  7a894dc55992b37cdbcba5c4049455fc  Markdown-3.2.1.tar.gz
-+sha256  90fee683eeabe1a92e149f7ba74e5ccdc81cd397bd6c516d93a8da0ef90b6902  Markdown-3.2.1.tar.gz
- # Locally computed sha256
--sha256	6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
-+sha256  6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
-diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
-index a8311168f5..1f352fd7f1 100644
---- a/package/python-markdown/python-markdown.mk
-+++ b/package/python-markdown/python-markdown.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MARKDOWN_VERSION = 3.1.1
-+PYTHON_MARKDOWN_VERSION = 3.2.1
- PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
--PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/ac/df/0ae25a9fd5bb528fe3c65af7143708160aa3b47970d5272003a1ad5c03c6
-+PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/98/79/ce6984767cb9478e6818bd0994283db55c423d733cc62a88a3ffb8581e11
- PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
- PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
- PYTHON_MARKDOWN_SETUP_TYPE = setuptools
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
