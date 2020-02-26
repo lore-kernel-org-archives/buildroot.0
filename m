@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 21:56:25 +0100
-Subject: [Buildroot] [git commit] toolchain: introduce
- BR2_TOOLCHAIN_HAS_GCC_BUG_93847
-Message-ID: <20200226210241.E95118EB50@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 22:14:14 +0100
+Subject: [Buildroot] [git commit] package/git: fix build failure due to gcc
+ bug 93847
+Message-ID: <20200226210241.F1C8B8EB51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb05f25ef2aacae8811e89daea51bd5a953636c1
+commit: https://git.buildroot.net/buildroot/commit/?id=c7d736bb924fb9a85c497651e533d57c5b83d54f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-git package fails to build for the Nios2 architecture with optimization
-enabled with gcc < 9.x:
-http://autobuild.buildroot.net/results/924/92484c49b655e4aa78ca52f124c6d8f605b9d06b/
+The git package exhibits gcc bug 93847 when built for the Nios2
+architecture with optimization enabled, which causes a build failure.
 
-It's been reported upstream:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93847
+As done for other packages in Buildroot work around this gcc bug by
+setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_93847=y.
+
+Fixes:
+http://autobuild.buildroot.net/results/e225e62ea2d48660df4110790664f0c3306c1ea9/
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- toolchain/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/git/git.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 87509f3d64..bff572805d 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -159,6 +159,13 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_90620
- 	bool
- 	default y if BR2_microblaze
+diff --git a/package/git/git.mk b/package/git/git.mk
+index a5c8669fc9..f32a2f8eb9 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -67,7 +67,7 @@ endif
  
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93847
-+# ICE: compiler error: Segmentation fault on Nios II. This bug
-+# no longer exists in gcc 9.x.
-+config BR2_TOOLCHAIN_HAS_GCC_BUG_93847
-+	bool
-+	default y if BR2_nios2 && !BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
+ GIT_CFLAGS = $(TARGET_CFLAGS)
+ 
+-ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180)$(BR2_TOOLCHAIN_HAS_GCC_BUG_93847),y)
+ GIT_CFLAGS += -O0
+ endif
  
