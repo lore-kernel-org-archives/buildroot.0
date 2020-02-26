@@ -1,25 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 16:26:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vala: bump version to 0.46.6
-In-Reply-To: <20200225232826.958260-1-aduskett@gmail.com> (aduskett's message
- of "Tue, 25 Feb 2020 15:28:26 -0800")
-References: <20200225232826.958260-1-aduskett@gmail.com>
-Message-ID: <87lfop74jj.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Feb 2020 16:27:31 +0100
+Subject: [Buildroot] [PATCH 1/3] package/python-iptables: add explicit
+ dependency on dynamic libs
+In-Reply-To: <20200226142617.4170-1-frank.vanbever@essensium.com>
+References: <20200226142617.4170-1-frank.vanbever@essensium.com>
+Message-ID: <20200226162731.16ba83cf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
+On Wed, 26 Feb 2020 15:26:15 +0100
+Frank Vanbever <frank.vanbever@essensium.com> wrote:
 
- > From: Adam Duskett <Aduskett@gmail.com>
- > Also add the line "HOST_VALA_CONF_OPTS += --disable-valadoc"
- > as valadoc requires libgvc which is not available in Buildroot.
+> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+> ---
+>  package/python-iptables/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/python-iptables/Config.in b/package/python-iptables/Config.in
+> index e55359963e..a35577bad3 100644
+> --- a/package/python-iptables/Config.in
+> +++ b/package/python-iptables/Config.in
+> @@ -1,7 +1,11 @@
+>  config BR2_PACKAGE_PYTHON_IPTABLES
+>  	bool "python-iptables"
+> +	depends on !BR2_STATIC_LIBS
 
- > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+This needs a bit more explanation, at least a short comment above. Even
+your commit log is empty.
 
-I take it this is meant for next? If not, why?
+Thanks!
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
