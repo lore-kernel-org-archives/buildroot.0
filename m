@@ -1,49 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 09:21:39 +0100
-Subject: [Buildroot] [git commit] package/python-jinja2: bump to version
- 2.11.1
-Message-ID: <20200309140906.7D3DE821F7@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 21:19:31 +0100
+Subject: [Buildroot] [git commit] package/fswebcam: bump to latest git
+ version
+Message-ID: <20200309140905.AE19F81298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be9333014cf8e66f1e8a7b04ada5671db6c7cb81
+commit: https://git.buildroot.net/buildroot/commit/?id=3601a7e08a7c0d0c3520e263b6b5cbf509808a22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Bump to latest git version.
+
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-jinja2/python-jinja2.hash | 4 ++--
- package/python-jinja2/python-jinja2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/fswebcam/fswebcam.hash | 2 +-
+ package/fswebcam/fswebcam.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
-index 7231123b58..e366b9e180 100644
---- a/package/python-jinja2/python-jinja2.hash
-+++ b/package/python-jinja2/python-jinja2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jinja2/json
--md5	7883559bc5cc3e2781d94b4be61cfdcd  Jinja2-2.10.3.tar.gz
--sha256	9fe95f19286cfefaa917656583d020be14e7859c6b0252588391e47db34527de  Jinja2-2.10.3.tar.gz
-+md5	5d88c7e77aa63fc852a04f65dbfe5594  Jinja2-2.11.1.tar.gz
-+sha256	93187ffbc7808079673ef52771baa950426fd664d3aad1d0fa3e95644360e250  Jinja2-2.11.1.tar.gz
- # Locally computed sha256
- sha256	3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index 5f011aa1ab..189b75d18f 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/fswebcam/fswebcam.hash b/package/fswebcam/fswebcam.hash
+index 28f604547c..3964b21e92 100644
+--- a/package/fswebcam/fswebcam.hash
++++ b/package/fswebcam/fswebcam.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  444d6a8a82102e09e935540c64a731021de36db03e1e74181f41ca6f39aa6474  fswebcam-20140113.tar.xz
++sha256  fe178a0f37ee203103eceaaf9a81a8669edb49923250e8a2ec7459543a8175b0  fswebcam-9a995d6a5369ddd158e352766e015dae20982318.tar.gz
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/fswebcam/fswebcam.mk b/package/fswebcam/fswebcam.mk
+index 8f823f4d04..5887c0b92b 100644
+--- a/package/fswebcam/fswebcam.mk
++++ b/package/fswebcam/fswebcam.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--PYTHON_JINJA2_VERSION = 2.10.3
-+PYTHON_JINJA2_VERSION = 2.11.1
- PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
--PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/7b/db/1d037ccd626d05a7a47a1b81ea73775614af83c2b3e53d86a0bb41d8d799
-+PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/d8/03/e491f423379ea14bb3a02a5238507f7d446de639b623187bccc111fbecdf
- PYTHON_JINJA2_SETUP_TYPE = setuptools
- PYTHON_JINJA2_LICENSE = BSD-3-Clause
- PYTHON_JINJA2_LICENSE_FILES = LICENSE.rst
+-FSWEBCAM_VERSION = 20140113
+-FSWEBCAM_SOURCE = fswebcam-$(FSWEBCAM_VERSION).tar.xz
+-FSWEBCAM_SITE = http://www.firestorm.cx/fswebcam/files
++FSWEBCAM_VERSION = 9a995d6a5369ddd158e352766e015dae20982318
++FSWEBCAM_SITE = $(call github,fsphil,fswebcam,$(FSWEBCAM_VERSION))
+ FSWEBCAM_LICENSE = GPL-2.0
+ FSWEBCAM_LICENSE_FILES = LICENSE
+ 
