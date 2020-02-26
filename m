@@ -1,52 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 21:17:14 +0100
-Subject: [Buildroot] [git commit] package/python-markdown: bump to version
- 3.2.1
-Message-ID: <20200309140905.A46637F8C1@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 22:35:09 +0100
+Subject: [Buildroot] [git commit] package/linux-firmware: bump to version
+ 20200122
+Message-ID: <20200309140905.CA9BE81298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e538bf642d3584032d63bb54d24b88ab57e4283
+commit: https://git.buildroot.net/buildroot/commit/?id=48cc1a89ae0451f6b7de3e8fe2181aa38aac68eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation of hash file (two spaces)
+Added new r8169 firmware files.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-markdown/python-markdown.hash | 6 +++---
- package/python-markdown/python-markdown.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/linux-firmware/linux-firmware.hash | 2 +-
+ package/linux-firmware/linux-firmware.mk   | 6 +++++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
-index 6eff2035bb..4d54ce9243 100644
---- a/package/python-markdown/python-markdown.hash
-+++ b/package/python-markdown/python-markdown.hash
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index b7c9753955..eff0c4cbb2 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/markdown/json
--md5	d84732ecc65b3a1bff693d9d4c24277f  Markdown-3.1.1.tar.gz
--sha256	2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a  Markdown-3.1.1.tar.gz
-+md5  7a894dc55992b37cdbcba5c4049455fc  Markdown-3.2.1.tar.gz
-+sha256  90fee683eeabe1a92e149f7ba74e5ccdc81cd397bd6c516d93a8da0ef90b6902  Markdown-3.2.1.tar.gz
- # Locally computed sha256
--sha256	6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
-+sha256  6f1193cb634718e65c3a537d6e25ebd614820ec0ef693cfc12248112638d64da  LICENSE.md
-diff --git a/package/python-markdown/python-markdown.mk b/package/python-markdown/python-markdown.mk
-index a8311168f5..1f352fd7f1 100644
---- a/package/python-markdown/python-markdown.mk
-+++ b/package/python-markdown/python-markdown.mk
-@@ -4,9 +4,9 @@
+ # Locally calculated
+-sha256 270f4b2dd89feb6ed7d9e166bb1677f27d8f93da9d95312e6d188b0e1efaba73 linux-firmware-20190717.tar.gz
++sha256 83646c58fc4e3ee9a73f4fa74213c849109f48c719322346393f3e5b0fa55044 linux-firmware-20200122.tar.gz
+ sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
+ sha256 ac7c42c8331ef69221039f770193a2120bc67c7bba357e51a5b3f557bca0037c LICENSE.amdgpu
+ sha256 2d6062d63b91eb750bf741498691604f75184b9fee97608ec537cd09bd6a42b4 LICENCE.Marvell
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 9d86ce57b2..fd90f261fa 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_MARKDOWN_VERSION = 3.1.1
-+PYTHON_MARKDOWN_VERSION = 3.2.1
- PYTHON_MARKDOWN_SOURCE = Markdown-$(PYTHON_MARKDOWN_VERSION).tar.gz
--PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/ac/df/0ae25a9fd5bb528fe3c65af7143708160aa3b47970d5272003a1ad5c03c6
-+PYTHON_MARKDOWN_SITE = https://files.pythonhosted.org/packages/98/79/ce6984767cb9478e6818bd0994283db55c423d733cc62a88a3ffb8581e11
- PYTHON_MARKDOWN_LICENSE = BSD-3-Clause
- PYTHON_MARKDOWN_LICENSE_FILES = LICENSE.md
- PYTHON_MARKDOWN_SETUP_TYPE = setuptools
+-LINUX_FIRMWARE_VERSION = 20190717
++LINUX_FIRMWARE_VERSION = 20200122
+ LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
+ 
+@@ -467,6 +467,9 @@ LINUX_FIRMWARE_FILES += \
+ 	rtl_nic/rtl8105e-1.fw \
+ 	rtl_nic/rtl8106e-1.fw \
+ 	rtl_nic/rtl8106e-2.fw \
++	rtl_nic/rtl8107e-1.fw \
++	rtl_nic/rtl8107e-2.fw \
++	rtl_nic/rtl8125a-3.fw \
+ 	rtl_nic/rtl8168d-1.fw \
+ 	rtl_nic/rtl8168d-2.fw \
+ 	rtl_nic/rtl8168e-1.fw \
+@@ -474,6 +477,7 @@ LINUX_FIRMWARE_FILES += \
+ 	rtl_nic/rtl8168e-3.fw \
+ 	rtl_nic/rtl8168f-1.fw \
+ 	rtl_nic/rtl8168f-2.fw \
++	rtl_nic/rtl8168fp-3.fw \
+ 	rtl_nic/rtl8168g-2.fw \
+ 	rtl_nic/rtl8168g-3.fw \
+ 	rtl_nic/rtl8168h-1.fw \
