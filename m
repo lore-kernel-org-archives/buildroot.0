@@ -1,59 +1,50 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Wed, 26 Feb 2020 23:59:53 +0200
-Subject: [Buildroot] external, how to achieve our needs?
-In-Reply-To: <875zft8joy.fsf@dell.be.48ers.dk>
-References: <20200225150149.zvyqbn34swfizg72@M43218.corp.atmel.com>
- <VI1PR02MB3920FE7EF8D9CDDC656EAB49DCEA0@VI1PR02MB3920.eurprd02.prod.outlook.com>
- <20200226132916.5umjrlej5to4shtl@M43218.corp.atmel.com>
- <875zft8joy.fsf@dell.be.48ers.dk>
-Message-ID: <CAMw6YJK2tDGYqJ=nxmUYUxrP_Z4mo=gXUAg-smwxBVCCsw-FNw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Feb 2020 23:19:11 +0100
+Subject: [Buildroot] [PATCH] package/docker-compose: update patch to allow
+ all pyyaml 5.x versions
+Message-ID: <20200226221911.9177-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+The recent bump of python-pyyaml to version 5.3 causes a runtime failure in docker-compose:
 
-On Wed, Feb 26, 2020 at 5:14 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Ludovic" == Ludovic Desroches <ludovic.desroches@microchip.com> writes:
->
->  > Hi Mircea,
->  > On Wed, Feb 26, 2020 at 12:11:36PM +0000, Mircea GLIGA wrote:
->  >> Hi Ludovic,
->  >>
->  >> I also have this kind of problems when implementing our external,
->  >> sometimes is useful to 'override' or append to a recipe (Yocto
->  >> style).
->  >>
->  >> * I ended up "duplicating" recipes in our layer, e.g. bd-tcpdump
->  >> in order to build the package differently
->
->  > From the top of my head, I tried this and I got an error when duplicating
->  > the recipes in the external. Did you use other tricks?
->
-> Buildrot uses a global namespace, so you have to rename the package (and
-> the makefile/kconfig symbols) for it to work.
->
-> It naturally only works for packages without any reverse dependencies as
-> those packages doesn't know about your custom 'foo' package.
->
+pkg_resources.ContextualVersionConflict: (PyYAML 5.3 (/usr/lib/python3.8/site-packages), Requirement.parse('PyYAML<5.2,>=3.10'), {'docker-compose'})
 
-For me looks like it can be solved (did not tried yet) by:
-1) Including BR2_EXTERNAL_MKS before include all the packages,
+https://gitlab.com/buildroot.org/buildroot/-/jobs/442151461
 
-    and filter-out these which has set variable $(PKG)_OVERRIDE=y
+Fix it by adjusting 0003-support-PyYAML-up-to-5.1-version.patch to allow all
+pyyaml 5.x versions, similar to what upstream has done post-1.24.1:
 
-    which means that external tree can contain some special version of
-    package from the main Buildroot, and this custom .mk package can set
-    XXX_OVERRIDE=YES to do not include the original package by main Makefile.
+https://github.com/docker/compose/commit/c818bfc62c0574009175d832c1a8a2857bf1b1bf
 
-2) The custom Config.in should be not a problem as it should replace
-original config
-     options.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../docker-compose/0003-support-PyYAML-up-to-5.1-version.patch | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-But I am not a Buildroot expert, so I might missed something.
-
-Regards,
-Vadim Kochan
+diff --git a/package/docker-compose/0003-support-PyYAML-up-to-5.1-version.patch b/package/docker-compose/0003-support-PyYAML-up-to-5.1-version.patch
+index ae91b01d03..ecbd197a51 100644
+--- a/package/docker-compose/0003-support-PyYAML-up-to-5.1-version.patch
++++ b/package/docker-compose/0003-support-PyYAML-up-to-5.1-version.patch
+@@ -6,6 +6,7 @@ Subject: [PATCH] support PyYAML up to 5.1 version
+ Signed-off-by: Sergey Fursov <geyser85@gmail.com>
+ [Upstream: https://github.com/docker/compose/pull/6623]
+ (cherry picked from commit d2ca096f46a56cd4db494c593ed84e5c255dc15d)
++[Peter: allow all 5.x]
+ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ ---
+  requirements.txt | 2 +-
+@@ -34,7 +35,7 @@ index c9e4729d..17ab678e 100644
+      'cached-property >= 1.2.0, < 2',
+      'docopt >= 0.6.1, < 1',
+ -    'PyYAML >= 3.10, < 5',
+-+    'PyYAML >= 3.10, < 5.2',
+++    'PyYAML >= 3.10, < 6',
+      'requests >= 2.20.0, < 3',
+      'texttable >= 0.9.0, < 2',
+      'websocket-client >= 0.32.0, < 1',
+-- 
+2.20.1
