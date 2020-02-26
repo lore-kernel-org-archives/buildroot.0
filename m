@@ -1,52 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 27 Feb 2020 21:14:22 +0100
-Subject: [Buildroot] [git commit] package/eudev: support openrc init
-Message-ID: <20200309140906.F3A848E780@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 26 Feb 2020 22:47:08 +0100
+Subject: [Buildroot] [git commit] package/scrypt: bump to version 1.3.0
+Message-ID: <20200309140906.206D58E780@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44fe0ac94c7460708902eec7acd31de8005b11b1
+commit: https://git.buildroot.net/buildroot/commit/?id=1524c1e9202eb040f6a5332862158b20cdfe29ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Select udev-gentoo-scripts and avoid installing the sysv init script.
+Use the new COPYRIGHT file as the license file
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-[yann.morin.1998 at free.fr: use a fake openrc init hook]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/eudev/Config.in | 1 +
- package/eudev/eudev.mk  | 6 ++++++
- 2 files changed, 7 insertions(+)
+ package/scrypt/scrypt.hash | 6 +++---
+ package/scrypt/scrypt.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index b1d2f37a72..b0ce76171a 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_EUDEV
- 	depends on BR2_USE_WCHAR # needs C99 compiler
- 	depends on !BR2_STATIC_LIBS # kmod
- 	select BR2_PACKAGE_HAS_UDEV
-+	select BR2_PACKAGE_UDEV_GENTOO_SCRIPTS if BR2_INIT_OPENRC
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_KMOD
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 99b5befd09..8b677e76b6 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -48,6 +48,12 @@ define EUDEV_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
- endef
+diff --git a/package/scrypt/scrypt.hash b/package/scrypt/scrypt.hash
+index 8a20d42bee..c73ff515bc 100644
+--- a/package/scrypt/scrypt.hash
++++ b/package/scrypt/scrypt.hash
+@@ -1,4 +1,4 @@
+-# From http://www.tarsnap.com/scrypt/scrypt-sigs-1.2.0.asc
+-sha256  1754bc89405277c8ac14220377a4c240ddc34b1ce70882aa92cd01bfdc8569d4  scrypt-1.2.0.tgz
++# From http://www.tarsnap.com/scrypt/scrypt-sigs-1.3.0.asc
++sha256  263034edd4d1e117d4051d9a9260c74dedb0efaf4491c5152b738978b3f32748  scrypt-1.3.0.tgz
+ # Locally computed
+-sha256  e9d3ce691acc974c05d54bdea919fa03018fcdb5abd82eab5cdb78f07c451e0a  main.c
++sha256  adc1942c42da6e3370223a27ff4a6835924d2b41e509f9bee58a5e6ca1bbddae  COPYRIGHT
+diff --git a/package/scrypt/scrypt.mk b/package/scrypt/scrypt.mk
+index ae5a64e71f..820664f6c1 100644
+--- a/package/scrypt/scrypt.mk
++++ b/package/scrypt/scrypt.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
  
-+# Avoid installing S10udev with openrc, as the service is started by a unit
-+# from the udev-gentoo-scripts package.
-+define EUDEV_INSTALL_INIT_OPENRC
-+	@:
-+endef
-+
- # Required by default rules for input devices
- define EUDEV_USERS
- 	- - input -1 * - - - Input device group
+-SCRYPT_VERSION = 1.2.0
++SCRYPT_VERSION = 1.3.0
+ SCRYPT_SOURCE = scrypt-$(SCRYPT_VERSION).tgz
+ SCRYPT_SITE = http://www.tarsnap.com/scrypt
+ SCRYPT_LICENSE = BSD-2-Clause
+-SCRYPT_LICENSE_FILES = main.c
++SCRYPT_LICENSE_FILES = COPYRIGHT
+ SCRYPT_DEPENDENCIES = openssl
+ SCRYPT_INSTALL_STAGING = YES
+ 
