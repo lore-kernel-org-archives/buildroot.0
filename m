@@ -1,61 +1,95 @@
-From: Frank Vanbever <frank.vanbever@essensium.com>
-Date: Wed, 26 Feb 2020 15:26:17 +0100
-Subject: [Buildroot] [PATCH 3/3] package/python-iptables: use installed
- iptables by default
-In-Reply-To: <20200226142617.4170-1-frank.vanbever@essensium.com>
-References: <20200226142617.4170-1-frank.vanbever@essensium.com>
-Message-ID: <20200226142617.4170-3-frank.vanbever@essensium.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Wed, 26 Feb 2020 06:30:07 -0800
+Subject: [Buildroot] [PATCH/next 1/1] package/meson: bump version to 0.53.2
+Message-ID: <20200226143007.25595-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-iptables depends on ctypes.util.find_library() which does not work due to
-the absence of gcc and friends on target. The location of the xtables library
-and the iptables modules can be configured through environment variables. Within
-the scope of buildroot we can determine what these should be at build time and
-replace the calls to os.getenv() with the correct value.
+From: Adam Duskett <Aduskett@gmail.com>
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=12271
-
-Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/python-iptables/Config.in          | 2 +-
- package/python-iptables/python-iptables.mk | 9 +++++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ .../0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch   | 2 +-
+ ...2-Prefer-ext-static-libs-when-default-library-static.patch | 2 +-
+ .../meson/0003-envconfig-add-pkg_config_libdir-property.patch | 4 ++--
+ package/meson/meson.hash                                      | 4 ++--
+ package/meson/meson.mk                                        | 2 +-
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-iptables/Config.in b/package/python-iptables/Config.in
-index a35577bad3..0e24283d06 100644
---- a/package/python-iptables/Config.in
-+++ b/package/python-iptables/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PYTHON_IPTABLES
- 	bool "python-iptables"
- 	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_IPTABLES # runtime dependency
-+	select BR2_PACKAGE_IPTABLES
- 	help
- 	  Python bindings for iptables.
+diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+index a7b66c1067..79e99adf4a 100644
+--- a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
++++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+@@ -14,7 +14,7 @@ diff --git a/mesonbuild/minstall.py b/mesonbuild/minstall.py
+ index 8ac6aab1..7ef04116 100644
+ --- a/mesonbuild/minstall.py
+ +++ b/mesonbuild/minstall.py
+-@@ -478,8 +478,14 @@ class Installer:
++@@ -489,8 +489,14 @@ class Installer:
+                          printed_symlink_error = True
+              if os.path.isfile(outname):
+                  try:
+diff --git a/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
+index 798cd65299..b859d8372e 100644
+--- a/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
++++ b/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
+@@ -30,7 +30,7 @@ diff --git a/mesonbuild/compilers/mixins/clike.py b/mesonbuild/compilers/mixins/
+ index 5d50b7d..8f5f1c6 100644
+ --- a/mesonbuild/compilers/mixins/clike.py
+ +++ b/mesonbuild/compilers/mixins/clike.py
+-@@ -858,6 +858,9 @@ class CLikeCompiler:
++@@ -857,6 +857,9 @@ class CLikeCompiler:
+          elif env.machines[self.for_machine].is_cygwin():
+              shlibext = ['dll', 'dll.a']
+              prefixes = ['cyg'] + prefixes
+diff --git a/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch b/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
+index ae40ab8b1c..8ae34b999d 100644
+--- a/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
++++ b/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
+@@ -53,7 +53,7 @@ diff --git a/run_unittests.py b/run_unittests.py
+ index 676604f4..382c0964 100755
+ --- a/run_unittests.py
+ +++ b/run_unittests.py
+-@@ -3621,6 +3621,34 @@ recommended as it is not supported on some platforms''')
++@@ -3629,6 +3629,34 @@ recommended as it is not supported on some platforms''')
+          self.wipe()
+          self.init(testdir, extra_args=['-Dstart_native=true'], override_envvars=env)
+  
+@@ -88,7 +88,7 @@ index 676604f4..382c0964 100755
+      def __reconfigure(self, change_minor=False):
+          # Set an older version to force a reconfigure from scratch
+          filename = os.path.join(self.privatedir, 'coredata.dat')
+-@@ -6847,7 +6875,7 @@ class NativeFileTests(BasePlatformTests):
++@@ -6863,7 +6891,7 @@ class NativeFileTests(BasePlatformTests):
+  
+  class CrossFileTests(BasePlatformTests):
+  
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 881d4211cf..3777a51542 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.53.1/meson-0.53.1.tar.gz.asc
+-sha256 ec1ba33eea701baca2c1607dac458152dc8323364a51fdef6babda2623413b04 meson-0.53.1.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.53.2/meson-0.53.2.tar.gz.asc
++sha256 3e8f830f33184397c2eb0b651ec502adb63decb28978bdc84b3558d71284c21f meson-0.53.2.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 810c84690a..29c7ed1800 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/python-iptables/python-iptables.mk b/package/python-iptables/python-iptables.mk
-index 66e478a89a..086d5b2457 100644
---- a/package/python-iptables/python-iptables.mk
-+++ b/package/python-iptables/python-iptables.mk
-@@ -9,5 +9,14 @@ PYTHON_IPTABLES_SITE = https://files.pythonhosted.org/packages/08/5e/16a5ca35c42
- PYTHON_IPTABLES_SETUP_TYPE = setuptools
- PYTHON_IPTABLES_LICENSE = Apache-2.0
- PYTHON_IPTABLES_LICENSE_FILES = NOTICE
-+PYTHON_IPTABLES_DEPENDENCIES = iptables
-+
-+define PYTHON_IPTABLES_SET_XTABLES_ENV_VARS
-+	XTABLES_VERSION=`awk '/XTABLES_VERSION_CODE/ {print $$NF}' $(STAGING_DIR)/usr/include/xtables-version.h`; \
-+	sed -i "s/os.getenv(\"PYTHON_IPTABLES_XTABLES_VERSION\")/$$XTABLES_VERSION/" $(@D)/iptc/xtables.py; \
-+	sed -i "s/os.getenv(\"XTABLES_LIBDIR\")/\"\/usr\/lib\/xtables\"/" $(@D)/iptc/xtables.py
-+endef
-+
-+PYTHON_IPTABLES_PRE_BUILD_HOOKS += PYTHON_IPTABLES_SET_XTABLES_ENV_VARS
- 
- $(eval $(python-package))
+-MESON_VERSION = 0.53.1
++MESON_VERSION = 0.53.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 -- 
-2.20.1
+2.21.1 (Apple Git-122.3)
