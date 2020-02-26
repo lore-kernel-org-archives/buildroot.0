@@ -1,50 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 20:46:18 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-msgpack: bump
- to version 1.0.0
-Message-ID: <20200226193424.722F98EA64@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 20:47:39 +0100
+Subject: [Buildroot] [git commit branch/next] package/kvm-unit-tests: fix
+ build with SSP
+Message-ID: <20200226193548.8A83C8EA6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23ae45825f8bc6d5633812ea56359a70b2260d91
+commit: https://git.buildroot.net/buildroot/commit/?id=dc006056bb06352a853a27d6691deac8842b6b20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-msgpack/python-msgpack.hash | 6 +++---
- package/python-msgpack/python-msgpack.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Add a patch to correct a typo in the Makefile, so -fno-stack-protector /
+-fno-stack-protector-all are really used.  With this applied, kvm-unit-tests
+will always be built without SSP as intented by upstream.  This will fix the
+build on ppc64 with SSP that started to fail for an unknown reason since
+November 27th.
 
-diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
-index e58537d062..e34ea118ed 100644
---- a/package/python-msgpack/python-msgpack.hash
-+++ b/package/python-msgpack/python-msgpack.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/msgpack/json
--md5	ba46fdee995565f40e332bd7eea882f1  msgpack-0.6.2.tar.gz
--sha256	ea3c2f859346fcd55fc46e96885301d9c2f7a36d453f5d8f2967840efa1e1830  msgpack-0.6.2.tar.gz
--# Locally computed sha256
-+md5  c35ee8f991dad3969884e9585e56ebba  msgpack-1.0.0.tar.gz
-+sha256  9534d5cc480d4aff720233411a1f765be90885750b07df772380b34c10ecb5c0  msgpack-1.0.0.tar.gz
-+# Locally computed sha256 checksums
- sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
-diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
-index f4e059f5ea..18d5a998ff 100644
---- a/package/python-msgpack/python-msgpack.mk
-+++ b/package/python-msgpack/python-msgpack.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MSGPACK_VERSION = 0.6.2
-+PYTHON_MSGPACK_VERSION = 1.0.0
- PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
--PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/74/0a/de673c1c987f5779b65ef69052331ec0b0ebd22958bda77a8284be831964
-+PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/e4/4f/057549afbd12fdd5d9aae9df19a6773a3d91988afe7be45b277e8cee2f4d
- PYTHON_MSGPACK_LICENSE = Apache-2.0
- PYTHON_MSGPACK_LICENSE_FILES = COPYING
- PYTHON_MSGPACK_SETUP_TYPE = setuptools
+Moreover, the Arch Linux workaround could also be removed in a follow-up
+patch.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0003-Makefile-fix-stack-protector-tests.patch  | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
+new file mode 100644
+index 0000000000..be819f27c6
+--- /dev/null
++++ b/package/kvm-unit-tests/0003-Makefile-fix-stack-protector-tests.patch
+@@ -0,0 +1,36 @@
++From 9bf9155804652c0b3a94af9723c79b6de430187b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 24 Feb 2020 00:04:06 +0100
++Subject: [PATCH] Makefile: fix stack-protector tests
++
++Rename fnostack_protector into fno_stack_protector and
++fnostack_protector_all into fnostack_protector_all otherwise build will
++fail if -fstack-protector is passed by the toolchain
++
++Fixes:
++ - http://autobuild.buildroot.org/results/ad689b08173548af21dd1fb0e827fd561de6dfef
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to kvm at vger.kernel.org]
++---
++ Makefile | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 767b6c6..754ed65 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -55,8 +55,8 @@ COMMON_CFLAGS += -Wignored-qualifiers -Werror
++ 
++ frame-pointer-flag=-f$(if $(KEEP_FRAME_POINTER),no-,)omit-frame-pointer
++ fomit_frame_pointer := $(call cc-option, $(frame-pointer-flag), "")
++-fnostack_protector := $(call cc-option, -fno-stack-protector, "")
++-fnostack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
+++fno_stack_protector := $(call cc-option, -fno-stack-protector, "")
+++fno_stack_protector_all := $(call cc-option, -fno-stack-protector-all, "")
++ wno_frame_address := $(call cc-option, -Wno-frame-address, "")
++ fno_pic := $(call cc-option, -fno-pic, "")
++ no_pie := $(call cc-option, -no-pie, "")
++-- 
++2.25.0
++
