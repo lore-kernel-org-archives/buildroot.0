@@ -1,41 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 19:04:04 +0100
-Subject: [Buildroot] [PATCH/next] package/psplash: bump to revision
- fd33a9b
-In-Reply-To: <1582733006-22049-1-git-send-email-pjtexier@koncepto.io>
- (Pierre-Jean Texier's message of "Wed, 26 Feb 2020 17:03:26 +0100")
-References: <1582733006-22049-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <875zft5ip7.fsf@dell.be.48ers.dk>
+Date: Wed, 26 Feb 2020 18:59:46 +0100
+Subject: [Buildroot] [git commit branch/next] package/armadillo: bump to
+ version 9.850.1
+Message-ID: <20200226175236.E6D9A8E951@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=50c8051da3fc878eed3e4962ec81ce1a453f56ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > This includes the following changes:
- > 66c8f65 Makefile.am: use BUILT_SOURCES instead of BUILD_SOURCES
- > f7a354d Generate image headers from their PNG source, while still including them in dist tarball
- > 983837e Import png source for images, extracted from headers
- > 3bd1557 Cleanup poky logo
- > 773a397 Add configure flags for fullscreen logo and no startup message
- > 2913c24 Double buffering support
- > 8188d68 Support --with-font configure option to use other font headers
- > 88c4b71 Add SPDX License information to files, drop boilerplate
- > 904f4aa add systemd support
- > e94bd11 process consecutive commands
- > 568f28e use /run for communication FIFO
- > ee053e0 add recovered bar.png
- > 2015f70 Fix text width calculation.
+Update indentation of hash file (two spaces)
 
- > Also:
- >  - remove the 'psplash-quit.service' unit file
- >  - add 'psplash-systemd.service' to use the new systemd support in psplash
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/armadillo/armadillo.hash | 8 ++++----
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index 6b3c4a855f..aa21570803 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,7 +1,7 @@
+ # From http://sourceforge.net/projects/arma/files/?source=navbar
+-md5 5ef71763bd429a3d481499878351f3be  armadillo-7.900.1.tar.xz
+-sha1 8118faf1c6a7a39c55a1103a1f90e85e613cc377  armadillo-7.900.1.tar.xz
++md5  12c3b63c301d414659d7592ff58a71cb  armadillo-9.850.1.tar.xz
++sha1  0a2d3ef140fd8587867def7359fe45f9df4a925a  armadillo-9.850.1.tar.xz
+ # Locally computed:
+-sha256 33eec7013990b5477ccc5ad3abc68bc2326c7a7a2790014d625cfcf37c0e07d3  armadillo-7.900.1.tar.xz
++sha256  d4c389b9597a5731500ad7a2656c11a6031757aaaadbcafdea5cc8ac0fd2c01f  armadillo-9.850.1.tar.xz
+ # License files, locally calculated
+-sha256 3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
++sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index b5fe403a7a..87fb5e8ade 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ARMADILLO_VERSION = 7.900.1
++ARMADILLO_VERSION = 9.850.1
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_DEPENDENCIES = clapack
