@@ -1,53 +1,133 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 16:33:22 +0100
-Subject: [Buildroot] [PATCH 3/3] package/python-iptables: use installed
- iptables by default
-In-Reply-To: <20200226142617.4170-3-frank.vanbever@essensium.com>
-References: <20200226142617.4170-1-frank.vanbever@essensium.com>
- <20200226142617.4170-3-frank.vanbever@essensium.com>
-Message-ID: <20200226163322.675b66f5@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Feb 2020 16:19:34 +0100
+Subject: [Buildroot] [git commit] package/qt5: drop 5.6 support
+Message-ID: <20200226152402.48C088E9B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Frank,
+commit: https://git.buildroot.net/buildroot/commit/?id=a69df083a815d7591489eac5597d457b6691cf54
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 26 Feb 2020 15:26:17 +0100
-Frank Vanbever <frank.vanbever@essensium.com> wrote:
+As discussed during the FOSDEM2019 develop days, Qt 5.6 is very old (5.6.3
+was released in September 2017, and 5.6.x became EOL in March 2019), so drop
+it before the new Buildroot LTS release:
 
-> diff --git a/package/python-iptables/python-iptables.mk b/package/python-iptables/python-iptables.mk
-> index 66e478a89a..086d5b2457 100644
-> --- a/package/python-iptables/python-iptables.mk
-> +++ b/package/python-iptables/python-iptables.mk
-> @@ -9,5 +9,14 @@ PYTHON_IPTABLES_SITE = https://files.pythonhosted.org/packages/08/5e/16a5ca35c42
->  PYTHON_IPTABLES_SETUP_TYPE = setuptools
->  PYTHON_IPTABLES_LICENSE = Apache-2.0
->  PYTHON_IPTABLES_LICENSE_FILES = NOTICE
-> +PYTHON_IPTABLES_DEPENDENCIES = iptables
-> +
-> +define PYTHON_IPTABLES_SET_XTABLES_ENV_VARS
-> +	XTABLES_VERSION=`awk '/XTABLES_VERSION_CODE/ {print $$NF}' $(STAGING_DIR)/usr/include/xtables-version.h`; \
-> +	sed -i "s/os.getenv(\"PYTHON_IPTABLES_XTABLES_VERSION\")/$$XTABLES_VERSION/" $(@D)/iptc/xtables.py; \
-> +	sed -i "s/os.getenv(\"XTABLES_LIBDIR\")/\"\/usr\/lib\/xtables\"/" $(@D)/iptc/xtables.py
+https://elinux.org/Buildroot:DeveloperDaysFOSDEM2019#Qt5_versions_to_support:_keep_5.6_or_a_newer_LTS.3F
 
-This last line is not using the XTABLES_VERSION variable, so it does
-not need to be a continuation line from the previous commands.
+And add legacy handling for it.
 
-Also, use % as a sed separator instead of / so that you don't have to
-escape all the slashes.
+There are a number of places where code checks for
+BR2_PACKAGE_QT5_VERSION_LATEST, so leave that as a blind option for now to
+not break the build.
 
-But overall, is there a better way ? Like some official way to pass
-these values at build time as setup.py options, with the environment
-variable taking precedence if available ? That would make this
-hopefully acceptable by upstream. Perhaps the setup.py logic could even
-check the xtables-version.h by itself ?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in.legacy      |  7 +++++++
+ package/qt5/Config.in | 38 ++++++++++++--------------------------
+ package/qt5/qt5.mk    |  6 ------
+ 3 files changed, 19 insertions(+), 32 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 87966facb4..6a33ce9e1c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2020.02"
+ 
++config BR2_PACKAGE_QT5_VERSION_5_6
++	bool "qt 5.6 support removed"
++	select BR2_LEGACY
++	help
++	  Support for Qt 5.6 is EOL and has been removed. The current
++	  version (5.12 or later) has been selected instead.
++
+ config BR2_PACKAGE_CURL
+ 	bool "BR2_PACKAGE_CURL was renamed"
+ 	select BR2_PACKAGE_LIBCURL_CURL
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index def79fa680..7051bf517a 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -11,14 +11,22 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	# ARM needs BLX, so v5t+
+ 	depends on !BR2_ARM_CPU_ARMV4
+ 
+-comment "Qt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++comment "Qt5 needs a toolchain w/ gcc >= 4.8, wchar, NPTL, C++, dynamic library"
++	depends on !BR2_ARM_CPU_ARMV4
++	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ menuconfig BR2_PACKAGE_QT5
+ 	bool "Qt5"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
++	# no built-in double-conversion support
++	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_QT5BASE
+ 	help
+@@ -29,31 +37,9 @@ menuconfig BR2_PACKAGE_QT5
+ 
+ if BR2_PACKAGE_QT5
+ 
+-choice
+-	prompt "Qt5 version"
+-
+ config BR2_PACKAGE_QT5_VERSION_LATEST
+-	bool "Latest (5.12)"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+-	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
+-	# no built-in double-conversion support
+-	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
+-	help
+-	  This option builds Qt 5.12, which is licensed under
+-	  (L)GPL-3.0+.
+-
+-comment "Latest Qt version needs a toolchain w/ gcc >= 4.8"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+-	depends on !BR2_ARM_CPU_ARMV4
+-	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
+-
+-config BR2_PACKAGE_QT5_VERSION_5_6
+-	bool "LTS (5.6)"
+-	help
+-	  This option builds Qt 5.6, which is licensed under
+-	  (L)GPL-2.0+.
+-
+-endchoice
++	bool
++	default y
+ 
+ source "package/qt5/qt53d/Config.in"
+ source "package/qt5/qt5base/Config.in"
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index d94d9cc99f..7805b575f5 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -4,15 +4,9 @@
+ #
+ ################################################################################
+ 
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5_VERSION_MAJOR = 5.12
+ QT5_VERSION = $(QT5_VERSION_MAJOR).7
+ QT5_SOURCE_TARBALL_PREFIX = everywhere-src
+-else
+-QT5_VERSION_MAJOR = 5.6
+-QT5_VERSION = $(QT5_VERSION_MAJOR).3
+-QT5_SOURCE_TARBALL_PREFIX = opensource-src
+-endif
+ QT5_SITE = https://download.qt.io/archive/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+ 
+ include $(sort $(wildcard package/qt5/*/*.mk))
