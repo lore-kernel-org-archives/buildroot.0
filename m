@@ -1,33 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 20:49:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vala: bump version to 0.46.6
-In-Reply-To: <20200225232826.958260-1-aduskett@gmail.com>
-References: <20200225232826.958260-1-aduskett@gmail.com>
-Message-ID: <20200226204956.7a6d63e3@windsurf>
+Date: Wed, 26 Feb 2020 20:51:45 +0100
+Subject: [Buildroot] [git commit] package/aufs: add support for linux 5.x
+Message-ID: <20200226194103.C23508EA7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 25 Feb 2020 15:28:26 -0800
-aduskett at gmail.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2051060054ed0a15265206633c6249f9edff1464
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Also add the line "HOST_VALA_CONF_OPTS += --disable-valadoc"
-> as valadoc requires libgvc which is not available in Buildroot.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/vala/vala.hash | 4 ++--
->  package/vala/vala.mk   | 5 +++--
->  2 files changed, 5 insertions(+), 4 deletions(-)
+Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/Config.ext.in  | 9 ++++++++-
+ package/aufs/aufs.mk | 2 ++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 14140d352c..734a52a533 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -102,7 +102,8 @@ choice
+ 	help
+ 	  Select the major series of this version. This must match the
+ 	  major version of your kernel (e.g. for kernels 3.x, select
+-	  aufs3.x; for kernels 4.x, select aufs4.x).
++	  aufs3.x; for kernels 4.x, select aufs4.x; for kernels 5.x,
++	  select aufs5.x ).
+ 
+ 	  Note: neither aufs1.x nor aufs2.x (both for kernels older than
+ 	  3.x) are supported.
+@@ -113,12 +114,16 @@ config BR2_LINUX_KERNEL_EXT_AUFS_SERIES_3
+ config BR2_LINUX_KERNEL_EXT_AUFS_SERIES_4
+ 	bool "aufs4.x"
+ 
++config BR2_LINUX_KERNEL_EXT_AUFS_SERIES_5
++	bool "aufs5.x"
++
+ endchoice
+ 
+ config BR2_LINUX_KERNEL_EXT_AUFS_SERIES
+ 	int
+ 	default 3 if BR2_LINUX_KERNEL_EXT_AUFS_SERIES_3
+ 	default 4 if BR2_LINUX_KERNEL_EXT_AUFS_SERIES_4
++	default 5 if BR2_LINUX_KERNEL_EXT_AUFS_SERIES_5
+ 
+ config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
+ 	string "aufs-standalone version"
+@@ -135,6 +140,8 @@ config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
+ 	  https://sourceforge.net/p/aufs/aufs3-standalone/ref/master/branches/
+ 	  For aufs4.x:
+ 	  https://github.com/sfjro/aufs4-standalone/branches/all
++	  For aufs5.x:
++	  https://github.com/sfjro/aufs5-standalone/branches/all
+ 
+ endif # aufs
+ 
+diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
+index 55dbf942df..4e95a350a0 100644
+--- a/package/aufs/aufs.mk
++++ b/package/aufs/aufs.mk
+@@ -13,6 +13,8 @@ AUFS_SITE = http://git.code.sf.net/p/aufs/aufs3-standalone
+ AUFS_SITE_METHOD = git
+ else ifeq ($(BR2_PACKAGE_AUFS_SERIES),4)
+ AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
++else ifeq ($(BR2_PACKAGE_AUFS_SERIES),5)
++AUFS_SITE = $(call github,sfjro,aufs5-standalone,$(AUFS_VERSION))
+ endif
+ 
+ ifeq ($(BR_BUILDING):$(BR2_PACKAGE_AUFS):$(AUFS_VERSION),y:y:)
