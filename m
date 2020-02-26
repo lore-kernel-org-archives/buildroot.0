@@ -1,59 +1,124 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 17:43:59 +0100
-Subject: [Buildroot] Buildroot 2020.02-rc2 released
-Message-ID: <878skp70z4.fsf@dell.be.48ers.dk>
+From: Mircea GLIGA <mgliga@bitdefender.com>
+Date: Wed, 26 Feb 2020 12:11:36 +0000
+Subject: [Buildroot] external, how to achieve our needs?
+In-Reply-To: <20200225150149.zvyqbn34swfizg72@M43218.corp.atmel.com>
+References: <20200225150149.zvyqbn34swfizg72@M43218.corp.atmel.com>
+Message-ID: <VI1PR02MB3920FE7EF8D9CDDC656EAB49DCEA0@VI1PR02MB3920.eurprd02.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Ludovic,
+
+I also have this kind of problems when implementing our external, sometimes is useful to 'override' or append to a recipe (Yocto style).
+
+  *   I ended up "duplicating" recipes in our layer, e.g. bd-tcpdump in order to build the package differently
+  *   where it was possible, I manipulated the original package variables, from a .mk file in the external layer: e.g modify the *_CONF_OPTS or *_CONF_ENV for some package
+
+I'm also not that pleased with this 'unofficial' solution.
+
+BR
+Mircea
+________________________________
+From: buildroot <buildroot-bounces@busybox.net> on behalf of Ludovic Desroches <ludovic.desroches@microchip.com>
+Sent: Tuesday, February 25, 2020 17:01
+To: buildroot at buildroot.org <buildroot@buildroot.org>
+Cc: Eugen Hristev <Eugen.Hristev@microchip.com>; Joshua Henderson <Joshua.Henderson@microchip.com>; Nicolas Ferre <Nicolas.Ferre@Microchip.com>; Cristian Birsan <Cristian.Birsan@microchip.com>; Tudor Ambarus <Tudor.Ambarus@microchip.com>
+Subject: [Buildroot] external, how to achieve our needs?
+
 Hi,
 
-Buildroot 2020.02-rc2 is released - Go download it at:
+We are currently using it for linux4sam but it seems it has limitations
+and I would like to know if you have advice to share or the same issue.
+I did a quick search in the mailing list, I found a discussion with few
+answers and patches from Yann for external toolchains, jpeg and openssl.
+Unfortunately, it doesn't cover all our use cases.
 
-http://buildroot.net/downloads/buildroot-2020.02-rc2.tar.gz
+At the beginning, we forked buildroot in the buildroot-at91 tree. It was
+mostly done to put patches we sent upstream. We release a distribution
+called linux4sam which contains bootloaders, kernel and rootfs. We can't
+wait for the next release of Buildroot to get our patches. It was also
+useful to handle additional defconfigs, buildroot bug fixes and sometimes
+patches that are not accepted upstream.
 
-or
+When the external feature was released, we thought that it should be better
+to rely on Buildroot vanilla and to release only our external. The goal was
+to remove the buildroot-at91 fork. At least, it was the plan...
 
-http://buildroot.net/downloads/buildroot-2020.02-rc2.tar.bz2
+Now, we still have buildroot-at91 + buildroot-external-microchip trees. We
+faced several problems which make difficult to only provide an external.
 
-Or get it from Git:
+One of the latest issue is we are adding support for a GPU in cairo and
+this work is not upstream yet. It involves patching cairo sources
+(that's not a big deal) but also to modify cairo.mk to add dependencies and
+new configure options. I discussed with Thomas who helped me to achieve it
+with some tricks. I added a cairo_microchip package, I had to patch some
+libraries to link with this version of cairo and use the external.mk to
+force extra dependencies for cairo and pango. Honestly, even if it works,
+I am not pleased with the solution. It will be so much easier and cleaner
+to do this in buildroot-at91 instead of buildroot-external-microchip. We
+discussed again, internally, about the external and the fork of buildroot
+but we have different opinions. I would like to emphasize that recent
+changes in buildroot make us think that it won't be easy to get rid of
+buildroot-at91: devmem2 deprecated, rgnd which increases the boot time
+since it uses the lib jitterentropy, curl library name change and others.
 
-git://git.buildroot.net/buildroot
+My feeling is that the external is not flexible enough to allow us to
+remove buildroot-at91. Is it planned to offer a way to modify package
+configs and makefiles or is it totally against Buildroot philosophy? I
+think this is a strength of the Yocto layers but it's also a weakness as
+it becomes difficult to know what is built and how. I also wonder if we can
+have one version of the external to support several versions of buildroot
+or if we'll need to tag it according to the version of buildroot it has
+been tested against. Do we put too much hope in the external?
 
-Another week, another release candidate.
+If I try to summarize our options with their pros and cons:
 
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
+- buildroot fork:
+  - pros:
+    - one tree
+    - full control, can do whatever we want
+  - cons:
+    - fork
+    - need to rebase patches for new releases
+    - may not be able to keep the pace of buildroot releases
 
-git shortlog -sn 2020.02-rc1..
+- buildroot external:
+  - pros:
+    - one tree
+    - not dependent on buildroot version (in theory) so no rebase to do
+  - cons:
+    - can't modify buildroot package makefiles, only the source code
+    - can't quickly solve bugs in buildroot
+    - may have dependency on the buildroot version
 
-    11  Fabrice Fontaine
-     9  Peter Korsgaard
-     5  Thomas Petazzoni
-     4  Romain Naour
-     4  Yann E. MORIN
-     3  Carlos Santos
-     2  Giulio Benetti
-     2  Pascal de Bruijn
-     2  Peter Seiderer
-     2  Thomas De Schampheleire
-     2  Yegor Yefremov
-     1  Adam Duskett
-     1  Andreas Naumann
-     1  Arnout Vandecappelle (Essensium/Mind)
-     1  Baruch Siach
-     1  Bernd Kuhls
-     1  Francois Gervais
-     1  Gilles Talis
-     1  Johan Oudinet
-     1  Michael Walle
-     1  Titouan Christophe
+- buildroot fork + external:
+  - pros:
+    - full control, can do whatever we want
+    - less patches to rebase (only the ones on top of buildroot)
+  - cons:
+    - fork
+    - two trees
+    - may not be able to keep the pace of buildroot releases
+    - may have buildroot fork with no patches on top of it sometime
 
-For more details, see the CHANGES file:
 
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02-rc2
+If you have any suggestions, about improvements for Buildroot or the way we
+manage our Buildroot offer, I would be happy to hear them.
 
--- 
-Bye, Peter Korsgaard
+
+Regards,
+
+Ludovic
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+________________________
+This email was scanned by Bitdefender
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200226/568519a3/attachment.html>
