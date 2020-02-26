@@ -1,52 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 22:47:08 +0100
-Subject: [Buildroot] [git commit] package/scrypt: bump to version 1.3.0
-Message-ID: <20200309140906.206D58E780@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 26 Feb 2020 19:01:59 +0100
+Subject: [Buildroot] [git commit] package/libsecret: bump to version 0.20.1
+Message-ID: <20200309140905.3965581298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1524c1e9202eb040f6a5332862158b20cdfe29ea
+commit: https://git.buildroot.net/buildroot/commit/?id=e0de8a34029d23c59a493dcac58e69ebaceae50d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use the new COPYRIGHT file as the license file
+- Drop patch (already in version)
+- Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/scrypt/scrypt.hash | 6 +++---
- package/scrypt/scrypt.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...t.pc-add-Libs.private-field-for-libgcrypt.patch | 38 ----------------------
+ package/libsecret/libsecret.hash                   |  6 ++--
+ package/libsecret/libsecret.mk                     |  4 +--
+ 3 files changed, 5 insertions(+), 43 deletions(-)
 
-diff --git a/package/scrypt/scrypt.hash b/package/scrypt/scrypt.hash
-index 8a20d42bee..c73ff515bc 100644
---- a/package/scrypt/scrypt.hash
-+++ b/package/scrypt/scrypt.hash
-@@ -1,4 +1,4 @@
--# From http://www.tarsnap.com/scrypt/scrypt-sigs-1.2.0.asc
--sha256  1754bc89405277c8ac14220377a4c240ddc34b1ce70882aa92cd01bfdc8569d4  scrypt-1.2.0.tgz
-+# From http://www.tarsnap.com/scrypt/scrypt-sigs-1.3.0.asc
-+sha256  263034edd4d1e117d4051d9a9260c74dedb0efaf4491c5152b738978b3f32748  scrypt-1.3.0.tgz
- # Locally computed
--sha256  e9d3ce691acc974c05d54bdea919fa03018fcdb5abd82eab5cdb78f07c451e0a  main.c
-+sha256  adc1942c42da6e3370223a27ff4a6835924d2b41e509f9bee58a5e6ca1bbddae  COPYRIGHT
-diff --git a/package/scrypt/scrypt.mk b/package/scrypt/scrypt.mk
-index ae5a64e71f..820664f6c1 100644
---- a/package/scrypt/scrypt.mk
-+++ b/package/scrypt/scrypt.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/libsecret/0001-libsecret.pc-add-Libs.private-field-for-libgcrypt.patch b/package/libsecret/0001-libsecret.pc-add-Libs.private-field-for-libgcrypt.patch
+deleted file mode 100644
+index 62bc84c87e..0000000000
+--- a/package/libsecret/0001-libsecret.pc-add-Libs.private-field-for-libgcrypt.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 754897490d9478025d174c2b1c1849305f728324 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 28 Dec 2015 12:13:07 +0100
+-Subject: [PATCH] libsecret.pc: add Libs.private field for libgcrypt
+-
+-When libgcrypt is available, libsecret links with it. When dynamic
+-linking is used, there is no problem: libsecret.so has a NEEDED
+-pointing to libgcrypt, so linking an application with -lsecret works
+-fine. However, when doing static linking, you must specify the entire
+-chain of libraries, otherwise you get unresolved symbols errors, such
+-as:
+-
+-host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libsecret-1.a(libsecret_1_la-secret-session.o): In function `request_open_session_aes':
+-build/libsecret-0.18.3/libsecret/secret-session.c:99: undefined reference to `gcry_mpi_release'
+-build/libsecret-0.18.3/libsecret/secret-session.c:101: undefined reference to `gcry_mpi_aprint'
+-build/libsecret-0.18.3/libsecret/secret-session.c:107: undefined reference to `gcry_free'
+-
+-In order to solve this, we simply need to indicate in the Libs.private
+-field of the .pc file that we depend on libgcrypt.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- libsecret/libsecret.pc.in | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/libsecret/libsecret.pc.in b/libsecret/libsecret.pc.in
+-index 0c342ef..d99cf44 100644
+---- a/libsecret/libsecret.pc.in
+-+++ b/libsecret/libsecret.pc.in
+-@@ -11,4 +11,5 @@ Description: GObject bindings for Secret Service API
+- Version: @VERSION@
+- Requires: glib-2.0 gobject-2.0 gio-2.0
+- Libs: -L${libdir} -lsecret- at SECRET_MAJOR@
+-+Libs.private: @LIBGCRYPT_LIBS@
+- Cflags: -I${includedir}/libsecret- at SECRET_MAJOR@
+--- 
+-2.6.4
+-
+diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
+index 00fdfd06f6..3a256fd700 100644
+--- a/package/libsecret/libsecret.hash
++++ b/package/libsecret/libsecret.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.8.sha256sum
+-sha256	3bfa889d260e0dbabcf5b9967f2aae12edcd2ddc9adc365de7a5cc840c311d15	libsecret-0.18.8.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.20/libsecret-0.20.1.sha256sum
++sha256  57f73e94ec6263a17a077fb809cf8cf424637a897a7f15b4eec42ce4aef52447  libsecret-0.20.1.tar.xz
+ 
+ # Hash for license file:
+-sha256	a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b	COPYING
++sha256  a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b  COPYING
+diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+index c699e16d99..b48d2e7086 100644
+--- a/package/libsecret/libsecret.mk
++++ b/package/libsecret/libsecret.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--SCRYPT_VERSION = 1.2.0
-+SCRYPT_VERSION = 1.3.0
- SCRYPT_SOURCE = scrypt-$(SCRYPT_VERSION).tgz
- SCRYPT_SITE = http://www.tarsnap.com/scrypt
- SCRYPT_LICENSE = BSD-2-Clause
--SCRYPT_LICENSE_FILES = main.c
-+SCRYPT_LICENSE_FILES = COPYRIGHT
- SCRYPT_DEPENDENCIES = openssl
- SCRYPT_INSTALL_STAGING = YES
- 
+-LIBSECRET_VERSION_MAJOR = 0.18
+-LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).8
++LIBSECRET_VERSION_MAJOR = 0.20
++LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).1
+ LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
+ LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
+ LIBSECRET_INSTALL_STAGING = YES
