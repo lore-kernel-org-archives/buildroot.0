@@ -1,48 +1,57 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 26 Feb 2020 09:24:02 +0100
-Subject: [Buildroot] [PATCH] Config.in: add BR2_HOST_GCC_AT_LEAST_9
-In-Reply-To: <20200225232303.1cad5408@windsurf>
-References: <20200225212213.22680-1-romain.naour@smile.fr>
- <20200225232303.1cad5408@windsurf>
-Message-ID: <39ab8651-6586-0fbf-39f9-874b51df36c4@smile.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 26 Feb 2020 10:41:59 +0200
+Subject: [Buildroot] [PATCH] package/fail2ban: The (host-python3) 2to3
+ utility needs to be present
+In-Reply-To: <20200226082818.5066-1-p.debruijn@unilogic.nl>
+References: <20200226082818.5066-1-p.debruijn@unilogic.nl>
+Message-ID: <87h7zdoi3s.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hi Pascal,
 
-Le 25/02/2020 ? 23:23, Thomas Petazzoni a ?crit?:
-> On Tue, 25 Feb 2020 22:22:13 +0100
-> Romain Naour <romain.naour@smile.fr> wrote:
-> 
->> Fedora 30 switched to GCC 9.x. [1]
->>
->> [1] https://fedoraproject.org/wiki/Changes/GCC9
->>
->> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> 
-> Thanks, but this was not sufficiently tested it seems: on my Fedora
-> system with gcc 9.x, BR2_HOST_GCC_VERSION was still 8, and therefore
-> BR2_HOST_GCC_AT_LEAST_9 was not "y". This is because the main Buildroot
-> Makefile HOSTCC_MAX_VERSION variable needs to be updated as well.
-> 
-> I fixed that up and applied to master. Thanks!
+On Wed, Feb 26 2020, Pascal de Bruijn wrote:
+> During _POST_PATCH_HOOKS _DEPENDANCIES aren't guaranteed to be built,
+> however during _PRE_CONFIGURE_HOOKS they should be built.
+>
+> Should fix:
+> http://autobuild.buildroot.net/results/dd8e225e2a49cfa6735bed11459007003a37c137/
+> http://autobuild.buildroot.net/results/e688c3652bd474ac682984e2e5947701942f0f57/
 
-Sorry for that.
+Thanks for following up on this.
 
-I was looking at [1] at the same time (that is why I noticed this symbol was
-missing).
+> Cc: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+> ---
+>  package/fail2ban/fail2ban.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
+> index 6f023b48a1..6cb77c2514 100644
+> --- a/package/fail2ban/fail2ban.mk
+> +++ b/package/fail2ban/fail2ban.mk
+> @@ -15,7 +15,7 @@ define FAIL2BAN_PYTHON_2TO3
+>  	$(HOST_DIR)/bin/2to3 --write --nobackups --no-diffs $(@D)/bin/* $(@D)/fail2ban
+>  endef
+>  FAIL2BAN_DEPENDENCIES += host-python3
+> -FAIL2BAN_POST_PATCH_HOOKS += FAIL2BAN_PYTHON_2TO3
+> +FAIL2BAN_PRE_CONFIGURE_HOOKS += FAIL2BAN_PYTHON_2TO3
 
-[1] https://bugs.busybox.net/show_bug.cgi?id=12581
+As Thomas suggested please add a comment here. Something like:
 
-Best regards,
-Romain
+# We can't use _POST_PATCH_HOOKS because dependencies are not guaranteed
+# to build and install before _POST_PATCH_HOOKS run.
 
+baruch
 
-> 
-> Best regards,
-> 
-> Thomas
-> 
+>  endif
+>
+>  define FAIL2BAN_FIX_DEFAULT_CONFIG
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
