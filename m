@@ -1,63 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 15:45:39 +0100
-Subject: [Buildroot] [PATCH v2 08/37] package/qt5enginio: drop qt 5.6 support
+Date: Wed, 26 Feb 2020 15:45:41 +0100
+Subject: [Buildroot] [PATCH v2 10/37] package/qt5imageformats: drop qt 5.6
+ support
 In-Reply-To: <20200226144608.12529-1-peter@korsgaard.com>
 References: <20200226144608.12529-1-peter@korsgaard.com>
-Message-ID: <20200226144608.12529-8-peter@korsgaard.com>
+Message-ID: <20200226144608.12529-10-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And get rid of the now unused BR2_PACKAGE_QT5BASE_OPENSSL symbol.
-
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5base/Config.in    |  4 ----
- package/qt5/qt5enginio/Config.in | 12 +-----------
- 2 files changed, 1 insertion(+), 15 deletions(-)
+ package/qt5/qt5imageformats/qt5imageformats.hash | 5 -----
+ package/qt5/qt5imageformats/qt5imageformats.mk   | 5 -----
+ 2 files changed, 10 deletions(-)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 1862a7d9b6..60a611e292 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -283,10 +283,6 @@ comment "icu support needs a toolchain w/ gcc >= 4.8"
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/qt5/qt5imageformats/qt5imageformats.hash b/package/qt5/qt5imageformats/qt5imageformats.hash
+index de977f15ba..3358b6d79c 100644
+--- a/package/qt5/qt5imageformats/qt5imageformats.hash
++++ b/package/qt5/qt5imageformats/qt5imageformats.hash
+@@ -1,6 +1,3 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtimageformats-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 efe4da3c90c976c9b9a2eb6b081d2b8e1435935695104456276ce98e8a5848c3 qtimageformats-opensource-src-5.6.3.tar.xz
+-
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtimageformats-everywhere-src-5.12.7.tar.xz.sha256
+ sha256 9bd19ee24fb85f249d01c78e637c95377dd738feb61da0deeee6b770fa62f70b qtimageformats-everywhere-src-5.12.7.tar.xz
  
--config BR2_PACKAGE_QT5BASE_OPENSSL
--	bool
--	default y if BR2_PACKAGE_OPENSSL
--
- config BR2_PACKAGE_QT5BASE_TSLIB
- 	bool "Enable Tslib support"
- 	select BR2_PACKAGE_TSLIB
-diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
-index f84d234771..d445d91dea 100644
---- a/package/qt5/qt5enginio/Config.in
-+++ b/package/qt5/qt5enginio/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_QT5ENGINIO
- 	bool "qt5enginio"
--	depends on BR2_PACKAGE_QT5BASE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	select BR2_PACKAGE_QT5BASE_NETWORK
- 	help
-@@ -14,13 +14,3 @@ config BR2_PACKAGE_QT5ENGINIO
- 	  5.6 and not recommended for new design.
+@@ -10,5 +7,3 @@ sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.
+ sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
+ sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
+ sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+-sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
+-sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
+diff --git a/package/qt5/qt5imageformats/qt5imageformats.mk b/package/qt5/qt5imageformats/qt5imageformats.mk
+index fa13ebedaf..b8e581c489 100644
+--- a/package/qt5/qt5imageformats/qt5imageformats.mk
++++ b/package/qt5/qt5imageformats/qt5imageformats.mk
+@@ -10,13 +10,8 @@ QT5IMAGEFORMATS_SOURCE = qtimageformats-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5IMAGEF
+ QT5IMAGEFORMATS_DEPENDENCIES = qt5base
+ QT5IMAGEFORMATS_INSTALL_STAGING = YES
  
- 	  http://doc.qt.io/archives/qt-5.5/enginio-index.html
--
--# When Qt 5.6 is removed, replace the depends on
--# BR2_PACKAGE_QT5BASE_OPENSSL above by a select BR2_PACKAGE_OPENSSL.
--comment "qt5enginio needs libressl"
--	depends on BR2_PACKAGE_QT5_VERSION_5_6
--	depends on !BR2_PACKAGE_QT5BASE_OPENSSL
--
--comment "qt5enginio needs openssl"
--	depends on BR2_PACKAGE_QT5_VERSION_LATEST
--	depends on !BR2_PACKAGE_QT5BASE_OPENSSL
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5IMAGEFORMATS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5IMAGEFORMATS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+-else
+-QT5IMAGEFORMATS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+-QT5IMAGEFORMATS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+-endif
+ 
+ define QT5IMAGEFORMATS_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
 -- 
 2.20.1
