@@ -1,96 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 19:00:04 +0100
-Subject: [Buildroot] [git commit branch/next] package/meson: bump version to
- 0.53.2
-Message-ID: <20200226175236.EF5BF8EA32@busybox.osuosl.org>
+Date: Wed, 26 Feb 2020 18:59:25 +0100
+Subject: [Buildroot] [git commit branch/next] package/openblas: bump to
+ version 0.3.8
+Message-ID: <20200226175236.D82E58EA31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10c0bf73be91c0dff86b71038a9d98c2f0c24504
+commit: https://git.buildroot.net/buildroot/commit/?id=8dd444fa401603311a31993dd9fb342fac31058b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Update indentation of hash file (two spaces)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch | 2 +-
- .../0002-Prefer-ext-static-libs-when-default-library-static.patch     | 2 +-
- package/meson/0003-envconfig-add-pkg_config_libdir-property.patch     | 4 ++--
- package/meson/meson.hash                                              | 4 ++--
- package/meson/meson.mk                                                | 2 +-
- 5 files changed, 7 insertions(+), 7 deletions(-)
+ package/openblas/openblas.hash | 4 ++--
+ package/openblas/openblas.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-index a7b66c1067..79e99adf4a 100644
---- a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-+++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-@@ -14,7 +14,7 @@ diff --git a/mesonbuild/minstall.py b/mesonbuild/minstall.py
- index 8ac6aab1..7ef04116 100644
- --- a/mesonbuild/minstall.py
- +++ b/mesonbuild/minstall.py
--@@ -478,8 +478,14 @@ class Installer:
-+@@ -489,8 +489,14 @@ class Installer:
-                          printed_symlink_error = True
-              if os.path.isfile(outname):
-                  try:
-diff --git a/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
-index 798cd65299..b859d8372e 100644
---- a/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
-+++ b/package/meson/0002-Prefer-ext-static-libs-when-default-library-static.patch
-@@ -30,7 +30,7 @@ diff --git a/mesonbuild/compilers/mixins/clike.py b/mesonbuild/compilers/mixins/
- index 5d50b7d..8f5f1c6 100644
- --- a/mesonbuild/compilers/mixins/clike.py
- +++ b/mesonbuild/compilers/mixins/clike.py
--@@ -858,6 +858,9 @@ class CLikeCompiler:
-+@@ -857,6 +857,9 @@ class CLikeCompiler:
-          elif env.machines[self.for_machine].is_cygwin():
-              shlibext = ['dll', 'dll.a']
-              prefixes = ['cyg'] + prefixes
-diff --git a/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch b/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
-index ae40ab8b1c..8ae34b999d 100644
---- a/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
-+++ b/package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
-@@ -53,7 +53,7 @@ diff --git a/run_unittests.py b/run_unittests.py
- index 676604f4..382c0964 100755
- --- a/run_unittests.py
- +++ b/run_unittests.py
--@@ -3621,6 +3621,34 @@ recommended as it is not supported on some platforms''')
-+@@ -3629,6 +3629,34 @@ recommended as it is not supported on some platforms''')
-          self.wipe()
-          self.init(testdir, extra_args=['-Dstart_native=true'], override_envvars=env)
-  
-@@ -88,7 +88,7 @@ index 676604f4..382c0964 100755
-      def __reconfigure(self, change_minor=False):
-          # Set an older version to force a reconfigure from scratch
-          filename = os.path.join(self.privatedir, 'coredata.dat')
--@@ -6847,7 +6875,7 @@ class NativeFileTests(BasePlatformTests):
-+@@ -6863,7 +6891,7 @@ class NativeFileTests(BasePlatformTests):
-  
-  class CrossFileTests(BasePlatformTests):
-  
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 881d4211cf..3777a51542 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.53.1/meson-0.53.1.tar.gz.asc
--sha256 ec1ba33eea701baca2c1607dac458152dc8323364a51fdef6babda2623413b04 meson-0.53.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.53.2/meson-0.53.2.tar.gz.asc
-+sha256 3e8f830f33184397c2eb0b651ec502adb63decb28978bdc84b3558d71284c21f meson-0.53.2.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 810c84690a..29c7ed1800 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
+diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
+index 5b1fb17fa7..0683d2a646 100644
+--- a/package/openblas/openblas.hash
++++ b/package/openblas/openblas.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 bde136122cef3dd6efe2de1c6f65c10955bbb0cc01a520c2342f5287c28f9379  openblas-0.3.7.tar.gz
+-sha256 190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
++sha256  8f86ade36f0dbed9ac90eb62575137388359d97d8f93093b38abe166ad7ef3a8  openblas-0.3.8.tar.gz
++sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index f068402269..105c03713b 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MESON_VERSION = 0.53.1
-+MESON_VERSION = 0.53.2
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-OPENBLAS_VERSION = 0.3.7
++OPENBLAS_VERSION = 0.3.8
+ OPENBLAS_SITE = $(call github,xianyi,OpenBLAS,v$(OPENBLAS_VERSION))
+ OPENBLAS_LICENSE = BSD-3-Clause
+ OPENBLAS_LICENSE_FILES = LICENSE
