@@ -1,42 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 23:28:17 +0100
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Add myself to
- package/gnuplot, sdl2
-In-Reply-To: <20200227103055.3704-1-mf@go-sys.de>
-References: <20200227103055.3704-1-mf@go-sys.de>
-Message-ID: <20200227232817.2255be65@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Feb 2020 23:32:22 +0100
+Subject: [Buildroot] [PATCH 1/2] package/pkg-generic.mk: simplify
+ step_pkg_size
+In-Reply-To: <20200227225556.4f542711@windsurf.home> (Thomas Petazzoni's
+ message of "Thu, 27 Feb 2020 22:55:56 +0100")
+References: <20200226194345.1087529-1-thomas.petazzoni@bootlin.com>
+ <20200226194345.1087529-2-thomas.petazzoni@bootlin.com>
+ <87eeuflmwj.fsf@dell.be.48ers.dk>
+ <20200227225556.4f542711@windsurf.home>
+Message-ID: <875zfrlkzt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 27 Feb 2020 11:30:55 +0100
-Michael Fischer <mf@go-sys.de> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-> Signed-off-by: Michael Fischer <mf@go-sys.de>
-> ---
->  DEVELOPERS | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 7d3d1ca11a..e56f8d57c6 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2646,3 +2646,7 @@ F:	package/qjson/
->  F:	package/quazip/
->  F:	package/shapelib/
->  F:	package/tinc/
-> +
-> +N:	Michael Fischer <mf@go-sys.de>
-> +F:	package/gnuplot/
-> +F:	package/sdl2/
+ > On Thu, 27 Feb 2020 22:51:08 +0100
+ > Peter Korsgaard <peter@korsgaard.com> wrote:
 
-The file is ordered alphabetically, so I fixed that and applied to
-master. Thanks!
+ >> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:  
+ >> 
+ >> > Use the same trick in step_pkg_size as the one used in check_bin_arch:
+ >> > factorize the two $(filter ...) calls into one, checking in one step
+ >> > the step and whether it's the beginning or end of the step.  
+ >> 
+ >> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>  
+ >> 
+ >> Committed, thanks.
 
-Thomas
+ > Is this something you applied to master?
+
+Yes.
+
+ > Even though PATCH 2/2 fixes some build issues, it is also a pretty
+ > radical change and I'm not sure it's a good idea to apply to master so
+ > late in the dev cycle.
+
+I know, but what is the alternative? Tell people to not use the toplevel
+parallel build feature? That also isn't really great.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
