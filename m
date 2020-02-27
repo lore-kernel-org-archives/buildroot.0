@@ -1,51 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 23:53:26 +0100
-Subject: [Buildroot] [git commit branch/next] package/qt5webkit-examples:
- drop qt 5.6 support
-Message-ID: <20200227224530.638CA8E865@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 23:53:34 +0100
+Subject: [Buildroot] [git commit branch/next] package/qt5webview: drop qt
+ 5.6 support
+Message-ID: <20200227224530.75E197FE80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b15344f43b3970cd8f0b799421d68c51905dba8
+commit: https://git.buildroot.net/buildroot/commit/?id=55e5b3464b212dd729b25e5f89f692958b4e4a26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5webkit-examples/qt5webkit-examples.hash | 3 ---
- package/qt5/qt5webkit-examples/qt5webkit-examples.mk   | 7 -------
- 2 files changed, 10 deletions(-)
+ package/qt5/qt5webview/qt5webview.hash | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-index 0d48ecdffa..736dbef5e9 100644
---- a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
-+++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
+diff --git a/package/qt5/qt5webview/qt5webview.hash b/package/qt5/qt5webview/qt5webview.hash
+index d9d340479b..7bbb23556b 100644
+--- a/package/qt5/qt5webview/qt5webview.hash
++++ b/package/qt5/qt5webview/qt5webview.hash
 @@ -1,6 +1,3 @@
--# Hash from: https://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-examples-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256  2d6ce7146298d03b443cca4390bbfee17c4c0b08a31efcbf9fe0732291a6169e  qtwebkit-examples-opensource-src-5.6.3.tar.xz
+-# Hash from: https://download.qt.io/archive/qt/5.6/5.6.3/submodules/qtwebview-opensource-src-5.6.3.tar.xz.sha256
+-sha256 768a456e89f0fd7cbf39ac6b282e078a098e7426651c0b3d453b10c5c44bd81c qtwebview-opensource-src-5.6.3.tar.xz
 -
- # Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-examples-opensource-src-5.9.1.tar.xz.mirrorlist
- sha256  e4ce4de6b468243abad2baabbe8ddfb05d25b186529bfe88cb8662fc983f54d0  qtwebkit-examples-opensource-src-5.9.1.tar.xz
- 
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-index 94153fd652..6dab61d913 100644
---- a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-+++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-@@ -4,15 +4,8 @@
- #
- ################################################################################
- 
--# no 5.10 package available, fall back to 5.9.1 version
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5WEBKIT_EXAMPLES_VERSION = 5.9.1
- QT5WEBKIT_EXAMPLES_SITE = https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules
--else
--QT5WEBKIT_EXAMPLES_VERSION = $(QT5_VERSION)
--QT5WEBKIT_EXAMPLES_SITE = https://download.qt.io/community_releases/5.6/$(QT5_VERSION)
--endif
--
- QT5WEBKIT_EXAMPLES_SOURCE = qtwebkit-examples-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
- QT5WEBKIT_EXAMPLES_DEPENDENCIES = qt5base qt5webkit
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtwebview-everywhere-src-5.12.7.tar.xz.sha256
+ sha256 d3f82d2ceab59dc4dee3b6f54f4b70869c199d63f4534b299d900cdacc9b7be7 qtwebview-everywhere-src-5.12.7.tar.xz
  
