@@ -1,45 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 18:26:36 +0100
-Subject: [Buildroot] [PATCH] package/proftpd: security bump to version
- 1.3.6c
-In-Reply-To: <20200227135457.13710-1-peter@korsgaard.com>
-References: <20200227135457.13710-1-peter@korsgaard.com>
-Message-ID: <20200227182636.6dffccc8@windsurf>
+Date: Thu, 27 Feb 2020 18:27:27 +0100
+Subject: [Buildroot] [PATCH 3/4] package/openrc: adapt "modules" init
+ script to busybox "modprobe"
+In-Reply-To: <20200227123938.13412-4-unixmania@gmail.com>
+References: <20200227123938.13412-1-unixmania@gmail.com>
+ <20200227123938.13412-4-unixmania@gmail.com>
+Message-ID: <20200227182727.0b277df7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 27 Feb 2020 14:54:56 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Thu, 27 Feb 2020 09:39:37 -0300
+unixmania at gmail.com wrote:
 
-> Fixes the following security issues:
-> 
-> - CVE-2020-9273: In ProFTPD 1.3.7, it is possible to corrupt the memory pool
->   by interrupting the data transfer channel.  This triggers a use-after-free
->   in alloc_pool in pool.c, and possible remote code execution.
-> 
-> And additionally, fixes a number of other issues.  For details, see the
-> release notes:
-> 
-> https://github.com/proftpd/proftpd/blob/1.3.6/RELEASE_NOTES
-> 
-> This also bumps the bundled libcap, so
-> 0001-fix-kernel-header-capability-version.patch can be dropped.
-> 
-> While we are at it, adjust the white space in the .hash function to match
-> the new agreements.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  .../0001-fix-kernel-header-capability-version.patch  | 12 ------------
->  package/proftpd/proftpd.hash                         |  4 ++--
->  package/proftpd/proftpd.mk                           |  2 +-
->  3 files changed, 3 insertions(+), 15 deletions(-)
->  delete mode 100644 package/proftpd/0001-fix-kernel-header-capability-version.patch
+> +# modprobe can be provided by either kmod or busybox
+> +ifeq ($(BR2_PACKAGE_KMOD_TOOLS),)
+> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+> +# Busybox modprobe does not have a --first-time option; --verbose is just -v
+> +# and --use-blacklist is just -b.
+> +ifeq ($(call KCONFIG_GET_OPT,CONFIG_MODPROBE,$(BUSYBOX_BUILD_CONFIG)),y)
 
-Applied to master, thanks.
+Is this working? Isn't that evaluated when Makefiles are parsed, i.e
+before the build has extracted Busybox and created its .config file ?
+
+Best regards,
 
 Thomas
 -- 
