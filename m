@@ -1,56 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 08:56:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/musl: bump to version 1.2.0
-In-Reply-To: <20200226220348.247869-1-joerg.krause@embedded.rocks>
-References: <20200226220348.247869-1-joerg.krause@embedded.rocks>
-Message-ID: <20200227085635.61c809db@windsurf>
+Date: Thu, 27 Feb 2020 08:56:51 +0100
+Subject: [Buildroot] [git commit] package/docker-compose: update patch to
+ allow all pyyaml 5.x versions
+Message-ID: <20200227074546.C90F18EC32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 26 Feb 2020 23:03:48 +0100
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ad4dd41c03d948dd77bc7a5b28fd41ff8623c72a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Also:
->  * Drop patch 0003 which is included in the new version.
->  * Update hash value of the COPYRIGHT file as the copyright year was
->    updated.
-> 
-> From the release history [1]:
-> 
-> This release moves all 32-bit archs to 64-bit time_t, enabling them
-> to represent times beyond January of 2038.
-> 
-> There are no new requirements on kernel version, and this is not a
-> hard ABI break, but the type changes do impact compatibility between
-> code built against previous versions of musl and code built against
-> musl 1.2. Users upgrading 32-bit systems should read the detailed
-> time64 release notes [2]. 64-bit systems are not affected.
-> 
-> In addition, character data has been updated to align with Unicode
-> 12.1.0, along with fixes for some errors in the data and a replacement
-> for inefficient and unmaintainable case-mapping code. Correctness of
-> results has been improved in the math library, particularly some complex
-> functions and 32-bit x86 asm. Various arch-specific bugs have also been
-> fixed.
-> 
-> [1] https://musl.libc.org/releases.html
-> [2] https://musl.libc.org/time64.html
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  ...register-index-constants-to-signal.h.patch | 54 -------------------
->  package/musl/musl.hash                        |  6 +--
->  package/musl/musl.mk                          |  2 +-
->  3 files changed, 4 insertions(+), 58 deletions(-)
->  delete mode 100644 package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch
+The recent bump of python-pyyaml to version 5.3 causes a runtime
+failure in docker-compose:
 
-Applied to next, thanks.
+pkg_resources.ContextualVersionConflict: (PyYAML 5.3 (/usr/lib/python3.8/site-packages), Requirement.parse('PyYAML<5.2,>=3.10'), {'docker-compose'})
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+https://gitlab.com/buildroot.org/buildroot/-/jobs/442151461
+
+Fix it by adjusting 0003-support-PyYAML-up-to-5.1-version.patch to
+allow all pyyaml 5.x versions, similar to what upstream has done
+post-1.24.1:
+
+https://github.com/docker/compose/commit/c818bfc62c0574009175d832c1a8a2857bf1b1bf
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/docker-compose/0003-support-PyYAML-up-to-5.1-version.patch | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/docker-compose/0003-support-PyYAML-up-to-5.1-version.patch b/package/docker-compose/0003-support-PyYAML-up-to-5.1-version.patch
+index ae91b01d03..ecbd197a51 100644
+--- a/package/docker-compose/0003-support-PyYAML-up-to-5.1-version.patch
++++ b/package/docker-compose/0003-support-PyYAML-up-to-5.1-version.patch
+@@ -6,6 +6,7 @@ Subject: [PATCH] support PyYAML up to 5.1 version
+ Signed-off-by: Sergey Fursov <geyser85@gmail.com>
+ [Upstream: https://github.com/docker/compose/pull/6623]
+ (cherry picked from commit d2ca096f46a56cd4db494c593ed84e5c255dc15d)
++[Peter: allow all 5.x]
+ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ ---
+  requirements.txt | 2 +-
+@@ -34,7 +35,7 @@ index c9e4729d..17ab678e 100644
+      'cached-property >= 1.2.0, < 2',
+      'docopt >= 0.6.1, < 1',
+ -    'PyYAML >= 3.10, < 5',
+-+    'PyYAML >= 3.10, < 5.2',
+++    'PyYAML >= 3.10, < 6',
+      'requests >= 2.20.0, < 3',
+      'texttable >= 0.9.0, < 2',
+      'websocket-client >= 0.32.0, < 1',
