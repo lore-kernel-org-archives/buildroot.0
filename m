@@ -1,37 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 23:58:41 +0100
-Subject: [Buildroot] [PATCH v2 01/37] package/qt5: drop 5.6 support
-In-Reply-To: <20200226144608.12529-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 26 Feb 2020 15:45:32 +0100")
-References: <20200226144608.12529-1-peter@korsgaard.com>
-Message-ID: <871rqfljry.fsf@dell.be.48ers.dk>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 27 Feb 2020 15:06:06 -0800
+Subject: [Buildroot] Analysis of build results
+In-Reply-To: <20200227234905.44125454@windsurf.home>
+References: <20200227093138.523B887666@whitealder.osuosl.org>
+ <20200227234905.44125454@windsurf.home>
+Message-ID: <CAMo8BfJaSdYUG=JL1=vTSFT91373kC4=FQo1=Sbw=ho_d2+XOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+On Thu, Feb 27, 2020 at 2:49 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> >    xtensa    | domoticz-0f411f781ae4fb4a82... | NOK | http://autobuild.buildroot.net/results/7885705f1b1c0f31cf21b464150f5509929c1906 |
+>
+> Toolchain issue:
+>
+> BFD (GNU Binutils) 2.31.1 internal error, aborting at elf32-xtensa.c:3283 in elf_xtensa_finish_dynamic_sections
+>
+> Max, any idea ?
 
- > As discussed during the FOSDEM2019 develop days, Qt 5.6 is very old (5.6.3
- > was released in September 2017, and 5.6.x became EOL in March 2019), so drop
- > it before the new Buildroot LTS release:
-
- > https://elinux.org/Buildroot:DeveloperDaysFOSDEM2019#Qt5_versions_to_support:_keep_5.6_or_a_newer_LTS.3F
-
- > And add legacy handling for it.
-
- > There are a number of places where code checks for
- > BR2_PACKAGE_QT5_VERSION_LATEST, so leave that as a blind option for now to
- > not break the build.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > ---
- > Changes since v1:
- > - Leave BR2_PACKAGE_QT5_VERSION_LATEST as a blind option for
- >   bisectability
-
-Committed series to next, thanks.
+Looking at it, thanks for the heads up!
 
 -- 
-Bye, Peter Korsgaard
+Thanks.
+-- Max
