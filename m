@@ -1,45 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 23:55:45 +0100
-Subject: [Buildroot] [git commit branch/next] package/gst1-plugins-good:
- drop QT5_VERSION_LATEST logic
-Message-ID: <20200227224530.957FD7FE80@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 23:53:26 +0100
+Subject: [Buildroot] [git commit branch/next] package/qt5webkit-examples:
+ drop qt 5.6 support
+Message-ID: <20200227224530.638CA8E865@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dad59b831e13c2a932a2e877f05b515637cb2183
+commit: https://git.buildroot.net/buildroot/commit/?id=1b15344f43b3970cd8f0b799421d68c51905dba8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Now that the version selection has been removed.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-good/Config.in | 6 ------
- 1 file changed, 6 deletions(-)
+ package/qt5/qt5webkit-examples/qt5webkit-examples.hash | 3 ---
+ package/qt5/qt5webkit-examples/qt5webkit-examples.mk   | 7 -------
+ 2 files changed, 10 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index c8bf58bb89..20aebc473e 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -279,7 +279,6 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL
- 	bool "qmlgl (qt5)"
- 	depends on BR2_PACKAGE_QT5
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
--	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative-quick
- 	select BR2_PACKAGE_QT5BASE_WIDGETS
- 	select BR2_PACKAGE_QT5DECLARATIVE
- 	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-@@ -287,11 +286,6 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL
- 	help
- 	  QT5 plugin which includes elements qmlglsrc and qmlglsink
- 
--comment "qmlgl (qt5) plugin needs an OpenGL-capable Qt5 backend"
--	depends on BR2_PACKAGE_QT5
--	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
--	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
+diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
+index 0d48ecdffa..736dbef5e9 100644
+--- a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
++++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
+@@ -1,6 +1,3 @@
+-# Hash from: https://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-examples-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256  2d6ce7146298d03b443cca4390bbfee17c4c0b08a31efcbf9fe0732291a6169e  qtwebkit-examples-opensource-src-5.6.3.tar.xz
 -
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
- 	bool "shout2"
- 	select BR2_PACKAGE_LIBSHOUT
+ # Hash from: https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-examples-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256  e4ce4de6b468243abad2baabbe8ddfb05d25b186529bfe88cb8662fc983f54d0  qtwebkit-examples-opensource-src-5.9.1.tar.xz
+ 
+diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
+index 94153fd652..6dab61d913 100644
+--- a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
++++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
+@@ -4,15 +4,8 @@
+ #
+ ################################################################################
+ 
+-# no 5.10 package available, fall back to 5.9.1 version
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5WEBKIT_EXAMPLES_VERSION = 5.9.1
+ QT5WEBKIT_EXAMPLES_SITE = https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules
+-else
+-QT5WEBKIT_EXAMPLES_VERSION = $(QT5_VERSION)
+-QT5WEBKIT_EXAMPLES_SITE = https://download.qt.io/community_releases/5.6/$(QT5_VERSION)
+-endif
+-
+ QT5WEBKIT_EXAMPLES_SOURCE = qtwebkit-examples-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
+ QT5WEBKIT_EXAMPLES_DEPENDENCIES = qt5base qt5webkit
+ 
