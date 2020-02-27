@@ -1,50 +1,82 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 27 Feb 2020 03:59:00 -0700
-Subject: [Buildroot] [PATCH v2 1/1] package/python-httplib2: bump to version
- 0.17.0
-Message-ID: <20200227105900.103785-1-james.hilliard1@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Thu, 27 Feb 2020 12:02:40 +0100
+Subject: [Buildroot] [PATCH v2] package/libnss: fix PowerPc build failure
+Message-ID: <20200227110240.14937-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-PKG-INFO hash change is due to version bump.
+NSS assumes <sys/auvx.h> is always present but that's not true, so add a
+patch to check if it exists or not.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/python-httplib2/python-httplib2.hash | 6 +++---
- package/python-httplib2/python-httplib2.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+V1->V2:
+* improve patch according to upstream:
+  https://bugzilla.mozilla.org/show_bug.cgi?id=1614183
+---
+ ...heck-if-PPC-__has_include-sys-auxv.h.patch | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
 
-diff --git a/package/python-httplib2/python-httplib2.hash b/package/python-httplib2/python-httplib2.hash
-index d299b61bc8..fe9995a9b3 100644
---- a/package/python-httplib2/python-httplib2.hash
-+++ b/package/python-httplib2/python-httplib2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/httplib2/json
--md5	427cda9f4d55762db325bd2eb46b7fe0  httplib2-0.14.0.tar.gz
--sha256	34537dcdd5e0f2386d29e0e2c6d4a1703a3b982d34c198a5102e6e5d6194b107  httplib2-0.14.0.tar.gz
-+md5  4a55ae1d33721110bf81b4d197bfa862  httplib2-0.17.0.tar.gz
-+sha256  de96d0a49f46d0ee7e0aae80141d37b8fcd6a68fb05d02e0b82c128592dd8261  httplib2-0.17.0.tar.gz
- # Locally computer sha256 checksums
--sha256	d8b8e99f77a260b8ca939f6a73ed0ea86977229a3d97f85547f499a62f61f5af  PKG-INFO
-+sha256  bbc124e160cd5c0381fe9560aaed43462dd60371210dbb2c87f00b7fec9a05ba  PKG-INFO
-diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
-index a74c0e7c72..f9e1d8b3d7 100644
---- a/package/python-httplib2/python-httplib2.mk
-+++ b/package/python-httplib2/python-httplib2.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_HTTPLIB2_VERSION = 0.14.0
-+PYTHON_HTTPLIB2_VERSION = 0.17.0
- PYTHON_HTTPLIB2_SOURCE = httplib2-$(PYTHON_HTTPLIB2_VERSION).tar.gz
--PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/ce/2e/87461bfbb7e561203b759b3f7f639e2144226604372830d00a8279960ae1
-+PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/6d/97/8225643419a53dd52d84c34d9d1e99bdbe18083dc760e7a2d0c47c0fab93
- PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
- PYTHON_HTTPLIB2_LICENSE = MIT
- PYTHON_HTTPLIB2_LICENSE_FILES = PKG-INFO
+diff --git a/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch b/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
+new file mode 100644
+index 0000000000..1325387760
+--- /dev/null
++++ b/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
+@@ -0,0 +1,51 @@
++From d9c7cbb3660d8a2da9ce42e4d1b58642a256a91a Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sun, 9 Feb 2020 10:15:16 +0100
++Subject: [PATCH] Bug 1614183 - Check if PPC __has_include(<sys/auxv.h>)
++
++Some build environment doesn't provide <sys/auxv.h> and this causes
++build failure, so let's check if that header exists by using
++__has_include() helper.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ nss/lib/freebl/blinit.c | 10 ++++++++++
++ 1 file changed, 10 insertions(+)
++
++diff --git a/nss/lib/freebl/blinit.c b/nss/lib/freebl/blinit.c
++index 7e8adfc64..d4921aaee 100644
++--- a/nss/lib/freebl/blinit.c
+++++ b/nss/lib/freebl/blinit.c
++@@ -431,8 +431,14 @@ ppc_crypto_support()
++ 
++ #if defined(__powerpc__)
++ 
+++#ifndef __has_include
+++#define __has_include(x) 0
+++#endif
+++
++ #if defined(__linux__) || (defined(__FreeBSD__) && __FreeBSD__ >= 12)
+++#if __has_include(<sys/auxv.h>)
++ #include <sys/auxv.h>
+++#endif
++ #elif (defined(__FreeBSD__) && __FreeBSD__ < 12)
++ #include <sys/sysctl.h>
++ #endif
++@@ -449,10 +455,14 @@ CheckPPCSupport()
++ 
++     unsigned long hwcaps = 0;
++ #if defined(__linux__)
+++#if __has_include(<sys/auxv.h>)
++     hwcaps = getauxval(AT_HWCAP2);
+++#endif
++ #elif defined(__FreeBSD__)
++ #if __FreeBSD__ >= 12
+++#if __has_include(<sys/auxv.h>)
++     elf_aux_info(AT_HWCAP2, &hwcaps, sizeof(hwcaps));
+++#endif
++ #else
++     size_t len = sizeof(hwcaps);
++     sysctlbyname("hw.cpu_features2", &hwcaps, &len, NULL, 0);
++-- 
++2.20.1
++
 -- 
 2.20.1
