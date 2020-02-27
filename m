@@ -1,52 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 09:59:26 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-passlib: bump
- to version 1.7.2
-Message-ID: <20200227100041.86D0F8EC46@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 10:00:27 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-pip: bump to
+ version 20.0.2
+Message-ID: <20200227100041.9D6B48EC46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94c48ead6700f8fb5855f177d21857fc868fa860
+commit: https://git.buildroot.net/buildroot/commit/?id=4fdb197c4a4160b2a1d9a6b94f8243062108d7b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-License hash change is due to date update.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-passlib/python-passlib.hash | 6 +++---
- package/python-passlib/python-passlib.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pip/python-pip.hash | 4 ++--
+ package/python-pip/python-pip.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-passlib/python-passlib.hash b/package/python-passlib/python-passlib.hash
-index 8e7f790af0..867223e19a 100644
---- a/package/python-passlib/python-passlib.hash
-+++ b/package/python-passlib/python-passlib.hash
+diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
+index 7d02a51023..58bc239154 100644
+--- a/package/python-pip/python-pip.hash
++++ b/package/python-pip/python-pip.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/passlib/json
--md5	254869dae3fd9f09f0746a3cb29a0b15  passlib-1.7.1.tar.gz
--sha256	3d948f64138c25633613f303bcc471126eae67c04d5e3f6b7b8ce6242f8653e0  passlib-1.7.1.tar.gz
-+md5	b908529cfd4c33057c244324c692eae7  passlib-1.7.2.tar.gz
-+sha256	8d666cef936198bc2ab47ee9b0410c94adf2ba798e5a84bf220be079ae7ab6a8  passlib-1.7.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pip/json
+-md5	1aaaf90fbafc50e7ba1e66ffceb00960  pip-19.3.1.tar.gz
+-sha256	21207d76c1031e517668898a6b46a9fb1501c7a4710ef5dfd6a40ad9e6757ea7  pip-19.3.1.tar.gz
++md5	7d42ba49b809604f0df3d55df1c3fd86  pip-20.0.2.tar.gz
++sha256	7db0c8ea4c7ea51c8049640e8e6e7fde949de672bfa4949920675563a5a6967f  pip-20.0.2.tar.gz
  # Locally computed sha256 checksums
--sha256	ae8cd74bd5be7be586c52def8bcddfe817872cf2e0782b159d37f88bf0ff11fc  LICENSE
-+sha256	49a74ad666f456493d6b9e2cda7c55e46ad512ce2c67db4accaddb27bb240bb9  LICENSE
-diff --git a/package/python-passlib/python-passlib.mk b/package/python-passlib/python-passlib.mk
-index 1a3726b607..6ab94fd66e 100644
---- a/package/python-passlib/python-passlib.mk
-+++ b/package/python-passlib/python-passlib.mk
+ sha256	5ba21fbb0964f936ad7d15362d1ed6d4931cc8c8f9ff2d4d91190e109be74431  LICENSE.txt
+diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
+index b8be234d24..cc40eecdfe 100644
+--- a/package/python-pip/python-pip.mk
++++ b/package/python-pip/python-pip.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PASSLIB_VERSION = 1.7.1
-+PYTHON_PASSLIB_VERSION = 1.7.2
- PYTHON_PASSLIB_SOURCE = passlib-$(PYTHON_PASSLIB_VERSION).tar.gz
--PYTHON_PASSLIB_SITE = https://files.pythonhosted.org/packages/25/4b/6fbfc66aabb3017cd8c3bd97b37f769d7503ead2899bf76e570eb91270de
-+PYTHON_PASSLIB_SITE = https://files.pythonhosted.org/packages/6d/6b/4bfca0c13506535289b58f9c9761d20f56ed89439bfe6b8e07416ce58ee1
- PYTHON_PASSLIB_SETUP_TYPE = setuptools
- PYTHON_PASSLIB_LICENSE = BSD-3-Clause
- PYTHON_PASSLIB_LICENSE_FILES = LICENSE
+-PYTHON_PIP_VERSION = 19.3.1
++PYTHON_PIP_VERSION = 20.0.2
+ PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
+-PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/ce/ea/9b445176a65ae4ba22dce1d93e4b5fe182f953df71a145f557cffaffc1bf
++PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/8e/76/66066b7bc71817238924c7e4b448abdb17eb0c92d645769c223f9ace478f
+ PYTHON_PIP_SETUP_TYPE = setuptools
+ PYTHON_PIP_LICENSE = MIT
+ PYTHON_PIP_LICENSE_FILES = LICENSE.txt
