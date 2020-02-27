@@ -1,40 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 17:54:43 +0100
-Subject: [Buildroot] Untractably slow CVE checks in
- support/scripts/pkg-stat
-In-Reply-To: <ac23d55f-c8a5-587d-2c98-5967f3abfa14@railnova.eu>
-References: <ac23d55f-c8a5-587d-2c98-5967f3abfa14@railnova.eu>
-Message-ID: <20200227175443.71a6461f@windsurf>
+Date: Thu, 27 Feb 2020 18:26:04 +0100
+Subject: [Buildroot] [git commit] package/proftpd: security bump to version
+ 1.3.6c
+Message-ID: <20200227171403.944408D77B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Titouan,
+commit: https://git.buildroot.net/buildroot/commit/?id=a1859b6204e0deadec4377fe4e6813a97c8d3fa0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 27 Feb 2020 16:05:41 +0100
-Titouan Christophe <titouan.christophe@railnova.eu> wrote:
+Fixes the following security issues:
 
-> 1. Uninstall the version distributed by apt:
->     `apt remove python-ijson`
-> 2. Install the latest version with pip:
->     `pip install [--user] ijson`
-> 3. Start the pkg-stat script, it should complete in less than 5 minutes.
+- CVE-2020-9273: In ProFTPD 1.3.7, it is possible to corrupt the memory pool
+  by interrupting the data transfer channel.  This triggers a use-after-free
+  in alloc_pool in pool.c, and possible remote code execution.
 
-Thanks a lot for the investigation and research!
+And additionally, fixes a number of other issues.  For details, see the
+release notes:
 
-I tested with ijson 2.6 installed from pip, and things are indeed a lot
-better. It's not 5 minutes though:
+https://github.com/proftpd/proftpd/blob/1.3.6/RELEASE_NOTES
 
-real	19m55.557s
-user	18m7.632s
-sys	1m53.140s
+This also bumps the bundled libcap, so
+0001-fix-kernel-header-capability-version.patch can be dropped.
 
-Best regards,
+While we are at it, adjust the white space in the .hash function to match
+the new agreements.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../proftpd/0001-fix-kernel-header-capability-version.patch  | 12 ------------
+ package/proftpd/proftpd.hash                                 |  4 ++--
+ package/proftpd/proftpd.mk                                   |  2 +-
+ 3 files changed, 3 insertions(+), 15 deletions(-)
+
+diff --git a/package/proftpd/0001-fix-kernel-header-capability-version.patch b/package/proftpd/0001-fix-kernel-header-capability-version.patch
+deleted file mode 100644
+index 4401c9aeaf..0000000000
+--- a/package/proftpd/0001-fix-kernel-header-capability-version.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+---- a/lib/libcap/libcap.h	2008-08-22 19:49:48.000000000 -0700
+-+++ b/lib/libcap/libcap.h	2010-10-06 15:31:11.000000000 -0700
+-@@ -65,7 +65,8 @@ struct _cap_struct {
+-  */
+- 
+- #if !defined(_LINUX_CAPABILITY_VERSION_1) || \
+--            (_LINUX_CAPABILITY_VERSION_1 != 0x19980330)
+-+            ((_LINUX_CAPABILITY_VERSION_1 != 0x19980330) && \
+-+            (_LINUX_CAPABILITY_VERSION_1 != 0x20071026))
+- 
+- # error "Kernel <linux/capability.h> does not match library"
+- # error "file "libcap.h" --> fix and recompile libcap"
+diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
+index 0f2acd3a20..1ac54de4ca 100644
+--- a/package/proftpd/proftpd.hash
++++ b/package/proftpd/proftpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 fe5baf6c469a2b0b7f0e2611561b6fd5414300e32a76b96adb2ccfe05b5efb60 proftpd-1.3.6b.tar.gz
+-sha256 391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80 COPYING
++sha256  fa3541c4b34136a7b80cb12a2f6f9a0cab5118a5b0a1653d40af49c6479c35ad  proftpd-1.3.6c.tar.gz
++sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 2c3e0a6877..02dd0e825e 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROFTPD_VERSION = 1.3.6b
++PROFTPD_VERSION = 1.3.6c
+ PROFTPD_SITE = $(call github,proftpd,proftpd,v$(PROFTPD_VERSION))
+ PROFTPD_LICENSE = GPL-2.0+
+ PROFTPD_LICENSE_FILES = COPYING
