@@ -1,123 +1,34 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Thu, 27 Feb 2020 05:54:52 -0300
-Subject: [Buildroot] [PATCH] package/asn1c: new host package
-In-Reply-To: <20200110211420.7704-1-sergio.prado@e-labworks.com>
-References: <20200110211420.7704-1-sergio.prado@e-labworks.com>
-Message-ID: <CANu7NGtpdGNTrbieo64_JHOYPEN4XeA95LVVdq5kWNc89qynFw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 27 Feb 2020 11:12:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-httplib2: bump to
+ version 0.17.0
+In-Reply-To: <20200213060659.103904-1-james.hilliard1@gmail.com>
+References: <20200213060659.103904-1-james.hilliard1@gmail.com>
+Message-ID: <20200227111231.272ba541@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Wed, 12 Feb 2020 23:06:59 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Does anyone had a chance to review this patch? Do I need to rebase it and
-send again?
-
-Sergio Prado
-Embedded Labworks
-
-
-Em sex., 10 de jan. de 2020 ?s 18:14, Sergio Prado <
-sergio.prado@e-labworks.com> escreveu:
-
-> The asn1c is a free, open source compiler of ASN.1 specifications into C
-> source code.
->
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  DEVELOPERS                   |  1 +
->  package/Config.in.host       |  1 +
->  package/asn1c/Config.in.host | 11 +++++++++++
->  package/asn1c/asn1c.hash     |  5 +++++
->  package/asn1c/asn1c.mk       | 12 ++++++++++++
->  5 files changed, 30 insertions(+)
->  create mode 100644 package/asn1c/Config.in.host
->  create mode 100644 package/asn1c/asn1c.hash
->  create mode 100644 package/asn1c/asn1c.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 80843dd1a113..287e222cdf57 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2241,6 +2241,7 @@ N:        Sergio Prado <sergio.prado@e-labworks.com>
->  F:     board/toradex/apalis-imx6/
->  F:     configs/toradex_apalis_imx6_defconfig
->  F:     package/aoetools/
-> +F:     package/asn1c/
->  F:     package/curlpp/
->  F:     package/daq/
->  F:     package/libgdiplus/
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 62e860d7c36c..a012ffaa38e9 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -2,6 +2,7 @@ menu "Host utilities"
->
->         source "package/aespipe/Config.in.host"
->         source "package/android-tools/Config.in.host"
-> +       source "package/asn1c/Config.in.host"
->         source "package/btrfs-progs/Config.in.host"
->         source "package/cargo/Config.in.host"
->         source "package/cbootimage/Config.in.host"
-> diff --git a/package/asn1c/Config.in.host b/package/asn1c/Config.in.host
-> new file mode 100644
-> index 000000000000..951f5f66915e
-> --- /dev/null
-> +++ b/package/asn1c/Config.in.host
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_HOST_ASN1C
-> +       bool "host asn1c"
-> +       help
-> +         ASN.1 stands for Abstract Syntax Notation One and allows
-> +         to describe complex data structures independently of any
-> +         particular programming language.
-> +
-> +         The asn1c is a free, open source compiler of ASN.1
-> +         specifications into C source code.
-> +
-> +         http://lionet.info/asn1c
-> diff --git a/package/asn1c/asn1c.hash b/package/asn1c/asn1c.hash
-> new file mode 100644
-> index 000000000000..a4fd3beffa53
-> --- /dev/null
-> +++ b/package/asn1c/asn1c.hash
-> @@ -0,0 +1,5 @@
-> +# Locally computed:
-> +sha256 8007440b647ef2dd9fb73d931c33ac11764e6afb2437dbe638bb4e5fc82386b9
-> asn1c-0.9.28.tar.gz
-> +
-> +# Hash for license files:
-> +sha256 bcc636802a52ace2255212be15fb707084af87061b5cfd37eb84dcf6a02cc48b
-> LICENSE
-> diff --git a/package/asn1c/asn1c.mk b/package/asn1c/asn1c.mk
-> new file mode 100644
-> index 000000000000..314462a92bf9
-> --- /dev/null
-> +++ b/package/asn1c/asn1c.mk
-> @@ -0,0 +1,12 @@
->
-> +################################################################################
-> +#
-> +# asn1c
-> +#
->
-> +################################################################################
-> +
-> +ASN1C_VERSION = 0.9.28
-> +ASN1C_SITE =
-> https://github.com/vlm/asn1c/releases/download/v$(ASN1C_VERSION)
-> +ASN1C_LICENSE
-> <https://github.com/vlm/asn1c/releases/download/v$(ASN1C_VERSION)+ASN1C_LICENSE>
-> = BSD-2-Clause
-> +ASN1C_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(host-autotools-package))
-> --
-> 2.17.1
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200227/eebf4f88/attachment.html>
+>  package/python-httplib2/python-httplib2.hash | 4 ++--
+>  package/python-httplib2/python-httplib2.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+
+After this patch, the PKG-INFO hash is incorrect, it seems like the
+contents have changed.
+
+Could you have a look and send an updated version ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
