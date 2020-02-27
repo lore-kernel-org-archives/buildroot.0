@@ -1,754 +1,419 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 23:53:18 +0100
-Subject: [Buildroot] [git commit branch/next] package/qt5webengine: drop qt
- 5.6 support
-Message-ID: <20200227224530.52B268E865@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 23:53:23 +0100
+Subject: [Buildroot] [git commit branch/next] package/qt5webkit: drop qt 5.6
+ support
+Message-ID: <20200227224530.5B84A8E865@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2b562b5ffc7a94feb8c5696ceb836ad51764342
+commit: https://git.buildroot.net/buildroot/commit/?id=68917a6fe5e1e2cf61b5034550c36db995b7dd1b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-And get rid of the 5.12.7 subdir now that the version selection is gone.
+And get rid of the 5.9.1 subdir now that the version selection is gone.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-pkg_config-Fixes-when-use_sysroot-false.patch |   0
- .../5.6.3/0001-Change-default-SSL-directory.patch  |  35 ---
- ...ad-libEGL-and-libGLES2-symbols-implicitly.patch |  93 --------
- package/qt5/qt5webengine/5.6.3/qt5webengine.hash   | 258 ---------------------
- package/qt5/qt5webengine/Config.in                 |   2 +-
- package/qt5/qt5webengine/chromium-lts.inc          | 253 --------------------
- .../qt5webengine/{5.12.7 => }/qt5webengine.hash    |   0
- package/qt5/qt5webengine/qt5webengine.mk           |   9 +-
- 8 files changed, 2 insertions(+), 648 deletions(-)
+ .../0001-qtwebkit-fix-QA-issue-bad-RPATH.patch     |  0
+ ...ude-backtrace-API-for-non-glibc-libraries.patch |  0
+ .../0003-Detect-32-bits-armv8-a-architecture.patch |  0
+ .../0004-Fix-installation-of-class-headers.patch   |  0
+ .../0005-Fix-ICU-related-compile-failures.patch    |  0
+ .../5.6.3/0002-Remove-TEXTREL-tag-in-x86.patch     | 85 --------------------
+ ...ude-backtrace-API-for-non-glibc-libraries.patch | 44 ----------
+ .../5.6.3/0004-Fix-compilation-with-ICU-59.patch   | 93 ----------------------
+ .../0005-Detect-32-bits-armv8-a-architecture.patch | 48 -----------
+ .../0001-qtwebkit-fix-QA-issue-bad-RPATH.patch     | 36 ---------
+ package/qt5/qt5webkit/qt5webkit.hash               |  3 -
+ package/qt5/qt5webkit/qt5webkit.mk                 |  7 --
+ 12 files changed, 316 deletions(-)
 
-diff --git a/package/qt5/qt5webengine/5.12.7/0001-pkg_config-Fixes-when-use_sysroot-false.patch b/package/qt5/qt5webengine/0001-pkg_config-Fixes-when-use_sysroot-false.patch
+diff --git a/package/qt5/qt5webkit/5.6.3/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch b/package/qt5/qt5webkit/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch
 similarity index 100%
-rename from package/qt5/qt5webengine/5.12.7/0001-pkg_config-Fixes-when-use_sysroot-false.patch
-rename to package/qt5/qt5webengine/0001-pkg_config-Fixes-when-use_sysroot-false.patch
-diff --git a/package/qt5/qt5webengine/5.6.3/0001-Change-default-SSL-directory.patch b/package/qt5/qt5webengine/5.6.3/0001-Change-default-SSL-directory.patch
+rename from package/qt5/qt5webkit/5.6.3/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch
+rename to package/qt5/qt5webkit/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch
+diff --git a/package/qt5/qt5webkit/5.9.1/0002-Exclude-backtrace-API-for-non-glibc-libraries.patch b/package/qt5/qt5webkit/0002-Exclude-backtrace-API-for-non-glibc-libraries.patch
+similarity index 100%
+rename from package/qt5/qt5webkit/5.9.1/0002-Exclude-backtrace-API-for-non-glibc-libraries.patch
+rename to package/qt5/qt5webkit/0002-Exclude-backtrace-API-for-non-glibc-libraries.patch
+diff --git a/package/qt5/qt5webkit/5.9.1/0003-Detect-32-bits-armv8-a-architecture.patch b/package/qt5/qt5webkit/0003-Detect-32-bits-armv8-a-architecture.patch
+similarity index 100%
+rename from package/qt5/qt5webkit/5.9.1/0003-Detect-32-bits-armv8-a-architecture.patch
+rename to package/qt5/qt5webkit/0003-Detect-32-bits-armv8-a-architecture.patch
+diff --git a/package/qt5/qt5webkit/5.9.1/0004-Fix-installation-of-class-headers.patch b/package/qt5/qt5webkit/0004-Fix-installation-of-class-headers.patch
+similarity index 100%
+rename from package/qt5/qt5webkit/5.9.1/0004-Fix-installation-of-class-headers.patch
+rename to package/qt5/qt5webkit/0004-Fix-installation-of-class-headers.patch
+diff --git a/package/qt5/qt5webkit/5.9.1/0005-Fix-ICU-related-compile-failures.patch b/package/qt5/qt5webkit/0005-Fix-ICU-related-compile-failures.patch
+similarity index 100%
+rename from package/qt5/qt5webkit/5.9.1/0005-Fix-ICU-related-compile-failures.patch
+rename to package/qt5/qt5webkit/0005-Fix-ICU-related-compile-failures.patch
+diff --git a/package/qt5/qt5webkit/5.6.3/0002-Remove-TEXTREL-tag-in-x86.patch b/package/qt5/qt5webkit/5.6.3/0002-Remove-TEXTREL-tag-in-x86.patch
 deleted file mode 100644
-index 15cd9f87bb..0000000000
---- a/package/qt5/qt5webengine/5.6.3/0001-Change-default-SSL-directory.patch
+index 14352a160c..0000000000
+--- a/package/qt5/qt5webkit/5.6.3/0002-Remove-TEXTREL-tag-in-x86.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From fc41c0f572ff347142cca4bf5d82b87782bb5906 Mon Sep 17 00:00:00 2001
--From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
--Date: Thu, 23 Nov 2017 16:18:06 -0500
--Subject: [PATCH] Change default SSL directory
--MIME-Version: 1.0
--Content-Type: text/plain; charset=utf-8
--Content-Transfer-Encoding: 8bit
+@@ -1,85 +0,0 @@
+-From ae16ce17cc7060274a0b0c165b953fc32540f977 Mon Sep 17 00:00:00 2001
+-From: Magnus Granberg <zorry@gentoo.org>
+-Date: Fri, 27 Feb 2015 11:55:09 +0100
+-Subject: [PATCH] Remove TEXTREL tag in x86
 -
--Change the default SSL directory, as buildroot ca-cert package is
--installed at /etc/ssl. That way, we don't have to use the SSL_CERT_DIR
--environment at runtime.
+-Fix textrel QA warnings when building qtwebkit for x86:
 -
--Upstream-Status: Inappropriate
--Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
--Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+-  WARNING: QA Issue: ELF binary '/home/andre/rdk/rdk-master/build-vbox32/tmp/work/core2-32-rdk-linux/qtwebkit/5.4.0-r0/packages-split/qtwebkit/usr/lib/libQt5WebKit.so.5.4.0' has relocations in .text [textrel]
+-
+-Patch from upstream webkit:
+-
+-  https://bugs.webkit.org/show_bug.cgi?id=70610
+-
+-Minor refresh required to apply cleanly to the older webkit sources used
+-by qtwebkit. Specifically, the patch needed to be modified to account
+-for PLATFORM(MAC) -> OS(DARWIN) renaming in recent webkit which is not
+-part of qtwebkit yet ( https://bugs.webkit.org/show_bug.cgi?id=99683 ).
+-
+-Upstream status [webkit] : backport
+-Upstream status [qtwebkit] : unclear
+-
+-Bug: https://bugs.webkit.org/show_bug.cgi?id=70610
+-Signed-off-by: Martin Jansa <Martin.Jansa@gmail.com>
+-
+-Downloaded from:
+-https://github.com/meta-qt5/meta-qt5/blob/krogoth/recipes-qt/qt5/qtwebkit/
+-0002-Remove-TEXTREL-tag-in-x86.patch
+-
+-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ----
-- src/core/qtwebengine_extras.gypi | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- Source/JavaScriptCore/jit/ThunkGenerators.cpp | 24 ++++++++++++++++++++++++
+- Source/WTF/wtf/InlineASM.h                    |  2 ++
+- 2 files changed, 26 insertions(+)
 -
--diff --git a/src/core/qtwebengine_extras.gypi b/src/core/qtwebengine_extras.gypi
--index 229421ef..3b2386c0 100644
----- a/src/core/qtwebengine_extras.gypi
--+++ b/src/core/qtwebengine_extras.gypi
--@@ -96,7 +96,7 @@
--             'GL_GLEXT_PROTOTYPES',
--             'EGL_EGLEXT_PROTOTYPES',
--             # At runtime the env variable SSL_CERT_DIR can be used to override this
---            'OPENSSLDIR="/usr/lib/ssl"',
--+            'OPENSSLDIR="/etc/ssl"',
--             'OPENSSL_LOAD_CONF',
--             'EGL_API_FB=1',
--             'LINUX=1',
+-diff --git a/Source/JavaScriptCore/jit/ThunkGenerators.cpp b/Source/JavaScriptCore/jit/ThunkGenerators.cpp
+-index 9684df2..8af82d8 100644
+---- a/Source/JavaScriptCore/jit/ThunkGenerators.cpp
+-+++ b/Source/JavaScriptCore/jit/ThunkGenerators.cpp
+-@@ -524,6 +524,30 @@ double jsRound(double d)
+-     } \
+-     static MathThunk UnaryDoubleOpWrapper(function) = &function##Thunk;
+- 
+-+#elif CPU(X86) && COMPILER(GCC) && OS(LINUX) && defined(__PIC__)
+-+#define defineUnaryDoubleOpWrapper(function) \
+-+    asm( \
+-+        ".text\n" \
+-+        ".globl " SYMBOL_STRING(function##Thunk) "\n" \
+-+        HIDE_SYMBOL(function##Thunk) "\n" \
+-+        SYMBOL_STRING(function##Thunk) ":" "\n" \
+-+        "pushl %ebx\n" \
+-+        "subl $20, %esp\n" \
+-+        "movsd %xmm0, (%esp) \n" \
+-+        "call __x86.get_pc_thunk.bx\n" \
+-+        "addl $_GLOBAL_OFFSET_TABLE_, %ebx\n" \
+-+        "call " GLOBAL_REFERENCE(function) "\n" \
+-+        "fstpl (%esp) \n" \
+-+        "movsd (%esp), %xmm0 \n" \
+-+        "addl $20, %esp\n" \
+-+        "popl %ebx\n" \
+-+        "ret\n" \
+-+    );\
+-+    extern "C" { \
+-+        MathThunkCallingConvention function##Thunk(MathThunkCallingConvention); \
+-+    } \
+-+    static MathThunk UnaryDoubleOpWrapper(function) = &function##Thunk;
+-+
+- #elif CPU(X86) && COMPILER(GCC) && (PLATFORM(MAC) || OS(LINUX))
+- #define defineUnaryDoubleOpWrapper(function) \
+-     asm( \
+-diff --git a/Source/WTF/wtf/InlineASM.h b/Source/WTF/wtf/InlineASM.h
+-index 0a2fe78..2dc40ef 100644
+---- a/Source/WTF/wtf/InlineASM.h
+-+++ b/Source/WTF/wtf/InlineASM.h
+-@@ -46,6 +46,8 @@
+- #define GLOBAL_REFERENCE(name) #name "@plt"
+- #elif CPU(X86) && COMPILER(MINGW)
+- #define GLOBAL_REFERENCE(name) "@" #name "@4"
+-+#elif OS(LINUX) && CPU(X86) && defined(__PIC__)
+-+#define GLOBAL_REFERENCE(name) SYMBOL_STRING(name) "@plt"
+- #else
+- #define GLOBAL_REFERENCE(name) SYMBOL_STRING(name)
+- #endif
 --- 
--2.15.0
+-2.7.0
 -
-diff --git a/package/qt5/qt5webengine/5.6.3/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch b/package/qt5/qt5webengine/5.6.3/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
+diff --git a/package/qt5/qt5webkit/5.6.3/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch b/package/qt5/qt5webkit/5.6.3/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch
 deleted file mode 100644
-index 05ed2956d2..0000000000
---- a/package/qt5/qt5webengine/5.6.3/0002-Load-libEGL-and-libGLES2-symbols-implicitly.patch
+index a2597a54bb..0000000000
+--- a/package/qt5/qt5webkit/5.6.3/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 6c36f0ff8c1f5852c33d2b23714f9f187cc6ff26 Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Fri, 5 Jun 2015 19:55:05 -0700
+-Subject: [PATCH] Exclude backtrace() API for non-glibc libraries
+-
+-It was excluding musl with current checks, so lets make it such that it
+-considers only glibc when using backtrace API
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-
+-Downloaded from:
+-https://github.com/meta-qt5/meta-qt5/blob/krogoth/recipes-qt/qt5/qtwebkit/
+-0003-Exclude-backtrace-API-for-non-glibc-libraries.patch
+-
+-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+----
+- Source/WTF/wtf/Assertions.cpp | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Source/WTF/wtf/Assertions.cpp b/Source/WTF/wtf/Assertions.cpp
+-index 1b2091f..ba03a28 100644
+---- a/Source/WTF/wtf/Assertions.cpp
+-+++ b/Source/WTF/wtf/Assertions.cpp
+-@@ -61,7 +61,7 @@
+- #include <windows.h>
+- #endif
+- 
+--#if (OS(DARWIN) || (OS(LINUX) && !defined(__UCLIBC__))) && !OS(ANDROID)
+-+#if (OS(DARWIN) || (OS(LINUX) && defined (__GLIBC__) && !defined(__UCLIBC__))) && !OS(ANDROID)
+- #include <cxxabi.h>
+- #include <dlfcn.h>
+- #include <execinfo.h>
+-@@ -245,7 +245,7 @@ void WTFReportArgumentAssertionFailure(const char* file, int line, const char* f
+- 
+- void WTFGetBacktrace(void** stack, int* size)
+- {
+--#if (OS(DARWIN) || (OS(LINUX) && !defined(__UCLIBC__))) && !OS(ANDROID)
+-+#if (OS(DARWIN) || (OS(LINUX) && defined(__GLIBC__) && !defined(__UCLIBC__))) && !OS(ANDROID)
+-     *size = backtrace(stack, *size);
+- #elif OS(WINDOWS) && !OS(WINCE)
+-     // The CaptureStackBackTrace function is available in XP, but it is not defined
+--- 
+-2.7.0
+-
+diff --git a/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch b/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch
+deleted file mode 100644
+index f3b590eadd..0000000000
+--- a/package/qt5/qt5webkit/5.6.3/0004-Fix-compilation-with-ICU-59.patch
 +++ /dev/null
 @@ -1,93 +0,0 @@
--From bdfd084296681bcead17c42f1e5cf0e24ee04f65 Mon Sep 17 00:00:00 2001
--From: Viktor Engelmann <viktor.engelmann@qt.io>
--Date: Fri, 7 Jul 2017 12:56:19 +0200
--Subject: [PATCH] Load libEGL and libGLES2 symbols implicitly
+-From bf172ae289a1348842005a9421797970f9b72060 Mon Sep 17 00:00:00 2001
+-From: Konstantin Tokarev <annulen@yandex.ru>
+-Date: Thu, 4 May 2017 15:12:37 +0300
+-Subject: [PATCH] Fix compilation with ICU 59
+-
+-Upstream fix: https://bugs.webkit.org/show_bug.cgi?id=171612
+-
+-Task-number: QTBUG-60532
+-Change-Id: I6014feea213aa70ebe40b09d9d1a03fd1ed3c843
+-Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- Source/JavaScriptCore/API/JSStringRef.cpp        | 6 +++---
+- Source/JavaScriptCore/runtime/DateConversion.cpp | 3 ++-
+- Source/WTF/wtf/TypeTraits.h                      | 3 +++
+- Source/WebKit2/Shared/API/c/WKString.cpp         | 2 +-
+- 4 files changed, 9 insertions(+), 5 deletions(-)
+-
+-diff --git a/Source/JavaScriptCore/API/JSStringRef.cpp b/Source/JavaScriptCore/API/JSStringRef.cpp
+-index 812f3d413..77a3fd0f4 100644
+---- a/Source/JavaScriptCore/API/JSStringRef.cpp
+-+++ b/Source/JavaScriptCore/API/JSStringRef.cpp
+-@@ -37,7 +37,7 @@ using namespace WTF::Unicode;
+- JSStringRef JSStringCreateWithCharacters(const JSChar* chars, size_t numChars)
+- {
+-     initializeThreading();
+--    return OpaqueJSString::create(chars, numChars).leakRef();
+-+    return OpaqueJSString::create(reinterpret_cast<const UChar*>(chars), numChars).leakRef();
+- }
+- 
+- JSStringRef JSStringCreateWithUTF8CString(const char* string)
+-@@ -62,7 +62,7 @@ JSStringRef JSStringCreateWithUTF8CString(const char* string)
+- JSStringRef JSStringCreateWithCharactersNoCopy(const JSChar* chars, size_t numChars)
+- {
+-     initializeThreading();
+--    return OpaqueJSString::create(StringImpl::createWithoutCopying(chars, numChars, WTF::DoesNotHaveTerminatingNullCharacter)).leakRef();
+-+    return OpaqueJSString::create(StringImpl::createWithoutCopying(reinterpret_cast<const UChar*>(chars), numChars, WTF::DoesNotHaveTerminatingNullCharacter)).leakRef();
+- }
+- 
+- JSStringRef JSStringRetain(JSStringRef string)
+-@@ -83,7 +83,7 @@ size_t JSStringGetLength(JSStringRef string)
+- 
+- const JSChar* JSStringGetCharactersPtr(JSStringRef string)
+- {
+--    return string->characters();
+-+    return reinterpret_cast<const JSChar*>(string->characters());
+- }
+- 
+- size_t JSStringGetMaximumUTF8CStringSize(JSStringRef string)
+-diff --git a/Source/JavaScriptCore/runtime/DateConversion.cpp b/Source/JavaScriptCore/runtime/DateConversion.cpp
+-index 0b57f012d..05e27338b 100644
+---- a/Source/JavaScriptCore/runtime/DateConversion.cpp
+-+++ b/Source/JavaScriptCore/runtime/DateConversion.cpp
+-@@ -107,7 +107,8 @@ String formatDateTime(const GregorianDateTime& t, DateTimeFormat format, bool as
+- #if OS(WINDOWS)
+-             TIME_ZONE_INFORMATION timeZoneInformation;
+-             GetTimeZoneInformation(&timeZoneInformation);
+--            const WCHAR* timeZoneName = t.isDST() ? timeZoneInformation.DaylightName : timeZoneInformation.StandardName;
+-+            const WCHAR* winTimeZoneName = t.isDST() ? timeZoneInformation.DaylightName : timeZoneInformation.StandardName;
+-+            String timeZoneName(reinterpret_cast<const UChar*>(winTimeZoneName));
+- #else
+-             struct tm gtm = t;
+-             char timeZoneName[70];
+-diff --git a/Source/WTF/wtf/TypeTraits.h b/Source/WTF/wtf/TypeTraits.h
+-index 9df2c95cf..f5d6121fd 100644
+---- a/Source/WTF/wtf/TypeTraits.h
+-+++ b/Source/WTF/wtf/TypeTraits.h
+-@@ -72,6 +72,9 @@ namespace WTF {
+-     template<> struct IsInteger<unsigned long>      { static const bool value = true; };
+-     template<> struct IsInteger<long long>          { static const bool value = true; };
+-     template<> struct IsInteger<unsigned long long> { static const bool value = true; };
+-+#if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__) || (defined(_HAS_CHAR16_T_LANGUAGE_SUPPORT) && _HAS_CHAR16_T_LANGUAGE_SUPPORT)
+-+    template<> struct IsInteger<char16_t>           { static const bool value = true; };
+-+#endif
+- #if !COMPILER(MSVC) || defined(_NATIVE_WCHAR_T_DEFINED)
+-     template<> struct IsInteger<wchar_t>            { static const bool value = true; };
+- #endif
+-diff --git a/Source/WebKit2/Shared/API/c/WKString.cpp b/Source/WebKit2/Shared/API/c/WKString.cpp
+-index cbac67dd8..23400a64e 100644
+---- a/Source/WebKit2/Shared/API/c/WKString.cpp
+-+++ b/Source/WebKit2/Shared/API/c/WKString.cpp
+-@@ -55,7 +55,7 @@ size_t WKStringGetLength(WKStringRef stringRef)
+- size_t WKStringGetCharacters(WKStringRef stringRef, WKChar* buffer, size_t bufferLength)
+- {
+-     COMPILE_ASSERT(sizeof(WKChar) == sizeof(UChar), WKStringGetCharacters_sizeof_WKChar_matches_UChar);
+--    return (toImpl(stringRef)->getCharacters(static_cast<UChar*>(buffer), bufferLength));
+-+    return (toImpl(stringRef)->getCharacters(reinterpret_cast<UChar*>(buffer), bufferLength));
+- }
+- 
+- size_t WKStringGetMaximumUTF8CStringSize(WKStringRef stringRef)
+--- 
+-2.11.0
+-
+diff --git a/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch b/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch
+deleted file mode 100644
+index 9c2205dd94..0000000000
+--- a/package/qt5/qt5webkit/5.6.3/0005-Detect-32-bits-armv8-a-architecture.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-From 068bf2d2d91382ea0d8ec24a142a30ea429704db Mon Sep 17 00:00:00 2001
+-From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+-Date: Tue, 15 Aug 2017 18:28:49 -0400
+-Subject: [PATCH] Detect 32-bits armv8-a architecture
 -MIME-Version: 1.0
 -Content-Type: text/plain; charset=utf-8
 -Content-Transfer-Encoding: 8bit
 -
--Instead of explicitly loading libraries from hard-coded locations,
--we now just call dlopen(NULL, RTLD_LAZY). This returns a handle to
--the host process'es context, which already contains the symbols of
--both these libraries, because we link against them.
--It was necessary to bypass LoadLibrary, because that expects a non-NULL
--file path, so we couldn't pass NULL through that interface.
+-Adds WTF platform support for the 32-bits armv8-a architectures.
 -
--Upstream-Status: Merged
--Task-number: QTBUG-57761
--Change-Id: I29f037dfe542222b5188a33c7727c81a464a87bb
--Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
--Reviewed-by: Michal Klocek <michal.klocek@qt.io>
+-Theses toolchains define __ARM_ARCH_8A__ (for ARM architecture version)
+-and __arm__ (for 32-bits word-size; __aarch64__ for 64-bits).
+-
+-This commit catches this new architecture (armv8a) within a #ifdef/#endif
+-inside the if statement dedicated for 32-bits ARM detection.
+-
+-Fixes:
+-
+-	In file included from ./config.h:30:0,
+-	                 from ...
+-	./wtf/Platform.h:323:6: error: #error "Not supported ARM architecture"
+-	 #    error "Not supported ARM architecture"
+-	      ^~~~~
+-
+-Upstream-Status: Backport [with adaptations]
 -Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
--[gportay: backport from 5.9 and merge conflicts]
 ----
-- src/core/surface_factory_qt.cpp | 40 ++++++++--------------------------------
-- 1 file changed, 8 insertions(+), 32 deletions(-)
+- Source/WTF/wtf/Platform.h | 4 ++++
+- 1 file changed, 4 insertions(+)
 -
--diff --git a/src/core/surface_factory_qt.cpp b/src/core/surface_factory_qt.cpp
--index 48c91bfc..c6059b67 100644
----- a/src/core/surface_factory_qt.cpp
--+++ b/src/core/surface_factory_qt.cpp
--@@ -51,51 +51,27 @@
-- #if defined(USE_OZONE)
+-diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
+-index 562840cf7..9cf656845 100644
+---- a/Source/WTF/wtf/Platform.h
+-+++ b/Source/WTF/wtf/Platform.h
+-@@ -243,6 +243,10 @@
+-     || defined(__ARM_ARCH_7S__)
+- #define WTF_ARM_ARCH_VERSION 7
 - 
-- #include <EGL/egl.h>
---
---#ifndef QT_LIBDIR_EGL
---#define QT_LIBDIR_EGL "/usr/lib"
---#endif
---#ifndef QT_LIBDIR_GLES2
---#define QT_LIBDIR_GLES2 QT_LIBDIR_EGL
---#endif
--+#include <dlfcn.h>
-- 
-- namespace QtWebEngineCore {
-- 
---base::NativeLibrary LoadLibrary(const base::FilePath& filename) {
---    base::NativeLibraryLoadError error;
---    base::NativeLibrary library = base::LoadNativeLibrary(filename, &error);
---    if (!library) {
---        LOG(ERROR) << "Failed to load " << filename.MaybeAsASCII() << ": " << error.ToString();
---        return NULL;
---    }
---    return library;
---}
---
-- bool SurfaceFactoryQt::LoadEGLGLES2Bindings(AddGLLibraryCallback add_gl_library, SetGLGetProcAddressProcCallback set_gl_get_proc_address)
-- {
---    base::FilePath libEGLPath = QtWebEngineCore::toFilePath(QT_LIBDIR_EGL);
---    libEGLPath = libEGLPath.Append("libEGL.so.1");
---    base::NativeLibrary eglLibrary = LoadLibrary(libEGLPath);
---    if (!eglLibrary)
---        return false;
---
---    base::FilePath libGLES2Path = QtWebEngineCore::toFilePath(QT_LIBDIR_GLES2);
---    libGLES2Path = libGLES2Path.Append("libGLESv2.so.2");
---    base::NativeLibrary gles2Library = LoadLibrary(libGLES2Path);
---    if (!gles2Library)
--+    base::NativeLibrary eglgles2Library = dlopen(NULL, RTLD_LAZY);
--+    if (!eglgles2Library) {
--+        LOG(ERROR) << "Failed to open EGL/GLES2 context " << dlerror();
--         return false;
--+    }
-- 
---    gfx::GLGetProcAddressProc get_proc_address = reinterpret_cast<gfx::GLGetProcAddressProc>(base::GetFunctionPointerFromNativeLibrary(eglLibrary, "eglGetProcAddress"));
--+    gfx::GLGetProcAddressProc get_proc_address = reinterpret_cast<gfx::GLGetProcAddressProc>(base::GetFunctionPointerFromNativeLibrary(eglgles2Library, "eglGetProcAddress"));
--     if (!get_proc_address) {
--         LOG(ERROR) << "eglGetProcAddress not found.";
---        base::UnloadNativeLibrary(eglLibrary);
---        base::UnloadNativeLibrary(gles2Library);
--+        base::UnloadNativeLibrary(eglgles2Library);
--         return false;
+-+#elif defined(__ARM_ARCH_8__) \
+-+    || defined(__ARM_ARCH_8A__)
+-+#define WTF_ARM_ARCH_VERSION 8
+-+
+- /* MSVC sets _M_ARM */
+- #elif defined(_M_ARM)
+- #define WTF_ARM_ARCH_VERSION _M_ARM
+--- 
+-2.16.1
+-
+diff --git a/package/qt5/qt5webkit/5.9.1/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch b/package/qt5/qt5webkit/5.9.1/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch
+deleted file mode 100644
+index 669c7e6aa2..0000000000
+--- a/package/qt5/qt5webkit/5.9.1/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 1735a8484ef9ae336f8d607b56bda64c8af10c79 Mon Sep 17 00:00:00 2001
+-From: Trevor Woerner <trevor.woerner@linaro.org>
+-Date: Fri, 7 Feb 2014 04:07:17 +0100
+-Subject: [PATCH] qtwebkit: fix QA issue (bad RPATH)
+-
+-Building qtwebkit causes a QA issue such that QtWebPluginProcess and
+-QtWebProcess contain bad RPATHs which point into the build location. This fix
+-adds a patch to not include the rpath.prf which causes this problem.
+-
+-Signed-off-by: Trevor Woerner <trevor.woerner@linaro.org>
+-Signed-off-by: Martin Jansa <Martin.Jansa@gmail.com>
+-
+-Downloaded from:
+-https://github.com/meta-qt5/meta-qt5/blob/krogoth/recipes-qt/qt5/qtwebkit/
+-0001-qtwebkit-fix-QA-issue-bad-RPATH.patch
+-
+-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+----
+- Tools/qmake/mkspecs/features/unix/default_post.prf | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/Tools/qmake/mkspecs/features/unix/default_post.prf b/Tools/qmake/mkspecs/features/unix/default_post.prf
+-index fd66af6..ef754c3 100644
+---- a/Tools/qmake/mkspecs/features/unix/default_post.prf
+-+++ b/Tools/qmake/mkspecs/features/unix/default_post.prf
+-@@ -61,7 +61,6 @@ linux-*g++* {
 -     }
-- 
--     gfx::SetGLGetProcAddressProc(get_proc_address);
---    gfx::AddGLNativeLibrary(eglLibrary);
---    gfx::AddGLNativeLibrary(gles2Library);
--+    gfx::AddGLNativeLibrary(eglgles2Library);
--     return true;
 - }
 - 
+--contains(TEMPLATE, app): CONFIG += rpath
+- 
+- CONFIG(debug, debug|release)|force_debug_info {
+-     # Make ld not cache the symbol tables of input files in memory to avoid memory exhaustion during the linking phase.
 --- 
--2.15.0
+-2.7.0
 -
-diff --git a/package/qt5/qt5webengine/5.6.3/qt5webengine.hash b/package/qt5/qt5webengine/5.6.3/qt5webengine.hash
-deleted file mode 100644
-index f062ae1633..0000000000
---- a/package/qt5/qt5webengine/5.6.3/qt5webengine.hash
-+++ /dev/null
-@@ -1,258 +0,0 @@
--# Hash from https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebengine-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 009d69fb39f6c0e2b0cd89a7e9302cd0ae1872d02c787d3a37f2cacca5ddb7a7 qtwebengine-opensource-src-5.6.3.tar.xz
+diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
+index 57ff2ac1b7..3068ad920d 100644
+--- a/package/qt5/qt5webkit/qt5webkit.hash
++++ b/package/qt5/qt5webkit/qt5webkit.hash
+@@ -1,6 +1,3 @@
+-# Hash from: https://download.qt.io/community_releases/5.6/5.6.3/qtwebkit-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256  098c6bb25798fbf1b619b540621287787064efc9b586d76ac0ce7e39b87a3896  qtwebkit-opensource-src-5.6.3.tar.xz
 -
--# Locally calculated
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
--sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
--sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
--sha256 9ae1959e86bd49b9680f78e0b49d4e52ae88a3f234d497e175e42a7e8ed59216  LICENSE.LGPL3
--
--# Locally calculated with:
--# for i in $(find src/3rdparty/ -type f \( -iname 'license*' -o -iname 'copying*' -o -name 'APPLE_LICENSE' -o -name 'Copyright' -o -path '*/license_texts/*' -o -path '*/licenses/*' \) -a -not -name '*.cc' -not -name '*.py' -not -name '*.h' -not -name 'LICENSE.sha1' -not -name 'licensecheck.pl*' -not -name 'license.after' -not -name 'license.before') ; do echo -n "sha256 " ; sha256sum $i ; done | sort --key=3
--sha256 d04360743ae3338bb08ab2106b51e24309e3ca4b1c6b1186139531ade351b7e3  src/3rdparty/chromium/base/third_party/dmg_fp/LICENSE
--sha256 96e7ccbf8d17e319dd77c4ebd4965b64a820bbcc3142a2478fbf95af77417b6a  src/3rdparty/chromium/base/third_party/dynamic_annotations/LICENSE
--sha256 4074881f47972aedda83940935bb1d03fa74a56f94445945ce80fe952eed6834  src/3rdparty/chromium/base/third_party/icu/LICENSE
--sha256 9ad1d4223b80349f3d3ab9cec92f93431b9da14a1b5d41de468ce054a28cf8aa  src/3rdparty/chromium/base/third_party/libevent/LICENSE
--sha256 d55a403514532af12dc2fbfb2e41900090a5dd6c7c76c8e4d9b20bcc737eac35  src/3rdparty/chromium/base/third_party/nspr/LICENSE
--sha256 90b2201c340cee36b40a443f949d9eb416f0a0d204c32d350aff87fedeb67ae8  src/3rdparty/chromium/base/third_party/superfasthash/LICENSE
--sha256 538edc6f52c563cf06eca1bac8dd785ff60ef5a371a950265700d5d40386db6e  src/3rdparty/chromium/base/third_party/symbolize/LICENSE
--sha256 79955cd80438f041387eb080f2675394e36a806b8b17eca63a4bc568d839509e  src/3rdparty/chromium/base/third_party/valgrind/LICENSE
--sha256 c45766baef552c59eeb1fdfbbc690e52e4cd5b135dfd325f21bdfe8ddfe28ce6  src/3rdparty/chromium/base/third_party/xdg_mime/LICENSE
--sha256 18351de3d7e2dc469cc83e77d38a3e25d010251e34eb348bbd1a76275e313997  src/3rdparty/chromium/base/third_party/xdg_user_dirs/LICENSE
--sha256 7a209dd1b94cabdb5ea9c6f9164b9546ffa5daaa671e7767d49510db055f5c51  src/3rdparty/chromium/buildtools/LICENSE
--sha256 5a12a0c01bfcdbc90b550c9cd8bfc3e90e6be9c9bbfdb58bfb5daaf6817eb78f  src/3rdparty/chromium/chrome/third_party/chromevox/LICENSE
--sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  src/3rdparty/chromium/chrome/third_party/chromevox/third_party/closure-library/LICENSE
--sha256 dd6019aa7edc5b25a220306cd480da21c206964f86b30d08b8db8e4659b65c58  src/3rdparty/chromium/crypto/third_party/nss/LICENSE
--sha256 845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308  src/3rdparty/chromium/LICENSE
--sha256 212c5a071f61512786b5e5840b3d70c85e017f3f82939ad4d4a870fc48b33477  src/3rdparty/chromium/LICENSE.chromium_os
--sha256 7a209dd1b94cabdb5ea9c6f9164b9546ffa5daaa671e7767d49510db055f5c51  src/3rdparty/chromium/mojo/public/LICENSE
--sha256 bed70fc84f1bea2b4b144564b9a0f9a5a3bc7b0d78f6e62092aeb689cac56bdd  src/3rdparty/chromium/net/third_party/mozilla_security_manager/LICENSE
--sha256 a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  src/3rdparty/chromium/net/third_party/nss/LICENSE
--sha256 834ee20e8fc3235722ed801bae30cc539c2775be656ff9cc2810fe674e53d5ec  src/3rdparty/chromium/ppapi/LICENSE
--sha256 891970cf216f708de2bfd77184b3e32d5cdba8dc4c3a75e60628c0375f5657e4  src/3rdparty/chromium/sdch/open-vcdiff/COPYING
--sha256 9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/3rdparty/chromium/testing/gmock/LICENSE
--sha256 5e0df8c845c742e76f2f64d2d9ce1b7e74a2422fddbc577ae6a56319083de0bf  src/3rdparty/chromium/testing/gmock/scripts/generator/LICENSE
--sha256 9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/3rdparty/chromium/testing/gtest/LICENSE
--sha256 77af9c9fc2710ee66b8282291a9392a9a61f1d5b3ad6e478d0b6c544de5f9aca  src/3rdparty/chromium/third_party/angle/LICENSE
--sha256 a08ba10adec47027ef8078848729837b1c5a42f140718d7afd65c23f1eeec392  src/3rdparty/chromium/third_party/angle/src/third_party/compiler/LICENSE
--sha256 d8a0f4dab052ff6f56e9d6fa68efb66de8ff3956a805110930f8ee297376047f  src/3rdparty/chromium/third_party/angle/src/third_party/murmurhash/LICENSE
--sha256 b23e682fda7310afe43505ed6041919ccff8f9e0c6799ebd7542cbcef11102e3  src/3rdparty/chromium/third_party/apple_apsl/LICENSE
--sha256 fddff1da5115ebb2f735b31fd17bac3166bf0c67d941287dfd490a111bca1c52  src/3rdparty/chromium/third_party/appurify-python/LICENSE
--sha256 f53f4201f4bd4b7a07b5e5830d89d75219211fa76214b761bcb181e5c95a56ce  src/3rdparty/chromium/third_party/bintrees/LICENSE.txt
--sha256 0518cf49c09398259d54fcfff0b5fd36456162c6439886660e53627b3073ef22  src/3rdparty/chromium/third_party/blanketjs/LICENSE
--sha256 def7352915ac84bea5e2ed16f6fff712d35de519799777bf927e2a567ab53b7e  src/3rdparty/chromium/third_party/boringssl/src/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/brotli/LICENSE
--sha256 0af2a39b2cb31f540a1178f176367761751454779431be92a73a62f87df91440  src/3rdparty/chromium/third_party/bspatch/LICENSE
--sha256 d415cefbadc3a8083475e30d8690a1103a2601226f725abf43a263c516345190  src/3rdparty/chromium/third_party/cardboard-java/LICENSE
--sha256 3d1d2669d0ba87069b5e202f106193c4eb0e140a2aead31dca9670a0581dd979  src/3rdparty/chromium/third_party/chaijs/LICENSE
--sha256 a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  src/3rdparty/chromium/third_party/checkstyle/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/checkstyle/LICENSE.apache20
--sha256 0acbdae3346bc7593c57471aaf47fb45326a26b3c29cfbbf8ce729d99a7e458a  src/3rdparty/chromium/third_party/class-dump/LICENSE
--sha256 ef5b39dfcafe08323262e3f51a3a9de649978a55ed8ef8eef3c451f2c1e78a53  src/3rdparty/chromium/third_party/cld/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/closure_compiler/compiler/COPYING
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/closure_compiler/LICENSE
--sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  src/3rdparty/chromium/third_party/closure_linter/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/crashpad/crashpad/LICENSE
--sha256 e5881019d8766c1e88a5fe1dbca4ba40c78011d41fcb18f6e9f50df60182685b  src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/apple_cctools/cctools/APPLE_LICENSE
--sha256 212846e0145aa50fb3a5aef254a370311a93acf6c1e792e47e0068d64c8c3885  src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/apple_cf/APPLE_LICENSE
--sha256 f40ee07401827b6ac9cf0aee1aaffb00e42a3f2c729f9c83f96a3daafef5d944  src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/getopt/LICENSE
--sha256 e9427cf6abc4eaeda0bcd094fca46af4067970079f426b65d5cbacb87bff6366  src/3rdparty/chromium/third_party/cros_system_api/LICENSE
--sha256 09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  src/3rdparty/chromium/third_party/custom_tabs_client/LICENSE
--sha256 10054db83ace18e5a455749d0d247857ec50508cecda79a5abe66fe4778d7721  src/3rdparty/chromium/third_party/d3/src/LICENSE
--sha256 43452b94e6aa0c2d076ad25b87f580c11571689d52f3aa1a1f7bdcab31a0bd15  src/3rdparty/chromium/third_party/decklink/LICENSE
--sha256 5a2ed53cc5975569e9fa146c4245eaf53377dc1a88bdcb923da6487e53cba55e  src/3rdparty/chromium/third_party/devscripts/COPYING
--sha256 4f5753ce8acf3feafc758599058746d30bda07bc0d4cc3a6a1eb8e039fdba1dc  src/3rdparty/chromium/third_party/dom_distiller_js/LICENSE
--sha256 8545f6c8d9497acf953ca93b9264032616e6430eb536e21142a381455c8085df  src/3rdparty/chromium/third_party/drmemory/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/errorprone/LICENSE
--sha256 e2fa3a3e38af6d7d0cb374883a89b3507fe3b053faef16485f37ff3c9d93a5d2  src/3rdparty/chromium/third_party/expat/files/COPYING
--sha256 d9c904abd0ead61b3fbaef0a609285548076ff9c3f814cc1cf019c5d7150736d  src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/full_lgpl.txt
--sha256 a8579e3fc40c11ab147bc299257733eb749cd455010385f7c117f70d7aef24e4  src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/jpeg.txt
--sha256 857d5f537af3aa164e7a27eda60147d34195e5781abe7b1d358d9fb01e222ae0  src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/mips.txt
--sha256 b4c85cce2b772f27d83f4562c20787057dc6949fcecc820a82c1d2e7047e89c3  src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/oggparse_ahlberg_rullgayrd_2005.txt
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  src/3rdparty/chromium/third_party/ffmpeg/COPYING.GPLv2
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  src/3rdparty/chromium/third_party/ffmpeg/COPYING.GPLv3
--sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  src/3rdparty/chromium/third_party/ffmpeg/COPYING.LGPLv2.1
--sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  src/3rdparty/chromium/third_party/ffmpeg/COPYING.LGPLv3
--sha256 cb77a08f3ee3deb5240a8b3d197436710621ee87f4f0fed03947f825e082fb28  src/3rdparty/chromium/third_party/ffmpeg/LICENSE.md
--sha256 5d0c892ea452c3828f1e311637cde4e3a04eb6431554308b3fcdac8c1b330168  src/3rdparty/chromium/third_party/fips181/COPYING
--sha256 f45cc81b400a048b56c9edbd4c3317f7a8958463dfd55aa96f268ecfd6baa12c  src/3rdparty/chromium/third_party/flac/COPYING.FDL
--sha256 0b1975de0a048180c5ea7179be1a3e751e05f79d225ac4be6481141970527e69  src/3rdparty/chromium/third_party/flac/COPYING.GPL
--sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  src/3rdparty/chromium/third_party/flac/COPYING.LGPL
--sha256 eafd0d3fac93964d4274a2f99be928d41c167a925a9ddb8621ab9aee065f8fee  src/3rdparty/chromium/third_party/flac/COPYING.Xiph
--sha256 e09d954054165670b6a669e6da59673d9e85f343b9983e92a220623ff0198f8c  src/3rdparty/chromium/third_party/flot/LICENSE.txt
--sha256 fa4cd9ab005185e10cd8f7504518856c7dd36c01e766c2bac87f4fc638e9f886  src/3rdparty/chromium/third_party/fontconfig/LICENSE
--sha256 fa4cd9ab005185e10cd8f7504518856c7dd36c01e766c2bac87f4fc638e9f886  src/3rdparty/chromium/third_party/fontconfig/src/COPYING
--sha256 246491bb21ec320b0396d218339305d8b7073c7cb94fa5adb77ebb9c84a87a0b  src/3rdparty/chromium/third_party/freetype2/src/docs/LICENSE.TXT
--sha256 32ce83e370dc31db74f20d8bb0febbb5f61b099f0e0212587e81fdc11ae7fcbc  src/3rdparty/chromium/third_party/gardiner_mod/LICENSE
--sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  src/3rdparty/chromium/third_party/gif_player/LICENSE
--sha256 2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216  src/3rdparty/chromium/third_party/harfbuzz-ng/COPYING
--sha256 1e33ef99129bb6e84b6bb84e8c9edb4c6dba9f876bc16bc143cb9a136627cdeb  src/3rdparty/chromium/third_party/hunspell/COPYING
--sha256 5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  src/3rdparty/chromium/third_party/hunspell/COPYING.LGPL
--sha256 53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  src/3rdparty/chromium/third_party/hunspell/COPYING.MPL
--sha256 93720ce4be6cca7dbfdd55f9cc9e1614865a4578b474612713fdbe06c3d34002  src/3rdparty/chromium/third_party/hunspell/src/hunspell/license.hunspell
--sha256 dcda061adeed22b26f276c01ec374f930789ae0d684e5aa8f8be309dd680ff20  src/3rdparty/chromium/third_party/hunspell/src/hunspell/license.myspell
--sha256 7a209dd1b94cabdb5ea9c6f9164b9546ffa5daaa671e7767d49510db055f5c51  src/3rdparty/chromium/third_party/hwcplus/LICENSE
--sha256 610809f1586ee4d22468f1e97c256153cea8be7a662193db70d6ca424e0f17c8  src/3rdparty/chromium/third_party/iaccessible2/LICENSE
--sha256 28d1d994f6f85ce2f605e214609a3a7925278039aa7a870b5cd089ef95b82445  src/3rdparty/chromium/third_party/iccjpeg/LICENSE
--sha256 d18e75f216f177d41304f5e94c2cba7d1bf9f8f8583a0777cceb5cca0c5ad137  src/3rdparty/chromium/third_party/icu/LICENSE
--sha256 7d149647f825d89af1268d9a53ebb414af1354a1815e26f8e44ef99820ba21db  src/3rdparty/chromium/third_party/icu/license.html
--sha256 8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac  src/3rdparty/chromium/third_party/ijar/LICENSE
--sha256 7a92c5e7a83b5ddcc693bb84ea8bdb842308509c1758cffdfe24717609154c75  src/3rdparty/chromium/third_party/isimpledom/LICENSE
--sha256 7975c0027cfa5d08253fbb6ff4676acc38248bd5e046d0dbab3d810971e97970  src/3rdparty/chromium/third_party/jinja2/LICENSE
--sha256 923e74e5ae41345038da0a56dfdc983356917fbbb139176e654d1b33100b723f  src/3rdparty/chromium/third_party/jmake/LICENSE
--sha256 76c45ece83a26117f86f4e349e7df118708e061e87225328fb478ce1e8b3eb86  src/3rdparty/chromium/third_party/jsoncpp/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/jstemplate/COPYING
--sha256 71a19392a0eb3255ab2055ed978bb0f93865cea84d31a3510eaffb74d8981e7f  src/3rdparty/chromium/third_party/khronos/LICENSE
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  src/3rdparty/chromium/third_party/lcov/COPYING
--sha256 ccc19f1da0798ed666609b65a5b44dd8b3abe6fc08b9c0592eb76e82e174db19  src/3rdparty/chromium/third_party/leveldatabase/src/LICENSE
--sha256 36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  src/3rdparty/chromium/third_party/libexif/sources/COPYING
--sha256 0382f4433a2b1b0b5c0af8cc769de0c7302c1b663ea569e67c0b5452e374e142  src/3rdparty/chromium/third_party/libjingle/source/talk/COPYING
--sha256 dea8cf0d3604b861d3a89dd1d193b02404414957b6ee7ab6ebeacf47daece976  src/3rdparty/chromium/third_party/libjingle/source/talk/LICENSE_THIRD_PARTY
--sha256 19af539b1ec692ea9ccf71b6ea97d602bcf7187eab27b0ea806aea1cd10b0b13  src/3rdparty/chromium/third_party/libjpeg/LICENSE
--sha256 0570fc4ebfee96ed20720ed8f2cd5b928930bdd7340dfdfa96bb00e8c4f89677  src/3rdparty/chromium/third_party/libjpeg_turbo/LICENSE.txt
--sha256 5fe714f37f27dcc5d59dee2601ac3e7fe1cf2e497e5fcdba00ddb9b1297f61cb  src/3rdparty/chromium/third_party/libpng/LICENSE
--sha256 a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b  src/3rdparty/chromium/third_party/libsecret/LICENSE
--sha256 8defed37d52096ae14b60adc499c33d43975109bc265552ee67e9a888c634b93  src/3rdparty/chromium/third_party/libsrtp/srtp/LICENSE
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  src/3rdparty/chromium/third_party/libudev/LICENSE
--sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  src/3rdparty/chromium/third_party/libusb/src/COPYING
--sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  src/3rdparty/chromium/third_party/libva/COPYING
--sha256 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/LICENSE
--sha256 9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/third_party/googletest/src/LICENSE
--sha256 5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/third_party/libwebm/LICENSE.TXT
--sha256 719d8fa235f2068e0ae6d6a7dceb0a7720d7840f0f0ebed29957989e6ded3cd8  src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/third_party/x86inc/LICENSE
--sha256 5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  src/3rdparty/chromium/third_party/libwebm/source/LICENSE.TXT
--sha256 6de6fe48ff7b249a51ec5522d1af618dd50effc6f030fd24e17878566ad2ca5d  src/3rdparty/chromium/third_party/libwebp/LICENSE
--sha256 c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd  src/3rdparty/chromium/third_party/libxml/src/Copyright
--sha256 31346421254a3e6e12687cf17f19f6357ee73a617fa7b3d3ccefdcbabe49bdd3  src/3rdparty/chromium/third_party/libXNVCtrl/LICENSE
--sha256 7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  src/3rdparty/chromium/third_party/libxslt/Copyright
--sha256 2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  src/3rdparty/chromium/third_party/libyuv/LICENSE
--sha256 d62df95ee2ada2637151bc125cadbe2703ef07ed5d9cbe163eaa53bda3949af4  src/3rdparty/chromium/third_party/libyuv/LICENSE_THIRD_PARTY
--sha256 90d1f3701813c3cd65eee2dc736746fe46b465918f3f7d6d31463a2018b33fa5  src/3rdparty/chromium/third_party/libyuv/third_party/gflags/LICENSE
--sha256 6e3e0a978f1e136cb3efb89702f4314671581a0c70c9a52447669e00f7b129e8  src/3rdparty/chromium/third_party/lzma_sdk/LICENSE
--sha256 7973776647df23457a9910075547e3f345fbc5e0e41147b4586d714582dfdd76  src/3rdparty/chromium/third_party/mach_override/LICENSE
--sha256 0bbe88228fd63d20ec097f64e58d5a0a465123ae139140a18d406c60b48824b5  src/3rdparty/chromium/third_party/markupsafe/LICENSE
--sha256 c93465d6a75e6ade8785edb4ec125ece083ab0910ed0417b4ff346792ba0f851  src/3rdparty/chromium/third_party/mesa/LICENSE
--sha256 e8800bd573e8f844a5b87cf43cc4d55767314b4e95a6092cf26ce9c6ed00b877  src/3rdparty/chromium/third_party/mesa/src/docs/COPYING
--sha256 1efd6dec259877be94db3dbd005c93a5c94a73a492bd85eede6e14885e480e0e  src/3rdparty/chromium/third_party/mesa/src/docs/license.html
--sha256 704179825bb7c4600acbff3d1fcd95f1eb61b2c4a11b66bb150d7cefea8f6371  src/3rdparty/chromium/third_party/mesa/src/src/gallium/drivers/radeon/LICENSE.TXT
--sha256 83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  src/3rdparty/chromium/third_party/minigbm/LICENSE
--sha256 1f194a987fa1dc60e4bcf5e04e0fc03fff8f2ee587c52136adb2cebb397250b8  src/3rdparty/chromium/third_party/mocha/LICENSE
--sha256 380893a2f01aea5c3328b1a8b08cdc488bf236916abac3af0d1f1a5d2634c31a  src/3rdparty/chromium/third_party/mockito/LICENSE
--sha256 d47e8390fb0d7ad4a18f26aedd6283c7ab6b5b4fabab536ccb4db7f9f6d90c08  src/3rdparty/chromium/third_party/modp_b64/LICENSE
--sha256 7a209dd1b94cabdb5ea9c6f9164b9546ffa5daaa671e7767d49510db055f5c51  src/3rdparty/chromium/third_party/mojo/LICENSE
--sha256 5f593432ef4e7ecefa6326042babb8a03d8d6ce502b4f0b78b105e18d19f8052  src/3rdparty/chromium/third_party/molokocacao/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/motemplate/LICENSE
--sha256 7a92c5e7a83b5ddcc693bb84ea8bdb842308509c1758cffdfe24717609154c75  src/3rdparty/chromium/third_party/mozilla/LICENSE
--sha256 c69a473064e2246a3123066eaec702b454422b2701934187f0e433f773c57305  src/3rdparty/chromium/third_party/mt19937ar/LICENSE
--sha256 7c7f6dc97beb9eac776c285bee22a58b83aba1d26e1d4e949e509717b5124540  src/3rdparty/chromium/third_party/npapi/LICENSE
--sha256 fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  src/3rdparty/chromium/third_party/nss/nspr/LICENSE
--sha256 a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  src/3rdparty/chromium/third_party/nss/nss/COPYING
--sha256 74ab31565472f8347d36849b6b330e5f741f6e2dff5d9147b93ba0a900a4a577  src/3rdparty/chromium/third_party/ocmock/License.txt
--sha256 dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  src/3rdparty/chromium/third_party/openh264/src/LICENSE
--sha256 1599cc232dbd003e6691c7f4e360f2068f84ebaef6510a26ab919c3a7fec27fd  src/3rdparty/chromium/third_party/openmax_dl/LICENSE
--sha256 8338ce8d922bb4416ce3dd1e5680173332435e3f0755007ac7801ccd674fe682  src/3rdparty/chromium/third_party/opus/src/COPYING
--sha256 7efb4989e0cd1b256229bdf2f09300c5d14e35db0e7476bfb87fac243498273d  src/3rdparty/chromium/third_party/opus/src/LICENSE_PLEASE_READ.txt
--sha256 984523ee987f4e8b72d61df37d8f1189a7077cd4b77e41a397e35593b297a29d  src/3rdparty/chromium/third_party/ots/LICENSE
--sha256 9f98bab33648b77578d85ac0f1d1c3941a72aa6d7e65015ba181f2fe804bb85d  src/3rdparty/chromium/third_party/pexpect/LICENSE
--sha256 dd4930c619afd8527591353c7d3d1c1d7f4bf62ed1cb411f4f507dbdee7738a2  src/3rdparty/chromium/third_party/ply/LICENSE
--sha256 685b3b09870f1361f8db2d3f37acdb765d5da1722a18b182765da4b79a8f63ff  src/3rdparty/chromium/third_party/ply/license.patch
--sha256 984fb04a16a9f1e0145ffd891125dc366a01cd921f58c9b0369be400c720790d  src/3rdparty/chromium/third_party/polymer/v1_0/components-chromium/polymer/LICENSE.txt
--sha256 294f58267c6f473c4ce7270bf5c8d34b2003cb43804552459654c36553431276  src/3rdparty/chromium/third_party/proguard/LICENSE
--sha256 31c7505c31a1ea8557a5362cd69946dc9f5ee80fac8fa1d1b1531c08530497b0  src/3rdparty/chromium/third_party/protobuf/COPYING.txt
--sha256 2ab28b982a7f3150e1597befaa87e1636b9973c80aef3752597945d270c4c4e4  src/3rdparty/chromium/third_party/pycoverage/LICENSE
--sha256 f8d0c347a0dcc6ebe1671640dfae8d2411b6ded892e06a6764f8208b218b2af4  src/3rdparty/chromium/third_party/pyelftools/elftools/construct/LICENSE
--sha256 f8c8ccecdbb044fd6fa1a586c596a055fb2b14fb3e335d8ed282db58d80b7410  src/3rdparty/chromium/third_party/pyelftools/LICENSE
--sha256 e88ae39d2e7c9ae8f5470bb23fdd7ce55fe58aca06f3d4399182f5bb0ffcf1dd  src/3rdparty/chromium/third_party/pyftpdlib/src/LICENSE
--sha256 c5b14f5a3814d2e57b9bb9520dcf57a2c3817b65c4f989e5c82e332c82af1038  src/3rdparty/chromium/third_party/pymock/LICENSE.txt
--sha256 90d1f3701813c3cd65eee2dc736746fe46b465918f3f7d6d31463a2018b33fa5  src/3rdparty/chromium/third_party/python_gflags/COPYING
--sha256 956c3b678228a216142df38d039bba56ee6509d3298e7a4b8dd5bc3eaa80fe33  src/3rdparty/chromium/third_party/Python-Markdown/LICENSE.md
--sha256 9b17bd282aac6d5729c700c823ddaaa6fa0e048d88e321f46252646f28791752  src/3rdparty/chromium/third_party/py_trace_event/src/LICENSE
--sha256 23681c6986fb33d57957660543f6e9dcbbcf6d2ae2f9fa2dbdb5efec5aa0d95f  src/3rdparty/chromium/third_party/pywebsocket/src/LICENSE
--sha256 c903100da706172066fa1b6f02eba60f202fea63036492d2c4a01267e32aa7a8  src/3rdparty/chromium/third_party/qcms/src/COPYING
--sha256 f98f3db81b4dd3873d8672117e409286142cfae9b7673ab6d7aab4bae1527d20  src/3rdparty/chromium/third_party/qunit/LICENSE
--sha256 6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  src/3rdparty/chromium/third_party/re2/LICENSE
--sha256 6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  src/3rdparty/chromium/third_party/re2/src/LICENSE
--sha256 e479bcdfa777738226b4282bf8536cc5416a25cec3100cbe210b8be4d1e2ed84  src/3rdparty/chromium/third_party/requests/LICENSE
--sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  src/3rdparty/chromium/third_party/robolectric/LICENSE
--sha256 19c9b910bec5a4f2c420747d1bf81e975ffdb1377ad91c5d9b1e8dd3e38f4c17  src/3rdparty/chromium/third_party/robolectric/licenses/extreme.indiana.edu.license.txt
--sha256 a7436c952fa2dc0701860cf4187d1e8e8e6de6720dec0ae9e0b641bc50eebced  src/3rdparty/chromium/third_party/robolectric/licenses/javolution.license.txt
--sha256 5b6ac717e37db4f6d17bda7791f4ce3f99947aeb21e6e72b705aa3d1ee2de480  src/3rdparty/chromium/third_party/robolectric/licenses/pivotal.labs.license.txt
--sha256 1af74cc402d50be09edd134ed5c31ade063fc0e7546670bc23ceeecc0004c142  src/3rdparty/chromium/third_party/safe_browsing/testing/LICENSE
--sha256 e320e0b6915c2a93dc7f6db28c014f223ae32de61f5033300db2b75d506daa1f  src/3rdparty/chromium/third_party/sfntly/COPYING.txt
--sha256 e320e0b6915c2a93dc7f6db28c014f223ae32de61f5033300db2b75d506daa1f  src/3rdparty/chromium/third_party/sfntly/src/cpp/COPYING.txt
--sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  src/3rdparty/chromium/third_party/sfntly/src/java/COPYING
--sha256 33c9a2fe619e1200937629f318895898ffcd1bf7d0ddd39adc382c030925e61e  src/3rdparty/chromium/third_party/simplejson/LICENSE.txt
--sha256 b25948e48c44312d04ffc626a9d52cae7c04539a1a8e0c1be47b7bfa0da03e1d  src/3rdparty/chromium/third_party/sinonjs/LICENSE
--sha256 1f04103e3a61b91343b3f9d2ed2cc8543062917e2cc7d52a739ffe6429ccaf61  src/3rdparty/chromium/third_party/skia/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/skia/platform_tools/android/third_party/ashmem/LICENSE
--sha256 5366e97b4478f15a1e2fd7e6094337426597df28de50cd9fed3f2e7e87f1229e  src/3rdparty/chromium/third_party/skia/third_party/etc1/LICENSE
--sha256 99750e3fa5e132e1b93a56538ab9c585f8fc62b9e11ab62adec0cd3803315c70  src/3rdparty/chromium/third_party/skia/third_party/libpng/LICENSE
--sha256 3f6f1b520bc53e878ccbb698ad0bacef3752a5f4e4b50a26552bd70f60b40748  src/3rdparty/chromium/third_party/smhasher/LICENSE
--sha256 5221a36a801b981fbdfda7b87db64cff231a3b88223a066c325411b539df796f  src/3rdparty/chromium/third_party/snappy/src/COPYING
--sha256 bd2368428b63facfc9586d4be1bd6efb6abce76a9339ba058dd9f399f3efb3b4  src/3rdparty/chromium/third_party/speech-dispatcher/COPYING
--sha256 06545a6ec25fbbff6c62f205f94a35be49e38f33bea827a8cfb07d7b82e4b083  src/3rdparty/chromium/third_party/sqlite/LICENSE
--sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  src/3rdparty/chromium/third_party/sqlite/sqlite-src-3080704/autoconf/tea/license.terms
--sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  src/3rdparty/chromium/third_party/sqlite/src/autoconf/tea/license.terms
--sha256 28113a6e9e2fd7584187c738a7c5484452a1c383307a1741bec50a73262fac08  src/3rdparty/chromium/third_party/sudden_motion_sensor/LICENSE
--sha256 0cd682f22d04b97de1a6ce05c27c4ae5fddec1e330babc46f5f4f6c586c19f17  src/3rdparty/chromium/third_party/swiftshader/LICENSE
--sha256 0eff14f27fd948e2382ef5751b9b6ed596fc59369260510bd9230d08f9404f3e  src/3rdparty/chromium/third_party/talloc/LICENSE
--sha256 ad4672b403488876635d2b455918f74b829d478da868ffc0c621a00fc99195f5  src/3rdparty/chromium/third_party/tcmalloc/LICENSE
--sha256 81ebf38708899097aacaac9723679b3ffa17640c14cd3193c46b75197de18b2c  src/3rdparty/chromium/third_party/tcmalloc/vendor/COPYING
--sha256 bb04dd22ee55fe3c24ee2a3c82bd1efdebbd965f7c178224a2977edc2457bb2f  src/3rdparty/chromium/third_party/tlslite/LICENSE
--sha256 6dc0e068dcf3a5bc8e054205b85b7720e1d49265bbc64bf515d2cf79197df69a  src/3rdparty/chromium/third_party/typ/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/ub-uiautomator/LICENSE
--sha256 6629d6edceffa9c68f4245b817137d2265fdab1e98068893420edb6689ccce9e  src/3rdparty/chromium/third_party/usb_ids/LICENSE
--sha256 7a4a31e05391919c05a996f09fc20ffc80c69af72cb3e69ac71b70c825fbdd1d  src/3rdparty/chromium/third_party/usrsctp/LICENSE
--sha256 fa53711b25af4b9a9b8dadfea3cb38166ec4b96760c8d62b284055554537d9ef  src/3rdparty/chromium/third_party/usrsctp/usrsctplib/LICENSE.md
--sha256 650cb519e09f781bf4fbd65fa6fc64449ea0d86d62d95172acdf5da74ca0eaf6  src/3rdparty/chromium/third_party/v4l2capture/LICENSE
--sha256 5a7f623a50e384aaf6d2ced068339ddf93d0a50d3a0ecbe86f125b07804ecc78  src/3rdparty/chromium/third_party/v4l-utils/COPYING.libv4l
--sha256 778a9c936b9fa24f3842b6071e3cc5c794d3f7cc6d6fddbf356b6f2202afb6a0  src/3rdparty/chromium/third_party/wayland/LICENSE
--sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  src/3rdparty/chromium/third_party/wayland-protocols/LICENSE
--sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  src/3rdparty/chromium/third_party/wayland-protocols/src/COPYING
--sha256 6eefcb023622a463168a5c20add95fd24a38c7482622a9254a23b99b7c153061  src/3rdparty/chromium/third_party/wayland/src/COPYING
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/web-animations-js/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/web-animations-js/sources/COPYING
--sha256 d51b39e7ed0391e75e0add75d1a162fdf4a0d6b49fba7635ed0ac4e16f324773  src/3rdparty/chromium/third_party/webdriver/COPYING
--sha256 6d83e980b9b843cf6fe24cb94714d00f9b0cf69cb00d0e3b0bed018d49d6f24f  src/3rdparty/chromium/third_party/webdriver/LICENSE
--sha256 7de3660b411bdcb1c690c0e0a907ed94626792a1b5139f1cedd3d919b968ecc8  src/3rdparty/chromium/third_party/WebKit/LICENSE
--sha256 a661d10f8f194b1963a75bb4d308f17b078cc064624313a556902d89705f6876  src/3rdparty/chromium/third_party/WebKit/LICENSE_FOR_ABOUT_CREDITS
--sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-APPLE
--sha256 7555fa34bc131a75ca56d65c40cc1ea8f9515d23e353d4c15d58573a042f7805  src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2
--sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce  src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2.1
--sha256 2e97627cb278aa7556fb9e8817368302301a595b6c7582512b8d74c57b773652  src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/acorn/LICENSE
--sha256 c7bae4ff453a099c61e5906014d3644319181834a47db839696dca0a85a76378  src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm/LICENSE
--sha256 c6daa4e8737d15aa7140b4f7eb82b9d4829bd2fd27132c43e282203b9c67dfc4  src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm/LICENSE_python
--sha256 c7bae4ff453a099c61e5906014d3644319181834a47db839696dca0a85a76378  src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm_modes/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/WebKit/Source/devtools/scripts/closure/COPYING
--sha256 4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca  src/3rdparty/chromium/third_party/WebKit/Source/wtf/dtoa/COPYING
--sha256 4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca  src/3rdparty/chromium/third_party/WebKit/Source/wtf/dtoa/LICENSE
--sha256 23681c6986fb33d57957660543f6e9dcbbcf6d2ae2f9fa2dbdb5efec5aa0d95f  src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/mod_pywebsocket/COPYING
--sha256 32b824d99c7e31f7035b6a9b39eac8e8205bfc54cf8573cfe830a367a8735161  src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/LICENSE
--sha256 df336397e09e764416fc33b555703b1cdddd3a0cfea8a013ad1cad565c8be2f5  src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/LICENSE
--sha256 df336397e09e764416fc33b555703b1cdddd3a0cfea8a013ad1cad565c8be2f5  src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/wptserve/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/webpagereplay/COPYING
--sha256 ac611349a262c2ceab06cd7c4fa104b794986486d3898c4d234a0fbc49e9bf07  src/3rdparty/chromium/third_party/webpagereplay/third_party/dns/LICENSE
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/webpagereplay/third_party/ipaddr/COPYING
--sha256 b3055a036e3bc37a1b9ff2b8316723d06df3997273aa9cb79223a85a48ad6dee  src/3rdparty/chromium/third_party/webpagereplay/third_party/ipfw_win32/LICENSE
--sha256 0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  src/3rdparty/chromium/third_party/webrtc/examples/androidapp/third_party/autobanh/LICENSE
--sha256 26d2d16d48825edf1194cb3907c5c0b7d01f9c5527eb0fefb949c51f304635e9  src/3rdparty/chromium/third_party/webrtc/examples/androidapp/third_party/autobanh/LICENSE.md
--sha256 21a742dd8cceebb1d5df7c6f945c75ccf1ad4f0d4c17e404517500c1a7de86a4  src/3rdparty/chromium/third_party/webrtc/examples/objc/AppRTCDemo/third_party/SocketRocket/LICENSE
--sha256 ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482  src/3rdparty/chromium/third_party/webrtc/LICENSE
--sha256 2feb814384635271a0a43dec65955439a8b659ddf0a5adae5b5333264dc6518a  src/3rdparty/chromium/third_party/webrtc/LICENSE_THIRD_PARTY
--sha256 eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea  src/3rdparty/chromium/third_party/webtreemap/src/COPYING
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  src/3rdparty/chromium/third_party/woff2/LICENSE
--sha256 1df4adc57d45b1639d3edb2127ee9e33e54b5a4b0809e9dc83ddaff5a62d9ae1  src/3rdparty/chromium/third_party/x86inc/LICENSE
--sha256 b244f73c3d21edaf44ec253b9a7c389ec43313c417f52f8b71914b0c40d87325  src/3rdparty/chromium/third_party/xdg-utils/LICENSE
--sha256 9dc0f229412e40d7f1fc4d94de07fcc812a6f31e27718b4dae315305408160fa  src/3rdparty/chromium/third_party/yasm/source/patched-yasm/COPYING
--sha256 282644c64aa8c4f0a4a589fd38d2213e41f37b4e0e4f639e01149d09b67117db  src/3rdparty/chromium/third_party/zlib/LICENSE
--sha256 70eb89e4cb460d1b27173348c9f9fca5cf67c09d722ddaa07c5d0fcd6262a97e  src/3rdparty/chromium/tools/gyp/LICENSE
--sha256 284545e873c704952e5b1b39d457dd83a3b115a51d9f1eb5175137bd69b8fa1b  src/3rdparty/chromium/url/third_party/mozilla/LICENSE.txt
--sha256 2337a9caeb13854242af8d0022f8e57389e5eae56fa3bf7887f5f38492b57199  src/3rdparty/chromium/v8/LICENSE
--sha256 6a585a9f466654abc8fc0829d56b1bc987e3a073d31faa03bba37d33640a23cd  src/3rdparty/chromium/v8/LICENSE.strongtalk
--sha256 4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca  src/3rdparty/chromium/v8/LICENSE.v8
--sha256 cae8c00ca6e90a682c321ec11e7a5a345d0d317aa0b8f038e03ef03a18095b2f  src/3rdparty/chromium/v8/LICENSE.valgrind
--sha256 e7115e18444dae09d17f361ddc365fb1d342640fe500796209c63f7c80dfae10  src/3rdparty/chromium/v8/src/third_party/fdlibm/LICENSE
--sha256 ebf25b8ce59c9e8883acd1ca75b6fc121937ca034f666c4077d2be739d2e1622  src/3rdparty/chromium/v8/src/third_party/valgrind/LICENSE
--sha256 cfe7599e45f340a35b4635090382897ca1526bc49b5e1889047f0168d131c415  src/3rdparty/chromium/v8/src/third_party/vtune/LICENSE
--sha256 eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea  src/3rdparty/ninja/COPYING
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 0e776ecb61..a05205c7ad 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -37,7 +37,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if !BR2_ARCH_IS_64 # v8/chromium
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_LIBNSS if !BR2_PACKAGE_QT5_VERSION_5_6
-+	select BR2_PACKAGE_LIBNSS
- 	select BR2_PACKAGE_LIBVPX
- 	select BR2_PACKAGE_OPUS
- 	select BR2_PACKAGE_WEBP
-diff --git a/package/qt5/qt5webengine/chromium-lts.inc b/package/qt5/qt5webengine/chromium-lts.inc
-deleted file mode 100644
-index fbc1f9b639..0000000000
---- a/package/qt5/qt5webengine/chromium-lts.inc
-+++ /dev/null
-@@ -1,253 +0,0 @@
--# Generated with:
--# (echo "QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \\" ; \
--# 	find src/3rdparty/ -type f \
--#	     \( -iname 'license*' -o -iname 'copying*' -o -name 'APPLE_LICENSE' -o -name 'Copyright' -o -path '*/license_texts/*' -o -path '*/licenses/*' \)\
--#	     -a -not -name '*.cc' -not -name '*.py' -not -name '*.h' -not -name 'LICENSE.sha1' -not -name 'licensecheck.pl*' -not -name 'license.after' -not -name 'license.before' | \
--#	     sort | sed 's%^\(.*\)$%\t\1 \\%') > package/qt5/qt5webengine/chromium-lts.inc
--QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
--	src/3rdparty/chromium/base/third_party/dmg_fp/LICENSE \
--	src/3rdparty/chromium/base/third_party/dynamic_annotations/LICENSE \
--	src/3rdparty/chromium/base/third_party/icu/LICENSE \
--	src/3rdparty/chromium/base/third_party/libevent/LICENSE \
--	src/3rdparty/chromium/base/third_party/nspr/LICENSE \
--	src/3rdparty/chromium/base/third_party/superfasthash/LICENSE \
--	src/3rdparty/chromium/base/third_party/symbolize/LICENSE \
--	src/3rdparty/chromium/base/third_party/valgrind/LICENSE \
--	src/3rdparty/chromium/base/third_party/xdg_mime/LICENSE \
--	src/3rdparty/chromium/base/third_party/xdg_user_dirs/LICENSE \
--	src/3rdparty/chromium/buildtools/LICENSE \
--	src/3rdparty/chromium/chrome/third_party/chromevox/LICENSE \
--	src/3rdparty/chromium/chrome/third_party/chromevox/third_party/closure-library/LICENSE \
--	src/3rdparty/chromium/crypto/third_party/nss/LICENSE \
--	src/3rdparty/chromium/LICENSE \
--	src/3rdparty/chromium/LICENSE.chromium_os \
--	src/3rdparty/chromium/mojo/public/LICENSE \
--	src/3rdparty/chromium/net/third_party/mozilla_security_manager/LICENSE \
--	src/3rdparty/chromium/net/third_party/nss/LICENSE \
--	src/3rdparty/chromium/ppapi/LICENSE \
--	src/3rdparty/chromium/sdch/open-vcdiff/COPYING \
--	src/3rdparty/chromium/testing/gmock/LICENSE \
--	src/3rdparty/chromium/testing/gmock/scripts/generator/LICENSE \
--	src/3rdparty/chromium/testing/gtest/LICENSE \
--	src/3rdparty/chromium/third_party/angle/LICENSE \
--	src/3rdparty/chromium/third_party/angle/src/third_party/compiler/LICENSE \
--	src/3rdparty/chromium/third_party/angle/src/third_party/murmurhash/LICENSE \
--	src/3rdparty/chromium/third_party/apple_apsl/LICENSE \
--	src/3rdparty/chromium/third_party/appurify-python/LICENSE \
--	src/3rdparty/chromium/third_party/bintrees/LICENSE.txt \
--	src/3rdparty/chromium/third_party/blanketjs/LICENSE \
--	src/3rdparty/chromium/third_party/boringssl/src/LICENSE \
--	src/3rdparty/chromium/third_party/brotli/LICENSE \
--	src/3rdparty/chromium/third_party/bspatch/LICENSE \
--	src/3rdparty/chromium/third_party/cardboard-java/LICENSE \
--	src/3rdparty/chromium/third_party/chaijs/LICENSE \
--	src/3rdparty/chromium/third_party/checkstyle/LICENSE \
--	src/3rdparty/chromium/third_party/checkstyle/LICENSE.apache20 \
--	src/3rdparty/chromium/third_party/class-dump/LICENSE \
--	src/3rdparty/chromium/third_party/cld/LICENSE \
--	src/3rdparty/chromium/third_party/closure_compiler/compiler/COPYING \
--	src/3rdparty/chromium/third_party/closure_compiler/LICENSE \
--	src/3rdparty/chromium/third_party/closure_linter/LICENSE \
--	src/3rdparty/chromium/third_party/crashpad/crashpad/LICENSE \
--	src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/apple_cctools/cctools/APPLE_LICENSE \
--	src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/apple_cf/APPLE_LICENSE \
--	src/3rdparty/chromium/third_party/crashpad/crashpad/third_party/getopt/LICENSE \
--	src/3rdparty/chromium/third_party/cros_system_api/LICENSE \
--	src/3rdparty/chromium/third_party/custom_tabs_client/LICENSE \
--	src/3rdparty/chromium/third_party/d3/src/LICENSE \
--	src/3rdparty/chromium/third_party/decklink/LICENSE \
--	src/3rdparty/chromium/third_party/devscripts/COPYING \
--	src/3rdparty/chromium/third_party/dom_distiller_js/LICENSE \
--	src/3rdparty/chromium/third_party/drmemory/LICENSE \
--	src/3rdparty/chromium/third_party/errorprone/LICENSE \
--	src/3rdparty/chromium/third_party/expat/files/COPYING \
--	src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/full_lgpl.txt \
--	src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/jpeg.txt \
--	src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/mips.txt \
--	src/3rdparty/chromium/third_party/ffmpeg/chromium/scripts/license_texts/oggparse_ahlberg_rullgayrd_2005.txt \
--	src/3rdparty/chromium/third_party/ffmpeg/COPYING.GPLv2 \
--	src/3rdparty/chromium/third_party/ffmpeg/COPYING.GPLv3 \
--	src/3rdparty/chromium/third_party/ffmpeg/COPYING.LGPLv2.1 \
--	src/3rdparty/chromium/third_party/ffmpeg/COPYING.LGPLv3 \
--	src/3rdparty/chromium/third_party/ffmpeg/LICENSE.md \
--	src/3rdparty/chromium/third_party/fips181/COPYING \
--	src/3rdparty/chromium/third_party/flac/COPYING.FDL \
--	src/3rdparty/chromium/third_party/flac/COPYING.GPL \
--	src/3rdparty/chromium/third_party/flac/COPYING.LGPL \
--	src/3rdparty/chromium/third_party/flac/COPYING.Xiph \
--	src/3rdparty/chromium/third_party/flot/LICENSE.txt \
--	src/3rdparty/chromium/third_party/fontconfig/LICENSE \
--	src/3rdparty/chromium/third_party/fontconfig/src/COPYING \
--	src/3rdparty/chromium/third_party/freetype2/src/docs/LICENSE.TXT \
--	src/3rdparty/chromium/third_party/gardiner_mod/LICENSE \
--	src/3rdparty/chromium/third_party/gif_player/LICENSE \
--	src/3rdparty/chromium/third_party/harfbuzz-ng/COPYING \
--	src/3rdparty/chromium/third_party/hunspell/COPYING \
--	src/3rdparty/chromium/third_party/hunspell/COPYING.LGPL \
--	src/3rdparty/chromium/third_party/hunspell/COPYING.MPL \
--	src/3rdparty/chromium/third_party/hunspell/src/hunspell/license.hunspell \
--	src/3rdparty/chromium/third_party/hunspell/src/hunspell/license.myspell \
--	src/3rdparty/chromium/third_party/hwcplus/LICENSE \
--	src/3rdparty/chromium/third_party/iaccessible2/LICENSE \
--	src/3rdparty/chromium/third_party/iccjpeg/LICENSE \
--	src/3rdparty/chromium/third_party/icu/LICENSE \
--	src/3rdparty/chromium/third_party/icu/license.html \
--	src/3rdparty/chromium/third_party/ijar/LICENSE \
--	src/3rdparty/chromium/third_party/isimpledom/LICENSE \
--	src/3rdparty/chromium/third_party/jinja2/LICENSE \
--	src/3rdparty/chromium/third_party/jmake/LICENSE \
--	src/3rdparty/chromium/third_party/jsoncpp/LICENSE \
--	src/3rdparty/chromium/third_party/jstemplate/COPYING \
--	src/3rdparty/chromium/third_party/khronos/LICENSE \
--	src/3rdparty/chromium/third_party/lcov/COPYING \
--	src/3rdparty/chromium/third_party/leveldatabase/src/LICENSE \
--	src/3rdparty/chromium/third_party/libexif/sources/COPYING \
--	src/3rdparty/chromium/third_party/libjingle/source/talk/COPYING \
--	src/3rdparty/chromium/third_party/libjingle/source/talk/LICENSE_THIRD_PARTY \
--	src/3rdparty/chromium/third_party/libjpeg/LICENSE \
--	src/3rdparty/chromium/third_party/libjpeg_turbo/LICENSE.txt \
--	src/3rdparty/chromium/third_party/libpng/LICENSE \
--	src/3rdparty/chromium/third_party/libsecret/LICENSE \
--	src/3rdparty/chromium/third_party/libsrtp/srtp/LICENSE \
--	src/3rdparty/chromium/third_party/libudev/LICENSE \
--	src/3rdparty/chromium/third_party/libusb/src/COPYING \
--	src/3rdparty/chromium/third_party/libva/COPYING \
--	src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/LICENSE \
--	src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/third_party/googletest/src/LICENSE \
--	src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/third_party/libwebm/LICENSE.TXT \
--	src/3rdparty/chromium/third_party/libvpx_new/source/libvpx/third_party/x86inc/LICENSE \
--	src/3rdparty/chromium/third_party/libwebm/source/LICENSE.TXT \
--	src/3rdparty/chromium/third_party/libwebp/LICENSE \
--	src/3rdparty/chromium/third_party/libxml/src/Copyright \
--	src/3rdparty/chromium/third_party/libXNVCtrl/LICENSE \
--	src/3rdparty/chromium/third_party/libxslt/Copyright \
--	src/3rdparty/chromium/third_party/libyuv/LICENSE \
--	src/3rdparty/chromium/third_party/libyuv/LICENSE_THIRD_PARTY \
--	src/3rdparty/chromium/third_party/libyuv/third_party/gflags/LICENSE \
--	src/3rdparty/chromium/third_party/lzma_sdk/LICENSE \
--	src/3rdparty/chromium/third_party/mach_override/LICENSE \
--	src/3rdparty/chromium/third_party/markupsafe/LICENSE \
--	src/3rdparty/chromium/third_party/mesa/LICENSE \
--	src/3rdparty/chromium/third_party/mesa/src/docs/COPYING \
--	src/3rdparty/chromium/third_party/mesa/src/docs/license.html \
--	src/3rdparty/chromium/third_party/mesa/src/src/gallium/drivers/radeon/LICENSE.TXT \
--	src/3rdparty/chromium/third_party/minigbm/LICENSE \
--	src/3rdparty/chromium/third_party/mocha/LICENSE \
--	src/3rdparty/chromium/third_party/mockito/LICENSE \
--	src/3rdparty/chromium/third_party/modp_b64/LICENSE \
--	src/3rdparty/chromium/third_party/mojo/LICENSE \
--	src/3rdparty/chromium/third_party/molokocacao/LICENSE \
--	src/3rdparty/chromium/third_party/motemplate/LICENSE \
--	src/3rdparty/chromium/third_party/mozilla/LICENSE \
--	src/3rdparty/chromium/third_party/mt19937ar/LICENSE \
--	src/3rdparty/chromium/third_party/npapi/LICENSE \
--	src/3rdparty/chromium/third_party/nss/nspr/LICENSE \
--	src/3rdparty/chromium/third_party/nss/nss/COPYING \
--	src/3rdparty/chromium/third_party/ocmock/License.txt \
--	src/3rdparty/chromium/third_party/openh264/src/LICENSE \
--	src/3rdparty/chromium/third_party/openmax_dl/LICENSE \
--	src/3rdparty/chromium/third_party/opus/src/COPYING \
--	src/3rdparty/chromium/third_party/opus/src/LICENSE_PLEASE_READ.txt \
--	src/3rdparty/chromium/third_party/ots/LICENSE \
--	src/3rdparty/chromium/third_party/pexpect/LICENSE \
--	src/3rdparty/chromium/third_party/ply/LICENSE \
--	src/3rdparty/chromium/third_party/ply/license.patch \
--	src/3rdparty/chromium/third_party/polymer/v1_0/components-chromium/polymer/LICENSE.txt \
--	src/3rdparty/chromium/third_party/proguard/LICENSE \
--	src/3rdparty/chromium/third_party/protobuf/COPYING.txt \
--	src/3rdparty/chromium/third_party/pycoverage/LICENSE \
--	src/3rdparty/chromium/third_party/pyelftools/elftools/construct/LICENSE \
--	src/3rdparty/chromium/third_party/pyelftools/LICENSE \
--	src/3rdparty/chromium/third_party/pyftpdlib/src/LICENSE \
--	src/3rdparty/chromium/third_party/pymock/LICENSE.txt \
--	src/3rdparty/chromium/third_party/python_gflags/COPYING \
--	src/3rdparty/chromium/third_party/Python-Markdown/LICENSE.md \
--	src/3rdparty/chromium/third_party/py_trace_event/src/LICENSE \
--	src/3rdparty/chromium/third_party/pywebsocket/src/LICENSE \
--	src/3rdparty/chromium/third_party/qcms/src/COPYING \
--	src/3rdparty/chromium/third_party/qunit/LICENSE \
--	src/3rdparty/chromium/third_party/re2/LICENSE \
--	src/3rdparty/chromium/third_party/re2/src/LICENSE \
--	src/3rdparty/chromium/third_party/requests/LICENSE \
--	src/3rdparty/chromium/third_party/robolectric/LICENSE \
--	src/3rdparty/chromium/third_party/robolectric/licenses/extreme.indiana.edu.license.txt \
--	src/3rdparty/chromium/third_party/robolectric/licenses/javolution.license.txt \
--	src/3rdparty/chromium/third_party/robolectric/licenses/pivotal.labs.license.txt \
--	src/3rdparty/chromium/third_party/safe_browsing/testing/LICENSE \
--	src/3rdparty/chromium/third_party/sfntly/COPYING.txt \
--	src/3rdparty/chromium/third_party/sfntly/src/cpp/COPYING.txt \
--	src/3rdparty/chromium/third_party/sfntly/src/java/COPYING \
--	src/3rdparty/chromium/third_party/simplejson/LICENSE.txt \
--	src/3rdparty/chromium/third_party/sinonjs/LICENSE \
--	src/3rdparty/chromium/third_party/skia/LICENSE \
--	src/3rdparty/chromium/third_party/skia/platform_tools/android/third_party/ashmem/LICENSE \
--	src/3rdparty/chromium/third_party/skia/third_party/etc1/LICENSE \
--	src/3rdparty/chromium/third_party/skia/third_party/libpng/LICENSE \
--	src/3rdparty/chromium/third_party/smhasher/LICENSE \
--	src/3rdparty/chromium/third_party/snappy/src/COPYING \
--	src/3rdparty/chromium/third_party/speech-dispatcher/COPYING \
--	src/3rdparty/chromium/third_party/sqlite/LICENSE \
--	src/3rdparty/chromium/third_party/sqlite/sqlite-src-3080704/autoconf/tea/license.terms \
--	src/3rdparty/chromium/third_party/sqlite/src/autoconf/tea/license.terms \
--	src/3rdparty/chromium/third_party/sudden_motion_sensor/LICENSE \
--	src/3rdparty/chromium/third_party/swiftshader/LICENSE \
--	src/3rdparty/chromium/third_party/talloc/LICENSE \
--	src/3rdparty/chromium/third_party/tcmalloc/LICENSE \
--	src/3rdparty/chromium/third_party/tcmalloc/vendor/COPYING \
--	src/3rdparty/chromium/third_party/tlslite/LICENSE \
--	src/3rdparty/chromium/third_party/typ/LICENSE \
--	src/3rdparty/chromium/third_party/ub-uiautomator/LICENSE \
--	src/3rdparty/chromium/third_party/usb_ids/LICENSE \
--	src/3rdparty/chromium/third_party/usrsctp/LICENSE \
--	src/3rdparty/chromium/third_party/usrsctp/usrsctplib/LICENSE.md \
--	src/3rdparty/chromium/third_party/v4l2capture/LICENSE \
--	src/3rdparty/chromium/third_party/v4l-utils/COPYING.libv4l \
--	src/3rdparty/chromium/third_party/wayland/LICENSE \
--	src/3rdparty/chromium/third_party/wayland-protocols/LICENSE \
--	src/3rdparty/chromium/third_party/wayland-protocols/src/COPYING \
--	src/3rdparty/chromium/third_party/wayland/src/COPYING \
--	src/3rdparty/chromium/third_party/web-animations-js/LICENSE \
--	src/3rdparty/chromium/third_party/web-animations-js/sources/COPYING \
--	src/3rdparty/chromium/third_party/webdriver/COPYING \
--	src/3rdparty/chromium/third_party/webdriver/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/LICENSE_FOR_ABOUT_CREDITS \
--	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-APPLE \
--	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2 \
--	src/3rdparty/chromium/third_party/WebKit/Source/core/LICENSE-LGPL-2.1 \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/acorn/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm/LICENSE_python \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/front_end/cm_modes/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Source/devtools/scripts/closure/COPYING \
--	src/3rdparty/chromium/third_party/WebKit/Source/wtf/dtoa/COPYING \
--	src/3rdparty/chromium/third_party/WebKit/Source/wtf/dtoa/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/mod_pywebsocket/COPYING \
--	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/LICENSE \
--	src/3rdparty/chromium/third_party/WebKit/Tools/Scripts/webkitpy/thirdparty/wpt/wpt/tools/wptserve/LICENSE \
--	src/3rdparty/chromium/third_party/webpagereplay/COPYING \
--	src/3rdparty/chromium/third_party/webpagereplay/third_party/dns/LICENSE \
--	src/3rdparty/chromium/third_party/webpagereplay/third_party/ipaddr/COPYING \
--	src/3rdparty/chromium/third_party/webpagereplay/third_party/ipfw_win32/LICENSE \
--	src/3rdparty/chromium/third_party/webrtc/examples/androidapp/third_party/autobanh/LICENSE \
--	src/3rdparty/chromium/third_party/webrtc/examples/androidapp/third_party/autobanh/LICENSE.md \
--	src/3rdparty/chromium/third_party/webrtc/examples/objc/AppRTCDemo/third_party/SocketRocket/LICENSE \
--	src/3rdparty/chromium/third_party/webrtc/LICENSE \
--	src/3rdparty/chromium/third_party/webrtc/LICENSE_THIRD_PARTY \
--	src/3rdparty/chromium/third_party/webtreemap/src/COPYING \
--	src/3rdparty/chromium/third_party/woff2/LICENSE \
--	src/3rdparty/chromium/third_party/x86inc/LICENSE \
--	src/3rdparty/chromium/third_party/xdg-utils/LICENSE \
--	src/3rdparty/chromium/third_party/yasm/source/patched-yasm/COPYING \
--	src/3rdparty/chromium/third_party/zlib/LICENSE \
--	src/3rdparty/chromium/tools/gyp/LICENSE \
--	src/3rdparty/chromium/url/third_party/mozilla/LICENSE.txt \
--	src/3rdparty/chromium/v8/LICENSE \
--	src/3rdparty/chromium/v8/LICENSE.strongtalk \
--	src/3rdparty/chromium/v8/LICENSE.v8 \
--	src/3rdparty/chromium/v8/LICENSE.valgrind \
--	src/3rdparty/chromium/v8/src/third_party/fdlibm/LICENSE \
--	src/3rdparty/chromium/v8/src/third_party/valgrind/LICENSE \
--	src/3rdparty/chromium/v8/src/third_party/vtune/LICENSE \
--	src/3rdparty/ninja/COPYING
-diff --git a/package/qt5/qt5webengine/5.12.7/qt5webengine.hash b/package/qt5/qt5webengine/qt5webengine.hash
-similarity index 100%
-rename from package/qt5/qt5webengine/5.12.7/qt5webengine.hash
-rename to package/qt5/qt5webengine/qt5webengine.hash
-diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-index 1d5ee8d819..b03f39161a 100644
---- a/package/qt5/qt5webengine/qt5webengine.mk
-+++ b/package/qt5/qt5webengine/qt5webengine.mk
-@@ -12,11 +12,8 @@ QT5WEBENGINE_DEPENDENCIES = ffmpeg libglib2 libvpx opus webp qt5base \
- 	host-pkgconf host-python
- QT5WEBENGINE_INSTALL_STAGING = YES
+ # hash from: https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtwebkit-opensource-src-5.9.1.tar.xz.mirrorlist
+ sha256  28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf  qtwebkit-opensource-src-5.9.1.tar.xz
  
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+index 25c5495482..c6441b5bdd 100644
+--- a/package/qt5/qt5webkit/qt5webkit.mk
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -4,15 +4,8 @@
+ #
+ ################################################################################
+ 
+-# no 5.9.2 package available, fall back to 5.9.1 version
 -ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- include package/qt5/qt5webengine/chromium-latest.inc
+ QT5WEBKIT_VERSION = 5.9.1
+ QT5WEBKIT_SITE = https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules
 -else
--include package/qt5/qt5webengine/chromium-lts.inc
+-QT5WEBKIT_VERSION = $(QT5_VERSION)
+-QT5WEBKIT_SITE = https://download.qt.io/community_releases/5.6/$(QT5_VERSION)
 -endif
-+
- QT5WEBENGINE_LICENSE = GPL-2.0 or LGPL-3.0 or GPL-3.0 or GPL-3.0 with exception
- QT5WEBENGINE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT \
- 	LICENSE.GPLv3 LICENSE.LGPL3 $(QT5WEBENGINE_CHROMIUM_LICENSE_FILES)
-@@ -26,9 +23,7 @@ QT5WEBENGINE_DEPENDENCIES += xlib_libXScrnSaver xlib_libXcomposite \
- 	xlib_libXcursor xlib_libXi xlib_libXrandr xlib_libXtst
- endif
- 
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
--endif
- 
- QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_system_ffmpeg
- 
-@@ -54,14 +49,12 @@ QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_PYTHON2_SYMLINK
- 
- QT5WEBENGINE_ENV += NINJAFLAGS="-j$(PARALLEL_JOBS)"
- 
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- define QT5WEBENGINE_CREATE_HOST_PKG_CONFIG
- 	sed s%@HOST_DIR@%$(HOST_DIR)%g $(QT5WEBENGINE_PKGDIR)/host-pkg-config.in > $(@D)/host-bin/host-pkg-config
- 	chmod +x $(@D)/host-bin/host-pkg-config
- endef
- QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_CREATE_HOST_PKG_CONFIG
- QT5WEBENGINE_ENV += GN_PKG_CONFIG_HOST=$(@D)/host-bin/host-pkg-config
--endif
- 
- define QT5WEBENGINE_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV) $(HOST_DIR)/bin/qmake $(QT5WEBENGINE_QMAKEFLAGS))
+-
+ QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
+ QT5WEBKIT_DEPENDENCIES = \
+ 	host-bison host-flex host-gperf host-python host-ruby \
