@@ -1,35 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 23:12:10 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: add Michael Fischer for
- gnuplot and sdl2
-Message-ID: <20200227220618.559598EDD7@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 27 Feb 2020 23:19:21 +0100
+Subject: [Buildroot] [PATCH 1/2] package/binutils: disable binutils >=
+ 2.33.1 for configurations using BR2_BINFMT_FLAT
+Message-ID: <20200227221922.8080-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eae8ff9b17e35402cb8d09e4b8ed8be45806bcf0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The patch added by [1] to fix a segfault with elf2flt when binutils
+2.33.1 is used on ARM, introduce a regression with previous binutils
+version on m68k and ARM.
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Theses issues has been reported upstreme [2] [3].
+
+For now, disable binutils >= 2.33.1 for configurations using
+BR2_BINFMT_FLAT.
+
+[1] 2b064f86b6a0fd683f307b51f12d9d919fcaa386
+[2] https://github.com/uclinux-dev/elf2flt/pull/16
+[3] https://github.com/uclinux-dev/elf2flt/issues/12
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- DEVELOPERS | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/binutils/Config.in.host | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7d3d1ca11a..dd44331b85 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1756,6 +1756,10 @@ F:	board/arcturus/
- F:	configs/arcturus_ucp1020_defconfig
- F:	configs/arcturus_ucls1012a_defconfig
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 06902b4ba6..9beabe357c 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -24,6 +24,9 @@ config BR2_BINUTILS_VERSION_2_32_X
+ config BR2_BINUTILS_VERSION_2_33_X
+ 	bool "binutils 2.33.1"
+ 	depends on !BR2_csky
++	# https://github.com/uclinux-dev/elf2flt/pull/16
++	# https://github.com/uclinux-dev/elf2flt/issues/12
++	depends on !BR2_BINFMT_FLAT
  
-+N:	Michael Fischer <mf@go-sys.de>
-+F:	package/gnuplot/
-+F:	package/sdl2/
-+
- N:	Michael Rommel <rommel@layer-7.net>
- F:	package/knock/
- F:	package/python-crc16/
+ config BR2_BINUTILS_VERSION_ARC
+ 	bool "binutils arc (2.31)"
+-- 
+2.24.1
