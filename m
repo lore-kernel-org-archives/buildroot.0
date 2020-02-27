@@ -1,88 +1,132 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 23:51:13 +0100
-Subject: [Buildroot] [git commit] package/qt5connectivity: drop qt 5.6
- support
-Message-ID: <20200309140907.3DC3D7FB4C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 27 Feb 2020 08:55:41 +0100
+Subject: [Buildroot] [git commit] package/musl: bump to version 1.2.0
+Message-ID: <20200309140906.33201821F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29469b645288580aafc3fc35cdf90cae6f29a818
+commit: https://git.buildroot.net/buildroot/commit/?id=c3012c3cc28a6686bb47f2489a218b90e557f0b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt5connectivity/5.12.7/qt5connectivity.hash |  9 ---------
- package/qt5/qt5connectivity/5.6.3/qt5connectivity.hash  | 10 ----------
- package/qt5/qt5connectivity/qt5connectivity.hash        | 11 +++++++++--
- package/qt5/qt5connectivity/qt5connectivity.mk          |  6 +-----
- 4 files changed, 10 insertions(+), 26 deletions(-)
+Also:
+ * Drop patch 0003 which is included in the new version.
+ * Update hash value of the COPYRIGHT file as the copyright year was
+   updated.
 
-diff --git a/package/qt5/qt5connectivity/5.12.7/qt5connectivity.hash b/package/qt5/qt5connectivity/5.12.7/qt5connectivity.hash
+From the release history [1]:
+
+This release moves all 32-bit archs to 64-bit time_t, enabling them
+to represent times beyond January of 2038.
+
+There are no new requirements on kernel version, and this is not a
+hard ABI break, but the type changes do impact compatibility between
+code built against previous versions of musl and code built against
+musl 1.2. Users upgrading 32-bit systems should read the detailed
+time64 release notes [2]. 64-bit systems are not affected.
+
+In addition, character data has been updated to align with Unicode
+12.1.0, along with fixes for some errors in the data and a replacement
+for inefficient and unmaintainable case-mapping code. Correctness of
+results has been improved in the math library, particularly some complex
+functions and 32-bit x86 asm. Various arch-specific bugs have also been
+fixed.
+
+[1] https://musl.libc.org/releases.html
+[2] https://musl.libc.org/time64.html
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...cv64-register-index-constants-to-signal.h.patch | 54 ----------------------
+ package/musl/musl.hash                             |  6 +--
+ package/musl/musl.mk                               |  2 +-
+ 3 files changed, 4 insertions(+), 58 deletions(-)
+
+diff --git a/package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch b/package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch
 deleted file mode 100644
-index 9af3a57c12..0000000000
---- a/package/qt5/qt5connectivity/5.12.7/qt5connectivity.hash
+index 8221c0ea30..0000000000
+--- a/package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch
 +++ /dev/null
-@@ -1,9 +0,0 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtconnectivity-everywhere-src-5.12.7.tar.xz.sha256
--sha256 647148b9b1a0d3e54f788b66797b81bb87434faf6fb12ac481f9165eda0d071a qtconnectivity-everywhere-src-5.12.7.tar.xz
+@@ -1,54 +0,0 @@
+-From 329e79299daaa994b8e75941331a1093051ea5d9 Mon Sep 17 00:00:00 2001
+-From: Rich Felker <dalias@aerifal.cx>
+-Date: Tue, 4 Feb 2020 09:29:13 -0500
+-Subject: move riscv64 register index constants to signal.h
 -
--# Hashes for license files:
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
--sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
--sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
--sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
-diff --git a/package/qt5/qt5connectivity/5.6.3/qt5connectivity.hash b/package/qt5/qt5connectivity/5.6.3/qt5connectivity.hash
-deleted file mode 100644
-index c1a03c5e00..0000000000
---- a/package/qt5/qt5connectivity/5.6.3/qt5connectivity.hash
-+++ /dev/null
-@@ -1,10 +0,0 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtconnectivity-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 fa406e3d63fa4a2acc8ecae6d110f20c766f19a21c7061a12f3c167deb07ccde qtconnectivity-opensource-src-5.6.3.tar.xz
+-under _GNU_SOURCE for namespace cleanliness, analogous to other archs.
+-the original placement in sys/reg.h seems not to have been motivated;
+-such a header isn't even present on other implementations.
 -
--# Hashes for license files:
--sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
--sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
--sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
--sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
--sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
--sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
-diff --git a/package/qt5/qt5connectivity/qt5connectivity.hash b/package/qt5/qt5connectivity/qt5connectivity.hash
-index 5316f03b10..9af3a57c12 100644
---- a/package/qt5/qt5connectivity/qt5connectivity.hash
-+++ b/package/qt5/qt5connectivity/qt5connectivity.hash
-@@ -1,2 +1,9 @@
--# This hash file is not used; instead, update the
--# hash files in the per-version sub-directories.
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtconnectivity-everywhere-src-5.12.7.tar.xz.sha256
-+sha256 647148b9b1a0d3e54f788b66797b81bb87434faf6fb12ac481f9165eda0d071a qtconnectivity-everywhere-src-5.12.7.tar.xz
-+
-+# Hashes for license files:
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
-+sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
-+sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
-+sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
-diff --git a/package/qt5/qt5connectivity/qt5connectivity.mk b/package/qt5/qt5connectivity/qt5connectivity.mk
-index 0ade9876de..eb9f0141c3 100644
---- a/package/qt5/qt5connectivity/qt5connectivity.mk
-+++ b/package/qt5/qt5connectivity/qt5connectivity.mk
-@@ -10,13 +10,9 @@ QT5CONNECTIVITY_SOURCE = qtconnectivity-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5CONNEC
- QT5CONNECTIVITY_DEPENDENCIES = qt5base
- QT5CONNECTIVITY_INSTALL_STAGING = YES
+-Downloaded from upstream commit
+-https://git.musl-libc.org/cgit/musl/commit/?id=329e79299daaa994b8e75941331a1093051ea5d9
+-
+-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+----
+- arch/riscv64/bits/reg.h    | 6 ------
+- arch/riscv64/bits/signal.h | 9 +++++++++
+- 2 files changed, 9 insertions(+), 6 deletions(-)
+-
+-diff --git a/arch/riscv64/bits/reg.h b/arch/riscv64/bits/reg.h
+-index c800788c..2633f39d 100644
+---- a/arch/riscv64/bits/reg.h
+-+++ b/arch/riscv64/bits/reg.h
+-@@ -1,8 +1,2 @@
+- #undef __WORDSIZE
+- #define __WORDSIZE 64
+--#define REG_PC 0
+--#define REG_RA 1
+--#define REG_SP 2
+--#define REG_TP 4
+--#define REG_S0 8
+--#define REG_A0 10
+-diff --git a/arch/riscv64/bits/signal.h b/arch/riscv64/bits/signal.h
+-index 2ff4be30..b006334f 100644
+---- a/arch/riscv64/bits/signal.h
+-+++ b/arch/riscv64/bits/signal.h
+-@@ -35,6 +35,15 @@ typedef struct mcontext_t {
+- 	union __riscv_mc_fp_state __fpregs;
+- } mcontext_t;
+- 
+-+#if defined(_GNU_SOURCE)
+-+#define REG_PC 0
+-+#define REG_RA 1
+-+#define REG_SP 2
+-+#define REG_TP 4
+-+#define REG_S0 8
+-+#define REG_A0 10
+-+#endif
+-+
+- #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
+- typedef unsigned long greg_t;
+- typedef unsigned long gregset_t[32];
+--- 
+-cgit v1.2.1
+-
+diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+index f0450897c0..9d8b61e165 100644
+--- a/package/musl/musl.hash
++++ b/package/musl/musl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature from
+-# http://www.musl-libc.org/releases/musl-1.1.24.tar.gz.asc
+-sha256  1370c9a812b2cf2a7d92802510cca0058cc37e66a7bedd70051f0a34015022a3  musl-1.1.24.tar.gz
+-sha256  3520d478bccbdf68d9dc0c03984efb0fa4b99868ab2599f5b5f72f3fb3b07a49  COPYRIGHT
++# https://musl.libc.org/releases/musl-1.2.0.tar.gz.asc
++sha256  c6de7b191139142d3f9a7b5b702c9cae1b5ee6e7f57e582da9328629408fd4e8  musl-1.2.0.tar.gz
++sha256  afe1df384787fce3577f3356b8b0d417381483f7c704eacb63f8050349fac77a  COPYRIGHT
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index df68c5f51b..9482c0b246 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5CONNECTIVITY_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
- QT5CONNECTIVITY_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
--else
--QT5CONNECTIVITY_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
--QT5CONNECTIVITY_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
--endif
-+
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- QT5CONNECTIVITY_LICENSE += , BSD-3-Clause (examples)
- endif
+-MUSL_VERSION = 1.1.24
++MUSL_VERSION = 1.2.0
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
