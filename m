@@ -1,96 +1,99 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Feb 2020 19:01:59 +0100
-Subject: [Buildroot] [git commit] package/libsecret: bump to version 0.20.1
-Message-ID: <20200309140905.3965581298@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 27 Feb 2020 21:12:32 +0100
+Subject: [Buildroot] [git commit] package/udev-gentoo-scripts: new package
+Message-ID: <20200309140906.E89F18158C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0de8a34029d23c59a493dcac58e69ebaceae50d
+commit: https://git.buildroot.net/buildroot/commit/?id=19c5075e0c4716d0138d020dd36985201e6234ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop patch (already in version)
-- Update indentation of hash file (two spaces)
+Gentoo scripts to initialize udev via openrc, to be used by eudev.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+[yann.morin.1998 at free.fr: fix commit title]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...t.pc-add-Libs.private-field-for-libgcrypt.patch | 38 ----------------------
- package/libsecret/libsecret.hash                   |  6 ++--
- package/libsecret/libsecret.mk                     |  4 +--
- 3 files changed, 5 insertions(+), 43 deletions(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/udev-gentoo-scripts/Config.in              |  6 ++++++
+ .../udev-gentoo-scripts/udev-gentoo-scripts.hash   |  3 +++
+ package/udev-gentoo-scripts/udev-gentoo-scripts.mk | 22 ++++++++++++++++++++++
+ 5 files changed, 33 insertions(+)
 
-diff --git a/package/libsecret/0001-libsecret.pc-add-Libs.private-field-for-libgcrypt.patch b/package/libsecret/0001-libsecret.pc-add-Libs.private-field-for-libgcrypt.patch
-deleted file mode 100644
-index 62bc84c87e..0000000000
---- a/package/libsecret/0001-libsecret.pc-add-Libs.private-field-for-libgcrypt.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 754897490d9478025d174c2b1c1849305f728324 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Mon, 28 Dec 2015 12:13:07 +0100
--Subject: [PATCH] libsecret.pc: add Libs.private field for libgcrypt
--
--When libgcrypt is available, libsecret links with it. When dynamic
--linking is used, there is no problem: libsecret.so has a NEEDED
--pointing to libgcrypt, so linking an application with -lsecret works
--fine. However, when doing static linking, you must specify the entire
--chain of libraries, otherwise you get unresolved symbols errors, such
--as:
--
--host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libsecret-1.a(libsecret_1_la-secret-session.o): In function `request_open_session_aes':
--build/libsecret-0.18.3/libsecret/secret-session.c:99: undefined reference to `gcry_mpi_release'
--build/libsecret-0.18.3/libsecret/secret-session.c:101: undefined reference to `gcry_mpi_aprint'
--build/libsecret-0.18.3/libsecret/secret-session.c:107: undefined reference to `gcry_free'
--
--In order to solve this, we simply need to indicate in the Libs.private
--field of the .pc file that we depend on libgcrypt.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- libsecret/libsecret.pc.in | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/libsecret/libsecret.pc.in b/libsecret/libsecret.pc.in
--index 0c342ef..d99cf44 100644
----- a/libsecret/libsecret.pc.in
--+++ b/libsecret/libsecret.pc.in
--@@ -11,4 +11,5 @@ Description: GObject bindings for Secret Service API
-- Version: @VERSION@
-- Requires: glib-2.0 gobject-2.0 gio-2.0
-- Libs: -L${libdir} -lsecret- at SECRET_MAJOR@
--+Libs.private: @LIBGCRYPT_LIBS@
-- Cflags: -I${includedir}/libsecret- at SECRET_MAJOR@
---- 
--2.6.4
--
-diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
-index 00fdfd06f6..3a256fd700 100644
---- a/package/libsecret/libsecret.hash
-+++ b/package/libsecret/libsecret.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.8.sha256sum
--sha256	3bfa889d260e0dbabcf5b9967f2aae12edcd2ddc9adc365de7a5cc840c311d15	libsecret-0.18.8.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.20/libsecret-0.20.1.sha256sum
-+sha256  57f73e94ec6263a17a077fb809cf8cf424637a897a7f15b4eec42ce4aef52447  libsecret-0.20.1.tar.xz
- 
- # Hash for license file:
--sha256	a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b	COPYING
-+sha256  a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b  COPYING
-diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
-index c699e16d99..b48d2e7086 100644
---- a/package/libsecret/libsecret.mk
-+++ b/package/libsecret/libsecret.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBSECRET_VERSION_MAJOR = 0.18
--LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).8
-+LIBSECRET_VERSION_MAJOR = 0.20
-+LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).1
- LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
- LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
- LIBSECRET_INSTALL_STAGING = YES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8f6a52b4fb..dbc14f114a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -505,6 +505,7 @@ F:	package/skeleton-init-systemd/
+ F:	package/skeleton-init-sysv/
+ F:	package/skeleton/
+ F:	package/sysvinit/
++F:	package/udev-gentoo-scripts/
+ F:	package/util-linux/
+ F:	package/tpm2-abrmd/
+ F:	package/tpm2-tools/
+diff --git a/package/Config.in b/package/Config.in
+index 9d83d3948d..5be5f3726b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -556,6 +556,7 @@ endmenu
+ 	source "package/ubus/Config.in"
+ 	source "package/uccp420wlan/Config.in"
+ 	source "package/udev/Config.in"
++	source "package/udev-gentoo-scripts/Config.in"
+ 	source "package/udisks/Config.in"
+ 	source "package/uhubctl/Config.in"
+ 	source "package/umtprd/Config.in"
+diff --git a/package/udev-gentoo-scripts/Config.in b/package/udev-gentoo-scripts/Config.in
+new file mode 100644
+index 0000000000..9d6944354d
+--- /dev/null
++++ b/package/udev-gentoo-scripts/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_UDEV_GENTOO_SCRIPTS
++	bool
++	depends on BR2_PACKAGE_EUDEV
++	depends on BR2_INIT_OPENRC
++	help
++	  Init scripts for eudev.
+diff --git a/package/udev-gentoo-scripts/udev-gentoo-scripts.hash b/package/udev-gentoo-scripts/udev-gentoo-scripts.hash
+new file mode 100644
+index 0000000000..60563baae0
+--- /dev/null
++++ b/package/udev-gentoo-scripts/udev-gentoo-scripts.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 b206f72c93cd2e51ed59061931918a9c23c3c1f7e6caffacc9d4f8915a42c30a  udev-gentoo-scripts-33.tar.bz2
++sha256 329f95829088b95650b9012ae688f09baa1637985425a7964d33683363f48702  init.d/udev-settle
+diff --git a/package/udev-gentoo-scripts/udev-gentoo-scripts.mk b/package/udev-gentoo-scripts/udev-gentoo-scripts.mk
+new file mode 100644
+index 0000000000..a0598bcad8
+--- /dev/null
++++ b/package/udev-gentoo-scripts/udev-gentoo-scripts.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# udev-gentoo-scripts
++#
++################################################################################
++
++UDEV_GENTOO_SCRIPTS_VERSION = 33
++UDEV_GENTOO_SCRIPTS_SOURCE = udev-gentoo-scripts-$(UDEV_GENTOO_SCRIPTS_VERSION).tar.bz2
++UDEV_GENTOO_SCRIPTS_SITE = https://gitweb.gentoo.org/proj/udev-gentoo-scripts.git/snapshot
++UDEV_GENTOO_SCRIPTS_LICENSE = GPL-2.0
++UDEV_GENTOO_SCRIPTS_LICENSE_FILES = init.d/udev-settle
++
++# We don't need to symlink /etc/init.d/udev to /etc/runlevels/sysinit, since
++# it's in the udev-settle and udev-trigger "need" lists.
++define UDEV_GENTOO_SCRIPTS_INSTALL_INIT_OPENRC
++	$(MAKE1) -C $(@D) install DESTDIR=$(TARGET_DIR)
++	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/runlevels/sysinit
++	ln -s -f /etc/init.d/udev-settle /etc/init.d/udev-trigger \
++		$(TARGET_DIR)/etc/runlevels/sysinit
++endef
++
++$(eval $(generic-package))
