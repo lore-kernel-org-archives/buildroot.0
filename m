@@ -1,49 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 09:59:10 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-paramiko: bump
- to version 2.7.1
-Message-ID: <20200227100041.7B7598EC46@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 09:19:51 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-asn1crypto:
+ bump to version 1.3.0
+Message-ID: <20200227100041.2A9D58ED13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0618116432028a324c7f0aae8397965d1590df29
+commit: https://git.buildroot.net/buildroot/commit/?id=02c16cf69107faa3cf36bc47ac38c5c38b1fbfcb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-paramiko/python-paramiko.hash | 4 ++--
- package/python-paramiko/python-paramiko.mk   | 4 ++--
+ package/python-asn1crypto/python-asn1crypto.hash | 4 ++--
+ package/python-asn1crypto/python-asn1crypto.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-paramiko/python-paramiko.hash b/package/python-paramiko/python-paramiko.hash
-index 48cc79e7eb..6054e8d492 100644
---- a/package/python-paramiko/python-paramiko.hash
-+++ b/package/python-paramiko/python-paramiko.hash
+diff --git a/package/python-asn1crypto/python-asn1crypto.hash b/package/python-asn1crypto/python-asn1crypto.hash
+index d2c8487b83..b00474bdcd 100644
+--- a/package/python-asn1crypto/python-asn1crypto.hash
++++ b/package/python-asn1crypto/python-asn1crypto.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/paramiko/json
--md5	f729a45c9122bf975b9177ec5aaa3791  paramiko-2.6.0.tar.gz
--sha256	f4b2edfa0d226b70bd4ca31ea7e389325990283da23465d572ed1f70a7583041  paramiko-2.6.0.tar.gz
-+md5	bf8239dc820ca86dd3c3226f4281c35f  paramiko-2.7.1.tar.gz
-+sha256	920492895db8013f6cc0179293147f830b8c7b21fdfc839b6bad760c27459d9f  paramiko-2.7.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/asn1crypto/json
+-md5	fc3815cdd4812505e3ee297740c5f5d3  asn1crypto-1.2.0.tar.gz
+-sha256	87620880a477123e01177a1f73d0f327210b43a3cdbd714efcd2fa49a8d7b384  asn1crypto-1.2.0.tar.gz
++md5	daad112940181917e3ff169b47b9bd9a  asn1crypto-1.3.0.tar.gz
++sha256	5a215cb8dc12f892244e3a113fe05397ee23c5c4ca7a69cd6e69811755efc42d  asn1crypto-1.3.0.tar.gz
  # Locally computed sha256 checksums
- sha256	5fa25bf5f395fd26e701c2e1de4ca7d162816986dc791c22f8f4226857ad1bb2  LICENSE
-diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
-index 381cd2df21..c9e144c96e 100644
---- a/package/python-paramiko/python-paramiko.mk
-+++ b/package/python-paramiko/python-paramiko.mk
+ sha256	a88480656ec98943fb04344f6a477ee74062896f3ddb1a6f99e5f05f0109a286  LICENSE
+diff --git a/package/python-asn1crypto/python-asn1crypto.mk b/package/python-asn1crypto/python-asn1crypto.mk
+index 43d3842ff6..2d8d384cca 100644
+--- a/package/python-asn1crypto/python-asn1crypto.mk
++++ b/package/python-asn1crypto/python-asn1crypto.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PARAMIKO_VERSION = 2.6.0
-+PYTHON_PARAMIKO_VERSION = 2.7.1
- PYTHON_PARAMIKO_SOURCE = paramiko-$(PYTHON_PARAMIKO_VERSION).tar.gz
--PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/54/68/dde7919279d4ecdd1607a7eb425a2874ccd49a73a5a71f8aa4f0102d3eb8
-+PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/ac/15/4351003352e11300b9f44a13576bff52dcdc6e4a911129c07447bda0a358
- PYTHON_PARAMIKO_SETUP_TYPE = setuptools
- PYTHON_PARAMIKO_LICENSE = LGPL-2.1+
- PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
+-PYTHON_ASN1CRYPTO_VERSION = 1.2.0
++PYTHON_ASN1CRYPTO_VERSION = 1.3.0
+ PYTHON_ASN1CRYPTO_SOURCE = asn1crypto-$(PYTHON_ASN1CRYPTO_VERSION).tar.gz
+-PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/c1/a9/86bfedaf41ca590747b4c9075bc470d0b2ec44fb5db5d378bc61447b3b6b
++PYTHON_ASN1CRYPTO_SITE = https://files.pythonhosted.org/packages/9f/3d/8beae739ed8c1c8f00ceac0ab6b0e97299b42da869e24cf82851b27a9123
+ PYTHON_ASN1CRYPTO_SETUP_TYPE = setuptools
+ PYTHON_ASN1CRYPTO_LICENSE = MIT
+ PYTHON_ASN1CRYPTO_LICENSE_FILES = LICENSE
