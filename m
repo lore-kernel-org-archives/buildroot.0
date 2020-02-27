@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Feb 2020 21:44:16 +0100
-Subject: [Buildroot] [git commit] package/sispmctl: bump to version 4.2
-Message-ID: <20200309140904.946B781298@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 09:59:41 +0100
+Subject: [Buildroot] [git commit] package/python-pexpect: bump to version
+ 4.8.0
+Message-ID: <20200309140906.BA5A0821F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d71bae7af73ead6209ede8b8dc608be304132f6c
+commit: https://git.buildroot.net/buildroot/commit/?id=602b7e2a5b48fb1793851dc9e808d925f0dfb8ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sispmctl/sispmctl.hash | 2 +-
- package/sispmctl/sispmctl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pexpect/python-pexpect.hash | 4 ++--
+ package/python-pexpect/python-pexpect.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sispmctl/sispmctl.hash b/package/sispmctl/sispmctl.hash
-index f1090c4b8a..941eb3dfda 100644
---- a/package/sispmctl/sispmctl.hash
-+++ b/package/sispmctl/sispmctl.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  bf5177e085cb0168e18e4cfb69645c3095da149ed46f5659d6e757bde3548e40  sispmctl-4.1.tar.gz
-+sha256  300adc32ab35a4f9260705f8f57ccd83c3c6601fc493dbe7d259335938819aaf  sispmctl-4.2.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sispmctl/sispmctl.mk b/package/sispmctl/sispmctl.mk
-index 93e7de7694..ed0c8c2958 100644
---- a/package/sispmctl/sispmctl.mk
-+++ b/package/sispmctl/sispmctl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
+index 6972cdb806..87df05d881 100644
+--- a/package/python-pexpect/python-pexpect.hash
++++ b/package/python-pexpect/python-pexpect.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pexpect/json
+-md5	ed003242cbf308aee1b1eaecdef59e43  pexpect-4.7.0.tar.gz
+-sha256	9e2c1fd0e6ee3a49b28f95d4b33bc389c89b20af6a1255906e90ff1262ce62eb  pexpect-4.7.0.tar.gz
++md5	153eb25184249d6a85fde9acf4804085  pexpect-4.8.0.tar.gz
++sha256	fc65a43959d153d0114afe13997d439c22823a27cefceb5ff35c2178c6784c0c  pexpect-4.8.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	4a483ae1c4dc738a6c8b73feb49074e1835da02ab5aa686f2675029906fa364d  LICENSE
+diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+index 45e331f647..a9609cbe79 100644
+--- a/package/python-pexpect/python-pexpect.mk
++++ b/package/python-pexpect/python-pexpect.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SISPMCTL_VERSION = 4.1
-+SISPMCTL_VERSION = 4.2
- SISPMCTL_SITE = http://downloads.sourceforge.net/project/sispmctl/sispmctl/sispmctl-$(SISPMCTL_VERSION)
- SISPMCTL_LICENSE = GPL-2.0+
- SISPMCTL_LICENSE_FILES = COPYING
+-PYTHON_PEXPECT_VERSION = 4.7.0
++PYTHON_PEXPECT_VERSION = 4.8.0
+ PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
+-PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/1c/b1/362a0d4235496cb42c33d1d8732b5e2c607b0129ad5fdd76f5a583b9fcb3
++PYTHON_PEXPECT_SITE = https://files.pythonhosted.org/packages/e5/9b/ff402e0e930e70467a7178abb7c128709a30dfb22d8777c043e501bc1b10
+ PYTHON_PEXPECT_LICENSE = ISC
+ PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+ PYTHON_PEXPECT_SETUP_TYPE = distutils
