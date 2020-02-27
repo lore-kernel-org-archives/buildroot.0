@@ -1,132 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 08:55:41 +0100
-Subject: [Buildroot] [git commit] package/musl: bump to version 1.2.0
-Message-ID: <20200309140906.33201821F7@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Feb 2020 23:53:08 +0100
+Subject: [Buildroot] [git commit] package/qt5webchannel: drop qt 5.6 support
+Message-ID: <20200309140907.E8B2A7FB4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3012c3cc28a6686bb47f2489a218b90e557f0b8
+commit: https://git.buildroot.net/buildroot/commit/?id=f57ab9d1d2101292b521f9de0a2934d1da3b3d1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also:
- * Drop patch 0003 which is included in the new version.
- * Update hash value of the COPYRIGHT file as the copyright year was
-   updated.
-
-From the release history [1]:
-
-This release moves all 32-bit archs to 64-bit time_t, enabling them
-to represent times beyond January of 2038.
-
-There are no new requirements on kernel version, and this is not a
-hard ABI break, but the type changes do impact compatibility between
-code built against previous versions of musl and code built against
-musl 1.2. Users upgrading 32-bit systems should read the detailed
-time64 release notes [2]. 64-bit systems are not affected.
-
-In addition, character data has been updated to align with Unicode
-12.1.0, along with fixes for some errors in the data and a replacement
-for inefficient and unmaintainable case-mapping code. Correctness of
-results has been improved in the math library, particularly some complex
-functions and 32-bit x86 asm. Various arch-specific bugs have also been
-fixed.
-
-[1] https://musl.libc.org/releases.html
-[2] https://musl.libc.org/time64.html
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...cv64-register-index-constants-to-signal.h.patch | 54 ----------------------
- package/musl/musl.hash                             |  6 +--
- package/musl/musl.mk                               |  2 +-
- 3 files changed, 4 insertions(+), 58 deletions(-)
+ package/qt5/qt5webchannel/qt5webchannel.hash |  8 --------
+ package/qt5/qt5webchannel/qt5webchannel.mk   | 14 +-------------
+ 2 files changed, 1 insertion(+), 21 deletions(-)
 
-diff --git a/package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch b/package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch
-deleted file mode 100644
-index 8221c0ea30..0000000000
---- a/package/musl/0003-move-riscv64-register-index-constants-to-signal.h.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From 329e79299daaa994b8e75941331a1093051ea5d9 Mon Sep 17 00:00:00 2001
--From: Rich Felker <dalias@aerifal.cx>
--Date: Tue, 4 Feb 2020 09:29:13 -0500
--Subject: move riscv64 register index constants to signal.h
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.hash b/package/qt5/qt5webchannel/qt5webchannel.hash
+index c863a6ea60..d45f293821 100644
+--- a/package/qt5/qt5webchannel/qt5webchannel.hash
++++ b/package/qt5/qt5webchannel/qt5webchannel.hash
+@@ -1,6 +1,3 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebchannel-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 8eb1b0ac2286653c7932758c21e7760788a5d7cfd6162da09afa926d5be50713 qtwebchannel-opensource-src-5.6.3.tar.xz
 -
--under _GNU_SOURCE for namespace cleanliness, analogous to other archs.
--the original placement in sys/reg.h seems not to have been motivated;
--such a header isn't even present on other implementations.
--
--Downloaded from upstream commit
--https://git.musl-libc.org/cgit/musl/commit/?id=329e79299daaa994b8e75941331a1093051ea5d9
--
--Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-----
-- arch/riscv64/bits/reg.h    | 6 ------
-- arch/riscv64/bits/signal.h | 9 +++++++++
-- 2 files changed, 9 insertions(+), 6 deletions(-)
--
--diff --git a/arch/riscv64/bits/reg.h b/arch/riscv64/bits/reg.h
--index c800788c..2633f39d 100644
----- a/arch/riscv64/bits/reg.h
--+++ b/arch/riscv64/bits/reg.h
--@@ -1,8 +1,2 @@
-- #undef __WORDSIZE
-- #define __WORDSIZE 64
---#define REG_PC 0
---#define REG_RA 1
---#define REG_SP 2
---#define REG_TP 4
---#define REG_S0 8
---#define REG_A0 10
--diff --git a/arch/riscv64/bits/signal.h b/arch/riscv64/bits/signal.h
--index 2ff4be30..b006334f 100644
----- a/arch/riscv64/bits/signal.h
--+++ b/arch/riscv64/bits/signal.h
--@@ -35,6 +35,15 @@ typedef struct mcontext_t {
-- 	union __riscv_mc_fp_state __fpregs;
-- } mcontext_t;
-- 
--+#if defined(_GNU_SOURCE)
--+#define REG_PC 0
--+#define REG_RA 1
--+#define REG_SP 2
--+#define REG_TP 4
--+#define REG_S0 8
--+#define REG_A0 10
--+#endif
--+
-- #if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
-- typedef unsigned long greg_t;
-- typedef unsigned long gregset_t[32];
---- 
--cgit v1.2.1
--
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index f0450897c0..9d8b61e165 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
--# http://www.musl-libc.org/releases/musl-1.1.24.tar.gz.asc
--sha256  1370c9a812b2cf2a7d92802510cca0058cc37e66a7bedd70051f0a34015022a3  musl-1.1.24.tar.gz
--sha256  3520d478bccbdf68d9dc0c03984efb0fa4b99868ab2599f5b5f72f3fb3b07a49  COPYRIGHT
-+# https://musl.libc.org/releases/musl-1.2.0.tar.gz.asc
-+sha256  c6de7b191139142d3f9a7b5b702c9cae1b5ee6e7f57e582da9328629408fd4e8  musl-1.2.0.tar.gz
-+sha256  afe1df384787fce3577f3356b8b0d417381483f7c704eacb63f8050349fac77a  COPYRIGHT
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index df68c5f51b..9482c0b246 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtwebchannel-everywhere-src-5.12.7.tar.xz.sha256
+ sha256 b0ae72e5957aa4b281a37d2e169fcf91f92382bc36bd0cf09c80b2bb961bce75 qtwebchannel-everywhere-src-5.12.7.tar.xz
  
--MUSL_VERSION = 1.1.24
-+MUSL_VERSION = 1.2.0
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+@@ -10,8 +7,3 @@ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.
+ sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
+ sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
+ sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+-sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
+-sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
+-sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
+-sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
+-sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
+index 22523036e7..0f1b3bafbf 100644
+--- a/package/qt5/qt5webchannel/qt5webchannel.mk
++++ b/package/qt5/qt5webchannel/qt5webchannel.mk
+@@ -9,14 +9,9 @@ QT5WEBCHANNEL_SITE = $(QT5_SITE)
+ QT5WEBCHANNEL_SOURCE = qtwebchannel-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5WEBCHANNEL_VERSION).tar.xz
+ QT5WEBCHANNEL_DEPENDENCIES = qt5base qt5websockets
+ QT5WEBCHANNEL_INSTALL_STAGING = YES
+-
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5WEBCHANNEL_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5WEBCHANNEL_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
+-else
+-QT5WEBCHANNEL_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+-QT5WEBCHANNEL_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+-endif
++
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ QT5WEBCHANNEL_LICENSE += , BSD-3-Clause (examples)
+ endif
+@@ -37,17 +32,10 @@ define QT5WEBCHANNEL_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ define QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
+ 	$(INSTALL) -m 0644 -D $(@D)/examples/webchannel/shared/qwebchannel.js \
+ 		$(TARGET_DIR)/var/www/qwebchannel.js
+ endef
+-else
+-define QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
+-	$(INSTALL) -m 0644 -D $(@D)/src/webchannel/qwebchannel.js \
+-		$(TARGET_DIR)/var/www/qwebchannel.js
+-endef
+-endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+ define QT5WEBCHANNEL_INSTALL_TARGET_QMLS
