@@ -1,49 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 09:21:39 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-jinja2: bump to
- version 2.11.1
-Message-ID: <20200227100041.56BC58EC46@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 10:03:47 +0100
+Subject: [Buildroot] [git commit branch/next] package/{protobuf,
+ python-protobuf}: bump to version 3.11.3
+Message-ID: <20200227100041.B950B8EC46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be9333014cf8e66f1e8a7b04ada5671db6c7cb81
+commit: https://git.buildroot.net/buildroot/commit/?id=f3abd22a28237e2e9a1c62d488e4ae2419380e29
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-jinja2/python-jinja2.hash | 4 ++--
- package/python-jinja2/python-jinja2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
-index 7231123b58..e366b9e180 100644
---- a/package/python-jinja2/python-jinja2.hash
-+++ b/package/python-jinja2/python-jinja2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jinja2/json
--md5	7883559bc5cc3e2781d94b4be61cfdcd  Jinja2-2.10.3.tar.gz
--sha256	9fe95f19286cfefaa917656583d020be14e7859c6b0252588391e47db34527de  Jinja2-2.10.3.tar.gz
-+md5	5d88c7e77aa63fc852a04f65dbfe5594  Jinja2-2.11.1.tar.gz
-+sha256	93187ffbc7808079673ef52771baa950426fd664d3aad1d0fa3e95644360e250  Jinja2-2.11.1.tar.gz
- # Locally computed sha256
- sha256	3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index 5f011aa1ab..189b75d18f 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_JINJA2_VERSION = 2.10.3
-+PYTHON_JINJA2_VERSION = 2.11.1
- PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
--PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/7b/db/1d037ccd626d05a7a47a1b81ea73775614af83c2b3e53d86a0bb41d8d799
-+PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/d8/03/e491f423379ea14bb3a02a5238507f7d446de639b623187bccc111fbecdf
- PYTHON_JINJA2_SETUP_TYPE = setuptools
- PYTHON_JINJA2_LICENSE = BSD-3-Clause
- PYTHON_JINJA2_LICENSE_FILES = LICENSE.rst
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 5ebf99a993..c82ae84f22 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	5abfd5bf11dc0a14bb2303883fa76ecde48a4b447eb2f9f90b84592ce8b8707c  protobuf-cpp-3.11.0.tar.gz
++sha256	9ffb1fe6091240f2e7bcaca5b65fb19cb7b951ffc9a60d8b2c9d73f89f0e0a51  protobuf-cpp-3.11.3.tar.gz
+ sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index ed21f13c41..1531bfffb2 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works, as they share the same
+ # version/site variables.
+-PROTOBUF_VERSION = 3.11.0
++PROTOBUF_VERSION = 3.11.3
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index e299b8c760..0ede47ec20 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	a5ef6dccfe29f46168af8ab5194147f24701727a84661611fe80532ba83d3edd  protobuf-python-3.11.0.tar.gz
++sha256	a9c6c3821ece08f8db55392edbbec4d4a5392fa5df148188309ed6c5a842e3b7  protobuf-python-3.11.3.tar.gz
+ sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
