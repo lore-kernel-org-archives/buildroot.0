@@ -1,59 +1,87 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 23:52:28 +0100
-Subject: [Buildroot] [git commit] package/qt5script: drop qt 5.6 support
-Message-ID: <20200309140907.890668E780@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 27 Feb 2020 09:20:28 +0100
+Subject: [Buildroot] [git commit] package/python-crossbar: bump to version
+ 20.1.2
+Message-ID: <20200309140906.653AF821F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=051a2e7b1b696707161507ddd3f7aff437ee2b81
+commit: https://git.buildroot.net/buildroot/commit/?id=44a9f390efc282f41052b39716eab04cd76b1680
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt5script/qt5script.hash | 6 ------
- package/qt5/qt5script/qt5script.mk   | 5 -----
- 2 files changed, 11 deletions(-)
+Rebased avoid intentional syntax error patch.
 
-diff --git a/package/qt5/qt5script/qt5script.hash b/package/qt5/qt5script/qt5script.hash
-index bddcceb813..8d87cd6f60 100644
---- a/package/qt5/qt5script/qt5script.hash
-+++ b/package/qt5/qt5script/qt5script.hash
-@@ -1,16 +1,10 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtscript-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 f08720dd0e3a70377c1cb7fa3b129e24f4cdedade279e51b67c9271ab470b389 qtscript-opensource-src-5.6.3.tar.xz
--
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtscript-everywhere-src-5.12.7.tar.xz.sha256
- sha256 ca1dbc66d4125a678638dd0c9c030b72fdfc4ec2c229b9316a8bc80a86104019 qtscript-everywhere-src-5.12.7.tar.xz
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Avoid-intentional-syntax-error.patch                | 12 ++++++------
+ package/python-crossbar/python-crossbar.hash                 |  6 +++---
+ package/python-crossbar/python-crossbar.mk                   |  6 +++---
+ 3 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch b/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
+index fb8e4a2763..0ff7cae21a 100644
+--- a/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
++++ b/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
+@@ -1,4 +1,4 @@
+-From 9ab2b96c2ee679c6dcb387174be211db5d70fa97 Mon Sep 17 00:00:00 2001
++From 423a1b081f6b7198f6a921ca83043270ebbace1a Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Sun, 1 May 2016 15:35:32 +0200
+ Subject: [PATCH] Avoid intentional syntax error
+@@ -15,15 +15,15 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  1 file changed, 2 deletions(-)
  
- # Hashes for license files:
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
--sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
--sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
- sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
--sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
- sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
- sha256 5094ecb9c9dcd0eadc34f3c11511d9b5535063032bc150164ecd1a5d5a445547 src/3rdparty/javascriptcore/JavaScriptCore/COPYING.LIB
- sha256 43b007cd3ac7b7ea5284b13e9580334028e6f42e859059605d57558f39374197 src/3rdparty/javascriptcore/JavaScriptCore/pcre/COPYING
-diff --git a/package/qt5/qt5script/qt5script.mk b/package/qt5/qt5script/qt5script.mk
-index a3b8cb7e34..641af6f62c 100644
---- a/package/qt5/qt5script/qt5script.mk
-+++ b/package/qt5/qt5script/qt5script.mk
-@@ -14,14 +14,9 @@ QT5SCRIPT_INSTALL_STAGING = YES
- # This is linked into libQt5Script, which also contains Qt sources under
- # LGPL-2.1 (only). Therefore, the library is  LGPL-2.1 and BSD-3-Clause.
- # libQt5ScriptTools is under the normal Qt opensource license.
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5SCRIPT_LICENSE = LGPL-2.1, BSD-3-Clause, LGPL-3.0 or GPL-2.0+ (libQt5ScriptTools), GFDL-1.3 (docs)
- # LGPL-2.1 license file is missing
- QT5SCRIPT_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.LGPL3 LICENSE.FDL
--else
--QT5SCRIPT_LICENSE = LGPL-2.1, BSD-3-Clause, LGPL-2.1 with exception or LGPL-3.0 with exception (libQt5ScriptTools), GFDL-1.3 (docs)
--QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LGPL_EXCEPTION.txt LICENSE.FDL
--endif
- # License files from JavaScriptCore
- QT5SCRIPT_LICENSE_FILES += \
- 	src/3rdparty/javascriptcore/JavaScriptCore/COPYING.LIB \
+ diff --git a/crossbar/worker/test/examples/syntaxerror.py b/crossbar/worker/test/examples/syntaxerror.py
+-index a5947cc..585c995 100644
++index 7b88e088..cd7de901 100644
+ --- a/crossbar/worker/test/examples/syntaxerror.py
+ +++ b/crossbar/worker/test/examples/syntaxerror.py
+-@@ -29,5 +29,3 @@
++@@ -27,5 +27,3 @@
++ #  with this program. If not, see <http://www.gnu.org/licenses/agpl-3.0.en.html>.
++ #
+  #####################################################################################
+- 
+- from __future__ import absolute_import, division
+ -
+ -class # noqa
+ -- 
+-2.7.4
++2.20.1
+ 
+diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
+index f956dc27e1..903d11d330 100644
+--- a/package/python-crossbar/python-crossbar.hash
++++ b/package/python-crossbar/python-crossbar.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/crossbar/json
+-md5	462a204da3c776cbb770b98f9047e8e7  crossbar-19.1.2.tar.gz
+-sha256	269d534a65c136a5c952a6accccf256f457569f731ee65e201e5a14e69db471a  crossbar-19.1.2.tar.gz
++md5	f19fb0995f42e2970fb1b1b077b01d61  crossbar-20.1.2.tar.gz
++sha256	3f4ee0bc73d7e6d25af74b163495eb8892bfe2f0ccbc3153dc4cf807af6163fa  crossbar-20.1.2.tar.gz
+ # Locally computed
+-sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  LICENSE
++sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  crossbar/LICENSE
+diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
+index 064d2d92b6..df4d7cc4d5 100644
+--- a/package/python-crossbar/python-crossbar.mk
++++ b/package/python-crossbar/python-crossbar.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CROSSBAR_VERSION = 19.1.2
++PYTHON_CROSSBAR_VERSION = 20.1.2
+ PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
+-PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/86/19/54c7bd9da1ac70643b9ae7d3d4592a73391f62fcb376fcd30f8328c1c5ce
++PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/2a/cd/e8be30a9ba4db52dc04e530f19a24d225d743aa36f5074ec0b3ef316637a
+ PYTHON_CROSSBAR_LICENSE = AGPL-3.0
+-PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
++PYTHON_CROSSBAR_LICENSE_FILES = crossbar/LICENSE
+ PYTHON_CROSSBAR_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
