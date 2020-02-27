@@ -1,58 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 23:51:58 +0100
-Subject: [Buildroot] [git commit] package/qt5graphicaleffects: drop qt 5.6
- support
-Message-ID: <20200309140907.55F77821F7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 27 Feb 2020 09:21:01 +0100
+Subject: [Buildroot] [git commit] package/python-ecdsa: bump to version 0.15
+Message-ID: <20200309140906.747AC821F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd75bdc762399d34b0176a6cdc8ac9ac63a5991c
+commit: https://git.buildroot.net/buildroot/commit/?id=1f843ff366c64775c54581db2eef839c879f0274
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash | 8 --------
- package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk   | 5 -----
- 2 files changed, 13 deletions(-)
+Select new requirement python-six.
 
-diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-index 8e327de296..ae800fe07a 100644
---- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-+++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-@@ -1,6 +1,3 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtgraphicaleffects-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 c742592d5e45b122b29df60b69be23ba7c817f2dc471db86e054f6ea24a999ed qtgraphicaleffects-opensource-src-5.6.3.tar.xz
--
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtgraphicaleffects-everywhere-src-5.12.7.tar.xz.sha256
- sha256 02f0328420c623da8f9ae949fec01e99ba84213dd2ad559cb00c204502bbcace qtgraphicaleffects-everywhere-src-5.12.7.tar.xz
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-ecdsa/Config.in         | 1 +
+ package/python-ecdsa/python-ecdsa.hash | 4 ++--
+ package/python-ecdsa/python-ecdsa.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-ecdsa/Config.in b/package/python-ecdsa/Config.in
+index ce11910e8b..eb0d65801f 100644
+--- a/package/python-ecdsa/Config.in
++++ b/package/python-ecdsa/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_ECDSA
+ 	bool "python-ecdsa"
++	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+ 	  ECDSA cryptographic signature library (pure python).
  
-@@ -10,8 +7,3 @@ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.
- sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
- sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
- sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
--sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
--sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
--sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
--sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
--sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
-diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
-index c5011a94f0..2961c89fcb 100644
---- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
-+++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
-@@ -10,13 +10,8 @@ QT5GRAPHICALEFFECTS_SOURCE = qtgraphicaleffects-$(QT5_SOURCE_TARBALL_PREFIX)-$(Q
- QT5GRAPHICALEFFECTS_DEPENDENCIES = qt5base qt5declarative
- QT5GRAPHICALEFFECTS_INSTALL_STAGING = YES
+diff --git a/package/python-ecdsa/python-ecdsa.hash b/package/python-ecdsa/python-ecdsa.hash
+index 3e24783657..efe396bf0a 100644
+--- a/package/python-ecdsa/python-ecdsa.hash
++++ b/package/python-ecdsa/python-ecdsa.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/ecdsa/json
+-md5	b1b33f7fe171eb1278de6f93eefc34f8  ecdsa-0.13.3.tar.gz
+-sha256	163c80b064a763ea733870feb96f9dd9b92216cfcacd374837af18e4e8ec3d4d  ecdsa-0.13.3.tar.gz
++md5	821d543047941dd26f543f62912230d4  ecdsa-0.15.tar.gz
++sha256	8f12ac317f8a1318efa75757ef0a651abe12e51fc1af8838fb91079445227277  ecdsa-0.15.tar.gz
+ # Locally computed sha256 checksums
+ sha256	3eca9845773d2e5b8cc9d8c119d345f00a4806e4bd660d4a3d6cdf9c0e9d8bb2  LICENSE
+diff --git a/package/python-ecdsa/python-ecdsa.mk b/package/python-ecdsa/python-ecdsa.mk
+index 90e359f8b7..ffb51a3aa5 100644
+--- a/package/python-ecdsa/python-ecdsa.mk
++++ b/package/python-ecdsa/python-ecdsa.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5GRAPHICALEFFECTS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
- QT5GRAPHICALEFFECTS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
--else
--QT5GRAPHICALEFFECTS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
--QT5GRAPHICALEFFECTS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
--endif
- 
- define QT5GRAPHICALEFFECTS_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
+-PYTHON_ECDSA_VERSION = 0.13.3
++PYTHON_ECDSA_VERSION = 0.15
+ PYTHON_ECDSA_SOURCE = ecdsa-$(PYTHON_ECDSA_VERSION).tar.gz
+-PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/8c/d8/9c3596fd0f18ae0a76333492a119c00183323d8e64de1a4f4bd642856963
++PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/e3/7c/b508ade1feb47cd79222e06d85e477f5cfc4fb0455ad3c70eb6330fc49aa
+ PYTHON_ECDSA_SETUP_TYPE = setuptools
+ PYTHON_ECDSA_LICENSE = MIT
+ PYTHON_ECDSA_LICENSE_FILES = LICENSE
