@@ -1,49 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 09:11:47 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-autobahn: bump
- to version 20.2.1
-Message-ID: <20200227080701.BDCAA8EC47@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Feb 2020 09:22:13 +0100
+Subject: [Buildroot] [PATCH] package/python3: bump to version 3.8.2
+Message-ID: <20200227082214.21154-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8bab87a12f89e72d69bf639e4d297224a9ad2e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Bugfix release, fixing a number of issues.  For details, see the
+announcement:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+https://docs.python.org/release/3.8.2/whatsnew/changelog.html#python-3-8-2-final
+
+Adjust the spacing in the hash file and update the hash of the license file
+for a change in copyright years:
+
+-2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Python Software Foundation;
++2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Python Software Foundation;
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-autobahn/python-autobahn.hash | 4 ++--
- package/python-autobahn/python-autobahn.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python3/python3.hash | 8 ++++----
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index 1dc6c1eeaf..204aba7783 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 3773825b43..cb7c6b2f25 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/autobahn/json
--md5	472d965c75dba0f8cb5f3b9f9001ed1b  autobahn-19.11.1.tar.gz
--sha256	201b9879b49c6e259d4126dbafe9e3c73807de0c242d50065fbebc62c6ccb181  autobahn-19.11.1.tar.gz
-+md5	8889605311865aa8fedd1819c6df2c30  autobahn-20.2.1.tar.gz
-+sha256	1ec603ea374a3b9d85540c499709c41f35f7c6e288b571d12da14aba6c381211  autobahn-20.2.1.tar.gz
- # Locally computed sha256 checksums
- sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index 6c5c608b9a..5d69253095 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
-@@ -4,9 +4,9 @@
- #
+-# From https://www.python.org/downloads/release/python-380/
+-md5		b3fb85fd479c0bf950c626ef80cacb57 Python-3.8.1.tar.xz
++# From https://www.python.org/downloads/release/python-382/
++md5  e9d6ebc92183a177b8e8a58cad5b8d67  Python-3.8.2.tar.xz
+ # Locally computed
+-sha256 75894117f6db7051c1b34f37410168844bbb357c139a8a10a352e9bf8be594e8 Python-3.8.1.tar.xz
+-sha256 a77d71d6be6f9032e6b6e5d2cf6da68f9eeab9036edfbc043633c8979cd5e82c LICENSE
++sha256  2646e7dc233362f59714c6193017bb2d6f7b38d6ab4a0cb5fbac5c36c4d845df  Python-3.8.2.tar.xz
++sha256  de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 6a12c1f0e8..d12237300d 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_AUTOBAHN_VERSION = 19.11.1
-+PYTHON_AUTOBAHN_VERSION = 20.2.1
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/3f/f4/e907b172d3c1d912b8da57560b8b298ebad22f900f8a412002247716328a
-+PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/ef/6d/74e6ceea815ee836a64846ace4f754dacaf8fae58a37b4d3c912bc9d37ea
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+ PYTHON3_VERSION_MAJOR = 3.8
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).1
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
+-- 
+2.20.1
