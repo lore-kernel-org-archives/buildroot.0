@@ -1,60 +1,109 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 23:55:04 +0100
-Subject: [Buildroot] [git commit] package/qt5xmlpatterns: drop qt 5.6 support
-Message-ID: <20200309140908.3CA2181268@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 23:52:24 +0100
+Subject: [Buildroot] [git commit] package/qt5quickcontrols2: drop qt 5.6
+ support
+Message-ID: <20200309140907.80683821F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80dd5c98f492299583b862b440f9f55ae4de54ee
+commit: https://git.buildroot.net/buildroot/commit/?id=6496afdcdec4527c3f59034c5ac479156fcc50a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash | 7 -------
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk   | 7 +------
- 2 files changed, 1 insertion(+), 13 deletions(-)
+ package/qt5/qt5quickcontrols2/5.12.7/qt5quickcontrols2.hash |  7 -------
+ package/qt5/qt5quickcontrols2/5.6.3/qt5quickcontrols2.hash  |  7 -------
+ package/qt5/qt5quickcontrols2/Config.in                     |  5 -----
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash        |  9 +++++++--
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk          | 10 ----------
+ 5 files changed, 7 insertions(+), 31 deletions(-)
 
-diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-index 0366baa0b9..5e61928ea7 100644
---- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-+++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-@@ -1,16 +1,9 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtxmlpatterns-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 a461ff9f0d7310de9b9904ff9cd34919e958bf4071a6fc7096450b8990ab51f6 qtxmlpatterns-opensource-src-5.6.3.tar.xz
+diff --git a/package/qt5/qt5quickcontrols2/5.12.7/qt5quickcontrols2.hash b/package/qt5/qt5quickcontrols2/5.12.7/qt5quickcontrols2.hash
+deleted file mode 100644
+index 689a7e5284..0000000000
+--- a/package/qt5/qt5quickcontrols2/5.12.7/qt5quickcontrols2.hash
++++ /dev/null
+@@ -1,7 +0,0 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtquickcontrols2-everywhere-src-5.12.7.tar.xz.sha256
+-sha256 3a9526e5ad01edbfb796a6631983c391ea1b7e22ae6e07840048156a9e92a237 qtquickcontrols2-everywhere-src-5.12.7.tar.xz
 -
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtxmlpatterns-everywhere-src-5.12.7.tar.xz.sha256
- sha256 9002014129a1f2a44700df333a7776e23bdfd689e7a619c3540fd9f6819b417b qtxmlpatterns-everywhere-src-5.12.7.tar.xz
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+-# Hashes for license files:
+-sha256 d2cfc059acb4abd8e513cd0a73cd8489f34cbafa7bc34d5d31fb3210821cf8ca LICENSE.GPLv3
+-sha256 9e63a04ce021b8bf811b30881fa51c8c3db88afeead942cd59322f2fb69c75bc LICENSE.LGPLv3
+-sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+diff --git a/package/qt5/qt5quickcontrols2/5.6.3/qt5quickcontrols2.hash b/package/qt5/qt5quickcontrols2/5.6.3/qt5quickcontrols2.hash
+deleted file mode 100644
+index 01fe5dcd61..0000000000
+--- a/package/qt5/qt5quickcontrols2/5.6.3/qt5quickcontrols2.hash
++++ /dev/null
+@@ -1,7 +0,0 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtquickcontrols2-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 ec5078470abe2da888c2be5d1749b5961ef5132487c180ce4d4aa19ea7ff81cb qtquickcontrols2-opensource-src-5.6.3.tar.xz
+-
+-# Hashes for license files:
+-sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
 -sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
- sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
- sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
--sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
- sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
--sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
--sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
-diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-index 6ed247fd59..42338afa07 100644
---- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-+++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-@@ -9,14 +9,9 @@ QT5XMLPATTERNS_SITE = $(QT5_SITE)
- QT5XMLPATTERNS_SOURCE = qtxmlpatterns-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5XMLPATTERNS_VERSION).tar.xz
- QT5XMLPATTERNS_DEPENDENCIES = qt5base
- QT5XMLPATTERNS_INSTALL_STAGING = YES
+-sha256 0ec5b37a28dd638c5c05c8cc940276e55c808353fe8d942c7f993c2c8b4cbe62 LICENSE.LGPLv3
+diff --git a/package/qt5/qt5quickcontrols2/Config.in b/package/qt5/qt5quickcontrols2/Config.in
+index d036f74bab..3f81e20d52 100644
+--- a/package/qt5/qt5quickcontrols2/Config.in
++++ b/package/qt5/qt5quickcontrols2/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_QT5QUICKCONTROLS2
+ 	bool "qt5quickcontrols2"
+-	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative/quick
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative/quick
+ 	select BR2_PACKAGE_QT5DECLARATIVE
+ 	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+@@ -14,7 +13,3 @@ config BR2_PACKAGE_QT5QUICKCONTROLS2
+ 	  to a core module in Qt 5.7.0.
+ 
+ 	  https://doc.qt.io/qt-5/qtquickcontrols2-index.html
 -
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5XMLPATTERNS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
- QT5XMLPATTERNS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
--else
--QT5XMLPATTERNS_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
--QT5XMLPATTERNS_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
--endif
+-comment "qt5quickcontrols2 needs an OpenGL-capable backend"
+-	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
+-	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
+index 5316f03b10..689a7e5284 100644
+--- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
++++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
+@@ -1,2 +1,7 @@
+-# This hash file is not used; instead, update the
+-# hash files in the per-version sub-directories.
++# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtquickcontrols2-everywhere-src-5.12.7.tar.xz.sha256
++sha256 3a9526e5ad01edbfb796a6631983c391ea1b7e22ae6e07840048156a9e92a237 qtquickcontrols2-everywhere-src-5.12.7.tar.xz
 +
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- QT5XMLPATTERNS_LICENSE += , BSD-3-Clause (examples)
++# Hashes for license files:
++sha256 d2cfc059acb4abd8e513cd0a73cd8489f34cbafa7bc34d5d31fb3210821cf8ca LICENSE.GPLv3
++sha256 9e63a04ce021b8bf811b30881fa51c8c3db88afeead942cd59322f2fb69c75bc LICENSE.LGPLv3
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+index c2004c2ee7..632bc47205 100644
+--- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
++++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+@@ -31,7 +31,6 @@ define QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES
+ endef
  endif
+ 
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5QuickTemplates2.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5QuickControls2.so.* $(TARGET_DIR)/usr/lib
+@@ -41,14 +40,5 @@ define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Templates.2 $(TARGET_DIR)/usr/qml/QtQuick
+ 	$(QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES)
+ endef
+-else
+-define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQt5LabsTemplates.so.* $(TARGET_DIR)/usr/lib
+-	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/controls $(TARGET_DIR)/usr/qml/Qt/labs
+-	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/calendar $(TARGET_DIR)/usr/qml/Qt/labs
+-	cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/templates $(TARGET_DIR)/usr/qml/Qt/labs
+-	$(QT5QUICKCONTROLS2_INSTALL_TARGET_EXAMPLES)
+-endef
+-endif
+ 
+ $(eval $(generic-package))
