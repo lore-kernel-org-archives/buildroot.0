@@ -1,138 +1,133 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Thu, 27 Feb 2020 14:15:05 -0600
-Subject: [Buildroot] [PATCH 1/1] package/libopenssl: add PPC64BE ELFv2
- support
-Message-ID: <20200227201505.8109-1-vfazio@xes-inc.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 27 Feb 2020 21:15:53 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/connman: bump to 1.38
+Message-ID: <20200227201553.15820-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vincent Fazio <vfazio@gmail.com>
+Add choice for either iptables or nftables as firewall types.
+Add option to enable/disable wireguard support.
+This release requires libmnl (if WireGuard enabled).
 
-musl libc uses ELFv2 by default for all PPC64 targets.
-
-Now, OpenSSL libraries built with musl targeting PPC64BE should build
-and function as expected.
-
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- ...Fv2-ABI-on-some-ppc64-big-endian-sys.patch | 35 +++++++++++
- ...m-ppc-xlate.pl-add-linux64v2-flavour.patch | 63 +++++++++++++++++++
- 2 files changed, 98 insertions(+)
- create mode 100644 package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
- create mode 100644 package/libopenssl/0005-crypto-perlasm-ppc-xlate.pl-add-linux64v2-flavour.patch
+Changes v1->v2:
+Implement notes from Thomas:
+* Add choice for either iptables or nftables as firewall types.
+* Add option to enable/disable wireguard support.
+* Require libmnl only if WireGuard enabled.
 
-diff --git a/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-new file mode 100644
-index 0000000000..3d6eaf49d2
---- /dev/null
-+++ b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-@@ -0,0 +1,35 @@
-+From b57cc2e4ee21babacbffc243626de72c248068ea Mon Sep 17 00:00:00 2001
-+From: Andy Polyakov <appro@openssl.org>
-+Date: Sun, 5 May 2019 18:30:55 +0200
-+Subject: [PATCH] Configure: use ELFv2 ABI on some ppc64 big endian systems
+ package/connman/Config.in    | 30 +++++++++++++++++++++++++++++-
+ package/connman/connman.hash |  2 +-
+ package/connman/connman.mk   | 14 ++++++++++----
+ 3 files changed, 40 insertions(+), 6 deletions(-)
+
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 30eae23c96..5e4ac8bb7d 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -8,7 +8,6 @@ config BR2_PACKAGE_CONNMAN
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # missing res_ninit()
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_IPTABLES
+ 	help
+ 	  The Connection Manager (ConnMan) project provides a daemon
+ 	  for managing internet connections within embedded devices
+@@ -18,10 +17,39 @@ config BR2_PACKAGE_CONNMAN
+ 
+ if BR2_PACKAGE_CONNMAN
+ 
++choice
++	prompt "Firewall type"
++	default BR2_PACKAGE_CONNMAN_IPTABLES
++	help
++	  Select which firewall type is used.
 +
-+If _CALL_ELF is defined to be 2, it's an ELFv2 system.
-+Conditionally switch to the v2 perlasm scheme.
++config BR2_PACKAGE_CONNMAN_IPTABLES
++	bool "iptables"
++	select BR2_PACKAGE_IPTABLES
++	help
++	  Use iptables as firewall.
 +
-+Reviewed-by: Paul Dale <paul.dale@oracle.com>
-+Reviewed-by: Richard Levitte <levitte@openssl.org>
-+(Merged from https://github.com/openssl/openssl/pull/8883)
-+[vfazio: fixup for 1.1.1d]
-+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-+---
-+ Configure | 4 ++++
-+ 1 file changed, 4 insertions(+)
++config BR2_PACKAGE_CONNMAN_NFTABLES
++	bool "nftables"
++	select BR2_PACKAGE_NFTABLES
++	help
++	  Use nftables as firewall.
++endchoice
 +
-+diff --git a/Configure b/Configure
-+index 5a699836f3..f9152b1702 100755
-+--- a/Configure
-++++ b/Configure
-+@@ -1413,6 +1413,10 @@ my %predefined_CXX = $config{CXX}
-+     ? compiler_predefined($config{CROSS_COMPILE}.$config{CXX})
-+     : ();
-+ 
-++if ($target eq "linux-ppc64" && !$disabled{asm}) {
-++       $target{perlasm_scheme} = "linux64v2" if ($predefined_C{_CALL_ELF} == 2);
-++}
-++
-+ # Check for makedepend capabilities.
-+ if (!$disabled{makedepend}) {
-+     if ($config{target} =~ /^(VC|vms)-/) {
-+-- 
-+2.25.0
+ config BR2_PACKAGE_CONNMAN_ETHERNET
+ 	bool "enable Ethernet support"
+ 	default y
+ 
++config BR2_PACKAGE_CONNMAN_WIREGUARD
++	bool "enable WireGuard support"
++	select BR2_PACKAGE_LIBMNL
++	select BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
++	select BR2_PACKAGE_WIREGUARD_TOOLS
++	help
++	  Enable WiFi support (scan and static/dhcp interface
++	  setup). ConnMan detects the start of wpa_supplicant
++	  automatically.
 +
-diff --git a/package/libopenssl/0005-crypto-perlasm-ppc-xlate.pl-add-linux64v2-flavour.patch b/package/libopenssl/0005-crypto-perlasm-ppc-xlate.pl-add-linux64v2-flavour.patch
-new file mode 100644
-index 0000000000..26c31ab521
---- /dev/null
-+++ b/package/libopenssl/0005-crypto-perlasm-ppc-xlate.pl-add-linux64v2-flavour.patch
-@@ -0,0 +1,63 @@
-+From 07a0bbdd179a52907485fd793f0df31c097447af Mon Sep 17 00:00:00 2001
-+From: Andy Polyakov <appro@openssl.org>
-+Date: Sun, 5 May 2019 18:25:50 +0200
-+Subject: [PATCH] crypto/perlasm/ppc-xlate.pl: add linux64v2 flavour
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+This is a big endian ELFv2 configuration. ELFv2 was already being
-+used for little endian, and big endian was traditionally ELFv1
-+but there are practical configurations that use ELFv2 with big
-+endian nowadays (Ad?lie Linux, Void Linux, possibly Gentoo, etc.)
-+
-+Reviewed-by: Paul Dale <paul.dale@oracle.com>
-+Reviewed-by: Richard Levitte <levitte@openssl.org>
-+(Merged from https://github.com/openssl/openssl/pull/8883)
-+---
-+ crypto/perlasm/ppc-xlate.pl | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/crypto/perlasm/ppc-xlate.pl b/crypto/perlasm/ppc-xlate.pl
-+index d220c6245b..eec82b8d48 100755
-+--- a/crypto/perlasm/ppc-xlate.pl
-++++ b/crypto/perlasm/ppc-xlate.pl
-+@@ -49,7 +49,7 @@ my $globl = sub {
-+ 	/osx/		&& do { $name = "_$name";
-+ 				last;
-+ 			      };
-+-	/linux.*(32|64le)/
-++	/linux.*(32|64(le|v2))/
-+ 			&& do {	$ret .= ".globl	$name";
-+ 				if (!$$type) {
-+ 				    $ret .= "\n.type	$name,\@function";
-+@@ -80,7 +80,7 @@ my $globl = sub {
-+ };
-+ my $text = sub {
-+     my $ret = ($flavour =~ /aix/) ? ".csect\t.text[PR],7" : ".text";
-+-    $ret = ".abiversion	2\n".$ret	if ($flavour =~ /linux.*64le/);
-++    $ret = ".abiversion	2\n".$ret	if ($flavour =~ /linux.*64(le|v2)/);
-+     $ret;
-+ };
-+ my $machine = sub {
-+@@ -186,7 +186,7 @@ my $vmr = sub {
-+ 
-+ # Some ABIs specify vrsave, special-purpose register #256, as reserved
-+ # for system use.
-+-my $no_vrsave = ($flavour =~ /aix|linux64le/);
-++my $no_vrsave = ($flavour =~ /aix|linux64(le|v2)/);
-+ my $mtspr = sub {
-+     my ($f,$idx,$ra) = @_;
-+     if ($idx == 256 && $no_vrsave) {
-+@@ -318,7 +318,7 @@ while($line=<>) {
-+ 	if ($label) {
-+ 	    my $xlated = ($GLOBALS{$label} or $label);
-+ 	    print "$xlated:";
-+-	    if ($flavour =~ /linux.*64le/) {
-++	    if ($flavour =~ /linux.*64(le|v2)/) {
-+ 		if ($TYPES{$label} =~ /function/) {
-+ 		    printf "\n.localentry	%s,0\n",$xlated;
-+ 		}
-+-- 
-+2.25.0
-+
+ config BR2_PACKAGE_CONNMAN_WIFI
+ 	bool "enable WiFi support"
+ 	select BR2_PACKAGE_WPA_SUPPLICANT # runtime
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index ff5b4d48f0..3039105027 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256 6ce29b3eb0bb16a7387bc609c39455fd13064bdcde5a4d185fab3a0c71946e16  connman-1.37.tar.xz
++sha256 cb30aca97c2f79ccaed8802aa2909ac5100a3969de74c0af8a9d73b85fc4932b  connman-1.38.tar.xz
+ # Locally computed
+ sha256 b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 2cbf3fe752..505e77854a 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONNMAN_VERSION = 1.37
++CONNMAN_VERSION = 1.38
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+@@ -13,19 +13,25 @@ CONNMAN_LICENSE = GPL-2.0
+ CONNMAN_LICENSE_FILES = COPYING
+ CONNMAN_CONF_OPTS += \
+ 	--with-dbusconfdir=/etc \
++	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth) \
+ 	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug) \
+ 	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet) \
+-	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi) \
+-	$(if $(BR2_PACKAGE_CONNMAN_WISPR),--enable-wispr,--disable-wispr) \
+-	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth) \
++	$(if $(BR2_PACKAGE_CONNMAN_IPTABLES),--with-firewall=iptables) \
+ 	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback) \
+ 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),--enable-neard,--disable-neard) \
++	$(if $(BR2_PACKAGE_CONNMAN_NFTABLES),--with-firewall=nftables) \
+ 	$(if $(BR2_PACKAGE_CONNMAN_OFONO),--enable-ofono,--disable-ofono) \
++	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi) \
++	$(if $(BR2_PACKAGE_CONNMAN_WIREGUARD),--enable-wireguard,--disable-wireguard) \
++	$(if $(BR2_PACKAGE_CONNMAN_WISPR),--enable-wispr,--disable-wispr) \
+ 	$(if $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
+ 
+ CONNMAN_DEPENDENCIES += \
++	$(if $(BR2_PACKAGE_CONNMAN_IPTABLES),iptables) \
+ 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
++	$(if $(BR2_PACKAGE_CONNMAN_NFTABLES),nftables) \
+ 	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono) \
++	$(if $(BR2_PACKAGE_CONNMAN_WIREGUARD),libmnl) \
+ 	$(if $(BR2_PACKAGE_CONNMAN_WISPR),gnutls)
+ 
+ define CONNMAN_INSTALL_INIT_SYSV
 -- 
 2.25.1
