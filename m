@@ -1,23 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 22:12:59 +0100
-Subject: [Buildroot] [PATCH] package/git: make _BUG_ condition more clear
-In-Reply-To: <20200227111854.16211-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Thu, 27 Feb 2020 12:18:54 +0100")
-References: <20200227111854.16211-1-giulio.benetti@benettiengineering.com>
-Message-ID: <87v9nrloo4.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Feb 2020 22:13:26 +0100
+Subject: [Buildroot] [PATCH] package/python3: bump to version 3.8.2
+In-Reply-To: <20200227082214.21154-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 27 Feb 2020 09:22:13 +0100")
+References: <20200227082214.21154-1-peter@korsgaard.com>
+Message-ID: <87r1yflond.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > As pointed by Peter combined condition of the 2 gcc bugs is potentially
- > wrong, but as Thomas pointed in this case it's not harmful. Let's fix it
- > anyway since it's basically wrong even it doesn't cause harm.
+ > Bugfix release, fixing a number of issues.  For details, see the
+ > announcement:
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > https://docs.python.org/release/3.8.2/whatsnew/changelog.html#python-3-8-2-final
+
+ > Adjust the spacing in the hash file and update the hash of the license file
+ > for a change in copyright years:
+
+ > -2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Python Software Foundation;
+ > +2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Python Software Foundation;
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
