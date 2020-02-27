@@ -1,38 +1,24 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Thu, 27 Feb 2020 09:39:38 -0300
-Subject: [Buildroot] [PATCH 4/4] package/busybox: document the use of
- BUSYBOX_BUILD_CONFIG in openrc.mk
-In-Reply-To: <20200227123938.13412-1-unixmania@gmail.com>
-References: <20200227123938.13412-1-unixmania@gmail.com>
-Message-ID: <20200227123938.13412-5-unixmania@gmail.com>
+From: Serhii Sakhno <sergei.sakhno@gmail.com>
+Date: Thu, 27 Feb 2020 15:11:18 +0200
+Subject: [Buildroot] Rebuild host package
+Message-ID: <CAOqJNTfytEYT7=EWupa-Gy=e3Rg=ngweN+-KqcPFKyFf_wmCPQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+Hi all,
+I added host package and they build on the first build of the system. But
+its package in developing state, and need to rebuild him some times. How I
+can do it? For example, target package I can rebuild:
+{package_name}-rebuild
+But with host package its doesn't work.
 
-Prevent filures if the variable is removed or renamed in the future.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
- package/busybox/busybox.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 9eeb784d2a..a761ff569f 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -80,7 +80,9 @@ BUSYBOX_CFLAGS += "`$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
- BUSYBOX_CFLAGS_busybox += "`$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`"
- endif
- 
-+# Warning: this is also used in package/openrc/openrc.mk.
- BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
-+
- # Allows the build system to tweak CFLAGS
- BUSYBOX_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
 -- 
-2.18.2
+
+Regards,
+Sakhno Serhii
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200227/be4049f0/attachment.html>
