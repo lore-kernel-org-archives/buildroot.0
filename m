@@ -1,80 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 20:55:28 +0100
-Subject: [Buildroot] [git commit] package/libxkbcommon: bump to version
- 0.10.0 and convert to meson
-Message-ID: <20200309140905.9AAA77F8C1@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Feb 2020 23:51:58 +0100
+Subject: [Buildroot] [git commit] package/qt5graphicaleffects: drop qt 5.6
+ support
+Message-ID: <20200309140907.55F77821F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=474b4832c109be75efd0a216a5dcbacac3da3d6a
+commit: https://git.buildroot.net/buildroot/commit/?id=bd75bdc762399d34b0176a6cdc8ac9ac63a5991c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 0.9.x the autotools build system is removed from libxkbcommon
-([1]), so convert to meson build system.
-
-Remove the CFLAGS force of '-std=gnu99', believing meson sets it
-automatically (a test build used '-std=c99').
-
-For details see [1].
-
-[1] https://lists.freedesktop.org/archives/wayland-devel/2019-October/040962.html
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxkbcommon/libxkbcommon.hash |  8 ++++----
- package/libxkbcommon/libxkbcommon.mk   | 12 +++++-------
- 2 files changed, 9 insertions(+), 11 deletions(-)
+ package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash | 8 --------
+ package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk   | 5 -----
+ 2 files changed, 13 deletions(-)
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
-index c734f3ad9f..5d4c3af10a 100644
---- a/package/libxkbcommon/libxkbcommon.hash
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -1,7 +1,7 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2019-February/040102.html
--md5 3c4409058dfd203f641a563358e0187d  libxkbcommon-0.8.4.tar.xz
--sha1 0ce9df42239d451f61b2112c6ba8d0a1a0879009  libxkbcommon-0.8.4.tar.xz
--sha256 60ddcff932b7fd352752d51a5c4f04f3d0403230a584df9a2e0d5ed87c486c8b  libxkbcommon-0.8.4.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-January/041133.html
-+md5 2d9ad3a46b317138b5e72a91cf105451  libxkbcommon-0.10.0.tar.xz
-+sha1 d8f956f4bc5382d5d8e0e4dd590c4f090e0e985a  libxkbcommon-0.10.0.tar.xz
-+sha256 57c3630cdc38fb4734cd57fa349e92244f5ae3862813e533cedbd86721a0b6f2  libxkbcommon-0.10.0.tar.xz
+diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
+index 8e327de296..ae800fe07a 100644
+--- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
++++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
+@@ -1,6 +1,3 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtgraphicaleffects-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 c742592d5e45b122b29df60b69be23ba7c817f2dc471db86e054f6ea24a999ed qtgraphicaleffects-opensource-src-5.6.3.tar.xz
+-
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtgraphicaleffects-everywhere-src-5.12.7.tar.xz.sha256
+ sha256 02f0328420c623da8f9ae949fec01e99ba84213dd2ad559cb00c204502bbcace qtgraphicaleffects-everywhere-src-5.12.7.tar.xz
  
- # License file:
- sha256 086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb LICENSE
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index 1f54de4267..3923d69c8d 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -4,22 +4,20 @@
- #
- ################################################################################
+@@ -10,8 +7,3 @@ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.
+ sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
+ sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
+ sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+-sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
+-sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
+-sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
+-sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
+-sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
+diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
+index c5011a94f0..2961c89fcb 100644
+--- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
++++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
+@@ -10,13 +10,8 @@ QT5GRAPHICALEFFECTS_SOURCE = qtgraphicaleffects-$(QT5_SOURCE_TARBALL_PREFIX)-$(Q
+ QT5GRAPHICALEFFECTS_DEPENDENCIES = qt5base qt5declarative
+ QT5GRAPHICALEFFECTS_INSTALL_STAGING = YES
  
--LIBXKBCOMMON_VERSION = 0.8.4
-+LIBXKBCOMMON_VERSION = 0.10.0
- LIBXKBCOMMON_SITE = http://xkbcommon.org/download
- LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
- LIBXKBCOMMON_LICENSE = MIT/X11
- LIBXKBCOMMON_LICENSE_FILES = LICENSE
- LIBXKBCOMMON_INSTALL_STAGING = YES
- LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
--LIBXKBCOMMON_CONF_OPTS = --disable-wayland
--# uses C99 features
--LIBXKBCOMMON_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
-+LIBXKBCOMMON_CONF_OPTS = -Denable-docs=false -Denable-wayland=false
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5GRAPHICALEFFECTS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5GRAPHICALEFFECTS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
+-else
+-QT5GRAPHICALEFFECTS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+-QT5GRAPHICALEFFECTS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+-endif
  
- ifeq ($(BR2_PACKAGE_XORG7),y)
--LIBXKBCOMMON_CONF_OPTS += --enable-x11
-+LIBXKBCOMMON_CONF_OPTS += -Denable-x11=true
- LIBXKBCOMMON_DEPENDENCIES += libxcb
- else
--LIBXKBCOMMON_CONF_OPTS += --disable-x11
-+LIBXKBCOMMON_CONF_OPTS += -Denable-x11=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+ define QT5GRAPHICALEFFECTS_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
