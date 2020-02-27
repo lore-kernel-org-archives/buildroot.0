@@ -1,138 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 09:04:32 +0100
-Subject: [Buildroot] [git commit] configs/{at91,
- atmel}*_defconfig: move to bluez5_utils
-Message-ID: <20200227075236.74EF08EC41@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 09:10:41 +0100
+Subject: [Buildroot] [PATCH] package/lvm2: lvmetad systemd integration
+In-Reply-To: <20200227074651.21424-1-p.debruijn@unilogic.nl>
+References: <20200227074651.21424-1-p.debruijn@unilogic.nl>
+Message-ID: <20200227091041.19cc911f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=719f14916b7772878d9ea6e19a0f5173a5c2516f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Pascal,
 
-Commit 61a813339af43 (package/bluez_utils: drop package) removed
-bluez-utils, but forgot to update the defconfigs.  Fix them by changing to
-bluez5-utils instead.
+On Thu, 27 Feb 2020 08:46:51 +0100
+Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
 
-Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/451176867 and many
-others.
+> lvmetad is usually combined with event-based system services that
+> automatically run pvscan --cache on disks added or removed.  This
+> way, the cache is automatically updated with metadata from new disks
+> when they appear.  LVM udev rules and systemd services implement this
+> automation.  Automatic scanning is usually combined with automatic
+> activation.  For more information, see pvscan(8).
+> 
+> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+> ---
+>  package/lvm2/Config.in | 3 +++
+>  package/lvm2/lvm2.mk   | 5 +++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+> index de5b972e99..a828c31714 100644
+> --- a/package/lvm2/Config.in
+> +++ b/package/lvm2/Config.in
+> @@ -44,6 +44,9 @@ config BR2_PACKAGE_LVM2_APP_LIBRARY
+>  	help
+>  	  Install application library (liblvm2app).
+>  
+> +	  Enable this if you need systemd integration,
+> +	  like automatic activation of LVM logical volumes.
+> +
+>  comment "lvm2 application library needs a glibc or uClibc toolchain"
+>  	depends on BR2_TOOLCHAIN_USES_MUSL
+>  
+> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+> index 43370b03bf..1c3ff564b3 100644
+> --- a/package/lvm2/lvm2.mk
+> +++ b/package/lvm2/lvm2.mk
+> @@ -54,6 +54,11 @@ else
+>  LVM2_CONF_OPTS += --disable-applib
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LVM2_APP_LIBRARY)$(BR2_PACKAGE_SYSTEMD),yy)
+> +LVM2_CONF_OPTS += --enable-lvmetad
+> +LVM2_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install install_systemd_units install_systemd_generators
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/at91sam9x5ek_dev_defconfig               | 2 +-
- configs/at91sam9x5ek_mmc_dev_defconfig           | 2 +-
- configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 2 +-
- configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 2 +-
- configs/atmel_sama5d3_xplained_dev_defconfig     | 2 +-
- configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 2 +-
- configs/atmel_sama5d4_xplained_dev_defconfig     | 2 +-
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 2 +-
- 8 files changed, 8 insertions(+), 8 deletions(-)
+Looking at the install_systemd_units target, it does install much more
+than just a unit file for lvmetad.
 
-diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
-index 4257dd5642..5f777fbc72 100644
---- a/configs/at91sam9x5ek_dev_defconfig
-+++ b/configs/at91sam9x5ek_dev_defconfig
-@@ -56,7 +56,7 @@ BR2_PACKAGE_LIBDRM=y
- BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
- BR2_PACKAGE_DTC=y
- BR2_PACKAGE_DTC_PROGRAMS=y
--BR2_PACKAGE_BLUEZ_UTILS=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
- BR2_PACKAGE_ETHTOOL=y
-diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
-index 2e12038544..e8246c8d50 100644
---- a/configs/at91sam9x5ek_mmc_dev_defconfig
-+++ b/configs/at91sam9x5ek_mmc_dev_defconfig
-@@ -59,7 +59,7 @@ BR2_PACKAGE_LIBDRM=y
- BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
- BR2_PACKAGE_DTC=y
- BR2_PACKAGE_DTC_PROGRAMS=y
--BR2_PACKAGE_BLUEZ_UTILS=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
- BR2_PACKAGE_ETHTOOL=y
-diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-index c1f39ba2ee..6b5def3c64 100644
---- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
-@@ -49,7 +49,7 @@ BR2_PACKAGE_LIBDRM=y
- BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
- BR2_PACKAGE_DTC=y
- BR2_PACKAGE_DTC_PROGRAMS=y
--BR2_PACKAGE_BLUEZ_UTILS=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
- BR2_PACKAGE_ETHTOOL=y
-diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-index 057a86eab7..6f641280c8 100644
---- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-@@ -62,7 +62,7 @@ BR2_PACKAGE_LIBDRM=y
- BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
- BR2_PACKAGE_DTC=y
- BR2_PACKAGE_DTC_PROGRAMS=y
--BR2_PACKAGE_BLUEZ_UTILS=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
- BR2_PACKAGE_ETHTOOL=y
-diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-index 0d9a541d09..28efe4cc8f 100644
---- a/configs/atmel_sama5d3_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_dev_defconfig
-@@ -58,7 +58,7 @@ BR2_PACKAGE_LIBDRM=y
- BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
- BR2_PACKAGE_DTC=y
- BR2_PACKAGE_DTC_PROGRAMS=y
--BR2_PACKAGE_BLUEZ_UTILS=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
- BR2_PACKAGE_ETHTOOL=y
-diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-index 97d2d6477c..1f1881f8b7 100644
---- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-@@ -61,7 +61,7 @@ BR2_PACKAGE_LIBDRM=y
- BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
- BR2_PACKAGE_DTC=y
- BR2_PACKAGE_DTC_PROGRAMS=y
--BR2_PACKAGE_BLUEZ_UTILS=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
- BR2_PACKAGE_ETHTOOL=y
-diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
-index 41c24fe9be..71568f7497 100644
---- a/configs/atmel_sama5d4_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_dev_defconfig
-@@ -59,7 +59,7 @@ BR2_PACKAGE_LIBDRM=y
- BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
- BR2_PACKAGE_DTC=y
- BR2_PACKAGE_DTC_PROGRAMS=y
--BR2_PACKAGE_BLUEZ_UTILS=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
- BR2_PACKAGE_ETHTOOL=y
-diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-index 09c9de5fbd..93a5bd9299 100644
---- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -62,7 +62,7 @@ BR2_PACKAGE_LIBDRM=y
- BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
- BR2_PACKAGE_DTC=y
- BR2_PACKAGE_DTC_PROGRAMS=y
--BR2_PACKAGE_BLUEZ_UTILS=y
-+BR2_PACKAGE_BLUEZ5_UTILS=y
- BR2_PACKAGE_BRIDGE_UTILS=y
- BR2_PACKAGE_CAN_UTILS=y
- BR2_PACKAGE_ETHTOOL=y
+So I think the two things should be decoupled:
+
+ (1) When systemd is enabled, use install_systemd_units and
+     install_systemd_generators.
+
+ (2) Have an additional Config.in option to enable/disable the build of
+     lvmetad
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
