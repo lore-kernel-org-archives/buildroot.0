@@ -1,87 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 26 Feb 2020 21:55:01 +0100
-Subject: [Buildroot] [git commit] package/python-flatbuffers: new package
-Message-ID: <20200309140905.C161381298@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 09:21:39 +0100
+Subject: [Buildroot] [git commit] package/python-jinja2: bump to version
+ 2.11.1
+Message-ID: <20200309140906.7D3DE821F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=642f63a0dbcd8400659b160a5641a11582638070
+commit: https://git.buildroot.net/buildroot/commit/?id=be9333014cf8e66f1e8a7b04ada5671db6c7cb81
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- package/python-flatbuffers/Config.in               |  6 ++++++
- package/python-flatbuffers/python-flatbuffers.hash |  3 +++
- package/python-flatbuffers/python-flatbuffers.mk   | 13 +++++++++++++
- 5 files changed, 24 insertions(+)
+ package/python-jinja2/python-jinja2.hash | 4 ++--
+ package/python-jinja2/python-jinja2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 24b68ebe11..8f6a52b4fb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1167,6 +1167,7 @@ F:	package/python-async-lru/
- F:	package/python-async-timeout/
- F:	package/python-brotli/
- F:	package/python-cchardet/
-+F:	package/python-flatbuffers/
- F:	package/python-frozenlist/
- F:	package/python-janus/
- F:	package/python-logstash/
-diff --git a/package/Config.in b/package/Config.in
-index 2edcee01a5..9d83d3948d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -942,6 +942,7 @@ menu "External python modules"
- 	source "package/python-flask-jsonrpc/Config.in"
- 	source "package/python-flask-login/Config.in"
- 	source "package/python-flask-sqlalchemy/Config.in"
-+	source "package/python-flatbuffers/Config.in"
- 	source "package/python-flup/Config.in"
- 	source "package/python-frozenlist/Config.in"
- 	source "package/python-functools32/Config.in"
-diff --git a/package/python-flatbuffers/Config.in b/package/python-flatbuffers/Config.in
-new file mode 100644
-index 0000000000..b24b5aaf64
---- /dev/null
-+++ b/package/python-flatbuffers/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_FLATBUFFERS
-+	bool "python-flatbuffers"
-+	help
-+	  The FlatBuffers serialization format for Python.
-+
-+	  https://github.com/google/flatbuffers
-diff --git a/package/python-flatbuffers/python-flatbuffers.hash b/package/python-flatbuffers/python-flatbuffers.hash
-new file mode 100644
-index 0000000000..0cb5437906
---- /dev/null
-+++ b/package/python-flatbuffers/python-flatbuffers.hash
-@@ -0,0 +1,3 @@
-+# md5, sha256 from https://pypi.org/pypi/flatbuffers/json
-+md5  b5f6c2246f45636dd49d9ff8a00d7f1c  flatbuffers-1.11.tar.gz
-+sha256  f24185db54193540e3d684dc98aa7c2d89882341641548ceb36fd2589fef6c4e  flatbuffers-1.11.tar.gz
-diff --git a/package/python-flatbuffers/python-flatbuffers.mk b/package/python-flatbuffers/python-flatbuffers.mk
-new file mode 100644
-index 0000000000..d0374c4787
---- /dev/null
-+++ b/package/python-flatbuffers/python-flatbuffers.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-flatbuffers
-+#
-+################################################################################
-+
-+PYTHON_FLATBUFFERS_VERSION = 1.11
-+PYTHON_FLATBUFFERS_SOURCE = flatbuffers-$(PYTHON_FLATBUFFERS_VERSION).tar.gz
-+PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/c6/b6/21478b76aa7ccab58da3beb85746b6844dee2112c0cc25b51ec64b46bdbb
-+PYTHON_FLATBUFFERS_LICENSE = Apache-2.0
-+PYTHON_FLATBUFFERS_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+index 7231123b58..e366b9e180 100644
+--- a/package/python-jinja2/python-jinja2.hash
++++ b/package/python-jinja2/python-jinja2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jinja2/json
+-md5	7883559bc5cc3e2781d94b4be61cfdcd  Jinja2-2.10.3.tar.gz
+-sha256	9fe95f19286cfefaa917656583d020be14e7859c6b0252588391e47db34527de  Jinja2-2.10.3.tar.gz
++md5	5d88c7e77aa63fc852a04f65dbfe5594  Jinja2-2.11.1.tar.gz
++sha256	93187ffbc7808079673ef52771baa950426fd664d3aad1d0fa3e95644360e250  Jinja2-2.11.1.tar.gz
+ # Locally computed sha256
+ sha256	3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 5f011aa1ab..189b75d18f 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_JINJA2_VERSION = 2.10.3
++PYTHON_JINJA2_VERSION = 2.11.1
+ PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+-PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/7b/db/1d037ccd626d05a7a47a1b81ea73775614af83c2b3e53d86a0bb41d8d799
++PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/d8/03/e491f423379ea14bb3a02a5238507f7d446de639b623187bccc111fbecdf
+ PYTHON_JINJA2_SETUP_TYPE = setuptools
+ PYTHON_JINJA2_LICENSE = BSD-3-Clause
+ PYTHON_JINJA2_LICENSE_FILES = LICENSE.rst
