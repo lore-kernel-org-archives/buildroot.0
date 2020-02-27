@@ -1,48 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 10:16:16 +0100
-Subject: [Buildroot] [git commit] package/python-lmdb: bump to version 0.98
-Message-ID: <20200309140906.DA0B1821F7@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Feb 2020 23:52:28 +0100
+Subject: [Buildroot] [git commit] package/qt5script: drop qt 5.6 support
+Message-ID: <20200309140907.890668E780@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b6566611815451ada4ceda3ab3dadb599f28487
+commit: https://git.buildroot.net/buildroot/commit/?id=051a2e7b1b696707161507ddd3f7aff437ee2b81
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-lmdb/python-lmdb.hash | 4 ++--
- package/python-lmdb/python-lmdb.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/qt5/qt5script/qt5script.hash | 6 ------
+ package/qt5/qt5script/qt5script.mk   | 5 -----
+ 2 files changed, 11 deletions(-)
 
-diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
-index f57437b5f0..569d1d0bd6 100644
---- a/package/python-lmdb/python-lmdb.hash
-+++ b/package/python-lmdb/python-lmdb.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/lmdb/json
--md5	917f611903283a05d43a85ad1e7d05d3  lmdb-0.97.tar.gz
--sha256	173d71ade5fd402c7e9ecb0a1d6022c92a7f89c313132ef4e5e561d349b0834b  lmdb-0.97.tar.gz
-+md5	ae2efef18202e51c9e4a807a47900ce2  lmdb-0.98.tar.gz
-+sha256	0625bc28bf0893e6000a83be7234f915ca078c32f9e73d8ae48b3508db7af708  lmdb-0.98.tar.gz
- # Locally computed sha256 checksums
- sha256	310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
-index 5e1c0f4c79..f92c7f775b 100644
---- a/package/python-lmdb/python-lmdb.mk
-+++ b/package/python-lmdb/python-lmdb.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/qt5/qt5script/qt5script.hash b/package/qt5/qt5script/qt5script.hash
+index bddcceb813..8d87cd6f60 100644
+--- a/package/qt5/qt5script/qt5script.hash
++++ b/package/qt5/qt5script/qt5script.hash
+@@ -1,16 +1,10 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtscript-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 f08720dd0e3a70377c1cb7fa3b129e24f4cdedade279e51b67c9271ab470b389 qtscript-opensource-src-5.6.3.tar.xz
+-
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtscript-everywhere-src-5.12.7.tar.xz.sha256
+ sha256 ca1dbc66d4125a678638dd0c9c030b72fdfc4ec2c229b9316a8bc80a86104019 qtscript-everywhere-src-5.12.7.tar.xz
  
--PYTHON_LMDB_VERSION = 0.97
-+PYTHON_LMDB_VERSION = 0.98
- PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
--PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/9f/8f/37cc080deb867305bf2d3ec4639e33b981d0def8d78949454a4654ca16bf
-+PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/c0/5c/d56dbc2532ecf14fa004c543927500c0f645eaca8bd7ec39420c7546396a
- PYTHON_LMDB_LICENSE = OLDAP-2.8
- PYTHON_LMDB_LICENSE_FILES = LICENSE
- PYTHON_LMDB_SETUP_TYPE = setuptools
+ # Hashes for license files:
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+-sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
+-sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
+ sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
+-sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
+ sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+ sha256 5094ecb9c9dcd0eadc34f3c11511d9b5535063032bc150164ecd1a5d5a445547 src/3rdparty/javascriptcore/JavaScriptCore/COPYING.LIB
+ sha256 43b007cd3ac7b7ea5284b13e9580334028e6f42e859059605d57558f39374197 src/3rdparty/javascriptcore/JavaScriptCore/pcre/COPYING
+diff --git a/package/qt5/qt5script/qt5script.mk b/package/qt5/qt5script/qt5script.mk
+index a3b8cb7e34..641af6f62c 100644
+--- a/package/qt5/qt5script/qt5script.mk
++++ b/package/qt5/qt5script/qt5script.mk
+@@ -14,14 +14,9 @@ QT5SCRIPT_INSTALL_STAGING = YES
+ # This is linked into libQt5Script, which also contains Qt sources under
+ # LGPL-2.1 (only). Therefore, the library is  LGPL-2.1 and BSD-3-Clause.
+ # libQt5ScriptTools is under the normal Qt opensource license.
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5SCRIPT_LICENSE = LGPL-2.1, BSD-3-Clause, LGPL-3.0 or GPL-2.0+ (libQt5ScriptTools), GFDL-1.3 (docs)
+ # LGPL-2.1 license file is missing
+ QT5SCRIPT_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.LGPL3 LICENSE.FDL
+-else
+-QT5SCRIPT_LICENSE = LGPL-2.1, BSD-3-Clause, LGPL-2.1 with exception or LGPL-3.0 with exception (libQt5ScriptTools), GFDL-1.3 (docs)
+-QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LGPL_EXCEPTION.txt LICENSE.FDL
+-endif
+ # License files from JavaScriptCore
+ QT5SCRIPT_LICENSE_FILES += \
+ 	src/3rdparty/javascriptcore/JavaScriptCore/COPYING.LIB \
