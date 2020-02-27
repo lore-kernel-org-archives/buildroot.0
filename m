@@ -1,153 +1,120 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 27 Feb 2020 08:43:54 -0700
-Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: add missing symlinks
-Message-ID: <20200227154354.98663-1-james.hilliard1@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 27 Feb 2020 17:30:42 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/bearssl: new package
+Message-ID: <20200227163042.3723042-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As of upstream commit 9cfefbd7fbdaa5ae769e3061c463f8345d146fb7
-we must manually create symlinks as they are no longer present
-in the archive but created at installation.
+BearSSL is an implementation of the SSL/TLS protocol (RFC 5246) written
+in C
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+https://bearssl.org
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/linux-firmware/linux-firmware.mk | 57 ++++++++++++++++++------
- 1 file changed, 43 insertions(+), 14 deletions(-)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/bearssl/Config.in    |  7 +++++++
+ package/bearssl/bearssl.hash |  3 +++
+ package/bearssl/bearssl.mk   | 39 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 51 insertions(+)
+ create mode 100644 package/bearssl/Config.in
+ create mode 100644 package/bearssl/bearssl.hash
+ create mode 100644 package/bearssl/bearssl.mk
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index fd90f261fa..3ced155e69 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -71,9 +71,13 @@ endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1700b138d0..16e81cbba7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -823,6 +823,7 @@ F:	package/libmaxminddb/
+ F:	package/openzwave/
  
- # rt2xx
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX),y)
--# rt3090.bin is a symlink to rt2860.bin
--# rt3070.bin is a symlink to rt2870.bin
--LINUX_FIRMWARE_FILES += rt2860.bin rt2870.bin rt3070.bin rt3071.bin rt3090.bin
-+define LINUX_FIRMWARE_INSTALL_RALINK_RT2XX_SYMLINKS
-+	ln -sf rt2860.bin \
-+		$(TARGET_DIR)/lib/firmware/rt3090.bin
-+	ln -sf rt2870.bin \
-+		$(TARGET_DIR)/lib/firmware/rt3070.bin
-+endef
-+LINUX_FIRMWARE_FILES += rt2860.bin rt2870.bin rt3071.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink-firmware.txt
- endif
+ N:	Fabrice Fontaine <fontaine.fabrice@gmail.com>
++F:	package/bearssl/
+ F:	package/boinc/
+ F:	package/cairo/
+ F:	package/daq3/
+diff --git a/package/Config.in b/package/Config.in
+index deb1b32aff..09c5c2dd57 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1276,6 +1276,7 @@ menu "Compression and decompression"
+ endmenu
  
-@@ -214,8 +218,13 @@ endif
- 
- # sd8688
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688),y)
--LINUX_FIRMWARE_FILES += libertas/sd8688.bin libertas/sd8688_helper.bin
--# The two files above are but symlinks to those two ones:
-+define LINUX_FIRMWARE_INSTALL_LIBERTAS_SD8688_SYMLINKS
-+	mkdir -p $(TARGET_DIR)/lib/firmware/libertas
-+	ln -sf ../mrvl/sd8688.bin \
-+		$(TARGET_DIR)/lib/firmware/libertas/sd8688.bin
-+	ln -sf ../mrvl/sd8688_helper.bin \
-+		$(TARGET_DIR)/lib/firmware/libertas/sd8688_helper.bin
-+endef
- LINUX_FIRMWARE_FILES += mrvl/sd8688.bin mrvl/sd8688_helper.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
- endif
-@@ -320,12 +329,14 @@ endif
- 
- # wl127x
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
--# wl1271-nvs.bin is a symlink to wl127x-nvs.bin
-+define LINUX_FIRMWARE_INSTALL_TI_WL127X_SYMLINKS
-+	ln -sf wl127x-nvs.bin \
-+		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl1271-nvs.bin
-+endef
- LINUX_FIRMWARE_FILES += \
- 	ti-connectivity/wl1271-fw-2.bin \
- 	ti-connectivity/wl1271-fw-ap.bin \
- 	ti-connectivity/wl1271-fw.bin \
--	ti-connectivity/wl1271-nvs.bin \
- 	ti-connectivity/wl127x-fw-3.bin \
- 	ti-connectivity/wl127x-fw-plt-3.bin \
- 	ti-connectivity/wl127x-nvs.bin \
-@@ -341,15 +352,18 @@ endif
- 
- # wl128x
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X),y)
--# wl1271-nvs.bin and wl12xx-nvs.bin are symlinks to wl127x-nvs.bin
-+define LINUX_FIRMWARE_INSTALL_TI_WL128X_SYMLINKS
-+	ln -sf wl127x-nvs.bin \
-+		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl1271-nvs.bin
-+	ln -sf wl127x-nvs.bin \
-+		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl12xx-nvs.bin
-+endef
- LINUX_FIRMWARE_FILES += \
- 	ti-connectivity/wl128x-fw-3.bin \
- 	ti-connectivity/wl128x-fw-ap.bin \
- 	ti-connectivity/wl128x-fw-plt-3.bin \
- 	ti-connectivity/wl128x-fw.bin \
--	ti-connectivity/wl1271-nvs.bin \
- 	ti-connectivity/wl128x-nvs.bin \
--	ti-connectivity/wl12xx-nvs.bin \
- 	ti-connectivity/wl127x-nvs.bin \
- 	ti-connectivity/wl128x-fw-4-mr.bin \
- 	ti-connectivity/wl128x-fw-4-plt.bin \
-@@ -363,13 +377,15 @@ endif
- 
- # wl18xx
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX),y)
--# wl1271-nvs.bin is a symlink to wl127x-nvs.bin
-+define LINUX_FIRMWARE_INSTALL_TI_WL18XX_SYMLINKS
-+	ln -sf wl127x-nvs.bin \
-+		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl1271-nvs.bin
-+endef
- LINUX_FIRMWARE_FILES += \
- 	ti-connectivity/wl18xx-fw.bin \
- 	ti-connectivity/wl18xx-fw-2.bin \
- 	ti-connectivity/wl18xx-fw-3.bin \
- 	ti-connectivity/wl18xx-fw-4.bin \
--	ti-connectivity/wl1271-nvs.bin \
- 	ti-connectivity/wl127x-nvs.bin \
- 	ti-connectivity/TIInit_7.2.31.bts
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
-@@ -563,8 +579,11 @@ LINUX_FIRMWARE_FILES += \
- endif
- 
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QAT_DH895XCC),y)
--# qat_mmp.bin is a symlink to qat_895xcc_mmp.bin
--LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin qat_mmp.bin
-+define LINUX_FIRMWARE_INSTALL_QAT_DH895XCC_SYMLINKS
-+	ln -sf qat_895xcc_mmp.bin \
-+		$(TARGET_DIR)/lib/firmware/qat_mmp.bin
-+endef
-+LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
- endif
- 
-@@ -597,6 +616,15 @@ define LINUX_FIRMWARE_INSTALL_DIRS
- endef
- endif
- 
-+define LINUX_FIRMWARE_INSTALL_SYMLINKS
-+	$(LINUX_FIRMWARE_INSTALL_RALINK_RT2XX_SYMLINKS)
-+	$(LINUX_FIRMWARE_INSTALL_LIBERTAS_SD8688_SYMLINKS)
-+	$(LINUX_FIRMWARE_INSTALL_TI_WL127X_SYMLINKS)
-+	$(LINUX_FIRMWARE_INSTALL_TI_WL128X_SYMLINKS)
-+	$(LINUX_FIRMWARE_INSTALL_TI_WL18XX_SYMLINKS)
-+	$(LINUX_FIRMWARE_INSTALL_QAT_DH895XCC_SYMLINKS)
+ menu "Crypto"
++	source "package/bearssl/Config.in"
+ 	source "package/beecrypt/Config.in"
+ 	source "package/botan/Config.in"
+ 	source "package/ca-certificates/Config.in"
+diff --git a/package/bearssl/Config.in b/package/bearssl/Config.in
+new file mode 100644
+index 0000000000..b10ce6025a
+--- /dev/null
++++ b/package/bearssl/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_BEARSSL
++	bool "bearssl"
++	help
++	  BearSSL is an implementation of the SSL/TLS protocol
++	  (RFC 5246) written in C.
++
++	  https://bearssl.org
+diff --git a/package/bearssl/bearssl.hash b/package/bearssl/bearssl.hash
+new file mode 100644
+index 0000000000..e000762668
+--- /dev/null
++++ b/package/bearssl/bearssl.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  6705bba1714961b41a728dfc5debbe348d2966c117649392f8c8139efc83ff14  bearssl-0.6.tar.gz
++sha256  771bf18c8633ea69ec9b07d2e604c4b99b7bef41b0f5ce6385d24df4448f61ca  LICENSE.txt
+diff --git a/package/bearssl/bearssl.mk b/package/bearssl/bearssl.mk
+new file mode 100644
+index 0000000000..32e41db81e
+--- /dev/null
++++ b/package/bearssl/bearssl.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# bearssl
++#
++################################################################################
++
++BEARSSL_VERSION = 0.6
++BEARSSL_SITE = https://bearssl.org
++BEARSSL_LICENSE = MIT
++BEARSSL_LICENSE_FILES = LICENSE.txt
++BEARSSL_INSTALL_STAGING = YES
++
++BEARSSL_MAKE_OPTS = \
++	$(TARGET_CONFIGURE_OPTS) \
++	LDDLL=$(TARGET_CC)
++
++ifeq ($(BR2_SHARED_LIBS),y)
++BEARSSL_TARGETS += dll
++else ifeq ($(BR2_STATIC_LIBS),y)
++BEARSSL_TARGETS += lib
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++BEARSSL_TARGETS += dll lib
++endif
++
++define BEARSSL_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(BEARSSL_MAKE_OPTS) -C $(@D) \
++		$(BEARSSL_TARGETS)
 +endef
 +
- ifneq ($(LINUX_FIRMWARE_FILES)$(LINUX_FIRMWARE_DIRS),)
- 
- # Most firmware files are under a proprietary license, so no need to
-@@ -619,6 +647,7 @@ define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/lib/firmware
- 	$(LINUX_FIRMWARE_INSTALL_FILES)
- 	$(LINUX_FIRMWARE_INSTALL_DIRS)
-+	$(LINUX_FIRMWARE_INSTALL_SYMLINKS)
- endef
- 
- $(eval $(generic-package))
++define BEARSSL_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/inc/*.h $(STAGING_DIR)/usr/include
++	$(INSTALL) -D -m 0644 $(@D)/build/lib* $(STAGING_DIR)/usr/lib
++endef
++
++define BEARSSL_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/build/lib* $(TARGET_DIR)/usr/lib
++endef
++
++$(eval $(generic-package))
 -- 
-2.20.1
+2.25.0
