@@ -1,101 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 09:03:39 +0100
-Subject: [Buildroot] [PATCH] package/qt5/qt5tools: mark qdoc option as
- broken
-In-Reply-To: <15341_1582786313_5E576709_15341_100_1_20200227065151.GA3323@r-lnx-nyma7486-2>
-References: <20200226232237.292826-1-romain.naour@smile.fr>
- <15341_1582786313_5E576709_15341_100_1_20200227065151.GA3323@r-lnx-nyma7486-2>
-Message-ID: <20200227090339.344f8d3e@windsurf>
+Date: Thu, 27 Feb 2020 09:04:37 +0100
+Subject: [Buildroot] [git commit] configs/beaglebone_qt5_defconfig: kernel
+ builds needs host-openssl
+Message-ID: <20200227075236.824A78EC41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=128c57adb8f3a4e1af2b9e0fcfc612049cff6773
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 27 Feb 2020 07:51:51 +0100
-<yann.morin@orange.com> wrote:
+Similar to the fix for the base beaglebone defconfig in commit 38912a61be
+(configs/beaglebone: kernel builds needs host-openssl), the qt5 variant uses
+the same kernel, so also needs host-openssl.
 
-> > So in the current state, host-clang is added to qt5tools
-> > dependency without taking into account BR2_PACKAGE_LLVM_ARCH_SUPPORTS.  
-> 
-> Then when don't we simply add that depednency instead of hiding it
-> behind BROKEN?
+Fixes:
 
-I think the idea was that since BR2_PACKAGE_LLVM_ARCH_SUPPORTS only
-exposes whether the target architecture is supported by LLVM, it does
-not make sense to use that, and for now, we don't have an option to
-indicate that the the host architecture is supported by LLVM.
+914 scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+915  #include <openssl/bio.h>
 
-> > But even with host native support in llvm/clang host packages, the
-> > host-clang dependency itself increase a lot the build time.
-> > 
-> > On a laptop with a i7-8565U CPU @ 1.80GHz, host-llvm takes 1100 sec
-> > (18,3min) to build and host-clang takes 1200 sec (20min) to build.
-> > qt5tools takes 18sec to build.
-> > 
-> > Increasing the build time by 40min just for the sake of building qdoc
-> > is not great.  
-> 
-> Yes, and so what? If people want to build qdoc because they want to
-> generate documentation for their Qt-based programs, and upstream Qt has
-> decided they need clang, there is not much we can do about that, can we?
-> 
-> The build time is no reason to hide away a feature, so there is no
-> reason to reference that in the commit log (it could be a post-commit
-> note, though).
+https://gitlab.com/buildroot.org/buildroot/-/jobs/451176891
 
-I agree that the phrasing here is not ideal.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/beaglebone_qt5_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > Instead we may consider adding a new check in support/dependencies/dependencies.sh
-> > for llvm/clang installed on the build machine.
-> > This llvm/clang would be used for building qdoc (or mabe other host package).
-> > 
-> > But we need to be careful for the case where host-llvm and host-clang
-> > package are already build.
-> > 
-> > Then, the qt5tools package would set LLVM_INSTALL_DIR in the
-> > additional environment variables to pass to make in the build step,
-> > to provide the patch to llvm/clang headers and libraries.
-> > 
-> > Something like:
-> > define QT5TOOLS_BUILD_CMDS
-> > 	$(TARGET_MAKE_ENV) LLVM_INSTALL_DIR="`/usr/bin/llvm-config --prefix`" \
-> > 		$(MAKE) -C $(@D) sub-src-qmake_all
-> > [...]  
-> 
-> All those proposals do not belogn to the commit log, but to a
-> post-commit note, too.
-
-Not sure here. Post-commit notes are lost. Commit logs are not. So a
-commit log can easily be found by someone who sees the dependency,
-finds it annoying, and wants to find what are the alternative solutions.
-
-
-> Here's my counter-proposal:
-> 
->     config BR2_PACKAGE_QT5TOOLS_QDOC_TOOL
->         bool "qdoc host tool"
->         # Needs llvm-config and libclang for the host, which is not
->         # currently supported in Buildroot, unless the target is
->         # already supported by llvm.
->         depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-
-If that works, then that's fine by me.
-
-What I discussed with Romain yesterday is that I didn't want for
-2020.02 to do all the work to supports LLVM just for the host (i.e when
-the target architecture is not supported), and wanted a more minimal
-solution.
-
-If your solution works, fine with me. Romain, Yann, could you
-coordinate to send an updated patch ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 99355e855c..6e07bc9ac0 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/beaglebone/linux-sgx.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_FBV=y
+ BR2_PACKAGE_QT5=y
+ BR2_PACKAGE_QT5BASE_EXAMPLES=y
