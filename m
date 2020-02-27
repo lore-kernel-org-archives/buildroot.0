@@ -1,9 +1,10 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Thu, 27 Feb 2020 17:08:12 -0300
-Subject: [Buildroot] [PATCH v2 1/4] Makefile: add SED_QUIET
+Date: Thu, 27 Feb 2020 17:08:13 -0300
+Subject: [Buildroot] [PATCH v2 2/4] package/pkg-utils.mk: add
+ KCONFIG_GET_OPT macro
 In-Reply-To: <20200227200815.26613-1-unixmania@gmail.com>
 References: <20200227200815.26613-1-unixmania@gmail.com>
-Message-ID: <20200227200815.26613-2-unixmania@gmail.com>
+Message-ID: <20200227200815.26613-3-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +13,31 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-- Save the sed command full path in HOSTSED
-- Define SED as "$(HOSTSED) -i -e"
-- Define SED_QUIET as "$(HOSTSED) -n -e"
+Given a config name and a file list, returns the config value if it is
+set in one of the files, otherwise returns an empty string.
 
-SED_QUIET will be used by the forthcoming KCONFIG_GET_OPT macro.
+Files are searched in the given order and the last value found prevails
+over the other ones.
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- Makefile | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/pkg-utils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index eb68598059..25285eb5c2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -307,7 +307,9 @@ HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
- HOSTNM := $(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
- HOSTOBJCOPY := $(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
- HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
--SED := $(shell which sed || type -p sed) -i -e
-+HOSTSED := $(shell which sed || type -p sed)
-+SED := $(HOSTSED) -i -e
-+SED_QUIET := $(HOSTSED) -n -e
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index d324934dba..6f9693e81a 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -16,6 +16,10 @@ define KCONFIG_ENABLE_OPT # (option, file)
+ 	echo '$(1)=y' >> $(2)
+ endef
  
- export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
- export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
++define KCONFIG_GET_OPT # (option, files)
++$(shell $(SED_QUIET) '/^\<$(1)\>=/h;$${x;s/$(1)=//p;}' $(2) 2> /dev/null)
++endef
++
+ define KCONFIG_SET_OPT # (option, value, file)
+ 	$(SED) "/\\<$(1)\\>/d" $(3)
+ 	echo '$(1)=$(2)' >> $(3)
 -- 
 2.18.2
