@@ -1,49 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 09:19:37 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-cffi: bump to
- version 1.14.0
-Message-ID: <20200227100041.1E1528EC46@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 09:22:41 +0100
+Subject: [Buildroot] [git commit branch/next] package/python{,
+ 3}-mako: bump to version 1.1.1
+Message-ID: <20200227100041.6EB228ED13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ff0ebe52b80fa440f559c766cc5433082075fe5
+commit: https://git.buildroot.net/buildroot/commit/?id=1da9e37bd785205c49dad124353a11adbab2cfbd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+License hash change is due to date update.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-cffi/python-cffi.hash | 4 ++--
- package/python-cffi/python-cffi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-mako/python-mako.hash | 6 +++---
+ package/python-mako/python-mako.mk   | 4 ++--
+ package/python3-mako/python3-mako.mk | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
-index dd8720e822..8c2beb06a4 100644
---- a/package/python-cffi/python-cffi.hash
-+++ b/package/python-cffi/python-cffi.hash
+diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
+index 0f0dadcd0c..a1c18c9916 100644
+--- a/package/python-mako/python-mako.hash
++++ b/package/python-mako/python-mako.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cffi/json
--md5	824ad9f228fbc6ce203c334e2ff4ab8f  cffi-1.13.1.tar.gz
--sha256	558b3afef987cf4b17abd849e7bedf64ee12b28175d564d05b628a0f9355599b  cffi-1.13.1.tar.gz
-+md5	74845f8d2b7b583dd9a3574f402edf39  cffi-1.14.0.tar.gz
-+sha256	2d384f4a127a15ba701207f7639d94106693b6cd64173d6c8988e2c25f3ac2b6  cffi-1.14.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/mako/json
+-md5	6c3f2da0b74af529a4c4a537d0848bf2  Mako-1.1.0.tar.gz
+-sha256	a36919599a9b7dc5d86a7a8988f23a9a3a3d083070023bab23d64f7f1d1e0a4b  Mako-1.1.0.tar.gz
++md5	2660a4916f2f63456e6885c727b7cd2f  Mako-1.1.1.tar.gz
++sha256	2984a6733e1d472796ceef37ad48c26f4a984bb18119bb2dbc37a44d8f6e75a4  Mako-1.1.1.tar.gz
  # Locally computed sha256 checksums
- sha256  04b80f5b077bbed68808cfebadeb5e3523f2a8c9a96495c587bd96df1eac2a33  LICENSE
-diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-index b43e8887e5..8f76e7c1d1 100644
---- a/package/python-cffi/python-cffi.mk
-+++ b/package/python-cffi/python-cffi.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+-sha256	c3b124673c93872156757a934c75b498d68eec09510e25e549d9dc2013776499  LICENSE
++sha256	47cd0d41b1092f9161cfb629ed15e5cea185144710ff4633a4281ef088ff5de7  LICENSE
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+index 622359493a..5be9937fee 100644
+--- a/package/python-mako/python-mako.mk
++++ b/package/python-mako/python-mako.mk
+@@ -6,9 +6,9 @@
  
--PYTHON_CFFI_VERSION = 1.13.1
-+PYTHON_CFFI_VERSION = 1.14.0
- PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
--PYTHON_CFFI_SITE = https://files.pythonhosted.org/packages/0d/aa/c5ac2f337d9a10ee95d160d47beb8d9400e1b2a46bb94990a0409fe6d133
-+PYTHON_CFFI_SITE = https://files.pythonhosted.org/packages/05/54/3324b0c46340c31b909fcec598696aaec7ddc8c18a63f2db352562d3354c
- PYTHON_CFFI_SETUP_TYPE = setuptools
- PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
- PYTHON_CFFI_LICENSE = MIT
+ # Please keep in sync with
+ # package/python3-mako/python3-mako.mk
+-PYTHON_MAKO_VERSION = 1.1.0
++PYTHON_MAKO_VERSION = 1.1.1
+ PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+-PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/b0/3c/8dcd6883d009f7cae0f3157fb53e9afb05a0d3d33b3db1268ec2e6f4a56b
++PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/28/03/329b21f00243fc2d3815399413845dbbfb0745cff38a29d3597e97f8be58
+ PYTHON_MAKO_SETUP_TYPE = setuptools
+ PYTHON_MAKO_LICENSE = MIT
+ PYTHON_MAKO_LICENSE_FILES = LICENSE
+diff --git a/package/python3-mako/python3-mako.mk b/package/python3-mako/python3-mako.mk
+index 31df4194eb..6d5c1a185e 100644
+--- a/package/python3-mako/python3-mako.mk
++++ b/package/python3-mako/python3-mako.mk
+@@ -6,9 +6,9 @@
+ 
+ # Please keep in sync with
+ # package/python-mako/python-mako.mk
+-PYTHON3_MAKO_VERSION = 1.1.0
++PYTHON3_MAKO_VERSION = 1.1.1
+ PYTHON3_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+-PYTHON3_MAKO_SITE = https://files.pythonhosted.org/packages/b0/3c/8dcd6883d009f7cae0f3157fb53e9afb05a0d3d33b3db1268ec2e6f4a56b
++PYTHON3_MAKO_SITE = https://files.pythonhosted.org/packages/28/03/329b21f00243fc2d3815399413845dbbfb0745cff38a29d3597e97f8be58
+ PYTHON3_MAKO_SETUP_TYPE = setuptools
+ PYTHON3_MAKO_LICENSE = MIT
+ PYTHON3_MAKO_LICENSE_FILES = LICENSE
