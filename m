@@ -1,71 +1,153 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Thu, 27 Feb 2020 16:05:41 +0100
-Subject: [Buildroot] Untractably slow CVE checks in support/scripts/pkg-stat
-Message-ID: <ac23d55f-c8a5-587d-2c98-5967f3abfa14@railnova.eu>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu, 27 Feb 2020 08:43:54 -0700
+Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: add missing symlinks
+Message-ID: <20200227154354.98663-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas^2, Yann, and all Buildrooters,
+As of upstream commit 9cfefbd7fbdaa5ae769e3061c463f8345d146fb7
+we must manually create symlinks as they are no longer present
+in the archive but created at installation.
 
-During the FOSDEM2020 developer meeting, we started to work on matching 
-Buildroot packages against the NIST Vulnerability Database (NVD) files, 
-as to obtain a list of known CVEs affecting our packages.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/linux-firmware/linux-firmware.mk | 57 ++++++++++++++++++------
+ 1 file changed, 43 insertions(+), 14 deletions(-)
 
-The first implementation, merged in 
-4a157be9efac8ba8888e4972f42eda213077152c, was loading entire nvd files 
-one by one (Python's json.load()). While this is the most 
-straightforward approach, this was not practical because when loaded 
-into their Python representation, these files take up to a few gigabytes 
-of memory, and hosts with a modest amount of RAM (4GB or less) were 
-OOMing while processing the CVEs.
-
-I therefore introduced the usage of the Python 3rd party module ijson, 
-which allows to iterate over a json file in streaming, ie only loading 
-one CVE at a time from its json representation. Thomas D.S. confirmed 
-that this drastically reduced memory consumption. This modification was 
-subsequently merged in 712f81c41cde9d58c750ae2b1617831c0b07ccbd . In the 
-commit message, I wrote:
-
-"""
-To run the script with these modifications, one should install the ijson 
-python package. This can be done with pip: `pip install ijson`. On 
-Debian based distributions, this can be done with the apt package 
-manager: `apt install python-ijson`.
-"""
-
-However, Thomas P. reported that the pkg-stat script now takes very much 
-longer to terminate (from a few minutes before the change, to 2h30 (!) 
-now). At first, I was puzzled because the same script completes in less 
-than 5 minutes on my laptop. Thanks to the help of Yann, I managed to 
-isolate the issue into a small Python script, which can be found, along 
-with accompanying data files over there: 
-https://mypi.cz/0c3af4651d1aefe7335b6f137131424e.tar.gz . On my laptop, 
-the 8 different steps in this script run all in less than 1 minute, 
-while on Yann's machine, the first one did not even complete in a few 
-minutes.
-
-I therefore went to the release notes of ijson 
-(https://github.com/ICRAR/ijson/blob/master/CHANGELOG.md#24), and found 
-that the version 2.4 introduced huge performance improvements. On my 
-laptop, I have ijson-2.6.1, because I installed it via pip, and 
-therefore obtained the last version. On the other hand, Yann installed 
-it via the apt package manager, which only provides ijson-2.3 (before 
-the perf improvement).
-
-=> Thus, I think that the huge slowness we see currently in pkg-stat is 
-due to an old ijson version. This can be easily verified with the 
-following procedure:
-
-1. Uninstall the version distributed by apt:
-    `apt remove python-ijson`
-2. Install the latest version with pip:
-    `pip install [--user] ijson`
-3. Start the pkg-stat script, it should complete in less than 5 minutes.
-
-
-Kind regards,
-
-Titouan
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index fd90f261fa..3ced155e69 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -71,9 +71,13 @@ endif
+ 
+ # rt2xx
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX),y)
+-# rt3090.bin is a symlink to rt2860.bin
+-# rt3070.bin is a symlink to rt2870.bin
+-LINUX_FIRMWARE_FILES += rt2860.bin rt2870.bin rt3070.bin rt3071.bin rt3090.bin
++define LINUX_FIRMWARE_INSTALL_RALINK_RT2XX_SYMLINKS
++	ln -sf rt2860.bin \
++		$(TARGET_DIR)/lib/firmware/rt3090.bin
++	ln -sf rt2870.bin \
++		$(TARGET_DIR)/lib/firmware/rt3070.bin
++endef
++LINUX_FIRMWARE_FILES += rt2860.bin rt2870.bin rt3071.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink-firmware.txt
+ endif
+ 
+@@ -214,8 +218,13 @@ endif
+ 
+ # sd8688
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688),y)
+-LINUX_FIRMWARE_FILES += libertas/sd8688.bin libertas/sd8688_helper.bin
+-# The two files above are but symlinks to those two ones:
++define LINUX_FIRMWARE_INSTALL_LIBERTAS_SD8688_SYMLINKS
++	mkdir -p $(TARGET_DIR)/lib/firmware/libertas
++	ln -sf ../mrvl/sd8688.bin \
++		$(TARGET_DIR)/lib/firmware/libertas/sd8688.bin
++	ln -sf ../mrvl/sd8688_helper.bin \
++		$(TARGET_DIR)/lib/firmware/libertas/sd8688_helper.bin
++endef
+ LINUX_FIRMWARE_FILES += mrvl/sd8688.bin mrvl/sd8688_helper.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
+ endif
+@@ -320,12 +329,14 @@ endif
+ 
+ # wl127x
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
+-# wl1271-nvs.bin is a symlink to wl127x-nvs.bin
++define LINUX_FIRMWARE_INSTALL_TI_WL127X_SYMLINKS
++	ln -sf wl127x-nvs.bin \
++		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl1271-nvs.bin
++endef
+ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl1271-fw-2.bin \
+ 	ti-connectivity/wl1271-fw-ap.bin \
+ 	ti-connectivity/wl1271-fw.bin \
+-	ti-connectivity/wl1271-nvs.bin \
+ 	ti-connectivity/wl127x-fw-3.bin \
+ 	ti-connectivity/wl127x-fw-plt-3.bin \
+ 	ti-connectivity/wl127x-nvs.bin \
+@@ -341,15 +352,18 @@ endif
+ 
+ # wl128x
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X),y)
+-# wl1271-nvs.bin and wl12xx-nvs.bin are symlinks to wl127x-nvs.bin
++define LINUX_FIRMWARE_INSTALL_TI_WL128X_SYMLINKS
++	ln -sf wl127x-nvs.bin \
++		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl1271-nvs.bin
++	ln -sf wl127x-nvs.bin \
++		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl12xx-nvs.bin
++endef
+ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl128x-fw-3.bin \
+ 	ti-connectivity/wl128x-fw-ap.bin \
+ 	ti-connectivity/wl128x-fw-plt-3.bin \
+ 	ti-connectivity/wl128x-fw.bin \
+-	ti-connectivity/wl1271-nvs.bin \
+ 	ti-connectivity/wl128x-nvs.bin \
+-	ti-connectivity/wl12xx-nvs.bin \
+ 	ti-connectivity/wl127x-nvs.bin \
+ 	ti-connectivity/wl128x-fw-4-mr.bin \
+ 	ti-connectivity/wl128x-fw-4-plt.bin \
+@@ -363,13 +377,15 @@ endif
+ 
+ # wl18xx
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX),y)
+-# wl1271-nvs.bin is a symlink to wl127x-nvs.bin
++define LINUX_FIRMWARE_INSTALL_TI_WL18XX_SYMLINKS
++	ln -sf wl127x-nvs.bin \
++		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl1271-nvs.bin
++endef
+ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl18xx-fw.bin \
+ 	ti-connectivity/wl18xx-fw-2.bin \
+ 	ti-connectivity/wl18xx-fw-3.bin \
+ 	ti-connectivity/wl18xx-fw-4.bin \
+-	ti-connectivity/wl1271-nvs.bin \
+ 	ti-connectivity/wl127x-nvs.bin \
+ 	ti-connectivity/TIInit_7.2.31.bts
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
+@@ -563,8 +579,11 @@ LINUX_FIRMWARE_FILES += \
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QAT_DH895XCC),y)
+-# qat_mmp.bin is a symlink to qat_895xcc_mmp.bin
+-LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin qat_mmp.bin
++define LINUX_FIRMWARE_INSTALL_QAT_DH895XCC_SYMLINKS
++	ln -sf qat_895xcc_mmp.bin \
++		$(TARGET_DIR)/lib/firmware/qat_mmp.bin
++endef
++LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
+ endif
+ 
+@@ -597,6 +616,15 @@ define LINUX_FIRMWARE_INSTALL_DIRS
+ endef
+ endif
+ 
++define LINUX_FIRMWARE_INSTALL_SYMLINKS
++	$(LINUX_FIRMWARE_INSTALL_RALINK_RT2XX_SYMLINKS)
++	$(LINUX_FIRMWARE_INSTALL_LIBERTAS_SD8688_SYMLINKS)
++	$(LINUX_FIRMWARE_INSTALL_TI_WL127X_SYMLINKS)
++	$(LINUX_FIRMWARE_INSTALL_TI_WL128X_SYMLINKS)
++	$(LINUX_FIRMWARE_INSTALL_TI_WL18XX_SYMLINKS)
++	$(LINUX_FIRMWARE_INSTALL_QAT_DH895XCC_SYMLINKS)
++endef
++
+ ifneq ($(LINUX_FIRMWARE_FILES)$(LINUX_FIRMWARE_DIRS),)
+ 
+ # Most firmware files are under a proprietary license, so no need to
+@@ -619,6 +647,7 @@ define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/lib/firmware
+ 	$(LINUX_FIRMWARE_INSTALL_FILES)
+ 	$(LINUX_FIRMWARE_INSTALL_DIRS)
++	$(LINUX_FIRMWARE_INSTALL_SYMLINKS)
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.20.1
