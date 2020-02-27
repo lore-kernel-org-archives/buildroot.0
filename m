@@ -1,43 +1,138 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Feb 2020 09:04:37 +0100
-Subject: [Buildroot] [git commit] configs/beaglebone_qt5_defconfig: kernel
- builds needs host-openssl
-Message-ID: <20200227075236.824A78EC41@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 09:04:32 +0100
+Subject: [Buildroot] [git commit] configs/{at91,
+ atmel}*_defconfig: move to bluez5_utils
+Message-ID: <20200227075236.74EF08EC41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=128c57adb8f3a4e1af2b9e0fcfc612049cff6773
+commit: https://git.buildroot.net/buildroot/commit/?id=719f14916b7772878d9ea6e19a0f5173a5c2516f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Similar to the fix for the base beaglebone defconfig in commit 38912a61be
-(configs/beaglebone: kernel builds needs host-openssl), the qt5 variant uses
-the same kernel, so also needs host-openssl.
+Commit 61a813339af43 (package/bluez_utils: drop package) removed
+bluez-utils, but forgot to update the defconfigs.  Fix them by changing to
+bluez5-utils instead.
 
-Fixes:
-
-914 scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
-915  #include <openssl/bio.h>
-
-https://gitlab.com/buildroot.org/buildroot/-/jobs/451176891
+Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/451176867 and many
+others.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/beaglebone_qt5_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ configs/at91sam9x5ek_dev_defconfig               | 2 +-
+ configs/at91sam9x5ek_mmc_dev_defconfig           | 2 +-
+ configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 2 +-
+ configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 2 +-
+ configs/atmel_sama5d3_xplained_dev_defconfig     | 2 +-
+ configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 2 +-
+ configs/atmel_sama5d4_xplained_dev_defconfig     | 2 +-
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
-index 99355e855c..6e07bc9ac0 100644
---- a/configs/beaglebone_qt5_defconfig
-+++ b/configs/beaglebone_qt5_defconfig
-@@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/beaglebone/linux-sgx.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_PACKAGE_FBV=y
- BR2_PACKAGE_QT5=y
- BR2_PACKAGE_QT5BASE_EXAMPLES=y
+diff --git a/configs/at91sam9x5ek_dev_defconfig b/configs/at91sam9x5ek_dev_defconfig
+index 4257dd5642..5f777fbc72 100644
+--- a/configs/at91sam9x5ek_dev_defconfig
++++ b/configs/at91sam9x5ek_dev_defconfig
+@@ -56,7 +56,7 @@ BR2_PACKAGE_LIBDRM=y
+ BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
+ BR2_PACKAGE_DTC=y
+ BR2_PACKAGE_DTC_PROGRAMS=y
+-BR2_PACKAGE_BLUEZ_UTILS=y
++BR2_PACKAGE_BLUEZ5_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+ BR2_PACKAGE_ETHTOOL=y
+diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
+index 2e12038544..e8246c8d50 100644
+--- a/configs/at91sam9x5ek_mmc_dev_defconfig
++++ b/configs/at91sam9x5ek_mmc_dev_defconfig
+@@ -59,7 +59,7 @@ BR2_PACKAGE_LIBDRM=y
+ BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
+ BR2_PACKAGE_DTC=y
+ BR2_PACKAGE_DTC_PROGRAMS=y
+-BR2_PACKAGE_BLUEZ_UTILS=y
++BR2_PACKAGE_BLUEZ5_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+ BR2_PACKAGE_ETHTOOL=y
+diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+index c1f39ba2ee..6b5def3c64 100644
+--- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
++++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+@@ -49,7 +49,7 @@ BR2_PACKAGE_LIBDRM=y
+ BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
+ BR2_PACKAGE_DTC=y
+ BR2_PACKAGE_DTC_PROGRAMS=y
+-BR2_PACKAGE_BLUEZ_UTILS=y
++BR2_PACKAGE_BLUEZ5_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+ BR2_PACKAGE_ETHTOOL=y
+diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+index 057a86eab7..6f641280c8 100644
+--- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+@@ -62,7 +62,7 @@ BR2_PACKAGE_LIBDRM=y
+ BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
+ BR2_PACKAGE_DTC=y
+ BR2_PACKAGE_DTC_PROGRAMS=y
+-BR2_PACKAGE_BLUEZ_UTILS=y
++BR2_PACKAGE_BLUEZ5_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+ BR2_PACKAGE_ETHTOOL=y
+diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
+index 0d9a541d09..28efe4cc8f 100644
+--- a/configs/atmel_sama5d3_xplained_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_dev_defconfig
+@@ -58,7 +58,7 @@ BR2_PACKAGE_LIBDRM=y
+ BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
+ BR2_PACKAGE_DTC=y
+ BR2_PACKAGE_DTC_PROGRAMS=y
+-BR2_PACKAGE_BLUEZ_UTILS=y
++BR2_PACKAGE_BLUEZ5_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+ BR2_PACKAGE_ETHTOOL=y
+diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+index 97d2d6477c..1f1881f8b7 100644
+--- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+@@ -61,7 +61,7 @@ BR2_PACKAGE_LIBDRM=y
+ BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
+ BR2_PACKAGE_DTC=y
+ BR2_PACKAGE_DTC_PROGRAMS=y
+-BR2_PACKAGE_BLUEZ_UTILS=y
++BR2_PACKAGE_BLUEZ5_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+ BR2_PACKAGE_ETHTOOL=y
+diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
+index 41c24fe9be..71568f7497 100644
+--- a/configs/atmel_sama5d4_xplained_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_dev_defconfig
+@@ -59,7 +59,7 @@ BR2_PACKAGE_LIBDRM=y
+ BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
+ BR2_PACKAGE_DTC=y
+ BR2_PACKAGE_DTC_PROGRAMS=y
+-BR2_PACKAGE_BLUEZ_UTILS=y
++BR2_PACKAGE_BLUEZ5_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+ BR2_PACKAGE_ETHTOOL=y
+diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+index 09c9de5fbd..93a5bd9299 100644
+--- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+@@ -62,7 +62,7 @@ BR2_PACKAGE_LIBDRM=y
+ BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
+ BR2_PACKAGE_DTC=y
+ BR2_PACKAGE_DTC_PROGRAMS=y
+-BR2_PACKAGE_BLUEZ_UTILS=y
++BR2_PACKAGE_BLUEZ5_UTILS=y
+ BR2_PACKAGE_BRIDGE_UTILS=y
+ BR2_PACKAGE_CAN_UTILS=y
+ BR2_PACKAGE_ETHTOOL=y
