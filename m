@@ -1,133 +1,92 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 23:50:30 +0100
-Subject: [Buildroot] [git commit] package/qt5: drop 5.6 support
-Message-ID: <20200309140907.0ADA9821F7@busybox.osuosl.org>
+Date: Thu, 27 Feb 2020 23:53:04 +0100
+Subject: [Buildroot] [git commit] package/qt5wayland: drop qt 5.6 support
+Message-ID: <20200309140907.DC94F7FB4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2744e48adc3da7f8dd4efaeeae4480dbc6d7b10
+commit: https://git.buildroot.net/buildroot/commit/?id=7a962dacdcc3cd2f120aec1724770adb9feac64c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-As discussed during the FOSDEM2019 develop days, Qt 5.6 is very old (5.6.3
-was released in September 2017, and 5.6.x became EOL in March 2019), so drop
-it before the new Buildroot LTS release:
-
-https://elinux.org/Buildroot:DeveloperDaysFOSDEM2019#Qt5_versions_to_support:_keep_5.6_or_a_newer_LTS.3F
-
-And add legacy handling for it.
-
-There are a number of places where code checks for
-BR2_PACKAGE_QT5_VERSION_LATEST, so leave that as a blind option for now to
-not break the build.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy      |  7 +++++++
- package/qt5/Config.in | 38 ++++++++++++--------------------------
- package/qt5/qt5.mk    |  6 ------
- 3 files changed, 19 insertions(+), 32 deletions(-)
+ package/qt5/qt5wayland/qt5wayland.hash |  7 -------
+ package/qt5/qt5wayland/qt5wayland.mk   | 19 +------------------
+ 2 files changed, 1 insertion(+), 25 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 87966facb4..6a33ce9e1c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2020.02"
- 
-+config BR2_PACKAGE_QT5_VERSION_5_6
-+	bool "qt 5.6 support removed"
-+	select BR2_LEGACY
-+	help
-+	  Support for Qt 5.6 is EOL and has been removed. The current
-+	  version (5.12 or later) has been selected instead.
-+
- config BR2_PACKAGE_CURL
- 	bool "BR2_PACKAGE_CURL was renamed"
- 	select BR2_PACKAGE_LIBCURL_CURL
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index def79fa680..7051bf517a 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -11,14 +11,22 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	# ARM needs BLX, so v5t+
- 	depends on !BR2_ARM_CPU_ARMV4
- 
--comment "Qt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+comment "Qt5 needs a toolchain w/ gcc >= 4.8, wchar, NPTL, C++, dynamic library"
-+	depends on !BR2_ARM_CPU_ARMV4
-+	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- menuconfig BR2_PACKAGE_QT5
- 	bool "Qt5"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
-+	# no built-in double-conversion support
-+	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_QT5BASE
- 	help
-@@ -29,31 +37,9 @@ menuconfig BR2_PACKAGE_QT5
- 
- if BR2_PACKAGE_QT5
- 
--choice
--	prompt "Qt5 version"
+diff --git a/package/qt5/qt5wayland/qt5wayland.hash b/package/qt5/qt5wayland/qt5wayland.hash
+index 43ca77a393..1ffa22cadf 100644
+--- a/package/qt5/qt5wayland/qt5wayland.hash
++++ b/package/qt5/qt5wayland/qt5wayland.hash
+@@ -1,6 +1,3 @@
+-# hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwayland-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 5a475278b2db73aa7fa7f3ba6d98d8d72774f5c77e172495007d79f91d09daa3 qtwayland-opensource-src-5.6.3.tar.xz
 -
- config BR2_PACKAGE_QT5_VERSION_LATEST
--	bool "Latest (5.12)"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
--	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
--	# no built-in double-conversion support
--	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
--	help
--	  This option builds Qt 5.12, which is licensed under
--	  (L)GPL-3.0+.
--
--comment "Latest Qt version needs a toolchain w/ gcc >= 4.8"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
--	depends on !BR2_ARM_CPU_ARMV4
--	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
--
--config BR2_PACKAGE_QT5_VERSION_5_6
--	bool "LTS (5.6)"
--	help
--	  This option builds Qt 5.6, which is licensed under
--	  (L)GPL-2.0+.
--
--endchoice
-+	bool
-+	default y
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtwayland-everywhere-src-5.12.7.tar.xz.sha256
+ sha256 fc1ab8e25461580e37090e4f82422411dee71a3de48a54be1f4b6569e00f66c5 qtwayland-everywhere-src-5.12.7.tar.xz
  
- source "package/qt5/qt53d/Config.in"
- source "package/qt5/qt5base/Config.in"
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index d94d9cc99f..7805b575f5 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -4,15 +4,9 @@
- #
- ################################################################################
+@@ -10,7 +7,3 @@ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.
+ sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
+ sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
+ sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+-sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
+-sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
+-sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
+-sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
+diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
+index 4790efc660..6ea974f49a 100644
+--- a/package/qt5/qt5wayland/qt5wayland.mk
++++ b/package/qt5/qt5wayland/qt5wayland.mk
+@@ -18,13 +18,8 @@ ifeq ($(BR2_PACKAGE_LIBXKBCOMMON),y)
+ QT5WAYLAND_DEPENDENCIES += libxkbcommon
+ endif
  
 -ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5_VERSION_MAJOR = 5.12
- QT5_VERSION = $(QT5_VERSION_MAJOR).7
- QT5_SOURCE_TARBALL_PREFIX = everywhere-src
+ QT5WAYLAND_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5WAYLAND_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
 -else
--QT5_VERSION_MAJOR = 5.6
--QT5_VERSION = $(QT5_VERSION_MAJOR).3
--QT5_SOURCE_TARBALL_PREFIX = opensource-src
+-QT5WAYLAND_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+-QT5WAYLAND_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
 -endif
- QT5_SITE = https://download.qt.io/archive/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
  
- include $(sort $(wildcard package/qt5/*/*.mk))
+ ifeq ($(BR2_PACKAGE_QT5WAYLAND_COMPOSITOR),y)
+ QT5WAYLAND_QMAKEFLAGS += CONFIG+=wayland-compositor
+@@ -43,16 +38,10 @@ define QT5WAYLAND_INSTALL_STAGING_CMDS
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_QT5WAYLAND_COMPOSITOR),y)
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ define QT5WAYLAND_INSTALL_COMPOSITOR
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WaylandCompositor.so* $(TARGET_DIR)/usr/lib
+ endef
+-else
+-define QT5WAYLAND_INSTALL_COMPOSITOR
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Compositor.so* $(TARGET_DIR)/usr/lib
+-endef
+-endif
+-ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK)$(BR2_PACKAGE_QT5_VERSION_LATEST),yy)
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+ define QT5WAYLAND_INSTALL_COMPOSITOR_QMLS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtWayland $(TARGET_DIR)/usr/qml/
+ endef
+@@ -60,17 +49,11 @@ endif
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ ifeq ($(BR2_PACKAGE_QT5BASE_OPENGL),y)
+ define QT5WAYLAND_INSTALL_TARGET_EXAMPLES
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/wayland $(TARGET_DIR)/usr/lib/qt/examples/
+ endef
+ endif
+-else
+-define QT5WAYLAND_INSTALL_TARGET_EXAMPLES
+-	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/wayland $(TARGET_DIR)/usr/lib/qt/examples/
+-endef
+-endif
+ endif
+ 
+ define QT5WAYLAND_INSTALL_TARGET_CMDS
