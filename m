@@ -1,59 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Feb 2020 23:53:30 +0100
-Subject: [Buildroot] [git commit branch/next] package/qt5websockets: drop qt
+Date: Thu, 27 Feb 2020 23:53:08 +0100
+Subject: [Buildroot] [git commit branch/next] package/qt5webchannel: drop qt
  5.6 support
-Message-ID: <20200227224530.6DF287FE80@busybox.osuosl.org>
+Message-ID: <20200227224530.46ADB8EDF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c59c7471468290dddc8d5871602080194848197
+commit: https://git.buildroot.net/buildroot/commit/?id=f57ab9d1d2101292b521f9de0a2934d1da3b3d1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5websockets/qt5websockets.hash | 7 -------
- package/qt5/qt5websockets/qt5websockets.mk   | 7 +------
- 2 files changed, 1 insertion(+), 13 deletions(-)
+ package/qt5/qt5webchannel/qt5webchannel.hash |  8 --------
+ package/qt5/qt5webchannel/qt5webchannel.mk   | 14 +-------------
+ 2 files changed, 1 insertion(+), 21 deletions(-)
 
-diff --git a/package/qt5/qt5websockets/qt5websockets.hash b/package/qt5/qt5websockets/qt5websockets.hash
-index 3bb6297f3e..230aab232c 100644
---- a/package/qt5/qt5websockets/qt5websockets.hash
-+++ b/package/qt5/qt5websockets/qt5websockets.hash
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.hash b/package/qt5/qt5webchannel/qt5webchannel.hash
+index c863a6ea60..d45f293821 100644
+--- a/package/qt5/qt5webchannel/qt5webchannel.hash
++++ b/package/qt5/qt5webchannel/qt5webchannel.hash
 @@ -1,6 +1,3 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebsockets-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 a2439045616c89dfe06333734ff4726075c92e01db6e6b6863bc138e39c028eb qtwebsockets-opensource-src-5.6.3.tar.xz
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebchannel-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 8eb1b0ac2286653c7932758c21e7760788a5d7cfd6162da09afa926d5be50713 qtwebchannel-opensource-src-5.6.3.tar.xz
 -
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtwebsockets-everywhere-src-5.12.7.tar.xz.sha256
- sha256 6fd13c2558f532a32f20d977b44c0146107a0e93861df84978e4fd72af283b17 qtwebsockets-everywhere-src-5.12.7.tar.xz
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtwebchannel-everywhere-src-5.12.7.tar.xz.sha256
+ sha256 b0ae72e5957aa4b281a37d2e169fcf91f92382bc36bd0cf09c80b2bb961bce75 qtwebchannel-everywhere-src-5.12.7.tar.xz
  
-@@ -9,7 +6,3 @@ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+@@ -10,8 +7,3 @@ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.
  sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
  sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
+ sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+-sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
 -sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
 -sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
--sha256 79949ee74297883df6e4e7c4bfe1e75a6e7695376b4a87ffc013e27bda509cb2 LGPL_EXCEPTION.txt
+-sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
 -sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
-diff --git a/package/qt5/qt5websockets/qt5websockets.mk b/package/qt5/qt5websockets/qt5websockets.mk
-index 6e734a3bf3..bd4d49940a 100644
---- a/package/qt5/qt5websockets/qt5websockets.mk
-+++ b/package/qt5/qt5websockets/qt5websockets.mk
-@@ -9,14 +9,9 @@ QT5WEBSOCKETS_SITE = $(QT5_SITE)
- QT5WEBSOCKETS_SOURCE = qtwebsockets-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5WEBSOCKETS_VERSION).tar.xz
- QT5WEBSOCKETS_DEPENDENCIES = qt5base
- QT5WEBSOCKETS_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
+index 22523036e7..0f1b3bafbf 100644
+--- a/package/qt5/qt5webchannel/qt5webchannel.mk
++++ b/package/qt5/qt5webchannel/qt5webchannel.mk
+@@ -9,14 +9,9 @@ QT5WEBCHANNEL_SITE = $(QT5_SITE)
+ QT5WEBCHANNEL_SOURCE = qtwebchannel-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5WEBCHANNEL_VERSION).tar.xz
+ QT5WEBCHANNEL_DEPENDENCIES = qt5base qt5websockets
+ QT5WEBCHANNEL_INSTALL_STAGING = YES
 -
 -ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5WEBSOCKETS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools)
- QT5WEBSOCKETS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3
+ QT5WEBCHANNEL_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5WEBCHANNEL_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
 -else
--QT5WEBSOCKETS_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0
--QT5WEBSOCKETS_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
+-QT5WEBCHANNEL_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+-QT5WEBCHANNEL_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
 -endif
 +
  ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- QT5WEBSOCKETS_LICENSE += , BSD-3-Clause (examples)
+ QT5WEBCHANNEL_LICENSE += , BSD-3-Clause (examples)
  endif
+@@ -37,17 +32,10 @@ define QT5WEBCHANNEL_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ define QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
+ 	$(INSTALL) -m 0644 -D $(@D)/examples/webchannel/shared/qwebchannel.js \
+ 		$(TARGET_DIR)/var/www/qwebchannel.js
+ endef
+-else
+-define QT5WEBCHANNEL_INSTALL_TARGET_JAVASCRIPT
+-	$(INSTALL) -m 0644 -D $(@D)/src/webchannel/qwebchannel.js \
+-		$(TARGET_DIR)/var/www/qwebchannel.js
+-endef
+-endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+ define QT5WEBCHANNEL_INSTALL_TARGET_QMLS
