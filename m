@@ -1,78 +1,48 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 28 Feb 2020 23:12:34 +0100
+Date: Fri, 28 Feb 2020 23:12:35 +0100
 Subject: [Buildroot] [PATCH v2,
- 1/3] package/libarchive: security bump to version 3.4.2
-Message-ID: <20200228221236.1982482-1-fontaine.fabrice@gmail.com>
+ 2/3] package/libarchive: add lz4 optional dependency
+In-Reply-To: <20200228221236.1982482-1-fontaine.fabrice@gmail.com>
+References: <20200228221236.1982482-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200228221236.1982482-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2020-9308: archive_read_support_format_rar5.c in libarchive
-  before 3.4.2 attempts to unpack a RAR5 file with an invalid or
-  corrupted header (such as a header size of zero), leading to a SIGSEGV
-  or possibly unspecified other impact.
-- Add new mbedtls optional dependency and use --with-nettle to enable
-  nettle support, see
-  https://github.com/libarchive/libarchive/commit/f96a71144b7725ca4a94d84bd27d7dca8c2f58d2
+lz4 is available since version 3.2.0 and
+https://github.com/libarchive/libarchive/commit/724f3f918e509ddca60ce62fad696d7621d3623d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Add --without-mbedtls to host variant
+ package/libarchive/libarchive.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- package/libarchive/libarchive.hash |  2 +-
- package/libarchive/libarchive.mk   | 11 ++++++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index b01d6368a5..9da4eb3baa 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  fcf87f3ad8db2e4f74f32526dee62dd1fb9894782b0a503a89c9d7a70a235191  libarchive-3.4.1.tar.gz
-+sha256  b60d58d12632ecf1e8fad7316dc82c6b9738a35625746b47ecdcaf4aed176176  libarchive-3.4.2.tar.gz
- # Locally computed:
- sha256  e1e3d4ba9d0b0ccba333b5f5539f7c6c9a3ef3d57a96cd165d2c45eaa1cd026d  COPYING
 diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index e256b72289..b7ae5fb0cf 100644
+index b7ae5fb0cf..d07f0776a6 100644
 --- a/package/libarchive/libarchive.mk
 +++ b/package/libarchive/libarchive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBARCHIVE_VERSION = 3.4.1
-+LIBARCHIVE_VERSION = 3.4.2
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
-@@ -84,8 +84,16 @@ else
- LIBARCHIVE_CONF_OPTS += --without-lzo2
+@@ -78,6 +78,12 @@ else
+ LIBARCHIVE_CONF_OPTS += --without-xml2
  endif
  
-+ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+LIBARCHIVE_DEPENDENCIES += mbedtls
-+LIBARCHIVE_CONF_OPTS += --with-mbedtls
++ifeq ($(BR2_PACKAGE_LZ4),y)
++LIBARCHIVE_DEPENDENCIES += lz4
 +else
-+LIBARCHIVE_CONF_OPTS += --without-mbedtls
++LIBARCHIVE_CONF_OPTS += --without-lz4
 +endif
 +
- ifeq ($(BR2_PACKAGE_NETTLE),y)
- LIBARCHIVE_DEPENDENCIES += nettle
-+LIBARCHIVE_CONF_OPTS += --with-nettle
+ ifeq ($(BR2_PACKAGE_LZO),y)
+ LIBARCHIVE_DEPENDENCIES += lzo
  else
- LIBARCHIVE_CONF_OPTS += --without-nettle
- endif
-@@ -123,6 +131,7 @@ HOST_LIBARCHIVE_CONF_OPTS = \
+@@ -130,6 +136,7 @@ HOST_LIBARCHIVE_CONF_OPTS = \
+ 	--without-expat \
  	--without-libiconv-prefix \
  	--without-xml2 \
++	--without-lz4 \
  	--without-lzo2 \
-+	--without-mbedtls \
+ 	--without-mbedtls \
  	--without-nettle \
- 	--without-openssl \
- 	--without-lzma
 -- 
 2.25.0
