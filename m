@@ -1,37 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 28 Feb 2020 16:33:14 +0000
-Subject: [Buildroot] [Bug 12521] RISCV RV32IA selected, RV64GC output
-In-Reply-To: <bug-12521-163@https.bugs.busybox.net/>
-References: <bug-12521-163@https.bugs.busybox.net/>
-Message-ID: <bug-12521-163-ZUT43jdNs9@https.bugs.busybox.net/>
+From: Frank Vanbever <frank.vanbever@essensium.com>
+Date: Fri, 28 Feb 2020 17:39:15 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/python-iptables: add explicit
+ dependency on dynamic libs
+In-Reply-To: <20200226142617.4170-1-frank.vanbever@essensium.com>
+References: <20200226142617.4170-1-frank.vanbever@essensium.com>
+Message-ID: <20200228163917.10596-1-frank.vanbever@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12521
+The package uses ctypes.CDLL extensively which only makes sense when dynamic
+libraries are available.
 
-lelassal at hushmail.com changed:
+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+---
+v1 - > v2:
+ - Add some additional explanation in commit message.
+---
+ package/python-iptables/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|NEEDINFO                    |---
-             Status|RESOLVED                    |REOPENED
-
---- Comment #3 from lelassal at hushmail.com ---
-So sorry I didn't get a notification about your previous message!
-
-> Thanks for your report. Instead of looking at the kernel code, could you instead look at some user-space application or library ?
-
-I don't know how I can get you this...
-
-> Also, could you share a Buildroot .config file that allows to reproduce the issue ?
-
-Here you go: https://pastebin.com/VAri9WdE
-
-Thank you and again apologies for the delay as I hadn't seen that you replied.
-
+diff --git a/package/python-iptables/Config.in b/package/python-iptables/Config.in
+index e55359963e..a35577bad3 100644
+--- a/package/python-iptables/Config.in
++++ b/package/python-iptables/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_PYTHON_IPTABLES
+ 	bool "python-iptables"
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_IPTABLES # runtime dependency
+ 	help
+ 	  Python bindings for iptables.
+ 
+ 	  https://github.com/ldx/python-iptables
++
++comment "python-iptables needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
