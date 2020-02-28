@@ -1,50 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 28 Feb 2020 23:12:36 +0100
-Subject: [Buildroot] [PATCH v2,
- 3/3] package/libarchive: add zstd optional dependency
-In-Reply-To: <20200228221236.1982482-1-fontaine.fabrice@gmail.com>
-References: <20200228221236.1982482-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200228221236.1982482-3-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 28 Feb 2020 23:19:36 +0100
+Subject: [Buildroot] [PATCH 1/2] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+In-Reply-To: <20200228175814.128730-1-giulio.benetti@benettiengineering.com>
+References: <20200228175814.128730-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20200228231936.1dc26a1f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-zstd is available since version 3.3.3 and
-https://github.com/libarchive/libarchive/commit/26838cf5c17642f57192753cc5c3880b16b65ba3
+On Fri, 28 Feb 2020 18:58:13 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libarchive/libarchive.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+> On OpenRisc binutils it still present ld bug 21464 leading to a package
+> protobuf to fail building:
+> http://autobuild.buildroot.net/results/908/9084cd777aefe0fa8235514c33767d8640ad7a5b/
+> 
+> The bug was already reported and it's been updated:
+> https://sourceware.org/bugzilla/show_bug.cgi?id=21464
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  toolchain/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index 87509f3d64..d71bb2a65a 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -81,6 +81,12 @@ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
+>  config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
+>  	bool
+>  
+> +# https://sourceware.org/bugzilla/show_bug.cgi?id=21464
+> +# Affect toolchains built with binutils 2.31.1, still not fixed.
+> +config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+> +	bool
+> +	default y if BR2_or1k
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index d07f0776a6..c3fe63526a 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -116,6 +116,12 @@ else
- LIBARCHIVE_CONF_OPTS += --without-zlib
- endif
- 
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+LIBARCHIVE_DEPENDENCIES += zstd
-+else
-+LIBARCHIVE_CONF_OPTS += --without-zstd
-+endif
-+
- # libarchive requires LZMA with thread support in the toolchain
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_PACKAGE_XZ),yy)
- LIBARCHIVE_DEPENDENCIES += xz
-@@ -141,7 +147,8 @@ HOST_LIBARCHIVE_CONF_OPTS = \
- 	--without-mbedtls \
- 	--without-nettle \
- 	--without-openssl \
--	--without-lzma
-+	--without-lzma \
-+	--without-zstd
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+The problem here is that we don't have any Config.in options for
+binutils versions, so should this problem be fixed one day, we would
+have no way to update this Config.in option.
+
+To be honest, I am starting to wonder if we should keep support for
+OpenRISC. It's using a now quite old gcc version, and I'm not sure the
+OpenRISC support has been upstreamed to gcc.
+
+Also, we don't have anyone specifically interested in OpenRISC and
+maintaining it...
+
+Thomas
 -- 
-2.25.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
