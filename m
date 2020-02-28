@@ -1,80 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Feb 2020 14:33:48 +0100
-Subject: [Buildroot] Split per-package dirs for dependencies and installation
-Message-ID: <20200228143348.14391427@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 28 Feb 2020 14:38:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/vlc: fix build with opencv3
+Message-ID: <20200228133809.687495-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+ - http://autobuild.buildroot.org/results/210424bd33f660aa0757f62a558e1e03faf0f371
 
-During the Buildroot Developers Meeting, we discussed the progress of
-the top-level parallel build support, and identified two issues:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...lter-opencv_example.cpp-fix-build-wi.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
 
- (1) The per-package host and target directories are read/write, and
-     due to the fact that we use hardlinks, if a package has the bad
-     idea of modifying/overwriting a file that was installed by
-     another package, this change is visible in all other per-package
-     host/target directories, which violates the isolation between the
-     build of the different packages.
-
- (2) The per-package logic breaks the <pkg>-reconfigure, <pkg>-rebuild
-     and <pkg>-reinstall targets, as I explained in a previous e-mail
-     in
-     http://lists.busybox.net/pipermail/buildroot/2019-December/268908.html.
-
-As part of the Buildroot Developers Meeting, we thought of the
-following solution:
-
- - The host/target directories of package A dependencies are collected
-   in $(PER_PACKAGE_DIR)/A/host-deps and
-   $(PER_PACKAGE_DIR)/A/target-deps respectively.
-
- - These folders are made read-only once the dependencies have been
-   rsynced into them. This prevents incorrect modifications of files
-   in these folders.
-
- - During the configure/build steps, HOST_DIR points to
-   $(PER_PACKAGE_DIR)/A/host-deps and TARGET_DIR points to
-   $(PER_PACKAGE_DIR)/A/target-deps. However, at installation time,
-   HOST_DIR and TARGET_DIR points to other, empty directories, which
-   are writable. The aim here was to also solve the issue of the
-   reconfigure/rebuild/reinstall targets.
-
-So, I took a stab at implementing this, and well, it's not that easy:
-
- - As expected, some packages do more than installing stuff in their
-   install step. As a trivial example, for some funky reason, even a
-   "simple" package like Busybox calls ARCH-gcc during its install
-   step. Except that during the install step, HOST_DIR is empty, and
-   certainly does not contain any cross-compiler. The build fails.
-
- - Worse is the case of host packages. We configure them with
-   --prefix=$(HOST_DIR)/usr, which points to
-   $(PER_PACKAGE_DIR)/A/host-deps. So when we run "make install", they
-   want to install in $(PER_PACKAGE_DIR)/A/host-deps, not in
-   $(PER_PACKAGE_DIR)/A/host, which is the read/write empty directory we
-   want packages to install into. I don't see any good way to fix that.
-
-Overall, I am wondering if we couldn't instead keep a single
-HOST_DIR/TARGET_DIR, but make only the *files* read-only. Having the
-files read-only would prevent modifications of existing files, but
-since the directories are read/write, additional files can be added by
-the new package. This would solve issue (1) above.
-
-It would however not solve issue (2). As outlined in my December
-e-mail, another possible direction to solve issue (2) is to rely on
-the package file list, but it's a bit annoying to rely on this as part
-of the build process, as we so far do not rely on that.
-
-Do you have some ideas or feedback ?
-
-Thanks a lot,
-
-Thomas
+diff --git a/package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch b/package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
+new file mode 100644
+index 0000000000..04c9958298
+--- /dev/null
++++ b/package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
+@@ -0,0 +1,38 @@
++From 67244e60fc1d8c7a9350bac30611f56c398761e5 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 28 Feb 2020 14:29:47 +0100
++Subject: [PATCH] modules/video_filter/opencv_example.cpp: fix build with
++ opencv 3.4.9
++
++Convert CV_RGB to cvScalar to avoid the following build failure with
++opencv 3.4.9:
++
++In file included from /home/naourr/work/instance-2/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/opencv2/imgproc/imgproc.hpp:48,
++                 from video_filter/opencv_example.cpp:46:
++video_filter/opencv_example.cpp: In function 'picture_t* Filter(filter_t*, picture_t*)':
++video_filter/opencv_example.cpp:200:46: error: could not convert 'cv::Scalar_<double>((double)0, (double)0, (double)0, (double)0)' from 'cv::Scalar' {aka 'cv::Scalar_<double>'} to 'CvScalar'
++             cvRectangle( p_img[0], pt1, pt2, CV_RGB(0,0,0), 3, 8, 0 );
++                                              ^~~~~~
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to vlc-devel at videolan.org]
++---
++ modules/video_filter/opencv_example.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/modules/video_filter/opencv_example.cpp b/modules/video_filter/opencv_example.cpp
++index 1334cd4c36..292f24b257 100644
++--- a/modules/video_filter/opencv_example.cpp
+++++ b/modules/video_filter/opencv_example.cpp
++@@ -202,7 +202,7 @@ static picture_t *Filter( filter_t *p_filter, picture_t *p_pic )
++             pt2.x = (r->x+r->width)*scale;
++             pt1.y = r->y*scale;
++             pt2.y = (r->y+r->height)*scale;
++-            cvRectangle( p_img[0], pt1, pt2, CV_RGB(0,0,0), 3, 8, 0 );
+++            cvRectangle( p_img[0], pt1, pt2, cvScalar(CV_RGB(0,0,0)), 3, 8, 0 );
++ 
++             *(CvRect*)(&(p_sys->event_info.p_region[i])) = *r;
++             p_sys->event_info.p_region[i].i_id = p_sys->i_id++;
++-- 
++2.25.0
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.0
