@@ -1,44 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Feb 2020 23:34:57 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] DEVELOPERS: drop Sven
- Neumann
-Message-ID: <20200228222600.F0D548EE3A@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 28 Feb 2020 23:45:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/zsh: security bump to version 5.8
+Message-ID: <20200228224508.2026125-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dce73d76ba708d851f931fab3458d968f5918479
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+- Fix CVE-2019-20044: In Zsh before 5.8, attackers able to execute
+  commands can regain privileges dropped by the --no-PRIVILEGED option.
+  Zsh fails to overwrite the saved uid, so the original privileges can
+  be restored by executing MODULE_PATH=/dir/with/module zmodload with a
+  module that calls setuid().
+- Update indentation of hash file (two spaces)
 
-His e-mail address has been bouncing for quite some time:
-
-From: thomas.petazzoni@bootlin.com To: neumann at teufel.de
-212.91.255.190[212.91.255.190] reply 550 5.1.10 RESOLVER.ADR.RecipientNotFound
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b97b9a59897e6d9ae2fc6ddbb86a3e00c33dc9f3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS | 7 -------
- 1 file changed, 7 deletions(-)
+ package/zsh/zsh.hash | 8 ++++----
+ package/zsh/zsh.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index bca1b578a6..9ff126eb8c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2250,13 +2250,6 @@ N:	Sven Haardiek <sven.haardiek@iotec-gmbh.de>
- F:	package/lcdproc/
- F:	package/python-influxdb/
+diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
+index 79c661d455..2df409c946 100644
+--- a/package/zsh/zsh.hash
++++ b/package/zsh/zsh.hash
+@@ -1,7 +1,7 @@
+ # From http://www.zsh.org/pub/MD5SUM
+-md5	374f9fdd121b5b90e07abfcad7df0627	zsh-5.7.1.tar.xz
++md5  e02a5428620b3dd268800c7843b3dd4d  zsh-5.8.tar.xz
+ # Calculated based on the hash above and after checking signature
+-# http://www.zsh.org/pub/zsh-5.7.1.tar.xz.asc
+-sha256 7260292c2c1d483b2d50febfa5055176bd512b32a8833b116177bf5f01e77ee8 zsh-5.7.1.tar.xz
++# http://www.zsh.org/pub/zsh-5.8.tar.xz.asc
++sha256  dcc4b54cc5565670a65581760261c163d720991f0d06486da61f8d839b52de27  zsh-5.8.tar.xz
+ # Locally calculated
+-sha256	d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
++sha256  d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index b287e3051d..c3d9e52152 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	Sven Neumann <neumann@teufel.de>
--F:	package/glib-networking/
--F:	package/gstreamer1/gst1-libav/
--F:	package/libmms/
--F:	package/orc/
--F:	package/wampcc/
--
- N:	Sven Oliver Moll <svolli@svolli.de>
- F:	package/most/
- 
+-ZSH_VERSION = 5.7.1
++ZSH_VERSION = 5.8
+ ZSH_SITE = http://www.zsh.org/pub
+ ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
+ ZSH_DEPENDENCIES = ncurses
+-- 
+2.25.0
