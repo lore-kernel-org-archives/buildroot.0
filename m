@@ -1,28 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Feb 2020 18:02:37 +0100
-Subject: [Buildroot] [PATCH] ti-cgt-pru: specify need for 32-bit host
- libraries
-In-Reply-To: <20200113014141.579479-1-ashcharles@gmail.com> (Ash Charles's
- message of "Sun, 12 Jan 2020 20:41:41 -0500")
-References: <20200113014141.579479-1-ashcharles@gmail.com>
-Message-ID: <87o8tik5le.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Feb 2020 18:02:09 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/ti-cgt-pru:
+ specify need for 32-bit host libraries
+Message-ID: <20200228165033.B05688EE20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ash" == Ash Charles <ashcharles@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=325d3d5f38f70a8c6c9d2cdfe2b35404779cafb0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > The downloaded source for the ti-cgt-pru package is an installer that
- > requires 32-bit host libraries for extraction. Specify this dependency
- > in the package configuration [1].
+Fixes:
+http://autobuild.buildroot.net/results/787/7875507cc1009c9a495695f9d9ecb974530a3f72
 
- > [1] http://lists.busybox.net/pipermail/buildroot/2020-January/271416.html
+The downloaded source for the ti-cgt-pru package is an installer that
+requires 32-bit host libraries for extraction. Specify this dependency
+in the package configuration [1].
 
- > Signed-off-by: Ash Charles <ashcharles@gmail.com>
+[1] http://lists.busybox.net/pipermail/buildroot/2020-January/271416.html
 
-Committed to 2019.02.x and 2019.11.x, thanks.
+Signed-off-by: Ash Charles <ashcharles@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit efea700bb80f3d695be1fb99d5da5a00a98c1d96)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ti-cgt-pru/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ti-cgt-pru/Config.in.host b/package/ti-cgt-pru/Config.in.host
+index a36633705d..eab3cd72d5 100644
+--- a/package/ti-cgt-pru/Config.in.host
++++ b/package/ti-cgt-pru/Config.in.host
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_HOST_TI_CGT_PRU_ARCH_SUPPORTS
+ config BR2_PACKAGE_HOST_TI_CGT_PRU
+ 	bool "host ti-cgt-pru"
+ 	depends on BR2_PACKAGE_HOST_TI_CGT_PRU_ARCH_SUPPORTS
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  This package provides the Code Generation Tools for the PRU
+ 	  unit found on some TI processors e.g. AM3358.
