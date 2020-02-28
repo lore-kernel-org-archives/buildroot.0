@@ -1,125 +1,111 @@
-From: Nathan Ford <nford@westpond.com>
-Date: Fri, 28 Feb 2020 12:37:22 -0500
-Subject: [Buildroot] [PATCH v2 2/2] package/qt5/qt5webengine: fix build
- dependencies for autodetected packages
-In-Reply-To: <20200228165925.5dc5355e@gmx.net>
-References: <1582900755-10044-1-git-send-email-nford@westpond.com>
- <1582900755-10044-2-git-send-email-nford@westpond.com>
- <20200228165645.734b6390@gmx.net> <20200228165925.5dc5355e@gmx.net>
-Message-ID: <CAOgXH4cBXrFSnbz4fdnqBUTLSXF2f25So9wURCqUb6kLDgsxwg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 28 Feb 2020 18:46:00 +0100
+Subject: [Buildroot] [PATCH] package/qt5tools: hide qdoc with llvm
+ dependencies
+In-Reply-To: <01e75bf6-8804-f124-be6c-56cc5832a621@smile.fr>
+References: <25605_1582898461_5E591D1D_25605_345_8_0fa6a8d4-31d0-445b-acea-f425422d14ef@OPEXCAUBMA2.corporate.adroot.infra.ftgroup>
+ <5e0c3453-1cd6-a4e4-3058-d1175fa903f5@smile.fr>
+ <17221_1582903725_5E5931AD_17221_356_11_20200228152844.GH13369@r-lnx-nyma7486-2>
+ <01e75bf6-8804-f124-be6c-56cc5832a621@smile.fr>
+Message-ID: <20200228174600.GH8743@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I ran into a linker error when I tried to enable minizip, so I omitted it.
+Romain, All,
 
-Did you re-compile qt5base after selecting png / jpeg / harfbuzz?
-qt5webengine enables them via the qt build system.
+On 2020-02-28 16:30 +0100, Romain Naour spake thusly:
+> Le 28/02/2020 ? 16:28, yann.morin at orange.com a ?crit?:
+> > On 2020-02-28 16:16 +0100, Romain Naour spake thusly:
+> >> Le 28/02/2020 ? 15:00, yann.morin at orange.com a ?crit?:
+> >>> From: "Yann E. MORIN" <yann.morin@orange.com>
+> >>>
+> >>> Building qdoc requires a llvm and clang for the host.
+> >>>
+> >>> However, there is a limitation in the llvm and clang packages in
+> >>> Buildroot, which makes it impossible to havea  host variant without
+> >>
+> >> s/havea/have a/
+> >>
+> >>> a target variant.
+> >>>
+> >>> So, propagate the dependencies of the target llvm and clang, to ensure
+> >>> we can only have a host-llvm and -clang packages that are correctly
+> >> host-clang
+> > 
+> > That was done on purpose, and is called an ellipsis. ;-]
+> 
+> Well, I was not sure :p
+> Typo or not typo ?
 
-icu needs to be enabled explicitly similar to ffmpeg. Don't remember
-why I omitted it. I'm compiling now to see if there was an issue.
+Since Ia m also susecptible to doign the same typoes as mu alter-ego, I
+can assure yuo that on ewas not a tyop. ;-]
 
-If libxml2/libxslt is checked, qt5webengine will skip them because
-libxml2 is not built with ICU support. libxml2 needs a configure
-switch to explicitly enable it. I have a patch that does this if ICU
-is enabled, but I don't know if implicitly enabling it would have
-ramifications, otherwise why is it not auto detected?
+Regards,
+Yann E. MORIN.
 
---Nate
-
-
-
-On Fri, Feb 28, 2020 at 10:59 AM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> Re-add CC: Nathan Ford <nford@westpond.com>
->
-> On Fri, 28 Feb 2020 16:56:45 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > Hello Nathan,
-> >
-> > On Fri, 28 Feb 2020 09:39:15 -0500, Nathan Ford <nford@westpond.com> wrote:
-> >
-> > > Signed-off-by: Nathan Ford <nford@westpond.com>
-> > > ---
-> > >  package/qt5/qt5webengine/qt5webengine.mk | 28 ++++++++++++++++++++++++++++
-> > >  1 file changed, 28 insertions(+)
-> > >
-> > > diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-> > > index 3824738..e5f8421 100644
-> > > --- a/package/qt5/qt5webengine/qt5webengine.mk
-> > > +++ b/package/qt5/qt5webengine/qt5webengine.mk
-> > > @@ -60,6 +60,34 @@ QT5WEBENGINE_QMAKEFLAGS += QT_CONFIG-=alsa
-> > >  endif
-> > >  endif
-> > >
-> > > +ifeq ($(BR2_PACKAGE_JSONCPP),y)
-> > > +QT5WEBENGINE_DEPENDENCIES += jsoncpp
-> > > +endif
-> > > +
-> > > +ifeq ($(BR2_PACKAGE_LCMS2),y)
-> > > +QT5WEBENGINE_DEPENDENCIES += lcms2
-> > > +endif
-> > > +
-> > > +ifeq ($(BR2_PACKAGE_LIBEVENT),y)
-> > > +QT5WEBENGINE_DEPENDENCIES += libevent
-> > > +endif
-> > > +
-> > > +ifeq ($(BR2_PACKAGE_LIBXML2),y)
-> > > +QT5WEBENGINE_DEPENDENCIES += libxml2
-> > > +endif
-> > > +
-> > > +ifeq ($(BR2_PACKAGE_LIBXSLT),y)
-> > > +QT5WEBENGINE_DEPENDENCIES += libxslt
-> > > +endif
-> > > +
-> > > +ifeq ($(BR2_PACKAGE_PROTOBUF),y)
-> > > +QT5WEBENGINE_DEPENDENCIES += protobuf
-> > > +endif
-> > > +
-> > > +ifeq ($(BR2_PACKAGE_SNAPPY),y)
-> > > +QT5WEBENGINE_DEPENDENCIES += snappy
-> > > +endif
-> > > +
-> >
-> > According to build/qt5webengine-5.12.7/config.summary:
-> >
-> >   Optional system libraries used:
-> >     re2 .................................. no   ---> not in buildroot
-> >     icu .................................. no   ---> handled by select BR2_PACKAGE_QT5BASE_ICU but not found (version mismatch)?
-> >     libwebp, libwebpmux and libwebpdemux . yes  ---> already handled and fixed by your previous patch
-> >     opus ................................. yes  ---> already handled
-> >     ffmpeg ............................... yes  ---> already handled
-> >     libvpx ............................... yes  ---> already handled
-> >     snappy ............................... yes  ---> handled by our patch
-> >     glib ................................. yes  ---> already handled
-> >     zlib ................................. yes  ---> handled by qt5base
-> >     minizip .............................. no
-> >     libevent ............................. no   ---> handled by our patch
-> >     jsoncpp .............................. no   ---> handled by our patch
-> >     protobuf ............................. no   ---> handled by our patch
-> >     libxml2 and libxslt .................. no   ---> handled by our patch
-> >     lcms2 ................................ no   ---> handled by our patch
-> >     png .................................. yes  ---> handled by qt5base (only in case BR2_PACKAGE_QT5BASE_PNG is set)?
-> >     JPEG ................................. no   ---> handled by qt5base (only in case BR2_PACKAGE_QT5BASE_JPEG is set)? In my config
-> >                                                      BR2_PACKAGE_QT5BASE_JPEG is set but not found?
-> >     harfbuzz ............................. yes  ---> handled by qt5base (only in case BR2_PACKAGE_QT5BASE_HARFBUZZ and BR2_TOOLCHAIN_HAS_SYNC_4 is set)?
-> >     freetype ............................. yes  ---> handled by qt5base
-> >
-> > So your patch is definitely an improvement and you can add my
-> >
-> > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-> >
-> > Care to take a look if the buildroot package minizip is sufficient for qt5webengine?
-> >
-> > Leaving icu, png, jpeg and harfbuzz for more research....
-> >
+> Best regards,
+> Romain
+> 
+> 
+> > 
 > > Regards,
-> > Peter
-> >
-> > >  # QtWebengine's build system uses python, but only supports python2. We work
-> > >  # around this by forcing python2 early in the PATH, via a python->python2
-> > >  # symlink.
-> >
->
+> > Yann E. MORIN.
+> > 
+> >>> built.
+> >>>
+> >>> Note that we do propagate all of the dependencies (instead of just the
+> >>> architecture part), to be consistent.
+> >>>
+> >>> Reported-by: Romain Naour <romain.naour@smile.fr>
+> >>> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> >>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> >>> Cc: Peter Seiderer <ps.report@gmx.net>
+> >>> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> >>> ---
+> >>>  package/qt5/qt5tools/Config.in | 10 ++++++++++
+> >>>  1 file changed, 10 insertions(+)
+> >>>
+> >>> diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
+> >>> index 14178abc29..60106c1ee3 100644
+> >>> --- a/package/qt5/qt5tools/Config.in
+> >>> +++ b/package/qt5/qt5tools/Config.in
+> >>> @@ -19,6 +19,16 @@ config BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
+> >>>  
+> >>>  config BR2_PACKAGE_QT5TOOLS_QDOC_TOOL
+> >>>  	bool "qdoc host tool"
+> >>> +	# Needs llvm-config and libclang for the host, which is not
+> >>> +	# currently supported in Buildroot, unless the target is
+> >>> +	# already supported by llvm.
+> >>> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # llvm, clang
+> >>> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # llvm, clang
+> >>> +	depends on BR2_TOOLCHAIN_HAS_THREADS # llvm, clang
+> >>> +	depends on BR2_INSTALL_LIBSTDCPP # llvm, clang
+> >>> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # llvm, clang
+> >>> +	depends on !BR2_STATIC_LIBS # llvm, clang
+> >>> +	depends on BR2_USE_WCHAR # llvm, clang
+> >>>  	help
+> >>>  	  This option enables the qdoc host tool.
+> >>>  
+> >>>
+> >> Reviewed-by: Romain Naour <romain.naour@smile.fr>
+> >>
+> >> Best regards,
+> >> Romain
+> >>
+> > 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
