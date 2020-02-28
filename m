@@ -1,32 +1,77 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 28 Feb 2020 12:36:03 +0000
-Subject: [Buildroot] [Bug 12586] avahi failure
-In-Reply-To: <bug-12586-163@https.bugs.busybox.net/>
-References: <bug-12586-163@https.bugs.busybox.net/>
-Message-ID: <bug-12586-163-ao11RaO9GB@https.bugs.busybox.net/>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 28 Feb 2020 13:52:39 +0100
+Subject: [Buildroot] buildroot 2019.11.1 rpi-0-w error
+In-Reply-To: <CAPm8-H6q+gk=-rVR44L8zwL-RngM3a8YNHwxeS+Ddumi6K29FA@mail.gmail.com>
+References: <CAPm8-H6q+gk=-rVR44L8zwL-RngM3a8YNHwxeS+Ddumi6K29FA@mail.gmail.com>
+Message-ID: <20200228135239.478d8257@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12586
+Hello Laurentiu-Cristian,
 
---- Comment #2 from Peter Seiderer <ps.report@gmx.net> ---
-Your .config enables no filesystem image, how do you run it on the target?
+On Fri, 28 Feb 2020 14:03:45 +0200, Laurentiu-Cristian Duca <laurentiu.duca@gmail.com> wrote:
 
-Note that the result under target is not a usable filesystem (see e.g.
-cat target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM) and will miss the user/group
-entries for avahi...
+> Hi,
+>
+>   I am facing the following error in buildroot 2019.11.1
+> when configuring buildroot for rpi-0-w
+> with this settings:
+>
+> make menuconfig
+> Kernel
+>     Defconfig name (bcm2835)
+>     In-tree Device Tree Source file names (bcm2835-rpi-zero-w)
+>
+> make
+> >>>   Executing post-image script board/raspberrypi0w/post-image.sh
+> INFO: cmd: "mkdir -p
+> "/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/build/genimage.tmp""
+> (stderr):
+> INFO: cmd: "rm -rf
+> "/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/build/genimage.tmp"/*"
+> (stderr):
+> INFO: cmd: "mkdir -p
+> "/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/build/genimage.tmp""
+> (stderr):
+> INFO: cmd: "cp -a "/tmp/tmp.iaBv2bX7fQ"
+> "/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/build/genimage.tmp/root""
+> (stderr):
+> INFO: cmd: "find
+> '/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/build/genimage.tmp/root'
+> -depth -type d -printf '%P\0' | xargs -0 -I {} touch -r
+> '/tmp/tmp.iaBv2bX7fQ/{}'
+> '/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/build/genimage.tmp/root/{}'"
+> (stderr):
+> ERROR: file(bcm2708-rpi-zero-w.dtb):
+> stat(/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/images/bcm2708-rpi-zero-w.dtb)
+> failed: No such file or directory
+> ERROR: vfat(boot.vfat): could not setup bcm2708-rpi-zero-w.dtb
+>
+>   If I rename bcm2835-rpi-zero-w.dtb to bcm2708-rpi-zero-w.dtb in output/images,
+> the build succeeds but linux does not boot.
+>
 
-On the target the following avahi user/group entries should exist:
+According to configs/raspberrypi0w_defconfig the DTS name should
+be 'bcm2708-rpi-zero-w' (or 'bcm2708-rpi-0-w' prior to [1], [2])
+and the defconfig name should be 'bcmrpi'?
 
-$ grep avahi /etc/passwd 
-avahi:x:1000:1000::/:/bin/false
+Does the plain raspberrypi0w_defconfig work for you?
 
-$ grep avahi /etc/group 
-avahi:x:1000:
+Which linux kernel do you use (in doubt send your .config or defconfig file)?
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards,
+Peter
+
+[1] https://git.buildroot.net/buildroot/commit/?id=42d22f3bdba41da8e6b6ace2c78af2b3e34d7491
+[2] https://git.buildroot.net/buildroot/commit/?id=fcecfb66d1fb749426306dbea50fdeb37d4706d8
+
+>   Any ideas?
+>
+> Thanks
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
