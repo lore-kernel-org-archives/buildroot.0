@@ -1,38 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Feb 2020 16:04:20 +0100
-Subject: [Buildroot] [PATCH] package/pkg-generic.mk: in image install,
- print message before pre-hooks
-Message-ID: <20200228150421.1240651-1-thomas.petazzoni@bootlin.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Fri, 28 Feb 2020 16:16:28 +0100
+Subject: [Buildroot] [PATCH] package/qt5tools: hide qdoc with llvm
+ dependencies
+In-Reply-To: <25605_1582898461_5E591D1D_25605_345_8_0fa6a8d4-31d0-445b-acea-f425422d14ef@OPEXCAUBMA2.corporate.adroot.infra.ftgroup>
+References: <25605_1582898461_5E591D1D_25605_345_8_0fa6a8d4-31d0-445b-acea-f425422d14ef@OPEXCAUBMA2.corporate.adroot.infra.ftgroup>
+Message-ID: <5e0c3453-1cd6-a4e4-3058-d1175fa903f5@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In all steps, we print the message indicating the start of the step
-using the MESSAGE macro before running pre-hooks. Except in the image
-installation step, where the message is printed after the pre-hooks.
+Hello Yann,
 
-Let's fix this inconsistency.
+Le 28/02/2020 ? 15:00, yann.morin at orange.com a ?crit?:
+> From: "Yann E. MORIN" <yann.morin@orange.com>
+> 
+> Building qdoc requires a llvm and clang for the host.
+> 
+> However, there is a limitation in the llvm and clang packages in
+> Buildroot, which makes it impossible to havea  host variant without
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+s/havea/have a/
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 7b240ca012..c1b9fe2e59 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -347,8 +347,8 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- $(BUILD_DIR)/%/.stamp_images_installed:
- 	@$(call step_start,install-image)
- 	@mkdir -p $(BINARIES_DIR)
--	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	@$(call MESSAGE,"Installing to images directory")
-+	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_IMAGES_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	@$(call step_end,install-image)
--- 
-2.24.1
+> a target variant.
+> 
+> So, propagate the dependencies of the target llvm and clang, to ensure
+> we can only have a host-llvm and -clang packages that are correctly
+
+host-clang
+
+> built.
+> 
+> Note that we do propagate all of the dependencies (instead of just the
+> architecture part), to be consistent.
+> 
+> Reported-by: Romain Naour <romain.naour@smile.fr>
+> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Cc: Julien Corjon <corjon.j@ecagroup.com>
+> ---
+>  package/qt5/qt5tools/Config.in | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
+> index 14178abc29..60106c1ee3 100644
+> --- a/package/qt5/qt5tools/Config.in
+> +++ b/package/qt5/qt5tools/Config.in
+> @@ -19,6 +19,16 @@ config BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
+>  
+>  config BR2_PACKAGE_QT5TOOLS_QDOC_TOOL
+>  	bool "qdoc host tool"
+> +	# Needs llvm-config and libclang for the host, which is not
+> +	# currently supported in Buildroot, unless the target is
+> +	# already supported by llvm.
+> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # llvm, clang
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # llvm, clang
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # llvm, clang
+> +	depends on BR2_INSTALL_LIBSTDCPP # llvm, clang
+> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # llvm, clang
+> +	depends on !BR2_STATIC_LIBS # llvm, clang
+> +	depends on BR2_USE_WCHAR # llvm, clang
+>  	help
+>  	  This option enables the qdoc host tool.
+>  
+> 
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+
+Best regards,
+Romain
