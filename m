@@ -1,68 +1,67 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Fri, 28 Feb 2020 18:47:43 -0300
-Subject: [Buildroot] [PATCH] package/openrc: needs kmod
-In-Reply-To: <20200228202552.14788-1-yann.morin.1998@free.fr>
-References: <20200228202552.14788-1-yann.morin.1998@free.fr>
-Message-ID: <CAJ4jsaffqEWdUMwgd6WHS2zsX1H5q9K8JZan2ZFK+fpGDCx2_w@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 28 Feb 2020 22:57:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libarchive: security bump to
+ version 3.4.2
+Message-ID: <20200228215705.1958993-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 28, 2020 at 5:26 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> openrc provides scritps that have been written for the big-gun kmod, and
-> so use options unknown to the biusybox' provided applets:
->
->   - Busybox modprobe does not have a "--first-time" option,
->   - the "--verbose" option is just "-v",
->   - the "--use-blacklist" option is just "-b". Also blacklist support is
->     not selected in our default busybox configuration.
->
-> One of two options, is to "fix" or "adapt" openrc's scripts to busybox,
-> which means for the openrc package to go peek into files from the
-> busybox package, which is not nice, and can't work because that is not
-> available by the time we scan our Makefiles.
->
-> The other option, which this patch implements, is to just add a
-> dependency onto kmod and its tools.
->
-> Reported-by: Carlos Santos <unixmania@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/openrc/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/package/openrc/Config.in b/package/openrc/Config.in
-> index 796858f404..4691be63a2 100644
-> --- a/package/openrc/Config.in
-> +++ b/package/openrc/Config.in
-> @@ -3,6 +3,9 @@ config BR2_PACKAGE_OPENRC
->         depends on BR2_USE_MMU # fork()
->         depends on !BR2_STATIC_LIBS
->         depends on BR2_INIT_OPENRC
-> +       select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod tools
-> +       select BR2_PACKAGE_KMOD # runtime
-> +       select BR2_PACKAGE_KMOD_TOOLS # runtime
->         select BR2_PACKAGE_NCURSES
->         help
->           Init that works on top of pid 1 (for example
-> --
-> 2.20.1
->
+- Fix CVE-2020-9308: archive_read_support_format_rar5.c in libarchive
+  before 3.4.2 attempts to unpack a RAR5 file with an invalid or
+  corrupted header (such as a header size of zero), leading to a SIGSEGV
+  or possibly unspecified other impact.
+- Add new mbedtls optional dependency and use --with-nettle to enable
+  nettle support, see
+  https://github.com/libarchive/libarchive/commit/f96a71144b7725ca4a94d84bd27d7dca8c2f58d2
 
-What about doing the opposite?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libarchive/libarchive.hash |  2 +-
+ package/libarchive/libarchive.mk   | 10 +++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-1. Always patch openrc to support busybox.' modprobe.
-2. In busybox, select modprobe+blacklist if openrc is selected but
-kmod tools are not selected.
-
-This would be cleaner and seems to be reasonable, since busybox
-already sets several configurations based on the selection of other
-packages.
-
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index b01d6368a5..9da4eb3baa 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,4 +1,4 @@
+ # From https://www.libarchive.de/downloads/sha256sums
+-sha256  fcf87f3ad8db2e4f74f32526dee62dd1fb9894782b0a503a89c9d7a70a235191  libarchive-3.4.1.tar.gz
++sha256  b60d58d12632ecf1e8fad7316dc82c6b9738a35625746b47ecdcaf4aed176176  libarchive-3.4.2.tar.gz
+ # Locally computed:
+ sha256  e1e3d4ba9d0b0ccba333b5f5539f7c6c9a3ef3d57a96cd165d2c45eaa1cd026d  COPYING
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index e256b72289..2e5f976ffd 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBARCHIVE_VERSION = 3.4.1
++LIBARCHIVE_VERSION = 3.4.2
+ LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
+@@ -84,8 +84,16 @@ else
+ LIBARCHIVE_CONF_OPTS += --without-lzo2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++LIBARCHIVE_DEPENDENCIES += mbedtls
++LIBARCHIVE_CONF_OPTS += --with-mbedtls
++else
++LIBARCHIVE_CONF_OPTS += --without-mbedtls
++endif
++
+ ifeq ($(BR2_PACKAGE_NETTLE),y)
+ LIBARCHIVE_DEPENDENCIES += nettle
++LIBARCHIVE_CONF_OPTS += --with-nettle
+ else
+ LIBARCHIVE_CONF_OPTS += --without-nettle
+ endif
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.25.0
