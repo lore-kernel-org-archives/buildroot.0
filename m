@@ -1,36 +1,29 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 28 Feb 2020 15:54:10 +0000
-Subject: [Buildroot] [Bug 12576] 2020.02-RC1: error while loading shared
- libraries: libsystemd-shared-244.so
-In-Reply-To: <bug-12576-163@https.bugs.busybox.net/>
-References: <bug-12576-163@https.bugs.busybox.net/>
-Message-ID: <bug-12576-163-vp0DH16am0@https.bugs.busybox.net/>
+Date: Fri, 28 Feb 2020 15:56:42 +0000
+Subject: [Buildroot] [Bug 12571] ltp-testsuite : Build failure
+In-Reply-To: <bug-12571-163@https.bugs.busybox.net/>
+References: <bug-12571-163@https.bugs.busybox.net/>
+Message-ID: <bug-12571-163-uJe2Z06Kll@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12576
+https://bugs.busybox.net/show_bug.cgi?id=12571
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Hello Melanie,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Thanks for your bug report. Could you try the below patch, and see if it fixes
-the issue for you:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |INVALID
+             Status|NEW                         |RESOLVED
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1150fd390e..20637f3a8a 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -570,6 +570,7 @@ HOST_SYSTEMD_DEPENDENCIES = \
- # * thus re-tweak rpath after the installation for all binaries that need it
- HOST_SYSTEMD_HOST_TOOLS = \
-        systemd-analyze \
-+       systemd-machine-id-setup \
-        systemd-mount \
-        systemctl \
-        udevadm
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+There is no bug here: your ext4 filesystem image is now larger, but you haven't
+adjusted your genimage configuration file to accommodate a larger ext4
+filesystem. Your genimage configuration file has a rootfs partition of 512 MB,
+so trying to fit a 64 GB filesystem in there obviously doesn't work.
 
 -- 
 You are receiving this mail because:
