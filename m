@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Feb 2020 23:37:26 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/openswan:
+Date: Fri, 28 Feb 2020 23:36:29 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/openswan:
  security bump to version 2.6.51.5
-Message-ID: <20200228222555.8AEC78EE36@busybox.osuosl.org>
+Message-ID: <20200228222601.0588B8EE3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5482228cbc0a24ad86bf337c02dc48a0271690df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=90a173964de15ca32c64285ff2df75dcaba96f2b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fix CVE-2019-10155 (IKEv1 information exchange packet's integrity check
 value is not verified)
