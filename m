@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Feb 2020 17:45:11 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/zeromq: add
+Date: Fri, 28 Feb 2020 17:43:00 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/zeromq: add
  -latomic to libzmq.pc
-Message-ID: <20200228163438.87B0B81539@busybox.osuosl.org>
+Message-ID: <20200228163443.7ED6C8EE1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ad22ad94dbc18aa339fdf5e1edcd1772553dddb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=565db7267e0a8ffb43f3ed8a2d70c03fd166803f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 This will fix a static build failure with czmq
 
@@ -20,8 +20,6 @@ Fixes:
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 (cherry picked from commit f2fc6df260fc6ba9e8fac81b3ee27b0ad7b02875)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 565db7267e0a8ffb43f3ed8a2d70c03fd166803f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...ude.m4-add-latomic-to-PKGCFG_LIBS_PRIVATE.patch | 36 ++++++++++++++++++++++
