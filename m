@@ -1,40 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Feb 2020 15:57:39 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-02-27
-In-Reply-To: <20200228145500.GA39900@p1g2.work>
-References: <5e58c07a.1c69fb81.188c8.fdd9SMTPIN_ADDED_MISSING@mx.google.com>
- <20200228145500.GA39900@p1g2.work>
-Message-ID: <20200228155739.7f31a6c9@windsurf.home>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 28 Feb 2020 16:02:08 +0100
+Subject: [Buildroot] Analysis of build results
+In-Reply-To: <CANLo3JjxsNWX0zvULWV3L0h95wJ28F5Kf40LA169Gim=8yfxbA@mail.gmail.com>
+References: <20200227093138.523B887666@whitealder.osuosl.org>
+ <20200227234905.44125454@windsurf.home>
+ <CANLo3JjxsNWX0zvULWV3L0h95wJ28F5Kf40LA169Gim=8yfxbA@mail.gmail.com>
+Message-ID: <20200228160208.545a45a1@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 28 Feb 2020 15:55:00 +0100
-Gary Bisson <bisson.gary@gmail.com> wrote:
+Hello Romain,
 
-> >     arch     |             reason             |                                       url                                      
-> > -------------+--------------------------------+---------------------------------------------------------------------------------
-> >     arm      |      host-mfgtools-v0.02       | http://autobuild.buildroot.net/results/33f8e4054f2b9b9b4f0ff21a7016b4fa44b58ff0  
-> 
-> Is it possible to cherry-pick this patch to the 2019.02.x branch?
-> https://git.buildroot.net/buildroot/commit/package/mfgtools?id=8e267afcc2912c40a4317c7580c8f8f2fa202489
-> 
-> Or should I re-send it with 2019.02.x in the title?
+On Fri, 28 Feb 2020 08:32:18 +0100, Romain Naour <romain.naour@gmail.com> wrote:
 
-This patch has fairly "recently" been committed to master, on Feb 16,
-so I think Peter has not yet done his regular pass on all commits to
-master, and see which ones are relevant to 2019.02.
+> >
+> > >     arm      |         mesa3d-19.3.4          | NOK |
+> > http://autobuild.buildroot.net/results/6387b0a99e1a0922811919623d9a10b0943988df
+> > |
+> >
+> > {standard input}: Assembler messages:
+> > {standard input}:334: Error: selected processor does not support `vldm
+> > r4,{q0,q1,q2,q3}' in ARM mode
+> > {standard input}:335: Error: selected processor does not support `vst1.8
+> > d0,[r3],r2' in ARM mode
+> > {standard input}:336: Error: selected processor does not support `vst1.8
+> > d1,[r3],r2' in ARM mode
+> > {standard input}:337: Error: selected processor does not support `vst1.8
+> > d2,[r3],r2' in ARM mode
+> >
+> > Bad stuff happens when building the vc4 driver. It probably needs some
+> > minimal ARM architecture variant.
+> >
+>
+> I believe we should re-add the dependency on neon for vc4 driver. There is
+> -mfpu=neon added by the build system.
 
-When he does, I'm pretty sure he will cherry-pick this patch,
-especially now that you explicitly notified us about it.
+The BR2_ARM_CPU_HAS_NEON dependency was dropped with commit [1] because mesa3d
+commit [2] added a compile time detected neon support, in the meantime this
+was changed to a runtime detection [3] and finally enabled for the meson
+cross compile build with commit [4] (assuming toolchain support for the
+neon assembler instructions)...
 
-Thanks!
+Maybe the compile error could be fixed by re-adding partly the compile time
+check for the neon support (tested):
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--- mesa3d-19.3.4/src/broadcom/common/v3d_cpu_tiling.h_orig	2020-02-28 14:47:44.232634657 +0100
++++ mesa3d-19.3.4/src/broadcom/common/v3d_cpu_tiling.h	2020-02-28 14:49:21.518425222 +0100
+@@ -31,7 +31,7 @@
+ v3d_load_utile(void *cpu, uint32_t cpu_stride,
+                void *gpu, uint32_t gpu_stride)
+ {
+-#if defined(V3D_BUILD_NEON) && defined(PIPE_ARCH_ARM)
++#if defined(V3D_BUILD_NEON) && defined(__ARM_ARCH) && __ARM_ARCH >= 7
+         if (gpu_stride == 8) {
+                 __asm__ volatile (
+                         /* Load from the GPU in one shot, no interleave, to
+@@ -141,7 +141,7 @@
+ v3d_store_utile(void *gpu, uint32_t gpu_stride,
+                 void *cpu, uint32_t cpu_stride)
+ {
+-#if defined(V3D_BUILD_NEON) && defined(PIPE_ARCH_ARM)
++#if defined(V3D_BUILD_NEON) && defined(__ARM_ARCH) && __ARM_ARCH >= 7
+         if (gpu_stride == 8) {
+                 __asm__ volatile (
+                         /* Load each 8-byte line from cpu-side source,
+
+Regards,
+Peter
+
+[1] https://git.buildroot.net/buildroot/commit/package/mesa3d?id=350cb0d32ece533b9723a5f3ca6fbf7e6f071c90
+[2] https://cgit.freedesktop.org/mesa/mesa/commit/?h=17.1&id=4d30024238efa829cabc72c1601beeee18c3dbf2
+[3] https://cgit.freedesktop.org/mesa/mesa/commit/?h=staging/19.3&id=ece06defe77a77d2db40abeddee5a2e0e45654ce
+[4] https://cgit.freedesktop.org/mesa/mesa/commit/?id=932ed9c00b99e6ec92146ec9e820f546cf3e6551
+
+>
+> Romain
