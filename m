@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Feb 2020 18:02:09 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/ti-cgt-pru:
+Date: Fri, 28 Feb 2020 18:01:49 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/ti-cgt-pru:
  specify need for 32-bit host libraries
-Message-ID: <20200228165033.B05688EE20@busybox.osuosl.org>
+Message-ID: <20200228165040.6B9F48EE25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=325d3d5f38f70a8c6c9d2cdfe2b35404779cafb0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=275ed3ad74a1ddb360f1a98394ae2cd7a4572e88
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes:
 http://autobuild.buildroot.net/results/787/7875507cc1009c9a495695f9d9ecb974530a3f72
