@@ -1,70 +1,63 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 28 Feb 2020 18:30:51 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libtirpc: fix build with gcc 10
-Message-ID: <20200228173052.5128-1-petr.vorel@gmail.com>
+Date: Fri, 28 Feb 2020 18:30:52 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libtirpc: fix build when missing
+ <bits/endian.h>
+In-Reply-To: <20200228173052.5128-1-petr.vorel@gmail.com>
+References: <20200228173052.5128-1-petr.vorel@gmail.com>
+Message-ID: <20200228173052.5128-2-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This fixes build on riscv64:
+
+http://autobuild.buildroot.net/results/a334f774e95fb7805568fc3868d5cf1d790a6e73
+http://autobuild.buildroot.net/results/9cf80bdd4d329788c89596b56205ef215ee09c35
+
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- ...ltiple-definiton-with-gcc-fno-common.patch | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/libtirpc/0005-Avoid-multiple-definiton-with-gcc-fno-common.patch
+ ...r_float-do-not-include-bits-endian.h.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/libtirpc/0006-xdr_float-do-not-include-bits-endian.h.patch
 
-diff --git a/package/libtirpc/0005-Avoid-multiple-definiton-with-gcc-fno-common.patch b/package/libtirpc/0005-Avoid-multiple-definiton-with-gcc-fno-common.patch
+diff --git a/package/libtirpc/0006-xdr_float-do-not-include-bits-endian.h.patch b/package/libtirpc/0006-xdr_float-do-not-include-bits-endian.h.patch
 new file mode 100644
-index 0000000000..35846bb6e2
+index 0000000000..2527726015
 --- /dev/null
-+++ b/package/libtirpc/0005-Avoid-multiple-definiton-with-gcc-fno-common.patch
-@@ -0,0 +1,48 @@
-+From daed7eedba73907730241c5262a5c16c7abedb6f Mon Sep 17 00:00:00 2001
-+From: Mike Gilbert <floppym@gentoo.org>
-+Date: Tue, 21 Jan 2020 11:49:35 -0500
-+Subject: [PATCH 1/2] Avoid multiple-definiton with gcc -fno-common
++++ b/package/libtirpc/0006-xdr_float-do-not-include-bits-endian.h.patch
+@@ -0,0 +1,33 @@
++From d04f4d6f0e682f16b0ce96839ab4eadade591eb1 Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Tue, 21 Jan 2020 11:51:16 -0500
++Subject: [PATCH 2/2] xdr_float: do not include bits/endian.h
 +
-+GCC 10 enables -fno-common by default.
++bits/endian.h is an internal header. endian.h should be included.
 +
-+Fixes: https://bugs.gentoo.org/705896
++Fixes compilation with recent musl.
 +
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
 +Signed-off-by: Steve Dickson <steved@redhat.com>
 +Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+[ upstream status: daed7eedba73907730241c5262a5c16c7abedb6f ]
++[ upstream status: d04f4d6f0e682f16b0ce96839ab4eadade591eb1 ]
 +---
-+ src/rpc_com.h | 3 +--
-+ src/svc.c     | 3 +++
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
++ src/xdr_float.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/rpc_com.h b/src/rpc_com.h
-+index 10bec79..76badef 100644
-+--- a/src/rpc_com.h
-++++ b/src/rpc_com.h
-+@@ -61,8 +61,7 @@ void __xprt_unregister_unlocked(SVCXPRT *);
-+ void __xprt_set_raddr(SVCXPRT *, const struct sockaddr_storage *);
++diff --git a/src/xdr_float.c b/src/xdr_float.c
++index 26bc865..349d48f 100644
++--- a/src/xdr_float.c
+++++ b/src/xdr_float.c
++@@ -83,7 +83,7 @@ static struct sgl_limits {
++ };
++ #else
 + 
++-#include <bits/endian.h>
+++#include <endian.h>
++ #define IEEEFP
 + 
-+-SVCXPRT **__svc_xports;
-+-int __svc_maxrec;
-++extern int __svc_maxrec;
-+ 
-+ #ifdef __cplusplus
-+ }
-+diff --git a/src/svc.c b/src/svc.c
-+index b59467b..6db164b 100644
-+--- a/src/svc.c
-++++ b/src/svc.c
-+@@ -57,6 +57,9 @@
-+ 
-+ #define max(a, b) (a > b ? a : b)
-+ 
-++static SVCXPRT **__svc_xports;
-++int __svc_maxrec;
-++
-+ /*
-+  * The services list
-+  * Each entry represents a set of procedures (an rpc program).
++ #endif /* vax */
 +-- 
 +2.25.1
 +
