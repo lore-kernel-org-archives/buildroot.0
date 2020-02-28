@@ -1,32 +1,25 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 28 Feb 2020 23:29:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ntfs-3g: annotate _IGNORE_CVES for
- the included security patch
-Message-ID: <20200228222927.1983199-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 28 Feb 2020 23:37:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openswan: security bump to
+ version 2.6.51.5
+In-Reply-To: <20200113192612.824665-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 13 Jan 2020 20:26:12 +0100")
+References: <20200113192612.824665-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k146jq2o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/ntfs-3g/ntfs-3g.mk | 3 +++
- 1 file changed, 3 insertions(+)
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
-index 5f23eae9c9..cbb356195c 100644
---- a/package/ntfs-3g/ntfs-3g.mk
-+++ b/package/ntfs-3g/ntfs-3g.mk
-@@ -13,6 +13,9 @@ NTFS_3G_DEPENDENCIES = host-pkgconf
- NTFS_3G_LICENSE = GPL-2.0+, LGPL-2.0+
- NTFS_3G_LICENSE_FILES = COPYING COPYING.LIB
- 
-+# 0001-Fixed-reporting-an-error-when-failed-to-build-the-mo.patch
-+NTFS_3G_IGNORE_CVES += CVE-2019-9755
-+
- ifeq ($(BR2_PACKAGE_LIBFUSE),y)
- NTFS_3G_CONF_OPTS += --with-fuse=external
- NTFS_3G_DEPENDENCIES += libfuse
+ > Fix CVE-2019-10155 (IKEv1 information exchange packet's integrity check
+ > value is not verified)
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2019.02.x and 2019.11.x, thanks.
+
 -- 
-2.25.0
+Bye, Peter Korsgaard
