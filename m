@@ -1,76 +1,40 @@
-From: Nathan Ford <nford@westpond.com>
-Date: Fri, 28 Feb 2020 09:39:14 -0500
-Subject: [Buildroot] [PATCH v2 1/2] package/qt5/qt5webengine: fix
- ffmpeg/codec/alsa option handling for latest
-Message-ID: <1582900755-10044-1-git-send-email-nford@westpond.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 28 Feb 2020 15:57:39 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-02-27
+In-Reply-To: <20200228145500.GA39900@p1g2.work>
+References: <5e58c07a.1c69fb81.188c8.fdd9SMTPIN_ADDED_MISSING@mx.google.com>
+ <20200228145500.GA39900@p1g2.work>
+Message-ID: <20200228155739.7f31a6c9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qt5engine also now requires webp mux support or the auto
-detection will fail.
+On Fri, 28 Feb 2020 15:55:00 +0100
+Gary Bisson <bisson.gary@gmail.com> wrote:
 
-This patch is based on the suggested fix, and fixes, Bug #12416
+> >     arch     |             reason             |                                       url                                      
+> > -------------+--------------------------------+---------------------------------------------------------------------------------
+> >     arm      |      host-mfgtools-v0.02       | http://autobuild.buildroot.net/results/33f8e4054f2b9b9b4f0ff21a7016b4fa44b58ff0  
+> 
+> Is it possible to cherry-pick this patch to the 2019.02.x branch?
+> https://git.buildroot.net/buildroot/commit/package/mfgtools?id=8e267afcc2912c40a4317c7580c8f8f2fa202489
+> 
+> Or should I re-send it with 2019.02.x in the title?
 
-Signed-off-by: Nathan Ford <nford@westpond.com>
----
- package/qt5/qt5webengine/Config.in       |  1 +
- package/qt5/qt5webengine/qt5webengine.mk | 18 ++++++++++++++++++
- 2 files changed, 19 insertions(+)
+This patch has fairly "recently" been committed to master, on Feb 16,
+so I think Peter has not yet done his regular pass on all commits to
+master, and see which ones are relevant to 2019.02.
 
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 0e776ec..18e4418 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -42,6 +42,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	select BR2_PACKAGE_OPUS
- 	select BR2_PACKAGE_WEBP
- 	select BR2_PACKAGE_WEBP_DEMUX
-+	select BR2_PACKAGE_WEBP_MUX
- 	select BR2_PACKAGE_QT5BASE_DBUS
- 	select BR2_PACKAGE_QT5BASE_EGLFS
- 	select BR2_PACKAGE_QT5BASE_FONTCONFIG
-diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-index 8987259..3824738 100644
---- a/package/qt5/qt5webengine/qt5webengine.mk
-+++ b/package/qt5/qt5webengine/qt5webengine.mk
-@@ -30,17 +30,35 @@ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
- endif
- 
-+# As of qt 5.10 these options are handled as arguments to qmake instead of defines
-+# The -- is needed to delineate qmake options from config options
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBENGINE_QMAKEFLAGS += --
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBENGINE_QMAKEFLAGS += -webengine-ffmpeg
-+else
- QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_system_ffmpeg
-+endif
- 
- ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBENGINE_QMAKEFLAGS += -webengine-proprietary-codecs
-+else
- QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_proprietary_codecs
- endif
-+endif
- 
- ifeq ($(BR2_PACKAGE_QT5WEBENGINE_ALSA),y)
- QT5WEBENGINE_DEPENDENCIES += alsa-lib
- else
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBENGINE_QMAKEFLAGS += -no-webengine-alsa
-+else
- QT5WEBENGINE_QMAKEFLAGS += QT_CONFIG-=alsa
- endif
-+endif
- 
- # QtWebengine's build system uses python, but only supports python2. We work
- # around this by forcing python2 early in the PATH, via a python->python2
+When he does, I'm pretty sure he will cherry-pick this patch,
+especially now that you explicitly notified us about it.
+
+Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
