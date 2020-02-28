@@ -1,77 +1,72 @@
-From: Nathan Ford <nford@westpond.com>
-Date: Fri, 28 Feb 2020 12:05:39 -0500
-Subject: [Buildroot] [PATCH v3 1/2] package/qt5/qt5webengine: fix
- ffmpeg/codec/alsa option handling for latest
-Message-ID: <1582909540-10901-1-git-send-email-nford@westpond.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Fri, 28 Feb 2020 18:30:51 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libtirpc: fix build with gcc 10
+Message-ID: <20200228173052.5128-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qt5engine also now requires webp mux support or the auto
-detection will fail.
-
-This patch is based on the suggested fix, and fixes, Bug #12416
-
-Signed-off-by: Nathan Ford <nford@westpond.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/qt5/qt5webengine/Config.in       |  1 +
- package/qt5/qt5webengine/qt5webengine.mk | 18 ++++++++++++++++++
- 2 files changed, 19 insertions(+)
+ ...ltiple-definiton-with-gcc-fno-common.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/libtirpc/0005-Avoid-multiple-definiton-with-gcc-fno-common.patch
 
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 0e776ec..18e4418 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -42,6 +42,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	select BR2_PACKAGE_OPUS
- 	select BR2_PACKAGE_WEBP
- 	select BR2_PACKAGE_WEBP_DEMUX
-+	select BR2_PACKAGE_WEBP_MUX
- 	select BR2_PACKAGE_QT5BASE_DBUS
- 	select BR2_PACKAGE_QT5BASE_EGLFS
- 	select BR2_PACKAGE_QT5BASE_FONTCONFIG
-diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-index 8987259..3824738 100644
---- a/package/qt5/qt5webengine/qt5webengine.mk
-+++ b/package/qt5/qt5webengine/qt5webengine.mk
-@@ -30,17 +30,35 @@ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
- endif
- 
-+# As of qt 5.10 these options are handled as arguments to qmake instead of defines
-+# The -- is needed to separate qmake options from config options
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBENGINE_QMAKEFLAGS = --
-+endif
+diff --git a/package/libtirpc/0005-Avoid-multiple-definiton-with-gcc-fno-common.patch b/package/libtirpc/0005-Avoid-multiple-definiton-with-gcc-fno-common.patch
+new file mode 100644
+index 0000000000..35846bb6e2
+--- /dev/null
++++ b/package/libtirpc/0005-Avoid-multiple-definiton-with-gcc-fno-common.patch
+@@ -0,0 +1,48 @@
++From daed7eedba73907730241c5262a5c16c7abedb6f Mon Sep 17 00:00:00 2001
++From: Mike Gilbert <floppym@gentoo.org>
++Date: Tue, 21 Jan 2020 11:49:35 -0500
++Subject: [PATCH 1/2] Avoid multiple-definiton with gcc -fno-common
 +
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBENGINE_QMAKEFLAGS += -webengine-ffmpeg
-+else
- QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_system_ffmpeg
-+endif
- 
- ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBENGINE_QMAKEFLAGS += -webengine-proprietary-codecs
-+else
- QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_proprietary_codecs
- endif
-+endif
- 
- ifeq ($(BR2_PACKAGE_QT5WEBENGINE_ALSA),y)
- QT5WEBENGINE_DEPENDENCIES += alsa-lib
- else
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+QT5WEBENGINE_QMAKEFLAGS += -no-webengine-alsa
-+else
- QT5WEBENGINE_QMAKEFLAGS += QT_CONFIG-=alsa
- endif
-+endif
- 
- # QtWebengine's build system uses python, but only supports python2. We work
- # around this by forcing python2 early in the PATH, via a python->python2
++GCC 10 enables -fno-common by default.
++
++Fixes: https://bugs.gentoo.org/705896
++
++Signed-off-by: Steve Dickson <steved@redhat.com>
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++[ upstream status: daed7eedba73907730241c5262a5c16c7abedb6f ]
++---
++ src/rpc_com.h | 3 +--
++ src/svc.c     | 3 +++
++ 2 files changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/src/rpc_com.h b/src/rpc_com.h
++index 10bec79..76badef 100644
++--- a/src/rpc_com.h
+++++ b/src/rpc_com.h
++@@ -61,8 +61,7 @@ void __xprt_unregister_unlocked(SVCXPRT *);
++ void __xprt_set_raddr(SVCXPRT *, const struct sockaddr_storage *);
++ 
++ 
++-SVCXPRT **__svc_xports;
++-int __svc_maxrec;
+++extern int __svc_maxrec;
++ 
++ #ifdef __cplusplus
++ }
++diff --git a/src/svc.c b/src/svc.c
++index b59467b..6db164b 100644
++--- a/src/svc.c
+++++ b/src/svc.c
++@@ -57,6 +57,9 @@
++ 
++ #define max(a, b) (a > b ? a : b)
++ 
+++static SVCXPRT **__svc_xports;
+++int __svc_maxrec;
+++
++ /*
++  * The services list
++  * Each entry represents a set of procedures (an rpc program).
++-- 
++2.25.1
++
 -- 
-2.7.4
+2.25.1
