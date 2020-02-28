@@ -1,72 +1,125 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Fri, 28 Feb 2020 15:00:54 +0100
-Subject: [Buildroot] [PATCH] package/qt5tools: hide qdoc with llvm
- dependencies
-Message-ID: <25605_1582898461_5E591D1D_25605_345_8_0fa6a8d4-31d0-445b-acea-f425422d14ef@OPEXCAUBMA2.corporate.adroot.infra.ftgroup>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 28 Feb 2020 15:18:09 +0100
+Subject: [Buildroot] buildroot 2019.11.1 rpi-0-w error
+In-Reply-To: <CAPm8-H4w3DyfbsA2sDgR8Ekuo_6ew+45XMoZn8zDrFaDAvK5oA@mail.gmail.com>
+References: <CAPm8-H6q+gk=-rVR44L8zwL-RngM3a8YNHwxeS+Ddumi6K29FA@mail.gmail.com>
+ <20200228135239.478d8257@gmx.net>
+ <CAPm8-H4w3DyfbsA2sDgR8Ekuo_6ew+45XMoZn8zDrFaDAvK5oA@mail.gmail.com>
+Message-ID: <20200228151809.400146ec@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+Hello Laurentiu-Cristian,
 
-Building qdoc requires a llvm and clang for the host.
+On Fri, 28 Feb 2020 15:51:44 +0200, Laurentiu-Cristian Duca <laurentiu.duca@gmail.com> wrote:
 
-However, there is a limitation in the llvm and clang packages in
-Buildroot, which makes it impossible to havea  host variant without
-a target variant.
+> Hi,
+>
+> On 2/28/20, Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> >
+> > On Fri, 28 Feb 2020 14:03:45 +0200, Laurentiu-Cristian Duca
+> > <laurentiu.duca@gmail.com> wrote:
+> >
+> >> Hi,
+> >>
+> >>   I am facing the following error in buildroot 2019.11.1
+> >> when configuring buildroot for rpi-0-w
+> >> with this settings:
+> >>
+> >> make menuconfig
+> >> Kernel
+> >>     Defconfig name (bcm2835)
+> >>     In-tree Device Tree Source file names (bcm2835-rpi-zero-w)
+> >>
+> >> make
+> >> >>>   Executing post-image script board/raspberrypi0w/post-image.sh
+> >> INFO: cmd: "mkdir -p
+> >> "/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/build/genimage.tmp""
+> >> (stderr):
+> >> INFO: cmd: "rm -rf
+> >> "/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/build/genimage.tmp"/*"
+> >> (stderr):
+> >> INFO: cmd: "mkdir -p
+> >> "/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/build/genimage.tmp""
+> >> (stderr):
+> >> INFO: cmd: "cp -a "/tmp/tmp.iaBv2bX7fQ"
+> >> "/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/build/genimage.tmp/root""
+> >> (stderr):
+> >> INFO: cmd: "find
+> >> '/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/build/genimage.tmp/root'
+> >> -depth -type d -printf '%P\0' | xargs -0 -I {} touch -r
+> >> '/tmp/tmp.iaBv2bX7fQ/{}'
+> >> '/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/build/genimage.tmp/root/{}'"
+> >> (stderr):
+> >> ERROR: file(bcm2708-rpi-zero-w.dtb):
+> >> stat(/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.11.rpi/output/images/bcm2708-rpi-zero-w.dtb)
+> >> failed: No such file or directory
+> >> ERROR: vfat(boot.vfat): could not setup bcm2708-rpi-zero-w.dtb
+> >>
+> >>   If I rename bcm2835-rpi-zero-w.dtb to bcm2708-rpi-zero-w.dtb in
+> >> output/images,
+> >> the build succeeds but linux does not boot.
+> >>
+> >
+> > According to configs/raspberrypi0w_defconfig the DTS name should
+> > be 'bcm2708-rpi-zero-w' (or 'bcm2708-rpi-0-w' prior to [1], [2])
+> > and the defconfig name should be 'bcmrpi'?
+> >
+> > Does the plain raspberrypi0w_defconfig work for you?
+>   Yes, it works. But only works with rpi linux.
+> I wanted to use linux mainline kernel compiled separately
+> and that is why I tried to use
+> bcm2835-rpi-zero-w.dts because mainline kernel does not have bcm2708...dts
 
-So, propagate the dependencies of the target llvm and clang, to ensure
-we can only have a host-llvm and -clang packages that are correctly
-built.
+Then do not forget to change board/raspberrypi/genimage-raspberrypi0w.cfg:
 
-Note that we do propagate all of the dependencies (instead of just the
-architecture part), to be consistent.
+--- a/board/raspberrypi/genimage-raspberrypi0w.cfg
++++ b/board/raspberrypi/genimage-raspberrypi0w.cfg
+@@ -1,7 +1,7 @@
+ image boot.vfat {
+   vfat {
+     files = {
+-      "bcm2708-rpi-zero-w.dtb",
++      "bcm2835-rpi-zero-w.dtb",
+       "rpi-firmware/bootcode.bin",
+       "rpi-firmware/cmdline.txt",
+       "rpi-firmware/config.txt",
 
-Reported-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
----
- package/qt5/qt5tools/Config.in | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+And according to [3], [4] you need to add kernel and DTB file to /boot/config.txt,
+e.g.:
 
-diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
-index 14178abc29..60106c1ee3 100644
---- a/package/qt5/qt5tools/Config.in
-+++ b/package/qt5/qt5tools/Config.in
-@@ -19,6 +19,16 @@ config BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
- 
- config BR2_PACKAGE_QT5TOOLS_QDOC_TOOL
- 	bool "qdoc host tool"
-+	# Needs llvm-config and libclang for the host, which is not
-+	# currently supported in Buildroot, unless the target is
-+	# already supported by llvm.
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # llvm, clang
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # llvm, clang
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # llvm, clang
-+	depends on BR2_INSTALL_LIBSTDCPP # llvm, clang
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # llvm, clang
-+	depends on !BR2_STATIC_LIBS # llvm, clang
-+	depends on BR2_USE_WCHAR # llvm, clang
- 	help
- 	  This option enables the qdoc host tool.
- 
--- 
-2.17.1
+kernel=zImage
+device_tree=bcm2835-rpi-zero-w.dtb
 
 
-_________________________________________________________________________________________________________________________
+[3] https://www.collabora.com/news-and-blog/blog/2019/03/12/quick-hack-raspberry-pi-meets-linux-kernel-mainline/
+[4] https://wiki.gentoo.org/wiki/Raspberry_Pi/Mainline_Kernel
 
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+>
+> Thanks
+>
+> >
+> > Which linux kernel do you use (in doubt send your .config or defconfig
+> > file)?
+> >
+> > Regards,
+> > Peter
+> >
+> > [1]
+> > https://git.buildroot.net/buildroot/commit/?id=42d22f3bdba41da8e6b6ace2c78af2b3e34d7491
+> > [2]
+> > https://git.buildroot.net/buildroot/commit/?id=fcecfb66d1fb749426306dbea50fdeb37d4706d8
+> >
+> >>   Any ideas?
+> >>
+> >> Thanks
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot at busybox.net
+> >> http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> >
