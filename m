@@ -1,32 +1,37 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Fri, 28 Feb 2020 09:25:39 +0100
-Subject: [Buildroot] [PATCH] package/exim: fix systemd service binary path
-Message-ID: <20200228082539.4530-1-p.debruijn@unilogic.nl>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 28 Feb 2020 09:44:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ruby: fix build on mips
+Message-ID: <20200228084435.3964164-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-modern versions of exim are installed into sbin not bin
+Fixes:
+ - http://autobuild.buildroot.org/results/d0ab5334f195a400a6d6dd6c49e3c1a2001b2b70
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/exim/exim.service | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ruby/ruby.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/exim/exim.service b/package/exim/exim.service
-index 26daabc4c0..fe97727ab5 100644
---- a/package/exim/exim.service
-+++ b/package/exim/exim.service
-@@ -3,7 +3,7 @@ Description=Exim MTA
- After=syslog.target network.target
- 
- [Service]
--ExecStart=/usr/bin/exim -bdf
-+ExecStart=/usr/sbin/exim -bdf
- Restart=always
- 
- [Install]
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 1899d14797..0ac1164332 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -48,6 +48,12 @@ endif
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+ RUBY_DEPENDENCIES += berkeleydb
+ endif
++ifeq ($(BR2_PACKAGE_LIBFFI),y)
++RUBY_DEPENDENCIES += libffi
++else
++# Disable fiddle to avoid a build failure with bundled-libffi on MIPS
++RUBY_CONF_OPTS += --with-out-ext=fiddle
++endif
+ ifeq ($(BR2_PACKAGE_GDBM),y)
+ RUBY_DEPENDENCIES += gdbm
+ endif
 -- 
-2.17.1
+2.25.0
