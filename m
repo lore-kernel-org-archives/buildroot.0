@@ -1,96 +1,102 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 28 Feb 2020 16:23:52 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/qt5/qt5webengine: fix
- ffmpeg/codec/alsa option handling for latest
-In-Reply-To: <1582900755-10044-1-git-send-email-nford@westpond.com>
-References: <1582900755-10044-1-git-send-email-nford@westpond.com>
-Message-ID: <20200228162352.7995d8e1@gmx.net>
+From: yann.morin at orange.com <yann.morin@orange.com>
+Date: Fri, 28 Feb 2020 16:28:44 +0100
+Subject: [Buildroot] [PATCH] package/qt5tools: hide qdoc with llvm
+ dependencies
+In-Reply-To: <5e0c3453-1cd6-a4e4-3058-d1175fa903f5@smile.fr>
+References: <25605_1582898461_5E591D1D_25605_345_8_0fa6a8d4-31d0-445b-acea-f425422d14ef@OPEXCAUBMA2.corporate.adroot.infra.ftgroup>
+ <5e0c3453-1cd6-a4e4-3058-d1175fa903f5@smile.fr>
+Message-ID: <17221_1582903725_5E5931AD_17221_356_11_20200228152844.GH13369@r-lnx-nyma7486-2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nathan,
+Romain, All,
 
-thanks for the new patch iteration, only minor nitpicks...
+On 2020-02-28 16:16 +0100, Romain Naour spake thusly:
+> Le 28/02/2020 ? 15:00, yann.morin at orange.com a ?crit?:
+> > From: "Yann E. MORIN" <yann.morin@orange.com>
+> > 
+> > Building qdoc requires a llvm and clang for the host.
+> > 
+> > However, there is a limitation in the llvm and clang packages in
+> > Buildroot, which makes it impossible to havea  host variant without
+> 
+> s/havea/have a/
+> 
+> > a target variant.
+> > 
+> > So, propagate the dependencies of the target llvm and clang, to ensure
+> > we can only have a host-llvm and -clang packages that are correctly
+> host-clang
 
-On Fri, 28 Feb 2020 09:39:14 -0500, Nathan Ford <nford@westpond.com> wrote:
-
-> qt5engine also now requires webp mux support or the auto
-> detection will fail.
->
-> This patch is based on the suggested fix, and fixes, Bug #12416
->
-> Signed-off-by: Nathan Ford <nford@westpond.com>
-> ---
->  package/qt5/qt5webengine/Config.in       |  1 +
->  package/qt5/qt5webengine/qt5webengine.mk | 18 ++++++++++++++++++
->  2 files changed, 19 insertions(+)
->
-> diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-> index 0e776ec..18e4418 100644
-> --- a/package/qt5/qt5webengine/Config.in
-> +++ b/package/qt5/qt5webengine/Config.in
-> @@ -42,6 +42,7 @@ config BR2_PACKAGE_QT5WEBENGINE
->  	select BR2_PACKAGE_OPUS
->  	select BR2_PACKAGE_WEBP
->  	select BR2_PACKAGE_WEBP_DEMUX
-> +	select BR2_PACKAGE_WEBP_MUX
->  	select BR2_PACKAGE_QT5BASE_DBUS
->  	select BR2_PACKAGE_QT5BASE_EGLFS
->  	select BR2_PACKAGE_QT5BASE_FONTCONFIG
-> diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-> index 8987259..3824738 100644
-> --- a/package/qt5/qt5webengine/qt5webengine.mk
-> +++ b/package/qt5/qt5webengine/qt5webengine.mk
-> @@ -30,17 +30,35 @@ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
->  QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
->  endif
->
-> +# As of qt 5.10 these options are handled as arguments to qmake instead of defines
-> +# The -- is needed to delineate qmake options from config options
-
-s/delineate/separate/ (but I am not a native speaker)?
-
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> +'
-> +endif
-
-First occurrence of QT5WEBENGINE_QMAKEFLAGS, so 'QT5WEBENGINE_QMAKEFLAGS = --' is
-enough...
-
-With this fixed you can add my
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+That was done on purpose, and is called an ellipsis. ;-]
 
 Regards,
-Peter
+Yann E. MORIN.
 
-> +
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> +QT5WEBENGINE_QMAKEFLAGS += -webengine-ffmpeg
-> +else
->  QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_system_ffmpeg
-> +endif
->
->  ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> +QT5WEBENGINE_QMAKEFLAGS += -webengine-proprietary-codecs
-> +else
->  QT5WEBENGINE_QMAKEFLAGS += WEBENGINE_CONFIG+=use_proprietary_codecs
->  endif
-> +endif
->
->  ifeq ($(BR2_PACKAGE_QT5WEBENGINE_ALSA),y)
->  QT5WEBENGINE_DEPENDENCIES += alsa-lib
->  else
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> +QT5WEBENGINE_QMAKEFLAGS += -no-webengine-alsa
-> +else
->  QT5WEBENGINE_QMAKEFLAGS += QT_CONFIG-=alsa
->  endif
-> +endif
->
->  # QtWebengine's build system uses python, but only supports python2. We work
->  # around this by forcing python2 early in the PATH, via a python->python2
+> > built.
+> > 
+> > Note that we do propagate all of the dependencies (instead of just the
+> > architecture part), to be consistent.
+> > 
+> > Reported-by: Romain Naour <romain.naour@smile.fr>
+> > Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Cc: Peter Seiderer <ps.report@gmx.net>
+> > Cc: Julien Corjon <corjon.j@ecagroup.com>
+> > ---
+> >  package/qt5/qt5tools/Config.in | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> > 
+> > diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
+> > index 14178abc29..60106c1ee3 100644
+> > --- a/package/qt5/qt5tools/Config.in
+> > +++ b/package/qt5/qt5tools/Config.in
+> > @@ -19,6 +19,16 @@ config BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
+> >  
+> >  config BR2_PACKAGE_QT5TOOLS_QDOC_TOOL
+> >  	bool "qdoc host tool"
+> > +	# Needs llvm-config and libclang for the host, which is not
+> > +	# currently supported in Buildroot, unless the target is
+> > +	# already supported by llvm.
+> > +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # llvm, clang
+> > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # llvm, clang
+> > +	depends on BR2_TOOLCHAIN_HAS_THREADS # llvm, clang
+> > +	depends on BR2_INSTALL_LIBSTDCPP # llvm, clang
+> > +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # llvm, clang
+> > +	depends on !BR2_STATIC_LIBS # llvm, clang
+> > +	depends on BR2_USE_WCHAR # llvm, clang
+> >  	help
+> >  	  This option enables the qdoc host tool.
+> >  
+> > 
+> Reviewed-by: Romain Naour <romain.naour@smile.fr>
+> 
+> Best regards,
+> Romain
+> 
+
+-- 
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
