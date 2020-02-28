@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Feb 2020 23:40:08 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual: run-tests
+Date: Fri, 28 Feb 2020 23:39:59 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] docs/manual: run-tests
  test framework
-Message-ID: <20200228223254.DF36F8CA7C@busybox.osuosl.org>
+Message-ID: <20200228223259.E50D18EE5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a5b29f33d31c3631fb945ef000752dd6fad5a4c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=33b184800b3926c810f928eb41367d35d432bff6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 This patch adds a new manual section that captures an overview
 of the run-tests tool, how to manually run a test and where to
