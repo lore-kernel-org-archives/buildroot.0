@@ -1,55 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Feb 2020 20:07:10 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mbedtls: security
- bump to version 2.7.13
-Message-ID: <20200229185740.02E468EF89@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Feb 2020 20:25:34 +0100
+Subject: [Buildroot] [git commit] package/qpdf: fix comment
+Message-ID: <20200229191339.A04688EF90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf8b6053142276b2c03f46ffaae766699ab21bac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=03cb3f61a01dd014dc475e7054ada5af313b2eaf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2019-18222: Our bignum implementation is not constant
-time/constant trace, so side channel attacks can retrieve the blinded
-value, factor it (as it is smaller than RSA keys and not guaranteed to
-have only large prime factors), and then, by brute force, recover the
-key. Reported by Alejandro Cabrera Aldaya and Billy Brumley.
+Commit 3f9bcc01b3ef94c8f138b6dccc861d9e222de5ef forgot to update comment
 
-For more details, see the announcement:
-https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.4-and-2.7.13-released
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mbedtls/mbedtls.hash | 6 +++---
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/qpdf/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 84fe820c5c..9edd4cd6da 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,5 +1,5 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.3-and-2.7.12-released
--sha1	ce1af75d497cc03fe5c8e8e15fbf583d9dfbacd1	mbedtls-2.7.12-apache.tgz
--sha256	d3a36dbc9f607747daa6875c1ab2e41f49eff5fc99d3436b4f3ac90c89f3c143	mbedtls-2.7.12-apache.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.4-and-2.7.13-released
-+sha1	a539756905c312591aae757ecbf3e0aadc6d1c46	mbedtls-2.7.13-apache.tgz
-+sha256	6772fe21c7755dc513920e84adec629d39188b6451542ebaece428f0eba655c9	mbedtls-2.7.13-apache.tgz
- # Locally calculated
- sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 427b2acb55..42198c2e57 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/qpdf/Config.in b/package/qpdf/Config.in
+index 6f586f651a..56a96e4f41 100644
+--- a/package/qpdf/Config.in
++++ b/package/qpdf/Config.in
+@@ -15,6 +15,6 @@ config BR2_PACKAGE_QPDF
  
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.7.12
-+MBEDTLS_VERSION = 2.7.13
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+ 	  http://qpdf.sourceforge.net/
+ 
+-comment "qpdf needs a toolchain w/ C++, gcc >= 4.7"
+-	depends on !BR2_INSTALL_LIBSTDCPP || \
++comment "qpdf needs a toolchain w/ C++, wchar, gcc >= 4.7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
