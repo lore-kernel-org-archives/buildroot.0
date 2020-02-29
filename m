@@ -1,75 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Feb 2020 17:43:59 +0100
-Subject: [Buildroot] [git commit] package/libarchive: security bump to
- version 3.4.2
-Message-ID: <20200229163323.2D4648EEF0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Feb 2020 17:45:59 +0100
+Subject: [Buildroot] [PATCH] package/openrc: needs kmod
+In-Reply-To: <20200228202552.14788-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Fri, 28 Feb 2020 21:25:52 +0100")
+References: <20200228202552.14788-1-yann.morin.1998@free.fr>
+Message-ID: <87wo85gx4o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6785c19bf5f76001b9a1237402b68fd8302e5620
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-- Fix CVE-2020-9308: archive_read_support_format_rar5.c in libarchive
-  before 3.4.2 attempts to unpack a RAR5 file with an invalid or
-  corrupted header (such as a header size of zero), leading to a SIGSEGV
-  or possibly unspecified other impact.
-- use --with-nettle to enable nettle support, see
-  https://github.com/libarchive/libarchive/commit/f96a71144b7725ca4a94d84bd27d7dca8c2f58d2
+ > openrc provides scritps that have been written for the big-gun kmod, and
+ > so use options unknown to the biusybox' provided applets:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998 at free.fr:
-  - drop new optional dependency to mbedtsl, forced off for now
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libarchive/libarchive.hash | 2 +-
- package/libarchive/libarchive.mk   | 5 ++++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ >   - Busybox modprobe does not have a "--first-time" option,
+ >   - the "--verbose" option is just "-v",
+ >   - the "--use-blacklist" option is just "-b". Also blacklist support is
+ >     not selected in our default busybox configuration.
 
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index b01d6368a5..9da4eb3baa 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  fcf87f3ad8db2e4f74f32526dee62dd1fb9894782b0a503a89c9d7a70a235191  libarchive-3.4.1.tar.gz
-+sha256  b60d58d12632ecf1e8fad7316dc82c6b9738a35625746b47ecdcaf4aed176176  libarchive-3.4.2.tar.gz
- # Locally computed:
- sha256  e1e3d4ba9d0b0ccba333b5f5539f7c6c9a3ef3d57a96cd165d2c45eaa1cd026d  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index e256b72289..60838eea0a 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,11 +4,12 @@
- #
- ################################################################################
- 
--LIBARCHIVE_VERSION = 3.4.1
-+LIBARCHIVE_VERSION = 3.4.2
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
- LIBARCHIVE_LICENSE_FILES = COPYING
-+LIBARCHIVE_CONF_OPTS = --without-mbedtls
- 
- ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
- ifeq ($(BR2_STATIC_LIBS),y)
-@@ -86,6 +87,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_NETTLE),y)
- LIBARCHIVE_DEPENDENCIES += nettle
-+LIBARCHIVE_CONF_OPTS += --with-nettle
- else
- LIBARCHIVE_CONF_OPTS += --without-nettle
- endif
-@@ -123,6 +125,7 @@ HOST_LIBARCHIVE_CONF_OPTS = \
- 	--without-libiconv-prefix \
- 	--without-xml2 \
- 	--without-lzo2 \
-+	--without-mbedtls \
- 	--without-nettle \
- 	--without-openssl \
- 	--without-lzma
+ > One of two options, is to "fix" or "adapt" openrc's scripts to busybox,
+ > which means for the openrc package to go peek into files from the
+ > busybox package, which is not nice, and can't work because that is not
+ > available by the time we scan our Makefiles.
+
+ > The other option, which this patch implements, is to just add a
+ > dependency onto kmod and its tools.
+
+ > Reported-by: Carlos Santos <unixmania@gmail.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
