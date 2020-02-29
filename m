@@ -1,34 +1,46 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 28 Feb 2020 18:11:55 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-jinja2: fix async removal
- paths
-Message-ID: <20200229011155.10706-1-james.hilliard1@gmail.com>
+Date: Fri, 28 Feb 2020 19:09:35 -0700
+Subject: [Buildroot] [PATCH 1/1] package/gensio: bump to version 1.5.3
+Message-ID: <20200229020935.6820-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/dd5/dd5f151b2c9872476ab63c529468d0b37a0374f5/
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-jinja2/python-jinja2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gensio/gensio.hash | 6 +++---
+ package/gensio/gensio.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index 189b75d18f..64b4c60c9b 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -20,7 +20,7 @@ HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
- # Hence remove both files after package extraction.
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- define PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
--	rm $(@D)/jinja2/asyncsupport.py $(@D)/jinja2/asyncfilters.py
-+	rm $(@D)/src/jinja2/asyncsupport.py $(@D)/src/jinja2/asyncfilters.py
- endef
+diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
+index b63e459f16..202548bc40 100644
+--- a/package/gensio/gensio.hash
++++ b/package/gensio/gensio.hash
+@@ -1,7 +1,7 @@
+ # From https://sourceforge.net/projects/ser2net/files/ser2net/
+-md5  eecceb741c34708deb8b29b7b84d5bd0  gensio-1.5.2.tar.gz
+-sha1  4209ba80ecd1ead930ee8d9e60f384afd20481bd  gensio-1.5.2.tar.gz
++md5  d6b0665266f738973b13450c53d83032  gensio-1.5.3.tar.gz
++sha1  8d041babe8d29f8acb48c6cb0fa543e6f9f63238  gensio-1.5.3.tar.gz
+ # Locally computed:
+-sha256  9213b05bcab615fe5b9c5d71bb5fe765500271941980ba606904ffc5d0cd30fa  gensio-1.5.2.tar.gz
++sha256  f5097add3f269594e7a81016af93c147e8f5e8312f27f3d0bfbeeb3aad1ace53  gensio-1.5.3.tar.gz
+ sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
+ sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
+diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
+index 5272c3c0d7..06e55875c0 100644
+--- a/package/gensio/gensio.mk
++++ b/package/gensio/gensio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- PYTHON_JINJA2_POST_EXTRACT_HOOKS = PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
+-GENSIO_VERSION = 1.5.2
++GENSIO_VERSION = 1.5.3
+ GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GENSIO_LICENSE_FILES = COPYING.LIB COPYING
 -- 
 2.20.1
