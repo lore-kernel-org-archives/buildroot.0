@@ -1,91 +1,112 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Feb 2020 21:24:42 +0100
-Subject: [Buildroot] [PATCH 3/3] package/openjpeg: fix CVE-2020-8112
-In-Reply-To: <20200229202442.3455662-1-fontaine.fabrice@gmail.com>
-References: <20200229202442.3455662-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200229202442.3455662-3-fontaine.fabrice@gmail.com>
+Date: Sat, 29 Feb 2020 21:34:15 +0100
+Subject: [Buildroot] [PATCH 1/2] package/pure-ftpd: fix CVE-2019-20176
+Message-ID: <20200229203416.3462566-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-opj_t1_clbl_decode_processor in openjp2/t1.c in OpenJPEG 2.3.1 through
-2020-01-28 has a heap-based buffer overflow in the qmfbid==1 case, a
-different issue than CVE-2020-6851.
+In Pure-FTPd 1.0.49, a stack exhaustion issue was discovered in the
+listdir function in ls.c.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...tcd_init_tile-avoid-integer-overflow.patch | 46 +++++++++++++++++++
- package/openjpeg/openjpeg.mk                  |  3 ++
- 2 files changed, 49 insertions(+)
- create mode 100644 package/openjpeg/0007-opj_tcd_init_tile-avoid-integer-overflow.patch
+ ...-to-store-every-file-name-to-display.patch | 70 +++++++++++++++++++
+ package/pure-ftpd/pure-ftpd.mk                |  3 +
+ 2 files changed, 73 insertions(+)
+ create mode 100644 package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
 
-diff --git a/package/openjpeg/0007-opj_tcd_init_tile-avoid-integer-overflow.patch b/package/openjpeg/0007-opj_tcd_init_tile-avoid-integer-overflow.patch
+diff --git a/package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch b/package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
 new file mode 100644
-index 0000000000..7d82377d52
+index 0000000000..2f791d1d6e
 --- /dev/null
-+++ b/package/openjpeg/0007-opj_tcd_init_tile-avoid-integer-overflow.patch
-@@ -0,0 +1,46 @@
-+From 05f9b91e60debda0e83977e5e63b2e66486f7074 Mon Sep 17 00:00:00 2001
-+From: Even Rouault <even.rouault@spatialys.com>
-+Date: Thu, 30 Jan 2020 00:59:57 +0100
-+Subject: [PATCH] opj_tcd_init_tile(): avoid integer overflow
++++ b/package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
+@@ -0,0 +1,70 @@
++From aea56f4bcb9948d456f3fae4d044fd3fa2e19706 Mon Sep 17 00:00:00 2001
++From: Frank Denis <github@pureftpd.org>
++Date: Mon, 30 Dec 2019 17:40:04 +0100
++Subject: [PATCH] listdir(): reuse a single buffer to store every file name to
++ display
 +
-+That could lead to later assertion failures.
++Allocating a new buffer for each entry is useless.
 +
-+Fixes #1231 / CVE-2020-8112
++And as these buffers are allocated on the stack, on systems with a
++small stack size, with many entries, the limit can easily be reached,
++causing a stack exhaustion and aborting the user session.
++
++Reported by Antonio Morales from the GitHub Security Lab team, thanks!
 +[Retrieved from:
-+https://github.com/uclouvain/openjpeg/commit/05f9b91e60debda0e83977e5e63b2e66486f7074]
++https://github.com/jedisct1/pure-ftpd/commit/aea56f4bcb9948d456f3fae4d044fd3fa2e19706]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ src/lib/openjp2/tcd.c | 20 ++++++++++++++++++--
-+ 1 file changed, 18 insertions(+), 2 deletions(-)
++ src/ls.c | 15 ++++++++-------
++ 1 file changed, 8 insertions(+), 7 deletions(-)
 +
-+diff --git a/src/lib/openjp2/tcd.c b/src/lib/openjp2/tcd.c
-+index deecc4dff..aa419030a 100644
-+--- a/src/lib/openjp2/tcd.c
-++++ b/src/lib/openjp2/tcd.c
-+@@ -905,8 +905,24 @@ static INLINE OPJ_BOOL opj_tcd_init_tile(opj_tcd_t *p_tcd, OPJ_UINT32 p_tile_no,
-+             /* p. 64, B.6, ISO/IEC FDIS15444-1 : 2000 (18 august 2000)  */
-+             l_tl_prc_x_start = opj_int_floordivpow2(l_res->x0, (OPJ_INT32)l_pdx) << l_pdx;
-+             l_tl_prc_y_start = opj_int_floordivpow2(l_res->y0, (OPJ_INT32)l_pdy) << l_pdy;
-+-            l_br_prc_x_end = opj_int_ceildivpow2(l_res->x1, (OPJ_INT32)l_pdx) << l_pdx;
-+-            l_br_prc_y_end = opj_int_ceildivpow2(l_res->y1, (OPJ_INT32)l_pdy) << l_pdy;
-++            {
-++                OPJ_UINT32 tmp = ((OPJ_UINT32)opj_int_ceildivpow2(l_res->x1,
-++                                  (OPJ_INT32)l_pdx)) << l_pdx;
-++                if (tmp > (OPJ_UINT32)INT_MAX) {
-++                    opj_event_msg(manager, EVT_ERROR, "Integer overflow\n");
-++                    return OPJ_FALSE;
-++                }
-++                l_br_prc_x_end = (OPJ_INT32)tmp;
-++            }
-++            {
-++                OPJ_UINT32 tmp = ((OPJ_UINT32)opj_int_ceildivpow2(l_res->y1,
-++                                  (OPJ_INT32)l_pdy)) << l_pdy;
-++                if (tmp > (OPJ_UINT32)INT_MAX) {
-++                    opj_event_msg(manager, EVT_ERROR, "Integer overflow\n");
-++                    return OPJ_FALSE;
-++                }
-++                l_br_prc_y_end = (OPJ_INT32)tmp;
-++            }
-+             /*fprintf(stderr, "\t\t\tprc_x_start=%d, prc_y_start=%d, br_prc_x_end=%d, br_prc_y_end=%d \n", l_tl_prc_x_start, l_tl_prc_y_start, l_br_prc_x_end ,l_br_prc_y_end );*/
++diff --git a/src/ls.c b/src/ls.c
++index cf804c7..f8a588f 100644
++--- a/src/ls.c
+++++ b/src/ls.c
++@@ -661,6 +661,8 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
++     char *names;
++     PureFileInfo *s;
++     PureFileInfo *r;
+++    char *alloca_subdir;
+++    size_t sizeof_subdir;
++     int d;
 + 
-+             l_res->pw = (l_res->x0 == l_res->x1) ? 0U : (OPJ_UINT32)((
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index 28d6e97b01..1ff3111d64 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -17,6 +17,9 @@ OPENJPEG_IGNORE_CVES += CVE-2019-12973
- # 0006-opj_j2k_update_image_dimensions-reject-images-whose-coordinates.patch
- OPENJPEG_IGNORE_CVES += CVE-2020-6851
++     if (depth >= max_ls_depth || matches >= max_ls_files) {
++@@ -690,14 +692,12 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
++     }
++     outputfiles(f, tls_fd);
++     r = dir;
+++    sizeof_subdir = PATH_MAX + 1U;
+++    if ((alloca_subdir = ALLOCA(sizeof_subdir)) == NULL) {
+++        goto toomany;
+++    }
++     while (opt_R && r != s) {
++         if (r->name_offset != (size_t) -1 && !chdir(FI_NAME(r))) {
++-            char *alloca_subdir;
++-            const size_t sizeof_subdir = PATH_MAX + 1U;
++-
++-            if ((alloca_subdir = ALLOCA(sizeof_subdir)) == NULL) {
++-                goto toomany;
++-            }
++             if (SNCHECK(snprintf(alloca_subdir, sizeof_subdir, "%s/%s",
++                                  name, FI_NAME(r)), sizeof_subdir)) {
++                 goto nolist;
++@@ -706,8 +706,8 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
++             wrstr(f, tls_fd, alloca_subdir);
++             wrstr(f, tls_fd, ":\r\n\r\n");
++             listdir(depth + 1U, f, tls_fd, alloca_subdir);
+++
++             nolist:
++-            ALLOCA_FREE(alloca_subdir);
++             if (matches >= max_ls_files) {
++                 goto toomany;
++             }
++@@ -720,6 +720,7 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
++         r++;
++     }
++     toomany:
+++    ALLOCA_FREE(alloca_subdir);
++     free(names);
++     free(dir);
++     names = NULL;
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index 2d69efe3f9..3af66a066c 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -11,6 +11,9 @@ PURE_FTPD_LICENSE = ISC
+ PURE_FTPD_LICENSE_FILES = COPYING
+ PURE_FTPD_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
  
-+# 0007-opj_tcd_init_tile-avoid-integer-overflow.patch
-+OPENJPEG_IGNORE_CVES += CVE-2020-8112
++# 0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
++PURE_FTPD_IGNORE_CVES += CVE-2019-20176
 +
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
+ PURE_FTPD_CONF_OPTS = \
+ 	--with-altlog \
+ 	--with-puredb
 -- 
 2.25.0
