@@ -1,59 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Feb 2020 17:50:42 +0100
-Subject: [Buildroot] [PATCH] package/kexec-lite: Bump the version
-In-Reply-To: <1582916753-1681-1-git-send-email-nayna@linux.ibm.com> (Nayna
- Jain's message of "Fri, 28 Feb 2020 14:05:53 -0500")
-References: <1582916753-1681-1-git-send-email-nayna@linux.ibm.com>
-Message-ID: <87o8thgwwt.fsf@dell.be.48ers.dk>
+Date: Sat, 29 Feb 2020 18:07:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/boost: annotate _IGNORE_CVES
+ for CVE-2009-3654
+In-Reply-To: <20200229163608.GO8743@scaer> (Yann E. MORIN's message of "Sat,
+ 29 Feb 2020 17:36:08 +0100")
+References: <20200229094609.2451566-1-fontaine.fabrice@gmail.com>
+ <20200229163608.GO8743@scaer>
+Message-ID: <87k145gw45.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nayna" == Nayna Jain <nayna@linux.ibm.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Upstream changes include:
- > kexec: improve kexec_file_load error message
+ > Fabrice, All,
+ > On 2020-02-29 10:46 +0100, Fabrice Fontaine spake thusly:
+ >> Unspecified vulnerability in Boost before 6.x-1.03, a module for Drupal,
+ >> allows remote attackers to create new webroot directories via unknown
+ >> attack vectors.
 
- > Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
- > ---
- > The patch is based on "next" branch.
+ > Yes, good to know, but the interesting bit is why we are not affected,
+ > which your commit log fails to specify.
 
- >  package/kexec-lite/kexec-lite.hash | 2 +-
- >  package/kexec-lite/kexec-lite.mk   | 2 +-
- >  2 files changed, 2 insertions(+), 2 deletions(-)
+ > Also, the comment should say so as well. Maybe just something like:
 
- > diff --git a/package/kexec-lite/kexec-lite.hash b/package/kexec-lite/kexec-lite.hash
- > index 0100823..e2426a4 100644
- > --- a/package/kexec-lite/kexec-lite.hash
- > +++ b/package/kexec-lite/kexec-lite.hash
- > @@ -1,3 +1,3 @@
- >  # Locally calculated
- > -sha256
- > 6eb115c8db3a071b970d7ba985ea5e2425e1e716952186f9a4fe329a2e2bb1ca
- > kexec-lite-18ec88310c4134eca2f9e3c417cd09f5914bf633.tar.gz
- > +sha256
- > 1027c69721e8ee21614273a540e1dd505370d8d814845c0adaf838496105a35d
- > kexec-lite-6b0130b3c1ea489e061cda2805e6f8b68dc96a76.tar.gz
- >  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- > diff --git a/package/kexec-lite/kexec-lite.mk b/package/kexec-lite/kexec-lite.mk
- > index e44c6df..a3e99f4 100644
- > --- a/package/kexec-lite/kexec-lite.mk
- > +++ b/package/kexec-lite/kexec-lite.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
- 
- > -KEXEC_LITE_VERSION = 18ec88310c4134eca2f9e3c417cd09f5914bf633
- > +KEXEC_LITE_VERSION = 6b0130b3c1ea489e061cda2805e6f8b68dc96a76 
+ >     # Module for Drupal, not installed in Buildroot
+ >     BOOST_IGNORE_CVES +=...
 
-As check-package correctly notices, you are adding a trailing space
-here:
+It is not because we don't install some optional part of boost, it is
+simply that our CVE logic thinks that this CVE applies to our boost
+package, whereas it is really for some kind of drupal module:
 
-package/kexec-lite/kexec-lite.mk:7: line contains trailing whitespace
-
-Committed to next with that fixed, thanks.
+https://nvd.nist.gov/vuln/detail/CVE-2009-3654
 
 -- 
 Bye, Peter Korsgaard
