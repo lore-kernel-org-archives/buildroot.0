@@ -1,137 +1,39 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 29 Feb 2020 17:47:01 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/python-pybind11: new
- package
-In-Reply-To: <20191130001206.2962387-1-aduskett@gmail.com>
-References: <20191130001206.2962387-1-aduskett@gmail.com>
-Message-ID: <CALFsTFUJEf7MnT_N1AktVK9H5PgE3Neo3Nst_h3g9oib5ff7RA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Feb 2020 17:27:28 +0100
+Subject: [Buildroot] [git commit] package/poco: PDF needs XML, JSON and Util
+Message-ID: <20200229161520.DD57F8EE94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2f813df3d92cc91070e8fd447cb81e9851c68785
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, Nov 30, 2019 at 2:12 AM <aduskett@gmail.com> wrote:
->
-> From: Adam Duskett <Aduskett@gmail.com>
->
-> pybind11 is a lightweight header-only library that exposes C++ types in Python
-> and vice versa, mainly to create Python bindings of existing C++ code. Its goals
-> and syntax are similar to the excellent Boost.Python library by David
-> Abrahams:
-> To minimize boilerplate code in traditional extension modules by inferring type
-> information using compile-time introspection.
->
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  DEVELOPERS                                   |  1 +
->  package/Config.in                            |  1 +
->  package/python-pybind11/Config.in            | 23 ++++++++++++++++++++
->  package/python-pybind11/python-pybind11.hash |  5 +++++
->  package/python-pybind11/python-pybind11.mk   | 15 +++++++++++++
->  5 files changed, 45 insertions(+)
->  create mode 100644 package/python-pybind11/Config.in
->  create mode 100644 package/python-pybind11/python-pybind11.hash
->  create mode 100644 package/python-pybind11/python-pybind11.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 16e8510b0a..d2da7fd5fa 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -64,6 +64,7 @@ F:    package/python-flask-sqlalchemy/
->  F:     package/python-mutagen/
->  F:     package/python-pip/
->  F:     package/python-psycopg2/
-> +F:     package/python-pybind11/
->  F:     package/python-sqlalchemy/
->  F:     package/python-sqlparse/
->  F:     package/python-visitor/
-> diff --git a/package/Config.in b/package/Config.in
-> index 37861387e8..8b89ba034b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1021,6 +1021,7 @@ menu "External python modules"
->         source "package/python-pyasn-modules/Config.in"
->         source "package/python-pyasn1/Config.in"
->         source "package/python-pyasn1-modules/Config.in"
-> +       source "package/python-pybind11/Config.in"
->         source "package/python-pycairo/Config.in"
->         source "package/python-pycares/Config.in"
->         source "package/python-pycli/Config.in"
-> diff --git a/package/python-pybind11/Config.in b/package/python-pybind11/Config.in
-> new file mode 100644
-> index 0000000000..e79c0075a6
-> --- /dev/null
-> +++ b/package/python-pybind11/Config.in
-> @@ -0,0 +1,23 @@
-> +config BR2_PACKAGE_PYTHON_PYBIND11
-> +       bool "python-pybind11"
-> +       depends on BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-> +       depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
-> +       help
-> +         pybind11 is a lightweight header-only library that exposes C++
-> +         types in Python and vice versa, mainly to create Python
-> +         bindings of existing C++ code. Its goals and syntax are
-> +         similar to the excellent Boost.Python library by David
-> +         Abrahams:
-> +         To minimize boilerplate code in traditional extension modules
-> +         by inferring type information using compile-time
-> +         introspection.
-> +
-> +         https://github.com/pybind/pybind11
-> +
-> +comment "python-pybind11 needs a toolchain w/ C++, gcc >= 4.8"
-> +       depends on !BR2_INSTALL_LIBSTDCPP
-> +       depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +
-> +comment "python-pybind11 needs exception_ptr"
-> +       depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> diff --git a/package/python-pybind11/python-pybind11.hash b/package/python-pybind11/python-pybind11.hash
-> new file mode 100644
-> index 0000000000..614ea183ec
-> --- /dev/null
-> +++ b/package/python-pybind11/python-pybind11.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/pybind11/json
-> +md5    23fdca8191b16ce3e7f38fb9e4252b2d  pybind11-2.4.3.tar.gz
-> +sha256 72e6def53fb491f7f4e92692029d2e7bb5a0783314f20d80222735ff10a75758  pybind11-2.4.3.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 9a37ea54aa3cf12c7f3292799f20822ffd4b9b7142b36a7a9997b28c39264dc9  LICENSE
-> diff --git a/package/python-pybind11/python-pybind11.mk b/package/python-pybind11/python-pybind11.mk
-> new file mode 100644
-> index 0000000000..2b0f64c9bb
-> --- /dev/null
-> +++ b/package/python-pybind11/python-pybind11.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-pybind11
-> +#
-> +################################################################################
-> +
-> +PYTHON_PYBIND11_VERSION = 2.4.3
-> +PYTHON_PYBIND11_SOURCE = pybind11-$(PYTHON_PYBIND11_VERSION).tar.gz
-> +PYTHON_PYBIND11_SITE = https://files.pythonhosted.org/packages/aa/91/deb6743e79e22ab01502296570b39b8404f10cc507a6692d612a7fee8d51
-> +PYTHON_PYBIND11_SETUP_TYPE = setuptools
-> +PYTHON_PYBIND11_LICENSE = BSD-3-Clause
-> +PYTHON_PYBIND11_LICENSE_FILES = LICENSE
-> +PYTHON_PYBIND11_INSTALL_STAGING = YES
+PDF needs XML, JSON and Util since version 1.9.0 and
+https://github.com/pocoproject/poco/commit/c5acb2ac27a81a429e146780769f965e8284cadc
 
-Don't we want to add PYTHON_PYBIND11_INSTALL_TARGET = NO?
-This package installs only headers and is used only when compiling the sources.
+Fixes:
+ - http://autobuild.buildroot.org/results/294b604a0e37aafbe085f0e6f0d1a83ab110c3a4
 
-> +
-> +$(eval $(python-package))
-> --
-> 2.23.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/poco/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Regards,
-Asaf.
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index 7e1257146c..f8f921de04 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -54,6 +54,9 @@ config BR2_PACKAGE_POCO_CPP_PARSER
+ 
+ config BR2_PACKAGE_POCO_PDF
+ 	bool "pdf"
++	select BR2_PACKAGE_POCO_JSON
++	select BR2_PACKAGE_POCO_UTIL
++	select BR2_PACKAGE_POCO_XML
+ 
+ config BR2_PACKAGE_POCO_REDIS
+ 	bool "redis"
