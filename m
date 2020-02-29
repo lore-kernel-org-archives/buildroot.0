@@ -1,24 +1,71 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 29 Feb 2020 22:47:15 +0000
-Subject: [Buildroot] [Bug 12576] 2020.02-RC1: error while loading shared
- libraries: libsystemd-shared-244.so
-In-Reply-To: <bug-12576-163@https.bugs.busybox.net/>
-References: <bug-12576-163@https.bugs.busybox.net/>
-Message-ID: <bug-12576-163-mSUPJTiuO9@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 29 Feb 2020 23:55:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/shellinabox: fix CVE-2018-16789
+Message-ID: <20200229225511.4079011-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12576
+libhttp/url.c in shellinabox through 2.20 has an implementation flaw in
+the HTTP request parsing logic. By sending a crafted multipart/form-data
+HTTP request, an attacker could exploit this to force shellinaboxd into
+an infinite loop, exhausting available CPU resources and taking the
+service down.
 
---- Comment #2 from Melanie <melanie@trash-mail.com> ---
-Hello Thomas.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...9-fix-for-broken-multipart-form-data.patch | 26 +++++++++++++++++++
+ package/shellinabox/shellinabox.mk            |  3 +++
+ 2 files changed, 29 insertions(+)
+ create mode 100644 package/shellinabox/0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch
 
-I've tested your patch and can confirm that it fixes the issue.
-Would be great if this could be implemented into the final 2020.02 release.
-
+diff --git a/package/shellinabox/0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch b/package/shellinabox/0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch
+new file mode 100644
+index 0000000000..4b15f419e3
+--- /dev/null
++++ b/package/shellinabox/0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch
+@@ -0,0 +1,26 @@
++From 7f47efe1717c381f86566fabe0b1ced8cb98fe8f Mon Sep 17 00:00:00 2001
++From: irsl <irsl@users.noreply.github.com>
++Date: Fri, 26 Oct 2018 11:51:15 +0200
++Subject: [PATCH] fix for broken multipart/form-data
++
++Malformed multipart/form-data payload results in infinite loop and thus denial of service
++[Upstream status: https://github.com/shellinabox/shellinabox/pull/446]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libhttp/url.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/libhttp/url.c b/libhttp/url.c
++index ed29475..4177871 100644
++--- a/libhttp/url.c
+++++ b/libhttp/url.c
++@@ -312,6 +312,9 @@ static void urlParsePostBody(struct URL *url,
++               }
++             }
++           }
+++        } else {
+++           warn("[http] broken multipart/form-data!");
+++           break;
++         }
++       }
++       if (lastPart) {
+diff --git a/package/shellinabox/shellinabox.mk b/package/shellinabox/shellinabox.mk
+index be36804cb7..4c93fdccef 100644
+--- a/package/shellinabox/shellinabox.mk
++++ b/package/shellinabox/shellinabox.mk
+@@ -9,6 +9,9 @@ SHELLINABOX_SITE = $(call github,shellinabox,shellinabox,v$(SHELLINABOX_VERSION)
+ SHELLINABOX_LICENSE = GPL-2.0 with OpenSSL exception
+ SHELLINABOX_LICENSE_FILES = COPYING GPL-2
+ 
++# 0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch
++SHELLINABOX_IGNORE_CVES += CVE-2018-16789
++
+ # Fetching from Github, and patching Makefile.am, so we need to autoreconf
+ SHELLINABOX_AUTORECONF = YES
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.25.0
