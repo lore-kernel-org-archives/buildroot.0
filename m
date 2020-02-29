@@ -1,116 +1,137 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Feb 2020 16:12:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: fix CVE-2019-14834
-In-Reply-To: <20200229133437.2780453-1-fontaine.fabrice@gmail.com>
-References: <20200229133437.2780453-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200229151245.GL8743@scaer>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 29 Feb 2020 17:47:01 +0200
+Subject: [Buildroot] [PATCH/next 1/2] package/python-pybind11: new
+ package
+In-Reply-To: <20191130001206.2962387-1-aduskett@gmail.com>
+References: <20191130001206.2962387-1-aduskett@gmail.com>
+Message-ID: <CALFsTFUJEf7MnT_N1AktVK9H5PgE3Neo3Nst_h3g9oib5ff7RA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello,
 
-On 2020-02-29 14:34 +0100, Fabrice Fontaine spake thusly:
-> A vulnerability was found in dnsmasq before version 2.81, where the
-> memory leak allows remote attackers to cause a denial of service
-> (memory consumption) via vectors involving DHCP response creation.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
+On Sat, Nov 30, 2019 at 2:12 AM <aduskett@gmail.com> wrote:
+>
+> From: Adam Duskett <Aduskett@gmail.com>
+>
+> pybind11 is a lightweight header-only library that exposes C++ types in Python
+> and vice versa, mainly to create Python bindings of existing C++ code. Its goals
+> and syntax are similar to the excellent Boost.Python library by David
+> Abrahams:
+> To minimize boilerplate code in traditional extension modules by inferring type
+> information using compile-time introspection.
+>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
->  .../0004-Fix-memory-leak-in-helper-c.patch    | 49 +++++++++++++++++++
->  package/dnsmasq/dnsmasq.mk                    |  3 ++
->  2 files changed, 52 insertions(+)
->  create mode 100644 package/dnsmasq/0004-Fix-memory-leak-in-helper-c.patch
-> 
-> diff --git a/package/dnsmasq/0004-Fix-memory-leak-in-helper-c.patch b/package/dnsmasq/0004-Fix-memory-leak-in-helper-c.patch
+>  DEVELOPERS                                   |  1 +
+>  package/Config.in                            |  1 +
+>  package/python-pybind11/Config.in            | 23 ++++++++++++++++++++
+>  package/python-pybind11/python-pybind11.hash |  5 +++++
+>  package/python-pybind11/python-pybind11.mk   | 15 +++++++++++++
+>  5 files changed, 45 insertions(+)
+>  create mode 100644 package/python-pybind11/Config.in
+>  create mode 100644 package/python-pybind11/python-pybind11.hash
+>  create mode 100644 package/python-pybind11/python-pybind11.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 16e8510b0a..d2da7fd5fa 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -64,6 +64,7 @@ F:    package/python-flask-sqlalchemy/
+>  F:     package/python-mutagen/
+>  F:     package/python-pip/
+>  F:     package/python-psycopg2/
+> +F:     package/python-pybind11/
+>  F:     package/python-sqlalchemy/
+>  F:     package/python-sqlparse/
+>  F:     package/python-visitor/
+> diff --git a/package/Config.in b/package/Config.in
+> index 37861387e8..8b89ba034b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1021,6 +1021,7 @@ menu "External python modules"
+>         source "package/python-pyasn-modules/Config.in"
+>         source "package/python-pyasn1/Config.in"
+>         source "package/python-pyasn1-modules/Config.in"
+> +       source "package/python-pybind11/Config.in"
+>         source "package/python-pycairo/Config.in"
+>         source "package/python-pycares/Config.in"
+>         source "package/python-pycli/Config.in"
+> diff --git a/package/python-pybind11/Config.in b/package/python-pybind11/Config.in
 > new file mode 100644
-> index 0000000000..c00a9cc3ef
+> index 0000000000..e79c0075a6
 > --- /dev/null
-> +++ b/package/dnsmasq/0004-Fix-memory-leak-in-helper-c.patch
-> @@ -0,0 +1,49 @@
-> +From 69bc94779c2f035a9fffdb5327a54c3aeca73ed5 Mon Sep 17 00:00:00 2001
-> +From: Simon Kelley <simon@thekelleys.org.uk>
-> +Date: Wed, 14 Aug 2019 20:44:50 +0100
-> +Subject: [PATCH] Fix memory leak in helper.c
+> +++ b/package/python-pybind11/Config.in
+> @@ -0,0 +1,23 @@
+> +config BR2_PACKAGE_PYTHON_PYBIND11
+> +       bool "python-pybind11"
+> +       depends on BR2_INSTALL_LIBSTDCPP
+> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+> +       depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+> +       help
+> +         pybind11 is a lightweight header-only library that exposes C++
+> +         types in Python and vice versa, mainly to create Python
+> +         bindings of existing C++ code. Its goals and syntax are
+> +         similar to the excellent Boost.Python library by David
+> +         Abrahams:
+> +         To minimize boilerplate code in traditional extension modules
+> +         by inferring type information using compile-time
+> +         introspection.
 > +
-> +Thanks to Xu Mingjie <xumingjie1995@outlook.com> for spotting this.
-> +[Retrieved from:
-> +http://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=commit;h=69bc94779c2f035a9fffdb5327a54c3aeca73ed5]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/helper.c |   12 +++++++++---
-> + 1 file changed, 9 insertions(+), 3 deletions(-)
+> +         https://github.com/pybind/pybind11
 > +
-> +diff --git a/src/helper.c b/src/helper.c
-> +index 33ba120..c392eec 100644
-> +--- a/src/helper.c
-> ++++ b/src/helper.c
-> +@@ -80,7 +80,8 @@ int create_helper(int event_fd, int err_fd, uid_t uid, gid_t gid, long max_fd)
-> +   pid_t pid;
-> +   int i, pipefd[2];
-> +   struct sigaction sigact;
-> +-
-> ++  unsigned char *alloc_buff = NULL;
-> ++  
-> +   /* create the pipe through which the main program sends us commands,
-> +      then fork our process. */
-> +   if (pipe(pipefd) == -1 || !fix_fd(pipefd[1]) || (pid = fork()) == -1)
-> +@@ -186,11 +187,16 @@ int create_helper(int event_fd, int err_fd, uid_t uid, gid_t gid, long max_fd)
-> +       struct script_data data;
-> +       char *p, *action_str, *hostname = NULL, *domain = NULL;
-> +       unsigned char *buf = (unsigned char *)daemon->namebuff;
-> +-      unsigned char *end, *extradata, *alloc_buff = NULL;
-> ++      unsigned char *end, *extradata;
-> +       int is6, err = 0;
-> +       int pipeout[2];
-> + 
-> +-      free(alloc_buff);
-> ++      /* Free rarely-allocated memory from previous iteration. */
-> ++      if (alloc_buff)
-> ++	{
-> ++	  free(alloc_buff);
-> ++	  alloc_buff = NULL;
-> ++	}
-> +       
-> +       /* we read zero bytes when pipe closed: this is our signal to exit */ 
-> +       if (!read_write(pipefd[0], (unsigned char *)&data, sizeof(data), 1))
-> +-- 
-> +1.7.10.4
+> +comment "python-pybind11 needs a toolchain w/ C++, gcc >= 4.8"
+> +       depends on !BR2_INSTALL_LIBSTDCPP
+> +       depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 > +
-> diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-> index f271523068..3f25ac0885 100644
-> --- a/package/dnsmasq/dnsmasq.mk
-> +++ b/package/dnsmasq/dnsmasq.mk
-> @@ -15,6 +15,9 @@ DNSMASQ_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
->  DNSMASQ_LICENSE = GPL-2.0 or GPL-3.0
->  DNSMASQ_LICENSE_FILES = COPYING COPYING-v3
->  
-> +# 0004-Fix-memory-leak-in-helper-c.patch
-> +DNSMASQ_IGNORE_CVES += CVE-2019-14834
+> +comment "python-pybind11 needs exception_ptr"
+> +       depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+> diff --git a/package/python-pybind11/python-pybind11.hash b/package/python-pybind11/python-pybind11.hash
+> new file mode 100644
+> index 0000000000..614ea183ec
+> --- /dev/null
+> +++ b/package/python-pybind11/python-pybind11.hash
+> @@ -0,0 +1,5 @@
+> +# md5, sha256 from https://pypi.org/pypi/pybind11/json
+> +md5    23fdca8191b16ce3e7f38fb9e4252b2d  pybind11-2.4.3.tar.gz
+> +sha256 72e6def53fb491f7f4e92692029d2e7bb5a0783314f20d80222735ff10a75758  pybind11-2.4.3.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 9a37ea54aa3cf12c7f3292799f20822ffd4b9b7142b36a7a9997b28c39264dc9  LICENSE
+> diff --git a/package/python-pybind11/python-pybind11.mk b/package/python-pybind11/python-pybind11.mk
+> new file mode 100644
+> index 0000000000..2b0f64c9bb
+> --- /dev/null
+> +++ b/package/python-pybind11/python-pybind11.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-pybind11
+> +#
+> +################################################################################
 > +
->  DNSMASQ_I18N = $(if $(BR2_SYSTEM_ENABLE_NLS),-i18n)
->  
->  ifneq ($(BR2_PACKAGE_DNSMASQ_DHCP),y)
-> -- 
-> 2.25.0
-> 
+> +PYTHON_PYBIND11_VERSION = 2.4.3
+> +PYTHON_PYBIND11_SOURCE = pybind11-$(PYTHON_PYBIND11_VERSION).tar.gz
+> +PYTHON_PYBIND11_SITE = https://files.pythonhosted.org/packages/aa/91/deb6743e79e22ab01502296570b39b8404f10cc507a6692d612a7fee8d51
+> +PYTHON_PYBIND11_SETUP_TYPE = setuptools
+> +PYTHON_PYBIND11_LICENSE = BSD-3-Clause
+> +PYTHON_PYBIND11_LICENSE_FILES = LICENSE
+> +PYTHON_PYBIND11_INSTALL_STAGING = YES
+
+Don't we want to add PYTHON_PYBIND11_INSTALL_TARGET = NO?
+This package installs only headers and is used only when compiling the sources.
+
+> +
+> +$(eval $(python-package))
+> --
+> 2.23.0
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards,
+Asaf.
