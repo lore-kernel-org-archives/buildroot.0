@@ -1,57 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Feb 2020 19:26:38 +0100
-Subject: [Buildroot] [git commit] package/qpdf: needs wchar
-Message-ID: <20200229181728.2FBF88EF77@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 29 Feb 2020 20:03:19 +0100
+Subject: [Buildroot] [PATCH v1 09/30] package/Makefile.in: Provide
+ TARGET_CROSS without path and trailing -
+In-Reply-To: <20191205171517.96639-10-michael.drake@codethink.co.uk>
+References: <20191205171517.96639-1-michael.drake@codethink.co.uk>
+ <20191205171517.96639-10-michael.drake@codethink.co.uk>
+Message-ID: <fc05f469-0966-34e6-d12b-ed291dd105e1@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f9bcc01b3ef94c8f138b6dccc861d9e222de5ef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Michael,
 
-Upstream was not too keen [0] on applying fixes for toolchains without
-wchar, so just require that.
+Le 05/12/2019 ? 18:14, Michael Drake a ?crit?:
+> The LLVM/Clang toolchain takes the target triple as a `--target=`
+> argument, rather than having separate binaries with different
+> names for each target.
+> 
+> This change exposes just the triple as TARGET_CROSS_TRIPLE.
+> 
+> Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
+> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+> ---
+>  package/Makefile.in | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 47808292b0..273e9de5d9 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -192,11 +192,13 @@ TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
+>  endif
+>  
+>  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+> -TARGET_CROSS = $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-
+> +TARGET_CROSS_TRIPLE = $(GNU_TARGET_NAME)
 
-The sole user selecting qpdf already depends on wchar, so update the
-comment accordingly.
+GNU_TARGET_NAME is used all over the place in Buildroot. Adding
+TARGET_CROSS_TRIPLE would require in the manual [1] to clarify the use of one or
+the other.
 
-[0] https://github.com/qpdf/qpdf/pull/405#issuecomment-592971907
+[1] docs/manual/adding-packages-generic.txt
 
-Fixes:
- - http://autobuild.buildroot.org/results/99c82d4775ed44bd04d0a48188ff590dcba73d69
+>  else
+> -TARGET_CROSS = $(HOST_DIR)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
+> +TARGET_CROSS_TRIPLE = $(TOOLCHAIN_EXTERNAL_PREFIX)
+>  endif
+>  
+> +TARGET_CROSS = $(HOST_DIR)/bin/$(TARGET_CROSS_TRIPLE)-
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998 at free.fr: drop the patch, add the dependency]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/cups-filters/Config.in | 2 +-
- package/qpdf/Config.in         | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+TOOLCHAIN_EXTERNAL_PREFIX can be used in a package, see [2] as example.
 
-diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
-index 5badf0e1f1..9e4e37ca6b 100644
---- a/package/cups-filters/Config.in
-+++ b/package/cups-filters/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_CUPS_FILTERS
- 	depends on BR2_USE_MMU
- 	depends on BR2_INSTALL_LIBSTDCPP # qpdf
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_USE_WCHAR # libglib2, qpdf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_PACKAGE_CUPS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-diff --git a/package/qpdf/Config.in b/package/qpdf/Config.in
-index 7550e1547a..6f586f651a 100644
---- a/package/qpdf/Config.in
-+++ b/package/qpdf/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_QPDF
- 	bool "qpdf"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_JPEG
+[2] https://git.buildroot.net/buildroot/tree/package/wine/wine.mk?h=2020.02-rc2#n39
+
+> +
+>  # Define TARGET_xx variables for all common binutils/gcc
+>  TARGET_AR       = $(TARGET_CROSS)ar
+>  TARGET_AS       = $(TARGET_CROSS)as
+> 
