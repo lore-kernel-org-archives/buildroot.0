@@ -1,68 +1,97 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Feb 2020 10:18:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lxc: fix build with ultrasparc
-Message-ID: <20200229091851.2389137-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Feb 2020 10:38:59 +0100
+Subject: [Buildroot] [PATCH] package/openrc: needs kmod
+In-Reply-To: <CAJ4jsaffqEWdUMwgd6WHS2zsX1H5q9K8JZan2ZFK+fpGDCx2_w@mail.gmail.com>
+References: <20200228202552.14788-1-yann.morin.1998@free.fr>
+ <CAJ4jsaffqEWdUMwgd6WHS2zsX1H5q9K8JZan2ZFK+fpGDCx2_w@mail.gmail.com>
+Message-ID: <20200229093859.GK8743@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/17c2319850f02f24da6fbef9656c07f86fdc5a3a
+On 2020-02-28 18:47 -0300, Carlos Santos spake thusly:
+> On Fri, Feb 28, 2020 at 5:26 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >
+> > openrc provides scritps that have been written for the big-gun kmod, and
+> > so use options unknown to the biusybox' provided applets:
+> >
+> >   - Busybox modprobe does not have a "--first-time" option,
+> >   - the "--verbose" option is just "-v",
+> >   - the "--use-blacklist" option is just "-b". Also blacklist support is
+> >     not selected in our default busybox configuration.
+> >
+> > One of two options, is to "fix" or "adapt" openrc's scripts to busybox,
+> > which means for the openrc package to go peek into files from the
+> > busybox package, which is not nice, and can't work because that is not
+> > available by the time we scan our Makefiles.
+> >
+> > The other option, which this patch implements, is to just add a
+> > dependency onto kmod and its tools.
+> >
+> > Reported-by: Carlos Santos <unixmania@gmail.com>
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > Cc: Peter Korsgaard <peter@korsgaard.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > ---
+> >  package/openrc/Config.in | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/package/openrc/Config.in b/package/openrc/Config.in
+> > index 796858f404..4691be63a2 100644
+> > --- a/package/openrc/Config.in
+> > +++ b/package/openrc/Config.in
+> > @@ -3,6 +3,9 @@ config BR2_PACKAGE_OPENRC
+> >         depends on BR2_USE_MMU # fork()
+> >         depends on !BR2_STATIC_LIBS
+> >         depends on BR2_INIT_OPENRC
+> > +       select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod tools
+> > +       select BR2_PACKAGE_KMOD # runtime
+> > +       select BR2_PACKAGE_KMOD_TOOLS # runtime
+> >         select BR2_PACKAGE_NCURSES
+> >         help
+> >           Init that works on top of pid 1 (for example
+> > --
+> > 2.20.1
+> >
+> 
+> What about doing the opposite?
+> 
+> 1. Always patch openrc to support busybox.' modprobe.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...xc-raw_syscalls.c-fix-sparc-assembly.patch | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
+That is akin to a feature patch, so should have to be done upstream
+first. Otherwise, we'd have to endlessly maintain that patch...
 
-diff --git a/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch b/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
-new file mode 100644
-index 0000000000..4de07ddada
---- /dev/null
-+++ b/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
-@@ -0,0 +1,41 @@
-+From 5f7dd076fe203ebe6992698b63a1856a98bc0bba Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 28 Feb 2020 17:35:42 +0100
-+Subject: [PATCH] src/lxc/raw_syscalls.c: fix sparc assembly
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Build of lxc 3.2.1 fails with ultrasparc on:
-+
-+raw_syscalls.c: In function ?lxc_raw_clone?:
-+raw_syscalls.c:66:3: error: invalid 'asm': invalid operand output code
-+   asm volatile(
-+   ^~~
-+
-+Issue has been added with commit
-+b52e8e68a61866da2af86e85905ec850f8a8b7fc which added %g1 instead of %%g1
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/17c2319850f02f24da6fbef9656c07f86fdc5a3a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/lxc/lxc/commit/5f7dd076fe203ebe6992698b63a1856a98bc0bba]
-+---
-+ src/lxc/raw_syscalls.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/lxc/raw_syscalls.c b/src/lxc/raw_syscalls.c
-+index 7ffb2584b8..bfa48c0348 100644
-+--- a/src/lxc/raw_syscalls.c
-++++ b/src/lxc/raw_syscalls.c
-+@@ -76,7 +76,7 @@ __returns_twice pid_t lxc_raw_clone(unsigned long flags, int *pidfd)
-+ 		     * processor status register (psr) is used instead of a
-+ 		     * full register.
-+ 		     */
-+-		    "addx %%g0, 0, %g1"
-++		    "addx %%g0, 0, %%g1"
-+ 		    : "=r"(g1), "=r"(o0), "=r"(o1), "=r"(o2) /* outputs */
-+ 		    : "r"(g1), "r"(o0), "r"(o1), "r"(o2)     /* inputs */
-+ 		    : "%cc");				     /* clobbers */
+> 2. In busybox, select modprobe+blacklist if openrc is selected but
+> kmod tools are not selected.
+
+Or just tweak our default busybox config to enable modprobe + blacklist
+and be done with that. And we don't care about kmod being enabled or
+not, because kmod will always win against busybox in any case.
+
+> This would be cleaner and seems to be reasonable, since busybox
+> already sets several configurations based on the selection of other
+> packages.
+
+The only one that is dependent on another package is PAM support, and
+that one is special. All other config tweaks only depend on architecture
+(e.g. MMU support), system settings (e.g. mdev for /dev handling), or on
+busybox' own config in Buildroot (e.g. support for individual binaries).
+
+Furthermore, for the imminent release, this is currently the simplest
+solution we have. We can refine it afterwards.
+
+Regards,
+Yann E. MORIN.
+
+> -- 
+> Carlos Santos <unixmania@gmail.com>
+
 -- 
-2.25.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
