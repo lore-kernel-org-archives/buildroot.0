@@ -1,75 +1,144 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Feb 2020 23:30:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcgroup: fix CVE-2018-14348
-Message-ID: <20200229223018.4032175-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 29 Feb 2020 23:35:44 +0100
+Subject: [Buildroot] [RFC v1] package/qt5webengine: fix chromium arm
+ compile flags
+In-Reply-To: <20200229220642.24367-1-ps.report@gmx.net>
+References: <20200229220642.24367-1-ps.report@gmx.net>
+Message-ID: <20200229233544.719f2e66@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libcgroup up to and including 0.41 creates /var/log/cgred with mode 0666
-regardless of the configured umask, leading to disclosure of information
+On Sat, 29 Feb 2020 23:06:42 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-cgrulesengd-remove-umask-0.patch     | 33 +++++++++++++++++++
- package/libcgroup/libcgroup.mk                |  3 ++
- 2 files changed, 36 insertions(+)
- create mode 100644 package/libcgroup/0001-cgrulesengd-remove-umask-0.patch
+> The qt5webengine configure simple takes QT_ARCH ('arm') to determine the
+> chromium compiler flags and uses some hard coded ARMv7 default values
+> for the compiler command line: '... -march=armv7-a -mfloat-abi=hard
+> -mtune=generic-armv7-a -mfpu=vfpv3-d16 ...'.
+>
+> This results e.g. in an illegal instruction failure for rpi zero
+> (reported on the mailing list, see [1]).
+>
+> Custom values could be set in the file src/3rdparty/chromium/build/config/arm.gni
+> (as tested by an proof-of-concept patch [2]).
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2020-February/274587.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2020-February/274586.html
+>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Notes:
+>   - did not spot how the gcc default arch 'armv6kz+fp' is determined
+>     for the rpi zero case in buildroot (or is it some gcc built-in
+>     magic? If so a new buildroot parameter is needed?), so used simple
+>     armv4, armv5, armv6, armv7-a, armv7-m and armv8-a for the
+>     arm.gni-/gcc-march-value.
+>   - not yet run-time tested (the rpi zero compile is still running)
 
-diff --git a/package/libcgroup/0001-cgrulesengd-remove-umask-0.patch b/package/libcgroup/0001-cgrulesengd-remove-umask-0.patch
-new file mode 100644
-index 0000000000..1d9077a2d6
---- /dev/null
-+++ b/package/libcgroup/0001-cgrulesengd-remove-umask-0.patch
-@@ -0,0 +1,33 @@
-+From 0d88b73d189ea3440ccaab00418d6469f76fa590 Mon Sep 17 00:00:00 2001
-+From: Michal Hocko <mhocko@suse.com>
-+Date: Wed, 18 Jul 2018 11:24:29 +0200
-+Subject: [PATCH] cgrulesengd: remove umask(0)
-+
-+One of our partners has noticed that cgred daemon is creating a log file
-+(/var/log/cgred) with too wide permissions (0666) and that is seen as
-+a security bug because an untrusted user can write to otherwise
-+restricted area. CVE-2018-14348 has been assigned to this issue.
-+
-+Signed-off-by: Michal Hocko <mhocko@suse.com>
-+Acked-by: Balbir Singh <bsingharora@gmail.com>
-+[Retrieved from:
-+https://github.com/libcgroup/libcgroup/commit/0d88b73d189ea3440ccaab00418d6469f76fa590]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/daemon/cgrulesengd.c | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/src/daemon/cgrulesengd.c b/src/daemon/cgrulesengd.c
-+index ea51f11..0d288f3 100644
-+--- a/src/daemon/cgrulesengd.c
-++++ b/src/daemon/cgrulesengd.c
-+@@ -889,9 +889,6 @@ int cgre_start_daemon(const char *logp, const int logf,
-+ 		} else if (pid > 0) {
-+ 			exit(EXIT_SUCCESS);
-+ 		}
-+-
-+-		/* Change the file mode mask. */
-+-		umask(0);
-+ 	} else {
-+ 		flog(LOG_DEBUG, "Not using daemon mode\n");
-+ 		pid = getpid();
-diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
-index 3845627d48..a26d5f2ddf 100644
---- a/package/libcgroup/libcgroup.mk
-+++ b/package/libcgroup/libcgroup.mk
-@@ -12,6 +12,9 @@ LIBCGROUP_LICENSE_FILES = COPYING
- LIBCGROUP_DEPENDENCIES = host-bison host-flex
- LIBCGROUP_INSTALL_STAGING = YES
- 
-+# 0001-cgrulesengd-remove-umask-0.patch
-+LIBCGROUP_IGNORE_CVES += CVE-2018-14348
-+
- # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
- # large file support. See https://bugzilla.redhat.com/show_bug.cgi?id=574992
- # for more information.
--- 
-2.25.0
+And compile failed with:
+
+  {standard input}: Assembler messages:
+  {standard input}:2322: Error: selected processor does not support `yield' in ARM mode
+
+The combination of '-march=armv6 -mfloat-abi=hard -mfpu=vfp' seems to be invalid
+for qt5webengine....., so -march=armv6kz+fp seems to be needed...
+
+Regards,
+Peter
+
+> ---
+>  package/qt5/qt5webengine/qt5webengine.mk | 78 ++++++++++++++++++++++++
+>  1 file changed, 78 insertions(+)
+>
+> diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+> index 898725937b..f4ecf6ca3c 100644
+> --- a/package/qt5/qt5webengine/qt5webengine.mk
+> +++ b/package/qt5/qt5webengine/qt5webengine.mk
+> @@ -63,7 +63,85 @@ QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_CREATE_HOST_PKG_CONFIG
+>  QT5WEBENGINE_ENV += GN_PKG_CONFIG_HOST=$(@D)/host-bin/host-pkg-config
+>  endif
+>
+> +# configure arm architecture paramter for chromium compile
+> +ifeq ($(BR2_arm),y)
+> +ifeq ($(BR2_ARM_CPU_ARMV4),y)
+> +define QT5WEBENGINE_CONFIGURE_ARM_CPU
+> +	$(SED) 's/^    arm_version = 7$$/    arm_version = 4/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +	$(SED) 's/^    arm_arch = ""$$/    arm_arch = "armv4"/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_ARM_CPU_ARMV5),y)
+> +define QT5WEBENGINE_CONFIGURE_ARM_CPU
+> +	$(SED) 's/^    arm_version = 7$$/    arm_version = 5/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +	$(SED) 's/^    arm_arch = ""$$/    arm_arch = "armv5"/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_ARM_CPU_ARMV6),y)
+> +define QT5WEBENGINE_CONFIGURE_ARM_CPU
+> +	$(SED) 's/^    arm_version = 7$$/    arm_version = 6/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +	$(SED) 's/^    arm_arch = ""$$/    arm_arch = "armv6"/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+> +define QT5WEBENGINE_CONFIGURE_ARM_CPU
+> +	$(SED) 's/^    arm_arch = ""$$/    arm_arch = "armv7-a"/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_ARM_CPU_ARMV7M),y)
+> +define QT5WEBENGINE_CONFIGURE_ARM_CPU
+> +	$(SED) 's/^    arm_arch = ""$$/    arm_arch = "armv7-m"/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_ARM_CPU_ARMV8A),y)
+> +define QT5WEBENGINE_CONFIGURE_ARM_CPU
+> +	$(SED) 's/^    arm_version = 7$$/    arm_version = 8/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +	$(SED) 's/^    arm_arch = ""$$/    arm_arch = "armv8-a"/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +endef
+> +endif
+> +
+> +define QT5WEBENGINE_CONFIGURE_ARM_FPU
+> +	$(SED) 's/^    arm_fpu = ""$$/    arm_fpu = $(BR2_GCC_TARGET_FPU)/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +endef
+> +
+> +define QT5WEBENGINE_CONFIGURE_ARM_FLOAT_ABI
+> +	$(SED) 's/^    arm_float_abi = ""$$/    arm_float_abi = $(BR2_GCC_TARGET_FLOAT_ABI)/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +endef
+> +
+> +define QT5WEBENGINE_CONFIGURE_ARM_TUNE
+> +	$(SED) 's/^    arm_tune = ""$$/    arm_tune = $(BR2_GCC_TARGET_CPU)/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +endef
+> +
+> +ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+> +define QT5WEBENGINE_CONFIGURE_ARM_NEON
+> +	$(SED) 's/^    arm_use_neon = ""$$/    arm_use_neon = "true"/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +	$(SED) 's/^    arm_optionally_use_neon = false$$/    arm_optionally_use_neon = true/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +endef
+> +else
+> +define QT5WEBENGINE_CONFIGURE_ARM_NEON
+> +	$(SED) 's/^    arm_use_neon = ""$$/    arm_use_neon = "false"/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_ARM_CPU_HAS_THUMB),)
+> +define QT5WEBENGINE_CONFIGURE_ARM_THUMB
+> +	$(SED) 's/^    arm_use_thumb = true$$/    arm_use_thumb = false/' $(@D)/src/3rdparty/chromium/build/config/arm.gni
+> +endef
+> +endif
+> +endif
+> +
+>  define QT5WEBENGINE_CONFIGURE_CMDS
+> +	$(QT5WEBENGINE_CONFIGURE_ARM_CPU)
+> +	$(QT5WEBENGINE_CONFIGURE_ARM_FPU)
+> +	$(QT5WEBENGINE_CONFIGURE_ARM_FLOAT_ABI)
+> +	$(QT5WEBENGINE_CONFIGURE_ARM_TUNE)
+> +	$(QT5WEBENGINE_CONFIGURE_ARM_NEON)
+> +	$(QT5WEBENGINE_CONFIGURE_ARM_THUMB)
+>  	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBENGINE_ENV) $(HOST_DIR)/bin/qmake $(QT5WEBENGINE_QMAKEFLAGS))
+>  endef
+>
