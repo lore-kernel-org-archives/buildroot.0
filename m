@@ -1,30 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Feb 2020 18:16:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mbedtls: security bump to
- version 2.16.4
-In-Reply-To: <20200117215121.2568169-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 17 Jan 2020 22:51:21 +0100")
-References: <20200117215121.2568169-1-fontaine.fabrice@gmail.com>
-Message-ID: <87ftetgvq8.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Feb 2020 18:17:37 +0100
+Subject: [Buildroot] [git commit] package/boost: annotate _IGNORE_CVES for
+ CVE-2009-3654
+Message-ID: <20200229170651.B14098EF36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c8c5660a818c9a367e46d4188f5f87b2dfe74a71
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fix CVE-2019-18222: Our bignum implementation is not constant
- > time/constant trace, so side channel attacks can retrieve the blinded
- > value, factor it (as it is smaller than RSA keys and not guaranteed to
- > have only large prime factors), and then, by brute force, recover the
- > key. Reported by Alejandro Cabrera Aldaya and Billy Brumley.
+This CVE does not affect the boost package, but is misclassified by our
+CVS tracker. As per the advisory:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+    Unspecified vulnerability in Boost before 6.x-1.03, a module for
+    Drupal, allows remote attackers to create new webroot directories
+    via unknown attack vectors.
 
-Committed to 2019.11.x, thanks.
+Ignore the CVS, and expand a comment to explain it.
 
-For 2019.02.x I will instead bump to 2.7.13.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: expand the comment]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/boost/boost.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 322429a10c..2daf7f5a96 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -11,6 +11,10 @@ BOOST_INSTALL_STAGING = YES
+ BOOST_LICENSE = BSL-1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
+ 
++# CVE-2009-3654 is misclassified (by our CVE tracker) as affecting to boost,
++# while in fact it affects Drupal (a module called boost in there).
++BOOST_IGNORE_CVES += CVE-2009-3654
++
+ # keep host variant as minimal as possible
+ HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
+ 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
