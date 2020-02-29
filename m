@@ -1,69 +1,92 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Feb 2020 17:37:54 +0100
-Subject: [Buildroot] [git commit] package/lxc: fix build with ultrasparc
-Message-ID: <20200229162545.1F99B8EEC4@busybox.osuosl.org>
+Date: Sat, 29 Feb 2020 17:38:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lxc: fix build with ultrasparc
+In-Reply-To: <20200229091851.2389137-1-fontaine.fabrice@gmail.com>
+References: <20200229091851.2389137-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200229163814.GP8743@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71d6e2cc054a3961c2357ac44ff961bc00829949
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/17c2319850f02f24da6fbef9656c07f86fdc5a3a
+On 2020-02-29 10:18 +0100, Fabrice Fontaine spake thusly:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/17c2319850f02f24da6fbef9656c07f86fdc5a3a
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...src-lxc-raw_syscalls.c-fix-sparc-assembly.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch b/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
-new file mode 100644
-index 0000000000..4de07ddada
---- /dev/null
-+++ b/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
-@@ -0,0 +1,41 @@
-+From 5f7dd076fe203ebe6992698b63a1856a98bc0bba Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 28 Feb 2020 17:35:42 +0100
-+Subject: [PATCH] src/lxc/raw_syscalls.c: fix sparc assembly
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Build of lxc 3.2.1 fails with ultrasparc on:
-+
-+raw_syscalls.c: In function ???lxc_raw_clone???:
-+raw_syscalls.c:66:3: error: invalid 'asm': invalid operand output code
-+   asm volatile(
-+   ^~~
-+
-+Issue has been added with commit
-+b52e8e68a61866da2af86e85905ec850f8a8b7fc which added %g1 instead of %%g1
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/17c2319850f02f24da6fbef9656c07f86fdc5a3a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/lxc/lxc/commit/5f7dd076fe203ebe6992698b63a1856a98bc0bba]
-+---
-+ src/lxc/raw_syscalls.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/lxc/raw_syscalls.c b/src/lxc/raw_syscalls.c
-+index 7ffb2584b8..bfa48c0348 100644
-+--- a/src/lxc/raw_syscalls.c
-++++ b/src/lxc/raw_syscalls.c
-+@@ -76,7 +76,7 @@ __returns_twice pid_t lxc_raw_clone(unsigned long flags, int *pidfd)
-+ 		     * processor status register (psr) is used instead of a
-+ 		     * full register.
-+ 		     */
-+-		    "addx %%g0, 0, %g1"
-++		    "addx %%g0, 0, %%g1"
-+ 		    : "=r"(g1), "=r"(o0), "=r"(o1), "=r"(o2) /* outputs */
-+ 		    : "r"(g1), "r"(o0), "r"(o1), "r"(o2)     /* inputs */
-+ 		    : "%cc");				     /* clobbers */
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...xc-raw_syscalls.c-fix-sparc-assembly.patch | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
+> 
+> diff --git a/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch b/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
+> new file mode 100644
+> index 0000000000..4de07ddada
+> --- /dev/null
+> +++ b/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
+> @@ -0,0 +1,41 @@
+> +From 5f7dd076fe203ebe6992698b63a1856a98bc0bba Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Fri, 28 Feb 2020 17:35:42 +0100
+> +Subject: [PATCH] src/lxc/raw_syscalls.c: fix sparc assembly
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Build of lxc 3.2.1 fails with ultrasparc on:
+> +
+> +raw_syscalls.c: In function ?lxc_raw_clone?:
+> +raw_syscalls.c:66:3: error: invalid 'asm': invalid operand output code
+> +   asm volatile(
+> +   ^~~
+> +
+> +Issue has been added with commit
+> +b52e8e68a61866da2af86e85905ec850f8a8b7fc which added %g1 instead of %%g1
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/17c2319850f02f24da6fbef9656c07f86fdc5a3a
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://github.com/lxc/lxc/commit/5f7dd076fe203ebe6992698b63a1856a98bc0bba]
+> +---
+> + src/lxc/raw_syscalls.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/lxc/raw_syscalls.c b/src/lxc/raw_syscalls.c
+> +index 7ffb2584b8..bfa48c0348 100644
+> +--- a/src/lxc/raw_syscalls.c
+> ++++ b/src/lxc/raw_syscalls.c
+> +@@ -76,7 +76,7 @@ __returns_twice pid_t lxc_raw_clone(unsigned long flags, int *pidfd)
+> + 		     * processor status register (psr) is used instead of a
+> + 		     * full register.
+> + 		     */
+> +-		    "addx %%g0, 0, %g1"
+> ++		    "addx %%g0, 0, %%g1"
+> + 		    : "=r"(g1), "=r"(o0), "=r"(o1), "=r"(o2) /* outputs */
+> + 		    : "r"(g1), "r"(o0), "r"(o1), "r"(o2)     /* inputs */
+> + 		    : "%cc");				     /* clobbers */
+> -- 
+> 2.25.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
