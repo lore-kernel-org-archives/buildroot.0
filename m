@@ -1,67 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Feb 2020 17:36:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boost: annotate _IGNORE_CVES
- for CVE-2009-3654
-In-Reply-To: <20200229094609.2451566-1-fontaine.fabrice@gmail.com>
-References: <20200229094609.2451566-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200229163608.GO8743@scaer>
+Date: Sat, 29 Feb 2020 17:37:54 +0100
+Subject: [Buildroot] [git commit] package/lxc: fix build with ultrasparc
+Message-ID: <20200229162545.1F99B8EEC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=71d6e2cc054a3961c2357ac44ff961bc00829949
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-02-29 10:46 +0100, Fabrice Fontaine spake thusly:
-> Unspecified vulnerability in Boost before 6.x-1.03, a module for Drupal,
-> allows remote attackers to create new webroot directories via unknown
-> attack vectors.
+Fixes:
+ - http://autobuild.buildroot.org/results/17c2319850f02f24da6fbef9656c07f86fdc5a3a
 
-Yes, good to know, but the interesting bit is why we are not affected,
-which your commit log fails to specify.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...src-lxc-raw_syscalls.c-fix-sparc-assembly.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-Also, the comment should say so as well. Maybe just something like:
-
-    # Module for Drupal, not installed in Buildroot
-    BOOST_IGNORE_CVES +=...
-
-Care to respin with explanations, please?
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/boost/boost.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-> index 322429a10c..c9e80266e0 100644
-> --- a/package/boost/boost.mk
-> +++ b/package/boost/boost.mk
-> @@ -11,6 +11,9 @@ BOOST_INSTALL_STAGING = YES
->  BOOST_LICENSE = BSL-1.0
->  BOOST_LICENSE_FILES = LICENSE_1_0.txt
->  
-> +# module for Drupal
-> +BOOST_IGNORE_CVES += CVE-2009-3654
-> +
->  # keep host variant as minimal as possible
->  HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
->  	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch b/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
+new file mode 100644
+index 0000000000..4de07ddada
+--- /dev/null
++++ b/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
+@@ -0,0 +1,41 @@
++From 5f7dd076fe203ebe6992698b63a1856a98bc0bba Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 28 Feb 2020 17:35:42 +0100
++Subject: [PATCH] src/lxc/raw_syscalls.c: fix sparc assembly
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Build of lxc 3.2.1 fails with ultrasparc on:
++
++raw_syscalls.c: In function ???lxc_raw_clone???:
++raw_syscalls.c:66:3: error: invalid 'asm': invalid operand output code
++   asm volatile(
++   ^~~
++
++Issue has been added with commit
++b52e8e68a61866da2af86e85905ec850f8a8b7fc which added %g1 instead of %%g1
++
++Fixes:
++ - http://autobuild.buildroot.org/results/17c2319850f02f24da6fbef9656c07f86fdc5a3a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/lxc/lxc/commit/5f7dd076fe203ebe6992698b63a1856a98bc0bba]
++---
++ src/lxc/raw_syscalls.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/lxc/raw_syscalls.c b/src/lxc/raw_syscalls.c
++index 7ffb2584b8..bfa48c0348 100644
++--- a/src/lxc/raw_syscalls.c
+++++ b/src/lxc/raw_syscalls.c
++@@ -76,7 +76,7 @@ __returns_twice pid_t lxc_raw_clone(unsigned long flags, int *pidfd)
++ 		     * processor status register (psr) is used instead of a
++ 		     * full register.
++ 		     */
++-		    "addx %%g0, 0, %g1"
+++		    "addx %%g0, 0, %%g1"
++ 		    : "=r"(g1), "=r"(o0), "=r"(o1), "=r"(o2) /* outputs */
++ 		    : "r"(g1), "r"(o0), "r"(o1), "r"(o2)     /* inputs */
++ 		    : "%cc");				     /* clobbers */
