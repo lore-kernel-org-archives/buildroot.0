@@ -1,34 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Feb 2020 20:25:34 +0100
-Subject: [Buildroot] [git commit] package/qpdf: fix comment
-Message-ID: <20200229191339.A04688EF90@busybox.osuosl.org>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sat, 29 Feb 2020 11:26:37 -0800
+Subject: [Buildroot] [PATCH] package/openrc: remove keymaps units if kbd
+ package is not selected
+In-Reply-To: <20200229182621.14431-1-unixmania@gmail.com>
+References: <20200229182621.14431-1-unixmania@gmail.com>
+Message-ID: <CAFSsvmqtLtPthmLRdyVN9cq7WN+9+wF-b_=taq6u6orAqZFV0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03cb3f61a01dd014dc475e7054ada5af313b2eaf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+All;
 
-Commit 3f9bcc01b3ef94c8f138b6dccc861d9e222de5ef forgot to update comment
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/qpdf/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sat, Feb 29, 2020 at 10:26 AM <unixmania@gmail.com> wrote:
+>
+> From: Carlos Santos <unixmania@gmail.com>
+>
+> keymaps and save-keymaps require kbd_mode and dumpkeys, respectively, so
+> remove them if the kbd package is not selected (e.g. devices with serial
+> console, only).
+>
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ---
+>  package/openrc/openrc.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
+> index 289bde4d03..dd56d72a1a 100644
+> --- a/package/openrc/openrc.mk
+> +++ b/package/openrc/openrc.mk
+> @@ -39,6 +39,16 @@ define OPENRC_INSTALL_TARGET_CMDS
+>                 $(TARGET_DIR)/etc/init.d/sysv-rcs
+>  endef
+>
+> +ifeq ($(BR2_PACKAGE_KBD),)
+> +# keymaps and save-keymaps require kbd_mode and dumpkeys, respectively, so
+> +# remove them if the kbd package is not selected (e.g. devices with serial
+> +# console, only).
+Small nitpick: I think generally the comment would go above the ifeq.
+> +define OPENRC_NO_KBD
+> +       $(RM) $(TARGET_DIR)/etc/{conf.d,init.d,runlevels/boot}/{keymaps,save-keymaps}
+> +endef
+> +OPENRC_POST_INSTALL_TARGET_HOOKS += OPENRC_NO_KBD
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_NETIFRC),y)
+>  # netifrc replaces network, staticroute and loopback services which are
+>  # installed by openrc
+> --
+> 2.18.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/qpdf/Config.in b/package/qpdf/Config.in
-index 6f586f651a..56a96e4f41 100644
---- a/package/qpdf/Config.in
-+++ b/package/qpdf/Config.in
-@@ -15,6 +15,6 @@ config BR2_PACKAGE_QPDF
- 
- 	  http://qpdf.sourceforge.net/
- 
--comment "qpdf needs a toolchain w/ C++, gcc >= 4.7"
--	depends on !BR2_INSTALL_LIBSTDCPP || \
-+comment "qpdf needs a toolchain w/ C++, wchar, gcc >= 4.7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+
+Tested-by: Adam Duskett <aduskett@gmail.com>
