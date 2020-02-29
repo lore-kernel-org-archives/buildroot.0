@@ -1,97 +1,71 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sat, 29 Feb 2020 09:13:21 -0300
-Subject: [Buildroot] [PATCH] package/openrc: needs kmod
-In-Reply-To: <20200229093859.GK8743@scaer>
-References: <20200228202552.14788-1-yann.morin.1998@free.fr>
- <CAJ4jsaffqEWdUMwgd6WHS2zsX1H5q9K8JZan2ZFK+fpGDCx2_w@mail.gmail.com>
- <20200229093859.GK8743@scaer>
-Message-ID: <CAJ4jsaeKLdVr5gGFyKXks+jj8xXD+o3Rsv5UFKie4uWE4rcYxw@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 29 Feb 2020 14:01:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qpdf: fix build without wchar
+Message-ID: <20200229130130.2641591-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 29, 2020 at 6:39 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> On 2020-02-28 18:47 -0300, Carlos Santos spake thusly:
-> > On Fri, Feb 28, 2020 at 5:26 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > >
-> > > openrc provides scritps that have been written for the big-gun kmod, and
-> > > so use options unknown to the biusybox' provided applets:
-> > >
-> > >   - Busybox modprobe does not have a "--first-time" option,
-> > >   - the "--verbose" option is just "-v",
-> > >   - the "--use-blacklist" option is just "-b". Also blacklist support is
-> > >     not selected in our default busybox configuration.
-> > >
-> > > One of two options, is to "fix" or "adapt" openrc's scripts to busybox,
-> > > which means for the openrc package to go peek into files from the
-> > > busybox package, which is not nice, and can't work because that is not
-> > > available by the time we scan our Makefiles.
-> > >
-> > > The other option, which this patch implements, is to just add a
-> > > dependency onto kmod and its tools.
-> > >
-> > > Reported-by: Carlos Santos <unixmania@gmail.com>
-> > > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > > Cc: Peter Korsgaard <peter@korsgaard.com>
-> > > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > > ---
-> > >  package/openrc/Config.in | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > >
-> > > diff --git a/package/openrc/Config.in b/package/openrc/Config.in
-> > > index 796858f404..4691be63a2 100644
-> > > --- a/package/openrc/Config.in
-> > > +++ b/package/openrc/Config.in
-> > > @@ -3,6 +3,9 @@ config BR2_PACKAGE_OPENRC
-> > >         depends on BR2_USE_MMU # fork()
-> > >         depends on !BR2_STATIC_LIBS
-> > >         depends on BR2_INIT_OPENRC
-> > > +       select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod tools
-> > > +       select BR2_PACKAGE_KMOD # runtime
-> > > +       select BR2_PACKAGE_KMOD_TOOLS # runtime
-> > >         select BR2_PACKAGE_NCURSES
-> > >         help
-> > >           Init that works on top of pid 1 (for example
-> > > --
-> > > 2.20.1
-> > >
-> >
-> > What about doing the opposite?
-> >
-> > 1. Always patch openrc to support busybox.' modprobe.
->
-> That is akin to a feature patch, so should have to be done upstream
-> first. Otherwise, we'd have to endlessly maintain that patch...
->
-> > 2. In busybox, select modprobe+blacklist if openrc is selected but
-> > kmod tools are not selected.
->
-> Or just tweak our default busybox config to enable modprobe + blacklist
-> and be done with that. And we don't care about kmod being enabled or
-> not, because kmod will always win against busybox in any case.
->
-> > This would be cleaner and seems to be reasonable, since busybox
-> > already sets several configurations based on the selection of other
-> > packages.
->
-> The only one that is dependent on another package is PAM support, and
-> that one is special. All other config tweaks only depend on architecture
-> (e.g. MMU support), system settings (e.g. mdev for /dev handling), or on
-> busybox' own config in Buildroot (e.g. support for individual binaries).
->
-> Furthermore, for the imminent release, this is currently the simplest
-> solution we have. We can refine it afterwards.
->
-> Regards,
-> Yann E. MORIN.
+Fixes:
+ - http://autobuild.buildroot.org/results/99c82d4775ed44bd04d0a48188ff590dcba73d69
 
-OK, I submitted a pull request upstream:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...pdf-QUtil.cc-fix-build-without-wchar.patch | 44 +++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/qpdf/0002-libqpdf-QUtil.cc-fix-build-without-wchar.patch
 
-    https://github.com/OpenRC/openrc/pull/354
-
-Meanwhile,
-
-Tested-by: Carlos Santos <unixmania@gmail.com>
+diff --git a/package/qpdf/0002-libqpdf-QUtil.cc-fix-build-without-wchar.patch b/package/qpdf/0002-libqpdf-QUtil.cc-fix-build-without-wchar.patch
+new file mode 100644
+index 0000000000..32d61562a5
+--- /dev/null
++++ b/package/qpdf/0002-libqpdf-QUtil.cc-fix-build-without-wchar.patch
+@@ -0,0 +1,44 @@
++From 852fc293245ab5b85be5e45a4f034d65c0635aeb Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 29 Feb 2020 13:42:15 +0100
++Subject: [PATCH] libqpdf/QUtil.cc: fix build without wchar
++
++Build on Linux toolchains without wchar fails since version 9.1.1 and
++a44b5a34a07b9f2905d419d5571fd53832c1f6c0 on:
++
++libqpdf/QUtil.cc: In function 'int QUtil::call_main_from_wmain(int, wchar_t**, std::function<int(int, char**)>)':
++libqpdf/QUtil.cc:2378:32: error: 'wcslen' was not declared in this scope
++         for (size_t j = 0; j < wcslen(argv[i]); ++j)
++                                ^~~~~~
++
++To fix this error, return -1 if WINDOWS_WMAIN is not defined
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/qpdf/qpdf/pull/405]
++---
++ libqpdf/QUtil.cc | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/libqpdf/QUtil.cc b/libqpdf/QUtil.cc
++index 1d29bcc..1c4ff2d 100644
++--- a/libqpdf/QUtil.cc
+++++ b/libqpdf/QUtil.cc
++@@ -2366,6 +2366,7 @@ QUtil::possible_repaired_encodings(std::string supplied)
++ int
++ QUtil::call_main_from_wmain(int argc, wchar_t* argv[], std::function<int(int, char*[])> realmain)
++ {
+++#ifdef WINDOWS_WMAIN
++     // argv contains UTF-16-encoded strings with a 16-bit wchar_t.
++     // Convert this to UTF-8-encoded strings for compatibility with
++     // other systems. That way the rest of qpdf.cc can just act like
++@@ -2396,4 +2397,7 @@ QUtil::call_main_from_wmain(int argc, wchar_t* argv[], std::function<int(int, ch
++     argc = QIntC::to_int(utf8_argv.size());
++     new_argv[argc] = 0;
++     return realmain(argc, new_argv);
+++#else
+++    return -1;
+++#endif
++ }
++-- 
++2.25.0
++
+-- 
+2.25.0
