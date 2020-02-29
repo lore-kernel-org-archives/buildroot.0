@@ -1,86 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Feb 2020 17:41:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cairo: security bump to version
- 1.17.2
-In-Reply-To: <20200229132533.2761046-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 29 Feb 2020 14:25:33 +0100")
-References: <20200229132533.2761046-1-fontaine.fabrice@gmail.com>
-Message-ID: <871rqdibw4.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Feb 2020 17:43:59 +0100
+Subject: [Buildroot] [git commit] package/libarchive: security bump to
+ version 3.4.2
+Message-ID: <20200229163323.2D4648EEF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6785c19bf5f76001b9a1237402b68fd8302e5620
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > - Fix CVE-2018-19876: cairo 1.16.0, in cairo_ft_apply_variations() in
- >   cairo-ft-font.c, would free memory using a free function incompatible
- >   with WebKit's fastMalloc, leading to an application crash with a
- >   "free(): invalid pointer" error.
- > - Update indentation of hash file (two spaces)
+- Fix CVE-2020-9308: archive_read_support_format_rar5.c in libarchive
+  before 3.4.2 attempts to unpack a RAR5 file with an invalid or
+  corrupted header (such as a header size of zero), leading to a SIGSEGV
+  or possibly unspecified other impact.
+- use --with-nettle to enable nettle support, see
+  https://github.com/libarchive/libarchive/commit/f96a71144b7725ca4a94d84bd27d7dca8c2f58d2
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - drop new optional dependency to mbedtsl, forced off for now
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libarchive/libarchive.hash | 2 +-
+ package/libarchive/libarchive.mk   | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-Moving from a 2018 release to a snapshot isn't really great here just
-before the release :/
-
-Looking at the security tracker, wouldn't it make more sense to apply
-the 2 patches (+ autoreconf) instead for master?
-
-https://security-tracker.debian.org/tracker/CVE-2018-19876
-
-
- > ---
- >  package/cairo/cairo.hash | 12 ++++++------
- >  package/cairo/cairo.mk   |  4 ++--
- >  2 files changed, 8 insertions(+), 8 deletions(-)
-
- > diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
- > index 949ed3ffee..c86ccc31ab 100644
- > --- a/package/cairo/cairo.hash
- > +++ b/package/cairo/cairo.hash
- > @@ -1,9 +1,9 @@
- > -# From https://www.cairographics.org/releases/cairo-1.16.0.tar.xz.sha1
- > -sha1 00e81842ae5e81bb0343108884eb5205be0eac14 cairo-1.16.0.tar.xz
- > +# From https://cairographics.org/snapshots/cairo-1.17.2.tar.xz.sha1
- > +sha1  c5d6f12701f23b2dc2988a5a5586848e70e858fe  cairo-1.17.2.tar.xz
- >  # Calculated based on the hash above
- > -sha256	5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331	cairo-1.16.0.tar.xz
- > +sha256  6b70d4655e2a47a22b101c666f4b29ba746eda4aa8a0f7255b32b2e9408801df  cairo-1.17.2.tar.xz
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index b01d6368a5..9da4eb3baa 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,4 +1,4 @@
+ # From https://www.libarchive.de/downloads/sha256sums
+-sha256  fcf87f3ad8db2e4f74f32526dee62dd1fb9894782b0a503a89c9d7a70a235191  libarchive-3.4.1.tar.gz
++sha256  b60d58d12632ecf1e8fad7316dc82c6b9738a35625746b47ecdcaf4aed176176  libarchive-3.4.2.tar.gz
+ # Locally computed:
+ sha256  e1e3d4ba9d0b0ccba333b5f5539f7c6c9a3ef3d57a96cd165d2c45eaa1cd026d  COPYING
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index e256b72289..60838eea0a 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
  
- >  # Hash for license files:
- > -sha256	67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf	COPYING
- > -sha256	9e9e8608c4cdda51a78cc3a385f4ec9a2e4c96d5ecad74ac8bca5fca3e563b7d	COPYING-LGPL-2.1
- > -sha256	53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f	COPYING-MPL-1.1
- > +sha256  67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf  COPYING
- > +sha256  9e9e8608c4cdda51a78cc3a385f4ec9a2e4c96d5ecad74ac8bca5fca3e563b7d  COPYING-LGPL-2.1
- > +sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING-MPL-1.1
- > diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
- > index 902f505aaa..10f6a661f8 100644
- > --- a/package/cairo/cairo.mk
- > +++ b/package/cairo/cairo.mk
- > @@ -4,11 +4,11 @@
- >  #
- >  ################################################################################
+-LIBARCHIVE_VERSION = 3.4.1
++LIBARCHIVE_VERSION = 3.4.2
+ LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
+ LIBARCHIVE_LICENSE_FILES = COPYING
++LIBARCHIVE_CONF_OPTS = --without-mbedtls
  
- > -CAIRO_VERSION = 1.16.0
- > +CAIRO_VERSION = 1.17.2
- >  CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
- >  CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
- >  CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
- > -CAIRO_SITE = http://cairographics.org/releases
- > +CAIRO_SITE = http://cairographics.org/snapshots
- >  CAIRO_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
+ ifeq ($(BR2_STATIC_LIBS),y)
+@@ -86,6 +87,7 @@ endif
  
- >  # relocation truncated to fit: R_68K_GOT16O
- > -- 
- > 2.25.0
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Bye, Peter Korsgaard
+ ifeq ($(BR2_PACKAGE_NETTLE),y)
+ LIBARCHIVE_DEPENDENCIES += nettle
++LIBARCHIVE_CONF_OPTS += --with-nettle
+ else
+ LIBARCHIVE_CONF_OPTS += --without-nettle
+ endif
+@@ -123,6 +125,7 @@ HOST_LIBARCHIVE_CONF_OPTS = \
+ 	--without-libiconv-prefix \
+ 	--without-xml2 \
+ 	--without-lzo2 \
++	--without-mbedtls \
+ 	--without-nettle \
+ 	--without-openssl \
+ 	--without-lzma
