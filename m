@@ -1,92 +1,86 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Feb 2020 17:38:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lxc: fix build with ultrasparc
-In-Reply-To: <20200229091851.2389137-1-fontaine.fabrice@gmail.com>
-References: <20200229091851.2389137-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200229163814.GP8743@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Feb 2020 17:41:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cairo: security bump to version
+ 1.17.2
+In-Reply-To: <20200229132533.2761046-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 29 Feb 2020 14:25:33 +0100")
+References: <20200229132533.2761046-1-fontaine.fabrice@gmail.com>
+Message-ID: <871rqdibw4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On 2020-02-29 10:18 +0100, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/17c2319850f02f24da6fbef9656c07f86fdc5a3a
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > - Fix CVE-2018-19876: cairo 1.16.0, in cairo_ft_apply_variations() in
+ >   cairo-ft-font.c, would free memory using a free function incompatible
+ >   with WebKit's fastMalloc, leading to an application crash with a
+ >   "free(): invalid pointer" error.
+ > - Update indentation of hash file (two spaces)
 
-Applied to master, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Regards,
-Yann E. MORIN.
+Moving from a 2018 release to a snapshot isn't really great here just
+before the release :/
 
-> ---
->  ...xc-raw_syscalls.c-fix-sparc-assembly.patch | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
-> 
-> diff --git a/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch b/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
-> new file mode 100644
-> index 0000000000..4de07ddada
-> --- /dev/null
-> +++ b/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
-> @@ -0,0 +1,41 @@
-> +From 5f7dd076fe203ebe6992698b63a1856a98bc0bba Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Fri, 28 Feb 2020 17:35:42 +0100
-> +Subject: [PATCH] src/lxc/raw_syscalls.c: fix sparc assembly
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Build of lxc 3.2.1 fails with ultrasparc on:
-> +
-> +raw_syscalls.c: In function ?lxc_raw_clone?:
-> +raw_syscalls.c:66:3: error: invalid 'asm': invalid operand output code
-> +   asm volatile(
-> +   ^~~
-> +
-> +Issue has been added with commit
-> +b52e8e68a61866da2af86e85905ec850f8a8b7fc which added %g1 instead of %%g1
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/17c2319850f02f24da6fbef9656c07f86fdc5a3a
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Retrieved from:
-> +https://github.com/lxc/lxc/commit/5f7dd076fe203ebe6992698b63a1856a98bc0bba]
-> +---
-> + src/lxc/raw_syscalls.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/lxc/raw_syscalls.c b/src/lxc/raw_syscalls.c
-> +index 7ffb2584b8..bfa48c0348 100644
-> +--- a/src/lxc/raw_syscalls.c
-> ++++ b/src/lxc/raw_syscalls.c
-> +@@ -76,7 +76,7 @@ __returns_twice pid_t lxc_raw_clone(unsigned long flags, int *pidfd)
-> + 		     * processor status register (psr) is used instead of a
-> + 		     * full register.
-> + 		     */
-> +-		    "addx %%g0, 0, %g1"
-> ++		    "addx %%g0, 0, %%g1"
-> + 		    : "=r"(g1), "=r"(o0), "=r"(o1), "=r"(o2) /* outputs */
-> + 		    : "r"(g1), "r"(o0), "r"(o1), "r"(o2)     /* inputs */
-> + 		    : "%cc");				     /* clobbers */
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Looking at the security tracker, wouldn't it make more sense to apply
+the 2 patches (+ autoreconf) instead for master?
+
+https://security-tracker.debian.org/tracker/CVE-2018-19876
+
+
+ > ---
+ >  package/cairo/cairo.hash | 12 ++++++------
+ >  package/cairo/cairo.mk   |  4 ++--
+ >  2 files changed, 8 insertions(+), 8 deletions(-)
+
+ > diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
+ > index 949ed3ffee..c86ccc31ab 100644
+ > --- a/package/cairo/cairo.hash
+ > +++ b/package/cairo/cairo.hash
+ > @@ -1,9 +1,9 @@
+ > -# From https://www.cairographics.org/releases/cairo-1.16.0.tar.xz.sha1
+ > -sha1 00e81842ae5e81bb0343108884eb5205be0eac14 cairo-1.16.0.tar.xz
+ > +# From https://cairographics.org/snapshots/cairo-1.17.2.tar.xz.sha1
+ > +sha1  c5d6f12701f23b2dc2988a5a5586848e70e858fe  cairo-1.17.2.tar.xz
+ >  # Calculated based on the hash above
+ > -sha256	5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331	cairo-1.16.0.tar.xz
+ > +sha256  6b70d4655e2a47a22b101c666f4b29ba746eda4aa8a0f7255b32b2e9408801df  cairo-1.17.2.tar.xz
+ 
+ >  # Hash for license files:
+ > -sha256	67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf	COPYING
+ > -sha256	9e9e8608c4cdda51a78cc3a385f4ec9a2e4c96d5ecad74ac8bca5fca3e563b7d	COPYING-LGPL-2.1
+ > -sha256	53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f	COPYING-MPL-1.1
+ > +sha256  67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf  COPYING
+ > +sha256  9e9e8608c4cdda51a78cc3a385f4ec9a2e4c96d5ecad74ac8bca5fca3e563b7d  COPYING-LGPL-2.1
+ > +sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING-MPL-1.1
+ > diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+ > index 902f505aaa..10f6a661f8 100644
+ > --- a/package/cairo/cairo.mk
+ > +++ b/package/cairo/cairo.mk
+ > @@ -4,11 +4,11 @@
+ >  #
+ >  ################################################################################
+ 
+ > -CAIRO_VERSION = 1.16.0
+ > +CAIRO_VERSION = 1.17.2
+ >  CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
+ >  CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
+ >  CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
+ > -CAIRO_SITE = http://cairographics.org/releases
+ > +CAIRO_SITE = http://cairographics.org/snapshots
+ >  CAIRO_INSTALL_STAGING = YES
+ 
+ >  # relocation truncated to fit: R_68K_GOT16O
+ > -- 
+ > 2.25.0
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
