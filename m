@@ -1,77 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Feb 2020 22:17:55 +0100
-Subject: [Buildroot] [PATCH] package/openrc: remove keymaps units if kbd
- package is not selected
-In-Reply-To: <20200229182621.14431-1-unixmania@gmail.com>
-References: <20200229182621.14431-1-unixmania@gmail.com>
-Message-ID: <20200229211755.GV8743@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 29 Feb 2020 22:32:02 +0100
+Subject: [Buildroot] [PATCH 1/3] package/exiv2: annotate CVE-2019-13504
+Message-ID: <20200229213204.3703303-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+CVE-2019-13504 is misclassified (by our CVE tracker) as affecting
+version 0.27.2, while in fact both commits that fixed this issue are
+already in this version.
 
-On 2020-02-29 15:26 -0300, unixmania at gmail.com spake thusly:
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> keymaps and save-keymaps require kbd_mode and dumpkeys, respectively, so
-> remove them if the kbd package is not selected (e.g. devices with serial
-> console, only).
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/exiv2/exiv2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Applied to master with a small fix:
-
-  - expand to three commands to match the existing hook
-
-As Adam noted, I also prefer the comment to be outside the conditional
-block, but that is not a set-in-stone rule. Given that the existing hook
-had the comment in the conditional block, I kept the new one there too.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/openrc/openrc.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-> index 289bde4d03..dd56d72a1a 100644
-> --- a/package/openrc/openrc.mk
-> +++ b/package/openrc/openrc.mk
-> @@ -39,6 +39,16 @@ define OPENRC_INSTALL_TARGET_CMDS
->  		$(TARGET_DIR)/etc/init.d/sysv-rcs
->  endef
->  
-> +ifeq ($(BR2_PACKAGE_KBD),)
-> +# keymaps and save-keymaps require kbd_mode and dumpkeys, respectively, so
-> +# remove them if the kbd package is not selected (e.g. devices with serial
-> +# console, only).
-> +define OPENRC_NO_KBD
-> +	$(RM) $(TARGET_DIR)/etc/{conf.d,init.d,runlevels/boot}/{keymaps,save-keymaps}
-> +endef
-> +OPENRC_POST_INSTALL_TARGET_HOOKS += OPENRC_NO_KBD
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_NETIFRC),y)
->  # netifrc replaces network, staticroute and loopback services which are
->  # installed by openrc
-> -- 
-> 2.18.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+index 228b3a980e..09988f49b2 100644
+--- a/package/exiv2/exiv2.mk
++++ b/package/exiv2/exiv2.mk
+@@ -10,6 +10,11 @@ EXIV2_INSTALL_STAGING = YES
+ EXIV2_LICENSE = GPL-2.0+, BSD-3-Clause
+ EXIV2_LICENSE_FILES = COPYING COPYING-CMAKE-SCRIPTS
+ 
++# CVE-2019-13504 is misclassified (by our CVE tracker) as affecting version
++# 0.27.2, while in fact both commits that fixed this issue are already in this
++# version.
++EXIV2_IGNORE_CVES += CVE-2019-13504
++
+ EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
+ 
+ # The following CMake variable disables a TRY_RUN call in the -pthread
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.0
