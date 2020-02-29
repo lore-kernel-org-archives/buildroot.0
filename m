@@ -1,63 +1,92 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Feb 2020 14:25:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cairo: security bump to version
- 1.17.2
-Message-ID: <20200229132533.2761046-1-fontaine.fabrice@gmail.com>
+Date: Sat, 29 Feb 2020 14:34:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: fix CVE-2019-14834
+Message-ID: <20200229133437.2780453-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2018-19876: cairo 1.16.0, in cairo_ft_apply_variations() in
-  cairo-ft-font.c, would free memory using a free function incompatible
-  with WebKit's fastMalloc, leading to an application crash with a
-  "free(): invalid pointer" error.
-- Update indentation of hash file (two spaces)
+A vulnerability was found in dnsmasq before version 2.81, where the
+memory leak allows remote attackers to cause a denial of service
+(memory consumption) via vectors involving DHCP response creation.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cairo/cairo.hash | 12 ++++++------
- package/cairo/cairo.mk   |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ .../0004-Fix-memory-leak-in-helper-c.patch    | 49 +++++++++++++++++++
+ package/dnsmasq/dnsmasq.mk                    |  3 ++
+ 2 files changed, 52 insertions(+)
+ create mode 100644 package/dnsmasq/0004-Fix-memory-leak-in-helper-c.patch
 
-diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
-index 949ed3ffee..c86ccc31ab 100644
---- a/package/cairo/cairo.hash
-+++ b/package/cairo/cairo.hash
-@@ -1,9 +1,9 @@
--# From https://www.cairographics.org/releases/cairo-1.16.0.tar.xz.sha1
--sha1 00e81842ae5e81bb0343108884eb5205be0eac14 cairo-1.16.0.tar.xz
-+# From https://cairographics.org/snapshots/cairo-1.17.2.tar.xz.sha1
-+sha1  c5d6f12701f23b2dc2988a5a5586848e70e858fe  cairo-1.17.2.tar.xz
- # Calculated based on the hash above
--sha256	5e7b29b3f113ef870d1e3ecf8adf21f923396401604bda16d44be45e66052331	cairo-1.16.0.tar.xz
-+sha256  6b70d4655e2a47a22b101c666f4b29ba746eda4aa8a0f7255b32b2e9408801df  cairo-1.17.2.tar.xz
+diff --git a/package/dnsmasq/0004-Fix-memory-leak-in-helper-c.patch b/package/dnsmasq/0004-Fix-memory-leak-in-helper-c.patch
+new file mode 100644
+index 0000000000..c00a9cc3ef
+--- /dev/null
++++ b/package/dnsmasq/0004-Fix-memory-leak-in-helper-c.patch
+@@ -0,0 +1,49 @@
++From 69bc94779c2f035a9fffdb5327a54c3aeca73ed5 Mon Sep 17 00:00:00 2001
++From: Simon Kelley <simon@thekelleys.org.uk>
++Date: Wed, 14 Aug 2019 20:44:50 +0100
++Subject: [PATCH] Fix memory leak in helper.c
++
++Thanks to Xu Mingjie <xumingjie1995@outlook.com> for spotting this.
++[Retrieved from:
++http://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=commit;h=69bc94779c2f035a9fffdb5327a54c3aeca73ed5]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/helper.c |   12 +++++++++---
++ 1 file changed, 9 insertions(+), 3 deletions(-)
++
++diff --git a/src/helper.c b/src/helper.c
++index 33ba120..c392eec 100644
++--- a/src/helper.c
+++++ b/src/helper.c
++@@ -80,7 +80,8 @@ int create_helper(int event_fd, int err_fd, uid_t uid, gid_t gid, long max_fd)
++   pid_t pid;
++   int i, pipefd[2];
++   struct sigaction sigact;
++-
+++  unsigned char *alloc_buff = NULL;
+++  
++   /* create the pipe through which the main program sends us commands,
++      then fork our process. */
++   if (pipe(pipefd) == -1 || !fix_fd(pipefd[1]) || (pid = fork()) == -1)
++@@ -186,11 +187,16 @@ int create_helper(int event_fd, int err_fd, uid_t uid, gid_t gid, long max_fd)
++       struct script_data data;
++       char *p, *action_str, *hostname = NULL, *domain = NULL;
++       unsigned char *buf = (unsigned char *)daemon->namebuff;
++-      unsigned char *end, *extradata, *alloc_buff = NULL;
+++      unsigned char *end, *extradata;
++       int is6, err = 0;
++       int pipeout[2];
++ 
++-      free(alloc_buff);
+++      /* Free rarely-allocated memory from previous iteration. */
+++      if (alloc_buff)
+++	{
+++	  free(alloc_buff);
+++	  alloc_buff = NULL;
+++	}
++       
++       /* we read zero bytes when pipe closed: this is our signal to exit */ 
++       if (!read_write(pipefd[0], (unsigned char *)&data, sizeof(data), 1))
++-- 
++1.7.10.4
++
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index f271523068..3f25ac0885 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -15,6 +15,9 @@ DNSMASQ_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ DNSMASQ_LICENSE = GPL-2.0 or GPL-3.0
+ DNSMASQ_LICENSE_FILES = COPYING COPYING-v3
  
- # Hash for license files:
--sha256	67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf	COPYING
--sha256	9e9e8608c4cdda51a78cc3a385f4ec9a2e4c96d5ecad74ac8bca5fca3e563b7d	COPYING-LGPL-2.1
--sha256	53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f	COPYING-MPL-1.1
-+sha256  67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf  COPYING
-+sha256  9e9e8608c4cdda51a78cc3a385f4ec9a2e4c96d5ecad74ac8bca5fca3e563b7d  COPYING-LGPL-2.1
-+sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING-MPL-1.1
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 902f505aaa..10f6a661f8 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
++# 0004-Fix-memory-leak-in-helper-c.patch
++DNSMASQ_IGNORE_CVES += CVE-2019-14834
++
+ DNSMASQ_I18N = $(if $(BR2_SYSTEM_ENABLE_NLS),-i18n)
  
--CAIRO_VERSION = 1.16.0
-+CAIRO_VERSION = 1.17.2
- CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
- CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
- CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
--CAIRO_SITE = http://cairographics.org/releases
-+CAIRO_SITE = http://cairographics.org/snapshots
- CAIRO_INSTALL_STAGING = YES
- 
- # relocation truncated to fit: R_68K_GOT16O
+ ifneq ($(BR2_PACKAGE_DNSMASQ_DHCP),y)
 -- 
 2.25.0
