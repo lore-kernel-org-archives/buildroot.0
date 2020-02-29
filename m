@@ -1,46 +1,34 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 28 Feb 2020 17:31:16 -0700
-Subject: [Buildroot] [PATCH 1/1] support/config-fragments/autobuild: add
- x86_64 glibc debug toolchain
-Message-ID: <20200229003116.115081-1-james.hilliard1@gmail.com>
+Date: Fri, 28 Feb 2020 18:11:55 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-jinja2: fix async removal
+ paths
+Message-ID: <20200229011155.10706-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This toolchain config helps to catch build issues that are only
-reproducible when building with a debug optimizations enabled.
+Fixes:
+http://autobuild.buildroot.net/results/dd5/dd5f151b2c9872476ab63c529468d0b37a0374f5/
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .../autobuild/br-x86-64-internal-glibc-debug.config          | 5 +++++
- support/config-fragments/autobuild/toolchain-configs.csv     | 1 +
- 2 files changed, 6 insertions(+)
- create mode 100644 support/config-fragments/autobuild/br-x86-64-internal-glibc-debug.config
+ package/python-jinja2/python-jinja2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/config-fragments/autobuild/br-x86-64-internal-glibc-debug.config b/support/config-fragments/autobuild/br-x86-64-internal-glibc-debug.config
-new file mode 100644
-index 0000000000..7cf6238471
---- /dev/null
-+++ b/support/config-fragments/autobuild/br-x86-64-internal-glibc-debug.config
-@@ -0,0 +1,5 @@
-+BR2_x86_64=y
-+BR2_OPTIMIZE_G=y
-+BR2_ENABLE_DEBUG=y
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 9b41e2173b..a2cd4a6768 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -57,6 +57,7 @@ support/config-fragments/autobuild/br-riscv64-internal-musl.config,any
- support/config-fragments/autobuild/br-sh4-full.config,x86_64
- support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
- support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
-+support/config-fragments/autobuild/br-x86-64-internal-glibc-debug.config,x86_64
- support/config-fragments/autobuild/br-x86-64-core2-full.config,x86_64
- support/config-fragments/autobuild/br-xtensa-full.config,x86_64
- support/config-fragments/autobuild/br-xtensa-full-internal.config,any
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 189b75d18f..64b4c60c9b 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -20,7 +20,7 @@ HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+ # Hence remove both files after package extraction.
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ define PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
+-	rm $(@D)/jinja2/asyncsupport.py $(@D)/jinja2/asyncfilters.py
++	rm $(@D)/src/jinja2/asyncsupport.py $(@D)/src/jinja2/asyncfilters.py
+ endef
+ 
+ PYTHON_JINJA2_POST_EXTRACT_HOOKS = PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
 -- 
 2.20.1
