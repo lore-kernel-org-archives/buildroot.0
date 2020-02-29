@@ -1,79 +1,131 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Feb 2020 23:17:29 +0100
-Subject: [Buildroot] [git commit] package/cairo: fix CVE-2018-19876
-Message-ID: <20200229220541.F0CBD8EFCE@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Feb 2020 23:20:35 +0100
+Subject: [Buildroot] [git commit] package/exiv2: fix CVE-2019-20421
+Message-ID: <20200229220828.232AD8EFD3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91b150dc33841be13a2085d52c312dafe0b87767
+commit: https://git.buildroot.net/buildroot/commit/?id=d8be0e4cd4c2c21d601e9d425f9bee1349c4589d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an upstream patch to fix CVE-2018-19876: cairo 1.16.0, in
-cairo_ft_apply_variations() in cairo-ft-font.c, would free memory using a
-free function incompatible with WebKit's fastMalloc, leading to an
-application crash with a "free(): invalid pointer" error.
+In Jp2Image::readMetadata() in jp2image.cpp in Exiv2 0.27.2, an input
+file can result in an infinite loop and hang, with high CPU consumption.
+Remote attackers could leverage this vulnerability to cause a denial of
+service via a crafted file.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Peter: extend commit message]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...hen-available-in-cairo_ft_apply_variation.patch | 33 ++++++++++++++++++++++
- package/cairo/cairo.mk                             |  3 ++
- 2 files changed, 36 insertions(+)
+ .../0002-fix_1011_jp2_readmetadata_loop.patch      | 86 ++++++++++++++++++++++
+ package/exiv2/exiv2.mk                             |  3 +
+ 2 files changed, 89 insertions(+)
 
-diff --git a/package/cairo/0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch b/package/cairo/0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
+diff --git a/package/exiv2/0002-fix_1011_jp2_readmetadata_loop.patch b/package/exiv2/0002-fix_1011_jp2_readmetadata_loop.patch
 new file mode 100644
-index 0000000000..10e000d16f
+index 0000000000..400bf342ce
 --- /dev/null
-+++ b/package/cairo/0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
-@@ -0,0 +1,33 @@
-+From 90e85c2493fdfa3551f202ff10282463f1e36645 Mon Sep 17 00:00:00 2001
-+From: Carlos Garcia Campos <cgarcia@igalia.com>
-+Date: Mon, 19 Nov 2018 12:33:07 +0100
-+Subject: [PATCH] ft: Use FT_Done_MM_Var instead of free when available in
-+ cairo_ft_apply_variations
++++ b/package/exiv2/0002-fix_1011_jp2_readmetadata_loop.patch
+@@ -0,0 +1,86 @@
++From 1b917c3f7dd86336a9f6fda4456422c419dfe88c Mon Sep 17 00:00:00 2001
++From: clanmills <robin@clanmills.com>
++Date: Tue, 1 Oct 2019 17:39:44 +0100
++Subject: [PATCH] Fix #1011 fix_1011_jp2_readmetadata_loop
 +
-+Fixes a crash when using freetype >= 2.9
-+[Retrieved from:
-+https://gitlab.freedesktop.org/cairo/cairo/-/commit/90e85c2493fdfa3551f202ff10282463f1e36645]
++[Retrieved (and slighlty updated to keep only the fix) from:
++https://github.com/Exiv2/exiv2/commit/a82098f4f90cd86297131b5663c3dec6a34470e8]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ src/cairo-ft-font.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
++ src/jp2image.cpp                             |  25 +++++++++++++++----
++ test/data/Jp2Image_readMetadata_loop.poc     | Bin 0 -> 738 bytes
++ tests/bugfixes/github/test_CVE_2017_17725.py |   4 +--
++ tests/bugfixes/github/test_issue_1011.py     |  13 ++++++++++
++ 4 files changed, 35 insertions(+), 7 deletions(-)
++ create mode 100755 test/data/Jp2Image_readMetadata_loop.poc
++ create mode 100644 tests/bugfixes/github/test_issue_1011.py
 +
-+diff --git a/src/cairo-ft-font.c b/src/cairo-ft-font.c
-+index 325dd61b4..981973f78 100644
-+--- a/src/cairo-ft-font.c
-++++ b/src/cairo-ft-font.c
-+@@ -2393,7 +2393,11 @@ skip:
-+ done:
-+         free (coords);
-+         free (current_coords);
-++#if HAVE_FT_DONE_MM_VAR
-++        FT_Done_MM_Var (face->glyph->library, ft_mm_var);
-++#else
-+         free (ft_mm_var);
-++#endif
-+     }
-+ }
++diff --git a/src/jp2image.cpp b/src/jp2image.cpp
++index d5cd1340a..0de088d62 100644
++--- a/src/jp2image.cpp
+++++ b/src/jp2image.cpp
++@@ -18,10 +18,6 @@
++  * Foundation, Inc., 51 Franklin Street, 5th Floor, Boston, MA 02110-1301 USA.
++  */
 + 
-+-- 
-+2.24.1
-+
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 902f505aaa..c6a3dad932 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -11,6 +11,9 @@ CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
- CAIRO_SITE = http://cairographics.org/releases
- CAIRO_INSTALL_STAGING = YES
++-/*
++-  File:      jp2image.cpp
++-*/
++-
++ // *****************************************************************************
++ 
++ // included header files
++@@ -197,6 +193,16 @@ namespace Exiv2
++         return result;
++     }
++ 
+++static void boxes_check(size_t b,size_t m)
+++{
+++    if ( b > m ) {
+++#ifdef EXIV2_DEBUG_MESSAGES
+++        std::cout << "Exiv2::Jp2Image::readMetadata box maximum exceeded" << std::endl;
+++#endif
+++        throw Error(kerCorruptedMetadata);
+++    }
+++}
+++
++     void Jp2Image::readMetadata()
++     {
++ #ifdef EXIV2_DEBUG_MESSAGES
++@@ -219,9 +225,12 @@ namespace Exiv2
++         Jp2BoxHeader      subBox    = {0,0};
++         Jp2ImageHeaderBox ihdr      = {0,0,0,0,0,0,0,0};
++         Jp2UuidBox        uuid      = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+++        size_t            boxes     = 0 ;
+++        size_t            boxem     = 1000 ; // boxes max
++ 
++         while (io_->read((byte*)&box, sizeof(box)) == sizeof(box))
++         {
+++            boxes_check(boxes++,boxem );
++             position   = io_->tell();
++             box.length = getLong((byte*)&box.length, bigEndian);
++             box.type   = getLong((byte*)&box.type, bigEndian);
++@@ -251,8 +260,12 @@ namespace Exiv2
++ 
++                     while (io_->read((byte*)&subBox, sizeof(subBox)) == sizeof(subBox) && subBox.length )
++                     {
+++                        boxes_check(boxes++, boxem) ;
++                         subBox.length = getLong((byte*)&subBox.length, bigEndian);
++                         subBox.type   = getLong((byte*)&subBox.type, bigEndian);
+++                        if (subBox.length > io_->size() ) {
+++                            throw Error(kerCorruptedMetadata);
+++                        }
++ #ifdef EXIV2_DEBUG_MESSAGES
++                         std::cout << "Exiv2::Jp2Image::readMetadata: "
++                         << "subBox = " << toAscii(subBox.type) << " length = " << subBox.length << std::endl;
++@@ -308,7 +321,9 @@ namespace Exiv2
++                         }
++ 
++                         io_->seek(restore,BasicIo::beg);
++-                        io_->seek(subBox.length, Exiv2::BasicIo::cur);
+++                        if ( io_->seek(subBox.length, Exiv2::BasicIo::cur) != 0 ) {
+++                            throw Error(kerCorruptedMetadata);
+++                        }
++                         restore = io_->tell();
++                     }
++                     break;
+diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+index 7ef42fd9bc..ee96a1c2c8 100644
+--- a/package/exiv2/exiv2.mk
++++ b/package/exiv2/exiv2.mk
+@@ -13,6 +13,9 @@ EXIV2_LICENSE_FILES = COPYING COPYING-CMAKE-SCRIPTS
+ # 0001-crwimage-Check-offset-and-size-against-total-size.patch
+ EXIV2_IGNORE_CVES += CVE-2019-17402
  
-+# 0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
-+CAIRO_IGNORE_CVES += CVE-2018-19876
++# 0002-fix_1011_jp2_readmetadata_loop.patch
++EXIV2_IGNORE_CVES += CVE-2019-20421
 +
- # relocation truncated to fit: R_68K_GOT16O
- ifeq ($(BR2_m68k_cf),y)
- CAIRO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
+ EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
+ 
+ # The following CMake variable disables a TRY_RUN call in the -pthread
