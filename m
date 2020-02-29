@@ -1,31 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Feb 2020 17:48:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libgdiplus: backport of fix for
- GifQuantizeBuffer
-In-Reply-To: <20200228091942.10490-1-heiko.thiery@gmail.com> (Heiko Thiery's
- message of "Fri, 28 Feb 2020 10:19:43 +0100")
-References: <20200228091942.10490-1-heiko.thiery@gmail.com>
-Message-ID: <87sgitgx0p.fsf@dell.be.48ers.dk>
+Date: Sat, 29 Feb 2020 17:47:47 +0100
+Subject: [Buildroot] [git commit] package/pkg-generic.mk: in image install,
+ print message before pre-hooks
+Message-ID: <20200229163621.0202C8EF06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=15e96f94172d190a5c6b48d38438dc50603bfd9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > In newer version of giflib the GifQuantizeBuffer code was removed.
- > libgdiplus included the needed function by their own:
- > (https://github.com/mono/libgdiplus/pull/575).
+In all steps, we print the message indicating the start of the step
+using the MESSAGE macro before running pre-hooks. Except in the image
+installation step, where the message is printed after the pre-hooks.
 
- > This patch will become obsolete once libgdiplus is bumped to version 6.x.
+Let's fix this inconsistency.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/46c5cf068cf9ea50e53491870d9dbf3f134c8c22
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 7b240ca012..c1b9fe2e59 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -347,8 +347,8 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ $(BUILD_DIR)/%/.stamp_images_installed:
+ 	@$(call step_start,install-image)
+ 	@mkdir -p $(BINARIES_DIR)
+-	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
+ 	@$(call MESSAGE,"Installing to images directory")
++	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_IMAGES_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
+ 	@$(call step_end,install-image)
