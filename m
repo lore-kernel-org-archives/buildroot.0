@@ -1,49 +1,95 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Feb 2020 19:10:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rdesktop: security bump to version
- 1.8.6
-Message-ID: <20200229181008.3338093-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 29 Feb 2020 19:17:53 +0100
+Subject: [Buildroot] [PATCH v1 06/30] package/llvm: add config to build
+ backend for host arch
+In-Reply-To: <20191205171517.96639-7-michael.drake@codethink.co.uk>
+References: <20191205171517.96639-1-michael.drake@codethink.co.uk>
+ <20191205171517.96639-7-michael.drake@codethink.co.uk>
+Message-ID: <5e783d21-9813-260d-78cf-55e05f5b971f@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2019-15682: RDesktop version 1.8.4 contains multiple
-  out-of-bound access read vulnerabilities in its code, which results in
-  a denial of service (DoS) condition. This attack appear to be
-  exploitable via network connectivity. These issues have been fixed in
-  version 1.8.5
-- Update indentation of hash file (two spaces)
+Hello Michael,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/rdesktop/rdesktop.hash | 4 ++--
- package/rdesktop/rdesktop.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Le 05/12/2019 ? 18:14, Michael Drake a ?crit?:
+> From: Joseph Kogut <joseph.kogut@gmail.com>
+> 
+> When cross-compiling for a different architecture to the host,
+> LLVM only has target architecture support.  This change adds
+> support for compiling for the host architecture as well.
+> 
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
+> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+> ---
+>  package/llvm/Config.in | 6 ++++++
+>  package/llvm/llvm.mk   | 6 +++++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+> index 1d21d879da..ae96d30a64 100644
+> --- a/package/llvm/Config.in
+> +++ b/package/llvm/Config.in
+> @@ -28,6 +28,12 @@ config BR2_PACKAGE_LLVM
+>  
+>  if BR2_PACKAGE_LLVM
+>  
 
-diff --git a/package/rdesktop/rdesktop.hash b/package/rdesktop/rdesktop.hash
-index a43fab76fa..d42ab59be1 100644
---- a/package/rdesktop/rdesktop.hash
-+++ b/package/rdesktop/rdesktop.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	516f04df92f16eba04c96bbf9aeb05b9da686689c2bb5c107e0941583e09f933	rdesktop-1.8.4.tar.gz
--sha256	fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7	COPYING
-+sha256  ffb9f8e2f0b7a06e383e550698bdc9734ae33eb3ec971b0a094078434a4bba6d  rdesktop-1.8.6.tar.gz
-+sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/rdesktop/rdesktop.mk b/package/rdesktop/rdesktop.mk
-index d97422cf13..491fd60407 100644
---- a/package/rdesktop/rdesktop.mk
-+++ b/package/rdesktop/rdesktop.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RDESKTOP_VERSION = 1.8.4
-+RDESKTOP_VERSION = 1.8.6
- RDESKTOP_SITE = $(call github,rdesktop,rdesktop,v$(RDESKTOP_VERSION))
- RDESKTOP_DEPENDENCIES = host-pkgconf openssl xlib_libX11 xlib_libXt \
- 	$(if $(BR2_PACKAGE_ALSA_LIB_PCM),alsa-lib) \
--- 
-2.25.0
+This should be outside of BR2_PACKAGE_LLVM, like BR2_PACKAGE_LLVM_TARGET_ARCH.
+
+> +config BR2_PACKAGE_HOST_LLVM_HOST_ARCH
+> +	string
+> +	default "X86" if BR2_HOSTARCH = "x86" || BR2_HOSTARCH = "x86_64"
+> +	default "AArch64" if BR2_HOSTARCH="aarch64"
+> +	default "ARM" if BR2_HOSTARCH = "arm"
+> +
+>  config BR2_PACKAGE_LLVM_AMDGPU
+>  	bool "AMDGPU backend"
+>  	help
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> index 2b2bcf336e..300ac3e300 100644
+> --- a/package/llvm/llvm.mk
+> +++ b/package/llvm/llvm.mk
+> @@ -42,7 +42,10 @@ LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
+>  
+>  # Build backend for target architecture. This include backends like AMDGPU.
+>  LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+> -HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
+> +HOST_LLVM_TARGETS_TO_BUILD = \
+> +	$(LLVM_TARGETS_TO_BUILD) \
+> +	$(call qstrip,$(BR2_PACKAGE_HOST_LLVM_HOST_ARCH))
+> +HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(HOST_LLVM_TARGETS_TO_BUILD))"
+
+Maybe we want to consider the case where llvm is supported by the host
+(BR2_PACKAGE_HOST_LLVM_HOST_ARCH is set) but not by the selected target
+(BR2_PACKAGE_LLVM_TARGET_ARCH is not set).
+
+In this case LLVM_TARGETS_TO_BUILD would be -DLLVM_TARGETS_TO_BUILD=";X86" due
+to a space before the host target string (X86).
+
+Some one may need host-llvm (ex qdoc) [1]
+
+[1] http://patchwork.ozlabs.org/patch/1246516/
+
+>  LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
+>  
+>  # LLVM target to use for native code generation. This is required for JIT generation.
+> @@ -58,6 +61,7 @@ LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(LLVM_TARGET_ARCH)
+>  # output only $(LLVM_TARGET_ARCH) if not, and mesa3d won't build as
+>  # it thinks AMDGPU backend is not installed on the target.
+>  ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+> +HOST_LLVM_TARGETS_TO_BUILD += AMDGPU
+
+Ok, we need to keep AMDGPU here to keep llvm-config working for the cross build
+process.
+
+Best regards,
+Romain
+
+>  LLVM_TARGETS_TO_BUILD += AMDGPU
+>  endif
+>  
+> 
