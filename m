@@ -1,39 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Feb 2020 18:07:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boost: annotate _IGNORE_CVES
- for CVE-2009-3654
-In-Reply-To: <20200229163608.GO8743@scaer> (Yann E. MORIN's message of "Sat,
- 29 Feb 2020 17:36:08 +0100")
-References: <20200229094609.2451566-1-fontaine.fabrice@gmail.com>
- <20200229163608.GO8743@scaer>
-Message-ID: <87k145gw45.fsf@dell.be.48ers.dk>
+Date: Sat, 29 Feb 2020 18:08:54 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] DEVELOPERS: add Giulio
+ Benetti to nfs-utils package
+Message-ID: <20200229165649.4F3768EF22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=72c67806b27be81c4186823c008d6a2c46320ad0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
- > Fabrice, All,
- > On 2020-02-29 10:46 +0100, Fabrice Fontaine spake thusly:
- >> Unspecified vulnerability in Boost before 6.x-1.03, a module for Drupal,
- >> allows remote attackers to create new webroot directories via unknown
- >> attack vectors.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 562660a5ea0e9a0feeb6bfbb850c553b648db339)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Yes, good to know, but the interesting bit is why we are not affected,
- > which your commit log fails to specify.
-
- > Also, the comment should say so as well. Maybe just something like:
-
- >     # Module for Drupal, not installed in Buildroot
- >     BOOST_IGNORE_CVES +=...
-
-It is not because we don't install some optional part of boost, it is
-simply that our CVE logic thinks that this CVE applies to our boost
-package, whereas it is really for some kind of drupal module:
-
-https://nvd.nist.gov/vuln/detail/CVE-2009-3654
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9ff126eb8c..f38a7bf448 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -981,6 +981,7 @@ F:	package/at/
+ F:	package/libnspr/
+ F:	package/libnss/
+ F:	package/minicom/
++F:	package/nfs-utils/
+ F:	package/sunxi-mali-mainline/
+ F:	package/sunxi-mali-mainline-driver/
+ 
