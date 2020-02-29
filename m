@@ -1,29 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Feb 2020 08:39:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lz4: security bump to version
- 1.9.2
-In-Reply-To: <20200228232626.2387483-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 29 Feb 2020 00:26:26 +0100")
-References: <20200228232626.2387483-1-fontaine.fabrice@gmail.com>
-Message-ID: <87lfolj0zx.fsf@dell.be.48ers.dk>
+Date: Sat, 29 Feb 2020 08:35:40 +0100
+Subject: [Buildroot] [git commit] package/ntfs-3g: annotate _IGNORE_CVES for
+ the included security patch
+Message-ID: <20200229072735.5575A8E4D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8619025300899f7d5cfcd658352c2f70794201d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > - Fix CVE-2019-17543: LZ4 before 1.9.2 has a heap-based buffer overflow
- >   in LZ4_write32 (related to LZ4_compress_destSize), affecting
- >   applications that call LZ4_compress_fast with a large input. (This
- >   issue can also lead to data corruption.) NOTE: the vendor states "only
- >   a few specific / uncommon usages of the API are at risk."
- > - Update indentation of hash file (two spaces)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ntfs-3g/ntfs-3g.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index 5f23eae9c9..cbb356195c 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
+@@ -13,6 +13,9 @@ NTFS_3G_DEPENDENCIES = host-pkgconf
+ NTFS_3G_LICENSE = GPL-2.0+, LGPL-2.0+
+ NTFS_3G_LICENSE_FILES = COPYING COPYING.LIB
+ 
++# 0001-Fixed-reporting-an-error-when-failed-to-build-the-mo.patch
++NTFS_3G_IGNORE_CVES += CVE-2019-9755
++
+ ifeq ($(BR2_PACKAGE_LIBFUSE),y)
+ NTFS_3G_CONF_OPTS += --with-fuse=external
+ NTFS_3G_DEPENDENCIES += libfuse
