@@ -1,52 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Feb 2020 08:39:06 +0100
-Subject: [Buildroot] [git commit] package/lz4: security bump to version 1.9.2
-Message-ID: <20200229072735.8A24581191@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 29 Feb 2020 10:18:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lxc: fix build with ultrasparc
+Message-ID: <20200229091851.2389137-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4390b365a2dfc4cea5505d44955b2fdef816b2e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- Fix CVE-2019-17543: LZ4 before 1.9.2 has a heap-based buffer overflow
-  in LZ4_write32 (related to LZ4_compress_destSize), affecting
-  applications that call LZ4_compress_fast with a large input. (This
-  issue can also lead to data corruption.) NOTE: the vendor states "only
-  a few specific / uncommon usages of the API are at risk."
-- Update indentation of hash file (two spaces)
+Fixes:
+ - http://autobuild.buildroot.org/results/17c2319850f02f24da6fbef9656c07f86fdc5a3a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lz4/lz4.hash | 6 +++---
- package/lz4/lz4.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...xc-raw_syscalls.c-fix-sparc-assembly.patch | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
 
-diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
-index 5477cb6395..01d0107b3f 100644
---- a/package/lz4/lz4.hash
-+++ b/package/lz4/lz4.hash
-@@ -1,4 +1,4 @@
- # sha256 locally computed
--sha256 33af5936ac06536805f9745e0b6d61da606a1f8b4cc5c04dd3cbaca3b9b4fc43  lz4-1.8.3.tar.gz
--sha256 d15d99c8dc6b0ec22174c0e563a95bc40f9363ca7f9d9d793bb5c5a8e8d0af71  lib/LICENSE
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  programs/COPYING
-+sha256  658ba6191fa44c92280d4aa2c271b0f4fbc0e34d249578dd05e50e76d0e5efcc  lz4-1.9.2.tar.gz
-+sha256  d15d99c8dc6b0ec22174c0e563a95bc40f9363ca7f9d9d793bb5c5a8e8d0af71  lib/LICENSE
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  programs/COPYING
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index 70e193c51a..2a658fbba5 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LZ4_VERSION = 1.8.3
-+LZ4_VERSION = 1.9.2
- LZ4_SITE = $(call github,lz4,lz4,v$(LZ4_VERSION))
- LZ4_INSTALL_STAGING = YES
- LZ4_LICENSE = BSD-2-Clause (library), GPL-2.0+ (programs)
+diff --git a/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch b/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
+new file mode 100644
+index 0000000000..4de07ddada
+--- /dev/null
++++ b/package/lxc/0003-src-lxc-raw_syscalls.c-fix-sparc-assembly.patch
+@@ -0,0 +1,41 @@
++From 5f7dd076fe203ebe6992698b63a1856a98bc0bba Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 28 Feb 2020 17:35:42 +0100
++Subject: [PATCH] src/lxc/raw_syscalls.c: fix sparc assembly
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Build of lxc 3.2.1 fails with ultrasparc on:
++
++raw_syscalls.c: In function ?lxc_raw_clone?:
++raw_syscalls.c:66:3: error: invalid 'asm': invalid operand output code
++   asm volatile(
++   ^~~
++
++Issue has been added with commit
++b52e8e68a61866da2af86e85905ec850f8a8b7fc which added %g1 instead of %%g1
++
++Fixes:
++ - http://autobuild.buildroot.org/results/17c2319850f02f24da6fbef9656c07f86fdc5a3a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/lxc/lxc/commit/5f7dd076fe203ebe6992698b63a1856a98bc0bba]
++---
++ src/lxc/raw_syscalls.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/lxc/raw_syscalls.c b/src/lxc/raw_syscalls.c
++index 7ffb2584b8..bfa48c0348 100644
++--- a/src/lxc/raw_syscalls.c
+++++ b/src/lxc/raw_syscalls.c
++@@ -76,7 +76,7 @@ __returns_twice pid_t lxc_raw_clone(unsigned long flags, int *pidfd)
++ 		     * processor status register (psr) is used instead of a
++ 		     * full register.
++ 		     */
++-		    "addx %%g0, 0, %g1"
+++		    "addx %%g0, 0, %%g1"
++ 		    : "=r"(g1), "=r"(o0), "=r"(o1), "=r"(o2) /* outputs */
++ 		    : "r"(g1), "r"(o0), "r"(o1), "r"(o2)     /* inputs */
++ 		    : "%cc");				     /* clobbers */
+-- 
+2.25.0
