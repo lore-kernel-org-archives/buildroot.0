@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Feb 2020 23:39:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/suricata: fix CVE-2019-18792
-Message-ID: <20200229223947.4061978-1-fontaine.fabrice@gmail.com>
+Date: Sat, 29 Feb 2020 23:46:43 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/suricata: fix CVE-2019-18792
+Message-ID: <20200229224643.4064368-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,6 +19,9 @@ linux and windows clients are ignoring the injected packet.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix trailing whitespace
+
  ...004-stream-reject-broken-ACK-packets.patch | 40 +++++++++++++++++++
  package/suricata/suricata.mk                  |  3 ++
  2 files changed, 43 insertions(+)
@@ -71,7 +74,7 @@ index 0000000000..9670d73158
 +     p->tcph = &tcph;
 + 
 diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index b1f0e18dbc..2cc0c656ff 100644
+index b1f0e18dbc..48a6205eed 100644
 --- a/package/suricata/suricata.mk
 +++ b/package/suricata/suricata.mk
 @@ -11,6 +11,9 @@ SURICATA_LICENSE_FILES = COPYING LICENSE
@@ -79,7 +82,7 @@ index b1f0e18dbc..2cc0c656ff 100644
  SURICATA_AUTORECONF = YES
  
 +# 0004-stream-reject-broken-ACK-packets.patch
-+SURICATA_IGNORE_CVES += CVE-2019-18792 
++SURICATA_IGNORE_CVES += CVE-2019-18792
 +
  SURICATA_DEPENDENCIES = \
  	host-pkgconf \
