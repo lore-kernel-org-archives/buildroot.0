@@ -1,95 +1,34 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sat, 29 Feb 2020 19:17:53 +0100
-Subject: [Buildroot] [PATCH v1 06/30] package/llvm: add config to build
- backend for host arch
-In-Reply-To: <20191205171517.96639-7-michael.drake@codethink.co.uk>
-References: <20191205171517.96639-1-michael.drake@codethink.co.uk>
- <20191205171517.96639-7-michael.drake@codethink.co.uk>
-Message-ID: <5e783d21-9813-260d-78cf-55e05f5b971f@smile.fr>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Sat, 29 Feb 2020 15:18:07 -0300
+Subject: [Buildroot] [PATCH] package/openrc: fix post-install-target addition
+Message-ID: <20200229181807.5462-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michael,
+From: Carlos Santos <unixmania@gmail.com>
 
-Le 05/12/2019 ? 18:14, Michael Drake a ?crit?:
-> From: Joseph Kogut <joseph.kogut@gmail.com>
-> 
-> When cross-compiling for a different architecture to the host,
-> LLVM only has target architecture support.  This change adds
-> support for compiling for the host architecture as well.
-> 
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> Signed-off-by: Michael Drake <michael.drake@codethink.co.uk>
-> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
-> ---
->  package/llvm/Config.in | 6 ++++++
->  package/llvm/llvm.mk   | 6 +++++-
->  2 files changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-> index 1d21d879da..ae96d30a64 100644
-> --- a/package/llvm/Config.in
-> +++ b/package/llvm/Config.in
-> @@ -28,6 +28,12 @@ config BR2_PACKAGE_LLVM
->  
->  if BR2_PACKAGE_LLVM
->  
+OPENRC_POST_TARGET_INSTALL_HOOKS -> OPENRC_POST_INSTALL_TARGET_HOOKS
 
-This should be outside of BR2_PACKAGE_LLVM, like BR2_PACKAGE_LLVM_TARGET_ARCH.
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+ package/openrc/openrc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +config BR2_PACKAGE_HOST_LLVM_HOST_ARCH
-> +	string
-> +	default "X86" if BR2_HOSTARCH = "x86" || BR2_HOSTARCH = "x86_64"
-> +	default "AArch64" if BR2_HOSTARCH="aarch64"
-> +	default "ARM" if BR2_HOSTARCH = "arm"
-> +
->  config BR2_PACKAGE_LLVM_AMDGPU
->  	bool "AMDGPU backend"
->  	help
-> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-> index 2b2bcf336e..300ac3e300 100644
-> --- a/package/llvm/llvm.mk
-> +++ b/package/llvm/llvm.mk
-> @@ -42,7 +42,10 @@ LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
->  
->  # Build backend for target architecture. This include backends like AMDGPU.
->  LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
-> -HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
-> +HOST_LLVM_TARGETS_TO_BUILD = \
-> +	$(LLVM_TARGETS_TO_BUILD) \
-> +	$(call qstrip,$(BR2_PACKAGE_HOST_LLVM_HOST_ARCH))
-> +HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(HOST_LLVM_TARGETS_TO_BUILD))"
-
-Maybe we want to consider the case where llvm is supported by the host
-(BR2_PACKAGE_HOST_LLVM_HOST_ARCH is set) but not by the selected target
-(BR2_PACKAGE_LLVM_TARGET_ARCH is not set).
-
-In this case LLVM_TARGETS_TO_BUILD would be -DLLVM_TARGETS_TO_BUILD=";X86" due
-to a space before the host target string (X86).
-
-Some one may need host-llvm (ex qdoc) [1]
-
-[1] http://patchwork.ozlabs.org/patch/1246516/
-
->  LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
->  
->  # LLVM target to use for native code generation. This is required for JIT generation.
-> @@ -58,6 +61,7 @@ LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(LLVM_TARGET_ARCH)
->  # output only $(LLVM_TARGET_ARCH) if not, and mesa3d won't build as
->  # it thinks AMDGPU backend is not installed on the target.
->  ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
-> +HOST_LLVM_TARGETS_TO_BUILD += AMDGPU
-
-Ok, we need to keep AMDGPU here to keep llvm-config working for the cross build
-process.
-
-Best regards,
-Romain
-
->  LLVM_TARGETS_TO_BUILD += AMDGPU
->  endif
->  
-> 
+diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
+index 3f6453cef5..289bde4d03 100644
+--- a/package/openrc/openrc.mk
++++ b/package/openrc/openrc.mk
+@@ -47,7 +47,7 @@ define OPENRC_NO_NET
+ 	$(RM) $(TARGET_DIR)/etc/init.d/{network,staticroute,loopback}
+ 	$(RM) $(TARGET_DIR)/etc/conf.d/{network,staticroute,loopback}
+ endef
+-OPENRC_POST_TARGET_INSTALL_HOOKS += OPENRC_NO_NET
++OPENRC_POST_INSTALL_TARGET_HOOKS += OPENRC_NO_NET
+ endif
+ 
+ define OPENRC_REMOVE_UNNEEDED
+-- 
+2.18.2
