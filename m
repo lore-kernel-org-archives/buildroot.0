@@ -1,45 +1,137 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 28 Feb 2020 19:22:13 -0700
-Subject: [Buildroot] [PATCH 1/1] package/ser2net: bump to version 4.1.2
-Message-ID: <20200229022213.36247-1-james.hilliard1@gmail.com>
+Date: Fri, 28 Feb 2020 19:29:15 -0700
+Subject: [Buildroot] [PATCH 1/1] package/gensio: add patch fixing expected
+ identifier before token error
+Message-ID: <20200229022915.28459-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/d33c6cc6154607c6f1f8fdde3569cfcc4b9d2330/
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/ser2net/ser2net.hash | 6 +++---
- package/ser2net/ser2net.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...r-Rename-some-variables-to-tr_stdxxx.patch | 109 ++++++++++++++++++
+ 1 file changed, 109 insertions(+)
+ create mode 100644 package/gensio/0001-filter-Rename-some-variables-to-tr_stdxxx.patch
 
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index 5bd927d7d1..9a61564b0e 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5 44a69f573677d9f2bde87b3611db5817  ser2net-4.1.1.tar.gz
--sha1 502e11c3bee429de6550db459d83c9a0991cfc5c  ser2net-4.1.1.tar.gz
-+md5 1a42e9605342fd3d6fa41b48be7f564a  ser2net-4.1.2.tar.gz
-+sha1 2a40a94e37d89ca795b3a8f692583c78259383c1  ser2net-4.1.2.tar.gz
- # Locally computed:
--sha256 ad6c8fb34d01be177570323899d840a44c8774399d594595393708162fc61e22  ser2net-4.1.1.tar.gz
-+sha256 9bdc33476834bbbdcbfbb77ff8f1b1952fe2e7e19dde7e6f7932cea0cec958c7  ser2net-4.1.2.tar.gz
- sha256 501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index 2ea68ccc43..55f82bb2b4 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SER2NET_VERSION = 4.1.1
-+SER2NET_VERSION = 4.1.2
- SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPL-2.0+
- SER2NET_LICENSE_FILES = COPYING
+diff --git a/package/gensio/0001-filter-Rename-some-variables-to-tr_stdxxx.patch b/package/gensio/0001-filter-Rename-some-variables-to-tr_stdxxx.patch
+new file mode 100644
+index 0000000000..fdc78d334d
+--- /dev/null
++++ b/package/gensio/0001-filter-Rename-some-variables-to-tr_stdxxx.patch
+@@ -0,0 +1,109 @@
++From 601e6e56f44b91d957bb643662455f52540f336a Mon Sep 17 00:00:00 2001
++From: Corey Minyard <cminyard@mvista.com>
++Date: Tue, 25 Feb 2020 16:08:40 -0600
++Subject: [PATCH] filter: Rename some variables to tr_stdxxx
++
++stdout and stderr can be macros, don't use the names directly.
++
++Signed-off-by: Corey Minyard <cminyard@mvista.com>
++[james.hilliard1 at gmail.com: backport from upstream commit
++601e6e56f44b91d957bb643662455f52540f336a]
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++---
++ lib/gensio_filter_trace.c | 28 ++++++++++++++--------------
++ 1 file changed, 14 insertions(+), 14 deletions(-)
++
++diff --git a/lib/gensio_filter_trace.c b/lib/gensio_filter_trace.c
++index d39d58b..abe2db6 100644
++--- a/lib/gensio_filter_trace.c
+++++ b/lib/gensio_filter_trace.c
++@@ -32,8 +32,8 @@ struct trace_filter {
++     enum trace_dir dir;
++     bool raw;
++     char *filename;
++-    bool stdout;
++-    bool stderr;
+++    bool tr_stdout;
+++    bool tr_stderr;
++ 
++     FILE *tr;
++ };
++@@ -82,9 +82,9 @@ trace_try_connect(struct gensio_filter *filter, struct timeval *timeout)
++ {
++     struct trace_filter *tfilter = filter_to_trace(filter);
++ 
++-    if (tfilter->stdout) {
+++    if (tfilter->tr_stdout) {
++ 	tfilter->tr = stdout;
++-    } else if (tfilter->stderr) {
+++    } else if (tfilter->tr_stderr) {
++ 	tfilter->tr = stderr;
++     } else if (tfilter->filename) {
++ 	tfilter->tr = fopen(tfilter->filename, "a+");
++@@ -99,7 +99,7 @@ trace_try_disconnect(struct gensio_filter *filter, struct timeval *timeout)
++ {
++     struct trace_filter *tfilter = filter_to_trace(filter);
++ 
++-    if (!tfilter->stdout && !tfilter->stderr && tfilter->tr)
+++    if (!tfilter->tr_stdout && !tfilter->tr_stderr && tfilter->tr)
++ 	fclose(tfilter->tr);
++     tfilter->tr = NULL;
++     return 0;
++@@ -331,12 +331,12 @@ static int gensio_trace_filter_func(struct gensio_filter *filter, int op,
++ 
++ static struct gensio_filter *
++ gensio_trace_filter_raw_alloc(struct gensio_os_funcs *o, enum trace_dir dir,
++-			      bool raw, const char *filename, bool stdout,
++-			      bool stderr)
+++			      bool raw, const char *filename, bool tr_stdout,
+++			      bool tr_stderr)
++ {
++     struct trace_filter *tfilter;
++ 
++-    if (!filename && !stdout && !stderr)
+++    if (!filename && !tr_stdout && !tr_stderr)
++ 	dir = TRACE_NONE;
++ 
++     tfilter = o->zalloc(o, sizeof(*tfilter));
++@@ -351,8 +351,8 @@ gensio_trace_filter_raw_alloc(struct gensio_os_funcs *o, enum trace_dir dir,
++ 	if (!tfilter->filename)
++ 	    goto out_nomem;
++     }
++-    tfilter->stdout = stdout;
++-    tfilter->stderr = stderr;
+++    tfilter->tr_stdout = tr_stdout;
+++    tfilter->tr_stderr = tr_stderr;
++ 
++     tfilter->lock = o->alloc_lock(o);
++     if (!tfilter->lock)
++@@ -385,7 +385,7 @@ gensio_trace_filter_alloc(struct gensio_os_funcs *o,
++ {
++     struct gensio_filter *filter;
++     int dir = TRACE_NONE;
++-    bool raw = false, stdout = false, stderr = false;
+++    bool raw = false, tr_stdout = false, tr_stderr = false;
++     const char *filename = NULL;
++     unsigned int i;
++ 
++@@ -396,15 +396,15 @@ gensio_trace_filter_alloc(struct gensio_os_funcs *o,
++ 	    continue;
++ 	if (gensio_check_keyvalue(args[i], "file", &filename) > 0)
++ 	    continue;
++-	if (gensio_check_keybool(args[i], "stdout", &stdout) > 0)
+++	if (gensio_check_keybool(args[i], "stdout", &tr_stdout) > 0)
++ 	    continue;
++-	if (gensio_check_keybool(args[i], "stderr", &stderr) > 0)
+++	if (gensio_check_keybool(args[i], "stderr", &tr_stderr) > 0)
++ 	    continue;
++ 	return GE_INVAL;
++     }
++ 
++     filter = gensio_trace_filter_raw_alloc(o, dir, raw, filename,
++-					   stdout, stderr);
+++					   tr_stdout, tr_stderr);
++     if (!filter)
++ 	return GE_NOMEM;
++ 
++-- 
++2.20.1
++
 -- 
 2.20.1
