@@ -1,54 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Feb 2020 17:32:22 +0100
-Subject: [Buildroot] [PATCH] package/exim: fix spool directory
-In-Reply-To: <20200228133056.9482-1-p.debruijn@unilogic.nl> (Pascal de
- Bruijn's message of "Fri, 28 Feb 2020 14:30:56 +0100")
-References: <20200228133056.9482-1-p.debruijn@unilogic.nl>
-Message-ID: <87a751icbt.fsf@dell.be.48ers.dk>
+Date: Sat, 29 Feb 2020 17:33:24 +0100
+Subject: [Buildroot] [PATCH] package/pkg-generic.mk: in image install,
+ print message before pre-hooks
+In-Reply-To: <20200228150421.1240651-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Fri, 28 Feb 2020 16:04:20 +0100")
+References: <20200228150421.1240651-1-thomas.petazzoni@bootlin.com>
+Message-ID: <875zfpica3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pascal" == Pascal de Bruijn <p.debruijn@unilogic.nl> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Make sure the exim spool directory exists and
- > has the proper permissions so the following error
- > does not occur:
+ > In all steps, we print the message indicating the start of the step
+ > using the MESSAGE macro before running pre-hooks. Except in the image
+ > installation step, where the message is printed after the pre-hooks.
 
- > Cannot open main log file "/var/spool/exim/log/mainlog"
+ > Let's fix this inconsistency.
 
-Isn't that a strange location for a logfile? Why is this not under
-/var/log?
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
- > Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
- > ---
- >  package/exim/exim.mk | 4 ++++
- >  1 file changed, 4 insertions(+)
-
- > diff --git a/package/exim/exim.mk b/package/exim/exim.mk
- > index e4b0bfc1b4..1ed3961a14 100644
- > --- a/package/exim/exim.mk
- > +++ b/package/exim/exim.mk
- > @@ -145,6 +145,10 @@ define EXIM_USERS
- >  	exim 88 mail 8 * - - - exim
- >  endef
- 
- > +define EXIM_PERMISSIONS
- > +        /var/spool/exim d 755 88 8 - - - - -
- > +endef
- > +
- >  define EXIM_INSTALL_INIT_SYSV
- >  	$(INSTALL) -D -m 755 package/exim/S86exim \
- >  		$(TARGET_DIR)/etc/init.d/S86exim
- > -- 
- > 2.17.1
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
