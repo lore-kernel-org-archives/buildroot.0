@@ -1,92 +1,67 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Feb 2020 14:34:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: fix CVE-2019-14834
-Message-ID: <20200229133437.2780453-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sat, 29 Feb 2020 15:00:01 +0100
+Subject: [Buildroot] [PATCH 1/2] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+In-Reply-To: <20200228231936.1dc26a1f@windsurf.home>
+References: <20200228175814.128730-1-giulio.benetti@benettiengineering.com>
+ <20200228231936.1dc26a1f@windsurf.home>
+Message-ID: <869fef1a-4ce2-d46c-0810-5ef34af29534@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A vulnerability was found in dnsmasq before version 2.81, where the
-memory leak allows remote attackers to cause a denial of service
-(memory consumption) via vectors involving DHCP response creation.
+Hi Thomas, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0004-Fix-memory-leak-in-helper-c.patch    | 49 +++++++++++++++++++
- package/dnsmasq/dnsmasq.mk                    |  3 ++
- 2 files changed, 52 insertions(+)
- create mode 100644 package/dnsmasq/0004-Fix-memory-leak-in-helper-c.patch
+On 2/28/20 11:19 PM, Thomas Petazzoni wrote:
+> On Fri, 28 Feb 2020 18:58:13 +0100
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> On OpenRisc binutils it still present ld bug 21464 leading to a package
+>> protobuf to fail building:
+>> http://autobuild.buildroot.net/results/908/9084cd777aefe0fa8235514c33767d8640ad7a5b/
+>>
+>> The bug was already reported and it's been updated:
+>> https://sourceware.org/bugzilla/show_bug.cgi?id=21464
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>>   toolchain/Config.in | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/toolchain/Config.in b/toolchain/Config.in
+>> index 87509f3d64..d71bb2a65a 100644
+>> --- a/toolchain/Config.in
+>> +++ b/toolchain/Config.in
+>> @@ -81,6 +81,12 @@ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
+>>   config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
+>>   	bool
+>>   
+>> +# https://sourceware.org/bugzilla/show_bug.cgi?id=21464
+>> +# Affect toolchains built with binutils 2.31.1, still not fixed.
+>> +config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+>> +	bool
+>> +	default y if BR2_or1k
+> 
+> The problem here is that we don't have any Config.in options for
+> binutils versions, so should this problem be fixed one day, we would
+> have no way to update this Config.in option.
 
-diff --git a/package/dnsmasq/0004-Fix-memory-leak-in-helper-c.patch b/package/dnsmasq/0004-Fix-memory-leak-in-helper-c.patch
-new file mode 100644
-index 0000000000..c00a9cc3ef
---- /dev/null
-+++ b/package/dnsmasq/0004-Fix-memory-leak-in-helper-c.patch
-@@ -0,0 +1,49 @@
-+From 69bc94779c2f035a9fffdb5327a54c3aeca73ed5 Mon Sep 17 00:00:00 2001
-+From: Simon Kelley <simon@thekelleys.org.uk>
-+Date: Wed, 14 Aug 2019 20:44:50 +0100
-+Subject: [PATCH] Fix memory leak in helper.c
-+
-+Thanks to Xu Mingjie <xumingjie1995@outlook.com> for spotting this.
-+[Retrieved from:
-+http://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=commit;h=69bc94779c2f035a9fffdb5327a54c3aeca73ed5]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/helper.c |   12 +++++++++---
-+ 1 file changed, 9 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/helper.c b/src/helper.c
-+index 33ba120..c392eec 100644
-+--- a/src/helper.c
-++++ b/src/helper.c
-+@@ -80,7 +80,8 @@ int create_helper(int event_fd, int err_fd, uid_t uid, gid_t gid, long max_fd)
-+   pid_t pid;
-+   int i, pipefd[2];
-+   struct sigaction sigact;
-+-
-++  unsigned char *alloc_buff = NULL;
-++  
-+   /* create the pipe through which the main program sends us commands,
-+      then fork our process. */
-+   if (pipe(pipefd) == -1 || !fix_fd(pipefd[1]) || (pid = fork()) == -1)
-+@@ -186,11 +187,16 @@ int create_helper(int event_fd, int err_fd, uid_t uid, gid_t gid, long max_fd)
-+       struct script_data data;
-+       char *p, *action_str, *hostname = NULL, *domain = NULL;
-+       unsigned char *buf = (unsigned char *)daemon->namebuff;
-+-      unsigned char *end, *extradata, *alloc_buff = NULL;
-++      unsigned char *end, *extradata;
-+       int is6, err = 0;
-+       int pipeout[2];
-+ 
-+-      free(alloc_buff);
-++      /* Free rarely-allocated memory from previous iteration. */
-++      if (alloc_buff)
-++	{
-++	  free(alloc_buff);
-++	  alloc_buff = NULL;
-++	}
-+       
-+       /* we read zero bytes when pipe closed: this is our signal to exit */ 
-+       if (!read_write(pipefd[0], (unsigned char *)&data, sizeof(data), 1))
-+-- 
-+1.7.10.4
-+
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index f271523068..3f25ac0885 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -15,6 +15,9 @@ DNSMASQ_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- DNSMASQ_LICENSE = GPL-2.0 or GPL-3.0
- DNSMASQ_LICENSE_FILES = COPYING COPYING-v3
- 
-+# 0004-Fix-memory-leak-in-helper-c.patch
-+DNSMASQ_IGNORE_CVES += CVE-2019-14834
-+
- DNSMASQ_I18N = $(if $(BR2_SYSTEM_ENABLE_NLS),-i18n)
- 
- ifneq ($(BR2_PACKAGE_DNSMASQ_DHCP),y)
+So at the moment it would make sense to only specify in protobuf 
+Config.in that or1k is not supported, right?
+
+> To be honest, I am starting to wonder if we should keep support for
+> OpenRISC. It's using a now quite old gcc version, and I'm not sure the
+> OpenRISC support has been upstreamed to gcc.
+> 
+> Also, we don't have anyone specifically interested in OpenRISC and
+> maintaining it...
+
+I don't know, is it more used than Microblaze or less? Maybe that could 
+give the idea if keep it or not after all the work with gcc workarounds 
+for Microblaze IMHO.
+
 -- 
-2.25.0
+Giulio Benetti
+Benetti Engineering sas
