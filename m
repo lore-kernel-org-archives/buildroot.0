@@ -1,56 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Feb 2020 08:36:11 +0100
-Subject: [Buildroot] [git commit] package/zsh: security bump to version 5.8
-Message-ID: <20200229072735.6DB3A81191@busybox.osuosl.org>
+Date: Sat, 29 Feb 2020 08:39:06 +0100
+Subject: [Buildroot] [git commit] package/lz4: security bump to version 1.9.2
+Message-ID: <20200229072735.8A24581191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=141ec698123d0c9c9b793d39d947060f001aab55
+commit: https://git.buildroot.net/buildroot/commit/?id=4390b365a2dfc4cea5505d44955b2fdef816b2e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2019-20044: In Zsh before 5.8, attackers able to execute
-  commands can regain privileges dropped by the --no-PRIVILEGED option.
-  Zsh fails to overwrite the saved uid, so the original privileges can
-  be restored by executing MODULE_PATH=/dir/with/module zmodload with a
-  module that calls setuid().
+- Fix CVE-2019-17543: LZ4 before 1.9.2 has a heap-based buffer overflow
+  in LZ4_write32 (related to LZ4_compress_destSize), affecting
+  applications that call LZ4_compress_fast with a large input. (This
+  issue can also lead to data corruption.) NOTE: the vendor states "only
+  a few specific / uncommon usages of the API are at risk."
 - Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zsh/zsh.hash | 8 ++++----
- package/zsh/zsh.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/lz4/lz4.hash | 6 +++---
+ package/lz4/lz4.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
-index 79c661d455..2df409c946 100644
---- a/package/zsh/zsh.hash
-+++ b/package/zsh/zsh.hash
-@@ -1,7 +1,7 @@
- # From http://www.zsh.org/pub/MD5SUM
--md5	374f9fdd121b5b90e07abfcad7df0627	zsh-5.7.1.tar.xz
-+md5  e02a5428620b3dd268800c7843b3dd4d  zsh-5.8.tar.xz
- # Calculated based on the hash above and after checking signature
--# http://www.zsh.org/pub/zsh-5.7.1.tar.xz.asc
--sha256 7260292c2c1d483b2d50febfa5055176bd512b32a8833b116177bf5f01e77ee8 zsh-5.7.1.tar.xz
-+# http://www.zsh.org/pub/zsh-5.8.tar.xz.asc
-+sha256  dcc4b54cc5565670a65581760261c163d720991f0d06486da61f8d839b52de27  zsh-5.8.tar.xz
- # Locally calculated
--sha256	d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
-+sha256  d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index b287e3051d..c3d9e52152 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
+diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
+index 5477cb6395..01d0107b3f 100644
+--- a/package/lz4/lz4.hash
++++ b/package/lz4/lz4.hash
+@@ -1,4 +1,4 @@
+ # sha256 locally computed
+-sha256 33af5936ac06536805f9745e0b6d61da606a1f8b4cc5c04dd3cbaca3b9b4fc43  lz4-1.8.3.tar.gz
+-sha256 d15d99c8dc6b0ec22174c0e563a95bc40f9363ca7f9d9d793bb5c5a8e8d0af71  lib/LICENSE
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  programs/COPYING
++sha256  658ba6191fa44c92280d4aa2c271b0f4fbc0e34d249578dd05e50e76d0e5efcc  lz4-1.9.2.tar.gz
++sha256  d15d99c8dc6b0ec22174c0e563a95bc40f9363ca7f9d9d793bb5c5a8e8d0af71  lib/LICENSE
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  programs/COPYING
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index 70e193c51a..2a658fbba5 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZSH_VERSION = 5.7.1
-+ZSH_VERSION = 5.8
- ZSH_SITE = http://www.zsh.org/pub
- ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
+-LZ4_VERSION = 1.8.3
++LZ4_VERSION = 1.9.2
+ LZ4_SITE = $(call github,lz4,lz4,v$(LZ4_VERSION))
+ LZ4_INSTALL_STAGING = YES
+ LZ4_LICENSE = BSD-2-Clause (library), GPL-2.0+ (programs)
