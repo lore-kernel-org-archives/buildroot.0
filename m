@@ -1,92 +1,119 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Mar 2020 17:52:15 +0100
-Subject: [Buildroot] [PATCH 1/2] package/systemd: random-seed: add
- missing header for GRND_NONBLOCK
-In-Reply-To: <20200301162647.438549-1-romain.naour@smile.fr>
-References: <20200301162647.438549-1-romain.naour@smile.fr>
-Message-ID: <20200301165215.GR8743@scaer>
+Date: Sun, 1 Mar 2020 18:39:55 +0100
+Subject: [Buildroot] [PATCH/next v2 4/4] support/testing: add openrc
+ tests
+In-Reply-To: <20200301151747.25723-5-unixmania@gmail.com>
+References: <20200301151747.25723-1-unixmania@gmail.com>
+ <20200301151747.25723-5-unixmania@gmail.com>
+Message-ID: <20200301173954.GS8743@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Carlos, Adam, All,
 
-On 2020-03-01 17:26 +0100, Romain Naour spake thusly:
-> GRND_NONBLOCK has been introduced with the 3.17 kernel version [1]
-> while adding getrandom(2) system call.
+On 2020-03-01 12:17 -0300, unixmania at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> The header missing_random.h is needed for random-seed.c when building
-> with old toolchain, such Sourcery CodeBench ARM 2014.05 (kernel headers
-> 3.13).
+> Two simple tests to ensure that openrc boots without any services crashing
+> with a read only and a read write filing system.
 > 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/454255917
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=c6e9d6f38894798696f23c8084ca7edbf16ee895
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
 
-Applied to master, thanks.
+Thanks for this new runtime test! :-)
+
+Would it make sense to apply just this test to master? Or does it really
+need the version bump first?
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  ...add-missing-header-for-GRND_NONBLOCK.patch | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch
+>  .gitlab-ci.yml                            |  2 +
+>  support/testing/tests/init/test_openrc.py | 51 +++++++++++++++++++++++
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 support/testing/tests/init/test_openrc.py
 > 
-> diff --git a/package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch b/package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch
+> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> index b4dad3173e..382a7c59b2 100644
+> --- a/.gitlab-ci.yml
+> +++ b/.gitlab-ci.yml
+> @@ -368,6 +368,8 @@ tests.init.test_busybox.TestInitSystemBusyboxRoNet: { extends: .runtime_test }
+>  tests.init.test_busybox.TestInitSystemBusyboxRw: { extends: .runtime_test }
+>  tests.init.test_busybox.TestInitSystemBusyboxRwNet: { extends: .runtime_test }
+>  tests.init.test_none.TestInitSystemNone: { extends: .runtime_test }
+> +tests.init.test_openrc.TestInitSystemOpenrcRoFull: { extends: .runtime_test }
+> +tests.init.test_openrc.TestInitSystemOpenrcRwFull: { extends: .runtime_test }
+>  tests.init.test_systemd.TestInitSystemSystemdRoFull: { extends: .runtime_test }
+>  tests.init.test_systemd.TestInitSystemSystemdRoIfupdown: { extends: .runtime_test }
+>  tests.init.test_systemd.TestInitSystemSystemdRoNetworkd: { extends: .runtime_test }
+> diff --git a/support/testing/tests/init/test_openrc.py b/support/testing/tests/init/test_openrc.py
 > new file mode 100644
-> index 0000000000..e74df10e9d
+> index 0000000000..23669a9572
 > --- /dev/null
-> +++ b/package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch
-> @@ -0,0 +1,39 @@
-> +From 806e2011a0ea684b10a07b74c4ee0f817437e8c6 Mon Sep 17 00:00:00 2001
-> +From: Romain Naour <romain.naour@smile.fr>
-> +Date: Sun, 1 Mar 2020 15:19:01 +0100
-> +Subject: [PATCH] random-seed: add missing header for GRND_NONBLOCK
+> +++ b/support/testing/tests/init/test_openrc.py
+> @@ -0,0 +1,51 @@
+> +import infra.basetest
+> +from tests.init.base import InitSystemBase as InitSystemBase
 > +
-> +GRND_NONBLOCK has been introduced with the 3.17 kernel version [1]
-> +while adding getrandom(2) system call.
 > +
-> +The header missing_random.h is needed for random-seed.c when building
-> +with old toolchain, such Sourcery CodeBench ARM 2014.05.
+> +class InitSystemOpenrcBase(InitSystemBase):
+> +    config = \
+> +        """
+> +        BR2_arm=y
+> +        BR2_TOOLCHAIN_EXTERNAL=y
+> +        BR2_INIT_OPENRC=y
+> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+> +        BR2_LINUX_KERNEL=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.5.7"
+> +        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+> +        BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        """
 > +
-> +Fixes:
-> +https://gitlab.com/buildroot.org/buildroot/-/jobs/454255917
+> +    def check_init(self):
+> +        super(InitSystemOpenrcBase, self)
 > +
-> +[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=c6e9d6f38894798696f23c8084ca7edbf16ee895
+> +        # Test all services are OK
+> +        output, _ = self.emulator.run("rc-status -c")
+> +        self.assertEqual(len(output), 0)
 > +
-> +Upstream status:
-> +https://github.com/systemd/systemd/pull/14988
 > +
-> +Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> +---
-> + src/random-seed/random-seed.c | 1 +
-> + 1 file changed, 1 insertion(+)
+> +class TestInitSystemOpenrcRoFull(InitSystemOpenrcBase):
+> +    config = InitSystemOpenrcBase.config + \
+> +        """
+> +        BR2_SYSTEM_DHCP="eth0"
+> +        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+> +        BR2_TARGET_ROOTFS_SQUASHFS=y
+> +        """
 > +
-> +diff --git a/src/random-seed/random-seed.c b/src/random-seed/random-seed.c
-> +index 2fcbcb281a..596bff98f1 100644
-> +--- a/src/random-seed/random-seed.c
-> ++++ b/src/random-seed/random-seed.c
-> +@@ -19,6 +19,7 @@
-> + #include "io-util.h"
-> + #include "log.h"
-> + #include "main-func.h"
-> ++#include "missing_random.h"
-> + #include "missing_syscall.h"
-> + #include "mkdir.h"
-> + #include "parse-util.h"
-> +-- 
-> +2.24.1
+> +    def test_run(self):
+> +        self.start_emulator("squashfs", "zImage", "vexpress-v2p-ca9")
+> +        self.check_init()
 > +
+> +
+> +class TestInitSystemOpenrcRwFull(InitSystemOpenrcBase):
+> +    config = InitSystemOpenrcBase.config + \
+> +        """
+> +        BR2_SYSTEM_DHCP="eth0"
+> +        BR2_TARGET_ROOTFS_EXT2=y
+> +        """
+> +
+> +    def test_run(self):
+> +        self.start_emulator("ext2", "zImage", "vexpress-v2p-ca9")
+> +        self.check_init()
 > -- 
-> 2.24.1
+> 2.18.2
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
