@@ -1,43 +1,35 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  1 Mar 2020 21:09:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/netcat: annotate CVEs
-Message-ID: <20200301200956.211977-1-fontaine.fabrice@gmail.com>
+Date: Sun,  1 Mar 2020 21:14:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/links: annotate CVE-2008-3319
+Message-ID: <20200301201408.212316-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2008-5727, CVE-2008-5728, CVE-2008-5729, CVE-2008-5730 and
-CVE-2008-5742 are misclassified (by our CVE tracker) as affecting
-netcat, while in fact they affect AIST NetCat.
-
-CVE-2015-2214 is misclassified (by our CVE tracker) as affecting netcat,
-while in fact it affects NetCat CMS.
+CVE-2008-3319 is misclassified (by our CVE tracker) as affecting links,
+while in fact it affects Maian Links (https://www.maianlinks.com).
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/netcat/netcat.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/links/links.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/netcat/netcat.mk b/package/netcat/netcat.mk
-index eb7ddcac27..77d29ce788 100644
---- a/package/netcat/netcat.mk
-+++ b/package/netcat/netcat.mk
-@@ -9,4 +9,14 @@ NETCAT_SITE = http://downloads.sourceforge.net/project/netcat/netcat/$(NETCAT_VE
- NETCAT_LICENSE = GPL-2.0+
- NETCAT_LICENSE_FILES = COPYING
+diff --git a/package/links/links.mk b/package/links/links.mk
+index 228a8ed0ee..cc95ec2867 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -11,6 +11,10 @@ LINKS_DEPENDENCIES = host-pkgconf
+ LINKS_LICENSE = GPL-2.0+
+ LINKS_LICENSE_FILES = COPYING
  
-+# CVE-2008-5727, CVE-2008-5728, CVE-2008-5729, CVE-2008-5730 and CVE-2008-5742
-+# are misclassified (by our CVE tracker) as affecting netcat, while in fact
-+# they affect AIST NetCat.
-+NETCAT_IGNORE_CVES += \
-+	CVE-2008-5727 CVE-2008-5728 CVE-2008-5729 CVE-2008-5730 CVE-2008-5742
++# CVE-2008-3319 is misclassified (by our CVE tracker) as affecting links, while
++# in fact it affects Maian Links (https://www.maianlinks.com).
++LINKS_IGNORE_CVES += CVE-2008-3319
 +
-+# CVE-2015-2214 is misclassified (by our CVE tracker) as affecting netcat, while
-+# in fact it affects NetCat CMS.
-+NETCAT_IGNORE_CVES += CVE-2015-2214
-+
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LINKS_GRAPHICS),y)
+ LINKS_CONF_OPTS += --enable-graphics
+ LINKS_DEPENDENCIES += libpng
 -- 
 2.25.0
