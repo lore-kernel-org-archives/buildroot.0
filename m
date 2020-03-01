@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Mar 2020 08:45:50 +0100
+Date: Sun, 1 Mar 2020 09:15:26 +0100
 Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: add missing
  symlinks
 In-Reply-To: <20200227154354.98663-1-james.hilliard1@gmail.com>
 References: <20200227154354.98663-1-james.hilliard1@gmail.com>
-Message-ID: <20200301074550.GD8743@scaer>
+Message-ID: <20200301081526.GE8743@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,14 +17,35 @@ On 2020-02-27 08:43 -0700, James Hilliard spake thusly:
 > As of upstream commit 9cfefbd7fbdaa5ae769e3061c463f8345d146fb7
 > we must manually create symlinks as they are no longer present
 > in the archive but created at installation.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Applied to master, thanks.
+So, as I said, I've applied this to master, for the imminent release.
+
+However, long term, I think we should switch to using the WHENCE file as
+source for the symlinks. Something like:
+
+    LINUX_FIRMWARE_DEPENDENCIES += $(BR2_COREUTILS_HOST_DEPENDENCY)
+
+    define LINUX_FIRMWARE_INSTALL_SYMLINKS
+        $(foreach file,$(LINUX_FIRMWARE_FILES),\
+            sed -r -e '/^Link: $(file) -> (.+)$/!d; s//\1/' $(@D)/WHENCE \
+            |while read link; do \
+                ln -sf --relative $(TARGET_DIR)/lib/firmware/$(file) \
+                    $(TARGET_DIR)/lib/firmware/$(dir $(file))/$${link} || exit 1; \
+            done$(sep))
+    endef
+
+
+Note: totally untested, and known to break when the link has a sub-dir
+component, like:
+
+    Link: netronome/nic_AMDA0096-0001_2x10.nffw -> nic/nic_AMDA0096-0001_2x10.nffw).
+
+Care to have a look, please?
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
 >  package/linux-firmware/linux-firmware.mk | 57 ++++++++++++++++++------
 >  1 file changed, 43 insertions(+), 14 deletions(-)
