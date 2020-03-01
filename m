@@ -1,73 +1,55 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sun,  1 Mar 2020 22:06:09 +0100
-Subject: [Buildroot] [PATCH] package/lxc: cgroups: initialize cpuset properly
-Message-ID: <20200301210609.930954-1-romain.naour@smile.fr>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Sun,  1 Mar 2020 22:18:48 +0100
+Subject: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: decode
+ subprocess output for python3
+Message-ID: <20200301211848.13659-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tests.package.test_lxc.TestLxc failure on gitlab
-is similar to the issue reported by [1] and fixed by [2].
+In Python 3, the functions from the subprocess module return bytes
+(and no longer strings as in Python 2), which must be decoded for
+further text operations.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/454255988
+Now, pkg-stats can be run in Python 3.
 
-[1] https://github.com/NixOS/nixpkgs/issues/75467#issuecomment-569386159
-[2] https://github.com/lxc/lxc/pull/3109
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: J?r?me Pouiller <jezz@sysmic.org>
-Cc: Patrick Havelange <patrick.havelange@essensium.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- ...4-cgroups-initialize-cpuset-properly.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/lxc/0004-cgroups-initialize-cpuset-properly.patch
+ support/scripts/pkg-stats | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lxc/0004-cgroups-initialize-cpuset-properly.patch b/package/lxc/0004-cgroups-initialize-cpuset-properly.patch
-new file mode 100644
-index 0000000000..86aa708d56
---- /dev/null
-+++ b/package/lxc/0004-cgroups-initialize-cpuset-properly.patch
-@@ -0,0 +1,38 @@
-+From 6a8a510211515824ff20699d45f6d07a84f3c02e Mon Sep 17 00:00:00 2001
-+From: Christian Brauner <christian.brauner@ubuntu.com>
-+Date: Sun, 28 Jul 2019 23:13:26 +0200
-+Subject: [PATCH] cgroups: initialize cpuset properly
-+
-+Closes #3108.
-+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-+(cherry picked from commit b31d62b847a3ee013613795094cce4acc12345ef)
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ src/lxc/cgroups/cgfsng.c | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/lxc/cgroups/cgfsng.c b/src/lxc/cgroups/cgfsng.c
-+index 87e12d2dd..7e691d7cc 100644
-+--- a/src/lxc/cgroups/cgfsng.c
-++++ b/src/lxc/cgroups/cgfsng.c
-+@@ -496,12 +496,12 @@ static bool cg_legacy_filter_and_set_cpus(char *path, bool am_initialized)
-+ 	}
-+ 
-+ 	if (!flipped_bit) {
-+-		DEBUG("No isolated or offline cpus present in cpuset");
-+-		return true;
-++		cpulist = lxc_cpumask_to_cpulist(possmask, maxposs);
-++		TRACE("No isolated or offline cpus present in cpuset");
-++	} else {
-++		cpulist = move_ptr(posscpus);
-++		TRACE("Removed isolated or offline cpus from cpuset");
-+ 	}
-+-	DEBUG("Removed isolated or offline cpus from cpuset");
-+-
-+-	cpulist = lxc_cpumask_to_cpulist(possmask, maxposs);
-+ 	if (!cpulist) {
-+ 		ERROR("Failed to create cpu list");
-+ 		return false;
-+-- 
-+2.24.1
-+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 7721d98459..e414ec50f2 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -157,7 +157,7 @@ class Package:
+         o = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[1]
+         lines = o.splitlines()
+         for line in lines:
+-            m = re.match("^([0-9]*) warnings generated", line)
++            m = re.match("^([0-9]*) warnings generated", line.decode())
+             if m:
+                 self.warnings = int(m.group(1))
+                 return
+@@ -351,7 +351,7 @@ def package_init_make_info():
+     # Fetch all variables at once
+     variables = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars",
+                                          "VARS=%_LICENSE %_LICENSE_FILES %_VERSION %_IGNORE_CVES"])
+-    variable_list = variables.splitlines()
++    variable_list = variables.decode().splitlines()
+ 
+     # We process first the host package VERSION, and then the target
+     # package VERSION. This means that if a package exists in both
+@@ -886,7 +886,7 @@ def __main__():
+         package_list = None
+     date = datetime.datetime.utcnow()
+     commit = subprocess.check_output(['git', 'rev-parse',
+-                                      'HEAD']).splitlines()[0]
++                                      'HEAD']).splitlines()[0].decode()
+     print("Build package list ...")
+     packages = get_pkglist(args.npackages, package_list)
+     print("Getting package make info ...")
 -- 
 2.24.1
