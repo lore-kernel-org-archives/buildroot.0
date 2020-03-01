@@ -1,50 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Mar 2020 17:27:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cairo: fix CVE-2018-19876
-In-Reply-To: <87a750ysuq.fsf@tarshish>
-References: <20200229200016.3448256-1-fontaine.fabrice@gmail.com>
- <20200301154235.GL8743@scaer> <87a750ysuq.fsf@tarshish>
-Message-ID: <20200301162731.GQ8743@scaer>
+Date: Sun, 1 Mar 2020 17:32:29 +0100
+Subject: [Buildroot] [git commit] package/systemd: random-seed: add missing
+ header for GRND_NONBLOCK
+Message-ID: <20200301163940.106B28F0B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=0fd23c3e28405e82695fa6a29d5b9e875ad93c9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-01 17:53 +0200, Baruch Siach spake thusly:
-> On Sun, Mar 01 2020, Yann E. MORIN wrote:
-> > On 2020-02-29 21:00 +0100, Fabrice Fontaine spake thusly:
-> >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > As per Peter's review, this is a long shot for a security fix: better
-> > backport the two patches (+autoreconf) for master. The version bump can
-> > then be respun for next or after the merge.
-> > I've marked this as chages-requested in patchwork.
-> Are you sure? This patch is now master commit 91b150dc33841be1.
+GRND_NONBLOCK has been introduced with the 3.17 kernel version [1]
+while adding getrandom(2) system call.
 
-OK, I got super confussed, then:
+The header missing_random.h is needed for random-seed.c when building
+with old toolchain, such Sourcery CodeBench ARM 2014.05 (kernel headers
+3.13).
 
-  - https://patchwork.ozlabs.org/patch/1247071/ wsa the security bump,
-    and the one I reviewed (and came to the same conclusion as Peter),
-    and which I marked as changes-requested;
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/454255917
 
-  - https://patchwork.ozlabs.org/patch/1247133/ is the one Peter
-    applied, and the mail I replied to with the conclusion of the bump,
-    above.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=c6e9d6f38894798696f23c8084ca7edbf16ee895
 
-So, after shaking my head to put everything back in their places, I
-marked 1247071 as enw again, while 1247133 was already marked accepted.
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...seed-add-missing-header-for-GRND_NONBLOCK.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-Damn... Thanks for noticing.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch b/package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch
+new file mode 100644
+index 0000000000..e74df10e9d
+--- /dev/null
++++ b/package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch
+@@ -0,0 +1,39 @@
++From 806e2011a0ea684b10a07b74c4ee0f817437e8c6 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Sun, 1 Mar 2020 15:19:01 +0100
++Subject: [PATCH] random-seed: add missing header for GRND_NONBLOCK
++
++GRND_NONBLOCK has been introduced with the 3.17 kernel version [1]
++while adding getrandom(2) system call.
++
++The header missing_random.h is needed for random-seed.c when building
++with old toolchain, such Sourcery CodeBench ARM 2014.05.
++
++Fixes:
++https://gitlab.com/buildroot.org/buildroot/-/jobs/454255917
++
++[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=c6e9d6f38894798696f23c8084ca7edbf16ee895
++
++Upstream status:
++https://github.com/systemd/systemd/pull/14988
++
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ src/random-seed/random-seed.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/random-seed/random-seed.c b/src/random-seed/random-seed.c
++index 2fcbcb281a..596bff98f1 100644
++--- a/src/random-seed/random-seed.c
+++++ b/src/random-seed/random-seed.c
++@@ -19,6 +19,7 @@
++ #include "io-util.h"
++ #include "log.h"
++ #include "main-func.h"
+++#include "missing_random.h"
++ #include "missing_syscall.h"
++ #include "mkdir.h"
++ #include "parse-util.h"
++-- 
++2.24.1
++
