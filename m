@@ -1,49 +1,103 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Mar 2020 16:47:37 +0100
-Subject: [Buildroot] [git commit branch/next] package/gensio: bump to
- version 1.5.3
-Message-ID: <20200301153654.3CF168F09C@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 01 Mar 2020 17:53:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cairo: fix CVE-2018-19876
+In-Reply-To: <20200301154235.GL8743@scaer>
+References: <20200229200016.3448256-1-fontaine.fabrice@gmail.com>
+ <20200301154235.GL8743@scaer>
+Message-ID: <87a750ysuq.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a4354218c556da19947b02c0445a42c8ddba35c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi Yann,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/gensio/gensio.hash | 6 +++---
- package/gensio/gensio.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Sun, Mar 01 2020, Yann E. MORIN wrote:
+> Fabrice, All,
+>
+> On 2020-02-29 21:00 +0100, Fabrice Fontaine spake thusly:
+>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> As per Peter's review, this is a long shot for a security fix: better
+> backport the two patches (+autoreconf) for master. The version bump can
+> then be respun for next or after the merge.
+>
+> I've marked this as chages-requested in patchwork.
 
-diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
-index b63e459f16..202548bc40 100644
---- a/package/gensio/gensio.hash
-+++ b/package/gensio/gensio.hash
-@@ -1,7 +1,7 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5  eecceb741c34708deb8b29b7b84d5bd0  gensio-1.5.2.tar.gz
--sha1  4209ba80ecd1ead930ee8d9e60f384afd20481bd  gensio-1.5.2.tar.gz
-+md5  d6b0665266f738973b13450c53d83032  gensio-1.5.3.tar.gz
-+sha1  8d041babe8d29f8acb48c6cb0fa543e6f9f63238  gensio-1.5.3.tar.gz
- # Locally computed:
--sha256  9213b05bcab615fe5b9c5d71bb5fe765500271941980ba606904ffc5d0cd30fa  gensio-1.5.2.tar.gz
-+sha256  f5097add3f269594e7a81016af93c147e8f5e8312f27f3d0bfbeeb3aad1ace53  gensio-1.5.3.tar.gz
- sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
- sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
-diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-index 5272c3c0d7..06e55875c0 100644
---- a/package/gensio/gensio.mk
-+++ b/package/gensio/gensio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GENSIO_VERSION = 1.5.2
-+GENSIO_VERSION = 1.5.3
- GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GENSIO_LICENSE_FILES = COPYING.LIB COPYING
+Are you sure? This patch is now master commit 91b150dc33841be1.
+
+baruch
+
+>> ---
+>>  ...vailable-in-cairo_ft_apply_variation.patch | 33 +++++++++++++++++++
+>>  package/cairo/cairo.mk                        |  3 ++
+>>  2 files changed, 36 insertions(+)
+>>  create mode 100644 package/cairo/0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
+>> 
+>> diff --git a/package/cairo/0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch b/package/cairo/0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
+>> new file mode 100644
+>> index 0000000000..10e000d16f
+>> --- /dev/null
+>> +++ b/package/cairo/0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
+>> @@ -0,0 +1,33 @@
+>> +From 90e85c2493fdfa3551f202ff10282463f1e36645 Mon Sep 17 00:00:00 2001
+>> +From: Carlos Garcia Campos <cgarcia@igalia.com>
+>> +Date: Mon, 19 Nov 2018 12:33:07 +0100
+>> +Subject: [PATCH] ft: Use FT_Done_MM_Var instead of free when available in
+>> + cairo_ft_apply_variations
+>> +
+>> +Fixes a crash when using freetype >= 2.9
+>> +[Retrieved from:
+>> +https://gitlab.freedesktop.org/cairo/cairo/-/commit/90e85c2493fdfa3551f202ff10282463f1e36645]
+>> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>> +---
+>> + src/cairo-ft-font.c | 4 ++++
+>> + 1 file changed, 4 insertions(+)
+>> +
+>> +diff --git a/src/cairo-ft-font.c b/src/cairo-ft-font.c
+>> +index 325dd61b4..981973f78 100644
+>> +--- a/src/cairo-ft-font.c
+>> ++++ b/src/cairo-ft-font.c
+>> +@@ -2393,7 +2393,11 @@ skip:
+>> + done:
+>> +         free (coords);
+>> +         free (current_coords);
+>> ++#if HAVE_FT_DONE_MM_VAR
+>> ++        FT_Done_MM_Var (face->glyph->library, ft_mm_var);
+>> ++#else
+>> +         free (ft_mm_var);
+>> ++#endif
+>> +     }
+>> + }
+>> + 
+>> +-- 
+>> +2.24.1
+>> +
+>> diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+>> index 902f505aaa..c6a3dad932 100644
+>> --- a/package/cairo/cairo.mk
+>> +++ b/package/cairo/cairo.mk
+>> @@ -11,6 +11,9 @@ CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
+>>  CAIRO_SITE = http://cairographics.org/releases
+>>  CAIRO_INSTALL_STAGING = YES
+>>  
+>> +# 0002-ft-Use-FT_Done_MM_Var-instead-of-free-when-available-in-cairo_ft_apply_variation.patch
+>> +CAIRO_IGNORE_CVES += CVE-2018-19876
+>> +
+>>  # relocation truncated to fit: R_68K_GOT16O
+>>  ifeq ($(BR2_m68k_cf),y)
+>>  CAIRO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
+>> -- 
+>> 2.25.0
+>> 
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
