@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Mar 2020 08:42:32 +0100
-Subject: [Buildroot] [PATCH v2, 1/1] package/suricata: fix CVE-2019-18792
-In-Reply-To: <20200229224643.4064368-1-fontaine.fabrice@gmail.com>
-References: <20200229224643.4064368-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200301074232.GB8743@scaer>
+Date: Sun, 1 Mar 2020 08:42:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcgroup: fix CVE-2018-14348
+In-Reply-To: <20200229223018.4032175-1-fontaine.fabrice@gmail.com>
+References: <20200229223018.4032175-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200301074250.GC8743@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,9 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2020-02-29 23:46 +0100, Fabrice Fontaine spake thusly:
-> An issue was discovered in Suricata 5.0.0. It is possible to
-> bypass/evade any tcp based signature by overlapping a TCP segment with a
-> fake FIN packet. The fake FIN packet is injected just before the PUSH
-> ACK packet we want to bypass. The PUSH ACK packet (containing the data)
-> will be ignored by Suricata because it overlaps the FIN packet (the
-> sequence and ack number are identical in the two packets). The client
-> will ignore the fake FIN packet because the ACK flag is not set. Both
-> linux and windows clients are ignoring the injected packet.
+On 2020-02-29 23:30 +0100, Fabrice Fontaine spake thusly:
+> libcgroup up to and including 0.41 creates /var/log/cgred with mode 0666
+> regardless of the configured umask, leading to disclosure of information
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -30,74 +24,64 @@ Regards,
 Yann E. MORIN.
 
 > ---
-> Changes v1 -> v2:
->  - Fix trailing whitespace
+>  .../0001-cgrulesengd-remove-umask-0.patch     | 33 +++++++++++++++++++
+>  package/libcgroup/libcgroup.mk                |  3 ++
+>  2 files changed, 36 insertions(+)
+>  create mode 100644 package/libcgroup/0001-cgrulesengd-remove-umask-0.patch
 > 
->  ...004-stream-reject-broken-ACK-packets.patch | 40 +++++++++++++++++++
->  package/suricata/suricata.mk                  |  3 ++
->  2 files changed, 43 insertions(+)
->  create mode 100644 package/suricata/0004-stream-reject-broken-ACK-packets.patch
-> 
-> diff --git a/package/suricata/0004-stream-reject-broken-ACK-packets.patch b/package/suricata/0004-stream-reject-broken-ACK-packets.patch
+> diff --git a/package/libcgroup/0001-cgrulesengd-remove-umask-0.patch b/package/libcgroup/0001-cgrulesengd-remove-umask-0.patch
 > new file mode 100644
-> index 0000000000..9670d73158
+> index 0000000000..1d9077a2d6
 > --- /dev/null
-> +++ b/package/suricata/0004-stream-reject-broken-ACK-packets.patch
-> @@ -0,0 +1,40 @@
-> +From 1c63d3905852f746ccde7e2585600b2199cefb4b Mon Sep 17 00:00:00 2001
-> +From: Victor Julien <victor@inliniac.net>
-> +Date: Thu, 21 Nov 2019 16:10:21 +0100
-> +Subject: [PATCH] stream: reject broken ACK packets
+> +++ b/package/libcgroup/0001-cgrulesengd-remove-umask-0.patch
+> @@ -0,0 +1,33 @@
+> +From 0d88b73d189ea3440ccaab00418d6469f76fa590 Mon Sep 17 00:00:00 2001
+> +From: Michal Hocko <mhocko@suse.com>
+> +Date: Wed, 18 Jul 2018 11:24:29 +0200
+> +Subject: [PATCH] cgrulesengd: remove umask(0)
 > +
-> +Fix evasion posibility by rejecting packets with a broken ACK field.
-> +These packets have a non-0 ACK field, but do not have a ACK flag set.
+> +One of our partners has noticed that cgred daemon is creating a log file
+> +(/var/log/cgred) with too wide permissions (0666) and that is seen as
+> +a security bug because an untrusted user can write to otherwise
+> +restricted area. CVE-2018-14348 has been assigned to this issue.
 > +
-> +Bug #3324.
-> +
-> +Reported-by: Nicolas Adba
-> +(cherry picked from commit fa692df37a796c3330c81988d15ef1a219afc006)
+> +Signed-off-by: Michal Hocko <mhocko@suse.com>
+> +Acked-by: Balbir Singh <bsingharora@gmail.com>
 > +[Retrieved from:
-> +https://github.com/OISF/suricata/commit/1c63d3905852f746ccde7e2585600b2199cefb4b]
+> +https://github.com/libcgroup/libcgroup/commit/0d88b73d189ea3440ccaab00418d6469f76fa590]
 > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > +---
-> + src/stream-tcp.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
+> + src/daemon/cgrulesengd.c | 3 ---
+> + 1 file changed, 3 deletions(-)
 > +
-> +diff --git a/src/stream-tcp.c b/src/stream-tcp.c
-> +index 35e489acba..8653d670c6 100644
-> +--- a/src/stream-tcp.c
-> ++++ b/src/stream-tcp.c
-> +@@ -4759,6 +4759,7 @@ int StreamTcpPacket (ThreadVars *tv, Packet *p, StreamTcpThread *stt,
-> +     /* broken TCP http://ask.wireshark.org/questions/3183/acknowledgment-number-broken-tcp-the-acknowledge-field-is-nonzero-while-the-ack-flag-is-not-set */
-> +     if (!(p->tcph->th_flags & TH_ACK) && TCP_GET_ACK(p) != 0) {
-> +         StreamTcpSetEvent(p, STREAM_PKT_BROKEN_ACK);
-> ++        goto error;
-> +     }
-> + 
-> +     /* If we are on IPS mode, and got a drop action triggered from
-> +@@ -6883,7 +6884,7 @@ static int StreamTcpTest10 (void)
-> + 
-> +     tcph.th_win = htons(5480);
-> +     tcph.th_seq = htonl(10);
-> +-    tcph.th_ack = htonl(11);
-> ++    tcph.th_ack = 0;
-> +     tcph.th_flags = TH_SYN;
-> +     p->tcph = &tcph;
-> + 
-> diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-> index b1f0e18dbc..48a6205eed 100644
-> --- a/package/suricata/suricata.mk
-> +++ b/package/suricata/suricata.mk
-> @@ -11,6 +11,9 @@ SURICATA_LICENSE_FILES = COPYING LICENSE
->  # We're patching configure.ac
->  SURICATA_AUTORECONF = YES
+> +diff --git a/src/daemon/cgrulesengd.c b/src/daemon/cgrulesengd.c
+> +index ea51f11..0d288f3 100644
+> +--- a/src/daemon/cgrulesengd.c
+> ++++ b/src/daemon/cgrulesengd.c
+> +@@ -889,9 +889,6 @@ int cgre_start_daemon(const char *logp, const int logf,
+> + 		} else if (pid > 0) {
+> + 			exit(EXIT_SUCCESS);
+> + 		}
+> +-
+> +-		/* Change the file mode mask. */
+> +-		umask(0);
+> + 	} else {
+> + 		flog(LOG_DEBUG, "Not using daemon mode\n");
+> + 		pid = getpid();
+> diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
+> index 3845627d48..a26d5f2ddf 100644
+> --- a/package/libcgroup/libcgroup.mk
+> +++ b/package/libcgroup/libcgroup.mk
+> @@ -12,6 +12,9 @@ LIBCGROUP_LICENSE_FILES = COPYING
+>  LIBCGROUP_DEPENDENCIES = host-bison host-flex
+>  LIBCGROUP_INSTALL_STAGING = YES
 >  
-> +# 0004-stream-reject-broken-ACK-packets.patch
-> +SURICATA_IGNORE_CVES += CVE-2019-18792
+> +# 0001-cgrulesengd-remove-umask-0.patch
+> +LIBCGROUP_IGNORE_CVES += CVE-2018-14348
 > +
->  SURICATA_DEPENDENCIES = \
->  	host-pkgconf \
->  	$(if $(BR2_PACKAGE_JANSSON),jansson) \
+>  # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+>  # large file support. See https://bugzilla.redhat.com/show_bug.cgi?id=574992
+>  # for more information.
 > -- 
 > 2.25.0
 > 
