@@ -1,136 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Mar 2020 14:21:36 +0100
-Subject: [Buildroot] [PATCH 1/2] package/pure-ftpd: fix CVE-2019-20176
-In-Reply-To: <20200229203416.3462566-1-fontaine.fabrice@gmail.com>
-References: <20200229203416.3462566-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200301132136.GJ8743@scaer>
+From: =?UTF-8?Q?Einar_J=C3=B3n?= <tolvupostur@gmail.com>
+Date: Sun, 1 Mar 2020 14:55:33 +0100
+Subject: [Buildroot] Beaglebone support
+In-Reply-To: <CAPmASeu4KLNSK=nkgb04C4UKwTsDfjyZ0RXOCkF2r3yWyHYWJg@mail.gmail.com>
+References: <CAPmASeu4KLNSK=nkgb04C4UKwTsDfjyZ0RXOCkF2r3yWyHYWJg@mail.gmail.com>
+Message-ID: <CABhNV22j46zXYJimCgP7Z-VK=kbbosiQr0V7ObVW0Y3cW-VVZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello Andrea, Sebastien
 
-On 2020-02-29 21:34 +0100, Fabrice Fontaine spake thusly:
-> In Pure-FTPd 1.0.49, a stack exhaustion issue was discovered in the
-> listdir function in ls.c.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Sorry for the late response. I've been meaning to build and fix the qt5 for
+beaglebone, but I'm in the middle of switching jobs and moving countries,
+and I don't have the buildroot repo.
+The beaglebone_qt5_defconfig should mostly work with the latest addition of
+new ti-sgx drivers (added in November or so). It now builds the latest
+drivers for ti-sgx (which finally builds the KMS plugin for QT), and
+QtMultimedia should work. I have been building QtMultimedia and QtWebEngine
+with the old ti-sgx drivers and writing directly to the frame buffer (no
+acceleration because KMS plugin wouldn't build, no Weston) for over a year.
 
-Series applied to master, thanks.
+I haven't tried that exact setup since the addition, but you probably need
+to add
+BR2_KERNEL_NEEDS_OPENSSL=y
+for it to build. Compare beaglebone_qt5_defconfig to beaglebone_defconfig
+for exact spelling of this option.
 
-Regards,
-Yann E. MORIN.
+There is also an environment variable:
+export QT_QPA_EGLFS_INTEGRATION=eglfs_kms
+that needs to be set to  to use the kms plugin (or
+QT_QPA_EGLFS_INTEGRATION=none to run it without acceleration).
+It can be set on the command line, or a default value in package/qt5/
+qt5base.mk
+See https://doc.qt.io/qt-5.12/embedded-linux.html
 
-> ---
->  ...-to-store-every-file-name-to-display.patch | 70 +++++++++++++++++++
->  package/pure-ftpd/pure-ftpd.mk                |  3 +
->  2 files changed, 73 insertions(+)
->  create mode 100644 package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
-> 
-> diff --git a/package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch b/package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
-> new file mode 100644
-> index 0000000000..2f791d1d6e
-> --- /dev/null
-> +++ b/package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
-> @@ -0,0 +1,70 @@
-> +From aea56f4bcb9948d456f3fae4d044fd3fa2e19706 Mon Sep 17 00:00:00 2001
-> +From: Frank Denis <github@pureftpd.org>
-> +Date: Mon, 30 Dec 2019 17:40:04 +0100
-> +Subject: [PATCH] listdir(): reuse a single buffer to store every file name to
-> + display
-> +
-> +Allocating a new buffer for each entry is useless.
-> +
-> +And as these buffers are allocated on the stack, on systems with a
-> +small stack size, with many entries, the limit can easily be reached,
-> +causing a stack exhaustion and aborting the user session.
-> +
-> +Reported by Antonio Morales from the GitHub Security Lab team, thanks!
-> +[Retrieved from:
-> +https://github.com/jedisct1/pure-ftpd/commit/aea56f4bcb9948d456f3fae4d044fd3fa2e19706]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/ls.c | 15 ++++++++-------
-> + 1 file changed, 8 insertions(+), 7 deletions(-)
-> +
-> +diff --git a/src/ls.c b/src/ls.c
-> +index cf804c7..f8a588f 100644
-> +--- a/src/ls.c
-> ++++ b/src/ls.c
-> +@@ -661,6 +661,8 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
-> +     char *names;
-> +     PureFileInfo *s;
-> +     PureFileInfo *r;
-> ++    char *alloca_subdir;
-> ++    size_t sizeof_subdir;
-> +     int d;
-> + 
-> +     if (depth >= max_ls_depth || matches >= max_ls_files) {
-> +@@ -690,14 +692,12 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
-> +     }
-> +     outputfiles(f, tls_fd);
-> +     r = dir;
-> ++    sizeof_subdir = PATH_MAX + 1U;
-> ++    if ((alloca_subdir = ALLOCA(sizeof_subdir)) == NULL) {
-> ++        goto toomany;
-> ++    }
-> +     while (opt_R && r != s) {
-> +         if (r->name_offset != (size_t) -1 && !chdir(FI_NAME(r))) {
-> +-            char *alloca_subdir;
-> +-            const size_t sizeof_subdir = PATH_MAX + 1U;
-> +-
-> +-            if ((alloca_subdir = ALLOCA(sizeof_subdir)) == NULL) {
-> +-                goto toomany;
-> +-            }
-> +             if (SNCHECK(snprintf(alloca_subdir, sizeof_subdir, "%s/%s",
-> +                                  name, FI_NAME(r)), sizeof_subdir)) {
-> +                 goto nolist;
-> +@@ -706,8 +706,8 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
-> +             wrstr(f, tls_fd, alloca_subdir);
-> +             wrstr(f, tls_fd, ":\r\n\r\n");
-> +             listdir(depth + 1U, f, tls_fd, alloca_subdir);
-> ++
-> +             nolist:
-> +-            ALLOCA_FREE(alloca_subdir);
-> +             if (matches >= max_ls_files) {
-> +                 goto toomany;
-> +             }
-> +@@ -720,6 +720,7 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
-> +         r++;
-> +     }
-> +     toomany:
-> ++    ALLOCA_FREE(alloca_subdir);
-> +     free(names);
-> +     free(dir);
-> +     names = NULL;
-> diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-> index 2d69efe3f9..3af66a066c 100644
-> --- a/package/pure-ftpd/pure-ftpd.mk
-> +++ b/package/pure-ftpd/pure-ftpd.mk
-> @@ -11,6 +11,9 @@ PURE_FTPD_LICENSE = ISC
->  PURE_FTPD_LICENSE_FILES = COPYING
->  PURE_FTPD_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
->  
-> +# 0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
-> +PURE_FTPD_IGNORE_CVES += CVE-2019-20176
-> +
->  PURE_FTPD_CONF_OPTS = \
->  	--with-altlog \
->  	--with-puredb
-> -- 
-> 2.25.0
-> 
+Other stuff to consider:
+1) Note that the framebuffer must be writable for the user running the QT
+program (e.g. "sudo chmod 666 /dev/fb0" ).
+2) There are 2 sets of libgbm: ti-sgx-um and ti-sgx-libgbm provide one each
+(libgbm.so.1.0.0 and libgbm.so.2.0.0). I think the ti-sgx-libgbm should not
+be there at all - ti-sgx-um internalized libgbm recently, and that's
+probably the one to use.
+
+Good luck
+Einar J?n
+
+On Fri, 31 Jan 2020 at 14:28, Andrea Simeoni <andreasimeoni73@gmail.com>
+wrote:
+
+> Hi, because I was not able to run Buildroot on RPi4+Qt5/QML w/ hw
+> acceleration, I'm going to give it a try with a Beaglebone Black.
+>
+> I'm aware you cannot try *all* the almost infinite combinations of
+> packages, but I politely ask if someone tried to use this board with
+> Qt5/QML, QtMultimedia (broken since a lot of years on RPi - not a Buildroot
+> fault, of course!) and omxplayer.
+>
+> I would like to run Qt5 with a GPU driver, not a standard linuxfb.
+> Thanks in advance
+> Andrea
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards
+Einar J?n
++31 610 957234
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200301/b136922c/attachment.html>
