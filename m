@@ -1,55 +1,62 @@
 From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sun,  1 Mar 2020 22:18:48 +0100
-Subject: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: decode
- subprocess output for python3
-Message-ID: <20200301211848.13659-1-titouan.christophe@railnova.eu>
+Date: Sun,  1 Mar 2020 22:25:28 +0100
+Subject: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: clear
+ multiprocessing pools after use
+Message-ID: <20200301212528.15754-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In Python 3, the functions from the subprocess module return bytes
-(and no longer strings as in Python 2), which must be decoded for
-further text operations.
+During the CVE checking phase, we can still see a huge amount of
+Python processes (actually 128) running on the host, even though
+the CVE step is entirely ran in the main thread.
 
-Now, pkg-stats can be run in Python 3.
+These are actually the worker processes spawned to check for the
+packages URL statuses and the latest versions from release-monitoring.
+This is because of an issue in Python's multiprocessing implementation:
+https://bugs.python.org/issue34172
+
+The problem was already there before the CVE matching step was
+introduced, but because pkg-stat was terminating right after the
+release-monitoring step, it went unnoticed.
+
+Also, do not hold a reference to the multiprocessing pool from
+the Package class, as this is not needed.
 
 Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- support/scripts/pkg-stats | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/pkg-stats | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 7721d98459..e414ec50f2 100755
+index 7721d98459..4f653a6ad9 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -157,7 +157,7 @@ class Package:
-         o = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[1]
-         lines = o.splitlines()
-         for line in lines:
--            m = re.match("^([0-9]*) warnings generated", line)
-+            m = re.match("^([0-9]*) warnings generated", line.decode())
-             if m:
-                 self.warnings = int(m.group(1))
-                 return
-@@ -351,7 +351,7 @@ def package_init_make_info():
-     # Fetch all variables at once
-     variables = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars",
-                                          "VARS=%_LICENSE %_LICENSE_FILES %_VERSION %_IGNORE_CVES"])
--    variable_list = variables.splitlines()
-+    variable_list = variables.decode().splitlines()
+@@ -402,11 +402,13 @@ def check_url_status_worker(url, url_status):
  
-     # We process first the host package VERSION, and then the target
-     # package VERSION. This means that if a package exists in both
-@@ -886,7 +886,7 @@ def __main__():
-         package_list = None
-     date = datetime.datetime.utcnow()
-     commit = subprocess.check_output(['git', 'rev-parse',
--                                      'HEAD']).splitlines()[0]
-+                                      'HEAD']).splitlines()[0].decode()
-     print("Build package list ...")
-     packages = get_pkglist(args.npackages, package_list)
-     print("Getting package make info ...")
+ 
+ def check_package_urls(packages):
+-    Package.pool = Pool(processes=64)
++    pool = Pool(processes=64)
+     for pkg in packages:
+-        pkg.url_worker = pkg.pool.apply_async(check_url_status_worker, (pkg.url, pkg.url_status))
++        pkg.url_worker = pool.apply_async(check_url_status_worker, (pkg.url, pkg.url_status))
+     for pkg in packages:
+         pkg.url_status = pkg.url_worker.get(timeout=3600)
++        del pkg.url_worker
++    pool.terminate()
+ 
+ 
+ def release_monitoring_get_latest_version_by_distro(pool, name):
+@@ -479,6 +481,7 @@ def check_package_latest_version(packages):
+     results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
+     for pkg, r in zip(packages, results):
+         pkg.latest_version = r
++    worker_pool.terminate()
+     del http_pool
+ 
+ 
 -- 
 2.24.1
