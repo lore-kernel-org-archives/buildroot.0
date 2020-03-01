@@ -1,36 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  1 Mar 2020 21:00:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libtorrent: annotate CVE-2009-1760
- and CVE-2016-5301
-Message-ID: <20200301200049.211453-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Mar 2020 21:01:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/smack: annotate CVE-2016-10027
+In-Reply-To: <20200301193527.209837-1-fontaine.fabrice@gmail.com>
+References: <20200301193527.209837-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200301210127.476be796@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2009-1760 and CVE-2016-5301 are misclassified (by our CVE tracker)
-as affecting libtorrent, while in fact they affect libtorrent-rasterbar.
+On Sun,  1 Mar 2020 20:35:27 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libtorrent/libtorrent.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+> CVE-2016-10027 is misclassified (by our CVE tracker) as affecting smack, while
+> in fact it affects https://github.com/igniterealtime/Smack.
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/smack/smack.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/smack/smack.mk b/package/smack/smack.mk
+> index d2ac005ab9..1237c8356c 100644
+> --- a/package/smack/smack.mk
+> +++ b/package/smack/smack.mk
+> @@ -11,6 +11,10 @@ SMACK_LICENSE_FILES = COPYING
+>  SMACK_INSTALL_STAGING = YES
+>  SMACK_DEPENDENCIES = host-pkgconf
+>  
+> +# CVE-2016-10027 is misclassified (by our CVE tracker) as affecting smack, while
+> +# in fact it affects https://github.com/igniterealtime/Smack.
+> +SMACK_IGNORE_CVES += CVE-2016-10027
 
-diff --git a/package/libtorrent/libtorrent.mk b/package/libtorrent/libtorrent.mk
-index c8310cab65..17c6f92ab4 100644
---- a/package/libtorrent/libtorrent.mk
-+++ b/package/libtorrent/libtorrent.mk
-@@ -14,6 +14,10 @@ LIBTORRENT_INSTALL_STAGING = YES
- LIBTORRENT_LICENSE = GPL-2.0
- LIBTORRENT_LICENSE_FILES = COPYING
- 
-+# CVE-2009-1760 and CVE-2016-5301 are misclassified (by our CVE tracker) as
-+# affecting libtorrent, while in fact they affect libtorrent-rasterbar.
-+LIBTORRENT_IGNORE_CVES += CVE-2009-1760 CVE-2016-5301
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBTORRENT_CONF_OPTS += --enable-openssl
- LIBTORRENT_DEPENDENCIES += openssl
+I think this should be resolved by adding CPE mappings, not by adding
+an IGNORE_CVES value.
+
+Thomas
 -- 
-2.25.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
