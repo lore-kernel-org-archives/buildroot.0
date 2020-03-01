@@ -1,72 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Mar 2020 08:36:09 +0100
-Subject: [Buildroot] [git commit] package/shellinabox: fix CVE-2018-16789
-Message-ID: <20200301072901.1C5438F01B@busybox.osuosl.org>
+Date: Sun, 1 Mar 2020 08:36:04 +0100
+Subject: [Buildroot] [git commit] package/libcgroup: fix CVE-2018-14348
+Message-ID: <20200301072900.F1A608F01B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5553223297a5ef07220ab5b45bf48973f7166950
+commit: https://git.buildroot.net/buildroot/commit/?id=7d74283309535a6b673cdb95e9aaac28e46523bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libhttp/url.c in shellinabox through 2.20 has an implementation flaw in
-the HTTP request parsing logic. By sending a crafted multipart/form-data
-HTTP request, an attacker could exploit this to force shellinaboxd into
-an infinite loop, exhausting available CPU resources and taking the
-service down.
+libcgroup up to and including 0.41 creates /var/log/cgred with mode 0666
+regardless of the configured umask, leading to disclosure of information
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...-16789-fix-for-broken-multipart-form-data.patch | 26 ++++++++++++++++++++++
- package/shellinabox/shellinabox.mk                 |  3 +++
- 2 files changed, 29 insertions(+)
+ .../0001-cgrulesengd-remove-umask-0.patch          | 33 ++++++++++++++++++++++
+ package/libcgroup/libcgroup.mk                     |  3 ++
+ 2 files changed, 36 insertions(+)
 
-diff --git a/package/shellinabox/0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch b/package/shellinabox/0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch
+diff --git a/package/libcgroup/0001-cgrulesengd-remove-umask-0.patch b/package/libcgroup/0001-cgrulesengd-remove-umask-0.patch
 new file mode 100644
-index 0000000000..4b15f419e3
+index 0000000000..1d9077a2d6
 --- /dev/null
-+++ b/package/shellinabox/0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch
-@@ -0,0 +1,26 @@
-+From 7f47efe1717c381f86566fabe0b1ced8cb98fe8f Mon Sep 17 00:00:00 2001
-+From: irsl <irsl@users.noreply.github.com>
-+Date: Fri, 26 Oct 2018 11:51:15 +0200
-+Subject: [PATCH] fix for broken multipart/form-data
++++ b/package/libcgroup/0001-cgrulesengd-remove-umask-0.patch
+@@ -0,0 +1,33 @@
++From 0d88b73d189ea3440ccaab00418d6469f76fa590 Mon Sep 17 00:00:00 2001
++From: Michal Hocko <mhocko@suse.com>
++Date: Wed, 18 Jul 2018 11:24:29 +0200
++Subject: [PATCH] cgrulesengd: remove umask(0)
 +
-+Malformed multipart/form-data payload results in infinite loop and thus denial of service
-+[Upstream status: https://github.com/shellinabox/shellinabox/pull/446]
++One of our partners has noticed that cgred daemon is creating a log file
++(/var/log/cgred) with too wide permissions (0666) and that is seen as
++a security bug because an untrusted user can write to otherwise
++restricted area. CVE-2018-14348 has been assigned to this issue.
++
++Signed-off-by: Michal Hocko <mhocko@suse.com>
++Acked-by: Balbir Singh <bsingharora@gmail.com>
++[Retrieved from:
++https://github.com/libcgroup/libcgroup/commit/0d88b73d189ea3440ccaab00418d6469f76fa590]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ libhttp/url.c | 3 +++
-+ 1 file changed, 3 insertions(+)
++ src/daemon/cgrulesengd.c | 3 ---
++ 1 file changed, 3 deletions(-)
 +
-+diff --git a/libhttp/url.c b/libhttp/url.c
-+index ed29475..4177871 100644
-+--- a/libhttp/url.c
-++++ b/libhttp/url.c
-+@@ -312,6 +312,9 @@ static void urlParsePostBody(struct URL *url,
-+               }
-+             }
-+           }
-++        } else {
-++           warn("[http] broken multipart/form-data!");
-++           break;
-+         }
-+       }
-+       if (lastPart) {
-diff --git a/package/shellinabox/shellinabox.mk b/package/shellinabox/shellinabox.mk
-index be36804cb7..4c93fdccef 100644
---- a/package/shellinabox/shellinabox.mk
-+++ b/package/shellinabox/shellinabox.mk
-@@ -9,6 +9,9 @@ SHELLINABOX_SITE = $(call github,shellinabox,shellinabox,v$(SHELLINABOX_VERSION)
- SHELLINABOX_LICENSE = GPL-2.0 with OpenSSL exception
- SHELLINABOX_LICENSE_FILES = COPYING GPL-2
++diff --git a/src/daemon/cgrulesengd.c b/src/daemon/cgrulesengd.c
++index ea51f11..0d288f3 100644
++--- a/src/daemon/cgrulesengd.c
+++++ b/src/daemon/cgrulesengd.c
++@@ -889,9 +889,6 @@ int cgre_start_daemon(const char *logp, const int logf,
++ 		} else if (pid > 0) {
++ 			exit(EXIT_SUCCESS);
++ 		}
++-
++-		/* Change the file mode mask. */
++-		umask(0);
++ 	} else {
++ 		flog(LOG_DEBUG, "Not using daemon mode\n");
++ 		pid = getpid();
+diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
+index 3845627d48..a26d5f2ddf 100644
+--- a/package/libcgroup/libcgroup.mk
++++ b/package/libcgroup/libcgroup.mk
+@@ -12,6 +12,9 @@ LIBCGROUP_LICENSE_FILES = COPYING
+ LIBCGROUP_DEPENDENCIES = host-bison host-flex
+ LIBCGROUP_INSTALL_STAGING = YES
  
-+# 0002-CVE-2018-16789-fix-for-broken-multipart-form-data.patch
-+SHELLINABOX_IGNORE_CVES += CVE-2018-16789
++# 0001-cgrulesengd-remove-umask-0.patch
++LIBCGROUP_IGNORE_CVES += CVE-2018-14348
 +
- # Fetching from Github, and patching Makefile.am, so we need to autoreconf
- SHELLINABOX_AUTORECONF = YES
- 
+ # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
+ # large file support. See https://bugzilla.redhat.com/show_bug.cgi?id=574992
+ # for more information.
