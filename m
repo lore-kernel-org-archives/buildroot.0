@@ -1,10 +1,10 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 29 Feb 2020 23:52:21 -0800
-Subject: [Buildroot] [PATCH v3 4/6] package/docker-engine: fix go-module
+Date: Sat, 29 Feb 2020 23:52:22 -0800
+Subject: [Buildroot] [PATCH v3 5/6] package/docker-cli: fix go-module
  package identifier
 In-Reply-To: <20200301075223.1398715-1-christian@paral.in>
 References: <20200301075223.1398715-1-christian@paral.in>
-Message-ID: <20200301075223.1398715-4-christian@paral.in>
+Message-ID: <20200301075223.1398715-5-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-engine/docker-engine.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/docker-cli/docker-cli.mk | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index eb3a7fd29f..e44d561b45 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -11,14 +11,14 @@ DOCKER_ENGINE_LICENSE = Apache-2.0
- DOCKER_ENGINE_LICENSE_FILES = LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 4ad30e0278..12fb563885 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -13,12 +13,13 @@ DOCKER_CLI_LICENSE_FILES = LICENSE
  
- DOCKER_ENGINE_DEPENDENCIES = host-pkgconf
--DOCKER_ENGINE_SRC_SUBDIR = github.com/docker/docker
+ DOCKER_CLI_DEPENDENCIES = host-pkgconf
  
- DOCKER_ENGINE_LDFLAGS = \
- 	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
- 	-X main.Version=$(DOCKER_ENGINE_VERSION)
+-DOCKER_CLI_TAGS = autogen
+-DOCKER_CLI_BUILD_TARGETS = cmd/docker
 -
- DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs autogen
--DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd
++DOCKER_CLI_GOMOD = github.com/docker/cli
+ DOCKER_CLI_LDFLAGS = \
+-	-X github.com/docker/cli/cli.GitCommit=$(DOCKER_CLI_VERSION) \
+-	-X github.com/docker/cli/cli.Version=$(DOCKER_CLI_VERSION)
++	-X $(DOCKER_CLI_GOMOD).GitCommit=$(DOCKER_CLI_VERSION) \
++	-X $(DOCKER_CLI_GOMOD).Version=$(DOCKER_CLI_VERSION)
 +
-+DOCKER_ENGINE_GOMOD = github.com/docker/docker
-+DOCKER_ENGINE_BUILD_TARGETS = $(DOCKER_ENGINE_GOMOD)/cmd/dockerd
++DOCKER_CLI_BUILD_TARGETS = $(DOCKER_CLI_GOMOD)/cmd/docker
++DOCKER_CLI_TAGS = autogen
  
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- DOCKER_ENGINE_TAGS += seccomp
+ ifeq ($(BR2_PACKAGE_DOCKER_CLI_STATIC),y)
+ DOCKER_CLI_LDFLAGS += -extldflags '-static'
 -- 
 2.25.1
