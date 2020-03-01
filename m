@@ -1,99 +1,159 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Mar 2020 08:42:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcgroup: fix CVE-2018-14348
-In-Reply-To: <20200229223018.4032175-1-fontaine.fabrice@gmail.com>
-References: <20200229223018.4032175-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200301074250.GC8743@scaer>
+Date: Sun, 1 Mar 2020 08:44:41 +0100
+Subject: [Buildroot] [git commit] package/linux-firmware: add missing
+ symlinks
+Message-ID: <20200301073249.E01638B7AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=23d12793d54480617f4dd104bc70c53e80582fdb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-02-29 23:30 +0100, Fabrice Fontaine spake thusly:
-> libcgroup up to and including 0.41 creates /var/log/cgred with mode 0666
-> regardless of the configured umask, leading to disclosure of information
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+As of upstream commit 9cfefbd7fbdaa5ae769e3061c463f8345d146fb7
+we must manually create symlinks as they are no longer present
+in the archive but created at installation.
 
-Applied to master, thanks.
+Fixes:
+    http://autobuild.buildroot.net/results/46fdacbe4064d72aaafa9f52741121d8e4fe64ab/
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/linux-firmware/linux-firmware.mk | 57 ++++++++++++++++++++++++--------
+ 1 file changed, 43 insertions(+), 14 deletions(-)
 
-> ---
->  .../0001-cgrulesengd-remove-umask-0.patch     | 33 +++++++++++++++++++
->  package/libcgroup/libcgroup.mk                |  3 ++
->  2 files changed, 36 insertions(+)
->  create mode 100644 package/libcgroup/0001-cgrulesengd-remove-umask-0.patch
-> 
-> diff --git a/package/libcgroup/0001-cgrulesengd-remove-umask-0.patch b/package/libcgroup/0001-cgrulesengd-remove-umask-0.patch
-> new file mode 100644
-> index 0000000000..1d9077a2d6
-> --- /dev/null
-> +++ b/package/libcgroup/0001-cgrulesengd-remove-umask-0.patch
-> @@ -0,0 +1,33 @@
-> +From 0d88b73d189ea3440ccaab00418d6469f76fa590 Mon Sep 17 00:00:00 2001
-> +From: Michal Hocko <mhocko@suse.com>
-> +Date: Wed, 18 Jul 2018 11:24:29 +0200
-> +Subject: [PATCH] cgrulesengd: remove umask(0)
-> +
-> +One of our partners has noticed that cgred daemon is creating a log file
-> +(/var/log/cgred) with too wide permissions (0666) and that is seen as
-> +a security bug because an untrusted user can write to otherwise
-> +restricted area. CVE-2018-14348 has been assigned to this issue.
-> +
-> +Signed-off-by: Michal Hocko <mhocko@suse.com>
-> +Acked-by: Balbir Singh <bsingharora@gmail.com>
-> +[Retrieved from:
-> +https://github.com/libcgroup/libcgroup/commit/0d88b73d189ea3440ccaab00418d6469f76fa590]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/daemon/cgrulesengd.c | 3 ---
-> + 1 file changed, 3 deletions(-)
-> +
-> +diff --git a/src/daemon/cgrulesengd.c b/src/daemon/cgrulesengd.c
-> +index ea51f11..0d288f3 100644
-> +--- a/src/daemon/cgrulesengd.c
-> ++++ b/src/daemon/cgrulesengd.c
-> +@@ -889,9 +889,6 @@ int cgre_start_daemon(const char *logp, const int logf,
-> + 		} else if (pid > 0) {
-> + 			exit(EXIT_SUCCESS);
-> + 		}
-> +-
-> +-		/* Change the file mode mask. */
-> +-		umask(0);
-> + 	} else {
-> + 		flog(LOG_DEBUG, "Not using daemon mode\n");
-> + 		pid = getpid();
-> diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
-> index 3845627d48..a26d5f2ddf 100644
-> --- a/package/libcgroup/libcgroup.mk
-> +++ b/package/libcgroup/libcgroup.mk
-> @@ -12,6 +12,9 @@ LIBCGROUP_LICENSE_FILES = COPYING
->  LIBCGROUP_DEPENDENCIES = host-bison host-flex
->  LIBCGROUP_INSTALL_STAGING = YES
->  
-> +# 0001-cgrulesengd-remove-umask-0.patch
-> +LIBCGROUP_IGNORE_CVES += CVE-2018-14348
-> +
->  # Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
->  # large file support. See https://bugzilla.redhat.com/show_bug.cgi?id=574992
->  # for more information.
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 9d86ce57b2..9aa2e96175 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -71,9 +71,13 @@ endif
+ 
+ # rt2xx
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX),y)
+-# rt3090.bin is a symlink to rt2860.bin
+-# rt3070.bin is a symlink to rt2870.bin
+-LINUX_FIRMWARE_FILES += rt2860.bin rt2870.bin rt3070.bin rt3071.bin rt3090.bin
++define LINUX_FIRMWARE_INSTALL_RALINK_RT2XX_SYMLINKS
++	ln -sf rt2860.bin \
++		$(TARGET_DIR)/lib/firmware/rt3090.bin
++	ln -sf rt2870.bin \
++		$(TARGET_DIR)/lib/firmware/rt3070.bin
++endef
++LINUX_FIRMWARE_FILES += rt2860.bin rt2870.bin rt3071.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink-firmware.txt
+ endif
+ 
+@@ -214,8 +218,13 @@ endif
+ 
+ # sd8688
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688),y)
+-LINUX_FIRMWARE_FILES += libertas/sd8688.bin libertas/sd8688_helper.bin
+-# The two files above are but symlinks to those two ones:
++define LINUX_FIRMWARE_INSTALL_LIBERTAS_SD8688_SYMLINKS
++	mkdir -p $(TARGET_DIR)/lib/firmware/libertas
++	ln -sf ../mrvl/sd8688.bin \
++		$(TARGET_DIR)/lib/firmware/libertas/sd8688.bin
++	ln -sf ../mrvl/sd8688_helper.bin \
++		$(TARGET_DIR)/lib/firmware/libertas/sd8688_helper.bin
++endef
+ LINUX_FIRMWARE_FILES += mrvl/sd8688.bin mrvl/sd8688_helper.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
+ endif
+@@ -320,12 +329,14 @@ endif
+ 
+ # wl127x
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
+-# wl1271-nvs.bin is a symlink to wl127x-nvs.bin
++define LINUX_FIRMWARE_INSTALL_TI_WL127X_SYMLINKS
++	ln -sf wl127x-nvs.bin \
++		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl1271-nvs.bin
++endef
+ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl1271-fw-2.bin \
+ 	ti-connectivity/wl1271-fw-ap.bin \
+ 	ti-connectivity/wl1271-fw.bin \
+-	ti-connectivity/wl1271-nvs.bin \
+ 	ti-connectivity/wl127x-fw-3.bin \
+ 	ti-connectivity/wl127x-fw-plt-3.bin \
+ 	ti-connectivity/wl127x-nvs.bin \
+@@ -341,15 +352,18 @@ endif
+ 
+ # wl128x
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X),y)
+-# wl1271-nvs.bin and wl12xx-nvs.bin are symlinks to wl127x-nvs.bin
++define LINUX_FIRMWARE_INSTALL_TI_WL128X_SYMLINKS
++	ln -sf wl127x-nvs.bin \
++		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl1271-nvs.bin
++	ln -sf wl127x-nvs.bin \
++		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl12xx-nvs.bin
++endef
+ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl128x-fw-3.bin \
+ 	ti-connectivity/wl128x-fw-ap.bin \
+ 	ti-connectivity/wl128x-fw-plt-3.bin \
+ 	ti-connectivity/wl128x-fw.bin \
+-	ti-connectivity/wl1271-nvs.bin \
+ 	ti-connectivity/wl128x-nvs.bin \
+-	ti-connectivity/wl12xx-nvs.bin \
+ 	ti-connectivity/wl127x-nvs.bin \
+ 	ti-connectivity/wl128x-fw-4-mr.bin \
+ 	ti-connectivity/wl128x-fw-4-plt.bin \
+@@ -363,13 +377,15 @@ endif
+ 
+ # wl18xx
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX),y)
+-# wl1271-nvs.bin is a symlink to wl127x-nvs.bin
++define LINUX_FIRMWARE_INSTALL_TI_WL18XX_SYMLINKS
++	ln -sf wl127x-nvs.bin \
++		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl1271-nvs.bin
++endef
+ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl18xx-fw.bin \
+ 	ti-connectivity/wl18xx-fw-2.bin \
+ 	ti-connectivity/wl18xx-fw-3.bin \
+ 	ti-connectivity/wl18xx-fw-4.bin \
+-	ti-connectivity/wl1271-nvs.bin \
+ 	ti-connectivity/wl127x-nvs.bin \
+ 	ti-connectivity/TIInit_7.2.31.bts
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
+@@ -559,8 +575,11 @@ LINUX_FIRMWARE_FILES += \
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QAT_DH895XCC),y)
+-# qat_mmp.bin is a symlink to qat_895xcc_mmp.bin
+-LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin qat_mmp.bin
++define LINUX_FIRMWARE_INSTALL_QAT_DH895XCC_SYMLINKS
++	ln -sf qat_895xcc_mmp.bin \
++		$(TARGET_DIR)/lib/firmware/qat_mmp.bin
++endef
++LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
+ endif
+ 
+@@ -593,6 +612,15 @@ define LINUX_FIRMWARE_INSTALL_DIRS
+ endef
+ endif
+ 
++define LINUX_FIRMWARE_INSTALL_SYMLINKS
++	$(LINUX_FIRMWARE_INSTALL_RALINK_RT2XX_SYMLINKS)
++	$(LINUX_FIRMWARE_INSTALL_LIBERTAS_SD8688_SYMLINKS)
++	$(LINUX_FIRMWARE_INSTALL_TI_WL127X_SYMLINKS)
++	$(LINUX_FIRMWARE_INSTALL_TI_WL128X_SYMLINKS)
++	$(LINUX_FIRMWARE_INSTALL_TI_WL18XX_SYMLINKS)
++	$(LINUX_FIRMWARE_INSTALL_QAT_DH895XCC_SYMLINKS)
++endef
++
+ ifneq ($(LINUX_FIRMWARE_FILES)$(LINUX_FIRMWARE_DIRS),)
+ 
+ # Most firmware files are under a proprietary license, so no need to
+@@ -615,6 +643,7 @@ define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/lib/firmware
+ 	$(LINUX_FIRMWARE_INSTALL_FILES)
+ 	$(LINUX_FIRMWARE_INSTALL_DIRS)
++	$(LINUX_FIRMWARE_INSTALL_SYMLINKS)
+ endef
+ 
+ $(eval $(generic-package))
