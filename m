@@ -1,43 +1,138 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 15:58:41 +0100
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: properly ignore
- CVEs in <pkg>_IGNORE_CVES
-Message-ID: <20200309140909.75B678894D@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 1 Mar 2020 16:46:02 +0100
+Subject: [Buildroot] [git commit] package/gensio: add patch fixing expected
+ identifier before token error
+Message-ID: <20200309140908.918467FB4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1097c0427d3b3f2838d14ee9661226bafc610572
+commit: https://git.buildroot.net/buildroot/commit/?id=05b2c42b135e419ed4489e9e5b06152ff870ccc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It seems like throughout the series that the CVE pkg-stats support
-went through, the support for ignoring CVEs in the per-package
-<pkg>_IGNORE_CVES variable was forgotten.
+Fixes:
+http://autobuild.buildroot.net/results/d33c6cc6154607c6f1f8fdde3569cfcc4b9d2330/
 
-Let's re-introduce this, which is now very simple thanks to the CVE
-class, its .identifier() propertly and the .is_cve_ignored() method of
-the Package class
-
-Cc: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/scripts/pkg-stats | 3 +++
- 1 file changed, 3 insertions(+)
+ ...filter-Rename-some-variables-to-tr_stdxxx.patch | 109 +++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 01a0a0d53d..7721d98459 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -260,6 +260,9 @@ class CVE:
-         True if the Buildroot Package object passed as argument is affected
-         by this CVE.
-         """
-+        if br_pkg.is_cve_ignored(self.identifier):
-+            return False
+diff --git a/package/gensio/0001-filter-Rename-some-variables-to-tr_stdxxx.patch b/package/gensio/0001-filter-Rename-some-variables-to-tr_stdxxx.patch
+new file mode 100644
+index 0000000000..fdc78d334d
+--- /dev/null
++++ b/package/gensio/0001-filter-Rename-some-variables-to-tr_stdxxx.patch
+@@ -0,0 +1,109 @@
++From 601e6e56f44b91d957bb643662455f52540f336a Mon Sep 17 00:00:00 2001
++From: Corey Minyard <cminyard@mvista.com>
++Date: Tue, 25 Feb 2020 16:08:40 -0600
++Subject: [PATCH] filter: Rename some variables to tr_stdxxx
 +
-         for product in self.each_product():
-             if product['product_name'] != br_pkg.name:
-                 continue
++stdout and stderr can be macros, don't use the names directly.
++
++Signed-off-by: Corey Minyard <cminyard@mvista.com>
++[james.hilliard1 at gmail.com: backport from upstream commit
++601e6e56f44b91d957bb643662455f52540f336a]
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++---
++ lib/gensio_filter_trace.c | 28 ++++++++++++++--------------
++ 1 file changed, 14 insertions(+), 14 deletions(-)
++
++diff --git a/lib/gensio_filter_trace.c b/lib/gensio_filter_trace.c
++index d39d58b..abe2db6 100644
++--- a/lib/gensio_filter_trace.c
+++++ b/lib/gensio_filter_trace.c
++@@ -32,8 +32,8 @@ struct trace_filter {
++     enum trace_dir dir;
++     bool raw;
++     char *filename;
++-    bool stdout;
++-    bool stderr;
+++    bool tr_stdout;
+++    bool tr_stderr;
++ 
++     FILE *tr;
++ };
++@@ -82,9 +82,9 @@ trace_try_connect(struct gensio_filter *filter, struct timeval *timeout)
++ {
++     struct trace_filter *tfilter = filter_to_trace(filter);
++ 
++-    if (tfilter->stdout) {
+++    if (tfilter->tr_stdout) {
++ 	tfilter->tr = stdout;
++-    } else if (tfilter->stderr) {
+++    } else if (tfilter->tr_stderr) {
++ 	tfilter->tr = stderr;
++     } else if (tfilter->filename) {
++ 	tfilter->tr = fopen(tfilter->filename, "a+");
++@@ -99,7 +99,7 @@ trace_try_disconnect(struct gensio_filter *filter, struct timeval *timeout)
++ {
++     struct trace_filter *tfilter = filter_to_trace(filter);
++ 
++-    if (!tfilter->stdout && !tfilter->stderr && tfilter->tr)
+++    if (!tfilter->tr_stdout && !tfilter->tr_stderr && tfilter->tr)
++ 	fclose(tfilter->tr);
++     tfilter->tr = NULL;
++     return 0;
++@@ -331,12 +331,12 @@ static int gensio_trace_filter_func(struct gensio_filter *filter, int op,
++ 
++ static struct gensio_filter *
++ gensio_trace_filter_raw_alloc(struct gensio_os_funcs *o, enum trace_dir dir,
++-			      bool raw, const char *filename, bool stdout,
++-			      bool stderr)
+++			      bool raw, const char *filename, bool tr_stdout,
+++			      bool tr_stderr)
++ {
++     struct trace_filter *tfilter;
++ 
++-    if (!filename && !stdout && !stderr)
+++    if (!filename && !tr_stdout && !tr_stderr)
++ 	dir = TRACE_NONE;
++ 
++     tfilter = o->zalloc(o, sizeof(*tfilter));
++@@ -351,8 +351,8 @@ gensio_trace_filter_raw_alloc(struct gensio_os_funcs *o, enum trace_dir dir,
++ 	if (!tfilter->filename)
++ 	    goto out_nomem;
++     }
++-    tfilter->stdout = stdout;
++-    tfilter->stderr = stderr;
+++    tfilter->tr_stdout = tr_stdout;
+++    tfilter->tr_stderr = tr_stderr;
++ 
++     tfilter->lock = o->alloc_lock(o);
++     if (!tfilter->lock)
++@@ -385,7 +385,7 @@ gensio_trace_filter_alloc(struct gensio_os_funcs *o,
++ {
++     struct gensio_filter *filter;
++     int dir = TRACE_NONE;
++-    bool raw = false, stdout = false, stderr = false;
+++    bool raw = false, tr_stdout = false, tr_stderr = false;
++     const char *filename = NULL;
++     unsigned int i;
++ 
++@@ -396,15 +396,15 @@ gensio_trace_filter_alloc(struct gensio_os_funcs *o,
++ 	    continue;
++ 	if (gensio_check_keyvalue(args[i], "file", &filename) > 0)
++ 	    continue;
++-	if (gensio_check_keybool(args[i], "stdout", &stdout) > 0)
+++	if (gensio_check_keybool(args[i], "stdout", &tr_stdout) > 0)
++ 	    continue;
++-	if (gensio_check_keybool(args[i], "stderr", &stderr) > 0)
+++	if (gensio_check_keybool(args[i], "stderr", &tr_stderr) > 0)
++ 	    continue;
++ 	return GE_INVAL;
++     }
++ 
++     filter = gensio_trace_filter_raw_alloc(o, dir, raw, filename,
++-					   stdout, stderr);
+++					   tr_stdout, tr_stderr);
++     if (!filter)
++ 	return GE_NOMEM;
++ 
++-- 
++2.20.1
++
