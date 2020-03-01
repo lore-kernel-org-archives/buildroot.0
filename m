@@ -1,152 +1,152 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 1 Jan 2020 00:44:09 +0100
-Subject: [Buildroot] [PATCH] package/libnss: fix build failure due to HW
- PPC Crypto bug
-In-Reply-To: <a45613d1-5d52-9c80-8b79-a1eda19e83f0@xes-inc.com>
-References: <20191227165427.107111-1-giulio.benetti@benettiengineering.com>
- <20191231180736.09a5add2@windsurf>
- <496f5949-570f-2678-6bcd-67660692479b@benettiengineering.com>
- <08c5d316-d21b-f361-1506-af6a3bdd46e0@xes-inc.com>
- <a45613d1-5d52-9c80-8b79-a1eda19e83f0@xes-inc.com>
-Message-ID: <a1f74ad6-8dbc-e515-1393-c81ec6013472@benettiengineering.com>
+From: Christian Stewart <christian@paral.in>
+Date: Sat, 29 Feb 2020 23:52:18 -0800
+Subject: [Buildroot] [PATCH v3 1/6] package/go: implement go modules
+ integration
+Message-ID: <20200301075223.1398715-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
+This commit moves from the GOPATH mechanism to the new GO111MODULE approach for
+Go based packages. Old Go packages compile with small tweaks.
 
+The Go module system replaces the GOPATH mechanism by allowing the Go tool to
+work with packages correctly without a GOPATH tree.
 
-On 1/1/20 12:31 AM, Vincent Fazio wrote:
-> 
-> On 12/31/19 4:49 PM, Vincent Fazio wrote:
->> Gang,
->>
->> Just going to toss my $.02 in...
->>
->> On 12/31/19 3:24 PM, Giulio Benetti wrote:
->>> Hi Thomas,
->>>
->>> On 12/31/19 6:07 PM, Thomas Petazzoni wrote:
->>>> On Fri, 27 Dec 2019 17:54:27 +0100
->>>> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
->>>>
->>>>> diff --git
->>>>> a/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
->>>>> b/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
->>>>>
->>>>> new file mode 100644
->>>>> index 0000000000..0b891b5ebc
->>>>> --- /dev/null
->>>>> +++
->>>>> b/package/libnss/0005-Bug-1606119-Fix-PPC-HW-Crypto-build-failure.patch
->>>>>
->>>>> @@ -0,0 +1,37 @@
->>>>> +From 09b3776a924736049693a118d5a8d883e8c794ca Mon Sep 17 00:00:00
->>>>> 2001
->>>>> +From: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>>>> +Date: Fri, 27 Dec 2019 17:41:04 +0100
->>>>> +Subject: [PATCH] Bug 1606119 - Fix PPC HW Crypto build failure
->>>>> +
->>>>> +Only Big Endian Altivec functions are used, not Little Endian
->>>>> ones, so
->>>>> +let's change check if USE_PPC_CRYPTO by changing to IS_BIG_ENDIAN
->>>>> +instead of IS_LITTLE_ENDIAN.
->>>>> +
->>>>> +Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>>>
->>>> I don't understand the reasoning here. From a quick look, the undefined
->>>> symbols reported in the build log come from the file
->>>> ./nss/lib/freebl/gcm-ppc.c.
->>>>
->>>> This file is included in the build in nss/lib/freebl/Makefile if
->>>> CPU_ARCH=ppc.
->>>>
->>>> However CPU_ARCH=ppc is only set in nss/coreconf/Linux.mk as follows:
->>>>
->>>> ifeq (,$(filter-out ppc64 ppc64le,$(OS_TEST)))
->>>>  ???????? CPU_ARCH??????? = ppc
->>>> ifeq ($(USE_64),1)
->>>>  ???????? ARCHFLAG??????? = -m64
->>>> endif
->>>>
->>>> In libnss.mk, we pass OS_TEST=$(LIBNSS_ARCH), which basically is the
->>>> value of $(BR2_ARCH), which is powerpc64 or powerpc64le in Buildroot.
->>>>
->>>> So, regardless of whether we are big endian PPC64 or little endian
->>>> PPC64, the gcm-ppc.c file will not be included in the build.
->>>>
->>>> Am I missing something ? Could you explain a bit better how you came to
->>>> the conclusion you have in this patch ?
->>>
->>> The point is that gcm-ppc.c gets compiled, but inside it there's an
->>> #if defined(USE_PPC_CRYPTO) on top of the file, that is defined in
->>> gsm.h only #if __powerpc64__ and LITTLE_ENDIAN. But inside gcm-ppc.c
->>> they use _be() Altivec functions. Basically they have inverted
->>> LITTLE_ENDIAN with BIB_ENDIAN, since they use Big Endian only Altivec
->>> functions in gcm-ppc.c so the only wrong piece of code is in gcm.h,
->>> where USE_PPC_CRYPTO is defined.
->>>
->> I assume you mean this in gcm_HashMult_hw:
+Reference: https://github.com/golang/go/wiki/Modules
 
-Yes
+Signed-off-by: Christian Stewart <christian@paral.in>
 
->>
->>  ??????? /* clang needs the following cast away from const; maybe a bug
->> in 7.0.0 */
->>  ??????? v = (vec_u64)vec_xl_be(0, (unsigned char *)buf);
->>
->> It should be fine to call endian specific functions if you know how
->> the data is stored.
+v2 -> v3:
 
-I've completely understood vec_xl_be() wrong.
+ - cjs: cleaned up spelling and moved extract hook to configure step
+ - cjs: applied fixes from vincent fazio related to host packages
 
->>
->>> Need only to invert the condition by which USE_PPC_CRYPTO is defined:
->>> BIG_ENDIAN instead of LITTLE_ENDIAN.
->>>
->>> Best regards
->>
->> Based on the below commit, it was tested on a POWER8, presumably in LE
->> mode, so I'd be hesitant to switch any endian checks:
->> https://hg.mozilla.org/projects/nss/rev/3d7e509d6d20ecd607a28fa6ce42e4ffd9c51443
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/go/go.mk      |  8 ++++++--
+ package/pkg-golang.mk | 31 +++++++++++++++++++------------
+ 2 files changed, 25 insertions(+), 14 deletions(-)
 
-Right.
-
->>
->>
->> The bigger issue may be that 'vec_xl_be' wasn't introduced until GCC 8
->> and the toolchain used in the failed build is GCC 7, so that function
->> is not available in altivec.h:
->> https://github.com/gcc-mirror/gcc/commit/f7b0548e5eba54b637977e3df4d4daf0cabe474d
-
-Ok
-
->>
->>
->> So if we stick with nss-3.48, the package should likely depend on
->> BR2_TOOLCHAIN_GCC_AT_LEAST_8.
-
-This ^^^ is too restrictive, but...
-
-> Or don't utilize PPC hardware accelerated instructions by undefining
-> USE_PPC_CRYPTO... which is probably the saner option :-). This would
-> give the semblance that the compile worked as expected since the hashing
-> function will now be available, but Thomas' concern re CPU_ARCH and the
-> future inclusion of ppc specific source is still valid.
-
-...this is a good idea. So with gcc version < 8.x let's disable 
-USE_PPC_CRYPTO and with gcc version >= 8.x let's enable it only if 
-LITTLE_ENDIAN. So at this point I would change my upstream patch to do 
-that in NSS, since there's already a gcc version check but only against 
-version 5.x(>=) that instead needs to be >= 8.x.
-
-Thanks for all the explanations!
-
-Best regards
-and
-happy new year! For me at least :-)
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 376c3db7f0..1291874b1d 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -15,6 +15,8 @@ HOST_GO_DEPENDENCIES = host-go-bootstrap
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/usr/share/host-go-cache
+ HOST_GO_ROOT = $(HOST_DIR)/lib/go
+ HOST_GO_TARGET_CACHE = $(HOST_DIR)/usr/share/go-cache
++# used for go module downloads
++HOST_GO_GOPATH = $(DL_DIR)/go-module
+ 
+ ifeq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
+ 
+@@ -43,13 +45,15 @@ else ifeq ($(BR2_mips64el),y)
+ GO_GOARCH = mips64le
+ endif
+ 
+-# For the convienience of target packages.
++# For the convenience of target packages.
+ HOST_GO_TOOLDIR = $(HOST_GO_ROOT)/pkg/tool/linux_$(GO_GOARCH)
+ HOST_GO_TARGET_ENV = \
+-	GO111MODULE=off \
++	GO111MODULE=on \
+ 	GOARCH=$(GO_GOARCH) \
+ 	GOCACHE="$(HOST_GO_TARGET_CACHE)" \
++	GOPROXY=off \
+ 	GOROOT="$(HOST_GO_ROOT)" \
++	GOPATH="$(HOST_GO_GOPATH)" \
+ 	CC="$(TARGET_CC)" \
+ 	CXX="$(TARGET_CXX)" \
+ 	GOTOOLDIR="$(HOST_GO_TOOLDIR)"
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 2494ce028c..7b5c263806 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -35,8 +35,16 @@ GO_TARGET_ENV = \
+ 	$(GO_COMMON_ENV)
+ 
+ GO_HOST_ENV = \
++	CC=$(HOSTCC_NOCCACHE) \
++	CXX=$(HOSTCXX_NOCCACHE) \
+ 	CGO_CFLAGS="$(HOST_CFLAGS)" \
+ 	CGO_LDFLAGS="$(HOST_LDFLAGS)" \
++	GO111MODULE=on \
++	GOCACHE="$(HOST_GO_TARGET_CACHE)" \
++	GOPROXY=off \
++	GOROOT="$(HOST_GO_ROOT)" \
++	GOPATH="$(HOST_GO_GOPATH)" \
++	GOTOOLDIR="$(HOST_GO_TOOLDIR)" \
+ 	$(GO_COMMON_ENV)
+ 
+ ################################################################################
+@@ -60,6 +68,7 @@ $(2)_WORKSPACE ?= _gopath
+ 
+ $(2)_BUILD_OPTS += \
+ 	-ldflags "$$($(2)_LDFLAGS)" \
++	-mod=vendor \
+ 	-tags "$$($(2)_TAGS)" \
+ 	-trimpath \
+ 	-p $(PARALLEL_JOBS)
+@@ -79,23 +88,23 @@ endif
+ 
+ $(2)_INSTALL_BINS ?= $(1)
+ 
+-# Source files in Go should be extracted in a precise folder in the hierarchy
+-# of GOPATH. It usually resolves around domain/vendor/software. By default, we
+-# derive domain/vendor/software from the upstream URL of the project, but we
+-# allow $(2)_SRC_SUBDIR to be overridden if needed.
++# Source files in Go usually use an import path resolved around
++# domain/vendor/software. We infer domain/vendor/software from the upstream URL
++# of the project. $(2)_GOMOD can be overridden.
+ $(2)_SRC_DOMAIN = $$(call domain,$$($(2)_SITE))
+ $(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
+ $(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
++$(2)_SRC_PATH = $$(@D)
+ 
+-$(2)_SRC_SUBDIR ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
+-$(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
++$(2)_GOMOD ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
+ 
+ # Configure step. Only define it if not already defined by the package .mk
+ # file.
+ ifndef $(2)_CONFIGURE_CMDS
+ define $(2)_CONFIGURE_CMDS
+-	mkdir -p $$(dir $$($(2)_SRC_PATH))
+-	ln -sf $$(@D) $$($(2)_SRC_PATH)
++	if [ ! -f $$($(2)_SRC_PATH)/go.mod ] && [ -n "$$($(2)_GOMOD)" ]; then \
++		printf "module $$($(2)_GOMOD)\n" > $$($(2)_SRC_PATH)/go.mod; \
++	fi
+ endef
+ endif
+ 
+@@ -113,11 +122,10 @@ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+ 		cd $$($(2)_SRC_PATH); \
+ 		$$(GO_TARGET_ENV) \
+-			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
+ 			$$($(2)_GO_ENV) \
+ 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
+ 			-o $$(@D)/bin/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
+-			./$$(d)
++			$$(d)
+ 	)
+ endef
+ else
+@@ -126,11 +134,10 @@ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+ 		cd $$($(2)_SRC_PATH); \
+ 		$$(GO_HOST_ENV) \
+-			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
+ 			$$($(2)_GO_ENV) \
+ 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
+ 			-o $$(@D)/bin/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
+-			./$$(d)
++			$$(d)
+ 	)
+ endef
+ endif
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.25.1
