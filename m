@@ -1,7 +1,10 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sun,  1 Mar 2020 12:17:43 -0300
-Subject: [Buildroot] [PATCH/next v2 0/4] openrc: bump to version 0.42.1
-Message-ID: <20200301151747.25723-1-unixmania@gmail.com>
+Date: Sun,  1 Mar 2020 12:17:44 -0300
+Subject: [Buildroot] [PATCH/next v2 1/4] package/openrc: drop custom getty
+ service
+In-Reply-To: <20200301151747.25723-1-unixmania@gmail.com>
+References: <20200301151747.25723-1-unixmania@gmail.com>
+Message-ID: <20200301151747.25723-2-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +13,164 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-1. Drop the custom getty service, which has issues with openrc 0.42.1.
-   Use the already existing agetty service, with two small patches.
+In Buildroot getty is provided by BusyBox or util-linux (agetty). Both
+create a /sbin/getty symlink pointing to the actual program, so make the
+agetty service use that path instead of /sbin/agetty.
 
-2. Bump openrc to version 0.42.1. It requires a patch to prevent
-   starting spurions agetty instances for tty[1-6].
+Also start agetty after all other services, to prevent mixing startup
+messages with the getty prompt on devices with a single serial console.
 
-3. Add selinux support.
+This allows us to drop the custom getty service, which causes an error
+message from openrc 0.42.1 (in a forthcoming patch):
 
-4. Add openrc tests.
+    Error: getty is the name of a real and virtual service.
 
-Adam Duskett (3):
-  package/openrc: bump to version 0.42.1
-  package/openrc: add libselinux support
-  support/testing: add openrc tests
+The patches are required because it's not possible to override the
+command or startup order by means of a configuration file. Anyway it's
+still better to patch something maintained upstream than depending on a
+custom piece that may easily become obsolete.
 
-Carlos Santos (1):
-  package/openrc: drop custom getty service
-
- .gitlab-ci.yml                                |  2 +
- ...ty-replace-sbin-agetty-by-sbin-getty.patch | 33 ++++++++++++
- ...getty-start-agetty-after-all-sevices.patch | 29 +++++++++++
- ...-add-agetty.tty-1-6-if-MKSYSVINIT-ye.patch | 34 +++++++++++++
- package/openrc/getty                          | 24 ---------
- package/openrc/openrc.hash                    |  2 +-
- package/openrc/openrc.mk                      | 18 ++++---
- support/testing/tests/init/test_openrc.py     | 51 +++++++++++++++++++
- 8 files changed, 161 insertions(+), 32 deletions(-)
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+CC: Adam Duskett <Aduskett@gmail.com>
+---
+ ...ty-replace-sbin-agetty-by-sbin-getty.patch | 33 +++++++++++++++++++
+ ...getty-start-agetty-after-all-sevices.patch | 29 ++++++++++++++++
+ package/openrc/getty                          | 24 --------------
+ package/openrc/openrc.mk                      |  8 ++---
+ 4 files changed, 65 insertions(+), 29 deletions(-)
  create mode 100644 package/openrc/0003-init.d-agetty-replace-sbin-agetty-by-sbin-getty.patch
  create mode 100644 package/openrc/0004-init.d-agetty-start-agetty-after-all-sevices.patch
- create mode 100644 package/openrc/0005-runlevels-do-not-add-agetty.tty-1-6-if-MKSYSVINIT-ye.patch
  delete mode 100755 package/openrc/getty
- create mode 100644 support/testing/tests/init/test_openrc.py
 
+diff --git a/package/openrc/0003-init.d-agetty-replace-sbin-agetty-by-sbin-getty.patch b/package/openrc/0003-init.d-agetty-replace-sbin-agetty-by-sbin-getty.patch
+new file mode 100644
+index 0000000000..feeff22254
+--- /dev/null
++++ b/package/openrc/0003-init.d-agetty-replace-sbin-agetty-by-sbin-getty.patch
+@@ -0,0 +1,33 @@
++From b39ab180358ed451eae9df900f49a72ef1eb7442 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <unixmania@gmail.com>
++Date: Sun, 1 Mar 2020 09:04:48 -0300
++Subject: [PATCH] init.d/agetty: replace /sbin/agetty by /sbin/getty
++
++In Buildroot getty is provided by BusyBox or util-linux (agetty). Both
++create a /sbin/getty symlink pointing to the actual program, so make the
++agetty service use that path instead of /sbin/agetty.
++
++The patch is required because it's not possible to override the command
++by means of a configuration file.
++
++Signed-off-by: Carlos Santos <unixmania@gmail.com>
++---
++ init.d/agetty.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/init.d/agetty.in b/init.d/agetty.in
++index e4866f7a..e1864628 100644
++--- a/init.d/agetty.in
+++++ b/init.d/agetty.in
++@@ -14,7 +14,7 @@ supervisor=supervise-daemon
++ port="${RC_SVCNAME#*.}"
++ respawn_period="${respawn_period:-60}"
++ term_type="${term_type:-linux}"
++-command=/sbin/agetty
+++command=/sbin/getty
++ command_args_foreground="${agetty_options} ${port} ${baud} ${term_type}"
++ pidfile="/run/${RC_SVCNAME}.pid"
++ 
++-- 
++2.18.2
++
+diff --git a/package/openrc/0004-init.d-agetty-start-agetty-after-all-sevices.patch b/package/openrc/0004-init.d-agetty-start-agetty-after-all-sevices.patch
+new file mode 100644
+index 0000000000..f1c927a450
+--- /dev/null
++++ b/package/openrc/0004-init.d-agetty-start-agetty-after-all-sevices.patch
+@@ -0,0 +1,29 @@
++From c2dc04f6b8c6784941b896e0b17c160dd43a566f Mon Sep 17 00:00:00 2001
++From: Carlos Santos <unixmania@gmail.com>
++Date: Sun, 1 Mar 2020 11:14:37 -0300
++Subject: [PATCH] init.d/agetty: start agetty after all services
++
++This is required for Buildroot, to prevent mixing service initialization
++messages with the getty prompt on devices with a single serial console.
++
++Signed-off-by: Carlos Santos <unixmania@gmail.com>
++---
++ init.d/agetty.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/init.d/agetty.in b/init.d/agetty.in
++index e1864628..a1ad4e9f 100644
++--- a/init.d/agetty.in
+++++ b/init.d/agetty.in
++@@ -19,7 +19,7 @@ command_args_foreground="${agetty_options} ${port} ${baud} ${term_type}"
++ pidfile="/run/${RC_SVCNAME}.pid"
++ 
++ depend() {
++-	after local
+++	after *
++ 	keyword -prefix
++ 	provide getty
++ }
++-- 
++2.18.2
++
+diff --git a/package/openrc/getty b/package/openrc/getty
+deleted file mode 100755
+index 8fcb071f8a..0000000000
+--- a/package/openrc/getty
++++ /dev/null
+@@ -1,24 +0,0 @@
+-#!/sbin/openrc-run
+-# based on agetty service from OpenRC package
+-
+-description="start getty on terminal"
+-supervisor=supervise-daemon
+-port="${RC_SVCNAME#*.}"
+-term_type="${term_type:-linux}"
+-command=/sbin/getty
+-command_args_foreground="${getty_options} ${baud} ${port} ${term_type}"
+-pidfile="/run/${RC_SVCNAME}.pid"
+-
+-depend() {
+-	# start getty at the very end of init
+-	after *
+-	keyword -prefix
+-}
+-
+-start_pre() {
+-	export EINFO_QUIET="${quiet:-yes}"
+-}
+-
+-stop_pre() {
+-	export EINFO_QUIET="${quiet:-yes}"
+-}
+diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
+index 1f8516f5ee..ce0b05e965 100644
+--- a/package/openrc/openrc.mk
++++ b/package/openrc/openrc.mk
+@@ -68,17 +68,15 @@ endef
+ OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_REMOVE_UNNEEDED
+ 
+ ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+-OPENRC_GETTY_SVCNAME = getty.$(SYSTEM_GETTY_PORT)
++OPENRC_GETTY_SVCNAME = agetty.$(SYSTEM_GETTY_PORT)
+ OPENRC_GETTY_CONF_D = $(TARGET_DIR)/etc/conf.d/$(OPENRC_GETTY_SVCNAME)
+ define OPENRC_SET_GETTY
+ 	{ \
+ 		echo "baud=\"$(SYSTEM_GETTY_BAUDRATE)\""; \
+ 		echo "term_type=\"$(SYSTEM_GETTY_TERM)\"" ; \
+-		echo "getty_options=\"-L $(SYSTEM_GETTY_OPTIONS)\""; \
++		echo "agetty_options=\"-L $(SYSTEM_GETTY_OPTIONS)\""; \
+ 	} > $(OPENRC_GETTY_CONF_D)
+-	$(INSTALL) -D -m 0755 $(OPENRC_PKGDIR)/getty \
+-		$(TARGET_DIR)/etc/init.d/getty
+-	ln -sf getty $(TARGET_DIR)/etc/init.d/$(OPENRC_GETTY_SVCNAME)
++	ln -sf agetty $(TARGET_DIR)/etc/init.d/$(OPENRC_GETTY_SVCNAME)
+ 	ln -sf /etc/init.d/$(OPENRC_GETTY_SVCNAME) \
+ 		$(TARGET_DIR)/etc/runlevels/default/$(OPENRC_GETTY_SVCNAME)
+ endef
 -- 
 2.18.2
