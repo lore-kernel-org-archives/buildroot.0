@@ -1,99 +1,87 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 2 Mar 2020 21:53:39 +0100
-Subject: [Buildroot] [PATCH v1] package/mesa3d: fix linux/kcmp.h related
- compile failure
-In-Reply-To: <20200302110826.31166-1-ps.report@gmx.net>
-References: <20200302110826.31166-1-ps.report@gmx.net>
-Message-ID: <e655a87e-f571-bc43-cc31-26de29100209@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 02 Mar 2020 21:00:01 +0000
+Subject: [Buildroot] [Bug 12596] New: host-e2fsprogs: tune2fs
+ incompatibility on older glibc version
+Message-ID: <bug-12596-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+https://bugs.busybox.net/show_bug.cgi?id=12596
 
-Le 02/03/2020 ? 12:08, Peter Seiderer a ?crit?:
-> Add upstream patch [1].
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/df5bcb8e4f6e98c4de347abbbe91e10a98047422
-> 
->   ../src/util/os_file.c:37:24: fatal error: linux/kcmp.h: No such file or directory
-> 
-> [1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=f7bfb10c69dfe48a91e35523cb5ee641bdbf6988
+            Bug ID: 12596
+           Summary: host-e2fsprogs: tune2fs incompatibility on older glibc
+                    version
+           Product: buildroot
+           Version: 2019.02.9
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: ryan.barnett at rockwellcollins.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-The problem is trigged by the old codesourcery toolchain using kernel headers
-3.13 that doesn't provide the kcmp.h header.
+When host-e2fsprogs is selected and build as part of a buildroot configuration
+on a host system which has a glibc version >= 2.25, the tune2fs command will
+require a glibc version >= 2.25. This is an issue if an SDK is created and then
+later run onto a system which has a glibc version < 2.25 as there will be error
+such as:
 
-kcmp.h is present uapi since kernel 3.19 [1]. Otherwise it would require to add
-a new kernel header dependecy to mesa3d...
+tune2fs: /lib/x86_64-linux-gnu/libc.so.6: version GLIBC_2.25 not found
+(required by /opt/br-sdk/lib/libblkid.so.1)
 
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=3f4994cfc15f38a3159c6e3a4b3ab2e1481a6b02
+This can be reproduced using the following a Ubuntu 18.04 host to build an SDK
+from the following configuration:
 
+BR2_x86_i686=y
+# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--stable-2018.11-1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+# BR2_TARGET_ENABLE_ROOT_LOGIN is not set
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_TARGET_GENERIC_GETTY is not set
+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+# BR2_ENABLE_LOCALE_PURGE is not set
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_TARGET_GENERIC_GETTY is not set
+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+# BR2_ENABLE_LOCALE_PURGE is not set
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_PACKAGE_HOST_E2FSPROGS=y
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Then run:
 
+make sdk
 
-Best regards,
-Romain
+After the SDK is created, utilize an Ubuntu 16.04 machine to extract the SDK
+tar.gz file and run:
 
+cd <br-sdk>
+./relocate-sdk.sh
+./sbin/tune2fs --help
 
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...util-remove-the-dependency-on-kcmp.h.patch | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
-> 
-> diff --git a/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch b/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
-> new file mode 100644
-> index 0000000000..27ae021e08
-> --- /dev/null
-> +++ b/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
-> @@ -0,0 +1,42 @@
-> +From 63ad4535df6a0a938e7391d73adcada05e730c89 Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <marek.olsak@amd.com>
-> +Date: Tue, 18 Feb 2020 16:12:23 -0500
-> +Subject: [PATCH] util: remove the dependency on kcmp.h
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Fixes: f76cbc7901f7 "util: Add os_same_file_description helper"
-> +
-> +Acked-by: Eric Engestrom <eric@engestrom.ch>
-> +Reviewed-by: Michel D?nzer <mdaenzer@redhat.com>
-> +Tested-by: Marge Bot <https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3860>
-> +Part-of: <https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3860>
-> +
-> +[ Upstream: https://cgit.freedesktop.org/mesa/mesa/commit/?id=f7bfb10c69dfe48a91e35523cb5ee641bdbf6988 ]
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + src/util/os_file.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/src/util/os_file.c b/src/util/os_file.c
-> +index b502ff4..128fe87 100644
-> +--- a/src/util/os_file.c
-> ++++ b/src/util/os_file.c
-> +@@ -34,11 +34,12 @@ os_file_create_unique(const char *filename, int filemode)
-> + #if defined(__linux__)
-> + 
-> + #include <fcntl.h>
-> +-#include <linux/kcmp.h>
-> + #include <sys/stat.h>
-> + #include <sys/syscall.h>
-> + #include <unistd.h>
-> + 
-> ++/* copied from <linux/kcmp.h> */
-> ++#define KCMP_FILE 0
-> + 
-> + static ssize_t
-> + readN(int fd, char *buf, size_t len)
-> +-- 
-> +2.25.1
-> +
-> 
+However, if the SDK was created on a Ubuntu 16.04 and relocated to Ubuntu
+18.04, then tune2fs will work fine. 
+
+What are the options for forcing e2fsprogs to compile/work with the older
+version of glibc?
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
