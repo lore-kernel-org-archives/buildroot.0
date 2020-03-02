@@ -1,68 +1,50 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon,  2 Mar 2020 11:34:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to v3.2.2
-Message-ID: <20200302103417.204110-1-titouan.christophe@railnova.eu>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  2 Mar 2020 11:40:47 +0100
+Subject: [Buildroot] [PATCH/next v1] package/bcm2835: bump version to 1.62
+Message-ID: <20200302104047.23560-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes the following CVEs:
- - CVE-2020-9428:
-   In Wireshark 3.2.0 to 3.2.1, 3.0.0 to 3.0.8, and 2.6.0 to 2.6.14,
-   the EAP dissector could crash. This was addressed in
-   epan/dissectors/packet-eap.c by using more careful sscanf parsing.
+Changelog (since 1.60):
+  - 1.61 2020-01-11 Fixed errors in the documentation for bcm2835_spi_write.
+    Fixes issue seen on Raspberry Pi 4 boards where 64-bit off_t is used by
+    default via -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64. The offset was
+    being incorrectly converted, this way is clearer and fixes the problem.
+    Contributed by Jonathan Perkin.
+  - 1.62 2020-01-12 Fixed a problem that could cause compile failures with
+    size_t and off_t
 
- - CVE-2020-9429:
-   In Wireshark 3.2.0 to 3.2.1, the WireGuard dissector could crash.
-   This was addressed in epan/dissectors/packet-wireguard.c by
-   handling the situation where a certain data structure intentionally
-   has a NULL value.
-
- - CVE-2020-9430:
-   In Wireshark 3.2.0 to 3.2.1, 3.0.0 to 3.0.8, and 2.6.0 to 2.6.14,
-   the WiMax DLMAP dissector could crash.
-   This was addressed in plugins/epan/wimax/msg_dlmap.c by validating
-   a length field.
-
- - CVE-2020-9431:
-   In Wireshark 3.2.0 to 3.2.1, 3.0.0 to 3.0.8, and 2.6.0 to 2.6.14,
-   the LTE RRC dissector could leak memory. This was addressed in
-   epan/dissectors/packet-lte-rrc.c by adjusting certain append operations.
-
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/bcm2835/bcm2835.hash | 4 ++--
+ package/bcm2835/bcm2835.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 65406b3001..8b8261840a 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.1.txt
--sha1  d0b8eb3e01264afb98ec151d7114ed14cf174ced  wireshark-3.2.1.tar.xz
--sha256  589f640058d6408ebbd695a80ebbd6e7bd99d8db64ecda253d27100dfd27e85b  wireshark-3.2.1.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.2.txt
-+sha1  9cc54a56e9c2ed77e1bc436d9ae2f7bba68d26f8  wireshark-3.2.2.tar.xz
-+sha256  5f5923ef4c3fee370ed0ca1bb324f37c246015eba4a7e74ab95d9208feeded79  wireshark-3.2.2.tar.xz
- 
- # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 1e71fe755d..ead6b164ed 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
+diff --git a/package/bcm2835/bcm2835.hash b/package/bcm2835/bcm2835.hash
+index 3926d63bb0..025ef8be40 100644
+--- a/package/bcm2835/bcm2835.hash
++++ b/package/bcm2835/bcm2835.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 333e7ceee895e910c29098074773ee86bcab4a82c2af0cf083c4533767e52d27 bcm2835-1.60.tar.gz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
++sha256  7beacda787d6073d0982bfe576c318bb2730700f7d0f7950c6e763dfcb06e0e5  bcm2835-1.62.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
+index 82238ee528..2435a42c95 100644
+--- a/package/bcm2835/bcm2835.mk
++++ b/package/bcm2835/bcm2835.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 3.2.1
-+WIRESHARK_VERSION = 3.2.2
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+-BCM2835_VERSION = 1.60
++BCM2835_VERSION = 1.62
+ BCM2835_SITE = http://www.airspayce.com/mikem/bcm2835
+ BCM2835_LICENSE = GPL-2.0
+ BCM2835_LICENSE_FILES = COPYING
 -- 
-2.24.1
+2.25.1
