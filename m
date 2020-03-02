@@ -1,47 +1,51 @@
 From: Ryan Coe <bluemrp9@gmail.com>
-Date: Mon,  2 Mar 2020 09:49:13 -0800
-Subject: [Buildroot] [PATCH/next 1/3] package/inadyn: remove dependency on
- libite
-Message-ID: <20200302174915.6483-1-bluemrp9@gmail.com>
+Date: Mon,  2 Mar 2020 09:49:14 -0800
+Subject: [Buildroot] [PATCH/next 2/3] package/inadyn: bump version to 2.6
+In-Reply-To: <20200302174915.6483-1-bluemrp9@gmail.com>
+References: <20200302174915.6483-1-bluemrp9@gmail.com>
+Message-ID: <20200302174915.6483-2-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dependency for libite was removed in commit e27bfbf dating back a couple
-of years.
+Changelog:
+https://github.com/troglobit/inadyn/releases/tag/v2.6
 
 Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 ---
- package/inadyn/Config.in | 1 -
- package/inadyn/inadyn.mk | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ package/inadyn/inadyn.hash | 9 +++++----
+ package/inadyn/inadyn.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/inadyn/Config.in b/package/inadyn/Config.in
-index d03db83e3a..3589823da4 100644
---- a/package/inadyn/Config.in
-+++ b/package/inadyn/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_INADYN
- 	depends on BR2_USE_MMU # Uses fork()
- 	depends on !BR2_STATIC_LIBS # dlopen()
- 	select BR2_PACKAGE_LIBCONFUSE
--	select BR2_PACKAGE_LIBITE
- 	help
- 	  INADYN is a free DynDNS client. It gives the possibility
- 	  to have your own fixed hostname registered on the internet,
+diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
+index 2691ba0ef9..52bd6abd38 100644
+--- a/package/inadyn/inadyn.hash
++++ b/package/inadyn/inadyn.hash
+@@ -1,5 +1,6 @@
+-# From https://github.com/troglobit/inadyn/releases/download/v2.5/inadyn-2.5.tar.xz.md5
+-md5 8a864d5186e54d24de2d7554fc01b3ec  inadyn-2.5.tar.xz
++# From https://github.com/troglobit/inadyn/releases/download/v2.6/inadyn-2.6.tar.xz.md5
++md5  62ec986b73d24b1b755bf0ed3efe54f2  inadyn-2.6.tar.xz
++
+ # Locally computed
+-sha256 4a9ad208671f62912428413da0282450b2d2c4da38f3c95c4ac975d048c41fcd  inadyn-2.5.tar.xz
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  9f4198764abbd2798472b349d8867e86b4692c76ee304f1f9c607f67c9b582a4  inadyn-2.6.tar.xz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
 diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 5f67849252..40a12e35cd 100644
+index 40a12e35cd..b1ebeeb2fe 100644
 --- a/package/inadyn/inadyn.mk
 +++ b/package/inadyn/inadyn.mk
-@@ -9,7 +9,7 @@ INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VE
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INADYN_VERSION = 2.5
++INADYN_VERSION = 2.6
+ INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
  INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
  INADYN_LICENSE = GPL-2.0+
- INADYN_LICENSE_FILES = COPYING
--INADYN_DEPENDENCIES = host-pkgconf libconfuse libite
-+INADYN_DEPENDENCIES = host-pkgconf libconfuse
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- INADYN_CONF_OPTS += --enable-openssl
 -- 
 2.25.1
