@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Mar 2020 23:35:43 +0100
-Subject: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: decode
- subprocess output for python3
-In-Reply-To: <20200301211848.13659-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Sun, 1 Mar 2020 22:18:48 +0100")
-References: <20200301211848.13659-1-titouan.christophe@railnova.eu>
-Message-ID: <87r1yacrls.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Mar 2020 23:37:31 +0100
+Subject: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: clear
+ multiprocessing pools after use
+In-Reply-To: <20200301212528.15754-1-titouan.christophe@railnova.eu> (Titouan
+ Christophe's message of "Sun, 1 Mar 2020 22:25:28 +0100")
+References: <20200301212528.15754-1-titouan.christophe@railnova.eu>
+Message-ID: <87mu8ycris.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +14,21 @@ To: buildroot@busybox.net
 
 >>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
 
- > In Python 3, the functions from the subprocess module return bytes
- > (and no longer strings as in Python 2), which must be decoded for
- > further text operations.
+ > During the CVE checking phase, we can still see a huge amount of
+ > Python processes (actually 128) running on the host, even though
+ > the CVE step is entirely ran in the main thread.
 
- > Now, pkg-stats can be run in Python 3.
+ > These are actually the worker processes spawned to check for the
+ > packages URL statuses and the latest versions from release-monitoring.
+ > This is because of an issue in Python's multiprocessing implementation:
+ > https://bugs.python.org/issue34172
+
+ > The problem was already there before the CVE matching step was
+ > introduced, but because pkg-stat was terminating right after the
+ > release-monitoring step, it went unnoticed.
+
+ > Also, do not hold a reference to the multiprocessing pool from
+ > the Package class, as this is not needed.
 
  > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
