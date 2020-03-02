@@ -1,61 +1,57 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Mon,  2 Mar 2020 09:49:15 -0800
-Subject: [Buildroot] [PATCH/next 3/3] package/libite: bump version to 2.1.2
-In-Reply-To: <20200302174915.6483-1-bluemrp9@gmail.com>
-References: <20200302174915.6483-1-bluemrp9@gmail.com>
-Message-ID: <20200302174915.6483-3-bluemrp9@gmail.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Mon, 2 Mar 2020 10:39:56 -0800
+Subject: [Buildroot] [PATCH 1/1] boot/opensbi: bump to version 0.6
+In-Reply-To: <20200302140250.12734-1-mark@dibsco.co.uk>
+References: <20200302140250.12734-1-mark@dibsco.co.uk>
+Message-ID: <CAKmqyKMCgSGouDy=7YkPZ5xA5dPxxWQxSXnOwv_6+D+CBqfObg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The hash for LICENSE has changed due to the copyright being updated and
-the note about licensing types has been moved to the bottom.
+On Mon, Mar 2, 2020 at 6:03 AM Mark Corbin <mark@dibsco.co.uk> wrote:
+>
+> Tested with qemu_riscv32_virt_defconfig and
+> qemu_riscv64_virt_defconfig using Buildroot host-qemu 4.2.0.
+>
+> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 
-The hash for chomp.c has been changed due to the copyright being updated and
-code changes in that file.
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 
-Changelog:
-https://github.com/troglobit/libite/releases/tag/v2.1.2
+Alistair
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
- package/libite/libite.hash | 13 +++++++------
- package/libite/libite.mk   |  2 +-
- 2 files changed, 8 insertions(+), 7 deletions(-)
-
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index db3f6232b2..e16e78c01f 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,7 +1,8 @@
--# From https://github.com/troglobit/libite/releases/download/v2.1.0/libite-2.1.0.tar.xz.md5
--md5 701aa509f27ee35156bc53601e69fa74  libite-2.1.0.tar.xz
-+# From https://github.com/troglobit/libite/releases/download/v2.1.2/libite-2.1.2.tar.xz.md5
-+md5  3c23186dec3f3ae135ec4e8b58581f4e  libite-2.1.2.tar.xz
-+
- # Locally calculated
--sha256 cf56e720146243749e0af5763d4a84eef738e20f2bef2d867497fefc39dee991  libite-2.1.0.tar.xz
--sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
--sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  src/chomp.c
--sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
-+sha256  7a16825c6d02040767ccb9f3faed4bf0e6841857a46cc4cb9e9f36b78a6c7cb3  libite-2.1.2.tar.xz
-+sha256  dc6eae50f69af0e848fd6957cdf48895563b4d15fdde7c9d20ae2bfdefbc2b83  LICENSE
-+sha256  89053891d46d04a21d4a492f68038703e179986baffa458201810f4222b57427  src/chomp.c
-+sha256  a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index c598da1b4a..62fc0df00a 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBITE_VERSION = 2.1.0
-+LIBITE_VERSION = 2.1.2
- LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
- LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
--- 
-2.25.1
+> ---
+>  boot/opensbi/opensbi.hash | 2 +-
+>  boot/opensbi/opensbi.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
+> index 47d5930ace..6e69d512dd 100644
+> --- a/boot/opensbi/opensbi.hash
+> +++ b/boot/opensbi/opensbi.hash
+> @@ -1,3 +1,3 @@
+>  # locally computed
+> -sha256 bc82f1e63663cafb7976b324d8a01263510cfd816063dc89e0ccffb9763fb1dd opensbi-0.5.tar.gz
+> +sha256 46a93afd5465eba094ddba40015e754bf09f9e80e0702c00013d6bdb3ecd0a72 opensbi-0.6.tar.gz
+>  sha256 82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21 COPYING.BSD
+> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> index 2df746ab00..00e3b05dd0 100644
+> --- a/boot/opensbi/opensbi.mk
+> +++ b/boot/opensbi/opensbi.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -OPENSBI_VERSION = 0.5
+> +OPENSBI_VERSION = 0.6
+>  OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
+>  OPENSBI_LICENSE = BSD-2-Clause
+>  OPENSBI_LICENSE_FILES = COPYING.BSD
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
