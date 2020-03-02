@@ -1,63 +1,67 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  2 Mar 2020 16:09:06 +0100
-Subject: [Buildroot] [PATCH/next v2 2/3] package/libevdev: bump version to
- 1.9.0
-In-Reply-To: <20200302150907.5812-1-ps.report@gmx.net>
-References: <20200302150907.5812-1-ps.report@gmx.net>
-Message-ID: <20200302150907.5812-2-ps.report@gmx.net>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Mon, 2 Mar 2020 16:36:06 +0100
+Subject: [Buildroot] [PATCH] package/systemd: also fix rpath for nspawn
+In-Reply-To: <20200229144316.5283-1-yann.morin.1998@free.fr>
+References: <20200229144316.5283-1-yann.morin.1998@free.fr>
+Message-ID: <CAFvCimWKE4SPx0_EiB+oVrXwkEuTRKBB9PggvWivS816rxS6_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And update hash file formatting (2 spaces).
+Reviewd-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 
-For details see [1] and [2].
+Le sam. 29 f?vr. 2020 ? 15:43, Yann E. MORIN <yann.morin.1998@free.fr> a
+?crit :
 
-[1] https://lists.freedesktop.org/archives/input-tools/2020-February/001529.html
-[2] https://lists.freedesktop.org/archives/input-tools/2020-March/001530.html
+> Fixes:
+>
+> http://autobuild.buildroot.org/results/e03ae6a3209eea00459b94cee9c10fd4f2184fec/
+>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Adam Duskett <aduskett@gmail.com>
+> Cc: J?r?my Rosen <jeremy.rosen@smile.fr>
+> ---
+>  package/systemd/systemd.mk | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 6e31a14ac3..b5805e6470 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -571,6 +571,7 @@ HOST_SYSTEMD_DEPENDENCIES = \
+>  HOST_SYSTEMD_HOST_TOOLS = \
+>         systemd-analyze \
+>         systemd-mount \
+> +       systemd-nspawn \
+>         systemctl \
+>         udevadm
+>
+> --
+> 2.20.1
+>
+>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - minor change in commit log (one extra empty line)
----
- package/libevdev/libevdev.hash | 12 ++++++------
- package/libevdev/libevdev.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index 0d2c999222..5a28275319 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/input-tools/2019-August/001521.html
--md5 879631080be18526737e33b63d848039 libevdev-1.8.0.tar.xz
--sha1 4392d28fb91a5f6eb404aab531526f5fa0bbe73d libevdev-1.8.0.tar.xz
--sha256 20d3cae4efd277f485abdf8f2a7c46588e539998b5a08c2c4d368218379d4211 libevdev-1.8.0.tar.xz
--sha512 8d285632f4fe87c01e81f94e514bec4e37fed4bc44d6d38b9297dba1114e42f6ed8d143fc05f3d0e8d51b08b659e34481dc4c65f60421c54e2f3e11efbafdeb4 libevdev-1.8.0.tar.xz
-+# From https://lists.freedesktop.org/archives/input-tools/2020-March/001530.html
-+md5  13c3f0911f9326d4b9fa103365f84421  libevdev-1.9.0.tar.xz
-+sha1  ab5040ee88dd4cb49a75da72e8fded91b282c108  libevdev-1.9.0.tar.xz
-+sha256  e7e18a64264f2dea19b6c50a481f8c062529d42919ccda0bc861495bce28eb9e  libevdev-1.9.0.tar.xz
-+sha512  6e7589b5776437ac23fbf65b3194fb1dd3a68a294696145060cdd97bcdeb9b04f355f2be028dc1a5efe98ef2cafca15e4f61115edf5d62591e3a8944dc95942a  libevdev-1.9.0.tar.xz
- 
- # Hash for license files:
--sha256 f063d1279b31e73007e1c54493391818b4cb5f9162d590120397e0347b932137 COPYING
-+sha256  f063d1279b31e73007e1c54493391818b4cb5f9162d590120397e0347b932137  COPYING
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index 8b243be74e..2fac47f2f8 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEVDEV_VERSION = 1.8.0
-+LIBEVDEV_VERSION = 1.9.0
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
 -- 
-2.25.1
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200302/00409526/attachment.html>
