@@ -1,50 +1,88 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  2 Mar 2020 11:40:47 +0100
-Subject: [Buildroot] [PATCH/next v1] package/bcm2835: bump version to 1.62
-Message-ID: <20200302104047.23560-1-ps.report@gmx.net>
+Date: Mon,  2 Mar 2020 12:07:19 +0100
+Subject: [Buildroot] [PATCH v1] package/mesa3d: fix nouveau std::isinf
+ related compile failure
+Message-ID: <20200302110719.30935-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog (since 1.60):
-  - 1.61 2020-01-11 Fixed errors in the documentation for bcm2835_spi_write.
-    Fixes issue seen on Raspberry Pi 4 boards where 64-bit off_t is used by
-    default via -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64. The offset was
-    being incorrectly converted, this way is clearer and fixes the problem.
-    Contributed by Jonathan Perkin.
-  - 1.62 2020-01-12 Fixed a problem that could cause compile failures with
-    size_t and off_t
+Add missing cmath include to already existing patch
+0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch.
+
+Fixes:
+  http://autobuild.buildroot.net/results/cbefc5d4a4fefb674e596400fa1d2698cd89c5b3/
+  http://autobuild.buildroot.net/results/dc974da012f53fa4ed3be616f937b0afae423d66/
+
+  ../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: In member function 'bool nv50_ir::GCRA::simplify()':
+  ../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:1348:19: error: expected unqualified-id before '(' token
+            if (std::isinf(bestScore)) {
+                     ^
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/bcm2835/bcm2835.hash | 4 ++--
- package/bcm2835/bcm2835.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Notes:
+ - There are already three mesa3d upstream commits which tried to
+   fix the same problem [1], [2], [3].
+   Maybe the check for glibc in [3] is the root cause for the
+   buildroot failures both using uclibc.
 
-diff --git a/package/bcm2835/bcm2835.hash b/package/bcm2835/bcm2835.hash
-index 3926d63bb0..025ef8be40 100644
---- a/package/bcm2835/bcm2835.hash
-+++ b/package/bcm2835/bcm2835.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 333e7ceee895e910c29098074773ee86bcab4a82c2af0cf083c4533767e52d27 bcm2835-1.60.tar.gz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-+sha256  7beacda787d6073d0982bfe576c318bb2730700f7d0f7950c6e763dfcb06e0e5  bcm2835-1.62.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
-index 82238ee528..2435a42c95 100644
---- a/package/bcm2835/bcm2835.mk
-+++ b/package/bcm2835/bcm2835.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+[1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=f525db6358fbaa7b4296d2e6484e0b1ae703ac78
+[2] https://cgit.freedesktop.org/mesa/mesa/commit/?id=121a0cedc80c5541d51599383486ba9a7397c6ce
+[3] https://cgit.freedesktop.org/mesa/mesa/commit/?id=649704f1f7c9e1d0990d34a76154b2eb656bee42
+---
+ ...ers-nouveau-codegen-nv50_ir_ra.cpp-p.patch | 23 ++++++++++++++-----
+ 1 file changed, 17 insertions(+), 6 deletions(-)
+
+diff --git a/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch b/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
+index 73e75993de..dac1b79a8a 100644
+--- a/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
++++ b/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
+@@ -1,4 +1,4 @@
+-From f2ce27b761eeca301a109856f20ed9a8eb06796d Mon Sep 17 00:00:00 2001
++From 07de6302aefbe340e54276b4a9a8edd9a3fba270 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Sat, 28 Dec 2019 21:49:43 +0100
+ Subject: [PATCH] src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: prefix
+@@ -25,15 +25,26 @@ Fixes:
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ [Upstream status:
+ https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3227]
++
++[Added missing cmath include]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+- src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
  
--BCM2835_VERSION = 1.60
-+BCM2835_VERSION = 1.62
- BCM2835_SITE = http://www.airspayce.com/mikem/bcm2835
- BCM2835_LICENSE = GPL-2.0
- BCM2835_LICENSE_FILES = COPYING
+ diff --git a/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp b/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
+-index 6df2664da22..e81fb117213 100644
++index 6df2664..5959210 100644
+ --- a/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
+ +++ b/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
+-@@ -1345,7 +1345,7 @@ GCRA::simplify()
++@@ -24,6 +24,7 @@
++ #include "codegen/nv50_ir_target.h"
++ 
++ #include <algorithm>
+++#include <cmath>
++ #include <stack>
++ #include <limits>
++ #if __cplusplus >= 201103L
++@@ -1345,7 +1346,7 @@ GCRA::simplify()
+                 bestMaxReg = it->maxReg;
+              }
+           }
+@@ -43,5 +54,5 @@ index 6df2664da22..e81fb117213 100644
+              return false;
+           }
+ -- 
+-2.24.0
++2.25.1
+ 
 -- 
 2.25.1
