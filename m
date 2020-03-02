@@ -1,27 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Mar 2020 22:54:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mosquitto: bump to v1.6.9
-In-Reply-To: <20200302101559.42826-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Mon, 2 Mar 2020 11:15:59 +0100")
-References: <20200302101559.42826-1-titouan.christophe@railnova.eu>
-Message-ID: <87y2sie83f.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 02 Mar 2020 21:54:47 +0000
+Subject: [Buildroot] [Bug 12596] host-e2fsprogs: tune2fs incompatibility on
+ older glibc version
+In-Reply-To: <bug-12596-163@https.bugs.busybox.net/>
+References: <bug-12596-163@https.bugs.busybox.net/>
+Message-ID: <bug-12596-163-XgCFTDMxqC@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+https://bugs.busybox.net/show_bug.cgi?id=12596
 
- > mosquitto 1.6.9 is a bugfix release, see the announcement:
- > https://mosquitto.org/blog/2020/02/version-1-6-9-released/
+--- Comment #2 from Ryan Barnett <ryan.barnett@rockwellcollins.com> ---
+Hi Romain,
 
- > Also update the indentation of the hash file to 2 spaces,
- > and add URL of the GPG signature in hash file comment.
+Thank you for the prompt reply.
 
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Based on what you said, in order to solve the problem buildroot would need to
+support specify a custom "host" toolchain which would be used to compile all of
+the host binaries?
 
-Committed, thanks.
+I'd imagine that would be outside of the scope of what buildroot is designed to
+do. 
+
+Thanks,
+-Ryan
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
