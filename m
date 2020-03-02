@@ -1,78 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Mar 2020 23:33:45 +0100
-Subject: [Buildroot] [git commit] package/taglib: fix CVE-2017-12678
-Message-ID: <20200302222548.47ECE8F186@busybox.osuosl.org>
+Date: Mon, 2 Mar 2020 23:35:26 +0100
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: decode
+ subprocess output for python3
+Message-ID: <20200302222548.586AE8F186@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85ed0d1c0986bd310190127e706fbdb7fd1ac726
+commit: https://git.buildroot.net/buildroot/commit/?id=304b141a9733fe44ccf5a045cff4aa9d46c7bbed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In TagLib 1.11.1, the rebuildAggregateFrames function in
-id3v2framefactory.cpp has a pointer to cast vulnerability, which allows
-remote attackers to cause a denial of service or possibly have
-unspecified other impact via a crafted audio file.
+In Python 3, the functions from the subprocess module return bytes
+(and no longer strings as in Python 2), which must be decoded for
+further text operations.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Now, pkg-stats can be run in Python 3.
+
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...is-an-instance-of-TextIdentificationFrame.patch | 33 ++++++++++++++++++++++
- package/taglib/taglib.mk                           |  3 ++
- 2 files changed, 36 insertions(+)
+ support/scripts/pkg-stats | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/taglib/0002-Don-t-assume-TDRC-is-an-instance-of-TextIdentificationFrame.patch b/package/taglib/0002-Don-t-assume-TDRC-is-an-instance-of-TextIdentificationFrame.patch
-new file mode 100644
-index 0000000000..c7ca9500d2
---- /dev/null
-+++ b/package/taglib/0002-Don-t-assume-TDRC-is-an-instance-of-TextIdentificationFrame.patch
-@@ -0,0 +1,33 @@
-+From eb9ded1206f18f2c319157337edea2533a40bea6 Mon Sep 17 00:00:00 2001
-+From: "Stephen F. Booth" <me@sbooth.org>
-+Date: Sun, 23 Jul 2017 10:11:09 -0400
-+Subject: [PATCH] Don't assume TDRC is an instance of TextIdentificationFrame
-+
-+If TDRC is encrypted, FrameFactory::createFrame() returns UnknownFrame
-+which causes problems in rebuildAggregateFrames() when it is assumed
-+that TDRC is a TextIdentificationFrame
-+[Retrieved from:
-+https://github.com/taglib/taglib/pull/831/commits/eb9ded1206f18f2c319157337edea2533a40bea6]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ taglib/mpeg/id3v2/id3v2framefactory.cpp | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/taglib/mpeg/id3v2/id3v2framefactory.cpp b/taglib/mpeg/id3v2/id3v2framefactory.cpp
-+index 759a9b7be..9347ab869 100644
-+--- a/taglib/mpeg/id3v2/id3v2framefactory.cpp
-++++ b/taglib/mpeg/id3v2/id3v2framefactory.cpp
-+@@ -334,10 +334,11 @@ void FrameFactory::rebuildAggregateFrames(ID3v2::Tag *tag) const
-+      tag->frameList("TDAT").size() == 1)
-+   {
-+     TextIdentificationFrame *tdrc =
-+-      static_cast<TextIdentificationFrame *>(tag->frameList("TDRC").front());
-++      dynamic_cast<TextIdentificationFrame *>(tag->frameList("TDRC").front());
-+     UnknownFrame *tdat = static_cast<UnknownFrame *>(tag->frameList("TDAT").front());
-+ 
-+-    if(tdrc->fieldList().size() == 1 &&
-++    if(tdrc &&
-++       tdrc->fieldList().size() == 1 &&
-+        tdrc->fieldList().front().size() == 4 &&
-+        tdat->data().size() >= 5)
-+     {
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index 6f36347e61..35b54348ff 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -10,6 +10,9 @@ TAGLIB_INSTALL_STAGING = YES
- TAGLIB_LICENSE = LGPL-2.1 or MPL-1.1
- TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 7721d98459..e414ec50f2 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -157,7 +157,7 @@ class Package:
+         o = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[1]
+         lines = o.splitlines()
+         for line in lines:
+-            m = re.match("^([0-9]*) warnings generated", line)
++            m = re.match("^([0-9]*) warnings generated", line.decode())
+             if m:
+                 self.warnings = int(m.group(1))
+                 return
+@@ -351,7 +351,7 @@ def package_init_make_info():
+     # Fetch all variables at once
+     variables = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars",
+                                          "VARS=%_LICENSE %_LICENSE_FILES %_VERSION %_IGNORE_CVES"])
+-    variable_list = variables.splitlines()
++    variable_list = variables.decode().splitlines()
  
-+# 0002-Don-t-assume-TDRC-is-an-instance-of-TextIdentificationFrame.patch
-+TAGLIB_IGNORE_CVES += CVE-2017-12678
-+
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- TAGLIB_DEPENDENCIES += zlib
- endif
+     # We process first the host package VERSION, and then the target
+     # package VERSION. This means that if a package exists in both
+@@ -886,7 +886,7 @@ def __main__():
+         package_list = None
+     date = datetime.datetime.utcnow()
+     commit = subprocess.check_output(['git', 'rev-parse',
+-                                      'HEAD']).splitlines()[0]
++                                      'HEAD']).splitlines()[0].decode()
+     print("Build package list ...")
+     packages = get_pkglist(args.npackages, package_list)
+     print("Getting package make info ...")
