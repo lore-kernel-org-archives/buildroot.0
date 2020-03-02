@@ -1,43 +1,57 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Mon,  2 Mar 2020 14:02:50 +0000
-Subject: [Buildroot] [PATCH 1/1] boot/opensbi: bump to version 0.6
-Message-ID: <20200302140250.12734-1-mark@dibsco.co.uk>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon,  2 Mar 2020 07:35:16 -0700
+Subject: [Buildroot] [PATCH 1/1] package/opencv3: bump to version 4.2.0
+Message-ID: <20200302143516.40900-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested with qemu_riscv32_virt_defconfig and
-qemu_riscv64_virt_defconfig using Buildroot host-qemu 4.2.0.
+We need to set -DPROTOBUF_UPDATE_FILES=ON otherwise our protobuf
+headers will be incompatible.
 
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- boot/opensbi/opensbi.hash | 2 +-
- boot/opensbi/opensbi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/opencv3/opencv3.hash | 4 ++--
+ package/opencv3/opencv3.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
-index 47d5930ace..6e69d512dd 100644
---- a/boot/opensbi/opensbi.hash
-+++ b/boot/opensbi/opensbi.hash
+diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
+index 4953d01a1c..ef95f24ad3 100644
+--- a/package/opencv3/opencv3.hash
++++ b/package/opencv3/opencv3.hash
 @@ -1,3 +1,3 @@
- # locally computed
--sha256 bc82f1e63663cafb7976b324d8a01263510cfd816063dc89e0ccffb9763fb1dd opensbi-0.5.tar.gz
-+sha256 46a93afd5465eba094ddba40015e754bf09f9e80e0702c00013d6bdb3ecd0a72 opensbi-0.6.tar.gz
- sha256 82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21 COPYING.BSD
-diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-index 2df746ab00..00e3b05dd0 100644
---- a/boot/opensbi/opensbi.mk
-+++ b/boot/opensbi/opensbi.mk
+ # Locally calculated
+-sha256 b7ea364de7273cfb3b771a0d9c111b8b8dfb42ff2bcd2d84681902fb8f49892a  opencv3-3.4.9.tar.gz
+-sha256 c3596f2f886631ac49af2c9a201ca559f850bb5726bdc25eacbe2369a70caad9  LICENSE
++sha256  9ccb2192d7e8c03c58fee07051364d94ed7599363f3b0dce1c5e6cc11c1bb0ec  opencv3-4.2.0.tar.gz
++sha256  c3596f2f886631ac49af2c9a201ca559f850bb5726bdc25eacbe2369a70caad9  LICENSE
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 2c5d6b041d..8a8257b387 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSBI_VERSION = 0.5
-+OPENSBI_VERSION = 0.6
- OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
- OPENSBI_LICENSE = BSD-2-Clause
- OPENSBI_LICENSE_FILES = COPYING.BSD
+-OPENCV3_VERSION = 3.4.9
++OPENCV3_VERSION = 4.2.0
+ OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
+ OPENCV3_INSTALL_STAGING = YES
+ OPENCV3_LICENSE = BSD-3-Clause
+@@ -282,10 +282,10 @@ OPENCV3_CONF_OPTS += -DWITH_PNG=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV3_WITH_PROTOBUF),y)
+-OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=ON
++OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=ON -DPROTOBUF_UPDATE_FILES=ON
+ OPENCV3_DEPENDENCIES += protobuf
+ else
+-OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=OFF
++OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=OFF -DPROTOBUF_UPDATE_FILES=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV3_WITH_QT5),y)
 -- 
 2.20.1
