@@ -1,58 +1,59 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon,  2 Mar 2020 15:50:04 +0100
-Subject: [Buildroot] [PATCH v4 02/12] support/scripts/pkg-stats: store patch
- files for the package
-In-Reply-To: <20200302145013.9574-1-heiko.thiery@gmail.com>
-References: <20200302145013.9574-1-heiko.thiery@gmail.com>
-Message-ID: <20200302145013.9574-3-heiko.thiery@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  2 Mar 2020 16:04:49 +0100
+Subject: [Buildroot] [PATCH/next v1 2/3] package/libevdev: bump version to
+ 1.9.0
+In-Reply-To: <20200302150450.3546-1-ps.report@gmx.net>
+References: <20200302150450.3546-1-ps.report@gmx.net>
+Message-ID: <20200302150450.3546-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the patch_count attribute and use a class property instead.
+And update hash file formatting (2 spaces).
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+For details see [1] and [2].
+[1] https://lists.freedesktop.org/archives/input-tools/2020-February/001529.html
+[2] https://lists.freedesktop.org/archives/input-tools/2020-March/001530.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- support/scripts/pkg-stats | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ package/libevdev/libevdev.hash | 12 ++++++------
+ package/libevdev/libevdev.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 727b203032..4116622c98 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -64,7 +64,7 @@ class Package:
-         self.has_license = False
-         self.has_license_files = False
-         self.has_hash = False
--        self.patch_count = 0
-+        self.patch_files = []
-         self.warnings = 0
-         self.current_version = None
-         self.url = None
-@@ -93,6 +93,10 @@ class Package:
-                 self.url_status = "Missing"
-                 fp.close()
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 0d2c999222..5a28275319 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/input-tools/2019-August/001521.html
+-md5 879631080be18526737e33b63d848039 libevdev-1.8.0.tar.xz
+-sha1 4392d28fb91a5f6eb404aab531526f5fa0bbe73d libevdev-1.8.0.tar.xz
+-sha256 20d3cae4efd277f485abdf8f2a7c46588e539998b5a08c2c4d368218379d4211 libevdev-1.8.0.tar.xz
+-sha512 8d285632f4fe87c01e81f94e514bec4e37fed4bc44d6d38b9297dba1114e42f6ed8d143fc05f3d0e8d51b08b659e34481dc4c65f60421c54e2f3e11efbafdeb4 libevdev-1.8.0.tar.xz
++# From https://lists.freedesktop.org/archives/input-tools/2020-March/001530.html
++md5  13c3f0911f9326d4b9fa103365f84421  libevdev-1.9.0.tar.xz
++sha1  ab5040ee88dd4cb49a75da72e8fded91b282c108  libevdev-1.9.0.tar.xz
++sha256  e7e18a64264f2dea19b6c50a481f8c062529d42919ccda0bc861495bce28eb9e  libevdev-1.9.0.tar.xz
++sha512  6e7589b5776437ac23fbf65b3194fb1dd3a68a294696145060cdd97bcdeb9b04f355f2be028dc1a5efe98ef2cafca15e4f61115edf5d62591e3a8944dc95942a  libevdev-1.9.0.tar.xz
  
-+    @property
-+    def patch_count(self):
-+        return len(self.patch_files)
-+
-     def set_infra(self):
-         """
-         Fills in the .infras field
-@@ -131,10 +135,9 @@ class Package:
-         """
-         Fills in the .patch_count field
-         """
--        self.patch_count = 0
-         pkgdir = os.path.dirname(self.path)
-         for subdir, _, _ in os.walk(pkgdir):
--            self.patch_count += len(fnmatch.filter(os.listdir(subdir), '*.patch'))
-+            self.patch_files = fnmatch.filter(os.listdir(subdir), '*.patch')
+ # Hash for license files:
+-sha256 f063d1279b31e73007e1c54493391818b4cb5f9162d590120397e0347b932137 COPYING
++sha256  f063d1279b31e73007e1c54493391818b4cb5f9162d590120397e0347b932137  COPYING
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 8b243be74e..2fac47f2f8 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     def set_current_version(self):
-         """
+-LIBEVDEV_VERSION = 1.8.0
++LIBEVDEV_VERSION = 1.9.0
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
 -- 
-2.20.1
+2.25.1
