@@ -1,75 +1,68 @@
-From: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Date: Mon,  2 Mar 2020 11:19:02 +0100
-Subject: [Buildroot] [PATCH] package/exim: fix log and pid file paths
-Message-ID: <20200302101902.8285-1-p.debruijn@unilogic.nl>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Mon,  2 Mar 2020 11:34:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to v3.2.2
+Message-ID: <20200302103417.204110-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-both the logs and pid should not be placed in /var/spool
+This fixes the following CVEs:
+ - CVE-2020-9428:
+   In Wireshark 3.2.0 to 3.2.1, 3.0.0 to 3.0.8, and 2.6.0 to 2.6.14,
+   the EAP dissector could crash. This was addressed in
+   epan/dissectors/packet-eap.c by using more careful sscanf parsing.
 
-we place the log in /var/log/exim and
-we place the pid in /var/run/exim
+ - CVE-2020-9429:
+   In Wireshark 3.2.0 to 3.2.1, the WireGuard dissector could crash.
+   This was addressed in epan/dissectors/packet-wireguard.c by
+   handling the situation where a certain data structure intentionally
+   has a NULL value.
 
-using binary name subdirectory in both cases allows for the
-use of systemd's LogsDirectory and RuntimeDirectory statements
+ - CVE-2020-9430:
+   In Wireshark 3.2.0 to 3.2.1, 3.0.0 to 3.0.8, and 2.6.0 to 2.6.14,
+   the WiMax DLMAP dissector could crash.
+   This was addressed in plugins/epan/wimax/msg_dlmap.c by validating
+   a length field.
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+ - CVE-2020-9431:
+   In Wireshark 3.2.0 to 3.2.1, 3.0.0 to 3.0.8, and 2.6.0 to 2.6.14,
+   the LTE RRC dissector could leak memory. This was addressed in
+   epan/dissectors/packet-lte-rrc.c by adjusting certain append operations.
 
-diff --git a/package/exim/S86exim b/package/exim/S86exim
-index bec88fc222..0d09361f65 100644
---- a/package/exim/S86exim
-+++ b/package/exim/S86exim
-@@ -3,11 +3,19 @@
- # Start/stop exim
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 65406b3001..8b8261840a 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.1.txt
+-sha1  d0b8eb3e01264afb98ec151d7114ed14cf174ced  wireshark-3.2.1.tar.xz
+-sha256  589f640058d6408ebbd695a80ebbd6e7bd99d8db64ecda253d27100dfd27e85b  wireshark-3.2.1.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.2.txt
++sha1  9cc54a56e9c2ed77e1bc436d9ae2f7bba68d26f8  wireshark-3.2.2.tar.xz
++sha256  5f5923ef4c3fee370ed0ca1bb324f37c246015eba4a7e74ab95d9208feeded79  wireshark-3.2.2.tar.xz
+ 
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 1e71fe755d..ead6b164ed 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
  #
+ ################################################################################
  
--PIDFILE=/var/lock/exim/exim-daemon.pid
-+PIDFILE=/var/run/exim/exim.pid
- 
- case "$1" in
-   start)
- 	echo "Starting exim..."
-+	if [ ! -d /var/log/exim ]; then
-+	  mkdir -p /var/log/exim
-+	  chown exim:mail /var/log/exim
-+	fi
-+	if [ ! -d /var/run/exim ]; then
-+	  mkdir -p /var/run/exim
-+	  chown root:mail /var/run/exim
-+	fi
- 	start-stop-daemon -S -x exim -- -bd
- 	;;
-   stop)
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index e4b0bfc1b4..0e74bdd8e0 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -39,6 +39,8 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
- 	$(INSTALL) -m 0644 $(@D)/src/EDITME $(@D)/Local/Makefile
- 	$(call exim-config-change,BIN_DIRECTORY,/usr/sbin)
- 	$(call exim-config-change,CONFIGURE_FILE,/etc/exim/configure)
-+	$(call exim-config-change,LOG_FILE_PATH,/var/log/exim/exim_%slog)
-+	$(call exim-config-change,PID_FILE_PATH,/var/run/exim/exim.pid)
- 	$(call exim-config-change,EXIM_USER,ref:exim)
- 	$(call exim-config-change,EXIM_GROUP,mail)
- 	$(call exim-config-change,TRANSPORT_LMTP,yes)
-diff --git a/package/exim/exim.service b/package/exim/exim.service
-index fe97727ab5..ac3f067de4 100644
---- a/package/exim/exim.service
-+++ b/package/exim/exim.service
-@@ -3,6 +3,10 @@ Description=Exim MTA
- After=syslog.target network.target
- 
- [Service]
-+User=exim
-+Group=mail
-+LogsDirectory=exim
-+RuntimeDirectory=exim
- ExecStart=/usr/sbin/exim -bdf
- Restart=always
- 
+-WIRESHARK_VERSION = 3.2.1
++WIRESHARK_VERSION = 3.2.2
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 -- 
-2.17.1
+2.24.1
