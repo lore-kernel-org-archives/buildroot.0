@@ -1,33 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 02 Mar 2020 21:54:47 +0000
-Subject: [Buildroot] [Bug 12596] host-e2fsprogs: tune2fs incompatibility on
- older glibc version
-In-Reply-To: <bug-12596-163@https.bugs.busybox.net/>
-References: <bug-12596-163@https.bugs.busybox.net/>
-Message-ID: <bug-12596-163-XgCFTDMxqC@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 Mar 2020 23:00:41 +0100
+Subject: [Buildroot] [PATCH] package/lxc: cgroups: initialize cpuset
+ properly
+In-Reply-To: <20200301210609.930954-1-romain.naour@smile.fr> (Romain Naour's
+ message of "Sun, 1 Mar 2020 22:06:09 +0100")
+References: <20200301210609.930954-1-romain.naour@smile.fr>
+Message-ID: <87tv36e7sm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12596
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
---- Comment #2 from Ryan Barnett <ryan.barnett@rockwellcollins.com> ---
-Hi Romain,
+ > The tests.package.test_lxc.TestLxc failure on gitlab
+ > is similar to the issue reported by [1] and fixed by [2].
 
-Thank you for the prompt reply.
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/454255988
 
-Based on what you said, in order to solve the problem buildroot would need to
-support specify a custom "host" toolchain which would be used to compile all of
-the host binaries?
+ > [1] https://github.com/NixOS/nixpkgs/issues/75467#issuecomment-569386159
+ > [2] https://github.com/lxc/lxc/pull/3109
 
-I'd imagine that would be outside of the scope of what buildroot is designed to
-do. 
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ > Cc: J?r?me Pouiller <jezz@sysmic.org>
+ > Cc: Patrick Havelange <patrick.havelange@essensium.com>
 
-Thanks,
--Ryan
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
