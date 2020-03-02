@@ -1,88 +1,77 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  2 Mar 2020 12:07:19 +0100
-Subject: [Buildroot] [PATCH v1] package/mesa3d: fix nouveau std::isinf
- related compile failure
-Message-ID: <20200302110719.30935-1-ps.report@gmx.net>
+Date: Mon,  2 Mar 2020 12:08:26 +0100
+Subject: [Buildroot] [PATCH v1] package/mesa3d: fix linux/kcmp.h related
+ compile failure
+Message-ID: <20200302110826.31166-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add missing cmath include to already existing patch
-0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch.
+Add upstream patch [1].
 
 Fixes:
-  http://autobuild.buildroot.net/results/cbefc5d4a4fefb674e596400fa1d2698cd89c5b3/
-  http://autobuild.buildroot.net/results/dc974da012f53fa4ed3be616f937b0afae423d66/
 
-  ../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: In member function 'bool nv50_ir::GCRA::simplify()':
-  ../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:1348:19: error: expected unqualified-id before '(' token
-            if (std::isinf(bestScore)) {
-                     ^
+  http://autobuild.buildroot.net/results/df5bcb8e4f6e98c4de347abbbe91e10a98047422
+
+  ../src/util/os_file.c:37:24: fatal error: linux/kcmp.h: No such file or directory
+
+[1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=f7bfb10c69dfe48a91e35523cb5ee641bdbf6988
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Notes:
- - There are already three mesa3d upstream commits which tried to
-   fix the same problem [1], [2], [3].
-   Maybe the check for glibc in [3] is the root cause for the
-   buildroot failures both using uclibc.
+ ...util-remove-the-dependency-on-kcmp.h.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
 
-[1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=f525db6358fbaa7b4296d2e6484e0b1ae703ac78
-[2] https://cgit.freedesktop.org/mesa/mesa/commit/?id=121a0cedc80c5541d51599383486ba9a7397c6ce
-[3] https://cgit.freedesktop.org/mesa/mesa/commit/?id=649704f1f7c9e1d0990d34a76154b2eb656bee42
----
- ...ers-nouveau-codegen-nv50_ir_ra.cpp-p.patch | 23 ++++++++++++++-----
- 1 file changed, 17 insertions(+), 6 deletions(-)
-
-diff --git a/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch b/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-index 73e75993de..dac1b79a8a 100644
---- a/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-+++ b/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-@@ -1,4 +1,4 @@
--From f2ce27b761eeca301a109856f20ed9a8eb06796d Mon Sep 17 00:00:00 2001
-+From 07de6302aefbe340e54276b4a9a8edd9a3fba270 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Sat, 28 Dec 2019 21:49:43 +0100
- Subject: [PATCH] src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: prefix
-@@ -25,15 +25,26 @@ Fixes:
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- [Upstream status:
- https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3227]
+diff --git a/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch b/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
+new file mode 100644
+index 0000000000..27ae021e08
+--- /dev/null
++++ b/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
+@@ -0,0 +1,42 @@
++From 63ad4535df6a0a938e7391d73adcada05e730c89 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <marek.olsak@amd.com>
++Date: Tue, 18 Feb 2020 16:12:23 -0500
++Subject: [PATCH] util: remove the dependency on kcmp.h
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+[Added missing cmath include]
++Fixes: f76cbc7901f7 "util: Add os_same_file_description helper"
++
++Acked-by: Eric Engestrom <eric@engestrom.ch>
++Reviewed-by: Michel D?nzer <mdaenzer@redhat.com>
++Tested-by: Marge Bot <https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3860>
++Part-of: <https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3860>
++
++[ Upstream: https://cgit.freedesktop.org/mesa/mesa/commit/?id=f7bfb10c69dfe48a91e35523cb5ee641bdbf6988 ]
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-- src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
-+ src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp | 3 ++-
++---
++ src/util/os_file.c | 3 ++-
 + 1 file changed, 2 insertions(+), 1 deletion(-)
- 
- diff --git a/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp b/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
--index 6df2664da22..e81fb117213 100644
-+index 6df2664..5959210 100644
- --- a/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
- +++ b/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
--@@ -1345,7 +1345,7 @@ GCRA::simplify()
-+@@ -24,6 +24,7 @@
-+ #include "codegen/nv50_ir_target.h"
++
++diff --git a/src/util/os_file.c b/src/util/os_file.c
++index b502ff4..128fe87 100644
++--- a/src/util/os_file.c
+++++ b/src/util/os_file.c
++@@ -34,11 +34,12 @@ os_file_create_unique(const char *filename, int filemode)
++ #if defined(__linux__)
 + 
-+ #include <algorithm>
-++#include <cmath>
-+ #include <stack>
-+ #include <limits>
-+ #if __cplusplus >= 201103L
-+@@ -1345,7 +1346,7 @@ GCRA::simplify()
-                 bestMaxReg = it->maxReg;
-              }
-           }
-@@ -43,5 +54,5 @@ index 6df2664da22..e81fb117213 100644
-              return false;
-           }
- -- 
--2.24.0
++ #include <fcntl.h>
++-#include <linux/kcmp.h>
++ #include <sys/stat.h>
++ #include <sys/syscall.h>
++ #include <unistd.h>
++ 
+++/* copied from <linux/kcmp.h> */
+++#define KCMP_FILE 0
++ 
++ static ssize_t
++ readN(int fd, char *buf, size_t len)
++-- 
 +2.25.1
- 
++
 -- 
 2.25.1
