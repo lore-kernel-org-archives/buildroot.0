@@ -1,111 +1,69 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon,  2 Mar 2020 15:50:10 +0100
-Subject: [Buildroot] [PATCH v4 08/12] support/scripts/pkg-stats: add
- defconfig support
-In-Reply-To: <20200302145013.9574-1-heiko.thiery@gmail.com>
-References: <20200302145013.9574-1-heiko.thiery@gmail.com>
-Message-ID: <20200302145013.9574-9-heiko.thiery@gmail.com>
+Date: Mon,  2 Mar 2020 15:50:02 +0100
+Subject: [Buildroot] [PATCH v4 00/12] pkg-stats json output improvements
+Message-ID: <20200302145013.9574-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Scan configs directory and create Defconfig objects.
+- add developers information to the packages
+- add supported defconfigs to json
+- add license information to json
+- add license file information to json
+- add patch files to json
+- add a more generic check status field to the packages for easier post
+  processing. The following check status are availble: checks: cve, license,
+  license-files, hash, hash-license,patches, version, url, developers,
+  pkg-check
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- support/scripts/pkg-stats | 43 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 41 insertions(+), 2 deletions(-)
+v3 -> v4:
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 1fd306a6d5..432090c251 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -54,6 +54,34 @@ RM_API_STATUS_NOT_FOUND = 4
- # because it's used by sub-processes.
- http_pool = None
- 
-+class Defconfig:
-+    def __init__(self, name, path):
-+        self.name = name
-+        self.path = path
-+        self.developers = None
-+
-+    def set_developers(self, developers):
-+        """
-+        Fills in the .developers field
-+        """
-+        self.developers = [
-+            developer.name
-+            for developer in developers
-+            if developer.hasfile(self.path)
-+        ]
-+
-+
-+def get_defconfig_list():
-+    """
-+    Builds the list of Buildroot defconfigs, returning a list of Defconfig
-+    objects.
-+    """
-+    return [
-+        Defconfig(name[:-len('_defconfig')], os.path.join('configs', name))
-+        for name in os.listdir('configs')
-+        if name.endswith('_defconfig')
-+    ]
-+
- 
- class Package:
-     all_licenses = dict()
-@@ -886,7 +914,7 @@ def dump_html(packages, stats, date, commit, output):
-         f.write(html_footer)
- 
- 
--def dump_json(packages, stats, date, commit, output):
-+def dump_json(packages, defconfigs, stats, date, commit, output):
-     # Format packages as a dictionnary instead of a list
-     # Exclude local field that does not contains real date
-     excluded_fields = ['url_worker', 'name']
-@@ -897,6 +925,12 @@ def dump_json(packages, stats, date, commit, output):
-             if k not in excluded_fields
-         } for pkg in packages
-     }
-+    defconfigs = {
-+        d.name: {
-+            k: v
-+            for k, v in d.__dict__.items()
-+        } for d in defconfigs
-+    }
-     # Aggregate infrastructures into a single dict entry
-     statistics = {
-         k: v
-@@ -907,6 +941,7 @@ def dump_json(packages, stats, date, commit, output):
-     # The actual structure to dump, add commit and date to it
-     final = {'packages': pkgs,
-              'stats': statistics,
-+             'defconfigs': defconfigs,
-              'commit': commit,
-              'date': str(date)}
- 
-@@ -948,6 +983,10 @@ def __main__():
-     packages = get_pkglist(args.npackages, package_list)
-     print("Getting developers ...")
-     developers = parse_developers()
-+    print("Build defconfig list ...")
-+    defconfigs = get_defconfig_list()
-+    for d in defconfigs:
-+        d.set_developers(developers)
-     print("Getting package make info ...")
-     package_init_make_info()
-     print("Getting package details ...")
-@@ -974,7 +1013,7 @@ def __main__():
-         dump_html(packages, stats, date, commit, args.html)
-     if args.json:
-         print("Write JSON")
--        dump_json(packages, stats, date, commit, args.json)
-+        dump_json(packages, defconfigs, stats, date, commit, args.json)
- 
- 
- __main__()
+Included the review comments from Titouan
+
+- use only one signed-off mail address
+- do some things in a more pythonic way
+- remove the patch_count attribute and use a class property instead
+  (Note that the patch_count value will not go into the json output
+  anymore,but then coutn can be computed by "len(patch_files)".)
+- remove the status initializer in the package class that was introduced
+  in v3
+- update the cve status at the end of the cve check loop
+- change the is_valid_infra -> has_valid_infra and use it as property
+
+v2 -> v3:
+- keep variable latest_release but change format
+- add check for license file hashes
+- introduce a na status for the checks
+- add a list of all possible checks to the json output
+- add the cve check status
+
+v1 -> v2:
+- cleanup and recreation of patches
+- remove pkg name from dumping to json
+- use patch_files instead of combine count and files in dict
+- include getdevelopers.py to reuse Developers class
+
+---
+
+Heiko Thiery (12):
+  support/scripts/pkg-stats: store latest version in a dict
+  support/scripts/pkg-stats: store patch files for the package
+  support/scripts/pkg-stats: set developers info
+  support/scripts/pkg-stats: store licences of package
+  support/scripts/pkg-stats: add package status
+  support/scripts/pkg-stats: add package count to stats
+  support/scripts/pkg-stats: store pkg dir path
+  support/scripts/pkg-stats: add defconfig support
+  support/scripts/pkg-stats: add support for license hash check
+  support/scripts/pkg-stats: set status to 'na' for virtual packages
+  support/scripts/pkg-stats: initialize all package status checks
+  support/scripts/pkg-stats: add status for cve check
+
+ support/scripts/pkg-stats | 271 +++++++++++++++++++++++++++++---------
+ 1 file changed, 211 insertions(+), 60 deletions(-)
+
 -- 
 2.20.1
