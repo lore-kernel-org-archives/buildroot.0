@@ -1,47 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Mar 2020 23:10:02 +0100
-Subject: [Buildroot] [git commit] package/binutils: disable binutils >=
- 2.33.1 for configurations using BR2_BINFMT_FLAT
-Message-ID: <20200302215905.485C48F155@busybox.osuosl.org>
+Date: Mon, 02 Mar 2020 23:14:05 +0100
+Subject: [Buildroot] [PATCH] package/qt5tools: hide qdoc with llvm
+ dependencies
+In-Reply-To: <25605_1582898461_5E591D1D_25605_345_8_0fa6a8d4-31d0-445b-acea-f425422d14ef@OPEXCAUBMA2.corporate.adroot.infra.ftgroup>
+ (yann morin's message of "Fri, 28 Feb 2020 15:00:54 +0100")
+References: <25605_1582898461_5E591D1D_25605_345_8_0fa6a8d4-31d0-445b-acea-f425422d14ef@OPEXCAUBMA2.corporate.adroot.infra.ftgroup>
+Message-ID: <87d09ue76a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24708b598aff0004af4c35800e7a96e47dac8760
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>>   <yann.morin@orange.com> writes:
 
-The patch added by [1] to fix a segfault with elf2flt when binutils
-2.33.1 is used on ARM, introduce a regression with previous binutils
-version on m68k and ARM.
+ > From: "Yann E. MORIN" <yann.morin@orange.com>
+ > Building qdoc requires a llvm and clang for the host.
 
-Theses issues has been reported upstreme [2] [3].
+ > However, there is a limitation in the llvm and clang packages in
+ > Buildroot, which makes it impossible to havea  host variant without
+ > a target variant.
 
-For now, disable binutils >= 2.33.1 for configurations using
-BR2_BINFMT_FLAT.
+ > So, propagate the dependencies of the target llvm and clang, to ensure
+ > we can only have a host-llvm and -clang packages that are correctly
+ > built.
 
-[1] 2b064f86b6a0fd683f307b51f12d9d919fcaa386
-[2] https://github.com/uclinux-dev/elf2flt/pull/16
-[3] https://github.com/uclinux-dev/elf2flt/issues/12
+ > Note that we do propagate all of the dependencies (instead of just the
+ > architecture part), to be consistent.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/binutils/Config.in.host | 3 +++
- 1 file changed, 3 insertions(+)
+ > Reported-by: Romain Naour <romain.naour@smile.fr>
+ > Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Peter Seiderer <ps.report@gmx.net>
+ > Cc: Julien Corjon <corjon.j@ecagroup.com>
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 06902b4ba6..9beabe357c 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -24,6 +24,9 @@ config BR2_BINUTILS_VERSION_2_32_X
- config BR2_BINUTILS_VERSION_2_33_X
- 	bool "binutils 2.33.1"
- 	depends on !BR2_csky
-+	# https://github.com/uclinux-dev/elf2flt/pull/16
-+	# https://github.com/uclinux-dev/elf2flt/issues/12
-+	depends on !BR2_BINFMT_FLAT
- 
- config BR2_BINUTILS_VERSION_ARC
- 	bool "binutils arc (2.31)"
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
