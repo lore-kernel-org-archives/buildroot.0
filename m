@@ -1,77 +1,42 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  2 Mar 2020 12:08:26 +0100
-Subject: [Buildroot] [PATCH v1] package/mesa3d: fix linux/kcmp.h related
- compile failure
-Message-ID: <20200302110826.31166-1-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 2 Mar 2020 14:30:07 +0100
+Subject: [Buildroot] [RFC v2 2/2] package/qt5webengine: fix chromium arm
+ compile flags
+In-Reply-To: <20200302091926.19308-2-ps.report@gmx.net>
+References: <20200302091926.19308-1-ps.report@gmx.net>
+ <20200302091926.19308-2-ps.report@gmx.net>
+Message-ID: <20200302143007.17aa8819@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch [1].
+On Mon,  2 Mar 2020 10:19:26 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-Fixes:
+> The qt5webengine configure simple takes QT_ARCH ('arm') to determine the
+> chromium compiler flags and uses some hard coded ARMv7 default values
+> for the compiler command line: '... -march=armv7-a -mfloat-abi=hard
+> -mtune=generic-armv7-a -mfpu=vfpv3-d16 ...'.
+> 
+> This results e.g. in an illegal instruction failure for rpi zero
+> (reported on the mailing list, see [1]).
+> 
+> Custom values could be set in the file src/3rdparty/chromium/build/config/arm.gni
+> (as tested by an proof-of-concept patch [2]).
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2020-February/274587.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2020-February/274586.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-  http://autobuild.buildroot.net/results/df5bcb8e4f6e98c4de347abbbe91e10a98047422
+Could we instead ask this thing to not do all this sorcery, and instead
+just use the compiler as-is, without passing crazy
+architecture-specific compiler flags ?
 
-  ../src/util/os_file.c:37:24: fatal error: linux/kcmp.h: No such file or directory
-
-[1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=f7bfb10c69dfe48a91e35523cb5ee641bdbf6988
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...util-remove-the-dependency-on-kcmp.h.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
-
-diff --git a/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch b/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
-new file mode 100644
-index 0000000000..27ae021e08
---- /dev/null
-+++ b/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
-@@ -0,0 +1,42 @@
-+From 63ad4535df6a0a938e7391d73adcada05e730c89 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <marek.olsak@amd.com>
-+Date: Tue, 18 Feb 2020 16:12:23 -0500
-+Subject: [PATCH] util: remove the dependency on kcmp.h
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes: f76cbc7901f7 "util: Add os_same_file_description helper"
-+
-+Acked-by: Eric Engestrom <eric@engestrom.ch>
-+Reviewed-by: Michel D?nzer <mdaenzer@redhat.com>
-+Tested-by: Marge Bot <https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3860>
-+Part-of: <https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3860>
-+
-+[ Upstream: https://cgit.freedesktop.org/mesa/mesa/commit/?id=f7bfb10c69dfe48a91e35523cb5ee641bdbf6988 ]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/util/os_file.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/util/os_file.c b/src/util/os_file.c
-+index b502ff4..128fe87 100644
-+--- a/src/util/os_file.c
-++++ b/src/util/os_file.c
-+@@ -34,11 +34,12 @@ os_file_create_unique(const char *filename, int filemode)
-+ #if defined(__linux__)
-+ 
-+ #include <fcntl.h>
-+-#include <linux/kcmp.h>
-+ #include <sys/stat.h>
-+ #include <sys/syscall.h>
-+ #include <unistd.h>
-+ 
-++/* copied from <linux/kcmp.h> */
-++#define KCMP_FILE 0
-+ 
-+ static ssize_t
-+ readN(int fd, char *buf, size_t len)
-+-- 
-+2.25.1
-+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
