@@ -1,113 +1,77 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon,  2 Mar 2020 15:50:03 +0100
-Subject: [Buildroot] [PATCH v4 01/12] support/scripts/pkg-stats: store
- latest version in a dict
+Date: Mon,  2 Mar 2020 15:50:05 +0100
+Subject: [Buildroot] [PATCH v4 03/12] support/scripts/pkg-stats: set
+ developers info
 In-Reply-To: <20200302145013.9574-1-heiko.thiery@gmail.com>
 References: <20200302145013.9574-1-heiko.thiery@gmail.com>
-Message-ID: <20200302145013.9574-2-heiko.thiery@gmail.com>
+Message-ID: <20200302145013.9574-4-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch changes the type of the latest_version variable to a dict.
-This is for better readability/usability of the data. With this the json
-output is more descriptive in later processing of the json output.
+Use the function 'parse_developers' function from getdeveloperlib that
+collect the information about the developers and the files they
+maintain. Then set the maintainer(s) to each package.
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- support/scripts/pkg-stats | 31 +++++++++++++++----------------
- 1 file changed, 15 insertions(+), 16 deletions(-)
+ support/scripts/pkg-stats | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 7721d98459..727b203032 100755
+index 4116622c98..c40fe61d9e 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -71,7 +71,7 @@ class Package:
-         self.url_status = None
-         self.url_worker = None
-         self.cves = list()
--        self.latest_version = (RM_API_STATUS_ERROR, None, None)
-+        self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
+@@ -30,10 +30,14 @@ import certifi
+ import distutils.version
+ import time
+ import gzip
++import sys
+ from urllib3 import HTTPSConnectionPool
+ from urllib3.exceptions import HTTPError
+ from multiprocessing import Pool
  
-     def pkgvar(self):
-         return self.name.upper().replace("-", "_")
-@@ -460,9 +460,8 @@ def check_package_latest_version(packages):
-     """
-     Fills in the .latest_version field of all Package objects
- 
--    This field has a special format:
--      (status, version, id)
--    with:
-+    This field is a dict and has the following keys:
++sys.path.append('utils/')
++from getdeveloperlib import parse_developers
 +
-     - status: one of RM_API_STATUS_ERROR,
-       RM_API_STATUS_FOUND_BY_DISTRO, RM_API_STATUS_FOUND_BY_PATTERN,
-       RM_API_STATUS_NOT_FOUND
-@@ -478,7 +477,7 @@ def check_package_latest_version(packages):
-     worker_pool = Pool(processes=64)
-     results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
-     for pkg, r in zip(packages, results):
--        pkg.latest_version = r
-+        pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
-     del http_pool
+ NVD_START_YEAR = 2002
+ NVD_JSON_VERSION = "1.0"
+ NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
+@@ -171,6 +175,16 @@ class Package:
+         """
+         return cve in self.all_ignored_cves.get(self.pkgvar(), [])
  
++    def set_developers(self, developers):
++        """
++        Fills in the .developers field
++        """
++        self.developers = [
++            dev.name
++            for dev in developers
++            if dev.hasfile(self.path)
++        ]
++
+     def __eq__(self, other):
+         return self.path == other.path
  
-@@ -516,13 +515,13 @@ def calculate_stats(packages):
-             stats["hash"] += 1
-         else:
-             stats["no-hash"] += 1
--        if pkg.latest_version[0] == RM_API_STATUS_FOUND_BY_DISTRO:
-+        if pkg.latest_version['status'] == RM_API_STATUS_FOUND_BY_DISTRO:
-             stats["rmo-mapping"] += 1
-         else:
-             stats["rmo-no-mapping"] += 1
--        if not pkg.latest_version[1]:
-+        if not pkg.latest_version['version']:
-             stats["version-unknown"] += 1
--        elif pkg.latest_version[1] == pkg.current_version:
-+        elif pkg.latest_version['version'] == pkg.current_version:
-             stats["version-uptodate"] += 1
-         else:
-             stats["version-not-uptodate"] += 1
-@@ -688,29 +687,29 @@ def dump_html_pkg(f, pkg):
-     f.write("  <td class=\"centered\">%s</td>\n" % current_version)
- 
-     # Latest version
--    if pkg.latest_version[0] == RM_API_STATUS_ERROR:
-+    if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
-         td_class.append("version-error")
--    if pkg.latest_version[1] is None:
-+    if pkg.latest_version['version'] is None:
-         td_class.append("version-unknown")
--    elif pkg.latest_version[1] != pkg.current_version:
-+    elif pkg.latest_version['version'] != pkg.current_version:
-         td_class.append("version-needs-update")
-     else:
-         td_class.append("version-good")
- 
--    if pkg.latest_version[0] == RM_API_STATUS_ERROR:
-+    if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
-         latest_version_text = "<b>Error</b>"
--    elif pkg.latest_version[0] == RM_API_STATUS_NOT_FOUND:
-+    elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
-         latest_version_text = "<b>Not found</b>"
-     else:
--        if pkg.latest_version[1] is None:
-+        if pkg.latest_version['version'] is None:
-             latest_version_text = "<b>Found, but no version</b>"
-         else:
-             latest_version_text = "<a href=\"https://release-monitoring.org/project/%s\"><b>%s</b></a>" % \
--                (pkg.latest_version[2], str(pkg.latest_version[1]))
-+                (pkg.latest_version['id'], str(pkg.latest_version['version']))
- 
-         latest_version_text += "<br/>"
- 
--        if pkg.latest_version[0] == RM_API_STATUS_FOUND_BY_DISTRO:
-+        if pkg.latest_version['status'] == RM_API_STATUS_FOUND_BY_DISTRO:
-             latest_version_text += "found by <a href=\"https://release-monitoring.org/distro/Buildroot/\">distro</a>"
-         else:
-             latest_version_text += "found by guess"
+@@ -891,6 +905,8 @@ def __main__():
+                                       'HEAD']).splitlines()[0]
+     print("Build package list ...")
+     packages = get_pkglist(args.npackages, package_list)
++    print("Getting developers ...")
++    developers = parse_developers()
+     print("Getting package make info ...")
+     package_init_make_info()
+     print("Getting package details ...")
+@@ -902,6 +918,7 @@ def __main__():
+         pkg.set_check_package_warnings()
+         pkg.set_current_version()
+         pkg.set_url()
++        pkg.set_developers(developers)
+     print("Checking URL status")
+     check_package_urls(packages)
+     print("Getting latest versions ...")
 -- 
 2.20.1
