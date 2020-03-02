@@ -1,75 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Mar 2020 23:00:22 +0100
-Subject: [Buildroot] [git commit] package/lxc: cgroups: initialize cpuset
- properly
-Message-ID: <20200302215102.6F8628F137@busybox.osuosl.org>
+Date: Mon, 2 Mar 2020 22:53:54 +0100
+Subject: [Buildroot] [git commit] package/mosquitto: bump to v1.6.9
+Message-ID: <20200302215102.60BCD8F14A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8742bf3d9bc55d41c7e5cab0ae3c5d2c2f5c567c
+commit: https://git.buildroot.net/buildroot/commit/?id=447b648e536a74df8dd4b334e44b2388ba477c7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The tests.package.test_lxc.TestLxc failure on gitlab
-is similar to the issue reported by [1] and fixed by [2].
+mosquitto 1.6.9 is a bugfix release, see the announcement:
+https://mosquitto.org/blog/2020/02/version-1-6-9-released/
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/454255988
+Also update the indentation of the hash file to 2 spaces,
+and add URL of the GPG signature in hash file comment.
 
-[1] https://github.com/NixOS/nixpkgs/issues/75467#issuecomment-569386159
-[2] https://github.com/lxc/lxc/pull/3109
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: J??r??me Pouiller <jezz@sysmic.org>
-Cc: Patrick Havelange <patrick.havelange@essensium.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0004-cgroups-initialize-cpuset-properly.patch  | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/mosquitto/mosquitto.hash | 9 +++++----
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/lxc/0004-cgroups-initialize-cpuset-properly.patch b/package/lxc/0004-cgroups-initialize-cpuset-properly.patch
-new file mode 100644
-index 0000000000..86aa708d56
---- /dev/null
-+++ b/package/lxc/0004-cgroups-initialize-cpuset-properly.patch
-@@ -0,0 +1,38 @@
-+From 6a8a510211515824ff20699d45f6d07a84f3c02e Mon Sep 17 00:00:00 2001
-+From: Christian Brauner <christian.brauner@ubuntu.com>
-+Date: Sun, 28 Jul 2019 23:13:26 +0200
-+Subject: [PATCH] cgroups: initialize cpuset properly
-+
-+Closes #3108.
-+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-+(cherry picked from commit b31d62b847a3ee013613795094cce4acc12345ef)
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ src/lxc/cgroups/cgfsng.c | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/lxc/cgroups/cgfsng.c b/src/lxc/cgroups/cgfsng.c
-+index 87e12d2dd..7e691d7cc 100644
-+--- a/src/lxc/cgroups/cgfsng.c
-++++ b/src/lxc/cgroups/cgfsng.c
-+@@ -496,12 +496,12 @@ static bool cg_legacy_filter_and_set_cpus(char *path, bool am_initialized)
-+ 	}
-+ 
-+ 	if (!flipped_bit) {
-+-		DEBUG("No isolated or offline cpus present in cpuset");
-+-		return true;
-++		cpulist = lxc_cpumask_to_cpulist(possmask, maxposs);
-++		TRACE("No isolated or offline cpus present in cpuset");
-++	} else {
-++		cpulist = move_ptr(posscpus);
-++		TRACE("Removed isolated or offline cpus from cpuset");
-+ 	}
-+-	DEBUG("Removed isolated or offline cpus from cpuset");
-+-
-+-	cpulist = lxc_cpumask_to_cpulist(possmask, maxposs);
-+ 	if (!cpulist) {
-+ 		ERROR("Failed to create cpu list");
-+ 		return false;
-+-- 
-+2.24.1
-+
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index ba7fd3c03c..ab3f7aeb26 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,7 +1,8 @@
+ # Locally calculated after checking gpg signature
+-sha256 7df23c81ca37f0e070574fe74414403cf25183016433d07add6134366fb45df6  mosquitto-1.6.8.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-1.6.9.tar.gz.asc
++sha256  412979b2db0a0020bd02fa64f0a0de9e7000b84462586e32b67f29bb1f6c1685  mosquitto-1.6.9.tar.gz
+ 
+ # License files
+-sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
+-sha256 3b9be6b894d0769de796e653571ff6cef494913c0ce78c35a97db939e7d9087c  epl-v10
+-sha256 e8cf7d54ea46c19aba793983889b7f7425e1ebfcaaccec764a7db091646e203c  edl-v10
++sha256  cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
++sha256  3b9be6b894d0769de796e653571ff6cef494913c0ce78c35a97db939e7d9087c  epl-v10
++sha256  e8cf7d54ea46c19aba793983889b7f7425e1ebfcaaccec764a7db091646e203c  edl-v10
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index aab193c14d..ea57d76933 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 1.6.8
++MOSQUITTO_VERSION = 1.6.9
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
