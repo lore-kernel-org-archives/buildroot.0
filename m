@@ -1,24 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Mar 2020 22:42:31 +0100
-Subject: [Buildroot] [PATCH 1/5] package/patch: annote CVE-2018-6951
-In-Reply-To: <20200303194703.242362-1-fontaine.fabrice@gmail.com>
-References: <20200303194703.242362-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200303224231.41745f94@windsurf.home>
+Date: Tue, 3 Mar 2020 22:43:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to v12.16.1
+In-Reply-To: <20200303191133.10404-1-aduskett@gmail.com>
+References: <20200303191133.10404-1-aduskett@gmail.com>
+Message-ID: <20200303224315.2237b29c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  3 Mar 2020 20:46:59 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Adam,
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/patch/patch.mk | 3 +++
->  1 file changed, 3 insertions(+)
+On Tue,  3 Mar 2020 11:11:33 -0800
+aduskett at gmail.com wrote:
 
-Series applied to master. Thanks!
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Tested on Debian 9 and Ubuntu 18.04
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/9d3545a76c4f5c06debf319687498d662a53fafb
+> http://autobuild.buildroot.net/results/4da6c695b8ceca0a6eee2481a1b873a46676d0f5
+
+Are you positive that this bump fixes the ICU issues? I.e did you
+reproduce the ICU issues before this version bump, and confirm they
+disappeared solely because of the version bump?
+
+Thanks!
 
 Thomas
 -- 
