@@ -1,42 +1,74 @@
-From: Eugen Hristev <eugen.hristev@microchip.com>
-Date: Tue, 3 Mar 2020 11:00:52 +0200
-Subject: [Buildroot] [PATCH] package/fswebcam: bump to latest version
-Message-ID: <20200303090052.27722-1-eugen.hristev@microchip.com>
+From: Antoine Tenart <antoine.tenart@bootlin.com>
+Date: Tue,  3 Mar 2020 11:13:37 +0100
+Subject: [Buildroot] [PATCH] package/linux-firmware: add option for
+ Microchip VSC85xx networking PHYs
+Message-ID: <20200303101337.817021-1-antoine.tenart@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to latest git version.
+This patch adds an option to support installing firmware files for the
+Microchip/Microsemi VSC85xx networking PHY family.
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+There is a mismatch between Linux and Linux-firmware on the name of the
+PHY (Microchip vs Microsemi), due to the acquisition of Microsemi by
+Microchip. We chose here the name in Linux-firmware, but mentioned the
+other one in the Kconfig help of the option.
+
+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
 ---
- package/fswebcam/fswebcam.hash | 2 +-
- package/fswebcam/fswebcam.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-firmware/Config.in           | 7 +++++++
+ package/linux-firmware/linux-firmware.hash | 1 +
+ package/linux-firmware/linux-firmware.mk   | 5 +++++
+ 3 files changed, 13 insertions(+)
 
-diff --git a/package/fswebcam/fswebcam.hash b/package/fswebcam/fswebcam.hash
-index 3964b21e92..bac1626785 100644
---- a/package/fswebcam/fswebcam.hash
-+++ b/package/fswebcam/fswebcam.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  fe178a0f37ee203103eceaaf9a81a8669edb49923250e8a2ec7459543a8175b0  fswebcam-9a995d6a5369ddd158e352766e015dae20982318.tar.gz
-+sha256  5702771cee6e3fa0f2bbbb72ecf3e5a253ff458c1f648f7e7c0d477e39f0ec80  fswebcam-e9f8094b6a3d1a49f99b2abec4e6ab4df33e2e33.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
-diff --git a/package/fswebcam/fswebcam.mk b/package/fswebcam/fswebcam.mk
-index 5887c0b92b..3a5b8c9eef 100644
---- a/package/fswebcam/fswebcam.mk
-+++ b/package/fswebcam/fswebcam.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 9d142d2c5415..4768ea677272 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -367,6 +367,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100
+ 	  Firmware files for Intel 825xx handled by driver e100
+ 	  (e100)
  
--FSWEBCAM_VERSION = 9a995d6a5369ddd158e352766e015dae20982318
-+FSWEBCAM_VERSION = e9f8094b6a3d1a49f99b2abec4e6ab4df33e2e33
- FSWEBCAM_SITE = $(call github,fsphil,fswebcam,$(FSWEBCAM_VERSION))
- FSWEBCAM_LICENSE = GPL-2.0
- FSWEBCAM_LICENSE_FILES = LICENSE
++config BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY
++	bool "Microchip VSC85xx PHYs"
++	help
++	  Firmware files for Microchip/Microsemi VSC85xx networking
++	  PHYs (VSC8504, VSC8552, VSC8572, VSC8574, VSC856X, VSC8575,
++	  VSC8582 and VSC8584)
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X
+ 	bool "QLogic FastLinQ 4xxxx"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 573c33cbc91b..3878d9288170 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -12,6 +12,7 @@ sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.
+ sha256 5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4 LICENCE.ibt_firmware
+ sha256 0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d LICENCE.it913x
+ sha256 e295020afd7597dc1b3bbe50a84a7e432d9cb92bc053c1c5e657b50d2517627b LICENCE.iwlwifi_firmware
++sha256 0fc67bd715b3395f3f2af464781910e9e69c4ba23da304352229b42dc9e986c3 LICENCE.microchip
+ sha256 2051d5bf0755a0668f8c3d9a0d1c41d4b8cc411aba70f720fda71ae9e3b4d25c LICENCE.qat_firmware
+ sha256 4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822 LICENCE.qla2xxx
+ sha256 d7bec70668ddd4aae8fb4aa32870e54b49fcdb0b9b007aa9f54b53a1ac7461bd LICENCE.ralink-firmware.txt
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index fd90f261fa03..f8e95d0648c9 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -455,6 +455,11 @@ LINUX_FIRMWARE_FILES += e100/*.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.e100
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY),y)
++LINUX_FIRMWARE_FILES += microchip/mscc_vsc85*.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.microchip
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X),y)
+ LINUX_FIRMWARE_FILES += \
+ 	qed/qed_init_values_zipped-*.bin
 -- 
-2.20.1
+2.24.1
