@@ -1,78 +1,121 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  3 Mar 2020 17:30:45 +0100
-Subject: [Buildroot] [PATCH v1] package/gst1-plugins-base: fix static linking
-Message-ID: <20200303163045.13431-1-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 3 Mar 2020 17:43:02 +0100
+Subject: [Buildroot] [PATCH] package/linux-firmware: fix symlink support
+In-Reply-To: <20200303133356.859800-1-antoine.tenart@bootlin.com>
+References: <20200303133356.859800-1-antoine.tenart@bootlin.com>
+Message-ID: <20200303164302.GB12449@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to fix static linking of tools.
+Antoine, All,
 
-Fixes:
+On 2020-03-03 14:33 +0100, Antoine Tenart spake thusly:
+> Since Linux-firmware's commit 9cfefbd7fbda ("Remove duplicate symlinks")
+> symlinks aren't distributed anymore. They are rather created at
+> installation time by a script provided in the project, copy-firmware.sh.
+> The description of the symlinks is done in the WHENCE file. Since the
+> bump to version 20200122, in commit 48cc1a89ae04, installation for many
+> firmwares was broken as Buildroot tried to install missing symlinks from
+> Linux-firmware.
+> 
+> The fix is not only to remove now missing symlinks, but to add logic to
+> create those symlinks as kernel modules will depend on them. The
+> solution taken by this patch is to create dynamically symlinks based on
+> their description in the WHENCE file *and* only if the file they'll
+> point to was installed in the target directory.
 
-  http://autobuild.buildroot.net/results/b33019b3c9ad856aced34215c69bb292b536e25e
+Thanks for this patch, which basically does what I called for in a
+previous review:
+    http://lists.busybox.net/pipermail/buildroot/2020-March/275504.html
 
-  .../bin/ld: .../usr/lib/libgstreamer-1.0.a(gstplugin.c.o): in function `gst_plugin_register_func':
-  gstplugin.c:(.text+0x3bc): undefined reference to `g_module_make_resident'
-  .../bin/ld: .../usr/lib/libgstreamer-1.0.a(gstplugin.c.o): in function `_priv_gst_plugin_load_file_for_registry':
-  gstplugin.c:(.text+0x1228): undefined reference to `g_module_supported'
-  .../bin/ld: gstplugin.c:(.text+0x126c): undefined reference to `g_module_open'
-  .../bin/ld: gstplugin.c:(.text+0x1368): undefined reference to `g_module_symbol'
-  .../bin/ld: gstplugin.c:(.text+0x1494): undefined reference to `g_module_supported'
-  .../bin/ld: gstplugin.c:(.text+0x17f4): undefined reference to `g_module_close'
-  .../bin/ld: gstplugin.c:(.text+0x1a2c): undefined reference to `g_module_error'
+However, to avoid replicating my previous mistakes, I did a bit more
+in-depth analysis of this symlink issue, and it is a bit more involved
+than just this patch.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...ic-linkig-of-tools-needs-gmodule_dep.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/gstreamer1/gst1-plugins-base/0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch
+The problem is that we have bunch of LINUX_FIRMWARE_FILES that are
+globs, for example:
 
-diff --git a/package/gstreamer1/gst1-plugins-base/0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch b/package/gstreamer1/gst1-plugins-base/0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch
-new file mode 100644
-index 0000000000..b778f7a12c
---- /dev/null
-+++ b/package/gstreamer1/gst1-plugins-base/0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch
-@@ -0,0 +1,38 @@
-+From 443244e54d1e2813560d364b44b35d49b3987b67 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Tue, 3 Mar 2020 17:07:24 +0100
-+Subject: [PATCH] meson: static linkig of tools needs gmodule_dep
-+
-+Add gmodule_dep (analog to gstreamer/tools/meson.build).
-+
-+Fixes:
-+
-+.../bin/ld: .../usr/lib/libgstreamer-1.0.a(gstplugin.c.o): in function `gst_plugin_register_func':
-+gstplugin.c:(.text+0x3bc): undefined reference to `g_module_make_resident'
-+.../bin/ld: .../usr/lib/libgstreamer-1.0.a(gstplugin.c.o): in function `_priv_gst_plugin_load_file_for_registry':
-+gstplugin.c:(.text+0x1228): undefined reference to `g_module_supported'
-+.../bin/ld: gstplugin.c:(.text+0x126c): undefined reference to `g_module_open'
-+.../bin/ld: gstplugin.c:(.text+0x1368): undefined reference to `g_module_symbol'
-+.../bin/ld: gstplugin.c:(.text+0x1494): undefined reference to `g_module_supported'
-+.../bin/ld: gstplugin.c:(.text+0x17f4): undefined reference to `g_module_close'
-+.../bin/ld: gstplugin.c:(.text+0x1a2c): undefined reference to `g_module_error'
-+
-+[Upstream suggested: https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/merge_requests/587 ]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ tools/meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/meson.build b/tools/meson.build
-+index 57595fb47..bcbe11ca1 100644
-+--- a/tools/meson.build
-++++ b/tools/meson.build
-+@@ -1,4 +1,4 @@
-+-tool_deps = glib_deps + [pbutils_dep, audio_dep, video_dep, tag_dep, gst_dep, gst_base_dep]
-++tool_deps = glib_deps + [pbutils_dep, audio_dep, video_dep, tag_dep, gst_dep, gst_base_dep, gmodule_dep]
-+ 
-+ executable('gst-device-monitor- at 0@'.format(api_version),
-+   'gst-device-monitor.c',
-+-- 
-+2.25.1
-+
+    37 ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QCOM_ADRENO),y)
+    38 LINUX_FIRMWARE_FILES += qcom/a*
+    39 LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qcom qcom/NOTICE.txt
+    40 endif
+
+So, because we have a glob here, the following symlinks will not be
+created:
+
+    Link: a300_pfp.fw -> qcom/a300_pfp.fw
+    Link: a300_pm4.fw -> qcom/a300_pm4.fw
+
+So, we need to get rid of the globs and only ever use full names.
+
+See another comment below...
+
+> Fixes: 48cc1a89ae04 ("package/linux-firmware: bump to version 20200122")
+> Cc: james.hilliard1 at gmail.com
+> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+> ---
+> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+> index f8e95d0648c9..125df74ef68d 100644
+> --- a/package/linux-firmware/linux-firmware.mk
+> +++ b/package/linux-firmware/linux-firmware.mk
+[--SNIP--]
+> @@ -626,4 +614,21 @@ define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
+>  	$(LINUX_FIRMWARE_INSTALL_DIRS)
+>  endef
+>  
+> +# Some firmware are distributed as a symlink, for drivers to load them using a
+> +# defined name other than the real one. Since 9cfefbd7fbda ("Remove duplicate
+> +# symlinks") those symlink aren't distributed in linux-firmware but are created
+> +# automatically by its copy-firmware.sh script during the installation, which
+> +# parses the WHENCE file where symlinks are described. We follow the same logic
+> +# here, adding symlink only for firmwares installed in the target directory.
+> +# The grep/sed parsing is taken from the script mentioned before.
+> +define LINUX_FIRMWARE_CREATE_SYMLINKS
+> +	grep -E '^Link:' $(@D)/WHENCE | sed -e's/^Link: *//g' -e's/-> //g' | while read f d; do \
+
+You can combine the grep and sed into a single sed call:
+
+    sed -r -e '/^Link: (.+) -> (.+)$$/!d; s//\1 \2/' $(@D)/WHENCE
+
+> +		if test -f $(TARGET_DIR)/lib/firmware/$$d; then \
+> +			ln -sf $$d $(TARGET_DIR)/lib/firmware/$$f ; \
+> +		fi ; \
+> +	done
+> +endef
+> +
+> +LINUX_FIRMWARE_POST_INSTALL_TARGET_HOOKS += LINUX_FIRMWARE_CREATE_SYMLINKS
+
+Use of a hook is not really useful here: we are using the generic infra,
+so we can write whatever we want in the _INSTALL_TARGET_CMDS anyway, so
+just define the macro before _INSTALL_TARGET_CMDS and call it from
+there, like the other parts (notice the rename of the macro to match):
+
+    621  define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
+    622          mkdir -p $(TARGET_DIR)/lib/firmware
+    623          $(LINUX_FIRMWARE_INSTALL_FILES)
+    624          $(LINUX_FIRMWARE_INSTALL_DIRS)
+    625          $(LINUX_FIRMWARE_INSTALL_SYMLINKS)
+    626  endef
+
+Regards,
+Yann E. MORIN.
+
+>  $(eval $(generic-package))
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
