@@ -1,134 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 3 Mar 2020 22:15:52 +0100
-Subject: [Buildroot] [PATCH] package/linux-firmware: fix symlink support
-In-Reply-To: <20200303184755.GG3179@kwain>
-References: <20200303133356.859800-1-antoine.tenart@bootlin.com>
- <20200303164302.GB12449@scaer> <20200303184755.GG3179@kwain>
-Message-ID: <20200303211552.GC12449@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 3 Mar 2020 22:10:09 +0100
+Subject: [Buildroot] [git commit] package/libvncserver: fix CVE-2018-20750
+Message-ID: <20200303210603.EDDA18F237@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Antoine, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b10cee53265b0ddd195a26569caa8909d82e8c04
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-03 19:47 +0100, Antoine Tenart spake thusly:
-> On Tue, Mar 03, 2020 at 05:43:02PM +0100, Yann E. MORIN wrote:
-> > On 2020-03-03 14:33 +0100, Antoine Tenart spake thusly:
-> > 
-> > The problem is that we have bunch of LINUX_FIRMWARE_FILES that are
-> > globs, for example:
-> > 
-> >     37 ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QCOM_ADRENO),y)
-> >     38 LINUX_FIRMWARE_FILES += qcom/a*
-> >     39 LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qcom qcom/NOTICE.txt
-> >     40 endif
-> > 
-> > So, because we have a glob here, the following symlinks will not be
-> > created:
-> > 
-> >     Link: a300_pfp.fw -> qcom/a300_pfp.fw
-> >     Link: a300_pm4.fw -> qcom/a300_pm4.fw
-> 
-> I don't get why they wouldn't be created. The symlink creation is done
-> after the files have been installed to the target directory, and is done
-> based on what has been installed. So the definition used to get those
-> firmware installed (being full names or not) shouldn't matter.
-> 
-> With this patch, and BR2_PACKAGE_LINUX_FIRMWARE_QCOM_ADRENO enabled, I
-> get the following files in $(TARGET_DIR)/lib/firmware:
-> 
-> ./output/target/lib/firmware/
-> ??? a300_pfp.fw -> qcom/a300_pfp.fw
-> ??? a300_pm4.fw -> qcom/a300_pm4.fw
-> ??? qcom
->     ??? a300_pfp.fw
->     ??? a300_pm4.fw
->     ??? a530_pfp.fw
->     ??? a530_pm4.fw
->     ??? a530v3_gpmu.fw2
->     ??? a530_zap.b00
->     ??? a530_zap.b01
->     ??? a530_zap.b02
->     ??? a530_zap.mdt
->     ??? a630_gmu.bin
->     ??? a630_sqe.fw
+LibVNC through 0.9.12 contains a heap out-of-bounds write vulnerability
+in libvncserver/rfbserver.c. The fix for CVE-2018-15127 was incomplete.
 
-Indeed, and so do I. I just got confused between the 'Link:' tags and
-the usual order of arguments to ln: they are reversed, and I looke at
-file and links in the wrong location...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...bytes-in-rfbProcessFileTransferReadBuffer.patch | 47 ++++++++++++++++++++++
+ package/libvncserver/libvncserver.mk               |  3 ++
+ 2 files changed, 50 insertions(+)
 
-> > > +# Some firmware are distributed as a symlink, for drivers to load them using a
-> > > +# defined name other than the real one. Since 9cfefbd7fbda ("Remove duplicate
-> > > +# symlinks") those symlink aren't distributed in linux-firmware but are created
-> > > +# automatically by its copy-firmware.sh script during the installation, which
-> > > +# parses the WHENCE file where symlinks are described. We follow the same logic
-> > > +# here, adding symlink only for firmwares installed in the target directory.
-> > > +# The grep/sed parsing is taken from the script mentioned before.
-> > > +define LINUX_FIRMWARE_CREATE_SYMLINKS
-> > > +	grep -E '^Link:' $(@D)/WHENCE | sed -e's/^Link: *//g' -e's/-> //g' | while read f d; do \
-> > 
-> > You can combine the grep and sed into a single sed call:
-> > 
-> >     sed -r -e '/^Link: (.+) -> (.+)$$/!d; s//\1 \2/' $(@D)/WHENCE
-> 
-> The reasoning here was to reuse with as little change as possible the
-> code used in Linux-firmware's copy-firmware.sh script, to be easily
-> maintainable should they decide to update the link definition format.
-
-I see, and that's a good reason. Yet, I've looked at the copy-firmware
-script, and I am not impressed... I find the above to be more readable.
-
-If the upstream script was callable with a list of firmware files to
-install, then that would wonderfull, as we could re-use it instead of
-reimplementing the logic ourselves (hint, hint ;-) ).
-
-> I'm not pushing for either solution, I can change this for v2 if you
-> believe the two command should still be combined.
-
-no need for a v2: the major road-block (the globs above) is not. I can
-fix the sed and hook stuff locally (I already did it).
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
-> > > +		if test -f $(TARGET_DIR)/lib/firmware/$$d; then \
-> > > +			ln -sf $$d $(TARGET_DIR)/lib/firmware/$$f ; \
-> > > +		fi ; \
-> > > +	done
-> > > +endef
-> > > +
-> > > +LINUX_FIRMWARE_POST_INSTALL_TARGET_HOOKS += LINUX_FIRMWARE_CREATE_SYMLINKS
-> > 
-> > Use of a hook is not really useful here: we are using the generic infra,
-> > so we can write whatever we want in the _INSTALL_TARGET_CMDS anyway, so
-> > just define the macro before _INSTALL_TARGET_CMDS and call it from
-> > there, like the other parts (notice the rename of the macro to match):
-> > 
-> >     621  define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
-> >     622          mkdir -p $(TARGET_DIR)/lib/firmware
-> >     623          $(LINUX_FIRMWARE_INSTALL_FILES)
-> >     624          $(LINUX_FIRMWARE_INSTALL_DIRS)
-> >     625          $(LINUX_FIRMWARE_INSTALL_SYMLINKS)
-> >     626  endef
-> 
-> OK, will do!
-> 
-> Thanks!
-> Antoine
-> 
-> -- 
-> Antoine T?nart, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libvncserver/0003-Limit-lenght-to-INT_MAX-bytes-in-rfbProcessFileTransferReadBuffer.patch b/package/libvncserver/0003-Limit-lenght-to-INT_MAX-bytes-in-rfbProcessFileTransferReadBuffer.patch
+new file mode 100644
+index 0000000000..7461f11f80
+--- /dev/null
++++ b/package/libvncserver/0003-Limit-lenght-to-INT_MAX-bytes-in-rfbProcessFileTransferReadBuffer.patch
+@@ -0,0 +1,47 @@
++From 09e8fc02f59f16e2583b34fe1a270c238bd9ffec Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
++Date: Mon, 7 Jan 2019 10:40:01 +0100
++Subject: [PATCH] Limit lenght to INT_MAX bytes in
++ rfbProcessFileTransferReadBuffer()
++
++This ammends 15bb719c03cc70f14c36a843dcb16ed69b405707 fix for a heap
++out-of-bound write access in rfbProcessFileTransferReadBuffer() when
++reading a transfered file content in a server. The former fix did not
++work on platforms with a 32-bit int type (expected by rfbReadExact()).
++
++CVE-2018-15127
++<https://github.com/LibVNC/libvncserver/issues/243>
++<https://github.com/LibVNC/libvncserver/issues/273>
++[Retrieved from:
++https://github.com/LibVNC/libvncserver/commit/09e8fc02f59f16e2583b34fe1a270c238bd9ffec]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libvncserver/rfbserver.c | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/libvncserver/rfbserver.c b/libvncserver/rfbserver.c
++index 7af84906..f2edbeea 100644
++--- a/libvncserver/rfbserver.c
+++++ b/libvncserver/rfbserver.c
++@@ -88,6 +88,8 @@
++ #include <errno.h>
++ /* strftime() */
++ #include <time.h>
+++/* INT_MAX */
+++#include <limits.h>
++ 
++ #ifdef LIBVNCSERVER_WITH_WEBSOCKETS
++ #include "rfbssl.h"
++@@ -1472,8 +1474,11 @@ char *rfbProcessFileTransferReadBuffer(rfbClientPtr cl, uint32_t length)
++        0XFFFFFFFF, i.e. SIZE_MAX for 32-bit systems. On 64-bit systems, a length of 0XFFFFFFFF
++        will safely be allocated since this check will never trigger and malloc() can digest length+1
++        without problems as length is a uint32_t.
+++       We also later pass length to rfbReadExact() that expects a signed int type and
+++       that might wrap on platforms with a 32-bit int type if length is bigger
+++       than 0X7FFFFFFF.
++     */
++-    if(length == SIZE_MAX) {
+++    if(length == SIZE_MAX || length > INT_MAX) {
++ 	rfbErr("rfbProcessFileTransferReadBuffer: too big file transfer length requested: %u", (unsigned int)length);
++ 	rfbCloseClient(cl);
++ 	return NULL;
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index b024c3161d..79db2dad83 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
+@@ -13,6 +13,9 @@ LIBVNCSERVER_INSTALL_STAGING = YES
+ LIBVNCSERVER_DEPENDENCIES = host-pkgconf lzo
+ LIBVNCSERVER_CONF_OPTS = -DWITH_LZO=ON
+ 
++# 0003-Limit-lenght-to-INT_MAX-bytes-in-rfbProcessFileTransferReadBuffer.patch
++LIBVNCSERVER_IGNORE_CVES += CVE-2018-20750
++
+ # only used for examples
+ LIBVNCSERVER_CONF_OPTS += \
+ 	-DWITH_FFMPEG=OFF \
