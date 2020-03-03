@@ -1,80 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Mar 2020 00:00:37 +0100
-Subject: [Buildroot] [git commit] package/gst1-plugins-base: fix static
- linking
-Message-ID: <20200303224923.592FB8F33C@busybox.osuosl.org>
+Date: Wed, 04 Mar 2020 00:04:18 +0100
+Subject: [Buildroot] Beaglebone support
+In-Reply-To: <CABhNV22j46zXYJimCgP7Z-VK=kbbosiQr0V7ObVW0Y3cW-VVZg@mail.gmail.com>
+ ("Einar =?utf-8?Q?J=C3=B3n=22's?= message of "Sun, 1 Mar 2020 14:55:33
+ +0100")
+References: <CAPmASeu4KLNSK=nkgb04C4UKwTsDfjyZ0RXOCkF2r3yWyHYWJg@mail.gmail.com>
+ <CABhNV22j46zXYJimCgP7Z-VK=kbbosiQr0V7ObVW0Y3cW-VVZg@mail.gmail.com>
+Message-ID: <87lfohavm5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6494ddaf96657e413cef10342cfb4768661b43cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Einar" == Einar J?n <tolvupostur@gmail.com> writes:
 
-Add patch to fix static linking of tools.
+ > Hello Andrea, Sebastien
+ > Sorry for the late response. I've been meaning to build and fix the qt5 for
+ > beaglebone, but I'm in the middle of switching jobs and moving countries,
+ > and I don't have the buildroot repo.
+ > The beaglebone_qt5_defconfig should mostly work with the latest addition of
+ > new ti-sgx drivers (added in November or so). It now builds the latest
+ > drivers for ti-sgx (which finally builds the KMS plugin for QT), and
+ > QtMultimedia should work. I have been building QtMultimedia and QtWebEngine
+ > with the old ti-sgx drivers and writing directly to the frame buffer (no
+ > acceleration because KMS plugin wouldn't build, no Weston) for over a year.
 
-Fixes:
+ > I haven't tried that exact setup since the addition, but you probably need
+ > to add
+ > BR2_KERNEL_NEEDS_OPENSSL=y
+ > for it to build. Compare beaglebone_qt5_defconfig to beaglebone_defconfig
+ > for exact spelling of this option.
 
-  http://autobuild.buildroot.net/results/b33019b3c9ad856aced34215c69bb292b536e25e
+Notice that this has been fixed in commit 128c57adb8f3a4e1af2b9, which
+is part of 2020.02-rc3.
 
-  .../bin/ld: .../usr/lib/libgstreamer-1.0.a(gstplugin.c.o): in function `gst_plugin_register_func':
-  gstplugin.c:(.text+0x3bc): undefined reference to `g_module_make_resident'
-  .../bin/ld: .../usr/lib/libgstreamer-1.0.a(gstplugin.c.o): in function `_priv_gst_plugin_load_file_for_registry':
-  gstplugin.c:(.text+0x1228): undefined reference to `g_module_supported'
-  .../bin/ld: gstplugin.c:(.text+0x126c): undefined reference to `g_module_open'
-  .../bin/ld: gstplugin.c:(.text+0x1368): undefined reference to `g_module_symbol'
-  .../bin/ld: gstplugin.c:(.text+0x1494): undefined reference to `g_module_supported'
-  .../bin/ld: gstplugin.c:(.text+0x17f4): undefined reference to `g_module_close'
-  .../bin/ld: gstplugin.c:(.text+0x1a2c): undefined reference to `g_module_error'
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-static-linkig-of-tools-needs-gmodule_dep.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
-
-diff --git a/package/gstreamer1/gst1-plugins-base/0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch b/package/gstreamer1/gst1-plugins-base/0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch
-new file mode 100644
-index 0000000000..b778f7a12c
---- /dev/null
-+++ b/package/gstreamer1/gst1-plugins-base/0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch
-@@ -0,0 +1,38 @@
-+From 443244e54d1e2813560d364b44b35d49b3987b67 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Tue, 3 Mar 2020 17:07:24 +0100
-+Subject: [PATCH] meson: static linkig of tools needs gmodule_dep
-+
-+Add gmodule_dep (analog to gstreamer/tools/meson.build).
-+
-+Fixes:
-+
-+.../bin/ld: .../usr/lib/libgstreamer-1.0.a(gstplugin.c.o): in function `gst_plugin_register_func':
-+gstplugin.c:(.text+0x3bc): undefined reference to `g_module_make_resident'
-+.../bin/ld: .../usr/lib/libgstreamer-1.0.a(gstplugin.c.o): in function `_priv_gst_plugin_load_file_for_registry':
-+gstplugin.c:(.text+0x1228): undefined reference to `g_module_supported'
-+.../bin/ld: gstplugin.c:(.text+0x126c): undefined reference to `g_module_open'
-+.../bin/ld: gstplugin.c:(.text+0x1368): undefined reference to `g_module_symbol'
-+.../bin/ld: gstplugin.c:(.text+0x1494): undefined reference to `g_module_supported'
-+.../bin/ld: gstplugin.c:(.text+0x17f4): undefined reference to `g_module_close'
-+.../bin/ld: gstplugin.c:(.text+0x1a2c): undefined reference to `g_module_error'
-+
-+[Upstream suggested: https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/merge_requests/587 ]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ tools/meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/meson.build b/tools/meson.build
-+index 57595fb47..bcbe11ca1 100644
-+--- a/tools/meson.build
-++++ b/tools/meson.build
-+@@ -1,4 +1,4 @@
-+-tool_deps = glib_deps + [pbutils_dep, audio_dep, video_dep, tag_dep, gst_dep, gst_base_dep]
-++tool_deps = glib_deps + [pbutils_dep, audio_dep, video_dep, tag_dep, gst_dep, gst_base_dep, gmodule_dep]
-+ 
-+ executable('gst-device-monitor- at 0@'.format(api_version),
-+   'gst-device-monitor.c',
-+-- 
-+2.25.1
-+
+-- 
+Bye, Peter Korsgaard
