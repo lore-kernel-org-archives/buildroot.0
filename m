@@ -1,245 +1,207 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue,  3 Mar 2020 15:12:58 -0700
-Subject: [Buildroot] [PATCH 1/1] package/jamvm: drop package
-Message-ID: <20200303221258.105952-1-james.hilliard1@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 3 Mar 2020 23:18:58 +0100
+Subject: [Buildroot] [git commit branch/next] package/mini-snmpd: bump to
+ version 1.6
+Message-ID: <20200303220658.AE4B48F2FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-JamVM has not had a release since 2014 and is unmaintained.
+commit: https://git.buildroot.net/buildroot/commit/?id=fccdc6bd0b587b1b60565d957fe963fa4396f120
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Drop both patches:
+
+ - 0001-Prepend-zero-byte-before-unsigned-integers.patch is upstream
+   as of 949ae648bf7c654b8fae607a0988bfa672607156
+
+ - 0002-mib.c-allow-unsigned-integers-to-have-an-extra-byte.patch is
+   upstream as of
+
+Use the systemd unit file provided by the upstream project instead of
+our own, just add an /etc/default/ file to add the -a option to
+preserve the same behavior.
+
+This new version now needs pkg-config.
+
+v1.6 changelog:
+
+Bug fix release.
+
+- Fix #16: regression in ifTable for point-to-point interfaces
+- Fix #17: major memory leak in Linux backend
+- Fix #18: consistent timeout handling in .conf file and command line
+
+v1.5 changelog:
+
+Major feature release.  Support for TCP-MIB, UDP-MIB, IP-MIB,
+ifXTable with 64-bit counters.
+
+- Majority of new features from [NDM Systems][]
+- CVE fixes from [Cisco Talos Intelligence Group][talos]
+
+- Add support for ifXTable (64-bit counters), from NDM Systems
+- Add support for TCP-MIB, from NDM Systems
+- Add support for UDP-MIB, from NDM Systems
+- Add support for IP-MIB, from NDM Systems
+- Add support for ifType
+- Add support for ifMtu
+- Binary and man page renamed: `mini_snmpd` --> `mini-snmpd`
+- New command line option `-l LEVEL` replaces `--verbose`
+- New command line option `-v` to show program version
+- Create PID file when daemon is ready to receive signals
+- Add support for systemd unit file on Linux
+- Add support for /etc/mini-snmpd.conf, disabled by default
+
+- CVE-2020-6060: Fix stack overflow in client connection handler
+- CVE-2020-6059: Fix out-of-bounds read in parsing of SNMP packet
+- CVE-2020-6058: Fix out-of-bounds read in parsing of SNMP packet
+- Let `-s` flag control use of syslog, when running in foreground
+- Removed all (known) GNU:isms; i.e., `__progname` and `%m`
+
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                              |   6 +
- package/Config.in                             |   1 -
- ...n-available-instead-of-fpu_control.h.patch | 108 ------------------
- package/jamvm/Config.in                       |  26 -----
- package/jamvm/jamvm.hash                      |   3 -
- package/jamvm/jamvm.mk                        |  27 -----
- 6 files changed, 6 insertions(+), 165 deletions(-)
- delete mode 100644 package/jamvm/0001-Use-fenv.h-when-available-instead-of-fpu_control.h.patch
- delete mode 100644 package/jamvm/Config.in
- delete mode 100644 package/jamvm/jamvm.hash
- delete mode 100644 package/jamvm/jamvm.mk
+ ...repend-zero-byte-before-unsigned-integers.patch | 31 ----------------------
+ ...w-unsigned-integers-to-have-an-extra-byte.patch | 28 -------------------
+ package/mini-snmpd/mini-snmpd                      |  2 ++
+ package/mini-snmpd/mini-snmpd.hash                 |  2 +-
+ package/mini-snmpd/mini-snmpd.mk                   | 11 +++++---
+ package/mini-snmpd/mini-snmpd.service              | 12 ---------
+ 6 files changed, 10 insertions(+), 76 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 6a33ce9e1c..0238fbcb24 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2020.02"
- 
-+config BR2_PACKAGE_JAMVM
-+	bool "jamvm removed"
-+	select BR2_LEGACY
-+	help
-+	  JamVM has not had a release since 2014 and is unmaintained.
-+
- config BR2_PACKAGE_QT5_VERSION_5_6
- 	bool "qt 5.6 support removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 5be5f3726b..1dd5ace99c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -607,7 +607,6 @@ endif
- 	source "package/gauche/Config.in"
- 	source "package/guile/Config.in"
- 	source "package/haserl/Config.in"
--	source "package/jamvm/Config.in"
- 	source "package/jimtcl/Config.in"
- 	source "package/lua/Config.in"
- 	source "package/luainterpreter/Config.in"
-diff --git a/package/jamvm/0001-Use-fenv.h-when-available-instead-of-fpu_control.h.patch b/package/jamvm/0001-Use-fenv.h-when-available-instead-of-fpu_control.h.patch
+diff --git a/package/mini-snmpd/0001-Prepend-zero-byte-before-unsigned-integers.patch b/package/mini-snmpd/0001-Prepend-zero-byte-before-unsigned-integers.patch
 deleted file mode 100644
-index 78ee9b7e18..0000000000
---- a/package/jamvm/0001-Use-fenv.h-when-available-instead-of-fpu_control.h.patch
+index 36ddee422f..0000000000
+--- a/package/mini-snmpd/0001-Prepend-zero-byte-before-unsigned-integers.patch
 +++ /dev/null
-@@ -1,108 +0,0 @@
--From ecd4eceae98cfb1c83133bdeaa9095546ca8b7c6 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Thu, 26 May 2016 15:05:48 +0200
--Subject: [PATCH] Use <fenv.h> when available instead of <fpu_control.h>
+@@ -1,31 +0,0 @@
+-From 949ae648bf7c654b8fae607a0988bfa672607156 Mon Sep 17 00:00:00 2001
+-From: Patrick Rauscher <prauscher@prauscher.de>
+-Date: Fri, 18 Aug 2017 17:31:23 +0200
+-Subject: [PATCH] Prepend zero-byte before unsigned integers
 -
--musl libc (http://musl-libc.org lack the non-standard <fpu_control.h>
--header, which is used in src/os/linux/{i386,x86_64}/init.c files to
--setup the floating point precision. This patch makes it use the
--standard C <fenv.h> header instead when available.
+-fixes #8
 -
--Original patch at Felix Janda at
--https://sourceforge.net/p/jamvm/patches/6/, adapted to still use
--<fpu_control.h> if <fenv.h> is not provided.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 ----
-- configure.ac               |  2 +-
-- src/os/linux/i386/init.c   | 15 +++++++++++++++
-- src/os/linux/x86_64/init.c | 15 +++++++++++++--
-- 3 files changed, 29 insertions(+), 3 deletions(-)
+- mib.c | 5 +++++
+- 1 file changed, 5 insertions(+)
 -
--diff --git a/configure.ac b/configure.ac
--index 19f77e6..ce59a3e 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -279,7 +279,7 @@ fi
+-diff --git a/mib.c b/mib.c
+-index 7d2e513..a9ffbe2 100644
+---- a/mib.c
+-+++ b/mib.c
+-@@ -207,6 +207,11 @@ static int encode_unsigned(data_t *data, int type, unsigned int ticks_value)
+- 	else
+- 		length = 1;
 - 
-- dnl Checks for header files.
-- AC_HEADER_STDC
---AC_CHECK_HEADERS(sys/time.h unistd.h endian.h sys/param.h locale.h alloca.h)
--+AC_CHECK_HEADERS(sys/time.h unistd.h endian.h sys/param.h locale.h alloca.h fenv.h)
-- 
-- if test "$enable_zip" != no; then
--     AC_CHECK_HEADER(zlib.h,,AC_MSG_ERROR(zlib.h is missing))
--diff --git a/src/os/linux/i386/init.c b/src/os/linux/i386/init.c
--index d9c6648..8fefe7d 100644
----- a/src/os/linux/i386/init.c
--+++ b/src/os/linux/i386/init.c
--@@ -19,18 +19,33 @@
--  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
--  */
-- 
--+#include "config.h"
+-+	/* check if the integer could be interpreted negative during a signed decode and prepend a zero-byte if necessary */
+-+	if ((ticks_value >> (8 * (length - 1))) & 0x80) {
+-+		length++;
+-+	}
 -+
--+#if defined(HAVE_FENV_H)
--+#include <fenv.h>
--+#else
-- #include <fpu_control.h>
--+#endif
-- 
-- /* Change floating point precision to double (64-bit) from
--  * the extended (80-bit) Linux default. */
-- 
-- void setDoublePrecision() {
--+#if defined(HAVE_FENV_H)
--+    fenv_t fenv;
--+
--+    fegetenv(&fenv);
--+    fenv.__control_word &= ~0x300; /* _FPU_EXTENDED */
--+    fenv.__control_word |= 0x200; /* _FPU_DOUBLE */
--+    fesetenv(&fenv);
--+#else
--     fpu_control_t cw;
-- 
--     _FPU_GETCW(cw);
--     cw &= ~_FPU_EXTENDED;
--     cw |= _FPU_DOUBLE;
--     _FPU_SETCW(cw);
--+#endif
-- }
-- 
-- void initialisePlatform() {
--diff --git a/src/os/linux/x86_64/init.c b/src/os/linux/x86_64/init.c
--index 9d55229..b42b14e 100644
----- a/src/os/linux/x86_64/init.c
--+++ b/src/os/linux/x86_64/init.c
--@@ -19,7 +19,11 @@
--  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
--  */
-- 
---#ifdef __linux__
--+#include "config.h"
--+
--+#if defined(HAVE_FENV_H)
--+#include <fenv.h>
--+#else
-- #include <fpu_control.h>
-- #endif
-- 
--@@ -30,7 +34,14 @@
-- */
-- 
-- void setDoublePrecision() {
---#ifdef __linux__
--+#if defined(HAVE_FENV_H)
--+    fenv_t fenv;
--+
--+    fegetenv(&fenv);
--+    fenv.__control_word &= ~0x300; /*_FPU_EXTENDED */
--+    fenv.__control_word |= 0x200; /*_FPU_DOUBLE */
--+    fesetenv(&fenv);
--+#else
--     fpu_control_t cw;
-- 
--     _FPU_GETCW(cw);
+- 	*buffer++ = type;
+- 	*buffer++ = length;
+- 	while (length--)
 --- 
--2.7.4
+-2.13.2
 -
-diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
+diff --git a/package/mini-snmpd/0002-mib.c-allow-unsigned-integers-to-have-an-extra-byte.patch b/package/mini-snmpd/0002-mib.c-allow-unsigned-integers-to-have-an-extra-byte.patch
 deleted file mode 100644
-index 7717ccaadb..0000000000
---- a/package/jamvm/Config.in
+index 045d296913..0000000000
+--- a/package/mini-snmpd/0002-mib.c-allow-unsigned-integers-to-have-an-extra-byte.patch
 +++ /dev/null
-@@ -1,26 +0,0 @@
--config BR2_PACKAGE_JAMVM_ARCH_SUPPORTS
--	bool
--	default y if BR2_arm || BR2_armeb
--	default y if BR2_i386 || BR2_x86_64
--	default y if (BR2_mips || BR2_mipsel) \
--		&& (BR2_MIPS_FP32_MODE_32 || BR2_MIPS_SOFT_FLOAT)
--	default y if BR2_powerpc
+@@ -1,28 +0,0 @@
+-From 556c8a406c9e08dd9444222e072f7eb9c82a81e8 Mon Sep 17 00:00:00 2001
+-From: Patrick Rauscher <prauscher@prauscher.de>
+-Date: Fri, 18 Aug 2017 17:44:32 +0200
+-Subject: [PATCH] mib.c: allow unsigned integers to have an extra byte
 -
--config BR2_PACKAGE_JAMVM
--	bool "jamvm"
--	depends on BR2_PACKAGE_JAMVM_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_CLASSPATH_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_STATIC_LIBS
--	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_CLASSPATH
--	help
--	  JamVM is a new Java Virtual Machine which conforms to the
--	  JVM specification version 2 (blue book).
+-The extra byte can be needed when encoding huge unsigned numbers (i.e. 0x80000000 or higher). In this case, during encoding we need an extra byte to make sure clients decoding as signed int do not get negative numbers. For further details, see commit 949ae648
 -
--	  http://jamvm.sf.net
+-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+----
+- mib.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--comment "jamvm needs a toolchain w/ threads, dynamic library"
--	depends on BR2_PACKAGE_JAMVM_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_CLASSPATH_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/jamvm/jamvm.hash b/package/jamvm/jamvm.hash
+-diff --git a/mib.c b/mib.c
+-index a9ffbe2..83cc20d 100644
+---- a/mib.c
+-+++ b/mib.c
+-@@ -372,7 +372,7 @@ static int data_alloc(data_t *data, int type)
+- 		case BER_TYPE_COUNTER:
+- 		case BER_TYPE_GAUGE:
+- 		case BER_TYPE_TIME_TICKS:
+--			data->max_length = sizeof(unsigned int) + 2;
+-+			data->max_length = sizeof(unsigned int) + 3;
+- 			data->encoded_length = 0;
+- 			data->buffer = allocate(data->max_length);
+- 			break;
+--- 
+-2.13.2
+-
+diff --git a/package/mini-snmpd/mini-snmpd b/package/mini-snmpd/mini-snmpd
+new file mode 100644
+index 0000000000..0ca9901d58
+--- /dev/null
++++ b/package/mini-snmpd/mini-snmpd
+@@ -0,0 +1,2 @@
++# Require client authentication, thus SNMP version 2c
++EXTRA_PARAMS=-a
+diff --git a/package/mini-snmpd/mini-snmpd.hash b/package/mini-snmpd/mini-snmpd.hash
+index de72bb59eb..2d66809291 100644
+--- a/package/mini-snmpd/mini-snmpd.hash
++++ b/package/mini-snmpd/mini-snmpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 59f84e94ef7c9ff36d243c7974a100903a4a9a0bb529b67cf6f0d3352138a86b mini-snmpd-1.4.tar.gz
++sha256 de00c475a3c70c56f3ee97cd683cb71009d3521d60b1f589c5a91b4671ede9f3 mini-snmpd-1.6.tar.gz
+ sha256 8a43b895972a24567297f44f35dab0f5f9ed3b7db6dac0bf6094075b27ab9d56 COPYING
+diff --git a/package/mini-snmpd/mini-snmpd.mk b/package/mini-snmpd/mini-snmpd.mk
+index 698402bc51..570241c256 100644
+--- a/package/mini-snmpd/mini-snmpd.mk
++++ b/package/mini-snmpd/mini-snmpd.mk
+@@ -4,15 +4,18 @@
+ #
+ ################################################################################
+ 
+-MINI_SNMPD_VERSION = 1.4
++MINI_SNMPD_VERSION = 1.6
+ MINI_SNMPD_SITE = $(call github,troglobit,mini-snmpd,v$(MINI_SNMPD_VERSION))
+ MINI_SNMPD_LICENSE = GPL-2.0
+ MINI_SNMPD_LICENSE_FILES = COPYING
+ MINI_SNMPD_AUTORECONF = YES
++MINI_SNMPD_DEPENDENCIES = host-pkgconf
+ 
+-define MINI_SNMPD_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 package/mini-snmpd/mini-snmpd.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/mini-snmpd.service
++define MINI_SNMPD_INSTALL_ETC_DEFAULT
++	$(INSTALL) -D -m 644 package/mini-snmpd/mini-snmpd \
++		$(TARGET_DIR)/etc/default/mini-snmpd
+ endef
+ 
++MINI_SNMPD_POST_INSTALL_TARGET_HOOKS += MINI_SNMPD_INSTALL_ETC_DEFAULT
++
+ $(eval $(autotools-package))
+diff --git a/package/mini-snmpd/mini-snmpd.service b/package/mini-snmpd/mini-snmpd.service
 deleted file mode 100644
-index 9bcbd61393..0000000000
---- a/package/jamvm/jamvm.hash
+index 8a15585e6e..0000000000
+--- a/package/mini-snmpd/mini-snmpd.service
 +++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed:
--sha256  76428e96df0ae9dd964c7a7c74c1e9a837e2f312c39e9a357fa8178f7eff80da  jamvm-2.0.0.tar.gz
--sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/jamvm/jamvm.mk b/package/jamvm/jamvm.mk
-deleted file mode 100644
-index 26615ef7a3..0000000000
---- a/package/jamvm/jamvm.mk
-+++ /dev/null
-@@ -1,27 +0,0 @@
--################################################################################
--#
--# jamvm
--#
--################################################################################
+@@ -1,12 +0,0 @@
+-[Unit]
+-Description=Mini SNMP Daemon
+-StartLimitIntervalSec=0
 -
--JAMVM_VERSION = 2.0.0
--JAMVM_SITE = http://downloads.sourceforge.net/project/jamvm/jamvm/JamVM%20$(JAMVM_VERSION)
--JAMVM_LICENSE = GPL-2.0+
--JAMVM_LICENSE_FILES = COPYING
--JAMVM_DEPENDENCIES = zlib classpath
--# For 0001-Use-fenv.h-when-available-instead-of-fpu_control.h.patch
--JAMVM_AUTORECONF = YES
--# int inlining seems to crash jamvm, don't build shared version of internal lib
--JAMVM_CONF_OPTS = \
--	--with-classpath-install-dir=/usr \
--	--disable-int-inlining \
--	--disable-shared \
--	--without-pic
+-[Service]
+-Environment='COMMUNITY=public'
+-ExecStart=/sbin/mini_snmpd -a -n -c ${COMMUNITY} $EXTRA_PARAMS
+-Restart=always
+-RestartSec=1
 -
--# jamvm has ARM assembly code that cannot be compiled in Thumb2 mode,
--# so we must force traditional ARM mode.
--ifeq ($(BR2_arm),y)
--JAMVM_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -marm"
--endif
--
--$(eval $(autotools-package))
--- 
-2.20.1
+-[Install]
+-WantedBy=multi-user.target
