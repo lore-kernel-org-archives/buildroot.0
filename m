@@ -1,34 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Mar 2020 22:54:40 +0100
-Subject: [Buildroot] [PATCH 1/2] package/zziplib: fix CVE-2018-16548
-In-Reply-To: <20200303201622.283957-1-fontaine.fabrice@gmail.com>
-References: <20200303201622.283957-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200303225440.05c016f3@windsurf.home>
+Date: Tue, 3 Mar 2020 22:55:28 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libtirpc: fix build with gcc 10
+In-Reply-To: <20200228173052.5128-1-petr.vorel@gmail.com>
+References: <20200228173052.5128-1-petr.vorel@gmail.com>
+Message-ID: <20200303225528.4fe98de9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  3 Mar 2020 21:16:21 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Fri, 28 Feb 2020 18:30:51 +0100
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
-> An issue was discovered in ZZIPlib through 0.13.69. There is a memory
-> leak triggered in the function __zzip_parse_root_directory in zip.c,
-> which will lead to a denial of service attack.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->  ...eak-from-__zzip_parse_root_directory.patch | 74 +++++++++++++++++++
->  ...k-from-__zzip_parse_root_directory-2.patch | 53 +++++++++++++
->  ...3-One-more-free-to-avoid-memory-leak.patch | 25 +++++++
->  package/zziplib/zziplib.mk                    |  5 ++
->  4 files changed, 157 insertions(+)
->  create mode 100644 package/zziplib/0001-Avoid-memory-leak-from-__zzip_parse_root_directory.patch
->  create mode 100644 package/zziplib/0002-Avoid-memory-leak-from-__zzip_parse_root_directory-2.patch
->  create mode 100644 package/zziplib/0003-One-more-free-to-avoid-memory-leak.patch
+>  ...ltiple-definiton-with-gcc-fno-common.patch | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 package/libtirpc/0005-Avoid-multiple-definiton-with-gcc-fno-common.patch
 
-Both applied to master. Thanks!
+Is this for master or next ? Are you talking about gcc 10 for the host
+or gcc 10 for the target ?
 
 Thomas
 -- 
