@@ -1,63 +1,36 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Tue, 3 Mar 2020 22:44:25 +0100
-Subject: [Buildroot] [PATCH] package/linux-firmware: fix symlink support
-In-Reply-To: <20200303213203.GI3179@kwain>
-References: <20200303133356.859800-1-antoine.tenart@bootlin.com>
- <20200303212853.GD12449@scaer> <20200303213203.GI3179@kwain>
-Message-ID: <20200303214425.GJ3179@kwain>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 3 Mar 2020 22:47:46 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-jinja2: fix
+ async removal paths
+Message-ID: <20200303213621.5F8CA8F2F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Mar 03, 2020 at 10:32:03PM +0100, Antoine Tenart wrote:
-> On Tue, Mar 03, 2020 at 10:28:53PM +0100, Yann E. MORIN wrote:
-> > On 2020-03-03 14:33 +0100, Antoine Tenart spake thusly:
-> > > Since Linux-firmware's commit 9cfefbd7fbda ("Remove duplicate symlinks")
-> > > symlinks aren't distributed anymore. They are rather created at
-> > > installation time by a script provided in the project, copy-firmware.sh.
-> > > The description of the symlinks is done in the WHENCE file. Since the
-> > > bump to version 20200122, in commit 48cc1a89ae04, installation for many
-> > > firmwares was broken as Buildroot tried to install missing symlinks from
-> > > Linux-firmware.
-> > > 
-> > > The fix is not only to remove now missing symlinks, but to add logic to
-> > > create those symlinks as kernel modules will depend on them. The
-> > > solution taken by this patch is to create dynamically symlinks based on
-> > > their description in the WHENCE file *and* only if the file they'll
-> > > point to was installed in the target directory.
-> > > 
-> > > Fixes: 48cc1a89ae04 ("package/linux-firmware: bump to version 20200122")
-> > > Cc: james.hilliard1 at gmail.com
-> > > Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
-> > 
-> > I did find a problem with some symlinks that is not created.
-> > 
-> >     Link: cxgb4/t4fw.bin -> t4fw-1.24.11.0.bin
-> > 
-> > The target is itself in the cxgb4/ directory, so your code does not
-> > catch it as an isntalled blob, and thus does not create the symlink.
-> > 
-> > I anyway applied, because it at least fixes the build by dropping the
-> > entries tht no longer exist as they are symlinks.
-> > 
-> > So this patch is just a partial fix.
-> > 
-> > Care to send an update to also account for the kind of symlinks above?
-> 
-> Good catch! I'll have a look at this.
+commit: https://git.buildroot.net/buildroot/commit/?id=9b21a07b868321230854fb4794a90dcb64d7ce46
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-It seems to be fixed by:
+Fixes:
+http://autobuild.buildroot.net/results/dd5/dd5f151b2c9872476ab63c529468d0b37a0374f5/
 
-  - if test -f $(TARGET_DIR)/lib/firmware/$$d; then \
-  + if test -f $(TARGET_DIR)/lib/firmware/$$(dirname $$f)/$$d; then \
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/python-jinja2/python-jinja2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'll make some tests tomorrow.
-
-Antoine
-
--- 
-Antoine T?nart, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 189b75d18f..64b4c60c9b 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -20,7 +20,7 @@ HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+ # Hence remove both files after package extraction.
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ define PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
+-	rm $(@D)/jinja2/asyncsupport.py $(@D)/jinja2/asyncfilters.py
++	rm $(@D)/src/jinja2/asyncsupport.py $(@D)/src/jinja2/asyncfilters.py
+ endef
+ 
+ PYTHON_JINJA2_POST_EXTRACT_HOOKS = PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
