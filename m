@@ -1,125 +1,82 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Tue, 3 Mar 2020 08:59:09 -0300
-Subject: [Buildroot] [PATCH/next v2 4/4] support/testing: add openrc
- tests
-In-Reply-To: <20200301173954.GS8743@scaer>
-References: <20200301151747.25723-1-unixmania@gmail.com>
- <20200301151747.25723-5-unixmania@gmail.com>
- <20200301173954.GS8743@scaer>
-Message-ID: <CAJ4jsae9ZqRHv3dKcMgM+E6UoQanJtakr8F1copZYVFcq_siwg@mail.gmail.com>
+From: Hammami Omar <omar18hammami@gmail.com>
+Date: Tue, 3 Mar 2020 13:33:58 +0100
+Subject: [Buildroot] SSH server starts too late
+In-Reply-To: <CAGSpp9ktPHnTeqQ2VkVW4D31QKMb68gBATkHo3PaW9NemeY8nQ@mail.gmail.com>
+References: <CAGSpp9=qDFdtuETT8shQPXim25V7Yw2jvpjihbJgrttozOBVSQ@mail.gmail.com>
+ <20200221111947.33e4677d@gmx.net>
+ <CAGSpp9nYVE28LS2F5y97Xc0X_oXVJa8HDOiZKj73N7LOgMyGMA@mail.gmail.com>
+ <r2p6br$27r7$1@ciao.gmane.io>
+ <CAGSpp9ktPHnTeqQ2VkVW4D31QKMb68gBATkHo3PaW9NemeY8nQ@mail.gmail.com>
+Message-ID: <CAGSpp9n8KTJvuAXWsVRUD09fovskkknHTBR57k87xo8LK2ZAhg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 1, 2020 at 2:40 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Carlos, Adam, All,
->
-> On 2020-03-01 12:17 -0300, unixmania at gmail.com spake thusly:
-> > From: Adam Duskett <Aduskett@gmail.com>
-> >
-> > Two simple tests to ensure that openrc boots without any services crashing
-> > with a read only and a read write filing system.
-> >
-> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
->
-> Thanks for this new runtime test! :-)
->
-> Would it make sense to apply just this test to master? Or does it really
-> need the version bump first?
->
-> Regards,
-> Yann E. MORIN.
->
-> > ---
-> >  .gitlab-ci.yml                            |  2 +
-> >  support/testing/tests/init/test_openrc.py | 51 +++++++++++++++++++++++
-> >  2 files changed, 53 insertions(+)
-> >  create mode 100644 support/testing/tests/init/test_openrc.py
-> >
-> > diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> > index b4dad3173e..382a7c59b2 100644
-> > --- a/.gitlab-ci.yml
-> > +++ b/.gitlab-ci.yml
-> > @@ -368,6 +368,8 @@ tests.init.test_busybox.TestInitSystemBusyboxRoNet: { extends: .runtime_test }
-> >  tests.init.test_busybox.TestInitSystemBusyboxRw: { extends: .runtime_test }
-> >  tests.init.test_busybox.TestInitSystemBusyboxRwNet: { extends: .runtime_test }
-> >  tests.init.test_none.TestInitSystemNone: { extends: .runtime_test }
-> > +tests.init.test_openrc.TestInitSystemOpenrcRoFull: { extends: .runtime_test }
-> > +tests.init.test_openrc.TestInitSystemOpenrcRwFull: { extends: .runtime_test }
-> >  tests.init.test_systemd.TestInitSystemSystemdRoFull: { extends: .runtime_test }
-> >  tests.init.test_systemd.TestInitSystemSystemdRoIfupdown: { extends: .runtime_test }
-> >  tests.init.test_systemd.TestInitSystemSystemdRoNetworkd: { extends: .runtime_test }
-> > diff --git a/support/testing/tests/init/test_openrc.py b/support/testing/tests/init/test_openrc.py
-> > new file mode 100644
-> > index 0000000000..23669a9572
-> > --- /dev/null
-> > +++ b/support/testing/tests/init/test_openrc.py
-> > @@ -0,0 +1,51 @@
-> > +import infra.basetest
-> > +from tests.init.base import InitSystemBase as InitSystemBase
-> > +
-> > +
-> > +class InitSystemOpenrcBase(InitSystemBase):
-> > +    config = \
-> > +        """
-> > +        BR2_arm=y
-> > +        BR2_TOOLCHAIN_EXTERNAL=y
-> > +        BR2_INIT_OPENRC=y
-> > +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> > +        BR2_LINUX_KERNEL=y
-> > +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> > +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.5.7"
-> > +        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-> > +        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> > +        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-> > +        # BR2_TARGET_ROOTFS_TAR is not set
-> > +        """
-> > +
-> > +    def check_init(self):
-> > +        super(InitSystemOpenrcBase, self)
-> > +
-> > +        # Test all services are OK
-> > +        output, _ = self.emulator.run("rc-status -c")
-> > +        self.assertEqual(len(output), 0)
-> > +
-> > +
-> > +class TestInitSystemOpenrcRoFull(InitSystemOpenrcBase):
-> > +    config = InitSystemOpenrcBase.config + \
-> > +        """
-> > +        BR2_SYSTEM_DHCP="eth0"
-> > +        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-> > +        BR2_TARGET_ROOTFS_SQUASHFS=y
-> > +        """
-> > +
-> > +    def test_run(self):
-> > +        self.start_emulator("squashfs", "zImage", "vexpress-v2p-ca9")
-> > +        self.check_init()
-> > +
-> > +
-> > +class TestInitSystemOpenrcRwFull(InitSystemOpenrcBase):
-> > +    config = InitSystemOpenrcBase.config + \
-> > +        """
-> > +        BR2_SYSTEM_DHCP="eth0"
-> > +        BR2_TARGET_ROOTFS_EXT2=y
-> > +        """
-> > +
-> > +    def test_run(self):
-> > +        self.start_emulator("ext2", "zImage", "vexpress-v2p-ca9")
-> > +        self.check_init()
-> > --
-> > 2.18.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+Hello,
 
-The test is very simple and does not depend on any new openrc feature.
-I think it's safe to apply it on master.
+My problem is not resolved yet.
+In fact, I have known that the libopenssl *1.1.1d* use getrandom function
+in blocking mode.
+So to disable this I have applied the modification below in
+*crypto/rand/rand_unix.c* . But my problem is not resolved. In fact, my ssh
+server starts too late (after ~2 minutes).
 
--- 
-Carlos Santos <unixmania@gmail.com>
+patch :
+*# if defined(__linux) && defined(__NR_getrandom) *
+
+* - return syscall(__NR_getrandom, buf, buflen, 0); *
+*  +   return syscall(__NR_getrandom, buf, buflen, * *GRND_NONBLOCK* *);*
+
+Did I miss something ?
+
+In fact, I applied this modification because I saw that my ssh server
+started only if the* nonblocking pool was initialized*.
+
+Is it possible that  "*OPENSSL_RAND_SEED_GETRANDOM"* is not defined ?
+
+
+*Note :*
+I am using the openssh version* 8.1p1*
+
+Kind regards,
+Omar
+
+Le ven. 21 f?vr. 2020 ? 19:30, Hammami Omar <omar18hammami@gmail.com> a
+?crit :
+
+> hello Grant,
+>
+> No, I have always the same "/var/ssh_host_rsa_key"
+> The haveged script was started, I have very high value of entropy (2332)
+> and the sshd process started too late.
+>
+>
+> Le ven. 21 f?vr. 2020 ? 19:10, Grant Edwards <grant.b.edwards@gmail.com>
+> a ?crit :
+>
+>> On 2020-02-21, Hammami Omar <omar18hammami@gmail.com> wrote:
+>>
+>> > By too late, I mean that my ssh server starts ~20 seconds later
+>> comparing
+>> > to the normal  (Old buildroot version in my case).
+>>
+>> Does it generate a new host key each time it starts?
+>>
+>> --
+>> Grant Edwards               grant.b.edwards        Yow! Is a tattoo real,
+>> like
+>>                                   at               a curb or a battleship?
+>>                               gmail.com            Or are we suffering in
+>>                                                    Safeway?
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200303/67072457/attachment.html>
