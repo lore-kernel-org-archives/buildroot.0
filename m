@@ -1,82 +1,132 @@
-From: Hammami Omar <omar18hammami@gmail.com>
-Date: Tue, 3 Mar 2020 13:33:58 +0100
-Subject: [Buildroot] SSH server starts too late
-In-Reply-To: <CAGSpp9ktPHnTeqQ2VkVW4D31QKMb68gBATkHo3PaW9NemeY8nQ@mail.gmail.com>
-References: <CAGSpp9=qDFdtuETT8shQPXim25V7Yw2jvpjihbJgrttozOBVSQ@mail.gmail.com>
- <20200221111947.33e4677d@gmx.net>
- <CAGSpp9nYVE28LS2F5y97Xc0X_oXVJa8HDOiZKj73N7LOgMyGMA@mail.gmail.com>
- <r2p6br$27r7$1@ciao.gmane.io>
- <CAGSpp9ktPHnTeqQ2VkVW4D31QKMb68gBATkHo3PaW9NemeY8nQ@mail.gmail.com>
-Message-ID: <CAGSpp9n8KTJvuAXWsVRUD09fovskkknHTBR57k87xo8LK2ZAhg@mail.gmail.com>
+From: Antoine Tenart <antoine.tenart@bootlin.com>
+Date: Tue,  3 Mar 2020 14:33:56 +0100
+Subject: [Buildroot] [PATCH] package/linux-firmware: fix symlink support
+Message-ID: <20200303133356.859800-1-antoine.tenart@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since Linux-firmware's commit 9cfefbd7fbda ("Remove duplicate symlinks")
+symlinks aren't distributed anymore. They are rather created at
+installation time by a script provided in the project, copy-firmware.sh.
+The description of the symlinks is done in the WHENCE file. Since the
+bump to version 20200122, in commit 48cc1a89ae04, installation for many
+firmwares was broken as Buildroot tried to install missing symlinks from
+Linux-firmware.
 
-My problem is not resolved yet.
-In fact, I have known that the libopenssl *1.1.1d* use getrandom function
-in blocking mode.
-So to disable this I have applied the modification below in
-*crypto/rand/rand_unix.c* . But my problem is not resolved. In fact, my ssh
-server starts too late (after ~2 minutes).
+The fix is not only to remove now missing symlinks, but to add logic to
+create those symlinks as kernel modules will depend on them. The
+solution taken by this patch is to create dynamically symlinks based on
+their description in the WHENCE file *and* only if the file they'll
+point to was installed in the target directory.
 
-patch :
-*# if defined(__linux) && defined(__NR_getrandom) *
+Fixes: 48cc1a89ae04 ("package/linux-firmware: bump to version 20200122")
+Cc: james.hilliard1 at gmail.com
+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+---
+ package/linux-firmware/linux-firmware.mk | 33 ++++++++++++++----------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
 
-* - return syscall(__NR_getrandom, buf, buflen, 0); *
-*  +   return syscall(__NR_getrandom, buf, buflen, * *GRND_NONBLOCK* *);*
-
-Did I miss something ?
-
-In fact, I applied this modification because I saw that my ssh server
-started only if the* nonblocking pool was initialized*.
-
-Is it possible that  "*OPENSSL_RAND_SEED_GETRANDOM"* is not defined ?
-
-
-*Note :*
-I am using the openssh version* 8.1p1*
-
-Kind regards,
-Omar
-
-Le ven. 21 f?vr. 2020 ? 19:30, Hammami Omar <omar18hammami@gmail.com> a
-?crit :
-
-> hello Grant,
->
-> No, I have always the same "/var/ssh_host_rsa_key"
-> The haveged script was started, I have very high value of entropy (2332)
-> and the sshd process started too late.
->
->
-> Le ven. 21 f?vr. 2020 ? 19:10, Grant Edwards <grant.b.edwards@gmail.com>
-> a ?crit :
->
->> On 2020-02-21, Hammami Omar <omar18hammami@gmail.com> wrote:
->>
->> > By too late, I mean that my ssh server starts ~20 seconds later
->> comparing
->> > to the normal  (Old buildroot version in my case).
->>
->> Does it generate a new host key each time it starts?
->>
->> --
->> Grant Edwards               grant.b.edwards        Yow! Is a tattoo real,
->> like
->>                                   at               a curb or a battleship?
->>                               gmail.com            Or are we suffering in
->>                                                    Safeway?
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200303/67072457/attachment.html>
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index f8e95d0648c9..125df74ef68d 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -71,9 +71,7 @@ endif
+ 
+ # rt2xx
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX),y)
+-# rt3090.bin is a symlink to rt2860.bin
+-# rt3070.bin is a symlink to rt2870.bin
+-LINUX_FIRMWARE_FILES += rt2860.bin rt2870.bin rt3070.bin rt3071.bin rt3090.bin
++LINUX_FIRMWARE_FILES += rt2860.bin rt2870.bin rt3071.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink-firmware.txt
+ endif
+ 
+@@ -214,8 +212,6 @@ endif
+ 
+ # sd8688
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688),y)
+-LINUX_FIRMWARE_FILES += libertas/sd8688.bin libertas/sd8688_helper.bin
+-# The two files above are but symlinks to those two ones:
+ LINUX_FIRMWARE_FILES += mrvl/sd8688.bin mrvl/sd8688_helper.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
+ endif
+@@ -320,12 +316,10 @@ endif
+ 
+ # wl127x
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
+-# wl1271-nvs.bin is a symlink to wl127x-nvs.bin
+ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl1271-fw-2.bin \
+ 	ti-connectivity/wl1271-fw-ap.bin \
+ 	ti-connectivity/wl1271-fw.bin \
+-	ti-connectivity/wl1271-nvs.bin \
+ 	ti-connectivity/wl127x-fw-3.bin \
+ 	ti-connectivity/wl127x-fw-plt-3.bin \
+ 	ti-connectivity/wl127x-nvs.bin \
+@@ -341,15 +335,12 @@ endif
+ 
+ # wl128x
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X),y)
+-# wl1271-nvs.bin and wl12xx-nvs.bin are symlinks to wl127x-nvs.bin
+ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl128x-fw-3.bin \
+ 	ti-connectivity/wl128x-fw-ap.bin \
+ 	ti-connectivity/wl128x-fw-plt-3.bin \
+ 	ti-connectivity/wl128x-fw.bin \
+-	ti-connectivity/wl1271-nvs.bin \
+ 	ti-connectivity/wl128x-nvs.bin \
+-	ti-connectivity/wl12xx-nvs.bin \
+ 	ti-connectivity/wl127x-nvs.bin \
+ 	ti-connectivity/wl128x-fw-4-mr.bin \
+ 	ti-connectivity/wl128x-fw-4-plt.bin \
+@@ -363,13 +354,11 @@ endif
+ 
+ # wl18xx
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX),y)
+-# wl1271-nvs.bin is a symlink to wl127x-nvs.bin
+ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl18xx-fw.bin \
+ 	ti-connectivity/wl18xx-fw-2.bin \
+ 	ti-connectivity/wl18xx-fw-3.bin \
+ 	ti-connectivity/wl18xx-fw-4.bin \
+-	ti-connectivity/wl1271-nvs.bin \
+ 	ti-connectivity/wl127x-nvs.bin \
+ 	ti-connectivity/TIInit_7.2.31.bts
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
+@@ -568,8 +557,7 @@ LINUX_FIRMWARE_FILES += \
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QAT_DH895XCC),y)
+-# qat_mmp.bin is a symlink to qat_895xcc_mmp.bin
+-LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin qat_mmp.bin
++LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
+ endif
+ 
+@@ -626,4 +614,21 @@ define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
+ 	$(LINUX_FIRMWARE_INSTALL_DIRS)
+ endef
+ 
++# Some firmware are distributed as a symlink, for drivers to load them using a
++# defined name other than the real one. Since 9cfefbd7fbda ("Remove duplicate
++# symlinks") those symlink aren't distributed in linux-firmware but are created
++# automatically by its copy-firmware.sh script during the installation, which
++# parses the WHENCE file where symlinks are described. We follow the same logic
++# here, adding symlink only for firmwares installed in the target directory.
++# The grep/sed parsing is taken from the script mentioned before.
++define LINUX_FIRMWARE_CREATE_SYMLINKS
++	grep -E '^Link:' $(@D)/WHENCE | sed -e's/^Link: *//g' -e's/-> //g' | while read f d; do \
++		if test -f $(TARGET_DIR)/lib/firmware/$$d; then \
++			ln -sf $$d $(TARGET_DIR)/lib/firmware/$$f ; \
++		fi ; \
++	done
++endef
++
++LINUX_FIRMWARE_POST_INSTALL_TARGET_HOOKS += LINUX_FIRMWARE_CREATE_SYMLINKS
++
+ $(eval $(generic-package))
+-- 
+2.24.1
