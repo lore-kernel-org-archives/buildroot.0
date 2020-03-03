@@ -1,37 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 21:36:54 +0100
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: store pkg dir
- path
-Message-ID: <20200309140909.CC1D18E780@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 3 Mar 2020 22:47:46 +0100
+Subject: [Buildroot] [git commit] package/python-jinja2: fix async removal
+ paths
+Message-ID: <20200309140908.C09CA7FB4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d31fadfbf53a4e8c36c3fc4bb4b16c9dfd3e93e3
+commit: https://git.buildroot.net/buildroot/commit/?id=9b21a07b868321230854fb4794a90dcb64d7ce46
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This value can be used for later processing.
+Fixes:
+http://autobuild.buildroot.net/results/dd5/dd5f151b2c9872476ab63c529468d0b37a0374f5/
 
-In the buildroot-stats application this is used to create links pointing
-to the git repo of buildroot.
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/scripts/pkg-stats | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-jinja2/python-jinja2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 0e7d60bdbb..016c2322e6 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -64,6 +64,7 @@ class Package:
-     def __init__(self, name, path):
-         self.name = name
-         self.path = path
-+        self.pkg_path = os.path.dirname(path)
-         self.infras = None
-         self.license = None
-         self.has_license = False
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 189b75d18f..64b4c60c9b 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -20,7 +20,7 @@ HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+ # Hence remove both files after package extraction.
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ define PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
+-	rm $(@D)/jinja2/asyncsupport.py $(@D)/jinja2/asyncfilters.py
++	rm $(@D)/src/jinja2/asyncsupport.py $(@D)/src/jinja2/asyncfilters.py
+ endef
+ 
+ PYTHON_JINJA2_POST_EXTRACT_HOOKS = PYTHON_JINJA2_REMOVE_ASYNC_SUPPORT
