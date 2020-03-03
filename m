@@ -1,74 +1,125 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Tue,  3 Mar 2020 11:13:37 +0100
-Subject: [Buildroot] [PATCH] package/linux-firmware: add option for
- Microchip VSC85xx networking PHYs
-Message-ID: <20200303101337.817021-1-antoine.tenart@bootlin.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Tue, 3 Mar 2020 08:59:09 -0300
+Subject: [Buildroot] [PATCH/next v2 4/4] support/testing: add openrc
+ tests
+In-Reply-To: <20200301173954.GS8743@scaer>
+References: <20200301151747.25723-1-unixmania@gmail.com>
+ <20200301151747.25723-5-unixmania@gmail.com>
+ <20200301173954.GS8743@scaer>
+Message-ID: <CAJ4jsae9ZqRHv3dKcMgM+E6UoQanJtakr8F1copZYVFcq_siwg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds an option to support installing firmware files for the
-Microchip/Microsemi VSC85xx networking PHY family.
+On Sun, Mar 1, 2020 at 2:40 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Carlos, Adam, All,
+>
+> On 2020-03-01 12:17 -0300, unixmania at gmail.com spake thusly:
+> > From: Adam Duskett <Aduskett@gmail.com>
+> >
+> > Two simple tests to ensure that openrc boots without any services crashing
+> > with a read only and a read write filing system.
+> >
+> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+>
+> Thanks for this new runtime test! :-)
+>
+> Would it make sense to apply just this test to master? Or does it really
+> need the version bump first?
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > ---
+> >  .gitlab-ci.yml                            |  2 +
+> >  support/testing/tests/init/test_openrc.py | 51 +++++++++++++++++++++++
+> >  2 files changed, 53 insertions(+)
+> >  create mode 100644 support/testing/tests/init/test_openrc.py
+> >
+> > diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> > index b4dad3173e..382a7c59b2 100644
+> > --- a/.gitlab-ci.yml
+> > +++ b/.gitlab-ci.yml
+> > @@ -368,6 +368,8 @@ tests.init.test_busybox.TestInitSystemBusyboxRoNet: { extends: .runtime_test }
+> >  tests.init.test_busybox.TestInitSystemBusyboxRw: { extends: .runtime_test }
+> >  tests.init.test_busybox.TestInitSystemBusyboxRwNet: { extends: .runtime_test }
+> >  tests.init.test_none.TestInitSystemNone: { extends: .runtime_test }
+> > +tests.init.test_openrc.TestInitSystemOpenrcRoFull: { extends: .runtime_test }
+> > +tests.init.test_openrc.TestInitSystemOpenrcRwFull: { extends: .runtime_test }
+> >  tests.init.test_systemd.TestInitSystemSystemdRoFull: { extends: .runtime_test }
+> >  tests.init.test_systemd.TestInitSystemSystemdRoIfupdown: { extends: .runtime_test }
+> >  tests.init.test_systemd.TestInitSystemSystemdRoNetworkd: { extends: .runtime_test }
+> > diff --git a/support/testing/tests/init/test_openrc.py b/support/testing/tests/init/test_openrc.py
+> > new file mode 100644
+> > index 0000000000..23669a9572
+> > --- /dev/null
+> > +++ b/support/testing/tests/init/test_openrc.py
+> > @@ -0,0 +1,51 @@
+> > +import infra.basetest
+> > +from tests.init.base import InitSystemBase as InitSystemBase
+> > +
+> > +
+> > +class InitSystemOpenrcBase(InitSystemBase):
+> > +    config = \
+> > +        """
+> > +        BR2_arm=y
+> > +        BR2_TOOLCHAIN_EXTERNAL=y
+> > +        BR2_INIT_OPENRC=y
+> > +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+> > +        BR2_LINUX_KERNEL=y
+> > +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.5.7"
+> > +        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+> > +        BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > +        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+> > +        # BR2_TARGET_ROOTFS_TAR is not set
+> > +        """
+> > +
+> > +    def check_init(self):
+> > +        super(InitSystemOpenrcBase, self)
+> > +
+> > +        # Test all services are OK
+> > +        output, _ = self.emulator.run("rc-status -c")
+> > +        self.assertEqual(len(output), 0)
+> > +
+> > +
+> > +class TestInitSystemOpenrcRoFull(InitSystemOpenrcBase):
+> > +    config = InitSystemOpenrcBase.config + \
+> > +        """
+> > +        BR2_SYSTEM_DHCP="eth0"
+> > +        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+> > +        BR2_TARGET_ROOTFS_SQUASHFS=y
+> > +        """
+> > +
+> > +    def test_run(self):
+> > +        self.start_emulator("squashfs", "zImage", "vexpress-v2p-ca9")
+> > +        self.check_init()
+> > +
+> > +
+> > +class TestInitSystemOpenrcRwFull(InitSystemOpenrcBase):
+> > +    config = InitSystemOpenrcBase.config + \
+> > +        """
+> > +        BR2_SYSTEM_DHCP="eth0"
+> > +        BR2_TARGET_ROOTFS_EXT2=y
+> > +        """
+> > +
+> > +    def test_run(self):
+> > +        self.start_emulator("ext2", "zImage", "vexpress-v2p-ca9")
+> > +        self.check_init()
+> > --
+> > 2.18.2
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
 
-There is a mismatch between Linux and Linux-firmware on the name of the
-PHY (Microchip vs Microsemi), due to the acquisition of Microsemi by
-Microchip. We chose here the name in Linux-firmware, but mentioned the
-other one in the Kconfig help of the option.
+The test is very simple and does not depend on any new openrc feature.
+I think it's safe to apply it on master.
 
-Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
----
- package/linux-firmware/Config.in           | 7 +++++++
- package/linux-firmware/linux-firmware.hash | 1 +
- package/linux-firmware/linux-firmware.mk   | 5 +++++
- 3 files changed, 13 insertions(+)
-
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 9d142d2c5415..4768ea677272 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -367,6 +367,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100
- 	  Firmware files for Intel 825xx handled by driver e100
- 	  (e100)
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY
-+	bool "Microchip VSC85xx PHYs"
-+	help
-+	  Firmware files for Microchip/Microsemi VSC85xx networking
-+	  PHYs (VSC8504, VSC8552, VSC8572, VSC8574, VSC856X, VSC8575,
-+	  VSC8582 and VSC8584)
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X
- 	bool "QLogic FastLinQ 4xxxx"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 573c33cbc91b..3878d9288170 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -12,6 +12,7 @@ sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.
- sha256 5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4 LICENCE.ibt_firmware
- sha256 0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d LICENCE.it913x
- sha256 e295020afd7597dc1b3bbe50a84a7e432d9cb92bc053c1c5e657b50d2517627b LICENCE.iwlwifi_firmware
-+sha256 0fc67bd715b3395f3f2af464781910e9e69c4ba23da304352229b42dc9e986c3 LICENCE.microchip
- sha256 2051d5bf0755a0668f8c3d9a0d1c41d4b8cc411aba70f720fda71ae9e3b4d25c LICENCE.qat_firmware
- sha256 4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822 LICENCE.qla2xxx
- sha256 d7bec70668ddd4aae8fb4aa32870e54b49fcdb0b9b007aa9f54b53a1ac7461bd LICENCE.ralink-firmware.txt
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index fd90f261fa03..f8e95d0648c9 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -455,6 +455,11 @@ LINUX_FIRMWARE_FILES += e100/*.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.e100
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY),y)
-+LINUX_FIRMWARE_FILES += microchip/mscc_vsc85*.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.microchip
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X),y)
- LINUX_FIRMWARE_FILES += \
- 	qed/qed_init_values_zipped-*.bin
 -- 
-2.24.1
+Carlos Santos <unixmania@gmail.com>
