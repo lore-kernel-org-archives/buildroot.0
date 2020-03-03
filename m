@@ -1,158 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 3 Mar 2020 16:37:21 +0100
-Subject: [Buildroot] [git commit] Revert "package/linux-firmware: add
- missing symlinks"
-Message-ID: <20200303152520.6B7BF8F226@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue,  3 Mar 2020 17:30:45 +0100
+Subject: [Buildroot] [PATCH v1] package/gst1-plugins-base: fix static linking
+Message-ID: <20200303163045.13431-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b3f8df76e5a91c99ce816ed166cfbdf5e35c427
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add patch to fix static linking of tools.
 
-This reverts commit 23d12793d54480617f4dd104bc70c53e80582fdb, which was
-intended for the next branch, not master.
+Fixes:
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Antoine Tenart <antoine.tenart@bootlin.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
+  http://autobuild.buildroot.net/results/b33019b3c9ad856aced34215c69bb292b536e25e
+
+  .../bin/ld: .../usr/lib/libgstreamer-1.0.a(gstplugin.c.o): in function `gst_plugin_register_func':
+  gstplugin.c:(.text+0x3bc): undefined reference to `g_module_make_resident'
+  .../bin/ld: .../usr/lib/libgstreamer-1.0.a(gstplugin.c.o): in function `_priv_gst_plugin_load_file_for_registry':
+  gstplugin.c:(.text+0x1228): undefined reference to `g_module_supported'
+  .../bin/ld: gstplugin.c:(.text+0x126c): undefined reference to `g_module_open'
+  .../bin/ld: gstplugin.c:(.text+0x1368): undefined reference to `g_module_symbol'
+  .../bin/ld: gstplugin.c:(.text+0x1494): undefined reference to `g_module_supported'
+  .../bin/ld: gstplugin.c:(.text+0x17f4): undefined reference to `g_module_close'
+  .../bin/ld: gstplugin.c:(.text+0x1a2c): undefined reference to `g_module_error'
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/linux-firmware/linux-firmware.mk | 57 ++++++++------------------------
- 1 file changed, 14 insertions(+), 43 deletions(-)
+ ...ic-linkig-of-tools-needs-gmodule_dep.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/gstreamer1/gst1-plugins-base/0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 9aa2e96175..9d86ce57b2 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -71,13 +71,9 @@ endif
- 
- # rt2xx
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX),y)
--define LINUX_FIRMWARE_INSTALL_RALINK_RT2XX_SYMLINKS
--	ln -sf rt2860.bin \
--		$(TARGET_DIR)/lib/firmware/rt3090.bin
--	ln -sf rt2870.bin \
--		$(TARGET_DIR)/lib/firmware/rt3070.bin
--endef
--LINUX_FIRMWARE_FILES += rt2860.bin rt2870.bin rt3071.bin
-+# rt3090.bin is a symlink to rt2860.bin
-+# rt3070.bin is a symlink to rt2870.bin
-+LINUX_FIRMWARE_FILES += rt2860.bin rt2870.bin rt3070.bin rt3071.bin rt3090.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink-firmware.txt
- endif
- 
-@@ -218,13 +214,8 @@ endif
- 
- # sd8688
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688),y)
--define LINUX_FIRMWARE_INSTALL_LIBERTAS_SD8688_SYMLINKS
--	mkdir -p $(TARGET_DIR)/lib/firmware/libertas
--	ln -sf ../mrvl/sd8688.bin \
--		$(TARGET_DIR)/lib/firmware/libertas/sd8688.bin
--	ln -sf ../mrvl/sd8688_helper.bin \
--		$(TARGET_DIR)/lib/firmware/libertas/sd8688_helper.bin
--endef
-+LINUX_FIRMWARE_FILES += libertas/sd8688.bin libertas/sd8688_helper.bin
-+# The two files above are but symlinks to those two ones:
- LINUX_FIRMWARE_FILES += mrvl/sd8688.bin mrvl/sd8688_helper.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
- endif
-@@ -329,14 +320,12 @@ endif
- 
- # wl127x
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
--define LINUX_FIRMWARE_INSTALL_TI_WL127X_SYMLINKS
--	ln -sf wl127x-nvs.bin \
--		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl1271-nvs.bin
--endef
-+# wl1271-nvs.bin is a symlink to wl127x-nvs.bin
- LINUX_FIRMWARE_FILES += \
- 	ti-connectivity/wl1271-fw-2.bin \
- 	ti-connectivity/wl1271-fw-ap.bin \
- 	ti-connectivity/wl1271-fw.bin \
-+	ti-connectivity/wl1271-nvs.bin \
- 	ti-connectivity/wl127x-fw-3.bin \
- 	ti-connectivity/wl127x-fw-plt-3.bin \
- 	ti-connectivity/wl127x-nvs.bin \
-@@ -352,18 +341,15 @@ endif
- 
- # wl128x
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X),y)
--define LINUX_FIRMWARE_INSTALL_TI_WL128X_SYMLINKS
--	ln -sf wl127x-nvs.bin \
--		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl1271-nvs.bin
--	ln -sf wl127x-nvs.bin \
--		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl12xx-nvs.bin
--endef
-+# wl1271-nvs.bin and wl12xx-nvs.bin are symlinks to wl127x-nvs.bin
- LINUX_FIRMWARE_FILES += \
- 	ti-connectivity/wl128x-fw-3.bin \
- 	ti-connectivity/wl128x-fw-ap.bin \
- 	ti-connectivity/wl128x-fw-plt-3.bin \
- 	ti-connectivity/wl128x-fw.bin \
-+	ti-connectivity/wl1271-nvs.bin \
- 	ti-connectivity/wl128x-nvs.bin \
-+	ti-connectivity/wl12xx-nvs.bin \
- 	ti-connectivity/wl127x-nvs.bin \
- 	ti-connectivity/wl128x-fw-4-mr.bin \
- 	ti-connectivity/wl128x-fw-4-plt.bin \
-@@ -377,15 +363,13 @@ endif
- 
- # wl18xx
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX),y)
--define LINUX_FIRMWARE_INSTALL_TI_WL18XX_SYMLINKS
--	ln -sf wl127x-nvs.bin \
--		$(TARGET_DIR)/lib/firmware/ti-connectivity/wl1271-nvs.bin
--endef
-+# wl1271-nvs.bin is a symlink to wl127x-nvs.bin
- LINUX_FIRMWARE_FILES += \
- 	ti-connectivity/wl18xx-fw.bin \
- 	ti-connectivity/wl18xx-fw-2.bin \
- 	ti-connectivity/wl18xx-fw-3.bin \
- 	ti-connectivity/wl18xx-fw-4.bin \
-+	ti-connectivity/wl1271-nvs.bin \
- 	ti-connectivity/wl127x-nvs.bin \
- 	ti-connectivity/TIInit_7.2.31.bts
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
-@@ -575,11 +559,8 @@ LINUX_FIRMWARE_FILES += \
- endif
- 
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QAT_DH895XCC),y)
--define LINUX_FIRMWARE_INSTALL_QAT_DH895XCC_SYMLINKS
--	ln -sf qat_895xcc_mmp.bin \
--		$(TARGET_DIR)/lib/firmware/qat_mmp.bin
--endef
--LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin
-+# qat_mmp.bin is a symlink to qat_895xcc_mmp.bin
-+LINUX_FIRMWARE_FILES += qat_895xcc.bin qat_895xcc_mmp.bin qat_mmp.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
- endif
- 
-@@ -612,15 +593,6 @@ define LINUX_FIRMWARE_INSTALL_DIRS
- endef
- endif
- 
--define LINUX_FIRMWARE_INSTALL_SYMLINKS
--	$(LINUX_FIRMWARE_INSTALL_RALINK_RT2XX_SYMLINKS)
--	$(LINUX_FIRMWARE_INSTALL_LIBERTAS_SD8688_SYMLINKS)
--	$(LINUX_FIRMWARE_INSTALL_TI_WL127X_SYMLINKS)
--	$(LINUX_FIRMWARE_INSTALL_TI_WL128X_SYMLINKS)
--	$(LINUX_FIRMWARE_INSTALL_TI_WL18XX_SYMLINKS)
--	$(LINUX_FIRMWARE_INSTALL_QAT_DH895XCC_SYMLINKS)
--endef
--
- ifneq ($(LINUX_FIRMWARE_FILES)$(LINUX_FIRMWARE_DIRS),)
- 
- # Most firmware files are under a proprietary license, so no need to
-@@ -643,7 +615,6 @@ define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/lib/firmware
- 	$(LINUX_FIRMWARE_INSTALL_FILES)
- 	$(LINUX_FIRMWARE_INSTALL_DIRS)
--	$(LINUX_FIRMWARE_INSTALL_SYMLINKS)
- endef
- 
- $(eval $(generic-package))
+diff --git a/package/gstreamer1/gst1-plugins-base/0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch b/package/gstreamer1/gst1-plugins-base/0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch
+new file mode 100644
+index 0000000000..b778f7a12c
+--- /dev/null
++++ b/package/gstreamer1/gst1-plugins-base/0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch
+@@ -0,0 +1,38 @@
++From 443244e54d1e2813560d364b44b35d49b3987b67 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 3 Mar 2020 17:07:24 +0100
++Subject: [PATCH] meson: static linkig of tools needs gmodule_dep
++
++Add gmodule_dep (analog to gstreamer/tools/meson.build).
++
++Fixes:
++
++.../bin/ld: .../usr/lib/libgstreamer-1.0.a(gstplugin.c.o): in function `gst_plugin_register_func':
++gstplugin.c:(.text+0x3bc): undefined reference to `g_module_make_resident'
++.../bin/ld: .../usr/lib/libgstreamer-1.0.a(gstplugin.c.o): in function `_priv_gst_plugin_load_file_for_registry':
++gstplugin.c:(.text+0x1228): undefined reference to `g_module_supported'
++.../bin/ld: gstplugin.c:(.text+0x126c): undefined reference to `g_module_open'
++.../bin/ld: gstplugin.c:(.text+0x1368): undefined reference to `g_module_symbol'
++.../bin/ld: gstplugin.c:(.text+0x1494): undefined reference to `g_module_supported'
++.../bin/ld: gstplugin.c:(.text+0x17f4): undefined reference to `g_module_close'
++.../bin/ld: gstplugin.c:(.text+0x1a2c): undefined reference to `g_module_error'
++
++[Upstream suggested: https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/merge_requests/587 ]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ tools/meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/tools/meson.build b/tools/meson.build
++index 57595fb47..bcbe11ca1 100644
++--- a/tools/meson.build
+++++ b/tools/meson.build
++@@ -1,4 +1,4 @@
++-tool_deps = glib_deps + [pbutils_dep, audio_dep, video_dep, tag_dep, gst_dep, gst_base_dep]
+++tool_deps = glib_deps + [pbutils_dep, audio_dep, video_dep, tag_dep, gst_dep, gst_base_dep, gmodule_dep]
++ 
++ executable('gst-device-monitor- at 0@'.format(api_version),
++   'gst-device-monitor.c',
++-- 
++2.25.1
++
+-- 
+2.25.1
