@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 04 Mar 2020 09:01:10 +0000
-Subject: [Buildroot] [Bug 12606] New: fbgrab location has changedfbgrab
-Message-ID: <bug-12606-163@https.bugs.busybox.net/>
+Date: Wed, 04 Mar 2020 09:02:37 +0000
+Subject: [Buildroot] [Bug 12606] fbgrab location has changed
+In-Reply-To: <bug-12606-163@https.bugs.busybox.net/>
+References: <bug-12606-163@https.bugs.busybox.net/>
+Message-ID: <bug-12606-163-6bp83QekPq@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,20 +12,18 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=12606
 
-            Bug ID: 12606
-           Summary: fbgrab location has changedfbgrab
-           Product: buildroot
-           Version: 2019.02.9
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: prime.gildas+buildroot at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Gildas <prime.gildas+buildroot@gmail.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Summary|fbgrab location has         |fbgrab location has changed
+                   |changedfbgrab               |
+
+--- Comment #1 from Gildas <prime.gildas+buildroot@gmail.com> ---
+old website is no more reachable, it redirects to a github page, and the 1.3
+version is no more downloadable, only a 1.3.1 is available through github
+
+see https://github.com/GunnarMonell/fbgrab/releases
 
 -- 
 You are receiving this mail because:
