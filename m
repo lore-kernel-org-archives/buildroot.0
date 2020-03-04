@@ -1,140 +1,437 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  4 Mar 2020 12:00:50 +0100
-Subject: [Buildroot] [PATCH/next v2] package/mesa3d: fix nouveau std::isinf
- related compile failure
-Message-ID: <20200304110050.29607-1-ps.report@gmx.net>
+Date: Wed, 4 Mar 2020 12:32:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/zabbix: new package
+In-Reply-To: <20200304102843.3852504-1-skif@skif-web.ru>
+References: <20200304102843.3852504-1-skif@skif-web.ru>
+Message-ID: <20200304123235.682bc590@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Activate already existing mesa3d solution for the isinf compile
-failure for uclibc based toolchains instead of using a custom
-workaround.
+Hello Alexey,
 
-- remove 0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-- add 0004-c99_math-import-isinf-for-uclibc-based-toolchains.patch
+some minor nitpicks, see below ...
 
-Fixes:
-  http://autobuild.buildroot.net/results/cbefc5d4a4fefb674e596400fa1d2698cd89c5b3/
-  http://autobuild.buildroot.net/results/dc974da012f53fa4ed3be616f937b0afae423d66/
+On Wed,  4 Mar 2020 13:28:43 +0300, Alexey Lukyanchuk <skif@skif-web.ru> wrote:
 
-  ../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: In member function 'bool nv50_ir::GCRA::simplify()':
-  ../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:1348:19: error: expected unqualified-id before '(' token
-            if (std::isinf(bestScore)) {
-                     ^
+> Zabbix is an enterprise-class open source distributed monitoring solution.
+> Tested in production. Tested with check-package and test-pkg
+> Version history:
+> 6 -> 7 bump version to 4.4.6
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Notes:
-  - as Romain Naour pointed out ([1], [2]) the existing check in
-    c99_math.h failes for uclibc (because it impersonate glibc-2.2),
-    so enable the original isinf solution for uclibc instead of the
-    custom work around
+The version changelog/history belongs after the --- lines (see below for
+suggestion, or [1])
 
-Changes v1 -> v2:
-  - update patch to use defined() around __UCLIBC__
-  - update uclibc impersonate version to 2.2 in notes
-    and fix wording
+>
+> Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+> ---
 
-[1] http://lists.busybox.net/pipermail/buildroot/2020-March/275624.html
-[2] http://lists.busybox.net/pipermail/buildroot/2020-March/275735.html
----
- ...rt-isinf-for-uclibc-based-toolchains.patch | 30 ++++++++++++
- ...ers-nouveau-codegen-nv50_ir_ra.cpp-p.patch | 47 -------------------
- 2 files changed, 30 insertions(+), 47 deletions(-)
- create mode 100644 package/mesa3d/0004-c99_math-import-isinf-for-uclibc-based-toolchains.patch
- delete mode 100644 package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
+Changes v6 -> v7:
+  - update version to 4.4.6
 
-diff --git a/package/mesa3d/0004-c99_math-import-isinf-for-uclibc-based-toolchains.patch b/package/mesa3d/0004-c99_math-import-isinf-for-uclibc-based-toolchains.patch
-new file mode 100644
-index 0000000000..5acbaa4daa
---- /dev/null
-+++ b/package/mesa3d/0004-c99_math-import-isinf-for-uclibc-based-toolchains.patch
-@@ -0,0 +1,30 @@
-+From 705490763fcc052defa2d49a5c5200775cd12c54 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Wed, 4 Mar 2020 08:27:24 +0100
-+Subject: [PATCH] c99_math: import isinf for uclibc based toolchains
-+
-+The same fix as for glibc >= 2.23 is needed for uclibc
-+based toolchains.
-+
-+[Upstream suggested: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4042]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ include/c99_math.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/include/c99_math.h b/include/c99_math.h
-+index e906c26aa54..c8a73a2d2c7 100644
-+--- a/include/c99_math.h
-++++ b/include/c99_math.h
-+@@ -190,7 +190,7 @@ fpclassify(double x)
-+  * undefines those functions, which in glibc 2.23, are defined as macros rather
-+  * than functions as in glibc 2.22.
-+  */
-+-#if __cplusplus >= 201103L && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 23))
-++#if __cplusplus >= 201103L && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 23) || defined(__UCLIBC__))
-+ #include <cmath>
-+ 
-+ using std::fpclassify;
-+-- 
-+2.25.1
-+
-diff --git a/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch b/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-deleted file mode 100644
-index 73e75993de..0000000000
---- a/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From f2ce27b761eeca301a109856f20ed9a8eb06796d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 28 Dec 2019 21:49:43 +0100
--Subject: [PATCH] src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: prefix
-- isinf with std::
--
--Prefix isinf with std:: to fix the following build failure with gcc 4.9:
--
--../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: In member function 'bool nv50_ir::GCRA::simplify()':
--../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:1350:29: error: 'isinf' was not declared in this scope
--          if (isinf(bestScore)) {
--                             ^
--../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:1350:29: note: suggested alternative:
--In file included from /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/random:38:0,
--                 from /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/bits/stl_algo.h:66,
--                 from /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/algorithm:62,
--                 from ../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:26:
--/data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/cmath:621:5: note:   'std::isinf'
--     isinf(_Tp __x)
--     ^
--
--Fixes:
-- - http://autobuild.buildroot.org/results/599dc3478ed65d36fbf9f5e9625691dfa813b530
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3227]
-----
-- src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp b/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
--index 6df2664da22..e81fb117213 100644
----- a/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
--+++ b/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
--@@ -1345,7 +1345,7 @@ GCRA::simplify()
--                bestMaxReg = it->maxReg;
--             }
--          }
---         if (isinf(bestScore)) {
--+         if (std::isinf(bestScore)) {
--             ERROR("no viable spill candidates left\n");
--             return false;
--          }
---- 
--2.24.0
--
--- 
-2.25.1
+
+>  DEVELOPERS                           |   3 +
+>  package/Config.in                    |   1 +
+>  package/zabbix/Config.in             | 122 +++++++++++++++++++++
+>  package/zabbix/zabbix-agent.service  |  17 +++
+>  package/zabbix/zabbix-server.service |  17 +++
+>  package/zabbix/zabbix.hash           |   3 +
+>  package/zabbix/zabbix.mk             | 154 +++++++++++++++++++++++++++
+>  7 files changed, 317 insertions(+)
+>  create mode 100644 package/zabbix/Config.in
+>  create mode 100644 package/zabbix/zabbix-agent.service
+>  create mode 100644 package/zabbix/zabbix-server.service
+>  create mode 100644 package/zabbix/zabbix.hash
+>  create mode 100644 package/zabbix/zabbix.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index dd44331b85..668e806686 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -146,6 +146,9 @@ N:	Alexey Brodkin <alexey.brodkin@synopsys.com>
+>  F:	board/cubietech/cubieboard2/
+>  F:	configs/cubieboard2_defconfig
+>
+> +N:	Alexey Lukyanchuk <skif@skif-web.ru>
+> +F:	package/zabbix/
+> +
+>  N:	Alistair Francis <alistair@alistair23.me>
+>  F:	board/sifive/
+>  F:	boot/opensbi/
+> diff --git a/package/Config.in b/package/Config.in
+> index edf7687ab7..bad503dfc4 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2195,6 +2195,7 @@ endif
+>  	source "package/xinetd/Config.in"
+>  	source "package/xl2tp/Config.in"
+>  	source "package/xtables-addons/Config.in"
+> +    source "package/zabbix/Config.in"
+
+Use one tab (instead of spaces) for indent...
+
+>  	source "package/znc/Config.in"
+>
+>  endmenu
+> diff --git a/package/zabbix/Config.in b/package/zabbix/Config.in
+> new file mode 100644
+> index 0000000000..b75b6ce3f6
+> --- /dev/null
+> +++ b/package/zabbix/Config.in
+> @@ -0,0 +1,122 @@
+> +config BR2_PACKAGE_ZABBIX
+> +	bool "zabbix"
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC=y || BR2_TOOLCHAIN_EXTERNAL_GLIBC=y || BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> +	select BR2_PACKAGE_PCRE
+> +	help
+> +	  Zabbix is an enterprise-class open source distributed
+> +	  monitoring solution.Zabbix is free of cost. Zabbix
+> +	  is written and distributed under the GPL General Public
+> +	  License version 2.
+> +
+> +if (!BR2_TOOLCHAIN_USES_GLIBC && !BR2_TOOLCHAIN_EXTERNAL_GLIBC && !BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC)
+> +comment "zabbix need glibc"
+> +endif
+> +
+> +if BR2_PACKAGE_ZABBIX
+> +
+> +if (!BR2_PACKAGE_POSTGRESQL && !BR2_PACKAGE_MYSQL)
+> +comment "zabbix server needs postgresql or mysql support"
+> +endif
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER
+> +	bool "zabbix server"
+> +	depends on BR2_PACKAGE_POSTGRESQL || BR2_PACKAGE_MYSQL
+> +	select BR2_PACKAGE_ZLIB
+> +	select BR2_PACKAGE_LIBEVENT
+> +
+> +if BR2_PACKAGE_ZABBIX_SERVER
+> +
+> +choice
+> +	prompt "server database backend"
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER_MYSQL
+> +	bool "mysql"
+> +	depends on BR2_PACKAGE_MYSQL
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL
+> +	bool "postgresql"
+> +	depends on BR2_PACKAGE_POSTGRESQL
+> +
+> +endchoice
+> +
+> +if BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL || BR2_PACKAGE_ZABBIX_SERVER_MYSQL
+> +config BR2_PACKAGE_ZABBIX_SERVER_COPY_DUMPS
+> +	bool "install sql dumps"
+> +	help
+> +	  Copy inicitial database dumps to /usr/zabbix/
+> +endif
+> +
+> +if (!BR2_PACKAGE_PHP || (!BR2_PACKAGE_PHP_EXT_MYSQLI && !BR2_PACKAGE_PHP_EXT_PGSQL) || \
+> +	!BR2_PACKAGE_PHP_EXT_MBSTRING || !BR2_PACKAGE_PHP_EXT_BCMATH || \
+> +	!BR2_PACKAGE_PHP_EXT_SOCKETS || !BR2_PACKAGE_PHP_EXT_GD || \
+> +	!BR2_PACKAGE_PHP_EXT_LIBXML2 || !BR2_PACKAGE_PHP_EXT_CTYPE || \
+> +	!BR2_PACKAGE_PHP_EXT_SESSION || !BR2_PACKAGE_PHP_EXT_XMLREADER || \
+> +	!BR2_PACKAGE_PHP_EXT_XMLWRITER )
+> +comment "zabbix-frontend need php with extensions(bc,sockets,"
+> +comment "mbstring,gd,libxml2,ctype,session, xmlreader,xmlwriter, mysql or postgresql"
+
+Sometimes missing spaces after ',', missing closing bracket...
+
+> +endif
+> +
+> +choice
+> +	prompt "server ssl/tls backend"
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER_NOTLS
+> +	bool "none"
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER_OPENSSL
+> +	bool "openssl"
+> +	depends on BR2_PACKAGE_OPENSSL
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER_GNUTLS
+> +	bool "gnutls"
+> +	depends on BR2_PACKAGE_GNUTLS
+> +
+> +endchoice
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER_OPENIPMI
+> +	bool "openipmi support"
+> +	select BR2_PACKAGE_OPENIPMI
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER_LIBSSH2
+> +	bool "libssh2 support"
+> +	select BR2_PACKAGE_LIBSSH2
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER_LDAP
+> +	bool "openldap support"
+> +	select BR2_PACKAGE_OPENLDAP
+> +
+> +if (!BR2_USE_MMU)
+> +comment "netsnmp support need MMU"
+> +endif
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER_NETSNMP
+> +	bool "net-snmp support"
+> +	depends on BR2_USE_MMU # netsnmp
+> +	select BR2_PACKAGE_NETSNMP
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER_LIBCURL
+> +	bool "libcurl support"
+> +	select BR2_PACKAGE_LIBCURL
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER_LIBXML2
+> +	bool "libxml2 support"
+> +	select BR2_PACKAGE_LIBXML2
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER_COPY_FRONTEND
+> +	bool "copy php-frontend to target"
+> +	depends on BR2_PACKAGE_PHP
+> +	depends on BR2_PACKAGE_PHP_EXT_MYSQLI || BR2_PACKAGE_PHP_EXT_PGSQL
+> +	depends on BR2_PACKAGE_PHP_EXT_BCMATH
+> +	depends on BR2_PACKAGE_PHP_EXT_SOCKETS
+> +	depends on BR2_PACKAGE_PHP_EXT_MBSTRING
+> +	depends on BR2_PACKAGE_PHP_EXT_GD
+> +	depends on BR2_PACKAGE_PHP_EXT_LIBXML2
+> +	depends on BR2_PACKAGE_PHP_EXT_CTYPE
+> +	depends on BR2_PACKAGE_PHP_EXT_SESSION
+> +	depends on BR2_PACKAGE_PHP_EXT_XMLREADER
+> +	depends on BR2_PACKAGE_PHP_EXT_XMLWRITER
+> +	help
+> +	  copy web-frontend to /usr/zabbix/php-frontend
+> +
+> +endif
+> +
+> +endif
+> diff --git a/package/zabbix/zabbix-agent.service b/package/zabbix/zabbix-agent.service
+> new file mode 100644
+> index 0000000000..8b4f45a4fc
+> --- /dev/null
+> +++ b/package/zabbix/zabbix-agent.service
+> @@ -0,0 +1,17 @@
+> +[Unit]
+> +Description=Zabbix Agent Daemon
+> +After=network.target
+> +
+> +[Service]
+> +Type=forking
+> +ExecStart=/usr/sbin/zabbix_agentd
+> +ExecReload=/usr/sbin/zabbix_agentd -R config_cache_reload
+> +RuntimeDirectory=zabbix
+> +PIDFile=/run/zabbix/zabbix_agentd.pid
+> +User=zabbix
+> +Group=zabbix
+> +WatchdogSec=30s
+> +Restart=on-failure
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> diff --git a/package/zabbix/zabbix-server.service b/package/zabbix/zabbix-server.service
+> new file mode 100644
+> index 0000000000..b8ba0d1707
+> --- /dev/null
+> +++ b/package/zabbix/zabbix-server.service
+> @@ -0,0 +1,17 @@
+> +[Unit]
+> +Description=Zabbix Server Daemon
+> +After=network.target
+> +
+> +[Service]
+> +Type=forking
+> +ExecStart=/usr/sbin/zabbix_server
+> +ExecReload=/usr/sbin/zabbix_server -R config_cache_reload
+> +RuntimeDirectory=zabbix
+> +PIDFile=/run/zabbix/zabbix_server.pid
+> +User=zabbix
+> +Group=zabbix
+> +WatchdogSec=30s
+> +Restart=on-failure
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> diff --git a/package/zabbix/zabbix.hash b/package/zabbix/zabbix.hash
+> new file mode 100644
+> index 0000000000..87f1286682
+> --- /dev/null
+> +++ b/package/zabbix/zabbix.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha256	22bb28e667424ad4688f47732853f4241df0e78a7607727b043d704ba726ae0e	zabbix-4.4.6.tar.gz
+> +sha256  a823e00bc7f0844874f90fee97136f178e7debc76bace5f09e15ee8ed55f04c3    README
+
+The hash entry format should be (see [2]):
+  ...following three fields separated by two spaces...
+
+> diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
+> new file mode 100644
+> index 0000000000..a75914a816
+> --- /dev/null
+> +++ b/package/zabbix/zabbix.mk
+> @@ -0,0 +1,154 @@
+> +################################################################################
+> +#
+> +# zabbix
+> +#
+> +################################################################################
+> +
+> +ZABBIX_VERSION = 4.4.6
+> +ZABBIX_SITE = https://sourceforge.net/projects/zabbix/files
+> +ZABBIX_LICENSE = GPL-2.0
+> +ZABBIX_LICENSE_FILES = README
+> +
+> +ZABBIX_DEPENDENCIES = pcre
+> +ZABBIX_CONF_OPTS = --with-libpcre=$(STAGING_DIR)/usr/bin/ \
+> +	--enable-agent
+> +
+> +ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_CLIENT_CHANGE_PIDFILE_LOCATION
+> +ZABBIX_SYSTEMD_UNITS += zabbix-agent.service
+> +
+> +define ZABBIX_INSTALL_INIT_SYSTEMD
+> +	$(foreach unit,$(ZABBIX_SYSTEMD_UNITS),\
+> +		$(INSTALL) -D -m 0644 $(ZABBIX_PKGDIR)/$(unit) $(TARGET_DIR)/usr/lib/systemd/system/$(unit) && \
+> +		mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants && \
+> +		ln -fs -r $(TARGET_DIR)/usr/lib/systemd/system/$(unit) $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/$(unit)
+> +	)
+> +endef
+> +
+> +define ZABBIX_USERS
+> +	zabbix -1 zabbix -1 !- /var/lib/zabbix - zabbix zabbix user
+> +endef
+> +
+> +define ZABBIX_CLIENT_CHANGE_PIDFILE_LOCATION
+> +	$(SED) 's%\#\ PidFile=/tmp/zabbix_agentd.pid%PidFile=/run/zabbix/zabbix_agentd.pid%g' $(TARGET_DIR)/etc/zabbix_agentd.conf
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER),y)
+> +ZABBIX_SYSTEMD_UNITS += zabbix-server.service
+> +ZABBIX_CONF_OPTS += --enable-server \
+> +	--with-libevent \
+> +	--with-libpthread=$(STAGING_DIR)/usr \
+> +	--with-zlib=$(STAGING_DIR)/usr
+> +ZABBIX_DEPENDENCIES += libevent zlib
+> +ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_SERVER_CHANGE_PIDFILE_LOCATION
+> +
+> +# Need openipmi in staging dir. Patch submitted at 2019.12.16
+> +# Before this patch enabled, use this crutch
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_OPENIPMI),y)
+> +ZABBIX_CONF_OPTS += --with-openipmi=$(STAGING_DIR)/usr
+> +ZABBIX_DEPENDENCIES += openipmi
+> +ZABBIX_PRE_CONFIGURE_HOOKS += BR2_PACKAGE_ZABBIX_SERVER_OPENIPMI_FIX_LIBS
+> +
+> +define BR2_PACKAGE_ZABBIX_SERVER_OPENIPMI_FIX_LIBS
+> +	if [ ! -f $(STAGING_DIR)/usr/lib/libOpenIPMI.so ]; then \
+> +		cp -rf $(TARGET_DIR)/usr/lib/libOpenIPMI* $(STAGING_DIR)/usr/lib/ ;\
+> +		cp -rf $(TARGET_DIR)/usr/include/OpenIPMI $(STAGING_DIR)/usr/include/ ;\
+> +	fi
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_LIBCURL),y)
+> +ZABBIX_CONF_OPTS += --with-libcurl=$(STAGING_DIR)/usr/bin/curl-config
+> +ZABBIX_DEPENDENCIES += libcurl
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_LIBXML2),y)
+> +ZABBIX_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr/bin/xml2-config
+> +ZABBIX_DEPENDENCIES += libxml2
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_NETSNMP),y)
+> +ZABBIX_CONF_OPTS += --with-net-snmp=$(STAGING_DIR)/usr/bin/net-snmp-config
+> +ZABBIX_DEPENDENCIES += netsnmp
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_LDAP),y)
+> +ZABBIX_CONF_OPTS += --with-ldap=$(STAGING_DIR)/usr
+> +ZABBIX_DEPENDENCIES += openldap
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_LIBSSH2),y)
+> +ZABBIX_CONF_OPTS += --with-ssh2=$(STAGING_DIR)/usr
+> +ZABBIX_DEPENDENCIES += libssh2
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_OPENSSL),y)
+> +ZABBIX_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
+> +ZABBIX_DEPENDENCIES += openssl
+> +else ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_GNUTLS),y)
+> +ZABBIX_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr
+> +ZABBIX_DEPENDENCIES += gnutls
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_COPY_FRONTEND),y)
+> +ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_SERVER_COPY_FRONTEND
+> +
+> +define ZABBIX_SERVER_COPY_FRONTEND
+> +	mkdir -p $(TARGET_DIR)/usr/zabbix/php-frontend/
+> +	cp -r $(@D)/frontends/php/* $(TARGET_DIR)/usr/zabbix/php-frontend/
+> +endef
+> +
+> +endif
+> +
+> +define ZABBIX_SERVER_CHANGE_PIDFILE_LOCATION
+> +	$(SED) 's%\#\ PidFile=/tmp/zabbix_server.pid%PidFile=/run/zabbix/zabbix_server.pid%g' $(TARGET_DIR)/etc/zabbix_server.conf
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_MYSQL),y)
+> +ZABBIX_DEPENDENCIES += mysql
+> +ZABBIX_CONF_OPTS += --with-mysql=$(STAGING_DIR)/usr/bin/mysql_config
+> +# Need package/mariadb/0003-add-sysroot-path-to-mariadb_config.patch by Ryan Coe
+> +# While this patch not included, use this crutch
+> +ZABBIX_PRE_CONFIGURE_HOOKS += ZABBIX_DISABLE_MARIADB_CONFIG
+> +ZABBIX_POST_CONFIGURE_HOOKS += ZABBIX_ENABLE_MARIADB_CONFIG
+> +
+> +define ZABBIX_DISABLE_MARIADB_CONFIG
+> +	if [ -f "$(STAGING_DIR)/usr/bin/mariadb_config" ]; then \
+> +		mv $(STAGING_DIR)/usr/bin/mariadb_config $(STAGING_DIR)/usr/bin/mariadb_config_save; \
+> +	fi
+> +endef
+> +
+> +define ZABBIX_ENABLE_MARIADB_CONFIG
+> +	if [ -f "$(STAGING_DIR)/usr/bin/mariadb_confi_save" ]; then \
+> +		mv $(STAGING_DIR)/usr/bin/mariadb_config_save $(STAGING_DIR)/usr/bin/mariadb_config; \
+> +	fi
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_COPY_DUMPS),y)
+> +ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_SERVER_PREPARE_MYSQL
+> +endif
+> +
+> +define ZABBIX_SERVER_PREPARE_MYSQL
+> +	mkdir -p $(TARGET_DIR)/usr/zabbix/mysql_schema/
+> +	cp -r $(@D) $(@D)/database/mysql/*\.sql $(TARGET_DIR)/usr/zabbix/mysql_schema/
+> +endef
+> +
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL),y)
+> +ZABBIX_DEPENDENCIES += postgresql
+> +ZABBIX_CONF_OPTS += --with-postgresql=$(STAGING_DIR)/usr/bin/pg_config
+> +
+> +define ZABBIX_SERVER_PREPARE_POSTGRESQL
+> +	mkdir -p $(TARGET_DIR)/usr/zabbix/postgresql_schema
+> +	cp -r $(@D)/database/postgresql/*\.sql $(TARGET_DIR)/usr/zabbix/postgresql_schema/
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_COPY_DUMPS),y)
+> +ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_SERVER_PREPARE_POSTGRESQL
+> +endif
+> +
+> +endif
+> +
+> +endif
+> +
+> +$(eval $(autotools-package))
+
+Most formatting should be detected by (did not test with your patch):
+
+	$ ./utils/check-package package/zabbix/*
+
+Regards,
+Peter
+
+[1] https://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog
+[2] http://nightly.buildroot.org/manual.html#adding-packages-hash
