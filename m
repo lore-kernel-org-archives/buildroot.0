@@ -1,402 +1,80 @@
-From: Alexey Lukyanchuk <skif@skif-web.ru>
-Date: Wed,  4 Mar 2020 13:28:43 +0300
-Subject: [Buildroot] [PATCH 1/1] package/zabbix: new package
-Message-ID: <20200304102843.3852504-1-skif@skif-web.ru>
+From: Antoine Tenart <antoine.tenart@bootlin.com>
+Date: Wed,  4 Mar 2020 11:53:04 +0100
+Subject: [Buildroot] [PATCH] package/linux-firmware: fix special cases of
+ symlinks
+Message-ID: <20200304105304.986863-1-antoine.tenart@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Zabbix is an enterprise-class open source distributed monitoring solution.
-Tested in production. Tested with check-package and test-pkg
-Version history:
-6 -> 7 bump version to 4.4.6
+Some symlinks were not created correctly when installing the
+Linux-firmware package. This patch fixes the support for all symlinks of
+the form:
 
-Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+  a/foo -> bar
+  a/foo -> b/bar
+  a/foo -> ../b/bar
+
+With this patch all forms of symlinks described in the WHENCE file
+should be supported, whether they are in nested directories, or in
+non-existing ones.
+
+As some symlinks could be in directories that do not exist, we must
+make sure those directories are created before testing the presence of
+the target firmwares, as we'll end up testing files like:
+
+  a/foo -> ../b/foo : test -f a/../b/foo
+
+where a/ did not exist prior to our symlink creation logic. We then
+remove the created directories, if they're empty (that would mean the
+target firmware wasn't installed). As we could have nested empty
+directories (think of the following link: a/b/c/foo -> ../../../foo), we
+need to also remove empty parent directories. To avoid removing more
+than we created, we change directory to $(TARGET_DIR)/lib/firmware/
+before doing anything.
+
+I compared the symlinks installed pre-20200122 to what we have now, and
+it seems we're handling all of them with this patch.
+
+Fixes: 55df4059d24b ("package/linux-firmware: fix symlink support")
+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
 ---
- DEVELOPERS                           |   3 +
- package/Config.in                    |   1 +
- package/zabbix/Config.in             | 122 +++++++++++++++++++++
- package/zabbix/zabbix-agent.service  |  17 +++
- package/zabbix/zabbix-server.service |  17 +++
- package/zabbix/zabbix.hash           |   3 +
- package/zabbix/zabbix.mk             | 154 +++++++++++++++++++++++++++
- 7 files changed, 317 insertions(+)
- create mode 100644 package/zabbix/Config.in
- create mode 100644 package/zabbix/zabbix-agent.service
- create mode 100644 package/zabbix/zabbix-server.service
- create mode 100644 package/zabbix/zabbix.hash
- create mode 100644 package/zabbix/zabbix.mk
+ package/linux-firmware/linux-firmware.mk | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index dd44331b85..668e806686 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -146,6 +146,9 @@ N:	Alexey Brodkin <alexey.brodkin@synopsys.com>
- F:	board/cubietech/cubieboard2/
- F:	configs/cubieboard2_defconfig
- 
-+N:	Alexey Lukyanchuk <skif@skif-web.ru>
-+F:	package/zabbix/
-+
- N:	Alistair Francis <alistair@alistair23.me>
- F:	board/sifive/
- F:	boot/opensbi/
-diff --git a/package/Config.in b/package/Config.in
-index edf7687ab7..bad503dfc4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2195,6 +2195,7 @@ endif
- 	source "package/xinetd/Config.in"
- 	source "package/xl2tp/Config.in"
- 	source "package/xtables-addons/Config.in"
-+    source "package/zabbix/Config.in"
- 	source "package/znc/Config.in"
- 
- endmenu
-diff --git a/package/zabbix/Config.in b/package/zabbix/Config.in
-new file mode 100644
-index 0000000000..b75b6ce3f6
---- /dev/null
-+++ b/package/zabbix/Config.in
-@@ -0,0 +1,122 @@
-+config BR2_PACKAGE_ZABBIX
-+	bool "zabbix"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC=y || BR2_TOOLCHAIN_EXTERNAL_GLIBC=y || BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+	select BR2_PACKAGE_PCRE
-+	help
-+	  Zabbix is an enterprise-class open source distributed
-+	  monitoring solution.Zabbix is free of cost. Zabbix
-+	  is written and distributed under the GPL General Public
-+	  License version 2.
-+
-+if (!BR2_TOOLCHAIN_USES_GLIBC && !BR2_TOOLCHAIN_EXTERNAL_GLIBC && !BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC)
-+comment "zabbix need glibc"
-+endif
-+
-+if BR2_PACKAGE_ZABBIX
-+
-+if (!BR2_PACKAGE_POSTGRESQL && !BR2_PACKAGE_MYSQL)
-+comment "zabbix server needs postgresql or mysql support"
-+endif
-+
-+config BR2_PACKAGE_ZABBIX_SERVER
-+	bool "zabbix server"
-+	depends on BR2_PACKAGE_POSTGRESQL || BR2_PACKAGE_MYSQL
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_LIBEVENT
-+
-+if BR2_PACKAGE_ZABBIX_SERVER
-+
-+choice
-+	prompt "server database backend"
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_MYSQL
-+	bool "mysql"
-+	depends on BR2_PACKAGE_MYSQL
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL
-+	bool "postgresql"
-+	depends on BR2_PACKAGE_POSTGRESQL
-+
-+endchoice
-+
-+if BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL || BR2_PACKAGE_ZABBIX_SERVER_MYSQL
-+config BR2_PACKAGE_ZABBIX_SERVER_COPY_DUMPS
-+	bool "install sql dumps"
-+	help
-+	  Copy inicitial database dumps to /usr/zabbix/
-+endif
-+
-+if (!BR2_PACKAGE_PHP || (!BR2_PACKAGE_PHP_EXT_MYSQLI && !BR2_PACKAGE_PHP_EXT_PGSQL) || \
-+	!BR2_PACKAGE_PHP_EXT_MBSTRING || !BR2_PACKAGE_PHP_EXT_BCMATH || \
-+	!BR2_PACKAGE_PHP_EXT_SOCKETS || !BR2_PACKAGE_PHP_EXT_GD || \
-+	!BR2_PACKAGE_PHP_EXT_LIBXML2 || !BR2_PACKAGE_PHP_EXT_CTYPE || \
-+	!BR2_PACKAGE_PHP_EXT_SESSION || !BR2_PACKAGE_PHP_EXT_XMLREADER || \
-+	!BR2_PACKAGE_PHP_EXT_XMLWRITER )
-+comment "zabbix-frontend need php with extensions(bc,sockets,"
-+comment "mbstring,gd,libxml2,ctype,session, xmlreader,xmlwriter, mysql or postgresql"
-+endif
-+
-+choice
-+	prompt "server ssl/tls backend"
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_NOTLS
-+	bool "none"
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_OPENSSL
-+	bool "openssl"
-+	depends on BR2_PACKAGE_OPENSSL
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_GNUTLS
-+	bool "gnutls"
-+	depends on BR2_PACKAGE_GNUTLS
-+
-+endchoice
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_OPENIPMI
-+	bool "openipmi support"
-+	select BR2_PACKAGE_OPENIPMI
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_LIBSSH2
-+	bool "libssh2 support"
-+	select BR2_PACKAGE_LIBSSH2
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_LDAP
-+	bool "openldap support"
-+	select BR2_PACKAGE_OPENLDAP
-+
-+if (!BR2_USE_MMU)
-+comment "netsnmp support need MMU"
-+endif
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_NETSNMP
-+	bool "net-snmp support"
-+	depends on BR2_USE_MMU # netsnmp
-+	select BR2_PACKAGE_NETSNMP
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_LIBCURL
-+	bool "libcurl support"
-+	select BR2_PACKAGE_LIBCURL
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_LIBXML2
-+	bool "libxml2 support"
-+	select BR2_PACKAGE_LIBXML2
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_COPY_FRONTEND
-+	bool "copy php-frontend to target"
-+	depends on BR2_PACKAGE_PHP
-+	depends on BR2_PACKAGE_PHP_EXT_MYSQLI || BR2_PACKAGE_PHP_EXT_PGSQL
-+	depends on BR2_PACKAGE_PHP_EXT_BCMATH
-+	depends on BR2_PACKAGE_PHP_EXT_SOCKETS
-+	depends on BR2_PACKAGE_PHP_EXT_MBSTRING
-+	depends on BR2_PACKAGE_PHP_EXT_GD
-+	depends on BR2_PACKAGE_PHP_EXT_LIBXML2
-+	depends on BR2_PACKAGE_PHP_EXT_CTYPE
-+	depends on BR2_PACKAGE_PHP_EXT_SESSION
-+	depends on BR2_PACKAGE_PHP_EXT_XMLREADER
-+	depends on BR2_PACKAGE_PHP_EXT_XMLWRITER
-+	help
-+	  copy web-frontend to /usr/zabbix/php-frontend
-+
-+endif
-+
-+endif
-diff --git a/package/zabbix/zabbix-agent.service b/package/zabbix/zabbix-agent.service
-new file mode 100644
-index 0000000000..8b4f45a4fc
---- /dev/null
-+++ b/package/zabbix/zabbix-agent.service
-@@ -0,0 +1,17 @@
-+[Unit]
-+Description=Zabbix Agent Daemon
-+After=network.target
-+ 
-+[Service]
-+Type=forking
-+ExecStart=/usr/sbin/zabbix_agentd
-+ExecReload=/usr/sbin/zabbix_agentd -R config_cache_reload
-+RuntimeDirectory=zabbix
-+PIDFile=/run/zabbix/zabbix_agentd.pid
-+User=zabbix
-+Group=zabbix
-+WatchdogSec=30s
-+Restart=on-failure
-+
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/package/zabbix/zabbix-server.service b/package/zabbix/zabbix-server.service
-new file mode 100644
-index 0000000000..b8ba0d1707
---- /dev/null
-+++ b/package/zabbix/zabbix-server.service
-@@ -0,0 +1,17 @@
-+[Unit]
-+Description=Zabbix Server Daemon
-+After=network.target
-+ 
-+[Service]
-+Type=forking
-+ExecStart=/usr/sbin/zabbix_server
-+ExecReload=/usr/sbin/zabbix_server -R config_cache_reload
-+RuntimeDirectory=zabbix
-+PIDFile=/run/zabbix/zabbix_server.pid
-+User=zabbix
-+Group=zabbix
-+WatchdogSec=30s
-+Restart=on-failure
-+
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/package/zabbix/zabbix.hash b/package/zabbix/zabbix.hash
-new file mode 100644
-index 0000000000..87f1286682
---- /dev/null
-+++ b/package/zabbix/zabbix.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256	22bb28e667424ad4688f47732853f4241df0e78a7607727b043d704ba726ae0e	zabbix-4.4.6.tar.gz
-+sha256  a823e00bc7f0844874f90fee97136f178e7debc76bace5f09e15ee8ed55f04c3    README
-diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
-new file mode 100644
-index 0000000000..a75914a816
---- /dev/null
-+++ b/package/zabbix/zabbix.mk
-@@ -0,0 +1,154 @@
-+################################################################################
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 009202d604d4..e367d4c5e7b8 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -609,13 +609,24 @@ endif
+ # automatically by its copy-firmware.sh script during the installation, which
+ # parses the WHENCE file where symlinks are described. We follow the same logic
+ # here, adding symlink only for firmwares installed in the target directory.
+-# The grep/sed parsing is taken from the script mentioned before.
 +#
-+# zabbix
-+#
-+################################################################################
-+
-+ZABBIX_VERSION = 4.4.6
-+ZABBIX_SITE = https://sourceforge.net/projects/zabbix/files
-+ZABBIX_LICENSE = GPL-2.0
-+ZABBIX_LICENSE_FILES = README
-+
-+ZABBIX_DEPENDENCIES = pcre
-+ZABBIX_CONF_OPTS = --with-libpcre=$(STAGING_DIR)/usr/bin/ \
-+	--enable-agent
-+
-+ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_CLIENT_CHANGE_PIDFILE_LOCATION
-+ZABBIX_SYSTEMD_UNITS += zabbix-agent.service
-+
-+define ZABBIX_INSTALL_INIT_SYSTEMD
-+	$(foreach unit,$(ZABBIX_SYSTEMD_UNITS),\
-+		$(INSTALL) -D -m 0644 $(ZABBIX_PKGDIR)/$(unit) $(TARGET_DIR)/usr/lib/systemd/system/$(unit) && \
-+		mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants && \
-+		ln -fs -r $(TARGET_DIR)/usr/lib/systemd/system/$(unit) $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/$(unit)
-+	)
-+endef
-+
-+define ZABBIX_USERS
-+	zabbix -1 zabbix -1 !- /var/lib/zabbix - zabbix zabbix user
-+endef
-+
-+define ZABBIX_CLIENT_CHANGE_PIDFILE_LOCATION
-+	$(SED) 's%\#\ PidFile=/tmp/zabbix_agentd.pid%PidFile=/run/zabbix/zabbix_agentd.pid%g' $(TARGET_DIR)/etc/zabbix_agentd.conf
-+endef
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER),y)
-+ZABBIX_SYSTEMD_UNITS += zabbix-server.service
-+ZABBIX_CONF_OPTS += --enable-server \
-+	--with-libevent \
-+	--with-libpthread=$(STAGING_DIR)/usr \
-+	--with-zlib=$(STAGING_DIR)/usr
-+ZABBIX_DEPENDENCIES += libevent zlib
-+ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_SERVER_CHANGE_PIDFILE_LOCATION
-+
-+# Need openipmi in staging dir. Patch submitted at 2019.12.16
-+# Before this patch enabled, use this crutch
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_OPENIPMI),y)
-+ZABBIX_CONF_OPTS += --with-openipmi=$(STAGING_DIR)/usr
-+ZABBIX_DEPENDENCIES += openipmi
-+ZABBIX_PRE_CONFIGURE_HOOKS += BR2_PACKAGE_ZABBIX_SERVER_OPENIPMI_FIX_LIBS
-+
-+define BR2_PACKAGE_ZABBIX_SERVER_OPENIPMI_FIX_LIBS
-+	if [ ! -f $(STAGING_DIR)/usr/lib/libOpenIPMI.so ]; then \
-+		cp -rf $(TARGET_DIR)/usr/lib/libOpenIPMI* $(STAGING_DIR)/usr/lib/ ;\
-+		cp -rf $(TARGET_DIR)/usr/include/OpenIPMI $(STAGING_DIR)/usr/include/ ;\
-+	fi
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_LIBCURL),y)
-+ZABBIX_CONF_OPTS += --with-libcurl=$(STAGING_DIR)/usr/bin/curl-config
-+ZABBIX_DEPENDENCIES += libcurl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_LIBXML2),y)
-+ZABBIX_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr/bin/xml2-config
-+ZABBIX_DEPENDENCIES += libxml2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_NETSNMP),y)
-+ZABBIX_CONF_OPTS += --with-net-snmp=$(STAGING_DIR)/usr/bin/net-snmp-config
-+ZABBIX_DEPENDENCIES += netsnmp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_LDAP),y)
-+ZABBIX_CONF_OPTS += --with-ldap=$(STAGING_DIR)/usr
-+ZABBIX_DEPENDENCIES += openldap
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_LIBSSH2),y)
-+ZABBIX_CONF_OPTS += --with-ssh2=$(STAGING_DIR)/usr
-+ZABBIX_DEPENDENCIES += libssh2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_OPENSSL),y)
-+ZABBIX_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
-+ZABBIX_DEPENDENCIES += openssl
-+else ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_GNUTLS),y)
-+ZABBIX_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr
-+ZABBIX_DEPENDENCIES += gnutls
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_COPY_FRONTEND),y)
-+ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_SERVER_COPY_FRONTEND
-+
-+define ZABBIX_SERVER_COPY_FRONTEND
-+	mkdir -p $(TARGET_DIR)/usr/zabbix/php-frontend/
-+	cp -r $(@D)/frontends/php/* $(TARGET_DIR)/usr/zabbix/php-frontend/
-+endef
-+
-+endif
-+
-+define ZABBIX_SERVER_CHANGE_PIDFILE_LOCATION
-+	$(SED) 's%\#\ PidFile=/tmp/zabbix_server.pid%PidFile=/run/zabbix/zabbix_server.pid%g' $(TARGET_DIR)/etc/zabbix_server.conf
-+endef
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_MYSQL),y)
-+ZABBIX_DEPENDENCIES += mysql
-+ZABBIX_CONF_OPTS += --with-mysql=$(STAGING_DIR)/usr/bin/mysql_config
-+# Need package/mariadb/0003-add-sysroot-path-to-mariadb_config.patch by Ryan Coe
-+# While this patch not included, use this crutch
-+ZABBIX_PRE_CONFIGURE_HOOKS += ZABBIX_DISABLE_MARIADB_CONFIG
-+ZABBIX_POST_CONFIGURE_HOOKS += ZABBIX_ENABLE_MARIADB_CONFIG
-+
-+define ZABBIX_DISABLE_MARIADB_CONFIG
-+	if [ -f "$(STAGING_DIR)/usr/bin/mariadb_config" ]; then \
-+		mv $(STAGING_DIR)/usr/bin/mariadb_config $(STAGING_DIR)/usr/bin/mariadb_config_save; \
-+	fi
-+endef
-+
-+define ZABBIX_ENABLE_MARIADB_CONFIG
-+	if [ -f "$(STAGING_DIR)/usr/bin/mariadb_confi_save" ]; then \
-+		mv $(STAGING_DIR)/usr/bin/mariadb_config_save $(STAGING_DIR)/usr/bin/mariadb_config; \
-+	fi
-+endef
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_COPY_DUMPS),y)
-+ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_SERVER_PREPARE_MYSQL
-+endif
-+
-+define ZABBIX_SERVER_PREPARE_MYSQL
-+	mkdir -p $(TARGET_DIR)/usr/zabbix/mysql_schema/
-+	cp -r $(@D) $(@D)/database/mysql/*\.sql $(TARGET_DIR)/usr/zabbix/mysql_schema/
-+endef
-+
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL),y)
-+ZABBIX_DEPENDENCIES += postgresql
-+ZABBIX_CONF_OPTS += --with-postgresql=$(STAGING_DIR)/usr/bin/pg_config
-+
-+define ZABBIX_SERVER_PREPARE_POSTGRESQL
-+	mkdir -p $(TARGET_DIR)/usr/zabbix/postgresql_schema
-+	cp -r $(@D)/database/postgresql/*\.sql $(TARGET_DIR)/usr/zabbix/postgresql_schema/
-+endef
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_COPY_DUMPS),y)
-+ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_SERVER_PREPARE_POSTGRESQL
-+endif
-+
-+endif
-+
-+endif
-+
-+$(eval $(autotools-package))
++# For testing the presence of firmwares in the target directory we first make
++# sure the directories under which the symlinks could be created exist, to
++# handle symlinks of the form a/foo -> ../b/foo where a/ doesn't exist. We then
++# remove any previously created empty directory. As the symlinks could be in
++# nested (empty) directories, we use the --parents option of rmdir; this is why
++# we're changing the current directory to $(TARGET_DIR)/lib/firmware/ before
++# doing anything.
+ define LINUX_FIRMWARE_CREATE_SYMLINKS
++	cd $(TARGET_DIR)/lib/firmware/ ; \
+ 	sed -r -e '/^Link: (.+) -> (.+)$$/!d; s//\1 \2/' $(@D)/WHENCE | \
+ 	while read f d; do \
+-		if test -f $(TARGET_DIR)/lib/firmware/$$d; then \
+-			ln -sf $$d $(TARGET_DIR)/lib/firmware/$$f || exit 1; \
++		dir=$$(dirname $$f) ; \
++		mkdir -p $$dir ; \
++		if test -f $$dir/$$d; then \
++			ln -sf $$d $$f || exit 1; \
+ 		fi ; \
++		test "$$dir" != "." && rmdir --parents --ignore-fail-on-non-empty $$dir ; \
+ 	done
+ endef
+ 
 -- 
 2.24.1
