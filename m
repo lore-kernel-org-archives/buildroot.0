@@ -1,75 +1,70 @@
-From: Mircea GLIGA <mgliga@bitdefender.com>
-Date: Wed, 4 Mar 2020 15:02:45 +0000
-Subject: [Buildroot] [PATCHv2] Makefile: work around a bug in newly
- released make 4.3
-In-Reply-To: <20200304134037.24237-1-yann.morin.1998@free.fr>
-References: <20200304134037.24237-1-yann.morin.1998@free.fr>
-Message-ID: <b80fa303-8c03-b6e0-81dc-a4ce9d4c96ed@bitdefender.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  4 Mar 2020 17:55:32 +0100
+Subject: [Buildroot] [PATCHv2] package/linux-firmware: fix special cases of
+ symlinks
+Message-ID: <20200304165532.22033-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Antoine Tenart <antoine.tenart@bootlin.com>
 
-I've tested the patch against master and using a br2-external tree and
-it works.
+Some symlinks were not created correctly when installing the
+Linux-firmware package. This patch fixes the support for all symlinks of
+the form:
 
-I've also tested it against buildroot-2019.02.9, but there it needs
-to be adjusted accordingly:
+  a/foo -> bar
+  a/foo -> b/bar
+  a/foo -> ../b/bar
 
-`$(BASE_DIR)/.br-external.mk:;`
+With this patch all forms of symlinks described in the WHENCE file
+should be supported, whether they are in nested directories, or in
+non-existing ones.
 
-BR
-Mircea
+As some symlinks could be in directories that do not exist, we must
+maje sure to canonicalize the path before testing the linked-to file.
 
-On 3/4/20 3:40 PM, Yann E. MORIN wrote:
-> Several users of rolling-release distributions have been reporting on
-> IRC that Buildroot is broken now that they have switched to the newly
-> released make 4.3.
-> 
-> It turns out that the constructs we use to generated and onclude the
-> internal br2-external related fragments is no longer working with
-> make-4.3.
-> 
-> Indeed, an upstream bug report [0] seems to imply that it so far was
-> working by chance. There has been no further feedback, whether this is
-> really considered a fix for a previous ill-defined behaviour, or an
-> actual regression...
-> 
-> In the meantime, we add a workaround, suggested in that same bug report,
-> that fixes the issue for make 4.3, and that should not break on older
-> make versions either (verified on all relevant versions: from 3.81,
-> 3.82, 4.0, 4.1, and 4.2).
-> 
-> [0] https://savannah.gnu.org/bugs/?57676
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Tested-by: Mircea Gliga <mgliga@bitdefender.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> ---
-> Changes v1 -> v2:
->    - [0] points to something now  (Thomas)
->    - repeat the bug URL in the Makefile  (Thomas)
->    - explain where the workaround comes from  (Thomas)
-> ---
->   Makefile | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index 31624f77a2..09e769f613 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -188,6 +188,9 @@ ifneq ($(BR2_EXTERNAL_ERROR),)
->   $(error $(BR2_EXTERNAL_ERROR))
->   endif
->   
-> +# Workaround bug in make-4.3: https://savannah.gnu.org/bugs/?57676
-> +$(BASE_DIR)/.br2-external.mk:;
-> +
->   # To make sure that the environment variable overrides the .config option,
->   # set this before including .config.
->   ifneq ($(BR2_DL_DIR),)
-> 
+We compared the symlinks installed pre-20200122 to what we have now, and
+it seems we're handling all of them with this patch.
+
+Fixes: 55df4059d24b ("package/linux-firmware: fix symlink support")
+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+[yann.morin.1998 at free.fr:
+  - use readlink in canonicalize-missing mode, to avoid
+    creating-then-removing directories
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/linux-firmware/linux-firmware.mk | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 009202d604..6d3cec1a48 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -609,12 +609,18 @@ endif
+ # automatically by its copy-firmware.sh script during the installation, which
+ # parses the WHENCE file where symlinks are described. We follow the same logic
+ # here, adding symlink only for firmwares installed in the target directory.
+-# The grep/sed parsing is taken from the script mentioned before.
++#
++# For testing the presence of firmwares in the target directory we first make
++# sure we canonicalize the pointed-to file, to cover the symlinks of the form
++# a/foo -> ../b/foo  where a/ (the directory where to put the symlink) does
++# not yet exist.
+ define LINUX_FIRMWARE_CREATE_SYMLINKS
++	cd $(TARGET_DIR)/lib/firmware/ ; \
+ 	sed -r -e '/^Link: (.+) -> (.+)$$/!d; s//\1 \2/' $(@D)/WHENCE | \
+ 	while read f d; do \
+-		if test -f $(TARGET_DIR)/lib/firmware/$$d; then \
+-			ln -sf $$d $(TARGET_DIR)/lib/firmware/$$f || exit 1; \
++		if test -f $$(readlink -m $$(dirname $$f)/$$d); then \
++			mkdir -p $$(dirname $$f) || exit 1; \
++			ln -sf $$d $$f || exit 1; \
+ 		fi ; \
+ 	done
+ endef
+-- 
+2.20.1
