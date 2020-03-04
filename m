@@ -1,55 +1,76 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  4 Mar 2020 22:45:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jhead: security bump to version 3.04
-Message-ID: <20200304214532.1018182-1-fontaine.fabrice@gmail.com>
+Date: Wed,  4 Mar 2020 23:21:02 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libsndfile: fix CVE-2018-19758
+Message-ID: <20200304222103.1029879-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2019-1010301: jhead 3.03 is affected by: Buffer Overflow. The
-  impact is: Denial of service. The component is: gpsinfo.c Line 151
-  ProcessGpsInfo(). The attack vector is: Open a specially crafted JPEG
-  file.
-- Fix CVE-2019-1010302: jhead 3.03 is affected by: Incorrect Access
-  Control. The impact is: Denial of service. The component is: iptc.c
-  Line 122 show_IPTC(). The attack vector is: the victim must open a
-  specially crafted JPEG file.
-- Fix CVE-2019-19035: jhead 3.03 is affected by: heap-based buffer
-  over-read. The impact is: Denial of service. The component is:
-  ReadJpegSections and process_SOFn in jpgfile.c. The attack vector is:
-  Open a specially crafted JPEG file.
-- Update indentation of hash file (two spaces)
+There is a heap-based buffer over-read at wav.c in wav_write_header in
+libsndfile 1.0.28 that will cause a denial of service.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/jhead/jhead.hash | 4 ++--
- package/jhead/jhead.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...004-src-wav.c-Fix-heap-read-overflow.patch | 35 +++++++++++++++++++
+ package/libsndfile/libsndfile.mk              |  2 ++
+ 2 files changed, 37 insertions(+)
+ create mode 100644 package/libsndfile/0004-src-wav.c-Fix-heap-read-overflow.patch
 
-diff --git a/package/jhead/jhead.hash b/package/jhead/jhead.hash
-index 9ee5055f7c..ffe75381b3 100644
---- a/package/jhead/jhead.hash
-+++ b/package/jhead/jhead.hash
-@@ -1,3 +1,3 @@
- # Locally calculated from download (no sig, hash)
--sha256	82194e0128d9141038f82fadcb5845391ca3021d61bc00815078601619f6c0c2	jhead-3.03.tar.gz
--sha256	46c870a208305489eea862ec8b05b030ba1f06d99195f660dc0ba541cc38d82b	readme.txt
-+sha256  ef89bbcf4f6c25ed88088cf242a47a6aedfff4f08cc7dc205bf3e2c0f10a03c9  jhead-3.04.tar.gz
-+sha256  46c870a208305489eea862ec8b05b030ba1f06d99195f660dc0ba541cc38d82b  readme.txt
-diff --git a/package/jhead/jhead.mk b/package/jhead/jhead.mk
-index 65f8cdb73c..d56ee0daff 100644
---- a/package/jhead/jhead.mk
-+++ b/package/jhead/jhead.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libsndfile/0004-src-wav.c-Fix-heap-read-overflow.patch b/package/libsndfile/0004-src-wav.c-Fix-heap-read-overflow.patch
+new file mode 100644
+index 0000000000..2e730ca3fa
+--- /dev/null
++++ b/package/libsndfile/0004-src-wav.c-Fix-heap-read-overflow.patch
+@@ -0,0 +1,35 @@
++From 42132c543358cee9f7c3e9e9b15bb6c1063a608e Mon Sep 17 00:00:00 2001
++From: Erik de Castro Lopo <erikd@mega-nerd.com>
++Date: Tue, 1 Jan 2019 20:11:46 +1100
++Subject: [PATCH] src/wav.c: Fix heap read overflow
++
++This is CVE-2018-19758.
++
++Closes: https://github.com/erikd/libsndfile/issues/435
++[Retrieved (and backported) from:
++https://github.com/erikd/libsndfile/commit/42132c543358cee9f7c3e9e9b15bb6c1063a608e]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/wav.c | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/src/wav.c b/src/wav.c
++index 9d71aadb..5c825f2a 100644
++--- a/src/wav.c
+++++ b/src/wav.c
++@@ -1,5 +1,5 @@
++ /*
++-** Copyright (C) 1999-2016 Erik de Castro Lopo <erikd@mega-nerd.com>
+++** Copyright (C) 1999-2019 Erik de Castro Lopo <erikd@mega-nerd.com>
++ ** Copyright (C) 2004-2005 David Viens <davidv@plogue.com>
++ **
++ ** This program is free software; you can redistribute it and/or modify
++@@ -1146,6 +1146,8 @@ wav_write_header (SF_PRIVATE *psf, int calc_length)
++ 		psf_binheader_writef (psf, "44", BHW4 (0), BHW4 (0)) ; /* SMTPE format */
++ 		psf_binheader_writef (psf, "44", BHW4 (psf->instrument->loop_count), BHW4 (0)) ;
++ 
+++		/* Loop count is signed 16 bit number so we limit it range to something sensible. */
+++		psf->instrument->loop_count &= 0x7fff ;
++ 		for (tmp = 0 ; tmp < psf->instrument->loop_count ; tmp++)
++ 		{	int type ;
++ 
+diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
+index 19c3184961..7be822b875 100644
+--- a/package/libsndfile/libsndfile.mk
++++ b/package/libsndfile/libsndfile.mk
+@@ -20,6 +20,8 @@ LIBSNDFILE_IGNORE_CVES += \
+ 	CVE-2018-19661 CVE-2018-19662
+ # disputed, https://github.com/erikd/libsndfile/issues/398
+ LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
++# 0004-src-wav.c-Fix-heap-read-overflow.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2018-19758
  
--JHEAD_VERSION = 3.03
-+JHEAD_VERSION = 3.04
- JHEAD_SITE = http://www.sentex.net/~mwandel/jhead
- JHEAD_LICENSE = Public Domain
- JHEAD_LICENSE_FILES = readme.txt
+ LIBSNDFILE_CONF_OPTS = \
+ 	--disable-sqlite \
 -- 
 2.25.0
