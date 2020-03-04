@@ -1,166 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 4 Mar 2020 18:58:00 +0100
-Subject: [Buildroot] [PATCH/next v2] package/mesa3d: fix nouveau
- std::isinf related compile failure
-In-Reply-To: <20200304110050.29607-1-ps.report@gmx.net>
-References: <20200304110050.29607-1-ps.report@gmx.net>
-Message-ID: <20200304175800.GB5357@scaer>
+Date: Wed, 4 Mar 2020 19:03:21 +0100
+Subject: [Buildroot] [git commit] package/fbgrab: bump version to 1.3.1 and
+ update projct URL
+Message-ID: <20200304175216.708D48F377@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7e87817d2c4168e857d1a2aa4cd6b21ed080a96f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-04 12:00 +0100, Peter Seiderer spake thusly:
-> Activate already existing mesa3d solution for the isinf compile
-> failure for uclibc based toolchains instead of using a custom
-> workaround.
-> 
-> - remove 0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-> - add 0004-c99_math-import-isinf-for-uclibc-based-toolchains.patch
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/cbefc5d4a4fefb674e596400fa1d2698cd89c5b3/
->   http://autobuild.buildroot.net/results/dc974da012f53fa4ed3be616f937b0afae423d66/
+- bump version to 1.3.1
+  Changelog:
+  * Incorrect alpha value when converting 32-bit framebuffers.
+  * Documentation for github instead of own homepage.
 
-You've tagged this patch for next, but the two failures pccured on
-master.
+- update project URL
 
-Where should this patch be applied, then?
+Fixes bug 12606 ([1]).
 
-Regards,
-Yann E. MORIN.
+[1] https://bugs.busybox.net/show_bug.cgi?id=12606
 
->   ../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: In member function 'bool nv50_ir::GCRA::simplify()':
->   ../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:1348:19: error: expected unqualified-id before '(' token
->             if (std::isinf(bestScore)) {
->                      ^
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Notes:
->   - as Romain Naour pointed out ([1], [2]) the existing check in
->     c99_math.h failes for uclibc (because it impersonate glibc-2.2),
->     so enable the original isinf solution for uclibc instead of the
->     custom work around
-> 
-> Changes v1 -> v2:
->   - update patch to use defined() around __UCLIBC__
->   - update uclibc impersonate version to 2.2 in notes
->     and fix wording
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2020-March/275624.html
-> [2] http://lists.busybox.net/pipermail/buildroot/2020-March/275735.html
-> ---
->  ...rt-isinf-for-uclibc-based-toolchains.patch | 30 ++++++++++++
->  ...ers-nouveau-codegen-nv50_ir_ra.cpp-p.patch | 47 -------------------
->  2 files changed, 30 insertions(+), 47 deletions(-)
->  create mode 100644 package/mesa3d/0004-c99_math-import-isinf-for-uclibc-based-toolchains.patch
->  delete mode 100644 package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-> 
-> diff --git a/package/mesa3d/0004-c99_math-import-isinf-for-uclibc-based-toolchains.patch b/package/mesa3d/0004-c99_math-import-isinf-for-uclibc-based-toolchains.patch
-> new file mode 100644
-> index 0000000000..5acbaa4daa
-> --- /dev/null
-> +++ b/package/mesa3d/0004-c99_math-import-isinf-for-uclibc-based-toolchains.patch
-> @@ -0,0 +1,30 @@
-> +From 705490763fcc052defa2d49a5c5200775cd12c54 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Wed, 4 Mar 2020 08:27:24 +0100
-> +Subject: [PATCH] c99_math: import isinf for uclibc based toolchains
-> +
-> +The same fix as for glibc >= 2.23 is needed for uclibc
-> +based toolchains.
-> +
-> +[Upstream suggested: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4042]
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + include/c99_math.h | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/include/c99_math.h b/include/c99_math.h
-> +index e906c26aa54..c8a73a2d2c7 100644
-> +--- a/include/c99_math.h
-> ++++ b/include/c99_math.h
-> +@@ -190,7 +190,7 @@ fpclassify(double x)
-> +  * undefines those functions, which in glibc 2.23, are defined as macros rather
-> +  * than functions as in glibc 2.22.
-> +  */
-> +-#if __cplusplus >= 201103L && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 23))
-> ++#if __cplusplus >= 201103L && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 23) || defined(__UCLIBC__))
-> + #include <cmath>
-> + 
-> + using std::fpclassify;
-> +-- 
-> +2.25.1
-> +
-> diff --git a/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch b/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-> deleted file mode 100644
-> index 73e75993de..0000000000
-> --- a/package/mesa3d/0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-> +++ /dev/null
-> @@ -1,47 +0,0 @@
-> -From f2ce27b761eeca301a109856f20ed9a8eb06796d Mon Sep 17 00:00:00 2001
-> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Sat, 28 Dec 2019 21:49:43 +0100
-> -Subject: [PATCH] src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: prefix
-> - isinf with std::
-> -
-> -Prefix isinf with std:: to fix the following build failure with gcc 4.9:
-> -
-> -../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp: In member function 'bool nv50_ir::GCRA::simplify()':
-> -../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:1350:29: error: 'isinf' was not declared in this scope
-> -          if (isinf(bestScore)) {
-> -                             ^
-> -../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:1350:29: note: suggested alternative:
-> -In file included from /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/random:38:0,
-> -                 from /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/bits/stl_algo.h:66,
-> -                 from /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/algorithm:62,
-> -                 from ../src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp:26:
-> -/data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabi/include/c++/4.9.4/cmath:621:5: note:   'std::isinf'
-> -     isinf(_Tp __x)
-> -     ^
-> -
-> -Fixes:
-> - - http://autobuild.buildroot.org/results/599dc3478ed65d36fbf9f5e9625691dfa813b530
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status:
-> -https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3227]
-> ----
-> - src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp b/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
-> -index 6df2664da22..e81fb117213 100644
-> ---- a/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
-> -+++ b/src/gallium/drivers/nouveau/codegen/nv50_ir_ra.cpp
-> -@@ -1345,7 +1345,7 @@ GCRA::simplify()
-> -                bestMaxReg = it->maxReg;
-> -             }
-> -          }
-> --         if (isinf(bestScore)) {
-> -+         if (std::isinf(bestScore)) {
-> -             ERROR("no viable spill candidates left\n");
-> -             return false;
-> -          }
-> --- 
-> -2.24.0
-> -
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Tested-by: Timo Ketola <timo.ketola@exertus.fi>
+Acked-by: Timo Ketola <timo.ketola@exertus.fi>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/fbgrab/Config.in   | 2 +-
+ package/fbgrab/fbgrab.hash | 2 +-
+ package/fbgrab/fbgrab.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/fbgrab/Config.in b/package/fbgrab/Config.in
+index d1e9e69b3f..b1d8755f32 100644
+--- a/package/fbgrab/Config.in
++++ b/package/fbgrab/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_FBGRAB
+ 	  FBGrab is a framebuffer screenshot program, capturing the
+ 	  linux frambuffer and converting it to a png-picture.
+ 
+-	  http://fbgrab.monells.se/
++	  https://github.com/GunnarMonell/fbgrab
+diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
+index 386d8fb5cb..6cd19dc1d5 100644
+--- a/package/fbgrab/fbgrab.hash
++++ b/package/fbgrab/fbgrab.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5fab478cbf8731fbacefaa76236a8f8b38ccff920c53b3a8253bc35509fba8ed  fbgrab-1.3.tar.gz
++sha256  3314a932f830e32feaf36914e1b43326529fe35b7eb7410ff55f16c930ddfbcb  fbgrab-1.3.1.tar.gz
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+index d81a5ee2a0..43fd0ba948 100644
+--- a/package/fbgrab/fbgrab.mk
++++ b/package/fbgrab/fbgrab.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-FBGRAB_VERSION = 1.3
+-FBGRAB_SITE = http://fbgrab.monells.se
++FBGRAB_VERSION = 1.3.1
++FBGRAB_SITE = $(call github,GunnarMonell,fbgrab,$(FBGRAB_VERSION))
+ FBGRAB_DEPENDENCIES = libpng
+ FBGRAB_LICENSE = GPL-2.0
+ FBGRAB_LICENSE_FILES = COPYING
