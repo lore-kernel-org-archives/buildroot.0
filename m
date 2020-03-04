@@ -1,101 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 4 Mar 2020 19:22:38 +0100
-Subject: [Buildroot] [PATCH v1] package/mesa3d: fix linux/kcmp.h related
- compile failure
-In-Reply-To: <20200302110826.31166-1-ps.report@gmx.net>
-References: <20200302110826.31166-1-ps.report@gmx.net>
-Message-ID: <20200304182238.GE5357@scaer>
+From: Antoine Tenart <antoine.tenart@bootlin.com>
+Date: Wed, 4 Mar 2020 19:37:54 +0100
+Subject: [Buildroot] [PATCH] package/linux-firmware: fix special cases
+ of symlinks
+In-Reply-To: <20200304170009.GA5357@scaer>
+References: <20200304105304.986863-1-antoine.tenart@bootlin.com>
+ <20200304170009.GA5357@scaer>
+Message-ID: <20200304183754.GL3179@kwain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hi Yann,
 
-On 2020-03-02 12:08 +0100, Peter Seiderer spake thusly:
-> Add upstream patch [1].
+On Wed, Mar 04, 2020 at 06:00:09PM +0100, Yann E. MORIN wrote:
+> On 2020-03-04 11:53 +0100, Antoine Tenart spake thusly:
+> > diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+> > index 009202d604d4..e367d4c5e7b8 100644
+> > --- a/package/linux-firmware/linux-firmware.mk
+> > +++ b/package/linux-firmware/linux-firmware.mk
+> > @@ -609,13 +609,24 @@ endif
+> >  # automatically by its copy-firmware.sh script during the installation, which
+> >  # parses the WHENCE file where symlinks are described. We follow the same logic
+> >  # here, adding symlink only for firmwares installed in the target directory.
+> > -# The grep/sed parsing is taken from the script mentioned before.
+> > +#
+> > +# For testing the presence of firmwares in the target directory we first make
+> > +# sure the directories under which the symlinks could be created exist, to
+> > +# handle symlinks of the form a/foo -> ../b/foo where a/ doesn't exist. We then
+> > +# remove any previously created empty directory. As the symlinks could be in
+> > +# nested (empty) directories, we use the --parents option of rmdir; this is why
+> > +# we're changing the current directory to $(TARGET_DIR)/lib/firmware/ before
+> > +# doing anything.
+> >  define LINUX_FIRMWARE_CREATE_SYMLINKS
+> > +	cd $(TARGET_DIR)/lib/firmware/ ; \
+> >  	sed -r -e '/^Link: (.+) -> (.+)$$/!d; s//\1 \2/' $(@D)/WHENCE | \
+> >  	while read f d; do \
+> > -		if test -f $(TARGET_DIR)/lib/firmware/$$d; then \
+> > -			ln -sf $$d $(TARGET_DIR)/lib/firmware/$$f || exit 1; \
+> > +		dir=$$(dirname $$f) ; \
+> > +		mkdir -p $$dir ; \
+> > +		if test -f $$dir/$$d; then \
+> > +			ln -sf $$d $$f || exit 1; \
+> >  		fi ; \
+> > +		test "$$dir" != "." && rmdir --parents --ignore-fail-on-non-empty $$dir ; \
 > 
-> Fixes:
+> I was not too happy about this create-a-directory-then-remove-it-if-it-turned-
+> out-we-did-not-need-it dance.
 > 
->   http://autobuild.buildroot.net/results/df5bcb8e4f6e98c4de347abbbe91e10a98047422
+> So, I hacked it, using readlink -m, and come up with something that I
+> think is simpler and easier to grok:
 > 
->   ../src/util/os_file.c:37:24: fatal error: linux/kcmp.h: No such file or directory
-> 
-> [1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=f7bfb10c69dfe48a91e35523cb5ee641bdbf6988
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>     https://patchwork.ozlabs.org/patch/1249126/
 
-Applied to master, thanks.
+I considered `readlink -m`, but its man pages says: "Note realpath(1) is
+the preferred command to use for canonicalization functionality". So I
+could have used realpath, but to use it I would have to define a
+dependency on host-coreutils... which seemed a bit overkill. That's why
+I move to a create-then-remove solution which I agree isn't perfect :-)
 
-Regards,
-Yann E. MORIN.
+> I think even the cd into the firmware directory was not even needed, but
+> I firgit to remove it to test...
 
-> ---
->  ...util-remove-the-dependency-on-kcmp.h.patch | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
-> 
-> diff --git a/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch b/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
-> new file mode 100644
-> index 0000000000..27ae021e08
-> --- /dev/null
-> +++ b/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
-> @@ -0,0 +1,42 @@
-> +From 63ad4535df6a0a938e7391d73adcada05e730c89 Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <marek.olsak@amd.com>
-> +Date: Tue, 18 Feb 2020 16:12:23 -0500
-> +Subject: [PATCH] util: remove the dependency on kcmp.h
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Fixes: f76cbc7901f7 "util: Add os_same_file_description helper"
-> +
-> +Acked-by: Eric Engestrom <eric@engestrom.ch>
-> +Reviewed-by: Michel D?nzer <mdaenzer@redhat.com>
-> +Tested-by: Marge Bot <https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3860>
-> +Part-of: <https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3860>
-> +
-> +[ Upstream: https://cgit.freedesktop.org/mesa/mesa/commit/?id=f7bfb10c69dfe48a91e35523cb5ee641bdbf6988 ]
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + src/util/os_file.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/src/util/os_file.c b/src/util/os_file.c
-> +index b502ff4..128fe87 100644
-> +--- a/src/util/os_file.c
-> ++++ b/src/util/os_file.c
-> +@@ -34,11 +34,12 @@ os_file_create_unique(const char *filename, int filemode)
-> + #if defined(__linux__)
-> + 
-> + #include <fcntl.h>
-> +-#include <linux/kcmp.h>
-> + #include <sys/stat.h>
-> + #include <sys/syscall.h>
-> + #include <unistd.h>
-> + 
-> ++/* copied from <linux/kcmp.h> */
-> ++#define KCMP_FILE 0
-> + 
-> + static ssize_t
-> + readN(int fd, char *buf, size_t len)
-> +-- 
-> +2.25.1
-> +
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Right, you can drop the cd statement (you have to use the full path in
+the ln command then).
+
+Thanks,
+Antoine
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Antoine T?nart, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
