@@ -1,58 +1,87 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  4 Mar 2020 20:54:52 +0100
-Subject: [Buildroot] [PATCH] package/python-django: security bump to version
- 3.0.4
-Message-ID: <20200304195452.23371-1-peter@korsgaard.com>
+From: Antoine Tenart <antoine.tenart@bootlin.com>
+Date: Wed, 4 Mar 2020 21:26:43 +0100
+Subject: [Buildroot] [PATCHv2] package/linux-firmware: fix special cases
+ of symlinks
+In-Reply-To: <20200304165532.22033-1-yann.morin.1998@free.fr>
+References: <20200304165532.22033-1-yann.morin.1998@free.fr>
+Message-ID: <20200304202643.GM3179@kwain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerabilities:
+Hi Yann,
 
-- CVE-2020-9402: Potential SQL injection via tolerance parameter in GIS
-  functions and aggregates on Oracle.
-  GIS functions and aggregates on Oracle were subject to SQL injection,
-  using a suitably crafted tolerance.
+On Wed, Mar 04, 2020 at 05:55:32PM +0100, Yann E. MORIN wrote:
+> From: Antoine Tenart <antoine.tenart@bootlin.com>
+> 
+> Some symlinks were not created correctly when installing the
+> Linux-firmware package. This patch fixes the support for all symlinks of
+> the form:
+> 
+>   a/foo -> bar
+>   a/foo -> b/bar
+>   a/foo -> ../b/bar
+> 
+> With this patch all forms of symlinks described in the WHENCE file
+> should be supported, whether they are in nested directories, or in
+> non-existing ones.
+> 
+> As some symlinks could be in directories that do not exist, we must
+> maje sure to canonicalize the path before testing the linked-to file.
+> 
+> We compared the symlinks installed pre-20200122 to what we have now, and
+> it seems we're handling all of them with this patch.
+> 
+> Fixes: 55df4059d24b ("package/linux-firmware: fix symlink support")
+> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+> [yann.morin.1998 at free.fr:
+>   - use readlink in canonicalize-missing mode, to avoid
+>     creating-then-removing directories
+> ]
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-For more details, see the advisory:
-https://www.djangoproject.com/weblog/2020/mar/04/security-releases/
+I tested it and it looks good.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Thanks,
+Antoine
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index cdf3dbd271..af5e4bb6e0 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5	37ec335a56234c0ad56c383b810afc7f  Django-3.0.3.tar.gz
--sha256	2f1ba1db8648484dd5c238fb62504777b7ad090c81c5f1fd8d5eb5ec21b5f283  Django-3.0.3.tar.gz
-+md5	0b0299419770eaff86ff3a4af519cd6a  Django-3.0.4.tar.gz
-+sha256	50b781f6cbeb98f673aa76ed8e572a019a45e52bdd4ad09001072dfd91ab07c8  Django-3.0.4.tar.gz
- # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 0e557489df..0cc5749a9b 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 3.0.3
-+PYTHON_DJANGO_VERSION = 3.0.4
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/3d/21/316d435bf8bd6f355be6b5765da91394fb38f405e5bea6680e411e4d470c
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1d/38/89ea18b5aeb9b56fff7430388946e8e9dfd7a451f3e6ddb8a9b637f442c1
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
+> ---
+>  package/linux-firmware/linux-firmware.mk | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+> index 009202d604..6d3cec1a48 100644
+> --- a/package/linux-firmware/linux-firmware.mk
+> +++ b/package/linux-firmware/linux-firmware.mk
+> @@ -609,12 +609,18 @@ endif
+>  # automatically by its copy-firmware.sh script during the installation, which
+>  # parses the WHENCE file where symlinks are described. We follow the same logic
+>  # here, adding symlink only for firmwares installed in the target directory.
+> -# The grep/sed parsing is taken from the script mentioned before.
+> +#
+> +# For testing the presence of firmwares in the target directory we first make
+> +# sure we canonicalize the pointed-to file, to cover the symlinks of the form
+> +# a/foo -> ../b/foo  where a/ (the directory where to put the symlink) does
+> +# not yet exist.
+>  define LINUX_FIRMWARE_CREATE_SYMLINKS
+> +	cd $(TARGET_DIR)/lib/firmware/ ; \
+>  	sed -r -e '/^Link: (.+) -> (.+)$$/!d; s//\1 \2/' $(@D)/WHENCE | \
+>  	while read f d; do \
+> -		if test -f $(TARGET_DIR)/lib/firmware/$$d; then \
+> -			ln -sf $$d $(TARGET_DIR)/lib/firmware/$$f || exit 1; \
+> +		if test -f $$(readlink -m $$(dirname $$f)/$$d); then \
+> +			mkdir -p $$(dirname $$f) || exit 1; \
+> +			ln -sf $$d $$f || exit 1; \
+>  		fi ; \
+>  	done
+>  endef
+> -- 
+> 2.20.1
+> 
+
 -- 
-2.20.1
+Antoine T?nart, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
