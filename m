@@ -1,114 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 4 Mar 2020 18:00:09 +0100
-Subject: [Buildroot] [PATCH] package/linux-firmware: fix special cases
- of symlinks
-In-Reply-To: <20200304105304.986863-1-antoine.tenart@bootlin.com>
-References: <20200304105304.986863-1-antoine.tenart@bootlin.com>
-Message-ID: <20200304170009.GA5357@scaer>
+From: Mircea GLIGA <mgliga@bitdefender.com>
+Date: Wed, 4 Mar 2020 13:41:24 +0000
+Subject: [Buildroot] [PATCH] Makefile: work around a bug in newly
+ released make 4.3
+In-Reply-To: <20200304125330.8948-1-yann.morin.1998@free.fr>
+References: <20200304125330.8948-1-yann.morin.1998@free.fr>
+Message-ID: <VI1PR02MB3920623E71FF15DDA53631DDDCE50@VI1PR02MB3920.eurprd02.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Antoine, All,
+Hi Yann,
 
-On 2020-03-04 11:53 +0100, Antoine Tenart spake thusly:
-> Some symlinks were not created correctly when installing the
-> Linux-firmware package. This patch fixes the support for all symlinks of
-> the form:
-> 
->   a/foo -> bar
->   a/foo -> b/bar
->   a/foo -> ../b/bar
-> 
-> With this patch all forms of symlinks described in the WHENCE file
-> should be supported, whether they are in nested directories, or in
-> non-existing ones.
-> 
-> As some symlinks could be in directories that do not exist, we must
-> make sure those directories are created before testing the presence of
-> the target firmwares, as we'll end up testing files like:
-> 
->   a/foo -> ../b/foo : test -f a/../b/foo
-> 
-> where a/ did not exist prior to our symlink creation logic. We then
-> remove the created directories, if they're empty (that would mean the
-> target firmware wasn't installed). As we could have nested empty
-> directories (think of the following link: a/b/c/foo -> ../../../foo), we
-> need to also remove empty parent directories. To avoid removing more
-> than we created, we change directory to $(TARGET_DIR)/lib/firmware/
-> before doing anything.
-> 
-> I compared the symlinks installed pre-20200122 to what we have now, and
-> it seems we're handling all of them with this patch.
-> 
-> Fixes: 55df4059d24b ("package/linux-firmware: fix symlink support")
-> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+I've tested the patch against master and using a br2-external tree and 
+it works.
+I've also tested it against buildroot-2019.02.9, but there it needs 
+to be adjusted: `$(BASE_DIR)/.br-external.mk:;`
 
-Thanks for this quick new iteration! :-)
+Mircea
 
-I have some comments, below...
+________________________________________
+From: buildroot <buildroot-bounces@busybox.net> on behalf of Yann E. MORIN <yann.morin.1998@free.fr>
+Sent: Wednesday, March 4, 2020 14:53
+To: buildroot at buildroot.org
+Cc: Yann E. MORIN
+Subject: [Buildroot] [PATCH] Makefile: work around a bug in newly released make 4.3
 
-> ---
->  package/linux-firmware/linux-firmware.mk | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-> index 009202d604d4..e367d4c5e7b8 100644
-> --- a/package/linux-firmware/linux-firmware.mk
-> +++ b/package/linux-firmware/linux-firmware.mk
-> @@ -609,13 +609,24 @@ endif
->  # automatically by its copy-firmware.sh script during the installation, which
->  # parses the WHENCE file where symlinks are described. We follow the same logic
->  # here, adding symlink only for firmwares installed in the target directory.
-> -# The grep/sed parsing is taken from the script mentioned before.
-> +#
-> +# For testing the presence of firmwares in the target directory we first make
-> +# sure the directories under which the symlinks could be created exist, to
-> +# handle symlinks of the form a/foo -> ../b/foo where a/ doesn't exist. We then
-> +# remove any previously created empty directory. As the symlinks could be in
-> +# nested (empty) directories, we use the --parents option of rmdir; this is why
-> +# we're changing the current directory to $(TARGET_DIR)/lib/firmware/ before
-> +# doing anything.
->  define LINUX_FIRMWARE_CREATE_SYMLINKS
-> +	cd $(TARGET_DIR)/lib/firmware/ ; \
->  	sed -r -e '/^Link: (.+) -> (.+)$$/!d; s//\1 \2/' $(@D)/WHENCE | \
->  	while read f d; do \
-> -		if test -f $(TARGET_DIR)/lib/firmware/$$d; then \
-> -			ln -sf $$d $(TARGET_DIR)/lib/firmware/$$f || exit 1; \
-> +		dir=$$(dirname $$f) ; \
-> +		mkdir -p $$dir ; \
-> +		if test -f $$dir/$$d; then \
-> +			ln -sf $$d $$f || exit 1; \
->  		fi ; \
-> +		test "$$dir" != "." && rmdir --parents --ignore-fail-on-non-empty $$dir ; \
+Several users of rolling-release distributions have been reporting on
+IRC that Buildroot is broken now that they have switched to the newly
+released make 4.3.
 
-I was not too happy about this create-a-directory-then-remove-it-if-it-turned-
-out-we-did-not-need-it dance.
+It turns out that the constructs we use to generated and ionclude the
+internal br2-external related fragments is no longer working with
+make-4.3.
 
-So, I hacked it, using readlink -m, and come up with something that I
-think is simpler and easier to grok:
+Indeed, an upstream bug report [0] seems to imply that it so far was
+working by chance. There has been no further feedback, whether this is
+really considered a fix or a regression...
 
-    https://patchwork.ozlabs.org/patch/1249126/
+In the meantime, we add a workaround that fixes the issue, and should
+not break on older make versions either (verified on all relevant
+versions: 3.81, 3.82, 4.0, 4.1, and 4.2).
 
-I think even the cd into the firmware directory was not even needed, but
-I firgit to remove it to test...
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Tested-by: Mircea Gliga <mgliga@bitdefender.com>
+---
+ Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Regards,
-Yann E. MORIN.
+diff --git a/Makefile b/Makefile
+index 31624f77a2..c22c1d8980 100644
+--- a/Makefile
++++ b/Makefile
+@@ -188,6 +188,9 @@ ifneq ($(BR2_EXTERNAL_ERROR),)
+ $(error $(BR2_EXTERNAL_ERROR))
+ endif
 
->  	done
->  endef
->  
-> -- 
-> 2.24.1
-> 
++# Workaround bug #57676 in make-4.3
++$(BASE_DIR)/.br2-external.mk:;
++
+ # To make sure that the environment variable overrides the .config option,
+ # set this before including .config.
+ ifneq ($(BR2_DL_DIR),)
+--
+2.20.1
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+________________________
+This email was scanned by Bitdefender
