@@ -1,60 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 4 Mar 2020 19:08:51 +0100
-Subject: [Buildroot] [PATCH] utils/genrandconfig: drop outdated
- python-nfc check
-In-Reply-To: <20200303225920.23025-1-peter@korsgaard.com>
-References: <20200303225920.23025-1-peter@korsgaard.com>
-Message-ID: <20200304180851.GD5357@scaer>
+Date: Wed, 4 Mar 2020 19:21:10 +0100
+Subject: [Buildroot] [git commit] package/mesa3d: fix linux/kcmp.h related
+ compile failure
+Message-ID: <20200304180929.EE3F78F386@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=75c5cc23b43bbe1fd3c7abbd27752afa902e9e4e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-03 23:59 +0100, Peter Korsgaard spake thusly:
-> Commit 9ea528f84ba (package/python-nfc: bump to version 0.13.5) changed the
-> python-nfc package to download from github, so the package no longer needs
-> bzr on the host.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Add upstream patch [1].
 
-Applied to master, thanks.
+Fixes:
 
-Regards,
-Yann E. MORIN.
+  http://autobuild.buildroot.net/results/df5bcb8e4f6e98c4de347abbbe91e10a98047422
 
-> ---
->  utils/genrandconfig | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/utils/genrandconfig b/utils/genrandconfig
-> index c79360be89..63ff32cbfb 100755
-> --- a/utils/genrandconfig
-> +++ b/utils/genrandconfig
-> @@ -206,9 +206,6 @@ def fixup_config(sysinfo, configfile):
->  
->      if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not sysinfo.has("java"):
->          return False
-> -    # python-nfc needs bzr
-> -    if 'BR2_PACKAGE_PYTHON_NFC=y\n' in configlines and not sysinfo.has("bzr"):
-> -        return False
->      # The ctng toolchain is affected by PR58854
->      if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
->         BR2_TOOLCHAIN_EXTERNAL_URL + 'armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+  ../src/util/os_file.c:37:24: fatal error: linux/kcmp.h: No such file or directory
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+[1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=f7bfb10c69dfe48a91e35523cb5ee641bdbf6988
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...0006-util-remove-the-dependency-on-kcmp.h.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+
+diff --git a/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch b/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
+new file mode 100644
+index 0000000000..27ae021e08
+--- /dev/null
++++ b/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
+@@ -0,0 +1,42 @@
++From 63ad4535df6a0a938e7391d73adcada05e730c89 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <marek.olsak@amd.com>
++Date: Tue, 18 Feb 2020 16:12:23 -0500
++Subject: [PATCH] util: remove the dependency on kcmp.h
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes: f76cbc7901f7 "util: Add os_same_file_description helper"
++
++Acked-by: Eric Engestrom <eric@engestrom.ch>
++Reviewed-by: Michel D??nzer <mdaenzer@redhat.com>
++Tested-by: Marge Bot <https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3860>
++Part-of: <https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3860>
++
++[ Upstream: https://cgit.freedesktop.org/mesa/mesa/commit/?id=f7bfb10c69dfe48a91e35523cb5ee641bdbf6988 ]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/util/os_file.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/util/os_file.c b/src/util/os_file.c
++index b502ff4..128fe87 100644
++--- a/src/util/os_file.c
+++++ b/src/util/os_file.c
++@@ -34,11 +34,12 @@ os_file_create_unique(const char *filename, int filemode)
++ #if defined(__linux__)
++ 
++ #include <fcntl.h>
++-#include <linux/kcmp.h>
++ #include <sys/stat.h>
++ #include <sys/syscall.h>
++ #include <unistd.h>
++ 
+++/* copied from <linux/kcmp.h> */
+++#define KCMP_FILE 0
++ 
++ static ssize_t
++ readN(int fd, char *buf, size_t len)
++-- 
++2.25.1
++
