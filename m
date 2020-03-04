@@ -1,75 +1,75 @@
-From: Timo Ketola <Timo.Ketola@exertus.fi>
-Date: Wed, 4 Mar 2020 12:54:23 +0000
-Subject: [Buildroot] [PATCH v1] package/fbgrab: bump version to 1.3.1
- and update projct URL
-In-Reply-To: <20200304103141.12753-1-ps.report@gmx.net>
-References: <20200304103141.12753-1-ps.report@gmx.net>
-Message-ID: <be5261bf-c6b0-1d84-fd44-6de6b5f8e3e8@exertus.fi>
+From: Mircea GLIGA <mgliga@bitdefender.com>
+Date: Wed, 4 Mar 2020 15:02:45 +0000
+Subject: [Buildroot] [PATCHv2] Makefile: work around a bug in newly
+ released make 4.3
+In-Reply-To: <20200304134037.24237-1-yann.morin.1998@free.fr>
+References: <20200304134037.24237-1-yann.morin.1998@free.fr>
+Message-ID: <b80fa303-8c03-b6e0-81dc-a4ce9d4c96ed@bitdefender.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 4.3.2020 12.31, Peter Seiderer wrote:
-> - bump version to 1.3.1
->   Changelog:
->   * Incorrect alpha value when converting 32-bit framebuffers.
->   * Documentation for github instead of own homepage.
-> 
-> - update project URL
-> 
-> Fixes bug 12606 ([1]).
-> 
-> [1] https://bugs.busybox.net/show_bug.cgi?id=12606
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Hi,
 
-Tested-by: Timo Ketola <timo.ketola@exertus.fi>
-Acked-by: Timo Ketola <timo.ketola@exertus.fi>
+I've tested the patch against master and using a br2-external tree and
+it works.
 
-> ---
-> Notes:
->   Maybe stuff for master as the changes are minimal and fixes
->   original download site and project URL, otherweise stuff for next.
-> ---
->  package/fbgrab/Config.in   | 2 +-
->  package/fbgrab/fbgrab.hash | 2 +-
->  package/fbgrab/fbgrab.mk   | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
+I've also tested it against buildroot-2019.02.9, but there it needs
+to be adjusted accordingly:
+
+`$(BASE_DIR)/.br-external.mk:;`
+
+BR
+Mircea
+
+On 3/4/20 3:40 PM, Yann E. MORIN wrote:
+> Several users of rolling-release distributions have been reporting on
+> IRC that Buildroot is broken now that they have switched to the newly
+> released make 4.3.
 > 
-> diff --git a/package/fbgrab/Config.in b/package/fbgrab/Config.in
-> index d1e9e69b3f..b1d8755f32 100644
-> --- a/package/fbgrab/Config.in
-> +++ b/package/fbgrab/Config.in
-> @@ -5,4 +5,4 @@ config BR2_PACKAGE_FBGRAB
->  	  FBGrab is a framebuffer screenshot program, capturing the
->  	  linux frambuffer and converting it to a png-picture.
->  
-> -	  http://fbgrab.monells.se/
-> +	  https://github.com/GunnarMonell/fbgrab
-> diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
-> index 386d8fb5cb..6cd19dc1d5 100644
-> --- a/package/fbgrab/fbgrab.hash
-> +++ b/package/fbgrab/fbgrab.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  5fab478cbf8731fbacefaa76236a8f8b38ccff920c53b3a8253bc35509fba8ed  fbgrab-1.3.tar.gz
-> +sha256  3314a932f830e32feaf36914e1b43326529fe35b7eb7410ff55f16c930ddfbcb  fbgrab-1.3.1.tar.gz
->  sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
-> diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
-> index d81a5ee2a0..43fd0ba948 100644
-> --- a/package/fbgrab/fbgrab.mk
-> +++ b/package/fbgrab/fbgrab.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -FBGRAB_VERSION = 1.3
-> -FBGRAB_SITE = http://fbgrab.monells.se
-> +FBGRAB_VERSION = 1.3.1
-> +FBGRAB_SITE = $(call github,GunnarMonell,fbgrab,$(FBGRAB_VERSION))
->  FBGRAB_DEPENDENCIES = libpng
->  FBGRAB_LICENSE = GPL-2.0
->  FBGRAB_LICENSE_FILES = COPYING
+> It turns out that the constructs we use to generated and onclude the
+> internal br2-external related fragments is no longer working with
+> make-4.3.
+> 
+> Indeed, an upstream bug report [0] seems to imply that it so far was
+> working by chance. There has been no further feedback, whether this is
+> really considered a fix for a previous ill-defined behaviour, or an
+> actual regression...
+> 
+> In the meantime, we add a workaround, suggested in that same bug report,
+> that fixes the issue for make 4.3, and that should not break on older
+> make versions either (verified on all relevant versions: from 3.81,
+> 3.82, 4.0, 4.1, and 4.2).
+> 
+> [0] https://savannah.gnu.org/bugs/?57676
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Tested-by: Mircea Gliga <mgliga@bitdefender.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> ---
+> Changes v1 -> v2:
+>    - [0] points to something now  (Thomas)
+>    - repeat the bug URL in the Makefile  (Thomas)
+>    - explain where the workaround comes from  (Thomas)
+> ---
+>   Makefile | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 31624f77a2..09e769f613 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -188,6 +188,9 @@ ifneq ($(BR2_EXTERNAL_ERROR),)
+>   $(error $(BR2_EXTERNAL_ERROR))
+>   endif
+>   
+> +# Workaround bug in make-4.3: https://savannah.gnu.org/bugs/?57676
+> +$(BASE_DIR)/.br2-external.mk:;
+> +
+>   # To make sure that the environment variable overrides the .config option,
+>   # set this before including .config.
+>   ifneq ($(BR2_DL_DIR),)
 > 
