@@ -1,77 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Mar 2020 16:42:47 +0100
-Subject: [Buildroot] [git commit] package/libsndfile: fix CVE-2019-3832
-Message-ID: <20200305153448.2CA848F3D5@busybox.osuosl.org>
+Date: Thu, 5 Mar 2020 16:41:57 +0100
+Subject: [Buildroot] [git commit] package/libsndfile: fix CVE-2018-19758
+Message-ID: <20200305153448.231E08F3D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3426b37ebb2e8eee94375f58ea63992f0651cbb2
+commit: https://git.buildroot.net/buildroot/commit/?id=27acdca7ee5493cc5cbd7fcf272606da43cfa896
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It was discovered the fix for CVE-2018-19758 (libsndfile) was not
-complete and still allows a read beyond the limits of a buffer in
-wav_write_header() function in wav.c. A local attacker may use this flaw
-to make the application crash.
+There is a heap-based buffer over-read at wav.c in wav_write_header in
+libsndfile 1.0.28 that will cause a denial of service.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...rite_header-don-t-read-past-the-array-end.patch | 33 ++++++++++++++++++++++
+ .../0004-src-wav.c-Fix-heap-read-overflow.patch    | 35 ++++++++++++++++++++++
  package/libsndfile/libsndfile.mk                   |  2 ++
- 2 files changed, 35 insertions(+)
+ 2 files changed, 37 insertions(+)
 
-diff --git a/package/libsndfile/0005-wav_write_header-don-t-read-past-the-array-end.patch b/package/libsndfile/0005-wav_write_header-don-t-read-past-the-array-end.patch
+diff --git a/package/libsndfile/0004-src-wav.c-Fix-heap-read-overflow.patch b/package/libsndfile/0004-src-wav.c-Fix-heap-read-overflow.patch
 new file mode 100644
-index 0000000000..e958517808
+index 0000000000..2e730ca3fa
 --- /dev/null
-+++ b/package/libsndfile/0005-wav_write_header-don-t-read-past-the-array-end.patch
-@@ -0,0 +1,33 @@
-+From 6d7ce94c020cc720a6b28719d1a7879181790008 Mon Sep 17 00:00:00 2001
-+From: Emilio Pozuelo Monfort <pochu27@gmail.com>
-+Date: Tue, 5 Mar 2019 11:27:17 +0100
-+Subject: [PATCH] wav_write_header: don't read past the array end
++++ b/package/libsndfile/0004-src-wav.c-Fix-heap-read-overflow.patch
+@@ -0,0 +1,35 @@
++From 42132c543358cee9f7c3e9e9b15bb6c1063a608e Mon Sep 17 00:00:00 2001
++From: Erik de Castro Lopo <erikd@mega-nerd.com>
++Date: Tue, 1 Jan 2019 20:11:46 +1100
++Subject: [PATCH] src/wav.c: Fix heap read overflow
 +
-+If loop_count is bigger than the array, truncate it to the array
-+length (and not to 32k).
++This is CVE-2018-19758.
 +
-+CVE-2019-3832
-+[Retrieved from:
-+https://github.com/erikd/libsndfile/commit/6d7ce94c020cc720a6b28719d1a7879181790008]
++Closes: https://github.com/erikd/libsndfile/issues/435
++[Retrieved (and backported) from:
++https://github.com/erikd/libsndfile/commit/42132c543358cee9f7c3e9e9b15bb6c1063a608e]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
 + src/wav.c | 6 ++++--
 + 1 file changed, 4 insertions(+), 2 deletions(-)
 +
 +diff --git a/src/wav.c b/src/wav.c
-+index 5c825f2a..104bd0a7 100644
++index 9d71aadb..5c825f2a 100644
 +--- a/src/wav.c
 ++++ b/src/wav.c
-+@@ -1146,8 +1146,10 @@ wav_write_header (SF_PRIVATE *psf, int calc_length)
++@@ -1,5 +1,5 @@
++ /*
++-** Copyright (C) 1999-2016 Erik de Castro Lopo <erikd@mega-nerd.com>
+++** Copyright (C) 1999-2019 Erik de Castro Lopo <erikd@mega-nerd.com>
++ ** Copyright (C) 2004-2005 David Viens <davidv@plogue.com>
++ **
++ ** This program is free software; you can redistribute it and/or modify
++@@ -1146,6 +1146,8 @@ wav_write_header (SF_PRIVATE *psf, int calc_length)
 + 		psf_binheader_writef (psf, "44", BHW4 (0), BHW4 (0)) ; /* SMTPE format */
 + 		psf_binheader_writef (psf, "44", BHW4 (psf->instrument->loop_count), BHW4 (0)) ;
 + 
-+-		/* Loop count is signed 16 bit number so we limit it range to something sensible. */
-+-		psf->instrument->loop_count &= 0x7fff ;
-++		/* Make sure we don't read past the loops array end. */
-++		if (psf->instrument->loop_count > ARRAY_LEN (psf->instrument->loops))
-++			psf->instrument->loop_count = ARRAY_LEN (psf->instrument->loops) ;
-++
+++		/* Loop count is signed 16 bit number so we limit it range to something sensible. */
+++		psf->instrument->loop_count &= 0x7fff ;
 + 		for (tmp = 0 ; tmp < psf->instrument->loop_count ; tmp++)
 + 		{	int type ;
 + 
 diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
-index 7be822b875..63d9a521e6 100644
+index 19c3184961..7be822b875 100644
 --- a/package/libsndfile/libsndfile.mk
 +++ b/package/libsndfile/libsndfile.mk
-@@ -22,6 +22,8 @@ LIBSNDFILE_IGNORE_CVES += \
+@@ -20,6 +20,8 @@ LIBSNDFILE_IGNORE_CVES += \
+ 	CVE-2018-19661 CVE-2018-19662
+ # disputed, https://github.com/erikd/libsndfile/issues/398
  LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
- # 0004-src-wav.c-Fix-heap-read-overflow.patch
- LIBSNDFILE_IGNORE_CVES += CVE-2018-19758
-+# 0005-wav_write_header-don-t-read-past-the-array-end.patch
-+LIBSNDFILE_IGNORE_CVES += CVE-2019-3832
++# 0004-src-wav.c-Fix-heap-read-overflow.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2018-19758
  
  LIBSNDFILE_CONF_OPTS = \
  	--disable-sqlite \
