@@ -1,9 +1,11 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 5 Mar 2020 05:37:08 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libtirpc: fix build with gcc 10
-In-Reply-To: <20200228173052.5128-1-petr.vorel@gmail.com>
+Date: Thu, 5 Mar 2020 05:39:47 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libtirpc: fix build when
+ missing <bits/endian.h>
+In-Reply-To: <20200228173052.5128-2-petr.vorel@gmail.com>
 References: <20200228173052.5128-1-petr.vorel@gmail.com>
-Message-ID: <20200305043708.GA2841817@x230>
+ <20200228173052.5128-2-petr.vorel@gmail.com>
+Message-ID: <20200305043947.GA2842054@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
