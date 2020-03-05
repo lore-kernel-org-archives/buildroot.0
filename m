@@ -1,35 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 05 Mar 2020 08:02:41 +0000
-Subject: [Buildroot] [Bug 11866] iniramfs file system fails to boot using
- Grub on EFI x86_64
-In-Reply-To: <bug-11866-163@https.bugs.busybox.net/>
-References: <bug-11866-163@https.bugs.busybox.net/>
-Message-ID: <bug-11866-163-EcE820QAZK@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Mar 2020 09:03:22 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libtirpc: fix build with gcc 10
+In-Reply-To: <20200305043708.GA2841817@x230>
+References: <20200228173052.5128-1-petr.vorel@gmail.com>
+ <20200305043708.GA2841817@x230>
+Message-ID: <20200305090322.5b1e5fcc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11866
+On Thu, 5 Mar 2020 05:37:08 +0100
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
-Timo Ketola <timo.ketola@exertus.fi> changed:
+> > This issue seems to be happening only on the next branch. Why? Anything
+> > special in next compared to master?  
+> No idea why, libtirpc itself it's the same. It'd help if I could find builds for
+> master, but autobuild search doesn't help to search packages, which does not
+> fail, there is only search for failed packages:
+> 
+> http://autobuild.buildroot.net/index.php?reason=libtirpc-1.2.5
+> 
+> Is it running for master?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |timo.ketola at exertus.fi
+You can search the autobuilders for successful build results, filtering
+per config options. See http://autobuild.buildroot.net/search.php.
 
---- Comment #4 from Timo Ketola <timo.ketola@exertus.fi> ---
-This sounds very much like what I observed too. When I try to boot an ARM
-system with U-Boot and with 'silent' flag set, /init fails, kernel panics and
-the local display is left with a cursor alone (I watch the kernel messages from
-the serial line). U-Boot's 'silent' flag makes it to adjust kernel command line
-with 'console=<empty>'.
+For example:
 
-Here is a proposed patch:
+  http://autobuild.buildroot.net/index.php?status=OK&symbols%5BBR2_PACKAGE_LIBTIRPC%5D=y
 
-https://patchwork.ozlabs.org/patch/1166017
+will search all successful builds that had BR2_PACKAGE_LIBTIRPC enabled.
 
+Best regards,
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
