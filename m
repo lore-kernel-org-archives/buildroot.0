@@ -1,51 +1,65 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Thu, 5 Mar 2020 16:33:16 -0300
-Subject: [Buildroot] [PATCH] package/busybox: Add patches for glibc-2.31
- compatibility
-In-Reply-To: <20200210075111.16738-1-Evgeniy.Didin@synopsys.com>
-References: <20200210075111.16738-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <CAJ4jsaeB-xDWvktj0=5SD3qV=1m5DKkTXSf7upe5t9Zc-ZHp9g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Mar 2020 21:05:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.18.0
+In-Reply-To: <20200303230943.24334-1-james.hilliard1@gmail.com>
+References: <20200303230943.24334-1-james.hilliard1@gmail.com>
+Message-ID: <20200305210537.42d4c081@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 10, 2020 at 4:52 AM Evgeniy Didin
-<Evgeniy.Didin@synopsys.com> wrote:
->
-> Current release of busybox 1_31_1 is failing to build with glibc-2.31
-> due to removal of stime() from glibc. This commit adds two patches:
-> one that removes stime() function calls and one prerequisite for fixing
-> patch.
->
-> Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: arc-buildroot at synopsys.com
-> ---
->  ...e-the-overhead-of-single-parameter-bb_err.patch | 7635 ++++++++++++++++++++
->  .../busybox/0004-Remove-stime-function-calls.patch |   93 +
->  2 files changed, 7728 insertions(+)
->  create mode 100644 package/busybox/0003-libbb-reduce-the-overhead-of-single-parameter-bb_err.patch
->  create mode 100644 package/busybox/0004-Remove-stime-function-calls.patch
->
+Hello James,
 
-Some additional patches are required to deal with the
-__NR_clock_gettime issue with musl:
++Arnout, as there is a meson/pkg-config question.
 
-    http://autobuild.buildroot.net/results/f45f91aea6deee6699eabdfa618ac44873b8da51/
+Thanks for the patch. Two questions below.
 
-The required upstream commits are
+On Tue,  3 Mar 2020 16:09:43 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-  - 6937487be73cd4563b876413277a295a5fe2f32c
-  - b7b7452f292f03eefafa6fd1da9bcfc933dee15a
-  - 902d3992922fc8db8495d5fb30a4581711b60c62
-  - ad27d44ebe950335616f37e36863469dc181b455
-  - be5a505d771a77c640acc35ceaa470c80e62f954
-  - d3539be8f27b8cbfdfee460fe08299158f08bcd9
+> diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+> index e325c6d752..6de92f63d9 100644
+> --- a/package/wayland/wayland.mk
+> +++ b/package/wayland/wayland.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -WAYLAND_VERSION = 1.17.0
+> +WAYLAND_VERSION = 1.18.0
+>  WAYLAND_SITE = http://wayland.freedesktop.org/releases
+>  WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+>  WAYLAND_LICENSE = MIT
+> @@ -13,12 +13,12 @@ WAYLAND_INSTALL_STAGING = YES
+>  WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
+>  HOST_WAYLAND_DEPENDENCIES = host-pkgconf host-expat host-libffi host-libxml2
+>  
+> -# 0002-configure-add-option-to-disable-tests.patch
+> -WAYLAND_AUTORECONF = YES
+> +WAYLAND_CONF_OPTS = \
+> +	-Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
 
-Fortunately only the first patch is large (7635 lines). The subsequent
-ones are quire small.
+Are you sure this is needed since commit
+4e0bc29993376613d200e892d491e31ea5a49622 ? Indeed, with this commit,
+meson is properly able to use pkg-config either for native builds or
+cross builds.
 
+> +	-Dtests=false \
+> +	-Ddocumentation=false
+>  
+> -# wayland-scanner is only needed for building, not on the target
+> -WAYLAND_CONF_OPTS = --with-host-scanner --disable-tests
+
+So how is the scanner thing working these days? With the meson build
+logic, it doesn't build the scanner when cross-compiling, and knows
+that it should use a pre-installed scanner ?
+
+Thanks!
+
+Thomas
 -- 
-Carlos Santos <unixmania@gmail.com>
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
