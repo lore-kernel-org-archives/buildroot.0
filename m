@@ -1,31 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Mar 2020 23:39:43 +0100
-Subject: [Buildroot] [PATCH] board/ci20/genimage.cfg: drop hardcoded
- rootfs partition size
-In-Reply-To: <20200121210301.28973-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 21 Jan 2020 22:03:00 +0100")
-References: <20200121210301.28973-1-peter@korsgaard.com>
-Message-ID: <87y2se8lzk.fsf@dell.be.48ers.dk>
+Date: Thu, 5 Mar 2020 23:39:15 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] board/ci20/genimage.cfg:
+ drop hardcoded rootfs partition size
+Message-ID: <20200305222722.DB8758F60B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7ff9a16e6ef8894559f9cb8b6f4624b9dfffe3b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > As recently reported to the list:
- > http://lists.busybox.net/pipermail/buildroot/2020-January/271937.html
+As recently reported to the list:
+http://lists.busybox.net/pipermail/buildroot/2020-January/271937.html
 
- > The hardcoded rootfs partition size can lead to hard to understand build
- > failures if more packages are added.
+The hardcoded rootfs partition size can lead to hard to understand build
+failures if more packages are added.
 
- > So drop the hardcoded partition size.  Genimage will then size the partition
- > to match the size of the rootfs image (which by default is also 60MB for ext4).
+So drop the hardcoded partition size.  Genimage will then size the partition
+to match the size of the rootfs image (which by default is also 60MB for ext4).
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f1d1967422170b73ed7401eeb142a6b7a541dbec)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/ci20/genimage.cfg | 1 -
+ 1 file changed, 1 deletion(-)
 
-Committed to 2019.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/ci20/genimage.cfg b/board/ci20/genimage.cfg
+index fa3e7368d3..5f8a16c610 100644
+--- a/board/ci20/genimage.cfg
++++ b/board/ci20/genimage.cfg
+@@ -24,6 +24,5 @@ image sdcard.img {
+         partition-type = 0x83
+         image = "rootfs.ext4"
+         offset = 2M
+-        size = 60M
+     }
+ }
