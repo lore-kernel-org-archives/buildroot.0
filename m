@@ -1,52 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Mar 2020 21:09:54 +0100
-Subject: [Buildroot] [git commit branch/next] package/inadyn: bump version
- to 2.6
-Message-ID: <20200305200957.2EA4C8F447@busybox.osuosl.org>
+Date: Thu, 5 Mar 2020 21:13:45 +0100
+Subject: [Buildroot] [git commit branch/next] package/libite: bump version
+ to 2.1.2
+Message-ID: <20200305200957.3A0A98F447@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=897462ed5ffaa33a4d7725669ef8760c4db17556
+commit: https://git.buildroot.net/buildroot/commit/?id=486da6067dbe7511634af6b2e9ca29edc446e3eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+The hash for LICENSE has changed due to the copyright being updated and
+the note about licensing types has been moved to the bottom.
+
+The hash for chomp.c has been changed due to the copyright being updated and
+code changes in that file.
+
 Changelog:
-https://github.com/troglobit/inadyn/releases/tag/v2.6
+https://github.com/troglobit/libite/releases/tag/v2.1.2
 
 Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/inadyn/inadyn.hash | 9 +++++----
- package/inadyn/inadyn.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/libite/libite.hash | 13 +++++++------
+ package/libite/libite.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
-index 2691ba0ef9..52bd6abd38 100644
---- a/package/inadyn/inadyn.hash
-+++ b/package/inadyn/inadyn.hash
-@@ -1,5 +1,6 @@
--# From https://github.com/troglobit/inadyn/releases/download/v2.5/inadyn-2.5.tar.xz.md5
--md5 8a864d5186e54d24de2d7554fc01b3ec  inadyn-2.5.tar.xz
-+# From https://github.com/troglobit/inadyn/releases/download/v2.6/inadyn-2.6.tar.xz.md5
-+md5  62ec986b73d24b1b755bf0ed3efe54f2  inadyn-2.6.tar.xz
+diff --git a/package/libite/libite.hash b/package/libite/libite.hash
+index db3f6232b2..e16e78c01f 100644
+--- a/package/libite/libite.hash
++++ b/package/libite/libite.hash
+@@ -1,7 +1,8 @@
+-# From https://github.com/troglobit/libite/releases/download/v2.1.0/libite-2.1.0.tar.xz.md5
+-md5 701aa509f27ee35156bc53601e69fa74  libite-2.1.0.tar.xz
++# From https://github.com/troglobit/libite/releases/download/v2.1.2/libite-2.1.2.tar.xz.md5
++md5  3c23186dec3f3ae135ec4e8b58581f4e  libite-2.1.2.tar.xz
 +
- # Locally computed
--sha256 4a9ad208671f62912428413da0282450b2d2c4da38f3c95c4ac975d048c41fcd  inadyn-2.5.tar.xz
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256  9f4198764abbd2798472b349d8867e86b4692c76ee304f1f9c607f67c9b582a4  inadyn-2.6.tar.xz
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 40a12e35cd..b1ebeeb2fe 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
+ # Locally calculated
+-sha256 cf56e720146243749e0af5763d4a84eef738e20f2bef2d867497fefc39dee991  libite-2.1.0.tar.xz
+-sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
+-sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  src/chomp.c
+-sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
++sha256  7a16825c6d02040767ccb9f3faed4bf0e6841857a46cc4cb9e9f36b78a6c7cb3  libite-2.1.2.tar.xz
++sha256  dc6eae50f69af0e848fd6957cdf48895563b4d15fdde7c9d20ae2bfdefbc2b83  LICENSE
++sha256  89053891d46d04a21d4a492f68038703e179986baffa458201810f4222b57427  src/chomp.c
++sha256  a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
+diff --git a/package/libite/libite.mk b/package/libite/libite.mk
+index c598da1b4a..62fc0df00a 100644
+--- a/package/libite/libite.mk
++++ b/package/libite/libite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INADYN_VERSION = 2.5
-+INADYN_VERSION = 2.6
- INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
- INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
- INADYN_LICENSE = GPL-2.0+
+-LIBITE_VERSION = 2.1.0
++LIBITE_VERSION = 2.1.2
+ LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
+ LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
+ LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
