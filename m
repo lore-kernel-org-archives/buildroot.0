@@ -1,61 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Mar 2020 21:14:23 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] core/legal-info: update
- list of saved material in README
-Message-ID: <20200305200526.92F2E8F456@busybox.osuosl.org>
+Date: Thu, 5 Mar 2020 21:15:10 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/gettext-tiny: fix
+ install failure if path contains "m4/" string
+Message-ID: <20200305200526.9DA648F454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26c858c523927cb13a62d5607ebe40aca24cead1
+commit: https://git.buildroot.net/buildroot/commit/?id=96af2dfaaa8d6aea75a37a9afd2de39ec13bd89d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-The README file saved by legal-info does not mention the host package
-variant of the saved material. Add them.
+When building with path containing "m4/" occurence(i.e. make
+O=output-m4) gettext-tiny install recipe copies files to wrong place and
+later some package using autotools fail to autoreconf(i.e. minicom).
+This is due to buggy gettext-tiny Makefile install recipe where they
+substitute every "m4/" in INSTALL destination path, including the "m4/"
+part of our build folder. Add patch to fix this by using $(patsubst ...)
+instead of $(subst m4/,,$@) to substitute only last "m4/" occurence in
+path.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Fixes:
+https://bugs.busybox.net/show_bug.cgi?id=12481
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ec7806897290cbcede9fe6bde22e083bc0557226)
+(cherry picked from commit 41b9a64526b7bbd28ba2d084f3786cb536750daa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/legal-info/README.header | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+ ...x-install-failure-if-path-contains-m4-str.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/support/legal-info/README.header b/support/legal-info/README.header
-index d3bdf71bcf..55996b5303 100644
---- a/support/legal-info/README.header
-+++ b/support/legal-info/README.header
-@@ -14,18 +14,22 @@ This material is composed of the following items.
-    compiled programs.
-    Note: this may have not been saved due to technical limitations, you may
-    need to collect it manually.
-- * The original source code for all packages; this has been saved in the
--   sources/ subdirectory (except for the non-redistributable packages, which
--   have not been saved). Patches that were applied are also saved, along
--   with a file named 'series' that lists the patches in the order they were
--   applied. Patches are under the same license as the files that they modify
--   in the original package.
-+ * The original source code for target packages in the 'sources/'
-+   subdirectory and for host packages in the 'host-sources/' subdirectory
-+   (except for the non-redistributable packages, which have not been
-+   saved). Patches that were applied are also saved, along with a file
-+   named 'series' that lists the patches in the order they were
-+   applied. Patches are under the same license as the files that they
-+   modify in the original package.
-    Note: Buildroot applies additional patches to Libtool scripts of
-    autotools-based packages. These patches can be found under
-    support/libtool in the Buildroot source and, due to technical
-    limitations, are not saved with the package sources. You may need
-    to collect them manually.
-- * A manifest file listing the configured packages and related information.
-- * The license text of the packages; they have been saved in the licenses/
--   subdirectory.
-+ * Two manifest files listing the configured packages and related
-+   information: 'manifest.csv' for target packages and 'host-manifest.csv'
-+   for host packages.
-+ * The license text of the packages, in the 'licenses/' and
-+   'host-licenses/' subdirectories for target and host packages
-+   respectively.
- 
+diff --git a/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch b/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
+new file mode 100644
+index 0000000000..f1c68ee1e7
+--- /dev/null
++++ b/package/gettext-tiny/0001-Makefile-fix-install-failure-if-path-contains-m4-str.patch
+@@ -0,0 +1,31 @@
++From 2ad9d66d733396b655f05b477a5e91592378fb21 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Fri, 17 Jan 2020 18:34:42 +0100
++Subject: [PATCH] Makefile: fix install failure if path contains "m4/" string
++
++Actually Makefile install recipe substitutes every occurence of "m4/" in
++file name of the target of the rule($@), in an absolute path there could
++more than one "m4/" occurence, so install will fail. Let's change
++$(subst ...) with $(patsubst ...) substituting only last occurence of
++"m4/" pattern.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 4a3c3f6..2e13403 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -88,6 +88,6 @@ $(DESTDIR)$(datadir)/%: %
++ 	$(INSTALL) -D -m 644 $< $@
++ 
++ $(DESTDIR)$(acdir)/%: %
++-	$(INSTALL) -D -l ../$(subst $(datarootdir)/,,$(datadir))/$< $(subst m4/,,$@)
+++	$(INSTALL) -D -l ../$(subst $(datarootdir)/,,$(datadir))/$< $(patsubst %m4/,%,$(dir $@))/$(notdir $@)
++ 
++ .PHONY: all clean install
++-- 
++2.20.1
++
