@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Mar 2020 21:16:11 +0100
-Subject: [Buildroot] [PATCH v2] package/gettext-tiny: fix install
- failure if path contains "m4/" string
-In-Reply-To: <20200118220611.38913-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Sat, 18 Jan 2020 23:06:11 +0100")
-References: <20200117202949.GL22540@scaer>
- <20200118220611.38913-1-giulio.benetti@benettiengineering.com>
-Message-ID: <87ftema778.fsf@dell.be.48ers.dk>
+Date: Thu, 5 Mar 2020 21:13:19 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ docs/manual/legal-notice.txt: update list of non-saved material
+Message-ID: <20200305200407.ACD298F448@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5e73c1144d147634302e2419fd936f2792d41a25
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > When building with path containing "m4/" occurence(i.e. make
- > O=output-m4) gettext-tiny install recipe copies files to wrong place and
- > later some package using autotools fail to autoreconf(i.e. minicom).
- > This is due to buggy gettext-tiny Makefile install recipe where they
- > substitute every "m4/" in INSTALL destination path, including the "m4/"
- > part of our build folder. Add patch to fix this by using $(patsubst ...)
- > instead of $(subst m4/,,$@) to substitute only last "m4/" occurence in
- > path.
+This list dates back to 2012. Since a long time now Buildroot saves the
+patches applied as well as the actual source code for some external
+toolchains. Update the manual accordingly.
 
- > Fixes:
- > https://bugs.busybox.net/show_bug.cgi?id=12481
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a74e57c932df5edd483ff43518fae4e931064d07)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/legal-notice.txt | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
- > ---
- > Pending upstream:
- > https://github.com/sabotage-linux/gettext-tiny/pull/49
-
- > V1-> V2:
- > * used $(patsubst ...) instead of sed as suggested by Heiko and xhebox
-
-Committed to 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
+index 69753282ec..179aa6b179 100644
+--- a/docs/manual/legal-notice.txt
++++ b/docs/manual/legal-notice.txt
+@@ -67,9 +67,8 @@ for packages released under BSD-like licenses, that you are not required to
+ redistribute in source form.
+ 
+ Moreover, due to technical limitations, Buildroot does not produce some
+-material that you will or may need, such as the toolchain source code and the
+-Buildroot source code itself (including patches to packages for which source
+-distribution is required).
++material that you will or may need, such as the toolchain source code for
++some of the external toolchains and the Buildroot source code itself.
+ When you run +make legal-info+, Buildroot produces warnings in the +README+
+ file to inform you of relevant material that could not be saved.
+ 
