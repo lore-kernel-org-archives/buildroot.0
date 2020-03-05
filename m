@@ -1,68 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Mar 2020 16:29:44 +0100
-Subject: [Buildroot] [git commit] package/ortp: bump to version 4.3.1
-Message-ID: <20200309140910.C8E338EB58@busybox.osuosl.org>
+Date: Thu, 5 Mar 2020 23:19:20 +0100
+Subject: [Buildroot] [git commit] package/fswebcam: bump to latest version
+Message-ID: <20200309140909.5727F80426@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d84aa91ae5851d10d64ff561884710cbbedcf0ac
+commit: https://git.buildroot.net/buildroot/commit/?id=df49c9cb45f566ea861faf787483e24eace76f67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- License is GPL-3.0+ since version 4.3.0 and
-  https://gitlab.linphone.org/BC/public/ortp/commit/6b925368588ce0fc64a9762dbe86041151e8450a
-- Switch to cmake-package
+Bump to latest git version.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ortp/ortp.hash |  4 ++--
- package/ortp/ortp.mk   | 23 ++++++++++++++++-------
- 2 files changed, 18 insertions(+), 9 deletions(-)
+ package/fswebcam/fswebcam.hash | 2 +-
+ package/fswebcam/fswebcam.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ortp/ortp.hash b/package/ortp/ortp.hash
-index 93ec39297f..65a5141609 100644
---- a/package/ortp/ortp.hash
-+++ b/package/ortp/ortp.hash
+diff --git a/package/fswebcam/fswebcam.hash b/package/fswebcam/fswebcam.hash
+index 3964b21e92..bac1626785 100644
+--- a/package/fswebcam/fswebcam.hash
++++ b/package/fswebcam/fswebcam.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  eb61a833ab3ad80978d7007411240f46e9b2d1034373b9d9dfaac88c1b6ec0af  ortp-0.27.0.tar.gz
--sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-+sha256  55d12b71ed7c3958abb8d892105e616499d66c88200c46e3ec3cfbbe79771b2e  ortp-4.3.1.tar.gz
-+sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/ortp/ortp.mk b/package/ortp/ortp.mk
-index 0bd61e88d9..436e04c14d 100644
---- a/package/ortp/ortp.mk
-+++ b/package/ortp/ortp.mk
-@@ -4,13 +4,22 @@
+-sha256  fe178a0f37ee203103eceaaf9a81a8669edb49923250e8a2ec7459543a8175b0  fswebcam-9a995d6a5369ddd158e352766e015dae20982318.tar.gz
++sha256  5702771cee6e3fa0f2bbbb72ecf3e5a253ff458c1f648f7e7c0d477e39f0ec80  fswebcam-e9f8094b6a3d1a49f99b2abec4e6ab4df33e2e33.tar.gz
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/fswebcam/fswebcam.mk b/package/fswebcam/fswebcam.mk
+index 5887c0b92b..3a5b8c9eef 100644
+--- a/package/fswebcam/fswebcam.mk
++++ b/package/fswebcam/fswebcam.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ORTP_VERSION = 0.27.0
--ORTP_SITE = http://download.savannah.nongnu.org/releases/linphone/ortp/sources
--
--ORTP_CONF_OPTS = --disable-strict
-+ORTP_VERSION = 4.3.1
-+ORTP_SITE = https://gitlab.linphone.org/BC/public/ortp/-/archive/$(ORTP_VERSION)
-+ORTP_LICENSE = GPL-3.0+
-+ORTP_LICENSE_FILES = LICENSE.txt
- ORTP_INSTALL_STAGING = YES
--ORTP_LICENSE = LGPL-2.1+
--ORTP_LICENSE_FILES = COPYING
- ORTP_DEPENDENCIES = bctoolbox
-+ORTP_CONF_OPTS = \
-+	-DENABLE_DOC=OFF \
-+	-DENABLE_STRICT=OFF
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+ORTP_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+ORTP_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=ON
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+ORTP_CONF_OPTS += -DENABLE_STATIC=OFF -DENABLE_SHARED=ON
-+endif
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+-FSWEBCAM_VERSION = 9a995d6a5369ddd158e352766e015dae20982318
++FSWEBCAM_VERSION = e9f8094b6a3d1a49f99b2abec4e6ab4df33e2e33
+ FSWEBCAM_SITE = $(call github,fsphil,fswebcam,$(FSWEBCAM_VERSION))
+ FSWEBCAM_LICENSE = GPL-2.0
+ FSWEBCAM_LICENSE_FILES = LICENSE
