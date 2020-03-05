@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Mar 2020 21:14:28 +0100
-Subject: [Buildroot] [PATCH 1/2] docs/manual/legal-notice.txt: update
- list of non-saved material
-In-Reply-To: <20200118161820.12412-1-luca@lucaceresoli.net> (Luca Ceresoli's
- message of "Sat, 18 Jan 2020 17:18:19 +0100")
+Date: Thu, 05 Mar 2020 21:14:32 +0100
+Subject: [Buildroot] [PATCH 2/2] core/legal-info: update list of saved
+ material in README
+In-Reply-To: <20200118161820.12412-2-luca@lucaceresoli.net> (Luca Ceresoli's
+ message of "Sat, 18 Jan 2020 17:18:20 +0100")
 References: <20200118161820.12412-1-luca@lucaceresoli.net>
-Message-ID: <87o8taa7a3.fsf@dell.be.48ers.dk>
+ <20200118161820.12412-2-luca@lucaceresoli.net>
+Message-ID: <87k13ya79z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +15,8 @@ To: buildroot@busybox.net
 
 >>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- > This list dates back to 2012. Since a long time now Buildroot saves the
- > patches applied as well as the actual source code for some external
- > toolchains. Update the manual accordingly.
+ > The README file saved by legal-info does not mention the host package
+ > variant of the saved material. Add them.
 
  > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
