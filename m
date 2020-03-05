@@ -1,76 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Mar 2020 18:24:58 +0100
-Subject: [Buildroot] [git commit] package/linux-firmware: add option for
- Microchip VSC85xx networking PHYs
-Message-ID: <20200309140908.DBDC181532@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Mar 2020 21:06:47 +0100
+Subject: [Buildroot] [git commit] package/ipset: bump to version 7.6
+Message-ID: <20200309140908.EE3AE7FB4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=790465d43922d91f762d7c4c2950a6c9835c91a8
+commit: https://git.buildroot.net/buildroot/commit/?id=7df15b5c1e12a8ca96329d1ce1cf0713cd1b0c56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds an option to support installing firmware files for the
-Microchip/Microsemi VSC85xx networking PHY family.
+See full changelog http://ipset.netfilter.org/changelog.html
 
-There is a mismatch between Linux and Linux-firmware on the name of the
-PHY (Microchip vs Microsemi), due to the acquisition of Microsemi by
-Microchip. We chose here the name in Linux-firmware, but mentioned the
-other one in the Kconfig help of the option.
-
-Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-firmware/Config.in           | 7 +++++++
- package/linux-firmware/linux-firmware.hash | 1 +
- package/linux-firmware/linux-firmware.mk   | 5 +++++
- 3 files changed, 13 insertions(+)
+ package/ipset/ipset.hash | 6 +++---
+ package/ipset/ipset.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 9d142d2c54..4768ea6772 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -367,6 +367,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100
- 	  Firmware files for Intel 825xx handled by driver e100
- 	  (e100)
+diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
+index 9c95ca420f..fb200585d1 100644
+--- a/package/ipset/ipset.hash
++++ b/package/ipset/ipset.hash
+@@ -1,6 +1,6 @@
+-# From http://ipset.netfilter.org/ipset-7.5.tar.bz2.md5sum.txt
+-md5 1f3156c68f6fa6de03d8f3ca0539fb78  ipset-7.5.tar.bz2
++# From http://ipset.netfilter.org/ipset-7.6.tar.bz2.md5sum.txt
++md5 e107b679c3256af795261cece864d6d9  ipset-7.6.tar.bz2
+ # Calculated based on the hash above
+-sha256 a57aee54ab6ffe9e04603a464bbf69d66db976500bb04dd04fd3fbd6efb36a0b  ipset-7.5.tar.bz2
++sha256 0e7d44caa9c153d96a9b5f12644fbe35a632537a5a7f653792b72e53d9d5c2db  ipset-7.6.tar.bz2
+ # Locally calculated
+ sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index 383e90af38..869763d322 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY
-+	bool "Microchip VSC85xx PHYs"
-+	help
-+	  Firmware files for Microchip/Microsemi VSC85xx networking
-+	  PHYs (VSC8504, VSC8552, VSC8572, VSC8574, VSC856X, VSC8575,
-+	  VSC8582 and VSC8584)
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X
- 	bool "QLogic FastLinQ 4xxxx"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 573c33cbc9..3878d92881 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -12,6 +12,7 @@ sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.
- sha256 5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4 LICENCE.ibt_firmware
- sha256 0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d LICENCE.it913x
- sha256 e295020afd7597dc1b3bbe50a84a7e432d9cb92bc053c1c5e657b50d2517627b LICENCE.iwlwifi_firmware
-+sha256 0fc67bd715b3395f3f2af464781910e9e69c4ba23da304352229b42dc9e986c3 LICENCE.microchip
- sha256 2051d5bf0755a0668f8c3d9a0d1c41d4b8cc411aba70f720fda71ae9e3b4d25c LICENCE.qat_firmware
- sha256 4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822 LICENCE.qla2xxx
- sha256 d7bec70668ddd4aae8fb4aa32870e54b49fcdb0b9b007aa9f54b53a1ac7461bd LICENCE.ralink-firmware.txt
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 6d3cec1a48..aec76d54b9 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -444,6 +444,11 @@ LINUX_FIRMWARE_FILES += e100/*.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.e100
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY),y)
-+LINUX_FIRMWARE_FILES += microchip/mscc_vsc85*.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.microchip
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X),y)
- LINUX_FIRMWARE_FILES += \
- 	qed/qed_init_values_zipped-*.bin
+-IPSET_VERSION = 7.5
++IPSET_VERSION = 7.6
+ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+ IPSET_SITE = http://ipset.netfilter.org
+ IPSET_DEPENDENCIES = libmnl host-pkgconf
