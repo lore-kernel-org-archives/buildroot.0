@@ -1,7 +1,8 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Thu,  5 Mar 2020 07:54:48 -0300
-Subject: [Buildroot] [PATCH] package/busybox: add BUSYBOX_INSTALL_INIT_OPENRC
-Message-ID: <20200305105448.26383-1-unixmania@gmail.com>
+Date: Thu,  5 Mar 2020 07:55:21 -0300
+Subject: [Buildroot] [PATCH] package/procps-ng: add
+ PROCPS_NG_INSTALL_INIT_OPENRC
+Message-ID: <20200305105521.26501-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +11,28 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-Install the sysvinit scripts, for the moment, but not S02sysctl, since
-openrc provides /etc/init.d/sysctl.
+Avoid installing S02sysctl, since openrc provides /etc/init.d/sysctl.
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- package/busybox/busybox.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/procps-ng/procps-ng.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 9eeb784d2a..41a8b98183 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -374,6 +374,15 @@ define BUSYBOX_INSTALL_TARGET_CMDS
- 	$(BUSYBOX_INSTALL_MDEV_CONF)
- endef
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 6a41e9b322..5bafc7ee97 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -44,6 +44,11 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ PROCPS_NG_CONF_OPTS += --disable-numa
+ endif
  
-+# Install the sysvinit scripts, for the moment, but not S02sysctl, since
-+# openrc provides /etc/init.d/sysctl.
-+define BUSYBOX_INSTALL_INIT_OPENRC
-+	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
-+	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
-+	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
-+	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
++# Avoid installing S02sysctl, since openrc provides /etc/init.d/sysctl.
++define PROCPS_NG_INSTALL_INIT_OPENRC
++	@:
 +endef
 +
- define BUSYBOX_INSTALL_INIT_SYSV
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+ define PROCPS_NG_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/procps-ng/S02sysctl \
+ 		$(TARGET_DIR)/etc/init.d/S02sysctl
 -- 
 2.18.2
