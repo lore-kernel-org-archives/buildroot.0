@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Mar 2020 23:39:15 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] board/ci20/genimage.cfg:
+Date: Thu, 5 Mar 2020 23:39:07 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] board/ci20/genimage.cfg:
  drop hardcoded rootfs partition size
-Message-ID: <20200305222722.DB8758F60B@busybox.osuosl.org>
+Message-ID: <20200305222728.D4A2C8F636@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ff9a16e6ef8894559f9cb8b6f4624b9dfffe3b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4d0c783eae74f75cd130c4a0c31743c2e4588cc1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 As recently reported to the list:
 http://lists.busybox.net/pipermail/buildroot/2020-January/271937.html
