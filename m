@@ -1,38 +1,36 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Thu,  5 Mar 2020 07:55:21 -0300
-Subject: [Buildroot] [PATCH] package/procps-ng: add
- PROCPS_NG_INSTALL_INIT_OPENRC
-Message-ID: <20200305105521.26501-1-unixmania@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 05 Mar 2020 16:37:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jhead: security bump to version
+ 3.04
+In-Reply-To: <20200304214532.1018182-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 4 Mar 2020 22:45:32 +0100")
+References: <20200304214532.1018182-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h7z2byos.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Avoid installing S02sysctl, since openrc provides /etc/init.d/sysctl.
+ > - Fix CVE-2019-1010301: jhead 3.03 is affected by: Buffer Overflow. The
+ >   impact is: Denial of service. The component is: gpsinfo.c Line 151
+ >   ProcessGpsInfo(). The attack vector is: Open a specially crafted JPEG
+ >   file.
+ > - Fix CVE-2019-1010302: jhead 3.03 is affected by: Incorrect Access
+ >   Control. The impact is: Denial of service. The component is: iptc.c
+ >   Line 122 show_IPTC(). The attack vector is: the victim must open a
+ >   specially crafted JPEG file.
+ > - Fix CVE-2019-19035: jhead 3.03 is affected by: heap-based buffer
+ >   over-read. The impact is: Denial of service. The component is:
+ >   ReadJpegSections and process_SOFn in jpgfile.c. The attack vector is:
+ >   Open a specially crafted JPEG file.
+ > - Update indentation of hash file (two spaces)
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
- package/procps-ng/procps-ng.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index 6a41e9b322..5bafc7ee97 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -44,6 +44,11 @@ ifeq ($(BR2_STATIC_LIBS),y)
- PROCPS_NG_CONF_OPTS += --disable-numa
- endif
- 
-+# Avoid installing S02sysctl, since openrc provides /etc/init.d/sysctl.
-+define PROCPS_NG_INSTALL_INIT_OPENRC
-+	@:
-+endef
-+
- define PROCPS_NG_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/procps-ng/S02sysctl \
- 		$(TARGET_DIR)/etc/init.d/S02sysctl
+Committed, thanks.
+
 -- 
-2.18.2
+Bye, Peter Korsgaard
