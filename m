@@ -1,61 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Mar 2020 22:01:51 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/xen: security
- bump to version 4.11.3
-Message-ID: <20200305205226.BB6438F4D8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Mar 2020 23:01:05 +0100
+Subject: [Buildroot] [PATCH] package/python3: bump to 3.6.2
+In-Reply-To: <20170918223441.2129-1-andrew.smirnov@gmail.com>
+References: <20170918223441.2129-1-andrew.smirnov@gmail.com>
+Message-ID: <20200305230105.717fbebf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00986efc492409c9a1e702318e451016fb3355f2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Hello,
 
-The 4.11.3 release brings a large number of fixes:
+I'm getting back to this old patch.
 
-https://xenproject.org/downloads/xen-project-archives/xen-project-4-11-series/xen-project-4-11-3/
+On Mon, 18 Sep 2017 15:34:41 -0700
+Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
 
-Including a number of security fixes:
+> +# Some of CPython's source code is generated using Python interpreter
+> +# and some helper tools such as "Programs/_freeze_importlib" or
+> +# "Parser/pgen" (look for regen-* targets in Makefile.pre.in for more
+> +# info). Normally CPython codebase ships with those files
+> +# pre-generated, so just regular "make" with no additional steps
+> +# should be sufficient for a succesfull build, however due to
+> +# Buildroot's "Add importlib fix for PEP 3147 issue" custom patch we
+> +# end up modifying "Lib/importlib/_bootstrap_external.py" which means
+> +# we have to do "regen-importlib" step before building CPython
+> +# (Importlib is a builtin module that needs to be "frozen"/converted
+> +# to a C array of bytecode using "Programs/_freeze_importlib")
+> +#
+> +# To achive that we add pre-build steps to host-python3 as well as
+> +# python3 that execute "regen-importlib" target.
+> +#
+> +# Unfortunately, for the target Python, "Programs/_freeze_importlib"
+> +# is built for the target, while we need to run them at build time. So
+> +# when installing host-python3, we copy them to $(HOST_DIR)/bin...
+> +#
+> +define HOST_PYTHON3_MAKE_REGEN_IMPORTLIB
+> +	$(HOST_MAKE_ENV) $(PYTHON3_CONF_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) regen-importlib
 
-XSA-298: missing descriptor table limit checking in x86 PV emulation
-         (CVE-2019-18425)
-XSA-299: Issues with restartable PV type change operations (CVE-2019-18421)
-XSA-301: add-to-physmap can be abused to DoS Arm hosts (CVE-2019-18423)
-XSA-302: passed through PCI devices may corrupt host memory after
-         deassignment (CVE-2019-18424)
-XSA-303: ARM: Interrupts are unconditionally unmasked in exception handlers
-         (CVE-2019-18422)
-XSA-304: x86: Machine Check Error on Page Size Change DoS (CVE-2018-12207)
-XSA-305: TSX Asynchronous Abort speculative side channel (CVE-2019-11135)
-XSA-306: Device quarantine for alternate pci assignment methods
-         (CVE-2019-19579)
+Unfortunately, this breaks the build when python3 is not available on
+the build machine:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xen/xen.hash | 2 +-
- package/xen/xen.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+# Regenerate Python/importlib_external.h
+# from Lib/importlib/_bootstrap_external.py using _freeze_importlib
+./Programs/_freeze_importlib importlib._bootstrap_external \
+    ./Lib/importlib/_bootstrap_external.py \
+    ./Python/importlib_external.h.new
+python3 ./Tools/scripts/update_file.py ./Python/importlib_external.h ./Python/importlib_external.h.new
+make[1]: python3: Command not found
+Makefile:724: recipe for target 'regen-importlib' failed
+make[1]: *** [regen-importlib] Error 127
+make[1]: Leaving directory '/root/buildroot/output/build/host-python3-3.8.2'
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index d4232f592e..3900317789 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 3f9217f5a7cc240a06f3a03db8c29605d69a64d98330c426611ba5c2ee08b5d8 xen-4.11.2.tar.gz
-+sha256 d4d81da4b8390dadf90a177bd32739dd443ad84d09c2f143a0f0d4384d1a2021 xen-4.11.3.tar.gz
- sha256 dba0d79260259c013c52e5d4daeaea564a2fbb9ff7fc6778c377a401ec3898de COPYING
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 92629a3d86..352c35bf87 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XEN_VERSION = 4.11.2
-+XEN_VERSION = 4.11.3
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
+Indeed, the regen-importlib target uses python3... while building
+host-python3. This clearly cannot work.
+
+I believe we don't need to regenerate importlib for the host python, we
+probably only need it for the target.
+
+Do you think you could have a look ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
