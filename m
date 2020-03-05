@@ -1,63 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 09 Mar 2020 14:21:43 -0000
-Subject: [Buildroot] [git commit] package/smartmontools: bump to version 7.1
-Message-ID: <20200309140904.6261B7F8C1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Mar 2020 21:05:57 +0100
+Subject: [Buildroot] [git commit] package/wayland-protocols: bump to version
+ 1.20
+Message-ID: <20200309140908.E526A821F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0910230231e66c1339b18e7b8326745760ef3c0e
+commit: https://git.buildroot.net/buildroot/commit/?id=148e983614df332cd7f6ef4197dfa016cd3d3aad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- systemd optional dependency has been added in version 7.0
-- Update indentation of hash file (two spaces)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/smartmontools/smartmontools.hash | 8 +++++---
- package/smartmontools/smartmontools.mk   | 9 ++++++++-
- 2 files changed, 13 insertions(+), 4 deletions(-)
+ package/wayland-protocols/wayland-protocols.hash | 10 +++++-----
+ package/wayland-protocols/wayland-protocols.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/smartmontools/smartmontools.hash b/package/smartmontools/smartmontools.hash
-index ffa1e8f97e..bec007aabd 100644
---- a/package/smartmontools/smartmontools.hash
-+++ b/package/smartmontools/smartmontools.hash
-@@ -1,5 +1,7 @@
--# From http://sourceforge.net/projects/smartmontools/files/smartmontools/6.5/
--md5	093aeec3f8f39fa9a37593c4012d3156	smartmontools-6.5.tar.gz
--sha1	7e788b429534a4ae627858fbcc826b93402cee7e	smartmontools-6.5.tar.gz
-+# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.1/
-+md5  430cd5f64caa4524018b536e5ecd9c29  smartmontools-7.1.tar.gz
-+sha1  207dc2b50cab1c6fba7bc248665fbbe3189374e1  smartmontools-7.1.tar.gz
-+
- # Locally computed
-+sha256  3f734d2c99deb1e4af62b25d944c6252de70ca64d766c4c7294545a2e659b846  smartmontools-7.1.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-index bad7da2d16..77eedfabd8 100644
---- a/package/smartmontools/smartmontools.mk
-+++ b/package/smartmontools/smartmontools.mk
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index a27ff9e52c..321fc62de5 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2019-July/040756.html
+-md5 af38f22d8e233c2f2e00ddc8dcc94694  wayland-protocols-1.18.tar.xz
+-sha1 aa2f132c082f3c790bd046283b3ef7ce3fb11370  wayland-protocols-1.18.tar.xz
+-sha256 3d73b7e7661763dc09d7d9107678400101ecff2b5b1e531674abfa81e04874b3  wayland-protocols-1.18.tar.xz
+-sha256 f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-February/041269.html
++md5  b0836533a3f2dc6585b1dae00341157f  wayland-protocols-1.20.tar.xz
++sha1  e78c739a3a85477ed524b81e8bb75efe7f8bf4df  wayland-protocols-1.20.tar.xz
++sha256  9782b7a1a863d82d7c92478497d13c758f52e7da4f197aa16443f73de77e4de7  wayland-protocols-1.20.tar.xz
++sha256  f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index fbfa99558d..ed60d1c995 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SMARTMONTOOLS_VERSION = 6.5
-+SMARTMONTOOLS_VERSION = 7.1
- SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
- SMARTMONTOOLS_LICENSE = GPL-2.0+
- SMARTMONTOOLS_LICENSE_FILES = COPYING
-@@ -23,4 +23,11 @@ else
- SMARTMONTOOLS_CONF_OPTS += --without-selinux
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+SMARTMONTOOLS_CONF_OPTS += --with-libsystemd
-+SMARTMONTOOLS_DEPENDENCIES += systemd
-+else
-+SMARTMONTOOLS_CONF_OPTS += --without-libsystemd
-+endif
-+
- $(eval $(autotools-package))
+-WAYLAND_PROTOCOLS_VERSION = 1.18
++WAYLAND_PROTOCOLS_VERSION = 1.20
+ WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
