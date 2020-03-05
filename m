@@ -1,51 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Mar 2020 23:36:15 +0100
-Subject: [Buildroot] [PATCH/next v2] package/gstreamer1: update tools
- comment
-In-Reply-To: <20200303165848.19448-1-ps.report@gmx.net>
-References: <20200303165848.19448-1-ps.report@gmx.net>
-Message-ID: <20200305233615.20056f8e@windsurf>
+Date: Thu, 5 Mar 2020 23:36:31 +0100
+Subject: [Buildroot] [git commit branch/next] boot/opensbi: bump to version
+ 0.6
+Message-ID: <20200305222621.50E0F8F5F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  3 Mar 2020 17:58:48 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5fe6b7829904a0aec596e390093d611a7f4d05ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> - add missing tools (gst-stats, gst-typefind)
-> - order alphabetically
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - fix leading space in help text (undetected by check-package)
-> ---
->  package/gstreamer1/gstreamer1/Config.in | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/gstreamer1/gstreamer1/Config.in b/package/gstreamer1/gstreamer1/Config.in
-> index e9f1bd038a..660443f878 100644
-> --- a/package/gstreamer1/gstreamer1/Config.in
-> +++ b/package/gstreamer1/gstreamer1/Config.in
-> @@ -51,10 +51,11 @@ config BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY
->  	  increase the launch-time for a GStreamer application.
->  
->  config BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS
-> -	bool "install gst-launch & gst-inspect"
-> +	bool "install gst-inspect & gst-launch & gst-stats & gst-typefind"
+Tested with qemu_riscv32_virt_defconfig and
+qemu_riscv64_virt_defconfig using Buildroot host-qemu 4.2.0.
 
-Changed to:
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/opensbi/opensbi.hash | 2 +-
+ boot/opensbi/opensbi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-	bool "install tools"
-
-and applied to master, since really this is a fix.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
+index 47d5930ace..6e69d512dd 100644
+--- a/boot/opensbi/opensbi.hash
++++ b/boot/opensbi/opensbi.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256 bc82f1e63663cafb7976b324d8a01263510cfd816063dc89e0ccffb9763fb1dd opensbi-0.5.tar.gz
++sha256 46a93afd5465eba094ddba40015e754bf09f9e80e0702c00013d6bdb3ecd0a72 opensbi-0.6.tar.gz
+ sha256 82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21 COPYING.BSD
+diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+index 2df746ab00..00e3b05dd0 100644
+--- a/boot/opensbi/opensbi.mk
++++ b/boot/opensbi/opensbi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSBI_VERSION = 0.5
++OPENSBI_VERSION = 0.6
+ OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
+ OPENSBI_LICENSE = BSD-2-Clause
+ OPENSBI_LICENSE_FILES = COPYING.BSD
