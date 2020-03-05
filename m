@@ -1,59 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Mar 2020 16:35:37 +0100
-Subject: [Buildroot] [git commit] package/python-django: security bump to
- version 3.0.4
-Message-ID: <20200305152608.8955A8F3B4@busybox.osuosl.org>
+Date: Thu, 5 Mar 2020 16:35:42 +0100
+Subject: [Buildroot] [git commit] package/jhead: security bump to version
+ 3.04
+Message-ID: <20200305152608.96E778F3B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cba42d7f55b5845160b710c4488b95089c7cb558
+commit: https://git.buildroot.net/buildroot/commit/?id=faf755b4913969f768205caf4eadba55c7ce2f44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security vulnerabilities:
+- Fix CVE-2019-1010301: jhead 3.03 is affected by: Buffer Overflow. The
+  impact is: Denial of service. The component is: gpsinfo.c Line 151
+  ProcessGpsInfo(). The attack vector is: Open a specially crafted JPEG
+  file.
+- Fix CVE-2019-1010302: jhead 3.03 is affected by: Incorrect Access
+  Control. The impact is: Denial of service. The component is: iptc.c
+  Line 122 show_IPTC(). The attack vector is: the victim must open a
+  specially crafted JPEG file.
+- Fix CVE-2019-19035: jhead 3.03 is affected by: heap-based buffer
+  over-read. The impact is: Denial of service. The component is:
+  ReadJpegSections and process_SOFn in jpgfile.c. The attack vector is:
+  Open a specially crafted JPEG file.
+- Update indentation of hash file (two spaces)
 
-- CVE-2020-9402: Potential SQL injection via tolerance parameter in GIS
-  functions and aggregates on Oracle.
-  GIS functions and aggregates on Oracle were subject to SQL injection,
-  using a suitably crafted tolerance.
-
-For more details, see the advisory:
-https://www.djangoproject.com/weblog/2020/mar/04/security-releases/
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/jhead/jhead.hash | 4 ++--
+ package/jhead/jhead.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index cdf3dbd271..af5e4bb6e0 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5	37ec335a56234c0ad56c383b810afc7f  Django-3.0.3.tar.gz
--sha256	2f1ba1db8648484dd5c238fb62504777b7ad090c81c5f1fd8d5eb5ec21b5f283  Django-3.0.3.tar.gz
-+md5	0b0299419770eaff86ff3a4af519cd6a  Django-3.0.4.tar.gz
-+sha256	50b781f6cbeb98f673aa76ed8e572a019a45e52bdd4ad09001072dfd91ab07c8  Django-3.0.4.tar.gz
- # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 0e557489df..0cc5749a9b 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/jhead/jhead.hash b/package/jhead/jhead.hash
+index 9ee5055f7c..ffe75381b3 100644
+--- a/package/jhead/jhead.hash
++++ b/package/jhead/jhead.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated from download (no sig, hash)
+-sha256	82194e0128d9141038f82fadcb5845391ca3021d61bc00815078601619f6c0c2	jhead-3.03.tar.gz
+-sha256	46c870a208305489eea862ec8b05b030ba1f06d99195f660dc0ba541cc38d82b	readme.txt
++sha256  ef89bbcf4f6c25ed88088cf242a47a6aedfff4f08cc7dc205bf3e2c0f10a03c9  jhead-3.04.tar.gz
++sha256  46c870a208305489eea862ec8b05b030ba1f06d99195f660dc0ba541cc38d82b  readme.txt
+diff --git a/package/jhead/jhead.mk b/package/jhead/jhead.mk
+index 65f8cdb73c..d56ee0daff 100644
+--- a/package/jhead/jhead.mk
++++ b/package/jhead/jhead.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 3.0.3
-+PYTHON_DJANGO_VERSION = 3.0.4
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/3d/21/316d435bf8bd6f355be6b5765da91394fb38f405e5bea6680e411e4d470c
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1d/38/89ea18b5aeb9b56fff7430388946e8e9dfd7a451f3e6ddb8a9b637f442c1
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
+-JHEAD_VERSION = 3.03
++JHEAD_VERSION = 3.04
+ JHEAD_SITE = http://www.sentex.net/~mwandel/jhead
+ JHEAD_LICENSE = Public Domain
+ JHEAD_LICENSE_FILES = readme.txt
