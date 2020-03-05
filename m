@@ -1,56 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Mar 2020 16:39:53 +0100
-Subject: [Buildroot] [git commit] Makefile: work around a bug in newly
- released make 4.3
-Message-ID: <20200305152837.30E518F3B8@busybox.osuosl.org>
+Date: Thu, 05 Mar 2020 16:43:09 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libsndfile: fix CVE-2018-19758
+In-Reply-To: <20200304222103.1029879-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 4 Mar 2020 23:21:02 +0100")
+References: <20200304222103.1029879-1-fontaine.fabrice@gmail.com>
+Message-ID: <874kv2byeq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e2128bf5072e5f2fd69e2fc0239558782dfc677
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Several users of rolling-release distributions have been reporting on
-IRC that Buildroot is broken now that they have switched to the newly
-released make 4.3.
+ > There is a heap-based buffer over-read at wav.c in wav_write_header in
+ > libsndfile 1.0.28 that will cause a denial of service.
 
-It turns out that the constructs we use to generated and include the
-internal br2-external related fragments is no longer working with
-make-4.3.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Indeed, an upstream bug report [0] seems to imply that it so far was
-working by chance. There has been no further feedback, whether this is
-really considered a fix for a previous ill-defined behaviour, or an
-actual regression...
+Committed, thanks.
 
-In the meantime, we add a workaround, suggested in that same bug report,
-that fixes the issue for make 4.3, and that should not break on older
-make versions either (verified on all relevant versions: from 3.81,
-3.82, 4.0, 4.1, and 4.2).
-
-[0] https://savannah.gnu.org/bugs/?57676
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Mircea Gliga <mgliga@bitdefender.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Makefile b/Makefile
-index 31624f77a2..09e769f613 100644
---- a/Makefile
-+++ b/Makefile
-@@ -188,6 +188,9 @@ ifneq ($(BR2_EXTERNAL_ERROR),)
- $(error $(BR2_EXTERNAL_ERROR))
- endif
- 
-+# Workaround bug in make-4.3: https://savannah.gnu.org/bugs/?57676
-+$(BASE_DIR)/.br2-external.mk:;
-+
- # To make sure that the environment variable overrides the .config option,
- # set this before including .config.
- ifneq ($(BR2_DL_DIR),)
+-- 
+Bye, Peter Korsgaard
