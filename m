@@ -1,38 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Mar 2020 23:03:50 +0100
-Subject: [Buildroot] [git commit] package/libevdev: add host-python
- dependency
-Message-ID: <20200305215141.8DEFF8F4E2@busybox.osuosl.org>
+Date: Thu, 5 Mar 2020 23:07:11 +0100
+Subject: [Buildroot] [PATCH/next v2 1/3] package/libevdev: add
+ host-python dependency
+In-Reply-To: <20200302150907.5812-1-ps.report@gmx.net>
+References: <20200302150907.5812-1-ps.report@gmx.net>
+Message-ID: <20200305230711.1c8f78c5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93490c25836c18dc475e4144de3282f14c4d6570
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
+On Mon,  2 Mar 2020 16:09:05 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-  checking for a Python interpreter with version >= 2.6... none
-  configure: error: no suitable Python interpreter found
+> Fixes:
+> 
+>   checking for a Python interpreter with version >= 2.6... none
+>   configure: error: no suitable Python interpreter found
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libevdev/libevdev.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I've applied to master. Ideally, I would have preferred to use
+host-python3, since Titouan is working on making sure everything in
+Buildroot builds properly with Python 3. However due to another issue
+host-python3 is not self-sufficient: it doesn't build if Python3 is not
+already installed on the build machine!
 
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index 0b5a526bab..8b243be74e 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -14,7 +14,7 @@ LIBEVDEV_LICENSE_FILES = COPYING
- LIBEVDEV_AUTORECONF = YES
- 
- # Uses PKG_CHECK_MODULES() in configure.ac
--LIBEVDEV_DEPENDENCIES = host-pkgconf
-+LIBEVDEV_DEPENDENCIES = host-pkgconf host-python
- 
- LIBEVDEV_INSTALL_STAGING = YES
- 
+So, for now, I've applied your patch as-is to master.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
