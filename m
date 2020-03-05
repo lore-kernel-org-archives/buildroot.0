@@ -1,30 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Mar 2020 23:25:41 +0100
-Subject: [Buildroot] [PATCH] package/fswebcam: bump to latest version
-In-Reply-To: <20200303090052.27722-1-eugen.hristev@microchip.com>
-References: <20200303090052.27722-1-eugen.hristev@microchip.com>
-Message-ID: <20200305232541.5f9ce69d@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 05 Mar 2020 22:30:29 +0000
+Subject: [Buildroot] [Bug 12611] New: ntp hash is not matching with upstream
+ 4.2.8p13
+Message-ID: <bug-12611-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 3 Mar 2020 11:00:52 +0200
-Eugen Hristev <eugen.hristev@microchip.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12611
 
-> Bump to latest git version.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> ---
->  package/fswebcam/fswebcam.hash | 2 +-
->  package/fswebcam/fswebcam.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+            Bug ID: 12611
+           Summary: ntp hash is not matching with upstream 4.2.8p13
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: mjhammel at graphics-muse.org
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Applied to next, thanks.
+I was building 2019.05.1 and found ntp 4.2.8p13 hash didn't match with
+upstream.  I checked 2020.02rc3 and it has the same hash as 2019.05.1.  Then
+checking upstream ntp I found this.
 
-Thomas
+   [ ]  ntp-4.2.8p13.tar.gz     2020-03-03 19:54        6.7M     
+   [ ]  ntp-4.2.8p13.tar.gz.md5 2020-03-03 19:54        61       
+   [ ]  ntp-4.2.8p13.tar.gz.sha1        2019-03-07 06:18        62       
+   [ ]  ntp-4.2.8p13.tar.gz.sha256      2020-03-03 19:54        96       
+   [ ]  ntp-4.2.8p13.tar.gz.sha512      2019-03-07 06:18        150      
+   [ ]  ntp-4.2.8p14.tar.gz     2020-03-03 20:45        6.7M     
+   [ ]  ntp-4.2.8p14.tar.gz.md5 2020-03-03 20:45        61       
+   [ ]  ntp-4.2.8p14.tar.gz.sha256      2020-03-03 20:45        96
+
+It looks like both 4.2.8p13 and 4.2.8p14 were updated the same day, except for
+the former's sha1.  I can also verify that the 4.2.8p13 tar.gz is larger than
+my local archive.
+
+Not sure what to do with this.  Might be someone upstream just updated the
+archives and messed it up.  But I wasn't sure how to report that to the
+upstream.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
