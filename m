@@ -1,31 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Mar 2020 23:38:54 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/opensbi: bump to version 0.6
-In-Reply-To: <20200302140250.12734-1-mark@dibsco.co.uk>
-References: <20200302140250.12734-1-mark@dibsco.co.uk>
-Message-ID: <20200305233854.23785044@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 05 Mar 2020 23:39:43 +0100
+Subject: [Buildroot] [PATCH] board/ci20/genimage.cfg: drop hardcoded
+ rootfs partition size
+In-Reply-To: <20200121210301.28973-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 21 Jan 2020 22:03:00 +0100")
+References: <20200121210301.28973-1-peter@korsgaard.com>
+Message-ID: <87y2se8lzk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  2 Mar 2020 14:02:50 +0000
-Mark Corbin <mark@dibsco.co.uk> wrote:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-> Tested with qemu_riscv32_virt_defconfig and
-> qemu_riscv64_virt_defconfig using Buildroot host-qemu 4.2.0.
-> 
-> Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
-> ---
->  boot/opensbi/opensbi.hash | 2 +-
->  boot/opensbi/opensbi.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > As recently reported to the list:
+ > http://lists.busybox.net/pipermail/buildroot/2020-January/271937.html
 
-Applied to next, thanks.
+ > The hardcoded rootfs partition size can lead to hard to understand build
+ > failures if more packages are added.
 
-Thomas
+ > So drop the hardcoded partition size.  Genimage will then size the partition
+ > to match the size of the rootfs image (which by default is also 60MB for ext4).
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2019.02.x and 2019.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
