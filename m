@@ -1,30 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Mar 2020 21:07:22 +0100
-Subject: [Buildroot] [PATCH/next] package/ipset: bump to version 7.6
-In-Reply-To: <1583168173-8557-1-git-send-email-pjtexier@koncepto.io>
-References: <1583168173-8557-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20200305210722.08931478@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 05 Mar 2020 21:14:28 +0100
+Subject: [Buildroot] [PATCH 1/2] docs/manual/legal-notice.txt: update
+ list of non-saved material
+In-Reply-To: <20200118161820.12412-1-luca@lucaceresoli.net> (Luca Ceresoli's
+ message of "Sat, 18 Jan 2020 17:18:19 +0100")
+References: <20200118161820.12412-1-luca@lucaceresoli.net>
+Message-ID: <87o8taa7a3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  2 Mar 2020 17:56:13 +0100
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-> See full changelog http://ipset.netfilter.org/changelog.html
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  package/ipset/ipset.hash | 6 +++---
->  package/ipset/ipset.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+ > This list dates back to 2012. Since a long time now Buildroot saves the
+ > patches applied as well as the actual source code for some external
+ > toolchains. Update the manual accordingly.
 
-Applied to next, thanks.
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-Thomas
+Committed to 2019.02.x and 2019.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
