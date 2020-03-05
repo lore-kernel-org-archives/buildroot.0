@@ -1,78 +1,26 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  4 Mar 2020 23:21:03 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libsndfile: fix CVE-2019-3832
-In-Reply-To: <20200304222103.1029879-1-fontaine.fabrice@gmail.com>
-References: <20200304222103.1029879-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200304222103.1029879-2-fontaine.fabrice@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 5 Mar 2020 05:37:08 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libtirpc: fix build with gcc 10
+In-Reply-To: <20200228173052.5128-1-petr.vorel@gmail.com>
+References: <20200228173052.5128-1-petr.vorel@gmail.com>
+Message-ID: <20200305043708.GA2841817@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It was discovered the fix for CVE-2018-19758 (libsndfile) was not
-complete and still allows a read beyond the limits of a buffer in
-wav_write_header() function in wav.c. A local attacker may use this flaw
-to make the application crash.
+Hi Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...header-don-t-read-past-the-array-end.patch | 33 +++++++++++++++++++
- package/libsndfile/libsndfile.mk              |  2 ++
- 2 files changed, 35 insertions(+)
- create mode 100644 package/libsndfile/0005-wav_write_header-don-t-read-past-the-array-end.patch
+> This issue seems to be happening only on the next branch. Why? Anything
+> special in next compared to master?
+No idea why, libtirpc itself it's the same. It'd help if I could find builds for
+master, but autobuild search doesn't help to search packages, which does not
+fail, there is only search for failed packages:
 
-diff --git a/package/libsndfile/0005-wav_write_header-don-t-read-past-the-array-end.patch b/package/libsndfile/0005-wav_write_header-don-t-read-past-the-array-end.patch
-new file mode 100644
-index 0000000000..e958517808
---- /dev/null
-+++ b/package/libsndfile/0005-wav_write_header-don-t-read-past-the-array-end.patch
-@@ -0,0 +1,33 @@
-+From 6d7ce94c020cc720a6b28719d1a7879181790008 Mon Sep 17 00:00:00 2001
-+From: Emilio Pozuelo Monfort <pochu27@gmail.com>
-+Date: Tue, 5 Mar 2019 11:27:17 +0100
-+Subject: [PATCH] wav_write_header: don't read past the array end
-+
-+If loop_count is bigger than the array, truncate it to the array
-+length (and not to 32k).
-+
-+CVE-2019-3832
-+[Retrieved from:
-+https://github.com/erikd/libsndfile/commit/6d7ce94c020cc720a6b28719d1a7879181790008]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/wav.c | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/wav.c b/src/wav.c
-+index 5c825f2a..104bd0a7 100644
-+--- a/src/wav.c
-++++ b/src/wav.c
-+@@ -1146,8 +1146,10 @@ wav_write_header (SF_PRIVATE *psf, int calc_length)
-+ 		psf_binheader_writef (psf, "44", BHW4 (0), BHW4 (0)) ; /* SMTPE format */
-+ 		psf_binheader_writef (psf, "44", BHW4 (psf->instrument->loop_count), BHW4 (0)) ;
-+ 
-+-		/* Loop count is signed 16 bit number so we limit it range to something sensible. */
-+-		psf->instrument->loop_count &= 0x7fff ;
-++		/* Make sure we don't read past the loops array end. */
-++		if (psf->instrument->loop_count > ARRAY_LEN (psf->instrument->loops))
-++			psf->instrument->loop_count = ARRAY_LEN (psf->instrument->loops) ;
-++
-+ 		for (tmp = 0 ; tmp < psf->instrument->loop_count ; tmp++)
-+ 		{	int type ;
-+ 
-diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
-index 7be822b875..63d9a521e6 100644
---- a/package/libsndfile/libsndfile.mk
-+++ b/package/libsndfile/libsndfile.mk
-@@ -22,6 +22,8 @@ LIBSNDFILE_IGNORE_CVES += \
- LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
- # 0004-src-wav.c-Fix-heap-read-overflow.patch
- LIBSNDFILE_IGNORE_CVES += CVE-2018-19758
-+# 0005-wav_write_header-don-t-read-past-the-array-end.patch
-+LIBSNDFILE_IGNORE_CVES += CVE-2019-3832
- 
- LIBSNDFILE_CONF_OPTS = \
- 	--disable-sqlite \
--- 
-2.25.0
+http://autobuild.buildroot.net/index.php?reason=libtirpc-1.2.5
+
+Is it running for master?
+
+Kind regards,
+Petr
