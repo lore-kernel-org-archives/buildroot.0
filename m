@@ -1,42 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Mar 2020 21:13:14 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x]
- docs/manual/legal-notice.txt: update list of non-saved material
-Message-ID: <20200305200526.8B7428F454@busybox.osuosl.org>
+Date: Thu, 5 Mar 2020 21:14:23 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] core/legal-info: update
+ list of saved material in README
+Message-ID: <20200305200526.92F2E8F456@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f9c9ba21b5cd83571737c8d52d81256256fadb1
+commit: https://git.buildroot.net/buildroot/commit/?id=26c858c523927cb13a62d5607ebe40aca24cead1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-This list dates back to 2012. Since a long time now Buildroot saves the
-patches applied as well as the actual source code for some external
-toolchains. Update the manual accordingly.
+The README file saved by legal-info does not mention the host package
+variant of the saved material. Add them.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a74e57c932df5edd483ff43518fae4e931064d07)
+(cherry picked from commit ec7806897290cbcede9fe6bde22e083bc0557226)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/legal-notice.txt | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ support/legal-info/README.header | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
-index 69753282ec..179aa6b179 100644
---- a/docs/manual/legal-notice.txt
-+++ b/docs/manual/legal-notice.txt
-@@ -67,9 +67,8 @@ for packages released under BSD-like licenses, that you are not required to
- redistribute in source form.
- 
- Moreover, due to technical limitations, Buildroot does not produce some
--material that you will or may need, such as the toolchain source code and the
--Buildroot source code itself (including patches to packages for which source
--distribution is required).
-+material that you will or may need, such as the toolchain source code for
-+some of the external toolchains and the Buildroot source code itself.
- When you run +make legal-info+, Buildroot produces warnings in the +README+
- file to inform you of relevant material that could not be saved.
+diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+index d3bdf71bcf..55996b5303 100644
+--- a/support/legal-info/README.header
++++ b/support/legal-info/README.header
+@@ -14,18 +14,22 @@ This material is composed of the following items.
+    compiled programs.
+    Note: this may have not been saved due to technical limitations, you may
+    need to collect it manually.
+- * The original source code for all packages; this has been saved in the
+-   sources/ subdirectory (except for the non-redistributable packages, which
+-   have not been saved). Patches that were applied are also saved, along
+-   with a file named 'series' that lists the patches in the order they were
+-   applied. Patches are under the same license as the files that they modify
+-   in the original package.
++ * The original source code for target packages in the 'sources/'
++   subdirectory and for host packages in the 'host-sources/' subdirectory
++   (except for the non-redistributable packages, which have not been
++   saved). Patches that were applied are also saved, along with a file
++   named 'series' that lists the patches in the order they were
++   applied. Patches are under the same license as the files that they
++   modify in the original package.
+    Note: Buildroot applies additional patches to Libtool scripts of
+    autotools-based packages. These patches can be found under
+    support/libtool in the Buildroot source and, due to technical
+    limitations, are not saved with the package sources. You may need
+    to collect them manually.
+- * A manifest file listing the configured packages and related information.
+- * The license text of the packages; they have been saved in the licenses/
+-   subdirectory.
++ * Two manifest files listing the configured packages and related
++   information: 'manifest.csv' for target packages and 'host-manifest.csv'
++   for host packages.
++ * The license text of the packages, in the 'licenses/' and
++   'host-licenses/' subdirectories for target and host packages
++   respectively.
  
