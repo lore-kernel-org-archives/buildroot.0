@@ -1,50 +1,104 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu,  5 Mar 2020 18:23:36 -0700
-Subject: [Buildroot] [PATCH 2/2] package/ser2net: bump to version 4.1.6
-In-Reply-To: <20200306012336.63370-1-james.hilliard1@gmail.com>
-References: <20200306012336.63370-1-james.hilliard1@gmail.com>
-Message-ID: <20200306012336.63370-2-james.hilliard1@gmail.com>
+From: Brenke, Maik <Maik.Brenke@continental-corporation.com>
+Date: Thu, 5 Mar 2020 18:57:23 +0000
+Subject: [Buildroot] liboping compilation error
+Message-ID: <VE1PR03MB5197A376BAD29ECDC5C828F3A0E20@VE1PR03MB5197.eurprd03.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/cce/ccebd933feddcea2253837b8a0bf1ef96356b4fb/
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/ser2net/ser2net.hash | 6 +++---
- package/ser2net/ser2net.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello,
 
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index 5bd927d7d1..d11babec65 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5 44a69f573677d9f2bde87b3611db5817  ser2net-4.1.1.tar.gz
--sha1 502e11c3bee429de6550db459d83c9a0991cfc5c  ser2net-4.1.1.tar.gz
-+md5 96498fab618ff23ae2791eefc86a5066  ser2net-4.1.6.tar.gz
-+sha1 3b31fbbbdab2c658bb0dc19ed93c7d8474ecdd25  ser2net-4.1.6.tar.gz
- # Locally computed:
--sha256 ad6c8fb34d01be177570323899d840a44c8774399d594595393708162fc61e22  ser2net-4.1.1.tar.gz
-+sha256 757505db9afc21a448cb008a3b9a9040cdc17c348ef42a55c9e672d4ccf71e9f  ser2net-4.1.6.tar.gz
- sha256 501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index 2ea68ccc43..b438ab26b8 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SER2NET_VERSION = 4.1.1
-+SER2NET_VERSION = 4.1.6
- SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPL-2.0+
- SER2NET_LICENSE_FILES = COPYING
--- 
-2.20.1
+
+I noticed that the "ping" command (depending on "liboping") could not be build using "*-gcc" on my system (see [0]). I discovered the bug in [1] and fixed it with the commit from [2]. The result can be found under [3]. But afterwards I got the error in [4] (wrong automake version). Sould we maybe change to sources providing "autogen.sh"?
+
+
+[0]:
+>>> liboping 1.10.0 Building
+PATH="/home/brenkem/git/STACC-100BaseT1-1CH/output/host/bin:/home/brenkem/git/STACC-100BaseT1-1CH/output/host/sbin:/home/brenkem/bin:/home/brenkem/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/puppetlabs/bin:/usr/local/arm/fs-toolchain-8.3-armv7ahf/bin"  /usr/bin/make -j5  -C /home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/
+make[1]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0? wird betreten
+Making all in src
+make[2]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird betreten
+/usr/bin/make  all-recursive
+make[3]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird betreten
+Making all in mans
+make[4]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src/mans? wird betreten
+make[4]: F?r das Ziel ?all? ist nichts zu tun.
+make[4]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src/mans? wird verlassen
+make[4]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird betreten
+/bin/sh ../libtool  --tag=CC   --mode=compile /home/brenkem/git/STACC-100BaseT1-1CH/output/host/bin/arm-linux-gcc -DHAVE_CONFIG_H -I.   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Werror -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3   -c -o liboping_la-liboping.lo `test -f 'liboping.c' || echo './'`liboping.c
+libtool: compile:  /home/brenkem/git/STACC-100BaseT1-1CH/output/host/bin/arm-linux-gcc -DHAVE_CONFIG_H -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Werror -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -c liboping.c  -fPIC -DPIC -o .libs/liboping_la-liboping.o
+liboping.c: In function 'ping_set_ttl':
+liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
+    "%s: %s", function, message);
+         ^~
+liboping.c:829:6:
+      sstrerror (ret, errbuf, sizeof (errbuf)));
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
+  snprintf (obj->errmsg, sizeof (obj->errmsg),
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    "%s: %s", function, message);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
+    "%s: %s", function, message);
+         ^~
+liboping.c:842:6:
+      sstrerror (ret, errbuf, sizeof (errbuf)));
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
+  snprintf (obj->errmsg, sizeof (obj->errmsg),
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    "%s: %s", function, message);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+liboping.c: In function 'ping_set_qos':
+liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
+    "%s: %s", function, message);
+         ^~
+liboping.c:869:6:
+      sstrerror (ret, errbuf, sizeof (errbuf)));
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
+  snprintf (obj->errmsg, sizeof (obj->errmsg),
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    "%s: %s", function, message);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
+    "%s: %s", function, message);
+         ^~
+liboping.c:885:6:
+      sstrerror (ret, errbuf, sizeof (errbuf)));
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
+  snprintf (obj->errmsg, sizeof (obj->errmsg),
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    "%s: %s", function, message);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+Makefile:582: die Regel f?r Ziel ?liboping_la-liboping.lo? scheiterte
+make[4]: *** [liboping_la-liboping.lo] Fehler 1
+make[4]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird verlassen
+Makefile:645: die Regel f?r Ziel ?all-recursive? scheiterte
+make[3]: *** [all-recursive] Fehler 1
+make[3]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird verlassen
+Makefile:419: die Regel f?r Ziel ?all? scheiterte
+make[2]: *** [all] Fehler 2
+make[2]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird verlassen
+Makefile:382: die Regel f?r Ziel ?all-recursive? scheiterte
+make[1]: *** [all-recursive] Fehler 1
+make[1]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0? wird verlassen
+package/pkg-generic.mk:238: die Regel f?r Ziel ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/.stamp_built? scheiterte
+make: *** [/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/.stamp_built] Fehler 2
+
+
+[1]:
+https://bugs.gentoo.org/675344
+
+
+[2]:
+https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=c23d497c3fbdadf86cdc785f5806a36116101e5e
+
+
+[3]:
