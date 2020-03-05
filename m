@@ -1,52 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Mar 2020 23:11:37 +0100
-Subject: [Buildroot] [PATCH/next v2 3/3] package/libevdev: convert to
- meson
-In-Reply-To: <20200302150907.5812-3-ps.report@gmx.net>
-References: <20200302150907.5812-1-ps.report@gmx.net>
- <20200302150907.5812-3-ps.report@gmx.net>
-Message-ID: <20200305231137.1ab41db3@windsurf>
+Date: Thu, 5 Mar 2020 23:12:29 +0100
+Subject: [Buildroot] [git commit branch/next]
+ package/freescale-imx/firmware-imx: add support for i.MX8QM
+Message-ID: <20200305220601.A44948F55C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  2 Mar 2020 16:09:07 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=78995fb1d78a1638420550accfd50789109c7197
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> - drop legacy patch 0001-configure-add-disable-runtime-tests-option.patch
->   and use -Dtests=disabled instead
-> 
-> - drop host-pkgconf dependency as pkgconf is only used in case tests
->   are enabled to find the check package (checked via meson output -
->   no 'Found pkg-config' - and via strace)
-> 
-> - update host-python dependecy to host-python3 as the script
->   libevdev/make-event-names.py which is used to generate the
->   header file event-names.h is updated to python3:
->   '#!/usr/bin/env python3'
->   This made no difference with autotools build as the script
->   was called with '$(PYTHON) libevdev/make-event-names.py'.
-> 
-> - add patch to fix tools compile with older toolchains adding
->   the local include path (only the meson build is affected)
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
+Tested-by: Julien Olivain <julien.olivain@oss.nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-I've changed the host-python3 dependency to use
-$(BR2_PYTHON3_HOST_DEPENDENCY) instead, so that we only build
-host-python3 is not Python 3.x interpreter is available. And I applied
-to next.
-
-But anyway as replied on PATCH 1/3, we have an issue where host-python3
-doesn't build if there's no Python 3.x interpreter available on the
-build machine.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index b251fcda2a..7f14062f89 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -45,6 +45,14 @@ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+ 	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
+ 		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
+ endef
++else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
++FIRMWARE_IMX_INSTALL_IMAGES = YES
++define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
++	# SECO firmware is needed when generating imx8-boot-sd.bin which
++	# is done in post-image script.
++	cp $(@D)/firmware/seco/mx8qm-ahab-container.img \
++		$(BINARIES_DIR)/ahab-container.img
++endef
+ else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+ FIRMWARE_IMX_INSTALL_IMAGES = YES
+ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
