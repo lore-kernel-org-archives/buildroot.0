@@ -1,8 +1,8 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Thu,  5 Mar 2020 20:02:57 -0300
-Subject: [Buildroot] [PATCH/next v2] package/busybox: patch for glibc-2.31
+Date: Thu,  5 Mar 2020 20:15:09 -0300
+Subject: [Buildroot] [PATCH/next v3] package/busybox: patch for glibc-2.31
  and musl-1.2.0 compatibility
-Message-ID: <20200305230257.16414-1-unixmania@gmail.com>
+Message-ID: <20200305231509.17380-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,13 @@ To: buildroot@busybox.net
 From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
 
 Current release of busybox 1_31_1 is failing to build with glibc-2.31
-due to removal of stime() from glibc. This commit adds two patches:
-one that removes stime() function calls and one prerequisite for fixing
-patch.
+due to removal of stime() from glibc. It also fails to build with musl
+1.2.0 due to the direct use of __NR_clock_gettime.
 
-It also fails to build with musl 1.2.0 due to the direct use of
-__NR_clock_gettime.
+This commit adds six patches: one is a prerequisite for the subsequent
+patches, three to fix 64-bit time_t issues, one to fix the direct use of
+__NR_clock_gettime, which is not safe, and one that removes
+stime() function calls.
 
 Fixes:
   http://autobuild.buildroot.net/results/f45f91aea6deee6699eabdfa618ac44873b8da51/
@@ -32,6 +33,7 @@ Cc: arc-buildroot at synopsys.com
  2 files changed, 7728 insertions(+)
  create mode 100644 package/busybox/0003-libbb-reduce-the-overhead-of-single-parameter-bb_err.patch
  create mode 100644 package/busybox/0004-Remove-stime-function-calls.patch
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
  ...-overhead-of-single-parameter-bb_err.patch | 7635 +++++++++++++++++
  ...-Use-64-prefix-syscall-if-we-have-to.patch |   57 +
