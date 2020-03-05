@@ -1,38 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Mar 2020 18:07:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to v12.16.1
-In-Reply-To: <20200303224315.2237b29c@windsurf.home> (Thomas Petazzoni's
- message of "Tue, 3 Mar 2020 22:43:15 +0100")
-References: <20200303191133.10404-1-aduskett@gmail.com>
- <20200303224315.2237b29c@windsurf.home>
-Message-ID: <87sgimafyd.fsf@dell.be.48ers.dk>
+Date: Thu, 5 Mar 2020 18:04:20 +0100
+Subject: [Buildroot] [git commit] package/nodejs: bump version to v12.16.1
+Message-ID: <20200305165455.1C62D8F3E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=47b348114d746c10ad4bb2a099f91e1ea133d9a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello Adam,
- > On Tue,  3 Mar 2020 11:11:33 -0800
- > aduskett at gmail.com wrote:
+Fixes a number of regressions introduced in v12.16.0:
+https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V12.md#12.16.1
 
- >> From: Adam Duskett <Aduskett@gmail.com>
- >> 
- >> Tested on Debian 9 and Ubuntu 18.04
- >> 
- >> Fixes:
- >> http://autobuild.buildroot.net/results/9d3545a76c4f5c06debf319687498d662a53fafb
- >> http://autobuild.buildroot.net/results/4da6c695b8ceca0a6eee2481a1b873a46676d0f5
+Tested on Debian 9 and Ubuntu 18.04
 
- > Are you positive that this bump fixes the ICU issues? I.e did you
- > reproduce the ICU issues before this version bump, and confirm they
- > disappeared solely because of the version bump?
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed to master after dropping the fixes as discussed on IRC and
-extending the commit message info about the regressions fixed in
-12.16.1, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 8a56c04713..992040d391 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v12.16.0/SHASUMS256.txt
+-sha256  b8c90637473fce4444a0b4fdae2c1560a1cf9f5959fdf9670541fc52868cf925  node-v12.16.0.tar.xz
++# From https://nodejs.org/dist/v12.16.1/SHASUMS256.txt
++sha256  0a95845ba02c46102b5671d0c5732460073f2d397488337e18d1fc30146d412d  node-v12.16.1.tar.xz
+ 
+ # Hash for license file
+ sha256  3f5749f7a58edaadd77843057a90063a18067f472d8b26c0a76905cafa1063e3  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 0de3495df9..7f875058b3 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 12.16.0
++NODEJS_VERSION = 12.16.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
