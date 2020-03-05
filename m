@@ -1,46 +1,100 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Mar 2020 18:21:31 +0100
-Subject: [Buildroot] [PATCH/next v2] package/mesa3d: fix nouveau
- std::isinf related compile failure
-In-Reply-To: <20200304221146.461a3864@gmx.net>
-References: <20200304110050.29607-1-ps.report@gmx.net>
- <20200304175800.GB5357@scaer> <20200304221146.461a3864@gmx.net>
-Message-ID: <20200305172131.GG5357@scaer>
+Date: Thu, 5 Mar 2020 18:23:32 +0100
+Subject: [Buildroot] [PATCHv2] package/linux-firmware: fix special cases
+ of symlinks
+In-Reply-To: <20200304202643.GM3179@kwain>
+References: <20200304165532.22033-1-yann.morin.1998@free.fr>
+ <20200304202643.GM3179@kwain>
+Message-ID: <20200305172332.GH5357@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Antoine, All,
 
-On 2020-03-04 22:11 +0100, Peter Seiderer spake thusly:
-> On Wed, 4 Mar 2020 18:58:00 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > On 2020-03-04 12:00 +0100, Peter Seiderer spake thusly:
-> > > Activate already existing mesa3d solution for the isinf compile
-> > > failure for uclibc based toolchains instead of using a custom
-> > > workaround.
-> > >
-> > > - remove 0005-src-gallium-drivers-nouveau-codegen-nv50_ir_ra.cpp-p.patch
-> > > - add 0004-c99_math-import-isinf-for-uclibc-based-toolchains.patch
-> > >
-> > > Fixes:
-> > >   http://autobuild.buildroot.net/results/cbefc5d4a4fefb674e596400fa1d2698cd89c5b3/
-> > >   http://autobuild.buildroot.net/results/dc974da012f53fa4ed3be616f937b0afae423d66/
-> > You've tagged this patch for next, but the two failures pccured on
-> > master.
-> > Where should this patch be applied, then?
-> The patch [1] was meant for master (minimal change, minimal risk)
-> and this one (v1/v2) for next..., chronological later, first not
-> sure about the solution...., but after re-thinking more sure this
-> one is the right (and upstream acceptable) solution suitable for
-> master and next...
+On 2020-03-04 21:26 +0100, Antoine Tenart spake thusly:
+> On Wed, Mar 04, 2020 at 05:55:32PM +0100, Yann E. MORIN wrote:
+> > From: Antoine Tenart <antoine.tenart@bootlin.com>
+> > 
+> > Some symlinks were not created correctly when installing the
+> > Linux-firmware package. This patch fixes the support for all symlinks of
+> > the form:
+> > 
+> >   a/foo -> bar
+> >   a/foo -> b/bar
+> >   a/foo -> ../b/bar
+> > 
+> > With this patch all forms of symlinks described in the WHENCE file
+> > should be supported, whether they are in nested directories, or in
+> > non-existing ones.
+> > 
+> > As some symlinks could be in directories that do not exist, we must
+> > maje sure to canonicalize the path before testing the linked-to file.
+> > 
+> > We compared the symlinks installed pre-20200122 to what we have now, and
+> > it seems we're handling all of them with this patch.
+> > 
+> > Fixes: 55df4059d24b ("package/linux-firmware: fix symlink support")
+> > Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+> > [yann.morin.1998 at free.fr:
+> >   - use readlink in canonicalize-missing mode, to avoid
+> >     creating-then-removing directories
+> > ]
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> 
+> I tested it and it looks good.
 
-Followign this discusion, I've applied it to master (rather than next).
-Thanks!
+I took that as a hint to add your Tested-by: and Reviewed-by: tags to
+the commit.
+
+Applied to next. Thanks!
 
 Regards,
 Yann E. MORIN.
+
+> Thanks,
+> Antoine
+> 
+> > ---
+> >  package/linux-firmware/linux-firmware.mk | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+> > index 009202d604..6d3cec1a48 100644
+> > --- a/package/linux-firmware/linux-firmware.mk
+> > +++ b/package/linux-firmware/linux-firmware.mk
+> > @@ -609,12 +609,18 @@ endif
+> >  # automatically by its copy-firmware.sh script during the installation, which
+> >  # parses the WHENCE file where symlinks are described. We follow the same logic
+> >  # here, adding symlink only for firmwares installed in the target directory.
+> > -# The grep/sed parsing is taken from the script mentioned before.
+> > +#
+> > +# For testing the presence of firmwares in the target directory we first make
+> > +# sure we canonicalize the pointed-to file, to cover the symlinks of the form
+> > +# a/foo -> ../b/foo  where a/ (the directory where to put the symlink) does
+> > +# not yet exist.
+> >  define LINUX_FIRMWARE_CREATE_SYMLINKS
+> > +	cd $(TARGET_DIR)/lib/firmware/ ; \
+> >  	sed -r -e '/^Link: (.+) -> (.+)$$/!d; s//\1 \2/' $(@D)/WHENCE | \
+> >  	while read f d; do \
+> > -		if test -f $(TARGET_DIR)/lib/firmware/$$d; then \
+> > -			ln -sf $$d $(TARGET_DIR)/lib/firmware/$$f || exit 1; \
+> > +		if test -f $$(readlink -m $$(dirname $$f)/$$d); then \
+> > +			mkdir -p $$(dirname $$f) || exit 1; \
+> > +			ln -sf $$d $$f || exit 1; \
+> >  		fi ; \
+> >  	done
+> >  endef
+> > -- 
+> > 2.20.1
+> > 
+> 
+> -- 
+> Antoine T?nart, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
