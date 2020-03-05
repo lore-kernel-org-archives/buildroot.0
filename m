@@ -1,53 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Mar 2020 21:19:04 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/xen: explicitly
- disable checkpolicy logic
-Message-ID: <20200305200952.EE1A48F462@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 5 Mar 2020 21:09:54 +0100
+Subject: [Buildroot] [git commit branch/next] package/inadyn: bump version
+ to 2.6
+Message-ID: <20200305200957.2EA4C8F447@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee0c430a407ee5165dd9acd69970bf5428b58a76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=897462ed5ffaa33a4d7725669ef8760c4db17556
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/14af2dc3219847a92c6ec2db14ba387159b61fde
+Changelog:
+https://github.com/troglobit/inadyn/releases/tag/v2.6
 
-The Xen build system builds and embeds a default XSM FLASK (Flux Advanced
-Security Kernel) security policy if it detects SELinux checkpolicy on the
-build machine.
-
-If enabled, a gen-policy.py python script is used to convert the binary
-FLASK policy to a C array initialization list to embed it in the Xen binary.
-Depending on the python version and locale available on the host, this fails
-with byte values outside the 0..255 range:
-
-policy.c:7:10: error: unsigned conversion from 'int' to 'unsigned char' changes value from '56575' to '255' [-Werror=overflow]
-  0xdc8c, 0xdcff, 0x7c, 0xdcf9, 0x08, 0x00, 0x00, 0x00, 0x58, 0x65, 0x6e, 0x46, 0x6c,
-
-To fix this and ensure a consistent build, pass XEN_HAS_CHECKPOLICY=n to
-disable the checkpolicy detection.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b60f3e2ae6416c4179b7f6a4028d7f61c6d50526)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xen/xen.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/inadyn/inadyn.hash | 9 +++++----
+ package/inadyn/inadyn.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index b0dc2dfe4c..167f0ad638 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -26,6 +26,7 @@ XEN_MAKE_ENV = \
- 	XEN_TARGET_ARCH=$(XEN_ARCH) \
- 	CROSS_COMPILE=$(TARGET_CROSS) \
- 	HOST_EXTRACFLAGS="-Wno-error" \
-+	XEN_HAS_CHECKPOLICY=n \
- 	$(TARGET_CONFIGURE_OPTS)
+diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
+index 2691ba0ef9..52bd6abd38 100644
+--- a/package/inadyn/inadyn.hash
++++ b/package/inadyn/inadyn.hash
+@@ -1,5 +1,6 @@
+-# From https://github.com/troglobit/inadyn/releases/download/v2.5/inadyn-2.5.tar.xz.md5
+-md5 8a864d5186e54d24de2d7554fc01b3ec  inadyn-2.5.tar.xz
++# From https://github.com/troglobit/inadyn/releases/download/v2.6/inadyn-2.6.tar.xz.md5
++md5  62ec986b73d24b1b755bf0ed3efe54f2  inadyn-2.6.tar.xz
++
+ # Locally computed
+-sha256 4a9ad208671f62912428413da0282450b2d2c4da38f3c95c4ac975d048c41fcd  inadyn-2.5.tar.xz
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  9f4198764abbd2798472b349d8867e86b4692c76ee304f1f9c607f67c9b582a4  inadyn-2.6.tar.xz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 40a12e35cd..b1ebeeb2fe 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_XEN_HYPERVISOR),y)
+-INADYN_VERSION = 2.5
++INADYN_VERSION = 2.6
+ INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
+ INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
+ INADYN_LICENSE = GPL-2.0+
