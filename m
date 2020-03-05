@@ -1,86 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Mar 2020 18:26:01 +0100
-Subject: [Buildroot] [PATCH] package/linux-firmware: add option for
- Microchip VSC85xx networking PHYs
-In-Reply-To: <20200303101337.817021-1-antoine.tenart@bootlin.com>
-References: <20200303101337.817021-1-antoine.tenart@bootlin.com>
-Message-ID: <20200305172601.GI5357@scaer>
+Date: Thu, 5 Mar 2020 18:54:07 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/jpeg-turbo: fix build with SIMD
+In-Reply-To: <20200211204034.266999-1-fontaine.fabrice@gmail.com>
+References: <20200211204034.266999-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200305175407.GJ5357@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Antoine, All,
+Fabrice, All,
 
-On 2020-03-03 11:13 +0100, Antoine Tenart spake thusly:
-> This patch adds an option to support installing firmware files for the
-> Microchip/Microsemi VSC85xx networking PHY family.
-> 
-> There is a mismatch between Linux and Linux-firmware on the name of the
-> PHY (Microchip vs Microsemi), due to the acquisition of Microsemi by
-> Microchip. We chose here the name in Linux-firmware, but mentioned the
-> other one in the Kconfig help of the option.
-> 
-> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+On 2020-02-11 21:40 +0100, Fabrice Fontaine spake thusly:
+> Add -fPIC as requested by upstream in
+> https://github.com/libjpeg-turbo/libjpeg-turbo/pull/366
 
-Applied to next, thanks.
+The comment from upstream does not seem entirely correct, as I can
+understand...
+
+> Fixes:
+>  - http://autobuild.buildroot.org/results/5b7ce0a8f8d1f485bd7104ac2b40257bb17b284b
+
+I was unable to reproduce this build failure on current master...
+
+It seems that 37f3d09d46a (package/jpeg-turbo: force fPIC for shared
+libraries) fixed it in a different manner (I reverted said commit, and
+got the faillure back).
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/linux-firmware/Config.in           | 7 +++++++
->  package/linux-firmware/linux-firmware.hash | 1 +
->  package/linux-firmware/linux-firmware.mk   | 5 +++++
->  3 files changed, 13 insertions(+)
+> Changes v1 -> v2:
+>  - Fix typo in title: without -> with
 > 
-> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-> index 9d142d2c5415..4768ea677272 100644
-> --- a/package/linux-firmware/Config.in
-> +++ b/package/linux-firmware/Config.in
-> @@ -367,6 +367,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100
->  	  Firmware files for Intel 825xx handled by driver e100
->  	  (e100)
+>  package/jpeg-turbo/jpeg-turbo.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+> index 2767ce6de4..1d24406e0f 100644
+> --- a/package/jpeg-turbo/jpeg-turbo.mk
+> +++ b/package/jpeg-turbo/jpeg-turbo.mk
+> @@ -13,7 +13,9 @@ JPEG_TURBO_INSTALL_STAGING = YES
+>  JPEG_TURBO_PROVIDES = jpeg
+>  JPEG_TURBO_DEPENDENCIES = host-pkgconf
 >  
-> +config BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY
-> +	bool "Microchip VSC85xx PHYs"
-> +	help
-> +	  Firmware files for Microchip/Microsemi VSC85xx networking
-> +	  PHYs (VSC8504, VSC8552, VSC8572, VSC8574, VSC856X, VSC8575,
-> +	  VSC8582 and VSC8584)
-> +
->  config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X
->  	bool "QLogic FastLinQ 4xxxx"
->  	help
-> diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-> index 573c33cbc91b..3878d9288170 100644
-> --- a/package/linux-firmware/linux-firmware.hash
-> +++ b/package/linux-firmware/linux-firmware.hash
-> @@ -12,6 +12,7 @@ sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.
->  sha256 5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4 LICENCE.ibt_firmware
->  sha256 0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d LICENCE.it913x
->  sha256 e295020afd7597dc1b3bbe50a84a7e432d9cb92bc053c1c5e657b50d2517627b LICENCE.iwlwifi_firmware
-> +sha256 0fc67bd715b3395f3f2af464781910e9e69c4ba23da304352229b42dc9e986c3 LICENCE.microchip
->  sha256 2051d5bf0755a0668f8c3d9a0d1c41d4b8cc411aba70f720fda71ae9e3b4d25c LICENCE.qat_firmware
->  sha256 4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822 LICENCE.qla2xxx
->  sha256 d7bec70668ddd4aae8fb4aa32870e54b49fcdb0b9b007aa9f54b53a1ac7461bd LICENCE.ralink-firmware.txt
-> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-> index fd90f261fa03..f8e95d0648c9 100644
-> --- a/package/linux-firmware/linux-firmware.mk
-> +++ b/package/linux-firmware/linux-firmware.mk
-> @@ -455,6 +455,11 @@ LINUX_FIRMWARE_FILES += e100/*.bin
->  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.e100
->  endif
+> -JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON
+> +JPEG_TURBO_CONF_OPTS = \
+> +	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -fPIC" \
+> +	-DWITH_JPEG8=ON
 >  
-> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MICROCHIP_VSC85XX_PHY),y)
-> +LINUX_FIRMWARE_FILES += microchip/mscc_vsc85*.bin
-> +LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.microchip
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X),y)
->  LINUX_FIRMWARE_FILES += \
->  	qed/qed_init_values_zipped-*.bin
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
 > -- 
 > 2.24.1
 > 
