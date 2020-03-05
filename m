@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Mar 2020 21:21:11 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/xen: explicitly
+Date: Thu, 5 Mar 2020 21:19:04 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/xen: explicitly
  disable checkpolicy logic
-Message-ID: <20200305200937.8CB0081090@busybox.osuosl.org>
+Message-ID: <20200305200952.EE1A48F462@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7f4ab8fae0537d31e8046f0abcbb1c21a4d6a2b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ee0c430a407ee5165dd9acd69970bf5428b58a76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes:
 http://autobuild.buildroot.net/results/14af2dc3219847a92c6ec2db14ba387159b61fde
@@ -40,7 +40,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index bd8a39f639..92629a3d86 100644
+index b0dc2dfe4c..167f0ad638 100644
 --- a/package/xen/xen.mk
 +++ b/package/xen/xen.mk
 @@ -26,6 +26,7 @@ XEN_MAKE_ENV = \
