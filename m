@@ -1,184 +1,61 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 5 Mar 2020 21:27:56 +0100
-Subject: [Buildroot] [PATCH/next v2 3/3] package/libevdev: convert to
- meson
-In-Reply-To: <20200302150907.5812-3-ps.report@gmx.net>
-References: <20200302150907.5812-1-ps.report@gmx.net>
- <20200302150907.5812-3-ps.report@gmx.net>
-Message-ID: <20200305212756.75b78bcf@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 5 Mar 2020 22:01:51 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/xen: security
+ bump to version 4.11.3
+Message-ID: <20200305205226.BB6438F4D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  2 Mar 2020 16:09:07 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=00986efc492409c9a1e702318e451016fb3355f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-> - drop legacy patch 0001-configure-add-disable-runtime-tests-option.patch
->   and use -Dtests=disabled instead
-> 
-> - drop host-pkgconf dependency as pkgconf is only used in case tests
->   are enabled to find the check package (checked via meson output -
->   no 'Found pkg-config' - and via strace)
-> 
-> - update host-python dependecy to host-python3 as the script
->   libevdev/make-event-names.py which is used to generate the
->   header file event-names.h is updated to python3:
->   '#!/usr/bin/env python3'
->   This made no difference with autotools build as the script
->   was called with '$(PYTHON) libevdev/make-event-names.py'.
-> 
-> - add patch to fix tools compile with older toolchains adding
->   the local include path (only the meson build is affected)
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - really add the patch
-> ---
->  ...ure-add-disable-runtime-tests-option.patch | 44 ---------------
->  ...ild-use-local-include-path-for-tools.patch | 54 +++++++++++++++++++
->  package/libevdev/libevdev.mk                  | 13 +++--
->  3 files changed, 60 insertions(+), 51 deletions(-)
->  delete mode 100644 package/libevdev/0001-configure-add-disable-runtime-tests-option.patch
->  create mode 100644 package/libevdev/0001-meson.build-use-local-include-path-for-tools.patch
-> 
-> diff --git a/package/libevdev/0001-configure-add-disable-runtime-tests-option.patch b/package/libevdev/0001-configure-add-disable-runtime-tests-option.patch
-> deleted file mode 100644
-> index 745903178c..0000000000
-> --- a/package/libevdev/0001-configure-add-disable-runtime-tests-option.patch
-> +++ /dev/null
-> @@ -1,44 +0,0 @@
-> -From 93f6bc2b97a2b76a5e725d63d4b6c2dfe7baf63b Mon Sep 17 00:00:00 2001
-> -From: Peter Seiderer <ps.report@gmx.net>
-> -Date: Sun, 11 Oct 2015 13:33:19 +0200
-> -Subject: [PATCH] configure: add '--disable-runtime-tests' option
-> -
-> -Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> -[Rebased libevdev-1.6.0]
-> -Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ----
-> - configure.ac | 11 +++++++++--
-> - 1 file changed, 9 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/configure.ac b/configure.ac
-> -index 5161d93..2b3bb26 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -76,7 +76,14 @@ else
-> - 	AC_MSG_WARN([check not found - skipping building unit tests])
-> - fi
-> - AM_CONDITIONAL(HAVE_VALGRIND, [test "x$VALGRIND" != "x"])
-> --AM_CONDITIONAL(ENABLE_RUNTIME_TESTS, [test "x$HAVE_CHECK" = "xyes"])
-> -+
-> -+AC_ARG_ENABLE([runtime-tests],
-> -+	AS_HELP_STRING([--disable-runtime-tests], [Disable runtime tests]))
-> -+AS_IF([test "x$enable_runtime_tests" != "xno"],
-> -+	[enable_runtime_tests=yes],
-> -+	[enable_runtime_tests=no])
-> -+
-> -+AM_CONDITIONAL(ENABLE_RUNTIME_TESTS, [test "x${enable_runtime_tests}x$HAVE_CHECK" = "xyesxyes"])
-> - AM_CONDITIONAL(ENABLE_STATIC_LINK_TEST, [test "x$enable_static" = "xyes"])
-> - 
-> - with_cflags=""
-> -@@ -162,7 +169,7 @@ AC_MSG_RESULT([
-> - 	       Libdir				${libdir}
-> - 
-> - 	       Build documentation		${have_doxygen}
-> --	       Enable unit-tests		${HAVE_CHECK}
-> -+	       Enable unit-tests		${HAVE_CHECK} (runtime-tests: ${enable_runtime_tests})
-> - 	       Enable profiling			${enable_gcov}
-> - 	       Static library symbol check	${static_symbol_leaks_test}
-> - 	       ])
-> --- 
-> -2.19.1
-> -
-> diff --git a/package/libevdev/0001-meson.build-use-local-include-path-for-tools.patch b/package/libevdev/0001-meson.build-use-local-include-path-for-tools.patch
-> new file mode 100644
-> index 0000000000..aa0af75055
-> --- /dev/null
-> +++ b/package/libevdev/0001-meson.build-use-local-include-path-for-tools.patch
-> @@ -0,0 +1,54 @@
-> +From 83eb5bbac775d46b74e7f99fbd243d53f0118b37 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Mon, 2 Mar 2020 15:43:14 +0100
-> +Subject: [PATCH] meson.build: use local include path for tools
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Fixes the following compile failure with old toolchains and meson
-> +build (autotools build not affected):
-> +
-> +  ../tools/mouse-dpi-tool.c: In function ?handle_event?:
-> +  ../tools/mouse-dpi-tool.c:115:13: error: ?const struct input_event? has no member named ?input_event_sec?
-> +     m->us = ev->input_event_sec * 1000000 + ev->input_event_usec;
-> +               ^
-> +  ../tools/mouse-dpi-tool.c:115:45: error: ?const struct input_event? has no member named ?input_event_usec?
-> +     m->us = ev->input_event_sec * 1000000 + ev->input_event_usec;
-> +                                               ^
-> +
+The 4.11.3 release brings a large number of fixes:
 
-Upstream: https://lists.freedesktop.org/archives/input-tools/2020-March/001532.html
-          https://gitlab.freedesktop.org/libevdev/libevdev/-/merge_requests/42
+https://xenproject.org/downloads/xen-project-archives/xen-project-4-11-series/xen-project-4-11-3/
 
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + meson.build | 4 ++++
-> + 1 file changed, 4 insertions(+)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index 4831f8e..5500a83 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -102,18 +102,22 @@ install_man(manpage)
-> + # tools
-> + executable('libevdev-events',
-> + 	   sources: ['tools/libevdev-events.c'],
-> ++	   include_directories: [includes_include],
-> + 	   dependencies: dep_libevdev,
-> + 	   install: false)
-> + executable('touchpad-edge-detector',
-> + 	   sources: ['tools/touchpad-edge-detector.c'],
-> ++	   include_directories: [includes_include],
-> + 	   dependencies: [dep_libevdev, dep_lm],
-> +            install: true)
-> + executable('mouse-dpi-tool',
-> + 	   sources: ['tools/mouse-dpi-tool.c'],
-> ++	   include_directories: [includes_include],
-> + 	   dependencies: dep_libevdev,
-> +            install: true)
-> + executable('libevdev-tweak-device',
-> + 	   sources: ['tools/libevdev-tweak-device.c'],
-> ++	   include_directories: [includes_include],
-> + 	   dependencies: dep_libevdev,
-> + 	   install: true)
-> + 
-> +-- 
-> +2.25.1
-> +
-> diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-> index 2fac47f2f8..9cd09ac2d3 100644
-> --- a/package/libevdev/libevdev.mk
-> +++ b/package/libevdev/libevdev.mk
-> @@ -10,14 +10,13 @@ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
->  LIBEVDEV_LICENSE = X11
->  LIBEVDEV_LICENSE_FILES = COPYING
->  
-> -# patch touches configure.ac
-> -LIBEVDEV_AUTORECONF = YES
-> -
-> -# Uses PKG_CHECK_MODULES() in configure.ac
-> -LIBEVDEV_DEPENDENCIES = host-pkgconf host-python
-> +LIBEVDEV_DEPENDENCIES = host-python3
->  
->  LIBEVDEV_INSTALL_STAGING = YES
->  
-> -LIBEVDEV_CONF_OPTS += --disable-runtime-tests
-> +LIBEVDEV_CONF_OPTS += \
-> +	-Dtests=disabled \
-> +	-Ddocumentation=disabled \
-> +	-Dcoverity=false
->  
-> -$(eval $(autotools-package))
-> +$(eval $(meson-package))
+Including a number of security fixes:
+
+XSA-298: missing descriptor table limit checking in x86 PV emulation
+         (CVE-2019-18425)
+XSA-299: Issues with restartable PV type change operations (CVE-2019-18421)
+XSA-301: add-to-physmap can be abused to DoS Arm hosts (CVE-2019-18423)
+XSA-302: passed through PCI devices may corrupt host memory after
+         deassignment (CVE-2019-18424)
+XSA-303: ARM: Interrupts are unconditionally unmasked in exception handlers
+         (CVE-2019-18422)
+XSA-304: x86: Machine Check Error on Page Size Change DoS (CVE-2018-12207)
+XSA-305: TSX Asynchronous Abort speculative side channel (CVE-2019-11135)
+XSA-306: Device quarantine for alternate pci assignment methods
+         (CVE-2019-19579)
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xen/xen.hash | 2 +-
+ package/xen/xen.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index d4232f592e..3900317789 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 3f9217f5a7cc240a06f3a03db8c29605d69a64d98330c426611ba5c2ee08b5d8 xen-4.11.2.tar.gz
++sha256 d4d81da4b8390dadf90a177bd32739dd443ad84d09c2f143a0f0d4384d1a2021 xen-4.11.3.tar.gz
+ sha256 dba0d79260259c013c52e5d4daeaea564a2fbb9ff7fc6778c377a401ec3898de COPYING
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 92629a3d86..352c35bf87 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XEN_VERSION = 4.11.2
++XEN_VERSION = 4.11.3
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
