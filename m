@@ -1,51 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Mar 2020 21:09:54 +0100
-Subject: [Buildroot] [git commit] package/inadyn: bump version to 2.6
-Message-ID: <20200309140909.0BF51821F7@busybox.osuosl.org>
+Date: Thu, 5 Mar 2020 23:36:31 +0100
+Subject: [Buildroot] [git commit] boot/opensbi: bump to version 0.6
+Message-ID: <20200309140909.6BD898894D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=897462ed5ffaa33a4d7725669ef8760c4db17556
+commit: https://git.buildroot.net/buildroot/commit/?id=5fe6b7829904a0aec596e390093d611a7f4d05ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/troglobit/inadyn/releases/tag/v2.6
+Tested with qemu_riscv32_virt_defconfig and
+qemu_riscv64_virt_defconfig using Buildroot host-qemu 4.2.0.
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/inadyn/inadyn.hash | 9 +++++----
- package/inadyn/inadyn.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ boot/opensbi/opensbi.hash | 2 +-
+ boot/opensbi/opensbi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
-index 2691ba0ef9..52bd6abd38 100644
---- a/package/inadyn/inadyn.hash
-+++ b/package/inadyn/inadyn.hash
-@@ -1,5 +1,6 @@
--# From https://github.com/troglobit/inadyn/releases/download/v2.5/inadyn-2.5.tar.xz.md5
--md5 8a864d5186e54d24de2d7554fc01b3ec  inadyn-2.5.tar.xz
-+# From https://github.com/troglobit/inadyn/releases/download/v2.6/inadyn-2.6.tar.xz.md5
-+md5  62ec986b73d24b1b755bf0ed3efe54f2  inadyn-2.6.tar.xz
-+
- # Locally computed
--sha256 4a9ad208671f62912428413da0282450b2d2c4da38f3c95c4ac975d048c41fcd  inadyn-2.5.tar.xz
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256  9f4198764abbd2798472b349d8867e86b4692c76ee304f1f9c607f67c9b582a4  inadyn-2.6.tar.xz
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 40a12e35cd..b1ebeeb2fe 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
+diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
+index 47d5930ace..6e69d512dd 100644
+--- a/boot/opensbi/opensbi.hash
++++ b/boot/opensbi/opensbi.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256 bc82f1e63663cafb7976b324d8a01263510cfd816063dc89e0ccffb9763fb1dd opensbi-0.5.tar.gz
++sha256 46a93afd5465eba094ddba40015e754bf09f9e80e0702c00013d6bdb3ecd0a72 opensbi-0.6.tar.gz
+ sha256 82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21 COPYING.BSD
+diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+index 2df746ab00..00e3b05dd0 100644
+--- a/boot/opensbi/opensbi.mk
++++ b/boot/opensbi/opensbi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INADYN_VERSION = 2.5
-+INADYN_VERSION = 2.6
- INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
- INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
- INADYN_LICENSE = GPL-2.0+
+-OPENSBI_VERSION = 0.5
++OPENSBI_VERSION = 0.6
+ OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
+ OPENSBI_LICENSE = BSD-2-Clause
+ OPENSBI_LICENSE_FILES = COPYING.BSD
