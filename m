@@ -1,74 +1,52 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 5 Mar 2020 13:23:19 -0700
-Subject: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.18.0
-In-Reply-To: <20200305210537.42d4c081@windsurf>
-References: <20200303230943.24334-1-james.hilliard1@gmail.com>
- <20200305210537.42d4c081@windsurf>
-Message-ID: <CADvTj4p7bNSX6C+Y6Lo_cuHMT+4ifdJgckm2mEPX1tvyFyMTdQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 05 Mar 2020 21:25:30 +0100
+Subject: [Buildroot] [PATCH 2/3] package/xen: security bump to version
+ 4.12.2
+In-Reply-To: <20200119170358.5408-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 19 Jan 2020 18:03:57 +0100")
+References: <20200119170358.5408-1-peter@korsgaard.com>
+ <20200119170358.5408-2-peter@korsgaard.com>
+Message-ID: <877dzya6rp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 5, 2020 at 1:05 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello James,
->
-> +Arnout, as there is a meson/pkg-config question.
->
-> Thanks for the patch. Two questions below.
->
-> On Tue,  3 Mar 2020 16:09:43 -0700
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-> > index e325c6d752..6de92f63d9 100644
-> > --- a/package/wayland/wayland.mk
-> > +++ b/package/wayland/wayland.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >
-> > -WAYLAND_VERSION = 1.17.0
-> > +WAYLAND_VERSION = 1.18.0
-> >  WAYLAND_SITE = http://wayland.freedesktop.org/releases
-> >  WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
-> >  WAYLAND_LICENSE = MIT
-> > @@ -13,12 +13,12 @@ WAYLAND_INSTALL_STAGING = YES
-> >  WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
-> >  HOST_WAYLAND_DEPENDENCIES = host-pkgconf host-expat host-libffi host-libxml2
-> >
-> > -# 0002-configure-add-option-to-disable-tests.patch
-> > -WAYLAND_AUTORECONF = YES
-> > +WAYLAND_CONF_OPTS = \
-> > +     -Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
->
-> Are you sure this is needed since commit
-> 4e0bc29993376613d200e892d491e31ea5a49622 ? Indeed, with this commit,
-> meson is properly able to use pkg-config either for native builds or
-> cross builds.
-It was failing for me without this.
->
-> > +     -Dtests=false \
-> > +     -Ddocumentation=false
-> >
-> > -# wayland-scanner is only needed for building, not on the target
-> > -WAYLAND_CONF_OPTS = --with-host-scanner --disable-tests
->
-> So how is the scanner thing working these days? With the meson build
-> logic, it doesn't build the scanner when cross-compiling, and knows
-> that it should use a pre-installed scanner ?
-Yes, it knows there is a pre-installed scanner due to this:
--Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig
-See:
-https://github.com/wayland-project/wayland/blob/1.18.0/src/meson.build#L57-L59
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+
+ > The 4.12.2 release brings a large number of fixes:
+ > https://xenproject.org/downloads/xen-project-archives/xen-project-4-12-series/xen-project-4-12-2/
+
+ > Including a number of security fixes:
+
+ > XSA-296: VCPUOP_initialise DoS (CVE-2019-18420)
+ > XSA-298: missing descriptor table limit checking in x86 PV emulation
+ > 	 (CVE-2019-18425)
+ > XSA-299: Issues with restartable PV type change operations (CVE-2019-18421)
+ > XSA-301: add-to-physmap can be abused to DoS Arm hosts (CVE-2019-18423)
+ > XSA-302: passed through PCI devices may corrupt host memory after
+ >          deassignment (CVE-2019-18424)
+ > XSA-303: ARM: Interrupts are unconditionally unmasked in exception handlers
+ > 	 (CVE-2019-18422)
+ > XSA-304: x86: Machine Check Error on Page Size Change DoS (CVE-2018-12207)
+ > XSA-305: TSX Asynchronous Abort speculative side channel (CVE-2019-11135)
+ > XSA-306: Device quarantine for alternate pci assignment methods
+ > 	 (CVE-2019-19579)
+ > XSA-307: find_next_bit() issues (CVE-2019-19581 CVE-2019-19582)
+ > XSA-308: VMX: VMentry failure with debug exceptions and blocked states
+ > 	 (CVE-2019-19583)
+ > XSA-309: Linear pagetable use / entry miscounts (CVE-2019-19578)
+ > XSA-310: Further issues with restartable PV type change operations
+ > 	 (CVE-2019-19580)
+ > XSA-311: Bugs in dynamic height handling for AMD IOMMU pagetables
+ > 	 (CVE-2019-19577)
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2019.11.x, thanks.
+
+For 2019.02.x I will instead bump to 4.11.3.
+
+-- 
+Bye, Peter Korsgaard
