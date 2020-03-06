@@ -1,104 +1,166 @@
-From: Brenke, Maik <Maik.Brenke@continental-corporation.com>
-Date: Thu, 5 Mar 2020 18:57:23 +0000
-Subject: [Buildroot] liboping compilation error
-Message-ID: <VE1PR03MB5197A376BAD29ECDC5C828F3A0E20@VE1PR03MB5197.eurprd03.prod.outlook.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu,  5 Mar 2020 19:58:03 -0800
+Subject: [Buildroot] [PATCH] package/binutils: fix assertion failure in
+ xtensa ld
+Message-ID: <20200306035803.14320-1-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+xtensa ld fails with the following message
 
-Hello,
+  ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
+  elf32-xtensa.c:3283 in elf_xtensa_finish_dynamic_sections
 
+during domoticz package build. It happens because of mismatch between
+the size allocated for dynamic relocations in the executable image and
+the number of PLT relocations actually written to the image. The
+mismatch is caused by the fact that undefined weak symbol is treated as
+dynamic (and thus needing PLT relocation), but xtensa linker not
+expecting that.
 
-I noticed that the "ping" command (depending on "liboping") could not be build using "*-gcc" on my system (see [0]). I discovered the bug in [1] and fixed it with the commit from [2]. The result can be found under [3]. But afterwards I got the error in [4] (wrong automake version). Sould we maybe change to sources providing "autogen.sh"?
+Fixes: http://autobuild.buildroot.net/results/7885705f1b1c0f31cf21b464150f5509929c1906/
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Backported from: e15a8da9c71336b06cb5f2706c3f6b7e6ddd95a3
+---
+ .../0018-bfd-xtensa-fix-PR-ld-25630.patch     | 37 +++++++++++++++++++
+ .../0007-bfd-xtensa-fix-PR-ld-25630.patch     | 37 +++++++++++++++++++
+ .../0004-bfd-xtensa-fix-PR-ld-25630.patch     | 37 +++++++++++++++++++
+ 3 files changed, 111 insertions(+)
+ create mode 100644 package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch
+ create mode 100644 package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch
+ create mode 100644 package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch
 
-
-[0]:
->>> liboping 1.10.0 Building
-PATH="/home/brenkem/git/STACC-100BaseT1-1CH/output/host/bin:/home/brenkem/git/STACC-100BaseT1-1CH/output/host/sbin:/home/brenkem/bin:/home/brenkem/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/puppetlabs/bin:/usr/local/arm/fs-toolchain-8.3-armv7ahf/bin"  /usr/bin/make -j5  -C /home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/
-make[1]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0? wird betreten
-Making all in src
-make[2]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird betreten
-/usr/bin/make  all-recursive
-make[3]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird betreten
-Making all in mans
-make[4]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src/mans? wird betreten
-make[4]: F?r das Ziel ?all? ist nichts zu tun.
-make[4]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src/mans? wird verlassen
-make[4]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird betreten
-/bin/sh ../libtool  --tag=CC   --mode=compile /home/brenkem/git/STACC-100BaseT1-1CH/output/host/bin/arm-linux-gcc -DHAVE_CONFIG_H -I.   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Werror -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3   -c -o liboping_la-liboping.lo `test -f 'liboping.c' || echo './'`liboping.c
-libtool: compile:  /home/brenkem/git/STACC-100BaseT1-1CH/output/host/bin/arm-linux-gcc -DHAVE_CONFIG_H -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Werror -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -c liboping.c  -fPIC -DPIC -o .libs/liboping_la-liboping.o
-liboping.c: In function 'ping_set_ttl':
-liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
-    "%s: %s", function, message);
-         ^~
-liboping.c:829:6:
-      sstrerror (ret, errbuf, sizeof (errbuf)));
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
-  snprintf (obj->errmsg, sizeof (obj->errmsg),
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    "%s: %s", function, message);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
-    "%s: %s", function, message);
-         ^~
-liboping.c:842:6:
-      sstrerror (ret, errbuf, sizeof (errbuf)));
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
-  snprintf (obj->errmsg, sizeof (obj->errmsg),
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    "%s: %s", function, message);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-liboping.c: In function 'ping_set_qos':
-liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
-    "%s: %s", function, message);
-         ^~
-liboping.c:869:6:
-      sstrerror (ret, errbuf, sizeof (errbuf)));
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
-  snprintf (obj->errmsg, sizeof (obj->errmsg),
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    "%s: %s", function, message);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
-    "%s: %s", function, message);
-         ^~
-liboping.c:885:6:
-      sstrerror (ret, errbuf, sizeof (errbuf)));
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
-  snprintf (obj->errmsg, sizeof (obj->errmsg),
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    "%s: %s", function, message);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-Makefile:582: die Regel f?r Ziel ?liboping_la-liboping.lo? scheiterte
-make[4]: *** [liboping_la-liboping.lo] Fehler 1
-make[4]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird verlassen
-Makefile:645: die Regel f?r Ziel ?all-recursive? scheiterte
-make[3]: *** [all-recursive] Fehler 1
-make[3]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird verlassen
-Makefile:419: die Regel f?r Ziel ?all? scheiterte
-make[2]: *** [all] Fehler 2
-make[2]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird verlassen
-Makefile:382: die Regel f?r Ziel ?all-recursive? scheiterte
-make[1]: *** [all-recursive] Fehler 1
-make[1]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0? wird verlassen
-package/pkg-generic.mk:238: die Regel f?r Ziel ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/.stamp_built? scheiterte
-make: *** [/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/.stamp_built] Fehler 2
-
-
-[1]:
-https://bugs.gentoo.org/675344
-
-
-[2]:
-https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=c23d497c3fbdadf86cdc785f5806a36116101e5e
-
-
-[3]:
+diff --git a/package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch b/package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch
+new file mode 100644
+index 000000000000..f499426b708c
+--- /dev/null
++++ b/package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch
+@@ -0,0 +1,37 @@
++From 85dcca5997cf3822d6456a5c9c59c46b56adfbb8 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Wed, 4 Mar 2020 14:54:27 -0800
++Subject: [PATCH] bfd: xtensa: fix PR ld/25630
++
++bfd/
++2020-03-05  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Shrink dynamic
++	relocation sections for any removed reference to a dynamic symbol.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ bfd/elf32-xtensa.c | 7 +++----
++ 1 file changed, 3 insertions(+), 4 deletions(-)
++
++diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
++index 12ff9f772aaf..65e14d87940c 100644
++--- a/bfd/elf32-xtensa.c
+++++ b/bfd/elf32-xtensa.c
++@@ -10148,10 +10148,9 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
++ 
++   if ((r_type == R_XTENSA_32 || r_type == R_XTENSA_PLT)
++       && (input_section->flags & SEC_ALLOC) != 0
++-      && (dynamic_symbol || bfd_link_pic (info))
++-      && (!h || h->root.type != bfd_link_hash_undefweak
++-	  || (dynamic_symbol
++-	      && (bfd_link_dll (info) || info->export_dynamic))))
+++      && (dynamic_symbol
+++	  || (bfd_link_pic (info)
+++	      && (!h || h->root.type != bfd_link_hash_undefweak))))
++     {
++       asection *srel;
++       bfd_boolean is_plt = FALSE;
++-- 
++2.20.1
++
+diff --git a/package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch b/package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch
+new file mode 100644
+index 000000000000..f499426b708c
+--- /dev/null
++++ b/package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch
+@@ -0,0 +1,37 @@
++From 85dcca5997cf3822d6456a5c9c59c46b56adfbb8 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Wed, 4 Mar 2020 14:54:27 -0800
++Subject: [PATCH] bfd: xtensa: fix PR ld/25630
++
++bfd/
++2020-03-05  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Shrink dynamic
++	relocation sections for any removed reference to a dynamic symbol.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ bfd/elf32-xtensa.c | 7 +++----
++ 1 file changed, 3 insertions(+), 4 deletions(-)
++
++diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
++index 12ff9f772aaf..65e14d87940c 100644
++--- a/bfd/elf32-xtensa.c
+++++ b/bfd/elf32-xtensa.c
++@@ -10148,10 +10148,9 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
++ 
++   if ((r_type == R_XTENSA_32 || r_type == R_XTENSA_PLT)
++       && (input_section->flags & SEC_ALLOC) != 0
++-      && (dynamic_symbol || bfd_link_pic (info))
++-      && (!h || h->root.type != bfd_link_hash_undefweak
++-	  || (dynamic_symbol
++-	      && (bfd_link_dll (info) || info->export_dynamic))))
+++      && (dynamic_symbol
+++	  || (bfd_link_pic (info)
+++	      && (!h || h->root.type != bfd_link_hash_undefweak))))
++     {
++       asection *srel;
++       bfd_boolean is_plt = FALSE;
++-- 
++2.20.1
++
+diff --git a/package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch b/package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch
+new file mode 100644
+index 000000000000..f499426b708c
+--- /dev/null
++++ b/package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch
+@@ -0,0 +1,37 @@
++From 85dcca5997cf3822d6456a5c9c59c46b56adfbb8 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Wed, 4 Mar 2020 14:54:27 -0800
++Subject: [PATCH] bfd: xtensa: fix PR ld/25630
++
++bfd/
++2020-03-05  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Shrink dynamic
++	relocation sections for any removed reference to a dynamic symbol.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ bfd/elf32-xtensa.c | 7 +++----
++ 1 file changed, 3 insertions(+), 4 deletions(-)
++
++diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
++index 12ff9f772aaf..65e14d87940c 100644
++--- a/bfd/elf32-xtensa.c
+++++ b/bfd/elf32-xtensa.c
++@@ -10148,10 +10148,9 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
++ 
++   if ((r_type == R_XTENSA_32 || r_type == R_XTENSA_PLT)
++       && (input_section->flags & SEC_ALLOC) != 0
++-      && (dynamic_symbol || bfd_link_pic (info))
++-      && (!h || h->root.type != bfd_link_hash_undefweak
++-	  || (dynamic_symbol
++-	      && (bfd_link_dll (info) || info->export_dynamic))))
+++      && (dynamic_symbol
+++	  || (bfd_link_pic (info)
+++	      && (!h || h->root.type != bfd_link_hash_undefweak))))
++     {
++       asection *srel;
++       bfd_boolean is_plt = FALSE;
++-- 
++2.20.1
++
+-- 
+2.20.1
