@@ -1,54 +1,60 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri,  6 Mar 2020 21:08:47 +0100
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.15.3
-Message-ID: <20200306200847.22124-1-ps.report@gmx.net>
+Date: Fri,  6 Mar 2020 21:10:21 +0100
+Subject: [Buildroot] [PATCH v1 2/3] package/liboping: add patch to fix utf8
+ ncurses support
+In-Reply-To: <20200306201022.22382-1-ps.report@gmx.net>
+References: <20200306201022.22382-1-ps.report@gmx.net>
+Message-ID: <20200306201022.22382-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+Add patch from upstream merge request [1] to fix fix utf8 ncurses support.
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-March/041288.html
+[1] https://github.com/octo/liboping/issues/36
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/libinput/libinput.hash | 12 ++++++------
- package/libinput/libinput.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/liboping/0003-fix-utf8-support.patch | 29 ++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/liboping/0003-fix-utf8-support.patch
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 18cc257b72..f39afa0457 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-February/041227.html
--md5 eb6bd2907ad33d53954d70dfb881a643 libinput-1.15.2.tar.xz
--sha1 2a0c4ce80ee43a9a1b274bfe40ca638037716584 libinput-1.15.2.tar.xz
--sha256 971c3fbfb624f95c911adeb2803c372e4e3647d1b98f278f660051f834597747 libinput-1.15.2.tar.xz
--sha512 f6b50dbdf6ee6b65f88e020c4292c94c3178125d58629f27c2e52f92b658ccd67e0c5604fbf0b303621ff0386637ce1e291daaa991761d4145e8bcda4dd128a2 libinput-1.15.2.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-March/041288.html
-+md5  6fbea8d51d9194d7ba33f96d7c4cee56  libinput-1.15.3.tar.xz
-+sha1  101fd149b851c197323129efcdfe5c1c6c940b43  libinput-1.15.3.tar.xz
-+sha256  5b12427dd50489c2b41b04ae2ca54e31a112a33cb861f00ccd15a2ad7a88694d  libinput-1.15.3.tar.xz
-+sha512  6636fd618e2b9cfa5ee44701207dc98f2639adc53eb3ef135509d936fb19b2cedf5184eab58e887798d9cf8ee65f35bc9062f7e3630080bcbe45a90a8b631ef2  libinput-1.15.3.tar.xz
- 
- # License files
--sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
-+sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 1d5446e444..f418046257 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.15.2
-+LIBINPUT_VERSION = 1.15.3
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+diff --git a/package/liboping/0003-fix-utf8-support.patch b/package/liboping/0003-fix-utf8-support.patch
+new file mode 100644
+index 0000000000..8a9792b619
+--- /dev/null
++++ b/package/liboping/0003-fix-utf8-support.patch
+@@ -0,0 +1,29 @@
++From dfbdd324769f542b6b89499c1b7f0f4322100bc6 Mon Sep 17 00:00:00 2001
++From: wfaulk <wfaulk@users.noreply.github.com>
++Date: Wed, 7 Aug 2019 18:57:43 -0400
++Subject: [PATCH 3/4] fix utf8 support
++
++https://github.com/octo/liboping/issues/36
++
++[Upstream: https://github.com/octo/liboping/pull/49/commits/a313923ec12d11daa8e70497c6b7b5d50965821b]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/oping.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/oping.c b/src/oping.c
++index 87ca81a..62dbb67 100644
++--- a/src/oping.c
+++++ b/src/oping.c
++@@ -903,7 +903,7 @@ static void time_calc (struct timespec *ts_dest, /* {{{ */
++ #if USE_NCURSES
++ static _Bool has_utf8() /* {{{ */
++ {
++-# if HAVE_NCURSESW_NCURSES_H
+++# if HAVE_NCURSESW_CURSES_H
++ 	if (!opt_utf8)
++ 	{
++ 		/* Automatically determine */
++-- 
++2.25.1
++
 -- 
 2.25.1
