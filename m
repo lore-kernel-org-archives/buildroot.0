@@ -1,30 +1,81 @@
-From: lpdev at cordier.org <lpdev@cordier.org>
-Date: Fri,  6 Mar 2020 17:43:28 +0100 (CET)
-Subject: [Buildroot] Use Pigz instead of gzip for filesystem compression
-Message-ID: <ea-mime-5e627db0-4568-363416cc@www-5.netcourrier.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Fri, 6 Mar 2020 17:46:42 +0100
+Subject: [Buildroot] [PATCH v4 00/12] pkg-stats json output improvements
+In-Reply-To: <20200302145013.9574-1-heiko.thiery@gmail.com>
+References: <20200302145013.9574-1-heiko.thiery@gmail.com>
+Message-ID: <8f58b9c9-df8b-e16d-d495-0f2a2a7ae30d@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hello Heiko,
 
-I have an improvement suggestion for filesystem compression. I have done some benchmark with pigz program (see https://zlib.net/pigz/).
+Thanks for sending this updated series.
 
-Calling make after the target has been built the first time, buildroot has to compress a 850MB filesystem (build machine is i7-6700K CPU @ 4.00GHz):
+However it does not apply nicely on top of master (probably because of 
+the last patch I sent to make pkg-stats compatible with Python3).
 
-gzip: 2m23s
-pigz: 46s
+Would you care to resend ?
 
-It's almost 3 times faster.
+Titouan
 
-In the main Config.in, I suggest to add to Build options -> Command menu a BR2_GZIP command that would allow to specify the gzip program we want to use. Or better would be to set pigz as an host package.
-Then updating fs/common.mk:
-
-ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
-ROOTFS_$(2)_COMPRESS_EXT = .gz
-ROOTFS_$(2)_COMPRESS_CMD = $(BR2_GZIP) -9 -c -n
-endif
-
-More generally I think it would be useful to specify the compression command, as bzip2 seems to have pbzib2.
+On 3/2/20 3:50 PM, Heiko Thiery wrote:
+> - add developers information to the packages
+> - add supported defconfigs to json
+> - add license information to json
+> - add license file information to json
+> - add patch files to json
+> - add a more generic check status field to the packages for easier post
+>    processing. The following check status are availble: checks: cve, license,
+>    license-files, hash, hash-license,patches, version, url, developers,
+>    pkg-check
+> 
+> ---
+> v3 -> v4:
+> 
+> Included the review comments from Titouan
+> 
+> - use only one signed-off mail address
+> - do some things in a more pythonic way
+> - remove the patch_count attribute and use a class property instead
+>    (Note that the patch_count value will not go into the json output
+>    anymore,but then coutn can be computed by "len(patch_files)".)
+> - remove the status initializer in the package class that was introduced
+>    in v3
+> - update the cve status at the end of the cve check loop
+> - change the is_valid_infra -> has_valid_infra and use it as property
+> 
+> v2 -> v3:
+> - keep variable latest_release but change format
+> - add check for license file hashes
+> - introduce a na status for the checks
+> - add a list of all possible checks to the json output
+> - add the cve check status
+> 
+> v1 -> v2:
+> - cleanup and recreation of patches
+> - remove pkg name from dumping to json
+> - use patch_files instead of combine count and files in dict
+> - include getdevelopers.py to reuse Developers class
+> 
+> ---
+> 
+> Heiko Thiery (12):
+>    support/scripts/pkg-stats: store latest version in a dict
+>    support/scripts/pkg-stats: store patch files for the package
+>    support/scripts/pkg-stats: set developers info
+>    support/scripts/pkg-stats: store licences of package
+>    support/scripts/pkg-stats: add package status
+>    support/scripts/pkg-stats: add package count to stats
+>    support/scripts/pkg-stats: store pkg dir path
+>    support/scripts/pkg-stats: add defconfig support
+>    support/scripts/pkg-stats: add support for license hash check
+>    support/scripts/pkg-stats: set status to 'na' for virtual packages
+>    support/scripts/pkg-stats: initialize all package status checks
+>    support/scripts/pkg-stats: add status for cve check
+> 
+>   support/scripts/pkg-stats | 271 +++++++++++++++++++++++++++++---------
+>   1 file changed, 211 insertions(+), 60 deletions(-)
+> 
