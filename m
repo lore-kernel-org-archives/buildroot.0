@@ -1,105 +1,65 @@
-From: Eugen.Hristev at microchip.com <Eugen.Hristev@microchip.com>
-Date: Fri, 6 Mar 2020 13:51:30 +0000
-Subject: [Buildroot] [PATCH] package/ninja: add dependency to host-cmake
- for host-ninja
-In-Reply-To: <20200306143819.244d8bac@windsurf>
-References: <20200306130649.18989-1-eugen.hristev@microchip.com>
- <20200306143819.244d8bac@windsurf>
-Message-ID: <e1071549-ffa6-4944-f4a4-a154de625b9b@microchip.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 6 Mar 2020 15:34:24 +0100
+Subject: [Buildroot] [PATCH/next v1] package/gst1-plugins-base: add
+ tools option
+In-Reply-To: <20200305233410.76c4e8d0@windsurf>
+References: <20200303164702.18418-1-ps.report@gmx.net>
+ <20200305233410.76c4e8d0@windsurf>
+Message-ID: <20200306153424.3ea95cc7@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06.03.2020 15:38, Thomas Petazzoni wrote:
+Hello Thomas,
 
-> On Fri, 6 Mar 2020 15:06:49 +0200
-> Eugen Hristev <eugen.hristev@microchip.com> wrote:
-> 
->> If we change the minimum CMAKE version in external,
->> buildroot will try to build host-cmake , but, host-cmake
->> is not built yet at the time of ninja build.
->> So, we need to add a dependency to host-cmake in host-ninja.
->> Otherwise, host-ninja will try to use the host-cmake but
->> 'file not found' error.
->>
->> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> 
-> I don't understand what problem you are facing.
-> 
-> ninja.mk calls host-cmake-package, which already has:
-> 
-> $(2)_DEPENDENCIES += $(BR2_CMAKE_HOST_DEPENDENCY)
-> 
-> So it already adds a dependency on host-cmake if there is no available
-> CMake on the system, or its version is not appropriate.
-> 
->> I am unsure about this patch, but this fixes the issue for me.
->> If we change the minimum CMAKE version in our external tree, we hit this
->> issue: the fact that the host-cmake is not yet built when it's needed.
->> How can we fix that ?
->> This patch makes host-cmake being built at the moment when ninja needs it.
-> 
-> See above: this is already taken care of by the host-cmake-package
-> infrastructure.
-> 
->> It can happen that some other package may need it before, but I cannot know,
->> if it's not enabled in our config.
->>
->> Actually, this all started from the fact that BR2_CMAKE_VERSION_MIN is hardcoded
->> in mk file in the support/dependencies.
->> How can this be hardcoded, when we can build buildroot with an external that
->> needs a newer CMAKE ?
-> 
-> Buildroot indeed only takes care of setting BR2_CMAKE_VERSION_MIN
-> according to the minimum version needed by all Buildroot packages. We
-> cannot know which version is used in a BR2_EXTERNAL.
-> 
->> So, to fix this I added in the external.mk:
->>
->>
->> BR2_CMAKE_VERSION_MIN = 3.13
->>
->> BR2_CMAKE_CANDIDATES ?= cmake cmake3
->> BR2_CMAKE ?= $(call suitable-host-package,cmake,\
->>         $(BR2_CMAKE_VERSION_MIN) $(BR2_CMAKE_CANDIDATES))
->> ifeq ($(BR2_CMAKE),)
->> BR2_CMAKE = $(HOST_DIR)/bin/cmake
->> BR2_CMAKE_HOST_DEPENDENCY = host-cmake
->> endif
->>
->>
->> But now ninja fails because host-cmake does not exist yet. Not built yet.
->> So with this patch , all is fixed, but is this the right way, and can we
->> do it better from just the external ? To force the host-cmake to build
->> and ALL packets needing cmake to start using it.
-> 
-> Your patch is indeed not the right way. I guess the issue is that the
-> BR2_CMAKE_HOST_DEPENDENCY gets set too late, after ninja.mk has been
-> expanded or something like that.
-> 
-> Perhaps we should have a way for each package to declare its minimum
-> CMake version, and use that instead of a global value ?
-> 
-> Or tweak what we have today, by making it possible to override this
-> minimum version from an external tree.
+On Thu, 5 Mar 2020 23:34:10 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-It's obvious that if buildroot allows new packages in external, they may 
-require a newer version of HOST_CMAKE. The fact that the minimum version 
-is hardcoded somewhere in buildroot, looks like a bug to me. How can we 
-fix this, in the external ?
+> On Tue,  3 Mar 2020 17:47:02 +0100
+> Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > Add tools option to disable building/installing of
+> > gst-discoverer, gst-device-monitor and gst-play commandline
+> > tools (analog BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS).
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  package/gstreamer1/gst1-plugins-base/Config.in            | 7 +++++++
+> >  package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 6 ++++++
+> >  2 files changed, 13 insertions(+)
+> >
+> > diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
+> > index f60d540337..3a3694b72e 100644
+> > --- a/package/gstreamer1/gst1-plugins-base/Config.in
+> > +++ b/package/gstreamer1/gst1-plugins-base/Config.ihttps://github.com/octo/liboping/pull/50/commits/664414123a3fe89984abfa0917946c513bf47163n
+> > @@ -10,6 +10,13 @@ menuconfig BR2_PACKAGE_GST1_PLUGINS_BASE
+> >
+> >  if BR2_PACKAGE_GST1_PLUGINS_BASE
+> >
+> > +config BR2_PACKAGE_GST1_PLUGINS_BASE_INSTALL_TOOLS
+> > +	bool "install gst-discoverer & gst-device-monitor & gst-play
+>
+> Missing closing double quote. Also, I changed this to "install tools",
+> to keep the prompt shorter.
 
+Thanks for fixing it...
 
-Probably what I am facing is related to the fact that I am overriding 
-this minimum version in the external and some packets(ninja) get 
-confused, try to look for host-cmake which is not build, because maybe 
-at some point the wrong cmake is checked
+>
+> > +	default y
+>
+> I know gstreamer1 does this, but this "default y" is really not in line
+> with the typical Buildroot policy of minimalism, so I dropped this.
 
-> 
+The reasoning was to do the same as for BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS
+(which defaults to y) but I am although o.k. with this one...
+
+Regards,
+Peter
+
+>
+> Applied to next with those changes.
+>
+> Thanks!
+>
 > Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
