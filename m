@@ -1,49 +1,50 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Fri, 6 Mar 2020 10:48:23 -0600
-Subject: [Buildroot] Use Pigz instead of gzip for filesystem compression
-In-Reply-To: <ea-mime-5e627db0-4568-363416cc@www-5.netcourrier.com>
-References: <ea-mime-5e627db0-4568-363416cc@www-5.netcourrier.com>
-Message-ID: <bfb188d5-2d07-e7aa-bf3c-c221ddf372ff@xes-inc.com>
+From: Howard Mitchell <hm@hmbedded.co.uk>
+Date: Fri, 6 Mar 2020 17:22:28 +0000
+Subject: [Buildroot] [PATCH 2/2] package/mesa3d: get glxgears working
+ for v3d/vc4 minimal builds
+In-Reply-To: <20200306153854.06a840c3@gmx.net>
+References: <20200306092504.30340-1-hm@hmbedded.co.uk>
+ <20200306092504.30340-2-hm@hmbedded.co.uk> <20200306153854.06a840c3@gmx.net>
+Message-ID: <b49a5bc6-c01a-1a5a-6674-4939759d8edd@hmbedded.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Louis-Paul,
+Hello Peter,
 
-On 3/6/20 10:43 AM, lpdev at cordier.org wrote:
-> Hi all,
+On 06/03/2020 14:38, Peter Seiderer wrote:
+> Hello Howard,
 >
-> I have an improvement suggestion for filesystem compression. I have done some benchmark with pigz program (see https://zlib.net/pigz/).
+> On Fri,  6 Mar 2020 09:25:04 +0000, Howard Mitchell <hm@hmbedded.co.uk> wrote:
 >
-> Calling make after the target has been built the first time, buildroot has to compress a 850MB filesystem (build machine is i7-6700K CPU @ 4.00GHz):
->
-> gzip: 2m23s
-> pigz: 46s
->
-> It's almost 3 times faster.
->
-> In the main Config.in, I suggest to add to Build options -> Command menu a BR2_GZIP command that would allow to specify the gzip program we want to use. Or better would be to set pigz as an host package.
-> Then updating fs/common.mk:
->
-> ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
-> ROOTFS_$(2)_COMPRESS_EXT = .gz
-> ROOTFS_$(2)_COMPRESS_CMD = $(BR2_GZIP) -9 -c -n
-> endif
-If the commandline parameters are the same, this could likely be done 
-within support/dependencies/check-host-gzip.sh ?
-> More generally I think it would be useful to specify the compression command, as bzip2 seems to have pbzib2.
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>> Currently a minimal build for rpi2/3/4 (i.e. only v3d and/or vc4
+>> selected, no dri drivers selected) results in working X11 except that
+>> glxgears shows a blank window. This commit effectively results in the
+>> following conf options being added: -Dglx-direct=true -Ddri3=true
+>>
+>> Signed-off-by: Howard Mitchell <hm@hmbedded.co.uk>
+>> ---
+>>   package/mesa3d/Config.in | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+>> index 3950170533..59b8f60773 100644
+>> --- a/package/mesa3d/Config.in
+>> +++ b/package/mesa3d/Config.in
+>> @@ -274,6 +274,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+>>   	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+>>   	select BR2_PACKAGE_LIBDRM_VC4
+>>   	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+>> +	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+> On rpi4 v3d/vc4 work definitely for the Qt/eglfs case without
+> MESA3D_DRI_DRIVER, so this should at minimum depend on X11 (or
+> only be selected by x11/glxgears)?
 
--- 
-Vincent Fazio
-Embedded Software Engineer - Linux
-Extreme Engineering Solutions, Inc
-http://www.xes-inc.com
+In fact the '-Ddri3=true' option is already dependent on X11 (in mesa3d.mk)
+so only '-Dglx-direct=true' would be left without X. Do you think that is
+likelyto break Qt/eglfs?
+
+Regards,
+Howard
