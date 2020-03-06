@@ -1,166 +1,95 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Thu,  5 Mar 2020 19:58:03 -0800
-Subject: [Buildroot] [PATCH] package/binutils: fix assertion failure in
- xtensa ld
-Message-ID: <20200306035803.14320-1-jcmvbkbc@gmail.com>
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+Date: Fri,  6 Mar 2020 08:14:33 +0100
+Subject: [Buildroot] [PATCH 0/7] Rockchip Mali Bifrost GPU support
+Message-ID: <20200306071440.30433-1-miquel.raynal@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xtensa ld fails with the following message
+Hello,
 
-  ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
-  elf32-xtensa.c:3283 in elf_xtensa_finish_dynamic_sections
+As part of a wider work targeting a Rockchip SoC, here is an
+attempt to ease the use of Mali Bifrost GPUs (at least on Rockchip
+platforms) by providing the necessary packages to build and install
+the necessary userspace and kernel components.
 
-during domoticz package build. It happens because of mismatch between
-the size allocated for dynamic relocations in the executable image and
-the number of PLT relocations actually written to the image. The
-mismatch is caused by the fact that undefined weak symbol is treated as
-dynamic (and thus needing PLT relocation), but xtensa linker not
-expecting that.
+This series first renames the existing Mali-related packages targeting
+Allwinner SoCs to clarify what they provide, then brings support for
+Rockchip userspace (closed-source) libraries and (open-source) driver,
+and finally updates the Qt5 make file to support this hardware.
 
-Fixes: http://autobuild.buildroot.net/results/7885705f1b1c0f31cf21b464150f5509929c1906/
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Backported from: e15a8da9c71336b06cb5f2706c3f6b7e6ddd95a3
----
- .../0018-bfd-xtensa-fix-PR-ld-25630.patch     | 37 +++++++++++++++++++
- .../0007-bfd-xtensa-fix-PR-ld-25630.patch     | 37 +++++++++++++++++++
- .../0004-bfd-xtensa-fix-PR-ld-25630.patch     | 37 +++++++++++++++++++
- 3 files changed, 111 insertions(+)
- create mode 100644 package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch
- create mode 100644 package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch
- create mode 100644 package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch
+Hope this will be useful!
 
-diff --git a/package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch b/package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch
-new file mode 100644
-index 000000000000..f499426b708c
---- /dev/null
-+++ b/package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch
-@@ -0,0 +1,37 @@
-+From 85dcca5997cf3822d6456a5c9c59c46b56adfbb8 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 4 Mar 2020 14:54:27 -0800
-+Subject: [PATCH] bfd: xtensa: fix PR ld/25630
-+
-+bfd/
-+2020-03-05  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Shrink dynamic
-+	relocation sections for any removed reference to a dynamic symbol.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ bfd/elf32-xtensa.c | 7 +++----
-+ 1 file changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
-+index 12ff9f772aaf..65e14d87940c 100644
-+--- a/bfd/elf32-xtensa.c
-++++ b/bfd/elf32-xtensa.c
-+@@ -10148,10 +10148,9 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
-+ 
-+   if ((r_type == R_XTENSA_32 || r_type == R_XTENSA_PLT)
-+       && (input_section->flags & SEC_ALLOC) != 0
-+-      && (dynamic_symbol || bfd_link_pic (info))
-+-      && (!h || h->root.type != bfd_link_hash_undefweak
-+-	  || (dynamic_symbol
-+-	      && (bfd_link_dll (info) || info->export_dynamic))))
-++      && (dynamic_symbol
-++	  || (bfd_link_pic (info)
-++	      && (!h || h->root.type != bfd_link_hash_undefweak))))
-+     {
-+       asection *srel;
-+       bfd_boolean is_plt = FALSE;
-+-- 
-+2.20.1
-+
-diff --git a/package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch b/package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch
-new file mode 100644
-index 000000000000..f499426b708c
---- /dev/null
-+++ b/package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch
-@@ -0,0 +1,37 @@
-+From 85dcca5997cf3822d6456a5c9c59c46b56adfbb8 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 4 Mar 2020 14:54:27 -0800
-+Subject: [PATCH] bfd: xtensa: fix PR ld/25630
-+
-+bfd/
-+2020-03-05  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Shrink dynamic
-+	relocation sections for any removed reference to a dynamic symbol.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ bfd/elf32-xtensa.c | 7 +++----
-+ 1 file changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
-+index 12ff9f772aaf..65e14d87940c 100644
-+--- a/bfd/elf32-xtensa.c
-++++ b/bfd/elf32-xtensa.c
-+@@ -10148,10 +10148,9 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
-+ 
-+   if ((r_type == R_XTENSA_32 || r_type == R_XTENSA_PLT)
-+       && (input_section->flags & SEC_ALLOC) != 0
-+-      && (dynamic_symbol || bfd_link_pic (info))
-+-      && (!h || h->root.type != bfd_link_hash_undefweak
-+-	  || (dynamic_symbol
-+-	      && (bfd_link_dll (info) || info->export_dynamic))))
-++      && (dynamic_symbol
-++	  || (bfd_link_pic (info)
-++	      && (!h || h->root.type != bfd_link_hash_undefweak))))
-+     {
-+       asection *srel;
-+       bfd_boolean is_plt = FALSE;
-+-- 
-+2.20.1
-+
-diff --git a/package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch b/package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch
-new file mode 100644
-index 000000000000..f499426b708c
---- /dev/null
-+++ b/package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch
-@@ -0,0 +1,37 @@
-+From 85dcca5997cf3822d6456a5c9c59c46b56adfbb8 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 4 Mar 2020 14:54:27 -0800
-+Subject: [PATCH] bfd: xtensa: fix PR ld/25630
-+
-+bfd/
-+2020-03-05  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Shrink dynamic
-+	relocation sections for any removed reference to a dynamic symbol.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ bfd/elf32-xtensa.c | 7 +++----
-+ 1 file changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
-+index 12ff9f772aaf..65e14d87940c 100644
-+--- a/bfd/elf32-xtensa.c
-++++ b/bfd/elf32-xtensa.c
-+@@ -10148,10 +10148,9 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
-+ 
-+   if ((r_type == R_XTENSA_32 || r_type == R_XTENSA_PLT)
-+       && (input_section->flags & SEC_ALLOC) != 0
-+-      && (dynamic_symbol || bfd_link_pic (info))
-+-      && (!h || h->root.type != bfd_link_hash_undefweak
-+-	  || (dynamic_symbol
-+-	      && (bfd_link_dll (info) || info->export_dynamic))))
-++      && (dynamic_symbol
-++	  || (bfd_link_pic (info)
-++	      && (!h || h->root.type != bfd_link_hash_undefweak))))
-+     {
-+       asection *srel;
-+       bfd_boolean is_plt = FALSE;
-+-- 
-+2.20.1
-+
+Cheers,
+Miqu?l
+
+Maxime Chevallier (2):
+  package/rockchip-mali-bifrost: new package with binary blobs
+  package/qt5: allows using rockchip-mali-bifrost as OpenGL/KMS provider
+
+Miquel Raynal (4):
+  package/sunxi-mali-utgard: rename from sunxi-mali-mainline
+  package/sunxi-mali-utgard-driver: rename from
+    sunxi-mali-mainline-driver
+  package/mali-bifrost-driver: new package
+  package/qt5: generalize the condition on which EGLFS KMS gets
+    supported
+
+Thomas Petazzoni (1):
+  package/qt5: make it possible to use rockchip-mali-bifrost as GBM
+    provider
+
+ Config.in.legacy                              |  30 ++++
+ DEVELOPERS                                    |   4 +-
+ configs/olimex_a20_olinuxino_lime2_defconfig  |   4 +-
+ configs/olimex_a20_olinuxino_lime_defconfig   |   4 +-
+ docs/manual/adding-packages-virtual.txt       |   2 +-
+ linux/linux.mk                                |   2 +-
+ package/Config.in                             |   6 +-
+ package/glslsandbox-player/Config.in          |   4 +-
+ .../glslsandbox-player/glslsandbox-player.mk  |   2 +-
+ package/mali-bifrost-driver/Config.in         |  17 ++
+ .../mali-bifrost-driver.hash                  |   3 +
+ .../mali-bifrost-driver.mk                    |  15 ++
+ package/qt5/qt5base/qt5base.mk                |  10 +-
+ ...4-binaries-and-only-install-the-bifr.patch | 169 ++++++++++++++++++
+ package/rockchip-mali-bifrost/Config.in       |  20 +++
+ .../rockchip-mali-bifrost.hash                |   2 +
+ .../rockchip-mali-bifrost.mk                  |  85 +++++++++
+ package/sunxi-mali-mainline-driver/Config.in  |  25 ---
+ .../sunxi-mali-mainline-driver.mk             |  35 ----
+ package/sunxi-mali-mainline/Config.in         |  42 -----
+ .../sunxi-mali-mainline.mk                    |  49 -----
+ package/sunxi-mali-utgard-driver/Config.in    |  25 +++
+ .../sunxi-mali-utgard-driver.hash}            |   2 +-
+ .../sunxi-mali-utgard-driver.mk               |  35 ++++
+ package/sunxi-mali-utgard/Config.in           |  43 +++++
+ .../egl.pc                                    |   0
+ .../glesv2.pc                                 |   0
+ .../sunxi-mali-utgard.hash}                   |   2 +-
+ .../sunxi-mali-utgard/sunxi-mali-utgard.mk    |  49 +++++
+ 29 files changed, 518 insertions(+), 168 deletions(-)
+ create mode 100644 package/mali-bifrost-driver/Config.in
+ create mode 100644 package/mali-bifrost-driver/mali-bifrost-driver.hash
+ create mode 100644 package/mali-bifrost-driver/mali-bifrost-driver.mk
+ create mode 100644 package/rockchip-mali-bifrost/0001-cmake-Use-AArch64-binaries-and-only-install-the-bifr.patch
+ create mode 100644 package/rockchip-mali-bifrost/Config.in
+ create mode 100644 package/rockchip-mali-bifrost/rockchip-mali-bifrost.hash
+ create mode 100644 package/rockchip-mali-bifrost/rockchip-mali-bifrost.mk
+ delete mode 100644 package/sunxi-mali-mainline-driver/Config.in
+ delete mode 100644 package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+ delete mode 100644 package/sunxi-mali-mainline/Config.in
+ delete mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+ create mode 100644 package/sunxi-mali-utgard-driver/Config.in
+ rename package/{sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash => sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash} (66%)
+ create mode 100644 package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
+ create mode 100644 package/sunxi-mali-utgard/Config.in
+ rename package/{sunxi-mali-mainline => sunxi-mali-utgard}/egl.pc (100%)
+ rename package/{sunxi-mali-mainline => sunxi-mali-utgard}/glesv2.pc (100%)
+ rename package/{sunxi-mali-mainline/sunxi-mali-mainline.hash => sunxi-mali-utgard/sunxi-mali-utgard.hash} (70%)
+ create mode 100644 package/sunxi-mali-utgard/sunxi-mali-utgard.mk
+
 -- 
 2.20.1
