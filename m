@@ -1,110 +1,44 @@
-From: lpdev at cordier.org <lpdev@cordier.org>
-Date: Fri,  6 Mar 2020 15:47:03 +0100 (CET)
-Subject: [Buildroot] Reproducible toolchain
-Message-ID: <ea-mime-5e626267-56b9-7746598e@www-1.netcourrier.com>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Fri, 6 Mar 2020 09:00:12 -0600
+Subject: [Buildroot] update --march= for x86_64
+In-Reply-To: <ea-mime-5e626162-549c-4ada36db@www-1.netcourrier.com>
+References: <ea-mime-5e626162-549c-4ada36db@www-1.netcourrier.com>
+Message-ID: <7b092051-65b0-bbe8-d334-1994dff06158@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump for this thread
+Louis-Paul,
 
+On 3/6/20 8:42 AM, lpdev at cordier.org wrote:
+> Hi all,
+>
+> GCC has evolved a lot since 4.x versions. It seems that some target architectures are not available anymore (like corei7 and corei7-avx). GCC has moved to processor family names (like sandybridge, ivybridge) for the --march= parameter.
+>
+> These new nqmes can be checked here:
+>
+> - For old gcc: https://gcc.gnu.org/onlinedocs/gcc-4.8.5/gcc/i386-and-x86-64-Options.html#i386-and-x86-64-Options
+> - For gcc 7: https://gcc.gnu.org/onlinedocs/gcc-7.5.0/gcc/x86-Options.html#x86-Options
+>
+> I can send a serie of patches for moving (or adding) from old march to new march syntax, by adding some of the most used intel processors that are used for embedded systems (low power cores i3/i5/i7-U, some atom x series and intel mXXX series).
+Considering BR still supports GCC 4.8, this would have to be conditional 
+on the selected GCC version.
+> Before working on this, I would like to have an advice from a toolchain guru if possible.
+>
+> Thanks!
+>
+> Louis-Paul CORDIER
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-
-Thanks,
-
-
-
-Louis-Paul CORDIER
-
-
-
-------
-
-
-
-Hi,
-
-
-
-I'm currently experimenting toolchain building following the section "6.1.3. Build an external toolchain with Buildroot" of the documentation.
-
-
-
-My goal is to generate a reproducible sdk with the toolchain in it, and to store in my repo as a git lfs object. This would allow to rebuild the toolchain only when needed. Unfortunately, cleaning and rebuilding the toolchain with "make sdk" produces different hashes. It seems that only static libraries are affected.
-
-
-
-Is there any flag I can add to my toolchain build in order to generate the same binaries?
-
-
-
-This is my defconfig:
-
-
-
-BR2_x86_64=y
-BR2_x86_core_avx2=y
-BR2_REPRODUCIBLE=y
-BR2_TOOLCHAIN_BUILDROOT_VENDOR="test"
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_GCC_VERSION_7_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_GCC_ENABLE_OPENMP=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-
-
-
-List of files that are changing at each builds:
-
-
-
-./x86_64-test-linux-gnu/lib64/libasan.a
-./x86_64-test-linux-gnu/lib64/libtsan.a
-./x86_64-test-linux-gnu/lib64/libmpxwrappers.a
-./x86_64-test-linux-gnu/lib64/libatomic.a
-./x86_64-test-linux-gnu/lib64/libstdc++fs.a
-./x86_64-test-linux-gnu/lib64/libstdc++.a
-./x86_64-test-linux-gnu/lib64/libquadmath.a
-./x86_64-test-linux-gnu/lib64/libubsan.a
-./x86_64-test-linux-gnu/lib64/libsupc++.a
-./x86_64-test-linux-gnu/lib64/liblsan.a
-./x86_64-test-linux-gnu/lib64/libmpx.a
-./x86_64-test-linux-gnu/lib64/libitm.a
-./x86_64-test-linux-gnu/lib64/libgomp.a
-./x86_64-test-linux-gnu/lib64/libcilkrts.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/libdl.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/libmvec_nonshared.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/libg.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/libc.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/libcrypt.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/libanl.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/libutil.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/librpcsvc.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/libresolv.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/librt.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/libgomp.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/libm-2.30.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/libBrokenLocale.a
-./x86_64-test-linux-gnu/sysroot/usr/lib/libc_nonshared.a
-./x86_64-test-linux-gnu/sysroot/lib/libatomic.a
-./lib/gcc/x86_64-test-linux-gnu/7.4.0/libgcov.a
-./lib/gcc/x86_64-test-linux-gnu/7.4.0/libgcc_eh.a
-./lib/gcc/x86_64-test-linux-gnu/7.4.0/libgcc.a
-
-
-
-Thank you for your time,
-
-
-
-Louis-Paul CORDIER
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200306/603bd39d/attachment.html>
+-- 
+Vincent Fazio
+Embedded Software Engineer - Linux
+Extreme Engineering Solutions, Inc
+http://www.xes-inc.com
