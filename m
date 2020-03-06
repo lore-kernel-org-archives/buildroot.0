@@ -1,48 +1,26 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 6 Mar 2020 15:38:54 +0100
-Subject: [Buildroot] [PATCH 2/2] package/mesa3d: get glxgears working
- for v3d/vc4 minimal builds
-In-Reply-To: <20200306092504.30340-2-hm@hmbedded.co.uk>
-References: <20200306092504.30340-1-hm@hmbedded.co.uk>
- <20200306092504.30340-2-hm@hmbedded.co.uk>
-Message-ID: <20200306153854.06a840c3@gmx.net>
+From: lpdev at cordier.org <lpdev@cordier.org>
+Date: Fri,  6 Mar 2020 15:42:42 +0100 (CET)
+Subject: [Buildroot] update --march= for x86_64
+Message-ID: <ea-mime-5e626162-549c-4ada36db@www-1.netcourrier.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Howard,
+Hi all,
 
-On Fri,  6 Mar 2020 09:25:04 +0000, Howard Mitchell <hm@hmbedded.co.uk> wrote:
+GCC has evolved a lot since 4.x versions. It seems that some target architectures are not available anymore (like corei7 and corei7-avx). GCC has moved to processor family names (like sandybridge, ivybridge) for the --march= parameter.
 
-> Currently a minimal build for rpi2/3/4 (i.e. only v3d and/or vc4
-> selected, no dri drivers selected) results in working X11 except that
-> glxgears shows a blank window. This commit effectively results in the
-> following conf options being added: -Dglx-direct=true -Ddri3=true
->
-> Signed-off-by: Howard Mitchell <hm@hmbedded.co.uk>
-> ---
->  package/mesa3d/Config.in | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 3950170533..59b8f60773 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -274,6 +274,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
->  	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
->  	select BR2_PACKAGE_LIBDRM_VC4
->  	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-> +	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+These new nqmes can be checked here:
 
-On rpi4 v3d/vc4 work definitely for the Qt/eglfs case without
-MESA3D_DRI_DRIVER, so this should at minimum depend on X11 (or
-only be selected by x11/glxgears)?
+- For old gcc: https://gcc.gnu.org/onlinedocs/gcc-4.8.5/gcc/i386-and-x86-64-Options.html#i386-and-x86-64-Options
+- For gcc 7: https://gcc.gnu.org/onlinedocs/gcc-7.5.0/gcc/x86-Options.html#x86-Options
 
-Regards,
-Peter
+I can send a serie of patches for moving (or adding) from old march to new march syntax, by adding some of the most used intel processors that are used for embedded systems (low power cores i3/i5/i7-U, some atom x series and intel mXXX series).
 
->  	help
->  	  Driver for Broadcom VC4 (rpi2/3) GPUs.
->  	  It requires a vanilla 4.5+ kernel with drm vc4 (open) support.
+Before working on this, I would like to have an advice from a toolchain guru if possible.
+
+Thanks!
+
+Louis-Paul CORDIER
