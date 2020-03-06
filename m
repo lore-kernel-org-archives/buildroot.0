@@ -1,295 +1,350 @@
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri,  6 Mar 2020 08:14:35 +0100
-Subject: [Buildroot] [PATCH 2/7] package/sunxi-mali-utgard-driver: rename
- from sunxi-mali-mainline-driver
+Date: Fri,  6 Mar 2020 08:14:36 +0100
+Subject: [Buildroot] [PATCH 3/7] package/rockchip-mali-bifrost: new package
+ with binary blobs
 In-Reply-To: <20200306071440.30433-1-miquel.raynal@bootlin.com>
 References: <20200306071440.30433-1-miquel.raynal@bootlin.com>
-Message-ID: <20200306071440.30433-3-miquel.raynal@bootlin.com>
+Message-ID: <20200306071440.30433-4-miquel.raynal@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package provides a Mali kernel driver for Sunxi Mali Utgard GPUs. The
-trailing -mainline is historical and was used at a time when there was
-two packages providing this driver. The "non-upstream" package has
-been removed some time ago so before adding new packages bringing
-support for other ARM Mali GPU versions or implementations, rename
-sunxi-mali-mainline-driver into sunxi-mali-utgard-driver.
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
-Add a legacy entry.
+There is already a package adding Mali blobs for Sunxi Mali Utgard
+GPUs. Many Rockchip SoCs feature a Mali Bifrost GPU and need specific
+libraries provided under binary form with a non-GPL compliant license
+by Rockchip. Package these libraries.
 
+Define a common *_INSTALL_CMDS macro, which takes as argument the base
+destination path, and use it to implement *_INSTALL_TARGET_CMDS and
+*_INSTALL_STAGING_CMDS.
+
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- Config.in.legacy                              | 18 +++++-----
- DEVELOPERS                                    |  2 +-
- configs/olimex_a20_olinuxino_lime2_defconfig  |  2 +-
- configs/olimex_a20_olinuxino_lime_defconfig   |  2 +-
- linux/linux.mk                                |  2 +-
- package/Config.in                             |  2 +-
- package/sunxi-mali-mainline-driver/Config.in  | 25 -------------
- .../sunxi-mali-mainline-driver.mk             | 35 -------------------
- package/sunxi-mali-utgard-driver/Config.in    | 25 +++++++++++++
- .../sunxi-mali-utgard-driver.hash}            |  2 +-
- .../sunxi-mali-utgard-driver.mk               | 35 +++++++++++++++++++
- 11 files changed, 75 insertions(+), 75 deletions(-)
- delete mode 100644 package/sunxi-mali-mainline-driver/Config.in
- delete mode 100644 package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
- create mode 100644 package/sunxi-mali-utgard-driver/Config.in
- rename package/{sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash => sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash} (66%)
- create mode 100644 package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
+ package/Config.in                             |   1 +
+ ...4-binaries-and-only-install-the-bifr.patch | 169 ++++++++++++++++++
+ package/rockchip-mali-bifrost/Config.in       |  20 +++
+ .../rockchip-mali-bifrost.hash                |   2 +
+ .../rockchip-mali-bifrost.mk                  |  85 +++++++++
+ 5 files changed, 277 insertions(+)
+ create mode 100644 package/rockchip-mali-bifrost/0001-cmake-Use-AArch64-binaries-and-only-install-the-bifr.patch
+ create mode 100644 package/rockchip-mali-bifrost/Config.in
+ create mode 100644 package/rockchip-mali-bifrost/rockchip-mali-bifrost.hash
+ create mode 100644 package/rockchip-mali-bifrost/rockchip-mali-bifrost.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 295b1c6003..c9a044c68b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,17 +144,17 @@ endif
- 
- ###############################################################################
- 
--config BR2_PACKAGE_SUNXI_MALI_MAINLINE
--	bool "sunxi-mali-mainline package was renamed"
-+config BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER
-+	bool "sunxi-mali-mainline-driver package was renamed"
- 	select BR2_LEGACY
--	select BR2_PACKAGE_SUNXI_MALI_UTGARD
-+	select BR2_PACKAGE_SUNXI_MALI_UTGARD_DRIVER
- 	help
--	  Since the removal of the sunxi-mali package, the
--	  sunxi-mali-mainline package that coexisted became the only
--	  package to provide Mali blobs. The "-mainline" suffix being
--	  undescriptive nowadays and before adding new packages bringing
--	  Mali support for other SoCs/GPU flavors, it is clearer to
--	  rename it SUNXI_MALI_UTGARD.
-+	  Since the removal of the sunxi-mali-driver package, the
-+	  sunxi-mali-mainline-driver package that coexisted became the
-+	  only package to provide the Suxy Mali driver. The "-mainline"
-+	  suffix being undescriptive nowadays and before adding new
-+	  packages bringing Mali support for other SoCs/GPU flavors, it
-+	  is clearer to rename it SUNXI_MALI_UTGARD_DRIVER.
- 
- config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
- 	bool "sunxi-mali-mainline-r6p2 was renamed"
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 289fa9077d..f8d8bb360d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1014,7 +1014,7 @@ F:	package/libnss/
- F:	package/minicom/
- F:	package/nfs-utils/
- F:	package/sunxi-mali-utgard/
--F:	package/sunxi-mali-mainline-driver/
-+F:	package/sunxi-mali-utgard-driver/
- 
- N:	Gregory Dymarek <gregd72002@gmail.com>
- F:	package/ding-libs/
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index 02865d3c8c..9a840c7803 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -28,7 +28,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- # sunxi packages
- BR2_PACKAGE_SUNXI_TOOLS=y
- BR2_PACKAGE_SUNXI_MALI_UTGARD=y
--BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER=y
-+BR2_PACKAGE_SUNXI_MALI_UTGARD_DRIVER=y
- 
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 58a468aabf..974fb99d7d 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -28,7 +28,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- # sunxi packages
- BR2_PACKAGE_SUNXI_TOOLS=y
- BR2_PACKAGE_SUNXI_MALI_UTGARD=y
--BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER=y
-+BR2_PACKAGE_SUNXI_MALI_UTGARD_DRIVER=y
- 
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 4b60f33ff3..e6346b7274 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -379,7 +379,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SMACK,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK,$(@D)/.config))
--	$(if $(BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER),
-+	$(if $(BR2_PACKAGE_SUNXI_MALI_UTGARD_DRIVER),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_CMA,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DMA_CMA,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_IPTABLES),
 diff --git a/package/Config.in b/package/Config.in
-index aa57d34f96..2137aa88ed 100644
+index 2137aa88ed..f2217ee1d5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -538,8 +538,8 @@ endmenu
- 	source "package/statserial/Config.in"
- 	source "package/stm32flash/Config.in"
- 	source "package/sunxi-cedarx/Config.in"
--	source "package/sunxi-mali-mainline-driver/Config.in"
- 	source "package/sunxi-mali-utgard/Config.in"
-+	source "package/sunxi-mali-utgard-driver/Config.in"
- 	source "package/sysstat/Config.in"
- 	source "package/targetcli-fb/Config.in"
- 	source "package/ti-gfx/Config.in"
-diff --git a/package/sunxi-mali-mainline-driver/Config.in b/package/sunxi-mali-mainline-driver/Config.in
-deleted file mode 100644
-index 057f20db66..0000000000
---- a/package/sunxi-mali-mainline-driver/Config.in
-+++ /dev/null
-@@ -1,25 +0,0 @@
--comment "sunxi-mali-mainline-driver needs a Linux kernel to be built"
--	depends on BR2_PACKAGE_SUNXI_MALI_MAINLINE
--	depends on !BR2_LINUX_KERNEL
--
--config BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER
--	bool "sunxi-mali-mainline-driver"
--	default y
--	depends on BR2_PACKAGE_SUNXI_MALI_MAINLINE # runtime
--	depends on BR2_LINUX_KERNEL
--	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
--	help
--	  This package builds and installs the Linux kernel driver for
--	  the Mali GPU on Allwinner platforms, compatible with recent
--	  Linux kernels (>= 4.4). Note that it should be installed
--	  together with the corresponding userspace OpenGL libraries,
--	  which are provided as binaries only at:
--	  https://github.com/bootlin/mali-blobs
--
--	  sunxi-mali-mainline-driver requires a Linux kernel >= 4.4
--	  with the following options enabled:
--
--	  - CONFIG_CMA
--	  - CONFIG_DMA_CMA
--
--	  https://github.com/mripard/sunxi-mali/blob/master/README.md
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-deleted file mode 100644
-index 0edcdee4d6..0000000000
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-+++ /dev/null
-@@ -1,35 +0,0 @@
--################################################################################
--#
--# sunxi-mali-mainline-driver
--#
--################################################################################
--
--SUNXI_MALI_MAINLINE_DRIVER_VERSION = ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2
--SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
--SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
--SUNXI_MALI_MAINLINE_DRIVER_LICENSE = GPL-2.0
--SUNXI_MALI_MAINLINE_DRIVER_LICENSE_FILES = LICENSE
--
--SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS = \
--	$(LINUX_MAKE_FLAGS) \
--	KDIR=$(LINUX_DIR)
--
--define SUNXI_MALI_MAINLINE_DRIVER_USE_APPLY_PATCHES
--	ln -sf $(SUNXI_MALI_MAINLINE_REV)/series $(@D)/patches
--	$(SED) 's|quilt push -a|$(TOPDIR)/support/scripts/apply-patches.sh . ../patches|' \
--		$(@D)/build.sh
--endef
--
--SUNXI_MALI_MAINLINE_DRIVER_POST_PATCH_HOOKS += SUNXI_MALI_MAINLINE_DRIVER_USE_APPLY_PATCHES
--
--define SUNXI_MALI_MAINLINE_DRIVER_BUILD_CMDS
--	cd $(@D) && $(SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS) \
--		$(SHELL) ./build.sh -r $(SUNXI_MALI_MAINLINE_REV) -j $(PARALLEL_JOBS) -b
--endef
--
--define SUNXI_MALI_MAINLINE_DRIVER_INSTALL_TARGET_CMDS
--	cd $(@D) && $(SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS) \
--		$(SHELL) ./build.sh -r $(SUNXI_MALI_MAINLINE_REV) -j $(PARALLEL_JOBS) -i
--endef
--
--$(eval $(generic-package))
-diff --git a/package/sunxi-mali-utgard-driver/Config.in b/package/sunxi-mali-utgard-driver/Config.in
+@@ -516,6 +516,7 @@ endmenu
+ 	source "package/raspi-gpio/Config.in"
+ 	source "package/read-edid/Config.in"
+ 	source "package/rng-tools/Config.in"
++	source "package/rockchip-mali-bifrost/Config.in"
+ 	source "package/rpi-userland/Config.in"
+ 	source "package/rs485conf/Config.in"
+ 	source "package/rtc-tools/Config.in"
+diff --git a/package/rockchip-mali-bifrost/0001-cmake-Use-AArch64-binaries-and-only-install-the-bifr.patch b/package/rockchip-mali-bifrost/0001-cmake-Use-AArch64-binaries-and-only-install-the-bifr.patch
 new file mode 100644
-index 0000000000..d27fc4e755
+index 0000000000..c5cddea414
 --- /dev/null
-+++ b/package/sunxi-mali-utgard-driver/Config.in
-@@ -0,0 +1,25 @@
-+comment "sunxi-mali-utgard-driver needs a Linux kernel to be built"
-+	depends on BR2_PACKAGE_SUNXI_MALI_UTGARD
-+	depends on !BR2_LINUX_KERNEL
++++ b/package/rockchip-mali-bifrost/0001-cmake-Use-AArch64-binaries-and-only-install-the-bifr.patch
+@@ -0,0 +1,169 @@
++From 8e076bbbd17f05e248e7cb139e437b0a75481983 Mon Sep 17 00:00:00 2001
++From: Maxime Chevallier <maxime.chevallier@bootlin.com>
++Date: Mon, 23 Dec 2019 09:20:22 +0100
++Subject: [PATCH] cmake: Use AArch64 binaries, and only install the bifrost
++ libraries
 +
-+config BR2_PACKAGE_SUNXI_MALI_UTGARD_DRIVER
-+	bool "sunxi-mali-utgard-driver"
-+	default y
-+	depends on BR2_PACKAGE_SUNXI_MALI_UTGARD # runtime
-+	depends on BR2_LINUX_KERNEL
-+	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
++Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
++---
++ CMakeLists.txt           | 24 ++----------------------
++ pkgconfig/OpenCL.pc      | 11 +++++++++++
++ pkgconfig/egl.pc         | 12 ++++++++++++
++ pkgconfig/gbm.pc         | 12 ++++++++++++
++ pkgconfig/glesv2.pc      | 12 ++++++++++++
++ pkgconfig/mali.pc        | 10 ++++++++++
++ pkgconfig/wayland-egl.pc | 12 ++++++++++++
++ 7 files changed, 71 insertions(+), 22 deletions(-)
++ create mode 100644 pkgconfig/OpenCL.pc
++ create mode 100644 pkgconfig/egl.pc
++ create mode 100644 pkgconfig/gbm.pc
++ create mode 100644 pkgconfig/glesv2.pc
++ create mode 100644 pkgconfig/mali.pc
++ create mode 100644 pkgconfig/wayland-egl.pc
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index b0affff..363da33 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -21,31 +21,11 @@ INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/mali.icd"
++ DESTINATION "${CMAKE_INSTALL_SYSCONFDIR}/OpenCL/vendors/")
++ 
++ INSTALL(FILES
++-"${CMAKE_CURRENT_SOURCE_DIR}/lib/arm-linux-gnueabihf/libmali-midgard-t86x-r14p0.so"
+++"${CMAKE_CURRENT_SOURCE_DIR}/lib/aarch64-linux-gnu/libmali-bifrost-g31-rxp0-wayland-gbm.so"
++ DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++ 
++ INSTALL(FILES
++-"${CMAKE_CURRENT_SOURCE_DIR}/lib/arm-linux-gnueabihf/libmali-midgard-t76x-r14p0-r1p0.so"
++-DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++-
++-INSTALL(FILES
++-"${CMAKE_CURRENT_SOURCE_DIR}/lib/arm-linux-gnueabihf/libmali-midgard-t76x-r14p0-r0p0.so"
++-DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++-
++-INSTALL(FILES
++-"${CMAKE_CURRENT_SOURCE_DIR}/lib/arm-linux-gnueabihf/libmali-midgard-t76x-r14p0-r0p0-wayland.so"
++-DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++-
++-INSTALL(FILES
++-"${CMAKE_CURRENT_SOURCE_DIR}/lib/arm-linux-gnueabihf/libmali-utgard-450-r7p0.so"
++-DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++-
++-INSTALL(FILES
++-"${CMAKE_CURRENT_SOURCE_DIR}/lib/arm-linux-gnueabihf/libmali-utgard-400-r7p0.so"
++-DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++-
++-INSTALL(FILES
++-"${CMAKE_CURRENT_SOURCE_DIR}/lib/arm-linux-gnueabihf/libmali-bifrost-g31-rxp0-wayland-gbm.so"
+++"${CMAKE_CURRENT_SOURCE_DIR}/lib/aarch64-linux-gnu/libmali-bifrost-g31-rxp0-gbm.so"
++ DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++ 
++ INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/egl.pc"
++diff --git a/pkgconfig/OpenCL.pc b/pkgconfig/OpenCL.pc
++new file mode 100644
++index 0000000..218d0ff
++--- /dev/null
+++++ b/pkgconfig/OpenCL.pc
++@@ -0,0 +1,11 @@
+++prefix=/usr
+++exec_prefix=${prefix}
+++libdir=${prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: OpenCL
+++Description: Mali OpenCL library
+++Requires.private:
+++Version: 1.2
+++Libs: -L${libdir} -lMaliOpenCL
+++Cflags: -I${includedir} 
++diff --git a/pkgconfig/egl.pc b/pkgconfig/egl.pc
++new file mode 100644
++index 0000000..fe9e23a
++--- /dev/null
+++++ b/pkgconfig/egl.pc
++@@ -0,0 +1,12 @@
+++prefix=/usr
+++exec_prefix=${prefix}
+++libdir=${prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: egl
+++Description: Mali EGL library
+++Requires.private: 
+++Version: 7.10
+++Libs: -L${libdir} -lEGL
+++Libs.private: -lm -lpthread
+++Cflags: -I${includedir} 
++diff --git a/pkgconfig/gbm.pc b/pkgconfig/gbm.pc
++new file mode 100644
++index 0000000..e06a1e5
++--- /dev/null
+++++ b/pkgconfig/gbm.pc
++@@ -0,0 +1,12 @@
+++prefix=/usr
+++exec_prefix=${prefix}
+++libdir=${prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: gbm
+++Description: Mali GBM library
+++Requires.private: 
+++Version: 10.4.0
+++Libs: -L${libdir} -lgbm
+++Libs.private: 
+++Cflags: -I${includedir} 
++diff --git a/pkgconfig/glesv2.pc b/pkgconfig/glesv2.pc
++new file mode 100644
++index 0000000..51b4fca
++--- /dev/null
+++++ b/pkgconfig/glesv2.pc
++@@ -0,0 +1,12 @@
+++prefix=/usr
+++exec_prefix=${prefix}
+++libdir=${prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: glesv2
+++Description: Mali GLESV2 library
+++Requires.private:
+++Version:
+++Libs: -L${libdir} -lGLESv2
+++Libs.private: -lm -lpthread
+++Cflags: -I${includedir} 
++diff --git a/pkgconfig/mali.pc b/pkgconfig/mali.pc
++new file mode 100644
++index 0000000..b9aa626
++--- /dev/null
+++++ b/pkgconfig/mali.pc
++@@ -0,0 +1,10 @@
+++prefix=/usr
+++exec_prefix=${prefix}
+++libdir=${prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: mali
+++Description: Mali EGL library
+++Requires.private: 
+++Libs: -L${libdir} -lMali
+++Cflags: -I${includedir} 
++diff --git a/pkgconfig/wayland-egl.pc b/pkgconfig/wayland-egl.pc
++new file mode 100644
++index 0000000..7539f8c
++--- /dev/null
+++++ b/pkgconfig/wayland-egl.pc
++@@ -0,0 +1,12 @@
+++prefix=/usr
+++exec_prefix=${prefix}
+++libdir=${prefix}/lib
+++includedir=${prefix}/include
+++
+++Name: wayland-egl
+++Description: Mali EGL library
+++Requires.private: 
+++Version: 7.10
+++Libs: -L${libdir} -lMali
+++Libs.private: -lm -lpthread
+++Cflags: -I${includedir} 
++-- 
++2.24.1
++
+diff --git a/package/rockchip-mali-bifrost/Config.in b/package/rockchip-mali-bifrost/Config.in
+new file mode 100644
+index 0000000000..499cf0d8a9
+--- /dev/null
++++ b/package/rockchip-mali-bifrost/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_ROCKCHIP_MALI_BIFROST
++	bool "rockchip-mali-bifrost"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_arm || BR2_aarch64
++	select BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_HAS_LIBGLES
 +	help
-+	  This package builds and installs the Linux kernel driver for
-+	  the Mali Utgard GPU on Allwinner platforms, compatible with
-+	  recent Linux kernels (>= 4.4). Note that it should be
-+	  installed together with the corresponding userspace OpenGL
-+	  libraries, which are provided as binaries only at:
-+	  https://github.com/bootlin/mali-blobs
++	  Install the binary user-space libraries for the ARM Mali GPU.
++	  This package requires a kernel with the ARM Mali GPU Kernel
++	  Drivers enabled.
 +
-+	  sunxi-mali-utgard-driver requires a Linux kernel >= 4.4
-+	  with the following options enabled:
++if BR2_PACKAGE_ROCKCHIP_MALI_BIFROST
 +
-+	  - CONFIG_CMA
-+	  - CONFIG_DMA_CMA
++config BR2_PACKAGE_PROVIDES_LIBEGL
++	default "rockchip-mali-bifrost"
 +
-+	  https://github.com/mripard/sunxi-mali/blob/master/README.md
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
-similarity index 66%
-rename from package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-rename to package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
-index 7c01d07d20..1d259987ea 100644
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-+++ b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 98abeb8ff2e7e824ec89c7be9984ff298db1f35e48d79092238799ff5a239e91  sunxi-mali-mainline-driver-ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2.tar.gz
-+sha256 98abeb8ff2e7e824ec89c7be9984ff298db1f35e48d79092238799ff5a239e91  sunxi-mali-utgard-driver-ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
++config BR2_PACKAGE_PROVIDES_LIBGLES
++	default "rockchip-mali-bifrost"
++
++endif
+diff --git a/package/rockchip-mali-bifrost/rockchip-mali-bifrost.hash b/package/rockchip-mali-bifrost/rockchip-mali-bifrost.hash
 new file mode 100644
-index 0000000000..e61a1f86ff
+index 0000000000..68f0d3dce0
 --- /dev/null
-+++ b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
-@@ -0,0 +1,35 @@
++++ b/package/rockchip-mali-bifrost/rockchip-mali-bifrost.hash
+@@ -0,0 +1,2 @@
++sha256 ee440d859e9d7dfdf29b9a00c7a633337913c407be567d3651c29c12eb75fd9c  rockchip-mali-bifrost-721653b5b3b525a4f80d15aa7e2f9df7b7e60427.tar.gz
++sha256 a78acc73de9909efb879800d4daa4640c4aaa55cd751238a133954aba15e4285  END_USER_LICENCE_AGREEMENT.txt
+diff --git a/package/rockchip-mali-bifrost/rockchip-mali-bifrost.mk b/package/rockchip-mali-bifrost/rockchip-mali-bifrost.mk
+new file mode 100644
+index 0000000000..aefcd5057f
+--- /dev/null
++++ b/package/rockchip-mali-bifrost/rockchip-mali-bifrost.mk
+@@ -0,0 +1,85 @@
 +################################################################################
 +#
-+# sunxi-mali-utgard-driver
++# rockchip_mali_bifrost For Linux
 +#
 +################################################################################
 +
-+SUNXI_MALI_UTGARD_DRIVER_VERSION = ec654ee9caeb0c4348caacd0cf5eb2730d1d70e2
-+SUNXI_MALI_UTGARD_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_UTGARD_DRIVER_VERSION))
-+SUNXI_MALI_UTGARD_DRIVER_DEPENDENCIES = linux
-+SUNXI_MALI_UTGARD_DRIVER_LICENSE = GPL-2.0
-+SUNXI_MALI_UTGARD_DRIVER_LICENSE_FILES = LICENSE
++ROCKCHIP_MALI_BIFROST_VERSION = 721653b5b3b525a4f80d15aa7e2f9df7b7e60427
++ROCKCHIP_MALI_BIFROST_SITE = $(call github,rockchip-linux,libmali,$(ROCKCHIP_MALI_BIFROST_VERSION))
++ROCKCHIP_MALI_BIFROST_LICENSE = END_USER_LICENCE_AGREEMENT.txt
 +
-+SUNXI_MALI_UTGARD_DRIVER_MAKE_OPTS = \
-+	$(LINUX_MAKE_FLAGS) \
-+	KDIR=$(LINUX_DIR)
++ROCKCHIP_MALI_BIFROST_INSTALL_STAGING = YES
 +
-+define SUNXI_MALI_UTGARD_DRIVER_USE_APPLY_PATCHES
-+	ln -sf $(SUNXI_MALI_UTGARD_REV)/series $(@D)/patches
-+	$(SED) 's|quilt push -a|$(TOPDIR)/support/scripts/apply-patches.sh . ../patches|' \
-+		$(@D)/build.sh
++ROCKCHIP_MALI_BIFROST_DEPENDENCIES = host-patchelf libdrm
++
++ROCKCHIP_MALI_BIFROST_PROVIDES = libegl libgles
++
++#ifeq ($(BR2_PACKAGE_WAYLAND),y)
++#ROCKCHIP_MALI_BIFROST_SUFFIX = -wayland
++#else
++#ifeq ($(BR2_PACKAGE_XORG7)),y)
++#ROCKCHIP_MALI_BIFROST_SUFFIX =
++#else
++ROCKCHIP_MALI_BIFROST_SUFFIX = -gbm
++#endif
++#endif
++
++ROCKCHIP_MALI_BIFROST_LIBS = libmali-bifrost-g31-rxp0$(ROCKCHIP_MALI_BIFROST_SUFFIX).so
++
++ROCKCHIP_MALI_BIFROST_ARCH_DIR = $(if $(BR2_arm),arm-linux-gnueabihf,aarch64-linux-gnu)
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++define ROCKCHIP_MALI_BIFROST_CREATE_WAYLAND_LINKS
++	rm -f $(1)/usr/lib/libwayland-egl.so*
++
++	ln -sf libmali.so $(1)/usr/lib/libwayland-egl.so.1
++	ln -sf libwayland-egl.so.1 $(1)/usr/lib/libwayland-egl.so
++endef
++endif
++
++ROCKCHIP_MALI_BIFROST_HEADERS_DIRS = CL EGL FBDEV GLES GLES2 GLES3 KHR
++
++define ROCKCHIP_MALI_BIFROST_INSTALL_CMDS
++	mkdir -p $(1)/usr/lib
++	cp -dpfr $(@D)/lib/$(ROCKCHIP_MALI_BIFROST_ARCH_DIR)/$(ROCKCHIP_MALI_BIFROST_LIBS) $(1)/usr/lib
++
++	$(foreach l,$(ROCKCHIP_MALI_BIFROST_LIBS),
++		$(HOST_DIR)/bin/patchelf --set-soname libmali.so.1 $(1)/usr/lib/$(l)
++	)
++
++	ln -sf $(firstword $(ROCKCHIP_MALI_BIFROST_LIBS)) $(1)/usr/lib/libmali.so.1
++
++	$(foreach d,$(ROCKCHIP_MALI_BIFROST_HEADERS_DIRS),\
++		cp -dpfr $(@D)/include/$(d) $(1)/usr/include/
++	)
++	cp -dpfr $(@D)/include/gbm.h $(1)/usr/include/
++	mkdir -p $(1)/usr/lib/pkgconfig/
++	cp -dpfr $(@D)/pkgconfig/*.pc $(1)/usr/lib/pkgconfig/
++	ln -sf libmali.so.1 $(1)/usr/lib/libmali.so
++	ln -sf libmali.so $(1)/usr/lib/libMali.so.1
++	ln -sf libMali.so.1 $(1)/usr/lib/libMali.so
++
++	ln -sf libmali.so $(1)/usr/lib/libEGL.so.1
++	ln -sf libEGL.so.1 $(1)/usr/lib/libEGL.so
++
++	ln -sf libmali.so $(1)/usr/lib/libgbm.so.1
++	ln -sf libgbm.so.1 $(1)/usr/lib/libgbm.so
++	ln -sf libgbm.so.1 $(1)/usr/lib/libgbm.so.1.0.0
++
++	ln -sf libmali.so $(1)/usr/lib/libGLESv1_CM.so.1
++	ln -sf libGLESv1_CM.so.1 $(1)/usr/lib/libGLESv1_CM.so
++
++	ln -sf libmali.so $(1)/usr/lib/libGLESv2.so.2
++	ln -sf libGLESv2.so.2 $(1)/usr/lib/libGLESv2.so
++	$(call ROCKCHIP_MALI_BIFROST_CREATE_WAYLAND_LINKS,$(1))
 +endef
 +
-+SUNXI_MALI_UTGARD_DRIVER_POST_PATCH_HOOKS += SUNXI_MALI_UTGARD_DRIVER_USE_APPLY_PATCHES
-+
-+define SUNXI_MALI_UTGARD_DRIVER_BUILD_CMDS
-+	cd $(@D) && $(SUNXI_MALI_UTGARD_DRIVER_MAKE_OPTS) \
-+		$(SHELL) ./build.sh -r $(SUNXI_MALI_UTGARD_REV) -j $(PARALLEL_JOBS) -b
++define ROCKCHIP_MALI_BIFROST_INSTALL_TARGET_CMDS
++	$(call ROCKCHIP_MALI_BIFROST_INSTALL_CMDS,$(TARGET_DIR))
 +endef
 +
-+define SUNXI_MALI_UTGARD_DRIVER_INSTALL_TARGET_CMDS
-+	cd $(@D) && $(SUNXI_MALI_UTGARD_DRIVER_MAKE_OPTS) \
-+		$(SHELL) ./build.sh -r $(SUNXI_MALI_UTGARD_REV) -j $(PARALLEL_JOBS) -i
++define ROCKCHIP_MALI_BIFROST_INSTALL_STAGING_CMDS
++	$(call ROCKCHIP_MALI_BIFROST_INSTALL_CMDS,$(STAGING_DIR))
 +endef
 +
 +$(eval $(generic-package))
