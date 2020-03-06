@@ -1,120 +1,69 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri,  6 Mar 2020 21:10:22 +0100
-Subject: [Buildroot] [PATCH v1 3/3] package/liboping: add patch to fix suid
- root feature
-In-Reply-To: <20200306201022.22382-1-ps.report@gmx.net>
-References: <20200306201022.22382-1-ps.report@gmx.net>
-Message-ID: <20200306201022.22382-3-ps.report@gmx.net>
+Date: Fri,  6 Mar 2020 21:10:20 +0100
+Subject: [Buildroot] [PATCH v1 1/3] package/liboping: add patch to fix
+ gcc-8/gcc-9 snprintf truncation compile failure
+Message-ID: <20200306201022.22382-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch from upstream merge quest [1] to fix suid root feature.
+Add patch from upstream merge request ([1]) to fix fix gcc-8/gcc-9 snprintf
+truncation related compile failure (-Wall/-Werror), reported on the
+mailing list ([2]).
 
-[1] https://github.com/octo/liboping/pull/35
+Fixes:
 
+  liboping.c: In function ?ping_set_ttl?:
+  liboping.c:207:9: error: ?%s? directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
+    207 |    "%s: %s", function, message);
+        |         ^~
+
+[1] https://github.com/octo/liboping/pull/50
+[2] http://lists.busybox.net/pipermail/buildroot/2020-March/275861.html
+
+Reported-by: Maik Brenke <Maik.Brenke@continental-corporation.com>
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...-when-adding-hosts-not-when-doing-th.patch | 91 +++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 package/liboping/0004-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch
+ ...d-snprintf-truncation-warning-wError.patch | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/liboping/0002-Mitigated-snprintf-truncation-warning-wError.patch
 
-diff --git a/package/liboping/0004-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch b/package/liboping/0004-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch
+diff --git a/package/liboping/0002-Mitigated-snprintf-truncation-warning-wError.patch b/package/liboping/0002-Mitigated-snprintf-truncation-warning-wError.patch
 new file mode 100644
-index 0000000000..bdfb3d3f08
+index 0000000000..929d25e22d
 --- /dev/null
-+++ b/package/liboping/0004-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch
-@@ -0,0 +1,91 @@
-+From ac878566eb935fd3ebfb804e6bd9e1690d4a65e3 Mon Sep 17 00:00:00 2001
-+From: Tollef Fog Heen <tfheen@err.no>
-+Date: Tue, 20 Mar 2018 22:40:32 +0100
-+Subject: [PATCH 4/4] Open raw sockets when adding hosts, not when doing the
-+ pinging
++++ b/package/liboping/0002-Mitigated-snprintf-truncation-warning-wError.patch
+@@ -0,0 +1,31 @@
++From 215003b58c9214c4a3ff5ef44f361887cdbec348 Mon Sep 17 00:00:00 2001
++From: Guillaume Picquet <nelstaar@yahoo.fr>
++Date: Mon, 9 Sep 2019 17:30:47 +0200
++Subject: [PATCH] Mitigated snprintf truncation warning (-wError)
 +
-+This allows this to run as non-root again, without this, oping will
-+have dropped privileges before trying to ping, which then fails to
-+open the necessary raw sockets.
-+
-+Fixes: #34
-+
-+[Upstream: https://github.com/octo/liboping/pull/35/commits/a88c51f38dafa1fba9118045176754bec05d3c94]
++[Upstream: https://github.com/octo/liboping/pull/50/commits/664414123a3fe89984abfa0917946c513bf47163]
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ src/liboping.c | 48 +++++++++++++++++-------------------------------
-+ 1 file changed, 17 insertions(+), 31 deletions(-)
++ src/liboping.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
 +diff --git a/src/liboping.c b/src/liboping.c
-+index 39b0041..f98e810 100644
++index a2dfa19..39b0041 100644
 +--- a/src/liboping.c
 ++++ b/src/liboping.c
-+@@ -1344,41 +1344,10 @@ int ping_send (pingobj_t *obj)
-+ 	struct timeval nowtime;
-+ 	struct timeval timeout;
++@@ -203,9 +203,9 @@ static char *sstrerror (int errnum, char *buf, size_t buflen)
++ static void ping_set_error (pingobj_t *obj, const char *function,
++ 	       	const char *message)
++ {
++-	snprintf (obj->errmsg, sizeof (obj->errmsg),
++-			"%s: %s", function, message);
++-	obj->errmsg[sizeof (obj->errmsg) - 1] = 0;
+++	if (snprintf (obj->errmsg, sizeof (obj->errmsg),
+++			"%s: %s", function, message) >= sizeof (obj->errmsg))
+++		obj->errmsg[sizeof (obj->errmsg) - 1] = 0;
++ }
 + 
-+-	_Bool need_ipv4_socket = 0;
-+-	_Bool need_ipv6_socket = 0;
-+-
-+ 	for (ptr = obj->head; ptr != NULL; ptr = ptr->next)
-+ 	{
-+ 		ptr->latency  = -1.0;
-+ 		ptr->recv_ttl = -1;
-+-
-+-		if (ptr->addrfamily == AF_INET)
-+-			need_ipv4_socket = 1;
-+-		else if (ptr->addrfamily == AF_INET6)
-+-			need_ipv6_socket = 1;
-+-	}
-+-
-+-	if (!need_ipv4_socket && !need_ipv6_socket)
-+-	{
-+-		ping_set_error (obj, "ping_send", "No hosts to ping");
-+-		return (-1);
-+-	}
-+-
-+-	if (need_ipv4_socket && obj->fd4 == -1)
-+-	{
-+-		obj->fd4 = ping_open_socket(obj, AF_INET);
-+-		if (obj->fd4 == -1)
-+-			return (-1);
-+-		ping_set_ttl (obj, obj->ttl);
-+-		ping_set_qos (obj, obj->qos);
-+-	}
-+-	if (need_ipv6_socket && obj->fd6 == -1)
-+-	{
-+-		obj->fd6 = ping_open_socket(obj, AF_INET6);
-+-		if (obj->fd6 == -1)
-+-			return (-1);
-+-		ping_set_ttl (obj, obj->ttl);
-+-		ping_set_qos (obj, obj->qos);
-+ 	}
-+ 
-+ 	if (gettimeofday (&nowtime, NULL) == -1)
-+@@ -1698,6 +1667,23 @@ int ping_host_add (pingobj_t *obj, const char *host)
-+ 	ph->table_next = obj->table[ph->ident % PING_TABLE_LEN];
-+ 	obj->table[ph->ident % PING_TABLE_LEN] = ph;
-+ 
-++	if (ph->addrfamily == AF_INET && obj->fd4 == -1)
-++	{
-++		obj->fd4 = ping_open_socket(obj, AF_INET);
-++		if (obj->fd4 == -1)
-++			return (-1);
-++		ping_set_ttl (obj, obj->ttl);
-++		ping_set_qos (obj, obj->qos);
-++	}
-++	if (ph->addrfamily == AF_INET6 && obj->fd6 == -1)
-++	{
-++		obj->fd6 = ping_open_socket(obj, AF_INET6);
-++		if (obj->fd6 == -1)
-++			return (-1);
-++		ping_set_ttl (obj, obj->ttl);
-++		ping_set_qos (obj, obj->qos);
-++	}
-++
-+ 	return (0);
-+ } /* int ping_host_add */
-+ 
++ static void ping_set_errno (pingobj_t *obj, int error_number)
 +-- 
 +2.25.1
 +
