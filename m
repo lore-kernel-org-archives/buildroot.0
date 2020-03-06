@@ -1,86 +1,82 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 6 Mar 2020 11:27:17 +0100
-Subject: [Buildroot] [PATCH] package/linuxptp: make initscript options
- configurable
-In-Reply-To: <20200306101950.23219-1-michael@walle.cc>
-References: <20200306101950.23219-1-michael@walle.cc>
-Message-ID: <CAEyMn7b3uJGsTEBmxQ58oFZboN31v2NbrrZqv=0Kh_Evjp-HJQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri,  6 Mar 2020 11:38:39 +0100
+Subject: [Buildroot] [PATCH] package/swupdate: do not store local build
+ details in swupdate config file
+Message-ID: <20200306103839.1880550-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The SWUPDATE_SET_BUILD_OPTIONS macro sets a number of swupdate
+configuration options with local build details, especially the
+cross-compiler path and sysroot path.
 
-Am Fr., 6. M?rz 2020 um 11:19 Uhr schrieb Michael Walle <michael@walle.cc>:
->
-> Let the user supply its own options in /etc/default/linuxptp.
-> Additionally, let the user decide if he wants to start php2sys.
->
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->
-> It might be better to have an own php2sys initscript. I'm not sure.
-> Thoughts?
+This means that if one stores an swupdate defconfig file as part of
+Buildroot, generated with "make swupdate-update-defconfig", it will
+contain things like:
 
-I think 2 (ptp4l and phc2sys) scripts like done e.g. in debian would be better.
+CONFIG_CROSS_COMPILE="/home/thomas/projets/buildroot/output/host/bin/arm-linux-"
+CONFIG_SYSROOT="/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot"
 
->
->  package/linuxptp/S65linuxptp | 30 +++++++++++++++++++++---------
->  1 file changed, 21 insertions(+), 9 deletions(-)
->
-> diff --git a/package/linuxptp/S65linuxptp b/package/linuxptp/S65linuxptp
-> index 46b8921fdd..5f296a4651 100644
-> --- a/package/linuxptp/S65linuxptp
-> +++ b/package/linuxptp/S65linuxptp
-> @@ -3,23 +3,35 @@
->  # Start linuxptp
->  #
->
-> +# defaults
-> +PTP4L_OPTS="-f /etc/linuxptp.cfg"
-> +PHC2SYS_ENABLE="true"
-> +PHC2SYS_OPTS="-s eth0 -c CLOCK_REALTIME -w -S 1.0"
-> +
-> +# Read configuration variable file if it is present
-> +[ -r /etc/default/linuxptp ] && . /etc/default/linuxptp
-> +
->  start() {
->         printf "Starting linuxptp daemon: "
->         start-stop-daemon -S -b -q -p /var/run/linuxptp-ptp4l.pid \
-> -               -x /usr/sbin/ptp4l -- -f /etc/linuxptp.cfg
-> +               -x /usr/sbin/ptp4l -- ${PTP4L_OPTS}
->         [ $? = 0 ] && echo "OK" || echo "FAIL"
->
-> -       printf "Starting linuxptp system clock synchronization: "
-> -       start-stop-daemon -S -b -q -p /var/run/linuxptp-phc2sys.pid \
-> -               -x /usr/sbin/phc2sys -- -s eth0 -c CLOCK_REALTIME -w -S 1.0
-> -       [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +       if [ "${PHC2SYS_ENABLE}" = "true" ]; then
-> +               printf "Starting linuxptp system clock synchronization: "
-> +               start-stop-daemon -S -b -q -p /var/run/linuxptp-phc2sys.pid \
-> +                       -x /usr/sbin/phc2sys -- ${PHC2SYS_OPTS}
-> +               [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +       fi
->  }
->
->  stop() {
-> -       printf "Stopping linuxptp system clock synchronization: "
-> -       start-stop-daemon -K -q -p /var/run/linuxptp-phc2sys.pid \
-> -               -x /usr/sbin/phc2sys
-> -       echo "OK"
-> +       if [ "${PHC2SYS_ENABLE}" = "true" ]; then
-> +               printf "Stopping linuxptp system clock synchronization: "
-> +               start-stop-daemon -K -q -p /var/run/linuxptp-phc2sys.pid \
-> +                       -x /usr/sbin/phc2sys
-> +               echo "OK"
-> +       fi
->
->         printf "Stopping linuxptp daemon: "
->         start-stop-daemon -K -q -p /var/run/linuxptp-ptp4l.pid \
-> --
-> 2.20.1
->
+which obviously are not good, as they are specific to where the build
+was done.
 
-Heiko
+So instead this commit:
+
+ - Uses the CROSS_COMPILE environment variable to pass the
+   cross-compiler path.
+
+ - Drops entirely the use of CONFIG_SYSROOT, since all it does is pass
+   a --sysroot option to the compiler, which is not needed in the
+   context of Buildroot.
+
+ - Pass EXTRA_CFLAGS/EXTRA_LDFLAGS also through the environment.
+
+Thanks to that the swupdate defconfig file no longer contains any
+local build details, and can be re-used by different users of a given
+Buildroot configuration.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/swupdate/swupdate.mk | 17 +++++------------
+ 1 file changed, 5 insertions(+), 12 deletions(-)
+
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 60dc0e968a..237a44e233 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -156,25 +156,18 @@ define SWUPDATE_PREFER_STATIC
+ endef
+ endif
+ 
+-define SWUPDATE_SET_BUILD_OPTIONS
+-	$(call KCONFIG_SET_OPT,CONFIG_CROSS_COMPILE,"$(TARGET_CROSS)", \
+-		$(SWUPDATE_BUILD_CONFIG))
+-	$(call KCONFIG_SET_OPT,CONFIG_SYSROOT,"$(STAGING_DIR)", \
+-		$(SWUPDATE_BUILD_CONFIG))
+-	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_CFLAGS,"$(TARGET_CFLAGS)", \
+-		$(SWUPDATE_BUILD_CONFIG))
+-	$(call KCONFIG_SET_OPT,CONFIG_EXTRA_LDFLAGS,"$(TARGET_LDFLAGS)", \
+-		$(SWUPDATE_BUILD_CONFIG))
+-endef
++SWUPDATE_MAKE_OPTS = \
++	CROSS_COMPILE="$(TARGET_CROSS)" \
++	CONFIG_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
++	CONFIG_EXTRA_LDFLAGS="$(TARGET_LDFLAGS)"
+ 
+ define SWUPDATE_KCONFIG_FIXUP_CMDS
+ 	$(SWUPDATE_PREFER_STATIC)
+-	$(SWUPDATE_SET_BUILD_OPTIONS)
+ 	$(SWUPDATE_SET_LUA_VERSION)
+ endef
+ 
+ define SWUPDATE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) -C $(@D)
++	$(TARGET_MAKE_ENV) $(SWUPDATE_MAKE_ENV) $(MAKE) $(SWUPDATE_MAKE_OPTS) -C $(@D)
+ endef
+ 
+ define SWUPDATE_INSTALL_TARGET_CMDS
+-- 
+2.24.1
