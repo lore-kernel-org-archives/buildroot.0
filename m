@@ -1,258 +1,235 @@
-From: Brenke, Maik <Maik.Brenke@continental-corporation.com>
-Date: Fri, 6 Mar 2020 15:19:26 +0000
-Subject: [Buildroot] liboping compilation error
-In-Reply-To: <20200306141230.01f7ea37@gmx.net>
-References: <VE1PR03MB5197A376BAD29ECDC5C828F3A0E20@VE1PR03MB5197.eurprd03.prod.outlook.com>
- <20200306132357.51daa26a@gmx.net>,<20200306141230.01f7ea37@gmx.net>
-Message-ID: <VE1PR03MB51978905845A64B111A552ECA0E30@VE1PR03MB5197.eurprd03.prod.outlook.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Fri, 6 Mar 2020 17:09:52 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/linuxptp: make initscript
+ options configurable
+In-Reply-To: <20200306124222.28208-2-heiko.thiery@gmail.com>
+References: <20200306124222.28208-1-heiko.thiery@gmail.com>
+ <20200306124222.28208-2-heiko.thiery@gmail.com>
+Message-ID: <CAEyMn7b0Y8aaBaLVE2L-dB9ik7ATU2UhEaApqykMVbwZ2wn8dg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
 
-Hello,
-
-I solved this issue via [1]. The github repo is using "autogen.sh" and could be compiled without any other changes or fixes. Hope someone else can use it to, if facing the same issue.
-
-
-Have a nice day.
-
-
-[1]:
-diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
---- a/package/liboping/liboping.mk
-+++ b/package/liboping/liboping.mk
-@@ -4,14 +4,20 @@
- #
- ################################################################################
-
--LIBOPING_VERSION = 1.10.0
--LIBOPING_SITE = http://noping.cc/files
--LIBOPING_SOURCE = liboping-$(LIBOPING_VERSION).tar.bz2
-+LIBOPING_VERSION = liboping-1.10.0
-+LIBOPING_SITE = $(call github,octo,liboping,$(LIBOPING_VERSION))
- LIBOPING_INSTALL_STAGING = YES
- LIBOPING_CONF_OPTS = --without-perl-bindings
- LIBOPING_LICENSE = LGPL-2.1+, GPL-2.0
- LIBOPING_LICENSE_FILES = COPYING
-
-+# configure is missing but autogen.sh script is available
-+define LIBOPING_RUN_AUTOGEN
-+        cd $(@D) && PATH=$(BR_PATH) ./autogen.sh --noconfigure
-+endef
-+LIBOPING_PRE_CONFIGURE_HOOKS += LIBOPING_RUN_AUTOGEN
-+
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- LIBOPING_DEPENDENCIES += ncurses
- LIBOPING_CONF_OPTS += --with-ncurses
-
-________________________________
-Von: Peter Seiderer <ps.report@gmx.net>
-Gesendet: Freitag, 6. M?rz 2020 14:12
-An: Brenke, Maik <Maik.Brenke@continental-corporation.com>
-Cc: buildroot at busybox.net <buildroot@busybox.net>
-Betreff: Re: [Buildroot] liboping compilation error
-
-Hello Maik,
-
-On Fri, 6 Mar 2020 13:23:57 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
-
-> Hello Maik,
+Am Fr., 6. M?rz 2020 um 13:43 Uhr schrieb Heiko Thiery <heiko.thiery@gmail.com>:
 >
-> On Thu, 5 Mar 2020 18:57:23 +0000, "Brenke, Maik" <Maik.Brenke@continental-corporation.com> wrote:
+> The "package/busybox/S01sysklogd" is taken as template to change the
+> init script of the linuxptp daemon. The init script is split two parts
+> because there are 2 daemons (ptp4l and phc2sys).
 >
-> > Hello,
-> >
-> >
-> > I noticed that the "ping" command (depending on "liboping") could not be build using "*-gcc" on my system (see [0]). I discovered the bug in [1] and fixed it with the commit from [2]. The result can be found under [3]. But afterwards I got the error in [4] (wrong automake version). Sould we maybe change to sources providing "autogen.sh"?
-> >
-> >
-> > [0]:
-> > >>> liboping 1.10.0 Building
-> > PATH="/home/brenkem/git/STACC-100BaseT1-1CH/output/host/bin:/home/brenkem/git/STACC-100BaseT1-1CH/output/host/sbin:/home/brenkem/bin:/home/brenkem/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/puppetlabs/bin:/usr/local/arm/fs-toolchain-8.3-armv7ahf/bin"  /usr/bin/make -j5  -C /home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/
-> > make[1]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0? wird betreten
-> > Making all in src
-> > make[2]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird betreten
-> > /usr/bin/make  all-recursive
-> > make[3]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird betreten
-> > Making all in mans
-> > make[4]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src/mans? wird betreten
-> > make[4]: F?r das Ziel ?all? ist nichts zu tun.
-> > make[4]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src/mans? wird verlassen
-> > make[4]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird betreten
-> > /bin/sh ../libtool  --tag=CC   --mode=compile /home/brenkem/git/STACC-100BaseT1-1CH/output/host/bin/arm-linux-gcc -DHAVE_CONFIG_H -I.   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Werror -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O3   -c -o liboping_la-liboping.lo `test -f 'liboping.c' || echo './'`liboping.c
-> > libtool: compile:  /home/brenkem/git/STACC-100BaseT1-1CH/output/host/bin/arm-linux-gcc -DHAVE_CONFIG_H -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Werror -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -c liboping.c  -fPIC -DPIC -o .libs/liboping_la-liboping.o
-> > liboping.c: In function 'ping_set_ttl':
-> > liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
-> >     "%s: %s", function, message);
-> >          ^~
-> > liboping.c:829:6:
-> >       sstrerror (ret, errbuf, sizeof (errbuf)));
-> >       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
-> >   snprintf (obj->errmsg, sizeof (obj->errmsg),
-> >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >     "%s: %s", function, message);
-> >     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
-> >     "%s: %s", function, message);
-> >          ^~
-> > liboping.c:842:6:
-> >       sstrerror (ret, errbuf, sizeof (errbuf)));
-> >       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
-> >   snprintf (obj->errmsg, sizeof (obj->errmsg),
-> >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >     "%s: %s", function, message);
-> >     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > liboping.c: In function 'ping_set_qos':
-> > liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
-> >     "%s: %s", function, message);
-> >          ^~
-> > liboping.c:869:6:
-> >       sstrerror (ret, errbuf, sizeof (errbuf)));
-> >       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
-> >   snprintf (obj->errmsg, sizeof (obj->errmsg),
-> >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >     "%s: %s", function, message);
-> >     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > liboping.c:207:9: error: '%s' directive output may be truncated writing up to 255 bytes into a region of size 242 [-Werror=format-truncation=]
-> >     "%s: %s", function, message);
-> >          ^~
-> > liboping.c:885:6:
-> >       sstrerror (ret, errbuf, sizeof (errbuf)));
-> >       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > liboping.c:206:2: note: 'snprintf' output between 15 and 270 bytes into a destination of size 256
-> >   snprintf (obj->errmsg, sizeof (obj->errmsg),
-> >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >     "%s: %s", function, message);
-> >     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > cc1: all warnings being treated as errors
-> > Makefile:582: die Regel f?r Ziel ?liboping_la-liboping.lo? scheiterte
-> > make[4]: *** [liboping_la-liboping.lo] Fehler 1
-> > make[4]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird verlassen
-> > Makefile:645: die Regel f?r Ziel ?all-recursive? scheiterte
-> > make[3]: *** [all-recursive] Fehler 1
-> > make[3]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird verlassen
-> > Makefile:419: die Regel f?r Ziel ?all? scheiterte
-> > make[2]: *** [all] Fehler 2
-> > make[2]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird verlassen
-> > Makefile:382: die Regel f?r Ziel ?all-recursive? scheiterte
-> > make[1]: *** [all-recursive] Fehler 1
-> > make[1]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0? wird verlassen
-> > package/pkg-generic.mk:238: die Regel f?r Ziel ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/.stamp_built? scheiterte
-> > make: *** [/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/.stamp_built] Fehler 2
-> >
-> >
-> > [1]:
-> > https://bugs.gentoo.org/675344
-> >
-> >
-> > [2]:
-> > https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=c23d497c3fbdadf86cdc785f5806a36116101e5e
-> >
-> >
-> > [3]:
-> > From f784858a0bd5f7e5dd2ad681a2a8463fa4b3fc8f Mon Sep 17 00:00:00 2001
-> > From: Maik Brenke <Maik.Brenke@continental-corporation.com>
-> > Date: Thu, 5 Mar 2020 18:11:19 +0100
-> > Subject: [PATCH] fix-truncated-writing-error-by-removing-werror-option
-> >
-> > ---
-> >  src/Makefile.am | 4 ----
-> >  1 file changed, 4 deletions(-)
-> >
-> > diff --git a/src/Makefile.am b/src/Makefile.am
-> > index b8571aa..acd652c 100644
-> > --- a/src/Makefile.am
-> > +++ b/src/Makefile.am
-> > @@ -2,10 +2,6 @@ AUTOMAKE_OPTIONS = foreign no-dependencies
-> >
-> >  SUBDIRS = mans
-> >
-> > -if COMPILER_IS_GCC
-> > -AM_CFLAGS = -Wall -Werror
-> > -endif
-> > -
-> >  include_HEADERS = oping.h
-> >  lib_LTLIBRARIES = liboping.la
-> >
-> > --
-> > 2.7.4
-> >
-> >
-> > [4]:
-> > >>> liboping 1.10.0 Building
-> > PATH="/home/brenkem/git/STACC-100BaseT1-1CH/output/host/bin:/home/brenkem/git/STACC-100BaseT1-1CH/output/host/sbin:/home/brenkem/bin:/home/brenkem/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/puppetlabs/bin:/usr/local/arm/fs-toolchain-8.3-armv7ahf/bin"  /usr/bin/make -j5  -C /home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/
-> > make[1]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0? wird betreten
-> > Making all in src
-> > make[2]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird betreten
-> >  cd .. && /bin/sh /home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/missing automake-1.14 --foreign src/Makefile
-> > /home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/missing: Zeile 81: automake-1.14: Befehl nicht gefunden
-> > WARNING: 'automake-1.14' is missing on your system.
-> >          You should only need it if you modified 'Makefile.am' or
-> >          'configure.ac' or m4 files included by 'configure.ac'.
-> >          The 'automake' program is part of the GNU Automake package:
-> >          <http://www.gnu.org/software/automake>
-> >          It also requires GNU Autoconf, GNU m4 and Perl in order to run:
-> >          <http://www.gnu.org/software/autoconf>
-> >          <http://www.gnu.org/software/m4/>
-> >          <http://www.perl.org/>
-> > Makefile:424: die Regel f?r Ziel ?Makefile.in? scheiterte
-> > make[2]: *** [Makefile.in] Fehler 127
-> > make[2]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/src? wird verlassen
-> > Makefile:382: die Regel f?r Ziel ?all-recursive? scheiterte
-> > make[1]: *** [all-recursive] Fehler 1
-> > make[1]: Verzeichnis ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0? wird verlassen
-> > package/pkg-generic.mk:238: die Regel f?r Ziel ?/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/.stamp_built? scheiterte
-> > make: *** [/home/brenkem/git/STACC-100BaseT1-1CH/output/build/liboping-1.10.0/.stamp_built] Fehler 2
-> >
-> >
+> Let the user supply its own options in /etc/default/ptp4l and
+> /etc/default/phc2sys.
 >
-> Maybe
+> This patch also fixes an issue with the creation of the pid file that is
+> needed to properly stop the daemon again.
 >
-> LIBOPING_AUTORECONF=YES
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> ---
+>  package/linuxptp/S65linuxptp | 46 ----------------------------
+>  package/linuxptp/S65ptp4l    | 59 ++++++++++++++++++++++++++++++++++++
+>  package/linuxptp/S66phc2sys  | 59 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 118 insertions(+), 46 deletions(-)
+>  delete mode 100644 package/linuxptp/S65linuxptp
+>  create mode 100644 package/linuxptp/S65ptp4l
+>  create mode 100644 package/linuxptp/S66phc2sys
 >
-> missing from package/liboping/liboping.mk (needed in case configure.ac or
-> Makefile.am is patched, see [1])...
+> diff --git a/package/linuxptp/S65linuxptp b/package/linuxptp/S65linuxptp
+> deleted file mode 100644
+> index 46b8921fdd..0000000000
+> --- a/package/linuxptp/S65linuxptp
+> +++ /dev/null
+> @@ -1,46 +0,0 @@
+> -#!/bin/sh
+> -#
+> -# Start linuxptp
+> -#
+> -
+> -start() {
+> -       printf "Starting linuxptp daemon: "
+> -       start-stop-daemon -S -b -q -p /var/run/linuxptp-ptp4l.pid \
+> -               -x /usr/sbin/ptp4l -- -f /etc/linuxptp.cfg
+> -       [ $? = 0 ] && echo "OK" || echo "FAIL"
+> -
+> -       printf "Starting linuxptp system clock synchronization: "
+> -       start-stop-daemon -S -b -q -p /var/run/linuxptp-phc2sys.pid \
+> -               -x /usr/sbin/phc2sys -- -s eth0 -c CLOCK_REALTIME -w -S 1.0
+> -       [ $? = 0 ] && echo "OK" || echo "FAIL"
+> -}
+> -
+> -stop() {
+> -       printf "Stopping linuxptp system clock synchronization: "
+> -       start-stop-daemon -K -q -p /var/run/linuxptp-phc2sys.pid \
+> -               -x /usr/sbin/phc2sys
+> -       echo "OK"
+> -
+> -       printf "Stopping linuxptp daemon: "
+> -       start-stop-daemon -K -q -p /var/run/linuxptp-ptp4l.pid \
+> -               -x /usr/sbin/ptp4l
+> -       echo "OK"
+> -}
+> -
+> -case "$1" in
+> -  start)
+> -       start
+> -       ;;
+> -  stop)
+> -       stop
+> -       ;;
+> -  restart|reload)
+> -       stop
+> -       start
+> -       ;;
+> -  *)
+> -       echo "Usage: $0 {start|stop|restart}"
+> -       exit 1
+> -esac
+> -
+> -exit $?
+> diff --git a/package/linuxptp/S65ptp4l b/package/linuxptp/S65ptp4l
+> new file mode 100644
+> index 0000000000..630c5e803b
+> --- /dev/null
+> +++ b/package/linuxptp/S65ptp4l
+> @@ -0,0 +1,59 @@
+> +#!/bin/sh
+> +#
+> +# Start linuxptp
+> +#
+> +
+> +DAEMON="ptp4l"
+> +
+> +PIDFILE="/var/run/$DAEMON.pid"
+> +
+> +PTP4L_ARGS="-f /etc/linuxptp.cfg"
+> +
+> +# shellcheck source=/dev/null
+> +[ -r "/etc/default/ptp4l" ] && . "/etc/default/ptp4l"
+> +
+> +# ptp4l does not create a pidfile, so pass "-n" in the command line
+> +# and use "-m" to instruct start-stop-daemon to create one.
+> +start() {
+> +       printf "Starting linuxptp daemon: "
+> +       start-stop-daemon -S -b -q -m -p $PIDFILE \
+> +               -x /usr/sbin/$DAEMON -- $PTP4L_ARGS
+> +       status=$?
+> +       if [ "$status" -eq 0 ]; then
+> +               echo "OK"
+> +       else
+> +               echo "FAIL"
+> +       fi
+> +       return $status
+> +}
+> +
+> +stop() {
+> +       printf "Stopping linuxptp daemon: "
+> +       start-stop-daemon -K -q -p $PIDFILE
+> +       status=$?
+> +       if [ "$status" -eq 0 ]; then
+> +               rm -f "$PIDFILE"
+> +               echo "OK"
+> +       else
+> +               echo "FAIL"
+> +       fi
+> +       return $status
+> +}
+> +
+> +case "$1" in
+> +  start)
+> +       start
+> +       ;;
+> +  stop)
+> +       stop
+> +       ;;
+> +  restart|reload)
+> +       stop
+> +       start
+> +       ;;
+> +  *)
+> +       echo "Usage: $0 {start|stop|restart}"
+> +       exit 1
+> +esac
+> +
+> +exit $?
+> diff --git a/package/linuxptp/S66phc2sys b/package/linuxptp/S66phc2sys
+> new file mode 100644
+> index 0000000000..5d9e962b07
+> --- /dev/null
+> +++ b/package/linuxptp/S66phc2sys
+> @@ -0,0 +1,59 @@
+> +#!/bin/sh
+> +#
+> +# Start linuxptp
+> +#
+> +
+> +DAEMON="phc2sys"
+> +
+> +PIDFILE="/var/run/$DAEMON.pid"
+> +
+> +PHC2SYS_ARGS="-s eth0 -c CLOCK_REALTIME -w -S 1.0"
+> +
+> +# shellcheck source=/dev/null
+> +[ -r "/etc/default/phc2sys" ] && . "/etc/default/phc2sys"
+> +
+> +# phc2sys does not create a pidfile, so pass "-n" in the command line
+> +# and use "-m" to instruct start-stop-daemon to create one.
+> +start() {
+> +       printf "Starting linuxptp system clock synchronization: "
+> +       start-stop-daemon -S -b -q -m -p $PIDFILE \
+> +               -x /usr/sbin/$DAEMON -- $PHC2SYS_ARGS
+> +       status=$?
+> +       if [ "$status" -eq 0 ]; then
+> +               echo "OK"
+> +       else
+> +               echo "FAIL"
+> +       fi
+> +       return $status
+> +}
+> +
+> +stop() {
+> +       printf "Stopping linuxptp system clock synchronization: "
+> +       start-stop-daemon -K -q -p $PIDFILE
+> +       status=$?
+> +       if [ "$status" -eq 0 ]; then
+> +               rm -f "$PIDFILE"
+> +               echo "OK"
+> +       else
+> +               echo "FAIL"
+> +       fi
+> +       return $status
+> +}
+> +
+> +case "$1" in
+> +  start)
+> +       start
+> +       ;;
+> +  stop)
+> +       stop
+> +       ;;
+> +  restart|reload)
+> +       stop
+> +       start
+> +       ;;
+> +  *)
+> +       echo "Usage: $0 {start|stop|restart}"
+> +       exit 1
+> +esac
+> +
+> +exit $?
+> --
+> 2.20.1
+>
 
-And maybe 'Mitigated snprintf truncation warning (-wError) #50' [2] is the better
-fix than disabling -Werror?
+just realized that I forgot to update the makefile for the changed
+filename (S65linuxptp -> S65ptp4l) and the new one (S66phc2sys) ;-/ I
+will prepare a new version of this patch but I will wait for some
+review comments.
 
-Regards,
-Peter
+By the way I think we should than also rename the systemd service
+script to have the same names like the sysv one.
 
-[2] https://github.com/octo/liboping/pull/50/commits/664414123a3fe89984abfa0917946c513bf47163
-
->
-> Regards,
-> Peter
->
-> [1] http://nightly.buildroot.org/manual.html#_infrastructure_for_autotools_based_packages
->
-> >
-> >
-> > Mit freundlichen Gr??en / Best regards
-> >
-> > Maik Brenke
-> > Embedded Linux Developer
-> > BU ADAS
-> >
-> > Continental
-> > Division Chassis & Safety
-> > Ringlerstrasse 17, 85057 Ingolstadt
-> > Germany
-> >
-> > Phone: +49-841-881-12401
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200306/96177c34/attachment.html>
+--
+Heiko
