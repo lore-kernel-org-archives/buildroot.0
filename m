@@ -1,71 +1,45 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri,  6 Mar 2020 13:47:19 -0700
-Subject: [Buildroot] [PATCH 1/1] package/systemd: bump to version 245
-Message-ID: <20200306204719.25909-1-james.hilliard1@gmail.com>
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Date: Fri, 6 Mar 2020 22:10:44 +0100
+Subject: [Buildroot] [PATCH] package/mini-snmpd: bump to version 1.6
+In-Reply-To: <20200303232243.77a2e0fc@windsurf.home>
+References: <20200302185054.1815056-1-alexander.sverdlin@gmail.com>
+ <20200303232243.77a2e0fc@windsurf.home>
+Message-ID: <20200306221044.b07a18634cf281a94f42eb02@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disabled new modules for now.
+Hello Thomas,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 8 +++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+On Tue, 3 Mar 2020 23:22:43 +0100
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 5d3a8e83b1..4567812cf6 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256	06e604e5484ec03ff763ae680c8b52c33fedcce95a773944f27816fde68503d7	systemd-244.1.tar.gz
-+sha256	6dc956a857c889d6f3cf7d768d4836db48a39e5bef5dd930fbed697ab2421a61	systemd-245.tar.gz
- sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
- sha256	ca008b0178b6390e874f6e4a890fbed482b0fb946159a3b1d370bd8d2327d9bc	README
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 6e31a14ac3..1c3b81cfcb 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+> Thanks, I have applied to next, after doing some changes.
+
+[...]
+
+> The configure script now uses pkg-config, so I had to add
+> host-pkgconfig to MINI_SNMPD_DEPENDENCIES.
+
+[...]
+
+> I've moved the installation of this file to a post install target hook,
+> as it's not really completely systemd related.
+
+thank you for fixing the above issues!
  
--SYSTEMD_VERSION = 244.1
-+SYSTEMD_VERSION = 245
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
-@@ -41,6 +41,9 @@ SYSTEMD_CONF_OPTS += \
- 	-Dumount-path=/usr/bin/umount \
- 	-Dnobody-group=nogroup \
- 	-Didn=true \
-+	-Drepart=false \
-+	-Duserdb=false \
-+	-Dhomed=false \
- 	-Dnss-systemd=true
- 
- ifeq ($(BR2_PACKAGE_ACL),y)
-@@ -511,6 +514,7 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dtpm=false \
- 	-Denvironment-d=false \
- 	-Dbinfmt=false \
-+	-Drepart=false \
- 	-Dcoredump=false \
- 	-Dpstore=false \
- 	-Dlogind=false \
-@@ -518,6 +522,8 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dlocaled=false \
- 	-Dmachined=false \
- 	-Dportabled=false \
-+	-Duserdb=false \
-+	-Dhomed=false \
- 	-Dnetworkd=false \
- 	-Dtimedated=false \
- 	-Dtimesyncd=false \
+> > +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> > +	ln -sf ../../../../usr/lib/systemd/system/mini-snmpd.service \
+> > +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/mini-snmpd.service
+> 
+> This is no longer needed nowadays: these symlinks are created by
+> host-systemd, so I dropped this.
+> 
+> Could you try what's in the next branch, and make sure it works for you?
+
+Yes, your version works for me, thank you!
+
 -- 
-2.20.1
+Alexander Sverdlin.
