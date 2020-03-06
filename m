@@ -1,43 +1,36 @@
-From: Howard Mitchell <hm@hmbedded.co.uk>
-Date: Fri,  6 Mar 2020 09:25:03 +0000
-Subject: [Buildroot] [PATCH 1/2] package/mesa3d: select vc4 and kmsro driver
- for gallium v3d
-Message-ID: <20200306092504.30340-1-hm@hmbedded.co.uk>
+From: Hammami Omar <omar18hammami@gmail.com>
+Date: Fri, 6 Mar 2020 11:12:28 +0100
+Subject: [Buildroot] /dev/hwrng no such device error
+Message-ID: <CAGSpp9ms_HhhpGAcTz+34TxfUQ9pfNsK4pr4DO6MN4cLjn3sPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, when building for rpi2/3 it is only necessary to to select
-vc4 to get acceleration working. However, when building for rpi4 v3d,
-vc4 and kmsro have to be selected. Therefore this commit forces the
-selection of vc4 and kmsro when v3d is selected.
+Hello,
 
-Signed-off-by: Howard Mitchell <hm@hmbedded.co.uk>
----
- package/mesa3d/Config.in | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+I am trying to gather more entropy in my nonblocking pool.
+So I have compiled the the *rng-tools* module via buildroot, and I have
+activated the *HW_RANDOM_INTEL* in the  kernel configuration.
+However, I cannot read from /dev/hwrng and I cannot execute the rngd
+service.
+I have these messages :
+*# rngd -v*
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 13e516e452..3950170533 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -257,12 +257,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
- 	bool "Gallium v3d driver"
- 	depends on BR2_arm || BR2_aarch64
--	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
--	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
--	select BR2_PACKAGE_LIBDRM_VC4
--	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
- 	help
--	  Driver for Broadcom VC6 (rpi4) GPUs (needs kmsro and vc4).
-+	  Driver for Broadcom VC6 (rpi4) GPUs.
- 
- 	  It requires a kernel 4.18+ with DRM V3D support enabled:
- 
--- 
-2.17.1
+
+
+
+*read errorread errorAvailable entropy sources:        Intel/AMD hardware
+rng        DRNG*
+
+Also, the  file */sys/class/misc/hw_random/rng_available* is empty. And,
+the" */sys/class/misc/hw_random/rng_current*" has "*none*"
+
+Did anyone faced the same problem before ?
+
+Kind regards,
+Omar
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200306/ddead772/attachment.html>
