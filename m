@@ -1,58 +1,120 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri,  6 Mar 2020 21:10:21 +0100
-Subject: [Buildroot] [PATCH v1 2/3] package/liboping: add patch to fix utf8
- ncurses support
+Date: Fri,  6 Mar 2020 21:10:22 +0100
+Subject: [Buildroot] [PATCH v1 3/3] package/liboping: add patch to fix suid
+ root feature
 In-Reply-To: <20200306201022.22382-1-ps.report@gmx.net>
 References: <20200306201022.22382-1-ps.report@gmx.net>
-Message-ID: <20200306201022.22382-2-ps.report@gmx.net>
+Message-ID: <20200306201022.22382-3-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch from upstream merge request [1] to fix fix utf8 ncurses support.
+Add patch from upstream merge quest [1] to fix suid root feature.
 
-[1] https://github.com/octo/liboping/issues/36
+[1] https://github.com/octo/liboping/pull/35
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/liboping/0003-fix-utf8-support.patch | 29 ++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/liboping/0003-fix-utf8-support.patch
+ ...-when-adding-hosts-not-when-doing-th.patch | 91 +++++++++++++++++++
+ 1 file changed, 91 insertions(+)
+ create mode 100644 package/liboping/0004-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch
 
-diff --git a/package/liboping/0003-fix-utf8-support.patch b/package/liboping/0003-fix-utf8-support.patch
+diff --git a/package/liboping/0004-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch b/package/liboping/0004-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch
 new file mode 100644
-index 0000000000..8a9792b619
+index 0000000000..bdfb3d3f08
 --- /dev/null
-+++ b/package/liboping/0003-fix-utf8-support.patch
-@@ -0,0 +1,29 @@
-+From dfbdd324769f542b6b89499c1b7f0f4322100bc6 Mon Sep 17 00:00:00 2001
-+From: wfaulk <wfaulk@users.noreply.github.com>
-+Date: Wed, 7 Aug 2019 18:57:43 -0400
-+Subject: [PATCH 3/4] fix utf8 support
++++ b/package/liboping/0004-Open-raw-sockets-when-adding-hosts-not-when-doing-th.patch
+@@ -0,0 +1,91 @@
++From ac878566eb935fd3ebfb804e6bd9e1690d4a65e3 Mon Sep 17 00:00:00 2001
++From: Tollef Fog Heen <tfheen@err.no>
++Date: Tue, 20 Mar 2018 22:40:32 +0100
++Subject: [PATCH 4/4] Open raw sockets when adding hosts, not when doing the
++ pinging
 +
-+https://github.com/octo/liboping/issues/36
++This allows this to run as non-root again, without this, oping will
++have dropped privileges before trying to ping, which then fails to
++open the necessary raw sockets.
 +
-+[Upstream: https://github.com/octo/liboping/pull/49/commits/a313923ec12d11daa8e70497c6b7b5d50965821b]
++Fixes: #34
++
++[Upstream: https://github.com/octo/liboping/pull/35/commits/a88c51f38dafa1fba9118045176754bec05d3c94]
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ src/oping.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/liboping.c | 48 +++++++++++++++++-------------------------------
++ 1 file changed, 17 insertions(+), 31 deletions(-)
 +
-+diff --git a/src/oping.c b/src/oping.c
-+index 87ca81a..62dbb67 100644
-+--- a/src/oping.c
-++++ b/src/oping.c
-+@@ -903,7 +903,7 @@ static void time_calc (struct timespec *ts_dest, /* {{{ */
-+ #if USE_NCURSES
-+ static _Bool has_utf8() /* {{{ */
-+ {
-+-# if HAVE_NCURSESW_NCURSES_H
-++# if HAVE_NCURSESW_CURSES_H
-+ 	if (!opt_utf8)
++diff --git a/src/liboping.c b/src/liboping.c
++index 39b0041..f98e810 100644
++--- a/src/liboping.c
+++++ b/src/liboping.c
++@@ -1344,41 +1344,10 @@ int ping_send (pingobj_t *obj)
++ 	struct timeval nowtime;
++ 	struct timeval timeout;
++ 
++-	_Bool need_ipv4_socket = 0;
++-	_Bool need_ipv6_socket = 0;
++-
++ 	for (ptr = obj->head; ptr != NULL; ptr = ptr->next)
 + 	{
-+ 		/* Automatically determine */
++ 		ptr->latency  = -1.0;
++ 		ptr->recv_ttl = -1;
++-
++-		if (ptr->addrfamily == AF_INET)
++-			need_ipv4_socket = 1;
++-		else if (ptr->addrfamily == AF_INET6)
++-			need_ipv6_socket = 1;
++-	}
++-
++-	if (!need_ipv4_socket && !need_ipv6_socket)
++-	{
++-		ping_set_error (obj, "ping_send", "No hosts to ping");
++-		return (-1);
++-	}
++-
++-	if (need_ipv4_socket && obj->fd4 == -1)
++-	{
++-		obj->fd4 = ping_open_socket(obj, AF_INET);
++-		if (obj->fd4 == -1)
++-			return (-1);
++-		ping_set_ttl (obj, obj->ttl);
++-		ping_set_qos (obj, obj->qos);
++-	}
++-	if (need_ipv6_socket && obj->fd6 == -1)
++-	{
++-		obj->fd6 = ping_open_socket(obj, AF_INET6);
++-		if (obj->fd6 == -1)
++-			return (-1);
++-		ping_set_ttl (obj, obj->ttl);
++-		ping_set_qos (obj, obj->qos);
++ 	}
++ 
++ 	if (gettimeofday (&nowtime, NULL) == -1)
++@@ -1698,6 +1667,23 @@ int ping_host_add (pingobj_t *obj, const char *host)
++ 	ph->table_next = obj->table[ph->ident % PING_TABLE_LEN];
++ 	obj->table[ph->ident % PING_TABLE_LEN] = ph;
++ 
+++	if (ph->addrfamily == AF_INET && obj->fd4 == -1)
+++	{
+++		obj->fd4 = ping_open_socket(obj, AF_INET);
+++		if (obj->fd4 == -1)
+++			return (-1);
+++		ping_set_ttl (obj, obj->ttl);
+++		ping_set_qos (obj, obj->qos);
+++	}
+++	if (ph->addrfamily == AF_INET6 && obj->fd6 == -1)
+++	{
+++		obj->fd6 = ping_open_socket(obj, AF_INET6);
+++		if (obj->fd6 == -1)
+++			return (-1);
+++		ping_set_ttl (obj, obj->ttl);
+++		ping_set_qos (obj, obj->qos);
+++	}
+++
++ 	return (0);
++ } /* int ping_host_add */
++ 
 +-- 
 +2.25.1
 +
