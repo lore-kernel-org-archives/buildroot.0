@@ -1,74 +1,107 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 22:04:39 +0100
-Subject: [Buildroot] [git commit branch/next] package/systemd: bump to
- version 245
-Message-ID: <20200307213520.677B48FCF3@busybox.osuosl.org>
+Date: Sat, 7 Mar 2020 22:44:35 +0100
+Subject: [Buildroot] [git commit branch/next] package/connman: re-organize
+ configure options and dependencies
+Message-ID: <20200307213520.7247A8FC5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b634af44271384f6cbd0c44dd3cf34181fb0437
+commit: https://git.buildroot.net/buildroot/commit/?id=69aa5c5d695c64f75bd079d968a3d622f916045c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Disabled new modules for now.
+Use style typical for Buildroot.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 8 +++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/connman/connman.mk | 73 ++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 57 insertions(+), 16 deletions(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 5d3a8e83b1..4567812cf6 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256	06e604e5484ec03ff763ae680c8b52c33fedcce95a773944f27816fde68503d7	systemd-244.1.tar.gz
-+sha256	6dc956a857c889d6f3cf7d768d4836db48a39e5bef5dd930fbed697ab2421a61	systemd-245.tar.gz
- sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
- sha256	ca008b0178b6390e874f6e4a890fbed482b0fb946159a3b1d370bd8d2327d9bc	README
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 6e31a14ac3..1c3b81cfcb 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 2cbf3fe752..8403237c28 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -11,22 +11,63 @@ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+ CONNMAN_INSTALL_STAGING = YES
+ CONNMAN_LICENSE = GPL-2.0
+ CONNMAN_LICENSE_FILES = COPYING
+-CONNMAN_CONF_OPTS += \
+-	--with-dbusconfdir=/etc \
+-	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug) \
+-	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet) \
+-	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi) \
+-	$(if $(BR2_PACKAGE_CONNMAN_WISPR),--enable-wispr,--disable-wispr) \
+-	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth) \
+-	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback) \
+-	$(if $(BR2_PACKAGE_CONNMAN_NEARD),--enable-neard,--disable-neard) \
+-	$(if $(BR2_PACKAGE_CONNMAN_OFONO),--enable-ofono,--disable-ofono) \
+-	$(if $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
+-
+-CONNMAN_DEPENDENCIES += \
+-	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
+-	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono) \
+-	$(if $(BR2_PACKAGE_CONNMAN_WISPR),gnutls)
++
++CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
++
++ifeq ($(BR2_INIT_SYSTEMD),y)
++CONNMAN_CONF_OPTS += --with-systemdunitdir=/usr/lib/systemd/system
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_BLUETOOTH),y)
++CONNMAN_CONF_OPTS += --enable-bluetooth
++else
++CONNMAN_CONF_OPTS += --disable-bluetooth
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_DEBUG),y)
++CONNMAN_CONF_OPTS += --enable-debug
++else
++CONNMAN_CONF_OPTS += --disable-debug
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_ETHERNET),y)
++CONNMAN_CONF_OPTS += --enable-ethernet
++else
++CONNMAN_CONF_OPTS += --disable-ethernet
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_LOOPBACK),y)
++CONNMAN_CONF_OPTS += --enable-loopback
++else
++CONNMAN_CONF_OPTS += --disable-loopback
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_NEARD),y)
++CONNMAN_CONF_OPTS += --enable-neard
++CONNMAN_DEPENDENCIES += neard
++else
++CONNMAN_CONF_OPTS += --disable-neard
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_OFONO),y)
++CONNMAN_CONF_OPTS += --enable-ofono
++CONNMAN_DEPENDENCIES += ofono
++else
++CONNMAN_CONF_OPTS += --disable-ofono
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_WIFI),y)
++CONNMAN_CONF_OPTS += --enable-wifi
++else
++CONNMAN_CONF_OPTS += --disable-wifi
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_WISPR),y)
++CONNMAN_CONF_OPTS += --enable-wispr
++CONNMAN_DEPENDENCIES += gnutls
++else
++CONNMAN_CONF_OPTS += --disable-wispr
++endif
  
--SYSTEMD_VERSION = 244.1
-+SYSTEMD_VERSION = 245
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
-@@ -41,6 +41,9 @@ SYSTEMD_CONF_OPTS += \
- 	-Dumount-path=/usr/bin/umount \
- 	-Dnobody-group=nogroup \
- 	-Didn=true \
-+	-Drepart=false \
-+	-Duserdb=false \
-+	-Dhomed=false \
- 	-Dnss-systemd=true
- 
- ifeq ($(BR2_PACKAGE_ACL),y)
-@@ -511,6 +514,7 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dtpm=false \
- 	-Denvironment-d=false \
- 	-Dbinfmt=false \
-+	-Drepart=false \
- 	-Dcoredump=false \
- 	-Dpstore=false \
- 	-Dlogind=false \
-@@ -518,6 +522,8 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dlocaled=false \
- 	-Dmachined=false \
- 	-Dportabled=false \
-+	-Duserdb=false \
-+	-Dhomed=false \
- 	-Dnetworkd=false \
- 	-Dtimedated=false \
- 	-Dtimesyncd=false \
+ define CONNMAN_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
