@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 08:54:14 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/czmq: fix typo
+Date: Sat, 7 Mar 2020 08:54:27 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/czmq: fix typo
  for LICENSE hash
-Message-ID: <20200307074155.1348E8F4DC@busybox.osuosl.org>
+Message-ID: <20200307074207.2229B8F4EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6ce7cbaf25abcb423b20a98f9dc811ca9ad97ae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bf408b2b66907e719add6f546f2640b1341e9459
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
@@ -21,12 +21,12 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/czmq/czmq.hash b/package/czmq/czmq.hash
-index c42525c78d..446bc58064 100644
+index 97b6e03b54..4738c9c434 100644
 --- a/package/czmq/czmq.hash
 +++ b/package/czmq/czmq.hash
-@@ -3,4 +3,4 @@ md5 6d3a6fdd25c2bb29897c53670dce97bf czmq-4.1.1.tar.gz
- sha1 629d34e8b5c1f2dd88689350f71f9917a8d76f23 czmq-4.1.1.tar.gz
+@@ -3,4 +3,4 @@ md5 7e09997db6ac3b25e8ed104053040722 czmq-4.2.0.tar.gz
+ sha1 42165b3eede517708814e5a1b6972d8bde417f7a czmq-4.2.0.tar.gz
  # Locally calculated
- sha256 f00ff419881dc2a05d0686c8467cd89b4882677fc56f31c0e2cc81c134cbb0c0 czmq-4.1.1.tar.gz
+ sha256 cfab29c2b3cc8a845749758a51e1dd5f5160c1ef57e2a41ea96e4c2dcc8feceb czmq-4.2.0.tar.gz
 -sha256 1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5 LICENCE
 +sha256 1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5 LICENSE
