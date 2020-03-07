@@ -1,77 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 21:36:08 +0100
-Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats: set
- developers info
-Message-ID: <20200307204504.D21558FC5E@busybox.osuosl.org>
+Date: Sat, 7 Mar 2020 15:58:41 +0100
+Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats:
+ properly ignore CVEs in <pkg>_IGNORE_CVES
+Message-ID: <20200307204504.AA7168FC5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1fc827934a828179ae73f3b94bbc9d780cb4755
+commit: https://git.buildroot.net/buildroot/commit/?id=1097c0427d3b3f2838d14ee9661226bafc610572
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Use the function 'parse_developers' function from getdeveloperlib that
-collect the information about the developers and the files they
-maintain. Then set the maintainer(s) to each package.
+It seems like throughout the series that the CVE pkg-stats support
+went through, the support for ignoring CVEs in the per-package
+<pkg>_IGNORE_CVES variable was forgotten.
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Let's re-introduce this, which is now very simple thanks to the CVE
+class, its .identifier() propertly and the .is_cve_ignored() method of
+the Package class
+
+Cc: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ support/scripts/pkg-stats | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 87018eabd3..e34841fc7c 100755
+index 01a0a0d53d..7721d98459 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -30,10 +30,14 @@ import certifi
- import distutils.version
- import time
- import gzip
-+import sys
- from urllib3 import HTTPSConnectionPool
- from urllib3.exceptions import HTTPError
- from multiprocessing import Pool
- 
-+sys.path.append('utils/')
-+from getdeveloperlib import parse_developers
-+
- NVD_START_YEAR = 2002
- NVD_JSON_VERSION = "1.0"
- NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
-@@ -171,6 +175,16 @@ class Package:
+@@ -260,6 +260,9 @@ class CVE:
+         True if the Buildroot Package object passed as argument is affected
+         by this CVE.
          """
-         return cve in self.all_ignored_cves.get(self.pkgvar(), [])
- 
-+    def set_developers(self, developers):
-+        """
-+        Fills in the .developers field
-+        """
-+        self.developers = [
-+            dev.name
-+            for dev in developers
-+            if dev.hasfile(self.path)
-+        ]
++        if br_pkg.is_cve_ignored(self.identifier):
++            return False
 +
-     def __eq__(self, other):
-         return self.path == other.path
- 
-@@ -894,6 +908,8 @@ def __main__():
-                                       'HEAD']).splitlines()[0].decode()
-     print("Build package list ...")
-     packages = get_pkglist(args.npackages, package_list)
-+    print("Getting developers ...")
-+    developers = parse_developers()
-     print("Getting package make info ...")
-     package_init_make_info()
-     print("Getting package details ...")
-@@ -905,6 +921,7 @@ def __main__():
-         pkg.set_check_package_warnings()
-         pkg.set_current_version()
-         pkg.set_url()
-+        pkg.set_developers(developers)
-     print("Checking URL status")
-     check_package_urls(packages)
-     print("Getting latest versions ...")
+         for product in self.each_product():
+             if product['product_name'] != br_pkg.name:
+                 continue
