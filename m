@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 22:22:51 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/mariadb: fix
+Date: Sat, 7 Mar 2020 22:22:57 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/mariadb: fix
  permissions of data dir when using systemd
-Message-ID: <20200308084020.829F88FE15@busybox.osuosl.org>
+Message-ID: <20200308084027.79FDC7FC66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38f9851485cf111c992293ef7cd91f054e9417c8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b7dbe4d3520930d1d3c2488f5a9d55c92b679efc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 mysql_install_db is currently called in the systemd unit without
 --user=mysql that the sysv script uses. This will generate the initial
