@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 21:26:38 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/util-linux: bump
+Date: Sat, 7 Mar 2020 21:22:43 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/util-linux: bump
  to version 2.35
-Message-ID: <20200307202446.0ECAB8FBC5@busybox.osuosl.org>
+Message-ID: <20200307202451.4AD408FBF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=369dff2d00ce183e8d0a106eb7f411702acdfcfc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f54798547acf976f0ef5400ed90ab651e1080b2f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 This version brings bug fixes, enhancements and a new script utility,
 scriptlive. For detailed information see the release notes:
