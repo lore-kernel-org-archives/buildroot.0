@@ -1,67 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 22:25:43 +0100
-Subject: [Buildroot] [PATCH] uclibc: update to 1.0.33
-In-Reply-To: <20200228102840.4vv4wuqw42kmm37s@waldemar-brodkorb.de>
-References: <20200228102840.4vv4wuqw42kmm37s@waldemar-brodkorb.de>
-Message-ID: <20200307222543.0067ef9b@windsurf.home>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 7 Mar 2020 22:28:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump to version 2.64.0
+In-Reply-To: <20200307220648.7df62529@windsurf.home>
+References: <20200306211458.54107-1-james.hilliard1@gmail.com>
+ <20200307220648.7df62529@windsurf.home>
+Message-ID: <20200307222843.6889675c@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Waldemar,
+Hello Thomas,
 
-On Fri, 28 Feb 2020 11:28:40 +0100
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+On Sat, 7 Mar 2020 22:06:48 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  ...lude-ctype.h-drop-is-_l-macro-definitions.patch | 72 ----------------------
->  ...de-ctype.h-restore-__isctype_l-definition.patch | 32 ----------
->  package/uclibc/uclibc.hash                         |  4 +-
->  package/uclibc/uclibc.mk                           |  2 +-
->  4 files changed, 3 insertions(+), 107 deletions(-)
->  delete mode 100644 package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
->  delete mode 100644 package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
+> On Fri,  6 Mar 2020 14:14:58 -0700
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> >  ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
+> > -LIBGLIB2_CONF_OPTS += -Dlibmount=true
+> > +LIBGLIB2_CONF_OPTS += -Dlibmount=enabled
+> >  LIBGLIB2_DEPENDENCIES += util-linux
+> >  else
+> > -LIBGLIB2_CONF_OPTS += -Dlibmount=false
+> > +LIBGLIB2_CONF_OPTS += -Dlibmount=disabled
+> >  endif
+>
+> Any reason for this change ? It is not explained in the commit log, and
+> it's not obvious why it is needed.
+>
+> Could you give a few more details?
 
-There is something odd with your release tarball. When it gets
-extracted, I get gazillions of:
+The option was changed from type boolean to type feature:
 
->>> uclibc 1.0.33 Extracting
-xzcat /home/thomas/dl/uclibc/uClibc-ng-1.0.33.tar.xz | /home/thomas/projets/buildroot/output/host/bin/tar --strip-components=1 -C /home/thomas/projets/buildroot/output/build/uclibc-1.0.33   -xf -
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'LIBARCHIVE.creationtime'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.dev'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.ino'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.nlink'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.dev'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.ino'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.nlink'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.dev'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.ino'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.nlink'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'LIBARCHIVE.creationtime'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.dev'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.ino'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.nlink'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.dev'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.ino'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.nlink'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.dev'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.ino'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.nlink'
-/home/thomas/projets/buildroot/output/host/bin/tar: Ignoring unknown extended header keyword 'SCHILY.dev'
+-- build/libglib2-2.62.4/meson_options.txt	2019-12-19 17:33:15.000000000 +0100
++++ build/libglib2-2.64.0/meson_options.txt	2020-02-27 17:12:52.000000000 +0100
+@@ -30,8 +30,8 @@
+        description : 'build with xattr support')
 
-And when I say gazillions I mean it: there are 15502 of such messages
-printed when extracting your tarball. I don't get any of those messages
-when extracting the uClibc 1.0.32 tarball.
+ option('libmount',
+-       type : 'boolean',
+-       value : true,
++       type : 'feature',
++       value : 'auto',
+        description : 'build with libmount support')
 
-Could you fix this ?
+ option('internal_pcre',
 
-Thanks!
+Regards,
+Peter
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> Thanks,
+>
+> Thomas
