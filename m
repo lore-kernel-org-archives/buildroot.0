@@ -1,46 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Mar 2020 22:06:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/imagemagick: disable opencl
-In-Reply-To: <874kw73bhp.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 03 Feb 2020 17:02:26 +0100")
-References: <20190823191417.8748-1-juju@cotds.org>
- <20190924114722.2578c41b@windsurf> <874kw73bhp.fsf@dell.be.48ers.dk>
-Message-ID: <87ftejx4by.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Mar 2020 22:06:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: bump to version 245
+In-Reply-To: <20200306204719.25909-1-james.hilliard1@gmail.com>
+References: <20200306204719.25909-1-james.hilliard1@gmail.com>
+Message-ID: <20200307220614.67ee723f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+On Fri,  6 Mar 2020 13:47:19 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
- >> On Fri, 23 Aug 2019 21:14:17 +0200
- >> Julien Olivain <juju@cotds.org> wrote:
+> Disabled new modules for now.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/systemd/systemd.hash | 2 +-
+>  package/systemd/systemd.mk   | 8 +++++++-
+>  2 files changed, 8 insertions(+), 2 deletions(-)
 
- >>> Some packages installs libOpenCL without declaring
- >>> BR2_PACKAGE_PROVIDES_LIBOPENCL (e.g. imx-gpu-viv). ImageMagick will
- >>> detect the library and will require libtool. Since libtool is not in
- >>> dependencies, build might fail.
- >>> 
- >>> To prevent that situation, this patch explicitly disable opencl
- >>> support.
- >>> 
- >>> Signed-off-by: Julien Olivain <juju@cotds.org>
+Applied to next, thanks.
 
- >> FYI, I've started looking into this. First, there is an upstream commit
- >> that fixes using disable_opencl instead of enable_opencl. Then I fixed
- >> up the configure.ac to use the "no_cl" variable that the OpenCL M4
- >> macro defines. But then even with --disable-opencl, the build fails
- >> because MAGICKCORE__OPENCL is defined. I'm still trying to figure out
- >> why.
-
- > I don't see that issue any more (In fact, the only references to that
- > symbol seems to be in Magick{Core,Wand}/studio.h), and the
- > IMAGEMAGICK_CONV_ENV tweak isn't needed any more, so I dropped that and
- > committed - Thanks.
-
-Committed to 2019.02.x and 2019.11.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
