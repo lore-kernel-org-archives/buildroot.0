@@ -1,10 +1,10 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat,  7 Mar 2020 08:56:32 +0100
-Subject: [Buildroot] [PATCH v5 11/12] support/scripts/pkg-stats: add list of
- status checks to the json output
+Date: Sat,  7 Mar 2020 08:56:33 +0100
+Subject: [Buildroot] [PATCH v5 12/12] support/scripts/pkg-stats: add status
+ for cve check
 In-Reply-To: <20200307075633.7514-1-heiko.thiery@gmail.com>
 References: <20200307075633.7514-1-heiko.thiery@gmail.com>
-Message-ID: <20200307075633.7514-12-heiko.thiery@gmail.com>
+Message-ID: <20200307075633.7514-13-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,28 +17,21 @@ Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 8e75abe1d3..15aa48180e 100755
+index 15aa48180e..985a0fd079 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -88,6 +88,11 @@ class Package:
-     all_license_files = dict()
-     all_versions = dict()
-     all_ignored_cves = dict()
-+    # This is the list of all possible checks. Add new checks to this list so
-+    # a tool that post-processeds the json output knows the checks before
-+    # iterating over the packages.
-+    status_checks = ['cve', 'developers', 'hash', 'hash-license', 'license',
-+                     'license-files', 'patches', 'pkg-check', 'url', 'version']
+@@ -622,6 +622,12 @@ def check_package_cves(nvd_path, packages):
+             if pkg_name in packages and cve.affects(packages[pkg_name]):
+                 packages[pkg_name].cves.append(cve.identifier)
  
-     def __init__(self, name, path):
-         self.name = name
-@@ -984,6 +989,7 @@ def dump_json(packages, defconfigs, stats, date, commit, output):
-     final = {'packages': pkgs,
-              'stats': statistics,
-              'defconfigs': defconfigs,
-+             'package_status_checks': Package.status_checks,
-              'commit': commit,
-              'date': str(date)}
++    for pkg_name, pkg in packages.items():
++        if len(pkg.cves) > 0:
++            pkg.status['cve'] = ('error', 'affected by cve')
++        else:
++            pkg.status['cve'] = ('ok', 'no cve found')
++
  
+ def calculate_stats(packages):
+     stats = defaultdict(int)
 -- 
 2.20.1
