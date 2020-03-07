@@ -1,51 +1,45 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat, 7 Mar 2020 22:00:19 +0100
-Subject: [Buildroot] [PATCH] support/scripts/pkg-stats: add tilde '~'
- expansion for pathes
-In-Reply-To: <20200307155654.12e93ddb@windsurf.home>
-References: <20200307103704.20524-1-heiko.thiery@gmail.com>
- <20200307155654.12e93ddb@windsurf.home>
-Message-ID: <CAEyMn7YfytoHS+CuGxwBME0zRDPM3nOq83DCBpiebC6Sigwc0w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Mar 2020 22:02:54 +0100
+Subject: [Buildroot] [PATCH v5 00/12] pkg-stats json output improvements
+In-Reply-To: <20200307075633.7514-1-heiko.thiery@gmail.com>
+References: <20200307075633.7514-1-heiko.thiery@gmail.com>
+Message-ID: <20200307220254.69d2921d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-Am Sa., 7. M?rz 2020 um 15:56 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> On Sat,  7 Mar 2020 11:37:05 +0100
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > The script arguments 'nvd-path', 'json' and 'html' currently does not
-> > allow to have '~' in path for user home directory. With this patch
-> > this '~' is expanded to the real user home directory.
-> >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
->
-> Isn't ~ supposed to be expanded by your shell before calling pkg-stats
-> ? Here, pkg-stats --html ~/toto.html works perfectly fine without your
-> patch.
->
-Indeed I didn't thought about that and you're right the shell should
-expand that. But I saw that it was not.
+On Sat,  7 Mar 2020 08:56:21 +0100
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-I rechecked that and found out that there is a difference between
-setting the argument of the option with or without a '='.
+> Heiko Thiery (12):
+>   support/scripts/pkg-stats: store latest version in a dict
+>   support/scripts/pkg-stats: store patch files for the package
+>   support/scripts/pkg-stats: set developers info
+>   support/scripts/pkg-stats: store licences of package
+>   support/scripts/pkg-stats: add package status
+>   support/scripts/pkg-stats: add package count to stats
+>   support/scripts/pkg-stats: store pkg dir path
+>   support/scripts/pkg-stats: add defconfig support
+>   support/scripts/pkg-stats: add support for license hash check
+>   support/scripts/pkg-stats: set status to 'na' for virtual packages
+>   support/scripts/pkg-stats: initialize all package status checks
+>   support/scripts/pkg-stats: add status for cve check
 
-Without '=' the '~' is expanded by the shell (pkg-stats --html ~/out.html).
-Wit '=' the '~' is not expanded by the shell (pkg-stats --html=~/out.html).
+I've applied the entire series to next, except
+"support/scripts/pkg-stats: add support for license hash check" as I
+explained as a reply to this patch.
 
+Also, I fixed the daily-mail script from the buildroot-test repo to be
+compatible with the new JSON format.
 
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Thanks!
 
-Heiko
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
