@@ -1,40 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 21:32:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qt5: add qt5remoteobjects
- library
-In-Reply-To: <8ef0b851-e4b8-d2dd-28b8-190ab67dae8c@leiderfischer.de>
-References: <8ef0b851-e4b8-d2dd-28b8-190ab67dae8c@leiderfischer.de>
-Message-ID: <20200307213245.4db1c5d9@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 07 Mar 2020 21:36:37 +0100
+Subject: [Buildroot] [PATCH] package/util-linux: bump to version 2.35
+In-Reply-To: <874kw9p1m9.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sun, 02 Feb 2020 14:20:14 +0100")
+References: <20200129173425.10988-1-unixmania@gmail.com>
+ <874kw9p1m9.fsf@dell.be.48ers.dk>
+Message-ID: <87a74ryka2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sven,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Sat, 7 Mar 2020 16:19:12 +0100
-Sven Fischer <sven@leiderfischer.de> wrote:
+>>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+ >> From: Carlos Santos <unixmania@gmail.com>
+ >> This version brings bug fixes, enhancements and a new script utility,
+ >> scriptlive. For detailed information see the release notes:
 
-> Qt 5.12 adds a library for IPC. This library is missing from the
-> distributed qt5 package. Added it by using the library qt5serialport as
-> a template and replaced serialport with remoteobjects, recalculated the
-> sha256 sums.
-> 
-> Signed-off-by: Sven Fischer <sven@leiderfischer.de>
+ >> http://www.kernel.org/pub/linux/utils/util-linux/v2.35/v2.35-ReleaseNotes
 
-Thanks a lot for your patch. However, it has been badly line-wrapped by
-your e-mail client, which makes it impossible to apply, and difficult
-to review.
+ >> Pull some fixed applied after the release.
 
-Could you resend it using "git send-email", as instructed in the
-Buildroot manual
-(https://buildroot.org/downloads/manual/manual.html#submitting-patches) ?
+ >> Disable the use of code under GPLv3 included in hwclock since v2.30. The
+ >> subject was discussed upstream[1] and it was decided that hwclock will
+ >> be made GPLv2-only again in v2.36, so do it in advance in Buildroot.
 
-Thanks a lot!
+ >> Meanwhile, be warned that all OS images selecting hwclock built with
+ >> Buildroot since commit 74235a6854 (util-linux: bump to version 2.30)
+ >> contain code under GPLv3, which imposes some technical difficulties to
+ >> include in embedded systems. For more information see GPLv3, Section 6,
+ >> "Conveying Non-Source Forms", and the definitions of User Product and
+ >> Installation Information[2].
 
-Thomas
+ > Argh :/
+
+ > Committed, thanks. I will also apply it to 2019.02.x / 2019.11.x once I
+ > sync them.
+
+I finally got around to do so now.
+
+Committed to 2019.02.x and 2019.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
