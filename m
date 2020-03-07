@@ -1,64 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 15:59:08 +0100
-Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats:
- clear multiprocessing pools after use
-Message-ID: <20200307204504.B9F758FC5E@busybox.osuosl.org>
+Date: Sat, 7 Mar 2020 21:37:23 +0100
+Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats: set
+ status to 'na' for virtual packages
+Message-ID: <20200307204505.119498F5F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28adf09b8993970eadd63d7a8401d3c2bf3b7235
+commit: https://git.buildroot.net/buildroot/commit/?id=fb879c1954f0b8c3ab42f494ac9b9be37b148a4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-During the CVE checking phase, we can still see a huge amount of
-Python processes (actually 128) running on the host, even though
-the CVE step is entirely ran in the main thread.
+If there is no infra set or infra is virtual the status is set to 'na'.
 
-These are actually the worker processes spawned to check for the
-packages URL statuses and the latest versions from release-monitoring.
-This is because of an issue in Python's multiprocessing implementation:
-https://bugs.python.org/issue34172
+This is done for the follwing checks:
+ - license
+ - license-files
+ - hash
+ - hash-license
+ - patches
+ - version
 
-The problem was already there before the CVE matching step was
-introduced, but because pkg-stat was terminating right after the
-release-monitoring step, it went unnoticed.
-
-Also, do not hold a reference to the multiprocessing pool from
-the Package class, as this is not needed.
-
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index e414ec50f2..8a67e509e1 100755
+index a15d0ec24b..59b6f388bd 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -402,11 +402,13 @@ def check_url_status_worker(url, url_status):
+@@ -131,6 +131,15 @@ class Package:
+     def patch_count(self):
+         return len(self.patch_files)
  
- 
- def check_package_urls(packages):
--    Package.pool = Pool(processes=64)
-+    pool = Pool(processes=64)
-     for pkg in packages:
--        pkg.url_worker = pkg.pool.apply_async(check_url_status_worker, (pkg.url, pkg.url_status))
-+        pkg.url_worker = pool.apply_async(check_url_status_worker, (pkg.url, pkg.url_status))
-     for pkg in packages:
-         pkg.url_status = pkg.url_worker.get(timeout=3600)
-+        del pkg.url_worker
-+    pool.terminate()
- 
- 
- def release_monitoring_get_latest_version_by_distro(pool, name):
-@@ -479,6 +481,7 @@ def check_package_latest_version(packages):
-     results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
++    @property
++    def has_valid_infra(self):
++        try:
++            if self.infras[0][1] == 'virtual':
++                return False
++        except IndexError:
++                return False
++        return True
++
+     def set_infra(self):
+         """
+         Fills in the .infras field
+@@ -152,6 +161,11 @@ class Package:
+         """
+         Fills in the .status['license'] and .status['license-files'] fields
+         """
++        if not self.has_valid_infra:
++            self.status['license'] = ("na", "no valid package infra")
++            self.status['license-files'] = ("na", "no valid package infra")
++            return
++
+         var = self.pkgvar()
+         self.status['license'] = ("error", "missing")
+         self.status['license-files'] = ("error", "missing")
+@@ -165,6 +179,11 @@ class Package:
+         """
+         Fills in the .status['hash'] field
+         """
++        if not self.has_valid_infra:
++            self.status['hash'] = ("na", "no valid package infra")
++            self.status['hash-license'] = ("na", "no valid package infra")
++            return
++
+         hashpath = self.path.replace(".mk", ".hash")
+         if os.path.exists(hashpath):
+             self.status['hash'] = ("ok", "found")
+@@ -175,6 +194,10 @@ class Package:
+         """
+         Fills in the .patch_count, .patch_files and .status['patches'] fields
+         """
++        if not self.has_valid_infra:
++            self.status['patches'] = ("na", "no valid package infra")
++            return
++
+         pkgdir = os.path.dirname(self.path)
+         for subdir, _, _ in os.walk(pkgdir):
+             self.patch_files = fnmatch.filter(os.listdir(subdir), '*.patch')
+@@ -554,6 +577,10 @@ def check_package_latest_version(packages):
      for pkg, r in zip(packages, results):
-         pkg.latest_version = r
-+    worker_pool.terminate()
-     del http_pool
+         pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
  
- 
++        if not pkg.has_valid_infra:
++            pkg.status['version'] = ("na", "no valid package infra")
++            continue
++
+         if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
+             pkg.status['version'] = ('warning', "Release Monitoring API error")
+         elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
