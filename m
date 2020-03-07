@@ -1,46 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 23:41:20 +0100
-Subject: [Buildroot] [git commit] package/gst1-validate: disable
- introspection
-Message-ID: <20200307222917.C2D9C8FDA1@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  8 Mar 2020 00:27:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/proftpd: add mod_cap option
+Message-ID: <20200307232735.2425986-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f64face1fdbe7a7c84fc0cf19a0958e623b5074
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- disable introspection unconditionally (as already done for all
-  other original gstreamer1 packages)
-- use '=' instead of '+=' for the first usage of GST1_VALIDATE_CONF_OPTS
+Add an option to enable or disable mod_cap and select libcap accordingly
+instead of using bundled libcap which raise a build failure with headers
+< 4.3 due to PR_CAP_AMBIENT and will be removed in version 1.3.7:
+https://github.com/proftpd/proftpd/commit/8c845703fcf2c7978614784126bd074ffc4477f9
 
 Fixes:
+ - http://autobuild.buildroot.org/results/4d680d8204bdf1f3deec2c3eeb9a2d9e6eabe4d5
 
-  http://autobuild.buildroot.net/results/e6e43fb85c71af9bb599ea8bbe2e805b392cf1ad
-
-    GEN      GstValidate-1.0.gir
-  Couldn't find include 'GstPbutils-1.0.gir' (search path: '['/nvmedata/autobuild/instance-6/output-1/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '/usr/share/gir-1.0', '/usr/share/gir-1.0', '/usr/share/gir-1.0', '/usr/share/gir-1.0', '/usr/share/gir-1.0', '/nvmedata/autobuild/instance-6/output-1/host/share', 'gir-1.0', '/nvmedata/autobuild/instance-6/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
-  make[5]: *** [Makefile:1612: GstValidate-1.0.gir] Error 1
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gstreamer1/gst1-validate/gst1-validate.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/proftpd/Config.in  |  6 ++++++
+ package/proftpd/proftpd.mk | 13 +++++++------
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-index ff96d844ba..38b50b6736 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.mk
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
-@@ -22,6 +22,8 @@ else
- GST1_VALIDATE_DEPENDENCIES += host-python python
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index edec37c8dd..4a544f0c50 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -8,6 +8,12 @@ config BR2_PACKAGE_PROFTPD
+ 
+ if BR2_PACKAGE_PROFTPD
+ 
++config BR2_PACKAGE_PROFTPD_MOD_CAP
++	bool "mod_cap support"
++	select BR2_PACKAGE_LIBCAP
++	help
++	  Compile ProFTPD with mod_cap support
++
+ config BR2_PACKAGE_PROFTPD_MOD_REWRITE
+ 	bool "mod_rewrite support"
+ 	help
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 02dd0e825e..946a37d69e 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -25,6 +25,13 @@ PROFTPD_CONF_OPTS = \
+ 	--with-gnu-ld \
+ 	--without-openssl-cmdline
+ 
++ifeq ($(BR2_PACKAGE_PROFTPD_MOD_CAP),y)
++PROFTPD_CONF_OPTS += --enable-cap
++PROFTPD_DEPENDENCIES += libcap
++else
++PROFTPD_CONF_OPTS += --disable-cap
++endif
++
+ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
+ PROFTPD_MODULES += mod_rewrite
  endif
+@@ -85,12 +92,6 @@ define PROFTPD_USE_LLU
+ endef
+ PROFTPD_PRE_CONFIGURE_HOOKS += PROFTPD_USE_LLU
  
--GST1_VALIDATE_CONF_OPTS += --disable-sphinx-doc
-+GST1_VALIDATE_CONF_OPTS = \
-+	--disable-introspection \
-+	--disable-sphinx-doc
+-define PROFTPD_MAKENAMES
+-	$(MAKE1) CC="$(HOSTCC)" CFLAGS="" LDFLAGS="" -C $(@D)/lib/libcap _makenames
+-endef
+-
+-PROFTPD_POST_CONFIGURE_HOOKS = PROFTPD_MAKENAMES
+-
+ PROFTPD_MAKE = $(MAKE1)
  
- $(eval $(autotools-package))
+ # install Perl based scripts in target
+-- 
+2.25.0
