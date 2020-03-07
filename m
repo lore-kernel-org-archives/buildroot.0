@@ -1,39 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 22:08:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/connman: bump version to 1.38
-In-Reply-To: <20200307114312.14726-1-mc5686@mclink.it>
-References: <20200307114312.14726-1-mc5686@mclink.it>
-Message-ID: <20200307220822.53439875@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 07 Mar 2020 22:13:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/smartmontools: add libselinux
+ optional dependency
+In-Reply-To: <20200202104511.3342301-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 2 Feb 2020 11:45:11 +0100")
+References: <20200202104511.3342301-1-fontaine.fabrice@gmail.com>
+Message-ID: <87blp7x402.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Sat,  7 Mar 2020 12:43:12 +0100
-Mauro Condarelli <mc5686@mclink.it> wrote:
+ > libselinux is an optional dependency since a very long time (2010) and
+ > https://github.com/mirror/smartmontools/commit/ab807ee43bd4821f5e0e010de08a746d88506b17
 
-> Added support for iwd.
-> 
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Thanks Mauro, but we already have a patch series for connman that does
-a number of changes, including the version bump:
+Committed to 2019.02.x and 2019.11.x, thanks.
 
-  http://patchwork.ozlabs.org/patch/1246178/
-  http://patchwork.ozlabs.org/patch/1246179/
-  http://patchwork.ozlabs.org/patch/1246180/
-  http://patchwork.ozlabs.org/patch/1246181/
-
-However, it does not take care of iwd support, so a follow-up patch
-would be good.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
