@@ -1,43 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Mar 2020 21:36:51 +0100
-Subject: [Buildroot] [PATCH] package/util-linux: upgrade to version
- 2.35.1
-In-Reply-To: <20200207231608.1745-1-unixmania@gmail.com> (unixmania's message
- of "Fri, 7 Feb 2020 20:16:08 -0300")
-References: <20200207231608.1745-1-unixmania@gmail.com>
-Message-ID: <875zffyk9o.fsf@dell.be.48ers.dk>
+Date: Sat, 07 Mar 2020 21:37:05 +0100
+Subject: [Buildroot] [PATCH] package/util-linux: disable systemd for
+ host build
+In-Reply-To: <20200219112559.1429304-1-john@metanate.com> (John Keeping's
+ message of "Wed, 19 Feb 2020 11:25:59 +0000")
+References: <20200219112559.1429304-1-john@metanate.com>
+Message-ID: <871rq3yk9a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+>>>>> "John" == John Keeping <john@metanate.com> writes:
 
- > From: Carlos Santos <unixmania@gmail.com>
- > Drop patches already applied upstream and, consequently, AUTORECONF.
+ > When building host-util-linux, the systemdsystemunitdir is set to the
+ > real host directory, so the install step fails with:
 
- > util-linux 2.35.1 Release Notes
- > ===============================
+ > /usr/bin/install: cannot remove '/usr/lib/systemd/system/fstrim.service': Permission denied
+ > /usr/bin/install: cannot remove '/usr/lib/systemd/system/fstrim.timer': Permission denied
 
- > build-sys:
- >    - add --disable-hwclock-gplv3  [Karel Zak]
- > chrt:
- >    - Use sched_setscheduler system call directly  [jonnyh64]
- > lib/randutils:
- >    - use explicit data types for bit ops  [Karel Zak]
- > libfdisk:
- >    - fix __copy_partition()  [Karel Zak]
- >    - make sure we use NULL after free  [Karel Zak]
- > libmount:
- >    - fix x- options use for non-root users  [Karel Zak]
- > po:
- >    - update uk.po (from translationproject.org)  [Yuri Chornoivan]
- > sfdisk:
- >    - make sure we do not overlap on --move  [Karel Zak]
- >    - remove broken step alignment for --move  [Karel Zak]
+ > Since we don't need systemd support in host-util-linux, unconditionally
+ > disable it for the host build.
 
- > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+ > Signed-off-by: John Keeping <john@metanate.com>
 
 Committed to 2019.02.x and 2019.11.x, thanks.
 
