@@ -1,32 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Mar 2020 08:34:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version
- to 4.11.5
-In-Reply-To: <20200122185659.336443-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 22 Jan 2020 19:56:59 +0100")
-References: <20200122185659.336443-1-bernd.kuhls@t-online.de>
-Message-ID: <87lfoc8voo.fsf@dell.be.48ers.dk>
+Date: Sat, 07 Mar 2020 08:34:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libjpeg: security bump to
+ version 9d
+In-Reply-To: <20200122191130.55384-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 22 Jan 2020 20:11:30 +0100")
+References: <20200122191130.55384-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h7z08voi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Release notes: https://www.samba.org/samba/history/samba-4.11.5.html
- > This is a security release in order to address the following defects:
+ > - Fix CVE-2018-11813: libjpeg 9c has a large loop because read_pixel in
+ >   rdtarga.c mishandles EOF.
+ > - Update hash of README (small updates such as authors, year ...)
 
- > CVE-2019-14902: Replication of ACLs set to inherit down a subtree on AD
- >                 Directory not automatic.
- > CVE-2019-14907: Crash after failed character conversion at log level 3
- >                 or above.
- > CVE-2019-19344: Use after free during DNS zone scavenging in Samba AD
- >                 DC.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-I have instead bumped 2019.02.x to 4.9.18 and 2019.11.x to 4.10.13.
+Committed to 2019.02.x and 2019.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
