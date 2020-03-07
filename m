@@ -1,45 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 21:55:23 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/glibc/riscv32:
- update LICENSE file hash
-Message-ID: <20200307204447.BC5DB8FC26@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Mar 2020 21:36:08 +0100
+Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats: set
+ developers info
+Message-ID: <20200307204504.D21558FC5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c14f8f3bcc6d27d228959d6efac2403bcfdf8648
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c1fc827934a828179ae73f3b94bbc9d780cb4755
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The LICENSE file hash wasn't changed with the last glibc bump for riscv32 [1].
-The change is due to upstream LICENSE file update between glibc 2.26 and 2.29
-[2] [3].
+Use the function 'parse_developers' function from getdeveloperlib that
+collect the information about the developers and the files they
+maintain. Then set the maintainer(s) to each package.
 
-This issue was discovered by toolchain-builder [4].
-
-[1] a4958567284026f979f6e0056a5b98bedd77e88f
-[2] https://sourceware.org/git/?p=glibc.git;a=commit;h=7f9f1ecb710eac4d65bb02785ddf288cac098323
-[3] https://sourceware.org/git/?p=glibc.git;a=commit;h=5a357506659f9a00fcf5bc9c5d8fc676175c89a7
-[4] https://gitlab.com/kubu93/toolchains-builder/-/jobs/423826546
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Alistair Francis <alistair@alistair23.me>
-Cc: Mark Corbin <mark@dibsco.co.uk>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 76d1629e5755b0c9102bcdea18669a4e7bd48351)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/glibc/06983fe52cfe8e4779035c27e8cc5d2caab31531/glibc.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/scripts/pkg-stats | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/package/glibc/06983fe52cfe8e4779035c27e8cc5d2caab31531/glibc.hash b/package/glibc/06983fe52cfe8e4779035c27e8cc5d2caab31531/glibc.hash
-index 09ddc7be72..ce378c0bd1 100644
---- a/package/glibc/06983fe52cfe8e4779035c27e8cc5d2caab31531/glibc.hash
-+++ b/package/glibc/06983fe52cfe8e4779035c27e8cc5d2caab31531/glibc.hash
-@@ -4,4 +4,4 @@ sha256 703877c0df77fce00719fe55cc62b07bb8d5f44fdb704bbb1b0bf2cf38afe10a  glibc-0
- # Hashes for license files
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LIB
--sha256 61abdd6930c9c599062d89e916b3e7968783879b6be0ee1c6229dd6169def431 LICENSES
-+sha256 35bdb41dc0bcb10702ddacbd51ec4c0fe6fb3129f734e8c85fc02e4d3eb0ce3f LICENSES
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 87018eabd3..e34841fc7c 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -30,10 +30,14 @@ import certifi
+ import distutils.version
+ import time
+ import gzip
++import sys
+ from urllib3 import HTTPSConnectionPool
+ from urllib3.exceptions import HTTPError
+ from multiprocessing import Pool
+ 
++sys.path.append('utils/')
++from getdeveloperlib import parse_developers
++
+ NVD_START_YEAR = 2002
+ NVD_JSON_VERSION = "1.0"
+ NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
+@@ -171,6 +175,16 @@ class Package:
+         """
+         return cve in self.all_ignored_cves.get(self.pkgvar(), [])
+ 
++    def set_developers(self, developers):
++        """
++        Fills in the .developers field
++        """
++        self.developers = [
++            dev.name
++            for dev in developers
++            if dev.hasfile(self.path)
++        ]
++
+     def __eq__(self, other):
+         return self.path == other.path
+ 
+@@ -894,6 +908,8 @@ def __main__():
+                                       'HEAD']).splitlines()[0].decode()
+     print("Build package list ...")
+     packages = get_pkglist(args.npackages, package_list)
++    print("Getting developers ...")
++    developers = parse_developers()
+     print("Getting package make info ...")
+     package_init_make_info()
+     print("Getting package details ...")
+@@ -905,6 +921,7 @@ def __main__():
+         pkg.set_check_package_warnings()
+         pkg.set_current_version()
+         pkg.set_url()
++        pkg.set_developers(developers)
+     print("Checking URL status")
+     check_package_urls(packages)
+     print("Getting latest versions ...")
