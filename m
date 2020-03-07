@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 09:58:21 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/wpewebkit:
+Date: Sat, 7 Mar 2020 09:58:02 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/webkitgtk:
  security bump to version 2.26.4
-Message-ID: <20200307110059.0A66F815D3@busybox.osuosl.org>
+Message-ID: <20200307110058.E025A83B21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb275e11e36d779b157aae464ca1efbd1860b43d
+commit: https://git.buildroot.net/buildroot/commit/?id=ad946b267b4fdda9441da19c3aa464361f3968a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes the following security issues:
@@ -35,48 +35,48 @@ Fixes the following security issues:
   issues were addressed with improved memory handling.
 
 For more details, see the advisory:
-https://wpewebkit.org/security/WSA-2020-0002.html
+https://webkitgtk.org/security/WSA-2020-0002.html
 
 While we are at it, adjust the white space in the .hash function to match
 the new agreements.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit abafaedd05e1ca5eed3c793c34d3f1ad58d09a18)
+(cherry picked from commit 97ce61f633b02b1362cb9b9c93b9137a30065747)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.hash | 12 ++++++------
- package/wpewebkit/wpewebkit.mk   |  2 +-
+ package/webkitgtk/webkitgtk.hash | 12 ++++++------
+ package/webkitgtk/webkitgtk.mk   |  2 +-
  2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 07a06466d0..fd78264914 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 13d8742b7f..0dfbe93137 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
 @@ -1,8 +1,8 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.26.3.tar.xz.sums
--md5 735beb5c1f825d5feda2e355aca6bec0 wpewebkit-2.26.3.tar.xz
--sha1 aeda665b3a137ac748ff1d08ce9e4c751f7caf97 wpewebkit-2.26.3.tar.xz
--sha256 2da9fe9c3a8bdfecc4281d848a4eacdd7be8ac5e0fc397020094d68cf32c10b3 wpewebkit-2.26.3.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.26.4.tar.xz.sums
-+md5  4cd2883ec9da38a0ffe413bb75239874  wpewebkit-2.26.4.tar.xz
-+sha1  337f78ee237fe98c7e6e728d8fc0508069b007be  wpewebkit-2.26.4.tar.xz
-+sha256  0c292182864b63b725491f1a69b55c03e0e75f6db0875389caff31fe9c0d3ae9  wpewebkit-2.26.4.tar.xz
+-# From https://webkitgtk.org/releases/webkitgtk-2.26.3.tar.xz.sums
+-md5 4c27d59a032710dae3cffa5990bb6aea webkitgtk-2.26.3.tar.xz
+-sha1 8d5a7b4f330788847f85e1b2cb6191435dcf9f28 webkitgtk-2.26.3.tar.xz
+-sha256 add51153943cc11d90a7038d0ea5f6332281e6c0be0640f802a211b035f0e611 webkitgtk-2.26.3.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.26.4.tar.xz.sums
++md5  60f881729f3b71244b7f6e58790073e0  webkitgtk-2.26.4.tar.xz
++sha1  72f209c08ecc8ad4f0f6b767d4fa1be7a652df33  webkitgtk-2.26.4.tar.xz
++sha256  4386900713dfadf9741177210b32623cab22562a79ffd0d446b66569934b113f  webkitgtk-2.26.4.tar.xz
  
  # Hashes for license files:
 -sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
 -sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce Source/WebCore/LICENSE-LGPL-2.1
 +sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
 +sha256  f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce  Source/WebCore/LICENSE-LGPL-2.1
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index e823e0d4e4..c94e979d62 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index c8ad3c3382..4b0d7abf35 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.26.3
-+WPEWEBKIT_VERSION = 2.26.4
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-WEBKITGTK_VERSION = 2.26.3
++WEBKITGTK_VERSION = 2.26.4
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
