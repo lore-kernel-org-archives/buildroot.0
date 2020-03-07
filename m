@@ -1,68 +1,113 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 7 Mar 2020 12:48:06 +0100
-Subject: [Buildroot] [PATCH v1] package/libdrm: tests/amdgpu needs
- atomic_ops
-In-Reply-To: <20200307113604.14754-1-ps.report@gmx.net>
-References: <20200307113604.14754-1-ps.report@gmx.net>
-Message-ID: <20200307124806.72ce4a5e@gmx.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 7 Mar 2020 13:18:51 +0100
+Subject: [Buildroot] Reproducible toolchain
+In-Reply-To: <ea-mime-5e626267-56b9-7746598e@www-1.netcourrier.com>
+References: <ea-mime-5e626267-56b9-7746598e@www-1.netcourrier.com>
+Message-ID: <07c29a84-148f-bf47-7642-4e80495c57f8@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  7 Mar 2020 12:36:04 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+Hello,
 
-> Add patch to fix tests/amdpu dependency on atomic_ops.
->
-> Fixes:
->
->   http://autobuild.buildroot.net/results/e29dae423f3f80d2c34dde9a125bd216a75ad1c0
->
->   FAILED: tests/amdgpu/amdgpu_test
->   .../host/bin/sparc-linux-gcc  -o tests/amdgpu/amdgpu_test 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/amdgpu_test.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/basic_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/bo_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/cs_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/vce_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/uvd_enc_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/vcn_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/deadlock_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/vm_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/ras_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/syncobj_tests.c.o' -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -Wl,--start-group libdrm.so.2.4.0 amdgpu/libdrm_amdgpu.so.1.0.0 .../host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libcunit.so -Wl,--end-group -pthread '-Wl,-rpath,$ORIGIN/../..:$ORIGIN/../../amdgpu' -Wl,-rpath-link,.../build/libdrm-2.4.100/build/ -Wl,-rpath-link,.../build/li
->  bdrm-2.4.100/build/amdgpu
->   .../host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: tests/amdgpu/b9f2b1d@@amdgpu_test at exe/bo_tests.c.o: undefined reference to symbol 'AO_fetch_compare_and_swap_emulation'
->   .../host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: .../host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libatomic_ops.so.1: error adding symbols: DSO missing from command line
->
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  .../0007-tests-amdgpu-needs-atomic_ops.patch  | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/libdrm/0007-tests-amdgpu-needs-atomic_ops.patch
->
-> diff --git a/package/libdrm/0007-tests-amdgpu-needs-atomic_ops.patch b/package/libdrm/0007-tests-amdgpu-needs-atomic_ops.patch
-> new file mode 100644
-> index 0000000000..78a844b02e
-> --- /dev/null
-> +++ b/package/libdrm/0007-tests-amdgpu-needs-atomic_ops.patch
-> @@ -0,0 +1,26 @@
-> +From f0adb08424e624aeee340291343281256b7a98e8 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Sat, 7 Mar 2020 12:23:09 +0100
-> +Subject: [PATCH] tests/amdgpu: needs atomic_ops
-> +
+Le 06/03/2020 ? 15:47, lpdev at cordier.org a ?crit?:
+> Bump for this thread
+> 
+> Thanks,
+> 
+> Louis-Paul CORDIER
+> 
+> ------
+> 
+> Hi,
+> 
+> I'm currently experimenting toolchain building following the section "6.1.3.
+> Build an external toolchain with Buildroot" of the documentation.
+> 
+> My goal is to generate a reproducible sdk with the toolchain in it, and to store
+> in my repo as a git lfs object. This would allow to rebuild the toolchain only
+> when needed. Unfortunately, cleaning and rebuilding the toolchain with "make
+> sdk" produces different hashes. It seems that only static libraries are affected.
+> 
+> Is there any flag I can add to my toolchain build in order to generate the same
+> binaries?
 
-Upstream: https://gitlab.freedesktop.org/mesa/drm/-/merge_requests/50
+At the date of the 2020.02-rc3 version, the reproducible build option is
+experimental [1]. There is not guaranties that a generated sdk will be reproducible.
 
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + tests/amdgpu/meson.build | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/tests/amdgpu/meson.build b/tests/amdgpu/meson.build
-> +index 1726cb43..4dfa5c83 100644
-> +--- a/tests/amdgpu/meson.build
-> ++++ b/tests/amdgpu/meson.build
-> +@@ -26,7 +26,7 @@ if dep_cunit.found()
-> +       'vce_tests.c', 'uvd_enc_tests.c', 'vcn_tests.c', 'deadlock_tests.c',
-> +       'vm_tests.c', 'ras_tests.c', 'syncobj_tests.c',
-> +     ),
-> +-    dependencies : [dep_cunit, dep_threads],
-> ++    dependencies : [dep_cunit, dep_threads, dep_atomic_ops],
-> +     include_directories : [inc_root, inc_drm, include_directories('../../amdgpu')],
-> +     link_with : [libdrm, libdrm_amdgpu],
-> +     install : with_install_tests,
-> +--
-> +2.25.1
-> +
+[1] https://git.buildroot.net/buildroot/tree/Config.in?h=2020.02-rc3#n679
+
+> 
+> This is my defconfig:
+> 
+> BR2_x86_64=y
+> BR2_x86_core_avx2=y
+> BR2_REPRODUCIBLE=y
+> BR2_TOOLCHAIN_BUILDROOT_VENDOR="t est" ;
+> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> BR2_GCC_VERSION_7_X=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_GCC_ENABLE_OPENMP=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> # BR2_TARGET_ROOTFS_TAR is not set
+> 
+> List of files that are changing at each builds:
+> 
+> ./x86_64-test-linux-gnu/lib64/libasan.a
+> ./x86_64-test-linux-gnu/lib64/libtsan.a
+> ./x86_64-test-linux-gnu/lib64/libmpxwrappers.a
+> ./x86_64-test-linux-gnu/lib64/libatomic.a
+> ./x86_64-test-linux-gnu/lib64/libstdc++fs.a
+> ./x86_64-test-linux-gnu/lib64/libstdc++.a
+> ./x86_64-test-linux-gnu/lib64/libquadmath.a
+> ./x86_64-test-linux-gnu/lib64/libubsan.a
+> ./x86_64-test-linux-gnu/lib64/libsupc++.a
+> ./x86_64-test-linux-gnu/lib64/liblsan.a
+> ./x86_64-test-linux-gnu/lib64/libmpx.a
+> ./x86_64-test-linux-gnu/lib64/libitm.a
+> ./x86_64-test-linux-gnu/lib64/libgomp.a
+> ./x86_64-test-linux-gnu/lib64/libcilkrts.a
+> ./x86_64-test-linux -gnu/sys root/usr/lib/libdl.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/libmvec_nonshared.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/libg.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/libc.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/libcrypt.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/libanl.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/libutil.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/librpcsvc.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/libresolv.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/librt.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/libgomp.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/libm-2.30.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/libBrokenLocale.a
+> ./x86_64-test-linux-gnu/sysroot/usr/lib/libc_nonshared.a
+> ./x86_64-test-linux-gnu/sysroot/lib/libatomic.a
+> ./lib/gcc/x86_64-test-linux-gnu/7.4.0/libgcov.a
+> ./lib/gcc/x86_64-test-linux-gnu/7.4.0/libgcc_eh.a
+> ./lib/gcc/x86_64-test-linux-gnu/7.4.0/libgcc.a
+
+You may be interested by the reproducible-builds project [2].
+
+Note that gcc and binutils are listed as non producible packages [3], so some
+work needs to be done by upstream projects.
+
+[2] https://reproducible-builds.org
+[3] https://tests.reproducible-builds.org/debian/unstable/amd64/index_FTBR.html
+
+Best regards,
+Romain
+
+> 
+> Thank you for your time,
+> 
+> Louis-Paul CORDIER
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
