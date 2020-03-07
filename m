@@ -1,60 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 22:49:35 +0100
-Subject: [Buildroot] [PATCH v3 4/4] package/connman: add option to
- enable/disable WireGuard
-In-Reply-To: <20200227232955.16610-4-petr.vorel@gmail.com>
-References: <20200227232955.16610-1-petr.vorel@gmail.com>
- <20200227232955.16610-4-petr.vorel@gmail.com>
-Message-ID: <20200307224935.38dd7a7a@windsurf.home>
+Date: Sat, 7 Mar 2020 22:50:31 +0100
+Subject: [Buildroot] [git commit branch/next] package/connman: remove
+ _GNU_SOURCE patch
+Message-ID: <20200307213814.D08F08FD28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 28 Feb 2020 00:29:55 +0100
-Petr Vorel <petr.vorel@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=14191cd119d2366cb0ecb2f8f363e500bb02cbed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Changes v2->v3:
-> * New commit (each logical change should be in a separate commit).
-> 
->  package/connman/Config.in  | 7 +++++++
->  package/connman/connman.mk | 7 +++++++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/package/connman/Config.in b/package/connman/Config.in
-> index 68ea037b90..801957968a 100644
-> --- a/package/connman/Config.in
-> +++ b/package/connman/Config.in
-> @@ -42,6 +42,13 @@ config BR2_PACKAGE_CONNMAN_ETHERNET
->  	bool "enable Ethernet support"
->  	default y
->  
-> +config BR2_PACKAGE_CONNMAN_WIREGUARD
-> +	bool "enable WireGuard support"
-> +	select BR2_PACKAGE_LIBMNL
-> +	select BR2_PACKAGE_WIREGUARD_TOOLS
+Not needed any more.
 
-You forgot to propagate the dependencies of wireguard-tools, i.e:
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/connman/0001-nat-build-failure.patch | 30 ----------------------------
+ 1 file changed, 30 deletions(-)
 
-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-
-> +ifeq ($(BR2_PACKAGE_CONNMAN_WIREGUARD),y)
-> +CONNMAN_CONF_OPTS += --enable-wireguard
-> +CONNMAN_DEPENDENCIES += libmnl
-
-You don't depend on wireguard-tools here. Is it because wireguard-tools
-are only a runtime dependency? If so, there should be a comment in the
-Config.in, like this:
-
-	select BR2_PACKAGE_WIREGUARD_TOOLS # runtime
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/connman/0001-nat-build-failure.patch b/package/connman/0001-nat-build-failure.patch
+deleted file mode 100644
+index 0ab58501d0..0000000000
+--- a/package/connman/0001-nat-build-failure.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 68f4b4f5b220f256b17ad2f084d61fe89f3632ae Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 19 Apr 2016 08:38:38 -0300
+-Subject: [PATCH] nat: fix build failure
+-
+-_GNU_SOURCE needs to be defined so that O_CLOEXEC symbols can be found in
+-system header files.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Status: submitted upstream
+-
+- src/nat.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/nat.c b/src/nat.c
+-index 33ae6df..62e21d4 100644
+---- a/src/nat.c
+-+++ b/src/nat.c
+-@@ -24,6 +24,7 @@
+- #include <config.h>
+- #endif
+- 
+-+#define _GNU_SOURCE
+- #include <errno.h>
+- #include <sys/types.h>
+- #include <sys/stat.h>
+--- 
+-2.7.3
+-
