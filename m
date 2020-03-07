@@ -1,60 +1,48 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 7 Mar 2020 10:50:05 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/thrift: disable qt4
-In-Reply-To: <20200307092230.1388597-1-fontaine.fabrice@gmail.com>
-References: <20200307092230.1388597-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200307105005.4f9c3302@gmx.net>
+Date: Sat,  7 Mar 2020 10:54:48 +0100
+Subject: [Buildroot] [PATCH v1] package/gst1-validate: disable introspection
+Message-ID: <20200307095448.19707-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  7 Mar 2020 10:22:30 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+- disable introspection unconditionally (as already done for all
+  other original gstreamer1 packages)
+- use '=' instead of '+=' for the first usage of GST1_VALIDATE_CONF_OPTS
 
-> host-thrift can fail if a broken Qt4 is found on host:
->
-> CMake Error in lib/cpp/CMakeLists.txt:
->   Imported target "Qt4::QtCore" includes non-existent path
->
->     "/nvmedata/autobuild/instance-4/output-1/host/usr/mkspecs/default"
->
->   in its INTERFACE_INCLUDE_DIRECTORIES.  Possible reasons include:
->
->   * The path was deleted, renamed, or moved to another location.
->
->   * An install or uninstall procedure did not complete successfully.
->
->   * The installation package was faulty and references files it does not
->   provide.
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/57cad5313896c868e99b0b9534678f1c83a386f2
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+  http://autobuild.buildroot.net/results/e6e43fb85c71af9bb599ea8bbe2e805b392cf1ad
 
-Regards,
-Peter
+    GEN      GstValidate-1.0.gir
+  Couldn't find include 'GstPbutils-1.0.gir' (search path: '['/nvmedata/autobuild/instance-6/output-1/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '/usr/share/gir-1.0', '/usr/share/gir-1.0', '/usr/share/gir-1.0', '/usr/share/gir-1.0', '/usr/share/gir-1.0', '/nvmedata/autobuild/instance-6/output-1/host/share', 'gir-1.0', '/nvmedata/autobuild/instance-6/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
+  make[5]: *** [Makefile:1612: GstValidate-1.0.gir] Error 1
 
-> ---
-> Changes v1 -> v2 (after review of Peter Seiderer):
->  - Move WITH_QT4=OFF to THRIFT_COMMON_OPTS which already contains
->    WITH_QT5=OFF
->
->  package/thrift/thrift.mk | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-> index 6014bbfcdd..4260fe7e1c 100644
-> --- a/package/thrift/thrift.mk
-> +++ b/package/thrift/thrift.mk
-> @@ -19,6 +19,7 @@ THRIFT_COMMON_CONF_OPTS = -DBUILD_TUTORIALS=OFF \
->  	-DBUILD_TESTING=OFF \
->  	-DWITH_PYTHON=OFF \
->  	-DWITH_JAVA=OFF \
-> +	-DWITH_QT4=OFF \
->  	-DWITH_QT5=OFF
->
->  THRIFT_CONF_OPTS = $(THRIFT_COMMON_CONF_OPTS) -DBUILD_COMPILER=OFF
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Notes:
+  - blind patch (as I could not reproduce the failure locally)
+  - the autobuild failure is from next, but I believe the patch
+    does not do any harm on master
+---
+ package/gstreamer1/gst1-validate/gst1-validate.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+index ff96d844ba..92c5662efe 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.mk
++++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+@@ -22,6 +22,8 @@ else
+ GST1_VALIDATE_DEPENDENCIES += host-python python
+ endif
+ 
+-GST1_VALIDATE_CONF_OPTS += --disable-sphinx-doc
++GST1_VALIDATE_CONF_OPTS = \
++	--enable-introspection=no \
++	--disable-sphinx-doc
+ 
+ $(eval $(autotools-package))
+-- 
+2.25.1
