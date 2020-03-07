@@ -1,43 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Mar 2020 09:52:48 +0100
-Subject: [Buildroot] [PATCH v3 1/8] package/mariadb: fix permissions of
- data dir when using systemd
-In-Reply-To: <874kuzxmu2.fsf@tarshish> (Baruch Siach's message of "Sun, 08 Mar
- 2020 10:39:01 +0200")
-References: <20200204012200.7273-1-bluemrp9@gmail.com>
- <877dzvx3js.fsf@dell.be.48ers.dk> <874kuzxmu2.fsf@tarshish>
-Message-ID: <87a74rut27.fsf@dell.be.48ers.dk>
+Date: Sat, 7 Mar 2020 22:22:51 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/mariadb: fix
+ permissions of data dir when using systemd
+Message-ID: <20200308084020.829F88FE15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=38f9851485cf111c992293ef7cd91f054e9417c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
- > Hi Peter,
- > On Sat, Mar 07 2020, Peter Korsgaard wrote:
- >>>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
- >> 
- >> > mysql_install_db is currently called in the systemd unit without
- >> > --user=mysql that the sysv script uses. This will generate the initial
- >> > database files with root permissions. However, mysqld runs as user mysql
- >> > so this will cause problems. We fix this by calling chown instead of
- >> > passing the user parameter because an upcoming version bump will fail when
- >> > ran this way.
- >> 
- >> > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
- >> > ---
- >> > Changes v2 -> v3:
- >> >   - separate changes into separate patches (suggested by Thomas)
- >> > Changes v1 -> v2:
- >> >   - no change
- >> 
- >> Committed to 2019.02.x and 2019.11.x, thanks.
+mysql_install_db is currently called in the systemd unit without
+--user=mysql that the sysv script uses. This will generate the initial
+database files with root permissions. However, mysqld runs as user mysql
+so this will cause problems. We fix this by calling chown instead of
+passing the user parameter because an upcoming version bump will fail when
+ran this way.
 
- > Not in 2019.02.x as of 06d3d2602, or 2019.11.x as of 51f9a97831e.
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit add2c2ba2ec0e3fd18b6f6612dda6ab78ea6affd)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mariadb/mysqld.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ups, forgot to push. Will do so now. Thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mariadb/mysqld.service b/package/mariadb/mysqld.service
+index cd308310c6..3eaef173e1 100644
+--- a/package/mariadb/mysqld.service
++++ b/package/mariadb/mysqld.service
+@@ -2,7 +2,7 @@
+ Description=MySQL database server
+ 
+ [Service]
+-ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql'
++ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql && chown -R mysql:mysql /var/lib/mysql'
+ ExecStart=/usr/bin/mysqld_safe
+ Restart=always
+ User=mysql
