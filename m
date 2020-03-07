@@ -1,94 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 22:36:37 +0100
-Subject: [Buildroot] [git commit] package/guile: fix build without makeinfo
-Message-ID: <20200307212429.A18E08FC8A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Mar 2020 22:43:55 +0100
+Subject: [Buildroot] [git commit] package/ruby: fix build on mips
+Message-ID: <20200307213129.F03588FC93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d136a7ca2976b9e13f83f24f5ee03456f999f0e
+commit: https://git.buildroot.net/buildroot/commit/?id=c7e56163a70969a7dcdb3adf57c363ac462867a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
- - http://autobuild.buildroot.org/results/9605aac6f760bfff190d0ab95fa50f65486ffe90
+ - http://autobuild.buildroot.org/results/d0ab5334f195a400a6d6dd6c49e3c1a2001b2b70
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...04-Makefile.am-fix-build-without-makeinfo.patch | 51 ++++++++++++++++++++++
- package/guile/guile.mk                             |  3 +-
- 2 files changed, 53 insertions(+), 1 deletion(-)
+ package/ruby/ruby.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/guile/0004-Makefile.am-fix-build-without-makeinfo.patch b/package/guile/0004-Makefile.am-fix-build-without-makeinfo.patch
-new file mode 100644
-index 0000000000..0d16f92387
---- /dev/null
-+++ b/package/guile/0004-Makefile.am-fix-build-without-makeinfo.patch
-@@ -0,0 +1,51 @@
-+From 9304ad88a5f4b083d348563c5de00da53b34cf46 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 6 Mar 2020 23:20:39 +0100
-+Subject: [PATCH] Makefile.am: fix build without makeinfo
-+
-+Don't build doc subdir if makeinfo is not available otherwise build
-+fails on:
-+
-+make[4]: Entering directory '/nvmedata/autobuild/instance-7/output-1/build/host-guile-2.0.14/doc/ref'
-+  MAKEINFO guile.info
-+/nvmedata/autobuild/instance-7/output-1/build/host-guile-2.0.14/build-aux/missing: line 81: makeinfo: command not found
-+WARNING: 'makeinfo' is missing on your system.
-+         You should only need it if you modified a '.texi' file, or
-+         any other file indirectly affecting the aspect of the manual.
-+         You might want to install the Texinfo package:
-+         <http://www.gnu.org/software/texinfo/>
-+         The spurious makeinfo call might also be the consequence of
-+         using a buggy 'make' (AIX, DU, IRIX), in which case you might
-+         want to install GNU make:
-+         <http://www.gnu.org/software/make/>
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/9605aac6f760bfff190d0ab95fa50f65486ffe90
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to bug-guile at gnu.org]
-+---
-+ Makefile.am | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index ebbf6d476..2270afb9f 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -38,8 +38,12 @@ SUBDIRS =					\
-+ 	test-suite				\
-+ 	benchmark-suite				\
-+ 	gc-benchmarks				\
-+-	am					\
-++	am
-++
-++if HAVE_MAKEINFO
-++SUBDIRS +=					\
-+ 	doc
-++endif
-+ 
-+ DIST_SUBDIRS = $(SUBDIRS) prebuilt
-+ 
-+-- 
-+2.25.0
-+
-diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index f53ebdd5cb..4992861071 100644
---- a/package/guile/guile.mk
-+++ b/package/guile/guile.mk
-@@ -8,7 +8,8 @@ GUILE_VERSION = 2.0.14
- GUILE_SOURCE = guile-$(GUILE_VERSION).tar.xz
- GUILE_SITE = $(BR2_GNU_MIRROR)/guile
- GUILE_INSTALL_STAGING = YES
--# For 0002-calculate-csqrt_manually.patch
-+# For 0002-calculate-csqrt_manually.patch and
-+# 0004-Makefile.am-fix-build-without-makeinfo.patch
- GUILE_AUTORECONF = YES
- GUILE_LICENSE = LGPL-3.0+
- GUILE_LICENSE_FILES = LICENSE COPYING COPYING.LESSER
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 1899d14797..0ac1164332 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -48,6 +48,12 @@ endif
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+ RUBY_DEPENDENCIES += berkeleydb
+ endif
++ifeq ($(BR2_PACKAGE_LIBFFI),y)
++RUBY_DEPENDENCIES += libffi
++else
++# Disable fiddle to avoid a build failure with bundled-libffi on MIPS
++RUBY_CONF_OPTS += --with-out-ext=fiddle
++endif
+ ifeq ($(BR2_PACKAGE_GDBM),y)
+ RUBY_DEPENDENCIES += gdbm
+ endif
