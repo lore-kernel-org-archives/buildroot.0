@@ -1,188 +1,76 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Sat,  7 Mar 2020 16:39:01 +0000
-Subject: [Buildroot] [PATCH] uclibc: update to 1.0.33
-In-Reply-To: <20200228102840.4vv4wuqw42kmm37s@waldemar-brodkorb.de>
-Message-ID: <3647843.FeiedIDrhx@laptop>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  7 Mar 2020 20:06:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/piglit: fix GL tests
+Message-ID: <20200307190629.2233973-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday, 28 February 2020 10:28:40 GMT Waldemar Brodkorb wrote:
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> 
->  ...lude-ctype.h-drop-is-_l-macro-definitions.patch | 72
->  ---------------------- ...de-ctype.h-restore-__isctype_l-definition.patch
->  | 32 ----------
->  package/uclibc/uclibc.hash                         |  4 +-
->  package/uclibc/uclibc.mk                           |  2 +-
->  4 files changed, 3 insertions(+), 107 deletions(-)
->  delete mode 100644
->  package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
->  delete mode 100644
->  package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch> 
-> diff --git
-> a/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
-> b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
-> deleted file mode 100644
-> index 5557a9c1e7..0000000000
-> --- a/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
-> +++ /dev/null
-> @@ -1,72 +0,0 @@
-> -From d1a3ca7ca56630fddde7311a0474eed4a21335a7 Mon Sep 17 00:00:00 2001
-> -From: Max Filippov <jcmvbkbc@gmail.com>
-> -Date: Mon, 3 Feb 2020 13:57:32 -0800
-> -Subject: [PATCH] include/ctype.h: drop is*_l macro definitions
-> -
-> -ctype locale-specific macro definitions are broken because they result
-> -in dereference of pointer to structure of incomplete type.
-> -Drop these macros since they are optional and let applications use
-> -functions with the same names.
-> -
-> -This change fixes parted-3.3 build with uClibc-ng:
-> - 
-> http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083
-> ec39/build-end.log -
-> -Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ----
-> - include/ctype.h | 33 ---------------------------------
-> - 1 file changed, 33 deletions(-)
-> -
-> -diff --git a/include/ctype.h b/include/ctype.h
-> -index ecd5e730886a..e934cf3321a6 100644
-> ---- a/include/ctype.h
-> -+++ b/include/ctype.h
-> -@@ -350,46 +350,13 @@ libc_hidden_proto(tolower_l)
-> - /* Return the uppercase version of C.  */
-> - extern int toupper_l (int __c, __locale_t __l) __THROW;
-> -
-> --# if __GNUC__ >= 2 && defined __OPTIMIZE__ && !defined __cplusplus
-> --#  define tolower_l(c, locale) __tobody(c, tolower_l,
-> (locale)->__ctype_tolower, (c, locale)) --#  define toupper_l(c, locale)
-> __tobody(c, toupper_l, (locale)->__ctype_toupper, (c, locale)) --# endif	
-/*
-> Optimizing gcc */
-> --
-> --
-> --# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] &
-> (__ctype_mask_t) type) - # ifndef __NO_CTYPE
-> --#  define __isalnum_l(c,l)	__isctype_l((c), _ISalnum, (l))
-> --#  define __isalpha_l(c,l)	__isctype_l((c), _ISalpha, (l))
-> --#  define __iscntrl_l(c,l)	__isctype_l((c), _IScntrl, (l))
-> --#  define __isdigit_l(c,l)	__isctype_l((c), _ISdigit, (l))
-> --#  define __islower_l(c,l)	__isctype_l((c), _ISlower, (l))
-> --#  define __isgraph_l(c,l)	__isctype_l((c), _ISgraph, (l))
-> --#  define __isprint_l(c,l)	__isctype_l((c), _ISprint, (l))
-> --#  define __ispunct_l(c,l)	__isctype_l((c), _ISpunct, (l))
-> --#  define __isspace_l(c,l)	__isctype_l((c), _ISspace, (l))
-> --#  define __isupper_l(c,l)	__isctype_l((c), _ISupper, (l))
-> --#  define __isxdigit_l(c,l)	__isctype_l((c), _ISxdigit, (l))
-> --#  define __isblank_l(c,l)	__isctype_l((c), _ISblank, (l))
-> --
-> - #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-> - 	&& defined __UCLIBC_SUSV4_LEGACY__
-> - #   define __isascii_l(c,l)	((l), __isascii (c))
-> - #   define __toascii_l(c,l)	((l), __toascii (c))
-> - #  endif
-> -
-> --#  define isalnum_l(c,l)	__isalnum_l ((c), (l))
-> --#  define isalpha_l(c,l)	__isalpha_l ((c), (l))
-> --#  define iscntrl_l(c,l)	__iscntrl_l ((c), (l))
-> --#  define isdigit_l(c,l)	__isdigit_l ((c), (l))
-> --#  define islower_l(c,l)	__islower_l ((c), (l))
-> --#  define isgraph_l(c,l)	__isgraph_l ((c), (l))
-> --#  define isprint_l(c,l)	__isprint_l ((c), (l))
-> --#  define ispunct_l(c,l)	__ispunct_l ((c), (l))
-> --#  define isspace_l(c,l)	__isspace_l ((c), (l))
-> --#  define isupper_l(c,l)	__isupper_l ((c), (l))
-> --#  define isxdigit_l(c,l)	__isxdigit_l ((c), (l))
-> --#  define isblank_l(c,l)	__isblank_l ((c), (l))
-> --
-> - #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-> - 	&& defined __UCLIBC_SUSV4_LEGACY__
-> - #   define isascii_l(c,l)	__isascii_l ((c), (l))
-> ---
-> -2.20.1
-> -
-> diff --git
-> a/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
-> b/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
-> deleted file mode 100644
-> index a0e115c763..0000000000
-> ---
-> a/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
-> +++ /dev/null
-> @@ -1,32 +0,0 @@
-> -From 7a9a3e4b36955e8530756823d3443f6822562c56 Mon Sep 17 00:00:00 2001
-> -From: Max Filippov <jcmvbkbc@gmail.com>
-> -Date: Sun, 9 Feb 2020 22:29:53 +0100
-> -Subject: [PATCH] include/ctype.h: restore __isctype_l definition
-> -
-> -Recent is*_l fix broke uclibc build because removed __isctype_l
-> -definition was used in libc/misc/ctype/ctype.c. Restore it.
-> -
-> -Fixes: d1a3ca7ca566 ("include/ctype.h: drop is*_l macro definitions")
-> -Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ----
-> -Upstream status:
-> -https://mailman.uclibc-ng.org/pipermail/devel/2020-February/001940.html
-> ----
-> - include/ctype.h | 1 +
-> - 1 file changed, 1 insertion(+)
-> -
-> -diff --git a/include/ctype.h b/include/ctype.h
-> -index e934cf332..05f21c553 100644
-> ---- a/include/ctype.h
-> -+++ b/include/ctype.h
-> -@@ -350,6 +350,7 @@ libc_hidden_proto(tolower_l)
-> - /* Return the uppercase version of C.  */
-> - extern int toupper_l (int __c, __locale_t __l) __THROW;
-> -
-> -+# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] &
-> (__ctype_mask_t) type) - # ifndef __NO_CTYPE
-> - #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-> - 	&& defined __UCLIBC_SUSV4_LEGACY__
-> ---
-> -2.20.1
-> -
-> diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-> index c1f161fa15..3c79d63575 100644
-> --- a/package/uclibc/uclibc.hash
-> +++ b/package/uclibc/uclibc.hash
-> @@ -1,4 +1,4 @@
-> -# From
-> https://downloads.uclibc-ng.org/releases/1.0.32/uClibc-ng-1.0.32.tar.xz.sha
-> 256 -sha256 
-> 891b5e4573855e4c11e51d3a518f89a82e490d9aa73280c05ce3e4d7e739a370 
-> uClibc-ng-1.0.32.tar.xz +# From
-> https://downloads.uclibc-ng.org/releases/1.0.33/uClibc-ng-1.0.33.tar.xz.sha
-> 256 +sha256 
-> 4dfa9d438863f741a5a2f384d467fa9da397fd82acfcb9bb26f5d5634d70153a 
-> uClibc-ng-1.0.33.tar.xz> 
->  # Locally calculated
->  sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 
->  COPYING.LIB> 
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 2af666c208..3975e7e743 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -4,7 +4,7 @@
-> 
->  #
->  ###########################################################################
->  #####> 
-> -UCLIBC_VERSION = 1.0.32
-> +UCLIBC_VERSION = 1.0.33
-> 
->  UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
->  UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
->  UCLIBC_LICENSE = LGPL-2.1+
-> 
-> --
-> 2.11.0
+Fixes:
+ - http://autobuild.buildroot.org/results/3355e4dc02b07ccfd9fe9b5cafb70c01fc88c158
 
-Builds and boots using qemu_arm_versatile_defconfig and qemu_x86_64_defconfig.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...tests-fix-test-build-requiring-gles3.patch | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/piglit/0001-tests-fix-test-build-requiring-gles3.patch
 
-Tested-by: Mark Corbin <mark@dibsco.co.uk>
+diff --git a/package/piglit/0001-tests-fix-test-build-requiring-gles3.patch b/package/piglit/0001-tests-fix-test-build-requiring-gles3.patch
+new file mode 100644
+index 0000000000..4183f23432
+--- /dev/null
++++ b/package/piglit/0001-tests-fix-test-build-requiring-gles3.patch
+@@ -0,0 +1,49 @@
++From 8417ca1725d523493d8f6782699273dc056888ac Mon Sep 17 00:00:00 2001
++From: Lionel Landwerlin <lionel.g.landwerlin@intel.com>
++Date: Thu, 1 Aug 2019 20:51:55 +0300
++Subject: [PATCH] tests: fix test build requiring gles3
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This should be built only on gles3.
++
++Signed-off-by: Lionel Landwerlin <lionel.g.landwerlin@intel.com>
++Reported-by: Krzysztof Raszkowski <krzysztof.raszkowski@intel.com>
++Fixes: ef761094be ("tests: Reproducer for 110796")
++Reviewed-by: Tapani P?lli <tapani.palli@intel.com>
++[Retrieved from:
++https://gitlab.freedesktop.org/mesa/piglit/commit/8417ca1725d523493d8f6782699273dc056888ac]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ tests/shaders/CMakeLists.gl.txt    | 1 -
++ tests/shaders/CMakeLists.gles3.txt | 1 +
++ 2 files changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/tests/shaders/CMakeLists.gl.txt b/tests/shaders/CMakeLists.gl.txt
++index f1512f9cf..a299001cb 100644
++--- a/tests/shaders/CMakeLists.gl.txt
+++++ b/tests/shaders/CMakeLists.gl.txt
++@@ -43,7 +43,6 @@ IF (UNIX)
++ ENDIF (UNIX)
++ piglit_add_executable (glsl-arb-fragment-coord-conventions glsl-arb-fragment-coord-conventions.c)
++ piglit_add_executable (glsl-bindattriblocation glsl-bindattriblocation.c)
++-piglit_add_executable (glsl-bug-110796 glsl-bug-110796.c)
++ piglit_add_executable (glsl-bug-22603 glsl-bug-22603.c)
++ piglit_add_executable (glsl-dlist-getattriblocation glsl-dlist-getattriblocation.c)
++ piglit_add_executable (glsl-explicit-location-01 glsl-explicit-location-01.c)
++diff --git a/tests/shaders/CMakeLists.gles3.txt b/tests/shaders/CMakeLists.gles3.txt
++index 18b8c3534..c8ccfad42 100644
++--- a/tests/shaders/CMakeLists.gles3.txt
+++++ b/tests/shaders/CMakeLists.gles3.txt
++@@ -3,6 +3,7 @@ link_libraries(
++ )
++ 
++ piglit_add_executable (built-in-constants_${piglit_target_api} built-in-constants.c parser_utils.c)
+++piglit_add_executable (glsl-bug-110796 glsl-bug-110796.c)
++ piglit_add_executable(shader_runner_${piglit_target_api} shader_runner.c parser_utils.c)
++ 
++ # vim: ft=cmake:
++-- 
++2.24.1
++
+-- 
+2.25.0
