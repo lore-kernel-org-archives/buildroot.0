@@ -1,49 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 14:57:08 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/go: bump to 1.13.6
-Message-ID: <20200307134712.D01BF8FB71@busybox.osuosl.org>
+Date: Sat, 7 Mar 2020 15:00:11 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] Makefile, manual,
+ website: Bump copyright year
+Message-ID: <20200307135040.173F08FB67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9dc7e076e267e4fc30d4385a7637bbe4330c3b4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=14a01cf5669bed55d22fccfa08712b1f563540ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-go1.13.6 (released 2020/01/09) includes fixes to the runtime and the net/http
-package.
+Happy 2020!
 
-https://github.com/golang/go/issues?q=milestone=Go1.13.6
-
-Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 17aea508c7582bd56a541c12107032937532641c)
+(cherry picked from commit 6648cfc74954c02092c11d5c93344e1c6378533c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Makefile                   | 2 +-
+ docs/manual/manual.txt     | 2 +-
+ docs/website/copyright.txt | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 7d92c80f2b..f440490b4e 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	27d356e2a0b30d9983b60a788cf225da5f914066b37a6b4f69d457ba55a626ff  go1.13.5.src.tar.gz
-+sha256	aae5be954bdc40bcf8006eb77e8d8a5dde412722bc8effcdaf9772620d06420c  go1.13.6.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 2f5e384316..a0f796c21b 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
+diff --git a/Makefile b/Makefile
+index 93d30ff145..4038a9e3fd 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
  #
- ################################################################################
+ # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
+ # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
+-# Copyright (C) 2014-2019 by the Buildroot developers <buildroot@buildroot.org>
++# Copyright (C) 2014-2020 by the Buildroot developers <buildroot@buildroot.org>
+ #
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index 4eb4ba9bf0..b76ab40d40 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -12,7 +12,7 @@ It is licensed under the GNU General Public License, version 2. Refer to the
+ http://git.buildroot.org/buildroot/tree/COPYING?id={sys:git rev-parse HEAD}[COPYING]
+ file in the Buildroot sources for the full text of this license.
  
--GO_VERSION = 1.13.5
-+GO_VERSION = 1.13.6
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
+-Copyright (C) 2004-2019 The Buildroot developers
++Copyright (C) 2004-2020 The Buildroot developers
  
+ image::logo.png[]
+ 
+diff --git a/docs/website/copyright.txt b/docs/website/copyright.txt
+index 600bf7df77..b15ac5f919 100644
+--- a/docs/website/copyright.txt
++++ b/docs/website/copyright.txt
+@@ -1,6 +1,6 @@
+ 
+ The code and graphics on this website (and it's mirror sites, if any) are
+-Copyright (c) 1999-2005 by Erik Andersen, 2006-2019 The Buildroot
++Copyright (c) 1999-2005 by Erik Andersen, 2006-2020 The Buildroot
+ developers. All rights reserved.
+ 
+ Documents on this Web site including their graphical elements, design, and
