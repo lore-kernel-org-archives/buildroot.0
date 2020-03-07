@@ -1,57 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 15:59:04 +0100
+Date: Sat, 7 Mar 2020 15:59:14 +0100
 Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats:
- decode subprocess output for python3
-Message-ID: <20200307204504.B25BD8FC5E@busybox.osuosl.org>
+ store latest version in a dict
+Message-ID: <20200307204504.C1D658FC5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb05ab22425e8cd8715611b66eadb1a3a5da5fa9
+commit: https://git.buildroot.net/buildroot/commit/?id=c46e7071829a5af934e0b7d894d74988b0c0631e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In Python 3, the functions from the subprocess module return bytes
-(and no longer strings as in Python 2), which must be decoded for
-further text operations.
+This patch changes the type of the latest_version variable to a dict.
+This is for better readability/usability of the data. With this the json
+output is more descriptive in later processing of the json output.
 
-Now, pkg-stats can be run in Python 3.
-
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/pkg-stats | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 7721d98459..e414ec50f2 100755
+index 8a67e509e1..95ec9e86bd 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -157,7 +157,7 @@ class Package:
-         o = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[1]
-         lines = o.splitlines()
-         for line in lines:
--            m = re.match("^([0-9]*) warnings generated", line)
-+            m = re.match("^([0-9]*) warnings generated", line.decode())
-             if m:
-                 self.warnings = int(m.group(1))
-                 return
-@@ -351,7 +351,7 @@ def package_init_make_info():
-     # Fetch all variables at once
-     variables = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars",
-                                          "VARS=%_LICENSE %_LICENSE_FILES %_VERSION %_IGNORE_CVES"])
--    variable_list = variables.splitlines()
-+    variable_list = variables.decode().splitlines()
+@@ -71,7 +71,7 @@ class Package:
+         self.url_status = None
+         self.url_worker = None
+         self.cves = list()
+-        self.latest_version = (RM_API_STATUS_ERROR, None, None)
++        self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
  
-     # We process first the host package VERSION, and then the target
-     # package VERSION. This means that if a package exists in both
-@@ -886,7 +886,7 @@ def __main__():
-         package_list = None
-     date = datetime.datetime.utcnow()
-     commit = subprocess.check_output(['git', 'rev-parse',
--                                      'HEAD']).splitlines()[0]
-+                                      'HEAD']).splitlines()[0].decode()
-     print("Build package list ...")
-     packages = get_pkglist(args.npackages, package_list)
-     print("Getting package make info ...")
+     def pkgvar(self):
+         return self.name.upper().replace("-", "_")
+@@ -462,9 +462,8 @@ def check_package_latest_version(packages):
+     """
+     Fills in the .latest_version field of all Package objects
+ 
+-    This field has a special format:
+-      (status, version, id)
+-    with:
++    This field is a dict and has the following keys:
++
+     - status: one of RM_API_STATUS_ERROR,
+       RM_API_STATUS_FOUND_BY_DISTRO, RM_API_STATUS_FOUND_BY_PATTERN,
+       RM_API_STATUS_NOT_FOUND
+@@ -480,7 +479,7 @@ def check_package_latest_version(packages):
+     worker_pool = Pool(processes=64)
+     results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
+     for pkg, r in zip(packages, results):
+-        pkg.latest_version = r
++        pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
+     worker_pool.terminate()
+     del http_pool
+ 
+@@ -519,13 +518,13 @@ def calculate_stats(packages):
+             stats["hash"] += 1
+         else:
+             stats["no-hash"] += 1
+-        if pkg.latest_version[0] == RM_API_STATUS_FOUND_BY_DISTRO:
++        if pkg.latest_version['status'] == RM_API_STATUS_FOUND_BY_DISTRO:
+             stats["rmo-mapping"] += 1
+         else:
+             stats["rmo-no-mapping"] += 1
+-        if not pkg.latest_version[1]:
++        if not pkg.latest_version['version']:
+             stats["version-unknown"] += 1
+-        elif pkg.latest_version[1] == pkg.current_version:
++        elif pkg.latest_version['version'] == pkg.current_version:
+             stats["version-uptodate"] += 1
+         else:
+             stats["version-not-uptodate"] += 1
+@@ -691,29 +690,29 @@ def dump_html_pkg(f, pkg):
+     f.write("  <td class=\"centered\">%s</td>\n" % current_version)
+ 
+     # Latest version
+-    if pkg.latest_version[0] == RM_API_STATUS_ERROR:
++    if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
+         td_class.append("version-error")
+-    if pkg.latest_version[1] is None:
++    if pkg.latest_version['version'] is None:
+         td_class.append("version-unknown")
+-    elif pkg.latest_version[1] != pkg.current_version:
++    elif pkg.latest_version['version'] != pkg.current_version:
+         td_class.append("version-needs-update")
+     else:
+         td_class.append("version-good")
+ 
+-    if pkg.latest_version[0] == RM_API_STATUS_ERROR:
++    if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
+         latest_version_text = "<b>Error</b>"
+-    elif pkg.latest_version[0] == RM_API_STATUS_NOT_FOUND:
++    elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
+         latest_version_text = "<b>Not found</b>"
+     else:
+-        if pkg.latest_version[1] is None:
++        if pkg.latest_version['version'] is None:
+             latest_version_text = "<b>Found, but no version</b>"
+         else:
+             latest_version_text = "<a href=\"https://release-monitoring.org/project/%s\"><b>%s</b></a>" % \
+-                (pkg.latest_version[2], str(pkg.latest_version[1]))
++                (pkg.latest_version['id'], str(pkg.latest_version['version']))
+ 
+         latest_version_text += "<br/>"
+ 
+-        if pkg.latest_version[0] == RM_API_STATUS_FOUND_BY_DISTRO:
++        if pkg.latest_version['status'] == RM_API_STATUS_FOUND_BY_DISTRO:
+             latest_version_text += "found by <a href=\"https://release-monitoring.org/distro/Buildroot/\">distro</a>"
+         else:
+             latest_version_text += "found by guess"
