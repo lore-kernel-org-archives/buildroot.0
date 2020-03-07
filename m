@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 08:33:52 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libjpeg: security
+Date: Sat, 7 Mar 2020 08:33:42 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libjpeg: security
  bump to version 9d
-Message-ID: <20200307072127.C4A998F3D4@busybox.osuosl.org>
+Message-ID: <20200307072132.46B378F3A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cfc399ced2bf817fc9b78732224c899588a3080
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=00eae38d87ff86b5108e248f8c091d9991d2273d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 - Fix CVE-2018-11813: libjpeg 9c has a large loop because read_pixel in
   rdtarga.c mishandles EOF.
