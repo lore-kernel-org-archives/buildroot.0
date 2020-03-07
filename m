@@ -1,57 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 09:05:14 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/php: security
- bump to version 7.3.14
-Message-ID: <20200307075447.3CA898F5F3@busybox.osuosl.org>
+Date: Sat, 07 Mar 2020 09:11:40 +0100
+Subject: [Buildroot] [PATCH] package/linux: fix LINUX_PKGDIR with
+ br2-external linux-extensions
+In-Reply-To: <20200124213855.23215-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Fri, 24 Jan 2020 22:38:55 +0100")
+References: <20200124213855.23215-1-yann.morin.1998@free.fr>
+Message-ID: <87v9ng7fer.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9b4b3291650b36eca61aee23dcbb4745530c402
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Changelog of 7.3.13: https://www.php.net/ChangeLog-7.php#7.3.13
+ > When 'make' includes a new Makefile, it appends its path to the MAKEFILE_LIST
+ > variable. From that variable, we construct a few set of derivative
+ > variables:
+ >     pkgdir = $(dir $(lastword $(MAKEFILE_LIST)))
+ >     pkgname = $(lastword $(subst /, ,$(pkgdir)))
 
-Fixes CVE-2019-11044, CVE-2019-11045, CVE-2019-11046, CVE-2019-11047,
-CVE-2019-11049 & CVE-2019-11050
+ > Essentially, pkgdir is the full directory where the package is located
+ > (either relative to Buildroot's top directory for in-tree packages, or
+ > absolute for packages in br2-external trees), while pkgname is the last
+ > component of that directory.
 
-Changelog of 7.3.14: https://www.php.net/ChangeLog-7.php#7.3.14
+ > pkgdir is in turn used to seed FOO_PKGDIR.
 
-Fixes CVE-2020-7059 & CVE-2020-7060.
+ > This all happens when we eventually call the package-generic infra,
+ > later down in the file.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fc3916efbc9cb2c8d7803ae8fe58f5739efc8598)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/php.hash | 4 ++--
- package/php/php.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > When they are parsed, the Makefiles for each linux-extensions are
+ > appended to MAKEFILE_LIST, after the linux.mk one. But since they are
+ > located in the same directory as the main linux.mk, the last component
+ > of MaKEFILE_LIST, which is no longer the main linux.mk, will still yield
+ > the correct values for the linux package.
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 11ce109591..31f08cacac 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
--# From http://php.net/downloads.php
--sha256 aafe5e9861ad828860c6af8c88cdc1488314785962328eb1783607c1fdd855df  php-7.3.12.tar.xz
-+# From https://www.php.net/downloads.php
-+sha256 cc05dd373ca5d36652800762f65c10e828a17de35aaf246262e3efa99d00cdb0  php-7.3.14.tar.xz
- 
- # License file
- sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 9589530101..a552f483e8 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.3.12
-+PHP_VERSION = 7.3.14
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ > This is a tough assumption we made there and then.
+
+ > When we added the support for br2-external linux extensions, we where
+ > very cautious to explicitly scan them from a directory named 'linux', so
+ > that this would yield the correct package name.
+
+ > And that worked well so far, until someone needed to build an older
+ > kernel, for which our conditional patch is needed, and which just
+ > failed:
+
+ >     /bin/bash: [...]/buildroot-external-linux-test/linux//0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional: No such file or directory
+
+ > When we scan linux extensions from a br2-external tree, the last
+ > component of MAKEFILE_LIST is no longer in the same directory as the
+ > main linux.mk, and thus the assumption above falls to pieces...
+
+ > Again, when we added support for linux extensions from br2-external,
+ > although we cared about the package name (pkgname), we completely missed
+ > out on the package directory, and the LINUX_PKGDIR variable.
+
+ > We do not have a very clean way out of this mess, but we have a nice
+ > dirty trick scan the linux extensions from a br2-external tree before we
+ > scan the in-tree ones. That way, the last component of MAKEFILE_LIST is
+ > back to one that is in the same directory as the main linux.mk, and
+ > we're back on tracks.
+
+ > This is still very fragile, though, but short of a complete overhaul on
+ > how packages are parsed and evaluated, this is the best we can come in
+ > short order.
+
+ > Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Heiko Thiery <heiko.thiery@gmail.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2019.11.x (2019.02.x does not have support for external
+linux extensions), thanks.
+
+-- 
+Bye, Peter Korsgaard
