@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 22:06:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump to version 2.64.0
-In-Reply-To: <20200306211458.54107-1-james.hilliard1@gmail.com>
-References: <20200306211458.54107-1-james.hilliard1@gmail.com>
-Message-ID: <20200307220648.7df62529@windsurf.home>
+Date: Sat, 7 Mar 2020 22:08:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/connman: bump version to 1.38
+In-Reply-To: <20200307114312.14726-1-mc5686@mclink.it>
+References: <20200307114312.14726-1-mc5686@mclink.it>
+Message-ID: <20200307220822.53439875@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  6 Mar 2020 14:14:58 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Hello,
 
->  ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
-> -LIBGLIB2_CONF_OPTS += -Dlibmount=true
-> +LIBGLIB2_CONF_OPTS += -Dlibmount=enabled
->  LIBGLIB2_DEPENDENCIES += util-linux
->  else
-> -LIBGLIB2_CONF_OPTS += -Dlibmount=false
-> +LIBGLIB2_CONF_OPTS += -Dlibmount=disabled
->  endif
+On Sat,  7 Mar 2020 12:43:12 +0100
+Mauro Condarelli <mc5686@mclink.it> wrote:
 
-Any reason for this change ? It is not explained in the commit log, and
-it's not obvious why it is needed.
+> Added support for iwd.
+> 
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 
-Could you give a few more details?
+Thanks Mauro, but we already have a patch series for connman that does
+a number of changes, including the version bump:
+
+  http://patchwork.ozlabs.org/patch/1246178/
+  http://patchwork.ozlabs.org/patch/1246179/
+  http://patchwork.ozlabs.org/patch/1246180/
+  http://patchwork.ozlabs.org/patch/1246181/
+
+However, it does not take care of iwd support, so a follow-up patch
+would be good.
 
 Thanks,
 
