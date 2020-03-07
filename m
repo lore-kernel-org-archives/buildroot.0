@@ -1,111 +1,79 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat,  7 Mar 2020 08:56:29 +0100
-Subject: [Buildroot] [PATCH v5 08/12] support/scripts/pkg-stats: add
- defconfig support
+Date: Sat,  7 Mar 2020 08:56:30 +0100
+Subject: [Buildroot] [PATCH v5 09/12] support/scripts/pkg-stats: add support
+ for license hash check
 In-Reply-To: <20200307075633.7514-1-heiko.thiery@gmail.com>
 References: <20200307075633.7514-1-heiko.thiery@gmail.com>
-Message-ID: <20200307075633.7514-9-heiko.thiery@gmail.com>
+Message-ID: <20200307075633.7514-10-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Scan configs directory and create Defconfig objects.
+Store the names of license files and check if they are in the hash file.
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- support/scripts/pkg-stats | 43 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 41 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 016c2322e6..a15d0ec24b 100755
+index a15d0ec24b..8849c7a1c3 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -54,6 +54,34 @@ RM_API_STATUS_NOT_FOUND = 4
- # because it's used by sub-processes.
- http_pool = None
- 
-+class Defconfig:
-+    def __init__(self, name, path):
-+        self.name = name
-+        self.path = path
-+        self.developers = None
-+
-+    def set_developers(self, developers):
-+        """
-+        Fills in the .developers field
-+        """
-+        self.developers = [
-+            developer.name
-+            for developer in developers
-+            if developer.hasfile(self.path)
-+        ]
-+
-+
-+def get_defconfig_list():
-+    """
-+    Builds the list of Buildroot defconfigs, returning a list of Defconfig
-+    objects.
-+    """
-+    return [
-+        Defconfig(name[:-len('_defconfig')], os.path.join('configs', name))
-+        for name in os.listdir('configs')
-+        if name.endswith('_defconfig')
-+    ]
-+
+@@ -85,7 +85,7 @@ def get_defconfig_list():
  
  class Package:
      all_licenses = dict()
-@@ -889,7 +917,7 @@ def dump_html(packages, stats, date, commit, output):
-         f.write(html_footer)
+-    all_license_files = list()
++    all_license_files = dict()
+     all_versions = dict()
+     all_ignored_cves = dict()
  
+@@ -98,6 +98,7 @@ class Package:
+         self.has_license = False
+         self.has_license_files = False
+         self.has_hash = False
++        self.license_files = None
+         self.patch_files = []
+         self.warnings = 0
+         self.current_version = None
+@@ -159,6 +160,7 @@ class Package:
+             self.license = self.all_licenses[var]
+             self.status['license'] = ("ok", "found")
+         if var in self.all_license_files:
++            self.license_files = self.all_license_files[var].split(' ')
+             self.status['license-files'] = ("ok", "found")
  
--def dump_json(packages, stats, date, commit, output):
-+def dump_json(packages, defconfigs, stats, date, commit, output):
-     # Format packages as a dictionnary instead of a list
-     # Exclude local field that does not contains real date
-     excluded_fields = ['url_worker', 'name']
-@@ -900,6 +928,12 @@ def dump_json(packages, stats, date, commit, output):
-             if k not in excluded_fields
-         } for pkg in packages
-     }
-+    defconfigs = {
-+        d.name: {
-+            k: v
-+            for k, v in d.__dict__.items()
-+        } for d in defconfigs
-+    }
-     # Aggregate infrastructures into a single dict entry
-     statistics = {
-         k: v
-@@ -910,6 +944,7 @@ def dump_json(packages, stats, date, commit, output):
-     # The actual structure to dump, add commit and date to it
-     final = {'packages': pkgs,
-              'stats': statistics,
-+             'defconfigs': defconfigs,
-              'commit': commit,
-              'date': str(date)}
+     def set_hash_info(self):
+@@ -166,8 +168,18 @@ class Package:
+         Fills in the .status['hash'] field
+         """
+         hashpath = self.path.replace(".mk", ".hash")
++        self.status['hash-license'] = ("na", "no hash file")
+         if os.path.exists(hashpath):
+             self.status['hash'] = ("ok", "found")
++            self.status['hash-license'] = ("error", "no license in hash file")
++            # check if license files are in hash file
++            if self.license_files is not None:
++                self.status['hash-license'] = ("ok", "found")
++                with open(hashpath) as f:
++                    content = f.read()
++                    for license in self.license_files:
++                        if content.find(license) == -1:
++                            self.status['hash-license'] = ("error", "license missing in hash file")
+         else:
+             self.status['hash'] = ("error", "missing")
  
-@@ -951,6 +986,10 @@ def __main__():
-     packages = get_pkglist(args.npackages, package_list)
-     print("Getting developers ...")
-     developers = parse_developers()
-+    print("Build defconfig list ...")
-+    defconfigs = get_defconfig_list()
-+    for d in defconfigs:
-+        d.set_developers(developers)
-     print("Getting package make info ...")
-     package_init_make_info()
-     print("Getting package details ...")
-@@ -977,7 +1016,7 @@ def __main__():
-         dump_html(packages, stats, date, commit, args.html)
-     if args.json:
-         print("Write JSON")
--        dump_json(packages, stats, date, commit, args.json)
-+        dump_json(packages, defconfigs, stats, date, commit, args.json)
+@@ -449,7 +461,7 @@ def package_init_make_info():
+             if pkgvar.endswith("_MANIFEST_LICENSE_FILES"):
+                 continue
+             pkgvar = pkgvar[:-14]
+-            Package.all_license_files.append(pkgvar)
++            Package.all_license_files[pkgvar] = value
  
- 
- __main__()
+         elif pkgvar.endswith("_VERSION"):
+             if pkgvar.endswith("_DL_VERSION"):
 -- 
 2.20.1
