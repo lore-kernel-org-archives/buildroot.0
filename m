@@ -1,31 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Mar 2020 21:37:05 +0100
-Subject: [Buildroot] [PATCH] package/util-linux: disable systemd for
- host build
-In-Reply-To: <20200219112559.1429304-1-john@metanate.com> (John Keeping's
- message of "Wed, 19 Feb 2020 11:25:59 +0000")
-References: <20200219112559.1429304-1-john@metanate.com>
-Message-ID: <871rq3yk9a.fsf@dell.be.48ers.dk>
+Date: Sat, 7 Mar 2020 21:24:20 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/util-linux: minix
+ needs MMU
+Message-ID: <20200307202445.CEF368FBC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "John" == John Keeping <john@metanate.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b5c727c83291130c7b62ad7ef420b8d7d05bd821
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > When building host-util-linux, the systemdsystemunitdir is set to the
- > real host directory, so the install step fails with:
+Fixes:
+ - http://autobuild.buildroot.org/results/87801e1a3c628e00ccb0c57afc2b46cc735c6018
 
- > /usr/bin/install: cannot remove '/usr/lib/systemd/system/fstrim.service': Permission denied
- > /usr/bin/install: cannot remove '/usr/lib/systemd/system/fstrim.timer': Permission denied
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Tested-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 97fc2cb9c7732f99ab42438e782318f0607a8721)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/util-linux/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Since we don't need systemd support in host-util-linux, unconditionally
- > disable it for the host build.
-
- > Signed-off-by: John Keeping <john@metanate.com>
-
-Committed to 2019.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index acde9e5474..39eb2c03a0 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -217,6 +217,7 @@ config BR2_PACKAGE_UTIL_LINUX_MESG
+ 
+ config BR2_PACKAGE_UTIL_LINUX_MINIX
+ 	bool "minix"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Minix filesystem support
+ 
