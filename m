@@ -1,47 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 21:27:07 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/util-linux:
- disable systemd for host build
-Message-ID: <20200307202446.225018FBC5@busybox.osuosl.org>
+Date: Sat, 7 Mar 2020 21:25:49 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/util-linux: Add
+ option for enabling wipefs
+Message-ID: <20200307202445.E3ECF8FBC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c8dba277c69194e56eb78581cacd142682a0d85
+commit: https://git.buildroot.net/buildroot/commit/?id=0c6d8bc5efdaef8bc0cd00fffcb8c9b9ed35bb02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-When building host-util-linux, the systemdsystemunitdir is set to the
-real host directory, so the install step fails with:
+Add option to enable wipefs as a standalone app, so that it may be
+enabled when the flag --disable-all-packages is set.
 
-/usr/bin/install: cannot remove '/usr/lib/systemd/system/fstrim.service': Permission denied
-/usr/bin/install: cannot remove '/usr/lib/systemd/system/fstrim.timer': Permission denied
-
-Since we don't need systemd support in host-util-linux, unconditionally
-disable it for the host build.
-
-Signed-off-by: John Keeping <john@metanate.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 86441b9fd6c8472d2e6f0917cc308ea740ee7fd7)
+Signed-off-by: Sam Voss <sam.voss@gmail.com>
+Tested-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit ab4538c9090aae65a4aec585d6090fb5fdf18415)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/util-linux/util-linux.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ ...-Allow-explicit-wipefs-enable-disablement.patch | 33 ++++++++++++++++++++++
+ package/util-linux/Config.in                       | 11 ++++++++
+ package/util-linux/util-linux.mk                   |  1 +
+ 3 files changed, 45 insertions(+)
 
+diff --git a/package/util-linux/0001-Allow-explicit-wipefs-enable-disablement.patch b/package/util-linux/0001-Allow-explicit-wipefs-enable-disablement.patch
+new file mode 100644
+index 0000000000..85021e2978
+--- /dev/null
++++ b/package/util-linux/0001-Allow-explicit-wipefs-enable-disablement.patch
+@@ -0,0 +1,33 @@
++From a76cd5f6abace269b60ef6f1b95526a2d09fd331 Mon Sep 17 00:00:00 2001
++From: Sam Voss <sam.voss@gmail.com>
++Date: Mon, 14 Oct 2019 21:19:16 -0500
++Subject: [PATCH] wipefs: Allow explicitly enable/disablement
++
++Currently if `--disable-all-packages` is set, there is no configure
++option for re-enabling `wipefs`.
++
++As the current default for `wipefs` is "enabled", add `--disable-` flag
++to maintain backward compatibility.
++
++Signed-off-by: Sam Voss <sam.voss@gmail.com>
++---
++ configure.ac | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index fc8a9507f..f70f8d1ee 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1286,7 +1286,11 @@ UL_BUILD_INIT([findfs], [check])
++ UL_REQUIRES_BUILD([findfs], [libblkid])
++ AM_CONDITIONAL([BUILD_FINDFS], [test "x$build_findfs" = xyes])
++ 
++-UL_BUILD_INIT([wipefs], [check])
+++AC_ARG_ENABLE([wipefs],
+++  AS_HELP_STRING([--disable-wipefs], [do not build wipefs]),
+++  [], [UL_DEFAULT_ENABLE([wipefs], [check])]
+++)
+++UL_BUILD_INIT([wipefs])
++ UL_REQUIRES_BUILD([wipefs], [libblkid])
++ UL_REQUIRES_BUILD([wipefs], [libsmartcols])
++ AM_CONDITIONAL([BUILD_WIPEFS], [test "x$build_wipefs" = xyes])
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 39eb2c03a0..3c64a19d84 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -407,6 +407,17 @@ config BR2_PACKAGE_UTIL_LINUX_WALL
+ 	help
+ 	  Send a message to everybody's terminal
+ 
++config BR2_PACKAGE_UTIL_LINUX_WIPEFS
++	bool "wipefs"
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
++	help
++	  wipefs can erase filesystem, raid or partition-table
++	  signatures (magic strings) from the specified device
++	  to make the signatures invisible for libblkid. wipefs
++	  does not erase the filesystem itself nor any other data
++	  from the device.
++
+ config BR2_PACKAGE_UTIL_LINUX_WDCTL
+ 	bool "wdctl"
+ 	depends on BR2_USE_MMU # libsmartcols
 diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 549442232e..b6ccaaa78d 100644
+index da1ce14e1d..0ed8a22fc1 100644
 --- a/package/util-linux/util-linux.mk
 +++ b/package/util-linux/util-linux.mk
-@@ -38,7 +38,10 @@ UTIL_LINUX_CONF_OPTS += \
- HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
+@@ -153,6 +153,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_VIPW),--enable-vipw,--disable-vipw) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),--enable-wall,--disable-wall) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WDCTL),--enable-wdctl,--disable-wdctl) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_WIPEFS),--enable-wipefs,--disable-wipefs) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_ZRAMCTL),--enable-zramctl,--disable-zramctl)
  
- # We also don't want the host-python dependency
--HOST_UTIL_LINUX_CONF_OPTS = --without-python
-+HOST_UTIL_LINUX_CONF_OPTS = \
-+	--without-systemd \
-+	--with-systemdsystemunitdir=no \
-+	--without-python
- 
- # Prevent the installation from attempting to move shared libraries from
- # ${usrlib_execdir} (/usr/lib) to ${libdir} (/lib), since both paths are
