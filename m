@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 21:43:19 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/meson: fix
+Date: Sat, 7 Mar 2020 21:41:02 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/meson: fix
  shebang in deep build trees
-Message-ID: <20200307203141.5A2AB8FC14@busybox.osuosl.org>
+Message-ID: <20200307203146.74D568FC19@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f97aecef27eb0026d3434c4d31828e2b80c24b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dd331c1a6fb61f0b23bc08fa3856ff5ebbe5235b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 The meson script includes the full path to the python interpreter. In
 deep build trees, this path can be more than 128 characters long, which
@@ -50,12 +50,12 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 71bdadf825..9aa791ec17 100644
+index c708532c6d..9b4c0698cc 100644
 --- a/package/meson/meson.mk
 +++ b/package/meson/meson.mk
-@@ -67,4 +67,10 @@ endef
- 
- TARGET_FINALIZE_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
+@@ -49,4 +49,10 @@ HOST_MESON_SED_CFLAGS = $(if $(strip $(TARGET_CFLAGS)),`printf '"%s"$(comma) ' $
+ HOST_MESON_SED_LDFLAGS = $(if $(strip $(TARGET_LDFLAGS)),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+ HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
  
 +# Avoid interpreter shebang longer than 128 chars
 +define HOST_MESON_SET_INTERPRETER
