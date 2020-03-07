@@ -1,47 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 09:54:17 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/webkitgtk:
- disable JSC JIT for MIPSr6
-Message-ID: <20200307110034.4484482864@busybox.osuosl.org>
+Date: Sat, 07 Mar 2020 12:13:18 +0100
+Subject: [Buildroot] [PATCH 2/4] package/webkitgtk: security bump to
+ version 2.26.4
+In-Reply-To: <20200215150929.13293-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 15 Feb 2020 16:09:26 +0100")
+References: <20200215150929.13293-1-peter@korsgaard.com>
+ <20200215150929.13293-2-peter@korsgaard.com>
+Message-ID: <87h7z0zacx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee784078dfd9644912f20c9177125a13e0c0d5db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Forcibly disable the JavaScriptCore JIT compilation support
-for MIPSr6 processors, which are unsupported.
+ > Fixes the following security issues:
+ > - CVE-2020-3862: Impact: A malicious website may be able to cause a denial
+ >   of service.  Description: A denial of service issue was addressed with
+ >   improved memory handling.
 
-Fixes: http://autobuild.buildroot.net/results/3d21d3c3460cd85a4c828dd197929cdf17aaf4e0
+ > - CVE-2020-3864: Impact: A DOM object context may not have had a unique
+ >   security origin.  Description: A logic issue was addressed with improved
+ >   validation.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5eb70cecedd03e08977a06bcc115b6a954d3da9a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1a6de2da7079f07a8d6f47472394206b095232af)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/webkitgtk/webkitgtk.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ > - CVE-2020-3865: Impact: A top-level DOM object context may have incorrectly
+ >   been considered secure.  Description: A logic issue was addressed with
+ >   improved validation.
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 8f8870c9b0..c8ad3c3382 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -95,4 +95,13 @@ else
- WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
- endif
- 
-+# JIT is not supported for MIPS r6, but the WebKit build system does not
-+# have a check for these processors. Disable JIT forcibly here and use
-+# the CLoop interpreter instead.
-+#
-+# Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=191258
-+ifeq ($(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
-+WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON
-+endif
-+
- $(eval $(cmake-package))
+ > - CVE-2020-3867: Impact: Processing maliciously crafted web content may lead
+ >   to universal cross site scripting.  Description: A logic issue was
+ >   addressed with improved state management.
+
+ > - CVE-2020-3868: Impact: Processing maliciously crafted web content may lead
+ >   to arbitrary code execution.  Description: Multiple memory corruption
+ >   issues were addressed with improved memory handling.
+
+ > For more details, see the advisory:
+ > https://webkitgtk.org/security/WSA-2020-0002.html
+
+ > While we are at it, adjust the white space in the .hash function to match
+ > the new agreements.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2019.02.x and 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
