@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  7 Mar 2020 10:56:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/guile: fix host build without
- makeinfo
-Message-ID: <20200307095644.1428004-1-fontaine.fabrice@gmail.com>
+Date: Sat,  7 Mar 2020 11:00:07 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/guile: fix host build without makeinfo
+Message-ID: <20200307100007.1428472-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,6 +14,9 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix trailing whitespace
+
  ...kefile.am-fix-build-without-makeinfo.patch | 51 +++++++++++++++++++
  package/guile/guile.mk                        |  3 +-
  2 files changed, 53 insertions(+), 1 deletion(-)
@@ -77,7 +80,7 @@ index 0000000000..0d16f92387
 +2.25.0
 +
 diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index f53ebdd5cb..669000d080 100644
+index f53ebdd5cb..4992861071 100644
 --- a/package/guile/guile.mk
 +++ b/package/guile/guile.mk
 @@ -8,7 +8,8 @@ GUILE_VERSION = 2.0.14
@@ -85,7 +88,7 @@ index f53ebdd5cb..669000d080 100644
  GUILE_SITE = $(BR2_GNU_MIRROR)/guile
  GUILE_INSTALL_STAGING = YES
 -# For 0002-calculate-csqrt_manually.patch
-+# For 0002-calculate-csqrt_manually.patch and 
++# For 0002-calculate-csqrt_manually.patch and
 +# 0004-Makefile.am-fix-build-without-makeinfo.patch
  GUILE_AUTORECONF = YES
  GUILE_LICENSE = LGPL-3.0+
