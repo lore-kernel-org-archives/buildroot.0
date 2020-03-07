@@ -1,57 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 09:02:31 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/python-pyqt5:
- select BR2_PACKAGE_QT5BASE_GUI
-Message-ID: <20200307075447.323128F4E6@busybox.osuosl.org>
+Date: Sat, 7 Mar 2020 09:01:54 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/qt5/qt5base: fix
+ building with correct optimization
+Message-ID: <20200307075447.29D7B8F5F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c24c4cab34dac884025bba2640d4cce3caa42b4
+commit: https://git.buildroot.net/buildroot/commit/?id=6ce837ed4d3de0f5582be99066c8a9ec37b624ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Even though pyqt5 would be perfectly usable with just the core Qt5
-modules (QtCore, QtDbus, ...), its configure.py script passes the -gui
-option to qmake unconditionally. Therefore, make sure that GUI is built.
+Qt5 has predefined optimization flags depending if you're building for
+size, for debug etc. These flags are defined in
+mkspecs/common/gcc-base.conf:
+
+QMAKE_CFLAGS_OPTIMIZE      = -O2
+QMAKE_CFLAGS_OPTIMIZE_FULL = -O3
+QMAKE_CFLAGS_OPTIMIZE_DEBUG = -Og
+QMAKE_CFLAGS_OPTIMIZE_SIZE = -Os
+
+Then, in the same file, they use them to set
+QMAKE_CFLAGS_RELEASE/QMAKE_CXXFLAGS_RELEASE:
+
+QMAKE_CFLAGS_RELEASE       += $$QMAKE_CFLAGS_OPTIMIZE
+QMAKE_CXXFLAGS_RELEASE    += $$QMAKE_CFLAGS_RELEASE
+
+At this point there is our chance to override QMAKE_CFLAGS_OPTIMIZE_* in
+qmake.conf, but it's too late, because QMAKE_CFLAGS_RELEASE is already
+set (i.e. -O2) so trying to add or remove QMAKE_CFLAGS_OPTIMIZE (that is
+reset now on) from QMAKE_CLAGS_RELEASE in
+common/features/default_post.prf won't work:
+
+optimize_size {
+    !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_SIZE)  {
+        QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+        QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+        QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
+        QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
+    }
+} else: optimize_full {
+    !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_FULL)  {
+        QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+        QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+        QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
+        QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
+    }
+}
+
+So let's reset:
+QMAKE_CFLAGS_RELEASE
+QMAKE_CFLAGS_DEBUG
+QMAKE_CXXFLAGS_RELEASE
+QMAKE_CXXFLAGS_DEBUG
+in our qmake.conf since the only assignment done in
+mkspecs/common/gcc-base.conf only regards optimization.
+
+This package is also affected by BR2_TOOLCHAIN_HAS_GCC_BUG_90620 and
+it's been worked around by appending -O0 to CFLAGS/CXXFLAGS. This bug
+prevented workaround to work overriding optimization flags, so solving
+this also solves workaround problem.
 
 Fixes:
- - http://autobuild.buildroot.org/results/ea0c8db44aacf1ce76f75e8288969fe5da6690d9
+http://autobuild.buildroot.net/results/ada/adaa9b4bcc6f9d2b5e82c479859a07e8abf5cf13/
+http://autobuild.buildroot.net/results/a83/a83bdd1f3bf309c07abebe871b017c331ed36e67/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Tested-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Arnout: add a comment to qmake.conf.in]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 6b0ba1a3c486e5ef649cd231ff1840fccc2767a6)
+(cherry picked from commit c4a6f974b158a23bcab2f5e0e42971d0c15cc04b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyqt5/Config.in       | 1 +
- package/python-pyqt5/python-pyqt5.mk | 3 +--
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt5/qt5base/qmake.conf.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/python-pyqt5/Config.in b/package/python-pyqt5/Config.in
-index 20ac988703..9fa7676f98 100644
---- a/package/python-pyqt5/Config.in
-+++ b/package/python-pyqt5/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_PYQT5
- 	bool "python-pyqt5"
- 	depends on BR2_PACKAGE_QT5
- 	select BR2_PACKAGE_PYTHON_SIP
-+	select BR2_PACKAGE_QT5BASE_GUI
- 	help
- 	  Python bindings for Qt 5
+diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
+index 2eb564e172..024c074928 100644
+--- a/package/qt5/qt5base/qmake.conf.in
++++ b/package/qt5/qt5base/qmake.conf.in
+@@ -15,10 +15,15 @@ QMAKE_CXX               = $${CROSS_COMPILE}g++
+ # modifications to gcc-base.conf
+ QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
+ QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
++# Remove all optimisation flags, we really only want our own.
+ QMAKE_CFLAGS_OPTIMIZE       =
+ QMAKE_CFLAGS_OPTIMIZE_DEBUG =
+ QMAKE_CFLAGS_OPTIMIZE_FULL  =
+ QMAKE_CFLAGS_OPTIMIZE_SIZE  =
++QMAKE_CFLAGS_DEBUG =
++QMAKE_CXXFLAGS_DEBUG =
++QMAKE_CFLAGS_RELEASE =
++QMAKE_CXXFLAGS_RELEASE =
+ CONFIG                 += nostrip
  
-diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
-index b6d559cd5b..260a93af9c 100644
---- a/package/python-pyqt5/python-pyqt5.mk
-+++ b/package/python-pyqt5/python-pyqt5.mk
-@@ -12,9 +12,8 @@ PYTHON_PYQT5_LICENSE_FILES = LICENSE
- 
- PYTHON_PYQT5_DEPENDENCIES = python-sip host-python-sip qt5base
- PYTHON_PYQT5_MODULES = \
--	QtCore \
-+	QtCore QtGui \
- 	$(if $(BR2_PACKAGE_QT5BASE_DBUS),QtDBus) \
--	$(if $(BR2_PACKAGE_QT5BASE_GUI),QtGui) \
- 	$(if $(BR2_PACKAGE_QT5BASE_NETWORK),QtNetwork) \
- 	$(if $(BR2_PACKAGE_QT5BASE_OPENGL_LIB),QtOpenGL) \
- 	$(if $(BR2_PACKAGE_QT5BASE_PRINTSUPPORT),QtPrintSupport) \
+ QMAKE_LIBS             += -lrt -lpthread -ldl
