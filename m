@@ -1,74 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Mar 2020 15:16:09 +0100
-Subject: [Buildroot] [git commit] package/systemd: add userdb support
-Message-ID: <20200309140910.68CEF8EB58@busybox.osuosl.org>
+Date: Sat, 7 Mar 2020 21:37:23 +0100
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: set status to
+ 'na' for virtual packages
+Message-ID: <20200309140909.E9F8D8E780@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb619c5831f8671dfd13d2520d6dbd088d244af0
+commit: https://git.buildroot.net/buildroot/commit/?id=fb879c1954f0b8c3ab42f494ac9b9be37b148a4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-systemd-userdbd is a system service that multiplexes user/group lookups
-to all local services that provide JSON user/group record definitions
-to the system. In addition it synthesizes JSON user/group records from
-classic UNIX/glibc NSS user/group records in order to provide full
-backwards compatibility.
+If there is no infra set or infra is virtual the status is set to 'na'.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+This is done for the follwing checks:
+ - license
+ - license-files
+ - hash
+ - hash-license
+ - patches
+ - version
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/systemd/Config.in  | 12 ++++++++++++
- package/systemd/systemd.mk |  7 ++++++-
- 2 files changed, 18 insertions(+), 1 deletion(-)
+ support/scripts/pkg-stats | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 6f5f5c3346..bd638477a0 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -403,6 +403,18 @@ config BR2_PACKAGE_SYSTEMD_TMPFILES
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index a15d0ec24b..59b6f388bd 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -131,6 +131,15 @@ class Package:
+     def patch_count(self):
+         return len(self.patch_files)
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-tmpfiles.html
- 
-+config BR2_PACKAGE_SYSTEMD_USERDB
-+	bool "enable userdb daemon"
-+	help
-+	  systemd-userdbd is a system service that multiplexes
-+	  user/group lookups to all local services that provide JSON
-+	  user/group record definitions to the system. In addition it
-+	  synthesizes JSON user/group records from classic UNIX/glibc
-+	  NSS user/group records in order to provide full backwards
-+	  compatibility.
++    @property
++    def has_valid_infra(self):
++        try:
++            if self.infras[0][1] == 'virtual':
++                return False
++        except IndexError:
++                return False
++        return True
 +
-+	  https://www.freedesktop.org/software/systemd/man/systemd-userdbd.service.html
+     def set_infra(self):
+         """
+         Fills in the .infras field
+@@ -152,6 +161,11 @@ class Package:
+         """
+         Fills in the .status['license'] and .status['license-files'] fields
+         """
++        if not self.has_valid_infra:
++            self.status['license'] = ("na", "no valid package infra")
++            self.status['license-files'] = ("na", "no valid package infra")
++            return
 +
- config BR2_PACKAGE_SYSTEMD_VCONSOLE
- 	bool "enable vconsole tool"
- 	default y
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index c7a253bbe4..22165de2c1 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -41,7 +41,6 @@ SYSTEMD_CONF_OPTS += \
- 	-Dumount-path=/usr/bin/umount \
- 	-Dnobody-group=nogroup \
- 	-Didn=true \
--	-Duserdb=false \
- 	-Dhomed=false \
- 	-Dnss-systemd=true
- 
-@@ -311,6 +310,12 @@ else
- SYSTEMD_CONF_OPTS += -Drepart=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_USERDB),y)
-+SYSTEMD_CONF_OPTS += -Duserdb=true
-+else
-+SYSTEMD_CONF_OPTS += -Duserdb=false
-+endif
+         var = self.pkgvar()
+         self.status['license'] = ("error", "missing")
+         self.status['license-files'] = ("error", "missing")
+@@ -165,6 +179,11 @@ class Package:
+         """
+         Fills in the .status['hash'] field
+         """
++        if not self.has_valid_infra:
++            self.status['hash'] = ("na", "no valid package infra")
++            self.status['hash-license'] = ("na", "no valid package infra")
++            return
 +
- ifeq ($(BR2_PACKAGE_SYSTEMD_COREDUMP),y)
- SYSTEMD_CONF_OPTS += -Dcoredump=true
- SYSTEMD_COREDUMP_USER = systemd-coredump -1 systemd-coredump -1 * /var/lib/systemd/coredump - - Core Dumper
+         hashpath = self.path.replace(".mk", ".hash")
+         if os.path.exists(hashpath):
+             self.status['hash'] = ("ok", "found")
+@@ -175,6 +194,10 @@ class Package:
+         """
+         Fills in the .patch_count, .patch_files and .status['patches'] fields
+         """
++        if not self.has_valid_infra:
++            self.status['patches'] = ("na", "no valid package infra")
++            return
++
+         pkgdir = os.path.dirname(self.path)
+         for subdir, _, _ in os.walk(pkgdir):
+             self.patch_files = fnmatch.filter(os.listdir(subdir), '*.patch')
+@@ -554,6 +577,10 @@ def check_package_latest_version(packages):
+     for pkg, r in zip(packages, results):
+         pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
+ 
++        if not pkg.has_valid_infra:
++            pkg.status['version'] = ("na", "no valid package infra")
++            continue
++
+         if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
+             pkg.status['version'] = ('warning', "Release Monitoring API error")
+         elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
