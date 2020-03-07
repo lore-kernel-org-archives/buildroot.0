@@ -1,30 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 22:03:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/erlang-p1-acme: needs C++
-In-Reply-To: <20200307164619.1435341-1-fontaine.fabrice@gmail.com>
-References: <20200307164619.1435341-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200307220352.4e1883da@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 07 Mar 2020 22:06:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: disable opencl
+In-Reply-To: <874kw73bhp.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Mon, 03 Feb 2020 17:02:26 +0100")
+References: <20190823191417.8748-1-juju@cotds.org>
+ <20190924114722.2578c41b@windsurf> <874kw73bhp.fsf@dell.be.48ers.dk>
+Message-ID: <87ftejx4by.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  7 Mar 2020 17:46:19 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/79310855f9a2abe569365ffd27e776f1a56dba2e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/erlang-p1-acme/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+ >> On Fri, 23 Aug 2019 21:14:17 +0200
+ >> Julien Olivain <juju@cotds.org> wrote:
 
-Applied to master, thanks.
+ >>> Some packages installs libOpenCL without declaring
+ >>> BR2_PACKAGE_PROVIDES_LIBOPENCL (e.g. imx-gpu-viv). ImageMagick will
+ >>> detect the library and will require libtool. Since libtool is not in
+ >>> dependencies, build might fail.
+ >>> 
+ >>> To prevent that situation, this patch explicitly disable opencl
+ >>> support.
+ >>> 
+ >>> Signed-off-by: Julien Olivain <juju@cotds.org>
 
-Thomas
+ >> FYI, I've started looking into this. First, there is an upstream commit
+ >> that fixes using disable_opencl instead of enable_opencl. Then I fixed
+ >> up the configure.ac to use the "no_cl" variable that the OpenCL M4
+ >> macro defines. But then even with --disable-opencl, the build fails
+ >> because MAGICKCORE__OPENCL is defined. I'm still trying to figure out
+ >> why.
+
+ > I don't see that issue any more (In fact, the only references to that
+ > symbol seems to be in Magick{Core,Wand}/studio.h), and the
+ > IMAGEMAGICK_CONV_ENV tweak isn't needed any more, so I dropped that and
+ > committed - Thanks.
+
+Committed to 2019.02.x and 2019.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
