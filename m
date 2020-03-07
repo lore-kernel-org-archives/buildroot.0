@@ -1,50 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 08:33:42 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/libjpeg: security
- bump to version 9d
-Message-ID: <20200307072132.46B378F3A7@busybox.osuosl.org>
+Date: Sat, 07 Mar 2020 08:34:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version
+ to 4.11.5
+In-Reply-To: <20200122185659.336443-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 22 Jan 2020 19:56:59 +0100")
+References: <20200122185659.336443-1-bernd.kuhls@t-online.de>
+Message-ID: <87lfoc8voo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00eae38d87ff86b5108e248f8c091d9991d2273d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-- Fix CVE-2018-11813: libjpeg 9c has a large loop because read_pixel in
-  rdtarga.c mishandles EOF.
-- Update hash of README (small updates such as authors, year ...)
+ > Release notes: https://www.samba.org/samba/history/samba-4.11.5.html
+ > This is a security release in order to address the following defects:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 75a14ec067ed244c239692ff3944cc9c71674c6f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libjpeg/libjpeg.hash | 4 ++--
- package/libjpeg/libjpeg.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > CVE-2019-14902: Replication of ACLs set to inherit down a subtree on AD
+ >                 Directory not automatic.
+ > CVE-2019-14907: Crash after failed character conversion at log level 3
+ >                 or above.
+ > CVE-2019-19344: Use after free during DNS zone scavenging in Samba AD
+ >                 DC.
 
-diff --git a/package/libjpeg/libjpeg.hash b/package/libjpeg/libjpeg.hash
-index 7d47f550cb..4f0a677d04 100644
---- a/package/libjpeg/libjpeg.hash
-+++ b/package/libjpeg/libjpeg.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256	650250979303a649e21f87b5ccd02672af1ea6954b911342ea491f351ceb7122	jpegsrc.v9c.tar.gz
--sha256	31f366acfb6259456d9046eb7f16875e387f8bf029d37ac4c4397bf63f22fd6b	README
-+sha256	99cb50e48a4556bc571dadd27931955ff458aae32f68c4d9c39d624693f69c32	jpegsrc.v9d.tar.gz
-+sha256	3dc4e4a145c907a96bd6a0e40be3f722fecf061951909143cdff5365cba9c78c	README
-diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
-index ab09881fc1..b855344f3c 100644
---- a/package/libjpeg/libjpeg.mk
-+++ b/package/libjpeg/libjpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBJPEG_VERSION = 9c
-+LIBJPEG_VERSION = 9d
- LIBJPEG_SITE = http://www.ijg.org/files
- LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
- LIBJPEG_LICENSE = IJG
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+I have instead bumped 2019.02.x to 4.9.18 and 2019.11.x to 4.10.13.
+
+-- 
+Bye, Peter Korsgaard
