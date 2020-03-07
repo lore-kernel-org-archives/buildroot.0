@@ -1,28 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Mar 2020 21:17:32 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/qt5base: add patches to fix
- CVE-2020-0569 and CVE-2020-0570 for latest
-In-Reply-To: <20200130211335.24913-2-ps.report@gmx.net> (Peter Seiderer's
- message of "Thu, 30 Jan 2020 22:13:35 +0100")
-References: <20200130211335.24913-1-ps.report@gmx.net>
- <20200130211335.24913-2-ps.report@gmx.net>
-Message-ID: <87mu8ryl5v.fsf@dell.be.48ers.dk>
+Date: Sat, 07 Mar 2020 21:18:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/smartmontools: add libcap-ng
+ optional dependency
+In-Reply-To: <20200113204329.1204567-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 13 Jan 2020 21:43:29 +0100")
+References: <20200113204329.1204567-1-fontaine.fabrice@gmail.com>
+Message-ID: <87imjfyl3m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Add upstream patches to fix CVE-2020-0569 and CVE-2020-0570 for
- > latest qt version (for details see [1]).
+ > libcap-ng is an optional dependency since a very long time (2010) and
+ > https://github.com/mirror/smartmontools/commit/24882d3672b759c1125169420749e186a3816fe1
 
- > [1] https://www.openwall.com/lists/oss-security/2020/01/30/1
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-Committed to 2019.11.x, thanks.
+Committed to 2019.02.x and 2019.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
