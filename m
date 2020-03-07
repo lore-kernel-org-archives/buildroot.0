@@ -1,64 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 21:24:06 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/util-linux: fix
- build with glibc 2.29
-Message-ID: <20200307202445.BCACA8FBC5@busybox.osuosl.org>
+Date: Sat, 7 Mar 2020 21:18:10 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/smartmontools:
+ add libcap-ng optional dependency
+Message-ID: <20200307202445.B3B208FBC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf0230f43bbe9846bf6b85da6a935adb1d8e2477
+commit: https://git.buildroot.net/buildroot/commit/?id=8af997c03d8a3042ed1704d485ce2b8b4c68850e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
- - No autobuilders failures yet (found with
- qemu_mips64el_malta_defconfig)
+libcap-ng is an optional dependency since a very long time (2010) and
+https://github.com/mirror/smartmontools/commit/24882d3672b759c1125169420749e186a3816fe1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6ee3404bb7a7a0d83afc5ef16796f4abdcc93c0b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f692541dff3f89f10d16103b0b6e0c31bb9da4b3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/smartmontools/smartmontools.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch b/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch
-new file mode 100644
-index 0000000000..381c25382a
---- /dev/null
-+++ b/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch
-@@ -0,0 +1,32 @@
-+From 963413a1adf6767ab17712097e288e1a346f63a7 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Fri, 4 Jan 2019 22:38:25 -0800
-+Subject: [PATCH] ldattach: Check for value of _HAVE_STRUCT_TERMIOS_C_ISPEED
+diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
+index 137c00a505..6c90538f70 100644
+--- a/package/smartmontools/smartmontools.mk
++++ b/package/smartmontools/smartmontools.mk
+@@ -9,4 +9,11 @@ SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smar
+ SMARTMONTOOLS_LICENSE = GPL-2.0+
+ SMARTMONTOOLS_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
++SMARTMONTOOLS_CONF_OPTS += --with-libcap-ng
++SMARTMONTOOLS_DEPENDENCIES += libcap-ng
++else
++SMARTMONTOOLS_CONF_OPTS += --without-libcap-ng
++endif
 +
-+in glibc 2.29+ checking for just existence of _HAVE_STRUCT_TERMIOS_C_ISPEED
-+won't be enough, the value has to be checked
-+
-+see
-+https://sourceware.org/git/?p=glibc.git;a=commit;h=e5a50db36eaa6e8c6427b3a971563240b633ca85
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/karelzak/util-linux/commit/963413a1adf6767ab17712097e288e1a346f63a7]
-+---
-+ sys-utils/ldattach.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/sys-utils/ldattach.c b/sys-utils/ldattach.c
-+index d33d68535..fb50711eb 100644
-+--- a/sys-utils/ldattach.c
-++++ b/sys-utils/ldattach.c
-+@@ -242,7 +242,7 @@ static int my_cfsetspeed(struct termios *ts, int speed)
-+ 	 * -- we have to bypass glibc and set the speed manually (because glibc
-+ 	 *    checks for speed and supports Bxxx bit rates only)...
-+ 	 */
-+-#ifdef _HAVE_STRUCT_TERMIOS_C_ISPEED
-++#if _HAVE_STRUCT_TERMIOS_C_ISPEED
-+ # define BOTHER 0010000		/* non standard rate */
-+ 	dbg("using non-standard speeds");
-+ 	ts->c_ospeed = ts->c_ispeed = speed;
+ $(eval $(autotools-package))
