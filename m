@@ -1,72 +1,113 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat,  7 Mar 2020 08:56:21 +0100
-Subject: [Buildroot] [PATCH v5 00/12] pkg-stats json output improvements
-Message-ID: <20200307075633.7514-1-heiko.thiery@gmail.com>
+Date: Sat,  7 Mar 2020 08:56:22 +0100
+Subject: [Buildroot] [PATCH v5 01/12] support/scripts/pkg-stats: store
+ latest version in a dict
+In-Reply-To: <20200307075633.7514-1-heiko.thiery@gmail.com>
+References: <20200307075633.7514-1-heiko.thiery@gmail.com>
+Message-ID: <20200307075633.7514-2-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add developers information to the packages
-- add supported defconfigs to json
-- add license information to json
-- add license file information to json
-- add patch files to json
-- add a more generic check status field to the packages for easier post
-  processing. The following check status are availble: checks: cve, license,
-  license-files, hash, hash-license,patches, version, url, developers,
-  pkg-check
+This patch changes the type of the latest_version variable to a dict.
+This is for better readability/usability of the data. With this the json
+output is more descriptive in later processing of the json output.
 
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
-v4 -> v5:
- - fix failure while applying to master
+ support/scripts/pkg-stats | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
 
-v3 -> v4:
-
-Included the review comments from Titouan
-
-- use only one signed-off mail address
-- do some things in a more pythonic way
-- remove the patch_count attribute and use a class property instead
-  (Note that the patch_count value will not go into the json output
-  anymore,but then coutn can be computed by "len(patch_files)".)
-- remove the status initializer in the package class that was introduced
-  in v3
-- update the cve status at the end of the cve check loop
-- change the is_valid_infra -> has_valid_infra and use it as property
-
-v2 -> v3:
-- keep variable latest_release but change format
-- add check for license file hashes
-- introduce a na status for the checks
-- add a list of all possible checks to the json output
-- add the cve check status
-
-v1 -> v2:
-- cleanup and recreation of patches
-- remove pkg name from dumping to json
-- use patch_files instead of combine count and files in dict
-- include getdevelopers.py to reuse Developers class
-
----
-
-Heiko Thiery (12):
-  support/scripts/pkg-stats: store latest version in a dict
-  support/scripts/pkg-stats: store patch files for the package
-  support/scripts/pkg-stats: set developers info
-  support/scripts/pkg-stats: store licences of package
-  support/scripts/pkg-stats: add package status
-  support/scripts/pkg-stats: add package count to stats
-  support/scripts/pkg-stats: store pkg dir path
-  support/scripts/pkg-stats: add defconfig support
-  support/scripts/pkg-stats: add support for license hash check
-  support/scripts/pkg-stats: set status to 'na' for virtual packages
-  support/scripts/pkg-stats: initialize all package status checks
-  support/scripts/pkg-stats: add status for cve check
-
- support/scripts/pkg-stats | 271 +++++++++++++++++++++++++++++---------
- 1 file changed, 211 insertions(+), 60 deletions(-)
-
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 8a67e509e1..95ec9e86bd 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -71,7 +71,7 @@ class Package:
+         self.url_status = None
+         self.url_worker = None
+         self.cves = list()
+-        self.latest_version = (RM_API_STATUS_ERROR, None, None)
++        self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
+ 
+     def pkgvar(self):
+         return self.name.upper().replace("-", "_")
+@@ -462,9 +462,8 @@ def check_package_latest_version(packages):
+     """
+     Fills in the .latest_version field of all Package objects
+ 
+-    This field has a special format:
+-      (status, version, id)
+-    with:
++    This field is a dict and has the following keys:
++
+     - status: one of RM_API_STATUS_ERROR,
+       RM_API_STATUS_FOUND_BY_DISTRO, RM_API_STATUS_FOUND_BY_PATTERN,
+       RM_API_STATUS_NOT_FOUND
+@@ -480,7 +479,7 @@ def check_package_latest_version(packages):
+     worker_pool = Pool(processes=64)
+     results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
+     for pkg, r in zip(packages, results):
+-        pkg.latest_version = r
++        pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
+     worker_pool.terminate()
+     del http_pool
+ 
+@@ -519,13 +518,13 @@ def calculate_stats(packages):
+             stats["hash"] += 1
+         else:
+             stats["no-hash"] += 1
+-        if pkg.latest_version[0] == RM_API_STATUS_FOUND_BY_DISTRO:
++        if pkg.latest_version['status'] == RM_API_STATUS_FOUND_BY_DISTRO:
+             stats["rmo-mapping"] += 1
+         else:
+             stats["rmo-no-mapping"] += 1
+-        if not pkg.latest_version[1]:
++        if not pkg.latest_version['version']:
+             stats["version-unknown"] += 1
+-        elif pkg.latest_version[1] == pkg.current_version:
++        elif pkg.latest_version['version'] == pkg.current_version:
+             stats["version-uptodate"] += 1
+         else:
+             stats["version-not-uptodate"] += 1
+@@ -691,29 +690,29 @@ def dump_html_pkg(f, pkg):
+     f.write("  <td class=\"centered\">%s</td>\n" % current_version)
+ 
+     # Latest version
+-    if pkg.latest_version[0] == RM_API_STATUS_ERROR:
++    if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
+         td_class.append("version-error")
+-    if pkg.latest_version[1] is None:
++    if pkg.latest_version['version'] is None:
+         td_class.append("version-unknown")
+-    elif pkg.latest_version[1] != pkg.current_version:
++    elif pkg.latest_version['version'] != pkg.current_version:
+         td_class.append("version-needs-update")
+     else:
+         td_class.append("version-good")
+ 
+-    if pkg.latest_version[0] == RM_API_STATUS_ERROR:
++    if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
+         latest_version_text = "<b>Error</b>"
+-    elif pkg.latest_version[0] == RM_API_STATUS_NOT_FOUND:
++    elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
+         latest_version_text = "<b>Not found</b>"
+     else:
+-        if pkg.latest_version[1] is None:
++        if pkg.latest_version['version'] is None:
+             latest_version_text = "<b>Found, but no version</b>"
+         else:
+             latest_version_text = "<a href=\"https://release-monitoring.org/project/%s\"><b>%s</b></a>" % \
+-                (pkg.latest_version[2], str(pkg.latest_version[1]))
++                (pkg.latest_version['id'], str(pkg.latest_version['version']))
+ 
+         latest_version_text += "<br/>"
+ 
+-        if pkg.latest_version[0] == RM_API_STATUS_FOUND_BY_DISTRO:
++        if pkg.latest_version['status'] == RM_API_STATUS_FOUND_BY_DISTRO:
+             latest_version_text += "found by <a href=\"https://release-monitoring.org/distro/Buildroot/\">distro</a>"
+         else:
+             latest_version_text += "found by guess"
 -- 
 2.20.1
