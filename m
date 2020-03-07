@@ -1,43 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 22:45:02 +0100
-Subject: [Buildroot] [git commit] package/connman: bump to 1.38
-Message-ID: <20200309140910.2D1ED8EB58@busybox.osuosl.org>
+Date: Sat, 7 Mar 2020 21:36:08 +0100
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: set developers
+ info
+Message-ID: <20200309140909.A40848894D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c121114ad2844007b0dc2ea3783f2a65ad44dd7e
+commit: https://git.buildroot.net/buildroot/commit/?id=c1fc827934a828179ae73f3b94bbc9d780cb4755
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Use the function 'parse_developers' function from getdeveloperlib that
+collect the information about the developers and the files they
+maintain. Then set the maintainer(s) to each package.
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/connman/connman.hash | 2 +-
- package/connman/connman.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index ff5b4d48f0..3039105027 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256 6ce29b3eb0bb16a7387bc609c39455fd13064bdcde5a4d185fab3a0c71946e16  connman-1.37.tar.xz
-+sha256 cb30aca97c2f79ccaed8802aa2909ac5100a3969de74c0af8a9d73b85fc4932b  connman-1.38.tar.xz
- # Locally computed
- sha256 b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 8403237c28..7ea52f012a 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 87018eabd3..e34841fc7c 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -30,10 +30,14 @@ import certifi
+ import distutils.version
+ import time
+ import gzip
++import sys
+ from urllib3 import HTTPSConnectionPool
+ from urllib3.exceptions import HTTPError
+ from multiprocessing import Pool
  
--CONNMAN_VERSION = 1.37
-+CONNMAN_VERSION = 1.38
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables
++sys.path.append('utils/')
++from getdeveloperlib import parse_developers
++
+ NVD_START_YEAR = 2002
+ NVD_JSON_VERSION = "1.0"
+ NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
+@@ -171,6 +175,16 @@ class Package:
+         """
+         return cve in self.all_ignored_cves.get(self.pkgvar(), [])
+ 
++    def set_developers(self, developers):
++        """
++        Fills in the .developers field
++        """
++        self.developers = [
++            dev.name
++            for dev in developers
++            if dev.hasfile(self.path)
++        ]
++
+     def __eq__(self, other):
+         return self.path == other.path
+ 
+@@ -894,6 +908,8 @@ def __main__():
+                                       'HEAD']).splitlines()[0].decode()
+     print("Build package list ...")
+     packages = get_pkglist(args.npackages, package_list)
++    print("Getting developers ...")
++    developers = parse_developers()
+     print("Getting package make info ...")
+     package_init_make_info()
+     print("Getting package details ...")
+@@ -905,6 +921,7 @@ def __main__():
+         pkg.set_check_package_warnings()
+         pkg.set_current_version()
+         pkg.set_url()
++        pkg.set_developers(developers)
+     print("Checking URL status")
+     check_package_urls(packages)
+     print("Getting latest versions ...")
