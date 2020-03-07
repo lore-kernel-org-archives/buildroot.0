@@ -1,29 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Mar 2020 09:06:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.3.14
-In-Reply-To: <20200124182830.1442447-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Fri, 24 Jan 2020 19:28:30 +0100")
-References: <20200124182830.1442447-1-bernd.kuhls@t-online.de>
-Message-ID: <87zhcs7fmp.fsf@dell.be.48ers.dk>
+Date: Sat, 7 Mar 2020 09:01:59 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/qt5/qt5base: fix
+ building with correct optimization
+Message-ID: <20200307075439.1EB6C8F564@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=121ec5367cd5de7f8e4e74847cde86dc66887f38
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Changelog of 7.3.13: https://www.php.net/ChangeLog-7.php#7.3.13
- > Fixes CVE-2019-11044, CVE-2019-11045, CVE-2019-11046, CVE-2019-11047,
- > CVE-2019-11049 & CVE-2019-11050
+Qt5 has predefined optimization flags depending if you're building for
+size, for debug etc. These flags are defined in
+mkspecs/common/gcc-base.conf:
 
- > Changelog of 7.3.14: https://www.php.net/ChangeLog-7.php#7.3.14
+QMAKE_CFLAGS_OPTIMIZE      = -O2
+QMAKE_CFLAGS_OPTIMIZE_FULL = -O3
+QMAKE_CFLAGS_OPTIMIZE_DEBUG = -Og
+QMAKE_CFLAGS_OPTIMIZE_SIZE = -Os
 
- > Fixes CVE-2020-7059 & CVE-2020-7060.
+Then, in the same file, they use them to set
+QMAKE_CFLAGS_RELEASE/QMAKE_CXXFLAGS_RELEASE:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+QMAKE_CFLAGS_RELEASE       += $$QMAKE_CFLAGS_OPTIMIZE
+QMAKE_CXXFLAGS_RELEASE    += $$QMAKE_CFLAGS_RELEASE
 
-Committed to 2019.02.x and 2019.11.x, thanks.
+At this point there is our chance to override QMAKE_CFLAGS_OPTIMIZE_* in
+qmake.conf, but it's too late, because QMAKE_CFLAGS_RELEASE is already
+set (i.e. -O2) so trying to add or remove QMAKE_CFLAGS_OPTIMIZE (that is
+reset now on) from QMAKE_CLAGS_RELEASE in
+common/features/default_post.prf won't work:
 
--- 
-Bye, Peter Korsgaard
+optimize_size {
+    !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_SIZE)  {
+        QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+        QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+        QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
+        QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
+    }
+} else: optimize_full {
+    !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_FULL)  {
+        QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+        QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
+        QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
+        QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
+    }
+}
+
+So let's reset:
+QMAKE_CFLAGS_RELEASE
+QMAKE_CFLAGS_DEBUG
+QMAKE_CXXFLAGS_RELEASE
+QMAKE_CXXFLAGS_DEBUG
+in our qmake.conf since the only assignment done in
+mkspecs/common/gcc-base.conf only regards optimization.
+
+This package is also affected by BR2_TOOLCHAIN_HAS_GCC_BUG_90620 and
+it's been worked around by appending -O0 to CFLAGS/CXXFLAGS. This bug
+prevented workaround to work overriding optimization flags, so solving
+this also solves workaround problem.
+
+Fixes:
+http://autobuild.buildroot.net/results/ada/adaa9b4bcc6f9d2b5e82c479859a07e8abf5cf13/
+http://autobuild.buildroot.net/results/a83/a83bdd1f3bf309c07abebe871b017c331ed36e67/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Tested-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Arnout: add a comment to qmake.conf.in]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit c4a6f974b158a23bcab2f5e0e42971d0c15cc04b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5base/qmake.conf.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
+index 2eb564e172..024c074928 100644
+--- a/package/qt5/qt5base/qmake.conf.in
++++ b/package/qt5/qt5base/qmake.conf.in
+@@ -15,10 +15,15 @@ QMAKE_CXX               = $${CROSS_COMPILE}g++
+ # modifications to gcc-base.conf
+ QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
+ QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
++# Remove all optimisation flags, we really only want our own.
+ QMAKE_CFLAGS_OPTIMIZE       =
+ QMAKE_CFLAGS_OPTIMIZE_DEBUG =
+ QMAKE_CFLAGS_OPTIMIZE_FULL  =
+ QMAKE_CFLAGS_OPTIMIZE_SIZE  =
++QMAKE_CFLAGS_DEBUG =
++QMAKE_CXXFLAGS_DEBUG =
++QMAKE_CFLAGS_RELEASE =
++QMAKE_CXXFLAGS_RELEASE =
+ CONFIG                 += nostrip
+ 
+ QMAKE_LIBS             += -lrt -lpthread -ldl
