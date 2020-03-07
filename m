@@ -1,36 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Mar 2020 09:06:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-pyqt5: select
- BR2_PACKAGE_QT5BASE_GUI
-In-Reply-To: <27821b18-b923-ff87-9da9-f56e65d78a45@mind.be> (Arnout
- Vandecappelle's message of "Thu, 23 Jan 2020 23:39:45 +0100")
-References: <20191230214842.1485805-1-fontaine.fabrice@gmail.com>
- <20191230234259.5bfe6355@windsurf> <20200112230647.1fce0393@windsurf>
- <CAPi7W83tq1Lcfh6jsREDkS7dc7k8HKrp+50hwDCCZyQEbkq8Zg@mail.gmail.com>
- <27821b18-b923-ff87-9da9-f56e65d78a45@mind.be>
-Message-ID: <874kv08u7r.fsf@dell.be.48ers.dk>
+Date: Sat, 7 Mar 2020 09:02:31 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/python-pyqt5:
+ select BR2_PACKAGE_QT5BASE_GUI
+Message-ID: <20200307075447.323128F4E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2c24c4cab34dac884025bba2640d4cce3caa42b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
- > On 12/01/2020 23:23, Fabrice Fontaine wrote:
- >> Le dim. 12 janv. 2020 ? 23:06, Thomas Petazzoni
- >> <thomas.petazzoni@bootlin.com> a ?crit :
- >>> 
- >>> Fabrice,
- >>> 
- >>> Any comment on the below question ?
- >> This is indeed "strange" but configure.py is really passing -gui
- >> unconditionally for QtCore (as well as QtDbus, QtNetwork ...).
+Even though pyqt5 would be perfectly usable with just the core Qt5
+modules (QtCore, QtDbus, ...), its configure.py script passes the -gui
+option to qmake unconditionally. Therefore, make sure that GUI is built.
 
- >  I've added a bit of this explanation to the commit message and applied to
- > master, thanks!
+Fixes:
+ - http://autobuild.buildroot.org/results/ea0c8db44aacf1ce76f75e8288969fe5da6690d9
 
-Committed to 2019.02.x and 2019.11.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 6b0ba1a3c486e5ef649cd231ff1840fccc2767a6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-pyqt5/Config.in       | 1 +
+ package/python-pyqt5/python-pyqt5.mk | 3 +--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-pyqt5/Config.in b/package/python-pyqt5/Config.in
+index 20ac988703..9fa7676f98 100644
+--- a/package/python-pyqt5/Config.in
++++ b/package/python-pyqt5/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_PYQT5
+ 	bool "python-pyqt5"
+ 	depends on BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_PYTHON_SIP
++	select BR2_PACKAGE_QT5BASE_GUI
+ 	help
+ 	  Python bindings for Qt 5
+ 
+diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
+index b6d559cd5b..260a93af9c 100644
+--- a/package/python-pyqt5/python-pyqt5.mk
++++ b/package/python-pyqt5/python-pyqt5.mk
+@@ -12,9 +12,8 @@ PYTHON_PYQT5_LICENSE_FILES = LICENSE
+ 
+ PYTHON_PYQT5_DEPENDENCIES = python-sip host-python-sip qt5base
+ PYTHON_PYQT5_MODULES = \
+-	QtCore \
++	QtCore QtGui \
+ 	$(if $(BR2_PACKAGE_QT5BASE_DBUS),QtDBus) \
+-	$(if $(BR2_PACKAGE_QT5BASE_GUI),QtGui) \
+ 	$(if $(BR2_PACKAGE_QT5BASE_NETWORK),QtNetwork) \
+ 	$(if $(BR2_PACKAGE_QT5BASE_OPENGL_LIB),QtOpenGL) \
+ 	$(if $(BR2_PACKAGE_QT5BASE_PRINTSUPPORT),QtPrintSupport) \
