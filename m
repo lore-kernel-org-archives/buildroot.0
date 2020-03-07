@@ -1,83 +1,68 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sat,  7 Mar 2020 12:43:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/connman: bump version to 1.38
-Message-ID: <20200307114312.14726-1-mc5686@mclink.it>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 7 Mar 2020 12:48:06 +0100
+Subject: [Buildroot] [PATCH v1] package/libdrm: tests/amdgpu needs
+ atomic_ops
+In-Reply-To: <20200307113604.14754-1-ps.report@gmx.net>
+References: <20200307113604.14754-1-ps.report@gmx.net>
+Message-ID: <20200307124806.72ce4a5e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added support for iwd.
+On Sat,  7 Mar 2020 12:36:04 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- package/connman/Config.in    | 9 ++++++++-
- package/connman/connman.hash | 1 +
- package/connman/connman.mk   | 5 +++--
- 3 files changed, 12 insertions(+), 3 deletions(-)
+> Add patch to fix tests/amdpu dependency on atomic_ops.
+>
+> Fixes:
+>
+>   http://autobuild.buildroot.net/results/e29dae423f3f80d2c34dde9a125bd216a75ad1c0
+>
+>   FAILED: tests/amdgpu/amdgpu_test
+>   .../host/bin/sparc-linux-gcc  -o tests/amdgpu/amdgpu_test 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/amdgpu_test.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/basic_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/bo_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/cs_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/vce_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/uvd_enc_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/vcn_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/deadlock_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/vm_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/ras_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/syncobj_tests.c.o' -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -Wl,--start-group libdrm.so.2.4.0 amdgpu/libdrm_amdgpu.so.1.0.0 .../host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libcunit.so -Wl,--end-group -pthread '-Wl,-rpath,$ORIGIN/../..:$ORIGIN/../../amdgpu' -Wl,-rpath-link,.../build/libdrm-2.4.100/build/ -Wl,-rpath-link,.../build/li
+>  bdrm-2.4.100/build/amdgpu
+>   .../host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: tests/amdgpu/b9f2b1d@@amdgpu_test at exe/bo_tests.c.o: undefined reference to symbol 'AO_fetch_compare_and_swap_emulation'
+>   .../host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: .../host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libatomic_ops.so.1: error adding symbols: DSO missing from command line
+>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  .../0007-tests-amdgpu-needs-atomic_ops.patch  | 26 +++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>  create mode 100644 package/libdrm/0007-tests-amdgpu-needs-atomic_ops.patch
+>
+> diff --git a/package/libdrm/0007-tests-amdgpu-needs-atomic_ops.patch b/package/libdrm/0007-tests-amdgpu-needs-atomic_ops.patch
+> new file mode 100644
+> index 0000000000..78a844b02e
+> --- /dev/null
+> +++ b/package/libdrm/0007-tests-amdgpu-needs-atomic_ops.patch
+> @@ -0,0 +1,26 @@
+> +From f0adb08424e624aeee340291343281256b7a98e8 Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Sat, 7 Mar 2020 12:23:09 +0100
+> +Subject: [PATCH] tests/amdgpu: needs atomic_ops
+> +
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 30eae23..13f9ccc 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -23,7 +23,7 @@ config BR2_PACKAGE_CONNMAN_ETHERNET
- 	default y
- 
- config BR2_PACKAGE_CONNMAN_WIFI
--	bool "enable WiFi support"
-+	bool "enable WiFi (wpa_supplicant) support"
- 	select BR2_PACKAGE_WPA_SUPPLICANT # runtime
- 	select BR2_PACKAGE_WPA_SUPPLICANT_DBUS # runtime
- 	help
-@@ -31,6 +31,13 @@ config BR2_PACKAGE_CONNMAN_WIFI
- 	  setup). ConnMan detects the start of wpa_supplicant
- 	  automatically.
- 
-+config BR2_PACKAGE_CONNMAN_IWD
-+	bool "enable WiFi (iwd) support"
-+	select BR2_PACKAGE_IWD # runtime
-+	help
-+	  Enable WiFi support (scan and static/dhcp interface
-+	  setup). ConnMan detects the start of iwd automatically.
-+
- config BR2_PACKAGE_CONNMAN_WISPR
- 	bool "enable WISPr support"
- 	depends on !BR2_STATIC_LIBS # gnutls
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index ff5b4d4..9122c43 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
- sha256 6ce29b3eb0bb16a7387bc609c39455fd13064bdcde5a4d185fab3a0c71946e16  connman-1.37.tar.xz
-+sha256 cb30aca97c2f79ccaed8802aa2909ac5100a3969de74c0af8a9d73b85fc4932b  connman-1.38.tar.xz
- # Locally computed
- sha256 b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 2cbf3fe..181ea14 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--CONNMAN_VERSION = 1.37
-+CONNMAN_VERSION = 1.38
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
--CONNMAN_DEPENDENCIES = libglib2 dbus iptables
-+CONNMAN_DEPENDENCIES = libmnl libglib2 dbus iptables
- CONNMAN_INSTALL_STAGING = YES
- CONNMAN_LICENSE = GPL-2.0
- CONNMAN_LICENSE_FILES = COPYING
-@@ -16,6 +16,7 @@ CONNMAN_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug) \
- 	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet) \
- 	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi) \
-+	$(if $(BR2_PACKAGE_CONNMAN_IWD),--enable-iwd,--disable-iwd) \
- 	$(if $(BR2_PACKAGE_CONNMAN_WISPR),--enable-wispr,--disable-wispr) \
- 	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth) \
- 	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback) \
--- 
-2.25.1
+Upstream: https://gitlab.freedesktop.org/mesa/drm/-/merge_requests/50
+
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + tests/amdgpu/meson.build | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/tests/amdgpu/meson.build b/tests/amdgpu/meson.build
+> +index 1726cb43..4dfa5c83 100644
+> +--- a/tests/amdgpu/meson.build
+> ++++ b/tests/amdgpu/meson.build
+> +@@ -26,7 +26,7 @@ if dep_cunit.found()
+> +       'vce_tests.c', 'uvd_enc_tests.c', 'vcn_tests.c', 'deadlock_tests.c',
+> +       'vm_tests.c', 'ras_tests.c', 'syncobj_tests.c',
+> +     ),
+> +-    dependencies : [dep_cunit, dep_threads],
+> ++    dependencies : [dep_cunit, dep_threads, dep_atomic_ops],
+> +     include_directories : [inc_root, inc_drm, include_directories('../../amdgpu')],
+> +     link_with : [libdrm, libdrm_amdgpu],
+> +     install : with_install_tests,
+> +--
+> +2.25.1
+> +
