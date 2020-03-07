@@ -1,203 +1,56 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 7 Mar 2020 23:00:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qt5: add qt5remoteobjects
- library
-In-Reply-To: <8ef0b851-e4b8-d2dd-28b8-190ab67dae8c@leiderfischer.de>
-References: <8ef0b851-e4b8-d2dd-28b8-190ab67dae8c@leiderfischer.de>
-Message-ID: <20200307230033.4dc4afcf@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Mar 2020 23:03:11 +0100
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.15.3
+Message-ID: <20200307215045.3718B8FD80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sven,
+commit: https://git.buildroot.net/buildroot/commit/?id=7df87514861ddebc038542d3ac764fa276a2204f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-despite the line-wrapped/e-mail client problems some basic review...
+For details see [1].
 
-Subject should be:
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-March/041288.html
 
-package/qt5remoteobjects: new package
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libinput/libinput.hash | 12 ++++++------
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-On Sat, 7 Mar 2020 16:19:12 +0100, Sven Fischer <sven@leiderfischer.de> wrote:
-
-> Qt 5.12 adds a library for IPC. This library is missing from the
-> distributed qt5 package. Added it by using the library qt5serialport as
-> a template and replaced serialport with remoteobjects, recalculated the
-> sha256 sums.
-
-All but the first sentence is better moved to patch cover-letter
-or note below the first '---' (see below for example)...
-
->
-> Signed-off-by: Sven Fischer <sven@leiderfischer.de>
-> ---
-
-Notes:
-  - Added it by using the library qt5serialport as a template and replaced
-    serialport with remoteobjects, recalculated the sha256 sums.
-
-
-> package/qt5/Config.in | 1 +
-> .../5.12.7/qt5remoteobjects.hash | 8 +++
-> package/qt5/qt5remoteobjects/Config.in | 12 +++++
-> .../qt5remoteobjects/qt5remoteobjects.hash | 2 +
-> .../qt5/qt5remoteobjects/qt5remoteobjects.mk | 50 +++++++++++++++++++
-> 5 files changed, 73 insertions(+)
-> create mode 100644 package/qt5/qt5remoteobjects/5.12.7/qt5remoteobjects.hash
-> create mode 100644 package/qt5/qt5remoteobjects/Config.in
-> create mode 100644 package/qt5/qt5remoteobjects/qt5remoteobjects.hash
-> create mode 100644 package/qt5/qt5remoteobjects/qt5remoteobjects.mk
->
-> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-> index 7051bf517a..2178c7d545 100644
-> --- a/package/qt5/Config.in
-> +++ b/package/qt5/Config.in
-> @@ -54,6 +54,7 @@ source "package/qt5/qt5location/Config.in"
-> source "package/qt5/qt5multimedia/Config.in"
-> source "package/qt5/qt5quickcontrols/Config.in"
-> source "package/qt5/qt5quickcontrols2/Config.in"
-> +source "package/qt5/qt5remoteobjects/Config.in"
-> source "package/qt5/qt5script/Config.in"
-> source "package/qt5/qt5scxml/Config.in"
-> source "package/qt5/qt5sensors/Config.in"
-> diff --git a/package/qt5/qt5remoteobjects/5.12.7/qt5remoteobjects.hash
-> b/package/qt5/qt5remoteobjects/5.12.7/qt5remoteobjects.hash
-> new file mode 100644
-> index 0000000000..4097dd8d54
-> --- /dev/null
-> +++ b/package/qt5/qt5remoteobjects/5.12.7/qt5remoteobjects.hash
-> @@ -0,0 +1,8 @@
-> +# Hash from:
-> https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtremoteobjects-everywhere-src-5.12.7.tar.xz.sha256
-> +sha256 6d6aaec4e9c140c027b0badaabc6322ea3c16cf649495a27fec1f261e891120f
-> qtremoteobjects-everywhere-src-5.12.7.tar.xz
-> +
-> +# Hashes for license files:
-> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643
-> LICENSE.GPL2
-> +sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903
-> LICENSE.GPL3
-> +sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652
-> LICENSE.GPL3-EXCEPT
-> +sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768
-> LICENSE.LGPL3
-> diff --git a/package/qt5/qt5remoteobjects/Config.in
-> b/package/qt5/qt5remoteobjects/Config.in
-> new file mode 100644
-> index 0000000000..bba5c5af1c
-> --- /dev/null
-> +++ b/package/qt5/qt5remoteobjects/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_QT5REMOTEOBJECTS
-> + bool "qt5remoteobjects"
-> + select BR2_PACKAGE_QT5BASE
-
-$ head -1 build/qt5remoteobjects-5.12.7/qtremoteobjects.pro
-requires(qtHaveModule(network))
-
-Missing:
-
-select BR2_PACKAGE_QT5BASE_NETWORK
-
-> + help
-> + Qt is a cross-platform application and UI framework for
-> + developers using C++.
-> +
-> + Qt Remote Objects (QtRO) is an Inter-Process Communication (IPC) module
-> + developed for Qt. This module extends Qt's existing functionalities to
-> + enable information exchange between processes or computers, easily.
-> +
-> + http://doc.qt.io/qt-5/qtremoteobjects-index.html
-> diff --git a/package/qt5/qt5remoteobjects/qt5remoteobjects.hash
-> b/package/qt5/qt5remoteobjects/qt5remoteobjects.hash
-> new file mode 100644
-> index 0000000000..5316f03b10
-> --- /dev/null
-> +++ b/package/qt5/qt5remoteobjects/qt5remoteobjects.hash
-> @@ -0,0 +1,2 @@
-> +# This hash file is not used; instead, update the
-> +# hash files in the per-version sub-directories.
-
-Please re-base your patch against git next (the distinction
-between LTS and Lates is gone), only Qt-5.12.x is supported,
-no more need for an extra 5.12.7 subdirectory...
-
-> diff --git a/package/qt5/qt5remoteobjects/qt5remoteobjects.mk
-> b/package/qt5/qt5remoteobjects/qt5remoteobjects.mk
-> new file mode 100644
-> index 0000000000..7e9bd53aa0
-> --- /dev/null
-> +++ b/package/qt5/qt5remoteobjects/qt5remoteobjects.mk
-> @@ -0,0 +1,50 @@
-> +################################################################################
-> +#
-> +# qt5remoteobjects
-> +#
-> +################################################################################
-> +
-> +QT5REMOTEOBJECTS_VERSION = $(QT5_VERSION)
-> +QT5REMOTEOBJECTS_SITE = $(QT5_SITE)
-> +QT5REMOTEOBJECTS_SOURCE =
-> qtremoteobjects-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5REMOTEOBJECTS_VERSION).tar.xz
-> +QT5REMOTEOBJECTS_DEPENDENCIES = qt5base
-
-$ find build/qt5remoteobjects-5.12.7 -name "*.pro" | xargs grep QT
-
-build/qt5remoteobjects-5.12.7/src/imports/compat/compat.pro:QT += qml remoteobjects
-
---> at least an optional dependency is missing
-
-
-> +QT5REMOTEOBJECTS_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> +QT5REMOTEOBJECTS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with
-> exception(tools), GFDL-1.3 (docs)
-> +QT5REMOTEOBJECTS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3
-> LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
-> +else
-> +QT5REMOTEOBJECTS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with
-> exception or LGPL-3.0, GFDL-1.3 (docs)
-> +QT5REMOTEOBJECTS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3
-> LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
-> +endif
-> +
-> +define QT5REMOTEOBJECTS_CONFIGURE_CMDS
-> + (cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
-> +endef
-> +
-> +define QT5REMOTEOBJECTS_BUILD_CMDS
-> + $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define QT5REMOTEOBJECTS_INSTALL_STAGING_CMDS
-> + $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-> +endef
-> +
-> +ifeq ($(BR2_STATIC_LIBS),)
-> +define QT5REMOTEOBJECTS_INSTALL_TARGET_LIBS
-> + cp -dpf $(STAGING_DIR)/usr/lib/libQt5RemoteObjects.so.*
-> $(TARGET_DIR)/usr/lib
-> +endef
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-> +define QT5REMOTEOBJECTS_INSTALL_TARGET_EXAMPLES
-> + cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/remoteobjects
-> $(TARGET_DIR)/usr/lib/qt/examples/
-> +endef
-> +endif
-> +
-> +define QT5REMOTEOBJECTS_INSTALL_TARGET_CMDS
-> + $(QT5REMOTEOBJECTS_INSTALL_TARGET_LIBS)
-> + $(QT5REMOTEOBJECTS_INSTALL_TARGET_EXAMPLES)
-> +endef
-> +
-> +$(eval $(generic-package))
->
-
-Otherwise looks good (and compiles)...
-
-Regards,
-Peter
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 18cc257b72..f39afa0457 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-February/041227.html
+-md5 eb6bd2907ad33d53954d70dfb881a643 libinput-1.15.2.tar.xz
+-sha1 2a0c4ce80ee43a9a1b274bfe40ca638037716584 libinput-1.15.2.tar.xz
+-sha256 971c3fbfb624f95c911adeb2803c372e4e3647d1b98f278f660051f834597747 libinput-1.15.2.tar.xz
+-sha512 f6b50dbdf6ee6b65f88e020c4292c94c3178125d58629f27c2e52f92b658ccd67e0c5604fbf0b303621ff0386637ce1e291daaa991761d4145e8bcda4dd128a2 libinput-1.15.2.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-March/041288.html
++md5  6fbea8d51d9194d7ba33f96d7c4cee56  libinput-1.15.3.tar.xz
++sha1  101fd149b851c197323129efcdfe5c1c6c940b43  libinput-1.15.3.tar.xz
++sha256  5b12427dd50489c2b41b04ae2ca54e31a112a33cb861f00ccd15a2ad7a88694d  libinput-1.15.3.tar.xz
++sha512  6636fd618e2b9cfa5ee44701207dc98f2639adc53eb3ef135509d936fb19b2cedf5184eab58e887798d9cf8ee65f35bc9062f7e3630080bcbe45a90a8b631ef2  libinput-1.15.3.tar.xz
+ 
+ # License files
+-sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
++sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 1d5446e444..f418046257 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.15.2
++LIBINPUT_VERSION = 1.15.3
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
