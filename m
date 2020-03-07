@@ -1,45 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 22:02:54 +0100
-Subject: [Buildroot] [PATCH v5 00/12] pkg-stats json output improvements
-In-Reply-To: <20200307075633.7514-1-heiko.thiery@gmail.com>
-References: <20200307075633.7514-1-heiko.thiery@gmail.com>
-Message-ID: <20200307220254.69d2921d@windsurf.home>
+Date: Sat, 7 Mar 2020 22:03:36 +0100
+Subject: [Buildroot] [git commit] package/erlang-p1-acme: needs C++
+Message-ID: <20200307205112.590B78FC66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=21b122af840cf9462111354501e6d3187ee91427
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  7 Mar 2020 08:56:21 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/79310855f9a2abe569365ffd27e776f1a56dba2e
 
-> Heiko Thiery (12):
->   support/scripts/pkg-stats: store latest version in a dict
->   support/scripts/pkg-stats: store patch files for the package
->   support/scripts/pkg-stats: set developers info
->   support/scripts/pkg-stats: store licences of package
->   support/scripts/pkg-stats: add package status
->   support/scripts/pkg-stats: add package count to stats
->   support/scripts/pkg-stats: store pkg dir path
->   support/scripts/pkg-stats: add defconfig support
->   support/scripts/pkg-stats: add support for license hash check
->   support/scripts/pkg-stats: set status to 'na' for virtual packages
->   support/scripts/pkg-stats: initialize all package status checks
->   support/scripts/pkg-stats: add status for cve check
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/erlang-p1-acme/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I've applied the entire series to next, except
-"support/scripts/pkg-stats: add support for license hash check" as I
-explained as a reply to this patch.
-
-Also, I fixed the daily-mail script from the buildroot-test repo to be
-compatible with the new JSON format.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/erlang-p1-acme/Config.in b/package/erlang-p1-acme/Config.in
+index 2cd1985a4b..2c0d1d0337 100644
+--- a/package/erlang-p1-acme/Config.in
++++ b/package/erlang-p1-acme/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_ERLANG_P1_ACME
+ 	bool "erlang-p1-acme"
++	depends on BR2_INSTALL_LIBSTDCPP # erlang-jiffy
+ 	select BR2_PACKAGE_ERLANG_IDNA
+ 	select BR2_PACKAGE_ERLANG_JIFFY
+ 	select BR2_PACKAGE_ERLANG_JOSE
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_ERLANG_P1_ACME
+ 	  ACME client library for Erlang.
+ 
+ 	  https://github.com/processone/p1_acme
++
++comment "erlang-p1-acme needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
