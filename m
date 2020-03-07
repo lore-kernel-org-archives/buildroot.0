@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 21:38:48 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] linux/linux.mk: use
+Date: Sat, 7 Mar 2020 21:38:29 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] linux/linux.mk: use
  HOST_MAKE_ENV rather than TARGET_MAKE_ENV
-Message-ID: <20200307202732.20AD481268@busybox.osuosl.org>
+Message-ID: <20200307202738.A4F698FC0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=933ab20296fbf582019d154491617e1bac6dd4c9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=304a5efe585a8ec82084da3c56d3940f98c385c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 While the kernel is built for the target, the build may need various host
 libraries depending on config (and kernel version), so use HOST_MAKE_ENV
@@ -35,7 +35,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 5 insertions(+), 7 deletions(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index a1378345c3..e691208695 100644
+index 259cf5af56..e05cf34f56 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
 @@ -59,8 +59,12 @@ BR_NO_CHECK_HASH_FOR += $(notdir $(LINUX_PATCHES))
