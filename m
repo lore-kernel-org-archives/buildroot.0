@@ -1,61 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 10:01:24 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/webkitgtk: needs
- >= GCC 7
-Message-ID: <20200307110034.4E5B982864@busybox.osuosl.org>
+Date: Sat, 7 Mar 2020 09:54:17 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/webkitgtk:
+ disable JSC JIT for MIPSr6
+Message-ID: <20200307110034.4484482864@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=422cf4651673149812c809d825e1cd63987715f7
+commit: https://git.buildroot.net/buildroot/commit/?id=ee784078dfd9644912f20c9177125a13e0c0d5db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-CMakeLists.txt contains a toolchain check:
+Forcibly disable the JavaScriptCore JIT compilation support
+for MIPSr6 processors, which are unsupported.
 
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    if (${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS "7.3.0")
-        message(FATAL_ERROR "GCC 7.3 or newer is required to build WebKit. Use a newer GCC version or Clang.")
-    endif ()
-endif ()
+Fixes: http://autobuild.buildroot.net/results/3d21d3c3460cd85a4c828dd197929cdf17aaf4e0
 
-So bump the toolchain dependency to >= GCC 7.  The check is really about >=
-7.3.0, but we do not have such detailed version checks.  Given that GCC
-7.3.0 was released in January 2018 (and 7.1.0 in May 2017), most external
-GCC 7.x toolchains probably use >= 7.3.0.
-
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4)
+(cherry picked from commit 5eb70cecedd03e08977a06bcc115b6a954d3da9a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1a6de2da7079f07a8d6f47472394206b095232af)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/webkitgtk/webkitgtk.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 9f0d4a776c..0038a2fd61 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -12,19 +12,19 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 8f8870c9b0..c8ad3c3382 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -95,4 +95,13 @@ else
+ WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
+ endif
  
--comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6, host gcc >= 4.8"
-+comment "webkitgtk needs libgtk3 and a glibc toolchain w/ C++, gcc >= 7, host gcc >= 4.8"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_USES_GLIBC || \
- 		!BR2_HOST_GCC_AT_LEAST_4_8 || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_6
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_WEBKITGTK
- 	bool "webkitgtk"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
++# JIT is not supported for MIPS r6, but the WebKit build system does not
++# have a check for these processors. Disable JIT forcibly here and use
++# the CLoop interpreter instead.
++#
++# Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=191258
++ifeq ($(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
++WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON
++endif
++
+ $(eval $(cmake-package))
