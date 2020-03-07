@@ -1,39 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 21:26:11 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/util-linux: make
- wipefs depend on BR2_USE_MMU
-Message-ID: <20200307202446.0244E8FBC5@busybox.osuosl.org>
+Date: Sat, 7 Mar 2020 21:24:06 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/util-linux: fix
+ build with glibc 2.29
+Message-ID: <20200307202445.BCACA8FBC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caec37adee204b374a557432c6bcce9b07c54c3f
+commit: https://git.buildroot.net/buildroot/commit/?id=bf0230f43bbe9846bf6b85da6a935adb1d8e2477
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-It depends on libblkid and libsmartcols, which use fork().
-
 Fixes:
-  http://autobuild.buildroot.net/results/82f9712bc90377c625caeb5b175e83a03d5b9d75/
+ - No autobuilders failures yet (found with
+ qemu_mips64el_malta_defconfig)
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d83b5d628a79e21485eb6445ba9526075675e195)
+(cherry picked from commit 6ee3404bb7a7a0d83afc5ef16796f4abdcc93c0b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/util-linux/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ ...for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 3c64a19d84..3609da79ad 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -409,6 +409,7 @@ config BR2_PACKAGE_UTIL_LINUX_WALL
- 
- config BR2_PACKAGE_UTIL_LINUX_WIPEFS
- 	bool "wipefs"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
- 	help
+diff --git a/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch b/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch
+new file mode 100644
+index 0000000000..381c25382a
+--- /dev/null
++++ b/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch
+@@ -0,0 +1,32 @@
++From 963413a1adf6767ab17712097e288e1a346f63a7 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Fri, 4 Jan 2019 22:38:25 -0800
++Subject: [PATCH] ldattach: Check for value of _HAVE_STRUCT_TERMIOS_C_ISPEED
++
++in glibc 2.29+ checking for just existence of _HAVE_STRUCT_TERMIOS_C_ISPEED
++won't be enough, the value has to be checked
++
++see
++https://sourceware.org/git/?p=glibc.git;a=commit;h=e5a50db36eaa6e8c6427b3a971563240b633ca85
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/karelzak/util-linux/commit/963413a1adf6767ab17712097e288e1a346f63a7]
++---
++ sys-utils/ldattach.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/sys-utils/ldattach.c b/sys-utils/ldattach.c
++index d33d68535..fb50711eb 100644
++--- a/sys-utils/ldattach.c
+++++ b/sys-utils/ldattach.c
++@@ -242,7 +242,7 @@ static int my_cfsetspeed(struct termios *ts, int speed)
++ 	 * -- we have to bypass glibc and set the speed manually (because glibc
++ 	 *    checks for speed and supports Bxxx bit rates only)...
++ 	 */
++-#ifdef _HAVE_STRUCT_TERMIOS_C_ISPEED
+++#if _HAVE_STRUCT_TERMIOS_C_ISPEED
++ # define BOTHER 0010000		/* non standard rate */
++ 	dbg("using non-standard speeds");
++ 	ts->c_ospeed = ts->c_ispeed = speed;
