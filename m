@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Mar 2020 12:11:47 +0100
-Subject: [Buildroot] [PATCH 1/2] package/webkitgtk: security bump to
+Date: Sat, 07 Mar 2020 12:11:54 +0100
+Subject: [Buildroot] [PATCH 2/2] package/wpewebkit: security bump to
  version 2.26.3
-In-Reply-To: <20200128072323.9204-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 28 Jan 2020 08:23:21 +0100")
+In-Reply-To: <20200128072323.9204-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 28 Jan 2020 08:23:22 +0100")
 References: <20200128072323.9204-1-peter@korsgaard.com>
-Message-ID: <87blp81kss.fsf@dell.be.48ers.dk>
+ <20200128072323.9204-2-peter@korsgaard.com>
+Message-ID: <877dzw1ksl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -31,7 +32,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Committed to 2019.02.x and 2019.11.x, thanks.
+Committed to 2019.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
