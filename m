@@ -1,34 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Mar 2020 21:20:56 +0100
-Subject: [Buildroot] [git commit] package/gr-osmosdr: disable documentation
-Message-ID: <20200308201850.276A18FF4D@busybox.osuosl.org>
+Date: Sun, 08 Mar 2020 21:38:10 +0100
+Subject: [Buildroot] [PATCH v1] package/ser2net: fix gensio detection
+ with openssl enabled
+In-Reply-To: <20200308165149.31293-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 8 Mar 2020 17:51:49 +0100")
+References: <20200308165149.31293-1-ps.report@gmx.net>
+Message-ID: <87zhcqr39p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d606c1eba43a7e4229369af4b43319613631e23a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gr-osmosdr/gr-osmosdr.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ > Add openssl linker flags via LIBS to fix configure gensio
+ > library detection.
 
-diff --git a/package/gr-osmosdr/gr-osmosdr.mk b/package/gr-osmosdr/gr-osmosdr.mk
-index 003f406602..fcc817fe85 100644
---- a/package/gr-osmosdr/gr-osmosdr.mk
-+++ b/package/gr-osmosdr/gr-osmosdr.mk
-@@ -14,7 +14,9 @@ GR_OSMOSDR_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- GR_OSMOSDR_DEPENDENCIES = gnuradio host-python-cheetah
- 
--GR_OSMOSDR_CONF_OPTS = -DENABLE_DEFAULT=OFF
-+GR_OSMOSDR_CONF_OPTS = \
-+	-DENABLE_DEFAULT=OFF \
-+	-DENABLE_DOXYGEN=OFF
- 
- # For third-party blocks, the gr-osmosdr libraries are mandatory at
- # compile time.
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/66e0d3e0a2a8dc5a62c267d16a53216f0f2ce8dd
+
+ >   checking gensio/gensio.h usability... yes
+ >   checking gensio/gensio.h presence... yes
+ >   checking for gensio/gensio.h... yes
+ >   checking for str_to_gensio in -lgensio... no
+ >   configure: error: libgensio won't link, please install gensio dev package
+
+ > The build/ser2net-4.1.1/config.log files states:
+
+ >   .../arm-buildroot-linux-uclibcgnueabi/bin/ld: .../host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgensio.a(gensio_filter_ssl.o): in function `gensio_do_ssl_init':
+ >   gensio_filter_ssl.c:(.text+0x34): undefined reference to `OPENSSL_init_ssl'
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+The real solution would be for gensio to provide a .pc file / ser2net
+use pkg-config, but OK - This is good enough for 2020.02.
+
+-- 
+Bye, Peter Korsgaard
