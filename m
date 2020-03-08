@@ -1,40 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Mar 2020 12:16:37 +0100
-Subject: [Buildroot] [git commit] package/cups: store web-interface files
- under /usr/share/cups/doc-root
-Message-ID: <20200308111041.297E38FE3A@busybox.osuosl.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sun, 8 Mar 2020 13:35:23 +0100
+Subject: [Buildroot] [PATCH v5 09/12] support/scripts/pkg-stats: add
+ support for license hash check
+In-Reply-To: <20200307160840.2321dbf1@windsurf.home>
+References: <20200307075633.7514-1-heiko.thiery@gmail.com>
+ <20200307075633.7514-10-heiko.thiery@gmail.com>
+ <20200307160840.2321dbf1@windsurf.home>
+Message-ID: <CAEyMn7YCTyL=z1FxXraDFdDxLEFEdZYfvr6Bb4-6gM7vxwn2Tg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07ea16bd9ef17ef53484e43d9b4eaf32c97cf5bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-The web-interface files (~1.8MB) are by default installed under
-/usr/share/doc/cups, which is unfortunate as Buildroot removes usr/share/doc
-in target-finalize, breaking the webui.
+Am Sa., 7. M?rz 2020 um 16:08 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> On Sat,  7 Mar 2020 08:56:30 +0100
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> > Store the names of license files and check if they are in the hash file.
+> >
+> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+>
+> Checking that the license files are in the hash file should not be done
+> in pkg-stats. pkg-stats is about statistics, not about error reporting.
+> If anything, this should be checked by check-package, whose results are
+> anyway taken into account by pkg-stats.
 
-As a fix, store the web-interface files under /usr/share/cups/doc-root,
-similar to how it is done in Debian.
+I will take a look on it and try to integrate the test in check-package.
 
-Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
-[Peter: use --with-docdir, update description]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cups/cups.mk | 1 +
- 1 file changed, 1 insertion(+)
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index da6778f30a..18f01d8484 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -18,6 +18,7 @@ endef
- CUPS_PRE_CONFIGURE_HOOKS += CUPS_RUN_AUTOCONF
- 
- CUPS_CONF_OPTS = \
-+	--with-docdir=/usr/share/cups/doc-root \
- 	--disable-gssapi \
- 	--disable-pam \
- 	--libdir=/usr/lib
+BR,
+Heiko
