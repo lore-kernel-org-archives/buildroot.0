@@ -1,67 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Mar 2020 14:52:58 +0100
-Subject: [Buildroot] [PATCH] package/spidermonkey: do not build the
- JavaScript shell, by default
-In-Reply-To: <20200308032128.306-1-unixmania@gmail.com>
-References: <20200308032128.306-1-unixmania@gmail.com>
-Message-ID: <20200308145258.44d80049@windsurf.home>
+Date: Sun, 8 Mar 2020 14:54:04 +0100
+Subject: [Buildroot] [git commit] package/proftpd: add mod_cap option
+Message-ID: <20200308134143.BBBBD8FE57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Carlos,
+commit: https://git.buildroot.net/buildroot/commit/?id=eed76c5178735cf403caa8bb0a090543c484ee20
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  8 Mar 2020 00:21:28 -0300
-unixmania at gmail.com wrote:
+Add an option to enable or disable mod_cap and select libcap accordingly
+instead of using bundled libcap which raise a build failure with headers
+< 4.3 due to PR_CAP_AMBIENT and will be removed in version 1.3.7:
+https://github.com/proftpd/proftpd/commit/8c845703fcf2c7978614784126bd074ffc4477f9
 
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> Add a configuration to enable the JavaScript shell (default off). So
-> far only libmozjs is required (by polkit) and the shell takes around
-> 24MiB.
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
->  ....in-install-shell-only-if-it-s-built.patch | 28 +++++++++++++++++++
->  package/spidermonkey/Config.in                | 11 ++++++++
->  package/spidermonkey/spidermonkey.mk          |  1 +
->  3 files changed, 40 insertions(+)
->  create mode 100644 package/spidermonkey/0001-js-src-Makefile.in-install-shell-only-if-it-s-built.patch
-> 
-> diff --git a/package/spidermonkey/0001-js-src-Makefile.in-install-shell-only-if-it-s-built.patch b/package/spidermonkey/0001-js-src-Makefile.in-install-shell-only-if-it-s-built.patch
-> new file mode 100644
-> index 0000000000..f6092af7ef
-> --- /dev/null
-> +++ b/package/spidermonkey/0001-js-src-Makefile.in-install-shell-only-if-it-s-built.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/4d680d8204bdf1f3deec2c3eeb9a2d9e6eabe4d5
 
-We already had a 0001 patch, we actually have 10 patches on
-spidermonkey, so I renamed this one 0011.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/proftpd/Config.in  |  6 ++++++
+ package/proftpd/proftpd.mk | 13 +++++++------
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
-Has this patch been submitted upstream ?
-
-> diff --git a/package/spidermonkey/spidermonkey.mk b/package/spidermonkey/spidermonkey.mk
-> index 579dc7b864..9bd19b01d1 100644
-> --- a/package/spidermonkey/spidermonkey.mk
-> +++ b/package/spidermonkey/spidermonkey.mk
-> @@ -30,6 +30,7 @@ SPIDERMONKEY_CONF_OPTS = \
->  	--host=$(GNU_HOST_NAME) \
->  	--target=$(GNU_TARGET_NAME) \
->  	--disable-jemalloc \
-> +	--$(if $(BR2_PACKAGE_SPIDERMONKEY_JS_SHELL),en,dis)able-js-shell \
-
-That's really not the typical/conventional way of writing that in
-Buildroot, so I've expanded that into our more verbose, but more
-standard ifeq .. else .. endif conditional.
-
-Then I've applied to master, because I really consider a 24 MB space
-saving to be a fix :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index edec37c8dd..4a544f0c50 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -8,6 +8,12 @@ config BR2_PACKAGE_PROFTPD
+ 
+ if BR2_PACKAGE_PROFTPD
+ 
++config BR2_PACKAGE_PROFTPD_MOD_CAP
++	bool "mod_cap support"
++	select BR2_PACKAGE_LIBCAP
++	help
++	  Compile ProFTPD with mod_cap support
++
+ config BR2_PACKAGE_PROFTPD_MOD_REWRITE
+ 	bool "mod_rewrite support"
+ 	help
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 02dd0e825e..946a37d69e 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -25,6 +25,13 @@ PROFTPD_CONF_OPTS = \
+ 	--with-gnu-ld \
+ 	--without-openssl-cmdline
+ 
++ifeq ($(BR2_PACKAGE_PROFTPD_MOD_CAP),y)
++PROFTPD_CONF_OPTS += --enable-cap
++PROFTPD_DEPENDENCIES += libcap
++else
++PROFTPD_CONF_OPTS += --disable-cap
++endif
++
+ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
+ PROFTPD_MODULES += mod_rewrite
+ endif
+@@ -85,12 +92,6 @@ define PROFTPD_USE_LLU
+ endef
+ PROFTPD_PRE_CONFIGURE_HOOKS += PROFTPD_USE_LLU
+ 
+-define PROFTPD_MAKENAMES
+-	$(MAKE1) CC="$(HOSTCC)" CFLAGS="" LDFLAGS="" -C $(@D)/lib/libcap _makenames
+-endef
+-
+-PROFTPD_POST_CONFIGURE_HOOKS = PROFTPD_MAKENAMES
+-
+ PROFTPD_MAKE = $(MAKE1)
+ 
+ # install Perl based scripts in target
