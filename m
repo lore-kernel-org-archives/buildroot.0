@@ -1,50 +1,41 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 8 Mar 2020 13:50:08 -0600
-Subject: [Buildroot] [PATCH 1/1] package/connman: enable wireguard
-In-Reply-To: <87blp6u2wu.fsf@dell.be.48ers.dk>
-References: <20200308070741.42542-1-james.hilliard1@gmail.com>
- <20200308144746.6cbfbd8f@windsurf.home> <20200308173718.GA2885265@x230>
- <87blp6u2wu.fsf@dell.be.48ers.dk>
-Message-ID: <CADvTj4rNT=-oCZriKYn92420q_xjtK0Ri+99D-QLie3XhcHL2w@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 08 Mar 2020 20:58:04 +0100
+Subject: [Buildroot] [PATCH 1/4] configs/qemu_arm_vexpress_tz_defconfig:
+ optee needs host-python3 w/ modules
+In-Reply-To: <20200308183535.1206604-1-romain.naour@smile.fr> (Romain Naour's
+ message of "Sun, 8 Mar 2020 19:35:32 +0100")
+References: <20200308183535.1206604-1-romain.naour@smile.fr>
+Message-ID: <87pndmsjoz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 8, 2020 at 12:17 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
->
-> Hi,
->
->  >> > +config BR2_PACKAGE_CONNMAN_WIREGUARD
->  >> > + bool "enable wireguard support"
->  >> > + select BR2_PACKAGE_LIBMNL
->
->  >> We already had a patch from Petr at
->  >> http://patchwork.ozlabs.org/patch/1246181/ to add Wireguard support,
->  >> but he was also selecting BR2_PACKAGE_WIREGUARD_TOOLS.
->
->  >> Could you or Petr clarify this ?
->  > configure.ac
->  > found_libmnl="no"
->  > if (test "${firewall_type}" = "nftables" -o \
->  >              "${enable_wireguard}" != "no"); then
->  >      PKG_CHECK_MODULES(LIBMNL, [libmnl >= 1.0.0], [found_libmnl="yes"],
->  >              AC_MSG_ERROR([libmnl >= 1.0.0 not found]))
->  >      AC_SUBST(LIBMNL_CFLAGS)
->  >      AC_SUBST(LIBMNL_LIBS)
->  > fi
->  > AM_CONDITIONAL(LIBMNL, test "${found_libmnl}" != "no")
->
->  > IMHO this means that libmnl is required for nftables and wireguard.
->
-> Yes. What about wireguard-tools? Are they used by connman or does it
-> directly talk the netlink protocol? I guess the latter given the libmnl
-> dependency?
-Yeah, connman seemed to build fine with wireguard support without
-wireguard-tools.
->
-> --
-> Bye, Peter Korsgaard
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+
+ > optee-os needs host-python-pycrypto build for python3. The only way we can
+ > force building host-python modules for python3 is to select python3 package
+ > for the target.
+
+ > Since we want to avoid adding more host-python3-<modules>
+ > (host-python-pycrypto host-python-pyelftools), select python3 package
+ > even if it's not used.
+
+ > This problem will be fixed as soon as python2 is removed.
+
+ > Fixes:
+ > File "scripts/pem_to_pub_c.py", line 24, in main
+ > from Crypto.PublicKey import RSA
+ > ImportError: No module named 'Crypto'
+
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/456818689
+
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ > Cc: Etienne Carriere <etienne.carriere@linaro.org>
+
+It isn't great, but I also don't see any other quick solutions -
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
