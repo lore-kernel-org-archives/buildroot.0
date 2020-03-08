@@ -1,43 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 08 Mar 2020 10:39:01 +0200
-Subject: [Buildroot] [PATCH v3 1/8] package/mariadb: fix permissions of
- data dir when using systemd
-In-Reply-To: <877dzvx3js.fsf@dell.be.48ers.dk>
-References: <20200204012200.7273-1-bluemrp9@gmail.com>
- <877dzvx3js.fsf@dell.be.48ers.dk>
-Message-ID: <874kuzxmu2.fsf@tarshish>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun,  8 Mar 2020 01:41:31 -0700
+Subject: [Buildroot] [PATCH 1/1] package/systemd: add dns-over-tls support
+Message-ID: <20200308084131.111253-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Set default-dns-over-tls to opportunistic when dns-over-tls is enabled
+as it should be fully backwards compatible. The DNSOverTLS config in
+resolved.conf can be used to override default-dns-over-tls.
 
-On Sat, Mar 07 2020, Peter Korsgaard wrote:
->>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
->
->  > mysql_install_db is currently called in the systemd unit without
->  > --user=mysql that the sysv script uses. This will generate the initial
->  > database files with root permissions. However, mysqld runs as user mysql
->  > so this will cause problems. We fix this by calling chown instead of
->  > passing the user parameter because an upcoming version bump will fail when
->  > ran this way.
->
->  > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
->  > ---
->  > Changes v2 -> v3:
->  >   - separate changes into separate patches (suggested by Thomas)
->  > Changes v1 -> v2:
->  >   - no change
->
-> Committed to 2019.02.x and 2019.11.x, thanks.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/systemd/systemd.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Not in 2019.02.x as of 06d3d2602, or 2019.11.x as of 51f9a97831e.
-
-baruch
-
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 1c3b81cfcb..d97336b7cd 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -351,6 +351,16 @@ else
+ SYSTEMD_CONF_OPTS += -Dresolve=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++SYSTEMD_CONF_OPTS += -Ddns-over-tls=gnutls -Ddefault-dns-over-tls=opportunistic
++SYSTEMD_DEPENDENCIES += gnutls
++else ifeq ($(BR2_PACKAGE_OPENSSL),y)
++SYSTEMD_CONF_OPTS += -Ddns-over-tls=openssl -Ddefault-dns-over-tls=opportunistic
++SYSTEMD_DEPENDENCIES += openssl
++else
++SYSTEMD_CONF_OPTS += -Ddns-over-tls=false -Ddefault-dns-over-tls=no
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
+ SYSTEMD_CONF_OPTS += -Dtimesyncd=true
+ SYSTEMD_TIMESYNCD_USER = systemd-timesync -1 systemd-timesync -1 * - - - Network Time Synchronization
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.20.1
