@@ -1,67 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Mar 2020 12:22:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cups: change datarootdir
-In-Reply-To: <20200304072102.827531-1-skif@skif-web.ru> (Alexey Lukyanchuk's
- message of "Wed, 4 Mar 2020 10:21:02 +0300")
-References: <20200304072102.827531-1-skif@skif-web.ru>
-Message-ID: <87wo7vt7jp.fsf@dell.be.48ers.dk>
+Date: Sun, 8 Mar 2020 12:16:37 +0100
+Subject: [Buildroot] [git commit] package/cups: store web-interface files
+ under /usr/share/cups/doc-root
+Message-ID: <20200308111041.297E38FE3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Lukyanchuk <skif@skif-web.ru> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=07ea16bd9ef17ef53484e43d9b4eaf32c97cf5bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > By default, buildroot clean '/usr/share/doc' at image-building, including cups datadir(usr/share/doc/cups), which stores cups web-interface.
- > It results in web-interface will be unavailable on target system.
- > This patch add --datarootdir=/usr/share/cups to config options. After that cups web-interface work fine.
+The web-interface files (~1.8MB) are by default installed under
+/usr/share/doc/cups, which is unfortunate as Buildroot removes usr/share/doc
+in target-finalize, breaking the webui.
 
- > Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
- > ---
- >  package/cups/cups.mk | 1 +
- >  1 file changed, 1 insertion(+)
+As a fix, store the web-interface files under /usr/share/cups/doc-root,
+similar to how it is done in Debian.
 
- > diff --git a/package/cups/cups.mk b/package/cups/cups.mk
- > index da6778f30a..455da03feb 100644
- > --- a/package/cups/cups.mk
- > +++ b/package/cups/cups.mk
- > @@ -18,6 +18,7 @@ endef
- >  CUPS_PRE_CONFIGURE_HOOKS += CUPS_RUN_AUTOCONF
+Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+[Peter: use --with-docdir, update description]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cups/cups.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index da6778f30a..18f01d8484 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -18,6 +18,7 @@ endef
+ CUPS_PRE_CONFIGURE_HOOKS += CUPS_RUN_AUTOCONF
  
- >  CUPS_CONF_OPTS = \
- > +	--datarootdir=/usr/share/cups \
-
-Can you be more specific? Setting datarootdir to /usr/share/cups does
-not really make sense, as cups appends /cups to this, so you end up with
-/usr/share/cups/cups/.. Did you mean --datarootdir=/usr/share?
-datarootdir defaults to <prefix>/share, so as we build with
---prefix=/usr this is already the default value.
-
-The only thing that gets installed under /usr/share/doc/ is afaik the
-things that use docdir:
-
-docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
-
-grep usr/share/doc build/cups-2.3.1/.files-list.txt | head
-cups,./usr/share/doc/cups/de/index.html
-cups,./usr/share/doc/cups/es/index.html
-cups,./usr/share/doc/cups/ja/index.html
-cups,./usr/share/doc/cups/pt_BR/index.html
-cups,./usr/share/doc/cups/ru/index.html
-cups,./usr/share/doc/cups/apple-touch-icon.png
-cups,./usr/share/doc/cups/cups.css
-cups,./usr/share/doc/cups/cups-printable.css
-cups,./usr/share/doc/cups/index.html
-cups,./usr/share/doc/cups/robots.txt
-
-Debian "solves" this by putting these things under /usr/share/cups/doc-root:
-
-dpkg -L cups-server-common | grep cups.css
-/usr/share/cups/doc-root/cups.css
-
-So I've changed your patch to use --with-docdir=/usr/share/cups/doc-root
-and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ CUPS_CONF_OPTS = \
++	--with-docdir=/usr/share/cups/doc-root \
+ 	--disable-gssapi \
+ 	--disable-pam \
+ 	--libdir=/usr/lib
