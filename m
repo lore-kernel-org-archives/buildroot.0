@@ -1,82 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 22:46:36 +0100
-Subject: [Buildroot] [git commit] package/connman: add iptables/nftables
- selection
-Message-ID: <20200309140910.37DBF8FE05@busybox.osuosl.org>
+Date: Sun, 8 Mar 2020 16:29:44 +0100
+Subject: [Buildroot] [git commit] package/ortp: bump to version 4.3.1
+Message-ID: <20200309140910.C8E338EB58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba0c0e52810d1449f76dc7f75277c0381f6e135c
+commit: https://git.buildroot.net/buildroot/commit/?id=d84aa91ae5851d10d64ff561884710cbbedcf0ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This allows to use nftables instead of the default iptables.
+- License is GPL-3.0+ since version 4.3.0 and
+  https://gitlab.linphone.org/BC/public/ortp/commit/6b925368588ce0fc64a9762dbe86041151e8450a
+- Switch to cmake-package
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/connman/Config.in  | 22 +++++++++++++++++++++-
- package/connman/connman.mk |  8 ++++++++
- 2 files changed, 29 insertions(+), 1 deletion(-)
+ package/ortp/ortp.hash |  4 ++--
+ package/ortp/ortp.mk   | 23 ++++++++++++++++-------
+ 2 files changed, 18 insertions(+), 9 deletions(-)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 30eae23c96..ac012dda54 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -8,7 +8,6 @@ config BR2_PACKAGE_CONNMAN
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # missing res_ninit()
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_IPTABLES
- 	help
- 	  The Connection Manager (ConnMan) project provides a daemon
- 	  for managing internet connections within embedded devices
-@@ -18,6 +17,27 @@ config BR2_PACKAGE_CONNMAN
+diff --git a/package/ortp/ortp.hash b/package/ortp/ortp.hash
+index 93ec39297f..65a5141609 100644
+--- a/package/ortp/ortp.hash
++++ b/package/ortp/ortp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  eb61a833ab3ad80978d7007411240f46e9b2d1034373b9d9dfaac88c1b6ec0af  ortp-0.27.0.tar.gz
+-sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
++sha256  55d12b71ed7c3958abb8d892105e616499d66c88200c46e3ec3cfbbe79771b2e  ortp-4.3.1.tar.gz
++sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
+diff --git a/package/ortp/ortp.mk b/package/ortp/ortp.mk
+index 0bd61e88d9..436e04c14d 100644
+--- a/package/ortp/ortp.mk
++++ b/package/ortp/ortp.mk
+@@ -4,13 +4,22 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_CONNMAN
- 
-+choice
-+	prompt "Firewall type"
-+	default BR2_PACKAGE_CONNMAN_IPTABLES
-+	help
-+	  Select which firewall type is used.
+-ORTP_VERSION = 0.27.0
+-ORTP_SITE = http://download.savannah.nongnu.org/releases/linphone/ortp/sources
+-
+-ORTP_CONF_OPTS = --disable-strict
++ORTP_VERSION = 4.3.1
++ORTP_SITE = https://gitlab.linphone.org/BC/public/ortp/-/archive/$(ORTP_VERSION)
++ORTP_LICENSE = GPL-3.0+
++ORTP_LICENSE_FILES = LICENSE.txt
+ ORTP_INSTALL_STAGING = YES
+-ORTP_LICENSE = LGPL-2.1+
+-ORTP_LICENSE_FILES = COPYING
+ ORTP_DEPENDENCIES = bctoolbox
++ORTP_CONF_OPTS = \
++	-DENABLE_DOC=OFF \
++	-DENABLE_STRICT=OFF
 +
-+config BR2_PACKAGE_CONNMAN_IPTABLES
-+	bool "iptables"
-+	select BR2_PACKAGE_IPTABLES
-+	help
-+	  Use iptables as firewall.
-+
-+config BR2_PACKAGE_CONNMAN_NFTABLES
-+	bool "nftables"
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+	select BR2_PACKAGE_NFTABLES
-+	help
-+	  Use nftables as firewall.
-+endchoice
-+
- config BR2_PACKAGE_CONNMAN_ETHERNET
- 	bool "enable Ethernet support"
- 	default y
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 7ea52f012a..701be8b59d 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -36,6 +36,14 @@ else
- CONNMAN_CONF_OPTS += --disable-ethernet
- endif
- 
-+ifeq ($(BR2_PACKAGE_CONNMAN_IPTABLES),y)
-+CONNMAN_CONF_OPTS += --with-firewall=iptables
-+CONNMAN_DEPENDENCIES += iptables
-+else ifeq ($(BR2_PACKAGE_CONNMAN_NFTABLES),y)
-+CONNMAN_CONF_OPTS += --with-firewall=nftables
-+CONNMAN_DEPENDENCIES += nftables
++ifeq ($(BR2_STATIC_LIBS),y)
++ORTP_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++ORTP_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=ON
++else ifeq ($(BR2_SHARED_LIBS),y)
++ORTP_CONF_OPTS += -DENABLE_STATIC=OFF -DENABLE_SHARED=ON
 +endif
-+
- ifeq ($(BR2_PACKAGE_CONNMAN_LOOPBACK),y)
- CONNMAN_CONF_OPTS += --enable-loopback
- else
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
