@@ -1,51 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Mar 2020 09:30:14 +0100
-Subject: [Buildroot] [PATCH] package/swupdate: do not store local build
- details in swupdate config file
-In-Reply-To: <20200306103839.1880550-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 6 Mar 2020 11:38:39 +0100")
-References: <20200306103839.1880550-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87r1y3uu3t.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Mar 2020 09:32:29 +0100
+Subject: [Buildroot] Use Pigz instead of gzip for filesystem compression
+In-Reply-To: <bfb188d5-2d07-e7aa-bf3c-c221ddf372ff@xes-inc.com> (Vincent
+ Fazio's message of "Fri, 6 Mar 2020 10:48:23 -0600")
+References: <ea-mime-5e627db0-4568-363416cc@www-5.netcourrier.com>
+ <bfb188d5-2d07-e7aa-bf3c-c221ddf372ff@xes-inc.com>
+Message-ID: <87mu8ruu02.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Vincent" == Vincent Fazio <vfazio@xes-inc.com> writes:
 
- > The SWUPDATE_SET_BUILD_OPTIONS macro sets a number of swupdate
- > configuration options with local build details, especially the
- > cross-compiler path and sysroot path.
+ > Louis-Paul,
+ > On 3/6/20 10:43 AM, lpdev at cordier.org wrote:
+ >> Hi all,
+ >> 
+ >> I have an improvement suggestion for filesystem compression. I have
+ >> done some benchmark with pigz program (see https://zlib.net/pigz/).
+ >> 
+ >> Calling make after the target has been built the first time,
+ >> buildroot has to compress a 850MB filesystem (build machine is
+ >> i7-6700K CPU @ 4.00GHz):
+ >> 
+ >> gzip: 2m23s
+ >> pigz: 46s
+ >> 
+ >> It's almost 3 times faster.
+ >> 
+ >> In the main Config.in, I suggest to add to Build options -> Command
+ >> menu a BR2_GZIP command that would allow to specify the gzip program
+ >> we want to use. Or better would be to set pigz as an host package.
+ >> Then updating fs/common.mk:
+ >> 
+ >> ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+ >> ROOTFS_$(2)_COMPRESS_EXT = .gz
+ >> ROOTFS_$(2)_COMPRESS_CMD = $(BR2_GZIP) -9 -c -n
+ >> endif
+ > If the commandline parameters are the same, this could likely be done
+ > within support/dependencies/check-host-gzip.sh ?
 
- > This means that if one stores an swupdate defconfig file as part of
- > Buildroot, generated with "make swupdate-update-defconfig", it will
- > contain things like:
+We have to be careful to only use pigz where we are not interested in
+bit-identical output (like we are for the tarballs of git repos). For
+details, see:
 
- > CONFIG_CROSS_COMPILE="/home/thomas/projets/buildroot/output/host/bin/arm-linux-"
- > CONFIG_SYSROOT="/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot"
+commit 2218dc85bef9bb1c9d27788e5ac69593144fe268
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sat Nov 17 18:15:51 2018 +0100
 
- > which obviously are not good, as they are specific to where the build
- > was done.
-
- > So instead this commit:
-
- >  - Uses the CROSS_COMPILE environment variable to pass the
- >    cross-compiler path.
-
- >  - Drops entirely the use of CONFIG_SYSROOT, since all it does is pass
- >    a --sysroot option to the compiler, which is not needed in the
- >    context of Buildroot.
-
- >  - Pass EXTRA_CFLAGS/EXTRA_LDFLAGS also through the environment.
-
- > Thanks to that the swupdate defconfig file no longer contains any
- > local build details, and can be re-used by different users of a given
- > Buildroot configuration.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed, thanks.
+    support/dependencies: add a check for a suitable gzip
 
 -- 
 Bye, Peter Korsgaard
