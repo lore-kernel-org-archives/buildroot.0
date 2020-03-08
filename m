@@ -1,41 +1,71 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  8 Mar 2020 18:37:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openjdk-bin: fix install
-Message-ID: <20200308173737.181294-1-fontaine.fabrice@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sun, 8 Mar 2020 18:37:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/connman: enable wireguard
+In-Reply-To: <20200308144746.6cbfbd8f@windsurf.home>
+References: <20200308070741.42542-1-james.hilliard1@gmail.com>
+ <20200308144746.6cbfbd8f@windsurf.home>
+Message-ID: <20200308173718.GA2885265@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Create $(HOST_DIR)/bin and $(HOST_DIR)/lib otherwise build can fail on:
+Hi Thomas, James,
 
-cp -dpfr /home/buildroot/autobuild/instance-2/output-1/build/host-openjdk-bin-13.0.2_8/bin/* /home/buildroot/autobuild/instance-2/output-1/per-package/host-openjdk-bin/host/bin/
-cp: target '/home/buildroot/autobuild/instance-2/output-1/per-package/host-openjdk-bin/host/bin/' is not a directory
-package/pkg-generic.mk:276: recipe for target '/home/buildroot/autobuild/instance-2/output-1/build/host-openjdk-bin-13.0.2_8/.stamp_host_installed' failed
-make: *** [/home/buildroot/autobuild/instance-2/output-1/build/host-openjdk-bin-13.0.2_8/.stamp_host_installed] Error 1
+> On Sun,  8 Mar 2020 00:07:41 -0700
+> James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/28bcec0d28003c2784b6cd27039099c65bac3b96
+> > We also need to select libmnl when building with wireguard support or
+> > with nftables.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/openjdk-bin/openjdk-bin.mk | 2 ++
- 1 file changed, 2 insertions(+)
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >  package/connman/Config.in  | 5 +++++
+> >  package/connman/connman.mk | 9 ++++++++-
+> >  2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index e2525a5c3d..e780a797e6 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -18,7 +18,9 @@ HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEM
- # Because unpack200 is a deprecated tool, removing it to fix this
- # issue is safe.
- define HOST_OPENJDK_BIN_INSTALL_CMDS
-+	mkdir -p $(HOST_DIR)/bin
- 	cp -dpfr $(@D)/bin/* $(HOST_DIR)/bin/
-+	mkdir -p $(HOST_DIR)/lib
- 	cp -dpfr $(@D)/lib/* $(HOST_DIR)/lib/
- 	$(RM) -f $(HOST_DIR)/bin/unpack200
- endef
--- 
-2.25.0
+> > diff --git a/package/connman/Config.in b/package/connman/Config.in
+> > index ac012dda54..614b826f96 100644
+> > --- a/package/connman/Config.in
+> > +++ b/package/connman/Config.in
+> > @@ -33,6 +33,7 @@ config BR2_PACKAGE_CONNMAN_NFTABLES
+> >  	bool "nftables"
+> >  	depends on BR2_USE_WCHAR
+> >  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+> > +	select BR2_PACKAGE_LIBMNL
+
+> How is this related to wireguard support ?
+Yes.
+
+> >  	select BR2_PACKAGE_NFTABLES
+> >  	help
+> >  	  Use nftables as firewall.
+> > @@ -51,6 +52,10 @@ config BR2_PACKAGE_CONNMAN_WIFI
+> >  	  setup). ConnMan detects the start of wpa_supplicant
+> >  	  automatically.
+
+> > +config BR2_PACKAGE_CONNMAN_WIREGUARD
+> > +	bool "enable wireguard support"
+> > +	select BR2_PACKAGE_LIBMNL
+
+> We already had a patch from Petr at
+> http://patchwork.ozlabs.org/patch/1246181/ to add Wireguard support,
+> but he was also selecting BR2_PACKAGE_WIREGUARD_TOOLS.
+
+> Could you or Petr clarify this ?
+configure.ac
+found_libmnl="no"
+if (test "${firewall_type}" = "nftables" -o \
+		"${enable_wireguard}" != "no"); then
+	PKG_CHECK_MODULES(LIBMNL, [libmnl >= 1.0.0], [found_libmnl="yes"],
+		AC_MSG_ERROR([libmnl >= 1.0.0 not found]))
+	AC_SUBST(LIBMNL_CFLAGS)
+	AC_SUBST(LIBMNL_LIBS)
+fi
+AM_CONDITIONAL(LIBMNL, test "${found_libmnl}" != "no")
+
+IMHO this means that libmnl is required for nftables and wireguard.
+
+Kind regards,
+Petr
