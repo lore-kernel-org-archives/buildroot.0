@@ -1,42 +1,24 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun,  8 Mar 2020 01:41:31 -0700
-Subject: [Buildroot] [PATCH 1/1] package/systemd: add dns-over-tls support
-Message-ID: <20200308084131.111253-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 08 Mar 2020 09:43:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/piglit: fix GL tests
+In-Reply-To: <20200307190629.2233973-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 7 Mar 2020 20:06:29 +0100")
+References: <20200307190629.2233973-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eeu3uthq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set default-dns-over-tls to opportunistic when dns-over-tls is enabled
-as it should be fully backwards compatible. The DNSOverTLS config in
-resolved.conf can be used to override default-dns-over-tls.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/systemd/systemd.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/3355e4dc02b07ccfd9fe9b5cafb70c01fc88c158
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1c3b81cfcb..d97336b7cd 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -351,6 +351,16 @@ else
- SYSTEMD_CONF_OPTS += -Dresolve=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+SYSTEMD_CONF_OPTS += -Ddns-over-tls=gnutls -Ddefault-dns-over-tls=opportunistic
-+SYSTEMD_DEPENDENCIES += gnutls
-+else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+SYSTEMD_CONF_OPTS += -Ddns-over-tls=openssl -Ddefault-dns-over-tls=opportunistic
-+SYSTEMD_DEPENDENCIES += openssl
-+else
-+SYSTEMD_CONF_OPTS += -Ddns-over-tls=false -Ddefault-dns-over-tls=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
- SYSTEMD_CONF_OPTS += -Dtimesyncd=true
- SYSTEMD_TIMESYNCD_USER = systemd-timesync -1 systemd-timesync -1 * - - - Network Time Synchronization
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
