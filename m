@@ -1,33 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Mar 2020 16:31:35 +0100
-Subject: [Buildroot] [PATCH/next 2/6] package/ortp: bump to version 4.3.1
-In-Reply-To: <20200227174714.3727844-2-fontaine.fabrice@gmail.com>
-References: <20200227174714.3727844-1-fontaine.fabrice@gmail.com>
- <20200227174714.3727844-2-fontaine.fabrice@gmail.com>
-Message-ID: <20200308163135.4d0838d0@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 8 Mar 2020 16:33:27 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/bearssl: new package
+In-Reply-To: <20200308162106.706e131f@windsurf.home>
+References: <20200227163042.3723042-1-fontaine.fabrice@gmail.com>
+ <20200308162106.706e131f@windsurf.home>
+Message-ID: <CAPi7W81C80e16KmP9NtobYxpvx1ythYnbGW4eczdbizJsmT2HA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 27 Feb 2020 18:47:10 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Thomas,
 
-> - License is GPL-3.0+ since version 4.3.0 and
->   https://gitlab.linphone.org/BC/public/ortp/commit/6b925368588ce0fc64a9762dbe86041151e8450a
-> - Switch to cmake-package
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/ortp/ortp.hash |  4 ++--
->  package/ortp/ortp.mk   | 23 ++++++++++++++++-------
->  2 files changed, 18 insertions(+), 9 deletions(-)
+Le dim. 8 mars 2020 ? 16:21, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Thu, 27 Feb 2020 17:30:42 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > BearSSL is an implementation of the SSL/TLS protocol (RFC 5246) written
+> > in C
+> >
+> > https://bearssl.org
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  DEVELOPERS                   |  1 +
+> >  package/Config.in            |  1 +
+> >  package/bearssl/Config.in    |  7 +++++++
+> >  package/bearssl/bearssl.hash |  3 +++
+> >  package/bearssl/bearssl.mk   | 39 ++++++++++++++++++++++++++++++++++++
+> >  5 files changed, 51 insertions(+)
+> >  create mode 100644 package/bearssl/Config.in
+> >  create mode 100644 package/bearssl/bearssl.hash
+> >  create mode 100644 package/bearssl/bearssl.mk
+>
+> I did a few tweaks to the .mk file, and applied to next. Thanks!
+Thanks for those tweaks however was it intentional to use = instead of
++= for BEARSSL_TARGETS?
+Due to this change, bearssl will only build the dynamic library with
+BR2_SHARED_STATIC_LIBS.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
