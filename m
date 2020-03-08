@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Mar 2020 22:28:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vlc: fix build with opencv3
-In-Reply-To: <CAPi7W83cDsLz5jfZdOzL62QAJXNe-swYUOX+b4kiEvMYjexmYQ@mail.gmail.com>
-References: <20200228133809.687495-1-fontaine.fabrice@gmail.com>
- <20200308154220.1b2ccc1d@windsurf.home>
- <CAPi7W83cDsLz5jfZdOzL62QAJXNe-swYUOX+b4kiEvMYjexmYQ@mail.gmail.com>
-Message-ID: <20200308222849.10e6d47d@windsurf.home>
+Date: Sun, 8 Mar 2020 22:30:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/connman: enable wireguard
+In-Reply-To: <20200308173718.GA2885265@x230>
+References: <20200308070741.42542-1-james.hilliard1@gmail.com>
+ <20200308144746.6cbfbd8f@windsurf.home>
+ <20200308173718.GA2885265@x230>
+Message-ID: <20200308223004.66fc1ca0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +14,58 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 8 Mar 2020 16:49:07 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, 8 Mar 2020 18:37:18 +0100
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
-> > Thanks for looking into this. I must say I don't feel very confident
-> > about the fix. Have you been able to trace which change in OpenCV
-> > caused this build issue ?  
-> The issue is raised by
-> https://github.com/opencv/opencv/pull/11159/commits/7f9253ea0a9fe2635926379420002dbf0c3fce0f
-> which changed the CV_RGB definition from cvScalar to cv::Scalar
-> however cvRectangle was not updated and still waits for a CvScalar
-> color.
-> So, a better fix would be to remove the reference on CV_RGB and use
-> directly cvScalar. I'll send a v2 if you agree that this is a better
-> proposal.
+> > > diff --git a/package/connman/Config.in b/package/connman/Config.in
+> > > index ac012dda54..614b826f96 100644
+> > > --- a/package/connman/Config.in
+> > > +++ b/package/connman/Config.in
+> > > @@ -33,6 +33,7 @@ config BR2_PACKAGE_CONNMAN_NFTABLES
+> > >  	bool "nftables"
+> > >  	depends on BR2_USE_WCHAR
+> > >  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+> > > +	select BR2_PACKAGE_LIBMNL  
+> 
+> > How is this related to wireguard support ?  
+> Yes.
+> 
+> > >  	select BR2_PACKAGE_NFTABLES
+> > >  	help
+> > >  	  Use nftables as firewall.
+> > > @@ -51,6 +52,10 @@ config BR2_PACKAGE_CONNMAN_WIFI
+> > >  	  setup). ConnMan detects the start of wpa_supplicant
+> > >  	  automatically.  
+> 
+> > > +config BR2_PACKAGE_CONNMAN_WIREGUARD
+> > > +	bool "enable wireguard support"
+> > > +	select BR2_PACKAGE_LIBMNL  
+> 
+> > We already had a patch from Petr at
+> > http://patchwork.ozlabs.org/patch/1246181/ to add Wireguard support,
+> > but he was also selecting BR2_PACKAGE_WIREGUARD_TOOLS.  
+> 
+> > Could you or Petr clarify this ?  
+> configure.ac
+> found_libmnl="no"
+> if (test "${firewall_type}" = "nftables" -o \
+> 		"${enable_wireguard}" != "no"); then
+> 	PKG_CHECK_MODULES(LIBMNL, [libmnl >= 1.0.0], [found_libmnl="yes"],
+> 		AC_MSG_ERROR([libmnl >= 1.0.0 not found]))
+> 	AC_SUBST(LIBMNL_CFLAGS)
+> 	AC_SUBST(LIBMNL_LIBS)
+> fi
+> AM_CONDITIONAL(LIBMNL, test "${found_libmnl}" != "no")
 
-I don't really know what is the right way of fixing this. Have you paid
-attention to compatibility with OpenCV 2.x, if VLC can build with
-OpenCV 2.x ?
+Then the "select BR2_PACKAGE_LIBMNL" added to
+BR2_PACKAGE_CONNMAN_NFTABLES is completely unrelated to wireguard
+support. connman needs libmnl if nftables is used *or* if wireguard is
+used.
+
+So the missing select BR2_PACKAGE_LIBMNL in
+BR2_PACKAGE_CONNMAN_NFTABLES should be added as a separate patch.
+
+Thanks!
 
 Thomas
 -- 
