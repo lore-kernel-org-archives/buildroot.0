@@ -1,39 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Mar 2020 20:08:21 +0100
-Subject: [Buildroot] [git commit] package/php: fix build without zlib
-Message-ID: <20200308190047.6A05F8FF23@busybox.osuosl.org>
+Date: Sun, 8 Mar 2020 20:12:52 +0100
+Subject: [Buildroot] [git commit] package/openjdk-bin: fix install
+Message-ID: <20200308190047.845638FF24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57bbd39d61ba073b603f1eeaf2fc714012913ceb
+commit: https://git.buildroot.net/buildroot/commit/?id=9b83814ddfc2b0cb67791c14cf6f79c7815d349d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Build will fail if zlib is not found and mysqlnd compression support
-is not disabled since version 7.4.1 and
-https://github.com/php/php-src/commit/ee4295b4ce421003c2e1d2af98066826deb23319
+Create $(HOST_DIR)/bin and $(HOST_DIR)/lib otherwise build can fail on:
+
+cp -dpfr /home/buildroot/autobuild/instance-2/output-1/build/host-openjdk-bin-13.0.2_8/bin/* /home/buildroot/autobuild/instance-2/output-1/per-package/host-openjdk-bin/host/bin/
+cp: target '/home/buildroot/autobuild/instance-2/output-1/per-package/host-openjdk-bin/host/bin/' is not a directory
+package/pkg-generic.mk:276: recipe for target '/home/buildroot/autobuild/instance-2/output-1/build/host-openjdk-bin-13.0.2_8/.stamp_host_installed' failed
+make: *** [/home/buildroot/autobuild/instance-2/output-1/build/host-openjdk-bin-13.0.2_8/.stamp_host_installed] Error 1
 
 Fixes:
- - http://autobuild.buildroot.org/results/9496d81437dba55d22a03762dcfe60d632115ab5
+ - http://autobuild.buildroot.org/results/28bcec0d28003c2784b6cd27039099c65bac3b96
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.mk | 2 ++
+ package/openjdk-bin/openjdk-bin.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index d4829645e8..c0abecad19 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -174,6 +174,8 @@ endif
- ifneq ($(BR2_PACKAGE_PHP_EXT_ZLIB)$(BR2_PACKAGE_PHP_EXT_ZIP),)
- PHP_CONF_OPTS += --with-zlib=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += zlib
-+else
-+PHP_CONF_OPTS += --disable-mysqlnd_compression_support
- endif
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_GETTEXT),y)
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index e2525a5c3d..e780a797e6 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -18,7 +18,9 @@ HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEM
+ # Because unpack200 is a deprecated tool, removing it to fix this
+ # issue is safe.
+ define HOST_OPENJDK_BIN_INSTALL_CMDS
++	mkdir -p $(HOST_DIR)/bin
+ 	cp -dpfr $(@D)/bin/* $(HOST_DIR)/bin/
++	mkdir -p $(HOST_DIR)/lib
+ 	cp -dpfr $(@D)/lib/* $(HOST_DIR)/lib/
+ 	$(RM) -f $(HOST_DIR)/bin/unpack200
+ endef
