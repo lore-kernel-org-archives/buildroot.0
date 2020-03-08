@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Mar 2020 20:58:04 +0100
-Subject: [Buildroot] [PATCH 1/4] configs/qemu_arm_vexpress_tz_defconfig:
- optee needs host-python3 w/ modules
-In-Reply-To: <20200308183535.1206604-1-romain.naour@smile.fr> (Romain Naour's
- message of "Sun, 8 Mar 2020 19:35:32 +0100")
+Date: Sun, 08 Mar 2020 21:06:02 +0100
+Subject: [Buildroot] [PATCH 2/4] package/optee-test: use python3 instead
+ of python
+In-Reply-To: <20200308183535.1206604-2-romain.naour@smile.fr> (Romain Naour's
+ message of "Sun, 8 Mar 2020 19:35:33 +0100")
 References: <20200308183535.1206604-1-romain.naour@smile.fr>
-Message-ID: <87pndmsjoz.fsf@dell.be.48ers.dk>
+ <20200308183535.1206604-2-romain.naour@smile.fr>
+Message-ID: <87lfoasjbp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +15,17 @@ To: buildroot@busybox.net
 
 >>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
- > optee-os needs host-python-pycrypto build for python3. The only way we can
- > force building host-python modules for python3 is to select python3 package
- > for the target.
-
- > Since we want to avoid adding more host-python3-<modules>
- > (host-python-pycrypto host-python-pyelftools), select python3 package
- > even if it's not used.
-
- > This problem will be fixed as soon as python2 is removed.
-
  > Fixes:
- > File "scripts/pem_to_pub_c.py", line 24, in main
- > from Crypto.PublicKey import RSA
- > ImportError: No module named 'Crypto'
-
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/456818689
+ > TypeError: cannot use a str to initialize an array with typecode 'B'
+ >   File "../../scripts/file_to_c.py", line 32, in main
+ >     for x in array.array("B", inf.read()):
+ >     for x in array.array("B", inf.read()):
+ > TypeError: cannot use a str to initialize an array with typecode 'B'
+ > TypeError: cannot use a str to initialize an array with typecode 'B'
 
  > Signed-off-by: Romain Naour <romain.naour@smile.fr>
- > Cc: Etienne Carriere <etienne.carriere@linaro.org>
 
-It isn't great, but I also don't see any other quick solutions -
-Committed, thanks.
+Reworded the commit message a bit and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
