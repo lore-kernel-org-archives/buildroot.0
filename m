@@ -1,77 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 21:36:08 +0100
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: set developers
- info
-Message-ID: <20200309140909.A40848894D@busybox.osuosl.org>
+Date: Sun, 8 Mar 2020 15:16:05 +0100
+Subject: [Buildroot] [git commit] package/systemd: add repart support
+Message-ID: <20200309140910.5D8F38EB58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1fc827934a828179ae73f3b94bbc9d780cb4755
+commit: https://git.buildroot.net/buildroot/commit/?id=ed74dc875d496ae48ab3f690647a136547ca62ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use the function 'parse_developers' function from getdeveloperlib that
-collect the information about the developers and the files they
-maintain. Then set the maintainer(s) to each package.
+systemd-repart grows and adds partitions to a partition table, based on
+the configuration files described in repart.d.
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ package/systemd/Config.in  | 10 ++++++++++
+ package/systemd/systemd.mk |  8 +++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 87018eabd3..e34841fc7c 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -30,10 +30,14 @@ import certifi
- import distutils.version
- import time
- import gzip
-+import sys
- from urllib3 import HTTPSConnectionPool
- from urllib3.exceptions import HTTPError
- from multiprocessing import Pool
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index c727082a1a..6f5f5c3346 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -318,6 +318,16 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
  
-+sys.path.append('utils/')
-+from getdeveloperlib import parse_developers
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-random-seed.service.html
+ 
++config BR2_PACKAGE_SYSTEMD_REPART
++	bool "enable repart support"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
++	help
++	  systemd-repart grows and adds partitions to a partition table,
++	  based on the configuration files described in repart.d.
 +
- NVD_START_YEAR = 2002
- NVD_JSON_VERSION = "1.0"
- NVD_BASE_URL = "https://nvd.nist.gov/feeds/json/cve/" + NVD_JSON_VERSION
-@@ -171,6 +175,16 @@ class Package:
-         """
-         return cve in self.all_ignored_cves.get(self.pkgvar(), [])
- 
-+    def set_developers(self, developers):
-+        """
-+        Fills in the .developers field
-+        """
-+        self.developers = [
-+            dev.name
-+            for dev in developers
-+            if dev.hasfile(self.path)
-+        ]
++	  https://www.freedesktop.org/software/systemd/man/systemd-repart.html
 +
-     def __eq__(self, other):
-         return self.path == other.path
+ config BR2_PACKAGE_SYSTEMD_RESOLVED
+ 	bool "enable resolve daemon"
+ 	default y
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index d97336b7cd..c7a253bbe4 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -41,7 +41,6 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dumount-path=/usr/bin/umount \
+ 	-Dnobody-group=nogroup \
+ 	-Didn=true \
+-	-Drepart=false \
+ 	-Duserdb=false \
+ 	-Dhomed=false \
+ 	-Dnss-systemd=true
+@@ -305,6 +304,13 @@ else
+ SYSTEMD_CONF_OPTS += -Dlocaled=false
+ endif
  
-@@ -894,6 +908,8 @@ def __main__():
-                                       'HEAD']).splitlines()[0].decode()
-     print("Build package list ...")
-     packages = get_pkglist(args.npackages, package_list)
-+    print("Getting developers ...")
-+    developers = parse_developers()
-     print("Getting package make info ...")
-     package_init_make_info()
-     print("Getting package details ...")
-@@ -905,6 +921,7 @@ def __main__():
-         pkg.set_check_package_warnings()
-         pkg.set_current_version()
-         pkg.set_url()
-+        pkg.set_developers(developers)
-     print("Checking URL status")
-     check_package_urls(packages)
-     print("Getting latest versions ...")
++ifeq ($(BR2_PACKAGE_SYSTEMD_REPART),y)
++SYSTEMD_CONF_OPTS += -Drepart=true
++SYSTEMD_DEPENDENCIES += openssl
++else
++SYSTEMD_CONF_OPTS += -Drepart=false
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_COREDUMP),y)
+ SYSTEMD_CONF_OPTS += -Dcoredump=true
+ SYSTEMD_COREDUMP_USER = systemd-coredump -1 systemd-coredump -1 * /var/lib/systemd/coredump - - Core Dumper
