@@ -1,56 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Mar 2020 20:55:33 +0100
-Subject: [Buildroot] [git commit] configs/qemu_arm_vexpress_tz_defconfig:
- optee needs host-python3 w/ modules
-Message-ID: <20200308195756.D466880259@busybox.osuosl.org>
+Date: Sun, 08 Mar 2020 21:17:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/connman: enable wireguard
+In-Reply-To: <CADvTj4rNT=-oCZriKYn92420q_xjtK0Ri+99D-QLie3XhcHL2w@mail.gmail.com>
+ (James Hilliard's message of "Sun, 8 Mar 2020 13:50:08 -0600")
+References: <20200308070741.42542-1-james.hilliard1@gmail.com>
+ <20200308144746.6cbfbd8f@windsurf.home>
+ <20200308173718.GA2885265@x230> <87blp6u2wu.fsf@dell.be.48ers.dk>
+ <CADvTj4rNT=-oCZriKYn92420q_xjtK0Ri+99D-QLie3XhcHL2w@mail.gmail.com>
+Message-ID: <878skasis0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f16ddcdc6e73a790d7350dccb4694706f9d95f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-optee-os needs host-python-pycrypto build for python3. The only way we can
-force building host-python modules for python3 is to select python3 package
-for the target.
+ > On Sun, Mar 8, 2020 at 12:17 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> 
+ >> >>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
+ >> 
+ >> Hi,
+ >> 
+ >> >> > +config BR2_PACKAGE_CONNMAN_WIREGUARD
+ >> >> > + bool "enable wireguard support"
+ >> >> > + select BR2_PACKAGE_LIBMNL
+ >> 
+ >> >> We already had a patch from Petr at
+ >> >> http://patchwork.ozlabs.org/patch/1246181/ to add Wireguard support,
+ >> >> but he was also selecting BR2_PACKAGE_WIREGUARD_TOOLS.
+ >> 
+ >> >> Could you or Petr clarify this ?
+ >> > configure.ac
+ >> > found_libmnl="no"
+ >> > if (test "${firewall_type}" = "nftables" -o \
+ >> >              "${enable_wireguard}" != "no"); then
+ >> >      PKG_CHECK_MODULES(LIBMNL, [libmnl >= 1.0.0], [found_libmnl="yes"],
+ >> >              AC_MSG_ERROR([libmnl >= 1.0.0 not found]))
+ >> >      AC_SUBST(LIBMNL_CFLAGS)
+ >> >      AC_SUBST(LIBMNL_LIBS)
+ >> > fi
+ >> > AM_CONDITIONAL(LIBMNL, test "${found_libmnl}" != "no")
+ >> 
+ >> > IMHO this means that libmnl is required for nftables and wireguard.
+ >> 
+ >> Yes. What about wireguard-tools? Are they used by connman or does it
+ >> directly talk the netlink protocol? I guess the latter given the libmnl
+ >> dependency?
+ > Yeah, connman seemed to build fine with wireguard support without
+ > wireguard-tools.
 
-Since we want to avoid adding more host-python3-<modules>
-(host-python-pycrypto host-python-pyelftools), select python3 package
-even if it's not used.
+Well, a wireguard-tools dependency issue would probably be visible at
+runtime as it would then just call out to those binaries.
 
-This problem will be fixed as soon as python2 is removed.
+Looking at the code, I see that is not the case and connman directly
+talks the netlink interface of the kernel driver:
 
-Fixes:
-File "scripts/pem_to_pub_c.py", line 24, in main
-from Crypto.PublicKey import RSA
-ImportError: No module named 'Crypto'
+https://git.kernel.org/pub/scm/network/connman/connman.git/tree/vpn/plugins/libwireguard.c
 
-https://gitlab.com/buildroot.org/buildroot/-/jobs/456818689
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Etienne Carriere <etienne.carriere@linaro.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/qemu_arm_vexpress_tz_defconfig | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
-index ccc0dca3ec..eff3f52d11 100644
---- a/configs/qemu_arm_vexpress_tz_defconfig
-+++ b/configs/qemu_arm_vexpress_tz_defconfig
-@@ -38,6 +38,13 @@ BR2_PACKAGE_OPTEE_BENCHMARK=y
- BR2_PACKAGE_OPTEE_EXAMPLES=y
- BR2_PACKAGE_OPTEE_TEST=y
- 
-+# OP-TEE components needs host-python3 interpreter and its modules
-+BR2_PACKAGE_HOST_PYTHON3=y
-+# Select python3 on the target to make sure Buildroot builds host-python using
-+# python3 and builds all host-python modules for python3.
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_PACKAGE_PYTHON3=y
-+
- # U-boot for booting the dear Linux kernel
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-- 
+Bye, Peter Korsgaard
