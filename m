@@ -1,54 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Mar 2020 21:38:40 +0100
-Subject: [Buildroot] [git commit] package/ser2net: fix gensio detection with
- openssl enabled and static
-Message-ID: <20200308202654.8AEC7803AF@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun,  8 Mar 2020 14:53:01 -0600
+Subject: [Buildroot] [PATCH 1/1] package/connman: add missing libmnl
+ dependency for nftables
+Message-ID: <20200308205301.62180-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5feea5ea3c3e8b0c8c7e92ec5cefb145215d2c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Building with nftables support requires libmnl.
 
-Add openssl linker flags via LIBS to fix configure gensio
-library detection.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/66e0d3e0a2a8dc5a62c267d16a53216f0f2ce8dd
-
-  checking gensio/gensio.h usability... yes
-  checking gensio/gensio.h presence... yes
-  checking for gensio/gensio.h... yes
-  checking for str_to_gensio in -lgensio... no
-  configure: error: libgensio won't link, please install gensio dev package
-
-The build/ser2net-4.1.1/config.log files states:
-
-  .../arm-buildroot-linux-uclibcgnueabi/bin/ld: .../host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgensio.a(gensio_filter_ssl.o): in function `gensio_do_ssl_init':
-  gensio_filter_ssl.c:(.text+0x34): undefined reference to `OPENSSL_init_ssl'
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/ser2net/ser2net.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/connman/Config.in  | 1 +
+ package/connman/connman.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index 2ea68ccc43..94035b2184 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -16,6 +16,11 @@ else
- SER2NET_CONF_OPTS += --without-pthreads
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index ac012dda54..48a2ee421c 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -33,6 +33,7 @@ config BR2_PACKAGE_CONNMAN_NFTABLES
+ 	bool "nftables"
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
++	select BR2_PACKAGE_LIBMNL
+ 	select BR2_PACKAGE_NFTABLES
+ 	help
+ 	  Use nftables as firewall.
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 701be8b59d..1ebfe9cf14 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -41,7 +41,7 @@ CONNMAN_CONF_OPTS += --with-firewall=iptables
+ CONNMAN_DEPENDENCIES += iptables
+ else ifeq ($(BR2_PACKAGE_CONNMAN_NFTABLES),y)
+ CONNMAN_CONF_OPTS += --with-firewall=nftables
+-CONNMAN_DEPENDENCIES += nftables
++CONNMAN_DEPENDENCIES += libmnl nftables
  endif
  
-+# fix gensio detection with openssl enabled
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+SER2NET_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
-+endif
-+
- define SER2NET_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/ser2net/S50ser2net \
- 		$(TARGET_DIR)/etc/init.d/S50ser2net
+ ifeq ($(BR2_PACKAGE_CONNMAN_LOOPBACK),y)
+-- 
+2.20.1
