@@ -1,62 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Mar 2020 21:17:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/connman: enable wireguard
-In-Reply-To: <CADvTj4rNT=-oCZriKYn92420q_xjtK0Ri+99D-QLie3XhcHL2w@mail.gmail.com>
- (James Hilliard's message of "Sun, 8 Mar 2020 13:50:08 -0600")
-References: <20200308070741.42542-1-james.hilliard1@gmail.com>
- <20200308144746.6cbfbd8f@windsurf.home>
- <20200308173718.GA2885265@x230> <87blp6u2wu.fsf@dell.be.48ers.dk>
- <CADvTj4rNT=-oCZriKYn92420q_xjtK0Ri+99D-QLie3XhcHL2w@mail.gmail.com>
-Message-ID: <878skasis0.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Mar 2020 21:28:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gr-osmosdr: disable
+ documentation
+In-Reply-To: <20200308194747.978222-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 8 Mar 2020 20:47:47 +0100")
+References: <20200308194747.978222-1-fontaine.fabrice@gmail.com>
+Message-ID: <874kuysi9h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > On Sun, Mar 8, 2020 at 12:17 PM Peter Korsgaard <peter@korsgaard.com> wrote:
- >> 
- >> >>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
- >> 
- >> Hi,
- >> 
- >> >> > +config BR2_PACKAGE_CONNMAN_WIREGUARD
- >> >> > + bool "enable wireguard support"
- >> >> > + select BR2_PACKAGE_LIBMNL
- >> 
- >> >> We already had a patch from Petr at
- >> >> http://patchwork.ozlabs.org/patch/1246181/ to add Wireguard support,
- >> >> but he was also selecting BR2_PACKAGE_WIREGUARD_TOOLS.
- >> 
- >> >> Could you or Petr clarify this ?
- >> > configure.ac
- >> > found_libmnl="no"
- >> > if (test "${firewall_type}" = "nftables" -o \
- >> >              "${enable_wireguard}" != "no"); then
- >> >      PKG_CHECK_MODULES(LIBMNL, [libmnl >= 1.0.0], [found_libmnl="yes"],
- >> >              AC_MSG_ERROR([libmnl >= 1.0.0 not found]))
- >> >      AC_SUBST(LIBMNL_CFLAGS)
- >> >      AC_SUBST(LIBMNL_LIBS)
- >> > fi
- >> > AM_CONDITIONAL(LIBMNL, test "${found_libmnl}" != "no")
- >> 
- >> > IMHO this means that libmnl is required for nftables and wireguard.
- >> 
- >> Yes. What about wireguard-tools? Are they used by connman or does it
- >> directly talk the netlink protocol? I guess the latter given the libmnl
- >> dependency?
- > Yeah, connman seemed to build fine with wireguard support without
- > wireguard-tools.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Well, a wireguard-tools dependency issue would probably be visible at
-runtime as it would then just call out to those binaries.
-
-Looking at the code, I see that is not the case and connman directly
-talks the netlink interface of the kernel driver:
-
-https://git.kernel.org/pub/scm/network/connman/connman.git/tree/vpn/plugins/libwireguard.c
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
