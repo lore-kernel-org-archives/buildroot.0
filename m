@@ -1,82 +1,55 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  8 Mar 2020 11:02:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libvncserver: fix jpeg build
- without png or zlib
-Message-ID: <20200308100214.2461057-1-fontaine.fabrice@gmail.com>
+Date: Sun,  8 Mar 2020 12:18:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/samba4: needs host-python3
+Message-ID: <20200308111812.3065154-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+host-python3 is a mandatory dependency since bump to version 4.10.0 and
+https://gitlab.com/samba-team/devel/samba/-/commit/5ddff307b4af5c82d5064745f5bd2c33bd340ced
+because buildtools/bin/waf shebang is set to "/usr/bin/env python3"
+
 Fixes:
- - http://autobuild.buildroot.org/results/bcc701055dd5876005fa6f78f38500399394cd75
+ - http://autobuild.buildroot.org/results/2634eb7824beb34f485cf40670f6959515f008ad
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...on-t-build-tight.c-without-png-or-zl.patch | 54 +++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch
+ package/samba4/samba4.mk | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch b/package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch
-new file mode 100644
-index 0000000000..c357f8b3d5
---- /dev/null
-+++ b/package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch
-@@ -0,0 +1,54 @@
-+From 8f58a9d9f35e6b893b54b399be357bc789f6e630 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 8 Mar 2020 10:36:57 +0100
-+Subject: [PATCH] CMakeLists.txt: don't build tight.c without png or zlib
-+
-+If the user enables JPEG and disable PNG and ZLIB, build will fail on:
-+
-+[ 42%] Building C object CMakeFiles/vncserver.dir/libvncserver/ws_decode.c.o
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c: In function 'rfbSendRectEncodingTight':
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:276:7: error: 'struct _rfbClientRec' has no member named 'tightEncoding'
-+     cl->tightEncoding = rfbEncodingTight;
-+       ^~
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c: In function 'rfbSendRectEncodingTightPng':
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:287:7: error: 'struct _rfbClientRec' has no member named 'tightEncoding'
-+     cl->tightEncoding = rfbEncodingTightPng;
-+       ^~
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c: In function 'SendRectEncodingTight':
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:307:23: error: 'struct _rfbClientRec' has no member named 'tightCompressLevel'
-+     compressLevel = cl->tightCompressLevel;
-+                       ^~
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:308:22: error: 'struct _rfbClientRec' has no member named 'turboQualityLevel'
-+     qualityLevel = cl->turboQualityLevel;
-+                      ^~
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:309:22: error: 'struct _rfbClientRec' has no member named 'turboSubsampLevel'
-+     subsampLevel = cl->turboSubsampLevel;
-+                      ^~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/bcc701055dd5876005fa6f78f38500399394cd75
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/LibVNC/libvncserver/pull/380]
-+---
-+ CMakeLists.txt | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 2a2cb15..b8bc9e2 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -425,7 +425,9 @@ endif()
-+ if(JPEG_FOUND)
-+   add_definitions(-DLIBVNCSERVER_HAVE_LIBJPEG)
-+   include_directories(${JPEG_INCLUDE_DIR})
-+-  set(TIGHT_C ${LIBVNCSERVER_DIR}/tight.c ${COMMON_DIR}/turbojpeg.c)
-++  if(PNG_FOUND OR ZLIB_FOUND)
-++    set(TIGHT_C ${LIBVNCSERVER_DIR}/tight.c ${COMMON_DIR}/turbojpeg.c)
-++  endif(PNG_FOUND OR ZLIB_FOUND)
-+ endif(JPEG_FOUND)
-+ 
-+ if(PNG_FOUND)
-+-- 
-+2.25.0
-+
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 005296ea74..3048cb9a63 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -11,7 +11,7 @@ SAMBA4_INSTALL_STAGING = YES
+ SAMBA4_LICENSE = GPL-3.0+
+ SAMBA4_LICENSE_FILES = COPYING
+ SAMBA4_DEPENDENCIES = \
+-	host-e2fsprogs host-heimdal host-nfs-utils \
++	host-e2fsprogs host-heimdal host-nfs-utils host-python3 \
+ 	cmocka e2fsprogs gnutls popt zlib \
+ 	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
+ 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
+@@ -25,14 +25,11 @@ SAMBA4_CONF_ENV = \
+ 	XSLTPROC=false \
+ 	WAF_NO_PREFORK=1
+ 
++SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python3"
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-SAMBA4_PYTHON = \
+-	PYTHON="$(HOST_DIR)/bin/python3" \
+-	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
+-SAMBA4_DEPENDENCIES += host-python3 python3
++SAMBA4_PYTHON += PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
++SAMBA4_DEPENDENCIES += python3
+ else
+-SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python2"
+-SAMBA4_DEPENDENCIES += host-python
+ SAMBA4_CONF_OPTS += --disable-python
+ endif
+ 
 -- 
 2.25.0
