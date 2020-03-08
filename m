@@ -1,65 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Mar 2020 15:42:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vlc: fix build with opencv3
-In-Reply-To: <20200228133809.687495-1-fontaine.fabrice@gmail.com>
-References: <20200228133809.687495-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200308154220.1b2ccc1d@windsurf.home>
+Date: Sun, 8 Mar 2020 15:43:33 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-httplib2: bump
+ to version 0.17.0
+Message-ID: <20200308143108.277748FEB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=4b5970a93f918644459a0eeb4ff4c0add0f634db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 28 Feb 2020 14:38:09 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+PKG-INFO hash change is due to version bump.
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/210424bd33f660aa0757f62a558e1e03faf0f371
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...lter-opencv_example.cpp-fix-build-wi.patch | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
-> 
-> diff --git a/package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch b/package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
-> new file mode 100644
-> index 0000000000..04c9958298
-> --- /dev/null
-> +++ b/package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
-> @@ -0,0 +1,38 @@
-> +From 67244e60fc1d8c7a9350bac30611f56c398761e5 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Fri, 28 Feb 2020 14:29:47 +0100
-> +Subject: [PATCH] modules/video_filter/opencv_example.cpp: fix build with
-> + opencv 3.4.9
-> +
-> +Convert CV_RGB to cvScalar to avoid the following build failure with
-> +opencv 3.4.9:
-> +
-> +In file included from /home/naourr/work/instance-2/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/opencv2/imgproc/imgproc.hpp:48,
-> +                 from video_filter/opencv_example.cpp:46:
-> +video_filter/opencv_example.cpp: In function 'picture_t* Filter(filter_t*, picture_t*)':
-> +video_filter/opencv_example.cpp:200:46: error: could not convert 'cv::Scalar_<double>((double)0, (double)0, (double)0, (double)0)' from 'cv::Scalar' {aka 'cv::Scalar_<double>'} to 'CvScalar'
-> +             cvRectangle( p_img[0], pt1, pt2, CV_RGB(0,0,0), 3, 8, 0 );
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-httplib2/python-httplib2.hash | 6 +++---
+ package/python-httplib2/python-httplib2.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thanks for looking into this. I must say I don't feel very confident
-about the fix. Have you been able to trace which change in OpenCV
-caused this build issue ?
-
-Also, is the fix still compatible with OpenCV 2.x ? Indeed, VLC
-requires OpenCV > 2.0, so I guess it can still work with some 2.x
-OpenCV version.
-
-Have you considered talking with the OpenCV community to see what is
-the proper fix ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-httplib2/python-httplib2.hash b/package/python-httplib2/python-httplib2.hash
+index d299b61bc8..fe9995a9b3 100644
+--- a/package/python-httplib2/python-httplib2.hash
++++ b/package/python-httplib2/python-httplib2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/httplib2/json
+-md5	427cda9f4d55762db325bd2eb46b7fe0  httplib2-0.14.0.tar.gz
+-sha256	34537dcdd5e0f2386d29e0e2c6d4a1703a3b982d34c198a5102e6e5d6194b107  httplib2-0.14.0.tar.gz
++md5  4a55ae1d33721110bf81b4d197bfa862  httplib2-0.17.0.tar.gz
++sha256  de96d0a49f46d0ee7e0aae80141d37b8fcd6a68fb05d02e0b82c128592dd8261  httplib2-0.17.0.tar.gz
+ # Locally computer sha256 checksums
+-sha256	d8b8e99f77a260b8ca939f6a73ed0ea86977229a3d97f85547f499a62f61f5af  PKG-INFO
++sha256  bbc124e160cd5c0381fe9560aaed43462dd60371210dbb2c87f00b7fec9a05ba  PKG-INFO
+diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
+index a74c0e7c72..f9e1d8b3d7 100644
+--- a/package/python-httplib2/python-httplib2.mk
++++ b/package/python-httplib2/python-httplib2.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_HTTPLIB2_VERSION = 0.14.0
++PYTHON_HTTPLIB2_VERSION = 0.17.0
+ PYTHON_HTTPLIB2_SOURCE = httplib2-$(PYTHON_HTTPLIB2_VERSION).tar.gz
+-PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/ce/2e/87461bfbb7e561203b759b3f7f639e2144226604372830d00a8279960ae1
++PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/6d/97/8225643419a53dd52d84c34d9d1e99bdbe18083dc760e7a2d0c47c0fab93
+ PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
+ PYTHON_HTTPLIB2_LICENSE = MIT
+ PYTHON_HTTPLIB2_LICENSE_FILES = PKG-INFO
