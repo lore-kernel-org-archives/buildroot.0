@@ -1,69 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Mar 2020 15:16:05 +0100
-Subject: [Buildroot] [git commit branch/next] package/systemd: add repart
+Date: Sun, 8 Mar 2020 15:16:09 +0100
+Subject: [Buildroot] [git commit branch/next] package/systemd: add userdb
  support
-Message-ID: <20200308140402.93DFD8FD13@busybox.osuosl.org>
+Message-ID: <20200308140402.9CE9A8FD13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed74dc875d496ae48ab3f690647a136547ca62ae
+commit: https://git.buildroot.net/buildroot/commit/?id=cb619c5831f8671dfd13d2520d6dbd088d244af0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-systemd-repart grows and adds partitions to a partition table, based on
-the configuration files described in repart.d.
+systemd-userdbd is a system service that multiplexes user/group lookups
+to all local services that provide JSON user/group record definitions
+to the system. In addition it synthesizes JSON user/group records from
+classic UNIX/glibc NSS user/group records in order to provide full
+backwards compatibility.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/systemd/Config.in  | 10 ++++++++++
- package/systemd/systemd.mk |  8 +++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ package/systemd/Config.in  | 12 ++++++++++++
+ package/systemd/systemd.mk |  7 ++++++-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index c727082a1a..6f5f5c3346 100644
+index 6f5f5c3346..bd638477a0 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -318,6 +318,16 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
+@@ -403,6 +403,18 @@ config BR2_PACKAGE_SYSTEMD_TMPFILES
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-random-seed.service.html
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-tmpfiles.html
  
-+config BR2_PACKAGE_SYSTEMD_REPART
-+	bool "enable repart support"
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
++config BR2_PACKAGE_SYSTEMD_USERDB
++	bool "enable userdb daemon"
 +	help
-+	  systemd-repart grows and adds partitions to a partition table,
-+	  based on the configuration files described in repart.d.
++	  systemd-userdbd is a system service that multiplexes
++	  user/group lookups to all local services that provide JSON
++	  user/group record definitions to the system. In addition it
++	  synthesizes JSON user/group records from classic UNIX/glibc
++	  NSS user/group records in order to provide full backwards
++	  compatibility.
 +
-+	  https://www.freedesktop.org/software/systemd/man/systemd-repart.html
++	  https://www.freedesktop.org/software/systemd/man/systemd-userdbd.service.html
 +
- config BR2_PACKAGE_SYSTEMD_RESOLVED
- 	bool "enable resolve daemon"
+ config BR2_PACKAGE_SYSTEMD_VCONSOLE
+ 	bool "enable vconsole tool"
  	default y
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index d97336b7cd..c7a253bbe4 100644
+index c7a253bbe4..22165de2c1 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
 @@ -41,7 +41,6 @@ SYSTEMD_CONF_OPTS += \
  	-Dumount-path=/usr/bin/umount \
  	-Dnobody-group=nogroup \
  	-Didn=true \
--	-Drepart=false \
- 	-Duserdb=false \
+-	-Duserdb=false \
  	-Dhomed=false \
  	-Dnss-systemd=true
-@@ -305,6 +304,13 @@ else
- SYSTEMD_CONF_OPTS += -Dlocaled=false
+ 
+@@ -311,6 +310,12 @@ else
+ SYSTEMD_CONF_OPTS += -Drepart=false
  endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD_REPART),y)
-+SYSTEMD_CONF_OPTS += -Drepart=true
-+SYSTEMD_DEPENDENCIES += openssl
++ifeq ($(BR2_PACKAGE_SYSTEMD_USERDB),y)
++SYSTEMD_CONF_OPTS += -Duserdb=true
 +else
-+SYSTEMD_CONF_OPTS += -Drepart=false
++SYSTEMD_CONF_OPTS += -Duserdb=false
 +endif
 +
  ifeq ($(BR2_PACKAGE_SYSTEMD_COREDUMP),y)
