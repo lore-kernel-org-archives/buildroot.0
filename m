@@ -1,61 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Mar 2020 21:13:45 +0100
-Subject: [Buildroot] [git commit] package/libite: bump version to 2.1.2
-Message-ID: <20200309140909.16024821F7@busybox.osuosl.org>
+Date: Sun, 8 Mar 2020 15:43:33 +0100
+Subject: [Buildroot] [git commit] package/python-httplib2: bump to version
+ 0.17.0
+Message-ID: <20200309140910.8C1AA8EB58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=486da6067dbe7511634af6b2e9ca29edc446e3eb
+commit: https://git.buildroot.net/buildroot/commit/?id=4b5970a93f918644459a0eeb4ff4c0add0f634db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The hash for LICENSE has changed due to the copyright being updated and
-the note about licensing types has been moved to the bottom.
+PKG-INFO hash change is due to version bump.
 
-The hash for chomp.c has been changed due to the copyright being updated and
-code changes in that file.
-
-Changelog:
-https://github.com/troglobit/libite/releases/tag/v2.1.2
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libite/libite.hash | 13 +++++++------
- package/libite/libite.mk   |  2 +-
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ package/python-httplib2/python-httplib2.hash | 6 +++---
+ package/python-httplib2/python-httplib2.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index db3f6232b2..e16e78c01f 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,7 +1,8 @@
--# From https://github.com/troglobit/libite/releases/download/v2.1.0/libite-2.1.0.tar.xz.md5
--md5 701aa509f27ee35156bc53601e69fa74  libite-2.1.0.tar.xz
-+# From https://github.com/troglobit/libite/releases/download/v2.1.2/libite-2.1.2.tar.xz.md5
-+md5  3c23186dec3f3ae135ec4e8b58581f4e  libite-2.1.2.tar.xz
-+
- # Locally calculated
--sha256 cf56e720146243749e0af5763d4a84eef738e20f2bef2d867497fefc39dee991  libite-2.1.0.tar.xz
--sha256 0e97ab27b60e20a7ddb8e9638189ad159124e51d2c12e12735b05423df224da5  LICENSE
--sha256 9e0fb98d251dddf5ba81a355f6b4d89835ec53bc5d7f5fcd2c866b54ec5ccec8  src/chomp.c
--sha256 a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
-+sha256  7a16825c6d02040767ccb9f3faed4bf0e6841857a46cc4cb9e9f36b78a6c7cb3  libite-2.1.2.tar.xz
-+sha256  dc6eae50f69af0e848fd6957cdf48895563b4d15fdde7c9d20ae2bfdefbc2b83  LICENSE
-+sha256  89053891d46d04a21d4a492f68038703e179986baffa458201810f4222b57427  src/chomp.c
-+sha256  a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index c598da1b4a..62fc0df00a 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-httplib2/python-httplib2.hash b/package/python-httplib2/python-httplib2.hash
+index d299b61bc8..fe9995a9b3 100644
+--- a/package/python-httplib2/python-httplib2.hash
++++ b/package/python-httplib2/python-httplib2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/httplib2/json
+-md5	427cda9f4d55762db325bd2eb46b7fe0  httplib2-0.14.0.tar.gz
+-sha256	34537dcdd5e0f2386d29e0e2c6d4a1703a3b982d34c198a5102e6e5d6194b107  httplib2-0.14.0.tar.gz
++md5  4a55ae1d33721110bf81b4d197bfa862  httplib2-0.17.0.tar.gz
++sha256  de96d0a49f46d0ee7e0aae80141d37b8fcd6a68fb05d02e0b82c128592dd8261  httplib2-0.17.0.tar.gz
+ # Locally computer sha256 checksums
+-sha256	d8b8e99f77a260b8ca939f6a73ed0ea86977229a3d97f85547f499a62f61f5af  PKG-INFO
++sha256  bbc124e160cd5c0381fe9560aaed43462dd60371210dbb2c87f00b7fec9a05ba  PKG-INFO
+diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
+index a74c0e7c72..f9e1d8b3d7 100644
+--- a/package/python-httplib2/python-httplib2.mk
++++ b/package/python-httplib2/python-httplib2.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBITE_VERSION = 2.1.0
-+LIBITE_VERSION = 2.1.2
- LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
- LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
+-PYTHON_HTTPLIB2_VERSION = 0.14.0
++PYTHON_HTTPLIB2_VERSION = 0.17.0
+ PYTHON_HTTPLIB2_SOURCE = httplib2-$(PYTHON_HTTPLIB2_VERSION).tar.gz
+-PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/ce/2e/87461bfbb7e561203b759b3f7f639e2144226604372830d00a8279960ae1
++PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/6d/97/8225643419a53dd52d84c34d9d1e99bdbe18083dc760e7a2d0c47c0fab93
+ PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
+ PYTHON_HTTPLIB2_LICENSE = MIT
+ PYTHON_HTTPLIB2_LICENSE_FILES = PKG-INFO
