@@ -1,83 +1,122 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Mar 2020 16:12:50 +0100
-Subject: [Buildroot] [git commit] package/libnss: fix PowerPC build failure
-Message-ID: <20200308150022.964628FEBC@busybox.osuosl.org>
+Date: Sun, 8 Mar 2020 16:20:22 +0100
+Subject: [Buildroot] [git commit branch/next] package/bearssl: new package
+Message-ID: <20200308150818.C3A498FEC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=983a191ff6c326562703a55afd802315ea7cd5c3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=4ebb58a6551febee74dda7a36847bc5e9a7d43a3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-NSS assumes <sys/auvx.h> is always present but that's not true, so add a
-patch to check if it exists or not.
+BearSSL is an implementation of the SSL/TLS protocol (RFC 5246) written
+in C
 
-Fixes:
+https://bearssl.org
 
-  http://autobuild.buildroot.net/results/425ba828d30c2bd55ce9f4f00e67bc10d9de2867/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...183-Check-if-PPC-__has_include-sys-auxv.h.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/bearssl/Config.in    |  7 +++++++
+ package/bearssl/bearssl.hash |  3 +++
+ package/bearssl/bearssl.mk   | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 54 insertions(+)
 
-diff --git a/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch b/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8085cfb83d..e25e563ea3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -826,6 +826,7 @@ F:	package/libmaxminddb/
+ F:	package/openzwave/
+ 
+ N:	Fabrice Fontaine <fontaine.fabrice@gmail.com>
++F:	package/bearssl/
+ F:	package/boinc/
+ F:	package/cairo/
+ F:	package/duktape/
+diff --git a/package/Config.in b/package/Config.in
+index 5be5f3726b..3da42ba78f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1279,6 +1279,7 @@ menu "Compression and decompression"
+ endmenu
+ 
+ menu "Crypto"
++	source "package/bearssl/Config.in"
+ 	source "package/beecrypt/Config.in"
+ 	source "package/botan/Config.in"
+ 	source "package/ca-certificates/Config.in"
+diff --git a/package/bearssl/Config.in b/package/bearssl/Config.in
 new file mode 100644
-index 0000000000..1325387760
+index 0000000000..b10ce6025a
 --- /dev/null
-+++ b/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
-@@ -0,0 +1,51 @@
-+From d9c7cbb3660d8a2da9ce42e4d1b58642a256a91a Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Sun, 9 Feb 2020 10:15:16 +0100
-+Subject: [PATCH] Bug 1614183 - Check if PPC __has_include(<sys/auxv.h>)
++++ b/package/bearssl/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_BEARSSL
++	bool "bearssl"
++	help
++	  BearSSL is an implementation of the SSL/TLS protocol
++	  (RFC 5246) written in C.
 +
-+Some build environment doesn't provide <sys/auxv.h> and this causes
-+build failure, so let's check if that header exists by using
-+__has_include() helper.
++	  https://bearssl.org
+diff --git a/package/bearssl/bearssl.hash b/package/bearssl/bearssl.hash
+new file mode 100644
+index 0000000000..e000762668
+--- /dev/null
++++ b/package/bearssl/bearssl.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  6705bba1714961b41a728dfc5debbe348d2966c117649392f8c8139efc83ff14  bearssl-0.6.tar.gz
++sha256  771bf18c8633ea69ec9b07d2e604c4b99b7bef41b0f5ce6385d24df4448f61ca  LICENSE.txt
+diff --git a/package/bearssl/bearssl.mk b/package/bearssl/bearssl.mk
+new file mode 100644
+index 0000000000..549b000916
+--- /dev/null
++++ b/package/bearssl/bearssl.mk
+@@ -0,0 +1,42 @@
++################################################################################
++#
++# bearssl
++#
++################################################################################
 +
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ nss/lib/freebl/blinit.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
++BEARSSL_VERSION = 0.6
++BEARSSL_SITE = https://bearssl.org
++BEARSSL_LICENSE = MIT
++BEARSSL_LICENSE_FILES = LICENSE.txt
++BEARSSL_INSTALL_STAGING = YES
 +
-+diff --git a/nss/lib/freebl/blinit.c b/nss/lib/freebl/blinit.c
-+index 7e8adfc64..d4921aaee 100644
-+--- a/nss/lib/freebl/blinit.c
-++++ b/nss/lib/freebl/blinit.c
-+@@ -431,8 +431,14 @@ ppc_crypto_support()
-+ 
-+ #if defined(__powerpc__)
-+ 
-++#ifndef __has_include
-++#define __has_include(x) 0
-++#endif
-++
-+ #if defined(__linux__) || (defined(__FreeBSD__) && __FreeBSD__ >= 12)
-++#if __has_include(<sys/auxv.h>)
-+ #include <sys/auxv.h>
-++#endif
-+ #elif (defined(__FreeBSD__) && __FreeBSD__ < 12)
-+ #include <sys/sysctl.h>
-+ #endif
-+@@ -449,10 +455,14 @@ CheckPPCSupport()
-+ 
-+     unsigned long hwcaps = 0;
-+ #if defined(__linux__)
-++#if __has_include(<sys/auxv.h>)
-+     hwcaps = getauxval(AT_HWCAP2);
-++#endif
-+ #elif defined(__FreeBSD__)
-+ #if __FreeBSD__ >= 12
-++#if __has_include(<sys/auxv.h>)
-+     elf_aux_info(AT_HWCAP2, &hwcaps, sizeof(hwcaps));
-++#endif
-+ #else
-+     size_t len = sizeof(hwcaps);
-+     sysctlbyname("hw.cpu_features2", &hwcaps, &len, NULL, 0);
-+-- 
-+2.20.1
++BEARSSL_MAKE_OPTS = \
++	$(TARGET_CONFIGURE_OPTS) \
++	LDDLL=$(TARGET_CC)
 +
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++BEARSSL_TARGETS = dll
++endif
++
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++BEARSSL_TARGETS = lib
++endif
++
++define BEARSSL_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(BEARSSL_MAKE_OPTS) -C $(@D) \
++		$(BEARSSL_TARGETS)
++endef
++
++define BEARSSL_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include
++	cp -dpfr $(@D)/inc/*.h $(STAGING_DIR)/usr/include
++	mkdir -p $(STAGING_DIR)/usr/lib
++	cp -dpfr $(@D)/build/lib* $(STAGING_DIR)/usr/lib
++endef
++
++define BEARSSL_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/lib
++	cp -dpfr $(@D)/build/lib* $(TARGET_DIR)/usr/lib
++endef
++
++$(eval $(generic-package))
