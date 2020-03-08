@@ -1,61 +1,83 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sun, 8 Mar 2020 12:11:41 -0300
-Subject: [Buildroot] [PATCH] package/spidermonkey: do not build the
- JavaScript shell, by default
-In-Reply-To: <20200308145258.44d80049@windsurf.home>
-References: <20200308032128.306-1-unixmania@gmail.com>
- <20200308145258.44d80049@windsurf.home>
-Message-ID: <CAJ4jsado7Y_iHwtJVNNGta7pez_Zsx_fi_y6+wtrhmA_P0a5Xw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 8 Mar 2020 16:12:50 +0100
+Subject: [Buildroot] [git commit] package/libnss: fix PowerPC build failure
+Message-ID: <20200308150022.964628FEBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 8, 2020 at 10:53 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Carlos,
->
-> On Sun,  8 Mar 2020 00:21:28 -0300
-> unixmania at gmail.com wrote:
->
-> > From: Carlos Santos <unixmania@gmail.com>
-> >
-> > Add a configuration to enable the JavaScript shell (default off). So
-> > far only libmozjs is required (by polkit) and the shell takes around
-> > 24MiB.
-> >
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> > ---
-> >  ....in-install-shell-only-if-it-s-built.patch | 28 +++++++++++++++++++
-> >  package/spidermonkey/Config.in                | 11 ++++++++
-> >  package/spidermonkey/spidermonkey.mk          |  1 +
-> >  3 files changed, 40 insertions(+)
-> >  create mode 100644 package/spidermonkey/0001-js-src-Makefile.in-install-shell-only-if-it-s-built.patch
-> >
-> > diff --git a/package/spidermonkey/0001-js-src-Makefile.in-install-shell-only-if-it-s-built.patch b/package/spidermonkey/0001-js-src-Makefile.in-install-shell-only-if-it-s-built.patch
-> > new file mode 100644
-> > index 0000000000..f6092af7ef
-> > --- /dev/null
-> > +++ b/package/spidermonkey/0001-js-src-Makefile.in-install-shell-only-if-it-s-built.patch
->
-> We already had a 0001 patch, we actually have 10 patches on
-> spidermonkey, so I renamed this one 0011.
+commit: https://git.buildroot.net/buildroot/commit/?id=983a191ff6c326562703a55afd802315ea7cd5c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hum, that's the price passing "1" instead of "11" to --start-number. :-(
+NSS assumes <sys/auvx.h> is always present but that's not true, so add a
+patch to check if it exists or not.
 
-> Has this patch been submitted upstream ?
+Fixes:
 
-Well, "upstream" is Firefox and I don't believe they would care about
-an installation error when we compile a code sub-tree taken from a
-tarball made for Gentoo with an extra patch to force in-tree builds.
-;-)
+  http://autobuild.buildroot.net/results/425ba828d30c2bd55ce9f4f00e67bc10d9de2867/
 
-If the patch annoys you we can just use a post-install-target hook to
-remove js60. I didn't follow this approach because I was afraid that
-not passing --disable-js-shell would lead to the inclusion of code
-that could cause problem at run time.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...183-Check-if-PPC-__has_include-sys-auxv.h.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
--- 
-Carlos Santos <unixmania@gmail.com>
+diff --git a/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch b/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
+new file mode 100644
+index 0000000000..1325387760
+--- /dev/null
++++ b/package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
+@@ -0,0 +1,51 @@
++From d9c7cbb3660d8a2da9ce42e4d1b58642a256a91a Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Sun, 9 Feb 2020 10:15:16 +0100
++Subject: [PATCH] Bug 1614183 - Check if PPC __has_include(<sys/auxv.h>)
++
++Some build environment doesn't provide <sys/auxv.h> and this causes
++build failure, so let's check if that header exists by using
++__has_include() helper.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ nss/lib/freebl/blinit.c | 10 ++++++++++
++ 1 file changed, 10 insertions(+)
++
++diff --git a/nss/lib/freebl/blinit.c b/nss/lib/freebl/blinit.c
++index 7e8adfc64..d4921aaee 100644
++--- a/nss/lib/freebl/blinit.c
+++++ b/nss/lib/freebl/blinit.c
++@@ -431,8 +431,14 @@ ppc_crypto_support()
++ 
++ #if defined(__powerpc__)
++ 
+++#ifndef __has_include
+++#define __has_include(x) 0
+++#endif
+++
++ #if defined(__linux__) || (defined(__FreeBSD__) && __FreeBSD__ >= 12)
+++#if __has_include(<sys/auxv.h>)
++ #include <sys/auxv.h>
+++#endif
++ #elif (defined(__FreeBSD__) && __FreeBSD__ < 12)
++ #include <sys/sysctl.h>
++ #endif
++@@ -449,10 +455,14 @@ CheckPPCSupport()
++ 
++     unsigned long hwcaps = 0;
++ #if defined(__linux__)
+++#if __has_include(<sys/auxv.h>)
++     hwcaps = getauxval(AT_HWCAP2);
+++#endif
++ #elif defined(__FreeBSD__)
++ #if __FreeBSD__ >= 12
+++#if __has_include(<sys/auxv.h>)
++     elf_aux_info(AT_HWCAP2, &hwcaps, sizeof(hwcaps));
+++#endif
++ #else
++     size_t len = sizeof(hwcaps);
++     sysctlbyname("hw.cpu_features2", &hwcaps, &len, NULL, 0);
++-- 
++2.20.1
++
