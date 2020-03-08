@@ -1,113 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Mar 2020 09:56:45 +0100
-Subject: [Buildroot] [git commit] package/bash: fix uclibc build without
- wchar
-Message-ID: <20200308093554.A61E98EF30@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  8 Mar 2020 11:02:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libvncserver: fix jpeg build
+ without png or zlib
+Message-ID: <20200308100214.2461057-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1160427a9a3cefd08535bf59b22e47395dde5e44
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
 Fixes:
- - http://autobuild.buildroot.org/results/298fb9c785e137bff432dd304eb56986e54ce3ed
+ - http://autobuild.buildroot.org/results/bcc701055dd5876005fa6f78f38500399394cd75
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0018-locale.c-fix-build-without-wchar.patch    | 84 ++++++++++++++++++++++
- 1 file changed, 84 insertions(+)
+ ...on-t-build-tight.c-without-png-or-zl.patch | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch
 
-diff --git a/package/bash/0018-locale.c-fix-build-without-wchar.patch b/package/bash/0018-locale.c-fix-build-without-wchar.patch
+diff --git a/package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch b/package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch
 new file mode 100644
-index 0000000000..15c5f2e401
+index 0000000000..c357f8b3d5
 --- /dev/null
-+++ b/package/bash/0018-locale.c-fix-build-without-wchar.patch
-@@ -0,0 +1,84 @@
-+From 73ca494c60d46103f806325e6ccbe9e400238008 Mon Sep 17 00:00:00 2001
++++ b/package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch
+@@ -0,0 +1,54 @@
++From 8f58a9d9f35e6b893b54b399be357bc789f6e630 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 23 Feb 2020 11:41:09 +0100
-+Subject: [PATCH] locale.c: fix build without wchar
++Date: Sun, 8 Mar 2020 10:36:57 +0100
++Subject: [PATCH] CMakeLists.txt: don't build tight.c without png or zlib
 +
-+bash unconditionally builds locale.c which depends on mblen since
-+version 5.0 and
-+https://github.com/bminor/bash/commit/d233b485e83c3a784b803fb894280773f16f2deb
++If the user enables JPEG and disable PNG and ZLIB, build will fail on:
 +
-+This results in the following build failure if wchar is not available:
-+
-+/home/buildroot/autobuild/run/instance-0/output-1/host/bin/microblazeel-buildroot-linux-uclibc-gcc -L./builtins -L/home/buildroot/autobuild/run/instance-0/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/lib -L/home/buildroot/autobuild/run/instance-0/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/lib -L./lib/glob -L./lib/tilde  -L./lib/sh  -rdynamic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -Wno-parentheses -Wno-format-security   -o bash shell.o eval.o y.tab.o general.o make_cmd.o print_cmd.o  dispose_cmd.o execute_cmd.o variables.o copy_cmd.o error.o expr.o flags.o jobs.o subst.o hashcmd.o hashlib.o mailcheck.o trap.o input.o unwind_prot.o pathexp.o sig.o test.o version.o alias.o array.o arrayfunc.o assoc.o braces.o bracecomp.o bashhist.o bashline.o  list.o stringlib.o locale.o findcmd.o redir.o pcomplete.o pcomplib.o syntax.o xmalloc.o signames.o -lbuiltins -lglob -lsh -lreadline -lhistory -lcurses -ltilde     -ldl
-+/home/buildroot/autobuild/run/instance-0/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/8.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: locale.o: in function `set_default_locale':
-+(.text+0x260): undefined reference to `mblen'
-+
-+To fix this issue, don't use mblen if HANDLE_MULTIBYTE is not defined,
-+an other possibility would be to use MBLEN wrapper defined in shmbutil.h
++[ 42%] Building C object CMakeFiles/vncserver.dir/libvncserver/ws_decode.c.o
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c: In function 'rfbSendRectEncodingTight':
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:276:7: error: 'struct _rfbClientRec' has no member named 'tightEncoding'
++     cl->tightEncoding = rfbEncodingTight;
++       ^~
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c: In function 'rfbSendRectEncodingTightPng':
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:287:7: error: 'struct _rfbClientRec' has no member named 'tightEncoding'
++     cl->tightEncoding = rfbEncodingTightPng;
++       ^~
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c: In function 'SendRectEncodingTight':
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:307:23: error: 'struct _rfbClientRec' has no member named 'tightCompressLevel'
++     compressLevel = cl->tightCompressLevel;
++                       ^~
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:308:22: error: 'struct _rfbClientRec' has no member named 'turboQualityLevel'
++     qualityLevel = cl->turboQualityLevel;
++                      ^~
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:309:22: error: 'struct _rfbClientRec' has no member named 'turboSubsampLevel'
++     subsampLevel = cl->turboSubsampLevel;
++                      ^~
 +
 +Fixes:
-+ - http://autobuild.buildroot.org/results/298fb9c785e137bff432dd304eb56986e54ce3ed
++ - http://autobuild.buildroot.org/results/bcc701055dd5876005fa6f78f38500399394cd75
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://savannah.gnu.org/support/index.php?110200]
++[Upstream status: https://github.com/LibVNC/libvncserver/pull/380]
 +---
-+ locale.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
++ CMakeLists.txt | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+diff --git a/locale.c b/locale.c
-+index d62547f6..a64c5b4b 100644
-+--- a/locale.c
-++++ b/locale.c
-+@@ -86,7 +86,9 @@ set_default_locale ()
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 2a2cb15..b8bc9e2 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -425,7 +425,9 @@ endif()
++ if(JPEG_FOUND)
++   add_definitions(-DLIBVNCSERVER_HAVE_LIBJPEG)
++   include_directories(${JPEG_INCLUDE_DIR})
++-  set(TIGHT_C ${LIBVNCSERVER_DIR}/tight.c ${COMMON_DIR}/turbojpeg.c)
+++  if(PNG_FOUND OR ZLIB_FOUND)
+++    set(TIGHT_C ${LIBVNCSERVER_DIR}/tight.c ${COMMON_DIR}/turbojpeg.c)
+++  endif(PNG_FOUND OR ZLIB_FOUND)
++ endif(JPEG_FOUND)
 + 
-+   locale_mb_cur_max = MB_CUR_MAX;
-+   locale_utf8locale = locale_isutf8 (default_locale);
-++#if defined (HANDLE_MULTIBYTE)
-+   locale_shiftstates = mblen ((char *)NULL, 0);
-++#endif
-+ }
-+ 
-+ /* Set default values for LC_CTYPE, LC_COLLATE, LC_MESSAGES, LC_NUMERIC and
-+@@ -107,7 +109,9 @@ set_default_locale_vars ()
-+       locale_setblanks ();
-+       locale_mb_cur_max = MB_CUR_MAX;
-+       locale_utf8locale = locale_isutf8 (lc_all);
-++#    if defined (HANDLE_MULTIBYTE)
-+       locale_shiftstates = mblen ((char *)NULL, 0);
-++#    endif
-+       u32reset ();
-+     }
-+ #  endif
-+@@ -211,7 +215,9 @@ set_locale_var (var, value)
-+       /* if LC_ALL == "", reset_locale_vars has already called this */
-+       if (*lc_all && x)
-+ 	locale_utf8locale = locale_isutf8 (lc_all);
-++#  if defined (HANDLE_MULTIBYTE)
-+       locale_shiftstates = mblen ((char *)NULL, 0);
-++#  endif
-+       u32reset ();
-+       return r;
-+ #else
-+@@ -231,7 +237,9 @@ set_locale_var (var, value)
-+ 	  /* if setlocale() returns NULL, the locale is not changed */
-+ 	  if (x)
-+ 	    locale_utf8locale = locale_isutf8 (x);
-++#    if defined (HANDLE_MULTIBYTE)
-+ 	  locale_shiftstates = mblen ((char *)NULL, 0);
-++#    endif
-+ 	  u32reset ();
-+ 	}
-+ #  endif
-+@@ -368,7 +376,9 @@ reset_locale_vars ()
-+   locale_mb_cur_max = MB_CUR_MAX;
-+   if (x)
-+     locale_utf8locale = locale_isutf8 (x);
-++#  if defined (HANDLE_MULTIBYTE)
-+   locale_shiftstates = mblen ((char *)NULL, 0);
-++#  endif
-+   u32reset ();
-+ #endif
-+   return 1;
++ if(PNG_FOUND)
 +-- 
 +2.25.0
 +
+-- 
+2.25.0
