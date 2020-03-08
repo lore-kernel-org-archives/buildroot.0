@@ -1,302 +1,190 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 21:36:38 +0100
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: add package
- status
-Message-ID: <20200309140909.B74928894D@busybox.osuosl.org>
+Date: Sun, 8 Mar 2020 16:27:58 +0100
+Subject: [Buildroot] [git commit] package/bctoolbox: bump to version 4.3.1
+Message-ID: <20200309140910.BEEA88EB58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f422fa991f7f501c7291786efb2a1c6214a2e067
+commit: https://git.buildroot.net/buildroot/commit/?id=784fee1246d1d162d7541a57cf1bc388957a376b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Unify the status check information. The status is stored in a tuple. The
-first entry is the status that can be 'ok', 'warning' or 'error'. The
-second entry is a verbose message.
+- Refresh patch
+- libiconv is needed without locale since version 4.3.0 and
+  https://github.com/BelledonneCommunications/bctoolbox/commit/d5713996c2ae100594ebf319c54d95297b02a2e1
 
-The following checks are performed:
-- url: status of the URL check
-- license: status of the license presence check
-- license-files: status of the license file check
-- hash: status of the hash file presence check
-- patches: status of the patches count check
-- pkg-check: status of the check-package script result
-- developers: status if a package has developers in the DEVELOPERS file
-- version: status of the version check
-
-With that status information the following variables are replaced:
-has_license, has_license_files, has_hash, url_status
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 101 +++++++++++++++++++++++++++++++---------------
- 1 file changed, 69 insertions(+), 32 deletions(-)
+ .../0001-Fix-Libs.private-flags-for-mbedtls.patch  | 44 ++++++++--------------
+ package/bctoolbox/Config.in                        |  5 +++
+ package/bctoolbox/bctoolbox.hash                   |  2 +-
+ package/bctoolbox/bctoolbox.mk                     |  7 +++-
+ package/mediastreamer/Config.in                    |  4 ++
+ package/ortp/Config.in                             |  4 ++
+ 6 files changed, 36 insertions(+), 30 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 9529ad5c6a..0d4bb13196 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -73,10 +73,10 @@ class Package:
-         self.warnings = 0
-         self.current_version = None
-         self.url = None
--        self.url_status = None
-         self.url_worker = None
-         self.cves = list()
-         self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
-+        self.status = {}
+diff --git a/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch b/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch
+index a70c7c633a..342042d59c 100644
+--- a/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch
++++ b/package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch
+@@ -1,49 +1,37 @@
+-From c0b3dbb43aa3a38c47311556c85eadc6072e2d68 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Tue, 14 Feb 2017 22:02:26 +0100
+-Subject: [PATCH] Fix Libs.private flags for mbedtls
++From b7f14a800bbdad193f45695bc5b8c5173f3882ba Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 10 Feb 2019 17:51:05 +0100
++Subject: [PATCH] CMakeLists.txt: fix mbedtls libraries in bctoolbox.pc
+ MIME-Version: 1.0
+ Content-Type: text/plain; charset=UTF-8
+ Content-Transfer-Encoding: 8bit
  
-     def pkgvar(self):
-         return self.name.upper().replace("-", "_")
-@@ -85,17 +85,17 @@ class Package:
-         """
-         Fills in the .url field
-         """
--        self.url_status = "No Config.in"
-+        self.status['url'] = ("warning", "no Config.in")
-         for filename in os.listdir(os.path.dirname(self.path)):
-             if fnmatch.fnmatch(filename, 'Config.*'):
-                 fp = open(os.path.join(os.path.dirname(self.path), filename), "r")
-                 for config_line in fp:
-                     if URL_RE.match(config_line):
-                         self.url = config_line.strip()
--                        self.url_status = "Found"
-+                        self.status['url'] = ("ok", "found")
-                         fp.close()
-                         return
--                self.url_status = "Missing"
-+                self.status['url'] = ("error", "missing")
-                 fp.close()
+-Static linking with bctoolbox fails when using pkg-config as the
+-generated bctoolbox.pc file only consists of an '-L' string without any
+-search path or libraries flags.
+-
+-That's because of an typo in `mbedtls_library_path`. However,
+-`mbedtls_library_path` contains a string of the mbedtls libraries
+-concatenated by an ';' which cannot be parsed by pkg-config.
+-
+-Therefore, use `MBEDTLS_LIBRARY` instead of `MBEDTLS_LIBRARIES` to get
+-the library path.
+-
+-Furthermore, add the three mbedtls libraries *mbedtls*, *mbedcrypto*, and
+-*mbedx509* to `LIBS_PRIVATE` so these libraries are added to the
+-`Libs.private` field of bctoolbox.pc.
+-
+-Upstream status: Pending
++bctoolbox.pc should not contain the full libraries path, path should be
++given by -L and library names by -l
++So sent back the fix already suggested by J??rg Krause in
+ https://github.com/BelledonneCommunications/bctoolbox/pull/4
  
-     @property
-@@ -121,30 +121,42 @@ class Package:
+ Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://github.com/BelledonneCommunications/bctoolbox/pull/7]
+ ---
+- CMakeLists.txt | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
++ CMakeLists.txt | 5 ++---
++ 1 file changed, 2 insertions(+), 3 deletions(-)
  
-     def set_license(self):
-         """
--        Fills in the .has_license and .has_license_files fields
-+        Fills in the .status['license'] and .status['license-files'] fields
-         """
-         var = self.pkgvar()
-+        self.status['license'] = ("error", "missing")
-+        self.status['license-files'] = ("error", "missing")
-         if var in self.all_licenses:
--            self.has_license = True
-             self.license = self.all_licenses[var]
-+            self.status['license'] = ("ok", "found")
-         if var in self.all_license_files:
--            self.has_license_files = True
-+            self.status['license-files'] = ("ok", "found")
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index ed7aa00..4127f0e 100644
++index 29f3eb6..b2f26c2 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -103,8 +103,8 @@ else()
++@@ -101,9 +101,8 @@ else()
+  endif()
+  
+  if(MBEDTLS_FOUND)
+ -	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARIES}" PATH)
+--	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedlts_library_path}")
++-	string(REPLACE ";" " " MBEDTLS_LIBRARIES_STR "${MBEDTLS_LIBRARIES}")
++-	set(LIBS_PRIVATE "${LIBS_PRIVATE} ${MBEDTLS_LIBRARIES_STR}")
+ +	get_filename_component(mbedtls_library_path "${MBEDTLS_LIBRARY}" PATH)
+ +	set(LIBS_PRIVATE "${LIBS_PRIVATE} -L${mbedtls_library_path} -lmbedtls -lmbedcrypto -lmbedx509")
+  endif()
+  if(POLARSSL_FOUND)
+  	get_filename_component(polarssl_library_path "${POLARSSL_LIBRARIES}" PATH)
+--- 
+-2.11.1
+-
+diff --git a/package/bctoolbox/Config.in b/package/bctoolbox/Config.in
+index 048d01282c..1cf2b7e236 100644
+--- a/package/bctoolbox/Config.in
++++ b/package/bctoolbox/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_BCTOOLBOX
+ 	bool "bctoolbox"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  Utilities library used by Belledonne Communications
+ 	  softwares like belle-sip, mediastreamer2 and linphone.
+@@ -12,3 +14,6 @@ config BR2_PACKAGE_BCTOOLBOX
  
-     def set_hash_info(self):
-         """
--        Fills in the .has_hash field
-+        Fills in the .status['hash'] field
-         """
-         hashpath = self.path.replace(".mk", ".hash")
--        self.has_hash = os.path.exists(hashpath)
-+        if os.path.exists(hashpath):
-+            self.status['hash'] = ("ok", "found")
-+        else:
-+            self.status['hash'] = ("error", "missing")
- 
-     def set_patch_count(self):
-         """
--        Fills in the .patch_count field
-+        Fills in the .patch_count, .patch_files and .status['patches'] fields
-         """
-         pkgdir = os.path.dirname(self.path)
-         for subdir, _, _ in os.walk(pkgdir):
-             self.patch_files = fnmatch.filter(os.listdir(subdir), '*.patch')
- 
-+        if self.patch_count == 0:
-+            self.status['patches'] = ("ok", "no patches")
-+        elif self.patch_count < 5:
-+            self.status['patches'] = ("warning", "some patches")
-+        else:
-+            self.status['patches'] = ("error", "lots of patches")
+ comment "bctoolbox needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 +
-     def set_current_version(self):
-         """
-         Fills in the .current_version field
-@@ -155,10 +167,11 @@ class Package:
++comment "bctoolbox needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/bctoolbox/bctoolbox.hash b/package/bctoolbox/bctoolbox.hash
+index 6242355ee2..7d64c32013 100644
+--- a/package/bctoolbox/bctoolbox.hash
++++ b/package/bctoolbox/bctoolbox.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  da7df7ff359a9829e9e6ef98dfe9fead0cf735b8a4a5da1b1047f467dee1b2a9  bctoolbox-0.4.0.tar.gz
++sha256  d8501e3793c10abbf913759d7a0e5f6eb3140af6bacf5e2bdcd532049bde69c0  bctoolbox-4.3.1.tar.gz
+ sha256  849dd903d98f12a964466ccfbaf3a1de1f94ad0ebd49a59d12f8ce4506f9f647  COPYING
+diff --git a/package/bctoolbox/bctoolbox.mk b/package/bctoolbox/bctoolbox.mk
+index 281a0bf2a1..f9d740820d 100644
+--- a/package/bctoolbox/bctoolbox.mk
++++ b/package/bctoolbox/bctoolbox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     def set_check_package_warnings(self):
-         """
--        Fills in the .warnings field
-+        Fills in the .warnings and .status['pkg-check'] fields
-         """
-         cmd = ["./utils/check-package"]
-         pkgdir = os.path.dirname(self.path)
-+        self.status['pkg-check'] = ("error", "Missing")
-         for root, dirs, files in os.walk(pkgdir):
-             for f in files:
-                 if f.endswith(".mk") or f.endswith(".hash") or f == "Config.in" or f == "Config.in.host":
-@@ -169,6 +182,10 @@ class Package:
-             m = re.match("^([0-9]*) warnings generated", line.decode())
-             if m:
-                 self.warnings = int(m.group(1))
-+                if self.warnings == 0:
-+                    self.status['pkg-check'] = ("ok", "no warnings")
-+                else:
-+                    self.status['pkg-check'] = ("error", "{} warnings".format(self.warnings))
-                 return
+-BCTOOLBOX_VERSION = 0.4.0
++BCTOOLBOX_VERSION = 4.3.1
+ BCTOOLBOX_SITE = $(call github,BelledonneCommunications,bctoolbox,$(BCTOOLBOX_VERSION))
+ BCTOOLBOX_LICENSE = GPL-2.0+
+ BCTOOLBOX_LICENSE_FILES = COPYING
+@@ -20,6 +20,11 @@ BCTOOLBOX_CONF_OPTS = \
+ 	-DGIT_EXECUTABLE=OFF \
+ 	-DCMAKE_SKIP_RPATH=ON
  
-     def is_cve_ignored(self, cve):
-@@ -179,7 +196,7 @@ class Package:
- 
-     def set_developers(self, developers):
-         """
--        Fills in the .developers field
-+        Fills in the .developers and .status['developers'] field
-         """
-         self.developers = [
-             dev.name
-@@ -187,6 +204,14 @@ class Package:
-             if dev.hasfile(self.path)
-         ]
- 
-+        if self.developers:
-+            self.status['developers'] = ("ok", "{} developers".format(len(self.developers)))
-+        else:
-+            self.status['developers'] = ("warning", "no developers")
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++BCTOOLBOX_DEPENDENCIES += libiconv
++BCTOOLBOX_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -liconv"
++endif
 +
-+    def is_status_ok(self, name):
-+        return self.status[name][0] == 'ok'
+ ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+ BCTOOLBOX_DEPENDENCIES += mbedtls
+ BCTOOLBOX_CONF_OPTS += -DENABLE_MBEDTLS=ON
+diff --git a/package/mediastreamer/Config.in b/package/mediastreamer/Config.in
+index b18c83c5e5..91861c16c1 100644
+--- a/package/mediastreamer/Config.in
++++ b/package/mediastreamer/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_MEDIASTREAMER
+ 	bool "mediastreamer"
+ 	depends on BR2_INSTALL_LIBSTDCPP # ortp
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # ortp
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # ortp
+ 	select BR2_PACKAGE_ORTP
+ 	help
+ 	  Mediastreamer is a powerful and lightweighted streaming
+@@ -15,3 +16,6 @@ config BR2_PACKAGE_MEDIASTREAMER
+ 
+ comment "mediastreamer needs a toolchain w/ threads, C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 +
-     def __eq__(self, other):
-         return self.path == other.path
++comment "mediastreamer needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/ortp/Config.in b/package/ortp/Config.in
+index 052ff1d397..e296e82f7a 100644
+--- a/package/ortp/Config.in
++++ b/package/ortp/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_ORTP
+ 	bool "oRTP"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # bctoolbox
+ 	select BR2_PACKAGE_BCTOOLBOX
+ 	help
+ 	  oRTP, a Real-time Transport Protocol (RTP,RFC3550) library
+@@ -10,3 +11,6 @@ config BR2_PACKAGE_ORTP
  
-@@ -195,7 +220,7 @@ class Package:
- 
-     def __str__(self):
-         return "%s (path='%s', license='%s', license_files='%s', hash='%s', patches=%d)" % \
--            (self.name, self.path, self.has_license, self.has_license_files, self.has_hash, self.patch_count)
-+            (self.name, self.path, self.is_status_ok('license'), self.is_status_ok('license-files'), self.status['hash'], self.patch_count)
- 
- 
- class CVE:
-@@ -409,23 +434,23 @@ def package_init_make_info():
- 
- 
- def check_url_status_worker(url, url_status):
--    if url_status != "Missing" and url_status != "No Config.in":
-+    if url_status[0] == 'ok':
-         try:
-             url_status_code = requests.head(url, timeout=30).status_code
-             if url_status_code >= 400:
--                return "Invalid(%s)" % str(url_status_code)
-+                return ("error", "invalid {}".format(url_status_code))
-         except requests.exceptions.RequestException:
--            return "Invalid(Err)"
--        return "Ok"
-+            return ("error", "invalid (err)")
-+        return ("ok", "valid")
-     return url_status
- 
- 
- def check_package_urls(packages):
-     pool = Pool(processes=64)
-     for pkg in packages:
--        pkg.url_worker = pool.apply_async(check_url_status_worker, (pkg.url, pkg.url_status))
-+        pkg.url_worker = pool.apply_async(check_url_status_worker, (pkg.url, pkg.status['url']))
-     for pkg in packages:
--        pkg.url_status = pkg.url_worker.get(timeout=3600)
-+        pkg.status['url'] = pkg.url_worker.get(timeout=3600)
-         del pkg.url_worker
-     pool.terminate()
- 
-@@ -499,6 +524,18 @@ def check_package_latest_version(packages):
-     results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
-     for pkg, r in zip(packages, results):
-         pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
+ comment "ortp needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 +
-+        if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
-+            pkg.status['version'] = ('warning', "Release Monitoring API error")
-+        elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
-+            pkg.status['version'] = ('warning', "Package not found on Release Monitoring")
-+
-+        if pkg.latest_version['version'] is None:
-+            pkg.status['version'] = ('warning', "No upstream version available on Release Monitoring")
-+        elif pkg.latest_version['version'] != pkg.current_version:
-+            pkg.status['version'] = ('error', "The newer version {} is available upstream".format(pkg.latest_version['version']))
-+        else:
-+            pkg.status['version'] = ('ok', 'up-to-date')
-     worker_pool.terminate()
-     del http_pool
- 
-@@ -525,15 +562,15 @@ def calculate_stats(packages):
-             stats["infra-%s" % infra] += 1
-         else:
-             stats["infra-unknown"] += 1
--        if pkg.has_license:
-+        if pkg.is_status_ok('license'):
-             stats["license"] += 1
-         else:
-             stats["no-license"] += 1
--        if pkg.has_license_files:
-+        if pkg.is_status_ok('license-files'):
-             stats["license-files"] += 1
-         else:
-             stats["no-license-files"] += 1
--        if pkg.has_hash:
-+        if pkg.is_status_ok('hash'):
-             stats["hash"] += 1
-         else:
-             stats["no-hash"] += 1
-@@ -676,30 +713,30 @@ def dump_html_pkg(f, pkg):
- 
-     # License
-     td_class = ["centered"]
--    if pkg.has_license:
-+    if pkg.is_status_ok('license'):
-         td_class.append("correct")
-     else:
-         td_class.append("wrong")
-     f.write("  <td class=\"%s\">%s</td>\n" %
--            (" ".join(td_class), boolean_str(pkg.has_license)))
-+            (" ".join(td_class), boolean_str(pkg.is_status_ok('license'))))
- 
-     # License files
-     td_class = ["centered"]
--    if pkg.has_license_files:
-+    if pkg.is_status_ok('license-files'):
-         td_class.append("correct")
-     else:
-         td_class.append("wrong")
-     f.write("  <td class=\"%s\">%s</td>\n" %
--            (" ".join(td_class), boolean_str(pkg.has_license_files)))
-+            (" ".join(td_class), boolean_str(pkg.is_status_ok('license-files'))))
- 
-     # Hash
-     td_class = ["centered"]
--    if pkg.has_hash:
-+    if pkg.is_status_ok('hash'):
-         td_class.append("correct")
-     else:
-         td_class.append("wrong")
-     f.write("  <td class=\"%s\">%s</td>\n" %
--            (" ".join(td_class), boolean_str(pkg.has_hash)))
-+            (" ".join(td_class), boolean_str(pkg.is_status_ok('hash'))))
- 
-     # Current version
-     if len(pkg.current_version) > 20:
-@@ -750,12 +787,12 @@ def dump_html_pkg(f, pkg):
- 
-     # URL status
-     td_class = ["centered"]
--    url_str = pkg.url_status
--    if pkg.url_status == "Missing" or pkg.url_status == "No Config.in":
-+    url_str = pkg.status['url'][1]
-+    if pkg.status['url'][0] in ("error", "warning"):
-         td_class.append("missing_url")
--    elif pkg.url_status.startswith("Invalid"):
-+    if pkg.status['url'][0] == "error":
-         td_class.append("invalid_url")
--        url_str = "<a href=%s>%s</a>" % (pkg.url, pkg.url_status)
-+        url_str = "<a href=%s>%s</a>" % (pkg.url, pkg.status['url'][1])
-     else:
-         td_class.append("good_url")
-         url_str = "<a href=%s>Link</a>" % pkg.url
++comment "ortp needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
