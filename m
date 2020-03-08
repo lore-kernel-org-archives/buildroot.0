@@ -1,8 +1,7 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun,  8 Mar 2020 16:27:11 -0600
-Subject: [Buildroot] [PATCH 1/1] package/systemd: enable nss-mymachines when
- machined is enabled
-Message-ID: <20200308222711.75586-1-james.hilliard1@gmail.com>
+Date: Sun,  8 Mar 2020 16:53:36 -0600
+Subject: [Buildroot] [PATCH 1/1] package/systemd: add p11-kit support
+Message-ID: <20200308225336.118095-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,24 +10,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/systemd/systemd.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/systemd/systemd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 22165de2c1..407ae81aad 100644
+index 22165de2c1..803db898f2 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -268,9 +268,9 @@ SYSTEMD_CONF_OPTS += -Dlogind=false
+@@ -160,6 +160,13 @@ else
+ SYSTEMD_CONF_OPTS += -Dgcrypt=false
  endif
  
- ifeq ($(BR2_PACKAGE_SYSTEMD_MACHINED),y)
--SYSTEMD_CONF_OPTS += -Dmachined=true
-+SYSTEMD_CONF_OPTS += -Dmachined=true -Dnss-mymachines=true
- else
--SYSTEMD_CONF_OPTS += -Dmachined=false
-+SYSTEMD_CONF_OPTS += -Dmachined=false -Dnss-mymachines=false
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_IMPORTD),y)
++ifeq ($(BR2_PACKAGE_P11_KIT),y)
++SYSTEMD_DEPENDENCIES += p11-kit
++SYSTEMD_CONF_OPTS += -Dp11kit=true
++else
++SYSTEMD_CONF_OPTS += -Dp11kit=false
++endif
++
+ ifeq ($(BR2_PACKAGE_PCRE2),y)
+ SYSTEMD_DEPENDENCIES += pcre2
+ SYSTEMD_CONF_OPTS += -Dpcre2=true
 -- 
 2.20.1
