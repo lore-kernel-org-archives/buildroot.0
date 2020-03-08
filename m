@@ -1,32 +1,25 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  8 Mar 2020 20:47:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gr-osmosdr: disable documentation
-Message-ID: <20200308194747.978222-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 08 Mar 2020 20:47:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvmtools: fix musl build
+ with libfuse
+In-Reply-To: <20200308180954.681298-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 8 Mar 2020 19:09:54 +0100")
+References: <20200308180954.681298-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tv2ysk6u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gr-osmosdr/gr-osmosdr.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-diff --git a/package/gr-osmosdr/gr-osmosdr.mk b/package/gr-osmosdr/gr-osmosdr.mk
-index 003f406602..fcc817fe85 100644
---- a/package/gr-osmosdr/gr-osmosdr.mk
-+++ b/package/gr-osmosdr/gr-osmosdr.mk
-@@ -14,7 +14,9 @@ GR_OSMOSDR_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- GR_OSMOSDR_DEPENDENCIES = gnuradio host-python-cheetah
- 
--GR_OSMOSDR_CONF_OPTS = -DENABLE_DEFAULT=OFF
-+GR_OSMOSDR_CONF_OPTS = \
-+	-DENABLE_DEFAULT=OFF \
-+	-DENABLE_DOXYGEN=OFF
- 
- # For third-party blocks, the gr-osmosdr libraries are mandatory at
- # compile time.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/4eba7c4585d318efdb9b965d58d879426588aa14
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.25.0
+Bye, Peter Korsgaard
