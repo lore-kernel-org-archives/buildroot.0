@@ -1,52 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Mar 2020 15:17:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/systemd: add repart support
-In-Reply-To: <20200308091640.65742-1-james.hilliard1@gmail.com>
-References: <20200308091640.65742-1-james.hilliard1@gmail.com>
-Message-ID: <20200308151759.6e50c0c8@windsurf.home>
+Date: Sun, 8 Mar 2020 15:18:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: add userdb support
+In-Reply-To: <20200308093958.107192-1-james.hilliard1@gmail.com>
+References: <20200308093958.107192-1-james.hilliard1@gmail.com>
+Message-ID: <20200308151826.7f1771f0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  8 Mar 2020 03:16:40 -0600
+On Sun,  8 Mar 2020 03:39:58 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> systemd-repart grows and adds partitions to a partition table, based on
-> the configuration files described in repart.d.
+> systemd-userdbd is a system service that multiplexes user/group lookups
+> to all local services that provide JSON user/group record definitions
+> to the system. In addition it synthesizes JSON user/group records from
+> classic UNIX/glibc NSS user/group records in order to provide full
+> backwards compatibility.
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/systemd/Config.in  | 9 +++++++++
->  package/systemd/systemd.mk | 8 +++++++-
->  2 files changed, 16 insertions(+), 1 deletion(-)
+>  package/systemd/Config.in  | 11 +++++++++++
+>  package/systemd/systemd.mk |  7 ++++++-
+>  2 files changed, 17 insertions(+), 1 deletion(-)
 > 
 > diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index c727082a1a..64d30f32aa 100644
+> index c727082a1a..051bec5de1 100644
 > --- a/package/systemd/Config.in
 > +++ b/package/systemd/Config.in
-> @@ -153,6 +153,15 @@ config BR2_PACKAGE_SYSTEMD_BINFMT
+> @@ -233,6 +233,17 @@ config BR2_PACKAGE_SYSTEMD_LOCALED
 >  
->  	  http://www.freedesktop.org/software/systemd/man/systemd-binfmt.service.html
+>  	  http://www.freedesktop.org/software/systemd/man/systemd-localed.service.html
 >  
-> +config BR2_PACKAGE_SYSTEMD_REPART
-> +	bool "enable repart support"
-> +	select BR2_PACKAGE_OPENSSL
+> +config BR2_PACKAGE_SYSTEMD_USERDB
+> +	bool "enable userdb daemon"
 > +	help
-> +	  systemd-repart grows and adds partitions to a partition table,
-> +	  based on the configuration files described in repart.d.
-> +
-> +	  https://www.freedesktop.org/software/systemd/man/systemd-repart.html
+> +	  systemd-userdbd is a system service that multiplexes user/group
+> +	  lookups to all local services that provide JSON user/group record
+> +	  definitions to the system. In addition it synthesizes JSON
+> +	  user/group records from classic UNIX/glibc NSS user/group records
+> +	  in order to provide full backwards compatibility.
 
-Alphabetic sorting of options was not respected here, so I've moved
-this option.
+These lines were too long, check-package complained.
 
-I've also added an explicit select of libfdisk, as suggested by Baruch.
-Even though it is implied by the top-level option, making it explicit
-doesn't hurt.
+Also, alphabetic ordering of options was not respected here.
 
-Applied to next with those changes. Thanks!
+I fixed both, and applied to next. Thanks!
 
 Thomas
 -- 
