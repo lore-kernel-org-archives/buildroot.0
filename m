@@ -1,165 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Mar 2020 17:39:37 +0100
-Subject: [Buildroot] [git commit] package/binutils: fix assertion failure in
- xtensa ld
-Message-ID: <20200308162754.61B808FF02@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun,  8 Mar 2020 17:51:49 +0100
+Subject: [Buildroot] [PATCH v1] package/ser2net: fix gensio detection with
+ openssl enabled
+Message-ID: <20200308165149.31293-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b887cfc69d0fc080e973416f4d3563af778ea07
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add openssl linker flags via LIBS to fix configure gensio
+library detection.
 
-xtensa ld fails with the following message
+Fixes:
 
-  ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
-  elf32-xtensa.c:3283 in elf_xtensa_finish_dynamic_sections
+  http://autobuild.buildroot.net/results/66e0d3e0a2a8dc5a62c267d16a53216f0f2ce8dd
 
-during domoticz package build. It happens because of mismatch between
-the size allocated for dynamic relocations in the executable image and
-the number of PLT relocations actually written to the image. The
-mismatch is caused by the fact that undefined weak symbol is treated as
-dynamic (and thus needing PLT relocation), but xtensa linker not
-expecting that.
+  checking gensio/gensio.h usability... yes
+  checking gensio/gensio.h presence... yes
+  checking for gensio/gensio.h... yes
+  checking for str_to_gensio in -lgensio... no
+  configure: error: libgensio won't link, please install gensio dev package
 
-Fixes: http://autobuild.buildroot.net/results/7885705f1b1c0f31cf21b464150f5509929c1906/
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Backported from: e15a8da9c71336b06cb5f2706c3f6b7e6ddd95a3
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The build/ser2net-4.1.1/config.log files states:
+
+  .../arm-buildroot-linux-uclibcgnueabi/bin/ld: .../host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgensio.a(gensio_filter_ssl.o): in function `gensio_do_ssl_init':
+  gensio_filter_ssl.c:(.text+0x34): undefined reference to `OPENSSL_init_ssl'
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- .../2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch   | 37 ++++++++++++++++++++++
- .../2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch     | 37 ++++++++++++++++++++++
- .../2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch   | 37 ++++++++++++++++++++++
- 3 files changed, 111 insertions(+)
+ package/ser2net/ser2net.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch b/package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch
-new file mode 100644
-index 0000000000..f499426b70
---- /dev/null
-+++ b/package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch
-@@ -0,0 +1,37 @@
-+From 85dcca5997cf3822d6456a5c9c59c46b56adfbb8 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 4 Mar 2020 14:54:27 -0800
-+Subject: [PATCH] bfd: xtensa: fix PR ld/25630
+diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+index 2ea68ccc43..94035b2184 100644
+--- a/package/ser2net/ser2net.mk
++++ b/package/ser2net/ser2net.mk
+@@ -16,6 +16,11 @@ else
+ SER2NET_CONF_OPTS += --without-pthreads
+ endif
+ 
++# fix gensio detection with openssl enabled
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++SER2NET_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
++endif
 +
-+bfd/
-+2020-03-05  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Shrink dynamic
-+	relocation sections for any removed reference to a dynamic symbol.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ bfd/elf32-xtensa.c | 7 +++----
-+ 1 file changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
-+index 12ff9f772aaf..65e14d87940c 100644
-+--- a/bfd/elf32-xtensa.c
-++++ b/bfd/elf32-xtensa.c
-+@@ -10148,10 +10148,9 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
-+ 
-+   if ((r_type == R_XTENSA_32 || r_type == R_XTENSA_PLT)
-+       && (input_section->flags & SEC_ALLOC) != 0
-+-      && (dynamic_symbol || bfd_link_pic (info))
-+-      && (!h || h->root.type != bfd_link_hash_undefweak
-+-	  || (dynamic_symbol
-+-	      && (bfd_link_dll (info) || info->export_dynamic))))
-++      && (dynamic_symbol
-++	  || (bfd_link_pic (info)
-++	      && (!h || h->root.type != bfd_link_hash_undefweak))))
-+     {
-+       asection *srel;
-+       bfd_boolean is_plt = FALSE;
-+-- 
-+2.20.1
-+
-diff --git a/package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch b/package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch
-new file mode 100644
-index 0000000000..f499426b70
---- /dev/null
-+++ b/package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch
-@@ -0,0 +1,37 @@
-+From 85dcca5997cf3822d6456a5c9c59c46b56adfbb8 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 4 Mar 2020 14:54:27 -0800
-+Subject: [PATCH] bfd: xtensa: fix PR ld/25630
-+
-+bfd/
-+2020-03-05  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Shrink dynamic
-+	relocation sections for any removed reference to a dynamic symbol.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ bfd/elf32-xtensa.c | 7 +++----
-+ 1 file changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
-+index 12ff9f772aaf..65e14d87940c 100644
-+--- a/bfd/elf32-xtensa.c
-++++ b/bfd/elf32-xtensa.c
-+@@ -10148,10 +10148,9 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
-+ 
-+   if ((r_type == R_XTENSA_32 || r_type == R_XTENSA_PLT)
-+       && (input_section->flags & SEC_ALLOC) != 0
-+-      && (dynamic_symbol || bfd_link_pic (info))
-+-      && (!h || h->root.type != bfd_link_hash_undefweak
-+-	  || (dynamic_symbol
-+-	      && (bfd_link_dll (info) || info->export_dynamic))))
-++      && (dynamic_symbol
-++	  || (bfd_link_pic (info)
-++	      && (!h || h->root.type != bfd_link_hash_undefweak))))
-+     {
-+       asection *srel;
-+       bfd_boolean is_plt = FALSE;
-+-- 
-+2.20.1
-+
-diff --git a/package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch b/package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch
-new file mode 100644
-index 0000000000..f499426b70
---- /dev/null
-+++ b/package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch
-@@ -0,0 +1,37 @@
-+From 85dcca5997cf3822d6456a5c9c59c46b56adfbb8 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Wed, 4 Mar 2020 14:54:27 -0800
-+Subject: [PATCH] bfd: xtensa: fix PR ld/25630
-+
-+bfd/
-+2020-03-05  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Shrink dynamic
-+	relocation sections for any removed reference to a dynamic symbol.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ bfd/elf32-xtensa.c | 7 +++----
-+ 1 file changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
-+index 12ff9f772aaf..65e14d87940c 100644
-+--- a/bfd/elf32-xtensa.c
-++++ b/bfd/elf32-xtensa.c
-+@@ -10148,10 +10148,9 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
-+ 
-+   if ((r_type == R_XTENSA_32 || r_type == R_XTENSA_PLT)
-+       && (input_section->flags & SEC_ALLOC) != 0
-+-      && (dynamic_symbol || bfd_link_pic (info))
-+-      && (!h || h->root.type != bfd_link_hash_undefweak
-+-	  || (dynamic_symbol
-+-	      && (bfd_link_dll (info) || info->export_dynamic))))
-++      && (dynamic_symbol
-++	  || (bfd_link_pic (info)
-++	      && (!h || h->root.type != bfd_link_hash_undefweak))))
-+     {
-+       asection *srel;
-+       bfd_boolean is_plt = FALSE;
-+-- 
-+2.20.1
-+
+ define SER2NET_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/ser2net/S50ser2net \
+ 		$(TARGET_DIR)/etc/init.d/S50ser2net
+-- 
+2.25.1
