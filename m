@@ -1,71 +1,42 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun,  8 Mar 2020 03:39:58 -0600
-Subject: [Buildroot] [PATCH 1/1] package/systemd: add userdb support
-Message-ID: <20200308093958.107192-1-james.hilliard1@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 8 Mar 2020 10:42:32 +0100
+Subject: [Buildroot] [PATCH v1] package/libdrm: tests/amdgpu needs
+ atomic_ops
+In-Reply-To: <87imjfutxk.fsf@dell.be.48ers.dk>
+References: <20200307113604.14754-1-ps.report@gmx.net>
+ <87imjfutxk.fsf@dell.be.48ers.dk>
+Message-ID: <20200308104232.1259ef4c@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-systemd-userdbd is a system service that multiplexes user/group lookups
-to all local services that provide JSON user/group record definitions
-to the system. In addition it synthesizes JSON user/group records from
-classic UNIX/glibc NSS user/group records in order to provide full
-backwards compatibility.
+Hello Peter,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/systemd/Config.in  | 11 +++++++++++
- package/systemd/systemd.mk |  7 ++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+On Sun, 08 Mar 2020 09:33:59 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index c727082a1a..051bec5de1 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -233,6 +233,17 @@ config BR2_PACKAGE_SYSTEMD_LOCALED
- 
- 	  http://www.freedesktop.org/software/systemd/man/systemd-localed.service.html
- 
-+config BR2_PACKAGE_SYSTEMD_USERDB
-+	bool "enable userdb daemon"
-+	help
-+	  systemd-userdbd is a system service that multiplexes user/group
-+	  lookups to all local services that provide JSON user/group record
-+	  definitions to the system. In addition it synthesizes JSON
-+	  user/group records from classic UNIX/glibc NSS user/group records
-+	  in order to provide full backwards compatibility.
-+
-+	  https://www.freedesktop.org/software/systemd/man/systemd-userdbd.service.html
-+
- config BR2_PACKAGE_SYSTEMD_LOGIND
- 	bool "enable login daemon"
- 	help
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1c3b81cfcb..2dfe69b4f3 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -42,7 +42,6 @@ SYSTEMD_CONF_OPTS += \
- 	-Dnobody-group=nogroup \
- 	-Didn=true \
- 	-Drepart=false \
--	-Duserdb=false \
- 	-Dhomed=false \
- 	-Dnss-systemd=true
- 
-@@ -305,6 +304,12 @@ else
- SYSTEMD_CONF_OPTS += -Dlocaled=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_USERDB),y)
-+SYSTEMD_CONF_OPTS += -Duserdb=true
-+else
-+SYSTEMD_CONF_OPTS += -Duserdb=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD_COREDUMP),y)
- SYSTEMD_CONF_OPTS += -Dcoredump=true
- SYSTEMD_COREDUMP_USER = systemd-coredump -1 systemd-coredump -1 * /var/lib/systemd/coredump - - Core Dumper
--- 
-2.20.1
+> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>
+>  > Add patch to fix tests/amdpu dependency on atomic_ops.
+>  > Fixes:
+>
+>  >   http://autobuild.buildroot.net/results/e29dae423f3f80d2c34dde9a125bd216a75ad1c0
+>
+>  >   FAILED: tests/amdgpu/amdgpu_test
+>  >   .../host/bin/sparc-linux-gcc  -o tests/amdgpu/amdgpu_test 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/amdgpu_test.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/basic_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/bo_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/cs_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/vce_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/uvd_enc_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/vcn_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/deadlock_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/vm_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/ras_tests.c.o' 'tests/amdgpu/b9f2b1d@@amdgpu_test at exe/syncobj_tests.c.o' -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -Wl,--start-group libdrm.so.2.4.0 amdgpu/libdrm_amdgpu.so.1.0.0 .../host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libcunit.so -Wl,--end-group -pthread '-Wl,-rpath,$ORIGIN/../..:$ORIGIN/../../amdgpu' -Wl,-rpath-link,.../build/libdrm-2.4.100/build/ -Wl,-rpath-link,.../build/li
+>  >  bdrm-2.4.100/build/amdgpu
+>  >   .../host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: tests/amdgpu/b9f2b1d@@amdgpu_test at exe/bo_tests.c.o: undefined reference to symbol 'AO_fetch_compare_and_swap_emulation'
+>  >   .../host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: .../host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libatomic_ops.so.1: error adding symbols: DSO missing from command line
+>
+>  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>
+> Committed after adding the upstream reference.
+>
+> Why are we building these test programs in the first place?
+>
+
+Because there is no option to disable it ;-)
+
+Regards,
+Peter
