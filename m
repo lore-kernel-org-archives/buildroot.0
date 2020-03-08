@@ -1,26 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 08 Mar 2020 20:10:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php: fix build without zlib
-In-Reply-To: <20200308170556.165375-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 8 Mar 2020 18:05:56 +0100")
-References: <20200308170556.165375-1-fontaine.fabrice@gmail.com>
-Message-ID: <877dzuu0hc.fsf@dell.be.48ers.dk>
+Date: Sun, 08 Mar 2020 20:12:27 +0100
+Subject: [Buildroot] [PATCH v1] package/qt5base: fix double-conversion
+ compile for nios2
+In-Reply-To: <20200308171804.19615-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 8 Mar 2020 18:18:04 +0100")
+References: <20200308171804.19615-1-ps.report@gmx.net>
+Message-ID: <8736aiu0dg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > Build will fail if zlib is not found and mysqlnd compression support
- > is not disabled since version 7.4.1 and
- > https://github.com/php/php-src/commit/ee4295b4ce421003c2e1d2af98066826deb23319
-
+ > Add double-conversion upstream patch to enable compile for nios2.
  > Fixes:
- >  - http://autobuild.buildroot.org/results/9496d81437dba55d22a03762dcfe60d632115ab5
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >   http://autobuild.buildroot.net/results/19881951a328ff4df82b5753a23219eb634e86df
+
+ >   ../3rdparty/double-conversion/include/double-conversion/utils.h:114:2: error: #error Target architecture was not detected as supported by Double-Conversion.
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Committed, thanks.
 
