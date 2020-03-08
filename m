@@ -1,42 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Mar 2020 22:22:57 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mariadb: fix
- permissions of data dir when using systemd
-Message-ID: <20200308084027.79FDC7FC66@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun,  8 Mar 2020 03:16:40 -0600
+Subject: [Buildroot] [PATCH 1/1] package/systemd: add repart support
+Message-ID: <20200308091640.65742-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7dbe4d3520930d1d3c2488f5a9d55c92b679efc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+systemd-repart grows and adds partitions to a partition table, based on
+the configuration files described in repart.d.
 
-mysql_install_db is currently called in the systemd unit without
---user=mysql that the sysv script uses. This will generate the initial
-database files with root permissions. However, mysqld runs as user mysql
-so this will cause problems. We fix this by calling chown instead of
-passing the user parameter because an upcoming version bump will fail when
-ran this way.
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit add2c2ba2ec0e3fd18b6f6612dda6ab78ea6affd)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/mariadb/mysqld.service | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/systemd/Config.in  | 9 +++++++++
+ package/systemd/systemd.mk | 8 +++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/package/mariadb/mysqld.service b/package/mariadb/mysqld.service
-index cd308310c6..3eaef173e1 100644
---- a/package/mariadb/mysqld.service
-+++ b/package/mariadb/mysqld.service
-@@ -2,7 +2,7 @@
- Description=MySQL database server
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index c727082a1a..64d30f32aa 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -153,6 +153,15 @@ config BR2_PACKAGE_SYSTEMD_BINFMT
  
- [Service]
--ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql'
-+ExecStartPre=/bin/sh -c 'test "`ls -1 /var/lib/mysql | wc -l`" != "0" || mysql_install_db --basedir=/usr --datadir=/var/lib/mysql && chown -R mysql:mysql /var/lib/mysql'
- ExecStart=/usr/bin/mysqld_safe
- Restart=always
- User=mysql
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-binfmt.service.html
+ 
++config BR2_PACKAGE_SYSTEMD_REPART
++	bool "enable repart support"
++	select BR2_PACKAGE_OPENSSL
++	help
++	  systemd-repart grows and adds partitions to a partition table,
++	  based on the configuration files described in repart.d.
++
++	  https://www.freedesktop.org/software/systemd/man/systemd-repart.html
++
+ config BR2_PACKAGE_SYSTEMD_COREDUMP
+ 	bool "enable coredump hook"
+ 	help
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 1c3b81cfcb..d05541a2f6 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -41,7 +41,6 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dumount-path=/usr/bin/umount \
+ 	-Dnobody-group=nogroup \
+ 	-Didn=true \
+-	-Drepart=false \
+ 	-Duserdb=false \
+ 	-Dhomed=false \
+ 	-Dnss-systemd=true
+@@ -305,6 +304,13 @@ else
+ SYSTEMD_CONF_OPTS += -Dlocaled=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_REPART),y)
++SYSTEMD_CONF_OPTS += -Drepart=true
++SYSTEMD_DEPENDENCIES += openssl
++else
++SYSTEMD_CONF_OPTS += -Drepart=false
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_COREDUMP),y)
+ SYSTEMD_CONF_OPTS += -Dcoredump=true
+ SYSTEMD_COREDUMP_USER = systemd-coredump -1 systemd-coredump -1 * /var/lib/systemd/coredump - - Core Dumper
+-- 
+2.20.1
