@@ -1,49 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Mar 2020 21:06:47 +0100
-Subject: [Buildroot] [git commit] package/ipset: bump to version 7.6
-Message-ID: <20200309140908.EE3AE7FB4C@busybox.osuosl.org>
+Date: Sun, 8 Mar 2020 15:06:01 +0100
+Subject: [Buildroot] [git commit] package/systemd: add dns-over-tls support
+Message-ID: <20200309140910.511398EB58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7df15b5c1e12a8ca96329d1ce1cf0713cd1b0c56
+commit: https://git.buildroot.net/buildroot/commit/?id=d4ebd8cd4ce75d4d14d22f7c30f98f583f3cf0f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See full changelog http://ipset.netfilter.org/changelog.html
+Set default-dns-over-tls to opportunistic when dns-over-tls is enabled
+as it should be fully backwards compatible. The DNSOverTLS config in
+resolved.conf can be used to override default-dns-over-tls.
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ipset/ipset.hash | 6 +++---
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/systemd/systemd.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index 9c95ca420f..fb200585d1 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,6 +1,6 @@
--# From http://ipset.netfilter.org/ipset-7.5.tar.bz2.md5sum.txt
--md5 1f3156c68f6fa6de03d8f3ca0539fb78  ipset-7.5.tar.bz2
-+# From http://ipset.netfilter.org/ipset-7.6.tar.bz2.md5sum.txt
-+md5 e107b679c3256af795261cece864d6d9  ipset-7.6.tar.bz2
- # Calculated based on the hash above
--sha256 a57aee54ab6ffe9e04603a464bbf69d66db976500bb04dd04fd3fbd6efb36a0b  ipset-7.5.tar.bz2
-+sha256 0e7d44caa9c153d96a9b5f12644fbe35a632537a5a7f653792b72e53d9d5c2db  ipset-7.6.tar.bz2
- # Locally calculated
- sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index 383e90af38..869763d322 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 1c3b81cfcb..d97336b7cd 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -351,6 +351,16 @@ else
+ SYSTEMD_CONF_OPTS += -Dresolve=false
+ endif
  
--IPSET_VERSION = 7.5
-+IPSET_VERSION = 7.6
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++SYSTEMD_CONF_OPTS += -Ddns-over-tls=gnutls -Ddefault-dns-over-tls=opportunistic
++SYSTEMD_DEPENDENCIES += gnutls
++else ifeq ($(BR2_PACKAGE_OPENSSL),y)
++SYSTEMD_CONF_OPTS += -Ddns-over-tls=openssl -Ddefault-dns-over-tls=opportunistic
++SYSTEMD_DEPENDENCIES += openssl
++else
++SYSTEMD_CONF_OPTS += -Ddns-over-tls=false -Ddefault-dns-over-tls=no
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
+ SYSTEMD_CONF_OPTS += -Dtimesyncd=true
+ SYSTEMD_TIMESYNCD_USER = systemd-timesync -1 systemd-timesync -1 * - - - Network Time Synchronization
