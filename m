@@ -1,53 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 8 Mar 2020 15:56:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: needs host-python3
-In-Reply-To: <20200308150547.21a882d7@windsurf.home>
-References: <20200308111812.3065154-1-fontaine.fabrice@gmail.com>
- <20200308150547.21a882d7@windsurf.home>
-Message-ID: <CAPi7W81je75sj_ZHsW2W-3jivgL3Q6q7ZACefoHHY_UW762NQQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 8 Mar 2020 16:09:56 +0100
+Subject: [Buildroot] [PATCH v2] package/libnss: fix PowerPc build failure
+In-Reply-To: <20200227110240.14937-1-giulio.benetti@benettiengineering.com>
+References: <20200227110240.14937-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20200308160956.4db79963@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+On Thu, 27 Feb 2020 12:02:40 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-Le dim. 8 mars 2020 ? 15:05, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Sun,  8 Mar 2020 12:18:12 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > host-python3 is a mandatory dependency since bump to version 4.10.0 and
-> > https://gitlab.com/samba-team/devel/samba/-/commit/5ddff307b4af5c82d5064745f5bd2c33bd340ced
->
-> This commit says:
->
-> ""
-> Users wishing to use python2 to build need to specify PYTHON=
-> to both ./configure and make
-> ""
->
-> So it seems like Python 3.x is not necessary. Have you tried that?
-I'm not an expert in waf but we were already setting
-PYTHON="$(HOST_DIR)/bin/python2" in SAMBA4_PYTHON.
-SAMBA4_PYTHON is then passed to configure in SAMBA4_CONFIGURE_CMDS and
-to make in SAMBA4_BUILD_CMDS.
-This indeed allow the user to use python2 in configure and make but
-the waf script will still mandate than python3 is installed on the
-host.
-It should be noted that this dependency is clearly stated in the
-following commit log:
-https://gitlab.com/samba-team/devel/samba/-/commit/05791f40a6e78e628ec4ab2fb0e13b2c7fbb1b78.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+> NSS assumes <sys/auvx.h> is always present but that's not true, so add a
+> patch to check if it exists or not.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+> V1->V2:
+> * improve patch according to upstream:
+>   https://bugzilla.mozilla.org/show_bug.cgi?id=1614183
+> ---
+>  ...heck-if-PPC-__has_include-sys-auxv.h.patch | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 package/libnss/0001-Bug-1614183-Check-if-PPC-__has_include-sys-auxv.h.patch
 
-Fabrice
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
