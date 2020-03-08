@@ -1,95 +1,71 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sun,  8 Mar 2020 00:21:28 -0300
-Subject: [Buildroot] [PATCH] package/spidermonkey: do not build the
- JavaScript shell, by default
-Message-ID: <20200308032128.306-1-unixmania@gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sun, 8 Mar 2020 00:23:05 -0300
+Subject: [Buildroot] [git commit] package/polkit: bump to version 0.116
+In-Reply-To: <CAJ4jsafO8WJT-v9v2kY+QYaDDg+1By_xDMtmLzm_-+DEReORDw@mail.gmail.com>
+References: <20191208145140.33E3E8899E@busybox.osuosl.org>
+ <CAJ4jsacmmUF8eKM9Xs+5vVseg8VrHw-K1APU-O=6DGdyvDJvTg@mail.gmail.com>
+ <20200210093339.1782bd4d@windsurf>
+ <CAJ4jsafO8WJT-v9v2kY+QYaDDg+1By_xDMtmLzm_-+DEReORDw@mail.gmail.com>
+Message-ID: <CAJ4jsads0fXM0+CG+JM2W6hM4=rCpxqVeNVZHGmWm+De837vXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+On Mon, Feb 10, 2020 at 10:29 AM Carlos Santos <unixmania@gmail.com> wrote:
+>
+> On Mon, Feb 10, 2020 at 5:33 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > Hello Carlos,
+> >
+> > On Sun, 9 Feb 2020 21:00:31 -0300
+> > Carlos Santos <unixmania@gmail.com> wrote:
+> >
+> > > > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> > > > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > >
+> > > Argh, the mozjs (spidermonkey) dependency increases the size of the
+> > > target system by 45 MiB!
+> >
+> > Yes, the mozjs dependency is unfortunate, and trust me, we would very
+> > much have liked polkit to use a different JS engine, or no JS at all.
+> > We have been postponing this polkit bump for years due to this. But
+> > this is upstream polkit's decision, and at some point, we have no
+> > choice but to follow what they did.
+> >
+> > If you look at the polkit archive, many years ago there was a patch
+> > series posted to use the ducktape JS engine instead of mozjs. It would
+> > be very nice to revive this work and hopefully bring it upstream.
+> > Indeed, ducktape is 2 orders of magnitude smaller than mozjs I believe.
+> >
+> > > $ file build/buildroot-fs/ext2/target/usr/{bin/js60,lib/libmozjs-60.so}
+> > > build/buildroot-fs/ext2/target/usr/bin/js60:           ELF 64-bit LSB
+> > > executable, x86-64, version 1 (GNU/Linux), dynamically linked,
+> > > interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 4.14.0,
+> > > BuildID[sha1]=93295e8e66ae075577bc76110d7a81fc3f9b6359, stripped
+> > > build/buildroot-fs/ext2/target/usr/lib/libmozjs-60.so: ELF 64-bit LSB
+> > > shared object, x86-64, version 1 (GNU/Linux), dynamically linked,
+> > > BuildID[sha1]=2cda65c78b09727e5ee4ac481f8847ca07953cc9, stripped
+> > >
+> > > $ du -hc build/buildroot-fs/ext2/target/usr/{bin/js60,lib/libmozjs-60.so}
+> > > 23M    build/buildroot-fs/ext2/target/usr/bin/js60
+> >
+> > Is this binary dynamically linked against libmozjs, or statically
+> > linked against it? The fact that it has the same size as libmozjs makes
+> > me think it might be statically linked against it.
+> >
+> > > 23M    build/buildroot-fs/ext2/target/usr/lib/libmozjs-60.so
+> >
+> > Best regards,
+> >
+> > Thomas
+>
+> I'd just add --disable-js-shell to SPIDERMONKEY_CONF_OPTS, since the
+> JS shell is not required.
 
-Add a configuration to enable the JavaScript shell (default off). So
-far only libmozjs is required (by polkit) and the shell takes around
-24MiB.
+Done: https://patchwork.ozlabs.org/patch/1250972/
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
- ....in-install-shell-only-if-it-s-built.patch | 28 +++++++++++++++++++
- package/spidermonkey/Config.in                | 11 ++++++++
- package/spidermonkey/spidermonkey.mk          |  1 +
- 3 files changed, 40 insertions(+)
- create mode 100644 package/spidermonkey/0001-js-src-Makefile.in-install-shell-only-if-it-s-built.patch
-
-diff --git a/package/spidermonkey/0001-js-src-Makefile.in-install-shell-only-if-it-s-built.patch b/package/spidermonkey/0001-js-src-Makefile.in-install-shell-only-if-it-s-built.patch
-new file mode 100644
-index 0000000000..f6092af7ef
---- /dev/null
-+++ b/package/spidermonkey/0001-js-src-Makefile.in-install-shell-only-if-it-s-built.patch
-@@ -0,0 +1,28 @@
-+From b5e4a9926cf50d12e9c5c05c6d1b161e5b662d62 Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <unixmania@gmail.com>
-+Date: Sat, 7 Mar 2020 23:42:02 -0300
-+Subject: [PATCH] js/src/Makefile.in: install shell only if it's built
-+
-+Prevents an installation error if we configure with --disable-js-shell.
-+
-+Signed-off-by: Carlos Santos <unixmania@gmail.com>
-+---
-+ js/src/Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/js/src/Makefile.in b/js/src/Makefile.in
-+index 4ac9f48..9c8fb64 100644
-+--- a/js/src/Makefile.in
-++++ b/js/src/Makefile.in
-+@@ -136,7 +136,7 @@ endif
-+ 
-+ install::
-+ 	$(MAKE) -C build install
-+-	$(MAKE) -C shell install
-++	if [ -d shell ]; then $(MAKE) -C shell install; fi
-+ 
-+ ifdef HAVE_DTRACE
-+ javascript-trace.h: $(srcdir)/devtools/javascript-trace.d
-+-- 
-+2.18.2
-+
-diff --git a/package/spidermonkey/Config.in b/package/spidermonkey/Config.in
-index 5f12110626..e015e84ad2 100644
---- a/package/spidermonkey/Config.in
-+++ b/package/spidermonkey/Config.in
-@@ -37,6 +37,17 @@ config BR2_PACKAGE_SPIDERMONKEY
- 
- 	  https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey
- 
-+if BR2_PACKAGE_SPIDERMONKEY
-+
-+config BR2_PACKAGE_SPIDERMONKEY_JS_SHELL
-+	bool "JS shell"
-+	help
-+	  Build the JavaScript shell.
-+
-+	  WARNING: increases target image size by around 24 MiB.
-+
-+endif
-+
- comment "spidermonkey needs a glibc or musl toolchain with C++, wchar, dynamic library, NPTL, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_SPIDERMONKEY_ARCH_SUPPORTS
-diff --git a/package/spidermonkey/spidermonkey.mk b/package/spidermonkey/spidermonkey.mk
-index 579dc7b864..9bd19b01d1 100644
---- a/package/spidermonkey/spidermonkey.mk
-+++ b/package/spidermonkey/spidermonkey.mk
-@@ -30,6 +30,7 @@ SPIDERMONKEY_CONF_OPTS = \
- 	--host=$(GNU_HOST_NAME) \
- 	--target=$(GNU_TARGET_NAME) \
- 	--disable-jemalloc \
-+	--$(if $(BR2_PACKAGE_SPIDERMONKEY_JS_SHELL),en,dis)able-js-shell \
- 	--enable-shared-js \
- 	--with-system-zlib \
- 	--with-system-nspr \
 -- 
-2.18.2
+Carlos Santos <unixmania@gmail.com>
