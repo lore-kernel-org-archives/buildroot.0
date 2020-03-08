@@ -1,80 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Mar 2020 17:22:55 +0100
-Subject: [Buildroot] [git commit] package/pppd: Add upstream security fix
- for CVE-2020-8597
-Message-ID: <20200308161139.3A3A88FEFA@busybox.osuosl.org>
+Date: Sun, 08 Mar 2020 17:40:03 +0100
+Subject: [Buildroot] [PATCH] package/binutils: fix assertion failure in
+ xtensa ld
+In-Reply-To: <20200306035803.14320-1-jcmvbkbc@gmail.com> (Max Filippov's
+ message of "Thu, 5 Mar 2020 19:58:03 -0800")
+References: <20200306035803.14320-1-jcmvbkbc@gmail.com>
+Message-ID: <87fteiu7fg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfbff1456e397495435b08dbea10dd63035c4df2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
 
-Apply patch from upstream and set PPPD_INGORE_CVES appropriately.
+ > xtensa ld fails with the following message
+ >   ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
+ >   elf32-xtensa.c:3283 in elf_xtensa_finish_dynamic_sections
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pppd/0001-pppd-Fix-bounds-check.patch | 37 +++++++++++++++++++++++++++
- package/pppd/pppd.mk                          |  3 +++
- 2 files changed, 40 insertions(+)
+ > during domoticz package build. It happens because of mismatch between
+ > the size allocated for dynamic relocations in the executable image and
+ > the number of PLT relocations actually written to the image. The
+ > mismatch is caused by the fact that undefined weak symbol is treated as
+ > dynamic (and thus needing PLT relocation), but xtensa linker not
+ > expecting that.
 
-diff --git a/package/pppd/0001-pppd-Fix-bounds-check.patch b/package/pppd/0001-pppd-Fix-bounds-check.patch
-new file mode 100644
-index 0000000000..5d7c51bcac
---- /dev/null
-+++ b/package/pppd/0001-pppd-Fix-bounds-check.patch
-@@ -0,0 +1,37 @@
-+From 8d7970b8f3db727fe798b65f3377fe6787575426 Mon Sep 17 00:00:00 2001
-+From: Paul Mackerras <paulus@ozlabs.org>
-+Date: Mon, 3 Feb 2020 15:53:28 +1100
-+Subject: [PATCH] pppd: Fix bounds check in EAP code
-+
-+Given that we have just checked vallen < len, it can never be the case
-+that vallen >= len + sizeof(rhostname).  This fixes the check so we
-+actually avoid overflowing the rhostname array.
-+
-+Reported-by: Ilja Van Sprundel <ivansprundel@ioactive.com>
-+Signed-off-by: Paul Mackerras <paulus@ozlabs.org>
-+---
-+ pppd/eap.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/pppd/eap.c b/pppd/eap.c
-+index 94407f56..1b93db01 100644
-+--- a/pppd/eap.c
-++++ b/pppd/eap.c
-+@@ -1420,7 +1420,7 @@ int len;
-+ 		}
-+ 
-+ 		/* Not so likely to happen. */
-+-		if (vallen >= len + sizeof (rhostname)) {
-++		if (len - vallen >= sizeof (rhostname)) {
-+ 			dbglog("EAP: trimming really long peer name down");
-+ 			BCOPY(inp + vallen, rhostname, sizeof (rhostname) - 1);
-+ 			rhostname[sizeof (rhostname) - 1] = '\0';
-+@@ -1846,7 +1846,7 @@ int len;
-+ 		}
-+ 
-+ 		/* Not so likely to happen. */
-+-		if (vallen >= len + sizeof (rhostname)) {
-++		if (len - vallen >= sizeof (rhostname)) {
-+ 			dbglog("EAP: trimming really long peer name down");
-+ 			BCOPY(inp + vallen, rhostname, sizeof (rhostname) - 1);
-+ 			rhostname[sizeof (rhostname) - 1] = '\0';
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 4784fe79f8..685666a200 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -11,6 +11,9 @@ PPPD_LICENSE_FILES = \
- 	pppd/tdb.c pppd/plugins/pppoatm/COPYING \
- 	pppdump/bsd-comp.c pppd/ccp.c pppd/plugins/passprompt.c
- 
-+# 0001-pppd-Fix-bounds-check.patch
-+PPPD_IGNORE_CVES += CVE-2020-8597
-+
- PPPD_MAKE_OPTS = HAVE_INET6=y
- ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
- PPPD_DEPENDENCIES += openssl
+ > Fixes: http://autobuild.buildroot.net/results/7885705f1b1c0f31cf21b464150f5509929c1906/
+ > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+ > Backported from: e15a8da9c71336b06cb5f2706c3f6b7e6ddd95a3
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
