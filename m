@@ -1,28 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 8 Mar 2020 15:29:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/opencv3: bump to version 4.2.0
-In-Reply-To: <20200302143516.40900-1-james.hilliard1@gmail.com>
-References: <20200302143516.40900-1-james.hilliard1@gmail.com>
-Message-ID: <20200308152944.619143e8@windsurf.home>
+Date: Sun, 8 Mar 2020 15:42:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/vlc: fix build with opencv3
+In-Reply-To: <20200228133809.687495-1-fontaine.fabrice@gmail.com>
+References: <20200228133809.687495-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200308154220.1b2ccc1d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  2 Mar 2020 07:35:16 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Hello Fabrice,
 
-> We need to set -DPROTOBUF_UPDATE_FILES=ON otherwise our protobuf
-> headers will be incompatible.
+On Fri, 28 Feb 2020 14:38:09 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> Fixes:
+>  - http://autobuild.buildroot.org/results/210424bd33f660aa0757f62a558e1e03faf0f371
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/opencv3/opencv3.hash | 4 ++--
->  package/opencv3/opencv3.mk   | 6 +++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  ...lter-opencv_example.cpp-fix-build-wi.patch | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
+> 
+> diff --git a/package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch b/package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
+> new file mode 100644
+> index 0000000000..04c9958298
+> --- /dev/null
+> +++ b/package/vlc/0010-modules-video_filter-opencv_example.cpp-fix-build-wi.patch
+> @@ -0,0 +1,38 @@
+> +From 67244e60fc1d8c7a9350bac30611f56c398761e5 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Fri, 28 Feb 2020 14:29:47 +0100
+> +Subject: [PATCH] modules/video_filter/opencv_example.cpp: fix build with
+> + opencv 3.4.9
+> +
+> +Convert CV_RGB to cvScalar to avoid the following build failure with
+> +opencv 3.4.9:
+> +
+> +In file included from /home/naourr/work/instance-2/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/opencv2/imgproc/imgproc.hpp:48,
+> +                 from video_filter/opencv_example.cpp:46:
+> +video_filter/opencv_example.cpp: In function 'picture_t* Filter(filter_t*, picture_t*)':
+> +video_filter/opencv_example.cpp:200:46: error: could not convert 'cv::Scalar_<double>((double)0, (double)0, (double)0, (double)0)' from 'cv::Scalar' {aka 'cv::Scalar_<double>'} to 'CvScalar'
+> +             cvRectangle( p_img[0], pt1, pt2, CV_RGB(0,0,0), 3, 8, 0 );
 
-Applied to next, thanks.
+Thanks for looking into this. I must say I don't feel very confident
+about the fix. Have you been able to trace which change in OpenCV
+caused this build issue ?
+
+Also, is the fix still compatible with OpenCV 2.x ? Indeed, VLC
+requires OpenCV > 2.0, so I guess it can still work with some 2.x
+OpenCV version.
+
+Have you considered talking with the OpenCV community to see what is
+the proper fix ?
+
+Thanks!
 
 Thomas
 -- 
