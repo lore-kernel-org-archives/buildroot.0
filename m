@@ -1,110 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  9 Mar 2020 19:44:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 20.0.1
-Message-ID: <20200309184420.3846-1-bernd.kuhls@t-online.de>
+Date: Mon,  9 Mar 2020 20:35:21 +0100
+Subject: [Buildroot] [PATCH 1/3] package/x11r7/xapp_xkbcomp: bump version to
+ 1.4.3
+Message-ID: <20200309193523.185144-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch applied upstream.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d-headers/mesa3d-headers.mk      |  2 +-
- ...util-remove-the-dependency-on-kcmp.h.patch | 42 -------------------
- package/mesa3d/mesa3d.hash                    |  4 +-
- package/mesa3d/mesa3d.mk                      |  2 +-
- 4 files changed, 4 insertions(+), 46 deletions(-)
- delete mode 100644 package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash | 8 +++-----
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index f4927a28c6..d8205d68af 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 20.0.0
-+MESA3D_HEADERS_VERSION = 20.0.1
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch b/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
-deleted file mode 100644
-index 27ae021e08..0000000000
---- a/package/mesa3d/0006-util-remove-the-dependency-on-kcmp.h.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 63ad4535df6a0a938e7391d73adcada05e730c89 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <marek.olsak@amd.com>
--Date: Tue, 18 Feb 2020 16:12:23 -0500
--Subject: [PATCH] util: remove the dependency on kcmp.h
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Fixes: f76cbc7901f7 "util: Add os_same_file_description helper"
--
--Acked-by: Eric Engestrom <eric@engestrom.ch>
--Reviewed-by: Michel D?nzer <mdaenzer@redhat.com>
--Tested-by: Marge Bot <https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3860>
--Part-of: <https://gitlab.freedesktop.org/mesa/mesa/merge_requests/3860>
--
--[ Upstream: https://cgit.freedesktop.org/mesa/mesa/commit/?id=f7bfb10c69dfe48a91e35523cb5ee641bdbf6988 ]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- src/util/os_file.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/src/util/os_file.c b/src/util/os_file.c
--index b502ff4..128fe87 100644
----- a/src/util/os_file.c
--+++ b/src/util/os_file.c
--@@ -34,11 +34,12 @@ os_file_create_unique(const char *filename, int filemode)
-- #if defined(__linux__)
-- 
-- #include <fcntl.h>
---#include <linux/kcmp.h>
-- #include <sys/stat.h>
-- #include <sys/syscall.h>
-- #include <unistd.h>
-- 
--+/* copied from <linux/kcmp.h> */
--+#define KCMP_FILE 0
-- 
-- static ssize_t
-- readN(int fd, char *buf, size_t len)
---- 
--2.25.1
--
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index e2ec6e625d..be48ef4a89 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2020-February/000572.html
--sha256 bb6db3e54b608d2536d4000b3de7dd3ae115fc114e8acbb5afff4b3bbed04b34  mesa-20.0.0.tar.xz
-+# From https://www.mesa3d.org/relnotes/20.0.1.html
-+sha256 6153ba3f8cb0524bbfc08e4db76b408126b2d1be8f789dffe28d1a0461eedde4  mesa-20.0.1.tar.xz
- sha512 3968820029434682fb6644947c76e12b6bb991a3d05cb519a6ea971ecc4aa9b21d03f84b9a452cc21cc77a7981db9e40dd2dfd3ea3dee85b3dd88a59b4842bbb  mesa-20.0.0.tar.xz
- 
- # License
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 9c9f38d17e..8ca419a4cb 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+index 86fd033e3e..98bd0c43a3 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-June/002901.html
+-md5 12610df19df2af3797f2c130ee2bce97  xkbcomp-1.4.2.tar.bz2
+-sha1 9a39cf7a562c152465e04fc7cf1002c59f883870  xkbcomp-1.4.2.tar.bz2
+-sha256 6dd8bcb9be7e85bd7294abe261b8c7b0539d2fc93e41b80fb8bd013767ce8424  xkbcomp-1.4.2.tar.bz2
+-sha512 b00d1eb08c19be86044418c8ea3bfc3c3973406c481878270138a70ed9dab348acb8e4d0af8678879598ffbd7df1c640a63d0abad3d7481758be99af8dd7734e  xkbcomp-1.4.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-February/003037.html
++sha256 06242c169fc11caf601cac46d781d467748c6a330e15b36dce46520b8ac8d435  xkbcomp-1.4.3.tar.bz2
++sha512 827713c0413aecdcad2b61edb7b8c7c7a002e18505b9041f570e2f680907193cb5ff8a5b424695e21110b2d06c145cbf0e397e52347421ee946f06e2a51f135d  xkbcomp-1.4.3.tar.bz2
+ # Locally computed
+ sha256 f1a78f5796fe2374f2b93e579328a02283e57d2a8316484b31799b12debe7ee3  COPYING
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+index 9fcd8c0581..e97f8fdd8b 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 20.0.0
-+MESA3D_VERSION = 20.0.1
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-XAPP_XKBCOMP_VERSION = 1.4.2
++XAPP_XKBCOMP_VERSION = 1.4.3
+ XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
+ XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKBCOMP_LICENSE = MIT
 -- 
 2.25.0
