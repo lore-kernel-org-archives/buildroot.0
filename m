@@ -1,138 +1,109 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 09 Mar 2020 14:21:42 -0000
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 20.0.0
-Message-ID: <20200309140904.7101B7FCEA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libiberty: new package
+Message-ID: <20200309140903.F094A7FCEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=346fda84eb318d1e5f08e3aa8ebf7ebaf341d7dc
+commit: https://git.buildroot.net/buildroot/commit/?id=9c2126c963582ce0100745ca84de4cd2e6e4e212
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added optional dependency to zstd present due to upstream commit:
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=a8d941091f72923561a6c58b46ccb264b6a0e205
+Some packages, like prelink-cross, want to use libiberty but do not bundle
+their own instance (which is good!).
 
-Replaced MESA_EGL_NO_X11_HEADERS define with EGL_NO_X11 due to upstream
-commit:
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=6202a13b71e18dc31ba7e2f4ea915b67eacc1ddb
+However, libiberty is made for being bundled in packages: all GNU
+packages that use libiberty (gcc, Binutils, gdb, et al...) all have their own
+bundled variant. This common practice means that there is no official upstream
+for libiberty, the closest being as part of the combined Binutils-gdb tree.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+So we introduce a new host-only package, that installs just libiberty from a
+Binutils released tarball.
+
+Again, as packages usually bundle libiberty, it usually only installs a static
+version. Furthermore, it does not obey the usual --enable-shared and
+--disable-static flags; it only ever builds a static version.
+
+Furthermore, -fPIC is not used with this library, but some packages may pick it
+to build shared objects. This behavior is the case for host-gdb, for example,
+which accidentally picks that library instead of its internal one.
+
+So, rather than fix the various gdb versions and variants we can use, we ensure
+that the libiberty we install is usable in shared objects, and we always build
+before host-gdb.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[yann.morin.1998 at free.fr:
+  - fix DL_SUBDIR for a host-only package
+  - add licensing info
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mali-t76x/egl.pc                                         | 2 +-
- package/mali-t76x/glesv2.pc                                      | 2 +-
- package/mesa3d-headers/mesa3d-headers.mk                         | 2 +-
- package/mesa3d/mesa3d.hash                                       | 8 ++++----
- package/mesa3d/mesa3d.mk                                         | 9 ++++++++-
- package/nvidia-driver/gl.pc                                      | 2 +-
- ...02-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch | 8 ++++----
- 7 files changed, 20 insertions(+), 13 deletions(-)
+ DEVELOPERS                       |  1 +
+ package/libiberty/libiberty.hash |  5 +++++
+ package/libiberty/libiberty.mk   | 32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 38 insertions(+)
 
-diff --git a/package/mali-t76x/egl.pc b/package/mali-t76x/egl.pc
-index 614b700d64..3de3c3ffd3 100644
---- a/package/mali-t76x/egl.pc
-+++ b/package/mali-t76x/egl.pc
-@@ -8,4 +8,4 @@ Description: ARM Mali implementation of EGL
- Version: 1.5
- Requires:
- Libs: -L${libdir} -lEGL -lGLESv2
--Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-+Cflags: -I${includedir} -DEGL_NO_X11
-diff --git a/package/mali-t76x/glesv2.pc b/package/mali-t76x/glesv2.pc
-index 5997eac63f..6521a3862d 100644
---- a/package/mali-t76x/glesv2.pc
-+++ b/package/mali-t76x/glesv2.pc
-@@ -8,4 +8,4 @@ Description: ARM Mali implementation of OpenGL ESv2
- Version: 2.0
- Requires:
- Libs: -L${libdir} -lGLESv2 -lGLESv1_CM
--Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-+Cflags: -I${includedir} -DEGL_NO_X11
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 7d428f2322..f4927a28c6 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 19.3.4
-+MESA3D_HEADERS_VERSION = 20.0.0
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 3237135b1c..e2ec6e625d 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2020-February/000570.html
--sha256 1da467e6ae2799a517e242462331eafd29ae77d9872f3a845df81f7c308e8fe4  mesa-19.3.4.tar.xz
--sha512 2bbb3dc8f1d839f11fe12cc959393cd69607fa6714b2166b80299e0559d2d3b0ac38ed4e15ac3e5f472264eb24536d1901d350f7409f3a7e00d6f4ccbb2312fb  mesa-19.3.4.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2020-February/000572.html
-+sha256 bb6db3e54b608d2536d4000b3de7dd3ae115fc114e8acbb5afff4b3bbed04b34  mesa-20.0.0.tar.xz
-+sha512 3968820029434682fb6644947c76e12b6bb991a3d05cb519a6ea971ecc4aa9b21d03f84b9a452cc21cc77a7981db9e40dd2dfd3ea3dee85b3dd88a59b4842bbb  mesa-20.0.0.tar.xz
- 
- # License
--sha256 d8d662974fc86e2e640362015e42de3fcc161d435a9f2111ecd8561412feca73  docs/license.html
-+sha256 1ddae7da415352a5b5360ff3a9d7ecf23ba81408f62eeecce0011f32e3ef9da6  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 2a22d2fddc..9c9f38d17e 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 19.3.4
-+MESA3D_VERSION = 20.0.0
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
-@@ -257,4 +257,11 @@ else
- MESA3D_CONF_OPTS += -Dlmsensors=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+MESA3D_CONF_OPTS += -Dzstd=true
-+MESA3D_DEPENDENCIES += zstd
-+else
-+MESA3D_CONF_OPTS += -Dzstd=false
-+endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 69b460f12c..3cb0a78e73 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2555,6 +2555,7 @@ F:	package/keyutils/
+ F:	package/libbsd/
+ F:	package/libedit/
+ F:	package/libgsm/
++F:	package/libiberty/
+ F:	package/libinput/
+ F:	package/libiscsi/
+ F:	package/libpri/
+diff --git a/package/libiberty/libiberty.hash b/package/libiberty/libiberty.hash
+new file mode 100644
+index 0000000000..0dafcea520
+--- /dev/null
++++ b/package/libiberty/libiberty.hash
+@@ -0,0 +1,5 @@
++# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
++sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
 +
- $(eval $(meson-package))
-diff --git a/package/nvidia-driver/gl.pc b/package/nvidia-driver/gl.pc
-index d822763f57..d01f5d6944 100644
---- a/package/nvidia-driver/gl.pc
-+++ b/package/nvidia-driver/gl.pc
-@@ -7,5 +7,5 @@ Name: gl
- Description: Nvidia OpenGL library
- Version: 10.4.2
- Libs: -L${libdir} -lGL -lm -lXext -lX11 -ldl
--Cflags: -I${includedir}  -DMESA_EGL_NO_X11_HEADERS
-+Cflags: -I${includedir}  -DEGL_NO_X11
- glx_tls: no
-diff --git a/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch b/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
-index ffc1b5b8b1..126aa93300 100644
---- a/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
-+++ b/package/waffle/0002-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch
-@@ -4,12 +4,12 @@ Date: Sun, 24 Dec 2017 00:11:45 +0100
- Subject: [PATCH] cmake: forward cflags from *.pc files to waffle cflags
- 
- When building mesa egl without x11 and gles2 the headers need a
--MESA_EGL_NO_X11_HEADERS define to avoid including X11 headers.
-+EGL_NO_X11 define to avoid including X11 headers.
- 
--This define MESA_EGL_NO_X11_HEADERS  is lost while building waffle
--since CGLAGS defined by pc files are not used.
-+This define EGL_NO_X11 is lost while building waffle
-+since CFLAGS defined by pc files are not used.
- 
--MESA_EGL_NO_X11_HEADERS is defined in CFLAGS from egl.pc.
-+EGL_NO_X11 is defined in CFLAGS from egl.pc.
- 
- Signed-off-by: Romain Naour <romain.naour@gmail.com>
- ---
++# Locally computed, same as binutils.hash
++sha256  56bdea73b6145ef6ac5259b3da390b981d840c24cb03b8e1cbc678de7ecfa18d  COPYING.LIB
+diff --git a/package/libiberty/libiberty.mk b/package/libiberty/libiberty.mk
+new file mode 100644
+index 0000000000..6235a8b956
+--- /dev/null
++++ b/package/libiberty/libiberty.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# libiberty
++#
++################################################################################
++
++LIBIBERTY_VERSION = 2.32
++LIBIBERTY_SOURCE = binutils-$(LIBIBERTY_VERSION).tar.xz
++LIBIBERTY_SITE = $(BR2_GNU_MIRROR)/binutils
++HOST_LIBIBERTY_DL_SUBDIR = binutils
++
++# We're only building libiberty here, not the full binutils suite
++LIBIBERTY_LICENSE = LGPL-2.1+
++LIBIBERTY_LICENSE_FILES = COPYING.LIB
++
++LIBIBERTY_SUBDIR = libiberty
++
++# We explicitly disable multilib, as we do in binutils.
++# By default, libiberty installs nothing, so we must force it.
++HOST_LIBIBERTY_CONF_OPTS = \
++	--disable-multilib \
++	--enable-install-libiberty
++
++# Some packages (e.g. host-gdb) will pick this library and build shared
++# objects with it. But libiberty does not honour the --enable-shared and
++# --disable-static flags; it only ever builds a static library no matter
++# what. So we must force -fPIC in build flags.
++HOST_LIBIBERTY_CONF_ENV = \
++	CFLAGS="$(HOST_CFLAGS) -fPIC" \
++	LDFLAGS="$(HOST_LDFLAGS) -fPIC"
++
++$(eval $(host-autotools-package))
