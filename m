@@ -1,62 +1,42 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 9 Mar 2020 13:52:29 +0100
-Subject: [Buildroot] Cross compiling iperf 2 for mips
-In-Reply-To: <1276833545.526853.1583756829124@mail1.libero.it>
-References: <1276833545.526853.1583756829124@mail1.libero.it>
-Message-ID: <20200309135229.26dde92e@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 09 Mar 2020 14:21:40 -0000
+Subject: [Buildroot] [git commit] package/uacme: bump version to 1.0.22
+Message-ID: <20200309140903.8E7EC7FBD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=066d552499fac9bab41971530b114776b9ca27c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 9 Mar 2020 13:27:09 +0100 (CET), absolutely_free at libero.it wrote:
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Hi,
->
-> I am trying to cross compile iperf (version 2) for MIPS big endian (uclibc).
->
-> I used buildroot-2019.05.1, set correct TARGET MIPS (big endian) and C library uClibc-ng.
->
-> I successfully compiled iperf3 with this command:
->
-> $ ./configure --enable-static --disable-shared --target=mips-buildroot-linux-gnu --host=mips-buildroot-linux-gnu CC=/home/user/buildroot-2019.05.1/output/host/bin/mips-linux-gcc --with-openssl=no --disable-profiling --prefix=/opt/iperf3
-
-Why do it outside of buildroot? Why not use the package/iperf3 (BR2_PACKAGE_IPERF3=y) package?
-
->
-> $ make
->
->
-> With iperf2, anyawy, I get this error:
->
->
-> g++ -Wall -O2 -O2 -DHAVE_CONFIG_H -o iperf Client.o Extractor.o isochronous.o Launch.o List.o Listener.o Locale.o PerfSocket.o ReportCSV.o ReportDefault.o Reporter.o Server.o Settings.o SocketAddr.o gnu_getopt.o gnu_getopt_long.o histogram.o main.o service.o sockets.o stdio.o tcp_window_size.o pdfs.o checksums.o ../compat/libcompat.a -lrt
-> /usr/bin/ld: Extractor.o: Relocations in generic ELF (EM: 8)
-> /usr/bin/ld: Extractor.o: Relocations in generic ELF (EM: 8)
-> Extractor.o: error adding symbols: File in wrong format
-> collect2: error: ld returned 1 exit status
-> make[2]: *** [iperf] Error 1
-> make[2]: Leaving directory `/home/user/src/iperf-2.0.13/src'
-> make[1]: *** [all-recursive] Error 1
-> make[1]: Leaving directory `/home/user/src/iperf-2.0.13'
-> make: *** [all] Error 2
->
->
-> my guess (I am pretty neophite :) is that make is using "system" ld, not the one from toolchain.
->
-> Anyway, I tried to manually export LD variable to /home/user/buildroot-2019.05.1/output/host/bin/mips-buildroot-linux-uclibc-ld but I got exactly same error.
-
-Why do it outside of buildroot? Why not use the package/iperf (BR2_PACKAGE_IPERF=y) package?
-
-Regards,
-Peter
-
->
->
-> Any suggestion? Thank you!
->
->
->
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index b8d631d50b..5c68680b54 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	c80bbee3c2ac3a64f70abe23be3b7768039785863170ac062625407a0b61e635        uacme-1.0.21.tar.gz
++sha256	08070779232c9711a227189ee2d3cb55042f6be2ea0aa59525cb7b554c4688b0        uacme-1.0.22.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 5813399c56..c5931e2682 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UACME_VERSION = 1.0.21
++UACME_VERSION = 1.0.22
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
