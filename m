@@ -1,108 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 09 Mar 2020 14:21:40 -0000
-Subject: [Buildroot] [git commit] package/openfpgaloader: new package
-Message-ID: <20200309140903.C93067FBD5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libubootenv: bump to version
+ ba952d0
+Message-ID: <20200309140903.A99067FBD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c27c7ea4648f1ea071075eacca8ab15ea218fa89
+commit: https://git.buildroot.net/buildroot/commit/?id=11c87edde2eef60b56168df39520fe67555e3f59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-openFPGALoader is a tool for programming FPGA.
+This includes the following changes:
 
-Signed-off-by: Jean Burgat <jeanburgat33@gmail.com>
+ba952d0 BUG: variable lists not released in close()
+690f868 Variables are not removed when loading from file
+9e3586a Make sure there's no file descriptor leakage in case of error
+03647c4 Check config file defines a non-zero Sector size
+3b2d4f1 Check environment size from fw_env.config
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |  3 +++
- package/Config.in                          |  1 +
- package/openfpgaloader/Config.in           | 18 ++++++++++++++++++
- package/openfpgaloader/openfpgaloader.hash |  3 +++
- package/openfpgaloader/openfpgaloader.mk   | 18 ++++++++++++++++++
- 5 files changed, 43 insertions(+)
+ package/libubootenv/libubootenv.hash | 2 +-
+ package/libubootenv/libubootenv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e4a3bcb24a..69b460f12c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1216,6 +1216,9 @@ F:	package/quota/
- N:	Jason Pruitt <jrspruitt@gmail.com>
- F:	package/librtlsdr/
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index bde2ac30e8..383f550359 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 332c45d46401f1859f0781fd0fd316bb1c251264674677c26a4d9b9e1c592719 libubootenv-879c0731fa0725785b9fa4499bbf6aacd04ee4c2.tar.gz
++sha256 dc84eefd7dcde46e6754517be37dc0c5a6cd07d38db06564eb54acd9b9ff936e libubootenv-ba952d05ec9ab16029816a06d956bac7fb4e9832.tar.gz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index 99cbd0da23..44f8478833 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+N:	Jean Burgat <jeanburgat33@gmail.com>
-+F:	package/openfpgaloader/
-+
- N:	Jens Kleintje <scooby22@web.de>
- F:	package/gcnano-binaries/
- 
-diff --git a/package/Config.in b/package/Config.in
-index dfa3f34b9d..53cf280c8e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -499,6 +499,7 @@ endmenu
- 	source "package/ofono/Config.in"
- 	source "package/on2-8170-modules/Config.in"
- 	source "package/open2300/Config.in"
-+	source "package/openfpgaloader/Config.in"
- 	source "package/openipmi/Config.in"
- 	source "package/openocd/Config.in"
- 	source "package/openpowerlink/Config.in"
-diff --git a/package/openfpgaloader/Config.in b/package/openfpgaloader/Config.in
-new file mode 100644
-index 0000000000..9835b84b64
---- /dev/null
-+++ b/package/openfpgaloader/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_OPENFPGALOADER
-+	bool "openfpgaloader"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libftdi1
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_INSTALL_LIBSTDCPP # libftdipp1
-+	depends on BR2_USE_WCHAR # libftdipp1
-+	select BR2_PACKAGE_ARGP_STANDALONE \
-+	       if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL # argp
-+	select BR2_PACKAGE_LIBFTDI1
-+	select BR2_PACKAGE_LIBFTDI1_LIBFTDIPP1
-+	help
-+	  Universal utility for programming FPGA
-+
-+	  https://github.com/trabucayre/openFPGALoader/
-+
-+comment "openfpgaloader needs udev, a toolchain w/ threads, wchar, C++"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/openfpgaloader/openfpgaloader.hash b/package/openfpgaloader/openfpgaloader.hash
-new file mode 100644
-index 0000000000..a084e938b0
---- /dev/null
-+++ b/package/openfpgaloader/openfpgaloader.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  fcff4999164ee2d3734f16b7f1d2063b3a68e237921e8d63c2afe75e16cdc7ce  openfpgaloader-849e5751e06d4d00f323205d5f02ee01f9f59a61.tar.gz
-+sha256  8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef  LICENSE
-diff --git a/package/openfpgaloader/openfpgaloader.mk b/package/openfpgaloader/openfpgaloader.mk
-new file mode 100644
-index 0000000000..f806fd68f9
---- /dev/null
-+++ b/package/openfpgaloader/openfpgaloader.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# openfpgaloader
-+#
-+################################################################################
-+
-+OPENFPGALOADER_VERSION = 849e5751e06d4d00f323205d5f02ee01f9f59a61
-+OPENFPGALOADER_SITE = $(call github,trabucayre,openFPGALoader,$(OPENFPGALOADER_VERSION))
-+OPENFPGALOADER_LICENSE = AGPL-3.0
-+OPENFPGALOADER_LICENSE_FILES = LICENSE
-+OPENFPGALOADER_DEPENDENCIES = libftdi1 udev
-+
-+ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-+OPENFPGALOADER_DEPENDENCIES += argp-standalone
-+OPENFPGALOADER_CONF_OPTS += -DCMAKE_CXX_STANDARD_LIBRARIES="-largp"
-+endif
-+
-+$(eval $(cmake-package))
+-LIBUBOOTENV_VERSION = 879c0731fa0725785b9fa4499bbf6aacd04ee4c2
++LIBUBOOTENV_VERSION = ba952d05ec9ab16029816a06d956bac7fb4e9832
+ LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
