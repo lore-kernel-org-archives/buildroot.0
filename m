@@ -1,96 +1,93 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Mar 2020 21:37:23 +0100
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: set status to
- 'na' for virtual packages
-Message-ID: <20200309140909.E9F8D8E780@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  9 Mar 2020 15:50:38 +0100
+Subject: [Buildroot] [PATCH v1] package/php: fix aarch64 uclibc-ng compile
+Message-ID: <20200309145038.18093-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb879c1954f0b8c3ab42f494ac9b9be37b148a4a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The aarch64 compile uses the sys/auxv.h header which is not
+provided by ulcibc-ng. Add configure.ac patch to check for
+the header before using it in ext/standard/crc32.c.
 
-If there is no infra set or infra is virtual the status is set to 'na'.
+Fixes:
 
-This is done for the follwing checks:
- - license
- - license-files
- - hash
- - hash-license
- - patches
- - version
+  https://bugs.busybox.net/show_bug.cgi?id=12626
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  build/php-7.4.3/ext/standard/crc32.c:26:12: schwerwiegender Fehler: sys/auxv.h: Datei oder Verzeichnis nicht gefunden
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- support/scripts/pkg-stats | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ ...Check-for-sys-auxv.h-before-using-it.patch | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index a15d0ec24b..59b6f388bd 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -131,6 +131,15 @@ class Package:
-     def patch_count(self):
-         return len(self.patch_files)
- 
-+    @property
-+    def has_valid_infra(self):
-+        try:
-+            if self.infras[0][1] == 'virtual':
-+                return False
-+        except IndexError:
-+                return False
-+        return True
+diff --git a/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch b/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
+new file mode 100644
+index 0000000000..265bb4248c
+--- /dev/null
++++ b/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
+@@ -0,0 +1,59 @@
++From f150702d5ab72878d45b722b6d7d4194db92c44a Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Mon, 9 Mar 2020 15:36:48 +0100
++Subject: [PATCH] Check for sys/auxv.h before using it.
 +
-     def set_infra(self):
-         """
-         Fills in the .infras field
-@@ -152,6 +161,11 @@ class Package:
-         """
-         Fills in the .status['license'] and .status['license-files'] fields
-         """
-+        if not self.has_valid_infra:
-+            self.status['license'] = ("na", "no valid package infra")
-+            self.status['license-files'] = ("na", "no valid package infra")
-+            return
++Fixes aarch64 compile wiht uclibc-ng (does not provide
++sys/auxv.h header file).
 +
-         var = self.pkgvar()
-         self.status['license'] = ("error", "missing")
-         self.status['license-files'] = ("error", "missing")
-@@ -165,6 +179,11 @@ class Package:
-         """
-         Fills in the .status['hash'] field
-         """
-+        if not self.has_valid_infra:
-+            self.status['hash'] = ("na", "no valid package infra")
-+            self.status['hash-license'] = ("na", "no valid package infra")
-+            return
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac         | 1 +
++ ext/standard/crc32.c | 9 +++++++--
++ 2 files changed, 8 insertions(+), 2 deletions(-)
 +
-         hashpath = self.path.replace(".mk", ".hash")
-         if os.path.exists(hashpath):
-             self.status['hash'] = ("ok", "found")
-@@ -175,6 +194,10 @@ class Package:
-         """
-         Fills in the .patch_count, .patch_files and .status['patches'] fields
-         """
-+        if not self.has_valid_infra:
-+            self.status['patches'] = ("na", "no valid package infra")
-+            return
++diff --git a/configure.ac b/configure.ac
++index 5219a5f2..caf62302 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -440,6 +440,7 @@ resolv.h \
++ strings.h \
++ syslog.h \
++ sysexits.h \
+++sys/auxv.h \
++ sys/ioctl.h \
++ sys/file.h \
++ sys/mman.h \
++diff --git a/ext/standard/crc32.c b/ext/standard/crc32.c
++index c3ca5903..e59ab45f 100644
++--- a/ext/standard/crc32.c
+++++ b/ext/standard/crc32.c
++@@ -17,10 +17,15 @@
++ */
++ 
++ #include "php.h"
+++#ifdef PHP_WIN32
+++#include "config.w32.h"
+++#else
+++#include <php_config.h>
+++#endif
++ #include "basic_functions.h"
++ #include "crc32.h"
++ 
++-#if defined(__aarch64__)
+++#if defined(__aarch64__) && defined(HAVE_SYS_AUXV_H)
++ # include <arm_acle.h>
++ # if defined(__linux__)
++ #  include <sys/auxv.h>
++@@ -85,7 +90,7 @@ PHP_NAMED_FUNCTION(php_if_crc32)
++ 
++ 	crc = crcinit^0xFFFFFFFF;
++ 
++-#if defined(__aarch64__)
+++#if defined(__aarch64__) && defined(HAVE_SYS_AUXV_H)
++ 	if (has_crc32_insn()) {
++ 		crc = crc32_aarch64(crc, p, nr);
++ 		RETURN_LONG(crc^0xFFFFFFFF);
++-- 
++2.25.1
 +
-         pkgdir = os.path.dirname(self.path)
-         for subdir, _, _ in os.walk(pkgdir):
-             self.patch_files = fnmatch.filter(os.listdir(subdir), '*.patch')
-@@ -554,6 +577,10 @@ def check_package_latest_version(packages):
-     for pkg, r in zip(packages, results):
-         pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
- 
-+        if not pkg.has_valid_infra:
-+            pkg.status['version'] = ("na", "no valid package infra")
-+            continue
-+
-         if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
-             pkg.status['version'] = ('warning', "Release Monitoring API error")
-         elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
+-- 
+2.25.1
