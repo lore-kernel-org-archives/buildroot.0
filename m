@@ -1,82 +1,49 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 9 Mar 2020 16:39:12 -0600
-Subject: [Buildroot] [git commit] package/systemd: drop leftover patch
-In-Reply-To: <20200309204847.15A7A800C5@busybox.osuosl.org>
-References: <20200309204847.15A7A800C5@busybox.osuosl.org>
-Message-ID: <CADvTj4qpoUC356K5fDUXMDA8tgxPcho0od6A9f8WrLFwt0H15w@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 9 Mar 2020 23:42:33 +0100
+Subject: [Buildroot] [PATCH v6 01/28] package/qt5base: Do not build
+ shared libs if BR2_STATIC_LIBS is chosen
+In-Reply-To: <20200309222154.0eec932a@windsurf.home>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-2-anaumann@ultratronik.de>
+ <20200309222154.0eec932a@windsurf.home>
+Message-ID: <20200309234233.23d66662@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 9, 2020 at 3:01 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Hello Thomas,
+
+On Mon, 9 Mar 2020 22:21:54 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+
+
+> From package/qt5/Config.in:
 >
-> commit: https://git.buildroot.net/buildroot/commit/?id=1a07ba73e4b5c8ef95a5de87bc90a66a776a712b
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> menuconfig BR2_PACKAGE_QT5
+>         bool "Qt5"
+>         depends on BR2_INSTALL_LIBSTDCPP
+>         depends on BR2_USE_WCHAR
+>         depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>         depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+>         depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
+>         # no built-in double-conversion support
+>         depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
+>         depends on !BR2_STATIC_LIBS
 >
-> On master during the stabilisation phase, a new patch was added to
-> systemd; in parallel, on the next branch, systemd was bumped. Then, when
-> next was merged into master, there was no merge conflict, so the uneeded
-> patch was left unnoticed.
->
-> That patch was applied upstream, and is present in the version we now
-> have, so it no longer applies.
->
-> Drop that patch.
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Reviewed-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...seed-add-missing-header-for-GRND_NONBLOCK.patch | 39 ----------------------
->  1 file changed, 39 deletions(-)
->
-> diff --git a/package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch b/package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch
-> deleted file mode 100644
-> index e74df10e9d..0000000000
-> --- a/package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch
-> +++ /dev/null
-> @@ -1,39 +0,0 @@
-> -From 806e2011a0ea684b10a07b74c4ee0f817437e8c6 Mon Sep 17 00:00:00 2001
-> -From: Romain Naour <romain.naour@smile.fr>
-> -Date: Sun, 1 Mar 2020 15:19:01 +0100
-> -Subject: [PATCH] random-seed: add missing header for GRND_NONBLOCK
-> -
-> -GRND_NONBLOCK has been introduced with the 3.17 kernel version [1]
-> -while adding getrandom(2) system call.
-> -
-> -The header missing_random.h is needed for random-seed.c when building
-> -with old toolchain, such Sourcery CodeBench ARM 2014.05.
-> -
-> -Fixes:
-> -https://gitlab.com/buildroot.org/buildroot/-/jobs/454255917
-> -
-> -[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=c6e9d6f38894798696f23c8084ca7edbf16ee895
-> -
-> -Upstream status:
-> -https://github.com/systemd/systemd/pull/14988
-> -
-> -Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ----
-> - src/random-seed/random-seed.c | 1 +
-> - 1 file changed, 1 insertion(+)
-> -
-> -diff --git a/src/random-seed/random-seed.c b/src/random-seed/random-seed.c
-> -index 2fcbcb281a..596bff98f1 100644
-> ---- a/src/random-seed/random-seed.c
-> -+++ b/src/random-seed/random-seed.c
-> -@@ -19,6 +19,7 @@
-> - #include "io-util.h"
-> - #include "log.h"
-> - #include "main-func.h"
-> -+#include "missing_random.h"
-> - #include "missing_syscall.h"
-> - #include "mkdir.h"
-> - #include "parse-util.h"
-> ---
-> -2.24.1
-> -
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+That is funny, depends on !BR2_nios2 because of double conversion,
+just fixed by 'package/qt5base: fix double-conversion compile for nios2' ([1]),
+which was a autobuild failure..., but I think QT5 was enabled via
+package/pinentry/Config.in without the '!BR2_arc && !BR2_nios2 && !BR2_xtensa'
+dependency....
+
+Seems !BR2_nios2 can be dropped immediately from QT5 and !BR2_xtensa' after
+back porting the second part from [2]...
+
+Regards,
+Peter
+
+
+[1] https://git.buildroot.net/buildroot/commit/?id=e2fdb41f711db8894f9c5c83f32250728d4c3aa9
+[2] https://github.com/google/double-conversion/commit/a54561be5588ac9b16d3c20760b9b554168bb8aa
