@@ -1,128 +1,99 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Mar 2020 08:26:52 +0100
-Subject: [Buildroot] Buildroot 2020.02 released
-Message-ID: <87v9neq98j.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 9 Mar 2020 09:12:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.18.0
+In-Reply-To: <CADvTj4p7bNSX6C+Y6Lo_cuHMT+4ifdJgckm2mEPX1tvyFyMTdQ@mail.gmail.com>
+References: <20200303230943.24334-1-james.hilliard1@gmail.com>
+ <20200305210537.42d4c081@windsurf>
+ <CADvTj4p7bNSX6C+Y6Lo_cuHMT+4ifdJgckm2mEPX1tvyFyMTdQ@mail.gmail.com>
+Message-ID: <0b0b94ef-53a8-3f93-2cc6-09be6b5d318f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-Buildroot 2020.02 is released - Go download it at:
 
-http://buildroot.net/downloads/buildroot-2020.02.tar.gz
+On 05/03/2020 21:23, James Hilliard wrote:
+> On Thu, Mar 5, 2020 at 1:05 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>>
+>> Hello James,
+>>
+>> +Arnout, as there is a meson/pkg-config question.
+>>
+>> Thanks for the patch. Two questions below.
+>>
+>> On Tue,  3 Mar 2020 16:09:43 -0700
+>> James Hilliard <james.hilliard1@gmail.com> wrote:
+>>
+>>> diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+>>> index e325c6d752..6de92f63d9 100644
+>>> --- a/package/wayland/wayland.mk
+>>> +++ b/package/wayland/wayland.mk
+>>> @@ -4,7 +4,7 @@
+>>>  #
+>>>  ################################################################################
+>>>
+>>> -WAYLAND_VERSION = 1.17.0
+>>> +WAYLAND_VERSION = 1.18.0
+>>>  WAYLAND_SITE = http://wayland.freedesktop.org/releases
+>>>  WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+>>>  WAYLAND_LICENSE = MIT
+>>> @@ -13,12 +13,12 @@ WAYLAND_INSTALL_STAGING = YES
+>>>  WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
+>>>  HOST_WAYLAND_DEPENDENCIES = host-pkgconf host-expat host-libffi host-libxml2
+>>>
+>>> -# 0002-configure-add-option-to-disable-tests.patch
+>>> -WAYLAND_AUTORECONF = YES
+>>> +WAYLAND_CONF_OPTS = \
+>>> +     -Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
+>>
+>> Are you sure this is needed since commit
+>> 4e0bc29993376613d200e892d491e31ea5a49622 ? Indeed, with this commit,
+>> meson is properly able to use pkg-config either for native builds or
+>> cross builds.
+> It was failing for me without this.
 
-or
+ That means something is wrong with commit 4e0bc29933.
 
-http://buildroot.net/downloads/buildroot-2020.02.tar.bz2
+ Ideally we should find out what exactly is going on here and make sure things
+are done properly in our meson integration. Unfortunately, I don't have time to
+look at this myself for at least the coming 2 months. So I'm OK with merging
+this patch as is for the time being.
 
-Or get it from Git:
+>>
+>>> +     -Dtests=false \
+>>> +     -Ddocumentation=false
+>>>
+>>> -# wayland-scanner is only needed for building, not on the target
+>>> -WAYLAND_CONF_OPTS = --with-host-scanner --disable-tests
+>>
+>> So how is the scanner thing working these days? With the meson build
+>> logic, it doesn't build the scanner when cross-compiling, and knows
+>> that it should use a pre-installed scanner ?
+> Yes, it knows there is a pre-installed scanner due to this:
+> -Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig
+> See:
+> https://github.com/wayland-project/wayland/blob/1.18.0/src/meson.build#L57-L59
 
-git://git.buildroot.net/buildroot
+ AFAIU, meson doesn't have a way to build a program twice (once for target and
+once for build), so the wayland mesonbuild uses a pre-installed one when
+cross-compiling.
 
-Please give it a spin and report any problems to the mailing list or
-bug tracker.
+ A better solution for upstream wayland would probably be to repeat the
+definition of wayland_scanner as wayland_scanner_for_build (with install: false
+and native: true).
 
-Again a very active development cycle with more than 1600 changes and
-contributions from more than 120 unique contributors!
+ Regards,
+ Arnout
 
-Of noteworthy new features/changes we have:
 
-- Add experimental support for building with a per-package target and
-  host directory. This still has some rough edges, but brings a number
-  of advantages:
-
-  - Packages will only be able to access the explicitly listed
-    dependencies and not any other packages that happen to be built
-    before, ensuring correct dependency information in Buildroot.
-
-  - Possibility for top-level parallel builds, speeding up builds on
-    multicore machines.
-
-- Architecture: Add support for ARC-HS38 with 64bit multiplier variant,
-  allow building glibc for big endian ARC, handle 16KB MMU page size for
-  ARC in toolchain wrapper.
-
-- Toolchain: Add binutils 2.33.1, GCC 7.5.0, Arm 9.2-2019.12 toolchains,
-  ARC 2019.09 toolchain. Allow using custom kernel headers newer than
-  what is known by Buildroot.
-
-- pkg-stats: Support for CVE vulnerability reporting by comparing to NVD
-  database.
-
-- Util-linux: Ensure that hwclock is built without GPLv3 code. Notice
-  that builds with hwclock has contained GPLv3-licensed code since
-  util-linux 2.30 (Buildroot 2017.08+)
-
-- New defconfigs: Beelink GS1, Raspberrypi4 64bit
-
-- New packages: alura, avro-c, bubblewrap, cctz, cereal, qcpuburn-arm,
-  elixir, erlang-base64url, erlang-idna, erlang-jose, erlang-p1-acme,
-  erlang-p1-mqtree, erlang-p1-yconf, fluid-soundfont, fluidsynth,
-  gcnano-binaries, gensio, glslsandbox-player, libargon2,
-  libmodsecurity, libpam-nfc, libtelnet, lua-codegen, lua-livr,
-  lua-livr-extra, lua-rotas, lua-silva, mfoc, network-manager-openvpn,
-  nginx-modsecurity, perl-crypt-openssl-aes, perl-math-prime-util,
-  pipewire, ptm2human, python-aenum, python-aiohttp-debugtoolbar,
-  python-aiohttp-mako, python-aiologstash, python-aiosignal,
-  python-aiozipkin, python-async-lru, python-avro, python-bunch,
-  python-crontab, python-dnspython, python-entrypoints, python-esptool,
-  python-frozenlist, python-future, python-gitdb, python-janus,
-  python-lockfile, python-logstash, python-nested-dict, python-pbr,
-  python-pyaes, python-pydantic, python-smmap2, python-sockjs,
-  python-zc-lockfile, raspi-gpio, rocksdb, sdbusplus, spidermonkey,
-  thermald, ti-sgx-libgbm, tinyssh, tio, umtprd, weston-imx,
-  wireguard-linux-compat, wireguard-tools, xdg-dbus-proxy
-
-And the usual package version updates and bug fixes. See the CHANGES
-file for details:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02
-
-Upgrading from 2019.02.x:
-
-In addition to these changes, for people upgrading from 2019.02.x the
-most noteworthy changes since that release are:
-
-- Dependencies: Gcc/g++ 4.8 or newer is now required on the build host.
-
-- Br2-external: Add support for injecting additional options to the list
-  of preconfigured external toolchains and libjpeg and openssl providers
-  using files under provides/. See the manual for details.
-
-- Br2-external: Linux kernel extensions can now also be provided in an
-  external tree by adding packages under linux/linux-ext-*.mk. See the
-  manual for details.
-
-- Infrastructure: show-info and <pkg>-show-info make targets
-  added to output package metadata in JSON format for external
-  use.
-
-- Fakeroot now works correctly under Microsoft Windows 10 Services for
-  Linux, which does not provide SYSV IPC support
-
-- Removed packages: alljoyn, alljoyn-base, alljoyn-tcl-base,
-  bluez_utils, celt051, devmem2, erlang-p1-iconv, eventlog, fis,
-  gadgetfs-test, gstreamer, gst-ffmpeg, gst-fsl-plugins, gst-omapfb,
-  gst-plugins-bad, gst-plugins-base, gst-plugins-good, gst-plugins-ugly,
-  kodi-audiodecoder-opus, kodi-screensaver-planestate,
-  kodi-visualisation-waveforhue, libamcodec, libplayer, libump, lunit,
-  odroid-mali, odroid-scripts, perl-digest-md5, perl-mime-base64,
-  perl-net-ping, python-pysnmp-apps, python-scapy3k, riscv-pk, sunxi-mali,
-  ustr, wireguard, xapp_mkfontdir
-
-Future:
-
-This release will be become our new long term support releases, which
-means it will be supported with security and other important fixes until
-2021.02 is out. The previous 2019.02.x LTS release will see atleast one
-more update before it becomes EOL in April, so start migration to
-2020.02 soon.
-
-The next release will be 2020.05. Expect the first release candidate
-in early May and the final release at the end of the month.
-
--- 
-Bye, Peter Korsgaard
+>>
+>> Thanks!
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
