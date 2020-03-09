@@ -1,127 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 09 Mar 2020 14:21:43 -0000
-Subject: [Buildroot] [git commit] package/libeXosip2: bump to version 5.1.1
-Message-ID: <20200309140904.4A0677F8C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/smartmontools: bump to version 7.1
+Message-ID: <20200309140904.6261B7F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e035d765f69575c938e80e063dd817311298a14
+commit: https://git.buildroot.net/buildroot/commit/?id=0910230231e66c1339b18e7b8326745760ef3c0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Removed patch that was applied upstream
-- Removed AUTORECONF request that came with patch
-- Updated library's download name
+- systemd optional dependency has been added in version 7.0
+- Update indentation of hash file (two spaces)
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0001-use-pkg-config-to-detect-openssl.patch    | 62 ----------------------
- package/libeXosip2/libeXosip2.hash                 |  2 +-
- package/libeXosip2/libeXosip2.mk                   |  7 ++-
- 3 files changed, 4 insertions(+), 67 deletions(-)
+ package/smartmontools/smartmontools.hash | 8 +++++---
+ package/smartmontools/smartmontools.mk   | 9 ++++++++-
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/package/libeXosip2/0001-use-pkg-config-to-detect-openssl.patch b/package/libeXosip2/0001-use-pkg-config-to-detect-openssl.patch
-deleted file mode 100644
-index 69e349f205..0000000000
---- a/package/libeXosip2/0001-use-pkg-config-to-detect-openssl.patch
-+++ /dev/null
-@@ -1,62 +0,0 @@
--configure: use pkg-config to find openssl
--
--The current check is broken for static linking, since the openssl
--libs need to be linked against libz, which is missing in the link
--command when doing a static build:
--    http://autobuild.buildroot.net/results/787/787cd9992b00d8008641af208f5fb7c4afb40b06/build-end.log
--
--Instead of trying convoluted tests to decide what additional libs
--are required, just delegate this job to pkg-config.
--
--At the same time, fix a few legacy, deprecated constructs in favour
--of their new counterparts.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
-----
--Upstream status: submitted, but no public mailing list (sent to the
--mail documented in: http://www.antisip.com/doc/exosip2/index.html )
--
--diff -durN libeXosip2-3.6.0.orig/configure.in libeXosip2-3.6.0/configure.in
----- libeXosip2-3.6.0.orig/configure.in	2014-06-22 23:58:26.549487427 +0200
--+++ libeXosip2-3.6.0/configure.in	2014-06-22 23:59:12.822008499 +0200
--@@ -44,7 +44,7 @@
-- AC_CONFIG_AUX_DIR(scripts)
-- AC_CONFIG_HEADERS(config.h)
-- AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
---AM_ACLOCAL_INCLUDE(scripts)
--+AC_CONFIG_MACRO_DIR([scripts])
-- 
-- AC_CANONICAL_HOST
-- 
--@@ -371,13 +371,15 @@
-- 
-- AC_ARG_ENABLE(openssl,
-- 	[  --enable-openssl        enable support for openssl],
---	enable_openssl=$enableval,enable_openssl="yes")
--+	enable_openssl=$enableval,enable_openssl="auto")
-- 
---if test "$enable_openssl" = "yes" ; then
---	AC_CHECK_HEADERS(openssl/ssl.h)
---	AC_CHECK_LIB(ssl,SSL_CTX_new,[EXOSIP_LIB="$EXOSIP_LIB -lssl"])
---	AC_CHECK_LIB(crypto,X509_get_issuer_name,[EXOSIP_LIB="$EXOSIP_LIB -lcrypto"])
---fi
--+AS_IF([test "$enable_openssl" = "yes" -o "$enable_openssl" = "auto"],
--+      [PKG_CHECK_MODULES([SSL], [openssl],
--+                         [EXOSIP_LIB="$EXOSIP_LIB $SSL_LIBS"],
--+                         [AS_IF([test "$enable_openssl" = "yes"],
--+                                [AC_MSG_ERROR([can not find openssl])])
--+                         ])
--+      ])
-- 
-- AC_ARG_ENABLE(srvrec,
-- 	[  --enable-srvrec         enable support for SRV records DNS queries (yes) ],
--diff -durN build/libeXosip2-3.6.0.orig/Makefile.am build/libeXosip2-3.6.0/Makefile.am
----- libeXosip2-3.6.0.orig/Makefile.am	2014-06-23 00:14:25.328226745 +0200
--+++ libeXosip2-3.6.0/Makefile.am	2014-06-23 00:14:38.296371236 +0200
--@@ -1,4 +1,4 @@
---
--+ACLOCAL_AMFLAGS = -I scripts
-- EXTRA_DIST = README autogen.sh
-- 
-- SUBDIRS = scripts platform src include tools help
-diff --git a/package/libeXosip2/libeXosip2.hash b/package/libeXosip2/libeXosip2.hash
-index 86335a3c47..a7d3c56d00 100644
---- a/package/libeXosip2/libeXosip2.hash
-+++ b/package/libeXosip2/libeXosip2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 91da1a084c9ab663afe04b493342e075ad59ac54a1af011c7f2ba4543a923564 libeXosip2-3.6.0.tar.gz
-+sha256 21420c00bf8e0895ff36161766beec12b7e6f1d371030c389dba845e271272e2 libexosip2-5.1.1.tar.gz
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
-diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
-index 04f8672c40..4bd8922b41 100644
---- a/package/libeXosip2/libeXosip2.mk
-+++ b/package/libeXosip2/libeXosip2.mk
-@@ -4,7 +4,9 @@
+diff --git a/package/smartmontools/smartmontools.hash b/package/smartmontools/smartmontools.hash
+index ffa1e8f97e..bec007aabd 100644
+--- a/package/smartmontools/smartmontools.hash
++++ b/package/smartmontools/smartmontools.hash
+@@ -1,5 +1,7 @@
+-# From http://sourceforge.net/projects/smartmontools/files/smartmontools/6.5/
+-md5	093aeec3f8f39fa9a37593c4012d3156	smartmontools-6.5.tar.gz
+-sha1	7e788b429534a4ae627858fbcc826b93402cee7e	smartmontools-6.5.tar.gz
++# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.1/
++md5  430cd5f64caa4524018b536e5ecd9c29  smartmontools-7.1.tar.gz
++sha1  207dc2b50cab1c6fba7bc248665fbbe3189374e1  smartmontools-7.1.tar.gz
++
+ # Locally computed
++sha256  3f734d2c99deb1e4af62b25d944c6252de70ca64d766c4c7294545a2e659b846  smartmontools-7.1.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
+index bad7da2d16..77eedfabd8 100644
+--- a/package/smartmontools/smartmontools.mk
++++ b/package/smartmontools/smartmontools.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBEXOSIP2_VERSION = 3.6.0
-+LIBEXOSIP2_VERSION = 5.1.1
-+# Since version 5.0, letter 'X' in library's name is in lower case
-+LIBEXOSIP2_SOURCE = libexosip2-$(LIBEXOSIP2_VERSION).tar.gz
- LIBEXOSIP2_SITE = http://download.savannah.gnu.org/releases/exosip
- LIBEXOSIP2_INSTALL_STAGING = YES
- LIBEXOSIP2_LICENSE = GPL-2.0+
-@@ -12,9 +14,6 @@ LIBEXOSIP2_LICENSE_FILES = COPYING
+-SMARTMONTOOLS_VERSION = 6.5
++SMARTMONTOOLS_VERSION = 7.1
+ SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
+ SMARTMONTOOLS_LICENSE = GPL-2.0+
+ SMARTMONTOOLS_LICENSE_FILES = COPYING
+@@ -23,4 +23,11 @@ else
+ SMARTMONTOOLS_CONF_OPTS += --without-selinux
+ endif
  
- LIBEXOSIP2_DEPENDENCIES = host-pkgconf libosip2
- 
--# We are touching configure.in and Makefile.am with one of our patches
--LIBEXOSIP2_AUTORECONF = YES
--
- ifeq ($(BR2_arc),y)
- # toolchain __arc__ define conflicts with libeXosip2 source
- LIBEXOSIP2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -U__arc__"
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++SMARTMONTOOLS_CONF_OPTS += --with-libsystemd
++SMARTMONTOOLS_DEPENDENCIES += systemd
++else
++SMARTMONTOOLS_CONF_OPTS += --without-libsystemd
++endif
++
+ $(eval $(autotools-package))
