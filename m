@@ -1,131 +1,119 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Mar 2020 22:13:11 +0100
-Subject: [Buildroot] [git commit] package/belle-sip: new package
-Message-ID: <20200309210038.BE79390053@busybox.osuosl.org>
+Date: Mon, 9 Mar 2020 22:13:12 +0100
+Subject: [Buildroot] [git commit] package/belr: new package
+Message-ID: <20200309210038.C97C69002B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae4024960a6795347144e251b580357e4a8cd425
+commit: https://git.buildroot.net/buildroot/commit/?id=0f4e69d84310fe2c3627c109e6812080a6f66186
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Belle-sip is a modern library implementing SIP (RFC 3261) transport,
-transaction and dialog layers.
+Belr is Belledonne Communications' language recognition library, written
+in C++11. It parses text inputs formatted according to a language
+defined by an ABNF grammar, such as the protocols standardized at IETF.
 
-http://www.linphone.org/technical-corner/belle-sip
+https://gitlab.linphone.org/BC/public/belr
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Thomas: select mbedtls as support for crypto is needed in bctoolbox]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/belle-sip/Config.in      | 22 ++++++++++++++++++++++
- package/belle-sip/belle-sip.hash |  3 +++
- package/belle-sip/belle-sip.mk   | 35 +++++++++++++++++++++++++++++++++++
- 5 files changed, 62 insertions(+)
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/belr/Config.in | 19 +++++++++++++++++++
+ package/belr/belr.hash |  3 +++
+ package/belr/belr.mk   | 26 ++++++++++++++++++++++++++
+ 5 files changed, 50 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3316f701ce..4924856bf6 100644
+index 4924856bf6..6691386863 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -827,6 +827,7 @@ F:	package/openzwave/
- 
+@@ -828,6 +828,7 @@ F:	package/openzwave/
  N:	Fabrice Fontaine <fontaine.fabrice@gmail.com>
  F:	package/bearssl/
-+F:	package/belle-sip/
+ F:	package/belle-sip/
++F:	package/belr/
  F:	package/boinc/
  F:	package/cairo/
  F:	package/duktape/
 diff --git a/package/Config.in b/package/Config.in
-index 910b26698e..a411436700 100644
+index a411436700..146fc1bbc3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1617,6 +1617,7 @@ menu "Networking"
- 	source "package/azmq/Config.in"
- 	source "package/azure-iot-sdk-c/Config.in"
- 	source "package/batman-adv/Config.in"
-+	source "package/belle-sip/Config.in"
- 	source "package/bluez5_utils-headers/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/canfestival/Config.in"
-diff --git a/package/belle-sip/Config.in b/package/belle-sip/Config.in
+@@ -1750,6 +1750,7 @@ menu "Other"
+ 	source "package/avro-c/Config.in"
+ 	source "package/bctoolbox/Config.in"
+ 	source "package/bdwgc/Config.in"
++	source "package/belr/Config.in"
+ 	source "package/boost/Config.in"
+ 	source "package/c-capnproto/Config.in"
+ 	source "package/capnproto/Config.in"
+diff --git a/package/belr/Config.in b/package/belr/Config.in
 new file mode 100644
-index 0000000000..8e4de366e4
+index 0000000000..f3f742ad28
 --- /dev/null
-+++ b/package/belle-sip/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_BELLE_SIP
-+	bool "belle-sip"
++++ b/package/belr/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_BELR
++	bool "belr"
 +	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS # bctoolbox
 +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # bctoolbox
-+	depends on BR2_USE_WCHAR
 +	select BR2_PACKAGE_BCTOOLBOX
-+	# needs crypto support in bctoolbox
-+	select BR2_PACKAGE_MBEDTLS
 +	help
-+	  Belle-sip is a modern library implementing SIP (RFC 3261)
-+	  transport, transaction and dialog layers.
++	  Belr is Belledonne Communications' language recognition
++	  library, written in C++11. It parses text inputs formatted
++	  according to a language defined by an ABNF grammar, such as
++	  the protocols standardized at IETF.
 +
-+	  http://www.linphone.org/technical-corner/belle-sip
++	  https://gitlab.linphone.org/BC/public/belr
 +
-+comment "belle-sip needs a toolchain w/ threads, C++, dynamic library, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++comment "belr needs a toolchain w/ threads, C++"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 +
-+comment "belle-sip needs a toolchain not affected by GCC bug 64735"
++comment "belr needs a toolchain not affected by GCC bug 64735"
 +	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/belle-sip/belle-sip.hash b/package/belle-sip/belle-sip.hash
+diff --git a/package/belr/belr.hash b/package/belr/belr.hash
 new file mode 100644
-index 0000000000..889ad2be70
+index 0000000000..42cf506972
 --- /dev/null
-+++ b/package/belle-sip/belle-sip.hash
++++ b/package/belr/belr.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256  3ac7051ea6ac758cccbf1483a5dd6cda4293b5cde1370a3f0d298e3a6f0ee032  belle-sip-4.3.1.tar.gz
++sha256  d6575c36c32828edcaf39df2775070b187019b21fe5fe274e7a85caf54284f05  belr-4.3.1.tar.gz
 +sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/belle-sip/belle-sip.mk b/package/belle-sip/belle-sip.mk
+diff --git a/package/belr/belr.mk b/package/belr/belr.mk
 new file mode 100644
-index 0000000000..1daef1d2df
+index 0000000000..8855f94fda
 --- /dev/null
-+++ b/package/belle-sip/belle-sip.mk
-@@ -0,0 +1,35 @@
++++ b/package/belr/belr.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# belle-sip
++# belr
 +#
 +################################################################################
 +
-+BELLE_SIP_VERSION = 4.3.1
-+BELLE_SIP_SITE = \
-+	https://gitlab.linphone.org/BC/public/belle-sip/-/archive/$(BELLE_SIP_VERSION)
-+BELLE_SIP_LICENSE = GPL-3.0+
-+BELLE_SIP_LICENSE_FILES = LICENSE.txt
-+BELLE_SIP_INSTALL_STAGING = YES
-+BELLE_SIP_DEPENDENCIES = \
-+	bctoolbox \
-+	$(if $(BR2_PACKAGE_ZLIB),zlib)
-+BELLE_SIP_CONF_OPTS = \
++BELR_VERSION = 4.3.1
++BELR_SITE = https://gitlab.linphone.org/BC/public/belr/-/archive/$(BELR_VERSION)
++BELR_LICENSE = GPL-3.0+
++BELR_LICENSE_FILES = LICENSE.txt
++BELR_INSTALL_STAGING = YES
++BELR_DEPENDENCIES = bctoolbox
++BELR_CONF_OPTS = \
 +	-DENABLE_STRICT=OFF \
-+	-DENABLE_TESTS=OFF
-+
-+ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
-+BELLE_SIP_CONF_OPTS += -DENABLE_MDNS=ON
-+BELLE_SIP_DEPENDENCIES += avahi
-+else
-+BELLE_SIP_CONF_OPTS += -DENABLE_MDNS=OFF
-+endif
++	-DENABLE_TESTS=OFF \
++	-DENABLE_TOOLS=OFF
 +
 +ifeq ($(BR2_STATIC_LIBS),y)
-+BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=OFF -DENABLE_STATIC=ON
++BELR_CONF_OPTS += -DENABLE_SHARED=OFF -DENABLE_STATIC=ON
 +else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=ON
++BELR_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=ON
 +else ifeq ($(BR2_SHARED_LIBS),y)
-+BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
++BELR_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
 +endif
 +
 +$(eval $(cmake-package))
