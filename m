@@ -1,37 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Mar 2020 23:17:11 +0100
-Subject: [Buildroot] [git commit] package/pkg-qmake.mk: only add qt5base
- dependency when we're not qt5base
-Message-ID: <20200309221528.24338825E9@busybox.osuosl.org>
+Date: Mon, 9 Mar 2020 23:29:30 +0100
+Subject: [Buildroot] [PATCH v6 04/28] package/qt5base: Convert to qmake
+ infra
+In-Reply-To: <20200217212350.29750-5-anaumann@ultratronik.de>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-5-anaumann@ultratronik.de>
+Message-ID: <20200309232930.71131bb1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52dedbea62c6454fe60a17cc13d3f72edab1edfa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Andreas,
 
-As we are about to convert qt5base to the qmake-package
-infrastructure, we need to avoid a circular dependency: the qt5base
-package itself should not depend on qt5base.
+On Mon, 17 Feb 2020 22:23:26 +0100
+Andreas Naumann <anaumann@ultratronik.de> wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pkg-qmake.mk | 2 ++
- 1 file changed, 2 insertions(+)
+> Convert build, staging and target install to the qmake infra commands.
+> This removes a lot of conditional code because we solely rely on all install
+> rules being properly generated according to the configured options.
+> 
+> Of course we keep the configure command/logic as is, because qmake does not
+> yet exist.
+> 
+> Handling of the custom qt.conf is now done in the post staging hook.
+> 
+> Todo: Check if font install for 5.6 is still working.
 
-diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
-index ed48819d1b..46d2b22d04 100644
---- a/package/pkg-qmake.mk
-+++ b/package/pkg-qmake.mk
-@@ -40,7 +40,9 @@ $(2)_MAKE_OPTS			?=
- $(2)_INSTALL_STAGING_OPTS	?= install
- $(2)_INSTALL_TARGET_OPTS	?= $$($(2)_INSTALL_STAGING_OPTS)
- 
-+ifneq ($(1),qt5base)
- $(2)_DEPENDENCIES 		+= qt5base
-+endif
- 
- #
- # Configure step. Only define it if not already defined by the package
+This Todo is no longer relevant, as support for Qt 5.6 has been removed.
+
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+> ---
+>  package/qt5/qt5base/qt5base.mk | 81 +---------------------------------
+>  1 file changed, 2 insertions(+), 79 deletions(-)
+
+I've applied this patch to master, after fixing the conflicts when
+applying.
+
+I also added a preliminary patch that changes pkg-qmake.mk to only add
+qt5base as a dependency when the package is *not* qt5base, to avoid a
+circular dependency.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
