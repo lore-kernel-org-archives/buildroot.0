@@ -1,75 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 09 Mar 2020 14:21:41 -0000
-Subject: [Buildroot] [git commit] package/prelink-cross: new package
-Message-ID: <20200309140904.196097F8C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mpd: bump version to 0.21.20
+Message-ID: <20200309140903.D2C3D7FBD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8af40358e3885440248aa783490096bdd1b7a90c
+commit: https://git.buildroot.net/buildroot/commit/?id=af28275e64999ea8598af919b2bc0070bcbe0e85
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Prelink-cross emulates a runtime linker for a given sysroot. This is
-necessary to allow gobject-introspection to build its typelib files
-during cross-compiling.
-
-We're using a sha1 on the cross_prelink branch, as we need the
-RTLD-enabled variant of prelink-cross.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-[yann.morin.1998 at free.fr:
-  - drop HOST_ prefix for inherited variables
-  - fix licensing info to "or-later"
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/prelink-cross/prelink-cross.hash |  3 +++
- package/prelink-cross/prelink-cross.mk   | 16 ++++++++++++++++
- 3 files changed, 20 insertions(+)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3cb0a78e73..09927e22d9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -53,6 +53,7 @@ F:	package/openjdk/
- F:	package/openjdk-bin/
- F:	package/php/
- F:	package/policycoreutils/
-+F:	package/prelink-cross/
- F:	package/polkit/
- F:	package/python3/
- F:	package/python-aioredis/
-diff --git a/package/prelink-cross/prelink-cross.hash b/package/prelink-cross/prelink-cross.hash
-new file mode 100644
-index 0000000000..3ac33ac3d0
---- /dev/null
-+++ b/package/prelink-cross/prelink-cross.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  cb3f5d833cd74b7e90e38465c9c948b0f4138c017509cb91e391b0931063429e  prelink-cross-a853a5d715d84eec93aa68e8f2df26b7d860f5b2.tar.gz
-+sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
-diff --git a/package/prelink-cross/prelink-cross.mk b/package/prelink-cross/prelink-cross.mk
-new file mode 100644
-index 0000000000..2312ee53e6
---- /dev/null
-+++ b/package/prelink-cross/prelink-cross.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# host-prelink-cross
-+#
-+################################################################################
-+
-+PRELINK_CROSS_VERSION = a853a5d715d84eec93aa68e8f2df26b7d860f5b2
-+PRELINK_CROSS_SITE = https://git.yoctoproject.org/git/prelink-cross
-+PRELINK_CROSS_SITE_METHOD = git
-+PRELINK_CROSS_LICENSE = GPL-2.0+
-+PRELINK_CROSS_LICENSE_FILES = COPYING
-+# Sources from git, no configure script present
-+PRELINK_CROSS_AUTORECONF = YES
-+HOST_PRELINK_CROSS_DEPENDENCIES = host-elfutils host-libiberty
-+
-+$(eval $(host-autotools-package))
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index ecc2ee42a5..70ca9df582 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  d3275e11d85637adde250cadf3b4f5aec2144228f0d8085767493fc46c55b2f9  mpd-0.21.19.tar.xz
++sha256  422ef0a996d961f3ebc6856395f3a855b45fa0059910e878fb98281007e510e1  mpd-0.21.20.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 647cac4f32..a879a33d33 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.21
+-MPD_VERSION = $(MPD_VERSION_MAJOR).19
++MPD_VERSION = $(MPD_VERSION_MAJOR).20
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
