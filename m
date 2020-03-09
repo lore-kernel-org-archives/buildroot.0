@@ -1,64 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 09 Mar 2020 14:21:42 -0000
-Subject: [Buildroot] [git commit] package/gobject-introspection: depend on
- python3
-Message-ID: <20200309140904.567EF7F8C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkgconf: prepend sysroot paths to
+ common gobject-introspection utils
+Message-ID: <20200309140904.244517F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6da6cb2c312c6b22f1c2af2b9068d2e68baffa09
+commit: https://git.buildroot.net/buildroot/commit/?id=0157b6032d600f9b12778e425316076dffca9cab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the Config.in file has the line:
-select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+Many autotools packages call pkg-conf to inquire as to where the following
+utilities are:
 
-This line is incorrect as gobject-introspection does not support python2.
-Instead, remove the select line and make python3 a dependency with a new
-message that explains that gobject-introspection requires python3.
+g_ir_scanner
+g_ir_compiler
+g_ir_generate
+
+Because gobject uses wrappers to call qemu, prepending the sysroot to the paths
+of these compilers is necessary.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-[yann.morin.1998 at free.fr:
-  - move the explanations from the commit log to the code
-]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gobject-introspection/Config.in | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ ...Only-prefix-with-the-sysroot-a-subset-of-variables.patch | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
-index 0537cc0404..e312852cf2 100644
---- a/package/gobject-introspection/Config.in
-+++ b/package/gobject-introspection/Config.in
-@@ -9,11 +9,18 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
- 	# can be verified.
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	# gobject-introspection does not require python3 to run on the
-+	# target; however, because the tools run in a qemu wrapper, a
-+	# cross-compiled python3 must be installed to staging. As there
-+	# is no current mechanism to tell Buildroot only to install
-+	# python to staging, then python must also be installed
-+	# unconditionally to the target when building
-+	# gobject-introspection.
-+	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_HOST_QEMU
- 	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
- 	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  GObject introspection is a middleware layer between C
-@@ -25,6 +32,9 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
+diff --git a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
+index 5a9713d651..a7811752d2 100644
+--- a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
++++ b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
+@@ -15,11 +15,13 @@ be prefixed by the sysroot, and which path should not be prefixed by
+ the sysroot.
  
- 	  https://wiki.gnome.org/action/show/Projects/GObjectIntrospection
+ So, let's simply have a whitelist of paths that should be prefixed:
+-includedir, libdir, mapdir, pkgdatadir and sdkdir. This list of
+-variables was collected over years of Buildroot development. All other
+-paths are not prefixed by the sysroot.
++g_ir_scanner, g_ir_compiler, g_ir_generate, includedir, libdir, mapdir,
++pkgdatadir and sdkdir. This list of variables was collected over years of
++Buildroot development. All other paths are not prefixed by the sysroot.
  
-+comment "gobject-introspection needs python3"
-+	depends on !BR2_PACKAGE_PYTHON3
-+
- comment "gobject-introspection needs a glibc toolchain, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++[Updated to include gobject-introspection paths]
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ ---
+  libpkgconf/tuple.c | 60 ++++++++++++++++++++++++++++++++--------------
+  1 file changed, 42 insertions(+), 18 deletions(-)
+@@ -28,7 +30,7 @@ diff --git a/libpkgconf/tuple.c b/libpkgconf/tuple.c
+ index 8523709..7cd2fff 100644
+ --- a/libpkgconf/tuple.c
+ +++ b/libpkgconf/tuple.c
+-@@ -160,6 +160,18 @@ dequote(const char *value)
++@@ -160,6 +160,21 @@ dequote(const char *value)
+  	return buf;
+  }
+  
+@@ -36,6 +38,9 @@ index 8523709..7cd2fff 100644
+ +pkgconf_tuple_parse_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, bool add_sysroot);
+ +
+ +const char *sysrooted_keys[] = {
+++	"g_ir_scanner",
+++	"g_ir_compiler",
+++	"g_ir_generate",
+ +	"includedir",
+ +	"libdir",
+ +	"mapdir",
