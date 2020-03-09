@@ -1,43 +1,86 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  9 Mar 2020 19:39:37 +0100
-Subject: [Buildroot] [PATCH 15/16] package/kodi-visualisation-goom: bump
- version to 2.2.1-Leia
+Date: Mon,  9 Mar 2020 19:39:35 +0100
+Subject: [Buildroot] [PATCH 13/16] package/kodi-screensaver-pingpong: bump
+ version to 2.1.2-Leia
 In-Reply-To: <20200309183938.2528-1-bernd.kuhls@t-online.de>
 References: <20200309183938.2528-1-bernd.kuhls@t-online.de>
-Message-ID: <20200309183938.2528-15-bernd.kuhls@t-online.de>
+Message-ID: <20200309183938.2528-13-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Removed patch applied upstream:
+https://github.com/xbmc/screensaver.pingpong/commit/6ca75e7d421a49b6124d0e1cd37a529c66a701cb
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-visualisation-goom/kodi-visualisation-goom.hash | 2 +-
- package/kodi-visualisation-goom/kodi-visualisation-goom.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ackport-Add-missing-cstddef-includes.patch | 32 -------------------
+ .../kodi-screensaver-pingpong.hash            |  2 +-
+ .../kodi-screensaver-pingpong.mk              |  2 +-
+ 3 files changed, 2 insertions(+), 34 deletions(-)
+ delete mode 100644 package/kodi-screensaver-pingpong/0001-Backport-Add-missing-cstddef-includes.patch
 
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-index 4439240d7b..e6b00465df 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+diff --git a/package/kodi-screensaver-pingpong/0001-Backport-Add-missing-cstddef-includes.patch b/package/kodi-screensaver-pingpong/0001-Backport-Add-missing-cstddef-includes.patch
+deleted file mode 100644
+index f71e1899ae..0000000000
+--- a/package/kodi-screensaver-pingpong/0001-Backport-Add-missing-cstddef-includes.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 6ca75e7d421a49b6124d0e1cd37a529c66a701cb Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sat, 18 Jan 2020 20:01:21 +0100
+-Subject: [PATCH] [Backport] Add missing cstddef includes
+-
+-Fixes build error with gcc 5.5.0.
+-
+-Backported from https://github.com/xbmc/screensaver.pingpong/pull/21
+-
+-Patch sent upstream:
+-https://github.com/xbmc/screensaver.pingpong/pull/22
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/pingpong.cpp | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/pingpong.cpp b/src/pingpong.cpp
+-index e1df353..9cd9fb5 100644
+---- a/src/pingpong.cpp
+-+++ b/src/pingpong.cpp
+-@@ -24,6 +24,7 @@
+- #include "main.h"
+- #include "pingpong.h"
+- 
+-+#include <cstddef>
+- #include <vector>
+- 
+- #define NUMQUADS 3
+--- 
+-2.20.1
+-
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+index b4e22420ac..128bd251d5 100644
+--- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 49f193d32a14b26a39d6572fcbdd8b69a9e559f453bca017086336e985bf6b2c  kodi-visualisation-goom-2.1.0-Leia.tar.gz
-+sha256 a02dfd844cfd5ff24f735e614a2a4727771112ce15642957a2511061f724392a  kodi-visualisation-goom-2.2.1-Leia.tar.gz
- sha256 e5776a7262955801be2e19a84024cf4d0589253c8d77dd09a1db01bf5ed07683  src/Main.cpp
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-index 0184d8474c..44384199e3 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+-sha256 d4e09509bf036b7d5c381cd4ecac926a59396fb481347a4056d843ae68d3a20d  kodi-screensaver-pingpong-2.1.1-Leia.tar.gz
++sha256 618a7dfc85961c803b6292cea9004bdb71566e10a32aec2870cd29775681a808  kodi-screensaver-pingpong-2.1.2-Leia.tar.gz
+ sha256 47ff769788026a338740772250197acd0a84f26b57dda49e5b14d63f2f2937ee  src/readme.txt
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+index 45f2d23039..647417f211 100644
+--- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_GOOM_VERSION = 2.1.0-Leia
-+KODI_VISUALISATION_GOOM_VERSION = 2.2.1-Leia
- KODI_VISUALISATION_GOOM_SITE = $(call github,xbmc,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
- KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_GOOM_LICENSE_FILES = src/Main.cpp
+-KODI_SCREENSAVER_PINGPONG_VERSION = 2.1.1-Leia
++KODI_SCREENSAVER_PINGPONG_VERSION = 2.1.2-Leia
+ KODI_SCREENSAVER_PINGPONG_SITE = $(call github,xbmc,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
+ KODI_SCREENSAVER_PINGPONG_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = src/readme.txt
 -- 
 2.25.0
