@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  9 Mar 2020 19:39:36 +0100
-Subject: [Buildroot] [PATCH 14/16] package/kodi-screensaver-pyro: bump
- version to 3.0.1-Leia
+Date: Mon,  9 Mar 2020 19:39:30 +0100
+Subject: [Buildroot] [PATCH 08/16] package/kodi-pvr-vdr-vnsi: bump version
+ to 3.6.4-Leia
 In-Reply-To: <20200309183938.2528-1-bernd.kuhls@t-online.de>
 References: <20200309183938.2528-1-bernd.kuhls@t-online.de>
-Message-ID: <20200309183938.2528-14-bernd.kuhls@t-online.de>
+Message-ID: <20200309183938.2528-8-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash | 4 ++--
- package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash | 2 +-
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
-index fc41e80ee4..16a37d3161 100644
---- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
-+++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
+diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
+index 12a2768fae..d70a5c30b3 100644
+--- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
++++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  55f867b703e5cf409f8e0a8a2c34373f896feb990004b5901b4efaee905d42e5  kodi-screensaver-pyro-3.0.0-Leia.tar.gz
--sha256  b945c014a69091c728caa3fca547c2747911e61e1dd2cef9928cf92a6a45655f  src/Pyro.cpp
-+sha256 cf9ed582b70460682175366641e6a00eaea085a1d3477a02710ba8398a1d17bd  kodi-screensaver-pyro-3.0.1-Leia.tar.gz
-+sha256 b945c014a69091c728caa3fca547c2747911e61e1dd2cef9928cf92a6a45655f  src/Pyro.cpp
-diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-index 7b3b63ab7f..880212ee72 100644
---- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-+++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
+-sha256 6afaf1f3f1e0670edb9dc01581a0d6c3f57502c791e19283eb63807e8936a768  kodi-pvr-vdr-vnsi-3.6.3-Leia.tar.gz
++sha256 f0ea8907e77ca014429bbe73d07c3410cc7be25a6db0df157863b87d2684affb  kodi-pvr-vdr-vnsi-3.6.4-Leia.tar.gz
+ sha256 28266596fdf4162d4f15985e0108cd9ddb42531ddad2297011649c1af49f7fe2  debian/copyright
+diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
+index 3dbb24ce0e..f467fa98f5 100644
+--- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
++++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_PYRO_VERSION = 3.0.0-Leia
-+KODI_SCREENSAVER_PYRO_VERSION = 3.0.1-Leia
- KODI_SCREENSAVER_PYRO_SITE = $(call github,xbmc,screensaver.pyro,$(KODI_SCREENSAVER_PYRO_VERSION))
- KODI_SCREENSAVER_PYRO_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_PYRO_LICENSE_FILES = src/Pyro.cpp
+-KODI_PVR_VDR_VNSI_VERSION = 3.6.3-Leia
++KODI_PVR_VDR_VNSI_VERSION = 3.6.4-Leia
+ KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
+ KODI_PVR_VDR_VNSI_LICENSE = GPL-2.0+
+ KODI_PVR_VDR_VNSI_LICENSE_FILES = debian/copyright
 -- 
 2.25.0
