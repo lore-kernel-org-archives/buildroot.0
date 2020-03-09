@@ -1,73 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 9 Mar 2020 22:01:13 +0100
-Subject: [Buildroot] [git commit] package/systemd: drop leftover patch
-Message-ID: <20200309204847.15A7A800C5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 9 Mar 2020 22:06:33 +0100
+Subject: [Buildroot] [PATCH/next 3/6] package/mediastreamer: bump to
+ version 4.3.1
+In-Reply-To: <20200227174714.3727844-3-fontaine.fabrice@gmail.com>
+References: <20200227174714.3727844-1-fontaine.fabrice@gmail.com>
+ <20200227174714.3727844-3-fontaine.fabrice@gmail.com>
+Message-ID: <20200309220633.004d8403@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a07ba73e4b5c8ef95a5de87bc90a66a776a712b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 27 Feb 2020 18:47:11 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On master during the stabilisation phase, a new patch was added to
-systemd; in parallel, on the next branch, systemd was bumped. Then, when
-next was merged into master, there was no merge conflict, so the uneeded
-patch was left unnoticed.
+> - Drop first patch (already in version)
+> - Update second patch
+> - License is GPL-3.0+ since version 4.3.0 and
+>   https://gitlab.linphone.org/BC/public/mediastreamer2/commit/85094197cfaaaa8768a86562a0bce9d3d738d2da
+> - Switch to cmake-package and so drop third patch as autotools is not
+>   updated anymore (and fails to build due to missing po/Makefile.in.in)
+> - Add a mandatory dependency to mbedtls (to enable crypto support in
+>   bctoolbox)
+> - Add bcg729, jpegturbo, libgsm, libpcap, libsrtp and zxing-cpp optional
+>   dependencies
+> - Add a dependency on dynamic library as no pkg-config calls are done in
+>   cmake (static build with ffmepg and opus will fail for example)
+> - Drop libupnp optional dependency (not available anymore)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...mpilation-issue-with-latest-bctoobox.patch |  38 -----
+>  ...-nowebcam.c-fix-build-without-ffmpeg.patch |  55 +++++++
+>  ...FER_PADDING_SIZE-to-determine-paddin.patch |  24 +--
+>  ...ffmpeg-and-avcodec-function-conflict.patch |  42 -----
+>  package/mediastreamer/Config.in               |   9 +-
+>  package/mediastreamer/mediastreamer.hash      |   4 +-
+>  package/mediastreamer/mediastreamer.mk        | 153 ++++++++++++------
+>  7 files changed, 171 insertions(+), 154 deletions(-)
+>  delete mode 100644 package/mediastreamer/0001-fix-compilation-issue-with-latest-bctoobox.patch
+>  create mode 100644 package/mediastreamer/0001-src-videofilters-nowebcam.c-fix-build-without-ffmpeg.patch
+>  delete mode 100644 package/mediastreamer/0002-m4-fix-local-ffmpeg-and-avcodec-function-conflict.patch
 
-That patch was applied upstream, and is present in the version we now
-have, so it no longer applies.
+Applied to master, thanks.
 
-Drop that patch.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...seed-add-missing-header-for-GRND_NONBLOCK.patch | 39 ----------------------
- 1 file changed, 39 deletions(-)
-
-diff --git a/package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch b/package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch
-deleted file mode 100644
-index e74df10e9d..0000000000
---- a/package/systemd/0001-random-seed-add-missing-header-for-GRND_NONBLOCK.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 806e2011a0ea684b10a07b74c4ee0f817437e8c6 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@smile.fr>
--Date: Sun, 1 Mar 2020 15:19:01 +0100
--Subject: [PATCH] random-seed: add missing header for GRND_NONBLOCK
--
--GRND_NONBLOCK has been introduced with the 3.17 kernel version [1]
--while adding getrandom(2) system call.
--
--The header missing_random.h is needed for random-seed.c when building
--with old toolchain, such Sourcery CodeBench ARM 2014.05.
--
--Fixes:
--https://gitlab.com/buildroot.org/buildroot/-/jobs/454255917
--
--[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=c6e9d6f38894798696f23c8084ca7edbf16ee895
--
--Upstream status:
--https://github.com/systemd/systemd/pull/14988
--
--Signed-off-by: Romain Naour <romain.naour@smile.fr>
-----
-- src/random-seed/random-seed.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/random-seed/random-seed.c b/src/random-seed/random-seed.c
--index 2fcbcb281a..596bff98f1 100644
----- a/src/random-seed/random-seed.c
--+++ b/src/random-seed/random-seed.c
--@@ -19,6 +19,7 @@
-- #include "io-util.h"
-- #include "log.h"
-- #include "main-func.h"
--+#include "missing_random.h"
-- #include "missing_syscall.h"
-- #include "mkdir.h"
-- #include "parse-util.h"
---- 
--2.24.1
--
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
