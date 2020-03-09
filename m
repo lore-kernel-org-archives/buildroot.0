@@ -1,74 +1,87 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  9 Mar 2020 20:35:22 +0100
-Subject: [Buildroot] [PATCH 2/3] package/x11r7/xcb-proto: bump version to
- 1.14
-In-Reply-To: <20200309193523.185144-1-bernd.kuhls@t-online.de>
-References: <20200309193523.185144-1-bernd.kuhls@t-online.de>
-Message-ID: <20200309193523.185144-2-bernd.kuhls@t-online.de>
+From: Howard Mitchell <hm@hmbedded.co.uk>
+Date: Mon, 9 Mar 2020 19:52:12 +0000
+Subject: [Buildroot] [PATCH 2/2] package/mesa3d: get glxgears working
+ for v3d/vc4 minimal builds
+In-Reply-To: <20200306192710.0bbc4b68@gmx.net>
+References: <20200306092504.30340-1-hm@hmbedded.co.uk>
+ <20200306092504.30340-2-hm@hmbedded.co.uk> <20200306153854.06a840c3@gmx.net>
+ <b49a5bc6-c01a-1a5a-6674-4939759d8edd@hmbedded.co.uk>
+ <20200306192710.0bbc4b68@gmx.net>
+Message-ID: <d74401e8-d9c1-a6e4-a07d-47362f89bc7c@hmbedded.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Follow upstream switch to xz tarball:
-https://gitlab.freedesktop.org/xorg/proto/xcbproto/-/commit/6d846028718206769d6b70c96239b926e782b4aa
+Hello Peter,
 
-Removed XCB_PROTO_POST_INSTALL_STAGING_HOOKS, not needed anymore due
-to upstream fix:
-https://gitlab.freedesktop.org/xorg/proto/xcbproto/-/commit/bd7a481a3bee9283277badda95730f52185127bc
+On 06/03/2020 18:27, Peter Seiderer wrote:
+> Hello Howard,
+>
+> On Fri, 6 Mar 2020 17:22:28 +0000, Howard Mitchell <hm@hmbedded.co.uk> wrote:
+>
+>> Hello Peter,
+>>
+>> On 06/03/2020 14:38, Peter Seiderer wrote:
+>>> Hello Howard,
+>>>
+>>> On Fri,  6 Mar 2020 09:25:04 +0000, Howard Mitchell <hm@hmbedded.co.uk> wrote:
+>>>
+>>>> Currently a minimal build for rpi2/3/4 (i.e. only v3d and/or vc4
+>>>> selected, no dri drivers selected) results in working X11 except that
+>>>> glxgears shows a blank window. This commit effectively results in the
+>>>> following conf options being added: -Dglx-direct=true -Ddri3=true
+>>>>
+>>>> Signed-off-by: Howard Mitchell <hm@hmbedded.co.uk>
+>>>> ---
+>>>>    package/mesa3d/Config.in | 1 +
+>>>>    1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+>>>> index 3950170533..59b8f60773 100644
+>>>> --- a/package/mesa3d/Config.in
+>>>> +++ b/package/mesa3d/Config.in
+>>>> @@ -274,6 +274,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+>>>>    	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+>>>>    	select BR2_PACKAGE_LIBDRM_VC4
+>>>>    	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+>>>> +	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+>>> On rpi4 v3d/vc4 work definitely for the Qt/eglfs case without
+>>> MESA3D_DRI_DRIVER, so this should at minimum depend on X11 (or
+>>> only be selected by x11/glxgears)?
+>> In fact the '-Ddri3=true' option is already dependent on X11 (in mesa3d.mk)
+>> so only '-Dglx-direct=true' would be left without X. Do you think that is
+>> likelyto break Qt/eglfs?
+> Its not so much about breaking the Qt/eglfs case, but about being minimal and
+> not enabling un-needed/-wanted options...
+>
+> Your list of options above is not very precise when looking
+> at package/mesa3d/mesa3d.mk (missing -Dshared-glapi=true -Ddri-drivers=,
+> and -Ddri3=true/false dependent on BR2_PACKAGE_XLIB_LIBXSHMFENCE)...
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xcb-proto/xcb-proto.hash |  8 +++-----
- package/x11r7/xcb-proto/xcb-proto.mk   | 14 ++------------
- 2 files changed, 5 insertions(+), 17 deletions(-)
+The options I specified are the difference between before and after 
+applying the
+patch. I used 'make printvars VARS=MESA3D_CONF_OPTS' to verify. Looking at
+mesa3d.mk, -Dshared_glapi=true is already included because
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER=y and is therefore repeated. 
+-Ddri-drivers=
+is an empty list with or without the patch. So as I stated before only
+-Dglx-direct=true is additional if you're building without X11. When 
+building
+with X11 then additionally -Ddri3 changes from false to true when the 
+patch is
+applied.
 
-diff --git a/package/x11r7/xcb-proto/xcb-proto.hash b/package/x11r7/xcb-proto/xcb-proto.hash
-index b2ef3ee20b..c6d2d8e341 100644
---- a/package/x11r7/xcb-proto/xcb-proto.hash
-+++ b/package/x11r7/xcb-proto/xcb-proto.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002852.html
--md5 abe9aa4886138150bbc04ae4f29b90e3  xcb-proto-1.13.tar.bz2
--sha1 f7fa35ab59af18cecadbe83fe705281dcfd82ffd  xcb-proto-1.13.tar.bz2
--sha256 7b98721e669be80284e9bbfeab02d2d0d54cd11172b72271e47a2fe875e2bde1  xcb-proto-1.13.tar.bz2
--sha512 002aa2aa0ad503977e03419c6f136f1e3aa8c787916830ce6d6be8f81ca99edc1d8fc5f71ce8c592b490cc767bf6567695f0bafe55fe3f743076bcddbaac07f7  xcb-proto-1.13.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-February/003038.html
-+sha256 186a3ceb26f9b4a015f5a44dcc814c93033a5fc39684f36f1ecc79834416a605  xcb-proto-1.14.tar.xz
-+sha512 de66d568163b6da2be9d6c59984f3afa3acd119a781378638045fd68018665ef5c9af98f024e9962ba3eb7c7a4d85c27ba70ffafceb2324ccc6940f34de16690  xcb-proto-1.14.tar.xz
- # Locally computed
- sha256 c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
-diff --git a/package/x11r7/xcb-proto/xcb-proto.mk b/package/x11r7/xcb-proto/xcb-proto.mk
-index b85dad7f2c..f7a3ad55b1 100644
---- a/package/x11r7/xcb-proto/xcb-proto.mk
-+++ b/package/x11r7/xcb-proto/xcb-proto.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--XCB_PROTO_VERSION = 1.13
--XCB_PROTO_SOURCE = xcb-proto-$(XCB_PROTO_VERSION).tar.bz2
-+XCB_PROTO_VERSION = 1.14
-+XCB_PROTO_SOURCE = xcb-proto-$(XCB_PROTO_VERSION).tar.xz
- XCB_PROTO_SITE = http://xcb.freedesktop.org/dist
- XCB_PROTO_LICENSE = MIT
- XCB_PROTO_LICENSE_FILES = COPYING
-@@ -15,15 +15,5 @@ XCB_PROTO_INSTALL_STAGING = YES
- XCB_PROTO_DEPENDENCIES = host-python
- HOST_XCB_PROTO_DEPENDENCIES = host-python
- 
--# xcbincludedir/pythondir is used by E.G. libxcb at build time to find the
--# xml / python files, so ensure these expand to their full (host) paths
--define XCB_PROTO_FIXUP_PC_FILE
--	$(SED) 's|^\(xcbincludedir=\)|\1$(STAGING_DIR)|' \
--		-e 's|^\(pythondir=\)|\1$(STAGING_DIR)|' \
--		$(STAGING_DIR)/usr/lib/pkgconfig/xcb-proto.pc
--endef
--
--XCB_PROTO_POST_INSTALL_STAGING_HOOKS += XCB_PROTO_FIXUP_PC_FILE
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-2.25.0
+To see how much difference the -Dglx-direct=true option makes I built mesa3d
+without X11 both with and without the patch applied and compared the 
+file sizes
+produced. Interestingly there was no difference at all, all output files 
+were
+exactly the same size with or without the patch. I was a bit surprised 
+by this
+so I retraced my steps to be absolutely sure. I suspect it is because
+-Dglx=disabled so -Dglx-direct=true has no effect.
+
+Regards,
+Howard
