@@ -1,39 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 9 Mar 2020 22:07:06 +0100
-Subject: [Buildroot] [PATCH/next 4/6] package/belle-sip: new package
-In-Reply-To: <20200227174714.3727844-4-fontaine.fabrice@gmail.com>
+Date: Mon, 9 Mar 2020 22:07:11 +0100
+Subject: [Buildroot] [PATCH/next 5/6] package/belr: new package
+In-Reply-To: <20200227174714.3727844-5-fontaine.fabrice@gmail.com>
 References: <20200227174714.3727844-1-fontaine.fabrice@gmail.com>
- <20200227174714.3727844-4-fontaine.fabrice@gmail.com>
-Message-ID: <20200309220706.270f81c0@windsurf.home>
+ <20200227174714.3727844-5-fontaine.fabrice@gmail.com>
+Message-ID: <20200309220711.79b2494c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 27 Feb 2020 18:47:12 +0100
+On Thu, 27 Feb 2020 18:47:13 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> diff --git a/package/belle-sip/Config.in b/package/belle-sip/Config.in
-> new file mode 100644
-> index 0000000000..96b89d1627
-> --- /dev/null
-> +++ b/package/belle-sip/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_BELLE_SIP
-> +	bool "belle-sip"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on !BR2_STATIC_LIBS # dlfcn.h
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # bctoolbox
-> +	depends on BR2_USE_WCHAR
-> +	select BR2_PACKAGE_BCTOOLBOX
+> Belr is Belledonne Communications' language recognition library, written
+> in C++11. It parses text inputs formatted according to a language
+> defined by an ABNF grammar, such as the protocols standardized at IETF.
+> 
+> https://gitlab.linphone.org/BC/public/belr
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  DEVELOPERS             |  1 +
+>  package/Config.in      |  1 +
+>  package/belr/Config.in | 19 +++++++++++++++++++
+>  package/belr/belr.hash |  3 +++
+>  package/belr/belr.mk   | 26 ++++++++++++++++++++++++++
+>  5 files changed, 50 insertions(+)
+>  create mode 100644 package/belr/Config.in
+>  create mode 100644 package/belr/belr.hash
+>  create mode 100644 package/belr/belr.mk
 
-	select BR2_PACKAGE_MBEDTLS
-
-was needed here, as belle-sip requires crypto support in bctoolbox.
-
-I've added that and applied to master. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
