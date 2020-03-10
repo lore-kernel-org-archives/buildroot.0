@@ -1,71 +1,83 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 10 Mar 2020 15:13:47 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libglib2: restore use of system
- printf
-In-Reply-To: <20200310124459.908611-3-john@metanate.com>
-References: <20200310124459.908611-1-john@metanate.com>
- <20200310124459.908611-3-john@metanate.com>
-Message-ID: <20200310151347.2ba20674@gmx.net>
+Date: Tue, 10 Mar 2020 15:23:02 +0100
+Subject: [Buildroot] [PATCH 1/2] package/cog: add option for platform
+ DRM.
+In-Reply-To: <394e9ef0dfd8d15ed2dcae67a3cd8cece69993aa.camel@igalia.com>
+References: <20200310112227.16175-1-cturner@igalia.com>
+ <20200310133614.5d8ed8d1@gmx.net>
+ <394e9ef0dfd8d15ed2dcae67a3cd8cece69993aa.camel@igalia.com>
+Message-ID: <20200310152302.23f620ba@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello John,
+Hello Charles,
 
-On Tue, 10 Mar 2020 12:44:59 +0000, John Keeping <john@metanate.com> wrote:
+On Tue, 10 Mar 2020 13:49:42 +0000, Charles Turner <cturner@igalia.com> wrote:
 
-> Prior to commit 4102db0f7a ("package/libglib2: bump to version 2.60.3")
-> which converted libglib2 to meson, Buildroot used to set a range of
-> autoconf options to bypass tests that require running binaries.
+> Hi Peter,
 >
-> The meson version of libglib2's build system has many fewer of these
-> checks, but there are still some and these can be fed the "correct"
-> answer by adding properties to cross-compilation.conf.
+> On Tue, 2020-03-10 at 13:36 +0100, Peter Seiderer wrote:
+> > > diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+> > > index d0e5b79c38..0bbc684436 100644
+> > > --- a/package/cog/cog.mk
+> > > +++ b/package/cog/cog.mk
+> > > @@ -8,13 +8,17 @@ COG_VERSION = 0.4.0
+> > >  COG_SITE = https://wpewebkit.org/releases
+> > >  COG_SOURCE = cog-$(COG_VERSION).tar.xz
+> > >  COG_INSTALL_STAGING = YES
+> > > -COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
+> > > +COG_DEPENDENCIES = dbus wayland wpewebkit wpebackend-fdo
+> >
+> > New option, unconditionally added new dependency on wayland?
 >
-> Add the necessary properties to indicate that we have C99 compliant
-> print functions to avoid pulling in the gnulib fallback.
+> Perhaps I should place that in a separate patch. Cog does depend on
+> wayland with wpewebkit, which is why I reflex-added it to the deps.
+> It's already depended on from the wpewebkit dependency, but I didn't
+> like relying on a separate packages dependency list for this package,
+> especially when Cog can be build with webkitgtk instead, in which case
+> it would not need the wayland dep (although I wonder if anyone has
+> tested that in buildroot yet :-))
+
+Thanks for explanation...
+
 >
-> Signed-off-by: John Keeping <john@metanate.com>
-> ---
->  package/libglib2/libglib2.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+> From this reasoning, I will remove this added dependency on wayland.
 >
-> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> index f00818f69c..a206639f74 100644
-> --- a/package/libglib2/libglib2.mk
-> +++ b/package/libglib2/libglib2.mk
-> @@ -52,6 +52,11 @@ LIBGLIB2_CONF_OPTS = \
->  	-Dinstalled_tests=false \
->  	-Doss_fuzz=disabled
+> >
+> > >  COG_LICENSE = MIT
+> > >  COG_LICENSE_FILES = COPYING
+> > >  COG_CONF_OPTS = \
+> > >  	-DCOG_BUILD_PROGRAMS=ON \
+> > >  	-DCOG_PLATFORM_FDO=ON \
+> > > -	-DCOG_PLATFORM_DRM=OFF \
+> > >  	-DCOG_HOME_URI='$(call
+> > > qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
+> > >
+> > > +ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+> > > +	COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
+> > > +	COG_DEPENDENCIES += libdrm libinput
+> >
+> > missing:
+> >
+> > #else
+> > 	COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
 >
-> +LIBGLIB2_MESON_EXTRA_PROPERTIES = \
-> +	have_c99_vsnprintf=true \
-> +	have_c99_snprintf=true \
-> +	have_unix98_printf=true
-> +
+> This is default off in CMake, which is why I removed it from the .mk
+> file here.
 
-Not sure if the buildroot 'all configuration options should be set even if the
-default fits' applies for the cross properties here too, but there are some
-more:
-
-	$ grep meson.get_cross_property build/libglib2-2.62.4/meson.build
-      have_good_vsnprintf = meson.get_cross_property('have_c99_vsnprintf', false)
-      have_good_snprintf = meson.get_cross_property('have_c99_snprintf', false)
-      have_good_printf = meson.get_cross_property('have_unix98_printf', false)
-  glib_va_val_copy = meson.get_cross_property('va_val_copy', true)
-  growing_stack = meson.get_cross_property('growing_stack', false)
-  elif meson.get_cross_property('have_strlcpy', false)
-  have_proc_self_cmdline = meson.get_cross_property('have_proc_self_cmdline', false)
-
-Besides of this as the patch is surely a fix/improvement...
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Defaults can change, explicit setting preferred ;-)
 
 Regards,
 Peter
 
->  ifneq ($(BR2_ENABLE_LOCALE),y)
->  LIBGLIB2_DEPENDENCIES += libiconv
->  endif
+>
+> B.R
+> 	Charlie.
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
