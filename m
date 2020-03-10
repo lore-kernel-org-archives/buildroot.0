@@ -1,12 +1,12 @@
 From: John Keeping <john@metanate.com>
-Date: Tue, 10 Mar 2020 14:42:44 +0000
-Subject: [Buildroot] [PATCH 1/2] package/pkg-meson.mk: add
- FOO_MESON_EXTRA_PROPERTIES
-In-Reply-To: <20200310150726.6ace1450@gmx.net>
+Date: Tue, 10 Mar 2020 14:45:00 +0000
+Subject: [Buildroot] [PATCH 2/2] package/libglib2: restore use of system
+ printf
+In-Reply-To: <20200310151347.2ba20674@gmx.net>
 References: <20200310124459.908611-1-john@metanate.com>
- <20200310124459.908611-2-john@metanate.com>
- <20200310150726.6ace1450@gmx.net>
-Message-ID: <20200310144244.2701e98a.john@metanate.com>
+ <20200310124459.908611-3-john@metanate.com>
+ <20200310151347.2ba20674@gmx.net>
+Message-ID: <20200310144500.06887404.john@metanate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,65 +15,71 @@ To: buildroot@busybox.net
 
 Hi Peter,
 
-On Tue, 10 Mar 2020 15:07:26 +0100
+On Tue, 10 Mar 2020 15:13:47 +0100
 Peter Seiderer <ps.report@gmx.net> wrote:
 
-> On Tue, 10 Mar 2020 12:44:58 +0000, John Keeping <john@metanate.com> wrote:
+> On Tue, 10 Mar 2020 12:44:59 +0000, John Keeping <john@metanate.com> wrote:
 > 
-> > With autoconf packages, we often specify ac_cv_func_... cached values to
-> > avoid runtime checks during configure.  With meson the equivalent is
-> > setting properties in cross-compilation.conf which we cannot do in
-> > Buildroot at the moment.
+> > Prior to commit 4102db0f7a ("package/libglib2: bump to version 2.60.3")
+> > which converted libglib2 to meson, Buildroot used to set a range of
+> > autoconf options to bypass tests that require running binaries.
 > >
-> > For example, libglib2 used to set ac_cv_func_printf_unix98 and
-> > ac_cv_func_vsnprintf_c99 so that the system printf could be used, but
-> > with the conversion to meson these checks fail and the gnulib fallback
-> > is used.
+> > The meson version of libglib2's build system has many fewer of these
+> > checks, but there are still some and these can be fed the "correct"
+> > answer by adding properties to cross-compilation.conf.
 > >
-> > Add infrastructure in the same way as FOO_MESON_EXTRA_BINARIES to allow
-> > per-package modification to the cross-compilation properties.
+> > Add the necessary properties to indicate that we have C99 compliant
+> > print functions to avoid pulling in the gnulib fallback.
 > >
 > > Signed-off-by: John Keeping <john@metanate.com>
 > > ---
-> >  docs/manual/adding-packages-meson.txt | 8 ++++++++
-> >  package/pkg-meson.mk                  | 4 ++++
-> >  2 files changed, 12 insertions(+)
+> >  package/libglib2/libglib2.mk | 5 +++++
+> >  1 file changed, 5 insertions(+)
 > >
-> > diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
-> > index e84bf7f60a..c28828243c 100644
-> > --- a/docs/manual/adding-packages-meson.txt
-> > +++ b/docs/manual/adding-packages-meson.txt
-> > @@ -116,6 +116,14 @@ will therefore only use a few of them.
-> >    single quotes. By default, empty. Note that Buildroot already sets the
-> >    correct values for +c+, +cpp+, +ar+, +strip+, and +pkgconfig+.
+> > diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+> > index f00818f69c..a206639f74 100644
+> > --- a/package/libglib2/libglib2.mk
+> > +++ b/package/libglib2/libglib2.mk
+> > @@ -52,6 +52,11 @@ LIBGLIB2_CONF_OPTS = \
+> >  	-Dinstalled_tests=false \
+> >  	-Doss_fuzz=disabled
 > >
-> > +* +FOO_MESON_EXTRA_PROPERTIES+, to specify a space-separated list of
-> > +  properties to add to the `[properties]` section of the meson
-> > +  `cross-compilation.conf` configuration file. The format is
-> > +  `property-name='value'`, with no space around the +=+ sign, and with the
-> > +  value between single quotes. By default, empty. Note that Buildroot
-> > +  already sets values for +needs_exe_wrapper+, +c_args+, +c_link_args+,
-> > +  +cpp_args+, +cpp_link_args+, +sys_root+, and +pkg_config_libdir+.
+> > +LIBGLIB2_MESON_EXTRA_PROPERTIES = \
+> > +	have_c99_vsnprintf=true \
+> > +	have_c99_snprintf=true \
+> > +	have_unix98_printf=true
 > > +  
 > 
-> The description does not fit the usage in the follow-up patch
-> (...value between single quoates...):
+> Not sure if the buildroot 'all configuration options should be set even if the
+> default fits' applies for the cross properties here too, but there are some
+> more:
 > 
-> +LIBGLIB2_MESON_EXTRA_PROPERTIES = \
-> +	have_c99_vsnprintf=true \
-> +	have_c99_snprintf=true \
-> +	have_unix98_printf=true
-> +
+> 	$ grep meson.get_cross_property build/libglib2-2.62.4/meson.build
+>       have_good_vsnprintf = meson.get_cross_property('have_c99_vsnprintf', false)
+>       have_good_snprintf = meson.get_cross_property('have_c99_snprintf', false)
+>       have_good_printf = meson.get_cross_property('have_unix98_printf', false)
+>   glib_va_val_copy = meson.get_cross_property('va_val_copy', true)
+>   growing_stack = meson.get_cross_property('growing_stack', false)
+>   elif meson.get_cross_property('have_strlcpy', false)
+>   have_proc_self_cmdline = meson.get_cross_property('have_proc_self_cmdline', false)
+> 
+> Besides of this as the patch is surely a fix/improvement...
 
-This is a bit tricky because the meson configuration is typed, and we
-need to avoid double quotes for the sed command.  How about changing the
-description to:
-
-    The format is `property-name=<value>` with no space around the +=+
-    sign, and with single quotes around string values.
-
-?
+My understanding is that the policy is to avoid automatic configuration
+where the order in which packages are built will affect the result.  For
+all of these the value is fixed to "false" when cross-compiling, so I
+don't think we need to specify that.
 
 
 Regards,
 John
+
+> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> 
+> Regards,
+> Peter
+> 
+> >  ifneq ($(BR2_ENABLE_LOCALE),y)
+> >  LIBGLIB2_DEPENDENCIES += libiconv
+> >  endif  
+> 
