@@ -1,28 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:57:50 +0100
-Subject: [Buildroot] [PATCHv2] package/libxml2: add upstream security
- fix for CVE-2019-20388
-In-Reply-To: <20200218093136.15834-1-patrickdepinguin@gmail.com> (Thomas De
- Schampheleire's message of "Tue, 18 Feb 2020 10:31:34 +0100")
-References: <20200218093136.15834-1-patrickdepinguin@gmail.com>
-Message-ID: <8736agorld.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Mar 2020 21:57:04 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libxml2: add
+ upstream security fix for CVE-2020-7595
+Message-ID: <20200310204518.C2D529082F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e135f475b40770f0c85b79957f86665c21e416ed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > Fixes CVE-2019-20388: xmlSchemaPreRun in xmlschemas.c in libxml2 2.9.10
- > allows an xmlSchemaValidateStream memory leak.
+Fixes CVE-2020-7595: xmlStringLenDecodeEntities in parser.c in libxml2
+2.9.10 has an infinite loop in a certain end-of-file situation.
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > ---
- > v2: add sob line inside patch (ThomasP)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 615b7c4af59229a14a52f789ce4692dea1828ba3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...finite-loop-in-xmlStringLenDecodeEntities.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-Committed to 2019.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libxml2/0001-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch b/package/libxml2/0001-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch
+new file mode 100644
+index 0000000000..a79adc3f85
+--- /dev/null
++++ b/package/libxml2/0001-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch
+@@ -0,0 +1,36 @@
++From 0e1a49c8907645d2e155f0d89d4d9895ac5112b5 Mon Sep 17 00:00:00 2001
++From: Zhipeng Xie <xiezhipeng1@huawei.com>
++Date: Thu, 12 Dec 2019 17:30:55 +0800
++Subject: [PATCH] Fix infinite loop in xmlStringLenDecodeEntities
++
++When ctxt->instate == XML_PARSER_EOF,xmlParseStringEntityRef
++return NULL which cause a infinite loop in xmlStringLenDecodeEntities
++
++Found with libFuzzer.
++
++Fixes CVE-2020-7595: xmlStringLenDecodeEntities in parser.c in libxml2
++2.9.10 has an infinite loop in a certain end-of-file situation.
++
++Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ parser.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/parser.c b/parser.c
++index d1c31963..a34bb6cd 100644
++--- a/parser.c
+++++ b/parser.c
++@@ -2646,7 +2646,8 @@ xmlStringLenDecodeEntities(xmlParserCtxtPtr ctxt, const xmlChar *str, int len,
++     else
++         c = 0;
++     while ((c != 0) && (c != end) && /* non input consuming loop */
++-	   (c != end2) && (c != end3)) {
+++           (c != end2) && (c != end3) &&
+++           (ctxt->instate != XML_PARSER_EOF)) {
++ 
++ 	if (c == 0) break;
++         if ((c == '&') && (str[1] == '#')) {
++-- 
++2.20.1
++
