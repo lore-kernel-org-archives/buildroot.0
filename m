@@ -1,24 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:30:04 +0100
-Subject: [Buildroot] [PATCH v2] package/grep: fix busybox aliasing
-In-Reply-To: <1580822081-3713-1-git-send-email-angelo@amarulasolutions.com>
- (Angelo Compagnucci's message of "Tue, 4 Feb 2020 14:14:41 +0100")
-References: <1580822081-3713-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <87eeu0q7g3.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Mar 2020 21:30:34 +0100
+Subject: [Buildroot] [PATCH v3 2/8] package/mariadb: remove
+ mariadb_config from target
+In-Reply-To: <20200204012200.7273-2-bluemrp9@gmail.com> (Ryan Coe's message of
+ "Mon, 3 Feb 2020 17:21:54 -0800")
+References: <20200204012200.7273-1-bluemrp9@gmail.com>
+ <20200204012200.7273-2-bluemrp9@gmail.com>
+Message-ID: <87a74oq7f9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
 
- > When grep package is selected, it should be installed at the same exact
- > location where busybox installs it too, this way the grep/egrep/fgrep
- > executables will end up overwriting the busybox provided ones.
- > Busybox installs *grep executables in /bin, grep package in /usr/bin.
+ > We already remove mysql_config from the target since it's only useful in
+ > staging. The same is true for mariadb_config. Thus, we remove it from the
+ > target as well.
 
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+ > ---
+ > Changes v2 -> v3:
+ >   - separate changes into seperate patches (suggested by Thomas)
+ > Changes v1 -> v2:
+ >   - no change
 
 Committed to 2019.02.x and 2019.11.x, thanks.
 
