@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:40:37 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mariadb: security
+Date: Tue, 10 Mar 2020 21:38:57 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/mariadb: security
  bump to 10.3.22
-Message-ID: <20200310202806.D649C907CE@busybox.osuosl.org>
+Message-ID: <20200310202812.80EE5907D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91688f144408ad61fc49319e7f2b7462fde8c06f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=556af5c086d2a5b14ce21e40c443c7141dfa14f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Release notes:
 https://mariadb.com/kb/en/library/mariadb-10322-release-notes/
