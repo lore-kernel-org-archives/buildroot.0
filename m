@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:52:17 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] system: also create a
+Date: Tue, 10 Mar 2020 21:51:50 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] system: also create a
  lib64 -> lib symlink on mips64n32
-Message-ID: <20200310204004.C3A0990827@busybox.osuosl.org>
+Message-ID: <20200310204009.CB21390829@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d908f362d2e7d97df97d10ab102aebc155cd885
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=60eb8b047c2e87a458259e73aa0478451d414094
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 In gcc 5.1.0, a change was introduced which causes internal search paths
 inside the sysroot to be relative to 'lib64' rather than 'lib'. See [1] [2]
