@@ -1,33 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:38:13 +0100
-Subject: [Buildroot] [git commit] board/lemaker/bananapro: fix wlan
- module
-In-Reply-To: <20200204181858.22ADA8B6D0@busybox.osuosl.org> (Peter Korsgaard's
- message of "Tue, 4 Feb 2020 19:27:48 +0100")
-References: <20200204181858.22ADA8B6D0@busybox.osuosl.org>
-Message-ID: <87wo7sosi2.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Mar 2020 21:40:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: security bump to
+ 10.3.22
+In-Reply-To: <20200204181851.26394-1-bluemrp9@gmail.com> (Ryan Coe's message
+ of "Tue, 4 Feb 2020 10:18:51 -0800")
+References: <20200204181851.26394-1-bluemrp9@gmail.com>
+Message-ID: <87sgigosdy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=23bc8059cde54b5c29a559bff07e746a11590e23
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Release notes:
+ > https://mariadb.com/kb/en/library/mariadb-10322-release-notes/
 
- > Restore a patch which disables 00B IRQ for the built-in wlan module which
- > allows working wlan module again.  It turned out that it shouldn't have been
- > deleted because the bug still exists in the mainline linux kernel, so keep
- > this patch the same as armbian[1] to have wifi connection working correctly.
+ > Changelog:
+ > https://mariadb.com/kb/en/library/mariadb-10322-changelog/
 
- > [1] https://github.com/armbian/build/blob/master/patch/kernel/sunxi-dev/ARM-dts-sun7i-Disable-OOB-IRQ-for-brcm-wifi-on-Cubietruck-and-Banana-Pro.patch
+ > Fixes the following security vulnerability (10.3.22):
+ > CVE-2020-2574 - Vulnerability in the MySQL Client product of Oracle MySQL
+ > (component: C API). Supported versions that are affected are 5.6.46 and
+ > prior, 5.7.28 and prior and 8.0.18 and prior. Difficult to exploit
+ > vulnerability allows unauthenticated attacker with network access via
+ > multiple protocols to compromise MySQL Client. Successful attacks of this
+ > vulnerability can result in unauthorized ability to cause a hang or
+ > frequently repeatable crash (complete DOS) of MySQL Client.
 
- > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Fixes the following security vulnerabilities (10.3.19):
+ > CVE-2019-2974 - Vulnerability in the MySQL Server product of Oracle MySQL
+ > (component: Server: Optimizer). Supported versions that are affected are
+ > 5.6.45 and prior, 5.7.27 and prior and 8.0.17 and prior. Easily exploitable
+ > vulnerability allows low privileged attacker with network access via
+ > multiple protocols to compromise MySQL Server. Successful attacks of this
+ > vulnerability can result in unauthorized ability to cause a hang or
+ > frequently repeatable crash (complete DOS) of MySQL Server.
 
-Committed to 2019.11.x, thanks.
+ > CVE-2019-2938 - Vulnerability in the MySQL Server product of Oracle MySQL
+ > (component: InnoDB). Supported versions that are affected are 5.7.27 and
+ > prior and 8.0.17 and prior. Difficult to exploit vulnerability allows high
+ > privileged attacker with network access via multiple protocols to compromise
+ > MySQL Server. Successful attacks of this vulnerability can result in
+ > unauthorized ability to cause a hang or frequently repeatable crash
+ > (complete DOS) of MySQL Server.
+
+ > Patch 0002-fix-build-error-with-newer-cmake.patch has been removed as it
+ > has been applied upstream.
+
+ > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+
+Committed to 2019.02.x and 2019.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
