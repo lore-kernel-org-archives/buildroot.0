@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 22:35:27 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/e2fsprogs:
+Date: Tue, 10 Mar 2020 22:35:12 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/e2fsprogs:
  security bump to version 1.45.5
-Message-ID: <20200310212307.3A5309086C@busybox.osuosl.org>
+Message-ID: <20200310212311.152609086F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51a28c347a7fb23a5b3a29b92b51bc40adea6352
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b3cd3ac86079484267723336ea684dcc4b239397
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 This fixes CVE-2019-5188:
 A code execution vulnerability exists in the directory rehashing
