@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 23:44:53 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libexif: add
+Date: Tue, 10 Mar 2020 23:44:43 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libexif: add
  post-0.6.21 upstream security fixes
-Message-ID: <20200310223218.ECB7B908FF@busybox.osuosl.org>
+Message-ID: <20200310223224.3E47B90903@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e065dfda2f18b182ff0b3a7652c46ad9a004f0a1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d60dccfdc2ba44e22b91d8f4e1c08c45de22d969
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes the following security issues:
 
