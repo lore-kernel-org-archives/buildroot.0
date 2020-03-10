@@ -1,27 +1,46 @@
-From: Joao Marcos Costa <joaomarcos.costa@bootlin.com>
-Date: Tue, 10 Mar 2020 16:53:33 +0100
-Subject: [Buildroot] [PATCH v2] package/coreutils: bump to v8.32
-In-Reply-To: <20200310145656.4000-1-joaomarcos.costa@bootlin.com>
-References: <20200310145656.4000-1-joaomarcos.costa@bootlin.com>
-Message-ID: <20200310165333.6371fe55@joaomcosta-Latitude-E7470>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 10 Mar 2020 17:30:40 +0100
+Subject: [Buildroot] [PATCH] package/localedef: fix dependencies
+Message-ID: <20200310163040.23049-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+localedef needs bison to satisfy a .y.c rule at build time. So, we can
+depend on the system bison, or use our own if needed.
 
-On Tue, 10 Mar 2020 15:56:56 +0100
-Joao Marcos Costa <joaomarcos.costa@bootlin.com> wrote:
+localedef is a host-only package, and dependencies are not inherited
+from the target variant, so we need to make them explicit host
+dependencies.
 
-> The update to version 8.32 removes the need for an extra patch [1]
-> (which was added in upstream) but requires another one [2] to fix a
-> new build issue related to the file 'src/ls.c'.
-> [1]: 0001-strtod_fix_clash_with_strtold.patch
-> [2]: 0001-ls-restore-8.31-behavior-on-removed-directories.patch
+Split the assignemnt or it would make the line too long. And move it
+after all the download-relateed variables.
+
+Reported-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/localedef/localedef.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 10a1929044..6f7efe9f9d 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -10,9 +10,12 @@
+ LOCALEDEF_VERSION = 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+-LOCALEDEF_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
  
-I messed with the patch numbering, it is actually a v1.
-
-Sorry for the mistake,
-Joao Marcos
++HOST_LOCALEDEF_DEPENDENCIES = \
++	$(BR2_BISON_HOST_DEPENDENCY) \
++	$(BR2_MAKE_HOST_DEPENDENCY)
++
+ HOST_LOCALEDEF_CONF_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
+ 
+ # Even though we use the autotools-package infrastructure, we have to override
+-- 
+2.20.1
