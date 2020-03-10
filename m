@@ -1,46 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 10 Mar 2020 17:30:40 +0100
-Subject: [Buildroot] [PATCH] package/localedef: fix dependencies
-Message-ID: <20200310163040.23049-1-yann.morin.1998@free.fr>
+From: Andreas Naumann <dev@andin.de>
+Date: Tue, 10 Mar 2020 18:02:19 +0100
+Subject: [Buildroot] [PATCH v6 01/28] package/qt5base: Do not build
+ shared libs if BR2_STATIC_LIBS is chosen
+In-Reply-To: <20200309222154.0eec932a@windsurf.home>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-2-anaumann@ultratronik.de>
+ <20200309222154.0eec932a@windsurf.home>
+Message-ID: <1042f249-3ea0-4754-54d9-84c531538e71@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-localedef needs bison to satisfy a .y.c rule at build time. So, we can
-depend on the system bison, or use our own if needed.
+Hi Thomas,
 
-localedef is a host-only package, and dependencies are not inherited
-from the target variant, so we need to make them explicit host
-dependencies.
+On 09.03.20 22:21, Thomas Petazzoni wrote:
 
-Split the assignemnt or it would make the line too long. And move it
-after all the download-relateed variables.
+> 
+> So I don't think this patch is necessary, unless I missed something. 
+> How did you test it?
 
-Reported-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/localedef/localedef.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+I had in my original set (and tested it only back then). I didnt know if
+Qt static build would ever be reenabled so I kept it. But it isnt
+needed, so no problem omitting it.
 
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 10a1929044..6f7efe9f9d 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -10,9 +10,12 @@
- LOCALEDEF_VERSION = 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
--LOCALEDEF_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
- HOST_LOCALEDEF_DL_SUBDIR = glibc
- 
-+HOST_LOCALEDEF_DEPENDENCIES = \
-+	$(BR2_BISON_HOST_DEPENDENCY) \
-+	$(BR2_MAKE_HOST_DEPENDENCY)
-+
- HOST_LOCALEDEF_CONF_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
- 
- # Even though we use the autotools-package infrastructure, we have to override
--- 
-2.20.1
+regards,
+Andreas
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
