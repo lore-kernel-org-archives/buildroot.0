@@ -1,52 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 22:28:16 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/runc: security
- bump to version 1.0.0-rc10
-Message-ID: <20200310211623.DD96C90858@busybox.osuosl.org>
+Date: Tue, 10 Mar 2020 22:32:00 +0100
+Subject: [Buildroot] [PATCHv2] package/ncurses: add upstream (security)
+ patches up to 20200118
+In-Reply-To: <20200205133111.24540-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Wed, 5 Feb 2020 14:31:10 +0100")
+References: <20200205133111.24540-1-patrickdepinguin@gmail.com>
+Message-ID: <87h7yvoq0f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e96c423d87c750bad377217d85799f09bb0c5382
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Fixes the following security vulnerability:
+ > From: Peter Korsgaard <peter@korsgaard.com>
+ > Fixes the following security issues:
 
-- CVE-2019-19921: runc volume mount race condition with shared mounts
+ > - CVE-2018-10754: In ncurses before 6.1.20180414, there is a NULL Pointer
+ >   Dereference in the _nc_parse_entry function of tinfo/parse_entry.c.  It
+ >   could lead to a remote denial of service if the terminfo library code is
+ >   used to process untrusted terminfo data in which a use-name is invalid
+ >   syntax (REJECTED).
 
-For details see the announcement:
-https://github.com/opencontainers/runc/releases/tag/v1.0.0-rc10
+ > - CVE-2018-19211: In ncurses 6.1, there is a NULL pointer dereference at
+ >   function _nc_parse_entry in parse_entry.c that will lead to a denial of
+ >   service attack.  The product proceeds to the dereference code path even
+ >   after a "dubious character `*' in name or alias field" detection.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1673d06eb8f7c08d5dbb3e3229f6e134b4c6438b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > - CVE-2018-19217: In ncurses, possibly a 6.x version, there is a NULL
+ >   pointer dereference at the function _nc_name_match that will lead to a
+ >   denial of service attack.  NOTE: the original report stated version 6.1,
+ >   but the issue did not reproduce for that version according to the
+ >   maintainer or a reliable third-party.
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 3e8eff3cca..b895f6fccb 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256	2ec69c25df9f02c6fd38eb287145f8afba6772f809abe01df4534b5bfd68e8d4  runc-1.0.0-rc9.tar.gz
-+sha256	6b44985023347fb9c5a2cc6f761df8c41cc2c84a7a68a6e6acf834dff6653a9a  runc-1.0.0-rc10.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index acf61ab160..4c2f84ab16 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RUNC_VERSION = 1.0.0-rc9
-+RUNC_VERSION = 1.0.0-rc10
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
+ > - CVE-2019-17594: There is a heap-based buffer over-read in the
+ >   _nc_find_entry function in tinfo/comp_hash.c in the terminfo library in
+ >   ncurses before 6.1-20191012.
+
+ > - CVE-2019-17595: There is a heap-based buffer over-read in the fmt_entry
+ >   function in tinfo/comp_hash.c in the terminfo library in ncurses before
+ >   6.1-20191012.
+
+ > Ncurses upstream uses a fairly special way of releasing (security) bugfixes.
+ > Approximately once a week an incremental .patch.gz is released, and once in
+ > a while these incremental patches are bundled up to a bigger patch relative
+ > to the current release in .patch.sh.bz2 format (a bzip2 compressed patch
+ > with a small shell script prepended, luckily apply-patches can handle that),
+ > and the relative patch files deleted.
+
+ > For details of this process, see the upstream FAQ:
+ > https://invisible-island.net/ncurses/ncurses.faq.html#applying_patches
+
+ > Apply the latest .patch.sh.bz2 and incremental patches up to 20200118 to fix
+ > a number of (security) issues.  Notice that these patch files are NOT
+ > available on the GNU mirrors.
+
+ > While we are at it, adjust the white space in the .hash file to match
+ > sha256sum output for consistency.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > [fix whitespace inconsistency after 'sha256' keyword]
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+Committed to 2019.02.x and 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
