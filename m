@@ -1,32 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 22:47:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/clamav: security bump version
- to 0.102.2
-In-Reply-To: <20200206184314.215974-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 6 Feb 2020 19:43:14 +0100")
-References: <20200206184314.215974-1-bernd.kuhls@t-online.de>
-Message-ID: <87zhcnnaqn.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Mar 2020 22:41:23 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] boot/uboot: license files
+ hashes only valid for latest version
+Message-ID: <20200310213450.9168A90877@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2db3e95ff3b3cf72dc5cfadb2122125cb7425385
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Release notes:
- > https://lists.clamav.net/pipermail/clamav-announce/2020/000045.html
+We can only know the details of the license files for known versions.  For
+custom, older or newer versions, the license files may change, or may be
+moved around.
 
- > Fixes CVE-2020-3123.
+So, do for U-Boot as was done for ATF, linux, and linux-headers, and only
+define the list of license files for the latest version.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Markus Mayer <mmayer@broadcom.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ff1a03ab28c8b5ffd7703cc4710bf20cc6223b5e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/uboot/uboot.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Committed to 2019.11.x, thanks.
-
-According to the CVE info the issue was only introduced in 0.102.0, so I
-have not backported it to 2019.02.x:
-
-https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-3123
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 3c070b41b3..75ce3b2f6a 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -8,7 +8,9 @@ UBOOT_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
+ UBOOT_BOARD_NAME = $(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
+ 
+ UBOOT_LICENSE = GPL-2.0+
++ifeq ($(BR2_TARGET_UBOOT_LATEST_VERSION),y)
+ UBOOT_LICENSE_FILES = Licenses/gpl-2.0.txt
++endif
+ 
+ UBOOT_INSTALL_IMAGES = YES
+ 
