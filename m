@@ -1,44 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 11:42:30 +0100
-Subject: [Buildroot] Buildroot 2020.02 released
-In-Reply-To: <CAAXf6LUxTwCJBa3U+ZsRtYd9E4y-K7naTf7fzqTXhGH9AkCVeA@mail.gmail.com>
- (Thomas De Schampheleire's message of "Tue, 10 Mar 2020 11:17:28
- +0100")
-References: <87v9neq98j.fsf@dell.be.48ers.dk>
- <CAAXf6LWcHZUKEKBfa_wqYapQjohnqX487PumEe7M7uzNyo6ayg@mail.gmail.com>
- <87mu8pqljs.fsf@dell.be.48ers.dk>
- <CAAXf6LUxTwCJBa3U+ZsRtYd9E4y-K7naTf7fzqTXhGH9AkCVeA@mail.gmail.com>
-Message-ID: <87imjcqynd.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 10 Mar 2020 11:09:38 +0000
+Subject: [Buildroot] [Bug 12631] glibc support Power-PC SPE
+In-Reply-To: <bug-12631-163@https.bugs.busybox.net/>
+References: <bug-12631-163@https.bugs.busybox.net/>
+Message-ID: <bug-12631-163-vH8IECu7C7@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=12631
 
+--- Comment #1 from romain.naour at gmail.com ---
 Hi,
 
- >> I am a bit concerned about the length of the announcement mail, as there
- >> is quite a bit of info in it, but if it is useful then I can certainly
- >> try to remember to add it in the future.
- >> 
+I would recommend to build your toolchain using Buildroot 2019.02.x using the
+internal toolchain backend and import the toolchain in Buildroot 2020.02 using
+the external toolchain backend.
 
- > Ok, I had checked the 2019.11 release announcement and the list was
- > present there.
+See "6.1.3. Build an external toolchain with Buildroot"
+http://nightly.buildroot.org/manual.html#_cross_compilation_toolchain
 
- > I have always found this list a good way for community building: it
- > clearly shows that Buildroot has a large amount of contributors, and
- > developers in the list get some positive reinforcement about having
- > contributed. This reinforcement is good for the developer themself,
- > but could also be relevant for their surroundings like an employer or
- > peers.
+But Buildroot doesn't support powerpc-spe since [1] (2014-05-30)
 
- > In the same way I quite liked the list of reviewers/ackers/testers as
- > it encourages people to spend time on these tasks too.
+[1]
+https://git.buildroot.net/buildroot/commit/?id=5777e3ffd99132a57e3d29659850eec14b1625f8
 
-I agree. I will try to remember always including it in future release
-notifications.
+Note: The powerpc spe has been removed recently from gcc 9 and glibc 2.30.
+
+Best regards,
+Romain
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
