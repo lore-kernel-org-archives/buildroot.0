@@ -1,67 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Mar 2020 10:30:36 +0100
-Subject: [Buildroot] [PATCH] package/pkg-generic.mk: create folder before
- cd'ing in step_pkg_size_before
-Message-ID: <20200310093037.79028-1-thomas.petazzoni@bootlin.com>
+From: Louis-Paul Cordier <lpdev@cordier.org>
+Date: Tue, 10 Mar 2020 10:58:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pigz: add host package support
+Message-ID: <20200310095816.5404-1-lpdev@cordier.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 0e2be4db8ab01d479177a3a187c22525752195ae ("package/pkg-generic:
-make file list logic parallel build compatible"), the logic to create
-the list of files installed by a particular package was significantly
-reworked to be compatible with top-level parallel build.
-
-Before this commit, there was only a after-install step of listing the
-files in HOST_DIR/TARGET_DIR/STAGING_DIR. But after this commit, we
-now have a before-install logic and an after-install logic.
-
-It turns out that when the before-install logic is called for the very
-first host package, $(HOST_DIR) doesn't exist yet, and therefore the
-cd $(2) fails, with an error message:
-
-/bin/sh: line 0: cd: /home/thomas/buildroot/output/host: No such file or directory
-
-In addition, due to the code using ";" instead of "&&" to separate the
-'cd' from the 'find', we go ahead and continue listing all files in
-the current directory, which is obviously very wrong.
-
-We fix this by simply creating the directory we are going to cd into
-in step_pkg_size_before. It is simpler than testing if the directory
-exists, and if it doesn't, create an empty .files-list$(3).before
-file.
-
-While at it, we also turn the 'cd $(2); find' into 'cd $(2) && find'.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
 ---
- package/pkg-generic.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/Config.in.host      |  1 +
+ package/pigz/Config.in      |  1 +
+ package/pigz/Config.in.host |  9 +++++++++
+ package/pigz/pigz.mk        | 10 ++++++++++
+ 4 files changed, 21 insertions(+)
+ create mode 100644 package/pigz/Config.in.host
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index c1b9fe2e59..26bcabe3d9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -61,7 +61,8 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
- # $(2): base directory to search in
- # $(3): suffix of file (optional)
- define step_pkg_size_before
--	cd $(2); \
-+	mkdir -p $(2)
-+	cd $(2) && \
- 	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
- 		| LC_ALL=C sort > $($(PKG)_BUILDDIR)/.files-list$(3).before
+diff --git a/package/Config.in.host b/package/Config.in.host
+index c0ac4fbbcc..8eed4727bd 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -50,6 +50,7 @@ menu "Host utilities"
+ 	source "package/opkg-utils/Config.in.host"
+ 	source "package/parted/Config.in.host"
+ 	source "package/patchelf/Config.in.host"
++	source "package/pigz/Config.in.host"
+ 	source "package/pkgconf/Config.in.host"
+ 	source "package/pru-software-support/Config.in.host"
+ 	source "package/pwgen/Config.in.host"
+diff --git a/package/pigz/Config.in b/package/pigz/Config.in
+index af229060cf..a76146d8fc 100644
+--- a/package/pigz/Config.in
++++ b/package/pigz/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PIGZ
+ 	bool "pigz"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_HOST_ZLIB
+ 	help
+ 	  pigz, which stands for parallel implementation of gzip, is a
+ 	  fully functional replacement for gzip that exploits multiple
+diff --git a/package/pigz/Config.in.host b/package/pigz/Config.in.host
+new file mode 100644
+index 0000000000..9903cada7d
+--- /dev/null
++++ b/package/pigz/Config.in.host
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HOST_PIGZ
++	bool "host pigz"
++	help
++	  pigz, which stands for parallel implementation of gzip, is a
++	  fully functional replacement for gzip that exploits multiple
++	  processors and multiple cores to the hilt when compressing
++	  data.
++
++	  http://www.zlib.net/pigz/
+diff --git a/package/pigz/pigz.mk b/package/pigz/pigz.mk
+index b4f28c048e..634b6a9b9d 100644
+--- a/package/pigz/pigz.mk
++++ b/package/pigz/pigz.mk
+@@ -9,13 +9,23 @@ PIGZ_SITE = $(call github,madler,pigz,v$(PIGZ_VERSION))
+ PIGZ_DEPENDENCIES = zlib
+ PIGZ_LICENSE = Zlib
+ PIGZ_LICENSE_FILES = README
++HOST_PIGZ_DEPENDENCIES += host-zlib
+ 
+ define PIGZ_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
  endef
-@@ -70,7 +71,7 @@ endef
- # $(2): base directory to search in
- # $(3): suffix of file (optional)
- define step_pkg_size_after
--	cd $(2); \
-+	cd $(2) && \
- 	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
- 		| LC_ALL=C sort > $($(PKG)_BUILDDIR)/.files-list$(3).after
- 	LC_ALL=C comm -13 \
+ 
++define HOST_PIGZ_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
++endef
++
+ define PIGZ_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/pigz $(TARGET_DIR)/usr/bin/pigz
+ endef
+ 
++define HOST_PIGZ_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/pigz $(HOST_DIR)/bin/pigz
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-2.24.1
+2.20.1
