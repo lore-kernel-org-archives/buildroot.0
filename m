@@ -1,39 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Mar 2020 09:13:10 +0100
-Subject: [Buildroot] [PATCH v6 01/28] package/qt5base: Do not build
- shared libs if BR2_STATIC_LIBS is chosen
-In-Reply-To: <20200309234233.23d66662@gmx.net>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-2-anaumann@ultratronik.de>
- <20200309222154.0eec932a@windsurf.home>
- <20200309234233.23d66662@gmx.net>
-Message-ID: <20200310091310.1c5bb22d@windsurf>
+From: =?UTF-8?q?K=C3=A9vin=20L=27h=C3=B4pital?= <kevin.lhopital@bootlin.com>
+Date: Tue, 10 Mar 2020 09:16:37 +0100
+Subject: [Buildroot] [PATCH] package/ed: Bump to version 1.16
+Message-ID: <20200310081637.3288-1-kevin.lhopital@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: K?vin L'h?pital <kevin.lhopital@bootlin.com>
+---
+ package/ed/ed.hash | 4 ++--
+ package/ed/ed.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Mon, 9 Mar 2020 23:42:33 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
-
-> That is funny, depends on !BR2_nios2 because of double conversion,
-> just fixed by 'package/qt5base: fix double-conversion compile for nios2' ([1]),
-> which was a autobuild failure..., but I think QT5 was enabled via
-> package/pinentry/Config.in without the '!BR2_arc && !BR2_nios2 && !BR2_xtensa'
-> dependency....
-> 
-> Seems !BR2_nios2 can be dropped immediately from QT5 and !BR2_xtensa' after
-> back porting the second part from [2]...
-
-Indeed. Will you send some patches ?
-
-Thanks for spotting this!
-
-Thomas
+diff --git a/package/ed/ed.hash b/package/ed/ed.hash
+index 96c814d3c2..2544676b06 100644
+--- a/package/ed/ed.hash
++++ b/package/ed/ed.hash
+@@ -1,4 +1,4 @@
+-# From http://lists.gnu.org/archive/html/bug-ed/2019-01/msg00010.html
+-sha256	ad4489c0ad7a108c514262da28e6c2a426946fb408a3977ef1ed34308bdfd174	ed-1.15.tar.lz
++# From https://lists.gnu.org/archive/html/bug-ed/2020-02/msg00002.html
++sha256	cfc07a14ab048a758473ce222e784fbf031485bcd54a76f74acfee1f390d8b2c	ed-1.16.tar.lz
+ # Locally calculated
+ sha256	f03a12bef9dfb7281864a0dd965166d4f4ec7a66633df2bc72fa4363e57de02c	COPYING
+diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+index 6ef8f951cf..deb900e283 100644
+--- a/package/ed/ed.mk
++++ b/package/ed/ed.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ED_VERSION = 1.15
++ED_VERSION = 1.16
+ ED_SITE = $(BR2_GNU_MIRROR)/ed
+ ED_SOURCE = ed-$(ED_VERSION).tar.lz
+ ED_LICENSE = GPL-3.0+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
