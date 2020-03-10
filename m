@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 22:09:00 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x]
+Date: Tue, 10 Mar 2020 22:08:41 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x]
  package/docker-containerd: security bump to 1.2.12
-Message-ID: <20200310205647.12B7A90849@busybox.osuosl.org>
+Message-ID: <20200310205652.9D44C9084A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=171904dad37644d67a31146127cf8df0a0e82010
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0251b3ab5e6728fc70ffc9ec29cf1a8eeda6c8a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes the following security issues:
 
