@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 22:41:23 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] boot/uboot: license files
+Date: Tue, 10 Mar 2020 22:41:17 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] boot/uboot: license files
  hashes only valid for latest version
-Message-ID: <20200310213450.9168A90877@busybox.osuosl.org>
+Message-ID: <20200310213455.1C5259087F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2db3e95ff3b3cf72dc5cfadb2122125cb7425385
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f541c16b1ddfed5fa37773b4042a691dcc354099
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 We can only know the details of the license files for known versions.  For
 custom, older or newer versions, the license files may change, or may be
@@ -30,7 +30,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 3c070b41b3..75ce3b2f6a 100644
+index 5e0f614024..724ae29f63 100644
 --- a/boot/uboot/uboot.mk
 +++ b/boot/uboot/uboot.mk
 @@ -8,7 +8,9 @@ UBOOT_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
