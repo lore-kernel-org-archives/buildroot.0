@@ -1,57 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 23:17:49 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/wpebackend-fdo:
- bump to version 1.4.1
-Message-ID: <20200310220542.BB0349005F@busybox.osuosl.org>
+Date: Tue, 10 Mar 2020 23:19:53 +0100
+Subject: [Buildroot] [PATCH] package/uclibc: fix ctype.h is*_l
+ definitions
+In-Reply-To: <20200207195144.4060-1-jcmvbkbc@gmail.com> (Max Filippov's
+ message of "Fri, 7 Feb 2020 11:51:44 -0800")
+References: <20200207195144.4060-1-jcmvbkbc@gmail.com>
+Message-ID: <87imjbn986.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04c54859d04f184382f11c52169a10dd22a56f8a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
 
-This is a bugfix release which solves a couple of build issues.
-Full release notes:
+ > ctype locale-specific macro definitions are broken because they result
+ > in dereference of pointer to structure of incomplete type.
+ > Drop these macros since they are optional and let applications use
+ > functions with the same names.
 
-  https://wpewebkit.org/release/wpebackend-fdo-1.4.1.html
+ > Backported from:
+ >   https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=d1a3ca7ca56630fddde7311a0474eed4a21335a7
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1f027a771bcafbef088006c3f11d3a3ccc0bafa7)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index 85e02e22a8..fbeed390e6 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.4.0.tar.xz.sums
--md5 63553c3f43593c2a8c587c32e88fdf3c wpebackend-fdo-1.4.0.tar.xz
--sha1 a426d9a778ab52be2f4dd9cc7d324b43abac2f80 wpebackend-fdo-1.4.0.tar.xz
--sha256 a919ca4a5bc445f9419a5b7f3781cfc98e5abcf5d7259eb1869f5ab20fd18baf wpebackend-fdo-1.4.0.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.4.1.tar.xz.sums
-+md5 c6362491a4a38ddac42b66f140e1cff2 wpebackend-fdo-1.4.1.tar.xz
-+sha1 9217c8a5511bc53544b42cb23390256580ac4b0c wpebackend-fdo-1.4.1.tar.xz
-+sha256 6249a0b7cbfa662206a8d2fa24e2c574e75c681ad0e93468091f1dc68ddb299d wpebackend-fdo-1.4.1.tar.xz
- 
- # Hashes for license files:
- sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index 1f3fc705cc..4a7c569d9c 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEBACKEND_FDO_VERSION = 1.4.0
-+WPEBACKEND_FDO_VERSION = 1.4.1
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
+Committed to 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
