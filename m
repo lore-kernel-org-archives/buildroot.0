@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:50:40 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/imagemagick: fix
+Date: Tue, 10 Mar 2020 21:50:35 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/imagemagick: fix
  configure error with --disable-opencl in setups without libltdl
-Message-ID: <20200310203842.67DD390821@busybox.osuosl.org>
+Message-ID: <20200310203848.C2EAD90825@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d59e6f1a9a6d2867d3041bcc66e3f750520e65e0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d3d5822fb31340503c1801c24a831a0b820da547
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes:
 http://autobuild.buildroot.net/results/d9a/d9a84b642357f758c3f84270fb9a109abd7e2684/
@@ -54,7 +54,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index d85682b416..e5d741e17c 100644
+index eaa291a1bd..5ef04973a6 100644
 --- a/package/imagemagick/imagemagick.mk
 +++ b/package/imagemagick/imagemagick.mk
 @@ -18,7 +18,9 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
@@ -68,7 +68,7 @@ index d85682b416..e5d741e17c 100644
  
  IMAGEMAGICK_CONF_OPTS = \
  	--program-transform-name='s,,,' \
-@@ -184,7 +186,9 @@ HOST_IMAGEMAGICK_CONF_OPTS = \
+@@ -179,7 +181,9 @@ HOST_IMAGEMAGICK_CONF_OPTS = \
  	--with-zlib
  
  # uses clock_gettime, which was provided by librt in glibc < 2.17
