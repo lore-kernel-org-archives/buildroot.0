@@ -1,71 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:32:30 +0100
-Subject: [Buildroot] [PATCH v2] package/grep: fix egrep/fgrep shebang
-In-Reply-To: <87d0aujttx.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Tue, 04 Feb 2020 15:44:10 +0100")
-References: <1580826287-1343-1-git-send-email-angelo@amarulasolutions.com>
- <87d0aujttx.fsf@dell.be.48ers.dk>
-Message-ID: <871rq0q7c1.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Mar 2020 21:26:59 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/mariadb: remove
+ mariadb_config from target
+Message-ID: <20200310202142.0842490580@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=50f44a6fc9e86ec709bc0af1f0c1ffba93a473b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
- >> egrep/fgrep are using autotools SHELL variable to exec the
- >> grep executable with correct options, SHELL is defaulted to
- >> /bin/bash which we usually don't have on target.
- >> This patch defaults on /bin/sh, when /bin/sh is not available
- >> on target, we simply remove the aliases.
+We already remove mysql_config from the target since it's only useful in
+staging. The same is true for mariadb_config. Thus, we remove it from the
+target as well.
 
- >> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
- >> ---
- >> Changelog:
- >> v1 -> v2:
- >> * Handling the corner case when BR2_SYSTEM_BIN_SH_NONE as suggested by
- >> Yann
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c700b5ea8dc8cbe992cba260c5e98736fa95b32f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mariadb/mariadb.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
- >> package/grep/Config.in | 2 ++
- >> package/grep/grep.mk   | 9 +++++++++
- >> 2 files changed, 11 insertions(+)
-
- >> diff --git a/package/grep/Config.in b/package/grep/Config.in
- >> index 5b0471b..47ced41 100644
- >> --- a/package/grep/Config.in
- >> +++ b/package/grep/Config.in
- >> @@ -5,6 +5,8 @@ config BR2_PACKAGE_GREP
- >> help
- >> The GNU regular expression matcher.
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 82e3c16daf..d08909d35c 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -126,11 +126,12 @@ define MARIADB_INSTALL_INIT_SYSTEMD
+ endef
+ endif
  
- >> +	  egrep/fgrep aliases need /bin/sh to be available.
- >> +
- >> http://www.gnu.org/software/grep/grep.html
+-# We don't need mysql_config on the target as it's only useful in staging
+-# We also don't need the test suite on the target
++# We don't need mysql_config or mariadb_config on the target as it's
++# only useful in staging. We also don't need the test suite on the target.
+ define MARIADB_POST_INSTALL
+ 	mkdir -p $(TARGET_DIR)/var/lib/mysql
+ 	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
++	$(RM) $(TARGET_DIR)/usr/bin/mariadb_config
+ 	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
+ endef
  
- >> comment "grep needs a toolchain w/ wchar"
- >> diff --git a/package/grep/grep.mk b/package/grep/grep.mk
- >> index be3e53b..02d8b50 100644
- >> --- a/package/grep/grep.mk
- >> +++ b/package/grep/grep.mk
- >> @@ -12,6 +12,15 @@ GREP_LICENSE_FILES = COPYING
- >> GREP_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- >> GREP_CONF_OPTS = --exec-prefix=/
- 
- >> +ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
- >> +define GREP_REMOVE_ALIAS
- >> +	$(RM) $(TARGET_DIR)/bin/[fe]grep
- >> +endef
- >> +GREP_POST_INSTALL_TARGET_HOOKS += GREP_REMOVE_ALIAS
- >> +else
- >> +GREP_CONF_OPTS += SHELL=/bin/sh
-
- > It is a bit odd to not do this unconditionally. Such environment
- > variables normally go in _CONF_ENV, so I changed that, reworded the
- > commit message a bit and committed, thanks.
-
-Committed to 2019.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
