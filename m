@@ -1,64 +1,82 @@
-From: Charles Turner <cturner@igalia.com>
-Date: Tue, 10 Mar 2020 13:49:42 +0000
-Subject: [Buildroot] [PATCH 1/2] package/cog: add option for platform
- DRM.
-In-Reply-To: <20200310133614.5d8ed8d1@gmx.net>
-References: <20200310112227.16175-1-cturner@igalia.com>
- <20200310133614.5d8ed8d1@gmx.net>
-Message-ID: <394e9ef0dfd8d15ed2dcae67a3cd8cece69993aa.camel@igalia.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 10 Mar 2020 15:01:38 +0100
+Subject: [Buildroot] [PATCH] package/pkg-meson.mk: fix multiple
+ _MESON_EXTRA_BINARIES
+In-Reply-To: <20200310121510.905791-1-john@metanate.com>
+References: <20200310121510.905791-1-john@metanate.com>
+Message-ID: <20200310150138.2e663d6d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello John,
 
-On Tue, 2020-03-10 at 13:36 +0100, Peter Seiderer wrote:
-> > diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-> > index d0e5b79c38..0bbc684436 100644
-> > --- a/package/cog/cog.mk
-> > +++ b/package/cog/cog.mk
-> > @@ -8,13 +8,17 @@ COG_VERSION = 0.4.0
-> >  COG_SITE = https://wpewebkit.org/releases
-> >  COG_SOURCE = cog-$(COG_VERSION).tar.xz
-> >  COG_INSTALL_STAGING = YES
-> > -COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
-> > +COG_DEPENDENCIES = dbus wayland wpewebkit wpebackend-fdo
-> 
-> New option, unconditionally added new dependency on wayland?
+On Tue, 10 Mar 2020 12:15:10 +0000, John Keeping <john@metanate.com> wrote:
 
-Perhaps I should place that in a separate patch. Cog does depend on
-wayland with wpewebkit, which is why I reflex-added it to the deps.
-It's already depended on from the wpewebkit dependency, but I didn't
-like relying on a separate packages dependency list for this package,
-especially when Cog can be build with webkitgtk instead, in which case
-it would not need the wayland dep (although I wonder if anyone has
-tested that in buildroot yet :-))
+> If multiple entries are specified for _MESON_EXTRA_BINARIES, the current
+> sed expression will only replace the first one.
+>
+> Specifically, from GNU sed 4.8 the manual says:
+>
+>     /regexp/
+>         Match  lines matching the regular expression regexp.  Matching
+>         is performed on the current pattern space, which can be modified
+>         with commands such as ``s///''.
+>
+> so after the first binary has been added, the next entry no longer
+> matches since the pattern space has been modifed.
+>
+> Instead of adding a script for each value, apply the match once and add
+> a subsitution for each entry.
+>
+> Signed-off-by: John Keeping <john@metanate.com>
+> ---
+>  package/pkg-meson.mk | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 642b715938..6ac3f79fe9 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -76,9 +76,10 @@ define $(2)_CONFIGURE_CMDS
+>  	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
+>  	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
+>  	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
+> -	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+> -	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
+> -	    ) \
+> +	    -e "/^\[binaries\]$$$$/ { \
+> +		$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+> +	            s:$$$$:\n$$(x): ; \
+> +		) }" \
+>  	    package/meson/cross-compilation.conf.in \
+>  	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+>  	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
 
-From this reasoning, I will remove this added dependency on wayland.
+Tested with:
 
-> 
-> >  COG_LICENSE = MIT
-> >  COG_LICENSE_FILES = COPYING
-> >  COG_CONF_OPTS = \
-> >  	-DCOG_BUILD_PROGRAMS=ON \
-> >  	-DCOG_PLATFORM_FDO=ON \
-> > -	-DCOG_PLATFORM_DRM=OFF \
-> >  	-DCOG_HOME_URI='$(call
-> > qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
-> > 
-> > +ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
-> > +	COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
-> > +	COG_DEPENDENCIES += libdrm libinput
-> 
-> missing:
-> 
-> #else
-> 	COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -20,6 +20,10 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ LIBGLIB2_CFLAGS += -marm
+ endif
 
-This is default off in CMake, which is why I removed it from the .mk
-file here.
++LIBGLIB2_MESON_EXTRA_BINARIES = aaa='/usr/bin/aaaaaaaaaaa' \
++       bbb='/usr/bin/bbbbbbbbbbbbbbb' \
++       ccc='/usr/bin/ccccccccccccccc'
++
+ HOST_LIBGLIB2_CONF_OPTS = \
+        -Ddtrace=false \
+        -Dfam=false \
 
-B.R
-	Charlie.
+
+And checking build/libglib2-2.62.4/build/cross-compilation.conf
+before and after patching, only with your patch all three binaries
+entries are added...
+
+Tested-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
