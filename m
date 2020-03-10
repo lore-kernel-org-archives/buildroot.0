@@ -1,68 +1,47 @@
 From: John Keeping <john@metanate.com>
-Date: Tue, 10 Mar 2020 12:44:58 +0000
-Subject: [Buildroot] [PATCH 1/2] package/pkg-meson.mk: add
- FOO_MESON_EXTRA_PROPERTIES
+Date: Tue, 10 Mar 2020 12:44:59 +0000
+Subject: [Buildroot] [PATCH 2/2] package/libglib2: restore use of system
+ printf
 In-Reply-To: <20200310124459.908611-1-john@metanate.com>
 References: <20200310124459.908611-1-john@metanate.com>
-Message-ID: <20200310124459.908611-2-john@metanate.com>
+Message-ID: <20200310124459.908611-3-john@metanate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With autoconf packages, we often specify ac_cv_func_... cached values to
-avoid runtime checks during configure.  With meson the equivalent is
-setting properties in cross-compilation.conf which we cannot do in
-Buildroot at the moment.
+Prior to commit 4102db0f7a ("package/libglib2: bump to version 2.60.3")
+which converted libglib2 to meson, Buildroot used to set a range of
+autoconf options to bypass tests that require running binaries.
 
-For example, libglib2 used to set ac_cv_func_printf_unix98 and
-ac_cv_func_vsnprintf_c99 so that the system printf could be used, but
-with the conversion to meson these checks fail and the gnulib fallback
-is used.
+The meson version of libglib2's build system has many fewer of these
+checks, but there are still some and these can be fed the "correct"
+answer by adding properties to cross-compilation.conf.
 
-Add infrastructure in the same way as FOO_MESON_EXTRA_BINARIES to allow
-per-package modification to the cross-compilation properties.
+Add the necessary properties to indicate that we have C99 compliant
+print functions to avoid pulling in the gnulib fallback.
 
 Signed-off-by: John Keeping <john@metanate.com>
 ---
- docs/manual/adding-packages-meson.txt | 8 ++++++++
- package/pkg-meson.mk                  | 4 ++++
- 2 files changed, 12 insertions(+)
+ package/libglib2/libglib2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
-index e84bf7f60a..c28828243c 100644
---- a/docs/manual/adding-packages-meson.txt
-+++ b/docs/manual/adding-packages-meson.txt
-@@ -116,6 +116,14 @@ will therefore only use a few of them.
-   single quotes. By default, empty. Note that Buildroot already sets the
-   correct values for +c+, +cpp+, +ar+, +strip+, and +pkgconfig+.
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index f00818f69c..a206639f74 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -52,6 +52,11 @@ LIBGLIB2_CONF_OPTS = \
+ 	-Dinstalled_tests=false \
+ 	-Doss_fuzz=disabled
  
-+* +FOO_MESON_EXTRA_PROPERTIES+, to specify a space-separated list of
-+  properties to add to the `[properties]` section of the meson
-+  `cross-compilation.conf` configuration file. The format is
-+  `property-name='value'`, with no space around the +=+ sign, and with the
-+  value between single quotes. By default, empty. Note that Buildroot
-+  already sets values for +needs_exe_wrapper+, +c_args+, +c_link_args+,
-+  +cpp_args+, +cpp_link_args+, +sys_root+, and +pkg_config_libdir+.
++LIBGLIB2_MESON_EXTRA_PROPERTIES = \
++	have_c99_vsnprintf=true \
++	have_c99_snprintf=true \
++	have_unix98_printf=true
 +
- * +FOO_NINJA_ENV+, to specify additional environment variables to pass to
-   +ninja+, meson companion tool in charge of the build operations. By default,
-   empty.
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 6ac3f79fe9..4df1326cad 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -80,6 +80,10 @@ define $(2)_CONFIGURE_CMDS
- 		$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
- 	            s:$$$$:\n$$(x): ; \
- 		) }" \
-+	    -e "/^\[properties\]$$$$/ { \
-+		$$(foreach x,$$($(2)_MESON_EXTRA_PROPERTIES), \
-+		    s:$$$$:\n$$(x): ; \
-+		) }" \
- 	    package/meson/cross-compilation.conf.in \
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
- 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ LIBGLIB2_DEPENDENCIES += libiconv
+ endif
 -- 
 2.25.1
