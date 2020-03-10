@@ -1,75 +1,67 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 10 Mar 2020 09:56:08 +0100
-Subject: [Buildroot] [PATCH v1] package/libevdev: fix static compile
-In-Reply-To: <20200310084540.7176-1-ps.report@gmx.net>
-References: <20200310084540.7176-1-ps.report@gmx.net>
-Message-ID: <20200310095608.3e5fbbcb@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 10 Mar 2020 10:30:36 +0100
+Subject: [Buildroot] [PATCH] package/pkg-generic.mk: create folder before
+ cd'ing in step_pkg_size_before
+Message-ID: <20200310093037.79028-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 10 Mar 2020 09:45:40 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+Commit 0e2be4db8ab01d479177a3a187c22525752195ae ("package/pkg-generic:
+make file list logic parallel build compatible"), the logic to create
+the list of files installed by a particular package was significantly
+reworked to be compatible with top-level parallel build.
 
-> Add patch to enable meson static library build (use meson
-> library() instead of shared_library()).
->
-> Fixes:
->
->   - http://autobuild.buildroot.net/results/b920ef5a250e7d23223352367ded50bf32bb5688
->
->   .../host/bin/arm-linux-gcc  -o libevdev.so.2.3.0 'evdev at sha/libevdev_libevdev-uinput.c.o' 'evdev at sha/libevdev_libevdev.c.o' 'evdev at sha/libevdev_libevdev-names.c.o' -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -shared -fPIC -Wl,--start-group -Wl,-soname,libevdev.so.2 -Wl,--end-group -Wl,-elf2flt -static -Wl,--version-script,.../build/libevdev-1.9.0/libevdev/libevdev.sym
->   ld (ld-elf2flt): -shared used without passing a shared library ID
->
->   - http://autobuild.buildroot.net/results/dc52a705c7490b722380af7b00ff7c6e172450cf
->
->   .../host/bin/x86_64-linux-gcc  -o libevdev.so.2.3.0 'evdev at sha/libevdev_libevdev-uinput.c.o' 'evdev at sha/libevdev_libevdev.c.o' 'evdev at sha/libevdev_libevdev-names.c.o' -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -shared -fPIC -Wl,--start-group -Wl,-soname,libevdev.so.2 -Wl,--end-group -static -Wl,--version-script,.../build/libevdev-1.9.0/libevdev/libevdev.sym
->   .../host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: .../host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/crtbeginT.o: relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
->   .../host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: .../host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/crtend.o: relocation R_X86_64_32 against `.ctors' can not be used when making a shared object; recompile with -fPIC
->   .../host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: final link failed: nonrepresentable section on output
->
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...on.build-enable-static-library-build.patch | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/libevdev/0003-meson.build-enable-static-library-build.patch
->
-> diff --git a/package/libevdev/0003-meson.build-enable-static-library-build.patch b/package/libevdev/0003-meson.build-enable-static-library-build.patch
-> new file mode 100644
-> index 0000000000..36722bf9a3
-> --- /dev/null
-> +++ b/package/libevdev/0003-meson.build-enable-static-library-build.patch
-> @@ -0,0 +1,29 @@
-> +From 0d39ee4958869e9dd7657d6d0528bc4e2461e912 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Tue, 10 Mar 2020 09:35:52 +0100
-> +Subject: [PATCH] meson.build: enable static library build
-> +
-> +Use meson library() instead of shared_library() to enable
-> +static build.
-> +
+Before this commit, there was only a after-install step of listing the
+files in HOST_DIR/TARGET_DIR/STAGING_DIR. But after this commit, we
+now have a before-install logic and an after-install logic.
 
-Upstream: https://gitlab.freedesktop.org/libevdev/libevdev/-/merge_requests/45
+It turns out that when the before-install logic is called for the very
+first host package, $(HOST_DIR) doesn't exist yet, and therefore the
+cd $(2) fails, with an error message:
 
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + meson.build | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index a623a90..94224cb 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -70,7 +70,7 @@ src_libevdev = [
-> +
-> + mapfile = join_paths(dir_src, 'libevdev.sym')
-> + version_flag = '-Wl,--version-script, at 0@'.format(mapfile)
-> +-lib_libevdev = shared_library('evdev',
-> ++lib_libevdev = library('evdev',
-> + 	src_libevdev,
-> + 	include_directories: [includes_include],
-> + 	dependencies: [],
-> +--
-> +2.25.1
-> +
+/bin/sh: line 0: cd: /home/thomas/buildroot/output/host: No such file or directory
+
+In addition, due to the code using ";" instead of "&&" to separate the
+'cd' from the 'find', we go ahead and continue listing all files in
+the current directory, which is obviously very wrong.
+
+We fix this by simply creating the directory we are going to cd into
+in step_pkg_size_before. It is simpler than testing if the directory
+exists, and if it doesn't, create an empty .files-list$(3).before
+file.
+
+While at it, we also turn the 'cd $(2); find' into 'cd $(2) && find'.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-generic.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index c1b9fe2e59..26bcabe3d9 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -61,7 +61,8 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ # $(2): base directory to search in
+ # $(3): suffix of file (optional)
+ define step_pkg_size_before
+-	cd $(2); \
++	mkdir -p $(2)
++	cd $(2) && \
+ 	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+ 		| LC_ALL=C sort > $($(PKG)_BUILDDIR)/.files-list$(3).before
+ endef
+@@ -70,7 +71,7 @@ endef
+ # $(2): base directory to search in
+ # $(3): suffix of file (optional)
+ define step_pkg_size_after
+-	cd $(2); \
++	cd $(2) && \
+ 	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+ 		| LC_ALL=C sort > $($(PKG)_BUILDDIR)/.files-list$(3).after
+ 	LC_ALL=C comm -13 \
+-- 
+2.24.1
