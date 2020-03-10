@@ -1,68 +1,110 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 23:19:18 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/uclibc: restore
- __isctype_l definition
-Message-ID: <20200310220735.9081C908A9@busybox.osuosl.org>
+Date: Tue, 10 Mar 2020 23:19:13 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/uclibc: fix
+ ctype.h is*_l definitions
+Message-ID: <20200310220735.888D2908A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beb95de63fb97012e6b2ab3c6e35fc86e73e1a32
+commit: https://git.buildroot.net/buildroot/commit/?id=4275331b18b2c3995d77721a8dfadaf2366babe5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Recent is*_l fix broke uclibc build because removed __isctype_l
-definition was used in libc/misc/ctype/ctype.c. Restore it.
+ctype locale-specific macro definitions are broken because they result
+in dereference of pointer to structure of incomplete type.
+Drop these macros since they are optional and let applications use
+functions with the same names.
 
-Fixes: 8723c5e7a6db ("package/uclibc: fix ctype.h is*_l definitions")
+Backported from:
+  https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=d1a3ca7ca56630fddde7311a0474eed4a21335a7
+Fixes:
+  http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39
+
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-[yann.morin.1998 at free.fr:
-  - add new patch, don't fix existing one
-  - add URL to upstream ML post
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 115185b407a35e61785e83eccd0bcaed7eaac5f0)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8723c5e7a6dbdbed571d11a4c5e6853bf8ad7f06)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...de-ctype.h-restore-__isctype_l-definition.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ ...lude-ctype.h-drop-is-_l-macro-definitions.patch | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-diff --git a/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch b/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
+diff --git a/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
 new file mode 100644
-index 0000000000..a0e115c763
+index 0000000000..5557a9c1e7
 --- /dev/null
-+++ b/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
-@@ -0,0 +1,32 @@
-+From 7a9a3e4b36955e8530756823d3443f6822562c56 Mon Sep 17 00:00:00 2001
++++ b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
+@@ -0,0 +1,72 @@
++From d1a3ca7ca56630fddde7311a0474eed4a21335a7 Mon Sep 17 00:00:00 2001
 +From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Sun, 9 Feb 2020 22:29:53 +0100
-+Subject: [PATCH] include/ctype.h: restore __isctype_l definition
++Date: Mon, 3 Feb 2020 13:57:32 -0800
++Subject: [PATCH] include/ctype.h: drop is*_l macro definitions
 +
-+Recent is*_l fix broke uclibc build because removed __isctype_l
-+definition was used in libc/misc/ctype/ctype.c. Restore it.
++ctype locale-specific macro definitions are broken because they result
++in dereference of pointer to structure of incomplete type.
++Drop these macros since they are optional and let applications use
++functions with the same names.
 +
-+Fixes: d1a3ca7ca566 ("include/ctype.h: drop is*_l macro definitions")
++This change fixes parted-3.3 build with uClibc-ng:
++  http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39/build-end.log
++
 +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 +---
-+Upstream status:
-+https://mailman.uclibc-ng.org/pipermail/devel/2020-February/001940.html
-+---
-+ include/ctype.h | 1 +
-+ 1 file changed, 1 insertion(+)
++ include/ctype.h | 33 ---------------------------------
++ 1 file changed, 33 deletions(-)
 +
 +diff --git a/include/ctype.h b/include/ctype.h
-+index e934cf332..05f21c553 100644
++index ecd5e730886a..e934cf3321a6 100644
 +--- a/include/ctype.h
 ++++ b/include/ctype.h
-+@@ -350,6 +350,7 @@ libc_hidden_proto(tolower_l)
++@@ -350,46 +350,13 @@ libc_hidden_proto(tolower_l)
 + /* Return the uppercase version of C.  */
 + extern int toupper_l (int __c, __locale_t __l) __THROW;
 + 
-++# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] & (__ctype_mask_t) type)
++-# if __GNUC__ >= 2 && defined __OPTIMIZE__ && !defined __cplusplus
++-#  define tolower_l(c, locale) __tobody(c, tolower_l, (locale)->__ctype_tolower, (c, locale))
++-#  define toupper_l(c, locale) __tobody(c, toupper_l, (locale)->__ctype_toupper, (c, locale))
++-# endif	/* Optimizing gcc */
++-
++-
++-# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] & (__ctype_mask_t) type)
 + # ifndef __NO_CTYPE
++-#  define __isalnum_l(c,l)	__isctype_l((c), _ISalnum, (l))
++-#  define __isalpha_l(c,l)	__isctype_l((c), _ISalpha, (l))
++-#  define __iscntrl_l(c,l)	__isctype_l((c), _IScntrl, (l))
++-#  define __isdigit_l(c,l)	__isctype_l((c), _ISdigit, (l))
++-#  define __islower_l(c,l)	__isctype_l((c), _ISlower, (l))
++-#  define __isgraph_l(c,l)	__isctype_l((c), _ISgraph, (l))
++-#  define __isprint_l(c,l)	__isctype_l((c), _ISprint, (l))
++-#  define __ispunct_l(c,l)	__isctype_l((c), _ISpunct, (l))
++-#  define __isspace_l(c,l)	__isctype_l((c), _ISspace, (l))
++-#  define __isupper_l(c,l)	__isctype_l((c), _ISupper, (l))
++-#  define __isxdigit_l(c,l)	__isctype_l((c), _ISxdigit, (l))
++-#  define __isblank_l(c,l)	__isctype_l((c), _ISblank, (l))
++-
 + #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
 + 	&& defined __UCLIBC_SUSV4_LEGACY__
++ #   define __isascii_l(c,l)	((l), __isascii (c))
++ #   define __toascii_l(c,l)	((l), __toascii (c))
++ #  endif
++ 
++-#  define isalnum_l(c,l)	__isalnum_l ((c), (l))
++-#  define isalpha_l(c,l)	__isalpha_l ((c), (l))
++-#  define iscntrl_l(c,l)	__iscntrl_l ((c), (l))
++-#  define isdigit_l(c,l)	__isdigit_l ((c), (l))
++-#  define islower_l(c,l)	__islower_l ((c), (l))
++-#  define isgraph_l(c,l)	__isgraph_l ((c), (l))
++-#  define isprint_l(c,l)	__isprint_l ((c), (l))
++-#  define ispunct_l(c,l)	__ispunct_l ((c), (l))
++-#  define isspace_l(c,l)	__isspace_l ((c), (l))
++-#  define isupper_l(c,l)	__isupper_l ((c), (l))
++-#  define isxdigit_l(c,l)	__isxdigit_l ((c), (l))
++-#  define isblank_l(c,l)	__isblank_l ((c), (l))
++-
++ #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
++ 	&& defined __UCLIBC_SUSV4_LEGACY__
++ #   define isascii_l(c,l)	__isascii_l ((c), (l))
 +-- 
 +2.20.1
 +
