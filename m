@@ -1,67 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:57:04 +0100
+Date: Tue, 10 Mar 2020 21:57:08 +0100
 Subject: [Buildroot] [git commit branch/2019.02.x] package/libxml2: add
- upstream security fix for CVE-2020-7595
-Message-ID: <20200310204518.C2D529082F@busybox.osuosl.org>
+ upstream security fix for CVE-2019-20388
+Message-ID: <20200310204518.CB25990828@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e135f475b40770f0c85b79957f86665c21e416ed
+commit: https://git.buildroot.net/buildroot/commit/?id=480bdb249383b388a0334f9fbb178021479cd8b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes CVE-2020-7595: xmlStringLenDecodeEntities in parser.c in libxml2
-2.9.10 has an infinite loop in a certain end-of-file situation.
+Fixes CVE-2019-20388: xmlSchemaPreRun in xmlschemas.c in libxml2 2.9.10
+allows an xmlSchemaValidateStream memory leak.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 615b7c4af59229a14a52f789ce4692dea1828ba3)
+(cherry picked from commit 48802015a923ec64046a68300b00b74359b6bdcf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...finite-loop-in-xmlStringLenDecodeEntities.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ ...ix-memory-leak-in-xmlSchemaValidateStream.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/libxml2/0001-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch b/package/libxml2/0001-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch
+diff --git a/package/libxml2/0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch b/package/libxml2/0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch
 new file mode 100644
-index 0000000000..a79adc3f85
+index 0000000000..2aeddf6775
 --- /dev/null
-+++ b/package/libxml2/0001-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch
-@@ -0,0 +1,36 @@
-+From 0e1a49c8907645d2e155f0d89d4d9895ac5112b5 Mon Sep 17 00:00:00 2001
++++ b/package/libxml2/0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch
+@@ -0,0 +1,35 @@
++From 7ffcd44d7e6c46704f8af0321d9314cd26e0e18a Mon Sep 17 00:00:00 2001
 +From: Zhipeng Xie <xiezhipeng1@huawei.com>
-+Date: Thu, 12 Dec 2019 17:30:55 +0800
-+Subject: [PATCH] Fix infinite loop in xmlStringLenDecodeEntities
++Date: Tue, 20 Aug 2019 16:33:06 +0800
++Subject: [PATCH] Fix memory leak in xmlSchemaValidateStream
 +
-+When ctxt->instate == XML_PARSER_EOF,xmlParseStringEntityRef
-+return NULL which cause a infinite loop in xmlStringLenDecodeEntities
++When ctxt->schema is NULL, xmlSchemaSAXPlug->xmlSchemaPreRun
++alloc a new schema for ctxt->schema and set vctxt->xsiAssemble
++to 1. Then xmlSchemaVStart->xmlSchemaPreRun initialize
++vctxt->xsiAssemble to 0 again which cause the alloced schema
++can not be freed anymore.
 +
 +Found with libFuzzer.
 +
-+Fixes CVE-2020-7595: xmlStringLenDecodeEntities in parser.c in libxml2
-+2.9.10 has an infinite loop in a certain end-of-file situation.
-+
 +Signed-off-by: Zhipeng Xie <xiezhipeng1@huawei.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++[import into Buildroot]
++Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 +---
-+ parser.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++ xmlschemas.c | 1 -
++ 1 file changed, 1 deletion(-)
 +
-+diff --git a/parser.c b/parser.c
-+index d1c31963..a34bb6cd 100644
-+--- a/parser.c
-++++ b/parser.c
-+@@ -2646,7 +2646,8 @@ xmlStringLenDecodeEntities(xmlParserCtxtPtr ctxt, const xmlChar *str, int len,
-+     else
-+         c = 0;
-+     while ((c != 0) && (c != end) && /* non input consuming loop */
-+-	   (c != end2) && (c != end3)) {
-++           (c != end2) && (c != end3) &&
-++           (ctxt->instate != XML_PARSER_EOF)) {
-+ 
-+ 	if (c == 0) break;
-+         if ((c == '&') && (str[1] == '#')) {
++diff --git a/xmlschemas.c b/xmlschemas.c
++index 301c8449..39d92182 100644
++--- a/xmlschemas.c
+++++ b/xmlschemas.c
++@@ -28090,7 +28090,6 @@ xmlSchemaPreRun(xmlSchemaValidCtxtPtr vctxt) {
++     vctxt->nberrors = 0;
++     vctxt->depth = -1;
++     vctxt->skipDepth = -1;
++-    vctxt->xsiAssemble = 0;
++     vctxt->hasKeyrefs = 0;
++ #ifdef ENABLE_IDC_NODE_TABLES_TEST
++     vctxt->createIDCNodeTables = 1;
 +-- 
-+2.20.1
++2.24.1
 +
