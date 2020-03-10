@@ -1,49 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 22:26:55 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/lapack: avoid
- selecting lapack and clapack
-Message-ID: <20200310211619.4751590850@busybox.osuosl.org>
+Date: Tue, 10 Mar 2020 22:28:24 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/runc: security
+ bump to version 1.0.0-rc10
+Message-ID: <20200310211619.5520590848@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=010b003fa675d3f4c853988927dd9ab82b4642d3
+commit: https://git.buildroot.net/buildroot/commit/?id=e55307b83e4e1c5f9e9634492c1b6cc01bb41cdb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-lapack and clapack generate the same libraries liblapack.so and
-libblas.so. So those two packages can't be selected at the same time.
+Fixes the following security vulnerability:
 
-This is a temporary fix waiting for a solution[2].
+- CVE-2019-19921: runc volume mount race condition with shared mounts
 
-So:
-- add !BR2_PACKAGE_CLAPACK to lapack/Config.in.
+For details see the announcement:
+https://github.com/opencontainers/runc/releases/tag/v1.0.0-rc10
 
-[1]: http://autobuild.buildroot.org/results/375/375078ed8f965ecf92eb9674bd071a518c3ef894//
-[2]: http://lists.busybox.net/pipermail/buildroot/2019-August/255894.html
-
-Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Romain Naour <romain.naour@smile.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 24814a095814f3cf241ad12f90c701f98bee6849)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1673d06eb8f7c08d5dbb3e3229f6e134b4c6438b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lapack/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lapack/Config.in b/package/lapack/Config.in
-index 9687ace82d..6cd0810cb1 100644
---- a/package/lapack/Config.in
-+++ b/package/lapack/Config.in
-@@ -5,6 +5,7 @@ comment "lapack/blas needs a toolchain w/ fortran"
- config BR2_PACKAGE_LAPACK
- 	bool "lapack/blas"
- 	depends on BR2_TOOLCHAIN_HAS_FORTRAN
-+	depends on !BR2_PACKAGE_CLAPACK
- 	# _fpu_control is used on PowerPC, but not available with uClibc
- 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
- 	help
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 3e8eff3cca..b895f6fccb 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256	2ec69c25df9f02c6fd38eb287145f8afba6772f809abe01df4534b5bfd68e8d4  runc-1.0.0-rc9.tar.gz
++sha256	6b44985023347fb9c5a2cc6f761df8c41cc2c84a7a68a6e6acf834dff6653a9a  runc-1.0.0-rc10.tar.gz
+ sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index acf61ab160..4c2f84ab16 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RUNC_VERSION = 1.0.0-rc9
++RUNC_VERSION = 1.0.0-rc10
+ RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
