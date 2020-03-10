@@ -1,76 +1,92 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:31:25 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/grep: fix
- egrep/fgrep shebang
-Message-ID: <20200310202151.94B568F008@busybox.osuosl.org>
+Date: Tue, 10 Mar 2020 21:37:53 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] board/lemaker/bananapro:
+ fix wlan module
+Message-ID: <20200310202540.DD666907C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=908277b88fec0919aa77687e4846ec4999c51e9e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d17c8b06c94c3ceaa1f66ae3193ebf00b4840e41
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-egrep/fgrep are wrapper scripts, calling the grep binary with the correct
-arguments.
+Restore a patch which disables 00B IRQ for the built-in wlan module which
+allows working wlan module again.  It turned out that it shouldn't have been
+deleted because the bug still exists in the mainline linux kernel, so keep
+this patch the same as armbian[1] to have wifi connection working correctly.
 
-The shell wrappers use the value of SHELL at build time as the shebang value
-in these wrapper scripts, which in Buildroot points to /bin/bash.
+[1] https://github.com/armbian/build/blob/master/patch/kernel/sunxi-dev/ARM-dts-sun7i-Disable-OOB-IRQ-for-brcm-wifi-on-Cubietruck-and-Banana-Pro.patch
 
-The target may not have bash available, causing runtime errors.
-
-As a fix, add a post-install hook to change this to /bin/sh.
-
-If the target does not have /bin/sh, simply remove the aliases.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8f9f48acd2db27863ca8fc0a4f1377aa2b07c886)
+(cherry picked from commit 23bc8059cde54b5c29a559bff07e746a11590e23)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/grep/Config.in |  2 ++
- package/grep/grep.mk   | 17 +++++++++++++++++
- 2 files changed, 19 insertions(+)
+ ...ot-dts-sun7i-a20-bananapro.dts-disable-00.patch | 44 ++++++++++++++++++++++
+ configs/bananapro_defconfig                        |  1 +
+ 2 files changed, 45 insertions(+)
 
-diff --git a/package/grep/Config.in b/package/grep/Config.in
-index 5b0471b4c0..665c05c05e 100644
---- a/package/grep/Config.in
-+++ b/package/grep/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_GREP
- 	help
- 	  The GNU regular expression matcher.
+diff --git a/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch b/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
+new file mode 100644
+index 0000000000..c8e8c03753
+--- /dev/null
++++ b/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
+@@ -0,0 +1,44 @@
++From 896e82ab14e7e4e361ffa7c81def787907c1bf4c Mon Sep 17 00:00:00 2001
++From: Bartosz Bilas <b.bilas@grinn-global.com>
++Date: Sun, 19 May 2019 21:04:35 +0200
++Subject: [PATCH] arch/arm/boot/dts/sun7i-a20-bananapro.dts: disable 00B
++ IRQ for brcm wifi module
++
++	BugLink: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=908438
++
++Signed-off-by: Hans de Goede <hdegoede@redhat.com>
++Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
++---
++ arch/arm/boot/dts/sun7i-a20-bananapro.dts | 16 +++++++++++++---
++ 1 file changed, 13 insertions(+), 3 deletions(-)
++
++diff --git a/arch/arm/boot/dts/sun7i-a20-bananapro.dts b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
++index 0176e9de0..93b3340f5 100644
++--- a/arch/arm/boot/dts/sun7i-a20-bananapro.dts
+++++ b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
++@@ -160,9 +160,19 @@
++ 	brcmf: wifi at 1 {
++ 		reg = <1>;
++ 		compatible = "brcm,bcm4329-fmac";
++-		interrupt-parent = <&pio>;
++-		interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
++-		interrupt-names = "host-wake";
+++		/*
+++		 * OOB interrupt support is broken ATM, often the first irq
+++		 * does not get seen resulting in the drv probe failing with:
+++		 *
+++		 * brcmfmac: brcmf_sdio_bus_rxctl: resumed on timeout
+++		 * brcmfmac: brcmf_bus_started: failed: -110
+++		 * brcmfmac: brcmf_attach: dongle is not responding: err=-110
+++		 * brcmfmac: brcmf_sdio_firmware_callback: brcmf_attach failed
+++		 *
+++		 * interrupt-parent = <&pio>;
+++		 * interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
+++		 * interrupt-names = "host-wake";
+++		 */
++ 	};
++ };
++ 
++-- 
++2.21.0
++
+diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
+index a990380570..95bd871468 100644
+--- a/configs/bananapro_defconfig
++++ b/configs/bananapro_defconfig
+@@ -1,6 +1,7 @@
+ # Architecture
+ BR2_arm=y
+ BR2_cortex_a7=y
++BR2_GLOBAL_PATCH_DIR="board/lemaker/bananapro/patches"
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
-+	  egrep/fgrep aliases need /bin/sh to be available.
-+
- 	  http://www.gnu.org/software/grep/grep.html
- 
- comment "grep needs a toolchain w/ wchar"
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index eefdfe6a74..cc80553eb9 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -13,6 +13,23 @@ GREP_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- # install into /bin like busybox grep
- GREP_CONF_OPTS = --exec-prefix=/
- 
-+ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
-+
-+define GREP_REMOVE_ALIAS
-+	$(RM) $(TARGET_DIR)/bin/[fe]grep
-+endef
-+GREP_POST_INSTALL_TARGET_HOOKS += GREP_REMOVE_ALIAS
-+
-+else
-+
-+# ensure egrep/fgrep shell wrappers use #!/bin/sh
-+define GREP_FIXUP_SHEBANG
-+	$(SED) 's/bash$$/sh/' $(TARGET_DIR)/bin/[fe]grep
-+endef
-+GREP_POST_INSTALL_TARGET_HOOKS += GREP_FIXUP_SHEBANG
-+
-+endif
-+
- # link with iconv if enabled
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- GREP_CONF_ENV += LIBS=-liconv
