@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 22:31:19 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/ncurses: add
+Date: Tue, 10 Mar 2020 22:30:25 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/ncurses: add
  upstream (security) patches up to 20200118
-Message-ID: <20200310211926.738129085D@busybox.osuosl.org>
+Message-ID: <20200310211936.3CB51815B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b21273d71d094008330f56f936c762f6c3e7bd6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8db898a33866be43d32784ce7119407d103e83ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes the following security issues:
 
