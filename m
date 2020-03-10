@@ -1,47 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:49:08 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/bluez-alsa: fix
- location of alsa config files
-Message-ID: <20200310203733.A7E6B9081C@busybox.osuosl.org>
+Date: Tue, 10 Mar 2020 21:51:14 +0100
+Subject: [Buildroot] [PATCH] package/imagemagick: fix configure error
+ with --disable-opencl in setups without libltdl
+In-Reply-To: <20200204212910.13935-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 4 Feb 2020 22:29:09 +0100")
+References: <20200204212910.13935-1-peter@korsgaard.com>
+Message-ID: <87k13sorwd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=519e91e94b06c7c1344644230aabf5d0af03a84a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Since alsa-lib version 1.1.7 [1] the location for add-on config files
-has changed.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/d9a/d9a84b642357f758c3f84270fb9a109abd7e2684/
 
-In fact, the path for the alsa add-on config files has never been
-correct set in the package (it should have been
-`/usr/share/alsa/alsa.conf.d`).
+ > configure.ac contains a test using $ax_cv_check_cl_libcl:
 
-With alsa-lib version 1.1.7 or later the correct path is
-`/etc/alsa/conf.d`.
+ > if test "$build_modules" != 'no' || test "X$ax_cv_check_cl_libcl" != Xno; then
+ >   AC_MSG_RESULT([-------------------------------------------------------------])
+ >   AC_MSG_CHECKING([for libltdl])
 
-[1] https://github.com/alsa-project/alsa-lib/commit/93e03bdc2a3dcd5d12516f5de78e14d88a32ff2c
+ > But ax_cv_check_cl_libcl is only assigned a value (yes/no) if
+ > --disable-opencl is NOT passed, as the assignment logic is inside a
+ > conditional:
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4e36111dbcefee516325728375190a33fc63a7b7)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bluez-alsa/bluez-alsa.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > AC_ARG_ENABLE([opencl],
+ >     [AC_HELP_STRING([--disable-opencl],
+ >                     [do not use OpenCL])],
+ >     [disable_opencl=$enableval],
+ >     [disable_opencl='yes'])
 
-diff --git a/package/bluez-alsa/bluez-alsa.mk b/package/bluez-alsa/bluez-alsa.mk
-index 4552be82f3..16d50caaf6 100644
---- a/package/bluez-alsa/bluez-alsa.mk
-+++ b/package/bluez-alsa/bluez-alsa.mk
-@@ -23,7 +23,7 @@ BLUEZ_ALSA_CONF_OPTS = \
- 	--enable-aplay \
- 	--disable-debug-time \
- 	--with-alsaplugindir=/usr/lib/alsa-lib \
--	--with-alsaconfdir=/usr/share/alsa
-+	--with-alsaconfdir=/etc/alsa/conf.d
- 
- ifeq ($(BR2_PACKAGE_FDK_AAC),y)
- BLUEZ_ALSA_DEPENDENCIES += fdk-aac
+ > if test "$disable_opencl" = 'yes'; then
+ >   ..
+ >   AC_CACHE_CHECK([for OpenCL library], [ax_cv_check_cl_libcl],
+
+ > So configure errors out if --disable-opencl is passed on setups where
+ > libltdl isn't available:
+
+ > checking if libltdl package is complete... no
+ > configure: error: in `/home/naourr/work/instance-0/output-1/build/imagemagick-7.0.8-59':
+ > configure: error: libltdl is required for modules and OpenCL builds
+
+ > As a workaround, explictly set ax_cv_check_cl_libcl=no to skip this
+ > conditional.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2019.02.x and 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
