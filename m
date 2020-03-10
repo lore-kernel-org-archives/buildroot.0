@@ -1,92 +1,77 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 10 Mar 2020 15:59:17 +0100
-Subject: [Buildroot] [PATCH 1/2] package/pkg-meson.mk: add
- FOO_MESON_EXTRA_PROPERTIES
-In-Reply-To: <20200310144244.2701e98a.john@metanate.com>
-References: <20200310124459.908611-1-john@metanate.com>
- <20200310124459.908611-2-john@metanate.com>
- <20200310150726.6ace1450@gmx.net>
- <20200310144244.2701e98a.john@metanate.com>
-Message-ID: <20200310155917.37590ff5@gmx.net>
+From: Jianhui Zhao <zhaojh329@gmail.com>
+Date: Tue, 10 Mar 2020 23:06:06 +0800
+Subject: [Buildroot] [PATCH 1/1] package: add rtty
+Message-ID: <20200310150606.28261-1-zhaojh329@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 10 Mar 2020 14:42:44 +0000, John Keeping <john@metanate.com> wrote:
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+---
+ package/Config.in      |  1 +
+ package/rtty/Config.in |  7 +++++++
+ package/rtty/rtty.hash |  2 ++
+ package/rtty/rtty.mk   | 15 +++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/rtty/Config.in
+ create mode 100644 package/rtty/rtty.hash
+ create mode 100644 package/rtty/rtty.mk
 
-> Hi Peter,
->
-> On Tue, 10 Mar 2020 15:07:26 +0100
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > On Tue, 10 Mar 2020 12:44:58 +0000, John Keeping <john@metanate.com> wrote:
-> >
-> > > With autoconf packages, we often specify ac_cv_func_... cached values to
-> > > avoid runtime checks during configure.  With meson the equivalent is
-> > > setting properties in cross-compilation.conf which we cannot do in
-> > > Buildroot at the moment.
-> > >
-> > > For example, libglib2 used to set ac_cv_func_printf_unix98 and
-> > > ac_cv_func_vsnprintf_c99 so that the system printf could be used, but
-> > > with the conversion to meson these checks fail and the gnulib fallback
-> > > is used.
-> > >
-> > > Add infrastructure in the same way as FOO_MESON_EXTRA_BINARIES to allow
-> > > per-package modification to the cross-compilation properties.
-> > >
-> > > Signed-off-by: John Keeping <john@metanate.com>
-> > > ---
-> > >  docs/manual/adding-packages-meson.txt | 8 ++++++++
-> > >  package/pkg-meson.mk                  | 4 ++++
-> > >  2 files changed, 12 insertions(+)
-> > >
-> > > diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
-> > > index e84bf7f60a..c28828243c 100644
-> > > --- a/docs/manual/adding-packages-meson.txt
-> > > +++ b/docs/manual/adding-packages-meson.txt
-> > > @@ -116,6 +116,14 @@ will therefore only use a few of them.
-> > >    single quotes. By default, empty. Note that Buildroot already sets the
-> > >    correct values for +c+, +cpp+, +ar+, +strip+, and +pkgconfig+.
-> > >
-> > > +* +FOO_MESON_EXTRA_PROPERTIES+, to specify a space-separated list of
-> > > +  properties to add to the `[properties]` section of the meson
-> > > +  `cross-compilation.conf` configuration file. The format is
-> > > +  `property-name='value'`, with no space around the +=+ sign, and with the
-> > > +  value between single quotes. By default, empty. Note that Buildroot
-> > > +  already sets values for +needs_exe_wrapper+, +c_args+, +c_link_args+,
-> > > +  +cpp_args+, +cpp_link_args+, +sys_root+, and +pkg_config_libdir+.
-> > > +
-> >
-> > The description does not fit the usage in the follow-up patch
-> > (...value between single quoates...):
-> >
-> > +LIBGLIB2_MESON_EXTRA_PROPERTIES = \
-> > +	have_c99_vsnprintf=true \
-> > +	have_c99_snprintf=true \
-> > +	have_unix98_printf=true
-> > +
->
-> This is a bit tricky because the meson configuration is typed, and we
-> need to avoid double quotes for the sed command.  How about changing the
-> description to:
->
->     The format is `property-name=<value>` with no space around the +=+
->     sign, and with single quotes around string values.
->
-
-Fine with me...
-
-Regards,
-Peter
-
-> ?
->
->
-> Regards,
-> John
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/Config.in b/package/Config.in
+index 146fc1bbc3..f5aab078e6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2267,6 +2267,7 @@ comment "Utilities"
+ 	source "package/pdmenu/Config.in"
+ 	source "package/pinentry/Config.in"
+ 	source "package/ranger/Config.in"
++	source "package/rtty/Config.in"
+ 	source "package/screen/Config.in"
+ 	source "package/sudo/Config.in"
+ 	source "package/terminology/Config.in"
+diff --git a/package/rtty/Config.in b/package/rtty/Config.in
+new file mode 100644
+index 0000000000..badb329d3e
+--- /dev/null
++++ b/package/rtty/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_RTTY
++	bool "rtty"
++	select BR2_PACKAGE_LIBEV
++	help
++	  Access your device's terminal from anywhere via the web.
++
++	  https://github.com/zhaojh329/rtty
+diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
+new file mode 100644
+index 0000000000..239dc59f78
+--- /dev/null
++++ b/package/rtty/rtty.hash
+@@ -0,0 +1,2 @@
++sha256  6faafe75d82edbcfe154da5f1ffc0ddfd14dd88a2315f19aeed7f2631df96f41  rtty-7.1.2.tar.gz
++sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENCE
+diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
+new file mode 100644
+index 0000000000..857dc35751
+--- /dev/null
++++ b/package/rtty/rtty.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# rtty
++#
++################################################################################
++
++RTTY_VERSION = 7.1.2
++LIBCURL_SOURCE = rtty-$(RTTY_VERSION).tar.gz
++RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
++RTTY_LICENSE = MIT
++RTTY_LICENSE_FILES = LICENSE
++
++RTTY_DEPENDENCIES = libev
++
++$(eval $(cmake-package))
+-- 
+2.17.1
