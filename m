@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:54:48 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/vorbis-tools: add
+Date: Tue, 10 Mar 2020 21:54:32 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/vorbis-tools: add
  upstream security fixes for CVE-2014-96{38, 39, 40}
-Message-ID: <20200310204251.28CE39082D@busybox.osuosl.org>
+Message-ID: <20200310204256.2A63F90830@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8112520affb90b28705acb562d2bf780ca8c56e4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=61fa19d801736f0e50d5900a0405f67e31ad023f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes the following security vulnerabilities:
 
