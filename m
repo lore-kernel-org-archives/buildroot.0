@@ -1,28 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 22:28:43 +0100
-Subject: [Buildroot] [PATCH] package/runc: security bump to version
- 1.0.0-rc10
-In-Reply-To: <20200205125042.31122-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 5 Feb 2020 13:50:41 +0100")
-References: <20200205125042.31122-1-peter@korsgaard.com>
-Message-ID: <87lfo7oq5w.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Mar 2020 22:26:55 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/lapack: avoid
+ selecting lapack and clapack
+Message-ID: <20200310211619.4751590850@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=010b003fa675d3f4c853988927dd9ab82b4642d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Fixes the following security vulnerability:
- > - CVE-2019-19921: runc volume mount race condition with shared mounts
+lapack and clapack generate the same libraries liblapack.so and
+libblas.so. So those two packages can't be selected at the same time.
 
- > For details see the announcement:
- > https://github.com/opencontainers/runc/releases/tag/v1.0.0-rc10
+This is a temporary fix waiting for a solution[2].
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+So:
+- add !BR2_PACKAGE_CLAPACK to lapack/Config.in.
 
-Committed to 2019.02.x and 2019.11.x, thanks.
+[1]: http://autobuild.buildroot.org/results/375/375078ed8f965ecf92eb9674bd071a518c3ef894//
+[2]: http://lists.busybox.net/pipermail/buildroot/2019-August/255894.html
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Romain Naour <romain.naour@smile.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 24814a095814f3cf241ad12f90c701f98bee6849)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lapack/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/lapack/Config.in b/package/lapack/Config.in
+index 9687ace82d..6cd0810cb1 100644
+--- a/package/lapack/Config.in
++++ b/package/lapack/Config.in
+@@ -5,6 +5,7 @@ comment "lapack/blas needs a toolchain w/ fortran"
+ config BR2_PACKAGE_LAPACK
+ 	bool "lapack/blas"
+ 	depends on BR2_TOOLCHAIN_HAS_FORTRAN
++	depends on !BR2_PACKAGE_CLAPACK
+ 	# _fpu_control is used on PowerPC, but not available with uClibc
+ 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
+ 	help
