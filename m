@@ -1,40 +1,52 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 10 Mar 2020 12:41:01 +0100
-Subject: [Buildroot] [PATCH] package/python-markdown: fix Python version
- dependency
-Message-ID: <20200310114101.6726-1-yegorslists@googlemail.com>
+From: John Keeping <john@metanate.com>
+Date: Tue, 10 Mar 2020 12:15:10 +0000
+Subject: [Buildroot] [PATCH] package/pkg-meson.mk: fix multiple
+ _MESON_EXTRA_BINARIES
+Message-ID: <20200310121510.905791-1-john@metanate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+If multiple entries are specified for _MESON_EXTRA_BINARIES, the current
+sed expression will only replace the first one.
 
-The latest version has dropped Python 2 support.
+Specifically, from GNU sed 4.8 the manual says:
 
-Fixes:
-http://autobuild.buildroot.net/results/6d1e796f6658accb3eafef265935db5e464638fe
+    /regexp/
+        Match  lines matching the regular expression regexp.  Matching
+        is performed on the current pattern space, which can be modified
+        with commands such as ``s///''.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+so after the first binary has been added, the next entry no longer
+matches since the pattern space has been modifed.
+
+Instead of adding a script for each value, apply the match once and add
+a subsitution for each entry.
+
+Signed-off-by: John Keeping <john@metanate.com>
 ---
- package/python-markdown/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-meson.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-markdown/Config.in b/package/python-markdown/Config.in
-index 6706684142..454c2729bd 100644
---- a/package/python-markdown/Config.in
-+++ b/package/python-markdown/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_PYTHON_MARKDOWN
- 	bool "python-markdown"
-+	depends on BR2_PACKAGE_PYTHON3
- 	# runtime dependency on Python's xml module
--	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT
- 	help
- 	  This is a Python implementation of John Gruber's Markdown
- 
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 642b715938..6ac3f79fe9 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -76,9 +76,10 @@ define $(2)_CONFIGURE_CMDS
+ 	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
+ 	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
+ 	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
+-	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+-	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
+-	    ) \
++	    -e "/^\[binaries\]$$$$/ { \
++		$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
++	            s:$$$$:\n$$(x): ; \
++		) }" \
+ 	    package/meson/cross-compilation.conf.in \
+ 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+ 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
 -- 
-2.17.0
+2.25.1
