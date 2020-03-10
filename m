@@ -1,42 +1,57 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 10 Mar 2020 04:19:46 -0700
-Subject: [Buildroot] [PATCH 1/1] package/go: bump version to 1.14
-Message-ID: <20200310111946.197543-1-christian@paral.in>
+From: Charlie Turner <cturner@igalia.com>
+Date: Tue, 10 Mar 2020 11:22:26 +0000
+Subject: [Buildroot] [PATCH 1/2] package/cog: add option for platform DRM.
+Message-ID: <20200310112227.16175-1-cturner@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://golang.org/doc/go1.14
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Charlie Turner <cturner@igalia.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cog/Config.in | 6 ++++++
+ package/cog/cog.mk    | 8 ++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index dc966e85d2..50e932fe9a 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	b13bf04633d4d8cf53226ebeaace8d4d2fd07ae6fa676d0844a688339debec34  go1.13.8.src.tar.gz
-+sha256	6d643e46ad565058c7a39dac01144172ef9bd476521f42148be59249e4b74389  go1.14.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 376c3db7f0..fe75cbfcac 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cog/Config.in b/package/cog/Config.in
+index b25991d4ae..b260fa259c 100644
+--- a/package/cog/Config.in
++++ b/package/cog/Config.in
+@@ -26,4 +26,10 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
+ 	  string is used, there is no default and the URI to open
+ 	  must be always specified in the command line.
  
--GO_VERSION = 1.13.8
-+GO_VERSION = 1.14
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
++config BR2_PACKAGE_COG_PLATFORM_DRM
++       bool "DRM backend"
++       depends on BR2_PACKAGE_LIBDRM
++       help
++         Enable the DRM platform backend. This allows Cog to run
++         without a compositor like Weston.
+ endif
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index d0e5b79c38..0bbc684436 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
+@@ -8,13 +8,17 @@ COG_VERSION = 0.4.0
+ COG_SITE = https://wpewebkit.org/releases
+ COG_SOURCE = cog-$(COG_VERSION).tar.xz
+ COG_INSTALL_STAGING = YES
+-COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
++COG_DEPENDENCIES = dbus wayland wpewebkit wpebackend-fdo
+ COG_LICENSE = MIT
+ COG_LICENSE_FILES = COPYING
+ COG_CONF_OPTS = \
+ 	-DCOG_BUILD_PROGRAMS=ON \
+ 	-DCOG_PLATFORM_FDO=ON \
+-	-DCOG_PLATFORM_DRM=OFF \
+ 	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
  
++ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
++	COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
++	COG_DEPENDENCIES += libdrm libinput
++endif
++
+ $(eval $(cmake-package))
 -- 
-2.25.1
+2.20.1
