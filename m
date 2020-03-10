@@ -1,107 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:58:37 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/ntfs-3g: add
- upstream security fix for CVE-2019-9755
-Message-ID: <20200310204646.14A9290843@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 10 Mar 2020 22:03:05 +0100
+Subject: [Buildroot] [PATCH/next 6/6] package/linphone: bump to version
+ 4.3.1
+In-Reply-To: <20200309221426.3baa2d33@windsurf.home>
+References: <20200227174714.3727844-1-fontaine.fabrice@gmail.com>
+ <20200227174714.3727844-6-fontaine.fabrice@gmail.com>
+ <20200309221426.3baa2d33@windsurf.home>
+Message-ID: <CAPi7W803m_aKVO4vLpidua9OH0CgyU8_r07=L==0Tp_AuchbmA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae2cb52d5be84f993dc3cf2b0230bede85c896b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+Hello Thomas,
 
-Fixes CVE-2019-9755: An integer underflow issue exists in ntfs-3g 2017.3.23.
-A local attacker could potentially exploit this by running /bin/ntfs-3g with
-specially crafted arguments from a specially crafted directory to cause a
-heap buffer overflow, resulting in a crash or the ability to execute
-arbitrary code.  In installations where /bin/ntfs-3g is a setuid-root
-binary, this could lead to a local escalation of privileges.
+Le lun. 9 mars 2020 ? 22:14, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello Fabrice,
+>
+> On Thu, 27 Feb 2020 18:47:14 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > -LINPHONE_AUTORECONF = YES
+> > +     -DENABLE_ADVANCED_IM=OFF \
+> > +     -DENABLE_CXX_WRAPPER=OFF \
+> > +     -DENABLE_DB_STORAGE=OFF \
+> > +     -DENABLE_LIME=OFF \
+> > +     -DENABLE_LIME_X3DH=OFF \
+> > +     -DENABLE_STRICT=OFF \
+> > +     -DENABLE_TOOLS=OFF \
+> > +     -DENABLE_TUTORIALS=OFF \
+> > +     -DENABLE_UNIT_TESTS=OFF \
+> > +     -DENABLE_VCARD=OFF \
+> > +     -DENABLE_VIDEO=OFF
+>
+> Before your patch, linphone had support for Video4Linux (V4L), so we
+> used to have video support. It seems like quite a regression to no
+> longer have any video support.
+The linphone package never provided video support as stated in:
+ - the Config.in file
+ - the commit message of f3492b28d89c1f2448c9662a6f755cb48e8c0f0b
+which added --disable-video to LINPHONE_CONF_OPTS
+>
+> >  ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_XORG7),yy)
+> > -LINPHONE_CONF_OPTS += --enable-gtk_ui
+> > +LINPHONE_CONF_OPTS += -DENABLE_GTK_UI=ON
+>
+> Are you sure about this ENABLE_GTK_UI option? I don't see it being
+> defined anywhere:
+>
+> $ grep -r ENABLE_GTK_UI
+> share/CMakeLists.txt:if(ENABLE_GTK_UI)
+> CMakeLists.txt:cmake_dependent_option(ENABLE_NOTIFY "Enable libnotify support." YES "ENABLE_GTK_UI;NOT APPLE" NO)
+> CMakeLists.txt:cmake_dependent_option(ENABLE_ASSISTANT "Turn on assistant compiling." YES "ENABLE_GTK_UI" NO)
+>
+> None of these occurrences seem to be definitions of the ENABLE_GTK_UI
+> option.
+You're right that ENABLE_GTK_UI doesn't seem to be defined or useful.
+I'll remove it in v2.
+>
+> Could you comment on these topics ?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4fb3c69854b01fd8f6483a8dbbb73d05ef26e96a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ting-an-error-when-failed-to-build-the-mo.patch | 72 ++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
-
-diff --git a/package/ntfs-3g/0001-Fixed-reporting-an-error-when-failed-to-build-the-mo.patch b/package/ntfs-3g/0001-Fixed-reporting-an-error-when-failed-to-build-the-mo.patch
-new file mode 100644
-index 0000000000..9ba8aae50c
---- /dev/null
-+++ b/package/ntfs-3g/0001-Fixed-reporting-an-error-when-failed-to-build-the-mo.patch
-@@ -0,0 +1,72 @@
-+From 85c1634a26faa572d3c558d4cf8aaaca5202d4e9 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Jean-Pierre=20Andr=C3=A9?= <jean-pierre.andre@wanadoo.fr>
-+Date: Wed, 19 Dec 2018 15:57:50 +0100
-+Subject: [PATCH] Fixed reporting an error when failed to build the mountpoint
-+
-+The size check was inefficient because getcwd() uses an unsigned int
-+argument.
-+
-+Fixes CVE-2019-9755: An integer underflow issue exists in ntfs-3g 2017.3.23.
-+A local attacker could potentially exploit this by running /bin/ntfs-3g with
-+specially crafted arguments from a specially crafted directory to cause a
-+heap buffer overflow, resulting in a crash or the ability to execute
-+arbitrary code.  In installations where /bin/ntfs-3g is a setuid-root
-+binary, this could lead to a local escalation of privileges.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/lowntfs-3g.c | 6 +++++-
-+ src/ntfs-3g.c    | 6 +++++-
-+ 2 files changed, 10 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/lowntfs-3g.c b/src/lowntfs-3g.c
-+index 993867fa..0660439b 100644
-+--- a/src/lowntfs-3g.c
-++++ b/src/lowntfs-3g.c
-+@@ -4411,7 +4411,8 @@ int main(int argc, char *argv[])
-+ 	else {
-+ 		ctx->abs_mnt_point = (char*)ntfs_malloc(PATH_MAX);
-+ 		if (ctx->abs_mnt_point) {
-+-			if (getcwd(ctx->abs_mnt_point,
-++			if ((strlen(opts.mnt_point) < PATH_MAX)
-++			    && getcwd(ctx->abs_mnt_point,
-+ 				     PATH_MAX - strlen(opts.mnt_point) - 1)) {
-+ 				strcat(ctx->abs_mnt_point, "/");
-+ 				strcat(ctx->abs_mnt_point, opts.mnt_point);
-+@@ -4419,6 +4420,9 @@ int main(int argc, char *argv[])
-+ 			/* Solaris also wants the absolute mount point */
-+ 				opts.mnt_point = ctx->abs_mnt_point;
-+ #endif /* defined(__sun) && defined (__SVR4) */
-++			} else {
-++				free(ctx->abs_mnt_point);
-++				ctx->abs_mnt_point = (char*)NULL;
-+ 			}
-+ 		}
-+ 	}
-+diff --git a/src/ntfs-3g.c b/src/ntfs-3g.c
-+index 6ce89fef..4e0912ae 100644
-+--- a/src/ntfs-3g.c
-++++ b/src/ntfs-3g.c
-+@@ -4148,7 +4148,8 @@ int main(int argc, char *argv[])
-+ 	else {
-+ 		ctx->abs_mnt_point = (char*)ntfs_malloc(PATH_MAX);
-+ 		if (ctx->abs_mnt_point) {
-+-			if (getcwd(ctx->abs_mnt_point,
-++			if ((strlen(opts.mnt_point) < PATH_MAX)
-++			    && getcwd(ctx->abs_mnt_point,
-+ 				     PATH_MAX - strlen(opts.mnt_point) - 1)) {
-+ 				strcat(ctx->abs_mnt_point, "/");
-+ 				strcat(ctx->abs_mnt_point, opts.mnt_point);
-+@@ -4156,6 +4157,9 @@ int main(int argc, char *argv[])
-+ 			/* Solaris also wants the absolute mount point */
-+ 				opts.mnt_point = ctx->abs_mnt_point;
-+ #endif /* defined(__sun) && defined (__SVR4) */
-++			} else {
-++				free(ctx->abs_mnt_point);
-++				ctx->abs_mnt_point = (char*)NULL;
-+ 			}
-+ 		}
-+ 	}
-+-- 
-+2.20.1
-+
+Fabrice
