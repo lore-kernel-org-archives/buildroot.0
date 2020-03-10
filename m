@@ -1,52 +1,74 @@
-From: John Keeping <john@metanate.com>
-Date: Tue, 10 Mar 2020 12:15:10 +0000
-Subject: [Buildroot] [PATCH] package/pkg-meson.mk: fix multiple
- _MESON_EXTRA_BINARIES
-Message-ID: <20200310121510.905791-1-john@metanate.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 10 Mar 2020 13:36:14 +0100
+Subject: [Buildroot] [PATCH 1/2] package/cog: add option for platform
+ DRM.
+In-Reply-To: <20200310112227.16175-1-cturner@igalia.com>
+References: <20200310112227.16175-1-cturner@igalia.com>
+Message-ID: <20200310133614.5d8ed8d1@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If multiple entries are specified for _MESON_EXTRA_BINARIES, the current
-sed expression will only replace the first one.
+Hello Charlie,
 
-Specifically, from GNU sed 4.8 the manual says:
+On Tue, 10 Mar 2020 11:22:26 +0000, Charlie Turner <cturner@igalia.com> wrote:
 
-    /regexp/
-        Match  lines matching the regular expression regexp.  Matching
-        is performed on the current pattern space, which can be modified
-        with commands such as ``s///''.
+> Signed-off-by: Charlie Turner <cturner@igalia.com>
+> ---
+>  package/cog/Config.in | 6 ++++++
+>  package/cog/cog.mk    | 8 ++++++--
+>  2 files changed, 12 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/cog/Config.in b/package/cog/Config.in
+> index b25991d4ae..b260fa259c 100644
+> --- a/package/cog/Config.in
+> +++ b/package/cog/Config.in
+> @@ -26,4 +26,10 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
+>  	  string is used, there is no default and the URI to open
+>  	  must be always specified in the command line.
+>
+> +config BR2_PACKAGE_COG_PLATFORM_DRM
+> +       bool "DRM backend"
+> +       depends on BR2_PACKAGE_LIBDRM
+> +       help
+> +         Enable the DRM platform backend. This allows Cog to run
+> +         without a compositor like Weston.
+>  endif
+> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+> index d0e5b79c38..0bbc684436 100644
+> --- a/package/cog/cog.mk
+> +++ b/package/cog/cog.mk
+> @@ -8,13 +8,17 @@ COG_VERSION = 0.4.0
+>  COG_SITE = https://wpewebkit.org/releases
+>  COG_SOURCE = cog-$(COG_VERSION).tar.xz
+>  COG_INSTALL_STAGING = YES
+> -COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
+> +COG_DEPENDENCIES = dbus wayland wpewebkit wpebackend-fdo
 
-so after the first binary has been added, the next entry no longer
-matches since the pattern space has been modifed.
+New option, unconditionally added new dependency on wayland?
 
-Instead of adding a script for each value, apply the match once and add
-a subsitution for each entry.
+>  COG_LICENSE = MIT
+>  COG_LICENSE_FILES = COPYING
+>  COG_CONF_OPTS = \
+>  	-DCOG_BUILD_PROGRAMS=ON \
+>  	-DCOG_PLATFORM_FDO=ON \
+> -	-DCOG_PLATFORM_DRM=OFF \
+>  	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
+>
+> +ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+> +	COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
+> +	COG_DEPENDENCIES += libdrm libinput
 
-Signed-off-by: John Keeping <john@metanate.com>
----
- package/pkg-meson.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+missing:
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 642b715938..6ac3f79fe9 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -76,9 +76,10 @@ define $(2)_CONFIGURE_CMDS
- 	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
- 	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
- 	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
--	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
--	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
--	    ) \
-+	    -e "/^\[binaries\]$$$$/ { \
-+		$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
-+	            s:$$$$:\n$$(x): ; \
-+		) }" \
- 	    package/meson/cross-compilation.conf.in \
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
- 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
--- 
-2.25.1
+#else
+	COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
+
+Regards,
+Peter
+
+> +endif
+> +
+>  $(eval $(cmake-package))
