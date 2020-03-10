@@ -1,57 +1,59 @@
 From: Charlie Turner <cturner@igalia.com>
-Date: Tue, 10 Mar 2020 11:22:26 +0000
-Subject: [Buildroot] [PATCH 1/2] package/cog: add option for platform DRM.
-Message-ID: <20200310112227.16175-1-cturner@igalia.com>
+Date: Tue, 10 Mar 2020 11:22:27 +0000
+Subject: [Buildroot] [PATCH 2/2] board/raspberrypi: add post-image option
+ for VC4 overlay.
+In-Reply-To: <20200310112227.16175-1-cturner@igalia.com>
+References: <20200310112227.16175-1-cturner@igalia.com>
+Message-ID: <20200310112227.16175-2-cturner@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+It is often necessary to add a device tree overlay for the VC4 V3D
+driver. On a Raspberry Pi 4 for example, if you enable the Gallium VC4
+Mesa driver, you must add dtoverlay=vc4-fkms-v3d to the kernel command
+line for it to work correctly. There are times when adding vc4-kms-v3d
+is also required. This option allows post-image scripts to add either
+option conveniently depending on their specific configuration.
+
 Signed-off-by: Charlie Turner <cturner@igalia.com>
 ---
- package/cog/Config.in | 6 ++++++
- package/cog/cog.mk    | 8 ++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ board/raspberrypi/post-image.sh | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/package/cog/Config.in b/package/cog/Config.in
-index b25991d4ae..b260fa259c 100644
---- a/package/cog/Config.in
-+++ b/package/cog/Config.in
-@@ -26,4 +26,10 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
- 	  string is used, there is no default and the URI to open
- 	  must be always specified in the command line.
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index 9dbd98ef9b..4ffda4bf49 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -11,7 +11,7 @@ for arg in "$@"
+ do
+ 	case "${arg}" in
+ 		--add-miniuart-bt-overlay)
+-		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
++		if ! grep -qE '^dtoverlay=miniuart-bt' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+ 			echo "Adding 'dtoverlay=miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
+ 			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
  
-+config BR2_PACKAGE_COG_PLATFORM_DRM
-+       bool "DRM backend"
-+       depends on BR2_PACKAGE_LIBDRM
-+       help
-+         Enable the DRM platform backend. This allows Cog to run
-+         without a compositor like Weston.
- endif
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index d0e5b79c38..0bbc684436 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -8,13 +8,17 @@ COG_VERSION = 0.4.0
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
--COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
-+COG_DEPENDENCIES = dbus wayland wpewebkit wpebackend-fdo
- COG_LICENSE = MIT
- COG_LICENSE_FILES = COPYING
- COG_CONF_OPTS = \
- 	-DCOG_BUILD_PROGRAMS=ON \
- 	-DCOG_PLATFORM_FDO=ON \
--	-DCOG_PLATFORM_DRM=OFF \
- 	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
- 
-+ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
-+	COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
-+	COG_DEPENDENCIES += libdrm libinput
-+endif
+@@ -36,6 +36,18 @@ __EOF__
+ 		gpu_mem="${arg:2}"
+ 		sed -e "/^${gpu_mem%=*}=/s,=.*,=${gpu_mem##*=}," -i "${BINARIES_DIR}/rpi-firmware/config.txt"
+ 		;;
++		--vc4-modesetting-overlay=*)
++		overlay=${arg##*=}
++		if ! grep -qE "^dtoverlay=vc4-.*-v3d" "${BINARIES_DIR}/rpi-firmware/config.txt"; then
++			echo "Adding 'dtoverlay=vc4-${overlay}-v3d' to config.txt."
++			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
 +
- $(eval $(cmake-package))
++dtoverlay=vc4-${overlay}-v3d
++__EOF__
++		else
++			sed -e "/^dtoverlay=vc4-.*-v3d/s,=.*,=vc4-${overlay}-v3d," -i "${BINARIES_DIR}/rpi-firmware/config.txt"
++		fi
++		;;
+ 	esac
+ 
+ done
 -- 
 2.20.1
