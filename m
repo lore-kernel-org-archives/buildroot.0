@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:57:08 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libxml2: add
+Date: Tue, 10 Mar 2020 21:56:45 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libxml2: add
  upstream security fix for CVE-2019-20388
-Message-ID: <20200310204518.CB25990828@busybox.osuosl.org>
+Message-ID: <20200310204523.3EF409082C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=480bdb249383b388a0334f9fbb178021479cd8b3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b8a4eb9b5c3ba069b4d1837cdcf2d23f0e8b8e80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes CVE-2019-20388: xmlSchemaPreRun in xmlschemas.c in libxml2 2.9.10
 allows an xmlSchemaValidateStream memory leak.
