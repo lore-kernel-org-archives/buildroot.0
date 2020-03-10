@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 22:33:20 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/opencv3: disable
+Date: Tue, 10 Mar 2020 22:32:48 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/opencv3: disable
  VFPv3 options
-Message-ID: <20200310212109.544A090864@busybox.osuosl.org>
+Message-ID: <20200310212113.DE5FF90869@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=167b9238ff64f85b88938b35b3f9c53df5581e82
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1641835c71566482ca73f1a4e4847a071559805a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Commit a17402e42d8c996af239cfdb536e74188d6c6245 has conditionally
 enabled NEON and VFPv3 optimizations. However, the VFPv3 logic is
@@ -35,7 +35,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+), 9 deletions(-)
 
 diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index a6d795bd85..326edc78b5 100644
+index 4ddd80723f..5c2226bd5c 100644
 --- a/package/opencv3/opencv3.mk
 +++ b/package/opencv3/opencv3.mk
 @@ -104,17 +104,15 @@ OPENCV3_CONF_OPTS += \
