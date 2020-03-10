@@ -1,57 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:40:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mariadb: security bump to
- 10.3.22
-In-Reply-To: <20200204181851.26394-1-bluemrp9@gmail.com> (Ryan Coe's message
- of "Tue, 4 Feb 2020 10:18:51 -0800")
-References: <20200204181851.26394-1-bluemrp9@gmail.com>
-Message-ID: <87sgigosdy.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Mar 2020 21:40:32 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/mariadb: bump to
+ version 10.3.18
+Message-ID: <20200310202806.C8A0C907CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=44bf14b617b577496b2a1dd3b1fc739d48e1a887
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Release notes:
- > https://mariadb.com/kb/en/library/mariadb-10322-release-notes/
+Release notes:
+https://mariadb.com/kb/en/library/mariadb-10318-release-notes/
 
- > Changelog:
- > https://mariadb.com/kb/en/library/mariadb-10322-changelog/
+Changelog:
+https://mariadb.com/kb/en/mariadb-10318-changelog/
 
- > Fixes the following security vulnerability (10.3.22):
- > CVE-2020-2574 - Vulnerability in the MySQL Client product of Oracle MySQL
- > (component: C API). Supported versions that are affected are 5.6.46 and
- > prior, 5.7.28 and prior and 8.0.18 and prior. Difficult to exploit
- > vulnerability allows unauthenticated attacker with network access via
- > multiple protocols to compromise MySQL Client. Successful attacks of this
- > vulnerability can result in unauthorized ability to cause a hang or
- > frequently repeatable crash (complete DOS) of MySQL Client.
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 9a58e7dac6a460720cf0728013260ba9ae1feb33)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mariadb/mariadb.hash | 10 +++++-----
+ package/mariadb/mariadb.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
- > Fixes the following security vulnerabilities (10.3.19):
- > CVE-2019-2974 - Vulnerability in the MySQL Server product of Oracle MySQL
- > (component: Server: Optimizer). Supported versions that are affected are
- > 5.6.45 and prior, 5.7.27 and prior and 8.0.17 and prior. Easily exploitable
- > vulnerability allows low privileged attacker with network access via
- > multiple protocols to compromise MySQL Server. Successful attacks of this
- > vulnerability can result in unauthorized ability to cause a hang or
- > frequently repeatable crash (complete DOS) of MySQL Server.
-
- > CVE-2019-2938 - Vulnerability in the MySQL Server product of Oracle MySQL
- > (component: InnoDB). Supported versions that are affected are 5.7.27 and
- > prior and 8.0.17 and prior. Difficult to exploit vulnerability allows high
- > privileged attacker with network access via multiple protocols to compromise
- > MySQL Server. Successful attacks of this vulnerability can result in
- > unauthorized ability to cause a hang or frequently repeatable crash
- > (complete DOS) of MySQL Server.
-
- > Patch 0002-fix-build-error-with-newer-cmake.patch has been removed as it
- > has been applied upstream.
-
- > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-
-Committed to 2019.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index a6534d8d6a..a742d87daa 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,8 +1,8 @@
+-# From https://downloads.mariadb.org/mariadb/10.3.17
+-md5 6bcee042bcc393cfcffeccbddbf6fe0e  mariadb-10.3.17.tar.gz
+-sha1 16edbd4762c8804118dda10de713cbddc675df5a  mariadb-10.3.17.tar.gz
+-sha256 20a1ea4fc59aae89dcc82aff0d4907b036daf9bfbd252f08162399f055097097  mariadb-10.3.17.tar.gz
+-sha512 6fba995d8c284a12f19ee5635f5d69d8fa89fc314f512cd1764b2c4593933baf71a472ddce630463debd3bfbafa1cf5afee3f40d3c4062242f58cea16259561e  mariadb-10.3.17.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.3.18
++md5 b3524c0825c3a1c255496daea38304a0  mariadb-10.3.18.tar.gz
++sha1 922a317edd6f44baacc49831ca278e7a9878a363  mariadb-10.3.18.tar.gz
++sha256 69456ca85bf9d96c6d28b4ade2a9f6787d79a602e27ef941f9ba4e0b55dddedc  mariadb-10.3.18.tar.gz
++sha512 817253d18f20c74f9ec8030678fd50a28b1726fd59153023a3a5e9b3f79e1f44d79feb24ae9ed72d8c1c04017110c932aba7be0610fb06245590c7f5610db242  mariadb-10.3.18.tar.gz
+ 
+ # Hash for license files
+ sha256 a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 3aa7f94de2..d08909d35c 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.3.17
++MARIADB_VERSION = 10.3.18
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
