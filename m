@@ -1,42 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 21:27:35 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mariadb: fix
- potential error message in sysv startup script
-Message-ID: <20200310202151.8B2F3907BF@busybox.osuosl.org>
+Date: Tue, 10 Mar 2020 21:31:06 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/grep: install to
+ /bin to fix busybox aliasing
+Message-ID: <20200310202151.8C9C58F008@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a9c02a44ddb7bb81d44d652c3107dbd01467953
+commit: https://git.buildroot.net/buildroot/commit/?id=3c030e1685520523ec8c150b5c4af6c6cb6bf184
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-In order to check if the initial database needs to be created, the startup
-script calls ls -1 $MYSQL_LIB | wc -l to check the number of files in the
-directory.  If the directory does not exist, an error is printed.  We fix
-this by redirecting stderr to /dev/null for the ls call.
+When the grep package is selected, it should be installed at the same exact
+location where busybox installs it too, this way the grep/egrep/fgrep
+executables will end up overwriting the busybox provided ones.
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 22bb9b2c28a6835e8414cd0cd6cbb61223c0f0d4)
+(cherry picked from commit 10bc79c612dd945af236f23e11b4df79b3c76257)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/S97mysqld | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/grep/grep.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mariadb/S97mysqld b/package/mariadb/S97mysqld
-index 62357fa8c4..7f9ced31e9 100644
---- a/package/mariadb/S97mysqld
-+++ b/package/mariadb/S97mysqld
-@@ -21,7 +21,9 @@ wait_for_ready() {
- }
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 96685b0276..eefdfe6a74 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -10,6 +10,8 @@ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
+ GREP_LICENSE_FILES = COPYING
+ GREP_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
++# install into /bin like busybox grep
++GREP_CONF_OPTS = --exec-prefix=/
  
- start() {
--	if [ `ls -1 $MYSQL_LIB | wc -l` = 0 ] ; then
-+	# stderr is redirected to prevent a warning
-+	# if mysql lib directory doesn't exist
-+	if [ `ls -1 $MYSQL_LIB 2> /dev/null | wc -l` = 0 ] ; then
- 		printf "Creating mysql system tables ... "
- 		$MYSQL_BIN/mysql_install_db --basedir=/usr --user=mysql \
- 			--datadir=$MYSQL_LIB > /dev/null 2>&1
+ # link with iconv if enabled
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
