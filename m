@@ -1,62 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 22:35:12 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/e2fsprogs:
- security bump to version 1.45.5
-Message-ID: <20200310212311.152609086F@busybox.osuosl.org>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 10 Mar 2020 22:37:23 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libtommath: bump to version 1.2.0
+Message-ID: <20200310213724.4980-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3cd3ac86079484267723336ea684dcc4b239397
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
-
-This fixes CVE-2019-5188:
-A code execution vulnerability exists in the directory rehashing
-functionality of E2fsprogs e2fsck 1.45.4. A specially crafted ext4
-directory can cause an out-of-bounds write on the stack, resulting
-in code execution. An attacker can corrupt a partition to trigger
-this vulnerability.
-
-Also change the hash file to the new spacing convention introduced
-by Yann E. Morin.
-
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 31b8b08b47043044be38b3c50b9e872a150ac8e5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/e2fsprogs/e2fsprogs.hash | 10 +++++-----
- package/e2fsprogs/e2fsprogs.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/libtommath/libtommath.hash | 2 +-
+ package/libtommath/libtommath.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index c9018715c7..3ecbe4eaa7 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,6 +1,6 @@
--# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.4/sha256sums.asc
--sha256 65faf6b590ca1da97440d6446bd11de9e0914b42553740ba5d9d2a796fa0dc02  e2fsprogs-1.45.4.tar.xz
-+# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.5/sha256sums.asc
-+sha256  f9faccc0d90f73556e797dc7cc5979b582bd50d3f8609c0f2ad48c736d44aede  e2fsprogs-1.45.5.tar.xz
- # Locally calculated
--sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
--sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
--sha256 47182fe6631a32f271a15bbe210751b3825b7199f588879aac7d4804fc8b4b8f  lib/et/internal.h
-+sha256  5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
-+sha256  032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
-+sha256  47182fe6631a32f271a15bbe210751b3825b7199f588879aac7d4804fc8b4b8f  lib/et/internal.h
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 28fd78047f..fd59f701d6 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
+diff --git a/package/libtommath/libtommath.hash b/package/libtommath/libtommath.hash
+index 75aa7c7f1..fa1af5ec2 100644
+--- a/package/libtommath/libtommath.hash
++++ b/package/libtommath/libtommath.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 90466c88783d1fe9f5c2364a69f5479f10d73ed616011be6196f35f7f1537ead  ltm-1.1.0.tar.xz
++sha256 b7c75eecf680219484055fcedd686064409254ae44bc31a96c5032843c0e18b1  ltm-1.2.0.tar.xz
+ 
+ # Hashes for license files:
+ sha256 2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a  LICENSE
+diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
+index 36e7a89e6..bd3957d6c 100644
+--- a/package/libtommath/libtommath.mk
++++ b/package/libtommath/libtommath.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--E2FSPROGS_VERSION = 1.45.4
-+E2FSPROGS_VERSION = 1.45.5
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+-LIBTOMMATH_VERSION = 1.1.0
++LIBTOMMATH_VERSION = 1.2.0
+ LIBTOMMATH_SITE = https://github.com/libtom/libtommath/releases/download/v$(LIBTOMMATH_VERSION)
+ LIBTOMMATH_SOURCE = ltm-$(LIBTOMMATH_VERSION).tar.xz
+ LIBTOMMATH_LICENSE = Unlicense
+-- 
+2.20.1
