@@ -1,110 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Mar 2020 23:19:13 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/uclibc: fix
- ctype.h is*_l definitions
-Message-ID: <20200310220735.888D2908A3@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 10 Mar 2020 23:31:32 +0100
+Subject: [Buildroot] [PATCH 1/1] Revert "package/opencv3: bump to version
+ 4.2.0"
+Message-ID: <20200310223132.668486-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4275331b18b2c3995d77721a8dfadaf2366babe5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+This reverts commit 5e51bb2756ee5063eff9a45a46033a449e2a6195.
+Indeed, version 4.x is not backward with opencv 3.x, most of the C API
+has been removed as stated in https://opencv.org/opencv-4-0.
 
-ctype locale-specific macro definitions are broken because they result
-in dereference of pointer to structure of incomplete type.
-Drop these macros since they are optional and let applications use
-functions with the same names.
+Moreover, these issues should also be fixed:
+ - pkg-config file is not installed by default since
+ https://github.com/opencv/opencv/commit/e755a2a6e48ae02dd5136a628cc4148566a08225
+ - layout of include files and pkg-config file name are different since
+ https://github.com/opencv/opencv/commit/a95673287433fc810eda2d88b94bb234298c4cd5
 
-Backported from:
-  https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=d1a3ca7ca56630fddde7311a0474eed4a21335a7
+As a result, ffmpeg fails to build with opencv 4.2.0.
+
+Moreover, it should be noted that -DPROTOBUF_UPDATE_FILES=ON should be
+applied in a separate patch to fix existing build failure with 3.4.9 as
+stated in https://patchwork.ozlabs.org/patch/1222308
+
 Fixes:
-  http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39
+ - http://autobuild.buildroot.org/results/ef1d09d8b234807dcd993422f9557e5c34506013
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8723c5e7a6dbdbed571d11a4c5e6853bf8ad7f06)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...lude-ctype.h-drop-is-_l-macro-definitions.patch | 72 ++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+ package/opencv3/opencv3.hash | 4 ++--
+ package/opencv3/opencv3.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
-new file mode 100644
-index 0000000000..5557a9c1e7
---- /dev/null
-+++ b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
-@@ -0,0 +1,72 @@
-+From d1a3ca7ca56630fddde7311a0474eed4a21335a7 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Mon, 3 Feb 2020 13:57:32 -0800
-+Subject: [PATCH] include/ctype.h: drop is*_l macro definitions
-+
-+ctype locale-specific macro definitions are broken because they result
-+in dereference of pointer to structure of incomplete type.
-+Drop these macros since they are optional and let applications use
-+functions with the same names.
-+
-+This change fixes parted-3.3 build with uClibc-ng:
-+  http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39/build-end.log
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ include/ctype.h | 33 ---------------------------------
-+ 1 file changed, 33 deletions(-)
-+
-+diff --git a/include/ctype.h b/include/ctype.h
-+index ecd5e730886a..e934cf3321a6 100644
-+--- a/include/ctype.h
-++++ b/include/ctype.h
-+@@ -350,46 +350,13 @@ libc_hidden_proto(tolower_l)
-+ /* Return the uppercase version of C.  */
-+ extern int toupper_l (int __c, __locale_t __l) __THROW;
-+ 
-+-# if __GNUC__ >= 2 && defined __OPTIMIZE__ && !defined __cplusplus
-+-#  define tolower_l(c, locale) __tobody(c, tolower_l, (locale)->__ctype_tolower, (c, locale))
-+-#  define toupper_l(c, locale) __tobody(c, toupper_l, (locale)->__ctype_toupper, (c, locale))
-+-# endif	/* Optimizing gcc */
-+-
-+-
-+-# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] & (__ctype_mask_t) type)
-+ # ifndef __NO_CTYPE
-+-#  define __isalnum_l(c,l)	__isctype_l((c), _ISalnum, (l))
-+-#  define __isalpha_l(c,l)	__isctype_l((c), _ISalpha, (l))
-+-#  define __iscntrl_l(c,l)	__isctype_l((c), _IScntrl, (l))
-+-#  define __isdigit_l(c,l)	__isctype_l((c), _ISdigit, (l))
-+-#  define __islower_l(c,l)	__isctype_l((c), _ISlower, (l))
-+-#  define __isgraph_l(c,l)	__isctype_l((c), _ISgraph, (l))
-+-#  define __isprint_l(c,l)	__isctype_l((c), _ISprint, (l))
-+-#  define __ispunct_l(c,l)	__isctype_l((c), _ISpunct, (l))
-+-#  define __isspace_l(c,l)	__isctype_l((c), _ISspace, (l))
-+-#  define __isupper_l(c,l)	__isctype_l((c), _ISupper, (l))
-+-#  define __isxdigit_l(c,l)	__isctype_l((c), _ISxdigit, (l))
-+-#  define __isblank_l(c,l)	__isctype_l((c), _ISblank, (l))
-+-
-+ #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-+ 	&& defined __UCLIBC_SUSV4_LEGACY__
-+ #   define __isascii_l(c,l)	((l), __isascii (c))
-+ #   define __toascii_l(c,l)	((l), __toascii (c))
-+ #  endif
-+ 
-+-#  define isalnum_l(c,l)	__isalnum_l ((c), (l))
-+-#  define isalpha_l(c,l)	__isalpha_l ((c), (l))
-+-#  define iscntrl_l(c,l)	__iscntrl_l ((c), (l))
-+-#  define isdigit_l(c,l)	__isdigit_l ((c), (l))
-+-#  define islower_l(c,l)	__islower_l ((c), (l))
-+-#  define isgraph_l(c,l)	__isgraph_l ((c), (l))
-+-#  define isprint_l(c,l)	__isprint_l ((c), (l))
-+-#  define ispunct_l(c,l)	__ispunct_l ((c), (l))
-+-#  define isspace_l(c,l)	__isspace_l ((c), (l))
-+-#  define isupper_l(c,l)	__isupper_l ((c), (l))
-+-#  define isxdigit_l(c,l)	__isxdigit_l ((c), (l))
-+-#  define isblank_l(c,l)	__isblank_l ((c), (l))
-+-
-+ #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-+ 	&& defined __UCLIBC_SUSV4_LEGACY__
-+ #   define isascii_l(c,l)	__isascii_l ((c), (l))
-+-- 
-+2.20.1
-+
+diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
+index ef95f24ad3..4953d01a1c 100644
+--- a/package/opencv3/opencv3.hash
++++ b/package/opencv3/opencv3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9ccb2192d7e8c03c58fee07051364d94ed7599363f3b0dce1c5e6cc11c1bb0ec  opencv3-4.2.0.tar.gz
+-sha256  c3596f2f886631ac49af2c9a201ca559f850bb5726bdc25eacbe2369a70caad9  LICENSE
++sha256 b7ea364de7273cfb3b771a0d9c111b8b8dfb42ff2bcd2d84681902fb8f49892a  opencv3-3.4.9.tar.gz
++sha256 c3596f2f886631ac49af2c9a201ca559f850bb5726bdc25eacbe2369a70caad9  LICENSE
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 300631ce51..d37cd45adf 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENCV3_VERSION = 4.2.0
++OPENCV3_VERSION = 3.4.9
+ OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
+ OPENCV3_INSTALL_STAGING = YES
+ OPENCV3_LICENSE = BSD-3-Clause
+@@ -283,10 +283,10 @@ OPENCV3_CONF_OPTS += -DWITH_PNG=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV3_WITH_PROTOBUF),y)
+-OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=ON -DPROTOBUF_UPDATE_FILES=ON
++OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=ON
+ OPENCV3_DEPENDENCIES += protobuf
+ else
+-OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=OFF -DPROTOBUF_UPDATE_FILES=OFF
++OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV3_WITH_QT5),y)
+-- 
+2.25.1
