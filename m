@@ -1,43 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Mar 2020 22:35:06 +0100
-Subject: [Buildroot] [PATCH v6 08/28] package/qt5virtualkeyboard:
- Convert to qmake infra
-In-Reply-To: <20200217212350.29750-9-anaumann@ultratronik.de>
+Date: Wed, 11 Mar 2020 22:42:56 +0100
+Subject: [Buildroot] [PATCH v6 09/28] package/quazip: Convert to qmake
+ infra
+In-Reply-To: <d138dcb2-3946-c711-d8ee-a7491bf5979b@andin.de>
 References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-9-anaumann@ultratronik.de>
-Message-ID: <20200311223506.4483d55e@windsurf>
+ <20200217212350.29750-10-anaumann@ultratronik.de>
+ <20200217225752.74c34031@windsurf>
+ <d138dcb2-3946-c711-d8ee-a7491bf5979b@andin.de>
+Message-ID: <20200311224256.7be1235b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 17 Feb 2020 22:23:30 +0100
-Andreas Naumann <anaumann@ultratronik.de> wrote:
+On Tue, 18 Feb 2020 11:00:07 +0100
+Andreas Naumann <dev@andin.de> wrote:
 
-> It seems the old method was missing some files from the install
-> step since after the conversion the the following additional files
-> appear in target after a build with all config options selected:
-> usr/lib/qt/plugins/lipi_toolkit/libactivedtw.so
-> usr/lib/qt/plugins/lipi_toolkit/libboxfld.so
-> usr/lib/qt/plugins/lipi_toolkit/libl7.so
-> usr/lib/qt/plugins/lipi_toolkit/liblipiengine.so
-> usr/lib/qt/plugins/lipi_toolkit/liblogger.so
-> usr/lib/qt/plugins/lipi_toolkit/libneuralnet.so
-> usr/lib/qt/plugins/lipi_toolkit/libnn.so
-> usr/lib/qt/plugins/lipi_toolkit/libnpen.so
-> usr/lib/qt/plugins/lipi_toolkit/libpointfloat.so
-> usr/lib/qt/plugins/lipi_toolkit/libpreproc.so
-> usr/lib/qt/plugins/lipi_toolkit/libsubstroke.so
-> usr/lib/qt/plugins/virtualkeyboard/libqtvirtualkeyboard_lipi.so
+> > A prefix of $(STAGING_DIR)/usr looks wrong, as prefix is normally where
+> > the things will be once installed in the target. Do we really need to
+> > do this change?  
 > 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-> ---
->  .../qt5virtualkeyboard/qt5virtualkeyboard.mk  | 63 ++-----------------
->  1 file changed, 4 insertions(+), 59 deletions(-)
+> I agree it's probably not how PREFIX is intended to be used. But after 
+> all the project doesnt seem to support cross-compile/install properly as 
+> you can see by the need to explicitly set INSTALL_ROOT to a different 
+> path for staging/target.
 
-Applied to master after fixing the conflicts and dropping the qt5base
-dependency. Thanks!
+Well, in fact the current install procedure for quazip is perfect, as
+you don't have to do the horrible rsync dance that we have to do for
+other Qt packages. The fact that INSTALL_ROOT is different for staging
+and target is *perfect*, it is exactly how INSTALL_ROOT should be have
+in the first place: like DESTDIR.
+
+So I'd really like to see more research done on this package, to
+understand why we need to bogus PREFIX= variable, and make sure it
+behaves like other packages.
+
+It would in fact be ideal if all other Qt packages could properly
+support INSTALL_ROOT like quazip does.
+
+Best regards,
 
 Thomas
 -- 
