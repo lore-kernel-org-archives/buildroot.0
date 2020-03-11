@@ -1,65 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Mar 2020 23:30:02 +0100
-Subject: [Buildroot] [PATCH v6 21/28] package/python-sip: Fix qmake
- usage for per-package build
-In-Reply-To: <20200217212350.29750-22-anaumann@ultratronik.de>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-22-anaumann@ultratronik.de>
-Message-ID: <20200311233002.2fa2f414@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 11 Mar 2020 23:31:23 +0100
+Subject: [Buildroot] [PATCH] package/pkg-meson.mk: fix multiple
+ _MESON_EXTRA_BINARIES
+In-Reply-To: <20200310121510.905791-1-john@metanate.com>
+References: <20200310121510.905791-1-john@metanate.com>
+Message-ID: <20200311223123.GF705@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+John, All,
 
-On Mon, 17 Feb 2020 22:23:43 +0100
-Andreas Naumann <anaumann@ultratronik.de> wrote:
-
-> Since python-sip is not built by the qmake infra, we need to explicitly
-> integrate the qt.conf fixup needed for successful per-package build and
-> consistently use qmake via QT5_QMAKE variable.
+On 2020-03-10 12:15 +0000, John Keeping spake thusly:
+> If multiple entries are specified for _MESON_EXTRA_BINARIES, the current
+> sed expression will only replace the first one.
 > 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+> Specifically, from GNU sed 4.8 the manual says:
+> 
+>     /regexp/
+>         Match  lines matching the regular expression regexp.  Matching
+>         is performed on the current pattern space, which can be modified
+>         with commands such as ``s///''.
+> 
+> so after the first binary has been added, the next entry no longer
+> matches since the pattern space has been modifed.
+> 
+> Instead of adding a script for each value, apply the match once and add
+> a subsitution for each entry.
+> 
+> Signed-off-by: John Keeping <john@metanate.com>
+
+Applied to master, but I've made that a single substituion instead.
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
 > ---
->  package/python-sip/python-sip.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  package/pkg-meson.mk | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
-> index 1d6c205396..7ae2d43e1e 100644
-> --- a/package/python-sip/python-sip.mk
-> +++ b/package/python-sip/python-sip.mk
-> @@ -38,6 +38,7 @@ define HOST_PYTHON_SIP_INSTALL_CMDS
->  endef
->  
->  define PYTHON_SIP_CONFIGURE_CMDS
-> +	$(QT5_QT_CONF_FIXUP)
->  	(cd $(@D); \
->  		$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/bin/python configure.py \
->  			--bindir $(TARGET_DIR)/usr/bin \
-> @@ -46,7 +47,7 @@ define PYTHON_SIP_CONFIGURE_CMDS
->  			--sipdir $(TARGET_DIR)/usr/share/sip \
->  			--sysroot $(STAGING_DIR)/usr \
->  			--use-qmake && \
-> -		$(HOST_DIR)/bin/qmake)
-> +		$(QT5_QMAKE))
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 642b715938..6ac3f79fe9 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -76,9 +76,10 @@ define $(2)_CONFIGURE_CMDS
+>  	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
+>  	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
+>  	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
+> -	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+> -	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
+> -	    ) \
+> +	    -e "/^\[binaries\]$$$$/ { \
+> +		$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+> +	            s:$$$$:\n$$(x): ; \
+> +		) }" \
+>  	    package/meson/cross-compilation.conf.in \
+>  	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+>  	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Isn't this change a fix, independent from the per-package support ?
-
-QT5_QMAKE is defined as follows:
-
-QT5_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++
-
-So it means that python-sip was not using the
-devices/linux-buildroot-g++ spec file ? If that's the case, then this
-is something that should be fixed separately from the per-package
-support I believe.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
