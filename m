@@ -1,28 +1,38 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 10 Mar 2020 18:14:47 -0700
-Subject: [Buildroot] [PATCH 1/1] package/go: bump version to 1.14
-In-Reply-To: <20200310111946.197543-1-christian@paral.in>
-References: <20200310111946.197543-1-christian@paral.in>
-Message-ID: <CA+h8R2qoYov7f1AR762C87J5rihzz=ORQdzeouFCkzCS3psQUw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 Mar 2020 08:07:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/musl: move riscv64 register
+ index constant definitions
+In-Reply-To: <20200211151453.4972-1-mark@dibsco.co.uk> (Mark Corbin's message
+ of "Tue, 11 Feb 2020 15:14:53 +0000")
+References: <20200211151453.4972-1-mark@dibsco.co.uk>
+Message-ID: <871rpzmksq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+>>>>> "Mark" == Mark Corbin <mark@dibsco.co.uk> writes:
 
-On Tue, Mar 10, 2020 at 4:19 AM Christian Stewart <christian@paral.in> wrote:
->
-> Release notes: https://golang.org/doc/go1.14
+ > The riscv64 build of libsigsegv using musl fails due to a missing
+ > definition for REG_SP. This constant is used to index the __gregs
+ > array in the ucontext_t structure.
 
-In this release the Go maintainers have changed the host-go "go"
-binary to a symlink to lib/go for some reason.
+ > This fix moves the musl defintion of REG_SP (and others) from
+ > arch/riscv64/bits/reg.h to arch/riscv64/bits/signal.h
+ > so that it is picked up correctly.
 
-That breaks the Buildroot package upon upgrading to 1.14, although the
-package compiles successfully, the "go" file is empty.
+ > The patch was downloaded from upstream:
+ > https://git.musl-libc.org/cgit/musl/commit/?id=329e79299daaa994b8e75941331a1093051ea5d9
 
-Retracting this patch for now until I have found a solution.
+ > Fixes:
+ > http://autobuild.buildroot.org/results/8fcd5cb912e513ac08a81e3ee726e29ac22212bb/
 
-Best regards,
-Christian
+ > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+
+Committed to 2019.11.x, thanks.
+
+We don't have riscv support for musl in 2019.02.x.
+
+-- 
+Bye, Peter Korsgaard
