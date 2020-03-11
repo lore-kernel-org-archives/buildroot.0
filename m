@@ -1,51 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Mar 2020 22:33:30 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/sqlcipher:
- security bump to version 4.3.0
-Message-ID: <20200311215713.D146990A12@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 11 Mar 2020 23:25:03 +0100
+Subject: [Buildroot] [PATCH v6 18/28] package/cmake: Fix for using -O in
+ top-level make
+In-Reply-To: <20200217212350.29750-19-anaumann@ultratronik.de>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-19-anaumann@ultratronik.de>
+Message-ID: <20200311232503.0bafe189@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cde271847876edc3421481c805ce7372b031f851
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+Hello,
 
-From https://www.zetetic.net/blog/2019/08/14/defcon-sqlite-attacks:
+Let's add Arnout in the loop, for the make sorcery.
 
-"We strongly recommend that all applications upgrade to SQLCipher 4.2.0
-to take advantage of the latest security updates, especially if an
-application interacts with non-encrypted databases using SQLCipher."
+On Mon, 17 Feb 2020 22:23:40 +0100
+Andreas Naumann <anaumann@ultratronik.de> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b9440e8def9ab77482b059436749242d14fd5da6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sqlcipher/sqlcipher.hash | 2 +-
- package/sqlcipher/sqlcipher.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Setting -O in top level make somehow interferes with the explicit setting of
+> -jX in the cmake bootstrap script. Avoid passing down MAKEFLAGS in the configure
+> case.
+> 
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 
-diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
-index 7ebfc23f75..c37db7a20a 100644
---- a/package/sqlcipher/sqlcipher.hash
-+++ b/package/sqlcipher/sqlcipher.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  2f803017378c7479cb791be59b7bad8392a15acddbcc094e4433581fe421f4ca  sqlcipher-4.0.1.tar.gz
-+sha256  fccb37e440ada898902b294d02cde7af9e8706b185d77ed9f6f4d5b18b4c305f  sqlcipher-4.3.0.tar.gz
- sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index d4f7a19973..14290745aa 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLCIPHER_VERSION = 4.0.1
-+SQLCIPHER_VERSION = 4.3.0
- SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,v$(SQLCIPHER_VERSION))
- SQLCIPHER_LICENSE = BSD-3-Clause
- SQLCIPHER_LICENSE_FILES = LICENSE
+This commit log was a bit vague on what the issue was. If I understand
+correctly, what you see is that the "make" process running to build
+host-cmake is constantly entering/leaving its build directory, like
+this:
+
+make[3]: Entering directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+[ 50%] Building C object Utilities/cmlibarchive/libarchive/CMakeFiles/cmlibarchive.dir/archive_read_support_filter_rpm.c.o
+make[3]: Leaving directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+make[3]: Entering directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+[ 50%] Building C object Utilities/cmlibarchive/libarchive/CMakeFiles/cmlibarchive.dir/archive_read_support_filter_none.c.o
+make[3]: Leaving directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+make[3]: Entering directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+[ 50%] Building C object Utilities/cmlibarchive/libarchive/CMakeFiles/cmlibarchive.dir/archive_read_support_filter_program.c.o
+make[3]: Leaving directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+
+Reading
+https://www.gnu.org/software/make/manual/html_node/Parallel-Output.html,
+it seems like it is expected for -Otarget to behave like this. However,
+if you use -Orecurse, it works as expected: the entire output of the
+sub-make is buffered, and output in one-go when the make target at the
+Buildroot level completes.
+
+So I'm not sure we want to prevent -Otarget from doing what it does: we
+should probably instead use -Orecurse.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
