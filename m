@@ -1,59 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Mar 2020 23:25:03 +0100
-Subject: [Buildroot] [PATCH v6 18/28] package/cmake: Fix for using -O in
- top-level make
-In-Reply-To: <20200217212350.29750-19-anaumann@ultratronik.de>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-19-anaumann@ultratronik.de>
-Message-ID: <20200311232503.0bafe189@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 11 Mar 2020 23:28:44 +0100
+Subject: [Buildroot] [git commit] package/pkg-meson.mk: fix multiple
+ _MESON_EXTRA_BINARIES
+Message-ID: <20200311221718.958D290A15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a1e3c7b69310856c73a9eb4dce286a7a745f116f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Let's add Arnout in the loop, for the make sorcery.
+If multiple entries are specified for _MESON_EXTRA_BINARIES, the current
+sed expression will only replace the first one.
 
-On Mon, 17 Feb 2020 22:23:40 +0100
-Andreas Naumann <anaumann@ultratronik.de> wrote:
+Specifically, from GNU sed 4.8 the manual says:
 
-> Setting -O in top level make somehow interferes with the explicit setting of
-> -jX in the cmake bootstrap script. Avoid passing down MAKEFLAGS in the configure
-> case.
-> 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+    /regexp/
+        Match  lines matching the regular expression regexp.  Matching
+        is performed on the current pattern space, which can be modified
+        with commands such as ``s///''.
 
-This commit log was a bit vague on what the issue was. If I understand
-correctly, what you see is that the "make" process running to build
-host-cmake is constantly entering/leaving its build directory, like
-this:
+so after the first binary has been added, the next entry no longer
+matches since the pattern space has been modifed.
 
-make[3]: Entering directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
-[ 50%] Building C object Utilities/cmlibarchive/libarchive/CMakeFiles/cmlibarchive.dir/archive_read_support_filter_rpm.c.o
-make[3]: Leaving directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
-make[3]: Entering directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
-[ 50%] Building C object Utilities/cmlibarchive/libarchive/CMakeFiles/cmlibarchive.dir/archive_read_support_filter_none.c.o
-make[3]: Leaving directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
-make[3]: Entering directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
-[ 50%] Building C object Utilities/cmlibarchive/libarchive/CMakeFiles/cmlibarchive.dir/archive_read_support_filter_program.c.o
-make[3]: Leaving directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+Instead of adding a script for each value, apply the match once and add
+a subsitution for all entries at once.
 
-Reading
-https://www.gnu.org/software/make/manual/html_node/Parallel-Output.html,
-it seems like it is expected for -Otarget to behave like this. However,
-if you use -Orecurse, it works as expected: the entire output of the
-sub-make is buffered, and output in one-go when the make target at the
-Buildroot level completes.
+Signed-off-by: John Keeping <john@metanate.com>
+Tested-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998 at free.fr: do a single substitution]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-meson.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-So I'm not sure we want to prevent -Otarget from doing what it does: we
-should probably instead use -Orecurse.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index a0b467caba..835098b85c 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -76,9 +76,7 @@ define $(2)_CONFIGURE_CMDS
+ 	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
+ 	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
+ 	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
+-	    $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+-	        -e "/^\[binaries\]$$$$/s:$$$$:\n$$(x):" \
+-	    ) \
++	    -e "/^\[binaries\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES),\n$$(x)):" \
+ 	    package/meson/cross-compilation.conf.in \
+ 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+ 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
