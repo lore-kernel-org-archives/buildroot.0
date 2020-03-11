@@ -1,36 +1,72 @@
-From: Gleb Mazovetskiy <glex.spb@gmail.com>
-Date: Wed, 11 Mar 2020 10:59:30 +0000
-Subject: [Buildroot] [PATCH 1/1] package/pkg-meson.mk: Fix
- cross-compilation.conf
-Message-ID: <20200311105930.21564-1-glex.spb@gmail.com>
+From: John Keeping <john@metanate.com>
+Date: Wed, 11 Mar 2020 11:22:55 +0000
+Subject: [Buildroot] [PATCH v2 1/2] package/pkg-meson.mk: add
+ FOO_MESON_EXTRA_PROPERTIES
+Message-ID: <20200311112256.2849174-1-john@metanate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-$$(STAGING_DIR) -> $(STAGING_DIR) in PKG_MESON_INSTALL_CROSS_CONF.
+With autoconf packages, we often specify ac_cv_func_... cached values to
+avoid runtime checks during configure.  With meson the equivalent is
+setting properties in cross-compilation.conf which we cannot do in
+Buildroot at the moment.
 
-$$ resulted in `$(STAGING_DIR)` in the file instead of the expanded
-value.
+For example, libglib2 used to set ac_cv_func_printf_unix98 and
+ac_cv_func_vsnprintf_c99 so that the system printf could be used, but
+with the conversion to meson these checks fail and the gnulib fallback
+is used.
 
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+Add infrastructure in the same way as FOO_MESON_EXTRA_BINARIES to allow
+per-package modification to the cross-compilation properties.
+
+Signed-off-by: John Keeping <john@metanate.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/pkg-meson.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2:
+- Reword documentation on the format of _MESON_EXTRA_PROPERTIES entries
+- Add Peter's reviewed-by - thanks!
+---
+ docs/manual/adding-packages-meson.txt | 9 +++++++++
+ package/pkg-meson.mk                  | 4 ++++
+ 2 files changed, 13 insertions(+)
 
+diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
+index e84bf7f60a..029c8c2488 100644
+--- a/docs/manual/adding-packages-meson.txt
++++ b/docs/manual/adding-packages-meson.txt
+@@ -116,6 +116,15 @@ will therefore only use a few of them.
+   single quotes. By default, empty. Note that Buildroot already sets the
+   correct values for +c+, +cpp+, +ar+, +strip+, and +pkgconfig+.
+ 
++* +FOO_MESON_EXTRA_PROPERTIES+, to specify a space-separated list of
++  properties to add to the `[properties]` section of the meson
++  `cross-compilation.conf` configuration file. The format is
++  `property-name=<value>` with no space around the +=+ sign, and with
++  single quotes around string values. By default, empty. Note that
++  Buildroot already sets values for +needs_exe_wrapper+, +c_args+,
++  +c_link_args+, +cpp_args+, +cpp_link_args+, +sys_root+, and
++  +pkg_config_libdir+.
++
+ * +FOO_NINJA_ENV+, to specify additional environment variables to pass to
+   +ninja+, meson companion tool in charge of the build operations. By default,
+   empty.
 diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 642b715938..416129f6fe 100644
+index 6ac3f79fe9..4df1326cad 100644
 --- a/package/pkg-meson.mk
 +++ b/package/pkg-meson.mk
-@@ -193,7 +193,7 @@ define PKG_MESON_INSTALL_CROSS_CONF
- 	    -e 's%@TARGET_LDFLAGS@%$(call make-comma-list,$(TARGET_LDFLAGS))@PKG_TARGET_CFLAGS@%g' \
- 	    -e 's%@TARGET_CXXFLAGS@%$(call make-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g' \
- 	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
--	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
-+	    -e 's%@STAGING_DIR@%$(STAGING_DIR)%g' \
- 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
- 	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
+@@ -80,6 +80,10 @@ define $(2)_CONFIGURE_CMDS
+ 		$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+ 	            s:$$$$:\n$$(x): ; \
+ 		) }" \
++	    -e "/^\[properties\]$$$$/ { \
++		$$(foreach x,$$($(2)_MESON_EXTRA_PROPERTIES), \
++		    s:$$$$:\n$$(x): ; \
++		) }" \
+ 	    package/meson/cross-compilation.conf.in \
+ 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+ 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
 -- 
-2.20.1
+2.25.1
