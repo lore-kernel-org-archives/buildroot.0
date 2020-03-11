@@ -1,47 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Mar 2020 23:03:42 +0100
-Subject: [Buildroot] [git commit] package/qt-webkit-kiosk: convert to qmake
- infrastructure
-Message-ID: <20200311215109.D99AE90A0A@busybox.osuosl.org>
+Date: Wed, 11 Mar 2020 23:04:57 +0100
+Subject: [Buildroot] [PATCH v6 15/28] package/qt-webkit-kiosk: Convert
+ to qmake infra
+In-Reply-To: <20200217212350.29750-16-anaumann@ultratronik.de>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-16-anaumann@ultratronik.de>
+Message-ID: <20200311230457.59c63d93@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8440ef6ad20f591f52f261b24537c0a4862e7609
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Andreas,
 
-Convert but keep the slightly complicated custom install step for now.
+On Mon, 17 Feb 2020 22:23:37 +0100
+Andreas Naumann <anaumann@ultratronik.de> wrote:
 
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qt-webkit-kiosk/qt-webkit-kiosk.mk | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+> Convert but keep the slightly complicated custom install step for now.
+> 
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+> ---
+>  package/qt-webkit-kiosk/qt-webkit-kiosk.mk | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/package/qt-webkit-kiosk/qt-webkit-kiosk.mk b/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
-index a714fca9c9..cd1c21e28a 100644
---- a/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
-+++ b/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
-@@ -11,13 +11,7 @@ QT_WEBKIT_KIOSK_DEPENDENCIES = qt5webkit qt5multimedia
- QT_WEBKIT_KIOSK_LICENSE = LGPL-3.0
- QT_WEBKIT_KIOSK_LICENSE_FILES = doc/lgpl.html
- 
--define QT_WEBKIT_KIOSK_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE) PREFIX=/usr)
--endef
--
--define QT_WEBKIT_KIOSK_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
--endef
-+QT_WEBKIT_KIOSK_CONF_OPTS = PREFIX=/usr
- 
- define QT_WEBKIT_KIOSK_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src -f Makefile.qt-webkit-kiosk \
-@@ -29,4 +23,4 @@ define QT_WEBKIT_KIOSK_INSTALL_TARGET_CMDS
- 		$(if $(BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS),install_sound)
- endef
- 
--$(eval $(generic-package))
-+$(eval $(qmake-package))
+I've applied, but I have some comments below.
+
+> 
+> diff --git a/package/qt-webkit-kiosk/qt-webkit-kiosk.mk b/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
+> index a714fca9c9..22cbf3cb87 100644
+> --- a/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
+> +++ b/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
+> @@ -11,13 +11,8 @@ QT_WEBKIT_KIOSK_DEPENDENCIES = qt5webkit qt5multimedia
+>  QT_WEBKIT_KIOSK_LICENSE = LGPL-3.0
+>  QT_WEBKIT_KIOSK_LICENSE_FILES = doc/lgpl.html
+>  
+> -define QT_WEBKIT_KIOSK_CONFIGURE_CMDS
+> -	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE) PREFIX=/usr)
+> -endef
+> -
+> -define QT_WEBKIT_KIOSK_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> -endef
+> +QT_WEBKIT_KIOSK_INSTALL_STAGING = NO
+
+This is not needed, as this is the default, and check-package complains
+about this.
+
+> +QT_WEBKIT_KIOSK_CONF_OPTS = PREFIX=/usr
+
+Do you know why specifically for this package we need to pass
+PREFIX=/usr, and not for any other qmake-based package ?
+
+>  define QT_WEBKIT_KIOSK_INSTALL_TARGET_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src -f Makefile.qt-webkit-kiosk \
+> @@ -29,4 +24,4 @@ define QT_WEBKIT_KIOSK_INSTALL_TARGET_CMDS
+>  		$(if $(BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS),install_sound)
+>  endef
+
+Any reason for these custom installation commands, rather than using
+the package-provided installation logic ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
