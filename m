@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Mar 2020 22:26:55 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mongoose:
+Date: Wed, 11 Mar 2020 22:24:33 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/mongoose:
  security bump to version 6.17
-Message-ID: <20200311211441.ED342805F2@busybox.osuosl.org>
+Message-ID: <20200311211446.B4BAF90994@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d862f99818d7201fdaef58844f71b50388e18760
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ca4d4243849dfb0c8ab9131f9a7fc0fb69310df6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 - Fix CVE-2019-19307: An integer overflow in parse_mqtt in mongoose.c in
   Cesanta Mongoose 6.16 allows an attacker to achieve remote DoS
