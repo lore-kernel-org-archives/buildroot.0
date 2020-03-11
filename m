@@ -1,37 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 11 Mar 2020 23:08:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/psplash: add host-gdk-pixbuf
- mandatory dependency
-Message-ID: <20200311220808.1079295-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 11 Mar 2020 23:07:03 +0100
+Subject: [Buildroot] [PATCH v6 17/28] core/pkg-infra: Fix package file
+ statistics for parallel build
+In-Reply-To: <20200217212350.29750-18-anaumann@ultratronik.de>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-18-anaumann@ultratronik.de>
+Message-ID: <20200311230703.37bf0b63@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gdk-pixbuf-csource is needed since
-http://git.yoctoproject.org/cgit/cgit.cgi/psplash/commit/?id=f7a354dd7991bda57ab8b26d6491687d777f88da
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.org/results/cb46d93b90ca3b297d0e18fd84796660e20c3a52
+On Mon, 17 Feb 2020 22:23:39 +0100
+Andreas Naumann <anaumann@ultratronik.de> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/psplash/psplash.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> When activating top level parallel build, multiple processes may
+> try to modify the various *files-list* files in the common build/
+> directory at the same time. This can cause racy build failures.
+> 
+> The fix here is to use flock to ensure exclusive execution of the
+> statistics gathering code. For this to work it is assumed that the
+> target/staging/host directories are isolated, which is true for
+> per-package builds.
+> For standard sequential builds, the locking is of course unnecessary
+> but no conditional handling is implemented  since the runtime cost is
+> expected to be next to nothing.
+> 
+> For flock to work, the statistics gathering code must be run in a
+> single subshell. Otherwise the lockfile descriptor would be closed
+> after the subshell (= the Makefile line where it was opened) ends
+> and thus the lock would be released before even entering the critical
+> code section.
+> 
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 
-diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
-index 39fcc2235f..a0f01869b4 100644
---- a/package/psplash/psplash.mk
-+++ b/package/psplash/psplash.mk
-@@ -9,7 +9,7 @@ PSPLASH_SITE = git://git.yoctoproject.org/psplash
- PSPLASH_LICENSE = GPL-2.0+
- PSPLASH_LICENSE_FILES = COPYING
- PSPLASH_AUTORECONF = YES
--PSPLASH_DEPENDENCIES = host-pkgconf
-+PSPLASH_DEPENDENCIES = host-gdk-pixbuf host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- PSPLASH_DEPENDENCIES += systemd
+This is no longer needed: we have taken a different approach in commit
+0e2be4db8ab01d479177a3a187c22525752195ae, where we make the logic
+per-package, and collect the overall data in target-finalize.
+
+Thanks,
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
