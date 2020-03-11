@@ -1,9 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 11 Mar 2020 08:09:53 +0100
-Subject: [Buildroot] [PATCH 07/10] package/perl-net-dns: bump to version 1.22
+Date: Wed, 11 Mar 2020 08:09:55 +0100
+Subject: [Buildroot] [PATCH 09/10] package/perl-sys-mmap: bump to version
+ 0.20
 In-Reply-To: <20200311070956.6346-1-francois.perrad@gadz.org>
 References: <20200311070956.6346-1-francois.perrad@gadz.org>
-Message-ID: <20200311070956.6346-7-francois.perrad@gadz.org>
+Message-ID: <20200311070956.6346-9-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +13,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-net-dns/perl-net-dns.hash | 4 ++--
- package/perl-net-dns/perl-net-dns.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-sys-mmap/perl-sys-mmap.hash | 4 ++--
+ package/perl-sys-mmap/perl-sys-mmap.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
-index e015b872d..8ef5d5c7d 100644
---- a/package/perl-net-dns/perl-net-dns.hash
-+++ b/package/perl-net-dns/perl-net-dns.hash
+diff --git a/package/perl-sys-mmap/perl-sys-mmap.hash b/package/perl-sys-mmap/perl-sys-mmap.hash
+index d50fb717d..ce4d67354 100644
+--- a/package/perl-sys-mmap/perl-sys-mmap.hash
++++ b/package/perl-sys-mmap/perl-sys-mmap.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    91e8593eb6eed41995e6edc567fb6fec Net-DNS-1.21.tar.gz
--sha256 ddefe13b28084ffcc8f10a96b3c13c59449dbf6fc371c006d129630ea0ce767a Net-DNS-1.21.tar.gz
-+md5    f9b4f0b2613398d27434d94b456583ef Net-DNS-1.22.tar.gz
-+sha256 03cd6a733e1cab6f817b4c4dcb7b29575002f8c543fb85e94c6290bc224d4c12 Net-DNS-1.22.tar.gz
+-md5    990c9106a88dc843035f7bcb109e6c0e Sys-Mmap-0.19.tar.gz
+-sha256 09295e25cc9b0599d9009d19b2be89fcecaecc62ce594f873d7f70d7c10900fa Sys-Mmap-0.19.tar.gz
++md5    57172ce9b33c04de460b4e7ad68d2e9c Sys-Mmap-0.20.tar.gz
++sha256 1820ce2c89f1ab7357644f8db0f49f142f54526250fb1e235db10aa80f15e2cf Sys-Mmap-0.20.tar.gz
  
  # computed by scancpan
- sha256 afa7d288df3e3edbdb34790407ba4a9c7750c2746059d9355f4168bfb3212583 README
-diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
-index a4424c113..24a0eb339 100644
---- a/package/perl-net-dns/perl-net-dns.mk
-+++ b/package/perl-net-dns/perl-net-dns.mk
-@@ -4,7 +4,7 @@
+ sha256 4ac2afe465736476a06e52edcc78c72cfa0fa4d625916e58ab4f2af6c598709c Artistic
+diff --git a/package/perl-sys-mmap/perl-sys-mmap.mk b/package/perl-sys-mmap/perl-sys-mmap.mk
+index 489d4dd7e..5e0814526 100644
+--- a/package/perl-sys-mmap/perl-sys-mmap.mk
++++ b/package/perl-sys-mmap/perl-sys-mmap.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_NET_DNS_VERSION = 1.21
-+PERL_NET_DNS_VERSION = 1.22
- PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
- PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
- PERL_NET_DNS_LICENSE = MIT
+-PERL_SYS_MMAP_VERSION = 0.19
++PERL_SYS_MMAP_VERSION = 0.20
+ PERL_SYS_MMAP_SOURCE = Sys-Mmap-$(PERL_SYS_MMAP_VERSION).tar.gz
+-PERL_SYS_MMAP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SW/SWALTERS
++PERL_SYS_MMAP_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+ PERL_SYS_MMAP_LICENSE = Artistic or GPL-1.0+
+ PERL_SYS_MMAP_LICENSE_FILES = Artistic Copying
+ PERL_SYS_MMAP_DISTNAME = Sys-Mmap
 -- 
 2.20.1
