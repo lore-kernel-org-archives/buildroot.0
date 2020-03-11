@@ -1,95 +1,103 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 11 Mar 2020 08:41:42 +0100
-Subject: [Buildroot] [PATCH 1/1] Revert "package/opencv3: bump to
- version 4.2.0"
-In-Reply-To: <CADvTj4oMaxJAUiUQJ8Ze22mrKytQZXbNWg4ysgf2TNMhcnButw@mail.gmail.com>
-References: <20200310223132.668486-1-fontaine.fabrice@gmail.com>
- <CADvTj4oMaxJAUiUQJ8Ze22mrKytQZXbNWg4ysgf2TNMhcnButw@mail.gmail.com>
-Message-ID: <CAPi7W83sKWaXCqbvy=efwP0kBGOaDXc4M-kxpQGQOqPshf1UYA@mail.gmail.com>
+Date: Wed, 11 Mar 2020 08:49:33 +0100
+Subject: [Buildroot] [PATCH 2/2] package/moarvm: bump to version
+ 2020.02.1
+In-Reply-To: <20200310213724.4980-2-francois.perrad@gadz.org>
+References: <20200310213724.4980-1-francois.perrad@gadz.org>
+ <20200310213724.4980-2-francois.perrad@gadz.org>
+Message-ID: <CAPi7W82ek647OcFSEph6Vzckz6Rw1W2U6iozaFTg9itBJo6E_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi James,
+Dear Fran?ois,
 
-Le mer. 11 mars 2020 ? 00:11, James Hilliard
-<james.hilliard1@gmail.com> a ?crit :
+Le mar. 10 mars 2020 ? 22:37, Francois Perrad <fperrad@gmail.com> a ?crit :
 >
-> On Tue, Mar 10, 2020 at 4:30 PM Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> wrote:
-> >
-> > This reverts commit 5e51bb2756ee5063eff9a45a46033a449e2a6195.
-> > Indeed, version 4.x is not backward with opencv 3.x, most of the C API
-> > has been removed as stated in https://opencv.org/opencv-4-0.
-> I guess we need a separate opencv4 package then for this?
-Yes, I think this is the best course of action.
-> >
-> > Moreover, these issues should also be fixed:
-> >  - pkg-config file is not installed by default since
-> >  https://github.com/opencv/opencv/commit/e755a2a6e48ae02dd5136a628cc4148566a08225
-> >  - layout of include files and pkg-config file name are different since
-> >  https://github.com/opencv/opencv/commit/a95673287433fc810eda2d88b94bb234298c4cd5
-> >
-> > As a result, ffmpeg fails to build with opencv 4.2.0.
-> >
-> > Moreover, it should be noted that -DPROTOBUF_UPDATE_FILES=ON should be
-> > applied in a separate patch to fix existing build failure with 3.4.9 as
-> > stated in https://patchwork.ozlabs.org/patch/1222308
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/ef1d09d8b234807dcd993422f9557e5c34506013
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/opencv3/opencv3.hash | 4 ++--
-> >  package/opencv3/opencv3.mk   | 6 +++---
-> >  2 files changed, 5 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
-> > index ef95f24ad3..4953d01a1c 100644
-> > --- a/package/opencv3/opencv3.hash
-> > +++ b/package/opencv3/opencv3.hash
-> > @@ -1,3 +1,3 @@
-> >  # Locally calculated
-> > -sha256  9ccb2192d7e8c03c58fee07051364d94ed7599363f3b0dce1c5e6cc11c1bb0ec  opencv3-4.2.0.tar.gz
-> > -sha256  c3596f2f886631ac49af2c9a201ca559f850bb5726bdc25eacbe2369a70caad9  LICENSE
-> > +sha256 b7ea364de7273cfb3b771a0d9c111b8b8dfb42ff2bcd2d84681902fb8f49892a  opencv3-3.4.9.tar.gz
-> > +sha256 c3596f2f886631ac49af2c9a201ca559f850bb5726bdc25eacbe2369a70caad9  LICENSE
-> > diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-> > index 300631ce51..d37cd45adf 100644
-> > --- a/package/opencv3/opencv3.mk
-> > +++ b/package/opencv3/opencv3.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >
-> > -OPENCV3_VERSION = 4.2.0
-> > +OPENCV3_VERSION = 3.4.9
-> >  OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
-> >  OPENCV3_INSTALL_STAGING = YES
-> >  OPENCV3_LICENSE = BSD-3-Clause
-> > @@ -283,10 +283,10 @@ OPENCV3_CONF_OPTS += -DWITH_PNG=OFF
-> >  endif
-> >
-> >  ifeq ($(BR2_PACKAGE_OPENCV3_WITH_PROTOBUF),y)
-> > -OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=ON -DPROTOBUF_UPDATE_FILES=ON
-> > +OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=ON
-> >  OPENCV3_DEPENDENCIES += protobuf
-> >  else
-> > -OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=OFF -DPROTOBUF_UPDATE_FILES=OFF
-> > +OPENCV3_CONF_OPTS += -DWITH_PROTOBUF=OFF
-> >  endif
-> >
-> >  ifeq ($(BR2_PACKAGE_OPENCV3_WITH_QT5),y)
-> > --
-> > 2.25.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+> since version 2020.02, moarvm depends on libtommath 1.2.0
+Commit log should be updated to explain that the patch can be removed
+because it is not needed since the bump of the embedded dyncall:
+https://github.com/MoarVM/dyncall/commit/4b85baf44b9cf079d55cf74d26dc749659151e11
+>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  ...unix.c-don-t-use-RTLD_DI_LINKMAP-wit.patch | 38 -------------------
+>  package/moarvm/moarvm.hash                    |  2 +-
+>  package/moarvm/moarvm.mk                      |  2 +-
+>  3 files changed, 2 insertions(+), 40 deletions(-)
+>  delete mode 100644 package/moarvm/0001-dynload-dynload_unix.c-don-t-use-RTLD_DI_LINKMAP-wit.patch
+>
+> diff --git a/package/moarvm/0001-dynload-dynload_unix.c-don-t-use-RTLD_DI_LINKMAP-wit.patch b/package/moarvm/0001-dynload-dynload_unix.c-don-t-use-RTLD_DI_LINKMAP-wit.patch
+> deleted file mode 100644
+> index 326423679..000000000
+> --- a/package/moarvm/0001-dynload-dynload_unix.c-don-t-use-RTLD_DI_LINKMAP-wit.patch
+> +++ /dev/null
+> @@ -1,38 +0,0 @@
+> -From a83f1fd053aadd2e849df80f67b69ba7298341f3 Mon Sep 17 00:00:00 2001
+> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Date: Wed, 25 Dec 2019 20:37:57 +0100
+> -Subject: [PATCH] dynload/dynload_unix.c: don't use RTLD_DI_LINKMAP with uclibc
+> -
+> -RTLD_DI_LINKMAP is not defined on uclibc so check that __UCLIBC__ is not
+> -defined before using it otherwise build fails on:
+> -
+> -dynload_unix.c:93:19: error: 'RTLD_DI_LINKMAP' undeclared (first use in this function); did you mean 'RTLD_BINDING_MASK'?
+> -   if(dlinfo(pLib, RTLD_DI_LINKMAP, &p) == 0) {
+> -                   ^~~~~~~~~~~~~~~
+> -                   RTLD_BINDING_MASK
+> -
+> -Fixes:
+> - - http://autobuild.buildroot.org/results/b88e55dde1acab967023ae49bb1722eadb9cc6ab
+> -
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -[Upstream status: https://github.com/MoarVM/dyncall/pull/6]
+> ----
+> - dynload/dynload_unix.c | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -diff --git a/3rdparty/dyncall/dynload/dynload_unix.c b/3rdparty/dyncall/dynload/dynload_unix.c
+> -index adfd351..129a1e5 100644
+> ---- a/3rdparty/dyncall/dynload/dynload_unix.c
+> -+++ b/3rdparty/dyncall/dynload/dynload_unix.c
+> -@@ -82,7 +82,7 @@ void dlFreeLibrary(DLLib* pLib)
+> - /* that: check for RTLD_DI_LINKMAP (#define for dlinfo()), or if GNU C Lib */
+> - /* is used (where RTLD_DI_LINKMAP is an enum), or by OS (dlinfo comes from */
+> - /* Solaris), etc. */
+> --#if defined(RTLD_DI_LINKMAP) || defined(OS_SunOS) || defined(__GLIBC__) /* @@@ dlinfo() was introduced in glibc 2.3.3 (in 2003), somehow check for that, also */
+> -+#if defined(RTLD_DI_LINKMAP) || defined(OS_SunOS) || (defined(__GLIBC__) && !defined(__UCLIBC__)) /* @@@ dlinfo() was introduced in glibc 2.3.3 (in 2003), somehow check for that, also */
+> -
+> - #include <link.h>
+> -
+> ---
+> -2.24.0
+> -
+> diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+> index 908885f68..29c6ce77f 100644
+> --- a/package/moarvm/moarvm.hash
+> +++ b/package/moarvm/moarvm.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256 dcb61e44a098e8375c385eb9d52bd6394255a388697b2f6a52d88e6cf4a53587  MoarVM-2020.01.1.tar.gz
+> +sha256 82cb80b29ad7aebb0c0b42449d371eafa8935b07884526345f9788c8bcf4d632  MoarVM-2020.02.1.tar.gz
+>  sha256 c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
+> diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+> index e554ddb6d..a0c7766bf 100644
+> --- a/package/moarvm/moarvm.mk
+> +++ b/package/moarvm/moarvm.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -MOARVM_VERSION = 2020.01.1
+> +MOARVM_VERSION = 2020.02.1
+>  MOARVM_SITE = http://moarvm.com/releases
+>  MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+>  MOARVM_LICENSE = Artistic-2.0
+> --
+> 2.20.1
+>
 Best Regards,
 
 Fabrice
