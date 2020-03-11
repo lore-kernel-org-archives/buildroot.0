@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 11 Mar 2020 08:09:50 +0100
-Subject: [Buildroot] [PATCH 04/10] package/perl-http-message: bump to
- version 6.22
+Date: Wed, 11 Mar 2020 08:09:51 +0100
+Subject: [Buildroot] [PATCH 05/10] package/perl-io-socket-ssl: bump to
+ version 2.067
 In-Reply-To: <20200311070956.6346-1-francois.perrad@gadz.org>
 References: <20200311070956.6346-1-francois.perrad@gadz.org>
-Message-ID: <20200311070956.6346-4-francois.perrad@gadz.org>
+Message-ID: <20200311070956.6346-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-http-message/perl-http-message.hash | 4 ++--
- package/perl-http-message/perl-http-message.mk   | 2 +-
+ package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
+ package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
-index 78fda135c..80e117cff 100644
---- a/package/perl-http-message/perl-http-message.hash
-+++ b/package/perl-http-message/perl-http-message.hash
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+index de9b28abe..d849060f7 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    9fd400da24e1784f85d32de1705fc795 HTTP-Message-6.18.tar.gz
--sha256 d060d170d388b694c58c14f4d13ed908a2807f0e581146cef45726641d809112 HTTP-Message-6.18.tar.gz
-+md5    3cfb96e96c1881afa72639a8f4282e86 HTTP-Message-6.22.tar.gz
-+sha256 970efd151b81c95831d2a5f9e117f8032b63a1768cd2cd3f092ad634c85175c3 HTTP-Message-6.22.tar.gz
+-md5    ecf96ce2ff9e04a03a2d101c76ce1020 IO-Socket-SSL-2.066.tar.gz
+-sha256 0d47064781a545304d5dcea5dfcee3acc2e95a32e1b4884d80505cde8ee6ebcd IO-Socket-SSL-2.066.tar.gz
++md5    1d55e9f66ca442f4e0ae4d018e3067fc IO-Socket-SSL-2.067.tar.gz
++sha256 ef8842806d047cf56e2af64add4ed30b24547bcbb50e8df33cee0c54609af1c1 IO-Socket-SSL-2.067.tar.gz
  
  # computed by scancpan
- sha256 66f0d1e8593d5512d7a8cd90549a976aaae97e4fa9b6097249b3682f14747a6b LICENSE
-diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
-index becae4d17..c80d88405 100644
---- a/package/perl-http-message/perl-http-message.mk
-+++ b/package/perl-http-message/perl-http-message.mk
+ sha256 090aff5421fd55a9dceeaf6c612c36360402e8d29c1284aef88c87be565ce032 README
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+index 59c340759..4ab1f1fbe 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_MESSAGE_VERSION = 6.18
-+PERL_HTTP_MESSAGE_VERSION = 6.22
- PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
- PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
+-PERL_IO_SOCKET_SSL_VERSION = 2.066
++PERL_IO_SOCKET_SSL_VERSION = 2.067
+ PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
+ PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
+ PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPL-1.0+
 -- 
 2.20.1
