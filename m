@@ -1,61 +1,71 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 11 Mar 2020 20:36:50 +0100
-Subject: [Buildroot] [PATCH 1/1] meson: Strip quotes from BR2_ENDIAN
-In-Reply-To: <20200311183833.23074-1-glex.spb@gmail.com>
-References: <20200311183833.23074-1-glex.spb@gmail.com>
-Message-ID: <20200311203650.0cb520ff@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 11 Mar 2020 20:52:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libeXosip2: fix build without
+ threads
+Message-ID: <20200311195255.115690-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gleb,
+Fixes:
+ - http://autobuild.buildroot.org/results/7b5f049fda390a7961b5a7fde42ea5aebe1f7564
 
-On Wed, 11 Mar 2020 18:38:33 +0000, Gleb Mazovetskiy <glex.spb@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...c-eXconf.c-fix-build-without-threads.patch | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/libeXosip2/0001-src-eXconf.c-fix-build-without-threads.patch
 
-> Strips the quotes from BR2_ENDIAN because meson expects the value to be
-> unquoted.
->
-> Also uses the same values in target-specific cross-config as in the /etc
-> one.
->
-> Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
-> ---
->  package/meson/meson.mk | 2 +-
->  package/pkg-meson.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> index 29c7ed1800..845ce8fb71 100644
-> --- a/package/meson/meson.mk
-> +++ b/package/meson/meson.mk
-> @@ -13,7 +13,7 @@ MESON_SETUP_TYPE = setuptools
->  HOST_MESON_DEPENDENCIES = host-ninja
->  HOST_MESON_NEEDS_HOST_PYTHON = python3
->
-> -HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
-> +HOST_MESON_TARGET_ENDIAN = $(call qstrip,$(call LOWERCASE,$(BR2_ENDIAN)))
->  HOST_MESON_TARGET_CPU = $(GCC_TARGET_CPU)
->
->  # https://mesonbuild.com/Reference-tables.html#cpu-families
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index 642b715938..2cdcf01bfd 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -69,8 +69,8 @@ define $(2)_CONFIGURE_CMDS
->  	mkdir -p $$($$(PKG)_SRCDIR)/build
->  	sed -e 's%@TARGET_CROSS@%$$(TARGET_CROSS)%g' \
->  	    -e 's%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g' \
-> -	    -e 's%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g' \
-> -	    -e 's%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g' \
-> +	    -e 's%@TARGET_CPU@%$$(HOST_MESON_TARGET_CPU)%g' \
-> +	    -e 's%@TARGET_ENDIAN@%$$(HOST_MESON_TARGET_ENDIAN)%g' \
->  	    -e 's%@TARGET_CFLAGS@%$$(call make-comma-list,$$($(2)_CFLAGS))%g' \
->  	    -e 's%@TARGET_LDFLAGS@%$$(call make-comma-list,$$($(2)_LDFLAGS))%g' \
->  	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
+diff --git a/package/libeXosip2/0001-src-eXconf.c-fix-build-without-threads.patch b/package/libeXosip2/0001-src-eXconf.c-fix-build-without-threads.patch
+new file mode 100644
+index 0000000000..faaec5b377
+--- /dev/null
++++ b/package/libeXosip2/0001-src-eXconf.c-fix-build-without-threads.patch
+@@ -0,0 +1,43 @@
++From 618bd5edee8b1a93fbdf9e4a838e3c9cefcce6a7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 11 Mar 2020 20:43:48 +0100
++Subject: [PATCH] src/eXconf.c: fix build without threads
++
++Fix the following build failure without threads:
++
++eXconf.c:812:49: error: 'struct eXosip_t' has no member named 'j_socketctl_event'
++     ev.data.fd = jpipe_get_read_descr (excontext->j_socketctl_event);
++                                                 ^~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/7b5f049fda390a7961b5a7fde42ea5aebe1f7564
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://savannah.nongnu.org/bugs/index.php?57985]
++---
++ src/eXconf.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/eXconf.c b/src/eXconf.c
++index baf90be..cf8b4f7 100644
++--- a/src/eXconf.c
+++++ b/src/eXconf.c
++@@ -807,6 +807,7 @@ eXosip_init (struct eXosip_t *excontext)
++       return OSIP_UNDEFINED_ERROR;
++     }
++     
+++#ifndef OSIP_MONOTHREAD 
++     memset(&ev, 0, sizeof(struct epoll_event));
++     ev.events = EPOLLIN;
++     ev.data.fd = jpipe_get_read_descr (excontext->j_socketctl_event);
++@@ -815,6 +816,7 @@ eXosip_init (struct eXosip_t *excontext)
++       _eXosip_closesocket (excontext->epfdctl);
++       return OSIP_UNDEFINED_ERROR;
++     }
+++#endif
++   }
++ #endif
++   
++-- 
++2.25.1
++
+-- 
+2.25.1
