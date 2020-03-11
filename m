@@ -1,70 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Mar 2020 23:04:57 +0100
-Subject: [Buildroot] [PATCH v6 15/28] package/qt-webkit-kiosk: Convert
- to qmake infra
-In-Reply-To: <20200217212350.29750-16-anaumann@ultratronik.de>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-16-anaumann@ultratronik.de>
-Message-ID: <20200311230457.59c63d93@windsurf>
+Date: Wed, 11 Mar 2020 23:05:53 +0100
+Subject: [Buildroot] [git commit] package/qt5cinex: convert to qmake
+ infrastructure
+Message-ID: <20200311215326.084B590A0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andreas,
+commit: https://git.buildroot.net/buildroot/commit/?id=a4fb0177a0e7a0c0eab2341f29cccefd890b47b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 17 Feb 2020 22:23:37 +0100
-Andreas Naumann <anaumann@ultratronik.de> wrote:
+Keep custom install logic because qt5cinex has no built-in install
+target.
 
-> Convert but keep the slightly complicated custom install step for now.
-> 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-> ---
->  package/qt-webkit-kiosk/qt-webkit-kiosk.mk | 11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5cinex/qt5cinex.mk | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-I've applied, but I have some comments below.
-
-> 
-> diff --git a/package/qt-webkit-kiosk/qt-webkit-kiosk.mk b/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
-> index a714fca9c9..22cbf3cb87 100644
-> --- a/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
-> +++ b/package/qt-webkit-kiosk/qt-webkit-kiosk.mk
-> @@ -11,13 +11,8 @@ QT_WEBKIT_KIOSK_DEPENDENCIES = qt5webkit qt5multimedia
->  QT_WEBKIT_KIOSK_LICENSE = LGPL-3.0
->  QT_WEBKIT_KIOSK_LICENSE_FILES = doc/lgpl.html
->  
-> -define QT_WEBKIT_KIOSK_CONFIGURE_CMDS
-> -	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE) PREFIX=/usr)
-> -endef
-> -
-> -define QT_WEBKIT_KIOSK_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> -endef
-> +QT_WEBKIT_KIOSK_INSTALL_STAGING = NO
-
-This is not needed, as this is the default, and check-package complains
-about this.
-
-> +QT_WEBKIT_KIOSK_CONF_OPTS = PREFIX=/usr
-
-Do you know why specifically for this package we need to pass
-PREFIX=/usr, and not for any other qmake-based package ?
-
->  define QT_WEBKIT_KIOSK_INSTALL_TARGET_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src -f Makefile.qt-webkit-kiosk \
-> @@ -29,4 +24,4 @@ define QT_WEBKIT_KIOSK_INSTALL_TARGET_CMDS
->  		$(if $(BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS),install_sound)
->  endef
-
-Any reason for these custom installation commands, rather than using
-the package-provided installation logic ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5cinex/qt5cinex.mk b/package/qt5cinex/qt5cinex.mk
+index 89c38ee3f5..70038028d9 100644
+--- a/package/qt5cinex/qt5cinex.mk
++++ b/package/qt5cinex/qt5cinex.mk
+@@ -12,19 +12,11 @@ QT5CINEX_HD = rpi_
+ endif
+ 
+ QT5CINEX_SOURCE = Qt5_CinematicExperience_$(QT5CINEX_HD)$(QT5CINEX_VERSION).tgz
+-QT5CINEX_DEPENDENCIES = qt5base qt5declarative
++QT5CINEX_DEPENDENCIES = qt5declarative
+ 
+ QT5CINEX_LICENSE = CC-BY-3.0
+ QT5CINEX_LICENSE_FILES = README
+ 
+-define QT5CINEX_CONFIGURE_CMDS
+-	cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake
+-endef
+-
+-define QT5CINEX_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+-endef
+-
+ # In addition to the Cinematic Experience itself, we also install a
+ # wrapper shell script to /usr/bin: the Cinematic Experience binary
+ # wants its resource files to be available directly under a contents/
+@@ -39,4 +31,4 @@ define QT5CINEX_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/usr/bin/CinematicExperience-demo
+ endef
+ 
+-$(eval $(generic-package))
++$(eval $(qmake-package))
