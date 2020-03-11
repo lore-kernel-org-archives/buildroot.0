@@ -1,47 +1,147 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Mar 2020 08:08:36 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/ogre: link with
- libatomic when needed
-Message-ID: <20200311065650.2BBB390928@busybox.osuosl.org>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 11 Mar 2020 08:09:31 +0100
+Subject: [Buildroot] [Resend] package/lua-lyaml: new package
+Message-ID: <20200311070931.6271-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=653676e87b5731bc741da9ca041247946531a67c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
-
-On some architectures, atomic binutils are provided by the libatomic
-library from gcc. Linking with libatomic is therefore necessary,
-otherwise the build fails with:
-
-/home/test/autobuild/run/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/8.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: ../../lib/libOgreMain.so.1.12.0: undefined reference to `__atomic_fetch_add_8'
-
-This is often for example the case on sparc v8 32 bits.
-
-Fixes:
- - http://autobuild.buildroot.org/results/3a09e2d1d26b19243244eb7f9235c85488a788d2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bc88757481534b129b34b1890ef1569a71308229)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/ogre/ogre.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ .gitlab-ci.yml                                |  2 ++
+ package/Config.in                             |  1 +
+ package/lua-lyaml/Config.in                   |  9 +++++
+ package/lua-lyaml/lua-lyaml.hash              |  3 ++
+ package/lua-lyaml/lua-lyaml.mk                | 33 +++++++++++++++++++
+ .../testing/tests/package/test_lua_lyaml.py   | 27 +++++++++++++++
+ 6 files changed, 75 insertions(+)
+ create mode 100644 package/lua-lyaml/Config.in
+ create mode 100644 package/lua-lyaml/lua-lyaml.hash
+ create mode 100644 package/lua-lyaml/lua-lyaml.mk
+ create mode 100644 support/testing/tests/package/test_lua_lyaml.py
 
-diff --git a/package/ogre/ogre.mk b/package/ogre/ogre.mk
-index f7711e41f1..253e022a73 100644
---- a/package/ogre/ogre.mk
-+++ b/package/ogre/ogre.mk
-@@ -39,4 +39,9 @@ else
- OGRE_CONF_OPTS += -DOGRE_BUILD_COMPONENT_PYTHON=OFF
- endif
- 
-+# Uses __atomic_fetch_add_8
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+OGRE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-+endif
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index b4dad3173..6b120228f 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -397,6 +397,8 @@ tests.package.test_lua_gd.TestLuaLuaGD: { extends: .runtime_test }
+ tests.package.test_lua_gd.TestLuajitLuaGD: { extends: .runtime_test }
+ tests.package.test_lua_http.TestLuaHttp: { extends: .runtime_test }
+ tests.package.test_lua_http.TestLuajitHttp: { extends: .runtime_test }
++tests.package.test_lua_lyaml.TestLuaLuaLyaml: { extends: .runtime_test }
++tests.package.test_lua_lyaml.TestLuajitLuaLyaml: { extends: .runtime_test }
+ tests.package.test_lua_sdl2.TestLuaLuaSDL2: { extends: .runtime_test }
+ tests.package.test_lua_sdl2.TestLuajitLuaSDL2: { extends: .runtime_test }
+ tests.package.test_lua_utf8.TestLuaUtf8: { extends: .runtime_test }
+diff --git a/package/Config.in b/package/Config.in
+index edf7687ab..4a4411829 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -651,6 +651,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-livr-extra/Config.in"
+ 	source "package/lua-lpeg-patterns/Config.in"
+ 	source "package/lua-lunitx/Config.in"
++	source "package/lua-lyaml/Config.in"
+ 	source "package/lua-markdown/Config.in"
+ 	source "package/lua-messagepack/Config.in"
+ 	source "package/lua-msgpack-native/Config.in"
+diff --git a/package/lua-lyaml/Config.in b/package/lua-lyaml/Config.in
+new file mode 100644
+index 000000000..ef2d3823d
+--- /dev/null
++++ b/package/lua-lyaml/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LUA_LYAML
++	bool "lua-lyaml"
++	select BR2_PACKAGE_LIBYAML
++	help
++	  This is a Lua binding for the fast libYAML C library for
++	  converting between `%YAML 1.1` and Lua tables, with a
++	  flexible Lua language API to load and save YAML documents.
 +
- $(eval $(cmake-package))
++	  http://github.com/gvvaughan/lyaml
+diff --git a/package/lua-lyaml/lua-lyaml.hash b/package/lua-lyaml/lua-lyaml.hash
+new file mode 100644
+index 000000000..dd1978385
+--- /dev/null
++++ b/package/lua-lyaml/lua-lyaml.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256 f4015ba47a389fc4fe0656cbcb8a216239275ec53309a0df79b0733c843e7bba  lua-lyaml-6.2.4.tar.gz
++sha256 c7ec2f52d258088437cddeeee38cfc97d60d464c8801aa77decefb993400ec6e  LICENSE
+diff --git a/package/lua-lyaml/lua-lyaml.mk b/package/lua-lyaml/lua-lyaml.mk
+new file mode 100644
+index 000000000..c88a438d5
+--- /dev/null
++++ b/package/lua-lyaml/lua-lyaml.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# lua-lyaml
++#
++################################################################################
++
++LUA_LYAML_VERSION = 6.2.4
++LUA_LYAML_NAME_UPSTREAM = lyaml
++LUA_LYAML_SITE = $(call github,gvvaughan,$(LUA_LYAML_NAME_UPSTREAM),v$(LUA_LYAML_VERSION))
++LUA_LYAML_LICENSE = MIT
++LUA_LYAML_LICENSE_FILES = LICENSE
++LUA_LYAML_DEPENDENCIES = libyaml luainterpreter host-lua
++
++define LUA_LYAML_BUILD_CMDS
++	(cd $(@D); \
++		$(LUA_RUN) build-aux/luke \
++		version="'$(LUA_LYAML_VERSION)'" \
++		CC="$(TARGET_CC)" \
++		CFLAGS="$(TARGET_CFLAGS)" \
++		LUA_INCDIR=$(STAGING_DIR)/usr/include \
++		YAML_DIR=$(STAGING_DIR)/usr \
++	)
++endef
++
++define LUA_LYAML_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++		$(LUA_RUN) build-aux/luke install \
++		INST_LIBDIR="$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
++		INST_LUADIR="$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)" \
++	)
++endef
++
++$(eval $(generic-package))
+diff --git a/support/testing/tests/package/test_lua_lyaml.py b/support/testing/tests/package/test_lua_lyaml.py
+new file mode 100644
+index 000000000..ece3c675a
+--- /dev/null
++++ b/support/testing/tests/package/test_lua_lyaml.py
+@@ -0,0 +1,27 @@
++from tests.package.test_lua import TestLuaBase
++
++
++class TestLuaLuaLyaml(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUA=y
++        BR2_PACKAGE_LUA_LYAML=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("yaml")
++        self.module_test("lyaml")
++
++
++class TestLuajitLuaLyaml(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUAJIT=y
++        BR2_PACKAGE_LUA_LYAML=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("yaml")
++        self.module_test("lyaml")
+-- 
+2.20.1
