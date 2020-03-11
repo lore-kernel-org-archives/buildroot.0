@@ -1,72 +1,43 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed, 11 Mar 2020 14:49:22 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/cog: add option for platform
- DRM.
-In-Reply-To: <20200311103044.11422-1-cturner@igalia.com>
-References: <20200310112227.16175-1-cturner@igalia.com>
- <20200311103044.11422-1-cturner@igalia.com>
-Message-ID: <20200311144922.GB423893@momiji>
+From: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Date: Wed, 11 Mar 2020 14:35:04 +0100
+Subject: [Buildroot] [PATCH] package/collectd: make network crypto support
+ discoverable
+Message-ID: <20200311133504.13911-1-p.debruijn@unilogic.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 11 Mar 2020 10:30:44 +0000, Charlie Turner <cturner@igalia.com> wrote:
-> Signed-off-by: Charlie Turner <cturner@igalia.com>
+before it was completely non-obvious how to get crypto support
+in collectd's network module
 
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+this introduces a collectd config option which makes sure
+gcrypt is built, and can't be accidentally unselected
+resulting in an accidental non-crypto build of collectd
 
-> ---
->  package/cog/Config.in | 6 ++++++
->  package/cog/cog.mk    | 8 +++++++-
->  2 files changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/cog/Config.in b/package/cog/Config.in
-> index b25991d4ae..b260fa259c 100644
-> --- a/package/cog/Config.in
-> +++ b/package/cog/Config.in
-> @@ -26,4 +26,10 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
->  	  string is used, there is no default and the URI to open
->  	  must be always specified in the command line.
->  
-> +config BR2_PACKAGE_COG_PLATFORM_DRM
-> +       bool "DRM backend"
-> +       depends on BR2_PACKAGE_LIBDRM
-> +       help
-> +         Enable the DRM platform backend. This allows Cog to run
-> +         without a compositor like Weston.
->  endif
-> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-> index d0e5b79c38..4697fdf6ed 100644
-> --- a/package/cog/cog.mk
-> +++ b/package/cog/cog.mk
-> @@ -14,7 +14,13 @@ COG_LICENSE_FILES = COPYING
->  COG_CONF_OPTS = \
->  	-DCOG_BUILD_PROGRAMS=ON \
->  	-DCOG_PLATFORM_FDO=ON \
-> -	-DCOG_PLATFORM_DRM=OFF \
->  	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
->  
-> +ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
-> +	COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
-> +	COG_DEPENDENCIES += libdrm libinput
-> +else
-> +	COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
-> +endif
-> +
->  $(eval $(cmake-package))
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200311/72c6a483/attachment.asc>
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+---
+ package/collectd/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 303b5dc01b..4b34ec60eb 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -603,6 +603,13 @@ config BR2_PACKAGE_COLLECTD_NETWORK
+ 	help
+ 	  Send/receive values from other instances of collectd.
+ 
++config BR2_PACKAGE_COLLECTD_NETWORK_GCRYPT
++	bool "crypto support"
++	depends on BR2_PACKAGE_COLLECTD_NETWORK
++	select BR2_PACKAGE_LIBGCRYPT
++	help
++	  Enable crypto support
++
+ config BR2_PACKAGE_COLLECTD_RRDTOOL
+ 	bool "rrdtool"
+ 	depends on BR2_USE_WCHAR # rrdtool
+-- 
+2.17.1
