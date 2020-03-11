@@ -1,48 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Mar 2020 22:42:56 +0100
-Subject: [Buildroot] [PATCH v6 09/28] package/quazip: Convert to qmake
- infra
-In-Reply-To: <d138dcb2-3946-c711-d8ee-a7491bf5979b@andin.de>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-10-anaumann@ultratronik.de>
- <20200217225752.74c34031@windsurf>
- <d138dcb2-3946-c711-d8ee-a7491bf5979b@andin.de>
-Message-ID: <20200311224256.7be1235b@windsurf>
+Date: Wed, 11 Mar 2020 22:36:36 +0100
+Subject: [Buildroot] [git commit] package/qt5/qt5tools: partially convert to
+ qmake infra
+Message-ID: <20200311213449.4B7CF909E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 Feb 2020 11:00:07 +0100
-Andreas Naumann <dev@andin.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2c1e9c60288e303672f643a516bc6b9f24bdbcc5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > A prefix of $(STAGING_DIR)/usr looks wrong, as prefix is normally where
-> > the things will be once installed in the target. Do we really need to
-> > do this change?  
-> 
-> I agree it's probably not how PREFIX is intended to be used. But after 
-> all the project doesnt seem to support cross-compile/install properly as 
-> you can see by the need to explicitly set INSTALL_ROOT to a different 
-> path for staging/target.
+Use generic configure command but for now keep custom build and
+install logic, as we only build some parts of qt5tools depending on
+the selected sub-options.
 
-Well, in fact the current install procedure for quazip is perfect, as
-you don't have to do the horrible rsync dance that we have to do for
-other Qt packages. The fact that INSTALL_ROOT is different for staging
-and target is *perfect*, it is exactly how INSTALL_ROOT should be have
-in the first place: like DESTDIR.
+Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5tools/qt5tools.mk | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-So I'd really like to see more research done on this package, to
-understand why we need to bogus PREFIX= variable, and make sure it
-behaves like other packages.
-
-It would in fact be ideal if all other Qt packages could properly
-support INSTALL_ROOT like quazip does.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
+index 401b57a211..0543afd8f7 100644
+--- a/package/qt5/qt5tools/qt5tools.mk
++++ b/package/qt5/qt5tools/qt5tools.mk
+@@ -8,7 +8,6 @@ QT5TOOLS_VERSION = $(QT5_VERSION)
+ QT5TOOLS_SITE = $(QT5_SITE)
+ QT5TOOLS_SOURCE = qttools-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5TOOLS_VERSION).tar.xz
+ 
+-QT5TOOLS_DEPENDENCIES = qt5base
+ QT5TOOLS_INSTALL_STAGING = YES
+ 
+ # linguist tools compile conditionally on qtHaveModule(qmldevtools-private),
+@@ -45,10 +44,6 @@ QT5TOOLS_INSTALL_TARGET_$(BR2_PACKAGE_QT5TOOLS_QTPATHS) += qtpaths
+ QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTPLUGININFO) += qtplugininfo
+ QT5TOOLS_INSTALL_TARGET_$(BR2_PACKAGE_QT5TOOLS_QTPLUGININFO) += qtplugininfo
+ 
+-define QT5TOOLS_CONFIGURE_CMDS
+-	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
+-endef
+-
+ define QT5TOOLS_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) sub-src-qmake_all
+ 	$(foreach p,$(QT5TOOLS_BUILD_DIRS_y), \
+@@ -66,4 +61,4 @@ define QT5TOOLS_INSTALL_TARGET_CMDS
+ 		$(INSTALL) -D -m0755 $(@D)/bin/$(p) $(TARGET_DIR)/usr/bin/$(p)$(sep))
+ endef
+ 
+-$(eval $(generic-package))
++$(eval $(qmake-package))
