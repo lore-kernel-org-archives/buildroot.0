@@ -1,32 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 11 Mar 2020 22:22:12 +0100
-Subject: [Buildroot] [PATCH v6 07/28] package/qt5tools: Partially
- convert to qmake infra
-In-Reply-To: <20200217212350.29750-8-anaumann@ultratronik.de>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-8-anaumann@ultratronik.de>
-Message-ID: <20200311222212.6b65861f@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 11 Mar 2020 22:25:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libiio: fix install of C# bindings
+Message-ID: <20200311212533.829423-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 17 Feb 2020 22:23:29 +0100
-Andreas Naumann <anaumann@ultratronik.de> wrote:
+libiio-sharp.dll.mdb is not installed since version 0.19.0 and
+https://github.com/analogdevicesinc/libiio/commit/8b571969fa245fb25c6431340f23ff157e34841b
 
-> Use generic configure command but for now keep custom build and
-> install logic.
-> 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-> ---
->  package/qt5/qt5tools/qt5tools.mk | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+Indeed, EXISTS "${LIBIIO_CS_DLL}.mdb" will always return false because
+the file will not exist when cmake will create the makefiles.
 
-Applied to master, after dropping the qt5base dependency.
+Fixes:
+ - http://autobuild.buildroot.org/results/42ffbd07d0e998c75d1afde6a5db7d6418c10f45
 
-Thomas
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libiio/libiio.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+index efd582a5ea..af5b27ba5f 100644
+--- a/package/libiio/libiio.mk
++++ b/package/libiio/libiio.mk
+@@ -72,7 +72,6 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBIIO_BINDINGS_CSHARP),y)
+ define LIBIIO_INSTALL_CSHARP_BINDINGS_TO_TARGET
+-	rm $(TARGET_DIR)/usr/lib/cli/libiio-sharp-$(LIBIIO_VERSION)/libiio-sharp.dll.mdb
+ 	$(HOST_DIR)/bin/gacutil -root $(TARGET_DIR)/usr/lib -i \
+ 		$(TARGET_DIR)/usr/lib/cli/libiio-sharp-$(LIBIIO_VERSION)/libiio-sharp.dll
+ endef
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
