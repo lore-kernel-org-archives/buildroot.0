@@ -1,52 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Mar 2020 22:24:33 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/mongoose:
- security bump to version 6.17
-Message-ID: <20200311211446.B4BAF90994@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 11 Mar 2020 22:25:41 +0100
+Subject: [Buildroot] [git commit] package/pkg-meson.mk: fix
+ cross-compilation.conf
+Message-ID: <20200311211659.76BC690999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca4d4243849dfb0c8ab9131f9a7fc0fb69310df6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3fb784afb124ec689330177da5ee0e3e744f6237
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2019-19307: An integer overflow in parse_mqtt in mongoose.c in
-  Cesanta Mongoose 6.16 allows an attacker to achieve remote DoS
-  (infinite loop), or possibly cause an out-of-bounds write, by sending
-  a crafted MQTT protocol packet.
-- Update indentation of hash file (two spaces)
+$$(STAGING_DIR) -> $(STAGING_DIR) in PKG_MESON_INSTALL_CROSS_CONF.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c18562a82a47fc8cc9cb3af92cdee7ddbffc8a76)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+$$ resulted in `$(STAGING_DIR)` in the file instead of the expanded
+value.
+
+Note that this change only affects the etc config at:
+host/etc/meson/cross-compilation.conf
+
+Per-package cross-compilation.conf files are already correct.
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mongoose/mongoose.hash | 4 ++--
- package/mongoose/mongoose.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-meson.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index d380131631..c5de11bec2 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	1f20f2781862560ddf3203dfb0e6fcf248a68bf92aefbeafb9d2a629c4767c02  mongoose-6.16.tar.gz
--sha256	fdc34eeea97327d75c83492abd34f1a3200c53dec04422ecda8071dc60a36d10  LICENSE
-+sha256  5bff3cc70bb2248cf87d06a3543f120f3b29b9368d25a7715443cb10612987cc  mongoose-6.17.tar.gz
-+sha256  fdc34eeea97327d75c83492abd34f1a3200c53dec04422ecda8071dc60a36d10  LICENSE
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index bb40de261e..7944f5e534 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONGOOSE_VERSION = 6.16
-+MONGOOSE_VERSION = 6.17
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPL-2.0
- MONGOOSE_LICENSE_FILES = LICENSE
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 642b715938..416129f6fe 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -193,7 +193,7 @@ define PKG_MESON_INSTALL_CROSS_CONF
+ 	    -e 's%@TARGET_LDFLAGS@%$(call make-comma-list,$(TARGET_LDFLAGS))@PKG_TARGET_CFLAGS@%g' \
+ 	    -e 's%@TARGET_CXXFLAGS@%$(call make-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g' \
+ 	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
+-	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
++	    -e 's%@STAGING_DIR@%$(STAGING_DIR)%g' \
+ 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+ 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
+ 	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
