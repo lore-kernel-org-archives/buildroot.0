@@ -1,7 +1,8 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 11 Mar 2020 08:09:31 +0100
-Subject: [Buildroot] [Resend] package/lua-lyaml: new package
-Message-ID: <20200311070931.6271-1-francois.perrad@gadz.org>
+Date: Wed, 11 Mar 2020 08:09:47 +0100
+Subject: [Buildroot] [PATCH 01/10] package/perl-date-manip: bump to version
+ 6.81
+Message-ID: <20200311070956.6346-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,138 +11,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .gitlab-ci.yml                                |  2 ++
- package/Config.in                             |  1 +
- package/lua-lyaml/Config.in                   |  9 +++++
- package/lua-lyaml/lua-lyaml.hash              |  3 ++
- package/lua-lyaml/lua-lyaml.mk                | 33 +++++++++++++++++++
- .../testing/tests/package/test_lua_lyaml.py   | 27 +++++++++++++++
- 6 files changed, 75 insertions(+)
- create mode 100644 package/lua-lyaml/Config.in
- create mode 100644 package/lua-lyaml/lua-lyaml.hash
- create mode 100644 package/lua-lyaml/lua-lyaml.mk
- create mode 100644 support/testing/tests/package/test_lua_lyaml.py
+ package/perl-date-manip/perl-date-manip.hash | 4 ++--
+ package/perl-date-manip/perl-date-manip.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index b4dad3173..6b120228f 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -397,6 +397,8 @@ tests.package.test_lua_gd.TestLuaLuaGD: { extends: .runtime_test }
- tests.package.test_lua_gd.TestLuajitLuaGD: { extends: .runtime_test }
- tests.package.test_lua_http.TestLuaHttp: { extends: .runtime_test }
- tests.package.test_lua_http.TestLuajitHttp: { extends: .runtime_test }
-+tests.package.test_lua_lyaml.TestLuaLuaLyaml: { extends: .runtime_test }
-+tests.package.test_lua_lyaml.TestLuajitLuaLyaml: { extends: .runtime_test }
- tests.package.test_lua_sdl2.TestLuaLuaSDL2: { extends: .runtime_test }
- tests.package.test_lua_sdl2.TestLuajitLuaSDL2: { extends: .runtime_test }
- tests.package.test_lua_utf8.TestLuaUtf8: { extends: .runtime_test }
-diff --git a/package/Config.in b/package/Config.in
-index edf7687ab..4a4411829 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -651,6 +651,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-livr-extra/Config.in"
- 	source "package/lua-lpeg-patterns/Config.in"
- 	source "package/lua-lunitx/Config.in"
-+	source "package/lua-lyaml/Config.in"
- 	source "package/lua-markdown/Config.in"
- 	source "package/lua-messagepack/Config.in"
- 	source "package/lua-msgpack-native/Config.in"
-diff --git a/package/lua-lyaml/Config.in b/package/lua-lyaml/Config.in
-new file mode 100644
-index 000000000..ef2d3823d
---- /dev/null
-+++ b/package/lua-lyaml/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LUA_LYAML
-+	bool "lua-lyaml"
-+	select BR2_PACKAGE_LIBYAML
-+	help
-+	  This is a Lua binding for the fast libYAML C library for
-+	  converting between `%YAML 1.1` and Lua tables, with a
-+	  flexible Lua language API to load and save YAML documents.
-+
-+	  http://github.com/gvvaughan/lyaml
-diff --git a/package/lua-lyaml/lua-lyaml.hash b/package/lua-lyaml/lua-lyaml.hash
-new file mode 100644
-index 000000000..dd1978385
---- /dev/null
-+++ b/package/lua-lyaml/lua-lyaml.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256 f4015ba47a389fc4fe0656cbcb8a216239275ec53309a0df79b0733c843e7bba  lua-lyaml-6.2.4.tar.gz
-+sha256 c7ec2f52d258088437cddeeee38cfc97d60d464c8801aa77decefb993400ec6e  LICENSE
-diff --git a/package/lua-lyaml/lua-lyaml.mk b/package/lua-lyaml/lua-lyaml.mk
-new file mode 100644
-index 000000000..c88a438d5
---- /dev/null
-+++ b/package/lua-lyaml/lua-lyaml.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# lua-lyaml
-+#
-+################################################################################
-+
-+LUA_LYAML_VERSION = 6.2.4
-+LUA_LYAML_NAME_UPSTREAM = lyaml
-+LUA_LYAML_SITE = $(call github,gvvaughan,$(LUA_LYAML_NAME_UPSTREAM),v$(LUA_LYAML_VERSION))
-+LUA_LYAML_LICENSE = MIT
-+LUA_LYAML_LICENSE_FILES = LICENSE
-+LUA_LYAML_DEPENDENCIES = libyaml luainterpreter host-lua
-+
-+define LUA_LYAML_BUILD_CMDS
-+	(cd $(@D); \
-+		$(LUA_RUN) build-aux/luke \
-+		version="'$(LUA_LYAML_VERSION)'" \
-+		CC="$(TARGET_CC)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		LUA_INCDIR=$(STAGING_DIR)/usr/include \
-+		YAML_DIR=$(STAGING_DIR)/usr \
-+	)
-+endef
-+
-+define LUA_LYAML_INSTALL_TARGET_CMDS
-+	(cd $(@D); \
-+		$(LUA_RUN) build-aux/luke install \
-+		INST_LIBDIR="$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
-+		INST_LUADIR="$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)" \
-+	)
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/package/test_lua_lyaml.py b/support/testing/tests/package/test_lua_lyaml.py
-new file mode 100644
-index 000000000..ece3c675a
---- /dev/null
-+++ b/support/testing/tests/package/test_lua_lyaml.py
-@@ -0,0 +1,27 @@
-+from tests.package.test_lua import TestLuaBase
-+
-+
-+class TestLuaLuaLyaml(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUA=y
-+        BR2_PACKAGE_LUA_LYAML=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("yaml")
-+        self.module_test("lyaml")
-+
-+
-+class TestLuajitLuaLyaml(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUAJIT=y
-+        BR2_PACKAGE_LUA_LYAML=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("yaml")
-+        self.module_test("lyaml")
+diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
+index bb2e6efe7..a35b51456 100644
+--- a/package/perl-date-manip/perl-date-manip.hash
++++ b/package/perl-date-manip/perl-date-manip.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    a3b2c1129f02cc5ce5de59d506afab1a Date-Manip-6.79.tar.gz
+-sha256 71a8c42ce4edbd46a3ca2a17a7218ceed958cd7ad0dfeb79389f23d0f466943a Date-Manip-6.79.tar.gz
++md5    a9ff96f05675ac4cb7f19c4b03a7363b Date-Manip-6.81.tar.gz
++sha256 044c319e2213dad73abd32b7f731bf4593d1e9fa96024bdc6b6475a2e768949b Date-Manip-6.81.tar.gz
+ 
+ # computed by scancpan
+ sha256 8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d LICENSE
+diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
+index d930ee8c9..20dc72276 100644
+--- a/package/perl-date-manip/perl-date-manip.mk
++++ b/package/perl-date-manip/perl-date-manip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_DATE_MANIP_VERSION = 6.79
++PERL_DATE_MANIP_VERSION = 6.81
+ PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
+ PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
+ PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
 -- 
 2.20.1
