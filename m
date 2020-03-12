@@ -1,53 +1,66 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 12 Mar 2020 13:35:46 +0100
-Subject: [Buildroot] [PATCH v3 3/3] package/linuxptp: update indentation
- of hash file
-In-Reply-To: <CAJ4jsac2z3HGrLSOjpAQ5zWD1oERg7G+W1VxZzq4s7ee5+ygMQ@mail.gmail.com>
-References: <20200310080722.12742-1-heiko.thiery@gmail.com>
- <20200310080722.12742-4-heiko.thiery@gmail.com>
- <CAJ4jsac2z3HGrLSOjpAQ5zWD1oERg7G+W1VxZzq4s7ee5+ygMQ@mail.gmail.com>
-Message-ID: <7cabd46d-2475-f1ad-0298-93b3fc431554@gmail.com>
+From: =?UTF-8?Q?Mika=c3=abl_BOURHIS-CLOAREC?= <mikael.bourhis@smile.fr>
+Date: Thu, 12 Mar 2020 13:54:08 +0100
+Subject: [Buildroot] [PATCH v3 2/4] package/connman: bump to 1.38
+In-Reply-To: <20200227232955.16610-2-petr.vorel@gmail.com>
+References: <20200227232955.16610-1-petr.vorel@gmail.com>
+ <20200227232955.16610-2-petr.vorel@gmail.com>
+Message-ID: <a507f586-b9a2-364d-526e-c45b4303371a@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Carlos,
+Hello,
 
-On 3/12/20 1:24 PM, Carlos Santos wrote:
-> On Tue, Mar 10, 2020 at 5:08 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
->>
->> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
->> ---
->>   package/linuxptp/linuxptp.hash | 8 ++++----
->>   1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
->> index 5e6c7741cd..d04be1f655 100644
->> --- a/package/linuxptp/linuxptp.hash
->> +++ b/package/linuxptp/linuxptp.hash
->> @@ -1,9 +1,9 @@
->>   # From https://sourceforge.net/projects/linuxptp/files/v2.0/
->> -sha1 592ca42c6146a79c1fcabed7c19fa7af4803d4f6  linuxptp-2.0.tgz
->> -md5 d8bb7374943bb747db7786ac26f17f11  linuxptp-2.0.tgz
->> +sha1  592ca42c6146a79c1fcabed7c19fa7af4803d4f6  linuxptp-2.0.tgz
->> +md5  d8bb7374943bb747db7786ac26f17f11  linuxptp-2.0.tgz
->>
->>   # Locally computed:
->> -sha256 0a24d9401e87d4af023d201e234d91127d82c350daad93432106284aa9459c7d  linuxptp-2.0.tgz
->> +sha256  0a24d9401e87d4af023d201e234d91127d82c350daad93432106284aa9459c7d  linuxptp-2.0.tgz
->>
->>   # Hash for license file:
->> -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> 
-> Is the current indentation causing any problem? If not, I'd leave this
-> change to be made in a package version bump.
-> 
+On 28/02/2020 00:29, Petr Vorel wrote:
 
-No there is no problem. We just can ignore this commit.
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+>   package/connman/connman.hash | 2 +-
+>   package/connman/connman.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+> index ff5b4d48f0..3039105027 100644
+> --- a/package/connman/connman.hash
+> +++ b/package/connman/connman.hash
+> @@ -1,4 +1,4 @@
+>   # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+> -sha256 6ce29b3eb0bb16a7387bc609c39455fd13064bdcde5a4d185fab3a0c71946e16  connman-1.37.tar.xz
+> +sha256 cb30aca97c2f79ccaed8802aa2909ac5100a3969de74c0af8a9d73b85fc4932b  connman-1.38.tar.xz
+>   # Locally computed
+>   sha256 b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+> index 8403237c28..7ea52f012a 100644
+> --- a/package/connman/connman.mk
+> +++ b/package/connman/connman.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -CONNMAN_VERSION = 1.37
+> +CONNMAN_VERSION = 1.38
+The default build configuration of connman 1.38 uses 'WireGuard' and 
+'libmnl'.
+The current autobuild is broken due to the missing 'libmnl' dependency [1].
+A set of patches is already suggested [2] but,
+the best way could be a default 'connman' configuration with 'WireGuard' 
+disabled,
+before the adding of WireGuard support,
+
+('CONNMAN_CONF_OPTS += --disable-wireguard' in 'package/connman/connman.mk')
+
+so the default build of connman will be ok,
+and then, complete the patch.
+>   CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+>   CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+>   CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+[1] 
+http://autobuild.buildroot.org/results/e66/e66c83d0a9d0f3710907b6f7358d92b69b9e297d/build-end.log
+[2] http://patchwork.ozlabs.org/patch/1250994/
 
 
--- 
-Heiko
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200312/1aae888c/attachment.html>
