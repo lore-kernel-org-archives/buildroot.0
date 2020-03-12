@@ -1,110 +1,134 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 12 Mar 2020 13:05:27 -0700
-Subject: [Buildroot] [PATCH 1/1] package/gupnp: disable introspection
-In-Reply-To: <CAPi7W81w=vJyfh3YJ4BTbe82qt49HTDepWCQdZid5Zbm7_OVOw@mail.gmail.com>
-References: <20200311193410.69589-1-fontaine.fabrice@gmail.com>
- <CAFSsvmq1PdEHT-zNqMG_nh2VnUJdQEVBYny6H9pR12FTaDU0nw@mail.gmail.com>
- <CAPi7W81w=vJyfh3YJ4BTbe82qt49HTDepWCQdZid5Zbm7_OVOw@mail.gmail.com>
-Message-ID: <CAFSsvmruUz+YB=mef43KTWTP_ffJbP4eXX_iK-jE1QXvbE2AsQ@mail.gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Thu, 12 Mar 2020 13:10:01 -0700
+Subject: [Buildroot] [PATCH v2 1/3] package/libtextstyle: new package
+Message-ID: <20200312201004.3848419-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Fabrice;
+From: Adam Duskett <Aduskett@gmail.com>
 
-Actually my patch set does indeed fix these issues! GOI has two issues:
+This library provides an easy way to add styling to programs that produce
+output to a console or terminal emulator window.
 
-1) host-goi does not build typelib or gir files.
-2) goi does not work with meson projects.
+libtextstyle is for you if your application produces text that is more readable
+when it is accompanied with styling information, such as color, font attributes
+(weight, posture), or underlining.
 
-My patch set fixes both of these issues, and I have tested extensively with
-every package I could find in Buildroot currently.
+Newer versions of gettext-gnu require this package.
 
-Some packages I tested GOI with include:
-libsecret
-gssdp
-gtk3
-libsoup
-gstreamer1
+Tested with test-pkg -p gettext-tiny in Debian 10 and Centos 7
 
-All of them work fine with my patch set applied.
+            br-arm-full [1/6]: OK
+ br-arm-cortex-a9-glibc [2/6]: OK
+  br-arm-cortex-m4-full [3/6]: OK
+         br-x86-64-musl [4/6]: OK
+     br-arm-full-static [5/6]: OK
+           sourcery-arm [6/6]: OK
 
-Also, I made a new patch set just a few minutes ago along with a bump
-to libglib2 and goi.
-https://patchwork.ozlabs.org/project/buildroot/list/?series=164047
-https://patchwork.ozlabs.org/project/buildroot/list/?series=164050
-https://patchwork.ozlabs.org/project/buildroot/list/?series=164052
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/libtextstyle/Config.in         | 14 +++++++++++++
+ package/libtextstyle/libtextstyle.hash |  6 ++++++
+ package/libtextstyle/libtextstyle.mk   | 28 ++++++++++++++++++++++++++
+ 5 files changed, 50 insertions(+)
+ create mode 100644 package/libtextstyle/Config.in
+ create mode 100644 package/libtextstyle/libtextstyle.hash
+ create mode 100644 package/libtextstyle/libtextstyle.mk
 
-Thanks!
-
-Adam
-
-On Thu, Mar 12, 2020 at 11:20 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Adam, all,
->
-> Le jeu. 12 mars 2020 ? 18:31, Adam Duskett <aduskett@gmail.com> a ?crit :
-> >
-> > Frabrice, all;
-> >
-> >
-> > I disagree with this patch set.
-> > I have a patch set that has been sitting for a few weeks now that
-> > allows introspection to work with meson packages:
-> > https://patchwork.ozlabs.org/project/buildroot/list/?series=161028
-> gupnp (and libgtk3 as well as gdk-pixbuf) are autotools packages and
-> not meson packages. From my understanding, your patchset does not fix
-> those. Am I right?
-> Concerning gupnp, I tried to switch it to meson in August 2019 but I
-> had to revert this change due to meson's subproject feature for guul
-> being completely broken on static build with meson.
-> It seems that the issue is now fixed thanks to
-> https://github.com/mesonbuild/meson/pull/5936 so I could try, again,
-> to use meson with gupnp.
-> However, we'll still have to convert libgtk3 and gdk-pixbuf to meson.
-> >
-> > If we apply this patchset first, then we should set this package (and
-> > it's dependencies) to check for goi and enable or disable
-> > introspection conditionally.
-> >
-> > On Wed, Mar 11, 2020 at 12:33 PM Fabrice Fontaine
-> > <fontaine.fabrice@gmail.com> wrote:
-> > >
-> > > Build fails if gobject-introspection is built before gupnp:
-> > >
-> > >  GISCAN   GUPnP-1.0.gir
-> > > Couldn't find include 'GSSDP-1.0.gir' (search path: '['/nvmedata/autobuild/instance-0/output-1/host/bin/../nios2-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '..', '/nvmedata/autobuild/instance-0/output-1/host/share', 'gir-1.0', '/nvmedata/autobuild/instance-0/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
-> > >
-> > > Fixes:
-> > >  - http://autobuild.buildroot.org/results/ea91dab1d9a59c1aefa481c316115558a6f6e8f8
-> > >
-> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > > ---
-> > >  package/gupnp/gupnp.mk | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-> > > index 29305f0b4b..27486b09fa 100644
-> > > --- a/package/gupnp/gupnp.mk
-> > > +++ b/package/gupnp/gupnp.mk
-> > > @@ -12,5 +12,6 @@ GUPNP_LICENSE = LGPL-2.0+
-> > >  GUPNP_LICENSE_FILES = COPYING
-> > >  GUPNP_INSTALL_STAGING = YES
-> > >  GUPNP_DEPENDENCIES = host-pkgconf libglib2 libxml2 gssdp util-linux
-> > > +GUPNP_CONF_OPTS = --disable-introspection
-> > >
-> > >  $(eval $(autotools-package))
-> > > --
-> > > 2.25.1
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 10768a19ee..4c846da222 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -47,6 +47,7 @@ F:	package/libressl/
+ F:	package/libselinux/
+ F:	package/libsemanage/
+ F:	package/libsepol/
++F:	package/libtextstyle/
+ F:	package/libwebsockets/
+ F:	package/mender-grubenv/
+ F:	package/nginx-naxsi/
+diff --git a/package/Config.in b/package/Config.in
+index 146fc1bbc3..236373f303 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1889,6 +1889,7 @@ menu "Text and terminal handling"
+ 	source "package/libiconv/Config.in"
+ 	source "package/libunistring/Config.in"
+ 	source "package/linenoise/Config.in"
++	source "package/libtextstyle/Config.in"
+ 	source "package/ncurses/Config.in"
+ 	source "package/newt/Config.in"
+ 	source "package/oniguruma/Config.in"
+diff --git a/package/libtextstyle/Config.in b/package/libtextstyle/Config.in
+new file mode 100644
+index 0000000000..6858be5bf6
+--- /dev/null
++++ b/package/libtextstyle/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_LIBTEXTSTYLE
++	bool "libtextstyle"
++	depends on BR2_USE_WCHAR
++	help
++	  This library provides an easy way to add styling to
++	  programs that produce output to a console or terminal
++	  emulator window.
++
++	  libtextstyle is for you if your application produces text
++	  that is more readable when it is accompanied with styling
++	  information, such as color, font attributes
++	  (weight, posture), or underlining.
++
++	  http://www.gnu.org/software/gettext/
+diff --git a/package/libtextstyle/libtextstyle.hash b/package/libtextstyle/libtextstyle.hash
+new file mode 100644
+index 0000000000..5c5aee85bf
+--- /dev/null
++++ b/package/libtextstyle/libtextstyle.hash
+@@ -0,0 +1,6 @@
++# From https://lists.gnu.org/archive/html/info-gnu/2019-05/msg00011.html
++sha1  62f4a6a2fd5f80bfd0e66c497a04094fa3e07b90  gettext-0.20.1.tar.xz
++
++# Locally calculated
++sha256  53f02fbbec9e798b0faaf7c73272f83608e835c6288dd58be6c9bb54624a3800  gettext-0.20.1.tar.xz
++sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+diff --git a/package/libtextstyle/libtextstyle.mk b/package/libtextstyle/libtextstyle.mk
+new file mode 100644
+index 0000000000..e5b5706085
+--- /dev/null
++++ b/package/libtextstyle/libtextstyle.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# libtextstyle
++#
++################################################################################
++
++LIBTEXTSTYLE_VERSION = 0.20.1
++LIBTEXTSTYLE_SITE = $(BR2_GNU_MIRROR)/gettext
++LIBTEXTSTYLE_SOURCE = gettext-$(LIBTEXTSTYLE_VERSION).tar.xz
++LIBTEXTSTYLE_INSTALL_STAGING = YES
++LIBTEXTSTYLE_LICENSE = GPL-3.0+
++LIBTEXTSTYLE_LICENSE_FILES = COPYING
++LIBTEXTSTYLE_SUBDIR = libtextstyle
++HOST_LIBTEXTSTYLE_SUBDIR = libtextstyle
++
++# gettext-tools require libtextstyle.m4
++define LIBTEXTSTYLE_INSTALL_M4
++	$(INSTALL) -D -m 0755 $(@D)/libtextstyle/m4/libtextstyle.m4 $(ACLOCAL_DIR)/libtextstyle.m4
++endef
++LIBTEXTSTYLE_POST_INSTALL_STAGING_HOOKS += LIBTEXTSTYLE_INSTALL_M4
++
++define HOST_LIBTEXTSTYLE_INSTALL_M4
++	$(INSTALL) -D -m 0755 $(@D)/libtextstyle/m4/libtextstyle.m4 $(ACLOCAL_HOST_DIR)/libtextstyle.m4
++endef
++HOST_LIBTEXTSTYLE_POST_INSTALL_HOOKS += HOST_LIBTEXTSTYLE_INSTALL_M4
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+2.24.1
