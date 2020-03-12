@@ -1,73 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 12 Mar 2020 10:15:30 +0100
-Subject: [Buildroot] [PATCH 2/2] Makefile: don't hang the build if there are
- no file lists
-In-Reply-To: <20200312091530.287681-1-thomas.petazzoni@bootlin.com>
-References: <20200312091530.287681-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200312091530.287681-2-thomas.petazzoni@bootlin.com>
+Date: Thu, 12 Mar 2020 10:15:29 +0100
+Subject: [Buildroot] [PATCH 1/2] package/pkg-generic.mk: create folders
+ before calling hooks
+Message-ID: <20200312091530.287681-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In very limited configurations, it is possible to have a case where no
-.files-list-staging.txt files are created. In this case:
+In commit 0e2be4db8ab01d479177a3a187c22525752195ae
+("package/pkg-generic: make file list logic parallel build
+compatible"), the logic to create the list of files installed by a
+particular package was significantly reworked to be compatible with
+top-level parallel build.
 
-	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
-		$(BUILD_DIR)/packages-file-list-staging.txt
+Before this commit, there was only a after-install step of listing the
+files in HOST_DIR/TARGET_DIR/STAGING_DIR. But after this commit, we
+now have a before-install logic and an after-install logic.
 
-becomes:
+It turns out that when the before-install logic is called for the very
+first host package, $(HOST_DIR) doesn't exist yet, and therefore the
+cd $(2) fails, with an error message:
 
-	cat > \
-		$(BUILD_DIR)/packages-file-list-staging.txt
+/bin/sh: line 0: cd: /home/thomas/buildroot/output/host: No such file or directory
 
-which of course makes the build hang.. forever.
+In fact, $(HOST_DIR), $(STAGING_DIR), $(TARGET_DIR) and
+$(BINARIES_DIR) are created by the make rules for host installation,
+staging installation, target installation and images installation, but
+*after* calling the step_start hooks.
 
-So we fix this by checking the list is not empty. To keep the code
-readable, we introduce an intermediate variable to store the list of
-these files.
+So, we simply fix this problem by creating the directories *before*
+calling the step_start hooks.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-This is a fix, it should be backported to 2020.02.x
----
- Makefile | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+This is different solution than the one initially proposed at
+http://patchwork.ozlabs.org/patch/1252046/, following some discussion
+with Yann E. Morin on IRC. Since the creation of the directories is
+already done somewhere, it makes sense to rely on that rather than
+adding more code to create them in a difference place.
 
-diff --git a/Makefile b/Makefile
-index 074d08c04a..3fdd52c677 100644
---- a/Makefile
-+++ b/Makefile
-@@ -727,6 +727,10 @@ $(TARGETS_ROOTFS): target-finalize
- # Avoid the rootfs name leaking down the dependency chain
- target-finalize: ROOTFS=
+This patch needs to be backported to 2020.02.x.
+---
+ package/pkg-generic.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index c1b9fe2e59..47238f2649 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -273,9 +273,9 @@ $(BUILD_DIR)/%/.stamp_built::
  
-+TARGET_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt))
-+HOST_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt))
-+STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt))
-+
- .PHONY: host-finalize
- host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
- 	@$(call MESSAGE,"Finalizing host directory")
-@@ -807,12 +811,12 @@ endif # merged /usr
+ # Install to host dir
+ $(BUILD_DIR)/%/.stamp_host_installed:
++	@mkdir -p $(HOST_DIR)
+ 	@$(call step_start,install-host)
+ 	@$(call MESSAGE,"Installing to host directory")
+-	@mkdir -p $(HOST_DIR)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
+@@ -303,9 +303,9 @@ $(BUILD_DIR)/%/.stamp_host_installed:
+ # empty when we use an internal toolchain.
+ #
+ $(BUILD_DIR)/%/.stamp_staging_installed:
++	@mkdir -p $(STAGING_DIR)
+ 	@$(call step_start,install-staging)
+ 	@$(call MESSAGE,"Installing to staging directory")
+-	@mkdir -p $(STAGING_DIR)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_STAGING_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+@@ -345,8 +345,8 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
  
- 	touch $(TARGET_DIR)/usr
+ # Install to images dir
+ $(BUILD_DIR)/%/.stamp_images_installed:
+-	@$(call step_start,install-image)
+ 	@mkdir -p $(BINARIES_DIR)
++	@$(call step_start,install-image)
+ 	@$(call MESSAGE,"Installing to images directory")
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_IMAGES_CMDS)
+@@ -356,9 +356,9 @@ $(BUILD_DIR)/%/.stamp_images_installed:
  
--	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt)) > \
--		$(BUILD_DIR)/packages-file-list.txt
--	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt)) > \
--		$(BUILD_DIR)/packages-file-list-host.txt
--	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
--		$(BUILD_DIR)/packages-file-list-staging.txt
-+	$(if $(TARGET_DIR_FILES_LISTS), \
-+		cat $(TARGET_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list.txt)
-+	$(if $(HOST_DIR_FILES_LISTS), \
-+		cat $(HOST_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list-host.txt)
-+	$(if $(STAGING_DIR_FILES_LISTS), \
-+		cat $(STAGING_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list-staging.txt)
- 
- .PHONY: target-post-image
- target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
+ # Install to target dir
+ $(BUILD_DIR)/%/.stamp_target_installed:
++	@mkdir -p $(TARGET_DIR)
+ 	@$(call step_start,install-target)
+ 	@$(call MESSAGE,"Installing to target")
+-	@mkdir -p $(TARGET_DIR)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_TARGET_CMDS)
+ 	$(if $(BR2_INIT_SYSTEMD),\
 -- 
 2.24.1
