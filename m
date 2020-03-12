@@ -1,55 +1,55 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Thu, 12 Mar 2020 11:08:30 -0300
-Subject: [Buildroot] [PATCH v3 1/3] package/linuxptp: make initscript
- options configurable
-In-Reply-To: <CAJ4jsaeVfSiMGbjsXER2t2dAa8Kgi0R8ut=jvA43Kp-ayn-9ww@mail.gmail.com>
-References: <20200310080722.12742-1-heiko.thiery@gmail.com>
- <20200310080722.12742-2-heiko.thiery@gmail.com>
- <CAJ4jsaeVfSiMGbjsXER2t2dAa8Kgi0R8ut=jvA43Kp-ayn-9ww@mail.gmail.com>
-Message-ID: <CAJ4jsafEmJJRmyaX-jDwByWRpdr0O5XnGi0u+FsNeaiRckacew@mail.gmail.com>
+From: nimaim <nimaim@gmail.com>
+Date: Thu, 12 Mar 2020 09:20:28 -0500 (CDT)
+Subject: [Buildroot] 2020.02 Buildroot - Qt 5.12 missing XmlListModel
+Message-ID: <1584022828143-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 12, 2020 at 10:43 AM Carlos Santos <unixmania@gmail.com> wrote:
->
-> On Tue, Mar 10, 2020 at 5:08 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
-> >
-> > The "package/busybox/S01sysklogd" is taken as template to change the
-> > init script of the linuxptp daemon. The init script is split two parts
-> > because there are 2 daemons (ptp4l and phc2sys).
-> >
-> > Let the user supply its own options in /etc/default/ptp4l and
-> > /etc/default/phc2sys.
-> >
-> > This patch also fixes an issue with the creation of the pid file that is
-> > needed to properly stop the daemon again.
-> >
-> > Signed-off-by: Michael Walle <michael@walle.cc>
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
->
-> Tested-by: Carlos Santos <unixmania@gmail.com>
-> ---
-> Testes on an Intel C3000 device
->
->     02:00.0 Ethernet controller: Intel Corporation I210 Gigabit
-> Network Connection (rev 03)
->
-> after adding
->
-> ==> /etc/default/phc2sys <==
-> PHC2SYS_ARGS="-s enp2s0 -c CLOCK_REALTIME -w -S 1.0"
->
-> ==> /etc/default/ptp4l <==
-> PTP4L_ARGS="-i enp2s0 -f /etc/linuxptp.cfg -m"
+To the Qt maintainers ... it seems Qt 5.12 moved some libs from the old, now
+deprecated qt5declarative package to qt5xmlpatterns. See here:
+https://bugs.archlinux.org/task/60889. Some of the components such as
+XmlListModel are no longer working (as well as other libs that it included,
+I'm guessing). See directory listing for this particular module between 5.9
+and 5.12 builds in Buildroot:
 
-Hum, maybe it would be better just to use
+5.9:
 
-    PHC2SYS_ARGS="-s /dev/ptp0 -c CLOCK_REALTIME -w -S 1.0"
+find . -name *"xmllistmodel*"
+./qt5declarative-5.9.4/src/quick/doc/images/qml-xmllistmodel-example.png
+./qt5declarative-5.9.4/src/imports/xmllistmodel
+./qt5declarative-5.9.4/src/imports/xmllistmodel/xmllistmodel.pro
+./qt5declarative-5.9.4/src/imports/xmllistmodel/.obj/qqmlxmllistmodel.o
+./qt5declarative-5.9.4/src/imports/xmllistmodel/.obj/moc_qqmlxmllistmodel_p.o
+./qt5declarative-5.9.4/src/imports/xmllistmodel/.moc/moc_qqmlxmllistmodel_p.cpp
+./qt5declarative-5.9.4/src/imports/xmllistmodel/.moc/qqmlxmllistmodel.moc
+./qt5declarative-5.9.4/src/imports/xmllistmodel/qqmlxmllistmodel_p.h
+./qt5declarative-5.9.4/src/imports/xmllistmodel/qqmlxmllistmodel.cpp
+./qt5declarative-5.9.4/qml/QtQuick/XmlListModel/libqmlxmllistmodelplugin.so
+./qt5declarative-5.9.4/tests/auto/quick/qquickxmllistmodel
+./qt5declarative-5.9.4/tests/auto/quick/qquickxmllistmodel/qquickxmllistmodel.pro
+./qt5declarative-5.9.4/tests/auto/quick/qquickxmllistmodel/tst_qquickxmllistmodel.cpp
 
-in S66phc2sys, matching phc2sys.service.
+5.12:
 
--- 
-Carlos Santos <unixmania@gmail.com>
+find . -iname "*xmllistmodel*"
+NO RESULTS
+
+Taking another directory listing from the official installer on my 64 bit
+Mint host shows they should be there:
+
+~/Qt/5.12.5/gcc_64$ find . -iname "*xmllistmodel*"
+./qml/QtQuick/XmlListModel
+./qml/QtQuick/XmlListModel/libqmlxmllistmodelplugin.so
+
+I just wanted to make sure I'm not missing anything. This change broke my
+Qt5 project. Any simple patch to this?
+
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
