@@ -1,65 +1,150 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 13 Mar 2020 00:41:27 +0100
-Subject: [Buildroot] [PATCH] package/gcc: disable gcc 9.x for csky
-In-Reply-To: <20200312234127.449204-1-romain.naour@smile.fr>
-References: <20200312234127.449204-1-romain.naour@smile.fr>
-Message-ID: <20200312234127.449204-2-romain.naour@smile.fr>
+From: vadim4j at gmail.com <vadim4j@gmail.com>
+Date: Fri, 13 Mar 2020 01:57:48 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/libtextstyle: new package
+In-Reply-To: <20200312201004.3848419-1-aduskett@gmail.com>
+References: <20200312201004.3848419-1-aduskett@gmail.com>
+Message-ID: <20200312235727.GA13983@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building a toolchain with upstream gcc 9.x the build
-fail due to several issues.
+Hi Adam,
 
-Note: The upstream Binutils support csky target since
-release 2.32 but the support was never enabled in the
-Buildroot packaging. So the latest version (2.33.1) was
-tested here.
+On Thu, Mar 12, 2020 at 01:10:01PM -0700, aduskett at gmail.com wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> This library provides an easy way to add styling to programs that produce
+> output to a console or terminal emulator window.
+> 
+> libtextstyle is for you if your application produces text that is more readable
+> when it is accompanied with styling information, such as color, font attributes
+> (weight, posture), or underlining.
+> 
+> Newer versions of gettext-gnu require this package.
+> 
+> Tested with test-pkg -p gettext-tiny in Debian 10 and Centos 7
+> 
+>             br-arm-full [1/6]: OK
+>  br-arm-cortex-a9-glibc [2/6]: OK
+>   br-arm-cortex-m4-full [3/6]: OK
+>          br-x86-64-musl [4/6]: OK
+>      br-arm-full-static [5/6]: OK
+>            sourcery-arm [6/6]: OK
+I think it would be good to also test build of some amount of packages
+which requires gettext-gnu/gettext-tiny.
 
-[upstream gcc 9.x w/ glibc csky fork with binutils csky for or binutils 2.33.1]
-In file included from <command-line>:
-./../include/libc-symbols.h:534:26: error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location': 'const', 'nothrow' [-Werror=missing-attributes]
-  534 |   extern __typeof (name) __EI_##name \
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  DEVELOPERS                             |  1 +
+>  package/Config.in                      |  1 +
+>  package/libtextstyle/Config.in         | 14 +++++++++++++
+>  package/libtextstyle/libtextstyle.hash |  6 ++++++
+>  package/libtextstyle/libtextstyle.mk   | 28 ++++++++++++++++++++++++++
+>  5 files changed, 50 insertions(+)
+>  create mode 100644 package/libtextstyle/Config.in
+>  create mode 100644 package/libtextstyle/libtextstyle.hash
+>  create mode 100644 package/libtextstyle/libtextstyle.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 10768a19ee..4c846da222 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -47,6 +47,7 @@ F:	package/libressl/
+>  F:	package/libselinux/
+>  F:	package/libsemanage/
+>  F:	package/libsepol/
+> +F:	package/libtextstyle/
+>  F:	package/libwebsockets/
+>  F:	package/mender-grubenv/
+>  F:	package/nginx-naxsi/
+> diff --git a/package/Config.in b/package/Config.in
+> index 146fc1bbc3..236373f303 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1889,6 +1889,7 @@ menu "Text and terminal handling"
+>  	source "package/libiconv/Config.in"
+>  	source "package/libunistring/Config.in"
+>  	source "package/linenoise/Config.in"
+> +	source "package/libtextstyle/Config.in"
+>  	source "package/ncurses/Config.in"
+>  	source "package/newt/Config.in"
+>  	source "package/oniguruma/Config.in"
+> diff --git a/package/libtextstyle/Config.in b/package/libtextstyle/Config.in
+> new file mode 100644
+> index 0000000000..6858be5bf6
+> --- /dev/null
+> +++ b/package/libtextstyle/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_LIBTEXTSTYLE
+> +	bool "libtextstyle"
+> +	depends on BR2_USE_WCHAR
+> +	help
+> +	  This library provides an easy way to add styling to
+> +	  programs that produce output to a console or terminal
+> +	  emulator window.
+> +
+> +	  libtextstyle is for you if your application produces text
+> +	  that is more readable when it is accompanied with styling
+> +	  information, such as color, font attributes
+> +	  (weight, posture), or underlining.
+> +
+> +	  http://www.gnu.org/software/gettext/
+> diff --git a/package/libtextstyle/libtextstyle.hash b/package/libtextstyle/libtextstyle.hash
+> new file mode 100644
+> index 0000000000..5c5aee85bf
+> --- /dev/null
+> +++ b/package/libtextstyle/libtextstyle.hash
+> @@ -0,0 +1,6 @@
+> +# From https://lists.gnu.org/archive/html/info-gnu/2019-05/msg00011.html
+> +sha1  62f4a6a2fd5f80bfd0e66c497a04094fa3e07b90  gettext-0.20.1.tar.xz
+> +
+> +# Locally calculated
+> +sha256  53f02fbbec9e798b0faaf7c73272f83608e835c6288dd58be6c9bb54624a3800  gettext-0.20.1.tar.xz
+> +sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+> diff --git a/package/libtextstyle/libtextstyle.mk b/package/libtextstyle/libtextstyle.mk
+> new file mode 100644
+> index 0000000000..e5b5706085
+> --- /dev/null
+> +++ b/package/libtextstyle/libtextstyle.mk
+> @@ -0,0 +1,28 @@
+> +################################################################################
+> +#
+> +# libtextstyle
+> +#
+> +################################################################################
+> +
+> +LIBTEXTSTYLE_VERSION = 0.20.1
+> +LIBTEXTSTYLE_SITE = $(BR2_GNU_MIRROR)/gettext
+> +LIBTEXTSTYLE_SOURCE = gettext-$(LIBTEXTSTYLE_VERSION).tar.xz
+> +LIBTEXTSTYLE_INSTALL_STAGING = YES
+> +LIBTEXTSTYLE_LICENSE = GPL-3.0+
+> +LIBTEXTSTYLE_LICENSE_FILES = COPYING
+> +LIBTEXTSTYLE_SUBDIR = libtextstyle
+> +HOST_LIBTEXTSTYLE_SUBDIR = libtextstyle
+> +
+> +# gettext-tools require libtextstyle.m4
+> +define LIBTEXTSTYLE_INSTALL_M4
+> +	$(INSTALL) -D -m 0755 $(@D)/libtextstyle/m4/libtextstyle.m4 $(ACLOCAL_DIR)/libtextstyle.m4
+> +endef
+> +LIBTEXTSTYLE_POST_INSTALL_STAGING_HOOKS += LIBTEXTSTYLE_INSTALL_M4
+> +
+> +define HOST_LIBTEXTSTYLE_INSTALL_M4
+> +	$(INSTALL) -D -m 0755 $(@D)/libtextstyle/m4/libtextstyle.m4 $(ACLOCAL_HOST_DIR)/libtextstyle.m4
+> +endef
+> +HOST_LIBTEXTSTYLE_POST_INSTALL_HOOKS += HOST_LIBTEXTSTYLE_INSTALL_M4
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-[upstream gcc 9.x w/ glibc 2.30 w/ binutils csky fork]
-/tmp/ccThLRhb.s: Assembler messages:
-/tmp/ccThLRhb.s:10: Error: invalid or unsupported encoding in .cfi_personality
-/tmp/ccThLRhb.s:11: Error: invalid or unsupported encoding in .cfi_lsda
-
-[upstream gcc 9.x w/ glibc 2.30 w/ binutils 2.33.1]
-build/elf/librtld.os: in function `__sync_fetch_and_add_2':
-libgcc/config/csky/linux-atomic.c:116: undefined reference to `__kernel_cmpxchg'
-
-Currenlty, only the toolchain using binutils, gcc, glibc
-fork produce a working toolchain. So disable gcc 9.x for
-csky.
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Guo Ren <guoren@kernel.org>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- package/gcc/Config.in.host | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 203e98ad42..243310f61e 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -58,8 +58,9 @@ config BR2_GCC_VERSION_9_X
- 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
- 	depends on !BR2_powerpc_SPE
- 	# C-SKY sk610 needs abiv1, which is not supported in
--	# upstream gcc
--	depends on !BR2_ck610
-+	# upstream gcc. C-SKY gcc upstream support not tested
-+	# with upstream binutils and glibc.
-+	depends on !BR2_csky
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 
- endchoice
--- 
-2.24.1
+Regards,
+Vadym Kochan
