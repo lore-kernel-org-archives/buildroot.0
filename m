@@ -1,7 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu, 12 Mar 2020 13:10:01 -0700
-Subject: [Buildroot] [PATCH v2 1/3] package/libtextstyle: new package
-Message-ID: <20200312201004.3848419-1-aduskett@gmail.com>
+Date: Thu, 12 Mar 2020 13:10:03 -0700
+Subject: [Buildroot] [PATCH v2 3/3] package/gettext-tiny: support gettext
+ 0.20.1
+In-Reply-To: <20200312201004.3848419-1-aduskett@gmail.com>
+References: <20200312201004.3848419-1-aduskett@gmail.com>
+Message-ID: <20200312201004.3848419-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,14 +13,11 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-This library provides an easy way to add styling to programs that produce
-output to a console or terminal emulator window.
-
-libtextstyle is for you if your application produces text that is more readable
-when it is accompanied with styling information, such as color, font attributes
-(weight, posture), or underlining.
-
-Newer versions of gettext-gnu require this package.
+Other changes:
+  - Update gettext to 0.20.1 and the respective hashes.
+  - Remove share/gettext-tiny/m4/lock.m4 from GETTEXT_TINY_EXTRA_GETTEXT_FILES
+    and the install list, as this file was removed in commit
+    8c2bfdbddb13a480d88ceac4ab0e5886bda957cb.
 
 Tested with test-pkg -p gettext-tiny in Debian 10 and Centos 7
 
@@ -30,105 +30,53 @@ Tested with test-pkg -p gettext-tiny in Debian 10 and Centos 7
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/libtextstyle/Config.in         | 14 +++++++++++++
- package/libtextstyle/libtextstyle.hash |  6 ++++++
- package/libtextstyle/libtextstyle.mk   | 28 ++++++++++++++++++++++++++
- 5 files changed, 50 insertions(+)
- create mode 100644 package/libtextstyle/Config.in
- create mode 100644 package/libtextstyle/libtextstyle.hash
- create mode 100644 package/libtextstyle/libtextstyle.mk
+Changes v1 -> v2:
+  - Do not bump gettext-tiny's version, only gettext-gnu.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 10768a19ee..4c846da222 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -47,6 +47,7 @@ F:	package/libressl/
- F:	package/libselinux/
- F:	package/libsemanage/
- F:	package/libsepol/
-+F:	package/libtextstyle/
- F:	package/libwebsockets/
- F:	package/mender-grubenv/
- F:	package/nginx-naxsi/
-diff --git a/package/Config.in b/package/Config.in
-index 146fc1bbc3..236373f303 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1889,6 +1889,7 @@ menu "Text and terminal handling"
- 	source "package/libiconv/Config.in"
- 	source "package/libunistring/Config.in"
- 	source "package/linenoise/Config.in"
-+	source "package/libtextstyle/Config.in"
- 	source "package/ncurses/Config.in"
- 	source "package/newt/Config.in"
- 	source "package/oniguruma/Config.in"
-diff --git a/package/libtextstyle/Config.in b/package/libtextstyle/Config.in
-new file mode 100644
-index 0000000000..6858be5bf6
---- /dev/null
-+++ b/package/libtextstyle/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LIBTEXTSTYLE
-+	bool "libtextstyle"
-+	depends on BR2_USE_WCHAR
-+	help
-+	  This library provides an easy way to add styling to
-+	  programs that produce output to a console or terminal
-+	  emulator window.
-+
-+	  libtextstyle is for you if your application produces text
-+	  that is more readable when it is accompanied with styling
-+	  information, such as color, font attributes
-+	  (weight, posture), or underlining.
-+
-+	  http://www.gnu.org/software/gettext/
-diff --git a/package/libtextstyle/libtextstyle.hash b/package/libtextstyle/libtextstyle.hash
-new file mode 100644
-index 0000000000..5c5aee85bf
---- /dev/null
-+++ b/package/libtextstyle/libtextstyle.hash
-@@ -0,0 +1,6 @@
+ package/gettext-tiny/gettext-tiny.hash | 7 +++----
+ package/gettext-tiny/gettext-tiny.mk   | 4 +---
+ 2 files changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
+index 9232fe8530..201b05c6ff 100644
+--- a/package/gettext-tiny/gettext-tiny.hash
++++ b/package/gettext-tiny/gettext-tiny.hash
+@@ -1,7 +1,6 @@
+ # Locally Computed:
+ sha256 efc740007c82a9b3a0d382fb50d212fa7dc0beddb9695409ee79684f9f2124b2  gettext-tiny-adaa9c64921e80f2b8dd3610ffb508618b9204f3.tar.gz
+ sha256 b57aa4fdc1c614c28d41c1e2d5c4090935964c5f86291ba7d1c99ffd1d698b34  LICENSE
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  extra/COPYING
+-# From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
+-md5  df3f5690eaa30fd228537b00cb7b7590         gettext-0.19.8.1.tar.xz
+-sha1 e0fe90ede22f7f16bbde7bdea791a835f2773fc9 gettext-0.19.8.1.tar.xz
++sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  extra/COPYING
 +# From https://lists.gnu.org/archive/html/info-gnu/2019-05/msg00011.html
-+sha1  62f4a6a2fd5f80bfd0e66c497a04094fa3e07b90  gettext-0.20.1.tar.xz
-+
-+# Locally calculated
-+sha256  53f02fbbec9e798b0faaf7c73272f83608e835c6288dd58be6c9bb54624a3800  gettext-0.20.1.tar.xz
-+sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-diff --git a/package/libtextstyle/libtextstyle.mk b/package/libtextstyle/libtextstyle.mk
-new file mode 100644
-index 0000000000..e5b5706085
---- /dev/null
-+++ b/package/libtextstyle/libtextstyle.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# libtextstyle
-+#
-+################################################################################
-+
-+LIBTEXTSTYLE_VERSION = 0.20.1
-+LIBTEXTSTYLE_SITE = $(BR2_GNU_MIRROR)/gettext
-+LIBTEXTSTYLE_SOURCE = gettext-$(LIBTEXTSTYLE_VERSION).tar.xz
-+LIBTEXTSTYLE_INSTALL_STAGING = YES
-+LIBTEXTSTYLE_LICENSE = GPL-3.0+
-+LIBTEXTSTYLE_LICENSE_FILES = COPYING
-+LIBTEXTSTYLE_SUBDIR = libtextstyle
-+HOST_LIBTEXTSTYLE_SUBDIR = libtextstyle
-+
-+# gettext-tools require libtextstyle.m4
-+define LIBTEXTSTYLE_INSTALL_M4
-+	$(INSTALL) -D -m 0755 $(@D)/libtextstyle/m4/libtextstyle.m4 $(ACLOCAL_DIR)/libtextstyle.m4
-+endef
-+LIBTEXTSTYLE_POST_INSTALL_STAGING_HOOKS += LIBTEXTSTYLE_INSTALL_M4
-+
-+define HOST_LIBTEXTSTYLE_INSTALL_M4
-+	$(INSTALL) -D -m 0755 $(@D)/libtextstyle/m4/libtextstyle.m4 $(ACLOCAL_HOST_DIR)/libtextstyle.m4
-+endef
-+HOST_LIBTEXTSTYLE_POST_INSTALL_HOOKS += HOST_LIBTEXTSTYLE_INSTALL_M4
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++sha1 62f4a6a2fd5f80bfd0e66c497a04094fa3e07b90 gettext-0.20.1.tar.xz
+diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+index 09a98f99b4..87813ae5af 100644
+--- a/package/gettext-tiny/gettext-tiny.mk
++++ b/package/gettext-tiny/gettext-tiny.mk
+@@ -14,12 +14,11 @@ HOST_GETTEXT_TINY_LICENSE_FILES = LICENSE extra/COPYING
+ GETTEXT_TINY_PROVIDES = gettext
+ 
+ # needed for gettextize
+-GETTEXT_TINY_ARCHIVE_VERSION = 0.19.8
++GETTEXT_TINY_ARCHIVE_VERSION = 0.20.1
+ 
+ GETTEXT_TINY_EXTRA_GETTEXT_FILES = \
+ 	gettext-tools/misc/gettextize.in \
+ 	gettext-tools/po/Makevars.template \
+-	gettext-runtime/m4/lock.m4 \
+ 	gettext-runtime/po/boldquot.sed \
+ 	gettext-runtime/po/en at boldquot.header \
+ 	gettext-runtime/po/en at quot.header \
+@@ -83,7 +82,6 @@ define HOST_GETTEXT_TINY_INSTALL_CMDS
+ 
+ 	$(INSTALL) -m 0755 -D $(@D)/gettextize $(HOST_DIR)/bin/gettextize
+ 	$(INSTALL) -m 0644 -D $(@D)/build-aux/config.rpath $(HOST_DIR)/share/gettext-tiny/config.rpath
+-	$(INSTALL) -m 0644 -D $(@D)/extra/lock.m4 $(HOST_DIR)/share/gettext-tiny/m4/lock.m4
+ 	$(INSTALL) -m 0644 -D $(@D)/extra/Makefile.in.in $(HOST_DIR)/share/gettext-tiny/po/Makefile.in.in
+ 	$(INSTALL) -m 0644 -D $(@D)/extra/boldquot.sed $(HOST_DIR)/share/gettext-tiny/po/boldquot.sed
+ 	$(INSTALL) -m 0644 -D $(@D)/extra/en at boldquot.header $(HOST_DIR)/share/gettext-tiny/po/en at boldquot.header
 -- 
 2.24.1
