@@ -1,86 +1,37 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Thu, 12 Mar 2020 17:00:40 +0100
-Subject: [Buildroot] [PATCH v5 2/2] support/testing: add netdata test
-In-Reply-To: <20200312160040.3416161-1-m.niestroj@grinn-global.com>
-References: <20200312160040.3416161-1-m.niestroj@grinn-global.com>
-Message-ID: <20200312160040.3416161-2-m.niestroj@grinn-global.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Thu, 12 Mar 2020 13:10:12 -0300
+Subject: [Buildroot] [PATCH] package/util-linux: fix build for riscv64
+ and powerpc64le
+In-Reply-To: <20200312161118.4150ce4a@windsurf>
+References: <20200312114759.31764-1-unixmania@gmail.com>
+ <20200312145005.3c16bec0@windsurf>
+ <CAJ4jsafdXUTt262zgxXykxpYK9AyVjt3_MsSVf8RJ5v3m=hZGQ@mail.gmail.com>
+ <20200312161118.4150ce4a@windsurf>
+Message-ID: <CAJ4jsaenx+m4JZrp_vJ9WRgoZ-U=-1chUL1GWuQ8NLytfXnpLA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
-changes v4 -> v5: none
+On Thu, Mar 12, 2020 at 12:11 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Thu, 12 Mar 2020 10:54:52 -0300
+> Carlos Santos <unixmania@gmail.com> wrote:
+>
+> > The patches are not mine and are already properly signed:
+> >
+> > Signed-off-by: Sami Kerola <kerolasa@iki.fi>
+> > Signed-off-by: Karel Zak <kzak@redhat.com>
+>
+> We require contributors to on top of that add their own Signed-off-by.
+> It's been like this for several years in the Buildroot project. Have a
+> look, all patches in packages do have the original authors
+> Signed-off-by, plus the Signed-off-by of the Buildroot contributor who
+> brought the change into Buildroot.
 
-changes v3 -> v4:
- - do not launch netdata explicitly, but rely on init script to run netdata on
-   default port
+So all the current util-linux patches are wrong too. :-(
 
-changes v2 -> v3: none
-
-changes v1 -> v2:
- - squash DEVELOPERS entry from another commit (suggested by Arnout)
-
- .gitlab-ci.yml                                |  1 +
- DEVELOPERS                                    |  1 +
- support/testing/tests/package/test_netdata.py | 23 +++++++++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 support/testing/tests/package/test_netdata.py
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index abd9dab250..d662cda520 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -421,6 +421,7 @@ tests.package.test_luasyslog.TestLuajitLuasyslog: { extends: .runtime_test }
- tests.package.test_luvi.TestLuvi: { extends: .runtime_test }
- tests.package.test_lxc.TestLxc: { extends: .runtime_test }
- tests.package.test_lzlib.TestLuaLzlib: { extends: .runtime_test }
-+tests.package.test_netdata.TestNetdata: { extends: .runtime_test }
- tests.package.test_openjdk.TestOpenJdk: { extends: .runtime_test }
- tests.package.test_opkg.TestOpkg: { extends: .runtime_test }
- tests.package.test_perl.TestPerl: { extends: .runtime_test }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3252d02e93..888ef7e4d2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1553,6 +1553,7 @@ F:	package/murata-cyw-fw/
- F:	package/netdata/
- F:	package/rs485conf/
- F:	package/turbolua/
-+F:	support/testing/tests/package/test_netdata.py
- 
- N:	Marcus Folkesson <marcus.folkesson@gmail.com>
- F:	package/libostree/
-diff --git a/support/testing/tests/package/test_netdata.py b/support/testing/tests/package/test_netdata.py
-new file mode 100644
-index 0000000000..7418b762a4
---- /dev/null
-+++ b/support/testing/tests/package/test_netdata.py
-@@ -0,0 +1,23 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestNetdata(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_NETDATA=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        cmd = "wget localhost:19999 -O - | grep '<title>netdata dashboard</title>'"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
 -- 
-2.25.0
+Carlos Santos <unixmania@gmail.com>
