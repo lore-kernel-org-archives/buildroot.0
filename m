@@ -1,43 +1,55 @@
 From: Carlos Santos <unixmania@gmail.com>
-Date: Thu, 12 Mar 2020 10:54:52 -0300
-Subject: [Buildroot] [PATCH] package/util-linux: fix build for riscv64
- and powerpc64le
-In-Reply-To: <20200312145005.3c16bec0@windsurf>
-References: <20200312114759.31764-1-unixmania@gmail.com>
- <20200312145005.3c16bec0@windsurf>
-Message-ID: <CAJ4jsafdXUTt262zgxXykxpYK9AyVjt3_MsSVf8RJ5v3m=hZGQ@mail.gmail.com>
+Date: Thu, 12 Mar 2020 11:08:30 -0300
+Subject: [Buildroot] [PATCH v3 1/3] package/linuxptp: make initscript
+ options configurable
+In-Reply-To: <CAJ4jsaeVfSiMGbjsXER2t2dAa8Kgi0R8ut=jvA43Kp-ayn-9ww@mail.gmail.com>
+References: <20200310080722.12742-1-heiko.thiery@gmail.com>
+ <20200310080722.12742-2-heiko.thiery@gmail.com>
+ <CAJ4jsaeVfSiMGbjsXER2t2dAa8Kgi0R8ut=jvA43Kp-ayn-9ww@mail.gmail.com>
+Message-ID: <CAJ4jsafEmJJRmyaX-jDwByWRpdr0O5XnGi0u+FsNeaiRckacew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 12, 2020 at 10:50 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+On Thu, Mar 12, 2020 at 10:43 AM Carlos Santos <unixmania@gmail.com> wrote:
 >
-> Hello Carlos,
->
-> On Thu, 12 Mar 2020 08:47:59 -0300
-> unixmania at gmail.com wrote:
->
-> > From: Carlos Santos <unixmania@gmail.com>
+> On Tue, Mar 10, 2020 at 5:08 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
 > >
-> > Pull two upstream patches that fix the declaration of pidfd_open and
-> > pidfd_send_signal.
+> > The "package/busybox/S01sysklogd" is taken as template to change the
+> > init script of the linuxptp daemon. The init script is split two parts
+> > because there are 2 daemons (ptp4l and phc2sys).
 > >
-> > Fixes:
-> >   http://autobuild.buildroot.net/results/2396b04478f9d358b94f2e2e05540625ddc9f205/
-> >   http://autobuild.buildroot.net/results/ed4b5ec61bd33d3ccf0ebb16000af46d0499366d/
+> > Let the user supply its own options in /etc/default/ptp4l and
+> > /etc/default/phc2sys.
 > >
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> > This patch also fixes an issue with the creation of the pid file that is
+> > needed to properly stop the daemon again.
+> >
+> > Signed-off-by: Michael Walle <michael@walle.cc>
+> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 >
-> We normally require to sign-off on the patches themselves, when they
-> are added to Buildroot packages.
+> Tested-by: Carlos Santos <unixmania@gmail.com>
+> ---
+> Testes on an Intel C3000 device
+>
+>     02:00.0 Ethernet controller: Intel Corporation I210 Gigabit
+> Network Connection (rev 03)
+>
+> after adding
+>
+> ==> /etc/default/phc2sys <==
+> PHC2SYS_ARGS="-s enp2s0 -c CLOCK_REALTIME -w -S 1.0"
+>
+> ==> /etc/default/ptp4l <==
+> PTP4L_ARGS="-i enp2s0 -f /etc/linuxptp.cfg -m"
 
-The patches are not mine and are already properly signed:
+Hum, maybe it would be better just to use
 
-Signed-off-by: Sami Kerola <kerolasa@iki.fi>
-Signed-off-by: Karel Zak <kzak@redhat.com>
+    PHC2SYS_ARGS="-s /dev/ptp0 -c CLOCK_REALTIME -w -S 1.0"
+
+in S66phc2sys, matching phc2sys.service.
 
 -- 
 Carlos Santos <unixmania@gmail.com>
