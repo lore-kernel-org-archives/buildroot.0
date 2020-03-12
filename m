@@ -1,56 +1,236 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 12 Mar 2020 20:04:32 +0100
-Subject: [Buildroot] [PATCH v4 0/1] package/linuxptp: make initscript
+Date: Thu, 12 Mar 2020 20:04:34 +0100
+Subject: [Buildroot] [PATCH v4 1/2] package/linuxptp: make initscript
  options configurable
-Message-ID: <20200312190434.973-1-heiko.thiery@gmail.com>
+In-Reply-To: <20200312190434.973-1-heiko.thiery@gmail.com>
+References: <20200312190434.973-1-heiko.thiery@gmail.com>
+Message-ID: <20200312190434.973-2-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After talking to Michael I've taken his patch and did a new version
-with some modifications/improvements.
+The "package/busybox/S01sysklogd" is taken as template to change the
+init script of the linuxptp daemon. The init script is split two parts
+because there are 2 daemons (ptp4l and phc2sys).
 
-This series changes the SysV init script to match the prefered style
-(used package/busybox/S01syslogd) for init scripts. Since in the old
-init script 2 daemons were started this is split in two. The names for
-the scripts now matches the daemons they start.
+Let the user supply its own options in /etc/default/ptp4l and
+/etc/default/phc2sys.
 
-The systemd service scripts are also renamed to match the daemon names
-(this is the same name as used in debian).
+This patch also fixes an issue with the creation of the pid file that is
+needed to properly stop the daemon again.
 
+Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
-v3 -> v4
- - change default config values for phc2sys
-   (use the autoconfigure option -a that does not need the network or PHC
-   device)
- - added the Tested-by from Carlos for the previous version
-   (I don't know if this is allowed)
- - drop the patch that changes the indentation
-   (Carlos Santos proposed to do that with a version bump)
-
-v2 -> v3
- - fix the install hooks to match the renamed files
- - rename the systemd service scripts to have the same name as for the
-   SysVinit scripts
- - update the indentation of the hash file
-
-v1 -> v2
- - rename the init script from S65linuxptp to S65ptp4l
- - move the phc2sys stuff to S66phc2sys
- - use the style form package/busybox/S01syslogd as template
-
-Heiko Thiery (1):
-  package/linuxptp: make initscript options configurable
-
  package/linuxptp/S65linuxptp | 46 ----------------------------
  package/linuxptp/S65ptp4l    | 59 ++++++++++++++++++++++++++++++++++++
  package/linuxptp/S66phc2sys  | 59 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 118 insertions(+), 46 deletions(-)
+ package/linuxptp/linuxptp.mk |  6 ++--
+ 4 files changed, 122 insertions(+), 48 deletions(-)
  delete mode 100644 package/linuxptp/S65linuxptp
  create mode 100644 package/linuxptp/S65ptp4l
  create mode 100644 package/linuxptp/S66phc2sys
 
+diff --git a/package/linuxptp/S65linuxptp b/package/linuxptp/S65linuxptp
+deleted file mode 100644
+index 46b8921fdd..0000000000
+--- a/package/linuxptp/S65linuxptp
++++ /dev/null
+@@ -1,46 +0,0 @@
+-#!/bin/sh
+-#
+-# Start linuxptp
+-#
+-
+-start() {
+-	printf "Starting linuxptp daemon: "
+-	start-stop-daemon -S -b -q -p /var/run/linuxptp-ptp4l.pid \
+-		-x /usr/sbin/ptp4l -- -f /etc/linuxptp.cfg
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
+-
+-	printf "Starting linuxptp system clock synchronization: "
+-	start-stop-daemon -S -b -q -p /var/run/linuxptp-phc2sys.pid \
+-		-x /usr/sbin/phc2sys -- -s eth0 -c CLOCK_REALTIME -w -S 1.0
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
+-}
+-
+-stop() {
+-	printf "Stopping linuxptp system clock synchronization: "
+-	start-stop-daemon -K -q -p /var/run/linuxptp-phc2sys.pid \
+-		-x /usr/sbin/phc2sys
+-	echo "OK"
+-
+-	printf "Stopping linuxptp daemon: "
+-	start-stop-daemon -K -q -p /var/run/linuxptp-ptp4l.pid \
+-		-x /usr/sbin/ptp4l
+-	echo "OK"
+-}
+-
+-case "$1" in
+-  start)
+-	start
+-	;;
+-  stop)
+-	stop
+-	;;
+-  restart|reload)
+-	stop
+-	start
+-	;;
+-  *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
+-esac
+-
+-exit $?
+diff --git a/package/linuxptp/S65ptp4l b/package/linuxptp/S65ptp4l
+new file mode 100644
+index 0000000000..630c5e803b
+--- /dev/null
++++ b/package/linuxptp/S65ptp4l
+@@ -0,0 +1,59 @@
++#!/bin/sh
++#
++# Start linuxptp
++#
++
++DAEMON="ptp4l"
++
++PIDFILE="/var/run/$DAEMON.pid"
++
++PTP4L_ARGS="-f /etc/linuxptp.cfg"
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/ptp4l" ] && . "/etc/default/ptp4l"
++
++# ptp4l does not create a pidfile, so pass "-n" in the command line
++# and use "-m" to instruct start-stop-daemon to create one.
++start() {
++	printf "Starting linuxptp daemon: "
++	start-stop-daemon -S -b -q -m -p $PIDFILE \
++		-x /usr/sbin/$DAEMON -- $PTP4L_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return $status
++}
++
++stop() {
++	printf "Stopping linuxptp daemon: "
++	start-stop-daemon -K -q -p $PIDFILE
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return $status
++}
++
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	stop
++	start
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/linuxptp/S66phc2sys b/package/linuxptp/S66phc2sys
+new file mode 100644
+index 0000000000..c680879aeb
+--- /dev/null
++++ b/package/linuxptp/S66phc2sys
+@@ -0,0 +1,59 @@
++#!/bin/sh
++#
++# Start linuxptp
++#
++
++DAEMON="phc2sys"
++
++PIDFILE="/var/run/$DAEMON.pid"
++
++PHC2SYS_ARGS="-a -r -S 1.0"
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/phc2sys" ] && . "/etc/default/phc2sys"
++
++# phc2sys does not create a pidfile, so pass "-n" in the command line
++# and use "-m" to instruct start-stop-daemon to create one.
++start() {
++	printf "Starting linuxptp system clock synchronization: "
++	start-stop-daemon -S -b -q -m -p $PIDFILE \
++		-x /usr/sbin/$DAEMON -- $PHC2SYS_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return $status
++}
++
++stop() {
++	printf "Stopping linuxptp system clock synchronization: "
++	start-stop-daemon -K -q -p $PIDFILE
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return $status
++}
++
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	stop
++	start
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
+index 97e4af7be7..ba57396f86 100644
+--- a/package/linuxptp/linuxptp.mk
++++ b/package/linuxptp/linuxptp.mk
+@@ -33,8 +33,10 @@ define LINUXPTP_INSTALL_TARGET_CMDS
+ endef
+ 
+ define LINUXPTP_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 755 -D $(LINUXPTP_PKGDIR)/S65linuxptp \
+-		$(TARGET_DIR)/etc/init.d/S65linuxptp
++	$(INSTALL) -m 755 -D $(LINUXPTP_PKGDIR)/S65ptp4l \
++		$(TARGET_DIR)/etc/init.d/S65ptp4l
++	$(INSTALL) -m 755 -D $(LINUXPTP_PKGDIR)/S66phc2sys \
++		$(TARGET_DIR)/etc/init.d/S66phc2sys
+ endef
+ 
+ define LINUXPTP_INSTALL_INIT_SYSTEMD
 -- 
 2.20.1
