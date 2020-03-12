@@ -1,31 +1,37 @@
-From: Bin Meng <bmeng.cn@gmail.com>
-Date: Thu, 12 Mar 2020 09:50:50 +0800
-Subject: [Buildroot] [PATCH] configs/qemu_riscv{32,
- 64}_virt_defconfig: Remove BR2_TARGET_GENERIC_GETTY_PORT
-In-Reply-To: <1583583630-25647-1-git-send-email-bmeng.cn@gmail.com>
-References: <1583583630-25647-1-git-send-email-bmeng.cn@gmail.com>
-Message-ID: <CAEUhbmV03BhiZnp9GgJRMZB2JW9C4mjNu7ALN4hc60T=6CBNuw@mail.gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Wed, 11 Mar 2020 23:03:15 -0300
+Subject: [Buildroot] [PATCH/next v2 2/4] package/openrc: bump to version
+ 0.42.1
+In-Reply-To: <20200311172212.GM5357@scaer>
+References: <20200301151747.25723-1-unixmania@gmail.com>
+ <20200301151747.25723-3-unixmania@gmail.com>
+ <20200311172212.GM5357@scaer>
+Message-ID: <CAJ4jsacoWEi=7sJwTBCJ=cTDEkJbPOYpo2uZT8KWCudJjuHc3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 7, 2020 at 8:20 PM Bin Meng <bmeng.cn@gmail.com> wrote:
+On Wed, Mar 11, 2020 at 2:22 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
-> Currently BR2_TARGET_GENERIC_GETTY_PORT is set to ttyS0 in both
-> qemu_riscv32_virt and qemu_riscv64_virt defconfig files. This
-> limits usecases when the same one rootfs could be used on QEMU
-> 'sifive_u' machine and SiFive HiFive Unleashed board.
+> Carlos, Al,
 >
-> Remove it so that the default boot console can be used.
+> On 2020-03-01 12:17 -0300, unixmania at gmail.com spake thusly:
+> > From: Adam Duskett <Aduskett@gmail.com>
+> >
+> > Add a patch to prevent starting agetty on tty[1-6]. Buildroot starts a
+> > single getty, according to the system configuration. Also tty[1-6] may
+> > not even exist (e.g. embedded devices with serial consoles only).
 >
-> Signed-off-by: Bin Meng <bmeng.cn@gmail.com>
-> ---
+> It would be good if that was made into an upstreamable patch, e.g.:
 >
->  configs/qemu_riscv32_virt_defconfig | 1 -
->  configs/qemu_riscv64_virt_defconfig | 1 -
->  2 files changed, 2 deletions(-)
+>     if test "${MKGETTYS}" != no && test "${OS}" = Linux; then \
+>         [...]
+>     fi
 >
 
-Ping?
+Done: https://github.com/OpenRC/openrc/pull/355
+
+-- 
+Carlos Santos <unixmania@gmail.com>
