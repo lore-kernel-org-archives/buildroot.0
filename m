@@ -1,102 +1,110 @@
-From: Charlie Turner <cturner@igalia.com>
-Date: Thu, 12 Mar 2020 19:47:00 +0000
-Subject: [Buildroot] [PATCH v3 1/1] package/cog: add option for platform DRM.
-In-Reply-To: <20200311103044.11422-1-cturner@igalia.com>
-References: <20200311103044.11422-1-cturner@igalia.com>
-Message-ID: <20200312194700.2836-1-cturner@igalia.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 12 Mar 2020 13:05:27 -0700
+Subject: [Buildroot] [PATCH 1/1] package/gupnp: disable introspection
+In-Reply-To: <CAPi7W81w=vJyfh3YJ4BTbe82qt49HTDepWCQdZid5Zbm7_OVOw@mail.gmail.com>
+References: <20200311193410.69589-1-fontaine.fabrice@gmail.com>
+ <CAFSsvmq1PdEHT-zNqMG_nh2VnUJdQEVBYny6H9pR12FTaDU0nw@mail.gmail.com>
+ <CAPi7W81w=vJyfh3YJ4BTbe82qt49HTDepWCQdZid5Zbm7_OVOw@mail.gmail.com>
+Message-ID: <CAFSsvmruUz+YB=mef43KTWTP_ffJbP4eXX_iK-jE1QXvbE2AsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that there's two platforms, the default-on behaviour for FDO has
-been made configurable, so that you can choose DRM only platform for FDO
-platform. Don't be confused that in both cases the *wpebackend-fdo*
-package is required. This is an unfortunate naming issue.
+Hey Fabrice;
 
-Signed-off-by: Charlie Turner <cturner@igalia.com>
----
- package/cog/Config.in | 27 +++++++++++++++++++++++++++
- package/cog/cog.mk    | 18 +++++++++++++++---
- 2 files changed, 42 insertions(+), 3 deletions(-)
+Actually my patch set does indeed fix these issues! GOI has two issues:
 
-diff --git a/package/cog/Config.in b/package/cog/Config.in
-index b25991d4ae..664e055104 100644
---- a/package/cog/Config.in
-+++ b/package/cog/Config.in
-@@ -7,7 +7,11 @@ config BR2_PACKAGE_COG
- 	depends on BR2_PACKAGE_WPEWEBKIT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
- 	depends on BR2_USE_MMU # dbus
-+	# For egl across all platforms, and gbm in the DRM platform.
-+	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
-+
- 	select BR2_PACKAGE_DBUS
-+
- 	help
- 	  Single "window" launcher for the WebKit WPE port, and
- 	  helper library for implementing WPE launcher. It does
-@@ -26,4 +30,27 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
- 	  string is used, there is no default and the URI to open
- 	  must be always specified in the command line.
- 
-+config BR2_PACKAGE_COG_PLATFORM_FDO
-+	bool "FreeDesktop.org backend"
-+
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+
-+	help
-+	  Enable the FreeDesktop.org backend.
-+
-+config BR2_PACKAGE_COG_PLATFORM_DRM
-+	bool "DRM backend"
-+
-+	depends on BR2_PACKAGE_HAS_UDEV # libinput
-+
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBINPUT
-+
-+	help
-+	  Enable the DRM platform backend. This allows Cog to run
-+	  without a compositor like Weston.
-+
-+comment "DRM platform needs mesa3d w/ EGL driver and GBM"
-+	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
-+
- endif
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index d0e5b79c38..339187126a 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -8,13 +8,25 @@ COG_VERSION = 0.4.0
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
--COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
-+COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo wayland wayland-protocols
- COG_LICENSE = MIT
- COG_LICENSE_FILES = COPYING
- COG_CONF_OPTS = \
- 	-DCOG_BUILD_PROGRAMS=ON \
--	-DCOG_PLATFORM_FDO=ON \
--	-DCOG_PLATFORM_DRM=OFF \
- 	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
- 
-+ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
-+COG_CONF_OPTS += -DCOG_PLATFORM_FDO=ON
-+COG_DEPENDENCIES += libxkbcommon
-+else
-+COG_CONF_OPTS += -DCOG_PLATFORM_FDO=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
-+COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
-+COG_DEPENDENCIES += libdrm libinput
-+else
-+COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
-+endif
-+
- $(eval $(cmake-package))
--- 
-2.20.1
+1) host-goi does not build typelib or gir files.
+2) goi does not work with meson projects.
+
+My patch set fixes both of these issues, and I have tested extensively with
+every package I could find in Buildroot currently.
+
+Some packages I tested GOI with include:
+libsecret
+gssdp
+gtk3
+libsoup
+gstreamer1
+
+All of them work fine with my patch set applied.
+
+Also, I made a new patch set just a few minutes ago along with a bump
+to libglib2 and goi.
+https://patchwork.ozlabs.org/project/buildroot/list/?series=164047
+https://patchwork.ozlabs.org/project/buildroot/list/?series=164050
+https://patchwork.ozlabs.org/project/buildroot/list/?series=164052
+
+Thanks!
+
+Adam
+
+On Thu, Mar 12, 2020 at 11:20 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Adam, all,
+>
+> Le jeu. 12 mars 2020 ? 18:31, Adam Duskett <aduskett@gmail.com> a ?crit :
+> >
+> > Frabrice, all;
+> >
+> >
+> > I disagree with this patch set.
+> > I have a patch set that has been sitting for a few weeks now that
+> > allows introspection to work with meson packages:
+> > https://patchwork.ozlabs.org/project/buildroot/list/?series=161028
+> gupnp (and libgtk3 as well as gdk-pixbuf) are autotools packages and
+> not meson packages. From my understanding, your patchset does not fix
+> those. Am I right?
+> Concerning gupnp, I tried to switch it to meson in August 2019 but I
+> had to revert this change due to meson's subproject feature for guul
+> being completely broken on static build with meson.
+> It seems that the issue is now fixed thanks to
+> https://github.com/mesonbuild/meson/pull/5936 so I could try, again,
+> to use meson with gupnp.
+> However, we'll still have to convert libgtk3 and gdk-pixbuf to meson.
+> >
+> > If we apply this patchset first, then we should set this package (and
+> > it's dependencies) to check for goi and enable or disable
+> > introspection conditionally.
+> >
+> > On Wed, Mar 11, 2020 at 12:33 PM Fabrice Fontaine
+> > <fontaine.fabrice@gmail.com> wrote:
+> > >
+> > > Build fails if gobject-introspection is built before gupnp:
+> > >
+> > >  GISCAN   GUPnP-1.0.gir
+> > > Couldn't find include 'GSSDP-1.0.gir' (search path: '['/nvmedata/autobuild/instance-0/output-1/host/bin/../nios2-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '..', '/nvmedata/autobuild/instance-0/output-1/host/share', 'gir-1.0', '/nvmedata/autobuild/instance-0/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
+> > >
+> > > Fixes:
+> > >  - http://autobuild.buildroot.org/results/ea91dab1d9a59c1aefa481c316115558a6f6e8f8
+> > >
+> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > > ---
+> > >  package/gupnp/gupnp.mk | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+> > > index 29305f0b4b..27486b09fa 100644
+> > > --- a/package/gupnp/gupnp.mk
+> > > +++ b/package/gupnp/gupnp.mk
+> > > @@ -12,5 +12,6 @@ GUPNP_LICENSE = LGPL-2.0+
+> > >  GUPNP_LICENSE_FILES = COPYING
+> > >  GUPNP_INSTALL_STAGING = YES
+> > >  GUPNP_DEPENDENCIES = host-pkgconf libglib2 libxml2 gssdp util-linux
+> > > +GUPNP_CONF_OPTS = --disable-introspection
+> > >
+> > >  $(eval $(autotools-package))
+> > > --
+> > > 2.25.1
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
