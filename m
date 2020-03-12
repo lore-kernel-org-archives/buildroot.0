@@ -1,116 +1,85 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Thu, 12 Mar 2020 16:23:21 -0400
-Subject: [Buildroot] 2020.02 Buildroot - Qt 5.12 missing XmlListModel
-In-Reply-To: <20200312192352.08aa5102@gmx.net>
-References: <1584022828143-0.post@n4.nabble.com>
- <20200312192352.08aa5102@gmx.net>
-Message-ID: <CALoSW646KA6PdN=0dLd3h5vnmn8UUN7R=riLTXM2kk10VqTb7Q@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 12 Mar 2020 13:38:04 -0700
+Subject: [Buildroot] [PATCH v2 1/2] package/pkg-meson.mk: add
+ FOO_MESON_EXTRA_PROPERTIES
+In-Reply-To: <20200311112256.2849174-1-john@metanate.com>
+References: <20200311112256.2849174-1-john@metanate.com>
+Message-ID: <CAFSsvmpFPk6RfEopHLfvKQw+FpEbKfPVOGJpWyGFzFrR9XnYCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 12, 2020, 2:23 PM Peter Seiderer <ps.report@gmx.net> wrote:
+All;
 
-> Hello,
->
-> On Thu, 12 Mar 2020 09:20:28 -0500 (CDT), nimaim <nimaim@gmail.com> wrote:
->
-> > To the Qt maintainers ... it seems Qt 5.12 moved some libs from the old,
-> now
-> > deprecated qt5declarative package to qt5xmlpatterns. See here:
-> > https://bugs.archlinux.org/task/60889. Some of the components such as
-> > XmlListModel are no longer working (as well as other libs that it
-> included,
-> > I'm guessing). See directory listing for this particular module between
-> 5.9
-> > and 5.12 builds in Buildroot:
-> >
-> > 5.9:
-> >
-> > find . -name *"xmllistmodel*"
-> > ./qt5declarative-5.9.4/src/quick/doc/images/qml-xmllistmodel-example.png
-> > ./qt5declarative-5.9.4/src/imports/xmllistmodel
-> > ./qt5declarative-5.9.4/src/imports/xmllistmodel/xmllistmodel.pro
-> > ./qt5declarative-5.9.4/src/imports/xmllistmodel/.obj/qqmlxmllistmodel.o
-> >
-> ./qt5declarative-5.9.4/src/imports/xmllistmodel/.obj/moc_qqmlxmllistmodel_p.o
-> >
-> ./qt5declarative-5.9.4/src/imports/xmllistmodel/.moc/moc_qqmlxmllistmodel_p.cpp
-> > ./qt5declarative-5.9.4/src/imports/xmllistmodel/.moc/qqmlxmllistmodel.moc
-> > ./qt5declarative-5.9.4/src/imports/xmllistmodel/qqmlxmllistmodel_p.h
-> > ./qt5declarative-5.9.4/src/imports/xmllistmodel/qqmlxmllistmodel.cpp
-> >
-> ./qt5declarative-5.9.4/qml/QtQuick/XmlListModel/libqmlxmllistmodelplugin.so
-> > ./qt5declarative-5.9.4/tests/auto/quick/qquickxmllistmodel
-> > ./qt5declarative-5.9.4/tests/auto/quick/qquickxmllistmodel/
-> qquickxmllistmodel.pro
-> >
-> ./qt5declarative-5.9.4/tests/auto/quick/qquickxmllistmodel/tst_qquickxmllistmodel.cpp
-> >
-> > 5.12:
-> >
-> > find . -iname "*xmllistmodel*"
-> > NO RESULTS
->
-> Enable 'BR2_PACKAGE_QT5XMLPATTERNS=y' in your buildroot .config file?
->
-> Regards,
-> Peter
->
+reviewed-by: Adam Duskett <aduskett@gmail.com>
 
-Thank you for getting back to me Peter.
-
-No, that does not fix it as I already have it enabled. Explicitly adding QT
-+= xmlpatterns to the .pro file. also does not work. It is unable to find
-it because it's never built. I showed the dir listing of Qt 5.12.x on my
-host because it shows it truly is a separate lib, so while it's part of the
-xmlpatterns package now, it should still build a qmlxmllistmodelplugin.so
-as far as I can see.
-
+On Wed, Mar 11, 2020 at 4:23 AM John Keeping <john@metanate.com> wrote:
 >
-> Note: the suggestion is completely untested, in case it does not help
-> (maybe some target install handling is missing) please provide
-> a failing defconfig (and a failing example - best from qt5-examples
-> BR2_PACKAGE_QT5BASE_EXAMPLES=y and /usr/lib/qt/examples/... on
-> the target)...
+> With autoconf packages, we often specify ac_cv_func_... cached values to
+> avoid runtime checks during configure.  With meson the equivalent is
+> setting properties in cross-compilation.conf which we cannot do in
+> Buildroot at the moment.
 >
-
-I will post my defconfig in a bit, on mobile at the moment. I can also
-build the examples and run it if you think it would help, just to ensure Qt
-and other QtQuick components are working, but the simple error message you
-get if you have a dependency on "import QtQuick.XmlListModel" is: "module
-"QtQuick.XmlListModel" is not installed".
-
-I was just wondering if you saw something amiss at a quick glance to fix
-this. I'll dig around some more and compare it to the old Qt 5.9.x Makefile
-from an older BR.
-
+> For example, libglib2 used to set ac_cv_func_printf_unix98 and
+> ac_cv_func_vsnprintf_c99 so that the system printf could be used, but
+> with the conversion to meson these checks fail and the gnulib fallback
+> is used.
 >
-> >
-> > Taking another directory listing from the official installer on my 64 bit
-> > Mint host shows they should be there:
-> >
-> > ~/Qt/5.12.5/gcc_64$ find . -iname "*xmllistmodel*"
-> > ./qml/QtQuick/XmlListModel
-> > ./qml/QtQuick/XmlListModel/libqmlxmllistmodelplugin.so
-> >
-> > I just wanted to make sure I'm not missing anything. This change broke my
-> > Qt5 project. Any simple patch to this?
-> >
-> >
-> >
-> >
-> >
-> > --
-> > Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+> Add infrastructure in the same way as FOO_MESON_EXTRA_BINARIES to allow
+> per-package modification to the cross-compilation properties.
 >
+> Signed-off-by: John Keeping <john@metanate.com>
+> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> v2:
+> - Reword documentation on the format of _MESON_EXTRA_PROPERTIES entries
+> - Add Peter's reviewed-by - thanks!
+> ---
+>  docs/manual/adding-packages-meson.txt | 9 +++++++++
+>  package/pkg-meson.mk                  | 4 ++++
+>  2 files changed, 13 insertions(+)
 >
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200312/9d91b24c/attachment.html>
+> diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
+> index e84bf7f60a..029c8c2488 100644
+> --- a/docs/manual/adding-packages-meson.txt
+> +++ b/docs/manual/adding-packages-meson.txt
+> @@ -116,6 +116,15 @@ will therefore only use a few of them.
+>    single quotes. By default, empty. Note that Buildroot already sets the
+>    correct values for +c+, +cpp+, +ar+, +strip+, and +pkgconfig+.
+>
+> +* +FOO_MESON_EXTRA_PROPERTIES+, to specify a space-separated list of
+> +  properties to add to the `[properties]` section of the meson
+> +  `cross-compilation.conf` configuration file. The format is
+> +  `property-name=<value>` with no space around the +=+ sign, and with
+> +  single quotes around string values. By default, empty. Note that
+> +  Buildroot already sets values for +needs_exe_wrapper+, +c_args+,
+> +  +c_link_args+, +cpp_args+, +cpp_link_args+, +sys_root+, and
+> +  +pkg_config_libdir+.
+> +
+>  * +FOO_NINJA_ENV+, to specify additional environment variables to pass to
+>    +ninja+, meson companion tool in charge of the build operations. By default,
+>    empty.
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 6ac3f79fe9..4df1326cad 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -80,6 +80,10 @@ define $(2)_CONFIGURE_CMDS
+>                 $$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+>                     s:$$$$:\n$$(x): ; \
+>                 ) }" \
+> +           -e "/^\[properties\]$$$$/ { \
+> +               $$(foreach x,$$($(2)_MESON_EXTRA_PROPERTIES), \
+> +                   s:$$$$:\n$$(x): ; \
+> +               ) }" \
+>             package/meson/cross-compilation.conf.in \
+>             > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+>         PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+> --
+> 2.25.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
