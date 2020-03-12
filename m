@@ -1,44 +1,60 @@
-From: Anatoly Borodin <anatoly.borodin@gmail.com>
-Date: Thu, 12 Mar 2020 20:45:17 +0100
-Subject: [Buildroot] [PATCH] package/ffmpeg: fix typo "--enable-bsfs" ->
- "--enable-bsf"
-Message-ID: <20200312194517.15568-1-anatoly.borodin@gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Thu, 12 Mar 2020 12:46:30 -0700
+Subject: [Buildroot] [PATCH v4,
+ 2/3] package/gobject-introspection: export cc in g-ir-scanner
+In-Reply-To: <20200312194632.3787015-1-aduskett@gmail.com>
+References: <20200312194632.3787015-1-aduskett@gmail.com>
+Message-ID: <20200312194632.3787015-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix ffmpeg configuration when BR2_PACKAGE_FFMPEG_BSFS is not default ("all"):
+From: Adam Duskett <Aduskett@gmail.com>
 
-	Unknown option "--enable-bsfs=h264_metadata".
-	See ./configure --help for available options.
-	package/pkg-generic.mk:254: recipe for target '/root/buildroot/output/build/ffmpeg-4.2.2/.stamp_configured' failed
+Without this export, the host variant of g-ir-scanner will call the host
+gcc for linking.
 
-The option is named according to the scheme "--enable-SINGULAR=..." /
-"--disable-PLURAL".
+For autotools packages, this is not an issue as they use
+Makefile.introspection, which will export the cross-cc, however for meson,
+this is not the case, and linking errors occur when meson packages generate
+.gir and .typelib files.
 
-The typo is present since the release 2014.02:
-
-https://git.buildroot.net/buildroot/commit/package/ffmpeg/ffmpeg.mk?id=62ab07ef769bd6504fe1db144aaac3fd45db9dad
-
-Signed-off-by: Anatoly Borodin <anatoly.borodin@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/ffmpeg/ffmpeg.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v1 -> v3:
+  - Use relative paths. (Yann)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f0047c4e3b13..b7148bbba2dc 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -135,7 +135,7 @@ endif
+ package/gobject-introspection/g-ir-scanner.in          | 2 ++
+ package/gobject-introspection/gobject-introspection.mk | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
+index 9f97497b7e..d5847ad063 100644
+--- a/package/gobject-introspection/g-ir-scanner.in
++++ b/package/gobject-introspection/g-ir-scanner.in
+@@ -1,6 +1,8 @@
+ #!/usr/bin/env bash
  
- ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),all)
- FFMPEG_CONF_OPTS += --disable-bsfs \
--	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),--enable-bsfs=$(x))
-+	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),--enable-bsf=$(x))
- endif
- 
- ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_PROTOCOLS)),all)
+ export GI_SCANNER_DISABLE_CACHE=1
++export CC="$(dirname "${0}")/../../../../bin/@BASENAME_TARGET_CC@"
++
+ ${HOST_DIR}/bin/g-ir-scanner \
+ --lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
+ --use-binary-wrapper=$(dirname $0)/g-ir-scanner-qemuwrapper \
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index 9043390857..a508957904 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -104,6 +104,8 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
+ 		$(INSTALL) -D -m 755 \
+ 			$(GOBJECT_INTROSPECTION_PKGDIR)/$(w).in $(STAGING_DIR)/usr/bin/$(w)
+ 	)
++	$(SED) "s%@BASENAME_TARGET_CC@%$(notdir $(TARGET_CC))%g" $(STAGING_DIR)/usr/bin/g-ir-scanner
++
+ 	# Gobject-introspection installs Makefile.introspection in
+ 	# $(STAGING_DIR)/usr/share which is needed for autotools-based programs to
+ 	# build .gir and .typelib files. Unfortuantly, gobject-introspection-1.0.pc
 -- 
-2.17.1
+2.24.1
