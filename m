@@ -1,8 +1,11 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu, 12 Mar 2020 12:46:29 -0700
+Date: Thu, 12 Mar 2020 12:46:31 -0700
 Subject: [Buildroot] [PATCH v4,
- 1/3] package/gobject-introspection: fix host-linking
-Message-ID: <20200312194632.3787015-1-aduskett@gmail.com>
+ 3/3] package/meson: determine g-ir-scanner and g-ir-compiler paths
+ from pkgconfig
+In-Reply-To: <20200312194632.3787015-1-aduskett@gmail.com>
+References: <20200312194632.3787015-1-aduskett@gmail.com>
+Message-ID: <20200312194632.3787015-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,44 +14,101 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-When building, gobject-introspection uses g-ir-scanner to build several .gir
-files. g-ir-scanner does not use LDPATH, so LD_LIBRARY_PATH must be used in
-order to ensure that g-ir-scanner does not use the host library path.
+Currently, meson hard codes the paths of these binaries which results in
+cross-compiled environments to run the host versions of these tools.
+However, GObject-introspection provides the appropriate paths to these
+utilities via pkg-config
 
-This fix has the added benefit of allowing the host gobject-introspection to
-build the host .gir, .rnc, and .typelib files, which some packages may require.
+find_program is needed in the case g-i is built as a subproject. If
+g-ir-scanner or g-ir-compiler are in the build or source directory use those.
+If they aren't found in the source directory, use the results from pkg-config.
+
+Current upstream-status: merged
+https://github.com/mesonbuild/meson/pull/6687
+https://github.com/mesonbuild/meson/pull/6696
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
 Changes v1 -> v3:
-  - Update comment to be more clear.
+  - Use an upstream patch that fixes this issue permanently.
 
-Changes v3 -> v4:
-  - Update patch to work with gobject-introspection 2.64.0
+ ...canner-and-g-ir-compiler-paths-from-.patch | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 package/meson/0004-determine-g-ir-scanner-and-g-ir-compiler-paths-from-.patch
 
- package/gobject-introspection/gobject-introspection.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-index c18a1f17d3..9043390857 100644
---- a/package/gobject-introspection/gobject-introspection.mk
-+++ b/package/gobject-introspection/gobject-introspection.mk
-@@ -33,11 +33,11 @@ HOST_GOBJECT_INTROSPECTION_DEPENDENCIES = \
- GOBJECT_INTROSPECTION_NINJA_ENV += \
- 	CC="$(TARGET_CC)"
- 
--# Disable introspection data on the host, as it is not needed and
--# the package will attempt to use the systems libglib2 which will fail
--# if the systems libglib2 version is older than 2.60.
--HOST_GOBJECT_INTROSPECTION_CONF_OPTS = \
--	-Dbuild_introspection_data=false
-+# When building, gobject-introspection uses g-ir-scanner to build several .gir
-+# files. g-ir-scanner does not use LDPATH, so LD_LIBRARY_PATH must be used in
-+# order to ensure that g-ir-scanner does not use the host library path.
-+HOST_GOBJECT_INTROSPECTION_NINJA_ENV += \
-+	LD_LIBRARY_PATH="$(HOST_DIR)/lib"
- 
- # Use the host gi-scanner to prevent the scanner from generating incorrect
- # elf classes.
+diff --git a/package/meson/0004-determine-g-ir-scanner-and-g-ir-compiler-paths-from-.patch b/package/meson/0004-determine-g-ir-scanner-and-g-ir-compiler-paths-from-.patch
+new file mode 100644
+index 0000000000..4f765e2157
+--- /dev/null
++++ b/package/meson/0004-determine-g-ir-scanner-and-g-ir-compiler-paths-from-.patch
+@@ -0,0 +1,68 @@
++From e8c2c21aabb4a06915b2e3a2c8e99bd74999db92 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <Aduskett@gmail.com>
++Date: Wed, 26 Feb 2020 10:42:54 -0800
++Subject: [PATCH] determine g-ir-scanner and g-ir-compiler paths from pkgconfig
++
++Currently, meson hard codes the paths of these binaries which results in
++cross-compiled environments to run the host versions of these tools.
++However, GObject-introspection provides the appropriate paths to these
++utilities via pkg-config
++
++find_program is needed in the case g-i is built as a subproject. If
++g-ir-scanner or g-ir-compiler are in the build or source directory use those.
++If they aren't found in the source directory, use the results from pkg-config.
++
++Cherry picked from:
++https://github.com/mesonbuild/meson/commit/f66b04b0996eae5cd7b0ad007435d5a51f28b691
++https://github.com/mesonbuild/meson/commit/6ba034c37d8004a72d392f37f66e709c593d8983
++
++Signed-off-by: Adam Duskett <Aduskett@gmail.com>
++---
++ mesonbuild/modules/gnome.py | 25 ++++++++++++++++++++++---
++ 1 file changed, 22 insertions(+), 3 deletions(-)
++
++diff --git a/mesonbuild/modules/gnome.py b/mesonbuild/modules/gnome.py
++index 9bd7a99..df01409 100644
++--- a/mesonbuild/modules/gnome.py
+++++ b/mesonbuild/modules/gnome.py
++@@ -736,15 +736,34 @@ class GnomeModule(ExtensionModule):
++         if kwargs.get('install_dir'):
++             raise MesonException('install_dir is not supported with generate_gir(), see "install_dir_gir" and "install_dir_typelib"')
++ 
++-        giscanner = self.interpreter.find_program_impl('g-ir-scanner')
++-        gicompiler = self.interpreter.find_program_impl('g-ir-compiler')
++-
++         girtargets = [self._unwrap_gir_target(arg, state) for arg in args]
++ 
++         if len(girtargets) > 1 and any([isinstance(el, build.Executable) for el in girtargets]):
++             raise MesonException('generate_gir only accepts a single argument when one of the arguments is an executable')
++ 
++         self.gir_dep, pkgargs = self._get_gir_dep(state)
+++        # find_program is needed in the case g-i is built as subproject.
+++        # In that case it uses override_find_program so the gobject utilities
+++        # can be used from the build dir instead of from the system.
+++        # However, GObject-introspection provides the appropriate paths to
+++        # these utilities via pkg-config, so it would be best to use the
+++        # results from pkg-config when possible.
+++        gi_util_dirs_check = [state.environment.get_build_dir(), state.environment.get_source_dir()]
+++        giscanner = self.interpreter.find_program_impl('g-ir-scanner')
+++        if giscanner.found():
+++            giscanner_path = giscanner.get_command()[0]
+++            if not any(x in giscanner_path for x in gi_util_dirs_check):
+++                giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
+++        else:
+++            giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
+++
+++        gicompiler = self.interpreter.find_program_impl('g-ir-compiler')
+++        if gicompiler.found():
+++            gicompiler_path = gicompiler.get_command()[0]
+++            if not any(x in gicompiler_path for x in gi_util_dirs_check):
+++                gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
+++        else:
+++            gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
++ 
++         ns = kwargs.pop('namespace')
++         nsversion = kwargs.pop('nsversion')
++-- 
++2.24.1
++
 -- 
 2.24.1
