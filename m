@@ -1,53 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Mar 2020 23:39:36 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/sqlcipher:
- security bump to version 4.3.0
-Message-ID: <20200313065149.799AB907C0@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 13 Mar 2020 08:11:51 +0100
+Subject: [Buildroot] [PATCH 2/2] package/kodi-pvr-nextpvr: bump version to
+ 3.3.19-Leia
+In-Reply-To: <20200313071151.27027-1-bernd.kuhls@t-online.de>
+References: <20200313071151.27027-1-bernd.kuhls@t-online.de>
+Message-ID: <20200313071151.27027-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5259a50dcb172a3c6aa9de53dd774d8f0c07d60e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
-
-From https://www.zetetic.net/blog/2019/08/14/defcon-sqlite-attacks:
-
-"We strongly recommend that all applications upgrade to SQLCipher 4.2.0
-to take advantage of the latest security updates, especially if an
-application interacts with non-encrypted databases using SQLCipher."
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b9440e8def9ab77482b059436749242d14fd5da6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/sqlcipher/sqlcipher.hash | 2 +-
- package/sqlcipher/sqlcipher.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
-index 9216668536..c37db7a20a 100644
---- a/package/sqlcipher/sqlcipher.hash
-+++ b/package/sqlcipher/sqlcipher.hash
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+index 2ebadf55b9..4d730deb85 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
 @@ -1,3 +1,3 @@
- # locally computed
--sha256  2f803017378c7479cb791be59b7bad8392a15acddbcc094e4433581fe421f4ca  sqlcipher-v4.0.1.tar.gz
-+sha256  fccb37e440ada898902b294d02cde7af9e8706b185d77ed9f6f4d5b18b4c305f  sqlcipher-4.3.0.tar.gz
- sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index a16d94d1dc..14290745aa 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -4,8 +4,8 @@
+ # Locally computed
+-sha256 f7b6ea2e79e469fc265d008d3ba8ebb7e286e789a8b4bc809681a254ff225775  kodi-pvr-nextpvr-3.3.18-Leia.tar.gz
++sha256 5f1b7fa00d7248fa840a0e7574bb7714867bff4ad81ceb8ed33cb3aa6d5ccbe9  kodi-pvr-nextpvr-3.3.19-Leia.tar.gz
+ sha256 0bd576badce05c6b4315c415dabd77d80c871e72026c399f7a7bb8582e0911fe  debian/copyright
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+index a4ca198310..94461f61d1 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLCIPHER_VERSION = v4.0.1
--SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,$(SQLCIPHER_VERSION))
-+SQLCIPHER_VERSION = 4.3.0
-+SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,v$(SQLCIPHER_VERSION))
- SQLCIPHER_LICENSE = BSD-3-Clause
- SQLCIPHER_LICENSE_FILES = LICENSE
- SQLCIPHER_DEPENDENCIES = host-pkgconf openssl host-tcl
+-KODI_PVR_NEXTPVR_VERSION = 3.3.18-Leia
++KODI_PVR_NEXTPVR_VERSION = 3.3.19-Leia
+ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
+ KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
+ KODI_PVR_NEXTPVR_LICENSE_FILES = debian/copyright
+-- 
+2.25.0
