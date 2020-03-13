@@ -1,164 +1,76 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Fri, 13 Mar 2020 17:01:28 -0400
-Subject: [Buildroot] 2020.02 Buildroot - Qt 5.12 missing XmlListModel
-In-Reply-To: <20200313213344.17be85be@gmx.net>
-References: <1584022828143-0.post@n4.nabble.com>
- <20200312192352.08aa5102@gmx.net>
- <CALoSW646KA6PdN=0dLd3h5vnmn8UUN7R=riLTXM2kk10VqTb7Q@mail.gmail.com>
- <20200313213344.17be85be@gmx.net>
-Message-ID: <CALoSW64SfXk83x2dLmEdTXhk+vXV+j_iUgcJTF-t3QO7pPXJ=A@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 13 Mar 2020 22:04:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/c-ares: bump to version 1.16.0
+Message-ID: <20200313210449.1152680-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 13, 2020, 4:33 PM Peter Seiderer <ps.report@gmx.net> wrote:
+- Remove patch (already in version)
+- Update indentation of hash file (two spaces)
 
-> Hello Nimai,
->
-> On Thu, 12 Mar 2020 16:23:21 -0400, Nimai Mahajan <nimaim@gmail.com>
-> wrote:
->
-> > On Thu, Mar 12, 2020, 2:23 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > > Hello,
-> > >
-> > > On Thu, 12 Mar 2020 09:20:28 -0500 (CDT), nimaim <nimaim@gmail.com>
-> wrote:
-> > >
-> > > > To the Qt maintainers ... it seems Qt 5.12 moved some libs from the
-> old,
-> > > now
-> > > > deprecated qt5declarative package to qt5xmlpatterns. See here:
-> > > > https://bugs.archlinux.org/task/60889. Some of the components such
-> as
-> > > > XmlListModel are no longer working (as well as other libs that it
-> > > included,
-> > > > I'm guessing). See directory listing for this particular module
-> between
-> > > 5.9
-> > > > and 5.12 builds in Buildroot:
-> > > >
-> > > > 5.9:
-> > > >
-> > > > find . -name *"xmllistmodel*"
-> > > >
-> ./qt5declarative-5.9.4/src/quick/doc/images/qml-xmllistmodel-example.png
-> > > > ./qt5declarative-5.9.4/src/imports/xmllistmodel
-> > > > ./qt5declarative-5.9.4/src/imports/xmllistmodel/xmllistmodel.pro
-> > > >
-> ./qt5declarative-5.9.4/src/imports/xmllistmodel/.obj/qqmlxmllistmodel.o
-> > > >
-> > >
-> ./qt5declarative-5.9.4/src/imports/xmllistmodel/.obj/moc_qqmlxmllistmodel_p.o
-> > > >
-> > >
-> ./qt5declarative-5.9.4/src/imports/xmllistmodel/.moc/moc_qqmlxmllistmodel_p.cpp
-> > > >
-> ./qt5declarative-5.9.4/src/imports/xmllistmodel/.moc/qqmlxmllistmodel.moc
-> > > > ./qt5declarative-5.9.4/src/imports/xmllistmodel/qqmlxmllistmodel_p.h
-> > > > ./qt5declarative-5.9.4/src/imports/xmllistmodel/qqmlxmllistmodel.cpp
-> > > >
-> > >
-> ./qt5declarative-5.9.4/qml/QtQuick/XmlListModel/libqmlxmllistmodelplugin.so
-> > > > ./qt5declarative-5.9.4/tests/auto/quick/qquickxmllistmodel
-> > > > ./qt5declarative-5.9.4/tests/auto/quick/qquickxmllistmodel/
-> > > qquickxmllistmodel.pro
-> > > >
-> > >
-> ./qt5declarative-5.9.4/tests/auto/quick/qquickxmllistmodel/tst_qquickxmllistmodel.cpp
-> > > >
-> > > > 5.12:
-> > > >
-> > > > find . -iname "*xmllistmodel*"
-> > > > NO RESULTS
-> > >
-> > > Enable 'BR2_PACKAGE_QT5XMLPATTERNS=y' in your buildroot .config file?
-> > >
-> > > Regards,
-> > > Peter
-> > >
-> >
-> > Thank you for getting back to me Peter.
-> >
-> > No, that does not fix it as I already have it enabled. Explicitly adding
-> QT
-> > += xmlpatterns to the .pro file. also does not work. It is unable to find
-> > it because it's never built. I showed the dir listing of Qt 5.12.x on my
-> > host because it shows it truly is a separate lib, so while it's part of
-> the
-> > xmlpatterns package now, it should still build a qmlxmllistmodelplugin.so
-> > as far as I can see.
-> >
-> > >
-> > > Note: the suggestion is completely untested, in case it does not help
-> > > (maybe some target install handling is missing) please provide
-> > > a failing defconfig (and a failing example - best from qt5-examples
-> > > BR2_PACKAGE_QT5BASE_EXAMPLES=y and /usr/lib/qt/examples/... on
-> > > the target)...
-> > >
-> >
-> > I will post my defconfig in a bit, on mobile at the moment. I can also
-> > build the examples and run it if you think it would help, just to ensure
-> Qt
-> > and other QtQuick components are working, but the simple error message
-> you
-> > get if you have a dependency on "import QtQuick.XmlListModel" is: "module
-> > "QtQuick.XmlListModel" is not installed".
->
-> Thanks for the bug report, I think the main problem was a wrong/legacy
-> dependency qt5declarative --> qt5xmlpatterns, instead of the other
-> way round and a missing target install of the qml parts of the package
-> qt5xmlpatterns....should be fixed by [1] (only compile tested, not yet
-> runtime tested)...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-use_check_build_instead_of_check_user.patch | 17 -----------------
+ package/c-ares/c-ares.hash                      |  4 ++--
+ package/c-ares/c-ares.mk                        |  4 +---
+ 3 files changed, 3 insertions(+), 22 deletions(-)
+ delete mode 100644 package/c-ares/0001-use_check_build_instead_of_check_user.patch
 
-
-> Regards,
-> Peter
->
-
-Thank you! I'm guessing we must be the only ones to still be using this
-specific library so I appreciate you taking the time to submit this. I plan
-to test it with our project tomorrow, hopefully no more errors.
-
->
-> [1] https://patchwork.ozlabs.org/patch/1254668/
->
-> >
-> > I was just wondering if you saw something amiss at a quick glance to fix
-> > this. I'll dig around some more and compare it to the old Qt 5.9.x
-> Makefile
-> > from an older BR.
-> >
-> > >
-> > > >
-> > > > Taking another directory listing from the official installer on my
-> 64 bit
-> > > > Mint host shows they should be there:
-> > > >
-> > > > ~/Qt/5.12.5/gcc_64$ find . -iname "*xmllistmodel*"
-> > > > ./qml/QtQuick/XmlListModel
-> > > > ./qml/QtQuick/XmlListModel/libqmlxmllistmodelplugin.so
-> > > >
-> > > > I just wanted to make sure I'm not missing anything. This change
-> broke my
-> > > > Qt5 project. Any simple patch to this?
-> > > >
-> > > >
-> > > >
-> > > >
-> > > >
-> > > > --
-> > > > Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> > > > _______________________________________________
-> > > > buildroot mailing list
-> > > > buildroot at busybox.net
-> > > > http://lists.busybox.net/mailman/listinfo/buildroot
-> > >
-> > >
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200313/48467129/attachment.html>
+diff --git a/package/c-ares/0001-use_check_build_instead_of_check_user.patch b/package/c-ares/0001-use_check_build_instead_of_check_user.patch
+deleted file mode 100644
+index 8210ed673b..0000000000
+--- a/package/c-ares/0001-use_check_build_instead_of_check_user.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Use XC_CHECK_BUILD_FLAGS instead of XC_CHECK_USER_FLAGS.
+-Otherwise it complains of CPPFLAGS in CFLAGS.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura c-ares-1.10.0.orig/m4/xc-cc-check.m4 c-ares-1.10.0/m4/xc-cc-check.m4
+---- c-ares-1.10.0.orig/m4/xc-cc-check.m4	2013-12-26 19:40:46.354195974 -0300
+-+++ c-ares-1.10.0/m4/xc-cc-check.m4	2013-12-26 19:41:01.850718535 -0300
+-@@ -59,7 +59,7 @@
+- 
+- AC_DEFUN([_XC_PROG_CC], [
+-   AC_REQUIRE([_XC_PROG_CC_PREAMBLE])dnl
+--  AC_REQUIRE([XC_CHECK_USER_FLAGS])dnl
+-+  AC_REQUIRE([XC_CHECK_BUILD_FLAGS])dnl
+-   AC_REQUIRE([AC_PROG_INSTALL])dnl
+-   AC_REQUIRE([AC_PROG_CC])dnl
+-   AC_REQUIRE([AM_PROG_CC_C_O])dnl
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index a3599aaa11..d4fe483ae6 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256 6cdb97871f2930530c97deb7cf5c8fa4be5a0b02c7cea6e7c7667672a39d6852 c-ares-1.15.0.tar.gz
++sha256  de058ad7c128156e2db6dc98b8a359924d6f210a1b99dd36ba15c8f839a83a89  c-ares-1.16.0.tar.gz
+ 
+ # Hash for license file
+-sha256 db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c LICENSE.md
++sha256  db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c  LICENSE.md
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index f9e440d9b1..e8723bf784 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-C_ARES_VERSION = 1.15.0
++C_ARES_VERSION = 1.16.0
+ C_ARES_SITE = http://c-ares.haxx.se/download
+ C_ARES_INSTALL_STAGING = YES
+ C_ARES_CONF_OPTS = --with-random=/dev/urandom
+-# Rebuild configure to avoid XC_CHECK_USER_CFLAGS
+-C_ARES_AUTORECONF = YES
+ C_ARES_LICENSE = MIT
+ C_ARES_LICENSE_FILES = LICENSE.md
+ 
+-- 
+2.25.1
