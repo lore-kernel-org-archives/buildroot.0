@@ -1,67 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2020 17:01:10 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/mfgtools: fix
- build issue related to __time64_t
-Message-ID: <20200313155620.E760490B23@busybox.osuosl.org>
+Date: Fri, 13 Mar 2020 17:12:39 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.4.x series
+Message-ID: <20200313160014.31EED90B2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd21f5b55a5235b8229dc295ca5000654ef08f88
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6c3b0ed13b04409372caef9b43adc9de12e62764
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-The tool fails to build on recent distros due to conflicting declaration
-of __time64_t. Adding a check around the declaration to avoid
-redefinition.
-
-Patch not submitted upstream as the tool is not supported by NXP
-anymore[1].
-
-Fixes:
-http://autobuild.buildroot.net/results/ca4498ad21a96ba2a38ca2467dadffdbb516355b/
-
-[1] https://github.com/NXPmicro/mfgtools/pull/104
-
-Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8e267afcc2912c40a4317c7580c8f8f2fa202489)
+(cherry picked from commit dc43b918ec76289f58463868a0295ffd78a01440)
+[Peter: drop 5.4.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...fix-conflicting-declaration-of-__time64_t.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 8 ++++----
+ package/linux-headers/Config.in.host | 8 ++++----
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/mfgtools/0001-lnx_def.h-fix-conflicting-declaration-of-__time64_t.patch b/package/mfgtools/0001-lnx_def.h-fix-conflicting-declaration-of-__time64_t.patch
-new file mode 100644
-index 0000000000..7d0d3974a2
---- /dev/null
-+++ b/package/mfgtools/0001-lnx_def.h-fix-conflicting-declaration-of-__time64_t.patch
-@@ -0,0 +1,27 @@
-+From 1af7bc09451e0b779f7bfb0dcc58ffb3abe9c584 Mon Sep 17 00:00:00 2001
-+From: Gary Bisson <bisson.gary@gmail.com>
-+Date: Tue, 11 Feb 2020 15:30:12 +0100
-+Subject: [PATCH] lnx_def.h: fix conflicting declaration of __time64_t
-+
-+Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-+---
-+ MfgToolLib/lnx_def.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/MfgToolLib/lnx_def.h b/MfgToolLib/lnx_def.h
-+index c6869dd..a38bb99 100644
-+--- a/MfgToolLib/lnx_def.h
-++++ b/MfgToolLib/lnx_def.h
-+@@ -124,7 +124,9 @@ typedef unsigned long * ULONG_PTR;
-+ typedef char * LPOLESTR;
-+ typedef void * HDEVINFO;
-+ typedef unsigned long long ULONGLONG;
-++#ifndef __time64_t
-+ typedef long long __time64_t;
-++#endif
-+ typedef long long __int64;
-+ typedef unsigned long DWORD_PTR;
-+ typedef unsigned int UINT;
-+-- 
-+2.25.0
-+
+diff --git a/linux/Config.in b/linux/Config.in
+index 681ccf8404..5e7a38472e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -122,7 +122,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.19.102" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.19.104" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 43a8baa585..d524124aa9 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256  d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
+-sha256  00f73c3c7a2beebf5832422c81a037b05ca1217d5f4f6cbcc49284bf7fb2bcb2  linux-4.4.213.tar.xz
+-sha256  af85ff764670c2a934ee5b2590437d8e3ab32b1a0b8d51358f36c6bbf6c5eb64  linux-4.9.213.tar.xz
+-sha256  940a63247d11476daea6d114a9599be0eb68eeb2e295fe279e0f3312af1e17c3  linux-4.14.170.tar.xz
+-sha256  302e8388dd7b49d1b779225cf865af74b9837d1e955b1b290fdd71baf97ce015  linux-4.19.102.tar.xz
++sha256  b6aa65ee2c0767864175e3a9cf7b0b3751263b04a7c8a6e760e9b982282fa76c  linux-4.4.214.tar.xz
++sha256  b47f093dac7034c7c4722e80042c05e4ef53c14a4f28aa992117a127d2b1e483  linux-4.9.214.tar.xz
++sha256  4fe02489e4b4a187eccf0ef87df6100534c9d485e76d876b1fa247c7635332a0  linux-4.14.171.tar.xz
++sha256  23ebffb28c2607682fcb91df90d77467ac5b16a50961de298ef266a919d66be8  linux-4.19.104.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f735e30438..4b3740d1d4 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -287,10 +287,10 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.213"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.213"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.170"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.102"	if BR2_KERNEL_HEADERS_4_19
++	default "4.4.214"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.214"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.171"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.104"	if BR2_KERNEL_HEADERS_4_19
+ 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
