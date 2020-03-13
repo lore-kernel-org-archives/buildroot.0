@@ -1,146 +1,40 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Thu, 12 Mar 2020 22:06:11 -0300
-Subject: [Buildroot] [PATCH v2] package/util-linux: fix build for riscv64
- and powerpc64le
-Message-ID: <20200313010611.17176-1-unixmania@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 Mar 2020 08:03:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sqlcipher: security bump to
+ version 4.3.0
+In-Reply-To: <CAPi7W81yF9SRvUHrg_8zwv7Mt4zObkQOryLCUzGUFetOTMneyA@mail.gmail.com>
+ (Fabrice Fontaine's message of "Thu, 13 Feb 2020 22:21:20 +0100")
+References: <20200213184148.2090807-1-fontaine.fabrice@gmail.com>
+ <87lfp6dwnk.fsf@dell.be.48ers.dk>
+ <CAPi7W81yF9SRvUHrg_8zwv7Mt4zObkQOryLCUzGUFetOTMneyA@mail.gmail.com>
+Message-ID: <87blp020ts.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Pull two upstream patches that fix the declaration of pidfd_open and
-pidfd_send_signal.
+ > Le jeu. 13 f?vr. 2020 ? 22:06, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+ >> 
+ >> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+ >> 
+ >> > From https://www.zetetic.net/blog/2019/08/14/defcon-sqlite-attacks:
+ >> > "We strongly recommend that all applications upgrade to SQLCipher 4.2.0
+ >> > to take advantage of the latest security updates, especially if an
+ >> > application interacts with non-encrypted databases using SQLCipher."
+ >> 
+ >> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> 
+ >> Committed, thanks.
+ >> 
+ >> What should we do for 2019.02.x (which uses 3.2.0)?
+ > 3.2.0 has been released in 2014 and is based on SQLite 3.8.6 which is
+ > very old and subject to multiple CVEs so I would advise to bump from
+ > 3.2.0 to 4.3.0.
 
-Fixes:
-  http://autobuild.buildroot.net/results/2396b04478f9d358b94f2e2e05540625ddc9f205/
-  http://autobuild.buildroot.net/results/ed4b5ec61bd33d3ccf0ebb16000af46d0499366d/
+OK. Committed to 2019.02.x and 2019.11.x, thanks.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
-Chanves v1->v2: add SOB to patches
----
- ...-types.h-before-checking-SYS_pidfd_s.patch | 62 +++++++++++++++++++
- .../0007-include-cleanup-pidfd-inckudes.patch | 40 ++++++++++++
- 2 files changed, 102 insertions(+)
- create mode 100644 package/util-linux/0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch
- create mode 100644 package/util-linux/0007-include-cleanup-pidfd-inckudes.patch
-
-diff --git a/package/util-linux/0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch b/package/util-linux/0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch
-new file mode 100644
-index 0000000000..183b725a32
---- /dev/null
-+++ b/package/util-linux/0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch
-@@ -0,0 +1,62 @@
-+From 3cfde0370d3a8949df0c5bcf447cec6692910ed2 Mon Sep 17 00:00:00 2001
-+From: Sami Kerola <kerolasa@iki.fi>
-+Date: Sat, 15 Feb 2020 21:12:50 +0000
-+Subject: [PATCH] kill: include sys/types.h before checking
-+ SYS_pidfd_send_signal
-+
-+Including sys/types.h must happen before SYS_pidfd_send_signal is checked,
-+because that header defines variable in normal conditions.  When sys/types.h
-+does not have SYS_pidfd_send_signal then fallback is defined in config.h
-+that is included by default, and has therefore worked fine before and after
-+this change.
-+
-+Signed-off-by: Sami Kerola <kerolasa@iki.fi>
-+Signed-off-by: Carlos Santos <unixmania@gmail.com>
-+---
-+ include/pidfd-utils.h | 18 ++++++++++--------
-+ 1 file changed, 10 insertions(+), 8 deletions(-)
-+
-+diff --git a/include/pidfd-utils.h b/include/pidfd-utils.h
-+index 593346576..0baedd2c9 100644
-+--- a/include/pidfd-utils.h
-++++ b/include/pidfd-utils.h
-+@@ -1,26 +1,28 @@
-+ #ifndef UTIL_LINUX_PIDFD_UTILS
-+ #define UTIL_LINUX_PIDFD_UTILS
-+ 
-+-#if defined(__linux__) && defined(SYS_pidfd_send_signal)
-+-# include <sys/types.h>
-++#if defined(__linux__)
-+ # include <sys/syscall.h>
-++# if defined(SYS_pidfd_send_signal)
-++#  include <sys/types.h>
-+ 
-+-# ifndef HAVE_PIDFD_OPEN
-++#  ifndef HAVE_PIDFD_OPEN
-+ static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
-+ 				    unsigned int flags)
-+ {
-+ 	return syscall(SYS_pidfd_send_signal, pidfd, sig, info, flags);
-+ }
-+-# endif
-++#  endif
-+ 
-+-# ifndef HAVE_PIDFD_SEND_SIGNAL
-++#  ifndef HAVE_PIDFD_SEND_SIGNAL
-+ static inline int pidfd_open(pid_t pid, unsigned int flags)
-+ {
-+ 	return syscall(SYS_pidfd_open, pid, flags);
-+ }
-+-# endif
-++#  endif
-+ 
-+-# define UL_HAVE_PIDFD 1
-++#  define UL_HAVE_PIDFD 1
-+ 
-+-#endif /* __linux__ && SYS_pidfd_send_signal */
-++# endif	/* SYS_pidfd_send_signal */
-++#endif /* __linux__ */
-+ #endif /* UTIL_LINUX_PIDFD_UTILS */
-+-- 
-+2.18.2
-+
-diff --git a/package/util-linux/0007-include-cleanup-pidfd-inckudes.patch b/package/util-linux/0007-include-cleanup-pidfd-inckudes.patch
-new file mode 100644
-index 0000000000..73f3118b0a
---- /dev/null
-+++ b/package/util-linux/0007-include-cleanup-pidfd-inckudes.patch
-@@ -0,0 +1,40 @@
-+From 0a4035ff2e4fd5b5ae0cf8f8665696c2aff53b75 Mon Sep 17 00:00:00 2001
-+From: Karel Zak <kzak@redhat.com>
-+Date: Tue, 10 Mar 2020 11:43:16 +0100
-+Subject: [PATCH] include: cleanup pidfd inckudes
-+
-+Signed-off-by: Karel Zak <kzak@redhat.com>
-+Signed-off-by: Carlos Santos <unixmania@gmail.com>
-+---
-+ include/pidfd-utils.h | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/include/pidfd-utils.h b/include/pidfd-utils.h
-+index 0baedd2c9..4a6c3a604 100644
-+--- a/include/pidfd-utils.h
-++++ b/include/pidfd-utils.h
-+@@ -3,10 +3,10 @@
-+ 
-+ #if defined(__linux__)
-+ # include <sys/syscall.h>
-+-# if defined(SYS_pidfd_send_signal)
-++# if defined(SYS_pidfd_send_signal) && defined(SYS_pidfd_open)
-+ #  include <sys/types.h>
-+ 
-+-#  ifndef HAVE_PIDFD_OPEN
-++#  ifndef HAVE_PIDFD_SEND_SIGNAL
-+ static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
-+ 				    unsigned int flags)
-+ {
-+@@ -14,7 +14,7 @@ static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
-+ }
-+ #  endif
-+ 
-+-#  ifndef HAVE_PIDFD_SEND_SIGNAL
-++#  ifndef HAVE_PIDFD_OPEN
-+ static inline int pidfd_open(pid_t pid, unsigned int flags)
-+ {
-+ 	return syscall(SYS_pidfd_open, pid, flags);
-+-- 
-+2.18.2
-+
 -- 
-2.18.2
+Bye, Peter Korsgaard
