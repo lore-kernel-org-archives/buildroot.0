@@ -1,145 +1,44 @@
-From: nimaim <nimaim@gmail.com>
-Date: Fri, 13 Mar 2020 08:52:25 -0500 (CDT)
-Subject: [Buildroot] 2020.02 Buildroot - Qt 5.12 missing XmlListModel
-In-Reply-To: <CALoSW646KA6PdN=0dLd3h5vnmn8UUN7R=riLTXM2kk10VqTb7Q@mail.gmail.com>
-References: <1584022828143-0.post@n4.nabble.com>
- <20200312192352.08aa5102@gmx.net>
- <CALoSW646KA6PdN=0dLd3h5vnmn8UUN7R=riLTXM2kk10VqTb7Q@mail.gmail.com>
-Message-ID: <1584107545723-0.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 13 Mar 2020 15:04:43 +0100
+Subject: [Buildroot] Help: error LONG_BIT definition appears wrong for
+ platform
+In-Reply-To: <CAA0OSwgGcbzMe9o35FRqmLBZ5PFMx=1+fDYyiqq0yLk5YJyNpQ@mail.gmail.com>
+References: <CAA0OSwgGcbzMe9o35FRqmLBZ5PFMx=1+fDYyiqq0yLk5YJyNpQ@mail.gmail.com>
+Message-ID: <20200313150443.682fdc5a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here is my defconfig:
+Hello,
 
-The target's embedded GPU does not support hardware acceleration with any
-recent Linux graphics driver so we build llvmpipe and use its swrast
-capabilities. All of this has worked flawlessly with Qt 5.9.X, albeit a
-little slow.
+On Fri, 13 Mar 2020 18:26:38 +0800
+Mark Leo Sumadero <fryu771@gmail.com> wrote:
 
-BR2_x86_i686=y
-BR2_DL_DIR="$(DOWNLOAD_DIR)"
-BR2_CCACHE=y
-BR2_CCACHE_DIR="$(HOME)/.test-buildroot-ccache"
-BR2_CCACHE_INITIAL_SETUP="--max-size=10G --set-config=direct_mode=false"
-BR2_OPTIMIZE_2=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_PACKAGE_GLIBC_UTILS=y
-BR2_BINUTILS_VERSION_2_33_X=y
-BR2_GCC_VERSION_9_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY=y
-BR2_TARGET_GENERIC_HOSTNAME="test"
-BR2_TARGET_GENERIC_ISSUE="Test Build"
-BR2_TARGET_GENERIC_PASSWD_SHA512=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_ROOTFS_DEVICE_TABLE="$(BR2_EXTERNAL)/board/test/device_table.txt"
-# BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-BR2_SYSTEM_BIN_SH_BASH=y
-BR2_TARGET_TZ_INFO=y
-BR2_TARGET_LOCALTIME="America/New_York"
-BR2_ROOTFS_USERS_TABLES="$(BR2_EXTERNAL)/board/test/users"
-BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL)/board/test/fs-overlay"
-BR2_ROOTFS_POST_BUILD_SCRIPT="$(BR2_EXTERNAL)/scripts/post_build.sh"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.24"
-BR2_LINUX_KERNEL_PATCH="$(BR2_EXTERNAL)/board/test/patches/linux"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL)/board/test/linux.config"
-BR2_LINUX_KERNEL_XZ=y
-BR2_PACKAGE_BUSYBOX_CONFIG="$(BR2_EXTERNAL)/board/test/busybox.config"
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_XZ=y
-BR2_PACKAGE_LTRACE=y
-BR2_PACKAGE_STRACE=y
-BR2_PACKAGE_BTRFS_PROGS=y
-BR2_PACKAGE_E2FSPROGS=y
-BR2_PACKAGE_NFS_UTILS=y
-BR2_PACKAGE_NTFS_3G=y
-BR2_PACKAGE_NTFS_3G_ENCRYPTED=y
-BR2_PACKAGE_NTFS_3G_NTFSPROGS=y
-BR2_PACKAGE_DEJAVU=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_LLVM=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5BASE_CONCURRENT=y
-BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-BR2_PACKAGE_QT5BASE_LINUXFB=y
-BR2_PACKAGE_QT5BASE_XCB=y
-BR2_PACKAGE_QT5BASE_DEFAULT_QPA="xcb"
-BR2_PACKAGE_QT5BASE_TSLIB=y
-BR2_PACKAGE_QT5SERIALBUS=y
-BR2_PACKAGE_QT5SVG=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_XLIB_LIBXFONT=y
-BR2_PACKAGE_XAPP_XINIT=y
-BR2_PACKAGE_XAPP_XINPUT=y
-BR2_PACKAGE_XAPP_XINPUT_CALIBRATOR=y
-BR2_PACKAGE_XAPP_XMODMAP=y
-BR2_PACKAGE_XAPP_XRANDR=y
-BR2_PACKAGE_XAPP_XSET=y
-BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
-BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_VESA=y
-BR2_PACKAGE_XTERM=y
-BR2_PACKAGE_OPENBOX=y
-BR2_PACKAGE_CRYPTSETUP=y
-# BR2_PACKAGE_EUDEV_ENABLE_HWDB is not set
-BR2_PACKAGE_PARTED=y
-BR2_PACKAGE_LIBSHA1=y
-BR2_PACKAGE_LIBSSH2=y
-BR2_PACKAGE_LIBCONFIG=y
-BR2_PACKAGE_LIBFUSE=y
-BR2_PACKAGE_LIBDRI2=y
-BR2_PACKAGE_LIBCURL=y
-BR2_PACKAGE_LIBCURL_CURL=y
-BR2_PACKAGE_LIBCURL_VERBOSE=y
-BR2_PACKAGE_LIBOPING=y
-BR2_PACKAGE_NSS_MDNS=y
-BR2_PACKAGE_LIBUNISTRING=y
-BR2_PACKAGE_HAVEGED=y
-BR2_PACKAGE_AVAHI=y
-BR2_PACKAGE_AVAHI_DAEMON=y
-BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY=y
-BR2_PACKAGE_DNSMASQ=y
-BR2_PACKAGE_IFUPDOWN=y
-BR2_PACKAGE_IPUTILS=y
-BR2_PACKAGE_NBD=y
-BR2_PACKAGE_NBD_SERVER=y
-BR2_PACKAGE_NBD_TRDUMP=y
-BR2_PACKAGE_NET_TOOLS=y
-BR2_PACKAGE_NETCAT_OPENBSD=y
-BR2_PACKAGE_OPENSSH=y
-BR2_PACKAGE_SOCAT=y
-BR2_PACKAGE_SUDO=y
-BR2_PACKAGE_ATTR=y
-BR2_PACKAGE_DAEMON=y
-BR2_PACKAGE_HTOP=y
-BR2_PACKAGE_PROCPS_NG=y
-BR2_PACKAGE_RSYSLOG=y
-BR2_PACKAGE_START_STOP_DAEMON=y
-BR2_PACKAGE_UTIL_LINUX_BINARIES=y
-BR2_PACKAGE_UTIL_LINUX_MOUNT=y
-BR2_PACKAGE_NANO=y
-BR2_TARGET_ROOTFS_CPIO_XZ=y
-BR2_TARGET_ROOTFS_INITRAMFS=y
-BR2_TARGET_ROOTFS_ISO9660=y
-BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="$(BR2_EXTERNAL)/board/test/syslinux-config/isolinux.cfg"
-BR2_TARGET_ROOTFS_ISO9660_HYBRID=y
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_SYSLINUX=y
-# Custom packages removed
+> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
 
+This is the cross-compiler: good!
 
+> -prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> -D_FILE_OFFSET_BITS=64 -Os  -DLINUX -D_REENTRANT -D_GNU_SOURCE
+>  -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+>  -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
+> 
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../../../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m
 
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+This is a path to header of host components: BAD!
+
+And this is where your problem is, this header path should *NOT* be
+there when you cross-compile.
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
