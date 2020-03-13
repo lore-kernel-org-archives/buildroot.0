@@ -1,58 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2020 17:11:21 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] {linux,
- linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.4.x series
-Message-ID: <20200313160018.392978FE3B@busybox.osuosl.org>
+Date: Fri, 13 Mar 2020 17:15:41 +0100
+Subject: [Buildroot] [PATCH] core: fix packages-file-list.txt after an
+ incremental build
+In-Reply-To: <20200214195734.32081-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Fri, 14 Feb 2020 20:57:33 +0100")
+References: <20200214195734.32081-1-patrickdepinguin@gmail.com>
+Message-ID: <87eetwz0wi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e42c849b32e5155ef31d63b4a05ab66c18d5a860
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit dc43b918ec76289f58463868a0295ffd78a01440)
-[Peter: drop 5.4.x bump]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/linux.hash                     | 9 ++++-----
- package/linux-headers/Config.in.host | 8 ++++----
- 2 files changed, 8 insertions(+), 9 deletions(-)
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > The package instrumentation step 'step_pkg_size' is populating the files:
+ >     output/build/packages-file-list.txt
+ >     output/build/packages-file-list-staging.txt
+ >     output/build/packages-file-list-host.txt
+ > by comparing the list of files before and after installation of a package,
+ > with some clever tricks to detect changes to existing files etc.
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index f2e453cbf5..4ebaf892ba 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256 20f14917c4f33122cfa12963a7d3180fe6f4685cacfe984553b2b5b4ad20638c  linux-5.3.18.tar.xz
--# From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  00f73c3c7a2beebf5832422c81a037b05ca1217d5f4f6cbcc49284bf7fb2bcb2  linux-4.4.213.tar.xz
--sha256  af85ff764670c2a934ee5b2590437d8e3ab32b1a0b8d51358f36c6bbf6c5eb64  linux-4.9.213.tar.xz
--sha256  940a63247d11476daea6d114a9599be0eb68eeb2e295fe279e0f3312af1e17c3  linux-4.14.170.tar.xz
--sha256  302e8388dd7b49d1b779225cf865af74b9837d1e955b1b290fdd71baf97ce015  linux-4.19.102.tar.xz
-+sha256  b6aa65ee2c0767864175e3a9cf7b0b3751263b04a7c8a6e760e9b982282fa76c  linux-4.4.214.tar.xz
-+sha256  b47f093dac7034c7c4722e80042c05e4ef53c14a4f28aa992117a127d2b1e483  linux-4.9.214.tar.xz
-+sha256  4fe02489e4b4a187eccf0ef87df6100534c9d485e76d876b1fa247c7635332a0  linux-4.14.171.tar.xz
-+sha256  23ebffb28c2607682fcb91df90d77467ac5b16a50961de298ef266a919d66be8  linux-4.19.104.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 4f32334487..57527154be 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -305,10 +305,10 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.213"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.213"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.170"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.102"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.4.214"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.214"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.171"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.104"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.3.18"	if BR2_KERNEL_HEADERS_5_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ > As an optimization, instead of gathering this list before and after each
+ > package, where the 'after-state' of one package is the same as the
+ > 'before-state' of the next package, only the 'after-state' is used and
+ > is shared between packages.
+
+ > This works fine, except at the end of the build, as explained next.
+
+ > In the target-finalize step, many files will be touched. For example, files
+ > like /etc/hosts, /etc/os-release, but also all object files that are
+ > stripped, and all files touched by post-build scripts or created by rootfs
+ > overlays. This means that the 'after-state' of the last package does not
+ > reflect the actual situation after target-finalize is run.
+
+ > For a single complete build this poses no problem. But, if one incrementally
+ > rebuilds a package after the initial build, e.g. with 'make foo-rebuild',
+ > then all changes that happened in target-finalize at the end of the initial
+ > build (the 'after-state' of the last package built) will be detected as
+ > changes caused by the rebuild of package foo. As a result, all these files
+ > will incorrectly be treated as 'owned' by package foo.
+
+ > Correct this situation by capturing a new state at the end of
+ > target-finalize, so that the 'before-state' of an incremental build will be
+ > correct.
+
+ > Note: the reasoning above talks about packages-file-list.txt and
+ > target-finalize, but also applies to
+ > packages-file-list-staging.txt/staging-finalize and
+ > packages-file-list-host.txt/host-finalize.
+
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+Committed to 2019.02.x and 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
