@@ -1,7 +1,8 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Thu, 12 Mar 2020 22:04:18 -0300
-Subject: [Buildroot] [PATCH] package/util-linux: add missing SOB to patches
-Message-ID: <20200313010418.16872-1-unixmania@gmail.com>
+Date: Thu, 12 Mar 2020 22:06:11 -0300
+Subject: [Buildroot] [PATCH v2] package/util-linux: fix build for riscv64
+ and powerpc64le
+Message-ID: <20200313010611.17176-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,51 +11,136 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-It is required that all patches in packages have the Signed-off-by of
-the contributor who brought them into Buildroot.
+Pull two upstream patches that fix the declaration of pidfd_open and
+pidfd_send_signal.
+
+Fixes:
+  http://autobuild.buildroot.net/results/2396b04478f9d358b94f2e2e05540625ddc9f205/
+  http://autobuild.buildroot.net/results/ed4b5ec61bd33d3ccf0ebb16000af46d0499366d/
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- package/util-linux/0003-blkdiscard-use-O_EXCL-add-force.patch    | 1 +
- .../0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch   | 1 +
- .../0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch         | 1 +
- 3 files changed, 3 insertions(+)
+Chanves v1->v2: add SOB to patches
+---
+ ...-types.h-before-checking-SYS_pidfd_s.patch | 62 +++++++++++++++++++
+ .../0007-include-cleanup-pidfd-inckudes.patch | 40 ++++++++++++
+ 2 files changed, 102 insertions(+)
+ create mode 100644 package/util-linux/0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch
+ create mode 100644 package/util-linux/0007-include-cleanup-pidfd-inckudes.patch
 
-diff --git a/package/util-linux/0003-blkdiscard-use-O_EXCL-add-force.patch b/package/util-linux/0003-blkdiscard-use-O_EXCL-add-force.patch
-index 191608e080..0ecb867029 100644
---- a/package/util-linux/0003-blkdiscard-use-O_EXCL-add-force.patch
-+++ b/package/util-linux/0003-blkdiscard-use-O_EXCL-add-force.patch
-@@ -8,6 +8,7 @@ unwanted discard on mounted device.
- 
- Addresses: https://github.com/karelzak/util-linux/issues/915
- Signed-off-by: Karel Zak <kzak@redhat.com>
+diff --git a/package/util-linux/0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch b/package/util-linux/0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch
+new file mode 100644
+index 0000000000..183b725a32
+--- /dev/null
++++ b/package/util-linux/0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch
+@@ -0,0 +1,62 @@
++From 3cfde0370d3a8949df0c5bcf447cec6692910ed2 Mon Sep 17 00:00:00 2001
++From: Sami Kerola <kerolasa@iki.fi>
++Date: Sat, 15 Feb 2020 21:12:50 +0000
++Subject: [PATCH] kill: include sys/types.h before checking
++ SYS_pidfd_send_signal
++
++Including sys/types.h must happen before SYS_pidfd_send_signal is checked,
++because that header defines variable in normal conditions.  When sys/types.h
++does not have SYS_pidfd_send_signal then fallback is defined in config.h
++that is included by default, and has therefore worked fine before and after
++this change.
++
++Signed-off-by: Sami Kerola <kerolasa@iki.fi>
 +Signed-off-by: Carlos Santos <unixmania@gmail.com>
- ---
-  sys-utils/blkdiscard.8 |  5 +++++
-  sys-utils/blkdiscard.c | 11 ++++++++---
-diff --git a/package/util-linux/0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch b/package/util-linux/0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch
-index 40854e4b8d..eb28ae328b 100644
---- a/package/util-linux/0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch
-+++ b/package/util-linux/0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch
-@@ -8,6 +8,7 @@ It's not comfortable if you want to avoid dialog or template.
- 
- Addresses: https://github.com/karelzak/util-linux/issues/916
- Signed-off-by: Karel Zak <kzak@redhat.com>
++---
++ include/pidfd-utils.h | 18 ++++++++++--------
++ 1 file changed, 10 insertions(+), 8 deletions(-)
++
++diff --git a/include/pidfd-utils.h b/include/pidfd-utils.h
++index 593346576..0baedd2c9 100644
++--- a/include/pidfd-utils.h
+++++ b/include/pidfd-utils.h
++@@ -1,26 +1,28 @@
++ #ifndef UTIL_LINUX_PIDFD_UTILS
++ #define UTIL_LINUX_PIDFD_UTILS
++ 
++-#if defined(__linux__) && defined(SYS_pidfd_send_signal)
++-# include <sys/types.h>
+++#if defined(__linux__)
++ # include <sys/syscall.h>
+++# if defined(SYS_pidfd_send_signal)
+++#  include <sys/types.h>
++ 
++-# ifndef HAVE_PIDFD_OPEN
+++#  ifndef HAVE_PIDFD_OPEN
++ static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
++ 				    unsigned int flags)
++ {
++ 	return syscall(SYS_pidfd_send_signal, pidfd, sig, info, flags);
++ }
++-# endif
+++#  endif
++ 
++-# ifndef HAVE_PIDFD_SEND_SIGNAL
+++#  ifndef HAVE_PIDFD_SEND_SIGNAL
++ static inline int pidfd_open(pid_t pid, unsigned int flags)
++ {
++ 	return syscall(SYS_pidfd_open, pid, flags);
++ }
++-# endif
+++#  endif
++ 
++-# define UL_HAVE_PIDFD 1
+++#  define UL_HAVE_PIDFD 1
++ 
++-#endif /* __linux__ && SYS_pidfd_send_signal */
+++# endif	/* SYS_pidfd_send_signal */
+++#endif /* __linux__ */
++ #endif /* UTIL_LINUX_PIDFD_UTILS */
++-- 
++2.18.2
++
+diff --git a/package/util-linux/0007-include-cleanup-pidfd-inckudes.patch b/package/util-linux/0007-include-cleanup-pidfd-inckudes.patch
+new file mode 100644
+index 0000000000..73f3118b0a
+--- /dev/null
++++ b/package/util-linux/0007-include-cleanup-pidfd-inckudes.patch
+@@ -0,0 +1,40 @@
++From 0a4035ff2e4fd5b5ae0cf8f8665696c2aff53b75 Mon Sep 17 00:00:00 2001
++From: Karel Zak <kzak@redhat.com>
++Date: Tue, 10 Mar 2020 11:43:16 +0100
++Subject: [PATCH] include: cleanup pidfd inckudes
++
++Signed-off-by: Karel Zak <kzak@redhat.com>
 +Signed-off-by: Carlos Santos <unixmania@gmail.com>
- ---
-  libfdisk/docs/libfdisk-sections.txt |  1 +
-  libfdisk/src/dos.c                  | 29 ++++++++++++++++++-----------
-diff --git a/package/util-linux/0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch b/package/util-linux/0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch
-index cc96fbb1fa..fe435018f2 100644
---- a/package/util-linux/0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch
-+++ b/package/util-linux/0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch
-@@ -5,6 +5,7 @@ Subject: [PATCH] sfdisk: add --disk-id to change disk UUID/ID
- 
- Addresses: https://github.com/karelzak/util-linux/issues/916
- Signed-off-by: Karel Zak <kzak@redhat.com>
-+Signed-off-by: Carlos Santos <unixmania@gmail.com>
- ---
-  disk-utils/sfdisk.8 |  5 +++++
-  disk-utils/sfdisk.c | 54 +++++++++++++++++++++++++++++++++++++++++++++
++---
++ include/pidfd-utils.h | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/include/pidfd-utils.h b/include/pidfd-utils.h
++index 0baedd2c9..4a6c3a604 100644
++--- a/include/pidfd-utils.h
+++++ b/include/pidfd-utils.h
++@@ -3,10 +3,10 @@
++ 
++ #if defined(__linux__)
++ # include <sys/syscall.h>
++-# if defined(SYS_pidfd_send_signal)
+++# if defined(SYS_pidfd_send_signal) && defined(SYS_pidfd_open)
++ #  include <sys/types.h>
++ 
++-#  ifndef HAVE_PIDFD_OPEN
+++#  ifndef HAVE_PIDFD_SEND_SIGNAL
++ static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
++ 				    unsigned int flags)
++ {
++@@ -14,7 +14,7 @@ static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
++ }
++ #  endif
++ 
++-#  ifndef HAVE_PIDFD_SEND_SIGNAL
+++#  ifndef HAVE_PIDFD_OPEN
++ static inline int pidfd_open(pid_t pid, unsigned int flags)
++ {
++ 	return syscall(SYS_pidfd_open, pid, flags);
++-- 
++2.18.2
++
 -- 
 2.18.2
