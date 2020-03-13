@@ -1,25 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2020 16:12:04 +0100
-Subject: [Buildroot] [PATCH] package/eudev: Fix monitor starting
-In-Reply-To: <20200210064742.551472-1-joel@jms.id.au> (Joel Stanley's message
- of "Mon, 10 Feb 2020 17:17:42 +1030")
-References: <20200210064742.551472-1-joel@jms.id.au>
-Message-ID: <877dzo1e7v.fsf@dell.be.48ers.dk>
+Date: Fri, 13 Mar 2020 16:35:12 +0100
+Subject: [Buildroot] [git commit] package/libsigrok: drop remnants of
+ autoreconf
+In-Reply-To: <20200213221532.B8BF68E029@busybox.osuosl.org> (Peter Korsgaard's
+ message of "Thu, 13 Feb 2020 23:24:50 +0100")
+References: <20200213221532.B8BF68E029@busybox.osuosl.org>
+Message-ID: <8736ac1d5b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > When the kernel has CONFIG_SHMEM disabled /dev is a ramfs (instead of a
- > tmpfs) and the name_to_handle_at system call is not supported. This
- > causes eudev's monitor application to exit on startup.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=7ba7b9603b686524e1981e5251e9e25f5034d1bc
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Upstream eudev has added this fix which is not yet part of a release.
+ > libsigrok has not needed autoreconf since b428801934 (package/libsigrok:
+ > bump version to 0.4.0), 4 years ago now.
 
- > Signed-off-by: Joel Stanley <joel@jms.id.au>
+ > As such, we no longer need the autoreconf options, nor the dependency on
+ > the autoconf archive.
+
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2019.02.x and 2019.11.x, thanks.
 
