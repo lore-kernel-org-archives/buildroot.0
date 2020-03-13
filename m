@@ -1,42 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2020 17:19:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to v12.16.1
-In-Reply-To: <87sgimafyd.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Thu, 05 Mar 2020 18:07:06 +0100")
-References: <20200303191133.10404-1-aduskett@gmail.com>
- <20200303224315.2237b29c@windsurf.home>
- <87sgimafyd.fsf@dell.be.48ers.dk>
-Message-ID: <87a74kz0q1.fsf@dell.be.48ers.dk>
+Date: Fri, 13 Mar 2020 17:20:32 +0100
+Subject: [Buildroot] [git commit] package/nodejs: security bump to
+ version 12.16.0
+In-Reply-To: <20200218024001.BC3F38E3F3@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Tue, 18 Feb 2020 03:51:37 +0100")
+References: <20200218024001.BC3F38E3F3@busybox.osuosl.org>
+Message-ID: <875zf8z0of.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
-
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
- >> Hello Adam,
- >> On Tue,  3 Mar 2020 11:11:33 -0800
- >> aduskett at gmail.com wrote:
 
- >>> From: Adam Duskett <Aduskett@gmail.com>
- >>> 
- >>> Tested on Debian 9 and Ubuntu 18.04
- >>> 
- >>> Fixes:
- >>> http://autobuild.buildroot.net/results/9d3545a76c4f5c06debf319687498d662a53fafb
- >>> http://autobuild.buildroot.net/results/4da6c695b8ceca0a6eee2481a1b873a46676d0f5
+ > commit: https://git.buildroot.net/buildroot/commit/?id=61810db5187e6fad32e08214ec12b43a1c5f9b5a
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Are you positive that this bump fixes the ICU issues? I.e did you
- >> reproduce the ICU issues before this version bump, and confirm they
- >> disappeared solely because of the version bump?
+ > Fixes the following security issues (12.15.0):
 
- > Committed to master after dropping the fixes as discussed on IRC and
- > extending the commit message info about the regressions fixed in
- > 12.16.1, thanks.
+ > - CVE-2019-15606: HTTP header values do not have trailing OWS trimmed
+
+ > - CVE-2019-15605: HTTP request smuggling using malformed Transfer-Encoding
+ >   header
+
+ > - CVE-2019-15604: Remotely trigger an assertion on a TLS server with a
+ >   malformed certificate string
+
+ > For more details, see the advisory:
+ > https://nodejs.org/en/blog/vulnerability/february-2020-security-releases/
+
+ > On top of this, 12.16.0 brings a number of changes and bugfixes.
+
+ > Update the license hash for an addition of the (MIT) licensing terms for the
+ > uvwsai module:
+
+ > +
+ > +- uvwasi, located at deps/uvwasi, is licensed as follows:
+ > +  """
+ > +    MIT License
+ > +
+ > +    Copyright (c) 2019 Colin Ihrig and Contributors
+ > +
+ > +    Permission is hereby granted, free of charge, to any person obtaining a copy
+ > +    of this software and associated documentation files (the "Software"), to deal
+ > +    in the Software without restriction, including without limitation the rights
+ > +    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ > +    copies of the Software, and to permit persons to whom the Software is
+ > +    furnished to do so, subject to the following conditions:
+ > +
+ > +    The above copyright notice and this permission notice shall be included in all
+ > +    copies or substantial portions of the Software.
+ > +
+ > +    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ > +    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ > +    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ > +    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ > +    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ > +    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ > +    SOFTWARE.
+ > +  """
+
+ > While we are at it, adjust the white space in the .hash function to match
+ > the new agreements.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2019.11.x, thanks.
+
+2019.02.x is using nodejs 8.x which is now EOL. Given how close we are
+to EOL'ing 2019.02.x I have so far NOT bumped to the 12.x version.
 
 -- 
 Bye, Peter Korsgaard
