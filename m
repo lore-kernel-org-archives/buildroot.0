@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2020 16:04:00 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/eudev: Fix
+Date: Fri, 13 Mar 2020 16:03:18 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/eudev: Fix
  monitor starting for kernels w/o CONFIG_SHMEM
-Message-ID: <20200313145833.2DE0790AB4@busybox.osuosl.org>
+Message-ID: <20200313145838.910DE90AB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=327826fa28f31d75445d0d0a2b891de2d7f76607
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7e130e6ce960a666aab80c4c316f36e4c42359e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 When the kernel has CONFIG_SHMEM disabled, /dev is a ramfs (instead of a
 tmpfs) and the name_to_handle_at system call is not supported. This
