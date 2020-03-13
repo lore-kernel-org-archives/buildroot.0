@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2020 16:12:30 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/libsigrok: drop
+Date: Fri, 13 Mar 2020 16:22:44 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libsigrok: drop
  remnants of autoreconf
-Message-ID: <20200313152239.9020490AC0@busybox.osuosl.org>
+Message-ID: <20200313152231.D002F90ABC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3241943fbc99668dbefc254f47a0e8d44f01ea5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9a7c792b082ea91b63b7f49833b3731595e73c5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 libsigrok has not needed autoreconf since b428801934 (package/libsigrok:
 bump version to 0.4.0), 4 years ago now.
