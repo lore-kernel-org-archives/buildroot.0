@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2020 17:14:09 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] core: fix
+Date: Fri, 13 Mar 2020 17:14:03 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] core: fix
  packages-file-list.txt after an incremental build
-Message-ID: <20200313160313.5CB0B90B39@busybox.osuosl.org>
+Message-ID: <20200313160320.C58AE90B3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97d1c6551175915e5f9fa1717a459061022d61b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9c605fcdb16d7f7bc601ff61136b1a6369f91036
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 The package instrumentation step 'step_pkg_size' is populating the files:
     output/build/packages-file-list.txt
@@ -58,10 +58,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 29 insertions(+), 5 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 4038a9e3fd..4449c1bfbf 100644
+index e1cadd2768..2aa32029af 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -807,6 +807,16 @@ endif # merged /usr
+@@ -804,6 +804,16 @@ endif # merged /usr
  
  	touch $(TARGET_DIR)/usr
  
@@ -79,7 +79,7 @@ index 4038a9e3fd..4449c1bfbf 100644
  target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
  	@rm -f $(ROOTFS_COMMON_TAR)
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 1ac7f7877e..8ba1747d07 100644
+index 635040c2a0..33f5228904 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
 @@ -57,6 +57,23 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
