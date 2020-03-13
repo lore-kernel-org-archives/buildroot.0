@@ -1,45 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2020 16:22:44 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libsigrok: drop
- remnants of autoreconf
-Message-ID: <20200313152231.D002F90ABC@busybox.osuosl.org>
+Date: Fri, 13 Mar 2020 16:39:13 +0100
+Subject: [Buildroot] [PATCH v2] package/dovecot: security bump to
+ version 2.3.9.3
+In-Reply-To: <20200213201933.3124-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 13 Feb 2020 21:19:32 +0100")
+References: <20200213201933.3124-1-peter@korsgaard.com>
+Message-ID: <87y2s4z2la.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a7c792b082ea91b63b7f49833b3731595e73c5e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-libsigrok has not needed autoreconf since b428801934 (package/libsigrok:
-bump version to 0.4.0), 4 years ago now.
+ > Fixes the following security issues:
+ > - CVE-2020-7046: Truncated UTF-8 can be used to DoS submission-login and
+ >   lmtp processes
+ >   lib-smtp doesn't handle truncated command parameters properly, resulting
+ >   in infinite loop taking 100% CPU for the process.  This happens for LMTP
+ >   (where it doesn't matter so much) and also for submission-login where
+ >   unauthenticated users can trigger it.
 
-As such, we no longer need the autoreconf options, nor the dependency on
-the autoconf archive.
+ > - CVE-2020-7957: Specially crafted mail can crash snippet generation
+ >   Snippet generation crashes if:
+ >   - message is large enough that message-parser returns multiple body
+ >     blocks
+ >   - The first block(s) don't contain the full snippet (e.g.  full of
+ >     whitespace)
+ >   - input ends with '>'
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7ba7b9603b686524e1981e5251e9e25f5034d1bc)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libsigrok/libsigrok.mk | 2 --
- 1 file changed, 2 deletions(-)
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ > Changes since v1:
+ >  - Fix subject
+ >  - Drop unicode from commit text
 
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index aa79191e94..e06aaf6172 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -39,9 +39,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
- LIBSIGROK_CONF_OPTS += --enable-cxx
--LIBSIGROK_AUTORECONF_OPTS += -I $(HOST_DIR)/share/autoconf-archive
- LIBSIGROK_DEPENDENCIES += \
--	host-autoconf-archive \
- 	glibmm \
- 	host-doxygen \
- 	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+Committed to 2019.02.x and 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
