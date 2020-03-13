@@ -1,64 +1,113 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2020 17:22:36 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/cog: add patch
- fixing cog segfault
-Message-ID: <20200313161032.9684C90B48@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 13 Mar 2020 18:24:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-gobject: bump version to
+ 3.36.0
+In-Reply-To: <20200312194717.3787182-1-aduskett@gmail.com>
+References: <20200312194717.3787182-1-aduskett@gmail.com>
+Message-ID: <20200313172437.GK705@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5f9003927345c85c477c46633d6ec73276cad52
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+Adan, All,
 
-Fixes:
-Thread 1 "cog" received signal SIGSEGV, Segmentation fault.
-xkb_state_update_mask (state=0x0, base_mods=0, latched_mods=0, locked_mods=0, base_group=base_group at entry=0, latched_group=latched_group at entry=0, locked_group=0) at ../src/state.c:814
-814	    prev_components = state->components;
+On 2020-03-12 12:47 -0700, aduskett at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Other changes:
+>   - Convert the package to a meson package.
+>   - Remove 0001-add-PYTHON_INCLUDES-override.patch as it no longer applies.
+>   - Add gobject-introspection as a dependency.
+>   - Add the package under myself in the DEVELOPERS file.
+> 
+> Because gobject-introspection is now a dependency of python-gobject, the test
+> must be updated at the same time.
+> 
+>  - Change TestPythonPy2Gobject to TestPythonPy3Gobject as
+>    gobject-introspection requires python3.
+> 
+>  - Refactor test_python_gobject.py to no longer inherit the
+>    TestPythonPackageBase class, as this class uses a base config that does not
+>    support gobject-introspection.
+> 
+>  - Update sample_python_gobject to use Glib to find the path of sh.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 285e54cfdea294284e1f7c53adfe0b46190ec609)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...xkb_data.state-is-not-null-before-calling.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch b/package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
-new file mode 100644
-index 0000000000..4e8d4ad121
---- /dev/null
-+++ b/package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
-@@ -0,0 +1,30 @@
-+From 9f1f1e64b65e6680d5cdedf5a3b753ef85fc01f4 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Tue, 18 Feb 2020 01:20:50 -0700
-+Subject: [PATCH] fdo: ensure xkb_data.state is not null before calling
-+ xkb_state_update_mask (#180)
-+
-+[james.hilliard1 at gmail.com: backport from upstream commit
-+9f1f1e64b65e6680d5cdedf5a3b753ef85fc01f4]
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+---
-+ platform/cog-platform-fdo.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/platform/cog-platform-fdo.c b/platform/cog-platform-fdo.c
-+index 36177fc..e6f1cb5 100644
-+--- a/platform/cog-platform-fdo.c
-++++ b/platform/cog-platform-fdo.c
-+@@ -894,6 +894,9 @@ keyboard_on_modifiers (void *data,
-+                        uint32_t mods_locked,
-+                        uint32_t group)
-+ {
-++    if (xkb_data.state == NULL)
-++        return;
-++
-+     xkb_state_update_mask (xkb_data.state,
-+                            mods_depressed,
-+                            mods_latched,
-+-- 
-+2.20.1
-+
+However, see below for a comment I'd like you address in a followup
+patch...
+
+[--SNIP--]
+> diff --git a/support/testing/tests/package/test_python_gobject.py b/support/testing/tests/package/test_python_gobject.py
+> index 0a59447adb..a673d554a4 100644
+> --- a/support/testing/tests/package/test_python_gobject.py
+> +++ b/support/testing/tests/package/test_python_gobject.py
+> @@ -1,11 +1,33 @@
+> +import os
+>  from tests.package.test_python import TestPythonPackageBase
+>  
+> -
+> -class TestPythonPy2Gobject(TestPythonPackageBase):
+> +class TestPythonPy3Gobject(TestPythonPackageBase):
+>      __test__ = True
+> -    config = TestPythonPackageBase.config + \
+> +    config = \
+>          """
+> -        BR2_PACKAGE_PYTHON=y
+> +        BR2_aarch64=y
+> +        BR2_TOOLCHAIN_EXTERNAL=y
+> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+> +        BR2_LINUX_KERNEL=y
+
+Why do you need to build a custom kernel? Can't you use the prebuilt
+builtin kernel? See support/testing/tests/init/test_busybox.py and
+support/testing/tests/init/base.py for an example how the built-in
+kernel is used.
+
+I still decided to apply this patch, because it provides a runtime-test
+to test gobject-introspection, which is a very welcome addition.
+
+Regards,
+Yann E. MORIN.
+
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+> +        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +        BR2_TARGET_ROOTFS_CPIO=y
+> +        BR2_TARGET_ROOTFS_CPIO_GZIP=y
+> +        BR2_PACKAGE_GOBJECT_INTROSPECTION=y
+> +        BR2_PACKAGE_PYTHON3=y
+>          BR2_PACKAGE_PYTHON_GOBJECT=y
+>          """
+> +
+> +    def login(self):
+> +        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
+> +        kern = os.path.join(self.builddir, "images", "Image")
+> +        self.emulator.boot(arch="aarch64",
+> +                           kernel=kern,
+> +                           kernel_cmdline=["console=ttyAMA0"],
+> +                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
+> +        self.emulator.login()
+> +
+>      sample_scripts = ["tests/package/sample_python_gobject.py"]
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
