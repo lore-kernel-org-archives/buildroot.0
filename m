@@ -1,108 +1,178 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 13 Mar 2020 22:39:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rdesktop: bump to version 1.9.0
-Message-ID: <20200313213931.1436698-1-fontaine.fabrice@gmail.com>
+Date: Fri, 13 Mar 2020 22:50:15 +0100
+Subject: [Buildroot] [PATCH v2, 1/1] package/linphone: bump to version 4.3.1
+Message-ID: <20200313215015.1437465-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Retrieve official tarball and so remove autoreconf
-- xlib_Xcursor is a mandatory dependency since
-  https://github.com/rdesktop/rdesktop/commit/6dd85edc6f8293acd100b34add1405ea5a744111
-- libtasn1 is a mandatory dependency since
-  https://github.com/rdesktop/rdesktop/commit/673b267e665642def474f228142e46b18d195e01
-- nettle is a mandatory dependency since
-  https://github.com/rdesktop/rdesktop/commit/00d9e0c4c806c1d5d21ec7865f03cafe9acbeab3
-- gnutls is a mandatory dependency instead of openssl since
-  https://github.com/rdesktop/rdesktop/commit/166d1bc14d34c20dd0c640571a749a6599180367
-- pulseaudio is an optional dependency since
-  https://github.com/rdesktop/rdesktop/commit/9b98c3b2296f07b99b94aceb2c19131f32bde476
-- iconv is mandatory since
-  https://github.com/rdesktop/rdesktop/commit/2ea3f69873d18d07ef79c724c656d25b9d63a114
+- Update site to get latest release
+- License is GPL-3.0+ since version 4.3.0 and
+  https://gitlab.linphone.org/BC/public/liblinphone/commit/2bc924c184e2f00f1be3f82a736bccaeacce106e
+- Switch to cmake-infrastructure
+- Remove most of the existing dependencies (alsa, speex, libupnp, ...)
+  as they are now only managed in mediatreamer
+- Add external dependencies: belr, belle-sip, libxml2, mediastreamer,
+  sqlite
+- This bump is needed as current linphone does not build with latest
+  libeXosip2
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ed8bdcbfb7d453ed7d436bada35417ee305e6ac9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rdesktop/Config.in     | 12 +++++++++++-
- package/rdesktop/rdesktop.hash |  2 +-
- package/rdesktop/rdesktop.mk   | 20 ++++++++++++++------
- 3 files changed, 26 insertions(+), 8 deletions(-)
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Drop unneeded libgtk2 dependency
+ - No change made on video support as video was never supported in
+   buildroot as stated in Config.in and in commit history
 
-diff --git a/package/rdesktop/Config.in b/package/rdesktop/Config.in
-index 0335bee2a0..a52aa3de2d 100644
---- a/package/rdesktop/Config.in
-+++ b/package/rdesktop/Config.in
-@@ -1,9 +1,15 @@
- config BR2_PACKAGE_RDESKTOP
- 	bool "rdesktop"
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS #gnutls
-+	depends on BR2_USE_WCHAR # gnutls
- 	depends on BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_GNUTLS
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	select BR2_PACKAGE_LIBTASN1
-+	select BR2_PACKAGE_NETTLE
- 	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_XLIB_LIBXT
- 	help
- 	  rdesktop is an open source client for Windows NT Terminal
-@@ -12,3 +18,7 @@ config BR2_PACKAGE_RDESKTOP
- 	  present the user's NT desktop.
- 
- 	  http://rdesktop.sf.net/
-+
-+comment "rdesktop needs a toolchain w/ wchar, dynamic library"
+ package/linphone/Config.in     | 26 ++++++++----
+ package/linphone/linphone.hash |  4 +-
+ package/linphone/linphone.mk   | 76 ++++++++++++++--------------------
+ 3 files changed, 51 insertions(+), 55 deletions(-)
+
+diff --git a/package/linphone/Config.in b/package/linphone/Config.in
+index 06eb059cfd..c7683b829e 100644
+--- a/package/linphone/Config.in
++++ b/package/linphone/Config.in
+@@ -1,11 +1,17 @@
+ config BR2_PACKAGE_LINPHONE
+ 	bool "linphone"
+-	depends on BR2_INSTALL_LIBSTDCPP # mediastreamer (bundled)
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # ortp (bundled)
+-	depends on BR2_USE_MMU # libeXosip2
+-	select BR2_PACKAGE_LIBEXOSIP2
+-	select BR2_PACKAGE_SPEEX
+-	select BR2_PACKAGE_SPEEXDSP
 +	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-diff --git a/package/rdesktop/rdesktop.hash b/package/rdesktop/rdesktop.hash
-index d42ab59be1..f9715d2a47 100644
---- a/package/rdesktop/rdesktop.hash
-+++ b/package/rdesktop/rdesktop.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ffb9f8e2f0b7a06e383e550698bdc9734ae33eb3ec971b0a094078434a4bba6d  rdesktop-1.8.6.tar.gz
-+sha256  473c2f312391379960efe41caad37852c59312bc8f100f9b5f26609ab5704288  rdesktop-1.9.0.tar.gz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/rdesktop/rdesktop.mk b/package/rdesktop/rdesktop.mk
-index f40521d2b1..672d85b5c5 100644
---- a/package/rdesktop/rdesktop.mk
-+++ b/package/rdesktop/rdesktop.mk
-@@ -4,18 +4,26 @@
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS # belle-sip, mediastreamer
++	depends on BR2_TOOLCHAIN_HAS_THREADS # belr, belle-sip, mediastreamer
++	# belr, belle-sip, mediastreamer
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++	depends on BR2_USE_WCHAR # belle-sip
++	select BR2_PACKAGE_BELLE_SIP
++	select BR2_PACKAGE_BELR
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_MEDIASTREAMER
++	select BR2_PACKAGE_SQLITE
+ 	help
+ 	  Linphone is an internet phone or Voice Over IP phone (VoIP).
+ 
+@@ -24,6 +30,10 @@ config BR2_PACKAGE_LINPHONE
+ 
+ 	  http://www.linphone.org/
+ 
+-comment "linphone needs a toolchain w/ threads, C++"
++comment "linphone needs a toolchain w/ threads, C++, dynamic library, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++
++comment "linphone needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/linphone/linphone.hash b/package/linphone/linphone.hash
+index e5b9015ae5..9aa03078d2 100644
+--- a/package/linphone/linphone.hash
++++ b/package/linphone/linphone.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  05ba81223e9378c3bce8d33080213b9925af49bd9623cd9004eb3dd22ca9d2a0  linphone-3.6.1.tar.gz
++sha256  bfb195845ae23311667d5631c470310a63818fe46029cea2f1b77a5ed84e6e21  linphone-4.3.1.tar.gz
+ # Locally computed
+-sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
+diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
+index 4129c2a9e3..9fd69670e5 100644
+--- a/package/linphone/linphone.mk
++++ b/package/linphone/linphone.mk
+@@ -4,52 +4,38 @@
  #
  ################################################################################
  
--RDESKTOP_VERSION = 1.8.6
--RDESKTOP_SITE = $(call github,rdesktop,rdesktop,v$(RDESKTOP_VERSION))
--RDESKTOP_DEPENDENCIES = host-pkgconf openssl xlib_libX11 xlib_libXt \
-+RDESKTOP_VERSION = 1.9.0
-+RDESKTOP_SITE = \
-+	https://github.com/rdesktop/rdesktop/releases/download/v$(RDESKTOP_VERSION)
-+RDESKTOP_DEPENDENCIES = \
-+	host-pkgconf \
-+	gnutls \
-+	libtasn1 \
-+	nettle \
-+	xlib_libX11 \
-+	xlib_libXcursor \
-+	xlib_libXt \
- 	$(if $(BR2_PACKAGE_ALSA_LIB_PCM),alsa-lib) \
- 	$(if $(BR2_PACKAGE_LIBAO),libao) \
-+	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
- 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
-+	$(if $(BR2_PACKAGE_PULSEAUDIO),pulseaudio) \
- 	$(if $(BR2_PACKAGE_XLIB_LIBXRANDR),xlib_libXrandr)
--RDESKTOP_CONF_OPTS = --with-openssl=$(STAGING_DIR)/usr --disable-credssp
-+RDESKTOP_CONF_OPTS = --disable-credssp
- RDESKTOP_LICENSE = GPL-3.0+
- RDESKTOP_LICENSE_FILES = COPYING
--# From git
--RDESKTOP_AUTORECONF = YES
+-LINPHONE_VERSION_MAJOR = 3.6
+-LINPHONE_VERSION = $(LINPHONE_VERSION_MAJOR).1
+-LINPHONE_SITE = http://download-mirror.savannah.gnu.org/releases/linphone/$(LINPHONE_VERSION_MAJOR).x/sources
++LINPHONE_VERSION = 4.3.1
++LINPHONE_SITE = \
++	https://gitlab.linphone.org/BC/public/liblinphone/-/archive/$(LINPHONE_VERSION)
+ LINPHONE_CONF_OPTS = \
+-	--disable-strict --disable-video
+-# configure is out of sync causing deplibs linking issues
+-LINPHONE_AUTORECONF = YES
++	-DENABLE_ADVANCED_IM=OFF \
++	-DENABLE_CXX_WRAPPER=OFF \
++	-DENABLE_DB_STORAGE=OFF \
++	-DENABLE_LIME=OFF \
++	-DENABLE_LIME_X3DH=OFF \
++	-DENABLE_STRICT=OFF \
++	-DENABLE_TOOLS=OFF \
++	-DENABLE_TUTORIALS=OFF \
++	-DENABLE_UNIT_TESTS=OFF \
++	-DENABLE_VCARD=OFF \
++	-DENABLE_VIDEO=OFF
+ LINPHONE_INSTALL_STAGING = YES
+-LINPHONE_DEPENDENCIES = host-pkgconf libeXosip2 speex
+-LINPHONE_LICENSE = GPL-2.0+
+-LINPHONE_LICENSE_FILES = COPYING
+-
+-ifeq ($(BR2_arc),y)
+-# toolchain __arc__ define conflicts with libosip2 source
+-LINPHONE_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -U__arc__"
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_XORG7),yy)
+-LINPHONE_CONF_OPTS += --enable-gtk_ui
+-LINPHONE_DEPENDENCIES += libgtk2
+-else
+-LINPHONE_CONF_OPTS += --disable-gtk_ui
+-endif
+-
+-# needed for bundled mediastreamer2
+-LINPHONE_DEPENDENCIES += host-intltool host-gettext
+-
+-ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yy)
+-LINPHONE_CONF_OPTS += --enable-alsa
+-LINPHONE_DEPENDENCIES += alsa-lib
+-else
+-LINPHONE_CONF_OPTS += --disable-alsa
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBV4L),y)
+-LINPHONE_CONF_OPTS += --enable-libv4l1 --enable-libv4l2
+-LINPHONE_DEPENDENCIES += libv4l
+-else
+-LINPHONE_CONF_OPTS += --disable-libv4l1 --disable-libv4l2
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBUPNP),y)
+-LINPHONE_DEPENDENCIES += libupnp
+-LINPHONE_CONF_OPTS += --enable-upnp
+-else
+-LINPHONE_CONF_OPTS += --disable-upnp
++LINPHONE_DEPENDENCIES = \
++	belle-sip \
++	belr \
++	libxml2 \
++	mediastreamer \
++	sqlite \
++	$(if $(BR2_PACKAGE_ZLIB),zlib)
++LINPHONE_LICENSE = GPL-3.0+
++LINPHONE_LICENSE_FILES = LICENSE.txt
++
++ifeq ($(BR2_STATIC_LIBS),y)
++LINPHONE_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++LINPHONE_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=ON
++else ifeq ($(BR2_SHARED_LIBS),y)
++LINPHONE_CONF_OPTS += -DENABLE_STATIC=OFF -DENABLE_SHARED=ON
+ endif
  
- ifeq ($(BR2_PACKAGE_PCSC_LITE),y)
- RDESKTOP_DEPENDENCIES += pcsc-lite
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
 -- 
 2.25.1
