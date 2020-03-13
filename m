@@ -1,63 +1,106 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2020 16:38:55 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/dovecot: security
- bump to version 2.3.9.3
-Message-ID: <20200313152827.0DAEF8223D@busybox.osuosl.org>
+Date: Fri, 13 Mar 2020 16:38:37 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/dovecot: bump
+ version to 2.3.9.2
+Message-ID: <20200313152826.E8ADC90AD2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4542c745a6da39a6e2a011bd30755be4c529e083
+commit: https://git.buildroot.net/buildroot/commit/?id=1a01b100711598c8b8dc159db0171593750b2818
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issues:
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2019-October/000419.html
+https://dovecot.org/pipermail/dovecot-news/2019-December/000423.html
+https://dovecot.org/pipermail/dovecot-news/2019-December/000425.html
+https://dovecot.org/pipermail/dovecot-news/2019-December/000427.html
 
-- CVE-2020-7046: Truncated UTF-8 can be used to DoS submission-login and
-  lmtp processes
-  lib-smtp doesn't handle truncated command parameters properly, resulting
-  in infinite loop taking 100% CPU for the process.  This happens for LMTP
-  (where it doesn't matter so much) and also for submission-login where
-  unauthenticated users can trigger it.
+Please note that according to
+https://security-tracker.debian.org/tracker/CVE-2019-19722
+CVE-2019-19722 fixes a bug introduced in 2.3.9 so backporting this patch
+to older buildroot branches is not necessary.
 
-- CVE-2020-7957: Specially crafted mail can crash snippet generation
-  Snippet generation crashes if:
-  - message is large enough that message-parser returns multiple body
-    blocks
-  - The first block(s) don't contain the full snippet (e.g.  full of
-    whitespace)
-  - input ends with '>'
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 250535975d1f700a54c97cd31f4032b8cee5b52e)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8ff8d4fbd8c72d85e2d79e26e05b94e25b21909a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...tream-Do-not-build-static-test-iostream-s.patch | 30 ++++++++++++++++++++++
+ package/dovecot/dovecot.hash                       |  2 +-
+ package/dovecot/dovecot.mk                         |  6 ++++-
+ 3 files changed, 36 insertions(+), 2 deletions(-)
 
+diff --git a/package/dovecot/0002-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch b/package/dovecot/0002-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch
+new file mode 100644
+index 0000000000..686ed7383b
+--- /dev/null
++++ b/package/dovecot/0002-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch
+@@ -0,0 +1,30 @@
++From 40851dc3471809cabe8cc3f9b71980f8d82344ae Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 4 Jan 2020 14:39:39 +0100
++Subject: [PATCH] lib-ssl-iostream: Do not build static test-iostream-ssl
++
++Fixes broken static build:
++https://dovecot.org/pipermail/dovecot/2019-October/117326.html
++
++Patch sent upstream: https://github.com/dovecot/core/pull/111
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/lib-ssl-iostream/Makefile.am | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/src/lib-ssl-iostream/Makefile.am b/src/lib-ssl-iostream/Makefile.am
++index 94ead5cec..5aaea5d51 100644
++--- a/src/lib-ssl-iostream/Makefile.am
+++++ b/src/lib-ssl-iostream/Makefile.am
++@@ -46,7 +46,6 @@ test_libs = \
++ 	../lib/liblib.la
++ 
++ test_iostream_ssl_SOURCES = test-iostream-ssl.c
++-test_iostream_ssl_LDFLAGS = -static
++ test_iostream_ssl_LDADD = $(test_libs) $(SSL_LIBS) $(DLLIB)
++ test_iostream_ssl_DEPENDENCIES = $(test_libs)
++ 
++-- 
++2.20.1
++
 diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index e8c76b3c1e..e61937495a 100644
+index 3d78af0092..e8c76b3c1e 100644
 --- a/package/dovecot/dovecot.hash
 +++ b/package/dovecot/dovecot.hash
 @@ -1,5 +1,5 @@
  # Locally computed after checking signature
--sha256 4784fb98dd41b83888e4aa9908efcbcad2e04a254e97440863903c0c498486f9  dovecot-2.3.9.2.tar.gz
-+sha256 f89fb69423fc5bdc05955c8fc0607eab9e33511f9a643b721763db6156c49651  dovecot-2.3.9.3.tar.gz
+-sha256 666ce084760a47e601d49a9be3c7993c48789d332631e8dfb45f443b367b1260  dovecot-2.3.7.2.tar.gz
++sha256 4784fb98dd41b83888e4aa9908efcbcad2e04a254e97440863903c0c498486f9  dovecot-2.3.9.2.tar.gz
  sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
  sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
 diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 5b19fa6235..9f89ce6354 100644
+index 65c2bcef69..5b19fa6235 100644
 --- a/package/dovecot/dovecot.mk
 +++ b/package/dovecot/dovecot.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
  DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).9.2
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).9.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).7.2
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).9.2
  DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
  DOVECOT_INSTALL_STAGING = YES
  DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+@@ -14,6 +14,10 @@ DOVECOT_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+ 	openssl
++# 0002-lib-ssl-iostream-Do-not-build-static-test-iostream-s.patch
++DOVECOT_AUTORECONF = YES
++# add host-gettext for AM_ICONV macro
++DOVECOT_DEPENDENCIES += host-gettext
+ 
+ DOVECOT_CONF_ENV = \
+ 	RPCGEN=__disable_RPCGEN_rquota \
