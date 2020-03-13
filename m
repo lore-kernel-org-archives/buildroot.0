@@ -1,124 +1,88 @@
-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Fri, 13 Mar 2020 20:39:48 +0300
-Subject: [Buildroot] [PATCH] tinyproxy: New package
-Message-ID: <20200313173948.1604-1-alexander.i.mukhin@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 13 Mar 2020 21:27:12 +0100
+Subject: [Buildroot] [PATCH-for-2020.02.x v1] package/qt5xmlpatterns: enable
+ qml module
+Message-ID: <20200313202712.32587-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
----
- DEVELOPERS                                       |  3 +++
- package/Config.in                                |  1 +
- ...001-remove-docs-subdir-from-Makefile.am.patch | 15 +++++++++++++++
- package/tinyproxy/Config.in                      | 16 ++++++++++++++++
- package/tinyproxy/tinyproxy.hash                 |  2 ++
- package/tinyproxy/tinyproxy.mk                   | 15 +++++++++++++++
- 6 files changed, 52 insertions(+)
- create mode 100644 package/tinyproxy/0001-remove-docs-subdir-from-Makefile.am.patch
- create mode 100644 package/tinyproxy/Config.in
- create mode 100644 package/tinyproxy/tinyproxy.hash
- create mode 100644 package/tinyproxy/tinyproxy.mk
+qt5declarative:
+ - remove unneded dependency on qt5mlpatterns
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 10768a19ee..79a5e4d544 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -131,6 +131,9 @@ F:	package/minimodem/
- N:	Alexander Lukichev <alexander.lukichev@gmail.com>
- F:	package/openpgm/
+qt5xmlpatterns:
+ - add optional dependency on qt5declarative
+ - add target install step of the optional qml files
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5declarative/Config.in         |  1 -
+ package/qt5/qt5declarative/qt5declarative.mk |  2 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk | 11 +++++++++++
+ 3 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
+index 3a353a8326..d85f4c7136 100644
+--- a/package/qt5/qt5declarative/Config.in
++++ b/package/qt5/qt5declarative/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_QT5DECLARATIVE
+ 	bool "qt5declarative"
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+-	select BR2_PACKAGE_QT5XMLPATTERNS
+ 	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	help
+diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
+index 6210611961..200a5578f8 100644
+--- a/package/qt5/qt5declarative/qt5declarative.mk
++++ b/package/qt5/qt5declarative/qt5declarative.mk
+@@ -7,7 +7,7 @@
+ QT5DECLARATIVE_VERSION = $(QT5_VERSION)
+ QT5DECLARATIVE_SITE = $(QT5_SITE)
+ QT5DECLARATIVE_SOURCE = qtdeclarative-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5DECLARATIVE_VERSION).tar.xz
+-QT5DECLARATIVE_DEPENDENCIES = qt5base qt5xmlpatterns
++QT5DECLARATIVE_DEPENDENCIES = qt5base
+ QT5DECLARATIVE_INSTALL_STAGING = YES
  
-+N:	Alexander Mukhin <alexander.i.mukhin@gmail.com>
-+F:	package/tinyproxy/
-+
- N:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
- F:	package/mini-snmpd/
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+index 6ed247fd59..50f0c58931 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+@@ -21,6 +21,10 @@ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ QT5XMLPATTERNS_LICENSE += , BSD-3-Clause (examples)
+ endif
  
-diff --git a/package/Config.in b/package/Config.in
-index 146fc1bbc3..0da893801e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2169,6 +2169,7 @@ endif
- 	source "package/thttpd/Config.in"
- 	source "package/tinc/Config.in"
- 	source "package/tinyhttpd/Config.in"
-+	source "package/tinyproxy/Config.in"
- 	source "package/tinyssh/Config.in"
- 	source "package/tor/Config.in"
- 	source "package/traceroute/Config.in"
-diff --git a/package/tinyproxy/0001-remove-docs-subdir-from-Makefile.am.patch b/package/tinyproxy/0001-remove-docs-subdir-from-Makefile.am.patch
-new file mode 100644
-index 0000000000..646a4a53ba
---- /dev/null
-+++ b/package/tinyproxy/0001-remove-docs-subdir-from-Makefile.am.patch
-@@ -0,0 +1,15 @@
-+diff --git a/Makefile.am b/Makefile.am
-+index 4a3ead6..a12cb98 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -2,7 +2,6 @@ SUBDIRS = \
-+ 	src \
-+ 	data \
-+ 	etc \
-+-	docs \
-+ 	m4macros \
-+ 	tests
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
++QT5XMLPATTERNS_DEPENDENCIES = qt5declarative
++endif
 +
-+-- 
-+2.20.1
+ define QT5XMLPATTERNS_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
+ endef
+@@ -39,6 +43,12 @@ define QT5XMLPATTERNS_INSTALL_TARGET_LIBS
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
++define QT5XMLPATTERNS_INSTALL_TARGET_QMLS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/XmlListModel $(TARGET_DIR)/usr/qml/QtQuick
++endef
++endif
 +
-diff --git a/package/tinyproxy/Config.in b/package/tinyproxy/Config.in
-new file mode 100644
-index 0000000000..50f40ba524
---- /dev/null
-+++ b/package/tinyproxy/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_TINYPROXY
-+	bool "tinyproxy"
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Tinyproxy is a small, efficient HTTP/SSL proxy daemon released
-+	  under the GNU General Public License.  Tinyproxy is very
-+	  useful in a small network setting, where a larger proxy would
-+	  be too resource intensive.
-+	  
-+	  https://tinyproxy.github.io
-+
-+comment "tinyproxy needs a toolchain w/ threads, wchar"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
-diff --git a/package/tinyproxy/tinyproxy.hash b/package/tinyproxy/tinyproxy.hash
-new file mode 100644
-index 0000000000..2d439de517
---- /dev/null
-+++ b/package/tinyproxy/tinyproxy.hash
-@@ -0,0 +1,2 @@
-+# locally computed
-+sha256 ff4f3d1331d6d855d8b6ed794c22ab0a4285dd81fe9c98a7aa7ed591248d4ab9 tinyproxy-1.10.0.tar.gz
-diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
-new file mode 100644
-index 0000000000..3e0479d22b
---- /dev/null
-+++ b/package/tinyproxy/tinyproxy.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# tinyproxy
-+#
-+################################################################################
-+
-+TINYPROXY_VERSION = 1.10.0
-+TINYPROXY_SITE = $(call github,tinyproxy,tinyproxy,$(TINYPROXY_VERSION))
-+TINYPROXY_LICENSE = GPL-2.0
-+TINYPROXY_LICENSE_FILES = COPYING
-+
-+# building from a git clone
-+TINYPROXY_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ define QT5XMLPATTERNS_INSTALL_TARGET_EXAMPLES
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/xmlpatterns $(TARGET_DIR)/usr/lib/qt/examples/
+@@ -47,6 +57,7 @@ endif
+ 
+ define QT5XMLPATTERNS_INSTALL_TARGET_CMDS
+ 	$(QT5XMLPATTERNS_INSTALL_TARGET_LIBS)
++	$(QT5XMLPATTERNS_INSTALL_TARGET_QMLS)
+ 	$(QT5XMLPATTERNS_INSTALL_TARGET_EXAMPLES)
+ endef
+ 
 -- 
-2.20.1
+2.25.1
