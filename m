@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Mar 2020 17:01:31 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mfgtools: fix
+Date: Fri, 13 Mar 2020 17:01:10 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/mfgtools: fix
  build issue related to __time64_t
-Message-ID: <20200313155616.DCDCC90B20@busybox.osuosl.org>
+Message-ID: <20200313155620.E760490B23@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7a85cf70050279a9d1a388c10e44673e58a9cfc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cd21f5b55a5235b8229dc295ca5000654ef08f88
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 The tool fails to build on recent distros due to conflicting declaration
 of __time64_t. Adding a check around the declaration to avoid
