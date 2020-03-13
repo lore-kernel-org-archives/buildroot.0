@@ -1,120 +1,145 @@
-From: Mark Leo Sumadero <fryu771@gmail.com>
-Date: Fri, 13 Mar 2020 18:26:38 +0800
-Subject: [Buildroot] Help: error LONG_BIT definition appears wrong for
- platform
-Message-ID: <CAA0OSwgGcbzMe9o35FRqmLBZ5PFMx=1+fDYyiqq0yLk5YJyNpQ@mail.gmail.com>
+From: nimaim <nimaim@gmail.com>
+Date: Fri, 13 Mar 2020 08:52:25 -0500 (CDT)
+Subject: [Buildroot] 2020.02 Buildroot - Qt 5.12 missing XmlListModel
+In-Reply-To: <CALoSW646KA6PdN=0dLd3h5vnmn8UUN7R=riLTXM2kk10VqTb7Q@mail.gmail.com>
+References: <1584022828143-0.post@n4.nabble.com>
+ <20200312192352.08aa5102@gmx.net>
+ <CALoSW646KA6PdN=0dLd3h5vnmn8UUN7R=riLTXM2kk10VqTb7Q@mail.gmail.com>
+Message-ID: <1584107545723-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi I am a beginner on Buildroot and this is my first project
-I am currently working on raspberry pi 3B+. One of my project dependencies
-is mod_wsgi <https://modwsgi.readthedocs.io/en/develop/>.
-I am trying to cross compile mod_wsgi but I can't make it work.
+Here is my defconfig:
 
-*I have this error: *
+The target's embedded GPU does not support hardware acceleration with any
+recent Linux graphics driver so we build llvmpipe and use its swrast
+capabilities. All of this has worked flawlessly with Qt 5.9.X, albeit a
+little slow.
 
->>> mod-wsgi 61359e67448bdfc5fefb1692fd2a97f76394b20c Building
-PATH="/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/bin:/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/sbin:/home/falcon/.nvm/versions/node/v12.16.1/bin:/home/falcon/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
- /usr/bin/make -j9  -C
-/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/build/mod-wsgi-61359e67448bdfc5fefb1692fd2a97f76394b20c/
-/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/apxs
--c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m
--DNDEBUG  -Wc,-D_LARGEFILE_SOURCE -Wc,-D_LARGEFILE64_SOURCE
--Wc,-D_FILE_OFFSET_BITS=64 -Wc,-Os  src/server/mod_wsgi.c
-src/server/wsgi_*.c
--L/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/lib
--L/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/lib/python3.7/config-3.7m
- -lpython3.7m -lpthread -ldl  -lutil -lm
-/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/build-1/libtool
---silent --mode=compile
-/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
--prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -Os  -DLINUX -D_REENTRANT -D_GNU_SOURCE
- -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
- -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
+BR2_x86_i686=y
+BR2_DL_DIR="$(DOWNLOAD_DIR)"
+BR2_CCACHE=y
+BR2_CCACHE_DIR="$(HOME)/.test-buildroot-ccache"
+BR2_CCACHE_INITIAL_SETUP="--max-size=10G --set-config=direct_mode=false"
+BR2_OPTIMIZE_2=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_PACKAGE_GLIBC_UTILS=y
+BR2_BINUTILS_VERSION_2_33_X=y
+BR2_GCC_VERSION_9_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY=y
+BR2_TARGET_GENERIC_HOSTNAME="test"
+BR2_TARGET_GENERIC_ISSUE="Test Build"
+BR2_TARGET_GENERIC_PASSWD_SHA512=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_ROOTFS_DEVICE_TABLE="$(BR2_EXTERNAL)/board/test/device_table.txt"
+# BR2_TARGET_ENABLE_ROOT_LOGIN is not set
+BR2_SYSTEM_BIN_SH_BASH=y
+BR2_TARGET_TZ_INFO=y
+BR2_TARGET_LOCALTIME="America/New_York"
+BR2_ROOTFS_USERS_TABLES="$(BR2_EXTERNAL)/board/test/users"
+BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL)/board/test/fs-overlay"
+BR2_ROOTFS_POST_BUILD_SCRIPT="$(BR2_EXTERNAL)/scripts/post_build.sh"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.24"
+BR2_LINUX_KERNEL_PATCH="$(BR2_EXTERNAL)/board/test/patches/linux"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(BR2_EXTERNAL)/board/test/linux.config"
+BR2_LINUX_KERNEL_XZ=y
+BR2_PACKAGE_BUSYBOX_CONFIG="$(BR2_EXTERNAL)/board/test/busybox.config"
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_XZ=y
+BR2_PACKAGE_LTRACE=y
+BR2_PACKAGE_STRACE=y
+BR2_PACKAGE_BTRFS_PROGS=y
+BR2_PACKAGE_E2FSPROGS=y
+BR2_PACKAGE_NFS_UTILS=y
+BR2_PACKAGE_NTFS_3G=y
+BR2_PACKAGE_NTFS_3G_ENCRYPTED=y
+BR2_PACKAGE_NTFS_3G_NTFSPROGS=y
+BR2_PACKAGE_DEJAVU=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_LLVM=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_QT5=y
+BR2_PACKAGE_QT5BASE_CONCURRENT=y
+BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+BR2_PACKAGE_QT5BASE_LINUXFB=y
+BR2_PACKAGE_QT5BASE_XCB=y
+BR2_PACKAGE_QT5BASE_DEFAULT_QPA="xcb"
+BR2_PACKAGE_QT5BASE_TSLIB=y
+BR2_PACKAGE_QT5SERIALBUS=y
+BR2_PACKAGE_QT5SVG=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XLIB_LIBXFONT=y
+BR2_PACKAGE_XAPP_XINIT=y
+BR2_PACKAGE_XAPP_XINPUT=y
+BR2_PACKAGE_XAPP_XINPUT_CALIBRATOR=y
+BR2_PACKAGE_XAPP_XMODMAP=y
+BR2_PACKAGE_XAPP_XRANDR=y
+BR2_PACKAGE_XAPP_XSET=y
+BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
+BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_VESA=y
+BR2_PACKAGE_XTERM=y
+BR2_PACKAGE_OPENBOX=y
+BR2_PACKAGE_CRYPTSETUP=y
+# BR2_PACKAGE_EUDEV_ENABLE_HWDB is not set
+BR2_PACKAGE_PARTED=y
+BR2_PACKAGE_LIBSHA1=y
+BR2_PACKAGE_LIBSSH2=y
+BR2_PACKAGE_LIBCONFIG=y
+BR2_PACKAGE_LIBFUSE=y
+BR2_PACKAGE_LIBDRI2=y
+BR2_PACKAGE_LIBCURL=y
+BR2_PACKAGE_LIBCURL_CURL=y
+BR2_PACKAGE_LIBCURL_VERBOSE=y
+BR2_PACKAGE_LIBOPING=y
+BR2_PACKAGE_NSS_MDNS=y
+BR2_PACKAGE_LIBUNISTRING=y
+BR2_PACKAGE_HAVEGED=y
+BR2_PACKAGE_AVAHI=y
+BR2_PACKAGE_AVAHI_DAEMON=y
+BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY=y
+BR2_PACKAGE_DNSMASQ=y
+BR2_PACKAGE_IFUPDOWN=y
+BR2_PACKAGE_IPUTILS=y
+BR2_PACKAGE_NBD=y
+BR2_PACKAGE_NBD_SERVER=y
+BR2_PACKAGE_NBD_TRDUMP=y
+BR2_PACKAGE_NET_TOOLS=y
+BR2_PACKAGE_NETCAT_OPENBSD=y
+BR2_PACKAGE_OPENSSH=y
+BR2_PACKAGE_SOCAT=y
+BR2_PACKAGE_SUDO=y
+BR2_PACKAGE_ATTR=y
+BR2_PACKAGE_DAEMON=y
+BR2_PACKAGE_HTOP=y
+BR2_PACKAGE_PROCPS_NG=y
+BR2_PACKAGE_RSYSLOG=y
+BR2_PACKAGE_START_STOP_DAEMON=y
+BR2_PACKAGE_UTIL_LINUX_BINARIES=y
+BR2_PACKAGE_UTIL_LINUX_MOUNT=y
+BR2_PACKAGE_NANO=y
+BR2_TARGET_ROOTFS_CPIO_XZ=y
+BR2_TARGET_ROOTFS_INITRAMFS=y
+BR2_TARGET_ROOTFS_ISO9660=y
+BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU="$(BR2_EXTERNAL)/board/test/syslinux-config/isolinux.cfg"
+BR2_TARGET_ROOTFS_ISO9660_HYBRID=y
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_TARGET_SYSLINUX=y
+# Custom packages removed
 
--I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
--I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../../../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
--I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DNDEBUG
- -c -o src/server/mod_wsgi.lo src/server/mod_wsgi.c && touch
-src/server/mod_wsgi.slo
-In file included from
-/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m/Python.h:53:0,
-                 from src/server/wsgi_python.h:24,
-                 from src/server/mod_wsgi.c:22:
-/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m/pyport.h:699:2:
-error: #error "LONG_BIT definition appears wrong for platform (bad
-gcc/glibc config?)."
- #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc
-config?)."
-  ^~~~~
-apxs:Error: Command failed with rc=65536
 
 
-*Here is my .mk file*
-
-################################################################################
-#
-# mod-wsgi
-#
-################################################################################
-
-MOD_WSGI_VERSION = 61359e67448bdfc5fefb1692fd2a97f76394b20c
-MOD_WSGI_SITE = $(call github,GrahamDumpleton,mod_wsgi,$(MOD_WSGI_VERSION))
-MOD_WSGI_LICENSE = Apache-2.0
-MOD_WSGI_LICENSE_FILES = LICENSE
-MOD_WSGI_DEPENDENCIES = apache
-
-MOD_WSGI_CONF_OPTS = \
---oldincludedir=$(STAGING_DIR)/usr/include/ \
---includedir=$(STAGING_DIR)/usr/include/ \
---with-apxs=$(STAGING_DIR)/usr/bin/apxs
-
-ifeq ($(BR2_PACKAGE_PYTHON3),y)
-MOD_WSGI_DEPENDENCIES += python3
-MOD_WSGI_CONF_ENV += \
-LDFLAGS='-L$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)' \
-CPPFLAGS='-I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)' \
-CFLAGS='-I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)'
-# CFLAGS='$(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS))
--I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)'
-# MOD_WSGI_CONF_OPTS += \
-# --with-python="$(STAGING_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)"
-else
-MOD_WSGI_DEPENDENCIES += python
-MOD_WSGI_CONF_ENV += \
-LDFLAGS='-L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)' \
-CPPFLAGS='-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)' \
-CFLAGS='-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)'
-# CFLAGS='$(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS))
--I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)'
-# MOD_WSGI_CONF_OPTS += \
-# --with-python="$(STAGING_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)"
-endif
-
-# ifeq ($(BR2_PACKAGE_PYTHON3),y)
-# MOD_WSGI_DEPENDENCIES += python3
-# MOD_WSGI_CONF_OPTS += \
-# --with-python="$(STAGING_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)/"
-# else
-# MOD_WSGI_DEPENDENCIES += python
-# MOD_WSGI_CONF_OPTS += \
-# --with-python="$(STAGING_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)/"
-# endif
-
-# MOD_WSGI_EXCLUDES = $(TARGET_LIBEXECDIR)/*
-
-# MOD_WSGI_AUTORECONF = YES
-
-$(eval $(autotools-package))
-
-Any idea why the build is failing. Thanks
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200313/c33ef34b/attachment.html>
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
