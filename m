@@ -1,93 +1,33 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 13 Mar 2020 21:44:15 +0100
-Subject: [Buildroot] [PATCH-for-2020.02.x v2] package/qt5xmlpatterns: enable
- qml module
-Message-ID: <20200313204415.2036-1-ps.report@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 13 Mar 2020 21:56:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dropwatch: remove license comment
+Message-ID: <20200313205616.1132768-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qt5declarative:
- - remove unneded dependency on qt5mlpatterns
+This comment is not needed since bump to version 1.5.2 and
+https://github.com/nhorman/dropwatch/commit/83a2b4e9bfe5ad26f59c15da5f77e86fbc0a6701
 
-qt5xmlpatterns:
- - add optional dependency on qt5declarative
- - add target install step of the optional qml files
-
-Reported-by: Nimai Mahajan <nimaim@gmail.com>
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
-  - add Reported-by
-  - s/=/+=/ for qt5declarative dependency
----
- package/qt5/qt5declarative/Config.in         |  1 -
- package/qt5/qt5declarative/qt5declarative.mk |  2 +-
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk | 11 +++++++++++
- 3 files changed, 12 insertions(+), 2 deletions(-)
+ package/dropwatch/dropwatch.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
-index 3a353a8326..d85f4c7136 100644
---- a/package/qt5/qt5declarative/Config.in
-+++ b/package/qt5/qt5declarative/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_QT5DECLARATIVE
- 	bool "qt5declarative"
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
--	select BR2_PACKAGE_QT5XMLPATTERNS
- 	select BR2_PACKAGE_QT5BASE
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	help
-diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
-index 6210611961..200a5578f8 100644
---- a/package/qt5/qt5declarative/qt5declarative.mk
-+++ b/package/qt5/qt5declarative/qt5declarative.mk
-@@ -7,7 +7,7 @@
- QT5DECLARATIVE_VERSION = $(QT5_VERSION)
- QT5DECLARATIVE_SITE = $(QT5_SITE)
- QT5DECLARATIVE_SOURCE = qtdeclarative-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5DECLARATIVE_VERSION).tar.xz
--QT5DECLARATIVE_DEPENDENCIES = qt5base qt5xmlpatterns
-+QT5DECLARATIVE_DEPENDENCIES = qt5base
- QT5DECLARATIVE_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-index 6ed247fd59..5ce4064cb6 100644
---- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-+++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
-@@ -21,6 +21,10 @@ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- QT5XMLPATTERNS_LICENSE += , BSD-3-Clause (examples)
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
-+QT5XMLPATTERNS_DEPENDENCIES += qt5declarative
-+endif
-+
- define QT5XMLPATTERNS_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
- endef
-@@ -39,6 +43,12 @@ define QT5XMLPATTERNS_INSTALL_TARGET_LIBS
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-+define QT5XMLPATTERNS_INSTALL_TARGET_QMLS
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/XmlListModel $(TARGET_DIR)/usr/qml/QtQuick
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- define QT5XMLPATTERNS_INSTALL_TARGET_EXAMPLES
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/xmlpatterns $(TARGET_DIR)/usr/lib/qt/examples/
-@@ -47,6 +57,7 @@ endif
- 
- define QT5XMLPATTERNS_INSTALL_TARGET_CMDS
- 	$(QT5XMLPATTERNS_INSTALL_TARGET_LIBS)
-+	$(QT5XMLPATTERNS_INSTALL_TARGET_QMLS)
- 	$(QT5XMLPATTERNS_INSTALL_TARGET_EXAMPLES)
- endef
- 
+diff --git a/package/dropwatch/dropwatch.mk b/package/dropwatch/dropwatch.mk
+index 0ee9e5e0f6..4cebe041db 100644
+--- a/package/dropwatch/dropwatch.mk
++++ b/package/dropwatch/dropwatch.mk
+@@ -7,8 +7,6 @@
+ DROPWATCH_VERSION = 1.5.2
+ DROPWATCH_SITE = $(call github,nhorman,dropwatch,v$(DROPWATCH_VERSION))
+ DROPWATCH_DEPENDENCIES = libnl readline libpcap host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+-# Until upstream updates their tree with a proper license
+-# blurb: https://github.com/nhorman/dropwatch/issues/14
+ DROPWATCH_LICENSE = GPL-2.0+
+ DROPWATCH_LICENSE_FILES = COPYING
+ # From git
 -- 
 2.25.1
