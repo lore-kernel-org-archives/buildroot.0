@@ -1,105 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 17:41:37 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/brltty: use host
- pkg-config when building host tools
-Message-ID: <20200314163139.8C90B8378A@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 17:47:41 +0100
+Subject: [Buildroot] [PATCH] package/proftpd: security bump to version
+ 1.3.6c
+In-Reply-To: <20200227135457.13710-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 27 Feb 2020 14:54:56 +0100")
+References: <20200227135457.13710-1-peter@korsgaard.com>
+Message-ID: <87wo7mvq6q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2446e80b84a7df7a05af454b569d320b969f0528
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-brltty builds host tools which rely on the expat library, and
-pkg-config is used to detect the expat library.
+ > Fixes the following security issues:
+ > - CVE-2020-9273: In ProFTPD 1.3.7, it is possible to corrupt the memory pool
+ >   by interrupting the data transfer channel.  This triggers a use-after-free
+ >   in alloc_pool in pool.c, and possible remote code execution.
 
-Since commit cd16e18584066d2817d3acb3822e173f9f23455e ("pkgconf:
-always keep system libs"), the wrapper script added
---keep-system-libs, which adds a -L$(STAGING_DIR)/usr/lib to the
-pkg-config results instead of just -lexpat. So, previously, by chance,
-the pkg-config result for the target expat was "good enough" for the
-host expat as well. But now that -L$(STAGING_DIR)/usr/lib is added, it
-breaks the build in all sort of ways as obviously building host
-binaries with the library search path pointing to $(STAGING_DIR) is
-not a good idea.
+ > And additionally, fixes a number of other issues.  For details, see the
+ > release notes:
 
-To fix that, this commit adjusts the brltty build system so that the
-PKG_CONFIG_FOR_BUILD variable is used when using pkg-config to build
-host binaries.
+ > https://github.com/proftpd/proftpd/blob/1.3.6/RELEASE_NOTES
 
-Fixes:
+ > This also bumps the bundled libcap, so
+ > 0001-fix-kernel-header-capability-version.patch can be dropped.
 
-  http://autobuild.buildroot.net/results/5a64dfb845389882c366b6c91aaf5868c090a802/
+ > While we are at it, adjust the white space in the .hash function to match
+ > the new agreements.
 
-Many thanks to the initial work from Fabrice Fontaine at
-http://patchwork.ozlabs.org/patch/1238163/ which provided an initial
-starting point for this investigation.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7bed3ee409661107b6ce2a05c48adcc7f79258fa)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...so-pass-PKG_CONFIG_FOR_BUILD-to-the-nativ.patch | 38 ++++++++++++++++++++++
- package/brltty/brltty.mk                           |  3 ++
- 2 files changed, 41 insertions(+)
+Committed to 2019.02.x and 2019.11.x, thanks.
 
-diff --git a/package/brltty/0003-mk4build-also-pass-PKG_CONFIG_FOR_BUILD-to-the-nativ.patch b/package/brltty/0003-mk4build-also-pass-PKG_CONFIG_FOR_BUILD-to-the-nativ.patch
-new file mode 100644
-index 0000000000..5839f78f3f
---- /dev/null
-+++ b/package/brltty/0003-mk4build-also-pass-PKG_CONFIG_FOR_BUILD-to-the-nativ.patch
-@@ -0,0 +1,38 @@
-+From 568e0d6070021a9b805ba1fe1543e4b43a073413 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 20 Feb 2020 00:23:35 +0100
-+Subject: [PATCH] mk4build: also pass PKG_CONFIG_FOR_BUILD to the native
-+ configure
-+
-+In commit 0414ad2b4e8978a14343d920a5a1f11da892eaf3, mk4build was
-+modified to pass a number of *_FOR_BUILD variables down to the
-+configure script called for building the native tools.
-+
-+However, this configure script also uses the pkg-config tool, and the
-+pkg-config to use for the native build and the cross build may be
-+different, so let's also pass PKG_CONFIG_FOR_BUILD down to the
-+sub-configure, as PKG_CONFIG, following the same logic as the other
-+variables.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream: https://github.com/brltty/brltty/pull/248
-+[Upstream patch is different, due to other upstream changes.]
-+---
-+ mk4build | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/mk4build b/mk4build
-+index 3c64963b7..ad88ee69c 100755
-+--- a/mk4build
-++++ b/mk4build
-+@@ -73,6 +73,7 @@ then
-+    CXXFLAGS=${CXXFLAGS_FOR_BUILD} \
-+    LDFLAGS=${LDFLAGS_FOR_BUILD} \
-+    LDLIBS=${LDLIBS_FOR_BUILD} \
-++   PKG_CONFIG=${PKG_CONFIG_FOR_BUILD} \
-+    "${sourceRoot}/configure" \
-+       --disable-api \
-+       --disable-gpm \
-+-- 
-+2.24.1
-+
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index 3ae8b899b8..c9936b1357 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -15,6 +15,9 @@ BRLTTY_LICENSE_FILES = LICENSE-LGPL README
- BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
- 	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
- 
-+BRLTTY_CONF_ENV = \
-+	PKG_CONFIG_FOR_BUILD=$(HOST_DIR)/bin/pkgconf
-+
- BRLTTY_CONF_OPTS = \
- 	--disable-java-bindings \
- 	--disable-lisp-bindings \
+-- 
+Bye, Peter Korsgaard
