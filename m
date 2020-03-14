@@ -1,49 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 14:47:07 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/sysklogd: fix
- daemon paths in systemd unit files
-Message-ID: <20200315133507.BA3FF87F77@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 14 Mar 2020 16:07:55 +0100
+Subject: [Buildroot] [git commit] package/kodi-screensaver-asterwave: bump
+ version to 3.0.4-Leia
+Message-ID: <20200315140204.917C7848E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5188824ce85f885a75c1e693231c7cd61556190
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8c7653be34914673a77e1bcf85a50ff203b7c63c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-They are at /sbin, not /usr/sbin.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sysklogd/klogd.service   | 2 +-
- package/sysklogd/syslogd.service | 2 +-
+ package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash | 2 +-
+ package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sysklogd/klogd.service b/package/sysklogd/klogd.service
-index c66795b449..b5dbb93d7d 100644
---- a/package/sysklogd/klogd.service
-+++ b/package/sysklogd/klogd.service
-@@ -2,7 +2,7 @@
- Description=Kernel Log Daemon
+diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
+index b05c9a1803..d469f8b013 100644
+--- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
++++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 ff018b5bdd353747a4e962c72ec622a74232e05eae1742a116259273f1db0552  kodi-screensaver-asterwave-3.0.3-Leia.tar.gz
++sha256 44fb4189afefec6ab5cff04d205425bed26b127c02625ae176b409cb67207e5f  kodi-screensaver-asterwave-3.0.4-Leia.tar.gz
+diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
+index 82996bc3e2..168bc88fdc 100644
+--- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
++++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- [Service]
--ExecStart=/usr/sbin/klogd -n
-+ExecStart=/sbin/klogd -n
- StandardOutput=null
- Restart=on-failure
- 
-diff --git a/package/sysklogd/syslogd.service b/package/sysklogd/syslogd.service
-index 70e4cff27e..adaac679f2 100644
---- a/package/sysklogd/syslogd.service
-+++ b/package/sysklogd/syslogd.service
-@@ -4,7 +4,7 @@ Requires=syslog.socket
- Wants=klogd.service
- 
- [Service]
--ExecStart=/usr/sbin/syslogd -m 0 -n
-+ExecStart=/sbin/syslogd -m 0 -n
- StandardOutput=null
- Restart=on-failure
+-KODI_SCREENSAVER_ASTERWAVE_VERSION = 3.0.3-Leia
++KODI_SCREENSAVER_ASTERWAVE_VERSION = 3.0.4-Leia
+ KODI_SCREENSAVER_ASTERWAVE_SITE = $(call github,xbmc,screensaver.asterwave,$(KODI_SCREENSAVER_ASTERWAVE_VERSION))
+ KODI_SCREENSAVER_ASTERWAVE_DEPENDENCIES = kodi libglu libsoil
  
