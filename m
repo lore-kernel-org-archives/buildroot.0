@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 17:34:19 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/armadillo: fix
+Date: Sat, 14 Mar 2020 17:33:38 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/armadillo: fix
  license
-Message-ID: <20200314162141.EF92383679@busybox.osuosl.org>
+Message-ID: <20200314162146.1D8DB81640@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd5710639c52fb43ddc88437685a5c40ced72c88
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ce3a9252f23aa7533f0dfea52fe2b41e13978827
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 License is Apache-2.0 since version 7.800:
 http://arma.sourceforge.net/license.html
