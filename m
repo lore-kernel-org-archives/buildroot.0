@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 18:49:42 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/pkg-generic.mk:
+Date: Sat, 14 Mar 2020 18:49:34 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/pkg-generic.mk:
  in image install, print message before pre-hooks
-Message-ID: <20200314173657.1EEA88393F@busybox.osuosl.org>
+Message-ID: <20200314173701.AC39B83946@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa2197c93cfe1e557dd1c28e2ae3ccbd26946e8e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=77630ddb880bfaca1919b2c0b633b8d6126e1686
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 In all steps, we print the message indicating the start of the step
 using the MESSAGE macro before running pre-hooks. Except in the image
@@ -27,7 +27,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 8ba1747d07..a5ed64e5f0 100644
+index 33f5228904..b4aa9f1b18 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
 @@ -333,8 +333,8 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
