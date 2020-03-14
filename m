@@ -1,142 +1,92 @@
-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Sat, 14 Mar 2020 13:23:23 +0300
-Subject: [Buildroot] [PATCH] package/tinyproxy: new package
-In-Reply-To: <20200313220548.666cb3ef@gmx.net>
-References: <20200313220548.666cb3ef@gmx.net>
-Message-ID: <20200314102323.1781-1-alexander.i.mukhin@gmail.com>
+From: Gao Xiang <hsiangkao@aol.com>
+Date: Sat, 14 Mar 2020 19:43:06 +0800
+Subject: [Buildroot] [PATCH RESEND 2/2] fs/erofs: add support for creating
+ erofs rootfs image
+In-Reply-To: <20200314114306.3289-1-hsiangkao@aol.com>
+References: <20200314114306.3289-1-hsiangkao@aol.com>
+Message-ID: <20200314114306.3289-2-hsiangkao@aol.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tinyproxy is a small, efficient HTTP/SSL proxy daemon.
+This patch makes possible to create rootfs image using
+EROFS filesystem.
 
-https://tinyproxy.github.io
-
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Signed-off-by: Gao Xiang <hsiangkao@aol.com>
 ---
- DEVELOPERS                                    |  3 +++
- package/Config.in                             |  1 +
- .../0001-Makefile.am-remove-docs-subdir.patch | 27 +++++++++++++++++++
- package/tinyproxy/Config.in                   | 16 +++++++++++
- package/tinyproxy/tinyproxy.hash              |  2 ++
- package/tinyproxy/tinyproxy.mk                | 15 +++++++++++
- 6 files changed, 64 insertions(+)
- create mode 100644 package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch
- create mode 100644 package/tinyproxy/Config.in
- create mode 100644 package/tinyproxy/tinyproxy.hash
- create mode 100644 package/tinyproxy/tinyproxy.mk
+ fs/Config.in       |  1 +
+ fs/erofs/Config.in | 24 ++++++++++++++++++++++++
+ fs/erofs/erofs.mk  | 17 +++++++++++++++++
+ 3 files changed, 42 insertions(+)
+ create mode 100644 fs/erofs/Config.in
+ create mode 100644 fs/erofs/erofs.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5394150e5a..a3df15d903 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -132,6 +132,9 @@ F:	package/minimodem/
- N:	Alexander Lukichev <alexander.lukichev@gmail.com>
- F:	package/openpgm/
- 
-+N:	Alexander Mukhin <alexander.i.mukhin@gmail.com>
-+F:	package/tinyproxy/
-+
- N:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
- F:	package/mini-snmpd/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 146fc1bbc3..0da893801e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2169,6 +2169,7 @@ endif
- 	source "package/thttpd/Config.in"
- 	source "package/tinc/Config.in"
- 	source "package/tinyhttpd/Config.in"
-+	source "package/tinyproxy/Config.in"
- 	source "package/tinyssh/Config.in"
- 	source "package/tor/Config.in"
- 	source "package/traceroute/Config.in"
-diff --git a/package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch b/package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch
+diff --git a/fs/Config.in b/fs/Config.in
+index 527051ef54..37a2aa21f8 100644
+--- a/fs/Config.in
++++ b/fs/Config.in
+@@ -5,6 +5,7 @@ source "fs/btrfs/Config.in"
+ source "fs/cloop/Config.in"
+ source "fs/cpio/Config.in"
+ source "fs/cramfs/Config.in"
++source "fs/erofs/Config.in"
+ source "fs/ext2/Config.in"
+ source "fs/f2fs/Config.in"
+ source "fs/initramfs/Config.in"
+diff --git a/fs/erofs/Config.in b/fs/erofs/Config.in
 new file mode 100644
-index 0000000000..e2a08678a3
+index 0000000000..dad2498a15
 --- /dev/null
-+++ b/package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch
-@@ -0,0 +1,27 @@
-+From 7ce6ee22057489d280e0ea5f6439edbbf0ad7ee2 Mon Sep 17 00:00:00 2001
-+From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-+Date: Sat, 14 Mar 2020 12:45:29 +0300
-+Subject: [PATCH] Makefile.am: remove docs subdir
-+
-+This avoids building the documentation, which requires asciidoc.
-+
-+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-+---
-+ Makefile.am | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index e9113c2..2fe3d54 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -2,7 +2,6 @@ SUBDIRS = \
-+ 	src \
-+ 	data \
-+ 	etc \
-+-	docs \
-+ 	m4macros \
-+ 	tests
-+ 
-+-- 
-+2.20.1
-+
-diff --git a/package/tinyproxy/Config.in b/package/tinyproxy/Config.in
-new file mode 100644
-index 0000000000..aec2ab81a8
---- /dev/null
-+++ b/package/tinyproxy/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_TINYPROXY
-+	bool "tinyproxy"
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
++++ b/fs/erofs/Config.in
+@@ -0,0 +1,24 @@
++config BR2_TARGET_ROOTFS_EROFS
++	bool "erofs root filesystem"
++	select BR2_PACKAGE_HOST_EROFS_UTILS
 +	help
-+	  Tinyproxy is a small, efficient HTTP/SSL proxy daemon released
-+	  under the GNU General Public License. Tinyproxy is very
-+	  useful in a small network setting, where a larger proxy would
-+	  be too resource intensive.
++	  Build a EROFS root filesystem. If you enable this option,
++	  you probably want to enable the erofs-utils package too.
 +
-+	  https://tinyproxy.github.io
++if BR2_TARGET_ROOTFS_EROFS
 +
-+comment "tinyproxy needs a toolchain w/ threads, wchar"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
-diff --git a/package/tinyproxy/tinyproxy.hash b/package/tinyproxy/tinyproxy.hash
++choice
++	prompt "Compression algorithm"
++	default BR2_TARGET_ROOTFS_EROFS_LZ4HC
++	help
++	  Select the primary compression algorithm to use when
++	  generating EROFS filesystem image.
++
++config BR2_TARGET_ROOTFS_EROFS_NONE
++	bool "none"
++
++config BR2_TARGET_ROOTFS_EROFS_LZ4HC
++	bool "lz4hc"
++
++endchoice
++endif # BR2_TARGET_ROOTFS_EROFS
+diff --git a/fs/erofs/erofs.mk b/fs/erofs/erofs.mk
 new file mode 100644
-index 0000000000..2d439de517
+index 0000000000..c9eb0d8e8f
 --- /dev/null
-+++ b/package/tinyproxy/tinyproxy.hash
-@@ -0,0 +1,2 @@
-+# locally computed
-+sha256 ff4f3d1331d6d855d8b6ed794c22ab0a4285dd81fe9c98a7aa7ed591248d4ab9 tinyproxy-1.10.0.tar.gz
-diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
-new file mode 100644
-index 0000000000..3ba3d7f664
---- /dev/null
-+++ b/package/tinyproxy/tinyproxy.mk
-@@ -0,0 +1,15 @@
++++ b/fs/erofs/erofs.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# tinyproxy
++# Build the erofs root filesystem image
 +#
 +################################################################################
 +
-+TINYPROXY_VERSION = 1.10.0
-+TINYPROXY_SITE = $(call github,tinyproxy,tinyproxy,$(TINYPROXY_VERSION))
-+TINYPROXY_LICENSE = GPL-2.0+
-+TINYPROXY_LICENSE_FILES = COPYING
++ROOTFS_EROFS_DEPENDENCIES = host-erofs-utils
 +
-+# building from a git clone
-+TINYPROXY_AUTORECONF = YES
++ifeq ($(BR2_TARGET_ROOTFS_EROFS_LZ4HC),y)
++ROOTFS_EROFS_ARGS += -zlz4hc
++endif
 +
-+$(eval $(autotools-package))
++define ROOTFS_EROFS_CMD
++	$(HOST_DIR)/bin/mkfs.erofs $(ROOTFS_EROFS_ARGS) $@ $(TARGET_DIR)
++endef
++
++$(eval $(rootfs))
 -- 
 2.20.1
