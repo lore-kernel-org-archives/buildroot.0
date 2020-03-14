@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Mar 2020 15:48:11 +0100
-Subject: [Buildroot] [git commit] package/kodi-audiodecoder-*: mass version
- bump
-Message-ID: <20200315140204.46203848E3@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 15:59:02 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-*: mass update of license
+ files
+Message-ID: <20200315140204.664DA80D95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=198cd48e80429dc0e760d10d459da581c0e4434d
+commit: https://git.buildroot.net/buildroot/commit/?id=d33aa248d3ce239a11b564828bde6e4b55350e0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Switch _LICENSE_FILES to debian/copyright instead of using a source
@@ -18,208 +18,413 @@ code file.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash     | 4 ++--
- package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk       | 4 ++--
- package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash   | 4 ++--
- package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk     | 4 ++--
- package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash     | 4 ++--
- package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk       | 4 ++--
- package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash     | 4 ++--
- package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk       | 4 ++--
- package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash     | 4 ++--
- package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk       | 4 ++--
- package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash   | 4 ++--
- package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk     | 4 ++--
- package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash | 4 ++--
- package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk   | 4 ++--
- 14 files changed, 28 insertions(+), 28 deletions(-)
+ package/kodi-pvr-argustv/kodi-pvr-argustv.hash                          | 2 +-
+ package/kodi-pvr-argustv/kodi-pvr-argustv.mk                            | 2 +-
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash                          | 2 +-
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk                            | 2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash                      | 2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk                        | 2 +-
+ package/kodi-pvr-filmon/kodi-pvr-filmon.hash                            | 2 +-
+ package/kodi-pvr-filmon/kodi-pvr-filmon.mk                              | 2 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash                      | 2 +-
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk                        | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.hash                                  | 2 +-
+ package/kodi-pvr-hts/kodi-pvr-hts.mk                                    | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash                    | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk                      | 2 +-
+ .../kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash    | 2 +-
+ package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk  | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash                            | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk                              | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash                          | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk                            | 2 +-
+ package/kodi-pvr-njoy/kodi-pvr-njoy.hash                                | 2 +-
+ package/kodi-pvr-njoy/kodi-pvr-njoy.mk                                  | 2 +-
+ package/kodi-pvr-pctv/kodi-pvr-pctv.hash                                | 2 +-
+ package/kodi-pvr-pctv/kodi-pvr-pctv.mk                                  | 2 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.hash                          | 2 +-
+ package/kodi-pvr-stalker/kodi-pvr-stalker.mk                            | 2 +-
+ package/kodi-pvr-vbox/kodi-pvr-vbox.hash                                | 2 +-
+ package/kodi-pvr-vbox/kodi-pvr-vbox.mk                                  | 2 +-
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash                        | 2 +-
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk                          | 2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash                            | 2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk                              | 2 +-
+ package/kodi-pvr-wmc/kodi-pvr-wmc.hash                                  | 2 +-
+ package/kodi-pvr-wmc/kodi-pvr-wmc.mk                                    | 2 +-
+ 34 files changed, 34 insertions(+), 34 deletions(-)
 
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-index 11542f9c91..6bc7bc9acf 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
+diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
+index 1568f4b083..e9d3684b2f 100644
+--- a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
++++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 2e99f1c8b28e176268644c07020aa92ad74d22e7244db1af69f31b767f8e845f  kodi-audiodecoder-modplug-2.0.2-Leia.tar.gz
--sha256 785e25c61cbc691e7cebcd1d084ca3e5f7a20d5e99ea89ddd2ce7aed6c94c27d  src/ModplugCodec.cpp
-+sha256 6827f1ebefa5f281ace52bdf83b5ab95789c77b88a344524ead1b346668d57e7  kodi-audiodecoder-modplug-2.0.3-Leia.tar.gz
-+sha256 317f732723eb58745a9b22c234861dbd2d98972039543f6b549c7cb26eb2cb08  debian/copyright
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-index 6a501c2379..8e1031053e 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_MODPLUG_VERSION = 2.0.2-Leia
-+KODI_AUDIODECODER_MODPLUG_VERSION = 2.0.3-Leia
- KODI_AUDIODECODER_MODPLUG_SITE = $(call github,xbmc,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
- KODI_AUDIODECODER_MODPLUG_LICENSE = GPL-2.0+
--KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = src/ModplugCodec.cpp
-+KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = debian/copyright
- KODI_AUDIODECODER_MODPLUG_DEPENDENCIES = kodi libmodplug
+ sha256 2d0fae3721715a17e1c1454dd7029eb8d18e7f761ed65e00f8c488c7c08433e8  kodi-pvr-argustv-3.5.4-Leia.tar.gz
+-sha256 9a5b69143f47289e5d649a78a0f0aaf21a75fa8866bd2b8c6c559e57cd221295  src/client.h
++sha256 17bc5450fff10fc46484886690adbf20c369f5baff021435feab1187b9943834  debian/copyright
+diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
+index f59f4467ab..b82a6f52d0 100644
+--- a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
++++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_ARGUSTV_VERSION = 3.5.4-Leia
+ KODI_PVR_ARGUSTV_SITE = $(call github,kodi-pvr,pvr.argustv,$(KODI_PVR_ARGUSTV_VERSION))
+ KODI_PVR_ARGUSTV_LICENSE = GPL-2.0+
+-KODI_PVR_ARGUSTV_LICENSE_FILES = src/client.h
++KODI_PVR_ARGUSTV_LICENSE_FILES = debian/copyright
+ KODI_PVR_ARGUSTV_DEPENDENCIES = jsoncpp kodi-platform
  
  $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-index 756d85e80d..ae6931ae63 100644
---- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
+diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
+index 4bec77ddc5..c07f227809 100644
+--- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
++++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 0c17f407d90dd08368aead5df8bacf7589b97bf1c0d1ea45c60cc7d0da26844c  kodi-audiodecoder-nosefart-2.0.1-Leia.tar.gz
--sha256 8ff36ab79bfc1960b47d01bb33ef106e8eca495a85b206192d8a26bbf8055821  src/NSFCodec.cpp
-+sha256 66305c9d654aed0b9efcf44b90acac0ab8db321dff57523d13faf67606cd78ce  kodi-audiodecoder-nosefart-2.0.2-Leia.tar.gz
-+sha256 01a3f135925df23a5d8679ff633fe3d5021125224c9349acd2c35dd0cf3ea762  debian/copyright
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-index 1d9944d6c6..8f437a7378 100644
---- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_NOSEFART_VERSION = 2.0.1-Leia
-+KODI_AUDIODECODER_NOSEFART_VERSION = 2.0.2-Leia
- KODI_AUDIODECODER_NOSEFART_SITE = $(call github,xbmc,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
- KODI_AUDIODECODER_NOSEFART_LICENSE = GPL-2.0+
--KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = src/NSFCodec.cpp
-+KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = debian/copyright
- KODI_AUDIODECODER_NOSEFART_DEPENDENCIES = kodi
+ sha256 ad7586abfe7b3f9dd67b3a2225c442fc8d2a442e48bd7df75b11652286392c2f  kodi-pvr-dvblink-4.7.2-Leia.tar.gz
+-sha256 2a643b774c0b5238ff2d284bad43ec69c2ad4b848b6c58a73dbabffa55d62bfe  src/client.h
++sha256 4200fb35edb052f04dc43d267a1ad59468cb899e7b4931756b5830039b82716d  debian/copyright
+diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
+index 423faf7633..95bc7bbb4b 100644
+--- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
++++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_DVBLINK_VERSION = 4.7.2-Leia
+ KODI_PVR_DVBLINK_SITE = $(call github,kodi-pvr,pvr.dvblink,$(KODI_PVR_DVBLINK_VERSION))
+ KODI_PVR_DVBLINK_LICENSE = GPL-2.0+
+-KODI_PVR_DVBLINK_LICENSE_FILES = src/client.h
++KODI_PVR_DVBLINK_LICENSE_FILES = debian/copyright
+ KODI_PVR_DVBLINK_DEPENDENCIES = kodi-platform tinyxml2
  
  $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-index 7255319aa4..5c6a644ff3 100644
---- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+index f63f907145..642f93f71c 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 0dbff020e1988261680f2329fb6a29a034fede467885158ee63bae7e763d8e87  kodi-audiodecoder-sidplay-1.2.1-Leia.tar.gz
--sha256 0a9cf3c7f8aaa2bbbe4cbf80307513eb99595ebb8179e8bc549159184bbdca3a  src/SIDCodec.cpp
-+sha256 271e513a3094b163f986eb5bb5cbc70c7a602f5764cef255cc161cc5094e5648  kodi-audiodecoder-sidplay-1.2.2-Leia.tar.gz
-+sha256 dc915100daec3589f59b47f3438e8ec5ccc11ec25ccb3d0e7e66639764f31584  debian/copyright
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-index 83541d5ec6..079ae0b202 100644
---- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_SIDPLAY_VERSION = 1.2.1-Leia
-+KODI_AUDIODECODER_SIDPLAY_VERSION = 1.2.2-Leia
- KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,xbmc,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
- KODI_AUDIODECODER_SIDPLAY_LICENSE = GPL-2.0+
--KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = src/SIDCodec.cpp
-+KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = debian/copyright
- KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi libsidplay2
+ sha256 8a3d167e652574caf30ba0ce9c22d278715e0237774b817e37826f1b2d647bff  kodi-pvr-dvbviewer-3.7.11-Leia.tar.gz
+-sha256 d60190aad6c2e704c7ef51693afec2530a54e357ed217313570004cc59c9a4d8  src/client.h
++sha256 5757dbd6a8731e9395508cd7ab9ca0ea0c2863a7aac7136299d40549c88c9c2c  debian/copyright
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+index 4c221c012f..b88d3d86cd 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_DVBVIEWER_VERSION = 3.7.11-Leia
+ KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
+ KODI_PVR_DVBVIEWER_LICENSE = GPL-2.0+
+-KODI_PVR_DVBVIEWER_LICENSE_FILES = src/client.h
++KODI_PVR_DVBVIEWER_LICENSE_FILES = debian/copyright
+ KODI_PVR_DVBVIEWER_DEPENDENCIES = kodi-platform
  
  $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-index 1a4c9a0e72..ad3bf9be90 100644
---- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
+diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
+index ad777e5388..947c81d2e6 100644
+--- a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
++++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 db39f1f4a892fede45a5bffadd760962b5f02ab62e095a35dc37298cf548013d  kodi-audiodecoder-snesapu-2.0.1-Leia.tar.gz
--sha256 44d53bc17eb40ff1bdce9418be001334a99af9f41cf36e917f766e44604f63f8  src/SPCCodec.cpp
-+sha256 e059f84b04b8e92e5ecc2989303f6a736f37d6e3bda939ac765499e616c91580  kodi-audiodecoder-snesapu-2.0.2-Leia.tar.gz
-+sha256 b7e8b234fc40687d647d929fc554b91cdaa4011e5e656e68c5c6ee8c4cdf81d2  debian/copyright
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-index d78f915384..57504a17bb 100644
---- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_SNESAPU_VERSION = 2.0.1-Leia
-+KODI_AUDIODECODER_SNESAPU_VERSION = 2.0.2-Leia
- KODI_AUDIODECODER_SNESAPU_SITE = $(call github,xbmc,audiodecoder.snesapu,$(KODI_AUDIODECODER_SNESAPU_VERSION))
- KODI_AUDIODECODER_SNESAPU_LICENSE = GPL-2.0+
--KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = src/SPCCodec.cpp
-+KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = debian/copyright
- KODI_AUDIODECODER_SNESAPU_DEPENDENCIES = kodi
+ sha256 763500fb4a7210569f05dba8307d400e532dd0e72b24f1a1d2cd516695145190  kodi-pvr-filmon-2.4.4-Leia.tar.gz
+-sha256 8300bc67ff10aad7f271e96f867ad024fcdfc114caca04fefa437231945e6315  src/client.h
++sha256 081907693b03f27cb1b17e0a440ae05fd8c8b4631be6fe6fdba4e18a5d40fdc5  debian/copyright
+diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
+index 44f13909fa..0ee910db9f 100644
+--- a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
++++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_FILMON_VERSION = 2.4.4-Leia
+ KODI_PVR_FILMON_SITE = $(call github,kodi-pvr,pvr.filmon,$(KODI_PVR_FILMON_VERSION))
+ KODI_PVR_FILMON_LICENSE = GPL-2.0+
+-KODI_PVR_FILMON_LICENSE_FILES = src/client.h
++KODI_PVR_FILMON_LICENSE_FILES = debian/copyright
+ KODI_PVR_FILMON_DEPENDENCIES = jsoncpp kodi-platform
  
  $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-index e5a96bdba6..ae1c82e2d0 100644
---- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-+++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
+diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
+index 1bc71c06f7..3e76af00ed 100644
+--- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
++++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 75e219bf9abac3949dd3dd3fe908bc2b6e6b85654594e5494335e7e2f14dd1f1  kodi-audiodecoder-stsound-2.0.1-Leia.tar.gz
--sha256 dea29ec20a9d23f0f85cd863a2ecf38fad8b9267e2f298f22a4b1adb0a2a853e  src/YMCodec.cpp
-+sha256 3e14a7da3822002a90bf7d31a9f98541ae9ec2137c764dc94ca5b4de4ac8de82  kodi-audiodecoder-stsound-2.0.2-Leia.tar.gz
-+sha256 417ded3464139990f7898ac17c9eacde85dc0fafd3b3ca0c497d945b1bd93af5  debian/copyright
-diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-index b20fc345fe..679be5a7ff 100644
---- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-+++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_STSOUND_VERSION = 2.0.1-Leia
-+KODI_AUDIODECODER_STSOUND_VERSION = 2.0.2-Leia
- KODI_AUDIODECODER_STSOUND_SITE = $(call github,xbmc,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
- KODI_AUDIODECODER_STSOUND_LICENSE = GPL-2.0+
--KODI_AUDIODECODER_STSOUND_LICENSE_FILES = src/YMCodec.cpp
-+KODI_AUDIODECODER_STSOUND_LICENSE_FILES = debian/copyright
- KODI_AUDIODECODER_STSOUND_DEPENDENCIES = kodi
+ sha256 815ba3dfbe6e1318226d41879057f0b8a4f0ac960d12ebc5d69f0a1ac28cfa09  kodi-pvr-hdhomerun-3.5.0-Leia.tar.gz
+-sha256 b184cd8a52f77f6c02c1da89dfc17dff989c50c400acab10148ab77f02723d84  src/client.h
++sha256 9e76c8ce9e201f75c50c755982b9e2f15821280dedc5e953f685086912e1e39d  debian/copyright
+diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
+index 6e6dd4dfaa..ae42f5c33d 100644
+--- a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
++++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_HDHOMERUN_VERSION = 3.5.0-Leia
+ KODI_PVR_HDHOMERUN_SITE = $(call github,kodi-pvr,pvr.hdhomerun,$(KODI_PVR_HDHOMERUN_VERSION))
+ KODI_PVR_HDHOMERUN_LICENSE = GPL-2.0+
+-KODI_PVR_HDHOMERUN_LICENSE_FILES = src/client.h
++KODI_PVR_HDHOMERUN_LICENSE_FILES = debian/copyright
+ KODI_PVR_HDHOMERUN_DEPENDENCIES = jsoncpp kodi-platform libhdhomerun
  
  $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-index 0a8bdb279c..d944584d9e 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+index 6afcea4316..d5899f5119 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 bc6dea6dca0949571a3123e26f27dc73c78b8a876362fc8e95649280f2557bc0  kodi-audiodecoder-timidity-2.0.3-Leia.tar.gz
--sha256 d1b64dcec44f6dfa0168a93bf1e1497e233cf3a6a475f60ca7e0a813510d6aba  src/TimidityCodec.cpp
-+sha256 3ddd560b1c907f092f30e51dfc1f0b19e3cf77071fa557cb949d6fc3d9133497  kodi-audiodecoder-timidity-2.0.4-Leia.tar.gz
-+sha256 66792d1a5f4c47fbe593c0edfcd58af168a1e9c09ea3ca5b741ea170197638c2  debian/copyright
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-index fa78a3d782..fecd1342b3 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_TIMIDITY_VERSION = 2.0.3-Leia
-+KODI_AUDIODECODER_TIMIDITY_VERSION = 2.0.4-Leia
- KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,xbmc,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
- KODI_AUDIODECODER_TIMIDITY_LICENSE = GPL-2.0+
--KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = src/TimidityCodec.cpp
-+KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = debian/copyright
- KODI_AUDIODECODER_TIMIDITY_DEPENDENCIES = kodi
+ sha256 6958b91ca616554e4c068bc303c66388e9a2c3a68b5979d8918b4e0d7b6bb95c  kodi-pvr-hts-4.4.21-Leia.tar.gz
+-sha256 a6cd848443278bf312680e08d13fa898e4242fd76de8c86aea5f09a51826885c  src/client.h
++sha256 6d97c3d608a5d59565b567313bd3e53a1d0066ed59f4ae8e474c895d0c20e746  debian/copyright
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+index bfe960b65e..6a25cda003 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_HTS_VERSION = 4.4.21-Leia
+ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
+ KODI_PVR_HTS_LICENSE = GPL-2.0+
+-KODI_PVR_HTS_LICENSE_FILES = src/client.h
++KODI_PVR_HTS_LICENSE_FILES = debian/copyright
+ KODI_PVR_HTS_DEPENDENCIES = kodi-platform
  
  $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-index c4a3cdf23d..05d641b158 100644
---- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 38e8571380..ba65640555 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 6f1940d2a0607342cba8cffc0beb7c78caae5995c2d554a6079f4849997da7ba  kodi-audiodecoder-vgmstream-1.1.4-Leia.tar.gz
--sha256 976ef407b9b30a6c30dab03a8fbb32d0e7e45713b2121d9b378bfb15dc1dfc09  src/VGMCodec.cpp
-+sha256 28876be1e1317b3ec5c3a4fe415f20d92a4c5868912656c5e8ab9cdd7e3f32d8  kodi-audiodecoder-vgmstream-1.1.5-Leia.tar.gz
-+sha256 fc7c7ab8774d94fb2eccdf47e3b8052a3906e4b5ec8554191da321020c965d8e  debian/copyright
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-index 81f4825885..4e3cdab584 100644
---- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+ sha256 25eff252ad748e0cf166cd01b0f08e8fb3977c98a1b04cad9ef6509ea30c5fa9  kodi-pvr-iptvsimple-3.8.8-Leia.tar.gz
+-sha256 f5890f1869491e6e6674029355d40b1f4cf57f065da4f37d5b1b3d2dd41ba092  src/client.h
++sha256 50e33ec3cddb75e6c5c5eb1b3d38cc0adee7dec71d7244925106d4a2c4d5e31d  debian/copyright
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index 16007cf404..f9b384ba92 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_IPTVSIMPLE_VERSION = 3.8.8-Leia
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+-KODI_PVR_IPTVSIMPLE_LICENSE_FILES = src/client.h
++KODI_PVR_IPTVSIMPLE_LICENSE_FILES = debian/copyright
+ KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform rapidxml
  
--KODI_AUDIODECODER_VGMSTREAM_VERSION = 1.1.4-Leia
-+KODI_AUDIODECODER_VGMSTREAM_VERSION = 1.1.5-Leia
- KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,xbmc,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
- KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPL-2.0+
--KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = src/VGMCodec.cpp
-+KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = debian/copyright
- KODI_AUDIODECODER_VGMSTREAM_DEPENDENCIES = kodi
+ $(eval $(cmake-package))
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+index ce24491ec6..84526b7461 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256 9c05578566f7448dc3a7677587c804596aa314afd493cb9c62cc65ea883645aa  kodi-pvr-mediaportal-tvserver-3.5.18-Leia.tar.gz
+-sha256 b9966d774c89672efb8d6501d636038a77888c044d15e68af604e9366c1b1a0a  src/client.h
++sha256 f9df5b0c11a23b2d5ca84828c67412ecd8752df46527285aeff48f4d7988d367  debian/copyright
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+index 1b6ad39ef1..a00711c662 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 3.5.18-Leia
+ KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvserver,$(KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION))
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPL-2.0+
+-KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = src/client.h
++KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = debian/copyright
+ KODI_PVR_MEDIAPORTAL_TVSERVER_DEPENDENCIES = kodi-platform
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index a8aaef631c..c70e032289 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256 36d9142e0e19b904e1c4a6d8cd67063d291e63971f80a98a6f24b7f4554bb2e3  kodi-pvr-mythtv-5.10.15-Leia.tar.gz
+-sha256 ca8fee175b3a02d106870b991ed29b07dfc5024ce3992bbb872d0654467f132b  src/client.h
++sha256 0efb11009d447b39ec35d77dc265db3d1c3d261730bbc33b267587254d973ec8  debian/copyright
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index e644f9bc7f..b89db3a455 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_MYTHTV_VERSION = 5.10.15-Leia
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+-KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
++KODI_PVR_MYTHTV_LICENSE_FILES = debian/copyright
+ KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+index c7de649fbe..4d730deb85 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256 5f1b7fa00d7248fa840a0e7574bb7714867bff4ad81ceb8ed33cb3aa6d5ccbe9  kodi-pvr-nextpvr-3.3.19-Leia.tar.gz
+-sha256 71c90cfb2792702a6bc13dd10e34c2f181b5e923ab4ae2b1b0674c5b8867b2ad  src/client.h
++sha256 0bd576badce05c6b4315c415dabd77d80c871e72026c399f7a7bb8582e0911fe  debian/copyright
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+index ed3db5c745..94461f61d1 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_NEXTPVR_VERSION = 3.3.19-Leia
+ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
+ KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
+-KODI_PVR_NEXTPVR_LICENSE_FILES = src/client.h
++KODI_PVR_NEXTPVR_LICENSE_FILES = debian/copyright
+ KODI_PVR_NEXTPVR_DEPENDENCIES = kodi-platform
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.hash b/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
+index 472dc78624..cf23a3abaa 100644
+--- a/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
++++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256 8c42a3c3754d7a07de9682504c4883a584eb21a92b9af70f0129ffc2707c1554  kodi-pvr-njoy-3.4.2-Leia.tar.gz
+-sha256 69e4681abe815ce2f3ec2c9f34c2292e95e56424d9403fe91a91baeb23e91ec0  src/client.h
++sha256 9d42154eabd84ae131cc6384a3ea0fc622c3551595564bec7a6bec8df4a57fbd  debian/copyright
+diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
+index 1099e66212..ca86d46d85 100644
+--- a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
++++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_NJOY_VERSION = 3.4.2-Leia
+ KODI_PVR_NJOY_SITE = $(call github,kodi-pvr,pvr.njoy,$(KODI_PVR_NJOY_VERSION))
+ KODI_PVR_NJOY_LICENSE = GPL-2.0+
+-KODI_PVR_NJOY_LICENSE_FILES = src/client.h
++KODI_PVR_NJOY_LICENSE_FILES = debian/copyright
+ KODI_PVR_NJOY_DEPENDENCIES = kodi-platform
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
+index 850ca7ac77..f1bb8a4804 100644
+--- a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
++++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256 a9f1c5596786cf4cfa279d0b4477839ef7f5bb7267c65152dbcf7ae0bda56679  kodi-pvr-pctv-2.4.5-Leia.tar.gz
+-sha256 03798669132b75111ef5731f6f9c5e519faf088fe4ef3233289bc140e26d2845  src/client.h
++sha256 43376e70ae80133530c8ce71a3b0dcde8529a8162d3b3956009eb8fc0f5c559c  debian/copyright
+diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
+index 014d1d3f97..45c916df49 100644
+--- a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
++++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_PCTV_VERSION = 2.4.5-Leia
+ KODI_PVR_PCTV_SITE = $(call github,kodi-pvr,pvr.pctv,$(KODI_PVR_PCTV_VERSION))
+ KODI_PVR_PCTV_LICENSE = GPL-2.0+
+-KODI_PVR_PCTV_LICENSE_FILES = src/client.h
++KODI_PVR_PCTV_LICENSE_FILES = debian/copyright
+ KODI_PVR_PCTV_DEPENDENCIES = jsoncpp kodi-platform
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
+index 4db4f79745..720689dc43 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256 03eb428f21d6b8526b6671278b60ac6dc5a761a515af27172d8ac5c814cc3f65  kodi-pvr-stalker-3.4.10-Leia.tar.gz
+-sha256 31d746afd12ac7ebcbc2a4b525de77d31d10bc4f7a0a45830d6f899a2953bc95  src/client.h
++sha256 f9fa34b2caa07376a7a976c1f0b1b9761b37449afd4ceb1e7afa283492054237  debian/copyright
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+index 1b1592320c..0ae41171a9 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_STALKER_VERSION = 3.4.10-Leia
+ KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
+ KODI_PVR_STALKER_LICENSE = GPL-2.0+
+-KODI_PVR_STALKER_LICENSE_FILES = src/client.h
++KODI_PVR_STALKER_LICENSE_FILES = debian/copyright
+ KODI_PVR_STALKER_DEPENDENCIES = jsoncpp kodi-platform libxml2
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
+index 42fee0b5ae..a3c624526e 100644
+--- a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
++++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256 98aadcf3d0109a7dc5f85b4e5473d595039b59c46b0686a2fbda88ff7631ee0c  kodi-pvr-vbox-4.7.0-Leia.tar.gz
+-sha256 d50cada312480496eeb901e1809cfadaea256f82359d2cb01ae44f28e2191b33  src/client.h
++sha256 f535b79e33bdf4d270f8aed3fdcb92f807981f808d7f5e3c053c088e5ccf553b  debian/copyright
+diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
+index 8c8382a1d2..b10bfc5b85 100644
+--- a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
++++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_VBOX_VERSION = 4.7.0-Leia
+ KODI_PVR_VBOX_SITE = $(call github,kodi-pvr,pvr.vbox,$(KODI_PVR_VBOX_VERSION))
+ KODI_PVR_VBOX_LICENSE = GPL-2.0+
+-KODI_PVR_VBOX_LICENSE_FILES = src/client.h
++KODI_PVR_VBOX_LICENSE_FILES = debian/copyright
+ KODI_PVR_VBOX_DEPENDENCIES = kodi-platform
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
+index c0e1d90bfa..12a2768fae 100644
+--- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
++++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256 6afaf1f3f1e0670edb9dc01581a0d6c3f57502c791e19283eb63807e8936a768  kodi-pvr-vdr-vnsi-3.6.3-Leia.tar.gz
+-sha256 4da4a184b215913b33f48ee26990b34daa7a15e00cc23e60975d391b7168597b  src/client.h
++sha256 28266596fdf4162d4f15985e0108cd9ddb42531ddad2297011649c1af49f7fe2  debian/copyright
+diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
+index ec8fc7fc76..3dbb24ce0e 100644
+--- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
++++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_VDR_VNSI_VERSION = 3.6.3-Leia
+ KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
+ KODI_PVR_VDR_VNSI_LICENSE = GPL-2.0+
+-KODI_PVR_VDR_VNSI_LICENSE_FILES = src/client.h
++KODI_PVR_VDR_VNSI_LICENSE_FILES = debian/copyright
+ KODI_PVR_VDR_VNSI_DEPENDENCIES = kodi-platform
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+index a8f81244f2..bd7f865486 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256 d7dd890e4491e211ff3781cdc043347ab7a4ef6e00619ac1b4641ed81b0c3626  kodi-pvr-vuplus-3.28.9-Leia.tar.gz
+-sha256 21f5b12ef73285dbf9709fd42b719b719285a7e8a6741913664b58b8e08374c8  src/client.h
++sha256 e98518889de8d38eaa6ddcb086b6e3b86efed98b501a5c666b9cf48f79e6df5d  debian/copyright
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+index 34ec5d2384..bf1de1178d 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_VUPLUS_VERSION = 3.28.9-Leia
+ KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
+ KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
+-KODI_PVR_VUPLUS_LICENSE_FILES = src/client.h
++KODI_PVR_VUPLUS_LICENSE_FILES = debian/copyright
+ KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi-platform tinyxml
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
+index 643549ea73..e72e8d20a9 100644
+--- a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
++++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+ sha256 4cb81f29cba23172d042e50bbab00cd64cd5670ad7350fd9d25301f63178e5f7  kodi-pvr-wmc-2.4.5-Leia.tar.gz
+-sha256 1a2f68003a1149b6f6480f4cc749089aed8cbf16529300cc8458c5c7925ce917  src/client.h
++sha256 6d97c3d608a5d59565b567313bd3e53a1d0066ed59f4ae8e474c895d0c20e746  debian/copyright
+diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
+index 82397163fe..d669768e7e 100644
+--- a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
++++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
+@@ -7,7 +7,7 @@
+ KODI_PVR_WMC_VERSION = 2.4.5-Leia
+ KODI_PVR_WMC_SITE = $(call github,kodi-pvr,pvr.wmc,$(KODI_PVR_WMC_VERSION))
+ KODI_PVR_WMC_LICENSE = GPL-2.0+
+-KODI_PVR_WMC_LICENSE_FILES = src/client.h
++KODI_PVR_WMC_LICENSE_FILES = debian/copyright
+ KODI_PVR_WMC_DEPENDENCIES = kodi-platform
  
  $(eval $(cmake-package))
