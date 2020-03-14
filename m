@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 15:28:02 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libsvgtiny: fix
+Date: Sat, 14 Mar 2020 15:27:53 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libsvgtiny: fix
  parallel build
-Message-ID: <20200314141945.1F50D82B99@busybox.osuosl.org>
+Message-ID: <20200314141951.3AC5E82B9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=902ac0199993c113419128f470e18b1530ae38a7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=581a41a3f490912d3168b2bd5fa5197bde61385b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fix previous commit[1] which purpose was to fix parallel build. It
 didn't work since it assigned $(MAKE1) to LIBSVGTINY_MAKE, but this is a
