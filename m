@@ -1,177 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 18:32:01 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/libssh2: fix
- CVE-2019-17498
-Message-ID: <20200314171958.0C12783928@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 18:34:20 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libarchive:
+ security bump to version 3.4.2
+Message-ID: <20200314172134.CA1A68392E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b97241ab1cf2f727366f11682511963c98aa5ed
+commit: https://git.buildroot.net/buildroot/commit/?id=2b71ed27a55da497b4416c372fa4552251885129
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-In libssh2 v1.9.0 and earlier versions, the SSH_MSG_DISCONNECT logic in
-packet.c has an integer overflow in a bounds check, enabling an attacker
-to specify an arbitrary (out-of-bounds) offset for a subsequent memory
-read. A crafted SSH server may be able to disclose sensitive information
-or cause a denial of service condition on the client system when a user
-connects to the server.
+- Fix CVE-2020-9308: archive_read_support_format_rar5.c in libarchive
+  before 3.4.2 attempts to unpack a RAR5 file with an invalid or
+  corrupted header (such as a header size of zero), leading to a SIGSEGV
+  or possibly unspecified other impact.
+- use --with-nettle to enable nettle support, see
+  https://github.com/libarchive/libarchive/commit/f96a71144b7725ca4a94d84bd27d7dca8c2f58d2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - drop new optional dependency to mbedtsl, forced off for now
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8d76402ee113bd6d47b0d13162f2a753f98e37d5)
+(cherry picked from commit 6785c19bf5f76001b9a1237402b68fd8302e5620)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0003-packet-c-improve-message-parsing.patch    | 127 +++++++++++++++++++++
- package/libssh2/libssh2.mk                         |   3 +
- 2 files changed, 130 insertions(+)
+ package/libarchive/libarchive.hash | 2 +-
+ package/libarchive/libarchive.mk   | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/libssh2/0003-packet-c-improve-message-parsing.patch b/package/libssh2/0003-packet-c-improve-message-parsing.patch
-new file mode 100644
-index 0000000000..2b73520021
---- /dev/null
-+++ b/package/libssh2/0003-packet-c-improve-message-parsing.patch
-@@ -0,0 +1,127 @@
-+From dedcbd106f8e52d5586b0205bc7677e4c9868f9c Mon Sep 17 00:00:00 2001
-+From: Will Cosgrove <will@panic.com>
-+Date: Fri, 30 Aug 2019 09:57:38 -0700
-+Subject: [PATCH] packet.c: improve message parsing (#402)
-+
-+* packet.c: improve parsing of packets
-+
-+file: packet.c
-+
-+notes:
-+Use _libssh2_get_string API in SSH_MSG_DEBUG/SSH_MSG_DISCONNECT. Additional uint32 bounds check in SSH_MSG_GLOBAL_REQUEST.
-+[Retrieved from:
-+https://github.com/libssh2/libssh2/commit/dedcbd106f8e52d5586b0205bc7677e4c9868f9c]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/packet.c | 68 ++++++++++++++++++++++------------------------------
-+ 1 file changed, 29 insertions(+), 39 deletions(-)
-+
-+diff --git a/src/packet.c b/src/packet.c
-+index 38ab6294..2e01bfc5 100644
-+--- a/src/packet.c
-++++ b/src/packet.c
-+@@ -419,8 +419,8 @@ _libssh2_packet_add(LIBSSH2_SESSION * session, unsigned char *data,
-+                     size_t datalen, int macstate)
-+ {
-+     int rc = 0;
-+-    char *message = NULL;
-+-    char *language = NULL;
-++    unsigned char *message = NULL;
-++    unsigned char *language = NULL;
-+     size_t message_len = 0;
-+     size_t language_len = 0;
-+     LIBSSH2_CHANNEL *channelp = NULL;
-+@@ -472,33 +472,23 @@ _libssh2_packet_add(LIBSSH2_SESSION * session, unsigned char *data,
-+ 
-+         case SSH_MSG_DISCONNECT:
-+             if(datalen >= 5) {
-+-                size_t reason = _libssh2_ntohu32(data + 1);
-++                uint32_t reason = 0;
-++                struct string_buf buf;
-++                buf.data = (unsigned char *)data;
-++                buf.dataptr = buf.data;
-++                buf.len = datalen;
-++                buf.dataptr++; /* advance past type */
-+ 
-+-                if(datalen >= 9) {
-+-                    message_len = _libssh2_ntohu32(data + 5);
-++                _libssh2_get_u32(&buf, &reason);
-++                _libssh2_get_string(&buf, &message, &message_len);
-++                _libssh2_get_string(&buf, &language, &language_len);
-+ 
-+-                    if(message_len < datalen-13) {
-+-                        /* 9 = packet_type(1) + reason(4) + message_len(4) */
-+-                        message = (char *) data + 9;
-+-
-+-                        language_len =
-+-                            _libssh2_ntohu32(data + 9 + message_len);
-+-                        language = (char *) data + 9 + message_len + 4;
-+-
-+-                        if(language_len > (datalen-13-message_len)) {
-+-                            /* bad input, clear info */
-+-                            language = message = NULL;
-+-                            language_len = message_len = 0;
-+-                        }
-+-                    }
-+-                    else
-+-                        /* bad size, clear it */
-+-                        message_len = 0;
-+-                }
-+                 if(session->ssh_msg_disconnect) {
-+-                    LIBSSH2_DISCONNECT(session, reason, message,
-+-                                       message_len, language, language_len);
-++                    LIBSSH2_DISCONNECT(session, reason, (const char *)message,
-++                                       message_len, (const char *)language,
-++                                       language_len);
-+                 }
-++
-+                 _libssh2_debug(session, LIBSSH2_TRACE_TRANS,
-+                                "Disconnect(%d): %s(%s)", reason,
-+                                message, language);
-+@@ -539,24 +529,24 @@ _libssh2_packet_add(LIBSSH2_SESSION * session, unsigned char *data,
-+                 int always_display = data[1];
-+ 
-+                 if(datalen >= 6) {
-+-                    message_len = _libssh2_ntohu32(data + 2);
-+-
-+-                    if(message_len <= (datalen - 10)) {
-+-                        /* 6 = packet_type(1) + display(1) + message_len(4) */
-+-                        message = (char *) data + 6;
-+-                        language_len = _libssh2_ntohu32(data + 6 +
-+-                                                        message_len);
-+-
-+-                        if(language_len <= (datalen - 10 - message_len))
-+-                            language = (char *) data + 10 + message_len;
-+-                    }
-++                    struct string_buf buf;
-++                    buf.data = (unsigned char *)data;
-++                    buf.dataptr = buf.data;
-++                    buf.len = datalen;
-++                    buf.dataptr += 2; /* advance past type & always display */
-++
-++                    _libssh2_get_string(&buf, &message, &message_len);
-++                    _libssh2_get_string(&buf, &language, &language_len);
-+                 }
-+ 
-+                 if(session->ssh_msg_debug) {
-+-                    LIBSSH2_DEBUG(session, always_display, message,
-+-                                  message_len, language, language_len);
-++                    LIBSSH2_DEBUG(session, always_display,
-++                                  (const char *)message,
-++                                  message_len, (const char *)language,
-++                                  language_len);
-+                 }
-+             }
-++
-+             /*
-+              * _libssh2_debug will actually truncate this for us so
-+              * that it's not an inordinate about of data
-+@@ -579,7 +569,7 @@ _libssh2_packet_add(LIBSSH2_SESSION * session, unsigned char *data,
-+                 uint32_t len = 0;
-+                 unsigned char want_reply = 0;
-+                 len = _libssh2_ntohu32(data + 1);
-+-                if(datalen >= (6 + len)) {
-++                if((len <= (UINT_MAX - 6)) && (datalen >= (6 + len))) {
-+                     want_reply = data[5 + len];
-+                     _libssh2_debug(session,
-+                                    LIBSSH2_TRACE_CONN,
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index bd8517dac4..3819c1aa31 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -11,6 +11,9 @@ LIBSSH2_LICENSE_FILES = COPYING
- LIBSSH2_INSTALL_STAGING = YES
- LIBSSH2_CONF_OPTS = --disable-examples-build
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index b01d6368a5..9da4eb3baa 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,4 +1,4 @@
+ # From https://www.libarchive.de/downloads/sha256sums
+-sha256  fcf87f3ad8db2e4f74f32526dee62dd1fb9894782b0a503a89c9d7a70a235191  libarchive-3.4.1.tar.gz
++sha256  b60d58d12632ecf1e8fad7316dc82c6b9738a35625746b47ecdcaf4aed176176  libarchive-3.4.2.tar.gz
+ # Locally computed:
+ sha256  e1e3d4ba9d0b0ccba333b5f5539f7c6c9a3ef3d57a96cd165d2c45eaa1cd026d  COPYING
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index e256b72289..60838eea0a 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
  
-+# 0003-packet-c-improve-message-parsing.patch
-+LIBSSH2_IGNORE_CVES += CVE-2019-17498
-+
- # building from a git clone
- LIBSSH2_AUTORECONF = YES
+-LIBARCHIVE_VERSION = 3.4.1
++LIBARCHIVE_VERSION = 3.4.2
+ LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
+ LIBARCHIVE_LICENSE_FILES = COPYING
++LIBARCHIVE_CONF_OPTS = --without-mbedtls
  
+ ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
+ ifeq ($(BR2_STATIC_LIBS),y)
+@@ -86,6 +87,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETTLE),y)
+ LIBARCHIVE_DEPENDENCIES += nettle
++LIBARCHIVE_CONF_OPTS += --with-nettle
+ else
+ LIBARCHIVE_CONF_OPTS += --without-nettle
+ endif
+@@ -123,6 +125,7 @@ HOST_LIBARCHIVE_CONF_OPTS = \
+ 	--without-libiconv-prefix \
+ 	--without-xml2 \
+ 	--without-lzo2 \
++	--without-mbedtls \
+ 	--without-nettle \
+ 	--without-openssl \
+ 	--without-lzma
