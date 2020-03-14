@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 14:19:11 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] Makefile: don't recreate
+Date: Sat, 14 Mar 2020 14:19:21 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] Makefile: don't recreate
  staging symlink if it exists
-Message-ID: <20200314140054.D9F8A8229D@busybox.osuosl.org>
+Message-ID: <20200314140059.51E5B82AE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e59acef098cfe2bebf7e7e2f83ebd424ddba6cfd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cd62e87b6d61fe8cd9f05b61e7e5a5172932a8e3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Create the staging symlink the same way as the host symlink. This means
 using a make dependency rather than recreating it every time.
@@ -59,7 +59,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 4449c1bfbf..1afc305220 100644
+index 2aa32029af..cf35ae2b7f 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -465,6 +465,10 @@ $(HOST_DIR_SYMLINK): $(BASE_DIR)
