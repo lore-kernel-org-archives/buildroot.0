@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 18:44:44 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/exim: fix systemd
+Date: Sat, 14 Mar 2020 18:39:58 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/exim: fix systemd
  service binary path
-Message-ID: <20200314173626.1AABE83932@busybox.osuosl.org>
+Message-ID: <20200314173634.6A5F78393B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75927f8e1d3686ba6b1aed882a79fb4c3ac8d7d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ca52cfda33a22c23944f6e65c0d76021ca840bcb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 modern versions of exim are installed into sbin not bin
 
