@@ -1,59 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 18:20:13 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/zsh: security
- bump to version 5.8
-Message-ID: <20200314170810.4FB6483848@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 18:18:25 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/linknx:
+ host-pkgconf is mandatory
+Message-ID: <20200314170810.42FB8815B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7ddfba736c69a615a0e0aefe9f093baa68fd815
+commit: https://git.buildroot.net/buildroot/commit/?id=74008592b3b46c8e5f7036d8c0f63a7d65251f79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-- Fix CVE-2019-20044: In Zsh before 5.8, attackers able to execute
-  commands can regain privileges dropped by the --no-PRIVILEGED option.
-  Zsh fails to overwrite the saved uid, so the original privileges can
-  be restored by executing MODULE_PATH=/dir/with/module zmodload with a
-  module that calls setuid().
-- Update indentation of hash file (two spaces)
+host-pkgconf is a mandatory dependency, this will fix per-package build
+
+Fixes:
+ - http://autobuild.buildroot.org/results/cfda0ce53165bb22b691b5b6510f0ab096a41e17
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 141ec698123d0c9c9b793d39d947060f001aab55)
+(cherry picked from commit 16d3e1734e165a415652e9482f5ff34ff5ce518a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zsh/zsh.hash | 8 ++++----
- package/zsh/zsh.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/linknx/linknx.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/zsh/zsh.hash b/package/zsh/zsh.hash
-index 79c661d455..2df409c946 100644
---- a/package/zsh/zsh.hash
-+++ b/package/zsh/zsh.hash
-@@ -1,7 +1,7 @@
- # From http://www.zsh.org/pub/MD5SUM
--md5	374f9fdd121b5b90e07abfcad7df0627	zsh-5.7.1.tar.xz
-+md5  e02a5428620b3dd268800c7843b3dd4d  zsh-5.8.tar.xz
- # Calculated based on the hash above and after checking signature
--# http://www.zsh.org/pub/zsh-5.7.1.tar.xz.asc
--sha256 7260292c2c1d483b2d50febfa5055176bd512b32a8833b116177bf5f01e77ee8 zsh-5.7.1.tar.xz
-+# http://www.zsh.org/pub/zsh-5.8.tar.xz.asc
-+sha256  dcc4b54cc5565670a65581760261c163d720991f0d06486da61f8d839b52de27  zsh-5.8.tar.xz
- # Locally calculated
--sha256	d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
-+sha256  d06fdf3ef9b1ec69d6b9e170b0a9516fbad3523261ff1668bde3bfea6e0ef5f5  LICENCE
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index b287e3051d..c3d9e52152 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
+index 15d4b5a109..c75f0655d6 100644
+--- a/package/linknx/linknx.mk
++++ b/package/linknx/linknx.mk
+@@ -17,7 +17,9 @@ LINKNX_CONF_OPTS = \
+ 	--with-pth=$(STAGING_DIR)/usr \
+ 	--disable-smtp
  
--ZSH_VERSION = 5.7.1
-+ZSH_VERSION = 5.8
- ZSH_SITE = http://www.zsh.org/pub
- ZSH_SOURCE = zsh-$(ZSH_VERSION).tar.xz
- ZSH_DEPENDENCIES = ncurses
+-LINKNX_DEPENDENCIES = libpthsem \
++LINKNX_DEPENDENCIES = \
++	host-pkgconf \
++	libpthsem \
+ 	$(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone) \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
+@@ -30,7 +32,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LOG4CPP),y)
+ LINKNX_CONF_OPTS += --with-log4cpp
+-LINKNX_DEPENDENCIES += host-pkgconf log4cpp
++LINKNX_DEPENDENCIES += log4cpp
+ else
+ LINKNX_CONF_OPTS += --without-log4cpp
+ endif
