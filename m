@@ -1,80 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Mar 2020 15:33:03 +0100
-Subject: [Buildroot] [git commit] package/linuxptp: rename systemd service
- scripts
-Message-ID: <20200314142412.C28F882B3A@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 15:36:44 +0100
+Subject: [Buildroot] [git commit] linux: add automatic selinux config
+ selection
+Message-ID: <20200314142412.D1F9282C83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bacd7f82bc5d4657c113c0339361e149040606b1
+commit: https://git.buildroot.net/buildroot/commit/?id=326777c82fb15d8ed9b99a14b9484973d60d8785
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use the same name as for the SysVinit scripts. This name is also used in
-debian.
+Enabling SELinux support in the kernel requires several options, many
+of which are in different areas. These options are as follows:
 
-linuxptp-system-clock.service -> phc2sys.service
-linuxptp.service -> ptp4l.service
+  - CONFIG_AUDIT
+  - CONFIG_DEFAULT_SECURITY_SELINUX
+  - CONFIG_INET
+  - CONFIG_NET
+  - CONFIG_SECURITY
+  - CONFIG_SECURITY_NETWORK
+  - CONFIG_SECURITY_SELINUX
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Tested-by: Carlos Santos <unixmania@gmail.com>
-Tested-by: Carlos Santos <unixmania@gmail.com>
+As such, if a user selects the libselinux package, it is much easier
+to select these options for them, much like we already do with other
+packages such as systemd or iptables.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linuxptp/linuxptp.mk                                      | 8 ++++----
- .../linuxptp/{linuxptp-system-clock.service => phc2sys.service}   | 2 +-
- package/linuxptp/{linuxptp.service => ptp4l.service}              | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ linux/linux.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index ba57396f86..921c55ad59 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -40,10 +40,10 @@ define LINUXPTP_INSTALL_INIT_SYSV
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 4b60f33ff3..f8c34c3dca 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -406,6 +406,14 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_FB,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224,$(@D)/.config))
++	$(if $(BR2_PACKAGE_LIBSELINUX),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_INET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX,$(@D)/.config))
  endef
  
- define LINUXPTP_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 $(LINUXPTP_PKGDIR)/linuxptp.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/linuxptp.service
--	$(INSTALL) -D -m 644 $(LINUXPTP_PKGDIR)/linuxptp-system-clock.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/linuxptp-system-clock.service
-+	$(INSTALL) -D -m 644 $(LINUXPTP_PKGDIR)/ptp4l.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/ptp4l.service
-+	$(INSTALL) -D -m 644 $(LINUXPTP_PKGDIR)/phc2sys.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/phc2sys.service
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/linuxptp/linuxptp-system-clock.service b/package/linuxptp/phc2sys.service
-similarity index 89%
-rename from package/linuxptp/linuxptp-system-clock.service
-rename to package/linuxptp/phc2sys.service
-index 57beec4579..63b0ca23c3 100644
---- a/package/linuxptp/linuxptp-system-clock.service
-+++ b/package/linuxptp/phc2sys.service
-@@ -1,6 +1,6 @@
- [Unit]
- Description=Precision Time Protocol system clock synchronization
--After=linuxptp.service
-+After=ptp4l.service
- 
- [Service]
- ExecStart=/usr/sbin/phc2sys -s /dev/ptp0 -c CLOCK_REALTIME -w -S 1.0
-diff --git a/package/linuxptp/linuxptp.service b/package/linuxptp/ptp4l.service
-similarity index 87%
-rename from package/linuxptp/linuxptp.service
-rename to package/linuxptp/ptp4l.service
-index 14e9814b06..07f0b68fad 100644
---- a/package/linuxptp/linuxptp.service
-+++ b/package/linuxptp/ptp4l.service
-@@ -3,7 +3,7 @@ Description=Precision Time Protocol daemon
- After=syslog.target network.target
- Before=time-sync.target
- Wants=time-sync.target
--Wants=linuxptp-system-clock.service
-+Wants=phc2sys.service
- 
- [Service]
- ExecStart=/usr/sbin/ptp4l -f /etc/linuxptp.cfg
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
