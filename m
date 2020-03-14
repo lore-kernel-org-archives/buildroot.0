@@ -1,29 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Mar 2020 15:46:33 +0100
-Subject: [Buildroot] [PATCH 1/2] package/kodi-pvr-hts: bump version to
- 4.4.21-Leia
-In-Reply-To: <20200313071151.27027-1-bernd.kuhls@t-online.de>
-References: <20200313071151.27027-1-bernd.kuhls@t-online.de>
-Message-ID: <20200314154633.24ab408d@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 14 Mar 2020 16:02:44 +0100
+Subject: [Buildroot] [PATCH] package/at: fix parallel build failure
+In-Reply-To: <20200220211855.32961-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Thu, 20 Feb 2020 22:18:55 +0100")
+References: <20200220211855.32961-1-giulio.benetti@benettiengineering.com>
+Message-ID: <87v9n7vv1n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 13 Mar 2020 08:11:50 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
->  package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > Add a patch to finally fix parallel build failure. Patch is pending
+ > upstream:
+ > https://salsa.debian.org/debian/at/merge_requests/14
 
-Both applied. Thanks!
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Thomas
+Committed to 2019.02.x and 2019.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
