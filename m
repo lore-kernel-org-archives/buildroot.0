@@ -1,96 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Mar 2020 18:22:04 +0100
-Subject: [Buildroot] [PATCH v4,
- 2/3] package/gobject-introspection: export cc in g-ir-scanner
-In-Reply-To: <20200312194632.3787015-2-aduskett@gmail.com>
-References: <20200312194632.3787015-1-aduskett@gmail.com>
- <20200312194632.3787015-2-aduskett@gmail.com>
-Message-ID: <20200314172204.GP705@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 14 Mar 2020 18:23:31 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/lz4: security
+ bump to version 1.9.2
+Message-ID: <20200314171107.B28A1838D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=189261d28f550649f4a3d7f46f070fef90e632a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-On 2020-03-12 12:46 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Without this export, the host variant of g-ir-scanner will call the host
-> gcc for linking.
-> 
-> For autotools packages, this is not an issue as they use
-> Makefile.introspection, which will export the cross-cc, however for meson,
-> this is not the case, and linking errors occur when meson packages generate
-> .gir and .typelib files.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
-> Changes v1 -> v3:
->   - Use relative paths. (Yann)
-> 
->  package/gobject-introspection/g-ir-scanner.in          | 2 ++
->  package/gobject-introspection/gobject-introspection.mk | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
-> index 9f97497b7e..d5847ad063 100644
-> --- a/package/gobject-introspection/g-ir-scanner.in
-> +++ b/package/gobject-introspection/g-ir-scanner.in
-> @@ -1,6 +1,8 @@
->  #!/usr/bin/env bash
->  
->  export GI_SCANNER_DISABLE_CACHE=1
-> +export CC="$(dirname "${0}")/../../../../bin/@BASENAME_TARGET_CC@"
-> +
+- Fix CVE-2019-17543: LZ4 before 1.9.2 has a heap-based buffer overflow
+  in LZ4_write32 (related to LZ4_compress_destSize), affecting
+  applications that call LZ4_compress_fast with a large input. (This
+  issue can also lead to data corruption.) NOTE: the vendor states "only
+  a few specific / uncommon usages of the API are at risk."
+- Update indentation of hash file (two spaces)
 
-HHhmmm. I remember that I said I wanted the wrapper to still be
-rrrelocatable. But it is in staging (sysroot) while the compiler is in
-host dir, so you added that many .././/.. needed to got from there to
-there.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4390b365a2dfc4cea5505d44955b2fdef816b2e6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lz4/lz4.hash | 6 +++---
+ package/lz4/lz4.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-But look at the line below: we already have HOST_DIR:
-
->  ${HOST_DIR}/bin/g-ir-scanner \
-   ^^^^^^^^^^^
-
-So, just:
-
-    export CC="${HOSTTT_DIR}/bin/@BASENAME_TARGET_CC@"
-
-Or did we miss something?
-
-Regards,
-Yann E. MORIN.
-
->  --lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
->  --use-binary-wrapper=$(dirname $0)/g-ir-scanner-qemuwrapper \
-> diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-> index 9043390857..a508957904 100644
-> --- a/package/gobject-introspection/gobject-introspection.mk
-> +++ b/package/gobject-introspection/gobject-introspection.mk
-> @@ -104,6 +104,8 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
->  		$(INSTALL) -D -m 755 \
->  			$(GOBJECT_INTROSPECTION_PKGDIR)/$(w).in $(STAGING_DIR)/usr/bin/$(w)
->  	)
-> +	$(SED) "s%@BASENAME_TARGET_CC@%$(notdir $(TARGET_CC))%g" $(STAGING_DIR)/usr/bin/g-ir-scanner
-> +
->  	# Gobject-introspection installs Makefile.introspection in
->  	# $(STAGING_DIR)/usr/share which is needed for autotools-based programs to
->  	# build .gir and .typelib files. Unfortuantly, gobject-introspection-1.0.pc
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
+index 691ec6c42a..01d0107b3f 100644
+--- a/package/lz4/lz4.hash
++++ b/package/lz4/lz4.hash
+@@ -1,4 +1,4 @@
+ # sha256 locally computed
+-sha256 33af5936ac06536805f9745e0b6d61da606a1f8b4cc5c04dd3cbaca3b9b4fc43  lz4-v1.8.3.tar.gz
+-sha256 d15d99c8dc6b0ec22174c0e563a95bc40f9363ca7f9d9d793bb5c5a8e8d0af71  lib/LICENSE
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  programs/COPYING
++sha256  658ba6191fa44c92280d4aa2c271b0f4fbc0e34d249578dd05e50e76d0e5efcc  lz4-1.9.2.tar.gz
++sha256  d15d99c8dc6b0ec22174c0e563a95bc40f9363ca7f9d9d793bb5c5a8e8d0af71  lib/LICENSE
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  programs/COPYING
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index a7152cb531..2a658fbba5 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LZ4_VERSION = v1.8.3
+-LZ4_SITE = $(call github,lz4,lz4,$(LZ4_VERSION))
++LZ4_VERSION = 1.9.2
++LZ4_SITE = $(call github,lz4,lz4,v$(LZ4_VERSION))
+ LZ4_INSTALL_STAGING = YES
+ LZ4_LICENSE = BSD-2-Clause (library), GPL-2.0+ (programs)
+ LZ4_LICENSE_FILES = lib/LICENSE programs/COPYING
