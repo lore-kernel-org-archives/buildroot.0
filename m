@@ -1,46 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 17:17:07 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/openvmtools: fix
- build with NLS
-Message-ID: <20200314160527.7256383654@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 17:27:31 +0100
+Subject: [Buildroot] [PATCH v2] package/qt5webengine: fix translations
+ target install path
+In-Reply-To: <20200221073331.9942-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Fri, 21 Feb 2020 08:33:31 +0100")
+References: <20200221073331.9942-1-ps.report@gmx.net>
+Message-ID: <87imj6x5os.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55518f5e01f43e5a0974883fce30afc440ac7d7f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/e0e7ed448df8bdd6cb13a0989d7a6c7dbaa5bc4e
+ > Through the evolution of the qt5webengine package patch ([1], [2])
+ > until the initial commit ([3]) the translations target install
+ > path got mangled resulting in a double trailing qtwebengine_locales
+ > path:
+ >   /usr/translations/qtwebengine_locales/qtwebengine_locales
+ > Instead of:
+ >   /usr/translations/qtwebengine_locales
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6b4581e7b3eddfa82a59bed6d9d44a3641b7f619)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openvmtools/openvmtools.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ > Fixes the translations runtime access failure resulting in the
+ > following warning:
 
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index fc56bb5ee0..a3ba473872 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -17,8 +17,14 @@ OPENVMTOOLS_CONF_OPTS = --with-dnet \
- 	--without-icu --without-x --without-gtk2 \
- 	--without-gtkmm --without-kernel-modules \
- 	--disable-deploypkg --without-xerces
--OPENVMTOOLS_CONF_ENV += CUSTOM_DNET_CPPFLAGS=" "
--OPENVMTOOLS_DEPENDENCIES = host-nfs-utils libglib2 libdnet
-+OPENVMTOOLS_CONF_ENV += \
-+	CUSTOM_DNET_CPPFLAGS=" " \
-+	LIBS=$(TARGET_NLS_LIBS)
-+OPENVMTOOLS_DEPENDENCIES = \
-+	host-nfs-utils \
-+	libglib2 \
-+	libdnet \
-+	$(TARGET_NLS_DEPENDENCIES)
- 
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- OPENVMTOOLS_DEPENDENCIES += libtirpc
+ >   WARNING:resource_bundle_qt.cpp(116): locale_file_path.empty() for locale
+
+ > [1] http://lists.busybox.net/pipermail/buildroot/2015-July/132010.html
+ > [2] https://patchwork.ozlabs.org/patch/640633
+ > [3] https://git.buildroot.net/buildroot/commit/?id=89080bac9bc47946a09c1e74f2f872363bf6785b
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ > Changes v1 -> v2:
+ >   - re-add mkdir to fix translation installation path
+
+Committed to 2019.02.x and 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
