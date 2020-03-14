@@ -1,142 +1,77 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 14 Mar 2020 14:54:57 +0100
-Subject: [Buildroot] Help: error LONG_BIT definition appears wrong for
- platform
-In-Reply-To: <CAA0OSwgZGQOKOv-11BxahH+Ht9Koxx=MEpfiuM-B-ZVVgQyLaw@mail.gmail.com>
-References: <CAA0OSwgGcbzMe9o35FRqmLBZ5PFMx=1+fDYyiqq0yLk5YJyNpQ@mail.gmail.com>
- <20200313150443.682fdc5a@windsurf>
- <20200314112110.2d8ce39a@gmx.net>
- <CAA0OSwgZGQOKOv-11BxahH+Ht9Koxx=MEpfiuM-B-ZVVgQyLaw@mail.gmail.com>
-Message-ID: <20200314145457.19aae81f@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 14 Mar 2020 15:03:57 +0100
+Subject: [Buildroot] [git commit] package/c-ares: bump to version 1.16.0
+Message-ID: <20200314135116.03BED829FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mark,
+commit: https://git.buildroot.net/buildroot/commit/?id=6620250fc56057a2495bc0c222681bf36d4ee5ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 14 Mar 2020 20:30:01 +0800, Mark Leo Sumadero <fryu771@gmail.com> wrote:
+- Remove patch (already in version)
+- Update indentation of hash file (two spaces)
 
-> Hi Peter,
->
-> Thanks for the reply. I just used your configuration but i got the same
-> error
->
-> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/build-1/libtool
-> --silent --mode=compile
-> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
-> -prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64 -Os  -DLINUX -D_REENTRANT -D_GNU_SOURCE
->  -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
->  -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
->
-> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
-> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../../../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
-> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
-> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/python3.7
-> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m
-> -DNDEBUG  -c -o src/server/mod_wsgi.lo src/server/mod_wsgi.c && touch
-> src/server/mod_wsgi.slo
-> In file included from
-> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m/Python.h:53:0,
->                  from src/server/wsgi_python.h:24,
->                  from src/server/mod_wsgi.c:22:
-> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m/pyport.h:699:2:
-> error: #error "LONG_BIT definition appears wrong for platform (bad
-> gcc/glibc config?)."
->  #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc
-> config?)."
->
-> Did i miss something? I am currently using Buildroot-2019.02.01 and
-> python3.7, what version did you use?
-> Are we the same of header path?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-use_check_build_instead_of_check_user.patch    | 17 -----------------
+ package/c-ares/c-ares.hash                              |  4 ++--
+ package/c-ares/c-ares.mk                                |  4 +---
+ 3 files changed, 3 insertions(+), 22 deletions(-)
 
-Tested against buildroot master, but should not make any difference,
-the important part is a full rebuild (configure/compile) of the
-package (best achieved by rm -rf build/mod_wsgi-61359e67448bdfc5fefb1692fd2a97f76394b20c)...
-
-No need to patch configure or configure.ac (there is already enough logic/magic that the
-given custom CPPFLAGS/LDFLAGS are used first)...
-
-According to [1] the 'm' in 'python3.7m' comes from a python configuration with --with-pymalloc,
-does not happen with stock buildroot configuration...
-
-Regards,
-Peter
-
-[1] https://stackoverflow.com/questions/41589655/whats-the-difference-between-python3-x-and-python3-xm
-
-
->
-> Thanks,
->
-> Mark Leo
->
-> On Sat, Mar 14, 2020 at 6:21 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > Hello Mark,
-> >
-> > On Fri, 13 Mar 2020 15:04:43 +0100, Thomas Petazzoni <
-> > thomas.petazzoni at bootlin.com> wrote:
-> >
-> > > Hello,
-> > >
-> > > On Fri, 13 Mar 2020 18:26:38 +0800
-> > > Mark Leo Sumadero <fryu771@gmail.com> wrote:
-> > >
-> > > >
-> > /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
-> > >
-> > > This is the cross-compiler: good!
-> > >
-> > > > -prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> > > > -D_FILE_OFFSET_BITS=64 -Os  -DLINUX -D_REENTRANT -D_GNU_SOURCE
-> > > >
-> > -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
-> > > >
-> > -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
-> > > >
-> > > >
-> > -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
-> > > >
-> > -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../../../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
-> > > > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
-> > > >
-> > -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m
-> > >
-> > > This is a path to header of host components: BAD!
-> > >
-> > > And this is where your problem is, this header path should *NOT* be
-> > > there when you cross-compile.
-> >
-> > The following worked for me (python3 case only):
-> >
-> > MOD_WSGI_VERSION = 61359e67448bdfc5fefb1692fd2a97f76394b20c
-> > MOD_WSGI_SITE = $(call github,GrahamDumpleton,mod_wsgi,$(MOD_WSGI_VERSION))
-> > MOD_WSGI_LICENSE = Apache-2.0
-> > MOD_WSGI_LICENSE_FILES = LICENSE
-> > MOD_WSGI_DEPENDENCIES = apache
-> >
-> > MOD_WSGI_CONF_OPTS = \
-> > --with-apxs=$(STAGING_DIR)/usr/bin/apxs
-> >
-> > ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> > MOD_WSGI_DEPENDENCIES += python3
-> > MOD_WSGI_CONF_ENV += \
-> >
-> > CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)" \
-> >         LDFLAGS="-L$(STAGING_DIR)/usr/lib"
-> > endif
-> >
-> > $(eval $(autotools-package))
-> >
-> > Regards,
-> > Peter
-> >
-> > >
-> > > Best regards,
-> > >
-> > > Thomas Petazzoni
-> >
-> >
+diff --git a/package/c-ares/0001-use_check_build_instead_of_check_user.patch b/package/c-ares/0001-use_check_build_instead_of_check_user.patch
+deleted file mode 100644
+index 8210ed673b..0000000000
+--- a/package/c-ares/0001-use_check_build_instead_of_check_user.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Use XC_CHECK_BUILD_FLAGS instead of XC_CHECK_USER_FLAGS.
+-Otherwise it complains of CPPFLAGS in CFLAGS.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura c-ares-1.10.0.orig/m4/xc-cc-check.m4 c-ares-1.10.0/m4/xc-cc-check.m4
+---- c-ares-1.10.0.orig/m4/xc-cc-check.m4	2013-12-26 19:40:46.354195974 -0300
+-+++ c-ares-1.10.0/m4/xc-cc-check.m4	2013-12-26 19:41:01.850718535 -0300
+-@@ -59,7 +59,7 @@
+- 
+- AC_DEFUN([_XC_PROG_CC], [
+-   AC_REQUIRE([_XC_PROG_CC_PREAMBLE])dnl
+--  AC_REQUIRE([XC_CHECK_USER_FLAGS])dnl
+-+  AC_REQUIRE([XC_CHECK_BUILD_FLAGS])dnl
+-   AC_REQUIRE([AC_PROG_INSTALL])dnl
+-   AC_REQUIRE([AC_PROG_CC])dnl
+-   AC_REQUIRE([AM_PROG_CC_C_O])dnl
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index a3599aaa11..d4fe483ae6 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256 6cdb97871f2930530c97deb7cf5c8fa4be5a0b02c7cea6e7c7667672a39d6852 c-ares-1.15.0.tar.gz
++sha256  de058ad7c128156e2db6dc98b8a359924d6f210a1b99dd36ba15c8f839a83a89  c-ares-1.16.0.tar.gz
+ 
+ # Hash for license file
+-sha256 db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c LICENSE.md
++sha256  db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c  LICENSE.md
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index f9e440d9b1..e8723bf784 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-C_ARES_VERSION = 1.15.0
++C_ARES_VERSION = 1.16.0
+ C_ARES_SITE = http://c-ares.haxx.se/download
+ C_ARES_INSTALL_STAGING = YES
+ C_ARES_CONF_OPTS = --with-random=/dev/urandom
+-# Rebuild configure to avoid XC_CHECK_USER_CFLAGS
+-C_ARES_AUTORECONF = YES
+ C_ARES_LICENSE = MIT
+ C_ARES_LICENSE_FILES = LICENSE.md
+ 
