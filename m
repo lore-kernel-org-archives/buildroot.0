@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 18:23:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lz4: security bump to version
- 1.9.2
-In-Reply-To: <20200228232626.2387483-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 29 Feb 2020 00:26:26 +0100")
-References: <20200228232626.2387483-1-fontaine.fabrice@gmail.com>
-Message-ID: <877dzmvoif.fsf@dell.be.48ers.dk>
+Date: Sat, 14 Mar 2020 18:27:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: fix CVE-2019-14834
+In-Reply-To: <20200229133437.2780453-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 29 Feb 2020 14:34:37 +0100")
+References: <20200229133437.2780453-1-fontaine.fabrice@gmail.com>
+Message-ID: <8736aavoc4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +13,9 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > - Fix CVE-2019-17543: LZ4 before 1.9.2 has a heap-based buffer overflow
- >   in LZ4_write32 (related to LZ4_compress_destSize), affecting
- >   applications that call LZ4_compress_fast with a large input. (This
- >   issue can also lead to data corruption.) NOTE: the vendor states "only
- >   a few specific / uncommon usages of the API are at risk."
- > - Update indentation of hash file (two spaces)
+ > A vulnerability was found in dnsmasq before version 2.81, where the
+ > memory leak allows remote attackers to cause a denial of service
+ > (memory consumption) via vectors involving DHCP response creation.
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
