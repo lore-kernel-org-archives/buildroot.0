@@ -1,84 +1,92 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 19:23:13 +0100
+Date: Sat, 14 Mar 2020 19:23:35 +0100
 Subject: [Buildroot] [git commit branch/2019.11.x] package/suricata: fix
- shabang for python scripts
-Message-ID: <20200314181125.BB55F83AD3@busybox.osuosl.org>
+ CVE-2019-18792
+Message-ID: <20200314181125.C487A83AD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84b0a16b40e10ac6050d0db9968c93e38b28c07c
+commit: https://git.buildroot.net/buildroot/commit/?id=d31d0981286a3c9383f46867ff0a11ee377ecaf1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-/usr/bin/suricatactl and /usr/bin/suricatasc have their interpreter set
-to the path of python in the HOST machine.
+An issue was discovered in Suricata 5.0.0. It is possible to
+bypass/evade any tcp based signature by overlapping a TCP segment with a
+fake FIN packet. The fake FIN packet is injected just before the PUSH
+ACK packet we want to bypass. The PUSH ACK packet (containing the data)
+will be ignored by Suricata because it overlaps the FIN packet (the
+sequence and ack number are identical in the two packets). The client
+will ignore the fake FIN packet because the ACK flag is not set. Both
+linux and windows clients are ignoring the injected packet.
 
-Use distutils' option '-e' to specify a better shabang.
-
-[yann.morin.1998 at free.fr:
-  - author did not provide their SoB, but it's simple enough to
-    not require it for once
-  - reword commit log
-  - use git-formatted patch, with a proper commit log
-]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-(cherry picked from commit 061768a04085be1b118e056b8523976edbd06823)
+(cherry picked from commit 2914843b394cf905f8bec98a23ba44c692f4b862)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...n-ensure-proper-shabang-on-python-scripts.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ .../0004-stream-reject-broken-ACK-packets.patch    | 40 ++++++++++++++++++++++
+ package/suricata/suricata.mk                       |  3 ++
+ 2 files changed, 43 insertions(+)
 
-diff --git a/package/suricata/0003-python-ensure-proper-shabang-on-python-scripts.patch b/package/suricata/0003-python-ensure-proper-shabang-on-python-scripts.patch
+diff --git a/package/suricata/0004-stream-reject-broken-ACK-packets.patch b/package/suricata/0004-stream-reject-broken-ACK-packets.patch
 new file mode 100644
-index 0000000000..4be591be3f
+index 0000000000..9670d73158
 --- /dev/null
-+++ b/package/suricata/0003-python-ensure-proper-shabang-on-python-scripts.patch
-@@ -0,0 +1,45 @@
-+From 44fe2328b715db25134ee095526d2fa47e6cd834 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Wed, 1 Jan 2020 15:25:57 +0100
-+Subject: [PATCH] python: ensure proper shabang on python scripts
++++ b/package/suricata/0004-stream-reject-broken-ACK-packets.patch
+@@ -0,0 +1,40 @@
++From 1c63d3905852f746ccde7e2585600b2199cefb4b Mon Sep 17 00:00:00 2001
++From: Victor Julien <victor@inliniac.net>
++Date: Thu, 21 Nov 2019 16:10:21 +0100
++Subject: [PATCH] stream: reject broken ACK packets
 +
-+When instlling python scripts, distutils would use the python used to
-+run setup.py as shabang for the scripts it installs.
++Fix evasion posibility by rejecting packets with a broken ACK field.
++These packets have a non-0 ACK field, but do not have a ACK flag set.
 +
-+However, when cross-compiling, this is most often not correct.
++Bug #3324.
 +
-+Instead, using '/usr/bin/env python' is guaranteed to find the proper
-+python in the PATH, so we need to instruct setyup.py to use that as the
-+executable.
-+
-+[yann.morin.1998 at free.fr:
-+  - author did not provide their SoB, but it's simple enough to
-+    not require it for once
-+  - provide proper commit log
-+]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++Reported-by: Nicolas Adba
++(cherry picked from commit fa692df37a796c3330c81988d15ef1a219afc006)
++[Retrieved from:
++https://github.com/OISF/suricata/commit/1c63d3905852f746ccde7e2585600b2199cefb4b]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ python/Makefile.am | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ src/stream-tcp.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+diff --git a/python/Makefile.am b/python/Makefile.am
-+index 59d195f29..a41604f72 100644
-+--- a/python/Makefile.am
-++++ b/python/Makefile.am
-+@@ -6,11 +6,11 @@ EXTRA_DIST =	setup.py \
-+ if HAVE_PYTHON
-+ all-local:
-+ 	cd $(srcdir) && \
-+-		$(HAVE_PYTHON) setup.py build --build-base $(abs_builddir)
-++		$(HAVE_PYTHON) setup.py build -e "/usr/bin/env python" --build-base $(abs_builddir)
++diff --git a/src/stream-tcp.c b/src/stream-tcp.c
++index 35e489acba..8653d670c6 100644
++--- a/src/stream-tcp.c
+++++ b/src/stream-tcp.c
++@@ -4759,6 +4759,7 @@ int StreamTcpPacket (ThreadVars *tv, Packet *p, StreamTcpThread *stt,
++     /* broken TCP http://ask.wireshark.org/questions/3183/acknowledgment-number-broken-tcp-the-acknowledge-field-is-nonzero-while-the-ack-flag-is-not-set */
++     if (!(p->tcph->th_flags & TH_ACK) && TCP_GET_ACK(p) != 0) {
++         StreamTcpSetEvent(p, STREAM_PKT_BROKEN_ACK);
+++        goto error;
++     }
 + 
-+ install-exec-local:
-+ 	cd $(srcdir) && \
-+-		$(HAVE_PYTHON) setup.py build --build-base $(abs_builddir) \
-++		$(HAVE_PYTHON) setup.py build -e "/usr/bin/env python" --build-base $(abs_builddir) \
-+ 		install --prefix $(DESTDIR)$(prefix)
++     /* If we are on IPS mode, and got a drop action triggered from
++@@ -6883,7 +6884,7 @@ static int StreamTcpTest10 (void)
 + 
-+ uninstall-local:
-+-- 
-+2.20.1
++     tcph.th_win = htons(5480);
++     tcph.th_seq = htonl(10);
++-    tcph.th_ack = htonl(11);
+++    tcph.th_ack = 0;
++     tcph.th_flags = TH_SYN;
++     p->tcph = &tcph;
++ 
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index ebd830ea77..3857c7b202 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
+@@ -11,6 +11,9 @@ SURICATA_LICENSE_FILES = COPYING LICENSE
+ # We're patching configure.ac
+ SURICATA_AUTORECONF = YES
+ 
++# 0004-stream-reject-broken-ACK-packets.patch
++SURICATA_IGNORE_CVES += CVE-2019-18792
 +
+ SURICATA_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_JANSSON),jansson) \
