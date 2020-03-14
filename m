@@ -1,126 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 18:21:27 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/squid: security
- bump to version 4.10
-Message-ID: <20200314170920.B2867838CA@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 14 Mar 2020 18:22:04 +0100
+Subject: [Buildroot] [PATCH v4,
+ 2/3] package/gobject-introspection: export cc in g-ir-scanner
+In-Reply-To: <20200312194632.3787015-2-aduskett@gmail.com>
+References: <20200312194632.3787015-1-aduskett@gmail.com>
+ <20200312194632.3787015-2-aduskett@gmail.com>
+Message-ID: <20200314172204.GP705@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7aae2295fe3e12f174838d869f79f9496e46578c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+Adam, All,
 
-Drop patch (already in version)
-Update indentation of hash file (two spaces)
+On 2020-03-12 12:46 -0700, aduskett at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Without this export, the host variant of g-ir-scanner will call the host
+> gcc for linking.
+> 
+> For autotools packages, this is not an issue as they use
+> Makefile.introspection, which will export the cross-cc, however for meson,
+> this is not the case, and linking errors occur when meson packages generate
+> .gir and .typelib files.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+> Changes v1 -> v3:
+>   - Use relative paths. (Yann)
+> 
+>  package/gobject-introspection/g-ir-scanner.in          | 2 ++
+>  package/gobject-introspection/gobject-introspection.mk | 2 ++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
+> index 9f97497b7e..d5847ad063 100644
+> --- a/package/gobject-introspection/g-ir-scanner.in
+> +++ b/package/gobject-introspection/g-ir-scanner.in
+> @@ -1,6 +1,8 @@
+>  #!/usr/bin/env bash
+>  
+>  export GI_SCANNER_DISABLE_CACHE=1
+> +export CC="$(dirname "${0}")/../../../../bin/@BASENAME_TARGET_CC@"
+> +
 
-Fix the following issues:
- - CVE-2020-8517: Buffer Overflow issue in ext_lm_group_acl helper.
- - CVE-2019-12528: Information Disclosure issue in FTP Gateway.
- - CVE-2020-8449, CVE-2020-8450: Improper Input Validation issues in
-   HTTP Request processing.
- - CVE-2019-18679: Information Disclosure issue in HTTP Digest
-   Authentication.
- - CVE-2019-18678: HTTP Request Splitting issue in HTTP message
-   processing.
- - CVE-2019-18677: Cross-Site Request Forgery issue in HTTP Request
-   processing.
- - CVE-2019-12523, CVE-2019-18676: Multiple issues in URI processing.
- - CVE-2019-12526: Heap Overflow issue in URN processing.
+HHhmmm. I remember that I said I wanted the wrapper to still be
+rrrelocatable. But it is in staging (sysroot) while the compiler is in
+host dir, so you added that many .././/.. needed to got from there to
+there.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit df1d834420b7af4624331ae7fbe174ad9a84875f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...cinclude-os-deps.m4-fix-cross-compilation.patch | 42 ----------------------
- package/squid/squid.hash                           | 10 +++---
- package/squid/squid.mk                             |  4 +--
- 3 files changed, 6 insertions(+), 50 deletions(-)
+But look at the line below: we already have HOST_DIR:
 
-diff --git a/package/squid/0001-acinclude-os-deps.m4-fix-cross-compilation.patch b/package/squid/0001-acinclude-os-deps.m4-fix-cross-compilation.patch
-deleted file mode 100644
-index 4c4fd5c8d5..0000000000
---- a/package/squid/0001-acinclude-os-deps.m4-fix-cross-compilation.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 5dbaf8eebc5b66230e0131b09651c7e40bf0e9de Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 20 Aug 2019 21:41:16 +0200
--Subject: [PATCH] acinclude/os-deps.m4: fix cross-compilation
--
--Do not check check file descriptor maximum value through AC_RUN_IFELSE
--when cross-compiling as this will raise an error
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/squid-cache/squid/pull/464]
-----
-- acinclude/os-deps.m4 | 7 +++++--
-- 1 file changed, 5 insertions(+), 2 deletions(-)
--
--diff --git a/acinclude/os-deps.m4 b/acinclude/os-deps.m4
--index b50717517..ec10a54c6 100644
----- a/acinclude/os-deps.m4
--+++ b/acinclude/os-deps.m4
--@@ -169,7 +169,9 @@ AC_MSG_CHECKING(Maximum number of filedescriptors we can open)
-- SQUID_STATE_SAVE(maxfd)
-- dnl FreeBSD pthreads break dup2().
--   AS_CASE([$host_os],[freebsd],[ LDFLAGS=`echo $LDFLAGS | sed -e "s/-pthread//"` ])
---  AC_RUN_IFELSE([AC_LANG_SOURCE([[
--+  dnl AC_RUN_IFELSE can't be run when cross-compiling
--+  AS_CASE([$cross_compiling],[no],[
--+    AC_RUN_IFELSE([AC_LANG_SOURCE([[
-- #include <stdio.h>
-- #include <unistd.h>
-- #include <stdlib.h>
--@@ -231,7 +233,8 @@ int main(int argc, char **argv) {
-- 	fprintf (fp, "%d\n", i & ~0x3F);
-- 	return 0;
-- }
---  ]])],[squid_filedescriptors_limit=`cat conftestval`],[],[])
--+    ]])],[squid_filedescriptors_limit=`cat conftestval`],[],[])
--+  ])
--   dnl Microsoft MSVCRT.DLL supports 2048 maximum FDs
--   AS_CASE(["$host_os"],[mingw|mingw32],[squid_filedescriptors_limit="2048"])
--   AC_MSG_RESULT($squid_filedescriptors_limit)
---- 
--2.20.1
--
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index ff694da6ab..765e67cf3d 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v4/squid-4.8.tar.xz.asc
--md5 08e018f2d8db4911ee90591284fa1ca5 squid-4.8.tar.xz
--sha1 4ff1390eee3ec20cefa5565cbb56e1a89a12bfc1 squid-4.8.tar.xz
-+# From http://www.squid-cache.org/Versions/v4/squid-4.10.tar.xz.asc
-+md5  af7ac6e70f9bd03ae4fcec0c9b99c38a  squid-4.10.tar.xz
-+sha1  b8b267771550bb8c7f2b2968b305118090e7217a  squid-4.10.tar.xz
- # Locally calculated
--sha256 78cdb324d93341d36d09d5f791060f6e8aaa5ff3179f7c949cd910d023a86210 squid-4.8.tar.xz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-+sha256  98f0100afd8a42ea5f6b81eb98b0e4b36d7a54beab1c73d2f1705ab49b025f1f  squid-4.10.tar.xz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 0d09968bd3..f70403b87f 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,15 +4,13 @@
- #
- ################################################################################
- 
--SQUID_VERSION = 4.8
-+SQUID_VERSION = 4.10
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
- SQUID_LICENSE_FILES = COPYING
- SQUID_DEPENDENCIES = libcap host-libcap libxml2 host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
--# We're patching acinclude/os-deps.m4
--SQUID_AUTORECONF = YES
- SQUID_CONF_ENV = \
- 	ac_cv_epoll_works=yes \
- 	ac_cv_func_setresuid=yes \
+>  ${HOST_DIR}/bin/g-ir-scanner \
+   ^^^^^^^^^^^
+
+So, just:
+
+    export CC="${HOSTTT_DIR}/bin/@BASENAME_TARGET_CC@"
+
+Or did we miss something?
+
+Regards,
+Yann E. MORIN.
+
+>  --lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
+>  --use-binary-wrapper=$(dirname $0)/g-ir-scanner-qemuwrapper \
+> diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+> index 9043390857..a508957904 100644
+> --- a/package/gobject-introspection/gobject-introspection.mk
+> +++ b/package/gobject-introspection/gobject-introspection.mk
+> @@ -104,6 +104,8 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
+>  		$(INSTALL) -D -m 755 \
+>  			$(GOBJECT_INTROSPECTION_PKGDIR)/$(w).in $(STAGING_DIR)/usr/bin/$(w)
+>  	)
+> +	$(SED) "s%@BASENAME_TARGET_CC@%$(notdir $(TARGET_CC))%g" $(STAGING_DIR)/usr/bin/g-ir-scanner
+> +
+>  	# Gobject-introspection installs Makefile.introspection in
+>  	# $(STAGING_DIR)/usr/share which is needed for autotools-based programs to
+>  	# build .gir and .typelib files. Unfortuantly, gobject-introspection-1.0.pc
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
