@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 17:29:45 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/kvm-unit-tests:
+Date: Sat, 14 Mar 2020 17:29:16 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/kvm-unit-tests:
  fix build with SSP
-Message-ID: <20200314161743.5A65083672@busybox.osuosl.org>
+Message-ID: <20200314162025.14DC883676@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fe6bf8019474e6ff9375f0c0177ef9f843cbe66
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=474c3b3393e22672c4166cb1e79b6b6f0e8cbdc4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Add a patch to correct a typo in the Makefile, so -fno-stack-protector /
 -fno-stack-protector-all are really used.  With this applied, kvm-unit-tests
