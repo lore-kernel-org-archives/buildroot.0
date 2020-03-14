@@ -1,33 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 15:31:51 +0100
-Subject: [Buildroot] [PATCH] package/libsvgtiny: fix parallel build
-In-Reply-To: <20200222214439.18588-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Sat, 22 Feb 2020 22:44:39 +0100")
-References: <20200222214439.18588-1-giulio.benetti@benettiengineering.com>
-Message-ID: <87blozxb1k.fsf@dell.be.48ers.dk>
+Date: Sat, 14 Mar 2020 15:28:02 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libsvgtiny: fix
+ parallel build
+Message-ID: <20200314141945.1F50D82B99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=902ac0199993c113419128f470e18b1530ae38a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Fix previous commit[1] which purpose was to fix parallel build. It
- > didn't work since it assigned $(MAKE1) to LIBSVGTINY_MAKE, but this is a
- > generic-package and building is done using $(MAKE), then LIBSVGTINY_MAKE
- > was ignored. Let's substitute instead $(MAKE) with $(MAKE1) in
- > LIBSVGTINY_BUILD_CMDS.
+Fix previous commit[1] which purpose was to fix parallel build. It
+didn't work since it assigned $(MAKE1) to LIBSVGTINY_MAKE, but this is a
+generic-package and building is done using $(MAKE), then LIBSVGTINY_MAKE
+was ignored. Let's substitute instead $(MAKE) with $(MAKE1) in
+LIBSVGTINY_BUILD_CMDS.
 
- > [1]:
- > https://git.buildroot.net/buildroot/commit/?id=26d67a2599d6c88facd5178de853fa355244e7c2
+[1]:
+https://git.buildroot.net/buildroot/commit/?id=26d67a2599d6c88facd5178de853fa355244e7c2
 
- > Fixes:
- > http://autobuild.buildroot.net/results/67d/67d341c0cc272323d6e231a20796a6848c21d760/
+Fixes:
+http://autobuild.buildroot.net/results/67d/67d341c0cc272323d6e231a20796a6848c21d760/
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[yann.morin.1998 at free.fr:
+  - use $(MAKE1) in all three step
+  - move comment out of the define
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit f36c045e7b6e1ba9b07aed6b10fc2bf24462f073)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libsvgtiny/libsvgtiny.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Committed to 2019.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+index fe7dc0a6d2..55ce4327fe 100644
+--- a/package/libsvgtiny/libsvgtiny.mk
++++ b/package/libsvgtiny/libsvgtiny.mk
+@@ -12,8 +12,6 @@ LIBSVGTINY_DEPENDENCIES = \
+ 	libxml2 host-gperf host-pkgconf host-netsurf-buildsystem
+ LIBSVGTINY_LICENSE = MIT
+ LIBSVGTINY_LICENSE_FILES = README
+-# Package does not build in parallel due to improper make rules
+-LIBSVGTINY_MAKE = $(MAKE1)
+ 
+ # The libsvgtiny build system cannot build both the shared and static
+ # libraries. So when the Buildroot configuration requests to build
+@@ -28,20 +26,21 @@ define LIBSVGTINY_CONFIGURE_CMDS
+ 	ln -sf $(HOST_DIR)/share/netsurf-buildsystem $(@D)/build
+ endef
+ 
++# Use $(MAKE1) since parallel build fails
+ define LIBSVGTINY_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=/usr \
++	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) PREFIX=/usr \
+ 		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE)
+ endef
+ 
+ define LIBSVGTINY_INSTALL_STAGING_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) \
+-		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) \
++		$(MAKE1) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) \
+ 		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE) install
+ endef
+ 
+ define LIBSVGTINY_INSTALL_TARGET_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) \
+-		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) \
++		$(MAKE1) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) \
+ 		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE) install
+ endef
+ 
