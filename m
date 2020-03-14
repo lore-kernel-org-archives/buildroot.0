@@ -1,54 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 15:15:40 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/jpeg-turbo: force
- fPIC for shared libraries
-Message-ID: <20200314141336.5D3B582283@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 14 Mar 2020 15:28:31 +0100
+Subject: [Buildroot] [git commit] package/ffmpeg: fix typo "--enable-bsfs"
+ -> "--enable-bsf"
+Message-ID: <20200314141553.8DA7582B84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45717ee0c62975920c79cc627ba1b272ca155884
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f783486d07b24708a5bf45ad713353a2f90b926b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When BR2_SSP_ALL is set, there is a link issue due to missing -fPIC in CFLAGS.
-Set CMAKE_POSITION_INDEPENDENT_CODE=ON to add it.
+Fix ffmpeg configuration when BR2_PACKAGE_FFMPEG_BSFS is not default ("all"):
 
-This is a similar fix as for gtest package [1]
+	Unknown option "--enable-bsfs=h264_metadata".
+	See ./configure --help for available options.
+	package/pkg-generic.mk:254: recipe for target '/root/buildroot/output/build/ffmpeg-4.2.2/.stamp_configured' failed
 
-[1] https://git.buildroot.net/buildroot/commit/?id=2026621f3c60167aa8ba48e658be1b214d1347d7
+The option is named according to the scheme "--enable-SINGULAR=..." /
+"--disable-PLURAL".
 
-Fixes:
-http://autobuild.buildroot.net/results/e1f/e1f164cee16b037c0232fdda40fc16caf8f0c0af
+The typo is present since the release 2014.02:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Murat Demirten <mdemirten@yh.com.tr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 37f3d09d46a7b3b4ba8f564c0005f4ab7ff1a69c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+https://git.buildroot.net/buildroot/commit/package/ffmpeg/ffmpeg.mk?id=62ab07ef769bd6504fe1db144aaac3fd45db9dad
+
+Signed-off-by: Anatoly Borodin <anatoly.borodin@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jpeg-turbo/jpeg-turbo.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/ffmpeg/ffmpeg.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 0c75cf1db5..1ab60bab1e 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -31,6 +31,16 @@ else
- JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=OFF
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index f0047c4e3b..b7148bbba2 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -135,7 +135,7 @@ endif
+ 
+ ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),all)
+ FFMPEG_CONF_OPTS += --disable-bsfs \
+-	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),--enable-bsfs=$(x))
++	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),--enable-bsf=$(x))
  endif
  
-+# Ensure that jpeg-turbo is compiled with -fPIC to allow linking the static
-+# libraries with dynamically linked programs. This is not a requirement
-+# for most architectures but is mandatory for ARM.
-+# This allow to avoid link issues with BR2_SSP_ALL:
-+# jsimd_none.c.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against external symbol `__stack_chk_guard@@GLIBC_2.17'
-+# can not be used when making a shared object; recompile with -fPIC
-+ifeq ($(BR2_STATIC_LIBS),)
-+JPEG_TURBO_CONF_OPTS += -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-+endif
-+
- define JPEG_TURBO_REMOVE_USELESS_TOOLS
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,cjpeg djpeg jpegtran rdjpgcom tjbench wrjpgcom)
- endef
+ ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_PROTOCOLS)),all)
