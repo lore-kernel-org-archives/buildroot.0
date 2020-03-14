@@ -1,62 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 18:25:02 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/dnsmasq: bump
- version to 2.80
-Message-ID: <20200314171827.4B8B583912@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 18:25:13 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/dnsmasq: fix
+ build with ubus and NLS
+Message-ID: <20200314171827.5C4C6837B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8c3f767429508017cb2e11fd831d645aeaa8843
+commit: https://git.buildroot.net/buildroot/commit/?id=0df24d8c44ccd231d73c84aef523390e752dd98b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Also automatically enable UBus support when UBus itself is enabled.
+Fixes:
+ - http://autobuild.buildroot.org/results/c0b27754b7ede024c095bdf0b3616e6f6be48c6d
 
-Signed-off-by: Jan Willem Janssen <j.w.janssen@lxtreme.nl>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 26c876cd072bcceb67e11b4d173bd848f89476c3)
+(cherry picked from commit 5c4d9c644a45549cd2a26501d4169bbaac2169e7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dnsmasq/dnsmasq.hash | 1 +
- package/dnsmasq/dnsmasq.mk   | 7 ++++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ .../0001-Makefile-fix-i18n-build-with-ubus.patch   | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index 322f8df5cc..18a539277e 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,6 +1,7 @@
- # Locally calculated after checking pgp signature
- # http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.79.tar.xz.asc
- sha256	78ad74f5ca14fd85a8bac93f764cd9d60b27579e90eabd3687ca7b030e67861f	dnsmasq-2.79.tar.xz
-+sha256	cdaba2785e92665cf090646cba6f94812760b9d7d8c8d0cfb07ac819377a63bb	dnsmasq-2.80.tar.xz
- # Locally calculated
- sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING-v3
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 79c5619966..366cebf012 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DNSMASQ_VERSION = 2.79
-+DNSMASQ_VERSION = 2.80
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
-@@ -67,6 +67,11 @@ define DNSMASQ_INSTALL_DBUS
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_UBUS),y)
-+DNSMASQ_DEPENDENCIES += ubus
-+DNSMASQ_COPTS += -DHAVE_UBUS
-+endif
+diff --git a/package/dnsmasq/0001-Makefile-fix-i18n-build-with-ubus.patch b/package/dnsmasq/0001-Makefile-fix-i18n-build-with-ubus.patch
+new file mode 100644
+index 0000000000..e42549beac
+--- /dev/null
++++ b/package/dnsmasq/0001-Makefile-fix-i18n-build-with-ubus.patch
+@@ -0,0 +1,33 @@
++From 08572cffb641004d86072f12aec4d6489454b897 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 21 Jun 2019 09:26:20 +0200
++Subject: [PATCH] Makefile: fix i18n build with ubus
 +
- define DNSMASQ_FIX_PKGCONFIG
- 	$(SED) 's^PKG_CONFIG = pkg-config^PKG_CONFIG = $(PKG_CONFIG_HOST_BINARY)^' \
- 		$(DNSMASQ_DIR)/Makefile
++Commit caf4d571e6d86285a3690cfcc8de9c5f394320a8 forgot adding
++ubus_libs to build_libs for all-i18n target
++
++Fixes:
++ - http://autobuild.buildroot.org/results/c0b27754b7ede024c095bdf0b3616e6f6be48c6d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to simon at thekelleys.org.uk]
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 3fb7cbe..78e25f0 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -111,7 +111,7 @@ all-i18n : $(BUILDDIR)
++  top="$(top)" \
++  i18n=-DLOCALEDIR=\'\"$(LOCALEDIR)\"\' \
++  build_cflags="$(version) $(dbus_cflags) $(idn2_cflags) $(idn_cflags) $(ct_cflags) $(lua_cflags) $(nettle_cflags)" \
++- build_libs="$(dbus_libs) $(idn2_libs) $(idn_libs) $(ct_libs) $(lua_libs) $(sunos_libs) $(nettle_libs) $(gmp_libs)"  \
+++ build_libs="$(dbus_libs) $(idn2_libs) $(idn_libs) $(ct_libs) $(lua_libs) $(sunos_libs) $(nettle_libs) $(gmp_libs) $(ubus_libs)"  \
++  -f $(top)/Makefile dnsmasq
++ 	for f in `cd $(PO); echo *.po`; do \
++ 		cd $(top) && cd $(BUILDDIR) && $(MAKE) top="$(top)" -f $(top)/Makefile $${f%.po}.mo; \
++-- 
++2.14.1
++
