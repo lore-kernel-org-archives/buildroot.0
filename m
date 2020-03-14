@@ -1,57 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Mar 2020 15:16:52 +0100
-Subject: [Buildroot] [PATCH] package/gcc: disable gcc 9.x for csky
-In-Reply-To: <20200312234127.449204-2-romain.naour@smile.fr>
-References: <20200312234127.449204-1-romain.naour@smile.fr>
- <20200312234127.449204-2-romain.naour@smile.fr>
-Message-ID: <20200314151652.3f3c6afa@windsurf>
+Date: Sat, 14 Mar 2020 15:18:23 +0100
+Subject: [Buildroot] [PATCH-for-2020.02.x v2] package/qt5xmlpatterns:
+ enable qml module
+In-Reply-To: <20200313204415.2036-1-ps.report@gmx.net>
+References: <20200313204415.2036-1-ps.report@gmx.net>
+Message-ID: <20200314151823.39b5c55f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Peter,
 
-On Fri, 13 Mar 2020 00:41:27 +0100
-Romain Naour <romain.naour@smile.fr> wrote:
+On Fri, 13 Mar 2020 21:44:15 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> When building a toolchain with upstream gcc 9.x the build
-> fail due to several issues.
+> qt5declarative:
+>  - remove unneded dependency on qt5mlpatterns
 > 
-> Note: The upstream Binutils support csky target since
-> release 2.32 but the support was never enabled in the
-> Buildroot packaging. So the latest version (2.33.1) was
-> tested here.
+> qt5xmlpatterns:
+>  - add optional dependency on qt5declarative
+>  - add target install step of the optional qml files
 > 
-> [upstream gcc 9.x w/ glibc csky fork with binutils csky for or binutils 2.33.1]
-> In file included from <command-line>:
-> ./../include/libc-symbols.h:534:26: error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location': 'const', 'nothrow' [-Werror=missing-attributes]
->   534 |   extern __typeof (name) __EI_##name \
-> 
-> [upstream gcc 9.x w/ glibc 2.30 w/ binutils csky fork]
-> /tmp/ccThLRhb.s: Assembler messages:
-> /tmp/ccThLRhb.s:10: Error: invalid or unsupported encoding in .cfi_personality
-> /tmp/ccThLRhb.s:11: Error: invalid or unsupported encoding in .cfi_lsda
-> 
-> [upstream gcc 9.x w/ glibc 2.30 w/ binutils 2.33.1]
-> build/elf/librtld.os: in function `__sync_fetch_and_add_2':
-> libgcc/config/csky/linux-atomic.c:116: undefined reference to `__kernel_cmpxchg'
-> 
-> Currenlty, only the toolchain using binutils, gcc, glibc
-> fork produce a working toolchain. So disable gcc 9.x for
-> csky.
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/gcc/Config.in.host | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> Reported-by: Nimai Mahajan <nimaim@gmail.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Applied to master, thanks.
+Will you send a similar patch for master ?
+
+Thanks,
 
 Thomas
 -- 
