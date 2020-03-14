@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 18:32:28 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libssh2: fix
+Date: Sat, 14 Mar 2020 18:32:01 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libssh2: fix
  CVE-2019-17498
-Message-ID: <20200314171952.AC61083922@busybox.osuosl.org>
+Message-ID: <20200314171958.0C12783928@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13ffc622a129e61b0dad842dd1319da890515960
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0b97241ab1cf2f727366f11682511963c98aa5ed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 In libssh2 v1.9.0 and earlier versions, the SSH_MSG_DISCONNECT logic in
 packet.c has an integer overflow in a bounds check, enabling an attacker
