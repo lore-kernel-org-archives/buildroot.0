@@ -1,79 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 19:26:55 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/openjpeg: fix
- CVE-2020-6851
-Message-ID: <20200314181617.3984E83B01@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 19:33:57 +0100
+Subject: [Buildroot] [PATCH 2/2] package/pure-ftpd: fix CVE-2020-9365
+In-Reply-To: <20200229203416.3462566-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 29 Feb 2020 21:34:16 +0100")
+References: <20200229203416.3462566-1-fontaine.fabrice@gmail.com>
+ <20200229203416.3462566-2-fontaine.fabrice@gmail.com>
+Message-ID: <87fteardka.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfec60c9fec66cec07348cc102058fc01fa2227e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-OpenJPEG through 2.3.1 has a heap-based buffer overflow in
-opj_t1_clbl_decode_processor in openjp2/t1.c because of lack of
-opj_j2k_update_image_dimensions validation.
+ > An issue was discovered in Pure-FTPd 1.0.49. An out-of-bounds (OOB) read
+ > has been detected in the pure_strcmp function in utils.c.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a3b1f2885eeaf610eb98c5f419ece9d71e33e9c8)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...imensions-reject-images-whose-coordinates.patch | 32 ++++++++++++++++++++++
- package/openjpeg/openjpeg.mk                       |  3 ++
- 2 files changed, 35 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/openjpeg/0006-opj_j2k_update_image_dimensions-reject-images-whose-coordinates.patch b/package/openjpeg/0006-opj_j2k_update_image_dimensions-reject-images-whose-coordinates.patch
-new file mode 100644
-index 0000000000..fe1390a310
---- /dev/null
-+++ b/package/openjpeg/0006-opj_j2k_update_image_dimensions-reject-images-whose-coordinates.patch
-@@ -0,0 +1,32 @@
-+From 024b8407392cb0b82b04b58ed256094ed5799e04 Mon Sep 17 00:00:00 2001
-+From: Even Rouault <even.rouault@spatialys.com>
-+Date: Sat, 11 Jan 2020 01:51:19 +0100
-+Subject: [PATCH] opj_j2k_update_image_dimensions(): reject images whose
-+ coordinates are beyond INT_MAX (fixes #1228)
-+
-+[Retrieved from:
-+https://github.com/uclouvain/openjpeg/commit/024b8407392cb0b82b04b58ed256094ed5799e04]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/lib/openjp2/j2k.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/src/lib/openjp2/j2k.c b/src/lib/openjp2/j2k.c
-+index 14f6ff41a..922550eb1 100644
-+--- a/src/lib/openjp2/j2k.c
-++++ b/src/lib/openjp2/j2k.c
-+@@ -9221,6 +9221,14 @@ static OPJ_BOOL opj_j2k_update_image_dimensions(opj_image_t* p_image,
-+     l_img_comp = p_image->comps;
-+     for (it_comp = 0; it_comp < p_image->numcomps; ++it_comp) {
-+         OPJ_INT32 l_h, l_w;
-++        if (p_image->x0 > (OPJ_UINT32)INT_MAX ||
-++                p_image->y0 > (OPJ_UINT32)INT_MAX ||
-++                p_image->x1 > (OPJ_UINT32)INT_MAX ||
-++                p_image->y1 > (OPJ_UINT32)INT_MAX) {
-++            opj_event_msg(p_manager, EVT_ERROR,
-++                          "Image coordinates above INT_MAX are not supported\n");
-++            return OPJ_FALSE;
-++        }
-+ 
-+         l_img_comp->x0 = (OPJ_UINT32)opj_int_ceildiv((OPJ_INT32)p_image->x0,
-+                          (OPJ_INT32)l_img_comp->dx);
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index 0fe2aed536..28d6e97b01 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -14,6 +14,9 @@ OPENJPEG_INSTALL_STAGING = YES
- # 0005-bmp_read_rle4_data-avoid-potential-infinite-loop.patch
- OPENJPEG_IGNORE_CVES += CVE-2019-12973
- 
-+# 0006-opj_j2k_update_image_dimensions-reject-images-whose-coordinates.patch
-+OPENJPEG_IGNORE_CVES += CVE-2020-6851
-+
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
+Committed to 2019.02.x and 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
