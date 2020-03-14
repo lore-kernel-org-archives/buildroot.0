@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 15:42:27 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/at: fix parallel
+Date: Sat, 14 Mar 2020 15:42:00 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/at: fix parallel
  build failure
-Message-ID: <20200314145012.8CF0181F05@busybox.osuosl.org>
+Message-ID: <20200314145019.15B32831CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=314ab1a356b801e71ed7d0c93429fcf224aba065
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9377a8ce1a45ac422fcb954a744487f8b01bf833
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Add a patch to finally fix parallel build failure. Patch is pending
 upstream:
@@ -73,11 +73,11 @@ index 0000000000..6e3dc24ca4
 +2.20.1
 +
 diff --git a/package/at/at.mk b/package/at/at.mk
-index 36aa8c7a42..8ca38f01f1 100644
+index e0517af294..dbf649c0be 100644
 --- a/package/at/at.mk
 +++ b/package/at/at.mk
 @@ -7,9 +7,6 @@
- AT_VERSION = release/3.1.23
+ AT_VERSION = 7c74fa1aece6bc6db351763dc012193d5d634b7e
  AT_SITE = https://salsa.debian.org/debian/at.git
  AT_SITE_METHOD = git
 -# Tried to add missing deps for parsetime.l but still parallel build fails
