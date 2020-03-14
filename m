@@ -1,48 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 19:27:54 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/openjpeg: bump to
- version 2.3.1
-Message-ID: <20200314181610.D1C1483AF1@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 19:28:14 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/openjpeg: fix
+ CVE-2020-6851
+Message-ID: <20200314181610.E51B683AF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87401a14d19f3133c84f1bbf6110c563b7b9b830
+commit: https://git.buildroot.net/buildroot/commit/?id=ffd32ad3ef854bd6145f7b38b9756a6272aae363
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7a0f168c19b44c729247db1e055c049beccd11a5)
+OpenJPEG through 2.3.1 has a heap-based buffer overflow in
+opj_t1_clbl_decode_processor in openjp2/t1.c because of lack of
+opj_j2k_update_image_dimensions validation.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a3b1f2885eeaf610eb98c5f419ece9d71e33e9c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openjpeg/openjpeg.hash | 2 +-
- package/openjpeg/openjpeg.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...imensions-reject-images-whose-coordinates.patch | 32 ++++++++++++++++++++++
+ package/openjpeg/openjpeg.mk                       |  3 ++
+ 2 files changed, 35 insertions(+)
 
-diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
-index 8a6fda48c4..31c5b50409 100644
---- a/package/openjpeg/openjpeg.hash
-+++ b/package/openjpeg/openjpeg.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 3389a1aa908c2b577863da213db3a170df3edbb1432e99ae5fd3f2ac721d69d3  openjpeg-51f097e6d5754ddae93e716276fe8176b44ec548.tar.gz
-+sha256 63f5a4713ecafc86de51bfad89cc07bb788e9bba24ebbf0c4ca637621aadb6a9  openjpeg-2.3.1.tar.gz
- sha256 a6af136f3e15038a666b61f376612a07d9a4e48cb7c01adbf3e33b3f14ab49b6  LICENSE
+diff --git a/package/openjpeg/0006-opj_j2k_update_image_dimensions-reject-images-whose-coordinates.patch b/package/openjpeg/0006-opj_j2k_update_image_dimensions-reject-images-whose-coordinates.patch
+new file mode 100644
+index 0000000000..fe1390a310
+--- /dev/null
++++ b/package/openjpeg/0006-opj_j2k_update_image_dimensions-reject-images-whose-coordinates.patch
+@@ -0,0 +1,32 @@
++From 024b8407392cb0b82b04b58ed256094ed5799e04 Mon Sep 17 00:00:00 2001
++From: Even Rouault <even.rouault@spatialys.com>
++Date: Sat, 11 Jan 2020 01:51:19 +0100
++Subject: [PATCH] opj_j2k_update_image_dimensions(): reject images whose
++ coordinates are beyond INT_MAX (fixes #1228)
++
++[Retrieved from:
++https://github.com/uclouvain/openjpeg/commit/024b8407392cb0b82b04b58ed256094ed5799e04]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/lib/openjp2/j2k.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/src/lib/openjp2/j2k.c b/src/lib/openjp2/j2k.c
++index 14f6ff41a..922550eb1 100644
++--- a/src/lib/openjp2/j2k.c
+++++ b/src/lib/openjp2/j2k.c
++@@ -9221,6 +9221,14 @@ static OPJ_BOOL opj_j2k_update_image_dimensions(opj_image_t* p_image,
++     l_img_comp = p_image->comps;
++     for (it_comp = 0; it_comp < p_image->numcomps; ++it_comp) {
++         OPJ_INT32 l_h, l_w;
+++        if (p_image->x0 > (OPJ_UINT32)INT_MAX ||
+++                p_image->y0 > (OPJ_UINT32)INT_MAX ||
+++                p_image->x1 > (OPJ_UINT32)INT_MAX ||
+++                p_image->y1 > (OPJ_UINT32)INT_MAX) {
+++            opj_event_msg(p_manager, EVT_ERROR,
+++                          "Image coordinates above INT_MAX are not supported\n");
+++            return OPJ_FALSE;
+++        }
++ 
++         l_img_comp->x0 = (OPJ_UINT32)opj_int_ceildiv((OPJ_INT32)p_image->x0,
++                          (OPJ_INT32)l_img_comp->dx);
 diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index 6036ab95a3..1b119fa5fe 100644
+index 0fe2aed536..28d6e97b01 100644
 --- a/package/openjpeg/openjpeg.mk
 +++ b/package/openjpeg/openjpeg.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+@@ -14,6 +14,9 @@ OPENJPEG_INSTALL_STAGING = YES
+ # 0005-bmp_read_rle4_data-avoid-potential-infinite-loop.patch
+ OPENJPEG_IGNORE_CVES += CVE-2019-12973
  
--OPENJPEG_VERSION = 51f097e6d5754ddae93e716276fe8176b44ec548
--OPENJPEG_SITE = $(call github,uclouvain,openjpeg,$(OPENJPEG_VERSION))
-+OPENJPEG_VERSION = 2.3.1
-+OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
- OPENJPEG_LICENSE = BSD-2-Clause
- OPENJPEG_LICENSE_FILES = LICENSE
- OPENJPEG_INSTALL_STAGING = YES
++# 0006-opj_j2k_update_image_dimensions-reject-images-whose-coordinates.patch
++OPENJPEG_IGNORE_CVES += CVE-2020-6851
++
+ OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
+ OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
+ OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
