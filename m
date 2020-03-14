@@ -1,142 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Mar 2020 15:18:38 +0100
-Subject: [Buildroot] [git commit] package/util-linux: fix build for riscv64
- and powerpc64le
-Message-ID: <20200314140603.5A31C82B52@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 15:19:03 +0100
+Subject: [Buildroot] [PATCH] package/util-linux: add missing SOB to
+ patches
+In-Reply-To: <20200313010418.16872-1-unixmania@gmail.com>
+References: <20200313010418.16872-1-unixmania@gmail.com>
+Message-ID: <20200314151903.40101df8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e02356ebb70bb17848147e0e6161eacf8526189c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 12 Mar 2020 22:04:18 -0300
+unixmania at gmail.com wrote:
 
-Pull two upstream patches that fix the declaration of pidfd_open and
-pidfd_send_signal.
+> From: Carlos Santos <unixmania@gmail.com>
+> 
+> It is required that all patches in packages have the Signed-off-by of
+> the contributor who brought them into Buildroot.
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ---
+>  package/util-linux/0003-blkdiscard-use-O_EXCL-add-force.patch    | 1 +
+>  .../0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch   | 1 +
+>  .../0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch         | 1 +
+>  3 files changed, 3 insertions(+)
 
-Fixes:
-  http://autobuild.buildroot.net/results/2396b04478f9d358b94f2e2e05540625ddc9f205/
-  http://autobuild.buildroot.net/results/ed4b5ec61bd33d3ccf0ebb16000af46d0499366d/
+Applied to master, thanks.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...e-sys-types.h-before-checking-SYS_pidfd_s.patch | 62 ++++++++++++++++++++++
- .../0007-include-cleanup-pidfd-inckudes.patch      | 40 ++++++++++++++
- 2 files changed, 102 insertions(+)
-
-diff --git a/package/util-linux/0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch b/package/util-linux/0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch
-new file mode 100644
-index 0000000000..183b725a32
---- /dev/null
-+++ b/package/util-linux/0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch
-@@ -0,0 +1,62 @@
-+From 3cfde0370d3a8949df0c5bcf447cec6692910ed2 Mon Sep 17 00:00:00 2001
-+From: Sami Kerola <kerolasa@iki.fi>
-+Date: Sat, 15 Feb 2020 21:12:50 +0000
-+Subject: [PATCH] kill: include sys/types.h before checking
-+ SYS_pidfd_send_signal
-+
-+Including sys/types.h must happen before SYS_pidfd_send_signal is checked,
-+because that header defines variable in normal conditions.  When sys/types.h
-+does not have SYS_pidfd_send_signal then fallback is defined in config.h
-+that is included by default, and has therefore worked fine before and after
-+this change.
-+
-+Signed-off-by: Sami Kerola <kerolasa@iki.fi>
-+Signed-off-by: Carlos Santos <unixmania@gmail.com>
-+---
-+ include/pidfd-utils.h | 18 ++++++++++--------
-+ 1 file changed, 10 insertions(+), 8 deletions(-)
-+
-+diff --git a/include/pidfd-utils.h b/include/pidfd-utils.h
-+index 593346576..0baedd2c9 100644
-+--- a/include/pidfd-utils.h
-++++ b/include/pidfd-utils.h
-+@@ -1,26 +1,28 @@
-+ #ifndef UTIL_LINUX_PIDFD_UTILS
-+ #define UTIL_LINUX_PIDFD_UTILS
-+ 
-+-#if defined(__linux__) && defined(SYS_pidfd_send_signal)
-+-# include <sys/types.h>
-++#if defined(__linux__)
-+ # include <sys/syscall.h>
-++# if defined(SYS_pidfd_send_signal)
-++#  include <sys/types.h>
-+ 
-+-# ifndef HAVE_PIDFD_OPEN
-++#  ifndef HAVE_PIDFD_OPEN
-+ static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
-+ 				    unsigned int flags)
-+ {
-+ 	return syscall(SYS_pidfd_send_signal, pidfd, sig, info, flags);
-+ }
-+-# endif
-++#  endif
-+ 
-+-# ifndef HAVE_PIDFD_SEND_SIGNAL
-++#  ifndef HAVE_PIDFD_SEND_SIGNAL
-+ static inline int pidfd_open(pid_t pid, unsigned int flags)
-+ {
-+ 	return syscall(SYS_pidfd_open, pid, flags);
-+ }
-+-# endif
-++#  endif
-+ 
-+-# define UL_HAVE_PIDFD 1
-++#  define UL_HAVE_PIDFD 1
-+ 
-+-#endif /* __linux__ && SYS_pidfd_send_signal */
-++# endif	/* SYS_pidfd_send_signal */
-++#endif /* __linux__ */
-+ #endif /* UTIL_LINUX_PIDFD_UTILS */
-+-- 
-+2.18.2
-+
-diff --git a/package/util-linux/0007-include-cleanup-pidfd-inckudes.patch b/package/util-linux/0007-include-cleanup-pidfd-inckudes.patch
-new file mode 100644
-index 0000000000..73f3118b0a
---- /dev/null
-+++ b/package/util-linux/0007-include-cleanup-pidfd-inckudes.patch
-@@ -0,0 +1,40 @@
-+From 0a4035ff2e4fd5b5ae0cf8f8665696c2aff53b75 Mon Sep 17 00:00:00 2001
-+From: Karel Zak <kzak@redhat.com>
-+Date: Tue, 10 Mar 2020 11:43:16 +0100
-+Subject: [PATCH] include: cleanup pidfd inckudes
-+
-+Signed-off-by: Karel Zak <kzak@redhat.com>
-+Signed-off-by: Carlos Santos <unixmania@gmail.com>
-+---
-+ include/pidfd-utils.h | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/include/pidfd-utils.h b/include/pidfd-utils.h
-+index 0baedd2c9..4a6c3a604 100644
-+--- a/include/pidfd-utils.h
-++++ b/include/pidfd-utils.h
-+@@ -3,10 +3,10 @@
-+ 
-+ #if defined(__linux__)
-+ # include <sys/syscall.h>
-+-# if defined(SYS_pidfd_send_signal)
-++# if defined(SYS_pidfd_send_signal) && defined(SYS_pidfd_open)
-+ #  include <sys/types.h>
-+ 
-+-#  ifndef HAVE_PIDFD_OPEN
-++#  ifndef HAVE_PIDFD_SEND_SIGNAL
-+ static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
-+ 				    unsigned int flags)
-+ {
-+@@ -14,7 +14,7 @@ static inline int pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
-+ }
-+ #  endif
-+ 
-+-#  ifndef HAVE_PIDFD_SEND_SIGNAL
-++#  ifndef HAVE_PIDFD_OPEN
-+ static inline int pidfd_open(pid_t pid, unsigned int flags)
-+ {
-+ 	return syscall(SYS_pidfd_open, pid, flags);
-+-- 
-+2.18.2
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
