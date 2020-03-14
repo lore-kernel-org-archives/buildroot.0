@@ -1,116 +1,195 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 19:33:36 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/pure-ftpd: fix
- CVE-2019-20176
-Message-ID: <20200314182116.E496383B74@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 19:37:37 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/blktrace: fix
+ CVE-2018-10689
+Message-ID: <20200314182452.69EE383BBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0aa07ab40451c5f3c621a49a6283466b01b42632
+commit: https://git.buildroot.net/buildroot/commit/?id=f9554e81b5b646d0f664714e2b181653536c9e68
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-In Pure-FTPd 1.0.49, a stack exhaustion issue was discovered in the
-listdir function in ls.c.
+blktrace (aka Block IO Tracing) 1.2.0, as used with the Linux kernel and
+Android, has a buffer overflow in the dev_map_read function in
+btt/devmap.c because the device and devno arrays are too small, as
+demonstrated by an invalid free when using the btt program with a
+crafted file.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit cb7ac0c12efc0de259ab1c08b8fb86f4dddf9fe5)
+(cherry picked from commit 8c0ecc91b57f8f53b57b3646b61d0ff60a8054b7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...uffer-to-store-every-file-name-to-display.patch | 70 ++++++++++++++++++++++
- package/pure-ftpd/pure-ftpd.mk                     |  3 +
- 2 files changed, 73 insertions(+)
+ ...vice-devno-use-PATH_MAX-to-avoid-overflow.patch | 146 +++++++++++++++++++++
+ package/blktrace/blktrace.mk                       |   3 +
+ 2 files changed, 149 insertions(+)
 
-diff --git a/package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch b/package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
+diff --git a/package/blktrace/0001-btt-make-device-devno-use-PATH_MAX-to-avoid-overflow.patch b/package/blktrace/0001-btt-make-device-devno-use-PATH_MAX-to-avoid-overflow.patch
 new file mode 100644
-index 0000000000..2f791d1d6e
+index 0000000000..764410d472
 --- /dev/null
-+++ b/package/pure-ftpd/0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
-@@ -0,0 +1,70 @@
-+From aea56f4bcb9948d456f3fae4d044fd3fa2e19706 Mon Sep 17 00:00:00 2001
-+From: Frank Denis <github@pureftpd.org>
-+Date: Mon, 30 Dec 2019 17:40:04 +0100
-+Subject: [PATCH] listdir(): reuse a single buffer to store every file name to
-+ display
++++ b/package/blktrace/0001-btt-make-device-devno-use-PATH_MAX-to-avoid-overflow.patch
+@@ -0,0 +1,146 @@
++From d61ff409cb4dda31386373d706ea0cfb1aaac5b7 Mon Sep 17 00:00:00 2001
++From: Jens Axboe <axboe@kernel.dk>
++Date: Wed, 2 May 2018 10:24:17 -0600
++Subject: btt: make device/devno use PATH_MAX to avoid overflow
 +
-+Allocating a new buffer for each entry is useless.
++Herbo Zhang reports:
 +
-+And as these buffers are allocated on the stack, on systems with a
-+small stack size, with many entries, the limit can easily be reached,
-+causing a stack exhaustion and aborting the user session.
++I found a bug in blktrace/btt/devmap.c. The code is just as follows:
 +
-+Reported by Antonio Morales from the GitHub Security Lab team, thanks!
++https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git/tree/btt/devmap.c?id=8349ad2f2d19422a6241f94ea84d696b21de4757
++
++       struct devmap {
++
++struct list_head head;
++char device[32], devno[32];    // #1
++};
++
++LIST_HEAD(all_devmaps);
++
++static int dev_map_add(char *line)
++{
++struct devmap *dmp;
++
++if (strstr(line, "Device") != NULL)
++return 1;
++
++dmp = malloc(sizeof(struct devmap));
++if (sscanf(line, "%s %s", dmp->device, dmp->devno) != 2) {  //#2
++free(dmp);
++return 1;
++}
++
++list_add_tail(&dmp->head, &all_devmaps);
++return 0;
++}
++
++int dev_map_read(char *fname)
++{
++char line[256];   // #3
++FILE *fp = my_fopen(fname, "r");
++
++if (!fp) {
++perror(fname);
++return 1;
++}
++
++while (fscanf(fp, "%255[a-zA-Z0-9 :.,/_-]\n", line) == 1) {
++if (dev_map_add(line))
++break;
++}
++
++fclose(fp);
++return 0;
++}
++
++ The line length is 256, but the dmp->device, dmp->devno  max length
++is only 32. We can put strings longer than 32 into dmp->device and
++dmp->devno , and then they will be overflowed.
++
++ we can trigger this bug just as follows:
++
++ $ python -c "print 'A'*256" > ./test
++    $ btt -M ./test
++
++    *** Error in btt': free(): invalid next size (fast): 0x000055ad7349b250 ***
++    ======= Backtrace: =========
++    /lib/x86_64-linux-gnu/libc.so.6(+0x777e5)[0x7f7f158ce7e5]
++    /lib/x86_64-linux-gnu/libc.so.6(+0x7fe0a)[0x7f7f158d6e0a]
++    /lib/x86_64-linux-gnu/libc.so.6(cfree+0x4c)[0x7f7f158da98c]
++    btt(+0x32e0)[0x55ad7306f2e0]
++    btt(+0x2c5f)[0x55ad7306ec5f]
++    btt(+0x251f)[0x55ad7306e51f]
++    /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0)[0x7f7f15877830]
++    btt(+0x26b9)[0x55ad7306e6b9]
++    ======= Memory map: ========
++    55ad7306c000-55ad7307f000 r-xp 00000000 08:14 3698139
++      /usr/bin/btt
++    55ad7327e000-55ad7327f000 r--p 00012000 08:14 3698139
++      /usr/bin/btt
++    55ad7327f000-55ad73280000 rw-p 00013000 08:14 3698139
++      /usr/bin/btt
++    55ad73280000-55ad73285000 rw-p 00000000 00:00 0
++    55ad7349a000-55ad734bb000 rw-p 00000000 00:00 0
++      [heap]
++    7f7f10000000-7f7f10021000 rw-p 00000000 00:00 0
++    7f7f10021000-7f7f14000000 ---p 00000000 00:00 0
++    7f7f15640000-7f7f15656000 r-xp 00000000 08:14 14942237
++      /lib/x86_64-linux-gnu/libgcc_s.so.1
++    7f7f15656000-7f7f15855000 ---p 00016000 08:14 14942237
++      /lib/x86_64-linux-gnu/libgcc_s.so.1
++    7f7f15855000-7f7f15856000 r--p 00015000 08:14 14942237
++      /lib/x86_64-linux-gnu/libgcc_s.so.1
++    7f7f15856000-7f7f15857000 rw-p 00016000 08:14 14942237
++      /lib/x86_64-linux-gnu/libgcc_s.so.1
++    7f7f15857000-7f7f15a16000 r-xp 00000000 08:14 14948477
++      /lib/x86_64-linux-gnu/libc-2.23.so
++    7f7f15a16000-7f7f15c16000 ---p 001bf000 08:14 14948477
++      /lib/x86_64-linux-gnu/libc-2.23.so
++    7f7f15c16000-7f7f15c1a000 r--p 001bf000 08:14 14948477
++      /lib/x86_64-linux-gnu/libc-2.23.so
++    7f7f15c1a000-7f7f15c1c000 rw-p 001c3000 08:14 14948477
++      /lib/x86_64-linux-gnu/libc-2.23.so
++    7f7f15c1c000-7f7f15c20000 rw-p 00000000 00:00 0
++    7f7f15c20000-7f7f15c46000 r-xp 00000000 08:14 14948478
++      /lib/x86_64-linux-gnu/ld-2.23.so
++    7f7f15e16000-7f7f15e19000 rw-p 00000000 00:00 0
++    7f7f15e42000-7f7f15e45000 rw-p 00000000 00:00 0
++    7f7f15e45000-7f7f15e46000 r--p 00025000 08:14 14948478
++      /lib/x86_64-linux-gnu/ld-2.23.so
++    7f7f15e46000-7f7f15e47000 rw-p 00026000 08:14 14948478
++      /lib/x86_64-linux-gnu/ld-2.23.so
++    7f7f15e47000-7f7f15e48000 rw-p 00000000 00:00 0
++    7ffdebe5c000-7ffdebe7d000 rw-p 00000000 00:00 0
++      [stack]
++    7ffdebebc000-7ffdebebe000 r--p 00000000 00:00 0
++      [vvar]
++    7ffdebebe000-7ffdebec0000 r-xp 00000000 00:00 0
++      [vdso]
++    ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0
++      [vsyscall]
++    [1]    6272 abort      btt -M test
++
++Signed-off-by: Jens Axboe <axboe@kernel.dk>
 +[Retrieved from:
-+https://github.com/jedisct1/pure-ftpd/commit/aea56f4bcb9948d456f3fae4d044fd3fa2e19706]
++https://git.kernel.org/pub/scm/linux/kernel/git/axboe/blktrace.git/commit/?id=d61ff409cb4dda31386373d706ea0cfb1aaac5b7]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ src/ls.c | 15 ++++++++-------
-+ 1 file changed, 8 insertions(+), 7 deletions(-)
++ btt/devmap.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/ls.c b/src/ls.c
-+index cf804c7..f8a588f 100644
-+--- a/src/ls.c
-++++ b/src/ls.c
-+@@ -661,6 +661,8 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
-+     char *names;
-+     PureFileInfo *s;
-+     PureFileInfo *r;
-++    char *alloca_subdir;
-++    size_t sizeof_subdir;
-+     int d;
++diff --git a/btt/devmap.c b/btt/devmap.c
++index 0553a9e..5fc1cb2 100644
++--- a/btt/devmap.c
+++++ b/btt/devmap.c
++@@ -23,7 +23,7 @@
 + 
-+     if (depth >= max_ls_depth || matches >= max_ls_files) {
-+@@ -690,14 +692,12 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
-+     }
-+     outputfiles(f, tls_fd);
-+     r = dir;
-++    sizeof_subdir = PATH_MAX + 1U;
-++    if ((alloca_subdir = ALLOCA(sizeof_subdir)) == NULL) {
-++        goto toomany;
-++    }
-+     while (opt_R && r != s) {
-+         if (r->name_offset != (size_t) -1 && !chdir(FI_NAME(r))) {
-+-            char *alloca_subdir;
-+-            const size_t sizeof_subdir = PATH_MAX + 1U;
-+-
-+-            if ((alloca_subdir = ALLOCA(sizeof_subdir)) == NULL) {
-+-                goto toomany;
-+-            }
-+             if (SNCHECK(snprintf(alloca_subdir, sizeof_subdir, "%s/%s",
-+                                  name, FI_NAME(r)), sizeof_subdir)) {
-+                 goto nolist;
-+@@ -706,8 +706,8 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
-+             wrstr(f, tls_fd, alloca_subdir);
-+             wrstr(f, tls_fd, ":\r\n\r\n");
-+             listdir(depth + 1U, f, tls_fd, alloca_subdir);
-++
-+             nolist:
-+-            ALLOCA_FREE(alloca_subdir);
-+             if (matches >= max_ls_files) {
-+                 goto toomany;
-+             }
-+@@ -720,6 +720,7 @@ static void listdir(unsigned int depth, int f, void * const tls_fd,
-+         r++;
-+     }
-+     toomany:
-++    ALLOCA_FREE(alloca_subdir);
-+     free(names);
-+     free(dir);
-+     names = NULL;
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 2d69efe3f9..3af66a066c 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -11,6 +11,9 @@ PURE_FTPD_LICENSE = ISC
- PURE_FTPD_LICENSE_FILES = COPYING
- PURE_FTPD_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
-+# 0001-listdir-reuse-a-single-buffer-to-store-every-file-name-to-display.patch
-+PURE_FTPD_IGNORE_CVES += CVE-2019-20176
++ struct devmap {
++ 	struct list_head head;
++-	char device[32], devno[32];
+++	char device[PATH_MAX], devno[PATH_MAX];
++ };
++ 
++ LIST_HEAD(all_devmaps);
++-- 
++cgit 1.2-0.3.lf.el7
 +
- PURE_FTPD_CONF_OPTS = \
- 	--with-altlog \
- 	--with-puredb
+diff --git a/package/blktrace/blktrace.mk b/package/blktrace/blktrace.mk
+index 6d1c8e3b92..4ada2e8e4b 100644
+--- a/package/blktrace/blktrace.mk
++++ b/package/blktrace/blktrace.mk
+@@ -10,6 +10,9 @@ BLKTRACE_DEPENDENCIES = libaio
+ BLKTRACE_LICENSE = GPL-2.0+
+ BLKTRACE_LICENSE_FILES = COPYING
+ 
++# 0001-btt-make-device-devno-use-PATH_MAX-to-avoid-overflow.patch
++BLKTRACE_IGNORE_CVES += CVE-2018-10689
++
+ define BLKTRACE_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) $(TARGET_CONFIGURE_OPTS)
+ endef
