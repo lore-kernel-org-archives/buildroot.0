@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 19:37:37 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/blktrace: fix
+Date: Sat, 14 Mar 2020 19:37:28 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/blktrace: fix
  CVE-2018-10689
-Message-ID: <20200314182452.69EE383BBA@busybox.osuosl.org>
+Message-ID: <20200314182459.AAC1B83BC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9554e81b5b646d0f664714e2b181653536c9e68
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=478aa7f85493cb18bd17ba3af1cf87327364d1fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 blktrace (aka Block IO Tracing) 1.2.0, as used with the Linux kernel and
 Android, has a buffer overflow in the dev_map_read function in
