@@ -1,44 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Mar 2020 15:14:03 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/linphone: bump to version 4.3.1
-In-Reply-To: <20200313215015.1437465-1-fontaine.fabrice@gmail.com>
-References: <20200313215015.1437465-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200314151403.7ecd5a52@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 14 Mar 2020 14:19:11 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] Makefile: don't recreate
+ staging symlink if it exists
+Message-ID: <20200314140054.D9F8A8229D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 13 Mar 2020 22:50:15 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e59acef098cfe2bebf7e7e2f83ebd424ddba6cfd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-> - Update site to get latest release
-> - License is GPL-3.0+ since version 4.3.0 and
->   https://gitlab.linphone.org/BC/public/liblinphone/commit/2bc924c184e2f00f1be3f82a736bccaeacce106e
-> - Switch to cmake-infrastructure
-> - Remove most of the existing dependencies (alsa, speex, libupnp, ...)
->   as they are now only managed in mediatreamer
-> - Add external dependencies: belr, belle-sip, libxml2, mediastreamer,
->   sqlite
-> - This bump is needed as current linphone does not build with latest
->   libeXosip2
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/ed8bdcbfb7d453ed7d436bada35417ee305e6ac9
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Drop unneeded libgtk2 dependency
->  - No change made on video support as video was never supported in
->    buildroot as stated in Config.in and in commit history
+Create the staging symlink the same way as the host symlink. This means
+using a make dependency rather than recreating it every time.
 
-Applied to master, thanks.
+In coreutils versions below 8.27, re-creation of symbolic links was not
+atomic. This means that there is a period in time where the existing link is
+removed, before the new one is created. In coreutils 8.27 this was fixed,
+see [1]. Note that CentOS 7 ships with coreutils 8.22.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+In the following scenario, this is a problem:
+
+- an application is compiled using the sysroot prepared by Buildroot and
+  links against Xenomai userspace libraries, but its build process is steered
+  from outside of Buildroot
+- to know the correct flags, the application makefile uses the 'xeno-config'
+  file to request them, and passes DESTDIR=/buildroot/output/staging
+- the xeno-config responds with flags based on the path
+  '/buildroot/output/staging/...'
+- while the application build is ongoing, a 'make' happens in Buildroot,
+  causing the 'staging' symlink to be recreated (even though it already
+  existed)
+- when exactly at this time, the application calls the compiler with -I
+  flags pointing to output/staging, the build fails with:
+
+  -I/buildroot/output/staging/usr/include/xenomai/mercury: Error:  ^ is not a directory
+  -I/buildroot/output/staging/usr/include/xenomai: Error:  ^ is not a directory
+  -I/buildroot/output/staging/usr/include/xenomai/xenomai: Error:  ^ is not a directory
+  -I/buildroot/output/staging/usr/include/xenomai/psos: Error:  ^ is not a directory
+  Failed: ** ^ *
+
+Work around this problem by only creating the staging symlink once, similar
+to how the host symlink (if any) is created.
+
+See also commit d0f4f95e390bcb1c953efa125f5277a8a235396e which changed the
+way these symlinks are made. The reasoning in this commit is to move away
+from the 'dirs' target.
+
+[1] https://github.com/coreutils/coreutils/commit/376967889ed7ed561e46ff6d88a66779db62737a
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9b824423142697bf8715d3c3a230559b551b98f6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 4449c1bfbf..1afc305220 100644
+--- a/Makefile
++++ b/Makefile
+@@ -465,6 +465,10 @@ $(HOST_DIR_SYMLINK): $(BASE_DIR)
+ 	ln -snf $(HOST_DIR) $(BASE_DIR)/host
+ endif
+ 
++STAGING_DIR_SYMLINK = $(BASE_DIR)/staging
++$(STAGING_DIR_SYMLINK): $(BASE_DIR)
++	ln -snf $(STAGING_DIR) $(STAGING_DIR_SYMLINK)
++
+ # Quotes are needed for spaces and all in the original PATH content.
+ BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+ 
+@@ -730,8 +734,7 @@ target-finalize: ROOTFS=
+ host-finalize: $(HOST_DIR_SYMLINK)
+ 
+ .PHONY: staging-finalize
+-staging-finalize:
+-	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
++staging-finalize: $(STAGING_DIR_SYMLINK)
+ 
+ .PHONY: target-finalize
+ target-finalize: $(PACKAGES) host-finalize
