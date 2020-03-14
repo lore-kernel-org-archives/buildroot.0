@@ -1,70 +1,64 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Sat, 14 Mar 2020 22:52:25 +0100
-Subject: [Buildroot] [PATCH v6 09/28] package/quazip: Convert to qmake
- infra
-In-Reply-To: <20200311224256.7be1235b@windsurf>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-10-anaumann@ultratronik.de>
- <20200217225752.74c34031@windsurf>
- <d138dcb2-3946-c711-d8ee-a7491bf5979b@andin.de>
- <20200311224256.7be1235b@windsurf>
-Message-ID: <1514f29e-9df5-e02c-73fa-488b5b24cc36@andin.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 14 Mar 2020 23:20:26 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libcpprestsdk: zlib is optional,
+ not mandatory
+Message-ID: <20200314222027.2317520-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libcpprestsdk/Config.in        | 1 -
+ package/libcpprestsdk/libcpprestsdk.mk | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-On 11.03.20 22:42, Thomas Petazzoni wrote:
-> On Tue, 18 Feb 2020 11:00:07 +0100
-> Andreas Naumann <dev@andin.de> wrote:
-> 
->>> A prefix of $(STAGING_DIR)/usr looks wrong, as prefix is normally where
->>> the things will be once installed in the target. Do we really need to
->>> do this change?
->>
->> I agree it's probably not how PREFIX is intended to be used. But after
->> all the project doesnt seem to support cross-compile/install properly as
->> you can see by the need to explicitly set INSTALL_ROOT to a different
->> path for staging/target.
-> 
-> Well, in fact the current install procedure for quazip is perfect, as
-> you don't have to do the horrible rsync dance that we have to do for
-> other Qt packages. The fact that INSTALL_ROOT is different for staging
-> and target is *perfect*, it is exactly how INSTALL_ROOT should be have
-> in the first place: like DESTDIR.
-
-I couldn't agree more, if INSTALL_ROOT would not touch the destination 
-for host-files the whole thing would be much easier. But, it isnt that 
-quazip works better than other packages. It's just simpler because it 
-doesnt have any files for host.
-
-> 
-> So I'd really like to see more research done on this package, to
-> understand why we need to bogus PREFIX= variable, and make sure it
-> behaves like other packages.
-
-Again, the quazip.pro uses PREFIX directly as install destination, so 
-it's not aware of the sysroot/staging pathes for cross-compiles. This 
-could probably be changed by patching it to use QT_INSTALL_PREFIX (which 
-is prefixed with the staging path, if set). I dont know if that would 
-break other things or require more changes in the project file.
-
-> 
-> It would in fact be ideal if all other Qt packages could properly
-> support INSTALL_ROOT like quazip does.
-
-See above. It's not the packages fault but how qmake uses INSTALL_ROOT.
-
-
-best regards,
-Andreas
-
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
+diff --git a/package/libcpprestsdk/Config.in b/package/libcpprestsdk/Config.in
+index a07159b124..1551a0c6b1 100644
+--- a/package/libcpprestsdk/Config.in
++++ b/package/libcpprestsdk/Config.in
+@@ -13,7 +13,6 @@ config BR2_PACKAGE_LIBCPPRESTSDK
+ 	select BR2_PACKAGE_BOOST_REGEX
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  The C++ REST SDK is a Microsoft project for cloud-based
+ 	  client-server communication in native code using a modern
+diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
+index 8404b5096c..69ff9f17cc 100644
+--- a/package/libcpprestsdk/libcpprestsdk.mk
++++ b/package/libcpprestsdk/libcpprestsdk.mk
+@@ -10,7 +10,7 @@ LIBCPPRESTSDK_LICENSE = MIT
+ LIBCPPRESTSDK_LICENSE_FILES = license.txt
+ LIBCPPRESTSDK_SUBDIR = Release
+ LIBCPPRESTSDK_INSTALL_STAGING = YES
+-LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
++LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl
+ LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DBUILD_SAMPLES=OFF
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+@@ -25,12 +25,19 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ LIBCPPRESTSDK_CXXFLAGS += -latomic
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LIBCPPRESTSDK_DEPENDENCIES += zlib
++LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_COMPRESSION=OFF
++# brotli needs compression
+ ifeq ($(BR2_PACKAGE_BROTLI),y)
+ LIBCPPRESTSDK_DEPENDENCIES += brotli
+ LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_BROTLI=OFF
+ else
+ LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_BROTLI=ON
+ endif
++else
++LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_COMPRESSION=ON
++endif
+ 
+ ifeq ($(BR2_PACKAGE_WEBSOCKETPP),y)
+ LIBCPPRESTSDK_DEPENDENCIES += websocketpp
+-- 
+2.25.1
