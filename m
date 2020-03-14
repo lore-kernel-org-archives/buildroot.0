@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 17:17:36 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/openvmtools: fix
+Date: Sat, 14 Mar 2020 17:17:07 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/openvmtools: fix
  build with NLS
-Message-ID: <20200314160511.17E8683254@busybox.osuosl.org>
+Message-ID: <20200314160527.7256383654@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9872a0b29a766f1359b82449c31c46141163347
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=55518f5e01f43e5a0974883fce30afc440ac7d7f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/e0e7ed448df8bdd6cb13a0989d7a6c7dbaa5bc4e
@@ -24,7 +24,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index c5e3062212..a8eceb9895 100644
+index fc56bb5ee0..a3ba473872 100644
 --- a/package/openvmtools/openvmtools.mk
 +++ b/package/openvmtools/openvmtools.mk
 @@ -17,8 +17,14 @@ OPENVMTOOLS_CONF_OPTS = --with-dnet \
