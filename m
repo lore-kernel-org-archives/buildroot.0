@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 14:19:57 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/qwt: add missing
+Date: Sat, 14 Mar 2020 14:20:23 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/qwt: add missing
  qt5svg dependency
-Message-ID: <20200314140059.5F6BD82AEB@busybox.osuosl.org>
+Message-ID: <20200314140054.E63E48230F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5f00906a7dfe92a33448e0b0cfe462593db9987
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a5763d3bd83980cd9ae246ceb3fc828a1d217eb5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
