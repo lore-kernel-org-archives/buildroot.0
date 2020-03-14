@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 15:41:06 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual: clarify the
+Date: Sat, 14 Mar 2020 15:40:59 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] docs/manual: clarify the
  <PKG>_PATCH_DEPENDENCIES guarantee
-Message-ID: <20200314142821.E0A2782D5B@busybox.osuosl.org>
+Message-ID: <20200314142828.28C4A82D97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1585395ff869c854b1249395bfde6da6b32a05c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5cf114df4ced3bc9d8948a3c9f3c073d689a6674
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Unlike <PKG>_DEPENDENCIES, <PKG>_PATCH_DEPENDENCIES only guarantees
 extract and patch of listed dependencies, not build. Make this subtlety
@@ -27,7 +27,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 1e2f08cec7..e875f9b76a 100644
+index c9c3c7fadf..5486fa1ea6 100644
 --- a/docs/manual/adding-packages-generic.txt
 +++ b/docs/manual/adding-packages-generic.txt
 @@ -374,9 +374,9 @@ not and can not work as people would expect it should:
