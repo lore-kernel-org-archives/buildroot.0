@@ -1,76 +1,180 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 15:27:53 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/libsvgtiny: fix
- parallel build
-Message-ID: <20200314141951.3AC5E82B9A@busybox.osuosl.org>
+From: Mark Leo Sumadero <fryu771@gmail.com>
+Date: Sat, 14 Mar 2020 22:33:35 +0800
+Subject: [Buildroot] Help: error LONG_BIT definition appears wrong for
+ platform
+In-Reply-To: <20200314145457.19aae81f@gmx.net>
+References: <CAA0OSwgGcbzMe9o35FRqmLBZ5PFMx=1+fDYyiqq0yLk5YJyNpQ@mail.gmail.com>
+ <20200313150443.682fdc5a@windsurf> <20200314112110.2d8ce39a@gmx.net>
+ <CAA0OSwgZGQOKOv-11BxahH+Ht9Koxx=MEpfiuM-B-ZVVgQyLaw@mail.gmail.com>
+ <20200314145457.19aae81f@gmx.net>
+Message-ID: <CAA0OSwgc+DexzwMCbmPJE0BOW2P=-O6OEVKAZSvBxYgoobYm3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=581a41a3f490912d3168b2bd5fa5197bde61385b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+Hi Peter,
 
-Fix previous commit[1] which purpose was to fix parallel build. It
-didn't work since it assigned $(MAKE1) to LIBSVGTINY_MAKE, but this is a
-generic-package and building is done using $(MAKE), then LIBSVGTINY_MAKE
-was ignored. Let's substitute instead $(MAKE) with $(MAKE1) in
-LIBSVGTINY_BUILD_CMDS.
+You are correct no need to patch but if  i remove the 'm' on my
+configuration i got the same error. How can i force it to use python3.7
+only without 'm'?
 
-[1]:
-https://git.buildroot.net/buildroot/commit/?id=26d67a2599d6c88facd5178de853fa355244e7c2
+On Sat, Mar 14, 2020 at 9:54 PM Peter Seiderer <ps.report@gmx.net> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/67d/67d341c0cc272323d6e231a20796a6848c21d760/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[yann.morin.1998 at free.fr:
-  - use $(MAKE1) in all three step
-  - move comment out of the define
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f36c045e7b6e1ba9b07aed6b10fc2bf24462f073)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libsvgtiny/libsvgtiny.mk | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
-index fe7dc0a6d2..55ce4327fe 100644
---- a/package/libsvgtiny/libsvgtiny.mk
-+++ b/package/libsvgtiny/libsvgtiny.mk
-@@ -12,8 +12,6 @@ LIBSVGTINY_DEPENDENCIES = \
- 	libxml2 host-gperf host-pkgconf host-netsurf-buildsystem
- LIBSVGTINY_LICENSE = MIT
- LIBSVGTINY_LICENSE_FILES = README
--# Package does not build in parallel due to improper make rules
--LIBSVGTINY_MAKE = $(MAKE1)
- 
- # The libsvgtiny build system cannot build both the shared and static
- # libraries. So when the Buildroot configuration requests to build
-@@ -28,20 +26,21 @@ define LIBSVGTINY_CONFIGURE_CMDS
- 	ln -sf $(HOST_DIR)/share/netsurf-buildsystem $(@D)/build
- endef
- 
-+# Use $(MAKE1) since parallel build fails
- define LIBSVGTINY_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) PREFIX=/usr \
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) PREFIX=/usr \
- 		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE)
- endef
- 
- define LIBSVGTINY_INSTALL_STAGING_CMDS
- 	$(TARGET_CONFIGURE_OPTS) \
--		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) \
-+		$(MAKE1) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) \
- 		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE) install
- endef
- 
- define LIBSVGTINY_INSTALL_TARGET_CMDS
- 	$(TARGET_CONFIGURE_OPTS) \
--		$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) \
-+		$(MAKE1) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) \
- 		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE) install
- endef
- 
+> Hello Mark,
+>
+> On Sat, 14 Mar 2020 20:30:01 +0800, Mark Leo Sumadero <fryu771@gmail.com>
+> wrote:
+>
+> > Hi Peter,
+> >
+> > Thanks for the reply. I just used your configuration but i got the same
+> > error
+> >
+> >
+> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/build-1/libtool
+> > --silent --mode=compile
+> >
+> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+> > -prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> > -D_FILE_OFFSET_BITS=64 -Os  -DLINUX -D_REENTRANT -D_GNU_SOURCE
+> >
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+> >
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
+> >
+> >
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
+> >
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../../../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+> > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
+> >
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/python3.7
+> >
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m
+> > -DNDEBUG  -c -o src/server/mod_wsgi.lo src/server/mod_wsgi.c && touch
+> > src/server/mod_wsgi.slo
+> > In file included from
+> >
+> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m/Python.h:53:0,
+> >                  from src/server/wsgi_python.h:24,
+> >                  from src/server/mod_wsgi.c:22:
+> >
+> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m/pyport.h:699:2:
+> > error: #error "LONG_BIT definition appears wrong for platform (bad
+> > gcc/glibc config?)."
+> >  #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc
+> > config?)."
+> >
+> > Did i miss something? I am currently using Buildroot-2019.02.01 and
+> > python3.7, what version did you use?
+> > Are we the same of header path?
+>
+> Tested against buildroot master, but should not make any difference,
+> the important part is a full rebuild (configure/compile) of the
+> package (best achieved by rm -rf
+> build/mod_wsgi-61359e67448bdfc5fefb1692fd2a97f76394b20c)...
+>
+> No need to patch configure or configure.ac (there is already enough
+> logic/magic that the
+> given custom CPPFLAGS/LDFLAGS are used first)...
+>
+> According to [1] the 'm' in 'python3.7m' comes from a python configuration
+> with --with-pymalloc,
+> does not happen with stock buildroot configuration...
+>
+> Regards,
+> Peter
+>
+> [1]
+> https://stackoverflow.com/questions/41589655/whats-the-difference-between-python3-x-and-python3-xm
+>
+>
+> >
+> > Thanks,
+> >
+> > Mark Leo
+> >
+> > On Sat, Mar 14, 2020 at 6:21 PM Peter Seiderer <ps.report@gmx.net>
+> wrote:
+> >
+> > > Hello Mark,
+> > >
+> > > On Fri, 13 Mar 2020 15:04:43 +0100, Thomas Petazzoni <
+> > > thomas.petazzoni at bootlin.com> wrote:
+> > >
+> > > > Hello,
+> > > >
+> > > > On Fri, 13 Mar 2020 18:26:38 +0800
+> > > > Mark Leo Sumadero <fryu771@gmail.com> wrote:
+> > > >
+> > > > >
+> > >
+> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+> > > >
+> > > > This is the cross-compiler: good!
+> > > >
+> > > > > -prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> > > > > -D_FILE_OFFSET_BITS=64 -Os  -DLINUX -D_REENTRANT -D_GNU_SOURCE
+> > > > >
+> > >
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+> > > > >
+> > >
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
+> > > > >
+> > > > >
+> > >
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
+> > > > >
+> > >
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../../../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+> > > > > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> -Os
+> > > > >
+> > >
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m
+> > > >
+> > > > This is a path to header of host components: BAD!
+> > > >
+> > > > And this is where your problem is, this header path should *NOT* be
+> > > > there when you cross-compile.
+> > >
+> > > The following worked for me (python3 case only):
+> > >
+> > > MOD_WSGI_VERSION = 61359e67448bdfc5fefb1692fd2a97f76394b20c
+> > > MOD_WSGI_SITE = $(call
+> github,GrahamDumpleton,mod_wsgi,$(MOD_WSGI_VERSION))
+> > > MOD_WSGI_LICENSE = Apache-2.0
+> > > MOD_WSGI_LICENSE_FILES = LICENSE
+> > > MOD_WSGI_DEPENDENCIES = apache
+> > >
+> > > MOD_WSGI_CONF_OPTS = \
+> > > --with-apxs=$(STAGING_DIR)/usr/bin/apxs
+> > >
+> > > ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> > > MOD_WSGI_DEPENDENCIES += python3
+> > > MOD_WSGI_CONF_ENV += \
+> > >
+> > > CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)"
+> \
+> > >         LDFLAGS="-L$(STAGING_DIR)/usr/lib"
+> > > endif
+> > >
+> > > $(eval $(autotools-package))
+> > >
+> > > Regards,
+> > > Peter
+> > >
+> > > >
+> > > > Best regards,
+> > > >
+> > > > Thomas Petazzoni
+> > >
+> > >
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200314/015b55b1/attachment-0001.html>
