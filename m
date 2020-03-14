@@ -1,53 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 18:54:50 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/openrc: remove
- keymaps units if kbd package is not selected
-Message-ID: <20200314174231.7D87683978@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 14 Mar 2020 18:56:08 +0100
+Subject: [Buildroot] [PATCH v3] package/qt5xmlpatterns: enable qml module
+Message-ID: <20200314175608.18557-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c53a26d866cd628c835a48056fb074aaf651bd57
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+qt5declarative:
+ - remove unneded dependency on qt5mlpatterns
 
-keymaps and save-keymaps require kbd_mode and dumpkeys, respectively, so
-remove them if the kbd package is not selected (e.g. devices with serial
-console, only).
+qt5xmlpatterns:
+ - add optional dependency on qt5declarative
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Tested-by: Adam Duskett <aduskett@gmail.com>
-[yann.morin.1998 at free.fr:
-  - expand to three commands to match the existing hook
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0acd05423d0631827ce50ef21f0754246c406f0c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reported-by: Nimai Mahajan <nimaim@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/openrc/openrc.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Changes v1 -> v2:
+  - add Reported-by
+  - - s/=/+=/ for qt5declarative dependency
+Changes v2 -> v3:
+  - rebase on master, adjusted to qmake-package, adjusted commit message
+---
+ package/qt5/qt5declarative/Config.in         | 1 -
+ package/qt5/qt5declarative/qt5declarative.mk | 1 -
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk | 4 ++++
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index 289bde4d03..1f8516f5ee 100644
---- a/package/openrc/openrc.mk
-+++ b/package/openrc/openrc.mk
-@@ -39,6 +39,18 @@ define OPENRC_INSTALL_TARGET_CMDS
- 		$(TARGET_DIR)/etc/init.d/sysv-rcs
- endef
+diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
+index 32ea8f0d0c..476cf33f39 100644
+--- a/package/qt5/qt5declarative/Config.in
++++ b/package/qt5/qt5declarative/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_QT5DECLARATIVE
+ 	bool "qt5declarative"
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+-	select BR2_PACKAGE_QT5XMLPATTERNS
+ 	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	help
+diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
+index 42024c4a13..3318cd24c8 100644
+--- a/package/qt5/qt5declarative/qt5declarative.mk
++++ b/package/qt5/qt5declarative/qt5declarative.mk
+@@ -7,7 +7,6 @@
+ QT5DECLARATIVE_VERSION = $(QT5_VERSION)
+ QT5DECLARATIVE_SITE = $(QT5_SITE)
+ QT5DECLARATIVE_SOURCE = qtdeclarative-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5DECLARATIVE_VERSION).tar.xz
+-QT5DECLARATIVE_DEPENDENCIES = qt5xmlpatterns
+ QT5DECLARATIVE_INSTALL_STAGING = YES
  
-+ifeq ($(BR2_PACKAGE_KBD),)
-+# keymaps and save-keymaps require kbd_mode and dumpkeys, respectively, so
-+# remove them if the kbd package is not selected (e.g. devices with serial
-+# console, only).
-+define OPENRC_NO_KBD
-+	$(RM) $(TARGET_DIR)/etc/runlevels/boot/{keymaps,save-keymaps}
-+	$(RM) $(TARGET_DIR)/etc/init.d/{keymaps,save-keymaps}
-+	$(RM) $(TARGET_DIR)/etc/conf.d/keymaps
-+endef
-+OPENRC_POST_INSTALL_TARGET_HOOKS += OPENRC_NO_KBD
+ QT5DECLARATIVE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+index 8552869925..6845483327 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+@@ -11,6 +11,10 @@ QT5XMLPATTERNS_INSTALL_STAGING = YES
+ QT5XMLPATTERNS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5XMLPATTERNS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
+ 
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
++QT5XMLPATTERNS_DEPENDENCIES += qt5declarative
 +endif
 +
- ifeq ($(BR2_PACKAGE_NETIFRC),y)
- # netifrc replaces network, staticroute and loopback services which are
- # installed by openrc
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ QT5XMLPATTERNS_LICENSE += , BSD-3-Clause (examples)
+ endif
+-- 
+2.25.1
