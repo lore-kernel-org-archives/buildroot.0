@@ -1,69 +1,142 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 14 Mar 2020 11:21:10 +0100
-Subject: [Buildroot] Help: error LONG_BIT definition appears wrong for
- platform
-In-Reply-To: <20200313150443.682fdc5a@windsurf>
-References: <CAA0OSwgGcbzMe9o35FRqmLBZ5PFMx=1+fDYyiqq0yLk5YJyNpQ@mail.gmail.com>
- <20200313150443.682fdc5a@windsurf>
-Message-ID: <20200314112110.2d8ce39a@gmx.net>
+From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Date: Sat, 14 Mar 2020 13:23:23 +0300
+Subject: [Buildroot] [PATCH] package/tinyproxy: new package
+In-Reply-To: <20200313220548.666cb3ef@gmx.net>
+References: <20200313220548.666cb3ef@gmx.net>
+Message-ID: <20200314102323.1781-1-alexander.i.mukhin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mark,
+Tinyproxy is a small, efficient HTTP/SSL proxy daemon.
 
-On Fri, 13 Mar 2020 15:04:43 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+https://tinyproxy.github.io
 
-> Hello,
->
-> On Fri, 13 Mar 2020 18:26:38 +0800
-> Mark Leo Sumadero <fryu771@gmail.com> wrote:
->
-> > /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
->
-> This is the cross-compiler: good!
->
-> > -prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> > -D_FILE_OFFSET_BITS=64 -Os  -DLINUX -D_REENTRANT -D_GNU_SOURCE
-> >  -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
-> >  -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
-> >
-> > -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
-> > -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../../../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
-> > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
-> > -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m
->
-> This is a path to header of host components: BAD!
->
-> And this is where your problem is, this header path should *NOT* be
-> there when you cross-compile.
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+---
+ DEVELOPERS                                    |  3 +++
+ package/Config.in                             |  1 +
+ .../0001-Makefile.am-remove-docs-subdir.patch | 27 +++++++++++++++++++
+ package/tinyproxy/Config.in                   | 16 +++++++++++
+ package/tinyproxy/tinyproxy.hash              |  2 ++
+ package/tinyproxy/tinyproxy.mk                | 15 +++++++++++
+ 6 files changed, 64 insertions(+)
+ create mode 100644 package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch
+ create mode 100644 package/tinyproxy/Config.in
+ create mode 100644 package/tinyproxy/tinyproxy.hash
+ create mode 100644 package/tinyproxy/tinyproxy.mk
 
-The following worked for me (python3 case only):
-
-MOD_WSGI_VERSION = 61359e67448bdfc5fefb1692fd2a97f76394b20c
-MOD_WSGI_SITE = $(call github,GrahamDumpleton,mod_wsgi,$(MOD_WSGI_VERSION))
-MOD_WSGI_LICENSE = Apache-2.0
-MOD_WSGI_LICENSE_FILES = LICENSE
-MOD_WSGI_DEPENDENCIES = apache
-
-MOD_WSGI_CONF_OPTS = \
---with-apxs=$(STAGING_DIR)/usr/bin/apxs
-
-ifeq ($(BR2_PACKAGE_PYTHON3),y)
-MOD_WSGI_DEPENDENCIES += python3
-MOD_WSGI_CONF_ENV += \
-        CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)" \
-        LDFLAGS="-L$(STAGING_DIR)/usr/lib"
-endif
-
-$(eval $(autotools-package))
-
-Regards,
-Peter
-
->
-> Best regards,
->
-> Thomas Petazzoni
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5394150e5a..a3df15d903 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -132,6 +132,9 @@ F:	package/minimodem/
+ N:	Alexander Lukichev <alexander.lukichev@gmail.com>
+ F:	package/openpgm/
+ 
++N:	Alexander Mukhin <alexander.i.mukhin@gmail.com>
++F:	package/tinyproxy/
++
+ N:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+ F:	package/mini-snmpd/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 146fc1bbc3..0da893801e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2169,6 +2169,7 @@ endif
+ 	source "package/thttpd/Config.in"
+ 	source "package/tinc/Config.in"
+ 	source "package/tinyhttpd/Config.in"
++	source "package/tinyproxy/Config.in"
+ 	source "package/tinyssh/Config.in"
+ 	source "package/tor/Config.in"
+ 	source "package/traceroute/Config.in"
+diff --git a/package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch b/package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch
+new file mode 100644
+index 0000000000..e2a08678a3
+--- /dev/null
++++ b/package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch
+@@ -0,0 +1,27 @@
++From 7ce6ee22057489d280e0ea5f6439edbbf0ad7ee2 Mon Sep 17 00:00:00 2001
++From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
++Date: Sat, 14 Mar 2020 12:45:29 +0300
++Subject: [PATCH] Makefile.am: remove docs subdir
++
++This avoids building the documentation, which requires asciidoc.
++
++Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
++---
++ Makefile.am | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index e9113c2..2fe3d54 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -2,7 +2,6 @@ SUBDIRS = \
++ 	src \
++ 	data \
++ 	etc \
++-	docs \
++ 	m4macros \
++ 	tests
++ 
++-- 
++2.20.1
++
+diff --git a/package/tinyproxy/Config.in b/package/tinyproxy/Config.in
+new file mode 100644
+index 0000000000..aec2ab81a8
+--- /dev/null
++++ b/package/tinyproxy/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_TINYPROXY
++	bool "tinyproxy"
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
++	help
++	  Tinyproxy is a small, efficient HTTP/SSL proxy daemon released
++	  under the GNU General Public License. Tinyproxy is very
++	  useful in a small network setting, where a larger proxy would
++	  be too resource intensive.
++
++	  https://tinyproxy.github.io
++
++comment "tinyproxy needs a toolchain w/ threads, wchar"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on BR2_USE_MMU
+diff --git a/package/tinyproxy/tinyproxy.hash b/package/tinyproxy/tinyproxy.hash
+new file mode 100644
+index 0000000000..2d439de517
+--- /dev/null
++++ b/package/tinyproxy/tinyproxy.hash
+@@ -0,0 +1,2 @@
++# locally computed
++sha256 ff4f3d1331d6d855d8b6ed794c22ab0a4285dd81fe9c98a7aa7ed591248d4ab9 tinyproxy-1.10.0.tar.gz
+diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
+new file mode 100644
+index 0000000000..3ba3d7f664
+--- /dev/null
++++ b/package/tinyproxy/tinyproxy.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# tinyproxy
++#
++################################################################################
++
++TINYPROXY_VERSION = 1.10.0
++TINYPROXY_SITE = $(call github,tinyproxy,tinyproxy,$(TINYPROXY_VERSION))
++TINYPROXY_LICENSE = GPL-2.0+
++TINYPROXY_LICENSE_FILES = COPYING
++
++# building from a git clone
++TINYPROXY_AUTORECONF = YES
++
++$(eval $(autotools-package))
+-- 
+2.20.1
