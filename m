@@ -1,31 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 17:48:50 +0100
-Subject: [Buildroot] [PATCH] package/swig: create a symlink for swig3.0
-In-Reply-To: <20200224101252.29177-1-yegorslists@googlemail.com>
- (yegorslists's message of "Mon, 24 Feb 2020 11:12:52 +0100")
-References: <20200224101252.29177-1-yegorslists@googlemail.com>
-Message-ID: <87sgiavq4t.fsf@dell.be.48ers.dk>
+Date: Sat, 14 Mar 2020 17:48:14 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/swig: create a
+ legacy symlink for swig3.0
+Message-ID: <20200314163609.6205C8379F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=68175d363df9a0c1392d8c8686f21ad61fae934c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > For now swig package creates a symlink to the latest swig version
- > i.e. swig4.0. If the host already has both CMake 3.10 and earlier
- > swig version then the earlier version (swig2.0 or swig3.0) will
- > be detected. This happens because CMake 3.10 doesn't know about
- > swig4.0 and thus searches for swig3.0 first and finds it on the
- > host.
+The host-swig package installs the swig binary as 'swig' and adds a
+swig<major> symlink (E.G.  swig4.0).  This causes issues for older software
+which may not know about the 4.0 version of swig, E.G.  CMake 3.10.x
+contains the following swig detection logic:
 
- > With the new symlink CMake will find buildroot's swig binary.
+find_program(SWIG_EXECUTABLE NAMES swig3.0 swig2.0 swig)
 
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+If the host has a 3.x or 2.x variant of swig installed, then that will be
+used instead of our host-swig.
 
-Committed to 2019.11.x (2019.02.x uses swig 3.0.12), thanks.
+As a workaround, also add a swig3.0 symlink so our host-swig will be used.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Peter: reworded]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 738cefe7000758385adcfee514a4b9fb4354535d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/swig/swig.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+index 3dba3425cf..5881a0e423 100644
+--- a/package/swig/swig.mk
++++ b/package/swig/swig.mk
+@@ -27,6 +27,7 @@ SWIG_LICENSE_FILES = LICENSE LICENSE-GPL LICENSE-UNIVERSITIES
+ 
+ define HOST_SWIG_INSTALL_SYMLINK
+ 	ln -fs swig $(HOST_DIR)/bin/swig$(SWIG_VERSION_MAJOR)
++	ln -fs swig $(HOST_DIR)/bin/swig3.0
+ endef
+ 
+ HOST_SWIG_POST_INSTALL_HOOKS += HOST_SWIG_INSTALL_SYMLINK
