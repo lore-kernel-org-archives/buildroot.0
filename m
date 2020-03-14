@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 19:21:23 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libcgroup: fix
+Date: Sat, 14 Mar 2020 19:21:15 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libcgroup: fix
  CVE-2018-14348
-Message-ID: <20200314180846.3B28A81532@busybox.osuosl.org>
+Message-ID: <20200314180851.286A883ABE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=510925f431f8fe6703302560da22b285fd4c7ee4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9f13c688df549e8e07af00b2ac2a80ed7db1f283
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 libcgroup up to and including 0.41 creates /var/log/cgred with mode 0666
 regardless of the configured umask, leading to disclosure of information
