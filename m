@@ -1,37 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Mar 2020 15:18:23 +0100
-Subject: [Buildroot] [PATCH-for-2020.02.x v2] package/qt5xmlpatterns:
- enable qml module
-In-Reply-To: <20200313204415.2036-1-ps.report@gmx.net>
-References: <20200313204415.2036-1-ps.report@gmx.net>
-Message-ID: <20200314151823.39b5c55f@windsurf>
+Date: Sat, 14 Mar 2020 15:18:48 +0100
+Subject: [Buildroot] [git commit] package/util-linux: add missing SOB to
+ patches
+Message-ID: <20200314140603.629CB82B2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=94784f092b021af29b9480b66cd167d175b0f16b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 13 Mar 2020 21:44:15 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+It is required that all patches in packages have the Signed-off-by of
+the contributor who brought them into Buildroot.
 
-> qt5declarative:
->  - remove unneded dependency on qt5mlpatterns
-> 
-> qt5xmlpatterns:
->  - add optional dependency on qt5declarative
->  - add target install step of the optional qml files
-> 
-> Reported-by: Nimai Mahajan <nimaim@gmail.com>
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/util-linux/0003-blkdiscard-use-O_EXCL-add-force.patch            | 1 +
+ .../0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch           | 1 +
+ package/util-linux/0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch  | 1 +
+ 3 files changed, 3 insertions(+)
 
-Will you send a similar patch for master ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/util-linux/0003-blkdiscard-use-O_EXCL-add-force.patch b/package/util-linux/0003-blkdiscard-use-O_EXCL-add-force.patch
+index 191608e080..0ecb867029 100644
+--- a/package/util-linux/0003-blkdiscard-use-O_EXCL-add-force.patch
++++ b/package/util-linux/0003-blkdiscard-use-O_EXCL-add-force.patch
+@@ -8,6 +8,7 @@ unwanted discard on mounted device.
+ 
+ Addresses: https://github.com/karelzak/util-linux/issues/915
+ Signed-off-by: Karel Zak <kzak@redhat.com>
++Signed-off-by: Carlos Santos <unixmania@gmail.com>
+ ---
+  sys-utils/blkdiscard.8 |  5 +++++
+  sys-utils/blkdiscard.c | 11 ++++++++---
+diff --git a/package/util-linux/0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch b/package/util-linux/0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch
+index 40854e4b8d..eb28ae328b 100644
+--- a/package/util-linux/0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch
++++ b/package/util-linux/0004-libfdisk-add-fdisk_set_disklabel_id_from_string.patch
+@@ -8,6 +8,7 @@ It's not comfortable if you want to avoid dialog or template.
+ 
+ Addresses: https://github.com/karelzak/util-linux/issues/916
+ Signed-off-by: Karel Zak <kzak@redhat.com>
++Signed-off-by: Carlos Santos <unixmania@gmail.com>
+ ---
+  libfdisk/docs/libfdisk-sections.txt |  1 +
+  libfdisk/src/dos.c                  | 29 ++++++++++++++++++-----------
+diff --git a/package/util-linux/0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch b/package/util-linux/0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch
+index cc96fbb1fa..fe435018f2 100644
+--- a/package/util-linux/0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch
++++ b/package/util-linux/0005-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch
+@@ -5,6 +5,7 @@ Subject: [PATCH] sfdisk: add --disk-id to change disk UUID/ID
+ 
+ Addresses: https://github.com/karelzak/util-linux/issues/916
+ Signed-off-by: Karel Zak <kzak@redhat.com>
++Signed-off-by: Carlos Santos <unixmania@gmail.com>
+ ---
+  disk-utils/sfdisk.8 |  5 +++++
+  disk-utils/sfdisk.c | 54 +++++++++++++++++++++++++++++++++++++++++++++
