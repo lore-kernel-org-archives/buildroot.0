@@ -1,39 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 18:55:15 +0100
-Subject: [Buildroot] [PATCH] package/openrc: remove keymaps units if kbd
- package is not selected
-In-Reply-To: <20200229211755.GV8743@scaer> (Yann E. MORIN's message of "Sat,
- 29 Feb 2020 22:17:55 +0100")
-References: <20200229182621.14431-1-unixmania@gmail.com>
- <20200229211755.GV8743@scaer>
-Message-ID: <87zhcistx8.fsf@dell.be.48ers.dk>
+Date: Sat, 14 Mar 2020 18:54:42 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/openrc: fix
+ post-install-target addition
+Message-ID: <20200314174231.765BC839DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=804d40e72dd33968fa6d805e500a72bf6ad8bee0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
- > Carlos, All,
- > On 2020-02-29 15:26 -0300, unixmania at gmail.com spake thusly:
- >> From: Carlos Santos <unixmania@gmail.com>
- >> 
- >> keymaps and save-keymaps require kbd_mode and dumpkeys, respectively, so
- >> remove them if the kbd package is not selected (e.g. devices with serial
- >> console, only).
- >> 
- >> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+OPENRC_POST_TARGET_INSTALL_HOOKS -> OPENRC_POST_INSTALL_TARGET_HOOKS
 
- > Applied to master with a small fix:
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 4e3e53483c8b54064a408acb231734f9aef07c2c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openrc/openrc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- >   - expand to three commands to match the existing hook
-
- > As Adam noted, I also prefer the comment to be outside the conditional
- > block, but that is not a set-in-stone rule. Given that the existing hook
- > had the comment in the conditional block, I kept the new one there too.
-
-Committed to 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
+index 3f6453cef5..289bde4d03 100644
+--- a/package/openrc/openrc.mk
++++ b/package/openrc/openrc.mk
+@@ -47,7 +47,7 @@ define OPENRC_NO_NET
+ 	$(RM) $(TARGET_DIR)/etc/init.d/{network,staticroute,loopback}
+ 	$(RM) $(TARGET_DIR)/etc/conf.d/{network,staticroute,loopback}
+ endef
+-OPENRC_POST_TARGET_INSTALL_HOOKS += OPENRC_NO_NET
++OPENRC_POST_INSTALL_TARGET_HOOKS += OPENRC_NO_NET
+ endif
+ 
+ define OPENRC_REMOVE_UNNEEDED
