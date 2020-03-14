@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 19:39:11 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libvorbis: fix
+Date: Sat, 14 Mar 2020 19:38:19 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libvorbis: fix
  CVE-2018-10392
-Message-ID: <20200314182659.3F62D83BD1@busybox.osuosl.org>
+Message-ID: <20200314182710.1536483BEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a295adad0a2505de937a5f9ac69a6ec4a7ed236
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3613d9c2985cc29ed499ac693746372cfa36dcf9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 mapping0_forward in mapping0.c in Xiph.Org libvorbis 1.3.6 does not
 validate the number of channels, which allows remote attackers to cause
