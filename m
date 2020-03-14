@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 15:15:20 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/jpeg-turbo: force
+Date: Sat, 14 Mar 2020 15:15:40 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/jpeg-turbo: force
  fPIC for shared libraries
-Message-ID: <20200314141321.D7C0982B6F@busybox.osuosl.org>
+Message-ID: <20200314141336.5D3B582283@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8b7229551a10e98e786d02080adf3260ea1445d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=45717ee0c62975920c79cc627ba1b272ca155884
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 When BR2_SSP_ALL is set, there is a link issue due to missing -fPIC in CFLAGS.
 Set CMAKE_POSITION_INDEPENDENT_CODE=ON to add it.
