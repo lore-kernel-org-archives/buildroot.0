@@ -1,212 +1,92 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 19:28:01 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/openjpeg: fix
- CVE-2019-12973
-Message-ID: <20200314181610.DA76683AF1@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 19:27:02 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/openjpeg: fix
+ CVE-2020-8112
+Message-ID: <20200314181617.424EB83B01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a054795beeabbb9ac857cdd3c349c50e843df4a0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8e4b29c70111dc575206cd51c6b429346b2802d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-In OpenJPEG 2.3.1, there is excessive iteration in the
-opj_t1_encode_cblks function of openjp2/t1.c. Remote attackers could
-leverage this vulnerability to cause a denial of service via a crafted
-bmp file. This issue is similar to CVE-2018-6616.
+opj_t1_clbl_decode_processor in openjp2/t1.c in OpenJPEG 2.3.1 through
+2020-01-28 has a heap-based buffer overflow in the qmfbid==1 case, a
+different issue than CVE-2020-6851.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5934e676f3ae1537accb727154f08abb23177f0b)
+(cherry picked from commit 190964b66806dd6c2c65151cec1ea259fd4855c4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...tbmp-detect-invalid-file-dimensions-early.patch | 71 ++++++++++++++++++
- ...d_rle4_data-avoid-potential-infinite-loop.patch | 86 ++++++++++++++++++++++
- package/openjpeg/openjpeg.mk                       |  4 +
- 3 files changed, 161 insertions(+)
+ ...-opj_tcd_init_tile-avoid-integer-overflow.patch | 46 ++++++++++++++++++++++
+ package/openjpeg/openjpeg.mk                       |  3 ++
+ 2 files changed, 49 insertions(+)
 
-diff --git a/package/openjpeg/0004-convertbmp-detect-invalid-file-dimensions-early.patch b/package/openjpeg/0004-convertbmp-detect-invalid-file-dimensions-early.patch
+diff --git a/package/openjpeg/0007-opj_tcd_init_tile-avoid-integer-overflow.patch b/package/openjpeg/0007-opj_tcd_init_tile-avoid-integer-overflow.patch
 new file mode 100644
-index 0000000000..c648020bf7
+index 0000000000..7d82377d52
 --- /dev/null
-+++ b/package/openjpeg/0004-convertbmp-detect-invalid-file-dimensions-early.patch
-@@ -0,0 +1,71 @@
-+From 21399f6b7d318fcdf4406d5e88723c4922202aa3 Mon Sep 17 00:00:00 2001
-+From: Young Xiao <YangX92@hotmail.com>
-+Date: Sat, 16 Mar 2019 19:57:27 +0800
-+Subject: [PATCH] convertbmp: detect invalid file dimensions early
++++ b/package/openjpeg/0007-opj_tcd_init_tile-avoid-integer-overflow.patch
+@@ -0,0 +1,46 @@
++From 05f9b91e60debda0e83977e5e63b2e66486f7074 Mon Sep 17 00:00:00 2001
++From: Even Rouault <even.rouault@spatialys.com>
++Date: Thu, 30 Jan 2020 00:59:57 +0100
++Subject: [PATCH] opj_tcd_init_tile(): avoid integer overflow
 +
-+width/length dimensions read from bmp headers are not necessarily
-+valid. For instance they may have been maliciously set to very large
-+values with the intention to cause DoS (large memory allocation, stack
-+overflow). In these cases we want to detect the invalid size as early
-+as possible.
++That could lead to later assertion failures.
 +
-+This commit introduces a counter which verifies that the number of
-+written bytes corresponds to the advertized width/length.
-+
-+See commit 8ee335227bbc for details.
-+
-+Signed-off-by: Young Xiao <YangX92@hotmail.com>
++Fixes #1231 / CVE-2020-8112
 +[Retrieved from:
-+https://github.com/uclouvain/openjpeg/commit/21399f6b7d318fcdf4406d5e88723c4922202aa3]
++https://github.com/uclouvain/openjpeg/commit/05f9b91e60debda0e83977e5e63b2e66486f7074]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ src/bin/jp2/convertbmp.c | 10 ++++++++--
-+ 1 file changed, 8 insertions(+), 2 deletions(-)
++ src/lib/openjp2/tcd.c | 20 ++++++++++++++++++--
++ 1 file changed, 18 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/bin/jp2/convertbmp.c b/src/bin/jp2/convertbmp.c
-+index 0af52f816..ec34f535b 100644
-+--- a/src/bin/jp2/convertbmp.c
-++++ b/src/bin/jp2/convertbmp.c
-+@@ -622,13 +622,13 @@ static OPJ_BOOL bmp_read_rle8_data(FILE* IN, OPJ_UINT8* pData,
-+ static OPJ_BOOL bmp_read_rle4_data(FILE* IN, OPJ_UINT8* pData,
-+                                    OPJ_UINT32 stride, OPJ_UINT32 width, OPJ_UINT32 height)
-+ {
-+-    OPJ_UINT32 x, y;
-++    OPJ_UINT32 x, y, written;
-+     OPJ_UINT8 *pix;
-+     const OPJ_UINT8 *beyond;
-+ 
-+     beyond = pData + stride * height;
-+     pix = pData;
-+-    x = y = 0U;
-++    x = y = written = 0U;
-+     while (y < height) {
-+         int c = getc(IN);
-+         if (c == EOF) {
-+@@ -642,6 +642,7 @@ static OPJ_BOOL bmp_read_rle4_data(FILE* IN, OPJ_UINT8* pData,
-+             for (j = 0; (j < c) && (x < width) &&
-+                     ((OPJ_SIZE_T)pix < (OPJ_SIZE_T)beyond); j++, x++, pix++) {
-+                 *pix = (OPJ_UINT8)((j & 1) ? (c1 & 0x0fU) : ((c1 >> 4) & 0x0fU));
-++                written++;
-+             }
-+         } else { /* absolute mode */
-+             c = getc(IN);
-+@@ -671,6 +672,7 @@ static OPJ_BOOL bmp_read_rle4_data(FILE* IN, OPJ_UINT8* pData,
-+                         c1 = (OPJ_UINT8)getc(IN);
-+                     }
-+                     *pix = (OPJ_UINT8)((j & 1) ? (c1 & 0x0fU) : ((c1 >> 4) & 0x0fU));
-++                    written++;
-+                 }
-+                 if (((c & 3) == 1) || ((c & 3) == 2)) { /* skip padding byte */
-+                     getc(IN);
-+@@ -678,6 +680,10 @@ static OPJ_BOOL bmp_read_rle4_data(FILE* IN, OPJ_UINT8* pData,
-+             }
-+         }
-+     }  /* while(y < height) */
-++    if (written != width * height) {
-++        fprintf(stderr, "warning, image's actual size does not match advertized one\n");
-++        return OPJ_FALSE;
-++    }
-+     return OPJ_TRUE;
-+ }
-+ 
-diff --git a/package/openjpeg/0005-bmp_read_rle4_data-avoid-potential-infinite-loop.patch b/package/openjpeg/0005-bmp_read_rle4_data-avoid-potential-infinite-loop.patch
-new file mode 100644
-index 0000000000..dbaea3c8da
---- /dev/null
-+++ b/package/openjpeg/0005-bmp_read_rle4_data-avoid-potential-infinite-loop.patch
-@@ -0,0 +1,86 @@
-+From 3aef207f90e937d4931daf6d411e092f76d82e66 Mon Sep 17 00:00:00 2001
-+From: Young Xiao <YangX92@hotmail.com>
-+Date: Sat, 16 Mar 2019 20:09:59 +0800
-+Subject: [PATCH] bmp_read_rle4_data(): avoid potential infinite loop
-+
-+[Retrieved from:
-+https://github.com/uclouvain/openjpeg/commit/3aef207f90e937d4931daf6d411e092f76d82e66]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/bin/jp2/convertbmp.c | 32 ++++++++++++++++++++++++++------
-+ 1 file changed, 26 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/bin/jp2/convertbmp.c b/src/bin/jp2/convertbmp.c
-+index ec34f535b..2fc4e9bc4 100644
-+--- a/src/bin/jp2/convertbmp.c
-++++ b/src/bin/jp2/convertbmp.c
-+@@ -632,12 +632,18 @@ static OPJ_BOOL bmp_read_rle4_data(FILE* IN, OPJ_UINT8* pData,
-+     while (y < height) {
-+         int c = getc(IN);
-+         if (c == EOF) {
-+-            break;
-++            return OPJ_FALSE;
-+         }
-+ 
-+         if (c) { /* encoded mode */
-+-            int j;
-+-            OPJ_UINT8 c1 = (OPJ_UINT8)getc(IN);
-++            int j, c1_int;
-++            OPJ_UINT8 c1;
-++
-++            c1_int = getc(IN);
-++            if (c1_int == EOF) {
-++                return OPJ_FALSE;
++diff --git a/src/lib/openjp2/tcd.c b/src/lib/openjp2/tcd.c
++index deecc4dff..aa419030a 100644
++--- a/src/lib/openjp2/tcd.c
+++++ b/src/lib/openjp2/tcd.c
++@@ -905,8 +905,24 @@ static INLINE OPJ_BOOL opj_tcd_init_tile(opj_tcd_t *p_tcd, OPJ_UINT32 p_tile_no,
++             /* p. 64, B.6, ISO/IEC FDIS15444-1 : 2000 (18 august 2000)  */
++             l_tl_prc_x_start = opj_int_floordivpow2(l_res->x0, (OPJ_INT32)l_pdx) << l_pdx;
++             l_tl_prc_y_start = opj_int_floordivpow2(l_res->y0, (OPJ_INT32)l_pdy) << l_pdy;
++-            l_br_prc_x_end = opj_int_ceildivpow2(l_res->x1, (OPJ_INT32)l_pdx) << l_pdx;
++-            l_br_prc_y_end = opj_int_ceildivpow2(l_res->y1, (OPJ_INT32)l_pdy) << l_pdy;
+++            {
+++                OPJ_UINT32 tmp = ((OPJ_UINT32)opj_int_ceildivpow2(l_res->x1,
+++                                  (OPJ_INT32)l_pdx)) << l_pdx;
+++                if (tmp > (OPJ_UINT32)INT_MAX) {
+++                    opj_event_msg(manager, EVT_ERROR, "Integer overflow\n");
+++                    return OPJ_FALSE;
+++                }
+++                l_br_prc_x_end = (OPJ_INT32)tmp;
 ++            }
-++            c1 = (OPJ_UINT8)c1_int;
-+ 
-+             for (j = 0; (j < c) && (x < width) &&
-+                     ((OPJ_SIZE_T)pix < (OPJ_SIZE_T)beyond); j++, x++, pix++) {
-+@@ -647,7 +653,7 @@ static OPJ_BOOL bmp_read_rle4_data(FILE* IN, OPJ_UINT8* pData,
-+         } else { /* absolute mode */
-+             c = getc(IN);
-+             if (c == EOF) {
-+-                break;
-++                return OPJ_FALSE;
-+             }
-+ 
-+             if (c == 0x00) { /* EOL */
-+@@ -658,8 +664,14 @@ static OPJ_BOOL bmp_read_rle4_data(FILE* IN, OPJ_UINT8* pData,
-+                 break;
-+             } else if (c == 0x02) { /* MOVE by dxdy */
-+                 c = getc(IN);
-++                if (c == EOF) {
+++            {
+++                OPJ_UINT32 tmp = ((OPJ_UINT32)opj_int_ceildivpow2(l_res->y1,
+++                                  (OPJ_INT32)l_pdy)) << l_pdy;
+++                if (tmp > (OPJ_UINT32)INT_MAX) {
+++                    opj_event_msg(manager, EVT_ERROR, "Integer overflow\n");
 ++                    return OPJ_FALSE;
 ++                }
-+                 x += (OPJ_UINT32)c;
-+                 c = getc(IN);
-++                if (c == EOF) {
-++                    return OPJ_FALSE;
-++                }
-+                 y += (OPJ_UINT32)c;
-+                 pix = pData + y * stride + x;
-+             } else { /* 03 .. 255 : absolute mode */
-+@@ -669,13 +681,21 @@ static OPJ_BOOL bmp_read_rle4_data(FILE* IN, OPJ_UINT8* pData,
-+                 for (j = 0; (j < c) && (x < width) &&
-+                         ((OPJ_SIZE_T)pix < (OPJ_SIZE_T)beyond); j++, x++, pix++) {
-+                     if ((j & 1) == 0) {
-+-                        c1 = (OPJ_UINT8)getc(IN);
-++                        int c1_int;
-++                        c1_int = getc(IN);
-++                        if (c1_int == EOF) {
-++                            return OPJ_FALSE;
-++                        }
-++                        c1 = (OPJ_UINT8)c1_int;
-+                     }
-+                     *pix = (OPJ_UINT8)((j & 1) ? (c1 & 0x0fU) : ((c1 >> 4) & 0x0fU));
-+                     written++;
-+                 }
-+                 if (((c & 3) == 1) || ((c & 3) == 2)) { /* skip padding byte */
-+-                    getc(IN);
-++                    c = getc(IN);
-++                    if (c == EOF) {
-++                        return OPJ_FALSE;
-++                    }
-+                 }
-+             }
-+         }
+++                l_br_prc_y_end = (OPJ_INT32)tmp;
+++            }
++             /*fprintf(stderr, "\t\t\tprc_x_start=%d, prc_y_start=%d, br_prc_x_end=%d, br_prc_y_end=%d \n", l_tl_prc_x_start, l_tl_prc_y_start, l_br_prc_x_end ,l_br_prc_y_end );*/
++ 
++             l_res->pw = (l_res->x0 == l_res->x1) ? 0U : (OPJ_UINT32)((
 diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index 1b119fa5fe..0fe2aed536 100644
+index 28d6e97b01..1ff3111d64 100644
 --- a/package/openjpeg/openjpeg.mk
 +++ b/package/openjpeg/openjpeg.mk
-@@ -10,6 +10,10 @@ OPENJPEG_LICENSE = BSD-2-Clause
- OPENJPEG_LICENSE_FILES = LICENSE
- OPENJPEG_INSTALL_STAGING = YES
+@@ -17,6 +17,9 @@ OPENJPEG_IGNORE_CVES += CVE-2019-12973
+ # 0006-opj_j2k_update_image_dimensions-reject-images-whose-coordinates.patch
+ OPENJPEG_IGNORE_CVES += CVE-2020-6851
  
-+# 0004-convertbmp-detect-invalid-file-dimensions-early.patch
-+# 0005-bmp_read_rle4_data-avoid-potential-infinite-loop.patch
-+OPENJPEG_IGNORE_CVES += CVE-2019-12973
++# 0007-opj_tcd_init_tile-avoid-integer-overflow.patch
++OPENJPEG_IGNORE_CVES += CVE-2020-8112
 +
  OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
  OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
