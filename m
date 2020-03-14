@@ -1,64 +1,152 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 14:22:59 +0100
-Subject: [Buildroot] [git commit] Makefile: don't recreate staging
- symlink if it exists
-In-Reply-To: <20200219190232.1106C8E543@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Wed, 19 Feb 2020 20:13:57 +0100")
-References: <20200219190232.1106C8E543@busybox.osuosl.org>
-Message-ID: <87o8szxe8c.fsf@dell.be.48ers.dk>
+From: Mark Leo Sumadero <fryu771@gmail.com>
+Date: Sat, 14 Mar 2020 21:37:46 +0800
+Subject: [Buildroot] Help: error LONG_BIT definition appears wrong for
+ platform
+In-Reply-To: <CAA0OSwgZGQOKOv-11BxahH+Ht9Koxx=MEpfiuM-B-ZVVgQyLaw@mail.gmail.com>
+References: <CAA0OSwgGcbzMe9o35FRqmLBZ5PFMx=1+fDYyiqq0yLk5YJyNpQ@mail.gmail.com>
+ <20200313150443.682fdc5a@windsurf> <20200314112110.2d8ce39a@gmx.net>
+ <CAA0OSwgZGQOKOv-11BxahH+Ht9Koxx=MEpfiuM-B-ZVVgQyLaw@mail.gmail.com>
+Message-ID: <CAA0OSwhvuPwRFW9H7+tF9G-caWw2sbBeV2Zgi6Yk0YYJPcaXaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hi,
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=9b824423142697bf8715d3c3a230559b551b98f6
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I made it worked by using this by adding "m"  after PYTHON3_VERSION_MAJOR:
 
- > Create the staging symlink the same way as the host symlink. This means
- > using a make dependency rather than recreating it every time.
+MOD_WSGI_VERSION = 61359e67448bdfc5fefb1692fd2a97f76394b20c
+MOD_WSGI_SITE = $(call github,GrahamDumpleton,mod_wsgi,$(MOD_WSGI_VERSION))
+MOD_WSGI_LICENSE = Apache-2.0
+MOD_WSGI_LICENSE_FILES = LICENSE
+MOD_WSGI_DEPENDENCIES = apache
 
- > In coreutils versions below 8.27, re-creation of symbolic links was not
- > atomic. This means that there is a period in time where the existing link is
- > removed, before the new one is created. In coreutils 8.27 this was fixed,
- > see [1]. Note that CentOS 7 ships with coreutils 8.22.
+MOD_WSGI_CONF_OPTS = \
+--with-apxs=$(STAGING_DIR)/usr/bin/apxs
 
- > In the following scenario, this is a problem:
+ifeq ($(BR2_PACKAGE_PYTHON3),y)
+MOD_WSGI_DEPENDENCIES += python3
+MOD_WSGI_CONF_ENV += \
+        CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m"
+\
+        LDFLAGS="-L$(STAGING_DIR)/usr/lib"
+endif
 
- > - an application is compiled using the sysroot prepared by Buildroot and
- >   links against Xenomai userspace libraries, but its build process is steered
- >   from outside of Buildroot
- > - to know the correct flags, the application makefile uses the 'xeno-config'
- >   file to request them, and passes DESTDIR=/buildroot/output/staging
- > - the xeno-config responds with flags based on the path
- >   '/buildroot/output/staging/...'
- > - while the application build is ongoing, a 'make' happens in Buildroot,
- >   causing the 'staging' symlink to be recreated (even though it already
- >   existed)
- > - when exactly at this time, the application calls the compiler with -I
- >   flags pointing to output/staging, the build fails with:
+$(eval $(autotools-package))
 
- >   -I/buildroot/output/staging/usr/include/xenomai/mercury: Error:  ^ is not a directory
- >   -I/buildroot/output/staging/usr/include/xenomai: Error:  ^ is not a directory
- >   -I/buildroot/output/staging/usr/include/xenomai/xenomai: Error:  ^ is not a directory
- >   -I/buildroot/output/staging/usr/include/xenomai/psos: Error:  ^ is not a directory
- >   Failed: ** ^ *
+Then patching the configure and configure.ac of the package.
+Question why is that python name is python3.7m not python3.7?
 
- > Work around this problem by only creating the staging symlink once, similar
- > to how the host symlink (if any) is created.
+On Sat, Mar 14, 2020 at 8:30 PM Mark Leo Sumadero <fryu771@gmail.com> wrote:
 
- > See also commit d0f4f95e390bcb1c953efa125f5277a8a235396e which changed the
- > way these symlinks are made. The reasoning in this commit is to move away
- > from the 'dirs' target.
-
- > [1] https://github.com/coreutils/coreutils/commit/376967889ed7ed561e46ff6d88a66779db62737a
-
- > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2019.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+> Hi Peter,
+>
+> Thanks for the reply. I just used your configuration but i got the same
+> error
+>
+> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/build-1/libtool
+> --silent --mode=compile
+> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+> -prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> -D_FILE_OFFSET_BITS=64 -Os  -DLINUX -D_REENTRANT -D_GNU_SOURCE
+>  -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+>  -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
+>
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../../../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/python3.7
+> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m
+> -DNDEBUG  -c -o src/server/mod_wsgi.lo src/server/mod_wsgi.c && touch
+> src/server/mod_wsgi.slo
+> In file included from
+> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m/Python.h:53:0,
+>                  from src/server/wsgi_python.h:24,
+>                  from src/server/mod_wsgi.c:22:
+> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m/pyport.h:699:2:
+> error: #error "LONG_BIT definition appears wrong for platform (bad
+> gcc/glibc config?)."
+>  #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc
+> config?)."
+>
+> Did i miss something? I am currently using Buildroot-2019.02.01 and
+> python3.7, what version did you use?
+> Are we the same of header path?
+>
+> Thanks,
+>
+> Mark Leo
+>
+> On Sat, Mar 14, 2020 at 6:21 PM Peter Seiderer <ps.report@gmx.net> wrote:
+>
+>> Hello Mark,
+>>
+>> On Fri, 13 Mar 2020 15:04:43 +0100, Thomas Petazzoni <
+>> thomas.petazzoni at bootlin.com> wrote:
+>>
+>> > Hello,
+>> >
+>> > On Fri, 13 Mar 2020 18:26:38 +0800
+>> > Mark Leo Sumadero <fryu771@gmail.com> wrote:
+>> >
+>> > >
+>> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+>> >
+>> > This is the cross-compiler: good!
+>> >
+>> > > -prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+>> > > -D_FILE_OFFSET_BITS=64 -Os  -DLINUX -D_REENTRANT -D_GNU_SOURCE
+>> > >
+>> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+>> > >
+>> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
+>> > >
+>> > >
+>> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
+>> > >
+>> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../../../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
+>> > > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
+>> > >
+>> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m
+>> >
+>> > This is a path to header of host components: BAD!
+>> >
+>> > And this is where your problem is, this header path should *NOT* be
+>> > there when you cross-compile.
+>>
+>> The following worked for me (python3 case only):
+>>
+>> MOD_WSGI_VERSION = 61359e67448bdfc5fefb1692fd2a97f76394b20c
+>> MOD_WSGI_SITE = $(call
+>> github,GrahamDumpleton,mod_wsgi,$(MOD_WSGI_VERSION))
+>> MOD_WSGI_LICENSE = Apache-2.0
+>> MOD_WSGI_LICENSE_FILES = LICENSE
+>> MOD_WSGI_DEPENDENCIES = apache
+>>
+>> MOD_WSGI_CONF_OPTS = \
+>> --with-apxs=$(STAGING_DIR)/usr/bin/apxs
+>>
+>> ifeq ($(BR2_PACKAGE_PYTHON3),y)
+>> MOD_WSGI_DEPENDENCIES += python3
+>> MOD_WSGI_CONF_ENV += \
+>>
+>> CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)" \
+>>         LDFLAGS="-L$(STAGING_DIR)/usr/lib"
+>> endif
+>>
+>> $(eval $(autotools-package))
+>>
+>> Regards,
+>> Peter
+>>
+>> >
+>> > Best regards,
+>> >
+>> > Thomas Petazzoni
+>>
+>>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200314/6d9680e2/attachment.html>
