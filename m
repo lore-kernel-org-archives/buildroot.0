@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 18:55:56 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/rdesktop:
+Date: Sat, 14 Mar 2020 18:55:35 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/rdesktop:
  security bump to version 1.8.6
-Message-ID: <20200314174333.DA0F88393E@busybox.osuosl.org>
+Message-ID: <20200314174337.9B11B83A1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22675fad184a78011cc405abe0e7fa84eb4a8c5f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=94641ca901effc694f0cd7dee8df8cf04ae577fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 - Fix CVE-2019-15682: RDesktop version 1.8.4 contains multiple
   out-of-bound access read vulnerabilities in its code, which results in
