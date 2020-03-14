@@ -1,74 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 19:38:19 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/libvorbis: fix
- CVE-2018-10392
-Message-ID: <20200314182710.1536483BEA@busybox.osuosl.org>
+Date: Sat, 14 Mar 2020 19:38:37 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libvorbis: annote
+ CVE-2018-10393
+Message-ID: <20200314182710.1EED383BC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3613d9c2985cc29ed499ac693746372cfa36dcf9
+commit: https://git.buildroot.net/buildroot/commit/?id=ce4ed2b3df2a88acb34bae68e3ceae442dc2acbc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-mapping0_forward in mapping0.c in Xiph.Org libvorbis 1.3.6 does not
-validate the number of channels, which allows remote attackers to cause
-a denial of service (heap-based buffer overflow or over-read) or
-possibly have unspecified other impact via a crafted file.
+bark_noise_hybridmp in psy.c in Xiph.Org libvorbis 1.3.6 has a
+stack-based buffer over-read.
+
+Same patch as for CVE-2017-14160
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - update 0001-*.patch to also reference CVE-2018-10393
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3321eef6f28339df1c72ac4e1af937b391084501)
+(cherry picked from commit e21730db5c2d4ac305f3d944cad359623a31d638)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-Sanity-check-number-of-channels-in-setup.patch | 28 ++++++++++++++++++++++
- package/libvorbis/libvorbis.mk                     |  3 +++
- 2 files changed, 31 insertions(+)
+ ...0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch | 3 +++
+ package/libvorbis/libvorbis.mk                                         | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/libvorbis/0002-Sanity-check-number-of-channels-in-setup.patch b/package/libvorbis/0002-Sanity-check-number-of-channels-in-setup.patch
-new file mode 100644
-index 0000000000..1208839a20
---- /dev/null
-+++ b/package/libvorbis/0002-Sanity-check-number-of-channels-in-setup.patch
-@@ -0,0 +1,28 @@
-+From 112d3bd0aaacad51305e1464d4b381dabad0e88b Mon Sep 17 00:00:00 2001
-+From: Thomas Daede <daede003@umn.edu>
-+Date: Thu, 17 May 2018 16:19:19 -0700
-+Subject: [PATCH] Sanity check number of channels in setup.
-+
-+Fixes #2335.
-+[Retrieved from:
-+https://gitlab.xiph.org/xiph/vorbis/commit/112d3bd0aaacad51305e1464d4b381dabad0e88b]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lib/vorbisenc.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/lib/vorbisenc.c b/lib/vorbisenc.c
-+index 4fc7b62..64a51b5 100644
-+--- a/lib/vorbisenc.c
-++++ b/lib/vorbisenc.c
-+@@ -684,6 +684,7 @@ int vorbis_encode_setup_init(vorbis_info *vi){
-+   highlevel_encode_setup *hi=&ci->hi;
-+ 
-+   if(ci==NULL)return(OV_EINVAL);
-++  if(vi->channels<1||vi->channels>255)return(OV_EINVAL);
-+   if(!hi->impulse_block_p)i0=1;
-+ 
-+   /* too low/high an ATH floater is nonsensical, but doesn't break anything */
-+-- 
-+2.24.1
-+
+diff --git a/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch b/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
+index e84f3d4799..94dc4c614b 100644
+--- a/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
++++ b/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
+@@ -4,11 +4,14 @@ Subject: CVE-2017-14160: fix bounds check on very low sample rates.
+ X-Git-Url: https://git.xiph.org/?p=vorbis.git;a=commitdiff_plain;h=018ca26dece618457dd13585cad52941193c4a25
+ 
+ CVE-2017-14160: fix bounds check on very low sample rates.
++CVE-2018-10393: Out-of-bounds Read
+ 
+ Downloaded from upstream commit
+ https://git.xiph.org/?p=vorbis.git;a=commitdiff;h=018ca26dece618457dd13585cad52941193c4a25
+ 
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[yann.morin.1998 at free.fr: also fixes CVE-2018-10393]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ ---
+ 
+ diff --git a/lib/psy.c b/lib/psy.c
 diff --git a/package/libvorbis/libvorbis.mk b/package/libvorbis/libvorbis.mk
-index ae2c1efffe..bf479a3900 100644
+index bf479a3900..708f3364ec 100644
 --- a/package/libvorbis/libvorbis.mk
 +++ b/package/libvorbis/libvorbis.mk
-@@ -13,4 +13,7 @@ LIBVORBIS_DEPENDENCIES = host-pkgconf libogg
+@@ -13,6 +13,9 @@ LIBVORBIS_DEPENDENCIES = host-pkgconf libogg
  LIBVORBIS_LICENSE = BSD-3-Clause
  LIBVORBIS_LICENSE_FILES = COPYING
  
-+# 0002-Sanity-check-number-of-channels-in-setup.patch
-+LIBVORBIS_IGNORE_CVES += CVE-2018-10392
++# 0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
++LIBVORBIS_IGNORE_CVES += CVE-2018-10393
 +
- $(eval $(autotools-package))
+ # 0002-Sanity-check-number-of-channels-in-setup.patch
+ LIBVORBIS_IGNORE_CVES += CVE-2018-10392
+ 
