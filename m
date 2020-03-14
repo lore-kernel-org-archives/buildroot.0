@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 19:24:46 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/shellinabox: fix
+Date: Sat, 14 Mar 2020 19:24:29 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/shellinabox: fix
  CVE-2018-16789
-Message-ID: <20200314181224.30DBD83ADC@busybox.osuosl.org>
+Message-ID: <20200314181229.330A683AE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d41496b3dbc216e2a10edf27b004fd340d1b0c1b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=78e295a7956bf29b79eac5f09252822f6d30e625
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 libhttp/url.c in shellinabox through 2.20 has an implementation flaw in
 the HTTP request parsing logic. By sending a crafted multipart/form-data
@@ -60,10 +60,10 @@ index 0000000000..4b15f419e3
 +       }
 +       if (lastPart) {
 diff --git a/package/shellinabox/shellinabox.mk b/package/shellinabox/shellinabox.mk
-index 70db551e3c..f4b5a69dbf 100644
+index be36804cb7..4c93fdccef 100644
 --- a/package/shellinabox/shellinabox.mk
 +++ b/package/shellinabox/shellinabox.mk
-@@ -9,6 +9,9 @@ SHELLINABOX_SITE = $(call github,shellinabox,shellinabox,$(SHELLINABOX_VERSION))
+@@ -9,6 +9,9 @@ SHELLINABOX_SITE = $(call github,shellinabox,shellinabox,v$(SHELLINABOX_VERSION)
  SHELLINABOX_LICENSE = GPL-2.0 with OpenSSL exception
  SHELLINABOX_LICENSE_FILES = COPYING GPL-2
  
