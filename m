@@ -1,122 +1,26 @@
-From: Mark Leo Sumadero <fryu771@gmail.com>
-Date: Sat, 14 Mar 2020 20:30:01 +0800
-Subject: [Buildroot] Help: error LONG_BIT definition appears wrong for
- platform
-In-Reply-To: <20200314112110.2d8ce39a@gmx.net>
-References: <CAA0OSwgGcbzMe9o35FRqmLBZ5PFMx=1+fDYyiqq0yLk5YJyNpQ@mail.gmail.com>
- <20200313150443.682fdc5a@windsurf> <20200314112110.2d8ce39a@gmx.net>
-Message-ID: <CAA0OSwgZGQOKOv-11BxahH+Ht9Koxx=MEpfiuM-B-ZVVgQyLaw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 14 Mar 2020 14:22:06 +0100
+Subject: [Buildroot] [git commit] package/qwt: add missing qt5svg
+ dependency
+In-Reply-To: <20200219190449.C38DE8E549@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Wed, 19 Feb 2020 20:15:47 +0100")
+References: <20200219190449.C38DE8E549@busybox.osuosl.org>
+Message-ID: <87sgibxe9t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Thanks for the reply. I just used your configuration but i got the same
-error
+ > commit: https://git.buildroot.net/buildroot/commit/?id=bd99e4e54de06c1183c7823f14b05a3be8061296
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/build-1/libtool
---silent --mode=compile
-/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
--prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -Os  -DLINUX -D_REENTRANT -D_GNU_SOURCE
- -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
- -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
+ > Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
--I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
--I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../../../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
--I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/python3.7
--I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m
--DNDEBUG  -c -o src/server/mod_wsgi.lo src/server/mod_wsgi.c && touch
-src/server/mod_wsgi.slo
-In file included from
-/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m/Python.h:53:0,
-                 from src/server/wsgi_python.h:24,
-                 from src/server/mod_wsgi.c:22:
-/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m/pyport.h:699:2:
-error: #error "LONG_BIT definition appears wrong for platform (bad
-gcc/glibc config?)."
- #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc
-config?)."
+Committed to 2019.02.x and 2019.11.x, thanks.
 
-Did i miss something? I am currently using Buildroot-2019.02.01 and
-python3.7, what version did you use?
-Are we the same of header path?
-
-Thanks,
-
-Mark Leo
-
-On Sat, Mar 14, 2020 at 6:21 PM Peter Seiderer <ps.report@gmx.net> wrote:
-
-> Hello Mark,
->
-> On Fri, 13 Mar 2020 15:04:43 +0100, Thomas Petazzoni <
-> thomas.petazzoni at bootlin.com> wrote:
->
-> > Hello,
-> >
-> > On Fri, 13 Mar 2020 18:26:38 +0800
-> > Mark Leo Sumadero <fryu771@gmail.com> wrote:
-> >
-> > >
-> /home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
-> >
-> > This is the cross-compiler: good!
-> >
-> > > -prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> > > -D_FILE_OFFSET_BITS=64 -Os  -DLINUX -D_REENTRANT -D_GNU_SOURCE
-> > >
-> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
-> > >
-> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
-> > >
-> > >
-> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../usr/include/apr-1
-> > >
-> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/bin/../../../../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include
-> > > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
-> > >
-> -I/home/falcon/Documents/pisokonek-project/pisokonek/installer/buildroot-2019.02.1/output/host/include/python3.7m
-> >
-> > This is a path to header of host components: BAD!
-> >
-> > And this is where your problem is, this header path should *NOT* be
-> > there when you cross-compile.
->
-> The following worked for me (python3 case only):
->
-> MOD_WSGI_VERSION = 61359e67448bdfc5fefb1692fd2a97f76394b20c
-> MOD_WSGI_SITE = $(call github,GrahamDumpleton,mod_wsgi,$(MOD_WSGI_VERSION))
-> MOD_WSGI_LICENSE = Apache-2.0
-> MOD_WSGI_LICENSE_FILES = LICENSE
-> MOD_WSGI_DEPENDENCIES = apache
->
-> MOD_WSGI_CONF_OPTS = \
-> --with-apxs=$(STAGING_DIR)/usr/bin/apxs
->
-> ifeq ($(BR2_PACKAGE_PYTHON3),y)
-> MOD_WSGI_DEPENDENCIES += python3
-> MOD_WSGI_CONF_ENV += \
->
-> CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)" \
->         LDFLAGS="-L$(STAGING_DIR)/usr/lib"
-> endif
->
-> $(eval $(autotools-package))
->
-> Regards,
-> Peter
->
-> >
-> > Best regards,
-> >
-> > Thomas Petazzoni
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200314/1f376cc2/attachment.html>
+-- 
+Bye, Peter Korsgaard
