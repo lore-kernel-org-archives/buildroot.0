@@ -1,39 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Mar 2020 15:19:08 +0100
-Subject: [Buildroot] [PATCH v2] package/util-linux: fix build for
- riscv64 and powerpc64le
-In-Reply-To: <20200313010611.17176-1-unixmania@gmail.com>
-References: <20200313010611.17176-1-unixmania@gmail.com>
-Message-ID: <20200314151908.216d48b5@windsurf>
+Date: Sat, 14 Mar 2020 15:25:12 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/libtextstyle: new package
+In-Reply-To: <20200312201004.3848419-1-aduskett@gmail.com>
+References: <20200312201004.3848419-1-aduskett@gmail.com>
+Message-ID: <20200314152512.708b5d06@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 12 Mar 2020 22:06:11 -0300
-unixmania at gmail.com wrote:
+On Thu, 12 Mar 2020 13:10:01 -0700
+aduskett at gmail.com wrote:
 
-> From: Carlos Santos <unixmania@gmail.com>
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Pull two upstream patches that fix the declaration of pidfd_open and
-> pidfd_send_signal.
+> This library provides an easy way to add styling to programs that produce
+> output to a console or terminal emulator window.
 > 
-> Fixes:
->   http://autobuild.buildroot.net/results/2396b04478f9d358b94f2e2e05540625ddc9f205/
->   http://autobuild.buildroot.net/results/ed4b5ec61bd33d3ccf0ebb16000af46d0499366d/
+> libtextstyle is for you if your application produces text that is more readable
+> when it is accompanied with styling information, such as color, font attributes
+> (weight, posture), or underlining.
 > 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
-> Chanves v1->v2: add SOB to patches
-> ---
->  ...-types.h-before-checking-SYS_pidfd_s.patch | 62 +++++++++++++++++++
->  .../0007-include-cleanup-pidfd-inckudes.patch | 40 ++++++++++++
->  2 files changed, 102 insertions(+)
->  create mode 100644 package/util-linux/0006-kill-include-sys-types.h-before-checking-SYS_pidfd_s.patch
->  create mode 100644 package/util-linux/0007-include-cleanup-pidfd-inckudes.patch
+> Newer versions of gettext-gnu require this package.
+> 
+> Tested with test-pkg -p gettext-tiny in Debian 10 and Centos 7
+> 
+>             br-arm-full [1/6]: OK
+>  br-arm-cortex-a9-glibc [2/6]: OK
+>   br-arm-cortex-m4-full [3/6]: OK
+>          br-x86-64-musl [4/6]: OK
+>      br-arm-full-static [5/6]: OK
+>            sourcery-arm [6/6]: OK
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-Applied to master, thanks.
+I'm confused. Why do we need a separate for this, if this is part of
+gettext-gnu, and needed only by gettext-gnu ?
 
 Thomas
 -- 
