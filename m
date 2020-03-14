@@ -1,33 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Mar 2020 15:26:05 +0100
-Subject: [Buildroot] [PATCH] package/minicom: bump version to latest
-In-Reply-To: <20200312231200.64017-1-giulio.benetti@benettiengineering.com>
-References: <20200312231200.64017-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200314152605.132f2fe7@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 14 Mar 2020 15:15:20 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/jpeg-turbo: force
+ fPIC for shared libraries
+Message-ID: <20200314141321.D7C0982B6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 13 Mar 2020 00:12:00 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e8b7229551a10e98e786d02080adf3260ea1445d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-> Drop patch since it's replaced by upstream commit:
-> https://salsa.debian.org/minicom-team/minicom/-/commit/23292150e07ec264827fb6cf237ddb0ac9fc043b
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  ...0001-fix-static-linking-with-ncurses.patch | 745 ------------------
->  package/minicom/minicom.hash                  |   2 +-
->  package/minicom/minicom.mk                    |   2 +-
->  3 files changed, 2 insertions(+), 747 deletions(-)
->  delete mode 100644 package/minicom/0001-fix-static-linking-with-ncurses.patch
+When BR2_SSP_ALL is set, there is a link issue due to missing -fPIC in CFLAGS.
+Set CMAKE_POSITION_INDEPENDENT_CODE=ON to add it.
 
-Applied to master, thanks.
+This is a similar fix as for gtest package [1]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[1] https://git.buildroot.net/buildroot/commit/?id=2026621f3c60167aa8ba48e658be1b214d1347d7
+
+Fixes:
+http://autobuild.buildroot.net/results/e1f/e1f164cee16b037c0232fdda40fc16caf8f0c0af
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Murat Demirten <mdemirten@yh.com.tr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 37f3d09d46a7b3b4ba8f564c0005f4ab7ff1a69c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jpeg-turbo/jpeg-turbo.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 0c75cf1db5..1ab60bab1e 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -31,6 +31,16 @@ else
+ JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=OFF
+ endif
+ 
++# Ensure that jpeg-turbo is compiled with -fPIC to allow linking the static
++# libraries with dynamically linked programs. This is not a requirement
++# for most architectures but is mandatory for ARM.
++# This allow to avoid link issues with BR2_SSP_ALL:
++# jsimd_none.c.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against external symbol `__stack_chk_guard@@GLIBC_2.17'
++# can not be used when making a shared object; recompile with -fPIC
++ifeq ($(BR2_STATIC_LIBS),)
++JPEG_TURBO_CONF_OPTS += -DCMAKE_POSITION_INDEPENDENT_CODE=ON
++endif
++
+ define JPEG_TURBO_REMOVE_USELESS_TOOLS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,cjpeg djpeg jpegtran rdjpgcom tjbench wrjpgcom)
+ endef
