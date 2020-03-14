@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 16:04:36 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/busybox: fix
+Date: Sat, 14 Mar 2020 16:04:31 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/busybox: fix
  individual binaries installation
-Message-ID: <20200314145204.3341A83234@busybox.osuosl.org>
+Message-ID: <20200314145209.51AA3832B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4bacbf63cf5e5f7b80b7e1d8ddc6471b76dad90
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e96786c6233d2ec32d324c89fe47001b7a7e5579
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Call BUSYBOX_INSTALL_INDIVIDUAL_BINARIES in BUSYBOX_INSTALL_TARGET_CMDS,
 not in BUSYBOX_INSTALL_INIT_SYSV. This should have been done in commit
@@ -26,10 +26,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 6283bc96ea..dfcd9d392c 100644
+index 565488ce1a..bf3b8aeec8 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
-@@ -349,6 +349,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+@@ -334,6 +334,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
  	# Use the 'noclobber' install rule, to prevent BusyBox from overwriting
  	# any full-blown versions of apps installed by other packages.
  	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) install-noclobber
@@ -37,9 +37,9 @@ index 6283bc96ea..dfcd9d392c 100644
  	$(BUSYBOX_INSTALL_INITTAB)
  	$(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
  	$(BUSYBOX_INSTALL_MDEV_CONF)
-@@ -360,7 +361,6 @@ define BUSYBOX_INSTALL_INIT_SYSV
+@@ -344,7 +345,6 @@ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
  	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
- 	$(BUSYBOX_INSTALL_SYSCTL_SCRIPT)
  	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
 -	$(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
  endef
