@@ -1,41 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Mar 2020 15:28:48 +0100
-Subject: [Buildroot] [PATCH] package/ffmpeg: fix typo "--enable-bsfs" ->
- "--enable-bsf"
-In-Reply-To: <20200312194517.15568-1-anatoly.borodin@gmail.com>
-References: <20200312194517.15568-1-anatoly.borodin@gmail.com>
-Message-ID: <20200314152848.38d42b7e@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 14 Mar 2020 15:31:51 +0100
+Subject: [Buildroot] [PATCH] package/libsvgtiny: fix parallel build
+In-Reply-To: <20200222214439.18588-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Sat, 22 Feb 2020 22:44:39 +0100")
+References: <20200222214439.18588-1-giulio.benetti@benettiengineering.com>
+Message-ID: <87blozxb1k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 12 Mar 2020 20:45:17 +0100
-Anatoly Borodin <anatoly.borodin@gmail.com> wrote:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-> Fix ffmpeg configuration when BR2_PACKAGE_FFMPEG_BSFS is not default ("all"):
-> 
-> 	Unknown option "--enable-bsfs=h264_metadata".
-> 	See ./configure --help for available options.
-> 	package/pkg-generic.mk:254: recipe for target '/root/buildroot/output/build/ffmpeg-4.2.2/.stamp_configured' failed
-> 
-> The option is named according to the scheme "--enable-SINGULAR=..." /
-> "--disable-PLURAL".
-> 
-> The typo is present since the release 2014.02:
-> 
-> https://git.buildroot.net/buildroot/commit/package/ffmpeg/ffmpeg.mk?id=62ab07ef769bd6504fe1db144aaac3fd45db9dad
-> 
-> Signed-off-by: Anatoly Borodin <anatoly.borodin@gmail.com>
-> ---
->  package/ffmpeg/ffmpeg.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+ > Fix previous commit[1] which purpose was to fix parallel build. It
+ > didn't work since it assigned $(MAKE1) to LIBSVGTINY_MAKE, but this is a
+ > generic-package and building is done using $(MAKE), then LIBSVGTINY_MAKE
+ > was ignored. Let's substitute instead $(MAKE) with $(MAKE1) in
+ > LIBSVGTINY_BUILD_CMDS.
 
-Applied to master, thanks.
+ > [1]:
+ > https://git.buildroot.net/buildroot/commit/?id=26d67a2599d6c88facd5178de853fa355244e7c2
 
-Thomas
+ > Fixes:
+ > http://autobuild.buildroot.net/results/67d/67d341c0cc272323d6e231a20796a6848c21d760/
+
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+
+Committed to 2019.02.x and 2019.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
