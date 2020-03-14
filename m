@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 18:26:57 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/dnsmasq: fix
+Date: Sat, 14 Mar 2020 18:24:11 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/dnsmasq: fix
  CVE-2019-14834
-Message-ID: <20200314171827.71307837B9@busybox.osuosl.org>
+Message-ID: <20200314171832.C069C83919@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80197d7feff4363feb055dd8ad45e3389884c7ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cacd3efd2ac98a0efbcf319215be9c2075d40082
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 A vulnerability was found in dnsmasq before version 2.81, where the
 memory leak allows remote attackers to cause a denial of service
@@ -81,7 +81,7 @@ index 0000000000..c00a9cc3ef
 +1.7.10.4
 +
 diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 366cebf012..d0f38cb3b4 100644
+index f271523068..3f25ac0885 100644
 --- a/package/dnsmasq/dnsmasq.mk
 +++ b/package/dnsmasq/dnsmasq.mk
 @@ -15,6 +15,9 @@ DNSMASQ_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
