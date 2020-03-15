@@ -1,59 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Mar 2020 22:12:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/polkit: add linux-pam as a
- dependency if linux-pam is selected
-In-Reply-To: <20200315205610.2227486-1-aduskett@gmail.com>
-References: <20200315205610.2227486-1-aduskett@gmail.com>
-Message-ID: <20200315211204.GL19677@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 15 Mar 2020 22:47:51 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libcpprestsdk: zlib is optional,
+ not mandatory
+In-Reply-To: <20200314222027.2317520-1-fontaine.fabrice@gmail.com>
+References: <20200314222027.2317520-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200315224751.41147871@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+On Sat, 14 Mar 2020 23:20:26 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On 2020-03-15 13:56 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Without linux-pam built first, polkit will throw a configuration error:
-> configure: error: Could not find pam/pam-devel, please install the needed packages.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> +ifeq ($(BR2_PACKAGE_ZLIB),y)
+> +LIBCPPRESTSDK_DEPENDENCIES += zlib
+> +LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_COMPRESSION=OFF
+> +# brotli needs compression
 
-Applied to master, thanks.
+What makes you think brotli needs zlib ? I had a quick look at the
+CMake logic and didn't find that.
 
-Regards,
-Yann E. MORIN.
+Also, how did you test that? zlib is a dependency of openssl, and
+openssl is a mandatory dependency of libcpprestsdk. Did you test with
+libressl ?
 
-> ---
->  package/polkit/polkit.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-> index bc9e3580ab..efd788a05c 100644
-> --- a/package/polkit/polkit.mk
-> +++ b/package/polkit/polkit.mk
-> @@ -24,6 +24,7 @@ POLKIT_CONF_OPTS = \
->  	--disable-libsystemd-login
->  
->  ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-> +POLKIT_DEPENDENCIES += linux-pam
->  POLKIT_CONF_OPTS += --with-authfw=pam
->  else
->  POLKIT_CONF_OPTS += --with-authfw=shadow
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thanks,
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
