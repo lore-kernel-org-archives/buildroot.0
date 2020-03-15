@@ -1,48 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 12:03:00 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/php: security
- bump to version 7.3.15
-Message-ID: <20200315105036.A821286D3E@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 12:03:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to
+ 7.4.3
+In-Reply-To: <87h7yqitr3.fsf@tarshish> (Baruch Siach's message of "Sat, 14 Mar
+ 2020 22:09:04 +0200")
+References: <20200220223339.985987-1-bernd.kuhls@t-online.de>
+ <87k13nxbw6.fsf@dell.be.48ers.dk> <87h7yqitr3.fsf@tarshish>
+Message-ID: <8736a9khhc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6617fe098de820320c6e8bd7c05289820e378217
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.3.15
+ > Hi Peter,
+ > On Sat, Mar 14 2020, Peter Korsgaard wrote:
+ >>>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+ >> 
+ >> > Changelog: https://www.php.net/ChangeLog-7.php#7.4.3
+ >> > Fixes CVE-2020-7061, CVE-2020-7062 & CVE-2020-7063.
+ >> 
+ >> > Removed patch applied upstream:
+ >> > https://github.com/php/php-src/commit/f0f5c415a6e0abc40514f97113deb52a343174ee
+ >> 
+ >> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> 
+ >> For 2019.02.x and 2019.11.x I have instead bumped to 7.3.15, which
+ >> contains the same fixes.
 
-Fixes CVE-2020-7061, CVE-2020-7062 & CVE-2020-7063
+ > php is still 7.3.14 in 2019.02.x as of commit a8cf4afce17f.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Ups, indeed - Fixed. Thanks!
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 31f08cacac..a784adb7f5 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256 cc05dd373ca5d36652800762f65c10e828a17de35aaf246262e3efa99d00cdb0  php-7.3.14.tar.xz
-+sha256 de7ae7cf3d1dbb2824975b26b32991dac2b732886ec22075b8c53b261b018166  php-7.3.15.tar.xz
- 
- # License file
- sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 7410510eda..339509effd 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.3.14
-+PHP_VERSION = 7.3.15
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-- 
+Bye, Peter Korsgaard
