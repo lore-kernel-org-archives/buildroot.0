@@ -1,63 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:48:07 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/pppd: use uclibc
- libcrypt instead of openssl
-Message-ID: <20200315103555.356BA80538@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 11:48:13 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/pppd: add missing
+ file hashes
+Message-ID: <20200315103555.3EC06863D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f012854abbdb23960ad578ee3c2bebd49e0ac27e
+commit: https://git.buildroot.net/buildroot/commit/?id=6aacf6bd5402986adbebd2b08943d67756e0f2c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-glibc since 2.28 dropped DES encryption routines setkey() and encrypt(),
-but uclibc still provides them. So, if building with uclibc, we can
-avoid using huge openssl library.
+for :
+* pppd/tdb.c
+* pppd/plugins/pppoatm/COPYING
+* pppdump/bsd-comp.c
+* pppd/ccp.c
+* pppd/plugins/passprompt.c
 
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b519bcafe75d1256d1fc42aa26393405b89629b3)
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 09d5d650c6eb2b645dd50e6a5b6d45bd95109f21)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pppd/Config.in |  2 +-
- package/pppd/pppd.mk   | 12 ++++++++----
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ package/pppd/pppd.hash | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/pppd/Config.in b/package/pppd/Config.in
-index bf05689f53..7db5674bf1 100644
---- a/package/pppd/Config.in
-+++ b/package/pppd/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_PPPD
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # Use __P() macro all over the tree
- 	depends on BR2_USE_MMU
--	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL if BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  An implementation of the Point-to-point protocol.
- 
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 4dffc17941..29e52be978 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -12,10 +12,14 @@ PPPD_LICENSE_FILES = \
- 	pppd/tdb.c pppd/plugins/pppoatm/COPYING \
- 	pppdump/bsd-comp.c pppd/ccp.c pppd/plugins/passprompt.c
- 
--PPPD_DEPENDENCIES = openssl
--PPPD_MAKE_OPTS = \
--	HAVE_INET6=y \
--	OPENSSL_INCLUDE_DIR=$(STAGING_DIR)/usr/include/openssl
-+PPPD_MAKE_OPTS = HAVE_INET6=y
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-+PPPD_DEPENDENCIES += openssl
-+PPPD_MAKE_OPTS += OPENSSL_INCLUDE_DIR=$(STAGING_DIR)/usr/include/openssl
-+else
-+PPPD_MAKE_OPTS += USE_CRYPT=y
-+endif
+diff --git a/package/pppd/pppd.hash b/package/pppd/pppd.hash
+index 2bc248d89f..2baa6939e4 100644
+--- a/package/pppd/pppd.hash
++++ b/package/pppd/pppd.hash
+@@ -1,2 +1,9 @@
+ # Locally calculated after checking pgp signature
+ sha256	02e0a3dd3e4799e33103f70ec7df75348c8540966ee7c948e4ed8a42bbccfb30	ppp-2.4.7.tar.gz
 +
- PPPD_INSTALL_STAGING = YES
- PPPD_TARGET_BINS = chat pppd pppdump pppstats
- PPPD_RADIUS_CONF = \
++# Locally calculated
++sha256	3990c65c506885f7bb75455d1d6188743a14ad46f5b62e136ef3739aed52c532	pppd/tdb.c
++sha256	1822ead9d2854adfbd282322b29730a3fec4cc67f6f6a2e487aad3476e3afd59	pppd/plugins/pppoatm/COPYING
++sha256	91a5e9c173e0e001e081e15bf7850cfd782a0baa02f5921e327ae3b449beff3f	pppdump/bsd-comp.c
++sha256	41f7dbfa7c80940be74803c456c3a28f218b13a9e51e9777d3e9cb4cb6b4e692	pppd/ccp.c
++sha256	6fa4c3dad059f6ef15c1c5e5219d9d0d40991dd3a162098a89967a1720de059e	pppd/plugins/passprompt.c
