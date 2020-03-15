@@ -1,64 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:06:48 +0100
+Date: Sun, 15 Mar 2020 11:07:22 +0100
 Subject: [Buildroot] [git commit branch/2019.02.x] package/libvncserver: fix
- build without C++
-Message-ID: <20200315095840.416EB84079@busybox.osuosl.org>
+ pkg-config file
+Message-ID: <20200315095840.5E30D83F03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52f05e47365fc55f8f04676355975438162d38bb
+commit: https://git.buildroot.net/buildroot/commit/?id=f2df233360630eed7e6ccccc669a8b9f20a9894d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
+This will fix a build failure with vlc and without zlib
+
 Fixes:
- - http://autobuild.buildroot.org/results/16aaa4e86a2dbf1acf95f10d5131b0f7b8a3d61a
+ - http://autobuild.buildroot.org/results/7d5f5980f1ba248a1d95b380d422eaeeaca265f8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ca393d7a5b77d877573cdbb7029949d229bce062)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0bb5d1ceca64123b3b8473fcd375c759ccb735ac)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-CMakeLists.txt-fix-build-without-C.patch  | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ ...vnc-client-server-.pc.cmakein-remove-zlib.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch b/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch
+diff --git a/package/libvncserver/0002-libvnc-client-server-.pc.cmakein-remove-zlib.patch b/package/libvncserver/0002-libvnc-client-server-.pc.cmakein-remove-zlib.patch
 new file mode 100644
-index 0000000000..591c97fd6a
+index 0000000000..7941a98882
 --- /dev/null
-+++ b/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch
-@@ -0,0 +1,33 @@
-+From 868f0a9fa60bb45ee6cf762f323c5b3964b2ee69 Mon Sep 17 00:00:00 2001
++++ b/package/libvncserver/0002-libvnc-client-server-.pc.cmakein-remove-zlib.patch
+@@ -0,0 +1,45 @@
++From 5abd95b65fe5ec24749164338a9718ecce19e240 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 23 Jun 2019 10:18:59 +0200
-+Subject: [PATCH] CMakeLists.txt: fix build without C++
++Date: Fri, 28 Feb 2020 10:29:58 +0100
++Subject: [PATCH] libvnc{client,server}.pc.cmakein: remove zlib
 +
-+Specify that libvncserver is a C project file otherwise build will fail
-+if no C++ compiler is found by cmake
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/16aaa4e86a2dbf1acf95f10d5131b0f7b8a3d61a
++Remove zlib from Requires.private as libvnc can be built without zlib
++thanks to WITH_LIB, zlib will be added to Libs.private thanks to
++PRIVATE_LIBS
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/LibVNC/libvncserver/pull/317]
++[Upstream status: https://github.com/LibVNC/libvncserver/pull/377]
 +---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ libvncclient.pc.cmakein | 2 +-
++ libvncserver.pc.cmakein | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 0d3b4dc..ad609ae 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,7 +1,7 @@
-+ cmake_minimum_required(VERSION 3.4)
-+ cmake_policy(SET CMP0037 NEW)
-+ 
-+-project(LibVNCServer)
-++project(LibVNCServer C)
-+ include(CheckFunctionExists)
-+ include(CheckSymbolExists)
-+ include(CheckIncludeFile)
++diff --git a/libvncclient.pc.cmakein b/libvncclient.pc.cmakein
++index 336e73f..ceeda39 100644
++--- a/libvncclient.pc.cmakein
+++++ b/libvncclient.pc.cmakein
++@@ -7,7 +7,7 @@ Name: LibVNCClient
++ Description: A library for easy implementation of a VNC client.
++ Version: @LibVNCServer_VERSION@
++ Requires:
++-Requires.private: zlib
+++Requires.private:
++ Libs: -L${libdir} -lvncclient
++ Libs.private: @PRIVATE_LIBS@
++ Cflags: -I${includedir}
++diff --git a/libvncserver.pc.cmakein b/libvncserver.pc.cmakein
++index dfcec9d..33ec668 100644
++--- a/libvncserver.pc.cmakein
+++++ b/libvncserver.pc.cmakein
++@@ -7,7 +7,7 @@ Name: LibVNCServer
++ Description: A library for easy implementation of a VNC server.
++ Version: @LibVNCServer_VERSION@
++ Requires:
++-Requires.private: zlib
+++Requires.private:
++ Libs: -L${libdir} -lvncserver
++ Libs.private: @PRIVATE_LIBS@
++ Cflags: -I${includedir}
 +-- 
-+2.20.1
++2.25.0
 +
