@@ -1,29 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 14:47:28 +0100
-Subject: [Buildroot] [PATCH 2019.02.x] package/sysklogd: fix daemon
- paths in systemd unit files
-In-Reply-To: <20200315022732.20198-1-unixmania@gmail.com> (unixmania's message
- of "Sat, 14 Mar 2020 23:27:32 -0300")
-References: <20200315022732.20198-1-unixmania@gmail.com>
-Message-ID: <87y2s1ivbj.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Mar 2020 14:47:17 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/sysklogd: fix
+ daemon paths in systemd unit files
+Message-ID: <20200315133501.D4E4087F70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=387d14d0816e09c3aff0aab8eaba425296e9ad22
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
- > From: Carlos Santos <unixmania@gmail.com>
- > They are at /sbin, not /usr/sbin.
+They are at /sbin, not /usr/sbin.
 
- > Signed-off-by: Carlos Santos <unixmania@gmail.com>
- > ---
- > CC: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sysklogd/klogd.service   | 2 +-
+ package/sysklogd/syslogd.service | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Peter, this applies to 2019.02.x.
-
-Committed to 2019.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sysklogd/klogd.service b/package/sysklogd/klogd.service
+index c66795b449..b5dbb93d7d 100644
+--- a/package/sysklogd/klogd.service
++++ b/package/sysklogd/klogd.service
+@@ -2,7 +2,7 @@
+ Description=Kernel Log Daemon
+ 
+ [Service]
+-ExecStart=/usr/sbin/klogd -n
++ExecStart=/sbin/klogd -n
+ StandardOutput=null
+ Restart=on-failure
+ 
+diff --git a/package/sysklogd/syslogd.service b/package/sysklogd/syslogd.service
+index 70e4cff27e..adaac679f2 100644
+--- a/package/sysklogd/syslogd.service
++++ b/package/sysklogd/syslogd.service
+@@ -4,7 +4,7 @@ Requires=syslog.socket
+ Wants=klogd.service
+ 
+ [Service]
+-ExecStart=/usr/sbin/syslogd -m 0 -n
++ExecStart=/sbin/syslogd -m 0 -n
+ StandardOutput=null
+ Restart=on-failure
+ 
