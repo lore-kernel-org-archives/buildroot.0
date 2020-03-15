@@ -1,77 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 15 Mar 2020 11:09:49 +0100
 Subject: [Buildroot] [git commit branch/2019.11.x] package/libvncserver: fix
- CVE-2019-15681
-Message-ID: <20200315095835.82ED484001@busybox.osuosl.org>
+ jpeg build without png or zlib
+Message-ID: <20200315095835.8D2158263F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5439c044f6120c328e391ead5514a47f60d6a6c2
+commit: https://git.buildroot.net/buildroot/commit/?id=fff942f50ba1068c9138bcb97e36257de6d8a12f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-LibVNC commit before d01e1bb4246323ba6fcee3b82ef1faa9b1dac82a contains a
-memory leak (CWE-655) in VNC server code, which allow an attacker to
-read stack memory and can be abused for information disclosure. Combined
-with another vulnerability, it can be used to leak stack memory and
-bypass ASLR. This attack appear to be exploitable via network
-connectivity. These vulnerabilities have been fixed in commit
-d01e1bb4246323ba6fcee3b82ef1faa9b1dac82a
+Fixes:
+ - http://autobuild.buildroot.org/results/bcc701055dd5876005fa6f78f38500399394cd75
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 05bf029c112f42128286b4a07051f6af3cc602b8)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a8dc83b83a460d5aa787b2d8dfc5b786a7e83cd5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ver-don-t-leak-stack-memory-to-the-remote.patch | 26 ++++++++++++++++++++++
- package/libvncserver/libvncserver.mk               |  3 +++
- 2 files changed, 29 insertions(+)
+ ...txt-don-t-build-tight.c-without-png-or-zl.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/package/libvncserver/0004-rfbserver-don-t-leak-stack-memory-to-the-remote.patch b/package/libvncserver/0004-rfbserver-don-t-leak-stack-memory-to-the-remote.patch
+diff --git a/package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch b/package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch
 new file mode 100644
-index 0000000000..056b940cdf
+index 0000000000..c357f8b3d5
 --- /dev/null
-+++ b/package/libvncserver/0004-rfbserver-don-t-leak-stack-memory-to-the-remote.patch
-@@ -0,0 +1,26 @@
-+From d01e1bb4246323ba6fcee3b82ef1faa9b1dac82a Mon Sep 17 00:00:00 2001
-+From: Christian Beier <dontmind@freeshell.org>
-+Date: Mon, 19 Aug 2019 22:32:25 +0200
-+Subject: [PATCH] rfbserver: don't leak stack memory to the remote
++++ b/package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch
+@@ -0,0 +1,54 @@
++From 8f58a9d9f35e6b893b54b399be357bc789f6e630 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 8 Mar 2020 10:36:57 +0100
++Subject: [PATCH] CMakeLists.txt: don't build tight.c without png or zlib
 +
-+Thanks go to Pavel Cheremushkin of Kaspersky for reporting.
-+[Retrieved from:
-+https://github.com/LibVNC/libvncserver/commit/d01e1bb4246323ba6fcee3b82ef1faa9b1dac82a]
++If the user enables JPEG and disable PNG and ZLIB, build will fail on:
++
++[ 42%] Building C object CMakeFiles/vncserver.dir/libvncserver/ws_decode.c.o
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c: In function 'rfbSendRectEncodingTight':
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:276:7: error: 'struct _rfbClientRec' has no member named 'tightEncoding'
++     cl->tightEncoding = rfbEncodingTight;
++       ^~
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c: In function 'rfbSendRectEncodingTightPng':
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:287:7: error: 'struct _rfbClientRec' has no member named 'tightEncoding'
++     cl->tightEncoding = rfbEncodingTightPng;
++       ^~
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c: In function 'SendRectEncodingTight':
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:307:23: error: 'struct _rfbClientRec' has no member named 'tightCompressLevel'
++     compressLevel = cl->tightCompressLevel;
++                       ^~
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:308:22: error: 'struct _rfbClientRec' has no member named 'turboQualityLevel'
++     qualityLevel = cl->turboQualityLevel;
++                      ^~
++/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:309:22: error: 'struct _rfbClientRec' has no member named 'turboSubsampLevel'
++     subsampLevel = cl->turboSubsampLevel;
++                      ^~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/bcc701055dd5876005fa6f78f38500399394cd75
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/LibVNC/libvncserver/pull/380]
 +---
-+ libvncserver/rfbserver.c | 2 ++
-+ 1 file changed, 2 insertions(+)
++ CMakeLists.txt | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+diff --git a/libvncserver/rfbserver.c b/libvncserver/rfbserver.c
-+index 3bacc891..310e5487 100644
-+--- a/libvncserver/rfbserver.c
-++++ b/libvncserver/rfbserver.c
-+@@ -3724,6 +3724,8 @@ rfbSendServerCutText(rfbScreenInfoPtr rfbScreen,char *str, int len)
-+     rfbServerCutTextMsg sct;
-+     rfbClientIteratorPtr iterator;
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 2a2cb15..b8bc9e2 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -425,7 +425,9 @@ endif()
++ if(JPEG_FOUND)
++   add_definitions(-DLIBVNCSERVER_HAVE_LIBJPEG)
++   include_directories(${JPEG_INCLUDE_DIR})
++-  set(TIGHT_C ${LIBVNCSERVER_DIR}/tight.c ${COMMON_DIR}/turbojpeg.c)
+++  if(PNG_FOUND OR ZLIB_FOUND)
+++    set(TIGHT_C ${LIBVNCSERVER_DIR}/tight.c ${COMMON_DIR}/turbojpeg.c)
+++  endif(PNG_FOUND OR ZLIB_FOUND)
++ endif(JPEG_FOUND)
 + 
-++    memset((char *)&sct, 0, sizeof(sct));
-++
-+     iterator = rfbGetClientIterator(rfbScreen);
-+     while ((cl = rfbClientIteratorNext(iterator)) != NULL) {
-+         sct.type = rfbServerCutText;
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index 79db2dad83..5b8648fa6d 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -16,6 +16,9 @@ LIBVNCSERVER_CONF_OPTS = -DWITH_LZO=ON
- # 0003-Limit-lenght-to-INT_MAX-bytes-in-rfbProcessFileTransferReadBuffer.patch
- LIBVNCSERVER_IGNORE_CVES += CVE-2018-20750
- 
-+# 0004-rfbserver-don-t-leak-stack-memory-to-the-remote.patch
-+LIBVNCSERVER_IGNORE_CVES += CVE-2019-15681
++ if(PNG_FOUND)
++-- 
++2.25.0
 +
- # only used for examples
- LIBVNCSERVER_CONF_OPTS += \
- 	-DWITH_FFMPEG=OFF \
