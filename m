@@ -1,45 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Mar 2020 22:05:32 +0100
-Subject: [Buildroot] [PATCHv2 00/12] More perl packages + chartjs
-In-Reply-To: <20200210112636.8155-1-patrickdepinguin@gmail.com>
-References: <20200210112636.8155-1-patrickdepinguin@gmail.com>
-Message-ID: <20200315220532.686b0eb4@windsurf>
+Date: Sun, 15 Mar 2020 22:07:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rdesktop: use --with-sound
+ option
+In-Reply-To: <20200314223641.2552635-1-fontaine.fabrice@gmail.com>
+References: <20200314223641.2552635-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200315220704.4d588598@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Fabrice,
 
-+Fran?ois in Cc.
+On Sat, 14 Mar 2020 23:36:41 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On Mon, 10 Feb 2020 12:26:23 +0100
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
-
-> Joeri Barbarien (7):
->   package/perl-locale-maketext-lexicon: new package
->   package/perl-i18n: new package
->   package/perl-mojolicious-plugin-authorization: new package
->   package/perl-mojolicious-plugin-cspheader: new package
->   package/perl-mojolicious-plugin-i18n: new package
->   package/perl-mojolicious-plugin-securityheader: new package
->   package/chartjs: new package
+> Use --with-sound option as requested by Thomas Petazzoni in review of
+> https://patchwork.ozlabs.org/patch/1254693
 > 
-> Thomas De Schampheleire (5):
->   package/perl-mozilla-ca: new package
->   package/perl-lwp-protocol-https: new package
->   package/perl-path-class: new host package
->   package/perl-crypt-ssleay: new package
->   support/testing: add missing test file for perl-html-parser
+> alsa, libao and pulseaudio are not exclusive, the order of registrations
+> in rdpsnd_register_drivers define the probe-order when opening the
+> device for the first time
 
-Thanks, I've applied the entire series.
+But if you pass a single --with-sound=foo, don't they become mutually
+exclusive ? Does the configure script properly handles --with-sound=foo
+--with-sound=bar, and understands it should enable both support for
+"foo" and "bar" ? I think a normal configure script would only keep
+"bar" in such a circumstance.
 
-The only thing I have adjusted is that the new tests were missing
-entries in the DEVELOPERS file. Fran?ois, perhaps this should be
-improved in the scancpan script ?
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
