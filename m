@@ -1,40 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:32:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/thrift: disable qt for host
- build
-In-Reply-To: <20200306220129.1149054-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 6 Mar 2020 23:01:29 +0100")
-References: <20200306220129.1149054-1-fontaine.fabrice@gmail.com>
-Message-ID: <87tv2plxhm.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Mar 2020 11:32:07 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/thrift: disable
+ qt4
+Message-ID: <20200315101935.2F74E84AE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=821837125ee8fcac0362b5e6fa279a8a106a9354
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > host-thrift can fail if a broken Qt4 is found on host:
- > CMake Error in lib/cpp/CMakeLists.txt:
- >   Imported target "Qt4::QtCore" includes non-existent path
+host-thrift can fail if a broken Qt4 is found on host:
 
- >     "/nvmedata/autobuild/instance-4/output-1/host/usr/mkspecs/default"
+CMake Error in lib/cpp/CMakeLists.txt:
+  Imported target "Qt4::QtCore" includes non-existent path
 
- >   in its INTERFACE_INCLUDE_DIRECTORIES.  Possible reasons include:
+    "/nvmedata/autobuild/instance-4/output-1/host/usr/mkspecs/default"
 
- >   * The path was deleted, renamed, or moved to another location.
+  in its INTERFACE_INCLUDE_DIRECTORIES.  Possible reasons include:
 
- >   * An install or uninstall procedure did not complete successfully.
+  * The path was deleted, renamed, or moved to another location.
 
- >   * The installation package was faulty and references files it does not
- >   provide.
+  * An install or uninstall procedure did not complete successfully.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/57cad5313896c868e99b0b9534678f1c83a386f2
+  * The installation package was faulty and references files it does not
+  provide.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/57cad5313896c868e99b0b9534678f1c83a386f2
 
-Committed to 2019.02.x and 2019.11.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2f81865717f893c7fa5c2d4ac297ce42ec784297)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/thrift/thrift.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
+index 6014bbfcdd..4260fe7e1c 100644
+--- a/package/thrift/thrift.mk
++++ b/package/thrift/thrift.mk
+@@ -19,6 +19,7 @@ THRIFT_COMMON_CONF_OPTS = -DBUILD_TUTORIALS=OFF \
+ 	-DBUILD_TESTING=OFF \
+ 	-DWITH_PYTHON=OFF \
+ 	-DWITH_JAVA=OFF \
++	-DWITH_QT4=OFF \
+ 	-DWITH_QT5=OFF
+ 
+ THRIFT_CONF_OPTS = $(THRIFT_COMMON_CONF_OPTS) -DBUILD_COMPILER=OFF
