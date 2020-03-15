@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Mar 2020 18:03:20 +0100
-Subject: [Buildroot] [PATCH 0/3 v6] package/gobject-introspection: misc
- fixes (branch yem/goi-fixes)
-In-Reply-To: <cover.1584286382.git.yann.morin.1998@free.fr>
-References: <cover.1584286382.git.yann.morin.1998@free.fr>
-Message-ID: <20200315170320.GI19677@scaer>
+Date: Sun, 15 Mar 2020 18:21:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gssdp: explicitly disable vapi
+In-Reply-To: <20200315164724.GH19677@scaer>
+References: <20200315164150.640729-1-aduskett@gmail.com>
+ <20200315164724.GH19677@scaer>
+Message-ID: <20200315172105.GJ19677@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,70 @@ To: buildroot@busybox.net
 
 Adam, All,
 
-On 2020-03-15 16:33 +0100, Yann E. MORIN spake thusly:
-> Series based on previous work by Adam, with commit logs slightly
-> expanded and reworded with my own understanding of the problems
-> and the fixes.
+On 2020-03-15 17:47 +0100, Yann E. MORIN spake thusly:
+> On 2020-03-15 09:41 -0700, aduskett at gmail.com spake thusly:
+> > From: Adam Duskett <Aduskett@gmail.com>
+> > Currently, vapi support does not work with meson due to meson calling vapigen
+> > directly instead of the vala wrapper. As such, when building typelib files for
+> > gobject-introspection, vapigen fails to find the proper .gir files and fails
+> > to build.
+> > 
+> > Explicitly disable vapi until a fix for vapi is made.
+> > 
+> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> > ---
+> >  package/gssdp/gssdp.mk | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+> > index 4589517691..071ad00109 100644
+> > --- a/package/gssdp/gssdp.mk
+> > +++ b/package/gssdp/gssdp.mk
+> > @@ -14,7 +14,8 @@ GSSDP_INSTALL_STAGING = YES
+> >  GSSDP_DEPENDENCIES = host-pkgconf libglib2 libsoup
+> >  GSSDP_CONF_OPTS = \
+> >  	-Dexamples=false \
+> > -	-Dintrospection=false
+> > +	-Dintrospection=false \
+> > +	-Dvapi=false
+> 
+> Sorry, no: that's two different fixes, so should be two different
+> patches:
+>   - one to explicitly disable vapi support
+>   - one to enable instrospection
 
-Series eventually applied, now. Thanks for your persistence. :-)
+And I was being stupid here: the patch does not enable introspection, so
+it is good...
 
-We shall now all rejoice at the incoming flood of patches making use of
-GOI in buildroot. Rejoice, or brace ourselves, that is... ;-]
-
-Thanks! :-)
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
+
+> Regards,
+> Yann E. MORIN.
+> 
+> >  ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+> >  GSSDP_DEPENDENCIES += libgtk3
+> > -- 
+> > 2.24.1
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
