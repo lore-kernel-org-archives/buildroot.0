@@ -1,35 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Mar 2020 15:27:51 +0100
-Subject: [Buildroot] [PATCH 14/16] package/kodi-screensaver-pyro: bump
- version to 3.0.1-Leia
-In-Reply-To: <20200309183938.2528-14-bernd.kuhls@t-online.de>
-References: <20200309183938.2528-1-bernd.kuhls@t-online.de>
- <20200309183938.2528-14-bernd.kuhls@t-online.de>
-Message-ID: <20200315152751.230d3345@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 15 Mar 2020 15:41:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: add bearssl support
+Message-ID: <20200315144105.2793488-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  9 Mar 2020 19:39:36 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+bearssl support is available since version 7.68.0 and
+https://github.com/curl/curl/commit/9b879160df01e7ddbb4770904391d3b74114302b
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash | 4 ++--
->  package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libcurl/Config.in  | 4 ++++
+ package/libcurl/libcurl.mk | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
-Here as well,
-package/kodi-screensaver-pyro/0001-Add-missing-stddef-include.patch
-should have been removed, as it is now upstream. I dropped the patch
-when applying.
-
-Thanks!
-
-Thomas
+diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
+index d05cbedf77..b89c46f5ef 100644
+--- a/package/libcurl/Config.in
++++ b/package/libcurl/Config.in
+@@ -52,6 +52,10 @@ config BR2_PACKAGE_LIBCURL_OPENSSL
+ 	bool "OpenSSL"
+ 	depends on BR2_PACKAGE_OPENSSL
+ 
++config BR2_PACKAGE_LIBCURL_BEARSSL
++	bool "BearSSL"
++	depends on BR2_PACKAGE_BEARSSL
++
+ config BR2_PACKAGE_LIBCURL_GNUTLS
+ 	bool "GnuTLS"
+ 	depends on BR2_PACKAGE_GNUTLS
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 16b11ca944..5de2591178 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -51,6 +51,13 @@ else
+ LIBCURL_CONF_OPTS += --without-ssl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBCURL_BEARSSL),y)
++LIBCURL_CONF_OPTS += --with-bearssl=$(STAGING_DIR)/usr
++LIBCURL_DEPENDENCIES += bearssl
++else
++LIBCURL_CONF_OPTS += --without-bearssl
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCURL_GNUTLS),y)
+ LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr \
+ 	--with-ca-fallback
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
