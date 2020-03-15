@@ -1,96 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 15 Mar 2020 21:38:56 +0100
-Subject: [Buildroot] [git commit] package/perl-mozilla-ca: new package
-Message-ID: <20200315203842.2905A8158B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/chartjs: new package
+Message-ID: <20200315203842.1A182815AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcd5b148f480f06fd41006c2dcc64af75c10ffc7
+commit: https://git.buildroot.net/buildroot/commit/?id=7ca94a367dffc1889bc0354ba1957ae9493339a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a dependency for perl-lwp-protocol-https (added in a subsequent
-patch).
+Note: even though the Chart.js developers make specific tarballs on GitHub
+(i.e. not simply 'source code' tarballs), they cannot be used in Buildroot
+because their names do not encode a version number, e.g. 'Chart.js.zip'.
+This means that on upgrades, the same tarball name would have different
+contents and thus a different hash.
 
-Added via utils/scancpan, updating license only.
-
+Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/perl-mozilla-ca/Config.in            |  6 ++++++
- package/perl-mozilla-ca/perl-mozilla-ca.hash |  6 ++++++
- package/perl-mozilla-ca/perl-mozilla-ca.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/chartjs/Config.in    |  7 +++++++
+ package/chartjs/chartjs.hash |  3 +++
+ package/chartjs/chartjs.mk   | 21 +++++++++++++++++++++
+ 5 files changed, 33 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index dfc0dc6a6c..2dc8d4b59d 100644
+index a8ed03488d..dfc0dc6a6c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2410,6 +2410,7 @@ F:	package/perl-mojolicious-plugin-authorization/
- F:	package/perl-mojolicious-plugin-cspheader/
- F:	package/perl-mojolicious-plugin-i18n/
- F:	package/perl-mojolicious-plugin-securityheader/
-+F:	package/perl-mozilla-ca/
- F:	package/perl-net-snmp/
- F:	package/perl-net-ssh2/
- F:	package/perl-net-telnet/
+@@ -2394,6 +2394,7 @@ F:	package/civetweb/
+ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ F:	docs/manual/
+ F:	package/cereal/
++F:	package/chartjs/
+ F:	package/libtelnet/
+ F:	package/opkg-utils/
+ F:	package/perl-convert-asn1/
 diff --git a/package/Config.in b/package/Config.in
-index e35250808d..74d3f676e3 100644
+index dafc75540d..e35250808d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -784,6 +784,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mojolicious-plugin-i18n/Config.in"
- 	source "package/perl-mojolicious-plugin-securityheader/Config.in"
- 	source "package/perl-moo/Config.in"
-+	source "package/perl-mozilla-ca/Config.in"
- 	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-http/Config.in"
- 	source "package/perl-net-snmp/Config.in"
-diff --git a/package/perl-mozilla-ca/Config.in b/package/perl-mozilla-ca/Config.in
+@@ -1515,6 +1515,7 @@ menu "External AngularJS plugins"
+ endmenu
+ endif
+ 	source "package/bootstrap/Config.in"
++	source "package/chartjs/Config.in"
+ 	source "package/duktape/Config.in"
+ 	source "package/explorercanvas/Config.in"
+ 	source "package/flot/Config.in"
+diff --git a/package/chartjs/Config.in b/package/chartjs/Config.in
 new file mode 100644
-index 0000000000..733d07e1f9
+index 0000000000..73cc9b7750
 --- /dev/null
-+++ b/package/perl-mozilla-ca/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_MOZILLA_CA
-+	bool "perl-mozilla-ca"
++++ b/package/chartjs/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_CHARTJS
++	bool "chartjs"
 +	help
-+	  Mozilla's CA cert bundle in PEM format.
++	  Chart.js, a simple yet flexible JavaScript charting library
++	  for designers & developers
 +
-+	  https://metacpan.org/release/Mozilla-CA
-diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.hash b/package/perl-mozilla-ca/perl-mozilla-ca.hash
++	  https://www.chartjs.org/
+diff --git a/package/chartjs/chartjs.hash b/package/chartjs/chartjs.hash
 new file mode 100644
-index 0000000000..0d52d192e6
+index 0000000000..d2426ea614
 --- /dev/null
-+++ b/package/perl-mozilla-ca/perl-mozilla-ca.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    9c93333e1d9d3fad639e9d4082898de1 Mozilla-CA-20180117.tar.gz
-+sha256 f2cc9fbe119f756313f321e0d9f1fac0859f8f154ac9d75b1a264c1afdf4e406 Mozilla-CA-20180117.tar.gz
-+
-+# computed by scancpan
-+sha256 95cd63dae5c2bf6e7cf33435981614a36c85ef01fc7a02464e05e58a5355398e README
-diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.mk b/package/perl-mozilla-ca/perl-mozilla-ca.mk
++++ b/package/chartjs/chartjs.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256	8079d8fd39131fcfaec33f1c7799412bcf8e051e25b10bd6e37fc16159417aa1  chartjs-v2.9.3.tar.gz
++sha256	7b43caae91f31b18dc81fae6e0f7aa1acbecaa6d84e3249905cbe15308307d67  LICENSE.md
+diff --git a/package/chartjs/chartjs.mk b/package/chartjs/chartjs.mk
 new file mode 100644
-index 0000000000..9fca66d000
+index 0000000000..171e0a4a7c
 --- /dev/null
-+++ b/package/perl-mozilla-ca/perl-mozilla-ca.mk
-@@ -0,0 +1,14 @@
++++ b/package/chartjs/chartjs.mk
+@@ -0,0 +1,21 @@
 +################################################################################
 +#
-+# perl-mozilla-ca
++# chartjs
 +#
 +################################################################################
 +
-+PERL_MOZILLA_CA_VERSION = 20180117
-+PERL_MOZILLA_CA_SOURCE = Mozilla-CA-$(PERL_MOZILLA_CA_VERSION).tar.gz
-+PERL_MOZILLA_CA_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AB/ABH
-+PERL_MOZILLA_CA_LICENSE = MPL-2.0
-+PERL_MOZILLA_CA_LICENSE_FILES = README
-+PERL_MOZILLA_CA_DISTNAME = Mozilla-CA
++CHARTJS_VERSION = v2.9.3
++CHARTJS_SITE = $(call github,chartjs,Chart.js,$(CHARTJS_VERSION))
++CHARTJS_LICENSE = MIT
++CHARTJS_LICENSE_FILES = LICENSE.md
 +
-+$(eval $(perl-package))
++define CHARTJS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/dist/Chart.min.css \
++		$(TARGET_DIR)/var/www/chartjs/css/Chart.css
++	$(INSTALL) -m 0644 -D $(@D)/dist/Chart.min.js \
++		$(TARGET_DIR)/var/www/chartjs/js/Chart.js
++	$(INSTALL) -m 0644 -D $(@D)/dist/Chart.bundle.min.js \
++		$(TARGET_DIR)/var/www/chartjs/js/Chart.bundle.js
++endef
++
++$(eval $(generic-package))
