@@ -1,58 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:23:26 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] Makefile: work around a
- bug in newly released make 4.3
-Message-ID: <20200315101059.81B6E84672@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 11:24:02 +0100
+Subject: [Buildroot] [PATCHv2] Makefile: work around a bug in newly
+ released make 4.3
+In-Reply-To: <20200304134037.24237-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Wed, 4 Mar 2020 14:40:37 +0100")
+References: <20200304134037.24237-1-yann.morin.1998@free.fr>
+Message-ID: <87o8sxncfx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a4e96a35c13e68f539c96e523ac308592380cc4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Several users of rolling-release distributions have been reporting on
-IRC that Buildroot is broken now that they have switched to the newly
-released make 4.3.
+ > Several users of rolling-release distributions have been reporting on
+ > IRC that Buildroot is broken now that they have switched to the newly
+ > released make 4.3.
 
-It turns out that the constructs we use to generated and include the
-internal br2-external related fragments is no longer working with
-make-4.3.
+ > It turns out that the constructs we use to generated and onclude the
+ > internal br2-external related fragments is no longer working with
+ > make-4.3.
 
-Indeed, an upstream bug report [0] seems to imply that it so far was
-working by chance. There has been no further feedback, whether this is
-really considered a fix for a previous ill-defined behaviour, or an
-actual regression...
+ > Indeed, an upstream bug report [0] seems to imply that it so far was
+ > working by chance. There has been no further feedback, whether this is
+ > really considered a fix for a previous ill-defined behaviour, or an
+ > actual regression...
 
-In the meantime, we add a workaround, suggested in that same bug report,
-that fixes the issue for make 4.3, and that should not break on older
-make versions either (verified on all relevant versions: from 3.81,
-3.82, 4.0, 4.1, and 4.2).
+ > In the meantime, we add a workaround, suggested in that same bug report,
+ > that fixes the issue for make 4.3, and that should not break on older
+ > make versions either (verified on all relevant versions: from 3.81,
+ > 3.82, 4.0, 4.1, and 4.2).
 
-[0] https://savannah.gnu.org/bugs/?57676
+ > [0] https://savannah.gnu.org/bugs/?57676
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Mircea Gliga <mgliga@bitdefender.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9e2128bf5072e5f2fd69e2fc0239558782dfc677)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/Makefile b/Makefile
-index cf35ae2b7f..db5631821e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -188,6 +188,9 @@ ifneq ($(BR2_EXTERNAL_ERROR),)
- $(error $(BR2_EXTERNAL_ERROR))
- endif
- 
-+# Workaround bug in make-4.3: https://savannah.gnu.org/bugs/?57676
-+$(BASE_DIR)/.br2-external.mk:;
-+
- # To make sure that the environment variable overrides the .config option,
- # set this before including .config.
- ifneq ($(BR2_DL_DIR),)
+ > ---
+ > Changes v1 -> v2:
+ >   - [0] points to something now  (Thomas)
+ >   - repeat the bug URL in the Makefile  (Thomas)
+ >   - explain where the workaround comes from  (Thomas)
+
+Committed to 2019.02.x and 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
