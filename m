@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:23:35 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] Makefile: work around a
+Date: Sun, 15 Mar 2020 11:23:26 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] Makefile: work around a
  bug in newly released make 4.3
-Message-ID: <20200315101054.30AA182B45@busybox.osuosl.org>
+Message-ID: <20200315101059.81B6E84672@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdb4a9e110b67ebe3336a3003ad18761e0550f71
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9a4e96a35c13e68f539c96e523ac308592380cc4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Several users of rolling-release distributions have been reporting on
 IRC that Buildroot is broken now that they have switched to the newly
@@ -43,10 +43,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 3 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index 1afc305220..31960c8ffc 100644
+index cf35ae2b7f..db5631821e 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -189,6 +189,9 @@ ifneq ($(BR2_EXTERNAL_ERROR),)
+@@ -188,6 +188,9 @@ ifneq ($(BR2_EXTERNAL_ERROR),)
  $(error $(BR2_EXTERNAL_ERROR))
  endif
  
