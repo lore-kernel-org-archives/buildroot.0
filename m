@@ -1,46 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Mar 2020 21:57:11 +0100
-Subject: [Buildroot] [git commit] package/perl-module-build: bump to 0.4231
-Message-ID: <20200315204653.CD4F08164F@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 22:02:01 +0100
+Subject: [Buildroot] [PATCH 1/3 v6] package/gobject-introspection: fix
+ host-linking
+In-Reply-To: <ccda32dbb7d04471b987c0b8bed21a2b2c7544ed.1584286382.git.yann.morin.1998@free.fr>
+References: <cover.1584286382.git.yann.morin.1998@free.fr>
+ <ccda32dbb7d04471b987c0b8bed21a2b2c7544ed.1584286382.git.yann.morin.1998@free.fr>
+Message-ID: <20200315220201.60ffcbc5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8e230209f62a128bd80783bb9d226d60fee88a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 15 Mar 2020 16:33:19 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/perl-module-build/perl-module-build.hash | 4 ++--
- package/perl-module-build/perl-module-build.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> -# Disable introspection data on the host, as it is not needed and
+> -# the package will attempt to use the systems libglib2 which will fail
+> -# if the systems libglib2 version is older than 2.60.
+> -HOST_GOBJECT_INTROSPECTION_CONF_OPTS = \
+> -	-Dbuild_introspection_data=false
+> +# When building, gobject-introspection uses tools/g-ir-scanner to build several
+> +# .gir and .typelib files. g-ir-scanner does not use LDFLAGS, and by default,
+> +# links to the system-installed libglib2 path. To remedy this issue, defining
+> +# LD_LIBRARY_PATH forces g-ir-scanner to use our host installed libglib2 files.
+> +HOST_GOBJECT_INTROSPECTION_NINJA_ENV += \
+> +	LD_LIBRARY_PATH="$(if $(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)$(HOST_DIR)/lib"
 
-diff --git a/package/perl-module-build/perl-module-build.hash b/package/perl-module-build/perl-module-build.hash
-index 2af1a1ac8c..aad0b78e3d 100644
---- a/package/perl-module-build/perl-module-build.hash
-+++ b/package/perl-module-build/perl-module-build.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    1447d9e02e63f7a1643986789a8f1ba9 Module-Build-0.4229.tar.gz
--sha256 1fe491a6cda914b01bc8e592faa2b5404e9f35915ca15322f8f2a8d8f9008c18 Module-Build-0.4229.tar.gz
-+md5    066b193e461d7dfe1eca17a139353001 Module-Build-0.4231.tar.gz
-+sha256 7e0f4c692c1740c1ac84ea14d7ea3d8bc798b2fb26c09877229e04f430b2b717 Module-Build-0.4231.tar.gz
- 
- # computed by scancpan
- sha256 f35ac2cc6b808a38c42c2d230b875217b0a24bb51e5a497ebb630cbb3d806c3e LICENSE
-diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
-index a8a01f6ba9..f5cab36890 100644
---- a/package/perl-module-build/perl-module-build.mk
-+++ b/package/perl-module-build/perl-module-build.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_MODULE_BUILD_VERSION = 0.4229
-+PERL_MODULE_BUILD_VERSION = 0.4231
- PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
- PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
- PERL_MODULE_BUILD_LICENSE = Artistic or GPL-1.0+
+So there's really no other way? No way to convince this thing to use
+-Wl,-rpath,$(HOST_DIR)/lib when building host binaries ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
