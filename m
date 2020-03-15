@@ -1,71 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:22:48 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/jhead: bump to
- version 3.0.3
-Message-ID: <20200315101018.0114C8438E@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 11:22:32 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/jhead: security
+ bump to version 3.04
+Message-ID: <20200315101022.0D87684391@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=185d58741ba97d0d6640d37686b99d398ea814a3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6deee238c7cd40c7578fd4e07c7cdcd2676edc08
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-- Remove patch (already in version)
-- Add hash for license file
+- Fix CVE-2019-1010301: jhead 3.03 is affected by: Buffer Overflow. The
+  impact is: Denial of service. The component is: gpsinfo.c Line 151
+  ProcessGpsInfo(). The attack vector is: Open a specially crafted JPEG
+  file.
+- Fix CVE-2019-1010302: jhead 3.03 is affected by: Incorrect Access
+  Control. The impact is: Denial of service. The component is: iptc.c
+  Line 122 show_IPTC(). The attack vector is: the victim must open a
+  specially crafted JPEG file.
+- Fix CVE-2019-19035: jhead 3.03 is affected by: heap-based buffer
+  over-read. The impact is: Denial of service. The component is:
+  ReadJpegSections and process_SOFn in jpgfile.c. The attack vector is:
+  Open a specially crafted JPEG file.
+- Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 58a400035e23f6c0a92e3f7527d4541a67c498e2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit faf755b4913969f768205caf4eadba55c7ce2f44)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jhead/0001-use-ldflags.patch | 16 ----------------
- package/jhead/jhead.hash             |  3 ++-
- package/jhead/jhead.mk               |  2 +-
- 3 files changed, 3 insertions(+), 18 deletions(-)
+ package/jhead/jhead.hash | 4 ++--
+ package/jhead/jhead.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/jhead/0001-use-ldflags.patch b/package/jhead/0001-use-ldflags.patch
-deleted file mode 100644
-index a1d8185a26..0000000000
---- a/package/jhead/0001-use-ldflags.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Make jhead use LDFLAGS for the final link.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura jhead-2.97.orig/makefile jhead-2.97/makefile
----- jhead-2.97.orig/makefile	2013-03-27 09:22:38.759966389 -0300
--+++ jhead-2.97/makefile	2013-03-27 09:25:06.290691745 -0300
--@@ -14,7 +14,7 @@
-- 	${CC} $(CFLAGS) -c $< -o $@
-- 
-- jhead: $(objs) jhead.h
---	${CC} -o jhead $(objs) -lm
--+	${CC} $(LDFLAGS) -o jhead $(objs) -lm
-- 
-- clean:
-- 	rm -f $(objs) jhead
 diff --git a/package/jhead/jhead.hash b/package/jhead/jhead.hash
-index 55af7a7244..9ee5055f7c 100644
+index 9ee5055f7c..ffe75381b3 100644
 --- a/package/jhead/jhead.hash
 +++ b/package/jhead/jhead.hash
-@@ -1,2 +1,3 @@
+@@ -1,3 +1,3 @@
  # Locally calculated from download (no sig, hash)
--sha256	88cc01da018e242fe2e05db73f91b6288106858dd70f27506c4989a575d2895e	jhead-3.00.tar.gz
-+sha256	82194e0128d9141038f82fadcb5845391ca3021d61bc00815078601619f6c0c2	jhead-3.03.tar.gz
-+sha256	46c870a208305489eea862ec8b05b030ba1f06d99195f660dc0ba541cc38d82b	readme.txt
+-sha256	82194e0128d9141038f82fadcb5845391ca3021d61bc00815078601619f6c0c2	jhead-3.03.tar.gz
+-sha256	46c870a208305489eea862ec8b05b030ba1f06d99195f660dc0ba541cc38d82b	readme.txt
++sha256  ef89bbcf4f6c25ed88088cf242a47a6aedfff4f08cc7dc205bf3e2c0f10a03c9  jhead-3.04.tar.gz
++sha256  46c870a208305489eea862ec8b05b030ba1f06d99195f660dc0ba541cc38d82b  readme.txt
 diff --git a/package/jhead/jhead.mk b/package/jhead/jhead.mk
-index 8a99915bac..65f8cdb73c 100644
+index 65f8cdb73c..d56ee0daff 100644
 --- a/package/jhead/jhead.mk
 +++ b/package/jhead/jhead.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JHEAD_VERSION = 3.00
-+JHEAD_VERSION = 3.03
+-JHEAD_VERSION = 3.03
++JHEAD_VERSION = 3.04
  JHEAD_SITE = http://www.sentex.net/~mwandel/jhead
  JHEAD_LICENSE = Public Domain
  JHEAD_LICENSE_FILES = readme.txt
