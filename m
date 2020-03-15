@@ -1,40 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Mar 2020 18:21:13 +0100
-Subject: [Buildroot] [git commit] package/gssdp: explicitly disable vapi
-Message-ID: <20200315170839.54368815DB@busybox.osuosl.org>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sun, 15 Mar 2020 10:24:54 -0700
+Subject: [Buildroot] [PATCH 1/5] package/libsoup: add optional dependency
+ for gobject-introspection
+Message-ID: <20200315172459.881615-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9de3b9c09463127b94bacad3d0aa60aa6efc53dc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Adam Duskett <Aduskett@gmail.com>
 
-Currently, vapi support does not work with meson due to meson calling vapigen
-directly instead of the vala wrapper. As such, when building typelib files for
-gobject-introspection, vapigen fails to find the proper .gir files and fails
-to build.
-
-Explicitly disable vapi until a fix for vapi is made.
+If gobject-introspection is selected, explicitly set --with-introspection in
+the configure options and add a dependency for gobject-introspection.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gssdp/gssdp.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libsoup/libsoup.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
-index 4589517691..071ad00109 100644
---- a/package/gssdp/gssdp.mk
-+++ b/package/gssdp/gssdp.mk
-@@ -14,7 +14,8 @@ GSSDP_INSTALL_STAGING = YES
- GSSDP_DEPENDENCIES = host-pkgconf libglib2 libsoup
- GSSDP_CONF_OPTS = \
- 	-Dexamples=false \
--	-Dintrospection=false
-+	-Dintrospection=false \
-+	-Dvapi=false
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 95bd682010..07c9d787bd 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -16,6 +16,13 @@ LIBSOUP_CONF_OPTS = --disable-glibtest --enable-vala=no --with-gssapi=no
+ LIBSOUP_DEPENDENCIES = host-pkgconf host-libglib2 \
+ 	libglib2 libxml2 sqlite host-intltool
  
- ifeq ($(BR2_PACKAGE_LIBGTK3),y)
- GSSDP_DEPENDENCIES += libgtk3
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++LIBSOUP_CONF_OPTS += --with-introspection
++LIBSOUP_DEPENDENCIES += gobject-introspection
++else
++LIBSOUP_CONF_OPTS += --without-introspection
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBSOUP_GNOME),y)
+ LIBSOUP_CONF_OPTS += --with-gnome
+ else
+-- 
+2.24.1
