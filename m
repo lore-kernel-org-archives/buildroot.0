@@ -1,77 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Mar 2020 23:34:54 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/lxc: cgroups:
- initialize cpuset properly
-Message-ID: <20200315082329.B781D83D90@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 09:41:03 +0100
+Subject: [Buildroot] [PATCH 2/2] package/elf2flt: remove backported patch
+In-Reply-To: <20200227221922.8080-2-romain.naour@smile.fr> (Romain Naour's
+ message of "Thu, 27 Feb 2020 23:19:22 +0100")
+References: <20200227221922.8080-1-romain.naour@smile.fr>
+ <20200227221922.8080-2-romain.naour@smile.fr>
+Message-ID: <87h7yqovs0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42357e2d9efb2fe2339b83cc07073c957865fad0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
-The tests.package.test_lxc.TestLxc failure on gitlab
-is similar to the issue reported by [1] and fixed by [2].
+ > The patch added by [1] to fix a segfault with elf2flt when binutils
+ > 2.33.1 is used on ARM, introduce a regression with previous binutils
+ > version on m68k and ARM.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/454255988
+ > Theses issues has been reported upstream [2] [3] but there is no
+ > definitive solution.
 
-[1] https://github.com/NixOS/nixpkgs/issues/75467#issuecomment-569386159
-[2] https://github.com/lxc/lxc/pull/3109
+ > The binutils 2.33.1 has been disabled for configurations using
+ > BR2_BINFMT_FLAT by the previous commit, so we can safely remove
+ > the patch.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: J??r??me Pouiller <jezz@sysmic.org>
-Cc: Patrick Havelange <patrick.havelange@essensium.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8742bf3d9bc55d41c7e5cab0ae3c5d2c2f5c567c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0004-cgroups-initialize-cpuset-properly.patch  | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ > Fixes:
+ > [acpica-20191018]
+ > http://autobuild.buildroot.net/results/81ee33eb606062a62765d95b66a26f130d280c53
+ > [augeas-1.12.0]
+ > http://autobuild.buildroot.net/results/4e1f7f335d2c853e2a5e6ad96c14157ba8f003c7
+ > [cairo-1.16.0]
+ > http://autobuild.buildroot.net/results/976d99bc9b052f8d9429e666ac7fff7768ffff6b
+ > [fontconfig-2.13.1]
+ > http://autobuild.buildroot.net/results/4a5a8cb6411d709acb7ea8c83b3c8e45fdc0a10b
+ > [gptfdisk-1.0.4]
+ > http://autobuild.buildroot.net/results/6db5f9d8663730a54b04c1e624438095598b2573
+ > [libopenssl-1.1.1d]
+ > http://autobuild.buildroot.net/results/acf87e81130e85e7fb05edf5f6dedf095f16e226
+ > [mimic-1.1.0]
+ > http://autobuild.buildroot.net/results/61f53630ed85ee0d0d6dbf71012db77f4d7986ad
+ > Maybe more...
 
-diff --git a/package/lxc/0004-cgroups-initialize-cpuset-properly.patch b/package/lxc/0004-cgroups-initialize-cpuset-properly.patch
-new file mode 100644
-index 0000000000..86aa708d56
---- /dev/null
-+++ b/package/lxc/0004-cgroups-initialize-cpuset-properly.patch
-@@ -0,0 +1,38 @@
-+From 6a8a510211515824ff20699d45f6d07a84f3c02e Mon Sep 17 00:00:00 2001
-+From: Christian Brauner <christian.brauner@ubuntu.com>
-+Date: Sun, 28 Jul 2019 23:13:26 +0200
-+Subject: [PATCH] cgroups: initialize cpuset properly
-+
-+Closes #3108.
-+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-+(cherry picked from commit b31d62b847a3ee013613795094cce4acc12345ef)
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ src/lxc/cgroups/cgfsng.c | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/lxc/cgroups/cgfsng.c b/src/lxc/cgroups/cgfsng.c
-+index 87e12d2dd..7e691d7cc 100644
-+--- a/src/lxc/cgroups/cgfsng.c
-++++ b/src/lxc/cgroups/cgfsng.c
-+@@ -496,12 +496,12 @@ static bool cg_legacy_filter_and_set_cpus(char *path, bool am_initialized)
-+ 	}
-+ 
-+ 	if (!flipped_bit) {
-+-		DEBUG("No isolated or offline cpus present in cpuset");
-+-		return true;
-++		cpulist = lxc_cpumask_to_cpulist(possmask, maxposs);
-++		TRACE("No isolated or offline cpus present in cpuset");
-++	} else {
-++		cpulist = move_ptr(posscpus);
-++		TRACE("Removed isolated or offline cpus from cpuset");
-+ 	}
-+-	DEBUG("Removed isolated or offline cpus from cpuset");
-+-
-+-	cpulist = lxc_cpumask_to_cpulist(possmask, maxposs);
-+ 	if (!cpulist) {
-+ 		ERROR("Failed to create cpu list");
-+ 		return false;
-+-- 
-+2.24.1
-+
+ > [1] 2b064f86b6a0fd683f307b51f12d9d919fcaa386
+ > [2] https://github.com/uclinux-dev/elf2flt/pull/16
+ > [3] https://github.com/uclinux-dev/elf2flt/issues/12
+
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+
+Committed to 2019.11.x, thanks. For 2019.11.x we don't offer binutils
+2.33.x anyway.
+
+-- 
+Bye, Peter Korsgaard
