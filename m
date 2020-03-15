@@ -1,43 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:53:54 +0100
-Subject: [Buildroot] [PATCH] package/binutils: fix assertion failure in
- xtensa ld
-In-Reply-To: <20200306035803.14320-1-jcmvbkbc@gmail.com> (Max Filippov's
- message of "Thu, 5 Mar 2020 19:58:03 -0800")
-References: <20200306035803.14320-1-jcmvbkbc@gmail.com>
-Message-ID: <87v9n5khx9.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Mar 2020 11:55:14 +0100
+Subject: [Buildroot] [PATCH v1] package/qt5base: fix double-conversion
+ compile for nios2
+In-Reply-To: <20200308171804.19615-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 8 Mar 2020 18:18:04 +0100")
+References: <20200308171804.19615-1-ps.report@gmx.net>
+Message-ID: <87r1xtkhv1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > xtensa ld fails with the following message
- >   ld: BFD (GNU Binutils) 2.31.1 internal error, aborting at
- >   elf32-xtensa.c:3283 in elf_xtensa_finish_dynamic_sections
+ > Add double-conversion upstream patch to enable compile for nios2.
+ > Fixes:
 
- > during domoticz package build. It happens because of mismatch between
- > the size allocated for dynamic relocations in the executable image and
- > the number of PLT relocations actually written to the image. The
- > mismatch is caused by the fact that undefined weak symbol is treated as
- > dynamic (and thus needing PLT relocation), but xtensa linker not
- > expecting that.
+ >   http://autobuild.buildroot.net/results/19881951a328ff4df82b5753a23219eb634e86df
 
- > Fixes: http://autobuild.buildroot.net/results/7885705f1b1c0f31cf21b464150f5509929c1906/
- > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
- > Backported from: e15a8da9c71336b06cb5f2706c3f6b7e6ddd95a3
- > ---
- >  .../0018-bfd-xtensa-fix-PR-ld-25630.patch     | 37 +++++++++++++++++++
- >  .../0007-bfd-xtensa-fix-PR-ld-25630.patch     | 37 +++++++++++++++++++
- >  .../0004-bfd-xtensa-fix-PR-ld-25630.patch     | 37 +++++++++++++++++++
- >  3 files changed, 111 insertions(+)
- >  create mode 100644 package/binutils/2.31.1/0018-bfd-xtensa-fix-PR-ld-25630.patch
- >  create mode 100644 package/binutils/2.32/0007-bfd-xtensa-fix-PR-ld-25630.patch
- >  create mode 100644 package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch
+ >   ../3rdparty/double-conversion/include/double-conversion/utils.h:114:2: error: #error Target architecture was not detected as supported by Double-Conversion.
 
-Committed (for the versions supported) to 2019.02.x and 2019.11.x, thanks.
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed to 2019.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
