@@ -1,62 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:54:29 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/qt5base: fix
- double-conversion compile for nios2
-Message-ID: <20200315104423.A0C8C86C07@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 11:56:31 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/openvmtools: fix
+ musl build with libfuse
+Message-ID: <20200315104423.B35BB86C08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=794cd20a1f27cab480d89775eeec29341e16b1c2
+commit: https://git.buildroot.net/buildroot/commit/?id=7df00c63ba65453ba83fd2716b5fa171e3c8a76c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-Add double-conversion upstream patch to enable compile for nios2.
-
 Fixes:
+ - http://autobuild.buildroot.org/results/4eba7c4585d318efdb9b965d58d879426588aa14
 
-  http://autobuild.buildroot.net/results/19881951a328ff4df82b5753a23219eb634e86df
-
-  ../3rdparty/double-conversion/include/double-conversion/utils.h:114:2: error: #error Target architecture was not detected as supported by Double-Conversion.
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e2fdb41f711db8894f9c5c83f32250728d4c3aa9)
+(cherry picked from commit 05e47e84f5f533e77b386200dc8ebc4d63722f16)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0003-double-conversion-enable-for-nios2.patch  | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ ...ls-vmhgfs-fuse-fsutils.h-fix-build-on-mus.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/qt5/qt5base/5.12.5/0003-double-conversion-enable-for-nios2.patch b/package/qt5/qt5base/5.12.5/0003-double-conversion-enable-for-nios2.patch
+diff --git a/package/openvmtools/0011-open-vm-tools-vmhgfs-fuse-fsutils.h-fix-build-on-mus.patch b/package/openvmtools/0011-open-vm-tools-vmhgfs-fuse-fsutils.h-fix-build-on-mus.patch
 new file mode 100644
-index 0000000000..79e276b17f
+index 0000000000..e2984a38b7
 --- /dev/null
-+++ b/package/qt5/qt5base/5.12.5/0003-double-conversion-enable-for-nios2.patch
-@@ -0,0 +1,26 @@
-+From e3f63db3124caf5bde9cf688eba563f7f025662d Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 8 Mar 2020 18:08:26 +0100
-+Subject: [PATCH] double-conversion: enable for nios2
++++ b/package/openvmtools/0011-open-vm-tools-vmhgfs-fuse-fsutils.h-fix-build-on-mus.patch
+@@ -0,0 +1,41 @@
++From 0a5032669951ffd6735c294a6f309b0ec6667ea5 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 8 Mar 2020 18:49:00 +0100
++Subject: [PATCH] open-vm-tools/vmhgfs-fuse/fsutils.h: fix build on musl
 +
-+[Upstream: https://github.com/google/double-conversion/commit/a54561be5588ac9b16d3c20760b9b554168bb8aa]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++loff_t is not defined on musl so define it to avoid the following build
++failure:
++
++In file included from module.h:39,
++                 from bdhandler.c:31:
++fsutil.h:76:11: error: unknown type name 'loff_t'; did you mean 'off_t'?
++           loff_t offset);
++           ^~~~~~
++           off_t
++
++Fixes:
++ - http://autobuild.buildroot.org/results/4eba7c4585d318efdb9b965d58d879426588aa14
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent yet (upstream is not reactive on third patch]
 +---
-+ src/3rdparty/double-conversion/include/double-conversion/utils.h | 1 +
-+ 1 file changed, 1 insertion(+)
++ vmhgfs-fuse/fsutil.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+diff --git a/src/3rdparty/double-conversion/include/double-conversion/utils.h b/src/3rdparty/double-conversion/include/double-conversion/utils.h
-+index d29de950..55ca5bf5 100644
-+--- a/src/3rdparty/double-conversion/include/double-conversion/utils.h
-++++ b/src/3rdparty/double-conversion/include/double-conversion/utils.h
-+@@ -87,6 +87,7 @@ int main(int argc, char** argv) {
-+     defined(__ARMEL__) || defined(__avr32__) || defined(_M_ARM) || defined(_M_ARM64) || \
-+     defined(__hppa__) || defined(__ia64__) || \
-+     defined(__mips__) || \
-++    defined(__nios2__) || \
-+     defined(__powerpc__) || defined(__ppc__) || defined(__ppc64__) || \
-+     defined(_POWER) || defined(_ARCH_PPC) || defined(_ARCH_PPC64) || \
-+     defined(__sparc__) || defined(__sparc) || defined(__s390__) || \
++diff --git a/vmhgfs-fuse/fsutil.h b/vmhgfs-fuse/fsutil.h
++index 34b6d489..a94f9fbb 100644
++--- a/vmhgfs-fuse/fsutil.h
+++++ b/vmhgfs-fuse/fsutil.h
++@@ -32,7 +32,8 @@
++ #include "hgfsProto.h"
++ #include <fuse.h>
++ 
++-#if defined(__FreeBSD__) || defined(__SOLARIS__) || defined(__APPLE__)
+++#if defined(__FreeBSD__) || defined(__SOLARIS__) || defined(__APPLE__) || \
+++	!(defined(__GLIBC__) || defined(__UCLIBC__))
++ typedef long long loff_t;
++ #endif
++ 
 +-- 
-+2.25.1
++2.25.0
 +
