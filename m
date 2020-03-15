@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 14:47:17 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/sysklogd: fix
+Date: Sun, 15 Mar 2020 14:47:07 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/sysklogd: fix
  daemon paths in systemd unit files
-Message-ID: <20200315133501.D4E4087F70@busybox.osuosl.org>
+Message-ID: <20200315133507.BA3FF87F77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=387d14d0816e09c3aff0aab8eaba425296e9ad22
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a5188824ce85f885a75c1e693231c7cd61556190
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 They are at /sbin, not /usr/sbin.
 
