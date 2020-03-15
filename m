@@ -1,308 +1,131 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Sat, 14 Mar 2020 20:04:44 -0400
-Subject: [Buildroot] [PATCH-for-2020.02.x v2] package/qt5xmlpatterns:
- enable qml module
-In-Reply-To: <CALoSW67iJLJfm1vWH=MA3q43KWpL52zFJ+K6iBAhXZR=O5BU3A@mail.gmail.com>
-References: <20200313204415.2036-1-ps.report@gmx.net>
- <20200314151823.39b5c55f@windsurf>
- <CALoSW666gHbAPrO71=5yMA1f-=7Xj=DZ1mcAeRmWkJfUuTwmvQ@mail.gmail.com>
- <20200314185314.7504a984@gmx.net>
- <CALoSW67Z3XQYic0uL6=FsPSDy5ZdzW6UyB778K9p8MV0TKAxgg@mail.gmail.com>
- <20200314191416.7287211c@gmx.net>
- <CALoSW67iJLJfm1vWH=MA3q43KWpL52zFJ+K6iBAhXZR=O5BU3A@mail.gmail.com>
-Message-ID: <CALoSW67Rt214RXSxWcO2p7Ge8-FMLf_tc5SMSXdsrwFv0pQbGw@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sat, 14 Mar 2020 17:37:23 -0700
+Subject: [Buildroot] [PATCH v4,
+ 1/3] package/gobject-introspection: fix host-linking
+In-Reply-To: <20200314173605.GQ705@scaer>
+References: <20200312194632.3787015-1-aduskett@gmail.com>
+ <20200314173605.GQ705@scaer>
+Message-ID: <CAFSsvmqWqZ2ZRwy-cFTy+Z-9PMk5AtFY+4P0O9wdauZZZqu0wA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 14, 2020 at 7:58 PM Nimai Mahajan <nimaim@gmail.com> wrote:
-
->
-> On Sat, Mar 14, 2020 at 2:14 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
->> On Sat, 14 Mar 2020 14:04:30 -0400, Nimai Mahajan <nimaim@gmail.com>
->> wrote:
->>
->> > On Sat, Mar 14, 2020 at 1:53 PM Peter Seiderer <ps.report@gmx.net>
->> wrote:
->> >
->> > > Hello Nimai,
->> > >
->> > > On Sat, 14 Mar 2020 11:22:31 -0400, Nimai Mahajan <nimaim@gmail.com>
->> > > wrote:
->> > >
->> > > > On Sat, Mar 14, 2020 at 10:18 AM Thomas Petazzoni <
->> > > > thomas.petazzoni at bootlin.com> wrote:
->> > > >
->> > > > > Hello Peter,
->> > > > >
->> > > > > On Fri, 13 Mar 2020 21:44:15 +0100
->> > > > > Peter Seiderer <ps.report@gmx.net> wrote:
->> > > > >
->> > > > > > qt5declarative:
->> > > > > >  - remove unneded dependency on qt5mlpatterns
->> > > > > >
->> > > > > > qt5xmlpatterns:
->> > > > > >  - add optional dependency on qt5declarative
->> > > > > >  - add target install step of the optional qml files
->> > > > > >
->> > > > > > Reported-by: Nimai Mahajan <nimaim@gmail.com>
->> > > > > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->> > > > >
->> > > > > Will you send a similar patch for master ?
->> > > > >
->> > > > > Thanks,
->> > > > >
->> > > > > Thomas
->> > > > >
->> > > >
->> > > > Thomas,
->> > > >
->> > > > Please wait for my Tested-by: :)
->> > > >
->> > > > Peter,
->> > > >
->> > > > This is not working for me after using your V2 patch. Perhaps it is
->> my
->> > > own
->> > > > user error. The patch simply seems to change some dependencies
->> around
->> > > > (which looks correct now) and explicitly copies a XmlListModel
->> folder
->> > > into
->> > > > $(TARGET_DIR)/usr/qml/QtQuick, but there is nothing to copy, even
->> with
->> > > the
->> > > > qt5declarative and qt5xmlpatterns packages checked. For reference,
->> here
->> > > is
->> > > > everything mentioning xmllistmodel in the qt5 build directory:
->> > >
->> > > In this case your should get a buildroot error for the copy
->> command..., or
->> > > your .config is wrong..., or you did no re-build of the package?
->> > >
->> >
->> > I rebuilt from scratch after patching, so definitely is strange why I
->> did
->> > not get output like yours below. But I will wipe out the entire project,
->> > re-clone, patch, and try again.
->> >
->> > >
->> > > >
->> > > > ~/Desktop/test_defconfig_output/build$ find . -iname
->> "*xmllistmodel*"
->> > > >
->> ./qt5declarative-5.12.7/src/quick/doc/images/qml-xmllistmodel-example.png
->> > > >
->> > >
->> ./qt5declarative-5.12.7/tests/testapplications/elements/content/XmlListModelElement.qml
->> > > > ./qt5xmlpatterns-5.12.7/src/imports/xmllistmodel
->> > > > ./qt5xmlpatterns-5.12.7/src/imports/xmllistmodel/xmllistmodel.pro
->> > > >
->> ./qt5xmlpatterns-5.12.7/src/imports/xmllistmodel/qqmlxmllistmodel_p.h
->> > > >
->> ./qt5xmlpatterns-5.12.7/src/imports/xmllistmodel/qqmlxmllistmodel.cpp
->> > > > ./qt5xmlpatterns-5.12.7/tests/auto/qquickxmllistmodel
->> > > > ./qt5xmlpatterns-5.12.7/tests/auto/qquickxmllistmodel/
->> > > qquickxmllistmodel.pro
->> > > >
->> > >
->> ./qt5xmlpatterns-5.12.7/tests/auto/qquickxmllistmodel/tst_qquickxmllistmodel.cpp
->> > > >
->> > > > It seems like the xmllistmodel.pro file there is indeed compiling
->> it as
->> > > a
->> > > > plugin, but there is no XmlListModel in $(STAGING_DIR)/usr/qml
->> because
->> > > > again, it doesn't seem to be compiling it. I don't see anything in
->> the
->> > > > xmlpatterns Makefile that explicitly goes into src/imports and
->> compiles
->> > > it.
->> > >
->> > > The decision is made in the file build/qt5xmlpatterns-5.12.7/src/
->> src.pro:
->> > >
->> > > TEMPLATE = subdirs
->> > > SUBDIRS +=  xmlpatterns
->> > >
->> > > qtHaveModule(qml){
->> > >     SUBDIRS += imports
->> > >     imports.depends = xmlpatterns
->> > > }
->> > >
->> > Ahh I see, thanks!
->> >
->> >
->> > >
->> > > >
->> > > > Also, in the case there are more imports there in the future,
->> should it
->> > > not
->> > > > be compiling all the projects in
->> build/qt5xmlpatterns-5.12.7/src/imports/
->> > > > imports.pro? This would compile all the projects listed in SUBDIRS
->> > > there,
->> > > > and output the appropriate folder with it's .so, plugins.qmltypes,
->> and
->> > > > qmldir, which then could be copied over.
->> > > >
->> > > > Let me know if I'm missing something.
->> > >
->> > > Try a complete re-build (after make clean)...., in case of failure
->> please
->> > > provide your .config/defconfig...
->> > >
->> >
->> > Already provided here:
->> >
->> http://buildroot-busybox.2317881.n4.nabble.com/2020-02-Buildroot-Qt-5-12-missing-XmlListModel-tp249854p249918.html
->>
->> No plain config,...dependecies to $(BR2_EXTERNAL), and:
->>
->> BR2_PACKAGE_QT5=y
->> BR2_PACKAGE_QT5BASE_CONCURRENT=y
->> BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
->> BR2_PACKAGE_QT5BASE_LINUXFB=y
->> BR2_PACKAGE_QT5BASE_XCB=y
->> BR2_PACKAGE_QT5BASE_DEFAULT_QPA="xcb"
->> BR2_PACKAGE_QT5BASE_TSLIB=y
->> BR2_PACKAGE_QT5SERIALBUS=y
->> BR2_PACKAGE_QT5SVG=y
->>
->>
->> And the following is not selected:
->>
->> BR2_PACKAGE_QT5DECLARATIVE=y
->> BR2_PACKAGE_QT5DECLARATIVE_QUICK=y
->> BR2_PACKAGE_QT5QUICKCONTROLS=y
->> BR2_PACKAGE_QT5QUICKCONTROLS2=y
->> BR2_PACKAGE_QT5XMLPATTERNS=y
->>
->> Try to provide a plain .config against 2020.02..., without externals...
->>
->> Regards,
->> Peter
->>
->
-> Thanks for your patience Peter. All is good, my application DOES indeed
-> work. I nuked my previous config, ccache, etc. and started from scratch
-> cloning a fresh copy of BR 2020.02 and redoing my config and now it
-> correctly builds. The module is there and loads with my old import
-> statement.
->
-
-Tested-by: Nimai Mahajan <nimaim@gmail.com>
+Yann;
 
 
->> >
->> >
->> > >
->> > > Regards,
->> > > Peter
->> > >
->> > >
->> > > Tested locally with the following defconfig:
->> > >
->> > > BR2_arm=y
->> > > BR2_cortex_a53=y
->> > > BR2_ARM_FPU_NEON_VFPV4=y
->> > > BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
->> > > BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
->> > > BR2_BINUTILS_VERSION_2_33_X=y
->> > > BR2_GCC_VERSION_9_X=y
->> > > BR2_TOOLCHAIN_BUILDROOT_CXX=y
->> > > BR2_SYSTEM_DHCP="eth0"
->> > > BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
->> > > BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
->> > > BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
->> > > BR2_LINUX_KERNEL=y
->> > > BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
->> > > BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call
->> > >
->> github,raspberrypi,linux,64d0a9870ac14d5eb5253f67d984ae348eec1393)/linux-64d0a9870ac14d5eb5253f67d984ae348eec1393.tar.gz"
->> > > BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->> > > BR2_LINUX_KERNEL_DTS_SUPPORT=y
->> > > BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus
->> > > bcm2710-rpi-cm3"
->> > > BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->> > > BR2_PACKAGE_QT5=y
->> > > BR2_PACKAGE_QT5BASE_EGLFS=y
->> > > BR2_PACKAGE_QT5QUICKCONTROLS=y
->> > > BR2_PACKAGE_QT5QUICKCONTROLS2=y
->> > > BR2_PACKAGE_QT5XMLPATTERNS=y
->> > > BR2_PACKAGE_RPI_FIRMWARE=y
->> > > BR2_PACKAGE_RPI_USERLAND=y
->> > > BR2_TARGET_ROOTFS_EXT2=y
->> > > BR2_TARGET_ROOTFS_EXT2_4=y
->> > > BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
->> > > # BR2_TARGET_ROOTFS_TAR is not set
->> > > BR2_PACKAGE_HOST_DOSFSTOOLS=y
->> > > BR2_PACKAGE_HOST_GENIMAGE=y
->> > > BR2_PACKAGE_HOST_MTOOLS=y
->> > >
->> > >         $ find . -iname "*xmllistmodel*"
->> > >
->> > >
->> ./build/qt5declarative-5.12.7/src/quick/doc/images/qml-xmllistmodel-example.png
->> > >
->> > >
->> ./build/qt5declarative-5.12.7/tests/testapplications/elements/content/XmlListModelElement.qml
->> > > ./build/qt5xmlpatterns-5.12.7/src/imports/xmllistmodel
->> > >
->> ./build/qt5xmlpatterns-5.12.7/src/imports/xmllistmodel/qqmlxmllistmodel.cpp
->> > >
->> ./build/qt5xmlpatterns-5.12.7/src/imports/xmllistmodel/qqmlxmllistmodel_p.h
->> > > ./build/qt5xmlpatterns-5.12.7/src/imports/xmllistmodel/
->> xmllistmodel.pro
->> > >
->> > >
->> ./build/qt5xmlpatterns-5.12.7/src/imports/xmllistmodel/.obj/moc_qqmlxmllistmodel_p.o
->> > >
->> > >
->> ./build/qt5xmlpatterns-5.12.7/src/imports/xmllistmodel/.obj/qqmlxmllistmodel.o
->> > >
->> > >
->> ./build/qt5xmlpatterns-5.12.7/src/imports/xmllistmodel/.moc/moc_qqmlxmllistmodel_p.cpp
->> > >
->> > >
->> ./build/qt5xmlpatterns-5.12.7/src/imports/xmllistmodel/.moc/qqmlxmllistmodel.moc
->> > > ./build/qt5xmlpatterns-5.12.7/tests/auto/qquickxmllistmodel
->> > > ./build/qt5xmlpatterns-5.12.7/tests/auto/qquickxmllistmodel/
->> > > qquickxmllistmodel.pro
->> > >
->> > >
->> ./build/qt5xmlpatterns-5.12.7/tests/auto/qquickxmllistmodel/tst_qquickxmllistmodel.cpp
->> > > ./build/qt5xmlpatterns-5.12.7/qml/QtQuick/XmlListModel
->> > >
->> > >
->> ./build/qt5xmlpatterns-5.12.7/qml/QtQuick/XmlListModel/libqmlxmllistmodelplugin.so
->> > >
->> ./host/arm-buildroot-linux-gnueabihf/sysroot/usr/qml/QtQuick/XmlListModel
->> > >
->> > >
->> ./host/arm-buildroot-linux-gnueabihf/sysroot/usr/qml/QtQuick/XmlListModel/libqmlxmllistmodelplugin.so
->> > > ./target/usr/qml/QtQuick/XmlListModel
->> > > ./target/usr/qml/QtQuick/XmlListModel/libqmlxmllistmodelplugin.so
->> > >
->> > > >
->> > > > Thanks,
->> > > > Nimai
->> > > >
->> > > >
->> > > >
->> > > > > --
->> > > > > Thomas Petazzoni, CTO, Bootlin
->> > > > > Embedded Linux and Kernel engineering
->> > > > > https://bootlin.com
->> > > > >
->> > >
->> > >
->>
->>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200314/0c8d5a6d/attachment.html>
+On Sat, Mar 14, 2020 at 10:36 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Adam, All,
+>
+> On 2020-03-12 12:46 -0700, aduskett at gmail.com spake thusly:
+> > From: Adam Duskett <Aduskett@gmail.com>
+> >
+> > When building, gobject-introspection uses g-ir-scanner to build several .gir
+> > files. g-ir-scanner does not use LDPATH, so LD_LIBRARY_PATH must be used in
+>
+> What's LDPATH? Did you mean LDFLAGS? Or LD_RUN_PATH? Or soemthing else?
+I meant LDFLAGS. Sorry about that.
+
+>
+> Still, this is not clear what the problem is, and why we need
+> LD_LIBRARY_PATH. We already discussed this on IRC, and you said upstream
+> said to use it, but I am still not convinced, because this is really
+> ugly.
+It's specifically needed during the build process because during the
+build process
+host-goi builds and calls g-ir-scanner to build .gir files. I don't
+like it either, but it
+works and on IRC a maintainer told me that it needs to be exported and that is
+the correct solution.
+>
+> Also, this is not just g-ir-scanner that has the problem Is we were to
+> just export LD_LIBRARY_PATH in our wrapper, that would stil cause build
+> failures:
+>
+>     1 #!/usr/bin/env bash
+>     2
+>     3 export GI_SCANNER_DISABLE_CACHE=1
+>     4 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}${HOST_DIR}/lib"  # Not enough!
+>     5 ${HOST_DIR}/bin/g-ir-scanner \
+>     6 --lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
+>     7 --use-binary-wrapper=$(dirname $0)/g-ir-scanner-qemuwrapper \
+>     8 --use-ldd-wrapper=$(dirname $0)/g-ir-scanner-lddwrapper \
+>     9 --add-include-path=$(dirname $0)/../share/gir-1.0 "$@"
+>
+> > order to ensure that g-ir-scanner does not use the host library path.
+>
+> Did you mean:
+>     ... that g-ir-scanner does not use the system-install libglib2.
+The host computer or system-installed libglib2.
+
+>
+> There is indeed a problem, but I still don't understand it, and even if
+> setting LD_LIBRARY_PATH does indeed solve the issue, I'm still not happy
+> about that... :-(
+There is not much else I can do.
+>
+> Yeah, we've already concluded that anything goi related would have to be
+> ugly by design... Still, I'm not happy... :-(
+>
+> Maybe if the commit log were to at least point at the discussion with
+> upstream (on their issue tracker?), that could make the pill easier to
+> swallow... :-/
+It was on IRC.
+>
+> Regards,
+> Yann E. MORIN.
+
+Adam
+>
+> > This fix has the added benefit of allowing the host gobject-introspection to
+> > build the host .gir, .rnc, and .typelib files, which some packages may require.
+> >
+> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> > ---
+> > Changes v1 -> v3:
+> >   - Update comment to be more clear.
+> >
+> > Changes v3 -> v4:
+> >   - Update patch to work with gobject-introspection 2.64.0
+> >
+> >  package/gobject-introspection/gobject-introspection.mk | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+> > index c18a1f17d3..9043390857 100644
+> > --- a/package/gobject-introspection/gobject-introspection.mk
+> > +++ b/package/gobject-introspection/gobject-introspection.mk
+> > @@ -33,11 +33,11 @@ HOST_GOBJECT_INTROSPECTION_DEPENDENCIES = \
+> >  GOBJECT_INTROSPECTION_NINJA_ENV += \
+> >       CC="$(TARGET_CC)"
+> >
+> > -# Disable introspection data on the host, as it is not needed and
+> > -# the package will attempt to use the systems libglib2 which will fail
+> > -# if the systems libglib2 version is older than 2.60.
+> > -HOST_GOBJECT_INTROSPECTION_CONF_OPTS = \
+> > -     -Dbuild_introspection_data=false
+> > +# When building, gobject-introspection uses g-ir-scanner to build several .gir
+> > +# files. g-ir-scanner does not use LDPATH, so LD_LIBRARY_PATH must be used in
+> > +# order to ensure that g-ir-scanner does not use the host library path.
+> > +HOST_GOBJECT_INTROSPECTION_NINJA_ENV += \
+> > +     LD_LIBRARY_PATH="$(HOST_DIR)/lib"
+> >
+> >  # Use the host gi-scanner to prevent the scanner from generating incorrect
+> >  # elf classes.
+> > --
+> > 2.24.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
