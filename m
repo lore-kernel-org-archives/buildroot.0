@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:30:12 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/guile: fix build
+Date: Sun, 15 Mar 2020 11:30:03 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/guile: fix build
  without makeinfo
-Message-ID: <20200315101739.E42588475F@busybox.osuosl.org>
+Message-ID: <20200315101746.AC6328477A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48a14964ba59a731549d0fd0aa1805de0b03b816
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=65f4f65aefe1faf103a0b69a81fddfcf17177940
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/9605aac6f760bfff190d0ab95fa50f65486ffe90
