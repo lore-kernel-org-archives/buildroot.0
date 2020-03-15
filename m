@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:22:32 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/jhead: security
+Date: Sun, 15 Mar 2020 11:22:54 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/jhead: security
  bump to version 3.04
-Message-ID: <20200315101022.0D87684391@busybox.osuosl.org>
+Message-ID: <20200315101018.0D9378438E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6deee238c7cd40c7578fd4e07c7cdcd2676edc08
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e125322fff79012da99353f5c5cd02b2da044e5b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 - Fix CVE-2019-1010301: jhead 3.03 is affected by: Buffer Overflow. The
   impact is: Denial of service. The component is: gpsinfo.c Line 151
