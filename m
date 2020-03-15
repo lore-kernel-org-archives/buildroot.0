@@ -1,186 +1,179 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 15 Mar 2020 16:46:42 +0100
-Subject: [Buildroot] [PATCH v2] uclibc: update to 1.0.33
-In-Reply-To: <20200309101810.5wtqf2bzxipp536t@waldemar-brodkorb.de>
-References: <20200309101810.5wtqf2bzxipp536t@waldemar-brodkorb.de>
-Message-ID: <5e9204f5-2088-18f3-6871-681749eadbf5@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sun, 15 Mar 2020 17:18:46 +0100
+Subject: [Buildroot] [PATCH] package/gcc: bump to version 9.3.0
+Message-ID: <20200315161846.5827-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Weldemar,
+Remove upstream patch [1]
+Rebase and rename 0002-xtensa-fix-PR-target-91880.patch
+and 0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
 
-Le 09/03/2020 ? 11:18, Waldemar Brodkorb a ?crit?:
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Tested using gitlab with Qemu runtime testing series [2] [3].
 
-I used the Buildroot gitlab ci to test the uClibc-ng update
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=2e1e7ad18e121663082525a872f0d6fb32db4535
+[2] https://gitlab.com/kubu93/buildroot/pipelines/125828238
+[3] http://patchwork.ozlabs.org/project/buildroot/list/?series=159088
 
-It seems we need to fix something in qt5base package:
-.obj/qfilesystemengine_unix.o: in function `qt_real_statx(int, char const*, int,
-statx*)':
-qfilesystemengine_unix.cpp:(.text+0x5c): undefined reference to `statx'
+See:
+https://gcc.gnu.org/pipermail/gcc-announce/2020/000161.html
 
-https://gitlab.com/kubu93/buildroot/-/jobs/472027985
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+Ignore csky issues already fixed by [4] [5].
+Ignore optee-os issue [6]
 
-It seems related to [1] but we don't have such issue with glibc (2.29 & 2.30).
+[4] https://git.buildroot.net/buildroot/commit/?id=a85b464b9440ae97dabb961086d9285947c7b283
+[5] https://git.buildroot.net/buildroot/commit/?id=7542a596010e538ceff56b57dc2c6797c63d73ba
+[6] http://patchwork.ozlabs.org/patch/1251093/
+---
+ ...nsa-backport-fix-for-PR-target-90922.patch | 43 -------------------
+ .../0001-xtensa-fix-PR-target-91880.patch}    |  9 ++--
+ ...issue-with-set_got-clobbering-LR-r9.patch} |  4 +-
+ package/gcc/Config.in.host                    |  2 +-
+ package/gcc/gcc.hash                          |  4 +-
+ 5 files changed, 10 insertions(+), 52 deletions(-)
+ delete mode 100644 package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
+ rename package/gcc/{9.2.0/0002-xtensa-fix-PR-target-91880.patch => 9.3.0/0001-xtensa-fix-PR-target-91880.patch} (88%)
+ rename package/gcc/{9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch => 9.3.0/0002-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch} (98%)
 
-[1]
-https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=8a04c4d84c8a1a1297ec0c5cec5522112981e0c0
-
-Best regards,
-Romain
-
-> ---
-> v1 -> v2: repack tarballs with GNU tar
-> ---
->  ...lude-ctype.h-drop-is-_l-macro-definitions.patch | 72 ----------------------
->  ...de-ctype.h-restore-__isctype_l-definition.patch | 32 ----------
->  package/uclibc/uclibc.hash                         |  4 +-
->  package/uclibc/uclibc.mk                           |  2 +-
->  4 files changed, 3 insertions(+), 107 deletions(-)
->  delete mode 100644 package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
->  delete mode 100644 package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
-> 
-> diff --git a/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
-> deleted file mode 100644
-> index 5557a9c1e7..0000000000
-> --- a/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
-> +++ /dev/null
-> @@ -1,72 +0,0 @@
-> -From d1a3ca7ca56630fddde7311a0474eed4a21335a7 Mon Sep 17 00:00:00 2001
-> -From: Max Filippov <jcmvbkbc@gmail.com>
-> -Date: Mon, 3 Feb 2020 13:57:32 -0800
-> -Subject: [PATCH] include/ctype.h: drop is*_l macro definitions
-> -
-> -ctype locale-specific macro definitions are broken because they result
-> -in dereference of pointer to structure of incomplete type.
-> -Drop these macros since they are optional and let applications use
-> -functions with the same names.
-> -
-> -This change fixes parted-3.3 build with uClibc-ng:
-> -  http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39/build-end.log
-> -
-> -Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ----
-> - include/ctype.h | 33 ---------------------------------
-> - 1 file changed, 33 deletions(-)
-> -
-> -diff --git a/include/ctype.h b/include/ctype.h
-> -index ecd5e730886a..e934cf3321a6 100644
-> ---- a/include/ctype.h
-> -+++ b/include/ctype.h
-> -@@ -350,46 +350,13 @@ libc_hidden_proto(tolower_l)
-> - /* Return the uppercase version of C.  */
-> - extern int toupper_l (int __c, __locale_t __l) __THROW;
-> - 
-> --# if __GNUC__ >= 2 && defined __OPTIMIZE__ && !defined __cplusplus
-> --#  define tolower_l(c, locale) __tobody(c, tolower_l, (locale)->__ctype_tolower, (c, locale))
-> --#  define toupper_l(c, locale) __tobody(c, toupper_l, (locale)->__ctype_toupper, (c, locale))
-> --# endif	/* Optimizing gcc */
-> --
-> --
-> --# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] & (__ctype_mask_t) type)
-> - # ifndef __NO_CTYPE
-> --#  define __isalnum_l(c,l)	__isctype_l((c), _ISalnum, (l))
-> --#  define __isalpha_l(c,l)	__isctype_l((c), _ISalpha, (l))
-> --#  define __iscntrl_l(c,l)	__isctype_l((c), _IScntrl, (l))
-> --#  define __isdigit_l(c,l)	__isctype_l((c), _ISdigit, (l))
-> --#  define __islower_l(c,l)	__isctype_l((c), _ISlower, (l))
-> --#  define __isgraph_l(c,l)	__isctype_l((c), _ISgraph, (l))
-> --#  define __isprint_l(c,l)	__isctype_l((c), _ISprint, (l))
-> --#  define __ispunct_l(c,l)	__isctype_l((c), _ISpunct, (l))
-> --#  define __isspace_l(c,l)	__isctype_l((c), _ISspace, (l))
-> --#  define __isupper_l(c,l)	__isctype_l((c), _ISupper, (l))
-> --#  define __isxdigit_l(c,l)	__isctype_l((c), _ISxdigit, (l))
-> --#  define __isblank_l(c,l)	__isctype_l((c), _ISblank, (l))
-> --
-> - #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-> - 	&& defined __UCLIBC_SUSV4_LEGACY__
-> - #   define __isascii_l(c,l)	((l), __isascii (c))
-> - #   define __toascii_l(c,l)	((l), __toascii (c))
-> - #  endif
-> - 
-> --#  define isalnum_l(c,l)	__isalnum_l ((c), (l))
-> --#  define isalpha_l(c,l)	__isalpha_l ((c), (l))
-> --#  define iscntrl_l(c,l)	__iscntrl_l ((c), (l))
-> --#  define isdigit_l(c,l)	__isdigit_l ((c), (l))
-> --#  define islower_l(c,l)	__islower_l ((c), (l))
-> --#  define isgraph_l(c,l)	__isgraph_l ((c), (l))
-> --#  define isprint_l(c,l)	__isprint_l ((c), (l))
-> --#  define ispunct_l(c,l)	__ispunct_l ((c), (l))
-> --#  define isspace_l(c,l)	__isspace_l ((c), (l))
-> --#  define isupper_l(c,l)	__isupper_l ((c), (l))
-> --#  define isxdigit_l(c,l)	__isxdigit_l ((c), (l))
-> --#  define isblank_l(c,l)	__isblank_l ((c), (l))
-> --
-> - #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-> - 	&& defined __UCLIBC_SUSV4_LEGACY__
-> - #   define isascii_l(c,l)	__isascii_l ((c), (l))
-> --- 
-> -2.20.1
-> -
-> diff --git a/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch b/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
-> deleted file mode 100644
-> index a0e115c763..0000000000
-> --- a/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
-> +++ /dev/null
-> @@ -1,32 +0,0 @@
-> -From 7a9a3e4b36955e8530756823d3443f6822562c56 Mon Sep 17 00:00:00 2001
-> -From: Max Filippov <jcmvbkbc@gmail.com>
-> -Date: Sun, 9 Feb 2020 22:29:53 +0100
-> -Subject: [PATCH] include/ctype.h: restore __isctype_l definition
-> -
-> -Recent is*_l fix broke uclibc build because removed __isctype_l
-> -definition was used in libc/misc/ctype/ctype.c. Restore it.
-> -
-> -Fixes: d1a3ca7ca566 ("include/ctype.h: drop is*_l macro definitions")
-> -Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ----
-> -Upstream status:
-> -https://mailman.uclibc-ng.org/pipermail/devel/2020-February/001940.html
-> ----
-> - include/ctype.h | 1 +
-> - 1 file changed, 1 insertion(+)
-> -
-> -diff --git a/include/ctype.h b/include/ctype.h
-> -index e934cf332..05f21c553 100644
-> ---- a/include/ctype.h
-> -+++ b/include/ctype.h
-> -@@ -350,6 +350,7 @@ libc_hidden_proto(tolower_l)
-> - /* Return the uppercase version of C.  */
-> - extern int toupper_l (int __c, __locale_t __l) __THROW;
-> - 
-> -+# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] & (__ctype_mask_t) type)
-> - # ifndef __NO_CTYPE
-> - #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-> - 	&& defined __UCLIBC_SUSV4_LEGACY__
-> --- 
-> -2.20.1
-> -
-> diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-> index c1f161fa15..25629e6493 100644
-> --- a/package/uclibc/uclibc.hash
-> +++ b/package/uclibc/uclibc.hash
-> @@ -1,4 +1,4 @@
-> -# From https://downloads.uclibc-ng.org/releases/1.0.32/uClibc-ng-1.0.32.tar.xz.sha256
-> -sha256  891b5e4573855e4c11e51d3a518f89a82e490d9aa73280c05ce3e4d7e739a370  uClibc-ng-1.0.32.tar.xz
-> +# From https://downloads.uclibc-ng.org/releases/1.0.33/uClibc-ng-1.0.33.tar.xz.sha256
-> +sha256  aa7c361fddddf90b40a90e04431e607e2da21a5e8e2840a6db9ffd0c89d03e0d  uClibc-ng-1.0.33.tar.xz
->  # Locally calculated
->  sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 2af666c208..3975e7e743 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -UCLIBC_VERSION = 1.0.32
-> +UCLIBC_VERSION = 1.0.33
->  UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
->  UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
->  UCLIBC_LICENSE = LGPL-2.1+
-> 
+diff --git a/package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch b/package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
+deleted file mode 100644
+index bc1d13a9e4..0000000000
+--- a/package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From a592242578e573778241cae6d3928c064dcdfda4 Mon Sep 17 00:00:00 2001
+-From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
+-Date: Tue, 18 Jun 2019 22:19:12 +0000
+-Subject: [PATCH] xtensa: fix for PR target/90922
+-
+-Stack pointer adjustment code in prologue missed a case of no
+-callee-saved registers and a stack frame size bigger than 128 bytes.
+-Handle that case.
+-
+-This fixes the following gcc tests with call0 ABI:
+-  gcc.c-torture/execute/stdarg-2.c
+-  gcc.dg/torture/pr55882.c
+-  gcc.dg/torture/pr57569.c
+-
+-gcc/
+-2019-06-18  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* config/xtensa/xtensa.c (xtensa_expand_prologue): Add stack
+-	pointer adjustment for the case of no callee-saved registers and
+-	stack frame bigger than 128 bytes.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- gcc/config/xtensa/xtensa.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
+-index 19bd616d67f6..ee5612441e25 100644
+---- a/gcc/config/xtensa/xtensa.c
+-+++ b/gcc/config/xtensa/xtensa.c
+-@@ -2865,7 +2865,8 @@ xtensa_expand_prologue (void)
+- 			    gen_rtx_SET (mem, reg));
+- 	    }
+- 	}
+--      if (total_size > 1024)
+-+      if (total_size > 1024
+-+	  || (!callee_save_size && total_size > 128))
+- 	{
+- 	  rtx tmp_reg = gen_rtx_REG (Pmode, A9_REG);
+- 	  emit_move_insn (tmp_reg, GEN_INT (total_size -
+--- 
+-2.11.0
+-
+diff --git a/package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch b/package/gcc/9.3.0/0001-xtensa-fix-PR-target-91880.patch
+similarity index 88%
+rename from package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch
+rename to package/gcc/9.3.0/0001-xtensa-fix-PR-target-91880.patch
+index 0dbf1124a3..4e5aea2c7b 100644
+--- a/package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch
++++ b/package/gcc/9.3.0/0001-xtensa-fix-PR-target-91880.patch
+@@ -1,4 +1,4 @@
+-From 7c11710230921246156aecc20eb4b6ccaeaaa473 Mon Sep 17 00:00:00 2001
++From 0a59aa440a4c125b81504c777b066ae4eb1f09f0 Mon Sep 17 00:00:00 2001
+ From: Max Filippov <jcmvbkbc@gmail.com>
+ Date: Tue, 24 Sep 2019 04:15:17 -0700
+ Subject: [PATCH] xtensa: fix PR target/91880
+@@ -15,14 +15,15 @@ gcc/
+ 	block that precedes the loop is empty.
+ 
+ Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ ---
+ Backported from: r276166
+ 
+- gcc/config/xtensa/xtensa.c                 |  5 ++--
++ gcc/config/xtensa/xtensa.c | 5 +++--
+  1 file changed, 3 insertions(+), 2 deletions(-)
+ 
+ diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
+-index ee5612441e25..2527468d57db 100644
++index ee5612441e2..2527468d57d 100644
+ --- a/gcc/config/xtensa/xtensa.c
+ +++ b/gcc/config/xtensa/xtensa.c
+ @@ -4235,7 +4235,9 @@ hwloop_optimize (hwloop_info loop)
+@@ -45,5 +46,5 @@ index ee5612441e25..2527468d57db 100644
+               || (NOTE_P (entry_after)
+  		 && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK))
+ -- 
+-2.11.0
++2.24.1
+ 
+diff --git a/package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch b/package/gcc/9.3.0/0002-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+similarity index 98%
+rename from package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+rename to package/gcc/9.3.0/0002-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+index bdde2ce762..e40b96fe0f 100644
+--- a/package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
++++ b/package/gcc/9.3.0/0002-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+@@ -1,4 +1,4 @@
+-From 94c7d630348671b781368d9270514dcf6c34e0c9 Mon Sep 17 00:00:00 2001
++From 1383012ae409ed91903b2b76ee15137bc1f89900 Mon Sep 17 00:00:00 2001
+ From: shorne <shorne@138bc75d-0d04-0410-961f-82ee72b054a4>
+ Date: Sat, 31 Aug 2019 06:00:56 +0000
+ Subject: [PATCH] or1k: Fix issue with set_got clobbering LR (r9)
+@@ -101,5 +101,5 @@ index 2dad51cd46b..88f3f02630f 100644
+     (clobber (reg:SI LR_REGNUM))]
+    ""
+ -- 
+-2.23.0
++2.24.1
+ 
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index bdfa1b5916..243310f61e 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -88,7 +88,7 @@ config BR2_GCC_VERSION
+ 	default "5.5.0"     if BR2_GCC_VERSION_5_X
+ 	default "7.5.0"     if BR2_GCC_VERSION_7_X
+ 	default "8.4.0"     if BR2_GCC_VERSION_8_X
+-	default "9.2.0"     if BR2_GCC_VERSION_9_X
++	default "9.3.0"     if BR2_GCC_VERSION_9_X
+ 	default "arc-2019.09-release" if BR2_GCC_VERSION_ARC
+ 	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
+ 
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index ba63db1563..d9df3408d4 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -4,8 +4,8 @@ sha512  670ff52c2ae12c7852c12987e91798c5aa8bd6daf21f0d6e0cd57a4aa59cc4f06a837fe7
+ sha512  fe716cc19f2e3255d3a8b1b8290777bf769c6d98e6e0b07b81a3d6ad43f8af74cb170dfa18b1555dbfcd3f55ae582b91a286ccef496b9b65c1579902f96a1f60  gcc-7.5.0.tar.xz
+ # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
+ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
+-#  From ftp://gcc.gnu.org/pub/gcc/releases/gcc-9.2.0/sha512.sum
+-sha512  a12dff52af876aee0fd89a8d09cdc455f35ec46845e154023202392adc164848faf8ee881b59b681b696e27c69fd143a214014db4214db62f9891a1c8365c040  gcc-9.2.0.tar.xz
++#  From ftp://gcc.gnu.org/pub/gcc/releases/gcc-9.3.0/sha512.sum
++sha512  4b9e3639eef6e623747a22c37a904b4750c93b6da77cf3958d5047e9b5ebddb7eebe091cc16ca0a227c0ecbd2bf3b984b221130f269a97ee4cc18f9cf6c444de  gcc-9.3.0.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  84648d13f174102733e06ccdf7b351150babe06af0f2b99b8dfb2b2d3c3f13e424547349939806fe19932ad347977cad79cd8b37be9cbb03e6a4d03cdf95a72e  gcc-arc-2019.09-release.tar.gz
+-- 
+2.24.1
