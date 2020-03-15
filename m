@@ -1,36 +1,37 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 15 Mar 2020 17:52:55 +0100
-Subject: [Buildroot] [PATCH-for-2020.02.x v2] package/qt5xmlpatterns:
- enable qml module
-In-Reply-To: <CALoSW67iJLJfm1vWH=MA3q43KWpL52zFJ+K6iBAhXZR=O5BU3A@mail.gmail.com>
-References: <20200313204415.2036-1-ps.report@gmx.net>
- <20200314151823.39b5c55f@windsurf>
- <CALoSW666gHbAPrO71=5yMA1f-=7Xj=DZ1mcAeRmWkJfUuTwmvQ@mail.gmail.com>
- <20200314185314.7504a984@gmx.net>
- <CALoSW67Z3XQYic0uL6=FsPSDy5ZdzW6UyB778K9p8MV0TKAxgg@mail.gmail.com>
- <20200314191416.7287211c@gmx.net>
- <CALoSW67iJLJfm1vWH=MA3q43KWpL52zFJ+K6iBAhXZR=O5BU3A@mail.gmail.com>
-Message-ID: <20200315175255.3e29c617@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 15 Mar 2020 18:03:20 +0100
+Subject: [Buildroot] [PATCH 0/3 v6] package/gobject-introspection: misc
+ fixes (branch yem/goi-fixes)
+In-Reply-To: <cover.1584286382.git.yann.morin.1998@free.fr>
+References: <cover.1584286382.git.yann.morin.1998@free.fr>
+Message-ID: <20200315170320.GI19677@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nimai,
+Adam, All,
 
-On Sat, 14 Mar 2020 19:58:09 -0400, Nimai Mahajan <nimaim@gmail.com> wrote:
+On 2020-03-15 16:33 +0100, Yann E. MORIN spake thusly:
+> Series based on previous work by Adam, with commit logs slightly
+> expanded and reworded with my own understanding of the problems
+> and the fixes.
 
+Series eventually applied, now. Thanks for your persistence. :-)
 
->
-> Thanks for your patience Peter. All is good, my application DOES indeed
-> work. I nuked my previous config, ccache, etc. and started from scratch
-> cloning a fresh copy of BR 2020.02 and redoing my config and now it
-> correctly builds. The module is there and loads with my old import
-> statement.
->
+We shall now all rejoice at the incoming flood of patches making use of
+GOI in buildroot. Rejoice, or brace ourselves, that is... ;-]
 
-That's good news, and many thanks back to you for your patience to re-test ;-)
+Thanks! :-)
 
 Regards,
-Peter
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
