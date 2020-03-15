@@ -1,60 +1,89 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Mar 2020 16:38:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gupnp-dlna: disable
- introspection
-In-Reply-To: <20200315150257.2807446-1-fontaine.fabrice@gmail.com>
-References: <20200315150257.2807446-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200315153840.GF19677@scaer>
+Date: Sun, 15 Mar 2020 16:42:20 +0100
+Subject: [Buildroot] [PATCH v5 1/3] package/gobject-introspection: fix
+ host-linking
+In-Reply-To: <20200315031359.365637-1-aduskett@gmail.com>
+References: <20200315031359.365637-1-aduskett@gmail.com>
+Message-ID: <20200315154220.GG19677@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Adam, All,
 
-On 2020-03-15 16:02 +0100, Fabrice Fontaine spake thusly:
-> Build will fail if gobject-introspection is built before gupnp-dlna:
->   GISCAN   GUPnPDLNAGst-2.0.gir
-> Couldn't find include 'Gst-1.0.gir' (search path: '['/home/buildroot/autobuild/run/instance-1/output-1/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '.', '/home/buildroot/autobuild/run/instance-1/output-1/host/share', 'gir-1.0', '/home/buildroot/autobuild/run/instance-1/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
+On 2020-03-14 20:13 -0700, aduskett at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/829a84b37db7d9141785bfe2eec2dd0e6d3310f1
+> When building, gobject-introspection uses tools/g-ir-scanner to build several
+> .gir and .typelib files. g-ir-scanner does not use LDFLAGS, and by default,
+> links to the system-installed libglib2 path. To remedy this issue, defining
+> either LD_LIBRARY_PATH or LD_RUN_PATH forces g-ir-scanner to use the host
+> installed libglib2 files. The decision to use LD_RUN_PATH instead of
+> LD_LIBRARY_PATH is because this is a run time issue with g-ir-scanner and not
+> a compile-time issue.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> g-ir-scanner can use the argument --lib-dirs-envvar to pass a list of library
+> directories in place of LD_LIBRARY_PATH, which the installed g-ir-scanner
+> wrapper does. However, during the build process, this is not possible due to
+> the build process calling g-ir-scanner directly.
+> 
+> This fix has the added benefit of allowing the host gobject-introspection to
+> build the host .gir, .rnc, and .typelib files, which some packages may require.
 
-Applied to master, thanks.
+So, this commit log is indeed better at exaplaining the problem and the
+fix/workaround that is needed.
 
-However, these patches are just workarounds; it would be nice to
-eventually br able to enable introspection. This means it would be nice
-that we can help Adam to try and fix the remaining GOI issues; I just
-respun the GOI series:
+However, I still think it could be improved, so I respun a new iteration
+of the series, with a few fixes of my own:
     https://patchwork.ozlabs.org/project/buildroot/list/?series=164476
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
->  package/gupnp-dlna/gupnp-dlna.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> Changes v1 -> v3:
+>   - Update comment to be more clear.
 > 
-> diff --git a/package/gupnp-dlna/gupnp-dlna.mk b/package/gupnp-dlna/gupnp-dlna.mk
-> index 6f9ff8a58c..85d30b7cd2 100644
-> --- a/package/gupnp-dlna/gupnp-dlna.mk
-> +++ b/package/gupnp-dlna/gupnp-dlna.mk
-> @@ -15,7 +15,9 @@ GUPNP_DLNA_LICENSE_FILES = COPYING
->  GUPNP_DLNA_INSTALL_STAGING = YES
->  GUPNP_DLNA_DEPENDENCIES = host-pkgconf libglib2 libxml2
+> Changes v3 -> v4:
+>   - Update patch to work with gobject-introspection 2.64.0
+> 
+> Changes v4 -> v5:
+>   - Changed LD_LIBRARY_PATH to LD_RUN_PATH after more testing.
+>   - Updated the commit message and comments in the .mk file to better describe
+>     what the problem was and why this is necessary.
+> 
+>  .../gobject-introspection/gobject-introspection.mk  | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+> index c18a1f17d3..19071ba1cb 100644
+> --- a/package/gobject-introspection/gobject-introspection.mk
+> +++ b/package/gobject-introspection/gobject-introspection.mk
+> @@ -33,11 +33,14 @@ HOST_GOBJECT_INTROSPECTION_DEPENDENCIES = \
+>  GOBJECT_INTROSPECTION_NINJA_ENV += \
+>  	CC="$(TARGET_CC)"
 >  
-> -GUPNP_DLNA_CONF_OPTS = --disable-legacy-gstreamer-metadata-backend
-> +GUPNP_DLNA_CONF_OPTS = \
-> +	--disable-introspection \
-> +	--disable-legacy-gstreamer-metadata-backend
+> -# Disable introspection data on the host, as it is not needed and
+> -# the package will attempt to use the systems libglib2 which will fail
+> -# if the systems libglib2 version is older than 2.60.
+> -HOST_GOBJECT_INTROSPECTION_CONF_OPTS = \
+> -	-Dbuild_introspection_data=false
+> +# When building, gobject-introspection uses tools/g-ir-scanner to build several
+> +# .gir and .typelib files. g-ir-scanner does not use LDFLAGS, and by default,
+> +# links to the system-installed libglib2 path. To remedy this issue, defining
+> +# either LD_LIBRARY_PATH or LD_RUN_PATH forces g-ir-scanner to use the host
+> +# installed libglib2 files. Use LD_RUN_PATH instead of LD_LIBRARY_PATH because
+> +# this is a run time issue with g-ir-scanner and not a compile-time issue.
+> +HOST_GOBJECT_INTROSPECTION_NINJA_ENV += \
+> +	LD_RUN_PATH="$(HOST_DIR)/lib"
 >  
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
->  GUPNP_DLNA_CONF_OPTS += --enable-gstreamer-metadata-backend
+>  # Use the host gi-scanner to prevent the scanner from generating incorrect
+>  # elf classes.
 > -- 
-> 2.25.1
+> 2.24.1
 > 
 > _______________________________________________
 > buildroot mailing list
