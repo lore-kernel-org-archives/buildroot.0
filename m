@@ -1,78 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Mar 2020 15:57:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcurl: add bearssl support
-In-Reply-To: <20200315144105.2793488-1-fontaine.fabrice@gmail.com>
-References: <20200315144105.2793488-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200315145737.GE19677@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 15 Mar 2020 16:02:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gupnp-dlna: disable introspection
+Message-ID: <20200315150257.2807446-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Build will fail if gobject-introspection is built before gupnp-dlna:
+  GISCAN   GUPnPDLNAGst-2.0.gir
+Couldn't find include 'Gst-1.0.gir' (search path: '['/home/buildroot/autobuild/run/instance-1/output-1/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '.', '/home/buildroot/autobuild/run/instance-1/output-1/host/share', 'gir-1.0', '/home/buildroot/autobuild/run/instance-1/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
 
-On 2020-03-15 15:41 +0100, Fabrice Fontaine spake thusly:
-> bearssl support is available since version 7.68.0 and
-> https://github.com/curl/curl/commit/9b879160df01e7ddbb4770904391d3b74114302b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/829a84b37db7d9141785bfe2eec2dd0e6d3310f1
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gupnp-dlna/gupnp-dlna.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libcurl/Config.in  | 4 ++++
->  package/libcurl/libcurl.mk | 7 +++++++
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-> index d05cbedf77..b89c46f5ef 100644
-> --- a/package/libcurl/Config.in
-> +++ b/package/libcurl/Config.in
-> @@ -52,6 +52,10 @@ config BR2_PACKAGE_LIBCURL_OPENSSL
->  	bool "OpenSSL"
->  	depends on BR2_PACKAGE_OPENSSL
->  
-> +config BR2_PACKAGE_LIBCURL_BEARSSL
-> +	bool "BearSSL"
-> +	depends on BR2_PACKAGE_BEARSSL
-> +
->  config BR2_PACKAGE_LIBCURL_GNUTLS
->  	bool "GnuTLS"
->  	depends on BR2_PACKAGE_GNUTLS
-> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-> index 16b11ca944..5de2591178 100644
-> --- a/package/libcurl/libcurl.mk
-> +++ b/package/libcurl/libcurl.mk
-> @@ -51,6 +51,13 @@ else
->  LIBCURL_CONF_OPTS += --without-ssl
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBCURL_BEARSSL),y)
-> +LIBCURL_CONF_OPTS += --with-bearssl=$(STAGING_DIR)/usr
-> +LIBCURL_DEPENDENCIES += bearssl
-> +else
-> +LIBCURL_CONF_OPTS += --without-bearssl
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBCURL_GNUTLS),y)
->  LIBCURL_CONF_OPTS += --with-gnutls=$(STAGING_DIR)/usr \
->  	--with-ca-fallback
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/gupnp-dlna/gupnp-dlna.mk b/package/gupnp-dlna/gupnp-dlna.mk
+index 6f9ff8a58c..85d30b7cd2 100644
+--- a/package/gupnp-dlna/gupnp-dlna.mk
++++ b/package/gupnp-dlna/gupnp-dlna.mk
+@@ -15,7 +15,9 @@ GUPNP_DLNA_LICENSE_FILES = COPYING
+ GUPNP_DLNA_INSTALL_STAGING = YES
+ GUPNP_DLNA_DEPENDENCIES = host-pkgconf libglib2 libxml2
+ 
+-GUPNP_DLNA_CONF_OPTS = --disable-legacy-gstreamer-metadata-backend
++GUPNP_DLNA_CONF_OPTS = \
++	--disable-introspection \
++	--disable-legacy-gstreamer-metadata-backend
+ 
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
+ GUPNP_DLNA_CONF_OPTS += --enable-gstreamer-metadata-backend
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
