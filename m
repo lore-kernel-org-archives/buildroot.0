@@ -1,82 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:46:35 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/pppd: Add
- upstream security fix for CVE-2020-8597
-Message-ID: <20200315103600.5321782502@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 11:48:07 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/pppd: use uclibc
+ libcrypt instead of openssl
+Message-ID: <20200315103555.356BA80538@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da40edcc1abea79e48a9ce4a0441daed696c5439
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f012854abbdb23960ad578ee3c2bebd49e0ac27e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Apply patch from upstream and set PPPD_INGORE_CVES appropriately.
+glibc since 2.28 dropped DES encryption routines setkey() and encrypt(),
+but uclibc still provides them. So, if building with uclibc, we can
+avoid using huge openssl library.
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cfbff1456e397495435b08dbea10dd63035c4df2)
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b519bcafe75d1256d1fc42aa26393405b89629b3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pppd/0001-pppd-Fix-bounds-check.patch | 37 +++++++++++++++++++++++++++
- package/pppd/pppd.mk                          |  3 +++
- 2 files changed, 40 insertions(+)
+ package/pppd/Config.in |  2 +-
+ package/pppd/pppd.mk   | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/pppd/0001-pppd-Fix-bounds-check.patch b/package/pppd/0001-pppd-Fix-bounds-check.patch
-new file mode 100644
-index 0000000000..5d7c51bcac
---- /dev/null
-+++ b/package/pppd/0001-pppd-Fix-bounds-check.patch
-@@ -0,0 +1,37 @@
-+From 8d7970b8f3db727fe798b65f3377fe6787575426 Mon Sep 17 00:00:00 2001
-+From: Paul Mackerras <paulus@ozlabs.org>
-+Date: Mon, 3 Feb 2020 15:53:28 +1100
-+Subject: [PATCH] pppd: Fix bounds check in EAP code
-+
-+Given that we have just checked vallen < len, it can never be the case
-+that vallen >= len + sizeof(rhostname).  This fixes the check so we
-+actually avoid overflowing the rhostname array.
-+
-+Reported-by: Ilja Van Sprundel <ivansprundel@ioactive.com>
-+Signed-off-by: Paul Mackerras <paulus@ozlabs.org>
-+---
-+ pppd/eap.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/pppd/eap.c b/pppd/eap.c
-+index 94407f56..1b93db01 100644
-+--- a/pppd/eap.c
-++++ b/pppd/eap.c
-+@@ -1420,7 +1420,7 @@ int len;
-+ 		}
-+ 
-+ 		/* Not so likely to happen. */
-+-		if (vallen >= len + sizeof (rhostname)) {
-++		if (len - vallen >= sizeof (rhostname)) {
-+ 			dbglog("EAP: trimming really long peer name down");
-+ 			BCOPY(inp + vallen, rhostname, sizeof (rhostname) - 1);
-+ 			rhostname[sizeof (rhostname) - 1] = '\0';
-+@@ -1846,7 +1846,7 @@ int len;
-+ 		}
-+ 
-+ 		/* Not so likely to happen. */
-+-		if (vallen >= len + sizeof (rhostname)) {
-++		if (len - vallen >= sizeof (rhostname)) {
-+ 			dbglog("EAP: trimming really long peer name down");
-+ 			BCOPY(inp + vallen, rhostname, sizeof (rhostname) - 1);
-+ 			rhostname[sizeof (rhostname) - 1] = '\0';
+diff --git a/package/pppd/Config.in b/package/pppd/Config.in
+index bf05689f53..7db5674bf1 100644
+--- a/package/pppd/Config.in
++++ b/package/pppd/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PPPD
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # Use __P() macro all over the tree
+ 	depends on BR2_USE_MMU
+-	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL if BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  An implementation of the Point-to-point protocol.
+ 
 diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 4784fe79f8..685666a200 100644
+index 4dffc17941..29e52be978 100644
 --- a/package/pppd/pppd.mk
 +++ b/package/pppd/pppd.mk
-@@ -11,6 +11,9 @@ PPPD_LICENSE_FILES = \
+@@ -12,10 +12,14 @@ PPPD_LICENSE_FILES = \
  	pppd/tdb.c pppd/plugins/pppoatm/COPYING \
  	pppdump/bsd-comp.c pppd/ccp.c pppd/plugins/passprompt.c
  
-+# 0001-pppd-Fix-bounds-check.patch
-+PPPD_IGNORE_CVES += CVE-2020-8597
+-PPPD_DEPENDENCIES = openssl
+-PPPD_MAKE_OPTS = \
+-	HAVE_INET6=y \
+-	OPENSSL_INCLUDE_DIR=$(STAGING_DIR)/usr/include/openssl
++PPPD_MAKE_OPTS = HAVE_INET6=y
++ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
++PPPD_DEPENDENCIES += openssl
++PPPD_MAKE_OPTS += OPENSSL_INCLUDE_DIR=$(STAGING_DIR)/usr/include/openssl
++else
++PPPD_MAKE_OPTS += USE_CRYPT=y
++endif
 +
- PPPD_MAKE_OPTS = HAVE_INET6=y
- ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
- PPPD_DEPENDENCIES += openssl
+ PPPD_INSTALL_STAGING = YES
+ PPPD_TARGET_BINS = chat pppd pppdump pppstats
+ PPPD_RADIUS_CONF = \
