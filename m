@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:32:07 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/thrift: disable
+Date: Sun, 15 Mar 2020 11:31:52 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/thrift: disable
  qt4
-Message-ID: <20200315101935.2F74E84AE3@busybox.osuosl.org>
+Message-ID: <20200315101942.54B7984C70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=821837125ee8fcac0362b5e6fa279a8a106a9354
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5f6fe6f1e473c48397ed7ebe80c9f1789e30eee6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 host-thrift can fail if a broken Qt4 is found on host:
 
