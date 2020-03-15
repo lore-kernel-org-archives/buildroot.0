@@ -1,114 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Mar 2020 21:38:55 +0100
-Subject: [Buildroot] [git commit]
- package/perl-mojolicious-plugin-authorization: new package
-Message-ID: <20200315203841.DA86C8158B@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 21:38:56 +0100
+Subject: [Buildroot] [git commit] package/perl-mozilla-ca: new package
+Message-ID: <20200315203842.2905A8158B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98de719cffb0f2de7e8b4757a141f0f0a1bcb5a0
+commit: https://git.buildroot.net/buildroot/commit/?id=dcd5b148f480f06fd41006c2dcc64af75c10ffc7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added via utils/scancpan, but removing the 'suspicious' dependency on
-'host-perl-mojolicious'.
+This is a dependency for perl-lwp-protocol-https (added in a subsequent
+patch).
 
-    During configuration, the package warns:
+Added via utils/scancpan, updating license only.
 
-    Checking prerequisites...
-      requires:
-        !  Mojo::Base is not installed
-      build_requires:
-        !  Mojolicious::Lite is not installed
-        !  Test::Mojo is not installed
-
-    ERRORS/WARNINGS FOUND IN PREREQUISITES.  You may wish to install the versions
-    of the modules indicated above before proceeding with this installation
-
-    Run 'Build installdeps' to install missing prerequisites.
-
-But the build and installation continues correctly nonetheless.
-
-Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                                |  1 +
- package/Config.in                                         |  1 +
- package/perl-mojolicious-plugin-authorization/Config.in   |  7 +++++++
- .../perl-mojolicious-plugin-authorization.hash            |  6 ++++++
- .../perl-mojolicious-plugin-authorization.mk              | 15 +++++++++++++++
- 5 files changed, 30 insertions(+)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/perl-mozilla-ca/Config.in            |  6 ++++++
+ package/perl-mozilla-ca/perl-mozilla-ca.hash |  6 ++++++
+ package/perl-mozilla-ca/perl-mozilla-ca.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 86e653f854..d3ed653dd9 100644
+index dfc0dc6a6c..2dc8d4b59d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2405,6 +2405,7 @@ F:	package/perl-locale-maketext-lexicon/
- F:	package/perl-math-prime-util/
- F:	package/perl-mime-base64-urlsafe/
- F:	package/perl-mojolicious-plugin-authentication/
-+F:	package/perl-mojolicious-plugin-authorization/
+@@ -2410,6 +2410,7 @@ F:	package/perl-mojolicious-plugin-authorization/
+ F:	package/perl-mojolicious-plugin-cspheader/
+ F:	package/perl-mojolicious-plugin-i18n/
+ F:	package/perl-mojolicious-plugin-securityheader/
++F:	package/perl-mozilla-ca/
  F:	package/perl-net-snmp/
  F:	package/perl-net-ssh2/
  F:	package/perl-net-telnet/
 diff --git a/package/Config.in b/package/Config.in
-index 06c22ee3cd..10f3131ea5 100644
+index e35250808d..74d3f676e3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -779,6 +779,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-module-runtime/Config.in"
- 	source "package/perl-mojolicious/Config.in"
- 	source "package/perl-mojolicious-plugin-authentication/Config.in"
-+	source "package/perl-mojolicious-plugin-authorization/Config.in"
+@@ -784,6 +784,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-mojolicious-plugin-i18n/Config.in"
+ 	source "package/perl-mojolicious-plugin-securityheader/Config.in"
  	source "package/perl-moo/Config.in"
++	source "package/perl-mozilla-ca/Config.in"
  	source "package/perl-net-dns/Config.in"
  	source "package/perl-net-http/Config.in"
-diff --git a/package/perl-mojolicious-plugin-authorization/Config.in b/package/perl-mojolicious-plugin-authorization/Config.in
+ 	source "package/perl-net-snmp/Config.in"
+diff --git a/package/perl-mozilla-ca/Config.in b/package/perl-mozilla-ca/Config.in
 new file mode 100644
-index 0000000000..87976cbbe8
+index 0000000000..733d07e1f9
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-authorization/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION
-+	bool "perl-mojolicious-plugin-authorization"
-+	select BR2_PACKAGE_PERL_MOJOLICIOUS # runtime
++++ b/package/perl-mozilla-ca/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_MOZILLA_CA
++	bool "perl-mozilla-ca"
 +	help
-+	  A plugin to make authorization a bit easier.
++	  Mozilla's CA cert bundle in PEM format.
 +
-+	  https://metacpan.org/module/Mojolicious::Plugin::Authorization
-diff --git a/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash
++	  https://metacpan.org/release/Mozilla-CA
+diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.hash b/package/perl-mozilla-ca/perl-mozilla-ca.hash
 new file mode 100644
-index 0000000000..c55eefe2ff
+index 0000000000..0d52d192e6
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.hash
++++ b/package/perl-mozilla-ca/perl-mozilla-ca.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    9c009599cf397e3eacf5d7cd0dec45b8 Mojolicious-Plugin-Authorization-1.05.tar.gz
-+sha256 87f84092d5698595ad0d01e745eca1d6affd1f3d662786f39f3583c54ffed0e3 Mojolicious-Plugin-Authorization-1.05.tar.gz
++md5    9c93333e1d9d3fad639e9d4082898de1 Mozilla-CA-20180117.tar.gz
++sha256 f2cc9fbe119f756313f321e0d9f1fac0859f8f154ac9d75b1a264c1afdf4e406 Mozilla-CA-20180117.tar.gz
 +
 +# computed by scancpan
-+sha256 fd9632faca5a3d6af4cb9cf776514de87d2b34bff3a6cf06c23eea0f9cc3ab06 LICENSE
-diff --git a/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk
++sha256 95cd63dae5c2bf6e7cf33435981614a36c85ef01fc7a02464e05e58a5355398e README
+diff --git a/package/perl-mozilla-ca/perl-mozilla-ca.mk b/package/perl-mozilla-ca/perl-mozilla-ca.mk
 new file mode 100644
-index 0000000000..3fcee08a46
+index 0000000000..9fca66d000
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-authorization/perl-mojolicious-plugin-authorization.mk
-@@ -0,0 +1,15 @@
++++ b/package/perl-mozilla-ca/perl-mozilla-ca.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-mojolicious-plugin-authorization
++# perl-mozilla-ca
 +#
 +################################################################################
 +
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_VERSION = 1.05
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_SOURCE = Mojolicious-Plugin-Authorization-$(PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_VERSION).tar.gz
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_SITE = $(BR2_CPAN_MIRROR)/authors/id/B/BY/BYTEROCK
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_DEPENDENCIES = host-perl-module-build
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_LICENSE = Artistic or GPL-1.0+
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_LICENSE_FILES = LICENSE
-+PERL_MOJOLICIOUS_PLUGIN_AUTHORIZATION_DISTNAME = Mojolicious-Plugin-Authorization
++PERL_MOZILLA_CA_VERSION = 20180117
++PERL_MOZILLA_CA_SOURCE = Mozilla-CA-$(PERL_MOZILLA_CA_VERSION).tar.gz
++PERL_MOZILLA_CA_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AB/ABH
++PERL_MOZILLA_CA_LICENSE = MPL-2.0
++PERL_MOZILLA_CA_LICENSE_FILES = README
++PERL_MOZILLA_CA_DISTNAME = Mozilla-CA
 +
 +$(eval $(perl-package))
