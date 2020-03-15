@@ -1,53 +1,71 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 14 Mar 2020 23:27:32 -0300
-Subject: [Buildroot] [PATCH 2019.02.x] package/sysklogd: fix daemon paths in
- systemd unit files
-Message-ID: <20200315022732.20198-1-unixmania@gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sat, 14 Mar 2020 20:13:56 -0700
+Subject: [Buildroot] [PATCH v5 1/3] package/gobject-introspection: fix
+ host-linking
+Message-ID: <20200315031359.365637-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+From: Adam Duskett <Aduskett@gmail.com>
 
-They are at /sbin, not /usr/sbin.
+When building, gobject-introspection uses tools/g-ir-scanner to build several
+.gir and .typelib files. g-ir-scanner does not use LDFLAGS, and by default,
+links to the system-installed libglib2 path. To remedy this issue, defining
+either LD_LIBRARY_PATH or LD_RUN_PATH forces g-ir-scanner to use the host
+installed libglib2 files. The decision to use LD_RUN_PATH instead of
+LD_LIBRARY_PATH is because this is a run time issue with g-ir-scanner and not
+a compile-time issue.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+g-ir-scanner can use the argument --lib-dirs-envvar to pass a list of library
+directories in place of LD_LIBRARY_PATH, which the installed g-ir-scanner
+wrapper does. However, during the build process, this is not possible due to
+the build process calling g-ir-scanner directly.
+
+This fix has the added benefit of allowing the host gobject-introspection to
+build the host .gir, .rnc, and .typelib files, which some packages may require.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-CC: Peter Korsgaard <peter@korsgaard.com>
+Changes v1 -> v3:
+  - Update comment to be more clear.
 
-Peter, this applies to 2019.02.x.
----
- package/sysklogd/klogd.service   | 2 +-
- package/sysklogd/syslogd.service | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v3 -> v4:
+  - Update patch to work with gobject-introspection 2.64.0
 
-diff --git a/package/sysklogd/klogd.service b/package/sysklogd/klogd.service
-index c66795b449..b5dbb93d7d 100644
---- a/package/sysklogd/klogd.service
-+++ b/package/sysklogd/klogd.service
-@@ -2,7 +2,7 @@
- Description=Kernel Log Daemon
+Changes v4 -> v5:
+  - Changed LD_LIBRARY_PATH to LD_RUN_PATH after more testing.
+  - Updated the commit message and comments in the .mk file to better describe
+    what the problem was and why this is necessary.
+
+ .../gobject-introspection/gobject-introspection.mk  | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index c18a1f17d3..19071ba1cb 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -33,11 +33,14 @@ HOST_GOBJECT_INTROSPECTION_DEPENDENCIES = \
+ GOBJECT_INTROSPECTION_NINJA_ENV += \
+ 	CC="$(TARGET_CC)"
  
- [Service]
--ExecStart=/usr/sbin/klogd -n
-+ExecStart=/sbin/klogd -n
- StandardOutput=null
- Restart=on-failure
+-# Disable introspection data on the host, as it is not needed and
+-# the package will attempt to use the systems libglib2 which will fail
+-# if the systems libglib2 version is older than 2.60.
+-HOST_GOBJECT_INTROSPECTION_CONF_OPTS = \
+-	-Dbuild_introspection_data=false
++# When building, gobject-introspection uses tools/g-ir-scanner to build several
++# .gir and .typelib files. g-ir-scanner does not use LDFLAGS, and by default,
++# links to the system-installed libglib2 path. To remedy this issue, defining
++# either LD_LIBRARY_PATH or LD_RUN_PATH forces g-ir-scanner to use the host
++# installed libglib2 files. Use LD_RUN_PATH instead of LD_LIBRARY_PATH because
++# this is a run time issue with g-ir-scanner and not a compile-time issue.
++HOST_GOBJECT_INTROSPECTION_NINJA_ENV += \
++	LD_RUN_PATH="$(HOST_DIR)/lib"
  
-diff --git a/package/sysklogd/syslogd.service b/package/sysklogd/syslogd.service
-index 70e4cff27e..adaac679f2 100644
---- a/package/sysklogd/syslogd.service
-+++ b/package/sysklogd/syslogd.service
-@@ -4,7 +4,7 @@ Requires=syslog.socket
- Wants=klogd.service
- 
- [Service]
--ExecStart=/usr/sbin/syslogd -m 0 -n
-+ExecStart=/sbin/syslogd -m 0 -n
- StandardOutput=null
- Restart=on-failure
- 
+ # Use the host gi-scanner to prevent the scanner from generating incorrect
+ # elf classes.
 -- 
-2.18.2
+2.24.1
