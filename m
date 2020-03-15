@@ -1,74 +1,97 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 15 Mar 2020 21:46:24 +0100
-Subject: [Buildroot] [PATCH] board/qemu/sh4-r2d: fix sh4 kernel bug with
- Binutils 2.33
-In-Reply-To: <417a5a05-f317-fc27-c183-0682b0e3320c@gmail.com>
-References: <20191230133640.9702-1-romain.naour@gmail.com>
- <20191230145324.4eb78299@windsurf>
- <417a5a05-f317-fc27-c183-0682b0e3320c@gmail.com>
-Message-ID: <cf6fa0c0-d004-bd68-fe0b-f3ae8a5ac35e@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 15 Mar 2020 21:38:55 +0100
+Subject: [Buildroot] [git commit] package/perl-mojolicious-plugin-cspheader:
+ new package
+Message-ID: <20200315203841.E8BE081461@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=2120f375b579d1acef8fa38ab476ba0ffc9008ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 30/12/2019 ? 15:16, Romain Naour a ?crit?:
-> Hello Thomas,
-> 
-> Le 30/12/2019 ? 14:53, Thomas Petazzoni a ?crit?:
->> Hello Romain,
->>
->> On Mon, 30 Dec 2019 14:36:40 +0100
->> Romain Naour <romain.naour@gmail.com> wrote:
->>
->>> Remove the Binutils patch reverting [1] that trigger a sh4 kernel bug
->>> with Binutils >= 2.33.
->>> Add two kernel patch provided by Alan Modra [2] that fix alignment of rodata.
->>>
->>> [1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=ebd2263ba9a9124d93bbc0ece63d7e0fae89b40e
->>> [2] https://www.sourceware.org/ml/binutils/2019-12/msg00112.html
->>>
->>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->>
->> Thanks a lot for those fixes. Have the kernel patches been submitted
->> upstream, and accepted?
-> 
-> Not yet, I replied to Alan Modra to do so [1].
+Added via utils/scancpan, without changes.
 
-I just posted theses two patches to the linux-sh mailing list:
+Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                                 |  1 +
+ package/Config.in                                          |  1 +
+ package/perl-mojolicious-plugin-cspheader/Config.in        |  8 ++++++++
+ .../perl-mojolicious-plugin-cspheader.hash                 |  6 ++++++
+ .../perl-mojolicious-plugin-cspheader.mk                   | 14 ++++++++++++++
+ 5 files changed, 30 insertions(+)
 
-https://patchwork.kernel.org/project/linux-sh/list/?series=256703
-
-We need to move forward to add binutils 2.34.
-
-Best regards,
-Romain
-
-> 
->>
->> One issue with your change is of course that now the fix only works
->> when building the specific qemu_sh4 defconfigs. When not using one of
->> those defconfigs, but simply building the regular Linux kernel for SH4,
->> will lead to a kernel that no longer boots.
-> 
-> Indeed but I don't think is great to keep the non-upstream patch I've made
-> reverting [2] for Binutils >= 2.33 for all architectures just to workaround a
-> sh4 kernel bug. At the time I didn't know that was a sh4 kernel bug...
-> 
-> The two sh4 kernel patches are probably easy to backport as soon as a sh4
-> toolchain using Binutils >= 2.33 is used.
-> 
-> [1] https://www.sourceware.org/ml/binutils/2019-12/msg00386.html
-> [2]
-> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=ebd2263ba9a9124d93bbc0ece63d7e0fae89b40e
-> 
-> Best regards,
-> Romain
-> 
->>
->> Thomas
->>
-> 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d3ed653dd9..b83148e527 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2406,6 +2406,7 @@ F:	package/perl-math-prime-util/
+ F:	package/perl-mime-base64-urlsafe/
+ F:	package/perl-mojolicious-plugin-authentication/
+ F:	package/perl-mojolicious-plugin-authorization/
++F:	package/perl-mojolicious-plugin-cspheader/
+ F:	package/perl-net-snmp/
+ F:	package/perl-net-ssh2/
+ F:	package/perl-net-telnet/
+diff --git a/package/Config.in b/package/Config.in
+index 10f3131ea5..4b36386e34 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -780,6 +780,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-mojolicious/Config.in"
+ 	source "package/perl-mojolicious-plugin-authentication/Config.in"
+ 	source "package/perl-mojolicious-plugin-authorization/Config.in"
++	source "package/perl-mojolicious-plugin-cspheader/Config.in"
+ 	source "package/perl-moo/Config.in"
+ 	source "package/perl-net-dns/Config.in"
+ 	source "package/perl-net-http/Config.in"
+diff --git a/package/perl-mojolicious-plugin-cspheader/Config.in b/package/perl-mojolicious-plugin-cspheader/Config.in
+new file mode 100644
+index 0000000000..841b309470
+--- /dev/null
++++ b/package/perl-mojolicious-plugin-cspheader/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_CSPHEADER
++	bool "perl-mojolicious-plugin-cspheader"
++	select BR2_PACKAGE_PERL_MOJOLICIOUS # runtime
++	help
++	  Mojolicious Plugin to add Content-Security-Policy header to
++	  every HTTP response.
++
++	  https://metacpan.org/release/Mojolicious-Plugin-CSPHeader
+diff --git a/package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.hash b/package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.hash
+new file mode 100644
+index 0000000000..d0f9dc3ab0
+--- /dev/null
++++ b/package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    3d1b01c393e7ed576e4b503d26a88a3e Mojolicious-Plugin-CSPHeader-0.06.tar.gz
++sha256 0523a170af6620dab5b746725f171a138b6cff3d2d84e1a30af891741550f4a7 Mojolicious-Plugin-CSPHeader-0.06.tar.gz
++
++# computed by scancpan
++sha256 4bb36edd2bcafef11ca615f69607953a31ee05ae172b69990aee317e95653456 LICENSE
+diff --git a/package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.mk b/package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.mk
+new file mode 100644
+index 0000000000..438d6d517e
+--- /dev/null
++++ b/package/perl-mojolicious-plugin-cspheader/perl-mojolicious-plugin-cspheader.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# perl-mojolicious-plugin-cspheader
++#
++################################################################################
++
++PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_VERSION = 0.06
++PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_SOURCE = Mojolicious-Plugin-CSPHeader-$(PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_VERSION).tar.gz
++PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LD/LDIDRY
++PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_LICENSE = Artistic or GPL-1.0+
++PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_LICENSE_FILES = LICENSE
++PERL_MOJOLICIOUS_PLUGIN_CSPHEADER_DISTNAME = Mojolicious-Plugin-CSPHeader
++
++$(eval $(perl-package))
