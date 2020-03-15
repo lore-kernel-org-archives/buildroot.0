@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:44:55 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/proftpd: add
+Date: Sun, 15 Mar 2020 11:44:37 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/proftpd: add
  mod_cap option
-Message-ID: <20200315103208.71AB4864AE@busybox.osuosl.org>
+Message-ID: <20200315103215.C4691864B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=faacc5f3cc2ddc9ba8294bc932b4797fdc86cde0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=84f683ad17da3983f4f814fe20258864ca19a089
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Add an option to enable or disable mod_cap and select libcap accordingly
 instead of using bundled libcap which raise a build failure with headers
