@@ -1,85 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:08:46 +0100
+Date: Sun, 15 Mar 2020 11:06:48 +0100
 Subject: [Buildroot] [git commit branch/2019.02.x] package/libvncserver: fix
- jpeg build without png or zlib
-Message-ID: <20200315095840.7D1448407D@busybox.osuosl.org>
+ build without C++
+Message-ID: <20200315095840.416EB84079@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=309de93b8eceaef900739c95b667018c09089871
+commit: https://git.buildroot.net/buildroot/commit/?id=52f05e47365fc55f8f04676355975438162d38bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes:
- - http://autobuild.buildroot.org/results/bcc701055dd5876005fa6f78f38500399394cd75
+ - http://autobuild.buildroot.org/results/16aaa4e86a2dbf1acf95f10d5131b0f7b8a3d61a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a8dc83b83a460d5aa787b2d8dfc5b786a7e83cd5)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ca393d7a5b77d877573cdbb7029949d229bce062)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...txt-don-t-build-tight.c-without-png-or-zl.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+ .../0001-CMakeLists.txt-fix-build-without-C.patch  | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch b/package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch
+diff --git a/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch b/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch
 new file mode 100644
-index 0000000000..c357f8b3d5
+index 0000000000..591c97fd6a
 --- /dev/null
-+++ b/package/libvncserver/0005-CMakeLists.txt-don-t-build-tight.c-without-png-or-zl.patch
-@@ -0,0 +1,54 @@
-+From 8f58a9d9f35e6b893b54b399be357bc789f6e630 Mon Sep 17 00:00:00 2001
++++ b/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch
+@@ -0,0 +1,33 @@
++From 868f0a9fa60bb45ee6cf762f323c5b3964b2ee69 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 8 Mar 2020 10:36:57 +0100
-+Subject: [PATCH] CMakeLists.txt: don't build tight.c without png or zlib
++Date: Sun, 23 Jun 2019 10:18:59 +0200
++Subject: [PATCH] CMakeLists.txt: fix build without C++
 +
-+If the user enables JPEG and disable PNG and ZLIB, build will fail on:
-+
-+[ 42%] Building C object CMakeFiles/vncserver.dir/libvncserver/ws_decode.c.o
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c: In function 'rfbSendRectEncodingTight':
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:276:7: error: 'struct _rfbClientRec' has no member named 'tightEncoding'
-+     cl->tightEncoding = rfbEncodingTight;
-+       ^~
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c: In function 'rfbSendRectEncodingTightPng':
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:287:7: error: 'struct _rfbClientRec' has no member named 'tightEncoding'
-+     cl->tightEncoding = rfbEncodingTightPng;
-+       ^~
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c: In function 'SendRectEncodingTight':
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:307:23: error: 'struct _rfbClientRec' has no member named 'tightCompressLevel'
-+     compressLevel = cl->tightCompressLevel;
-+                       ^~
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:308:22: error: 'struct _rfbClientRec' has no member named 'turboQualityLevel'
-+     qualityLevel = cl->turboQualityLevel;
-+                      ^~
-+/nvmedata/autobuild/instance-3/output-1/build/libvncserver-0.9.12/libvncserver/tight.c:309:22: error: 'struct _rfbClientRec' has no member named 'turboSubsampLevel'
-+     subsampLevel = cl->turboSubsampLevel;
-+                      ^~
++Specify that libvncserver is a C project file otherwise build will fail
++if no C++ compiler is found by cmake
 +
 +Fixes:
-+ - http://autobuild.buildroot.org/results/bcc701055dd5876005fa6f78f38500399394cd75
++ - http://autobuild.buildroot.org/results/16aaa4e86a2dbf1acf95f10d5131b0f7b8a3d61a
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/LibVNC/libvncserver/pull/380]
++[Upstream status: https://github.com/LibVNC/libvncserver/pull/317]
 +---
-+ CMakeLists.txt | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 2a2cb15..b8bc9e2 100644
++index 0d3b4dc..ad609ae 100644
 +--- a/CMakeLists.txt
 ++++ b/CMakeLists.txt
-+@@ -425,7 +425,9 @@ endif()
-+ if(JPEG_FOUND)
-+   add_definitions(-DLIBVNCSERVER_HAVE_LIBJPEG)
-+   include_directories(${JPEG_INCLUDE_DIR})
-+-  set(TIGHT_C ${LIBVNCSERVER_DIR}/tight.c ${COMMON_DIR}/turbojpeg.c)
-++  if(PNG_FOUND OR ZLIB_FOUND)
-++    set(TIGHT_C ${LIBVNCSERVER_DIR}/tight.c ${COMMON_DIR}/turbojpeg.c)
-++  endif(PNG_FOUND OR ZLIB_FOUND)
-+ endif(JPEG_FOUND)
++@@ -1,7 +1,7 @@
++ cmake_minimum_required(VERSION 3.4)
++ cmake_policy(SET CMP0037 NEW)
 + 
-+ if(PNG_FOUND)
++-project(LibVNCServer)
+++project(LibVNCServer C)
++ include(CheckFunctionExists)
++ include(CheckSymbolExists)
++ include(CheckIncludeFile)
 +-- 
-+2.25.0
++2.20.1
 +
