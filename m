@@ -1,35 +1,46 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun, 15 Mar 2020 13:56:10 -0700
-Subject: [Buildroot] [PATCH 1/1] package/polkit: add linux-pam as a
- dependency if linux-pam is selected
-Message-ID: <20200315205610.2227486-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 15 Mar 2020 21:57:11 +0100
+Subject: [Buildroot] [git commit] package/perl-module-build: bump to 0.4231
+Message-ID: <20200315204653.CD4F08164F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=b8e230209f62a128bd80783bb9d226d60fee88a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Without linux-pam built first, polkit will throw a configuration error:
-configure: error: Could not find pam/pam-devel, please install the needed packages.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/polkit/polkit.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/perl-module-build/perl-module-build.hash | 4 ++--
+ package/perl-module-build/perl-module-build.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-index bc9e3580ab..efd788a05c 100644
---- a/package/polkit/polkit.mk
-+++ b/package/polkit/polkit.mk
-@@ -24,6 +24,7 @@ POLKIT_CONF_OPTS = \
- 	--disable-libsystemd-login
+diff --git a/package/perl-module-build/perl-module-build.hash b/package/perl-module-build/perl-module-build.hash
+index 2af1a1ac8c..aad0b78e3d 100644
+--- a/package/perl-module-build/perl-module-build.hash
++++ b/package/perl-module-build/perl-module-build.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    1447d9e02e63f7a1643986789a8f1ba9 Module-Build-0.4229.tar.gz
+-sha256 1fe491a6cda914b01bc8e592faa2b5404e9f35915ca15322f8f2a8d8f9008c18 Module-Build-0.4229.tar.gz
++md5    066b193e461d7dfe1eca17a139353001 Module-Build-0.4231.tar.gz
++sha256 7e0f4c692c1740c1ac84ea14d7ea3d8bc798b2fb26c09877229e04f430b2b717 Module-Build-0.4231.tar.gz
  
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+POLKIT_DEPENDENCIES += linux-pam
- POLKIT_CONF_OPTS += --with-authfw=pam
- else
- POLKIT_CONF_OPTS += --with-authfw=shadow
--- 
-2.24.1
+ # computed by scancpan
+ sha256 f35ac2cc6b808a38c42c2d230b875217b0a24bb51e5a497ebb630cbb3d806c3e LICENSE
+diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
+index a8a01f6ba9..f5cab36890 100644
+--- a/package/perl-module-build/perl-module-build.mk
++++ b/package/perl-module-build/perl-module-build.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_MODULE_BUILD_VERSION = 0.4229
++PERL_MODULE_BUILD_VERSION = 0.4231
+ PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
+ PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
+ PERL_MODULE_BUILD_LICENSE = Artistic or GPL-1.0+
