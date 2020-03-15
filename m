@@ -1,41 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Mar 2020 23:12:54 +0100
-Subject: [Buildroot] [PATCH v5 1/2] package/netdata: new package
-In-Reply-To: <20200312160040.3416161-1-m.niestroj@grinn-global.com>
-References: <20200312160040.3416161-1-m.niestroj@grinn-global.com>
-Message-ID: <20200315231254.524e5e39@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 15 Mar 2020 23:14:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rdesktop: use --with-sound
+ option
+In-Reply-To: <20200315225013.0c7556ec@windsurf>
+References: <20200314223641.2552635-1-fontaine.fabrice@gmail.com>
+ <20200315220704.4d588598@windsurf> <20200315211018.GK19677@scaer>
+ <20200315225013.0c7556ec@windsurf>
+Message-ID: <CAPi7W816Z0ngAapVQQq3VK3U5xwx4sSY8ZtEOkq69aD69T4OGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marcin,
+Dear all,
 
-On Thu, 12 Mar 2020 17:00:39 +0100
-Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
+Le dim. 15 mars 2020 ? 22:50, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Sun, 15 Mar 2020 22:10:18 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>
+> > Which is indeed what happens here;
+> >
+> >     https://github.com/rdesktop/rdesktop/blob/master/configure.ac#L286
+>
+> If I read
+> https://github.com/rdesktop/rdesktop/blob/master/configure.ac#L323
+> correctly, it means that --with-sound (or --with-sound=yes) will allow
+> multiple audio backends to be supported at the same time.
+>
+> While passing any other --with-sound=foo will only support the foo
+> audio backend.
+>
+> So in fact, passing --with-sound=foo is annoying, because you cannot
+> support multiple audio backends.
+Indeed, I was too quick on this one, I'll set it as rejected.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-> Always provide --disable-dbengine configuration option, because we do
-> not support libjudy dependency that is required otherwise.
-> 
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
-> changes v4 -> v5:
->  - use 1.20.0 instead of 1.19.0 version
->  - libuv is hard requirement now, so it was added to dependencies
->  - zlib is hard requirement as well, because it is needed to properly
->    compile project (missing uLong typedef otherwise)
->  - patch solving race condition during installation has been dropped,
->    because it is already part of 1.20.0
-
-Following the feedback from Carlos on the init script, I've marked this
-series as Changes Requested. Could you respin a new version, I think
-it's very close from being merged.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
