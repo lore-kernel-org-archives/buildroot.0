@@ -1,47 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:24:02 +0100
-Subject: [Buildroot] [PATCHv2] Makefile: work around a bug in newly
- released make 4.3
-In-Reply-To: <20200304134037.24237-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Wed, 4 Mar 2020 14:40:37 +0100")
-References: <20200304134037.24237-1-yann.morin.1998@free.fr>
-Message-ID: <87o8sxncfx.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Mar 2020 11:26:33 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libsndfile: fix CVE-2018-19758
+In-Reply-To: <20200304222103.1029879-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 4 Mar 2020 23:21:02 +0100")
+References: <20200304222103.1029879-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k13lncbq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Several users of rolling-release distributions have been reporting on
- > IRC that Buildroot is broken now that they have switched to the newly
- > released make 4.3.
+ > There is a heap-based buffer over-read at wav.c in wav_write_header in
+ > libsndfile 1.0.28 that will cause a denial of service.
 
- > It turns out that the constructs we use to generated and onclude the
- > internal br2-external related fragments is no longer working with
- > make-4.3.
-
- > Indeed, an upstream bug report [0] seems to imply that it so far was
- > working by chance. There has been no further feedback, whether this is
- > really considered a fix for a previous ill-defined behaviour, or an
- > actual regression...
-
- > In the meantime, we add a workaround, suggested in that same bug report,
- > that fixes the issue for make 4.3, and that should not break on older
- > make versions either (verified on all relevant versions: from 3.81,
- > 3.82, 4.0, 4.1, and 4.2).
-
- > [0] https://savannah.gnu.org/bugs/?57676
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
- > ---
- > Changes v1 -> v2:
- >   - [0] points to something now  (Thomas)
- >   - repeat the bug URL in the Makefile  (Thomas)
- >   - explain where the workaround comes from  (Thomas)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2019.02.x and 2019.11.x, thanks.
 
