@@ -1,28 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:30:25 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/guile: fix host build without makeinfo
-In-Reply-To: <20200307100007.1428472-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 7 Mar 2020 11:00:07 +0100")
-References: <20200307100007.1428472-1-fontaine.fabrice@gmail.com>
-Message-ID: <8736a9nc5a.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Mar 2020 11:30:12 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/guile: fix build
+ without makeinfo
+Message-ID: <20200315101739.E42588475F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=48a14964ba59a731549d0fd0aa1805de0b03b816
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/9605aac6f760bfff190d0ab95fa50f65486ffe90
+Fixes:
+ - http://autobuild.buildroot.org/results/9605aac6f760bfff190d0ab95fa50f65486ffe90
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2:
- >  - Fix trailing whitespace
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5d136a7ca2976b9e13f83f24f5ee03456f999f0e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...04-Makefile.am-fix-build-without-makeinfo.patch | 51 ++++++++++++++++++++++
+ package/guile/guile.mk                             |  3 +-
+ 2 files changed, 53 insertions(+), 1 deletion(-)
 
-Committed to 2019.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/guile/0004-Makefile.am-fix-build-without-makeinfo.patch b/package/guile/0004-Makefile.am-fix-build-without-makeinfo.patch
+new file mode 100644
+index 0000000000..0d16f92387
+--- /dev/null
++++ b/package/guile/0004-Makefile.am-fix-build-without-makeinfo.patch
+@@ -0,0 +1,51 @@
++From 9304ad88a5f4b083d348563c5de00da53b34cf46 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 6 Mar 2020 23:20:39 +0100
++Subject: [PATCH] Makefile.am: fix build without makeinfo
++
++Don't build doc subdir if makeinfo is not available otherwise build
++fails on:
++
++make[4]: Entering directory '/nvmedata/autobuild/instance-7/output-1/build/host-guile-2.0.14/doc/ref'
++  MAKEINFO guile.info
++/nvmedata/autobuild/instance-7/output-1/build/host-guile-2.0.14/build-aux/missing: line 81: makeinfo: command not found
++WARNING: 'makeinfo' is missing on your system.
++         You should only need it if you modified a '.texi' file, or
++         any other file indirectly affecting the aspect of the manual.
++         You might want to install the Texinfo package:
++         <http://www.gnu.org/software/texinfo/>
++         The spurious makeinfo call might also be the consequence of
++         using a buggy 'make' (AIX, DU, IRIX), in which case you might
++         want to install GNU make:
++         <http://www.gnu.org/software/make/>
++
++Fixes:
++ - http://autobuild.buildroot.org/results/9605aac6f760bfff190d0ab95fa50f65486ffe90
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to bug-guile at gnu.org]
++---
++ Makefile.am | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index ebbf6d476..2270afb9f 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -38,8 +38,12 @@ SUBDIRS =					\
++ 	test-suite				\
++ 	benchmark-suite				\
++ 	gc-benchmarks				\
++-	am					\
+++	am
+++
+++if HAVE_MAKEINFO
+++SUBDIRS +=					\
++ 	doc
+++endif
++ 
++ DIST_SUBDIRS = $(SUBDIRS) prebuilt
++ 
++-- 
++2.25.0
++
+diff --git a/package/guile/guile.mk b/package/guile/guile.mk
+index f53ebdd5cb..4992861071 100644
+--- a/package/guile/guile.mk
++++ b/package/guile/guile.mk
+@@ -8,7 +8,8 @@ GUILE_VERSION = 2.0.14
+ GUILE_SOURCE = guile-$(GUILE_VERSION).tar.xz
+ GUILE_SITE = $(BR2_GNU_MIRROR)/guile
+ GUILE_INSTALL_STAGING = YES
+-# For 0002-calculate-csqrt_manually.patch
++# For 0002-calculate-csqrt_manually.patch and
++# 0004-Makefile.am-fix-build-without-makeinfo.patch
+ GUILE_AUTORECONF = YES
+ GUILE_LICENSE = LGPL-3.0+
+ GUILE_LICENSE_FILES = LICENSE COPYING COPYING.LESSER
