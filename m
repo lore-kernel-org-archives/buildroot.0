@@ -1,11 +1,11 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 15 Mar 2020 09:35:09 -0700
-Subject: [Buildroot] [PATCH 3/3 v6] package/meson: determine
- g-ir-scanner and g-ir-compiler paths from pkgconfig
-In-Reply-To: <2b3494c60f3e0d1a9bdf79dfb902e685b713c0e3.1584286382.git.yann.morin.1998@free.fr>
+Date: Sun, 15 Mar 2020 09:35:20 -0700
+Subject: [Buildroot] [PATCH 2/3 v6] package/gobject-introspection:
+ export variables in g-ir-scanner
+In-Reply-To: <08a9fbe78f417f2b1a8b346263c72ceb12fba9c6.1584286382.git.yann.morin.1998@free.fr>
 References: <cover.1584286382.git.yann.morin.1998@free.fr>
- <2b3494c60f3e0d1a9bdf79dfb902e685b713c0e3.1584286382.git.yann.morin.1998@free.fr>
-Message-ID: <CAFSsvmpsUa-J6DpajOxRTDOhhs0cVrF1wjLxJHW+3ewEX1S9TA@mail.gmail.com>
+ <08a9fbe78f417f2b1a8b346263c72ceb12fba9c6.1584286382.git.yann.morin.1998@free.fr>
+Message-ID: <CAFSsvmpXmyLYTBsrmDbTbyi_uoaqNHaZR4Liy7OqwL50wei2KA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,151 +20,95 @@ On Sun, Mar 15, 2020 at 8:33 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
 > From: Adam Duskett <Aduskett@gmail.com>
 >
-> Currently, meson hard codes the paths of these binaries which results in
-> cross-compiled environments to run the host versions of these tools.
-> However, GObject-introspection provides the appropriate paths to these
-> utilities via pkg-config
+> When building .gir .typelib files, the g-ir-scanner wrapper calls the host
+> g-ir-scanner. g-ir-scanner calls ccompiler.py, which searches for the following
+> environment variables:
+>     CPP, CC, CXX, CPPFLAGS, CFLAGS, CXXFLAGS, LDFLAGS
 >
-> find_program is needed in the case g-i is built as a subproject. If
-> g-ir-scanner or g-ir-compiler are in the build or source directory use those.
-> If they aren't found in the source directory, use the results from pkg-config.
+> These environment variables are empty by default, and as such ccompiler.py
+> defaults to either using the system tools (CC, CXX, and CPP) or leaving
+> the variables blank (LDFLAGS, CFLAGS, and CPPFLAGS.)
 >
-> Backport two upstream commits to fix the issue.
+> For autotools packages, this issue does not occur because autotools uses
+> Makefile.introspection found on the staging directory in
+> usr/share/gobject-introspection-1.0/ which automatically exports the above
+> variables.
+>
+> However, for meson, the above variables are not exported when meson calls
+> g-ir-scanner to build .gir and .typelib files, which results in linking errors.
+>
+> Exporting these variables in the g-ir-scanner wrapper fixes these issues and
+> ensures all build systems can generate .gir and .typelib files properly.
 >
 > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 >
 > ---
 > Changes v1 -> v3:
->   - Use an upstream patch that fixes this issue permanently.
+>   - Use relative paths. (Yann)
 >
 > Changes v4 -> v5:
->   - Split the patches into two seperate patches. (Yann)
+>   - Switch back to using HOST_DIR. (Yann)
+>   - Update commit message as to why this patch is necessary.
+>   - Add CXX, CPP, LDFLAGS, CFLAGS and CPPFLAGS to the list of variables
+>     of which are exported.
+>   - Add a comment in g-ir-scanner as to why these exports are necessary.
 >
 > Changes v5 -> v6  (Yann):
->   - really make them patches backport with git-format-patch
+>   - only set the variables if not already set
+>   - use a single call to $(SED) instead of one per variable
+>   - reorder variables in a more logical order
+>   - add missing CXXFLAGS
 > ---
->  ...ction-determine-g-ir-scanner-and-g-i.patch | 62 +++++++++++++++++++
->  ...es-gnome.py-Fix-giscanner-and-gicomp.patch | 41 ++++++++++++
->  2 files changed, 103 insertions(+)
->  create mode 100644 package/meson/0004-gobject-introspection-determine-g-ir-scanner-and-g-i.patch
->  create mode 100644 package/meson/0005-mesonbuild-modules-gnome.py-Fix-giscanner-and-gicomp.patch
+>  package/gobject-introspection/g-ir-scanner.in      | 14 ++++++++++++++
+>  .../gobject-introspection/gobject-introspection.mk |  9 +++++++++
+>  2 files changed, 23 insertions(+)
 >
-> diff --git a/package/meson/0004-gobject-introspection-determine-g-ir-scanner-and-g-i.patch b/package/meson/0004-gobject-introspection-determine-g-ir-scanner-and-g-i.patch
-> new file mode 100644
-> index 0000000000..9c7eb656bc
-> --- /dev/null
-> +++ b/package/meson/0004-gobject-introspection-determine-g-ir-scanner-and-g-i.patch
-> @@ -0,0 +1,62 @@
-> +From f66b04b0996eae5cd7b0ad007435d5a51f28b691 Mon Sep 17 00:00:00 2001
-> +From: Adam Duskett <Aduskett@gmail.com>
-> +Date: Mon, 24 Feb 2020 06:29:26 -0800
-> +Subject: [PATCH] gobject-introspection: determine g-ir-scanner and
-> + g-ir-compiler paths from pkgconfig
+> diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
+> index 9f97497b7e..22df7be309 100644
+> --- a/package/gobject-introspection/g-ir-scanner.in
+> +++ b/package/gobject-introspection/g-ir-scanner.in
+> @@ -1,6 +1,20 @@
+>  #!/usr/bin/env bash
+>
+> +# These environment variables are empty by default, and as such ccompiler.py
+> +# defaults to either using the system tools (CC, CXX, and CPP) or leaving
+> +# the variables blank (LDFLAGS, CFLAGS, and CPPFLAGS.)
+> +# Export these variables to ensure all build systems can generate .gir and
+> +# .typelib files properly.
+> +export CPP="${CPP:-${HOST_DIR}/bin/@BASENAME_TARGET_CPP@}"
+> +export CC="${CC:-${HOST_DIR}/bin/@BASENAME_TARGET_CC@}"
+> +export CXX="${CXX:-${HOST_DIR}/bin/@BASENAME_TARGET_CXX@}"
+> +export CPPFLAGS="${CPPFLAGS:- at TARGET_CPPFLAGS@}"
+> +export CFLAGS="${CFLAGS:- at TARGET_CFLAGS@}"
+> +export CXXFLAGS="${CXXFLAGS:- at TARGET_CXXFLAGS@}"
+> +export LDFLAGS="${LDFLAGS:- at TARGET_LDFLAGS@}"
 > +
-> +Currently, meson hard codes the paths of these binaries which results in
-> +cross-compiled environments to run the host versions of these tools.
-> +However, GObject-introspection provides the appropriate paths to these
-> +utilities via pkg-config
+>  export GI_SCANNER_DISABLE_CACHE=1
 > +
-> +find_program is needed in the case g-i is built as a subproject. If
-> +g-ir-scanner or g-ir-compiler are in the build or source directory use those.
-> +If they aren't found in the source directory, use the results from pkg-config.
+>  ${HOST_DIR}/bin/g-ir-scanner \
+>  --lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
+>  --use-binary-wrapper=$(dirname $0)/g-ir-scanner-qemuwrapper \
+> diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+> index 35b6669469..0a395b814c 100644
+> --- a/package/gobject-introspection/gobject-introspection.mk
+> +++ b/package/gobject-introspection/gobject-introspection.mk
+> @@ -105,6 +105,15 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
+>                 $(INSTALL) -D -m 755 \
+>                         $(GOBJECT_INTROSPECTION_PKGDIR)/$(w).in $(STAGING_DIR)/usr/bin/$(w)
+>         )
+> +       $(SED) "s%@BASENAME_TARGET_CPP@%$(notdir $(TARGET_CPP))%g" \
+> +               -e "s%@BASENAME_TARGET_CC@%$(notdir $(TARGET_CC))%g" \
+> +               -e "s%@BASENAME_TARGET_CXX@%$(notdir $(TARGET_CXX))%g" \
+> +               -e "s%@TARGET_CPPFLAGS@%$(TARGET_CPPFLAGS)%g" \
+> +               -e "s%@TARGET_CFLAGS@%$(TARGET_CFLAGS)%g" \
+> +               -e "s%@TARGET_CXXFLAGS@%$(TARGET_CXXFLAGS)%g" \
+> +               -e "s%@TARGET_LDFLAGS@%$(TARGET_LDFLAGS)%g" \
+> +               $(STAGING_DIR)/usr/bin/g-ir-scanner
 > +
-> +Upstream commit: f66b04b0996eae5cd7b0ad007435d5a51f28b691
-> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> +---
-> + mesonbuild/modules/gnome.py | 21 ++++++++++++++++++---
-> + 1 file changed, 18 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/mesonbuild/modules/gnome.py b/mesonbuild/modules/gnome.py
-> +index 3d5d7181..0ea4b273 100644
-> +--- a/mesonbuild/modules/gnome.py
-> ++++ b/mesonbuild/modules/gnome.py
-> +@@ -736,15 +736,30 @@ class GnomeModule(ExtensionModule):
-> +         if kwargs.get('install_dir'):
-> +             raise MesonException('install_dir is not supported with generate_gir(), see "install_dir_gir" and "install_dir_typelib"')
-> +
-> +-        giscanner = self.interpreter.find_program_impl('g-ir-scanner')
-> +-        gicompiler = self.interpreter.find_program_impl('g-ir-compiler')
-> +-
-> +         girtargets = [self._unwrap_gir_target(arg, state) for arg in args]
-> +
-> +         if len(girtargets) > 1 and any([isinstance(el, build.Executable) for el in girtargets]):
-> +             raise MesonException('generate_gir only accepts a single argument when one of the arguments is an executable')
-> +
-> +         self.gir_dep, pkgargs = self._get_gir_dep(state)
-> ++        # find_program is needed in the case g-i is built as subproject.
-> ++        # In that case it uses override_find_program so the gobject utilities
-> ++        # can be used from the build dir instead of from the system.
-> ++        # However, GObject-introspection provides the appropriate paths to
-> ++        # these utilities via pkg-config, so it would be best to use the
-> ++        # results from pkg-config when possible.
-> ++        gi_util_dirs_check = [state.environment.get_build_dir(), state.environment.get_source_dir()]
-> ++        giscanner = self.interpreter.find_program_impl('g-ir-scanner')
-> ++        if giscanner.found():
-> ++            giscanner_path = giscanner.get_command()[0]
-> ++            if not any(x in giscanner_path for x in gi_util_dirs_check):
-> ++                giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
-> ++
-> ++        gicompiler = self.interpreter.find_program_impl('g-ir-compiler')
-> ++        if gicompiler.found():
-> ++            gicompiler_path = gicompiler.get_command()[0]
-> ++            if not any(x in gicompiler_path for x in gi_util_dirs_check):
-> ++                gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
-> +
-> +         ns = kwargs.pop('namespace')
-> +         nsversion = kwargs.pop('nsversion')
-> +--
-> +2.20.1
-> +
-> diff --git a/package/meson/0005-mesonbuild-modules-gnome.py-Fix-giscanner-and-gicomp.patch b/package/meson/0005-mesonbuild-modules-gnome.py-Fix-giscanner-and-gicomp.patch
-> new file mode 100644
-> index 0000000000..4a0813dc8d
-> --- /dev/null
-> +++ b/package/meson/0005-mesonbuild-modules-gnome.py-Fix-giscanner-and-gicomp.patch
-> @@ -0,0 +1,41 @@
-> +From 6ba034c37d8004a72d392f37f66e709c593d8983 Mon Sep 17 00:00:00 2001
-> +From: Adam Duskett <Aduskett@gmail.com>
-> +Date: Wed, 26 Feb 2020 05:51:28 -0800
-> +Subject: [PATCH] mesonbuild/modules/gnome.py: Fix giscanner and gicompiler
-> + logic
-> +
-> +Currently, giscanner and the gicompiler paths are only scanned via pkg-config
-> +if they are first found in the host path.
-> +
-> +Add a else statement to fix this oversite.
-> +
-> +Upstream commit: 6ba034c37d8004a72d392f37f66e709c593d8983
-> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> +---
-> + mesonbuild/modules/gnome.py | 4 ++++
-> + 1 file changed, 4 insertions(+)
-> +
-> +diff --git a/mesonbuild/modules/gnome.py b/mesonbuild/modules/gnome.py
-> +index 0ea4b273..1743b59c 100644
-> +--- a/mesonbuild/modules/gnome.py
-> ++++ b/mesonbuild/modules/gnome.py
-> +@@ -754,12 +754,16 @@ class GnomeModule(ExtensionModule):
-> +             giscanner_path = giscanner.get_command()[0]
-> +             if not any(x in giscanner_path for x in gi_util_dirs_check):
-> +                 giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
-> ++        else:
-> ++            giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
-> +
-> +         gicompiler = self.interpreter.find_program_impl('g-ir-compiler')
-> +         if gicompiler.found():
-> +             gicompiler_path = gicompiler.get_command()[0]
-> +             if not any(x in gicompiler_path for x in gi_util_dirs_check):
-> +                 gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
-> ++        else:
-> ++            gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
-> +
-> +         ns = kwargs.pop('namespace')
-> +         nsversion = kwargs.pop('nsversion')
-> +--
-> +2.20.1
-> +
+>         # Gobject-introspection installs Makefile.introspection in
+>         # $(STAGING_DIR)/usr/share which is needed for autotools-based programs to
+>         # build .gir and .typelib files. Unfortuantly, gobject-introspection-1.0.pc
 > --
 > 2.20.1
 >
