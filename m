@@ -1,42 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Mar 2020 22:51:52 +0100
-Subject: [Buildroot] [PATCH v3] package/qt5xmlpatterns: enable qml module
-In-Reply-To: <20200314175608.18557-1-ps.report@gmx.net>
-References: <20200314175608.18557-1-ps.report@gmx.net>
-Message-ID: <20200315225152.2e37462d@windsurf>
+Date: Sun, 15 Mar 2020 22:55:47 +0100
+Subject: [Buildroot] [git commit] package/sysklogd: fix installation path of
+ the daemons
+Message-ID: <20200315214302.13CF3817D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 14 Mar 2020 18:56:08 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=33642d8d95925dc71e8c260aee4b6c9e3de334ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> qt5declarative:
->  - remove unneded dependency on qt5mlpatterns
-> 
-> qt5xmlpatterns:
->  - add optional dependency on qt5declarative
-> 
-> Reported-by: Nimai Mahajan <nimaim@gmail.com>
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - add Reported-by
->   - - s/=/+=/ for qt5declarative dependency
-> Changes v2 -> v3:
->   - rebase on master, adjusted to qmake-package, adjusted commit message
-> ---
->  package/qt5/qt5declarative/Config.in         | 1 -
->  package/qt5/qt5declarative/qt5declarative.mk | 1 -
->  package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk | 4 ++++
->  3 files changed, 4 insertions(+), 2 deletions(-)
+Use "--exec-prefix=/" to install syslogd and klogd at /sbin, as required
+by the init scripts. This also ensures that the BusyBox counterparts are
+not installed.
 
-Applied to master, thanks.
+Update the systemd unit files, accordingly.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sysklogd/klogd.service   | 2 +-
+ package/sysklogd/sysklogd.mk     | 1 +
+ package/sysklogd/syslogd.service | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/sysklogd/klogd.service b/package/sysklogd/klogd.service
+index c66795b449..b5dbb93d7d 100644
+--- a/package/sysklogd/klogd.service
++++ b/package/sysklogd/klogd.service
+@@ -2,7 +2,7 @@
+ Description=Kernel Log Daemon
+ 
+ [Service]
+-ExecStart=/usr/sbin/klogd -n
++ExecStart=/sbin/klogd -n
+ StandardOutput=null
+ Restart=on-failure
+ 
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index 1bd1ec51b5..7a25d0eb6f 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -10,6 +10,7 @@ SYSKLOGD_LICENSE = GPL-2.0+
+ SYSKLOGD_LICENSE_FILES = COPYING
+ # From git
+ SYSKLOGD_AUTORECONF = YES
++SYSKLOGD_CONF_OPTS = --exec-prefix=/
+ 
+ define SYSKLOGD_INSTALL_SAMPLE_CONFIG
+ 	$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
+diff --git a/package/sysklogd/syslogd.service b/package/sysklogd/syslogd.service
+index 70e4cff27e..adaac679f2 100644
+--- a/package/sysklogd/syslogd.service
++++ b/package/sysklogd/syslogd.service
+@@ -4,7 +4,7 @@ Requires=syslog.socket
+ Wants=klogd.service
+ 
+ [Service]
+-ExecStart=/usr/sbin/syslogd -m 0 -n
++ExecStart=/sbin/syslogd -m 0 -n
+ StandardOutput=null
+ Restart=on-failure
+ 
