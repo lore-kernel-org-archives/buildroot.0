@@ -1,40 +1,88 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun, 15 Mar 2020 09:41:50 -0700
-Subject: [Buildroot] [PATCH 1/1] package/gssdp: explicitly disable vapi
-Message-ID: <20200315164150.640729-1-aduskett@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 15 Mar 2020 17:37:31 +0100
+Subject: [Buildroot] [git commit] package/gobject-introspection: export
+ variables in g-ir-scanner
+Message-ID: <20200315163201.BC46F815CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=3ff152386a857de9baf55eaccb1afdb0d81484bf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, vapi support does not work with meson due to meson calling vapigen
-directly instead of the vala wrapper. As such, when building typelib files for
-gobject-introspection, vapigen fails to find the proper .gir files and fails
-to build.
+When building .gir .typelib files, the g-ir-scanner wrapper calls the host
+g-ir-scanner. g-ir-scanner calls ccompiler.py, which searches for the following
+environment variables:
+    CPP, CC, CXX, CPPFLAGS, CFLAGS, CXXFLAGS, LDFLAGS
 
-Explicitly disable vapi until a fix for vapi is made.
+These environment variables are empty by default, and as such ccompiler.py
+defaults to either using the system tools (CC, CXX, and CPP) or leaving
+the variables blank (LDFLAGS, CFLAGS, and CPPFLAGS.)
+
+For autotools packages, this issue does not occur because autotools uses
+Makefile.introspection found on the staging directory in
+usr/share/gobject-introspection-1.0/ which automatically exports the above
+variables.
+
+However, for meson, the above variables are not exported when meson calls
+g-ir-scanner to build .gir and .typelib files, which results in linking errors.
+
+Exporting these variables in the g-ir-scanner wrapper fixes these issues and
+ensures all build systems can generate .gir and .typelib files properly.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Tested-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gssdp/gssdp.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/gobject-introspection/g-ir-scanner.in          | 14 ++++++++++++++
+ package/gobject-introspection/gobject-introspection.mk |  9 +++++++++
+ 2 files changed, 23 insertions(+)
 
-diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
-index 4589517691..071ad00109 100644
---- a/package/gssdp/gssdp.mk
-+++ b/package/gssdp/gssdp.mk
-@@ -14,7 +14,8 @@ GSSDP_INSTALL_STAGING = YES
- GSSDP_DEPENDENCIES = host-pkgconf libglib2 libsoup
- GSSDP_CONF_OPTS = \
- 	-Dexamples=false \
--	-Dintrospection=false
-+	-Dintrospection=false \
-+	-Dvapi=false
+diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
+index 9f97497b7e..22df7be309 100644
+--- a/package/gobject-introspection/g-ir-scanner.in
++++ b/package/gobject-introspection/g-ir-scanner.in
+@@ -1,6 +1,20 @@
+ #!/usr/bin/env bash
  
- ifeq ($(BR2_PACKAGE_LIBGTK3),y)
- GSSDP_DEPENDENCIES += libgtk3
--- 
-2.24.1
++# These environment variables are empty by default, and as such ccompiler.py
++# defaults to either using the system tools (CC, CXX, and CPP) or leaving
++# the variables blank (LDFLAGS, CFLAGS, and CPPFLAGS.)
++# Export these variables to ensure all build systems can generate .gir and
++# .typelib files properly.
++export CPP="${CPP:-${HOST_DIR}/bin/@BASENAME_TARGET_CPP@}"
++export CC="${CC:-${HOST_DIR}/bin/@BASENAME_TARGET_CC@}"
++export CXX="${CXX:-${HOST_DIR}/bin/@BASENAME_TARGET_CXX@}"
++export CPPFLAGS="${CPPFLAGS:- at TARGET_CPPFLAGS@}"
++export CFLAGS="${CFLAGS:- at TARGET_CFLAGS@}"
++export CXXFLAGS="${CXXFLAGS:- at TARGET_CXXFLAGS@}"
++export LDFLAGS="${LDFLAGS:- at TARGET_LDFLAGS@}"
++
+ export GI_SCANNER_DISABLE_CACHE=1
++
+ ${HOST_DIR}/bin/g-ir-scanner \
+ --lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
+ --use-binary-wrapper=$(dirname $0)/g-ir-scanner-qemuwrapper \
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index 35b6669469..0a395b814c 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -105,6 +105,15 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
+ 		$(INSTALL) -D -m 755 \
+ 			$(GOBJECT_INTROSPECTION_PKGDIR)/$(w).in $(STAGING_DIR)/usr/bin/$(w)
+ 	)
++	$(SED) "s%@BASENAME_TARGET_CPP@%$(notdir $(TARGET_CPP))%g" \
++		-e "s%@BASENAME_TARGET_CC@%$(notdir $(TARGET_CC))%g" \
++		-e "s%@BASENAME_TARGET_CXX@%$(notdir $(TARGET_CXX))%g" \
++		-e "s%@TARGET_CPPFLAGS@%$(TARGET_CPPFLAGS)%g" \
++		-e "s%@TARGET_CFLAGS@%$(TARGET_CFLAGS)%g" \
++		-e "s%@TARGET_CXXFLAGS@%$(TARGET_CXXFLAGS)%g" \
++		-e "s%@TARGET_LDFLAGS@%$(TARGET_LDFLAGS)%g" \
++		$(STAGING_DIR)/usr/bin/g-ir-scanner
++
+ 	# Gobject-introspection installs Makefile.introspection in
+ 	# $(STAGING_DIR)/usr/share which is needed for autotools-based programs to
+ 	# build .gir and .typelib files. Unfortuantly, gobject-introspection-1.0.pc
