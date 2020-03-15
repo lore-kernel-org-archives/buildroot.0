@@ -1,37 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:34:49 +0100
-Subject: [Buildroot] [PATCH v1] package/gst1-validate: disable
- introspection
-In-Reply-To: <20200307095448.19707-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sat, 7 Mar 2020 10:54:48 +0100")
-References: <20200307095448.19707-1-ps.report@gmx.net>
-Message-ID: <87pnddlxdi.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Mar 2020 11:36:22 +0100
+Subject: [Buildroot] [PATCH] package/swupdate: do not store local build
+ details in swupdate config file
+In-Reply-To: <20200306103839.1880550-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Fri, 6 Mar 2020 11:38:39 +0100")
+References: <20200306103839.1880550-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87lfo1lxax.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > - disable introspection unconditionally (as already done for all
- >   other original gstreamer1 packages)
- > - use '=' instead of '+=' for the first usage of GST1_VALIDATE_CONF_OPTS
+ > The SWUPDATE_SET_BUILD_OPTIONS macro sets a number of swupdate
+ > configuration options with local build details, especially the
+ > cross-compiler path and sysroot path.
 
- > Fixes:
+ > This means that if one stores an swupdate defconfig file as part of
+ > Buildroot, generated with "make swupdate-update-defconfig", it will
+ > contain things like:
 
- >   http://autobuild.buildroot.net/results/e6e43fb85c71af9bb599ea8bbe2e805b392cf1ad
+ > CONFIG_CROSS_COMPILE="/home/thomas/projets/buildroot/output/host/bin/arm-linux-"
+ > CONFIG_SYSROOT="/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot"
 
- >     GEN      GstValidate-1.0.gir
- >   Couldn't find include 'GstPbutils-1.0.gir' (search path: '['/nvmedata/autobuild/instance-6/output-1/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '/usr/share/gir-1.0', '/usr/share/gir-1.0', '/usr/share/gir-1.0', '/usr/share/gir-1.0', '/usr/share/gir-1.0', '/nvmedata/autobuild/instance-6/output-1/host/share', 'gir-1.0', '/nvmedata/autobuild/instance-6/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
- >   make[5]: *** [Makefile:1612: GstValidate-1.0.gir] Error 1
+ > which obviously are not good, as they are specific to where the build
+ > was done.
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- > ---
- > Notes:
- >   - blind patch (as I could not reproduce the failure locally)
- >   - the autobuild failure is from next, but I believe the patch
- >     does not do any harm on master
+ > So instead this commit:
+
+ >  - Uses the CROSS_COMPILE environment variable to pass the
+ >    cross-compiler path.
+
+ >  - Drops entirely the use of CONFIG_SYSROOT, since all it does is pass
+ >    a --sysroot option to the compiler, which is not needed in the
+ >    context of Buildroot.
+
+ >  - Pass EXTRA_CFLAGS/EXTRA_LDFLAGS also through the environment.
+
+ > Thanks to that the swupdate defconfig file no longer contains any
+ > local build details, and can be re-used by different users of a given
+ > Buildroot configuration.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2019.02.x and 2019.11.x, thanks.
 
