@@ -1,54 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Mar 2020 23:27:32 +0100
-Subject: [Buildroot] [PATCH v2] package/coreutils: bump to v8.32
-In-Reply-To: <20200310145656.4000-1-joaomarcos.costa@bootlin.com>
-References: <20200310145656.4000-1-joaomarcos.costa@bootlin.com>
-Message-ID: <20200315232732.3b594ae7@windsurf.home>
+Date: Sun, 15 Mar 2020 23:28:13 +0100
+Subject: [Buildroot] [git commit] package/qt5: enable for nios2
+Message-ID: <20200315222221.3AF8F81848@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joao Marcos,
+commit: https://git.buildroot.net/buildroot/commit/?id=572e371f3c7fb37bd25f5eccab7d062d385cdf3e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for your patch. There is one small issue though, see below.
+The double-conversion support for nios2 is already enabled
+by commit [1], so drop dependency on !BR2_nios2.
 
-On Tue, 10 Mar 2020 15:56:56 +0100
-Joao Marcos Costa <joaomarcos.costa@bootlin.com> wrote:
+[1] https://git.buildroot.net/buildroot/commit/?id=e2fdb41f711db8894f9c5c83f32250728d4c3aa9
 
-> diff --git a/package/coreutils/0001-ls-restore-8.31-behavior-on-removed-directories.patch b/package/coreutils/0001-ls-restore-8.31-behavior-on-removed-directories.patch
-> new file mode 100644
-> index 0000000000..ae74641b79
-> --- /dev/null
-> +++ b/package/coreutils/0001-ls-restore-8.31-behavior-on-removed-directories.patch
-> @@ -0,0 +1,117 @@
-> +From 10fcb97bd728f09d4a027eddf8ad2900f0819b0a Mon Sep 17 00:00:00 2001
-> +From: Paul Eggert <eggert@cs.ucla.edu>
-> +Date: Thu, 5 Mar 2020 17:25:29 -0800
-> +Subject: [PATCH] ls: restore 8.31 behavior on removed directories
-> +
-> +* NEWS: Mention this.
-> +* src/ls.c: Do not include <sys/sycall.h>
-> +(print_dir): Don't worry about whether the directory is removed.
-> +* tests/ls/removed-directory.sh: Adjust to match new (i.e., old)
-> +behavior.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-We need you to add your Signed-off-by into the patch you have
-backported from upstream, here.
-
-> +---
-> + NEWS                          |  6 ++++++
-> + src/ls.c                      | 22 ----------------------
-> + tests/ls/removed-directory.sh | 10 ++--------
-> + 3 files changed, 8 insertions(+), 30 deletions(-)
-
-Could you send an updated version with this issue fixed? Thanks!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index e257b92b99..b2cbf336bd 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 
+ comment "Qt5 needs a toolchain w/ gcc >= 4.8, wchar, NPTL, C++, dynamic library"
+ 	depends on !BR2_ARM_CPU_ARMV4
+-	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
++	depends on !BR2_arc && !BR2_xtensa
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+@@ -26,7 +26,7 @@ menuconfig BR2_PACKAGE_QT5
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
+ 	# no built-in double-conversion support
+-	depends on !BR2_arc && !BR2_nios2 && !BR2_xtensa
++	depends on !BR2_arc && !BR2_xtensa
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_QT5BASE
+ 	help
