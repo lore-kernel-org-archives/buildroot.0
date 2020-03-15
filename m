@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:26:23 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libsndfile: fix
+Date: Sun, 15 Mar 2020 11:25:33 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libsndfile: fix
  CVE-2019-3832
-Message-ID: <20200315101351.4E77E84659@busybox.osuosl.org>
+Message-ID: <20200315101355.364F58465E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b121ade6b92de78596b13d8bd8b3c5fa84f835d6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d682cc1776d347f23a7610709ca63b27d02d075b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 It was discovered the fix for CVE-2018-19758 (libsndfile) was not
 complete and still allows a read beyond the limits of a buffer in
