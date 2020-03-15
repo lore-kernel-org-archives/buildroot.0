@@ -1,78 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 15 Mar 2020 11:09:49 +0100
 Subject: [Buildroot] [git commit branch/2019.11.x] package/libvncserver: fix
- pkg-config file
-Message-ID: <20200315095835.6D2058263F@busybox.osuosl.org>
+ CVE-2019-15681
+Message-ID: <20200315095835.82ED484001@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d87f4ad207da984f7ff3e25c966be991afb1967d
+commit: https://git.buildroot.net/buildroot/commit/?id=5439c044f6120c328e391ead5514a47f60d6a6c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-This will fix a build failure with vlc and without zlib
-
-Fixes:
- - http://autobuild.buildroot.org/results/7d5f5980f1ba248a1d95b380d422eaeeaca265f8
+LibVNC commit before d01e1bb4246323ba6fcee3b82ef1faa9b1dac82a contains a
+memory leak (CWE-655) in VNC server code, which allow an attacker to
+read stack memory and can be abused for information disclosure. Combined
+with another vulnerability, it can be used to leak stack memory and
+bypass ASLR. This attack appear to be exploitable via network
+connectivity. These vulnerabilities have been fixed in commit
+d01e1bb4246323ba6fcee3b82ef1faa9b1dac82a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0bb5d1ceca64123b3b8473fcd375c759ccb735ac)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 05bf029c112f42128286b4a07051f6af3cc602b8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...vnc-client-server-.pc.cmakein-remove-zlib.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ ...ver-don-t-leak-stack-memory-to-the-remote.patch | 26 ++++++++++++++++++++++
+ package/libvncserver/libvncserver.mk               |  3 +++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/package/libvncserver/0002-libvnc-client-server-.pc.cmakein-remove-zlib.patch b/package/libvncserver/0002-libvnc-client-server-.pc.cmakein-remove-zlib.patch
+diff --git a/package/libvncserver/0004-rfbserver-don-t-leak-stack-memory-to-the-remote.patch b/package/libvncserver/0004-rfbserver-don-t-leak-stack-memory-to-the-remote.patch
 new file mode 100644
-index 0000000000..7941a98882
+index 0000000000..056b940cdf
 --- /dev/null
-+++ b/package/libvncserver/0002-libvnc-client-server-.pc.cmakein-remove-zlib.patch
-@@ -0,0 +1,45 @@
-+From 5abd95b65fe5ec24749164338a9718ecce19e240 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 28 Feb 2020 10:29:58 +0100
-+Subject: [PATCH] libvnc{client,server}.pc.cmakein: remove zlib
++++ b/package/libvncserver/0004-rfbserver-don-t-leak-stack-memory-to-the-remote.patch
+@@ -0,0 +1,26 @@
++From d01e1bb4246323ba6fcee3b82ef1faa9b1dac82a Mon Sep 17 00:00:00 2001
++From: Christian Beier <dontmind@freeshell.org>
++Date: Mon, 19 Aug 2019 22:32:25 +0200
++Subject: [PATCH] rfbserver: don't leak stack memory to the remote
 +
-+Remove zlib from Requires.private as libvnc can be built without zlib
-+thanks to WITH_LIB, zlib will be added to Libs.private thanks to
-+PRIVATE_LIBS
-+
++Thanks go to Pavel Cheremushkin of Kaspersky for reporting.
++[Retrieved from:
++https://github.com/LibVNC/libvncserver/commit/d01e1bb4246323ba6fcee3b82ef1faa9b1dac82a]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/LibVNC/libvncserver/pull/377]
 +---
-+ libvncclient.pc.cmakein | 2 +-
-+ libvncserver.pc.cmakein | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
++ libvncserver/rfbserver.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/libvncclient.pc.cmakein b/libvncclient.pc.cmakein
-+index 336e73f..ceeda39 100644
-+--- a/libvncclient.pc.cmakein
-++++ b/libvncclient.pc.cmakein
-+@@ -7,7 +7,7 @@ Name: LibVNCClient
-+ Description: A library for easy implementation of a VNC client.
-+ Version: @LibVNCServer_VERSION@
-+ Requires:
-+-Requires.private: zlib
-++Requires.private:
-+ Libs: -L${libdir} -lvncclient
-+ Libs.private: @PRIVATE_LIBS@
-+ Cflags: -I${includedir}
-+diff --git a/libvncserver.pc.cmakein b/libvncserver.pc.cmakein
-+index dfcec9d..33ec668 100644
-+--- a/libvncserver.pc.cmakein
-++++ b/libvncserver.pc.cmakein
-+@@ -7,7 +7,7 @@ Name: LibVNCServer
-+ Description: A library for easy implementation of a VNC server.
-+ Version: @LibVNCServer_VERSION@
-+ Requires:
-+-Requires.private: zlib
-++Requires.private:
-+ Libs: -L${libdir} -lvncserver
-+ Libs.private: @PRIVATE_LIBS@
-+ Cflags: -I${includedir}
-+-- 
-+2.25.0
++diff --git a/libvncserver/rfbserver.c b/libvncserver/rfbserver.c
++index 3bacc891..310e5487 100644
++--- a/libvncserver/rfbserver.c
+++++ b/libvncserver/rfbserver.c
++@@ -3724,6 +3724,8 @@ rfbSendServerCutText(rfbScreenInfoPtr rfbScreen,char *str, int len)
++     rfbServerCutTextMsg sct;
++     rfbClientIteratorPtr iterator;
++ 
+++    memset((char *)&sct, 0, sizeof(sct));
+++
++     iterator = rfbGetClientIterator(rfbScreen);
++     while ((cl = rfbClientIteratorNext(iterator)) != NULL) {
++         sct.type = rfbServerCutText;
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+index 79db2dad83..5b8648fa6d 100644
+--- a/package/libvncserver/libvncserver.mk
++++ b/package/libvncserver/libvncserver.mk
+@@ -16,6 +16,9 @@ LIBVNCSERVER_CONF_OPTS = -DWITH_LZO=ON
+ # 0003-Limit-lenght-to-INT_MAX-bytes-in-rfbProcessFileTransferReadBuffer.patch
+ LIBVNCSERVER_IGNORE_CVES += CVE-2018-20750
+ 
++# 0004-rfbserver-don-t-leak-stack-memory-to-the-remote.patch
++LIBVNCSERVER_IGNORE_CVES += CVE-2019-15681
 +
+ # only used for examples
+ LIBVNCSERVER_CONF_OPTS += \
+ 	-DWITH_FFMPEG=OFF \
