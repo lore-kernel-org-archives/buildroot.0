@@ -1,72 +1,62 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 15 Mar 2020 11:46:26 -0700
-Subject: [Buildroot] [PATCH 4/5] package/gupnp-dlna: add optional
- dependency for gobject-introspection
-In-Reply-To: <CAPi7W83qicTYKKCZ0tZe0h-6pH8cnxTUoKKOwNjwfRzx6zwXsQ@mail.gmail.com>
-References: <20200315172459.881615-1-aduskett@gmail.com>
- <20200315172459.881615-4-aduskett@gmail.com>
- <CAPi7W83qicTYKKCZ0tZe0h-6pH8cnxTUoKKOwNjwfRzx6zwXsQ@mail.gmail.com>
-Message-ID: <CAFSsvmpO-ZYPbSmUt_zNOAY97FOwnrT+_987xc6NfYUe7-Ro7w@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 15 Mar 2020 20:25:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/linphone: fix powerpc build
+Message-ID: <20200315192529.151801-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice;
+Fixes:
+ - http://autobuild.buildroot.org/results/d90bca02c2771df8dfbf39892d529fb5f9069656
 
-That's quite odd! I must have had gstreamer1 built when I tested this.
-I will issue a fix shortly.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...re-paths-paths.cpp-fix-powerpc-build.patch | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/linphone/0001-src-core-paths-paths.cpp-fix-powerpc-build.patch
 
-On Sun, Mar 15, 2020 at 10:38 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Dear Adam,
->
-> Le dim. 15 mars 2020 ? 18:25, <aduskett@gmail.com> a ?crit :
-> >
-> > From: Adam Duskett <Aduskett@gmail.com>
-> >
-> > If gobject-introspection is selected, explicitly set --enable-introspection in
-> > the configure options and add a dependency for gobject-introspection.
-> >
-> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> > ---
-> >  package/gupnp-dlna/gupnp-dlna.mk | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/package/gupnp-dlna/gupnp-dlna.mk b/package/gupnp-dlna/gupnp-dlna.mk
-> > index 85d30b7cd2..6ce20c15fd 100644
-> > --- a/package/gupnp-dlna/gupnp-dlna.mk
-> > +++ b/package/gupnp-dlna/gupnp-dlna.mk
-> > @@ -16,9 +16,15 @@ GUPNP_DLNA_INSTALL_STAGING = YES
-> >  GUPNP_DLNA_DEPENDENCIES = host-pkgconf libglib2 libxml2
-> >
-> >  GUPNP_DLNA_CONF_OPTS = \
-> > -       --disable-introspection \
-> >         --disable-legacy-gstreamer-metadata-backend
-> >
-> > +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-> > +GUPNP_DLNA_CONF_OPTS += --enable-introspection
-> > +GUPNP_DLNA_DEPENDENCIES += gobject-introspection
-> > +else
-> > +GUPNP_DLNA_CONF_OPTS += --disable-introspection
-> > +endif
-> I tried to enable introspection on gupnp-dlna and it fails due to
-> missing Gst-1.0.gir which is provided by gstreamer1 under the
-> following condition:
-> build_gir = gir.found() and not meson.is_cross_build()
->
-> So, before enabling introspection on gupnp-dlna, gstreamer1's
-> meson.build will have to be patched .
-> I tried to do that but I got a build failure.
-> > +
-> >  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
-> >  GUPNP_DLNA_CONF_OPTS += --enable-gstreamer-metadata-backend
-> >  GUPNP_DLNA_DEPENDENCIES += gstreamer1 gst1-plugins-base
-> > --
-> > 2.24.1
-> >
-> Best Regards,
->
-> Fabrice
+diff --git a/package/linphone/0001-src-core-paths-paths.cpp-fix-powerpc-build.patch b/package/linphone/0001-src-core-paths-paths.cpp-fix-powerpc-build.patch
+new file mode 100644
+index 0000000000..1655fa59a1
+--- /dev/null
++++ b/package/linphone/0001-src-core-paths-paths.cpp-fix-powerpc-build.patch
+@@ -0,0 +1,35 @@
++From d5d528e7562f358b9564e64cea0678020c51479a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 15 Mar 2020 18:56:19 +0100
++Subject: [PATCH] src/core/paths/paths.cpp: fix powerpc build
++
++Fix the following build failure on powerpc:
++
++/home/test/autobuild/run/instance-2/output-1/build/linphone-4.3.1/src/core/paths/paths.cpp:32:3: error: #error "Unsupported system."
++  #error "Unsupported system."
++   ^~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/d90bca02c2771df8dfbf39892d529fb5f9069656
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/core/paths/paths.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/core/paths/paths.cpp b/src/core/paths/paths.cpp
++index 0442282fe..2c6508a51 100644
++--- a/src/core/paths/paths.cpp
+++++ b/src/core/paths/paths.cpp
++@@ -26,7 +26,7 @@
++ 	#include "paths-android.h"
++ #elif defined(_WIN32)
++ 	#include "paths-windows.h"
++-#elif defined(__linux)
+++#elif defined(__linux) || defined(__linux__)
++ 	#include "paths-linux.h"
++ #else
++ 	#error "Unsupported system."
++-- 
++2.25.1
++
+-- 
+2.25.1
