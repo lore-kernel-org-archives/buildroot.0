@@ -1,42 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:29:35 +0100
-Subject: [Buildroot] [PATCH/next v1] package/bcm2835: bump version to
- 1.62
-In-Reply-To: <20200305234044.329c43ac@windsurf> (Thomas Petazzoni's message of
- "Thu, 5 Mar 2020 23:40:44 +0100")
-References: <20200302104047.23560-1-ps.report@gmx.net>
- <20200305234044.329c43ac@windsurf>
-Message-ID: <877dzlnc6o.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Mar 2020 11:29:02 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/bcm2835: bump
+ version to 1.62
+Message-ID: <20200315101649.0484B846F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0be8f7ea46c7c5a2e7dc6b582e2fac041a1633b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
- > On Mon,  2 Mar 2020 11:40:47 +0100
- > Peter Seiderer <ps.report@gmx.net> wrote:
+Changelog (since 1.60):
+  - 1.61 2020-01-11 Fixed errors in the documentation for bcm2835_spi_write.
+    Fixes issue seen on Raspberry Pi 4 boards where 64-bit off_t is used by
+    default via -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64. The offset was
+    being incorrectly converted, this way is clearer and fixes the problem.
+    Contributed by Jonathan Perkin.
+  - 1.62 2020-01-12 Fixed a problem that could cause compile failures with
+    size_t and off_t
 
- >> Changelog (since 1.60):
- >> - 1.61 2020-01-11 Fixed errors in the documentation for bcm2835_spi_write.
- >> Fixes issue seen on Raspberry Pi 4 boards where 64-bit off_t is used by
- >> default via -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64. The offset was
- >> being incorrectly converted, this way is clearer and fixes the problem.
- >> Contributed by Jonathan Perkin.
- >> - 1.62 2020-01-12 Fixed a problem that could cause compile failures with
- >> size_t and off_t
- >> 
- >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- >> ---
- >> package/bcm2835/bcm2835.hash | 4 ++--
- >> package/bcm2835/bcm2835.mk   | 2 +-
- >> 2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3cbf70366f5d1faea694626df7bbb018bb42d36a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bcm2835/bcm2835.hash | 4 ++--
+ package/bcm2835/bcm2835.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Since the number of changes is really small, and limited to bug fixes,
- > I've applied to master.
-
-Committed to 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/bcm2835/bcm2835.hash b/package/bcm2835/bcm2835.hash
+index 3926d63bb0..025ef8be40 100644
+--- a/package/bcm2835/bcm2835.hash
++++ b/package/bcm2835/bcm2835.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 333e7ceee895e910c29098074773ee86bcab4a82c2af0cf083c4533767e52d27 bcm2835-1.60.tar.gz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
++sha256  7beacda787d6073d0982bfe576c318bb2730700f7d0f7950c6e763dfcb06e0e5  bcm2835-1.62.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
+index 82238ee528..2435a42c95 100644
+--- a/package/bcm2835/bcm2835.mk
++++ b/package/bcm2835/bcm2835.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BCM2835_VERSION = 1.60
++BCM2835_VERSION = 1.62
+ BCM2835_SITE = http://www.airspayce.com/mikem/bcm2835
+ BCM2835_LICENSE = GPL-2.0
+ BCM2835_LICENSE_FILES = COPYING
