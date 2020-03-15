@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:10:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libvncserver: fix jpeg build
- without png or zlib
-In-Reply-To: <20200308100214.2461057-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 8 Mar 2020 11:02:14 +0100")
-References: <20200308100214.2461057-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r1xund2y.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Mar 2020 11:10:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libvncserver: fix pkg-config
+ file
+In-Reply-To: <20200228121717.4159321-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 28 Feb 2020 13:17:17 +0100")
+References: <20200228121717.4159321-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mu8ind2p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +14,9 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
+ > This will fix a build failure with vlc and without zlib
  > Fixes:
- >  - http://autobuild.buildroot.org/results/bcc701055dd5876005fa6f78f38500399394cd75
+ >  - http://autobuild.buildroot.org/results/7d5f5980f1ba248a1d95b380d422eaeeaca265f8
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
