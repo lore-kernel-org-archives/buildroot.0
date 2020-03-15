@@ -1,51 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Mar 2020 16:06:25 +0100
-Subject: [Buildroot] [git commit] package/kodi-visualisation-goom: bump
- version to 2.2.1-Leia
-Message-ID: <20200315145337.B82F688090@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 16:08:15 +0100
+Subject: [Buildroot] [PATCH 1/2] package/python: add optional support
+ for lib2to3
+In-Reply-To: <20200222185500.221018-1-bernd.kuhls@t-online.de>
+References: <20200222185500.221018-1-bernd.kuhls@t-online.de>
+Message-ID: <20200315160815.7d72f067@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6420dc3c54e999c3aa8f0d1cbfc12ed209e5473b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 22 Feb 2020 19:54:59 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Change license file to debian/copyright, since src/Main.cpp changed
-between 2.1.0 and 2.2.1.
+> Kodi is in transition to support python3 instead of python2:
+> https://kodi.wiki/view/General_information_about_migration_to_Python_3
+> 
+> "For Kodi 18 (Leia), only addons that are compatible with both Python 2
+>  and 3 will be accepted to the official addon repository."
+> 
+> Some of these addons depend on the Kodi addon script.module.future to
+> provide support for both python versions.
+> 
+> The script.module.future addon contains python-future:
+> https://kodi.wiki/view/General_information_about_migration_to_Python_3#Future
+> which in turn needs lib2to3 to be included in the target build of
+> python2: http://python-future.org/automatic_conversion.html
+> 
+> Kodi addons depending on the script.module.future addon are crashing on
+> buildroot due to lib2to3 missing in the build.
+> 
+> LibreELEC added lib2to3 to python2 to fix the problem:
+> https://forum.libreelec.tv/thread/21239-lib2to3-pgen2-parse-missing/
+> https://github.com/LibreELEC/LibreELEC.tv/pull/4147
+> 
+> This patch provides the Config.in option to be used by Kodi.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/python/Config.in | 5 +++++
+>  package/python/python.mk | 7 ++++++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kodi-visualisation-goom/kodi-visualisation-goom.hash | 4 ++--
- package/kodi-visualisation-goom/kodi-visualisation-goom.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Both patches applied to master. Thanks!
 
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-index 4439240d7b..a6f4e41796 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 49f193d32a14b26a39d6572fcbdd8b69a9e559f453bca017086336e985bf6b2c  kodi-visualisation-goom-2.1.0-Leia.tar.gz
--sha256 e5776a7262955801be2e19a84024cf4d0589253c8d77dd09a1db01bf5ed07683  src/Main.cpp
-+sha256 a02dfd844cfd5ff24f735e614a2a4727771112ce15642957a2511061f724392a  kodi-visualisation-goom-2.2.1-Leia.tar.gz
-+sha256 a6b36f495079206146ae0b11624a8db49a538f421ffe1341f8651c9e6b06f0b0  debian/copyright
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-index 0184d8474c..29cd24df69 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_GOOM_VERSION = 2.1.0-Leia
-+KODI_VISUALISATION_GOOM_VERSION = 2.2.1-Leia
- KODI_VISUALISATION_GOOM_SITE = $(call github,xbmc,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
- KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
--KODI_VISUALISATION_GOOM_LICENSE_FILES = src/Main.cpp
-+KODI_VISUALISATION_GOOM_LICENSE_FILES = debian/copyright
- 
- KODI_VISUALISATION_GOOM_DEPENDENCIES = glm kodi
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
