@@ -1,102 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 15 Mar 2020 21:38:55 +0100
-Subject: [Buildroot] [git commit] package/perl-mojolicious-plugin-i18n: new
+Subject: [Buildroot] [git commit] package/perl-locale-maketext-lexicon: new
  package
-Message-ID: <20200315203842.0667C81461@busybox.osuosl.org>
+Message-ID: <20200315203841.B515B8157C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d8fd525f6d2afd29165331c0042148436b65adb
+commit: https://git.buildroot.net/buildroot/commit/?id=3ee07cc901f7c02abfcdf5c80af20eb9cde3f33e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added via utils/scancpan, adding README.pod as license file and updating
-license to Artistic-2.0.
+This is a dependency of perl-i18n added in a subsequent patch.
 
-Note that the license declared in META.{json,yml} ('perl') would mean either
-Artistic or GPL-1.0, while the README.pod file only talks about
-Artistic-2.0. Assume the author means the latter one.
+Added via utils/scancpan, without changes.
 
 Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                                |  1 +
- package/Config.in                                         |  1 +
- package/perl-mojolicious-plugin-i18n/Config.in            |  7 +++++++
- .../perl-mojolicious-plugin-i18n.hash                     |  6 ++++++
- .../perl-mojolicious-plugin-i18n.mk                       | 15 +++++++++++++++
- 5 files changed, 30 insertions(+)
+ DEVELOPERS                                                 |  1 +
+ package/Config.in                                          |  1 +
+ package/perl-locale-maketext-lexicon/Config.in             |  6 ++++++
+ .../perl-locale-maketext-lexicon.hash                      |  6 ++++++
+ .../perl-locale-maketext-lexicon.mk                        | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index b83148e527..34078ff4f4 100644
+index 5394150e5a..593e3c88f1 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2407,6 +2407,7 @@ F:	package/perl-mime-base64-urlsafe/
+@@ -2400,6 +2400,7 @@ F:	package/perl-convert-asn1/
+ F:	package/perl-crypt-blowfish/
+ F:	package/perl-crypt-cbc/
+ F:	package/perl-crypt-openssl-aes/
++F:	package/perl-locale-maketext-lexicon/
+ F:	package/perl-math-prime-util/
+ F:	package/perl-mime-base64-urlsafe/
  F:	package/perl-mojolicious-plugin-authentication/
- F:	package/perl-mojolicious-plugin-authorization/
- F:	package/perl-mojolicious-plugin-cspheader/
-+F:	package/perl-mojolicious-plugin-i18n/
- F:	package/perl-net-snmp/
- F:	package/perl-net-ssh2/
- F:	package/perl-net-telnet/
 diff --git a/package/Config.in b/package/Config.in
-index 4b36386e34..37ef5dd710 100644
+index 146fc1bbc3..09bdc7ed81 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -781,6 +781,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mojolicious-plugin-authentication/Config.in"
- 	source "package/perl-mojolicious-plugin-authorization/Config.in"
- 	source "package/perl-mojolicious-plugin-cspheader/Config.in"
-+	source "package/perl-mojolicious-plugin-i18n/Config.in"
- 	source "package/perl-moo/Config.in"
- 	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-http/Config.in"
-diff --git a/package/perl-mojolicious-plugin-i18n/Config.in b/package/perl-mojolicious-plugin-i18n/Config.in
+@@ -767,6 +767,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-json-maybexs/Config.in"
+ 	source "package/perl-json-tiny/Config.in"
+ 	source "package/perl-libwww-perl/Config.in"
++	source "package/perl-locale-maketext-lexicon/Config.in"
+ 	source "package/perl-lwp-mediatypes/Config.in"
+ 	source "package/perl-mail-dkim/Config.in"
+ 	source "package/perl-mailtools/Config.in"
+diff --git a/package/perl-locale-maketext-lexicon/Config.in b/package/perl-locale-maketext-lexicon/Config.in
 new file mode 100644
-index 0000000000..cbe11451c5
+index 0000000000..4aed7b63b5
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-i18n/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_I18N
-+	bool "perl-mojolicious-plugin-i18n"
-+	select BR2_PACKAGE_PERL_MOJOLICIOUS # runtime
++++ b/package/perl-locale-maketext-lexicon/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_LOCALE_MAKETEXT_LEXICON
++	bool "perl-locale-maketext-lexicon"
 +	help
-+	  Internationalization Plugin for Mojolicious.
++	  Use other catalog formats in Maketext.
 +
-+	  https://metacpan.org/release/Mojolicious-Plugin-I18N
-diff --git a/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash
++	  http://search.cpan.org/dist/Locale-Maketext-Lexicon
+diff --git a/package/perl-locale-maketext-lexicon/perl-locale-maketext-lexicon.hash b/package/perl-locale-maketext-lexicon/perl-locale-maketext-lexicon.hash
 new file mode 100644
-index 0000000000..ed4bc20748
+index 0000000000..683e8c7d16
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.hash
++++ b/package/perl-locale-maketext-lexicon/perl-locale-maketext-lexicon.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    4002f7a7da4c90973ad6eedfb0fcfa16 Mojolicious-Plugin-I18N-1.6.tar.gz
-+sha256 32fb5ef8037d954b7ecebef5c1b2b24b420abd829702312f4ad42794f52b514d Mojolicious-Plugin-I18N-1.6.tar.gz
++md5    51acf0cb00cc01a2c8f560d74dd6c593 Locale-Maketext-Lexicon-1.00.tar.gz
++sha256 b73f6b04a58d3f0e38ebf2115a4c1532f1a4eef6fac5c6a2a449e4e14c1ddc7c Locale-Maketext-Lexicon-1.00.tar.gz
 +
-+# manually computed
-+sha256 82b05028033057b388b0040a3b5590a1c51168fe3b9899bffdb5ef7962c4eb47 README.pod
-diff --git a/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk
++# computed by scancpan
++sha256 af693c8c99bee68656f09328c97d50b24eb742ae4473f57cdafaa90691807fbe LICENSE
+diff --git a/package/perl-locale-maketext-lexicon/perl-locale-maketext-lexicon.mk b/package/perl-locale-maketext-lexicon/perl-locale-maketext-lexicon.mk
 new file mode 100644
-index 0000000000..11d41ac55c
+index 0000000000..64b37f9206
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-i18n/perl-mojolicious-plugin-i18n.mk
-@@ -0,0 +1,15 @@
++++ b/package/perl-locale-maketext-lexicon/perl-locale-maketext-lexicon.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-mojolicious-plugin-i18n
++# perl-locale-maketext-lexicon
 +#
 +################################################################################
 +
-+PERL_MOJOLICIOUS_PLUGIN_I18N_VERSION = 1.6
-+PERL_MOJOLICIOUS_PLUGIN_I18N_SOURCE = Mojolicious-Plugin-I18N-$(PERL_MOJOLICIOUS_PLUGIN_I18N_VERSION).tar.gz
-+PERL_MOJOLICIOUS_PLUGIN_I18N_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHARIFULN
-+PERL_MOJOLICIOUS_PLUGIN_I18N_DEPENDENCIES = host-perl-module-build
-+PERL_MOJOLICIOUS_PLUGIN_I18N_LICENSE = Artistic-2.0
-+PERL_MOJOLICIOUS_PLUGIN_I18N_LICENSE_FILES = README.pod
-+PERL_MOJOLICIOUS_PLUGIN_I18N_DISTNAME = Mojolicious-Plugin-I18N
++PERL_LOCALE_MAKETEXT_LEXICON_VERSION = 1.00
++PERL_LOCALE_MAKETEXT_LEXICON_SOURCE = Locale-Maketext-Lexicon-$(PERL_LOCALE_MAKETEXT_LEXICON_VERSION).tar.gz
++PERL_LOCALE_MAKETEXT_LEXICON_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DR/DRTECH
++PERL_LOCALE_MAKETEXT_LEXICON_LICENSE = MIT
++PERL_LOCALE_MAKETEXT_LEXICON_LICENSE_FILES = LICENSE
++PERL_LOCALE_MAKETEXT_LEXICON_DISTNAME = Locale-Maketext-Lexicon
 +
 +$(eval $(perl-package))
