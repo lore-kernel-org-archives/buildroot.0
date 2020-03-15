@@ -1,40 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:27:42 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/libevdev: add
- host-python dependency
-Message-ID: <20200315101539.C8854846E8@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 11:29:35 +0100
+Subject: [Buildroot] [PATCH/next v1] package/bcm2835: bump version to
+ 1.62
+In-Reply-To: <20200305234044.329c43ac@windsurf> (Thomas Petazzoni's message of
+ "Thu, 5 Mar 2020 23:40:44 +0100")
+References: <20200302104047.23560-1-ps.report@gmx.net>
+ <20200305234044.329c43ac@windsurf>
+Message-ID: <877dzlnc6o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e285152cc39c5aedbc437224ecc322bebd691b8c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Fixes:
+ > On Mon,  2 Mar 2020 11:40:47 +0100
+ > Peter Seiderer <ps.report@gmx.net> wrote:
 
-  checking for a Python interpreter with version >= 2.6... none
-  configure: error: no suitable Python interpreter found
+ >> Changelog (since 1.60):
+ >> - 1.61 2020-01-11 Fixed errors in the documentation for bcm2835_spi_write.
+ >> Fixes issue seen on Raspberry Pi 4 boards where 64-bit off_t is used by
+ >> default via -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64. The offset was
+ >> being incorrectly converted, this way is clearer and fixes the problem.
+ >> Contributed by Jonathan Perkin.
+ >> - 1.62 2020-01-12 Fixed a problem that could cause compile failures with
+ >> size_t and off_t
+ >> 
+ >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ >> ---
+ >> package/bcm2835/bcm2835.hash | 4 ++--
+ >> package/bcm2835/bcm2835.mk   | 2 +-
+ >> 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 93490c25836c18dc475e4144de3282f14c4d6570)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libevdev/libevdev.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Since the number of changes is really small, and limited to bug fixes,
+ > I've applied to master.
 
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index 0b5a526bab..8b243be74e 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -14,7 +14,7 @@ LIBEVDEV_LICENSE_FILES = COPYING
- LIBEVDEV_AUTORECONF = YES
- 
- # Uses PKG_CHECK_MODULES() in configure.ac
--LIBEVDEV_DEPENDENCIES = host-pkgconf
-+LIBEVDEV_DEPENDENCIES = host-pkgconf host-python
- 
- LIBEVDEV_INSTALL_STAGING = YES
- 
+Committed to 2019.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
