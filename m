@@ -1,25 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Mar 2020 23:11:54 +0100
-Subject: [Buildroot] [PATCH v2 7/7] DEVELOPERS: update my entry list
-In-Reply-To: <20200203193155.12657-7-tuzakli.refik@gmail.com>
-References: <20200203193155.12657-1-tuzakli.refik@gmail.com>
- <20200203193155.12657-7-tuzakli.refik@gmail.com>
-Message-ID: <20200315231154.4b1f8c19@windsurf.home>
+Date: Sun, 15 Mar 2020 23:12:54 +0100
+Subject: [Buildroot] [PATCH v5 1/2] package/netdata: new package
+In-Reply-To: <20200312160040.3416161-1-m.niestroj@grinn-global.com>
+References: <20200312160040.3416161-1-m.niestroj@grinn-global.com>
+Message-ID: <20200315231254.524e5e39@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  3 Feb 2020 22:31:55 +0300
-Refik Tuzakli <tuzakli.refik@gmail.com> wrote:
+Hello Marcin,
 
-> Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
+On Thu, 12 Mar 2020 17:00:39 +0100
+Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
+
+> Always provide --disable-dbengine configuration option, because we do
+> not support libjudy dependency that is required otherwise.
+> 
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
+> changes v4 -> v5:
+>  - use 1.20.0 instead of 1.19.0 version
+>  - libuv is hard requirement now, so it was added to dependencies
+>  - zlib is hard requirement as well, because it is needed to properly
+>    compile project (missing uLong typedef otherwise)
+>  - patch solving race condition during installation has been dropped,
+>    because it is already part of 1.20.0
 
-Applied to master with a slightly edited commit title. Thanks!
+Following the feedback from Carlos on the init script, I've marked this
+series as Changes Requested. Could you respin a new version, I think
+it's very close from being merged.
+
+Thanks!
 
 Thomas
 -- 
