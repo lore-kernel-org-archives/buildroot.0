@@ -1,52 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Mar 2020 16:07:52 +0100
-Subject: [Buildroot] [git commit] package/kodi: needs python 2to3 library
-Message-ID: <20200315145537.479248027C@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 16:09:38 +0100
+Subject: [Buildroot] [git commit] package/perl-date-manip: bump to version
+ 6.81
+Message-ID: <20200315150141.7DB9E88145@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b5d07b7d07cbde919d75002643b5436e022d3f0
+commit: https://git.buildroot.net/buildroot/commit/?id=d92df638be08d3373f138755b6d1e2dbbd4a1b72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Kodi is in transition to support python3 instead of python2:
-https://kodi.wiki/view/General_information_about_migration_to_Python_3
-
-"For Kodi 18 (Leia), only addons that are compatible with both Python 2
- and 3 will be accepted to the official addon repository."
-
-Some of these addons depend on the Kodi addon script.module.future to
-provide support for both python versions.
-
-The script.module.future addon contains python-future:
-https://kodi.wiki/view/General_information_about_migration_to_Python_3#Future
-which in turn needs lib2to3 to be included in the target build of
-python2: http://python-future.org/automatic_conversion.html
-
-Kodi addons depending on the script.module.future addon are crashing on
-buildroot due to lib2to3 missing in the build.
-
-LibreELEC added lib2to3 to python2 to fix the problem:
-https://forum.libreelec.tv/thread/21239-lib2to3-pgen2-parse-missing/
-https://github.com/LibreELEC/LibreELEC.tv/pull/4147
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/perl-date-manip/perl-date-manip.hash | 4 ++--
+ package/perl-date-manip/perl-date-manip.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index fd08f3de61..81bd3874f0 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -92,6 +92,7 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_PCRE_UCP
-+	select BR2_PACKAGE_PYTHON_2TO3
- 	select BR2_PACKAGE_PYTHON_BSDDB
- 	select BR2_PACKAGE_PYTHON_CURSES
- 	select BR2_PACKAGE_PYTHON_PYEXPAT
+diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
+index bb2e6efe76..a35b514563 100644
+--- a/package/perl-date-manip/perl-date-manip.hash
++++ b/package/perl-date-manip/perl-date-manip.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    a3b2c1129f02cc5ce5de59d506afab1a Date-Manip-6.79.tar.gz
+-sha256 71a8c42ce4edbd46a3ca2a17a7218ceed958cd7ad0dfeb79389f23d0f466943a Date-Manip-6.79.tar.gz
++md5    a9ff96f05675ac4cb7f19c4b03a7363b Date-Manip-6.81.tar.gz
++sha256 044c319e2213dad73abd32b7f731bf4593d1e9fa96024bdc6b6475a2e768949b Date-Manip-6.81.tar.gz
+ 
+ # computed by scancpan
+ sha256 8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d LICENSE
+diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
+index d930ee8c9f..20dc722768 100644
+--- a/package/perl-date-manip/perl-date-manip.mk
++++ b/package/perl-date-manip/perl-date-manip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_DATE_MANIP_VERSION = 6.79
++PERL_DATE_MANIP_VERSION = 6.81
+ PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
+ PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
+ PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
