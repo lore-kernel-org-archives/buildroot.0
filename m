@@ -1,25 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:14:22 +0100
-Subject: [Buildroot] [PATCH 4/5] package/patch: fix CVE-2019-13636
-In-Reply-To: <20200303194703.242362-4-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 3 Mar 2020 20:47:02 +0100")
-References: <20200303194703.242362-1-fontaine.fabrice@gmail.com>
- <20200303194703.242362-4-fontaine.fabrice@gmail.com>
-Message-ID: <87eetuncw1.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Mar 2020 11:13:43 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/patch: fix
+ CVE-2018-20969
+Message-ID: <20200315100136.933D28427A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=121b02874fadec0f0e1089727e727339f8b2e79b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > In GNU patch through 2.7.6, the following of symlinks is mishandled in
- > certain cases other than input files. This affects inp.c and util.c.
+do_ed_script in pch.c in GNU patch through 2.7.6 does not block strings
+beginning with a ! character. NOTE: this is the same commit as for
+CVE-2019-13638, but the ! syntax is specific to ed, and is unrelated to
+a shell metacharacter.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0835550ce984b1755c1e8540bbbeb24844392c5d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ke-ed-directly-instead-of-using-the-shell.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-Committed to 2019.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/patch/0004-Invoke-ed-directly-instead-of-using-the-shell.patch b/package/patch/0004-Invoke-ed-directly-instead-of-using-the-shell.patch
+new file mode 100644
+index 0000000000..ae64d58b93
+--- /dev/null
++++ b/package/patch/0004-Invoke-ed-directly-instead-of-using-the-shell.patch
+@@ -0,0 +1,41 @@
++From 3fcd042d26d70856e826a42b5f93dc4854d80bf0 Mon Sep 17 00:00:00 2001
++From: Andreas Gruenbacher <agruen@gnu.org>
++Date: Fri, 6 Apr 2018 19:36:15 +0200
++Subject: Invoke ed directly instead of using the shell
++
++* src/pch.c (do_ed_script): Invoke ed directly instead of using a shell
++command to avoid quoting vulnerabilities.
++[Retrieved from:
++https://git.savannah.gnu.org/cgit/patch.git/commit/?id=3fcd042d26d70856e826a42b5f93dc4854d80bf0]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/pch.c | 6 ++----
++ 1 file changed, 2 insertions(+), 4 deletions(-)
++
++diff --git a/src/pch.c b/src/pch.c
++index 4fd5a05..16e001a 100644
++--- a/src/pch.c
+++++ b/src/pch.c
++@@ -2459,9 +2459,6 @@ do_ed_script (char const *inname, char const *outname,
++ 	    *outname_needs_removal = true;
++ 	    copy_file (inname, outname, 0, exclusive, instat.st_mode, true);
++ 	  }
++-	sprintf (buf, "%s %s%s", editor_program,
++-		 verbosity == VERBOSE ? "" : "- ",
++-		 outname);
++ 	fflush (stdout);
++ 
++ 	pid = fork();
++@@ -2470,7 +2467,8 @@ do_ed_script (char const *inname, char const *outname,
++ 	else if (pid == 0)
++ 	  {
++ 	    dup2 (tmpfd, 0);
++-	    execl ("/bin/sh", "sh", "-c", buf, (char *) 0);
+++	    assert (outname[0] != '!' && outname[0] != '-');
+++	    execlp (editor_program, editor_program, "-", outname, (char  *) NULL);
++ 	    _exit (2);
++ 	  }
++ 	else
++-- 
++cgit v1.2.1
++
