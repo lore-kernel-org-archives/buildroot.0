@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun, 15 Mar 2020 10:24:57 -0700
-Subject: [Buildroot] [PATCH 4/5] package/gupnp-dlna: add optional dependency
+Date: Sun, 15 Mar 2020 10:24:58 -0700
+Subject: [Buildroot] [PATCH 5/5] package/gupnp-av: add optional dependency
  for gobject-introspection
 In-Reply-To: <20200315172459.881615-1-aduskett@gmail.com>
 References: <20200315172459.881615-1-aduskett@gmail.com>
-Message-ID: <20200315172459.881615-4-aduskett@gmail.com>
+Message-ID: <20200315172459.881615-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,29 +18,24 @@ the configure options and add a dependency for gobject-introspection.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/gupnp-dlna/gupnp-dlna.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/gupnp-av/gupnp-av.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/gupnp-dlna/gupnp-dlna.mk b/package/gupnp-dlna/gupnp-dlna.mk
-index 85d30b7cd2..6ce20c15fd 100644
---- a/package/gupnp-dlna/gupnp-dlna.mk
-+++ b/package/gupnp-dlna/gupnp-dlna.mk
-@@ -16,9 +16,15 @@ GUPNP_DLNA_INSTALL_STAGING = YES
- GUPNP_DLNA_DEPENDENCIES = host-pkgconf libglib2 libxml2
- 
- GUPNP_DLNA_CONF_OPTS = \
--	--disable-introspection \
- 	--disable-legacy-gstreamer-metadata-backend
+diff --git a/package/gupnp-av/gupnp-av.mk b/package/gupnp-av/gupnp-av.mk
+index c670ab6d43..55436d0e53 100644
+--- a/package/gupnp-av/gupnp-av.mk
++++ b/package/gupnp-av/gupnp-av.mk
+@@ -13,4 +13,11 @@ GUPNP_AV_LICENSE_FILES = COPYING
+ GUPNP_AV_INSTALL_STAGING = YES
+ GUPNP_AV_DEPENDENCIES = host-pkgconf libglib2 libxml2 gupnp
  
 +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+GUPNP_DLNA_CONF_OPTS += --enable-introspection
-+GUPNP_DLNA_DEPENDENCIES += gobject-introspection
++GUPNP_AV_CONF_OPTS += --enable-introspection
++GUPNP_AV_DEPENDENCIES += gobject-introspection
 +else
-+GUPNP_DLNA_CONF_OPTS += --disable-introspection
++GUPNP_AV_CONF_OPTS += --disable-introspection
 +endif
 +
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
- GUPNP_DLNA_CONF_OPTS += --enable-gstreamer-metadata-backend
- GUPNP_DLNA_DEPENDENCIES += gstreamer1 gst1-plugins-base
+ $(eval $(autotools-package))
 -- 
 2.24.1
