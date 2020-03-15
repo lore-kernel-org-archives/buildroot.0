@@ -1,34 +1,34 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 15 Mar 2020 23:25:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcpprestsdk: put back zlib
- dependency
-Message-ID: <20200315222505.673895-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 15 Mar 2020 23:25:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/owfs: enable back php
+In-Reply-To: <20200315102111.2731422-1-fontaine.fabrice@gmail.com>
+References: <20200315102111.2731422-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200315232546.0e59a362@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-zlib dependency was wrongly removed by commit
-3037e99ae67f159626c0b148da46008e1dd23e91
+On Sun, 15 Mar 2020 11:21:11 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libcpprestsdk/libcpprestsdk.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +# $(libdir) is set to $(EXTENSION_DIR) which is patched in php.mk to add
+> +# $(TARGET_DIR) so remove $(DESTDIR) to avoid an install failure
 
-diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
-index e746f22b1b..8404b5096c 100644
---- a/package/libcpprestsdk/libcpprestsdk.mk
-+++ b/package/libcpprestsdk/libcpprestsdk.mk
-@@ -10,7 +10,7 @@ LIBCPPRESTSDK_LICENSE = MIT
- LIBCPPRESTSDK_LICENSE_FILES = license.txt
- LIBCPPRESTSDK_SUBDIR = Release
- LIBCPPRESTSDK_INSTALL_STAGING = YES
--LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl
-+LIBCPPRESTSDK_DEPENDENCIES += host-pkgconf boost openssl zlib
- LIBCPPRESTSDK_CONF_OPTS = -DWERROR=OFF -DBUILD_SAMPLES=OFF
- 
- ifeq ($(BR2_STATIC_LIBS),y)
+I guess you're referring to:
+
++       $(SED) "/extension_dir/ s:/usr:$(TARGET_DIR)/usr:" \
++               $(STAGING_DIR)/usr/bin/php-config
+
+in php.mk ?
+
+Is this the correct thing to do ? Do we have a better solution ?
+
+Thanks,
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
