@@ -1,60 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:22:54 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/jhead: security
- bump to version 3.04
-Message-ID: <20200315101018.0D9378438E@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 11:23:35 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] Makefile: work around a
+ bug in newly released make 4.3
+Message-ID: <20200315101054.30AA182B45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e125322fff79012da99353f5c5cd02b2da044e5b
+commit: https://git.buildroot.net/buildroot/commit/?id=bdb4a9e110b67ebe3336a3003ad18761e0550f71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-- Fix CVE-2019-1010301: jhead 3.03 is affected by: Buffer Overflow. The
-  impact is: Denial of service. The component is: gpsinfo.c Line 151
-  ProcessGpsInfo(). The attack vector is: Open a specially crafted JPEG
-  file.
-- Fix CVE-2019-1010302: jhead 3.03 is affected by: Incorrect Access
-  Control. The impact is: Denial of service. The component is: iptc.c
-  Line 122 show_IPTC(). The attack vector is: the victim must open a
-  specially crafted JPEG file.
-- Fix CVE-2019-19035: jhead 3.03 is affected by: heap-based buffer
-  over-read. The impact is: Denial of service. The component is:
-  ReadJpegSections and process_SOFn in jpgfile.c. The attack vector is:
-  Open a specially crafted JPEG file.
-- Update indentation of hash file (two spaces)
+Several users of rolling-release distributions have been reporting on
+IRC that Buildroot is broken now that they have switched to the newly
+released make 4.3.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+It turns out that the constructs we use to generated and include the
+internal br2-external related fragments is no longer working with
+make-4.3.
+
+Indeed, an upstream bug report [0] seems to imply that it so far was
+working by chance. There has been no further feedback, whether this is
+really considered a fix for a previous ill-defined behaviour, or an
+actual regression...
+
+In the meantime, we add a workaround, suggested in that same bug report,
+that fixes the issue for make 4.3, and that should not break on older
+make versions either (verified on all relevant versions: from 3.81,
+3.82, 4.0, 4.1, and 4.2).
+
+[0] https://savannah.gnu.org/bugs/?57676
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Mircea Gliga <mgliga@bitdefender.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit faf755b4913969f768205caf4eadba55c7ce2f44)
+(cherry picked from commit 9e2128bf5072e5f2fd69e2fc0239558782dfc677)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jhead/jhead.hash | 4 ++--
- package/jhead/jhead.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/jhead/jhead.hash b/package/jhead/jhead.hash
-index 9ee5055f7c..ffe75381b3 100644
---- a/package/jhead/jhead.hash
-+++ b/package/jhead/jhead.hash
-@@ -1,3 +1,3 @@
- # Locally calculated from download (no sig, hash)
--sha256	82194e0128d9141038f82fadcb5845391ca3021d61bc00815078601619f6c0c2	jhead-3.03.tar.gz
--sha256	46c870a208305489eea862ec8b05b030ba1f06d99195f660dc0ba541cc38d82b	readme.txt
-+sha256  ef89bbcf4f6c25ed88088cf242a47a6aedfff4f08cc7dc205bf3e2c0f10a03c9  jhead-3.04.tar.gz
-+sha256  46c870a208305489eea862ec8b05b030ba1f06d99195f660dc0ba541cc38d82b  readme.txt
-diff --git a/package/jhead/jhead.mk b/package/jhead/jhead.mk
-index 65f8cdb73c..d56ee0daff 100644
---- a/package/jhead/jhead.mk
-+++ b/package/jhead/jhead.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Makefile b/Makefile
+index 1afc305220..31960c8ffc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -189,6 +189,9 @@ ifneq ($(BR2_EXTERNAL_ERROR),)
+ $(error $(BR2_EXTERNAL_ERROR))
+ endif
  
--JHEAD_VERSION = 3.03
-+JHEAD_VERSION = 3.04
- JHEAD_SITE = http://www.sentex.net/~mwandel/jhead
- JHEAD_LICENSE = Public Domain
- JHEAD_LICENSE_FILES = readme.txt
++# Workaround bug in make-4.3: https://savannah.gnu.org/bugs/?57676
++$(BASE_DIR)/.br2-external.mk:;
++
+ # To make sure that the environment variable overrides the .config option,
+ # set this before including .config.
+ ifneq ($(BR2_DL_DIR),)
