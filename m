@@ -1,47 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Mar 2020 16:09:46 +0100
-Subject: [Buildroot] [git commit] package/perl-file-slurp: bump to version
- 9999.30
-Message-ID: <20200315150141.A88E5813FE@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 16:11:05 +0100
+Subject: [Buildroot] [git commit] package/perl-sys-mmap: bump to version 0.20
+Message-ID: <20200315150141.EC99683E3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43c405963fc202f53e9b7c2c659c300112e90846
+commit: https://git.buildroot.net/buildroot/commit/?id=ae8df50233e92f27a4b65c4bb7b9e68c2d5e46d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-file-slurp/perl-file-slurp.hash | 4 ++--
- package/perl-file-slurp/perl-file-slurp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-sys-mmap/perl-sys-mmap.hash | 4 ++--
+ package/perl-sys-mmap/perl-sys-mmap.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-file-slurp/perl-file-slurp.hash b/package/perl-file-slurp/perl-file-slurp.hash
-index 5fc123851f..5bf2713dc7 100644
---- a/package/perl-file-slurp/perl-file-slurp.hash
-+++ b/package/perl-file-slurp/perl-file-slurp.hash
+diff --git a/package/perl-sys-mmap/perl-sys-mmap.hash b/package/perl-sys-mmap/perl-sys-mmap.hash
+index d50fb717d1..ce4d673540 100644
+--- a/package/perl-sys-mmap/perl-sys-mmap.hash
++++ b/package/perl-sys-mmap/perl-sys-mmap.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    603483824746ab4b1958bf7cf956c57a File-Slurp-9999.29.tar.gz
--sha256 0e6e47e0bba639e37e51fdc7a43b187cd90ac642e4baa13a7185bc6c223e19c7 File-Slurp-9999.29.tar.gz
-+md5    a806ca5c769d811b0f32c6a773295408 File-Slurp-9999.30.tar.gz
-+sha256 2a37163db0b9454e48eb308dac1fc27571be086e0864c9083bed88d9c4e93747 File-Slurp-9999.30.tar.gz
+-md5    990c9106a88dc843035f7bcb109e6c0e Sys-Mmap-0.19.tar.gz
+-sha256 09295e25cc9b0599d9009d19b2be89fcecaecc62ce594f873d7f70d7c10900fa Sys-Mmap-0.19.tar.gz
++md5    57172ce9b33c04de460b4e7ad68d2e9c Sys-Mmap-0.20.tar.gz
++sha256 1820ce2c89f1ab7357644f8db0f49f142f54526250fb1e235db10aa80f15e2cf Sys-Mmap-0.20.tar.gz
  
  # computed by scancpan
- sha256 2281c2e5a690ac7f227fd9934b3d0b9abc419fd514f001d421f2f854203d92b4 README.md
-diff --git a/package/perl-file-slurp/perl-file-slurp.mk b/package/perl-file-slurp/perl-file-slurp.mk
-index c1a64a7b24..4174df4a2e 100644
---- a/package/perl-file-slurp/perl-file-slurp.mk
-+++ b/package/perl-file-slurp/perl-file-slurp.mk
-@@ -4,7 +4,7 @@
+ sha256 4ac2afe465736476a06e52edcc78c72cfa0fa4d625916e58ab4f2af6c598709c Artistic
+diff --git a/package/perl-sys-mmap/perl-sys-mmap.mk b/package/perl-sys-mmap/perl-sys-mmap.mk
+index 489d4dd7ee..5e0814526a 100644
+--- a/package/perl-sys-mmap/perl-sys-mmap.mk
++++ b/package/perl-sys-mmap/perl-sys-mmap.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_FILE_SLURP_VERSION = 9999.29
-+PERL_FILE_SLURP_VERSION = 9999.30
- PERL_FILE_SLURP_SOURCE = File-Slurp-$(PERL_FILE_SLURP_VERSION).tar.gz
- PERL_FILE_SLURP_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPOEIRAB
- PERL_FILE_SLURP_LICENSE = Artistic or GPL-1.0+
+-PERL_SYS_MMAP_VERSION = 0.19
++PERL_SYS_MMAP_VERSION = 0.20
+ PERL_SYS_MMAP_SOURCE = Sys-Mmap-$(PERL_SYS_MMAP_VERSION).tar.gz
+-PERL_SYS_MMAP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SW/SWALTERS
++PERL_SYS_MMAP_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
+ PERL_SYS_MMAP_LICENSE = Artistic or GPL-1.0+
+ PERL_SYS_MMAP_LICENSE_FILES = Artistic Copying
+ PERL_SYS_MMAP_DISTNAME = Sys-Mmap
