@@ -1,93 +1,96 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:09:49 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/libvncserver: fix
- CVE-2018-20750
-Message-ID: <20200315095835.798EE80D95@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 11:07:04 +0100
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libvncserver:
+ needs dynamic library
+Message-ID: <20200315095840.5578E83F03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56dc0884377c813eabdda85b2f8730a68989909e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=598027e3f5f8902f2cf1e63f6d37fab15a743cf9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-LibVNC through 0.9.12 contains a heap out-of-bounds write vulnerability
-in libvncserver/rfbserver.c. The fix for CVE-2018-15127 was incomplete.
+Disable libvncserver for static builds and drop second patch following
+upstream feedback on patch fixing openssl issue:
+https://github.com/LibVNC/libvncserver/pull/319
+
+This will also fix build failure when building statically with libgcrypt
+
+Don't update x11vnc, the reverse dependency of libvncserver, because
+BR2_PACKAGE_XORG7 already depends on !BR2_STATIC_LIBS
+
+Fixes:
+ - http://autobuild.buildroot.org/results/8d7b109d085e3931a874c4fb99f465789485565a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b10cee53265b0ddd195a26569caa8909d82e8c04)
+(cherry picked from commit 726dcc6eeef70cf70d9deefa71fec118284ca05e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...bytes-in-rfbProcessFileTransferReadBuffer.patch | 47 ++++++++++++++++++++++
- package/libvncserver/libvncserver.mk               |  3 ++
- 2 files changed, 50 insertions(+)
+ ...keLists.txt-use-pkgconfig-to-find-openssl.patch | 34 ----------------------
+ package/libvncserver/Config.in                     |  6 ++++
+ 2 files changed, 6 insertions(+), 34 deletions(-)
 
-diff --git a/package/libvncserver/0003-Limit-lenght-to-INT_MAX-bytes-in-rfbProcessFileTransferReadBuffer.patch b/package/libvncserver/0003-Limit-lenght-to-INT_MAX-bytes-in-rfbProcessFileTransferReadBuffer.patch
-new file mode 100644
-index 0000000000..7461f11f80
---- /dev/null
-+++ b/package/libvncserver/0003-Limit-lenght-to-INT_MAX-bytes-in-rfbProcessFileTransferReadBuffer.patch
-@@ -0,0 +1,47 @@
-+From 09e8fc02f59f16e2583b34fe1a270c238bd9ffec Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
-+Date: Mon, 7 Jan 2019 10:40:01 +0100
-+Subject: [PATCH] Limit lenght to INT_MAX bytes in
-+ rfbProcessFileTransferReadBuffer()
-+
-+This ammends 15bb719c03cc70f14c36a843dcb16ed69b405707 fix for a heap
-+out-of-bound write access in rfbProcessFileTransferReadBuffer() when
-+reading a transfered file content in a server. The former fix did not
-+work on platforms with a 32-bit int type (expected by rfbReadExact()).
-+
-+CVE-2018-15127
-+<https://github.com/LibVNC/libvncserver/issues/243>
-+<https://github.com/LibVNC/libvncserver/issues/273>
-+[Retrieved from:
-+https://github.com/LibVNC/libvncserver/commit/09e8fc02f59f16e2583b34fe1a270c238bd9ffec]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libvncserver/rfbserver.c | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/libvncserver/rfbserver.c b/libvncserver/rfbserver.c
-+index 7af84906..f2edbeea 100644
-+--- a/libvncserver/rfbserver.c
-++++ b/libvncserver/rfbserver.c
-+@@ -88,6 +88,8 @@
-+ #include <errno.h>
-+ /* strftime() */
-+ #include <time.h>
-++/* INT_MAX */
-++#include <limits.h>
-+ 
-+ #ifdef LIBVNCSERVER_WITH_WEBSOCKETS
-+ #include "rfbssl.h"
-+@@ -1472,8 +1474,11 @@ char *rfbProcessFileTransferReadBuffer(rfbClientPtr cl, uint32_t length)
-+        0XFFFFFFFF, i.e. SIZE_MAX for 32-bit systems. On 64-bit systems, a length of 0XFFFFFFFF
-+        will safely be allocated since this check will never trigger and malloc() can digest length+1
-+        without problems as length is a uint32_t.
-++       We also later pass length to rfbReadExact() that expects a signed int type and
-++       that might wrap on platforms with a 32-bit int type if length is bigger
-++       than 0X7FFFFFFF.
-+     */
-+-    if(length == SIZE_MAX) {
-++    if(length == SIZE_MAX || length > INT_MAX) {
-+ 	rfbErr("rfbProcessFileTransferReadBuffer: too big file transfer length requested: %u", (unsigned int)length);
-+ 	rfbCloseClient(cl);
-+ 	return NULL;
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index b024c3161d..79db2dad83 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -13,6 +13,9 @@ LIBVNCSERVER_INSTALL_STAGING = YES
- LIBVNCSERVER_DEPENDENCIES = host-pkgconf lzo
- LIBVNCSERVER_CONF_OPTS = -DWITH_LZO=ON
+diff --git a/package/libvncserver/0002-CMakeLists.txt-use-pkgconfig-to-find-openssl.patch b/package/libvncserver/0002-CMakeLists.txt-use-pkgconfig-to-find-openssl.patch
+deleted file mode 100644
+index c51b725469..0000000000
+--- a/package/libvncserver/0002-CMakeLists.txt-use-pkgconfig-to-find-openssl.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From ab512233c88022fec67fabec1fb00a833c466c9e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 23 Jun 2019 22:54:57 +0200
+-Subject: [PATCH] CMakeLists.txt: use pkgconfig to find openssl
+-
+-find_package(openssl) fails to find openssl dependencies such as -lz so
+-use pkgconfig to fix static build
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/c3f75480cb4b8b042cdf6a34cc5568ea13e51342
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/LibVNC/libvncserver/pull/318]
+----
+- CMakeLists.txt | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index ad609ae..11103d8 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -125,7 +125,8 @@ endif(WITH_GNUTLS)
+- 
+- 
+- if(WITH_OPENSSL)
+--  find_package(OpenSSL)
+-+  find_package(PkgConfig)
+-+  pkg_check_modules(OPENSSL "openssl")
+- endif(WITH_OPENSSL)
+- 
+- 
+--- 
+-2.14.1
+-
+diff --git a/package/libvncserver/Config.in b/package/libvncserver/Config.in
+index c8042905ce..2d5bf8a182 100644
+--- a/package/libvncserver/Config.in
++++ b/package/libvncserver/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBVNCSERVER
+ 	depends on BR2_USE_MMU # VNCommand.c uses fork()
+ 	# binutils issue (bad expression)
+ 	depends on !BR2_nios2
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LZO
+ 	help
+ 	  libvncserver is a VNC server/client library.
+@@ -22,3 +23,8 @@ config BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG
+ 	  http://wiki.qemu.org/VNC_Tight_PNG
  
-+# 0003-Limit-lenght-to-INT_MAX-bytes-in-rfbProcessFileTransferReadBuffer.patch
-+LIBVNCSERVER_IGNORE_CVES += CVE-2018-20750
+ endif
 +
- # only used for examples
- LIBVNCSERVER_CONF_OPTS += \
- 	-DWITH_FFMPEG=OFF \
++comment "libvncserver needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_nios
++	depends on BR2_STATIC_LIBS
