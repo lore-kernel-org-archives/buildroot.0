@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:56:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openjdk-bin: fix install
-In-Reply-To: <20200308173737.181294-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 8 Mar 2020 18:37:37 +0100")
-References: <20200308173737.181294-1-fontaine.fabrice@gmail.com>
-Message-ID: <87mu8hkhtp.fsf@dell.be.48ers.dk>
+Date: Sun, 15 Mar 2020 11:57:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvmtools: fix musl build
+ with libfuse
+In-Reply-To: <20200308180954.681298-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 8 Mar 2020 19:09:54 +0100")
+References: <20200308180954.681298-1-fontaine.fabrice@gmail.com>
+Message-ID: <87imj5khs0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +14,12 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Create $(HOST_DIR)/bin and $(HOST_DIR)/lib otherwise build can fail on:
- > cp -dpfr /home/buildroot/autobuild/instance-2/output-1/build/host-openjdk-bin-13.0.2_8/bin/* /home/buildroot/autobuild/instance-2/output-1/per-package/host-openjdk-bin/host/bin/
- > cp: target '/home/buildroot/autobuild/instance-2/output-1/per-package/host-openjdk-bin/host/bin/' is not a directory
- > package/pkg-generic.mk:276: recipe for target '/home/buildroot/autobuild/instance-2/output-1/build/host-openjdk-bin-13.0.2_8/.stamp_host_installed' failed
- > make: *** [/home/buildroot/autobuild/instance-2/output-1/build/host-openjdk-bin-13.0.2_8/.stamp_host_installed] Error 1
-
  > Fixes:
- >  - http://autobuild.buildroot.org/results/28bcec0d28003c2784b6cd27039099c65bac3b96
+ >  - http://autobuild.buildroot.org/results/4eba7c4585d318efdb9b965d58d879426588aa14
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2019.11.x, thanks.
+Committed to 2019.02.x and 2019.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
