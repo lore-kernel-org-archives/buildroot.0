@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Mar 2020 15:49:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gdk-pixbuf: disable
- introspection
-In-Reply-To: <20200311191918.2488-1-fontaine.fabrice@gmail.com>
-References: <20200311191918.2488-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200315144941.GB19677@scaer>
+Date: Sun, 15 Mar 2020 15:50:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgtk3: disable introspection
+In-Reply-To: <20200311192500.2960-1-fontaine.fabrice@gmail.com>
+References: <20200311192500.2960-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200315145003.GC19677@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +12,14 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2020-03-11 20:19 +0100, Fabrice Fontaine spake thusly:
-> Build will fail if host-gobject-introspection is built before
-> host-gdk-pixbuf:
+On 2020-03-11 20:25 +0100, Fabrice Fontaine spake thusly:
+> Build will fail if gobject-introspection is built before libgtk3:
 > 
-> Writing a loaders.cache file to use when running examples before installing gdk-pixbuf.
-> Couldn't find include 'GModule-2.0.gir' (search path: '['/home/fabrice/buildroot/output/host/share', '/usr/share/gnome/gir-1.0', '/usr/local/share/gir-1.0', '/usr/share/gir-1.0', '/home/fabrice/buildroot/output/host/share/gir-1.0', '/usr/share/gir-1.0']')
+>   GISCAN   Gdk-3.0.gir
+> Couldn't find include 'GdkPixbuf-2.0.gir' (search path: '['/home/fabrice/buildroot/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '../gdk', '/home/fabrice/buildroot/output/host/share', '/usr/share/gnome/gir-1.0', '/usr/local/share/gir-1.0', '/usr/share/gir-1.0', '/home/fabrice/buildroot/output/host/share/gir-1.0', '/usr/share/gir-1.0']')
+> make[5]: *** [/home/fabrice/buildroot/output/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/../share/gobject-introspection-1.0/Makefile.introspection:156: Gdk-3.0.gir] Error 1
 > 
-> So disable introspection on target and host variant
+> So disable introspection on host and target variant
 > 
 > Fixes:
 >  - No autobuilder failures yet
@@ -33,25 +32,23 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/gdk-pixbuf/gdk-pixbuf.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  package/libgtk3/libgtk3.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-> index 33de2e3d3a..59e0d5f454 100644
-> --- a/package/gdk-pixbuf/gdk-pixbuf.mk
-> +++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-> @@ -23,7 +23,10 @@ GDK_PIXBUF_CONF_ENV = \
->  HOST_GDK_PIXBUF_CONF_ENV = \
->  	gio_can_sniff=no
+> diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+> index fc131132f9..7df4426fa6 100644
+> --- a/package/libgtk3/libgtk3.mk
+> +++ b/package/libgtk3/libgtk3.mk
+> @@ -20,7 +20,9 @@ LIBGTK3_CONF_ENV = \
 >  
-> -GDK_PIXBUF_CONF_OPTS = --disable-glibtest
-> +GDK_PIXBUF_CONF_OPTS = \
-> +	--disable-glibtest \
-> +	--disable-introspection
-> +HOST_GDK_PIXBUF_CONF_OPTS = --disable-introspection
+>  LIBGTK3_CONF_OPTS = \
+>  	--disable-glibtest \
+> +	--disable-introspection \
+>  	--enable-explicit-deps=no
+> +HOST_LIBGTK3_CONF_OPTS = --disable-introspection
 >  
->  ifneq ($(BR2_PACKAGE_LIBPNG),y)
->  GDK_PIXBUF_CONF_OPTS += --without-libpng
+>  # Override pkg-config pkgdatadir variable, it needs the prefix
+>  LIBGTK3_MAKE_OPTS = \
 > -- 
 > 2.25.1
 > 
