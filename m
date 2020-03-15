@@ -1,70 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 15 Mar 2020 21:38:56 +0100
-Subject: [Buildroot] [git commit] package/perl-path-class: new host package
-Message-ID: <20200315203842.3FF99815AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ package/perl-mojolicious-plugin-securityheader: new package
+Message-ID: <20200315203842.1079B81461@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bf161e4ecced33c7ff15a43f6e5ec75cecdd558
+commit: https://git.buildroot.net/buildroot/commit/?id=1f09c34fa1410fb045ca2cddc1defdb4d90933eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Dependency for perl-crypt-ssleay (added in a subsequent commit)
 
 Added via utils/scancpan, without changes.
 
+Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                   |  1 +
- package/perl-path-class/perl-path-class.hash |  6 ++++++
- package/perl-path-class/perl-path-class.mk   | 15 +++++++++++++++
- 3 files changed, 22 insertions(+)
+ DEVELOPERS                                                 |  1 +
+ package/Config.in                                          |  1 +
+ package/perl-mojolicious-plugin-securityheader/Config.in   |  7 +++++++
+ .../perl-mojolicious-plugin-securityheader.hash            |  6 ++++++
+ .../perl-mojolicious-plugin-securityheader.mk              | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 0025a38654..e3433d4466 100644
+index 34078ff4f4..a8ed03488d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2415,6 +2415,7 @@ F:	package/perl-mozilla-ca/
+@@ -2408,6 +2408,7 @@ F:	package/perl-mojolicious-plugin-authentication/
+ F:	package/perl-mojolicious-plugin-authorization/
+ F:	package/perl-mojolicious-plugin-cspheader/
+ F:	package/perl-mojolicious-plugin-i18n/
++F:	package/perl-mojolicious-plugin-securityheader/
  F:	package/perl-net-snmp/
  F:	package/perl-net-ssh2/
  F:	package/perl-net-telnet/
-+F:	package/perl-path-class/
- F:	package/pigz/
- F:	package/xenomai/
- F:	support/scripts/size-stats
-diff --git a/package/perl-path-class/perl-path-class.hash b/package/perl-path-class/perl-path-class.hash
+diff --git a/package/Config.in b/package/Config.in
+index 37ef5dd710..dafc75540d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -782,6 +782,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-mojolicious-plugin-authorization/Config.in"
+ 	source "package/perl-mojolicious-plugin-cspheader/Config.in"
+ 	source "package/perl-mojolicious-plugin-i18n/Config.in"
++	source "package/perl-mojolicious-plugin-securityheader/Config.in"
+ 	source "package/perl-moo/Config.in"
+ 	source "package/perl-net-dns/Config.in"
+ 	source "package/perl-net-http/Config.in"
+diff --git a/package/perl-mojolicious-plugin-securityheader/Config.in b/package/perl-mojolicious-plugin-securityheader/Config.in
 new file mode 100644
-index 0000000000..d2741dfca4
+index 0000000000..35e8e122ab
 --- /dev/null
-+++ b/package/perl-path-class/perl-path-class.hash
++++ b/package/perl-mojolicious-plugin-securityheader/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER
++	bool "perl-mojolicious-plugin-securityheader"
++	select BR2_PACKAGE_PERL_MOJOLICIOUS # runtime
++	help
++	  Mojolicious Plugin.
++
++	  http://github.com/reneeb/Mojolicious-Plugin-SecurityHeader
+diff --git a/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.hash b/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.hash
+new file mode 100644
+index 0000000000..b8a20bdd60
+--- /dev/null
++++ b/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    13e6db714f6d5a0e62ca1c4a7fc4d0f3 Path-Class-0.37.tar.gz
-+sha256 654781948602386f2cb2e4473a739f17dc6953d92aabc2498a4ca2561bc248ce Path-Class-0.37.tar.gz
++md5    38cf59258547ac866577db2d43632f30 Mojolicious-Plugin-SecurityHeader-0.07.tar.gz
++sha256 940474eaf7a415e5117b004387862473612e079a413590db1eb9c85d17a6648f Mojolicious-Plugin-SecurityHeader-0.07.tar.gz
 +
 +# computed by scancpan
-+sha256 636b5c82eabfe3d4cd86126db9502fd537d1442ad2c88c93dbe221e62b5f1710 LICENSE
-diff --git a/package/perl-path-class/perl-path-class.mk b/package/perl-path-class/perl-path-class.mk
++sha256 0c38e4629cc9eee869217d62ad765e581e54958596672046a62dfa4cfd87bb09 LICENSE
+diff --git a/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.mk b/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.mk
 new file mode 100644
-index 0000000000..185b7f6391
+index 0000000000..1f287f6f6a
 --- /dev/null
-+++ b/package/perl-path-class/perl-path-class.mk
-@@ -0,0 +1,15 @@
++++ b/package/perl-mojolicious-plugin-securityheader/perl-mojolicious-plugin-securityheader.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-path-class
++# perl-mojolicious-plugin-securityheader
 +#
 +################################################################################
 +
-+PERL_PATH_CLASS_VERSION = 0.37
-+PERL_PATH_CLASS_SOURCE = Path-Class-$(PERL_PATH_CLASS_VERSION).tar.gz
-+PERL_PATH_CLASS_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KW/KWILLIAMS
-+HOST_PERL_PATH_CLASS_DEPENDENCIES = host-perl-module-build
-+PERL_PATH_CLASS_LICENSE = Artistic or GPL-1.0+
-+PERL_PATH_CLASS_LICENSE_FILES = LICENSE
-+PERL_PATH_CLASS_DISTNAME = Path-Class
++PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_VERSION = 0.07
++PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_SOURCE = Mojolicious-Plugin-SecurityHeader-$(PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_VERSION).tar.gz
++PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RE/RENEEB
++PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_LICENSE = Artistic-2.0
++PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_LICENSE_FILES = LICENSE
++PERL_MOJOLICIOUS_PLUGIN_SECURITYHEADER_DISTNAME = Mojolicious-Plugin-SecurityHeader
 +
-+$(eval $(host-perl-package))
++$(eval $(perl-package))
