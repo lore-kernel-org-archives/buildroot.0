@@ -1,39 +1,170 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 15 Mar 2020 17:23:20 +0100
-Subject: [Buildroot] [PATCH] package/python-markdown: fix Python version
- dependency
-In-Reply-To: <20200315163316.00284574@windsurf>
-References: <20200310114101.6726-1-yegorslists@googlemail.com>
- <20200315163316.00284574@windsurf>
-Message-ID: <CAGm1_kuXiUBbwvfYR38VcCTDg+B0NN7CXU-++89-Z4yUMMOR3g@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sun, 15 Mar 2020 09:35:09 -0700
+Subject: [Buildroot] [PATCH 3/3 v6] package/meson: determine
+ g-ir-scanner and g-ir-compiler paths from pkgconfig
+In-Reply-To: <2b3494c60f3e0d1a9bdf79dfb902e685b713c0e3.1584286382.git.yann.morin.1998@free.fr>
+References: <cover.1584286382.git.yann.morin.1998@free.fr>
+ <2b3494c60f3e0d1a9bdf79dfb902e685b713c0e3.1584286382.git.yann.morin.1998@free.fr>
+Message-ID: <CAFSsvmpsUa-J6DpajOxRTDOhhs0cVrF1wjLxJHW+3ewEX1S9TA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+All:
 
-On Sun, Mar 15, 2020 at 4:33 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Tue, 10 Mar 2020 12:41:01 +0100
-> yegorslists at googlemail.com wrote:
->
-> > From: Yegor Yefremov <yegorslists@googlemail.com>
-> >
-> > The latest version has dropped Python 2 support.
-> >
-> > Fixes:
-> > http://autobuild.buildroot.net/results/6d1e796f6658accb3eafef265935db5e464638fe
-> >
-> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->
-> So, should this patch be marked as Rejected ?
+Tested-by: Adam Duskett <aduskett@gmail.com>
 
-Basically, the patch is eligible as is. But it depends on the above
-mentioned patch series that also touches python-cheetah. As soon as it
-is reworked and merged, python-markdown is only an optional dependency
-of the python-cheetah package and can be applied.
-
-Yegor
+On Sun, Mar 15, 2020 at 8:33 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> From: Adam Duskett <Aduskett@gmail.com>
+>
+> Currently, meson hard codes the paths of these binaries which results in
+> cross-compiled environments to run the host versions of these tools.
+> However, GObject-introspection provides the appropriate paths to these
+> utilities via pkg-config
+>
+> find_program is needed in the case g-i is built as a subproject. If
+> g-ir-scanner or g-ir-compiler are in the build or source directory use those.
+> If they aren't found in the source directory, use the results from pkg-config.
+>
+> Backport two upstream commits to fix the issue.
+>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+>
+> ---
+> Changes v1 -> v3:
+>   - Use an upstream patch that fixes this issue permanently.
+>
+> Changes v4 -> v5:
+>   - Split the patches into two seperate patches. (Yann)
+>
+> Changes v5 -> v6  (Yann):
+>   - really make them patches backport with git-format-patch
+> ---
+>  ...ction-determine-g-ir-scanner-and-g-i.patch | 62 +++++++++++++++++++
+>  ...es-gnome.py-Fix-giscanner-and-gicomp.patch | 41 ++++++++++++
+>  2 files changed, 103 insertions(+)
+>  create mode 100644 package/meson/0004-gobject-introspection-determine-g-ir-scanner-and-g-i.patch
+>  create mode 100644 package/meson/0005-mesonbuild-modules-gnome.py-Fix-giscanner-and-gicomp.patch
+>
+> diff --git a/package/meson/0004-gobject-introspection-determine-g-ir-scanner-and-g-i.patch b/package/meson/0004-gobject-introspection-determine-g-ir-scanner-and-g-i.patch
+> new file mode 100644
+> index 0000000000..9c7eb656bc
+> --- /dev/null
+> +++ b/package/meson/0004-gobject-introspection-determine-g-ir-scanner-and-g-i.patch
+> @@ -0,0 +1,62 @@
+> +From f66b04b0996eae5cd7b0ad007435d5a51f28b691 Mon Sep 17 00:00:00 2001
+> +From: Adam Duskett <Aduskett@gmail.com>
+> +Date: Mon, 24 Feb 2020 06:29:26 -0800
+> +Subject: [PATCH] gobject-introspection: determine g-ir-scanner and
+> + g-ir-compiler paths from pkgconfig
+> +
+> +Currently, meson hard codes the paths of these binaries which results in
+> +cross-compiled environments to run the host versions of these tools.
+> +However, GObject-introspection provides the appropriate paths to these
+> +utilities via pkg-config
+> +
+> +find_program is needed in the case g-i is built as a subproject. If
+> +g-ir-scanner or g-ir-compiler are in the build or source directory use those.
+> +If they aren't found in the source directory, use the results from pkg-config.
+> +
+> +Upstream commit: f66b04b0996eae5cd7b0ad007435d5a51f28b691
+> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> +---
+> + mesonbuild/modules/gnome.py | 21 ++++++++++++++++++---
+> + 1 file changed, 18 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/mesonbuild/modules/gnome.py b/mesonbuild/modules/gnome.py
+> +index 3d5d7181..0ea4b273 100644
+> +--- a/mesonbuild/modules/gnome.py
+> ++++ b/mesonbuild/modules/gnome.py
+> +@@ -736,15 +736,30 @@ class GnomeModule(ExtensionModule):
+> +         if kwargs.get('install_dir'):
+> +             raise MesonException('install_dir is not supported with generate_gir(), see "install_dir_gir" and "install_dir_typelib"')
+> +
+> +-        giscanner = self.interpreter.find_program_impl('g-ir-scanner')
+> +-        gicompiler = self.interpreter.find_program_impl('g-ir-compiler')
+> +-
+> +         girtargets = [self._unwrap_gir_target(arg, state) for arg in args]
+> +
+> +         if len(girtargets) > 1 and any([isinstance(el, build.Executable) for el in girtargets]):
+> +             raise MesonException('generate_gir only accepts a single argument when one of the arguments is an executable')
+> +
+> +         self.gir_dep, pkgargs = self._get_gir_dep(state)
+> ++        # find_program is needed in the case g-i is built as subproject.
+> ++        # In that case it uses override_find_program so the gobject utilities
+> ++        # can be used from the build dir instead of from the system.
+> ++        # However, GObject-introspection provides the appropriate paths to
+> ++        # these utilities via pkg-config, so it would be best to use the
+> ++        # results from pkg-config when possible.
+> ++        gi_util_dirs_check = [state.environment.get_build_dir(), state.environment.get_source_dir()]
+> ++        giscanner = self.interpreter.find_program_impl('g-ir-scanner')
+> ++        if giscanner.found():
+> ++            giscanner_path = giscanner.get_command()[0]
+> ++            if not any(x in giscanner_path for x in gi_util_dirs_check):
+> ++                giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
+> ++
+> ++        gicompiler = self.interpreter.find_program_impl('g-ir-compiler')
+> ++        if gicompiler.found():
+> ++            gicompiler_path = gicompiler.get_command()[0]
+> ++            if not any(x in gicompiler_path for x in gi_util_dirs_check):
+> ++                gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
+> +
+> +         ns = kwargs.pop('namespace')
+> +         nsversion = kwargs.pop('nsversion')
+> +--
+> +2.20.1
+> +
+> diff --git a/package/meson/0005-mesonbuild-modules-gnome.py-Fix-giscanner-and-gicomp.patch b/package/meson/0005-mesonbuild-modules-gnome.py-Fix-giscanner-and-gicomp.patch
+> new file mode 100644
+> index 0000000000..4a0813dc8d
+> --- /dev/null
+> +++ b/package/meson/0005-mesonbuild-modules-gnome.py-Fix-giscanner-and-gicomp.patch
+> @@ -0,0 +1,41 @@
+> +From 6ba034c37d8004a72d392f37f66e709c593d8983 Mon Sep 17 00:00:00 2001
+> +From: Adam Duskett <Aduskett@gmail.com>
+> +Date: Wed, 26 Feb 2020 05:51:28 -0800
+> +Subject: [PATCH] mesonbuild/modules/gnome.py: Fix giscanner and gicompiler
+> + logic
+> +
+> +Currently, giscanner and the gicompiler paths are only scanned via pkg-config
+> +if they are first found in the host path.
+> +
+> +Add a else statement to fix this oversite.
+> +
+> +Upstream commit: 6ba034c37d8004a72d392f37f66e709c593d8983
+> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> +---
+> + mesonbuild/modules/gnome.py | 4 ++++
+> + 1 file changed, 4 insertions(+)
+> +
+> +diff --git a/mesonbuild/modules/gnome.py b/mesonbuild/modules/gnome.py
+> +index 0ea4b273..1743b59c 100644
+> +--- a/mesonbuild/modules/gnome.py
+> ++++ b/mesonbuild/modules/gnome.py
+> +@@ -754,12 +754,16 @@ class GnomeModule(ExtensionModule):
+> +             giscanner_path = giscanner.get_command()[0]
+> +             if not any(x in giscanner_path for x in gi_util_dirs_check):
+> +                 giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
+> ++        else:
+> ++            giscanner = self.gir_dep.get_pkgconfig_variable('g_ir_scanner', {})
+> +
+> +         gicompiler = self.interpreter.find_program_impl('g-ir-compiler')
+> +         if gicompiler.found():
+> +             gicompiler_path = gicompiler.get_command()[0]
+> +             if not any(x in gicompiler_path for x in gi_util_dirs_check):
+> +                 gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
+> ++        else:
+> ++            gicompiler = self.gir_dep.get_pkgconfig_variable('g_ir_compiler', {})
+> +
+> +         ns = kwargs.pop('namespace')
+> +         nsversion = kwargs.pop('nsversion')
+> +--
+> +2.20.1
+> +
+> --
+> 2.20.1
+>
