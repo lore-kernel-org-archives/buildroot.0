@@ -1,47 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Mar 2020 16:09:54 +0100
-Subject: [Buildroot] [git commit] package/perl-io-socket-ssl: bump to
- version 2.067
-Message-ID: <20200315150141.C31617F9A4@busybox.osuosl.org>
+Date: Sun, 15 Mar 2020 16:09:46 +0100
+Subject: [Buildroot] [git commit] package/perl-file-slurp: bump to version
+ 9999.30
+Message-ID: <20200315150141.A88E5813FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=faa0550b7be00393bd7ac93c1d8bf870994357bb
+commit: https://git.buildroot.net/buildroot/commit/?id=43c405963fc202f53e9b7c2c659c300112e90846
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
- package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
+ package/perl-file-slurp/perl-file-slurp.hash | 4 ++--
+ package/perl-file-slurp/perl-file-slurp.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
-index de9b28abed..d849060f71 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+diff --git a/package/perl-file-slurp/perl-file-slurp.hash b/package/perl-file-slurp/perl-file-slurp.hash
+index 5fc123851f..5bf2713dc7 100644
+--- a/package/perl-file-slurp/perl-file-slurp.hash
++++ b/package/perl-file-slurp/perl-file-slurp.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    ecf96ce2ff9e04a03a2d101c76ce1020 IO-Socket-SSL-2.066.tar.gz
--sha256 0d47064781a545304d5dcea5dfcee3acc2e95a32e1b4884d80505cde8ee6ebcd IO-Socket-SSL-2.066.tar.gz
-+md5    1d55e9f66ca442f4e0ae4d018e3067fc IO-Socket-SSL-2.067.tar.gz
-+sha256 ef8842806d047cf56e2af64add4ed30b24547bcbb50e8df33cee0c54609af1c1 IO-Socket-SSL-2.067.tar.gz
+-md5    603483824746ab4b1958bf7cf956c57a File-Slurp-9999.29.tar.gz
+-sha256 0e6e47e0bba639e37e51fdc7a43b187cd90ac642e4baa13a7185bc6c223e19c7 File-Slurp-9999.29.tar.gz
++md5    a806ca5c769d811b0f32c6a773295408 File-Slurp-9999.30.tar.gz
++sha256 2a37163db0b9454e48eb308dac1fc27571be086e0864c9083bed88d9c4e93747 File-Slurp-9999.30.tar.gz
  
  # computed by scancpan
- sha256 090aff5421fd55a9dceeaf6c612c36360402e8d29c1284aef88c87be565ce032 README
-diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-index 59c3407594..4ab1f1fbe1 100644
---- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
-+++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+ sha256 2281c2e5a690ac7f227fd9934b3d0b9abc419fd514f001d421f2f854203d92b4 README.md
+diff --git a/package/perl-file-slurp/perl-file-slurp.mk b/package/perl-file-slurp/perl-file-slurp.mk
+index c1a64a7b24..4174df4a2e 100644
+--- a/package/perl-file-slurp/perl-file-slurp.mk
++++ b/package/perl-file-slurp/perl-file-slurp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_IO_SOCKET_SSL_VERSION = 2.066
-+PERL_IO_SOCKET_SSL_VERSION = 2.067
- PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
- PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
- PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPL-1.0+
+-PERL_FILE_SLURP_VERSION = 9999.29
++PERL_FILE_SLURP_VERSION = 9999.30
+ PERL_FILE_SLURP_SOURCE = File-Slurp-$(PERL_FILE_SLURP_VERSION).tar.gz
+ PERL_FILE_SLURP_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPOEIRAB
+ PERL_FILE_SLURP_LICENSE = Artistic or GPL-1.0+
