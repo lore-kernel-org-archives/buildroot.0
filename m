@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:15:38 +0100
-Subject: [Buildroot] [PATCH 1/2] package/zziplib: fix CVE-2018-16548
-In-Reply-To: <20200303201622.283957-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 3 Mar 2020 21:16:21 +0100")
+Date: Sun, 15 Mar 2020 11:15:47 +0100
+Subject: [Buildroot] [PATCH 2/2] package/zziplib: fix CVE-2018-17828
+In-Reply-To: <20200303201622.283957-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 3 Mar 2020 21:16:22 +0100")
 References: <20200303201622.283957-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a74hored.fsf@dell.be.48ers.dk>
+ <20200303201622.283957-2-fontaine.fabrice@gmail.com>
+Message-ID: <875zf5ore4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +14,9 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > An issue was discovered in ZZIPlib through 0.13.69. There is a memory
- > leak triggered in the function __zzip_parse_root_directory in zip.c,
- > which will lead to a denial of service attack.
+ > Directory traversal vulnerability in ZZIPlib 0.13.69 allows attackers to
+ > overwrite arbitrary files via a .. (dot dot) in a zip file, because of
+ > the function unzzip_cat in the bins/unzzipcat-mem.c file.
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
