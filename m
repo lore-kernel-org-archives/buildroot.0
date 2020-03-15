@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:34:22 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/gst1-validate:
+Date: Sun, 15 Mar 2020 11:32:59 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/gst1-validate:
  disable introspection
-Message-ID: <20200315102142.2AAE982256@busybox.osuosl.org>
+Message-ID: <20200315102148.5CF1685239@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57c23964088dc7671299e0d9161bb57b8d8fd9cb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=69c4d36d839c9e2dccf5ab98f71d13b776958125
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 - disable introspection unconditionally (as already done for all
   other original gstreamer1 packages)
@@ -33,12 +33,12 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-index 0f3d251782..ca0468b6bb 100644
+index e9522e1568..8e894bf463 100644
 --- a/package/gstreamer1/gst1-validate/gst1-validate.mk
 +++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
-@@ -18,6 +18,8 @@ GST1_VALIDATE_DEPENDENCIES = \
- 	python \
- 	$(if $(BR2_PACKAGE_CAIRO),cairo)
+@@ -22,6 +22,8 @@ else
+ GST1_VALIDATE_DEPENDENCIES += host-python python
+ endif
  
 -GST1_VALIDATE_CONF_OPTS += --disable-sphinx-doc
 +GST1_VALIDATE_CONF_OPTS = \
