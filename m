@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:36:07 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/swupdate: do not
+Date: Sun, 15 Mar 2020 11:35:46 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/swupdate: do not
  store local build details in swupdate config file
-Message-ID: <20200315102334.B5E9985475@busybox.osuosl.org>
+Message-ID: <20200315102339.7164C85F10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a4890bcead560d210a21dbe6f63c80f9bf371bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8d92ade605104fef8eb5ca9a9e38ab754cf6e545
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 The SWUPDATE_SET_BUILD_OPTIONS macro sets a number of swupdate
 configuration options with local build details, especially the
@@ -50,10 +50,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 5 insertions(+), 12 deletions(-)
 
 diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 78f23ec239..91e0c9724c 100644
+index 39d7d38579..4f07dff968 100644
 --- a/package/swupdate/swupdate.mk
 +++ b/package/swupdate/swupdate.mk
-@@ -106,25 +106,18 @@ define SWUPDATE_PREFER_STATIC
+@@ -113,25 +113,18 @@ define SWUPDATE_PREFER_STATIC
  endef
  endif
  
