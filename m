@@ -1,11 +1,12 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 14 Mar 2020 17:37:23 -0700
+Date: Sat, 14 Mar 2020 17:40:10 -0700
 Subject: [Buildroot] [PATCH v4,
- 1/3] package/gobject-introspection: fix host-linking
-In-Reply-To: <20200314173605.GQ705@scaer>
+ 2/3] package/gobject-introspection: export cc in g-ir-scanner
+In-Reply-To: <20200314172204.GP705@scaer>
 References: <20200312194632.3787015-1-aduskett@gmail.com>
- <20200314173605.GQ705@scaer>
-Message-ID: <CAFSsvmqWqZ2ZRwy-cFTy+Z-9PMk5AtFY+4P0O9wdauZZZqu0wA@mail.gmail.com>
+ <20200312194632.3787015-2-aduskett@gmail.com>
+ <20200314172204.GP705@scaer>
+Message-ID: <CAFSsvmrpj=Dzpz6GLO6FEha7WJ1H7bgD-bP4jtRNOm0em9c1Ug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,106 +15,86 @@ To: buildroot@busybox.net
 
 Yann;
 
-
-On Sat, Mar 14, 2020 at 10:36 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+On Sat, Mar 14, 2020 at 10:22 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
 > Adam, All,
 >
 > On 2020-03-12 12:46 -0700, aduskett at gmail.com spake thusly:
 > > From: Adam Duskett <Aduskett@gmail.com>
 > >
-> > When building, gobject-introspection uses g-ir-scanner to build several .gir
-> > files. g-ir-scanner does not use LDPATH, so LD_LIBRARY_PATH must be used in
->
-> What's LDPATH? Did you mean LDFLAGS? Or LD_RUN_PATH? Or soemthing else?
-I meant LDFLAGS. Sorry about that.
-
->
-> Still, this is not clear what the problem is, and why we need
-> LD_LIBRARY_PATH. We already discussed this on IRC, and you said upstream
-> said to use it, but I am still not convinced, because this is really
-> ugly.
-It's specifically needed during the build process because during the
-build process
-host-goi builds and calls g-ir-scanner to build .gir files. I don't
-like it either, but it
-works and on IRC a maintainer told me that it needs to be exported and that is
-the correct solution.
->
-> Also, this is not just g-ir-scanner that has the problem Is we were to
-> just export LD_LIBRARY_PATH in our wrapper, that would stil cause build
-> failures:
->
->     1 #!/usr/bin/env bash
->     2
->     3 export GI_SCANNER_DISABLE_CACHE=1
->     4 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}${HOST_DIR}/lib"  # Not enough!
->     5 ${HOST_DIR}/bin/g-ir-scanner \
->     6 --lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
->     7 --use-binary-wrapper=$(dirname $0)/g-ir-scanner-qemuwrapper \
->     8 --use-ldd-wrapper=$(dirname $0)/g-ir-scanner-lddwrapper \
->     9 --add-include-path=$(dirname $0)/../share/gir-1.0 "$@"
->
-> > order to ensure that g-ir-scanner does not use the host library path.
->
-> Did you mean:
->     ... that g-ir-scanner does not use the system-install libglib2.
-The host computer or system-installed libglib2.
-
->
-> There is indeed a problem, but I still don't understand it, and even if
-> setting LD_LIBRARY_PATH does indeed solve the issue, I'm still not happy
-> about that... :-(
-There is not much else I can do.
->
-> Yeah, we've already concluded that anything goi related would have to be
-> ugly by design... Still, I'm not happy... :-(
->
-> Maybe if the commit log were to at least point at the discussion with
-> upstream (on their issue tracker?), that could make the pill easier to
-> swallow... :-/
-It was on IRC.
->
-> Regards,
-> Yann E. MORIN.
-
-Adam
->
-> > This fix has the added benefit of allowing the host gobject-introspection to
-> > build the host .gir, .rnc, and .typelib files, which some packages may require.
+> > Without this export, the host variant of g-ir-scanner will call the host
+> > gcc for linking.
+> >
+> > For autotools packages, this is not an issue as they use
+> > Makefile.introspection, which will export the cross-cc, however for meson,
+> > this is not the case, and linking errors occur when meson packages generate
+> > .gir and .typelib files.
 > >
 > > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > > ---
 > > Changes v1 -> v3:
-> >   - Update comment to be more clear.
+> >   - Use relative paths. (Yann)
 > >
-> > Changes v3 -> v4:
-> >   - Update patch to work with gobject-introspection 2.64.0
+> >  package/gobject-introspection/g-ir-scanner.in          | 2 ++
+> >  package/gobject-introspection/gobject-introspection.mk | 2 ++
+> >  2 files changed, 4 insertions(+)
 > >
-> >  package/gobject-introspection/gobject-introspection.mk | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
+> > index 9f97497b7e..d5847ad063 100644
+> > --- a/package/gobject-introspection/g-ir-scanner.in
+> > +++ b/package/gobject-introspection/g-ir-scanner.in
+> > @@ -1,6 +1,8 @@
+> >  #!/usr/bin/env bash
 > >
+> >  export GI_SCANNER_DISABLE_CACHE=1
+> > +export CC="$(dirname "${0}")/../../../../bin/@BASENAME_TARGET_CC@"
+> > +
+>
+> HHhmmm. I remember that I said I wanted the wrapper to still be
+> relocatable. But it is in staging (sysroot) while the compiler is in
+> host dir, so you added that many .././/.. needed to got from there to
+> there.
+>
+> But look at the line below: we already have HOST_DIR:
+>
+> >  ${HOST_DIR}/bin/g-ir-scanner \
+>    ^^^^^^^^^^^
+>
+> So, just:
+>
+>     export CC="${HOST_DIR}/bin/@BASENAME_TARGET_CC@"
+>
+> Or did we miss something?
+That's what I had originally and you said to change it to this!
+Make up your mind! These patches take 2 - 3 weeks each to be reviewed
+and it is fairly annoying when a request for a change comes through, I make that
+change quickly, the changes sit for several weeks, and then a new
+request to revert
+the change that was originally requested comes in.
+
+I will remake the patch with
+HOST_DIR again.
+
+Adam
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >  --lib-dirs-envvar=GIR_EXTRA_LIBS_PATH \
+> >  --use-binary-wrapper=$(dirname $0)/g-ir-scanner-qemuwrapper \
 > > diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-> > index c18a1f17d3..9043390857 100644
+> > index 9043390857..a508957904 100644
 > > --- a/package/gobject-introspection/gobject-introspection.mk
 > > +++ b/package/gobject-introspection/gobject-introspection.mk
-> > @@ -33,11 +33,11 @@ HOST_GOBJECT_INTROSPECTION_DEPENDENCIES = \
-> >  GOBJECT_INTROSPECTION_NINJA_ENV += \
-> >       CC="$(TARGET_CC)"
-> >
-> > -# Disable introspection data on the host, as it is not needed and
-> > -# the package will attempt to use the systems libglib2 which will fail
-> > -# if the systems libglib2 version is older than 2.60.
-> > -HOST_GOBJECT_INTROSPECTION_CONF_OPTS = \
-> > -     -Dbuild_introspection_data=false
-> > +# When building, gobject-introspection uses g-ir-scanner to build several .gir
-> > +# files. g-ir-scanner does not use LDPATH, so LD_LIBRARY_PATH must be used in
-> > +# order to ensure that g-ir-scanner does not use the host library path.
-> > +HOST_GOBJECT_INTROSPECTION_NINJA_ENV += \
-> > +     LD_LIBRARY_PATH="$(HOST_DIR)/lib"
-> >
-> >  # Use the host gi-scanner to prevent the scanner from generating incorrect
-> >  # elf classes.
+> > @@ -104,6 +104,8 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
+> >               $(INSTALL) -D -m 755 \
+> >                       $(GOBJECT_INTROSPECTION_PKGDIR)/$(w).in $(STAGING_DIR)/usr/bin/$(w)
+> >       )
+> > +     $(SED) "s%@BASENAME_TARGET_CC@%$(notdir $(TARGET_CC))%g" $(STAGING_DIR)/usr/bin/g-ir-scanner
+> > +
+> >       # Gobject-introspection installs Makefile.introspection in
+> >       # $(STAGING_DIR)/usr/share which is needed for autotools-based programs to
+> >       # build .gir and .typelib files. Unfortuantly, gobject-introspection-1.0.pc
 > > --
 > > 2.24.1
 > >
