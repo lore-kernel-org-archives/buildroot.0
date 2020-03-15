@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Mar 2020 11:31:14 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/ruby: fix build
+Date: Sun, 15 Mar 2020 11:30:49 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/ruby: fix build
  on mips
-Message-ID: <20200315101838.09D9D7FEA2@busybox.osuosl.org>
+Message-ID: <20200315101844.31BC384922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24c4333ea4c2dc769fdfda8f606b2d9b1a6b3fe4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=821b0f5c9f4caa0a73519aa537d9045913365eac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/d0ab5334f195a400a6d6dd6c49e3c1a2001b2b70
