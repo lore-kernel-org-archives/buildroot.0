@@ -1,48 +1,132 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Mon, 16 Mar 2020 23:40:14 +0100
-Subject: [Buildroot] [PATCH v6 23/28] package/qt5webengine: add
- libXdamage as XCB dependency
-In-Reply-To: <20200312091553.5498289b@windsurf>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-24-anaumann@ultratronik.de>
- <20200312091553.5498289b@windsurf>
-Message-ID: <2edb848b-0d0f-2c01-edc5-7e412c83ba11@andin.de>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Tue, 17 Mar 2020 12:22:57 +1300
+Subject: [Buildroot] [PATCH] package/syslog-ng: fix build if net-snmp is
+ installed on the host
+In-Reply-To: <20200316150106.8800-1-patrickdepinguin@gmail.com>
+References: <20200316150106.8800-1-patrickdepinguin@gmail.com>
+Message-ID: <CAFOYHZAqS7E99Ncdrp2Q0eFf2KQVAU8+-PTw2NLCrVD=17RBOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Thomas,
 
-On 12.03.20 09:15, Thomas Petazzoni wrote:
-> On Mon, 17 Feb 2020 22:23:45 +0100
-> Andreas Naumann <anaumann@ultratronik.de> wrote:
-> 
->> Fixes a build failure.
->>
->> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-> 
-> Could you provide the Buildroot configuration that exhibits the issue?
+On Tue, Mar 17, 2020 at 4:00 AM Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+>
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>
+> If syslog-ng is selected in Buildroot and net-snmp is not, but net-snmp is
+> found on the host machine (at least its net-snmp-config script) then
+> compilation of syslog-ng fails with:
+>
+>   CC       modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest-grammar.lo
+>   CC       modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest.lo
+>   CC       modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest-plugin.lo
+> arm-none-linux-gnueabi-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
+> make[3]: *** [Makefile:17397: modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest-grammar.lo] Error 1
+> make[3]: *** Waiting for unfinished jobs....
+> arm-none-linux-gnueabi-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
+> make[3]: *** [Makefile:17404: modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest.lo] Error 1
+> arm-none-linux-gnueabi-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
+> make[3]: *** [Makefile:17411: modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest-plugin.lo] Error 1
+> make[2]: *** [Makefile:21428: all-recursive] Error 1
+> make[1]: *** [Makefile:8740: all] Error 2
+> make[1]: Leaving directory '.../buildroot/output/build/syslog-ng-3.25.1'
+> make: *** [package/pkg-generic.mk:269: .../buildroot/output/build/syslog-ng-3.25.1/.stamp_built] Error 2
+>
+> The path /usr/include is obtained via /usr/bin/net-snmp-config.
+>
+> The fix comprises two parts:
+> 1. only enable net-snmp support in syslog-ng if the net-snmp package is
+> enabled in Buildroot
+> 2. for the case where net-snmp is selected in Buildroot, fix the configure
+> script of syslog-ng to allow parsing --with-netsnmp=<path> correctly.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-it was imx6-sabresd_qt5_defconfig plus everything Qt I could find. See 
-cover letter near the end.
+One comment below, regardless
 
-> I've been trying to create a configuration that builds qt5webengine
-> with X.org enabled, and no matter what I do, the OpenGL provider I use
-> selects libxdamage, so I don't have a configuration that combines
-> qt5webengine and X.org, but without having libxdamage.
+Reviewed-by: Chris Packham <judge.packham@gmail.com>
 
-Maybe this was fixed with e79ee3b, I will try again.
+> ---
+>  .../0002-configure.ac-fix-with-netsnmp.patch  | 41 +++++++++++++++++++
+>  package/syslog-ng/syslog-ng.mk                |  8 ++++
+>  2 files changed, 49 insertions(+)
+>  create mode 100644 package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch
+>
+> diff --git a/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch b/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch
+> new file mode 100644
+> index 0000000000..f5b2a39bba
+> --- /dev/null
+> +++ b/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch
+> @@ -0,0 +1,41 @@
+> +From 39ab118a7e79b223941b50b372c8ed51f0e21f4b Mon Sep 17 00:00:00 2001
+> +From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> +Date: Mon, 16 Mar 2020 15:41:03 +0100
+> +Subject: [PATCH] configure.ac: fix --with-netsnmp
+> +
+> +The option '--with-net-snmp' did not work, because later checks were using
+> +the variable '$with_netsnmp' rather than '$with_net_snmp'.
+> +
+> +There are two possible solutions:
+> +- make the option '--with-netsnmp'
+> +- change the internal variables
+> +
+> +Taking into account that latest upstream has moved away from autotools and
+> +towards cmake, we opt for the first option that has the least amount of
+> +changes.
+> +
+> +Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> +Upstream-status: not applicable (latest upstream moved to cmake)
 
+Actually upstream are supporting both cmake and autotools so it's
+probably worth submitting.
 
-regards,
-Andreas
-
-> 
-> Also, what was the build failure ?
-> 
-> Thanks!
-> 
-> Thomas
-> 
+> +
+> +---
+> + configure.ac | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index bfc85c32d..392ab8bf3 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -148,8 +148,8 @@ AC_ARG_WITH(libnet,
+> +    ,
+> +    [with_libnet=""])
+> +
+> +-AC_ARG_WITH(net-snmp,
+> +-   [  --with-net-snmp=path      use path to net-snmp-config script],
+> ++AC_ARG_WITH(netsnmp,
+> ++   [  --with-netsnmp=path      use path to net-snmp-config script],
+> +    ,
+> +    [with_netsnmp=""])
+> +
+> +--
+> +2.24.1
+> +
+> diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+> index 9b7e9a1317..156bd95593 100644
+> --- a/package/syslog-ng/syslog-ng.mk
+> +++ b/package/syslog-ng/syslog-ng.mk
+> @@ -97,6 +97,14 @@ else
+>  SYSLOG_NG_CONF_OPTS += --disable-systemd
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_NETSNMP),y)
+> +SYSLOG_NG_DEPENDENCIES += netsnmp
+> +SYSLOG_NG_CONF_OPTS += --enable-snmp-dest
+> +SYSLOG_NG_CONF_OPTS += --with-netsnmp="$(STAGING_DIR)/usr/bin"
+> +else
+> +SYSLOG_NG_CONF_OPTS += --disable-snmp-dest
+> +endif
+> +
+>  define SYSLOG_NG_INSTALL_INIT_SYSV
+>         $(INSTALL) -m 0755 -D package/syslog-ng/S01syslog-ng \
+>                 $(TARGET_DIR)/etc/init.d/S01syslog-ng
+> --
+> 2.24.1
+>
