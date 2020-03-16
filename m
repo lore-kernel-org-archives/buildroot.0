@@ -1,72 +1,61 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 16 Mar 2020 08:34:59 -0700
-Subject: [Buildroot] [PATCH 1/1] support/testing/: change python-gobject to
- use prebuilt kernel
-Message-ID: <20200316153459.2291931-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 16 Mar 2020 16:46:23 +0100
+Subject: [Buildroot] [PATCH] Makefile: fix locale purge when
+ BR2_PER_PACKAGE_DIRECTORIES=y
+Message-ID: <20200316154623.972632-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+With BR2_PER_PACKAGE_DIRECTORIES=y, we have the following code in the
+main Makefile:
 
-This change significantly reduces the ammount of time needed to run the
-test.
+target-finalize: $(PACKAGES) $(TARGET_DIR) host-finalize
+	@$(call MESSAGE,"Finalizing target directory")
+	$(call per-package-rsync,$(sort $(PACKAGES)),target,$(TARGET_DIR))
+	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
 
-Select a cortext_a9 and a external linaro toolchain due to the need for a
-glibc based toolchain, as the default TestPythonPackageBase.config toolchain
-is a uClibc toolchain.
+The per-package-rsync call creates the global $(TARGET_DIR) from the
+per-package $(TARGET_DIR). Then, we call the TARGET_FINALIZE_HOOKS.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+One of the TARGET_FINALIZE_HOOKS, PURGE_LOCALES, remove locales that
+are not desired by the user. It does so using a loop with the
+$(wildcard ...) function.
+
+However, the $(wildcard ...) function is expanded at the moment the
+rule is evaluated. And with per-package directory, at the time the
+rule is evaluated, the global $(TARGET_DIR) is empty, so $(wildcard
+...) will return nothing. It is indeed only after the call to
+per-package-rsync that the TARGET_DIR will be populated.
+
+This commit fixes that by moving away from $(wildcard ...) and use a
+shell test instead, since we are anyway in big block of shell code.
+
+With this, locales are properly purged again when
+BR2_PER_PACKAGE_DIRECTORIES=y.
+
+Fixes: c4e6d5c8be6ada8e7c60950e3b499c55d48761cb ("core: implement per-package SDK and target")
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../tests/package/test_python_gobject.py      | 25 +++++++------------
- 1 file changed, 9 insertions(+), 16 deletions(-)
+ Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_python_gobject.py b/support/testing/tests/package/test_python_gobject.py
-index a673d554a4..cf10e9ff67 100644
---- a/support/testing/tests/package/test_python_gobject.py
-+++ b/support/testing/tests/package/test_python_gobject.py
-@@ -3,31 +3,24 @@ from tests.package.test_python import TestPythonPackageBase
+diff --git a/Makefile b/Makefile
+index 074d08c04a..cc65d7ca09 100644
+--- a/Makefile
++++ b/Makefile
+@@ -698,8 +698,9 @@ define PURGE_LOCALES
+ 	rm -f $(LOCALE_WHITELIST)
+ 	for i in $(LOCALE_NOPURGE) locale-archive; do echo $$i >> $(LOCALE_WHITELIST); done
  
- class TestPythonPy3Gobject(TestPythonPackageBase):
-     __test__ = True
--    config = \
-+    config = TestPythonPackageBase.config + \
-         """
--        BR2_aarch64=y
-         BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
--        BR2_LINUX_KERNEL=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
--        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
--        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-         BR2_TARGET_ROOTFS_CPIO=y
--        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_ARM_EABIHF=y
-+        BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
-         BR2_PACKAGE_GOBJECT_INTROSPECTION=y
-         BR2_PACKAGE_PYTHON3=y
-         BR2_PACKAGE_PYTHON_GOBJECT=y
-         """
- 
-     def login(self):
--        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
--        kern = os.path.join(self.builddir, "images", "Image")
--        self.emulator.boot(arch="aarch64",
--                           kernel=kern,
--                           kernel_cmdline=["console=ttyAMA0"],
--                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", img])
-         self.emulator.login()
- 
-     sample_scripts = ["tests/package/sample_python_gobject.py"]
+-	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/lib/locale)); \
++	for dir in $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/lib/locale); \
+ 	do \
++		if [ ! -d $$dir ] ; then continue ; fi ; \
+ 		for langdir in $$dir/*; \
+ 		do \
+ 			if [ -e "$${langdir}" ]; \
 -- 
 2.24.1
