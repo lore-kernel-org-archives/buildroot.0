@@ -1,49 +1,107 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 16 Mar 2020 23:10:50 +0100
-Subject: [Buildroot] [PATCH 2/2] package/llvm: remove outdated variables
- disabling bindings
-In-Reply-To: <20200316200106.3709163-2-joseph.kogut@gmail.com>
-References: <20200316200106.3709163-1-joseph.kogut@gmail.com>
- <20200316200106.3709163-2-joseph.kogut@gmail.com>
-Message-ID: <6e064969-62e5-d02e-7c43-ae2eb0ab3c00@gmail.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Mon, 16 Mar 2020 23:15:24 +0100
+Subject: [Buildroot] [PATCH v6 18/28] package/cmake: Fix for using -O in
+ top-level make
+In-Reply-To: <33267645-fd49-cb20-bb8f-f6a1edd57a15@mind.be>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-19-anaumann@ultratronik.de>
+ <20200311232503.0bafe189@windsurf>
+ <33267645-fd49-cb20-bb8f-f6a1edd57a15@mind.be>
+Message-ID: <d6125560-ca00-a4be-cfde-ff200d332756@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Joseph,
+Hi,
 
-Le 16/03/2020 ? 21:01, Joseph Kogut a ?crit?:
-> LLVM no longer disables unsupported bindings by overriding OCAMLFIND and
-> GO_EXECUTABLE, so remove them.
+On 12.03.20 14:00, Arnout Vandecappelle wrote:
 > 
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  package/llvm/llvm.mk | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
 > 
-> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-> index f1034f0365..24d033d124 100644
-> --- a/package/llvm/llvm.mk
-> +++ b/package/llvm/llvm.mk
-> @@ -189,11 +189,8 @@ LLVM_CONF_OPTS += -DLLVM_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME)
->  # This solves "No available targets are compatible for this triple" with llvmpipe
->  LLVM_CONF_OPTS += -DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME)
->  
-> -# The Go bindings have no CMake rules at the moment, but better remove the
-> -# check preventively. Building the Go and OCaml bindings is yet unsupported.
-> +# Building the Go and OCaml bindings is yet unsupported.
->  HOST_LLVM_CONF_OPTS += \
-> -	-DGO_EXECUTABLE=GO_EXECUTABLE-NOTFOUND \
-> -	-DOCAMLFIND=OCAMLFIND-NOTFOUND \
->  	-DLLVM_ENABLE_BINDINGS=OFF
+> On 11/03/2020 23:25, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> Let's add Arnout in the loop, for the make sorcery.
+> 
+>   Not much sorcery going on here...
+> 
+>> On Mon, 17 Feb 2020 22:23:40 +0100
+>> Andreas Naumann <anaumann@ultratronik.de> wrote:
+>>
+>>> Setting -O in top level make somehow interferes with the explicit setting of
+>>> -jX in the cmake bootstrap script. Avoid passing down MAKEFLAGS in the configure
+>>> case.
+>>>
+>>> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+>>
+>> This commit log was a bit vague on what the issue was. If I understand
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+The issue was that the cmake configure step stopped with an error if I 
+used the -O option. I dont think it was related to which output strategy 
+was used.
 
-Best regards,
-Romain
+>> correctly, what you see is that the "make" process running to build
+>> host-cmake is constantly entering/leaving its build directory, like
+>> this:
+>>
+>> make[3]: Entering directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+>> [ 50%] Building C object Utilities/cmlibarchive/libarchive/CMakeFiles/cmlibarchive.dir/archive_read_support_filter_rpm.c.o
+>> make[3]: Leaving directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+>> make[3]: Entering directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+>> [ 50%] Building C object Utilities/cmlibarchive/libarchive/CMakeFiles/cmlibarchive.dir/archive_read_support_filter_none.c.o
+>> make[3]: Leaving directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+>> make[3]: Entering directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+>> [ 50%] Building C object Utilities/cmlibarchive/libarchive/CMakeFiles/cmlibarchive.dir/archive_read_support_filter_program.c.o
+>> make[3]: Leaving directory '/home/thomas/projets/buildroot/output/build/host-cmake-3.15.5'
+>>
+>> Reading
+>> https://www.gnu.org/software/make/manual/html_node/Parallel-Output.html,
+>> it seems like it is expected for -Otarget to behave like this.
+> 
+> Indeed, looks exactly like expected. >
+>> However,
+>> if you use -Orecurse, it works as expected: the entire output of the
+>> sub-make is buffered, and output in one-go when the make target at the
+>> Buildroot level completes.
 
->  
->  # Builds a release host tablegen that gets used during the LLVM build.
+I dont mind the entering/leaving info. Rather I thought -Orecurse would 
+buffer everything to the end of the buildroot process, which is not what 
+I wanted.
+
+>>
+>> So I'm not sure we want to prevent -Otarget from doing what it does: we
+>> should probably instead use -Orecurse.
+> 
+> 
+>   Where do we pass -Otarget to begin with?
+
+I did after brmake.
+
+> 
+>   There could be something to be set for globall resetting MAKEFLAGS and taking
+> control over the make flags entirely from Buildroot infra when calling into
+> package build systems. However, this is a bit complicated in make, and I'm not
+> entirely convinced we really want that...
+
+Hmm, I have not seen problems anywhere else with the -O option. Just in 
+this case the configure step died. After some fiddling I found out it's 
+connected to what the bootstrap script does with the option 
+--parallel=$(PARALLEL_JOBS). If the --parallel option was not used then 
+-Oxxx was not a problem, but of course, the build used one core only.
+
+
+regards,
+Andreas
+
+
+
+
+> 
+>   Regards,
+>   Arnout
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
