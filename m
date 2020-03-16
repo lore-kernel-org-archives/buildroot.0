@@ -1,48 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Mar 2020 17:43:31 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2019.11.2
-Message-ID: <20200316163100.E260D81EBF@busybox.osuosl.org>
+Date: Mon, 16 Mar 2020 17:40:30 +0100
+Subject: [Buildroot] [git commit] Update for 2019.11.2
+Message-ID: <20200316163100.D88A281EBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=131083c4abfe345a307d44dd45b7966a638f37ae
+commit: https://git.buildroot.net/buildroot/commit/?id=c10d345810e4221a4508ad4a72d17e3264f71b8b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c23bac676738f8c8da2a8038df4ce9a123349008)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/news.html | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ CHANGES | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 0d57a56c52..9486da78e0 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/CHANGES b/CHANGES
+index 7433147e3c..54b20e7e29 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -154,6 +154,56 @@
+ 	#12536: Linux-Headers extracting failure
+ 	#12546: Ninja 1.10 build Error
  
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2019.11.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>16 March 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2019.11.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2019.11.1 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.11.2">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-March/277375.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2019.11.2.tar.bz2">2019.11.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2019.11.2, released March 16th, 2020
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Core: Ensure package-file-lists data is correct after
++	incremental builds as well.
++
++	Fix a race condition related to creating the output/staging
++	symlink on systems with coreutils < 8.27.
++
++	Toolchain: ARC tools bumped to arc-2019.09.
++
++	Br2-external: Fix patch handling when external linux-extension
++	packages are used. Fix compatibility with make 4.3+
++
++	Util-linux: Ensure that hwclock is built without GPLv3
++	code. Notice that builds with hwclock has contained
++	GPLv3-licensed code since util-linux 2.30 (Buildroot 2017.08+)
++
++	Updated/fixed packages: armadillo, at, bcm2835, binutils,
++	blktrace, bluez-alsa, bootstrap, brltty, busybox, cairo,
++	clamav, cog, cups, czmq, dnsmasq, docker-containerd, dovecot,
++	dovecot-pigeonhole, e2fsprogs, elf2flt, eudev, exim, exiv2,
++	fbgrab, gettext-tiny, glibc, go, grep, gst1-validate, guile,
++	imagemagick, jhead, jpeg-turbo, kvm-unit-tests, lapack,
++	libarchive, libcgroup, libdrm, libevent, libexif, libftdi1,
++	libgdiplus, libjpeg, libsigrok, libsndfile, libssh2,
++	libsvgtiny, libvncserver, libvorbis, libxml2, libxslt, linknx,
++	lxc, lz4, mariadb, mbedtls, meson, mongoose, mosquitto, musl,
++	ncurses, nodejs, ntfs-3g, ogre, opencv3, openjdk, openjpeg,
++	openrc, openswan, openvmtools, optee-test, patch, php, piglet,
++	postgresql, pppd, proftpd, pure-ftpd, python-django,
++	python-pyqt5, python-setuptools-scm-git-archive, python3,
++	qemu, qt5base, qt5tools, qt5virtualkeyboard, qt5webengine,
++	qwt, rdesktop, ruby, runc, samba4, shellinabox,
++	skeleton-init-openrc, smartmontools, spdlog, sqlcipher, squid,
++	suricata, swig, swupdate, sysklogd, taglib, thrift,
++	ti-cgt-pru, uclibc, util-linux, vorbis-tools, webkitgtk,
++	wireshark, wpebackend-fdo, wpewebkit, xen,
++	xserver_xorg-server, zeromq, zsh, zziplib
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#11996: opencv3 SIGILL on Cortex-A5 with VFPv4-D16
++	#12331: meson issue
++	#12456: qtvirtualkeyboard: No such file or directory
++	#12461: libglib2 build files with deep directory structure
++	#12481: minicom fails when output directory path contains "m4"
++	#12606: fbgrab location has changed
++
+ 2019.11.1, released January 12th, 2020
+ 
+ 	Important / security related fixes.
