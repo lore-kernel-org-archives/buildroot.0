@@ -1,10 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 16 Mar 2020 23:09:24 +0100
-Subject: [Buildroot] [PATCH 1/2] package/llvm: specify
- LLVM_ENABLE_BINDINGS=OFF
-In-Reply-To: <20200316200106.3709163-1-joseph.kogut@gmail.com>
+Date: Mon, 16 Mar 2020 23:10:50 +0100
+Subject: [Buildroot] [PATCH 2/2] package/llvm: remove outdated variables
+ disabling bindings
+In-Reply-To: <20200316200106.3709163-2-joseph.kogut@gmail.com>
 References: <20200316200106.3709163-1-joseph.kogut@gmail.com>
-Message-ID: <bde10ce7-2da8-eb1f-c6d3-f48489eb196f@gmail.com>
+ <20200316200106.3709163-2-joseph.kogut@gmail.com>
+Message-ID: <6e064969-62e5-d02e-7c43-ae2eb0ab3c00@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,50 +15,35 @@ To: buildroot@busybox.net
 Hi Joseph,
 
 Le 16/03/2020 ? 21:01, Joseph Kogut a ?crit?:
-> LLVM builds bindings for other languages such as Go and OCaml when the
-> appropriate dependencies can be found. We currently don't support
-> building these bindings in Buildroot, as they're currently unused by any
-> package.
+> LLVM no longer disables unsupported bindings by overriding OCAMLFIND and
+> GO_EXECUTABLE, so remove them.
 > 
-> Building these bindings was originally disabled by overriding the
-> dependencies with values indicating that they were not found.
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+>  package/llvm/llvm.mk | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 > 
-> Newer versions of LLVM no longer disable the OCaml bindings when overriding
-> OCAMLFIND. Consequently, the build process attempts to install the bindings
-> to the default location on the host of /usr/lib/ocaml/llvm, causing a
-> permissions error and build failure.
-> 
-> Additionally, LLVM has since added the variable LLVM_ENABLE_BINDINGS to
-> control whether bindings are enabled, so we override that to disable the
-> bindings.
-
-My autobuilder doesn't have ocaml libraries installed, maybe I can install them
-to trigger the issue.
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> index f1034f0365..24d033d124 100644
+> --- a/package/llvm/llvm.mk
+> +++ b/package/llvm/llvm.mk
+> @@ -189,11 +189,8 @@ LLVM_CONF_OPTS += -DLLVM_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME)
+>  # This solves "No available targets are compatible for this triple" with llvmpipe
+>  LLVM_CONF_OPTS += -DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME)
+>  
+> -# The Go bindings have no CMake rules at the moment, but better remove the
+> -# check preventively. Building the Go and OCaml bindings is yet unsupported.
+> +# Building the Go and OCaml bindings is yet unsupported.
+>  HOST_LLVM_CONF_OPTS += \
+> -	-DGO_EXECUTABLE=GO_EXECUTABLE-NOTFOUND \
+> -	-DOCAMLFIND=OCAMLFIND-NOTFOUND \
+>  	-DLLVM_ENABLE_BINDINGS=OFF
 
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
 Romain
 
-
-> 
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  package/llvm/llvm.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-> index 28ad6a5704..f1034f0365 100644
-> --- a/package/llvm/llvm.mk
-> +++ b/package/llvm/llvm.mk
-> @@ -193,7 +193,8 @@ LLVM_CONF_OPTS += -DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME)
->  # check preventively. Building the Go and OCaml bindings is yet unsupported.
->  HOST_LLVM_CONF_OPTS += \
->  	-DGO_EXECUTABLE=GO_EXECUTABLE-NOTFOUND \
-> -	-DOCAMLFIND=OCAMLFIND-NOTFOUND
-> +	-DOCAMLFIND=OCAMLFIND-NOTFOUND \
-> +	-DLLVM_ENABLE_BINDINGS=OFF
 >  
 >  # Builds a release host tablegen that gets used during the LLVM build.
->  HOST_LLVM_CONF_OPTS += -DLLVM_OPTIMIZED_TABLEGEN=ON
 > 
