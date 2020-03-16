@@ -1,51 +1,34 @@
-From: Joao Marcos Costa <joaomarcos.costa@bootlin.com>
-Date: Mon, 16 Mar 2020 10:44:16 +0100
-Subject: [Buildroot] [PATCH] package/vim: bump to v8.2.0
-Message-ID: <20200316094416.7274-1-joaomarcos.costa@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 16 Mar 2020 11:18:55 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/sysklogd: use
+ --exec-prefix to install binaries to /sbin
+Message-ID: <20200316100651.9C64181E02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update from version 8.1.1929 to 8.2.0, which is the latest stable
-version. The license file ('README.txt') has only one modification,
-concerning Vim's version, as it is shown by the following diff:
+commit: https://git.buildroot.net/buildroot/commit/?id=acec20bd8e61f32318e455e31face9752b927466
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-   --- vim-8.1.1929/README.txt	2019-08-25 23:08:17.000000000 +0200
-   +++ vim-8.2.0000/README.txt	2019-12-12 14:18:35.000000000 +0100
-   @@ -1,4 +1,4 @@
-   -README.txt for version 8.1 of Vim: Vi IMproved.
-   +README.txt for version 8.2 of Vim: Vi IMproved.
+To match the initscript and service file.
 
-Signed-off-by: Joao Marcos Costa <joaomarcos.costa@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vim/vim.hash | 4 ++--
- package/vim/vim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/sysklogd/sysklogd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 6c68b1bc2b..eb5928e91c 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4b7359a58a75c29d4a8fc7fcbb2ccab1d1dc0ede1c4c689b27cc049c17920278  vim-8.1.1929.tar.gz
--sha256  70ab7f93197b29d47bfe4371774c8d904f7842d4843c257d21c29b7ac38d6406  README.txt
-+sha256  8a72323817210daf40abe545bdf7637591b9b541a0fb3560baed76e436132dba  vim-8.2.0000.tar.gz
-+sha256  accdbd6761e7dd7e580545fe30f3a5a7707d50073aec4b8afef85c30fc9c031b  README.txt
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 5cb4e1b4cc..1fbb6a6b86 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index 266c171170..55ff71d484 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -10,6 +10,8 @@ SYSKLOGD_LICENSE = GPL-2.0+
+ SYSKLOGD_LICENSE_FILES = COPYING
+ # From git
+ SYSKLOGD_AUTORECONF = YES
++# install binaries to /sbin
++SYSKLOGD_CONF_OPTS = --exec-prefix=/
  
--VIM_VERSION = 8.1.1929
-+VIM_VERSION = 8.2.0000
- VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
- VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
- VIM_SUBDIR = src
--- 
-2.17.1
+ define SYSKLOGD_INSTALL_SAMPLE_CONFIG
+ 	$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
