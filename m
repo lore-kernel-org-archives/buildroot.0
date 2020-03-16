@@ -1,82 +1,117 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Mar 2020 22:20:02 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] Update for 2019.02.10
-Message-ID: <20200316210755.8E3DD81F58@busybox.osuosl.org>
+Date: Mon, 16 Mar 2020 22:44:43 +0100
+Subject: [Buildroot] Buildroot 2019.02.10 released
+Message-ID: <87tv2orn3o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f526ccb76de20c5969e9499737635fab1cf43a0a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 39 +++++++++++++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 41 insertions(+), 2 deletions(-)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-diff --git a/CHANGES b/CHANGES
-index a4d732bd2a..a620a69955 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,42 @@
-+2019.02.10, released March 16th, 2020
-+
-+	Important / security related fixes.
-+
-+	Core: Ensure package-file-lists data is correct after
-+	incremental builds as well.
-+
-+	Fix a race condition related to creating the output/staging
-+	symlink on systems with coreutils < 8.27.
-+
-+	Br2-external: Fix compatibility with make 4.3+
-+
-+	Util-linux: Ensure that hwclock is built without GPLv3
-+	code. Notice that builds with hwclock has contained
-+	GPLv3-licensed code since util-linux 2.30 (Buildroot 2017.08+)
-+
-+	Updated/fixed packages: armadillo, at, binutils, blktrace,
-+	bootstrap, busybox, cairo, cups, czmq, dnsmasq,
-+	docker-containerd, dovecot, dovecot-pigeonhole, e2fsprogs,
-+	eudev, exim, exiv2, fbgrab, grep, gst1-validate, guile,
-+	imagemagick, jhead, kvm-unit-tests, lapack, libcgroup,
-+	libftdi1, libjpeg, libsigrok, libsndfile, libssh2, libsvgtiny,
-+	libvncserver, libvorbis, libxml2, libxslt, linux, lz4,
-+	mariadb, mbedtls, meson, mfgtools, mongoose, ncurses, ntfs-3g,
-+	opencv3, openjpeg, openswan, openvmtools, patch, php,
-+	postgresql, pppd, proftpd, pure-ftpd, python-django,
-+	python-pyqt5, python3, qemu, qt5base, qt5webengine, qwt,
-+	rdesktop, ruby, runc, samba4, shellinabox, smartmontools,
-+	sqlcipher, squid, swupdate, sysklogd, taglib, thrift,
-+	ti-cgt-pru, uboot, util-linux, vorbis-tools, webkitgtk,
-+	wireshark, xen, xserver_xorg-server, zeromq, zsh
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11996: opencv3 SIGILL on Cortex-A5 with VFPv4-D16
-+	#12331: meson issue
-+	#12461: libglib2 build files with deep directory structure
-+	#12606: fbgrab location has changed
-+
- 2019.02.9, released January 12th, 2020
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 31960c8ffc..337ac016d7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2019.02.9
-+export BR2_VERSION := 2019.02.10
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1578842000
-+BR2_VERSION_EPOCH = 1584393000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+Buildroot 2019.02.10 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2019.02.10.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2019.02.10.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2019.02.10 is a bugfix release on the previous long term
+release, fixing a number of important / security related issues
+discovered since the 2019.02.9 release.
+
+Notice that the 2019.02.x series will only see one more update before
+going end of life. Please consider migrating to the 2020.02.x series
+instead.
+
+- Core: Ensure package-file-lists data is correct after	incremental
+  builds as well.
+
+- Fix a race condition related to creating the output/staging symlink on
+  systems with coreutils < 8.27.
+
+- Br2-external: Fix compatibility with make 4.3+
+
+- Util-linux: Ensure that hwclock is built without GPLv3 code. Notice
+  that builds with hwclock has contained GPLv3-licensed code since
+  util-linux 2.30 (Buildroot 2017.08+)
+
+- Security fixes for blktrace, bootstrap, cairo, dnsmasq,
+  docker-containerd, dovecot, e2fsprogs, exiv2, jhead, libcgroup,
+  libexif, libjpeg, libsndfile, libssh2, libvncserver, libvorbis,
+  libxml2, libxslt, lz4, mariadb, mbedtls, mongoose, ncurses, ntfs-3g,
+  openjpeg, openswan, patch, php, postgresql, pppd, proftpd, pure-ftpd,
+  python-django, qt5base, rdesktop, runc, samba4, shellinabox,
+  sqlcipher, squid, taglib, vorbis-tools, webkitgtk, wireshark, xen, zsh
+
+- Fixes for download/compilation/runtime/license issues in armadillo,
+  at, binutils, busybox, cups, czmq, eudev, exim, fbgrab, grep,
+  gst1-validate, guile, imagemagick, jpeg-turbo, kvm-unit-tests, lapack,
+  libftdi1, libsigrok, libsvgtiny, linux, mariadb, meson, mfgtools,
+  opencv3, openvmtools, python-pyqt5, python3, qemu, qt5base,
+  qt5webengine, qwt, ruby, smartmontools, swupdate, sysklogd, thrift,
+  ti-cgt-pru, uboot, util-linux, xserver_xorg-server, zeromq,
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.10
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2019.02.9..
+
+    66  Fabrice Fontaine
+    34  Peter Korsgaard
+     7  Carlos Santos
+     5  Bernd Kuhls
+     5  Peter Seiderer
+     5  Ryan Coe
+     4  Giulio Benetti
+     4  Thomas De Schampheleire
+     4  Thomas Petazzoni
+     4  Yann E. MORIN
+     3  Nicolas Serafini
+     3  Yegor Yefremov
+     2  Angelo Compagnucci
+     2  Baruch Siach
+     2  Luca Ceresoli
+     2  Matt Weber
+     2  Sam Voss
+     1  Adam Duskett
+     1  Adrian Perez de Castro
+     1  Alexander Mukhin
+     1  Alexandre PAYEN
+     1  Alexey Lukyanchuk
+     1  Andreas Naumann
+     1  Ash Charles
+     1  Chris Packham
+     1  Christian Stewart
+     1  Christopher McCrory
+     1  Francois Perrad
+     1  Gary Bisson
+     1  Heiko Thiery
+     1  Jan Willem Janssen
+     1  Joel Stanley
+     1  John Keeping
+     1  Julien Olivain
+     1  Max Filippov
+     1  Michael Fischer
+     1  Nicolas Carrier
+     1  Pascal de Bruijn
+     1  Pierre-Jean Texier
+     1  Romain Naour
+     1  Titouan Christophe
+
+-- 
+Bye, Peter Korsgaard
