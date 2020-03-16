@@ -1,48 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Mar 2020 22:48:18 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2019.02.10
-Message-ID: <20200316213544.B051681EB2@busybox.osuosl.org>
+Date: Mon, 16 Mar 2020 22:46:36 +0100
+Subject: [Buildroot] [git commit] Update for 2019.02.10
+Message-ID: <20200316213544.A3C9881FC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f0868acb2d3b4c23b3a9fb19bf5b2e9b0d9e1ca
+commit: https://git.buildroot.net/buildroot/commit/?id=2ccbb133b25371e6bf9bb2e157e46e80d51a43aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f526ccb76de20c5969e9499737635fab1cf43a0a)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/news.html | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ CHANGES | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 9486da78e0..061159747a 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/CHANGES b/CHANGES
+index 54b20e7e29..57a53083ed 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -901,6 +901,45 @@
+ 	#11761: Building custom kernel 5.1-rc3 or later breaks on objtool
+ 	#11816: Only selected coreutils binaries are installed
  
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2019.02.10 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>16 march 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2019.02.10 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2019.02.9 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.10">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-March/277395.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2019.02.10.tar.bz2">2019.02.10 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2019.02.10, released March 16th, 2020
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Core: Ensure package-file-lists data is correct after
++	incremental builds as well.
++
++	Fix a race condition related to creating the output/staging
++	symlink on systems with coreutils < 8.27.
++
++	Br2-external: Fix compatibility with make 4.3+
++
++	Util-linux: Ensure that hwclock is built without GPLv3
++	code. Notice that builds with hwclock has contained
++	GPLv3-licensed code since util-linux 2.30 (Buildroot 2017.08+)
++
++	Updated/fixed packages: armadillo, at, binutils, blktrace,
++	bootstrap, busybox, cairo, cups, czmq, dnsmasq,
++	docker-containerd, dovecot, dovecot-pigeonhole, e2fsprogs,
++	eudev, exim, exiv2, fbgrab, grep, gst1-validate, guile,
++	imagemagick, jhead, kvm-unit-tests, lapack, libcgroup,
++	libftdi1, libjpeg, libsigrok, libsndfile, libssh2, libsvgtiny,
++	libvncserver, libvorbis, libxml2, libxslt, linux, lz4,
++	mariadb, mbedtls, meson, mfgtools, mongoose, ncurses, ntfs-3g,
++	opencv3, openjpeg, openswan, openvmtools, patch, php,
++	postgresql, pppd, proftpd, pure-ftpd, python-django,
++	python-pyqt5, python3, qemu, qt5base, qt5webengine, qwt,
++	rdesktop, ruby, runc, samba4, shellinabox, smartmontools,
++	sqlcipher, squid, swupdate, sysklogd, taglib, thrift,
++	ti-cgt-pru, uboot, util-linux, vorbis-tools, webkitgtk,
++	wireshark, xen, xserver_xorg-server, zeromq, zsh
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#11996: opencv3 SIGILL on Cortex-A5 with VFPv4-D16
++	#12331: meson issue
++	#12461: libglib2 build files with deep directory structure
++	#12606: fbgrab location has changed
++
+ 2019.02.9, released January 12th, 2020
+ 
+ 	Important / security related fixes.
