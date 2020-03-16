@@ -1,71 +1,62 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 16 Mar 2020 18:45:05 +0200
-Subject: [Buildroot] [PATCH 1/4] package/bluez5_utils: bump to version
- 5.54
-In-Reply-To: <20200316164024.540598-1-joerg.krause@embedded.rocks>
-References: <20200316164024.540598-1-joerg.krause@embedded.rocks>
-Message-ID: <20200316164505.zvsutzatugff7ofh@sapphire.tkos.co.il>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon, 16 Mar 2020 17:52:51 +0100
+Subject: [Buildroot] [PATCH v2 2/4] package/bluez5_utils: add mesh support
+In-Reply-To: <20200316165253.560773-1-joerg.krause@embedded.rocks>
+References: <20200316165253.560773-1-joerg.krause@embedded.rocks>
+Message-ID: <20200316165253.560773-2-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
+Mesh support was already added in version 5.47.
 
-On Mon, Mar 16, 2020 at 05:40:21PM +0100, J?rg Krause wrote:
-> Changes since version 5.52:
-> 
-> 5.54:
->   Fix issue with HOGP to accept data only from bonded devices.
->   Fix issue with A2DP sessions being connected at the same time.
->   Fix issue with class UUID matches before connecting profile.
->   Add support for handling MTU auto-tuning option for AVDTP.
->   Add support for new policy for Just-Works repairing.
->   Add support for Enhanced ATT bearer (EATT).
-> 
-> 5.53:
->   Fix issue with handling unregistration for advertisment.
->   Fix issue with A2DP and handling recovering process.
->   Fix issue with udpating input device information.
->   Add support for loading blocked keys.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/bluez5_utils/bluez5_utils.hash | 2 +-
->  package/bluez5_utils/bluez5_utils.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-> index 00112bc0b6..3eb6912fb3 100644
-> --- a/package/bluez5_utils/bluez5_utils.hash
-> +++ b/package/bluez5_utils/bluez5_utils.hash
-> @@ -1,4 +1,4 @@
->  # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
-> -sha256  f7144ce2039202cfac18ccb52426efea11c98e4f6e1bb8041bcb994b8378560a  bluez-5.52.tar.xz
-> +sha256  68cdab9e63e8832b130d5979dc8c96fdb087b31278f342874d992af3e56656dc  bluez-5.54.tar.xz
->  sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
->  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-> diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-> index 8f9249454d..e328f52eaf 100644
-> --- a/package/bluez5_utils/bluez5_utils.mk
-> +++ b/package/bluez5_utils/bluez5_utils.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  # Keep the version and patches in sync with bluez5_utils-headers
-> -BLUEZ5_UTILS_VERSION = 5.52
-> +BLUEZ5_UTILS_VERSION = 5.54
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+v2:
+ * none
+---
+ package/bluez5_utils/Config.in       | 7 +++++++
+ package/bluez5_utils/bluez5_utils.mk | 8 ++++++++
+ 2 files changed, 15 insertions(+)
 
-What about bluez5_utils-headers?
-
-baruch
-
->  BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
->  BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
->  BLUEZ5_UTILS_INSTALL_STAGING = YES
-
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 488a2f79c8..038c6e7095 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -60,6 +60,13 @@ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
+ 	help
+ 	  Build BlueZ 5.x health plugin
+ 
++config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH
++	bool "build mesh profile"
++	select BR2_PACKAGE_JSON_C
++	select BR2_PACKAGE_READLINE
++	help
++	  Build BlueZ 5.x mesh plugin
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI
+ 	bool "build midi profile"
+ 	select BR2_PACKAGE_ALSA_LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index e328f52eaf..2d95899f44 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -51,6 +51,14 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-health
+ endif
+ 
++# enable mesh profile
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-mesh
++BLUEZ5_UTILS_DEPENDENCIES += json-c readline
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-mesh
++endif
++
+ # enable midi profile
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-midi
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.25.1
