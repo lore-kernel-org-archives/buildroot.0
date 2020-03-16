@@ -1,57 +1,89 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Mon, 16 Mar 2020 22:54:38 +0100
-Subject: [Buildroot] [PATCH v6 17/28] core/pkg-infra: Fix package file
- statistics for parallel build
-In-Reply-To: <20200311230703.37bf0b63@windsurf>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-18-anaumann@ultratronik.de>
- <20200311230703.37bf0b63@windsurf>
-Message-ID: <05f8a107-81e4-9e3d-4659-7dcfd4b2e417@andin.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 16 Mar 2020 22:55:36 +0100
+Subject: [Buildroot] [PATCH] fs/initramfs: fix show-info
+Message-ID: <20200316215536.22090-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The initramfs is not a reall filesystem, so it does not use the
+$(rootfs) infrastructure.
 
-On 11.03.20 23:07, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 17 Feb 2020 22:23:39 +0100
-> Andreas Naumann <anaumann@ultratronik.de> wrote:
-> 
->> When activating top level parallel build, multiple processes may
->> try to modify the various *files-list* files in the common build/
->> directory at the same time. This can cause racy build failures.
->>
->> The fix here is to use flock to ensure exclusive execution of the
->> statistics gathering code. For this to work it is assumed that the
->> target/staging/host directories are isolated, which is true for
->> per-package builds.
->> For standard sequential builds, the locking is of course unnecessary
->> but no conditional handling is implemented  since the runtime cost is
->> expected to be next to nothing.
->>
->> For flock to work, the statistics gathering code must be run in a
->> single subshell. Otherwise the lockfile descriptor would be closed
->> after the subshell (= the Makefile line where it was opened) ends
->> and thus the lock would be released before even entering the critical
->> code section.
->>
->> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
-> 
-> This is no longer needed: we have taken a different approach in commit
-> 0e2be4db8ab01d479177a3a187c22525752195ae, where we make the logic
-> per-package, and collect the overall data in target-finalize.
+As a consequence, the usual rootfs-related variables are not set,
+especially the name, type, and dependencies of the (non-)filesystem.
 
-I'm very glad as I wasnt too happy about this.
+Yet, it is present in the list of rootfs to build, and thus we end
+up including it in the output of show-info. But the missing variables
+yield an incorrect json:
 
-regards,
-Andreas
+    "": {
+        "type": "",
+        "virtual": false,
+        "version": "",
+        "licenses": "",
+        "dl_dir": "",
+        "install_target": ,
+        "install_staging": ,
+        "install_images": ,
+        "downloads": [ ],
+        "dependencies": [ ],
+        "reverse_dependencies": [ ]
+    },
 
-> 
-> Thanks,
-> 
-> Thomas
-> 
+First, the object key is empty; second, the install_target,
+install_staging, and install_images values are empty, which is not
+valid (if they were null, that be OK though). Third, this is clearly
+the layout of a 'package' entry, not that of a 'rootfs' entry.
+
+An option to fix that would be to actually make use of the rootfs
+infra. However, that would mean doing a lot of work for nothing
+(there is actually nothing to do, yet the infra would still do a lot
+of preparatory and clean up work).
+
+The alternative is pretty simple: declare and set the variables as if
+it were a real filesystem, so that show-info can filter it to the
+proper layout and can spit out appropriate content (even if fake).
+
+The third option would be to teach show-info (and its internal
+implementation, the macro json-info) to ignore specific cases, like
+no-name items, or replace empty values with null, or whatnots. This
+again would be quite a lot of work for a single occurence.
+
+So we go for the simple faked variables.
+
+We add linux as a dependency, so that the graph-depends also properly
+represent the dependency chain, which ends up with something liKe:
+
+              ALL
+               |
+               v
+        rootfs-initramfs
+         |            |
+         v            v
+       linux     rootfs-cpio
+
+which is pretty fitting in the end.
+
+Reported-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ fs/initramfs/initramfs.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
+index c751093214..3b3d4ed8b9 100644
+--- a/fs/initramfs/initramfs.mk
++++ b/fs/initramfs/initramfs.mk
+@@ -29,3 +29,8 @@ rootfs-initramfs-show-depends:
+ ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+ TARGETS_ROOTFS += rootfs-initramfs
+ endif
++
++# Not using the rootfs infra, so fake the variables
++ROOTFS_INITRAMFS_NAME = rootfs-initramfs
++ROOTFS_INITRAMFS_TYPE = rootfs
++ROOTFS_INITRAMFS_DEPENDENCIES = rootfs-cpio linux
+-- 
+2.20.1
