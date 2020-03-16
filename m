@@ -1,117 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Mar 2020 22:44:43 +0100
-Subject: [Buildroot] Buildroot 2019.02.10 released
-Message-ID: <87tv2orn3o.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Mar 2020 22:48:18 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2019.02.10
+Message-ID: <20200316213544.B051681EB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=0f0868acb2d3b4c23b3a9fb19bf5b2e9b0d9e1ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/news.html | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-Buildroot 2019.02.10 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2019.02.10.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2019.02.10.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2019.02.10 is a bugfix release on the previous long term
-release, fixing a number of important / security related issues
-discovered since the 2019.02.9 release.
-
-Notice that the 2019.02.x series will only see one more update before
-going end of life. Please consider migrating to the 2020.02.x series
-instead.
-
-- Core: Ensure package-file-lists data is correct after	incremental
-  builds as well.
-
-- Fix a race condition related to creating the output/staging symlink on
-  systems with coreutils < 8.27.
-
-- Br2-external: Fix compatibility with make 4.3+
-
-- Util-linux: Ensure that hwclock is built without GPLv3 code. Notice
-  that builds with hwclock has contained GPLv3-licensed code since
-  util-linux 2.30 (Buildroot 2017.08+)
-
-- Security fixes for blktrace, bootstrap, cairo, dnsmasq,
-  docker-containerd, dovecot, e2fsprogs, exiv2, jhead, libcgroup,
-  libexif, libjpeg, libsndfile, libssh2, libvncserver, libvorbis,
-  libxml2, libxslt, lz4, mariadb, mbedtls, mongoose, ncurses, ntfs-3g,
-  openjpeg, openswan, patch, php, postgresql, pppd, proftpd, pure-ftpd,
-  python-django, qt5base, rdesktop, runc, samba4, shellinabox,
-  sqlcipher, squid, taglib, vorbis-tools, webkitgtk, wireshark, xen, zsh
-
-- Fixes for download/compilation/runtime/license issues in armadillo,
-  at, binutils, busybox, cups, czmq, eudev, exim, fbgrab, grep,
-  gst1-validate, guile, imagemagick, jpeg-turbo, kvm-unit-tests, lapack,
-  libftdi1, libsigrok, libsvgtiny, linux, mariadb, meson, mfgtools,
-  opencv3, openvmtools, python-pyqt5, python3, qemu, qt5base,
-  qt5webengine, qwt, ruby, smartmontools, swupdate, sysklogd, thrift,
-  ti-cgt-pru, uboot, util-linux, xserver_xorg-server, zeromq,
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.10
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2019.02.9..
-
-    66  Fabrice Fontaine
-    34  Peter Korsgaard
-     7  Carlos Santos
-     5  Bernd Kuhls
-     5  Peter Seiderer
-     5  Ryan Coe
-     4  Giulio Benetti
-     4  Thomas De Schampheleire
-     4  Thomas Petazzoni
-     4  Yann E. MORIN
-     3  Nicolas Serafini
-     3  Yegor Yefremov
-     2  Angelo Compagnucci
-     2  Baruch Siach
-     2  Luca Ceresoli
-     2  Matt Weber
-     2  Sam Voss
-     1  Adam Duskett
-     1  Adrian Perez de Castro
-     1  Alexander Mukhin
-     1  Alexandre PAYEN
-     1  Alexey Lukyanchuk
-     1  Andreas Naumann
-     1  Ash Charles
-     1  Chris Packham
-     1  Christian Stewart
-     1  Christopher McCrory
-     1  Francois Perrad
-     1  Gary Bisson
-     1  Heiko Thiery
-     1  Jan Willem Janssen
-     1  Joel Stanley
-     1  John Keeping
-     1  Julien Olivain
-     1  Max Filippov
-     1  Michael Fischer
-     1  Nicolas Carrier
-     1  Pascal de Bruijn
-     1  Pierre-Jean Texier
-     1  Romain Naour
-     1  Titouan Christophe
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 9486da78e0..061159747a 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2019.02.10 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>16 march 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2019.02.10 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2019.02.9 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.10">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-March/277395.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2019.02.10.tar.bz2">2019.02.10 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
