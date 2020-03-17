@@ -1,28 +1,97 @@
-From: LP C <lpdev@cordier.org>
-Date: Tue, 17 Mar 2020 11:56:22 +0100
-Subject: [Buildroot] Improve external toolchain support
-Message-ID: <1584441658.local-92915ea1-2b2b-v1.5.5-b7939d38@getmailspring.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 17 Mar 2020 12:13:24 +0100
+Subject: [Buildroot] [PATCH 2/2] Makefile: don't hang the build if there
+ are no file lists
+In-Reply-To: <20200312091530.287681-2-thomas.petazzoni@bootlin.com>
+References: <20200312091530.287681-1-thomas.petazzoni@bootlin.com>
+ <20200312091530.287681-2-thomas.petazzoni@bootlin.com>
+Message-ID: <CAAXf6LXzTLt-eUfG8zsVRB-LNfc_jo01R9bWKDzDPH6ZLtnFMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+El jue., 12 mar. 2020 a las 10:15, Thomas Petazzoni
+(<thomas.petazzoni@bootlin.com>) escribi?:
+>
+> In very limited configurations, it is possible to have a case where no
+> .files-list-staging.txt files are created. In this case:
+>
+>         cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
+>                 $(BUILD_DIR)/packages-file-list-staging.txt
+>
+> becomes:
+>
+>         cat > \
+>                 $(BUILD_DIR)/packages-file-list-staging.txt
+>
+> which of course makes the build hang.. forever.
+>
+> So we fix this by checking the list is not empty. To keep the code
+> readable, we introduce an intermediate variable to store the list of
+> these files.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> This is a fix, it should be backported to 2020.02.x
+> ---
+>  Makefile | 16 ++++++++++------
+>  1 file changed, 10 insertions(+), 6 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 074d08c04a..3fdd52c677 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -727,6 +727,10 @@ $(TARGETS_ROOTFS): target-finalize
+>  # Avoid the rootfs name leaking down the dependency chain
+>  target-finalize: ROOTFS=
+>
+> +TARGET_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt))
+> +HOST_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt))
+> +STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt))
+> +
+>  .PHONY: host-finalize
+>  host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
+>         @$(call MESSAGE,"Finalizing host directory")
+> @@ -807,12 +811,12 @@ endif # merged /usr
+>
+>         touch $(TARGET_DIR)/usr
+>
+> -       cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt)) > \
+> -               $(BUILD_DIR)/packages-file-list.txt
+> -       cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt)) > \
+> -               $(BUILD_DIR)/packages-file-list-host.txt
+> -       cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
+> -               $(BUILD_DIR)/packages-file-list-staging.txt
+> +       $(if $(TARGET_DIR_FILES_LISTS), \
+> +               cat $(TARGET_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list.txt)
+> +       $(if $(HOST_DIR_FILES_LISTS), \
+> +               cat $(HOST_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list-host.txt)
+> +       $(if $(STAGING_DIR_FILES_LISTS), \
+> +               cat $(STAGING_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list-staging.txt)
 
-I bring your attention about section 6.1.3 Build an external toolchain with Buildroot.
-I have carefully followed the tutorial that explains how to make our own toolchain. I have seen few limitations of this approach though
-As stated in the documentation, it is possible to point to a freshly created toolchain using "file://MY_TOOLCHAIN.tar.gz" path in the toolchain URL. However, this means that buildroot will "download" the file in the its dl folder. If you decide to regenerate MY_TOOLCHAIN.tar.gz, then buildroot will NOT detect the toolchain archive changed, and will use the MY_TOOLCHAIN.tar.gz cached in dl directory.
-Integrity of the build is not achievable because the toolchain is not checked against in hash (local or remote). In toolchain/toolchain-external/toolchain-external-custom/toolchain-external-custom.mk, it is stated in the comment that "We can't check hashes for custom downloaded toolchains"
 
-To solve these caveats that can heavily comprimise a build, these are my suggestions:
+An alternative approach that does not require checking for empty, is
+to quote the argument to cat. I.e.
+cat "$(sort ...)" will not hang. It would give an error though, so
+your check is actually better.
 
-In buildroot makefile, detect that we are pointing to a local toolchain and always check using HASHES that toolchain in folder is the same as toolchain pointed by url. Not sure it's a good design though, because it can break the "make source" target.
-Add BR2_TOOLCHAIN_EXTERNAL_CUSTOM_HASH, (under the form "md5sum MY_MD5", or "sha1 MY_SHA1") that provides a hash to check against the downloaded toolchain. Instead of silently using the wrong toolchain, it might be catched earlier in the build.
+But I found two additional problems in this area:
 
-Thank you for your feedbacks on this, BR
+1. packages that set FOO_SUBDIR will have their file list created in
+the FOO_SUBDIR, and it is not picked up by the current '$(wildcard
+$(BUILD_DIR)/*/.files-list.txt)'.  Since make does not support a '**'
+as recursive wildcard, we'd need to use a find or a more clever
+method.
 
-Louis-Paul CORDIER
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200317/e698979a/attachment.html>
+2. Previously, the packages-file-list.txt was already available by the
+time the post-build scripts are run. But with the recent changes, this
+is no longer true. Moving the 'cat' lines up solves that.
+
+For 2 I have a patch but it conflicts with the above ones, so better
+to apply yours first. Alternatively I can send the entire series. Let
+me know what you prefer.
+
+Best regards,
+Thomas
