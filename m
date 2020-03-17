@@ -1,39 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Mar 2020 14:58:33 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] Makefile: correct make
- 4.3+ workaround for 2019.02.x
-Message-ID: <20200317134820.DD3A58216C@busybox.osuosl.org>
+Date: Tue, 17 Mar 2020 15:01:11 +0100
+Subject: [Buildroot] Buildroot 2019.02.10 released
+In-Reply-To: <VI1PR02MB3920FB98760F53590B4F735BDCF60@VI1PR02MB3920.eurprd02.prod.outlook.com>
+ (Mircea GLIGA's message of "Tue, 17 Mar 2020 13:50:06 +0000")
+References: <87tv2orn3o.fsf@dell.be.48ers.dk>
+ <VI1PR02MB3920FB98760F53590B4F735BDCF60@VI1PR02MB3920.eurprd02.prod.outlook.com>
+Message-ID: <87pndbrsgo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ad1dee15ae33c9785eb414b3fcc5b098fdf68c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Mircea" == Mircea GLIGA <mgliga@bitdefender.com> writes:
 
-Commit bdb4a9e110b67ebe3336a (Makefile: work around a bug in newly released
-make 4.3) backported a fix from master, but it doesn't work on 2019.02.x as
-the br2-external file is called .br-external.mk, not .br2-external.mk.
+ > Hi all,
+ >> - Br2-external: Fix compatibility with make 4.3+
 
-Adjust the workaround to match.
+ > Regarding this part, there is a problem, the fix that applies to master, doesn't fix
+ > the problem on 2019.02.X.
+ > I reported this when I tested the problem here: 
+ > http://lists.busybox.net/pipermail/buildroot/2020-March/275751.html
 
-Reported-by: Mircea GLIGA <mgliga@bitdefender.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > The fix on this branch should be:
 
-diff --git a/Makefile b/Makefile
-index 337ac016d7..1f6c2a6dd6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -190,7 +190,7 @@ $(error $(BR2_EXTERNAL_ERROR))
- endif
- 
- # Workaround bug in make-4.3: https://savannah.gnu.org/bugs/?57676
--$(BASE_DIR)/.br2-external.mk:;
-+$(BASE_DIR)/.br-external.mk:;
- 
- # To make sure that the environment variable overrides the .config option,
- # set this before including .config.
+ > `$(BASE_DIR)/.br-external.mk:;`
+
+Damn, sorry about that. I've pushed a fix to the 2019.02.x branch which
+will be included in 2019.02.11.
+
+-- 
+Bye, Peter Korsgaard
