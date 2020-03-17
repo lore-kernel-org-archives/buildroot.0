@@ -1,56 +1,36 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 17 Mar 2020 12:53:25 +1300
-Subject: [Buildroot] [PATCH] package/syslog-ng: Bump version to 2.26.1
-Message-ID: <20200316235325.26563-1-judge.packham@gmail.com>
+From: Bin Meng <bmeng.cn@gmail.com>
+Date: Tue, 17 Mar 2020 09:49:28 +0800
+Subject: [Buildroot] [PATCH] configs/qemu_riscv{32,
+ 64}_virt_defconfig: Remove BR2_TARGET_GENERIC_GETTY_PORT
+In-Reply-To: <CAEUhbmV03BhiZnp9GgJRMZB2JW9C4mjNu7ALN4hc60T=6CBNuw@mail.gmail.com>
+References: <1583583630-25647-1-git-send-email-bmeng.cn@gmail.com>
+ <CAEUhbmV03BhiZnp9GgJRMZB2JW9C4mjNu7ALN4hc60T=6CBNuw@mail.gmail.com>
+Message-ID: <CAEUhbmWdjXBaW-M45yfHGzNnHRZRMQEZEfBg7GXoXJgVYXpx+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
-I've build tested this with/without Thomas DS's patch and it builds clean
-either way.
+On Thu, Mar 12, 2020 at 9:50 AM Bin Meng <bmeng.cn@gmail.com> wrote:
+>
+> On Sat, Mar 7, 2020 at 8:20 PM Bin Meng <bmeng.cn@gmail.com> wrote:
+> >
+> > Currently BR2_TARGET_GENERIC_GETTY_PORT is set to ttyS0 in both
+> > qemu_riscv32_virt and qemu_riscv64_virt defconfig files. This
+> > limits usecases when the same one rootfs could be used on QEMU
+> > 'sifive_u' machine and SiFive HiFive Unleashed board.
+> >
+> > Remove it so that the default boot console can be used.
+> >
+> > Signed-off-by: Bin Meng <bmeng.cn@gmail.com>
+> > ---
+> >
+> >  configs/qemu_riscv32_virt_defconfig | 1 -
+> >  configs/qemu_riscv64_virt_defconfig | 1 -
+> >  2 files changed, 2 deletions(-)
+> >
+>
+> Ping?
 
- package/syslog-ng/syslog-ng.conf | 2 +-
- package/syslog-ng/syslog-ng.hash | 2 +-
- package/syslog-ng/syslog-ng.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
-index a04a4770b1..e23d80580d 100644
---- a/package/syslog-ng/syslog-ng.conf
-+++ b/package/syslog-ng/syslog-ng.conf
-@@ -1,4 +1,4 @@
-- at version: 3.25
-+ at version: 3.26
- 
- source s_sys {
- 	file("/proc/kmsg" program_override("kernel"));
-diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-index 962c354b4c..a752db0016 100644
---- a/package/syslog-ng/syslog-ng.hash
-+++ b/package/syslog-ng/syslog-ng.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 34cb9673bcde58d543890e6c1189f466f938e199f227c524a6fa2f47f4db6817  syslog-ng-3.25.1.tar.gz
-+sha256 90214223864df252cea80dbb35c88a2464edcbbb2c9fbc6f6f6c13ee60cb62cd  syslog-ng-3.26.1.tar.gz
- sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607  COPYING
- sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 156bd95593..203f2c96b6 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, please check at runtime if the version in
- # syslog-ng.conf header needs to be updated
--SYSLOG_NG_VERSION = 3.25.1
-+SYSLOG_NG_VERSION = 3.26.1
- SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
- SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
--- 
-2.25.1
+Ping again?
