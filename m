@@ -1,77 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Mar 2020 22:23:23 +0100
-Subject: [Buildroot] Running depmod in the package installation
-In-Reply-To: <CAJ4jsaeaKzb7o9Pj4u0wZyjM1zY2nWErKffTep5QYBEAhd=bug@mail.gmail.com>
-References: <CAJ4jsaeaKzb7o9Pj4u0wZyjM1zY2nWErKffTep5QYBEAhd=bug@mail.gmail.com>
-Message-ID: <20200317212323.GU19677@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 17 Mar 2020 22:31:01 +0100
+Subject: [Buildroot] [PATCHv2] package/localedef: fix dependencies
+In-Reply-To: <20200317211102.12842-1-yann.morin.1998@free.fr>
+References: <20200317211102.12842-1-yann.morin.1998@free.fr>
+Message-ID: <e7350603-70c2-ba04-73ae-e1f4b416f058@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+Hi Yann,
 
-On 2020-03-15 22:43 -0300, Carlos Santos spake thusly:
-> Hello buildrooters,
+Le 17/03/2020 ? 22:11, Yann E. MORIN a ?crit?:
+> localedef needs bison to satisfy a .y.c rule to generate a parser for
+> plural forms, to ultimately generate data for the target. So we do not
+> want to depend on the host-provided bison; we want to build our own (for
+> reproducibility).
 > 
-> Currently if a package installs a kernel module it must be loaded by
-> means of its full path, e.g
+> localedef is a host-only package, and dependencies are not inherited
+> from the target variant, so we need to make them explicit host
+> dependencies.
 > 
->     insmod /lib/modules/$(/bin/uname -r)/extra/pvrsrvkm.ko
+> And move the assignment after all the download-related variables.
 > 
-> This is required because modprobe does not work, since we must run
+> Reported-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 > 
->     $(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) <kernel-version>
-
-Damn, I was pretty sure we already did it, but it appears not.
-
-> So I did this in package/ti-sgx-km/ti-sgx-km.mk, to test:
+> ---
+> Changes v1 -> v2:
+>   - do not depend on the host provided bison
+> ---
+>  package/localedef/localedef.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> define TI_SGX_KM_INSTALL_TARGET_CMDS
->         $(TARGET_MAKE_ENV) $(MAKE) $(TI_SGX_KM_MAKE_OPTS) \
->                 DISCIMAGE=$(TARGET_DIR) \
->                 kbuild_install -C $(@D)/$(TI_SGX_KM_SUBDIR)
->         kver=$$($(MAKE) -C $(LINUX_DIR) --no-print-directory -s
-> kernelversion); \
->         $(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $$kver
->  endef
+> diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+> index 10a1929044..3e22f68039 100644
+> --- a/package/localedef/localedef.mk
+> +++ b/package/localedef/localedef.mk
+> @@ -10,9 +10,12 @@
+>  LOCALEDEF_VERSION = 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91
+>  LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+>  LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+> -LOCALEDEF_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
+
+I believe this line come from the glibc package [1] that requires GNU Make >=
+4.0 since version 2.28. Indeed glibc is a target package not a host package.
+
+[1] https://git.buildroot.net/buildroot/tree/package/glibc/glibc.mk?h=2020.02#n38
+
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+
+>  HOST_LOCALEDEF_DL_SUBDIR = glibc
+>  
+> +HOST_LOCALEDEF_DEPENDENCIES = \
+> +	$(BR2_MAKE_HOST_DEPENDENCY) \
+> +	host-bison
+> +
+>  HOST_LOCALEDEF_CONF_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
+>  
+>  # Even though we use the autotools-package infrastructure, we have to override
 > 
-> With this change a "modprobe pvrsrvkm" works but I wonder if it should
-> be better to run depmod in a target-finalize hook in linux/linux.mk,
-> e.g,
-
-Exactly what I was going to suggest.
-
-> define LINUX_DEPMOD
->         $(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) \
->                 $$($(MAKE) -C $(LINUX_DIR) --no-print-directory -s kernelversion)
-
-I guess you'd want to use $(LINUX_VERSION_PROBED) instead of
-hand-calling kernelversion, linux/linux.mk at 159:
-
-    # Get the real Linux version, which tells us where kernel modules are
-    # going to be installed in the target filesystem.
-    LINUX_VERSION_PROBED = ....
-
-Regards,
-Yann E. MORIN.
-
-> endef
-> 
-> What do you think?
-> 
-> -- 
-> Carlos Santos <unixmania@gmail.com>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
