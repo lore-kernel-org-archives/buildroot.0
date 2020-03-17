@@ -1,84 +1,115 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 17 Mar 2020 21:21:48 +0100
-Subject: [Buildroot] [PATCH] package/syslog-ng: Bump version to 2.26.1
-In-Reply-To: <20200316235325.26563-1-judge.packham@gmail.com>
-References: <20200316235325.26563-1-judge.packham@gmail.com>
-Message-ID: <20200317202148.GO19677@scaer>
+Date: Tue, 17 Mar 2020 21:22:14 +0100
+Subject: [Buildroot] [git commit] package/syslog-ng: fix build if net-snmp
+ is installed on the host
+Message-ID: <20200317201500.C4876821B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chris, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=4ff6e5239240a4e1bdf73c41d6e9bff9473ec62c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-17 12:53 +1300, Chris Packham spake thusly:
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> ---
-> I've build tested this with/without Thomas DS's patch and it builds clean
-> either way.
+If syslog-ng is selected in Buildroot and net-snmp is not, but net-snmp is
+found on the host machine (at least its net-snmp-config script) then
+compilation of syslog-ng fails with:
 
-I could reproduce it whem as explained in Thomas' patch, the net-snmp
-development files are installed on the host system (libsnmp-dev on
-Debian and derivatives, for example). Even with your version bump, the
-build still fails.
+  CC       modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest-grammar.lo
+  CC       modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest.lo
+  CC       modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest-plugin.lo
+arm-none-linux-gnueabi-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
+make[3]: *** [Makefile:17397: modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest-grammar.lo] Error 1
+make[3]: *** Waiting for unfinished jobs....
+arm-none-linux-gnueabi-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
+make[3]: *** [Makefile:17404: modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest.lo] Error 1
+arm-none-linux-gnueabi-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
+make[3]: *** [Makefile:17411: modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest-plugin.lo] Error 1
+make[2]: *** [Makefile:21428: all-recursive] Error 1
+make[1]: *** [Makefile:8740: all] Error 2
+make[1]: Leaving directory '.../buildroot/output/build/syslog-ng-3.25.1'
+make: *** [package/pkg-generic.mk:269: .../buildroot/output/build/syslog-ng-3.25.1/.stamp_built] Error 2
 
-So I 'll apply Thomas' patch first, and come back to your patch later...
+The path /usr/include is obtained via /usr/bin/net-snmp-config.
 
-Regards,
-Yann E. MORIN.
+The fix comprises two parts:
+1. only enable net-snmp support in syslog-ng if the net-snmp package is
+enabled in Buildroot
+2. for the case where net-snmp is selected in Buildroot, fix the configure
+script of syslog-ng to allow parsing --with-netsnmp=<path> correctly.
 
->  package/syslog-ng/syslog-ng.conf | 2 +-
->  package/syslog-ng/syslog-ng.hash | 2 +-
->  package/syslog-ng/syslog-ng.mk   | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
-> index a04a4770b1..e23d80580d 100644
-> --- a/package/syslog-ng/syslog-ng.conf
-> +++ b/package/syslog-ng/syslog-ng.conf
-> @@ -1,4 +1,4 @@
-> - at version: 3.25
-> + at version: 3.26
->  
->  source s_sys {
->  	file("/proc/kmsg" program_override("kernel"));
-> diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-> index 962c354b4c..a752db0016 100644
-> --- a/package/syslog-ng/syslog-ng.hash
-> +++ b/package/syslog-ng/syslog-ng.hash
-> @@ -1,5 +1,5 @@
->  # Locally computed
-> -sha256 34cb9673bcde58d543890e6c1189f466f938e199f227c524a6fa2f47f4db6817  syslog-ng-3.25.1.tar.gz
-> +sha256 90214223864df252cea80dbb35c88a2464edcbbb2c9fbc6f6f6c13ee60cb62cd  syslog-ng-3.26.1.tar.gz
->  sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607  COPYING
->  sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
->  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
-> diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-> index 156bd95593..203f2c96b6 100644
-> --- a/package/syslog-ng/syslog-ng.mk
-> +++ b/package/syslog-ng/syslog-ng.mk
-> @@ -6,7 +6,7 @@
->  
->  # When updating the version, please check at runtime if the version in
->  # syslog-ng.conf header needs to be updated
-> -SYSLOG_NG_VERSION = 3.25.1
-> +SYSLOG_NG_VERSION = 3.26.1
->  SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
->  SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
->  SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Reviewed-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0002-configure.ac-fix-with-netsnmp.patch       | 41 ++++++++++++++++++++++
+ package/syslog-ng/syslog-ng.mk                     |  8 +++++
+ 2 files changed, 49 insertions(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch b/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch
+new file mode 100644
+index 0000000000..f5b2a39bba
+--- /dev/null
++++ b/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch
+@@ -0,0 +1,41 @@
++From 39ab118a7e79b223941b50b372c8ed51f0e21f4b Mon Sep 17 00:00:00 2001
++From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++Date: Mon, 16 Mar 2020 15:41:03 +0100
++Subject: [PATCH] configure.ac: fix --with-netsnmp
++
++The option '--with-net-snmp' did not work, because later checks were using
++the variable '$with_netsnmp' rather than '$with_net_snmp'.
++
++There are two possible solutions:
++- make the option '--with-netsnmp'
++- change the internal variables
++
++Taking into account that latest upstream has moved away from autotools and
++towards cmake, we opt for the first option that has the least amount of
++changes.
++
++Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++Upstream-status: not applicable (latest upstream moved to cmake)
++
++---
++ configure.ac | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index bfc85c32d..392ab8bf3 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -148,8 +148,8 @@ AC_ARG_WITH(libnet,
++    ,
++    [with_libnet=""])
++ 
++-AC_ARG_WITH(net-snmp,
++-   [  --with-net-snmp=path      use path to net-snmp-config script],
+++AC_ARG_WITH(netsnmp,
+++   [  --with-netsnmp=path      use path to net-snmp-config script],
++    ,
++    [with_netsnmp=""])
++ 
++-- 
++2.24.1
++
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 9b7e9a1317..156bd95593 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -97,6 +97,14 @@ else
+ SYSLOG_NG_CONF_OPTS += --disable-systemd
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NETSNMP),y)
++SYSLOG_NG_DEPENDENCIES += netsnmp
++SYSLOG_NG_CONF_OPTS += --enable-snmp-dest
++SYSLOG_NG_CONF_OPTS += --with-netsnmp="$(STAGING_DIR)/usr/bin"
++else
++SYSLOG_NG_CONF_OPTS += --disable-snmp-dest
++endif
++
+ define SYSLOG_NG_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/syslog-ng/S01syslog-ng \
+ 		$(TARGET_DIR)/etc/init.d/S01syslog-ng
