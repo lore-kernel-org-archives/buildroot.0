@@ -1,41 +1,41 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 17 Mar 2020 21:04:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ccache: bump to version 3.7.8
-Message-ID: <20200317190403.6214-1-asafka7@gmail.com>
+Date: Tue, 17 Mar 2020 21:58:11 +0200
+Subject: [Buildroot] scripts invoking code outside the per-package directory
+Message-ID: <CALFsTFUwPxA=-YP3TEQ=3nLG1UpONffiAs_NUXnzqOdpffh_qQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/ccache/ccache.hash | 2 +-
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 83c172feae..3b9dac28b6 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  b7c1d6d6fe42f18e424de92746af863e0bc85794da3d69e44300840c478c98cd  ccache-3.7.7.tar.xz
-+sha256  99ea7b8fc34fdd5dc628169f452086c1f4d8ca3a1e52bd484fbdef3516893672  ccache-3.7.8.tar.xz
- sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
- sha256  4f63223bcdee822d55a6768cc8399ffe06401d7a03cfe79e1dc305f50dc22c59  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index a441f7a10a..1e8b9b7c25 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CCACHE_VERSION = 3.7.7
-+CCACHE_VERSION = 3.7.8
- CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
--- 
-2.20.1
+Recently, I upgraded my Buildroot version from 2019.11 to 2020.02 and
+I tried to use per-package directories and parallel build.
+My compilation has failed because:
+* I have a host python package (let's call it "package A") which
+installs a console script, which loads registered entry points and
+does something.
+* I have some other host python packages which register entry points
+for package A.
+* When a package wants to use the console script created by package A
+- the registered entry points cannot be found.
+After a little investigation I found out that the first line of the
+console script instructs it to use the python interpreter of package A
+(something like "#!<Package A per-package dir>/host/usr/bin/python). I
+run a small grep and found it's not the only case (another one is the
+easy_install utility, provided by setuptools).
+I also managed to "solve" the problem by adding a configure step in
+pkg-generic similar to the $(SED) we currently have on
+PKG_PYTHON_FIXUP_SYSCONFIGDATA (scanning $(HOST_DIR)/bin and
+$(HOST_DIR)/usr/bin), but I wonder if running this operation for
+_every_ package is not too aggressive.
+
+I think the problem is a little broader, because even without my
+specific problem, which fails the compilation, we are probably running
+console scripts which invokes code outside from the per-package
+directory.
+Any ideas for solving this issue?
+
+Thanks,
+Asaf.
