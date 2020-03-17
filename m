@@ -1,148 +1,71 @@
-From: Mircea GLIGA <mgliga@bitdefender.com>
-Date: Tue, 17 Mar 2020 13:50:06 +0000
-Subject: [Buildroot] Buildroot 2019.02.10 released
-In-Reply-To: <87tv2orn3o.fsf@dell.be.48ers.dk>
-References: <87tv2orn3o.fsf@dell.be.48ers.dk>
-Message-ID: <VI1PR02MB3920FB98760F53590B4F735BDCF60@VI1PR02MB3920.eurprd02.prod.outlook.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 17 Mar 2020 14:58:56 +0100
+Subject: [Buildroot] [PATCH 2/2] Makefile: don't hang the build if there
+ are no file lists
+In-Reply-To: <20200317131405.487ce542@windsurf.home>
+References: <20200312091530.287681-1-thomas.petazzoni@bootlin.com>
+ <20200312091530.287681-2-thomas.petazzoni@bootlin.com>
+ <CAAXf6LXzTLt-eUfG8zsVRB-LNfc_jo01R9bWKDzDPH6ZLtnFMg@mail.gmail.com>
+ <20200317131405.487ce542@windsurf.home>
+Message-ID: <CAAXf6LVu=fS+QwDhmS7+07aiycPjvy0Bd7-9Y9J5NX=fp8O1Rg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+El mar., 17 mar. 2020 a las 13:14, Thomas Petazzoni
+(<thomas.petazzoni@bootlin.com>) escribi?:
+>
+> Hello Thomas,
+>
+> On Tue, 17 Mar 2020 12:13:24 +0100
+> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+>
+> > An alternative approach that does not require checking for empty, is
+> > to quote the argument to cat. I.e.
+> > cat "$(sort ...)" will not hang. It would give an error though, so
+> > your check is actually better.
+>
+> OK. By the way, did you test the new logic in your use-cases? I know
+> you've been using these file lists as you've contributed some changes
+> in this area. Peter applied my patches very quickly (which is good, of
+> course), but that didn't leave a lot of time for people to give some
+> feedback.
 
-> - Br2-external: Fix compatibility with make 4.3+
+At first sight it seems to work, but I still need to make a real
+comparison between the old situation and the new to be sure.
 
-Regarding this part, there is a problem, the fix that applies to master, doesn't fix
-the problem on 2019.02.X.
-I reported this when I tested the problem here: 
-http://lists.busybox.net/pipermail/buildroot/2020-March/275751.html
+>
+> > But I found two additional problems in this area:
+> >
+> > 1. packages that set FOO_SUBDIR will have their file list created in
+> > the FOO_SUBDIR, and it is not picked up by the current '$(wildcard
+> > $(BUILD_DIR)/*/.files-list.txt)'.  Since make does not support a '**'
+> > as recursive wildcard, we'd need to use a find or a more clever
+> > method.
+>
+> What about generating the files in $($(PKG)_DIR) instead of
+> $($(PKG)_BUILDDIR) ? This way, it will always be in
+> output/build/foo-version/ and never in a sub-directory.
 
-The fix on this branch should be:
+Ok that makes sense and works too.
 
-`$(BASE_DIR)/.br-external.mk:;`
+>
+> > 2. Previously, the packages-file-list.txt was already available by the
+> > time the post-build scripts are run. But with the recent changes, this
+> > is no longer true. Moving the 'cat' lines up solves that.
+> >
+> > For 2 I have a patch but it conflicts with the above ones, so better
+> > to apply yours first. Alternatively I can send the entire series. Let
+> > me know what you prefer.
+>
+> You can send the entire series I'd say. If you have tested my patch,
+> add your Reviewed-by/Tested-by, so that I can apply my own patch as
+> well :-)
 
-Best regards
-Mircea
+Ok, I made the proposed changes, will run some further tests, and then
+send them.
 
-________________________________________
-From: buildroot <buildroot-bounces@busybox.net> on behalf of Peter Korsgaard <peter@korsgaard.com>
-Sent: Monday, March 16, 2020 23:44
-To: buildroot at buildroot.org
-Subject: [Buildroot] Buildroot 2019.02.10 released
-
-Hi,
-
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
-
-Buildroot 2019.02.10 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2019.02.10.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2019.02.10.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2019.02.10 is a bugfix release on the previous long term
-release, fixing a number of important / security related issues
-discovered since the 2019.02.9 release.
-
-Notice that the 2019.02.x series will only see one more update before
-going end of life. Please consider migrating to the 2020.02.x series
-instead.
-
-- Core: Ensure package-file-lists data is correct after incremental
-  builds as well.
-
-- Fix a race condition related to creating the output/staging symlink on
-  systems with coreutils < 8.27.
-
-- Br2-external: Fix compatibility with make 4.3+
-
-- Util-linux: Ensure that hwclock is built without GPLv3 code. Notice
-  that builds with hwclock has contained GPLv3-licensed code since
-  util-linux 2.30 (Buildroot 2017.08+)
-
-- Security fixes for blktrace, bootstrap, cairo, dnsmasq,
-  docker-containerd, dovecot, e2fsprogs, exiv2, jhead, libcgroup,
-  libexif, libjpeg, libsndfile, libssh2, libvncserver, libvorbis,
-  libxml2, libxslt, lz4, mariadb, mbedtls, mongoose, ncurses, ntfs-3g,
-  openjpeg, openswan, patch, php, postgresql, pppd, proftpd, pure-ftpd,
-  python-django, qt5base, rdesktop, runc, samba4, shellinabox,
-  sqlcipher, squid, taglib, vorbis-tools, webkitgtk, wireshark, xen, zsh
-
-- Fixes for download/compilation/runtime/license issues in armadillo,
-  at, binutils, busybox, cups, czmq, eudev, exim, fbgrab, grep,
-  gst1-validate, guile, imagemagick, jpeg-turbo, kvm-unit-tests, lapack,
-  libftdi1, libsigrok, libsvgtiny, linux, mariadb, meson, mfgtools,
-  opencv3, openvmtools, python-pyqt5, python3, qemu, qt5base,
-  qt5webengine, qwt, ruby, smartmontools, swupdate, sysklogd, thrift,
-  ti-cgt-pru, uboot, util-linux, xserver_xorg-server, zeromq,
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.10
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2019.02.9..
-
-    66  Fabrice Fontaine
-    34  Peter Korsgaard
-     7  Carlos Santos
-     5  Bernd Kuhls
-     5  Peter Seiderer
-     5  Ryan Coe
-     4  Giulio Benetti
-     4  Thomas De Schampheleire
-     4  Thomas Petazzoni
-     4  Yann E. MORIN
-     3  Nicolas Serafini
-     3  Yegor Yefremov
-     2  Angelo Compagnucci
-     2  Baruch Siach
-     2  Luca Ceresoli
-     2  Matt Weber
-     2  Sam Voss
-     1  Adam Duskett
-     1  Adrian Perez de Castro
-     1  Alexander Mukhin
-     1  Alexandre PAYEN
-     1  Alexey Lukyanchuk
-     1  Andreas Naumann
-     1  Ash Charles
-     1  Chris Packham
-     1  Christian Stewart
-     1  Christopher McCrory
-     1  Francois Perrad
-     1  Gary Bisson
-     1  Heiko Thiery
-     1  Jan Willem Janssen
-     1  Joel Stanley
-     1  John Keeping
-     1  Julien Olivain
-     1  Max Filippov
-     1  Michael Fischer
-     1  Nicolas Carrier
-     1  Pascal de Bruijn
-     1  Pierre-Jean Texier
-     1  Romain Naour
-     1  Titouan Christophe
-
---
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
-
-________________________
-This email was scanned by Bitdefender
+Thanks for the feedback,
+Thomas
