@@ -1,67 +1,254 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 17 Mar 2020 22:31:01 +0100
-Subject: [Buildroot] [PATCHv2] package/localedef: fix dependencies
-In-Reply-To: <20200317211102.12842-1-yann.morin.1998@free.fr>
-References: <20200317211102.12842-1-yann.morin.1998@free.fr>
-Message-ID: <e7350603-70c2-ba04-73ae-e1f4b416f058@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 17 Mar 2020 22:29:36 +0100
+Subject: [Buildroot] [git commit] package/coreutils: bump to v8.32
+Message-ID: <20200317212237.B32DE821ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=b4a0f9fb0e45aded46eb7259e25a1113eabf93c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 17/03/2020 ? 22:11, Yann E. MORIN a ?crit?:
-> localedef needs bison to satisfy a .y.c rule to generate a parser for
-> plural forms, to ultimately generate data for the target. So we do not
-> want to depend on the host-provided bison; we want to build our own (for
-> reproducibility).
-> 
-> localedef is a host-only package, and dependencies are not inherited
-> from the target variant, so we need to make them explicit host
-> dependencies.
-> 
-> And move the assignment after all the download-related variables.
-> 
-> Reported-by: James Hilliard <james.hilliard1@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> 
-> ---
-> Changes v1 -> v2:
->   - do not depend on the host provided bison
-> ---
->  package/localedef/localedef.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-> index 10a1929044..3e22f68039 100644
-> --- a/package/localedef/localedef.mk
-> +++ b/package/localedef/localedef.mk
-> @@ -10,9 +10,12 @@
->  LOCALEDEF_VERSION = 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91
->  LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
->  LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
-> -LOCALEDEF_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
+The update to version 8.32 removes the need for an extra patch [1]
+(which was added in upstream) but requires another one [2] to fix a new
+build issue related to the file 'src/ls.c'.
+[1]: 0001-strtod_fix_clash_with_strtold.patch
+[2]: 0001-ls-restore-8.31-behavior-on-removed-directories.patch
 
-I believe this line come from the glibc package [1] that requires GNU Make >=
-4.0 since version 2.28. Indeed glibc is a target package not a host package.
+The changes in the 'COPYING' license file are purely cosmetic: the
+https protocol is replacing http in all the links pointing to the
+fsf.org and the gnu.org websites (plus a page being renamed). The
+following diff shows one of these changes, they are all similar anyway:
 
-[1] https://git.buildroot.net/buildroot/tree/package/glibc/glibc.mk?h=2020.02#n38
+- Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
++ Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Joao Marcos Costa <joaomarcos.costa@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...tore-8.31-behavior-on-removed-directories.patch | 118 +++++++++++++++++++++
+ .../0001-strtod_fix_clash_with_strtold.patch       |  64 -----------
+ package/coreutils/coreutils.hash                   |   4 +-
+ package/coreutils/coreutils.mk                     |   2 +-
+ 4 files changed, 121 insertions(+), 67 deletions(-)
 
-Best regards,
-Romain
-
-
->  HOST_LOCALEDEF_DL_SUBDIR = glibc
->  
-> +HOST_LOCALEDEF_DEPENDENCIES = \
-> +	$(BR2_MAKE_HOST_DEPENDENCY) \
-> +	host-bison
-> +
->  HOST_LOCALEDEF_CONF_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
->  
->  # Even though we use the autotools-package infrastructure, we have to override
-> 
+diff --git a/package/coreutils/0001-ls-restore-8.31-behavior-on-removed-directories.patch b/package/coreutils/0001-ls-restore-8.31-behavior-on-removed-directories.patch
+new file mode 100644
+index 0000000000..43a8161b93
+--- /dev/null
++++ b/package/coreutils/0001-ls-restore-8.31-behavior-on-removed-directories.patch
+@@ -0,0 +1,118 @@
++From 10fcb97bd728f09d4a027eddf8ad2900f0819b0a Mon Sep 17 00:00:00 2001
++From: Paul Eggert <eggert@cs.ucla.edu>
++Date: Thu, 5 Mar 2020 17:25:29 -0800
++Subject: [PATCH] ls: restore 8.31 behavior on removed directories
++
++* NEWS: Mention this.
++* src/ls.c: Do not include <sys/sycall.h>
++(print_dir): Don't worry about whether the directory is removed.
++* tests/ls/removed-directory.sh: Adjust to match new (i.e., old)
++behavior.
++Signed-off-by: Joao Marcos Costa <joaomarcos.costa@bootlin.com>
++---
++ NEWS                          |  6 ++++++
++ src/ls.c                      | 22 ----------------------
++ tests/ls/removed-directory.sh | 10 ++--------
++ 3 files changed, 8 insertions(+), 30 deletions(-)
++
++diff --git a/NEWS b/NEWS
++index fdc8bf5db..653e7178b 100644
++--- a/NEWS
+++++ b/NEWS
++@@ -2,6 +2,12 @@ GNU coreutils NEWS                                    -*- outline -*-
++ 
++ * Noteworthy changes in release ?.? (????-??-??) [?]
++ 
+++** Changes in behavior
+++
+++  On GNU/Linux systems, ls no longer issues an error message on
+++  directory merely because it was removed.  This reverts a change
+++  that was made in release 8.32.
+++
++ 
++ * Noteworthy changes in release 8.32 (2020-03-05) [stable]
++ 
++diff --git a/src/ls.c b/src/ls.c
++index 24b983287..4acf5f44d 100644
++--- a/src/ls.c
+++++ b/src/ls.c
++@@ -49,10 +49,6 @@
++ # include <sys/ptem.h>
++ #endif
++ 
++-#ifdef __linux__
++-# include <sys/syscall.h>
++-#endif
++-
++ #include <stdio.h>
++ #include <assert.h>
++ #include <setjmp.h>
++@@ -2896,7 +2892,6 @@ print_dir (char const *name, char const *realname, bool command_line_arg)
++   struct dirent *next;
++   uintmax_t total_blocks = 0;
++   static bool first = true;
++-  bool found_any_entries = false;
++ 
++   errno = 0;
++   dirp = opendir (name);
++@@ -2972,7 +2967,6 @@ print_dir (char const *name, char const *realname, bool command_line_arg)
++       next = readdir (dirp);
++       if (next)
++         {
++-          found_any_entries = true;
++           if (! file_ignored (next->d_name))
++             {
++               enum filetype type = unknown;
++@@ -3018,22 +3012,6 @@ print_dir (char const *name, char const *realname, bool command_line_arg)
++           if (errno != EOVERFLOW)
++             break;
++         }
++-#ifdef __linux__
++-      else if (! found_any_entries)
++-        {
++-          /* If readdir finds no directory entries at all, not even "." or
++-             "..", then double check that the directory exists.  */
++-          if (syscall (SYS_getdents, dirfd (dirp), NULL, 0) == -1
++-              && errno != EINVAL)
++-            {
++-              /* We exclude EINVAL as that pertains to buffer handling,
++-                 and we've passed NULL as the buffer for simplicity.
++-                 ENOENT is returned if appropriate before buffer handling.  */
++-              file_failure (command_line_arg, _("reading directory %s"), name);
++-            }
++-          break;
++-        }
++-#endif
++       else
++         break;
++ 
++diff --git a/tests/ls/removed-directory.sh b/tests/ls/removed-directory.sh
++index e8c835dab..fe8f929a1 100755
++--- a/tests/ls/removed-directory.sh
+++++ b/tests/ls/removed-directory.sh
++@@ -26,20 +26,14 @@ case $host_triplet in
++   *) skip_ 'non linux kernel' ;;
++ esac
++ 
++-LS_FAILURE=2
++-
++-cat <<\EOF >exp-err || framework_failure_
++-ls: reading directory '.': No such file or directory
++-EOF
++-
++ cwd=$(pwd)
++ mkdir d || framework_failure_
++ cd d || framework_failure_
++ rmdir ../d || framework_failure_
++ 
++-returns_ $LS_FAILURE ls >../out 2>../err || fail=1
+++ls >../out 2>../err || fail=1
++ cd "$cwd" || framework_failure_
++ compare /dev/null out || fail=1
++-compare exp-err err || fail=1
+++compare /dev/null err || fail=1
++ 
++ Exit $fail
++-- 
++2.17.1
++
+diff --git a/package/coreutils/0001-strtod_fix_clash_with_strtold.patch b/package/coreutils/0001-strtod_fix_clash_with_strtold.patch
+deleted file mode 100644
+index 7033d3b856..0000000000
+--- a/package/coreutils/0001-strtod_fix_clash_with_strtold.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From 0562b040fa17f1722ba2b3096067b45d0582ca53 Mon Sep 17 00:00:00 2001
+-From: Paul Eggert <eggert@cs.ucla.edu>
+-Date: Mon, 11 Mar 2019 16:40:29 -0700
+-Subject: [PATCH] strtod: fix clash with strtold
+-
+-Problem reported for RHEL 5 by Jesse Caldwell (Bug#34817).
+-* lib/strtod.c (compute_minus_zero, minus_zero):
+-Simplify by remving the macro / external variable,
+-and having just a function.  User changed.  This avoids
+-the need for an external variable that might clash.
+-
+-Upstream-Status: Backport [rhel5]
+-
+-Signed-off-by: Oleksandr Kravchuk <open.source@oleksandr-kravchuk.com>
+-
+-Downloaded from
+-http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-core/coreutils/coreutils/strtod_fix_clash_with_strtold.patch
+-
+-This patch was committed to gnulib:
+-http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=patch;h=3bd82a82cf4ba693d2c31c7b95aaec4e56dc92a4
+-and will be included in the next release of coreutils.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- ChangeLog    |  9 +++++++++
+- lib/strtod.c | 11 +++++------
+- 2 files changed, 14 insertions(+), 6 deletions(-)
+-
+-diff --git a/lib/strtod.c b/lib/strtod.c
+-index b9eaa51b4..69b1564e1 100644
+---- a/lib/strtod.c
+-+++ b/lib/strtod.c
+-@@ -294,16 +294,15 @@ parse_number (const char *nptr,
+-    ICC 10.0 has a bug when optimizing the expression -zero.
+-    The expression -MIN * MIN does not work when cross-compiling
+-    to PowerPC on Mac OS X 10.5.  */
+--#if defined __hpux || defined __sgi || defined __ICC
+- static DOUBLE
+--compute_minus_zero (void)
+-+minus_zero (void)
+- {
+-+#if defined __hpux || defined __sgi || defined __ICC
+-   return -MIN * MIN;
+--}
+--# define minus_zero compute_minus_zero ()
+- #else
+--DOUBLE minus_zero = -0.0;
+-+  return -0.0;
+- #endif
+-+}
+- 
+- /* Convert NPTR to a DOUBLE.  If ENDPTR is not NULL, a pointer to the
+-    character after the last one used in the number is put in *ENDPTR.  */
+-@@ -479,6 +478,6 @@ STRTOD (const char *nptr, char **endptr)
+-   /* Special case -0.0, since at least ICC miscompiles negation.  We
+-      can't use copysign(), as that drags in -lm on some platforms.  */
+-   if (!num && negative)
+--    return minus_zero;
+-+    return minus_zero ();
+-   return negative ? -num : num;
+- }
+--- 
+-2.20.1
+-
+diff --git a/package/coreutils/coreutils.hash b/package/coreutils/coreutils.hash
+index 31dfbd73a9..54cdf4c551 100644
+--- a/package/coreutils/coreutils.hash
++++ b/package/coreutils/coreutils.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256 ff7a9c918edce6b4f4b2725e3f9b37b0c4d193531cac49a48b56c4d0d3a9e9fd  coreutils-8.31.tar.xz
++sha256 4458d8de7849df44ccab15e16b1548b285224dbba5f08fac070c1c0e0bcc4cfa  coreutils-8.32.tar.xz
+ # Locally computed
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index c1420b2602..3866b76243 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-COREUTILS_VERSION = 8.31
++COREUTILS_VERSION = 8.32
+ COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
+ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
+ COREUTILS_LICENSE = GPL-3.0+
