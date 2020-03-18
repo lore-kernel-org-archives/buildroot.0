@@ -1,58 +1,83 @@
-From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
-Date: Wed, 18 Mar 2020 19:15:53 +0530
-Subject: [Buildroot] [PATCH v3 5/5] DEVELOPERS: add me as a co-maintainer
- for rk3399 based targets
-In-Reply-To: <1584539153-12934-1-git-send-email-sunil@amarulasolutions.com>
-References: <1581590685-31680-2-git-send-email-sunil@amarulasolutions.com>
- <1584539153-12934-1-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <1584539153-12934-6-git-send-email-sunil@amarulasolutions.com>
+From: Sunil Kumar Mahesh <sunil@amarulasolutions.com>
+Date: Wed, 18 Mar 2020 19:12:50 +0530
+Subject: [Buildroot] [PATCH v3 1/5] boot/arm-trusted-firmware: Disable
+ bin copy for rk3399
+In-Reply-To: <1584538257-11932-2-git-send-email-sunil@amarulasolutions.com>
+References: <1584538257-11932-1-git-send-email-sunil@amarulasolutions.com>
+ <1584538257-11932-2-git-send-email-sunil@amarulasolutions.com>
+Message-ID: <CAM+7aWtV63w1CvG2JZKrxJ5AbAXa3_Sfc1gP3njXEx=gBQfx8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Suniel Mahesh <sunil@amarulasolutions.com>
+On Wed, Mar 18, 2020 at 7:01 PM <sunil@amarulasolutions.com> wrote:
 
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
----
-Changes for v3:
-New patch added to this series. Split one changeset from patch #4 and made
-it patch #5
+Ignore this patch.
 
-Changes for v2:
-didn't exist
+Suniel
 
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 98220a9..faa72a4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1114,6 +1114,7 @@ N:	Ismael Luceno <ismael@iodev.co.uk>
- F:	package/axel/
- 
- N:	Jagan Teki <jagan@amarulasolutions.com>
-+N:	Suniel Mahesh <sunil@amarulasolutions.com>
- F:	board/amarula/
- F:	board/asus/
- F:	board/bananapi/
-@@ -1129,6 +1130,7 @@ F:	board/orangepi/orangepi-prime/
- F:	board/orangepi/orangepi-win/
- F:	board/orangepi/orangepi-zero-plus2/
- F:	board/pine64/
-+F:	board/firefly/
- F:	configs/amarula_a64_relic_defconfig
- F:	configs/amarula_vyasa_rk3288_defconfig
- F:	configs/asus_tinker_rk3288_defconfig
-@@ -1151,6 +1153,7 @@ F:	configs/orangepi_win_defconfig
- F:	configs/orangepi_zero_plus2_defconfig
- F:	configs/pine64_defconfig
- F:	configs/pine64_sopine_defconfig
-+F:	configs/roc_pc_rk3399_defconfig
- 
- N:	James Hilliard <james.hilliard1@gmail.com>
- F:	package/gensio/
--- 
-2.7.4
+>
+> From: Jagan Teki <jagan@amarulasolutions.com>
+>
+> Unlike other SoC platforms, rockchip platforms doesn't require a binary
+> generation on TF-A project.
+>
+> This is due to rockchip platforms have non-continuous memory areas in
+> the linker script with a huge gap between them, so generating the binary
+> would require addition padding which indeed increases the size of the binary.
+>
+> Interestingly this binary generation is disabled in v2.2 of TF-A on below
+> commit:
+>  commit <33218d2a8143> "rockchip: Disable binary generation for all SoCs."
+>
+> Buildroot generally looks for a *.bin in the TF-A build directory but v2.2 is
+> not creating any bin since rk3399 (or rockchip) doesn't need bins, because of
+> which build fails.
+>
+> This changeset checks for a *.bin in the respective TF-A build directory, if
+> available it copies to the output directory, otherwise skips copy.
+>
+> This fixes the atf build on rk3399 with v2.2 and above.
+>
+> Note: the same can be applied to rest of rockchip platforms if
+> they use v2.2 TF-A and above.
+>
+> Cc: linux-amarula at amarulasolutions.com
+> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> ---
+> Changes for v3:
+> - Based on suggestions from sergey and thomas, instead of encoding
+>   platform-specific stuff in config files, made changes in .mk files
+>   based on the build flow.
+> - Tested on roc-rk3399-pc, a rk3399 based target. Compile tested for orangepi
+>
+> Changes for v2:
+> - added Cc tag.
+>
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> index 3473701..7722954 100644
+> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> @@ -150,9 +150,11 @@ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
+>  endef
+>
+>  define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
+> +if [ -e $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin ]; then \
+>         $(foreach f,$(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES)), \
+> -               cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/$(f) $(BINARIES_DIR)/
+> -       )
+> +               cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/$(f) $(BINARIES_DIR)/ \
+> +       ) ; \
+> +fi
+>         $(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL)
+>         $(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL_ELF)
+>  endef
+> --
+> 2.7.4
+>
