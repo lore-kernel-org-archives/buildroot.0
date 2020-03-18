@@ -1,59 +1,65 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 18 Mar 2020 16:58:13 +0100
-Subject: [Buildroot] [PATCH 3/3] Makefile: assemble package file lists
- before calling post-build scripts
-In-Reply-To: <20200318155814.567-1-patrickdepinguin@gmail.com>
-References: <20200318155814.567-1-patrickdepinguin@gmail.com>
-Message-ID: <20200318155814.567-3-patrickdepinguin@gmail.com>
+Date: Wed, 18 Mar 2020 17:41:26 +0100
+Subject: [Buildroot] Inquiry : Adding a custom python package to
+ buildroot
+In-Reply-To: <CALYA+Ys78xtOdKSQZVwgf-QVjU2j+69-uEJg87FJYUJb1j9WGw@mail.gmail.com>
+References: <CALYA+Yvspb-eeK7KWeAJn2bYtwWq4NK4W6usw6Ts+2OwQ0XLzw@mail.gmail.com>
+ <CALYA+Ys78xtOdKSQZVwgf-QVjU2j+69-uEJg87FJYUJb1j9WGw@mail.gmail.com>
+Message-ID: <CAAXf6LX5FRztO3nnjSCKwP2SUHR_ssFeQ=kMgOS_ht=jQFNehA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Hi Pragash,
 
-Post-build scripts may want to do something based on the list of files
-installed by a package. However, since commit
-0e2be4db8ab01d479177a3a187c22525752195ae the final packages-file-lists.txt
-file is only created _after_ the post-build scripts.
 
-Move the assembly of the file lists upwards, before the post-build scripts.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- Makefile | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+On Wed, Mar 18, 2020, 15:54 Pragash Jeyaratnam <pragash.jeyaratnam@gmail.com>
+wrote:
 
-diff --git a/Makefile b/Makefile
-index 29d30a4f70..1280066bab 100644
---- a/Makefile
-+++ b/Makefile
-@@ -806,12 +806,6 @@ endif # merged /usr
- 		$(call MESSAGE,"Copying overlay $(d)"); \
- 		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
- 
--	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
--		$(call MESSAGE,"Executing post-build script $(s)"); \
--		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
--
--	touch $(TARGET_DIR)/usr
--
- 	$(if $(TARGET_DIR_FILES_LISTS), \
- 		cat $(TARGET_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list.txt)
- 	$(if $(HOST_DIR_FILES_LISTS), \
-@@ -819,6 +813,12 @@ endif # merged /usr
- 	$(if $(STAGING_DIR_FILES_LISTS), \
- 		cat $(STAGING_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list-staging.txt)
- 
-+	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
-+		$(call MESSAGE,"Executing post-build script $(s)"); \
-+		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-+
-+	touch $(TARGET_DIR)/usr
-+
- .PHONY: target-post-image
- target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
- 	@rm -f $(ROOTFS_COMMON_TAR)
--- 
-2.24.1
+> Hi,
+>
+> Adding to my previous email. The problem is due to python setup.py issue
+> within custom modules. For example If we assume,
+> If a setup.py which has configuration
+>
+> setup(name='your-module',
+>       .....
+>       data_files=[
+>         ('/usr/share/your_module/', glob.glob('data/*')),
+>       ],
+>      )
+>
+> The above failure will occur ( Absolute path reference) . As per to the
+> setup.py manual https://docs.python.org/3/distutils/setupscript.html
+> "The *directory* should be a relative path. It is interpreted relative to
+> the installation prefix"
+>
+> So in-order to satisfy the above the configuration should be changed to
+>   setup(name='your_module',
+>       .....
+>       data_files=[
+>         ('share/your_module/', glob.glob('data/*')),
+>       ],
+>      )
+>
+> Which will be created as per to the installation_prefix/share/your_module.
+>
+
+
+In order to get efficient help, you should show the .mk file you used for
+this custom package.
+
+Buildroot has a python-package infrastructure, did you use it?
+
+Did you compare with other python packages present in Buildroot?
+
+Best regards
+Thomas
+
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200318/668f0455/attachment.html>
