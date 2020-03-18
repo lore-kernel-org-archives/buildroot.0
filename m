@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Mar 2020 23:18:11 +0100
-Subject: [Buildroot] [PATCH 1/2] package/llvm: specify
- LLVM_ENABLE_BINDINGS=OFF
-In-Reply-To: <20200316200106.3709163-1-joseph.kogut@gmail.com>
-References: <20200316200106.3709163-1-joseph.kogut@gmail.com>
-Message-ID: <20200318231811.3a6763f5@windsurf.home>
+Date: Wed, 18 Mar 2020 23:19:13 +0100
+Subject: [Buildroot] [git commit] package/polkit: fix build with NLS
+Message-ID: <20200318220617.0937382651@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 16 Mar 2020 13:01:05 -0700
-Joseph Kogut <joseph.kogut@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0c08a04e78eb64679482222dee5f7c2f777c54af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> LLVM builds bindings for other languages such as Go and OCaml when the
-> appropriate dependencies can be found. We currently don't support
-> building these bindings in Buildroot, as they're currently unused by any
-> package.
-> 
-> Building these bindings was originally disabled by overriding the
-> dependencies with values indicating that they were not found.
-> 
-> Newer versions of LLVM no longer disable the OCaml bindings when overriding
-> OCAMLFIND. Consequently, the build process attempts to install the bindings
-> to the default location on the host of /usr/lib/ocaml/llvm, causing a
-> permissions error and build failure.
-> 
-> Additionally, LLVM has since added the variable LLVM_ENABLE_BINDINGS to
-> control whether bindings are enabled, so we override that to disable the
-> bindings.
-> 
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  package/llvm/llvm.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/258b734e14f8f31355eba1ddb734213bc3f29591
 
-Thanks, both patches applied.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/polkit/polkit.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
+index efd788a05c..4e7cda943c 100644
+--- a/package/polkit/polkit.mk
++++ b/package/polkit/polkit.mk
+@@ -11,10 +11,13 @@ POLKIT_LICENSE_FILES = COPYING
+ 
+ POLKIT_INSTALL_STAGING = YES
+ 
+-POLKIT_DEPENDENCIES = libglib2 host-intltool expat spidermonkey
++POLKIT_DEPENDENCIES = \
++	libglib2 host-intltool expat spidermonkey $(TARGET_NLS_DEPENDENCIES)
+ 
+ # spidermonkey needs C++11
+-POLKIT_CONF_ENV = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++POLKIT_CONF_ENV = \
++	CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11" \
++	LIBS=$(TARGET_NLS_LIBS)
+ 
+ POLKIT_CONF_OPTS = \
+ 	--with-os-type=unknown \
