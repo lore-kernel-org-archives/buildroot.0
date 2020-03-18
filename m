@@ -1,42 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Mar 2020 22:20:53 +0100
-Subject: [Buildroot] [git commit] package/libuv: bump to version 1.35.0
-Message-ID: <20200318210839.DCDC481438@busybox.osuosl.org>
+Date: Wed, 18 Mar 2020 22:21:21 +0100
+Subject: [Buildroot] [git commit] package/ed: bump to version 1.16
+Message-ID: <20200318210839.F0F1081438@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60011f1456fa58208983b5fd105992a6ed7cb275
+commit: https://git.buildroot.net/buildroot/commit/?id=5cec1c5e57834bf377739ad6dae38debe049c27f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: K??vin L'h??pital <kevin.lhopital@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ed/ed.hash | 6 +++---
+ package/ed/ed.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 923cd1cb37..270fba722d 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/ed/ed.hash b/package/ed/ed.hash
+index 96c814d3c2..3169923c3d 100644
+--- a/package/ed/ed.hash
++++ b/package/ed/ed.hash
+@@ -1,4 +1,4 @@
+-# From http://lists.gnu.org/archive/html/bug-ed/2019-01/msg00010.html
+-sha256	ad4489c0ad7a108c514262da28e6c2a426946fb408a3977ef1ed34308bdfd174	ed-1.15.tar.lz
++# From https://lists.gnu.org/archive/html/bug-ed/2020-02/msg00002.html
++sha256  cfc07a14ab048a758473ce222e784fbf031485bcd54a76f74acfee1f390d8b2c  ed-1.16.tar.lz
  # Locally calculated
--sha256  e3e0105c9b26e181e0547607cb6893462beb0c652674c3795766b2e5555288b3  libuv-1.34.1.tar.gz
-+sha256  ff84a26c79559e511f087aa67925c3b4e0f0aac60cd8039d4d38b292f208ff58  libuv-1.35.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index d7160d1e0a..7e75dcb194 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -6,7 +6,7 @@
+-sha256	f03a12bef9dfb7281864a0dd965166d4f4ec7a66633df2bc72fa4363e57de02c	COPYING
++sha256  f03a12bef9dfb7281864a0dd965166d4f4ec7a66633df2bc72fa4363e57de02c  COPYING
+diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+index 6ef8f951cf..deb900e283 100644
+--- a/package/ed/ed.mk
++++ b/package/ed/ed.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # When bumping libuv, check if a new version of uvw is available
- # and bump it too.
--LIBUV_VERSION = 1.34.1
-+LIBUV_VERSION = 1.35.0
- LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+-ED_VERSION = 1.15
++ED_VERSION = 1.16
+ ED_SITE = $(BR2_GNU_MIRROR)/ed
+ ED_SOURCE = ed-$(ED_VERSION).tar.lz
+ ED_LICENSE = GPL-3.0+
