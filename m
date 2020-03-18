@@ -1,23 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Mar 2020 23:19:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to v5.0.8
-In-Reply-To: <20200316103134.4489-1-titouan.christophe@railnova.eu>
-References: <20200316103134.4489-1-titouan.christophe@railnova.eu>
-Message-ID: <20200318231938.17366a37@windsurf.home>
+Date: Wed, 18 Mar 2020 23:19:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/polkit: fix build with NLS
+In-Reply-To: <20200317210353.1260948-1-fontaine.fabrice@gmail.com>
+References: <20200317210353.1260948-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200318231949.5046328d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 16 Mar 2020 11:31:34 +0100
-Titouan Christophe <titouan.christophe@railnova.eu> wrote:
+On Tue, 17 Mar 2020 22:03:53 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/258b734e14f8f31355eba1ddb734213bc3f29591
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/redis/redis.hash | 2 +-
->  package/redis/redis.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/polkit/polkit.mk | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
