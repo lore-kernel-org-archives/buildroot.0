@@ -1,57 +1,98 @@
-From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
-Date: Wed, 18 Mar 2020 19:00:57 +0530
-Subject: [Buildroot] [PATCH v3 5/5] DEVELOPERS: add me as a co-maintainer
- for rk3399 based targets
-In-Reply-To: <1584538257-11932-1-git-send-email-sunil@amarulasolutions.com>
-References: <1584538257-11932-1-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <1584538257-11932-6-git-send-email-sunil@amarulasolutions.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 18 Mar 2020 14:39:33 +0100
+Subject: [Buildroot] [PATCH v6 4/4] package/python-scipy: Add new package
+In-Reply-To: <CAMty3ZCw9NhEL_Hes-=aBE6L4L_Rn4azqzbmsEoVRUxYBcQ_vQ@mail.gmail.com>
+References: <20200318090740.4973-1-jagan@amarulasolutions.com>
+ <20200318090740.4973-5-jagan@amarulasolutions.com>
+ <CAGm1_ksuFkkQQTHxhU7kKKjCjckcQB30+OWgif+3spBCcqZkbA@mail.gmail.com>
+ <CAMty3ZCw9NhEL_Hes-=aBE6L4L_Rn4azqzbmsEoVRUxYBcQ_vQ@mail.gmail.com>
+Message-ID: <CAGm1_ksrHQFWenFx_2sL149NNqLWB1VE-m=zYiYRx0W5Pgdunw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Suniel Mahesh <sunil@amarulasolutions.com>
+On Wed, Mar 18, 2020 at 2:36 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
+>
+> Hi Yegor,
+>
+> On Wed, Mar 18, 2020 at 4:08 PM Yegor Yefremov
+> <yegorslists@googlemail.com> wrote:
+> >
+> > Hi Jagan,
+> >
+> > the commit title should be:
+> >
+> > package/python-scipy: new package
+>
+> Sure.
+>
+> >
+> > On Wed, Mar 18, 2020 at 10:15 AM Jagan Teki <jagan@amarulasolutions.com> wrote:
+> > >
+> > > Add python-scipy with 1.4.1 release version.
+> > >
+> > > Cc: Esben Haabendal <esben@geanix.com>
+> > > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> > > ---
+> > > Changes for v6:
+> > > - update to latest scipy version
+> > >
+> > >  DEVELOPERS                             |  1 +
+> > >  package/Config.in                      |  1 +
+> > >  package/python-scipy/Config.in         | 23 +++++++++++++
+> > >  package/python-scipy/python-scipy.hash |  9 +++++
+> > >  package/python-scipy/python-scipy.mk   | 46 ++++++++++++++++++++++++++
+> > >  5 files changed, 80 insertions(+)
+> > >  create mode 100644 package/python-scipy/Config.in
+> > >  create mode 100644 package/python-scipy/python-scipy.hash
+> > >  create mode 100644 package/python-scipy/python-scipy.mk
+> > >
+> > > diff --git a/DEVELOPERS b/DEVELOPERS
+> > > index 308a59b264..9340ae2815 100644
+> > > --- a/DEVELOPERS
+> > > +++ b/DEVELOPERS
+> > > @@ -1152,6 +1152,7 @@ F:        configs/orangepi_zero_plus2_defconfig
+> > >  F:     configs/pine64_defconfig
+> > >  F:     configs/pine64_sopine_defconfig
+> > >  F:     package/python-pybind11
+> > > +F:     package/python-scipy
+> > >
+> > >  N:     James Hilliard <james.hilliard1@gmail.com>
+> > >  F:     package/gensio/
+> > > diff --git a/package/Config.in b/package/Config.in
+> > > index afe32f52b4..f5af9b07ea 100644
+> > > --- a/package/Config.in
+> > > +++ b/package/Config.in
+> > > @@ -1120,6 +1120,7 @@ menu "External python modules"
+> > >         source "package/python-scandir/Config.in"
+> > >         source "package/python-scapy/Config.in"
+> > >         source "package/python-schedule/Config.in"
+> > > +       source "package/python-scipy/Config.in"
+> > >         source "package/python-sdnotify/Config.in"
+> > >         source "package/python-secretstorage/Config.in"
+> > >         source "package/python-see/Config.in"
+> > > diff --git a/package/python-scipy/Config.in b/package/python-scipy/Config.in
+> > > new file mode 100644
+> > > index 0000000000..bacb8f8f8c
+> > > --- /dev/null
+> > > +++ b/package/python-scipy/Config.in
+> > > @@ -0,0 +1,23 @@
+> > > +config BR2_PACKAGE_PYTHON_SCIPY
+> > > +       bool "python-scipy"
+> > > +       depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+> > > +       depends on BR2_TOOLCHAIN_HAS_FORTRAN
+> > > +       depends on BR2_TOOLCHAIN_BUILDROOT_CXX
+> > > +       depends on BR2_PACKAGE_PYTHON3
+> > > +       select BR2_PACKAGE_PYTHON_NUMPY
+> > > +       select BR2_PACKAGE_HOST_PYTHON_PYBIND11
+> >
+> > can this line be dropped?
+>
+> is it because the dependency pick the pybind11 automatically for the build?
 
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
----
-Changes for v3:
-New patch added to this series. Split one changeset from patch #4 and made
-it patch #5
+Yes. When you reference is in the *.mk file, it will be built before
+the current package is built.
 
-Changes for v2:
-didn't exist
-
- DEVELOPERS | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 98220a9..faa72a4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1114,6 +1114,7 @@ N:	Ismael Luceno <ismael@iodev.co.uk>
- F:	package/axel/
- 
- N:	Jagan Teki <jagan@amarulasolutions.com>
-+N:	Suniel Mahesh <sunil@amarulasolutions.com>
- F:	board/amarula/
- F:	board/asus/
- F:	board/bananapi/
-@@ -1129,6 +1130,7 @@ F:	board/orangepi/orangepi-prime/
- F:	board/orangepi/orangepi-win/
- F:	board/orangepi/orangepi-zero-plus2/
- F:	board/pine64/
-+F:	board/firefly/
- F:	configs/amarula_a64_relic_defconfig
- F:	configs/amarula_vyasa_rk3288_defconfig
- F:	configs/asus_tinker_rk3288_defconfig
-@@ -1151,6 +1153,7 @@ F:	configs/orangepi_win_defconfig
- F:	configs/orangepi_zero_plus2_defconfig
- F:	configs/pine64_defconfig
- F:	configs/pine64_sopine_defconfig
-+F:	configs/roc_pc_rk3399_defconfig
- 
- N:	James Hilliard <james.hilliard1@gmail.com>
- F:	package/gensio/
--- 
-2.7.4
+Yegor
