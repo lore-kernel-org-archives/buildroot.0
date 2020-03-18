@@ -1,36 +1,85 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Wed, 18 Mar 2020 13:55:04 +0100
-Subject: [Buildroot] [PATCH] configs/grinn_liteboard_defconfig: bump Linux
- to 5.4.23
-Message-ID: <20200318125504.1144942-1-b.bilas@grinn-global.com>
+From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
+Date: Wed, 18 Mar 2020 19:00:54 +0530
+Subject: [Buildroot] [PATCH v3 2/5] package/arm-gnu-a-toolchain: new package
+In-Reply-To: <1584538257-11932-1-git-send-email-sunil@amarulasolutions.com>
+References: <1584538257-11932-1-git-send-email-sunil@amarulasolutions.com>
+Message-ID: <1584538257-11932-3-git-send-email-sunil@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- configs/grinn_liteboard_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+From: Suniel Mahesh <sunil@amarulasolutions.com>
 
-diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
-index f2c1da33e3..d48dfde715 100644
---- a/configs/grinn_liteboard_defconfig
-+++ b/configs/grinn_liteboard_defconfig
-@@ -1,11 +1,11 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/grinn/liteboard/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.23"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-liteboard"
+arm trusted firmware requires a bare metal toolchain to build Rockchip rk3399
+platform and rk3399 has a cortex-m0 core. Add pre-built cross-compilation
+ARM-A bare metal toolchain for Arm Cortex-A family processors to avoid the
+following build error.
+
+make[3]: arm-none-eabi-gcc: Command not found
+
+pre-built bate metal ARM GNU-A toolchain installs into the host file system folder
+/opt/gcc-arm-none-eabi.
+
+https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz
+
+Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+---
+Changes for v3:
+- no change
+
+Changes for v2:
+- Added lines in description regarding why bare metal toolchain is required,
+  as suggested by Jagan and pointed out by Sergey
+
+ .../arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash   |  3 +++
+ package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk | 27 ++++++++++++++++++++++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
+ create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
+
+diff --git a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
+new file mode 100644
+index 0000000..aa0a23a
+--- /dev/null
++++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++#sha256 bb17109f0ee697254a5d4ae6e5e01440e3ea8f0277f2e8169bf95d07c7d5fe69 gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
++sha256 ac952d89ae0fc3543e81099e7d34917efc621f5def112eee843fd1ce755eca8c  gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz
+diff --git a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
+new file mode 100644
+index 0000000..55dce4d
+--- /dev/null
++++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# arm-gnu-a-toolchain
++#
++################################################################################
++
++ARM_GNU_A_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel
++ARM_GNU_A_TOOLCHAIN_VERSION = 9.2-2019.12
++ARM_GNU_A_TOOLCHAIN_SOURCE = gcc-arm-$(ARM_GNU_A_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
++ARM_GNU_A_TOOLCHAIN_LICENSE = GPL-3.0+
++ARM_GNU_A_TOOLCHAIN_LICENSE_FILES =
++
++HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/gcc-arm-none-eabi
++
++define HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_CMDS
++    rm -rf $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
++    mkdir -p $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
++    cp -rf $(@D)/* $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
++
++    cd $(HOST_DIR)/bin && \
++	for i in $(HOST_DIR)/opt/gcc-arm-none-eabi/bin/*; do \
++	ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
++    done
++
++endef
++
++$(eval $(host-generic-package))
 -- 
-2.25.1
+2.7.4
