@@ -1,56 +1,53 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 18 Mar 2020 20:54:28 +0100
-Subject: [Buildroot] Problems with special characters in filenames
-In-Reply-To: <CADLDEKtQdEPVwiKiYHrjpRc6On4sMhHbDRSU4UWq9wnmx2xEEg@mail.gmail.com>
-References: <CADLDEKtQdEPVwiKiYHrjpRc6On4sMhHbDRSU4UWq9wnmx2xEEg@mail.gmail.com>
-Message-ID: <20200318205428.6dec3cb9@gmx.net>
+Date: Wed, 18 Mar 2020 21:40:18 +0100
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.15.4
+Message-ID: <20200318204018.28606-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Juerg,
+For details see [1].
 
-On Sat, 14 Mar 2020 13:03:07 +0100, Juerg Haefliger <juergh@gmail.com> wrote:
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-March/041332.html
 
-> Hi,
->
-> I have filenames with umlauts (special German characters) that are
-> displayed as '??' in busybox shell. I've tried the below config
-> changes to get those umlauts to display properly but it's  not
-> working. What am I missing?
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libinput/libinput.hash | 10 +++++-----
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Maybe
-	$ export LANG=en_US.utf8
-or
-	$ export LANG=de_CH.utf8
-
-Regards,
-Peter
-
->
-> Thanks
-> ...Juerg
->
-> - BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> +BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> +# BR2_ENABLE_LOCALE_PURGE is not set
-> +BR2_GENERATE_LOCALE="en_US de_CH"
->
-> busybox config fragment:
-> CONFIG_LOCALE_SUPPORT=y
-> CONFIG_UNICODE_SUPPORT=y
-> # CONFIG_UNICODE_USING_LOCALE is not set
-> CONFIG_FEATURE_CHECK_UNICODE_IN_ENV=y
-> CONFIG_SUBST_WCHAR=63
-> CONFIG_LAST_SUPPORTED_WCHAR=767
-> CONFIG_UNICODE_COMBINING_WCHARS=y
-> CONFIG_UNICODE_WIDE_WCHARS=y
-> # CONFIG_UNICODE_BIDI_SUPPORT is not set
-> # CONFIG_UNICODE_NEUTRAL_TABLE is not set
-> # CONFIG_UNICODE_PRESERVE_BROKEN is not set
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index f39afa0457..eee0697151 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-March/041288.html
+-md5  6fbea8d51d9194d7ba33f96d7c4cee56  libinput-1.15.3.tar.xz
+-sha1  101fd149b851c197323129efcdfe5c1c6c940b43  libinput-1.15.3.tar.xz
+-sha256  5b12427dd50489c2b41b04ae2ca54e31a112a33cb861f00ccd15a2ad7a88694d  libinput-1.15.3.tar.xz
+-sha512  6636fd618e2b9cfa5ee44701207dc98f2639adc53eb3ef135509d936fb19b2cedf5184eab58e887798d9cf8ee65f35bc9062f7e3630080bcbe45a90a8b631ef2  libinput-1.15.3.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-March/041332.html
++md5  76c5cb1a55f5098ed353ae7d4e054c50  libinput-1.15.4.tar.xz
++sha1  43740a5fec3f6d474906173cc01ff3d73d935d2f  libinput-1.15.4.tar.xz
++sha256  9c8b6846d94e374ee4bdb32634e4ac4aa318afc31f9a58fcb545cd3095c745c1  libinput-1.15.4.tar.xz
++sha512  : 4659818952dc729cd5bdb78ebe21edbbacbf8a66a592b13ba30f3bb4c4e264208ec94440a253cfa4edc8b2ef904954eecea6be0f8d63cf239e3858d3abb64a80  libinput-1.15.4.tar.xz
+ 
+ # License files
+ sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index f418046257..5e2ee696bf 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.15.3
++LIBINPUT_VERSION = 1.15.4
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-- 
+2.25.1
