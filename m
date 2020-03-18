@@ -1,77 +1,47 @@
-From: Pragash Jeyaratnam <pragash.jeyaratnam@gmail.com>
-Date: Wed, 18 Mar 2020 10:54:29 -0400
-Subject: [Buildroot] Inquiry : Adding a custom python package to
- buildroot
-In-Reply-To: <CALYA+Yvspb-eeK7KWeAJn2bYtwWq4NK4W6usw6Ts+2OwQ0XLzw@mail.gmail.com>
-References: <CALYA+Yvspb-eeK7KWeAJn2bYtwWq4NK4W6usw6Ts+2OwQ0XLzw@mail.gmail.com>
-Message-ID: <CALYA+Ys78xtOdKSQZVwgf-QVjU2j+69-uEJg87FJYUJb1j9WGw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 18 Mar 2020 15:16:43 +0000
+Subject: [Buildroot] [Bug 12661] New: cups problems in buildroot
+Message-ID: <bug-12661-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=12661
 
-Adding to my previous email. The problem is due to python setup.py issue
-within custom modules. For example If we assume,
-If a setup.py which has configuration
+            Bug ID: 12661
+           Summary: cups problems in buildroot
+           Product: buildroot
+           Version: 2019.11.2
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: skif at skif-web.ru
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-setup(name='your-module',
-      .....
-      data_files=[
-        ('/usr/share/your_module/', glob.glob('data/*')),
-      ],
-     )
+Created attachment 8401
+  --> https://bugs.busybox.net/attachment.cgi?id=8401&action=edit
+configs and logs
 
-The above failure will occur ( Absolute path reference) . As per to the
-setup.py manual https://docs.python.org/3/distutils/setupscript.html
-"The *directory* should be a relative path. It is interpreted relative to
-the installation prefix"
+If printing test-page (from cups web-interface), got error "Exception: open no:
+No such file or directory" in web-interface 
 
-So in-order to satisfy the above the configuration should be changed to
-  setup(name='your_module',
-      .....
-      data_files=[
-        ('share/your_module/', glob.glob('data/*')),
-      ],
-     )
+If printing text-file (fstab for example, lp /etc/fstab), got error "Exception:
+open no: No such file or directory" in web-interface.
 
-Which will be created as per to the installation_prefix/share/your_module.
-
-Hope it was helpful.
-
-Regards,
-Pragash
+If printing binary file, (head -n 1 /bin/cp >/1;lp -d test /1) all works fine
 
 
+Used printer - hp  laserJet pro m402dn
+Used driver - generic post-script (work fine fron linux-mint and gentoo)
+Used defaconfig - qemu_x86_84_defconfig
 
-On Wed, Mar 18, 2020 at 10:25 AM Pragash Jeyaratnam <
-pragash.jeyaratnam@gmail.com> wrote:
-
-> Hi,
->
-> I tried to add a custom python package to buildroot, during build I am
-> getting following error message.
->
-> creating /usr/share/sona
-> error: could not create '/usr/share/sona': Permission denied
-> package/pkg-generic.mk:311: recipe for target
-> '/home/branches/sona/build/dist/build/python-sona-engine-1.0/.stamp_target_installed'
-> failed
-> make[1]: ***
-> [/home/branches/sona/build/dist/build/python-sona-engine-1.0/.stamp_target_installed]
-> Error 1
-> Makefile:23: recipe for target '_all' failed
-> make: *** [_all] Error 2
->
-> Would it be possible for anyone to guide me on how to fix the above issue ?
->
-> Thank you.
->
-> Regards,
-> Pragash
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200318/4931e0ea/attachment.html>
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
