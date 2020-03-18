@@ -1,152 +1,127 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Wed, 18 Mar 2020 14:37:40 +0530
-Subject: [Buildroot] [PATCH v6 4/4] package/python-scipy: Add new package
-In-Reply-To: <20200318090740.4973-1-jagan@amarulasolutions.com>
+From: Esben Haabendal <esben@geanix.com>
+Date: Wed, 18 Mar 2020 10:28:42 +0100
+Subject: [Buildroot] [PATCH v6 1/4] package/python-numpy: Bump to
+ version 1.18.1
+In-Reply-To: <20200318090740.4973-2-jagan@amarulasolutions.com> (Jagan Teki's
+ message of "Wed, 18 Mar 2020 14:37:37 +0530")
 References: <20200318090740.4973-1-jagan@amarulasolutions.com>
-Message-ID: <20200318090740.4973-5-jagan@amarulasolutions.com>
+ <20200318090740.4973-2-jagan@amarulasolutions.com>
+Message-ID: <87sgi68111.fsf@geanix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add python-scipy with 1.4.1 release version.
+Jagan Teki <jagan@amarulasolutions.com> writes:
 
-Cc: Esben Haabendal <esben@geanix.com>
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
----
-Changes for v6:
-- update to latest scipy version
+> Bump the python-numpy version to 1.18.1.
 
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/python-scipy/Config.in         | 23 +++++++++++++
- package/python-scipy/python-scipy.hash |  9 +++++
- package/python-scipy/python-scipy.mk   | 46 ++++++++++++++++++++++++++
- 5 files changed, 80 insertions(+)
- create mode 100644 package/python-scipy/Config.in
- create mode 100644 package/python-scipy/python-scipy.hash
- create mode 100644 package/python-scipy/python-scipy.mk
+While at it, you should probably bump to 1.18.2 instead.  It is a small
+bugfix release on top of 1.18.1.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 308a59b264..9340ae2815 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1152,6 +1152,7 @@ F:	configs/orangepi_zero_plus2_defconfig
- F:	configs/pine64_defconfig
- F:	configs/pine64_sopine_defconfig
- F:	package/python-pybind11
-+F:	package/python-scipy
- 
- N:	James Hilliard <james.hilliard1@gmail.com>
- F:	package/gensio/
-diff --git a/package/Config.in b/package/Config.in
-index afe32f52b4..f5af9b07ea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1120,6 +1120,7 @@ menu "External python modules"
- 	source "package/python-scandir/Config.in"
- 	source "package/python-scapy/Config.in"
- 	source "package/python-schedule/Config.in"
-+	source "package/python-scipy/Config.in"
- 	source "package/python-sdnotify/Config.in"
- 	source "package/python-secretstorage/Config.in"
- 	source "package/python-see/Config.in"
-diff --git a/package/python-scipy/Config.in b/package/python-scipy/Config.in
-new file mode 100644
-index 0000000000..bacb8f8f8c
---- /dev/null
-+++ b/package/python-scipy/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_PYTHON_SCIPY
-+	bool "python-scipy"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
-+	depends on BR2_TOOLCHAIN_HAS_FORTRAN
-+	depends on BR2_TOOLCHAIN_BUILDROOT_CXX
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_NUMPY
-+	select BR2_PACKAGE_HOST_PYTHON_PYBIND11
-+	select BR2_PACKAGE_LAPACK
-+	select BR2_PACKAGE_OPENBLAS
-+	help
-+	  The SciPy library is one of the core packages that make up the SciPy
-+	  stack. It provides many user-friendly and efficient numerical
-+	  routines such as routines for numerical integration, interpolation,
-+	  optimization, linear algebra and statistics.
-+
-+	  https://www.scipy.org/scipylib/
-+
-+comment "python-scipy needs toolchain w/ fortran and c++ and glibc or musl"
-+	depends on BR2_PACKAGE_PYTHON3
-+	depends on !BR2_TOOLCHAIN_HAS_FORTRAN || \
-+		!BR2_TOOLCHAIN_BUILDROOT_CXX || \
-+		(!BR2_TOOLCHAIN_USES_GLIBC && !BR2_TOOLCHAIN_USES_MUSL)
-diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
-new file mode 100644
-index 0000000000..c9d295ef6b
---- /dev/null
-+++ b/package/python-scipy/python-scipy.hash
-@@ -0,0 +1,9 @@
-+# Locally generated
-+sha256 dee1bbf3a6c8f73b6b218cb28eed8dd13347ea2f87d572ce19b289d6fd3fbc59  scipy-1.4.1.tar.gz
-+sha256 5cbdbe33385779958be8b9310497e32d2eec144d82ef425780d3e19f8af6de76  LICENSE.txt
-+sha256 37e64a498894ac7c3b070023e3689e954a8ecf8a23b90968d09a455f1b4f7b35  scipy/linalg/src/lapack_deprecations/LICENSE
-+sha256 606209a000716c5f66e33e180ce08434b96ed17db4975ab9723c6b5fbcc89609  scipy/ndimage/LICENSE.txt
-+sha256 3df9207af2fdb861af0ae3b22026f163b9bcfab4e525dc4943afe2ffa3f77624  scipy/optimize/tnc/LICENSE
-+sha256 f0cedf52503b2d42b83411a0a16e6fefac346dfad8fddc66f50050150123470c  scipy/sparse/linalg/dsolve/SuperLU/License.txt
-+sha256 0926566f9f406178d1214f8cc796e166b1213dd7c05e0c5b461a8b8ac9e50bbe  scipy/sparse/linalg/eigen/arpack/ARPACK/COPYING
-+sha256 34db0c0c4f931861d720555c9cd7a2e228d1290ba29af0f2ee80c41bb2038afb  scipy/spatial/qhull_src/COPYING.txt
-diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
-new file mode 100644
-index 0000000000..1d66b146ec
---- /dev/null
-+++ b/package/python-scipy/python-scipy.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# python-scipy
-+#
-+################################################################################
-+
-+PYTHON_SCIPY_VERSION = 1.4.1
-+PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.gz
-+PYTHON_SCIPY_SITE = https://pypi.python.org/packages/04/ab/e2eb3e3f90b9363040a3d885ccc5c79fe20c5b8a3caa8fe3bf47ff653260
-+PYTHON_SCIPY_LICENSE = BSD-3-Clause, BSD-2-Clause, BSD, BSD-Style, \
-+	Apache-2.0, MIT
-+PYTHON_SCIPY_LICENSE_FILES = \
-+	LICENSE.txt \
-+	scipy/linalg/src/lapack_deprecations/LICENSE \
-+	scipy/ndimage/LICENSE.txt \
-+	scipy/optimize/tnc/LICENSE \
-+	scipy/sparse/linalg/dsolve/SuperLU/License.txt \
-+	scipy/sparse/linalg/eigen/arpack/ARPACK/COPYING \
-+	scipy/spatial/qhull_src/COPYING.txt
-+PYTHON_SCIPY_SETUP_TYPE = setuptools
-+PYTHON_SCIPY_DEPENDENCIES += \
-+	host-python-numpy \
-+	host-python-pybind11 \
-+	lapack \
-+	openblas \
-+	python-numpy
-+
-+PYTHON_SCIPY_BUILD_OPTS = config_fc --fcompiler=gnu95
-+PYTHON_SCIPY_ENV += F90=$(TARGET_CROSS)gfortran F77=$(TARGET_CROSS)gfortran
-+
-+# Provide system configuration options to numpy distutils extenions, telling
-+# to find all include files and libraries in staging directory.
-+define PYTHON_SCIPY_CONFIGURE_CMDS
-+	-rm -f $(@D)/site.cfg
-+	echo "[DEFAULT]" >> $(@D)/site.cfg
-+	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
-+	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
-+endef
-+
-+# Use the target numpy pkg-config configuration files modified for target
-+# cross-compilation.  Without this, numpy distutils will cause the linker to
-+# link with host libnpymath.a.
-+PYTHON_SCIPY_ENV += NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)
-+PYTHON_SCIPY_INSTALL_STAGING = YES
-+
-+$(eval $(python-package))
--- 
-2.17.1
+> Drop BR2_PACKAGE_PYTHON dependency from
+> - opencv3
+> - gnuadio
+> python support since numpy now support only for python3.
+>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> Cc: Esben Haabendal <esben@geanix.com>
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> ---
+> Changes for v6:
+> - new patch
+>
+>  package/gnuradio/Config.in             |  2 +-
+>  package/opencv3/Config.in              |  2 +-
+>  package/python-numpy/Config.in         |  2 ++
+>  package/python-numpy/python-numpy.hash | 14 +++++++-------
+>  package/python-numpy/python-numpy.mk   |  4 +++-
+>  5 files changed, 14 insertions(+), 10 deletions(-)
+>
+> diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+> index 6d438bcd6f..bf69ed605b 100644
+> --- a/package/gnuradio/Config.in
+> +++ b/package/gnuradio/Config.in
+> @@ -63,7 +63,7 @@ config BR2_PACKAGE_GNURADIO_FEC
+>  
+>  config BR2_PACKAGE_GNURADIO_PYTHON
+>  	bool "python support"
+> -	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> +	depends on BR2_PACKAGE_PYTHON3
+>  	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+>  	select BR2_PACKAGE_BOOST_PYTHON
+> diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+> index d4b17b6acf..18c390c515 100644
+> --- a/package/opencv3/Config.in
+> +++ b/package/opencv3/Config.in
+> @@ -156,7 +156,7 @@ config BR2_PACKAGE_OPENCV3_LIB_PHOTO
+>  
+>  config BR2_PACKAGE_OPENCV3_LIB_PYTHON
+>  	bool "python"
+> -	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> +	depends on BR2_PACKAGE_PYTHON3
+>  	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+>  	select BR2_PACKAGE_PYTHON_NUMPY
+> diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+> index 5b9ee5803b..f7311fed0f 100644
+> --- a/package/python-numpy/Config.in
+> +++ b/package/python-numpy/Config.in
+> @@ -15,9 +15,11 @@ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+>  
+>  config BR2_PACKAGE_PYTHON_NUMPY
+>  	bool "python-numpy"
+> +	depends on BR2_PACKAGE_PYTHON3
+>  	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+>  	# python-numpy needs fenv.h which is not provided by uclibc
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
+> +	select BR2_PACKAGE_HOST_PYTHON_CYTHON if BR2_PACKAGE_PYTHON3
+>  	help
+>  	  NumPy is the fundamental package for scientific computing
+>  	  with Python.
+> diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+> index eb4123e3f6..5c280479a2 100644
+> --- a/package/python-numpy/python-numpy.hash
+> +++ b/package/python-numpy/python-numpy.hash
+> @@ -1,9 +1,9 @@
+> -# Copied from https://github.com/numpy/numpy/releases/tag/v1.16.4
+> -sha256	a3bccb70ad94091a5b9e2469fabd41ac877c140a6828c2022e35560a2ec0346c	numpy-1.16.4.tar.gz
+> +# Copied from https://github.com/numpy/numpy/releases/tag/v1.18.1
+> +sha256  e37802868ba5f389bf4e3f4c40c16e1b031814f0585ac122637de219de6279cb	numpy-1.18.1.tar.gz
+>  # License files, locally calculated
+> -sha256	6b5086f61fe0c71564a79304ecbaa60f11fa3f3debf82f73d16a611cab102adc	LICENSE.txt
+> -sha256	426a5a484480f57a295db48c2c04f47bb3274752dd82a7fd6541dfa2cb90f641	doc/sphinxext/LICENSE.txt
+> +sha256  ad81d0c21843ba6ce6fe5fa3eaacb61120be70cd798c52f63df3f4c12a843f0c	LICENSE.txt
+> +sha256  d3045980e80a6b39f98586c24bc7f39a7625b4b9f08ce72e367d12814743d047	numpy/core/src/multiarray/dragon4.c
+> +sha256  426a5a484480f57a295db48c2c04f47bb3274752dd82a7fd6541dfa2cb90f641	doc/sphinxext/LICENSE.txt
+>  sha256	154a8706fa0fdeff1073bf6239c4ecf51f562ab107066eef839dade1a45c824c	doc/scipy-sphinx-theme/LICENSE.txt
+> -sha256	a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55	numpy/linalg/lapack_lite/LICENSE.txt
+> -sha256	badf51c7e3e7de9c7630bd069780f5c197b846ef7660b342a1e58d5553592d8e	tools/npy_tempita/license.txt
+> -sha256	d37526b4a34c0aa859afe6f9b7e64ca7c306b7430df8113dd5ac6fcb246bd2d4	numpy/core/src/multiarray/dragon4.c
+> +sha256  a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55	numpy/linalg/lapack_lite/LICENSE.txt
+> +sha256  badf51c7e3e7de9c7630bd069780f5c197b846ef7660b342a1e58d5553592d8e	tools/npy_tempita/license.txt
+> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+> index 3b474efa6e..6d4cd22e62 100644
+> --- a/package/python-numpy/python-numpy.mk
+> +++ b/package/python-numpy/python-numpy.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_NUMPY_VERSION = 1.16.4
+> +PYTHON_NUMPY_VERSION = 1.18.1
+>  PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
+>  PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
+>  PYTHON_NUMPY_LICENSE = BSD-3-Clause, BSD-2-Clause, PSF, Apache-2.0, MIT, Zlib
+> @@ -14,6 +14,8 @@ PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
+>  			tools/npy_tempita/license.txt \
+>  			numpy/core/src/multiarray/dragon4.c
+>  PYTHON_NUMPY_SETUP_TYPE = setuptools
+> +PYTHON_NUMPY_DEPENDENCIES += host-python-cython
+> +HOST_PYTHON_NUMPY_DEPENDENCIES += host-python-cython
+>  
+>  ifeq ($(BR2_PACKAGE_CLAPACK),y)
+>  PYTHON_NUMPY_DEPENDENCIES += clapack
