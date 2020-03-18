@@ -1,45 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 18 Mar 2020 22:21:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tor: security bump version to
- 0.4.2.7
-Message-ID: <20200318212130.289667-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 18 Mar 2020 22:20:57 +0100
+Subject: [Buildroot] [git commit] package/luvi: bump to version 2.11.0
+Message-ID: <20200318210839.E733B81438@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://blog.torproject.org/new-releases-03510-0419-0427
+commit: https://git.buildroot.net/buildroot/commit/?id=c6d2ba567189094f1c2e214e9e00d8cc3727cc5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2020-10592 & CVE-2020-10593.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
+ package/luvi/luvi.hash | 2 +-
+ package/luvi/luvi.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 94cb8325ff..41c0f81abc 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
+diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+index 4627db5c5c..f08883c068 100644
+--- a/package/luvi/luvi.hash
++++ b/package/luvi/luvi.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256 0500102433849bbe3231c590973d126c2d2d6b3943b4b9f9962bdb108436e6c4  tor-0.4.2.6.tar.gz
-+sha256 06a1d835ddf382f6bca40a62e8fb40b71b2f73d56f0d53523c8bd5caf9b3026d  tor-0.4.2.7.tar.gz
- sha256 ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index d1caf35a9a..09f780d3f5 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+ # Locally calculated
+-sha256  a38e440d3f82d75f428bafc3f3cd51cb64f8a03c9e0eb297b0ff27c5209edebb  luvi-src-v2.9.3.tar.gz
++sha256  ec4eff7aaf2f36879a5fc8eb86706818a75faf07a18451a6fb44e05bbe00817f  luvi-src-v2.11.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index e311504e96..d6384cb484 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.2.6
-+TOR_VERSION = 0.4.2.7
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
--- 
-2.25.0
+-LUVI_VERSION = 2.9.3
++LUVI_VERSION = 2.11.0
+ LUVI_SOURCE = luvi-src-v$(LUVI_VERSION).tar.gz
+ LUVI_SITE = https://github.com/luvit/luvi/releases/download/v$(LUVI_VERSION)
+ LUVI_LICENSE = Apache-2.0
