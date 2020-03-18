@@ -1,64 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Mar 2020 21:50:05 +0100
-Subject: [Buildroot] [PATCH] boot/arm-trusted-firmware: add optional
- host-dtc dependency
-Message-ID: <20200318205005.79605-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 18 Mar 2020 21:52:16 +0100
+Subject: [Buildroot] [PATCH v3 5/5] DEVELOPERS: add me as a
+ co-maintainer for rk3399 based targets
+In-Reply-To: <CAMty3ZBU8AP8SEuQC95eRELA5XZa2Dr92Efj3e3FENW24BiPfA@mail.gmail.com>
+References: <1581590685-31680-2-git-send-email-sunil@amarulasolutions.com>
+ <1584539153-12934-1-git-send-email-sunil@amarulasolutions.com>
+ <1584539153-12934-6-git-send-email-sunil@amarulasolutions.com>
+ <CAEyMn7aO8gmKywpsYxY+cAqsUGiL=oW9CfiZwtVi9L76-6us1A@mail.gmail.com>
+ <CAMty3ZBU8AP8SEuQC95eRELA5XZa2Dr92Efj3e3FENW24BiPfA@mail.gmail.com>
+Message-ID: <20200318215216.187d07bd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some ATF configurations, such as the ones for the STM32MP1 processor
-family, require DTC during the build as Device Tree files are
-used. Without dtc, the build fails:
+Hello Jagan,
 
-/bin/sh: 1: dtc: not found
-dtc version too old (), you need at least version 1.4.4
-plat/st/stm32mp1/platform.mk:239: recipe for target 'check_dtc_version' failed
-make[1]: *** [check_dtc_version] Error 1
+On Wed, 18 Mar 2020 22:37:30 +0530
+Jagan Teki <jagan@amarulasolutions.com> wrote:
 
-To solve this, this commit implements a
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC option, in a way that mimics
-the BR2_TARGET_UBOOT_NEEDS_DTC option we already have for the U-Boot
-package.
+> Doesn't it have a possibility of co-developer concept in buildroot
+> like we do have linux maintainers file? I feel it makes sense to have
+> it or the goal of this DEVELOPERS file seems different as what we
+> think?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/arm-trusted-firmware/Config.in               | 7 +++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++++
- 2 files changed, 11 insertions(+)
+The Linux MAINTAINERS file and the Buildroot DEVELOPERS are organized
+differently.
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index 373591d497..737dc587e5 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -160,4 +160,11 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES
- 	  Names of generated image files that are installed in the
- 	  output images/ directory.
- 
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC
-+	bool "Needs dtc"
-+	select BR2_PACKAGE_HOST_DTC
-+	help
-+	  Select this option if your ATF board configuration
-+	  requires the Device Tree compiler to be available.
-+
- endif
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 34737018aa..27f63a87fe 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -29,6 +29,10 @@ endif
- 
- ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES = YES
- 
-+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC),y)
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-dtc
-+endif
-+
- ARM_TRUSTED_FIRMWARE_PLATFORM = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM))
- 
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG),y)
+The Linux MAINTAINERS file is organized by topic/subsystem, and gives
+for this subsystem the list of persons in charge of it.
+
+The Buildroot DEVELOPERS is organized by person, and gives for each
+person the list of packages/defconfigs/areas this person is interested
+in.
+
+It is unlikely that two different developers will have exactly the same
+set of packages/defconfigs/areas they are interested in, so we don't
+support having multiple name/e-mail in front of a single list of
+packages/defconfigs. In addition, that would break the alphabetic
+ordering of the file.
+
+Best regards,
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
