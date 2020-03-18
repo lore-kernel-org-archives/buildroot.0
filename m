@@ -1,88 +1,77 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 18 Mar 2020 15:34:12 +0100
-Subject: [Buildroot] CVEs not matching buildroot packages
-In-Reply-To: <20200318151256.2c7e9c11@windsurf.home>
-References: <e9268b49623925add8aeac91e8059012@walle.cc>
- <20200225104600.0f295783@windsurf>
- <83c7598984b7c6eb22cc5a5bb11af4fc@walle.cc> <20200225112943.0a2dd6e6@windsurf>
- <11370f3cd0ea3d53ee8002c59dc600a9@walle.cc>
- <CAEyMn7bDcNOW4ty0sPgOg4WexfZ+uR+HoRvR3M+e-ObrWYKJJA@mail.gmail.com>
- <20200318151256.2c7e9c11@windsurf.home>
-Message-ID: <CAEyMn7YmftrqWPw263Yh08v2YPwCTB665RSMivj5h8ty_nSJ3A@mail.gmail.com>
+Date: Wed, 18 Mar 2020 15:51:08 +0100
+Subject: [Buildroot] [PATCH v3 5/5] DEVELOPERS: add me as a
+ co-maintainer for rk3399 based targets
+In-Reply-To: <1584539153-12934-6-git-send-email-sunil@amarulasolutions.com>
+References: <1581590685-31680-2-git-send-email-sunil@amarulasolutions.com>
+ <1584539153-12934-1-git-send-email-sunil@amarulasolutions.com>
+ <1584539153-12934-6-git-send-email-sunil@amarulasolutions.com>
+Message-ID: <CAEyMn7aO8gmKywpsYxY+cAqsUGiL=oW9CfiZwtVi9L76-6us1A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Sunil,
 
-
-Am Mi., 18. M?rz 2020 um 15:12 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
+Am Mi., 18. M?rz 2020 um 14:46 Uhr schrieb <sunil@amarulasolutions.com>:
 >
-> Hello,
+> From: Suniel Mahesh <sunil@amarulasolutions.com>
 >
-> On Wed, 18 Mar 2020 14:57:27 +0100
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+> ---
+> Changes for v3:
+> New patch added to this series. Split one changeset from patch #4 and made
+> it patch #5
 >
-> > Just to go on with this I did a proof of concept for the CVE mapping.
-> >
-> > A first version can be found here:
-> > https://github.com/hthiery/buildroot/tree/feature-cve-map
-> >
-> > What this change does:
-> > Add a new file format for the CVE mapping: <pkg>.cve. This is done in
-> > YAML format. In this file at least the fields vendor and product has
-> > to be defined. With this we can create a map from the CVE to the
-> > buildroot package name.
-> > Now we can decide the following:
-> > 1) the package has a mapping and is affected by a CVE  (RED ZONE)
-> > 2) the package has a mapping and a CVE is found but fixed (GREEN ZONE)
-> > 3) the package has a mapping and no CVE is found (GREEN ZONE)
-> > 4) the package has no mapping and it is affected by CVE found by guess
-> > (try to compare buildroot name vs. CVE product name value) (YELLOW
-> > ZONE)
-> > 5) the package has no mapping and no CVE is found  (we don't konw if
-> > there isn't a CVE or we have no match because the buildroot name does
-> > not match the CVE product name) (GREY ZONE)
-> >
-> > Here is an example of a yaml file: package/pppd/ppd.cve
-> > --- snip ---
-> > vendor: point-to-point_protocol_project
-> > product: point-to-point_protocol
-> >
-> > cves:
-> >   CVE-2020-8597:
-> >     patch: 0001-pppd-Fix-bounds-check.patch
-> >
-> > --- snip ---
-> >
-> > To take the decision if a CVE is fixed there could be more possible
-> > reasons instead of the patch in the example above. I can image
-> > something like 'does-not-apply'.
-> >
-> > I think the effort to have an extra file is not so much and it will
-> > not pollute the Makefile with variables that are not build related.
-> > For checking the YAML syntax an extra pkg-check can be implemented.
-> >
-> > As mentioned at the beginning this is first idea how a mapping could
-> > look. What do you think?
+> Changes for v2:
+> didn't exist
 >
-> I'll give my very quick and probably very blunt and brutal feedback: I
-> don't like having another file with package metadata. This metadata
-> should be in the .mk file.
+>  DEVELOPERS | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 98220a9..faa72a4 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1114,6 +1114,7 @@ N:        Ismael Luceno <ismael@iodev.co.uk>
+>  F:     package/axel/
+>
+>  N:     Jagan Teki <jagan@amarulasolutions.com>
+> +N:     Suniel Mahesh <sunil@amarulasolutions.com>
 
-This is really brutal .. Just kidding ;-)
+I think what you're are doing here will not work. You have to have
+your own list of supported files or pathes. And put your name at the
+right position in the DEVELOPERS file (alphabetically sorted).
 
-Don't you think more variables (CPE_VENDOR, CPE_PRODUCT, CVE_IGNORED
-..) in the Makefile will slow down the parsing? The other thing is
-that IMHO valuable information about why a CVE is ignored (fixed, does
-not apply to the build configuration ... ) will be lost or has to
-added as comment in the Makefile.
 
-On the other hand I understand your concern about having another file
-with meta information.
+>  F:     board/amarula/
+>  F:     board/asus/
+>  F:     board/bananapi/
+> @@ -1129,6 +1130,7 @@ F:        board/orangepi/orangepi-prime/
+>  F:     board/orangepi/orangepi-win/
+>  F:     board/orangepi/orangepi-zero-plus2/
+>  F:     board/pine64/
+> +F:     board/firefly/
+>  F:     configs/amarula_a64_relic_defconfig
+>  F:     configs/amarula_vyasa_rk3288_defconfig
+>  F:     configs/asus_tinker_rk3288_defconfig
+> @@ -1151,6 +1153,7 @@ F:        configs/orangepi_win_defconfig
+>  F:     configs/orangepi_zero_plus2_defconfig
+>  F:     configs/pine64_defconfig
+>  F:     configs/pine64_sopine_defconfig
+> +F:     configs/roc_pc_rk3399_defconfig
+>
+>  N:     James Hilliard <james.hilliard1@gmail.com>
+>  F:     package/gensio/
+> --
+> 2.7.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Heiko
