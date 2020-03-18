@@ -1,77 +1,77 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 18 Mar 2020 15:51:08 +0100
-Subject: [Buildroot] [PATCH v3 5/5] DEVELOPERS: add me as a
- co-maintainer for rk3399 based targets
-In-Reply-To: <1584539153-12934-6-git-send-email-sunil@amarulasolutions.com>
-References: <1581590685-31680-2-git-send-email-sunil@amarulasolutions.com>
- <1584539153-12934-1-git-send-email-sunil@amarulasolutions.com>
- <1584539153-12934-6-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <CAEyMn7aO8gmKywpsYxY+cAqsUGiL=oW9CfiZwtVi9L76-6us1A@mail.gmail.com>
+From: Pragash Jeyaratnam <pragash.jeyaratnam@gmail.com>
+Date: Wed, 18 Mar 2020 10:54:29 -0400
+Subject: [Buildroot] Inquiry : Adding a custom python package to
+ buildroot
+In-Reply-To: <CALYA+Yvspb-eeK7KWeAJn2bYtwWq4NK4W6usw6Ts+2OwQ0XLzw@mail.gmail.com>
+References: <CALYA+Yvspb-eeK7KWeAJn2bYtwWq4NK4W6usw6Ts+2OwQ0XLzw@mail.gmail.com>
+Message-ID: <CALYA+Ys78xtOdKSQZVwgf-QVjU2j+69-uEJg87FJYUJb1j9WGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sunil,
+Hi,
 
-Am Mi., 18. M?rz 2020 um 14:46 Uhr schrieb <sunil@amarulasolutions.com>:
->
-> From: Suniel Mahesh <sunil@amarulasolutions.com>
->
-> Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
-> ---
-> Changes for v3:
-> New patch added to this series. Split one changeset from patch #4 and made
-> it patch #5
->
-> Changes for v2:
-> didn't exist
->
->  DEVELOPERS | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 98220a9..faa72a4 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1114,6 +1114,7 @@ N:        Ismael Luceno <ismael@iodev.co.uk>
->  F:     package/axel/
->
->  N:     Jagan Teki <jagan@amarulasolutions.com>
-> +N:     Suniel Mahesh <sunil@amarulasolutions.com>
+Adding to my previous email. The problem is due to python setup.py issue
+within custom modules. For example If we assume,
+If a setup.py which has configuration
 
-I think what you're are doing here will not work. You have to have
-your own list of supported files or pathes. And put your name at the
-right position in the DEVELOPERS file (alphabetically sorted).
+setup(name='your-module',
+      .....
+      data_files=[
+        ('/usr/share/your_module/', glob.glob('data/*')),
+      ],
+     )
+
+The above failure will occur ( Absolute path reference) . As per to the
+setup.py manual https://docs.python.org/3/distutils/setupscript.html
+"The *directory* should be a relative path. It is interpreted relative to
+the installation prefix"
+
+So in-order to satisfy the above the configuration should be changed to
+  setup(name='your_module',
+      .....
+      data_files=[
+        ('share/your_module/', glob.glob('data/*')),
+      ],
+     )
+
+Which will be created as per to the installation_prefix/share/your_module.
+
+Hope it was helpful.
+
+Regards,
+Pragash
 
 
->  F:     board/amarula/
->  F:     board/asus/
->  F:     board/bananapi/
-> @@ -1129,6 +1130,7 @@ F:        board/orangepi/orangepi-prime/
->  F:     board/orangepi/orangepi-win/
->  F:     board/orangepi/orangepi-zero-plus2/
->  F:     board/pine64/
-> +F:     board/firefly/
->  F:     configs/amarula_a64_relic_defconfig
->  F:     configs/amarula_vyasa_rk3288_defconfig
->  F:     configs/asus_tinker_rk3288_defconfig
-> @@ -1151,6 +1153,7 @@ F:        configs/orangepi_win_defconfig
->  F:     configs/orangepi_zero_plus2_defconfig
->  F:     configs/pine64_defconfig
->  F:     configs/pine64_sopine_defconfig
-> +F:     configs/roc_pc_rk3399_defconfig
+
+On Wed, Mar 18, 2020 at 10:25 AM Pragash Jeyaratnam <
+pragash.jeyaratnam@gmail.com> wrote:
+
+> Hi,
 >
->  N:     James Hilliard <james.hilliard1@gmail.com>
->  F:     package/gensio/
-> --
-> 2.7.4
+> I tried to add a custom python package to buildroot, during build I am
+> getting following error message.
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Heiko
+> creating /usr/share/sona
+> error: could not create '/usr/share/sona': Permission denied
+> package/pkg-generic.mk:311: recipe for target
+> '/home/branches/sona/build/dist/build/python-sona-engine-1.0/.stamp_target_installed'
+> failed
+> make[1]: ***
+> [/home/branches/sona/build/dist/build/python-sona-engine-1.0/.stamp_target_installed]
+> Error 1
+> Makefile:23: recipe for target '_all' failed
+> make: *** [_all] Error 2
+>
+> Would it be possible for anyone to guide me on how to fix the above issue ?
+>
+> Thank you.
+>
+> Regards,
+> Pragash
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200318/4931e0ea/attachment.html>
