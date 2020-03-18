@@ -1,52 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Mar 2020 22:46:22 +0100
-Subject: [Buildroot] [git commit] package/llvm: specify
- LLVM_ENABLE_BINDINGS=OFF
-Message-ID: <20200318215635.7224582621@busybox.osuosl.org>
+Date: Wed, 18 Mar 2020 23:11:00 +0100
+Subject: [Buildroot] [git commit] package/vim: bump to v8.2.0
+Message-ID: <20200318220459.4498382646@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6a1ee9a8aee9faecb8d1d1bdd8697d18c23b605
+commit: https://git.buildroot.net/buildroot/commit/?id=c996f13999645323726384218ab04d97047513b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LLVM builds bindings for other languages such as Go and OCaml when the
-appropriate dependencies can be found. We currently don't support
-building these bindings in Buildroot, as they're currently unused by any
-package.
+Update from version 8.1.1929 to 8.2.0, which is the latest stable
+version. The license file ('README.txt') has only one modification,
+concerning Vim's version, as it is shown by the following diff:
 
-Building these bindings was originally disabled by overriding the
-dependencies with values indicating that they were not found.
+   --- vim-8.1.1929/README.txt	2019-08-25 23:08:17.000000000 +0200
+   +++ vim-8.2.0000/README.txt	2019-12-12 14:18:35.000000000 +0100
+   @@ -1,4 +1,4 @@
+   -README.txt for version 8.1 of Vim: Vi IMproved.
+   +README.txt for version 8.2 of Vim: Vi IMproved.
 
-Newer versions of LLVM no longer disable the OCaml bindings when overriding
-OCAMLFIND. Consequently, the build process attempts to install the bindings
-to the default location on the host of /usr/lib/ocaml/llvm, causing a
-permissions error and build failure.
-
-Additionally, LLVM has since added the variable LLVM_ENABLE_BINDINGS to
-control whether bindings are enabled, so we override that to disable the
-bindings.
-
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Joao Marcos Costa <joaomarcos.costa@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/llvm/llvm.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/vim/vim.hash | 4 ++--
+ package/vim/vim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 28ad6a5704..f1034f0365 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -193,7 +193,8 @@ LLVM_CONF_OPTS += -DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME)
- # check preventively. Building the Go and OCaml bindings is yet unsupported.
- HOST_LLVM_CONF_OPTS += \
- 	-DGO_EXECUTABLE=GO_EXECUTABLE-NOTFOUND \
--	-DOCAMLFIND=OCAMLFIND-NOTFOUND
-+	-DOCAMLFIND=OCAMLFIND-NOTFOUND \
-+	-DLLVM_ENABLE_BINDINGS=OFF
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 6c68b1bc2b..eb5928e91c 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4b7359a58a75c29d4a8fc7fcbb2ccab1d1dc0ede1c4c689b27cc049c17920278  vim-8.1.1929.tar.gz
+-sha256  70ab7f93197b29d47bfe4371774c8d904f7842d4843c257d21c29b7ac38d6406  README.txt
++sha256  8a72323817210daf40abe545bdf7637591b9b541a0fb3560baed76e436132dba  vim-8.2.0000.tar.gz
++sha256  accdbd6761e7dd7e580545fe30f3a5a7707d50073aec4b8afef85c30fc9c031b  README.txt
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 5cb4e1b4cc..1fbb6a6b86 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Builds a release host tablegen that gets used during the LLVM build.
- HOST_LLVM_CONF_OPTS += -DLLVM_OPTIMIZED_TABLEGEN=ON
+-VIM_VERSION = 8.1.1929
++VIM_VERSION = 8.2.0000
+ VIM_SITE = $(call github,vim,vim,v$(VIM_VERSION))
+ VIM_DEPENDENCIES = ncurses $(TARGET_NLS_DEPENDENCIES)
+ VIM_SUBDIR = src
