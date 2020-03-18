@@ -1,117 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 18 Mar 2020 22:49:08 +0100
-Subject: [Buildroot] [PATCH 1/3] Makefile: don't hang the build if there
- are no file lists
-In-Reply-To: <20200318155814.567-1-patrickdepinguin@gmail.com>
-References: <20200318155814.567-1-patrickdepinguin@gmail.com>
-Message-ID: <20200318214908.GB10025@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 18 Mar 2020 22:46:56 +0100
+Subject: [Buildroot] [git commit] package/llvm: remove outdated variables
+ disabling bindings
+Message-ID: <20200318215635.7BB3A82624@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas?, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d554772185a616725bf8a2d742358791f469c361
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-18 16:58 +0100, Thomas De Schampheleire spake thusly:
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> In very limited configurations, it is possible to have a case where no
-> .files-list-staging.txt files are created. In this case:
-> 
-> 	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
-> 		$(BUILD_DIR)/packages-file-list-staging.txt
-> 
-> becomes:
-> 
-> 	cat > \
-> 		$(BUILD_DIR)/packages-file-list-staging.txt
-> 
-> which of course makes the build hang.. forever.
-> 
-> So we fix this by checking the list is not empty. To keep the code
-> readable, we introduce an intermediate variable to store the list of
-> these files.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  Makefile | 16 ++++++++++------
->  1 file changed, 10 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 5455e6662e..29d30a4f70 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -728,6 +728,10 @@ $(TARGETS_ROOTFS): target-finalize
->  # Avoid the rootfs name leaking down the dependency chain
->  target-finalize: ROOTFS=
->  
-> +TARGET_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt))
-> +HOST_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt))
-> +STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt))
-> +
->  .PHONY: host-finalize
->  host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
->  	@$(call MESSAGE,"Finalizing host directory")
-> @@ -808,12 +812,12 @@ endif # merged /usr
->  
->  	touch $(TARGET_DIR)/usr
->  
-> -	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt)) > \
-> -		$(BUILD_DIR)/packages-file-list.txt
-> -	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt)) > \
-> -		$(BUILD_DIR)/packages-file-list-host.txt
-> -	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
-> -		$(BUILD_DIR)/packages-file-list-staging.txt
-> +	$(if $(TARGET_DIR_FILES_LISTS), \
-> +		cat $(TARGET_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list.txt)
-> +	$(if $(HOST_DIR_FILES_LISTS), \
-> +		cat $(HOST_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list-host.txt)
-> +	$(if $(STAGING_DIR_FILES_LISTS), \
-> +		cat $(STAGING_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list-staging.txt)
+LLVM no longer disables unsupported bindings by overriding OCAMLFIND and
+GO_EXECUTABLE, so remove them.
 
-So, if there is no file instaleld in staging, the packages-file-list-staging.txt
-file is not created. However, in followup patches, you make it (as well
-as the other two) available to post-build scripts.
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/llvm/llvm.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-This is not nce, as the scripts will have to be carefull to test if the
-files exist.
-
-I would like to suggest an alternative, that guarantees the files are
-created, even if empty:
-
-    $(if $(STAGING_DIR_FILES_LISTS), \
-        cat $(STAGING_DIR_FILES_LISTS)) >$(BUILD_DIR)/packages-file-list-staging.txt
-
-Notice how the redirection is outside the conditional, so that if there
-is no file, the commadn will be:
-
-    > $(BUILD_DIR)/packages-file-list-staging.txt
-
-Which will create an empty file.
-
-Thoughts? Shall I do that when applying the series or will you want to
-respin?
-
-Regards,
-Yann E. MORIN.
-
->  
->  .PHONY: target-post-image
->  target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index f1034f0365..24d033d124 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -189,11 +189,8 @@ LLVM_CONF_OPTS += -DLLVM_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME)
+ # This solves "No available targets are compatible for this triple" with llvmpipe
+ LLVM_CONF_OPTS += -DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME)
+ 
+-# The Go bindings have no CMake rules at the moment, but better remove the
+-# check preventively. Building the Go and OCaml bindings is yet unsupported.
++# Building the Go and OCaml bindings is yet unsupported.
+ HOST_LLVM_CONF_OPTS += \
+-	-DGO_EXECUTABLE=GO_EXECUTABLE-NOTFOUND \
+-	-DOCAMLFIND=OCAMLFIND-NOTFOUND \
+ 	-DLLVM_ENABLE_BINDINGS=OFF
+ 
+ # Builds a release host tablegen that gets used during the LLVM build.
