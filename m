@@ -1,171 +1,44 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 18 Mar 2020 11:37:41 +0100
-Subject: [Buildroot] [PATCH v6 4/4] package/python-scipy: Add new package
-In-Reply-To: <20200318090740.4973-5-jagan@amarulasolutions.com>
-References: <20200318090740.4973-1-jagan@amarulasolutions.com>
- <20200318090740.4973-5-jagan@amarulasolutions.com>
-Message-ID: <CAGm1_ksuFkkQQTHxhU7kKKjCjckcQB30+OWgif+3spBCcqZkbA@mail.gmail.com>
+From: Paulo Matos <pmatos@igalia.com>
+Date: Wed, 18 Mar 2020 11:50:15 +0100
+Subject: [Buildroot] ARM qemu versatile defconfig
+In-Reply-To: <20200318113447.709da855@windsurf.home>
+References: <87y2ry6jkb.fsf@igalia.com> <20200318113447.709da855@windsurf.home>
+Message-ID: <87pnda6ioo.fsf@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jagan,
 
-the commit title should be:
+Thomas Petazzoni writes:
 
-package/python-scipy: new package
+> On Wed, 18 Mar 2020 11:31:16 +0100
+> Paulo Matos <pmatos@igalia.com> wrote:
+>
+>> I am trying to get a emulation environment based on arm 32bits to
+>> emulate the native environment we have setup with
+>> raspberrypi3_defconfig.
+>> 
+>> The only existing defconfig I can see that could help me with this is
+>> qemu_arm_versatile_defconfig however, I do not understand what this
+>> 'versatile' refers to or find any online documentation about it.
+>> 
+>> Could someone explain what this 'versatile' defconfig corresponds to in
+>> terms of emulated hardware? Or is it versatile because you should use
+>> 'make menuconfig' later to specifically configure it for your needs?
+>
+> Versatile is one of the ARM machines emulated by Qemu. If you want to
+> be closer to RPi3, I would suggest to use our
+> qemu_arm_vexpress_defconfig instead, and follow the instructions of
+> board/qemu/arm-vexpress/readme.txt to use it.
 
-On Wed, Mar 18, 2020 at 10:15 AM Jagan Teki <jagan@amarulasolutions.com> wrote:
->
-> Add python-scipy with 1.4.1 release version.
->
-> Cc: Esben Haabendal <esben@geanix.com>
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
-> Changes for v6:
-> - update to latest scipy version
->
->  DEVELOPERS                             |  1 +
->  package/Config.in                      |  1 +
->  package/python-scipy/Config.in         | 23 +++++++++++++
->  package/python-scipy/python-scipy.hash |  9 +++++
->  package/python-scipy/python-scipy.mk   | 46 ++++++++++++++++++++++++++
->  5 files changed, 80 insertions(+)
->  create mode 100644 package/python-scipy/Config.in
->  create mode 100644 package/python-scipy/python-scipy.hash
->  create mode 100644 package/python-scipy/python-scipy.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 308a59b264..9340ae2815 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1152,6 +1152,7 @@ F:        configs/orangepi_zero_plus2_defconfig
->  F:     configs/pine64_defconfig
->  F:     configs/pine64_sopine_defconfig
->  F:     package/python-pybind11
-> +F:     package/python-scipy
->
->  N:     James Hilliard <james.hilliard1@gmail.com>
->  F:     package/gensio/
-> diff --git a/package/Config.in b/package/Config.in
-> index afe32f52b4..f5af9b07ea 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1120,6 +1120,7 @@ menu "External python modules"
->         source "package/python-scandir/Config.in"
->         source "package/python-scapy/Config.in"
->         source "package/python-schedule/Config.in"
-> +       source "package/python-scipy/Config.in"
->         source "package/python-sdnotify/Config.in"
->         source "package/python-secretstorage/Config.in"
->         source "package/python-see/Config.in"
-> diff --git a/package/python-scipy/Config.in b/package/python-scipy/Config.in
-> new file mode 100644
-> index 0000000000..bacb8f8f8c
-> --- /dev/null
-> +++ b/package/python-scipy/Config.in
-> @@ -0,0 +1,23 @@
-> +config BR2_PACKAGE_PYTHON_SCIPY
-> +       bool "python-scipy"
-> +       depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
-> +       depends on BR2_TOOLCHAIN_HAS_FORTRAN
-> +       depends on BR2_TOOLCHAIN_BUILDROOT_CXX
-> +       depends on BR2_PACKAGE_PYTHON3
-> +       select BR2_PACKAGE_PYTHON_NUMPY
-> +       select BR2_PACKAGE_HOST_PYTHON_PYBIND11
+Oh! I just learned Versatile is actually an ARM trademark. I thought
+versatile here was used as an adjective. :)
 
-can this line be dropped?
+Thanks for the suggestion on vexpress - I will give this a go.
 
-Yegor
-
-> +       select BR2_PACKAGE_LAPACK
-> +       select BR2_PACKAGE_OPENBLAS
-> +       help
-> +         The SciPy library is one of the core packages that make up the SciPy
-> +         stack. It provides many user-friendly and efficient numerical
-> +         routines such as routines for numerical integration, interpolation,
-> +         optimization, linear algebra and statistics.
-> +
-> +         https://www.scipy.org/scipylib/
-> +
-> +comment "python-scipy needs toolchain w/ fortran and c++ and glibc or musl"
-> +       depends on BR2_PACKAGE_PYTHON3
-> +       depends on !BR2_TOOLCHAIN_HAS_FORTRAN || \
-> +               !BR2_TOOLCHAIN_BUILDROOT_CXX || \
-> +               (!BR2_TOOLCHAIN_USES_GLIBC && !BR2_TOOLCHAIN_USES_MUSL)
-> diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
-> new file mode 100644
-> index 0000000000..c9d295ef6b
-> --- /dev/null
-> +++ b/package/python-scipy/python-scipy.hash
-> @@ -0,0 +1,9 @@
-> +# Locally generated
-> +sha256 dee1bbf3a6c8f73b6b218cb28eed8dd13347ea2f87d572ce19b289d6fd3fbc59  scipy-1.4.1.tar.gz
-> +sha256 5cbdbe33385779958be8b9310497e32d2eec144d82ef425780d3e19f8af6de76  LICENSE.txt
-> +sha256 37e64a498894ac7c3b070023e3689e954a8ecf8a23b90968d09a455f1b4f7b35  scipy/linalg/src/lapack_deprecations/LICENSE
-> +sha256 606209a000716c5f66e33e180ce08434b96ed17db4975ab9723c6b5fbcc89609  scipy/ndimage/LICENSE.txt
-> +sha256 3df9207af2fdb861af0ae3b22026f163b9bcfab4e525dc4943afe2ffa3f77624  scipy/optimize/tnc/LICENSE
-> +sha256 f0cedf52503b2d42b83411a0a16e6fefac346dfad8fddc66f50050150123470c  scipy/sparse/linalg/dsolve/SuperLU/License.txt
-> +sha256 0926566f9f406178d1214f8cc796e166b1213dd7c05e0c5b461a8b8ac9e50bbe  scipy/sparse/linalg/eigen/arpack/ARPACK/COPYING
-> +sha256 34db0c0c4f931861d720555c9cd7a2e228d1290ba29af0f2ee80c41bb2038afb  scipy/spatial/qhull_src/COPYING.txt
-> diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
-> new file mode 100644
-> index 0000000000..1d66b146ec
-> --- /dev/null
-> +++ b/package/python-scipy/python-scipy.mk
-> @@ -0,0 +1,46 @@
-> +################################################################################
-> +#
-> +# python-scipy
-> +#
-> +################################################################################
-> +
-> +PYTHON_SCIPY_VERSION = 1.4.1
-> +PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.gz
-> +PYTHON_SCIPY_SITE = https://pypi.python.org/packages/04/ab/e2eb3e3f90b9363040a3d885ccc5c79fe20c5b8a3caa8fe3bf47ff653260
-> +PYTHON_SCIPY_LICENSE = BSD-3-Clause, BSD-2-Clause, BSD, BSD-Style, \
-> +       Apache-2.0, MIT
-> +PYTHON_SCIPY_LICENSE_FILES = \
-> +       LICENSE.txt \
-> +       scipy/linalg/src/lapack_deprecations/LICENSE \
-> +       scipy/ndimage/LICENSE.txt \
-> +       scipy/optimize/tnc/LICENSE \
-> +       scipy/sparse/linalg/dsolve/SuperLU/License.txt \
-> +       scipy/sparse/linalg/eigen/arpack/ARPACK/COPYING \
-> +       scipy/spatial/qhull_src/COPYING.txt
-> +PYTHON_SCIPY_SETUP_TYPE = setuptools
-> +PYTHON_SCIPY_DEPENDENCIES += \
-> +       host-python-numpy \
-> +       host-python-pybind11 \
-> +       lapack \
-> +       openblas \
-> +       python-numpy
-> +
-> +PYTHON_SCIPY_BUILD_OPTS = config_fc --fcompiler=gnu95
-> +PYTHON_SCIPY_ENV += F90=$(TARGET_CROSS)gfortran F77=$(TARGET_CROSS)gfortran
-> +
-> +# Provide system configuration options to numpy distutils extenions, telling
-> +# to find all include files and libraries in staging directory.
-> +define PYTHON_SCIPY_CONFIGURE_CMDS
-> +       -rm -f $(@D)/site.cfg
-> +       echo "[DEFAULT]" >> $(@D)/site.cfg
-> +       echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
-> +       echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
-> +endef
-> +
-> +# Use the target numpy pkg-config configuration files modified for target
-> +# cross-compilation.  Without this, numpy distutils will cause the linker to
-> +# link with host libnpymath.a.
-> +PYTHON_SCIPY_ENV += NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)
-> +PYTHON_SCIPY_INSTALL_STAGING = YES
-> +
-> +$(eval $(python-package))
-> --
-> 2.17.1
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Best regards,
+>
+> Thomas
