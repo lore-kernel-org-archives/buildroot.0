@@ -1,23 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Mar 2020 22:23:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/luvi: bump to version 2.11.0
-In-Reply-To: <20200318081630.69722-1-joerg.krause@embedded.rocks>
-References: <20200318081630.69722-1-joerg.krause@embedded.rocks>
-Message-ID: <20200318222323.7e4f800c@windsurf.home>
+Date: Wed, 18 Mar 2020 22:23:32 +0100
+Subject: [Buildroot] [PATCH v2] package/ed: Bump to version 1.16
+In-Reply-To: <20200318084743.5376-1-kevin.lhopital@bootlin.com>
+References: <20200318084743.5376-1-kevin.lhopital@bootlin.com>
+Message-ID: <20200318222332.1fc893d5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 18 Mar 2020 09:16:30 +0100
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+On Wed, 18 Mar 2020 09:47:43 +0100
+K?vin L'h?pital <kevin.lhopital@bootlin.com> wrote:
 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: K?vin L'h?pital <kevin.lhopital@bootlin.com>
+> 
 > ---
->  package/luvi/luvi.hash | 2 +-
->  package/luvi/luvi.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
