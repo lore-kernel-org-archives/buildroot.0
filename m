@@ -1,41 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 18 Mar 2020 22:23:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boinc: bump version to 7.16.5
-Message-ID: <20200318212343.307371-1-bernd.kuhls@t-online.de>
+Date: Wed, 18 Mar 2020 22:28:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dav1d: bump version to 0.6.0
+Message-ID: <20200318212814.311286-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Release notes:
+https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/boinc/boinc.hash | 2 +-
- package/boinc/boinc.mk   | 2 +-
+ package/dav1d/dav1d.hash | 2 +-
+ package/dav1d/dav1d.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index 48d61dc919..aa2aebcc4c 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 622ce3335a01ef30add4813c0cc7b65cffcaa5500a7f58f77748d0dbc80e6b06  boinc-7.16.3.tar.gz
-+sha256 33db60991b253e717c6124cce4750ae7729eaab4e54ec718b9e37f87012d668a  boinc-7.16.5.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 827eaa0c84..b6a9374715 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
+index a2f2ea4dfc..9595e91c0e 100644
+--- a/package/dav1d/dav1d.hash
++++ b/package/dav1d/dav1d.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 1780199d71e62a82ca1bfca2d71da5c599c7e1edc68c72f6fc3c0c25ce1880b7  dav1d-0.5.2.tar.bz2
++sha256 7fcfb4d2e43681f99faaad29d2a81c0ecc42d6e2b94eb4d1fded4e9dcb3661f1  dav1d-0.6.0.tar.bz2
+ sha256 b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
+diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+index 150c40f099..4dc1e46826 100644
+--- a/package/dav1d/dav1d.mk
++++ b/package/dav1d/dav1d.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- BOINC_VERSION_MAJOR = 7.16
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).3
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).5
- # client_release can be used to build the Client and Manager but not the Server
- # part. The Server currently has no versioning (see
- # https://github.com/BOINC/boinc/pull/1798).
+-DAV1D_VERSION = 0.5.2
++DAV1D_VERSION = 0.6.0
+ DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
+ DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
+ DAV1D_LICENSE = BSD-2-Clause
 -- 
 2.25.0
