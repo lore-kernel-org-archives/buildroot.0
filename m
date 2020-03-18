@@ -1,82 +1,76 @@
-From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
-Date: Wed, 18 Mar 2020 19:00:52 +0530
-Subject: [Buildroot] [PATCH v3 0/5] Fix ATF v2.2 build for rk3399,
- add roc-rk3399-pc board
-Message-ID: <1584538257-11932-1-git-send-email-sunil@amarulasolutions.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 18 Mar 2020 15:12:56 +0100
+Subject: [Buildroot] CVEs not matching buildroot packages
+In-Reply-To: <CAEyMn7bDcNOW4ty0sPgOg4WexfZ+uR+HoRvR3M+e-ObrWYKJJA@mail.gmail.com>
+References: <e9268b49623925add8aeac91e8059012@walle.cc>
+ <20200225104600.0f295783@windsurf>
+ <83c7598984b7c6eb22cc5a5bb11af4fc@walle.cc>
+ <20200225112943.0a2dd6e6@windsurf>
+ <11370f3cd0ea3d53ee8002c59dc600a9@walle.cc>
+ <CAEyMn7bDcNOW4ty0sPgOg4WexfZ+uR+HoRvR3M+e-ObrWYKJJA@mail.gmail.com>
+Message-ID: <20200318151256.2c7e9c11@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Suniel Mahesh <sunil@amarulasolutions.com>
+Hello,
 
-This patch set does the following:
-Fix ATF v2.2 build for rk3399 SoC's.
-Add arm-gnu-a-toolchain package, which acts as a secondary bare metal toolchain
-to build ATF for Rockchip rk3399 platform (has a cortex-m0 core). The required
-pre-built toolchain is taken from ARM developers site and installed in host filesystem only.
-Add rk3399 support for building ATF.
-Add new defconfig file for roc-rk3399-pc.
-Update DEVELOPERS file.
+On Wed, 18 Mar 2020 14:57:27 +0100
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-The patch set is tested on roc-rk3399-pc, a rk3399 based target. Compile tested on orangepi.
----
-Changes for v3:
-Added one patch to this series. Split one changeset from patch #4 and made
-it patch #5
-patch #1 (Disable bin copy for rk3399)
-- Based on suggestions from sergey and thomas, instead of encoding
-platform-specific stuff in config files, made changes in .mk files
-based on the build flow. 
-patch #2 (new package)
-- no change
-patch #3 (add support for rockchip rk3399)
-- no change
-patch #4 (new defconfig)
-- dropped DEVELOPERS file
-patch #5 (Add me as a co-maintainer)
-- seperated this changeset
+> Just to go on with this I did a proof of concept for the CVE mapping.
+> 
+> A first version can be found here:
+> https://github.com/hthiery/buildroot/tree/feature-cve-map
+> 
+> What this change does:
+> Add a new file format for the CVE mapping: <pkg>.cve. This is done in
+> YAML format. In this file at least the fields vendor and product has
+> to be defined. With this we can create a map from the CVE to the
+> buildroot package name.
+> Now we can decide the following:
+> 1) the package has a mapping and is affected by a CVE  (RED ZONE)
+> 2) the package has a mapping and a CVE is found but fixed (GREEN ZONE)
+> 3) the package has a mapping and no CVE is found (GREEN ZONE)
+> 4) the package has no mapping and it is affected by CVE found by guess
+> (try to compare buildroot name vs. CVE product name value) (YELLOW
+> ZONE)
+> 5) the package has no mapping and no CVE is found  (we don't konw if
+> there isn't a CVE or we have no match because the buildroot name does
+> not match the CVE product name) (GREY ZONE)
+> 
+> Here is an example of a yaml file: package/pppd/ppd.cve
+> --- snip ---
+> vendor: point-to-point_protocol_project
+> product: point-to-point_protocol
+> 
+> cves:
+>   CVE-2020-8597:
+>     patch: 0001-pppd-Fix-bounds-check.patch
+> 
+> --- snip ---
+> 
+> To take the decision if a CVE is fixed there could be more possible
+> reasons instead of the patch in the example above. I can image
+> something like 'does-not-apply'.
+> 
+> I think the effort to have an extra file is not so much and it will
+> not pollute the Makefile with variables that are not build related.
+> For checking the YAML syntax an extra pkg-check can be implemented.
+> 
+> As mentioned at the beginning this is first idea how a mapping could
+> look. What do you think?
 
-Changes for v2:
-Changed cover letter description to add more meaning.
-patch #1 (Disable bin copy for rk3399)
-- Added Cc tag
-patch #2 (new package)
-- More Description added to justify why a secondary bare metal toolchain is required 
-patch #3 (add support for rockchip rk3399)
-- no change
-patch #4 (new defconfig)
-- updated readme.txt to help with the build/boot process 
-- modified file permissions of post-build.sh to 'x'
+I'll give my very quick and probably very blunt and brutal feedback: I
+don't like having another file with package metadata. This metadata
+should be in the .mk file.
 
-Jagan Teki (1):
-  boot/arm-trusted-firmware: Disable bin copy for rk3399
+Best regards,
 
-Suniel Mahesh (4):
-  package/arm-gnu-a-toolchain: new package
-  boot/arm-trusted-firmware: add support for rockchip rk3399
-  configs/roc-rk3399-pc: new defconfig
-  DEVELOPERS: add me as a co-maintainer for rk3399 based targets
-
- .gitlab-ci.yml                                     |  1 +
- DEVELOPERS                                         |  3 ++
- board/firefly/roc-rk3399-pc/extlinux.conf          |  4 ++
- board/firefly/roc-rk3399-pc/genimage.cfg           | 22 +++++++++
- board/firefly/roc-rk3399-pc/post-build.sh          |  5 ++
- board/firefly/roc-rk3399-pc/readme.txt             | 48 ++++++++++++++++++++
- boot/arm-trusted-firmware/arm-trusted-firmware.mk  | 10 +++-
- configs/roc_pc_rk3399_defconfig                    | 53 ++++++++++++++++++++++
- .../arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash   |  3 ++
- package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk | 27 +++++++++++
- 10 files changed, 174 insertions(+), 2 deletions(-)
- create mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf
- create mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg
- create mode 100755 board/firefly/roc-rk3399-pc/post-build.sh
- create mode 100644 board/firefly/roc-rk3399-pc/readme.txt
- create mode 100644 configs/roc_pc_rk3399_defconfig
- create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
- create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
-
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
