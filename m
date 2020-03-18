@@ -1,53 +1,64 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 18 Mar 2020 21:40:18 +0100
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.15.4
-Message-ID: <20200318204018.28606-1-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 18 Mar 2020 21:50:05 +0100
+Subject: [Buildroot] [PATCH] boot/arm-trusted-firmware: add optional
+ host-dtc dependency
+Message-ID: <20200318205005.79605-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+Some ATF configurations, such as the ones for the STM32MP1 processor
+family, require DTC during the build as Device Tree files are
+used. Without dtc, the build fails:
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-March/041332.html
+/bin/sh: 1: dtc: not found
+dtc version too old (), you need at least version 1.4.4
+plat/st/stm32mp1/platform.mk:239: recipe for target 'check_dtc_version' failed
+make[1]: *** [check_dtc_version] Error 1
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+To solve this, this commit implements a
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC option, in a way that mimics
+the BR2_TARGET_UBOOT_NEEDS_DTC option we already have for the U-Boot
+package.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libinput/libinput.hash | 10 +++++-----
- package/libinput/libinput.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ boot/arm-trusted-firmware/Config.in               | 7 +++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 4 ++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index f39afa0457..eee0697151 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-March/041288.html
--md5  6fbea8d51d9194d7ba33f96d7c4cee56  libinput-1.15.3.tar.xz
--sha1  101fd149b851c197323129efcdfe5c1c6c940b43  libinput-1.15.3.tar.xz
--sha256  5b12427dd50489c2b41b04ae2ca54e31a112a33cb861f00ccd15a2ad7a88694d  libinput-1.15.3.tar.xz
--sha512  6636fd618e2b9cfa5ee44701207dc98f2639adc53eb3ef135509d936fb19b2cedf5184eab58e887798d9cf8ee65f35bc9062f7e3630080bcbe45a90a8b631ef2  libinput-1.15.3.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-March/041332.html
-+md5  76c5cb1a55f5098ed353ae7d4e054c50  libinput-1.15.4.tar.xz
-+sha1  43740a5fec3f6d474906173cc01ff3d73d935d2f  libinput-1.15.4.tar.xz
-+sha256  9c8b6846d94e374ee4bdb32634e4ac4aa318afc31f9a58fcb545cd3095c745c1  libinput-1.15.4.tar.xz
-+sha512  : 4659818952dc729cd5bdb78ebe21edbbacbf8a66a592b13ba30f3bb4c4e264208ec94440a253cfa4edc8b2ef904954eecea6be0f8d63cf239e3858d3abb64a80  libinput-1.15.4.tar.xz
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index 373591d497..737dc587e5 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -160,4 +160,11 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES
+ 	  Names of generated image files that are installed in the
+ 	  output images/ directory.
  
- # License files
- sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index f418046257..5e2ee696bf 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC
++	bool "Needs dtc"
++	select BR2_PACKAGE_HOST_DTC
++	help
++	  Select this option if your ATF board configuration
++	  requires the Device Tree compiler to be available.
++
+ endif
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 34737018aa..27f63a87fe 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -29,6 +29,10 @@ endif
  
--LIBINPUT_VERSION = 1.15.3
-+LIBINPUT_VERSION = 1.15.4
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+ ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES = YES
+ 
++ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC),y)
++ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-dtc
++endif
++
+ ARM_TRUSTED_FIRMWARE_PLATFORM = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM))
+ 
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG),y)
 -- 
 2.25.1
