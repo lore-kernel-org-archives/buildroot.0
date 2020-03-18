@@ -1,101 +1,58 @@
 From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Wed, 18 Mar 2020 14:37:39 +0530
-Subject: [Buildroot] [PATCH v6 3/4] package/python-pybind11: Add new host
- package
+Date: Wed, 18 Mar 2020 14:37:38 +0530
+Subject: [Buildroot] [PATCH v6 2/4] package/python-numpy: fixup numpy
+ distutils for cross compilation
 In-Reply-To: <20200318090740.4973-1-jagan@amarulasolutions.com>
 References: <20200318090740.4973-1-jagan@amarulasolutions.com>
-Message-ID: <20200318090740.4973-4-jagan@amarulasolutions.com>
+Message-ID: <20200318090740.4973-3-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add python-pybind11 package with 2.4.3 release version.
+From: Esben Haabendal <esben@geanix.com>
 
-Cc: Esben Haabendal <esben@geanix.com>
+Fix problems using the numpy distutils extension for cross compilation,
+so that linking with npymath library will use target library when building
+target packages.
+
+Signed-off-by: Esben Haabendal <esben@geanix.com>
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
 Changes for v6:
-- new patch
+- drop python2 staging directory
 
- DEVELOPERS                                   |  1 +
- package/Config.in.host                       |  1 +
- package/python-pybind11/Config.in.host       |  7 +++++++
- package/python-pybind11/python-pybind11.hash |  5 +++++
- package/python-pybind11/python-pybind11.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/python-pybind11/Config.in.host
- create mode 100644 package/python-pybind11/python-pybind11.hash
- create mode 100644 package/python-pybind11/python-pybind11.mk
+ package/python-numpy/python-numpy.mk | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a2c6da208b..308a59b264 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1151,6 +1151,7 @@ F:	configs/orangepi_win_defconfig
- F:	configs/orangepi_zero_plus2_defconfig
- F:	configs/pine64_defconfig
- F:	configs/pine64_sopine_defconfig
-+F:	package/python-pybind11
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index 6d4cd22e62..18d9f40887 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -32,6 +32,23 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
+ 	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
+ endef
  
- N:	James Hilliard <james.hilliard1@gmail.com>
- F:	package/gensio/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index dfea478868..d63bf54aa7 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -57,6 +57,7 @@ menu "Host utilities"
- 	source "package/python/Config.in.host"
- 	source "package/python-cython/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
-+	source "package/python-pybind11/Config.in.host"
- 	source "package/python-six/Config.in.host"
- 	source "package/python-xlrd/Config.in.host"
- 	source "package/python3/Config.in.host"
-diff --git a/package/python-pybind11/Config.in.host b/package/python-pybind11/Config.in.host
-new file mode 100644
-index 0000000000..e4164efd9d
---- /dev/null
-+++ b/package/python-pybind11/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_PYTHON_PYBIND11
-+	bool "host python-pybind11"
-+	help
-+	  Python module for Seamless operability between
-+	  C++11 and Python.
++# The numpy distutils extensions are not very cross friendly.  It comes with
++# it's own pkg-config look-alike, which we are patching to allow overriding
++# where it locates the configuration files.  This allows us to use fixed up
++# target configuration files, which we make sure includes full path to the
++# target staging area, so that when building for target, we actually use the
++# target libraries.  Without this, target builds using numpy distutils
++# extensions (such as fx. python-scipy) will use the host libraries, which
++# obviously will not work.
++PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy
++PYTHON_NUMPY_NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_STAGING_DIR)/core/lib/npy-pkg-config
++define PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
++	sed -e '/^pkgdir=/d' \
++	    -e '/^prefix=/i pkgdir=$(PYTHON_NUMPY_STAGING_DIR)/core' \
++	    -i $(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)/npymath.ini
++endef
++PYTHON_NUMPY_POST_INSTALL_STAGING_HOOKS += PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
 +
-+	  https://github.com/pybind/pybind11
-diff --git a/package/python-pybind11/python-pybind11.hash b/package/python-pybind11/python-pybind11.hash
-new file mode 100644
-index 0000000000..ed1298e908
---- /dev/null
-+++ b/package/python-pybind11/python-pybind11.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.python.org/pypi/pybind11/json
-+md5  23fdca8191b16ce3e7f38fb9e4252b2d  pybind11-2.4.3.tar.gz
-+sha256  72e6def53fb491f7f4e92692029d2e7bb5a0783314f20d80222735ff10a75758  pybind11-2.4.3.tar.gz
-+# sha256 for LICENSE is locally computed
-+sha256  062e7b255501e598ba040b507e077f51c8c91734c21520920f70eeb5c5280ae6  LICENSE
-diff --git a/package/python-pybind11/python-pybind11.mk b/package/python-pybind11/python-pybind11.mk
-new file mode 100644
-index 0000000000..833ec92c86
---- /dev/null
-+++ b/package/python-pybind11/python-pybind11.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pybind11
-+#
-+################################################################################
-+
-+PYTHON_PYBIND11_VERSION = 2.4.3
-+PYTHON_PYBIND11_SOURCE = pybind11-$(PYTHON_PYBIND11_VERSION).tar.gz
-+PYTHON_PYBIND11_SITE = https://pypi.python.org/packages/aa/91/deb6743e79e22ab01502296570b39b8404f10cc507a6692d612a7fee8d51
-+PYTHON_PYBIND11_SETUP_TYPE = setuptools
-+PYTHON_PYBIND11_LICENSE = BSD
-+PYTHON_PYBIND11_LICENSE_FILES = LICENSE
-+
-+$(eval $(host-python-package))
+ # Some package may include few headers from NumPy, so let's install it
+ # in the staging area.
+ PYTHON_NUMPY_INSTALL_STAGING = YES
 -- 
 2.17.1
