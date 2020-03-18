@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 18 Mar 2020 16:58:12 +0100
-Subject: [Buildroot] [PATCH 2/3] Makefile: fix package file list if
- FOO_SUBDIR is set
+Date: Wed, 18 Mar 2020 16:58:13 +0100
+Subject: [Buildroot] [PATCH 3/3] Makefile: assemble package file lists
+ before calling post-build scripts
 In-Reply-To: <20200318155814.567-1-patrickdepinguin@gmail.com>
 References: <20200318155814.567-1-patrickdepinguin@gmail.com>
-Message-ID: <20200318155814.567-2-patrickdepinguin@gmail.com>
+Message-ID: <20200318155814.567-3-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,61 +13,47 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-If a package sets a FOO_SUBDIR (meaning its sources are not under
-output/build/foo-123 but under output/build/foo-123/$(FOO_SUBDIR)), the
-.files-list.txt file were also created under FOO_SUBDIR, due to which the
-logic in the Makefile would not find it.
+Post-build scripts may want to do something based on the list of files
+installed by a package. However, since commit
+0e2be4db8ab01d479177a3a187c22525752195ae the final packages-file-lists.txt
+file is only created _after_ the post-build scripts.
 
-Change the instrumentation steps so that the file list is directly under the
-package dir, ignoring the subdir.
+Move the assembly of the file lists upwards, before the post-build scripts.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/pkg-generic.mk | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ Makefile | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 47238f2649..20b07a7fa9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -63,7 +63,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
- define step_pkg_size_before
- 	cd $(2); \
- 	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
--		| LC_ALL=C sort > $($(PKG)_BUILDDIR)/.files-list$(3).before
-+		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(3).before
- endef
+diff --git a/Makefile b/Makefile
+index 29d30a4f70..1280066bab 100644
+--- a/Makefile
++++ b/Makefile
+@@ -806,12 +806,6 @@ endif # merged /usr
+ 		$(call MESSAGE,"Copying overlay $(d)"); \
+ 		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
  
- # $(1): package name
-@@ -72,14 +72,14 @@ endef
- define step_pkg_size_after
- 	cd $(2); \
- 	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
--		| LC_ALL=C sort > $($(PKG)_BUILDDIR)/.files-list$(3).after
-+		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(3).after
- 	LC_ALL=C comm -13 \
--		$($(PKG)_BUILDDIR)/.files-list$(3).before \
--		$($(PKG)_BUILDDIR)/.files-list$(3).after \
-+		$($(PKG)_DIR)/.files-list$(3).before \
-+		$($(PKG)_DIR)/.files-list$(3).after \
- 		| sed -r -e 's/^[^,]+/$(1)/' \
--		> $($(PKG)_BUILDDIR)/.files-list$(3).txt
--	rm -f $($(PKG)_BUILDDIR)/.files-list$(3).before
--	rm -f $($(PKG)_BUILDDIR)/.files-list$(3).after
-+		> $($(PKG)_DIR)/.files-list$(3).txt
-+	rm -f $($(PKG)_DIR)/.files-list$(3).before
-+	rm -f $($(PKG)_DIR)/.files-list$(3).after
- endef
+-	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+-		$(call MESSAGE,"Executing post-build script $(s)"); \
+-		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+-
+-	touch $(TARGET_DIR)/usr
+-
+ 	$(if $(TARGET_DIR_FILES_LISTS), \
+ 		cat $(TARGET_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list.txt)
+ 	$(if $(HOST_DIR_FILES_LISTS), \
+@@ -819,6 +813,12 @@ endif # merged /usr
+ 	$(if $(STAGING_DIR_FILES_LISTS), \
+ 		cat $(STAGING_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list-staging.txt)
  
- define step_pkg_size
-@@ -103,7 +103,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
- define check_bin_arch
- 	$(if $(filter end-install-target,$(1)-$(2)),\
- 		support/scripts/check-bin-arch -p $(3) \
--			-l $($(PKG)_BUILDDIR)/.files-list.txt \
-+			-l $($(PKG)_DIR)/.files-list.txt \
- 			$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
- 			-r $(TARGET_READELF) \
- 			-a $(BR2_READELF_ARCH_NAME))
++	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
++		$(call MESSAGE,"Executing post-build script $(s)"); \
++		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
++
++	touch $(TARGET_DIR)/usr
++
+ .PHONY: target-post-image
+ target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
+ 	@rm -f $(ROOTFS_COMMON_TAR)
 -- 
 2.24.1
