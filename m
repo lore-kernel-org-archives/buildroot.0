@@ -1,42 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Mar 2020 21:53:00 +0100
-Subject: [Buildroot] [git commit] package/monit: fix URL in hash file comment
-Message-ID: <20200318204014.2751B8227D@busybox.osuosl.org>
+Date: Wed, 18 Mar 2020 21:53:23 +0100
+Subject: [Buildroot] [git commit] configs/grinn_liteboard_defconfig: bump
+ Linux to 5.4.23
+Message-ID: <20200318204027.806C382283@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fb1eb95fe07b673081115aace66f8328aeb08d9
+commit: https://git.buildroot.net/buildroot/commit/?id=7a86bdb37ab9f3ede52da7d9322bae4f1234f3d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Previous URL gives:
-
-    % curl https://mmonit.com/monit/dist/monit-5.25.3.tar.gz.sha256
-    c10258c8839d20864d30390e7cbf2ff5e0480a67a6fb80c02aa457d6e3390569 monit-5.25.3.tar.gz
-
-Current URL is:
-
-    % curl https://mmonit.com/monit/dist/monit-5.26.0.tar.gz.sha256
-    87fc4568a3af9a2be89040efb169e3a2e47b262f99e78d5ddde99dd89f02f3c2 monit-5.26.0.tar.gz
-
-This was probably just forgotten on the last version bump.
-
-Fixes: ad250c3d1884 ("package/monit: bump to version 5.26.0")
-Signed-off-by: Alexander Dahl <post@lespocky.de>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/monit/monit.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/grinn_liteboard_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/monit/monit.hash b/package/monit/monit.hash
-index 0de0d675aa..26d665c083 100644
---- a/package/monit/monit.hash
-+++ b/package/monit/monit.hash
-@@ -1,4 +1,4 @@
--# From https://mmonit.com/monit/dist/monit-5.25.3.tar.gz.sha256:
-+# From https://mmonit.com/monit/dist/monit-5.26.0.tar.gz.sha256:
- sha256  87fc4568a3af9a2be89040efb169e3a2e47b262f99e78d5ddde99dd89f02f3c2  monit-5.26.0.tar.gz
- # Locally computed
- sha256  d5a4f52b1a5e1e7fe14e01a76aac8b08dc6bbea15466058f271456c97aac1ada  COPYING
+diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
+index f2c1da33e3..d48dfde715 100644
+--- a/configs/grinn_liteboard_defconfig
++++ b/configs/grinn_liteboard_defconfig
+@@ -1,11 +1,11 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/grinn/liteboard/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.23"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-liteboard"
