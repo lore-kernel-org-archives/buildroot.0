@@ -1,50 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Mar 2020 21:52:16 +0100
-Subject: [Buildroot] [PATCH v3 5/5] DEVELOPERS: add me as a
- co-maintainer for rk3399 based targets
-In-Reply-To: <CAMty3ZBU8AP8SEuQC95eRELA5XZa2Dr92Efj3e3FENW24BiPfA@mail.gmail.com>
-References: <1581590685-31680-2-git-send-email-sunil@amarulasolutions.com>
- <1584539153-12934-1-git-send-email-sunil@amarulasolutions.com>
- <1584539153-12934-6-git-send-email-sunil@amarulasolutions.com>
- <CAEyMn7aO8gmKywpsYxY+cAqsUGiL=oW9CfiZwtVi9L76-6us1A@mail.gmail.com>
- <CAMty3ZBU8AP8SEuQC95eRELA5XZa2Dr92Efj3e3FENW24BiPfA@mail.gmail.com>
-Message-ID: <20200318215216.187d07bd@windsurf.home>
+Date: Wed, 18 Mar 2020 21:53:00 +0100
+Subject: [Buildroot] [git commit] package/monit: fix URL in hash file comment
+Message-ID: <20200318204014.2751B8227D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jagan,
+commit: https://git.buildroot.net/buildroot/commit/?id=6fb1eb95fe07b673081115aace66f8328aeb08d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Mar 2020 22:37:30 +0530
-Jagan Teki <jagan@amarulasolutions.com> wrote:
+Previous URL gives:
 
-> Doesn't it have a possibility of co-developer concept in buildroot
-> like we do have linux maintainers file? I feel it makes sense to have
-> it or the goal of this DEVELOPERS file seems different as what we
-> think?
+    % curl https://mmonit.com/monit/dist/monit-5.25.3.tar.gz.sha256
+    c10258c8839d20864d30390e7cbf2ff5e0480a67a6fb80c02aa457d6e3390569 monit-5.25.3.tar.gz
 
-The Linux MAINTAINERS file and the Buildroot DEVELOPERS are organized
-differently.
+Current URL is:
 
-The Linux MAINTAINERS file is organized by topic/subsystem, and gives
-for this subsystem the list of persons in charge of it.
+    % curl https://mmonit.com/monit/dist/monit-5.26.0.tar.gz.sha256
+    87fc4568a3af9a2be89040efb169e3a2e47b262f99e78d5ddde99dd89f02f3c2 monit-5.26.0.tar.gz
 
-The Buildroot DEVELOPERS is organized by person, and gives for each
-person the list of packages/defconfigs/areas this person is interested
-in.
+This was probably just forgotten on the last version bump.
 
-It is unlikely that two different developers will have exactly the same
-set of packages/defconfigs/areas they are interested in, so we don't
-support having multiple name/e-mail in front of a single list of
-packages/defconfigs. In addition, that would break the alphabetic
-ordering of the file.
+Fixes: ad250c3d1884 ("package/monit: bump to version 5.26.0")
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/monit/monit.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/monit/monit.hash b/package/monit/monit.hash
+index 0de0d675aa..26d665c083 100644
+--- a/package/monit/monit.hash
++++ b/package/monit/monit.hash
+@@ -1,4 +1,4 @@
+-# From https://mmonit.com/monit/dist/monit-5.25.3.tar.gz.sha256:
++# From https://mmonit.com/monit/dist/monit-5.26.0.tar.gz.sha256:
+ sha256  87fc4568a3af9a2be89040efb169e3a2e47b262f99e78d5ddde99dd89f02f3c2  monit-5.26.0.tar.gz
+ # Locally computed
+ sha256  d5a4f52b1a5e1e7fe14e01a76aac8b08dc6bbea15466058f271456c97aac1ada  COPYING
