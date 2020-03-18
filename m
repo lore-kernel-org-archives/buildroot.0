@@ -1,44 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Mar 2020 23:13:50 +0100
-Subject: [Buildroot] [git commit] package/redis: bump to v5.0.8
-Message-ID: <20200318220459.506C6812A3@busybox.osuosl.org>
+Date: Wed, 18 Mar 2020 23:18:11 +0100
+Subject: [Buildroot] [PATCH 1/2] package/llvm: specify
+ LLVM_ENABLE_BINDINGS=OFF
+In-Reply-To: <20200316200106.3709163-1-joseph.kogut@gmail.com>
+References: <20200316200106.3709163-1-joseph.kogut@gmail.com>
+Message-ID: <20200318231811.3a6763f5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caed3878a6a3c0bd04d28d89b7ad781adf8d8666
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 16 Mar 2020 13:01:05 -0700
+Joseph Kogut <joseph.kogut@gmail.com> wrote:
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> LLVM builds bindings for other languages such as Go and OCaml when the
+> appropriate dependencies can be found. We currently don't support
+> building these bindings in Buildroot, as they're currently unused by any
+> package.
+> 
+> Building these bindings was originally disabled by overriding the
+> dependencies with values indicating that they were not found.
+> 
+> Newer versions of LLVM no longer disable the OCaml bindings when overriding
+> OCAMLFIND. Consequently, the build process attempts to install the bindings
+> to the default location on the host of /usr/lib/ocaml/llvm, causing a
+> permissions error and build failure.
+> 
+> Additionally, LLVM has since added the variable LLVM_ENABLE_BINDINGS to
+> control whether bindings are enabled, so we override that to disable the
+> bindings.
+> 
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+>  package/llvm/llvm.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index ac68e62814..ee15b75e08 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha256 61db74eabf6801f057fd24b590232f2f337d422280fd19486eca03be87d3a82b  redis-5.0.7.tar.gz
-+sha256 f3c7eac42f433326a8d981b50dba0169fdfaf46abb23fcda2f933a7552ee4ed7  redis-5.0.8.tar.gz
- 
- # Locally calculated
- sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index b85de1dfed..d3954d87ca 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 5.0.7
-+REDIS_VERSION = 5.0.8
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+Thanks, both patches applied.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
