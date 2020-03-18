@@ -1,86 +1,117 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Mar 2020 22:44:28 +0100
-Subject: [Buildroot] [PATCH] fs/initramfs: fix show-info
-In-Reply-To: <20200316215536.22090-1-yann.morin.1998@free.fr>
-References: <20200316215536.22090-1-yann.morin.1998@free.fr>
-Message-ID: <20200318224428.1528a321@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 18 Mar 2020 22:49:08 +0100
+Subject: [Buildroot] [PATCH 1/3] Makefile: don't hang the build if there
+ are no file lists
+In-Reply-To: <20200318155814.567-1-patrickdepinguin@gmail.com>
+References: <20200318155814.567-1-patrickdepinguin@gmail.com>
+Message-ID: <20200318214908.GB10025@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 16 Mar 2020 22:55:36 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Thomas?, All,
 
-> The initramfs is not a reall filesystem, so it does not use the
-> $(rootfs) infrastructure.
+On 2020-03-18 16:58 +0100, Thomas De Schampheleire spake thusly:
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > 
-> As a consequence, the usual rootfs-related variables are not set,
-> especially the name, type, and dependencies of the (non-)filesystem.
+> In very limited configurations, it is possible to have a case where no
+> .files-list-staging.txt files are created. In this case:
 > 
-> Yet, it is present in the list of rootfs to build, and thus we end
-> up including it in the output of show-info. But the missing variables
-> yield an incorrect json:
+> 	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
+> 		$(BUILD_DIR)/packages-file-list-staging.txt
 > 
->     "": {
->         "type": "",
->         "virtual": false,
->         "version": "",
->         "licenses": "",
->         "dl_dir": "",
->         "install_target": ,
->         "install_staging": ,
->         "install_images": ,
->         "downloads": [ ],
->         "dependencies": [ ],
->         "reverse_dependencies": [ ]
->     },
+> becomes:
 > 
-> First, the object key is empty; second, the install_target,
-> install_staging, and install_images values are empty, which is not
-> valid (if they were null, that be OK though). Third, this is clearly
-> the layout of a 'package' entry, not that of a 'rootfs' entry.
+> 	cat > \
+> 		$(BUILD_DIR)/packages-file-list-staging.txt
 > 
-> An option to fix that would be to actually make use of the rootfs
-> infra. However, that would mean doing a lot of work for nothing
-> (there is actually nothing to do, yet the infra would still do a lot
-> of preparatory and clean up work).
+> which of course makes the build hang.. forever.
 > 
-> The alternative is pretty simple: declare and set the variables as if
-> it were a real filesystem, so that show-info can filter it to the
-> proper layout and can spit out appropriate content (even if fake).
+> So we fix this by checking the list is not empty. To keep the code
+> readable, we introduce an intermediate variable to store the list of
+> these files.
 > 
-> The third option would be to teach show-info (and its internal
-> implementation, the macro json-info) to ignore specific cases, like
-> no-name items, or replace empty values with null, or whatnots. This
-> again would be quite a lot of work for a single occurence.
-> 
-> So we go for the simple faked variables.
-> 
-> We add linux as a dependency, so that the graph-depends also properly
-> represent the dependency chain, which ends up with something liKe:
-> 
->               ALL
->                |
->                v
->         rootfs-initramfs
->          |            |
->          v            v
->        linux     rootfs-cpio
-> 
-> which is pretty fitting in the end.
-> 
-> Reported-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > ---
->  fs/initramfs/initramfs.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+>  Makefile | 16 ++++++++++------
+>  1 file changed, 10 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 5455e6662e..29d30a4f70 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -728,6 +728,10 @@ $(TARGETS_ROOTFS): target-finalize
+>  # Avoid the rootfs name leaking down the dependency chain
+>  target-finalize: ROOTFS=
+>  
+> +TARGET_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt))
+> +HOST_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt))
+> +STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt))
+> +
+>  .PHONY: host-finalize
+>  host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
+>  	@$(call MESSAGE,"Finalizing host directory")
+> @@ -808,12 +812,12 @@ endif # merged /usr
+>  
+>  	touch $(TARGET_DIR)/usr
+>  
+> -	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt)) > \
+> -		$(BUILD_DIR)/packages-file-list.txt
+> -	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt)) > \
+> -		$(BUILD_DIR)/packages-file-list-host.txt
+> -	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
+> -		$(BUILD_DIR)/packages-file-list-staging.txt
+> +	$(if $(TARGET_DIR_FILES_LISTS), \
+> +		cat $(TARGET_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list.txt)
+> +	$(if $(HOST_DIR_FILES_LISTS), \
+> +		cat $(HOST_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list-host.txt)
+> +	$(if $(STAGING_DIR_FILES_LISTS), \
+> +		cat $(STAGING_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list-staging.txt)
 
-Applied to master, thanks.
+So, if there is no file instaleld in staging, the packages-file-list-staging.txt
+file is not created. However, in followup patches, you make it (as well
+as the other two) available to post-build scripts.
 
-Thomas
+This is not nce, as the scripts will have to be carefull to test if the
+files exist.
+
+I would like to suggest an alternative, that guarantees the files are
+created, even if empty:
+
+    $(if $(STAGING_DIR_FILES_LISTS), \
+        cat $(STAGING_DIR_FILES_LISTS)) >$(BUILD_DIR)/packages-file-list-staging.txt
+
+Notice how the redirection is outside the conditional, so that if there
+is no file, the commadn will be:
+
+    > $(BUILD_DIR)/packages-file-list-staging.txt
+
+Which will create an empty file.
+
+Thoughts? Shall I do that when applying the series or will you want to
+respin?
+
+Regards,
+Yann E. MORIN.
+
+>  
+>  .PHONY: target-post-image
+>  target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
