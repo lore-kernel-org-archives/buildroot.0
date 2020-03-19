@@ -1,84 +1,72 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 19 Mar 2020 14:32:09 +0100
-Subject: [Buildroot] [git commit] boot/barebox: license files hashes
- only valid for latest version
-In-Reply-To: <20200206193221.B87B38D427@busybox.osuosl.org>
-References: <20200206193221.B87B38D427@busybox.osuosl.org>
-Message-ID: <CAGm1_kvY1+5QbCX=vTB6AYRVESTVntm9AT+1tiSVifV8jH8Qyg@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Thu, 19 Mar 2020 15:53:23 +0200
+Subject: [Buildroot] [PATCH v6 18/28] package/cmake: Fix for using -O in
+ top-level make
+In-Reply-To: <20200319134951.3f8dfb85@windsurf.home>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-19-anaumann@ultratronik.de>
+ <20200311232503.0bafe189@windsurf>
+ <33267645-fd49-cb20-bb8f-f6a1edd57a15@mind.be>
+ <d6125560-ca00-a4be-cfde-ff200d332756@andin.de>
+ <20200317070800.6365cac6@windsurf.home>
+ <CALFsTFUiXLAVUPaKE22FZE7sF2V4uhv6XmDyim0-cveKP950mA@mail.gmail.com>
+ <0172c8d6-c39a-10a4-cb03-839242936287@andin.de>
+ <CALFsTFVHh+K0_9Un4Gx1TKVi1HwoDqG7N=gvMgdVxpN5iB0vyQ@mail.gmail.com>
+ <6e936a94-ca1a-dce4-cae5-40605344119b@andin.de>
+ <CALFsTFVNjnov69twmk_kv6VdBQAkLXTG4MaFUzw6LfiW2VmgDA@mail.gmail.com>
+ <20200319134951.3f8dfb85@windsurf.home>
+Message-ID: <CALFsTFUN-zHap9eg2AVoeVCH+5Yw3gF3SPZNx9rOFRtwtvUeLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Peter,
+Hello,
 
-On Thu, Feb 6, 2020 at 8:44 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+On Thu, Mar 19, 2020 at 2:49 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> commit: https://git.buildroot.net/buildroot/commit/?id=2ffaaea70c43dde30039c6469233ba8ca7a5dbe0
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> On Thu, 19 Mar 2020 13:40:36 +0200
+> Asaf Kahlon <asafka7@gmail.com> wrote:
 >
-> We can only know the details of the license files for known versions.  For
-> custom, older or newer versions, the license files may change, or may be
-> moved around.
+> > > To me it seems like this could be the culprit. The question is, what
+> > > should we do with this? Check for Make version < 4.2 && -j && -O and
+> > > give a warning? Maybe this is a bit too much.
+> > We now check for make>4.0. Do we want to bump it?
+> > Maybe some of the core Buildroot maintainers can give their advice here.
 >
-> So, do for Barebox as was done for ATF, linux, and linux-headers, and
-> only define the list of license files for the latest version.
+> We don't require make 4.0, we only require make 3.81.
 >
-> Add the hash for that license file, and align hashes to the new spacing
-> convention.
->
-> Reported-by: Peter Korsgaard <peter@korsgaard.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Markus Mayer <mmayer@broadcom.com>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  boot/barebox/barebox.hash | 7 +++++--
->  boot/barebox/barebox.mk   | 2 ++
->  2 files changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-> index 42561ea571..64fec919b8 100644
-> --- a/boot/barebox/barebox.hash
-> +++ b/boot/barebox/barebox.hash
-> @@ -1,5 +1,8 @@
->  # From https://www.barebox.org/download/barebox-2019.12.0.tar.bz2.md5
-> -md5 2d25158ccffaa843c9e4943bbe820ce2 barebox-2019.12.0.tar.bz2
-> +md5  2d25158ccffaa843c9e4943bbe820ce2  barebox-2019.12.0.tar.bz2
->
->  # Locally calculated
-> -sha256 fb77afc5c1a9783b8e1a9bb6c617973f5c0ed4c6f8e079f96cb7e7e0818a7a90 barebox-2019.12.0.tar.bz2
-> +sha256  fb77afc5c1a9783b8e1a9bb6c617973f5c0ed4c6f8e079f96cb7e7e0818a7a90  barebox-2019.12.0.tar.bz2
-> +
-> +# License files, locally computed
-> +sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
-> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> index 52178d89c8..f11f9950d1 100644
-> --- a/boot/barebox/barebox.mk
-> +++ b/boot/barebox/barebox.mk
-> @@ -33,7 +33,9 @@ endif
->
->  $(1)_DEPENDENCIES = host-lzop
->  $(1)_LICENSE = GPL-2.0 with exceptions
-> +ifeq ($(BR2_TARGET_BAREBOX_LATEST_VERSION),y)
->  $(1)_LICENSE_FILES = COPYING
-> +endif
->
->  $(1)_CUSTOM_EMBEDDED_ENV_PATH = $$(call qstrip,$$(BR2_TARGET_$(1)_CUSTOM_EMBEDDED_ENV_PATH))
+> The logic in support/dependencies/check-host-make.mk to check for make
+> 4.0 is only for those few packages that do need make >= 4.0. For such
+> packages, if the version of make installed system-wide is < 4.0, then
+> we build our own host-make. But the overall Buildroot build is still
+> executed by the system-wide make, which may be < 4.0.
 
-This approach works with barebox. But when I also use barebox-aux from
-git (for am335x), I get the following error:
+You're right, thanks for the correction.
 
-ERROR: No hash found for
-barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e.tar.gz
-package/pkg-generic.mk:167: recipe for target
-'/home/user/buildroot/bsp-experimental/build/barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e/.stamp_downloaded'
-failed
-make[1]: *** [/home/user/buildroot/bsp-experimental/build/barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e/.stamp_downloaded]
-Error 1
-Makefile:84: recipe for target '_all' failed
-make: *** [_all] Error 2
+>
+> Requiring make > 4.0 on the host system is too strict, especially
+> considering that the issue we have here only happens in very specific
+> conditions: ccache support enabled, and passing of custom -O flags that
+> are only useful for top-level parallel build, which is itself an
+> experimental feature.
 
-Any idea how to fix this?
+Just as a side note - the problem isn't related to ccache. We
+reproduced it with -O
+and top-level parallel build.
+In addition, if you have any suggestion how to address that case -
+I'll be more than happy
+to help.
 
-Yegor
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+Asaf.
