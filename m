@@ -1,267 +1,90 @@
-From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
-Date: Thu, 19 Mar 2020 16:16:52 +0530
-Subject: [Buildroot] [PATCH v4 4/4] configs/roc-rk3399-pc: new defconfig
-In-Reply-To: <1584614812-20061-1-git-send-email-sunil@amarulasolutions.com>
-References: <20200318215216.187d07bd@windsurf.home>
- <1584614812-20061-1-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <1584614812-20061-5-git-send-email-sunil@amarulasolutions.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 19 Mar 2020 11:53:34 +0100
+Subject: [Buildroot] [PATCH] package/python-cheetah: bump to version 3.2.4
+Message-ID: <20200319105334.7643-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Suniel Mahesh <sunil@amarulasolutions.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-This initial support includes:
-Linux 5.4
-U-Boot 2020.01
-Arm Trusted Firmware v2.2
-Buildroot default packages.
+The original python-cheetah project was abandoned and a new
+fork was created as a drop-in replacement. Though the name of the
+fork is Cheetah3, we do not rename the package name to avoid
+dependency renaming.
 
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+The new fork supports both Python2 and Python3.
+
+python-markdown is now an optional dependency.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
-Changes for v4:
-- Updated DEVELOPERS file
+ package/python-cheetah/Config.in           |  5 ++---
+ package/python-cheetah/python-cheetah.hash |  9 +++++----
+ package/python-cheetah/python-cheetah.mk   | 13 ++++---------
+ 3 files changed, 11 insertions(+), 16 deletions(-)
 
-Changes for v3:
-- dropped changes in DEVELOPERS file
-
-Changes for v2:
-- update readme.txt.
-- changed file permissions to 'x' for post-build.sh.
-
- .gitlab-ci.yml                            |  1 +
- DEVELOPERS                                |  2 ++
- board/firefly/roc-rk3399-pc/extlinux.conf |  4 +++
- board/firefly/roc-rk3399-pc/genimage.cfg  | 22 +++++++++++++
- board/firefly/roc-rk3399-pc/post-build.sh |  5 +++
- board/firefly/roc-rk3399-pc/readme.txt    | 48 ++++++++++++++++++++++++++++
- configs/roc_pc_rk3399_defconfig           | 53 +++++++++++++++++++++++++++++++
- 7 files changed, 135 insertions(+)
- create mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf
- create mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg
- create mode 100755 board/firefly/roc-rk3399-pc/post-build.sh
- create mode 100644 board/firefly/roc-rk3399-pc/readme.txt
- create mode 100644 configs/roc_pc_rk3399_defconfig
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 4b84a5b..d9519c3 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -302,6 +302,7 @@ raspberrypi4_64_defconfig: { extends: .defconfig }
- raspberrypi4_defconfig: { extends: .defconfig }
- raspberrypi_defconfig: { extends: .defconfig }
- riotboard_defconfig: { extends: .defconfig }
-+roc_pc_rk3399_defconfig: { extends: .defconfig }
- rock64_defconfig: { extends: .defconfig }
- roseapplepi_defconfig: { extends: .defconfig }
-- dropped changes in DEVELOPERS file
-
-Changes for v2:
-- update readme.txt.
-- changed file permissions to 'x' for post-build.sh.
-
- .gitlab-ci.yml                            |  1 +
- DEVELOPERS                                |  2 ++
- board/firefly/roc-rk3399-pc/extlinux.conf |  4 +++
- board/firefly/roc-rk3399-pc/genimage.cfg  | 22 +++++++++++++
- board/firefly/roc-rk3399-pc/post-build.sh |  5 +++
- board/firefly/roc-rk3399-pc/readme.txt    | 48 ++++++++++++++++++++++++++++
- configs/roc_pc_rk3399_defconfig           | 53 +++++++++++++++++++++++++++++++
- 7 files changed, 135 insertions(+)
- create mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf
- create mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg
- create mode 100755 board/firefly/roc-rk3399-pc/post-build.sh
- create mode 100644 board/firefly/roc-rk3399-pc/readme.txt
- create mode 100644 configs/roc_pc_rk3399_defconfig
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 4b84a5b..d9519c3 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -302,6 +302,7 @@ raspberrypi4_64_defconfig: { extends: .defconfig }
- raspberrypi4_defconfig: { extends: .defconfig }
- raspberrypi_defconfig: { extends: .defconfig }
- riotboard_defconfig: { extends: .defconfig }
-+roc_pc_rk3399_defconfig: { extends: .defconfig }
- rock64_defconfig: { extends: .defconfig }
- roseapplepi_defconfig: { extends: .defconfig }
- s6lx9_microboard_defconfig: { extends: .defconfig }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a90ad78..2f9982f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2372,6 +2372,8 @@ F:	package/powertop/
+diff --git a/package/python-cheetah/Config.in b/package/python-cheetah/Config.in
+index 12749a1681..7cbfc5c251 100644
+--- a/package/python-cheetah/Config.in
++++ b/package/python-cheetah/Config.in
+@@ -1,13 +1,12 @@
+ config BR2_PACKAGE_PYTHON_CHEETAH
+ 	bool "python-cheetah"
+-	depends on BR2_PACKAGE_PYTHON
+ 	help
+ 	  Cheetah is an open source template engine and code
+ 	  generation tool.
  
- N:	Suniel Mahesh <sunil@amarulasolutions.com>
- F:	package/arm-gnu-a-toolchain
-+F:	board/firefly/
-+F:	configs/roc_pc_rk3399_defconfig
+ 	  It can be used standalone or combined with other tools and
+-	  frameworks.  Web development is its principle use, but
++	  frameworks. Web development is its principle use, but
+ 	  Cheetah is very flexible and is also being used to generate
+ 	  C++ game code, Java, sql, form emails and even Python code.
  
- N:	Sven Haardiek <sven.haardiek@iotec-gmbh.de>
- F:	package/lcdproc/
-diff --git a/board/firefly/roc-rk3399-pc/extlinux.conf b/board/firefly/roc-rk3399-pc/extlinux.conf
-new file mode 100644
-index 0000000..50a358f
---- /dev/null
-+++ b/board/firefly/roc-rk3399-pc/extlinux.conf
-@@ -0,0 +1,4 @@
-+label RK3399RocPC linux
-+  kernel /boot/Image
-+  devicetree /boot/rk3399-roc-pc.dtb
-+  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk0p1 rootwait
-diff --git a/board/firefly/roc-rk3399-pc/genimage.cfg b/board/firefly/roc-rk3399-pc/genimage.cfg
-new file mode 100644
-index 0000000..966c869
---- /dev/null
-+++ b/board/firefly/roc-rk3399-pc/genimage.cfg
-@@ -0,0 +1,22 @@
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot-tpl-spl-dtb {
-+		in-partition-table = "no"
-+		image = "idbloader.img"
-+		offset = 32K
-+	}
-+
-+	partition u-boot-dtb {
-+		in-partition-table = "no"
-+		image = "u-boot.itb"
-+		offset = 8M
-+		size = 30M
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/firefly/roc-rk3399-pc/post-build.sh b/board/firefly/roc-rk3399-pc/post-build.sh
-new file mode 100755
-index 0000000..1f5ff6a
---- /dev/null
-+++ b/board/firefly/roc-rk3399-pc/post-build.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+
-+install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-diff --git a/board/firefly/roc-rk3399-pc/readme.txt b/board/firefly/roc-rk3399-pc/readme.txt
-new file mode 100644
-index 0000000..ebf91c1
---- /dev/null
-+++ b/board/firefly/roc-rk3399-pc/readme.txt
-@@ -0,0 +1,48 @@
-+Libre Computer Board ROC-RK3399-PC
-+===================================
-+
-+ROC-RK3399-PC is highest performance platforms leveraging the popular
-+Rockchip RK3399 SoC from Firefly and Libretech.
-+
-+Build:
-+
-+  $ make roc_pc_rk3399_defconfig
-+  $ make
-+
-+Files created in output directory
-+=================================
-+
-+output/images
-+
-+????????? bl31.elf
-+????????? idbloader.img
-+????????? Image
-+????????? rk3399-roc-pc.dtb
-+????????? rootfs.ext2
-+????????? rootfs.ext4 -> rootfs.ext2
-+????????? rootfs.tar
-+????????? sdcard.img
-+????????? u-boot.bin
-+????????? u-boot.itb
-+
-+Creating bootable SD card:
-+==========================
-+
-+Simply invoke (as root)
-+
-+sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
-+
-+Where X is your SD card device
-+
-+Serial console
-+--------------
-+
-+Baudrate for this board is 1500000
-+
-+
-+Wiki link:
-+https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/roc-rk3399-pc.html
-+
-+--
-+Suniel Mahesh <sunil@amarulasolutions.com>
-+10-Feb-2020
-diff --git a/configs/roc_pc_rk3399_defconfig b/configs/roc_pc_rk3399_defconfig
-new file mode 100644
-index 0000000..e5a82da
---- /dev/null
-+++ b/configs/roc_pc_rk3399_defconfig
-@@ -0,0 +1,53 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_cortex_a72_a53=y
-+
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+
-+# Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.2"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="roc-pc-rk3399"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.18"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-roc-pc"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem
-+BR2_TARGET_GENERIC_HOSTNAME="roc-rk3399-pc"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to ROC-RK3399-PC!"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/firefly/roc-rk3399-pc/genimage.cfg"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/firefly/roc-rk3399-pc/post-build.sh"
+-	  https://pypi.python.org/pypi/Cheetah/
++	  https://pypi.org/project/Cheetah3/
+diff --git a/package/python-cheetah/python-cheetah.hash b/package/python-cheetah/python-cheetah.hash
+index 477ee5483a..286b41fd9e 100644
+--- a/package/python-cheetah/python-cheetah.hash
++++ b/package/python-cheetah/python-cheetah.hash
+@@ -1,4 +1,5 @@
+-# From https://pypi.python.org/pypi/Cheetah/2.4.4
+-md5	853917116e731afbc8c8a43c37e6ddba	Cheetah-2.4.4.tar.gz
+-# Calculated based on the hash above
+-sha256	be308229f0c1e5e5af4f27d7ee06d90bb19e6af3059794e5fd536a6f29a9b550	Cheetah-2.4.4.tar.gz
++# From https://pypi.org/pypi/Cheetah3/json
++md5  8c0ac643263ffc3454fb321342284d0a  Cheetah3-3.2.4.tar.gz
++sha256	caabb9c22961a3413ac85cd1e5525ec9ca80daeba6555f4f60802b6c256e252b  Cheetah3-3.2.4.tar.gz
++# Locally computed sha256 checksums
++sha256  635349ae512fafc2e60eb74a50d0a5276fa06c00b5ecb20da53546449ddc45ea  LICENSE
+diff --git a/package/python-cheetah/python-cheetah.mk b/package/python-cheetah/python-cheetah.mk
+index eee87fcee7..1ad49a43b7 100644
+--- a/package/python-cheetah/python-cheetah.mk
++++ b/package/python-cheetah/python-cheetah.mk
+@@ -4,17 +4,12 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CHEETAH_VERSION = 2.4.4
+-PYTHON_CHEETAH_SOURCE = Cheetah-$(PYTHON_CHEETAH_VERSION).tar.gz
+-PYTHON_CHEETAH_SITE = https://pypi.python.org/packages/source/C/Cheetah
++PYTHON_CHEETAH_VERSION = 3.2.4
++PYTHON_CHEETAH_SOURCE = Cheetah3-$(PYTHON_CHEETAH_VERSION).tar.gz
++PYTHON_CHEETAH_SITE = https://files.pythonhosted.org/packages/4e/72/e6a7d92279e3551db1b68fd336fd7a6e3d2f2ec742bf486486e6150d77d2
+ PYTHON_CHEETAH_LICENSE = MIT
++PYTHON_CHEETAH_LICENSE_FILES = LICENSE
+ PYTHON_CHEETAH_SETUP_TYPE = setuptools
+ 
+-HOST_PYTHON_CHEETAH_NEEDS_HOST_PYTHON = python2
+-
+-# The dependency on host-python-markdown is needed to prevent
+-# setuptools from downloading markdown if it is not installed yet.
+-HOST_PYTHON_CHEETAH_DEPENDENCIES = host-python-markdown
+-
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 -- 
-2.7.4
+2.17.0
