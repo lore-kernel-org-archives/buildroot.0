@@ -1,59 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Mar 2020 15:00:18 +0100
-Subject: [Buildroot] [PATCH v6 18/28] package/cmake: Fix for using -O in
- top-level make
-In-Reply-To: <CALFsTFUN-zHap9eg2AVoeVCH+5Yw3gF3SPZNx9rOFRtwtvUeLw@mail.gmail.com>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-19-anaumann@ultratronik.de>
- <20200311232503.0bafe189@windsurf>
- <33267645-fd49-cb20-bb8f-f6a1edd57a15@mind.be>
- <d6125560-ca00-a4be-cfde-ff200d332756@andin.de>
- <20200317070800.6365cac6@windsurf.home>
- <CALFsTFUiXLAVUPaKE22FZE7sF2V4uhv6XmDyim0-cveKP950mA@mail.gmail.com>
- <0172c8d6-c39a-10a4-cb03-839242936287@andin.de>
- <CALFsTFVHh+K0_9Un4Gx1TKVi1HwoDqG7N=gvMgdVxpN5iB0vyQ@mail.gmail.com>
- <6e936a94-ca1a-dce4-cae5-40605344119b@andin.de>
- <CALFsTFVNjnov69twmk_kv6VdBQAkLXTG4MaFUzw6LfiW2VmgDA@mail.gmail.com>
- <20200319134951.3f8dfb85@windsurf.home>
- <CALFsTFUN-zHap9eg2AVoeVCH+5Yw3gF3SPZNx9rOFRtwtvUeLw@mail.gmail.com>
-Message-ID: <20200319150018.737f5e7c@windsurf.home>
+From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Date: Thu, 19 Mar 2020 17:04:44 +0300
+Subject: [Buildroot] [PATCH] package/tinyproxy: use the release tarball,
+ not a git clone
+In-Reply-To: <20200315230739.67c238b5@windsurf.home>
+References: <20200315230739.67c238b5@windsurf.home>
+Message-ID: <20200319140444.5749-1-alexander.i.mukhin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 19 Mar 2020 15:53:23 +0200
-Asaf Kahlon <asafka7@gmail.com> wrote:
+Upstream ships distribution tarballs with pre-built manpages and
+necessary fixes, so that the build doesn't break if asciidoc is not
+available.
 
-> > Requiring make > 4.0 on the host system is too strict, especially
-> > considering that the issue we have here only happens in very specific
-> > conditions: ccache support enabled, and passing of custom -O flags that
-> > are only useful for top-level parallel build, which is itself an
-> > experimental feature.  
-> 
-> Just as a side note - the problem isn't related to ccache. We
-> reproduced it with -O and top-level parallel build.
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+---
+ .../0001-Makefile.am-remove-docs-subdir.patch | 27 -------------------
+ package/tinyproxy/tinyproxy.hash              |  2 +-
+ package/tinyproxy/tinyproxy.mk                |  6 ++---
+ 3 files changed, 3 insertions(+), 32 deletions(-)
+ delete mode 100644 package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch
 
-Sorry, I mixed things up, and thought it was ccache related.
-
-> In addition, if you have any suggestion how to address that case -
-> I'll be more than happy to help.
-
-I don't have any really good suggestion. But it's really a corner case:
-only happens with make 4.1 if I understand correctly, and only when you
-pass some variants of the -O option.
-
-The "make -Orecurse" option, which is the most relevant for top-level
-parallel build, does not exhibit the issue.
-
-So essentially I simply wouldn't fix the problem. If you really want to
-fix it, maybe we can have some fancy logic in the main Makefile to
-detect that one of the problematic -O option is passed, and the make
-version is not appropriate, and then error out.
-
-Thomas
+diff --git a/package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch b/package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch
+deleted file mode 100644
+index e2a08678a3..0000000000
+--- a/package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 7ce6ee22057489d280e0ea5f6439edbbf0ad7ee2 Mon Sep 17 00:00:00 2001
+-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+-Date: Sat, 14 Mar 2020 12:45:29 +0300
+-Subject: [PATCH] Makefile.am: remove docs subdir
+-
+-This avoids building the documentation, which requires asciidoc.
+-
+-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+----
+- Makefile.am | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index e9113c2..2fe3d54 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -2,7 +2,6 @@ SUBDIRS = \
+- 	src \
+- 	data \
+- 	etc \
+--	docs \
+- 	m4macros \
+- 	tests
+- 
+--- 
+-2.20.1
+-
+diff --git a/package/tinyproxy/tinyproxy.hash b/package/tinyproxy/tinyproxy.hash
+index 2d439de517..099c974881 100644
+--- a/package/tinyproxy/tinyproxy.hash
++++ b/package/tinyproxy/tinyproxy.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256 ff4f3d1331d6d855d8b6ed794c22ab0a4285dd81fe9c98a7aa7ed591248d4ab9 tinyproxy-1.10.0.tar.gz
++sha256 a23a8f647f622f01e51b93fa882ea5a15c20e026d45c3aafa81ec579e464daf7 tinyproxy-1.10.0.tar.bz2
+diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
+index f1a2a50c32..305be922f5 100644
+--- a/package/tinyproxy/tinyproxy.mk
++++ b/package/tinyproxy/tinyproxy.mk
+@@ -5,11 +5,9 @@
+ ################################################################################
+ 
+ TINYPROXY_VERSION = 1.10.0
+-TINYPROXY_SITE = $(call github,tinyproxy,tinyproxy,$(TINYPROXY_VERSION))
++TINYPROXY_SITE = https://github.com/tinyproxy/tinyproxy/releases/download/$(TINYPROXY_VERSION)
++TINYPROXY_SOURCE = tinyproxy-$(TINYPROXY_VERSION).tar.bz2
+ TINYPROXY_LICENSE = GPL-2.0+
+ TINYPROXY_LICENSE_FILES = COPYING
+ 
+-# building from a git clone and patching Makefile.am
+-TINYPROXY_AUTORECONF = YES
+-
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
