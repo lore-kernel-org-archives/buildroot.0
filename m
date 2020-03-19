@@ -1,104 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Mar 2020 18:58:54 +0100
-Subject: [Buildroot] [PATCH] package/tinyproxy: use the release tarball,
- not a git clone
-In-Reply-To: <20200319140444.5749-1-alexander.i.mukhin@gmail.com>
-References: <20200315230739.67c238b5@windsurf.home>
- <20200319140444.5749-1-alexander.i.mukhin@gmail.com>
-Message-ID: <20200319175854.GG10025@scaer>
+Date: Thu, 19 Mar 2020 19:04:46 +0100
+Subject: [Buildroot] [git commit] boot/barebox: license files hashes
+ only valid for latest version
+In-Reply-To: <CAGm1_kvY1+5QbCX=vTB6AYRVESTVntm9AT+1tiSVifV8jH8Qyg@mail.gmail.com>
+References: <20200206193221.B87B38D427@busybox.osuosl.org>
+ <CAGm1_kvY1+5QbCX=vTB6AYRVESTVntm9AT+1tiSVifV8jH8Qyg@mail.gmail.com>
+Message-ID: <20200319180446.GH10025@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander, All,
+Yegor, All,
 
-On 2020-03-19 17:04 +0300, Alexander Mukhin spake thusly:
-> Upstream ships distribution tarballs with pre-built manpages and
-> necessary fixes, so that the build doesn't break if asciidoc is not
-> available.
+On 2020-03-19 14:32 +0100, Yegor Yefremov spake thusly:
+> On Thu, Feb 6, 2020 at 8:44 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+> > We can only know the details of the license files for known versions.  For
+> > custom, older or newer versions, the license files may change, or may be
+> > moved around.
+> >
+> > So, do for Barebox as was done for ATF, linux, and linux-headers, and
+> > only define the list of license files for the latest version.
+[--SNIP--]
+> > diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+> > index 52178d89c8..f11f9950d1 100644
+> > --- a/boot/barebox/barebox.mk
+> > +++ b/boot/barebox/barebox.mk
+> > @@ -33,7 +33,9 @@ endif
+> >
+> >  $(1)_DEPENDENCIES = host-lzop
+> >  $(1)_LICENSE = GPL-2.0 with exceptions
+> > +ifeq ($(BR2_TARGET_BAREBOX_LATEST_VERSION),y)
+> >  $(1)_LICENSE_FILES = COPYING
+> > +endif
+> >
+> >  $(1)_CUSTOM_EMBEDDED_ENV_PATH = $$(call qstrip,$$(BR2_TARGET_$(1)_CUSTOM_EMBEDDED_ENV_PATH))
 > 
-> Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+> This approach works with barebox. But when I also use barebox-aux from
+> git (for am335x), I get the following error:
+> 
+> ERROR: No hash found for barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e.tar.gz
 
-Applied to master, thanks.
+This error is not about the hash files, but about the actual downloaded
+tarball, while the patch you are replying to is about the hash of the
+license file.
+
+Care to provide a defconfig, or even just the URL to that git repo,
+please?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  .../0001-Makefile.am-remove-docs-subdir.patch | 27 -------------------
->  package/tinyproxy/tinyproxy.hash              |  2 +-
->  package/tinyproxy/tinyproxy.mk                |  6 ++---
->  3 files changed, 3 insertions(+), 32 deletions(-)
->  delete mode 100644 package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch
+> package/pkg-generic.mk:167: recipe for target
+> '/home/user/buildroot/bsp-experimental/build/barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e/.stamp_downloaded'
+> failed
+> make[1]: *** [/home/user/buildroot/bsp-experimental/build/barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e/.stamp_downloaded]
+> Error 1
+> Makefile:84: recipe for target '_all' failed
+> make: *** [_all] Error 2
 > 
-> diff --git a/package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch b/package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch
-> deleted file mode 100644
-> index e2a08678a3..0000000000
-> --- a/package/tinyproxy/0001-Makefile.am-remove-docs-subdir.patch
-> +++ /dev/null
-> @@ -1,27 +0,0 @@
-> -From 7ce6ee22057489d280e0ea5f6439edbbf0ad7ee2 Mon Sep 17 00:00:00 2001
-> -From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-> -Date: Sat, 14 Mar 2020 12:45:29 +0300
-> -Subject: [PATCH] Makefile.am: remove docs subdir
-> -
-> -This avoids building the documentation, which requires asciidoc.
-> -
-> -Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-> ----
-> - Makefile.am | 1 -
-> - 1 file changed, 1 deletion(-)
-> -
-> -diff --git a/Makefile.am b/Makefile.am
-> -index e9113c2..2fe3d54 100644
-> ---- a/Makefile.am
-> -+++ b/Makefile.am
-> -@@ -2,7 +2,6 @@ SUBDIRS = \
-> - 	src \
-> - 	data \
-> - 	etc \
-> --	docs \
-> - 	m4macros \
-> - 	tests
-> - 
-> --- 
-> -2.20.1
-> -
-> diff --git a/package/tinyproxy/tinyproxy.hash b/package/tinyproxy/tinyproxy.hash
-> index 2d439de517..099c974881 100644
-> --- a/package/tinyproxy/tinyproxy.hash
-> +++ b/package/tinyproxy/tinyproxy.hash
-> @@ -1,2 +1,2 @@
->  # locally computed
-> -sha256 ff4f3d1331d6d855d8b6ed794c22ab0a4285dd81fe9c98a7aa7ed591248d4ab9 tinyproxy-1.10.0.tar.gz
-> +sha256 a23a8f647f622f01e51b93fa882ea5a15c20e026d45c3aafa81ec579e464daf7 tinyproxy-1.10.0.tar.bz2
-> diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
-> index f1a2a50c32..305be922f5 100644
-> --- a/package/tinyproxy/tinyproxy.mk
-> +++ b/package/tinyproxy/tinyproxy.mk
-> @@ -5,11 +5,9 @@
->  ################################################################################
->  
->  TINYPROXY_VERSION = 1.10.0
-> -TINYPROXY_SITE = $(call github,tinyproxy,tinyproxy,$(TINYPROXY_VERSION))
-> +TINYPROXY_SITE = https://github.com/tinyproxy/tinyproxy/releases/download/$(TINYPROXY_VERSION)
-> +TINYPROXY_SOURCE = tinyproxy-$(TINYPROXY_VERSION).tar.bz2
->  TINYPROXY_LICENSE = GPL-2.0+
->  TINYPROXY_LICENSE_FILES = COPYING
->  
-> -# building from a git clone and patching Makefile.am
-> -TINYPROXY_AUTORECONF = YES
-> -
->  $(eval $(autotools-package))
-> -- 
-> 2.20.1
+> Any idea how to fix this?
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Yegor
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
