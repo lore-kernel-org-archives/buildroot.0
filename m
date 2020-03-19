@@ -1,53 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Mar 2020 13:49:51 +0100
-Subject: [Buildroot] [PATCH v6 18/28] package/cmake: Fix for using -O in
- top-level make
-In-Reply-To: <CALFsTFVNjnov69twmk_kv6VdBQAkLXTG4MaFUzw6LfiW2VmgDA@mail.gmail.com>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-19-anaumann@ultratronik.de>
- <20200311232503.0bafe189@windsurf>
- <33267645-fd49-cb20-bb8f-f6a1edd57a15@mind.be>
- <d6125560-ca00-a4be-cfde-ff200d332756@andin.de>
- <20200317070800.6365cac6@windsurf.home>
- <CALFsTFUiXLAVUPaKE22FZE7sF2V4uhv6XmDyim0-cveKP950mA@mail.gmail.com>
- <0172c8d6-c39a-10a4-cb03-839242936287@andin.de>
- <CALFsTFVHh+K0_9Un4Gx1TKVi1HwoDqG7N=gvMgdVxpN5iB0vyQ@mail.gmail.com>
- <6e936a94-ca1a-dce4-cae5-40605344119b@andin.de>
- <CALFsTFVNjnov69twmk_kv6VdBQAkLXTG4MaFUzw6LfiW2VmgDA@mail.gmail.com>
-Message-ID: <20200319134951.3f8dfb85@windsurf.home>
+From: Ramon Fried <rfried.dev@gmail.com>
+Date: Thu, 19 Mar 2020 14:50:37 +0200
+Subject: [Buildroot] [PATCH] package/gdb: Add support for host-gdb with
+ python3
+Message-ID: <20200319125037.12274-1-rfried.dev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 19 Mar 2020 13:40:36 +0200
-Asaf Kahlon <asafka7@gmail.com> wrote:
+host-gdb was limited to link only with Python 2 although
+it's possible to build Python 3 for host.
+Add the ability to link with Python 3.
 
-> > To me it seems like this could be the culprit. The question is, what
-> > should we do with this? Check for Make version < 4.2 && -j && -O and
-> > give a warning? Maybe this is a bit too much.  
-> We now check for make>4.0. Do we want to bump it?
-> Maybe some of the core Buildroot maintainers can give their advice here.
+Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
+---
+ package/gdb/Config.in.host | 9 +++++++--
+ package/gdb/gdb.mk         | 3 +++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-We don't require make 4.0, we only require make 3.81.
-
-The logic in support/dependencies/check-host-make.mk to check for make
-4.0 is only for those few packages that do need make >= 4.0. For such
-packages, if the version of make installed system-wide is < 4.0, then
-we build our own host-make. But the overall Buildroot build is still
-executed by the system-wide make, which may be < 4.0.
-
-Requiring make > 4.0 on the host system is too strict, especially
-considering that the issue we have here only happens in very specific
-conditions: ccache support enabled, and passing of custom -O flags that
-are only useful for top-level parallel build, which is itself an
-experimental feature.
-
-Best regards,
-
-Thomas
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 5315f10493..fe9aff4df7 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -33,9 +33,14 @@ config BR2_PACKAGE_HOST_GDB_TUI
+ 	  This option enables terminal user interface (TUI) for gdb
+ 
+ config BR2_PACKAGE_HOST_GDB_PYTHON
+-	bool "Python support"
++	bool "Python 2 support"
+ 	help
+-	  This option enables the Python support in the cross gdb.
++	  This option enables the Python 2 support in the cross gdb.
++
++config BR2_PACKAGE_HOST_GDB_PYTHON3
++	bool "Python 3 support"
++	help
++	  This option enables the Python 3 support in the cross gdb.
+ 
+ config BR2_PACKAGE_HOST_GDB_SIM
+ 	bool "Simulator support"
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 01f7e14460..8c74a0e2f6 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -238,6 +238,9 @@ endif
+ ifeq ($(BR2_PACKAGE_HOST_GDB_PYTHON),y)
+ HOST_GDB_CONF_OPTS += --with-python=$(HOST_DIR)/bin/python2
+ HOST_GDB_DEPENDENCIES += host-python
++else ifeq ($(BR2_PACKAGE_HOST_GDB_PYTHON3),y)
++HOST_GDB_CONF_OPTS += --with-python=$(HOST_DIR)/bin/python3
++HOST_GDB_DEPENDENCIES += host-python3
+ else
+ HOST_GDB_CONF_OPTS += --without-python
+ endif
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
