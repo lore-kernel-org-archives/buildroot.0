@@ -1,47 +1,89 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 19 Mar 2020 09:36:43 +0000
-Subject: [Buildroot] [Bug 12671] New: leveldb won't detect that snappy is
- present (static libs only)
-Message-ID: <bug-12671-163@https.bugs.busybox.net/>
+From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
+Date: Thu, 19 Mar 2020 16:16:48 +0530
+Subject: [Buildroot] [PATCH v4 0/4] Fix ATF v2.2 build for rk3399,
+ add roc-rk3399-pc board
+In-Reply-To: <20200318215216.187d07bd@windsurf.home>
+References: <20200318215216.187d07bd@windsurf.home>
+Message-ID: <1584614812-20061-1-git-send-email-sunil@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12671
+From: Suniel Mahesh <sunil@amarulasolutions.com>
 
-            Bug ID: 12671
-           Summary: leveldb won't detect that snappy is present (static
-                    libs only)
-           Product: buildroot
-           Version: 2020.02
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: maksis33 at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+This patch set does the following:
+Fix ATF v2.2 build for rk3399 SoC's.
+Add arm-gnu-a-toolchain package, which acts as a secondary bare metal toolchain
+to build ATF for Rockchip rk3399 platform (has a cortex-m0 core). The required
+pre-built toolchain is taken from ARM developers site and installed in host filesystem only.
+Add rk3399 support for building ATF.
+Add new defconfig file for roc-rk3399-pc.
+Update DEVELOPERS file.
 
-Fresh installation of 2020.02 with the following config:
+The patch set is tested on roc-rk3399-pc, a rk3399 based target. Compile tested on orangepi.
+---
+Changes for v4:
+- As per suggestions from Heiko Thiery and Thomas Pettazoni, changed DEVELOPERS file accordingly.
+- Updated Developers file accordingly whenever a new package(patch #2) or target is added(patch #4).
+- dropped patch #5, as it is no longer needed.
+- Its a four patch series like earlier v2 and v1. 
 
-Toolchain -> Enable C++ support -> enabled
-Build options -> libraries -> static only
-Target packages -> Libraries -> Database -> leveldb -> enabled
+Changes for v3:
+Added one patch to this series. Split one changeset from patch #4 and made
+it patch #5
+patch #1 (Disable bin copy for rk3399)
+- Based on suggestions from sergey and thomas, instead of encoding
+platform-specific stuff in config files, made changes in .mk files
+based on the build flow.
+patch #2 (new package)
+- no change
+patch #3 (add support for rockchip rk3399)
+- no change
+patch #4 (new defconfig)
+- dropped DEVELOPERS file
+patch #5 (Add me as a co-maintainer)
+- seperated this changeset
 
-From the cmake output of leveldb:
+Changes for v2:
+Changed cover letter description to add more meaning.
+patch #1 (Disable bin copy for rk3399)
+- Added Cc tag
+patch #2 (new package)
+- More Description added to justify why a secondary bare metal toolchain is required 
+patch #3 (add support for rockchip rk3399)
+- no change
+patch #4 (new defconfig)
+- updated readme.txt to help with the build/boot process 
+- modified file permissions of post-build.sh to 'x'
 
--- Looking for snappy_compress in snappy
--- Looking for snappy_compress in snappy - not found
+Jagan Teki (1):
+  boot/arm-trusted-firmware: Disable bin copy for rk3399
 
+Suniel Mahesh (3):
+  package/arm-gnu-a-toolchain: new package
+  boot/arm-trusted-firmware: add support for rockchip rk3399
+  configs/roc-rk3399-pc: new defconfig
 
-Snappy is being detect correctly when building with shared libraries. This
-issue wasn't present in buildroot 2019.02.
+ .gitlab-ci.yml                                     |  1 +
+ DEVELOPERS                                         |  5 ++
+ board/firefly/roc-rk3399-pc/extlinux.conf          |  4 ++
+ board/firefly/roc-rk3399-pc/genimage.cfg           | 22 +++++++++
+ board/firefly/roc-rk3399-pc/post-build.sh          |  5 ++
+ board/firefly/roc-rk3399-pc/readme.txt             | 48 ++++++++++++++++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk  | 10 +++-
+ configs/roc_pc_rk3399_defconfig                    | 53 ++++++++++++++++++++++
+ .../arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash   |  3 ++
+ package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk | 27 +++++++++++
+ 10 files changed, 176 insertions(+), 2 deletions(-)
+ create mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf
+ create mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg
+ create mode 100755 board/firefly/roc-rk3399-pc/post-build.sh
+ create mode 100644 board/firefly/roc-rk3399-pc/readme.txt
+ create mode 100644 configs/roc_pc_rk3399_defconfig
+ create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
+ create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.4
