@@ -1,38 +1,106 @@
 From: Chris Packham <judge.packham@gmail.com>
-Date: Thu, 19 Mar 2020 21:12:28 +1300
-Subject: [Buildroot] [PATCH] package/syslog-ng: Update has for COPYING
-Message-ID: <20200319081228.26547-1-judge.packham@gmail.com>
+Date: Thu, 19 Mar 2020 21:20:16 +1300
+Subject: [Buildroot] [PATCH] package/syslog-ng: Bump version to 2.26.1
+In-Reply-To: <CAFOYHZD5wTHfWSabqEckEqk4n71fbuRomedjR+jazi7Q=qMUHg@mail.gmail.com>
+References: <20200316235325.26563-1-judge.packham@gmail.com>
+ <20200317203422.GR19677@scaer>
+ <CAFOYHZD5wTHfWSabqEckEqk4n71fbuRomedjR+jazi7Q=qMUHg@mail.gmail.com>
+Message-ID: <CAFOYHZAE2b_n0Zgu3TAfu0Y7f4kuD8dcW-7G61CkHSq3MJ0Esw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some of the text was updated in syslog-ng-3.26.1. Update the hash
-accordingly.
+On Wed, Mar 18, 2020 at 7:33 PM Chris Packham <judge.packham@gmail.com> wrote:
+>
+>
+>
+> On Wed, 18 Mar 2020, 9:34 AM Yann E. MORIN, <yann.morin.1998@free.fr> wrote:
+>>
+>> Chris, All,
+>>
+>> On 2020-03-17 12:53 +1300, Chris Packham spake thusly:
+>> > Signed-off-by: Chris Packham <judge.packham@gmail.com>
+>>
+>> Applied to master, thanks.
+>>
+>> However, one small question: is upstream going to support both autotools
+>> and cmake for the foreseeable future, or are they transitionning to
+>> cmake for good (even if that takes time)?
+>>
+>> If the latter, then it would be nice to convert our package to use the
+>> cmake infra, no?
+>
+>
+> As far as I know they're going to support both. I don't think there are any plans to drop autotools. I'll ask around.
+>
 
-Fixes:
- - http://autobuild.buildroot.net/results/4e0768a5aae0f77e1382108b1ca06d0ad78f4da4
- - http://autobuild.buildroot.net/results/7430550dfce0bcb1bc5c9361033e26651883685a
- - http://autobuild.buildroot.net/results/56afedff96d17ab4800845d7777dd151cb431acf
- - http://autobuild.buildroot.net/results/2cac7eeaeabf8d77724ff283d3cb9026e778635c
- - http://autobuild.buildroot.net/results/a8189eab2a14cc5d04d90d8f1fa058b86889cc21
+Got a response from syslog-ng devs[1]. autotools is supported and
+cmake does not (yet) have parity.
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
- package/syslog-ng/syslog-ng.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[1] - https://lists.balabit.hu/pipermail/syslog-ng/2020-March/025773.html
 
-diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-index a752db0016..edb7efe195 100644
---- a/package/syslog-ng/syslog-ng.hash
-+++ b/package/syslog-ng/syslog-ng.hash
-@@ -1,5 +1,5 @@
- # Locally computed
- sha256 90214223864df252cea80dbb35c88a2464edcbbb2c9fbc6f6f6c13ee60cb62cd  syslog-ng-3.26.1.tar.gz
--sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607  COPYING
-+sha256 e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
- sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
--- 
-2.25.1
+
+>>
+>> Regards,
+>> Yann E. MORIN.
+>>
+>> > ---
+>> > I've build tested this with/without Thomas DS's patch and it builds clean
+>> > either way.
+>> >
+>> >  package/syslog-ng/syslog-ng.conf | 2 +-
+>> >  package/syslog-ng/syslog-ng.hash | 2 +-
+>> >  package/syslog-ng/syslog-ng.mk   | 2 +-
+>> >  3 files changed, 3 insertions(+), 3 deletions(-)
+>> >
+>> > diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
+>> > index a04a4770b1..e23d80580d 100644
+>> > --- a/package/syslog-ng/syslog-ng.conf
+>> > +++ b/package/syslog-ng/syslog-ng.conf
+>> > @@ -1,4 +1,4 @@
+>> > - at version: 3.25
+>> > + at version: 3.26
+>> >
+>> >  source s_sys {
+>> >       file("/proc/kmsg" program_override("kernel"));
+>> > diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+>> > index 962c354b4c..a752db0016 100644
+>> > --- a/package/syslog-ng/syslog-ng.hash
+>> > +++ b/package/syslog-ng/syslog-ng.hash
+>> > @@ -1,5 +1,5 @@
+>> >  # Locally computed
+>> > -sha256 34cb9673bcde58d543890e6c1189f466f938e199f227c524a6fa2f47f4db6817  syslog-ng-3.25.1.tar.gz
+>> > +sha256 90214223864df252cea80dbb35c88a2464edcbbb2c9fbc6f6f6c13ee60cb62cd  syslog-ng-3.26.1.tar.gz
+>> >  sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607  COPYING
+>> >  sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+>> >  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
+>> > diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+>> > index 156bd95593..203f2c96b6 100644
+>> > --- a/package/syslog-ng/syslog-ng.mk
+>> > +++ b/package/syslog-ng/syslog-ng.mk
+>> > @@ -6,7 +6,7 @@
+>> >
+>> >  # When updating the version, please check at runtime if the version in
+>> >  # syslog-ng.conf header needs to be updated
+>> > -SYSLOG_NG_VERSION = 3.25.1
+>> > +SYSLOG_NG_VERSION = 3.26.1
+>> >  SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+>> >  SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+>> >  SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
+>> > --
+>> > 2.25.1
+>> >
+>> > _______________________________________________
+>> > buildroot mailing list
+>> > buildroot at busybox.net
+>> > http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>> --
+>> .-----------------.--------------------.------------------.--------------------.
+>> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+>> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+>> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+>> '------------------------------^-------^------------------^--------------------'
