@@ -1,89 +1,92 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 19 Mar 2020 21:41:41 +0100
-Subject: [Buildroot] [git commit] boot/barebox: license files hashes
- only valid for latest version
-In-Reply-To: <20200319180446.GH10025@scaer>
-References: <20200206193221.B87B38D427@busybox.osuosl.org>
- <CAGm1_kvY1+5QbCX=vTB6AYRVESTVntm9AT+1tiSVifV8jH8Qyg@mail.gmail.com>
- <20200319180446.GH10025@scaer>
-Message-ID: <CAGm1_ktj7smV2dxvFg1b=NLG55f+JwZy63+ZOHoj3bCuVJf2tA@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 19 Mar 2020 21:57:08 +0100
+Subject: [Buildroot] [PATCH 1/2] package/llvm: specify
+ LLVM_ENABLE_BINDINGS=OFF
+In-Reply-To: <CAMWSM7iP75XtBBWoeDtXxJ=cjF=-g4+5kbzjD8pR0cTjsXp8tg@mail.gmail.com>
+References: <20200316200106.3709163-1-joseph.kogut@gmail.com>
+ <bde10ce7-2da8-eb1f-c6d3-f48489eb196f@gmail.com>
+ <CAMWSM7iP75XtBBWoeDtXxJ=cjF=-g4+5kbzjD8pR0cTjsXp8tg@mail.gmail.com>
+Message-ID: <a9989967-aadc-04b5-6d8a-502a09d0ef14@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 19, 2020 at 7:04 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Yegor, All,
->
-> On 2020-03-19 14:32 +0100, Yegor Yefremov spake thusly:
-> > On Thu, Feb 6, 2020 at 8:44 PM Peter Korsgaard <peter@korsgaard.com> wrote:
-> > > We can only know the details of the license files for known versions.  For
-> > > custom, older or newer versions, the license files may change, or may be
-> > > moved around.
-> > >
-> > > So, do for Barebox as was done for ATF, linux, and linux-headers, and
-> > > only define the list of license files for the latest version.
-> [--SNIP--]
-> > > diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> > > index 52178d89c8..f11f9950d1 100644
-> > > --- a/boot/barebox/barebox.mk
-> > > +++ b/boot/barebox/barebox.mk
-> > > @@ -33,7 +33,9 @@ endif
-> > >
-> > >  $(1)_DEPENDENCIES = host-lzop
-> > >  $(1)_LICENSE = GPL-2.0 with exceptions
-> > > +ifeq ($(BR2_TARGET_BAREBOX_LATEST_VERSION),y)
-> > >  $(1)_LICENSE_FILES = COPYING
-> > > +endif
-> > >
-> > >  $(1)_CUSTOM_EMBEDDED_ENV_PATH = $$(call qstrip,$$(BR2_TARGET_$(1)_CUSTOM_EMBEDDED_ENV_PATH))
-> >
-> > This approach works with barebox. But when I also use barebox-aux from
-> > git (for am335x), I get the following error:
-> >
-> > ERROR: No hash found for barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e.tar.gz
->
-> This error is not about the hash files, but about the actual downloaded
-> tarball, while the patch you are replying to is about the hash of the
-> license file.
->
-> Care to provide a defconfig, or even just the URL to that git repo,
-> please?
+Hi Joseph,
 
-You can take our BSP [1] and this defconfig [2] to reproduce this
-issue. Just replace barebox version to the official barebox git and
-use the latest commit ID.
-am335x requires two images MLO and barebox.bin so it has to use both
-barebox and barebox-aux.
+Le 18/03/2020 ? 01:27, Joseph Kogut a ?crit?:
+> Hi Romain,
+> 
+> On Mon, Mar 16, 2020 at 3:09 PM Romain Naour <romain.naour@gmail.com> wrote:
+>>
+>> Hi Joseph,
+>>
+>> Le 16/03/2020 ? 21:01, Joseph Kogut a ?crit :
+>>> LLVM builds bindings for other languages such as Go and OCaml when the
+>>> appropriate dependencies can be found. We currently don't support
+>>> building these bindings in Buildroot, as they're currently unused by any
+>>> package.
+>>>
+>>> Building these bindings was originally disabled by overriding the
+>>> dependencies with values indicating that they were not found.
+>>>
+>>> Newer versions of LLVM no longer disable the OCaml bindings when overriding
+>>> OCAMLFIND. Consequently, the build process attempts to install the bindings
+>>> to the default location on the host of /usr/lib/ocaml/llvm, causing a
+>>> permissions error and build failure.
+>>>
+>>> Additionally, LLVM has since added the variable LLVM_ENABLE_BINDINGS to
+>>> control whether bindings are enabled, so we override that to disable the
+>>> bindings.
+>>
+>> My autobuilder doesn't have ocaml libraries installed, maybe I can install them
+>> to trigger the issue.
+>>
+> 
+> That would be great. I did check the autobuilders to see if this was a
+> known issue, and didn't find any build problems but timeouts for LLVM.
 
-[1] https://github.com/visionsystemsgmbh/onrisc_br_bsp
-[2] https://github.com/visionsystemsgmbh/onrisc_br_bsp/blob/master/configs/baltos_experimental_defconfig
+Actually, the issue can't be trigged on the Fedora distribution since there is
+no ocaml-ctype package [1]. Event with Fedora 30/31 ocaml bindings are
+automatically disabled while configuring llvm:
 
-Thanks.
+"OCaml bindings disabled, need ctypes >=0.4."
 
-Yegor
+[1] https://lists.fedoraproject.org/pipermail/devel/2015-March/208677.html
 
-> Regards,
-> Yann E. MORIN.
->
-> > package/pkg-generic.mk:167: recipe for target
-> > '/home/user/buildroot/bsp-experimental/build/barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e/.stamp_downloaded'
-> > failed
-> > make[1]: *** [/home/user/buildroot/bsp-experimental/build/barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e/.stamp_downloaded]
-> > Error 1
-> > Makefile:84: recipe for target '_all' failed
-> > make: *** [_all] Error 2
-> >
-> > Any idea how to fix this?
-> >
-> > Yegor
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Best regards,
+Romain
+
+> 
+> 
+> 
+> 
+>> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+>>
+>> Best regards,
+>> Romain
+>>
+>>
+>>>
+>>> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+>>> ---
+>>>  package/llvm/llvm.mk | 3 ++-
+>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+>>> index 28ad6a5704..f1034f0365 100644
+>>> --- a/package/llvm/llvm.mk
+>>> +++ b/package/llvm/llvm.mk
+>>> @@ -193,7 +193,8 @@ LLVM_CONF_OPTS += -DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME)
+>>>  # check preventively. Building the Go and OCaml bindings is yet unsupported.
+>>>  HOST_LLVM_CONF_OPTS += \
+>>>       -DGO_EXECUTABLE=GO_EXECUTABLE-NOTFOUND \
+>>> -     -DOCAMLFIND=OCAMLFIND-NOTFOUND
+>>> +     -DOCAMLFIND=OCAMLFIND-NOTFOUND \
+>>> +     -DLLVM_ENABLE_BINDINGS=OFF
+>>>
+>>>  # Builds a release host tablegen that gets used during the LLVM build.
+>>>  HOST_LLVM_CONF_OPTS += -DLLVM_OPTIMIZED_TABLEGEN=ON
+>>>
+>>
