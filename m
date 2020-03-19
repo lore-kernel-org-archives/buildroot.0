@@ -1,106 +1,48 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Thu, 19 Mar 2020 21:20:16 +1300
-Subject: [Buildroot] [PATCH] package/syslog-ng: Bump version to 2.26.1
-In-Reply-To: <CAFOYHZD5wTHfWSabqEckEqk4n71fbuRomedjR+jazi7Q=qMUHg@mail.gmail.com>
-References: <20200316235325.26563-1-judge.packham@gmail.com>
- <20200317203422.GR19677@scaer>
- <CAFOYHZD5wTHfWSabqEckEqk4n71fbuRomedjR+jazi7Q=qMUHg@mail.gmail.com>
-Message-ID: <CAFOYHZAE2b_n0Zgu3TAfu0Y7f4kuD8dcW-7G61CkHSq3MJ0Esw@mail.gmail.com>
+From: Laurent Hartanerot <laurent.hartanerot@gmail.com>
+Date: Thu, 19 Mar 2020 10:30:57 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/rcw: add missing host-python
+ dependency
+In-Reply-To: <20200319065650.28486-1-laurent.hartanerot@gmail.com>
+References: <20200319065650.28486-1-laurent.hartanerot@gmail.com>
+Message-ID: <20200319093057.11386-1-laurent.hartanerot@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 18, 2020 at 7:33 PM Chris Packham <judge.packham@gmail.com> wrote:
->
->
->
-> On Wed, 18 Mar 2020, 9:34 AM Yann E. MORIN, <yann.morin.1998@free.fr> wrote:
->>
->> Chris, All,
->>
->> On 2020-03-17 12:53 +1300, Chris Packham spake thusly:
->> > Signed-off-by: Chris Packham <judge.packham@gmail.com>
->>
->> Applied to master, thanks.
->>
->> However, one small question: is upstream going to support both autotools
->> and cmake for the foreseeable future, or are they transitionning to
->> cmake for good (even if that takes time)?
->>
->> If the latter, then it would be nice to convert our package to use the
->> cmake infra, no?
->
->
-> As far as I know they're going to support both. I don't think there are any plans to drop autotools. I'll ask around.
->
+From: Laurent Hartanerot <laurent.hartanerot@atos.net>
 
-Got a response from syslog-ng devs[1]. autotools is supported and
-cmake does not (yet) have parity.
+The rcw tool that compiles RCW sources file need host-python
 
-[1] - https://lists.balabit.hu/pipermail/syslog-ng/2020-March/025773.html
+Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
+---
+ package/rcw/rcw.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-
->>
->> Regards,
->> Yann E. MORIN.
->>
->> > ---
->> > I've build tested this with/without Thomas DS's patch and it builds clean
->> > either way.
->> >
->> >  package/syslog-ng/syslog-ng.conf | 2 +-
->> >  package/syslog-ng/syslog-ng.hash | 2 +-
->> >  package/syslog-ng/syslog-ng.mk   | 2 +-
->> >  3 files changed, 3 insertions(+), 3 deletions(-)
->> >
->> > diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
->> > index a04a4770b1..e23d80580d 100644
->> > --- a/package/syslog-ng/syslog-ng.conf
->> > +++ b/package/syslog-ng/syslog-ng.conf
->> > @@ -1,4 +1,4 @@
->> > - at version: 3.25
->> > + at version: 3.26
->> >
->> >  source s_sys {
->> >       file("/proc/kmsg" program_override("kernel"));
->> > diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
->> > index 962c354b4c..a752db0016 100644
->> > --- a/package/syslog-ng/syslog-ng.hash
->> > +++ b/package/syslog-ng/syslog-ng.hash
->> > @@ -1,5 +1,5 @@
->> >  # Locally computed
->> > -sha256 34cb9673bcde58d543890e6c1189f466f938e199f227c524a6fa2f47f4db6817  syslog-ng-3.25.1.tar.gz
->> > +sha256 90214223864df252cea80dbb35c88a2464edcbbb2c9fbc6f6f6c13ee60cb62cd  syslog-ng-3.26.1.tar.gz
->> >  sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607  COPYING
->> >  sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
->> >  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
->> > diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
->> > index 156bd95593..203f2c96b6 100644
->> > --- a/package/syslog-ng/syslog-ng.mk
->> > +++ b/package/syslog-ng/syslog-ng.mk
->> > @@ -6,7 +6,7 @@
->> >
->> >  # When updating the version, please check at runtime if the version in
->> >  # syslog-ng.conf header needs to be updated
->> > -SYSLOG_NG_VERSION = 3.25.1
->> > +SYSLOG_NG_VERSION = 3.26.1
->> >  SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
->> >  SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
->> >  SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
->> > --
->> > 2.25.1
->> >
->> > _______________________________________________
->> > buildroot mailing list
->> > buildroot at busybox.net
->> > http://lists.busybox.net/mailman/listinfo/buildroot
->>
->> --
->> .-----------------.--------------------.------------------.--------------------.
->> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->> '------------------------------^-------^------------------^--------------------'
+diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
+index 81e22fff93..dbfeae7b21 100644
+--- a/package/rcw/rcw.mk
++++ b/package/rcw/rcw.mk
+@@ -10,6 +10,8 @@ RCW_SITE_METHOD = git
+ RCW_LICENSE = BSD-3-Clause
+ RCW_LICENSE_FILES = LICENSE
+ 
++HOST_RCW_DEPENDENCIES = host-python
++
+ RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))
+ 
+ ifneq ($(RCW_FILES),)
+@@ -39,7 +41,9 @@ endef
+ HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
+ 
+ define HOST_RCW_BUILD_CMDS
+-	python $(@D)/rcw.py -i $(@D)/custom_board/rcw/$(RCW_PROJECT) -I $(@D)/custom_board -o $(@D)/PBL.bin
++	$(HOST_DIR)/bin/python $(@D)/rcw.py \
++		-i $(@D)/custom_board/rcw/$(RCW_PROJECT) \
++		-I $(@D)/custom_board -o $(@D)/PBL.bin
+ endef
+ 
+ define HOST_RCW_INSTALL_DELIVERY_FILE
+-- 
+2.20.1
