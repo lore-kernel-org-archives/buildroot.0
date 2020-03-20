@@ -1,62 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Mar 2020 19:56:38 +0100
-Subject: [Buildroot] [git commit] boot/barebox-aux: exclude git downloads
- from hash check
-Message-ID: <20200320200717.D121782950@busybox.osuosl.org>
+Date: Fri, 20 Mar 2020 21:20:15 +0100
+Subject: [Buildroot] [PATCH v2 2/2] fs/erofs: add support for creating
+ EROFS rootfs image
+In-Reply-To: <20200320071302.GB1975@hsiangkao-HP-ZHAN-66-Pro-G1>
+References: <20200316015838.15183-1-hsiangkao@aol.com>
+ <20200316015838.15183-2-hsiangkao@aol.com>
+ <20200319174942.GF10025@scaer>
+ <20200320071302.GB1975@hsiangkao-HP-ZHAN-66-Pro-G1>
+Message-ID: <20200320202015.GM10025@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=451ee6fa5454158b5d95cef0f404c0443dde868e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Gao, All,
 
-When barebox, and thus barebox-aux, are downloaded from a git tree, then
-barebox-aux download fails because a hash check is attempted on the
-downloaded archive:
+On 2020-03-20 15:13 +0800, Gao Xiang spake thusly:
+> On Thu, Mar 19, 2020 at 06:49:42PM +0100, Yann E. MORIN wrote:
+[--SNIP--]
+> > I know the other filesystems (squashfs, jffs2...) have a choice about
+> > the compression method, but for those ther are two or more such
+> > possibilities, so it makes sense they have a choice. For erofs, not so
+> > much.
+> > As such, I have dropped the choice altogether, and just kept the single
+> > boolean to enable compression.
+> Currently, I'm fine with that as well. After LZMA algorithm is ready
+> upstream, I could submit another patch then.
 
-    Could not fetch special ref 'v2020.03.0'; assuming it is not special.
-    ERROR: No hash found for barebox-aux-v2020.03.0.tar.gz
+Yes, the choice can then be reinstated, and that would even not break
+existing configurations.
 
-This is because we only exclude from the check the archive of the bare
-barebox:
+Regards,
+Yann E. MORIN.
 
-    BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
-
-However, the default name of an archive is based on the package name,
-which for barebox-aux is not 'barebox'.
-
-Since barebox-aux really uses the exact same source as the bare barebox,
-it should also share the archive name.
-
-This has two direct consequences and advantages:
-
-  - the hash check is completely avoided for the barebox-aux archive;
-
-  - the barebox-aux archive is not downloaded as it is already
-    downloaded for barebox.
-
-Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- boot/barebox/barebox.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 3d7492598f..1efe5665de 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -25,6 +25,10 @@ $(1)_SOURCE = $$(notdir $$($(1)_TARBALL))
- else ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
- $(1)_SITE = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
- $(1)_SITE_METHOD = git
-+# Override the default value of _SOURCE to 'barebox-*' so that it is not
-+# downloaded a second time for barebox-aux; also alows avoiding the hash
-+# check:
-+$(1)_SOURCE = barebox-$$($(1)_VERSION).tar.gz
- else
- # Handle stable official Barebox versions
- $(1)_SOURCE = barebox-$$($(1)_VERSION).tar.bz2
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
