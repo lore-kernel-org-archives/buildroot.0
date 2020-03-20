@@ -1,62 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 20 Mar 2020 07:44:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump version to 7.69.1
-Message-ID: <20200320064451.791831-1-bernd.kuhls@t-online.de>
+Date: Fri, 20 Mar 2020 07:50:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x264: bump version to 20191217-2245
+Message-ID: <20200320065019.794400-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://curl.haxx.se/changes.html
-
-Removed polarssl configure options, upstream removed polarssl support:
-https://curl.haxx.se/bug/?i=4825
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcurl/libcurl.hash | 2 +-
- package/libcurl/libcurl.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/x264/x264.hash | 2 +-
+ package/x264/x264.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index e60194254e..69cf7b5398 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
+diff --git a/package/x264/x264.hash b/package/x264/x264.hash
+index 0cbdc03a9c..93242a46cc 100644
+--- a/package/x264/x264.hash
++++ b/package/x264/x264.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256 b724240722276a27f6e770b952121a3afd097129d8c9fe18e6272dc34192035a  curl-7.68.0.tar.xz
-+sha256 03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f  curl-7.69.1.tar.xz
- sha256 db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 5de2591178..7a29634c68 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+ # Locally computed
+-sha256 88bbb8f7453497be4ee85cbc6f7d27c02822c4a3744b5ae6042c9c0159ad0747  x264-snapshot-20190623-2245.tar.bz2
++sha256 0bb67d095513391e637b3b47e8efc3ba4603c3844f1b4c2690f4d36da7763055  x264-snapshot-20191217-2245.tar.bz2
+ sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index f3654d46b0..9d217d1912 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.68.0
-+LIBCURL_VERSION = 7.69.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
-@@ -22,7 +22,7 @@ LIBCURL_INSTALL_STAGING = YES
- # generate C code) isn't very useful
- LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
- 	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug \
--	--without-polarssl --disable-libcurl-option
-+	--disable-libcurl-option
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- LIBCURL_CONF_OPTS += --enable-threaded-resolver
-@@ -184,7 +184,6 @@ HOST_LIBCURL_CONF_OPTS = \
- 	--with-ssl \
- 	--without-gnutls \
- 	--without-mbedtls \
--	--without-polarssl \
- 	--without-nss
- 
- HOST_LIBCURL_POST_PATCH_HOOKS += LIBCURL_FIX_DOT_PC
+-X264_VERSION = 20190623-2245
++X264_VERSION = 20191217-2245
+ X264_SITE = http://download.videolan.org/x264/snapshots
+ X264_SOURCE = x264-snapshot-$(X264_VERSION).tar.bz2
+ X264_LICENSE = GPL-2.0+
 -- 
 2.25.0
