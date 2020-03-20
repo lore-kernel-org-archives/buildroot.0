@@ -1,10 +1,10 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Fri, 20 Mar 2020 20:35:45 -0300
-Subject: [Buildroot] [[PATCH RFC] 4/6] package/dmraid: use modules-load to
+Date: Fri, 20 Mar 2020 20:35:46 -0300
+Subject: [Buildroot] [[PATCH RFC] 5/6] package/owfs: use modules-load to
  load the kernel module
 In-Reply-To: <20200320233547.28586-1-unixmania@gmail.com>
 References: <20200320233547.28586-1-unixmania@gmail.com>
-Message-ID: <20200320233547.28586-5-unixmania@gmail.com>
+Message-ID: <20200320233547.28586-6-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,47 +19,47 @@ init script is executed.
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
-Tested on QEMU with a kernel config with MD=y and DM_<FOO>=m. Only the
-module loading was tested, since there is no RAID device.
+Tested on QEMU with a kernel config with FUSE_FS=m. Only the module
+loading was tested, since there is no 1-wire device.
 ---
- package/dmraid/S20dmraid |  3 ---
- package/dmraid/dmraid.mk | 12 ++++++++++++
- 2 files changed, 12 insertions(+), 3 deletions(-)
+ package/owfs/S60owfs |  2 --
+ package/owfs/owfs.mk | 11 +++++++++++
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/package/dmraid/S20dmraid b/package/dmraid/S20dmraid
-index b3bfdcc84b..ff325154c6 100644
---- a/package/dmraid/S20dmraid
-+++ b/package/dmraid/S20dmraid
-@@ -2,9 +2,6 @@
- 
- set -e
- 
--# try to load module in case that hasn't been done yet
--modprobe dm-mod >/dev/null 2>&1
--
+diff --git a/package/owfs/S60owfs b/package/owfs/S60owfs
+index feed676f8a..46b7ec775d 100644
+--- a/package/owfs/S60owfs
++++ b/package/owfs/S60owfs
+@@ -10,8 +10,6 @@ OWFS_ARGS=""
  case "$1" in
- 	start|"")
- 		echo "Setting up DMRAID devices..."
-diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
-index 0382cd4d99..c8facbdabd 100644
---- a/package/dmraid/dmraid.mk
-+++ b/package/dmraid/dmraid.mk
-@@ -21,4 +21,16 @@ define DMRAID_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S20dmraid
+ start)
+ 	printf "Starting ${NAME}: "
+-	# Fuse may be in a module, so try to load it
+-	modprobe -q fuse && printf "[fuse] "
+ 	mkdir -p ${OWFS_MOUNTPOINT}
+ 	start-stop-daemon -S -x ${DAEMON} -- \
+ 		--pid_file ${PID_F} -m ${OWFS_MOUNTPOINT} ${OWFS_DEVICES} \
+diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
+index ffc0b3098d..a09a4bb37b 100644
+--- a/package/owfs/owfs.mk
++++ b/package/owfs/owfs.mk
+@@ -35,6 +35,17 @@ define OWFS_CREATE_MOUNTPOINT
+ 	mkdir -p $(TARGET_DIR)/dev/1wire
  endef
- 
+ OWFS_POST_INSTALL_TARGET_HOOKS += OWFS_CREATE_MOUNTPOINT
 +ifeq ($(BR2_LINUX_KERNEL),y)
-+define DMRAID_GEN_MODULES_CONF
++define OWFS_GEN_MODULES_CONF
 +	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/modules-load.d
 +	{ \
-+		find $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/kernel/drivers/md -name 'dm[_-]mod.ko*'; \
++		find $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/kernel/fs/fuse -name 'fuse.ko*'; \
 +	} 2> /dev/null | { \
 +		sed 's:^.*/::; s:\.ko[^ ]*::'; \
-+	} > $(TARGET_DIR)/etc/modules-load.d/20-dmraid.conf
++	} > $(TARGET_DIR)/etc/modules-load.d/60-owfs.conf
 +endef
-+DMRAID_TARGET_FINALIZE_HOOKS += DMRAID_GEN_MODULES_CONF
++OWFS_TARGET_FINALIZE_HOOKS += OWFS_GEN_MODULES_CONF
 +endif
-+
- $(eval $(autotools-package))
+ else
+ OWFS_CONF_OPTS += --disable-owfs
+ endif
 -- 
 2.18.2
