@@ -1,66 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Mar 2020 21:49:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ytree: bump version to 2.02
-In-Reply-To: <20200318213913.315703-1-bernd.kuhls@t-online.de>
-References: <20200318213913.315703-1-bernd.kuhls@t-online.de>
-Message-ID: <20200320204943.GR10025@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 20 Mar 2020 21:53:48 +0100
+Subject: [Buildroot] [git commit] package/x264: bump version to 20191217-2245
+Message-ID: <20200320204059.567B082AB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2c7122549fdc134ce9aa802253581397a3f0102e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-18 22:39 +0100, Bernd Kuhls spake thusly:
-> Changelog: https://www.han.de/~werner/ytree.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x264/x264.hash | 2 +-
+ package/x264/x264.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/ytree/ytree.hash | 2 +-
->  package/ytree/ytree.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/ytree/ytree.hash b/package/ytree/ytree.hash
-> index 34ec8fefda..8886f8db47 100644
-> --- a/package/ytree/ytree.hash
-> +++ b/package/ytree/ytree.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256 da8ecaf8e15f8b0d3077ea88da8db9cd607f72ed2a51e91a24d6ef3ff017c6bf  ytree-2.00.tar.gz
-> +sha256 e5bf41ab6bee59cf1e8fc0ca429e9a18e6aa83823f30f5807042b04c88a0e0ec  ytree-2.02.tar.gz
->  sha256 eb6bf7204569b4fe8eaf9d4dffc57e44047c5efb5deba1b2d99069ddbc99d031  COPYING
-> diff --git a/package/ytree/ytree.mk b/package/ytree/ytree.mk
-> index 5a90264f42..48b3f7eff9 100644
-> --- a/package/ytree/ytree.mk
-> +++ b/package/ytree/ytree.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -YTREE_VERSION = 2.00
-> +YTREE_VERSION = 2.02
->  YTREE_SITE = https://www.han.de/~werner
->  YTREE_LICENSE = GPL-2.0+
->  YTREE_LICENSE_FILES = COPYING
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/x264/x264.hash b/package/x264/x264.hash
+index 0cbdc03a9c..93242a46cc 100644
+--- a/package/x264/x264.hash
++++ b/package/x264/x264.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 88bbb8f7453497be4ee85cbc6f7d27c02822c4a3744b5ae6042c9c0159ad0747  x264-snapshot-20190623-2245.tar.bz2
++sha256 0bb67d095513391e637b3b47e8efc3ba4603c3844f1b4c2690f4d36da7763055  x264-snapshot-20191217-2245.tar.bz2
+ sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index f3654d46b0..9d217d1912 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-X264_VERSION = 20190623-2245
++X264_VERSION = 20191217-2245
+ X264_SITE = http://download.videolan.org/x264/snapshots
+ X264_SOURCE = x264-snapshot-$(X264_VERSION).tar.bz2
+ X264_LICENSE = GPL-2.0+
