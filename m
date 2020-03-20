@@ -1,40 +1,86 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 20 Mar 2020 18:29:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libostree: disable introspection
-Message-ID: <20200320172948.1971589-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 20 Mar 2020 19:45:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump version to 7.69.1
+In-Reply-To: <20200320064451.791831-1-bernd.kuhls@t-online.de>
+References: <20200320064451.791831-1-bernd.kuhls@t-online.de>
+Message-ID: <20200320184513.GK10025@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build fails if gobject-introspection is built before libostree:
+Bernd, All,
 
-./.libs/libostree-1.so: error adding symbols: File in wrong format
-collect2: error: ld returned 1 exit status
-src/libostree/ostree-repo-deprecated.h:28: Warning: OSTree: symbol='G_GNUC_DEPRECATED_FOR': Skipping foreign symbol from namespace Gio
-linking of temporary binary failed: Command '['/bin/bash', './libtool', '--mode=link', '--tag=CC', '--silent', 'gcc', '-o', '/home/buildroot/autobuild/instance-2/output-1/build/libostree-2019.6/tmp-introspectvtkql2xj/OSTree-1.0', '-export-dynamic', '-D_LARGEFILE_SOURCE', '-D_LARGEFILE64_SOURCE', '-D_FILE_OFFSET_BITS=64', '-D_LARGEFILE_SOURCE', '-D_LARGEFILE64_SOURCE', '-D_FILE_OFFSET_BITS=64', '-Os', '/home/buildroot/autobuild/instance-2/output-1/build/libostree-2019.6/tmp-introspectvtkql2xj/OSTree-1.0.o', '-L.', 'libostree-1.la', '-L/home/buildroot/autobuild/instance-2/output-1/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib', '-lgio-2.0', '-lgobject-2.0', '-Wl,--export-dynamic', '-lgmodule-2.0', '-pthread', '-lglib-2.0', '-lglib-2.0']' returned non-zero exit status 1.
-/home/buildroot/autobuild/instance-2/output-1/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/../share/gobject-introspection-1.0/Makefile.introspection:155: recipe for target 'OSTree-1.0.gir' failed
+On 2020-03-20 07:44 +0100, Bernd Kuhls spake thusly:
+> Changelog: https://curl.haxx.se/changes.html
+> 
+> Removed polarssl configure options, upstream removed polarssl support:
+> https://curl.haxx.se/bug/?i=4825
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Fixes:
- - http://autobuild.buildroot.org/results/f8a14307e6feff61acd963d6cd2aac289e6d1647
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libostree/libostree.mk | 1 +
- 1 file changed, 1 insertion(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index bdbe6b5aba..ff763b20f9 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -21,6 +21,7 @@ LIBOSTREE_CONF_OPTS += \
- 	--disable-gtk-doc \
- 	--disable-gtk-doc-html \
- 	--disable-gtk-doc-pdf \
-+	--disable-introspection \
- 	--disable-man
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> ---
+>  package/libcurl/libcurl.hash | 2 +-
+>  package/libcurl/libcurl.mk   | 5 ++---
+>  2 files changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+> index e60194254e..69cf7b5398 100644
+> --- a/package/libcurl/libcurl.hash
+> +++ b/package/libcurl/libcurl.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256 b724240722276a27f6e770b952121a3afd097129d8c9fe18e6272dc34192035a  curl-7.68.0.tar.xz
+> +sha256 03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f  curl-7.69.1.tar.xz
+>  sha256 db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index 5de2591178..7a29634c68 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBCURL_VERSION = 7.68.0
+> +LIBCURL_VERSION = 7.69.1
+>  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+>  LIBCURL_SITE = https://curl.haxx.se/download
+>  LIBCURL_DEPENDENCIES = host-pkgconf \
+> @@ -22,7 +22,7 @@ LIBCURL_INSTALL_STAGING = YES
+>  # generate C code) isn't very useful
+>  LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
+>  	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug \
+> -	--without-polarssl --disable-libcurl-option
+> +	--disable-libcurl-option
+>  
+>  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+>  LIBCURL_CONF_OPTS += --enable-threaded-resolver
+> @@ -184,7 +184,6 @@ HOST_LIBCURL_CONF_OPTS = \
+>  	--with-ssl \
+>  	--without-gnutls \
+>  	--without-mbedtls \
+> -	--without-polarssl \
+>  	--without-nss
+>  
+>  HOST_LIBCURL_POST_PATCH_HOOKS += LIBCURL_FIX_DOT_PC
+> -- 
+> 2.25.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
