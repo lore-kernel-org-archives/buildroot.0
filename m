@@ -1,66 +1,46 @@
-From: Juerg Haefliger <juergh@gmail.com>
-Date: Fri, 20 Mar 2020 07:23:30 +0100
-Subject: [Buildroot] Problems with special characters in filenames
-In-Reply-To: <20200318205428.6dec3cb9@gmx.net>
-References: <CADLDEKtQdEPVwiKiYHrjpRc6On4sMhHbDRSU4UWq9wnmx2xEEg@mail.gmail.com>
- <20200318205428.6dec3cb9@gmx.net>
-Message-ID: <CADLDEKtOuRg7w+D00-5Z=Ra6SiQGJXjJkiY9yR6ZHct9nVoD2w@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 20 Mar 2020 07:36:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to 7.4.4
+Message-ID: <20200320063652.684612-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 18, 2020 at 8:54 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> Hello Juerg,
->
-> On Sat, 14 Mar 2020 13:03:07 +0100, Juerg Haefliger <juergh@gmail.com> wrote:
->
-> > Hi,
-> >
-> > I have filenames with umlauts (special German characters) that are
-> > displayed as '??' in busybox shell. I've tried the below config
-> > changes to get those umlauts to display properly but it's  not
-> > working. What am I missing?
->
-> Maybe
->         $ export LANG=en_US.utf8
-> or
->         $ export LANG=de_CH.utf8
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.4
 
-AH, yes. That helps :-)
+Fixes CVE-2020-7064, CVE-2020-7065 & CVE-2020-7066.
 
-Thanks a lot for the hint!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-...Juerg
-
-> Regards,
-> Peter
->
-> >
-> > Thanks
-> > ...Juerg
-> >
-> > - BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> > +BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> > +# BR2_ENABLE_LOCALE_PURGE is not set
-> > +BR2_GENERATE_LOCALE="en_US de_CH"
-> >
-> > busybox config fragment:
-> > CONFIG_LOCALE_SUPPORT=y
-> > CONFIG_UNICODE_SUPPORT=y
-> > # CONFIG_UNICODE_USING_LOCALE is not set
-> > CONFIG_FEATURE_CHECK_UNICODE_IN_ENV=y
-> > CONFIG_SUBST_WCHAR=63
-> > CONFIG_LAST_SUPPORTED_WCHAR=767
-> > CONFIG_UNICODE_COMBINING_WCHARS=y
-> > CONFIG_UNICODE_WIDE_WCHARS=y
-> > # CONFIG_UNICODE_BIDI_SUPPORT is not set
-> > # CONFIG_UNICODE_NEUTRAL_TABLE is not set
-> > # CONFIG_UNICODE_PRESERVE_BROKEN is not set
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
+diff --git a/package/php/php.hash b/package/php/php.hash
+index a01e936016..4584524f1c 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256 cf1f856d877c268124ded1ede40c9fb6142b125fdaafdc54f855120b8bc6982a  php-7.4.3.tar.xz
++sha256 1873c4cefdd3df9a78dcffb2198bba5c2f0464f55c9c960720c84df483fca74c  php-7.4.4.tar.xz
+ 
+ # License file
+ sha256 0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index c0abecad19..f62204c2a5 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.3
++PHP_VERSION = 7.4.4
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
+-- 
+2.25.0
