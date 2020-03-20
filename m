@@ -1,72 +1,99 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 20 Mar 2020 08:48:53 +0100
-Subject: [Buildroot] [PATCH] boot/barebox-aux: exclude git downloads
- from hash check
-In-Reply-To: <20200319215657.5419-1-yann.morin.1998@free.fr>
-References: <20200319215657.5419-1-yann.morin.1998@free.fr>
-Message-ID: <CAGm1_ks_LMSKuBj_qBAbY0c6PsfBOx+jec6+CKTAD+wezeiLvQ@mail.gmail.com>
+Date: Fri, 20 Mar 2020 08:50:51 +0100
+Subject: [Buildroot] [git commit] boot/barebox: license files hashes
+ only valid for latest version
+In-Reply-To: <20200319215955.GI10025@scaer>
+References: <20200206193221.B87B38D427@busybox.osuosl.org>
+ <CAGm1_kvY1+5QbCX=vTB6AYRVESTVntm9AT+1tiSVifV8jH8Qyg@mail.gmail.com>
+ <20200319180446.GH10025@scaer>
+ <CAGm1_ktj7smV2dxvFg1b=NLG55f+JwZy63+ZOHoj3bCuVJf2tA@mail.gmail.com>
+ <20200319215955.GI10025@scaer>
+Message-ID: <CAGm1_ktJPOpHKOqiFCFOJf9uY-M1MOQT4sydvBWgeHjQt3mZbg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 19, 2020 at 10:57 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+On Thu, Mar 19, 2020 at 11:00 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
-> When barebox, and thus barebox-aux, are downloaded from a git tree, then
-> barebox-aux download fails because a hash check is attempted on the
-> downloaded archive:
+> Yegor, All,
 >
->     Could not fetch special ref 'v2020.03.0'; assuming it is not special.
->     ERROR: No hash found for barebox-aux-v2020.03.0.tar.gz
+> On 2020-03-19 21:41 +0100, Yegor Yefremov spake thusly:
+> > On Thu, Mar 19, 2020 at 7:04 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > On 2020-03-19 14:32 +0100, Yegor Yefremov spake thusly:
+> [--SNIP--]
+> > > > This approach works with barebox. But when I also use barebox-aux from
+> > > > git (for am335x), I get the following error:
+> > > >
+> > > > ERROR: No hash found for barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e.tar.gz
+> [--SNIP--]
+> > > Care to provide a defconfig, or even just the URL to that git repo,
+> > > please?
+> >
+> > You can take our BSP [1] and this defconfig [2] to reproduce this
+> > issue. Just replace barebox version to the official barebox git and
+> > use the latest commit ID.
+> > am335x requires two images MLO and barebox.bin so it has to use both
+> > barebox and barebox-aux.
+> >
+> > [1] https://github.com/visionsystemsgmbh/onrisc_br_bsp
+> > [2] https://github.com/visionsystemsgmbh/onrisc_br_bsp/blob/master/configs/baltos_experimental_defconfig
 >
-> This is because we only exclude from the check the archive of the bare
-> barebox:
+> This is not really a minimal defconfig, and does not use stock
+> Buildroot, so I came up with one by myself:
 >
->     BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
+>     BR2_arm=y
+>     BR2_cortex_a7=y
+>     BR2_TOOLCHAIN_EXTERNAL=y
+>     BR2_TARGET_BAREBOX=y
+>     BR2_TARGET_BAREBOX_CUSTOM_GIT=y
+>     BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL="https://git.pengutronix.de/git/barebox"
+>     BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION="v2020.03.0"
+>     BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="foo"
+>     BR2_TARGET_BAREBOX_AUX=y
+>     BR2_TARGET_BAREBOX_AUX_BOARD_DEFCONFIG="bar"
 >
-> However, the default name of an archive is based on the package name,
-> which for barebox-aux is not 'barebox'.
+> And ran 'make source', to indeed get the same problem.
 >
-> Since barebox-aux really uses the exact same source as the bare barebox,
-> it should also share the archive name.
+> I've sent two related patches to fix the issue:
 >
-> This has two direct consequences and advantages:
->
->   - the hash check is completely avoided for the barebox-aux archive;
->
->   - the barebox-aux archive is not downloaded as it is already
->     downloaded for barebox.
->
-> Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
-
->
-> ---
-> Note: that last claim about the download being done only once requires
-> that a previous patch be applied first (with typoes fixed):
 >     https://patchwork.ozlabs.org/patch/1258482/
-> ---
->  boot/barebox/barebox.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>     https://patchwork.ozlabs.org/patch/1258485/
 >
-> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> index 3d7492598f..1efe5665de 100644
-> --- a/boot/barebox/barebox.mk
-> +++ b/boot/barebox/barebox.mk
-> @@ -25,6 +25,10 @@ $(1)_SOURCE = $$(notdir $$($(1)_TARBALL))
->  else ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
->  $(1)_SITE = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
->  $(1)_SITE_METHOD = git
-> +# Override the default value of _SOURCE to 'barebox-*' so that it is not
-> +# downloaded a second time for barebox-aux; also alows avoiding the hash
-> +# check:
-> +$(1)_SOURCE = barebox-$$($(1)_VERSION).tar.gz
->  else
->  # Handle stable official Barebox versions
->  $(1)_SOURCE = barebox-$$($(1)_VERSION).tar.bz2
+> Only the second is required to fix the issue. The first one is a bonus
+> to avoid downloading twice.
+>
+> Care to test them, please?
+
+Working like a charm. Thanks for a quick fix.
+
+Yegor
+
+> > > > package/pkg-generic.mk:167: recipe for target
+> > > > '/home/user/buildroot/bsp-experimental/build/barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e/.stamp_downloaded'
+> > > > failed
+> > > > make[1]: *** [/home/user/buildroot/bsp-experimental/build/barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e/.stamp_downloaded]
+> > > > Error 1
+> > > > Makefile:84: recipe for target '_all' failed
+> > > > make: *** [_all] Error 2
+> > > >
+> > > > Any idea how to fix this?
+> > > >
+> > > > Yegor
+> > >
+> > > --
+> > > .-----------------.--------------------.------------------.--------------------.
+> > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > > '------------------------------^-------^------------------^--------------------'
+>
 > --
-> 2.20.1
->
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
