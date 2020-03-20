@@ -1,10 +1,10 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Fri, 20 Mar 2020 20:35:43 -0300
-Subject: [Buildroot] [[PATCH RFC] 2/6] package/busybox: add modules-load
- init script
+Date: Fri, 20 Mar 2020 20:35:42 -0300
+Subject: [Buildroot] [[PATCH RFC] 1/6] package/kmod: add modules-load init
+ script
 In-Reply-To: <20200320233547.28586-1-unixmania@gmail.com>
 References: <20200320233547.28586-1-unixmania@gmail.com>
-Message-ID: <20200320233547.28586-3-unixmania@gmail.com>
+Message-ID: <20200320233547.28586-2-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,53 +16,144 @@ From: Carlos Santos <unixmania@gmail.com>
 Use some scripting to mimic the systemd "modules-load" and the OpenRC
 "modules" services (load kernel modules based on static configuration).
 
-At the moment package/busybox/S02modules-load is a symlink to the kmod
-script, since it works with both versions of the "modprobe" utility.
+The configuration files should simply contain a list of kernel module
+names to load, separated by newlines. Empty lines and lines whose first
+non-whitespace character is # or ; are ignored.
+
+The configuration directory list and file format is the same as the one
+described in modules-load.d(5). Files are loaded in the following order:
+
+  /etc/modules-load.d/*.conf
+  /run/modules-load.d/*.conf
+  /usr/lib/modules-load.d/*.conf
+
+This roughly mimics the logic used by systemd but the files are not
+sorted by their filename in lexicographic order as systemd does.
+
+Notice that OpenRC uses /etc/modules-load.d/*.conf, only, and does not
+ignore lines beginning with ';'.
+
+The file redirections do the following:
+
+- stdout is redirected to syslog with facility.level "kern.info"
+- stderr is redirected to syslog with facility.level "kern.err"
+- file dscriptor 4 is used to pass the result to the "start" function.
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
- package/busybox/S02modules-load |  1 +
- package/busybox/busybox.mk      | 12 ++++++++++++
- 2 files changed, 13 insertions(+)
- create mode 120000 package/busybox/S02modules-load
 
-diff --git a/package/busybox/S02modules-load b/package/busybox/S02modules-load
-new file mode 120000
-index 0000000000..84edaae3d7
+foo
+---
+ package/kmod/S02modules-load | 85 ++++++++++++++++++++++++++++++++++++
+ package/kmod/kmod.mk         |  5 +++
+ 2 files changed, 90 insertions(+)
+ create mode 100644 package/kmod/S02modules-load
+
+diff --git a/package/kmod/S02modules-load b/package/kmod/S02modules-load
+new file mode 100644
+index 0000000000..099cc63023
 --- /dev/null
-+++ b/package/busybox/S02modules-load
-@@ -0,0 +1 @@
-+../kmod/S02modules-load
-\ No newline at end of file
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index e2a4a8c5c7..767499b0c0 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -264,6 +264,17 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
- endef
++++ b/package/kmod/S02modules-load
+@@ -0,0 +1,85 @@
++#!/bin/sh
++
++PROGRAM="modules-load"
++
++MODULES_LOAD_ARGS=""
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$PROGRAM" ] && . "/etc/default/$PROGRAM"
++
++# Use some scripting to mimic the systemd "modules-load" and the OpenRC
++# "modules" services (load kernel modules based on static configuration).
++# 
++# The configuration files should simply contain a list of kernel module
++# names to load, separated by newlines. Empty lines and lines whose first
++# non-whitespace character is # or ; are ignored.
++# 
++# The configuration directory list and file format is the same as the one
++# described in modules-load.d(5). Files are loaded in the following order:
++# 
++#   /etc/modules-load.d/*.conf
++#   /run/modules-load.d/*.conf
++#   /usr/lib/modules-load.d/*.conf
++# 
++# This roughly mimics the logic used by systemd but the files are not sorted
++# by their filename in lexicographic order as systemd does.
++# 
++# Notice that OpenRC uses /etc/modules-load.d/*.conf, only, and does not
++# ignore lines beginning with ';'.
++#
++# The file redirections do the following:
++#
++# - stdout is redirected to syslog with facility.level "kern.info"
++# - stderr is redirected to syslog with facility.level "kern.err"
++# - file dscriptor 4 is used to pass the result to the "start" function.
++
++MODULES_LOAD_D="/etc/modules-load.d/ /run/modules-load.d/ /usr/lib/modules-load.d/"
++
++# Use some scripting to mimic the systemd-modules-load utility provided by
++# systemd, reporting results to syslog. Uers not interested on messages can
++# put "-q" in MODULES_LOAD_ARGS.
++
++run_program() {
++	# shellcheck disable=SC2086 # we need the word splitting
++	find $MODULES_LOAD_D -maxdepth 1 -name '*.conf' -print0 2> /dev/null | \
++	xargs -0 -r -n 1 readlink -f | {
++		prog_status="OK"
++		while :; do
++			read -r file
++			if [ -z "$file" ]; then
++				echo "$prog_status" >&4
++				break
++			fi
++			echo "* Applying $file ..."
++			while :; do
++				read -r mod || break
++				case "$mod" in
++					''|'#'*|';'*) ;;
++					*) /sbin/modprobe -s "$mod" || prog_status="FAIL"
++				esac
++			done < "$file"
++		done 2>&1 >&3 | /usr/bin/logger -t "$PROGRAM" -p kern.err
++	} 3>&1 | /usr/bin/logger -t "$PROGRAM" -p kern.info
++}
++
++start() {
++	printf '%s %s: ' "$1" "$PROGRAM"
++	status=$(run_program 4>&1)
++	echo "$status"
++	if [ "$status" = "OK" ]; then
++		return 0
++	fi
++	return 1
++}
++
++case "$1" in
++	start)
++		start "Running";;
++	restart|reload)
++		start "Rerunning";;
++	stop)
++		:;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index e2dfea5c7b..31bdac6d81 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -60,6 +60,11 @@ else
+ KMOD_BIN_PATH = ../usr/bin/kmod
  endif
  
-+# Only install our modules-load script if no other package does it.
-+ifeq ($(BR2_PACKAGE_KMOD_TOOLS),)
-+define BUSYBOX_INSTALL_MODULES_SCRIPT
-+	if grep -q CONFIG_MODPROBE=y $(@D)/.config; \
-+	then \
-+		$(INSTALL) -m 0755 -D package/busybox/S02modules-load \
-+			$(TARGET_DIR)/etc/init.d/S02modules-load; \
-+	fi
++define KMOD_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/kmod/S02modules-load \
++		$(TARGET_DIR)/etc/init.d/S02modules-load
 +endef
-+endif
 +
- # Only install our sysctl scripts if no other package does it.
- ifeq ($(BR2_PACKAGE_PROCPS_NG),)
- define BUSYBOX_INSTALL_SYSCTL_SCRIPT
-@@ -368,6 +379,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
-+	$(BUSYBOX_INSTALL_MODULES_SCRIPT)
- 	$(BUSYBOX_INSTALL_SYSCTL_SCRIPT)
- 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
- endef
+ define KMOD_INSTALL_TOOLS
+ 	for i in depmod insmod lsmod modinfo modprobe rmmod; do \
+ 		ln -sf $(KMOD_BIN_PATH) $(TARGET_DIR)/sbin/$$i; \
 -- 
 2.18.2
