@@ -1,46 +1,62 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 20 Mar 2020 07:36:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to 7.4.4
-Message-ID: <20200320063652.684612-1-bernd.kuhls@t-online.de>
+Date: Fri, 20 Mar 2020 07:44:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump version to 7.69.1
+Message-ID: <20200320064451.791831-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.4
+Changelog: https://curl.haxx.se/changes.html
 
-Fixes CVE-2020-7064, CVE-2020-7065 & CVE-2020-7066.
+Removed polarssl configure options, upstream removed polarssl support:
+https://curl.haxx.se/bug/?i=4825
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcurl/libcurl.hash | 2 +-
+ package/libcurl/libcurl.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index a01e936016..4584524f1c 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256 cf1f856d877c268124ded1ede40c9fb6142b125fdaafdc54f855120b8bc6982a  php-7.4.3.tar.xz
-+sha256 1873c4cefdd3df9a78dcffb2198bba5c2f0464f55c9c960720c84df483fca74c  php-7.4.4.tar.xz
- 
- # License file
- sha256 0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index c0abecad19..f62204c2a5 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index e60194254e..69cf7b5398 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b724240722276a27f6e770b952121a3afd097129d8c9fe18e6272dc34192035a  curl-7.68.0.tar.xz
++sha256 03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f  curl-7.69.1.tar.xz
+ sha256 db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 5de2591178..7a29634c68 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.4.3
-+PHP_VERSION = 7.4.4
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-LIBCURL_VERSION = 7.68.0
++LIBCURL_VERSION = 7.69.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+@@ -22,7 +22,7 @@ LIBCURL_INSTALL_STAGING = YES
+ # generate C code) isn't very useful
+ LIBCURL_CONF_OPTS = --disable-manual --disable-ntlm-wb \
+ 	--enable-hidden-symbols --with-random=/dev/urandom --disable-curldebug \
+-	--without-polarssl --disable-libcurl-option
++	--disable-libcurl-option
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ LIBCURL_CONF_OPTS += --enable-threaded-resolver
+@@ -184,7 +184,6 @@ HOST_LIBCURL_CONF_OPTS = \
+ 	--with-ssl \
+ 	--without-gnutls \
+ 	--without-mbedtls \
+-	--without-polarssl \
+ 	--without-nss
+ 
+ HOST_LIBCURL_POST_PATCH_HOOKS += LIBCURL_FIX_DOT_PC
 -- 
 2.25.0
