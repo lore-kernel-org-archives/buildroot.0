@@ -1,49 +1,46 @@
-From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Date: Fri, 20 Mar 2020 13:07:20 +0300
-Subject: [Buildroot] [PATCH] package/radvd: drop dependency on flex runtime
- library
-Message-ID: <20200320100720.1850-1-alexander.i.mukhin@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 20 Mar 2020 12:33:51 +0000
+Subject: [Buildroot] [Bug 12681] New: Mongodb fails to build from sources
+Message-ID: <bug-12681-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Radvd has its own main(), and does not use yywrap() from libfl.so,
-because scanner.l module contains noyywrap option. So, none of the
-functions exported by libfl.so are used, and there's no need to have
-the flex runtime on target.
+https://bugs.busybox.net/show_bug.cgi?id=12681
 
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
----
- package/radvd/Config.in | 1 -
- package/radvd/radvd.mk  | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+            Bug ID: 12681
+           Summary: Mongodb fails to build from sources
+           Product: buildroot
+           Version: 2020.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: zinosat at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/radvd/Config.in b/package/radvd/Config.in
-index fa5a20c4c1..f1df0c3cb8 100644
---- a/package/radvd/Config.in
-+++ b/package/radvd/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_RADVD
- 	bool "radvd"
- 	depends on BR2_USE_MMU # fork()
--	select BR2_PACKAGE_FLEX
- 	help
- 	  IPv6 Router Advertisement Daemon.
- 
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 3358264f18..ba0c78bd1e 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -6,7 +6,7 @@
- 
- RADVD_VERSION = 2.18
- RADVD_SITE = http://www.litech.org/radvd/dist
--RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
-+RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf
- # We need to ignore <linux/if_arp.h>, because radvd already includes
- # <net/if_arp.h>, which conflicts with <linux/if_arp.h>.
- RADVD_CONF_ENV = \
+my defconfig is based on pc_x86_64_bios_defconfig
+I got failures both in br 2020.2 and 2019.11.1. 
+
+it works in 2019.05
+
+I'm trying to revert mongodb and dependencies to the 2019.05 situation: no luck
+so far
+
+revert 2c938815d79d9f351512595a0a67ad25f6f3151d python-yaml
+revert 68dd5ab1affe95bc031f2a2a66317ba9244a1941 yaml-cpp
+revert 5a82a984b5c9d28fa62a3783bcc90b3addab21a4 scons
+revert 165e9c163c4d28025a5e1d3e5e6cfd0ad6476a7e mongodb
+
+error log available here:
+https://pastebin.com/vRPKixBy
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
