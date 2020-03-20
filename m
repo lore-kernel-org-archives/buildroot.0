@@ -1,86 +1,56 @@
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Fri, 20 Mar 2020 16:25:17 +0100
-Subject: [Buildroot] [PATCH v6 2/2] support/testing: add netdata test
-In-Reply-To: <20200320152517.3108669-1-m.niestroj@grinn-global.com>
-References: <20200320152517.3108669-1-m.niestroj@grinn-global.com>
-Message-ID: <20200320152517.3108669-2-m.niestroj@grinn-global.com>
+Date: Fri, 20 Mar 2020 16:35:03 +0100
+Subject: [Buildroot] [PATCH 1/3] board/chiliboard: drop custom post-image
+ script
+Message-ID: <20200320153505.3112143-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Instead use generic genimage.sh script.
+
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
-changes v4 -> v6: none
+ board/grinn/chiliboard/post-image.sh | 14 --------------
+ configs/grinn_chiliboard_defconfig   |  3 ++-
+ 2 files changed, 2 insertions(+), 15 deletions(-)
+ delete mode 100755 board/grinn/chiliboard/post-image.sh
 
-changes v3 -> v4:
- - do not launch netdata explicitly, but rely on init script to run netdata on
-   default port
-
-changes v2 -> v3: none
-
-changes v1 -> v2:
- - squash DEVELOPERS entry from another commit (suggested by Arnout)
-
- .gitlab-ci.yml                                |  1 +
- DEVELOPERS                                    |  1 +
- support/testing/tests/package/test_netdata.py | 23 +++++++++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 support/testing/tests/package/test_netdata.py
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 4b84a5b709..0b8050a7fe 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -421,6 +421,7 @@ tests.package.test_luasyslog.TestLuajitLuasyslog: { extends: .runtime_test }
- tests.package.test_luvi.TestLuvi: { extends: .runtime_test }
- tests.package.test_lxc.TestLxc: { extends: .runtime_test }
- tests.package.test_lzlib.TestLuaLzlib: { extends: .runtime_test }
-+tests.package.test_netdata.TestNetdata: { extends: .runtime_test }
- tests.package.test_openjdk.TestOpenJdk: { extends: .runtime_test }
- tests.package.test_opkg.TestOpkg: { extends: .runtime_test }
- tests.package.test_perl.TestPerl: { extends: .runtime_test }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1a39112386..dcd4c75be0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1558,6 +1558,7 @@ F:	package/murata-cyw-fw/
- F:	package/netdata/
- F:	package/rs485conf/
- F:	package/turbolua/
-+F:	support/testing/tests/package/test_netdata.py
- 
- N:	Marcus Folkesson <marcus.folkesson@gmail.com>
- F:	package/libostree/
-diff --git a/support/testing/tests/package/test_netdata.py b/support/testing/tests/package/test_netdata.py
-new file mode 100644
-index 0000000000..7418b762a4
---- /dev/null
-+++ b/support/testing/tests/package/test_netdata.py
-@@ -0,0 +1,23 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestNetdata(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_NETDATA=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        cmd = "wget localhost:19999 -O - | grep '<title>netdata dashboard</title>'"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
+diff --git a/board/grinn/chiliboard/post-image.sh b/board/grinn/chiliboard/post-image.sh
+deleted file mode 100755
+index 1a076eecb8..0000000000
+--- a/board/grinn/chiliboard/post-image.sh
++++ /dev/null
+@@ -1,14 +0,0 @@
+-#!/usr/bin/env bash
+-
+-BOARD_DIR="$(dirname $0)"
+-GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+-GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+-
+-rm -rf "${GENIMAGE_TMP}"
+-
+-genimage \
+-    --rootpath "${TARGET_DIR}" \
+-    --tmppath "${GENIMAGE_TMP}" \
+-    --inputpath "${BINARIES_DIR}" \
+-    --outputpath "${BINARIES_DIR}" \
+-    --config "${GENIMAGE_CFG}"
+diff --git a/configs/grinn_chiliboard_defconfig b/configs/grinn_chiliboard_defconfig
+index ab89bbf8f3..f3edf90de4 100644
+--- a/configs/grinn_chiliboard_defconfig
++++ b/configs/grinn_chiliboard_defconfig
+@@ -2,7 +2,8 @@ BR2_arm=y
+ BR2_cortex_a8=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
+ BR2_SYSTEM_DHCP="eth0"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/grinn/chiliboard/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/grinn/chiliboard/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.1"
 -- 
 2.25.0
