@@ -1,43 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Mar 2020 21:20:15 +0100
-Subject: [Buildroot] [PATCH v2 2/2] fs/erofs: add support for creating
- EROFS rootfs image
-In-Reply-To: <20200320071302.GB1975@hsiangkao-HP-ZHAN-66-Pro-G1>
-References: <20200316015838.15183-1-hsiangkao@aol.com>
- <20200316015838.15183-2-hsiangkao@aol.com>
- <20200319174942.GF10025@scaer>
- <20200320071302.GB1975@hsiangkao-HP-ZHAN-66-Pro-G1>
-Message-ID: <20200320202015.GM10025@scaer>
+Date: Fri, 20 Mar 2020 21:33:30 +0100
+Subject: [Buildroot] [git commit] package/tor: security bump version to
+ 0.4.2.7
+Message-ID: <20200320202211.2720F81E89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gao, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b356d9f92be20971877cd0657c4a9bd080056de1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-20 15:13 +0800, Gao Xiang spake thusly:
-> On Thu, Mar 19, 2020 at 06:49:42PM +0100, Yann E. MORIN wrote:
-[--SNIP--]
-> > I know the other filesystems (squashfs, jffs2...) have a choice about
-> > the compression method, but for those ther are two or more such
-> > possibilities, so it makes sense they have a choice. For erofs, not so
-> > much.
-> > As such, I have dropped the choice altogether, and just kept the single
-> > boolean to enable compression.
-> Currently, I'm fine with that as well. After LZMA algorithm is ready
-> upstream, I could submit another patch then.
+Release notes: https://blog.torproject.org/new-releases-03510-0419-0427
 
-Yes, the choice can then be reinstated, and that would even not break
-existing configurations.
+Fixes CVE-2020-10592 & CVE-2020-10593.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998 at free.fr: two spaces in hash files]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 94cb8325ff..e55f3ea3c2 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 0500102433849bbe3231c590973d126c2d2d6b3943b4b9f9962bdb108436e6c4  tor-0.4.2.6.tar.gz
+-sha256 ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
++sha256  06a1d835ddf382f6bca40a62e8fb40b71b2f73d56f0d53523c8bd5caf9b3026d  tor-0.4.2.7.tar.gz
++sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index d1caf35a9a..09f780d3f5 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.4.2.6
++TOR_VERSION = 0.4.2.7
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
