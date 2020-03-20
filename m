@@ -1,54 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 20 Mar 2020 22:48:29 +0100
-Subject: [Buildroot] [pkg-luarocks 4/6] pkg-luarocks: add support of
- host-luarocks-package
-In-Reply-To: <20190918061915.31250-4-francois.perrad@gadz.org>
-References: <20190918061915.31250-1-francois.perrad@gadz.org>
- <20190918061915.31250-4-francois.perrad@gadz.org>
-Message-ID: <20200320224829.4d267580@windsurf.home>
+Date: Fri, 20 Mar 2020 22:52:44 +0100
+Subject: [Buildroot] [git commit] package/libtommath: bump to version 1.2.0
+Message-ID: <20200320214634.2306382DED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+commit: https://git.buildroot.net/buildroot/commit/?id=5ced5910e38d84fba44c90dfc4d12a9bee377679
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Sep 2019 08:19:13 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libtommath/libtommath.hash | 2 +-
+ package/libtommath/libtommath.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->  $(2)_BUILD_OPTS		?=
-> -$(2)_NAME_UPSTREAM	?= $(1)
-> -$(2)_SUBDIR		?= $$($(2)_NAME_UPSTREAM)-$$(shell echo "$$($(2)_VERSION)" | sed -e "s/-[0-9]$$$$//")
-> -$(2)_ROCKSPEC		?= $$(call LOWERCASE,$$($(2)_NAME_UPSTREAM))-$$($(2)_VERSION).rockspec
-> -$(2)_SOURCE		?= $$(call LOWERCASE,$$($(2)_NAME_UPSTREAM))-$$($(2)_VERSION).src.rock
-> -$(2)_SITE		?= $$(call qstrip,$$(BR2_LUAROCKS_MIRROR))
-> +$(3)_NAME_UPSTREAM	?= $(1)
-> +$(3)_SUBDIR		?= $$($(3)_NAME_UPSTREAM)-$$(shell echo "$$($(3)_VERSION)" | sed -e "s/-[0-9]$$$$//")
-> +$(3)_ROCKSPEC		?= $$(call LOWERCASE,$$($(3)_NAME_UPSTREAM))-$$($(3)_VERSION).rockspec
-> +$(3)_SOURCE		?= $$(call LOWERCASE,$$($(3)_NAME_UPSTREAM))-$$($(3)_VERSION).src.rock
-> +$(3)_SITE		?= $$(call qstrip,$$(BR2_LUAROCKS_MIRROR))
-
-I think this is not good, because it means that if a package "lua-foo"
-has both a host and a target variant, then LUA_FOO_NAME_UPSTREAM will
-be defined twice by the package infrastructure.
-
-Instead, we want to do something like this:
-
-ifndef $(2)_NAME_UPSTREAM
-  ifdef $(3)_NAME_UPSTREAM
-    $(2)_NAME_UPSTREAM = $($(3)_NAME_UPSTREAM)
-  else
-    $(2)_NAME_UPSTREAM ?= $(1)
-  endif
-endif
-
-And so on for the different variables.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libtommath/libtommath.hash b/package/libtommath/libtommath.hash
+index 75aa7c7f18..fa1af5ec28 100644
+--- a/package/libtommath/libtommath.hash
++++ b/package/libtommath/libtommath.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 90466c88783d1fe9f5c2364a69f5479f10d73ed616011be6196f35f7f1537ead  ltm-1.1.0.tar.xz
++sha256 b7c75eecf680219484055fcedd686064409254ae44bc31a96c5032843c0e18b1  ltm-1.2.0.tar.xz
+ 
+ # Hashes for license files:
+ sha256 2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a  LICENSE
+diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
+index 36e7a89e6b..bd3957d6c2 100644
+--- a/package/libtommath/libtommath.mk
++++ b/package/libtommath/libtommath.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBTOMMATH_VERSION = 1.1.0
++LIBTOMMATH_VERSION = 1.2.0
+ LIBTOMMATH_SITE = https://github.com/libtom/libtommath/releases/download/v$(LIBTOMMATH_VERSION)
+ LIBTOMMATH_SOURCE = ltm-$(LIBTOMMATH_VERSION).tar.xz
+ LIBTOMMATH_LICENSE = Unlicense
