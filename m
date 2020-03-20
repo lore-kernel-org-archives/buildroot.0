@@ -1,10 +1,10 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Fri, 20 Mar 2020 20:35:44 -0300
-Subject: [Buildroot] [[PATCH RFC] 3/6] linux: run depmod in a
- target-finalize hook
+Date: Fri, 20 Mar 2020 20:35:45 -0300
+Subject: [Buildroot] [[PATCH RFC] 4/6] package/dmraid: use modules-load to
+ load the kernel module
 In-Reply-To: <20200320233547.28586-1-unixmania@gmail.com>
 References: <20200320233547.28586-1-unixmania@gmail.com>
-Message-ID: <20200320233547.28586-4-unixmania@gmail.com>
+Message-ID: <20200320233547.28586-5-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,51 +13,53 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-If a package installs a kernel module then it's necessary to run depmod
-afterwards, otherwise modprobe fails at run-time, because the module is
-not included in /lib/modules/<kernel-version>/modules.dep.
-
-Pass a dummy depmod (/dev/null) to the kernel build, since we don't want
-to run depmod after installing the kernel.
+This is compatible with BusyBox/sysvinit (via S02modules-load), OpenRC
+and systemd. It also prevents trying to load the module each time the
+init script is executed.
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- linux/linux.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Tested on QEMU with a kernel config with MD=y and DM_<FOO>=m. Only the
+module loading was tested, since there is no RAID device.
+---
+ package/dmraid/S20dmraid |  3 ---
+ package/dmraid/dmraid.mk | 12 ++++++++++++
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index f8c34c3dca..a5756148cc 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -127,12 +127,14 @@ LINUX_POST_EXTRACT_HOOKS += LINUX_XTENSA_OVERLAY_EXTRACT
- LINUX_EXTRA_DOWNLOADS += $(ARCH_XTENSA_OVERLAY_URL)
- endif
+diff --git a/package/dmraid/S20dmraid b/package/dmraid/S20dmraid
+index b3bfdcc84b..ff325154c6 100644
+--- a/package/dmraid/S20dmraid
++++ b/package/dmraid/S20dmraid
+@@ -2,9 +2,6 @@
  
-+# We don't want to run depmod after installing the kernel. It's done in a
-+# target-finalize hook, to encompass modules installed by packages.
- LINUX_MAKE_FLAGS = \
- 	HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
- 	ARCH=$(KERNEL_ARCH) \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
--	DEPMOD=$(HOST_DIR)/sbin/depmod
-+	DEPMOD="/dev/null"
+ set -e
  
- ifeq ($(BR2_REPRODUCIBLE),y)
- LINUX_MAKE_ENV += \
-@@ -534,6 +536,13 @@ define LINUX_INSTALL_TARGET_CMDS
- 	$(LINUX_INSTALL_HOST_TOOLS)
+-# try to load module in case that hasn't been done yet
+-modprobe dm-mod >/dev/null 2>&1
+-
+ case "$1" in
+ 	start|"")
+ 		echo "Setting up DMRAID devices..."
+diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
+index 0382cd4d99..c8facbdabd 100644
+--- a/package/dmraid/dmraid.mk
++++ b/package/dmraid/dmraid.mk
+@@ -21,4 +21,16 @@ define DMRAID_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S20dmraid
  endef
  
-+# Run depmod in a target-finalize hook, to encompass modules installed by
-+# packages.
-+define LINUX_RUN_DEPMOD
-+	$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED)
++ifeq ($(BR2_LINUX_KERNEL),y)
++define DMRAID_GEN_MODULES_CONF
++	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/modules-load.d
++	{ \
++		find $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/kernel/drivers/md -name 'dm[_-]mod.ko*'; \
++	} 2> /dev/null | { \
++		sed 's:^.*/::; s:\.ko[^ ]*::'; \
++	} > $(TARGET_DIR)/etc/modules-load.d/20-dmraid.conf
 +endef
-+LINUX_TARGET_FINALIZE_HOOKS += LINUX_RUN_DEPMOD
++DMRAID_TARGET_FINALIZE_HOOKS += DMRAID_GEN_MODULES_CONF
++endif
 +
- # Include all our extensions.
- #
- # Note: our package infrastructure uses the full-path of the last-scanned
+ $(eval $(autotools-package))
 -- 
 2.18.2
