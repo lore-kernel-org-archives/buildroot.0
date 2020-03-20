@@ -1,31 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 20 Mar 2020 15:50:39 +0000
-Subject: [Buildroot] [Bug 12681] Mongodb fails to build from sources
-In-Reply-To: <bug-12681-163@https.bugs.busybox.net/>
-References: <bug-12681-163@https.bugs.busybox.net/>
-Message-ID: <bug-12681-163-JPkO5ofnxR@https.bugs.busybox.net/>
+From: Robert Hammond <rob.hammondit@gmail.com>
+Date: Fri, 20 Mar 2020 16:24:52 +0000
+Subject: [Buildroot] configuration fragment file names
+Message-ID: <CAFjuYxzo4me4Lhj=gKFNWF-F81DvqWqkn72WjVSA9pVxGOrhBw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12681
+Version buildroot-2020.02
 
---- Comment #2 from Vincent Fazio <vfazio@xes-inc.com> ---
-The libyaml-cpp issue should be fixed at some point when a release is cut
-including
-https://github.com/jbeder/yaml-cpp/commit/52a1378e48e15d42a0b755af7146394c6eff998c
+Hi , I am trying to configure a Linux Kernel build using an NXP QorIQ arm64
+kernel branch.
+the configs in the kernel for this are arch/arm64/configs/defconfig
+and arch/arm64/configs/lsdk.config
 
-It should inherit the BUILD_SHARED_LIBS values defined in pkg-cmake.
+( a copy of the kernel source for this can be found here )
+https://source.codeaurora.org/external/qoriq/qoriq-components/linux
 
-Until a new version is cut, we could either hack libyaml-cpp.mk or patch
-CMakeLists.txt
+In the buildroot menu system I have selected to use the in-tree defconfig
+file which is does and picks up the arm64 default. If I don't specify the
+other fragment it builds
 
+However, I'm not having much luck in pointing it towards the other config
+fragment.
+I've tried specifying the fragment file name on it's own and with the
+relative path from the linux top level directory i.e. both just lsdk.config
+and arch/arm64/configs/lsdk.config .
 
-I haven't root-caused the mongodb issue. If it worked in 2019.05 but doesn't
-now, that seems to imply the jump from 4.0.6 to 4.0.12 caused the break.
+In both cases the error :-
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+for f in ./arch/arm64/configs/defconfig ; do if [ ! -f "${f}" ]; then
+printf "Kconfig fragment '%s' for '%s' does not exist\n" "${f}" "linux";
+exit 1; fi; done
+Kconfig fragment './arch/arm64/configs/defconfig' for 'linux' does not exist
+
+Could i get help on the correct way of specifying this?
+
+Best Regards
+
+Rob Hammond
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200320/9c23ef26/attachment.html>
