@@ -1,99 +1,61 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 20 Mar 2020 08:50:51 +0100
-Subject: [Buildroot] [git commit] boot/barebox: license files hashes
- only valid for latest version
-In-Reply-To: <20200319215955.GI10025@scaer>
-References: <20200206193221.B87B38D427@busybox.osuosl.org>
- <CAGm1_kvY1+5QbCX=vTB6AYRVESTVntm9AT+1tiSVifV8jH8Qyg@mail.gmail.com>
- <20200319180446.GH10025@scaer>
- <CAGm1_ktj7smV2dxvFg1b=NLG55f+JwZy63+ZOHoj3bCuVJf2tA@mail.gmail.com>
- <20200319215955.GI10025@scaer>
-Message-ID: <CAGm1_ktJPOpHKOqiFCFOJf9uY-M1MOQT4sydvBWgeHjQt3mZbg@mail.gmail.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Fri, 20 Mar 2020 21:59:46 +1300
+Subject: [Buildroot] [PATCH] package/syslog-ng: Update has for COPYING
+In-Reply-To: <20200319081228.26547-1-judge.packham@gmail.com>
+References: <20200319081228.26547-1-judge.packham@gmail.com>
+Message-ID: <CAFOYHZBeooStZjidQKJK4Zxdt-xFqdwVjUm2OCjdsdy6nm9Jcg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 19, 2020 at 11:00 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Yegor, All,
->
-> On 2020-03-19 21:41 +0100, Yegor Yefremov spake thusly:
-> > On Thu, Mar 19, 2020 at 7:04 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > On 2020-03-19 14:32 +0100, Yegor Yefremov spake thusly:
-> [--SNIP--]
-> > > > This approach works with barebox. But when I also use barebox-aux from
-> > > > git (for am335x), I get the following error:
-> > > >
-> > > > ERROR: No hash found for barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e.tar.gz
-> [--SNIP--]
-> > > Care to provide a defconfig, or even just the URL to that git repo,
-> > > please?
-> >
-> > You can take our BSP [1] and this defconfig [2] to reproduce this
-> > issue. Just replace barebox version to the official barebox git and
-> > use the latest commit ID.
-> > am335x requires two images MLO and barebox.bin so it has to use both
-> > barebox and barebox-aux.
-> >
-> > [1] https://github.com/visionsystemsgmbh/onrisc_br_bsp
-> > [2] https://github.com/visionsystemsgmbh/onrisc_br_bsp/blob/master/configs/baltos_experimental_defconfig
->
-> This is not really a minimal defconfig, and does not use stock
-> Buildroot, so I came up with one by myself:
->
->     BR2_arm=y
->     BR2_cortex_a7=y
->     BR2_TOOLCHAIN_EXTERNAL=y
->     BR2_TARGET_BAREBOX=y
->     BR2_TARGET_BAREBOX_CUSTOM_GIT=y
->     BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL="https://git.pengutronix.de/git/barebox"
->     BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION="v2020.03.0"
->     BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="foo"
->     BR2_TARGET_BAREBOX_AUX=y
->     BR2_TARGET_BAREBOX_AUX_BOARD_DEFCONFIG="bar"
->
-> And ran 'make source', to indeed get the same problem.
->
-> I've sent two related patches to fix the issue:
->
->     https://patchwork.ozlabs.org/patch/1258482/
->     https://patchwork.ozlabs.org/patch/1258485/
->
-> Only the second is required to fix the issue. The first one is a bonus
-> to avoid downloading twice.
->
-> Care to test them, please?
+Just noticed the typo in the subject. Can it be fixed up before it's
+applied or should i send a v2?
 
-Working like a charm. Thanks for a quick fix.
+On Thu, 19 Mar 2020, 9:12 PM Chris Packham, <judge.packham@gmail.com> wrote:
 
-Yegor
-
-> > > > package/pkg-generic.mk:167: recipe for target
-> > > > '/home/user/buildroot/bsp-experimental/build/barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e/.stamp_downloaded'
-> > > > failed
-> > > > make[1]: *** [/home/user/buildroot/bsp-experimental/build/barebox-aux-1e23cf5c7b71c29cc8dd7b0c5b80929d286b554e/.stamp_downloaded]
-> > > > Error 1
-> > > > Makefile:84: recipe for target '_all' failed
-> > > > make: *** [_all] Error 2
-> > > >
-> > > > Any idea how to fix this?
-> > > >
-> > > > Yegor
-> > >
-> > > --
-> > > .-----------------.--------------------.------------------.--------------------.
-> > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > > '------------------------------^-------^------------------^--------------------'
+> Some of the text was updated in syslog-ng-3.26.1. Update the hash
+> accordingly.
 >
+> Fixes:
+>  -
+> http://autobuild.buildroot.net/results/4e0768a5aae0f77e1382108b1ca06d0ad78f4da4
+>  -
+> http://autobuild.buildroot.net/results/7430550dfce0bcb1bc5c9361033e26651883685a
+>  -
+> http://autobuild.buildroot.net/results/56afedff96d17ab4800845d7777dd151cb431acf
+>  -
+> http://autobuild.buildroot.net/results/2cac7eeaeabf8d77724ff283d3cb9026e778635c
+>  -
+> http://autobuild.buildroot.net/results/a8189eab2a14cc5d04d90d8f1fa058b86889cc21
+>
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+> ---
+>  package/syslog-ng/syslog-ng.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/syslog-ng/syslog-ng.hash
+> b/package/syslog-ng/syslog-ng.hash
+> index a752db0016..edb7efe195 100644
+> --- a/package/syslog-ng/syslog-ng.hash
+> +++ b/package/syslog-ng/syslog-ng.hash
+> @@ -1,5 +1,5 @@
+>  # Locally computed
+>  sha256 90214223864df252cea80dbb35c88a2464edcbbb2c9fbc6f6f6c13ee60cb62cd
+> syslog-ng-3.26.1.tar.gz
+> -sha256 835219c8ca76156e6337236d1bcb8e617c0b1c2783b4a8bc478e18a86743d607
+> COPYING
+> +sha256 e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b
+> COPYING
+>  sha256 ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2
+> GPL.txt
+>  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551
+> LGPL.txt
 > --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+> 2.25.1
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200320/03d4c87d/attachment.html>
