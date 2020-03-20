@@ -1,60 +1,72 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 20 Mar 2020 08:48:36 +0100
-Subject: [Buildroot] [PATCH] boot/barebox-ayx: store downloads in same
- dir as bare barebox
-In-Reply-To: <20200319220117.GJ10025@scaer>
-References: <20200319214900.2992-1-yann.morin.1998@free.fr>
- <20200319220117.GJ10025@scaer>
-Message-ID: <CAGm1_kuQT2NxuAbT3EHEntsuZ6YmfbU0fwfsgVZxhVdMDKhWWg@mail.gmail.com>
+Date: Fri, 20 Mar 2020 08:48:53 +0100
+Subject: [Buildroot] [PATCH] boot/barebox-aux: exclude git downloads
+ from hash check
+In-Reply-To: <20200319215657.5419-1-yann.morin.1998@free.fr>
+References: <20200319215657.5419-1-yann.morin.1998@free.fr>
+Message-ID: <CAGm1_ks_LMSKuBj_qBAbY0c6PsfBOx+jec6+CKTAD+wezeiLvQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 19, 2020 at 11:01 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+On Thu, Mar 19, 2020 at 10:57 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
-> All, me,
+> When barebox, and thus barebox-aux, are downloaded from a git tree, then
+> barebox-aux download fails because a hash check is attempted on the
+> downloaded archive:
 >
-> Me: please be careful to the typo in the commit title... :-[
+>     Could not fetch special ref 'v2020.03.0'; assuming it is not special.
+>     ERROR: No hash found for barebox-aux-v2020.03.0.tar.gz
 >
-> Regards,
-> Yann E. MORIN.
+> This is because we only exclude from the check the archive of the bare
+> barebox:
 >
-> On 2020-03-19 22:49 +0100, Yann E. MORIN spake thusly:
-> > barebox and barebox-aux are really the same package, from the same URL
-> > and the same version. They deserve being stored in the same directory.
-> >
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Cc: Yegor Yefremov <yegorslists@googlemail.com>
+>     BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
+>
+> However, the default name of an archive is based on the package name,
+> which for barebox-aux is not 'barebox'.
+>
+> Since barebox-aux really uses the exact same source as the bare barebox,
+> it should also share the archive name.
+>
+> This has two direct consequences and advantages:
+>
+>   - the hash check is completely avoided for the barebox-aux archive;
+>
+>   - the barebox-aux archive is not downloaded as it is already
+>     downloaded for barebox.
+>
+> Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-> > ---
-> >  boot/barebox/barebox.mk | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> > index f11f9950d1..3d7492598f 100644
-> > --- a/boot/barebox/barebox.mk
-> > +++ b/boot/barebox/barebox.mk
-> > @@ -31,6 +31,8 @@ $(1)_SOURCE = barebox-$$($(1)_VERSION).tar.bz2
-> >  $(1)_SITE = https://www.barebox.org/download
-> >  endif
-> >
-> > +$(1)_DL_SUBDIR = barebox
-> > +
-> >  $(1)_DEPENDENCIES = host-lzop
-> >  $(1)_LICENSE = GPL-2.0 with exceptions
-> >  ifeq ($(BR2_TARGET_BAREBOX_LATEST_VERSION),y)
-> > --
-> > 2.20.1
-> >
 >
+> ---
+> Note: that last claim about the download being done only once requires
+> that a previous patch be applied first (with typoes fixed):
+>     https://patchwork.ozlabs.org/patch/1258482/
+> ---
+>  boot/barebox/barebox.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+> index 3d7492598f..1efe5665de 100644
+> --- a/boot/barebox/barebox.mk
+> +++ b/boot/barebox/barebox.mk
+> @@ -25,6 +25,10 @@ $(1)_SOURCE = $$(notdir $$($(1)_TARBALL))
+>  else ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
+>  $(1)_SITE = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
+>  $(1)_SITE_METHOD = git
+> +# Override the default value of _SOURCE to 'barebox-*' so that it is not
+> +# downloaded a second time for barebox-aux; also alows avoiding the hash
+> +# check:
+> +$(1)_SOURCE = barebox-$$($(1)_VERSION).tar.gz
+>  else
+>  # Handle stable official Barebox versions
+>  $(1)_SOURCE = barebox-$$($(1)_VERSION).tar.bz2
 > --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+> 2.20.1
+>
