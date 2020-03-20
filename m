@@ -1,33 +1,31 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Fri, 20 Mar 2020 16:45:38 +0100
-Subject: [Buildroot] [PATCH 2/2] board/liteboard: bump U-Boot to 2020.01
-In-Reply-To: <20200320154538.3115525-1-m.niestroj@grinn-global.com>
-References: <20200320154538.3115525-1-m.niestroj@grinn-global.com>
-Message-ID: <20200320154538.3115525-2-m.niestroj@grinn-global.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 20 Mar 2020 15:50:39 +0000
+Subject: [Buildroot] [Bug 12681] Mongodb fails to build from sources
+In-Reply-To: <bug-12681-163@https.bugs.busybox.net/>
+References: <bug-12681-163@https.bugs.busybox.net/>
+Message-ID: <bug-12681-163-JPkO5ofnxR@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Tested-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- configs/grinn_liteboard_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://bugs.busybox.net/show_bug.cgi?id=12681
 
-diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
-index 58f2a6b40d..6cee075006 100644
---- a/configs/grinn_liteboard_defconfig
-+++ b/configs/grinn_liteboard_defconfig
-@@ -16,7 +16,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="liteboard"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+--- Comment #2 from Vincent Fazio <vfazio@xes-inc.com> ---
+The libyaml-cpp issue should be fixed at some point when a release is cut
+including
+https://github.com/jbeder/yaml-cpp/commit/52a1378e48e15d42a0b755af7146394c6eff998c
+
+It should inherit the BUILD_SHARED_LIBS values defined in pkg-cmake.
+
+Until a new version is cut, we could either hack libyaml-cpp.mk or patch
+CMakeLists.txt
+
+
+I haven't root-caused the mongodb issue. If it worked in 2019.05 but doesn't
+now, that seems to imply the jump from 4.0.6 to 4.0.12 caused the break.
+
 -- 
-2.25.0
+You are receiving this mail because:
+You are on the CC list for the bug.
