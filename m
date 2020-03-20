@@ -1,30 +1,49 @@
-From: Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>
-Date: Fri, 20 Mar 2020 06:59:43 -0300
-Subject: [Buildroot] Problem with bison relocation in a buildroot generated
- toolchain
-Message-ID: <CACjc_5q0E4cq7WjB2oaqT3Uz+G+jyrbNpPsTrqAAipApPVyRKQ@mail.gmail.com>
+From: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Date: Fri, 20 Mar 2020 13:07:20 +0300
+Subject: [Buildroot] [PATCH] package/radvd: drop dependency on flex runtime
+ library
+Message-ID: <20200320100720.1850-1-alexander.i.mukhin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi folks,
+Radvd has its own main(), and does not use yywrap() from libfl.so,
+because scanner.l module contains noyywrap option. So, none of the
+functions exported by libfl.so are used, and there's no need to have
+the flex runtime on target.
 
-First, congratulations for this great project.
+Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+---
+ package/radvd/Config.in | 1 -
+ package/radvd/radvd.mk  | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-Recently I have built a toolchain for an ARM processor, and had a
-relocation failure with bison: The problem manifests in kernel compilation
-when performed in a different machine than the one that originally
-generated the toolchain, or of course, if you delete or rename the original
-buildroot folders where the toolchain has been generated,
-
-The bug has been reported here:
-
-https://bugs.buildroot.org/show_bug.cgi?id=12656
-
-Best regards,
-Marcelo.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200320/fe384c2e/attachment.html>
+diff --git a/package/radvd/Config.in b/package/radvd/Config.in
+index fa5a20c4c1..f1df0c3cb8 100644
+--- a/package/radvd/Config.in
++++ b/package/radvd/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_RADVD
+ 	bool "radvd"
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_FLEX
+ 	help
+ 	  IPv6 Router Advertisement Daemon.
+ 
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 3358264f18..ba0c78bd1e 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -6,7 +6,7 @@
+ 
+ RADVD_VERSION = 2.18
+ RADVD_SITE = http://www.litech.org/radvd/dist
+-RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
++RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf
+ # We need to ignore <linux/if_arp.h>, because radvd already includes
+ # <net/if_arp.h>, which conflicts with <linux/if_arp.h>.
+ RADVD_CONF_ENV = \
+-- 
+2.20.1
