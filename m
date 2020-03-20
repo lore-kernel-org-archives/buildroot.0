@@ -1,44 +1,93 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 20 Mar 2020 08:11:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.11.7
-Message-ID: <20200320071148.1042976-1-bernd.kuhls@t-online.de>
+From: Gao Xiang <hsiangkao@aol.com>
+Date: Fri, 20 Mar 2020 15:13:15 +0800
+Subject: [Buildroot] [PATCH v2 2/2] fs/erofs: add support for creating
+ EROFS rootfs image
+In-Reply-To: <20200319174942.GF10025@scaer>
+References: <20200316015838.15183-1-hsiangkao@aol.com>
+ <20200316015838.15183-2-hsiangkao@aol.com>
+ <20200319174942.GF10025@scaer>
+Message-ID: <20200320071302.GB1975@hsiangkao-HP-ZHAN-66-Pro-G1>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.samba.org/samba/history/samba-4.11.7.html
+Hi Yann,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Thu, Mar 19, 2020 at 06:49:42PM +0100, Yann E. MORIN wrote:
+> Gao, All,
+> 
+> On 2020-03-16 09:58 +0800, Gao Xiang spake thusly:
+> > This patch makes possible to create rootfs image using
+> > EROFS filesystem.
+> > 
+> > Signed-off-by: Gao Xiang <hsiangkao@aol.com>
+> > ---
+> [--SNIP--]
+> > diff --git a/fs/erofs/Config.in b/fs/erofs/Config.in
+> > new file mode 100644
+> > index 0000000000..dad2498a15
+> > --- /dev/null
+> > +++ b/fs/erofs/Config.in
+> > @@ -0,0 +1,24 @@
+> > +config BR2_TARGET_ROOTFS_EROFS
+> > +	bool "erofs root filesystem"
+> > +	select BR2_PACKAGE_HOST_EROFS_UTILS
+> > +	help
+> > +	  Build a EROFS root filesystem. If you enable this option,
+> > +	  you probably want to enable the erofs-utils package too.
+> 
+> Since erofs is a read-only filesystem, and since erofs-utils only
+> provide an mkfs tool, I don't see how erofs-utils would be useful on the
+> target. So I've dropped that part from the help text.
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 022bc22055..8948c41ea6 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.11.6.tar.asc
--sha256 91438f4d7b71f673421435fa7f26b03b613f214139636ce50af35bc2ff09ef38  samba-4.11.6.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.11.7.tar.asc
-+sha256 79b6f9ebc357373f885153e2d5d26dc6def9f4511ee4bcbe8a8e2622acc42143  samba-4.11.7.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 3048cb9a63..582b30bcd5 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.11.6
-+SAMBA4_VERSION = 4.11.7
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
--- 
-2.25.0
+Currently I agree with you. So that's fine. :)
+
+> 
+> > +if BR2_TARGET_ROOTFS_EROFS
+> > +
+> > +choice
+> > +	prompt "Compression algorithm"
+> > +	default BR2_TARGET_ROOTFS_EROFS_LZ4HC
+> > +	help
+> > +	  Select the primary compression algorithm to use when
+> > +	  generating EROFS filesystem image.
+> > +
+> > +config BR2_TARGET_ROOTFS_EROFS_NONE
+> > +	bool "none"
+> > +
+> > +config BR2_TARGET_ROOTFS_EROFS_LZ4HC
+> > +	bool "lz4hc"
+> 
+> Do you envision adding other compression schemes? As far as I can see,
+> the erofs-utils as well as the linux driver only ever supports lz4 (and
+> I think you are well aware of that ;-) ).
+
+I have been still working on support LZMA algorithm (a lot of work to
+achieve LZMA fixed-sized output compression) in my spare time.
+
+> 
+> I know the other filesystems (squashfs, jffs2...) have a choice about
+> the compression method, but for those ther are two or more such
+> possibilities, so it makes sense they have a choice. For erofs, not so
+> much.
+> 
+> As such, I have dropped the choice altogether, and just kept the single
+> boolean to enable compression.
+
+Currently, I'm fine with that as well. After LZMA algorithm is ready
+upstream, I could submit another patch then.
+
+> 
+> Applied to master with the above changes. Thanks!
+
+Thank you very much!
+
+Thanks,
+Gao Xiang
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
