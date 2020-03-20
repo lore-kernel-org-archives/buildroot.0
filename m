@@ -1,71 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Mar 2020 22:15:08 +0100
-Subject: [Buildroot] [git commit] Makefile: fix package file list if
- FOO_SUBDIR is set
-Message-ID: <20200320211449.05D7B82B50@busybox.osuosl.org>
+Date: Fri, 20 Mar 2020 22:29:29 +0100
+Subject: [Buildroot] [PATCH 1/3] Makefile: don't hang the build if there
+ are no file lists
+In-Reply-To: <20200318155814.567-1-patrickdepinguin@gmail.com>
+References: <20200318155814.567-1-patrickdepinguin@gmail.com>
+Message-ID: <20200320212929.GU10025@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f876c7f16a0aef8aa86ef5873b8db07aa00dce5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas ?2, All,
 
-If a package sets a FOO_SUBDIR (meaning its sources are not under
-output/build/foo-123 but under output/build/foo-123/$(FOO_SUBDIR)), the
-.files-list.txt file were also created under FOO_SUBDIR, due to which the
-logic in the Makefile would not find it.
+On 2020-03-18 16:58 +0100, Thomas De Schampheleire spake thusly:
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> In very limited configurations, it is possible to have a case where no
+> .files-list-staging.txt files are created. In this case:
+> 
+> 	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
+> 		$(BUILD_DIR)/packages-file-list-staging.txt
+> 
+> becomes:
+> 
+> 	cat > \
+> 		$(BUILD_DIR)/packages-file-list-staging.txt
+> 
+> which of course makes the build hang.. forever.
+> 
+> So we fix this by checking the list is not empty. To keep the code
+> readable, we introduce an intermediate variable to store the list of
+> these files.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Change the instrumentation steps so that the file list is directly under the
-package dir, ignoring the subdir.
+Series applied to master, after fixing this patch as previously
+discussed in the thread. Thanks.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/pkg-generic.mk | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 47238f2649..20b07a7fa9 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -63,7 +63,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
- define step_pkg_size_before
- 	cd $(2); \
- 	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
--		| LC_ALL=C sort > $($(PKG)_BUILDDIR)/.files-list$(3).before
-+		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(3).before
- endef
- 
- # $(1): package name
-@@ -72,14 +72,14 @@ endef
- define step_pkg_size_after
- 	cd $(2); \
- 	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
--		| LC_ALL=C sort > $($(PKG)_BUILDDIR)/.files-list$(3).after
-+		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(3).after
- 	LC_ALL=C comm -13 \
--		$($(PKG)_BUILDDIR)/.files-list$(3).before \
--		$($(PKG)_BUILDDIR)/.files-list$(3).after \
-+		$($(PKG)_DIR)/.files-list$(3).before \
-+		$($(PKG)_DIR)/.files-list$(3).after \
- 		| sed -r -e 's/^[^,]+/$(1)/' \
--		> $($(PKG)_BUILDDIR)/.files-list$(3).txt
--	rm -f $($(PKG)_BUILDDIR)/.files-list$(3).before
--	rm -f $($(PKG)_BUILDDIR)/.files-list$(3).after
-+		> $($(PKG)_DIR)/.files-list$(3).txt
-+	rm -f $($(PKG)_DIR)/.files-list$(3).before
-+	rm -f $($(PKG)_DIR)/.files-list$(3).after
- endef
- 
- define step_pkg_size
-@@ -103,7 +103,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
- define check_bin_arch
- 	$(if $(filter end-install-target,$(1)-$(2)),\
- 		support/scripts/check-bin-arch -p $(3) \
--			-l $($(PKG)_BUILDDIR)/.files-list.txt \
-+			-l $($(PKG)_DIR)/.files-list.txt \
- 			$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
- 			-r $(TARGET_READELF) \
- 			-a $(BR2_READELF_ARCH_NAME))
+> ---
+>  Makefile | 16 ++++++++++------
+>  1 file changed, 10 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 5455e6662e..29d30a4f70 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -728,6 +728,10 @@ $(TARGETS_ROOTFS): target-finalize
+>  # Avoid the rootfs name leaking down the dependency chain
+>  target-finalize: ROOTFS=
+>  
+> +TARGET_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt))
+> +HOST_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt))
+> +STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt))
+> +
+>  .PHONY: host-finalize
+>  host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
+>  	@$(call MESSAGE,"Finalizing host directory")
+> @@ -808,12 +812,12 @@ endif # merged /usr
+>  
+>  	touch $(TARGET_DIR)/usr
+>  
+> -	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt)) > \
+> -		$(BUILD_DIR)/packages-file-list.txt
+> -	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt)) > \
+> -		$(BUILD_DIR)/packages-file-list-host.txt
+> -	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
+> -		$(BUILD_DIR)/packages-file-list-staging.txt
+> +	$(if $(TARGET_DIR_FILES_LISTS), \
+> +		cat $(TARGET_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list.txt)
+> +	$(if $(HOST_DIR_FILES_LISTS), \
+> +		cat $(HOST_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list-host.txt)
+> +	$(if $(STAGING_DIR_FILES_LISTS), \
+> +		cat $(STAGING_DIR_FILES_LISTS) > $(BUILD_DIR)/packages-file-list-staging.txt)
+>  
+>  .PHONY: target-post-image
+>  target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
