@@ -1,73 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Mar 2020 22:11:31 +0100
-Subject: [Buildroot] [PATCH] package/radvd: drop dependency on flex
- runtime library
-In-Reply-To: <20200320100720.1850-1-alexander.i.mukhin@gmail.com>
-References: <20200320100720.1850-1-alexander.i.mukhin@gmail.com>
-Message-ID: <20200320211131.GT10025@scaer>
+Date: Fri, 20 Mar 2020 22:17:28 +0100
+Subject: [Buildroot] [git commit] Makefile: assemble package file lists
+ before calling post-build scripts
+Message-ID: <20200320211449.11FDD82B38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d4d52d907b9e6651be4f3ecfec5631122073f3cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-20 13:07 +0300, Alexander Mukhin spake thusly:
-> Radvd has its own main(), and does not use yywrap() from libfl.so,
-> because scanner.l module contains noyywrap option. So, none of the
-> functions exported by libfl.so are used, and there's no need to have
-> the flex runtime on target.
-> 
-> Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Post-build scripts may want to do something based on the list of files
+installed by a package. However, since commit
+0e2be4db8ab01d479177a3a187c22525752195ae the final packages-file-lists.txt
+file is only created _after_ the post-build scripts.
 
-Applied to master, thanks.
+Move the assembly of the file lists upwards, before the post-build scripts.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Makefile | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-> ---
->  package/radvd/Config.in | 1 -
->  package/radvd/radvd.mk  | 2 +-
->  2 files changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/package/radvd/Config.in b/package/radvd/Config.in
-> index fa5a20c4c1..f1df0c3cb8 100644
-> --- a/package/radvd/Config.in
-> +++ b/package/radvd/Config.in
-> @@ -1,7 +1,6 @@
->  config BR2_PACKAGE_RADVD
->  	bool "radvd"
->  	depends on BR2_USE_MMU # fork()
-> -	select BR2_PACKAGE_FLEX
->  	help
->  	  IPv6 Router Advertisement Daemon.
->  
-> diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-> index 3358264f18..ba0c78bd1e 100644
-> --- a/package/radvd/radvd.mk
-> +++ b/package/radvd/radvd.mk
-> @@ -6,7 +6,7 @@
->  
->  RADVD_VERSION = 2.18
->  RADVD_SITE = http://www.litech.org/radvd/dist
-> -RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
-> +RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf
->  # We need to ignore <linux/if_arp.h>, because radvd already includes
->  # <net/if_arp.h>, which conflicts with <linux/if_arp.h>.
->  RADVD_CONF_ENV = \
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/Makefile b/Makefile
+index 156ceb9aae..ae29b042ec 100644
+--- a/Makefile
++++ b/Makefile
+@@ -806,12 +806,6 @@ endif # merged /usr
+ 		$(call MESSAGE,"Copying overlay $(d)"); \
+ 		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
+ 
+-	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+-		$(call MESSAGE,"Executing post-build script $(s)"); \
+-		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+-
+-	touch $(TARGET_DIR)/usr
+-
+ 	$(if $(TARGET_DIR_FILES_LISTS), \
+ 		cat $(TARGET_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list.txt
+ 	$(if $(HOST_DIR_FILES_LISTS), \
+@@ -819,6 +813,12 @@ endif # merged /usr
+ 	$(if $(STAGING_DIR_FILES_LISTS), \
+ 		cat $(STAGING_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-staging.txt
+ 
++	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
++		$(call MESSAGE,"Executing post-build script $(s)"); \
++		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
++
++	touch $(TARGET_DIR)/usr
++
+ .PHONY: target-post-image
+ target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
+ 	@rm -f $(ROOTFS_COMMON_TAR)
