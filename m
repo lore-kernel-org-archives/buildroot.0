@@ -1,57 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Mar 2020 22:17:28 +0100
-Subject: [Buildroot] [git commit] Makefile: assemble package file lists
- before calling post-build scripts
-Message-ID: <20200320211449.11FDD82B38@busybox.osuosl.org>
+Date: Fri, 20 Mar 2020 22:13:51 +0100
+Subject: [Buildroot] [git commit] Makefile: don't hang the build if there
+ are no file lists
+Message-ID: <20200320211448.F05AC82B50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4d52d907b9e6651be4f3ecfec5631122073f3cc
+commit: https://git.buildroot.net/buildroot/commit/?id=aa1e74745c93534a14981616b92956e920a01dc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Post-build scripts may want to do something based on the list of files
-installed by a package. However, since commit
-0e2be4db8ab01d479177a3a187c22525752195ae the final packages-file-lists.txt
-file is only created _after_ the post-build scripts.
+In very limited configurations, it is possible to have a case where no
+.files-list-staging.txt files are created. In this case:
 
-Move the assembly of the file lists upwards, before the post-build scripts.
+    cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
+        $(BUILD_DIR)/packages-file-list-staging.txt
 
+becomes:
+
+    cat > \
+        $(BUILD_DIR)/packages-file-list-staging.txt
+
+which of course makes the build hang.. forever.
+
+So we fix this by checking the list is not empty. To keep the code
+readable, we introduce an intermediate variable to store the list of
+these files.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+[yann.morin.1998 at free.fr: always create the file, even if empty]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Makefile | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ Makefile | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 156ceb9aae..ae29b042ec 100644
+index 5455e6662e..156ceb9aae 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -806,12 +806,6 @@ endif # merged /usr
- 		$(call MESSAGE,"Copying overlay $(d)"); \
- 		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
+@@ -728,6 +728,10 @@ $(TARGETS_ROOTFS): target-finalize
+ # Avoid the rootfs name leaking down the dependency chain
+ target-finalize: ROOTFS=
  
--	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
--		$(call MESSAGE,"Executing post-build script $(s)"); \
--		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
--
--	touch $(TARGET_DIR)/usr
--
- 	$(if $(TARGET_DIR_FILES_LISTS), \
- 		cat $(TARGET_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list.txt
- 	$(if $(HOST_DIR_FILES_LISTS), \
-@@ -819,6 +813,12 @@ endif # merged /usr
- 	$(if $(STAGING_DIR_FILES_LISTS), \
- 		cat $(STAGING_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-staging.txt
++TARGET_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt))
++HOST_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt))
++STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt))
++
+ .PHONY: host-finalize
+ host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
+ 	@$(call MESSAGE,"Finalizing host directory")
+@@ -808,12 +812,12 @@ endif # merged /usr
  
-+	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
-+		$(call MESSAGE,"Executing post-build script $(s)"); \
-+		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-+
-+	touch $(TARGET_DIR)/usr
-+
+ 	touch $(TARGET_DIR)/usr
+ 
+-	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list.txt)) > \
+-		$(BUILD_DIR)/packages-file-list.txt
+-	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-host.txt)) > \
+-		$(BUILD_DIR)/packages-file-list-host.txt
+-	cat $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.txt)) > \
+-		$(BUILD_DIR)/packages-file-list-staging.txt
++	$(if $(TARGET_DIR_FILES_LISTS), \
++		cat $(TARGET_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list.txt
++	$(if $(HOST_DIR_FILES_LISTS), \
++		cat $(HOST_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-host.txt
++	$(if $(STAGING_DIR_FILES_LISTS), \
++		cat $(STAGING_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-staging.txt
+ 
  .PHONY: target-post-image
  target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
- 	@rm -f $(ROOTFS_COMMON_TAR)
