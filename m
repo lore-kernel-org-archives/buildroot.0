@@ -1,42 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Mar 2020 21:53:48 +0100
-Subject: [Buildroot] [git commit] package/x264: bump version to 20191217-2245
-Message-ID: <20200320204059.567B082AB7@busybox.osuosl.org>
+Date: Fri, 20 Mar 2020 21:53:34 +0100
+Subject: [Buildroot] [git commit] package/php: security bump version to 7.4.4
+Message-ID: <20200320204059.4A65982AB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c7122549fdc134ce9aa802253581397a3f0102e
+commit: https://git.buildroot.net/buildroot/commit/?id=51cd6b864101a110785e1ebee394526a98aba86e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.4
+
+Fixes CVE-2020-7064, CVE-2020-7065 & CVE-2020-7066.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x264/x264.hash | 2 +-
- package/x264/x264.mk   | 2 +-
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-index 0cbdc03a9c..93242a46cc 100644
---- a/package/x264/x264.hash
-+++ b/package/x264/x264.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 88bbb8f7453497be4ee85cbc6f7d27c02822c4a3744b5ae6042c9c0159ad0747  x264-snapshot-20190623-2245.tar.bz2
-+sha256 0bb67d095513391e637b3b47e8efc3ba4603c3844f1b4c2690f4d36da7763055  x264-snapshot-20191217-2245.tar.bz2
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index f3654d46b0..9d217d1912 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
+diff --git a/package/php/php.hash b/package/php/php.hash
+index a01e936016..4584524f1c 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256 cf1f856d877c268124ded1ede40c9fb6142b125fdaafdc54f855120b8bc6982a  php-7.4.3.tar.xz
++sha256 1873c4cefdd3df9a78dcffb2198bba5c2f0464f55c9c960720c84df483fca74c  php-7.4.4.tar.xz
+ 
+ # License file
+ sha256 0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index c0abecad19..f62204c2a5 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--X264_VERSION = 20190623-2245
-+X264_VERSION = 20191217-2245
- X264_SITE = http://download.videolan.org/x264/snapshots
- X264_SOURCE = x264-snapshot-$(X264_VERSION).tar.bz2
- X264_LICENSE = GPL-2.0+
+-PHP_VERSION = 7.4.3
++PHP_VERSION = 7.4.4
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
