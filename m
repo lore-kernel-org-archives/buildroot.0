@@ -1,40 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 20 Mar 2020 07:50:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x264: bump version to 20191217-2245
-Message-ID: <20200320065019.794400-1-bernd.kuhls@t-online.de>
+Date: Fri, 20 Mar 2020 07:56:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xkeyboard-config: bump
+ version to 2.29
+Message-ID: <20200320065652.836048-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Switch _SITE to https.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x264/x264.hash | 2 +-
- package/x264/x264.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 2 +-
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-index 0cbdc03a9c..93242a46cc 100644
---- a/package/x264/x264.hash
-+++ b/package/x264/x264.hash
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index ae94bb490a..5066a46885 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 88bbb8f7453497be4ee85cbc6f7d27c02822c4a3744b5ae6042c9c0159ad0747  x264-snapshot-20190623-2245.tar.bz2
-+sha256 0bb67d095513391e637b3b47e8efc3ba4603c3844f1b4c2690f4d36da7763055  x264-snapshot-20191217-2245.tar.bz2
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index f3654d46b0..9d217d1912 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
-@@ -4,7 +4,7 @@
+-sha256 69adb25b0fc64e4075f8ec0eab8d869892419f474f91fb69db1713de2062bdce  xkeyboard-config-2.28.tar.bz2
++sha256 1d4175278bf06000683656763a8b1d3282c61a314b6db41260c8efe92d621802  xkeyboard-config-2.29.tar.bz2
+ sha256 6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index d8e2434235..fde5d058d8 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--X264_VERSION = 20190623-2245
-+X264_VERSION = 20191217-2245
- X264_SITE = http://download.videolan.org/x264/snapshots
- X264_SOURCE = x264-snapshot-$(X264_VERSION).tar.bz2
- X264_LICENSE = GPL-2.0+
+-XKEYBOARD_CONFIG_VERSION = 2.28
++XKEYBOARD_CONFIG_VERSION = 2.29
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+-XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
++XKEYBOARD_CONFIG_SITE = https://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
+ XKEYBOARD_CONFIG_LICENSE_FILES = COPYING
+ 
 -- 
 2.25.0
