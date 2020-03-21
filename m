@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 20:15:42 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/samba4: needs
+Date: Sat, 21 Mar 2020 20:05:13 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/samba4: needs
  host-python3
-Message-ID: <20200321190525.2221E83A51@busybox.osuosl.org>
+Message-ID: <20200321190531.0E0B380E2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fa73241aa58a49a4e9010c7229057cb62da363a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9e07a360135f2645633c6dce2552099047ebd3b0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 host-python3 is a mandatory dependency since bump to version 4.10.0 and
 https://gitlab.com/samba-team/devel/samba/-/commit/5ddff307b4af5c82d5064745f5bd2c33bd340ced
@@ -24,11 +24,11 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 (cherry picked from commit bf341117f68fe3e47f3ea73c416e2cefbded25fc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.mk | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ package/samba4/samba4.mk | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 85cbf3a74a..05693df322 100644
+index 005296ea74..3048cb9a63 100644
 --- a/package/samba4/samba4.mk
 +++ b/package/samba4/samba4.mk
 @@ -11,7 +11,7 @@ SAMBA4_INSTALL_STAGING = YES
@@ -37,10 +37,10 @@ index 85cbf3a74a..05693df322 100644
  SAMBA4_DEPENDENCIES = \
 -	host-e2fsprogs host-heimdal host-nfs-utils \
 +	host-e2fsprogs host-heimdal host-nfs-utils host-python3 \
- 	cmocka e2fsprogs popt zlib \
+ 	cmocka e2fsprogs gnutls popt zlib \
  	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
  	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
-@@ -25,16 +25,12 @@ SAMBA4_CONF_ENV = \
+@@ -25,14 +25,11 @@ SAMBA4_CONF_ENV = \
  	XSLTPROC=false \
  	WAF_NO_PREFORK=1
  
@@ -53,11 +53,8 @@ index 85cbf3a74a..05693df322 100644
 +SAMBA4_PYTHON += PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
 +SAMBA4_DEPENDENCIES += python3
  else
--SAMBA4_PYTHON = \
--	PYTHON="$(HOST_DIR)/bin/python2" \
--	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config"
--SAMBA4_DEPENDENCIES += host-python python
-+SAMBA4_CONF_OPTS += --disable-python
+-SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python2"
+-SAMBA4_DEPENDENCIES += host-python
+ SAMBA4_CONF_OPTS += --disable-python
  endif
  
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
