@@ -1,59 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Mar 2020 17:01:17 +0100
-Subject: [Buildroot] [git commit] package/bluez5_utils: add mesh support
-Message-ID: <20200321154852.F177B838DB@busybox.osuosl.org>
+Date: Sat, 21 Mar 2020 17:05:06 +0100
+Subject: [Buildroot] [PATCH v2 1/4] package/{bluez5_utils,
+ bluez5_utils-headers}: bump to version 5.54
+In-Reply-To: <20200316165253.560773-1-joerg.krause@embedded.rocks>
+References: <20200316165253.560773-1-joerg.krause@embedded.rocks>
+Message-ID: <20200321170506.294efea2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a927d233e86c5a240bcd9c5ff5ef30821f8360d6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 16 Mar 2020 17:52:50 +0100
+J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-Mesh support was already added in version 5.47.
+> Changes since version 5.52:
+> 
+> 5.54:
+>   Fix issue with HOGP to accept data only from bonded devices.
+>   Fix issue with A2DP sessions being connected at the same time.
+>   Fix issue with class UUID matches before connecting profile.
+>   Add support for handling MTU auto-tuning option for AVDTP.
+>   Add support for new policy for Just-Works repairing.
+>   Add support for Enhanced ATT bearer (EATT).
+> 
+> 5.53:
+>   Fix issue with handling unregistration for advertisment.
+>   Fix issue with A2DP and handling recovering process.
+>   Fix issue with udpating input device information.
+>   Add support for loading blocked keys.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+> v2:
+>  * bump bluez5_utils-header, too [Baruch Siach]
+> ---
+>  package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
+>  package/bluez5_utils/bluez5_utils.hash               | 2 +-
+>  package/bluez5_utils/bluez5_utils.mk                 | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/bluez5_utils/Config.in       | 7 +++++++
- package/bluez5_utils/bluez5_utils.mk | 8 ++++++++
- 2 files changed, 15 insertions(+)
+Series applied. Thanks!
 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index 488a2f79c8..038c6e7095 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -60,6 +60,13 @@ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
- 	help
- 	  Build BlueZ 5.x health plugin
- 
-+config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH
-+	bool "build mesh profile"
-+	select BR2_PACKAGE_JSON_C
-+	select BR2_PACKAGE_READLINE
-+	help
-+	  Build BlueZ 5.x mesh plugin
-+
- config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI
- 	bool "build midi profile"
- 	select BR2_PACKAGE_ALSA_LIB
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index e328f52eaf..2d95899f44 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -51,6 +51,14 @@ else
- BLUEZ5_UTILS_CONF_OPTS += --disable-health
- endif
- 
-+# enable mesh profile
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-mesh
-+BLUEZ5_UTILS_DEPENDENCIES += json-c readline
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-mesh
-+endif
-+
- # enable midi profile
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MIDI),y)
- BLUEZ5_UTILS_CONF_OPTS += --enable-midi
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
