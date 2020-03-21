@@ -1,103 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Mar 2020 22:34:32 +0100
-Subject: [Buildroot] [PATCH v4] package/busybox: patch for glibc-2.31
- and musl-1.2.0 compatibility
-In-Reply-To: <47d05f0e-8266-75ee-36a5-b06daeedd3cf@gmail.com>
-References: <20200315115910.31365-1-unixmania@gmail.com>
- <47d05f0e-8266-75ee-36a5-b06daeedd3cf@gmail.com>
-Message-ID: <20200321213432.GM4290@scaer>
+Date: Sat, 21 Mar 2020 22:47:26 +0100
+Subject: [Buildroot] [PATCH 1/2]
+ package/gobject-introspection/g-ir-scanner: do not set default compiler
+ values
+In-Reply-To: <20200320222359.88689-1-aduskett@gmail.com>
+References: <20200320222359.88689-1-aduskett@gmail.com>
+Message-ID: <20200321214726.GN4290@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, Carlos, All,
+Adam, All,
 
-On 2020-03-21 21:36 +0100, Romain Naour spake thusly:
-> Le 15/03/2020 ? 12:59, unixmania at gmail.com a ?crit?:
-> > From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-> > Current release of busybox 1_31_1 is failing to build with glibc-2.31
-> > due to removal of stime() from glibc. It also fails to build with musl
-> > 1.2.0 due to the direct use of __NR_clock_gettime.
-> This patch is far too big IMHO ;-)
-
-Well, if that's just backports of upstream patches, that's OKish.
-
-> It would be great if you can split this patch an create a patch series.
-
-There I agree. Of course, if upstream fixed both in a single commit, use
-a single patch to backport that commit. Since this can be a bit
-ambiguous, here's what I mean:
-
-  [1/2] package/busybox: fix builg with glib 2.31
-        Note one of the backpoted patch also fix a musl-related failure
-        in addition ot fixing a glibc issue.
-
-  [2/2] package/busybox: fix builg with musl 1.2.0
-
-> > This commit adds six patches: one is a prerequisite for the subsequent
-> > patches, three to fix 64-bit time_t issues, one to fix the direct use of
-> > __NR_clock_gettime, which is not safe, and one that removes
-> > stime() function calls.
+On 2020-03-20 15:23 -0700, aduskett at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Instead of backporting patch 0003, try to rebase patch 0008 over busybox 1.31.1.
+> Commit 8b0aeafce2a22913e6a44818227f6a39e3225157 set 7 new variables in
+> g-ir-scanner.in:
 > 
-> But for the remaining patches, maybe you can squash then since the patch 0007
-> remove the syscall wrappers around clock_gettime that was modified by patch
-> 0004, 0005, 0006.
+> export CPP="${CPP:-${HOST_DIR}/bin/@BASENAME_TARGET_CPP@}"
+> export CC="${CC:-${HOST_DIR}/bin/@BASENAME_TARGET_CC@}"
+> export CXX="${CXX:-${HOST_DIR}/bin/@BASENAME_TARGET_CXX@}"
+> CPPFLAGS="${CPPFLAGS:- at TARGET_CPPFLAGS@}"
+> CFLAGS="${CFLAGS:- at TARGET_CFLAGS@}"
+> CXXFLAGS="${CXXFLAGS:- at TARGET_CXXFLAGS@}"
+> LDFLAGS="${LDFLAGS:- at TARGET_LDFLAGS@}"
+> 
+> However, defaulting to CPP, CC, or CXX breaks some packages because they may
+> hard code CC to the system CC.
+> 
+> One such package is libostree which has the line
+> "INTROSPECTION_SCANNER_ENV = CC=gcc" in the Makefile.
 
-There I highly disagree: we want to backport uptream patches as-is, even
-if they borked their fixes and needed three or four patches on top of
-each others: when we eventually update, we'll want to be able to quickly
-asses whther we can drop patches.
+But then, that's clearly a bug in libostree! They should not ever try to
+call a hard-coded compiler. If a user would even do a native build with
+an alternate compiler:
 
-> It would be great to ask upstream for a new release 1.32 or backport those
-> patches to 1.31.x.
+    CC=${HOME}/foo/bin/my-gcc-12.42 ./configure
 
-That'd be ideal, or even if they could backport to 1.31.x.
+Then the above would also break anyway. It's not even just about
+cross-compilation. We should fix libostree and send them the fix.
+Probably they should do something like:
 
-> Another solution would be using the current busybox master as a last resort.
+    INTROSPECTION_SCANNER_ENV = CC=${CC}
 
-As a *last* *resort*, I'd be OK to take a bump to a sha1, yes, but that
-would need to demonstrate that upstream is not ready by far to make a
-release, and that backporting individual commits is too tedious...
+With that commit log of yours, the problem is now obvious, while it did
+not look like it when we discussed on IRC, hence my comments now...
+
+Note that my comments above do not preclude us fixing our wrapper with
+this patch of yours, but if there is no need to do, I'd like to avoid
+it.
 
 Regards,
 Yann E. MORIN.
 
-> Best regards,
-> Romain
+> Because g-ir-scanner defaults CC to a predefined CC instead of explicitly
+> overwriting it, the CC passed from the makefile is used, and linking errors
+> occur as a result.
 > 
-> > 
-> > Fixes:
-> >   http://autobuild.buildroot.net/results/f45f91aea6deee6699eabdfa618ac44873b8da51/
-> > 
-> > Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Cc: arc-buildroot at synopsys.com
-> > ---
-> > Supersedes: https://patchwork.ozlabs.org/patch/1249916/
-> > ---
-> > Changes v4:
-> > - Rabase on the master branch
-> > - Add SOB lines to patches
-> > ---
-> >  ...-overhead-of-single-parameter-bb_err.patch | 7637 +++++++++++++++++
-> >  ...-Use-64-prefix-syscall-if-we-have-to.patch |   59 +
-> >  ...-Use-64-prefix-syscall-if-we-have-to.patch |   48 +
-> >  ...-Use-64-prefix-syscall-if-we-have-to.patch |   48 +
-> >  ...rappers-around-clock_gettime-closes-.patch |  132 +
-> >  .../0008-Remove-stime-function-calls.patch    |   95 +
-> >  6 files changed, 8019 insertions(+)
-> >  create mode 100644 package/busybox/0003-libbb-reduce-the-overhead-of-single-parameter-bb_err.patch
-> >  create mode 100644 package/busybox/0004-date-Use-64-prefix-syscall-if-we-have-to.patch
-> >  create mode 100644 package/busybox/0005-time-Use-64-prefix-syscall-if-we-have-to.patch
-> >  create mode 100644 package/busybox/0006-runsv-Use-64-prefix-syscall-if-we-have-to.patch
-> >  create mode 100644 package/busybox/0007-Remove-syscall-wrappers-around-clock_gettime-closes-.patch
-> >  create mode 100644 package/busybox/0008-Remove-stime-function-calls.patch
-> > 
+> Remove the defaults for the following and explicitly set the paths to the
+> proper cross-toolchain binaries:
+> CPP, CC, CXX
+> 
+> Fixes
+> http://autobuild.buildroot.org/results/f8a14307e6feff61acd963d6cd2aac289e6d1647
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/gobject-introspection/g-ir-scanner.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
+> index 22df7be309..6fc495389e 100644
+> --- a/package/gobject-introspection/g-ir-scanner.in
+> +++ b/package/gobject-introspection/g-ir-scanner.in
+> @@ -5,9 +5,9 @@
+>  # the variables blank (LDFLAGS, CFLAGS, and CPPFLAGS.)
+>  # Export these variables to ensure all build systems can generate .gir and
+>  # .typelib files properly.
+> -export CPP="${CPP:-${HOST_DIR}/bin/@BASENAME_TARGET_CPP@}"
+> -export CC="${CC:-${HOST_DIR}/bin/@BASENAME_TARGET_CC@}"
+> -export CXX="${CXX:-${HOST_DIR}/bin/@BASENAME_TARGET_CXX@}"
+> +export CPP="${HOST_DIR}/bin/@BASENAME_TARGET_CPP@"
+> +export CC="${HOST_DIR}/bin/@BASENAME_TARGET_CC@"
+> +export CXX="${HOST_DIR}/bin/@BASENAME_TARGET_CXX@"
+>  export CPPFLAGS="${CPPFLAGS:- at TARGET_CPPFLAGS@}"
+>  export CFLAGS="${CFLAGS:- at TARGET_CFLAGS@}"
+>  export CXXFLAGS="${CXXFLAGS:- at TARGET_CXXFLAGS@}"
+> -- 
+> 2.25.1
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
