@@ -1,46 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Mar 2020 16:36:17 +0100
-Subject: [Buildroot] [git commit] package/rcw: add missing host-python
- dependency
-Message-ID: <20200321152413.A88D283848@busybox.osuosl.org>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sat, 21 Mar 2020 16:47:24 +0100
+Subject: [Buildroot] [PATCH 3/6] configs/stm32mp157a_dk1: new defconfig
+In-Reply-To: <20200321153259.4f386e8e@windsurf.home>
+References: <20200321133222.1393674-1-b.bilas@grinn-global.com>
+ <20200321133222.1393674-3-b.bilas@grinn-global.com>
+ <20200321153259.4f386e8e@windsurf.home>
+Message-ID: <b5933c0a-6061-1ba4-103b-4f74f103ad2a@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd5efaeb67ba65c2706d60d742334a521343635f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-The rcw tool that compiles RCW sources file need host-python
+On 21.03.2020 15:32, Thomas Petazzoni wrote:
+> Hello Bartosz,
+>
+> On Sat, 21 Mar 2020 14:32:19 +0100
+> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+>
+>> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+>> index cde757681e..22448e1028 100644
+>> --- a/.gitlab-ci.yml
+>> +++ b/.gitlab-ci.yml
+>> @@ -320,6 +320,7 @@ solidrun_macchiatobin_marvell_defconfig: { extends: .defconfig }
+>>   stm32f429_disco_defconfig: { extends: .defconfig }
+>>   stm32f469_disco_defconfig: { extends: .defconfig }
+>>   stm32mp157c_dk2_defconfig: { extends: .defconfig }
+>> +stm32mp157a_dk1_defconfig: { extends: .defconfig }
+> You should use "make .gitlab-ci.yml" to generate this file. Indeed
+> here, alphabetic ordering was not correct. Fixed when applying.
+I should get acquainted with make target commands because most of things 
+I do manually. Anyway thanks for the hint.
+>> diff --git a/board/stmicroelectronics/stm32mp157a-dk1/linux.config b/board/stmicroelectronics/stm32mp157a-dk1/linux.config
+>> new file mode 100644
+>> index 0000000000..95c834e431
+>> --- /dev/null
+>> +++ b/board/stmicroelectronics/stm32mp157a-dk1/linux.config
+> I was wondering if a common Linux configuration file would be possible,
+> perhaps with just an extra fragment for the DK2 to enable display/WiFi
+> support.
+I was also wondering but I've decided to leave it as it is and improve 
+that when a good idea comes to my mind ;)
+>
+>> diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
+>> new file mode 100644
+>> index 0000000000..e9db685271
+>> --- /dev/null
+>> +++ b/configs/stm32mp157a_dk1_defconfig
+>> @@ -0,0 +1,32 @@
+>> +
+> Useless empty line here. Fixed when applying.
+>
+> Best regards,
+>
+> Thomas
 
-Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rcw/rcw.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Good, thanks :)
 
-diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
-index 81e22fff93..dbfeae7b21 100644
---- a/package/rcw/rcw.mk
-+++ b/package/rcw/rcw.mk
-@@ -10,6 +10,8 @@ RCW_SITE_METHOD = git
- RCW_LICENSE = BSD-3-Clause
- RCW_LICENSE_FILES = LICENSE
- 
-+HOST_RCW_DEPENDENCIES = host-python
-+
- RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))
- 
- ifneq ($(RCW_FILES),)
-@@ -39,7 +41,9 @@ endef
- HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
- 
- define HOST_RCW_BUILD_CMDS
--	python $(@D)/rcw.py -i $(@D)/custom_board/rcw/$(RCW_PROJECT) -I $(@D)/custom_board -o $(@D)/PBL.bin
-+	$(HOST_DIR)/bin/python $(@D)/rcw.py \
-+		-i $(@D)/custom_board/rcw/$(RCW_PROJECT) \
-+		-I $(@D)/custom_board -o $(@D)/PBL.bin
- endef
- 
- define HOST_RCW_INSTALL_DELIVERY_FILE
+Best
+Bartek
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200321/8494b105/attachment.html>
