@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 21:04:00 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/util-linux: fix
+Date: Sat, 21 Mar 2020 21:03:15 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/util-linux: fix
  build for riscv64 and powerpc64le
-Message-ID: <20200321195427.E32A47FD2E@busybox.osuosl.org>
+Message-ID: <20200321195441.E95C083AF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53660485127c648475ac028eaad428ce7d31592f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=30d2a06e48a079c08cd66f682ddd05d39ed87d0c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Pull two upstream patches that fix the declaration of pidfd_open and
 pidfd_send_signal.
