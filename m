@@ -1,162 +1,537 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Mar 2020 18:46:55 +0100
-Subject: [Buildroot] [PATCH] package/perl-crypt-ssleay: fix configure
- step
-In-Reply-To: <20200321085534.21655-1-francois.perrad@gadz.org>
-References: <20200321085534.21655-1-francois.perrad@gadz.org>
-Message-ID: <20200321174655.GG4290@scaer>
+Date: Sat, 21 Mar 2020 18:50:23 +0100
+Subject: [Buildroot] [PATCH] support/config-fragments: update Buildroot
+ toolchains to 2020.02
+In-Reply-To: <20200321141530.404337-1-thomas.petazzoni@bootlin.com>
+References: <20200321141530.404337-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20200321175022.GH4290@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, Thomas, All,
+Thomas, All,
 
-Thomas: question for you about this package you recently submitted...
-
-On 2020-03-21 09:55 +0100, Francois Perrad spake thusly:
-> currently, the compilation of openssl-version.c relies on include files
-> from the system libssl-dev
+On 2020-03-21 15:15 +0100, Thomas Petazzoni spake thusly:
+> This commit updates all our toolchain configuration fragments for
+> pre-built Buildroot toolchains to use toolchains built with Buildroot
+> 2020.02.
 > 
-> see http://autobuild.buildroot.org/results/306/30659feaa11e7d0daf01c41e1bc1da2b9538968c/
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Thanks for the patch, but it seems there are a few other issues with
-this perl package, with this defconfig:
-
-    BR2_arm=y
-    BR2_cortex_a7=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_PACKAGE_PERL=y
-    BR2_PACKAGE_PERL_CRYPT_SSLEAY=y
-
-which fails with:
-
-    >>> perl-crypt-ssleay 0.72 Configuring
-    cd /home/ymorin/dev/buildroot/O/build/perl-crypt-ssleay-0.72/ && if [ -f Build.PL ] && [ MB != "EUMM" ] ; then  PERL_MM_USE_DEFAULT=1 PERL5LIB= PERL_USE_UNSAFE_INC=1 /home/ymorin/dev/buildroot/O/host/bin/perl Build.PL --config ar="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-ar" --config full_ar="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-ar" --config cc="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-gcc" --config ccflags="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  " --config optimize=" " --config ld="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-gcc" --config lddlflags="-shared " --config ldflags="" --include_dirs /home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/perl5/5.30.2/arm-linux/CORE --destdir /home/ymorin/dev/buildroot/O/target --installdirs vendor --install_path lib=/usr/lib/perl5/site_perl/5.30.2 --install_path arch=/usr/lib/perl5/site_perl/5.30.2/arm-linux --install_path bin=/usr/bin --install_path script=/usr/bin --install_path bindoc=/usr/share/man/man1 --install_path libdoc=/usr/share/man/man3 --incpath=/home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include || exit 1; else  PERL_MM_USE_DEFAULT=1 PERL_AUTOINSTALL=--skipdeps PERL5LIB= PERL_USE_UNSAFE_INC=1 /home/ymorin/dev/buildroot/O/host/bin/perl Makefile.PL AR="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-ar" FULL_AR="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-ar" CC="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-gcc" CCFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  " OPTIMIZE=" " LD="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-gcc" LDDLFLAGS="-shared " LDFLAGS="" PERL_ARCHLIB=/home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/perl5/5.30.2/arm-linux DESTDIR=/home/ymorin/dev/buildroot/O/target INSTALLDIRS=vendor INSTALLVENDORLIB=/usr/lib/perl5/site_perl/5.30.2 INSTALLVENDORARCH=/usr/lib/perl5/site_perl/5.30.2/arm-linux INSTALLVENDORBIN=/usr/bin INSTALLVENDORSCRIPT=/usr/bin INSTALLVENDORMAN1DIR=/usr/share/man/man1 INSTALLVENDORMAN3DIR=/usr/share/man/man3 --incpath=/home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include || exit 1; fi
-
-    *** THIS IS NOT AN ERROR, JUST A MESSAGE FOR YOUR INFORMATION ***
-
-        Do you really need Crypt::SSLeay?
-
-        Starting with version 6.02 of LWP, https support was unbundled into
-        LWP::Protocol::https. This module specifies as one of its prerequisites
-        IO::Socket::SSL which is automatically used by LWP::UserAgent unless
-        this preference is overridden separately. IO::Socket::SSL is a more
-        complete implementation, and, crucially, it allows hostname
-        verification. Crypt::SSLeay does not support this. At this point,
-        Crypt::SSLeay is maintained to support existing software that already
-        depends on it.
-
-        However, it is possible that your software does not really depend on
-        Crypt::SSLeay, only on the ability of LWP::UserAgent class to
-        communicate with sites over SSL/TLS.
-
-        If are using version LWP 6.02 or later, and therefore have installed
-        LWP::Protocol::https and its dependencies, and do not explicitly use
-        Net::SSL before loading LWP::UserAgent, or override the default socket
-        class, you are probably using IO::Socket::SSL and do not really need
-        Crypt::SSLeay.
-
-        Before installing Crypt::SSLeay, you may want to try specifying a
-        dependency on LWP::Protocol::https.
-
-    In file included from /home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/features.h:474,
-                     from /home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/libc-header-start.h:33,
-                     from /home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/stdio.h:27,
-                     from openssl-version.c:1:
-    /home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/gnu/stubs.h:7:11: fatal error: gnu/stubs-soft.h: No such file or directory
-        7 | # include <gnu/stubs-soft.h>
-          |           ^~~~~~~~~~~~~~~~~~
-    compilation terminated.
-    Failed to build and link a simple executable using OpenSSL
-    >>> perl-crypt-ssleay 0.72 Building
-    cd /home/ymorin/dev/buildroot/O/build/perl-crypt-ssleay-0.72/ && if [ -f Build.PL ] && [ MB != "EUMM" ] ; then PERL5LIB= PERL_USE_UNSAFE_INC=1 /home/ymorin/dev/buildroot/O/host/bin/perl Build  build; else /usr/bin/make -j1 FIXIN=:  pure_all; fi
-    make[2]: *** No rule to make target 'pure_all'.  Stop.
-    make[1]: *** [package/pkg-generic.mk:269: /home/ymorin/dev/buildroot/O/build/perl-crypt-ssleay-0.72/.stamp_built] Error 2
-    make: *** [Makefile:23: _all] Error 2
-
-So I see at least two problems here:
-
-  - first, this module seems to be deprecated. It was added recently
-    with lwp-protocols-https, although the version for that is already
-    more recent than the one in the warning above.
-
-  - second, the configure step, although it fails, does not cause
-    Buildroot to stop immediately; instead, the build continues.
-    And indeed, the code does just 'exit 0' when the test fails (see
-    patch below)
-
-So, do we really need to have this legacy package that is broken?
-
-
-If you are interested, here's the patch I came up to fix the sanity
-checks:
-
-    diff --git a/package/perl-crypt-ssleay/0001-configure-exits-in-error.patch b/package/perl-crypt-ssleay/0001-configure-exits-in-error.patch
-    new file mode 100644
-    index 0000000000..0759a6600d
-    --- /dev/null
-    +++ b/package/perl-crypt-ssleay/0001-Makefile.PL-exit-in-error.patch
-    @@ -0,0 +1,34 @@
-    +Makefile.PL: exit in error when a sanity check fails
-    +
-    +Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-    +
-    +diff -durN perl-crypt-ssleay-0.72.orig/Makefile.PL perl-crypt-ssleay-0.72/Makefile.PL
-    +--- perl-crypt-ssleay-0.72.orig/Makefile.PL2014-04-24 16:50:29.000000000 +0200
-    ++++ perl-crypt-ssleay-0.72/Makefile.PL2020-03-21 18:41:15.480352640   +0100
-    +@@ -72,7 +72,7 @@
-    +         }
-    +         catch {
-    +             print "Failed to resolve '$arg=$path': $_\n";
-    +-            exit 0;
-    ++            exit 1;
-    +         };
-    +     }
-    + 
-    +@@ -88,7 +88,7 @@
-    + 
-    +     unless (defined $my_openssl_version_cmd) {
-    +         print "Failed to build and link a simple executable using OpenSSL\n";
-    +-        exit 0;
-    ++        exit 1;
-    +     };
-    + 
-    +     show_cmd_output($my_openssl_version_cmd);
-    +@@ -308,7 +308,7 @@
-    +             "Cannot link with any of the requested SSL libraries '%s'\n",
-    +             join(', ' => @$libs),
-    +         );
-    +-        exit 0;
-    ++        exit 1;
-    +     }
-    + 
-    +     printf "Found libraries '%s'\n", join(', ' => @found);
-
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/perl-crypt-ssleay/perl-crypt-ssleay.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  support/config-fragments/autobuild/br-aarch64-glibc.config  | 2 +-
+>  support/config-fragments/autobuild/br-arcle-hs38.config     | 2 +-
+>  support/config-fragments/autobuild/br-arm-basic.config      | 4 ++--
+>  .../autobuild/br-arm-cortex-a9-glibc.config                 | 4 ++--
+>  .../config-fragments/autobuild/br-arm-cortex-a9-musl.config | 4 ++--
+>  .../config-fragments/autobuild/br-arm-cortex-m4-full.config | 4 ++--
+>  .../config-fragments/autobuild/br-arm-full-nothread.config  | 4 ++--
+>  .../config-fragments/autobuild/br-arm-full-static.config    | 2 +-
+>  support/config-fragments/autobuild/br-arm-full.config       | 2 +-
+>  .../autobuild/br-i386-pentium-mmx-musl.config               | 2 +-
+>  .../config-fragments/autobuild/br-i386-pentium4-full.config | 2 +-
+>  support/config-fragments/autobuild/br-m68k-5208-full.config | 4 ++--
+>  .../config-fragments/autobuild/br-m68k-68040-full.config    | 4 ++--
+>  .../config-fragments/autobuild/br-microblazeel-full.config  | 2 +-
+>  .../autobuild/br-mips32r6-el-hf-glibc.config                | 4 ++--
+>  .../config-fragments/autobuild/br-mips64-n64-full.config    | 4 ++--
+>  .../autobuild/br-mips64r6-el-hf-glibc.config                | 4 ++--
+>  .../config-fragments/autobuild/br-mipsel-o32-full.config    | 4 ++--
+>  support/config-fragments/autobuild/br-nios2-glibc.config    | 4 ++--
+>  .../config-fragments/autobuild/br-openrisc-uclibc.config    | 6 +++---
+>  .../autobuild/br-powerpc-603e-basic-cpp.config              | 4 ++--
+>  .../autobuild/br-powerpc-e500mc-full.config                 | 4 ++--
+>  .../autobuild/br-powerpc64-power7-glibc.config              | 4 ++--
+>  .../autobuild/br-powerpc64le-power8-glibc.config            | 4 ++--
+>  support/config-fragments/autobuild/br-riscv32.config        | 2 +-
+>  support/config-fragments/autobuild/br-riscv64.config        | 4 ++--
+>  support/config-fragments/autobuild/br-sh4-full.config       | 4 ++--
+>  support/config-fragments/autobuild/br-sparc-uclibc.config   | 2 +-
+>  support/config-fragments/autobuild/br-sparc64-glibc.config  | 2 +-
+>  .../config-fragments/autobuild/br-x86-64-core2-full.config  | 4 ++--
+>  support/config-fragments/autobuild/br-x86-64-musl.config    | 4 ++--
+>  support/config-fragments/autobuild/br-xtensa-full.config    | 4 ++--
+>  32 files changed, 55 insertions(+), 55 deletions(-)
 > 
-> diff --git a/package/perl-crypt-ssleay/perl-crypt-ssleay.mk b/package/perl-crypt-ssleay/perl-crypt-ssleay.mk
-> index 9564ee2b3..a67554847 100644
-> --- a/package/perl-crypt-ssleay/perl-crypt-ssleay.mk
-> +++ b/package/perl-crypt-ssleay/perl-crypt-ssleay.mk
-> @@ -15,4 +15,6 @@ PERL_CRYPT_SSLEAY_LICENSE = Artistic-2.0
->  PERL_CRYPT_SSLEAY_LICENSE_FILES = README.md
->  PERL_CRYPT_SSLEAY_DISTNAME = Crypt-SSLeay
->  
-> +PERL_CRYPT_SSLEAY_CONF_OPTS = --incpath=$(STAGING_DIR)/usr/include
-> +
->  $(eval $(perl-package))
+> diff --git a/support/config-fragments/autobuild/br-aarch64-glibc.config b/support/config-fragments/autobuild/br-aarch64-glibc.config
+> index 961ff71573..f1b0f2a91e 100644
+> --- a/support/config-fragments/autobuild/br-aarch64-glibc.config
+> +++ b/support/config-fragments/autobuild/br-aarch64-glibc.config
+> @@ -2,7 +2,7 @@ BR2_aarch64=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-aarch64-glibc-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-aarch64-glibc-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+>  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> diff --git a/support/config-fragments/autobuild/br-arcle-hs38.config b/support/config-fragments/autobuild/br-arcle-hs38.config
+> index 22aa667ea5..f8287ccd0f 100644
+> --- a/support/config-fragments/autobuild/br-arcle-hs38.config
+> +++ b/support/config-fragments/autobuild/br-arcle-hs38.config
+> @@ -3,7 +3,7 @@ BR2_archs38=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arcle-hs38-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arcle-hs38-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
+>  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> diff --git a/support/config-fragments/autobuild/br-arm-basic.config b/support/config-fragments/autobuild/br-arm-basic.config
+> index edac17648d..c73aa782ca 100644
+> --- a/support/config-fragments/autobuild/br-arm-basic.config
+> +++ b/support/config-fragments/autobuild/br-arm-basic.config
+> @@ -2,7 +2,7 @@ BR2_arm=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+> diff --git a/support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config b/support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config
+> index 4b17df50f3..a3b51138d7 100644
+> --- a/support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config
+> +++ b/support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config
+> @@ -4,8 +4,8 @@ BR2_ARM_ENABLE_VFP=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-glibc-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-glibc-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-arm-cortex-a9-musl.config b/support/config-fragments/autobuild/br-arm-cortex-a9-musl.config
+> index 40349a5c33..e6a5fa64f0 100644
+> --- a/support/config-fragments/autobuild/br-arm-cortex-a9-musl.config
+> +++ b/support/config-fragments/autobuild/br-arm-cortex-a9-musl.config
+> @@ -4,8 +4,8 @@ BR2_ARM_ENABLE_VFP=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-arm-cortex-m4-full.config b/support/config-fragments/autobuild/br-arm-cortex-m4-full.config
+> index caa2269e5c..22e9740e4d 100644
+> --- a/support/config-fragments/autobuild/br-arm-cortex-m4-full.config
+> +++ b/support/config-fragments/autobuild/br-arm-cortex-m4-full.config
+> @@ -3,9 +3,9 @@ BR2_cortex_m4=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-m4-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-m4-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL is not set
+> diff --git a/support/config-fragments/autobuild/br-arm-full-nothread.config b/support/config-fragments/autobuild/br-arm-full-nothread.config
+> index 97e1e81809..3b0267f6d3 100644
+> --- a/support/config-fragments/autobuild/br-arm-full-nothread.config
+> +++ b/support/config-fragments/autobuild/br-arm-full-nothread.config
+> @@ -3,9 +3,9 @@ BR2_arm1176jzf_s=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm11-full-nothread-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm11-full-nothread-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS is not set
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-arm-full-static.config b/support/config-fragments/autobuild/br-arm-full-static.config
+> index 4797ccd2f5..59e90f3371 100644
+> --- a/support/config-fragments/autobuild/br-arm-full-static.config
+> +++ b/support/config-fragments/autobuild/br-arm-full-static.config
+> @@ -3,7 +3,7 @@ BR2_STATIC_LIBS=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+>  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> diff --git a/support/config-fragments/autobuild/br-arm-full.config b/support/config-fragments/autobuild/br-arm-full.config
+> index f12b76e5e9..652c5a68e5 100644
+> --- a/support/config-fragments/autobuild/br-arm-full.config
+> +++ b/support/config-fragments/autobuild/br-arm-full.config
+> @@ -2,7 +2,7 @@ BR2_arm=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
+>  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> diff --git a/support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config b/support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config
+> index 077e1d84ba..2f651dedfe 100644
+> --- a/support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config
+> +++ b/support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config
+> @@ -2,7 +2,7 @@ BR2_x86_pentium_mmx=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-i386-pentium-mmx-musl-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-i386-pentium-mmx-musl-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+>  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
+> diff --git a/support/config-fragments/autobuild/br-i386-pentium4-full.config b/support/config-fragments/autobuild/br-i386-pentium4-full.config
+> index 1fe960ba89..acc7c0942b 100644
+> --- a/support/config-fragments/autobuild/br-i386-pentium4-full.config
+> +++ b/support/config-fragments/autobuild/br-i386-pentium4-full.config
+> @@ -2,7 +2,7 @@ BR2_x86_pentium4=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+>  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> diff --git a/support/config-fragments/autobuild/br-m68k-5208-full.config b/support/config-fragments/autobuild/br-m68k-5208-full.config
+> index 25a2a21883..cee8a04269 100644
+> --- a/support/config-fragments/autobuild/br-m68k-5208-full.config
+> +++ b/support/config-fragments/autobuild/br-m68k-5208-full.config
+> @@ -2,9 +2,9 @@ BR2_m68k=y
+>  BR2_m68k_cf5208=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-m68k-5208-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-m68k-5208-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL is not set
+> diff --git a/support/config-fragments/autobuild/br-m68k-68040-full.config b/support/config-fragments/autobuild/br-m68k-68040-full.config
+> index 8803fa1db3..9f600acf46 100644
+> --- a/support/config-fragments/autobuild/br-m68k-68040-full.config
+> +++ b/support/config-fragments/autobuild/br-m68k-68040-full.config
+> @@ -1,9 +1,9 @@
+>  BR2_m68k=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-m68k-68040-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-m68k-68040-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL is not set
+> diff --git a/support/config-fragments/autobuild/br-microblazeel-full.config b/support/config-fragments/autobuild/br-microblazeel-full.config
+> index 5dc5e842fd..60c23a202d 100644
+> --- a/support/config-fragments/autobuild/br-microblazeel-full.config
+> +++ b/support/config-fragments/autobuild/br-microblazeel-full.config
+> @@ -1,7 +1,7 @@
+>  BR2_microblazeel=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-microblaze-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-microblaze-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+>  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> diff --git a/support/config-fragments/autobuild/br-mips32r6-el-hf-glibc.config b/support/config-fragments/autobuild/br-mips32r6-el-hf-glibc.config
+> index 69cb93c1f2..ce61100a37 100644
+> --- a/support/config-fragments/autobuild/br-mips32r6-el-hf-glibc.config
+> +++ b/support/config-fragments/autobuild/br-mips32r6-el-hf-glibc.config
+> @@ -4,8 +4,8 @@ BR2_mips_32r6=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips32r6-el-hf-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips32r6-el-hf-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-mips64-n64-full.config b/support/config-fragments/autobuild/br-mips64-n64-full.config
+> index cdd3029b2f..99ace7776a 100644
+> --- a/support/config-fragments/autobuild/br-mips64-n64-full.config
+> +++ b/support/config-fragments/autobuild/br-mips64-n64-full.config
+> @@ -3,8 +3,8 @@ BR2_MIPS_NABI64=y
+>  # BR2_MIPS_SOFT_FLOAT is not set
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64-n64-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64-n64-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config b/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config
+> index f722b6582e..48ed24dacf 100644
+> --- a/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config
+> +++ b/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config
+> @@ -5,8 +5,8 @@ BR2_MIPS_NABI64=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64r6-n64-el-hf-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64r6-n64-el-hf-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-mipsel-o32-full.config b/support/config-fragments/autobuild/br-mipsel-o32-full.config
+> index 9c46809d82..6099e48869 100644
+> --- a/support/config-fragments/autobuild/br-mipsel-o32-full.config
+> +++ b/support/config-fragments/autobuild/br-mipsel-o32-full.config
+> @@ -2,9 +2,9 @@ BR2_mipsel=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-nios2-glibc.config b/support/config-fragments/autobuild/br-nios2-glibc.config
+> index 2f93714fc9..c5ac68dc50 100644
+> --- a/support/config-fragments/autobuild/br-nios2-glibc.config
+> +++ b/support/config-fragments/autobuild/br-nios2-glibc.config
+> @@ -2,8 +2,8 @@ BR2_nios2=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-nios2-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-nios2-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-openrisc-uclibc.config b/support/config-fragments/autobuild/br-openrisc-uclibc.config
+> index b3cf2d08ae..a4cbc40618 100644
+> --- a/support/config-fragments/autobuild/br-openrisc-uclibc.config
+> +++ b/support/config-fragments/autobuild/br-openrisc-uclibc.config
+> @@ -1,9 +1,9 @@
+>  BR2_or1k=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-openrisc-full-2019.11.tar.bz2"
+> -BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-openrisc-full-2020.02.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config b/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config
+> index b8a568e431..f083462654 100644
+> --- a/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config
+> +++ b/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config
+> @@ -3,8 +3,8 @@ BR2_powerpc_603e=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-603e-basic-cpp-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-603e-basic-cpp-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-powerpc-e500mc-full.config b/support/config-fragments/autobuild/br-powerpc-e500mc-full.config
+> index dc7c7d35fc..c5edcc177d 100644
+> --- a/support/config-fragments/autobuild/br-powerpc-e500mc-full.config
+> +++ b/support/config-fragments/autobuild/br-powerpc-e500mc-full.config
+> @@ -3,9 +3,9 @@ BR2_powerpc_e500mc=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-e500mc-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-e500mc-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config b/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config
+> index e7ff1a4715..5d7171a067 100644
+> --- a/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config
+> +++ b/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config
+> @@ -2,8 +2,8 @@ BR2_powerpc64=y
+>  BR2_powerpc_power7=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64-power7-glibc-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64-power7-glibc-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config b/support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config
+> index 97c7ebdb67..b743bbc4a0 100644
+> --- a/support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config
+> +++ b/support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config
+> @@ -2,8 +2,8 @@ BR2_powerpc64le=y
+>  BR2_powerpc_power8=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64le-power8-glibc-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64le-power8-glibc-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-riscv32.config b/support/config-fragments/autobuild/br-riscv32.config
+> index f8901edf2d..d9110a6a86 100644
+> --- a/support/config-fragments/autobuild/br-riscv32.config
+> +++ b/support/config-fragments/autobuild/br-riscv32.config
+> @@ -2,7 +2,7 @@ BR2_riscv=y
+>  BR2_RISCV_32=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv32-glibc-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv32-glibc-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+>  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> diff --git a/support/config-fragments/autobuild/br-riscv64.config b/support/config-fragments/autobuild/br-riscv64.config
+> index f98675d8dd..c5df86392c 100644
+> --- a/support/config-fragments/autobuild/br-riscv64.config
+> +++ b/support/config-fragments/autobuild/br-riscv64.config
+> @@ -1,8 +1,8 @@
+>  BR2_riscv=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv64-glibc-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv64-glibc-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-sh4-full.config b/support/config-fragments/autobuild/br-sh4-full.config
+> index 5e358bb82a..dc31902874 100644
+> --- a/support/config-fragments/autobuild/br-sh4-full.config
+> +++ b/support/config-fragments/autobuild/br-sh4-full.config
+> @@ -2,9 +2,9 @@ BR2_sh=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sh4-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sh4-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-sparc-uclibc.config b/support/config-fragments/autobuild/br-sparc-uclibc.config
+> index 74b4bf27eb..8550a01263 100644
+> --- a/support/config-fragments/autobuild/br-sparc-uclibc.config
+> +++ b/support/config-fragments/autobuild/br-sparc-uclibc.config
+> @@ -1,7 +1,7 @@
+>  BR2_sparc=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sparc-uclibc-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sparc-uclibc-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+>  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> diff --git a/support/config-fragments/autobuild/br-sparc64-glibc.config b/support/config-fragments/autobuild/br-sparc64-glibc.config
+> index 75c31ad5cb..0b77bb45fa 100644
+> --- a/support/config-fragments/autobuild/br-sparc64-glibc.config
+> +++ b/support/config-fragments/autobuild/br-sparc64-glibc.config
+> @@ -1,7 +1,7 @@
+>  BR2_sparc64=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sparc64-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sparc64-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+>  BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> diff --git a/support/config-fragments/autobuild/br-x86-64-core2-full.config b/support/config-fragments/autobuild/br-x86-64-core2-full.config
+> index 8bab1deb17..b6682da202 100644
+> --- a/support/config-fragments/autobuild/br-x86-64-core2-full.config
+> +++ b/support/config-fragments/autobuild/br-x86-64-core2-full.config
+> @@ -3,9 +3,9 @@ BR2_x86_core2=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-x86-64-musl.config b/support/config-fragments/autobuild/br-x86-64-musl.config
+> index c67a524744..03de24d354 100644
+> --- a/support/config-fragments/autobuild/br-x86-64-musl.config
+> +++ b/support/config-fragments/autobuild/br-x86-64-musl.config
+> @@ -3,8 +3,8 @@ BR2_x86_atom=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-musl-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-musl-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/br-xtensa-full.config b/support/config-fragments/autobuild/br-xtensa-full.config
+> index 3d57b99c3c..9d0092143c 100644
+> --- a/support/config-fragments/autobuild/br-xtensa-full.config
+> +++ b/support/config-fragments/autobuild/br-xtensa-full.config
+> @@ -1,9 +1,9 @@
+>  BR2_xtensa=y
+>  BR2_TOOLCHAIN_EXTERNAL=y
+>  BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-xtensa-full-2019.11.tar.bz2"
+> +BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-xtensa-full-2020.02.tar.bz2"
+>  BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_3=y
+> +BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+>  BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>  # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>  BR2_TOOLCHAIN_EXTERNAL_CXX=y
 > -- 
-> 2.20.1
+> 2.25.1
 > 
 > _______________________________________________
 > buildroot mailing list
