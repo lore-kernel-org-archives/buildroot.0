@@ -1,58 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Mar 2020 16:55:03 +0100
-Subject: [Buildroot] [RFC PATCH 1/1] package/cegui: rename and bump
- version
-In-Reply-To: <20200318085125.12843-1-b.bilas@grinn-global.com>
-References: <20200318085125.12843-1-b.bilas@grinn-global.com>
-Message-ID: <20200321165503.7baa0173@windsurf.home>
+Date: Sat, 21 Mar 2020 16:55:32 +0100
+Subject: [Buildroot] [git commit] package/civetweb: add zlib optional
+ dependency
+Message-ID: <20200321154409.8884D837FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bartosz,
+commit: https://git.buildroot.net/buildroot/commit/?id=41dfe5707cc7704d74604879035882b01f349ce8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Mar 2020 09:51:25 +0100
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+zlib is an optional dependency since version 1.11 and
+https://github.com/civetweb/civetweb/commit/6b8b15935378f71323ff95f907fa0d33841deac0
 
-> Since spice ver. 0.12.6 doesn't depend on cegui anymore let's bump to the latest stable version
-> and rename package.
-> 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/civetweb/civetweb.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Unfortunately, it doesn't build with uClibc/musl:
-
-/home/thomas/projets/buildroot/output/build/cegui-0-8-7/cegui/src/Exceptions.cpp:45:25: fatal error: execinfo.h: No such file or directory
-compilation terminated.
-
-You'll have to add a check for execinfo.h in CMakeLists.txt and use the
-result of this check instead of the crazy:
-
-#elif     (defined(__linux__) && !defined(__ANDROID__)) \
-      ||  defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) \
-      ||  defined(__HAIKU__)
-
-> +ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
-> +CEGUI_DEPENDENCIES += libepoxy
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SDL2_OPENGLES),y)
-> +CEGUI_DEPENDENCIES += sdl2_opengles
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OGRE),y)
-> +CEGUI_DEPENDENCIES += ogre
-> +endif
-
-[... snip ...]
-
-So I take it there are no enable/disable options ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
+index 99da1b6f06..f05b29f3cd 100644
+--- a/package/civetweb/civetweb.mk
++++ b/package/civetweb/civetweb.mk
+@@ -38,6 +38,12 @@ else
+ CIVETWEB_COPT += -DNO_SSL
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++CIVETWEB_CONF_OPTS += WITH_ZLIB=1
++CIVETWEB_LIBS += -lz
++CIVETWEB_DEPENDENCIES += zlib
++endif
++
+ ifeq ($(BR2_PACKAGE_CIVETWEB_SERVER),y)
+ CIVETWEB_BUILD_TARGETS += build
+ CIVETWEB_INSTALL_TARGETS += install
