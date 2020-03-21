@@ -1,61 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Mar 2020 16:19:22 +0100
-Subject: [Buildroot] [PATCH 2/5] package/freescale-imx/firmware-imx:
- bump version to 8.5
-In-Reply-To: <20200320163158.18341-3-maeva.manuel@oss.nxp.com>
+Date: Sat, 21 Mar 2020 16:20:00 +0100
+Subject: [Buildroot] [PATCH 4/5] package/imx-mkimage: bump to version
+ rel_imx_4.19.35_1.1.0
+In-Reply-To: <20200320163158.18341-5-maeva.manuel@oss.nxp.com>
 References: <20200320163158.18341-1-maeva.manuel@oss.nxp.com>
- <20200320163158.18341-3-maeva.manuel@oss.nxp.com>
-Message-ID: <20200321161922.6d585e58@windsurf.home>
+ <20200320163158.18341-5-maeva.manuel@oss.nxp.com>
+Message-ID: <20200321162000.47e552c2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Maeva,
-
-On Fri, 20 Mar 2020 17:31:55 +0100
+On Fri, 20 Mar 2020 17:31:57 +0100
 Maeva Manuel <maeva.manuel@oss.nxp.com> wrote:
 
-> -else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
-> -FIRMWARE_IMX_INSTALL_IMAGES = YES
-> -define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
-> -	# SECO firmware is needed when generating imx8-boot-sd.bin which
-> -	# is done in post-image script.
-> -	cp $(@D)/firmware/seco/mx8qm-ahab-container.img \
-> -		$(BINARIES_DIR)/ahab-container.img
-> -endef
->  else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
->  FIRMWARE_IMX_INSTALL_IMAGES = YES
+> -From 0677e6cff00506de56d11bfa230b6c366e74f6ed Mon Sep 17 00:00:00 2001
+> +From 4870df3d70e94f9f0d6c06f610cea2d88cd6edb5 Mon Sep 17 00:00:00 2001
+>  From: Erik Larsson <erik.larsson@combitech.se>
+>  Date: Thu, 8 Mar 2018 19:04:37 +0100
+> -Subject: [PATCH] Add support for overriding BL32 and BL33 not only BL31
+> +Subject: [PATCH 1/3] Add support for overriding BL32 and BL33 not only BL31
 
-This line was no longer needed, since you're dropping
-FIRMWARE_IMX_INSTALL_IMAGES_CMDS below.
+Please generate patches with "git format-patch -N" to have the 1/3, 2/3
+and 3/3 numbering inside the patches.
 
-> -define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
-> -	# SECO firmware is needed when generating imx8-boot-sd.bin which
-> -	# is done in post-image script.
-> -	cp $(@D)/firmware/seco/mx8qx-ahab-container.img \
-> -		$(BINARIES_DIR)/ahab-container.img
-> -endef
+I fixed that when applying.
 
-However, more generally, I dislike this firmware-imx package. It seems
-to have been progressively patched with more and more logic, without
-much consistency. For example, the VPU blobs for i.MX8 are not
-installed for BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M and
-BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM. Is this normal ?
-
-For platforms other than BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M,
-BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM and
-BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X, we install all VPU blobs and
-SDMA blobs, even those that are not relevant for the selected platform.
-
-I think it really needs a complete rewrite, with a careful look at all
-firmware files that are provided by NXP in this package, and see which
-ones are applicable to which platform.
-
-It would be great if you could have a look at doing such a cleanup.
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
