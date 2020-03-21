@@ -1,74 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 21 Mar 2020 17:01:17 +0100
-Subject: [Buildroot] [git commit] package/{bluez5_utils,
- bluez5_utils-headers}: bump to version 5.54
-Message-ID: <20200321154852.E8E7083905@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bluez5_utils: enable support for
+ external ell
+Message-ID: <20200321154853.10C10838DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a678c952f4394b119d884ef22910f30860e1c2e
+commit: https://git.buildroot.net/buildroot/commit/?id=5a29bf23ecffcb93a8e82721ae7cfb2b82a91c50
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes since version 5.52:
+Bluez5' support for the mesh profile needs ell, the Embedded Linux
+Library, at least version 0.28.
 
-5.54:
-  Fix issue with HOGP to accept data only from bonded devices.
-  Fix issue with A2DP sessions being connected at the same time.
-  Fix issue with class UUID matches before connecting profile.
-  Add support for handling MTU auto-tuning option for AVDTP.
-  Add support for new policy for Just-Works repairing.
-  Add support for Enhanced ATT bearer (EATT).
-
-5.53:
-  Fix issue with handling unregistration for advertisment.
-  Fix issue with A2DP and handling recovering process.
-  Fix issue with udpating input device information.
-  Add support for loading blocked keys.
+Although Bluez5 bundles an internal copy of ell version 0.28, we prefer
+building with external libraries.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
- package/bluez5_utils/bluez5_utils.hash               | 2 +-
- package/bluez5_utils/bluez5_utils.mk                 | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/bluez5_utils/Config.in       | 1 +
+ package/bluez5_utils/bluez5_utils.mk | 6 +++---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-index c61f93a23c..871986c817 100644
---- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
-+++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 038c6e7095..1e9eda31dc 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -62,6 +62,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HEALTH
  
- # Keep the version and patches in sync with bluez5_utils
--BLUEZ5_UTILS_HEADERS_VERSION = 5.52
-+BLUEZ5_UTILS_HEADERS_VERSION = 5.54
- BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index 00112bc0b6..3eb6912fb3 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  f7144ce2039202cfac18ccb52426efea11c98e4f6e1bb8041bcb994b8378560a  bluez-5.52.tar.xz
-+sha256  68cdab9e63e8832b130d5979dc8c96fdb087b31278f342874d992af3e56656dc  bluez-5.54.tar.xz
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+ config BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH
+ 	bool "build mesh profile"
++	select BR2_PACKAGE_ELL
+ 	select BR2_PACKAGE_JSON_C
+ 	select BR2_PACKAGE_READLINE
+ 	help
 diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 8f9249454d..e328f52eaf 100644
+index 2d95899f44..2149614c56 100644
 --- a/package/bluez5_utils/bluez5_utils.mk
 +++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+@@ -53,10 +53,10 @@ endif
  
- # Keep the version and patches in sync with bluez5_utils-headers
--BLUEZ5_UTILS_VERSION = 5.52
-+BLUEZ5_UTILS_VERSION = 5.54
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
+ # enable mesh profile
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_MESH),y)
+-BLUEZ5_UTILS_CONF_OPTS += --enable-mesh
+-BLUEZ5_UTILS_DEPENDENCIES += json-c readline
++BLUEZ5_UTILS_CONF_OPTS += --enable-external-ell --enable-mesh
++BLUEZ5_UTILS_DEPENDENCIES += ell json-c readline
+ else
+-BLUEZ5_UTILS_CONF_OPTS += --disable-mesh
++BLUEZ5_UTILS_CONF_OPTS += --disable-external-ell --disable-mesh
+ endif
+ 
+ # enable midi profile
