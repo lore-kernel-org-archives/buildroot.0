@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 21:09:14 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/ffmpeg: fix typo
+Date: Sat, 21 Mar 2020 21:08:45 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/ffmpeg: fix typo
  "--enable-bsfs" -> "--enable-bsf"
-Message-ID: <20200321195656.AB37D83B15@busybox.osuosl.org>
+Message-ID: <20200321195701.97F4283B1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12c9335bc7e6a49bbb5df5fb86ab419c868a772f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=70d41a39667a55674a3636c47c9c9a2c6015ae19
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fix ffmpeg configuration when BR2_PACKAGE_FFMPEG_BSFS is not default ("all"):
 
