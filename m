@@ -1,23 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Mar 2020 16:23:00 +0100
-Subject: [Buildroot] [PATCH] package/perl: bump to version 5.30.2
-In-Reply-To: <20200321130240.16914-1-francois.perrad@gadz.org>
-References: <20200321130240.16914-1-francois.perrad@gadz.org>
-Message-ID: <20200321162300.0777b476@windsurf.home>
+Date: Sat, 21 Mar 2020 16:35:03 +0100
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.4.x series
+In-Reply-To: <20200321143053.24764-1-peter@korsgaard.com>
+References: <20200321143053.24764-1-peter@korsgaard.com>
+Message-ID: <20200321163503.4361c9fe@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 21 Mar 2020 14:02:40 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+On Sat, 21 Mar 2020 15:30:53 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/perl/perl.hash | 12 ++++++------
->  package/perl/perl.mk   |  4 ++--
->  2 files changed, 8 insertions(+), 8 deletions(-)
+>  linux/Config.in                      |  2 +-
+>  linux/linux.hash                     | 10 +++++-----
+>  package/linux-headers/Config.in.host | 10 +++++-----
+>  3 files changed, 11 insertions(+), 11 deletions(-)
 
 Applied to master, thanks.
 
