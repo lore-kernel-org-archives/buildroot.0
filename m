@@ -1,164 +1,178 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 21 Mar 2020 19:33:54 +0100
-Subject: [Buildroot] [PATCH] package/perl-crypt-ssleay: fix configure
- step
-In-Reply-To: <20200321174655.GG4290@scaer>
-References: <20200321085534.21655-1-francois.perrad@gadz.org>
- <20200321174655.GG4290@scaer>
-Message-ID: <CAAXf6LWLrPAS9z-4W=RCH8pBSa6PJc+xAMxP6RRRJbwFYWJDPQ@mail.gmail.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Sun, 22 Mar 2020 00:32:38 +0530
+Subject: [Buildroot] [PATCH v7 1/4] package/python-numpy: Bump to version
+ 1.18.2
+In-Reply-To: <20200321190241.3590-1-jagan@amarulasolutions.com>
+References: <20200321190241.3590-1-jagan@amarulasolutions.com>
+Message-ID: <20200321190241.3590-2-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+Bump the python-numpy version to 1.18.2, this version
+of python-numpy will support python3 only, not python2.
 
-On Sat, Mar 21, 2020, 18:47 Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Drop python2 dependency from opencv3, gnuadio packages
+since the python support on these are selecting
+python-numpy.
 
-> Fran?ois, Thomas, All,
->
-> Thomas: question for you about this package you recently submitted...
->
-> On 2020-03-21 09:55 +0100, Francois Perrad spake thusly:
-> > currently, the compilation of openssl-version.c relies on include files
-> > from the system libssl-dev
-> >
-> > see
-> http://autobuild.buildroot.org/results/306/30659feaa11e7d0daf01c41e1bc1da2b9538968c/
-> >
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->
-> Thanks for the patch, but it seems there are a few other issues with
-> this perl package, with this defconfig:
->
->     BR2_arm=y
->     BR2_cortex_a7=y
->     BR2_TOOLCHAIN_EXTERNAL=y
->     BR2_PACKAGE_PERL=y
->     BR2_PACKAGE_PERL_CRYPT_SSLEAY=y
->
-> which fails with:
->
->     >>> perl-crypt-ssleay 0.72 Configuring
->     cd /home/ymorin/dev/buildroot/O/build/perl-crypt-ssleay-0.72/ && if [
-> -f Build.PL ] && [ MB != "EUMM" ] ; then  PERL_MM_USE_DEFAULT=1 PERL5LIB=
-> PERL_USE_UNSAFE_INC=1 /home/ymorin/dev/buildroot/O/host/bin/perl Build.PL
-> --config
-> ar="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-ar"
-> --config
-> full_ar="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-ar"
-> --config
-> cc="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-gcc"
-> --config ccflags="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64  -Os  " --config optimize=" " --config
-> ld="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-gcc"
-> --config lddlflags="-shared " --config ldflags="" --include_dirs
-> /home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/perl5/5.30.2/arm-linux/CORE
-> --destdir /home/ymorin/dev/buildroot/O/target --installdirs vendor
-> --install_path lib=/usr/lib/perl5/site_perl/5.30.2 --install_path
-> arch=/usr/lib/perl5/site_perl/5.30.2/arm-linux --install_path bin=/usr/bin
-> --install_path script=/usr/bin --install_path bindoc=/usr/share/man/man1
-> --install_path libdoc=/usr/share/man/man3
-> --incpath=/home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include
-> || exit 1; else  PERL_MM_USE_DEFAULT=1 PERL_AUTOINSTALL=--skipdeps
-> PERL5LIB= PERL_USE_UNSAFE_INC=1 /home/ymorin/dev/buildroot/O/host/bin/perl
-> Makefile.PL
-> AR="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-ar"
-> FULL_AR="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-ar"
-> CC="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-gcc"
-> CCFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-> -Os  " OPTIMIZE=" "
-> LD="/home/ymorin/dev/buildroot/O/host/bin/arm-none-linux-gnueabihf-gcc"
-> LDDLFLAGS="-shared " LDFLAGS=""
-> PERL_ARCHLIB=/home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/perl5/5.30.2/arm-linux
-> DESTDIR=/home/ymorin/dev/buildroot/O/target INSTALLDIRS=vendor
-> INSTALLVENDORLIB=/usr/lib/perl5/site_perl/5.30.2
-> INSTALLVENDORARCH=/usr/lib/perl5/site_perl/5.30.2/arm-linux
-> INSTALLVENDORBIN=/usr/bin INSTALLVENDORSCRIPT=/usr/bin
-> INSTALLVENDORMAN1DIR=/usr/share/man/man1
-> INSTALLVENDORMAN3DIR=/usr/share/man/man3
-> --incpath=/home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include
-> || exit 1; fi
->
->     *** THIS IS NOT AN ERROR, JUST A MESSAGE FOR YOUR INFORMATION ***
->
->         Do you really need Crypt::SSLeay?
->
->         Starting with version 6.02 of LWP, https support was unbundled into
->         LWP::Protocol::https. This module specifies as one of its
-> prerequisites
->         IO::Socket::SSL which is automatically used by LWP::UserAgent
-> unless
->         this preference is overridden separately. IO::Socket::SSL is a more
->         complete implementation, and, crucially, it allows hostname
->         verification. Crypt::SSLeay does not support this. At this point,
->         Crypt::SSLeay is maintained to support existing software that
-> already
->         depends on it.
->
->         However, it is possible that your software does not really depend
-> on
->         Crypt::SSLeay, only on the ability of LWP::UserAgent class to
->         communicate with sites over SSL/TLS.
->
->         If are using version LWP 6.02 or later, and therefore have
-> installed
->         LWP::Protocol::https and its dependencies, and do not explicitly
-> use
->         Net::SSL before loading LWP::UserAgent, or override the default
-> socket
->         class, you are probably using IO::Socket::SSL and do not really
-> need
->         Crypt::SSLeay.
->
->         Before installing Crypt::SSLeay, you may want to try specifying a
->         dependency on LWP::Protocol::https.
->
->     In file included from
-> /home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/features.h:474,
->                      from
-> /home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/libc-header-start.h:33,
->                      from
-> /home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/stdio.h:27,
->                      from openssl-version.c:1:
->
-> /home/ymorin/dev/buildroot/O/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/gnu/stubs.h:7:11:
-> fatal error: gnu/stubs-soft.h: No such file or directory
->         7 | # include <gnu/stubs-soft.h>
->           |           ^~~~~~~~~~~~~~~~~~
->     compilation terminated.
->     Failed to build and link a simple executable using OpenSSL
->     >>> perl-crypt-ssleay 0.72 Building
->     cd /home/ymorin/dev/buildroot/O/build/perl-crypt-ssleay-0.72/ && if [
-> -f Build.PL ] && [ MB != "EUMM" ] ; then PERL5LIB= PERL_USE_UNSAFE_INC=1
-> /home/ymorin/dev/buildroot/O/host/bin/perl Build  build; else /usr/bin/make
-> -j1 FIXIN=:  pure_all; fi
->     make[2]: *** No rule to make target 'pure_all'.  Stop.
->     make[1]: *** [package/pkg-generic.mk:269:
-> /home/ymorin/dev/buildroot/O/build/perl-crypt-ssleay-0.72/.stamp_built]
-> Error 2
->     make: *** [Makefile:23: _all] Error 2
->
-> So I see at least two problems here:
->
->   - first, this module seems to be deprecated. It was added recently
->     with lwp-protocols-https, although the version for that is already
->     more recent than the one in the warning above.
->
->   - second, the configure step, although it fails, does not cause
->     Buildroot to stop immediately; instead, the build continues.
->     And indeed, the code does just 'exit 0' when the test fails (see
->     patch below)
->
-> So, do we really need to have this legacy package that is broken?
->
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Cc: Esben Haabendal <esben@geanix.com>
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+---
+Changes for v7:
+- bump 1.181.2 numpy
+- drop 'BR2_PACKAGE_HOST_PYTHON_CYTHON' selection from numpy
+- drop python2 dependency from gnuradio.mk
+- drop python2 dependency from opencv3.mk
+- update the commit message
 
-I also saw this warning recently, and asked the responsible team to look
-into it. I will check internally next week and get back to you.
+ package/gnuradio/Config.in             |  2 +-
+ package/gnuradio/gnuradio.mk           |  4 ++--
+ package/opencv3/Config.in              |  2 +-
+ package/opencv3/opencv3.mk             | 14 --------------
+ package/python-numpy/Config.in         |  1 +
+ package/python-numpy/python-numpy.hash | 14 +++++++-------
+ package/python-numpy/python-numpy.mk   |  4 +++-
+ 7 files changed, 15 insertions(+), 26 deletions(-)
 
-Thanks,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200321/27b1f358/attachment.html>
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 6d438bcd6f..bf69ed605b 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -63,7 +63,7 @@ config BR2_PACKAGE_GNURADIO_FEC
+ 
+ config BR2_PACKAGE_GNURADIO_PYTHON
+ 	bool "python support"
+-	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+ 	select BR2_PACKAGE_BOOST_PYTHON
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index 41d4619f72..ab5b79e3e5 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -13,7 +13,7 @@ GNURADIO_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
+ # host-python-mako and host-python-six are needed for volk to compile
+ GNURADIO_DEPENDENCIES = \
+-	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python) \
++	host-python3 \
+ 	host-python-mako \
+ 	host-python-six \
+ 	host-swig \
+@@ -108,7 +108,7 @@ GNURADIO_CONF_OPTS += -DENABLE_GR_FILTER=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
+-GNURADIO_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),python3,python)
++GNURADIO_DEPENDENCIES += python3
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
+ else
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=OFF
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index d4b17b6acf..18c390c515 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -156,7 +156,7 @@ config BR2_PACKAGE_OPENCV3_LIB_PHOTO
+ 
+ config BR2_PACKAGE_OPENCV3_LIB_PYTHON
+ 	bool "python"
+-	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+ 	select BR2_PACKAGE_PYTHON_NUMPY
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 8a8257b387..fe41f6f382 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -312,19 +312,6 @@ OPENCV3_CONF_OPTS += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV3_LIB_PYTHON),y)
+-ifeq ($(BR2_PACKAGE_PYTHON),y)
+-OPENCV3_CONF_OPTS += \
+-	-DBUILD_opencv_python2=ON \
+-	-DBUILD_opencv_python3=OFF \
+-	-DPYTHON2_EXECUTABLE=$(HOST_DIR)/bin/python2 \
+-	-DPYTHON2_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
+-	-DPYTHON2_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR).so \
+-	-DPYTHON2_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/numpy/core/include \
+-	-DPYTHON2_PACKAGES_PATH=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+-	-DPYTHON2_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
+-OPENCV3_DEPENDENCIES += python
+-OPENCV3_KEEP_PY_FILES += usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/cv2/config*.py
+-else
+ OPENCV3_CONF_OPTS += \
+ 	-DBUILD_opencv_python2=OFF \
+ 	-DBUILD_opencv_python3=ON \
+@@ -336,7 +323,6 @@ OPENCV3_CONF_OPTS += \
+ 	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
+ OPENCV3_DEPENDENCIES += python3
+ OPENCV3_KEEP_PY_FILES += usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/cv2/config*.py
+-endif
+ OPENCV3_CONF_ENV += $(PKG_PYTHON_DISTUTILS_ENV)
+ OPENCV3_DEPENDENCIES += python-numpy
+ else
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index 5b9ee5803b..507d52c4d8 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -15,6 +15,7 @@ config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_PYTHON_NUMPY
+ 	bool "python-numpy"
++	depends on BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	# python-numpy needs fenv.h which is not provided by uclibc
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+index eb4123e3f6..ff9d02643c 100644
+--- a/package/python-numpy/python-numpy.hash
++++ b/package/python-numpy/python-numpy.hash
+@@ -1,9 +1,9 @@
+-# Copied from https://github.com/numpy/numpy/releases/tag/v1.16.4
+-sha256	a3bccb70ad94091a5b9e2469fabd41ac877c140a6828c2022e35560a2ec0346c	numpy-1.16.4.tar.gz
++# Copied from https://github.com/numpy/numpy/releases/tag/v1.18.1
++sha256  da204ce460aa4247e595b7c7189d2fb2ed5f796bc03197055de01dac61d0125e	numpy-1.18.2.tar.gz
+ # License files, locally calculated
+-sha256	6b5086f61fe0c71564a79304ecbaa60f11fa3f3debf82f73d16a611cab102adc	LICENSE.txt
+-sha256	426a5a484480f57a295db48c2c04f47bb3274752dd82a7fd6541dfa2cb90f641	doc/sphinxext/LICENSE.txt
++sha256  ad81d0c21843ba6ce6fe5fa3eaacb61120be70cd798c52f63df3f4c12a843f0c	LICENSE.txt
++sha256  d3045980e80a6b39f98586c24bc7f39a7625b4b9f08ce72e367d12814743d047	numpy/core/src/multiarray/dragon4.c
++sha256  426a5a484480f57a295db48c2c04f47bb3274752dd82a7fd6541dfa2cb90f641	doc/sphinxext/LICENSE.txt
+ sha256	154a8706fa0fdeff1073bf6239c4ecf51f562ab107066eef839dade1a45c824c	doc/scipy-sphinx-theme/LICENSE.txt
+-sha256	a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55	numpy/linalg/lapack_lite/LICENSE.txt
+-sha256	badf51c7e3e7de9c7630bd069780f5c197b846ef7660b342a1e58d5553592d8e	tools/npy_tempita/license.txt
+-sha256	d37526b4a34c0aa859afe6f9b7e64ca7c306b7430df8113dd5ac6fcb246bd2d4	numpy/core/src/multiarray/dragon4.c
++sha256  a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55	numpy/linalg/lapack_lite/LICENSE.txt
++sha256  badf51c7e3e7de9c7630bd069780f5c197b846ef7660b342a1e58d5553592d8e	tools/npy_tempita/license.txt
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index 3b474efa6e..3f0df7a640 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_NUMPY_VERSION = 1.16.4
++PYTHON_NUMPY_VERSION = 1.18.2
+ PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
+ PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
+ PYTHON_NUMPY_LICENSE = BSD-3-Clause, BSD-2-Clause, PSF, Apache-2.0, MIT, Zlib
+@@ -14,6 +14,8 @@ PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
+ 			tools/npy_tempita/license.txt \
+ 			numpy/core/src/multiarray/dragon4.c
+ PYTHON_NUMPY_SETUP_TYPE = setuptools
++PYTHON_NUMPY_DEPENDENCIES += host-python-cython
++HOST_PYTHON_NUMPY_DEPENDENCIES += host-python-cython
+ 
+ ifeq ($(BR2_PACKAGE_CLAPACK),y)
+ PYTHON_NUMPY_DEPENDENCIES += clapack
+-- 
+2.17.1
