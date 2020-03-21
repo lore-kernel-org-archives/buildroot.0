@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 22:30:54 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/gssdp: explicitly
+Date: Sat, 21 Mar 2020 22:30:31 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/gssdp: explicitly
  disable vapi
-Message-ID: <20200321211902.78BCE83BA3@busybox.osuosl.org>
+Message-ID: <20200321211909.B0EE883BB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b06b0be65a5c2ff57c89c1f085d1f78919913920
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=751f657689485a04998dab168a167f8e5c87a9f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Currently, vapi support does not work with meson due to meson calling vapigen
 directly instead of the vala wrapper. As such, when building typelib files for
