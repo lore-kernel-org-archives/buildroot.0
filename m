@@ -1,70 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 20:40:37 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] meson: Strip quotes from
- BR2_ENDIAN
-Message-ID: <20200321192855.E49C783A77@busybox.osuosl.org>
+Date: Sat, 21 Mar 2020 20:45:27 +0100
+Subject: [Buildroot] [PATCH] package/pkg-meson.mk: fix multiple
+ _MESON_EXTRA_BINARIES
+In-Reply-To: <20200310121510.905791-1-john@metanate.com> (John Keeping's
+ message of "Tue, 10 Mar 2020 12:15:10 +0000")
+References: <20200310121510.905791-1-john@metanate.com>
+Message-ID: <877dzd5w6g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ab3bcee8c5333304fdc045aa5fe41806ae7e84e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "John" == John Keeping <john@metanate.com> writes:
 
-The values in the cross-compilation file are expected to be quoted with
-single quotes, which we have in our template.
+ > If multiple entries are specified for _MESON_EXTRA_BINARIES, the current
+ > sed expression will only replace the first one.
 
-However, the endian value we are injecting comes from Kconfig, so it is
-double-quoted, and those quotes end up in the cross-compilation files we
-generate (the internal one, and the SDK one):
+ > Specifically, from GNU sed 4.8 the manual says:
 
-    endian = '"little"'
+ >     /regexp/
+ >         Match  lines matching the regular expression regexp.  Matching
+ >         is performed on the current pattern space, which can be modified
+ >         with commands such as ``s///''.
 
-So qstrip the value before we inject it.
+ > so after the first binary has been added, the next entry no longer
+ > matches since the pattern space has been modifed.
 
-Propagate the fix to the two generated files by using the same variable
-HOST_MESON_TARGET_ENDIAN in both cases, rather than replicating the
-(flawed) logic.
+ > Instead of adding a script for each value, apply the match once and add
+ > a subsitution for each entry.
 
-While at it, also use the common GCC_TARGET_CPU variable for the SDK
-file too.
+ > Signed-off-by: John Keeping <john@metanate.com>
 
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 92eca65ddf9a27a0919d01d03e441d84740fa7b3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/meson/meson.mk | 2 +-
- package/pkg-meson.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Committed to 2020.02.x, thanks.
 
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 810c84690a..d782ee086b 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -13,7 +13,7 @@ MESON_SETUP_TYPE = setuptools
- HOST_MESON_DEPENDENCIES = host-ninja
- HOST_MESON_NEEDS_HOST_PYTHON = python3
- 
--HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
-+HOST_MESON_TARGET_ENDIAN = $(call qstrip,$(call LOWERCASE,$(BR2_ENDIAN)))
- HOST_MESON_TARGET_CPU = $(GCC_TARGET_CPU)
- 
- # https://mesonbuild.com/Reference-tables.html#cpu-families
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 416129f6fe..a0b467caba 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -69,8 +69,8 @@ define $(2)_CONFIGURE_CMDS
- 	mkdir -p $$($$(PKG)_SRCDIR)/build
- 	sed -e 's%@TARGET_CROSS@%$$(TARGET_CROSS)%g' \
- 	    -e 's%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g' \
--	    -e 's%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g' \
--	    -e 's%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g' \
-+	    -e 's%@TARGET_CPU@%$$(HOST_MESON_TARGET_CPU)%g' \
-+	    -e 's%@TARGET_ENDIAN@%$$(HOST_MESON_TARGET_ENDIAN)%g' \
- 	    -e 's%@TARGET_CFLAGS@%$$(call make-comma-list,$$($(2)_CFLAGS))%g' \
- 	    -e 's%@TARGET_LDFLAGS@%$$(call make-comma-list,$$($(2)_LDFLAGS))%g' \
- 	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
+-- 
+Bye, Peter Korsgaard
