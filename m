@@ -1,28 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 20:17:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: needs host-python3
-In-Reply-To: <20200308111812.3065154-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 8 Mar 2020 12:18:12 +0100")
-References: <20200308111812.3065154-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k13d5xgr.fsf@dell.be.48ers.dk>
+Date: Sat, 21 Mar 2020 20:15:42 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/samba4: needs
+ host-python3
+Message-ID: <20200321190525.2221E83A51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0fa73241aa58a49a4e9010c7229057cb62da363a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
- > host-python3 is a mandatory dependency since bump to version 4.10.0 and
- > https://gitlab.com/samba-team/devel/samba/-/commit/5ddff307b4af5c82d5064745f5bd2c33bd340ced
- > because buildtools/bin/waf shebang is set to "/usr/bin/env python3"
+host-python3 is a mandatory dependency since bump to version 4.10.0 and
+https://gitlab.com/samba-team/devel/samba/-/commit/5ddff307b4af5c82d5064745f5bd2c33bd340ced
+because buildtools/bin/waf shebang is set to "/usr/bin/env python3"
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/2634eb7824beb34f485cf40670f6959515f008ad
+Fixes:
+ - http://autobuild.buildroot.org/results/2634eb7824beb34f485cf40670f6959515f008ad
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bf341117f68fe3e47f3ea73c416e2cefbded25fc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/samba4/samba4.mk | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-Committed to 2020.02.x and 2019.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 85cbf3a74a..05693df322 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -11,7 +11,7 @@ SAMBA4_INSTALL_STAGING = YES
+ SAMBA4_LICENSE = GPL-3.0+
+ SAMBA4_LICENSE_FILES = COPYING
+ SAMBA4_DEPENDENCIES = \
+-	host-e2fsprogs host-heimdal host-nfs-utils \
++	host-e2fsprogs host-heimdal host-nfs-utils host-python3 \
+ 	cmocka e2fsprogs popt zlib \
+ 	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
+ 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
+@@ -25,16 +25,12 @@ SAMBA4_CONF_ENV = \
+ 	XSLTPROC=false \
+ 	WAF_NO_PREFORK=1
+ 
++SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python3"
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-SAMBA4_PYTHON = \
+-	PYTHON="$(HOST_DIR)/bin/python3" \
+-	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
+-SAMBA4_DEPENDENCIES += host-python3 python3
++SAMBA4_PYTHON += PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
++SAMBA4_DEPENDENCIES += python3
+ else
+-SAMBA4_PYTHON = \
+-	PYTHON="$(HOST_DIR)/bin/python2" \
+-	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config"
+-SAMBA4_DEPENDENCIES += host-python python
++SAMBA4_CONF_OPTS += --disable-python
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
