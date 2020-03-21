@@ -1,74 +1,112 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 21 Mar 2020 16:22:12 +0100
-Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: bump
- version to 8.5
-Message-ID: <20200321150924.CF4DB836C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/freescale_imx8q{m,
+ xp}mek: bump BSP components to 4.19.35_1.1.0
+Message-ID: <20200321150925.0588A813D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8cc27a292e3433a0993b0e28573fa876a87b0a7a
+commit: https://git.buildroot.net/buildroot/commit/?id=56a90440021d67a6b5fa10cca8113ceb1774ba7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package needed to be updated to be aligned with NXP
-BSP 4.19.35_1.1.0
-
-This newer 8.5 version no longer include ahab-container images.
-Those images are now in a separate imx-seco package.
+The package imx-seco has been added in the defconfigs.
 
 Signed-off-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
 Reviewed-by: Julien Olivain <julien.olivain@oss.nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/firmware-imx/firmware-imx.hash |  2 +-
- package/freescale-imx/firmware-imx/firmware-imx.mk   | 17 +----------------
- 2 files changed, 2 insertions(+), 17 deletions(-)
+ configs/freescale_imx8qmmek_defconfig  | 9 +++++----
+ configs/freescale_imx8qxpmek_defconfig | 9 +++++----
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
-index 85f203311f..7b9f722881 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.hash
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 c115d5d0d115fc14754671bd2428f672f9f99677988588accef2fbca2c3f749c  firmware-imx-8.1.1.bin
-+sha256 45b0a7392e7a4b2e6c7e1cb988dd660ff3f8cd465afdf796ff840a00db08389d  firmware-imx-8.5.bin
- sha256 69d19847bac9af7f9e832170a15138f5ef144d8064413434114d75a68982cc9c  EULA
- sha256 6467f2e81d06b19fe541de49bdba32a9a205e8d1c230220fe24247b48672cb46  COPYING
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 7f14062f89..246bfdfaa1 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FIRMWARE_IMX_VERSION = 8.1.1
-+FIRMWARE_IMX_VERSION = 8.5
- FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
- FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
- 
-@@ -45,22 +45,7 @@ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
- 	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
- 		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
- endef
--else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
--FIRMWARE_IMX_INSTALL_IMAGES = YES
--define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
--	# SECO firmware is needed when generating imx8-boot-sd.bin which
--	# is done in post-image script.
--	cp $(@D)/firmware/seco/mx8qm-ahab-container.img \
--		$(BINARIES_DIR)/ahab-container.img
--endef
- else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
--FIRMWARE_IMX_INSTALL_IMAGES = YES
--define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
--	# SECO firmware is needed when generating imx8-boot-sd.bin which
--	# is done in post-image script.
--	cp $(@D)/firmware/seco/mx8qx-ahab-container.img \
--		$(BINARIES_DIR)/ahab-container.img
--endef
- define FIRMWARE_IMX_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/firmware/vpu/vpu_fw_imx8_dec.bin \
- 		$(TARGET_DIR)/lib/firmware/vpu/vpu_fw_imx8_dec.bin
+diff --git a/configs/freescale_imx8qmmek_defconfig b/configs/freescale_imx8qmmek_defconfig
+index ddc4767e08..e87818f34b 100644
+--- a/configs/freescale_imx8qmmek_defconfig
++++ b/configs/freescale_imx8qmmek_defconfig
+@@ -1,12 +1,12 @@
+ BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qm-mek.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8qm-mek"
+@@ -14,20 +14,21 @@ BR2_PACKAGE_FREESCALE_IMX=y
+ BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8=y
+ BR2_PACKAGE_FIRMWARE_IMX=y
+ BR2_PACKAGE_IMX_SC_FIRMWARE=y
++BR2_PACKAGE_IMX_SECO=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qm"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qm_mek"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/freescale_imx8qxpmek_defconfig b/configs/freescale_imx8qxpmek_defconfig
+index 82f433f6cf..1965e0c804 100644
+--- a/configs/freescale_imx8qxpmek_defconfig
++++ b/configs/freescale_imx8qxpmek_defconfig
+@@ -1,14 +1,14 @@
+ BR2_aarch64=y
+ BR2_cortex_a35=y
+ BR2_ARM_FPU_VFPV3=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qxp-mek.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8qxp-mek"
+@@ -16,20 +16,21 @@ BR2_PACKAGE_FREESCALE_IMX=y
+ BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X=y
+ BR2_PACKAGE_FIRMWARE_IMX=y
+ BR2_PACKAGE_IMX_SC_FIRMWARE=y
++BR2_PACKAGE_IMX_SECO=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qx"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qxp_mek"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
