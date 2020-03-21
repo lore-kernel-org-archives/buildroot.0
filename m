@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 21:09:25 +0100
-Subject: [Buildroot] [git commit branch/2019.02.x] package/ffmpeg: fix typo
+Date: Sat, 21 Mar 2020 21:09:14 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/ffmpeg: fix typo
  "--enable-bsfs" -> "--enable-bsf"
-Message-ID: <20200321195651.B280783B0B@busybox.osuosl.org>
+Message-ID: <20200321195656.AB37D83B15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dacaba8e588c2e06e38d4be4953269eda3f3f247
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=12c9335bc7e6a49bbb5df5fb86ab419c868a772f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fix ffmpeg configuration when BR2_PACKAGE_FFMPEG_BSFS is not default ("all"):
 
@@ -34,10 +34,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index d26555a506..0dfa63b2fc 100644
+index f0047c4e3b..b7148bbba2 100644
 --- a/package/ffmpeg/ffmpeg.mk
 +++ b/package/ffmpeg/ffmpeg.mk
-@@ -141,7 +141,7 @@ endif
+@@ -135,7 +135,7 @@ endif
  
  ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_BSFS)),all)
  FFMPEG_CONF_OPTS += --disable-bsfs \
