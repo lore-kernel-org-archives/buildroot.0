@@ -1,42 +1,26 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Mar 2020 22:48:01 +0100
-Subject: [Buildroot] [git commit] package/libostree: disable introspection
-Message-ID: <20200321213505.0FF6A83BDB@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 21 Mar 2020 22:53:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/polkit: add linux-pam as a
+ dependency if linux-pam is selected
+In-Reply-To: <20200315205610.2227486-1-aduskett@gmail.com> (aduskett's message
+ of "Sun, 15 Mar 2020 13:56:10 -0700")
+References: <20200315205610.2227486-1-aduskett@gmail.com>
+Message-ID: <878sjt4boi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d264351cfcca91e19c06fee277ebba1976a68508
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
 
-Build fails if gobject-introspection is built before libostree:
+ > From: Adam Duskett <Aduskett@gmail.com>
+ > Without linux-pam built first, polkit will throw a configuration error:
+ > configure: error: Could not find pam/pam-devel, please install the needed packages.
 
-./.libs/libostree-1.so: error adding symbols: File in wrong format
-collect2: error: ld returned 1 exit status
-src/libostree/ostree-repo-deprecated.h:28: Warning: OSTree: symbol='G_GNUC_DEPRECATED_FOR': Skipping foreign symbol from namespace Gio
-linking of temporary binary failed: Command '['/bin/bash', './libtool', '--mode=link', '--tag=CC', '--silent', 'gcc', '-o', '/home/buildroot/autobuild/instance-2/output-1/build/libostree-2019.6/tmp-introspectvtkql2xj/OSTree-1.0', '-export-dynamic', '-D_LARGEFILE_SOURCE', '-D_LARGEFILE64_SOURCE', '-D_FILE_OFFSET_BITS=64', '-D_LARGEFILE_SOURCE', '-D_LARGEFILE64_SOURCE', '-D_FILE_OFFSET_BITS=64', '-Os', '/home/buildroot/autobuild/instance-2/output-1/build/libostree-2019.6/tmp-introspectvtkql2xj/OSTree-1.0.o', '-L.', 'libostree-1.la', '-L/home/buildroot/autobuild/instance-2/output-1/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib', '-lgio-2.0', '-lgobject-2.0', '-Wl,--export-dynamic', '-lgmodule-2.0', '-pthread', '-lglib-2.0', '-lglib-2.0']' returned non-zero exit status 1.
-/home/buildroot/autobuild/instance-2/output-1/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/../share/gobject-introspection-1.0/Makefile.introspection:155: recipe for target 'OSTree-1.0.gir' failed
+ > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/f8a14307e6feff61acd963d6cd2aac289e6d1647
+Committed to 2020.02.x, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libostree/libostree.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index bdbe6b5aba..ff763b20f9 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -21,6 +21,7 @@ LIBOSTREE_CONF_OPTS += \
- 	--disable-gtk-doc \
- 	--disable-gtk-doc-html \
- 	--disable-gtk-doc-pdf \
-+	--disable-introspection \
- 	--disable-man
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-- 
+Bye, Peter Korsgaard
