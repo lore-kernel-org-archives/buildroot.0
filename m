@@ -1,51 +1,74 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 21 Mar 2020 21:16:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/perl: fix README hash
-Message-ID: <20200321201623.287087-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 21 Mar 2020 21:36:36 +0100
+Subject: [Buildroot] [PATCH v4] package/busybox: patch for glibc-2.31
+ and musl-1.2.0 compatibility
+In-Reply-To: <20200315115910.31365-1-unixmania@gmail.com>
+References: <20200315115910.31365-1-unixmania@gmail.com>
+Message-ID: <47d05f0e-8266-75ee-36a5-b06daeedd3cf@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit d5c7c9dabb94d64855b8c0383e77d01b890f85c3 forgot to update README
-hash (year, github issue tracker):
-https://github.com/Perl/perl5/commit/9802995490251df92faf7a0dd5c7114ad8146bd3
-https://github.com/Perl/perl5/commit/b9e2183386fadc0979b46e024365ceab56a369aa
+Hello Carlos,
 
-Also update indentation (two spaces)
+Le 15/03/2020 ? 12:59, unixmania at gmail.com a ?crit?:
+> From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+> 
+> Current release of busybox 1_31_1 is failing to build with glibc-2.31
+> due to removal of stime() from glibc. It also fails to build with musl
+> 1.2.0 due to the direct use of __NR_clock_gettime.
 
-Fixes:
- - http://autobuild.buildroot.org/results/3b124aca123207460a9d025f5afd23f5f67fbf18
+This patch is far too big IMHO ;-)
+It would be great if you can split this patch an create a patch series.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/perl/perl.hash | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> This commit adds six patches: one is a prerequisite for the subsequent
+> patches, three to fix 64-bit time_t issues, one to fix the direct use of
+> __NR_clock_gettime, which is not safe, and one that removes
+> stime() function calls.
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 74791c0b05..7c153fedb2 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,12 +1,12 @@
- # Hashes from: http://www.cpan.org/src/5.0/perl-5.30.2.tar.xz.{md5,sha1,sha256}.txt
--md5    4bfa12b528522a50de0470b8b70b9b3b                                 perl-5.30.2.tar.xz
--sha1   d82cdaa610a3e749e821fc77004b1b4bfd5ebd28                         perl-5.30.2.tar.xz
--sha256 a1aa88bd6fbbdc2e82938afbb76c408b0ea847317737b712dc196cc7907a5259 perl-5.30.2.tar.xz
-+md5  4bfa12b528522a50de0470b8b70b9b3b  perl-5.30.2.tar.xz
-+sha1  d82cdaa610a3e749e821fc77004b1b4bfd5ebd28  perl-5.30.2.tar.xz
-+sha256  a1aa88bd6fbbdc2e82938afbb76c408b0ea847317737b712dc196cc7907a5259  perl-5.30.2.tar.xz
- 
- # Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.2/perl-cross-1.3.2.hash
--sha256	defa12f0ad7be0b6c48b4f76e2fb5b37c1b37fbeb6e9ebe938279cd539a0c20c  perl-cross-1.3.2.tar.gz
-+sha256  defa12f0ad7be0b6c48b4f76e2fb5b37c1b37fbeb6e9ebe938279cd539a0c20c  perl-cross-1.3.2.tar.gz
- 
- # Locally calculated
--sha256 dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2 Artistic
--sha256 d77d235e41d54594865151f4751e835c5a82322b0e87ace266567c3391a4b912 Copying
--sha256 4a39adc445d79e213df5c2028c5432806dfcdfe69a5bc31ba5c83071a0097877 README
-+sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
-+sha256  d77d235e41d54594865151f4751e835c5a82322b0e87ace266567c3391a4b912  Copying
-+sha256  4916e95d32b84e07c045d839646f74996f577e5f497bbba8177a94b31415cee7  README
--- 
-2.25.1
+Instead of backporting patch 0003, try to rebase patch 0008 over busybox 1.31.1.
+
+But for the remaining patches, maybe you can squash then since the patch 0007
+remove the syscall wrappers around clock_gettime that was modified by patch
+0004, 0005, 0006.
+
+It would be great to ask upstream for a new release 1.32 or backport those
+patches to 1.31.x.
+
+Another solution would be using the current busybox master as a last resort.
+
+Best regards,
+Romain
+
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/f45f91aea6deee6699eabdfa618ac44873b8da51/
+> 
+> Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: arc-buildroot at synopsys.com
+> ---
+> Supersedes: https://patchwork.ozlabs.org/patch/1249916/
+> ---
+> Changes v4:
+> - Rabase on the master branch
+> - Add SOB lines to patches
+> ---
+>  ...-overhead-of-single-parameter-bb_err.patch | 7637 +++++++++++++++++
+>  ...-Use-64-prefix-syscall-if-we-have-to.patch |   59 +
+>  ...-Use-64-prefix-syscall-if-we-have-to.patch |   48 +
+>  ...-Use-64-prefix-syscall-if-we-have-to.patch |   48 +
+>  ...rappers-around-clock_gettime-closes-.patch |  132 +
+>  .../0008-Remove-stime-function-calls.patch    |   95 +
+>  6 files changed, 8019 insertions(+)
+>  create mode 100644 package/busybox/0003-libbb-reduce-the-overhead-of-single-parameter-bb_err.patch
+>  create mode 100644 package/busybox/0004-date-Use-64-prefix-syscall-if-we-have-to.patch
+>  create mode 100644 package/busybox/0005-time-Use-64-prefix-syscall-if-we-have-to.patch
+>  create mode 100644 package/busybox/0006-runsv-Use-64-prefix-syscall-if-we-have-to.patch
+>  create mode 100644 package/busybox/0007-Remove-syscall-wrappers-around-clock_gettime-closes-.patch
+>  create mode 100644 package/busybox/0008-Remove-stime-function-calls.patch
+> 
