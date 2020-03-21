@@ -1,8 +1,8 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 21 Mar 2020 17:57:56 -0300
-Subject: [Buildroot] [PATCH] package/busybox: patch for glibc-2.31 and
+Date: Sat, 21 Mar 2020 17:58:52 -0300
+Subject: [Buildroot] [PATCH v5] package/busybox: patch for glibc-2.31 and
  musl-1.2.0 compatibility
-Message-ID: <20200321205756.19436-1-unixmania@gmail.com>
+Message-ID: <20200321205852.19564-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
