@@ -1,66 +1,58 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Sat, 21 Mar 2020 16:47:24 +0100
-Subject: [Buildroot] [PATCH 3/6] configs/stm32mp157a_dk1: new defconfig
-In-Reply-To: <20200321153259.4f386e8e@windsurf.home>
-References: <20200321133222.1393674-1-b.bilas@grinn-global.com>
- <20200321133222.1393674-3-b.bilas@grinn-global.com>
- <20200321153259.4f386e8e@windsurf.home>
-Message-ID: <b5933c0a-6061-1ba4-103b-4f74f103ad2a@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 21 Mar 2020 16:55:03 +0100
+Subject: [Buildroot] [RFC PATCH 1/1] package/cegui: rename and bump
+ version
+In-Reply-To: <20200318085125.12843-1-b.bilas@grinn-global.com>
+References: <20200318085125.12843-1-b.bilas@grinn-global.com>
+Message-ID: <20200321165503.7baa0173@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello Bartosz,
 
-On 21.03.2020 15:32, Thomas Petazzoni wrote:
-> Hello Bartosz,
->
-> On Sat, 21 Mar 2020 14:32:19 +0100
-> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
->
->> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
->> index cde757681e..22448e1028 100644
->> --- a/.gitlab-ci.yml
->> +++ b/.gitlab-ci.yml
->> @@ -320,6 +320,7 @@ solidrun_macchiatobin_marvell_defconfig: { extends: .defconfig }
->>   stm32f429_disco_defconfig: { extends: .defconfig }
->>   stm32f469_disco_defconfig: { extends: .defconfig }
->>   stm32mp157c_dk2_defconfig: { extends: .defconfig }
->> +stm32mp157a_dk1_defconfig: { extends: .defconfig }
-> You should use "make .gitlab-ci.yml" to generate this file. Indeed
-> here, alphabetic ordering was not correct. Fixed when applying.
-I should get acquainted with make target commands because most of things 
-I do manually. Anyway thanks for the hint.
->> diff --git a/board/stmicroelectronics/stm32mp157a-dk1/linux.config b/board/stmicroelectronics/stm32mp157a-dk1/linux.config
->> new file mode 100644
->> index 0000000000..95c834e431
->> --- /dev/null
->> +++ b/board/stmicroelectronics/stm32mp157a-dk1/linux.config
-> I was wondering if a common Linux configuration file would be possible,
-> perhaps with just an extra fragment for the DK2 to enable display/WiFi
-> support.
-I was also wondering but I've decided to leave it as it is and improve 
-that when a good idea comes to my mind ;)
->
->> diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
->> new file mode 100644
->> index 0000000000..e9db685271
->> --- /dev/null
->> +++ b/configs/stm32mp157a_dk1_defconfig
->> @@ -0,0 +1,32 @@
->> +
-> Useless empty line here. Fixed when applying.
->
-> Best regards,
->
-> Thomas
+On Wed, 18 Mar 2020 09:51:25 +0100
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-Good, thanks :)
+> Since spice ver. 0.12.6 doesn't depend on cegui anymore let's bump to the latest stable version
+> and rename package.
+> 
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 
-Best
-Bartek
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200321/8494b105/attachment.html>
+Unfortunately, it doesn't build with uClibc/musl:
+
+/home/thomas/projets/buildroot/output/build/cegui-0-8-7/cegui/src/Exceptions.cpp:45:25: fatal error: execinfo.h: No such file or directory
+compilation terminated.
+
+You'll have to add a check for execinfo.h in CMakeLists.txt and use the
+result of this check instead of the crazy:
+
+#elif     (defined(__linux__) && !defined(__ANDROID__)) \
+      ||  defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) \
+      ||  defined(__HAIKU__)
+
+> +ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
+> +CEGUI_DEPENDENCIES += libepoxy
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SDL2_OPENGLES),y)
+> +CEGUI_DEPENDENCIES += sdl2_opengles
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OGRE),y)
+> +CEGUI_DEPENDENCIES += ogre
+> +endif
+
+[... snip ...]
+
+So I take it there are no enable/disable options ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
