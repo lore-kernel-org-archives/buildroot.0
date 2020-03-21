@@ -1,68 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 21 Mar 2020 14:52:19 +0100
-Subject: [Buildroot] [PATCH] support/scripts/check-kernel-headers.sh: do not
- print error for loose checks
-In-Reply-To: <20200321135220.341529-1-thomas.petazzoni@bootlin.com>
-References: <20200321135220.341529-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200321135220.341529-2-thomas.petazzoni@bootlin.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sat, 21 Mar 2020 15:05:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libeXosip2: fix build without
+ threads
+In-Reply-To: <20200311195255.115690-1-fontaine.fabrice@gmail.com>
+References: <20200311195255.115690-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAKcgs2y22_TNaQL8EZH6ZKs6UAcJS11fPNeCiezeQkvavtEMAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The C program inside check-kernel-headers.sh has two checking mode: a
-strict and a loose one.
+Hello Fabrice,
 
-In strict mode, we want the kernel headers version declared by the
-user to match exactly the one of the toolchain.
+Thanks for the fix!
 
-In loose mode, we want the kernel headers version of the toolchain to
-be greater than or equal to the one declared by the user: this is used
-when we have a toolchain that has newer headers than the latest
-version known by Buildroot.
+Le mer. 11 mars 2020 ? 20:51, Fabrice Fontaine
+<fontaine.fabrice@gmail.com> a ?crit :
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/7b5f049fda390a7961b5a7fde42ea5aebe1f7564
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...c-eXconf.c-fix-build-without-threads.patch | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 package/libeXosip2/0001-src-eXconf.c-fix-build-without-threads.patch
+>
+> diff --git a/package/libeXosip2/0001-src-eXconf.c-fix-build-without-threads.patch b/package/libeXosip2/0001-src-eXconf.c-fix-build-without-threads.patch
+> new file mode 100644
+> index 0000000000..faaec5b377
+> --- /dev/null
+> +++ b/package/libeXosip2/0001-src-eXconf.c-fix-build-without-threads.patch
+> @@ -0,0 +1,43 @@
+> +From 618bd5edee8b1a93fbdf9e4a838e3c9cefcce6a7 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Wed, 11 Mar 2020 20:43:48 +0100
+> +Subject: [PATCH] src/eXconf.c: fix build without threads
+> +
+> +Fix the following build failure without threads:
+> +
+> +eXconf.c:812:49: error: 'struct eXosip_t' has no member named 'j_socketctl_event'
+> +     ev.data.fd = jpipe_get_read_descr (excontext->j_socketctl_event);
+> +                                                 ^~
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/7b5f049fda390a7961b5a7fde42ea5aebe1f7564
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://savannah.nongnu.org/bugs/index.php?57985]
+> +---
+> + src/eXconf.c | 2 ++
+> + 1 file changed, 2 insertions(+)
+> +
+> +diff --git a/src/eXconf.c b/src/eXconf.c
+> +index baf90be..cf8b4f7 100644
+> +--- a/src/eXconf.c
+> ++++ b/src/eXconf.c
+> +@@ -807,6 +807,7 @@ eXosip_init (struct eXosip_t *excontext)
+> +       return OSIP_UNDEFINED_ERROR;
+> +     }
+> +
+> ++#ifndef OSIP_MONOTHREAD
+> +     memset(&ev, 0, sizeof(struct epoll_event));
+> +     ev.events = EPOLLIN;
+> +     ev.data.fd = jpipe_get_read_descr (excontext->j_socketctl_event);
+> +@@ -815,6 +816,7 @@ eXosip_init (struct eXosip_t *excontext)
+> +       _eXosip_closesocket (excontext->epfdctl);
+> +       return OSIP_UNDEFINED_ERROR;
+> +     }
+> ++#endif
+> +   }
+> + #endif
+> +
+> +--
+> +2.25.1
+> +
+> --
+> 2.25.1
+>
+Your patch made it upstream, but the maintainer committed a version
+that is slightly different from yours [1].
+Care to re-send your fix with the upstream version of your patch?
 
-However, in loose mode, we continue to show the "Incorrect kernel
-headers version" message, even though we then return a zero error
-code. This is very confusing: you see an error displayed on the
-terminal, but the build goes on.
+thanks!
+Gilles.
 
-We fix that by first doing the loose check first, and returning 0 if
-it succeeds. And then we move on with the strict check where we want
-the version to be identical.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/check-kernel-headers.sh | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
-index 841df98b64..4e6dce5487 100755
---- a/support/scripts/check-kernel-headers.sh
-+++ b/support/scripts/check-kernel-headers.sh
-@@ -49,18 +49,20 @@ ${HOSTCC} -imacros "${SYSROOT}/usr/include/linux/version.h" \
- int main(int argc __attribute__((unused)),
-          char** argv __attribute__((unused)))
- {
--    int ret = 0;
-     int l = LINUX_VERSION_CODE & ~0xFF;
-     int h = KERNEL_VERSION(${HDR_M},${HDR_m},0);
- 
-+    if ((l >= h) && !strcmp("${CHECK}", "loose"))
-+        return 0;
-+
-     if (l != h) {
-         printf("Incorrect selection of kernel headers: ");
-         printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
-                ((LINUX_VERSION_CODE>>16) & 0xFF),
-                ((LINUX_VERSION_CODE>>8) & 0xFF));
--        ret = ((l >= h) && !strcmp("${CHECK}", "loose")) ? 0 : 1;
-+        return 1;
-     }
--    return ret;
-+    return 0;
- }
- _EOF_
- 
--- 
-2.25.1
+[1] http://git.savannah.nongnu.org/cgit/exosip.git/commit/?id=0e0e95dbc380c5eede3a2fc1631294a98078e30f
