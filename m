@@ -1,33 +1,29 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Sat, 21 Mar 2020 14:32:20 +0100
-Subject: [Buildroot] [PATCH 4/6] configs/stm32mp157c_dk2: bump Linux to
- 5.4.26
-In-Reply-To: <20200321133222.1393674-1-b.bilas@grinn-global.com>
-References: <20200321133222.1393674-1-b.bilas@grinn-global.com>
-Message-ID: <20200321133222.1393674-4-b.bilas@grinn-global.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 21 Mar 2020 14:43:29 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-03-19
+In-Reply-To: <20200320072540.7317287447@fraxinus.osuosl.org>
+References: <20200320072540.7317287447@fraxinus.osuosl.org>
+Message-ID: <20200321144329.1e780a5e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- configs/stm32mp157c_dk2_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 20 Mar 2020 07:25:34 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index 25a96fa276..d8d6bd8e7b 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -6,7 +6,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/common/stm32mp157/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.26"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--- 
-2.25.2
+
+> Results for branch 'master'
+> ===========================
+
+>     arm      |         libevdev-1.9.0         | NOK | http://autobuild.buildroot.net/results/7d2385e710b79d71fd9fe7b480e279161aa91e20 |
+>     arm      |         libevdev-1.9.0         | NOK | http://autobuild.buildroot.net/results/04f8aca18586e83d5e8a0f92a8cfbe0205c460d9 |
+>     arm      |         libevdev-1.9.0         | NOK | http://autobuild.buildroot.net/results/317a8550e15ccca157c53ce8b7f992623127954c |
+
+Should be fixed with 'package/libevdev: fix static compile' ([1])...
+
+Regards,
+Peter
+
+[1] https://patchwork.ozlabs.org/patch/1252031/
