@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 21:00:12 +0100
+Date: Sat, 21 Mar 2020 21:00:52 +0100
 Subject: [Buildroot] [PATCH] package/gcc: disable gcc 9.x for csky
 In-Reply-To: <20200312234127.449204-2-romain.naour@smile.fr> (Romain Naour's
  message of "Fri, 13 Mar 2020 00:41:27 +0100")
 References: <20200312234127.449204-1-romain.naour@smile.fr>
  <20200312234127.449204-2-romain.naour@smile.fr>
-Message-ID: <87y2rt4gxf.fsf@dell.be.48ers.dk>
+Message-ID: <87tv2h4gwb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -46,6 +46,7 @@ To: buildroot@busybox.net
  > Cc: Arnout Vandecappelle <arnout@mind.be>
  > Cc: Peter Korsgaard <peter@korsgaard.com>
 
+Committed to 2019.11.x and 2020.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
