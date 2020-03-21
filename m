@@ -1,68 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 22:57:36 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/sysklogd: fix
- installation path of the daemons
-Message-ID: <20200321214609.3483683BED@busybox.osuosl.org>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sat, 21 Mar 2020 19:18:08 -0300
+Subject: [Buildroot] [[PATCH RFC] 3/6] linux: run depmod in a
+ target-finalize hook
+In-Reply-To: <20200321205141.GJ4290@scaer>
+References: <20200320233547.28586-1-unixmania@gmail.com>
+ <20200320233547.28586-4-unixmania@gmail.com>
+ <20200321205141.GJ4290@scaer>
+Message-ID: <CAJ4jsaeQWUwoW0UE1xU=96L6YieMyBCsDAcxyz5aDbnrbGONLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7d330f95e9df8078f3d09daa40c248ba6b7d538
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+On Sat, Mar 21, 2020 at 5:51 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> CAlros, All,
+>
+> On 2020-03-20 20:35 -0300, unixmania at gmail.com spake thusly:
+> > From: Carlos Santos <unixmania@gmail.com>
+> >
+> > If a package installs a kernel module then it's necessary to run depmod
+> > afterwards, otherwise modprobe fails at run-time, because the module is
+> > not included in /lib/modules/<kernel-version>/modules.dep.
+> >
+> > Pass a dummy depmod (/dev/null) to the kernel build, since we don't want
+> > to run depmod after installing the kernel.
+> >
+> > Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> > ---
+> >  linux/linux.mk | 11 ++++++++++-
+> >  1 file changed, 10 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/linux/linux.mk b/linux/linux.mk
+> > index f8c34c3dca..a5756148cc 100644
+> > --- a/linux/linux.mk
+> > +++ b/linux/linux.mk
+> > @@ -127,12 +127,14 @@ LINUX_POST_EXTRACT_HOOKS += LINUX_XTENSA_OVERLAY_EXTRACT
+> >  LINUX_EXTRA_DOWNLOADS += $(ARCH_XTENSA_OVERLAY_URL)
+> >  endif
+> >
+> > +# We don't want to run depmod after installing the kernel. It's done in a
+> > +# target-finalize hook, to encompass modules installed by packages.
+> >  LINUX_MAKE_FLAGS = \
+> >       HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
+> >       ARCH=$(KERNEL_ARCH) \
+> >       INSTALL_MOD_PATH=$(TARGET_DIR) \
+> >       CROSS_COMPILE="$(TARGET_CROSS)" \
+> > -     DEPMOD=$(HOST_DIR)/sbin/depmod
+> > +     DEPMOD="/dev/null"
+>
+> This causes a spurious, confusing warning:
+>
+>      DEPMOD  5.4.27
+>     ./scripts/depmod.sh: 46: /dev/null: Permission denied
+>     make[2]: *** [Makefile:1326: _modinst_post] Error 126
+>
+> Since that call does not cost musch, I've restored it, and applied to
+> master with an extended commit log. Thanks.
+>
+> Regards,
+> Yann E. MORIN.
 
-Use "--exec-prefix=/" to install syslogd and klogd at /sbin, as required
-by the init scripts. This also ensures that the BusyBox counterparts are
-not installed.
+We can avoid the script by using
 
-Update the systemd unit files, accordingly.
+    DEPMOD=/bin/false \
+    cmd_depmod=":"
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 33642d8d95925dc71e8c260aee4b6c9e3de334ff)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sysklogd/klogd.service   | 2 +-
- package/sysklogd/sysklogd.mk     | 1 +
- package/sysklogd/syslogd.service | 2 +-
- 3 files changed, 3 insertions(+), 2 deletions(-)
+So cmd_depmod ensures that the script does not run; DEPMOD=/bin/false
+is as a canary, failing if cmd_depmod does not work in a future kernel
+version.
 
-diff --git a/package/sysklogd/klogd.service b/package/sysklogd/klogd.service
-index c66795b449..b5dbb93d7d 100644
---- a/package/sysklogd/klogd.service
-+++ b/package/sysklogd/klogd.service
-@@ -2,7 +2,7 @@
- Description=Kernel Log Daemon
- 
- [Service]
--ExecStart=/usr/sbin/klogd -n
-+ExecStart=/sbin/klogd -n
- StandardOutput=null
- Restart=on-failure
- 
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index 1bd1ec51b5..7a25d0eb6f 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -10,6 +10,7 @@ SYSKLOGD_LICENSE = GPL-2.0+
- SYSKLOGD_LICENSE_FILES = COPYING
- # From git
- SYSKLOGD_AUTORECONF = YES
-+SYSKLOGD_CONF_OPTS = --exec-prefix=/
- 
- define SYSKLOGD_INSTALL_SAMPLE_CONFIG
- 	$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
-diff --git a/package/sysklogd/syslogd.service b/package/sysklogd/syslogd.service
-index 70e4cff27e..adaac679f2 100644
---- a/package/sysklogd/syslogd.service
-+++ b/package/sysklogd/syslogd.service
-@@ -4,7 +4,7 @@ Requires=syslog.socket
- Wants=klogd.service
- 
- [Service]
--ExecStart=/usr/sbin/syslogd -m 0 -n
-+ExecStart=/sbin/syslogd -m 0 -n
- StandardOutput=null
- Restart=on-failure
- 
+-- 
+Carlos Santos <unixmania@gmail.com>
