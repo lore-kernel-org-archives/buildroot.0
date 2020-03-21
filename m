@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 21:03:22 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/util-linux: add
+Date: Sat, 21 Mar 2020 21:02:45 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/util-linux: add
  missing SOB to patches
-Message-ID: <20200321195441.F2D7983AF7@busybox.osuosl.org>
+Message-ID: <20200321195457.AEF1583B01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa1b895128bc0a3e21ba59d5a1dd653e9096aa2d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a17e2522cf97e2da84a43c643455d0aa0f490421
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 It is required that all patches in packages have the Signed-off-by of
 the contributor who brought them into Buildroot.
