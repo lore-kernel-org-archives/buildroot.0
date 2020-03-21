@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 21 Mar 2020 15:27:17 +0100
-Subject: [Buildroot] [git commit] board/stm32mp157c-dk2/genimage.cfg: drop
- hardcoded rootfs partition size
-Message-ID: <20200321141447.C4A23834E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/stm32mp157c_dk2: bump U-Boot to
+ 2020.01
+Message-ID: <20200321141448.0336382B3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0db3732985b78a666354a141e4ba95dd801cff2
+commit: https://git.buildroot.net/buildroot/commit/?id=93734bd94223e9337b240b4bf90e058c82d15964
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Let genimage to match the size of the rootfs image instead.
 
 Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/stmicroelectronics/stm32mp157c-dk2/genimage.cfg | 1 -
- 1 file changed, 1 deletion(-)
+ configs/stm32mp157c_dk2_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/stmicroelectronics/stm32mp157c-dk2/genimage.cfg b/board/stmicroelectronics/stm32mp157c-dk2/genimage.cfg
-index 2b9e832dc9..d1ce530cc5 100644
---- a/board/stmicroelectronics/stm32mp157c-dk2/genimage.cfg
-+++ b/board/stmicroelectronics/stm32mp157c-dk2/genimage.cfg
-@@ -19,6 +19,5 @@ image sdcard.img {
- 		image = "rootfs.ext4"
- 		partition-type = 0x83
- 		bootable = "yes"
--		size = 256M
- 	}
- }
+diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+index d8d6bd8e7b..d38fa5bab4 100644
+--- a/configs/stm32mp157c_dk2_defconfig
++++ b/configs/stm32mp157c_dk2_defconfig
+@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^metadata_csum"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_basic"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config"
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
