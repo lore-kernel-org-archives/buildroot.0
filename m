@@ -1,120 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 21 Mar 2020 16:22:12 +0100
-Subject: [Buildroot] [git commit] package/freescale-imx/imx-seco: new package
-Message-ID: <20200321150924.BFBD78379E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl: bump to version 5.30.2
+Message-ID: <20200321150925.1DE67813D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97d54bdcb2185914e232749fa4171601a9ec7f0d
+commit: https://git.buildroot.net/buildroot/commit/?id=d5c7c9dabb94d64855b8c0383e77d01b890f85c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package is needed with Freescale i.MX8/i.MX8X defconfigs
-version equal to 4.19.35_1.0.0
-It is also subject to multi-version support.
-
-The package version aligned with NXP BSP 4.19.35_1.1.0 is 2.3.1
-
-Signed-off-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
-Reviewed-by: Julien Olivain <julien.olivain@oss.nxp.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                   |  1 +
- package/freescale-imx/Config.in              |  1 +
- package/freescale-imx/imx-seco/Config.in     |  9 +++++++
- package/freescale-imx/imx-seco/imx-seco.hash |  4 ++++
- package/freescale-imx/imx-seco/imx-seco.mk   | 35 ++++++++++++++++++++++++++++
- 5 files changed, 50 insertions(+)
+ package/perl/perl.hash | 12 ++++++------
+ package/perl/perl.mk   |  4 ++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 906a478d7b..541e6b5483 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1531,6 +1531,7 @@ F:	package/wilc1000-firmware/
- N:	Maeva Manuel <maeva.manuel@oss.nxp.com>
- F:	board/freescale/imx8qmmek/
- F:	configs/freescale_imx8qmmek_defconfig
-+F:	package/freescale-imx/imx-seco/
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 161a4fd615..74791c0b05 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,10 +1,10 @@
+-# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.1.tar.xz.{md5,sha1,sha256}.txt
+-md5    f399f3aaee90ddcff5eadd3bccdaacc0                                 perl-5.30.1.tar.xz
+-sha1   4bc190b6ac368f573e6a028f91430f831d40d30a                         perl-5.30.1.tar.xz
+-sha256 7336cd3ed0535eb61b76a71350effcfa7c88b44faf37d64d70952ced5d38cd35 perl-5.30.1.tar.xz
++# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.2.tar.xz.{md5,sha1,sha256}.txt
++md5    4bfa12b528522a50de0470b8b70b9b3b                                 perl-5.30.2.tar.xz
++sha1   d82cdaa610a3e749e821fc77004b1b4bfd5ebd28                         perl-5.30.2.tar.xz
++sha256 a1aa88bd6fbbdc2e82938afbb76c408b0ea847317737b712dc196cc7907a5259 perl-5.30.2.tar.xz
  
- N:	Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
- F:	package/ffmpeg/
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 711e8f72c2..f42bb11a3c 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -101,6 +101,7 @@ source "package/freescale-imx/imx-vpu-hantro/Config.in"
- source "package/freescale-imx/imx-vpuwrap/Config.in"
- source "package/freescale-imx/firmware-imx/Config.in"
- source "package/freescale-imx/imx-sc-firmware/Config.in"
-+source "package/freescale-imx/imx-seco/Config.in"
- if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
- source "package/freescale-imx/gpu-amd-bin-mx51/Config.in"
- source "package/freescale-imx/libz160/Config.in"
-diff --git a/package/freescale-imx/imx-seco/Config.in b/package/freescale-imx/imx-seco/Config.in
-new file mode 100644
-index 0000000000..1877664a0c
---- /dev/null
-+++ b/package/freescale-imx/imx-seco/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_IMX_SECO
-+	bool "imx-seco"
-+	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
-+	help
-+	  Firmware file for the i.MX8 and i.MX8X Security Controller.
-+
-+	  This library is provided by Freescale as-is and doesn't have
-+	  an upstream.
-diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
-new file mode 100644
-index 0000000000..56f56369d4
---- /dev/null
-+++ b/package/freescale-imx/imx-seco/imx-seco.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  b429ac58b2ea1771b3fdf7ae87bf1d37ccaf596bde01a5ecccae27b2145f6824  imx-seco-2.3.1.bin
-+sha256  69d19847bac9af7f9e832170a15138f5ef144d8064413434114d75a68982cc9c  EULA
-+sha256  6467f2e81d06b19fe541de49bdba32a9a205e8d1c230220fe24247b48672cb46  COPYING
-diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
-new file mode 100644
-index 0000000000..d06bf4c5cc
---- /dev/null
-+++ b/package/freescale-imx/imx-seco/imx-seco.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# imx-seco
-+#
-+################################################################################
-+
-+IMX_SECO_VERSION = 2.3.1
-+IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
-+IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
-+
-+IMX_SECO_LICENSE = NXP Semiconductor Software License Agreement
-+IMX_SECO_LICENSE_FILES = EULA COPYING
-+IMX_SECO_REDISTRIBUTE = NO
-+
-+define IMX_SECO_EXTRACT_CMDS
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_SECO_DL_DIR)/$(IMX_SECO_SOURCE))
-+endef
-+
-+IMX_SECO_INSTALL_IMAGES = YES
-+
-+# SECO firmware is needed when generating imx8-boot-sd.bin which
-+# is done in post-image script.
-+ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
-+define IMX_SECO_INSTALL_IMAGES_CMDS
-+	cp $(@D)/firmware/seco/mx8qx-ahab-container.img \
-+		$(BINARIES_DIR)/ahab-container.img
-+endef
-+else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
-+define IMX_SECO_INSTALL_IMAGES_CMDS
-+	cp $(@D)/firmware/seco/mx8qm-ahab-container.img \
-+		$(BINARIES_DIR)/ahab-container.img
-+endef
-+endif
-+
-+$(eval $(generic-package))
+-# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.1/perl-cross-1.3.1.hash
+-sha256	edce0b0c2f725e2db3f203d6d8e9f3f7161256f5d1590551e40694f21200141d perl-cross-1.3.1.tar.gz
++# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.2/perl-cross-1.3.2.hash
++sha256	defa12f0ad7be0b6c48b4f76e2fb5b37c1b37fbeb6e9ebe938279cd539a0c20c  perl-cross-1.3.2.tar.gz
+ 
+ # Locally calculated
+ sha256 dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2 Artistic
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 0ab81ddb34..c865fc7681 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -6,14 +6,14 @@
+ 
+ # When updating the version here, also update utils/scancpan
+ PERL_VERSION_MAJOR = 30
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
+ PERL_SITE = http://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.3.1
++PERL_CROSS_VERSION = 1.3.2
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
