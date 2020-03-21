@@ -1,62 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 21 Mar 2020 16:22:12 +0100
-Subject: [Buildroot] [git commit] package/perl: bump to version 5.30.2
-Message-ID: <20200321150925.1DE67813D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: bump
+ version to 8.5
+Message-ID: <20200321150924.CF4DB836C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5c7c9dabb94d64855b8c0383e77d01b890f85c3
+commit: https://git.buildroot.net/buildroot/commit/?id=8cc27a292e3433a0993b0e28573fa876a87b0a7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+This package needed to be updated to be aligned with NXP
+BSP 4.19.35_1.1.0
+
+This newer 8.5 version no longer include ahab-container images.
+Those images are now in a separate imx-seco package.
+
+Signed-off-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
+Reviewed-by: Julien Olivain <julien.olivain@oss.nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl/perl.hash | 12 ++++++------
- package/perl/perl.mk   |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.hash |  2 +-
+ package/freescale-imx/firmware-imx/firmware-imx.mk   | 17 +----------------
+ 2 files changed, 2 insertions(+), 17 deletions(-)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 161a4fd615..74791c0b05 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,10 +1,10 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.1.tar.xz.{md5,sha1,sha256}.txt
--md5    f399f3aaee90ddcff5eadd3bccdaacc0                                 perl-5.30.1.tar.xz
--sha1   4bc190b6ac368f573e6a028f91430f831d40d30a                         perl-5.30.1.tar.xz
--sha256 7336cd3ed0535eb61b76a71350effcfa7c88b44faf37d64d70952ced5d38cd35 perl-5.30.1.tar.xz
-+# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.2.tar.xz.{md5,sha1,sha256}.txt
-+md5    4bfa12b528522a50de0470b8b70b9b3b                                 perl-5.30.2.tar.xz
-+sha1   d82cdaa610a3e749e821fc77004b1b4bfd5ebd28                         perl-5.30.2.tar.xz
-+sha256 a1aa88bd6fbbdc2e82938afbb76c408b0ea847317737b712dc196cc7907a5259 perl-5.30.2.tar.xz
- 
--# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.1/perl-cross-1.3.1.hash
--sha256	edce0b0c2f725e2db3f203d6d8e9f3f7161256f5d1590551e40694f21200141d perl-cross-1.3.1.tar.gz
-+# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.2/perl-cross-1.3.2.hash
-+sha256	defa12f0ad7be0b6c48b4f76e2fb5b37c1b37fbeb6e9ebe938279cd539a0c20c  perl-cross-1.3.2.tar.gz
- 
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+index 85f203311f..7b9f722881 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+@@ -1,4 +1,4 @@
  # Locally calculated
- sha256 dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2 Artistic
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 0ab81ddb34..c865fc7681 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -6,14 +6,14 @@
+-sha256 c115d5d0d115fc14754671bd2428f672f9f99677988588accef2fbca2c3f749c  firmware-imx-8.1.1.bin
++sha256 45b0a7392e7a4b2e6c7e1cb988dd660ff3f8cd465afdf796ff840a00db08389d  firmware-imx-8.5.bin
+ sha256 69d19847bac9af7f9e832170a15138f5ef144d8064413434114d75a68982cc9c  EULA
+ sha256 6467f2e81d06b19fe541de49bdba32a9a205e8d1c230220fe24247b48672cb46  COPYING
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 7f14062f89..246bfdfaa1 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # When updating the version here, also update utils/scancpan
- PERL_VERSION_MAJOR = 30
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
+-FIRMWARE_IMX_VERSION = 8.1.1
++FIRMWARE_IMX_VERSION = 8.5
+ FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
  
--PERL_CROSS_VERSION = 1.3.1
-+PERL_CROSS_VERSION = 1.3.2
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+@@ -45,22 +45,7 @@ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+ 	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
+ 		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
+ endef
+-else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8),y)
+-FIRMWARE_IMX_INSTALL_IMAGES = YES
+-define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+-	# SECO firmware is needed when generating imx8-boot-sd.bin which
+-	# is done in post-image script.
+-	cp $(@D)/firmware/seco/mx8qm-ahab-container.img \
+-		$(BINARIES_DIR)/ahab-container.img
+-endef
+ else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+-FIRMWARE_IMX_INSTALL_IMAGES = YES
+-define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+-	# SECO firmware is needed when generating imx8-boot-sd.bin which
+-	# is done in post-image script.
+-	cp $(@D)/firmware/seco/mx8qx-ahab-container.img \
+-		$(BINARIES_DIR)/ahab-container.img
+-endef
+ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/firmware/vpu/vpu_fw_imx8_dec.bin \
+ 		$(TARGET_DIR)/lib/firmware/vpu/vpu_fw_imx8_dec.bin
