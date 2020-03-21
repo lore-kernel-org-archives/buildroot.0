@@ -1,46 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 20:38:04 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/pkg-meson.mk: fix
- cross-compilation.conf
-Message-ID: <20200321192605.ECB4283A65@busybox.osuosl.org>
+Date: Sat, 21 Mar 2020 20:41:53 +0100
+Subject: [Buildroot] [PATCH 1/1] meson: Strip quotes from BR2_ENDIAN
+In-Reply-To: <20200311183833.23074-1-glex.spb@gmail.com> (Gleb Mazovetskiy's
+ message of "Wed, 11 Mar 2020 18:38:33 +0000")
+References: <20200311183833.23074-1-glex.spb@gmail.com>
+Message-ID: <87blop5wce.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2989bcf09d4e3822993b9c382a3b89dd4eba3493
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Gleb" == Gleb Mazovetskiy <glex.spb@gmail.com> writes:
 
-$$(STAGING_DIR) -> $(STAGING_DIR) in PKG_MESON_INSTALL_CROSS_CONF.
+ > Strips the quotes from BR2_ENDIAN because meson expects the value to be
+ > unquoted.
 
-$$ resulted in `$(STAGING_DIR)` in the file instead of the expanded
-value.
+ > Also uses the same values in target-specific cross-config as in the /etc
+ > one.
 
-Note that this change only affects the etc config at:
-host/etc/meson/cross-compilation.conf
+ > Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 
-Per-package cross-compilation.conf files are already correct.
+Committed to 2020.02.x, thanks.
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3fb784afb124ec689330177da5ee0e3e744f6237)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-meson.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 642b715938..416129f6fe 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -193,7 +193,7 @@ define PKG_MESON_INSTALL_CROSS_CONF
- 	    -e 's%@TARGET_LDFLAGS@%$(call make-comma-list,$(TARGET_LDFLAGS))@PKG_TARGET_CFLAGS@%g' \
- 	    -e 's%@TARGET_CXXFLAGS@%$(call make-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g' \
- 	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
--	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
-+	    -e 's%@STAGING_DIR@%$(STAGING_DIR)%g' \
- 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
- 	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
+-- 
+Bye, Peter Korsgaard
