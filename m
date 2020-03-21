@@ -1,40 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Mar 2020 17:48:53 +0100
-Subject: [Buildroot] [git commit] package/boinc: drop comment about server
- having no versioning
-Message-ID: <20200321163724.D44F4839D6@busybox.osuosl.org>
+Date: Sat, 21 Mar 2020 17:50:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/boinc: drop comment about
+ server having no versioning
+In-Reply-To: <20200321100820.137676-1-fontaine.fabrice@gmail.com>
+References: <20200321100820.137676-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200321165035.GD4290@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=053f6884492ffb5f41489a76aae56724430e2f73
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-The package only ever builds the client; it builds neither the server
-nor the manager.
+On 2020-03-21 11:08 +0100, Fabrice Fontaine spake thusly:
+> server has versioning since April 2018 and
+> https://github.com/BOINC/boinc/releases/tag/server_release%2F0.9
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/boinc/boinc.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+> index b6a9374715..7bbc4dfbf4 100644
+> --- a/package/boinc/boinc.mk
+> +++ b/package/boinc/boinc.mk
+> @@ -7,8 +7,7 @@
+>  BOINC_VERSION_MAJOR = 7.16
+>  BOINC_VERSION = $(BOINC_VERSION_MAJOR).5
+>  # client_release can be used to build the Client and Manager but not the Server
+> -# part. The Server currently has no versioning (see
+> -# https://github.com/BOINC/boinc/pull/1798).
+> +# part.
 
-Drop the comment altogether.
+I'm not even sure why we still talk about the server here, since this
+package only ever builds the client. Even the part about the manager is
+superfluous, since we explicitly do not build the manager either.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998 at free.fr: drop the comment altogether]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/boinc/boinc.mk | 3 ---
- 1 file changed, 3 deletions(-)
+I've dropped the comment altogether, and pushed to master, thanks.
 
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index b6a9374715..3dc1ea65ad 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -6,9 +6,6 @@
- 
- BOINC_VERSION_MAJOR = 7.16
- BOINC_VERSION = $(BOINC_VERSION_MAJOR).5
--# client_release can be used to build the Client and Manager but not the Server
--# part. The Server currently has no versioning (see
--# https://github.com/BOINC/boinc/pull/1798).
- BOINC_SITE = \
- 	$(call github,BOINC,boinc,client_release/$(BOINC_VERSION_MAJOR)/$(BOINC_VERSION))
- BOINC_LICENSE = LGPL-3.0+
+Regards,
+Yann E. MORIN.
+
+>  BOINC_SITE = \
+>  	$(call github,BOINC,boinc,client_release/$(BOINC_VERSION_MAJOR)/$(BOINC_VERSION))
+>  BOINC_LICENSE = LGPL-3.0+
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
