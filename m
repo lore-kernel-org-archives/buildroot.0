@@ -1,68 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 20:59:28 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/gcc: disable gcc
- 9.x for csky
-Message-ID: <20200321194817.3386183A50@busybox.osuosl.org>
+Date: Sat, 21 Mar 2020 21:05:41 +0100
+Subject: [Buildroot] [PATCH] package/util-linux: add missing SOB to
+ patches
+In-Reply-To: <20200313010418.16872-1-unixmania@gmail.com> (unixmania's message
+ of "Thu, 12 Mar 2020 22:04:18 -0300")
+References: <20200313010418.16872-1-unixmania@gmail.com>
+Message-ID: <87pnd54goa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6f66f62d9f98a5952717e37f86b4c0b8d54829d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+>>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
 
-When building a toolchain with upstream gcc 9.x the build
-fail due to several issues.
+ > From: Carlos Santos <unixmania@gmail.com>
+ > It is required that all patches in packages have the Signed-off-by of
+ > the contributor who brought them into Buildroot.
 
-Note: The upstream Binutils support csky target since
-release 2.32 but the support was never enabled in the
-Buildroot packaging. So the latest version (2.33.1) was
-tested here.
+ > Signed-off-by: Carlos Santos <unixmania@gmail.com>
 
-[upstream gcc 9.x w/ glibc csky fork with binutils csky for or binutils 2.33.1]
-In file included from <command-line>:
-./../include/libc-symbols.h:534:26: error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location': 'const', 'nothrow' [-Werror=missing-attributes]
-  534 |   extern __typeof (name) __EI_##name \
+Committed to 2019.02.x, 2019.11.x and 2020.02.x, thanks.
 
-[upstream gcc 9.x w/ glibc 2.30 w/ binutils csky fork]
-/tmp/ccThLRhb.s: Assembler messages:
-/tmp/ccThLRhb.s:10: Error: invalid or unsupported encoding in .cfi_personality
-/tmp/ccThLRhb.s:11: Error: invalid or unsupported encoding in .cfi_lsda
-
-[upstream gcc 9.x w/ glibc 2.30 w/ binutils 2.33.1]
-build/elf/librtld.os: in function `__sync_fetch_and_add_2':
-libgcc/config/csky/linux-atomic.c:116: undefined reference to `__kernel_cmpxchg'
-
-Currenlty, only the toolchain using binutils, gcc, glibc
-fork produce a working toolchain. So disable gcc 9.x for
-csky.
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Guo Ren <guoren@kernel.org>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7542a596010e538ceff56b57dc2c6797c63d73ba)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gcc/Config.in.host | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 671df1e9ce..eda362bc0e 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -66,8 +66,9 @@ config BR2_GCC_VERSION_9_X
- 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
- 	depends on !BR2_powerpc_SPE
- 	# C-SKY sk610 needs abiv1, which is not supported in
--	# upstream gcc
--	depends on !BR2_ck610
-+	# upstream gcc. C-SKY gcc upstream support not tested
-+	# with upstream binutils and glibc.
-+	depends on !BR2_csky
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 
- endchoice
+-- 
+Bye, Peter Korsgaard
