@@ -1,42 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 21 Mar 2020 17:33:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dav1d: needs dynamic library
-Message-ID: <20200321163316.139938-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 21 Mar 2020 17:34:26 +0100
+Subject: [Buildroot] [git commit] package/localedef: add missing dependeny
+ on host-gawk
+Message-ID: <20200321162506.6878C8390C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dav1d needs dynamic library since version 0.6.0 and
-https://github.com/videolan/dav1d/commit/6b611d36acab8ce1afdd528599322bb6b2d28727
+commit: https://git.buildroot.net/buildroot/commit/?id=7a74bad0b44d1ea9b400320e4f992925463e49a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/c82b6e3c1cf968c644f3dee376b16760fb4593bb
+While reviewing the patch [1], we noticed that host-gawk dependency
+was missing. It may trigger an issue if gawk is missing on the host
+since it's a "critical tool" [2].
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Indeed, localedef package is actually glibc sources that check gawk
+host binary.
+
+host-gawk is listed in glibc package dependency [3], so add it to
+localedef too.
+
+[1] af90a104c06542a1bf5545eaf9b9c7beb7176e80
+[2] https://sourceware.org/git/?p=glibc.git;a=blob;f=configure.ac;h=49b900c1ed68fa4dd1dadca809ceb6e8b237a89c;hb=9ea3686266dca3f004ba874745a4087a89682617#l1021
+[3] https://git.buildroot.net/buildroot/tree/package/glibc/glibc.mk?h=2020.02#n38
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/dav1d/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/localedef/localedef.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/dav1d/Config.in b/package/dav1d/Config.in
-index 00d2fd17f1..fb2902558f 100644
---- a/package/dav1d/Config.in
-+++ b/package/dav1d/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_DAV1D
- 	bool "dav1d"
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pthread
- 	help
- 	  dav1d is a new AV1 cross-platform decoder, open-source, and
-@@ -7,5 +8,5 @@ config BR2_PACKAGE_DAV1D
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 3e22f68039..1093e106fa 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -14,7 +14,8 @@ HOST_LOCALEDEF_DL_SUBDIR = glibc
  
- 	  https://code.videolan.org/videolan/dav1d
+ HOST_LOCALEDEF_DEPENDENCIES = \
+ 	$(BR2_MAKE_HOST_DEPENDENCY) \
+-	host-bison
++	host-bison \
++	host-gawk
  
--comment "dav1d needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "dav1d needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
--- 
-2.25.1
+ HOST_LOCALEDEF_CONF_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
+ 
