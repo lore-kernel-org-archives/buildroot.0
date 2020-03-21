@@ -1,106 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Mar 2020 22:47:26 +0100
-Subject: [Buildroot] [PATCH 1/2]
- package/gobject-introspection/g-ir-scanner: do not set default compiler
- values
-In-Reply-To: <20200320222359.88689-1-aduskett@gmail.com>
-References: <20200320222359.88689-1-aduskett@gmail.com>
-Message-ID: <20200321214726.GN4290@scaer>
+Date: Sat, 21 Mar 2020 22:48:01 +0100
+Subject: [Buildroot] [git commit] package/libostree: disable introspection
+Message-ID: <20200321213505.0FF6A83BDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d264351cfcca91e19c06fee277ebba1976a68508
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-20 15:23 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Commit 8b0aeafce2a22913e6a44818227f6a39e3225157 set 7 new variables in
-> g-ir-scanner.in:
-> 
-> export CPP="${CPP:-${HOST_DIR}/bin/@BASENAME_TARGET_CPP@}"
-> export CC="${CC:-${HOST_DIR}/bin/@BASENAME_TARGET_CC@}"
-> export CXX="${CXX:-${HOST_DIR}/bin/@BASENAME_TARGET_CXX@}"
-> CPPFLAGS="${CPPFLAGS:- at TARGET_CPPFLAGS@}"
-> CFLAGS="${CFLAGS:- at TARGET_CFLAGS@}"
-> CXXFLAGS="${CXXFLAGS:- at TARGET_CXXFLAGS@}"
-> LDFLAGS="${LDFLAGS:- at TARGET_LDFLAGS@}"
-> 
-> However, defaulting to CPP, CC, or CXX breaks some packages because they may
-> hard code CC to the system CC.
-> 
-> One such package is libostree which has the line
-> "INTROSPECTION_SCANNER_ENV = CC=gcc" in the Makefile.
+Build fails if gobject-introspection is built before libostree:
 
-But then, that's clearly a bug in libostree! They should not ever try to
-call a hard-coded compiler. If a user would even do a native build with
-an alternate compiler:
+./.libs/libostree-1.so: error adding symbols: File in wrong format
+collect2: error: ld returned 1 exit status
+src/libostree/ostree-repo-deprecated.h:28: Warning: OSTree: symbol='G_GNUC_DEPRECATED_FOR': Skipping foreign symbol from namespace Gio
+linking of temporary binary failed: Command '['/bin/bash', './libtool', '--mode=link', '--tag=CC', '--silent', 'gcc', '-o', '/home/buildroot/autobuild/instance-2/output-1/build/libostree-2019.6/tmp-introspectvtkql2xj/OSTree-1.0', '-export-dynamic', '-D_LARGEFILE_SOURCE', '-D_LARGEFILE64_SOURCE', '-D_FILE_OFFSET_BITS=64', '-D_LARGEFILE_SOURCE', '-D_LARGEFILE64_SOURCE', '-D_FILE_OFFSET_BITS=64', '-Os', '/home/buildroot/autobuild/instance-2/output-1/build/libostree-2019.6/tmp-introspectvtkql2xj/OSTree-1.0.o', '-L.', 'libostree-1.la', '-L/home/buildroot/autobuild/instance-2/output-1/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib', '-lgio-2.0', '-lgobject-2.0', '-Wl,--export-dynamic', '-lgmodule-2.0', '-pthread', '-lglib-2.0', '-lglib-2.0']' returned non-zero exit status 1.
+/home/buildroot/autobuild/instance-2/output-1/host/bin/../aarch64-buildroot-linux-gnu/sysroot/usr/lib/../share/gobject-introspection-1.0/Makefile.introspection:155: recipe for target 'OSTree-1.0.gir' failed
 
-    CC=${HOME}/foo/bin/my-gcc-12.42 ./configure
+Fixes:
+ - http://autobuild.buildroot.org/results/f8a14307e6feff61acd963d6cd2aac289e6d1647
 
-Then the above would also break anyway. It's not even just about
-cross-compilation. We should fix libostree and send them the fix.
-Probably they should do something like:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libostree/libostree.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-    INTROSPECTION_SCANNER_ENV = CC=${CC}
-
-With that commit log of yours, the problem is now obvious, while it did
-not look like it when we discussed on IRC, hence my comments now...
-
-Note that my comments above do not preclude us fixing our wrapper with
-this patch of yours, but if there is no need to do, I'd like to avoid
-it.
-
-Regards,
-Yann E. MORIN.
-
-> Because g-ir-scanner defaults CC to a predefined CC instead of explicitly
-> overwriting it, the CC passed from the makefile is used, and linking errors
-> occur as a result.
-> 
-> Remove the defaults for the following and explicitly set the paths to the
-> proper cross-toolchain binaries:
-> CPP, CC, CXX
-> 
-> Fixes
-> http://autobuild.buildroot.org/results/f8a14307e6feff61acd963d6cd2aac289e6d1647
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/gobject-introspection/g-ir-scanner.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/gobject-introspection/g-ir-scanner.in b/package/gobject-introspection/g-ir-scanner.in
-> index 22df7be309..6fc495389e 100644
-> --- a/package/gobject-introspection/g-ir-scanner.in
-> +++ b/package/gobject-introspection/g-ir-scanner.in
-> @@ -5,9 +5,9 @@
->  # the variables blank (LDFLAGS, CFLAGS, and CPPFLAGS.)
->  # Export these variables to ensure all build systems can generate .gir and
->  # .typelib files properly.
-> -export CPP="${CPP:-${HOST_DIR}/bin/@BASENAME_TARGET_CPP@}"
-> -export CC="${CC:-${HOST_DIR}/bin/@BASENAME_TARGET_CC@}"
-> -export CXX="${CXX:-${HOST_DIR}/bin/@BASENAME_TARGET_CXX@}"
-> +export CPP="${HOST_DIR}/bin/@BASENAME_TARGET_CPP@"
-> +export CC="${HOST_DIR}/bin/@BASENAME_TARGET_CC@"
-> +export CXX="${HOST_DIR}/bin/@BASENAME_TARGET_CXX@"
->  export CPPFLAGS="${CPPFLAGS:- at TARGET_CPPFLAGS@}"
->  export CFLAGS="${CFLAGS:- at TARGET_CFLAGS@}"
->  export CXXFLAGS="${CXXFLAGS:- at TARGET_CXXFLAGS@}"
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index bdbe6b5aba..ff763b20f9 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -21,6 +21,7 @@ LIBOSTREE_CONF_OPTS += \
+ 	--disable-gtk-doc \
+ 	--disable-gtk-doc-html \
+ 	--disable-gtk-doc-pdf \
++	--disable-introspection \
+ 	--disable-man
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
