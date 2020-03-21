@@ -1,60 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Mar 2020 20:05:13 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/samba4: needs
- host-python3
-Message-ID: <20200321190531.0E0B380E2B@busybox.osuosl.org>
+Date: Sat, 21 Mar 2020 20:39:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson.mk: Fix
+ cross-compilation.conf
+In-Reply-To: <20200311191141.16295-1-glex.spb@gmail.com> (Gleb Mazovetskiy's
+ message of "Wed, 11 Mar 2020 19:11:41 +0000")
+References: <20200311105930.21564-1-glex.spb@gmail.com>
+ <20200311191141.16295-1-glex.spb@gmail.com>
+Message-ID: <87fte15wh0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e07a360135f2645633c6dce2552099047ebd3b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Gleb" == Gleb Mazovetskiy <glex.spb@gmail.com> writes:
 
-host-python3 is a mandatory dependency since bump to version 4.10.0 and
-https://gitlab.com/samba-team/devel/samba/-/commit/5ddff307b4af5c82d5064745f5bd2c33bd340ced
-because buildtools/bin/waf shebang is set to "/usr/bin/env python3"
+ > $$(STAGING_DIR) -> $(STAGING_DIR) in PKG_MESON_INSTALL_CROSS_CONF.
+ > $$ resulted in `$(STAGING_DIR)` in the file instead of the expanded
+ > value.
 
-Fixes:
- - http://autobuild.buildroot.org/results/2634eb7824beb34f485cf40670f6959515f008ad
+ > Note that this change only affects the etc config at:
+ > host/etc/meson/cross-compilation.conf
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bf341117f68fe3e47f3ea73c416e2cefbded25fc)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/samba4.mk | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ > Per-package cross-compilation.conf files are already correct.
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 005296ea74..3048cb9a63 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -11,7 +11,7 @@ SAMBA4_INSTALL_STAGING = YES
- SAMBA4_LICENSE = GPL-3.0+
- SAMBA4_LICENSE_FILES = COPYING
- SAMBA4_DEPENDENCIES = \
--	host-e2fsprogs host-heimdal host-nfs-utils \
-+	host-e2fsprogs host-heimdal host-nfs-utils host-python3 \
- 	cmocka e2fsprogs gnutls popt zlib \
- 	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
- 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
-@@ -25,14 +25,11 @@ SAMBA4_CONF_ENV = \
- 	XSLTPROC=false \
- 	WAF_NO_PREFORK=1
- 
-+SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python3"
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
--SAMBA4_PYTHON = \
--	PYTHON="$(HOST_DIR)/bin/python3" \
--	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
--SAMBA4_DEPENDENCIES += host-python3 python3
-+SAMBA4_PYTHON += PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config"
-+SAMBA4_DEPENDENCIES += python3
- else
--SAMBA4_PYTHON = PYTHON="$(HOST_DIR)/bin/python2"
--SAMBA4_DEPENDENCIES += host-python
- SAMBA4_CONF_OPTS += --disable-python
- endif
- 
+ > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+ > Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+
+Committed to 2020.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
