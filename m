@@ -1,69 +1,67 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Sun, 22 Mar 2020 21:46:16 +0100
-Subject: [Buildroot] [PATCH v6 18/28] package/cmake: Fix for using -O in
- top-level make
-In-Reply-To: <20200319150018.737f5e7c@windsurf.home>
-References: <20200217212350.29750-1-anaumann@ultratronik.de>
- <20200217212350.29750-19-anaumann@ultratronik.de>
- <20200311232503.0bafe189@windsurf>
- <33267645-fd49-cb20-bb8f-f6a1edd57a15@mind.be>
- <d6125560-ca00-a4be-cfde-ff200d332756@andin.de>
- <20200317070800.6365cac6@windsurf.home>
- <CALFsTFUiXLAVUPaKE22FZE7sF2V4uhv6XmDyim0-cveKP950mA@mail.gmail.com>
- <0172c8d6-c39a-10a4-cb03-839242936287@andin.de>
- <CALFsTFVHh+K0_9Un4Gx1TKVi1HwoDqG7N=gvMgdVxpN5iB0vyQ@mail.gmail.com>
- <6e936a94-ca1a-dce4-cae5-40605344119b@andin.de>
- <CALFsTFVNjnov69twmk_kv6VdBQAkLXTG4MaFUzw6LfiW2VmgDA@mail.gmail.com>
- <20200319134951.3f8dfb85@windsurf.home>
- <CALFsTFUN-zHap9eg2AVoeVCH+5Yw3gF3SPZNx9rOFRtwtvUeLw@mail.gmail.com>
- <20200319150018.737f5e7c@windsurf.home>
-Message-ID: <f51a8f1a-24d3-5a2a-3a15-3e9095d57c92@andin.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Mar 2020 21:49:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package: add rtty
+In-Reply-To: <20200310150606.28261-1-zhaojh329@gmail.com>
+References: <20200310150606.28261-1-zhaojh329@gmail.com>
+Message-ID: <20200322214949.676fe7e3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-On 19.03.20 15:00, Thomas Petazzoni wrote:
-> On Thu, 19 Mar 2020 15:53:23 +0200
-> Asaf Kahlon <asafka7@gmail.com> wrote:
-> 
->>> Requiring make > 4.0 on the host system is too strict, especially
->>> considering that the issue we have here only happens in very specific
->>> conditions: ccache support enabled, and passing of custom -O flags that
->>> are only useful for top-level parallel build, which is itself an
->>> experimental feature.
->>
->> Just as a side note - the problem isn't related to ccache. We
->> reproduced it with -O and top-level parallel build.
-> 
-> Sorry, I mixed things up, and thought it was ccache related.
-> 
->> In addition, if you have any suggestion how to address that case -
->> I'll be more than happy to help.
-> 
-> I don't have any really good suggestion. But it's really a corner case:
-> only happens with make 4.1 if I understand correctly, and only when you
-> pass some variants of the -O option.
-> 
-> The "make -Orecurse" option, which is the most relevant for top-level
-> parallel build, does not exhibit the issue.
-> 
-> So essentially I simply wouldn't fix the problem. If you really want to
+On Tue, 10 Mar 2020 23:06:06 +0800
+Jianhui Zhao <zhaojh329@gmail.com> wrote:
 
-That's ok for me since it really is a corner case.
+> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
 
+Thanks for your contribution. I have applied your patch, after doing a
+number of changes. See below.
 
-regards,
-Andreas
+> ---
+>  package/Config.in      |  1 +
+>  package/rtty/Config.in |  7 +++++++
+>  package/rtty/rtty.hash |  2 ++
+>  package/rtty/rtty.mk   | 15 +++++++++++++++
+>  4 files changed, 25 insertions(+)
 
+You forgot to add an entry to the DEVELOPERS files, so I did that.
 
+> diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
+> new file mode 100644
+> index 0000000000..239dc59f78
+> --- /dev/null
+> +++ b/package/rtty/rtty.hash
+> @@ -0,0 +1,2 @@
+> +sha256  6faafe75d82edbcfe154da5f1ffc0ddfd14dd88a2315f19aeed7f2631df96f41  rtty-7.1.2.tar.gz
+> +sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENCE
 
-> fix it, maybe we can have some fancy logic in the main Makefile to
-> detect that one of the problematic -O option is passed, and the make
-> version is not appropriate, and then error out.
-> 
-> Thomas
-> 
+The license file is named LICENSE (with an S) not LICENCE (with a C).
+
+> +RTTY_VERSION = 7.1.2
+> +LIBCURL_SOURCE = rtty-$(RTTY_VERSION).tar.gz
+
+Wrong prefix, this variable was not needed anyway, so I dropped it.
+
+> +RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
+> +RTTY_LICENSE = MIT
+> +RTTY_LICENSE_FILES = LICENSE
+> +
+> +RTTY_DEPENDENCIES = libev
+
+As suggested by Romain Naour, I've added -DRTTY_SSL_SUPPORT=OFF, and
+then did a follow-up commit to add optional support for SSL.
+
+You will receive e-mail notifications if there are build failures for
+the rtty package. If there are build failures, it would be nice if you
+could investigate them, and provide fixes.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
