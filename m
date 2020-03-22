@@ -1,54 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Mar 2020 22:45:22 +0100
-Subject: [Buildroot] [PATCHv2] package/libostree: enable introspection
-In-Reply-To: <20200322092854.20421-1-yann.morin.1998@free.fr>
-References: <20200322092854.20421-1-yann.morin.1998@free.fr>
-Message-ID: <20200322224522.6d373638@windsurf.home>
+Date: Sun, 22 Mar 2020 22:47:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/intel-mediasdk: enable
+ compilation with x11 dri3
+In-Reply-To: <20200214154350.31588-1-lpdev@cordier.org>
+References: <20200214154350.31588-1-lpdev@cordier.org>
+Message-ID: <20200322224706.5106de39@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 22 Mar 2020 10:28:54 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Hello Louis-Paul,
 
-> libostree build fails when introspection is enabled:
-> 
->     ./.libs/libostree-1.so: error adding symbols: File in wrong format
->     collect2: error: ld returned 1 exit status
->     src/libostree/ostree-repo-deprecated.h:28: Warning: OSTree: symbol='G_GNUC_DEPRECATED_FOR': Skipping foreign symbol from namespace Gio
->     linking of temporary binary failed: Command '['/bin/bash', './libtool', '--mode=link', '--tag=CC', '--silent', 'gcc', [...] ]' returned non-zero exit status 1.
-> 
-> This is because the build system fir libiostree hard-codes CC=gcc when
-> calling the GOI scanner, which obviously causes build failures when in
-> cross-compilation.
-> 
-> In d264351cfcca (package/libostree: disable introspection), we just
-> papered over the problem by forcibly disabling introspection altogether.
-> 
-> Turns out the fix is realatively simple: we can just override the
-> INTROSPECTION_SCANNER_ENV variable when calling make, which will revert
-> to the behaviour we expect: to use the cross-compiler in the GOI scanner
-> wrapper.
-> 
-> Thanks to Adam for pointing out at INTROSPECTION_SCANNER_ENV in the
-> first place. :-)
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> ---
-> Note: this is an alternate proposal to replace a previous series by
-> Adam:
->     https://patchwork.ozlabs.org/project/buildroot/list/?series=165777
-> ---
->  package/libostree/libostree.mk | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+On Fri, 14 Feb 2020 16:43:50 +0100
+Louis-Paul Cordier <lpdev@cordier.org> wrote:
 
-Applied to master, thanks.
+> Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
+> ---
+>  package/intel-mediasdk/Config.in         | 1 +
+>  package/intel-mediasdk/intel-mediasdk.mk | 4 ++--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/intel-mediasdk/Config.in b/package/intel-mediasdk/Config.in
+> index 05293d7604..0bfaf1272b 100644
+> --- a/package/intel-mediasdk/Config.in
+> +++ b/package/intel-mediasdk/Config.in
+> @@ -9,6 +9,7 @@ config BR2_PACKAGE_INTEL_MEDIASDK
+>  	depends on BR2_PACKAGE_XORG7  # intel-mediadriver
+>  	select BR2_PACKAGE_INTEL_MEDIADRIVER
+>  	select BR2_PACKAGE_LIBDRM_INTEL
+> +	select BR2_PACKAGE_XORGPROTO
+>  	help
+>  	  Intel(R) Media SDK provides an API to access
+>  	  hardware-accelerated video decode, encode and filtering on
+> diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+> index 368e108308..b040729506 100644
+> --- a/package/intel-mediasdk/intel-mediasdk.mk
+> +++ b/package/intel-mediasdk/intel-mediasdk.mk
+> @@ -10,8 +10,8 @@ INTEL_MEDIASDK_LICENSE = MIT
+>  INTEL_MEDIASDK_LICENSE_FILES = LICENSE
+>  
+>  INTEL_MEDIASDK_INSTALL_STAGING = YES
+> -INTEL_MEDIASDK_DEPENDENCIES = intel-mediadriver
+> +INTEL_MEDIASDK_DEPENDENCIES = intel-mediadriver xorgproto
+>  
+> -INTEL_MEDIASDK_CONF_OPTS = -DMFX_INCLUDE="$(@D)/api/include"
+> +INTEL_MEDIASDK_CONF_OPTS = -DMFX_INCLUDE="$(@D)/api/include" -DENABLE_X11_DRI3=ON
+
+Why are you making xorgproto a mandatory dependency ? intel-mediasdk
+doesn't build without it ? If it does build and work without it, then
+this is an optional dependency, and should be treated as such.
+
+Could you confirm this ?
+
+Thanks,
 
 Thomas
 -- 
