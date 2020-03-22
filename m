@@ -1,51 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Mar 2020 15:42:13 +0100
-Subject: [Buildroot] [git commit] package/mesa3d: disable v3d support for
- arm if neon is not supported
-Message-ID: <20200322143005.AB3708434E@busybox.osuosl.org>
+Date: Sun, 22 Mar 2020 15:33:31 +0100
+Subject: [Buildroot] [git commit] package/wine: bump to version 5.0
+Message-ID: <20200322143005.94BBE8434E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff00c284c56e954592a6246d48cd5edadbd34043
+commit: https://git.buildroot.net/buildroot/commit/?id=e7b929abf9245d26fbcbdb3630a77ab685807465
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The v3d driver for arm uses neon instructions unconditionally, so
-depend on BR2_ARM_CPU_HAS_NEON.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/66c4df4ee84b73160dde5fe4437b5abdbd2b50d2
-
-  [1050/1079] Compiling C object 'src/gallium/drivers/v3d/99241e4@@v3d_neon at sta/v3d_tiling.c.o'.
-  {standard input}: Assembler messages:
-  {standard input}:417: Error: selected processor does not support `vldm r6,{q0,q1,q2,q3}' in ARM mode
-  {standard input}:418: Error: selected processor does not support `vst1.8 d0,[r4],r5' in ARM mode
-  {standard input}:419: Error: selected processor does not support `vst1.8 d1,[r4],r5' in ARM mode
-  {standard input}:420: Error: selected processor does not support `vst1.8 d2,[r4],r5' in ARM mode
-  {standard input}:421: Error: selected processor does not support `vst1.8 d3,[r4],r5' in ARM mode
-  {standard input}:422: Error: selected processor does not support `vst1.8 d4,[r4],r5' in ARM mode
-  {standard input}:423: Error: selected processor does not support `vst1.8 d5,[r4],r5' in ARM mode
-  {standard input}:424: Error: selected processor does not support `vst1.8 d6,[r4],r5' in ARM mode
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/wine/wine.hash | 4 ++--
+ package/wine/wine.mk   | 6 ++++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 13e516e452..16d77f42c2 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -256,7 +256,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index eeb30c9a9f..e6d0ef88ed 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256 25026d9f98a5d62583b8a02c91b1adaca9a2ff000d54095bb274045379e00fda wine-4.0.3.tar.xz
++sha256 181550ba69a80b00c631f80c28ff7642264613bbecdb0c0fc04d6534866713b4 wine-5.0.tar.xz
+ # Locally calculated
+ sha256 e237fa56668030e928551ddd60f05df5fe957f75eab874bbd017e085ed722e7c COPYING.LIB
+-sha256 d29132813288a9b6034a79c53b22dbb1b078c70cec5c9bb731ae574cf812aa54 LICENSE
++sha256 f3ca909e68d38c972e8ded5248b4745958dbb26f2e581ad73cfbedb6b0408e58 LICENSE
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index f315d90994..a4b6c6a15f 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
- 	bool "Gallium v3d driver"
--	depends on BR2_arm || BR2_aarch64
-+	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_LIBDRM_VC4
+-WINE_VERSION = 4.0.3
++WINE_VERSION = 5.0
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
+-WINE_SITE = https://dl.winehq.org/wine/source/4.0
++WINE_SITE = https://dl.winehq.org/wine/source/5.0
+ WINE_LICENSE = LGPL-2.1+
+ WINE_LICENSE_FILES = COPYING.LIB LICENSE
+ WINE_DEPENDENCIES = host-bison host-flex host-wine
+@@ -19,6 +19,7 @@ WINE_CONF_OPTS = \
+ 	--disable-win64 \
+ 	--without-capi \
+ 	--without-coreaudio \
++	--without-faudio \
+ 	--without-gettext \
+ 	--without-gettextpo \
+ 	--without-gphoto \
+@@ -357,6 +358,7 @@ HOST_WINE_CONF_OPTS += \
+ 	--without-capi \
+ 	--without-cms \
+ 	--without-coreaudio \
++	--without-faudio \
+ 	--without-cups \
+ 	--without-curses \
+ 	--without-dbus \
