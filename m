@@ -1,12 +1,15 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 22 Mar 2020 10:39:43 +0100
-Subject: [Buildroot] [PATCH v1] package/iwd: bump version to 1.5
-Message-ID: <20200322093943.20101-1-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Mar 2020 10:43:44 +0100
+Subject: [Buildroot] [git commit] package/iwd: bump version to 1.5
+Message-ID: <20200322094829.DE09583CF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=5bab28d8362bfc9e30020390890e67646b12ad2d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes incompatibility because of recent version bump to ell-0.28 ([1]):
 
@@ -30,6 +33,7 @@ Fixes incompatibility because of recent version bump to ell-0.28 ([1]):
 [1] https://git.buildroot.net/buildroot/commit/?id=faa592179d9fe46b97289bde5a1b0f0da6052b06
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/iwd/iwd.hash | 4 ++--
  package/iwd/iwd.mk   | 2 +-
@@ -60,5 +64,3 @@ index fc8b83d1bb..799e631ba5 100644
  IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
  IWD_SITE_METHOD = git
  IWD_LICENSE = LGPL-2.1+
--- 
-2.25.1
