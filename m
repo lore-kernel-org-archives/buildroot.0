@@ -1,94 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Mar 2020 22:09:19 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/rcw : bump to LSDK-19.09
-In-Reply-To: <20200322162444.29206-1-laurent.hartanerot@gmail.com>
-References: <20200318071427.347-1-laurent.hartanerot@gmail.com>
- <20200322162444.29206-1-laurent.hartanerot@gmail.com>
-Message-ID: <20200322210919.GC22325@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Mar 2020 22:09:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mediastreamer: speexdsp and
+ portaudio needs speex
+In-Reply-To: <20200310195838.2988-1-fontaine.fabrice@gmail.com>
+References: <20200310195838.2988-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200322220948.74189c0d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Laurent, All,
+Hello,
 
-On 2020-03-22 17:24 +0100, Laurent Hartanerot spake thusly:
-> From: Laurent Hartanerot <laurent.hartanerot@atos.net>
-> 
-> Upgrade python to python3 : "Only Python versions 3.0+ are supported"
-> 
-> Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
-> ---
->  package/rcw/rcw.hash | 2 +-
->  package/rcw/rcw.mk   | 6 +++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/rcw/rcw.hash b/package/rcw/rcw.hash
-> index 7de1ec659a..76b6373942 100644
-> --- a/package/rcw/rcw.hash
-> +++ b/package/rcw/rcw.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 1421ada9fec10b12ff21cd9ad82f0a835b191cb2dde80f03547764574b1346c3 rcw-LSDK-18.12.tar.gz
-> +sha256 b69a6a8b187ba794e0af716a509ced2bbac83da0f6e94b5c7331a34619db21b1 rcw-LSDK-19.09.tar.gz
->  sha256 a531b3146425e592db17a51ff39c4801cb01fb4055ffdaada0572decc0655bcd LICENSE
-> diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
-> index dbfeae7b21..10e357ed69 100644
-> --- a/package/rcw/rcw.mk
-> +++ b/package/rcw/rcw.mk
-> @@ -4,13 +4,13 @@
->  #
->  ################################################################################
+On Tue, 10 Mar 2020 20:58:38 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> -ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
+> +# portaudio backend needs speex as well
+> +ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yyy)
+
+Does it needs speexdsp, or just speex ?
+
+>  MEDIASTREAMER_CONF_OPTS += \
+>  	-DENABLE_PORTAUDIO=ON \
+>  	-DENABLE_SOUND=ON
+> @@ -105,7 +106,7 @@ else
+>  MEDIASTREAMER_CONF_OPTS += -DENABLE_SPEEX_CODEC=OFF
+>  endif
 >  
-> -RCW_VERSION = LSDK-18.12
-> +RCW_VERSION = LSDK-19.09
->  RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
->  RCW_SITE_METHOD = git
->  RCW_LICENSE = BSD-3-Clause
->  RCW_LICENSE_FILES = LICENSE
->  
-> -HOST_RCW_DEPENDENCIES = host-python
-> +HOST_RCW_DEPENDENCIES = $(BR2_PYTHON3_HOST_DEPENDENCY)
->  
->  RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))
->  
-> @@ -41,7 +41,7 @@ endef
->  HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
->  
->  define HOST_RCW_BUILD_CMDS
-> -	$(HOST_DIR)/bin/python $(@D)/rcw.py \
-> +	python3 $(@D)/rcw.py \
+> -ifeq ($(BR2_PACKAGE_SPEEXDSP),y)
+> +ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
+>  MEDIASTREAMER_CONF_OPTS += -DENABLE_SPEEX_DSP=ON
 
-This would not work if building our own host-python3, because it most
-probably is not in the default PATH, which by the way I explained in a
-previous mail.
+Are you sure about this one ? If you look at the build failure at
+http://autobuild.buildroot.org/results/32d06517a5470f71d9b7dc99139f6c3071e7d77d,
+it fails when building src/audiofilters/msresample.c. This file is
+built when ENABLE_RESAMPLE=ON.
 
-Furthermore, this can all be highyl simplified, because the script is
-not a direct python3 script, it uses /usr/bin/env as shebang, so will
-properly find the appropriate python3 from the PATH.
+So strictly speaking, it's not the SPEEX_DSP support that needs SPEEX,
+but it's the RESAMPLE support that needs both SPEEX and SPEEX_DSP. So
+the following change:
 
-I've fixed that and pushed to master. Please review my commit and verify
-it also still works for you, please. Thanks!
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index dcec66dfcd..53024d2f07 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -112,6 +112,12 @@ else
+ MEDIASTREAMER_CONF_OPTS += -DENABLE_SPEEX_DSP=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
++MEDIASTREAMER_CONF_OPTS += -DENABLE_RESAMPLE=ON
++else
++MEDIASTREAMER_CONF_OPTS += -DENABLE_RESAMPLE=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_FFMPEG_SWSCALE),y)
+ MEDIASTREAMER_CONF_OPTS += -DENABLE_FFMPEG=ON
+ MEDIASTREAMER_DEPENDENCIES += ffmpeg
 
-Regards,
-Yann E. MORIN.
+Fixes the second build failure in a way that is more correct IMO.
 
->  		-i $(@D)/custom_board/rcw/$(RCW_PROJECT) \
->  		-I $(@D)/custom_board -o $(@D)/PBL.bin
->  endef
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Also, did you report these build issues upstream? They indicate that
+the CMakeLists.txt doesn't have the appropriate logic.
 
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
