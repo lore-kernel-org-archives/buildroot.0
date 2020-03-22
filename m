@@ -1,68 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Mar 2020 10:31:42 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libostree: add introspection
- support
-In-Reply-To: <20200320222359.88689-2-aduskett@gmail.com>
-References: <20200320222359.88689-1-aduskett@gmail.com>
- <20200320222359.88689-2-aduskett@gmail.com>
-Message-ID: <20200322093142.GT4290@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 22 Mar 2020 10:39:43 +0100
+Subject: [Buildroot] [PATCH v1] package/iwd: bump version to 1.5
+Message-ID: <20200322093943.20101-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Fixes incompatibility because of recent version bump to ell-0.28 ([1]):
 
-On 2020-03-20 15:23 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> If gobject-introspection is selected, explicitly set --enable-introspection in
-> the configure options and add a dependency for gobject-introspection.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+  http://autobuild.buildroot.net/results/32899d7e1f7d5abc528e5627f8f66ae5c9733342
+  http://autobuild.buildroot.net/results/a0a4387e5319d792658f6d82a63fb17a06848d10
+  http://autobuild.buildroot.net/results/7d02c966518e44d798b83ac36b9083a8041b09ec
+  http://autobuild.buildroot.net/results/f7b27ab243e6b35445d9cb28e4747514fa7d98d6
+  http://autobuild.buildroot.net/results/f5d71af640812a58374374e178cb7ff225e69c19
 
-I've sent an alternate proposal that replaces this patch, nad gets away
-with the previous one too:
-    https://patchwork.ozlabs.org/patch/1259614/
+    CC       src/main.o
+  src/main.c: In function 'request_name_callback':
+  src/main.c:167:7: error: too few arguments to function 'l_dbus_object_manager_enable'
+    if (!l_dbus_object_manager_enable(dbus))
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  In file included from /nvmedata/autobuild/instance-4/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/ell/ell.h:55,
+                   from src/main.c:32:
+  /nvmedata/autobuild/instance-4/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/ell/dbus.h:245:6: note: declared here
+   bool l_dbus_object_manager_enable(struct l_dbus *dbus, const char *root);
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Regards,
-Yann E. MORIN.
+[1] https://git.buildroot.net/buildroot/commit/?id=faa592179d9fe46b97289bde5a1b0f0da6052b06
 
-> ---
->  package/libostree/libostree.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-> index bdbe6b5aba..63e6bbfde3 100644
-> --- a/package/libostree/libostree.mk
-> +++ b/package/libostree/libostree.mk
-> @@ -30,6 +30,13 @@ else
->  LIBOSTREE_CONF_OPTS += --without-openssl
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-> +LIBOSTREE_CONF_OPTS += --enable-introspection
-> +LIBOSTREE_DEPENDENCIES += gobject-introspection
-> +else
-> +LIBOSTREE_CONF_OPTS += --disable-introspection
-> +endif
-> +
->  # Avahi support needs libavahi-client, which is built by avahi if avahi-daemon
->  # and dbus is selected. Since there is no BR2_PACKAGE_LIBAVAHI_CLIENT config
->  # option yet, use the avahi-daemon and dbus config symbols to check for
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/iwd/iwd.hash | 4 ++--
+ package/iwd/iwd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index e7ba107a3b..006916cdff 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 f52ed3cc0dae1f9a82c601df638977f0f6d8d4629ba5e333b4743748a907c0e7 iwd-0.22.tar.gz
++sha256  4d7c92b9fdbf14f46f208f1b053597a7e5225a4ad42369a3c28bcdb595087833  iwd-1.5.tar.gz
+ 
+ # License files
+-sha256 ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5 COPYING
++sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index fc8b83d1bb..799e631ba5 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IWD_VERSION = 0.22
++IWD_VERSION = 1.5
+ IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
+ IWD_SITE_METHOD = git
+ IWD_LICENSE = LGPL-2.1+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
