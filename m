@@ -1,95 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Mar 2020 22:31:54 +0100
-Subject: [Buildroot] [git commit] package/php: fix aarch64 uclibc-ng compile
-Message-ID: <20200322211901.ADDE5860F2@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 22 Mar 2020 21:34:28 +0000
+Subject: [Buildroot] [Bug 12696] Uboot 2020.01 Problem loading Linux kernel
+ on Nano PI NEO
+In-Reply-To: <bug-12696-163@https.bugs.busybox.net/>
+References: <bug-12696-163@https.bugs.busybox.net/>
+Message-ID: <bug-12696-163-nj4KeldQDn@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16e0bf6b9f9f681df8619c12e9504dc00fc28410
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=12696
 
-The aarch64 compile uses the sys/auxv.h header which is not
-provided by ulcibc-ng. Add configure.ac patch to check for
-the header before using it in ext/standard/crc32.c.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Fixes:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |INVALID
 
-  https://bugs.busybox.net/show_bug.cgi?id=12626
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks for your bug report. However, this does not look like a Buildroot issue,
+but rather a U-Boot issue. Could you instead talk to the U-Boot
+developers/community and report this issue ? Thanks!
 
-  build/php-7.4.3/ext/standard/crc32.c:26:12: schwerwiegender Fehler: sys/auxv.h: Datei oder Verzeichnis nicht gefunden
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...0005-Check-for-sys-auxv.h-before-using-it.patch | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
-
-diff --git a/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch b/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
-new file mode 100644
-index 0000000000..559c64db8a
---- /dev/null
-+++ b/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
-@@ -0,0 +1,60 @@
-+From f150702d5ab72878d45b722b6d7d4194db92c44a Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 9 Mar 2020 15:36:48 +0100
-+Subject: [PATCH] Check for sys/auxv.h before using it.
-+
-+Fixes aarch64 compile wiht uclibc-ng (does not provide
-+sys/auxv.h header file).
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+Upstream: https://github.com/php/php-src/commit/f73528f0e0d59ac744ccb4a94a3a9d7b9f0fba1b
-+---
-+ configure.ac         | 1 +
-+ ext/standard/crc32.c | 9 +++++++--
-+ 2 files changed, 8 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 5219a5f2..caf62302 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -440,6 +440,7 @@ resolv.h \
-+ strings.h \
-+ syslog.h \
-+ sysexits.h \
-++sys/auxv.h \
-+ sys/ioctl.h \
-+ sys/file.h \
-+ sys/mman.h \
-+diff --git a/ext/standard/crc32.c b/ext/standard/crc32.c
-+index c3ca5903..e59ab45f 100644
-+--- a/ext/standard/crc32.c
-++++ b/ext/standard/crc32.c
-+@@ -17,10 +17,15 @@
-+ */
-+ 
-+ #include "php.h"
-++#ifdef PHP_WIN32
-++#include "config.w32.h"
-++#else
-++#include <php_config.h>
-++#endif
-+ #include "basic_functions.h"
-+ #include "crc32.h"
-+ 
-+-#if defined(__aarch64__)
-++#if defined(__aarch64__) && defined(HAVE_SYS_AUXV_H)
-+ # include <arm_acle.h>
-+ # if defined(__linux__)
-+ #  include <sys/auxv.h>
-+@@ -85,7 +90,7 @@ PHP_NAMED_FUNCTION(php_if_crc32)
-+ 
-+ 	crc = crcinit^0xFFFFFFFF;
-+ 
-+-#if defined(__aarch64__)
-++#if defined(__aarch64__) && defined(HAVE_SYS_AUXV_H)
-+ 	if (has_crc32_insn()) {
-+ 		crc = crc32_aarch64(crc, p, nr);
-+ 		RETURN_LONG(crc^0xFFFFFFFF);
-+-- 
-+2.25.1
-+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
