@@ -1,42 +1,158 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Mar 2020 22:22:06 +0100
-Subject: [Buildroot] [PATCH] package/gcc: remove stray
- or1k-musl-5.4.0-20170218 patches
-In-Reply-To: <20200322211540.556085-1-romain.naour@gmail.com>
-References: <20200322211540.556085-1-romain.naour@gmail.com>
-Message-ID: <20200322222206.1fe0593a@windsurf.home>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 22 Mar 2020 22:28:01 +0100
+Subject: [Buildroot] [PATCH v1] package/mesa3d: fix musl related compile
+ failures
+In-Reply-To: <20200322121520.5898-1-ps.report@gmx.net>
+References: <20200322121520.5898-1-ps.report@gmx.net>
+Message-ID: <20200322222801.20b17503@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 22 Mar 2020 22:15:39 +0100
-Romain Naour <romain.naour@gmail.com> wrote:
+On Sun, 22 Mar 2020 13:15:20 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
 
-> gcc or1k-musl-5.4.0-20170218 was remove from [1] but the
-> patch directory was forgotten.
+> Fixes:
 > 
-> [1] f424b8afa22f767dc46cde915efc9a01c86f12c8
+>   http://autobuild.buildroot.net/results/1881daae69992e30a9c1fff1f639d57f82e6ee19
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>   ../src/gallium/drivers/vc4/vc4_bufmgr.c:110:57: error: format '%ld' expects argument of type 'long int', but argument 3 has type 'time_t' {aka 'long long int'} [-Werror=format=]
+> 
+>   ../src/gallium/drivers/panfrost/pan_bo.h:93:9: error: unknown type name ?time_t?
+> 
+>   ../src/gallium/drivers/v3d/v3d_bufmgr.c:83:57: error: format ?%ld? expects argument of type ?long int?, but argument 3 has type ?time_t? {aka ?long long int?} [-Werror=format=]
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  .../100-uclibc-conf.patch                     |  15 -
->  .../301-missing-execinfo_h.patch              |  13 -
->  .../850-libstdcxx-uclibc-c99.patch            | 273 ------------------
->  .../860-cilk-wchar.patch                      |  56 ----
->  ...libgcc-disable-split-stack-nothreads.patch |  14 -
->  5 files changed, 371 deletions(-)
->  delete mode 100644 package/gcc/or1k-musl-5.4.0-20170218/100-uclibc-conf.patch
->  delete mode 100644 package/gcc/or1k-musl-5.4.0-20170218/301-missing-execinfo_h.patch
->  delete mode 100644 package/gcc/or1k-musl-5.4.0-20170218/850-libstdcxx-uclibc-c99.patch
->  delete mode 100644 package/gcc/or1k-musl-5.4.0-20170218/860-cilk-wchar.patch
->  delete mode 100644 package/gcc/or1k-musl-5.4.0-20170218/930-libgcc-disable-split-stack-nothreads.patch
+>  .../0005-vc4_bufmgr-fix-time_t-printf.patch   | 33 +++++++++++++++++++
+>  ...n_bo.h-add-time.h-include-for-time_t.patch | 32 ++++++++++++++++++
+>  .../0007-v3d_bufmgr-fix-time_t-printf.patch   | 33 +++++++++++++++++++
+>  3 files changed, 98 insertions(+)
+>  create mode 100644 package/mesa3d/0005-vc4_bufmgr-fix-time_t-printf.patch
+>  create mode 100644 package/mesa3d/0006-pan_bo.h-add-time.h-include-for-time_t.patch
+>  create mode 100644 package/mesa3d/0007-v3d_bufmgr-fix-time_t-printf.patch
+> 
+> diff --git a/package/mesa3d/0005-vc4_bufmgr-fix-time_t-printf.patch b/package/mesa3d/0005-vc4_bufmgr-fix-time_t-printf.patch
+> new file mode 100644
+> index 0000000000..56357e1f3a
+> --- /dev/null
+> +++ b/package/mesa3d/0005-vc4_bufmgr-fix-time_t-printf.patch
+> @@ -0,0 +1,33 @@
+> +From 4ed48324b032857c95e6803409d5def9660d5b46 Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Sun, 22 Mar 2020 11:42:35 +0100
+> +Subject: [PATCH] vc4_bufmgr: fix time_t printf
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Fixes:
+> +
+> +  error: format ?%ld? expects argument of type ?long int?, but argument 3 has type ?time_t? {aka ?long long int?}
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + src/gallium/drivers/vc4/vc4_bufmgr.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/gallium/drivers/vc4/vc4_bufmgr.c b/src/gallium/drivers/vc4/vc4_bufmgr.c
+> +index f7ac1698ee3..a786e8ee939 100644
+> +--- a/src/gallium/drivers/vc4/vc4_bufmgr.c
+> ++++ b/src/gallium/drivers/vc4/vc4_bufmgr.c
+> +@@ -100,7 +100,7 @@ vc4_bo_dump_stats(struct vc4_screen *screen)
+> +                 struct timespec time;
+> +                 clock_gettime(CLOCK_MONOTONIC, &time);
+> +                 fprintf(stderr, "  now:               %ld\n",
+> +-                        time.tv_sec);
+> ++                        (long)time.tv_sec);
+> +         }
+> + }
+> + 
+> +-- 
+> +2.25.1
+> +
+> diff --git a/package/mesa3d/0006-pan_bo.h-add-time.h-include-for-time_t.patch b/package/mesa3d/0006-pan_bo.h-add-time.h-include-for-time_t.patch
+> new file mode 100644
+> index 0000000000..1586b26bba
+> --- /dev/null
+> +++ b/package/mesa3d/0006-pan_bo.h-add-time.h-include-for-time_t.patch
+> @@ -0,0 +1,32 @@
+> +From fc93d357efd207525a4ddaac609ab5a6bf469bcd Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Sun, 22 Mar 2020 11:48:31 +0100
+> +Subject: [PATCH] pan_bo.h: add time.h include for time_t
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Fixes:
+> +
+> +  ../src/gallium/drivers/panfrost/pan_bo.h:93:9: error: unknown type name ?time_t?
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + src/gallium/drivers/panfrost/pan_bo.h | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/src/gallium/drivers/panfrost/pan_bo.h b/src/gallium/drivers/panfrost/pan_bo.h
+> +index 414c356b95c..6dda393095d 100644
+> +--- a/src/gallium/drivers/panfrost/pan_bo.h
+> ++++ b/src/gallium/drivers/panfrost/pan_bo.h
+> +@@ -29,6 +29,7 @@
+> + #include <panfrost-misc.h>
+> + #include "pipe/p_state.h"
+> + #include "util/list.h"
+> ++#include <time.h>
+> + 
+> + struct panfrost_screen;
+> + 
+> +-- 
+> +2.25.1
+> +
+> diff --git a/package/mesa3d/0007-v3d_bufmgr-fix-time_t-printf.patch b/package/mesa3d/0007-v3d_bufmgr-fix-time_t-printf.patch
+> new file mode 100644
+> index 0000000000..f8031c2847
+> --- /dev/null
+> +++ b/package/mesa3d/0007-v3d_bufmgr-fix-time_t-printf.patch
+> @@ -0,0 +1,33 @@
+> +From c4984ce2b7d3bd7129ddb02e4e423bf00498607a Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Sun, 22 Mar 2020 13:03:00 +0100
+> +Subject: [PATCH] v3d_bufmgr: fix time_t printf
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Fixes:
+> +
+> +  error: format ?%ld? expects argument of type ?long int?, but argument 3 has type ?time_t? {aka ?long long int?}
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + src/gallium/drivers/v3d/v3d_bufmgr.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/gallium/drivers/v3d/v3d_bufmgr.c b/src/gallium/drivers/v3d/v3d_bufmgr.c
+> +index 50e4081dafd..31a08036b38 100644
+> +--- a/src/gallium/drivers/v3d/v3d_bufmgr.c
+> ++++ b/src/gallium/drivers/v3d/v3d_bufmgr.c
+> +@@ -81,7 +81,7 @@ v3d_bo_dump_stats(struct v3d_screen *screen)
+> +                 struct timespec time;
+> +                 clock_gettime(CLOCK_MONOTONIC, &time);
+> +                 fprintf(stderr, "  now:               %ld\n",
+> +-                        time.tv_sec);
+> ++                        (long)time.tv_sec);
+> +         }
+> + }
+> + 
+> +-- 
+> +2.25.1
+> +
 
-Applied to master, thanks.
+Patches upstream suggested:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4279
+
+Regards,
+Peter
