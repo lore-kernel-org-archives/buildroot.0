@@ -1,50 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Mar 2020 15:45:26 +0100
-Subject: [Buildroot] [PATCH v1 1/2] package/mesa3d: fix vc4 neon related
- compile failure
-In-Reply-To: <20200309123432.5943-1-ps.report@gmx.net>
-References: <20200309123432.5943-1-ps.report@gmx.net>
-Message-ID: <20200322154526.604906e5@windsurf.home>
+Date: Sun, 22 Mar 2020 15:48:44 +0100
+Subject: [Buildroot] [RFC PATCH 1/1] package/cegui: rename and bump
+ version
+In-Reply-To: <20200322135714.GD2364@scaer>
+References: <20200318085125.12843-1-b.bilas@grinn-global.com>
+ <20200321165503.7baa0173@windsurf.home>
+ <0d04353d-faf2-35d2-5a58-cb293ef52f86@grinn-global.com>
+ <20200322135714.GD2364@scaer>
+Message-ID: <20200322154844.46f59068@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  9 Mar 2020 13:34:31 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Sun, 22 Mar 2020 14:57:14 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Add mesa3d patch to add a vc4 option to disable
-> the optional neon support and set it dependent
-> on BR2_ARM_CPU_HAS_NEON.
+> We still want to forcibly enable/disable optional features rather than
+> leave them to chance. Also, if your target is x86_64 and your build
+> machine is also x86_64 (for example), then if you machine has one of
+> thedependencies installed, the CEGUI buildsyste,m may find them, instead
+> of those from Buildroot.
 > 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/6387b0a99e1a0922811919623d9a10b0943988df
-> 
->   [1086/1254] Compiling C object 'src/gallium/drivers/vc4/691f666@@vc4_neon at sta/vc4_tiling_lt_neon.c.o'.
->   {standard input}: Assembler messages:
->   {standard input}:334: Error: selected processor does not support `vldm r4,{q0,q1,q2,q3}' in ARM mode
->   {standard input}:335: Error: selected processor does not support `vst1.8 d0,[r3],r2' in ARM mode
->   {standard input}:336: Error: selected processor does not support `vst1.8 d1,[r3],r2' in ARM mode
->   {standard input}:337: Error: selected processor does not support `vst1.8 d2,[r3],r2' in ARM mode
->   {standard input}:338: Error: selected processor does not support `vst1.8 d3,[r3],r2' in ARM mode
->   {standard input}:339: Error: selected processor does not support `vst1.8 d4,[r3],r2' in ARM mode
->   {standard input}:340: Error: selected processor does not support `vst1.8 d5,[r3],r2' in ARM mode
->   {standard input}:341: Error: selected processor does not support `vst1.8 d6,[r3],r2' in ARM mode
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...tion-to-disable-optional-neon-suppor.patch | 82 +++++++++++++++++++
->  package/mesa3d/mesa3d.mk                      |  6 ++
->  2 files changed, 88 insertions(+)
->  create mode 100644 package/mesa3d/0007-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+> So, we still want to have the proper enable/disable options.
 
-I've applied both patches. I understand that the first patch is under
-discussion upstream, it might end up being different, but I merged your
-proposal nevertheless for the time being.
-
-Thanks!
+The thing is that from what I could see, the cegui build system doesn't
+provide any of these enable/disable options. It really only relies on
+automatic detection.
 
 Thomas
 -- 
