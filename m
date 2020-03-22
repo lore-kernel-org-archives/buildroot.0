@@ -1,100 +1,172 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Mar 2020 15:28:47 +0100
-Subject: [Buildroot] [PATCH 1/1] support/testing/: change python-gobject
- to use prebuilt kernel
-In-Reply-To: <20200316153459.2291931-1-aduskett@gmail.com>
-References: <20200316153459.2291931-1-aduskett@gmail.com>
-Message-ID: <20200322142847.GE2364@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Mar 2020 15:31:01 +0100
+Subject: [Buildroot] [git commit] package/gcc: bump 9.x series to version
+ 9.3.0
+Message-ID: <20200322141800.76279837BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f6bf6281f018b4cc0ebb11227f68ac59001781ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-16 08:34 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> This change significantly reduces the ammount of time needed to run the
-> test.
-> 
-> Select a cortext_a9 and a external linaro toolchain due to the need for a
-> glibc based toolchain, as the default TestPythonPackageBase.config toolchain
-> is a uClibc toolchain.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Remove upstream patch [1]
+Rebase and rename 0002-xtensa-fix-PR-target-91880.patch
+and 0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
 
-Applied to master, thanks.
+Tested using gitlab with Qemu runtime testing series [2] [3].
 
-Thomas and I arrived at the same conclusion each on our side, to change
-the config to be entirely defined in the test case, so I just did that I
-pushed.
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=2e1e7ad18e121663082525a872f0d6fb32db4535
+[2] https://gitlab.com/kubu93/buildroot/pipelines/125828238
+[3] http://patchwork.ozlabs.org/project/buildroot/list/?series=159088
 
-Regards,
-Yann E. MORIN.
+See:
+https://gcc.gnu.org/pipermail/gcc-announce/2020/000161.html
 
-> ---
->  .../tests/package/test_python_gobject.py      | 25 +++++++------------
->  1 file changed, 9 insertions(+), 16 deletions(-)
-> 
-> diff --git a/support/testing/tests/package/test_python_gobject.py b/support/testing/tests/package/test_python_gobject.py
-> index a673d554a4..cf10e9ff67 100644
-> --- a/support/testing/tests/package/test_python_gobject.py
-> +++ b/support/testing/tests/package/test_python_gobject.py
-> @@ -3,31 +3,24 @@ from tests.package.test_python import TestPythonPackageBase
->  
->  class TestPythonPy3Gobject(TestPythonPackageBase):
->      __test__ = True
-> -    config = \
-> +    config = TestPythonPackageBase.config + \
->          """
-> -        BR2_aarch64=y
->          BR2_TOOLCHAIN_EXTERNAL=y
-> -        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> -        BR2_LINUX_KERNEL=y
-> -        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-> -        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> -        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-> -        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->          BR2_TARGET_ROOTFS_CPIO=y
-> -        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-> +        BR2_cortex_a9=y
-> +        BR2_ARM_ENABLE_VFP=y
-> +        BR2_ARM_EABIHF=y
-> +        BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
->          BR2_PACKAGE_GOBJECT_INTROSPECTION=y
->          BR2_PACKAGE_PYTHON3=y
->          BR2_PACKAGE_PYTHON_GOBJECT=y
->          """
->  
->      def login(self):
-> -        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-> -        kern = os.path.join(self.builddir, "images", "Image")
-> -        self.emulator.boot(arch="aarch64",
-> -                           kernel=kern,
-> -                           kernel_cmdline=["console=ttyAMA0"],
-> -                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
-> +        img = os.path.join(self.builddir, "images", "rootfs.cpio")
-> +        self.emulator.boot(arch="armv7",
-> +                           kernel="builtin",
-> +                           options=["-initrd", img])
->          self.emulator.login()
->  
->      sample_scripts = ["tests/package/sample_python_gobject.py"]
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...1-xtensa-backport-fix-for-PR-target-90922.patch | 43 ----------------------
+ .../0001-xtensa-fix-PR-target-91880.patch}         |  9 +++--
+ ...-Fix-issue-with-set_got-clobbering-LR-r9.patch} |  4 +-
+ package/gcc/Config.in.host                         |  2 +-
+ package/gcc/gcc.hash                               |  4 +-
+ 5 files changed, 10 insertions(+), 52 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch b/package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
+deleted file mode 100644
+index bc1d13a9e4..0000000000
+--- a/package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From a592242578e573778241cae6d3928c064dcdfda4 Mon Sep 17 00:00:00 2001
+-From: jcmvbkbc <jcmvbkbc@138bc75d-0d04-0410-961f-82ee72b054a4>
+-Date: Tue, 18 Jun 2019 22:19:12 +0000
+-Subject: [PATCH] xtensa: fix for PR target/90922
+-
+-Stack pointer adjustment code in prologue missed a case of no
+-callee-saved registers and a stack frame size bigger than 128 bytes.
+-Handle that case.
+-
+-This fixes the following gcc tests with call0 ABI:
+-  gcc.c-torture/execute/stdarg-2.c
+-  gcc.dg/torture/pr55882.c
+-  gcc.dg/torture/pr57569.c
+-
+-gcc/
+-2019-06-18  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* config/xtensa/xtensa.c (xtensa_expand_prologue): Add stack
+-	pointer adjustment for the case of no callee-saved registers and
+-	stack frame bigger than 128 bytes.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- gcc/config/xtensa/xtensa.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
+-index 19bd616d67f6..ee5612441e25 100644
+---- a/gcc/config/xtensa/xtensa.c
+-+++ b/gcc/config/xtensa/xtensa.c
+-@@ -2865,7 +2865,8 @@ xtensa_expand_prologue (void)
+- 			    gen_rtx_SET (mem, reg));
+- 	    }
+- 	}
+--      if (total_size > 1024)
+-+      if (total_size > 1024
+-+	  || (!callee_save_size && total_size > 128))
+- 	{
+- 	  rtx tmp_reg = gen_rtx_REG (Pmode, A9_REG);
+- 	  emit_move_insn (tmp_reg, GEN_INT (total_size -
+--- 
+-2.11.0
+-
+diff --git a/package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch b/package/gcc/9.3.0/0001-xtensa-fix-PR-target-91880.patch
+similarity index 88%
+rename from package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch
+rename to package/gcc/9.3.0/0001-xtensa-fix-PR-target-91880.patch
+index 0dbf1124a3..4e5aea2c7b 100644
+--- a/package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch
++++ b/package/gcc/9.3.0/0001-xtensa-fix-PR-target-91880.patch
+@@ -1,4 +1,4 @@
+-From 7c11710230921246156aecc20eb4b6ccaeaaa473 Mon Sep 17 00:00:00 2001
++From 0a59aa440a4c125b81504c777b066ae4eb1f09f0 Mon Sep 17 00:00:00 2001
+ From: Max Filippov <jcmvbkbc@gmail.com>
+ Date: Tue, 24 Sep 2019 04:15:17 -0700
+ Subject: [PATCH] xtensa: fix PR target/91880
+@@ -15,14 +15,15 @@ gcc/
+ 	block that precedes the loop is empty.
+ 
+ Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ ---
+ Backported from: r276166
+ 
+- gcc/config/xtensa/xtensa.c                 |  5 ++--
++ gcc/config/xtensa/xtensa.c | 5 +++--
+  1 file changed, 3 insertions(+), 2 deletions(-)
+ 
+ diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
+-index ee5612441e25..2527468d57db 100644
++index ee5612441e2..2527468d57d 100644
+ --- a/gcc/config/xtensa/xtensa.c
+ +++ b/gcc/config/xtensa/xtensa.c
+ @@ -4235,7 +4235,9 @@ hwloop_optimize (hwloop_info loop)
+@@ -45,5 +46,5 @@ index ee5612441e25..2527468d57db 100644
+               || (NOTE_P (entry_after)
+  		 && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK))
+ -- 
+-2.11.0
++2.24.1
+ 
+diff --git a/package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch b/package/gcc/9.3.0/0002-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+similarity index 98%
+rename from package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+rename to package/gcc/9.3.0/0002-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+index bdde2ce762..e40b96fe0f 100644
+--- a/package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
++++ b/package/gcc/9.3.0/0002-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+@@ -1,4 +1,4 @@
+-From 94c7d630348671b781368d9270514dcf6c34e0c9 Mon Sep 17 00:00:00 2001
++From 1383012ae409ed91903b2b76ee15137bc1f89900 Mon Sep 17 00:00:00 2001
+ From: shorne <shorne@138bc75d-0d04-0410-961f-82ee72b054a4>
+ Date: Sat, 31 Aug 2019 06:00:56 +0000
+ Subject: [PATCH] or1k: Fix issue with set_got clobbering LR (r9)
+@@ -101,5 +101,5 @@ index 2dad51cd46b..88f3f02630f 100644
+     (clobber (reg:SI LR_REGNUM))]
+    ""
+ -- 
+-2.23.0
++2.24.1
+ 
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index bdfa1b5916..243310f61e 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -88,7 +88,7 @@ config BR2_GCC_VERSION
+ 	default "5.5.0"     if BR2_GCC_VERSION_5_X
+ 	default "7.5.0"     if BR2_GCC_VERSION_7_X
+ 	default "8.4.0"     if BR2_GCC_VERSION_8_X
+-	default "9.2.0"     if BR2_GCC_VERSION_9_X
++	default "9.3.0"     if BR2_GCC_VERSION_9_X
+ 	default "arc-2019.09-release" if BR2_GCC_VERSION_ARC
+ 	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
+ 
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index ba63db1563..d9df3408d4 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -4,8 +4,8 @@ sha512  670ff52c2ae12c7852c12987e91798c5aa8bd6daf21f0d6e0cd57a4aa59cc4f06a837fe7
+ sha512  fe716cc19f2e3255d3a8b1b8290777bf769c6d98e6e0b07b81a3d6ad43f8af74cb170dfa18b1555dbfcd3f55ae582b91a286ccef496b9b65c1579902f96a1f60  gcc-7.5.0.tar.xz
+ # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
+ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
+-#  From ftp://gcc.gnu.org/pub/gcc/releases/gcc-9.2.0/sha512.sum
+-sha512  a12dff52af876aee0fd89a8d09cdc455f35ec46845e154023202392adc164848faf8ee881b59b681b696e27c69fd143a214014db4214db62f9891a1c8365c040  gcc-9.2.0.tar.xz
++#  From ftp://gcc.gnu.org/pub/gcc/releases/gcc-9.3.0/sha512.sum
++sha512  4b9e3639eef6e623747a22c37a904b4750c93b6da77cf3958d5047e9b5ebddb7eebe091cc16ca0a227c0ecbd2bf3b984b221130f269a97ee4cc18f9cf6c444de  gcc-9.3.0.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  84648d13f174102733e06ccdf7b351150babe06af0f2b99b8dfb2b2d3c3f13e424547349939806fe19932ad347977cad79cd8b37be9cbb03e6a4d03cdf95a72e  gcc-arc-2019.09-release.tar.gz
