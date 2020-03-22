@@ -1,100 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Mar 2020 14:12:55 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/rcw : bump to LSDK-19.09
-In-Reply-To: <20200322103143.18772-1-laurent.hartanerot@gmail.com>
-References: <20200322103143.18772-1-laurent.hartanerot@gmail.com>
-Message-ID: <20200322131255.GB2364@scaer>
+Date: Sun, 22 Mar 2020 11:51:00 +0100
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-base: add
+ introspection support
+Message-ID: <20200322130149.E084283D71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Laurent, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=1dfa7f8e19ba121ac5e2ae846ab839995b4b9249
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-22 11:31 +0100, Laurent Hartanerot spake thusly:
-> From: Laurent Hartanerot <laurent.hartanerot@atos.net>
-> 
-> Upgrade python to python3 : "Only Python versions 3.0+ are supported"
-> 
-> Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
-> ---
->  package/rcw/rcw.hash | 2 +-
->  package/rcw/rcw.mk   | 6 +++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/rcw/rcw.hash b/package/rcw/rcw.hash
-> index 7de1ec659a..76b6373942 100644
-> --- a/package/rcw/rcw.hash
-> +++ b/package/rcw/rcw.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 1421ada9fec10b12ff21cd9ad82f0a835b191cb2dde80f03547764574b1346c3 rcw-LSDK-18.12.tar.gz
-> +sha256 b69a6a8b187ba794e0af716a509ced2bbac83da0f6e94b5c7331a34619db21b1 rcw-LSDK-19.09.tar.gz
->  sha256 a531b3146425e592db17a51ff39c4801cb01fb4055ffdaada0572decc0655bcd LICENSE
-> diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
-> index dbfeae7b21..928135abfc 100644
-> --- a/package/rcw/rcw.mk
-> +++ b/package/rcw/rcw.mk
-> @@ -4,13 +4,13 @@
->  #
->  ################################################################################
->  
-> -RCW_VERSION = LSDK-18.12
-> +RCW_VERSION = LSDK-19.09
->  RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
->  RCW_SITE_METHOD = git
->  RCW_LICENSE = BSD-3-Clause
->  RCW_LICENSE_FILES = LICENSE
->  
-> -HOST_RCW_DEPENDENCIES = host-python
-> +HOST_RCW_DEPENDENCIES = host-python3
+If gobject-introspection is selected, explicitly set -Dintrospection=enabled in
+the configure options and add a dependency for gobject-introspection.
 
-As far as I can see, that's not what Thomas requested in his previous
-review http://lists.busybox.net/pipermail/buildroot/2020-March/277531.html
+This feature requires an upstream patch that allows introspection support even
+when cross-compiling.
 
-Thomas requested that the bump be split in two changes:
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...ven-when-cross-compiling-if-introspection.patch | 35 ++++++++++++++++++++++
+ .../gst1-plugins-base/gst1-plugins-base.mk         | 11 +++++--
+ 2 files changed, 44 insertions(+), 2 deletions(-)
 
-  - a first patch that does not update the version, but adds the missing
-    dependency to host-python, making sure to use by replacing the call
-    to 'python' by a call to $(HOST_DIR)/bin/python, so that we can
-    backport that fix into our LTS branch, 2020.02;
-
-  - a second patch that does the version bump, and in the process,
-    changes the dependency on host-python to using the conditional
-    depednency set in the variable $(BR2_PYTHON3_HOST_DEPENDENCY).
-
-If you have issues with the above, then do not hesitate to explain your
-concerns, instead of re-sending almost exactly the same change.
-
-In the meantime, I've marked the patch as changes-requested in patchwork.
-
-Regards,
-Yann E. MORIN.
-
->  RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))
->  
-> @@ -41,7 +41,7 @@ endef
->  HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
->  
->  define HOST_RCW_BUILD_CMDS
-> -	$(HOST_DIR)/bin/python $(@D)/rcw.py \
-> +	$(HOST_DIR)/bin/python3 $(@D)/rcw.py \
->  		-i $(@D)/custom_board/rcw/$(RCW_PROJECT) \
->  		-I $(@D)/custom_board -o $(@D)/PBL.bin
->  endef
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gstreamer1/gst1-plugins-base/0002-meson-build-gir-even-when-cross-compiling-if-introspection.patch b/package/gstreamer1/gst1-plugins-base/0002-meson-build-gir-even-when-cross-compiling-if-introspection.patch
+new file mode 100644
+index 0000000000..a6cca0a4be
+--- /dev/null
++++ b/package/gstreamer1/gst1-plugins-base/0002-meson-build-gir-even-when-cross-compiling-if-introspection.patch
+@@ -0,0 +1,35 @@
++From 35db4a2433fbdf8612cf98b5aab5b14aeb5372f8 Mon Sep 17 00:00:00 2001
++From: Tim Philipp <tim@centricular.com>
++Date: Thu, 17 Oct 2019 12:13:35 +0100
++Subject: [PATCH] meson: build gir even when cross-compiling if introspection
++ was enabled explicitly
++
++This can be made to work in certain circumstances when
++cross-compiling, so default to not building g-i stuff
++when cross-compiling, but allow it if introspection was
++enabled explicitly via -Dintrospection=enabled.
++
++See gstreamer/gstreamer#454 and gstreamer/gstreamer#381.
++
++Upstream commit: 30672ba7d134553e59935ddc875104adba26f25c
++Signed-off-by: Tim Philipp <tim@centricular.com>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 264d84c9e..c8147c224 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -371,7 +371,7 @@ endif
++ 
++ gir = find_program('g-ir-scanner', required : get_option('introspection'))
++ gnome = import('gnome')
++-build_gir = gir.found() and not meson.is_cross_build()
+++build_gir = gir.found() and (not meson.is_cross_build() or get_option('introspection').enabled())
++ gir_init_section = [ '--add-init-section=extern void gst_init(gint*,gchar**);' + \
++     'g_setenv("GST_REGISTRY_DISABLE", "yes", TRUE);' + \
++     'g_setenv("GST_REGISTRY_1.0", "@0@", TRUE);'.format(meson.current_build_dir() + '/gir_empty_registry.reg') + \
++-- 
++2.24.1
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index ccecbb3c08..fe80f4751c 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -17,8 +17,7 @@ GST1_PLUGINS_BASE_CONF_OPTS = \
+ 	-Dgobject-cast-checks=disabled \
+ 	-Dglib-asserts=disabled \
+ 	-Dglib-checks=disabled \
+-	-Dgtk_doc=disabled \
+-	-Dintrospection=disabled
++	-Dgtk_doc=disabled
+ 
+ # Options which require currently unpackaged libraries
+ GST1_PLUGINS_BASE_CONF_OPTS += \
+@@ -37,6 +36,14 @@ GST1_PLUGINS_BASE_DEPENDENCIES = gstreamer1 $(TARGET_NLS_DEPENDENCIES)
+ GST1_PLUGINS_BASE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ # These plugins are listed in the order from ./configure --help
++
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++GST1_PLUGINS_BASE_CONF_OPTS += -Dintrospection=enabled
++GST1_PLUGINS_BASE_DEPENDENCIES += gobject-introspection
++else
++GST1_PLUGINS_BASE_CONF_OPTS += -Dintrospection=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_ORC),y)
+ GST1_PLUGINS_BASE_DEPENDENCIES += orc
+ GST1_PLUGINS_BASE_CONF_OPTS += -Dorc=enabled
