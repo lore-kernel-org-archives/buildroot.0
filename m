@@ -1,149 +1,100 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 22 Mar 2020 13:15:20 +0100
-Subject: [Buildroot] [PATCH v1] package/mesa3d: fix musl related compile
- failures
-Message-ID: <20200322121520.5898-1-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Mar 2020 14:12:55 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/rcw : bump to LSDK-19.09
+In-Reply-To: <20200322103143.18772-1-laurent.hartanerot@gmail.com>
+References: <20200322103143.18772-1-laurent.hartanerot@gmail.com>
+Message-ID: <20200322131255.GB2364@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Laurent, All,
 
-  http://autobuild.buildroot.net/results/1881daae69992e30a9c1fff1f639d57f82e6ee19
+On 2020-03-22 11:31 +0100, Laurent Hartanerot spake thusly:
+> From: Laurent Hartanerot <laurent.hartanerot@atos.net>
+> 
+> Upgrade python to python3 : "Only Python versions 3.0+ are supported"
+> 
+> Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
+> ---
+>  package/rcw/rcw.hash | 2 +-
+>  package/rcw/rcw.mk   | 6 +++---
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/rcw/rcw.hash b/package/rcw/rcw.hash
+> index 7de1ec659a..76b6373942 100644
+> --- a/package/rcw/rcw.hash
+> +++ b/package/rcw/rcw.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256 1421ada9fec10b12ff21cd9ad82f0a835b191cb2dde80f03547764574b1346c3 rcw-LSDK-18.12.tar.gz
+> +sha256 b69a6a8b187ba794e0af716a509ced2bbac83da0f6e94b5c7331a34619db21b1 rcw-LSDK-19.09.tar.gz
+>  sha256 a531b3146425e592db17a51ff39c4801cb01fb4055ffdaada0572decc0655bcd LICENSE
+> diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
+> index dbfeae7b21..928135abfc 100644
+> --- a/package/rcw/rcw.mk
+> +++ b/package/rcw/rcw.mk
+> @@ -4,13 +4,13 @@
+>  #
+>  ################################################################################
+>  
+> -RCW_VERSION = LSDK-18.12
+> +RCW_VERSION = LSDK-19.09
+>  RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
+>  RCW_SITE_METHOD = git
+>  RCW_LICENSE = BSD-3-Clause
+>  RCW_LICENSE_FILES = LICENSE
+>  
+> -HOST_RCW_DEPENDENCIES = host-python
+> +HOST_RCW_DEPENDENCIES = host-python3
 
-  ../src/gallium/drivers/vc4/vc4_bufmgr.c:110:57: error: format '%ld' expects argument of type 'long int', but argument 3 has type 'time_t' {aka 'long long int'} [-Werror=format=]
+As far as I can see, that's not what Thomas requested in his previous
+review http://lists.busybox.net/pipermail/buildroot/2020-March/277531.html
 
-  ../src/gallium/drivers/panfrost/pan_bo.h:93:9: error: unknown type name ?time_t?
+Thomas requested that the bump be split in two changes:
 
-  ../src/gallium/drivers/v3d/v3d_bufmgr.c:83:57: error: format ?%ld? expects argument of type ?long int?, but argument 3 has type ?time_t? {aka ?long long int?} [-Werror=format=]
+  - a first patch that does not update the version, but adds the missing
+    dependency to host-python, making sure to use by replacing the call
+    to 'python' by a call to $(HOST_DIR)/bin/python, so that we can
+    backport that fix into our LTS branch, 2020.02;
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- .../0005-vc4_bufmgr-fix-time_t-printf.patch   | 33 +++++++++++++++++++
- ...n_bo.h-add-time.h-include-for-time_t.patch | 32 ++++++++++++++++++
- .../0007-v3d_bufmgr-fix-time_t-printf.patch   | 33 +++++++++++++++++++
- 3 files changed, 98 insertions(+)
- create mode 100644 package/mesa3d/0005-vc4_bufmgr-fix-time_t-printf.patch
- create mode 100644 package/mesa3d/0006-pan_bo.h-add-time.h-include-for-time_t.patch
- create mode 100644 package/mesa3d/0007-v3d_bufmgr-fix-time_t-printf.patch
+  - a second patch that does the version bump, and in the process,
+    changes the dependency on host-python to using the conditional
+    depednency set in the variable $(BR2_PYTHON3_HOST_DEPENDENCY).
 
-diff --git a/package/mesa3d/0005-vc4_bufmgr-fix-time_t-printf.patch b/package/mesa3d/0005-vc4_bufmgr-fix-time_t-printf.patch
-new file mode 100644
-index 0000000000..56357e1f3a
---- /dev/null
-+++ b/package/mesa3d/0005-vc4_bufmgr-fix-time_t-printf.patch
-@@ -0,0 +1,33 @@
-+From 4ed48324b032857c95e6803409d5def9660d5b46 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 22 Mar 2020 11:42:35 +0100
-+Subject: [PATCH] vc4_bufmgr: fix time_t printf
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes:
-+
-+  error: format ?%ld? expects argument of type ?long int?, but argument 3 has type ?time_t? {aka ?long long int?}
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/gallium/drivers/vc4/vc4_bufmgr.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/gallium/drivers/vc4/vc4_bufmgr.c b/src/gallium/drivers/vc4/vc4_bufmgr.c
-+index f7ac1698ee3..a786e8ee939 100644
-+--- a/src/gallium/drivers/vc4/vc4_bufmgr.c
-++++ b/src/gallium/drivers/vc4/vc4_bufmgr.c
-+@@ -100,7 +100,7 @@ vc4_bo_dump_stats(struct vc4_screen *screen)
-+                 struct timespec time;
-+                 clock_gettime(CLOCK_MONOTONIC, &time);
-+                 fprintf(stderr, "  now:               %ld\n",
-+-                        time.tv_sec);
-++                        (long)time.tv_sec);
-+         }
-+ }
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/mesa3d/0006-pan_bo.h-add-time.h-include-for-time_t.patch b/package/mesa3d/0006-pan_bo.h-add-time.h-include-for-time_t.patch
-new file mode 100644
-index 0000000000..1586b26bba
---- /dev/null
-+++ b/package/mesa3d/0006-pan_bo.h-add-time.h-include-for-time_t.patch
-@@ -0,0 +1,32 @@
-+From fc93d357efd207525a4ddaac609ab5a6bf469bcd Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 22 Mar 2020 11:48:31 +0100
-+Subject: [PATCH] pan_bo.h: add time.h include for time_t
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes:
-+
-+  ../src/gallium/drivers/panfrost/pan_bo.h:93:9: error: unknown type name ?time_t?
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/gallium/drivers/panfrost/pan_bo.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/gallium/drivers/panfrost/pan_bo.h b/src/gallium/drivers/panfrost/pan_bo.h
-+index 414c356b95c..6dda393095d 100644
-+--- a/src/gallium/drivers/panfrost/pan_bo.h
-++++ b/src/gallium/drivers/panfrost/pan_bo.h
-+@@ -29,6 +29,7 @@
-+ #include <panfrost-misc.h>
-+ #include "pipe/p_state.h"
-+ #include "util/list.h"
-++#include <time.h>
-+ 
-+ struct panfrost_screen;
-+ 
-+-- 
-+2.25.1
-+
-diff --git a/package/mesa3d/0007-v3d_bufmgr-fix-time_t-printf.patch b/package/mesa3d/0007-v3d_bufmgr-fix-time_t-printf.patch
-new file mode 100644
-index 0000000000..f8031c2847
---- /dev/null
-+++ b/package/mesa3d/0007-v3d_bufmgr-fix-time_t-printf.patch
-@@ -0,0 +1,33 @@
-+From c4984ce2b7d3bd7129ddb02e4e423bf00498607a Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 22 Mar 2020 13:03:00 +0100
-+Subject: [PATCH] v3d_bufmgr: fix time_t printf
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes:
-+
-+  error: format ?%ld? expects argument of type ?long int?, but argument 3 has type ?time_t? {aka ?long long int?}
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/gallium/drivers/v3d/v3d_bufmgr.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/gallium/drivers/v3d/v3d_bufmgr.c b/src/gallium/drivers/v3d/v3d_bufmgr.c
-+index 50e4081dafd..31a08036b38 100644
-+--- a/src/gallium/drivers/v3d/v3d_bufmgr.c
-++++ b/src/gallium/drivers/v3d/v3d_bufmgr.c
-+@@ -81,7 +81,7 @@ v3d_bo_dump_stats(struct v3d_screen *screen)
-+                 struct timespec time;
-+                 clock_gettime(CLOCK_MONOTONIC, &time);
-+                 fprintf(stderr, "  now:               %ld\n",
-+-                        time.tv_sec);
-++                        (long)time.tv_sec);
-+         }
-+ }
-+ 
-+-- 
-+2.25.1
-+
+If you have issues with the above, then do not hesitate to explain your
+concerns, instead of re-sending almost exactly the same change.
+
+In the meantime, I've marked the patch as changes-requested in patchwork.
+
+Regards,
+Yann E. MORIN.
+
+>  RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))
+>  
+> @@ -41,7 +41,7 @@ endef
+>  HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
+>  
+>  define HOST_RCW_BUILD_CMDS
+> -	$(HOST_DIR)/bin/python $(@D)/rcw.py \
+> +	$(HOST_DIR)/bin/python3 $(@D)/rcw.py \
+>  		-i $(@D)/custom_board/rcw/$(RCW_PROJECT) \
+>  		-I $(@D)/custom_board -o $(@D)/PBL.bin
+>  endef
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
