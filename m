@@ -1,95 +1,112 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Mar 2020 11:51:12 +0100
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-bad: add
- introspection support
-Message-ID: <20200322130149.F0D1E83D71@busybox.osuosl.org>
+Date: Sun, 22 Mar 2020 11:55:31 +0100
+Subject: [Buildroot] [git commit] support/testing: add gst1-python test case
+Message-ID: <20200322130150.2061683D71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cbe598a9f286a8e1ad54564829eba594ff64327
+commit: https://git.buildroot.net/buildroot/commit/?id=3f9bf6295324b03d321cfa80772911e9322294de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If gobject-introspection is selected, explicitly set -Dintrospection=enabled in
-the configure options and add a dependency for gobject-introspection.
-
-This feature requires an upstream patch that allows introspection support even
-when cross-compiling.
+This test case runs a simple pipeline for 100 frames to ensure that
+gst1-python works properly.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ven-when-cross-compiling-if-introspection.patch | 36 ++++++++++++++++++++++
- .../gst1-plugins-bad/gst1-plugins-bad.mk           |  8 ++++-
- 2 files changed, 43 insertions(+), 1 deletion(-)
+ .gitlab-ci.yml                                     |  1 +
+ DEVELOPERS                                         |  1 +
+ .../testing/tests/package/sample_gst1_python.py    | 21 ++++++++++++++++
+ support/testing/tests/package/test_gst1_python.py  | 29 ++++++++++++++++++++++
+ 4 files changed, 52 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/0001-meson-build-gir-even-when-cross-compiling-if-introspection.patch b/package/gstreamer1/gst1-plugins-bad/0001-meson-build-gir-even-when-cross-compiling-if-introspection.patch
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 0869f325da..f5ed95f5e7 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -384,6 +384,7 @@ tests.package.test_crudini.TestCrudiniPy3: { extends: .runtime_test }
+ tests.package.test_docker_compose.TestDockerCompose: { extends: .runtime_test }
+ tests.package.test_dropbear.TestDropbear: { extends: .runtime_test }
+ tests.package.test_glxinfo.TestGlxinfo: { extends: .runtime_test }
++tests.package.test_gst1_python.TestGst1Python: { extends: .runtime_test }
+ tests.package.test_ipython.TestIPythonPy3: { extends: .runtime_test }
+ tests.package.test_libftdi1.TestPythonPy2Libftdi1: { extends: .runtime_test }
+ tests.package.test_libftdi1.TestPythonPy3Libftdi1: { extends: .runtime_test }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ce4d1f9d6b..aab7d4b18a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -85,6 +85,7 @@ F:	package/setools/
+ F:	package/sngrep/
+ F:	package/spidermonkey/
+ F:	package/systemd/
++F:	support/testing/tests/package/test_gst1_python.py
+ F:	support/testing/tests/package/test_python_gobject.py
+ 
+ N:	Adam Heinrich <adam@adamh.cz>
+diff --git a/support/testing/tests/package/sample_gst1_python.py b/support/testing/tests/package/sample_gst1_python.py
 new file mode 100644
-index 0000000000..dd3b6eca7d
+index 0000000000..41eccbe5fd
 --- /dev/null
-+++ b/package/gstreamer1/gst1-plugins-bad/0001-meson-build-gir-even-when-cross-compiling-if-introspection.patch
-@@ -0,0 +1,36 @@
-+From 35db4a2433fbdf8612cf98b5aab5b14aeb5372f8 Mon Sep 17 00:00:00 2001
-+From: Tim Philipp <tim@centricular.com>
-+Date: Fri, 18 Oct 2019 00:39:12 +0100
-+Subject: [PATCH] meson: build gir even when cross-compiling if introspection
-+ was enabled explicitly
++++ b/support/testing/tests/package/sample_gst1_python.py
+@@ -0,0 +1,21 @@
++#!/usr/bin/env python
++"""A simple test that uses gst1-python to run a fake videotestsrc for 100 frames"""
++import sys
++import gi
++import time
++gi.require_version('Gst', '1.0')
++from gi.repository import Gst, GLib
 +
-+This can be made to work in certain circumstances when
-+cross-compiling, so default to not building g-i stuff
-+when cross-compiling, but allow it if introspection was
-+enabled explicitly via -Dintrospection=enabled.
 +
-+See gstreamer/gstreamer#454 and gstreamer/gstreamer#381.
++def main():
++    # Initializes Gstreamer
++    Gst.init(sys.argv)
++    pipeline = Gst.parse_launch("videotestsrc num-buffers=100 ! autovideosink")
++    bus = pipeline.get_bus()
++    bus.add_signal_watch()
++    pipeline.set_state(Gst.State.PLAYING)
++    loop = GLib.MainLoop()
++    bus.connect("message", on_message, loop)
++    loop.run()
++    pipeline.set_state(Gst.State.EOS)
++    exit(0)
+\ No newline at end of file
+diff --git a/support/testing/tests/package/test_gst1_python.py b/support/testing/tests/package/test_gst1_python.py
+new file mode 100644
+index 0000000000..8d6efcbe4a
+--- /dev/null
++++ b/support/testing/tests/package/test_gst1_python.py
+@@ -0,0 +1,29 @@
++import os
++from tests.package.test_python import TestPythonPackageBase
 +
-+Upstream commit: 97a4d0cd7de8cfbf983acc7e37ba2f8fb73c3e19
-+Signed-off-by: Tim Philipp <tim@centricular.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/meson.build b/meson.build
-+index 67aeeb4d03..7b3314bd9f 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -405,7 +405,7 @@ python3 = import('python').find_installation()
-+ 
-+ gir = find_program('g-ir-scanner', required : get_option('introspection'))
-+ gnome = import('gnome')
-+-build_gir = gir.found() and not meson.is_cross_build()
-++build_gir = gir.found() and (not meson.is_cross_build() or get_option('introspection').enabled())
-+ gir_init_section = [ '--add-init-section=extern void gst_init(gint*,gchar**);' + \
-+     'g_setenv("GST_REGISTRY_1.0", "@0@", TRUE);'.format(meson.current_build_dir() + '/gir_empty_registry.reg') + \
-+     'g_setenv("GST_PLUGIN_PATH_1_0", "", TRUE);' + \
-+-- 
-+2.24.1
++class TestGst1Python(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_ARM_EABIHF=y
++        BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
++        BR2_PACKAGE_GOBJECT_INTROSPECTION=y
++        BR2_PACKAGE_GSTREAMER1=y
++        BR2_PACKAGE_GST1_PYTHON=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_GOBJECT=y
++        """
 +
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index ef36e4dc0a..e020c587d3 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -23,7 +23,6 @@ GST1_PLUGINS_BAD_CONF_OPTS = \
- 	-Dwinks=disabled \
- 	-Dandroidmedia=disabled \
- 	-Dapplemedia=disabled \
--	-Dintrospection=disabled \
- 	-Dgobject-cast-checks=disabled \
- 	-Dglib-asserts=disabled \
- 	-Dglib-checks=disabled
-@@ -63,6 +62,13 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
- 
- GST1_PLUGINS_BAD_DEPENDENCIES = gst1-plugins-base gstreamer1
- 
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += -Dintrospection=enabled
-+GST1_PLUGINS_BAD_DEPENDENCIES += gobject-introspection
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += -Dintrospection=disabled
-+endif
++    def login(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++    sample_scripts = ["tests/package/sample_gst1_python.py"]
 +
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),y)
- GST1_PLUGINS_BAD_CONF_OPTS += -Dwayland=enabled
- GST1_PLUGINS_BAD_DEPENDENCIES += libdrm wayland wayland-protocols
