@@ -1,38 +1,49 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 22 Mar 2020 22:39:24 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/python-jinja2: fix runtime
- python modules dependencies
-Message-ID: <20200322213925.945-1-ps.report@gmx.net>
+Date: Sun, 22 Mar 2020 22:39:25 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/python-flask: fix runtime python
+ modules dependencies
+In-Reply-To: <20200322213925.945-1-ps.report@gmx.net>
+References: <20200322213925.945-1-ps.report@gmx.net>
+Message-ID: <20200322213925.945-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add python unicodedata runtime dependency, fixes:
-  File "usr/lib/python3.8/site-packages/jinja2/lexer.py", line 46, in <module>
-  ModuleNotFoundError: No module named 'unicodedata'
+- add python setuptools runtime dependency, fixes:
+  ModuleNotFoundError: No module named 'pkg_resources'
+
+- add python libxml2 runtime dependency, fixes:
+  ModuleNotFoundError: No module named 'xml'
+
+- add python ssl runtime dependency, fixes:
+  AttributeError: 'NoneType' object has no attribute 'SSLContext'
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v1 -> v2:
   - add missing signed off by (spotted by Thomas Petazzoni)
 ---
- package/python-jinja2/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-flask/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/python-jinja2/Config.in b/package/python-jinja2/Config.in
-index a1900e94d5..5b99df75b8 100644
---- a/package/python-jinja2/Config.in
-+++ b/package/python-jinja2/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_PYTHON_JINJA2
- 	bool "python-jinja2"
- 	select BR2_PACKAGE_PYTHON_MARKUPSAFE # runtime
-+	select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
+diff --git a/package/python-flask/Config.in b/package/python-flask/Config.in
+index 6f77913ed1..72fcb61999 100644
+--- a/package/python-flask/Config.in
++++ b/package/python-flask/Config.in
+@@ -2,8 +2,12 @@ config BR2_PACKAGE_PYTHON_FLASK
+ 	bool "python-flask"
+ 	select BR2_PACKAGE_PYTHON_CLICK # runtime
+ 	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
++	select BR2_PACKAGE_PYTHON_LXML # runtime
+ 	select BR2_PACKAGE_PYTHON_WERKZEUG # runtime
+ 	select BR2_PACKAGE_PYTHON_ITSDANGEROUS # runtime
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
++	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
  	help
- 	  Jinja2 is a template engine written in pure Python. It
- 	  provides a Django inspired non-XML syntax but supports
 -- 
 2.25.1
