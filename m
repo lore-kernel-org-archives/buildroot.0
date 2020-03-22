@@ -1,67 +1,176 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Mar 2020 21:49:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package: add rtty
-In-Reply-To: <20200310150606.28261-1-zhaojh329@gmail.com>
-References: <20200310150606.28261-1-zhaojh329@gmail.com>
-Message-ID: <20200322214949.676fe7e3@windsurf.home>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Sun, 22 Mar 2020 21:52:22 +0100
+Subject: [Buildroot] [PATCH] package/azure-iot-sdk-c: should also
+ install libparson (otherwise linking errors in userspace applications)
+In-Reply-To: <702e8997-62c3-47aa-7065-76b4aa59e990@mind.be>
+References: <d9eb67a8-b8fd-f890-1d02-c454c2313369@logicway.de>
+ <702e8997-62c3-47aa-7065-76b4aa59e990@mind.be>
+Message-ID: <CAOf5uwkTWP_sJNv9PDfCf_BdPHf9n774XOfSGM7_qLv-4d+i3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi
 
-On Tue, 10 Mar 2020 23:06:06 +0800
-Jianhui Zhao <zhaojh329@gmail.com> wrote:
+On Fri, Apr 12, 2019 at 11:40 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>  Hi Arndt,
+>
+>  Thank you for your patch. However, before we can merge it, you have to provide
+> your Signed-off-by tag.  This is a short way for you to assert that you are
+> entitled to contribute the patch under buildroot's GPL license.  See
+> http://elinux.org/Developer_Certificate_Of_Origin for more details.
+>
+>  Also, we prefer to get patches from git, though this one happens to work as well.
+>
+>  The subject line of the mail (or the first line of the git commit message)
+> should be much shorter. For example, the commit message could be:
+>
+> package/azure-iot-sdk-c: bump version to 2019-03-18
+>
+> This version adds the libparson library, so that needs to be installed as well.
+>
+> Signed-off-by: ... <...@...>
+>
 
-> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+I think that library was present even in the old one but under other directory.
 
-Thanks for your contribution. I have applied your patch, after doing a
-number of changes. See below.
+So the libparson.so, is compiled, but not installed; this gives
+problems when compiling the Qt application including an Azure IoT
+example.
+When the Qt application starts, the library libumqtt.so.1 is required.
+That link is missing on the target, while the libumqtt.so library
+exists.
 
-> ---
->  package/Config.in      |  1 +
->  package/rtty/Config.in |  7 +++++++
->  package/rtty/rtty.hash |  2 ++
->  package/rtty/rtty.mk   | 15 +++++++++++++++
->  4 files changed, 25 insertions(+)
+Right now I have done two patches.
 
-You forgot to add an entry to the DEVELOPERS files, so I did that.
+1) Bump the library
+2) Adjust the installation
 
-> diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
-> new file mode 100644
-> index 0000000000..239dc59f78
-> --- /dev/null
-> +++ b/package/rtty/rtty.hash
-> @@ -0,0 +1,2 @@
-> +sha256  6faafe75d82edbcfe154da5f1ffc0ddfd14dd88a2315f19aeed7f2631df96f41  rtty-7.1.2.tar.gz
-> +sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENCE
+Somenthing like this
 
-The license file is named LICENSE (with an S) not LICENCE (with a C).
+--- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+@@ -23,20 +23,20 @@ AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.a
+c-utility/libaziotsharedutil.a \
+        iothub_client/libiothub_client_http_transport.a \
+        iothub_client/libiothub_client_amqp_transport.a \
+        iothub_client/libiothub_client_mqtt_transport.a \
+-       iothub_service_client/libiothub_service_client.a
+serializer/libserializer.a umqtt/libumqtt.a
++       iothub_service_client/libiothub_service_client.a
+serializer/libserializer.a umqtt/libumqtt.a libparson.a
+ else
+-AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.so c-utility/libaziotsharedutil.so \
+-       iothub_client/libiothub_client.so
+iothub_client/libiothub_client_mqtt_ws_transport.so \
+-       iothub_client/libiothub_client_amqp_ws_transport.so \
+-       iothub_client/libiothub_client_http_transport.so \
+-       iothub_client/libiothub_client_amqp_transport.so \
+-       iothub_client/libiothub_client_mqtt_transport.so \
+-       iothub_service_client/libiothub_service_client.so
+serializer/libserializer.so umqtt/libumqtt.so
++AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.so c-utility/libaziotsharedutil.so* \
++       iothub_client/libiothub_client.so
+iothub_client/libiothub_client_mqtt_ws_transport.so* \
++       iothub_client/libiothub_client_amqp_ws_transport.so* \
++       iothub_client/libiothub_client_http_transport.so* \
++       iothub_client/libiothub_client_amqp_transport.so* \
++       iothub_client/libiothub_client_mqtt_transport.so* \
++       iothub_service_client/libiothub_service_client.so
+serializer/libserializer.so* umqtt/libumqtt.so* libparson.so*
+ endif
 
-> +RTTY_VERSION = 7.1.2
-> +LIBCURL_SOURCE = rtty-$(RTTY_VERSION).tar.gz
+ define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
+        $(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
+-               $(INSTALL) -D -m 0755 $(@D)/$(l) $(STAGING_DIR)/usr/lib/
++               cp -dpf $(@D)/$(l) $(STAGING_DIR)/usr/lib/
+        )
+        cp -a $(@D)/c-utility/inc/* $(STAGING_DIR)/usr/include/
+        cp -a $(@D)/iothub_client/inc/* $(STAGING_DIR)/usr/include/
+@@ -44,7 +44,7 @@ endef
 
-Wrong prefix, this variable was not needed anyway, so I dropped it.
+ define AZURE_IOT_SDK_C_INSTALL_TARGET_CMDS
+        $(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
+-               $(INSTALL) -D -m 0755 $(@D)/$(l) $(TARGET_DIR)/usr/lib/
++               cp -dpf $(@D)/$(l) $(TARGET_DIR)/usr/lib/
+        )
+ endef
 
-> +RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
-> +RTTY_LICENSE = MIT
-> +RTTY_LICENSE_FILES = LICENSE
-> +
-> +RTTY_DEPENDENCIES = libev
+Michael
 
-As suggested by Romain Naour, I've added -DRTTY_SSL_SUPPORT=OFF, and
-then did a follow-up commit to add optional support for SSL.
+>
+> On 12/04/2019 09:53, Arndt Kritzner wrote:
+> > --- buildroot-2019.02.1.original/package/azure-iot-sdk-c/azure-iot-sdk-c.mk   2019-03-29 23:52:57.000000000 +0100
+> > +++ buildroot-2019.02.1.2/package/azure-iot-sdk-c/azure-iot-sdk-c.mk  2019-04-09 16:02:14.412271020 +0200
+> > @@ -4,7 +4,7 @@
+> >  #
+> >  ################################################################################
+> >
+> > -AZURE_IOT_SDK_C_VERSION = 2018-12-13
+> > +AZURE_IOT_SDK_C_VERSION = 2019-03-18
+>
+>  Is this version bump intentional? Actually, I suspect that libparson is
+> introduced by this version bump - AFAIK version 2018-12-13 doesn't have it.
+> That's why in the example commit message I changed the subject line into "bump
+> version".
+>
+> >  AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
+> >  AZURE_IOT_SDK_C_SITE_METHOD = git
+> >  AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
+> > @@ -23,7 +23,7 @@
+> >       iothub_client/libiothub_client_http_transport.a \
+> >       iothub_client/libiothub_client_amqp_transport.a \
+> >       iothub_client/libiothub_client_mqtt_transport.a \
+> > -     iothub_service_client/libiothub_service_client.a serializer/libserializer.a umqtt/libumqtt.a
+> > +     iothub_service_client/libiothub_service_client.a serializer/libserializer.a umqtt/libumqtt.a libparson.a
+>
+>  This line was already too long (we try to split at 80 characters). Could you
+> split it before the umqtt as part of this patch? Or even put just a single
+> library per line.
+>
+> >  else
+> >  AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.so c-utility/libaziotsharedutil.so \
+> >       iothub_client/libiothub_client.so iothub_client/libiothub_client_mqtt_ws_transport.so \
+> > @@ -31,7 +31,7 @@
+> >       iothub_client/libiothub_client_http_transport.so \
+> >       iothub_client/libiothub_client_amqp_transport.so \
+> >       iothub_client/libiothub_client_mqtt_transport.so \
+> > -     iothub_service_client/libiothub_service_client.so serializer/libserializer.so umqtt/libumqtt.so
+> > +     iothub_service_client/libiothub_service_client.so serializer/libserializer.so umqtt/libumqtt.so libparson.so
+>
+>  Same here, of course.
+>
+>  Regards,
+>  Arnout
+>
+> >  endif
+> >
+> >  define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
+> >
+> >
+> > ===============================================================================
+> > Kind regards
+> > Arndt
+> >
+> >
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-You will receive e-mail notifications if there are build failures for
-the rtty package. If there are build failures, it would be nice if you
-could investigate them, and provide fixes.
 
-Thanks a lot!
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
+| COO  -  Founder                                      Cruquiuskade 47 |
+| +31(0)851119172                                 Amsterdam 1018 AM NL |
+|                  [`as] http://www.amarulasolutions.com               |
