@@ -1,44 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Mar 2020 22:42:41 +0100
-Subject: [Buildroot] [git commit] package/intel-mediadriver: bump version to
- 19.4.0r
-Message-ID: <20200322213014.5E00B86BF2@busybox.osuosl.org>
+Date: Sun, 22 Mar 2020 22:44:38 +0100
+Subject: [Buildroot] [git commit] package/libostree: enable introspection
+Message-ID: <20200322213147.2F65D86C03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12b7ba06f39cccf3c14fbf71059ced16fe9af4f8
+commit: https://git.buildroot.net/buildroot/commit/?id=978d835640e64822302d4d1be24eb47880e1804e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
+libostree build fails when introspection is enabled:
+
+    ./.libs/libostree-1.so: error adding symbols: File in wrong format
+    collect2: error: ld returned 1 exit status
+    src/libostree/ostree-repo-deprecated.h:28: Warning: OSTree: symbol='G_GNUC_DEPRECATED_FOR': Skipping foreign symbol from namespace Gio
+    linking of temporary binary failed: Command '['/bin/bash', './libtool', '--mode=link', '--tag=CC', '--silent', 'gcc', [...] ]' returned non-zero exit status 1.
+
+This is because the build system for libostree hard-codes CC=gcc when
+calling the GOI scanner, which obviously causes build failures when in
+cross-compilation.
+
+In d264351cfcca (package/libostree: disable introspection), we just
+papered over the problem by forcibly disabling introspection altogether.
+
+Turns out the fix is realatively simple: we can just override the
+INTROSPECTION_SCANNER_ENV variable when calling make, which will revert
+to the behaviour we expect: to use the cross-compiler in the GOI scanner
+wrapper.
+
+Thanks to Adam for pointing out at INTROSPECTION_SCANNER_ENV in the
+first place. :-)
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/intel-mediadriver/intel-mediadriver.hash | 3 ++-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libostree/libostree.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index f53d19a69d..a3f124c3f8 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,4 @@
- # Locally computed
--sha256 79279c991d918deaa52239dac55787b9c7562e520cd58744171b468d28b8af40  intel-media-19.2.1.tar.gz
-+sha256 a03bd75eefe9cb0245e3aab2723b3fef555d9f180a180b2c29d7b12d483d9ec2  intel-media-19.4.0r.tar.gz
- sha256 74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index ff763b20f9..aed97b70cc 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -21,9 +21,16 @@ LIBOSTREE_CONF_OPTS += \
+ 	--disable-gtk-doc \
+ 	--disable-gtk-doc-html \
+ 	--disable-gtk-doc-pdf \
+-	--disable-introspection \
+ 	--disable-man
+ 
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++LIBOSTREE_DEPENDENCIES += gobject-introspection
++LIBOSTREE_CONF_OPTS += --enable-introspection
++LIBOSTREE_MAKE_OPTS = INTROSPECTION_SCANNER_ENV=
++else
++LIBOSTREE_CONF_OPTS += --disable-introspection
++endif
 +
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 0acac52e35..c3157867ed 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
- 
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 19.2.1
-+INTEL_MEDIADRIVER_VERSION = 19.4.0r
- INTEL_MEDIADRIVER_SITE = http://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBOSTREE_CONF_OPTS += --with-openssl
+ LIBOSTREE_DEPENDENCIES += openssl
