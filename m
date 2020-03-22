@@ -1,49 +1,97 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 22 Mar 2020 22:39:25 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/python-flask: fix runtime python
- modules dependencies
-In-Reply-To: <20200322213925.945-1-ps.report@gmx.net>
-References: <20200322213925.945-1-ps.report@gmx.net>
-Message-ID: <20200322213925.945-2-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Mar 2020 22:40:21 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/pkg-meson.mk: add
+ FOO_MESON_EXTRA_PROPERTIES
+In-Reply-To: <20200311112256.2849174-1-john@metanate.com>
+References: <20200311112256.2849174-1-john@metanate.com>
+Message-ID: <20200322214021.GE22325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add python setuptools runtime dependency, fixes:
-  ModuleNotFoundError: No module named 'pkg_resources'
+John, All,
 
-- add python libxml2 runtime dependency, fixes:
-  ModuleNotFoundError: No module named 'xml'
+On 2020-03-11 11:22 +0000, John Keeping spake thusly:
+> With autoconf packages, we often specify ac_cv_func_... cached values to
+> avoid runtime checks during configure.  With meson the equivalent is
+> setting properties in cross-compilation.conf which we cannot do in
+> Buildroot at the moment.
+> 
+> For example, libglib2 used to set ac_cv_func_printf_unix98 and
+> ac_cv_func_vsnprintf_c99 so that the system printf could be used, but
+> with the conversion to meson these checks fail and the gnulib fallback
+> is used.
+> 
+> Add infrastructure in the same way as FOO_MESON_EXTRA_BINARIES to allow
+> per-package modification to the cross-compilation properties.
+> 
+> Signed-off-by: John Keeping <john@metanate.com>
+> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
-- add python ssl runtime dependency, fixes:
-  AttributeError: 'NoneType' object has no attribute 'SSLContext'
+Applied to master, after I changed the code to do a single substitution
+as in a1e3c7b693. Thanks!
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - add missing signed off by (spotted by Thomas Petazzoni)
----
- package/python-flask/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/python-flask/Config.in b/package/python-flask/Config.in
-index 6f77913ed1..72fcb61999 100644
---- a/package/python-flask/Config.in
-+++ b/package/python-flask/Config.in
-@@ -2,8 +2,12 @@ config BR2_PACKAGE_PYTHON_FLASK
- 	bool "python-flask"
- 	select BR2_PACKAGE_PYTHON_CLICK # runtime
- 	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
-+	select BR2_PACKAGE_PYTHON_LXML # runtime
- 	select BR2_PACKAGE_PYTHON_WERKZEUG # runtime
- 	select BR2_PACKAGE_PYTHON_ITSDANGEROUS # runtime
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
- 	help
+> ---
+> v2:
+> - Reword documentation on the format of _MESON_EXTRA_PROPERTIES entries
+> - Add Peter's reviewed-by - thanks!
+> ---
+>  docs/manual/adding-packages-meson.txt | 9 +++++++++
+>  package/pkg-meson.mk                  | 4 ++++
+>  2 files changed, 13 insertions(+)
+> 
+> diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
+> index e84bf7f60a..029c8c2488 100644
+> --- a/docs/manual/adding-packages-meson.txt
+> +++ b/docs/manual/adding-packages-meson.txt
+> @@ -116,6 +116,15 @@ will therefore only use a few of them.
+>    single quotes. By default, empty. Note that Buildroot already sets the
+>    correct values for +c+, +cpp+, +ar+, +strip+, and +pkgconfig+.
+>  
+> +* +FOO_MESON_EXTRA_PROPERTIES+, to specify a space-separated list of
+> +  properties to add to the `[properties]` section of the meson
+> +  `cross-compilation.conf` configuration file. The format is
+> +  `property-name=<value>` with no space around the +=+ sign, and with
+> +  single quotes around string values. By default, empty. Note that
+> +  Buildroot already sets values for +needs_exe_wrapper+, +c_args+,
+> +  +c_link_args+, +cpp_args+, +cpp_link_args+, +sys_root+, and
+> +  +pkg_config_libdir+.
+> +
+>  * +FOO_NINJA_ENV+, to specify additional environment variables to pass to
+>    +ninja+, meson companion tool in charge of the build operations. By default,
+>    empty.
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 6ac3f79fe9..4df1326cad 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -80,6 +80,10 @@ define $(2)_CONFIGURE_CMDS
+>  		$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES), \
+>  	            s:$$$$:\n$$(x): ; \
+>  		) }" \
+> +	    -e "/^\[properties\]$$$$/ { \
+> +		$$(foreach x,$$($(2)_MESON_EXTRA_PROPERTIES), \
+> +		    s:$$$$:\n$$(x): ; \
+> +		) }" \
+>  	    package/meson/cross-compilation.conf.in \
+>  	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+>  	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
