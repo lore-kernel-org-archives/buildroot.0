@@ -1,56 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Mar 2020 21:43:45 +0100
-Subject: [Buildroot] [git commit] package/rtty: add optional SSL support
-Message-ID: <20200322203039.DE69E846EB@busybox.osuosl.org>
+From: Andreas Naumann <dev@andin.de>
+Date: Sun, 22 Mar 2020 21:46:16 +0100
+Subject: [Buildroot] [PATCH v6 18/28] package/cmake: Fix for using -O in
+ top-level make
+In-Reply-To: <20200319150018.737f5e7c@windsurf.home>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-19-anaumann@ultratronik.de>
+ <20200311232503.0bafe189@windsurf>
+ <33267645-fd49-cb20-bb8f-f6a1edd57a15@mind.be>
+ <d6125560-ca00-a4be-cfde-ff200d332756@andin.de>
+ <20200317070800.6365cac6@windsurf.home>
+ <CALFsTFUiXLAVUPaKE22FZE7sF2V4uhv6XmDyim0-cveKP950mA@mail.gmail.com>
+ <0172c8d6-c39a-10a4-cb03-839242936287@andin.de>
+ <CALFsTFVHh+K0_9Un4Gx1TKVi1HwoDqG7N=gvMgdVxpN5iB0vyQ@mail.gmail.com>
+ <6e936a94-ca1a-dce4-cae5-40605344119b@andin.de>
+ <CALFsTFVNjnov69twmk_kv6VdBQAkLXTG4MaFUzw6LfiW2VmgDA@mail.gmail.com>
+ <20200319134951.3f8dfb85@windsurf.home>
+ <CALFsTFUN-zHap9eg2AVoeVCH+5Yw3gF3SPZNx9rOFRtwtvUeLw@mail.gmail.com>
+ <20200319150018.737f5e7c@windsurf.home>
+Message-ID: <f51a8f1a-24d3-5a2a-3a15-3e9095d57c92@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fffd917eba275c151cc4ee525921a456058f595
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-This commit adds optional dependencies on mbedtls, openssl or wolfssl.
+On 19.03.20 15:00, Thomas Petazzoni wrote:
+> On Thu, 19 Mar 2020 15:53:23 +0200
+> Asaf Kahlon <asafka7@gmail.com> wrote:
+> 
+>>> Requiring make > 4.0 on the host system is too strict, especially
+>>> considering that the issue we have here only happens in very specific
+>>> conditions: ccache support enabled, and passing of custom -O flags that
+>>> are only useful for top-level parallel build, which is itself an
+>>> experimental feature.
+>>
+>> Just as a side note - the problem isn't related to ccache. We
+>> reproduced it with -O and top-level parallel build.
+> 
+> Sorry, I mixed things up, and thought it was ccache related.
+> 
+>> In addition, if you have any suggestion how to address that case -
+>> I'll be more than happy to help.
+> 
+> I don't have any really good suggestion. But it's really a corner case:
+> only happens with make 4.1 if I understand correctly, and only when you
+> pass some variants of the -O option.
+> 
+> The "make -Orecurse" option, which is the most relevant for top-level
+> parallel build, does not exhibit the issue.
+> 
+> So essentially I simply wouldn't fix the problem. If you really want to
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rtty/rtty.mk | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+That's ok for me since it really is a corner case.
 
-diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
-index 21ba385018..bcd0fb3625 100644
---- a/package/rtty/rtty.mk
-+++ b/package/rtty/rtty.mk
-@@ -9,6 +9,30 @@ RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
- RTTY_LICENSE = MIT
- RTTY_LICENSE_FILES = LICENSE
- RTTY_DEPENDENCIES = libev
--RTTY_CONF_OPTS = -DRTTY_SSL_SUPPORT=OFF
-+
-+ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+RTTY_DEPENDENCIES += mbedtls
-+RTTY_CONF_OPTS += \
-+	-DRTTY_SSL_SUPPORT=ON \
-+	-DRTTY_USE_MBEDTLS=ON \
-+	-DRTTY_USE_OPENSSL=OFF \
-+	-DRTTY_USE_WOLFSSL=OFF
-+else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+RTTY_DEPENDENCIES += openssl
-+RTTY_CONF_OPTS += \
-+	-DRTTY_SSL_SUPPORT=ON \
-+	-DRTTY_USE_MBEDTLS=OFF \
-+	-DRTTY_USE_OPENSSL=ON \
-+	-DRTTY_USE_WOLFSSL=OFF
-+else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
-+RTTY_DEPENDENCIES += wolfssl
-+RTTY_CONF_OPTS += \
-+	-DRTTY_SSL_SUPPORT=ON \
-+	-DRTTY_USE_MBEDTLS=OFF \
-+	-DRTTY_USE_OPENSSL=OFF \
-+	-DRTTY_USE_WOLFSSL=ON
-+else
-+RTTY_CONF_OPTS += -DRTTY_SSL_SUPPORT=OFF
-+endif
- 
- $(eval $(cmake-package))
+
+regards,
+Andreas
+
+
+
+> fix it, maybe we can have some fancy logic in the main Makefile to
+> detect that one of the problematic -O option is passed, and the make
+> version is not appropriate, and then error out.
+> 
+> Thomas
+> 
