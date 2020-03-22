@@ -1,55 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Mar 2020 22:29:21 +0100
-Subject: [Buildroot] [git commit] package/linux-firmware: rename Realtek
- rtw88 option
-Message-ID: <20200322211613.EDC8185F10@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Mar 2020 22:30:23 +0100
+Subject: [Buildroot] [PATCH v2] uclibc: update to 1.0.33
+In-Reply-To: <5e9204f5-2088-18f3-6871-681749eadbf5@gmail.com>
+References: <20200309101810.5wtqf2bzxipp536t@waldemar-brodkorb.de>
+ <5e9204f5-2088-18f3-6871-681749eadbf5@gmail.com>
+Message-ID: <20200322223023.7ce73bff@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3817f0e87b96add0d0c63932dce0f0dd395849cb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 15 Mar 2020 16:46:42 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-The newly introduced option does not follow the naming scheme of other
-Realtek firmwares, in part because the model is not named rtl-something,
-but rtw-something.
+> Hi Weldemar,
+> 
+> Le 09/03/2020 ? 11:18, Waldemar Brodkorb a ?crit?:
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>  
+> 
+> I used the Buildroot gitlab ci to test the uClibc-ng update
+> 
+> It seems we need to fix something in qt5base package:
+> .obj/qfilesystemengine_unix.o: in function `qt_real_statx(int, char const*, int,
+> statx*)':
+> qfilesystemengine_unix.cpp:(.text+0x5c): undefined reference to `statx'
+> 
+> https://gitlab.com/kubu93/buildroot/-/jobs/472027985
+> 
+> It seems related to [1] but we don't have such issue with glibc (2.29 & 2.30).
+> 
+> [1]
+> https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=8a04c4d84c8a1a1297ec0c5cec5522112981e0c0
 
-Rename the option to match the VENDOR_DEVICE scheme. We do not add a
-legacy entry for this: we've had no release and it was pushed minutes
-ago...
+Thanks for the testing. Due to this issue, I'm holding off on the
+update to uClibc-ng 1.0.33. Waldemar, will you have a look ?
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/linux-firmware/Config.in         | 2 +-
- package/linux-firmware/linux-firmware.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks,
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index fa741f5407..fb884842d6 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -318,7 +318,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX
- 	help
- 	  Realtek rtl8821ae
- 
--config BR2_PACKAGE_LINUX_FIRMWARE_RTW88
-+config BR2_PACKAGE_LINUX_FIRMWARE_RTL_RTW88
- 	bool "Realtek rtw88"
- 	help
- 	  Firmware images supported by Realtek's wireless
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index b90585daee..21300ddc72 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -113,7 +113,7 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.rtlwifi_firmware.txt
- endif
- 
- # rtw88
--ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTW88),y)
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_RTW88),y)
- LINUX_FIRMWARE_FILES += \
- 	rtw88/rtw8723d_fw.bin \
- 	rtw88/rtw8822b_fw.bin \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
