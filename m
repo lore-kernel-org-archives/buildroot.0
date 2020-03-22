@@ -1,65 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Mar 2020 14:57:14 +0100
-Subject: [Buildroot] [RFC PATCH 1/1] package/cegui: rename and bump
- version
-In-Reply-To: <0d04353d-faf2-35d2-5a58-cb293ef52f86@grinn-global.com>
-References: <20200318085125.12843-1-b.bilas@grinn-global.com>
- <20200321165503.7baa0173@windsurf.home>
- <0d04353d-faf2-35d2-5a58-cb293ef52f86@grinn-global.com>
-Message-ID: <20200322135714.GD2364@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Mar 2020 15:12:44 +0100
+Subject: [Buildroot] [PATCH 1/1] support/testing/: change python-gobject
+ to use prebuilt kernel
+In-Reply-To: <20200316153459.2291931-1-aduskett@gmail.com>
+References: <20200316153459.2291931-1-aduskett@gmail.com>
+Message-ID: <20200322151244.0cab0e9e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bartosz, All,
+Hello Adam,
 
-On 2020-03-22 14:44 +0100, Bartosz Bilas spake thusly:
-> On 21.03.2020 16:55, Thomas Petazzoni wrote:
-> >On Wed, 18 Mar 2020 09:51:25 +0100
-> >Bartosz Bilas <b.bilas@grinn-global.com> wrote:
-> >>Since spice ver. 0.12.6 doesn't depend on cegui anymore let's bump to the latest stable version
-> >>and rename package.
-> >>
-> >>Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-[--SNIP--]
-> >>+ifeq ($(BR2_PACKAGE_OGRE),y)
-> >>+CEGUI_DEPENDENCIES += ogre
-> >>+endif
-> >[... snip ...]
-> >
-> >So I take it there are no enable/disable options ?
-> Those options are automatically set based on found dependencies so I think
-> that there is no necessity to override them in mk file (or am I wrong?).
+On Mon, 16 Mar 2020 08:34:59 -0700
+aduskett at gmail.com wrote:
 
-We still want to forcibly enable/disable optional features rather than
-leave them to chance. Also, if your target is x86_64 and your build
-machine is also x86_64 (for example), then if you machine has one of
-thedependencies installed, the CEGUI buildsyste,m may find them, instead
-of those from Buildroot.
-
-So, we still want to have the proper enable/disable options.
-
-Regards,
-Yann E. MORIN.
-
-> >
-> >Thanks!
-> >
-> >Thomas
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Best
-> Bartek
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> This change significantly reduces the ammount of time needed to run the
+> test.
+> 
+> Select a cortext_a9 and a external linaro toolchain due to the need for a
 
+cortext -> cortex
+
+> glibc based toolchain, as the default TestPythonPackageBase.config toolchain
+> is a uClibc toolchain.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+
+The idea is good, but I have some comment below.
+
+> diff --git a/support/testing/tests/package/test_python_gobject.py b/support/testing/tests/package/test_python_gobject.py
+> index a673d554a4..cf10e9ff67 100644
+> --- a/support/testing/tests/package/test_python_gobject.py
+> +++ b/support/testing/tests/package/test_python_gobject.py
+> @@ -3,31 +3,24 @@ from tests.package.test_python import TestPythonPackageBase
+>  
+>  class TestPythonPy3Gobject(TestPythonPackageBase):
+>      __test__ = True
+> -    config = \
+> +    config = TestPythonPackageBase.config + \
+
+I don't think it makes much sense to re-use
+TestPythonPackageBase.config. Indeed, what is does is:
+
+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+        """
+        BR2_TARGET_ROOTFS_CPIO=y
+        # BR2_TARGET_ROOTFS_TAR is not set
+        """
+
+and infra.basetest.BASIC_TOOLCHAIN_CONFIG only defines the toolchain
+options.
+
+So could instead just use a configuration that is completely defined
+here ?
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
