@@ -1,157 +1,415 @@
-From: Laurent Hartanerot <laurent.hartanerot@gmail.com>
-Date: Sun, 22 Mar 2020 15:51:19 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/rcw : bump to LSDK-19.09
-In-Reply-To: <20200322131255.GB2364@scaer>
-References: <20200322103143.18772-1-laurent.hartanerot@gmail.com>
- <20200322131255.GB2364@scaer>
-Message-ID: <CACGVVZg_3UzO=B4ZF5LUTnv+QaDhF3OvcyC_y7wHhnQ1gN5P2A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Mar 2020 15:51:54 +0100
+Subject: [Buildroot] [git commit] package/tslib: fix build with headers >=
+ 4.16
+Message-ID: <20200322143849.072938438C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
-Thank you for the feedback,
+commit: https://git.buildroot.net/buildroot/commit/?id=fedaa28079489b308f77d80a0cac8698d776df23
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- I thought I followed the explanations by making a first patch :
-https://patchwork.ozlabs.org/patch/1258063/
-and the second patch (this) for the version bump...
-Maybe, I shouldn't have done it in response to this email (--in-reply-to=)
+Fixes:
+ - http://autobuild.buildroot.org/results/bc8bc3f1d88f3b64765025fee7f941d30a81ee46
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...x-build-on-32bit-arches-with-64bit-time_t.patch | 386 +++++++++++++++++++++
+ 1 file changed, 386 insertions(+)
 
-
-- I take this opportunity to explain why I have not used
-+HOST_RCW_DEPENDENCIES = $(BR2_PYTHON3_HOST_DEPENDENCY)
-but
-+HOST_RCW_DEPENDENCIES = host-python3
-in the first case the host-python3 dependency is not added
-
-When I check the varaibles (in the first case) I get :
-$ make printvars "VARS=HOST_RCW_DEPENDENCIES"
-HOST_RCW_DEPENDENCIES= host-skeleton
-$ make printvars "VARS=BR2_PYTHON3_HOST_DEPENDENCY"
-
-but in the second case :
-$ make printvars "VARS=BR2_PYTHON3_HOST_DEPENDENCY"
-$ make printvars "VARS=HOST_RCW_DEPENDENCIES"
-HOST_RCW_DEPENDENCIES=host-python3 host-skeleton
-
-I don't find the reason why $(BR2_PYTHON3_HOST_DEPENDENCY) is not equals to
-host-python3.
-
-Thanks for support
-
-
-Le dim. 22 mars 2020 ? 14:13, Yann E. MORIN <yann.morin.1998@free.fr> a
-?crit :
-
-> Laurent, All,
->
-> On 2020-03-22 11:31 +0100, Laurent Hartanerot spake thusly:
-> > From: Laurent Hartanerot <laurent.hartanerot@atos.net>
-> >
-> > Upgrade python to python3 : "Only Python versions 3.0+ are supported"
-> >
-> > Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
-> > ---
-> >  package/rcw/rcw.hash | 2 +-
-> >  package/rcw/rcw.mk   | 6 +++---
-> >  2 files changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/package/rcw/rcw.hash b/package/rcw/rcw.hash
-> > index 7de1ec659a..76b6373942 100644
-> > --- a/package/rcw/rcw.hash
-> > +++ b/package/rcw/rcw.hash
-> > @@ -1,3 +1,3 @@
-> >  # Locally calculated
-> > -sha256 1421ada9fec10b12ff21cd9ad82f0a835b191cb2dde80f03547764574b1346c3
-> rcw-LSDK-18.12.tar.gz
-> > +sha256 b69a6a8b187ba794e0af716a509ced2bbac83da0f6e94b5c7331a34619db21b1
-> rcw-LSDK-19.09.tar.gz
-> >  sha256 a531b3146425e592db17a51ff39c4801cb01fb4055ffdaada0572decc0655bcd
-> LICENSE
-> > diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
-> > index dbfeae7b21..928135abfc 100644
-> > --- a/package/rcw/rcw.mk
-> > +++ b/package/rcw/rcw.mk
-> > @@ -4,13 +4,13 @@
-> >  #
-> >
-> ################################################################################
-> >
-> > -RCW_VERSION = LSDK-18.12
-> > +RCW_VERSION = LSDK-19.09
-> >  RCW_SITE =
-> https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
-> >  RCW_SITE_METHOD = git
-> >  RCW_LICENSE = BSD-3-Clause
-> >  RCW_LICENSE_FILES = LICENSE
-> >
-> > -HOST_RCW_DEPENDENCIES = host-python
-> > +HOST_RCW_DEPENDENCIES = host-python3
->
-> As far as I can see, that's not what Thomas requested in his previous
-> review http://lists.busybox.net/pipermail/buildroot/2020-March/277531.html
->
-> Thomas requested that the bump be split in two changes:
->
->   - a first patch that does not update the version, but adds the missing
->     dependency to host-python, making sure to use by replacing the call
->     to 'python' by a call to $(HOST_DIR)/bin/python, so that we can
->     backport that fix into our LTS branch, 2020.02;
->
->   - a second patch that does the version bump, and in the process,
->     changes the dependency on host-python to using the conditional
->     depednency set in the variable $(BR2_PYTHON3_HOST_DEPENDENCY).
->
-> If you have issues with the above, then do not hesitate to explain your
-> concerns, instead of re-sending almost exactly the same change.
->
-> In the meantime, I've marked the patch as changes-requested in patchwork.
->
-> Regards,
-> Yann E. MORIN.
->
-> >  RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))
-> >
-> > @@ -41,7 +41,7 @@ endef
-> >  HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
-> >
-> >  define HOST_RCW_BUILD_CMDS
-> > -     $(HOST_DIR)/bin/python $(@D)/rcw.py \
-> > +     $(HOST_DIR)/bin/python3 $(@D)/rcw.py \
-> >               -i $(@D)/custom_board/rcw/$(RCW_PROJECT) \
-> >               -I $(@D)/custom_board -o $(@D)/PBL.bin
-> >  endef
-> > --
-> > 2.20.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
-
-
--- 
-Laurent HARTANEROT
-Laurent.Hartanerot at gmail.com
-tel : 06 49 14 93 74
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200322/8f66a89c/attachment.html>
+diff --git a/package/tslib/0001-Fix-build-on-32bit-arches-with-64bit-time_t.patch b/package/tslib/0001-Fix-build-on-32bit-arches-with-64bit-time_t.patch
+new file mode 100644
+index 0000000000..70a3f25f59
+--- /dev/null
++++ b/package/tslib/0001-Fix-build-on-32bit-arches-with-64bit-time_t.patch
+@@ -0,0 +1,386 @@
++From 09eeff8c90a82e7aa9ff215320d558c1147982f6 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Sat, 30 Nov 2019 19:59:29 -0800
++Subject: [PATCH] Fix build on 32bit arches with 64bit time_t
++
++time element is deprecated on new input_event structure in kernel's
++input.h [1]
++
++[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/libts/tslib/commit/a7a39a67f9a7f7fab9765d412ab42869a5c5c858]
++---
++ plugins/input-raw.c | 59 +++++++++++++++++++++++++++-------------
++ tools/ts_uinput.c   | 66 ++++++++++++++++++++++++++++++---------------
++ 2 files changed, 85 insertions(+), 40 deletions(-)
++
++diff --git a/plugins/input-raw.c b/plugins/input-raw.c
++index 64f0156..f030836 100644
++--- a/plugins/input-raw.c
+++++ b/plugins/input-raw.c
++@@ -40,6 +40,11 @@
++ # include <linux/input.h>
++ #endif
++ 
+++#ifndef input_event_sec
+++#define input_event_sec time.tv_sec
+++#define input_event_usec time.tv_usec
+++#endif
+++
++ #ifndef EV_SYN /* 2.4 kernel headers */
++ # define EV_SYN 0x00
++ #endif
++@@ -384,7 +389,8 @@ static int ts_input_read(struct tslib_module_info *inf,
++ 						samp->y = i->current_y;
++ 						samp->pressure = i->current_p;
++ 					}
++-					samp->tv = ev.time;
+++					samp->tv.tv_sec = ev.input_event_sec;
+++					samp->tv.tv_usec = ev.input_event_usec;
++ 			#ifdef DEBUG
++ 				fprintf(stderr,
++ 					"RAW---------------------> %d %d %d %ld.%ld\n",
++@@ -519,7 +525,8 @@ static int ts_input_read(struct tslib_module_info *inf,
++ 					samp->pressure = i->current_p = ev.value;
++ 					break;
++ 				}
++-				samp->tv = ev.time;
+++				samp->tv.tv_sec = ev.input_event_sec;
+++				samp->tv.tv_usec = ev.input_event_usec;
++ 	#ifdef DEBUG
++ 				fprintf(stderr,
++ 					"RAW---------------------------> %d %d %d\n",
++@@ -536,7 +543,8 @@ static int ts_input_read(struct tslib_module_info *inf,
++ 						samp->x = 0;
++ 						samp->y = 0;
++ 						samp->pressure = 0;
++-						samp->tv = ev.time;
+++						samp->tv.tv_sec = ev.input_event_sec;
+++						samp->tv.tv_usec = ev.input_event_usec;
++ 						samp++;
++ 						total++;
++ 					}
++@@ -651,7 +659,8 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
++ 				switch (i->ev[it].code) {
++ 				case BTN_TOUCH:
++ 					i->buf[total][i->slot].pen_down = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					if (i->ev[it].value == 0)
++ 						pen_up = 1;
++@@ -751,7 +760,8 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
++ 					// fall through
++ 				case ABS_MT_POSITION_X:
++ 					i->buf[total][i->slot].x = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					break;
++ 				case ABS_Y:
++@@ -760,7 +770,8 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
++ 					// fall through
++ 				case ABS_MT_POSITION_Y:
++ 					i->buf[total][i->slot].y = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					break;
++ 				case ABS_PRESSURE:
++@@ -769,12 +780,14 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
++ 					// fall through
++ 				case ABS_MT_PRESSURE:
++ 					i->buf[total][i->slot].pressure = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					break;
++ 				case ABS_MT_TOOL_X:
++ 					i->buf[total][i->slot].tool_x = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					/* for future use
++ 					 * i->buf[total][i->slot].valid |= TSLIB_MT_VALID_TOOL;
++@@ -782,7 +795,8 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
++ 					break;
++ 				case ABS_MT_TOOL_Y:
++ 					i->buf[total][i->slot].tool_y = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					/* for future use
++ 					 * i->buf[total][i->slot].valid |= TSLIB_MT_VALID_TOOL;
++@@ -790,7 +804,8 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
++ 					break;
++ 				case ABS_MT_TOOL_TYPE:
++ 					i->buf[total][i->slot].tool_type = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					/* for future use
++ 					 * i->buf[total][i->slot].valid |= TSLIB_MT_VALID_TOOL;
++@@ -798,12 +813,14 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
++ 					break;
++ 				case ABS_MT_ORIENTATION:
++ 					i->buf[total][i->slot].orientation = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					break;
++ 				case ABS_MT_DISTANCE:
++ 					i->buf[total][i->slot].distance = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 
++ 					if (i->special_device == EGALAX_VERSION_210) {
++@@ -816,34 +833,40 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
++ 					break;
++ 				case ABS_MT_BLOB_ID:
++ 					i->buf[total][i->slot].blob_id = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					break;
++ 				case ABS_MT_TOUCH_MAJOR:
++ 					i->buf[total][i->slot].touch_major = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					if (i->ev[it].value == 0)
++ 						i->buf[total][i->slot].pressure = 0;
++ 					break;
++ 				case ABS_MT_WIDTH_MAJOR:
++ 					i->buf[total][i->slot].width_major = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					break;
++ 				case ABS_MT_TOUCH_MINOR:
++ 					i->buf[total][i->slot].touch_minor = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					break;
++ 				case ABS_MT_WIDTH_MINOR:
++ 					i->buf[total][i->slot].width_minor = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					break;
++ 				case ABS_MT_TRACKING_ID:
++ 					i->buf[total][i->slot].tracking_id = i->ev[it].value;
++-					i->buf[total][i->slot].tv = i->ev[it].time;
+++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
+++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
++ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
++ 					if (i->ev[it].value == -1)
++ 						i->buf[total][i->slot].pressure = 0;
++diff --git a/tools/ts_uinput.c b/tools/ts_uinput.c
++index 6ca4c3d..1832a07 100644
++--- a/tools/ts_uinput.c
+++++ b/tools/ts_uinput.c
++@@ -170,14 +170,16 @@ static int send_touch_events(struct data_t *data, struct ts_sample_mt **s,
++ 				continue;
++ 
++ 			if (s[j][i].pen_down == 1) {
++-				data->ev[c].time = s[j][i].tv;
+++				data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++				data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 				data->ev[c].type = EV_KEY;
++ 				data->ev[c].code = BTN_TOUCH;
++ 				data->ev[c].value = s[j][i].pen_down;
++ 				c++;
++ 			}
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_SLOT;
++ 			data->ev[c].value = s[j][i].slot;
++@@ -190,111 +192,129 @@ static int send_touch_events(struct data_t *data, struct ts_sample_mt **s,
++ 			 * we should use slot 1 and so on.
++ 			 */
++ 			if (i == 0) {
++-				data->ev[c].time = s[j][i].tv;
+++				data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++				data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 				data->ev[c].type = EV_ABS;
++ 				data->ev[c].code = ABS_X;
++ 				data->ev[c].value = s[j][i].x;
++ 				c++;
++ 
++-				data->ev[c].time = s[j][i].tv;
+++				data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++				data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 				data->ev[c].type = EV_ABS;
++ 				data->ev[c].code = ABS_Y;
++ 				data->ev[c].value = s[j][i].y;
++ 				c++;
++ 
++-				data->ev[c].time = s[j][i].tv;
+++				data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++				data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 				data->ev[c].type = EV_ABS;
++ 				data->ev[c].code = ABS_PRESSURE;
++ 				data->ev[c].value = s[j][i].pressure;
++ 				c++;
++ 			}
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_POSITION_X;
++ 			data->ev[c].value = s[j][i].x;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_POSITION_Y;
++ 			data->ev[c].value = s[j][i].y;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_PRESSURE;
++ 			data->ev[c].value = s[j][i].pressure;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_TOUCH_MAJOR;
++ 			data->ev[c].value = s[j][i].touch_major;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_WIDTH_MAJOR;
++ 			data->ev[c].value = s[j][i].width_major;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_TOUCH_MINOR;
++ 			data->ev[c].value = s[j][i].touch_minor;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_WIDTH_MINOR;
++ 			data->ev[c].value = s[j][i].width_minor;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_TOOL_TYPE;
++ 			data->ev[c].value = s[j][i].tool_type;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_TOOL_X;
++ 			data->ev[c].value = s[j][i].tool_x;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_TOOL_Y;
++ 			data->ev[c].value = s[j][i].tool_y;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_ORIENTATION;
++ 			data->ev[c].value = s[j][i].orientation;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_DISTANCE;
++ 			data->ev[c].value = s[j][i].distance;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_BLOB_ID;
++ 			data->ev[c].value = s[j][i].blob_id;
++ 			c++;
++ 
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_ABS;
++ 			data->ev[c].code = ABS_MT_TRACKING_ID;
++ 			data->ev[c].value = s[j][i].tracking_id;
++ 			c++;
++ 
++ 			if (data->mt_type_a == 1) {
++-				data->ev[c].time = s[j][i].tv;
+++				data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++				data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 				data->ev[c].type = EV_SYN;
++ 				data->ev[c].code = SYN_MT_REPORT;
++ 				data->ev[c].value = 0;
++@@ -302,7 +322,8 @@ static int send_touch_events(struct data_t *data, struct ts_sample_mt **s,
++ 			}
++ 
++ 			if (s[j][i].pen_down == 0) {
++-				data->ev[c].time = s[j][i].tv;
+++				data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++				data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 				data->ev[c].type = EV_KEY;
++ 				data->ev[c].code = BTN_TOUCH;
++ 				data->ev[c].value = s[j][i].pen_down;
++@@ -312,7 +333,8 @@ static int send_touch_events(struct data_t *data, struct ts_sample_mt **s,
++ 		}
++ 
++ 		if (c > 0) {
++-			data->ev[c].time = s[j][i].tv;
+++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
+++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
++ 			data->ev[c].type = EV_SYN;
++ 			data->ev[c].code = SYN_REPORT;
++ 			data->ev[c].value = 0;
