@@ -1,55 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Mar 2020 22:53:44 +0100
-Subject: [Buildroot] [PATCH 1/2]
- package/gobject-introspection/g-ir-scanner: do not set default compiler
- values
-In-Reply-To: <20200321214726.GN4290@scaer>
-References: <20200320222359.88689-1-aduskett@gmail.com>
- <20200321214726.GN4290@scaer>
-Message-ID: <20200322215344.GF22325@scaer>
+From: Andreas Naumann <dev@andin.de>
+Date: Sun, 22 Mar 2020 22:58:19 +0100
+Subject: [Buildroot] [PATCH v6 23/28] package/qt5webengine: add
+ libXdamage as XCB dependency
+In-Reply-To: <2edb848b-0d0f-2c01-edc5-7e412c83ba11@andin.de>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-24-anaumann@ultratronik.de>
+ <20200312091553.5498289b@windsurf>
+ <2edb848b-0d0f-2c01-edc5-7e412c83ba11@andin.de>
+Message-ID: <f5dd2d50-0edb-6819-5a12-61675c601363@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Hi Thomas,
 
-On 2020-03-21 22:47 +0100, Yann E. MORIN spake thusly:
-> On 2020-03-20 15:23 -0700, aduskett at gmail.com spake thusly:
-> > From: Adam Duskett <Aduskett@gmail.com>
-> > Commit 8b0aeafce2a22913e6a44818227f6a39e3225157 set 7 new variables in
-> > g-ir-scanner.in:
-> > 
-> > export CPP="${CPP:-${HOST_DIR}/bin/@BASENAME_TARGET_CPP@}"
-> > export CC="${CC:-${HOST_DIR}/bin/@BASENAME_TARGET_CC@}"
-> > export CXX="${CXX:-${HOST_DIR}/bin/@BASENAME_TARGET_CXX@}"
-> > CPPFLAGS="${CPPFLAGS:- at TARGET_CPPFLAGS@}"
-> > CFLAGS="${CFLAGS:- at TARGET_CFLAGS@}"
-> > CXXFLAGS="${CXXFLAGS:- at TARGET_CXXFLAGS@}"
-> > LDFLAGS="${LDFLAGS:- at TARGET_LDFLAGS@}"
-> > 
-> > However, defaulting to CPP, CC, or CXX breaks some packages because they may
-> > hard code CC to the system CC.
-> > 
-> > One such package is libostree which has the line
-> > "INTROSPECTION_SCANNER_ENV = CC=gcc" in the Makefile.
+On 16.03.20 23:40, Andreas Naumann wrote:
+> Hi,
 > 
-> But then, that's clearly a bug in libostree! They should not ever try to
-> call a hard-coded compiler.
-[--SNIP--]
+> On 12.03.20 09:15, Thomas Petazzoni wrote:
+>> On Mon, 17 Feb 2020 22:23:45 +0100
+>> Andreas Naumann <anaumann@ultratronik.de> wrote:
+>>
+>>> Fixes a build failure.
+>>>
+>>> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+>>
+>> Could you provide the Buildroot configuration that exhibits the issue?
+> 
+> it was imx6-sabresd_qt5_defconfig plus everything Qt I could find. See 
+> cover letter near the end.
+> 
+>> I've been trying to create a configuration that builds qt5webengine
+>> with X.org enabled, and no matter what I do, the OpenGL provider I use
+>> selects libxdamage, so I don't have a configuration that combines
+>> qt5webengine and X.org, but without having libxdamage.
 
-Mu alternate proposal was just merged, so I've marked this series as
-rejected. It anyway helped understand the actual problem, so it was
-definitely not in vain. Thanks! :-)
+I now realize my configuration had mesa3d without 
+BR2_PACKAGE_MESA3D_OPENGL_GLX. Once selected, it pulls in libxdamage and 
+it gets build before mesa. So the first part of my patch might really 
+not be needed.
 
-Regards,
-Yann E. MORIN.
+The second part (the dependency) however is needed because otherwise it 
+wont be available in the per-package sysroot of qt5webengine. I guess I 
+should have pointed that out in the commit message. Do you want me to 
+resend?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> 
+> Maybe this was fixed with e79ee3b, I will try again.
+
+So no, this was another issue.
+
+
+regards,
+Andreas
+
+
+
+
+> 
+> 
+> regards,
+> Andreas
+> 
+>>
+>> Also, what was the build failure ?
+>>
+>> Thanks!
+>>
+>> Thomas
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
