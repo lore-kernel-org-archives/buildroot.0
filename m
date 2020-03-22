@@ -1,45 +1,78 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 22 Mar 2020 07:17:10 +0100
-Subject: [Buildroot] [PATCH] package/xapian: bump to version 1.4.15
-In-Reply-To: <20200322061710.14420-1-gilles.talis@gmail.com>
-References: <20200322061710.14420-1-gilles.talis@gmail.com>
-Message-ID: <20200322061710.14420-2-gilles.talis@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Mar 2020 08:19:38 +0100
+Subject: [Buildroot] [PATCH] linux: do not run depmod during the
+ installation
+In-Reply-To: <20200321235703.10622-1-unixmania@gmail.com>
+References: <20200321235703.10622-1-unixmania@gmail.com>
+Message-ID: <20200322071938.GP4290@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
----
- package/xapian/xapian.hash | 4 ++--
- package/xapian/xapian.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Carlos, All,
 
-diff --git a/package/xapian/xapian.hash b/package/xapian/xapian.hash
-index e4f8dfa23f..6e1ae3c423 100644
---- a/package/xapian/xapian.hash
-+++ b/package/xapian/xapian.hash
-@@ -1,5 +1,5 @@
--# From https://lists.xapian.org/pipermail/xapian-discuss/2019-November/009774.html
--sha256 975a7ac018c9d34a15cc94a3ecc883204403469f748907e5c4c64d0aec2e4949 xapian-core-1.4.14.tar.xz
-+# From https://lists.xapian.org/pipermail/xapian-discuss/2020-February/009792.html
-+sha256 b168e95918a01e014fb6a6cbce26e535f80da4d4791bfa5a0e0051fcb6f950ea xapian-core-1.4.15.tar.xz
- 
- # locally computed
- sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42 COPYING
-diff --git a/package/xapian/xapian.mk b/package/xapian/xapian.mk
-index 57aba5e039..9fbe0b36f8 100644
---- a/package/xapian/xapian.mk
-+++ b/package/xapian/xapian.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XAPIAN_VERSION = 1.4.14
-+XAPIAN_VERSION = 1.4.15
- XAPIAN_SOURCE = xapian-core-$(XAPIAN_VERSION).tar.xz
- XAPIAN_SITE = https://oligarchy.co.uk/xapian/$(XAPIAN_VERSION)
- XAPIAN_LICENSE = GPL-2.0+
+On 2020-03-21 20:57 -0300, unixmania at gmail.com spake thusly:
+> From: Carlos Santos <unixmania@gmail.com>
+> 
+> The kernel "install" target runs depmod by means of a wrapper script
+> (scripts/depmod.sh), so passing a dummy depmod (e.g. /dev/null) would
+> cause warning messages like this:
+> 
+>     DEPMOD  5.4.27
+>     ./scripts/depmod.sh: 46: /dev/null: Permission denied
+>     make[2]: *** [Makefile:1326: _modinst_post] Error 126
+> 
+> We can avoid running the script by overriding the cmd_depmod variable,
+> which contains the command line to run depmod.
+> 
+> As a safety measure, setting DEPMOD to /bin/false makes the installation
+> fail if overriding cmd_depmod does not work in a future kernel version.
+
+Really, what's the problem with running this demod here?
+
+The default AArch64 kernel defconfig takes almost 12 minutes to build on
+my machine, and the install, including running depmod, takes just under
+14 seconds (including parsing all Buildroot Makefiles!).
+
+So running depmod is hardly a time hog...
+
+> 
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ---
+> CC: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  linux/linux.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 2e3ea52053..383d1908d6 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -134,7 +134,8 @@ LINUX_MAKE_FLAGS = \
+>  	ARCH=$(KERNEL_ARCH) \
+>  	INSTALL_MOD_PATH=$(TARGET_DIR) \
+>  	CROSS_COMPILE="$(TARGET_CROSS)" \
+> -	DEPMOD=$(HOST_DIR)/sbin/depmod
+> +	DEPMOD=/bin/false \
+> +	cmd_depmod=":"
+
+This is touching the internals of the kernel, so no.
+
+Regards,
+Yann E. MORIN.
+
+>  ifeq ($(BR2_REPRODUCIBLE),y)
+>  LINUX_MAKE_ENV += \
+> -- 
+> 2.18.2
+> 
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
