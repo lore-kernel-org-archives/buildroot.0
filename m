@@ -1,152 +1,321 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sun, 22 Mar 2020 14:13:01 -0300
-Subject: [Buildroot] [PATCH v6 2/2] package/busybox: fix build with glibc
- 2.31
-In-Reply-To: <20200322171301.15753-1-unixmania@gmail.com>
-References: <20200322171301.15753-1-unixmania@gmail.com>
-Message-ID: <20200322171301.15753-3-unixmania@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Mar 2020 18:27:15 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/cegui: rename and bump
+ version
+In-Reply-To: <20200322170252.1700000-1-b.bilas@grinn-global.com>
+References: <20200322170252.1700000-1-b.bilas@grinn-global.com>
+Message-ID: <20200322172715.GA22325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+Bartosz, all,
 
-Busybox 1.31.1 fails to build with glibc 2.31 due to the removal of
-stime() from glibc. Pull a patch already applied upstream to fix the
-problem.
+On 2020-03-22 18:02 +0100, Bartosz Bilas spake thusly:
+> Since spice ver. 0.12.6 doesn't depend on cegui anymore
+> let's bump to the latest stable version and rename package.
+> 
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> ---
+[--SNIP--]
+> diff --git a/package/cegui/0001-src-Exceptions.cpp-check-if-execinfo-header-is-avail.patch b/package/cegui/0001-src-Exceptions.cpp-check-if-execinfo-header-is-avail.patch
+> new file mode 100644
+> index 0000000000..99da9993a7
+> --- /dev/null
+> +++ b/package/cegui/0001-src-Exceptions.cpp-check-if-execinfo-header-is-avail.patch
+> @@ -0,0 +1,33 @@
+> +From e18e48624cd45910917e5e4fb0aa16cef490bb6d Mon Sep 17 00:00:00 2001
+> +From: Bartosz Bilas <b.bilas@grinn-global.com>
+> +Date: Sun, 22 Mar 2020 14:25:53 +0100
+> +Subject: [PATCH 1/1] src/Exceptions.cpp: check if execinfo header is available
+> +
+> +Fixes:
+> +  fatal error: execinfo.h: No such file or directory
+> +  compilation terminated.
+> +
+> +Signed-off-by: Bartosz Bilas <bartosz.bilas@hotmail.com>
+> +---
+> + Upstream status: https://github.com/cegui/cegui/pull/1189
 
-The patch was rebased on version 1.31.1 to minimize the change, since
-the original one depended on a previous commit which is not worthwhile
-to pick.
+It's now been merged.
 
-Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN. <yann.morin.1998@free.fr>
-Cc: arc-buildroot at synopsys.com
----
-Supersedes: https://patchwork.ozlabs.org/patch/1259554/
----
-Changes v6:
-- Use 5 separate patches from upstream and split the Buildroot fix into
-  two, one for the musl compatibility and other for the glibc, as
-  suggested by Yann E. MORIN..
-Changes v5:
-- Drop the first patch, squash the other ones and rebase on v1.31.1, as
-  suggested by Romain Naour
-Changes v4:
-- Rabase on the master branch
-- Add SOB lines to patches
----
- .../0007-Remove-stime-function-calls.patch    | 97 +++++++++++++++++++
- 1 file changed, 97 insertions(+)
- create mode 100644 package/busybox/0007-Remove-stime-function-calls.patch
+[--SNIP--]
+> diff --git a/package/cegui06/Config.in b/package/cegui/Config.in
+> similarity index 69%
+> rename from package/cegui06/Config.in
+> rename to package/cegui/Config.in
+> index 0139d32422..71a4d6cc84 100644
+> --- a/package/cegui06/Config.in
+> +++ b/package/cegui/Config.in
+> @@ -1,14 +1,14 @@
+> -comment "cegui06 needs a toolchain w/ C++, threads, dynamic library"
+> +comment "cegui needs a toolchain w/ C++, threads, dynamic library"
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+>  
+> -config BR2_PACKAGE_CEGUI06
+> -	bool "cegui06"
+> +config BR2_PACKAGE_CEGUI
+> +	bool "cegui"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on !BR2_STATIC_LIBS
+> -	select BR2_PACKAGE_EXPAT
+> -	select BR2_PACKAGE_FREETYPE
+> -	select BR2_PACKAGE_PCRE
+> +	select BR2_PACKAGE_GLM
+> +	select BR2_TOOLCHAIN_BUILDROOT_WCHAR if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
 
-diff --git a/package/busybox/0007-Remove-stime-function-calls.patch b/package/busybox/0007-Remove-stime-function-calls.patch
-new file mode 100644
-index 0000000000..58e1ced3de
---- /dev/null
-+++ b/package/busybox/0007-Remove-stime-function-calls.patch
-@@ -0,0 +1,97 @@
-+From 59102e499ac25c4311246d2b9417b3e5830cf851 Mon Sep 17 00:00:00 2001
-+From: Alistair Francis <alistair.francis@wdc.com>
-+Date: Tue, 19 Nov 2019 13:06:40 +0100
-+Subject: [PATCH] Remove stime() function calls
-+
-+stime() has been deprecated in glibc 2.31 and replaced with
-+clock_settime(). Let's replace the stime() function calls with
-+clock_settime() in preperation.
-+
-+function                                             old     new   delta
-+rdate_main                                           197     224     +27
-+clock_settime                                          -      27     +27
-+date_main                                            926     941     +15
-+stime                                                 37       -     -37
-+------------------------------------------------------------------------------
-+(add/remove: 2/2 grow/shrink: 2/0 up/down: 69/-37)             Total: 32 bytes
-+
-+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+
-+(cherry picked from commit d3539be8f27b8cbfdfee460fe08299158f08bcd9)
-+
-+Signed-off-by: Carlos Santos <unixmania@gmail.com>
-+---
-+ coreutils/date.c         | 6 +++++-
-+ libbb/missing_syscalls.c | 8 --------
-+ util-linux/rdate.c       | 8 ++++++--
-+ 3 files changed, 11 insertions(+), 11 deletions(-)
-+
-+diff --git a/coreutils/date.c b/coreutils/date.c
-+index e479c23a2..77a7d1368 100644
-+--- a/coreutils/date.c
-++++ b/coreutils/date.c
-+@@ -276,6 +276,9 @@ int date_main(int argc UNUSED_PARAM, char **argv)
-+ 		time(&ts.tv_sec);
-+ #endif
-+ 	}
-++#if !ENABLE_FEATURE_DATE_NANO
-++	ts.tv_nsec = 0;
-++#endif
-+ 	localtime_r(&ts.tv_sec, &tm_time);
-+ 
-+ 	/* If date string is given, update tm_time, and maybe set date */
-+@@ -298,9 +301,10 @@ int date_main(int argc UNUSED_PARAM, char **argv)
-+ 		if (date_str[0] != '@')
-+ 			tm_time.tm_isdst = -1;
-+ 		ts.tv_sec = validate_tm_time(date_str, &tm_time);
-++		ts.tv_nsec = 0;
-+ 
-+ 		/* if setting time, set it */
-+-		if ((opt & OPT_SET) && stime(&ts.tv_sec) < 0) {
-++		if ((opt & OPT_SET) && clock_settime(CLOCK_REALTIME, &ts) < 0) {
-+ 			bb_perror_msg("can't set date");
-+ 		}
-+ 	}
-+diff --git a/libbb/missing_syscalls.c b/libbb/missing_syscalls.c
-+index 87cf59b3d..dc40d9155 100644
-+--- a/libbb/missing_syscalls.c
-++++ b/libbb/missing_syscalls.c
-+@@ -15,14 +15,6 @@ pid_t getsid(pid_t pid)
-+ 	return syscall(__NR_getsid, pid);
-+ }
-+ 
-+-int stime(const time_t *t)
-+-{
-+-	struct timeval tv;
-+-	tv.tv_sec = *t;
-+-	tv.tv_usec = 0;
-+-	return settimeofday(&tv, NULL);
-+-}
-+-
-+ int sethostname(const char *name, size_t len)
-+ {
-+ 	return syscall(__NR_sethostname, name, len);
-+diff --git a/util-linux/rdate.c b/util-linux/rdate.c
-+index 70f829e7f..878375d78 100644
-+--- a/util-linux/rdate.c
-++++ b/util-linux/rdate.c
-+@@ -95,9 +95,13 @@ int rdate_main(int argc UNUSED_PARAM, char **argv)
-+ 	if (!(flags & 2)) { /* no -p (-s may be present) */
-+ 		if (time(NULL) == remote_time)
-+ 			bb_error_msg("current time matches remote time");
-+-		else
-+-			if (stime(&remote_time) < 0)
-++		else {
-++			struct timespec ts;
-++			ts.tv_sec = remote_time;
-++			ts.tv_nsec = 0;
-++			if (clock_settime(CLOCK_REALTIME, &ts) < 0)
-+ 				bb_perror_msg_and_die("can't set time of day");
-++		}
-+ 	}
-+ 
-+ 	if (flags != 1) /* not lone -s */
-+-- 
-+2.18.2
-+
+You must not select a toolchain feature; you can only depend on it.
+
+Furthermore, that does not account for external toolchains anyway.
+
+> +	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+>  	help
+>  	  Crazy Eddie's GUI System is a free library providing windowing
+>  	  and widgets for graphics APIs / engines where such
+> diff --git a/package/cegui/cegui.hash b/package/cegui/cegui.hash
+> new file mode 100644
+> index 0000000000..8295039037
+> --- /dev/null
+> +++ b/package/cegui/cegui.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed:
+> +sha256  7be289d2d8562e7d20bd155d087d6ccb0ba62f7e99cc25d20684b8edf2ba15cd  cegui-0-8-7.tar.gz
+> +sha256  cc869e2ece8ad039f6d7fd17259db4ea0ae0a502d02a1bb506c0168deb12e40d  COPYING
+> diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+> new file mode 100644
+> index 0000000000..ae17b362f4
+> --- /dev/null
+> +++ b/package/cegui/cegui.mk
+> @@ -0,0 +1,120 @@
+> +################################################################################
+> +#
+> +# cegui
+> +#
+> +################################################################################
+> +
+> +CEGUI_VERSION = 0-8-7
+> +CEGUI_SITE = $(call github,cegui,cegui,v$(CEGUI_VERSION))
+> +CEGUI_LICENSE = MIT
+> +CEGUI_LICENSE_FILES = COPYING
+> +CEGUI_INSTALL_STAGING = YES
+> +CEGUI_DEPENDENCIES = glm \
+> +		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
+> +		$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
+> +		$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
+> +		$(if $(BR2_PACKAGE_LIBGLEW),libglew)
+> +
+> +ifeq ($(BR2_ENABLE_LOCALE),)
+> +CEGUI_DEPENDENCIES += libiconv
+> +endif
+
+The more usual way is to add the dependency based on the pacjage being
+enabled, eg:
+    package/flac/flac.mk:FLAC_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+
+So include that like you did above for the other packages.
+
+> +ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
+> +CEGUI_DEPENDENCIES += libepoxy
+> +CEGUI_CONF_OTPS += -DCEGUI_USE_EPOXY=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_USE_EPOXY=OFF
+> +endif
+
+So in the end, these are official options?
+
+Regards,
+Yann E. MORIN.
+
+> +ifeq ($(BR2_PACKAGE_OGRE),y)
+> +CEGUI_DEPENDENCIES += ogre
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_RENDERER_OGRE=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_RENDERER_OGRE=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_EXPAT),y)
+> +CEGUI_DEPENDENCIES += expat
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_EXPAT=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_EXPAT=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_IRRLICHT),y)
+> +CEGUI_DEPENDENCIES += irrlicht
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_RENDERER_IRRLICHT=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_RENDERER_IRRLICHT=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SDL2)$(BR2_PACKAGE_SDL2_IMAGE),yy)
+> +CEGUI_DEPENDENCIES += sdl2 sdl2_image
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_IMAGECODEC_SDL2=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_IMAGECODEC_SDL2=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PCRE),y)
+> +CEGUI_DEPENDENCIES += pcre
+> +CEGUI_CONF_OTPS += -DCEGUI_HAS_PCRE_REGEX=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_HAS_PCRE_REGEX=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FREETYPE),y)
+> +CEGUI_DEPENDENCIES += freetype
+> +CEGUI_CONF_OTPS += -DCEGUI_HAS_FREETYPE=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_HAS_FREETYPE=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_MINIZIP),y)
+> +CEGUI_DEPENDENCIES += minizip
+> +CEGUI_CONF_OTPS += -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_XERCES),y)
+> +CEGUI_DEPENDENCIES += xerces
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_XERCES=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_XERCES=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBXML2),y)
+> +CEGUI_DEPENDENCIES += libxml2
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_LIBXML2=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_LIBXML2=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_RAPIDXML),y)
+> +CEGUI_DEPENDENCIES += rapidxml
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_RAPIDXML=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_RAPIDXML=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_TINYXML),y)
+> +CEGUI_DEPENDENCIES += tinyxml
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_TINYXML=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_TINYXML=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_TINYXML2),y)
+> +CEGUI_DEPENDENCIES += tinyxml2
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_TINYXML2=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_TINYXML2=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBFREEIMAGE),y)
+> +CEGUI_DEPENDENCIES += libfreeimage
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_IMAGECODEC_FREEIMAGE=ON
+> +else
+> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_IMAGECODEC_FREEIMAGE=OFF
+> +endif
+> +
+> +$(eval $(cmake-package))
+> diff --git a/package/cegui06/0001-stddef.h.patch b/package/cegui06/0001-stddef.h.patch
+> deleted file mode 100644
+> index cc16effc25..0000000000
+> --- a/package/cegui06/0001-stddef.h.patch
+> +++ /dev/null
+> @@ -1,26 +0,0 @@
+> -includes: ptrdiff_t is defined in stddef.h
+> -
+> -ptrdiff_t is defined in the stddef.h header, so this
+> -header must be included.
+> -
+> -Do the #include in a common header to avoid doing it
+> -all over the place.
+> -
+> -Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> -
+> ----
+> -Patch not sent upstream, it's a no-longer-maintained branch.
+> -To be noted, however, is that the current devel branch is
+> -still missing that include.
+> -
+> -diff -durN cegui06-0.6.2.orig/include/CEGUIBase.h cegui06-0.6.2/include/CEGUIBase.h
+> ---- cegui06-0.6.2.orig//include/CEGUIBase.h	2008-02-11 15:38:27.000000000 +0100
+> -+++ cegui06-0.6.2/include/CEGUIBase.h	2012-08-19 22:51:50.260385978 +0200
+> -@@ -34,6 +34,7 @@
+> - #define _CEGUIBase_h_
+> - 
+> - #include <cassert>
+> -+#include <stddef.h>
+> - 
+> - // bring in configuration options
+> - #include "CEGUIConfig.h"
+> diff --git a/package/cegui06/cegui06.hash b/package/cegui06/cegui06.hash
+> deleted file mode 100644
+> index f46bcee242..0000000000
+> --- a/package/cegui06/cegui06.hash
+> +++ /dev/null
+> @@ -1,3 +0,0 @@
+> -# Locally computed:
+> -sha256  eb77741cd9fcc927a876e8116b98691212e973d2264e2071406423f6ca3e305f  CEGUI-0.6.2b.tar.gz
+> -sha256  da1c10009579e3eb8d3b3abc65d538a2890f70ff7fd1f05b73a4f9e3fff5c56e  COPYING
+> diff --git a/package/cegui06/cegui06.mk b/package/cegui06/cegui06.mk
+> deleted file mode 100644
+> index d3da3ebc4c..0000000000
+> --- a/package/cegui06/cegui06.mk
+> +++ /dev/null
+> @@ -1,36 +0,0 @@
+> -################################################################################
+> -#
+> -# cegui06
+> -#
+> -################################################################################
+> -
+> -# Do not update the version, we need exactly that one for Spice.
+> -CEGUI06_VERSION_MAJOR = 0.6.2
+> -CEGUI06_VERSION = $(CEGUI06_VERSION_MAJOR)b
+> -CEGUI06_SOURCE = CEGUI-$(CEGUI06_VERSION).tar.gz
+> -CEGUI06_SITE = http://downloads.sourceforge.net/project/crayzedsgui/CEGUI%20Mk-2/$(CEGUI06_VERSION_MAJOR)
+> -CEGUI06_LICENSE = MIT
+> -CEGUI06_LICENSE_FILES = COPYING
+> -CEGUI06_INSTALL_STAGING = YES
+> -
+> -CEGUI06_DEPENDENCIES = \
+> -	expat \
+> -	freetype \
+> -	pcre
+> -
+> -CEGUI06_CONF_OPTS = \
+> -	--enable-expat \
+> -	--disable-external-tinyxml \
+> -	--disable-xerces-c \
+> -	--disable-libxml \
+> -	--disable-tinyxml \
+> -	--disable-opengl-renderer \
+> -	--disable-external-glew \
+> -	--disable-irrlicht-renderer \
+> -	--disable-directfb-renderer \
+> -	--disable-samples \
+> -	--disable-lua-module \
+> -	--disable-toluacegui \
+> -	--disable-external-toluapp
+> -
+> -$(eval $(autotools-package))
+> -- 
+> 2.25.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.18.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
