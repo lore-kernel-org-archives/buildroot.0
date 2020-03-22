@@ -1,100 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Mar 2020 22:42:32 +0100
-Subject: [Buildroot] [git commit] package/pigz: add host package support
-Message-ID: <20200322213014.4B33E86BF2@busybox.osuosl.org>
+Date: Sun, 22 Mar 2020 22:42:35 +0100
+Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
+ 19.4.1
+Message-ID: <20200322213014.53D3C86BF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77d9217083005465926788f15c1597320935dcdb
+commit: https://git.buildroot.net/buildroot/commit/?id=767c8d2b23efd94d36d5a2dd296c72c039575be4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in.host                     |  1 +
- package/pigz/Config.in                     |  1 +
- package/pigz/{Config.in => Config.in.host} |  9 ++-------
- package/pigz/pigz.mk                       | 10 ++++++++++
- 4 files changed, 14 insertions(+), 7 deletions(-)
+ package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 64a88f7630..eb8f63f689 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -52,6 +52,7 @@ menu "Host utilities"
- 	source "package/opkg-utils/Config.in.host"
- 	source "package/parted/Config.in.host"
- 	source "package/patchelf/Config.in.host"
-+	source "package/pigz/Config.in.host"
- 	source "package/pkgconf/Config.in.host"
- 	source "package/pru-software-support/Config.in.host"
- 	source "package/pwgen/Config.in.host"
-diff --git a/package/pigz/Config.in b/package/pigz/Config.in
-index af229060cf..a76146d8fc 100644
---- a/package/pigz/Config.in
-+++ b/package/pigz/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PIGZ
- 	bool "pigz"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_HOST_ZLIB
- 	help
- 	  pigz, which stands for parallel implementation of gzip, is a
- 	  fully functional replacement for gzip that exploits multiple
-diff --git a/package/pigz/Config.in b/package/pigz/Config.in.host
-similarity index 56%
-copy from package/pigz/Config.in
-copy to package/pigz/Config.in.host
-index af229060cf..9903cada7d 100644
---- a/package/pigz/Config.in
-+++ b/package/pigz/Config.in.host
-@@ -1,7 +1,5 @@
--config BR2_PACKAGE_PIGZ
--	bool "pigz"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_ZLIB
-+config BR2_PACKAGE_HOST_PIGZ
-+	bool "host pigz"
- 	help
- 	  pigz, which stands for parallel implementation of gzip, is a
- 	  fully functional replacement for gzip that exploits multiple
-@@ -9,6 +7,3 @@ config BR2_PACKAGE_PIGZ
- 	  data.
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index a23020673a..1e8baba6c7 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 60944d54a4992553f92d71ba9f8f4191d297407b564b0f24e9912b415689582e  intel-gmmlib-19.2.3.tar.gz
++sha256 bb874b41c499abb8f6253b1834e93a02ed9744de71f2503ee9cd4100af7c1860  intel-gmmlib-19.4.1.tar.gz
+ sha256 b61d639c5d84ec710ffcf5600ac92f8a4ace66670c1f9bd921f3bde671d36033  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 7a943ed141..517fc09131 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://www.zlib.net/pigz/
--
--comment "pigz needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/pigz/pigz.mk b/package/pigz/pigz.mk
-index b4f28c048e..23df0f5fcb 100644
---- a/package/pigz/pigz.mk
-+++ b/package/pigz/pigz.mk
-@@ -7,6 +7,7 @@
- PIGZ_VERSION = 2.4
- PIGZ_SITE = $(call github,madler,pigz,v$(PIGZ_VERSION))
- PIGZ_DEPENDENCIES = zlib
-+HOST_PIGZ_DEPENDENCIES = host-zlib
- PIGZ_LICENSE = Zlib
- PIGZ_LICENSE_FILES = README
- 
-@@ -14,8 +15,17 @@ define PIGZ_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
- endef
- 
-+define HOST_PIGZ_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
- define PIGZ_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/pigz $(TARGET_DIR)/usr/bin/pigz
- endef
- 
-+define HOST_PIGZ_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/pigz $(HOST_DIR)/bin/pigz
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+-INTEL_GMMLIB_VERSION = 19.2.3
++INTEL_GMMLIB_VERSION = 19.4.1
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
