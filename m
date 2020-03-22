@@ -1,49 +1,40 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 21 Mar 2020 20:57:03 -0300
-Subject: [Buildroot] [PATCH] linux: do not run depmod during the installation
-Message-ID: <20200321235703.10622-1-unixmania@gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sun, 22 Mar 2020 07:17:09 +0100
+Subject: [Buildroot] [PATCH] package/restclient-cpp: bump to version 0.5.2
+Message-ID: <20200322061710.14420-1-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
-
-The kernel "install" target runs depmod by means of a wrapper script
-(scripts/depmod.sh), so passing a dummy depmod (e.g. /dev/null) would
-cause warning messages like this:
-
-    DEPMOD  5.4.27
-    ./scripts/depmod.sh: 46: /dev/null: Permission denied
-    make[2]: *** [Makefile:1326: _modinst_post] Error 126
-
-We can avoid running the script by overriding the cmd_depmod variable,
-which contains the command line to run depmod.
-
-As a safety measure, setting DEPMOD to /bin/false makes the installation
-fail if overriding cmd_depmod does not work in a future kernel version.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
-CC: Yann E. MORIN <yann.morin.1998@free.fr>
----
- linux/linux.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/restclient-cpp/restclient-cpp.hash | 2 +-
+ package/restclient-cpp/restclient-cpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 2e3ea52053..383d1908d6 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -134,7 +134,8 @@ LINUX_MAKE_FLAGS = \
- 	ARCH=$(KERNEL_ARCH) \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
--	DEPMOD=$(HOST_DIR)/sbin/depmod
-+	DEPMOD=/bin/false \
-+	cmd_depmod=":"
+diff --git a/package/restclient-cpp/restclient-cpp.hash b/package/restclient-cpp/restclient-cpp.hash
+index 428ec51f5f..cb79c89c89 100644
+--- a/package/restclient-cpp/restclient-cpp.hash
++++ b/package/restclient-cpp/restclient-cpp.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256 6ae98c65333214d13d765d8fde04ec696f88ce349a419df0fbfc4564bc779df3 restclient-cpp-0.5.1.tar.gz
++sha256 d62ba618f9a938652fd53b483289e8662a99451839e59058c8beb286dfbc65ec restclient-cpp-0.5.2.tar.gz
+ sha256 1c2f79e825a39eb61d8919044776627f4d079ff38975410a3bde340154fc94a4 LICENSE
+diff --git a/package/restclient-cpp/restclient-cpp.mk b/package/restclient-cpp/restclient-cpp.mk
+index 9393333095..826be870b9 100644
+--- a/package/restclient-cpp/restclient-cpp.mk
++++ b/package/restclient-cpp/restclient-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_REPRODUCIBLE),y)
- LINUX_MAKE_ENV += \
+-RESTCLIENT_CPP_VERSION = 0.5.1
++RESTCLIENT_CPP_VERSION = 0.5.2
+ RESTCLIENT_CPP_SITE =  $(call github,mrtazz,restclient-cpp,$(RESTCLIENT_CPP_VERSION))
+ RESTCLIENT_CPP_LICENSE = MIT
+ RESTCLIENT_CPP_LICENSE_FILES = LICENSE
 -- 
-2.18.2
+2.17.1
