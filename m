@@ -1,62 +1,56 @@
-From: Laurent Hartanerot <laurent.hartanerot@gmail.com>
-Date: Sun, 22 Mar 2020 17:24:44 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/rcw : bump to LSDK-19.09
-In-Reply-To: <20200318071427.347-1-laurent.hartanerot@gmail.com>
-References: <20200318071427.347-1-laurent.hartanerot@gmail.com>
-Message-ID: <20200322162444.29206-1-laurent.hartanerot@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 22 Mar 2020 16:59:21 +0000
+Subject: [Buildroot] [Bug 12691] New: host-rust build fails
+Message-ID: <bug-12691-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Laurent Hartanerot <laurent.hartanerot@atos.net>
+https://bugs.busybox.net/show_bug.cgi?id=12691
 
-Upgrade python to python3 : "Only Python versions 3.0+ are supported"
+            Bug ID: 12691
+           Summary: host-rust build fails
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: eyalroyee at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
----
- package/rcw/rcw.hash | 2 +-
- package/rcw/rcw.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Unable to build host-rust (version 1.33.0).
+I'm trying to build host-rust on my Ubuntu 18.04 with buildroot on branch
+master (commit 35e845700fb15b4ab30678c073300b508db4eb95)
 
-diff --git a/package/rcw/rcw.hash b/package/rcw/rcw.hash
-index 7de1ec659a..76b6373942 100644
---- a/package/rcw/rcw.hash
-+++ b/package/rcw/rcw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 1421ada9fec10b12ff21cd9ad82f0a835b191cb2dde80f03547764574b1346c3 rcw-LSDK-18.12.tar.gz
-+sha256 b69a6a8b187ba794e0af716a509ced2bbac83da0f6e94b5c7331a34619db21b1 rcw-LSDK-19.09.tar.gz
- sha256 a531b3146425e592db17a51ff39c4801cb01fb4055ffdaada0572decc0655bcd LICENSE
-diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
-index dbfeae7b21..10e357ed69 100644
---- a/package/rcw/rcw.mk
-+++ b/package/rcw/rcw.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--RCW_VERSION = LSDK-18.12
-+RCW_VERSION = LSDK-19.09
- RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
- RCW_SITE_METHOD = git
- RCW_LICENSE = BSD-3-Clause
- RCW_LICENSE_FILES = LICENSE
- 
--HOST_RCW_DEPENDENCIES = host-python
-+HOST_RCW_DEPENDENCIES = $(BR2_PYTHON3_HOST_DEPENDENCY)
- 
- RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))
- 
-@@ -41,7 +41,7 @@ endef
- HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
- 
- define HOST_RCW_BUILD_CMDS
--	$(HOST_DIR)/bin/python $(@D)/rcw.py \
-+	python3 $(@D)/rcw.py \
- 		-i $(@D)/custom_board/rcw/$(RCW_PROJECT) \
- 		-I $(@D)/custom_board -o $(@D)/PBL.bin
- endef
+Steps to reproduce are:
+1) select host-rust
+2) make host-rust
+
+The error is the following:
+failed to parse TOML configuration 'config.toml': expected a table key, found a
+right bracket at line 15
+failed to run:
+/home/eyal/buildroot/output/build/host-rust-1.33.0/build/bootstrap/debug/bootstrap
+build
+
+It looks like the HOST_RUST_CONFIGURE_CMDS didn't generated a proper .toml
+file.
+The 15th line in the generated .toml file is of the following format:
+    echo '[target.$(RUSTC_TARGET_NAME)]';
+
+I guess that should be some sort of validation for that variable before
+evaluating it.
+
+Thanks,
+Eyal
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
