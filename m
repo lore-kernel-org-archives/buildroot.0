@@ -1,40 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Mar 2020 15:39:07 +0100
-Subject: [Buildroot] [PATCH] package/gcc: bump to version 9.3.0
-In-Reply-To: <20200315161846.5827-1-romain.naour@smile.fr>
-References: <20200315161846.5827-1-romain.naour@smile.fr>
-Message-ID: <20200322153907.43ddccd2@windsurf.home>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 22 Mar 2020 16:39:33 +0200
+Subject: [Buildroot] [PATCH] package/uacme: mention openssl crypto backend
+ in description
+Message-ID: <aef48f32740b8b832ec46d1a5616d000744637c6.1584887973.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 15 Mar 2020 17:18:46 +0100
-Romain Naour <romain.naour@smile.fr> wrote:
+uacme supports OpenSSL as crypto backend since version 1.0.8.
 
-> Remove upstream patch [1]
-> Rebase and rename 0002-xtensa-fix-PR-target-91880.patch
-> and 0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
-> 
-> Tested using gitlab with Qemu runtime testing series [2] [3].
-> 
-> [1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=2e1e7ad18e121663082525a872f0d6fb32db4535
-> [2] https://gitlab.com/kubu93/buildroot/pipelines/125828238
-> [3] http://patchwork.ozlabs.org/project/buildroot/list/?series=159088
-> 
-> See:
-> https://gcc.gnu.org/pipermail/gcc-announce/2020/000161.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ---
-> Ignore csky issues already fixed by [4] [5].
-> Ignore optee-os issue [6]
+Cc: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/uacme/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/uacme/Config.in b/package/uacme/Config.in
+index ac59764e1ace..128131bbafce 100644
+--- a/package/uacme/Config.in
++++ b/package/uacme/Config.in
+@@ -6,9 +6,9 @@ config BR2_PACKAGE_UACME
+ 	help
+ 	  uacme is a client for the ACMEv2 protocol described in
+ 	  RFC8555, written in plain C code with minimal dependencies
+-	  (libcurl and GnuTLS or mbedTLS). The ACMEv2 protocol allows
+-	  a Certificate Authority (https://letsencrypt.org is a
+-	  popular one) and an applicant to automate the process of
++	  (libcurl and either of GnuTLS, OpenSSL or mbedTLS). The ACMEv2
++	  protocol allows a Certificate Authority (https://letsencrypt.org
++	  is a popular one) and an applicant to automate the process of
+ 	  verification and certificate issuance.
+ 
+ 	  https://github.com/ndilieto/uacme
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
