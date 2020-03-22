@@ -1,63 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 22 Mar 2020 22:47:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/intel-mediasdk: enable
- compilation with x11 dri3
-In-Reply-To: <20200214154350.31588-1-lpdev@cordier.org>
-References: <20200214154350.31588-1-lpdev@cordier.org>
-Message-ID: <20200322224706.5106de39@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 22 Mar 2020 22:53:44 +0100
+Subject: [Buildroot] [PATCH 1/2]
+ package/gobject-introspection/g-ir-scanner: do not set default compiler
+ values
+In-Reply-To: <20200321214726.GN4290@scaer>
+References: <20200320222359.88689-1-aduskett@gmail.com>
+ <20200321214726.GN4290@scaer>
+Message-ID: <20200322215344.GF22325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Louis-Paul,
+Adam, All,
 
-On Fri, 14 Feb 2020 16:43:50 +0100
-Louis-Paul Cordier <lpdev@cordier.org> wrote:
-
-> Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
-> ---
->  package/intel-mediasdk/Config.in         | 1 +
->  package/intel-mediasdk/intel-mediasdk.mk | 4 ++--
->  2 files changed, 3 insertions(+), 2 deletions(-)
+On 2020-03-21 22:47 +0100, Yann E. MORIN spake thusly:
+> On 2020-03-20 15:23 -0700, aduskett at gmail.com spake thusly:
+> > From: Adam Duskett <Aduskett@gmail.com>
+> > Commit 8b0aeafce2a22913e6a44818227f6a39e3225157 set 7 new variables in
+> > g-ir-scanner.in:
+> > 
+> > export CPP="${CPP:-${HOST_DIR}/bin/@BASENAME_TARGET_CPP@}"
+> > export CC="${CC:-${HOST_DIR}/bin/@BASENAME_TARGET_CC@}"
+> > export CXX="${CXX:-${HOST_DIR}/bin/@BASENAME_TARGET_CXX@}"
+> > CPPFLAGS="${CPPFLAGS:- at TARGET_CPPFLAGS@}"
+> > CFLAGS="${CFLAGS:- at TARGET_CFLAGS@}"
+> > CXXFLAGS="${CXXFLAGS:- at TARGET_CXXFLAGS@}"
+> > LDFLAGS="${LDFLAGS:- at TARGET_LDFLAGS@}"
+> > 
+> > However, defaulting to CPP, CC, or CXX breaks some packages because they may
+> > hard code CC to the system CC.
+> > 
+> > One such package is libostree which has the line
+> > "INTROSPECTION_SCANNER_ENV = CC=gcc" in the Makefile.
 > 
-> diff --git a/package/intel-mediasdk/Config.in b/package/intel-mediasdk/Config.in
-> index 05293d7604..0bfaf1272b 100644
-> --- a/package/intel-mediasdk/Config.in
-> +++ b/package/intel-mediasdk/Config.in
-> @@ -9,6 +9,7 @@ config BR2_PACKAGE_INTEL_MEDIASDK
->  	depends on BR2_PACKAGE_XORG7  # intel-mediadriver
->  	select BR2_PACKAGE_INTEL_MEDIADRIVER
->  	select BR2_PACKAGE_LIBDRM_INTEL
-> +	select BR2_PACKAGE_XORGPROTO
->  	help
->  	  Intel(R) Media SDK provides an API to access
->  	  hardware-accelerated video decode, encode and filtering on
-> diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-> index 368e108308..b040729506 100644
-> --- a/package/intel-mediasdk/intel-mediasdk.mk
-> +++ b/package/intel-mediasdk/intel-mediasdk.mk
-> @@ -10,8 +10,8 @@ INTEL_MEDIASDK_LICENSE = MIT
->  INTEL_MEDIASDK_LICENSE_FILES = LICENSE
->  
->  INTEL_MEDIASDK_INSTALL_STAGING = YES
-> -INTEL_MEDIASDK_DEPENDENCIES = intel-mediadriver
-> +INTEL_MEDIASDK_DEPENDENCIES = intel-mediadriver xorgproto
->  
-> -INTEL_MEDIASDK_CONF_OPTS = -DMFX_INCLUDE="$(@D)/api/include"
-> +INTEL_MEDIASDK_CONF_OPTS = -DMFX_INCLUDE="$(@D)/api/include" -DENABLE_X11_DRI3=ON
+> But then, that's clearly a bug in libostree! They should not ever try to
+> call a hard-coded compiler.
+[--SNIP--]
 
-Why are you making xorgproto a mandatory dependency ? intel-mediasdk
-doesn't build without it ? If it does build and work without it, then
-this is an optional dependency, and should be treated as such.
+Mu alternate proposal was just merged, so I've marked this series as
+rejected. It anyway helped understand the actual problem, so it was
+definitely not in vain. Thanks! :-)
 
-Could you confirm this ?
+Regards,
+Yann E. MORIN.
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
