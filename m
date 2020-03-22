@@ -1,38 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 22 Mar 2020 16:39:33 +0200
-Subject: [Buildroot] [PATCH] package/uacme: mention openssl crypto backend
- in description
-Message-ID: <aef48f32740b8b832ec46d1a5616d000744637c6.1584887973.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 22 Mar 2020 15:42:13 +0100
+Subject: [Buildroot] [git commit] package/mesa3d: disable v3d support for
+ arm if neon is not supported
+Message-ID: <20200322143005.AB3708434E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uacme supports OpenSSL as crypto backend since version 1.0.8.
+commit: https://git.buildroot.net/buildroot/commit/?id=ff00c284c56e954592a6246d48cd5edadbd34043
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Nicola Di Lieto <nicola.dilieto@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+The v3d driver for arm uses neon instructions unconditionally, so
+depend on BR2_ARM_CPU_HAS_NEON.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/66c4df4ee84b73160dde5fe4437b5abdbd2b50d2
+
+  [1050/1079] Compiling C object 'src/gallium/drivers/v3d/99241e4@@v3d_neon at sta/v3d_tiling.c.o'.
+  {standard input}: Assembler messages:
+  {standard input}:417: Error: selected processor does not support `vldm r6,{q0,q1,q2,q3}' in ARM mode
+  {standard input}:418: Error: selected processor does not support `vst1.8 d0,[r4],r5' in ARM mode
+  {standard input}:419: Error: selected processor does not support `vst1.8 d1,[r4],r5' in ARM mode
+  {standard input}:420: Error: selected processor does not support `vst1.8 d2,[r4],r5' in ARM mode
+  {standard input}:421: Error: selected processor does not support `vst1.8 d3,[r4],r5' in ARM mode
+  {standard input}:422: Error: selected processor does not support `vst1.8 d4,[r4],r5' in ARM mode
+  {standard input}:423: Error: selected processor does not support `vst1.8 d5,[r4],r5' in ARM mode
+  {standard input}:424: Error: selected processor does not support `vst1.8 d6,[r4],r5' in ARM mode
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/uacme/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mesa3d/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/uacme/Config.in b/package/uacme/Config.in
-index ac59764e1ace..128131bbafce 100644
---- a/package/uacme/Config.in
-+++ b/package/uacme/Config.in
-@@ -6,9 +6,9 @@ config BR2_PACKAGE_UACME
- 	help
- 	  uacme is a client for the ACMEv2 protocol described in
- 	  RFC8555, written in plain C code with minimal dependencies
--	  (libcurl and GnuTLS or mbedTLS). The ACMEv2 protocol allows
--	  a Certificate Authority (https://letsencrypt.org is a
--	  popular one) and an applicant to automate the process of
-+	  (libcurl and either of GnuTLS, OpenSSL or mbedTLS). The ACMEv2
-+	  protocol allows a Certificate Authority (https://letsencrypt.org
-+	  is a popular one) and an applicant to automate the process of
- 	  verification and certificate issuance.
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 13e516e452..16d77f42c2 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -256,7 +256,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
  
- 	  https://github.com/ndilieto/uacme
--- 
-2.25.1
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
+ 	bool "Gallium v3d driver"
+-	depends on BR2_arm || BR2_aarch64
++	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+ 	select BR2_PACKAGE_LIBDRM_VC4
