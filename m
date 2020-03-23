@@ -1,139 +1,97 @@
-From: Michael Fischer <mf@go-sys.de>
-Date: Mon, 23 Mar 2020 15:41:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: bump version to 2.0.12
-Message-ID: <20200323144119.15975-1-mf@go-sys.de>
+From: Jared Bents <jared.bents@rockwellcollins.com>
+Date: Mon, 23 Mar 2020 10:00:09 -0500
+Subject: [Buildroot] [PATCH v1 1/1] package/python-filelock: add
+ python-filelock
+Message-ID: <20200323150009.37472-1-jared.bents@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-patch 0001: already applied upstream
-patch 0002: already applied upstream
-Adjust license hash as the copyright year was changed
+Update to add python-filelock. This package contains a single
+module, which implements a platform independent file lock in
+Python, which provides a simple way of inter-process
+communication.
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 ---
- ...DL_threadprio.c-fix-build-without-th.patch | 35 ----------------
- .../sdl2/0002-fix-busy-loop-in-dlopen.patch   | 41 -------------------
- package/sdl2/sdl2.hash                        |  6 +--
- package/sdl2/sdl2.mk                          |  2 +-
- 4 files changed, 4 insertions(+), 80 deletions(-)
- delete mode 100644 package/sdl2/0001-src-core-linux-SDL_threadprio.c-fix-build-without-th.patch
- delete mode 100644 package/sdl2/0002-fix-busy-loop-in-dlopen.patch
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-filelock/Config.in            |  6 ++++++
+ package/python-filelock/python-filelock.hash |  5 +++++
+ package/python-filelock/python-filelock.mk   | 14 ++++++++++++++
+ 5 files changed, 27 insertions(+)
+ create mode 100644 package/python-filelock/Config.in
+ create mode 100644 package/python-filelock/python-filelock.hash
+ create mode 100644 package/python-filelock/python-filelock.mk
 
-diff --git a/package/sdl2/0001-src-core-linux-SDL_threadprio.c-fix-build-without-th.patch b/package/sdl2/0001-src-core-linux-SDL_threadprio.c-fix-build-without-th.patch
-deleted file mode 100644
-index 1165edc661..0000000000
---- a/package/sdl2/0001-src-core-linux-SDL_threadprio.c-fix-build-without-th.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From cb51ec369186628e016a10ccf25b2b26d5d2ef85 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 10 Feb 2020 21:31:36 +0100
--Subject: [PATCH] src/core/linux/SDL_threadprio.c: fix build without threads
--
--Add an include on SDL_error.h to avoid the following build failure
--without threads:
--
--/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/ld: build/.libs/SDL_threadprio.o: in function `SDL_LinuxSetThreadPriority_REAL':
--SDL_threadprio.c:(.text+0x0): undefined reference to `SDL_Unsupported'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/7f7712c5bd47de4a3fcec1e0d0526fd5a3ecd532
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://bugzilla.libsdl.org/show_bug.cgi?id=4971]
-----
-- src/core/linux/SDL_threadprio.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/core/linux/SDL_threadprio.c b/src/core/linux/SDL_threadprio.c
--index 162b1a3f1..2cbc4cb48 100644
----- a/src/core/linux/SDL_threadprio.c
--+++ b/src/core/linux/SDL_threadprio.c
--@@ -22,6 +22,7 @@
-- 
-- #ifdef __LINUX__
-- 
--+#include "SDL_error.h"
-- #include "SDL_stdinc.h"
-- 
-- #if !SDL_THREADS_DISABLED
---- 
--2.24.1
--
-diff --git a/package/sdl2/0002-fix-busy-loop-in-dlopen.patch b/package/sdl2/0002-fix-busy-loop-in-dlopen.patch
-deleted file mode 100644
-index e335f95b7e..0000000000
---- a/package/sdl2/0002-fix-busy-loop-in-dlopen.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--
--# HG changeset patch
--# User Paul Cercueil <paul@crapouillou.net>
--# Date 1576820863 28800
--# Node ID 4f5bef55183c677d12a7da8f3392879ed50670a3
--# Parent  01f16d7f36cb9f4fa02016e57fbe915fdea71cc8
--kmsdrm: Fix busy-loop within libc's dlopen()
--For some obscure reason, the order in which the libdrm/libgbm libraries
--are loaded matters.
--
--Without this fix, the first call to check_modesetting() will work and
--load then unload all symbols properly, but the second call to this
--function will lock up as soon as dlopen() is called on libdrm.
--
--Swapping the order in which the libdrm and libgbm libraries are loaded
--is enough to fix (or work around?) this issue.
--
--Fixes #4891:
--https://bugzilla.libsdl.org/show_bug.cgi?id=4891
--
--Upstream: https://hg.libsdl.org/SDL/rev/4f5bef55183c
--
--Signed-off-by: Paul Cercueil <paul@crapouillou.net>
--[yann.morin.1998 at free.fr: add upstream commit URL]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
--
--diff -r 01f16d7f36cb -r 4f5bef55183c src/video/kmsdrm/SDL_kmsdrmdyn.c
----- a/src/video/kmsdrm/SDL_kmsdrmdyn.c	Thu Dec 19 21:45:44 2019 -0800
--+++ b/src/video/kmsdrm/SDL_kmsdrmdyn.c	Thu Dec 19 21:47:43 2019 -0800
--@@ -50,8 +50,8 @@
-- #endif
-- 
-- static kmsdrmdynlib kmsdrmlibs[] = {
---    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC},
---    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC_GBM}
--+    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC_GBM},
--+    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC}
-- };
-- 
-- static void *
--
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 9e968e0af5..6fdcfc0065 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.10.tar.gz.sig
--sha256 b4656c13a1f0d0023ae2f4a9cf08ec92fffb464e0f24238337784159b8b91d57  SDL2-2.0.10.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.12.tar.gz.sig
-+sha256 349268f695c02efbc9b9148a70b85e58cefbbf704abd3e91be654db7f1e2c863  SDL2-2.0.12.tar.gz
- # Locally calculated
--sha256 a7c8d0b3167c502921192585a582eb8477ad9862330f4d8b9e4a8bb4c1a9d29e  COPYING.txt
-+sha256 ae4df3759a726538607b84c00ab8f8a5567d9f38ad5397486eb9b5c5f626caef  COPYING.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index e39c51d4d9..501bb4699d 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8ea08739f7..0cd2502e5d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1230,6 +1230,7 @@ F:	package/zynq-boot-bin/
  
--SDL2_VERSION = 2.0.10
-+SDL2_VERSION = 2.0.12
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+ N:	Jared Bents <jared.bents@rockwellcollins.com>
+ F:	package/davici/
++F:	package/python-filelock/
+ 
+ N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+ F:	package/quota/
+diff --git a/package/Config.in b/package/Config.in
+index 2b903140df..48abe77f03 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -946,6 +946,7 @@ menu "External python modules"
+ 	source "package/python-enum34/Config.in"
+ 	source "package/python-esptool/Config.in"
+ 	source "package/python-falcon/Config.in"
++	source "package/python-filelock/Config.in"
+ 	source "package/python-fire/Config.in"
+ 	source "package/python-flask/Config.in"
+ 	source "package/python-flask-babel/Config.in"
+diff --git a/package/python-filelock/Config.in b/package/python-filelock/Config.in
+new file mode 100644
+index 0000000000..57ec039400
+--- /dev/null
++++ b/package/python-filelock/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_FILELOCK
++	bool "python-filelock"
++	help
++	  A platform independent file lock.
++
++	  https://github.com/benediktschmitt/py-filelock
+diff --git a/package/python-filelock/python-filelock.hash b/package/python-filelock/python-filelock.hash
+new file mode 100644
+index 0000000000..d50d2d561c
+--- /dev/null
++++ b/package/python-filelock/python-filelock.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/filelock/json
++md5  c1fe6d9a7433a7ca6ce4f36e273317d1  filelock-3.0.12.tar.gz
++sha256  18d82244ee114f543149c66a6e0c14e9c4f8a1044b5cdaadd0f82159d6a6ff59  filelock-3.0.12.tar.gz
++# Locally computed sha256 checksums
++sha256  88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd  LICENSE
+diff --git a/package/python-filelock/python-filelock.mk b/package/python-filelock/python-filelock.mk
+new file mode 100644
+index 0000000000..35b3374d29
+--- /dev/null
++++ b/package/python-filelock/python-filelock.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-filelock
++#
++################################################################################
++
++PYTHON_FILELOCK_VERSION = 3.0.12
++PYTHON_FILELOCK_SOURCE = filelock-$(PYTHON_FILELOCK_VERSION).tar.gz
++PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/14/ec/6ee2168387ce0154632f856d5cc5592328e9cf93127c5c9aeca92c8c16cb
++PYTHON_FILELOCK_SETUP_TYPE = setuptools
++PYTHON_FILELOCK_LICENSE = Public Domain
++PYTHON_FILELOCK_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
-2.25.1
+2.17.1
