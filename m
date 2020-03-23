@@ -1,41 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 23 Mar 2020 19:01:20 +0100
+Date: Mon, 23 Mar 2020 19:01:21 +0100
 Subject: [Buildroot] [PATCH v2,
- 1/2] package/mediastreamer: portaudio needs speexdsp
-Message-ID: <20200323180121.688647-1-fontaine.fabrice@gmail.com>
+ 2/2] package/mediastreamer: resample needs speex and speexdsp
+In-Reply-To: <20200323180121.688647-1-fontaine.fabrice@gmail.com>
+References: <20200323180121.688647-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200323180121.688647-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 8f5562ed7c227f29dbfa6897f54dccda0dfbf656 wrongly removed speexdsp
-dependency from portaudio
+resample needs speex and speexdsp as spotted by Thomas Petazzoni during
+review of https://patchwork.ozlabs.org/patch/1252391/
 
 Fixes:
- - http://autobuild.buildroot.org/results/e6adf151141ae56f5194165fd5b74b52164bfb17
+ - http://autobuild.buildroot.org/results/32d06517a5470f71d9b7dc99139f6c3071e7d77d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
 Changes v1 -> v2 (after review of Thomas Petazzoni):
- - portaudio only needs speexdsp, not speex
+ - resample needs speex and speexdsp
 
- package/mediastreamer/mediastreamer.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/mediastreamer/mediastreamer.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index dcec66dfcd..691eaddb52 100644
+index 691eaddb52..982eadf099 100644
 --- a/package/mediastreamer/mediastreamer.mk
 +++ b/package/mediastreamer/mediastreamer.mk
-@@ -80,7 +80,8 @@ else
- MEDIASTREAMER_CONF_OPTS += -DENABLE_OPUS=OFF
+@@ -113,6 +113,12 @@ else
+ MEDIASTREAMER_CONF_OPTS += -DENABLE_SPEEX_DSP=OFF
  endif
  
--ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
-+# portaudio backend needs speexdsp as well
-+ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEXDSP),yy)
- MEDIASTREAMER_CONF_OPTS += \
- 	-DENABLE_PORTAUDIO=ON \
- 	-DENABLE_SOUND=ON
++ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
++MEDIASTREAMER_CONF_OPTS += -DENABLE_RESAMPLE=ON
++else
++MEDIASTREAMER_CONF_OPTS += -DENABLE_RESAMPLE=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_FFMPEG_SWSCALE),y)
+ MEDIASTREAMER_CONF_OPTS += -DENABLE_FFMPEG=ON
+ MEDIASTREAMER_DEPENDENCIES += ffmpeg
 -- 
 2.25.1
