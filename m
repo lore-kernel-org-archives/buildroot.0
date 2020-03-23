@@ -1,67 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Mar 2020 22:01:35 +0100
-Subject: [Buildroot] [PATCH] package/libostree: bump to version 2020.3
-In-Reply-To: <20200323132809.252002-1-marcus.folkesson@gmail.com>
-References: <20200323132809.252002-1-marcus.folkesson@gmail.com>
-Message-ID: <20200323210135.GK22325@scaer>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 23 Mar 2020 22:05:37 +0100
+Subject: [Buildroot] iputils failures
+In-Reply-To: <5e78648f.1c69fb81.748d4.e737SMTPIN_ADDED_MISSING@mx.google.com>
+References: <5e78648f.1c69fb81.748d4.e737SMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <20200323210537.GB30642@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marcus, All,
+Hi,
 
-On 2020-03-23 14:28 +0100, Marcus Folkesson spake thusly:
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+>     arch     |             reason             |                                       url                                      
+> -------------+--------------------------------+---------------------------------------------------------------------------------
+> microblazeel |        iputils-20190709        | http://autobuild.buildroot.net/results/09d8c395e29e0e3f291698bb4982ab7d1a573c36
+I'm not sure, how to fix this error [1]:
 
-Applied to master, thanks.
+[12/26] Linking target ping.
+FAILED: ping
+/home/buildroot/autobuild/run/instance-0/output-1/host/bin/microblazeel-buildroot-linux-uclibc-gcc  -o ping 'ping at exe/ping.c.o' 'ping at exe/ping_common.c.o' 'ping at exe/ping6_common.c.o' -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -static -Wl,--start-group libcommon.a -lm /home/buildroot/autobuild/run/instance-0/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libidn2.a /home/buildroot/autobuild/run/instance-0/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libssl.a /home/buildroot/autobuild/run/instance-0/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a -lresolv -Wl,--end-group '-Wl,-rpath,$ORIGIN/' -Wl,-rpath-link,/home/buildroot/autobuild/run/instance-0/output-1/build/iputils-20190709/build/
+/home/buildroot/autobuild/run/instance-0/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/8.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-0/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libidn2.a(striconveh.o): in function `iconv_carefully_1':
+(.text+0x8c): undefined reference to `libiconv'
 
-I dropped the use of the VERSION_MAJOR variable, to just use VERSION;
-see my updated commit log for the explanations.
+=> libidn2 uses libiconv. There is check for it's dependency in package/libidn2/libidn2.mk
+LIBIDN2_DEPENDENCIES = \
+...
+$(if $(BR2_PACKAGE_LIBICONV),libiconv)
 
-Regards,
-Yann E. MORIN.
+but that does not help. Is it libiconv failure or iputils failure? And is it
+buildroot setup problem or upstream issue?
+In worst case disabling libidn2 for iputils for static build would fix this.
 
-> ---
->  package/libostree/libostree.hash | 2 +-
->  package/libostree/libostree.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-> index 374f278f42..2c55b2614c 100644
-> --- a/package/libostree/libostree.hash
-> +++ b/package/libostree/libostree.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 5482b8fc179c6d2861acb176a1c379e4d02f709bffa92e63f5360f65e57219ae  libostree-2019.6.tar.xz
-> +sha256 5877396ea092f5b6701c17bd20280746cad20f55a94c760dbeba0fa115818c05  libostree-2020.3.tar.xz
->  sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-> diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-> index aed97b70cc..997a99b51e 100644
-> --- a/package/libostree/libostree.mk
-> +++ b/package/libostree/libostree.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBOSTREE_VERSION_MAJOR = 2019.6
-> +LIBOSTREE_VERSION_MAJOR = 2020.3
->  LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR)
->  LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
->  LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION_MAJOR)
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Kind regards,
+Petr
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+[1] http://autobuild.buildroot.net/results/09d8c395e29e0e3f291698bb4982ab7d1a573c36/build-end.log
