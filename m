@@ -1,40 +1,108 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Mon, 23 Mar 2020 14:28:09 +0100
-Subject: [Buildroot] [PATCH] package/libostree: bump to version 2020.3
-Message-ID: <20200323132809.252002-1-marcus.folkesson@gmail.com>
+From: Charles Turner <cturner@igalia.com>
+Date: Mon, 23 Mar 2020 13:30:37 +0000
+Subject: [Buildroot] [PATCH v3 1/1] package/cog: add option for platform
+ DRM.
+In-Reply-To: <20200312194700.2836-1-cturner@igalia.com>
+References: <20200311103044.11422-1-cturner@igalia.com>
+ <20200312194700.2836-1-cturner@igalia.com>
+Message-ID: <e7770703e18e5ae5293c1c0f0ccba3c034f47bc9.camel@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Gentle ping...
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index 374f278f42..2c55b2614c 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 5482b8fc179c6d2861acb176a1c379e4d02f709bffa92e63f5360f65e57219ae  libostree-2019.6.tar.xz
-+sha256 5877396ea092f5b6701c17bd20280746cad20f55a94c760dbeba0fa115818c05  libostree-2020.3.tar.xz
- sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index aed97b70cc..997a99b51e 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOSTREE_VERSION_MAJOR = 2019.6
-+LIBOSTREE_VERSION_MAJOR = 2020.3
- LIBOSTREE_VERSION= $(LIBOSTREE_VERSION_MAJOR)
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION_MAJOR)
--- 
-2.25.1
+On Thu, 2020-03-12 at 19:47 +0000, Charlie Turner wrote:
+> Now that there's two platforms, the default-on behaviour for FDO has
+> been made configurable, so that you can choose DRM only platform for
+> FDO
+> platform. Don't be confused that in both cases the *wpebackend-fdo*
+> package is required. This is an unfortunate naming issue.
+> 
+> Signed-off-by: Charlie Turner <cturner@igalia.com>
+> ---
+>  package/cog/Config.in | 27 +++++++++++++++++++++++++++
+>  package/cog/cog.mk    | 18 +++++++++++++++---
+>  2 files changed, 42 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/cog/Config.in b/package/cog/Config.in
+> index b25991d4ae..664e055104 100644
+> --- a/package/cog/Config.in
+> +++ b/package/cog/Config.in
+> @@ -7,7 +7,11 @@ config BR2_PACKAGE_COG
+>  	depends on BR2_PACKAGE_WPEWEBKIT
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+>  	depends on BR2_USE_MMU # dbus
+> +	# For egl across all platforms, and gbm in the DRM platform.
+> +	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
+> +
+>  	select BR2_PACKAGE_DBUS
+> +
+>  	help
+>  	  Single "window" launcher for the WebKit WPE port, and
+>  	  helper library for implementing WPE launcher. It does
+> @@ -26,4 +30,27 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
+>  	  string is used, there is no default and the URI to open
+>  	  must be always specified in the command line.
+>  
+> +config BR2_PACKAGE_COG_PLATFORM_FDO
+> +	bool "FreeDesktop.org backend"
+> +
+> +	select BR2_PACKAGE_LIBXKBCOMMON
+> +
+> +	help
+> +	  Enable the FreeDesktop.org backend.
+> +
+> +config BR2_PACKAGE_COG_PLATFORM_DRM
+> +	bool "DRM backend"
+> +
+> +	depends on BR2_PACKAGE_HAS_UDEV # libinput
+> +
+> +	select BR2_PACKAGE_LIBDRM
+> +	select BR2_PACKAGE_LIBINPUT
+> +
+> +	help
+> +	  Enable the DRM platform backend. This allows Cog to run
+> +	  without a compositor like Weston.
+> +
+> +comment "DRM platform needs mesa3d w/ EGL driver and GBM"
+> +	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
+> +
+>  endif
+> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+> index d0e5b79c38..339187126a 100644
+> --- a/package/cog/cog.mk
+> +++ b/package/cog/cog.mk
+> @@ -8,13 +8,25 @@ COG_VERSION = 0.4.0
+>  COG_SITE = https://wpewebkit.org/releases
+>  COG_SOURCE = cog-$(COG_VERSION).tar.xz
+>  COG_INSTALL_STAGING = YES
+> -COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
+> +COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo wayland wayland-
+> protocols
+>  COG_LICENSE = MIT
+>  COG_LICENSE_FILES = COPYING
+>  COG_CONF_OPTS = \
+>  	-DCOG_BUILD_PROGRAMS=ON \
+> -	-DCOG_PLATFORM_FDO=ON \
+> -	-DCOG_PLATFORM_DRM=OFF \
+>  	-DCOG_HOME_URI='$(call
+> qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
+>  
+> +ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
+> +COG_CONF_OPTS += -DCOG_PLATFORM_FDO=ON
+> +COG_DEPENDENCIES += libxkbcommon
+> +else
+> +COG_CONF_OPTS += -DCOG_PLATFORM_FDO=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+> +COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
+> +COG_DEPENDENCIES += libdrm libinput
+> +else
+> +COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
+> +endif
+> +
+>  $(eval $(cmake-package))
