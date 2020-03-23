@@ -1,108 +1,139 @@
-From: Charles Turner <cturner@igalia.com>
-Date: Mon, 23 Mar 2020 13:30:37 +0000
-Subject: [Buildroot] [PATCH v3 1/1] package/cog: add option for platform
- DRM.
-In-Reply-To: <20200312194700.2836-1-cturner@igalia.com>
-References: <20200311103044.11422-1-cturner@igalia.com>
- <20200312194700.2836-1-cturner@igalia.com>
-Message-ID: <e7770703e18e5ae5293c1c0f0ccba3c034f47bc9.camel@igalia.com>
+From: Michael Fischer <mf@go-sys.de>
+Date: Mon, 23 Mar 2020 15:41:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: bump version to 2.0.12
+Message-ID: <20200323144119.15975-1-mf@go-sys.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gentle ping...
+patch 0001: already applied upstream
+patch 0002: already applied upstream
+Adjust license hash as the copyright year was changed
 
-On Thu, 2020-03-12 at 19:47 +0000, Charlie Turner wrote:
-> Now that there's two platforms, the default-on behaviour for FDO has
-> been made configurable, so that you can choose DRM only platform for
-> FDO
-> platform. Don't be confused that in both cases the *wpebackend-fdo*
-> package is required. This is an unfortunate naming issue.
-> 
-> Signed-off-by: Charlie Turner <cturner@igalia.com>
-> ---
->  package/cog/Config.in | 27 +++++++++++++++++++++++++++
->  package/cog/cog.mk    | 18 +++++++++++++++---
->  2 files changed, 42 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/cog/Config.in b/package/cog/Config.in
-> index b25991d4ae..664e055104 100644
-> --- a/package/cog/Config.in
-> +++ b/package/cog/Config.in
-> @@ -7,7 +7,11 @@ config BR2_PACKAGE_COG
->  	depends on BR2_PACKAGE_WPEWEBKIT
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
->  	depends on BR2_USE_MMU # dbus
-> +	# For egl across all platforms, and gbm in the DRM platform.
-> +	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
-> +
->  	select BR2_PACKAGE_DBUS
-> +
->  	help
->  	  Single "window" launcher for the WebKit WPE port, and
->  	  helper library for implementing WPE launcher. It does
-> @@ -26,4 +30,27 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
->  	  string is used, there is no default and the URI to open
->  	  must be always specified in the command line.
->  
-> +config BR2_PACKAGE_COG_PLATFORM_FDO
-> +	bool "FreeDesktop.org backend"
-> +
-> +	select BR2_PACKAGE_LIBXKBCOMMON
-> +
-> +	help
-> +	  Enable the FreeDesktop.org backend.
-> +
-> +config BR2_PACKAGE_COG_PLATFORM_DRM
-> +	bool "DRM backend"
-> +
-> +	depends on BR2_PACKAGE_HAS_UDEV # libinput
-> +
-> +	select BR2_PACKAGE_LIBDRM
-> +	select BR2_PACKAGE_LIBINPUT
-> +
-> +	help
-> +	  Enable the DRM platform backend. This allows Cog to run
-> +	  without a compositor like Weston.
-> +
-> +comment "DRM platform needs mesa3d w/ EGL driver and GBM"
-> +	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
-> +
->  endif
-> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-> index d0e5b79c38..339187126a 100644
-> --- a/package/cog/cog.mk
-> +++ b/package/cog/cog.mk
-> @@ -8,13 +8,25 @@ COG_VERSION = 0.4.0
->  COG_SITE = https://wpewebkit.org/releases
->  COG_SOURCE = cog-$(COG_VERSION).tar.xz
->  COG_INSTALL_STAGING = YES
-> -COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
-> +COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo wayland wayland-
-> protocols
->  COG_LICENSE = MIT
->  COG_LICENSE_FILES = COPYING
->  COG_CONF_OPTS = \
->  	-DCOG_BUILD_PROGRAMS=ON \
-> -	-DCOG_PLATFORM_FDO=ON \
-> -	-DCOG_PLATFORM_DRM=OFF \
->  	-DCOG_HOME_URI='$(call
-> qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
->  
-> +ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
-> +COG_CONF_OPTS += -DCOG_PLATFORM_FDO=ON
-> +COG_DEPENDENCIES += libxkbcommon
-> +else
-> +COG_CONF_OPTS += -DCOG_PLATFORM_FDO=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
-> +COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
-> +COG_DEPENDENCIES += libdrm libinput
-> +else
-> +COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
-> +endif
-> +
->  $(eval $(cmake-package))
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+---
+ ...DL_threadprio.c-fix-build-without-th.patch | 35 ----------------
+ .../sdl2/0002-fix-busy-loop-in-dlopen.patch   | 41 -------------------
+ package/sdl2/sdl2.hash                        |  6 +--
+ package/sdl2/sdl2.mk                          |  2 +-
+ 4 files changed, 4 insertions(+), 80 deletions(-)
+ delete mode 100644 package/sdl2/0001-src-core-linux-SDL_threadprio.c-fix-build-without-th.patch
+ delete mode 100644 package/sdl2/0002-fix-busy-loop-in-dlopen.patch
+
+diff --git a/package/sdl2/0001-src-core-linux-SDL_threadprio.c-fix-build-without-th.patch b/package/sdl2/0001-src-core-linux-SDL_threadprio.c-fix-build-without-th.patch
+deleted file mode 100644
+index 1165edc661..0000000000
+--- a/package/sdl2/0001-src-core-linux-SDL_threadprio.c-fix-build-without-th.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From cb51ec369186628e016a10ccf25b2b26d5d2ef85 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 10 Feb 2020 21:31:36 +0100
+-Subject: [PATCH] src/core/linux/SDL_threadprio.c: fix build without threads
+-
+-Add an include on SDL_error.h to avoid the following build failure
+-without threads:
+-
+-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/ld: build/.libs/SDL_threadprio.o: in function `SDL_LinuxSetThreadPriority_REAL':
+-SDL_threadprio.c:(.text+0x0): undefined reference to `SDL_Unsupported'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/7f7712c5bd47de4a3fcec1e0d0526fd5a3ecd532
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://bugzilla.libsdl.org/show_bug.cgi?id=4971]
+----
+- src/core/linux/SDL_threadprio.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/core/linux/SDL_threadprio.c b/src/core/linux/SDL_threadprio.c
+-index 162b1a3f1..2cbc4cb48 100644
+---- a/src/core/linux/SDL_threadprio.c
+-+++ b/src/core/linux/SDL_threadprio.c
+-@@ -22,6 +22,7 @@
+- 
+- #ifdef __LINUX__
+- 
+-+#include "SDL_error.h"
+- #include "SDL_stdinc.h"
+- 
+- #if !SDL_THREADS_DISABLED
+--- 
+-2.24.1
+-
+diff --git a/package/sdl2/0002-fix-busy-loop-in-dlopen.patch b/package/sdl2/0002-fix-busy-loop-in-dlopen.patch
+deleted file mode 100644
+index e335f95b7e..0000000000
+--- a/package/sdl2/0002-fix-busy-loop-in-dlopen.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-
+-# HG changeset patch
+-# User Paul Cercueil <paul@crapouillou.net>
+-# Date 1576820863 28800
+-# Node ID 4f5bef55183c677d12a7da8f3392879ed50670a3
+-# Parent  01f16d7f36cb9f4fa02016e57fbe915fdea71cc8
+-kmsdrm: Fix busy-loop within libc's dlopen()
+-For some obscure reason, the order in which the libdrm/libgbm libraries
+-are loaded matters.
+-
+-Without this fix, the first call to check_modesetting() will work and
+-load then unload all symbols properly, but the second call to this
+-function will lock up as soon as dlopen() is called on libdrm.
+-
+-Swapping the order in which the libdrm and libgbm libraries are loaded
+-is enough to fix (or work around?) this issue.
+-
+-Fixes #4891:
+-https://bugzilla.libsdl.org/show_bug.cgi?id=4891
+-
+-Upstream: https://hg.libsdl.org/SDL/rev/4f5bef55183c
+-
+-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+-[yann.morin.1998 at free.fr: add upstream commit URL]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-
+-diff -r 01f16d7f36cb -r 4f5bef55183c src/video/kmsdrm/SDL_kmsdrmdyn.c
+---- a/src/video/kmsdrm/SDL_kmsdrmdyn.c	Thu Dec 19 21:45:44 2019 -0800
+-+++ b/src/video/kmsdrm/SDL_kmsdrmdyn.c	Thu Dec 19 21:47:43 2019 -0800
+-@@ -50,8 +50,8 @@
+- #endif
+- 
+- static kmsdrmdynlib kmsdrmlibs[] = {
+--    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC},
+--    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC_GBM}
+-+    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC_GBM},
+-+    {NULL, SDL_VIDEO_DRIVER_KMSDRM_DYNAMIC}
+- };
+- 
+- static void *
+-
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index 9e968e0af5..6fdcfc0065 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.10.tar.gz.sig
+-sha256 b4656c13a1f0d0023ae2f4a9cf08ec92fffb464e0f24238337784159b8b91d57  SDL2-2.0.10.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.0.12.tar.gz.sig
++sha256 349268f695c02efbc9b9148a70b85e58cefbbf704abd3e91be654db7f1e2c863  SDL2-2.0.12.tar.gz
+ # Locally calculated
+-sha256 a7c8d0b3167c502921192585a582eb8477ad9862330f4d8b9e4a8bb4c1a9d29e  COPYING.txt
++sha256 ae4df3759a726538607b84c00ab8f8a5567d9f38ad5397486eb9b5c5f626caef  COPYING.txt
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index e39c51d4d9..501bb4699d 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_VERSION = 2.0.10
++SDL2_VERSION = 2.0.12
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
+-- 
+2.25.1
