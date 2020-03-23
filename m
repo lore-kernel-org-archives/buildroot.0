@@ -1,42 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 23 Mar 2020 18:50:27 +0000
-Subject: [Buildroot] [Bug 12686] recipe for target 'install_dev' failed
- (libcrypto.so: file format not recognized)
-In-Reply-To: <bug-12686-163@https.bugs.busybox.net/>
-References: <bug-12686-163@https.bugs.busybox.net/>
-Message-ID: <bug-12686-163-9dd76fMIbu@https.bugs.busybox.net/>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 23 Mar 2020 20:42:37 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libtirpc: fix build with gcc 10
+In-Reply-To: <20200305090322.5b1e5fcc@windsurf>
+References: <20200228173052.5128-1-petr.vorel@gmail.com>
+ <20200305043708.GA2841817@x230> <20200305090322.5b1e5fcc@windsurf>
+Message-ID: <20200323194237.GA30642@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12686
+Hi Thomas,
 
---- Comment #6 from Peter Seiderer <ps.report@gmx.net> ---
-Two last (from my side) options/suggestions:
+> You can search the autobuilders for successful build results, filtering
+> per config options. See http://autobuild.buildroot.net/search.php.
 
-- maybe a parallel build issue, try to re-build libopenssl with BR2_JLEVEL=1
-set in the .config file
+> For example:
 
-- check your environment variables, your log excerpt shows something
-with
+>   http://autobuild.buildroot.net/index.php?status=OK&symbols%5BBR2_PACKAGE_LIBTIRPC%5D=y
 
-    Makefile:358: recipe for target 'install_dev' failed
+> will search all successful builds that had BR2_PACKAGE_LIBTIRPC enabled.
 
-and 
+Thanks! Not sure if it's just a slow net on my side, but search takes ages.
+Not sure whether you still maintain this web service, but adding index on column
+which stores symbols might help (suppose it uses database).
 
-    buildrootpath/host/bin/arm-buildroot-linux-gnueabihf-ar:
-/buildrootpath/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libcrypto.so:
-file format not recognized
-
-In my Makefile (build/libopenssl-1.1.1d/Makefile) the target install_dev
-is form line 310 to 355 and contains install/cp/$(RANLIB)/chmod/mv commands for
-.new files....no 'ar' call...and RANLIB is specified as
-
-   
-RANLIB=$(CROSS_COMPILE)<my_working_dir>/host/bin/arm-buildroot-linux-gnueabihf-ranlib
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Kind regards,
+Petr
