@@ -1,85 +1,54 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 23 Mar 2020 18:42:04 +0100
-Subject: [Buildroot] Error building Python with musl in 2020.02
-In-Reply-To: <1584956001741.25630@citrix.com>
-References: <1584717125169.78577@citrix.com> <20200320223939.6d9972dc@gmx.net>
- <1584956001741.25630@citrix.com>
-Message-ID: <20200323184204.4aab32ad@gmx.net>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon, 23 Mar 2020 10:58:12 -0700
+Subject: [Buildroot] [PATCH v2 1/2] package/vala: install wrapper to vapigen
+Message-ID: <20200323175813.3903868-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Simon,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On Mon, 23 Mar 2020 09:33:21 +0000, Simon Rowe <Simon.Rowe@citrix.com> wrote:
+when compiling gobject-introspection .gir files, some packages use vapigen to
+generate a vala-api compatible .gir file. These packages tend to call vapigen
+directly instead of vala or valac.
 
-> [Apologies for the top posting, stuck with web-based email]
->
-> python3, defconfig attached. This config has been working with 2019.02, I loaded and re-saved it
+Without the wrapper, building the .gir files fail. In the case of for example,
+gupnp-dlna throws the following error:
+"error: Package `Gst-1.0' not found in specified Vala API directories or
+GObject-Introspection GIR directories."
 
-Given defconfig still compiles fine here....
+Installing the vala wrapper to vapigen fixes the above issue.
 
-- ./build/python3-3.8.2/Modules/posixmodule.c:
-  The usage of copy_file_range() is protected by HAVE_COPY_FILE_RANGE
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v1 -> v2:
+  - Add this patch to the series.
 
-- HAVE_COPY_FILE_RANGE is defined in pyconfig.h:
-	$ grep HAVE_COPY_FILE_RANGE build/python3-3.8.2/pyconfig.h
-#define HAVE_COPY_FILE_RANGE 1
+ package/vala/vala.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-- the buildroot compiled musl libc proviedes copy_file_range:
-
-	$ nm -A host/x86_64-buildroot-linux-musl/sysroot/lib/libc.so | grep copy_file_range
-host/x86_64-buildroot-linux-musl/sysroot/lib/libc.so:000000000001f4bd T copy_file_range
-
-- the header file provides copy_file_range() (protected by _GNU_SOURCE)
-
-	$ grep copy_file_range host/x86_64-buildroot-linux-musl/sysroot/usr/include/unistd.h
-ssize_t copy_file_range(int, off_t *, int, off_t *, size_t, unsigned);
-
-Please try a plain defconfig (without EXTERNALs), make sure no additional patches/config files
-are used.....otherwise out of ideas...
-
-Regards,
-Peter
-
->
-> Simon
->
-> ________________________________________
-> From: Peter Seiderer <ps.report@gmx.net>
-> Sent: 20 March 2020 21:39
-> To: Simon Rowe
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] Error building Python with musl in 2020.02
->
-> Hello Simon,
->
-> On Fri, 20 Mar 2020 15:12:07 +0000, Simon Rowe <Simon.Rowe@citrix.com> wrote:
->
-> > I'm getting the following error when trying out 2020.02 with the latest musl-based toolchain
-> >
-> >
-> > /build/host/bin/x86_64-buildroot-linux-musl-gcc -Wno-unused-result -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -std=c99 -Wextra -Wno-unused-result -Wno-unused-parameter -Wno-missing-field-initializers -Werror=implicit-function-declaration  -I./Include/internal  -I. -I./Include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -fPIC -DPy_BUILD_CORE_BUILTIN  -c ./Modules/xxsubtype.c -o Modules/xxsubtype.o
-> > ./Modules/posixmodule.c: In function 'os_copy_file_range_impl':
-> > ./Modules/posixmodule.c:9704:15: error: implicit declaration of function 'copy_file_range'; did you mean 'sync_file_range'? [-Werror=implicit-function-declaration]
-> >  9704 |         ret = copy_file_range(src, p_offset_src, dst, p_offset_dst, count, flags);
-> >       |               ^~~~~~~~~~~~~~~
-> >       |               sync_file_range
-> > cc1: some warnings being treated as errors
-> > Makefile:1938: recipe for target 'Modules/posixmodule.o' failed
-> >
-> >
-> > Has anyone else seen this?
->
-> Python or python3? Could you provide a .config or defconfig file
-> for the failure?
->
-> Regards,
-> Peter
->
-> >
-> >
-> > Simon
->
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index b8a69f8c5e..d000393d71 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -17,13 +17,15 @@ HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
+ HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
+ HOST_VALA_CONF_OPTS += --disable-valadoc
+ 
+-# We wrap vala & valac to point to the proper gir and vapi data dirs
++# We wrap vala, valac and vapigen to point to the proper gir and vapi data dirs
+ # Otherwise we'll get host directory data which isn't enough
+ define HOST_VALA_INSTALL_WRAPPER
+ 	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
+ 		$(HOST_DIR)/bin/vala
+ 	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
+ 		$(HOST_DIR)/bin/valac
++	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
++		$(HOST_DIR)/bin/vapigen
+ 	$(SED) 's, at VALA_VERSION@,$(VALA_VERSION_MAJOR),' \
+ 		$(HOST_DIR)/bin/vala \
+ 		$(HOST_DIR)/bin/valac
+-- 
+2.25.1
