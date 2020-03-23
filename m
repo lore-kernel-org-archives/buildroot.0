@@ -1,59 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 23 Mar 2020 08:48:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tslib: fix build with headers < 4.16
-Message-ID: <20200323074828.44084-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 23 Mar 2020 09:32:39 +0000
+Subject: [Buildroot] [Bug 12686] recipe for target 'install_dev' failed
+ (libcrypto.so: file format not recognized)
+In-Reply-To: <bug-12686-163@https.bugs.busybox.net/>
+References: <bug-12686-163@https.bugs.busybox.net/>
+Message-ID: <bug-12686-163-IvqM1f2sc9@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit fedaa28079489b308f77d80a0cac8698d776df23 fixed build with
-headers >= 4.16 but as a side effect, build with headers < 4.16 is now
-failing so add an upstream patch
+https://bugs.busybox.net/show_bug.cgi?id=12686
 
-Fixes:
- - http://autobuild.buildroot.org/results/594cd1a0d9e6286eca62b575fd1ba2d3a5e01234
+--- Comment #5 from Juan <jrmcorreo-linux@yahoo.es> ---
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-with-input_event_sec-for-old-kernel.patch | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/tslib/0002-Fix-build-error-with-input_event_sec-for-old-kernel.patch
+My build system is old but compliant with requirements:
 
-diff --git a/package/tslib/0002-Fix-build-error-with-input_event_sec-for-old-kernel.patch b/package/tslib/0002-Fix-build-error-with-input_event_sec-for-old-kernel.patch
-new file mode 100644
-index 0000000000..5dca3a009c
---- /dev/null
-+++ b/package/tslib/0002-Fix-build-error-with-input_event_sec-for-old-kernel.patch
-@@ -0,0 +1,28 @@
-+From 050bf24c16e95f63a76e13156346a072035d45b4 Mon Sep 17 00:00:00 2001
-+From: Evan Harvey <evanwork1234@gmail.com>
-+Date: Thu, 19 Mar 2020 01:32:03 -0700
-+Subject: [PATCH] Fix build error with input_event_sec for old kernel
-+
-+[Retrieved from:
-+https://github.com/libts/tslib/commit/050bf24c16e95f63a76e13156346a072035d45b4]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ tools/ts_uinput.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/tools/ts_uinput.c b/tools/ts_uinput.c
-+index 1832a07..9c40bb3 100644
-+--- a/tools/ts_uinput.c
-++++ b/tools/ts_uinput.c
-+@@ -51,6 +51,11 @@
-+ #include <linux/fb.h>
-+ #endif
-+ 
-++#ifndef input_event_sec
-++#define input_event_sec time.tv_sec
-++#define input_event_usec time.tv_usec
-++#endif
-++
-+ #define RESET   "\033[0m"
-+ #define RED     "\033[31m"
-+ #define GREEN   "\033[32m"
+- gcc/gcc++ 4.9.2-6.fc21
+- make 4.0-3.fc21
+
+except perl version (5.18.4-310.fc21), but 2019.02 compiles well in my system
+and perl requirements are the same... and this error does not appear to be
+related with perl.
+
+
+Best Regards
+
 -- 
-2.25.1
+You are receiving this mail because:
+You are on the CC list for the bug.
