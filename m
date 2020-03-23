@@ -1,58 +1,41 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 23 Mar 2020 10:58:13 -0700
-Subject: [Buildroot] [PATCH v2 2/2] package/gupnp-dlna: add optional
- dependency for gobject-introspection
-In-Reply-To: <20200323175813.3903868-1-aduskett@gmail.com>
-References: <20200323175813.3903868-1-aduskett@gmail.com>
-Message-ID: <20200323175813.3903868-2-aduskett@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 23 Mar 2020 19:01:20 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/2] package/mediastreamer: portaudio needs speexdsp
+Message-ID: <20200323180121.688647-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Commit 8f5562ed7c227f29dbfa6897f54dccda0dfbf656 wrongly removed speexdsp
+dependency from portaudio
 
-If gobject-introspection is selected, explicitly set --enable-introspection in
-the configure options and add a dependency for both gobject-introspection and
-host-vala.
+Fixes:
+ - http://autobuild.buildroot.org/results/e6adf151141ae56f5194165fd5b74b52164bfb17
 
-Host-vala is necessary because the introspection includes vala bindings files
-with no way to disable them.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
-  - Depend on gst plugins (Fabrice Fontaine)
-  - Add host-vala to the dependencies.
-  - Move the goi check inside of the gst1_plugins_base check.
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - portaudio only needs speexdsp, not speex
 
- package/gupnp-dlna/gupnp-dlna.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/mediastreamer/mediastreamer.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/gupnp-dlna/gupnp-dlna.mk b/package/gupnp-dlna/gupnp-dlna.mk
-index 85d30b7cd2..4eecc0754e 100644
---- a/package/gupnp-dlna/gupnp-dlna.mk
-+++ b/package/gupnp-dlna/gupnp-dlna.mk
-@@ -16,12 +16,18 @@ GUPNP_DLNA_INSTALL_STAGING = YES
- GUPNP_DLNA_DEPENDENCIES = host-pkgconf libglib2 libxml2
- 
- GUPNP_DLNA_CONF_OPTS = \
--	--disable-introspection \
- 	--disable-legacy-gstreamer-metadata-backend
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
- GUPNP_DLNA_CONF_OPTS += --enable-gstreamer-metadata-backend
- GUPNP_DLNA_DEPENDENCIES += gstreamer1 gst1-plugins-base
-+# vala bindings are created with the .gir files.
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+GUPNP_DLNA_CONF_OPTS += --enable-introspection
-+GUPNP_DLNA_DEPENDENCIES += gobject-introspection host-vala
-+else
-+GUPNP_DLNA_CONF_OPTS += --disable-introspection
-+endif
- else
- GUPNP_DLNA_CONF_OPTS += --disable-gstreamer-metadata-backend
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index dcec66dfcd..691eaddb52 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -80,7 +80,8 @@ else
+ MEDIASTREAMER_CONF_OPTS += -DENABLE_OPUS=OFF
  endif
+ 
+-ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
++# portaudio backend needs speexdsp as well
++ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEXDSP),yy)
+ MEDIASTREAMER_CONF_OPTS += \
+ 	-DENABLE_PORTAUDIO=ON \
+ 	-DENABLE_SOUND=ON
 -- 
 2.25.1
