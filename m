@@ -1,61 +1,35 @@
-From: Simon Rowe <Simon.Rowe@citrix.com>
-Date: Mon, 23 Mar 2020 09:33:21 +0000
-Subject: [Buildroot] Error building Python with musl in 2020.02
-In-Reply-To: <20200320223939.6d9972dc@gmx.net>
-References: <1584717125169.78577@citrix.com>, <20200320223939.6d9972dc@gmx.net>
-Message-ID: <1584956001741.25630@citrix.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 23 Mar 2020 11:49:02 +0100
+Subject: [Buildroot] [PATCH 1/8] package/python-psutil: add host variant
+Message-ID: <20200323104909.16765-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[Apologies for the top posting, stuck with web-based email]
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-python3, defconfig attached. This config has been working with 2019.02, I loaded and re-saved it
+host-python-psutil for host-python3 is needed for mongodb >= 4.1.8
 
-Simon
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ package/python-psutil/python-psutil.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-________________________________________
-From: Peter Seiderer <ps.report@gmx.net>
-Sent: 20 March 2020 21:39
-To: Simon Rowe
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] Error building Python with musl in 2020.02
-
-Hello Simon,
-
-On Fri, 20 Mar 2020 15:12:07 +0000, Simon Rowe <Simon.Rowe@citrix.com> wrote:
-
-> I'm getting the following error when trying out 2020.02 with the latest musl-based toolchain
->
->
-> /build/host/bin/x86_64-buildroot-linux-musl-gcc -Wno-unused-result -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -std=c99 -Wextra -Wno-unused-result -Wno-unused-parameter -Wno-missing-field-initializers -Werror=implicit-function-declaration  -I./Include/internal  -I. -I./Include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -fPIC -DPy_BUILD_CORE_BUILTIN  -c ./Modules/xxsubtype.c -o Modules/xxsubtype.o
-> ./Modules/posixmodule.c: In function 'os_copy_file_range_impl':
-> ./Modules/posixmodule.c:9704:15: error: implicit declaration of function 'copy_file_range'; did you mean 'sync_file_range'? [-Werror=implicit-function-declaration]
->  9704 |         ret = copy_file_range(src, p_offset_src, dst, p_offset_dst, count, flags);
->       |               ^~~~~~~~~~~~~~~
->       |               sync_file_range
-> cc1: some warnings being treated as errors
-> Makefile:1938: recipe for target 'Modules/posixmodule.o' failed
->
->
-> Has anyone else seen this?
-
-Python or python3? Could you provide a .config or defconfig file
-for the failure?
-
-Regards,
-Peter
-
->
->
-> Simon
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: defconfig
-Type: application/octet-stream
-Size: 122583 bytes
-Desc: defconfig
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200323/149ed867/attachment-0001.obj>
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 62a94f3c41..cfb015cfe6 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -11,4 +11,8 @@ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+ 
++# Needed to build mongodb
++HOST_PYTHON_PSUTIL_NEEDS_HOST_PYTHON = python3
++
+ $(eval $(python-package))
++$(eval $(host-python-package))
+-- 
+2.17.0
