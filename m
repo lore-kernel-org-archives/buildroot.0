@@ -1,35 +1,42 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 23 Mar 2020 19:24:43 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libtirpc: fix build when
- missing <bits/endian.h>
-In-Reply-To: <20200305043947.GA2842054@x230>
-References: <20200228173052.5128-1-petr.vorel@gmail.com>
- <20200228173052.5128-2-petr.vorel@gmail.com>
- <20200305043947.GA2842054@x230>
-Message-ID: <20200323182443.GA3832536@x230>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 23 Mar 2020 18:50:27 +0000
+Subject: [Buildroot] [Bug 12686] recipe for target 'install_dev' failed
+ (libcrypto.so: file format not recognized)
+In-Reply-To: <bug-12686-163@https.bugs.busybox.net/>
+References: <bug-12686-163@https.bugs.busybox.net/>
+Message-ID: <bug-12686-163-9dd76fMIbu@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=12686
 
-> > This issue seems to be happening only on the next branch. Why? Anything
-> > special in next compared to master?
-Now, the error got propagated to the master, it'll fix failures on riscv64 and
-arm:
+--- Comment #6 from Peter Seiderer <ps.report@gmx.net> ---
+Two last (from my side) options/suggestions:
 
-http://autobuild.buildroot.net/results/4f423c95e290ec99fec263a839e3336362e7003c
-http://autobuild.buildroot.net/results/04fdf097b9aeda2e831c9138110b527e1e6ee5ea
-http://autobuild.buildroot.net/results/531156fd470eeb287e1761c5f0c17c68fe1e7888
-http://autobuild.buildroot.net/results/678cd9b11160e3995e61afc8579b579702429ef5
-http://autobuild.buildroot.net/results/940e4212a7d029e6495af3d5cacc8e3bbc9e78ff
+- maybe a parallel build issue, try to re-build libopenssl with BR2_JLEVEL=1
+set in the .config file
 
-You can merge it with previous one (gcc-10 fix [1]), or I can sent v2 with just
-this patch (then I'd rename patch number from 6 to 5).
+- check your environment variables, your log excerpt shows something
+with
 
-Kind regards,
-Petr
+    Makefile:358: recipe for target 'install_dev' failed
 
-[1] https://patchwork.ozlabs.org/patch/1246746/
+and 
+
+    buildrootpath/host/bin/arm-buildroot-linux-gnueabihf-ar:
+/buildrootpath/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libcrypto.so:
+file format not recognized
+
+In my Makefile (build/libopenssl-1.1.1d/Makefile) the target install_dev
+is form line 310 to 355 and contains install/cp/$(RANLIB)/chmod/mv commands for
+.new files....no 'ar' call...and RANLIB is specified as
+
+   
+RANLIB=$(CROSS_COMPILE)<my_working_dir>/host/bin/arm-buildroot-linux-gnueabihf-ranlib
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
