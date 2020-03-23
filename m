@@ -1,10 +1,10 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 23 Mar 2020 11:49:06 +0100
-Subject: [Buildroot] [PATCH 5/8] package/python3-requests: add special host
+Date: Mon, 23 Mar 2020 11:49:07 +0100
+Subject: [Buildroot] [PATCH 6/8] package/python3-pyyaml: add special host
  variant
 In-Reply-To: <20200323104909.16765-1-yegorslists@googlemail.com>
 References: <20200323104909.16765-1-yegorslists@googlemail.com>
-Message-ID: <20200323104909.16765-5-yegorslists@googlemail.com>
+Message-ID: <20200323104909.16765-6-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,56 +15,46 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Needed to build mongodb.
 
-Also convert python-requests to host package.
-
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-requests/python-requests.mk     |  1 +
- package/python3-requests/python3-requests.hash |  1 +
- package/python3-requests/python3-requests.mk   | 18 ++++++++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 120000 package/python3-requests/python3-requests.hash
- create mode 100644 package/python3-requests/python3-requests.mk
+ package/python3-pyyaml/python3-pyyaml.hash |  1 +
+ package/python3-pyyaml/python3-pyyaml.mk   | 20 ++++++++++++++++++++
+ 2 files changed, 21 insertions(+)
+ create mode 120000 package/python3-pyyaml/python3-pyyaml.hash
+ create mode 100644 package/python3-pyyaml/python3-pyyaml.mk
 
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index e64db94523..8c012145f3 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
-@@ -12,3 +12,4 @@ PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
-+$(eval $(host-python-package))
-diff --git a/package/python3-requests/python3-requests.hash b/package/python3-requests/python3-requests.hash
+diff --git a/package/python3-pyyaml/python3-pyyaml.hash b/package/python3-pyyaml/python3-pyyaml.hash
 new file mode 120000
-index 0000000000..19e182d4a6
+index 0000000000..afa4932ecb
 --- /dev/null
-+++ b/package/python3-requests/python3-requests.hash
++++ b/package/python3-pyyaml/python3-pyyaml.hash
 @@ -0,0 +1 @@
-+../python-requests/python-requests.hash
++../python-pyyaml/python-pyyaml.hash
 \ No newline at end of file
-diff --git a/package/python3-requests/python3-requests.mk b/package/python3-requests/python3-requests.mk
+diff --git a/package/python3-pyyaml/python3-pyyaml.mk b/package/python3-pyyaml/python3-pyyaml.mk
 new file mode 100644
-index 0000000000..b75b388499
+index 0000000000..3026135fca
 --- /dev/null
-+++ b/package/python3-requests/python3-requests.mk
-@@ -0,0 +1,18 @@
++++ b/package/python3-pyyaml/python3-pyyaml.mk
+@@ -0,0 +1,20 @@
 +################################################################################
 +#
-+# python3-requests
++# python3-pyyaml
 +#
 +################################################################################
 +
 +# Please keep in sync with
-+# package/python-requests/python-requests.mk
-+PYTHON3_REQUESTS_VERSION = 2.22.0
-+PYTHON3_REQUESTS_SOURCE = requests-$(PYTHON3_REQUESTS_VERSION).tar.gz
-+PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/01/62/ddcf76d1d19885e8579acb1b1df26a852b03472c0e46d2b959a714c90608
-+PYTHON3_REQUESTS_SETUP_TYPE = setuptools
-+PYTHON3_REQUESTS_LICENSE = Apache-2.0
-+PYTHON3_REQUESTS_LICENSE_FILES = LICENSE
-+HOST_PYTHON3_REQUESTS_DL_SUBDIR = python-requests
-+HOST_PYTHON3_REQUESTS_NEEDS_HOST_PYTHON = python3
++# package/python-pyyaml/python-pyyaml.mk
++PYTHON3_PYYAML_VERSION = 5.3
++PYTHON3_PYYAML_SOURCE = PyYAML-$(PYTHON3_PYYAML_VERSION).tar.gz
++PYTHON3_PYYAML_SITE = https://files.pythonhosted.org/packages/3d/d9/ea9816aea31beeadccd03f1f8b625ecf8f645bd66744484d162d84803ce5
++PYTHON3_PYYAML_SETUP_TYPE = distutils
++PYTHON3_PYYAML_LICENSE = MIT
++PYTHON3_PYYAML_LICENSE_FILES = LICENSE
++PYTHON3_PYYAML_DEPENDENCIES = libyaml
++HOST_PYTHON3_PYYAML_DL_SUBDIR = python-pyyaml
++HOST_PYTHON3_PYYAML_NEEDS_HOST_PYTHON = python3
++HOST_PYTHON3_PYYAML_DEPENDENCIES = host-libyaml
 +
 +$(eval $(host-python-package))
 -- 
