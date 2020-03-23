@@ -1,67 +1,35 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 23 Mar 2020 11:04:34 -0700
-Subject: [Buildroot] [PATCH v2 1/2] package/vala: install wrapper to
- vapigen
-In-Reply-To: <20200323175813.3903868-1-aduskett@gmail.com>
-References: <20200323175813.3903868-1-aduskett@gmail.com>
-Message-ID: <CAFSsvmrbax_i7Z0w8AsLBVFTj8zNBhVK9Op6VHZx1hUm81Q-Kw@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 23 Mar 2020 19:24:43 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libtirpc: fix build when
+ missing <bits/endian.h>
+In-Reply-To: <20200305043947.GA2842054@x230>
+References: <20200228173052.5128-1-petr.vorel@gmail.com>
+ <20200228173052.5128-2-petr.vorel@gmail.com>
+ <20200305043947.GA2842054@x230>
+Message-ID: <20200323182443.GA3832536@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All;
+Hi Thomas,
 
-On Mon, Mar 23, 2020 at 10:58 AM <aduskett@gmail.com> wrote:
->
-> From: Adam Duskett <Aduskett@gmail.com>
->
-> when compiling gobject-introspection .gir files, some packages use vapigen to
-> generate a vala-api compatible .gir file. These packages tend to call vapigen
-> directly instead of vala or valac.
->
-> Without the wrapper, building the .gir files fail. In the case of for example,
-> gupnp-dlna throws the following error:
-> "error: Package `Gst-1.0' not found in specified Vala API directories or
-> GObject-Introspection GIR directories."
->
-> Installing the vala wrapper to vapigen fixes the above issue.
->
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Add this patch to the series.
->
->  package/vala/vala.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-> index b8a69f8c5e..d000393d71 100644
-> --- a/package/vala/vala.mk
-> +++ b/package/vala/vala.mk
-> @@ -17,13 +17,15 @@ HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
->  HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
->  HOST_VALA_CONF_OPTS += --disable-valadoc
->
-> -# We wrap vala & valac to point to the proper gir and vapi data dirs
-> +# We wrap vala, valac and vapigen to point to the proper gir and vapi data dirs
->  # Otherwise we'll get host directory data which isn't enough
->  define HOST_VALA_INSTALL_WRAPPER
->         $(INSTALL) -D -m 0755 package/vala/vala-wrapper \
->                 $(HOST_DIR)/bin/vala
->         $(INSTALL) -D -m 0755 package/vala/vala-wrapper \
->                 $(HOST_DIR)/bin/valac
-> +       $(INSTALL) -D -m 0755 package/vala/vala-wrapper \
-> +               $(HOST_DIR)/bin/vapigen
->         $(SED) 's, at VALA_VERSION@,$(VALA_VERSION_MAJOR),' \
->                 $(HOST_DIR)/bin/vala \
->                 $(HOST_DIR)/bin/valac
-I added vapigen to this line but didn't save the .mk file before
-committing. If you want me to resend
-a new patch with $(HOST_DIR)/bin/vapigen please let me know!
+> > This issue seems to be happening only on the next branch. Why? Anything
+> > special in next compared to master?
+Now, the error got propagated to the master, it'll fix failures on riscv64 and
+arm:
 
-Adam
-> --
-> 2.25.1
->
+http://autobuild.buildroot.net/results/4f423c95e290ec99fec263a839e3336362e7003c
+http://autobuild.buildroot.net/results/04fdf097b9aeda2e831c9138110b527e1e6ee5ea
+http://autobuild.buildroot.net/results/531156fd470eeb287e1761c5f0c17c68fe1e7888
+http://autobuild.buildroot.net/results/678cd9b11160e3995e61afc8579b579702429ef5
+http://autobuild.buildroot.net/results/940e4212a7d029e6495af3d5cacc8e3bbc9e78ff
+
+You can merge it with previous one (gcc-10 fix [1]), or I can sent v2 with just
+this patch (then I'd rename patch number from 6 to 5).
+
+Kind regards,
+Petr
+
+[1] https://patchwork.ozlabs.org/patch/1246746/
