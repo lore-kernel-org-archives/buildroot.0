@@ -1,7 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 23 Mar 2020 10:58:12 -0700
-Subject: [Buildroot] [PATCH v2 1/2] package/vala: install wrapper to vapigen
-Message-ID: <20200323175813.3903868-1-aduskett@gmail.com>
+Date: Mon, 23 Mar 2020 10:58:13 -0700
+Subject: [Buildroot] [PATCH v2 2/2] package/gupnp-dlna: add optional
+ dependency for gobject-introspection
+In-Reply-To: <20200323175813.3903868-1-aduskett@gmail.com>
+References: <20200323175813.3903868-1-aduskett@gmail.com>
+Message-ID: <20200323175813.3903868-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,45 +13,46 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-when compiling gobject-introspection .gir files, some packages use vapigen to
-generate a vala-api compatible .gir file. These packages tend to call vapigen
-directly instead of vala or valac.
+If gobject-introspection is selected, explicitly set --enable-introspection in
+the configure options and add a dependency for both gobject-introspection and
+host-vala.
 
-Without the wrapper, building the .gir files fail. In the case of for example,
-gupnp-dlna throws the following error:
-"error: Package `Gst-1.0' not found in specified Vala API directories or
-GObject-Introspection GIR directories."
-
-Installing the vala wrapper to vapigen fixes the above issue.
+Host-vala is necessary because the introspection includes vala bindings files
+with no way to disable them.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
 Changes v1 -> v2:
-  - Add this patch to the series.
+  - Depend on gst plugins (Fabrice Fontaine)
+  - Add host-vala to the dependencies.
+  - Move the goi check inside of the gst1_plugins_base check.
 
- package/vala/vala.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/gupnp-dlna/gupnp-dlna.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index b8a69f8c5e..d000393d71 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -17,13 +17,15 @@ HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
- HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
- HOST_VALA_CONF_OPTS += --disable-valadoc
+diff --git a/package/gupnp-dlna/gupnp-dlna.mk b/package/gupnp-dlna/gupnp-dlna.mk
+index 85d30b7cd2..4eecc0754e 100644
+--- a/package/gupnp-dlna/gupnp-dlna.mk
++++ b/package/gupnp-dlna/gupnp-dlna.mk
+@@ -16,12 +16,18 @@ GUPNP_DLNA_INSTALL_STAGING = YES
+ GUPNP_DLNA_DEPENDENCIES = host-pkgconf libglib2 libxml2
  
--# We wrap vala & valac to point to the proper gir and vapi data dirs
-+# We wrap vala, valac and vapigen to point to the proper gir and vapi data dirs
- # Otherwise we'll get host directory data which isn't enough
- define HOST_VALA_INSTALL_WRAPPER
- 	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
- 		$(HOST_DIR)/bin/vala
- 	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
- 		$(HOST_DIR)/bin/valac
-+	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
-+		$(HOST_DIR)/bin/vapigen
- 	$(SED) 's, at VALA_VERSION@,$(VALA_VERSION_MAJOR),' \
- 		$(HOST_DIR)/bin/vala \
- 		$(HOST_DIR)/bin/valac
+ GUPNP_DLNA_CONF_OPTS = \
+-	--disable-introspection \
+ 	--disable-legacy-gstreamer-metadata-backend
+ 
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
+ GUPNP_DLNA_CONF_OPTS += --enable-gstreamer-metadata-backend
+ GUPNP_DLNA_DEPENDENCIES += gstreamer1 gst1-plugins-base
++# vala bindings are created with the .gir files.
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++GUPNP_DLNA_CONF_OPTS += --enable-introspection
++GUPNP_DLNA_DEPENDENCIES += gobject-introspection host-vala
++else
++GUPNP_DLNA_CONF_OPTS += --disable-introspection
++endif
+ else
+ GUPNP_DLNA_CONF_OPTS += --disable-gstreamer-metadata-backend
+ endif
 -- 
 2.25.1
