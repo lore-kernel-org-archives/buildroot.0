@@ -1,105 +1,129 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Mar 2020 22:06:04 +0100
-Subject: [Buildroot] [git commit] package/erofs-utils: fix autobuild on arm
+Date: Tue, 24 Mar 2020 22:10:06 +0100
+Subject: [Buildroot] [PATCH] package/erofs-utils: fix autobuild on arm
  platform
-Message-ID: <20200324205623.6AA828816A@busybox.osuosl.org>
+In-Reply-To: <20200324151942.25686-1-hsiangkao@aol.com>
+References: <20200324151942.25686-1-hsiangkao.ref@aol.com>
+ <20200324151942.25686-1-hsiangkao@aol.com>
+Message-ID: <20200324211006.GM22325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b892384b645f725c45baeb7f0d60327a73d98f33
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Gao, All,
 
-Add a patch to avoid uint type, which resolves buildroot
-arm autobuild error.
-http://autobuild.buildroot.net/results/842a3c6416416d7badf4db9f38e3b231093a786a
+On 2020-03-24 23:19 +0800, Gao Xiang spake thusly:
+> Add a patch to avoid uint type, which resolves buildroot
+> arm autobuild error.
+> http://autobuild.buildroot.net/results/842a3c6416416d7badf4db9f38e3b231093a786a
+> 
+> Signed-off-by: Gao Xiang <hsiangkao@aol.com>
 
-Signed-off-by: Gao Xiang <hsiangkao@aol.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...s-avoid-using-old-compatibility-type-uint.patch | 75 ++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+Aplied to master, thanks.
 
-diff --git a/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch b/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
-new file mode 100644
-index 0000000000..cef1256975
---- /dev/null
-+++ b/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
-@@ -0,0 +1,75 @@
-+From 873c932b1119531355df23bacc3cf6824231804b Mon Sep 17 00:00:00 2001
-+From: Gao Xiang <hsiangkao@aol.com>
-+Date: Tue, 24 Mar 2020 16:19:49 +0800
-+Subject: [PATCH] erofs-utils: avoid using old compatibility type uint
-+
-+This should fix the following buildroot autobuild issues
-+with some configration on ARM platform [1]:
-+
-+compress.c: In function 'vle_compress_one':
-+compress.c:209:10: error: unknown type name 'uint'
-+    const uint qh_aligned = round_down(ctx->head, EROFS_BLKSIZ);
-+          ^~~~
-+compress.c:210:10: error: unknown type name 'uint'
-+    const uint qh_after = ctx->head - qh_aligned;
-+          ^~~~
-+compress.c: In function 'z_erofs_convert_to_compacted_format':
-+compress.c:313:8: error: unknown type name 'uint'
-+  const uint headerpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
-+        ^~~~
-+compress.c:316:8: error: unknown type name 'uint'
-+  const uint totalidx = (legacymetasize -
-+        ^~~~
-+
-+[1] http://autobuild.buildroot.net/results/842a3c6416416d7badf4db9f38e3b231093a786a
-+Link: https://lore.kernel.org/r/20200324081949.26355-1-hsiangkao at aol.com
-+Signed-off-by: Gao Xiang <hsiangkao@aol.com>
-+---
-+ lib/compress.c | 17 +++++++++--------
-+ 1 file changed, 9 insertions(+), 8 deletions(-)
-+
-+diff --git a/lib/compress.c b/lib/compress.c
-+index b14ff17..6cc68ed 100644
-+--- a/lib/compress.c
-++++ b/lib/compress.c
-+@@ -204,8 +204,9 @@ nocompression:
-+ 		len -= count;
-+ 
-+ 		if (!final && ctx->head >= EROFS_CONFIG_COMPR_MAX_SZ) {
-+-			const uint qh_aligned = round_down(ctx->head, EROFS_BLKSIZ);
-+-			const uint qh_after = ctx->head - qh_aligned;
-++			const unsigned int qh_aligned =
-++				round_down(ctx->head, EROFS_BLKSIZ);
-++			const unsigned int qh_after = ctx->head - qh_aligned;
-+ 
-+ 			memmove(ctx->queue, ctx->queue + qh_aligned,
-+ 				len + qh_after);
-+@@ -308,11 +309,11 @@ int z_erofs_convert_to_compacted_format(struct erofs_inode *inode,
-+ 					unsigned int legacymetasize,
-+ 					unsigned int logical_clusterbits)
-+ {
-+-	const uint headerpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
-+-							inode->xattr_isize) +
-+-			       sizeof(struct z_erofs_map_header);
-+-	const uint totalidx = (legacymetasize -
-+-			       Z_EROFS_LEGACY_MAP_HEADER_SIZE) / 8;
-++	const unsigned int mpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
-++							   inode->xattr_isize) +
-++				  sizeof(struct z_erofs_map_header);
-++	const unsigned int totalidx = (legacymetasize -
-++				       Z_EROFS_LEGACY_MAP_HEADER_SIZE) / 8;
-+ 	u8 *out, *in;
-+ 	struct z_erofs_compressindex_vec cv[16];
-+ 	/* # of 8-byte units so that it can be aligned with 32 bytes */
-+@@ -324,7 +325,7 @@ int z_erofs_convert_to_compacted_format(struct erofs_inode *inode,
-+ 	if (logical_clusterbits > 14)	/* currently not supported */
-+ 		return -ENOTSUP;
-+ 	if (logical_clusterbits == 12) {
-+-		compacted_4b_initial = (32 - headerpos % 32) / 4;
-++		compacted_4b_initial = (32 - mpos % 32) / 4;
-+ 		if (compacted_4b_initial == 32 / 4)
-+ 			compacted_4b_initial = 0;
-+ 
-+-- 
-+2.20.1
-+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...id-using-old-compatibility-type-uint.patch | 75 +++++++++++++++++++
+>  1 file changed, 75 insertions(+)
+>  create mode 100644 package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
+> 
+> diff --git a/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch b/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
+> new file mode 100644
+> index 0000000000..cef1256975
+> --- /dev/null
+> +++ b/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
+> @@ -0,0 +1,75 @@
+> +From 873c932b1119531355df23bacc3cf6824231804b Mon Sep 17 00:00:00 2001
+> +From: Gao Xiang <hsiangkao@aol.com>
+> +Date: Tue, 24 Mar 2020 16:19:49 +0800
+> +Subject: [PATCH] erofs-utils: avoid using old compatibility type uint
+> +
+> +This should fix the following buildroot autobuild issues
+> +with some configration on ARM platform [1]:
+> +
+> +compress.c: In function 'vle_compress_one':
+> +compress.c:209:10: error: unknown type name 'uint'
+> +    const uint qh_aligned = round_down(ctx->head, EROFS_BLKSIZ);
+> +          ^~~~
+> +compress.c:210:10: error: unknown type name 'uint'
+> +    const uint qh_after = ctx->head - qh_aligned;
+> +          ^~~~
+> +compress.c: In function 'z_erofs_convert_to_compacted_format':
+> +compress.c:313:8: error: unknown type name 'uint'
+> +  const uint headerpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
+> +        ^~~~
+> +compress.c:316:8: error: unknown type name 'uint'
+> +  const uint totalidx = (legacymetasize -
+> +        ^~~~
+> +
+> +[1] http://autobuild.buildroot.net/results/842a3c6416416d7badf4db9f38e3b231093a786a
+> +Link: https://lore.kernel.org/r/20200324081949.26355-1-hsiangkao at aol.com
+> +Signed-off-by: Gao Xiang <hsiangkao@aol.com>
+> +---
+> + lib/compress.c | 17 +++++++++--------
+> + 1 file changed, 9 insertions(+), 8 deletions(-)
+> +
+> +diff --git a/lib/compress.c b/lib/compress.c
+> +index b14ff17..6cc68ed 100644
+> +--- a/lib/compress.c
+> ++++ b/lib/compress.c
+> +@@ -204,8 +204,9 @@ nocompression:
+> + 		len -= count;
+> + 
+> + 		if (!final && ctx->head >= EROFS_CONFIG_COMPR_MAX_SZ) {
+> +-			const uint qh_aligned = round_down(ctx->head, EROFS_BLKSIZ);
+> +-			const uint qh_after = ctx->head - qh_aligned;
+> ++			const unsigned int qh_aligned =
+> ++				round_down(ctx->head, EROFS_BLKSIZ);
+> ++			const unsigned int qh_after = ctx->head - qh_aligned;
+> + 
+> + 			memmove(ctx->queue, ctx->queue + qh_aligned,
+> + 				len + qh_after);
+> +@@ -308,11 +309,11 @@ int z_erofs_convert_to_compacted_format(struct erofs_inode *inode,
+> + 					unsigned int legacymetasize,
+> + 					unsigned int logical_clusterbits)
+> + {
+> +-	const uint headerpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
+> +-							inode->xattr_isize) +
+> +-			       sizeof(struct z_erofs_map_header);
+> +-	const uint totalidx = (legacymetasize -
+> +-			       Z_EROFS_LEGACY_MAP_HEADER_SIZE) / 8;
+> ++	const unsigned int mpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
+> ++							   inode->xattr_isize) +
+> ++				  sizeof(struct z_erofs_map_header);
+> ++	const unsigned int totalidx = (legacymetasize -
+> ++				       Z_EROFS_LEGACY_MAP_HEADER_SIZE) / 8;
+> + 	u8 *out, *in;
+> + 	struct z_erofs_compressindex_vec cv[16];
+> + 	/* # of 8-byte units so that it can be aligned with 32 bytes */
+> +@@ -324,7 +325,7 @@ int z_erofs_convert_to_compacted_format(struct erofs_inode *inode,
+> + 	if (logical_clusterbits > 14)	/* currently not supported */
+> + 		return -ENOTSUP;
+> + 	if (logical_clusterbits == 12) {
+> +-		compacted_4b_initial = (32 - headerpos % 32) / 4;
+> ++		compacted_4b_initial = (32 - mpos % 32) / 4;
+> + 		if (compacted_4b_initial == 32 / 4)
+> + 			compacted_4b_initial = 0;
+> + 
+> +-- 
+> +2.20.1
+> +
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
