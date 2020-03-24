@@ -1,105 +1,210 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Mar 2020 22:19:24 +0100
-Subject: [Buildroot] [PATCH] package/gcc: remove version 5.5.5
-In-Reply-To: <20200322211540.556085-2-romain.naour@gmail.com>
-References: <20200322211540.556085-1-romain.naour@gmail.com>
- <20200322211540.556085-2-romain.naour@gmail.com>
-Message-ID: <20200324221924.1f3d5d3c@windsurf.home>
+Date: Tue, 24 Mar 2020 22:25:33 +0100
+Subject: [Buildroot] [git commit] package/netdata: new package
+Message-ID: <20200324212004.67C00881A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 22 Mar 2020 22:15:40 +0100
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1d2bb469078b5818aa2390b9868cd632200f17a2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> gcc 9.2 is around, gcc 8.4 is the default version, so drop
-> 5.5 in order to reduce the gcc choice.
-> 
-> GCC 5.5 was disabled for Glibc based toolchain since Glibc
-> 2.30 needs GCC 6.2 or later.
-> 
-> See:
-> https://sourceware.org/ml/libc-alpha/2019-08/msg00029.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  Config.in.legacy                              |   9 +
->  .../5.5.0/0001-m68k-coldfire-pr68467.patch    |  48 ---
->  ...2-libsanitizer-Use-pre-computed-size.patch |  72 -----
->  package/gcc/5.5.0/100-uclibc-conf.patch       |  15 -
->  ...ix-typo-for-powerpc-e6500-cpu_is_64b.patch |  29 --
->  .../gcc/5.5.0/301-missing-execinfo_h.patch    |  13 -
->  .../gcc/5.5.0/810-arm-softfloat-libgcc.patch  |  30 --
->  .../gcc/5.5.0/830-arm_unbreak_armv4t.patch    |  15 -
->  ...473-Reduce-size-of-Cortex-A8-automat.patch |  68 ----
->  ...0-microblaze-enable-dwarf-eh-support.patch | 166 ----------
->  .../gcc/5.5.0/850-libstdcxx-uclibc-c99.patch  | 273 -----------------
->  package/gcc/5.5.0/860-cilk-wchar.patch        |  56 ----
->  ...870-xtensa-add-mauto-litpools-option.patch | 290 ------------------
->  ...xtensa-reimplement-register-spilling.patch |  76 -----
->  .../874-xtensa-add-uclinux-support.patch      | 174 -----------
->  .../875-xtensa-implement-trap-pattern.patch   |  67 ----
->  .../880-gcc-nios2-Add-IJMP_REGS-enum.patch    | 103 -------
->  package/gcc/5.5.0/890-fix-m68k-compile.patch  |  15 -
->  .../900-libitm-fixes-for-musl-support.patch   |  65 ----
->  ...-fixincludes-update-for-musl-support.patch |  32 --
->  .../gcc/5.5.0/902-unwind-fix-for-musl.patch   |  36 ---
->  ...libgfortran-gthr-workaround-for-musl.patch |  80 -----
->  package/gcc/5.5.0/904-musl-libc-config.patch  | 285 -----------------
->  .../5.5.0/905-add-musl-support-to-gcc.patch   | 130 --------
->  package/gcc/5.5.0/906-mips-musl-support.patch |  37 ---
->  package/gcc/5.5.0/907-x86-musl-support.patch  |  45 ---
->  package/gcc/5.5.0/908-arm-musl-support.patch  |  45 ---
->  .../gcc/5.5.0/909-aarch64-musl-support.patch  |  33 --
->  .../910-microblaze-musl-and-uclibc.patch      |  36 ---
->  package/gcc/5.5.0/911-ppc-musl-support.patch  |  75 -----
->  package/gcc/5.5.0/912-sh-musl-support.patch   |  50 ---
->  ...libgcc-disable-split-stack-nothreads.patch |  14 -
->  .../5.5.0/940-uclinux-enable-threads.patch    |  19 --
->  ...41-mips-Add-support-for-mips-r6-musl.patch |  43 ---
->  package/gcc/Config.in.host                    |  14 -
->  package/gcc/gcc.hash                          |   2 -
->  36 files changed, 9 insertions(+), 2551 deletions(-)
->  delete mode 100644 package/gcc/5.5.0/0001-m68k-coldfire-pr68467.patch
->  delete mode 100644 package/gcc/5.5.0/0002-libsanitizer-Use-pre-computed-size.patch
->  delete mode 100644 package/gcc/5.5.0/100-uclibc-conf.patch
->  delete mode 100644 package/gcc/5.5.0/120-gcc-config.gcc-fix-typo-for-powerpc-e6500-cpu_is_64b.patch
->  delete mode 100644 package/gcc/5.5.0/301-missing-execinfo_h.patch
->  delete mode 100644 package/gcc/5.5.0/810-arm-softfloat-libgcc.patch
->  delete mode 100644 package/gcc/5.5.0/830-arm_unbreak_armv4t.patch
->  delete mode 100644 package/gcc/5.5.0/831-ARM-PR-target-70473-Reduce-size-of-Cortex-A8-automat.patch
->  delete mode 100644 package/gcc/5.5.0/840-microblaze-enable-dwarf-eh-support.patch
->  delete mode 100644 package/gcc/5.5.0/850-libstdcxx-uclibc-c99.patch
->  delete mode 100644 package/gcc/5.5.0/860-cilk-wchar.patch
->  delete mode 100644 package/gcc/5.5.0/870-xtensa-add-mauto-litpools-option.patch
->  delete mode 100644 package/gcc/5.5.0/871-xtensa-reimplement-register-spilling.patch
->  delete mode 100644 package/gcc/5.5.0/874-xtensa-add-uclinux-support.patch
->  delete mode 100644 package/gcc/5.5.0/875-xtensa-implement-trap-pattern.patch
->  delete mode 100644 package/gcc/5.5.0/880-gcc-nios2-Add-IJMP_REGS-enum.patch
->  delete mode 100644 package/gcc/5.5.0/890-fix-m68k-compile.patch
->  delete mode 100644 package/gcc/5.5.0/900-libitm-fixes-for-musl-support.patch
->  delete mode 100644 package/gcc/5.5.0/901-fixincludes-update-for-musl-support.patch
->  delete mode 100644 package/gcc/5.5.0/902-unwind-fix-for-musl.patch
->  delete mode 100644 package/gcc/5.5.0/903-libstdc++-libgfortran-gthr-workaround-for-musl.patch
->  delete mode 100644 package/gcc/5.5.0/904-musl-libc-config.patch
->  delete mode 100644 package/gcc/5.5.0/905-add-musl-support-to-gcc.patch
->  delete mode 100644 package/gcc/5.5.0/906-mips-musl-support.patch
->  delete mode 100644 package/gcc/5.5.0/907-x86-musl-support.patch
->  delete mode 100644 package/gcc/5.5.0/908-arm-musl-support.patch
->  delete mode 100644 package/gcc/5.5.0/909-aarch64-musl-support.patch
->  delete mode 100644 package/gcc/5.5.0/910-microblaze-musl-and-uclibc.patch
->  delete mode 100644 package/gcc/5.5.0/911-ppc-musl-support.patch
->  delete mode 100644 package/gcc/5.5.0/912-sh-musl-support.patch
->  delete mode 100644 package/gcc/5.5.0/930-libgcc-disable-split-stack-nothreads.patch
->  delete mode 100644 package/gcc/5.5.0/940-uclinux-enable-threads.patch
->  delete mode 100644 package/gcc/5.5.0/941-mips-Add-support-for-mips-r6-musl.patch
+Always use the --disable-dbengine configuration option, because we do
+not support libjudy dependency that is required otherwise.
 
-Applied to master, thanks.
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/netdata/Config.in    | 22 ++++++++++++++++++
+ package/netdata/S60netdata   | 55 ++++++++++++++++++++++++++++++++++++++++++++
+ package/netdata/netdata.hash |  3 +++
+ package/netdata/netdata.mk   | 55 ++++++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 137 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 14deb2aa0b..256be1b2b7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1572,6 +1572,7 @@ F:	package/lua-flu/
+ F:	package/lua-stdlib/
+ F:	package/luaossl/
+ F:	package/murata-cyw-fw/
++F:	package/netdata/
+ F:	package/rs485conf/
+ F:	package/turbolua/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index b4033721e2..614ec921e5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1946,6 +1946,7 @@ menu "Miscellaneous"
+ 	source "package/linux-syscall-support/Config.in"
+ 	source "package/mcrypt/Config.in"
+ 	source "package/mobile-broadband-provider-info/Config.in"
++	source "package/netdata/Config.in"
+ 	source "package/proj/Config.in"
+ 	source "package/qemu/Config.in"
+ 	source "package/qpdf/Config.in"
+diff --git a/package/netdata/Config.in b/package/netdata/Config.in
+new file mode 100644
+index 0000000000..88f88cb7ed
+--- /dev/null
++++ b/package/netdata/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_NETDATA
++	bool "netdata"
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS # libuv
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
++	select BR2_PACKAGE_LIBUV
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	select BR2_PACKAGE_ZLIB
++	help
++	  Netdata is distributed, real-time, performance and health
++	  monitoring for systems and applications. It is a highly
++	  optimized monitoring agent you install on all your systems and
++	  containers.
++
++	  https://github.com/netdata/netdata
++
++comment "netdata needs a toolchain w/ NPTL, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/netdata/S60netdata b/package/netdata/S60netdata
+new file mode 100644
+index 0000000000..421f0715c0
+--- /dev/null
++++ b/package/netdata/S60netdata
+@@ -0,0 +1,55 @@
++#!/bin/sh
++
++DAEMON="netdata"
++PIDFILE="/var/run/$DAEMON.pid"
++
++NETDATA_ARGS="-u root -P $PIDFILE"
++
++# Create needed directories.
++mkdir -p /var/cache/$DAEMON /var/lib/$DAEMON /var/log/$DAEMON
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
++		-- $NETDATA_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/netdata/netdata.hash b/package/netdata/netdata.hash
+new file mode 100644
+index 0000000000..6c79e97017
+--- /dev/null
++++ b/package/netdata/netdata.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 c739e0fa8d6d7f433c0c7c8016b763e8f70519d67f0b5e7eca9ee5318f210d90  netdata-1.20.0.tar.gz
++sha256 0e5fd9d833efe9b79f784d1903281554af82d1b4261af67d35455728e5572aa6  LICENSE
+diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
+new file mode 100644
+index 0000000000..d169881a9c
+--- /dev/null
++++ b/package/netdata/netdata.mk
+@@ -0,0 +1,55 @@
++################################################################################
++#
++# netdata
++#
++################################################################################
++
++NETDATA_VERSION = 1.20.0
++NETDATA_SITE = $(call github,netdata,netdata,v$(NETDATA_VERSION))
++NETDATA_LICENSE = GPL-3.0+
++NETDATA_LICENSE_FILES = LICENSE
++# netdata's source code is released without a generated configure script
++NETDATA_AUTORECONF = YES
++NETDATA_CONF_OPTS = --disable-dbengine
++NETDATA_DEPENDENCIES = libuv util-linux zlib
++
++ifeq ($(BR2_GCC_ENABLE_LTO),y)
++NETDATA_CONF_OPTS += --enable-lto
++else
++NETDATA_CONF_OPTS += --disable-lto
++endif
++
++ifeq ($(BR2_PACKAGE_CUPS),y)
++NETDATA_CONF_OPTS += --enable-plugin-cups
++NETDATA_DEPENDENCIES += cups
++else
++NETDATA_CONF_OPTS += --disable-plugin-cups
++endif
++
++ifeq ($(BR2_PACKAGE_JSON_C),y)
++NETDATA_CONF_OPTS += --enable-jsonc
++NETDATA_DEPENDENCIES += json-c
++else
++NETDATA_CONF_OPTS += --disable-jsonc
++endif
++
++ifeq ($(BR2_PACKAGE_NFACCT),y)
++NETDATA_CONF_OPTS += --enable-plugin-nfacct
++NETDATA_DEPENDENCIES += nfacct
++else
++NETDATA_CONF_OPTS += --disable-plugin-nfacct
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++NETDATA_CONF_OPTS += --enable-https
++NETDATA_DEPENDENCIES += openssl
++else
++NETDATA_CONF_OPTS += --disable-https
++endif
++
++define NETDATA_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/netdata/S60netdata \
++		$(TARGET_DIR)/etc/init.d/S60netdata
++endef
++
++$(eval $(autotools-package))
