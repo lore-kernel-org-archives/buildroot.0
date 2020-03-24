@@ -1,129 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Mar 2020 22:10:06 +0100
-Subject: [Buildroot] [PATCH] package/erofs-utils: fix autobuild on arm
- platform
-In-Reply-To: <20200324151942.25686-1-hsiangkao@aol.com>
-References: <20200324151942.25686-1-hsiangkao.ref@aol.com>
- <20200324151942.25686-1-hsiangkao@aol.com>
-Message-ID: <20200324211006.GM22325@scaer>
+Date: Tue, 24 Mar 2020 22:12:57 +0100
+Subject: [Buildroot] [git commit] package/sdl2: fix build with directfb
+Message-ID: <20200324210147.7440A8816E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gao, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=830bbc0a9aa444b894c245728bf1616e9d7f6811
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-24 23:19 +0800, Gao Xiang spake thusly:
-> Add a patch to avoid uint type, which resolves buildroot
-> arm autobuild error.
-> http://autobuild.buildroot.net/results/842a3c6416416d7badf4db9f38e3b231093a786a
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@aol.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/83ccefee68c2800c0544e6f40fa8bc8ee6b67b77
 
-Aplied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...-directfb-SDL_DirectFB_render.c-fix-build.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...id-using-old-compatibility-type-uint.patch | 75 +++++++++++++++++++
->  1 file changed, 75 insertions(+)
->  create mode 100644 package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
-> 
-> diff --git a/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch b/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
-> new file mode 100644
-> index 0000000000..cef1256975
-> --- /dev/null
-> +++ b/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
-> @@ -0,0 +1,75 @@
-> +From 873c932b1119531355df23bacc3cf6824231804b Mon Sep 17 00:00:00 2001
-> +From: Gao Xiang <hsiangkao@aol.com>
-> +Date: Tue, 24 Mar 2020 16:19:49 +0800
-> +Subject: [PATCH] erofs-utils: avoid using old compatibility type uint
-> +
-> +This should fix the following buildroot autobuild issues
-> +with some configration on ARM platform [1]:
-> +
-> +compress.c: In function 'vle_compress_one':
-> +compress.c:209:10: error: unknown type name 'uint'
-> +    const uint qh_aligned = round_down(ctx->head, EROFS_BLKSIZ);
-> +          ^~~~
-> +compress.c:210:10: error: unknown type name 'uint'
-> +    const uint qh_after = ctx->head - qh_aligned;
-> +          ^~~~
-> +compress.c: In function 'z_erofs_convert_to_compacted_format':
-> +compress.c:313:8: error: unknown type name 'uint'
-> +  const uint headerpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
-> +        ^~~~
-> +compress.c:316:8: error: unknown type name 'uint'
-> +  const uint totalidx = (legacymetasize -
-> +        ^~~~
-> +
-> +[1] http://autobuild.buildroot.net/results/842a3c6416416d7badf4db9f38e3b231093a786a
-> +Link: https://lore.kernel.org/r/20200324081949.26355-1-hsiangkao at aol.com
-> +Signed-off-by: Gao Xiang <hsiangkao@aol.com>
-> +---
-> + lib/compress.c | 17 +++++++++--------
-> + 1 file changed, 9 insertions(+), 8 deletions(-)
-> +
-> +diff --git a/lib/compress.c b/lib/compress.c
-> +index b14ff17..6cc68ed 100644
-> +--- a/lib/compress.c
-> ++++ b/lib/compress.c
-> +@@ -204,8 +204,9 @@ nocompression:
-> + 		len -= count;
-> + 
-> + 		if (!final && ctx->head >= EROFS_CONFIG_COMPR_MAX_SZ) {
-> +-			const uint qh_aligned = round_down(ctx->head, EROFS_BLKSIZ);
-> +-			const uint qh_after = ctx->head - qh_aligned;
-> ++			const unsigned int qh_aligned =
-> ++				round_down(ctx->head, EROFS_BLKSIZ);
-> ++			const unsigned int qh_after = ctx->head - qh_aligned;
-> + 
-> + 			memmove(ctx->queue, ctx->queue + qh_aligned,
-> + 				len + qh_after);
-> +@@ -308,11 +309,11 @@ int z_erofs_convert_to_compacted_format(struct erofs_inode *inode,
-> + 					unsigned int legacymetasize,
-> + 					unsigned int logical_clusterbits)
-> + {
-> +-	const uint headerpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
-> +-							inode->xattr_isize) +
-> +-			       sizeof(struct z_erofs_map_header);
-> +-	const uint totalidx = (legacymetasize -
-> +-			       Z_EROFS_LEGACY_MAP_HEADER_SIZE) / 8;
-> ++	const unsigned int mpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
-> ++							   inode->xattr_isize) +
-> ++				  sizeof(struct z_erofs_map_header);
-> ++	const unsigned int totalidx = (legacymetasize -
-> ++				       Z_EROFS_LEGACY_MAP_HEADER_SIZE) / 8;
-> + 	u8 *out, *in;
-> + 	struct z_erofs_compressindex_vec cv[16];
-> + 	/* # of 8-byte units so that it can be aligned with 32 bytes */
-> +@@ -324,7 +325,7 @@ int z_erofs_convert_to_compacted_format(struct erofs_inode *inode,
-> + 	if (logical_clusterbits > 14)	/* currently not supported */
-> + 		return -ENOTSUP;
-> + 	if (logical_clusterbits == 12) {
-> +-		compacted_4b_initial = (32 - headerpos % 32) / 4;
-> ++		compacted_4b_initial = (32 - mpos % 32) / 4;
-> + 		if (compacted_4b_initial == 32 / 4)
-> + 			compacted_4b_initial = 0;
-> + 
-> +-- 
-> +2.20.1
-> +
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/sdl2/0001-src-video-directfb-SDL_DirectFB_render.c-fix-build.patch b/package/sdl2/0001-src-video-directfb-SDL_DirectFB_render.c-fix-build.patch
+new file mode 100644
+index 0000000000..2fbad97402
+--- /dev/null
++++ b/package/sdl2/0001-src-video-directfb-SDL_DirectFB_render.c-fix-build.patch
+@@ -0,0 +1,46 @@
++From 7c6d466d98910a2896680351cc5cea1b7fb37ab9 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 24 Mar 2020 13:33:40 +0100
++Subject: [PATCH] src/video/directfb/SDL_DirectFB_render.c: fix build
++
++Build with directfb is broken due to a spurious '}' and a missing 'E'
++since version 2.0.12 and https://hg.libsdl.org/SDL/rev/2d5b5a5ccbfb:
++
++/home/buildroot/autobuild/run/instance-2/output-1/build/sdl2-2.0.12/src/video/directfb/SDL_DirectFB_render.c: In function 'SetBlendMode':
++/home/buildroot/autobuild/run/instance-2/output-1/build/sdl2-2.0.12/src/video/directfb/SDL_DirectFB_render.c:202:9: error: case label not within a switch statement
++  202 |         case SDL_BLENDMODE_MUL:
++      |         ^~~~
++
++/home/buildroot/autobuild/run/instance-2/output-1/build/sdl2-2.0.12/src/video/directfb/SDL_DirectFB_render.c:205:67: error: 'DSBF_DSTCOLOR' undeclared (first use in this function); did you mean 'DSBF_DESTCOLOR'?
++  205 |             SDL_DFB_CHECK(destsurf->SetSrcBlendFunction(destsurf, DSBF_DSTCOLOR));
++      |                                                                   ^~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/83ccefee68c2800c0544e6f40fa8bc8ee6b67b77
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from: https://hg.libsdl.org/SDL/rev/769f80095217]
++---
++ src/video/directfb/SDL_DirectFB_render.c | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/src/video/directfb/SDL_DirectFB_render.c b/src/video/directfb/SDL_DirectFB_render.c
++index 618009850..cc31fb8f4 100644
++--- a/src/video/directfb/SDL_DirectFB_render.c
+++++ b/src/video/directfb/SDL_DirectFB_render.c
++@@ -198,11 +198,10 @@ SetBlendMode(DirectFB_RenderData * data, int blendMode,
++             SDL_DFB_CHECK(destsurf->SetDstBlendFunction(destsurf, DSBF_SRCCOLOR));
++ 
++             break;
++-        }
++         case SDL_BLENDMODE_MUL:
++             data->blitFlags = DSBLIT_BLEND_ALPHACHANNEL;
++             data->drawFlags = DSDRAW_BLEND;
++-            SDL_DFB_CHECK(destsurf->SetSrcBlendFunction(destsurf, DSBF_DSTCOLOR));
+++            SDL_DFB_CHECK(destsurf->SetSrcBlendFunction(destsurf, DSBF_DESTCOLOR));
++             SDL_DFB_CHECK(destsurf->SetDstBlendFunction(destsurf, DSBF_INVSRCALPHA));
++ 
++             break;
++-- 
++2.25.1
++
