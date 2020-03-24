@@ -1,8 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 24 Mar 2020 10:38:52 -0700
-Subject: [Buildroot] [PATCH 1/3] package/gstreamer1/gst1-python: fix
- libpython-dir path
-Message-ID: <20200324173855.747054-1-aduskett@gmail.com>
+Date: Tue, 24 Mar 2020 10:38:53 -0700
+Subject: [Buildroot] [PATCH 2/3]
+ support/testing/tests/package/test_gst1_python.py: fix config and timeout
+In-Reply-To: <20200324173855.747054-1-aduskett@gmail.com>
+References: <20200324173855.747054-1-aduskett@gmail.com>
+Message-ID: <20200324173855.747054-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,63 +13,46 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Due to the CONF_ENV options set in the gst1-python.mk file, libpython-dir
-must be set manually or else the error:
-"Python dynamic library path could not be determined" occurs.
+The config is missing the following packages:
+  - BR2_PACKAGE_GST1_PLUGINS_BASE
+    - This is needed for the videotestsrc plugin which provides videotestsrc.
 
-Previously the libpython-dir option was set to
-$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR), however, this breaks the
-resulting .so because the above full path is baked into the resulting .so.
-which results in the error:
+  - BR2_PACKAGE_GST1_PLUGINS_BAD
+    - This is needed for the debugutils plugin which provides fakevideosink.
 
-Couldn't g_module_open libpython. Reason:
-/full/path/to/host/lib/python3.8/libpython3.8.so: cannot open shared object
-file: No such file or directory
+  - BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC
+    - videotestsrcplugin used by the example pipeline.
 
-To fix this error, set the libpython-dir to /usr/lib.
-Because we provide PYTHONPATH=$(PYTHON3_PATH) in the GST1_PYTHON_CONF_ENV,
-the logic in the meson file uses the above python3 provided by the PYTHONPATH
-variable to determine /usr/lib/ has the proper
-python$(PYTHON3_VERSION_MAJOR).so file.
+  - BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS
+    - fakevideosink plugin used by the example pipeline.
 
-Because Buildroot provides the appropriate paths, the meson file finds
-the correct .so file and the resulting compiled library has the appropriate
-path of /usr/lib/python3.$(PYTHON3_VERSION_MAJOR).so
-
-This change has been tested on the following distributions:
-  - Debian 9 and 10
-  - Debian 9 without python3 installed on the host.
-  - Centos7
-  - Fedora 31
+In addition, the default timeout is set to low and will result in a test
+failure, this has been changed to 200 seconds.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/gstreamer1/gst1-python/gst1-python.mk | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ support/testing/tests/package/test_gst1_python.py | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
-index 23b4bbd900..122c3dd997 100644
---- a/package/gstreamer1/gst1-python/gst1-python.mk
-+++ b/package/gstreamer1/gst1-python/gst1-python.mk
-@@ -23,10 +23,16 @@ GST1_PYTHON_CONF_ENV += \
- 	_PYTHON_SYSCONFIGDATA_NAME=$(PKG_PYTHON_SYSCONFIGDATA_NAME) \
- 	PYTHONPATH=$(PYTHON3_PATH)
- 
--# Due to the CONF_ENV options, libpython-dir must be set to the host directory
-+# Due to the CONF_ENV options, libpython-dir must be set manually
- # or else the error: "Python dynamic library path could not be determined"
--# will occure
-+# occurs. We set the libpython-dir to /usr/lib as this path is hard-coded
-+# into the resulting .so file as /usr/lib/python3.$(PYTHON3_VERSION_MAJOR).so.
-+# Because we provide PYTHONPATH=$(PYTHON3_PATH) above, the logic in the meson
-+# file uses the above python path to determine if /usr/lib/ has the proper .so
-+# file. Because Buildroot provides the appropriate paths, the meson file finds
-+# the correct .so file, and the resulting compiled library has the appropriate
-+# path of /usr/lib/python3.$(PYTHON3_VERSION_MAJOR).so
- GST1_PYTHON_CONF_OPTS += \
--	-Dlibpython-dir=$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)
-+	-Dlibpython-dir=/usr/lib/
- 
- $(eval $(meson-package))
+diff --git a/support/testing/tests/package/test_gst1_python.py b/support/testing/tests/package/test_gst1_python.py
+index 469e0f392d..c6b337dd04 100644
+--- a/support/testing/tests/package/test_gst1_python.py
++++ b/support/testing/tests/package/test_gst1_python.py
+@@ -14,6 +14,10 @@ class TestGst1Python(TestPythonPackageBase):
+         BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
+         BR2_PACKAGE_GOBJECT_INTROSPECTION=y
+         BR2_PACKAGE_GSTREAMER1=y
++        BR2_PACKAGE_GST1_PLUGINS_BASE=y
++        BR2_PACKAGE_GST1_PLUGINS_BAD=y
++        BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC=y
++        BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS=y
+         BR2_PACKAGE_GST1_PYTHON=y
+         BR2_PACKAGE_PYTHON3=y
+         BR2_PACKAGE_PYTHON_GOBJECT=y
+@@ -26,3 +30,4 @@ class TestGst1Python(TestPythonPackageBase):
+                            options=["-initrd", cpio_file])
+         self.emulator.login()
+     sample_scripts = ["tests/package/sample_gst1_python.py"]
++    timeout = 200
 -- 
 2.25.1
