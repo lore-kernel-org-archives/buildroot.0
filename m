@@ -1,74 +1,169 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 24 Mar 2020 15:58:09 -0600
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: bump to version 2.28.0
-Message-ID: <20200324215809.77787-1-james.hilliard1@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 24 Mar 2020 23:06:08 +0100
+Subject: [Buildroot] [PATCH 8/8] package/mongodb: bump to version 4.2.4
+In-Reply-To: <20200323104909.16765-8-yegorslists@googlemail.com>
+References: <20200323104909.16765-1-yegorslists@googlemail.com>
+ <20200323104909.16765-8-yegorslists@googlemail.com>
+Message-ID: <86ddbaf6-24c8-87aa-8e5a-dd7211af5127@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adjust fix build with musl patch for 2.28.0.
+Hi,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/wpewebkit/0001-Fix-build-with-musl.patch | 6 +++---
- package/wpewebkit/wpewebkit.hash                 | 8 ++++----
- package/wpewebkit/wpewebkit.mk                   | 2 +-
- 3 files changed, 8 insertions(+), 8 deletions(-)
+Le 23/03/2020 ? 11:49, yegorslists at googlemail.com a ?crit?:
+> From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> 
+> - Drop !BR2_PACKAGE_PYTHON3 dependency as SConstruct requires
+>   host-python3 since version 4.1.10 and:
+>   https://github.com/mongodb/mongo/commit/8dd6d4755734ed37c1b98dfdefce3ca6bc65f1f6
+> - host-python-psutil is needed since 4.1.8 and
+>   https://github.com/mongodb/mongo/commit/ff03811e31851984617d73739de8acc7640b19a2
+> - Drop unneeded host-python-typing dependency
+> - C++17 and so gcc 7 is required since 4.1.8 and
+>   https://github.com/mongodb/mongo/commit/01d84b2565fc9ea9626a55dcf1f3f817968088f2
+> - Set --disable-minimum-compiler-version-enforcement as mongodb enforces
+>   gcc >= 8.2 since verson 4.1.8 and
+>   https://github.com/mongodb/mongo/commit/9ac90b128ebeb1bb431ebe3fe9176cb6142818cb
+> - Explictly disable ssl if needed as ssl is enabled by default
+> - Add host-python-cheetah dependency if needed
+> - Manage new http-client option added in version 4.1.2 and
+>   https://github.com/mongodb/mongo/commit/4d7dcca91bc2bbde65843fe88c41fa040e0d1877
 
-diff --git a/package/wpewebkit/0001-Fix-build-with-musl.patch b/package/wpewebkit/0001-Fix-build-with-musl.patch
-index a436adf6ce..705c67c7f6 100644
---- a/package/wpewebkit/0001-Fix-build-with-musl.patch
-+++ b/package/wpewebkit/0001-Fix-build-with-musl.patch
-@@ -9,7 +9,7 @@ https://github.com/WebPlatformForEmbedded/meta-wpe/blob/master/recipes-wpe/wpewe
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  Source/JavaScriptCore/runtime/MachineContext.h | 10 +++++-----
-- Source/WTF/wtf/Platform.h                      |  2 +-
-+ Source/WTF/wtf/PlatformHave.h                  |  2 +-
-  2 files changed, 6 insertions(+), 6 deletions(-)
- 
- diff --git a/Source/JavaScriptCore/runtime/MachineContext.h b/Source/JavaScriptCore/runtime/MachineContext.h
-@@ -63,8 +63,8 @@ index bf0bdc7a51a..78d2ec81838 100644
-  #if CPU(X86)
- diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
- index e2a3388993f..95fe7c593cf 100644
----- a/Source/WTF/wtf/Platform.h
--+++ b/Source/WTF/wtf/Platform.h
-+--- a/Source/WTF/wtf/PlatformHave.h
-++++ b/Source/WTF/wtf/PlatformHave.h
- @@ -683,7 +683,7 @@
-  #define HAVE_CFNETWORK_STORAGE_PARTITIONING 1
-  #endif
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index fd78264914..2e7016fe38 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.26.4.tar.xz.sums
--md5  4cd2883ec9da38a0ffe413bb75239874  wpewebkit-2.26.4.tar.xz
--sha1  337f78ee237fe98c7e6e728d8fc0508069b007be  wpewebkit-2.26.4.tar.xz
--sha256  0c292182864b63b725491f1a69b55c03e0e75f6db0875389caff31fe9c0d3ae9  wpewebkit-2.26.4.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.28.0.tar.xz.sums
-+md5  4298b9d38b4f05f92995422ea9979893  wpewebkit-2.28.0.tar.xz
-+sha1  9e791b6112cca8cda51ae7e991b545f4bf0bb46c  wpewebkit-2.28.0.tar.xz
-+sha256  a85cd3cb46206a4929a9562d53379a7e7e2ec1a3224b34e2dcf5da30bb906722  wpewebkit-2.28.0.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 6591c7a0d8..9c969cae5a 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.26.4
-+WPEWEBKIT_VERSION = 2.28.0
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
--- 
-2.20.1
+This series superseed the previous one from Titouan:
+http://patchwork.ozlabs.org/project/buildroot/list/?series=138894
+
+Best regards,
+Romain
+
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> [Titouan: Fix patch conflicts with master]
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/mongodb/Config.in    |  8 +++-----
+>  package/mongodb/mongodb.hash |  2 +-
+>  package/mongodb/mongodb.mk   | 27 ++++++++++++++++++---------
+>  3 files changed, 22 insertions(+), 15 deletions(-)
+> 
+> diff --git a/package/mongodb/Config.in b/package/mongodb/Config.in
+> index 9c5dba8347..493c592413 100644
+> --- a/package/mongodb/Config.in
+> +++ b/package/mongodb/Config.in
+> @@ -8,12 +8,11 @@ config BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
+>  config BR2_PACKAGE_MONGODB
+>  	bool "mongodb"
+>  	depends on BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
+> -	depends on !BR2_PACKAGE_PYTHON3
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC # needs glibc malloc_usable_size
+>  	depends on BR2_USE_WCHAR
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+>  	select BR2_PACKAGE_BOOST
+>  	select BR2_PACKAGE_BOOST_FILESYSTEM
+>  	select BR2_PACKAGE_BOOST_IOSTREAMS
+> @@ -35,9 +34,8 @@ config BR2_PACKAGE_MONGODB
+>  
+>  	  https://www.mongodb.org/
+>  
+> -comment "mongodb needs a glibc toolchain w/ wchar, threads, C++, gcc >= 6"
+> +comment "mongodb needs a glibc toolchain w/ wchar, threads, C++, gcc >= 7"
+>  	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+>  		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC || \
+> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_6
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+>  	depends on BR2_PACKAGE_MONGODB_ARCH_SUPPORTS
+> -	depends on !BR2_PACKAGE_PYTHON3
+> diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+> index f08ffffe3b..01793e02e9 100644
+> --- a/package/mongodb/mongodb.hash
+> +++ b/package/mongodb/mongodb.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed:
+> -sha256 b39c5b7bb77a547804ab6f43f9b5f09add47574356b31512fd1cc641a08b4ea5  mongodb-r4.0.12.tar.gz
+> +sha256 033839fe43adb13351f9e0ef361d4731d7e917b2d7ad12f09df73e6e9c8bf6db  mongodb-r4.2.4.tar.gz
+>  sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
+>  sha256 09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
+> diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+> index 22ca920e12..f7f8b4bd05 100644
+> --- a/package/mongodb/mongodb.mk
+> +++ b/package/mongodb/mongodb.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -MONGODB_VERSION_BASE = 4.0.12
+> +MONGODB_VERSION_BASE = 4.2.4
+>  MONGODB_VERSION = r$(MONGODB_VERSION_BASE)
+>  MONGODB_SITE = $(call github,mongodb,mongo,$(MONGODB_VERSION))
+>  
+> @@ -13,9 +13,11 @@ MONGODB_LICENSE_FILES = APACHE-2.0.txt LICENSE-Community.txt
+>  
+>  MONGODB_DEPENDENCIES = \
+>  	boost \
+> -	host-python-cheetah \
+> -	host-python-pyyaml \
+> -	host-python-typing \
+> +	host-python3-cheetah \
+> +	host-python3-psutil \
+> +	host-python3-pyyaml \
+> +	host-python3-regex \
+> +	host-python3-requests \
+>  	host-scons \
+>  	pcre \
+>  	snappy \
+> @@ -29,6 +31,7 @@ MONGODB_SCONS_ENV = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" \
+>  	-j"$(PARALLEL_JOBS)"
+>  
+>  MONGODB_SCONS_OPTS = \
+> +	--disable-minimum-compiler-version-enforcement \
+>  	--disable-warnings-as-errors \
+>  	--use-system-boost \
+>  	--use-system-pcre \
+> @@ -60,21 +63,27 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBCURL),y)
+>  MONGODB_DEPENDENCIES += libcurl
+> -MONGODB_SCONS_OPTS += --enable-free-mon=on
+> +MONGODB_SCONS_OPTS += \
+> +	--enable-free-mon=on \
+> +	--enable-http-client=on
+>  else
+> -MONGODB_SCONS_OPTS += --enable-free-mon=off
+> +MONGODB_SCONS_OPTS += \
+> +	--enable-free-mon=off \
+> +	--enable-http-client=off
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
+>  MONGODB_DEPENDENCIES += openssl
+>  MONGODB_SCONS_OPTS += \
+> -	--ssl \
+> +	--ssl=on \
+>  	--ssl-provider=openssl
+> +else
+> +MONGODB_SCONS_OPTS += --ssl=off
+>  endif
+>  
+>  define MONGODB_BUILD_CMDS
+>  	(cd $(@D); \
+> -		$(HOST_DIR)/bin/python $(SCONS) \
+> +		$(HOST_DIR)/bin/python3 $(SCONS) \
+>  		$(MONGODB_SCONS_ENV) \
+>  		$(MONGODB_SCONS_OPTS) \
+>  		$(MONGODB_SCONS_TARGETS))
+> @@ -82,7 +91,7 @@ endef
+>  
+>  define MONGODB_INSTALL_TARGET_CMDS
+>  	(cd $(@D); \
+> -		$(HOST_DIR)/bin/python $(SCONS) \
+> +		$(HOST_DIR)/bin/python3 $(SCONS) \
+>  		$(MONGODB_SCONS_ENV) \
+>  		$(MONGODB_SCONS_OPTS) \
+>  		--prefix=$(TARGET_DIR)/usr \
+> 
