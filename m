@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Mar 2020 22:03:44 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/python-filelock: new package
-In-Reply-To: <20200323154539.39731-1-jared.bents@rockwellcollins.com>
-References: <20200323154539.39731-1-jared.bents@rockwellcollins.com>
-Message-ID: <20200324220344.2ca2e145@windsurf.home>
+Date: Tue, 24 Mar 2020 22:05:22 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/freescale_imx6ullevk: new
+ defconfig
+In-Reply-To: <20200323210122.471254-1-fabrice.goucem@oss.nxp.com>
+References: <20200323210122.471254-1-fabrice.goucem@oss.nxp.com>
+Message-ID: <20200324220522.5142662b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Mar 2020 10:45:39 -0500
-Jared Bents <jared.bents@rockwellcollins.com> wrote:
+On Mon, 23 Mar 2020 22:01:22 +0100
+Fabrice Goucem <fabrice.goucem@oss.nxp.com> wrote:
 
-> This package contains a single module, which implements
-> a platform independent file lock in Python, which provides
-> a simple way of inter-process communication.
+> Add basic support for NXP's i.MX6 ULL EVK board:
 > 
-> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> --
-> v2: updated commit message to fit new package standard
+> https://www.nxp.com/design/development-boards/i.mx-evaluation-and-development-boards/evaluation-kit-for-the-i.mx-6ull-and-6ulz-applications-processor:MCIMX6ULL-EVK
+> 
+> Signed-off-by: Fabrice Goucem <fabrice.goucem@oss.nxp.com>
+> Signed-off-by: Fabrice Goucem <fabrice.goucem@nxp.com>
 > ---
->  DEVELOPERS                                   |  1 +
->  package/Config.in                            |  1 +
->  package/python-filelock/Config.in            |  6 ++++++
->  package/python-filelock/python-filelock.hash |  5 +++++
->  package/python-filelock/python-filelock.mk   | 14 ++++++++++++++
->  5 files changed, 27 insertions(+)
->  create mode 100644 package/python-filelock/Config.in
->  create mode 100644 package/python-filelock/python-filelock.hash
->  create mode 100644 package/python-filelock/python-filelock.mk
+>  .gitlab-ci.yml                         |  1 +
+>  DEVELOPERS                             |  4 ++
+>  board/freescale/imx6ullevk/readme.txt  | 61 ++++++++++++++++++++++++++
+>  configs/freescale_imx6ullevk_defconfig | 24 ++++++++++
+>  4 files changed, 90 insertions(+)
+>  create mode 100644 board/freescale/imx6ullevk/readme.txt
+>  create mode 100644 configs/freescale_imx6ullevk_defconfig
 
-Applied to master, thanks.
+Applied to master, thanks for your contribution!
 
 Thomas
 -- 
