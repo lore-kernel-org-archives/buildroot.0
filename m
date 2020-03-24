@@ -1,95 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Mar 2020 21:54:14 +0100
-Subject: [Buildroot] [git commit] package/python-pysftp: new package
-Message-ID: <20200324204916.920D388153@busybox.osuosl.org>
+Date: Tue, 24 Mar 2020 22:01:11 +0100
+Subject: [Buildroot] [git commit] package/python-filelock: new package
+Message-ID: <20200324204916.9C3F788125@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b920487bad119abf5bfb10a237cedd3b5278c10
+commit: https://git.buildroot.net/buildroot/commit/?id=16ee6551c3ed608f8e28d45bdd4b6b3bbcd8c09a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A simple interface to SFTP. The module offers high level
-abstractions and task based routines to handle your SFTP
-needs.
+This package contains a single module, which implements
+a platform independent file lock in Python, which provides
+a simple way of inter-process communication.
 
 Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-pysftp/Config.in          |  7 +++++++
- package/python-pysftp/python-pysftp.hash |  5 +++++
- package/python-pysftp/python-pysftp.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-filelock/Config.in            |  6 ++++++
+ package/python-filelock/python-filelock.hash |  5 +++++
+ package/python-filelock/python-filelock.mk   | 14 ++++++++++++++
+ 5 files changed, 27 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 8ea08739f7..56e8e23221 100644
+index 56e8e23221..6beb3ea809 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -1230,6 +1230,7 @@ F:	package/zynq-boot-bin/
  
  N:	Jared Bents <jared.bents@rockwellcollins.com>
  F:	package/davici/
-+F:	package/python-pysftp/
++F:	package/python-filelock/
+ F:	package/python-pysftp/
  
  N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
- F:	package/quota/
 diff --git a/package/Config.in b/package/Config.in
-index 2b903140df..8be07d001a 100644
+index 8be07d001a..b4033721e2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1094,6 +1094,7 @@ menu "External python modules"
- 	source "package/python-pyro/Config.in"
- 	source "package/python-pyroute2/Config.in"
- 	source "package/python-pysendfile/Config.in"
-+	source "package/python-pysftp/Config.in"
- 	source "package/python-pysmb/Config.in"
- 	source "package/python-pysmi/Config.in"
- 	source "package/python-pysnmp/Config.in"
-diff --git a/package/python-pysftp/Config.in b/package/python-pysftp/Config.in
+@@ -946,6 +946,7 @@ menu "External python modules"
+ 	source "package/python-enum34/Config.in"
+ 	source "package/python-esptool/Config.in"
+ 	source "package/python-falcon/Config.in"
++	source "package/python-filelock/Config.in"
+ 	source "package/python-fire/Config.in"
+ 	source "package/python-flask/Config.in"
+ 	source "package/python-flask-babel/Config.in"
+diff --git a/package/python-filelock/Config.in b/package/python-filelock/Config.in
 new file mode 100644
-index 0000000000..06f883f602
+index 0000000000..57ec039400
 --- /dev/null
-+++ b/package/python-pysftp/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYSFTP
-+	bool "python-pysftp"
-+	select BR2_PACKAGE_PYTHON_PARAMIKO # runtime
++++ b/package/python-filelock/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_FILELOCK
++	bool "python-filelock"
 +	help
-+	  A friendly face on SFTP.
++	  A platform independent file lock.
 +
-+	  https://bitbucket.org/dundeemt/pysftp
-diff --git a/package/python-pysftp/python-pysftp.hash b/package/python-pysftp/python-pysftp.hash
++	  https://github.com/benediktschmitt/py-filelock
+diff --git a/package/python-filelock/python-filelock.hash b/package/python-filelock/python-filelock.hash
 new file mode 100644
-index 0000000000..75102ab8a5
+index 0000000000..d50d2d561c
 --- /dev/null
-+++ b/package/python-pysftp/python-pysftp.hash
++++ b/package/python-filelock/python-filelock.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pysftp/json
-+md5  abc55b7122de3e86f0d547301f4ddf0c  pysftp-0.2.9.tar.gz
-+sha256  fbf55a802e74d663673400acd92d5373c1c7ee94d765b428d9f977567ac4854a  pysftp-0.2.9.tar.gz
++# md5, sha256 from https://pypi.org/pypi/filelock/json
++md5  c1fe6d9a7433a7ca6ce4f36e273317d1  filelock-3.0.12.tar.gz
++sha256  18d82244ee114f543149c66a6e0c14e9c4f8a1044b5cdaadd0f82159d6a6ff59  filelock-3.0.12.tar.gz
 +# Locally computed sha256 checksums
-+sha256  e648e3c7f439b52222a785a590223a0f7bad1a8a5fb89157d80d13123c7dcd25  LICENSE.txt
-diff --git a/package/python-pysftp/python-pysftp.mk b/package/python-pysftp/python-pysftp.mk
++sha256  88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd  LICENSE
+diff --git a/package/python-filelock/python-filelock.mk b/package/python-filelock/python-filelock.mk
 new file mode 100644
-index 0000000000..4841afd000
+index 0000000000..35b3374d29
 --- /dev/null
-+++ b/package/python-pysftp/python-pysftp.mk
++++ b/package/python-filelock/python-filelock.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-pysftp
++# python-filelock
 +#
 +################################################################################
 +
-+PYTHON_PYSFTP_VERSION = 0.2.9
-+PYTHON_PYSFTP_SOURCE = pysftp-$(PYTHON_PYSFTP_VERSION).tar.gz
-+PYTHON_PYSFTP_SITE = https://files.pythonhosted.org/packages/36/60/45f30390a38b1f92e0a8cf4de178cd7c2bc3f874c85430e40ccf99df8fe7
-+PYTHON_PYSFTP_SETUP_TYPE = setuptools
-+PYTHON_PYSFTP_LICENSE = BSD-3-Clause
-+PYTHON_PYSFTP_LICENSE_FILES = LICENSE.txt
++PYTHON_FILELOCK_VERSION = 3.0.12
++PYTHON_FILELOCK_SOURCE = filelock-$(PYTHON_FILELOCK_VERSION).tar.gz
++PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/14/ec/6ee2168387ce0154632f856d5cc5592328e9cf93127c5c9aeca92c8c16cb
++PYTHON_FILELOCK_SETUP_TYPE = setuptools
++PYTHON_FILELOCK_LICENSE = Public Domain
++PYTHON_FILELOCK_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
