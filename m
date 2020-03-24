@@ -1,66 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 24 Mar 2020 23:22:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: fix kmsdrm build without EGL
-Message-ID: <20200324222241.5808-1-fontaine.fabrice@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 24 Mar 2020 16:22:30 -0600
+Subject: [Buildroot] [PATCH 1/1] package/wpebackend-fdo: bump to version
+ 1.6.0
+Message-ID: <20200324222230.128927-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/fafd20a01591032662f9ca025fcea3478239cf3c
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...o-kmsdrm-SDL_kmsdrmvideo.c-fix-build.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/sdl2/0002-src-video-kmsdrm-SDL_kmsdrmvideo.c-fix-build.patch
+ package/wpebackend-fdo/wpebackend-fdo.hash | 10 +++++-----
+ package/wpebackend-fdo/wpebackend-fdo.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/sdl2/0002-src-video-kmsdrm-SDL_kmsdrmvideo.c-fix-build.patch b/package/sdl2/0002-src-video-kmsdrm-SDL_kmsdrmvideo.c-fix-build.patch
-new file mode 100644
-index 0000000000..6021647a38
---- /dev/null
-+++ b/package/sdl2/0002-src-video-kmsdrm-SDL_kmsdrmvideo.c-fix-build.patch
-@@ -0,0 +1,39 @@
-+From d265b1ee94aa4faf5fa405f14cc731a25d7a00ab Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 24 Mar 2020 14:11:14 +0100
-+Subject: [PATCH] src/video/kmsdrm/SDL_kmsdrmvideo.c: fix build
-+
-+Build is broken without EGL since version 2.0.12 and
-+https://hg.libsdl.org/SDL/rev/9761858bd6a3:
-+
-+/home/giuliobenetti/autobuild/run/instance-1/output-1/build/sdl2-2.0.12/src/video/kmsdrm/SDL_kmsdrmvideo.c: In function 'KMSDRM_CreateSurfaces':
-+/home/giuliobenetti/autobuild/run/instance-1/output-1/build/sdl2-2.0.12/src/video/kmsdrm/SDL_kmsdrmvideo.c:394:5: error: unknown type name 'EGLContext'
-+     EGLContext egl_context;
-+     ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/fafd20a01591032662f9ca025fcea3478239cf3c
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://bugzilla.libsdl.org/show_bug.cgi?id=5057]
-+---
-+ src/video/kmsdrm/SDL_kmsdrmvideo.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.c b/src/video/kmsdrm/SDL_kmsdrmvideo.c
-+index 216c45dab..459f96537 100644
-+--- a/src/video/kmsdrm/SDL_kmsdrmvideo.c
-++++ b/src/video/kmsdrm/SDL_kmsdrmvideo.c
-+@@ -391,7 +391,9 @@ KMSDRM_CreateSurfaces(_THIS, SDL_Window * window)
-+     Uint32 height = dispdata->mode.vdisplay;
-+     Uint32 surface_fmt = GBM_FORMAT_XRGB8888;
-+     Uint32 surface_flags = GBM_BO_USE_SCANOUT | GBM_BO_USE_RENDERING;
-++#if SDL_VIDEO_OPENGL_EGL
-+     EGLContext egl_context;
-++#endif
-+ 
-+     if (!KMSDRM_gbm_device_is_format_supported(viddata->gbm, surface_fmt, surface_flags)) {
-+         SDL_LogWarn(SDL_LOG_CATEGORY_VIDEO, "GBM surface format not supported. Trying anyway.");
-+-- 
-+2.25.1
-+
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+index fbeed390e6..1380934af3 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.hash
++++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpebackend-fdo-1.4.1.tar.xz.sums
+-md5 c6362491a4a38ddac42b66f140e1cff2 wpebackend-fdo-1.4.1.tar.xz
+-sha1 9217c8a5511bc53544b42cb23390256580ac4b0c wpebackend-fdo-1.4.1.tar.xz
+-sha256 6249a0b7cbfa662206a8d2fa24e2c574e75c681ad0e93468091f1dc68ddb299d wpebackend-fdo-1.4.1.tar.xz
++# From https://wpewebkit.org/releases/wpebackend-fdo-1.6.0.tar.xz.sums
++md5  456afeed22f6749f7b2a97c11660835d  wpebackend-fdo-1.6.0.tar.xz
++sha1  d128e2c7ff273d9b9f31217f6ac25be3b266d805  wpebackend-fdo-1.6.0.tar.xz
++sha256  7f5bd7b9d8f97b1655f4dcd39fad92719d0fb3985b251da5802df13aaa09f567  wpebackend-fdo-1.6.0.tar.xz
+ 
+ # Hashes for license files:
+-sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
++sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+index 4a7c569d9c..99e10c5a01 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.mk
++++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPEBACKEND_FDO_VERSION = 1.4.1
++WPEBACKEND_FDO_VERSION = 1.6.0
+ WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+ WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+ WPEBACKEND_FDO_INSTALL_STAGING = YES
 -- 
-2.25.1
+2.20.1
