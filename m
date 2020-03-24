@@ -1,35 +1,95 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 24 Mar 2020 22:00:40 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libmicrohttpd: fix pthread detection
-Message-ID: <20200324210041.628200-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 24 Mar 2020 21:54:14 +0100
+Subject: [Buildroot] [git commit] package/python-pysftp: new package
+Message-ID: <20200324204916.920D388153@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/ceb802eea0fee5812efd717ae4cdbd9673d9507e/
+commit: https://git.buildroot.net/buildroot/commit/?id=3b920487bad119abf5bfb10a237cedd3b5278c10
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Quoted from config.log:
-conftest.c:32:26: error: #error "_REENTRANT must be defined"
+A simple interface to SFTP. The module offers high level
+abstractions and task based routines to handle your SFTP
+needs.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libmicrohttpd/libmicrohttpd.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-pysftp/Config.in          |  7 +++++++
+ package/python-pysftp/python-pysftp.hash |  5 +++++
+ package/python-pysftp/python-pysftp.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index f47d7ec214..2f5c28cd58 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -22,4 +22,7 @@ LIBMICROHTTPD_LICENSE = LGPL-2.1+ or eCos
- LIBMICROHTTPD_CONF_OPTS += --disable-https
- endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8ea08739f7..56e8e23221 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1230,6 +1230,7 @@ F:	package/zynq-boot-bin/
  
-+# fixes pthreads detection
-+LIBMICROHTTPD_CFLAGS += -D_REENTRANT
+ N:	Jared Bents <jared.bents@rockwellcollins.com>
+ F:	package/davici/
++F:	package/python-pysftp/
+ 
+ N:	Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+ F:	package/quota/
+diff --git a/package/Config.in b/package/Config.in
+index 2b903140df..8be07d001a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1094,6 +1094,7 @@ menu "External python modules"
+ 	source "package/python-pyro/Config.in"
+ 	source "package/python-pyroute2/Config.in"
+ 	source "package/python-pysendfile/Config.in"
++	source "package/python-pysftp/Config.in"
+ 	source "package/python-pysmb/Config.in"
+ 	source "package/python-pysmi/Config.in"
+ 	source "package/python-pysnmp/Config.in"
+diff --git a/package/python-pysftp/Config.in b/package/python-pysftp/Config.in
+new file mode 100644
+index 0000000000..06f883f602
+--- /dev/null
++++ b/package/python-pysftp/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PYSFTP
++	bool "python-pysftp"
++	select BR2_PACKAGE_PYTHON_PARAMIKO # runtime
++	help
++	  A friendly face on SFTP.
 +
- $(eval $(autotools-package))
--- 
-2.25.0
++	  https://bitbucket.org/dundeemt/pysftp
+diff --git a/package/python-pysftp/python-pysftp.hash b/package/python-pysftp/python-pysftp.hash
+new file mode 100644
+index 0000000000..75102ab8a5
+--- /dev/null
++++ b/package/python-pysftp/python-pysftp.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pysftp/json
++md5  abc55b7122de3e86f0d547301f4ddf0c  pysftp-0.2.9.tar.gz
++sha256  fbf55a802e74d663673400acd92d5373c1c7ee94d765b428d9f977567ac4854a  pysftp-0.2.9.tar.gz
++# Locally computed sha256 checksums
++sha256  e648e3c7f439b52222a785a590223a0f7bad1a8a5fb89157d80d13123c7dcd25  LICENSE.txt
+diff --git a/package/python-pysftp/python-pysftp.mk b/package/python-pysftp/python-pysftp.mk
+new file mode 100644
+index 0000000000..4841afd000
+--- /dev/null
++++ b/package/python-pysftp/python-pysftp.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pysftp
++#
++################################################################################
++
++PYTHON_PYSFTP_VERSION = 0.2.9
++PYTHON_PYSFTP_SOURCE = pysftp-$(PYTHON_PYSFTP_VERSION).tar.gz
++PYTHON_PYSFTP_SITE = https://files.pythonhosted.org/packages/36/60/45f30390a38b1f92e0a8cf4de178cd7c2bc3f874c85430e40ccf99df8fe7
++PYTHON_PYSFTP_SETUP_TYPE = setuptools
++PYTHON_PYSFTP_LICENSE = BSD-3-Clause
++PYTHON_PYSFTP_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
