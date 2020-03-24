@@ -1,105 +1,82 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 24 Mar 2020 12:19:11 -0600
-Subject: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.18.0
-In-Reply-To: <0b0b94ef-53a8-3f93-2cc6-09be6b5d318f@mind.be>
-References: <20200303230943.24334-1-james.hilliard1@gmail.com>
- <20200305210537.42d4c081@windsurf>
- <CADvTj4p7bNSX6C+Y6Lo_cuHMT+4ifdJgckm2mEPX1tvyFyMTdQ@mail.gmail.com>
- <0b0b94ef-53a8-3f93-2cc6-09be6b5d318f@mind.be>
-Message-ID: <CADvTj4rWcE615eLkeWeLW-BvXu+4Ruebo-xVLVQRVx=XJKKW6w@mail.gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Tue, 24 Mar 2020 11:34:55 -0700
+Subject: [Buildroot] [PATCH 1/1] package/{openjdk,
+ openjdk-bin}: bump version to 14+36
+Message-ID: <20200324183456.3054773-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 9, 2020 at 2:12 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 05/03/2020 21:23, James Hilliard wrote:
-> > On Thu, Mar 5, 2020 at 1:05 PM Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> wrote:
-> >>
-> >> Hello James,
-> >>
-> >> +Arnout, as there is a meson/pkg-config question.
-> >>
-> >> Thanks for the patch. Two questions below.
-> >>
-> >> On Tue,  3 Mar 2020 16:09:43 -0700
-> >> James Hilliard <james.hilliard1@gmail.com> wrote:
-> >>
-> >>> diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-> >>> index e325c6d752..6de92f63d9 100644
-> >>> --- a/package/wayland/wayland.mk
-> >>> +++ b/package/wayland/wayland.mk
-> >>> @@ -4,7 +4,7 @@
-> >>>  #
-> >>>  ################################################################################
-> >>>
-> >>> -WAYLAND_VERSION = 1.17.0
-> >>> +WAYLAND_VERSION = 1.18.0
-> >>>  WAYLAND_SITE = http://wayland.freedesktop.org/releases
-> >>>  WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
-> >>>  WAYLAND_LICENSE = MIT
-> >>> @@ -13,12 +13,12 @@ WAYLAND_INSTALL_STAGING = YES
-> >>>  WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
-> >>>  HOST_WAYLAND_DEPENDENCIES = host-pkgconf host-expat host-libffi host-libxml2
-> >>>
-> >>> -# 0002-configure-add-option-to-disable-tests.patch
-> >>> -WAYLAND_AUTORECONF = YES
-> >>> +WAYLAND_CONF_OPTS = \
-> >>> +     -Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
-> >>
-> >> Are you sure this is needed since commit
-> >> 4e0bc29993376613d200e892d491e31ea5a49622 ? Indeed, with this commit,
-> >> meson is properly able to use pkg-config either for native builds or
-> >> cross builds.
-> > It was failing for me without this.
->
->  That means something is wrong with commit 4e0bc29933.
-From what I can tell that change is for fixing a different issue.
->
->  Ideally we should find out what exactly is going on here and make sure things
-> are done properly in our meson integration. Unfortunately, I don't have time to
-> look at this myself for at least the coming 2 months. So I'm OK with merging
-> this patch as is for the time being.
-By the way we do the same thing for weston, see:
-https://github.com/buildroot/buildroot/blob/e0c5e294b939167ceda718a9729d6ddb64c3a4b3/package/weston/weston.mk#L17
->
-> >>
-> >>> +     -Dtests=false \
-> >>> +     -Ddocumentation=false
-> >>>
-> >>> -# wayland-scanner is only needed for building, not on the target
-> >>> -WAYLAND_CONF_OPTS = --with-host-scanner --disable-tests
-> >>
-> >> So how is the scanner thing working these days? With the meson build
-> >> logic, it doesn't build the scanner when cross-compiling, and knows
-> >> that it should use a pre-installed scanner ?
-> > Yes, it knows there is a pre-installed scanner due to this:
-> > -Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig
-> > See:
-> > https://github.com/wayland-project/wayland/blob/1.18.0/src/meson.build#L57-L59
->
->  AFAIU, meson doesn't have a way to build a program twice (once for target and
-> once for build), so the wayland mesonbuild uses a pre-installed one when
-> cross-compiling.
->
->  A better solution for upstream wayland would probably be to repeat the
-> definition of wayland_scanner as wayland_scanner_for_build (with install: false
-> and native: true).
->
->  Regards,
->  Arnout
->
->
-> >>
-> >> Thanks!
-> >>
-> >> Thomas
-> >> --
-> >> Thomas Petazzoni, CTO, Bootlin
-> >> Embedded Linux and Kernel engineering
-> >> https://bootlin.com
+From: Adam Duskett <Aduskett@gmail.com>
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/openjdk-bin/openjdk-bin.hash | 2 +-
+ package/openjdk-bin/openjdk-bin.mk   | 8 ++++----
+ package/openjdk/openjdk.hash         | 2 +-
+ package/openjdk/openjdk.mk           | 6 +++---
+ 4 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 3e4df59236..98e039c17e 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/AdoptOpenJDK/openjdk12-binaries/releases
+-sha256  9ccc063569f19899fd08e41466f8c4cd4e05058abdb5178fa374cb365dcf5998	OpenJDK13U-jdk_x64_linux_hotspot_13.0.2_8.tar.gz
++sha256  6c06853332585ab58834d9e8a02774b388e6e062ef6c4084b4f058c67f2e81b5	OpenJDK14U-jdk_x64_linux_hotspot_14_36.tar.gz
+ 
+ # Locally calculated
+ sha256	4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726	legal/java.prefs/LICENSE
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index e780a797e6..31dc4a4666 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-HOST_OPENJDK_BIN_VERSION_MAJOR = 13.0.2
+-HOST_OPENJDK_BIN_VERSION_MINOR = 8
++HOST_OPENJDK_BIN_VERSION_MAJOR = 14
++HOST_OPENJDK_BIN_VERSION_MINOR = 36
+ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
+-HOST_OPENJDK_BIN_SOURCE = OpenJDK13U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+-HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk13-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
++HOST_OPENJDK_BIN_SOURCE = OpenJDK14U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
++HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
+ HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
+ 
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index ca282591ef..d5be642052 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 d38fb17795782dffe84e98f21f1d6293b0a45ea8f1e9c81e99cd71acac03a4e0  jdk-13.0.2+8.tar.gz
++sha256 6815dbac7dd0f86291254e84ed17565c89477eeb6b0847a9648b00ecb4f07634  jdk-14+36.tar.gz
+ sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index 030a205228..edc86c6fbe 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-OPENJDK_VERSION_MAJOR = 13.0.2
+-OPENJDK_VERSION_MINOR = 8
++OPENJDK_VERSION_MAJOR = 14
++OPENJDK_VERSION_MINOR = 36
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
+-OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk13u/archive
++OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk14u/archive
+ OPENJDK_LICENSE = GPL-2.0+ with exception
+ OPENJDK_LICENSE_FILES = LICENSE
+ 
+-- 
+2.25.1
