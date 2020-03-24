@@ -1,32 +1,105 @@
-From: Graham Rhodes <graham.rhodes@rockwellcollins.com>
-Date: Tue, 24 Mar 2020 12:53:26 -0500
-Subject: [Buildroot] [PATCH 1/1] package/quagga: install quagga to staging
-Message-ID: <20200324175326.102828-1-graham.rhodes@rockwellcollins.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 24 Mar 2020 12:19:11 -0600
+Subject: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.18.0
+In-Reply-To: <0b0b94ef-53a8-3f93-2cc6-09be6b5d318f@mind.be>
+References: <20200303230943.24334-1-james.hilliard1@gmail.com>
+ <20200305210537.42d4c081@windsurf>
+ <CADvTj4p7bNSX6C+Y6Lo_cuHMT+4ifdJgckm2mEPX1tvyFyMTdQ@mail.gmail.com>
+ <0b0b94ef-53a8-3f93-2cc6-09be6b5d318f@mind.be>
+Message-ID: <CADvTj4rWcE615eLkeWeLW-BvXu+4Ruebo-xVLVQRVx=XJKKW6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-quagga installs libraries that provide interfaces to manage network routing 
-that can be used by other applications.
-
-Signed-off-by: Graham Rhodes <graham.rhodes@rockwellcollins.com>
----
- package/quagga/quagga.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 96a971104b..0b352aa367 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -6,6 +6,7 @@
- 
- QUAGGA_VERSION = 1.2.4
- QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
-+QUAGGA_INSTALL_STAGING = YES
- QUAGGA_DEPENDENCIES = host-gawk host-pkgconf
- QUAGGA_LICENSE = GPL-2.0+
- QUAGGA_LICENSE_FILES = COPYING
--- 
-2.23.0
+On Mon, Mar 9, 2020 at 2:12 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 05/03/2020 21:23, James Hilliard wrote:
+> > On Thu, Mar 5, 2020 at 1:05 PM Thomas Petazzoni
+> > <thomas.petazzoni@bootlin.com> wrote:
+> >>
+> >> Hello James,
+> >>
+> >> +Arnout, as there is a meson/pkg-config question.
+> >>
+> >> Thanks for the patch. Two questions below.
+> >>
+> >> On Tue,  3 Mar 2020 16:09:43 -0700
+> >> James Hilliard <james.hilliard1@gmail.com> wrote:
+> >>
+> >>> diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+> >>> index e325c6d752..6de92f63d9 100644
+> >>> --- a/package/wayland/wayland.mk
+> >>> +++ b/package/wayland/wayland.mk
+> >>> @@ -4,7 +4,7 @@
+> >>>  #
+> >>>  ################################################################################
+> >>>
+> >>> -WAYLAND_VERSION = 1.17.0
+> >>> +WAYLAND_VERSION = 1.18.0
+> >>>  WAYLAND_SITE = http://wayland.freedesktop.org/releases
+> >>>  WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+> >>>  WAYLAND_LICENSE = MIT
+> >>> @@ -13,12 +13,12 @@ WAYLAND_INSTALL_STAGING = YES
+> >>>  WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
+> >>>  HOST_WAYLAND_DEPENDENCIES = host-pkgconf host-expat host-libffi host-libxml2
+> >>>
+> >>> -# 0002-configure-add-option-to-disable-tests.patch
+> >>> -WAYLAND_AUTORECONF = YES
+> >>> +WAYLAND_CONF_OPTS = \
+> >>> +     -Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
+> >>
+> >> Are you sure this is needed since commit
+> >> 4e0bc29993376613d200e892d491e31ea5a49622 ? Indeed, with this commit,
+> >> meson is properly able to use pkg-config either for native builds or
+> >> cross builds.
+> > It was failing for me without this.
+>
+>  That means something is wrong with commit 4e0bc29933.
+From what I can tell that change is for fixing a different issue.
+>
+>  Ideally we should find out what exactly is going on here and make sure things
+> are done properly in our meson integration. Unfortunately, I don't have time to
+> look at this myself for at least the coming 2 months. So I'm OK with merging
+> this patch as is for the time being.
+By the way we do the same thing for weston, see:
+https://github.com/buildroot/buildroot/blob/e0c5e294b939167ceda718a9729d6ddb64c3a4b3/package/weston/weston.mk#L17
+>
+> >>
+> >>> +     -Dtests=false \
+> >>> +     -Ddocumentation=false
+> >>>
+> >>> -# wayland-scanner is only needed for building, not on the target
+> >>> -WAYLAND_CONF_OPTS = --with-host-scanner --disable-tests
+> >>
+> >> So how is the scanner thing working these days? With the meson build
+> >> logic, it doesn't build the scanner when cross-compiling, and knows
+> >> that it should use a pre-installed scanner ?
+> > Yes, it knows there is a pre-installed scanner due to this:
+> > -Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig
+> > See:
+> > https://github.com/wayland-project/wayland/blob/1.18.0/src/meson.build#L57-L59
+>
+>  AFAIU, meson doesn't have a way to build a program twice (once for target and
+> once for build), so the wayland mesonbuild uses a pre-installed one when
+> cross-compiling.
+>
+>  A better solution for upstream wayland would probably be to repeat the
+> definition of wayland_scanner as wayland_scanner_for_build (with install: false
+> and native: true).
+>
+>  Regards,
+>  Arnout
+>
+>
+> >>
+> >> Thanks!
+> >>
+> >> Thomas
+> >> --
+> >> Thomas Petazzoni, CTO, Bootlin
+> >> Embedded Linux and Kernel engineering
+> >> https://bootlin.com
