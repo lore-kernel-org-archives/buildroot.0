@@ -1,155 +1,73 @@
-From: Julien Olivain <julien.olivain@oss.nxp.com>
-Date: Tue, 24 Mar 2020 18:40:15 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/freescale_imx7dsabresd: bump BSP
- components to 4.19.35_1.1.0
-Message-ID: <20200324174015.125787-1-julien.olivain@oss.nxp.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 24 Mar 2020 20:21:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: fix build with directfb
+Message-ID: <20200324192121.3692-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also dropped uboot patch accepted upstream in v2018.05 in
-commit f916757300c15aa1a3f0ccc98e7abb8a84c97da0
+Fixes:
+ - http://autobuild.buildroot.org/results/83ccefee68c2800c0544e6f40fa8bc8ee6b67b77
 
-Tested-by: Julien Olivain <julien.olivain@oss.nxp.com>
-Signed-off-by: Julien Olivain <julien.olivain@oss.nxp.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...nct-pre-processed-mkimage-config-fil.patch | 89 -------------------
- configs/freescale_imx7dsabresd_defconfig      | 11 +--
- 2 files changed, 4 insertions(+), 96 deletions(-)
- delete mode 100644 board/freescale/imx7dsdb/patches/uboot/0001-imx-Create-distinct-pre-processed-mkimage-config-fil.patch
+ ...ctfb-SDL_DirectFB_render.c-fix-build.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/sdl2/0001-src-video-directfb-SDL_DirectFB_render.c-fix-build.patch
 
-diff --git a/board/freescale/imx7dsdb/patches/uboot/0001-imx-Create-distinct-pre-processed-mkimage-config-fil.patch b/board/freescale/imx7dsdb/patches/uboot/0001-imx-Create-distinct-pre-processed-mkimage-config-fil.patch
-deleted file mode 100644
-index b8989cb965..0000000000
---- a/board/freescale/imx7dsdb/patches/uboot/0001-imx-Create-distinct-pre-processed-mkimage-config-fil.patch
-+++ /dev/null
-@@ -1,89 +0,0 @@
--From 27a2cd6a1980adf3002412678c8fdec6528dc47d Mon Sep 17 00:00:00 2001
--From: Trent Piepho <tpiepho@impinj.com>
--Date: Fri, 6 Apr 2018 17:11:27 -0700
--Subject: [PATCH] imx: Create distinct pre-processed mkimage config files
--
--Each imx image is created by a separate sub-make and during this process
--the mkimage config file is run though cpp.
--
--The cpp output is to the same file no matter what imx image is being
--created.
--
--This means if two imx images are generated in parallel they will attempt
--to independently produce the same pre-processed mkimage config file at
--the same time.
--
--Avoid the problem by making the pre-processed config file name unique
--based on the imx image it will be used in.  This way each image will
--create a unique config file and they won't clobber each other when run
--in parallel.
--
--This should fixed the build bug referenced in b5b0e4e3 ("imximage:
--Remove failure when no IVT offset is found").
--
--Cc: Breno Lima <breno.lima@nxp.com>
--Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Cc: Fabio Estevam <fabio.estevam@nxp.com>
--Signed-off-by: Trent Piepho <tpiepho@impinj.com>
--Tested-by: Fabio Estevam <fabio.estevam@nxp.com>
--[fabio: Adapted to imx_v2017.03_4.9.11_1.0.0_ga]
--Signed-off-by: Fabio Estevam <festevam@gmail.com>
-----
-- arch/arm/imx-common/Makefile | 15 ++++++++-------
-- 1 file changed, 8 insertions(+), 7 deletions(-)
--
--diff --git a/arch/arm/imx-common/Makefile b/arch/arm/imx-common/Makefile
--index d862258..f1bae8d 100644
----- a/arch/arm/imx-common/Makefile
--+++ b/arch/arm/imx-common/Makefile
--@@ -69,9 +69,11 @@ endif
-- quiet_cmd_cpp_cfg = CFGS    $@
--       cmd_cpp_cfg = $(CPP) $(cpp_flags) -x c -o $@ $<
-- 
---IMX_CONFIG = $(CONFIG_IMX_CONFIG:"%"=%).cfgtmp
--+# mkimage source config file
--+IMX_CONFIG = $(CONFIG_IMX_CONFIG:"%"=%)
-- 
---$(IMX_CONFIG): %.cfgtmp: % FORCE
--+# How to create a cpp processed config file, they all use the same source
--+%.cfgout: $(IMX_CONFIG) FORCE
-- 	$(Q)mkdir -p $(dir $@)
-- 	$(call if_changed_dep,cpp_cfg)
-- 
--@@ -79,7 +81,7 @@ MKIMAGEFLAGS_u-boot.imx = -n $(filter-out $(PLUGIN).bin $< $(PHONY),$^) -T imxim
-- 	-e $(CONFIG_SYS_TEXT_BASE)
-- u-boot.imx: MKIMAGEOUTPUT = u-boot.imx.log
-- 
---u-boot.imx: u-boot.bin $(IMX_CONFIG) $(PLUGIN).bin FORCE
--+u-boot.imx: u-boot.bin u-boot.cfgout $(PLUGIN).bin FORCE
-- 	$(call if_changed,mkimage)
-- 
-- ifeq ($(CONFIG_OF_SEPARATE),y)
--@@ -87,16 +89,15 @@ MKIMAGEFLAGS_u-boot-dtb.imx = -n $(filter-out $(PLUGIN).bin $< $(PHONY),$^) -T i
-- 	-e $(CONFIG_SYS_TEXT_BASE)
-- u-boot-dtb.imx: MKIMAGEOUTPUT = u-boot-dtb.imx.log
-- 
---u-boot-dtb.imx: u-boot-dtb.bin $(IMX_CONFIG) $(PLUGIN).bin FORCE
--+u-boot-dtb.imx: u-boot-dtb.bin u-boot-dtb.cfgout $(PLUGIN).bin FORCE
-- 	$(call if_changed,mkimage)
-- endif
-- 
-- MKIMAGEFLAGS_SPL = -n $(filter-out $(PLUGIN).bin $< $(PHONY),$^) -T imximage \
-- 	-e $(CONFIG_SPL_TEXT_BASE)
---
-- SPL: MKIMAGEOUTPUT = SPL.log
-- 
---SPL: spl/u-boot-spl.bin $(IMX_CONFIG) $(PLUGIN).bin FORCE
--+SPL: spl/u-boot-spl.bin spl/u-boot-spl.cfgout $(PLUGIN).bin FORCE
-- 	$(call if_changed,mkimage)
-- 
-- MKIMAGEFLAGS_u-boot.uim = -A arm -O U-Boot -a $(CONFIG_SYS_TEXT_BASE) \
--@@ -124,4 +125,4 @@ cmd_u-boot-nand-spl_imx = (printf '\000\000\000\000\106\103\102\040\001' && \
-- spl/u-boot-nand-spl.imx: SPL FORCE
-- 	$(call if_changed,u-boot-nand-spl_imx)
-- 
---targets += $(addprefix ../../../,$(IMX_CONFIG) SPL u-boot.uim spl/u-boot-nand-spl.imx)
--+targets += $(addprefix ../../../,SPL spl/u-boot-spl.cfgout u-boot-dtb.cfgout u-boot.cfgout u-boot.uim spl/u-boot-nand-spl.imx)
---- 
--2.7.4
--
-diff --git a/configs/freescale_imx7dsabresd_defconfig b/configs/freescale_imx7dsabresd_defconfig
-index 9d00a53eb8..86009c1c21 100644
---- a/configs/freescale_imx7dsabresd_defconfig
-+++ b/configs/freescale_imx7dsabresd_defconfig
-@@ -2,11 +2,8 @@
- BR2_arm=y
- BR2_cortex_a7=y
- 
--# patches
--BR2_GLOBAL_PATCH_DIR="board/freescale/imx7dsdb/patches"
--
--# Linux headers same as kernel, a 4.9 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -15,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
-@@ -29,7 +26,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.9.x_1.0.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- 
+diff --git a/package/sdl2/0001-src-video-directfb-SDL_DirectFB_render.c-fix-build.patch b/package/sdl2/0001-src-video-directfb-SDL_DirectFB_render.c-fix-build.patch
+new file mode 100644
+index 0000000000..2fbad97402
+--- /dev/null
++++ b/package/sdl2/0001-src-video-directfb-SDL_DirectFB_render.c-fix-build.patch
+@@ -0,0 +1,46 @@
++From 7c6d466d98910a2896680351cc5cea1b7fb37ab9 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 24 Mar 2020 13:33:40 +0100
++Subject: [PATCH] src/video/directfb/SDL_DirectFB_render.c: fix build
++
++Build with directfb is broken due to a spurious '}' and a missing 'E'
++since version 2.0.12 and https://hg.libsdl.org/SDL/rev/2d5b5a5ccbfb:
++
++/home/buildroot/autobuild/run/instance-2/output-1/build/sdl2-2.0.12/src/video/directfb/SDL_DirectFB_render.c: In function 'SetBlendMode':
++/home/buildroot/autobuild/run/instance-2/output-1/build/sdl2-2.0.12/src/video/directfb/SDL_DirectFB_render.c:202:9: error: case label not within a switch statement
++  202 |         case SDL_BLENDMODE_MUL:
++      |         ^~~~
++
++/home/buildroot/autobuild/run/instance-2/output-1/build/sdl2-2.0.12/src/video/directfb/SDL_DirectFB_render.c:205:67: error: 'DSBF_DSTCOLOR' undeclared (first use in this function); did you mean 'DSBF_DESTCOLOR'?
++  205 |             SDL_DFB_CHECK(destsurf->SetSrcBlendFunction(destsurf, DSBF_DSTCOLOR));
++      |                                                                   ^~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/83ccefee68c2800c0544e6f40fa8bc8ee6b67b77
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from: https://hg.libsdl.org/SDL/rev/769f80095217]
++---
++ src/video/directfb/SDL_DirectFB_render.c | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/src/video/directfb/SDL_DirectFB_render.c b/src/video/directfb/SDL_DirectFB_render.c
++index 618009850..cc31fb8f4 100644
++--- a/src/video/directfb/SDL_DirectFB_render.c
+++++ b/src/video/directfb/SDL_DirectFB_render.c
++@@ -198,11 +198,10 @@ SetBlendMode(DirectFB_RenderData * data, int blendMode,
++             SDL_DFB_CHECK(destsurf->SetDstBlendFunction(destsurf, DSBF_SRCCOLOR));
++ 
++             break;
++-        }
++         case SDL_BLENDMODE_MUL:
++             data->blitFlags = DSBLIT_BLEND_ALPHACHANNEL;
++             data->drawFlags = DSDRAW_BLEND;
++-            SDL_DFB_CHECK(destsurf->SetSrcBlendFunction(destsurf, DSBF_DSTCOLOR));
+++            SDL_DFB_CHECK(destsurf->SetSrcBlendFunction(destsurf, DSBF_DESTCOLOR));
++             SDL_DFB_CHECK(destsurf->SetDstBlendFunction(destsurf, DSBF_INVSRCALPHA));
++ 
++             break;
++-- 
++2.25.1
++
 -- 
 2.25.1
