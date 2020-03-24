@@ -1,105 +1,63 @@
-From: Gao Xiang <hsiangkao@aol.com>
-Date: Tue, 24 Mar 2020 23:19:42 +0800
-Subject: [Buildroot] [PATCH] package/erofs-utils: fix autobuild on arm
- platform
-References: <20200324151942.25686-1-hsiangkao.ref@aol.com>
-Message-ID: <20200324151942.25686-1-hsiangkao@aol.com>
+From: Heiko Stuebner <heiko@sntech.de>
+Date: Tue, 24 Mar 2020 16:42:55 +0100
+Subject: [Buildroot] [PATCH RESEND 1/1] package/optee-client: add option to
+ configure REE-based storage location
+Message-ID: <20200324154255.1300634-1-heiko@sntech.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to avoid uint type, which resolves buildroot
-arm autobuild error.
-http://autobuild.buildroot.net/results/842a3c6416416d7badf4db9f38e3b231093a786a
+From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
-Signed-off-by: Gao Xiang <hsiangkao@aol.com>
+OP-TEE provides the possibility of secure storage done by the
+normal world OS via tee-supplicant.
+
+The location is a compile-time value and by default it is /data/tee .
+As this might not be suitable for all use-cases add an option to
+set the CFG_TEE_FS_PARENT_PATH compile option.
+
+Default value is still /data/tee as it was before adding this option.
+
+Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 ---
- ...id-using-old-compatibility-type-uint.patch | 75 +++++++++++++++++++
- 1 file changed, 75 insertions(+)
- create mode 100644 package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
+resend due to buildroot ml rejecting the first try.
 
-diff --git a/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch b/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
-new file mode 100644
-index 0000000000..cef1256975
---- /dev/null
-+++ b/package/erofs-utils/0003-erofs-utils-avoid-using-old-compatibility-type-uint.patch
-@@ -0,0 +1,75 @@
-+From 873c932b1119531355df23bacc3cf6824231804b Mon Sep 17 00:00:00 2001
-+From: Gao Xiang <hsiangkao@aol.com>
-+Date: Tue, 24 Mar 2020 16:19:49 +0800
-+Subject: [PATCH] erofs-utils: avoid using old compatibility type uint
+ package/optee-client/Config.in       | 8 ++++++++
+ package/optee-client/optee-client.mk | 2 ++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
+index e519a13456..f187c0f2f1 100644
+--- a/package/optee-client/Config.in
++++ b/package/optee-client/Config.in
+@@ -13,5 +13,13 @@ config BR2_PACKAGE_OPTEE_CLIENT
+ 
+ 	  https://github.com/OP-TEE/optee_client
+ 
++config BR2_PACKAGE_OPTEE_CLIENT_REE_FS_PATH
++	string "Path for normal world OS secure storage"
++	default "/data/tee"
++	help
++	  Path to storage area for secure storage based on the
++	  normal world OS providing the actual storage via
++	  tee-supplicant.
 +
-+This should fix the following buildroot autobuild issues
-+with some configration on ARM platform [1]:
+ comment "optee-client needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+index 15bebdc615..0121fab7dd 100644
+--- a/package/optee-client/optee-client.mk
++++ b/package/optee-client/optee-client.mk
+@@ -10,6 +10,8 @@ OPTEE_CLIENT_LICENSE = BSD-2-Clause
+ OPTEE_CLIENT_LICENSE_FILES = LICENSE
+ OPTEE_CLIENT_INSTALL_STAGING = YES
+ 
++OPTEE_CLIENT_CONF_OPTS = -DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_REE_FS_PATH)
 +
-+compress.c: In function 'vle_compress_one':
-+compress.c:209:10: error: unknown type name 'uint'
-+    const uint qh_aligned = round_down(ctx->head, EROFS_BLKSIZ);
-+          ^~~~
-+compress.c:210:10: error: unknown type name 'uint'
-+    const uint qh_after = ctx->head - qh_aligned;
-+          ^~~~
-+compress.c: In function 'z_erofs_convert_to_compacted_format':
-+compress.c:313:8: error: unknown type name 'uint'
-+  const uint headerpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
-+        ^~~~
-+compress.c:316:8: error: unknown type name 'uint'
-+  const uint totalidx = (legacymetasize -
-+        ^~~~
-+
-+[1] http://autobuild.buildroot.net/results/842a3c6416416d7badf4db9f38e3b231093a786a
-+Link: https://lore.kernel.org/r/20200324081949.26355-1-hsiangkao at aol.com
-+Signed-off-by: Gao Xiang <hsiangkao@aol.com>
-+---
-+ lib/compress.c | 17 +++++++++--------
-+ 1 file changed, 9 insertions(+), 8 deletions(-)
-+
-+diff --git a/lib/compress.c b/lib/compress.c
-+index b14ff17..6cc68ed 100644
-+--- a/lib/compress.c
-++++ b/lib/compress.c
-+@@ -204,8 +204,9 @@ nocompression:
-+ 		len -= count;
-+ 
-+ 		if (!final && ctx->head >= EROFS_CONFIG_COMPR_MAX_SZ) {
-+-			const uint qh_aligned = round_down(ctx->head, EROFS_BLKSIZ);
-+-			const uint qh_after = ctx->head - qh_aligned;
-++			const unsigned int qh_aligned =
-++				round_down(ctx->head, EROFS_BLKSIZ);
-++			const unsigned int qh_after = ctx->head - qh_aligned;
-+ 
-+ 			memmove(ctx->queue, ctx->queue + qh_aligned,
-+ 				len + qh_after);
-+@@ -308,11 +309,11 @@ int z_erofs_convert_to_compacted_format(struct erofs_inode *inode,
-+ 					unsigned int legacymetasize,
-+ 					unsigned int logical_clusterbits)
-+ {
-+-	const uint headerpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
-+-							inode->xattr_isize) +
-+-			       sizeof(struct z_erofs_map_header);
-+-	const uint totalidx = (legacymetasize -
-+-			       Z_EROFS_LEGACY_MAP_HEADER_SIZE) / 8;
-++	const unsigned int mpos = Z_EROFS_VLE_EXTENT_ALIGN(inode->inode_isize +
-++							   inode->xattr_isize) +
-++				  sizeof(struct z_erofs_map_header);
-++	const unsigned int totalidx = (legacymetasize -
-++				       Z_EROFS_LEGACY_MAP_HEADER_SIZE) / 8;
-+ 	u8 *out, *in;
-+ 	struct z_erofs_compressindex_vec cv[16];
-+ 	/* # of 8-byte units so that it can be aligned with 32 bytes */
-+@@ -324,7 +325,7 @@ int z_erofs_convert_to_compacted_format(struct erofs_inode *inode,
-+ 	if (logical_clusterbits > 14)	/* currently not supported */
-+ 		return -ENOTSUP;
-+ 	if (logical_clusterbits == 12) {
-+-		compacted_4b_initial = (32 - headerpos % 32) / 4;
-++		compacted_4b_initial = (32 - mpos % 32) / 4;
-+ 		if (compacted_4b_initial == 32 / 4)
-+ 			compacted_4b_initial = 0;
-+ 
-+-- 
-+2.20.1
-+
+ define OPTEE_CLIENT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
+ 		$(TARGET_DIR)/etc/init.d/S30optee
 -- 
-2.20.1
+2.24.1
