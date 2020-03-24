@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 24 Mar 2020 15:27:57 +0100
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: fix flake8 E501
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: fix flake8 E117
  warning
-Message-ID: <20200324144153.3B3927FBD1@busybox.osuosl.org>
+Message-ID: <20200324144153.292F17FBD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7f33771b3a7889e5781b30830b1400489880252
+commit: https://git.buildroot.net/buildroot/commit/?id=198d76efb35c84b397c1e960cc454f4988f50eb7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
 
-support/scripts/pkg-stats:281:133: E501 line too long (139 > 132 characters)
+  support/scripts/pkg-stats:146:17: E117 over-indented
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ support/scripts/pkg-stats | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 039a1937b9..4d8e932a9f 100755
+index 93035495ad..039a1937b9 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -278,7 +278,8 @@ class Package:
+@@ -143,7 +143,7 @@ class Package:
+             if self.infras[0][1] == 'virtual':
+                 return False
+         except IndexError:
+-                return False
++            return False
+         return True
  
-     def __str__(self):
-         return "%s (path='%s', license='%s', license_files='%s', hash='%s', patches=%d)" % \
--            (self.name, self.path, self.is_status_ok('license'), self.is_status_ok('license-files'), self.status['hash'], self.patch_count)
-+            (self.name, self.path, self.is_status_ok('license'),
-+             self.is_status_ok('license-files'), self.status['hash'], self.patch_count)
- 
- 
- class CVE:
+     def set_infra(self):
