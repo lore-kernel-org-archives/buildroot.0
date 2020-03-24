@@ -1,8 +1,8 @@
 From: Zack <ptitwarrior2@gmail.com>
-Date: Tue, 24 Mar 2020 04:31:31 -0500 (CDT)
+Date: Tue, 24 Mar 2020 04:34:42 -0500 (CDT)
 Subject: [Buildroot] Buildroot Compilation Error >> systemd245 Building
  ninja: build stopped: subcommand failed.
-Message-ID: <1585042291461-0.post@n4.nabble.com>
+Message-ID: <1585042482387-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
