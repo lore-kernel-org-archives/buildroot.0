@@ -1,48 +1,66 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 24 Mar 2020 16:15:25 -0600
-Subject: [Buildroot] [PATCH 1/1] package/libwpe: bump to version 1.6.0
-Message-ID: <20200324221525.116461-1-james.hilliard1@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 24 Mar 2020 23:22:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: fix kmsdrm build without EGL
+Message-ID: <20200324222241.5808-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/libwpe/libwpe.hash | 10 +++++-----
- package/libwpe/libwpe.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/fafd20a01591032662f9ca025fcea3478239cf3c
 
-diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
-index 0a616a31cc..e138c06f2b 100644
---- a/package/libwpe/libwpe.hash
-+++ b/package/libwpe/libwpe.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/libwpe-1.4.0.1.tar.xz.sums
--md5 1d4d38413ee0d0043f74d0445cab906f libwpe-1.4.0.1.tar.xz
--sha1 a41480a0a85cfa11b3f87f801b7c37bc3410e060 libwpe-1.4.0.1.tar.xz
--sha256 09849dfb34877354f34f318e138971cf22e677b2179e1f0a8ea00ab0b7bd8e9b libwpe-1.4.0.1.tar.xz
-+# From https://wpewebkit.org/releases/libwpe-1.6.0.tar.xz.sums
-+md5  6e8a2c279dcc3617db5ec7ac4c03d628  libwpe-1.6.0.tar.xz
-+sha1  e8424d5e29f35861d85acdc5962d8b59b53bb1ad  libwpe-1.6.0.tar.xz
-+sha256  3587c6b8a807f4bb76b268ba74ca82c6b395b90235db41ad8252224456193c90  libwpe-1.6.0.tar.xz
- 
- # Hashes for license files:
--sha256 35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b COPYING
-+sha256  35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b  COPYING
-diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
-index 09518ce9b1..fd4f3d0cbd 100644
---- a/package/libwpe/libwpe.mk
-+++ b/package/libwpe/libwpe.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBWPE_VERSION = 1.4.0.1
-+LIBWPE_VERSION = 1.6.0
- LIBWPE_SITE = https://wpewebkit.org/releases
- LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
- LIBWPE_INSTALL_STAGING = YES
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...o-kmsdrm-SDL_kmsdrmvideo.c-fix-build.patch | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/sdl2/0002-src-video-kmsdrm-SDL_kmsdrmvideo.c-fix-build.patch
+
+diff --git a/package/sdl2/0002-src-video-kmsdrm-SDL_kmsdrmvideo.c-fix-build.patch b/package/sdl2/0002-src-video-kmsdrm-SDL_kmsdrmvideo.c-fix-build.patch
+new file mode 100644
+index 0000000000..6021647a38
+--- /dev/null
++++ b/package/sdl2/0002-src-video-kmsdrm-SDL_kmsdrmvideo.c-fix-build.patch
+@@ -0,0 +1,39 @@
++From d265b1ee94aa4faf5fa405f14cc731a25d7a00ab Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 24 Mar 2020 14:11:14 +0100
++Subject: [PATCH] src/video/kmsdrm/SDL_kmsdrmvideo.c: fix build
++
++Build is broken without EGL since version 2.0.12 and
++https://hg.libsdl.org/SDL/rev/9761858bd6a3:
++
++/home/giuliobenetti/autobuild/run/instance-1/output-1/build/sdl2-2.0.12/src/video/kmsdrm/SDL_kmsdrmvideo.c: In function 'KMSDRM_CreateSurfaces':
++/home/giuliobenetti/autobuild/run/instance-1/output-1/build/sdl2-2.0.12/src/video/kmsdrm/SDL_kmsdrmvideo.c:394:5: error: unknown type name 'EGLContext'
++     EGLContext egl_context;
++     ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/fafd20a01591032662f9ca025fcea3478239cf3c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://bugzilla.libsdl.org/show_bug.cgi?id=5057]
++---
++ src/video/kmsdrm/SDL_kmsdrmvideo.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/video/kmsdrm/SDL_kmsdrmvideo.c b/src/video/kmsdrm/SDL_kmsdrmvideo.c
++index 216c45dab..459f96537 100644
++--- a/src/video/kmsdrm/SDL_kmsdrmvideo.c
+++++ b/src/video/kmsdrm/SDL_kmsdrmvideo.c
++@@ -391,7 +391,9 @@ KMSDRM_CreateSurfaces(_THIS, SDL_Window * window)
++     Uint32 height = dispdata->mode.vdisplay;
++     Uint32 surface_fmt = GBM_FORMAT_XRGB8888;
++     Uint32 surface_flags = GBM_BO_USE_SCANOUT | GBM_BO_USE_RENDERING;
+++#if SDL_VIDEO_OPENGL_EGL
++     EGLContext egl_context;
+++#endif
++ 
++     if (!KMSDRM_gbm_device_is_format_supported(viddata->gbm, surface_fmt, surface_flags)) {
++         SDL_LogWarn(SDL_LOG_CATEGORY_VIDEO, "GBM surface format not supported. Trying anyway.");
++-- 
++2.25.1
++
 -- 
-2.20.1
+2.25.1
