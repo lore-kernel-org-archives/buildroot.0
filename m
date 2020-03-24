@@ -1,99 +1,53 @@
-From: shy <mail_hysong@163.com>
-Date: Tue, 24 Mar 2020 08:50:32 +0800 (CST)
-Subject: [Buildroot] date command
-In-Reply-To: <20200323180549.6ccd2738@gmx.net>
-References: <589197dd.b0b7.17107dc905e.Coremail.mail_hysong@163.com>
- <20200323180549.6ccd2738@gmx.net>
-Message-ID: <2047d0f5.f3a.1710a050334.Coremail.mail_hysong@163.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 24 Mar 2020 08:20:35 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libtirpc: fix build with gcc 10
+In-Reply-To: <20200323194237.GA30642@dell5510>
+References: <20200228173052.5128-1-petr.vorel@gmail.com>
+ <20200305043708.GA2841817@x230> <20200305090322.5b1e5fcc@windsurf>
+ <20200323194237.GA30642@dell5510>
+Message-ID: <20200324082035.381bc785@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all:
+Hello Petr,
 
+On Mon, 23 Mar 2020 20:42:37 +0100
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
-I test in buildroot and ubuntu, it all can't set time "1970-01-01 00:00:00", there is error message "date: can't set date: Invalid argument".
-I don't know why and how to solve the problem. It's UTC time and no timezone.
+> > You can search the autobuilders for successful build results, filtering
+> > per config options. See http://autobuild.buildroot.net/search.php.  
+> 
+> > For example:  
+> 
+> >   http://autobuild.buildroot.net/index.php?status=OK&symbols%5BBR2_PACKAGE_LIBTIRPC%5D=y  
+> 
+> > will search all successful builds that had BR2_PACKAGE_LIBTIRPC enabled.  
+> 
+> Thanks! Not sure if it's just a slow net on my side, but search takes ages.
+> Not sure whether you still maintain this web service, but adding index on column
+> which stores symbols might help (suppose it uses database).
 
+The search has indeed never been "fast", but it's true that it's
+particular slow now, much slower than it was. Not sure what happened,
+as nothing changed.
 
-1. I use buildroot-2013.05, the busybox is in 1.21.1, the linux kernel is in version 4.4.39.
+You can find the schema of the MySQL database at
+https://git.buildroot.org/buildroot-test/tree/web/schema.sql. It does
+have indexes. However, the symbol_for_result table really has (tens
+of?) millions of entries.
 
+Last summer, we had an intern at Bootlin who worked on this, and
+greatly improved the performance of those queries. But it seems like
+this have worsen again, for some reason. I can share a dump of the
+database if anybody wants to play with it.
 
-# date -s "1970-01-20 00:00:00"
-Tue Jan 20 00:00:00 UTC 1970
-# date -R
-Tue, 20 Jan 1970 00:00:03 +0000
-# date -s "1970-01-01 00:00:00"
-date: can't set date: Invalid argument
-Thu Jan  1 00:00:00 UTC 1970
+Best regards,
 
-
-
-
-2. I test in ubuntu version 14.04.1.
-shy at ubuntu:/etc$ sudo date -s "2020-03-01 00:00:00"
-Sun Mar  1 00:00:00 UTC 2020
-shy at ubuntu:/etc$ date -R
-Sun, 01 Mar 2020 00:00:03 +0000
-
-shy at ubuntu:/etc$ sudo date -s "1970-01-01 00:00:00"
-
-date: cannot set date: Invalid argument
-
-Thu Jan  1 00:00:00 UTC 1970
-
-shy at ubuntu:/etc$ uname -a
-
-Linux ubuntu 4.4.0-142-generic #168~14.04.1-Ubuntu SMP Sat Jan 19 11:26:28 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
-
-
-
-
-
-
-
-Best regards!
-
-
-
-
-
-
-
-
-At 2020-03-24 00:05:49, "Peter Seiderer" <ps.report@gmx.net> wrote:
->Hello,
->
->On Mon, 23 Mar 2020 22:47:07 +0800 (CST), shy  <mail_hysong@163.com> wrote:
->
->> Hi:
->>
->>
->> I have a question and need your help.
->>
->>
->> The linux epoch time is 1970-01-01 00:00:00,  I set the UTC  time, but it has error with "date: cannot set date: Invalid argument".
->> I'm confused with it.
->
->Please show the exact commands (including options) your use...
->
->Regards,
->Peter
->
->>
->>
->>
->>
->> Best regards!
->>
->>
->>
->>
->>
->>
->>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200324/7df9940e/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
