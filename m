@@ -1,40 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 24 Mar 2020 15:27:53 +0100
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: fix flake8 E402
+Date: Tue, 24 Mar 2020 15:27:57 +0100
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: fix flake8 E302
  warning
-Message-ID: <20200324144153.05E708805D@busybox.osuosl.org>
+Message-ID: <20200324144153.180238805D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=769f98c18c94d6d684bb2efc00239ce07a02d522
+commit: https://git.buildroot.net/buildroot/commit/?id=e03bdef0ec0a32d9c472ab050ea29f8d3ad8c35e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-flake8 complains with:
+Fixes:
 
-pkg-stats:38:1: E402 module level import not at top of file
-
-This is due to sys.path.append() being before the import from
-getdeveloperlib, but we really need this sys.path.append() to be
-before, so let's ignore this flake8 warning.
+  support/scripts/pkg-stats:57:1: E302 expected 2 blank lines, found 1
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/scripts/pkg-stats | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 9cfb43928b..7b144a5ba6 100755
+index 7b144a5ba6..93035495ad 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -36,7 +36,7 @@ from urllib3.exceptions import HTTPError
- from multiprocessing import Pool
+@@ -54,6 +54,7 @@ RM_API_STATUS_NOT_FOUND = 4
+ # because it's used by sub-processes.
+ http_pool = None
  
- sys.path.append('utils/')
--from getdeveloperlib import parse_developers
-+from getdeveloperlib import parse_developers  # noqa: E402
- 
- NVD_START_YEAR = 2002
- NVD_JSON_VERSION = "1.0"
++
+ class Defconfig:
+     def __init__(self, name, path):
+         self.name = name
