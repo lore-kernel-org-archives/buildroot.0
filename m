@@ -1,28 +1,42 @@
-From: Graham Rhodes <graham.rhodes@rockwellcollins.com>
-Date: Tue, 24 Mar 2020 10:47:21 -0500
-Subject: [Buildroot] [PATCH] package/quagga: install quagga to staging
-Message-ID: <20200324154722.126399-1-graham.rhodes@rockwellcollins.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 24 Mar 2020 11:36:53 -0600
+Subject: [Buildroot] [PATCH 1/1] package/gcc: pass -Wno-error to debug builds
+Message-ID: <20200324173653.74573-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/quagga/quagga.mk | 1 +
- 1 file changed, 1 insertion(+)
+Fixes:
+../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ?st.st_mode? may be used uninitialized in this function [-Werror=maybe-uninitialized]
+   return S_ISLNK (st.st_mode);
+                     ^
 
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 96a971104b..0b352aa367 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -6,6 +6,7 @@
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v1 -> v2:
+  - add comment from Yocto recipes
+---
+ package/gcc/gcc.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 524ca83db0..fe7167b2f3 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -100,6 +100,11 @@ HOST_GCC_COMMON_CONF_ENV = \
+ GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+ GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
  
- QUAGGA_VERSION = 1.2.4
- QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
-+QUAGGA_INSTALL_STAGING = YES
- QUAGGA_DEPENDENCIES = host-gawk host-pkgconf
- QUAGGA_LICENSE = GPL-2.0+
- QUAGGA_LICENSE_FILES = COPYING
++# used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ?st.st_mode? may be used uninitialized in this function [-Werror=maybe-uninitialized]
++ifeq ($(BR2_ENABLE_DEBUG),y)
++GCC_COMMON_TARGET_CFLAGS += -Wno-error
++endif
++
+ # Propagate options used for target software building to GCC target libs
+ HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
+ HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
 -- 
-2.23.0
+2.20.1
