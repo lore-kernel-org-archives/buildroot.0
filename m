@@ -1,75 +1,77 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 25 Mar 2020 08:36:48 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libeXosip2: fix build without threads
-Message-ID: <20200325073648.46890-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 25 Mar 2020 09:02:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.18.0
+In-Reply-To: <CADvTj4rWcE615eLkeWeLW-BvXu+4Ruebo-xVLVQRVx=XJKKW6w@mail.gmail.com>
+References: <20200303230943.24334-1-james.hilliard1@gmail.com>
+ <20200305210537.42d4c081@windsurf>
+ <CADvTj4p7bNSX6C+Y6Lo_cuHMT+4ifdJgckm2mEPX1tvyFyMTdQ@mail.gmail.com>
+ <0b0b94ef-53a8-3f93-2cc6-09be6b5d318f@mind.be>
+ <CADvTj4rWcE615eLkeWeLW-BvXu+4Ruebo-xVLVQRVx=XJKKW6w@mail.gmail.com>
+Message-ID: <ed014e8f-4aa1-1577-7bad-d2068a625dc1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/ec262058cc0a4bf92c381857eaf3b44412942bba
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Gilles Talis)
- - Use upstream patch
 
- ...pilation-error-introduced-with-epoll.patch | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
+On 24/03/2020 19:19, James Hilliard wrote:
+> On Mon, Mar 9, 2020 at 2:12 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>
+>>
+>> On 05/03/2020 21:23, James Hilliard wrote:
+>>> On Thu, Mar 5, 2020 at 1:05 PM Thomas Petazzoni
+>>> <thomas.petazzoni@bootlin.com> wrote:
+>>>>
+>>>> Hello James,
+>>>>
+>>>> +Arnout, as there is a meson/pkg-config question.
+>>>>
+>>>> Thanks for the patch. Two questions below.
+>>>>
+>>>> On Tue,  3 Mar 2020 16:09:43 -0700
+>>>> James Hilliard <james.hilliard1@gmail.com> wrote:
+>>>>
+>>>>> diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+>>>>> index e325c6d752..6de92f63d9 100644
+>>>>> --- a/package/wayland/wayland.mk
+>>>>> +++ b/package/wayland/wayland.mk
+>>>>> @@ -4,7 +4,7 @@
+>>>>>  #
+>>>>>  ################################################################################
+>>>>>
+>>>>> -WAYLAND_VERSION = 1.17.0
+>>>>> +WAYLAND_VERSION = 1.18.0
+>>>>>  WAYLAND_SITE = http://wayland.freedesktop.org/releases
+>>>>>  WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+>>>>>  WAYLAND_LICENSE = MIT
+>>>>> @@ -13,12 +13,12 @@ WAYLAND_INSTALL_STAGING = YES
+>>>>>  WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
+>>>>>  HOST_WAYLAND_DEPENDENCIES = host-pkgconf host-expat host-libffi host-libxml2
+>>>>>
+>>>>> -# 0002-configure-add-option-to-disable-tests.patch
+>>>>> -WAYLAND_AUTORECONF = YES
+>>>>> +WAYLAND_CONF_OPTS = \
+>>>>> +     -Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
+>>>>
+>>>> Are you sure this is needed since commit
+>>>> 4e0bc29993376613d200e892d491e31ea5a49622 ? Indeed, with this commit,
+>>>> meson is properly able to use pkg-config either for native builds or
+>>>> cross builds.
+>>> It was failing for me without this.
+>>
+>>  That means something is wrong with commit 4e0bc29933.
+> From what I can tell that change is for fixing a different issue.
 
-diff --git a/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch b/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
-new file mode 100644
-index 0000000000..b69455bd7a
---- /dev/null
-+++ b/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
-@@ -0,0 +1,44 @@
-+From 0e0e95dbc380c5eede3a2fc1631294a98078e30f Mon Sep 17 00:00:00 2001
-+From: Aymeric Moizard <amoizard@gmail.com>
-+Date: Fri, 13 Mar 2020 16:34:41 +0100
-+Subject: fix: fix OSIP_MONOTHREAD compilation error introduced with epoll
-+ implementation
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+http://git.savannah.nongnu.org/cgit/exosip.git/patch/?id=0e0e95dbc380c5eede3a2fc1631294a98078e30f]
-+---
-+ src/eXconf.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/eXconf.c b/src/eXconf.c
-+index baf90be..6165eb3 100644
-+--- a/src/eXconf.c
-++++ b/src/eXconf.c
-+@@ -801,12 +801,15 @@ eXosip_init (struct eXosip_t *excontext)
-+   }
-+ 
-+   if (excontext->poll_method == EXOSIP_USE_EPOLL_LT) {
-++#ifndef OSIP_MONOTHREAD
-+     struct epoll_event ev;
-++#endif
-+     excontext->epfdctl = epoll_create (1);
-+     if (excontext->epfdctl < 0) {
-+       return OSIP_UNDEFINED_ERROR;
-+     }
-+     
-++#ifndef OSIP_MONOTHREAD
-+     memset(&ev, 0, sizeof(struct epoll_event));
-+     ev.events = EPOLLIN;
-+     ev.data.fd = jpipe_get_read_descr (excontext->j_socketctl_event);
-+@@ -815,6 +818,7 @@ eXosip_init (struct eXosip_t *excontext)
-+       _eXosip_closesocket (excontext->epfdctl);
-+       return OSIP_UNDEFINED_ERROR;
-+     }
-++#endif
-+   }
-+ #endif
-+   
-+-- 
-+cgit v1.2.1
-+
--- 
-2.25.1
+ Right! I forgot - commit 4e0bc29933 was only handling it for target. For host,
+we would need a native-compilation.conf. I had started on that but didn't finish
+it because I had no package to test it with. Hm, apparently I never even posted
+the WIP on the mailing list...
+
+ Anyway, good to now that I can test it with weston and wayland packages now.
+When I have time (yeah, right) I can properly test that series.
+
+ Regards,
+ Arnout
