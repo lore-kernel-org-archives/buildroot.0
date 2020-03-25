@@ -1,57 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Mar 2020 07:29:36 +0100
-Subject: [Buildroot] [git commit] linux: run depmod only if modules are
- enabled
-Message-ID: <20200325062015.9EB3181F76@busybox.osuosl.org>
+Date: Wed, 25 Mar 2020 07:33:56 +0100
+Subject: [Buildroot] [git commit] package/busybox: fix target-finalize hook
+Message-ID: <20200325062100.EDB8488280@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43f41a7bf8e92ad88d1e59c48b27718c343ca548
+commit: https://git.buildroot.net/buildroot/commit/?id=9ab1d565eef8935694d12bff2cd33c64b7a97f0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If the kernel configuration CONFIG_MODULES disabled, there's no
-/lib/modules/<version> directory, causing this:
+It was searching for CONFIG_ASH=y and CONFIG_HUSH=y at $(@D)/.config,
+which does not contain the package build path at the target-finalize
+step. Use $(BUSYBOX_DIR), instead.
 
-depmod: ERROR: could not open directory [...]/target/lib/modules/4.19.8: No such file or directory
-depmod: FATAL: could not search modules: No such file or directory
-Makefile:745: recipe for target 'target-finalize' failed
-
-Fixes:
-
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712831
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712817
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712814
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712796
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712729
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712727
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712698
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712691
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712660
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712573
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712574
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/linux.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/busybox/busybox.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 2e3ea52053..b2ceeecafb 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -539,7 +539,9 @@ endef
- # Run depmod in a target-finalize hook, to encompass modules installed by
- # packages.
- define LINUX_RUN_DEPMOD
--	$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED)
-+	if grep -q "CONFIG_MODULES=y" $(LINUX_DIR)/.config; then \
-+		$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED); \
-+	fi
- endef
- LINUX_TARGET_FINALIZE_HOOKS += LINUX_RUN_DEPMOD
- 
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index dfcd9d392c..b9d82ed71e 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -318,11 +318,11 @@ endef
+ # Add /bin/{a,hu}sh to /etc/shells otherwise some login tools like dropbear
+ # can reject the user connection. See man shells.
+ define BUSYBOX_INSTALL_ADD_TO_SHELLS
+-	if grep -q CONFIG_ASH=y $(@D)/.config; then \
++	if grep -q CONFIG_ASH=y $(BUSYBOX_DIR)/.config; then \
+ 		grep -qsE '^/bin/ash$$' $(TARGET_DIR)/etc/shells \
+ 		|| echo "/bin/ash" >> $(TARGET_DIR)/etc/shells; \
+ 	fi
+-	if grep -q CONFIG_HUSH=y $(@D)/.config; then \
++	if grep -q CONFIG_HUSH=y $(BUSYBOX_DIR)/.config; then \
+ 		grep -qsE '^/bin/hush$$' $(TARGET_DIR)/etc/shells \
+ 		|| echo "/bin/hush" >> $(TARGET_DIR)/etc/shells; \
+ 	fi
