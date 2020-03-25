@@ -1,77 +1,110 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 25 Mar 2020 09:02:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.18.0
-In-Reply-To: <CADvTj4rWcE615eLkeWeLW-BvXu+4Ruebo-xVLVQRVx=XJKKW6w@mail.gmail.com>
-References: <20200303230943.24334-1-james.hilliard1@gmail.com>
- <20200305210537.42d4c081@windsurf>
- <CADvTj4p7bNSX6C+Y6Lo_cuHMT+4ifdJgckm2mEPX1tvyFyMTdQ@mail.gmail.com>
- <0b0b94ef-53a8-3f93-2cc6-09be6b5d318f@mind.be>
- <CADvTj4rWcE615eLkeWeLW-BvXu+4Ruebo-xVLVQRVx=XJKKW6w@mail.gmail.com>
-Message-ID: <ed014e8f-4aa1-1577-7bad-d2068a625dc1@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 25 Mar 2020 10:38:26 +0100
+Subject: [Buildroot] [PATCH] package/syslog-ng: update patch that fixes
+ --with-net-snmp
+Message-ID: <20200325093826.26221-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
+The final solution accepted upstream differs from the local patch applied
+earlier in Buildroot (commit 4ff6e5239240a4e1bdf73c41d6e9bff9473ec62c).
 
-On 24/03/2020 19:19, James Hilliard wrote:
-> On Mon, Mar 9, 2020 at 2:12 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->>
->>
->> On 05/03/2020 21:23, James Hilliard wrote:
->>> On Thu, Mar 5, 2020 at 1:05 PM Thomas Petazzoni
->>> <thomas.petazzoni@bootlin.com> wrote:
->>>>
->>>> Hello James,
->>>>
->>>> +Arnout, as there is a meson/pkg-config question.
->>>>
->>>> Thanks for the patch. Two questions below.
->>>>
->>>> On Tue,  3 Mar 2020 16:09:43 -0700
->>>> James Hilliard <james.hilliard1@gmail.com> wrote:
->>>>
->>>>> diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
->>>>> index e325c6d752..6de92f63d9 100644
->>>>> --- a/package/wayland/wayland.mk
->>>>> +++ b/package/wayland/wayland.mk
->>>>> @@ -4,7 +4,7 @@
->>>>>  #
->>>>>  ################################################################################
->>>>>
->>>>> -WAYLAND_VERSION = 1.17.0
->>>>> +WAYLAND_VERSION = 1.18.0
->>>>>  WAYLAND_SITE = http://wayland.freedesktop.org/releases
->>>>>  WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
->>>>>  WAYLAND_LICENSE = MIT
->>>>> @@ -13,12 +13,12 @@ WAYLAND_INSTALL_STAGING = YES
->>>>>  WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
->>>>>  HOST_WAYLAND_DEPENDENCIES = host-pkgconf host-expat host-libffi host-libxml2
->>>>>
->>>>> -# 0002-configure-add-option-to-disable-tests.patch
->>>>> -WAYLAND_AUTORECONF = YES
->>>>> +WAYLAND_CONF_OPTS = \
->>>>> +     -Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
->>>>
->>>> Are you sure this is needed since commit
->>>> 4e0bc29993376613d200e892d491e31ea5a49622 ? Indeed, with this commit,
->>>> meson is properly able to use pkg-config either for native builds or
->>>> cross builds.
->>> It was failing for me without this.
->>
->>  That means something is wrong with commit 4e0bc29933.
-> From what I can tell that change is for fixing a different issue.
+Update the local code accordingly.
 
- Right! I forgot - commit 4e0bc29933 was only handling it for target. For host,
-we would need a native-compilation.conf. I had started on that but didn't finish
-it because I had no package to test it with. Hm, apparently I never even posted
-the WIP on the mailing list...
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ .../0002-configure.ac-fix-with-netsnmp.patch  | 44 +++++++++++--------
+ package/syslog-ng/syslog-ng.mk                |  2 +-
+ 2 files changed, 27 insertions(+), 19 deletions(-)
 
- Anyway, good to now that I can test it with weston and wayland packages now.
-When I have time (yeah, right) I can properly test that series.
-
- Regards,
- Arnout
+diff --git a/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch b/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch
+index f5b2a39bba..4d531aedd0 100644
+--- a/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch
++++ b/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch
+@@ -1,7 +1,7 @@
+-From 39ab118a7e79b223941b50b372c8ed51f0e21f4b Mon Sep 17 00:00:00 2001
++From bc327e4deb44f6b7a380a85d0b344647ea162ea9 Mon Sep 17 00:00:00 2001
+ From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ Date: Mon, 16 Mar 2020 15:41:03 +0100
+-Subject: [PATCH] configure.ac: fix --with-netsnmp
++Subject: [PATCH] configure.ac: fix --with-net-snmp
+ 
+ The option '--with-net-snmp' did not work, because later checks were using
+ the variable '$with_netsnmp' rather than '$with_net_snmp'.
+@@ -10,32 +10,40 @@ There are two possible solutions:
+ - make the option '--with-netsnmp'
+ - change the internal variables
+ 
+-Taking into account that latest upstream has moved away from autotools and
+-towards cmake, we opt for the first option that has the least amount of
+-changes.
++Opt for the second option so the user-visible options remain the same.
+ 
+ Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+-Upstream-status: not applicable (latest upstream moved to cmake)
+-
++Upstream-status: backport
+ ---
+- configure.ac | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
++ configure.ac | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index bfc85c32d..392ab8bf3 100644
++index 75901bd98..6e8462c37 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -148,8 +148,8 @@ AC_ARG_WITH(libnet,
++@@ -151,7 +151,7 @@ AC_ARG_WITH(libnet,
++ AC_ARG_WITH(net-snmp,
++    [  --with-net-snmp=path      use path to net-snmp-config script],
+     ,
+-    [with_libnet=""])
++-   [with_netsnmp=""])
+++   [with_net_snmp=""])
+  
+--AC_ARG_WITH(net-snmp,
+--   [  --with-net-snmp=path      use path to net-snmp-config script],
+-+AC_ARG_WITH(netsnmp,
+-+   [  --with-netsnmp=path      use path to net-snmp-config script],
+-    ,
+-    [with_netsnmp=""])
++ AC_ARG_WITH(pidfile-dir,
++    [  --with-pidfile-dir=path   Use path as the directory for storing pidfiles],
++@@ -1104,10 +1104,10 @@ dnl afsnmp module & net-snmp headers/libraries
++ dnl ***************************************************************************
++ AC_MSG_CHECKING(whether to enable snmp destination driver)
++ 
++-if test "x$with_netsnmp" = "x"; then
+++if test "x$with_net_snmp" = "x"; then
++    NETSNMP_CONFIG="`which net-snmp-config`"
++ else
++-   NETSNMP_CONFIG="$with_netsnmp/net-snmp-config"
+++   NETSNMP_CONFIG="$with_net_snmp/net-snmp-config"
++ fi
+  
++ if test "x$enable_afsnmp" = "xyes"; then
+ -- 
+ 2.24.1
+ 
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 203f2c96b6..a0c21a8907 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -100,7 +100,7 @@ endif
+ ifeq ($(BR2_PACKAGE_NETSNMP),y)
+ SYSLOG_NG_DEPENDENCIES += netsnmp
+ SYSLOG_NG_CONF_OPTS += --enable-snmp-dest
+-SYSLOG_NG_CONF_OPTS += --with-netsnmp="$(STAGING_DIR)/usr/bin"
++SYSLOG_NG_CONF_OPTS += --with-net-snmp="$(STAGING_DIR)/usr/bin"
+ else
+ SYSLOG_NG_CONF_OPTS += --disable-snmp-dest
+ endif
+-- 
+2.24.1
