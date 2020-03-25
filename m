@@ -1,7 +1,7 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Tue, 24 Mar 2020 21:21:54 -0300
-Subject: [Buildroot] [PATCH] linux: run depmod only if modules are enabled
-Message-ID: <20200325002154.5882-1-unixmania@gmail.com>
+Date: Tue, 24 Mar 2020 21:30:53 -0300
+Subject: [Buildroot] [PATCH] package/busybox: fix target-finalize hook
+Message-ID: <20200325003053.6305-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +10,32 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-If the kernel configuration CONFIG_MODULES disabled, there's no
-/lib/modules/<version> directory, causing this:
+It was searching for CONFIG_ASH=y and CONFIG_HUSH=y at $(@D)/.config,
+which does not contain the package build path at the target-finalize
+step. Use $(BUSYBOX_DIR), instead.
 
-depmod: ERROR: could not open directory [...]/target/lib/modules/4.19.8: No such file or directory
-depmod: FATAL: could not search modules: No such file or directory
-Makefile:745: recipe for target 'target-finalize' failed
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
-CC: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- linux/linux.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/busybox/busybox.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 2e3ea52053..b2ceeecafb 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -539,7 +539,9 @@ endef
- # Run depmod in a target-finalize hook, to encompass modules installed by
- # packages.
- define LINUX_RUN_DEPMOD
--	$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED)
-+	if grep -q "CONFIG_MODULES=y" $(LINUX_DIR)/.config; then \
-+		$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED); \
-+	fi
- endef
- LINUX_TARGET_FINALIZE_HOOKS += LINUX_RUN_DEPMOD
- 
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 767499b0c0..0da73b4eab 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -329,11 +329,11 @@ endef
+ # Add /bin/{a,hu}sh to /etc/shells otherwise some login tools like dropbear
+ # can reject the user connection. See man shells.
+ define BUSYBOX_INSTALL_ADD_TO_SHELLS
+-	if grep -q CONFIG_ASH=y $(@D)/.config; then \
++	if grep -q CONFIG_ASH=y $(BUSYBOX_DIR)/.config; then \
+ 		grep -qsE '^/bin/ash$$' $(TARGET_DIR)/etc/shells \
+ 		|| echo "/bin/ash" >> $(TARGET_DIR)/etc/shells; \
+ 	fi
+-	if grep -q CONFIG_HUSH=y $(@D)/.config; then \
++	if grep -q CONFIG_HUSH=y $(BUSYBOX_DIR)/.config; then \
+ 		grep -qsE '^/bin/hush$$' $(TARGET_DIR)/etc/shells \
+ 		|| echo "/bin/hush" >> $(TARGET_DIR)/etc/shells; \
+ 	fi
 -- 
 2.18.2
