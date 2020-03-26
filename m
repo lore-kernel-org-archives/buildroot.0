@@ -1,58 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Mar 2020 22:30:18 +0100
-Subject: [Buildroot] [git commit] package/libite: bump version to 2.2.0
-Message-ID: <20200326212348.1D0268837B@busybox.osuosl.org>
+Date: Thu, 26 Mar 2020 22:36:49 +0100
+Subject: [Buildroot] [git commit] package/python-pycryptodomex: bump to
+ version 3.9.6
+Message-ID: <20200326212348.2D9AE8837B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40bfa45a0bf6fb2f8101c7267bd53e0d5578344f
+commit: https://git.buildroot.net/buildroot/commit/?id=ee736de2b4d42c7722e25f1722915935b28dbb0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The hash for LICENSE also changed. The following text was removed:
-
-Note: Much of the code in libite (-lite) is written by Claudio Matsuoka
-      for Finit and released under the MIT/X11 license.  Joachim Nilsson
-      later improved on the Finit code base and included pieces of
-      software released under the ISC and BSD licenses.  See each
-      respective file for license details.
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libite/libite.hash | 8 ++++----
- package/libite/libite.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pycryptodomex/python-pycryptodomex.hash | 4 ++--
+ package/python-pycryptodomex/python-pycryptodomex.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libite/libite.hash b/package/libite/libite.hash
-index e16e78c01f..1a553d2bcb 100644
---- a/package/libite/libite.hash
-+++ b/package/libite/libite.hash
-@@ -1,8 +1,8 @@
--# From https://github.com/troglobit/libite/releases/download/v2.1.2/libite-2.1.2.tar.xz.md5
--md5  3c23186dec3f3ae135ec4e8b58581f4e  libite-2.1.2.tar.xz
-+# From https://github.com/troglobit/libite/releases/download/v2.2.0/libite-2.2.0.tar.xz.md5
-+md5  8533ab27d0d4a7c745f11925907795a9  libite-2.2.0.tar.xz
- 
- # Locally calculated
--sha256  7a16825c6d02040767ccb9f3faed4bf0e6841857a46cc4cb9e9f36b78a6c7cb3  libite-2.1.2.tar.xz
--sha256  dc6eae50f69af0e848fd6957cdf48895563b4d15fdde7c9d20ae2bfdefbc2b83  LICENSE
-+sha256  3fdeb48ea3d9220f91111ed7a68e1e68edfc70346d0108a49bab73a47a7dd761  libite-2.2.0.tar.xz
-+sha256  a8a7506c64ce46a58c17838b0f678f8c2567d71869402f97d19460ddec4882f5  LICENSE
- sha256  89053891d46d04a21d4a492f68038703e179986baffa458201810f4222b57427  src/chomp.c
- sha256  a7d29c148e057fae11a87febc3a51970a26433c35a08fc710be689394442d32d  src/pidfile.c
-diff --git a/package/libite/libite.mk b/package/libite/libite.mk
-index 62fc0df00a..69a90d7187 100644
---- a/package/libite/libite.mk
-+++ b/package/libite/libite.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pycryptodomex/python-pycryptodomex.hash b/package/python-pycryptodomex/python-pycryptodomex.hash
+index 2caf97a293..2f2ca3ca7f 100644
+--- a/package/python-pycryptodomex/python-pycryptodomex.hash
++++ b/package/python-pycryptodomex/python-pycryptodomex.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pycryptodomex/json
+-md5	ae7083008139cf9372322dcd99e92db0  pycryptodomex-3.7.1.tar.gz
+-sha256	4ba053bea752ddc89b94d1f9f87008ef296a644b8dec0201c021d9636c069322  pycryptodomex-3.7.1.tar.gz
++md5	c55b52fc81cbf795fb7c302b0cc19b9f  pycryptodomex-3.9.6.tar.gz
++sha256	c021b66f5b3c4ea0c45422ec3241bfea4a16651e1ee5459a136639d0716ccb3c  pycryptodomex-3.9.6.tar.gz
+ # Locally computed sha256 checksums
+ sha256	d1af3fab2ef8cc53b6c7f48bdeb178ac874b04faf4ba0159a96b6109f1d393e2  LICENSE.rst
+ sha256	8e563c767164faa0831a333b57d23d4311cf566eb1b15d93250f4606be4eb549  Doc/LEGAL/COPYRIGHT.pycrypto
+diff --git a/package/python-pycryptodomex/python-pycryptodomex.mk b/package/python-pycryptodomex/python-pycryptodomex.mk
+index 3d3b97ca48..7bc871678a 100644
+--- a/package/python-pycryptodomex/python-pycryptodomex.mk
++++ b/package/python-pycryptodomex/python-pycryptodomex.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBITE_VERSION = 2.1.2
-+LIBITE_VERSION = 2.2.0
- LIBITE_SOURCE = libite-$(LIBITE_VERSION).tar.xz
- LIBITE_SITE = https://github.com/troglobit/libite/releases/download/v$(LIBITE_VERSION)
- LIBITE_LICENSE = MIT, X11, ISC, BSD-2-Clause
+-PYTHON_PYCRYPTODOMEX_VERSION = 3.7.1
++PYTHON_PYCRYPTODOMEX_VERSION = 3.9.6
+ PYTHON_PYCRYPTODOMEX_SOURCE = pycryptodomex-$(PYTHON_PYCRYPTODOMEX_VERSION).tar.gz
+-PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/f6/be/9f65b7db183628bdb36401105a3fc9f1688909f5184c115902a7bdd333bd
++PYTHON_PYCRYPTODOMEX_SITE = https://files.pythonhosted.org/packages/d7/4f/20258a48e6760cff6523a176ecec671c85cad3f199754a8b89728d130aa8
+ PYTHON_PYCRYPTODOMEX_SETUP_TYPE = setuptools
+ PYTHON_PYCRYPTODOMEX_LICENSE = \
+ 	BSD-2-Clause, \
