@@ -1,100 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Mar 2020 21:37:35 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/connman: disable wireguard support
-In-Reply-To: <b4c0ce8d-0c24-1f5b-bef8-3f900150759c@smile.fr>
-References: <20200326152501.GA30362@P-NAN-EREVAN-mikbou>
- <20200326190106.GU22325@scaer>
- <b4c0ce8d-0c24-1f5b-bef8-3f900150759c@smile.fr>
-Message-ID: <20200326203735.GW22325@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Mar 2020 21:17:45 +0100
+Subject: [Buildroot] [git commit] package/connman: add option to enable
+ wireguard support
+Message-ID: <20200326202533.503B1882DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2cb778612565e8395c8814a047fc58cc5d746722
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-26 21:30 +0100, Romain Naour spake thusly:
-> Le 26/03/2020 ? 20:01, Yann E. MORIN a ?crit?:
-> > On 2020-03-26 16:25 +0100, Mikael Bourhis-Cloarec spake thusly:
-> >> The new Connman 1.38 release uses 'WireGuard' and 'libmnl' by default now.
-> > 
-> > For the libmnl part, we already have a pending patch:
-> >     https://patchwork.ozlabs.org/patch/1251106/
-> > 
-> >> But to keep the same 'Connman' setup as previous setup, we need to
-> >> explicitly disable the 'WireGuard' support.
-> >>
-> >> The support of all the new 'Connman' options will be added by follow-up commits
-> >> (or patches).
-> >>
-> >> Fixes:
-> >> http://autobuild.buildroot.org/?reason=connman-1.38
-> > 
-> > AFAICS, all the failures have iptable support enabled, which should be
-> > solved by the patch above...
-> > 
-> > I don't see how wireguard fits in the picture...
-> 
-> Sorry but our build still failing on current master with:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/connman/Config.in  | 4 ++++
+ package/connman/connman.mk | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
-I was not trying to imply that master was fixed, just that we already
-had a pending patch about libmnl.
-
-[--SNIP--]
-> It's unfortunate but we have several issues with the same error.
-> The case fixed by James Hilliard is when BR2_PACKAGE_CONNMAN_NFTABLES is set.
-
-Damn, iptables, not nftables. Your patch is still on the table, then.
-;-)
-
-Regards,
-Yann E. MORIN.
-
-> Best regards,
-> Romain
-> 
-> > 
-> > Regards,
-> > Yann E. MORIN.
-> > 
-> >> Signed-off-by: Mikael Bourhis-Cloarec <mikael.bourhis@smile.fr>
-> >> ---
-> >> Changes v1 -> v2 (after review of Romain Naour)
-> >>   - this fix concerns all Arch, not only x86_64
-> >>   - do not add a new '_CONF_OPTS' line but use the previous one
-> >>
-> >>  package/connman/connman.mk | 3 ++-
-> >>  1 file changed, 2 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-> >> index 701be8b59d..62ae919862 100644
-> >> --- a/package/connman/connman.mk
-> >> +++ b/package/connman/connman.mk
-> >> @@ -12,7 +12,8 @@ CONNMAN_INSTALL_STAGING = YES
-> >>  CONNMAN_LICENSE = GPL-2.0
-> >>  CONNMAN_LICENSE_FILES = COPYING
-> >>  
-> >> -CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
-> >> +CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc \
-> >> +	--disable-wireguard
-> >>  
-> >>  ifeq ($(BR2_INIT_SYSTEMD),y)
-> >>  CONNMAN_CONF_OPTS += --with-systemdunitdir=/usr/lib/systemd/system
-> >> -- 
-> >> 2.20.1
-> >> _______________________________________________
-> >> buildroot mailing list
-> >> buildroot at busybox.net
-> >> http://lists.busybox.net/mailman/listinfo/buildroot
-> > 
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 48a2ee421c..614b826f96 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -52,6 +52,10 @@ config BR2_PACKAGE_CONNMAN_WIFI
+ 	  setup). ConnMan detects the start of wpa_supplicant
+ 	  automatically.
+ 
++config BR2_PACKAGE_CONNMAN_WIREGUARD
++	bool "enable wireguard support"
++	select BR2_PACKAGE_LIBMNL
++
+ config BR2_PACKAGE_CONNMAN_WISPR
+ 	bool "enable WISPr support"
+ 	depends on !BR2_STATIC_LIBS # gnutls
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 1ebfe9cf14..23e7cb7797 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -70,6 +70,13 @@ else
+ CONNMAN_CONF_OPTS += --disable-wifi
+ endif
+ 
++ifeq ($(BR2_PACKAGE_CONNMAN_WIREGUARD),y)
++CONNMAN_CONF_OPTS += --enable-wireguard
++CONNMAN_DEPENDENCIES += libmnl
++else
++CONNMAN_CONF_OPTS += --disable-wireguard
++endif
++
+ ifeq ($(BR2_PACKAGE_CONNMAN_WISPR),y)
+ CONNMAN_CONF_OPTS += --enable-wispr
+ CONNMAN_DEPENDENCIES += gnutls
