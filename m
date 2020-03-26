@@ -1,9 +1,9 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 26 Mar 2020 15:44:36 +0100
+Date: Thu, 26 Mar 2020 15:33:20 +0100
 Subject: [Buildroot] [PATCH 3/3] configs/nitrogen8mm: Add new defconfig
-In-Reply-To: <20200326144436.529906-1-gary.bisson@boundarydevices.com>
-References: <20200326144436.529906-1-gary.bisson@boundarydevices.com>
-Message-ID: <20200326144436.529906-4-gary.bisson@boundarydevices.com>
+In-Reply-To: <20200326143320.527056-1-gary.bisson@boundarydevices.com>
+References: <20200326143320.527056-1-gary.bisson@boundarydevices.com>
+Message-ID: <20200326143320.527056-4-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
