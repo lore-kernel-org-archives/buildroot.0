@@ -1,102 +1,85 @@
-From: Gao Xiang <hsiangkao@aol.com>
-Date: Thu, 26 Mar 2020 10:12:15 +0800
-Subject: [Buildroot] [PATCH] package/erofs-utils: add patch to resolve
- PAGE_SIZE redefinition
-References: <20200326021215.23749-1-hsiangkao.ref@aol.com>
-Message-ID: <20200326021215.23749-1-hsiangkao@aol.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Thu, 26 Mar 2020 08:06:05 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libeXosip2: fix build without threads
+In-Reply-To: <20200325073648.46890-1-fontaine.fabrice@gmail.com>
+References: <20200325073648.46890-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAKcgs2xN5pVisfmOBC9Gq_B5thVk_1whS24tcKd+tvj5JJpWpw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch resolves PAGE_SIZE redefinition reported by autobuild [1]
-with some configrations on i586 platform.
+Hello Fabrice, all,
 
-As what I said in the patch, I didn't get such error report before.
-
-[1] http://autobuild.buildroot.net/results/340b98caa45bafd43f109002be9da59ba7f6d971
-Signed-off-by: Gao Xiang <hsiangkao@aol.com>
----
-Hi all,
-
-I have no simple way to verify the whole compilation with such
-configuration due to poor Internet quality to download all
-necessary packages in China mainland.
-
-I've just verified with my own old configuration and it has no
-impact. Hopefully it's the last patch for all configration to
-work.
-
-Thanks,
-Gao Xiang
-
- ...s-utils-avoid-PAGE_SIZE-redefinition.patch | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch
-
-diff --git a/package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch b/package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch
-new file mode 100644
-index 0000000000..2441a841ba
---- /dev/null
-+++ b/package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch
-@@ -0,0 +1,57 @@
-+From 6c087a91c968197b5a95578fc645617947c943ad Mon Sep 17 00:00:00 2001
-+From: Gao Xiang <hsiangkao@aol.com>
-+Date: Wed, 25 Mar 2020 15:42:22 +0800
-+Subject: [PATCH] erofs-utils: avoid PAGE_SIZE redefinition
-+
-+Buildroot autobuild reported a PAGE_SIZE redefinition with some
-+configrations on i586 toolchain [1] (I didn't notice such report
-+from erofs-utils travis CI or distribution builds before.)
-+
-+In file included from config.c:11:
-+../include/erofs/internal.h:27: error: "PAGE_SIZE" redefined [-Werror]
-+ #define PAGE_SIZE  (1U << PAGE_SHIFT)
-+
-+In file included from ../include/erofs/defs.h:17,
-+                 from ../include/erofs/config.h:12,
-+                 from ../include/erofs/print.h:12,
-+                 from config.c:10:
-+.../sysroot/usr/include/limits.h:89: note: this is the location of the previous definition
-+ #define PAGE_SIZE PAGESIZE
-+
-+cc1: all warnings being treated as errors
-+
-+Fix it now.
-+
-+[1] http://autobuild.buildroot.net/results/340b98caa45bafd43f109002be9da59ba7f6d971
-+Link: https://lore.kernel.org/r/20200325082930.2025-1-hsiangkao at aol.com
-+Signed-off-by: Gao Xiang <hsiangkao@aol.com>
-+---
-+ include/erofs/internal.h | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/include/erofs/internal.h b/include/erofs/internal.h
-+index e7d5a64..41da189 100644
-+--- a/include/erofs/internal.h
-++++ b/include/erofs/internal.h
-+@@ -23,8 +23,18 @@ typedef unsigned short umode_t;
-+ #define PATH_MAX        4096    /* # chars in a path name including nul */
-+ #endif
-+ 
-++#ifndef PAGE_SHIFT
-+ #define PAGE_SHIFT		(12)
-++#endif
-++
-++#ifndef PAGE_SIZE
-+ #define PAGE_SIZE		(1U << PAGE_SHIFT)
-++#endif
-++
-++/* no obvious reason to support explicit PAGE_SIZE != 4096 for now */
-++#if PAGE_SIZE != 4096
-++#error incompatible PAGE_SIZE is already defined
-++#endif
-+ 
-+ #define LOG_BLOCK_SIZE          (12)
-+ #define EROFS_BLKSIZ            (1U << LOG_BLOCK_SIZE)
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+Le mer. 25 mars 2020 ? 08:35, Fabrice Fontaine
+<fontaine.fabrice@gmail.com> a ?crit :
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ec262058cc0a4bf92c381857eaf3b44412942bba
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2 (after review of Gilles Talis)
+>  - Use upstream patch
+>
+>  ...pilation-error-introduced-with-epoll.patch | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
+>
+> diff --git a/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch b/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
+> new file mode 100644
+> index 0000000000..b69455bd7a
+> --- /dev/null
+> +++ b/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
+> @@ -0,0 +1,44 @@
+> +From 0e0e95dbc380c5eede3a2fc1631294a98078e30f Mon Sep 17 00:00:00 2001
+> +From: Aymeric Moizard <amoizard@gmail.com>
+> +Date: Fri, 13 Mar 2020 16:34:41 +0100
+> +Subject: fix: fix OSIP_MONOTHREAD compilation error introduced with epoll
+> + implementation
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +http://git.savannah.nongnu.org/cgit/exosip.git/patch/?id=0e0e95dbc380c5eede3a2fc1631294a98078e30f]
+> +---
+> + src/eXconf.c | 4 ++++
+> + 1 file changed, 4 insertions(+)
+> +
+> +diff --git a/src/eXconf.c b/src/eXconf.c
+> +index baf90be..6165eb3 100644
+> +--- a/src/eXconf.c
+> ++++ b/src/eXconf.c
+> +@@ -801,12 +801,15 @@ eXosip_init (struct eXosip_t *excontext)
+> +   }
+> +
+> +   if (excontext->poll_method == EXOSIP_USE_EPOLL_LT) {
+> ++#ifndef OSIP_MONOTHREAD
+> +     struct epoll_event ev;
+> ++#endif
+> +     excontext->epfdctl = epoll_create (1);
+> +     if (excontext->epfdctl < 0) {
+> +       return OSIP_UNDEFINED_ERROR;
+> +     }
+> +
+> ++#ifndef OSIP_MONOTHREAD
+> +     memset(&ev, 0, sizeof(struct epoll_event));
+> +     ev.events = EPOLLIN;
+> +     ev.data.fd = jpipe_get_read_descr (excontext->j_socketctl_event);
+> +@@ -815,6 +818,7 @@ eXosip_init (struct eXosip_t *excontext)
+> +       _eXosip_closesocket (excontext->epfdctl);
+> +       return OSIP_UNDEFINED_ERROR;
+> +     }
+> ++#endif
+> +   }
+> + #endif
+> +
+> +--
+> +cgit v1.2.1
+> +
+> --
+> 2.25.1
+>
+Thanks for updating the patch!
+Reviewed-by: Gilles Talis <gilles.talis@gmail.com>
