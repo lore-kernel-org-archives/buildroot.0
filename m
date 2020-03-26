@@ -1,76 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Mar 2020 21:56:58 +0100
-Subject: [Buildroot] [PATCH v2] package/libapparmor: new package
-In-Reply-To: <CA+_SqVaJV25AFu3btPK6OfgNLsz_DEpxfohgW-cDKzRdCrHTtA@mail.gmail.com>
-References: <20200326180115.30643-1-angelo@amarulasolutions.com>
- <20200326185659.GT22325@scaer>
- <CA+_SqVaJV25AFu3btPK6OfgNLsz_DEpxfohgW-cDKzRdCrHTtA@mail.gmail.com>
-Message-ID: <20200326205658.GY22325@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Mar 2020 21:57:14 +0100
+Subject: [Buildroot] [PATCH 3/3] configs/nitrogen8mm: Add new defconfig
+In-Reply-To: <20200326144436.529906-4-gary.bisson@boundarydevices.com>
+References: <20200326144436.529906-1-gary.bisson@boundarydevices.com>
+ <20200326144436.529906-4-gary.bisson@boundarydevices.com>
+Message-ID: <20200326215714.3a5fa6dc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, All,
+Hello Gary,
 
-On 2020-03-26 21:34 +0100, Angelo Compagnucci spake thusly:
-> On Thu, Mar 26, 2020 at 7:57 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2020-03-26 19:01 +0100, Angelo Compagnucci spake thusly:
-> > > From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> > > This patch adds libapparmor and it's related tools.
-> > > The patch is quite complicated by the layout of the source tree:
-[--SNIP--]
-> > I've looked at the .mk, and I don't like it.
-[--SNIP--]
-> > Why don't you provide multiple packages:
-> >   - libapparmor
-[--SNIP--]
-> >   - apparmor-utils, with just the parser (and binutils?) sub-dirs
-> >   - pam
-> >   - apache
-> >   - python
-> >   - profiles
-> >   - rules caching
+I was about to apply, but there are a few things that could be
+improved. See below.
 
-> I don't know. I've tried that approach at in the end it was a mess.
-> Some of the steps to build the swig python are embedded into the
-> makefile, so we need to call configure and make even for a package
-> that instead could have been a simple python one.
+On Thu, 26 Mar 2020 15:44:36 +0100
+Gary Bisson <gary.bisson@boundarydevices.com> wrote:
 
-Well, as far as I can see, that's exactly what your patch does: it
-installs libapparmor, and then as post-staging hooks, it then builds the
-rest of the package.
+> NXP i.MX8MMini based SBC with 2GB of LPDDR4 and 8GB eMMC.
+> 
+> More details on the platform here:
+> https://boundarydevices.com/product/nitrogen8m-mini
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+>  configs/nitrogen8mm_defconfig | 56 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 configs/nitrogen8mm_defconfig
 
-This is exactly what having two packages would provide.
+Could you update board/boundary/common/readme.txt to also list this
+platform as being supported, and any other note that might be relevant ?
 
-Now, specifically about the python bindings: maybe they should be built
-from the libapparmor package rather than the utils one, sure, if it
-makes more sense...
+> +BR2_TARGET_GENERIC_GETTY=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
 
-> You mean having a patch series that will add bit by bit to the package?
+Could you drop this script and use support/scripts/genimage.sh ?
+Indeed, it does the same thing, and in fact support/scripts/genimage.sh
+got fixed to use an empty rootpath and avoid a useless extra copy
+(commit 31d1fb27b0e62a6542112a7476ff188f2f7b8d38).
 
-Yes.
+It would be good to do that in a preparation commit for all existing
+Boundary Devices boards.
 
-As you say yourself, the package is a mess as it is. By splitting it in
-a series that adds each pieces one by one, it will:
+Thanks!
 
-   - allow you to provide a detailed commit log with full explanations
-     about the required uglyness,
-
-  - allow reviewers to understand that problem and better asses the
-    uglyness, and see if it is indeed needed.
-
-Also, "it was a mess" is not descriptive enough to dismiss the
-multi-package attempt (where 'multi' may well be just '2').
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
