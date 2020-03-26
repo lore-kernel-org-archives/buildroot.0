@@ -1,47 +1,79 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 26 Mar 2020 15:44:38 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-pyasn1: bump to version 0.4.8
-Message-ID: <20200326214438.107004-1-james.hilliard1@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Mar 2020 23:00:41 +0100
+Subject: [Buildroot] [git commit] package/libtommath: fix build with latest
+ moarvm on ARM
+Message-ID: <20200326214723.8D46A8843F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-pyasn1/python-pyasn1.hash | 6 +++---
- package/python-pyasn1/python-pyasn1.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=0abfa1b69a4285a3448d75c60f60a646eab31db3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-pyasn1/python-pyasn1.hash b/package/python-pyasn1/python-pyasn1.hash
-index c6109345db..4347a43c46 100644
---- a/package/python-pyasn1/python-pyasn1.hash
-+++ b/package/python-pyasn1/python-pyasn1.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyasn1/json
--md5	50290e833395016c49903f4f9c7e47e5  pyasn1-0.4.7.tar.gz
--sha256	a9495356ca1d66ed197a0f72b41eb1823cf7ea8b5bd07191673e8147aecf8604  pyasn1-0.4.7.tar.gz
-+md5  dffae4ff9f997a83324b3f33fe62be54  pyasn1-0.4.8.tar.gz
-+sha256  aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba  pyasn1-0.4.8.tar.gz
- # Locally computed sha256 checksums
--sha256	22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.rst
-+sha256  22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.rst
-diff --git a/package/python-pyasn1/python-pyasn1.mk b/package/python-pyasn1/python-pyasn1.mk
-index 50a500c743..60050bef18 100644
---- a/package/python-pyasn1/python-pyasn1.mk
-+++ b/package/python-pyasn1/python-pyasn1.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYASN1_VERSION = 0.4.7
-+PYTHON_PYASN1_VERSION = 0.4.8
- PYTHON_PYASN1_SOURCE = pyasn1-$(PYTHON_PYASN1_VERSION).tar.gz
--PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/ca/f8/2a60a2c88a97558bdd289b6dc9eb75b00bd90ff34155d681ba6dbbcb46b2
-+PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/a4/db/fffec68299e6d7bad3d504147f9094830b704527a7fc098b721d38cc7fa7
- PYTHON_PYASN1_SETUP_TYPE = setuptools
- PYTHON_PYASN1_LICENSE = BSD-2-Clause
- PYTHON_PYASN1_LICENSE_FILES = LICENSE.rst
--- 
-2.20.1
+Add an upstream to enable mp_set_double on more architectures to fix the
+following build failure on moarvm with some ARM architectures:
+
+linking moar
+./libmoar.so: undefined reference to `mp_set_double'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/59d6b651498f3523d4a990eddc03c7d5043425ff
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...test-bn_mp_set_double-c-on-more-platforms.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+
+diff --git a/package/libtommath/0001-Build-test-bn_mp_set_double-c-on-more-platforms.patch b/package/libtommath/0001-Build-test-bn_mp_set_double-c-on-more-platforms.patch
+new file mode 100644
+index 0000000000..c25002ba70
+--- /dev/null
++++ b/package/libtommath/0001-Build-test-bn_mp_set_double-c-on-more-platforms.patch
+@@ -0,0 +1,44 @@
++From 4e90f3185aea9160c28f3eaec5625b67fc0f67db Mon Sep 17 00:00:00 2001
++From: Daniel Green <ddgreen@gmail.com>
++Date: Sun, 9 Feb 2020 11:06:53 -0500
++Subject: [PATCH] Build+test bn_mp_set_double.c on more platforms
++
++Not all platforms/environments/architectures that support enough of
++IEEE 754 for the purposes of mp_set_double() actually support enough
++to legitimately define __STDC_IEC_559__, so only relying on that is
++too strict. Fixes https://github.com/libtom/libtommath/issues/159
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved (and backported) from:
++https://github.com/libtom/libtommath/commit/4e90f3185aea9160c28f3eaec5625b67fc0f67db]
++---
++ demo/test.c     | 2 +-
++ bn_mp_set_double.c | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/demo/test.c b/demo/test.c
++index 998f14b3..f719709d 100644
++--- a/demo/test.c
+++++ b/demo/test.c
++@@ -522,7 +522,7 @@ static int test_mp_invmod(void)
++ 
++ }
++ 
++-#if defined(__STDC_IEC_559__) || defined(__GCC_IEC_559)
+++#if defined(__STDC_IEC_559__) || defined(__GCC_IEC_559) || defined(__x86_64__) || defined(_M_X64) || defined(_M_AMD64) || defined(__i386__) || defined(_M_X86) || defined(__aarch64__) || defined(__arm__)
++ static int test_mp_set_double(void)
++ {
++    int i;
++diff --git a/mp_set_double.c b/mp_set_double.c
++index 78550c8f..cdc644d9 100644
++--- a/bn_mp_set_double.c
+++++ b/bn_mp_set_double.c
++@@ -3,7 +3,7 @@
++ /* LibTomMath, multiple-precision integer library -- Tom St Denis */
++ /* SPDX-License-Identifier: Unlicense */
++ 
++-#if defined(__STDC_IEC_559__) || defined(__GCC_IEC_559)
+++#if defined(__STDC_IEC_559__) || defined(__GCC_IEC_559) || defined(__x86_64__) || defined(_M_X64) || defined(_M_AMD64) || defined(__i386__) || defined(_M_X86) || defined(__aarch64__) || defined(__arm__)
++ mp_err mp_set_double(mp_int *a, double b)
++ {
++    uint64_t frac;
