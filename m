@@ -1,71 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Mar 2020 20:03:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/connman: add missing libmnl
- dependency for nftables
-In-Reply-To: <20200308205301.62180-1-james.hilliard1@gmail.com>
-References: <20200308205301.62180-1-james.hilliard1@gmail.com>
-Message-ID: <20200326190324.GV22325@scaer>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 26 Mar 2020 19:22:54 +0000
+Subject: [Buildroot] [Bug 12701] New: [patch] wpa_supplicant must depend on
+ openssl
+Message-ID: <bug-12701-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+https://bugs.busybox.net/show_bug.cgi?id=12701
 
-On 2020-03-08 14:53 -0600, James Hilliard spake thusly:
-> Building with nftables support requires libmnl.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+            Bug ID: 12701
+           Summary: [patch] wpa_supplicant must depend on openssl
+           Product: buildroot
+           Version: 2020.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: shaforostoff at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Applied to master, after adding references to a few autobuild failures.
-Thanks!
+with BR2_PACKAGE_OPENSSH=n building buildroot results in errors:
 
-Regards,
-Yann E. MORIN.
+buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/8.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld:
+../src/eap_peer/eap_teap.o: in function `eap_teap_session_id':
 
-> ---
->  package/connman/Config.in  | 1 +
->  package/connman/connman.mk | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/connman/Config.in b/package/connman/Config.in
-> index ac012dda54..48a2ee421c 100644
-> --- a/package/connman/Config.in
-> +++ b/package/connman/Config.in
-> @@ -33,6 +33,7 @@ config BR2_PACKAGE_CONNMAN_NFTABLES
->  	bool "nftables"
->  	depends on BR2_USE_WCHAR
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-> +	select BR2_PACKAGE_LIBMNL
->  	select BR2_PACKAGE_NFTABLES
->  	help
->  	  Use nftables as firewall.
-> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-> index 701be8b59d..1ebfe9cf14 100644
-> --- a/package/connman/connman.mk
-> +++ b/package/connman/connman.mk
-> @@ -41,7 +41,7 @@ CONNMAN_CONF_OPTS += --with-firewall=iptables
->  CONNMAN_DEPENDENCIES += iptables
->  else ifeq ($(BR2_PACKAGE_CONNMAN_NFTABLES),y)
->  CONNMAN_CONF_OPTS += --with-firewall=nftables
-> -CONNMAN_DEPENDENCIES += nftables
-> +CONNMAN_DEPENDENCIES += libmnl nftables
->  endif
->  
->  ifeq ($(BR2_PACKAGE_CONNMAN_LOOPBACK),y)
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+buildroot/build/wpa_supplicant-2.9/wpa_supplicant/../src/eap_peer/eap_teap.c:741:
+undefined reference to `tls_get_tls_unique'
+buildroot/build/wpa_supplicant-2.9/wpa_supplicant/../src/eap_peer/eap_teap.c:1828:
+undefined reference to `tls_connection_get_cipher_suite'
+
+buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/8.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld:
+../src/eap_common/eap_teap_common.o: in function `eap_teap_tls_prf':
+14:15:20
+buildroot/build/wpa_supplicant-2.9/wpa_supplicant/../src/eap_common/eap_teap_common.c:75:
+undefined reference to `tls_prf_sha256'
+
+and so on. The fix is to add WPA_SUPPLICANT_DEPENDENCIES=opessl
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+You are receiving this mail because:
+You are on the CC list for the bug.
