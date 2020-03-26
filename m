@@ -1,20 +1,23 @@
-From: Simon Rowe <Simon.Rowe@citrix.com>
-Date: Thu, 26 Mar 2020 12:56:01 +0000
-Subject: [Buildroot] External packages in 2020.02
-Message-ID: <1585227360690.38607@citrix.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 26 Mar 2020 13:08:23 +0000
+Subject: [Buildroot] [Bug 12671] leveldb won't detect that snappy is present
+ (static libs only)
+In-Reply-To: <bug-12671-163@https.bugs.busybox.net/>
+References: <bug-12671-163@https.bugs.busybox.net/>
+Message-ID: <bug-12671-163-OI7xja7zzB@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Has something changed in the way that packages external to the buildroot code tree need to be specified? After updating my 2019.02 config I can no longer see my external package in the config menu.
+https://bugs.busybox.net/show_bug.cgi?id=12671
 
-I've checked Config.in, external.desc and external.mk but they seem to contain the correct details,
+--- Comment #1 from maksis33 at gmail.com ---
+Applying changes from https://github.com/google/leveldb/pull/686/files seems to
+fix the detection (and makes the library compatible with existing compresses
+databases again)
 
-
-Simon
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200326/d962d951/attachment.html>
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
