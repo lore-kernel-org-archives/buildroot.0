@@ -1,55 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Mar 2020 22:20:09 +0100
-Subject: [Buildroot] [git commit] package/python-pyyaml: bump to version
- 5.3.1
-Message-ID: <20200326210721.116C188324@busybox.osuosl.org>
+Date: Thu, 26 Mar 2020 21:58:58 +0100
+Subject: [Buildroot] [git commit] package/python-cchardet: bump to version
+ 2.1.6
+Message-ID: <20200326210720.E5FA0882F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9063df44da2c19ec23b228ab8e7d29ebb2a3eb4f
+commit: https://git.buildroot.net/buildroot/commit/?id=bb24305f86099088d3b1273af1be61e8f2cea418
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The hash of the license file changed due to the following diff:
-
--Copyright (c) 2017-2019 Ingy d??t Net
-+Copyright (c) 2017-2020 Ingy d??t Net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyyaml/python-pyyaml.hash | 6 +++---
- package/python-pyyaml/python-pyyaml.mk   | 4 ++--
+ package/python-cchardet/python-cchardet.hash | 6 +++---
+ package/python-cchardet/python-cchardet.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
-index e0d182bcbb..90e1f2199e 100644
---- a/package/python-pyyaml/python-pyyaml.hash
-+++ b/package/python-pyyaml/python-pyyaml.hash
+diff --git a/package/python-cchardet/python-cchardet.hash b/package/python-cchardet/python-cchardet.hash
+index d023457854..960801f889 100644
+--- a/package/python-cchardet/python-cchardet.hash
++++ b/package/python-cchardet/python-cchardet.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/PyYAML/json
--md5	adbb0d336b509d6472d3b095a0f1cf30  PyYAML-5.3.tar.gz
--sha256	e9f45bd5b92c7974e59bcd2dcc8631a6b6cc380a904725fce7bc08872e691615  PyYAML-5.3.tar.gz
-+md5  d3590b85917362e837298e733321962b  PyYAML-5.3.1.tar.gz
-+sha256  b8eac752c5e14d3eca0e6dd9199cd627518cb5ec06add0de9d32baeee6fe645d  PyYAML-5.3.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cchardet/json
+-md5	681af4e6546e47e2ae856057a8a7d105  cchardet-2.1.5.tar.gz
+-sha256	240efe3f255f916769458343840b9c6403cf3192720bc5129792cbcb88bf72fb  cchardet-2.1.5.tar.gz
++md5  ee884e2c7762e56e8a0600aa34ad4fa3  cchardet-2.1.6.tar.gz
++sha256  b76afb2059ad69eab576949980a17413c1e9e5a5624abf9e43542d8853f146b3  cchardet-2.1.6.tar.gz
  # Locally computed sha256 checksums
--sha256	a2adb9c959b797494a0ef80bdf60e22db2749ee3e0c0908556e3eb548f967c56  LICENSE
-+sha256  c40112449f254b9753045925248313e9270efa36d226b22d82d4cc6c43c57f29  LICENSE
-diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
-index 5d9246d37c..78506390a4 100644
---- a/package/python-pyyaml/python-pyyaml.mk
-+++ b/package/python-pyyaml/python-pyyaml.mk
+-sha256	107a29ccdd2d778aa2df5462f85dddfa099059abd22e064e07ec2cc9bafc37cd  COPYING
++sha256  107a29ccdd2d778aa2df5462f85dddfa099059abd22e064e07ec2cc9bafc37cd  COPYING
+diff --git a/package/python-cchardet/python-cchardet.mk b/package/python-cchardet/python-cchardet.mk
+index 58082538d0..78daf6075e 100644
+--- a/package/python-cchardet/python-cchardet.mk
++++ b/package/python-cchardet/python-cchardet.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYYAML_VERSION = 5.3
-+PYTHON_PYYAML_VERSION = 5.3.1
- PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
--PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/3d/d9/ea9816aea31beeadccd03f1f8b625ecf8f645bd66744484d162d84803ce5
-+PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/64/c2/b80047c7ac2478f9501676c988a5411ed5572f35d1beff9cae07d321512c
- PYTHON_PYYAML_SETUP_TYPE = distutils
- PYTHON_PYYAML_LICENSE = MIT
- PYTHON_PYYAML_LICENSE_FILES = LICENSE
+-PYTHON_CCHARDET_VERSION = 2.1.5
++PYTHON_CCHARDET_VERSION = 2.1.6
+ PYTHON_CCHARDET_SOURCE = cchardet-$(PYTHON_CCHARDET_VERSION).tar.gz
+-PYTHON_CCHARDET_SITE = https://files.pythonhosted.org/packages/73/25/73649708a30aa97124631bd088a22f1bf721d05d4e72fb9cc9bedb97de51
++PYTHON_CCHARDET_SITE = https://files.pythonhosted.org/packages/41/e6/2e2184a3bc887bfb6e6b97aef5e94af9b8de43806ce14b023ddbbcb0b30d
+ PYTHON_CCHARDET_SETUP_TYPE = setuptools
+ PYTHON_CCHARDET_LICENSE = MPL-1.1
+ PYTHON_CCHARDET_LICENSE_FILES = COPYING
