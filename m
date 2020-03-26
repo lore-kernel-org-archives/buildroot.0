@@ -1,146 +1,87 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 26 Mar 2020 15:44:35 +0100
-Subject: [Buildroot] [PATCH 2/3] board/boundarydevices: update boot scripts
+Date: Thu, 26 Mar 2020 15:44:36 +0100
+Subject: [Buildroot] [PATCH 3/3] configs/nitrogen8mm: Add new defconfig
 In-Reply-To: <20200326144436.529906-1-gary.bisson@boundarydevices.com>
 References: <20200326144436.529906-1-gary.bisson@boundarydevices.com>
-Message-ID: <20200326144436.529906-3-gary.bisson@boundarydevices.com>
+Message-ID: <20200326144436.529906-4-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Add support for 8MMini and 8MNano
-- Upgrade script now resets by default
+NXP i.MX8MMini based SBC with 2GB of LPDDR4 and 8GB eMMC.
+
+More details on the platform here:
+https://boundarydevices.com/product/nitrogen8m-mini
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- board/boundarydevices/common/boot.cmd    | 24 +++++++++++++++---------
- board/boundarydevices/common/upgrade.cmd | 20 +++++++++++++++-----
- 2 files changed, 30 insertions(+), 14 deletions(-)
+ configs/nitrogen8mm_defconfig | 56 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 configs/nitrogen8mm_defconfig
 
-diff --git a/board/boundarydevices/common/boot.cmd b/board/boundarydevices/common/boot.cmd
-index 760363da9b..dbc3b3c373 100644
---- a/board/boundarydevices/common/boot.cmd
-+++ b/board/boundarydevices/common/boot.cmd
-@@ -9,9 +9,9 @@ if itest.s x51 == "x${imx_cpu}" ; then
- 	a_base=0x90000000
- elif itest.s x53 == "x${imx_cpu}"; then
- 	a_base=0x70000000
--elif itest.s x6SX == "x${imx_cpu}" || itest.s x7D == "x${imx_cpu}"; then
-+elif itest.s x6SX == "x${imx_cpu}" || itest.s x6ULL == "x${imx_cpu}" || itest.s x7D == "x${imx_cpu}"; then
- 	a_base=0x80000000
--elif itest.s x8MQ == "x${imx_cpu}"; then
-+elif itest.s x8MQ == "x${imx_cpu}" || itest.s x8MM == "x${imx_cpu}" || itest.s x8MMQ == "x${imx_cpu}" || itest.s x8MNano == "x${imx_cpu}"; then
- 	a_base=0x40000000
- 	kernelimage=Image
- 	bootcommand=booti
-@@ -43,10 +43,18 @@ if itest.s "x" == "x${fdt_file}" ; then
- 		fdt_file=imx6qp-${board}.dtb;
- 	elif itest.s x6SX == "x${imx_cpu}" ; then
- 		fdt_file=imx6sx-${board}${m4}.dtb;
-+	elif itest.s x6ULL == "x${imx_cpu}" ; then
-+		fdt_file=imx6ull-${board}.dtb;
- 	elif itest.s x7D == "x${imx_cpu}" ; then
- 		fdt_file=imx7d-${board}${m4}.dtb;
- 	elif itest.s x8MQ == "x${imx_cpu}" ; then
- 		fdt_file=imx8mq-${board}${m4}.dtb;
-+	elif itest.s x8MM == "x${imx_cpu}" ; then
-+		fdt_file=imx8mm-${board}${m4}.dtb;
-+	elif itest.s x8MMQ == "x${imx_cpu}" ; then
-+		fdt_file=imx8mm-${board}${m4}.dtb;
-+	elif itest.s x8MNano == "x${imx_cpu}" ; then
-+		fdt_file=imx8mn-${board}${m4}.dtb;
- 	elif itest.s x51 == "x${imx_cpu}" ; then
- 		fdt_file=imx51-${board}.dtb;
- 	elif itest.s x53 == "x${imx_cpu}" ; then
-@@ -63,7 +71,6 @@ fi
- if load ${devtype} ${devnum}:${distro_bootpart} ${a_script} uEnv.txt ; then
-     env import -t ${a_script} ${filesize}
- fi
--
- setenv bootargs ${bootargs} console=${console},115200 vmalloc=400M consoleblank=0 rootwait fixrtc cpu=${imx_cpu} board=${board}
- 
- if load ${devtype} ${devnum}:${distro_bootpart} ${a_fdt} ${prefix}${fdt_file} ; then
-@@ -74,21 +81,20 @@ else
- 	exit;
- fi
- 
--fdt resize
-+fdt resize 4096
-+if itest.s "x" != "x${cmd_board}" ; then
-+	run cmd_board
-+fi
- if itest.s "x" != "x${cmd_custom}" ; then
- 	run cmd_custom
- fi
- if itest.s "x" != "x${cmd_hdmi}" ; then
- 	run cmd_hdmi
--	if itest.s x == x${allow_noncea} ; then
--		setenv bootargs ${bootargs} mxc_hdmi.only_cea=1;
--		echo "only CEA modes allowed on HDMI port";
--	else
-+	if itest.s x != x${allow_noncea} ; then
- 		setenv bootargs ${bootargs} mxc_hdmi.only_cea=0;
- 		echo "non-CEA modes allowed on HDMI, audio may be affected";
- 	fi
- fi
--
- if itest.s "x" != "x${cmd_lcd}" ; then
- 	run cmd_lcd
- fi
-diff --git a/board/boundarydevices/common/upgrade.cmd b/board/boundarydevices/common/upgrade.cmd
-index 24b705eb76..ce32d77b5b 100644
---- a/board/boundarydevices/common/upgrade.cmd
-+++ b/board/boundarydevices/common/upgrade.cmd
-@@ -13,11 +13,14 @@ if itest.s x51 == "x${imx_cpu}"; then
- 	a_base=0x92000000
- elif itest.s x53 == "x${imx_cpu}"; then
- 	a_base=0x72000000
--elif itest.s x6SX == "x${imx_cpu}" || itest.s x7D == "x${imx_cpu}"; then
-+elif itest.s x6SX == "x${imx_cpu}" || itest.s x6ULL == "x${imx_cpu}" || itest.s x7D == "x${imx_cpu}"; then
- 	a_base=0x82000000
--elif itest.s x8MQ == "x${imx_cpu}"; then
-+elif itest.s x8MQ == "x${imx_cpu}" || itest.s x8MM == "x${imx_cpu}" || itest.s x8MMQ == "x${imx_cpu}"; then
- 	a_base=0x42000000
- 	offset=0x8400
-+elif itest.s x8MNano == "x${imx_cpu}"; then
-+	a_base=0x42000000
-+	offset=0x8000
- fi
- 
- qspi_match=1
-@@ -56,6 +59,7 @@ mmc dev ${env_dev} ${env_part}
- mmc read ${a_uImage2} ${cntoffset} ${cntfile}
- if cmp.b ${a_uImage1} ${a_uImage2} ${filesize} ; then
- 	echo "------- U-Boot versions match" ;
-+	echo "------- U-Boot upgrade NOT needed" ;
- 	exit ;
- fi
- 
-@@ -134,7 +138,7 @@ fi
- if cmp.b ${a_uImage1} ${a_uImage2} $filesize ; then
- 	echo "------- U-Boot versions match" ;
- 	if itest.s "${qspi_match}" == "1" ; then
--		echo "------- upgrade not needed" ;
-+		echo "------- U-Boot upgrade NOT needed" ;
- 		if itest.s "x" != "x${next}" ; then
- 			if ${fs}load ${devtype} ${devnum}:${distro_bootpart} ${a_script} ${next} ; then
- 				source ${a_script}
-@@ -206,6 +210,12 @@ if itest.s "x" != "x${next}" ; then
- fi
- fi
- 
--while echo "---- U-Boot upgraded. Please reset the board" ; do
--	sleep 120
-+if itest.s "xno" == "x${reset}" ; then
-+	while echo "---- U-Boot upgraded. Please reset the board" ; do
-+		sleep 120
-+	done
-+fi
-+echo "---- U-Boot upgraded. The board will now reset."
-+sleep 1
-+reset
- done
+diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
+new file mode 100644
+index 0000000000..a7aa55c527
+--- /dev/null
++++ b/configs/nitrogen8mm_defconfig
+@@ -0,0 +1,56 @@
++# Architecture
++BR2_aarch64=y
++BR2_cortex_a53=y
++
++# System
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mm-nitrogen8mm.dtb"
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_IMX_MKIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++
++# DDR training binaries
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++
++# ARM Trusted Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
++# Latest revision of branch boundary-imx_4.14.98_2.3.0
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/99e07a29.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mm_2g"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++# Latest revision of branch boundary-imx_v2018.07
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/26bfd1de.tar.gz"
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_SPL=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++# Latest revision  of branch boundary-imx_4.14.x_2.0.0_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/208127fd.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="boundary"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-nitrogen8mm freescale/imx8mm-nitrogen8mm-m4 freescale/imx8mm-nitrogen8mm_rev2 freescale/imx8mm-nitrogen8mm_rev2-m4 freescale/imx8mm-nitrogen8mm_som freescale/imx8mm-nitrogen8mm_som-m4"
 -- 
 2.25.1
