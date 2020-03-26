@@ -1,42 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Mar 2020 21:43:56 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/connman: disable wireguard support
-In-Reply-To: <20200326203735.GW22325@scaer>
-References: <20200326152501.GA30362@P-NAN-EREVAN-mikbou>
- <20200326190106.GU22325@scaer>
- <b4c0ce8d-0c24-1f5b-bef8-3f900150759c@smile.fr>
- <20200326203735.GW22325@scaer>
-Message-ID: <20200326204356.GX22325@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Mar 2020 21:46:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/connman: enable wireguard
+In-Reply-To: <20200308070741.42542-1-james.hilliard1@gmail.com>
+References: <20200308070741.42542-1-james.hilliard1@gmail.com>
+Message-ID: <20200326214640.437bc16e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, Mikael, All,
+On Sun,  8 Mar 2020 00:07:41 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-On 2020-03-26 21:37 +0100, Yann E. MORIN spake thusly:
-> On 2020-03-26 21:30 +0100, Romain Naour spake thusly:
-> > Le 26/03/2020 ? 20:01, Yann E. MORIN a ?crit?:
-> > > On 2020-03-26 16:25 +0100, Mikael Bourhis-Cloarec spake thusly:
-> > >> The new Connman 1.38 release uses 'WireGuard' and 'libmnl' by default now.
-> Damn, iptables, not nftables. Your patch is still on the table, then.
+> We also need to select libmnl when building with wireguard support or
+> with nftables.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/connman/Config.in  | 5 +++++
+>  package/connman/connman.mk | 9 ++++++++-
+>  2 files changed, 13 insertions(+), 1 deletion(-)
 
-In the meantime, Thomas applied another earlier pending patch that
-actually enabled wireguard support.
+I've applied to master, but only the parts related to wireguard
+support, as the rest was applied separately.
 
-So I've marked your patch as not applicable in patchwork.
+Thanks,
 
-Thanks for the contribution nonetheless! :-)
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
