@@ -1,63 +1,47 @@
-From: John Faith <jfaith@impinj.com>
-Date: Thu, 26 Mar 2020 21:01:29 +0000
-Subject: [Buildroot] [PATCH 1/1] package/sdbusplus: needs C++17
-In-Reply-To: <20200326203820.59678-1-fontaine.fabrice@gmail.com>
-References: <20200326203820.59678-1-fontaine.fabrice@gmail.com>
-Message-ID: <CY4PR0601MB37797FBC0F43E25E28E0C54CB4CF0@CY4PR0601MB3779.namprd06.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Mar 2020 21:58:52 +0100
+Subject: [Buildroot] [git commit] package/python-aioconsole: bump to version
+ 0.1.16
+Message-ID: <20200326210720.DE5C388321@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Sent: Thursday, March 26, 2020 1:38 PM
-> To: buildroot at buildroot.org <buildroot@buildroot.org>
-> Cc: John Faith <jfaith@impinj.com>; Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Subject: [PATCH 1/1] package/sdbusplus: needs C++17
-> 
-> sdbusplus needs C++17 since
-> https://github.com/openbmc/sdbusplus/commit/ca46b9d2e958d1e4b392265f656f782899c2de1d
-> 
-> This is not needed for host-sdbusplus as libsdbusplus is disabled on
-> host through --disable-libsdbusplus
-> 
-> Fixes:
-> - 
-> http://autobuild.buildroot.org/results/65a4652e5b419f03ace109c4b3738e9b997cdabe
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=3a33eb87cfc2256c0869e616e21cea1d34db36b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reviewed-by: John Faith <jfaith@impinj.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-aioconsole/python-aioconsole.hash | 4 ++--
+ package/python-aioconsole/python-aioconsole.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks for fixing this!
-,
-John
-
-> ---
-> package/sdbusplus/Config.in | 6 ++++--
-> 1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/sdbusplus/Config.in b/package/sdbusplus/Config.in
-> index e278d17156..c66203c463 100644
-> --- a/package/sdbusplus/Config.in
-> +++ b/package/sdbusplus/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_SDBUSPLUS
-> bool "sdbusplus"
-> depends on BR2_INSTALL_LIBSTDCPP
-> depends on BR2_PACKAGE_SYSTEMD
-> + depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-> help
-> A C++ library for sd-bus with a bindings and doc generator.
-> 
-> @@ -10,5 +11,6 @@ config BR2_PACKAGE_SDBUSPLUS
-> 
-> https://github.com/openbmc/sdbusplus
-> 
-> -comment "sdbusplus needs systemd and a toolchain w/ C++"
-> - depends on !BR2_PACKAGE_SYSTEMD || !BR2_INSTALL_LIBSTDCPP
-> +comment "sdbusplus needs systemd and a toolchain w/ C++, gcc >= 7"
-> + depends on !BR2_PACKAGE_SYSTEMD || !BR2_INSTALL_LIBSTDCPP || \
-> + !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-> -- 
-> 2.25.1
+diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
+index 28c841cf12..93173e4721 100644
+--- a/package/python-aioconsole/python-aioconsole.hash
++++ b/package/python-aioconsole/python-aioconsole.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/aioconsole/json
+-md5	918caf70f00a3fbc8a61cd74579da1c4  aioconsole-0.1.15.tar.gz
+-sha256	498e567805b74c1ecf4501d28e48727e8e77af8d6a0b8f1b7aa9a4842e02743d  aioconsole-0.1.15.tar.gz
++md5  8eeeee86f96c51d202e69f0e0a56eaad  aioconsole-0.1.16.tar.gz
++sha256  a5d98a99539e060f514b96425f19839abc4bc2b487b39cdb76b91df2367c647a  aioconsole-0.1.16.tar.gz
+diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
+index 83c694fe3d..ef0aa2faee 100644
+--- a/package/python-aioconsole/python-aioconsole.mk
++++ b/package/python-aioconsole/python-aioconsole.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOCONSOLE_VERSION = 0.1.15
++PYTHON_AIOCONSOLE_VERSION = 0.1.16
+ PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
+-PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/c4/68/56b09bf94aff8e02a6080493b3f85bdf7ddea7e4f264e6a90a158e064898
++PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/70/08/5dbb71777058a4f3b6e61b61ffc5b5021056c4a139e118938773b93e9304
+ PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
+ PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
+ 
