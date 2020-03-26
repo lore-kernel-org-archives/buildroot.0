@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Mar 2020 23:15:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: fix kmsdrm build without
- EGL
-In-Reply-To: <20200324222241.5808-1-fontaine.fabrice@gmail.com>
-References: <20200324222241.5808-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200326231504.30d75478@windsurf.home>
+Date: Thu, 26 Mar 2020 23:17:25 +0100
+Subject: [Buildroot] [git commit] package/kodi: remove dependency on
+ BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+Message-ID: <20200326220408.274DE88487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 24 Mar 2020 23:22:41 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=dde1bcf0e269ea6fe5a28e07b8752a37e16bd231
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/fafd20a01591032662f9ca025fcea3478239cf3c
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...o-kmsdrm-SDL_kmsdrmvideo.c-fix-build.patch | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/sdl2/0002-src-video-kmsdrm-SDL_kmsdrmvideo.c-fix-build.patch
+Upstream does not require libgcrypt & libgpg-error anymore:
+https://github.com/xbmc/xbmc/commit/0c6e8e0d975d4045004dc2fe90218d61395cdcb5
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 81bd3874f0..13b8f9df3e 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -177,7 +177,6 @@ config BR2_PACKAGE_KODI_LCMS2
+ 
+ config BR2_PACKAGE_KODI_LIBMICROHTTPD
+ 	bool "web server"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt, libmicrohttpd
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+ 	help
+ 	  Enable webserver feature
