@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Mar 2020 23:10:18 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/freescale_imx6{dl, q,
- sx}*: bump BSP components to 4.19.35_1.1.0
-In-Reply-To: <20200326132320.79708-1-julien.olivain@oss.nxp.com>
-References: <20200326132320.79708-1-julien.olivain@oss.nxp.com>
-Message-ID: <20200326231018.4d48b76e@windsurf.home>
+Date: Thu, 26 Mar 2020 23:10:27 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/freescale_imx8{mm,
+ mq}evk: bump BSP components to 4.19.35_1.1.0
+In-Reply-To: <1585231500-8777-2-git-send-email-laurent.gauthier_1@oss.nxp.com>
+References: <1585231500-8777-1-git-send-email-laurent.gauthier_1@oss.nxp.com>
+ <1585231500-8777-2-git-send-email-laurent.gauthier_1@oss.nxp.com>
+Message-ID: <20200326231027.7588454f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 26 Mar 2020 14:23:20 +0100
-Julien Olivain <julien.olivain@oss.nxp.com> wrote:
+On Thu, 26 Mar 2020 15:05:00 +0100
+"Laurent Gauthier (OSS)" <laurent.gauthier_1@oss.nxp.com> wrote:
 
-> Also:
-> - drop uboot patch accepted upstream in v2018.05 in
->   commit f916757300c15aa1a3f0ccc98e7abb8a84c97da0
-> - Add kernel dependency on host-openssl needed for v4.19.
-> - Rebased uboot patch
+> From: Laurent GAUTHIER <laurent.gauthier_1@oss.nxp.com>
 > 
-> Tested-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
-> (Tested on i.MX6Quad SabreAuto)
-> Signed-off-by: Julien Olivain <julien.olivain@oss.nxp.com>
+> Disabled creation of u-boot.imx image as it fails, and is not required.
+> Final boot image is created from uboot binary and firmwares in post image
+> script board/freescale/common/imx/imx8-bootloader-prepare.sh
+> 
+> With the bump of the kernel to 4.19, the kernel configuration now needs
+> host-openssl to build.
+> 
+> Tested-by: Julien Olivain <julien.olivain@oss.nxp.com>
+> Signed-off-by: Laurent GAUTHIER <laurent.gauthier_1@oss.nxp.com>
 > ---
->  ...nct-pre-processed-mkimage-config-fil.patch | 89 -------------------
->  ...-boot-Linux-to-init-in-mfgtools-mode.patch | 29 +++---
->  configs/freescale_imx6dlsabreauto_defconfig   |  9 +-
->  configs/freescale_imx6dlsabresd_defconfig     |  9 +-
->  configs/freescale_imx6qsabreauto_defconfig    |  9 +-
->  configs/freescale_imx6qsabresd_defconfig      |  9 +-
->  configs/freescale_imx6sxsabresd_defconfig     |  9 +-
->  7 files changed, 40 insertions(+), 123 deletions(-)
->  delete mode 100644 board/freescale/imx6sabre/patches/uboot/0002-imx-Create-distinct-pre-processed-mkimage-config-fil.patch
+>  configs/freescale_imx8mmevk_defconfig | 10 +++++-----
+>  configs/freescale_imx8mqevk_defconfig | 10 +++++-----
+>  2 files changed, 10 insertions(+), 10 deletions(-)
 
 Applied to master, thanks.
 
