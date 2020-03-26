@@ -1,7 +1,7 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 26 Mar 2020 03:53:35 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-txaio: bump to version 20.3.1
-Message-ID: <20200326095335.63174-1-james.hilliard1@gmail.com>
+Date: Thu, 26 Mar 2020 04:04:04 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-pyyaml: bump to version 5.3.1
+Message-ID: <20200326100404.82191-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +10,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-txaio/python-txaio.hash | 6 +++---
- package/python-txaio/python-txaio.mk   | 4 ++--
+ package/python-pyyaml/python-pyyaml.hash | 6 +++---
+ package/python-pyyaml/python-pyyaml.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
-index 778efed8a3..2c4e37f7b9 100644
---- a/package/python-txaio/python-txaio.hash
-+++ b/package/python-txaio/python-txaio.hash
+diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
+index e0d182bcbb..1161ae1021 100644
+--- a/package/python-pyyaml/python-pyyaml.hash
++++ b/package/python-pyyaml/python-pyyaml.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/txaio/json
--md5	53ec110dd7c7d84606abc151f607f0ae  txaio-20.1.1.tar.gz
--sha256	f24e10396f026c75364ae23ffac8d72c156dc5f3733d332febb356c9d8d6b58d  txaio-20.1.1.tar.gz
-+md5  0f584b6c20860363152c1a866cc2d449  txaio-20.3.1.tar.gz
-+sha256  e7a4a4db3d818975ed16ae1b90f53c6621e0075618709e88291ad5a41924e38f  txaio-20.3.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/PyYAML/json
+-md5	adbb0d336b509d6472d3b095a0f1cf30  PyYAML-5.3.tar.gz
+-sha256	e9f45bd5b92c7974e59bcd2dcc8631a6b6cc380a904725fce7bc08872e691615  PyYAML-5.3.tar.gz
++md5  d3590b85917362e837298e733321962b  PyYAML-5.3.1.tar.gz
++sha256  b8eac752c5e14d3eca0e6dd9199cd627518cb5ec06add0de9d32baeee6fe645d  PyYAML-5.3.1.tar.gz
  # Locally computed sha256 checksums
--sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-+sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
-index 409213b3de..068c8ca566 100644
---- a/package/python-txaio/python-txaio.mk
-+++ b/package/python-txaio/python-txaio.mk
+-sha256	a2adb9c959b797494a0ef80bdf60e22db2749ee3e0c0908556e3eb548f967c56  LICENSE
++sha256  a2adb9c959b797494a0ef80bdf60e22db2749ee3e0c0908556e3eb548f967c56  LICENSE
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index 5d9246d37c..78506390a4 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TXAIO_VERSION = 20.1.1
-+PYTHON_TXAIO_VERSION = 20.3.1
- PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
--PYTHON_TXAIO_SITE = https://files.pythonhosted.org/packages/50/ea/dd4c34ade00ddfcd2f32b4f1e7136a50ae13894009d64024a9d03f8c594f
-+PYTHON_TXAIO_SITE = https://files.pythonhosted.org/packages/ca/a0/f19a421547b60fbd7ccb48b56c51deac56bffec9b256f9bd7c622572d0a8
- PYTHON_TXAIO_LICENSE = MIT
- PYTHON_TXAIO_LICENSE_FILES = LICENSE
- PYTHON_TXAIO_SETUP_TYPE = setuptools
+-PYTHON_PYYAML_VERSION = 5.3
++PYTHON_PYYAML_VERSION = 5.3.1
+ PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
+-PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/3d/d9/ea9816aea31beeadccd03f1f8b625ecf8f645bd66744484d162d84803ce5
++PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/64/c2/b80047c7ac2478f9501676c988a5411ed5572f35d1beff9cae07d321512c
+ PYTHON_PYYAML_SETUP_TYPE = distutils
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
 -- 
 2.20.1
