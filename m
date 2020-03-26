@@ -1,8 +1,8 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 26 Mar 2020 17:08:41 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-setuptools-scm: bump to
- version 3.5.0
-Message-ID: <20200326230841.62133-1-james.hilliard1@gmail.com>
+Date: Thu, 26 Mar 2020 17:16:56 -0600
+Subject: [Buildroot] [PATCH 1/1] package/{protobuf,
+ python-protobuf}: bump to version 3.11.4
+Message-ID: <20200326231656.97849-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,38 +11,43 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-setuptools-scm/python-setuptools-scm.hash | 6 +++---
- package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/protobuf/protobuf.hash               | 4 ++--
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
-index 8208a9dc13..82dbf14356 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.hash
-+++ b/package/python-setuptools-scm/python-setuptools-scm.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setuptools-scm/json
--md5	50b2199082fe808d032ec1710c9d7415  setuptools_scm-3.3.3.tar.gz
--sha256	bd25e1fb5e4d603dcf490f1fde40fb4c595b357795674c3e5cb7f6217ab39ea5 setuptools_scm-3.3.3.tar.gz
-+md5  86ec1eb9ec02ba018b097787e98897c5  setuptools_scm-3.5.0.tar.gz
-+sha256  5bdf21a05792903cafe7ae0c9501182ab52497614fa6b1750d9dbae7b60c1a87  setuptools_scm-3.5.0.tar.gz
- # sha256 locally computed
--sha256 89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e LICENSE
-+sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSE
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
-index dc9d28059f..c6d30e99e7 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.mk
-+++ b/package/python-setuptools-scm/python-setuptools-scm.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SETUPTOOLS_SCM_VERSION = 3.3.3
-+PYTHON_SETUPTOOLS_SCM_VERSION = 3.5.0
- PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/83/44/53cad68ce686585d12222e6769682c4bdb9686808d2739671f9175e2938b
-+PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/b2/f7/60a645aae001a2e06cf4b8db2fba9d9f36b8fd378f10647e3e218b61b74b
- PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
- PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index c82ae84f22..df5e9c62d9 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	9ffb1fe6091240f2e7bcaca5b65fb19cb7b951ffc9a60d8b2c9d73f89f0e0a51  protobuf-cpp-3.11.3.tar.gz
+-sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
++sha256  ba4bbc3e6b58d2ccfe406e616576ef48710a2aae205f463618025fc691549cfe  protobuf-cpp-3.11.4.tar.gz
++sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 1531bfffb2..381649a4e7 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works, as they share the same
+ # version/site variables.
+-PROTOBUF_VERSION = 3.11.3
++PROTOBUF_VERSION = 3.11.4
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 0ede47ec20..929f88548a 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	a9c6c3821ece08f8db55392edbbec4d4a5392fa5df148188309ed6c5a842e3b7  protobuf-python-3.11.3.tar.gz
+-sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
++sha256  5fe38d70962e4a6bb4d663e63b0906d5bd08a1b590841e08c5148cdbb63732b5  protobuf-python-3.11.4.tar.gz
++sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
 -- 
 2.20.1
