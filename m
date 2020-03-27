@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 23:27:04 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/redis: security
+Date: Fri, 27 Mar 2020 23:24:57 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/redis: security
  bump to v5.0.8
-Message-ID: <20200327221648.A854A886C8@busybox.osuosl.org>
+Message-ID: <20200327221709.66B26886CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f655e7c3b761b2b73d792bd94f3035a4095bd36
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7aff262ebed245929074a7ad5a1a20d75fd102b9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 From the release notes:
 https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES
@@ -44,7 +44,7 @@ index ac68e62814..ee15b75e08 100644
  # Locally calculated
  sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
 diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 1729afe165..5f6c83f84b 100644
+index b85de1dfed..d3954d87ca 100644
 --- a/package/redis/redis.mk
 +++ b/package/redis/redis.mk
 @@ -4,7 +4,7 @@
