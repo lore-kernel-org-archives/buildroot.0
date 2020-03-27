@@ -1,26 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 27 Mar 2020 13:57:46 +0000
-Subject: [Buildroot] [Bug 12711] host-localedef 2.30-20 fails to compile on
- fedora 32 (gcc 10.0.1)
-In-Reply-To: <bug-12711-163@https.bugs.busybox.net/>
-References: <bug-12711-163@https.bugs.busybox.net/>
-Message-ID: <bug-12711-163-mVNEQN5x0p@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 27 Mar 2020 15:23:31 +0100
+Subject: [Buildroot] [PATCH] package/oprofile: Fix build with
+ binutils_2.34
+In-Reply-To: <20200327121752.32344-1-Evgeniy.Didin@synopsys.com>
+References: <20200327121752.32344-1-Evgeniy.Didin@synopsys.com>
+Message-ID: <20200327152331.547ae47b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12711
+Hello,
 
-Dr I J Ormshaw <ian_ormshaw@waters.com> changed:
+On Fri, 27 Mar 2020 15:17:52 +0300
+Evgeniy Didin <Evgeniy.Didin@synopsys.com> wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Hardware|All                         |PC
-             Target|                            |x86_64
-               Host|                            |x86_64
+> After updating ARC toolchain to arc-2019.09 version oprofile_1.3.0
+> builds started to fail. These failures were caused by binutils 
+> upstream commit fd3619828e94a ("bfd_section_* macros") which was 
+> added in binutils-arc. This commit removed some macros that were
+> used in oprofile_1.3.0. 
+> 
+> With this commit we introduce fix for oprofile wich enables builds
+> with binutils_2.34 and older versions.
+> 
+> Fixes:
+> http://autobuild.buildroot.org/results/999/9995b7a18fcc38a02dd1dd3af462a14528a2174d//
+> 
+> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+> Cc: William Cohen <wcohen@redhat.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: arc-buildroot at synopsys.com
 
+I have already submitted a few days ago:
+
+  http://patchwork.ozlabs.org/patch/1261162/
+
+to fix the same issue. I think your patch is missing the additional of
+OPROFILE_AUTORECONF = YES.
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
