@@ -1,45 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 22:49:01 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/monit: fix URL in
- hash file comment
-Message-ID: <20200327213729.650318869C@busybox.osuosl.org>
+Date: Fri, 27 Mar 2020 23:05:35 +0100
+Subject: [Buildroot] [PATCH] boot/arm-trusted-firmware: add optional
+ host-dtc dependency
+In-Reply-To: <20200318205005.79605-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Wed, 18 Mar 2020 21:50:05 +0100")
+References: <20200318205005.79605-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87blohfo7k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f80fb5bc54e0df7506ae6422aaab572683386afb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Previous URL gives:
+ > Some ATF configurations, such as the ones for the STM32MP1 processor
+ > family, require DTC during the build as Device Tree files are
+ > used. Without dtc, the build fails:
 
-    % curl https://mmonit.com/monit/dist/monit-5.25.3.tar.gz.sha256
-    c10258c8839d20864d30390e7cbf2ff5e0480a67a6fb80c02aa457d6e3390569 monit-5.25.3.tar.gz
+ > /bin/sh: 1: dtc: not found
+ > dtc version too old (), you need at least version 1.4.4
+ > plat/st/stm32mp1/platform.mk:239: recipe for target 'check_dtc_version' failed
+ > make[1]: *** [check_dtc_version] Error 1
 
-Current URL is:
+ > To solve this, this commit implements a
+ > BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC option, in a way that mimics
+ > the BR2_TARGET_UBOOT_NEEDS_DTC option we already have for the U-Boot
+ > package.
 
-    % curl https://mmonit.com/monit/dist/monit-5.26.0.tar.gz.sha256
-    87fc4568a3af9a2be89040efb169e3a2e47b262f99e78d5ddde99dd89f02f3c2 monit-5.26.0.tar.gz
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-This was probably just forgotten on the last version bump.
+It isn't really technically a bugfix, but it seems quite low risk and
+useful for the affected people, so committed to 2020.02.x, thanks.
 
-Fixes: ad250c3d1884 ("package/monit: bump to version 5.26.0")
-Signed-off-by: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6fb1eb95fe07b673081115aace66f8328aeb08d9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/monit/monit.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/monit/monit.hash b/package/monit/monit.hash
-index 0de0d675aa..26d665c083 100644
---- a/package/monit/monit.hash
-+++ b/package/monit/monit.hash
-@@ -1,4 +1,4 @@
--# From https://mmonit.com/monit/dist/monit-5.25.3.tar.gz.sha256:
-+# From https://mmonit.com/monit/dist/monit-5.26.0.tar.gz.sha256:
- sha256  87fc4568a3af9a2be89040efb169e3a2e47b262f99e78d5ddde99dd89f02f3c2  monit-5.26.0.tar.gz
- # Locally computed
- sha256  d5a4f52b1a5e1e7fe14e01a76aac8b08dc6bbea15466058f271456c97aac1ada  COPYING
+-- 
+Bye, Peter Korsgaard
