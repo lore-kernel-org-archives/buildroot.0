@@ -1,53 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 22:42:31 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/localedef: fix
- dependencies
-Message-ID: <20200327213456.21F7B88690@busybox.osuosl.org>
+Date: Fri, 27 Mar 2020 22:50:22 +0100
+Subject: [Buildroot] [PATCH] package/monit: Fix URL in comment
+In-Reply-To: <20200318091140.2344-1-post@lespocky.de> (Alexander Dahl's
+ message of "Wed, 18 Mar 2020 10:11:40 +0100")
+References: <20200318091140.2344-1-post@lespocky.de>
+Message-ID: <87ftdtfowx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79f1c0cd18cca0d8c3c691be0d03c3c466b01f52
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
 
-localedef needs bison to satisfy a .y.c rule to generate a parser for
-plural forms, to ultimately generate data for the target. So we do not
-want to depend on the host-provided bison; we want to build our own (for
-reproducibility).
+ > Previous URL gives:
+ >     % curl https://mmonit.com/monit/dist/monit-5.25.3.tar.gz.sha256
+ >     c10258c8839d20864d30390e7cbf2ff5e0480a67a6fb80c02aa457d6e3390569 monit-5.25.3.tar.gz
 
-localedef is a host-only package, and dependencies are not inherited
-from the target variant, so we need to make them explicit host
-dependencies.
+ > Current URL is:
 
-And move the assignment after all the download-related variables.
+ >     % curl https://mmonit.com/monit/dist/monit-5.26.0.tar.gz.sha256
+ >     87fc4568a3af9a2be89040efb169e3a2e47b262f99e78d5ddde99dd89f02f3c2 monit-5.26.0.tar.gz
 
-Reported-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit af90a104c06542a1bf5545eaf9b9c7beb7176e80)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/localedef/localedef.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ > This was probably just forgotten on the last version bump.
 
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 10a1929044..3e22f68039 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -10,9 +10,12 @@
- LOCALEDEF_VERSION = 2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
--LOCALEDEF_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
- HOST_LOCALEDEF_DL_SUBDIR = glibc
- 
-+HOST_LOCALEDEF_DEPENDENCIES = \
-+	$(BR2_MAKE_HOST_DEPENDENCY) \
-+	host-bison
-+
- HOST_LOCALEDEF_CONF_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
- 
- # Even though we use the autotools-package infrastructure, we have to override
+ > Fixes: ad250c3d1884 ("package/monit: bump to version 5.26.0")
+ > Signed-off-by: Alexander Dahl <post@lespocky.de>
+
+Committed to 2019.11.x and 2020.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
