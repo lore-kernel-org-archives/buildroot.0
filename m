@@ -1,11 +1,11 @@
 From: David PIERRET <david.pierret@smile.fr>
-Date: Fri, 27 Mar 2020 11:51:56 +0100
-Subject: [Buildroot] [PATCH v3 05/10] package/rust: drop dependency on
- host-cargo-bin
-In-Reply-To: <20200207180829.165689-6-arnout@mind.be>
+Date: Fri, 27 Mar 2020 11:53:49 +0100
+Subject: [Buildroot] [PATCH v3 06/10] package/ripgrep: depends on
+ host-rustc
+In-Reply-To: <20200207180829.165689-7-arnout@mind.be>
 References: <20200207180829.165689-1-arnout@mind.be>
- <20200207180829.165689-6-arnout@mind.be>
-Message-ID: <CADyEP=T9Vwgwmb7D00x=qcHs1fivOO5oGJT8Lr2mDpc4mZXp8Q@mail.gmail.com>
+ <20200207180829.165689-7-arnout@mind.be>
+Message-ID: <CADyEP=RcQfucKeBMOSQP=kNmzKCd+9yDN6kE1MnEBwT-m_Sgng@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,13 +19,14 @@ issue with rust version successfully.
 Regards
 David
 
-On Fri, Feb 7, 2020 at 7:09 PM Arnout Vandecappelle (Essensium/Mind)
+On Fri, Feb 7, 2020 at 7:10 PM Arnout Vandecappelle (Essensium/Mind)
 <arnout@mind.be> wrote:
 >
 > From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 >
-> As host-rust depends on host-rust-bin, which depends on host-cargo-bin,
-> remove unneeded dependency.
+> As all providers of rustc also install cargo, there is no need to depend
+> on the standalone cargo package anymore. Instead add host-rustc to the
+> dependency list.
 >
 > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 > Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
@@ -33,21 +34,36 @@ On Fri, Feb 7, 2020 at 7:09 PM Arnout Vandecappelle (Essensium/Mind)
 Reviewed-by: David Pierret <david.pierret@smile.fr>
 Tested-by: David Pierret <david.pierret@smile.fr>
 > ---
->  package/rust/rust.mk | 1 -
->  1 file changed, 1 deletion(-)
+>  package/ripgrep/Config.in  | 2 +-
+>  package/ripgrep/ripgrep.mk | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-> index 9bbed15082..588e1088f8 100644
-> --- a/package/rust/rust.mk
-> +++ b/package/rust/rust.mk
-> @@ -15,7 +15,6 @@ HOST_RUST_PROVIDES = host-rustc
->  HOST_RUST_DEPENDENCIES = \
->         toolchain \
->         host-rust-bin \
-> -       host-cargo-bin \
->         host-openssl \
->         host-python \
->         $(BR2_CMAKE_HOST_DEPENDENCY)
+> diff --git a/package/ripgrep/Config.in b/package/ripgrep/Config.in
+> index 5446ad046c..0ea2902b34 100644
+> --- a/package/ripgrep/Config.in
+> +++ b/package/ripgrep/Config.in
+> @@ -1,7 +1,7 @@
+>  config BR2_PACKAGE_RIPGREP
+>         bool "ripgrep"
+>         depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> -       select BR2_PACKAGE_HOST_CARGO
+> +       select BR2_PACKAGE_HOST_RUSTC
+>         help
+>           ripgrep is a line-oriented search tool that
+>           recursively searches your current directory
+> diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
+> index 0bb7017a96..832c076f26 100644
+> --- a/package/ripgrep/ripgrep.mk
+> +++ b/package/ripgrep/ripgrep.mk
+> @@ -9,7 +9,7 @@ RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
+>  RIPGREP_LICENSE = MIT
+>  RIPGREP_LICENSE_FILES = LICENSE-MIT
+>
+> -RIPGREP_DEPENDENCIES = host-cargo
+> +RIPGREP_DEPENDENCIES = host-rustc
+>  RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+>  RIPGREP_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
+>
 > --
 > 2.24.1
 >
