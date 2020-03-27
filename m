@@ -1,39 +1,48 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 27 Mar 2020 18:12:00 +0100
-Subject: [Buildroot] [PATCH v2 0/3] imx: update Boundary Devices boards
- support
-Message-ID: <20200327171203.619849-1-gary.bisson@boundarydevices.com>
+Date: Fri, 27 Mar 2020 18:12:02 +0100
+Subject: [Buildroot] [PATCH v2 2/3] board/boundarydevices: update readme.txt
+In-Reply-To: <20200327171203.619849-1-gary.bisson@boundarydevices.com>
+References: <20200327171203.619849-1-gary.bisson@boundarydevices.com>
+Message-ID: <20200327171203.619849-3-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+- update outdated website URL
+- add missing Nitrogen8M configuration
+- reword procedure to make it clear it works for all storages
 
-As suggested by Thomas[1], updating the readme.txt and using
-genimage.sh.
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ board/boundarydevices/common/readme.txt | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-As an FYI, we unfortunately cannot use the genimage.sh as the args are
-already used by the imx8-bootloader-prepare.sh.
-
-So we keep using post-image.sh for all nitrogen boards for consistency.
-
-Regards,
-Gary
-
-[1] http://lists.busybox.net/pipermail/buildroot/2020-March/278224.html
-
-Gary Bisson (3):
-  board/boundarydevices/common/post-image.sh: use genimage.sh
-  board/boundarydevices: update readme.txt
-  configs/nitrogen8mm: Add new defconfig
-
- board/boundarydevices/common/post-image.sh | 13 +----
- board/boundarydevices/common/readme.txt    | 12 ++++-
- configs/nitrogen8mm_defconfig              | 56 ++++++++++++++++++++++
- 3 files changed, 67 insertions(+), 14 deletions(-)
- create mode 100644 configs/nitrogen8mm_defconfig
-
+diff --git a/board/boundarydevices/common/readme.txt b/board/boundarydevices/common/readme.txt
+index 0625deef26..2c9a073d2f 100644
+--- a/board/boundarydevices/common/readme.txt
++++ b/board/boundarydevices/common/readme.txt
+@@ -1,6 +1,6 @@
+ Buildroot for Boundary Devices platforms:
+ 
+-https://boundarydevices.com/product-category/popular-sbc-and-som-modules/
++https://boundarydevices.com/nitrogen-sbcs-and-soms/
+ 
+ Here is the list of targeted platforms per defconfig:
+ 
+@@ -19,7 +19,11 @@ Here is the list of targeted platforms per defconfig:
+ - nitrogen7_defconfig
+   - Nitrogen7
+ 
+-To install, simply copy the image to a uSD card:
++- nitrogen8m_defconfig
++  - Nitrogen8M
++  - Nitrogen8M_SOM
++
++To install, simply copy the image to your storage (SD, eMMC, USB):
+ 
+ $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+ 
 -- 
 2.25.1
