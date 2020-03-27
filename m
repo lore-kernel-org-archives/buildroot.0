@@ -1,54 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 23:18:18 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/llvm: specify
- LLVM_ENABLE_BINDINGS=OFF
-Message-ID: <20200327220726.74ACD802F4@busybox.osuosl.org>
+Date: Fri, 27 Mar 2020 23:29:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/redis: bump to v5.0.8
+In-Reply-To: <20200316103134.4489-1-titouan.christophe@railnova.eu> (Titouan
+ Christophe's message of "Mon, 16 Mar 2020 11:31:34 +0100")
+References: <20200316103134.4489-1-titouan.christophe@railnova.eu>
+Message-ID: <87y2rle8is.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff495fd1a162583b71cac20101ae5583da4035c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
 
-LLVM builds bindings for other languages such as Go and OCaml when the
-appropriate dependencies can be found. We currently don't support
-building these bindings in Buildroot, as they're currently unused by any
-package.
+ > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
-Building these bindings was originally disabled by overriding the
-dependencies with values indicating that they were not found.
+Please explicitly mention when version bumps fixes security issues so
+they won't be missed for the stable branches. From the release notes:
 
-Newer versions of LLVM no longer disable the OCaml bindings when overriding
-OCAMLFIND. Consequently, the build process attempts to install the bindings
-to the default location on the host of /usr/lib/ocaml/llvm, causing a
-permissions error and build failure.
+================================================================================
+Redis 5.0.8     Released Thu Mar 12 16:05:41 CET 2020
+================================================================================
 
-Additionally, LLVM has since added the variable LLVM_ENABLE_BINDINGS to
-control whether bindings are enabled, so we override that to disable the
-bindings.
+Upgrade urgency HIGH: This release fixes security issues.
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e6a1ee9a8aee9faecb8d1d1bdd8697d18c23b605)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/llvm/llvm.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+[FIX] revisit CVE-2015-8080 vulnerability
 
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 28ad6a5704..f1034f0365 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -193,7 +193,8 @@ LLVM_CONF_OPTS += -DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME)
- # check preventively. Building the Go and OCaml bindings is yet unsupported.
- HOST_LLVM_CONF_OPTS += \
- 	-DGO_EXECUTABLE=GO_EXECUTABLE-NOTFOUND \
--	-DOCAMLFIND=OCAMLFIND-NOTFOUND
-+	-DOCAMLFIND=OCAMLFIND-NOTFOUND \
-+	-DLLVM_ENABLE_BINDINGS=OFF
- 
- # Builds a release host tablegen that gets used during the LLVM build.
- HOST_LLVM_CONF_OPTS += -DLLVM_OPTIMIZED_TABLEGEN=ON
+https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES
+
+Committed to 2019.11.x and 2020.02.x after updating the commit message
+to mention that it is a security bump, thanks.
+
+-- 
+Bye, Peter Korsgaard
