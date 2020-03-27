@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 22:49:16 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/monit: fix URL in
+Date: Fri, 27 Mar 2020 22:49:01 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/monit: fix URL in
  hash file comment
-Message-ID: <20200327213720.59C7288693@busybox.osuosl.org>
+Message-ID: <20200327213729.650318869C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8535e7dece905dd09008f44e93acab2c4eab23b9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f80fb5bc54e0df7506ae6422aaab572683386afb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Previous URL gives:
 
