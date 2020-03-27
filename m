@@ -1,219 +1,205 @@
-From: David PIERRET <david.pierret@smile.fr>
-Date: Fri, 27 Mar 2020 12:08:36 +0100
-Subject: [Buildroot] [PATCH v3 10/10] package/cargo-bin: remove and use
- cargo-bin from rust-bin package
-In-Reply-To: <20200207180829.165689-11-arnout@mind.be>
-References: <20200207180829.165689-1-arnout@mind.be>
- <20200207180829.165689-11-arnout@mind.be>
-Message-ID: <CADyEP=RMReVbY0-+onkw10FVusDsfBWbaKiQzZ_EK0PyzAcEiA@mail.gmail.com>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Fri, 27 Mar 2020 15:17:52 +0300
+Subject: [Buildroot] [PATCH] package/oprofile: Fix build with binutils_2.34
+Message-ID: <20200327121752.32344-1-Evgeniy.Didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Working on a new package using rust, this patch suite have resolved my
-issue with rust version successfully.
+After updating ARC toolchain to arc-2019.09 version oprofile_1.3.0
+builds started to fail. These failures were caused by binutils 
+upstream commit fd3619828e94a ("bfd_section_* macros") which was 
+added in binutils-arc. This commit removed some macros that were
+used in oprofile_1.3.0. 
 
-Regards
-David
+With this commit we introduce fix for oprofile wich enables builds
+with binutils_2.34 and older versions.
 
-On Fri, Feb 7, 2020 at 7:10 PM Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
->
-> From: Patrick Havelange <patrick.havelange@essensium.com>
->
-> Rust upstream distributes tarballs with separate rust and cargo
-> binaries, but also tarballs with everything together. The latter
-> contains a bit more than what we need, so the download is slightly
-> larger than separate cargo-bin and rust-bin. But it simplifies our life
-> if we do the same in rust-bin as in rust (i.e. get both rust and cargo).
->
-> Also added hashes for rust-bin powerpc64le, which was missing before.
->
-> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: David Pierret <david.pierret@smile.fr>
-> ---
->  DEVELOPERS                       |  1 -
->  package/cargo-bin/cargo-bin.hash | 13 -------------
->  package/cargo-bin/cargo-bin.mk   | 19 -------------------
->  package/rust-bin/rust-bin.hash   | 15 +++++++++------
->  package/rust-bin/rust-bin.mk     | 28 ++++++++++++----------------
->  package/rust/rust.mk             |  2 +-
->  6 files changed, 22 insertions(+), 56 deletions(-)
->  delete mode 100644 package/cargo-bin/cargo-bin.hash
->  delete mode 100644 package/cargo-bin/cargo-bin.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index e0f6e7278c..ace16c06e6 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -708,7 +708,6 @@ F:  package/gstreamer1/gst1-plugins-bayer2rgb-neon/
->  N:     Eric Le Bihan <eric.le.bihan.dev@free.fr>
->  F:     docs/manual/adding-packages-meson.txt
->  F:     package/adwaita-icon-theme/
-> -F:     package/cargo-bin/
->  F:     package/darkhttpd/
->  F:     package/eudev/
->  F:     package/execline/
-> diff --git a/package/cargo-bin/cargo-bin.hash b/package/cargo-bin/cargo-bin.hash
-> deleted file mode 100644
-> index 22cad3c0ee..0000000000
-> --- a/package/cargo-bin/cargo-bin.hash
-> +++ /dev/null
-> @@ -1,13 +0,0 @@
-> -# From https://static.rust-lang.org/dist/cargo-0.41.0-i686-unknown-linux-gnu.tar.xz.sha256
-> -# Verified using https://static.rust-lang.org/dist/cargo-0.41.0-i686-unknown-linux-gnu.tar.xz.asc
-> -sha256 c48bc132f4025ff39b1b6dc52aef9d406c3f926ce05fe92d943ceab7a5fd6058  cargo-0.41.0-i686-unknown-linux-gnu.tar.xz
-> -# From https://static.rust-lang.org/dist/cargo-0.41.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-> -# Verified using https://static.rust-lang.org/dist/cargo-0.41.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
-> -sha256 7705f21d938a72ba6f01818661b2dea29183209940a335f18d1761e1e03d3710  cargo-0.41.0-powerpc64le-unknown-linux-gnu.tar.xz
-> -# From https://static.rust-lang.org/dist/cargo-0.41.0-x86_64-unknown-linux-gnu.tar.xz.sha256
-> -# Verified using https://static.rust-lang.org/dist/cargo-0.41.0-x86_64-unknown-linux-gnu.tar.xz.asc
-> -sha256 9b6ae643fa240c5ecbc1dc390f4020b6a683f25bac6f7437ebd4b9d32a8d0b6c  cargo-0.41.0-x86_64-unknown-linux-gnu.tar.xz
-> -# Locally generated
-> -sha256 8ada45cd9f843acf64e4722ae262c622a2b3b3007c7310ef36ac1061a30f6adb  LICENSE-APACHE
-> -sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-> -sha256 cbc759b1f17a2ac38fe3eb9e9563b1a08ba0f900611c49faaf68b46907b6d898  LICENSE-THIRD-PARTY
-> diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
-> deleted file mode 100644
-> index 246fdbf856..0000000000
-> --- a/package/cargo-bin/cargo-bin.mk
-> +++ /dev/null
-> @@ -1,19 +0,0 @@
-> -################################################################################
-> -#
-> -# cargo-bin
-> -#
-> -################################################################################
-> -
-> -CARGO_BIN_VERSION = 0.41.0
-> -CARGO_BIN_SITE = https://static.rust-lang.org/dist
-> -CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
-> -CARGO_BIN_LICENSE = Apache-2.0 or MIT
-> -CARGO_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-> -
-> -ifeq ($(BR2_PACKAGE_HOST_RUST_BIN),y)
-> -define HOST_CARGO_BIN_INSTALL_CMDS
-> -       $(@D)/install.sh --prefix=$(HOST_DIR) --disable-ldconfig
-> -endef
-> -endif
-> -
-> -$(eval $(host-generic-package))
-> diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
-> index 12195f2911..1fdce9ad6f 100644
-> --- a/package/rust-bin/rust-bin.hash
-> +++ b/package/rust-bin/rust-bin.hash
-> @@ -1,9 +1,12 @@
-> -# From https://static.rust-lang.org/dist/rustc-1.40.0-i686-unknown-linux-gnu.tar.xz.sha256
-> -# Verified using https://static.rust-lang.org/dist/rustc-1.40.0-i686-unknown-linux-gnu.tar.xz.asc
-> -sha256 257e4789043098a5e3b4fa85ea988019f37d640a10f83d39ada00fb23e057b8a  rustc-1.40.0-i686-unknown-linux-gnu.tar.xz
-> -# From https://static.rust-lang.org/dist/rustc-1.40.0-x86_64-unknown-linux-gnu.tar.xz.sha256
-> -# Verified using https://static.rust-lang.org/dist/rustc-1.40.0-x86_64-unknown-linux-gnu.tar.xz.asc
-> -sha256 b1c00618b7a98156e88b14682508a503284f85748eab23de749a20dcc8847111  rustc-1.40.0-x86_64-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-1.40.0-i686-unknown-linux-gnu.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-1.40.0-i686-unknown-linux-gnu.tar.xz.asc
-> +sha256 82454e1b60b2bc24779d9c949cc0e1da43f3e423dbfc6b45b5afddf65829fc9d  rust-1.40.0-i686-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-1.40.0-x86_64-unknown-linux-gnu.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-1.40.0-x86_64-unknown-linux-gnu.tar.xz.asc
-> +sha256 37492d6467bcea611b2c7388aed50b655524f81410e255142ef6cfb6cef1ec53  rust-1.40.0-x86_64-unknown-linux-gnu.tar.xz
-> +# From https://static.rust-lang.org/dist/rust-1.40.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-> +# Verified using https://static.rust-lang.org/dist/rust-1.40.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
-> +sha256 82454e1b60b2bc24779d9c949cc0e1da43f3e423dbfc6b45b5afddf65829fc9d  rust-1.40.0-powerpc64le-unknown-linux-gnu.tar.xz
->  # From https://static.rust-lang.org/dist/rust-std-1.40.0-aarch64-unknown-linux-gnu.tar.xz.sha256
->  # Verified using https://static.rust-lang.org/dist/rust-std-1.40.0-aarch64-unknown-linux-gnu.tar.xz.asc
->  sha256 1abd1865e8339c2cac6992a11f6f98b66fa2b97f67acaddcf1992e39a7001bfc  rust-std-1.40.0-aarch64-unknown-linux-gnu.tar.xz
-> diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
-> index a5966768a4..be8d623aa2 100644
-> --- a/package/rust-bin/rust-bin.mk
-> +++ b/package/rust-bin/rust-bin.mk
-> @@ -10,18 +10,14 @@ RUST_BIN_LICENSE = Apache-2.0 or MIT
->  RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
->
->  HOST_RUST_BIN_PROVIDES = host-rustc
-> -HOST_RUST_BIN_DEPENDENCIES = host-cargo-bin
->
-> -HOST_RUST_BIN_SOURCE = rustc-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
-> -
-> -HOST_RUST_BIN_EXTRA_DOWNLOADS = \
-> -       rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
-> +HOST_RUST_BIN_SOURCE = rust-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
->
->  ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
-> -HOST_RUST_BIN_EXTRA_DOWNLOADS += rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME).tar.xz
-> +HOST_RUST_BIN_EXTRA_DOWNLOADS = rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME).tar.xz
->  endif
->
-> -HOST_RUST_BIN_LIBSTD_HOST_PREFIX = rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME)/rust-std-$(RUSTC_HOST_NAME)
-> +HOST_RUST_BIN_LIBSTD_HOST_PREFIX = rust-std-$(RUSTC_HOST_NAME)
->
->  define HOST_RUST_BIN_LIBSTD_EXTRACT
->         mkdir -p $(@D)/std
-> @@ -31,36 +27,36 @@ define HOST_RUST_BIN_LIBSTD_EXTRACT
->         )
->         mkdir -p $(@D)/rustc/lib/rustlib/$(RUSTC_HOST_NAME)/lib
->         cd $(@D)/rustc/lib/rustlib/$(RUSTC_HOST_NAME)/lib; \
-> -               ln -sf ../../../../../std/$(HOST_RUST_BIN_LIBSTD_HOST_PREFIX)/lib/rustlib/$(RUSTC_HOST_NAME)/lib/* .
-> +               ln -sf ../../../../../$(HOST_RUST_BIN_LIBSTD_HOST_PREFIX)/lib/rustlib/$(RUSTC_HOST_NAME)/lib/* .
->  endef
->
->  HOST_RUST_BIN_POST_EXTRACT_HOOKS += HOST_RUST_BIN_LIBSTD_EXTRACT
->
-> -HOST_RUST_BIN_INSTALL_OPTS = \
-> +HOST_RUST_BIN_INSTALL_COMMON_OPTS = \
->         --prefix=$(HOST_DIR) \
->         --disable-ldconfig
->
-> +HOST_RUST_BIN_INSTALL_OPTS = \
-> +       $(HOST_RUST_BIN_INSTALL_COMMON_OPTS) \
-> +       --components=rustc,cargo,rust-std-$(RUSTC_HOST_NAME)
-> +
->  define HOST_RUST_BIN_INSTALL_RUSTC
->         (cd $(@D); \
->                 ./install.sh $(HOST_RUST_BIN_INSTALL_OPTS))
->  endef
->
-> -define HOST_RUST_BIN_INSTALL_LIBSTD_HOST
-> -       (cd $(@D)/std/rust-std-$(RUST_BIN_VERSION)-$(RUSTC_HOST_NAME); \
-> -               ./install.sh $(HOST_RUST_BIN_INSTALL_OPTS))
-> -endef
-> -
->  ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
->  define HOST_RUST_BIN_INSTALL_LIBSTD_TARGET
->         (cd $(@D)/std/rust-std-$(RUST_BIN_VERSION)-$(RUSTC_TARGET_NAME); \
-> -               ./install.sh $(HOST_RUST_BIN_INSTALL_OPTS))
-> +               ./install.sh $(HOST_RUST_BIN_INSTALL_COMMON_OPTS))
->  endef
->  endif
->
->  define HOST_RUST_BIN_INSTALL_CMDS
->         $(HOST_RUST_BIN_INSTALL_RUSTC)
-> -       $(HOST_RUST_BIN_INSTALL_LIBSTD_HOST)
->         $(HOST_RUST_BIN_INSTALL_LIBSTD_TARGET)
->  endef
->
-> +HOST_RUST_BIN_POST_INSTALL_HOOKS += HOST_RUST_INSTALL_CARGO_CONFIG
-> +
->  $(eval $(host-generic-package))
-> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-> index cc3cf1bd01..a81aa6dc2b 100644
-> --- a/package/rust/rust.mk
-> +++ b/package/rust/rust.mk
-> @@ -41,7 +41,7 @@ define HOST_RUST_CONFIGURE_CMDS
->         ( \
->                 echo '[build]'; \
->                 echo 'target = ["$(RUSTC_TARGET_NAME)"]'; \
-> -               echo 'cargo = "$(HOST_CARGO_BIN_DIR)/cargo/bin/cargo"'; \
-> +               echo 'cargo = "$(HOST_RUST_BIN_DIR)/cargo/bin/cargo"'; \
->                 echo 'rustc = "$(HOST_RUST_BIN_DIR)/rustc/bin/rustc"'; \
->                 echo 'python = "$(HOST_DIR)/bin/python2"'; \
->                 echo 'submodules = false'; \
-> --
-> 2.24.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes:
+http://autobuild.buildroot.org/results/999/9995b7a18fcc38a02dd1dd3af462a14528a2174d//
+
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: William Cohen <wcohen@redhat.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
+---
+ ...ers-to-handle-the-binutils-2.34-api-chang.patch | 166 +++++++++++++++++++++
+ 1 file changed, 166 insertions(+)
+ create mode 100644 package/oprofile/0002-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
+
+diff --git a/package/oprofile/0002-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch b/package/oprofile/0002-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
+new file mode 100644
+index 0000000000..b35b8b70f3
+--- /dev/null
++++ b/package/oprofile/0002-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
+@@ -0,0 +1,166 @@
++From 377610414fb6cd7ac30e4485d9d6482fcf29aca6 Mon Sep 17 00:00:00 2001
++From: William Cohen <wcohen@redhat.com>
++Date: Wed, 18 Mar 2020 21:19:16 -0400
++Subject: [PATCH] Macro wrappers to handle the binutils 2.34 api changes
++
++Changes in binutils 2.34 API prevented oprofile from compiling with
++it.  This patch tests for the changes in the binutils API during
++configuration and selects the appropiate wrappers to allow oprofile to
++compile.  This allows oprofile to compile with both older and newer
++versions of binutils.
++---
++ configure.ac              | 20 ++++++++++++++++++++
++ libutil++/bfd_support.cpp | 11 ++++++-----
++ libutil/op_bfd_wrappers.h | 28 ++++++++++++++++++++++++++++
++ opjitconv/create_bfd.c    |  7 ++++---
++ 4 files changed, 58 insertions(+), 8 deletions(-)
++ create mode 100644 libutil/op_bfd_wrappers.h
++
++diff --git a/configure.ac b/configure.ac
++index ac2fd35e..df032a78 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -224,6 +224,26 @@ if test "$host_cpu" = "powerpc64le" -o "$host_cpu" = "powerpc64"; then
++ fi
++ AC_SUBST(PFM_LIB)
++ 
+++HAVE_BINUTILS_234='1'
+++AC_MSG_CHECKING([whether binutils 2.34 is being used])
+++rm -f test-for-BINUTILS
+++AC_LANG_CONFTEST(
+++	[AC_LANG_PROGRAM([[#include <bfd.h>]],
+++		[[asection * sect;
+++		bfd_size_type buildid_sect_size = bfd_section_size(sect);
+++		return 0;]])
+++	])
+++$CC conftest.$ac_ext $CFLAGS $LDFLAGS $LIBS $PERF_EVENT_FLAGS -o test-for-BINUTILS  > /dev/null 2>&1
+++if test -f test-for-BINUTILS; then
+++	echo "yes"
+++	HAVE_BINUTILS_234='1'
+++else
+++	echo "no"
+++	HAVE_BINUTILS_234='0'
+++fi
+++AC_DEFINE_UNQUOTED(HAVE_BINUTILS_234, $HAVE_BINUTILS_234, [Using binutils 2.34])
+++rm -f test-for-BINUTILS*
+++
++ AC_ARG_WITH(java,
++ [  --with-java=java-home        Path to Java home directory (default is "no"; "yes" will use /usr as Java home)],
++ JAVA_HOMEDIR=$with_java, [with_java=no])
++diff --git a/libutil++/bfd_support.cpp b/libutil++/bfd_support.cpp
++index fa904839..cd0f4f71 100644
++--- a/libutil++/bfd_support.cpp
+++++ b/libutil++/bfd_support.cpp
++@@ -19,6 +19,7 @@
++ #include "locate_images.h"
++ #include "op_libiberty.h"
++ #include "op_exception.h"
+++#include "op_bfd_wrappers.h"
++ 
++ #include <unistd.h>
++ #include <errno.h>
++@@ -137,7 +138,7 @@ static bool get_build_id(bfd * ibfd, unsigned char * build_id)
++ 		}
++ 	}
++ 
++-	bfd_size_type buildid_sect_size = bfd_section_size(ibfd, sect);
+++	bfd_size_type buildid_sect_size = op_bfd_section_size(ibfd, sect);
++ 	char * contents = (char *) xmalloc(buildid_sect_size);
++ 	errno = 0;
++ 	if (!bfd_get_section_contents(ibfd, sect,
++@@ -188,7 +189,7 @@ bool get_debug_link_info(bfd * ibfd, string & filename, unsigned long & crc32)
++ 	if (sect == NULL)
++ 		return false;
++ 	
++-	bfd_size_type debuglink_size = bfd_section_size(ibfd, sect);  
+++	bfd_size_type debuglink_size = op_bfd_section_size(ibfd, sect);
++ 	char * contents = (char *) xmalloc(debuglink_size);
++ 	cverb << vbfd
++ 	      << ".gnu_debuglink section has size " << debuglink_size << endl;
++@@ -346,7 +347,7 @@ void fixup_linenr(bfd * abfd, asection * section, asymbol ** syms,
++ 	// first restrict the search on a sensible range of vma, 16 is
++ 	// an intuitive value based on epilog code look
++ 	size_t max_search = 16;
++-	size_t section_size = bfd_section_size(abfd, section);
+++	size_t section_size = op_bfd_section_size(abfd, section);
++ 	if (pc + max_search > section_size)
++ 		max_search = section_size - pc;
++ 
++@@ -819,10 +820,10 @@ find_nearest_line(bfd_info const & b, op_bfd_symbol const & sym,
++ 	else
++ 		pc = (sym.value() + offset) - sym.filepos();
++ 
++-	if ((bfd_get_section_flags(abfd, section) & SEC_ALLOC) == 0)
+++	if ((op_bfd_get_section_flags(abfd, section) & SEC_ALLOC) == 0)
++ 		goto fail;
++ 
++-	if (pc >= bfd_section_size(abfd, section))
+++	if (pc >= op_bfd_section_size(abfd, section))
++ 		goto fail;
++ 
++ 	ret = bfd_find_nearest_line(abfd, section, syms, pc, &cfilename,
++diff --git a/libutil/op_bfd_wrappers.h b/libutil/op_bfd_wrappers.h
++new file mode 100644
++index 00000000..b229cc12
++--- /dev/null
+++++ b/libutil/op_bfd_wrappers.h
++@@ -0,0 +1,28 @@
+++/**
+++ * @file op_bfd_wrappers.h
+++ * Wrappers to hide API changes in binutils 2.34
+++ *
+++ * @remark Copyright 2020 OProfile authors
+++ * @remark Read the file COPYING
+++ *
+++ * @author William Cohen
+++ */
+++
+++#ifndef OP_BFD_WRAPPERS_H
+++#define OP_BFD_WRAPPERS_H
+++
+++#if HAVE_BINUTILS_234
+++#define op_bfd_section_size(ibfd, sec) bfd_section_size(sec)
+++#define op_bfd_get_section_flags(abfd, sec) bfd_section_flags(sec)
+++#define op_bfd_set_section_flags(abfd, sec, flags) bfd_set_section_flags(sec, flags)
+++#define op_bfd_set_section_vma(abfd, sec, vma) bfd_set_section_vma(sec, vma)
+++#define op_bfd_set_section_size(abfd, sec, size) bfd_set_section_size(sec, size)
+++#else
+++#define op_bfd_section_size(ibfd, sec) bfd_section_size(ibfd, sec)
+++#define op_bfd_get_section_flags(abfd, sec) bfd_get_section_flags(abfd, sec)
+++#define op_bfd_set_section_flags(abfd, sec, flags) bfd_set_section_flags(abfd, sec, flags)
+++#define op_bfd_set_section_vma(abfd, sec, vma) bfd_set_section_vma(abfd, sec, vma)
+++#define op_bfd_set_section_size(abfd, sec, size) bfd_set_section_size(abfd, sec, size)
+++#endif
+++
+++#endif /* !OP_BFD_WRAPPERS_H */
++diff --git a/opjitconv/create_bfd.c b/opjitconv/create_bfd.c
++index 48db143b..da1e6d29 100644
++--- a/opjitconv/create_bfd.c
+++++ b/opjitconv/create_bfd.c
++@@ -16,6 +16,7 @@
++ 
++ #include "opjitconv.h"
++ #include "op_libiberty.h"
+++#include "op_bfd_wrappers.h"
++ 
++ #include <bfd.h>
++ #include <assert.h>
++@@ -86,12 +87,12 @@ asection * create_section(bfd * abfd, char const * section_name,
++ 		bfd_perror("bfd_make_section");
++ 		goto error;
++ 	}
++-	bfd_set_section_vma(abfd, section, vma);
++-	if (bfd_set_section_size(abfd, section, size) == FALSE) {
+++	op_bfd_set_section_vma(abfd, section, vma);
+++	if (op_bfd_set_section_size(abfd, section, size) == FALSE) {
++ 		bfd_perror("bfd_set_section_size");
++ 		goto error;
++ 	}
++-	if (bfd_set_section_flags(abfd, section, flags) == FALSE) {
+++	if (op_bfd_set_section_flags(abfd, section, flags) == FALSE) {
++ 		bfd_perror("bfd_set_section_flags");
++ 		goto error;
++ 	}
++-- 
++2.16.2
++
+-- 
+2.16.2
