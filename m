@@ -1,13 +1,13 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 07:42:19 +0100
-Subject: [Buildroot] [PATCH v1 3/4] package/pinentry: add missing qt5
+Date: Fri, 27 Mar 2020 07:42:53 +0100
+Subject: [Buildroot] [PATCH v1 4/4] package/wireshark: add missing qt5
  dependencies
-In-Reply-To: <20200315233839.5a91a231@windsurf.home> (Thomas Petazzoni's
- message of "Sun, 15 Mar 2020 23:38:39 +0100")
+In-Reply-To: <20200315233914.0f52a989@windsurf.home> (Thomas Petazzoni's
+ message of "Sun, 15 Mar 2020 23:39:14 +0100")
 References: <20200310081902.3488-1-ps.report@gmx.net>
- <20200310081902.3488-3-ps.report@gmx.net>
- <20200315233839.5a91a231@windsurf.home>
-Message-ID: <875zeqguyc.fsf@dell.be.48ers.dk>
+ <20200310081902.3488-4-ps.report@gmx.net>
+ <20200315233914.0f52a989@windsurf.home>
+Message-ID: <871rpeguxe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,26 +16,27 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > On Tue, 10 Mar 2020 09:19:01 +0100
+ > On Tue, 10 Mar 2020 09:19:02 +0100
  > Peter Seiderer <ps.report@gmx.net> wrote:
 
- >> -comment "pinentry-qt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
- >> +comment "pinentry-qt5 needs a toolchain w/ wchar, NPTL, gcc >= 4.8, C++, dynamic library"
- >> depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- >> -		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+ >> -comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL"
+ >> +comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, gcc >= 4.8"
+ >> depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || \
+ >> -		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
  >> +		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
- >> +		!BR2_arc || BR2_STATIC_LIBS
+ >> +		!BR2_arc
 
- > This is not the correct way to take into account architecture
- > dependencies. It should be:
+ > Same problem as for pinentry in how the arch dependency is taken into
+ > account.
 
- > comment "pinentry-qt5 needs a toolchain w/ wchar, NPTL, gcc >= 4.8, C++, dynamic library"
+ > Fixed to:
+
+ > comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, gcc >= 4.8"
  >         depends on !BR2_arc
- >         depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- >                 !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
- >                 BR2_STATIC_LIBS
+ >         depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || \
+ >                 !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 
- > I fixed that and applied. Thanks!
+ > And applied. Thanks!
 
 Committed to 2020.02.x, thanks.
 
