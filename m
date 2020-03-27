@@ -1,52 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 23:32:30 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] linux-tools: perf: Add
- dependencies for binutils and openssl
-Message-ID: <20200327222012.18221886DC@busybox.osuosl.org>
+Date: Sat, 28 Mar 2020 00:06:23 +0100
+Subject: [Buildroot] [PATCH] boot/barebox-ayx: store downloads in same
+ dir as bare barebox
+In-Reply-To: <20200319214900.2992-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Thu, 19 Mar 2020 22:49:00 +0100")
+References: <20200319214900.2992-1-yann.morin.1998@free.fr>
+Message-ID: <87pncxe6ts.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90e6eec1e82539db648e9df456a8b024ca2d00d6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-perf auto-detects and uses the libbfd (from binutils) and openssl
-libraries if they are detected and happen to be built before perf is,
-but if they're not, or if per-package directories are enabled, it won't
-detect these libraries. Explicitly add dependencies on these packages if
-they are enabled, and disable the feature if not, so that the behavior
-is deterministic.
+ > barebox and barebox-aux are really the same package, from the same URL
+ > and the same version. They deserve being stored in the same directory.
 
-Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 013cc68bf7cd92fc66dc65f7bb62592dc87123db)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-tools/linux-tool-perf.mk.in | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-index 80e00c3c56..7106b622cb 100644
---- a/package/linux-tools/linux-tool-perf.mk.in
-+++ b/package/linux-tools/linux-tool-perf.mk.in
-@@ -82,6 +82,18 @@ else
- PERF_MAKE_FLAGS += NO_LIBELF=1 NO_DWARF=1
- endif
- 
-+ifeq ($(BR2_PACKAGE_BINUTILS),y)
-+PERF_DEPENDENCIES += binutils
-+else
-+PERF_MAKE_FLAGS += NO_DEMANGLE=1
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+PERF_DEPENDENCIES += openssl
-+else
-+PERF_MAKE_FLAGS += NO_LIBCRYPTO=1
-+endif
-+
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- PERF_DEPENDENCIES += zlib
- else
+Committed to 2019.02.x, 2019.11.x and 2020.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
