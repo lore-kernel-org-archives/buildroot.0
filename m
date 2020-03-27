@@ -1,44 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 07:42:53 +0100
-Subject: [Buildroot] [PATCH v1 4/4] package/wireshark: add missing qt5
- dependencies
-In-Reply-To: <20200315233914.0f52a989@windsurf.home> (Thomas Petazzoni's
- message of "Sun, 15 Mar 2020 23:39:14 +0100")
-References: <20200310081902.3488-1-ps.report@gmx.net>
- <20200310081902.3488-4-ps.report@gmx.net>
- <20200315233914.0f52a989@windsurf.home>
-Message-ID: <871rpeguxe.fsf@dell.be.48ers.dk>
+Date: Fri, 27 Mar 2020 07:40:47 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/pinentry: add
+ missing qt5 dependencies
+Message-ID: <20200327063012.B1C4388501@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9860ae2e0fcd739307c6a82b66d8e77479871a7c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > On Tue, 10 Mar 2020 09:19:02 +0100
- > Peter Seiderer <ps.report@gmx.net> wrote:
+- BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+- !BR2_arc
 
- >> -comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL"
- >> +comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, gcc >= 4.8"
- >> depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || \
- >> -		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
- >> +		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
- >> +		!BR2_arc
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4a1c35f0db012a9e175ba8b679d9cbfaee990c87)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pinentry/Config.in | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
- > Same problem as for pinentry in how the arch dependency is taken into
- > account.
-
- > Fixed to:
-
- > comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, gcc >= 4.8"
- >         depends on !BR2_arc
- >         depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || \
- >                 !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-
- > And applied. Thanks!
-
-Committed to 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index 9048edd21b..ef70908502 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -61,6 +61,8 @@ config BR2_PACKAGE_PINENTRY_QT5
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on !BR2_arc
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_QT5BASE_GUI
+@@ -68,8 +70,10 @@ config BR2_PACKAGE_PINENTRY_QT5
+ 	help
+ 	  The pinentry-qt5 tool
+ 
+-comment "pinentry-qt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
++comment "pinentry-qt5 needs a toolchain w/ wchar, NPTL, gcc >= 4.8, C++, dynamic library"
++	depends on !BR2_arc
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		BR2_STATIC_LIBS
+ 
+ endif
