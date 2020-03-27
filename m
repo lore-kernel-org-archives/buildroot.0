@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 08:12:10 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/syslog-ng: fix
+Date: Fri, 27 Mar 2020 07:47:20 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/syslog-ng: fix
  build if net-snmp is installed on the host
-Message-ID: <20200327070518.EE2B688517@busybox.osuosl.org>
+Message-ID: <20200327070525.9B14788524@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1182f73c1a7b60879ea1fb21c1b12b23da468807
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1455754e50e6ef2db75288a8832c1f2a1e26015b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 If syslog-ng is selected in Buildroot and net-snmp is not, but net-snmp is
 found on the host machine (at least its net-snmp-config script) then
@@ -97,7 +97,7 @@ index 0000000000..f5b2a39bba
 +2.24.1
 +
 diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index fc44777d16..05a6141d4b 100644
+index 68260172a2..ed8f0c7120 100644
 --- a/package/syslog-ng/syslog-ng.mk
 +++ b/package/syslog-ng/syslog-ng.mk
 @@ -97,6 +97,14 @@ else
