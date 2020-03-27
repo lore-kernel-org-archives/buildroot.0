@@ -1,117 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 07:47:20 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/syslog-ng: fix
- build if net-snmp is installed on the host
-Message-ID: <20200327070525.9B14788524@busybox.osuosl.org>
+Date: Fri, 27 Mar 2020 08:19:56 +0100
+Subject: [Buildroot] [PATCH] Makefile: fix locale purge when
+ BR2_PER_PACKAGE_DIRECTORIES=y
+In-Reply-To: <20200316154623.972632-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 16 Mar 2020 16:46:23 +0100")
+References: <20200316154623.972632-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87o8sifen7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1455754e50e6ef2db75288a8832c1f2a1e26015b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-If syslog-ng is selected in Buildroot and net-snmp is not, but net-snmp is
-found on the host machine (at least its net-snmp-config script) then
-compilation of syslog-ng fails with:
+ > With BR2_PER_PACKAGE_DIRECTORIES=y, we have the following code in the
+ > main Makefile:
 
-  CC       modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest-grammar.lo
-  CC       modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest.lo
-  CC       modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest-plugin.lo
-arm-none-linux-gnueabi-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
-make[3]: *** [Makefile:17397: modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest-grammar.lo] Error 1
-make[3]: *** Waiting for unfinished jobs....
-arm-none-linux-gnueabi-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
-make[3]: *** [Makefile:17404: modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest.lo] Error 1
-arm-none-linux-gnueabi-gcc: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include'
-make[3]: *** [Makefile:17411: modules/snmp-dest/modules_snmp_dest_libsnmpdest_la-snmpdest-plugin.lo] Error 1
-make[2]: *** [Makefile:21428: all-recursive] Error 1
-make[1]: *** [Makefile:8740: all] Error 2
-make[1]: Leaving directory '.../buildroot/output/build/syslog-ng-3.25.1'
-make: *** [package/pkg-generic.mk:269: .../buildroot/output/build/syslog-ng-3.25.1/.stamp_built] Error 2
+ > target-finalize: $(PACKAGES) $(TARGET_DIR) host-finalize
+ > 	@$(call MESSAGE,"Finalizing target directory")
+ > 	$(call per-package-rsync,$(sort $(PACKAGES)),target,$(TARGET_DIR))
+ > 	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
 
-The path /usr/include is obtained via /usr/bin/net-snmp-config.
+ > The per-package-rsync call creates the global $(TARGET_DIR) from the
+ > per-package $(TARGET_DIR). Then, we call the TARGET_FINALIZE_HOOKS.
 
-The fix comprises two parts:
-1. only enable net-snmp support in syslog-ng if the net-snmp package is
-enabled in Buildroot
-2. for the case where net-snmp is selected in Buildroot, fix the configure
-script of syslog-ng to allow parsing --with-netsnmp=<path> correctly.
+ > One of the TARGET_FINALIZE_HOOKS, PURGE_LOCALES, remove locales that
+ > are not desired by the user. It does so using a loop with the
+ > $(wildcard ...) function.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Reviewed-by: Chris Packham <judge.packham@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4ff6e5239240a4e1bdf73c41d6e9bff9473ec62c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0002-configure.ac-fix-with-netsnmp.patch       | 41 ++++++++++++++++++++++
- package/syslog-ng/syslog-ng.mk                     |  8 +++++
- 2 files changed, 49 insertions(+)
+ > However, the $(wildcard ...) function is expanded at the moment the
+ > rule is evaluated. And with per-package directory, at the time the
+ > rule is evaluated, the global $(TARGET_DIR) is empty, so $(wildcard
+ > ...) will return nothing. It is indeed only after the call to
+ > per-package-rsync that the TARGET_DIR will be populated.
 
-diff --git a/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch b/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch
-new file mode 100644
-index 0000000000..f5b2a39bba
---- /dev/null
-+++ b/package/syslog-ng/0002-configure.ac-fix-with-netsnmp.patch
-@@ -0,0 +1,41 @@
-+From 39ab118a7e79b223941b50b372c8ed51f0e21f4b Mon Sep 17 00:00:00 2001
-+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+Date: Mon, 16 Mar 2020 15:41:03 +0100
-+Subject: [PATCH] configure.ac: fix --with-netsnmp
-+
-+The option '--with-net-snmp' did not work, because later checks were using
-+the variable '$with_netsnmp' rather than '$with_net_snmp'.
-+
-+There are two possible solutions:
-+- make the option '--with-netsnmp'
-+- change the internal variables
-+
-+Taking into account that latest upstream has moved away from autotools and
-+towards cmake, we opt for the first option that has the least amount of
-+changes.
-+
-+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+Upstream-status: not applicable (latest upstream moved to cmake)
-+
-+---
-+ configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index bfc85c32d..392ab8bf3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -148,8 +148,8 @@ AC_ARG_WITH(libnet,
-+    ,
-+    [with_libnet=""])
-+ 
-+-AC_ARG_WITH(net-snmp,
-+-   [  --with-net-snmp=path      use path to net-snmp-config script],
-++AC_ARG_WITH(netsnmp,
-++   [  --with-netsnmp=path      use path to net-snmp-config script],
-+    ,
-+    [with_netsnmp=""])
-+ 
-+-- 
-+2.24.1
-+
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 68260172a2..ed8f0c7120 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -97,6 +97,14 @@ else
- SYSLOG_NG_CONF_OPTS += --disable-systemd
- endif
- 
-+ifeq ($(BR2_PACKAGE_NETSNMP),y)
-+SYSLOG_NG_DEPENDENCIES += netsnmp
-+SYSLOG_NG_CONF_OPTS += --enable-snmp-dest
-+SYSLOG_NG_CONF_OPTS += --with-netsnmp="$(STAGING_DIR)/usr/bin"
-+else
-+SYSLOG_NG_CONF_OPTS += --disable-snmp-dest
-+endif
-+
- define SYSLOG_NG_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/syslog-ng/S01syslog-ng \
- 		$(TARGET_DIR)/etc/init.d/S01syslog-ng
+ > This commit fixes that by moving away from $(wildcard ...) and use a
+ > shell test instead, since we are anyway in big block of shell code.
+
+ > With this, locales are properly purged again when
+ > BR2_PER_PACKAGE_DIRECTORIES=y.
+
+ > Fixes: c4e6d5c8be6ada8e7c60950e3b499c55d48761cb ("core: implement per-package SDK and target")
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2020.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
