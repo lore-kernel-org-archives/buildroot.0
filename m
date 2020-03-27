@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Mar 2020 10:08:30 +0100
-Subject: [Buildroot] [PATCH v3 1/2] package/libapparmor: new package
-In-Reply-To: <20200326225641.15536-1-angelo@amarulasolutions.com>
+Date: Fri, 27 Mar 2020 10:09:43 +0100
+Subject: [Buildroot] [PATCH v3 2/2] package/libapparmor-utils: new
+ package
+In-Reply-To: <20200326225641.15536-2-angelo@amarulasolutions.com>
 References: <20200326225641.15536-1-angelo@amarulasolutions.com>
-Message-ID: <20200327100830.68e39b50@windsurf.home>
+ <20200326225641.15536-2-angelo@amarulasolutions.com>
+Message-ID: <20200327100943.688ea008@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Angelo,
 
-On Thu, 26 Mar 2020 23:56:40 +0100
+On Thu, 26 Mar 2020 23:56:41 +0100
 Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
 
-> This patch adds libapparmor and its mandatory tools.
-> 
-> * The first step is to compile libraries/libapparmor using the autotools
->   infrastructure. Autoreconf is needed due to the attached patches.
->   Libapparmor library needs to be installed in staging directory before
->   compiling the rest of the tools.
-> * The second step is to compile the mandatory parser and binutils
->   sub directories, this is done in POST_INSTALL_STAGING_HOOKS.
-> * If python3 is available, swig bindings are compiled.
-> * parser/apparmor.systemd is actually a systemv init script
-> * All Apparmor kernel code is now upstream, so no other patches are
->   needed.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> diff --git a/package/libapparmor-utils/libapparmor-utils.mk b/package/libapparmor-utils/libapparmor-utils.mk
+> new file mode 100644
+> index 0000000000..3b2b47be07
+> --- /dev/null
+> +++ b/package/libapparmor-utils/libapparmor-utils.mk
+> @@ -0,0 +1,65 @@
+> +################################################################################
+> +#
+> +# libapparmor-utils
+> +#
+> +################################################################################
+> +
+> +LIBAPPARMOR_UTILS_BASE_VERSION = 2.13
+> +LIBAPPARMOR_UTILS_VERSION = $(LIBAPPARMOR_UTILS_BASE_VERSION).3
+> +LIBAPPARMOR_UTILS_SOURCE = apparmor-$(LIBAPPARMOR_UTILS_VERSION).tar.gz
 
-What are the changes between versions? I.e, what does this v3 changes
-compared to v2 ?
+This is using the same source code as the libapparmor package, so
+unless there is a very solid reason for having a separate package (and
+it should be explained in the commit log), we prefer in Buildroot to
+have one package for one upstream project, so this logic should go into
+package/libapparmor/.
 
 Thanks!
 
