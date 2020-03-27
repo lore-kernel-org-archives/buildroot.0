@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 23:32:40 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] linux-tools: perf: Add
+Date: Fri, 27 Mar 2020 23:32:30 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] linux-tools: perf: Add
  dependencies for binutils and openssl
-Message-ID: <20200327222007.67CE2886D7@busybox.osuosl.org>
+Message-ID: <20200327222012.18221886DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=578e241de8971d75600950817677b1dff4054b78
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=90e6eec1e82539db648e9df456a8b024ca2d00d6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 perf auto-detects and uses the libbfd (from binutils) and openssl
 libraries if they are detected and happen to be built before perf is,
