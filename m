@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 23:18:56 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/llvm: specify
+Date: Fri, 27 Mar 2020 23:18:18 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/llvm: specify
  LLVM_ENABLE_BINDINGS=OFF
-Message-ID: <20200327220718.91A4A8281D@busybox.osuosl.org>
+Message-ID: <20200327220726.74ACD802F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b240f72cdeb336babba689c23bddc406c3acec2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ff495fd1a162583b71cac20101ae5583da4035c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 LLVM builds bindings for other languages such as Go and OCaml when the
 appropriate dependencies can be found. We currently don't support
@@ -39,7 +39,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 2b2bcf336e..54fab6e724 100644
+index 28ad6a5704..f1034f0365 100644
 --- a/package/llvm/llvm.mk
 +++ b/package/llvm/llvm.mk
 @@ -193,7 +193,8 @@ LLVM_CONF_OPTS += -DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME)
