@@ -1,49 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Mar 2020 10:03:19 +0100
-Subject: [Buildroot] [git commit] package/python-crossbar: bump to version
- 20.2.1
-Message-ID: <20200327085224.8287D80FA1@busybox.osuosl.org>
+Date: Fri, 27 Mar 2020 10:03:51 +0100
+Subject: [Buildroot] [git commit] package/python-setuptools-scm: bump to
+ version 3.5.0
+Message-ID: <20200327085224.95636810FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3f0e7a7a12b7bdf284bb922d7f790be6522c0bd
+commit: https://git.buildroot.net/buildroot/commit/?id=803b63de56c7b115562d131270660367eefafeca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-crossbar/python-crossbar.hash | 4 ++--
- package/python-crossbar/python-crossbar.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-setuptools-scm/python-setuptools-scm.hash | 6 +++---
+ package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
-index 903d11d330..1be4c72b76 100644
---- a/package/python-crossbar/python-crossbar.hash
-+++ b/package/python-crossbar/python-crossbar.hash
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
+index 8208a9dc13..82dbf14356 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.hash
++++ b/package/python-setuptools-scm/python-setuptools-scm.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/crossbar/json
--md5	f19fb0995f42e2970fb1b1b077b01d61  crossbar-20.1.2.tar.gz
--sha256	3f4ee0bc73d7e6d25af74b163495eb8892bfe2f0ccbc3153dc4cf807af6163fa  crossbar-20.1.2.tar.gz
-+md5  bacb1f25cbf8fcdd0568325ef04a721c  crossbar-20.2.1.tar.gz
-+sha256  a63951780fde8c46834c70a637d97f3b2028da637b7a4f793b624532f7a45863  crossbar-20.2.1.tar.gz
- # Locally computed
- sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  crossbar/LICENSE
-diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
-index df4d7cc4d5..84d4177daa 100644
---- a/package/python-crossbar/python-crossbar.mk
-+++ b/package/python-crossbar/python-crossbar.mk
+ # md5, sha256 from https://pypi.org/pypi/setuptools-scm/json
+-md5	50b2199082fe808d032ec1710c9d7415  setuptools_scm-3.3.3.tar.gz
+-sha256	bd25e1fb5e4d603dcf490f1fde40fb4c595b357795674c3e5cb7f6217ab39ea5 setuptools_scm-3.3.3.tar.gz
++md5  86ec1eb9ec02ba018b097787e98897c5  setuptools_scm-3.5.0.tar.gz
++sha256  5bdf21a05792903cafe7ae0c9501182ab52497614fa6b1750d9dbae7b60c1a87  setuptools_scm-3.5.0.tar.gz
+ # sha256 locally computed
+-sha256 89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e LICENSE
++sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSE
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
+index dc9d28059f..c6d30e99e7 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.mk
++++ b/package/python-setuptools-scm/python-setuptools-scm.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CROSSBAR_VERSION = 20.1.2
-+PYTHON_CROSSBAR_VERSION = 20.2.1
- PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
--PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/2a/cd/e8be30a9ba4db52dc04e530f19a24d225d743aa36f5074ec0b3ef316637a
-+PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/78/f0/82970d84abd532bdea007322b73bfe2d7762194b85155296b76ba48724e9
- PYTHON_CROSSBAR_LICENSE = AGPL-3.0
- PYTHON_CROSSBAR_LICENSE_FILES = crossbar/LICENSE
- PYTHON_CROSSBAR_SETUP_TYPE = setuptools
+-PYTHON_SETUPTOOLS_SCM_VERSION = 3.3.3
++PYTHON_SETUPTOOLS_SCM_VERSION = 3.5.0
+ PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/83/44/53cad68ce686585d12222e6769682c4bdb9686808d2739671f9175e2938b
++PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/b2/f7/60a645aae001a2e06cf4b8db2fba9d9f36b8fd378f10647e3e218b61b74b
+ PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
+ PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
