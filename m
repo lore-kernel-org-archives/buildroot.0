@@ -1,51 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 07:42:43 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/wireshark: add
- missing qt5 dependencies
-Message-ID: <20200327063012.BD70E88501@busybox.osuosl.org>
+Date: Fri, 27 Mar 2020 07:45:41 +0100
+Subject: [Buildroot] [PATCH 1/2] package/pkg-generic.mk: create folders
+ before calling hooks
+In-Reply-To: <20200312091530.287681-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 12 Mar 2020 10:15:29 +0100")
+References: <20200312091530.287681-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87wo76fg8a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25723bf2e9f70cd2c11b3f264fac0361d647d623
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-- BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-- !BR2_arc
+ > In commit 0e2be4db8ab01d479177a3a187c22525752195ae
+ > ("package/pkg-generic: make file list logic parallel build
+ > compatible"), the logic to create the list of files installed by a
+ > particular package was significantly reworked to be compatible with
+ > top-level parallel build.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fade0f6088c4ef41733da5e72e1ed567b67e6db1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireshark/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ > Before this commit, there was only a after-install step of listing the
+ > files in HOST_DIR/TARGET_DIR/STAGING_DIR. But after this commit, we
+ > now have a before-install logic and an after-install logic.
 
-diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
-index 382e429a9c..e52edb9f69 100644
---- a/package/wireshark/Config.in
-+++ b/package/wireshark/Config.in
-@@ -21,6 +21,8 @@ config BR2_PACKAGE_WIRESHARK_GUI
- 	default y
- 	depends on BR2_INSTALL_LIBSTDCPP # qt5
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # qt5
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # qt5
-+	depends on !BR2_arc # qt5
- 	depends on BR2_PACKAGE_HAS_UDEV # qt5 input
- 	select BR2_PACKAGE_QT5
- 	select BR2_PACKAGE_QT5BASE
-@@ -34,9 +36,10 @@ config BR2_PACKAGE_WIRESHARK_GUI
- 	help
- 	  Enable Qt5 GUI
- 
--comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL"
-+comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, gcc >= 4.8"
-+	depends on !BR2_arc
- 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- endif # BR2_PACKAGE_WIRESHARK
- 
+ > It turns out that when the before-install logic is called for the very
+ > first host package, $(HOST_DIR) doesn't exist yet, and therefore the
+ > cd $(2) fails, with an error message:
+
+ > /bin/sh: line 0: cd: /home/thomas/buildroot/output/host: No such file or directory
+
+ > In fact, $(HOST_DIR), $(STAGING_DIR), $(TARGET_DIR) and
+ > $(BINARIES_DIR) are created by the make rules for host installation,
+ > staging installation, target installation and images installation, but
+ > *after* calling the step_start hooks.
+
+ > So, we simply fix this problem by creating the directories *before*
+ > calling the step_start hooks.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+ > This is different solution than the one initially proposed at
+ > http://patchwork.ozlabs.org/patch/1252046/, following some discussion
+ > with Yann E. Morin on IRC. Since the creation of the directories is
+ > already done somewhere, it makes sense to rely on that rather than
+ > adding more code to create them in a difference place.
+
+ > This patch needs to be backported to 2020.02.x.
+
+Committed to 2020.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
