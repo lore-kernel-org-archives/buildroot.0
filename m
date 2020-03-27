@@ -1,60 +1,95 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 27 Mar 2020 10:55:36 +0100
-Subject: [Buildroot] [PATCH 3/3] configs/nitrogen8mm: Add new defconfig
-In-Reply-To: <20200326215714.3a5fa6dc@windsurf.home>
-References: <20200326144436.529906-1-gary.bisson@boundarydevices.com>
- <20200326144436.529906-4-gary.bisson@boundarydevices.com>
- <20200326215714.3a5fa6dc@windsurf.home>
-Message-ID: <20200327095536.GA585342@p1g2>
+From: David PIERRET <david.pierret@smile.fr>
+Date: Fri, 27 Mar 2020 11:42:24 +0100
+Subject: [Buildroot] [PATCH v3 01/10] package/rustc: install cargo
+ config as toolchain post-install hook
+In-Reply-To: <20200207180829.165689-2-arnout@mind.be>
+References: <20200207180829.165689-1-arnout@mind.be>
+ <20200207180829.165689-2-arnout@mind.be>
+Message-ID: <CADyEP=TwGXK3VdHL-_BjEC1Rh+pFx+mTDhikYQxWcRrfjSGcqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
+Working on a new package using rust, this patch suite have resolved my
+issue with rust version successfully.
 
-On Thu, Mar 26, 2020 at 09:57:14PM +0100, Thomas Petazzoni wrote:
-> Hello Gary,
-> 
-> I was about to apply, but there are a few things that could be
-> improved. See below.
-> 
-> On Thu, 26 Mar 2020 15:44:36 +0100
-> Gary Bisson <gary.bisson@boundarydevices.com> wrote:
-> 
-> > NXP i.MX8MMini based SBC with 2GB of LPDDR4 and 8GB eMMC.
-> > 
-> > More details on the platform here:
-> > https://boundarydevices.com/product/nitrogen8m-mini
-> > 
-> > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> > ---
-> >  configs/nitrogen8mm_defconfig | 56 +++++++++++++++++++++++++++++++++++
-> >  1 file changed, 56 insertions(+)
-> >  create mode 100644 configs/nitrogen8mm_defconfig
-> 
-> Could you update board/boundary/common/readme.txt to also list this
-> platform as being supported, and any other note that might be relevant ?
+Regards,
+David
 
-Yes good catch I'll make sure to update it.
-
-> > +BR2_TARGET_GENERIC_GETTY=y
-> > +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-> > +BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
-> > +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
-> 
-> Could you drop this script and use support/scripts/genimage.sh ?
-> Indeed, it does the same thing, and in fact support/scripts/genimage.sh
-> got fixed to use an empty rootpath and avoid a useless extra copy
-> (commit 31d1fb27b0e62a6542112a7476ff188f2f7b8d38).
-
-Sure will do, didn't know about that script ;)
-
-> It would be good to do that in a preparation commit for all existing
-> Boundary Devices boards.
-
-Yep I'll align all boards to use that script.
-
-Thanks,
-Gary
+On Fri, Feb 7, 2020 at 7:08 PM Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
+>
+> The cargo config file is much like the cmake and meson configuration
+> files, something that tells the cargo build system how the
+> cross-toolchain is configured. It can be used not only with our own
+> host-cargo package, but also with a pre-installed cargo.
+>
+> Therefore, install the cargo config file as a toolchain post-install
+> hook, just like we do for cmake and meson. However, we don't have a
+> pkg-cargo infrastructure (yet) so we can't put it there. The cargo
+> package itself will be removed soon, so that's not appropriate either.
+> Therefore, put it in the rustc package - any cargo package will need
+> rustc.
+>
+> Remove the config handling from the cargo package.
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: David Pierret <david.pierret@smile.fr>
+> ---
+>  package/cargo/cargo.mk                             |  6 ------
+>  package/{cargo/config.in => rustc/cargo-config.in} |  0
+>  package/rustc/rustc.mk                             | 12 ++++++++++++
+>  3 files changed, 12 insertions(+), 6 deletions(-)
+>  rename package/{cargo/config.in => rustc/cargo-config.in} (100%)
+>
+> diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
+> index a387281b4c..3f6646d027 100644
+> --- a/package/cargo/cargo.mk
+> +++ b/package/cargo/cargo.mk
+> @@ -80,12 +80,6 @@ endef
+>
+>  define HOST_CARGO_INSTALL_CMDS
+>         $(INSTALL) -D -m 0755 $(@D)/target/release/cargo $(HOST_DIR)/bin/cargo
+> -       $(INSTALL) -D package/cargo/config.in \
+> -               $(HOST_DIR)/share/cargo/config
+> -       $(SED) 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
+> -               $(HOST_DIR)/share/cargo/config
+> -       $(SED) 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
+> -               $(HOST_DIR)/share/cargo/config
+>  endef
+>
+>  $(eval $(host-generic-package))
+> diff --git a/package/cargo/config.in b/package/rustc/cargo-config.in
+> similarity index 100%
+> rename from package/cargo/config.in
+> rename to package/rustc/cargo-config.in
+> diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk
+> index 6eea9b4fc5..35ffc36106 100644
+> --- a/package/rustc/rustc.mk
+> +++ b/package/rustc/rustc.mk
+> @@ -20,3 +20,15 @@ endif
+>  RUSTC_HOST_NAME = $(RUSTC_HOST_ARCH)-unknown-linux-gnu
+>
+>  $(eval $(host-virtual-package))
+> +
+> +ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
+> +define RUSTC_INSTALL_CARGO_CONFIG
+> +       mkdir -p $(HOST_DIR)/share/cargo
+> +       sed -e 's/@RUSTC_TARGET_NAME@/$(RUSTC_TARGET_NAME)/' \
+> +               -e 's/@CROSS_PREFIX@/$(notdir $(TARGET_CROSS))/' \
+> +               package/rustc/cargo-config.in \
+> +               > $(HOST_DIR)/share/cargo/config
+> +endef
+> +# check-package disable TypoInPackageVariable - TOOLCHAIN intended
+> +TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += RUSTC_INSTALL_CARGO_CONFIG
+> +endif
+> --
+> 2.24.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
