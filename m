@@ -1,61 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Mar 2020 08:11:21 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/tor: security
- bump to version 4.1.9
-Message-ID: <20200328070930.256B288650@busybox.osuosl.org>
+Date: Sat, 28 Mar 2020 00:08:41 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/tor: security
+ bump version to 0.4.2.7
+Message-ID: <20200328070936.A35618869B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72d579b115bb713c01c6d428431cdc602d9b20a3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d8e8d4c7bf3eed6336a342d31ad757b2d9eb9255
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes the following security issues:
+Release notes: https://blog.torproject.org/new-releases-03510-0419-0427
 
-    - Fix a denial-of-service bug that could be used by anyone to
-      consume a bunch of CPU on any Tor relay or authority, or by
-      directories to consume a bunch of CPU on clients or hidden
-      services. Because of the potential for CPU consumption to
-      introduce observable timing patterns, we are treating this as a
-      high-severity security issue. Fixes bug 33119; bugfix on
-      0.2.1.5-alpha. Found by OSS-Fuzz. We are also tracking this issue
-      as TROVE-2020-002 and CVE-2020-10592.
+Fixes CVE-2020-10592 & CVE-2020-10593.
 
-    - Avoid a remotely triggered memory leak in the case that a circuit
-      padding machine is somehow negotiated twice on the same circuit.
-      Fixes bug 33619; bugfix on 0.4.0.1-alpha. Found by Tobias Pulls.
-      This is also tracked as TROVE-2020-004 and CVE-2020-10593.
-
-For more details, see the changelog:
-https://gitweb.torproject.org/tor.git/tree/ChangeLog?h=tor-0.4.1.9
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998 at free.fr: two spaces in hash files]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b356d9f92be20971877cd0657c4a9bd080056de1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tor/tor.hash | 2 +-
+ package/tor/tor.hash | 4 ++--
  package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 13448de7c6..8594e3fe13 100644
+index 94cb8325ff..e55f3ea3c2 100644
 --- a/package/tor/tor.hash
 +++ b/package/tor/tor.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 2a88524ce426079fb9b828bc1b789f2c8ade3ed53c130851102debc3518bed71  tor-0.4.1.6.tar.gz
-+sha256 a763c24362c6220ead345fa232d5b343fce5e1ac0a49549d0a3a2253d60fd28a  tor-0.4.1.9.tar.gz
- sha256 b4248f32f009d4f5cccb704b351e31a16590e0dd5fda2856382cc854d81f6234  LICENSE
+-sha256 0500102433849bbe3231c590973d126c2d2d6b3943b4b9f9962bdb108436e6c4  tor-0.4.2.6.tar.gz
+-sha256 ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
++sha256  06a1d835ddf382f6bca40a62e8fb40b71b2f73d56f0d53523c8bd5caf9b3026d  tor-0.4.2.7.tar.gz
++sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
 diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 264d8d06da..c84037e9cb 100644
+index d1caf35a9a..09f780d3f5 100644
 --- a/package/tor/tor.mk
 +++ b/package/tor/tor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.1.6
-+TOR_VERSION = 0.4.1.9
+-TOR_VERSION = 0.4.2.6
++TOR_VERSION = 0.4.2.7
  TOR_SITE = https://dist.torproject.org
  TOR_LICENSE = BSD-3-Clause
  TOR_LICENSE_FILES = LICENSE
