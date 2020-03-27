@@ -1,50 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Mar 2020 10:03:06 +0100
-Subject: [Buildroot] [git commit] package/python-automat: bump to version
- 20.2.0
-Message-ID: <20200327085224.6EC7288556@busybox.osuosl.org>
+Date: Fri, 27 Mar 2020 10:03:35 +0100
+Subject: [Buildroot] [git commit] package/python-pyasn1-modules: bump to
+ version 0.2.8
+Message-ID: <20200327085224.8C5B9810FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a6a9878e3a0cd5b4e1dc3a0f7e89893f3040598
+commit: https://git.buildroot.net/buildroot/commit/?id=c1494c637e55949576250d7853cae9a0074b56f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-automat/python-automat.hash | 6 +++---
- package/python-automat/python-automat.mk   | 4 ++--
+ package/python-pyasn1-modules/python-pyasn1-modules.hash | 6 +++---
+ package/python-pyasn1-modules/python-pyasn1-modules.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-automat/python-automat.hash b/package/python-automat/python-automat.hash
-index 1be91e0e91..33a64abedf 100644
---- a/package/python-automat/python-automat.hash
-+++ b/package/python-automat/python-automat.hash
+diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.hash b/package/python-pyasn1-modules/python-pyasn1-modules.hash
+index 96831dc5dc..2305596585 100644
+--- a/package/python-pyasn1-modules/python-pyasn1-modules.hash
++++ b/package/python-pyasn1-modules/python-pyasn1-modules.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/automat/json
--md5	47e980a48201a1dabe37fa11f0187013  Automat-0.8.0.tar.gz
--sha256	269a09dfb063a3b078983f4976d83f0a0d3e6e7aaf8e27d8df1095e09dc4a484  Automat-0.8.0.tar.gz
-+md5  d6cef9886b037b8857bfbc686f3ae30a  Automat-20.2.0.tar.gz
-+sha256  7979803c74610e11ef0c0d68a2942b152df52da55336e0c9d58daf1831cbdf33  Automat-20.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pyasn1-modules/json
+-md5	18c77d56abeef631d94f95ff2d652859  pyasn1-modules-0.2.7.tar.gz
+-sha256	0c35a52e00b672f832e5846826f1fb7507907f7d52fba6faa9e3c4cbe874fe4b  pyasn1-modules-0.2.7.tar.gz
++md5  107e1ece7d0a41d782f69f8a95a4d9bc  pyasn1-modules-0.2.8.tar.gz
++sha256  905f84c712230b2c592c19470d3ca8d552de726050d1d1716282a1f6146be65e  pyasn1-modules-0.2.8.tar.gz
  # Locally computed sha256 checksums
--sha256	b2201301678d0a937d938543827ca1360712eb34e23de8ee3f3bfffbd4c0e376  LICENSE
-+sha256  b2201301678d0a937d938543827ca1360712eb34e23de8ee3f3bfffbd4c0e376  LICENSE
-diff --git a/package/python-automat/python-automat.mk b/package/python-automat/python-automat.mk
-index 0bd40daf76..b94fd2e1c4 100644
---- a/package/python-automat/python-automat.mk
-+++ b/package/python-automat/python-automat.mk
+-sha256	22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.txt
++sha256  22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.txt
+diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.mk b/package/python-pyasn1-modules/python-pyasn1-modules.mk
+index afc3c363fd..9933a63aa7 100644
+--- a/package/python-pyasn1-modules/python-pyasn1-modules.mk
++++ b/package/python-pyasn1-modules/python-pyasn1-modules.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AUTOMAT_VERSION = 0.8.0
-+PYTHON_AUTOMAT_VERSION = 20.2.0
- PYTHON_AUTOMAT_SOURCE = Automat-$(PYTHON_AUTOMAT_VERSION).tar.gz
--PYTHON_AUTOMAT_SITE = https://files.pythonhosted.org/packages/4c/9a/3052851fa3a888d1ff32f053fba424ed929b47383fb5327855fdf70018cd
-+PYTHON_AUTOMAT_SITE = https://files.pythonhosted.org/packages/80/c5/82c63bad570f4ef745cc5c2f0713c8eddcd07153b4bee7f72a8dc9f9384b
- PYTHON_AUTOMAT_SETUP_TYPE = setuptools
- PYTHON_AUTOMAT_LICENSE = MIT
- PYTHON_AUTOMAT_LICENSE_FILES = LICENSE
+-PYTHON_PYASN1_MODULES_VERSION = 0.2.7
++PYTHON_PYASN1_MODULES_VERSION = 0.2.8
+ PYTHON_PYASN1_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
+-PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/75/93/c51104ea6a74252957c341ccd110b65efecc18edfd386b666637d67d4d10
++PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/88/87/72eb9ccf8a58021c542de2588a867dbefc7556e14b2866d1e40e9e2b587e
+ PYTHON_PYASN1_MODULES_SETUP_TYPE = setuptools
+ PYTHON_PYASN1_MODULES_LICENSE = BSD-2-Clause
+ PYTHON_PYASN1_MODULES_LICENSE_FILES = LICENSE.txt
