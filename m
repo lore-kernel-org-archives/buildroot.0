@@ -1,9 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Fri, 27 Mar 2020 11:29:57 -0700
-Subject: [Buildroot] [PATCH v3 4/7] package/gssdp: bump version to 1.2.2
+Date: Fri, 27 Mar 2020 11:29:58 -0700
+Subject: [Buildroot] [PATCH v3 5/7] package/gupnp: bump version to 1.2.2
 In-Reply-To: <20200327183000.1005676-1-aduskett@gmail.com>
 References: <20200327183000.1005676-1-aduskett@gmail.com>
-Message-ID: <20200327183000.1005676-4-aduskett@gmail.com>
+Message-ID: <20200327183000.1005676-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,55 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
+Other changes:
+  - Convert the package type to meson as there is no longer autotools support.
+
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/gssdp/gssdp.hash | 4 ++--
- package/gssdp/gssdp.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gupnp/gupnp.hash |  4 ++--
+ package/gupnp/gupnp.mk   | 10 +++++-----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
-index b389d0205c..325ac00171 100644
---- a/package/gssdp/gssdp.hash
-+++ b/package/gssdp/gssdp.hash
+diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
+index c530eb7ef5..df3e9bafae 100644
+--- a/package/gupnp/gupnp.hash
++++ b/package/gupnp/gupnp.hash
 @@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.0/gssdp-1.0.3.sha256sum:
--sha256 211387a62bc1d99821dd0333d873a781320287f5436f91e58b2ca145b378be41  gssdp-1.0.3.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.2/gssdp-1.2.2.sha256sum:
-+sha256 cabb9e3b456b8354a55e23eb0207545d974643cda6d623523470ebbc4188b0a4  gssdp-1.2.2.tar.xz
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.0/gupnp-1.0.4.sha256sum:
+-sha256	8b0992650c6ef8566d2d0c9198c8a669106dc2c73aa908fcc4a4d043a8c0b544	gupnp-1.0.4.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.2.sha256sum:
++sha256	9a80bd953e5c8772ad26b72f8da01cbe7241a113edd6084903f413ce751c9989	gupnp-1.2.2.tar.xz
  
  # Hash for license file:
  sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
-index d91c8acda0..14eec0b5fd 100644
---- a/package/gssdp/gssdp.mk
-+++ b/package/gssdp/gssdp.mk
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index 75bbfa8d1d..612359ba55 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--GSSDP_VERSION_MAJOR = 1.0
--GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).3
-+GSSDP_VERSION_MAJOR = 1.2
-+GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).2
- GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
- GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
- GSSDP_LICENSE = LGPL-2.0+
+-GUPNP_VERSION_MAJOR = 1.0
+-GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).4
++GUPNP_VERSION_MAJOR = 1.2
++GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).2
+ GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
+ GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
+ GUPNP_LICENSE = LGPL-2.0+
+@@ -14,10 +14,10 @@ GUPNP_INSTALL_STAGING = YES
+ GUPNP_DEPENDENCIES = host-pkgconf libglib2 libxml2 gssdp util-linux
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-GUPNP_CONF_OPTS += --enable-introspection
++GUPNP_CONF_OPTS += -Dintrospection=true
+ GUPNP_DEPENDENCIES += gobject-introspection
+ else
+-GUPNP_CONF_OPTS += --disable-introspection
++GUPNP_CONF_OPTS += -Dintrospection=false
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
 2.25.1
