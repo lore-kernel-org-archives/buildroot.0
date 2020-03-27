@@ -1,39 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 23:20:31 +0100
-Subject: [Buildroot] [PATCH 1/2] package/llvm: specify
+Date: Fri, 27 Mar 2020 23:18:56 +0100
+Subject: [Buildroot] [git commit branch/2019.11.x] package/llvm: specify
  LLVM_ENABLE_BINDINGS=OFF
-In-Reply-To: <20200316200106.3709163-1-joseph.kogut@gmail.com> (Joseph Kogut's
- message of "Mon, 16 Mar 2020 13:01:05 -0700")
-References: <20200316200106.3709163-1-joseph.kogut@gmail.com>
-Message-ID: <87369tfnio.fsf@dell.be.48ers.dk>
+Message-ID: <20200327220718.91A4A8281D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joseph" == Joseph Kogut <joseph.kogut@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2b240f72cdeb336babba689c23bddc406c3acec2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
- > LLVM builds bindings for other languages such as Go and OCaml when the
- > appropriate dependencies can be found. We currently don't support
- > building these bindings in Buildroot, as they're currently unused by any
- > package.
+LLVM builds bindings for other languages such as Go and OCaml when the
+appropriate dependencies can be found. We currently don't support
+building these bindings in Buildroot, as they're currently unused by any
+package.
 
- > Building these bindings was originally disabled by overriding the
- > dependencies with values indicating that they were not found.
+Building these bindings was originally disabled by overriding the
+dependencies with values indicating that they were not found.
 
- > Newer versions of LLVM no longer disable the OCaml bindings when overriding
- > OCAMLFIND. Consequently, the build process attempts to install the bindings
- > to the default location on the host of /usr/lib/ocaml/llvm, causing a
- > permissions error and build failure.
+Newer versions of LLVM no longer disable the OCaml bindings when overriding
+OCAMLFIND. Consequently, the build process attempts to install the bindings
+to the default location on the host of /usr/lib/ocaml/llvm, causing a
+permissions error and build failure.
 
- > Additionally, LLVM has since added the variable LLVM_ENABLE_BINDINGS to
- > control whether bindings are enabled, so we override that to disable the
- > bindings.
+Additionally, LLVM has since added the variable LLVM_ENABLE_BINDINGS to
+control whether bindings are enabled, so we override that to disable the
+bindings.
 
- > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit e6a1ee9a8aee9faecb8d1d1bdd8697d18c23b605)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/llvm/llvm.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Committed to 2019.11.x and 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 2b2bcf336e..54fab6e724 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -193,7 +193,8 @@ LLVM_CONF_OPTS += -DLLVM_HOST_TRIPLE=$(GNU_TARGET_NAME)
+ # check preventively. Building the Go and OCaml bindings is yet unsupported.
+ HOST_LLVM_CONF_OPTS += \
+ 	-DGO_EXECUTABLE=GO_EXECUTABLE-NOTFOUND \
+-	-DOCAMLFIND=OCAMLFIND-NOTFOUND
++	-DOCAMLFIND=OCAMLFIND-NOTFOUND \
++	-DLLVM_ENABLE_BINDINGS=OFF
+ 
+ # Builds a release host tablegen that gets used during the LLVM build.
+ HOST_LLVM_CONF_OPTS += -DLLVM_OPTIMIZED_TABLEGEN=ON
