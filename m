@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 23:13:33 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] fs/initramfs: fix
+Date: Fri, 27 Mar 2020 23:13:12 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] fs/initramfs: fix
  show-info
-Message-ID: <20200327220218.10919886A1@busybox.osuosl.org>
+Message-ID: <20200327220228.909F0886A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05e87df0bbde8665767f4fe0c9959540cd84b13d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=49dcc6eb09061ce729693a5b80bf615e0fd42455
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 The initramfs is not a reall filesystem, so it does not use the
 $(rootfs) infrastructure.
