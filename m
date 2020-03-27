@@ -1,12 +1,11 @@
 From: David PIERRET <david.pierret@smile.fr>
-Date: Fri, 27 Mar 2020 11:44:57 +0100
-Subject: [Buildroot] [PATCH v3 02/10] package/rust: build and install
- cargo
-In-Reply-To: <88b71ee6-02ca-f0f3-27bb-5ef04ac1f3a9@mind.be>
+Date: Fri, 27 Mar 2020 11:47:18 +0100
+Subject: [Buildroot] [PATCH v3 03/10] package/cargo-bin: install if
+ rust-bin selected
+In-Reply-To: <20200207180829.165689-4-arnout@mind.be>
 References: <20200207180829.165689-1-arnout@mind.be>
- <20200207180829.165689-3-arnout@mind.be>
- <20200209102131.GK23769@scaer> <88b71ee6-02ca-f0f3-27bb-5ef04ac1f3a9@mind.be>
-Message-ID: <CADyEP=QQ22x_52WrAGqGrQeR5eTa-BV2tk=PzxtoC3fTd-LUcA@mail.gmail.com>
+ <20200207180829.165689-4-arnout@mind.be>
+Message-ID: <CADyEP=SEEdAUC3MMwOmLK10YexteGGJkZB7N98RT4HEMbUrb4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,91 +17,44 @@ Working on a new package using rust, this patch suite have resolved my
 issue with rust version successfully.
 
 Regards
-
 David
 
-On Sun, Feb 9, 2020 at 5:37 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+On Fri, Feb 7, 2020 at 7:09 PM Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
 >
+> From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 >
+> If host-rust-bin, the pre-built Rust compiler, is selected as a rustc
+> provider, then also install the pre-built cargo binary to be coherent.
 >
-> On 09/02/2020 11:21, Yann E. MORIN wrote:
-> > Arnout, All,
-> >
-> > On 2020-02-07 19:08 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> >> From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> >>
-> >> Cargo source code is not provided anymore as a separate tarball but is
-> >> now built along with the Rust compiler.
-> >>
-> >> So update rust host variant to build Cargo and install the
-> >> cross-compilation configuration file.
->
->  Hm, this last part of the sentence is not valid anymore.
->
-> >>
-> >> All this will be overwritten again by the host-cargo package, but
-> >> that will be removed in later commits.
-> >>
-> >> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> >> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
-> >> Tested-by: Sam Voss <sam.voss@rockwellcollins.com>
-> >> [Arnout: merge all install commands in HOST_RUST_INSTALL_CMDS]
-> >> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+> [Arnout: don't install cargo config, alread moved]
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: David Pierret <david.pierret@smile.fr>
 Tested-by: David Pierret <david.pierret@smile.fr>
-> >
-> > The commit does not look to do what it says in the commit log.
-> >
-> > The commit log says "merge all install commands in HOST_RUST_INSTALL_CMDS"
-> > but HOST_RUST_INSTALL_CMDS are not touched; only CONFIGURE_CMDS are.
+> ---
+>  package/cargo-bin/cargo-bin.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
->  The previous version split up the _INSTALL_CMDS into separate variables. I
-> undid that change and merged them together in a single HOST_RUST_INSTALL_CMDS,
-> so there's no change anymore. Well, originally there still was the installation
-> of cargo/config but I moved that somewhere else and in a separate commit. So
-> probably a better description would have been "don't change
-> HOST_RUST_INSTALL_CMDS; move cargo/config generation to post-toolchain hook and
-> in a separate commit".
+> diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
+> index 3614f7a53d..3eaf417531 100644
+> --- a/package/cargo-bin/cargo-bin.mk
+> +++ b/package/cargo-bin/cargo-bin.mk
+> @@ -10,4 +10,10 @@ CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
+>  CARGO_BIN_LICENSE = Apache-2.0 or MIT
+>  CARGO_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 >
->  Regards,
->  Arnout
+> +ifeq ($(BR2_PACKAGE_HOST_RUST_BIN),y)
+> +define HOST_CARGO_BIN_INSTALL_CMDS
+> +       $(@D)/install.sh --prefix=$(HOST_DIR) --disable-ldconfig
+> +endef
+> +endif
+> +
+>  $(eval $(host-generic-package))
+> --
+> 2.24.1
 >
-> >
-> > So, I'm not sure I follow what's going on...
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> >> ---
-> >>  package/rust/rust.mk | 3 +++
-> >>  1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-> >> index 5d14fc6682..9bbed15082 100644
-> >> --- a/package/rust/rust.mk
-> >> +++ b/package/rust/rust.mk
-> >> @@ -47,11 +47,14 @@ define HOST_RUST_CONFIGURE_CMDS
-> >>              echo 'python = "$(HOST_DIR)/bin/python2"'; \
-> >>              echo 'submodules = false'; \
-> >>              echo 'vendor = true'; \
-> >> +            echo 'extended = true'; \
-> >> +            echo 'tools = ["cargo"]'; \
-> >>              echo 'compiler-docs = false'; \
-> >>              echo 'docs = false'; \
-> >>              echo 'verbose = $(HOST_RUST_VERBOSITY)'; \
-> >>              echo '[install]'; \
-> >>              echo 'prefix = "$(HOST_DIR)"'; \
-> >> +            echo 'sysconfdir = "$(HOST_DIR)/etc"'; \
-> >>              echo '[rust]'; \
-> >>              echo 'channel = "stable"'; \
-> >>              echo '[target.$(RUSTC_TARGET_NAME)]'; \
-> >> --
-> >> 2.24.1
-> >>
-> >> _______________________________________________
-> >> buildroot mailing list
-> >> buildroot at busybox.net
-> >> http://lists.busybox.net/mailman/listinfo/buildroot
-> >
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
