@@ -1,55 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Mar 2020 10:04:16 +0100
-Subject: [Buildroot] [git commit] package/{protobuf,
- python-protobuf}: bump to version 3.11.4
-Message-ID: <20200327085224.9FEEC810FF@busybox.osuosl.org>
+Date: Fri, 27 Mar 2020 10:06:08 +0100
+Subject: [Buildroot] [git commit] package/libeXosip2: fix build without
+ threads
+Message-ID: <20200327085250.3ED948345A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30d6c1cb6ad21afe4df06ee918027e9f3e23a8e6
+commit: https://git.buildroot.net/buildroot/commit/?id=86cd05b675881db9aeea3ca4b83ff232e90e69dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/ec262058cc0a4bf92c381857eaf3b44412942bba
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/protobuf/protobuf.hash               | 4 ++--
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ ...D-compilation-error-introduced-with-epoll.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index c82ae84f22..df5e9c62d9 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	9ffb1fe6091240f2e7bcaca5b65fb19cb7b951ffc9a60d8b2c9d73f89f0e0a51  protobuf-cpp-3.11.3.tar.gz
--sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-+sha256  ba4bbc3e6b58d2ccfe406e616576ef48710a2aae205f463618025fc691549cfe  protobuf-cpp-3.11.4.tar.gz
-+sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 1531bfffb2..381649a4e7 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works, as they share the same
- # version/site variables.
--PROTOBUF_VERSION = 3.11.3
-+PROTOBUF_VERSION = 3.11.4
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 0ede47ec20..929f88548a 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	a9c6c3821ece08f8db55392edbbec4d4a5392fa5df148188309ed6c5a842e3b7  protobuf-python-3.11.3.tar.gz
--sha256	6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-+sha256  5fe38d70962e4a6bb4d663e63b0906d5bd08a1b590841e08c5148cdbb63732b5  protobuf-python-3.11.4.tar.gz
-+sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch b/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
+new file mode 100644
+index 0000000000..b69455bd7a
+--- /dev/null
++++ b/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
+@@ -0,0 +1,44 @@
++From 0e0e95dbc380c5eede3a2fc1631294a98078e30f Mon Sep 17 00:00:00 2001
++From: Aymeric Moizard <amoizard@gmail.com>
++Date: Fri, 13 Mar 2020 16:34:41 +0100
++Subject: fix: fix OSIP_MONOTHREAD compilation error introduced with epoll
++ implementation
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++http://git.savannah.nongnu.org/cgit/exosip.git/patch/?id=0e0e95dbc380c5eede3a2fc1631294a98078e30f]
++---
++ src/eXconf.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/eXconf.c b/src/eXconf.c
++index baf90be..6165eb3 100644
++--- a/src/eXconf.c
+++++ b/src/eXconf.c
++@@ -801,12 +801,15 @@ eXosip_init (struct eXosip_t *excontext)
++   }
++ 
++   if (excontext->poll_method == EXOSIP_USE_EPOLL_LT) {
+++#ifndef OSIP_MONOTHREAD
++     struct epoll_event ev;
+++#endif
++     excontext->epfdctl = epoll_create (1);
++     if (excontext->epfdctl < 0) {
++       return OSIP_UNDEFINED_ERROR;
++     }
++     
+++#ifndef OSIP_MONOTHREAD
++     memset(&ev, 0, sizeof(struct epoll_event));
++     ev.events = EPOLLIN;
++     ev.data.fd = jpipe_get_read_descr (excontext->j_socketctl_event);
++@@ -815,6 +818,7 @@ eXosip_init (struct eXosip_t *excontext)
++       _eXosip_closesocket (excontext->epfdctl);
++       return OSIP_UNDEFINED_ERROR;
++     }
+++#endif
++   }
++ #endif
++   
++-- 
++cgit v1.2.1
++
