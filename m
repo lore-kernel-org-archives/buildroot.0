@@ -1,205 +1,132 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Fri, 27 Mar 2020 15:17:52 +0300
-Subject: [Buildroot] [PATCH] package/oprofile: Fix build with binutils_2.34
-Message-ID: <20200327121752.32344-1-Evgeniy.Didin@synopsys.com>
+From: David Pierret <david.pierret@smile.fr>
+Date: Fri, 27 Mar 2020 13:37:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bat: new package
+Message-ID: <20200327123739.23926-1-david.pierret@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After updating ARC toolchain to arc-2019.09 version oprofile_1.3.0
-builds started to fail. These failures were caused by binutils 
-upstream commit fd3619828e94a ("bfd_section_* macros") which was 
-added in binutils-arc. This commit removed some macros that were
-used in oprofile_1.3.0. 
+This patch add bat package
 
-With this commit we introduce fix for oprofile wich enables builds
-with binutils_2.34 and older versions.
+bat is a cat(1) clone with syntax highlighting and Git integration.
 
-Fixes:
-http://autobuild.buildroot.org/results/999/9995b7a18fcc38a02dd1dd3af462a14528a2174d//
+This package need rust version >= 1.37.0
 
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-Cc: William Cohen <wcohen@redhat.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: arc-buildroot at synopsys.com
+Signed-off-by: David Pierret <david.pierret@smile.fr>
+
+----
+bat supports syntax highlighting for a large number of programming
+and markup languages. He can communicates with git to show
+modifications with respect to the index.
+For conveignance use, bat can pipe its own output to less if the
+output is too large for one screen.
 ---
- ...ers-to-handle-the-binutils-2.34-api-chang.patch | 166 +++++++++++++++++++++
- 1 file changed, 166 insertions(+)
- create mode 100644 package/oprofile/0002-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
+ DEVELOPERS            |  3 +++
+ package/Config.in     |  1 +
+ package/bat/Config.in |  8 ++++++++
+ package/bat/bat.hash  |  4 ++++
+ package/bat/bat.mk    | 39 +++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 55 insertions(+)
+ create mode 100644 package/bat/Config.in
+ create mode 100644 package/bat/bat.hash
+ create mode 100644 package/bat/bat.mk
 
-diff --git a/package/oprofile/0002-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch b/package/oprofile/0002-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7cb61e2b98..3afa45fc7f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -688,6 +688,9 @@ F:	linux/linux-ext-ev3dev-linux-drivers.mk
+ F:	package/brickd/
+ F:	package/ev3dev-linux-drivers/
+ 
++N:	David Pierret <david.pierret@smile.fr>
++F:	package/bat/
++
+ N:	Davide Viti <zinosat@tiscali.it>
+ F:	package/flann/
+ F:	package/python-paho-mqtt/
+diff --git a/package/Config.in b/package/Config.in
+index 7b73198d50..e0fc92c347 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2385,6 +2385,7 @@ menu "System tools"
+ endmenu
+ 
+ menu "Text editors and viewers"
++	source "package/bat/Config.in"
+ 	source "package/ed/Config.in"
+ 	source "package/joe/Config.in"
+ 	source "package/less/Config.in"
+diff --git a/package/bat/Config.in b/package/bat/Config.in
 new file mode 100644
-index 0000000000..b35b8b70f3
+index 0000000000..51bba3eb31
 --- /dev/null
-+++ b/package/oprofile/0002-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
-@@ -0,0 +1,166 @@
-+From 377610414fb6cd7ac30e4485d9d6482fcf29aca6 Mon Sep 17 00:00:00 2001
-+From: William Cohen <wcohen@redhat.com>
-+Date: Wed, 18 Mar 2020 21:19:16 -0400
-+Subject: [PATCH] Macro wrappers to handle the binutils 2.34 api changes
++++ b/package/bat/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_BAT
++	bool "bat"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_RUSTC
++	help
++	  A cat(1) clone with syntax highlighting and Git integration.
 +
-+Changes in binutils 2.34 API prevented oprofile from compiling with
-+it.  This patch tests for the changes in the binutils API during
-+configuration and selects the appropiate wrappers to allow oprofile to
-+compile.  This allows oprofile to compile with both older and newer
-+versions of binutils.
-+---
-+ configure.ac              | 20 ++++++++++++++++++++
-+ libutil++/bfd_support.cpp | 11 ++++++-----
-+ libutil/op_bfd_wrappers.h | 28 ++++++++++++++++++++++++++++
-+ opjitconv/create_bfd.c    |  7 ++++---
-+ 4 files changed, 58 insertions(+), 8 deletions(-)
-+ create mode 100644 libutil/op_bfd_wrappers.h
++	  https://github.com/sharkdp/bat
+diff --git a/package/bat/bat.hash b/package/bat/bat.hash
+new file mode 100644
+index 0000000000..14438b8a6f
+--- /dev/null
++++ b/package/bat/bat.hash
+@@ -0,0 +1,4 @@
++# Locally generated
++sha256 f4aee370013e2a3bc84c405738ed0ab6e334d3a9f22c18031a7ea008cd5abd2a  bat-0.13.0.tar.gz
++sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
++sha256 dc931b3f4376dc2b12486ded9f51487719099074587d757ea6125bb59deeb221  LICENSE-MIT
+diff --git a/package/bat/bat.mk b/package/bat/bat.mk
+new file mode 100644
+index 0000000000..89711ac33b
+--- /dev/null
++++ b/package/bat/bat.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# bat
++#
++################################################################################
 +
-+diff --git a/configure.ac b/configure.ac
-+index ac2fd35e..df032a78 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -224,6 +224,26 @@ if test "$host_cpu" = "powerpc64le" -o "$host_cpu" = "powerpc64"; then
-+ fi
-+ AC_SUBST(PFM_LIB)
-+ 
-++HAVE_BINUTILS_234='1'
-++AC_MSG_CHECKING([whether binutils 2.34 is being used])
-++rm -f test-for-BINUTILS
-++AC_LANG_CONFTEST(
-++	[AC_LANG_PROGRAM([[#include <bfd.h>]],
-++		[[asection * sect;
-++		bfd_size_type buildid_sect_size = bfd_section_size(sect);
-++		return 0;]])
-++	])
-++$CC conftest.$ac_ext $CFLAGS $LDFLAGS $LIBS $PERF_EVENT_FLAGS -o test-for-BINUTILS  > /dev/null 2>&1
-++if test -f test-for-BINUTILS; then
-++	echo "yes"
-++	HAVE_BINUTILS_234='1'
-++else
-++	echo "no"
-++	HAVE_BINUTILS_234='0'
-++fi
-++AC_DEFINE_UNQUOTED(HAVE_BINUTILS_234, $HAVE_BINUTILS_234, [Using binutils 2.34])
-++rm -f test-for-BINUTILS*
-++
-+ AC_ARG_WITH(java,
-+ [  --with-java=java-home        Path to Java home directory (default is "no"; "yes" will use /usr as Java home)],
-+ JAVA_HOMEDIR=$with_java, [with_java=no])
-+diff --git a/libutil++/bfd_support.cpp b/libutil++/bfd_support.cpp
-+index fa904839..cd0f4f71 100644
-+--- a/libutil++/bfd_support.cpp
-++++ b/libutil++/bfd_support.cpp
-+@@ -19,6 +19,7 @@
-+ #include "locate_images.h"
-+ #include "op_libiberty.h"
-+ #include "op_exception.h"
-++#include "op_bfd_wrappers.h"
-+ 
-+ #include <unistd.h>
-+ #include <errno.h>
-+@@ -137,7 +138,7 @@ static bool get_build_id(bfd * ibfd, unsigned char * build_id)
-+ 		}
-+ 	}
-+ 
-+-	bfd_size_type buildid_sect_size = bfd_section_size(ibfd, sect);
-++	bfd_size_type buildid_sect_size = op_bfd_section_size(ibfd, sect);
-+ 	char * contents = (char *) xmalloc(buildid_sect_size);
-+ 	errno = 0;
-+ 	if (!bfd_get_section_contents(ibfd, sect,
-+@@ -188,7 +189,7 @@ bool get_debug_link_info(bfd * ibfd, string & filename, unsigned long & crc32)
-+ 	if (sect == NULL)
-+ 		return false;
-+ 	
-+-	bfd_size_type debuglink_size = bfd_section_size(ibfd, sect);  
-++	bfd_size_type debuglink_size = op_bfd_section_size(ibfd, sect);
-+ 	char * contents = (char *) xmalloc(debuglink_size);
-+ 	cverb << vbfd
-+ 	      << ".gnu_debuglink section has size " << debuglink_size << endl;
-+@@ -346,7 +347,7 @@ void fixup_linenr(bfd * abfd, asection * section, asymbol ** syms,
-+ 	// first restrict the search on a sensible range of vma, 16 is
-+ 	// an intuitive value based on epilog code look
-+ 	size_t max_search = 16;
-+-	size_t section_size = bfd_section_size(abfd, section);
-++	size_t section_size = op_bfd_section_size(abfd, section);
-+ 	if (pc + max_search > section_size)
-+ 		max_search = section_size - pc;
-+ 
-+@@ -819,10 +820,10 @@ find_nearest_line(bfd_info const & b, op_bfd_symbol const & sym,
-+ 	else
-+ 		pc = (sym.value() + offset) - sym.filepos();
-+ 
-+-	if ((bfd_get_section_flags(abfd, section) & SEC_ALLOC) == 0)
-++	if ((op_bfd_get_section_flags(abfd, section) & SEC_ALLOC) == 0)
-+ 		goto fail;
-+ 
-+-	if (pc >= bfd_section_size(abfd, section))
-++	if (pc >= op_bfd_section_size(abfd, section))
-+ 		goto fail;
-+ 
-+ 	ret = bfd_find_nearest_line(abfd, section, syms, pc, &cfilename,
-+diff --git a/libutil/op_bfd_wrappers.h b/libutil/op_bfd_wrappers.h
-+new file mode 100644
-+index 00000000..b229cc12
-+--- /dev/null
-++++ b/libutil/op_bfd_wrappers.h
-+@@ -0,0 +1,28 @@
-++/**
-++ * @file op_bfd_wrappers.h
-++ * Wrappers to hide API changes in binutils 2.34
-++ *
-++ * @remark Copyright 2020 OProfile authors
-++ * @remark Read the file COPYING
-++ *
-++ * @author William Cohen
-++ */
-++
-++#ifndef OP_BFD_WRAPPERS_H
-++#define OP_BFD_WRAPPERS_H
-++
-++#if HAVE_BINUTILS_234
-++#define op_bfd_section_size(ibfd, sec) bfd_section_size(sec)
-++#define op_bfd_get_section_flags(abfd, sec) bfd_section_flags(sec)
-++#define op_bfd_set_section_flags(abfd, sec, flags) bfd_set_section_flags(sec, flags)
-++#define op_bfd_set_section_vma(abfd, sec, vma) bfd_set_section_vma(sec, vma)
-++#define op_bfd_set_section_size(abfd, sec, size) bfd_set_section_size(sec, size)
-++#else
-++#define op_bfd_section_size(ibfd, sec) bfd_section_size(ibfd, sec)
-++#define op_bfd_get_section_flags(abfd, sec) bfd_get_section_flags(abfd, sec)
-++#define op_bfd_set_section_flags(abfd, sec, flags) bfd_set_section_flags(abfd, sec, flags)
-++#define op_bfd_set_section_vma(abfd, sec, vma) bfd_set_section_vma(abfd, sec, vma)
-++#define op_bfd_set_section_size(abfd, sec, size) bfd_set_section_size(abfd, sec, size)
-++#endif
-++
-++#endif /* !OP_BFD_WRAPPERS_H */
-+diff --git a/opjitconv/create_bfd.c b/opjitconv/create_bfd.c
-+index 48db143b..da1e6d29 100644
-+--- a/opjitconv/create_bfd.c
-++++ b/opjitconv/create_bfd.c
-+@@ -16,6 +16,7 @@
-+ 
-+ #include "opjitconv.h"
-+ #include "op_libiberty.h"
-++#include "op_bfd_wrappers.h"
-+ 
-+ #include <bfd.h>
-+ #include <assert.h>
-+@@ -86,12 +87,12 @@ asection * create_section(bfd * abfd, char const * section_name,
-+ 		bfd_perror("bfd_make_section");
-+ 		goto error;
-+ 	}
-+-	bfd_set_section_vma(abfd, section, vma);
-+-	if (bfd_set_section_size(abfd, section, size) == FALSE) {
-++	op_bfd_set_section_vma(abfd, section, vma);
-++	if (op_bfd_set_section_size(abfd, section, size) == FALSE) {
-+ 		bfd_perror("bfd_set_section_size");
-+ 		goto error;
-+ 	}
-+-	if (bfd_set_section_flags(abfd, section, flags) == FALSE) {
-++	if (op_bfd_set_section_flags(abfd, section, flags) == FALSE) {
-+ 		bfd_perror("bfd_set_section_flags");
-+ 		goto error;
-+ 	}
-+-- 
-+2.16.2
++BAT_VERSION = 0.13.0
++BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
++BAT_LICENSE = Apache-2.0 or MIT
++BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
++BAT_DEPENDENCIES = host-rustc
 +
++BAT_CFLAGS = $(TARGET_CFLAGS)
++
++BAT_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
++BAT_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
++
++BAT_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(BAT_CARGO_MODE)
++
++BAT_CARGO_OPTS = \
++		 --bins \
++		 --$(BAT_CARGO_MODE) \
++		 --target=$(RUSTC_TARGET_NAME) \
++		 --manifest-path=$(@D)/Cargo.toml
++
++define BAT_BUILD_CMDS
++	# we need to use the 'env' command to set the CC_<target> variable since
++	# the rustc_target_name contain minus characters not allowed in bash.
++	env $(TARGET_MAKE_ENV) $(BAT_CARGO_ENV) \
++	CC_$(RUSTC_TARGET_NAME)=$(TARGET_CC) \
++		cargo build $(BAT_CARGO_OPTS)
++endef
++
++define BAT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/$(BAT_BIN_DIR)/bat \
++		$(TARGET_DIR)/usr/bin/bat
++endef
++
++$(eval $(generic-package))
 -- 
-2.16.2
+2.17.1
