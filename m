@@ -1,132 +1,93 @@
-From: David Pierret <david.pierret@smile.fr>
-Date: Fri, 27 Mar 2020 13:37:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bat: new package
-Message-ID: <20200327123739.23926-1-david.pierret@smile.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 27 Mar 2020 13:56:46 +0000
+Subject: [Buildroot] [Bug 12711] New: host-localedef 2.30-20 fails to
+ compile on fedora 32 (gcc 10.0.1)
+Message-ID: <bug-12711-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch add bat package
+https://bugs.busybox.net/show_bug.cgi?id=12711
 
-bat is a cat(1) clone with syntax highlighting and Git integration.
+            Bug ID: 12711
+           Summary: host-localedef 2.30-20 fails to compile on fedora 32
+                    (gcc 10.0.1)
+           Product: buildroot
+           Version: 2020.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: ian_ormshaw at waters.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-This package need rust version >= 1.37.0
+host-localedef 2.30-20 fails to compile on fedora 32 (gcc 10.0.1)
 
-Signed-off-by: David Pierret <david.pierret@smile.fr>
+/home/ian/build/hiwire-linux-c38cdaa1-x86_64/buildroot/host/bin/ccache
+/usr/lib64/ccache/gcc programs/ld-ctype.c -c -std=gnu11 -fgnu89-inline  -O2
+-Wall -Wwrite-strings -Wundef -Werror -fmerge-all-constants -frounding-math
+-fno-stack-protector -Wstrict-prototypes -Wold-style-definition -fmath-errno   
+      -I/home/ian/build/hiwire-linux-c38cdaa1-x86_64/buildroot/host/include
+-DCOMPLOCALEDIR='"/usr/lib/locale"' -DLOCALE_ALIAS_PATH='"/usr/share/locale"'
+-Iprograms -I../include
+-I/home/ian/build/hiwire-linux-c38cdaa1-x86_64/buildroot/build/host-localedef-2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/build/locale
 
-----
-bat supports syntax highlighting for a large number of programming
-and markup languages. He can communicates with git to show
-modifications with respect to the index.
-For conveignance use, bat can pipe its own output to less if the
-output is too large for one screen.
----
- DEVELOPERS            |  3 +++
- package/Config.in     |  1 +
- package/bat/Config.in |  8 ++++++++
- package/bat/bat.hash  |  4 ++++
- package/bat/bat.mk    | 39 +++++++++++++++++++++++++++++++++++++++
- 5 files changed, 55 insertions(+)
- create mode 100644 package/bat/Config.in
- create mode 100644 package/bat/bat.hash
- create mode 100644 package/bat/bat.mk
+-I/home/ian/build/hiwire-linux-c38cdaa1-x86_64/buildroot/build/host-localedef-2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/build
+ -I../sysdeps/unix/sysv/linux/x86_64/64  -I../sysdeps/unix/sysv/linux/x86_64 
+-I../sysdeps/unix/sysv/linux/x86/include -I../sysdeps/unix/sysv/linux/x86 
+-I../sysdeps/x86/nptl  -I../sysdeps/unix/sysv/linux/wordsize-64 
+-I../sysdeps/x86_64/nptl  -I../sysdeps/unix/sysv/linux/include
+-I../sysdeps/unix/sysv/linux  -I../sysdeps/nptl  -I../sysdeps/pthread 
+-I../sysdeps/gnu  -I../sysdeps/unix/inet  -I../sysdeps/unix/sysv 
+-I../sysdeps/unix/x86_64  -I../sysdeps/unix  -I../sysdeps/posix 
+-I../sysdeps/x86_64/64  -I../sysdeps/x86_64/fpu/multiarch 
+-I../sysdeps/x86_64/fpu  -I../sysdeps/x86/fpu/include -I../sysdeps/x86/fpu 
+-I../sysdeps/x86_64/multiarch  -I../sysdeps/x86_64  -I../sysdeps/x86 
+-I../sysdeps/ieee754/float128  -I../sysdeps/ieee754/ldbl-96/include
+-I../sysdeps/ieee754/ldbl-96  -I../sysdeps/ieee754/dbl-64/wordsize-64 
+-I../sysdeps/ieee754/dbl-64  -I../sysdeps/ieee754/flt-32 
+-I../sysdeps/wordsize-64  -I../sysdeps/ieee754  -I../sysdeps/generic  -I..
+-I../libio -I.   -D_LIBC_REENTRANT -include
+/home/ian/build/hiwire-linux-c38cdaa1-x86_64/buildroot/build/host-localedef-2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/build/libc-modules.h
+-DMODULE_NAME=locale_programs -include ../include/libc-symbols.h  
+-DLOCALE_PATH='"/usr/lib/locale:/usr/share/i18n"'
+-DCHARMAP_PATH='"/usr/share/i18n/charmaps"'
+-DREPERTOIREMAP_PATH='"/usr/share/i18n/repertoiremaps"'
+-DLOCSRCDIR='"/usr/share/i18n/locales"'    -DTOP_NAMESPACE=glibc -o
+/home/ian/build/hiwire-linux-c38cdaa1-x86_64/buildroot/build/host-localedef-2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/build/locale/ld-ctype.o
+-MD -MP -MF
+/home/ian/build/hiwire-linux-c38cdaa1-x86_64/buildroot/build/host-localedef-2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/build/locale/ld-ctype.o.dt
+-MT
+/home/ian/build/hiwire-linux-c38cdaa1-x86_64/buildroot/build/host-localedef-2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/build/locale/ld-ctype.o
+programs/ld-ctype.c: In function ?ctype_finish?:
+programs/ld-ctype.c:855:18: error: array subscript 0 is outside the bounds of
+an interior zero-length array ?unsigned char[0]? [-Werror=zero-length-bounds]
+  855 |  replace[0].bytes[0] = '?';
+      |  ~~~~~~~~~~~~~~~~^~~
+In file included from programs/repertoire.h:24,
+                 from programs/localedef.h:32,
+                 from programs/ld-ctype.c:35:
+programs/charmap.h:63:17: note: while referencing ?bytes?
+   63 |   unsigned char bytes[0];
+      |                 ^~~~~
+programs/ld-ctype.c:856:18: error: array subscript 1 is outside the bounds of
+an interior zero-length array ?unsigned char[0]? [-Werror=zero-length-bounds]
+  856 |  replace[0].bytes[1] = '\0';
+      |  ~~~~~~~~~~~~~~~~^~~
+In file included from programs/repertoire.h:24,
+                 from programs/localedef.h:32,
+                 from programs/ld-ctype.c:35:
+programs/charmap.h:63:17: note: while referencing ?bytes?
+   63 |   unsigned char bytes[0];
+      |                 ^~~~~
+cc1: all warnings being treated as errors
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7cb61e2b98..3afa45fc7f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -688,6 +688,9 @@ F:	linux/linux-ext-ev3dev-linux-drivers.mk
- F:	package/brickd/
- F:	package/ev3dev-linux-drivers/
- 
-+N:	David Pierret <david.pierret@smile.fr>
-+F:	package/bat/
-+
- N:	Davide Viti <zinosat@tiscali.it>
- F:	package/flann/
- F:	package/python-paho-mqtt/
-diff --git a/package/Config.in b/package/Config.in
-index 7b73198d50..e0fc92c347 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2385,6 +2385,7 @@ menu "System tools"
- endmenu
- 
- menu "Text editors and viewers"
-+	source "package/bat/Config.in"
- 	source "package/ed/Config.in"
- 	source "package/joe/Config.in"
- 	source "package/less/Config.in"
-diff --git a/package/bat/Config.in b/package/bat/Config.in
-new file mode 100644
-index 0000000000..51bba3eb31
---- /dev/null
-+++ b/package/bat/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_BAT
-+	bool "bat"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  A cat(1) clone with syntax highlighting and Git integration.
-+
-+	  https://github.com/sharkdp/bat
-diff --git a/package/bat/bat.hash b/package/bat/bat.hash
-new file mode 100644
-index 0000000000..14438b8a6f
---- /dev/null
-+++ b/package/bat/bat.hash
-@@ -0,0 +1,4 @@
-+# Locally generated
-+sha256 f4aee370013e2a3bc84c405738ed0ab6e334d3a9f22c18031a7ea008cd5abd2a  bat-0.13.0.tar.gz
-+sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
-+sha256 dc931b3f4376dc2b12486ded9f51487719099074587d757ea6125bb59deeb221  LICENSE-MIT
-diff --git a/package/bat/bat.mk b/package/bat/bat.mk
-new file mode 100644
-index 0000000000..89711ac33b
---- /dev/null
-+++ b/package/bat/bat.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# bat
-+#
-+################################################################################
-+
-+BAT_VERSION = 0.13.0
-+BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
-+BAT_LICENSE = Apache-2.0 or MIT
-+BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-+BAT_DEPENDENCIES = host-rustc
-+
-+BAT_CFLAGS = $(TARGET_CFLAGS)
-+
-+BAT_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
-+BAT_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
-+
-+BAT_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(BAT_CARGO_MODE)
-+
-+BAT_CARGO_OPTS = \
-+		 --bins \
-+		 --$(BAT_CARGO_MODE) \
-+		 --target=$(RUSTC_TARGET_NAME) \
-+		 --manifest-path=$(@D)/Cargo.toml
-+
-+define BAT_BUILD_CMDS
-+	# we need to use the 'env' command to set the CC_<target> variable since
-+	# the rustc_target_name contain minus characters not allowed in bash.
-+	env $(TARGET_MAKE_ENV) $(BAT_CARGO_ENV) \
-+	CC_$(RUSTC_TARGET_NAME)=$(TARGET_CC) \
-+		cargo build $(BAT_CARGO_OPTS)
-+endef
-+
-+define BAT_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/$(BAT_BIN_DIR)/bat \
-+		$(TARGET_DIR)/usr/bin/bat
-+endef
-+
-+$(eval $(generic-package))
 -- 
-2.17.1
+You are receiving this mail because:
+You are on the CC list for the bug.
