@@ -1,50 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Mar 2020 10:03:35 +0100
-Subject: [Buildroot] [git commit] package/python-pyasn1-modules: bump to
- version 0.2.8
-Message-ID: <20200327085224.8C5B9810FF@busybox.osuosl.org>
+Date: Fri, 27 Mar 2020 10:03:19 +0100
+Subject: [Buildroot] [git commit] package/python-crossbar: bump to version
+ 20.2.1
+Message-ID: <20200327085224.8287D80FA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1494c637e55949576250d7853cae9a0074b56f0
+commit: https://git.buildroot.net/buildroot/commit/?id=a3f0e7a7a12b7bdf284bb922d7f790be6522c0bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyasn1-modules/python-pyasn1-modules.hash | 6 +++---
- package/python-pyasn1-modules/python-pyasn1-modules.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-crossbar/python-crossbar.hash | 4 ++--
+ package/python-crossbar/python-crossbar.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.hash b/package/python-pyasn1-modules/python-pyasn1-modules.hash
-index 96831dc5dc..2305596585 100644
---- a/package/python-pyasn1-modules/python-pyasn1-modules.hash
-+++ b/package/python-pyasn1-modules/python-pyasn1-modules.hash
+diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
+index 903d11d330..1be4c72b76 100644
+--- a/package/python-crossbar/python-crossbar.hash
++++ b/package/python-crossbar/python-crossbar.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyasn1-modules/json
--md5	18c77d56abeef631d94f95ff2d652859  pyasn1-modules-0.2.7.tar.gz
--sha256	0c35a52e00b672f832e5846826f1fb7507907f7d52fba6faa9e3c4cbe874fe4b  pyasn1-modules-0.2.7.tar.gz
-+md5  107e1ece7d0a41d782f69f8a95a4d9bc  pyasn1-modules-0.2.8.tar.gz
-+sha256  905f84c712230b2c592c19470d3ca8d552de726050d1d1716282a1f6146be65e  pyasn1-modules-0.2.8.tar.gz
- # Locally computed sha256 checksums
--sha256	22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.txt
-+sha256  22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.txt
-diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.mk b/package/python-pyasn1-modules/python-pyasn1-modules.mk
-index afc3c363fd..9933a63aa7 100644
---- a/package/python-pyasn1-modules/python-pyasn1-modules.mk
-+++ b/package/python-pyasn1-modules/python-pyasn1-modules.mk
+ # md5, sha256 from https://pypi.org/pypi/crossbar/json
+-md5	f19fb0995f42e2970fb1b1b077b01d61  crossbar-20.1.2.tar.gz
+-sha256	3f4ee0bc73d7e6d25af74b163495eb8892bfe2f0ccbc3153dc4cf807af6163fa  crossbar-20.1.2.tar.gz
++md5  bacb1f25cbf8fcdd0568325ef04a721c  crossbar-20.2.1.tar.gz
++sha256  a63951780fde8c46834c70a637d97f3b2028da637b7a4f793b624532f7a45863  crossbar-20.2.1.tar.gz
+ # Locally computed
+ sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  crossbar/LICENSE
+diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
+index df4d7cc4d5..84d4177daa 100644
+--- a/package/python-crossbar/python-crossbar.mk
++++ b/package/python-crossbar/python-crossbar.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYASN1_MODULES_VERSION = 0.2.7
-+PYTHON_PYASN1_MODULES_VERSION = 0.2.8
- PYTHON_PYASN1_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
--PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/75/93/c51104ea6a74252957c341ccd110b65efecc18edfd386b666637d67d4d10
-+PYTHON_PYASN1_MODULES_SITE = https://files.pythonhosted.org/packages/88/87/72eb9ccf8a58021c542de2588a867dbefc7556e14b2866d1e40e9e2b587e
- PYTHON_PYASN1_MODULES_SETUP_TYPE = setuptools
- PYTHON_PYASN1_MODULES_LICENSE = BSD-2-Clause
- PYTHON_PYASN1_MODULES_LICENSE_FILES = LICENSE.txt
+-PYTHON_CROSSBAR_VERSION = 20.1.2
++PYTHON_CROSSBAR_VERSION = 20.2.1
+ PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
+-PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/2a/cd/e8be30a9ba4db52dc04e530f19a24d225d743aa36f5074ec0b3ef316637a
++PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/78/f0/82970d84abd532bdea007322b73bfe2d7762194b85155296b76ba48724e9
+ PYTHON_CROSSBAR_LICENSE = AGPL-3.0
+ PYTHON_CROSSBAR_LICENSE_FILES = crossbar/LICENSE
+ PYTHON_CROSSBAR_SETUP_TYPE = setuptools
