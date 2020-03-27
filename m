@@ -1,24 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Mar 2020 10:07:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-crossbar: bump to
- version 20.2.1
-In-Reply-To: <20200326225453.19153-1-james.hilliard1@gmail.com>
-References: <20200326225453.19153-1-james.hilliard1@gmail.com>
-Message-ID: <20200327100733.50ea9fdb@windsurf.home>
+Date: Fri, 27 Mar 2020 10:07:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-pyasn1-modules: bump to
+ version 0.2.8
+In-Reply-To: <20200326225848.40673-1-james.hilliard1@gmail.com>
+References: <20200326225848.40673-1-james.hilliard1@gmail.com>
+Message-ID: <20200327100740.3be25ba4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 26 Mar 2020 16:54:53 -0600
+On Thu, 26 Mar 2020 16:58:48 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-crossbar/python-crossbar.hash | 4 ++--
->  package/python-crossbar/python-crossbar.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/python-pyasn1-modules/python-pyasn1-modules.hash | 6 +++---
+>  package/python-pyasn1-modules/python-pyasn1-modules.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
