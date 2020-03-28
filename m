@@ -1,178 +1,162 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 28 Mar 2020 19:56:50 +0100
-Subject: [Buildroot] Failed to load libmmal.so from rpi-userland package
- via buildroot toolchain on raspberry pi 4
-In-Reply-To: <trinity-00824589-a2b1-432a-91cb-72bbd9df3da4-1585415058087@3c-app-mailcom-bs10>
-References: <CAPn7sn38WqJVgbLBkVj403GpkhcQx77HwdZ9zxEEvifO7qRbxg@mail.gmail.com>
- <20200328113133.022b01b6@gmx.net>
- <trinity-5b420b27-f59e-48e3-beee-af28dfff8d55-1585393538709@3c-app-mailcom-bs12>
- <20200328152845.055bdebc@gmx.net>
- <trinity-00824589-a2b1-432a-91cb-72bbd9df3da4-1585415058087@3c-app-mailcom-bs10>
-Message-ID: <20200328195650.52ae188e@gmx.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 28 Mar 2020 22:18:29 +0100
+Subject: [Buildroot] [v2 1/1] package/bat: new package
+In-Reply-To: <20200327174035.11503-1-david.pierret@smile.fr>
+References: <20200327174035.11503-1-david.pierret@smile.fr>
+Message-ID: <74538af2-c667-e50e-4cbb-681957f67a2d@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Dagg,
+David,
 
-On Sat, 28 Mar 2020 18:04:18 +0100, daggs <daggs@gmx.com> wrote:
+Le 27/03/2020 ? 18:40, David Pierret a ?crit?:
+> bat is a cat(1) clone with syntax highlighting and Git integration.
+> 
+> This package need rust version 1.37.0 or later
+> 
+> Signed-off-by: David Pierret <david.pierret@smile.fr>
+> 
+> ----
+> bat supports syntax highlighting for a large number of programming
+> and markup languages. He can communicates with git to show
+> modifications with respect to the index.
+> For conveignance use, bat can pipe its own output to less if the
+> output is too large for one screen.
+> 
+> v1 -> v2
+> Add selection of less out of busybox for command line option
+> compatibility
+> ---
+[...]
+> +++ b/package/bat/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_BAT
+> +	bool "bat"
+> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> +	select BR2_PACKAGE_HOST_RUSTC
+> +	# we need a full version of less
+> +	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> +	# less needs ncurses
 
-> Greetings Peter,
->
-> > Sent: Saturday, March 28, 2020 at 5:28 PM
-> > From: "Peter Seiderer" <ps.report@gmx.net>
-> > To: daggs <daggs@gmx.com>
-> > Cc: buildroot at busybox.net, "iman ahmadvand" <iman72411@gmail.com>
-> > Subject: Re: [Buildroot] Failed to load libmmal.so from rpi-userland package via buildroot toolchain on raspberry pi 4
-> >
-> > Hello Dagg,
-> >
-> > On Sat, 28 Mar 2020 12:05:38 +0100, daggs <daggs@gmx.com> wrote:
-> >
-> > > Greetings,
-> > >
-> > > > Sent: Saturday, March 28, 2020 at 1:31 PM
-> > > > From: "Peter Seiderer" <ps.report@gmx.net>
-> > > > To: "iman ahmadvand" <iman72411@gmail.com>
-> > > > Cc: buildroot at busybox.net
-> > > > Subject: Re: [Buildroot] Failed to load libmmal.so from rpi-userland package via buildroot toolchain on raspberry pi 4
-> > > >
-> > > > Hello Iman,
-> > > >
-> > > > On Sat, 28 Mar 2020 11:39:46 +0430, iman ahmadvand <iman72411@gmail.com> wrote:
-> > > >
-> > > > > Hi everyone.
-> > > > > It seems that loading the MMAL interface shared libraries from rpi-userland
-> > > > > package via simple dlopen is not possible, or more specific, the packages
-> > > > > or binaries such as VLC or VLC codec plugin (libavcodec_plugin) could not
-> > > > > load the libavcodec from FFmpeg which in turn depends on libmmal*.so
-> > > > >
-> > > > > The steps to reproduce(with BR2_PACKAGE_RPI_USERLAND enabled,
-> > > > > BR2_STRIP_strip disabled, BR2_OPTIMIZE_0 enabled):
-> > > > > git clone git://git.busybox.net/buildroot buildroot && cd buildroot && git
-> > > > > checkout 2019.11.01
-> > > > > make raspberrypi4_defconfig && make all
-> > > > >
-> > > > > Then in this image try to run a simple c routine with dlopen(), if you do
-> > > > > so, for example, ./dltest /usr/lib/libmmal.so you will end up with:
-> > > > >
-> > > > > symbol 'mmal_port_payload_alloc': can't resolve symbol
-> > > > > symbol 'mmal_port_payload_free': can't resolve symbol
-> > > > > symbol 'mmal_port_log_category': can't resolve symbol
-> > > > >
-> > > >
-> > > > Can confirm your failure...did not (yet) find out what fails exactly, but
-> > > > ldd produces the following ouput (mind the 0x00000000):
-> > > >
-> > > > 	$ ldd /usr/lib/libmmal.so
-> > > > checking sub-depends for '/usr/lib/libmmal_vc_client.so'
-> > > > checking sub-depends for '/usr/lib/libmmal_components.so'
-> > > > checking sub-depends for '/usr/lib/libvchiq_arm.so'
-> > > > checking sub-depends for '/usr/lib/libvcsm.so'
-> > > > checking sub-depends for '/usr/lib/libmmal_core.so'
-> > > > checking sub-depends for '/usr/lib/libmmal_util.so'
-> > > > checking sub-depends for '/usr/lib/libcontainers.so'
-> > > > checking sub-depends for '/usr/lib/libvcos.so'
-> > > > checking sub-depends for '/lib/libc.so.0'
-> > > >         ld-uClibc.so.1 => /lib/ld-uClibc.so.1 (0xb6f8b000)
-> > > >         libmmal_vc_client.so => /usr/lib/libmmal_vc_client.so (0x00000000)
-> > > >         libmmal_components.so => /usr/lib/libmmal_components.so (0x00000000)
-> > > >         libvchiq_arm.so => /usr/lib/libvchiq_arm.so (0x00000000)
-> > > >         libvcsm.so => /usr/lib/libvcsm.so (0x00000000)
-> > > >         libmmal_core.so => /usr/lib/libmmal_core.so (0x00000000)
-> > > >         libmmal_util.so => /usr/lib/libmmal_util.so (0x00000000)
-> > > >         libcontainers.so => /usr/lib/libcontainers.so (0x00000000)
-> > > >         libvcos.so => /usr/lib/libvcos.so (0x00000000)
-> > > >         libc.so.0 => /lib/libc.so.0 (0x00000000)
-> > > >         /lib/ld-uClibc.so.1 => /lib/ld-uClibc.so.1 (0x00000000)
-> > > >
-> > > >
-> > > > After changing the buildroot toolchain from uclibc to glibc (and a full
-> > > > re-build) dlopen() of /usr/lib/libmmal.so works and ldd produces the
-> > > > following output:
-> > > >
-> > > > 	$ ldd /usr/lib/libmmal.so
-> > > > 	linux-vdso.so.1 (0xbea59000)
-> > > > 	libmmal_vc_client.so => /usr/lib/libmmal_vc_client.so (0xb6f5f000)
-> > > > 	libmmal_components.so => /usr/lib/libmmal_components.so (0xb6f44000)
-> > > > 	libvchiq_arm.so => /usr/lib/libvchiq_arm.so (0xb6f2e000)
-> > > > 	libvcsm.so => /usr/lib/libvcsm.so (0xb6f14000)
-> > > > 	libmmal_core.so => /usr/lib/libmmal_core.so (0xb6ef6000)
-> > > > 	libmmal_util.so => /usr/lib/libmmal_util.so (0xb6ed8000)
-> > > > 	libcontainers.so => /usr/lib/libcontainers.so (0xb6eb5000)
-> > > > 	libvcos.so => /usr/lib/libvcos.so (0xb6e9c000)
-> > > > 	libpthread.so.0 => /lib/libpthread.so.0 (0xb6e71000)
-> > > > 	libdl.so.2 => /lib/libdl.so.2 (0xb6e5e000)
-> > > > 	librt.so.1 => /lib/librt.so.1 (0xb6e47000)
-> > > > 	libc.so.6 => /lib/libc.so.6 (0xb6cfb000)
-> > > > 	/lib/ld-linux-armhf.so.3 (0xb6f8f000)
-> > > >
-> > > > Regards,
-> > > > Peter
-> > > >
-> > > >
-> > > > > Or for another proof of the issue, you can run VLC with X11 to play an
-> > > > > MPEG-4 video, and you will  end up with VLC could not load the codec module
-> > > > > because of the same thing:
-> > > > >
-> > > > > main debug: loading plugins cache file /usr/lib/vlc/plugins/plugins.dat
-> > > > > main warning: cannot read /usr/lib/vlc/plugins/plugins.dat: No such
-> > > > > file or directory
-> > > > > main debug: recursively browsing `/usr/lib/vlc/plugins'
-> > > > > main warning: cannot load module
-> > > > > `/usr/lib/vlc/plugins/codec/libavcodec_plugin.so' ((null)
-> > > > >
-> > > > > Any idea about this?
-> > > > >
-> > > > > Best Regards.
-> > > > > IMAN.
-> > >
-> > > I wonder, how do you run ldd on the pi4 with the buildroot env? I'm trying to debug my mmal issue too.
-> >
-> > Exactly with the command line as given above 'ldd /usr/lib/libmmal.so' on the
-> > target (here pi4), what do your mean with buildroot env (do not mix 'ldd -
-> > print shared object dependencies' with 'ld - The GNU linker')?
-> >
-> > Regards,
-> > Peter
-> >
->
-> here is what I get:
-> <root@TvHeadend_Server: /home/igor> ldd /usr/lib/libmmal.so
-> bash: ldd: command not found
-> <root@TvHeadend_Server: /home/igor> cat /etc/os-release
-> NAME=Buildroot
-> VERSION=2020.02-rc2-00018-g16d3e1734e-dirty
-> ID=buildroot
-> VERSION_ID=2020.02-rc2
-> PRETTY_NAME="Buildroot 2020.02-rc2"
-> <root@TvHeadend_Server: /home/igor> uname  -a
-> Linux TvHeadend_Server 4.19.97-v8 #1 SMP PREEMPT Fri Feb 28 15:16:43 IST 2020 aarch64 GNU/Linux
-> <root@TvHeadend_Server: /home/igor> ls -l /usr/lib/libmmal*
-> -rwxr-xr-x    1 root     root         14192 Feb 28 15:21 /usr/lib/libmmal.so
-> -rwxr-xr-x    1 root     root         51576 Feb 28 15:21 /usr/lib/libmmal_components.so
-> -rwxr-xr-x    1 root     root         72344 Feb 28 15:21 /usr/lib/libmmal_core.so
-> -rwxr-xr-x    1 root     root         72320 Feb 28 15:21 /usr/lib/libmmal_util.so
-> -rwxr-xr-x    1 root     root         43520 Feb 28 15:21 /usr/lib/libmmal_vc_client.so
->
-> looks like I'm missing something...
+This comment is useless.
 
-Then your are using for sure something different than a plain raspberrypi4_defconfig
-with BR2_PACKAGE_RPI_USERLAND enabled (or there is a differnce between
-2020.02-rc2 (used by your, why rc2?) and git master (used by me)....
+> +	select BR2_PACKAGE_NCURSES
+> +	select BR2_PACKAGE_LESS
 
-When in doubt provide your .config (or defconfig) file...
+Add a comment "# Runtime dependency" for each.
 
-Regards,
-Peter
+> +	help
+> +	  A cat(1) clone with syntax highlighting and Git integration.
+> +
+> +	  https://github.com/sharkdp/bat
+> diff --git a/package/bat/bat.hash b/package/bat/bat.hash
+> new file mode 100644
+> index 0000000000..14438b8a6f
+> --- /dev/null
+> +++ b/package/bat/bat.hash
+> @@ -0,0 +1,4 @@
+> +# Locally generated
+> +sha256 f4aee370013e2a3bc84c405738ed0ab6e334d3a9f22c18031a7ea008cd5abd2a  bat-0.13.0.tar.gz
+> +sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
+> +sha256 dc931b3f4376dc2b12486ded9f51487719099074587d757ea6125bb59deeb221  LICENSE-MIT
+> diff --git a/package/bat/bat.mk b/package/bat/bat.mk
+> new file mode 100644
+> index 0000000000..89711ac33b
+> --- /dev/null
+> +++ b/package/bat/bat.mk
+> @@ -0,0 +1,39 @@
+> +################################################################################
+> +#
+> +# bat
+> +#
+> +################################################################################
+> +
+> +BAT_VERSION = 0.13.0
+> +BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
+> +BAT_LICENSE = Apache-2.0 or MIT
+> +BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> +BAT_DEPENDENCIES = host-rustc
+> +
+> +BAT_CFLAGS = $(TARGET_CFLAGS)
+> +
+> +BAT_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+> +BAT_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
+> +
+> +BAT_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(BAT_CARGO_MODE)
+> +
+> +BAT_CARGO_OPTS = \
+> +		 --bins \
+> +		 --$(BAT_CARGO_MODE) \
+> +		 --target=$(RUSTC_TARGET_NAME) \
+> +		 --manifest-path=$(@D)/Cargo.toml
+> +
+> +define BAT_BUILD_CMDS
+> +	# we need to use the 'env' command to set the CC_<target> variable since
+> +	# the rustc_target_name contain minus characters not allowed in bash.
+> +	env $(TARGET_MAKE_ENV) $(BAT_CARGO_ENV) \
+> +	CC_$(RUSTC_TARGET_NAME)=$(TARGET_CC) \
+> +		cargo build $(BAT_CARGO_OPTS)
+> +endef
 
->
-> Thanks,
->
-> Dagg.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+David, can you add some details about the issue with CC_<target> ?
+
+It would be great if you can use the upcoming cargo package infra, but this
+infra doesn't handle CC_<target>.
+
+As you noticed the build fail because we need to set CC_aarch64-none-linux-gnu
+environment variable for aarch64 target build.
+
+Arnout, Patrick. It seems David discovered a cross-compilation issue with cargo.
+I reproduced the issue, cargo is using the host compiler instead of the
+cross-compiler:
+
+error: failed to run custom build command for `libloading v0.5.2`
+
+Caused by:
+  process didn't exit successfully:
+`/home/naourr/buildroot/test/bat/build/bat-0.13.0/target/release/build/libloading-0c8de6c7b10afd2b/build-script-build`
+(exit code: 1)
+--- stdout
+cargo:rustc-link-lib=dl
+TARGET = Some("x86_64-unknown-linux-gnu")
+OPT_LEVEL = Some("3")
+HOST = Some("x86_64-unknown-linux-gnu")
+CC_x86_64-unknown-linux-gnu = None
+CC_x86_64_unknown_linux_gnu = None
+HOST_CC = None
+CC = Some("/home/naourr/buildroot/test/bat/host/bin/aarch64-none-linux-gnu-gcc")
+CFLAGS_x86_64-unknown-linux-gnu = None
+CFLAGS_x86_64_unknown_linux_gnu = None
+HOST_CFLAGS = None
+CFLAGS = Some("-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-Os  ")
+CRATE_CC_NO_DEFAULTS = None
+DEBUG = Some("false")
+CARGO_CFG_TARGET_FEATURE = Some("fxsr,sse,sse2")
+running: "/home/naourr/buildroot/test/bat/host/bin/aarch64-none-linux-gnu-gcc"
+"-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "-m64"
+"-D_LARGEFILE_SOURCE" "-D_LARGEFILE64_SOURCE" "-D_FILE_OFFSET_BITS=64" "-Os"
+"-o"
+"/home/naourr/buildroot/test/bat/build/bat-0.13.0/target/release/build/libloading-f48b6720ea7caaa6/out/src/os/unix/global_static.o"
+"-c" "src/os/unix/global_static.c"
+cargo:warning=aarch64-none-linux-gnu-gcc: error: unrecognized command line
+option ?-m64?
+exit code: 1
+
+See:
+https://stackoverflow.com/questions/54029117/why-is-the-target-environment-variable-reset-when-compiling-a-rust-program-in-a
+
+Best regards,
+Romain
+
+> +
+> +define BAT_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/$(BAT_BIN_DIR)/bat \
+> +		$(TARGET_DIR)/usr/bin/bat
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
