@@ -1,8 +1,9 @@
 From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
-Date: Sat, 28 Mar 2020 10:34:28 +0530
-Subject: [Buildroot] [PATCH v5 0/3] Fix ATF v2.2 build for rk3399,
- add roc-rk3399-pc board
-Message-ID: <1585371871-29406-1-git-send-email-sunil@amarulasolutions.com>
+Date: Sat, 28 Mar 2020 10:34:29 +0530
+Subject: [Buildroot] [PATCH v5 1/3] package/arm-gnu-a-toolchain: new package
+In-Reply-To: <1585371871-29406-1-git-send-email-sunil@amarulasolutions.com>
+References: <1585371871-29406-1-git-send-email-sunil@amarulasolutions.com>
+Message-ID: <1585371871-29406-2-git-send-email-sunil@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,89 +12,126 @@ To: buildroot@busybox.net
 
 From: Suniel Mahesh <sunil@amarulasolutions.com>
 
-This patch set does the following:
-Fix ATF v2.2 build for rk3399 SoC's.
-Add arm-gnu-a-toolchain package, which acts as a secondary bare metal toolchain
-to build ATF for Rockchip rk3399 platform (has a cortex-m0 core). The required
-pre-built toolchain is taken from ARM developers site and installed in host filesystem only.
-Add config options for building ATF, targets must enable these configs based on their
-requirements in board defconfig.
-Add new defconfig file for roc-rk3399-pc.
-Update DEVELOPERS file.
+arm trusted firmware requires a bare metal toolchain to build platforms which
+host cortex-m series core, like Rockchip rk3399 which has a cortex-m0 core.
+Add pre-built cross-compilation ARM-A bare metal toolchain to avoid the following
+build error.
 
-The patch set is tested on roc-rk3399-pc, a rk3399 based target. Compile tested on orangepi.
+make[3]: arm-none-eabi-gcc: Command not found
+
+pre-built bate metal ARM GNU-A toolchain installs into the host file system folder
+/opt/gcc-arm-none-eabi.
+
+https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz
+
+Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
 ---
 Changes for v5:
-- Dropped patch #1(Disable bin copy for rk3399), as it is no longer needed.
-- Based on suggestions from thomas pettazzoni and Sergey, instead of encoding
-  platform-specific stuff in config files, introduced new config options which
-  need to be enabled in board defconfig as per requirement.
-- patch #2(new package) is now patch #1
-- patch #3(add support for rockchip rk3399), title and description is changed and
-  is now patch #2
-- patch #4(new defconfig) is now patch #3
+- Introduced a BR2_PACKAGE_HOST_ARM_GNU_A_TOOLCHAIN config option
+  based on discussions from Thomas Pettazzoni
+- Added to package/Config.in.host
 
 Changes for v4:
-- As per suggestions from Heiko Thiery and Thomas Pettazoni, changed DEVELOPERS file accordingly.
-- Updated Developers file accordingly whenever a new package(patch #2) or target is added(patch #4).
-- dropped patch #5, as it is no longer needed.
-- Its a four patch series like earlier v2 and v1.
+- Upated DEVELOPERS file as suggested by Heiko Thiery and Thomas Pettazoni
 
 Changes for v3:
-Added one patch to this series. Split one changeset from patch #4 and made
-it patch #5
-patch #1 (Disable bin copy for rk3399)
-- Based on suggestions from sergey and thomas, instead of encoding
-platform-specific stuff in config files, made changes in .mk files
-based on the build flow.
-patch #2 (new package)
 - no change
-patch #3 (add support for rockchip rk3399)
-- no change
-patch #4 (new defconfig)
-- dropped DEVELOPERS file
-patch #5 (Add me as a co-maintainer)
-- seperated this changeset
 
 Changes for v2:
-Changed cover letter description to add more meaning.
-patch #1 (Disable bin copy for rk3399)
-- Added Cc tag
-patch #2 (new package)
-- More Description added to justify why a secondary bare metal toolchain is required 
-patch #3 (add support for rockchip rk3399)
-- no change
-patch #4 (new defconfig)
-- updated readme.txt to help with the build/boot process 
-- modified file permissions of post-build.sh to 'x'
-
-Suniel Mahesh (3):
-  package/arm-gnu-a-toolchain: new package
-  boot/arm-trusted-firmware: add optional host-arm-gnu-a-toolchain
-    dependency
-  configs/roc-rk3399-pc: new defconfig
-
- .gitlab-ci.yml                                     |  1 +
- DEVELOPERS                                         |  5 ++
- board/firefly/roc-rk3399-pc/extlinux.conf          |  4 ++
- board/firefly/roc-rk3399-pc/genimage.cfg           | 22 +++++++++
- board/firefly/roc-rk3399-pc/post-build.sh          |  5 ++
- board/firefly/roc-rk3399-pc/readme.txt             | 48 +++++++++++++++++++
- boot/arm-trusted-firmware/Config.in                |  6 +++
- configs/roc_pc_rk3399_defconfig                    | 56 ++++++++++++++++++++++
+- Added lines in description regarding why bare metal toolchain is required,
+  as suggested by Jagan and pointed out by Sergey
+---
+ DEVELOPERS                                         |  3 +++
  package/Config.in.host                             |  1 +
- package/arm-gnu-a-toolchain/Config.in.host         |  9 ++++
- .../arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash   |  2 +
- package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk | 27 +++++++++++
- 12 files changed, 186 insertions(+)
- create mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf
- create mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg
- create mode 100755 board/firefly/roc-rk3399-pc/post-build.sh
- create mode 100644 board/firefly/roc-rk3399-pc/readme.txt
- create mode 100644 configs/roc_pc_rk3399_defconfig
+ package/arm-gnu-a-toolchain/Config.in.host         |  9 ++++++++
+ .../arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash   |  2 ++
+ package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk | 27 ++++++++++++++++++++++
+ 5 files changed, 42 insertions(+)
  create mode 100644 package/arm-gnu-a-toolchain/Config.in.host
  create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
  create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1fb4e65..ce1a761 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2389,6 +2389,9 @@ N:	Steven Noonan <steven@uplinklabs.net>
+ F:	package/hwloc/
+ F:	package/powertop/
+ 
++N:	Suniel Mahesh <sunil@amarulasolutions.com>
++F:	package/arm-gnu-a-toolchain
++
+ N:	Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+ F:	package/lcdproc/
+ F:	package/python-influxdb/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index eb8f63f..19dcab6 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -2,6 +2,7 @@ menu "Host utilities"
+ 
+ 	source "package/aespipe/Config.in.host"
+ 	source "package/android-tools/Config.in.host"
++	source "package/arm-gnu-a-toolchain/Config.in.host"
+ 	source "package/btrfs-progs/Config.in.host"
+ 	source "package/cargo/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+diff --git a/package/arm-gnu-a-toolchain/Config.in.host b/package/arm-gnu-a-toolchain/Config.in.host
+new file mode 100644
+index 0000000..07b73a7
+--- /dev/null
++++ b/package/arm-gnu-a-toolchain/Config.in.host
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HOST_ARM_GNU_A_TOOLCHAIN
++	bool "host arm-gnu-a-toolchain"
++	help
++	  arm trusted firmware requires a bare metal toolchain to build some platforms
++	  which host cortex-m series core, for instance rockchip rk3399 has a cortex-m0 core. 
++	  This package installs a pre-built cross-compilation ARM-A bare metal toolchain for
++	  the host machine.
++
++	  https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz
+diff --git a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
+new file mode 100644
+index 0000000..b18e56c
+--- /dev/null
++++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 ac952d89ae0fc3543e81099e7d34917efc621f5def112eee843fd1ce755eca8c  gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz
+diff --git a/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
+new file mode 100644
+index 0000000..cbe8aba
+--- /dev/null
++++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# arm-gnu-a-toolchain
++#
++################################################################################
++
++ARM_GNU_A_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel
++ARM_GNU_A_TOOLCHAIN_VERSION = 9.2-2019.12
++ARM_GNU_A_TOOLCHAIN_SOURCE = gcc-arm-$(ARM_GNU_A_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
++ARM_GNU_A_TOOLCHAIN_LICENSE = GPL-3.0+
++ARM_GNU_A_TOOLCHAIN_LICENSE_FILES =
++
++HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/gcc-arm-none-eabi
++
++define HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_CMDS
++	rm -rf $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
++	mkdir -p $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
++	cp -rf $(@D)/* $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
++
++	cd $(HOST_DIR)/bin && \
++	for i in $(HOST_DIR)/opt/gcc-arm-none-eabi/bin/*; do \
++		ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
++	done
++
++endef
++
++$(eval $(host-generic-package))
 -- 
 2.7.4
