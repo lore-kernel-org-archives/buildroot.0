@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Mar 2020 08:39:15 +0100
-Subject: [Buildroot] [PATCH 2/3] Makefile: fix package file list if
- FOO_SUBDIR is set
-In-Reply-To: <20200318155814.567-2-patrickdepinguin@gmail.com> (Thomas De
- Schampheleire's message of "Wed, 18 Mar 2020 16:58:12 +0100")
+Date: Sat, 28 Mar 2020 08:39:46 +0100
+Subject: [Buildroot] [PATCH 3/3] Makefile: assemble package file lists
+ before calling post-build scripts
+In-Reply-To: <20200318155814.567-3-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Wed, 18 Mar 2020 16:58:13 +0100")
 References: <20200318155814.567-1-patrickdepinguin@gmail.com>
- <20200318155814.567-2-patrickdepinguin@gmail.com>
-Message-ID: <87v9mpc4ik.fsf@dell.be.48ers.dk>
+ <20200318155814.567-3-patrickdepinguin@gmail.com>
+Message-ID: <87r1xdc4hp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +16,16 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
  > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > If a package sets a FOO_SUBDIR (meaning its sources are not under
- > output/build/foo-123 but under output/build/foo-123/$(FOO_SUBDIR)), the
- > .files-list.txt file were also created under FOO_SUBDIR, due to which the
- > logic in the Makefile would not find it.
+ > Post-build scripts may want to do something based on the list of files
+ > installed by a package. However, since commit
+ > 0e2be4db8ab01d479177a3a187c22525752195ae the final packages-file-lists.txt
+ > file is only created _after_ the post-build scripts.
 
- > Change the instrumentation steps so that the file list is directly under the
- > package dir, ignoring the subdir.
+ > Move the assembly of the file lists upwards, before the post-build scripts.
 
  > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
 Committed to 2020.02.x, thanks.
-
-This is not applicable to the older releases, right?
 
 -- 
 Bye, Peter Korsgaard
