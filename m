@@ -1,82 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Mar 2020 14:40:47 +0100
-Subject: [Buildroot] [git commit] package/pure-ftpd: fix CVE-2020-9274
-Message-ID: <20200328134031.D5AA5888C2@busybox.osuosl.org>
+Date: Sat, 28 Mar 2020 14:41:28 +0100
+Subject: [Buildroot] [git commit] package/libical: fix CVE-2016-9584
+Message-ID: <20200328134031.DEF0B888C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d8426b32cb030888cbd3d8abdc2b4dc70e987c8
+commit: https://git.buildroot.net/buildroot/commit/?id=69b51259a2cccbbeff106b7d3536832ab999c0f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-An issue was discovered in Pure-FTPd 1.0.49. An uninitialized pointer
-vulnerability has been detected in the diraliases linked list. When the
-*lookup_alias(const char alias) or print_aliases(void) function is
-called, they fail to correctly detect the end of the linked list and try
-to access a non-existent list member. This is related to init_aliases in
-diraliases.c.
+libical allows remote attackers to cause a denial of service
+(use-after-free) and possibly read heap memory via a crafted ics file.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...s-always-set-the-tail-of-the-list-to-NULL.patch | 35 ++++++++++++++++++++++
- package/pure-ftpd/pure-ftpd.mk                     |  3 ++
- 2 files changed, 38 insertions(+)
+ ...stattype_from_string-copy-the-reqstattype.patch | 27 ++++++++++++++++++++++
+ package/libical/libical.mk                         |  3 +++
+ 2 files changed, 30 insertions(+)
 
-diff --git a/package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch b/package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
+diff --git a/package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch b/package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
 new file mode 100644
-index 0000000000..6c58eb74ae
+index 0000000000..0d74835e44
 --- /dev/null
-+++ b/package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
-@@ -0,0 +1,35 @@
-+From 8d0d42542e2cb7a56d645fbe4d0ef436e38bcefa Mon Sep 17 00:00:00 2001
-+From: Frank Denis <github@pureftpd.org>
-+Date: Tue, 18 Feb 2020 18:36:58 +0100
-+Subject: [PATCH] diraliases: always set the tail of the list to NULL
++++ b/package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
+@@ -0,0 +1,27 @@
++From 6b9438d746cec6e4e632d78c5244f4be6314d1c9 Mon Sep 17 00:00:00 2001
++From: Allen Winter <allen.winter@kdab.com>
++Date: Sun, 28 May 2017 12:51:10 -0400
++Subject: [PATCH] icaltypes.c - icalreqstattype_from_string(), copy the
++ reqstattype's debug string into its own memory in the ring buffer.
 +
-+Spotted and reported by Antonio Norales from GitHub Security Labs.
-+Thanks!
-+
++Issue#253
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/jedisct1/pure-ftpd/commit/8d0d42542e2cb7a56d645fbe4d0ef436e38bcefa]
++[Retrieved (and backported) from:
++https://github.com/libical/libical/commit/6b9438d746cec6e4e632d78c5244f4be6314d1c9]
 +---
-+ src/diraliases.c | 2 +-
++ src/libical/icaltypes.c | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/diraliases.c b/src/diraliases.c
-+index 4002a36..fb70273 100644
-+--- a/src/diraliases.c
-++++ b/src/diraliases.c
-+@@ -93,7 +93,6 @@ int init_aliases(void)
-+                 (tail->dir = strdup(dir)) == NULL) {
-+                 die_mem();
-+             }
-+-            tail->next = NULL;
-+         } else {
-+             DirAlias *curr;
++diff --git a/src/libical/icaltypes.c b/src/libical/icaltypes.c
++index 70c50d29..85c33545 100644
++--- a/src/libical/icaltypes.c
+++++ b/src/libical/icaltypes.c
++@@ -140,7 +140,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
 + 
-+@@ -105,6 +104,7 @@ int init_aliases(void)
-+             tail->next = curr;
-+             tail = curr;
-+         }
-++        tail->next = NULL;
-+     }
-+     fclose(fp);
-+     aliases_up++;
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 0ef9a35250..7b7c7d9637 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -17,6 +17,9 @@ PURE_FTPD_IGNORE_CVES += CVE-2019-20176
- # 0002-pure_strcmp-len-s2-can-be-len-s1.patch
- PURE_FTPD_IGNORE_CVES += CVE-2020-9365
++   p2 = strchr(p1+1,';');
++   if (p2 != 0 && *p2 != 0){
++-    stat.debug = p2+1;
+++    stat.debug = icalmemory_tmp_copy(p2+1);
++   } 
++ 
++   return stat;
+diff --git a/package/libical/libical.mk b/package/libical/libical.mk
+index 7125aa8b19..f9a266026e 100644
+--- a/package/libical/libical.mk
++++ b/package/libical/libical.mk
+@@ -10,6 +10,9 @@ LIBICAL_INSTALL_STAGING = YES
+ LIBICAL_LICENSE = MPL-1.0 or LGPL-2.1
+ LIBICAL_LICENSE_FILES = LICENSE
  
-+# 0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
-+PURE_FTPD_IGNORE_CVES += CVE-2020-9274
++# 0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
++LIBICAL_IGNORE_CVES += CVE-2016-9584
 +
- PURE_FTPD_CONF_OPTS = \
- 	--with-altlog \
- 	--with-puredb
+ # building without this option is broken, it is used by
+ # Gentoo/alpinelinux as well
+ LIBICAL_CONF_OPTS = -DSHARED_ONLY=true
