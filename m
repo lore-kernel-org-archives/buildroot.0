@@ -1,48 +1,69 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 28 Mar 2020 12:01:08 +0300
-Subject: [Buildroot] scripts invoking code outside the per-package
- directory
-In-Reply-To: <CALFsTFUwPxA=-YP3TEQ=3nLG1UpONffiAs_NUXnzqOdpffh_qQ@mail.gmail.com>
-References: <CALFsTFUwPxA=-YP3TEQ=3nLG1UpONffiAs_NUXnzqOdpffh_qQ@mail.gmail.com>
-Message-ID: <CALFsTFUCiHEXKOn0jh9UcBSkzk5FerQf=X8Mpgc6Hf4HXRD-ew@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Mar 2020 10:36:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libical: fix CVE-2016-9584
+Message-ID: <20200328093647.959215-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Anyone?
+libical allows remote attackers to cause a denial of service
+(use-after-free) and possibly read heap memory via a crafted ics file.
 
-On Tue, Mar 17, 2020 at 9:58 PM Asaf Kahlon <asafka7@gmail.com> wrote:
->
-> Hello,
->
-> Recently, I upgraded my Buildroot version from 2019.11 to 2020.02 and
-> I tried to use per-package directories and parallel build.
-> My compilation has failed because:
-> * I have a host python package (let's call it "package A") which
-> installs a console script, which loads registered entry points and
-> does something.
-> * I have some other host python packages which register entry points
-> for package A.
-> * When a package wants to use the console script created by package A
-> - the registered entry points cannot be found.
-> After a little investigation I found out that the first line of the
-> console script instructs it to use the python interpreter of package A
-> (something like "#!<Package A per-package dir>/host/usr/bin/python). I
-> run a small grep and found it's not the only case (another one is the
-> easy_install utility, provided by setuptools).
-> I also managed to "solve" the problem by adding a configure step in
-> pkg-generic similar to the $(SED) we currently have on
-> PKG_PYTHON_FIXUP_SYSCONFIGDATA (scanning $(HOST_DIR)/bin and
-> $(HOST_DIR)/usr/bin), but I wonder if running this operation for
-> _every_ package is not too aggressive.
->
-> I think the problem is a little broader, because even without my
-> specific problem, which fails the compilation, we are probably running
-> console scripts which invokes code outside from the per-package
-> directory.
-> Any ideas for solving this issue?
->
-> Thanks,
-> Asaf.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ype_from_string-copy-the-reqstattype.patch | 27 +++++++++++++++++++
+ package/libical/libical.mk                    |  3 +++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
+
+diff --git a/package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch b/package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
+new file mode 100644
+index 0000000000..0d74835e44
+--- /dev/null
++++ b/package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
+@@ -0,0 +1,27 @@
++From 6b9438d746cec6e4e632d78c5244f4be6314d1c9 Mon Sep 17 00:00:00 2001
++From: Allen Winter <allen.winter@kdab.com>
++Date: Sun, 28 May 2017 12:51:10 -0400
++Subject: [PATCH] icaltypes.c - icalreqstattype_from_string(), copy the
++ reqstattype's debug string into its own memory in the ring buffer.
++
++Issue#253
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved (and backported) from:
++https://github.com/libical/libical/commit/6b9438d746cec6e4e632d78c5244f4be6314d1c9]
++---
++ src/libical/icaltypes.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/libical/icaltypes.c b/src/libical/icaltypes.c
++index 70c50d29..85c33545 100644
++--- a/src/libical/icaltypes.c
+++++ b/src/libical/icaltypes.c
++@@ -140,7 +140,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
++ 
++   p2 = strchr(p1+1,';');
++   if (p2 != 0 && *p2 != 0){
++-    stat.debug = p2+1;
+++    stat.debug = icalmemory_tmp_copy(p2+1);
++   } 
++ 
++   return stat;
+diff --git a/package/libical/libical.mk b/package/libical/libical.mk
+index 7125aa8b19..f9a266026e 100644
+--- a/package/libical/libical.mk
++++ b/package/libical/libical.mk
+@@ -10,6 +10,9 @@ LIBICAL_INSTALL_STAGING = YES
+ LIBICAL_LICENSE = MPL-1.0 or LGPL-2.1
+ LIBICAL_LICENSE_FILES = LICENSE
+ 
++# 0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
++LIBICAL_IGNORE_CVES += CVE-2016-9584
++
+ # building without this option is broken, it is used by
+ # Gentoo/alpinelinux as well
+ LIBICAL_CONF_OPTS = -DSHARED_ONLY=true
+-- 
+2.25.1
