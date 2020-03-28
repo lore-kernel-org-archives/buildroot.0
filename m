@@ -1,70 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Mar 2020 14:41:28 +0100
-Subject: [Buildroot] [git commit] package/libical: fix CVE-2016-9584
-Message-ID: <20200328134031.DEF0B888C2@busybox.osuosl.org>
+Date: Sat, 28 Mar 2020 14:53:50 +0100
+Subject: [Buildroot] [git commit] package/lz4: annotate CVE-2014-4715
+Message-ID: <20200328134031.E7E57888C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69b51259a2cccbbeff106b7d3536832ab999c0f1
+commit: https://git.buildroot.net/buildroot/commit/?id=45db4bb08e3e550db483d8745fe8aaede2fa7e98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libical allows remote attackers to cause a denial of service
-(use-after-free) and possibly read heap memory via a crafted ics file.
+CVE-2014-4715 is misclassified (by our CVE tracker) as affecting
+version 1.9.2, while in fact this issue has been fixed since lz4-r130:
+https://github.com/lz4/lz4/commit/140e6e72ddb6fc5f7cd28ce0c8ec3812ef4a9c08
+
+See https://github.com/lz4/lz4/issues/818
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...stattype_from_string-copy-the-reqstattype.patch | 27 ++++++++++++++++++++++
- package/libical/libical.mk                         |  3 +++
- 2 files changed, 30 insertions(+)
+ package/lz4/lz4.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch b/package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
-new file mode 100644
-index 0000000000..0d74835e44
---- /dev/null
-+++ b/package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
-@@ -0,0 +1,27 @@
-+From 6b9438d746cec6e4e632d78c5244f4be6314d1c9 Mon Sep 17 00:00:00 2001
-+From: Allen Winter <allen.winter@kdab.com>
-+Date: Sun, 28 May 2017 12:51:10 -0400
-+Subject: [PATCH] icaltypes.c - icalreqstattype_from_string(), copy the
-+ reqstattype's debug string into its own memory in the ring buffer.
-+
-+Issue#253
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved (and backported) from:
-+https://github.com/libical/libical/commit/6b9438d746cec6e4e632d78c5244f4be6314d1c9]
-+---
-+ src/libical/icaltypes.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/libical/icaltypes.c b/src/libical/icaltypes.c
-+index 70c50d29..85c33545 100644
-+--- a/src/libical/icaltypes.c
-++++ b/src/libical/icaltypes.c
-+@@ -140,7 +140,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
-+ 
-+   p2 = strchr(p1+1,';');
-+   if (p2 != 0 && *p2 != 0){
-+-    stat.debug = p2+1;
-++    stat.debug = icalmemory_tmp_copy(p2+1);
-+   } 
-+ 
-+   return stat;
-diff --git a/package/libical/libical.mk b/package/libical/libical.mk
-index 7125aa8b19..f9a266026e 100644
---- a/package/libical/libical.mk
-+++ b/package/libical/libical.mk
-@@ -10,6 +10,9 @@ LIBICAL_INSTALL_STAGING = YES
- LIBICAL_LICENSE = MPL-1.0 or LGPL-2.1
- LIBICAL_LICENSE_FILES = LICENSE
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index 2a658fbba5..1d32666ccc 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -10,6 +10,12 @@ LZ4_INSTALL_STAGING = YES
+ LZ4_LICENSE = BSD-2-Clause (library), GPL-2.0+ (programs)
+ LZ4_LICENSE_FILES = lib/LICENSE programs/COPYING
  
-+# 0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
-+LIBICAL_IGNORE_CVES += CVE-2016-9584
++# CVE-2014-4715 is misclassified (by our CVE tracker) as affecting version
++# 1.9.2, while in fact this issue has been fixed since lz4-r130:
++# https://github.com/lz4/lz4/commit/140e6e72ddb6fc5f7cd28ce0c8ec3812ef4a9c08
++# See https://github.com/lz4/lz4/issues/818
++LZ4_IGNORE_CVES += CVE-2014-4715
 +
- # building without this option is broken, it is used by
- # Gentoo/alpinelinux as well
- LIBICAL_CONF_OPTS = -DSHARED_ONLY=true
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LZ4_MAKE_OPTS += BUILD_SHARED=no
+ else ifeq ($(BR2_SHARED_LIBS),y)
