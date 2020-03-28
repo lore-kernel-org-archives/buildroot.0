@@ -1,81 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 28 Mar 2020 10:00:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pure-ftpd: fix CVE-2020-9274
-Message-ID: <20200328090042.950156-1-fontaine.fabrice@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 28 Mar 2020 12:01:08 +0300
+Subject: [Buildroot] scripts invoking code outside the per-package
+ directory
+In-Reply-To: <CALFsTFUwPxA=-YP3TEQ=3nLG1UpONffiAs_NUXnzqOdpffh_qQ@mail.gmail.com>
+References: <CALFsTFUwPxA=-YP3TEQ=3nLG1UpONffiAs_NUXnzqOdpffh_qQ@mail.gmail.com>
+Message-ID: <CALFsTFUCiHEXKOn0jh9UcBSkzk5FerQf=X8Mpgc6Hf4HXRD-ew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An issue was discovered in Pure-FTPd 1.0.49. An uninitialized pointer
-vulnerability has been detected in the diraliases linked list. When the
-*lookup_alias(const char alias) or print_aliases(void) function is
-called, they fail to correctly detect the end of the linked list and try
-to access a non-existent list member. This is related to init_aliases in
-diraliases.c.
+Anyone?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ays-set-the-tail-of-the-list-to-NULL.patch | 35 +++++++++++++++++++
- package/pure-ftpd/pure-ftpd.mk                |  3 ++
- 2 files changed, 38 insertions(+)
- create mode 100644 package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
-
-diff --git a/package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch b/package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
-new file mode 100644
-index 0000000000..6c58eb74ae
---- /dev/null
-+++ b/package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
-@@ -0,0 +1,35 @@
-+From 8d0d42542e2cb7a56d645fbe4d0ef436e38bcefa Mon Sep 17 00:00:00 2001
-+From: Frank Denis <github@pureftpd.org>
-+Date: Tue, 18 Feb 2020 18:36:58 +0100
-+Subject: [PATCH] diraliases: always set the tail of the list to NULL
-+
-+Spotted and reported by Antonio Norales from GitHub Security Labs.
-+Thanks!
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/jedisct1/pure-ftpd/commit/8d0d42542e2cb7a56d645fbe4d0ef436e38bcefa]
-+---
-+ src/diraliases.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/diraliases.c b/src/diraliases.c
-+index 4002a36..fb70273 100644
-+--- a/src/diraliases.c
-++++ b/src/diraliases.c
-+@@ -93,7 +93,6 @@ int init_aliases(void)
-+                 (tail->dir = strdup(dir)) == NULL) {
-+                 die_mem();
-+             }
-+-            tail->next = NULL;
-+         } else {
-+             DirAlias *curr;
-+ 
-+@@ -105,6 +104,7 @@ int init_aliases(void)
-+             tail->next = curr;
-+             tail = curr;
-+         }
-++        tail->next = NULL;
-+     }
-+     fclose(fp);
-+     aliases_up++;
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 0ef9a35250..7b7c7d9637 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -17,6 +17,9 @@ PURE_FTPD_IGNORE_CVES += CVE-2019-20176
- # 0002-pure_strcmp-len-s2-can-be-len-s1.patch
- PURE_FTPD_IGNORE_CVES += CVE-2020-9365
- 
-+# 0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
-+PURE_FTPD_IGNORE_CVES += CVE-2020-9274
-+
- PURE_FTPD_CONF_OPTS = \
- 	--with-altlog \
- 	--with-puredb
--- 
-2.25.1
+On Tue, Mar 17, 2020 at 9:58 PM Asaf Kahlon <asafka7@gmail.com> wrote:
+>
+> Hello,
+>
+> Recently, I upgraded my Buildroot version from 2019.11 to 2020.02 and
+> I tried to use per-package directories and parallel build.
+> My compilation has failed because:
+> * I have a host python package (let's call it "package A") which
+> installs a console script, which loads registered entry points and
+> does something.
+> * I have some other host python packages which register entry points
+> for package A.
+> * When a package wants to use the console script created by package A
+> - the registered entry points cannot be found.
+> After a little investigation I found out that the first line of the
+> console script instructs it to use the python interpreter of package A
+> (something like "#!<Package A per-package dir>/host/usr/bin/python). I
+> run a small grep and found it's not the only case (another one is the
+> easy_install utility, provided by setuptools).
+> I also managed to "solve" the problem by adding a configure step in
+> pkg-generic similar to the $(SED) we currently have on
+> PKG_PYTHON_FIXUP_SYSCONFIGDATA (scanning $(HOST_DIR)/bin and
+> $(HOST_DIR)/usr/bin), but I wonder if running this operation for
+> _every_ package is not too aggressive.
+>
+> I think the problem is a little broader, because even without my
+> specific problem, which fails the compilation, we are probably running
+> console scripts which invokes code outside from the per-package
+> directory.
+> Any ideas for solving this issue?
+>
+> Thanks,
+> Asaf.
