@@ -1,77 +1,57 @@
-From: =?UTF-8?q?Merlin=20B=C3=BCge?= <merlin.buege@tuhh.de>
-Date: Sat, 28 Mar 2020 15:41:38 +0100
-Subject: [Buildroot] [PATCH] docs/manual: small typo fixes and cleanup
-Message-ID: <20200328144138.31979-1-merlin.buege@tuhh.de>
+From: Akshay Bhat <akshay.bhat@timesys.com>
+Date: Sat, 28 Mar 2020 11:07:39 -0400
+Subject: [Buildroot] [PATCH 1/1] package/lz4: annotate CVE-2014-4715
+In-Reply-To: <20200328150827.64a9f714@windsurf.home>
+References: <20200328095138.959798-1-fontaine.fabrice@gmail.com>
+ <20200328150827.64a9f714@windsurf.home>
+Message-ID: <CACrMeVCfVxi3BEUq5EgXV=OMF+36HtT6sDqwG=D8qMCD_Cs3GA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix a few punctuation mistakes. The removed link is redundant, see the
-previous sentence.
+Hi Thomas,
 
-Signed-off-by: Merlin B?ge <merlin.buege@tuhh.de>
----
- docs/manual/common-usage.txt      | 2 +-
- docs/manual/customize-patches.txt | 2 +-
- docs/manual/customize-rootfs.txt  | 2 +-
- docs/manual/writing-rules.txt     | 4 ++--
- 4 files changed, 5 insertions(+), 5 deletions(-)
+On Sat, Mar 28, 2020 at 10:08 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> So I've applied this patch, but what can we do to fix this properly?
+> The NVD database says that versions < r118 are affected, but of course
+> with the project having changed its numbering scheme (current version
+> is 1.9.2), making comparisons is difficult.
+>
+> Indeed, after r131, the next version was v1.7.3. Can we ask the NVD
+> maintainers to indicate that versions earlier than v1.7.3 are
+> vulnerable ?
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 3fe7f69..7cfda10 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -88,7 +88,7 @@ to +make+ or set in the environment:
-   Buildroot stores the cached files when using ccache.
-   +
- * +BR2_DL_DIR+ to override the directory in which
--  Buildroot stores/retrieves downloaded files
-+  Buildroot stores/retrieves downloaded files.
-   +
-   Note that the Buildroot download directory can also be set from the
-   configuration interface, so through the Buildroot +.config+ file. See
-diff --git a/docs/manual/customize-patches.txt b/docs/manual/customize-patches.txt
-index fa63541..eb98d1b 100644
---- a/docs/manual/customize-patches.txt
-+++ b/docs/manual/customize-patches.txt
-@@ -53,7 +53,7 @@ directory.
- The exception to +BR2_GLOBAL_PATCH_DIR+ being the preferred method for
- specifying custom patches is +BR2_LINUX_KERNEL_PATCH+.
- +BR2_LINUX_KERNEL_PATCH+ should be used to specify kernel patches that
--are available at an URL. *Note:* +BR2_LINUX_KERNEL_PATCH+ specifies kernel
-+are available at a URL. *Note:* +BR2_LINUX_KERNEL_PATCH+ specifies kernel
- patches that are applied after patches available in +BR2_GLOBAL_PATCH_DIR+,
- as it is done from a post-patch hook of the Linux package.
- 
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 6b72a37..e1dbadd 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -145,7 +145,7 @@ It is recommended to use the existing mechanisms to set file permissions
- The difference between post-build scripts (above) and fakeroot scripts,
-   is that post-build scripts are not called in the fakeroot context.
- +
--.Note;
-+.Note:
- Using `fakeroot` is not an absolute substitute for actually being root.
-   `fakeroot` only ever fakes the file access rights and types (regular,
-   block-or-char device...) and uid/gid; these are emulated in-memory.
-diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-index ca43272..3b809d5 100644
---- a/docs/manual/writing-rules.txt
-+++ b/docs/manual/writing-rules.txt
-@@ -141,8 +141,8 @@ endif
- The documentation uses the
- http://www.methods.co.nz/asciidoc/[asciidoc] format.
- 
--For further details about the http://www.methods.co.nz/asciidoc/[asciidoc]
--syntax, refer to http://www.methods.co.nz/asciidoc/userguide.html[].
-+For further details about the asciidoc syntax, refer to
-+http://www.methods.co.nz/asciidoc/userguide.html[].
- 
- === Support scripts
- 
--- 
-2.25.2
+Interesting case! The fix has been there since r118 (including).
+(Expand the tags in the github link:
+https://github.com/lz4/lz4/commit/140e6e72ddb6fc5f7cd28ce0c8ec3812ef4a9c08)
+
+Thankfully CVE-2014-4715 is the only CVE using the old version scheme.
+So the 2 easy options are:
+1. Live with the patch from Fabrice for ignore CVEs since we don't
+expect this list to grow (OR)
+2. Since there are only 2 tagged releases before r118, ask NVD to
+change the affected version:
+From
+cpe:2.3:a:yann_collet:lz4:*:*:*:*:*:*:*:*  Up to (including) r118
+To
+cpe:2.3:a:yann_collet:lz4:r116:*:*:*:*:*:*:*
+cpe:2.3:a:yann_collet:lz4:r117:*:*:*:*:*:*:*
+
+This way comparing the new versions (eg:1.9.2) will not match with
+either r116 or r117 since there is no  "<=" check involved.
+I would not recommend changing it to earlier than v1.7.3 since r118 to
+r131 that are technically less than v1.7.3 and those versions are not
+affected by this CVE.
+
+Looks like Yocto decided to go the ignore cve route as well:
+http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-support/lz4/lz4_1.9.2.bb?h=master#n21
+
+I can shoot an email to NVD if the above explicit calling out of
+r116/r117 versions seems a better route.
+
+Thanks,
+Akshay
