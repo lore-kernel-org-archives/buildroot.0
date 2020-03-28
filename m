@@ -1,122 +1,99 @@
-From: Gao Xiang <hsiangkao@aol.com>
-Date: Sat, 28 Mar 2020 10:43:45 +0800
-Subject: [Buildroot] [PATCH] package/erofs-utils: add patch to resolve
- PAGE_SIZE redefinition
-In-Reply-To: <20200326021215.23749-1-hsiangkao@aol.com>
-References: <20200326021215.23749-1-hsiangkao.ref@aol.com>
- <20200326021215.23749-1-hsiangkao@aol.com>
-Message-ID: <20200328024334.GA4422@hsiangkao-HP-ZHAN-66-Pro-G1>
+From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
+Date: Sat, 28 Mar 2020 10:34:28 +0530
+Subject: [Buildroot] [PATCH v5 0/3] Fix ATF v2.2 build for rk3399,
+ add roc-rk3399-pc board
+Message-ID: <1585371871-29406-1-git-send-email-sunil@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+From: Suniel Mahesh <sunil@amarulasolutions.com>
 
-On Thu, Mar 26, 2020 at 10:12:15AM +0800, Gao Xiang wrote:
-> This patch resolves PAGE_SIZE redefinition reported by autobuild [1]
-> with some configrations on i586 platform.
-> 
-> As what I said in the patch, I didn't get such error report before.
-> 
-> [1] http://autobuild.buildroot.net/results/340b98caa45bafd43f109002be9da59ba7f6d971
-> Signed-off-by: Gao Xiang <hsiangkao@aol.com>
-> ---
-> Hi all,
+This patch set does the following:
+Fix ATF v2.2 build for rk3399 SoC's.
+Add arm-gnu-a-toolchain package, which acts as a secondary bare metal toolchain
+to build ATF for Rockchip rk3399 platform (has a cortex-m0 core). The required
+pre-built toolchain is taken from ARM developers site and installed in host filesystem only.
+Add config options for building ATF, targets must enable these configs based on their
+requirements in board defconfig.
+Add new defconfig file for roc-rk3399-pc.
+Update DEVELOPERS file.
 
-I received 2 more autobuild reports due to the same cause.
+The patch set is tested on roc-rk3399-pc, a rk3399 based target. Compile tested on orangepi.
+---
+Changes for v5:
+- Dropped patch #1(Disable bin copy for rk3399), as it is no longer needed.
+- Based on suggestions from thomas pettazzoni and Sergey, instead of encoding
+  platform-specific stuff in config files, introduced new config options which
+  need to be enabled in board defconfig as per requirement.
+- patch #2(new package) is now patch #1
+- patch #3(add support for rockchip rk3399), title and description is changed and
+  is now patch #2
+- patch #4(new defconfig) is now patch #3
 
-I have no clue which configration impacts, but this patch
-addresses these reports.
+Changes for v4:
+- As per suggestions from Heiko Thiery and Thomas Pettazoni, changed DEVELOPERS file accordingly.
+- Updated Developers file accordingly whenever a new package(patch #2) or target is added(patch #4).
+- dropped patch #5, as it is no longer needed.
+- Its a four patch series like earlier v2 and v1.
 
-x86_64    |        erofs-utils-1.0         | http://autobuild.buildroot.net/results/42cd24535ab38cb9b416b730a034a1dbe3293bf5
-x86_64    |        erofs-utils-1.0         | http://autobuild.buildroot.net/results/260cdb3203e9141e674f38a2acd127d10320f8fa
+Changes for v3:
+Added one patch to this series. Split one changeset from patch #4 and made
+it patch #5
+patch #1 (Disable bin copy for rk3399)
+- Based on suggestions from sergey and thomas, instead of encoding
+platform-specific stuff in config files, made changes in .mk files
+based on the build flow.
+patch #2 (new package)
+- no change
+patch #3 (add support for rockchip rk3399)
+- no change
+patch #4 (new defconfig)
+- dropped DEVELOPERS file
+patch #5 (Add me as a co-maintainer)
+- seperated this changeset
 
-Please kindly consider this. I will keep track of these all.
+Changes for v2:
+Changed cover letter description to add more meaning.
+patch #1 (Disable bin copy for rk3399)
+- Added Cc tag
+patch #2 (new package)
+- More Description added to justify why a secondary bare metal toolchain is required 
+patch #3 (add support for rockchip rk3399)
+- no change
+patch #4 (new defconfig)
+- updated readme.txt to help with the build/boot process 
+- modified file permissions of post-build.sh to 'x'
 
-Thanks,
-Gao Xiang
+Suniel Mahesh (3):
+  package/arm-gnu-a-toolchain: new package
+  boot/arm-trusted-firmware: add optional host-arm-gnu-a-toolchain
+    dependency
+  configs/roc-rk3399-pc: new defconfig
 
-> 
-> I have no simple way to verify the whole compilation with such
-> configuration due to poor Internet quality to download all
-> necessary packages in China mainland.
-> 
-> I've just verified with my own old configuration and it has no
-> impact. Hopefully it's the last patch for all configration to
-> work.
-> 
-> Thanks,
-> Gao Xiang
-> 
->  ...s-utils-avoid-PAGE_SIZE-redefinition.patch | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch
-> 
-> diff --git a/package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch b/package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch
-> new file mode 100644
-> index 0000000000..2441a841ba
-> --- /dev/null
-> +++ b/package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch
-> @@ -0,0 +1,57 @@
-> +From 6c087a91c968197b5a95578fc645617947c943ad Mon Sep 17 00:00:00 2001
-> +From: Gao Xiang <hsiangkao@aol.com>
-> +Date: Wed, 25 Mar 2020 15:42:22 +0800
-> +Subject: [PATCH] erofs-utils: avoid PAGE_SIZE redefinition
-> +
-> +Buildroot autobuild reported a PAGE_SIZE redefinition with some
-> +configrations on i586 toolchain [1] (I didn't notice such report
-> +from erofs-utils travis CI or distribution builds before.)
-> +
-> +In file included from config.c:11:
-> +../include/erofs/internal.h:27: error: "PAGE_SIZE" redefined [-Werror]
-> + #define PAGE_SIZE  (1U << PAGE_SHIFT)
-> +
-> +In file included from ../include/erofs/defs.h:17,
-> +                 from ../include/erofs/config.h:12,
-> +                 from ../include/erofs/print.h:12,
-> +                 from config.c:10:
-> +.../sysroot/usr/include/limits.h:89: note: this is the location of the previous definition
-> + #define PAGE_SIZE PAGESIZE
-> +
-> +cc1: all warnings being treated as errors
-> +
-> +Fix it now.
-> +
-> +[1] http://autobuild.buildroot.net/results/340b98caa45bafd43f109002be9da59ba7f6d971
-> +Link: https://lore.kernel.org/r/20200325082930.2025-1-hsiangkao at aol.com
-> +Signed-off-by: Gao Xiang <hsiangkao@aol.com>
-> +---
-> + include/erofs/internal.h | 10 ++++++++++
-> + 1 file changed, 10 insertions(+)
-> +
-> +diff --git a/include/erofs/internal.h b/include/erofs/internal.h
-> +index e7d5a64..41da189 100644
-> +--- a/include/erofs/internal.h
-> ++++ b/include/erofs/internal.h
-> +@@ -23,8 +23,18 @@ typedef unsigned short umode_t;
-> + #define PATH_MAX        4096    /* # chars in a path name including nul */
-> + #endif
-> + 
-> ++#ifndef PAGE_SHIFT
-> + #define PAGE_SHIFT		(12)
-> ++#endif
-> ++
-> ++#ifndef PAGE_SIZE
-> + #define PAGE_SIZE		(1U << PAGE_SHIFT)
-> ++#endif
-> ++
-> ++/* no obvious reason to support explicit PAGE_SIZE != 4096 for now */
-> ++#if PAGE_SIZE != 4096
-> ++#error incompatible PAGE_SIZE is already defined
-> ++#endif
-> + 
-> + #define LOG_BLOCK_SIZE          (12)
-> + #define EROFS_BLKSIZ            (1U << LOG_BLOCK_SIZE)
-> +-- 
-> +2.20.1
-> +
-> -- 
-> 2.20.1
-> 
+ .gitlab-ci.yml                                     |  1 +
+ DEVELOPERS                                         |  5 ++
+ board/firefly/roc-rk3399-pc/extlinux.conf          |  4 ++
+ board/firefly/roc-rk3399-pc/genimage.cfg           | 22 +++++++++
+ board/firefly/roc-rk3399-pc/post-build.sh          |  5 ++
+ board/firefly/roc-rk3399-pc/readme.txt             | 48 +++++++++++++++++++
+ boot/arm-trusted-firmware/Config.in                |  6 +++
+ configs/roc_pc_rk3399_defconfig                    | 56 ++++++++++++++++++++++
+ package/Config.in.host                             |  1 +
+ package/arm-gnu-a-toolchain/Config.in.host         |  9 ++++
+ .../arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash   |  2 +
+ package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk | 27 +++++++++++
+ 12 files changed, 186 insertions(+)
+ create mode 100644 board/firefly/roc-rk3399-pc/extlinux.conf
+ create mode 100644 board/firefly/roc-rk3399-pc/genimage.cfg
+ create mode 100755 board/firefly/roc-rk3399-pc/post-build.sh
+ create mode 100644 board/firefly/roc-rk3399-pc/readme.txt
+ create mode 100644 configs/roc_pc_rk3399_defconfig
+ create mode 100644 package/arm-gnu-a-toolchain/Config.in.host
+ create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.hash
+ create mode 100644 package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
+
+-- 
+2.7.4
