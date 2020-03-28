@@ -1,57 +1,46 @@
-From: Akshay Bhat <akshay.bhat@timesys.com>
-Date: Sat, 28 Mar 2020 11:07:39 -0400
-Subject: [Buildroot] [PATCH 1/1] package/lz4: annotate CVE-2014-4715
-In-Reply-To: <20200328150827.64a9f714@windsurf.home>
-References: <20200328095138.959798-1-fontaine.fabrice@gmail.com>
- <20200328150827.64a9f714@windsurf.home>
-Message-ID: <CACrMeVCfVxi3BEUq5EgXV=OMF+36HtT6sDqwG=D8qMCD_Cs3GA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Mar 2020 16:58:28 +0100
+Subject: [Buildroot] [PATCH 1/2] package/rocksdb: fix build on m68k_cf
+Message-ID: <20200328155829.1133494-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes:
+ - http://autobuild.buildroot.org/results/04c5afff034d8d71d11b95c998e3156292852de6
 
-On Sat, Mar 28, 2020 at 10:08 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> So I've applied this patch, but what can we do to fix this properly?
-> The NVD database says that versions < r118 are affected, but of course
-> with the project having changed its numbering scheme (current version
-> is 1.9.2), making comparisons is difficult.
->
-> Indeed, after r131, the next version was v1.7.3. Can we ask the NVD
-> maintainers to indicate that versions earlier than v1.7.3 are
-> vulnerable ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/rocksdb/rocksdb.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Interesting case! The fix has been there since r118 (including).
-(Expand the tags in the github link:
-https://github.com/lz4/lz4/commit/140e6e72ddb6fc5f7cd28ce0c8ec3812ef4a9c08)
-
-Thankfully CVE-2014-4715 is the only CVE using the old version scheme.
-So the 2 easy options are:
-1. Live with the patch from Fabrice for ignore CVEs since we don't
-expect this list to grow (OR)
-2. Since there are only 2 tagged releases before r118, ask NVD to
-change the affected version:
-From
-cpe:2.3:a:yann_collet:lz4:*:*:*:*:*:*:*:*  Up to (including) r118
-To
-cpe:2.3:a:yann_collet:lz4:r116:*:*:*:*:*:*:*
-cpe:2.3:a:yann_collet:lz4:r117:*:*:*:*:*:*:*
-
-This way comparing the new versions (eg:1.9.2) will not match with
-either r116 or r117 since there is no  "<=" check involved.
-I would not recommend changing it to earlier than v1.7.3 since r118 to
-r131 that are technically less than v1.7.3 and those versions are not
-affected by this CVE.
-
-Looks like Yocto decided to go the ignore cve route as well:
-http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-support/lz4/lz4_1.9.2.bb?h=master#n21
-
-I can shoot an email to NVD if the above explicit calling out of
-r116/r117 versions seems a better route.
-
-Thanks,
-Akshay
+diff --git a/package/rocksdb/rocksdb.mk b/package/rocksdb/rocksdb.mk
+index 5f9fd9f1cb..86732ad46c 100644
+--- a/package/rocksdb/rocksdb.mk
++++ b/package/rocksdb/rocksdb.mk
+@@ -12,6 +12,12 @@ ROCKSDB_INSTALL_STAGING = YES
+ 
+ ROCKSDB_MAKE_OPTS = PORTABLE=1
+ 
++# Internal error, aborting at dwarf2cfi.c:2802 in connect_traces
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
++ifeq ($(BR2_m68k_cf),y)
++ROCKSDB_EXTRA_CXXFLAGS += -fno-defer-pop
++endif
++
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ ROCKSDB_DEPENDENCIES += bzip2
+ ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_BZ2=0
+@@ -72,6 +78,8 @@ ROCKSDB_BUILD_TARGETS += shared_lib static_lib
+ ROCKSDB_INSTALL_TARGETS += install-shared install-static
+ endif
+ 
++ROCKSDB_MAKE_OPTS += EXTRA_CXXFLAGS="$(ROCKSDB_EXTRA_CXXFLAGS)"
++
+ define ROCKSDB_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(ROCKSDB_MAKE_OPTS) -C $(@D) \
+ 		$(ROCKSDB_BUILD_TARGETS)
+-- 
+2.25.1
