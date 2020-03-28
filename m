@@ -1,47 +1,81 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 28 Mar 2020 09:58:16 +0100
-Subject: [Buildroot] [PATCH 2/3] Makefile: fix package file list if
- FOO_SUBDIR is set
-In-Reply-To: <87v9mpc4ik.fsf@dell.be.48ers.dk>
-References: <20200318155814.567-1-patrickdepinguin@gmail.com>
- <20200318155814.567-2-patrickdepinguin@gmail.com>
- <87v9mpc4ik.fsf@dell.be.48ers.dk>
-Message-ID: <CAAXf6LXBd1nK56h9eyymw1ck7zpVW_hQ4MYm6_eOkd3eyqu8hQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Mar 2020 10:00:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pure-ftpd: fix CVE-2020-9274
+Message-ID: <20200328090042.950156-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 28, 2020, 08:39 Peter Korsgaard <peter@korsgaard.com> wrote:
+An issue was discovered in Pure-FTPd 1.0.49. An uninitialized pointer
+vulnerability has been detected in the diraliases linked list. When the
+*lookup_alias(const char alias) or print_aliases(void) function is
+called, they fail to correctly detect the end of the linked list and try
+to access a non-existent list member. This is related to init_aliases in
+diraliases.c.
 
-> >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> writes:
->
->  > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->  > If a package sets a FOO_SUBDIR (meaning its sources are not under
->  > output/build/foo-123 but under output/build/foo-123/$(FOO_SUBDIR)), the
->  > .files-list.txt file were also created under FOO_SUBDIR, due to which
-> the
->  > logic in the Makefile would not find it.
->
->  > Change the instrumentation steps so that the file list is directly
-> under the
->  > package dir, ignoring the subdir.
->
->  > Signed-off-by: Thomas De Schampheleire <
-> thomas.de_schampheleire at nokia.com>
->
-> Committed to 2020.02.x, thanks.
->
-> This is not applicable to the older releases, right?
->
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ays-set-the-tail-of-the-list-to-NULL.patch | 35 +++++++++++++++++++
+ package/pure-ftpd/pure-ftpd.mk                |  3 ++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
 
-No indeed, I think this code that handles the file lists differently was
-new in 2020.02.
-
-Thanks,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200328/44b4c0f9/attachment.html>
+diff --git a/package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch b/package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
+new file mode 100644
+index 0000000000..6c58eb74ae
+--- /dev/null
++++ b/package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
+@@ -0,0 +1,35 @@
++From 8d0d42542e2cb7a56d645fbe4d0ef436e38bcefa Mon Sep 17 00:00:00 2001
++From: Frank Denis <github@pureftpd.org>
++Date: Tue, 18 Feb 2020 18:36:58 +0100
++Subject: [PATCH] diraliases: always set the tail of the list to NULL
++
++Spotted and reported by Antonio Norales from GitHub Security Labs.
++Thanks!
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/jedisct1/pure-ftpd/commit/8d0d42542e2cb7a56d645fbe4d0ef436e38bcefa]
++---
++ src/diraliases.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/diraliases.c b/src/diraliases.c
++index 4002a36..fb70273 100644
++--- a/src/diraliases.c
+++++ b/src/diraliases.c
++@@ -93,7 +93,6 @@ int init_aliases(void)
++                 (tail->dir = strdup(dir)) == NULL) {
++                 die_mem();
++             }
++-            tail->next = NULL;
++         } else {
++             DirAlias *curr;
++ 
++@@ -105,6 +104,7 @@ int init_aliases(void)
++             tail->next = curr;
++             tail = curr;
++         }
+++        tail->next = NULL;
++     }
++     fclose(fp);
++     aliases_up++;
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index 0ef9a35250..7b7c7d9637 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -17,6 +17,9 @@ PURE_FTPD_IGNORE_CVES += CVE-2019-20176
+ # 0002-pure_strcmp-len-s2-can-be-len-s1.patch
+ PURE_FTPD_IGNORE_CVES += CVE-2020-9365
+ 
++# 0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
++PURE_FTPD_IGNORE_CVES += CVE-2020-9274
++
+ PURE_FTPD_CONF_OPTS = \
+ 	--with-altlog \
+ 	--with-puredb
+-- 
+2.25.1
