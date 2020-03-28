@@ -1,57 +1,159 @@
-From: Akshay Bhat <akshay.bhat@timesys.com>
-Date: Sat, 28 Mar 2020 11:58:27 -0400
-Subject: [Buildroot] [PATCH 1/1] package/lz4: annotate CVE-2014-4715
-In-Reply-To: <CACrMeVCfVxi3BEUq5EgXV=OMF+36HtT6sDqwG=D8qMCD_Cs3GA@mail.gmail.com>
-References: <20200328095138.959798-1-fontaine.fabrice@gmail.com>
- <20200328150827.64a9f714@windsurf.home>
- <CACrMeVCfVxi3BEUq5EgXV=OMF+36HtT6sDqwG=D8qMCD_Cs3GA@mail.gmail.com>
-Message-ID: <CACrMeVAPvcafRDwNsDFcrgk2q_6hg08viDMH-8GFuZFT64P7TQ@mail.gmail.com>
+From: daggs <daggs@gmx.com>
+Date: Sat, 28 Mar 2020 18:04:18 +0100
+Subject: [Buildroot] Failed to load libmmal.so from rpi-userland package
+ via buildroot toolchain on raspberry pi 4
+In-Reply-To: <20200328152845.055bdebc@gmx.net>
+References: <CAPn7sn38WqJVgbLBkVj403GpkhcQx77HwdZ9zxEEvifO7qRbxg@mail.gmail.com>
+ <20200328113133.022b01b6@gmx.net>
+ <trinity-5b420b27-f59e-48e3-beee-af28dfff8d55-1585393538709@3c-app-mailcom-bs12>
+ <20200328152845.055bdebc@gmx.net>
+Message-ID: <trinity-00824589-a2b1-432a-91cb-72bbd9df3da4-1585415058087@3c-app-mailcom-bs10>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 28, 2020 at 11:07 AM Akshay Bhat <akshay.bhat@timesys.com> wrote:
+Greetings Peter,
+
+> Sent: Saturday, March 28, 2020 at 5:28 PM
+> From: "Peter Seiderer" <ps.report@gmx.net>
+> To: daggs <daggs@gmx.com>
+> Cc: buildroot at busybox.net, "iman ahmadvand" <iman72411@gmail.com>
+> Subject: Re: [Buildroot] Failed to load libmmal.so from rpi-userland package via buildroot toolchain on raspberry pi 4
 >
-> Hi Thomas,
+> Hello Dagg,
 >
-> On Sat, Mar 28, 2020 at 10:08 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
+> On Sat, 28 Mar 2020 12:05:38 +0100, daggs <daggs@gmx.com> wrote:
+>
+> > Greetings,
 > >
-> > So I've applied this patch, but what can we do to fix this properly?
-> > The NVD database says that versions < r118 are affected, but of course
-> > with the project having changed its numbering scheme (current version
-> > is 1.9.2), making comparisons is difficult.
+> > > Sent: Saturday, March 28, 2020 at 1:31 PM
+> > > From: "Peter Seiderer" <ps.report@gmx.net>
+> > > To: "iman ahmadvand" <iman72411@gmail.com>
+> > > Cc: buildroot at busybox.net
+> > > Subject: Re: [Buildroot] Failed to load libmmal.so from rpi-userland package via buildroot toolchain on raspberry pi 4
+> > >
+> > > Hello Iman,
+> > >
+> > > On Sat, 28 Mar 2020 11:39:46 +0430, iman ahmadvand <iman72411@gmail.com> wrote:
+> > >
+> > > > Hi everyone.
+> > > > It seems that loading the MMAL interface shared libraries from rpi-userland
+> > > > package via simple dlopen is not possible, or more specific, the packages
+> > > > or binaries such as VLC or VLC codec plugin (libavcodec_plugin) could not
+> > > > load the libavcodec from FFmpeg which in turn depends on libmmal*.so
+> > > >
+> > > > The steps to reproduce(with BR2_PACKAGE_RPI_USERLAND enabled,
+> > > > BR2_STRIP_strip disabled, BR2_OPTIMIZE_0 enabled):
+> > > > git clone git://git.busybox.net/buildroot buildroot && cd buildroot && git
+> > > > checkout 2019.11.01
+> > > > make raspberrypi4_defconfig && make all
+> > > >
+> > > > Then in this image try to run a simple c routine with dlopen(), if you do
+> > > > so, for example, ./dltest /usr/lib/libmmal.so you will end up with:
+> > > >
+> > > > symbol 'mmal_port_payload_alloc': can't resolve symbol
+> > > > symbol 'mmal_port_payload_free': can't resolve symbol
+> > > > symbol 'mmal_port_log_category': can't resolve symbol
+> > > >
+> > >
+> > > Can confirm your failure...did not (yet) find out what fails exactly, but
+> > > ldd produces the following ouput (mind the 0x00000000):
+> > >
+> > > 	$ ldd /usr/lib/libmmal.so
+> > > checking sub-depends for '/usr/lib/libmmal_vc_client.so'
+> > > checking sub-depends for '/usr/lib/libmmal_components.so'
+> > > checking sub-depends for '/usr/lib/libvchiq_arm.so'
+> > > checking sub-depends for '/usr/lib/libvcsm.so'
+> > > checking sub-depends for '/usr/lib/libmmal_core.so'
+> > > checking sub-depends for '/usr/lib/libmmal_util.so'
+> > > checking sub-depends for '/usr/lib/libcontainers.so'
+> > > checking sub-depends for '/usr/lib/libvcos.so'
+> > > checking sub-depends for '/lib/libc.so.0'
+> > >         ld-uClibc.so.1 => /lib/ld-uClibc.so.1 (0xb6f8b000)
+> > >         libmmal_vc_client.so => /usr/lib/libmmal_vc_client.so (0x00000000)
+> > >         libmmal_components.so => /usr/lib/libmmal_components.so (0x00000000)
+> > >         libvchiq_arm.so => /usr/lib/libvchiq_arm.so (0x00000000)
+> > >         libvcsm.so => /usr/lib/libvcsm.so (0x00000000)
+> > >         libmmal_core.so => /usr/lib/libmmal_core.so (0x00000000)
+> > >         libmmal_util.so => /usr/lib/libmmal_util.so (0x00000000)
+> > >         libcontainers.so => /usr/lib/libcontainers.so (0x00000000)
+> > >         libvcos.so => /usr/lib/libvcos.so (0x00000000)
+> > >         libc.so.0 => /lib/libc.so.0 (0x00000000)
+> > >         /lib/ld-uClibc.so.1 => /lib/ld-uClibc.so.1 (0x00000000)
+> > >
+> > >
+> > > After changing the buildroot toolchain from uclibc to glibc (and a full
+> > > re-build) dlopen() of /usr/lib/libmmal.so works and ldd produces the
+> > > following output:
+> > >
+> > > 	$ ldd /usr/lib/libmmal.so
+> > > 	linux-vdso.so.1 (0xbea59000)
+> > > 	libmmal_vc_client.so => /usr/lib/libmmal_vc_client.so (0xb6f5f000)
+> > > 	libmmal_components.so => /usr/lib/libmmal_components.so (0xb6f44000)
+> > > 	libvchiq_arm.so => /usr/lib/libvchiq_arm.so (0xb6f2e000)
+> > > 	libvcsm.so => /usr/lib/libvcsm.so (0xb6f14000)
+> > > 	libmmal_core.so => /usr/lib/libmmal_core.so (0xb6ef6000)
+> > > 	libmmal_util.so => /usr/lib/libmmal_util.so (0xb6ed8000)
+> > > 	libcontainers.so => /usr/lib/libcontainers.so (0xb6eb5000)
+> > > 	libvcos.so => /usr/lib/libvcos.so (0xb6e9c000)
+> > > 	libpthread.so.0 => /lib/libpthread.so.0 (0xb6e71000)
+> > > 	libdl.so.2 => /lib/libdl.so.2 (0xb6e5e000)
+> > > 	librt.so.1 => /lib/librt.so.1 (0xb6e47000)
+> > > 	libc.so.6 => /lib/libc.so.6 (0xb6cfb000)
+> > > 	/lib/ld-linux-armhf.so.3 (0xb6f8f000)
+> > >
+> > > Regards,
+> > > Peter
+> > >
+> > >
+> > > > Or for another proof of the issue, you can run VLC with X11 to play an
+> > > > MPEG-4 video, and you will  end up with VLC could not load the codec module
+> > > > because of the same thing:
+> > > >
+> > > > main debug: loading plugins cache file /usr/lib/vlc/plugins/plugins.dat
+> > > > main warning: cannot read /usr/lib/vlc/plugins/plugins.dat: No such
+> > > > file or directory
+> > > > main debug: recursively browsing `/usr/lib/vlc/plugins'
+> > > > main warning: cannot load module
+> > > > `/usr/lib/vlc/plugins/codec/libavcodec_plugin.so' ((null)
+> > > >
+> > > > Any idea about this?
+> > > >
+> > > > Best Regards.
+> > > > IMAN.
 > >
-> > Indeed, after r131, the next version was v1.7.3. Can we ask the NVD
-> > maintainers to indicate that versions earlier than v1.7.3 are
-> > vulnerable ?
+> > I wonder, how do you run ldd on the pi4 with the buildroot env? I'm trying to debug my mmal issue too.
 >
-> Interesting case! The fix has been there since r118 (including).
-> (Expand the tags in the github link:
-> https://github.com/lz4/lz4/commit/140e6e72ddb6fc5f7cd28ce0c8ec3812ef4a9c08)
+> Exactly with the command line as given above 'ldd /usr/lib/libmmal.so' on the
+> target (here pi4), what do your mean with buildroot env (do not mix 'ldd -
+> print shared object dependencies' with 'ld - The GNU linker')?
 >
-> Thankfully CVE-2014-4715 is the only CVE using the old version scheme.
-> So the 2 easy options are:
-> 1. Live with the patch from Fabrice for ignore CVEs since we don't
-> expect this list to grow (OR)
-> 2. Since there are only 2 tagged releases before r118, ask NVD to
-> change the affected version:
+> Regards,
+> Peter
 >
-> From
-> cpe:2.3:a:yann_collet:lz4:*:*:*:*:*:*:*:*  Up to (including) r118
-> To
-> cpe:2.3:a:yann_collet:lz4:r116:*:*:*:*:*:*:*
-> cpe:2.3:a:yann_collet:lz4:r117:*:*:*:*:*:*:*
 
-Hmm digging deeper the first release is r105, looks like all the tags
-were not carried over to github when it was migrated!
-https://fossies.org/linux/lz4/NEWS
+here is what I get:
+<root@TvHeadend_Server: /home/igor> ldd /usr/lib/libmmal.so
+bash: ldd: command not found
+<root@TvHeadend_Server: /home/igor> cat /etc/os-release
+NAME=Buildroot
+VERSION=2020.02-rc2-00018-g16d3e1734e-dirty
+ID=buildroot
+VERSION_ID=2020.02-rc2
+PRETTY_NAME="Buildroot 2020.02-rc2"
+<root@TvHeadend_Server: /home/igor> uname  -a
+Linux TvHeadend_Server 4.19.97-v8 #1 SMP PREEMPT Fri Feb 28 15:16:43 IST 2020 aarch64 GNU/Linux
+<root@TvHeadend_Server: /home/igor> ls -l /usr/lib/libmmal*
+-rwxr-xr-x    1 root     root         14192 Feb 28 15:21 /usr/lib/libmmal.so
+-rwxr-xr-x    1 root     root         51576 Feb 28 15:21 /usr/lib/libmmal_components.so
+-rwxr-xr-x    1 root     root         72344 Feb 28 15:21 /usr/lib/libmmal_core.so
+-rwxr-xr-x    1 root     root         72320 Feb 28 15:21 /usr/lib/libmmal_util.so
+-rwxr-xr-x    1 root     root         43520 Feb 28 15:21 /usr/lib/libmmal_vc_client.so
 
-So if we were to ask NVD to update the versions then we have to list
-all versions before r118.
+looks like I'm missing something...
 
-Another option is to make the version compare tool more intelligent to
-not treat the old scheme (eg: r118) greater than current scheme (eg:
-1.9.2).
+Thanks,
+
+Dagg.
