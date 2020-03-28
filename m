@@ -1,51 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Mar 2020 08:23:34 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/php: security
- bump version to 7.4.4
-Message-ID: <20200328071629.D47CD886DC@busybox.osuosl.org>
+Date: Sat, 28 Mar 2020 08:31:25 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/samba4: bump
+ version to 4.11.7
+Message-ID: <20200328071845.5B5B888702@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b439c1d695b30ff50600d16796025b6566b94858
+commit: https://git.buildroot.net/buildroot/commit/?id=0168c3d7252f1ed15781e5649f73a6bb1d3a8ffa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.4
-
-Fixes CVE-2020-7064, CVE-2020-7065 & CVE-2020-7066.
+Release notes: https://www.samba.org/samba/history/samba-4.11.7.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 51cd6b864101a110785e1ebee394526a98aba86e)
+(cherry picked from commit 98cd8870f8d9c06d1c01bde1f5b623efb9a00b01)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index a01e936016..4584524f1c 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256 cf1f856d877c268124ded1ede40c9fb6142b125fdaafdc54f855120b8bc6982a  php-7.4.3.tar.xz
-+sha256 1873c4cefdd3df9a78dcffb2198bba5c2f0464f55c9c960720c84df483fca74c  php-7.4.4.tar.xz
- 
- # License file
- sha256 0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index c0abecad19..f62204c2a5 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 022bc22055..8948c41ea6 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.11.6.tar.asc
+-sha256 91438f4d7b71f673421435fa7f26b03b613f214139636ce50af35bc2ff09ef38  samba-4.11.6.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.11.7.tar.asc
++sha256 79b6f9ebc357373f885153e2d5d26dc6def9f4511ee4bcbe8a8e2622acc42143  samba-4.11.7.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 3048cb9a63..582b30bcd5 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.4.3
-+PHP_VERSION = 7.4.4
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-SAMBA4_VERSION = 4.11.6
++SAMBA4_VERSION = 4.11.7
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
