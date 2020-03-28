@@ -1,7 +1,9 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 28 Mar 2020 16:58:28 +0100
-Subject: [Buildroot] [PATCH 1/2] package/rocksdb: fix build on m68k_cf
-Message-ID: <20200328155829.1133494-1-fontaine.fabrice@gmail.com>
+Date: Sat, 28 Mar 2020 16:58:29 +0100
+Subject: [Buildroot] [PATCH 2/2] package/rocksdb: fix build without dlfcn.h
+In-Reply-To: <20200328155829.1133494-1-fontaine.fabrice@gmail.com>
+References: <20200328155829.1133494-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200328155829.1133494-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +15,20 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rocksdb/rocksdb.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/rocksdb/rocksdb.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/rocksdb/rocksdb.mk b/package/rocksdb/rocksdb.mk
-index 5f9fd9f1cb..86732ad46c 100644
+index 86732ad46c..31a9f98b55 100644
 --- a/package/rocksdb/rocksdb.mk
 +++ b/package/rocksdb/rocksdb.mk
-@@ -12,6 +12,12 @@ ROCKSDB_INSTALL_STAGING = YES
- 
- ROCKSDB_MAKE_OPTS = PORTABLE=1
- 
-+# Internal error, aborting at dwarf2cfi.c:2802 in connect_traces
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
-+ifeq ($(BR2_m68k_cf),y)
-+ROCKSDB_EXTRA_CXXFLAGS += -fno-defer-pop
-+endif
-+
- ifeq ($(BR2_PACKAGE_BZIP2),y)
- ROCKSDB_DEPENDENCIES += bzip2
- ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_BZ2=0
-@@ -72,6 +78,8 @@ ROCKSDB_BUILD_TARGETS += shared_lib static_lib
- ROCKSDB_INSTALL_TARGETS += install-shared install-static
- endif
- 
-+ROCKSDB_MAKE_OPTS += EXTRA_CXXFLAGS="$(ROCKSDB_EXTRA_CXXFLAGS)"
-+
- define ROCKSDB_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(ROCKSDB_MAKE_OPTS) -C $(@D) \
- 		$(ROCKSDB_BUILD_TARGETS)
+@@ -70,6 +70,7 @@ endif
+ ifeq ($(BR2_STATIC_LIBS),y)
+ ROCKSDB_BUILD_TARGETS += static_lib
+ ROCKSDB_INSTALL_TARGETS += install-static
++ROCKSDB_EXTRA_CXXFLAGS += -DROCKSDB_NO_DYNAMIC_EXTENSION
+ else ifeq ($(BR2_SHARED_LIBS),y)
+ ROCKSDB_BUILD_TARGETS += shared_lib
+ ROCKSDB_INSTALL_TARGETS += install-shared
 -- 
 2.25.1
