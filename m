@@ -1,60 +1,48 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 28 Mar 2020 07:10:18 +0100
-Subject: [Buildroot] [PATCH] package/python-markdown: fix Python version
- dependency
-In-Reply-To: <20200325165309.6a71778d@x230_1.trabucayre.com>
-References: <20200310114101.6726-1-yegorslists@googlemail.com>
- <20200325165309.6a71778d@x230_1.trabucayre.com>
-Message-ID: <CAGm1_ku7v6MJZNFAoTG0SHy5FAFsk9igJ9mc4La0vw7FnyRdzw@mail.gmail.com>
+From: iman ahmadvand <iman72411@gmail.com>
+Date: Sat, 28 Mar 2020 11:39:46 +0430
+Subject: [Buildroot] Failed to load libmmal.so from rpi-userland package via
+ buildroot toolchain on raspberry pi 4
+Message-ID: <CAPn7sn38WqJVgbLBkVj403GpkhcQx77HwdZ9zxEEvifO7qRbxg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi everyone.
+It seems that loading the MMAL interface shared libraries from rpi-userland
+package via simple dlopen is not possible, or more specific, the packages
+or binaries such as VLC or VLC codec plugin (libavcodec_plugin) could not
+load the libavcodec from FFmpeg which in turn depends on libmmal*.so
 
-On Wed, Mar 25, 2020 at 4:54 PM Gwenhael Goavec-Merou
-<gwenj@trabucayre.com> wrote:
->
-> Hi,
-> On Tue, 10 Mar 2020 12:41:01 +0100
-> yegorslists at googlemail.com wrote:
->
-> > From: Yegor Yefremov <yegorslists@googlemail.com>
-> >
-> > The latest version has dropped Python 2 support.
-> >
-> > Fixes:
-> > http://autobuild.buildroot.net/results/6d1e796f6658accb3eafef265935db5e464638fe
-> >
-> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> > ---
-> >  package/python-markdown/Config.in | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/package/python-markdown/Config.in
-> > b/package/python-markdown/Config.in index 6706684142..454c2729bd 100644
-> > --- a/package/python-markdown/Config.in
-> > +++ b/package/python-markdown/Config.in
-> > @@ -1,8 +1,8 @@
-> >  config BR2_PACKAGE_PYTHON_MARKDOWN
-> >       bool "python-markdown"
-> > +     depends on BR2_PACKAGE_PYTHON3
-> >       # runtime dependency on Python's xml module
-> > -     select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
-> > -     select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
-> > +     select BR2_PACKAGE_PYTHON3_PYEXPAT
-> >       help
-> >         This is a Python implementation of John Gruber's Markdown
-> >
-> > --
-> > 2.17.0
-> >
->
-> Tested-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+The steps to reproduce(with BR2_PACKAGE_RPI_USERLAND enabled,
+BR2_STRIP_strip disabled, BR2_OPTIMIZE_0 enabled):
+git clone git://git.busybox.net/buildroot buildroot && cd buildroot && git
+checkout 2019.11.01
+make raspberrypi4_defconfig && make all
 
-It is now safe to merge this patch as python-cheetah doesn't depend on
-it anymore and also supports both Py2 and Py3.
+Then in this image try to run a simple c routine with dlopen(), if you do
+so, for example, ./dltest /usr/lib/libmmal.so you will end up with:
 
-Yegor
+symbol 'mmal_port_payload_alloc': can't resolve symbol
+symbol 'mmal_port_payload_free': can't resolve symbol
+symbol 'mmal_port_log_category': can't resolve symbol
+
+Or for another proof of the issue, you can run VLC with X11 to play an
+MPEG-4 video, and you will  end up with VLC could not load the codec module
+because of the same thing:
+
+main debug: loading plugins cache file /usr/lib/vlc/plugins/plugins.dat
+main warning: cannot read /usr/lib/vlc/plugins/plugins.dat: No such
+file or directory
+main debug: recursively browsing `/usr/lib/vlc/plugins'
+main warning: cannot load module
+`/usr/lib/vlc/plugins/codec/libavcodec_plugin.so' ((null)
+
+Any idea about this?
+
+Best Regards.
+IMAN.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200328/edb4f076/attachment.html>
