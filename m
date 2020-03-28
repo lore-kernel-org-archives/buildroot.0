@@ -1,64 +1,122 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Mar 2020 23:46:41 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] boot/barebox-aux: exclude
- git downloads from hash check
-Message-ID: <20200327225402.063A38874D@busybox.osuosl.org>
+From: Gao Xiang <hsiangkao@aol.com>
+Date: Sat, 28 Mar 2020 10:43:45 +0800
+Subject: [Buildroot] [PATCH] package/erofs-utils: add patch to resolve
+ PAGE_SIZE redefinition
+In-Reply-To: <20200326021215.23749-1-hsiangkao@aol.com>
+References: <20200326021215.23749-1-hsiangkao.ref@aol.com>
+ <20200326021215.23749-1-hsiangkao@aol.com>
+Message-ID: <20200328024334.GA4422@hsiangkao-HP-ZHAN-66-Pro-G1>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea8b8e5a9b308c6fc6ae53c5305b75022a7244f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Hi all,
 
-When barebox, and thus barebox-aux, are downloaded from a git tree, then
-barebox-aux download fails because a hash check is attempted on the
-downloaded archive:
+On Thu, Mar 26, 2020 at 10:12:15AM +0800, Gao Xiang wrote:
+> This patch resolves PAGE_SIZE redefinition reported by autobuild [1]
+> with some configrations on i586 platform.
+> 
+> As what I said in the patch, I didn't get such error report before.
+> 
+> [1] http://autobuild.buildroot.net/results/340b98caa45bafd43f109002be9da59ba7f6d971
+> Signed-off-by: Gao Xiang <hsiangkao@aol.com>
+> ---
+> Hi all,
 
-    Could not fetch special ref 'v2020.03.0'; assuming it is not special.
-    ERROR: No hash found for barebox-aux-v2020.03.0.tar.gz
+I received 2 more autobuild reports due to the same cause.
 
-This is because we only exclude from the check the archive of the bare
-barebox:
+I have no clue which configration impacts, but this patch
+addresses these reports.
 
-    BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
+x86_64    |        erofs-utils-1.0         | http://autobuild.buildroot.net/results/42cd24535ab38cb9b416b730a034a1dbe3293bf5
+x86_64    |        erofs-utils-1.0         | http://autobuild.buildroot.net/results/260cdb3203e9141e674f38a2acd127d10320f8fa
 
-However, the default name of an archive is based on the package name,
-which for barebox-aux is not 'barebox'.
+Please kindly consider this. I will keep track of these all.
 
-Since barebox-aux really uses the exact same source as the bare barebox,
-it should also share the archive name.
+Thanks,
+Gao Xiang
 
-This has two direct consequences and advantages:
-
-  - the hash check is completely avoided for the barebox-aux archive;
-
-  - the barebox-aux archive is not downloaded as it is already
-    downloaded for barebox.
-
-Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 451ee6fa5454158b5d95cef0f404c0443dde868e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/barebox/barebox.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 3d7492598f..1efe5665de 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -25,6 +25,10 @@ $(1)_SOURCE = $$(notdir $$($(1)_TARBALL))
- else ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
- $(1)_SITE = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
- $(1)_SITE_METHOD = git
-+# Override the default value of _SOURCE to 'barebox-*' so that it is not
-+# downloaded a second time for barebox-aux; also alows avoiding the hash
-+# check:
-+$(1)_SOURCE = barebox-$$($(1)_VERSION).tar.gz
- else
- # Handle stable official Barebox versions
- $(1)_SOURCE = barebox-$$($(1)_VERSION).tar.bz2
+> 
+> I have no simple way to verify the whole compilation with such
+> configuration due to poor Internet quality to download all
+> necessary packages in China mainland.
+> 
+> I've just verified with my own old configuration and it has no
+> impact. Hopefully it's the last patch for all configration to
+> work.
+> 
+> Thanks,
+> Gao Xiang
+> 
+>  ...s-utils-avoid-PAGE_SIZE-redefinition.patch | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch
+> 
+> diff --git a/package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch b/package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch
+> new file mode 100644
+> index 0000000000..2441a841ba
+> --- /dev/null
+> +++ b/package/erofs-utils/0004-erofs-utils-avoid-PAGE_SIZE-redefinition.patch
+> @@ -0,0 +1,57 @@
+> +From 6c087a91c968197b5a95578fc645617947c943ad Mon Sep 17 00:00:00 2001
+> +From: Gao Xiang <hsiangkao@aol.com>
+> +Date: Wed, 25 Mar 2020 15:42:22 +0800
+> +Subject: [PATCH] erofs-utils: avoid PAGE_SIZE redefinition
+> +
+> +Buildroot autobuild reported a PAGE_SIZE redefinition with some
+> +configrations on i586 toolchain [1] (I didn't notice such report
+> +from erofs-utils travis CI or distribution builds before.)
+> +
+> +In file included from config.c:11:
+> +../include/erofs/internal.h:27: error: "PAGE_SIZE" redefined [-Werror]
+> + #define PAGE_SIZE  (1U << PAGE_SHIFT)
+> +
+> +In file included from ../include/erofs/defs.h:17,
+> +                 from ../include/erofs/config.h:12,
+> +                 from ../include/erofs/print.h:12,
+> +                 from config.c:10:
+> +.../sysroot/usr/include/limits.h:89: note: this is the location of the previous definition
+> + #define PAGE_SIZE PAGESIZE
+> +
+> +cc1: all warnings being treated as errors
+> +
+> +Fix it now.
+> +
+> +[1] http://autobuild.buildroot.net/results/340b98caa45bafd43f109002be9da59ba7f6d971
+> +Link: https://lore.kernel.org/r/20200325082930.2025-1-hsiangkao at aol.com
+> +Signed-off-by: Gao Xiang <hsiangkao@aol.com>
+> +---
+> + include/erofs/internal.h | 10 ++++++++++
+> + 1 file changed, 10 insertions(+)
+> +
+> +diff --git a/include/erofs/internal.h b/include/erofs/internal.h
+> +index e7d5a64..41da189 100644
+> +--- a/include/erofs/internal.h
+> ++++ b/include/erofs/internal.h
+> +@@ -23,8 +23,18 @@ typedef unsigned short umode_t;
+> + #define PATH_MAX        4096    /* # chars in a path name including nul */
+> + #endif
+> + 
+> ++#ifndef PAGE_SHIFT
+> + #define PAGE_SHIFT		(12)
+> ++#endif
+> ++
+> ++#ifndef PAGE_SIZE
+> + #define PAGE_SIZE		(1U << PAGE_SHIFT)
+> ++#endif
+> ++
+> ++/* no obvious reason to support explicit PAGE_SIZE != 4096 for now */
+> ++#if PAGE_SIZE != 4096
+> ++#error incompatible PAGE_SIZE is already defined
+> ++#endif
+> + 
+> + #define LOG_BLOCK_SIZE          (12)
+> + #define EROFS_BLKSIZ            (1U << LOG_BLOCK_SIZE)
+> +-- 
+> +2.20.1
+> +
+> -- 
+> 2.20.1
+> 
