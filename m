@@ -1,52 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Mar 2020 22:48:29 +0100
-Subject: [Buildroot] [PATCH 2/2] package/kodi: remove dependency to udev for
- libcec support
-In-Reply-To: <20200328214829.159717-1-bernd.kuhls@t-online.de>
-References: <20200328214829.159717-1-bernd.kuhls@t-online.de>
-Message-ID: <20200328214829.159717-2-bernd.kuhls@t-online.de>
+Date: Sat, 28 Mar 2020 22:48:28 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libcec: bump version
+Message-ID: <20200328214829.159717-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libcec added sysfs scanning support:
-
-On Linux, dynamic device discovery is currently implemented via libudev,
-which may not be available on more minimal systems. Thus, we implement a
-new device discovery that directly uses sysfs to scan through available
-USB devices for supported ones without any additional dependencies.
-
-https://github.com/Pulse-Eight/libcec/commit/70d71cb16fa7c334373f3ba0148b89eafc04f73f
-
-Previously Kodi needed udev to find the Pulse-Eight CEC adapter.
-Run-time tested using Kodi 18.6-Leia.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/libcec/libcec.hash | 2 +-
+ package/libcec/libcec.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 13b8f9df3e..07128ac3c5 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -160,15 +160,11 @@ config BR2_PACKAGE_KODI_LIBBLURAY
+diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
+index 6790b417f1..c457ee7097 100644
+--- a/package/libcec/libcec.hash
++++ b/package/libcec/libcec.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 4382a964bf8c511c22c03cdab5ba2d81c241536e6479072a61516966804f400a  libcec-4.0.4.tar.gz
++sha256 035c617e48e14b1d70c503c5fefce42142198e36fefa0f8b01f0228df65edb52  libcec-91da1b6d5daecd3c85a1ac06d325ee4554f69b83.tar.gz
+ sha256 3618005b3db4eb8ede7292d233e6c41605cb8dcbd33e8790eff6e29c1e4f3789  COPYING
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index fe519d47ba..e85fd6a4d3 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_KODI_LIBCEC
- 	bool "hdmi cec"
--	depends on BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_LIBCEC
- 	help
- 	  Enable CEC (Consumer Electronics Control) support.
- 	  Select this if you want Kodi to support HDMI CEC.
+-LIBCEC_VERSION = 4.0.4
+-LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
++LIBCEC_VERSION = 91da1b6d5daecd3c85a1ac06d325ee4554f69b83
++LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPL-2.0+
+ LIBCEC_LICENSE_FILES = COPYING
  
--comment "hdmi cec support needs udev /dev management"
--	depends on !BR2_PACKAGE_HAS_UDEV
--
- config BR2_PACKAGE_KODI_LCMS2
- 	bool "lcms2"
- 	select BR2_PACKAGE_LCMS2
 -- 
 2.25.0
