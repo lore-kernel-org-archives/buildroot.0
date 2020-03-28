@@ -1,33 +1,79 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 28 Mar 2020 18:30:08 +0000
-Subject: [Buildroot] [Bug 12716] bio.h not found
-In-Reply-To: <bug-12716-163@https.bugs.busybox.net/>
-References: <bug-12716-163@https.bugs.busybox.net/>
-Message-ID: <bug-12716-163-1N1QxsUinQ@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 28 Mar 2020 19:45:28 +0100
+Subject: [Buildroot] [git commit] docs/manual: small typo fixes and cleanup
+Message-ID: <20200328183231.21EBE888EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12716
+commit: https://git.buildroot.net/buildroot/commit/?id=20bd811c7ed5240d6eccde918161222de3bb6b4d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Fix a few punctuation mistakes. The removed link is redundant, see the
+previous sentence.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |INVALID
-                 CC|                            |yann.morin.1998 at free.fr
+Signed-off-by: Merlin B??ge <merlin.buege@tuhh.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ docs/manual/common-usage.txt      | 2 +-
+ docs/manual/customize-patches.txt | 2 +-
+ docs/manual/customize-rootfs.txt  | 2 +-
+ docs/manual/writing-rules.txt     | 4 ++--
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-> scripts/extract-cert.c:21:10: fatal error: openssl/bio.h: No such file or directory
->  #include <openssl/bio.h>
->           ^~~~~~~~~~~~~~~
-> compilation terminated.
-
-You need to enable BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 3fe7f69721..7cfda10365 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -88,7 +88,7 @@ to +make+ or set in the environment:
+   Buildroot stores the cached files when using ccache.
+   +
+ * +BR2_DL_DIR+ to override the directory in which
+-  Buildroot stores/retrieves downloaded files
++  Buildroot stores/retrieves downloaded files.
+   +
+   Note that the Buildroot download directory can also be set from the
+   configuration interface, so through the Buildroot +.config+ file. See
+diff --git a/docs/manual/customize-patches.txt b/docs/manual/customize-patches.txt
+index fa63541110..eb98d1bea2 100644
+--- a/docs/manual/customize-patches.txt
++++ b/docs/manual/customize-patches.txt
+@@ -53,7 +53,7 @@ directory.
+ The exception to +BR2_GLOBAL_PATCH_DIR+ being the preferred method for
+ specifying custom patches is +BR2_LINUX_KERNEL_PATCH+.
+ +BR2_LINUX_KERNEL_PATCH+ should be used to specify kernel patches that
+-are available at an URL. *Note:* +BR2_LINUX_KERNEL_PATCH+ specifies kernel
++are available at a URL. *Note:* +BR2_LINUX_KERNEL_PATCH+ specifies kernel
+ patches that are applied after patches available in +BR2_GLOBAL_PATCH_DIR+,
+ as it is done from a post-patch hook of the Linux package.
+ 
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index 6b72a37b32..e1dbadda5b 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -145,7 +145,7 @@ It is recommended to use the existing mechanisms to set file permissions
+ The difference between post-build scripts (above) and fakeroot scripts,
+   is that post-build scripts are not called in the fakeroot context.
+ +
+-.Note;
++.Note:
+ Using `fakeroot` is not an absolute substitute for actually being root.
+   `fakeroot` only ever fakes the file access rights and types (regular,
+   block-or-char device...) and uid/gid; these are emulated in-memory.
+diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
+index ca43272287..3b809d5c48 100644
+--- a/docs/manual/writing-rules.txt
++++ b/docs/manual/writing-rules.txt
+@@ -141,8 +141,8 @@ endif
+ The documentation uses the
+ http://www.methods.co.nz/asciidoc/[asciidoc] format.
+ 
+-For further details about the http://www.methods.co.nz/asciidoc/[asciidoc]
+-syntax, refer to http://www.methods.co.nz/asciidoc/userguide.html[].
++For further details about the asciidoc syntax, refer to
++http://www.methods.co.nz/asciidoc/userguide.html[].
+ 
+ === Support scripts
+ 
