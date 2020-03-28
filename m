@@ -1,42 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 28 Mar 2020 18:06:05 +0000
-Subject: [Buildroot] [Bug 12716] New: bio.h not found
-Message-ID: <bug-12716-163@https.bugs.busybox.net/>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Sat, 28 Mar 2020 19:12:20 +0100
+Subject: [Buildroot] friendlyarm neo4
+In-Reply-To: <CAAfyv36FyrVcYtaEwC3J=JuhtnGg2TY0-XYvD7MtecYyL4UnSA@mail.gmail.com>
+References: <CAAfyv36FyrVcYtaEwC3J=JuhtnGg2TY0-XYvD7MtecYyL4UnSA@mail.gmail.com>
+Message-ID: <CAAfyv34+YfRy1E9zc-8nZxVQyJ817LkAXLRK0HdxM-tPdgfaCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12716
+On Fri, Mar 27, 2020 at 10:07 PM Belisko Marek <marek.belisko@gmail.com> wrote:
+>
+> Hi,
+>
+> I became owner of nanopi neo4 board and was looking around for some
+> options how to run buildroot on this board. I discovered that BR have
+> support for this board but was dropped in commit:
+> 8af7b11bd8a95bc41e4de46f727f3b0afde465a4.
+>
+> Anyway I revert this commit and build an image but when flashed to
+> SDcard console shows some garbage only and that's it. Anyone have this
+> board working or am I missing something? Thanks.
+I'm missing proper board reading of readme. Problme was baudrate on
+serial console.
+Sorry for noise.
+>
+> BR,
+>
+> marek
 
-            Bug ID: 12716
-           Summary: bio.h not found
-           Product: buildroot
-           Version: 2020.02
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: blocker
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: fshah48 at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+BR,
 
-Created attachment 8416
-  --> https://bugs.busybox.net/attachment.cgi?id=8416&action=edit
-Output of make and stderr + output of find -name bio.h
+marek
 
-I am rather new to linux.
-Tried to build default configuration with minor changes required to produce ISO
-image for running under qemu. I could update .config but it is 90KB and
-restriction is 75KB.
 
-<make menuconfig> failed because it could not find bio.h
-I captured output of next attempt since it would produce only related output.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
+
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
