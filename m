@@ -1,49 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Mar 2020 08:31:25 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/samba4: bump
- version to 4.11.7
-Message-ID: <20200328071845.5B5B888702@busybox.osuosl.org>
+Date: Sat, 28 Mar 2020 08:33:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.11.7
+In-Reply-To: <20200320071148.1042976-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 20 Mar 2020 08:11:48 +0100")
+References: <20200320071148.1042976-1-bernd.kuhls@t-online.de>
+Message-ID: <878sjldjd9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0168c3d7252f1ed15781e5649f73a6bb1d3a8ffa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Release notes: https://www.samba.org/samba/history/samba-4.11.7.html
+ > Release notes: https://www.samba.org/samba/history/samba-4.11.7.html
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 98cd8870f8d9c06d1c01bde1f5b623efb9a00b01)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Given the small number of changes and the fact that they are all
+bugfixes - Committed to 2020.02.x, thanks.
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 022bc22055..8948c41ea6 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.11.6.tar.asc
--sha256 91438f4d7b71f673421435fa7f26b03b613f214139636ce50af35bc2ff09ef38  samba-4.11.6.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.11.7.tar.asc
-+sha256 79b6f9ebc357373f885153e2d5d26dc6def9f4511ee4bcbe8a8e2622acc42143  samba-4.11.7.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 3048cb9a63..582b30bcd5 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.11.6
-+SAMBA4_VERSION = 4.11.7
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-- 
+Bye, Peter Korsgaard
