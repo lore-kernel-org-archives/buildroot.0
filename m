@@ -1,42 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Mar 2020 14:53:50 +0100
-Subject: [Buildroot] [git commit] package/lz4: annotate CVE-2014-4715
-Message-ID: <20200328134031.E7E57888C2@busybox.osuosl.org>
+Date: Sat, 28 Mar 2020 14:54:56 +0100
+Subject: [Buildroot] [git commit] package/rocksdb: fix bzip2 option
+Message-ID: <20200328134133.CE4D6888C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45db4bb08e3e550db483d8745fe8aaede2fa7e98
+commit: https://git.buildroot.net/buildroot/commit/?id=8fc0b41c733f07a0c89d82d78306c35ed6ff4236
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CVE-2014-4715 is misclassified (by our CVE tracker) as affecting
-version 1.9.2, while in fact this issue has been fixed since lz4-r130:
-https://github.com/lz4/lz4/commit/140e6e72ddb6fc5f7cd28ce0c8ec3812ef4a9c08
-
-See https://github.com/lz4/lz4/issues/818
+Commit 95bf830e2ae6b5548c17fd3ce6ac1a8d2aa0c8b6 forgot to replace
+ROCKSDB_CONF_OPTS by ROCKSDB_MAKE_OPTS for BR2_PACKAGE_BZIP2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lz4/lz4.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/rocksdb/rocksdb.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index 2a658fbba5..1d32666ccc 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -10,6 +10,12 @@ LZ4_INSTALL_STAGING = YES
- LZ4_LICENSE = BSD-2-Clause (library), GPL-2.0+ (programs)
- LZ4_LICENSE_FILES = lib/LICENSE programs/COPYING
+diff --git a/package/rocksdb/rocksdb.mk b/package/rocksdb/rocksdb.mk
+index 8109605916..5f9fd9f1cb 100644
+--- a/package/rocksdb/rocksdb.mk
++++ b/package/rocksdb/rocksdb.mk
+@@ -14,9 +14,9 @@ ROCKSDB_MAKE_OPTS = PORTABLE=1
  
-+# CVE-2014-4715 is misclassified (by our CVE tracker) as affecting version
-+# 1.9.2, while in fact this issue has been fixed since lz4-r130:
-+# https://github.com/lz4/lz4/commit/140e6e72ddb6fc5f7cd28ce0c8ec3812ef4a9c08
-+# See https://github.com/lz4/lz4/issues/818
-+LZ4_IGNORE_CVES += CVE-2014-4715
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- LZ4_MAKE_OPTS += BUILD_SHARED=no
- else ifeq ($(BR2_SHARED_LIBS),y)
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ ROCKSDB_DEPENDENCIES += bzip2
+-ROCKSDB_CONF_OPTS += ROCKSDB_DISABLE_BZ2=0
++ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_BZ2=0
+ else
+-ROCKSDB_CONF_OPTS += ROCKSDB_DISABLE_BZ2=1
++ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_BZ2=1
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GFLAGS),y)
