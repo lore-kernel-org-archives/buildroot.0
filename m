@@ -1,38 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Mar 2020 14:54:56 +0100
-Subject: [Buildroot] [git commit] package/rocksdb: fix bzip2 option
-Message-ID: <20200328134133.CE4D6888C8@busybox.osuosl.org>
+Date: Sat, 28 Mar 2020 14:59:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pure-ftpd: fix CVE-2020-9274
+In-Reply-To: <20200328090042.950156-1-fontaine.fabrice@gmail.com>
+References: <20200328090042.950156-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200328145905.1dddc44c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fc0b41c733f07a0c89d82d78306c35ed6ff4236
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 28 Mar 2020 10:00:42 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Commit 95bf830e2ae6b5548c17fd3ce6ac1a8d2aa0c8b6 forgot to replace
-ROCKSDB_CONF_OPTS by ROCKSDB_MAKE_OPTS for BR2_PACKAGE_BZIP2
+> An issue was discovered in Pure-FTPd 1.0.49. An uninitialized pointer
+> vulnerability has been detected in the diraliases linked list. When the
+> *lookup_alias(const char alias) or print_aliases(void) function is
+> called, they fail to correctly detect the end of the linked list and try
+> to access a non-existent list member. This is related to init_aliases in
+> diraliases.c.
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...ays-set-the-tail-of-the-list-to-NULL.patch | 35 +++++++++++++++++++
+>  package/pure-ftpd/pure-ftpd.mk                |  3 ++
+>  2 files changed, 38 insertions(+)
+>  create mode 100644 package/pure-ftpd/0003-diraliases-always-set-the-tail-of-the-list-to-NULL.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rocksdb/rocksdb.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/rocksdb/rocksdb.mk b/package/rocksdb/rocksdb.mk
-index 8109605916..5f9fd9f1cb 100644
---- a/package/rocksdb/rocksdb.mk
-+++ b/package/rocksdb/rocksdb.mk
-@@ -14,9 +14,9 @@ ROCKSDB_MAKE_OPTS = PORTABLE=1
- 
- ifeq ($(BR2_PACKAGE_BZIP2),y)
- ROCKSDB_DEPENDENCIES += bzip2
--ROCKSDB_CONF_OPTS += ROCKSDB_DISABLE_BZ2=0
-+ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_BZ2=0
- else
--ROCKSDB_CONF_OPTS += ROCKSDB_DISABLE_BZ2=1
-+ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_BZ2=1
- endif
- 
- ifeq ($(BR2_PACKAGE_GFLAGS),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
