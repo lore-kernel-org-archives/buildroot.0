@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Mar 2020 08:34:23 +0100
-Subject: [Buildroot] [git commit branch/2019.11.x] package/radvd: drop
+Date: Sat, 28 Mar 2020 08:33:51 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/radvd: drop
  dependency on flex runtime library
-Message-ID: <20200328072156.332E48874C@busybox.osuosl.org>
+Message-ID: <20200328072203.3949A88751@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65be1ccc55c53495664bb1f109a2df123935402e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=958c6986a37ac80e0af179be0838917bdb6a946d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Radvd has its own main(), and does not use yywrap() from libfl.so,
 because scanner.l module contains noyywrap option. So, none of the
@@ -27,7 +27,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/package/radvd/Config.in b/package/radvd/Config.in
-index 48aeedc08f..713e7cb277 100644
+index fa5a20c4c1..f1df0c3cb8 100644
 --- a/package/radvd/Config.in
 +++ b/package/radvd/Config.in
 @@ -1,7 +1,6 @@
@@ -39,7 +39,7 @@ index 48aeedc08f..713e7cb277 100644
  	  IPv6 Router Advertisement Daemon.
  
 diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 5679e613d4..4bc3ea4e60 100644
+index 3358264f18..ba0c78bd1e 100644
 --- a/package/radvd/radvd.mk
 +++ b/package/radvd/radvd.mk
 @@ -6,7 +6,7 @@
