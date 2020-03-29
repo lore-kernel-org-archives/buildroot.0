@@ -1,55 +1,179 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Mar 2020 22:43:27 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/cegui: rename and bump
- version
-In-Reply-To: <20200323180330.486956-1-b.bilas@grinn-global.com>
-References: <20200323180330.486956-1-b.bilas@grinn-global.com>
-Message-ID: <20200329224327.619ec3a2@windsurf.home>
+From: =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Date: Sun, 29 Mar 2020 22:50:31 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: add version 5.5
+In-Reply-To: <20200329171804.GJ22325@scaer>
+References: <20200210162102.27584-1-jagan@amarulasolutions.com>
+ <20200329171804.GJ22325@scaer>
+Message-ID: <CAJiuCcdm9pDbdkBa2YGJGWarGXpsyzLrE5vnF+KjvAcJoApyWw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Mar 2020 19:03:30 +0100
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+Hi Yann,
 
-> Since spice ver. 0.12.6 doesn't depend on cegui anymore
-> let's bump to the latest stable version and rename package.
-> 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> ---
-> Changes v2 -> v3:
-> 	- update DEVELOPERS package entry
-> 	- add dependency on BR2_USE_WCHAR
-> 	- add libiconv dependency if package is selected (suggested by
-> 	  Yann)
-> Changes v1 -> v2:
->         - fix compiling errors when uClibc is used (reported by Thomas)
->         - force to set dependency options explicitly (suggested by Thomas)
->  Config.in.legacy                              |   8 ++
->  DEVELOPERS                                    |   2 +-
->  package/Config.in                             |   2 +-
->  ...pp-check-if-execinfo-header-is-avail.patch |  33 +++++
->  package/{cegui06 => cegui}/Config.in          |  17 +--
->  package/cegui/cegui.hash                      |   3 +
->  package/cegui/cegui.mk                        | 117 ++++++++++++++++++
->  package/cegui06/0001-stddef.h.patch           |  26 ----
->  package/cegui06/cegui06.hash                  |   3 -
->  package/cegui06/cegui06.mk                    |  36 ------
->  10 files changed, 172 insertions(+), 75 deletions(-)
->  create mode 100644 package/cegui/0001-src-Exceptions.cpp-check-if-execinfo-header-is-avail.patch
->  rename package/{cegui06 => cegui}/Config.in (68%)
->  create mode 100644 package/cegui/cegui.hash
->  create mode 100644 package/cegui/cegui.mk
->  delete mode 100644 package/cegui06/0001-stddef.h.patch
->  delete mode 100644 package/cegui06/cegui06.hash
->  delete mode 100644 package/cegui06/cegui06.mk
+On Sun, 29 Mar 2020 at 19:18, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Jagan, All,
+>
+> On 2020-02-10 17:21 +0100, Jagan Teki spake thusly:
+> > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+>
+> Finally applied to master, thanks!
+>
+> It's been a bit tough, because so much has changed in the meantime, so
+> it was conflicting all over. I hope I did not bork it too much when
+> doing the rease.
+>
+> In the process, I also switched over to 5.5.13, which had been released
+> in the meantime.
 
-Applied to master, thanks.
+Thank you very much for taking care of this patch !
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Clement
+
+>
+> Thanks!
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > ---
+> >  linux/Config.in                                       |  4 ++--
+> >  linux/linux.hash                                      |  1 +
+> >  package/linux-headers/Config.in.host                  | 11 ++++++++++-
+> >  toolchain/Config.in                                   |  5 +++++
+> >  .../toolchain-external-custom/Config.in.options       |  4 ++++
+> >  5 files changed, 22 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/linux/Config.in b/linux/Config.in
+> > index 14b76205e4..5c4d58092e 100644
+> > --- a/linux/Config.in
+> > +++ b/linux/Config.in
+> > @@ -27,7 +27,7 @@ choice
+> >       prompt "Kernel version"
+> >
+> >  config BR2_LINUX_KERNEL_LATEST_VERSION
+> > -     bool "Latest version (5.4)"
+> > +     bool "Latest version (5.5)"
+> >
+> >  config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+> >       bool "Latest CIP SLTS version (4.19.94-cip18)"
+> > @@ -128,7 +128,7 @@ endif
+> >
+> >  config BR2_LINUX_KERNEL_VERSION
+> >       string
+> > -     default "5.4.13" if BR2_LINUX_KERNEL_LATEST_VERSION
+> > +     default "5.5" if BR2_LINUX_KERNEL_LATEST_VERSION
+> >       default "4.19.94-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+> >       default "4.19.90-cip16-rt6" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+> >       default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+> > diff --git a/linux/linux.hash b/linux/linux.hash
+> > index 560bdfc704..be43bef708 100644
+> > --- a/linux/linux.hash
+> > +++ b/linux/linux.hash
+> > @@ -1,5 +1,6 @@
+> >  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+> >  sha256 49fb29d96d7e7c1d7e6082701bd26bfddd0fbc87a796fb6ba6258bc5fd386ad7  linux-5.4.13.tar.xz
+> > +sha256 a6fbd4ee903c128367892c2393ee0d9657b6ed3ea90016d4dc6f1f6da20b2330  linux-5.5.tar.xz
+> >  # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+> >  sha256 da02389a9c39284dca01b7ba48e845be3dd5ce0fed0b5f30150d8d303429e7dd  linux-4.4.210.tar.xz
+> >  sha256 a0915203836d02cc3cd70252904700412c4a409737a81b392465fb70d7625313  linux-4.9.210.tar.xz
+> > diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+> > index ee3a8fe1ba..d10a50fd40 100644
+> > --- a/package/linux-headers/Config.in.host
+> > +++ b/package/linux-headers/Config.in.host
+> > @@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+> >  choice
+> >       prompt "Kernel Headers"
+> >       default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+> > -     default BR2_KERNEL_HEADERS_5_4
+> > +     default BR2_KERNEL_HEADERS_5_5
+> >       help
+> >         Select the kernel version to get headers from.
+> >
+> > @@ -53,6 +53,10 @@ config BR2_KERNEL_HEADERS_5_4
+> >       bool "Linux 5.4.x kernel headers"
+> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+> >
+> > +config BR2_KERNEL_HEADERS_5_5
+> > +     bool "Linux 5.5.x kernel headers"
+> > +     select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
+> > +
+> >  config BR2_KERNEL_HEADERS_VERSION
+> >       bool "Manually specified Linux version"
+> >       help
+> > @@ -118,6 +122,10 @@ choice
+> >         This is used to hide/show some packages that have strict
+> >         requirements on the version of kernel headers.
+> >
+> > +config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_5
+> > +     bool "5.5.x"
+> > +     select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
+> > +
+> >  config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4
+> >       bool "5.4.x"
+> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+> > @@ -314,6 +322,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+> >       default "4.14.166"      if BR2_KERNEL_HEADERS_4_14
+> >       default "4.19.97"       if BR2_KERNEL_HEADERS_4_19
+> >       default "5.4.13"        if BR2_KERNEL_HEADERS_5_4
+> > +     default "5.5"           if BR2_KERNEL_HEADERS_5_5
+> >       default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+> >       default "custom"        if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+> >       default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+> > diff --git a/toolchain/Config.in b/toolchain/Config.in
+> > index 858121d2c5..c166c9d201 100644
+> > --- a/toolchain/Config.in
+> > +++ b/toolchain/Config.in
+> > @@ -458,10 +458,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+> >       bool
+> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
+> >
+> > +config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
+> > +     bool
+> > +     select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+> > +
+> >  # This order guarantees that the highest version is set, as kconfig
+> >  # stops affecting a value on the first matching default.
+> >  config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+> >       string
+> > +     default "5.5"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
+> >       default "5.4"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+> >       default "5.3"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
+> >       default "5.2"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+> > diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> > index 665765a104..f256105463 100644
+> > --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> > +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+> > @@ -109,6 +109,10 @@ choice
+> >           m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+> >           p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+> >
+> > +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_5
+> > +     bool "5.5.x"
+> > +     select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
+> > +
+> >  config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4
+> >       bool "5.4.x"
+> >       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+> > --
+> > 2.17.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
