@@ -1,81 +1,187 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Mar 2020 00:21:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rng-tools: fix redefinition of
- encrypt
-Message-ID: <20200329222150.95147-1-fontaine.fabrice@gmail.com>
+From: David PIERRET <david.pierret@smile.fr>
+Date: Mon, 30 Mar 2020 01:16:27 +0200
+Subject: [Buildroot] [v2 1/1] package/bat: new package
+In-Reply-To: <74538af2-c667-e50e-4cbb-681957f67a2d@gmail.com>
+References: <20200327174035.11503-1-david.pierret@smile.fr>
+ <74538af2-c667-e50e-4cbb-681957f67a2d@gmail.com>
+Message-ID: <CADyEP=Q9wgGGLPppD4eGrWnKhiyvjpJXZ51x0AbtO47UmDWzsA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/bb7dbd5a76c1ecd2a1d205f4a1c391095e653886
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ..._jitter-disambiguate-call-to-encrypt.patch | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 package/rng-tools/0002-rngd_jitter-disambiguate-call-to-encrypt.patch
+On Sat, Mar 28, 2020 at 10:18 PM Romain Naour <romain.naour@gmail.com> wrote:
+>
+> David,
+>
+> Le 27/03/2020 ? 18:40, David Pierret a ?crit :
+> > bat is a cat(1) clone with syntax highlighting and Git integration.
+> >
+> > This package need rust version 1.37.0 or later
+> >
+> > Signed-off-by: David Pierret <david.pierret@smile.fr>
+> >
+> > ----
+> > bat supports syntax highlighting for a large number of programming
+> > and markup languages. He can communicates with git to show
+> > modifications with respect to the index.
+> > For conveignance use, bat can pipe its own output to less if the
+> > output is too large for one screen.
+> >
+> > v1 -> v2
+> > Add selection of less out of busybox for command line option
+> > compatibility
+> > ---
+> [...]
+> > +++ b/package/bat/Config.in
+> > @@ -0,0 +1,13 @@
+> > +config BR2_PACKAGE_BAT
+> > +     bool "bat"
+> > +     depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> > +     select BR2_PACKAGE_HOST_RUSTC
+> > +     # we need a full version of less
+> > +     select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> > +     # less needs ncurses
+>
+> This comment is useless.
+>
+> > +     select BR2_PACKAGE_NCURSES
+> > +     select BR2_PACKAGE_LESS
+>
+> Add a comment "# Runtime dependency" for each.
+>
+> > +     help
+> > +       A cat(1) clone with syntax highlighting and Git integration.
+> > +
+> > +       https://github.com/sharkdp/bat
+> > diff --git a/package/bat/bat.hash b/package/bat/bat.hash
+> > new file mode 100644
+> > index 0000000000..14438b8a6f
+> > --- /dev/null
+> > +++ b/package/bat/bat.hash
+> > @@ -0,0 +1,4 @@
+> > +# Locally generated
+> > +sha256 f4aee370013e2a3bc84c405738ed0ab6e334d3a9f22c18031a7ea008cd5abd2a  bat-0.13.0.tar.gz
+> > +sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
+> > +sha256 dc931b3f4376dc2b12486ded9f51487719099074587d757ea6125bb59deeb221  LICENSE-MIT
+> > diff --git a/package/bat/bat.mk b/package/bat/bat.mk
+> > new file mode 100644
+> > index 0000000000..89711ac33b
+> > --- /dev/null
+> > +++ b/package/bat/bat.mk
+> > @@ -0,0 +1,39 @@
+> > +################################################################################
+> > +#
+> > +# bat
+> > +#
+> > +################################################################################
+> > +
+> > +BAT_VERSION = 0.13.0
+> > +BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
+> > +BAT_LICENSE = Apache-2.0 or MIT
+> > +BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> > +BAT_DEPENDENCIES = host-rustc
+> > +
+> > +BAT_CFLAGS = $(TARGET_CFLAGS)
+> > +
+> > +BAT_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+> > +BAT_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
+> > +
+> > +BAT_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(BAT_CARGO_MODE)
+> > +
+> > +BAT_CARGO_OPTS = \
+> > +              --bins \
+> > +              --$(BAT_CARGO_MODE) \
+> > +              --target=$(RUSTC_TARGET_NAME) \
+> > +              --manifest-path=$(@D)/Cargo.toml
+> > +
+> > +define BAT_BUILD_CMDS
+> > +     # we need to use the 'env' command to set the CC_<target> variable since
+> > +     # the rustc_target_name contain minus characters not allowed in bash.
+> > +     env $(TARGET_MAKE_ENV) $(BAT_CARGO_ENV) \
+> > +     CC_$(RUSTC_TARGET_NAME)=$(TARGET_CC) \
+> > +             cargo build $(BAT_CARGO_OPTS)
+> > +endef
+>
+> David, can you add some details about the issue with CC_<target> ?
+>
+> It would be great if you can use the upcoming cargo package infra, but this
+> infra doesn't handle CC_<target>.
 
-diff --git a/package/rng-tools/0002-rngd_jitter-disambiguate-call-to-encrypt.patch b/package/rng-tools/0002-rngd_jitter-disambiguate-call-to-encrypt.patch
-new file mode 100644
-index 0000000000..99997ce866
---- /dev/null
-+++ b/package/rng-tools/0002-rngd_jitter-disambiguate-call-to-encrypt.patch
-@@ -0,0 +1,53 @@
-+From dab16a5fd4efde8ef569b358e19b1fcbc7d0d938 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 30 Mar 2020 00:10:46 +0200
-+Subject: [PATCH] rngd_jitter: disambiguate call to encrypt
-+
-+Commit 0f184ea7e792427fb20afe81d471b565aee96f0b disambiguate the call to
-+encrypt in rngd_rdrand.c but did not update rngd_jitter.c.
-+
-+This raise the following build failure:
-+
-+rngd_jitter.c:75:12: error: conflicting types for 'encrypt'
-+ static int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
-+            ^~~~~~~
-+In file included from rngd_jitter.c:27:
-+/home/dawncrow/buildroot-test/scripts/instance-0/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/unistd.h:1132:13: note: previous declaration of 'encrypt' was here
-+ extern void encrypt (char *__block, int __edflag) __THROW __nonnull ((1));
-+             ^~~~~~~
-+Makefile:770: recipe for target 'rngd-rngd_jitter.o' failed
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0ca6bf16e3acbc94065b88c4442d6595424b77cb
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/nhorman/rng-tools/pull/89]
-+---
-+ rngd_jitter.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/rngd_jitter.c b/rngd_jitter.c
-+index c1b1aca..49a3825 100644
-+--- a/rngd_jitter.c
-++++ b/rngd_jitter.c
-+@@ -72,7 +72,7 @@ unsigned char *aes_buf;
-+ char key[AES_BLOCK];
-+ static unsigned char iv_buf[CHUNK_SIZE] __attribute__((aligned(128)));
-+ 
-+-static int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
-++static int osslencrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
-+             unsigned char *iv, unsigned char *ciphertext)
-+ {
-+         EVP_CIPHER_CTX *ctx;
-+@@ -122,7 +122,7 @@ static inline int openssl_mangle(unsigned char *tmp, struct rng *ent_src)
-+         unsigned char ciphertext[CHUNK_SIZE * RDRAND_ROUNDS];
-+ 
-+         /* Encrypt the plaintext */
-+-        ciphertext_len = encrypt (tmp, strlen(tmp), key, iv_buf,
-++        ciphertext_len = osslencrypt (tmp, strlen(tmp), key, iv_buf,
-+                               ciphertext);
-+         if (!ciphertext_len)
-+                 return -1;
-+-- 
-+2.25.1
-+
--- 
-2.25.1
+Yes, I will do it for the v3, but we need to fix the CC_<target>
+first, because the
+upcoming cargo infra allow the package to not specify the BUILD_CMD macro.
+
+>
+> As you noticed the build fail because we need to set CC_aarch64-none-linux-gnu
+> environment variable for aarch64 target build.
+>
+> Arnout, Patrick. It seems David discovered a cross-compilation issue with cargo.
+> I reproduced the issue, cargo is using the host compiler instead of the
+> cross-compiler:
+>
+> error: failed to run custom build command for `libloading v0.5.2`
+>
+> Caused by:
+>   process didn't exit successfully:
+> `/home/naourr/buildroot/test/bat/build/bat-0.13.0/target/release/build/libloading-0c8de6c7b10afd2b/build-script-build`
+> (exit code: 1)
+> --- stdout
+> cargo:rustc-link-lib=dl
+> TARGET = Some("x86_64-unknown-linux-gnu")
+> OPT_LEVEL = Some("3")
+> HOST = Some("x86_64-unknown-linux-gnu")
+> CC_x86_64-unknown-linux-gnu = None
+> CC_x86_64_unknown_linux_gnu = None
+> HOST_CC = None
+> CC = Some("/home/naourr/buildroot/test/bat/host/bin/aarch64-none-linux-gnu-gcc")
+> CFLAGS_x86_64-unknown-linux-gnu = None
+> CFLAGS_x86_64_unknown_linux_gnu = None
+> HOST_CFLAGS = None
+> CFLAGS = Some("-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> -Os  ")
+> CRATE_CC_NO_DEFAULTS = None
+> DEBUG = Some("false")
+> CARGO_CFG_TARGET_FEATURE = Some("fxsr,sse,sse2")
+> running: "/home/naourr/buildroot/test/bat/host/bin/aarch64-none-linux-gnu-gcc"
+> "-O3" "-ffunction-sections" "-fdata-sections" "-fPIC" "-m64"
+> "-D_LARGEFILE_SOURCE" "-D_LARGEFILE64_SOURCE" "-D_FILE_OFFSET_BITS=64" "-Os"
+> "-o"
+> "/home/naourr/buildroot/test/bat/build/bat-0.13.0/target/release/build/libloading-f48b6720ea7caaa6/out/src/os/unix/global_static.o"
+> "-c" "src/os/unix/global_static.c"
+> cargo:warning=aarch64-none-linux-gnu-gcc: error: unrecognized command line
+> option ?-m64?
+> exit code: 1
+>
+> See:
+> https://stackoverflow.com/questions/54029117/why-is-the-target-environment-variable-reset-when-compiling-a-rust-program-in-a
+
+Some rust dependances use the host compiler as target compiler (not
+considered as defects by maintainers).
+see : https://github.com/alexcrichton/cc-rs/issues/382#issuecomment-473948063
+
+To force Cargo to use the good compiler, you need to specify the CC by
+architectures like explain in this article :
+https://github.com/alexcrichton/cc-rs#external-configuration-via-environment-variables
+
+For this I've used the `env` command who accept the variables name
+containing minus sign.
+see : https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/rust/default.nix#L152-L163
+
+
+>
+> Best regards,
+> Romain
+>
+> > +
+> > +define BAT_INSTALL_TARGET_CMDS
+> > +     $(INSTALL) -D -m 0755 $(@D)/$(BAT_BIN_DIR)/bat \
+> > +             $(TARGET_DIR)/usr/bin/bat
+> > +endef
+> > +
+> > +$(eval $(generic-package))
+> >
+>
