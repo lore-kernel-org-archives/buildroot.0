@@ -1,128 +1,113 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 29 Mar 2020 15:51:16 +0200
-Subject: [Buildroot] [PATCH v1 6/6] package/localedef: fix gcc-10.0.1
- compile
-In-Reply-To: <20200329132535.4811-6-ps.report@gmx.net>
-References: <20200329132535.4811-1-ps.report@gmx.net>
- <20200329132535.4811-6-ps.report@gmx.net>
-Message-ID: <20200329155116.57906ed2@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 29 Mar 2020 16:01:42 +0200
+Subject: [Buildroot] [PATCH 0/9 v5] package/apparmor: new package (branch
+ yem/apparmor)
+Message-ID: <cover.1585490494.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello *,
+Hello All!
 
-this one leaked to the wrong branch ;-), ignore...
+This series is reworked of the previous work from Angelo:
+    http://lists.busybox.net/pipermail/buildroot/2020-March/278308.html
+    http://lists.busybox.net/pipermail/buildroot/2020-March/278307.html
+
+Fundamentally, (almost) all the code is from Angelo, and it has jsut
+been spread across two packages.
+
+The way the apparmor package is laid out is not very amenable at doing a
+single package that builds everything: all the tools and utils depend on
+libapparmor, and that is better installed before the build of the tools
+is attempted.
+
+So, we split the packaging in two:
+
+  - libapparmor, which is siolely responsible for installing
+    libapparmor and its python3 bindings,
+
+  - apparmor per-se, which is responsible for installing all the tools
+    and utilities.
+
+To be noted: most of the tools' Makefiles hard-code linking to the
+static libapparmor (without explanations), so rather than go against the
+tide, we just enforce building the static library (note also that we do
+not forbid building the shared one).
+
+The only major part that was dropped from the initial series, is support
+for writign the cache on read-write filesystems. The codition was based
+on BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW, but that does not prevent
+building an actually read-only filesystem at all (e.g. squashfs). So,
+more thoughts will have to be poured into this caching feature in a
+subsequent series.
+
+Chage v4 -> v5:  (adopted by Yann)
+  - split in two packages, one for the lib, ione for the utils
+  - reword all the commit logs
+  - fix dependencies (threads, mmu...)
+  - re-organise the conditions to install utils (python3 vs others)
+  - drop the cache writing for read-write filesystems
+
 
 Regards,
-Peter
+Yann E. MORIN.
 
-On Sun, 29 Mar 2020 15:25:35 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
 
-> Fixes bug 12711 ([1]):
-> 
->   programs/ld-ctype.c:855:18: error: array subscript 0 is outside the bounds of an interior zero-length array ?unsigned char[0]? [-Werror=zero-length-bounds]
->     855 |  replace[0].bytes[0] = '?';
->         |  ~~~~~~~~~~~~~~~~^~~
-> 
-> [1] https://bugs.busybox.net/show_bug.cgi?id=12711
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Notes:
-> Patch suggested by Yann E, MORIN, could not test personally (no
-> gcc-10.0.1 available).
-> ---
->  ...itializer-for-flexible-array-member-.patch | 81 +++++++++++++++++++
->  1 file changed, 81 insertions(+)
->  create mode 100644 package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0003-localedef-Use-initializer-for-flexible-array-member-.patch
-> 
-> diff --git a/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0003-localedef-Use-initializer-for-flexible-array-member-.patch b/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0003-localedef-Use-initializer-for-flexible-array-member-.patch
-> new file mode 100644
-> index 0000000000..93547e08f0
-> --- /dev/null
-> +++ b/package/localedef/2.30-20-g50f20fe506abb8853641006a7b90a81af21d7b91/0003-localedef-Use-initializer-for-flexible-array-member-.patch
-> @@ -0,0 +1,81 @@
-> +From 6fea0a8e33760258c4baa5d0a6f3a145897427fe Mon Sep 17 00:00:00 2001
-> +From: Florian Weimer <fweimer@redhat.com>
-> +Date: Tue, 3 Sep 2019 14:01:39 +0200
-> +Subject: [PATCH] localedef: Use initializer for flexible array member [BZ
-> + #24950]
-> +
-> +struct charseq used a zero-length array instead of a flexible array
-> +member.  This required a strange construct to initialize struct
-> +charseq objects, and GCC 10 warns about that:
-> +
-> +cc1: error: writing 1 byte into a region of size 0 [-Werror=stringop-overflow=]
-> +In file included from programs/repertoire.h:24,
-> +                 from programs/localedef.h:32,
-> +                 from programs/ld-ctype.c:35:
-> +programs/charmap.h:63:17: note: destination object declared here
-> +   63 |   unsigned char bytes[0];
-> +      |                 ^~~~~
-> +cc1: error: writing 1 byte into a region of size 0 [-Werror=stringop-overflow=]
-> +programs/charmap.h:63:17: note: destination object declared here
-> +cc1: error: writing 1 byte into a region of size 0 [-Werror=stringop-overflow=]
-> +programs/charmap.h:63:17: note: destination object declared here
-> +cc1: error: writing 1 byte into a region of size 0 [-Werror=stringop-overflow=]
-> +programs/charmap.h:63:17: note: destination object declared here
-> +
-> +The change makes the object physically const, but it is not expected
-> +to be modified.
-> +
-> +[Upstream: https://sourceware.org/git/?p=glibc.git;a=patch;h=1471fa556afb428c4a4c46cf5543a4101d5bcf91]
-> +[Dropped confliciting ChangeLog part]
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + locale/programs/charmap.h  |  2 +-
-> + locale/programs/ld-ctype.c | 12 ++++++------
-> + 2 files changed, 7 insertions(+), 7 deletions(-)
-> +
-> +diff --git a/locale/programs/charmap.h b/locale/programs/charmap.h
-> +index 870a9e95..70db330d 100644
-> +--- a/locale/programs/charmap.h
-> ++++ b/locale/programs/charmap.h
-> +@@ -60,7 +60,7 @@ struct charseq
-> +   const char *name;
-> +   uint32_t ucs4;
-> +   int nbytes;
-> +-  unsigned char bytes[0];
-> ++  unsigned char bytes[];
-> + };
-> + 
-> + 
-> +diff --git a/locale/programs/ld-ctype.c b/locale/programs/ld-ctype.c
-> +index cfc9c43f..9123f64a 100644
-> +--- a/locale/programs/ld-ctype.c
-> ++++ b/locale/programs/ld-ctype.c
-> +@@ -842,8 +842,6 @@ no input digits defined and none of the standard names in the charmap"));
-> +   for (cnt = 0; cnt < 10; ++cnt)
-> +     if (ctype->mboutdigits[cnt] == NULL)
-> +       {
-> +-	static struct charseq replace[2];
-> +-
-> + 	if (!warned)
-> + 	  {
-> + 	    record_error (0, 0, _("\
-> +@@ -851,10 +849,12 @@ not all characters used in `outdigit' are available in the charmap"));
-> + 	    warned = 1;
-> + 	  }
-> + 
-> +-	replace[0].nbytes = 1;
-> +-	replace[0].bytes[0] = '?';
-> +-	replace[0].bytes[1] = '\0';
-> +-	ctype->mboutdigits[cnt] = &replace[0];
-> ++	static const struct charseq replace =
-> ++	  {
-> ++	     .nbytes = 1,
-> ++	     .bytes = "?",
-> ++	  };
-> ++	ctype->mboutdigits[cnt] = (struct charseq *) &replace;
-> +       }
-> + 
-> +   warned = 0;
-> +-- 
-> +2.26.0
-> +
+The following changes since commit d0f5a5551ab86f6272f13deaa16dcdf4b07a524f
+
+  package/sysstat: bump to version 12.2.1 (2020-03-29 15:50:36 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 8b4415dad37fa81cf2d4adb09b27119b233bcd8a
+
+  package/apparmor: enable apache integration (2020-03-29 16:01:18 +0200)
+
+
+----------------------------------------------------------------
+Angelo Compagnucci (4):
+      package/libapparmor: new package
+      linux: enable AppArmor-related options if needed
+      package/apparmor: new package
+      package/apparmor: add option to install binutils
+
+Yann E. MORIN (5):
+      package/apparmor: add options to install utils
+      package/apparmor: add option to install generic profiles
+      package/libapparmor: enable python bindings
+      package/apparmor: enable PAM integration
+      package/apparmor: enable apache integration
+
+ DEVELOPERS                                         |  1 +
+ linux/linux.mk                                     |  5 ++
+ package/Config.in                                  |  2 +
+ package/apparmor/Config.in                         | 71 ++++++++++++++++
+ package/apparmor/apparmor.hash                     |  4 +
+ package/apparmor/apparmor.mk                       | 81 ++++++++++++++++++
+ ...n_devel-fixing-for-crosscompiling-environ.patch | 96 ++++++++++++++++++++++
+ ...-fixing-setup.py-call-when-crosscompiling.patch | 30 +++++++
+ package/libapparmor/Config.in                      | 16 ++++
+ package/libapparmor/libapparmor.hash               |  4 +
+ package/libapparmor/libapparmor.mk                 | 41 +++++++++
+ 11 files changed, 351 insertions(+)
+ create mode 100644 package/apparmor/Config.in
+ create mode 100644 package/apparmor/apparmor.hash
+ create mode 100644 package/apparmor/apparmor.mk
+ create mode 100644 package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch
+ create mode 100644 package/libapparmor/0002-libapparmor-fixing-setup.py-call-when-crosscompiling.patch
+ create mode 100644 package/libapparmor/Config.in
+ create mode 100644 package/libapparmor/libapparmor.hash
+ create mode 100644 package/libapparmor/libapparmor.mk
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
