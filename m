@@ -1,66 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Mar 2020 22:19:25 +0200
-Subject: [Buildroot] [git commit] package/optee-client: add option to
- configure TEE-based storage location
-Message-ID: <20200329200708.F02B88909A@busybox.osuosl.org>
+Date: Sun, 29 Mar 2020 22:22:13 +0200
+Subject: [Buildroot] [PATCH RESEND 1/1] package/optee-client: add option
+ to configure REE-based storage location
+In-Reply-To: <20200324154255.1300634-1-heiko@sntech.de>
+References: <20200324154255.1300634-1-heiko@sntech.de>
+Message-ID: <20200329222213.23bd8617@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96929f344ff6ad2eb8311933d3a8a69a2be02882
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Heiko,
 
-OP-TEE provides the possibility of secure storage done by the
-normal world OS via tee-supplicant.
+Thanks for your patch.
 
-The location is a compile-time value and by default it is /data/tee .
-As this might not be suitable for all use-cases add an option to
-set the CFG_TEE_FS_PARENT_PATH compile option.
+On Tue, 24 Mar 2020 16:42:55 +0100
+Heiko Stuebner <heiko@sntech.de> wrote:
 
-Default value is still /data/tee as it was before adding this option.
+> +config BR2_PACKAGE_OPTEE_CLIENT_REE_FS_PATH
 
-Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/optee-client/Config.in       | 12 ++++++++++++
- package/optee-client/optee-client.mk |  3 +++
- 2 files changed, 15 insertions(+)
+Why REE_FS_PATH ? The CMake option is named TEE_FS_PARENT_PATH, so I
+assume this was a typo, and should have been TEE_FS_PATH, so I fixed
+that.
 
-diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
-index e519a13456..1ef0a1401e 100644
---- a/package/optee-client/Config.in
-+++ b/package/optee-client/Config.in
-@@ -13,5 +13,17 @@ config BR2_PACKAGE_OPTEE_CLIENT
- 
- 	  https://github.com/OP-TEE/optee_client
- 
-+if BR2_PACKAGE_OPTEE_CLIENT
-+
-+config BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH
-+	string "Path for normal world OS secure storage"
-+	default "/data/tee"
-+	help
-+	  Path to storage area for secure storage based on the
-+	  normal world OS providing the actual storage via
-+	  tee-supplicant.
-+
-+endif
-+
- comment "optee-client needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
-index 15bebdc615..64235b41e4 100644
---- a/package/optee-client/optee-client.mk
-+++ b/package/optee-client/optee-client.mk
-@@ -10,6 +10,9 @@ OPTEE_CLIENT_LICENSE = BSD-2-Clause
- OPTEE_CLIENT_LICENSE_FILES = LICENSE
- OPTEE_CLIENT_INSTALL_STAGING = YES
- 
-+OPTEE_CLIENT_CONF_OPTS = \
-+	-DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH)
-+
- define OPTEE_CLIENT_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
- 		$(TARGET_DIR)/etc/init.d/S30optee
+Also, the option should have been within a if BR2_PACKAGE_OPTEE_CLIENT
+... endif block, so I fixed that up as well, and applied.
+
+If the REE wording was really correct, let me know.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
