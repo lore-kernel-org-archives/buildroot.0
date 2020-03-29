@@ -1,60 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Mar 2020 15:29:46 +0200
-Subject: [Buildroot] [git commit] package/gcc: define _REENTRANT for
- OpenRISC when -pthread is passed
-Message-ID: <20200329131624.1388C8897E@busybox.osuosl.org>
+Date: Sun, 29 Mar 2020 15:28:39 +0200
+Subject: [Buildroot] [git commit] package/libmicrohttpd: remove dependency
+ on threads
+Message-ID: <20200329131624.08C198897E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eee96b0f0ad224b3e09a9b98c26d056e18f17fd5
+commit: https://git.buildroot.net/buildroot/commit/?id=80f3622bc78d7d2c404a5e4d960686bd03c82450
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/ceb802eea0fee5812efd717ae4cdbd9673d9507e/
+Upstream added support for non-threaded builds:
+https://git.gnunet.org/libmicrohttpd.git/commit/configure.ac?id=0eefd20ba370509d93fb7b0220e6d1c5739efac5
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ..._REENTRANT-for-RISC-V-when-pthread-is-pas.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ package/janus-gateway/Config.in           |  1 -
+ package/libmicrohttpd/0001-fix-6135.patch | 46 +++++++++++++++++++++++++++++++
+ package/libmicrohttpd/Config.in           |  4 ---
+ package/libmicrohttpd/libmicrohttpd.mk    |  6 ++++
+ 4 files changed, 52 insertions(+), 5 deletions(-)
 
-diff --git a/package/gcc/9.3.0/0003-gcc-define-_REENTRANT-for-RISC-V-when-pthread-is-pas.patch b/package/gcc/9.3.0/0003-gcc-define-_REENTRANT-for-RISC-V-when-pthread-is-pas.patch
+diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
+index 9b70fa0cad..989ae26055 100644
+--- a/package/janus-gateway/Config.in
++++ b/package/janus-gateway/Config.in
+@@ -77,7 +77,6 @@ comment "RabbitMQ transport needs a toolchain w/ dynamic library, threads"
+ 
+ config BR2_PACKAGE_JANUS_GATEWAY_REST
+ 	bool "REST (HTTP/HTTPS)"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+ 
+ comment "REST transport needs a toolchain w/ threads"
+diff --git a/package/libmicrohttpd/0001-fix-6135.patch b/package/libmicrohttpd/0001-fix-6135.patch
 new file mode 100644
-index 0000000000..3ff64b71f8
+index 0000000000..af410284aa
 --- /dev/null
-+++ b/package/gcc/9.3.0/0003-gcc-define-_REENTRANT-for-RISC-V-when-pthread-is-pas.patch
-@@ -0,0 +1,31 @@
-+From 2aefc4ee703ce3ff70ad25915005cacfbaae0c49 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Fri, 27 Mar 2020 21:23:53 +0100
-+Subject: [PATCH] gcc: define _REENTRANT for OpenRISC when -pthread is passed
++++ b/package/libmicrohttpd/0001-fix-6135.patch
+@@ -0,0 +1,46 @@
++From 6702e6202368720d7a381669c03eedc318f225ca Mon Sep 17 00:00:00 2001
++From: Christian Grothoff <christian@grothoff.org>
++Date: Thu, 26 Mar 2020 19:08:30 +0100
++Subject: [PATCH] fix #6135
 +
-+The detection of pthread support fails on OpenRISC unless _REENTRANT
-+is defined. Added the CPP_SPEC definition to correct this.
-+
-+Patch sent upstream: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94372
++Downloaded from upstream commit to fix non-threaded build:
++https://git.gnunet.org/libmicrohttpd.git/commit/?id=6702e6202368720d7a381669c03eedc318f225ca
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ gcc/config/or1k/linux.h | 2 ++
-+ 1 file changed, 2 insertions(+)
++ src/microhttpd/internal.h | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
 +
-+diff --git a/gcc/config/or1k/linux.h b/gcc/config/or1k/linux.h
-+index 4b2f7b6e1fd..b00d23ddfa0 100644
-+--- a/gcc/config/or1k/linux.h
-++++ b/gcc/config/or1k/linux.h
-+@@ -32,6 +32,8 @@
-+ #undef MUSL_DYNAMIC_LINKER
-+ #define MUSL_DYNAMIC_LINKER  "/lib/ld-musl-or1k.so.1"
++diff --git a/src/microhttpd/internal.h b/src/microhttpd/internal.h
++index 211eed9f..ad16535e 100644
++--- a/src/microhttpd/internal.h
+++++ b/src/microhttpd/internal.h
++@@ -1462,12 +1462,6 @@ struct MHD_Daemon
++    */
++   size_t thread_stack_size;
 + 
-++#define CPP_SPEC "%{pthread:-D_REENTRANT}"
++-  /**
++-   * Our #MHD_OPTION_SERVER_INSANITY level, bits indicating
++-   * which sanity checks are off.
++-   */
++-  enum MHD_DisableSanityCheck insanity_level;
++-
++   /**
++    * Number of worker daemons
++    */
++@@ -1490,6 +1484,12 @@ struct MHD_Daemon
++   MHD_mutex_ cleanup_connection_mutex;
++ #endif
++ 
+++  /**
+++   * Our #MHD_OPTION_SERVER_INSANITY level, bits indicating
+++   * which sanity checks are off.
+++   */
+++  enum MHD_DisableSanityCheck insanity_level;
 ++
-+ #undef LINK_SPEC
-+ #define LINK_SPEC "%{h*}			\
-+    %{static:-Bstatic}				\
++   /**
++    * Listen socket.
++    */
 +-- 
-+2.21.0
++2.25.0
 +
+diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
+index 7f3c9bb8fd..8477ef6668 100644
+--- a/package/libmicrohttpd/Config.in
++++ b/package/libmicrohttpd/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LIBMICROHTTPD
+ 	bool "libmicrohttpd"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  GNU libmicrohttpd is a small C library that makes it easy to
+ 	  run an HTTP server as part of another application.
+@@ -21,6 +20,3 @@ comment "libmicrohttpd https support needs a toolchain w/ wchar, dynamic library
+ 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
+ 
+ endif
+-
+-comment "libmicrohttpd needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index f47d7ec214..ea2de55804 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -22,4 +22,10 @@ LIBMICROHTTPD_LICENSE = LGPL-2.1+ or eCos
+ LIBMICROHTTPD_CONF_OPTS += --disable-https
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBMICROHTTPD_CONF_OPTS += --with-threads=auto
++else
++LIBMICROHTTPD_CONF_OPTS += --with-threads=none
++endif
++
+ $(eval $(autotools-package))
