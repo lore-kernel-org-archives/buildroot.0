@@ -1,144 +1,121 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Mar 2020 18:35:22 +0200
-Subject: [Buildroot] [git commit] package/gvfs: fix CVE-2019-12795
-Message-ID: <20200329163444.2536C821C2@busybox.osuosl.org>
+Date: Sun, 29 Mar 2020 18:49:16 +0200
+Subject: [Buildroot] [PATCH 1/5] package/gvfs: fix CVE-2019-3827
+In-Reply-To: <20200329160246.4053834-1-fontaine.fabrice@gmail.com>
+References: <20200329160246.4053834-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200329164916.GH22325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9f38acbf2c28a9ec8c8e8e24e56b9ed4bc71778
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-daemon/gvfsdaemon.c in gvfsd from GNOME gvfs before 1.38.3, 1.40.x
-before 1.40.2, and 1.41.x before 1.41.3 opened a private D-Bus server
-socket without configuring an authorization rule. A local attacker could
-connect to this server socket and issue D-Bus method calls. (Note that
-the server socket only accepts a single connection, so the attacker
-would have to discover the server and connect to the socket before its
-owner does.)
+On 2020-03-29 18:02 +0200, Fabrice Fontaine spake thusly:
+> An incorrect permission check in the admin backend in gvfs before
+> version 1.39.4 was found that allows reading and modify arbitrary files
+> by privileged users without asking for password when no authentication
+> agent is running. This vulnerability can be exploited by malicious
+> programs running under privileges of users belonging to the wheel group
+> to further escalate its privileges by modifying system files without
+> user's knowledge. Successful exploitation requires uncommon system
+> configuration.
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...at-the-connecting-client-is-the-same-user.patch | 96 ++++++++++++++++++++++
- package/gvfs/gvfs.mk                               |  3 +
- 2 files changed, 99 insertions(+)
+Patch series applied to master, thanks.
 
-diff --git a/package/gvfs/0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch b/package/gvfs/0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch
-new file mode 100644
-index 0000000000..56bef26b0f
---- /dev/null
-+++ b/package/gvfs/0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch
-@@ -0,0 +1,96 @@
-+From 70dbfc68a79faac49bd3423e079cb6902522082a Mon Sep 17 00:00:00 2001
-+From: Simon McVittie <smcv@collabora.com>
-+Date: Wed, 5 Jun 2019 13:33:38 +0100
-+Subject: [PATCH] gvfsdaemon: Check that the connecting client is the same user
-+
-+Otherwise, an attacker who learns the abstract socket address from
-+netstat(8) or similar could connect to it and issue D-Bus method
-+calls.
-+
-+Signed-off-by: Simon McVittie <smcv@collabora.com>
-+
-+[Retrieved from:
-+https://gitlab.gnome.org/GNOME/gvfs/commit/70dbfc68a79faac49bd3423e079cb6902522082a]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ daemon/gvfsdaemon.c | 36 +++++++++++++++++++++++++++++++++++-
-+ 1 file changed, 35 insertions(+), 1 deletion(-)
-+
-+diff --git a/daemon/gvfsdaemon.c b/daemon/gvfsdaemon.c
-+index 406d4f8e..be148a7b 100644
-+--- a/daemon/gvfsdaemon.c
-++++ b/daemon/gvfsdaemon.c
-+@@ -79,6 +79,7 @@ struct _GVfsDaemon
-+   
-+   gint mount_counter;
-+   
-++  GDBusAuthObserver *auth_observer;
-+   GDBusConnection *conn;
-+   GVfsDBusDaemon *daemon_skeleton;
-+   GVfsDBusMountable *mountable_skeleton;
-+@@ -171,6 +172,8 @@ g_vfs_daemon_finalize (GObject *object)
-+     }
-+   if (daemon->conn != NULL)
-+     g_object_unref (daemon->conn);
-++  if (daemon->auth_observer != NULL)
-++    g_object_unref (daemon->auth_observer);
-+   
-+   g_hash_table_destroy (daemon->registered_paths);
-+   g_hash_table_destroy (daemon->client_connections);
-+@@ -236,6 +239,35 @@ name_vanished_handler (GDBusConnection *connection,
-+   daemon->lost_main_daemon = TRUE;
-+ }
-+ 
-++/*
-++ * Authentication observer signal handler that authorizes connections
-++ * from the same uid as this process. This matches the behaviour of a
-++ * libdbus DBusServer/DBusConnection when no DBusAllowUnixUserFunction
-++ * has been set, but is not the default in GDBus.
-++ */
-++static gboolean
-++authorize_authenticated_peer_cb (GDBusAuthObserver *observer,
-++                                 G_GNUC_UNUSED GIOStream *stream,
-++                                 GCredentials *credentials,
-++                                 G_GNUC_UNUSED gpointer user_data)
-++{
-++  gboolean authorized = FALSE;
-++
-++  if (credentials != NULL)
-++    {
-++      GCredentials *own_credentials;
-++
-++      own_credentials = g_credentials_new ();
-++
-++      if (g_credentials_is_same_user (credentials, own_credentials, NULL))
-++        authorized = TRUE;
-++
-++      g_object_unref (own_credentials);
-++    }
-++
-++  return authorized;
-++}
-++
-+ static void
-+ g_vfs_daemon_init (GVfsDaemon *daemon)
-+ {
-+@@ -265,6 +297,8 @@ g_vfs_daemon_init (GVfsDaemon *daemon)
-+ 
-+   daemon->conn = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-+   g_assert (daemon->conn != NULL);
-++  daemon->auth_observer = g_dbus_auth_observer_new ();
-++  g_signal_connect (daemon->auth_observer, "authorize-authenticated-peer", G_CALLBACK (authorize_authenticated_peer_cb), NULL);
-+ 
-+   daemon->daemon_skeleton = gvfs_dbus_daemon_skeleton_new ();
-+   g_signal_connect (daemon->daemon_skeleton, "handle-get-connection", G_CALLBACK (handle_get_connection), daemon);
-+@@ -876,7 +910,7 @@ handle_get_connection (GVfsDBusDaemon *object,
-+   server = g_dbus_server_new_sync (address1,
-+                                    G_DBUS_SERVER_FLAGS_NONE,
-+                                    guid,
-+-                                   NULL, /* GDBusAuthObserver */
-++                                   daemon->auth_observer,
-+                                    NULL, /* GCancellable */
-+                                    &error);
-+   g_free (guid);
-+-- 
-+2.24.1
-+
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index a3308b713d..b3b18a3482 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -28,6 +28,9 @@ GVFS_IGNORE_CVES += CVE-2019-12447
- # 0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
- GVFS_IGNORE_CVES += CVE-2019-12449
- 
-+# 0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch
-+GVFS_IGNORE_CVES += CVE-2019-12795
-+
- # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
- # build system from searching the host paths.
- GVFS_CONF_ENV = \
+Any reason why you sent one patch for each CVE, rather than a single
+patch?
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...authentication-agent-isn-t-available.patch | 46 +++++++++++++++++++
+>  package/gvfs/gvfs.mk                          |  3 ++
+>  2 files changed, 49 insertions(+)
+>  create mode 100644 package/gvfs/0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
+> 
+> diff --git a/package/gvfs/0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch b/package/gvfs/0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
+> new file mode 100644
+> index 0000000000..2715371534
+> --- /dev/null
+> +++ b/package/gvfs/0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
+> @@ -0,0 +1,46 @@
+> +From d8d0c8c40049cfd824b2b90d0cd47914052b9811 Mon Sep 17 00:00:00 2001
+> +From: Ondrej Holy <oholy@redhat.com>
+> +Date: Wed, 2 Jan 2019 17:13:27 +0100
+> +Subject: [PATCH] admin: Prevent access if any authentication agent isn't
+> + available
+> +
+> +The backend currently allows to access and modify files without prompting
+> +for password if any polkit authentication agent isn't available. This seems
+> +isn't usually problem, because polkit agents are integral parts of
+> +graphical environments / linux distributions. The agents can't be simply
+> +disabled without root permissions and are automatically respawned. However,
+> +this might be a problem in some non-standard cases.
+> +
+> +This affects only users which belong to wheel group (i.e. those who are
+> +already allowed to use sudo). It doesn't allow privilege escalation for
+> +users, who don't belong to that group.
+> +
+> +Let's return permission denied error also when the subject can't be
+> +authorized by any polkit agent to prevent this behavior.
+> +
+> +Closes: https://gitlab.gnome.org/GNOME/gvfs/issues/355
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://gitlab.gnome.org/GNOME/gvfs/commit/d8d0c8c40049cfd824b2b90d0cd47914052b9811]
+> +---
+> + daemon/gvfsbackendadmin.c | 3 +--
+> + 1 file changed, 1 insertion(+), 2 deletions(-)
+> +
+> +diff --git a/daemon/gvfsbackendadmin.c b/daemon/gvfsbackendadmin.c
+> +index ec0f2392..0f849008 100644
+> +--- a/daemon/gvfsbackendadmin.c
+> ++++ b/daemon/gvfsbackendadmin.c
+> +@@ -130,8 +130,7 @@ check_permission (GVfsBackendAdmin *self,
+> +       return FALSE;
+> +     }
+> + 
+> +-  is_authorized = polkit_authorization_result_get_is_authorized (result) ||
+> +-    polkit_authorization_result_get_is_challenge (result);
+> ++  is_authorized = polkit_authorization_result_get_is_authorized (result);
+> + 
+> +   g_object_unref (result);
+> + 
+> +-- 
+> +2.24.1
+> +
+> diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+> index c380a710fb..6c927fa345 100644
+> --- a/package/gvfs/gvfs.mk
+> +++ b/package/gvfs/gvfs.mk
+> @@ -15,6 +15,9 @@ GVFS_LICENSE = LGPL-2.0+
+>  GVFS_LICENSE_FILES = COPYING
+>  GVFS_LIBS = $(TARGET_NLS_LIBS)
+>  
+> +# 0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
+> +GVFS_IGNORE_CVES += CVE-2019-3827
+> +
+>  # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
+>  # build system from searching the host paths.
+>  GVFS_CONF_ENV = \
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
