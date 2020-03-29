@@ -1,86 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Mar 2020 23:27:02 +0200
-Subject: [Buildroot] [PATCH v5 1/1] libuwsc: new package
-In-Reply-To: <20190914162302.4645-1-zhaojh329@gmail.com>
-References: <20190914162302.4645-1-zhaojh329@gmail.com>
-Message-ID: <20200329232702.521c6151@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 30 Mar 2020 00:04:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rygel: bump to version 0.38.3
+Message-ID: <20200329220428.35062-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+- Update indentation of hash file (two spaces)
+- Fix build with gssdp/gupnp 1.2 thanks to:
+  https://github.com/GNOME/rygel/commit/791b688d8ac3f8da4d162b1935871d16fe8e16fd
 
-On Sun, 15 Sep 2019 00:23:02 +0800
-Jianhui zhao <zhaojh329@gmail.com> wrote:
+Fixes:
+ - No autobuilder failures yet
 
-> From: Jianhui Zhao <zhaojh329@gmail.com>
-> 
-> Signed-off-by: Jianhui zhao <zhaojh329@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/rygel/rygel.hash | 8 ++++----
+ package/rygel/rygel.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-I've applied the patch, after doing a number of changes, see below.
-
->  package/Config.in            |  1 +
->  package/libuwsc/Config.in    |  8 ++++++++
->  package/libuwsc/libuwsc.hash |  3 +++
->  package/libuwsc/libuwsc.mk   | 37 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 49 insertions(+)
-
-I've added an entry to the DEVELOPERS file.
-
-> new file mode 100644
-> index 0000000000..5afbb186a4
-> --- /dev/null
-> +++ b/package/libuwsc/libuwsc.mk
-> @@ -0,0 +1,37 @@
-> +################################################################################
-> +#
-> +# libuwsc
-> +#
-> +################################################################################
-> +
-> +LIBUWSC_VERSION = 3.3.2
-> +LIBUWSC_SITE = https://github.com/zhaojh329/libuwsc/releases/download/v$(LIBUWSC_VERSION)
-> +LIBUWSC_LICENSE = MIT
-> +LIBUWSC_LICENSE_FILES = LICENSE
-> +LIBUWSC_INSTALL_STAGING = YES
-> +LIBUWSC_DEPENDENCIES = libev
-> +
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +LIBUWSC_DEPENDENCIES += openssl
-> +LIBUWSC_CONF_OPTS += -DUWSC_USE_OPENSSL=ON
-> +else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
-> +LIBUWSC_DEPENDENCIES += wolfssl
-> +LIBUWSC_CONF_OPTS += -DUWSC_USE_WOLFSSL=ON
-> +else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-> +LIBUWSC_DEPENDENCIES += mbedtls
-> +LIBUWSC_CONF_OPTS += -DUWSC_USE_MBEDTLS=ON
-> +else
-> +LIBUWSC_CONF_OPTS += -DUWSC_SSL_SUPPORT=OFF
-> +endif
-
-Just like for rtty, I've added some explicit disabling of SSL options
-when they are not relevant.
-
-> +
-> +ifeq ($(BR2_PACKAGE_LUA),y)
-> +LIBUWSC_DEPENDENCIES += lua
-> +ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
-> +LIBUWSC_DEPENDENCIES += luainterpreter
-
-This is not good: you should either use BR2_PACKAGE_LUA, or
-BR2_PACKAGE_HJAS_LUAINTERPRETER, but not both.
-
-You must use BR2_PACKAGE_LUA when you only support the original Lua
-interpreter. Or use BR2_PACKAGE_HJAS_LUAINTERPRETER when you support
-either Lua or LuaJIT. From a quick test build, LuaJIT was not properly
-detected, so I've simplified that to only use BR2_PACKAGE_LUA.
-
-Thanks!
-
-Thomas
+diff --git a/package/rygel/rygel.hash b/package/rygel/rygel.hash
+index 0d8c95a697..33b44aecc2 100644
+--- a/package/rygel/rygel.hash
++++ b/package/rygel/rygel.hash
+@@ -1,6 +1,6 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.36/rygel-0.36.2.sha256sum:
+-sha256	d332c76c76716de1e5085f0ca0c152174352efd652a80e5b94ec7df797f92244	rygel-0.36.2.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/rygel/0.38/rygel-0.38.3.sha256sum:
++sha256  08c21a577f7bdad26446a75ffa32778b26842c3b1188165f0b19818559747d00  rygel-0.38.3.tar.xz
+ 
+ # Locally calculated
+-sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
+-sha256	c7d881be8ae01162510e982a32001446c6d6d18a9cecc89cc41a28bd215a0262	COPYING.logo
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
++sha256  c7d881be8ae01162510e982a32001446c6d6d18a9cecc89cc41a28bd215a0262  COPYING.logo
+diff --git a/package/rygel/rygel.mk b/package/rygel/rygel.mk
+index d87beda8c9..c43030d69f 100644
+--- a/package/rygel/rygel.mk
++++ b/package/rygel/rygel.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-RYGEL_VERSION_MAJOR = 0.36
+-RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).2
++RYGEL_VERSION_MAJOR = 0.38
++RYGEL_VERSION = $(RYGEL_VERSION_MAJOR).3
+ RYGEL_SOURCE = rygel-$(RYGEL_VERSION).tar.xz
+ RYGEL_SITE = http://ftp.gnome.org/pub/gnome/sources/rygel/$(RYGEL_VERSION_MAJOR)
+ RYGEL_LICENSE = LGPL-2.1+, CC-BY-SA-3.0 (logo)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
