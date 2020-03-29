@@ -1,28 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Mar 2020 21:49:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rtty: fix static build with
- openssl
-In-Reply-To: <20200326202445.58808-1-fontaine.fabrice@gmail.com>
-References: <20200326202445.58808-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200329214933.24e033f1@windsurf.home>
+Date: Sun, 29 Mar 2020 21:49:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cog: fix segfaults on null
+ xkb_data keymap/state
+In-Reply-To: <20200327182639.76711-1-james.hilliard1@gmail.com>
+References: <20200327182639.76711-1-james.hilliard1@gmail.com>
+Message-ID: <20200329214939.767b7774@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 26 Mar 2020 21:24:45 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Fri, 27 Mar 2020 12:26:39 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
 > Fixes:
->  - http://autobuild.buildroot.org/results/6105b69d8598f0033044a26f53a768e2d4b2915e
+> Program terminated with signal SIGSEGV, Segmentation fault.
+> #0  xkb_state_key_get_layout (state=state at entry=0x0, kc=kc at entry=50) at ../src/state.c:217
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Program terminated with signal SIGSEGV, Segmentation fault.
+> #0  XkbKey (kc=kc at entry=45, keymap=0x0) at ../src/keymap.h:430
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  ...ts.txt-fix-static-build-with-openssl.patch | 43 +++++++++++++++++++
->  package/rtty/rtty.mk                          |  2 +-
->  2 files changed, 44 insertions(+), 1 deletion(-)
->  create mode 100644 package/rtty/0001-src-CMakeLists.txt-fix-static-build-with-openssl.patch
+>  ...ata.state-is-not-null-before-calling.patch | 30 +++++++++++++++++++
+>  ...ata.keymap-is-not-null-before-callin.patch | 30 +++++++++++++++++++
+>  2 files changed, 60 insertions(+)
+>  create mode 100644 package/cog/0002-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
+>  create mode 100644 package/cog/0003-fdo-ensure-xkb_data.keymap-is-not-null-before-callin.patch
 
 Applied to master, thanks.
 
