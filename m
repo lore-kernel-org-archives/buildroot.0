@@ -1,113 +1,141 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Mar 2020 16:01:42 +0200
-Subject: [Buildroot] [PATCH 0/9 v5] package/apparmor: new package (branch
- yem/apparmor)
-Message-ID: <cover.1585490494.git.yann.morin.1998@free.fr>
+Date: Sun, 29 Mar 2020 16:01:37 +0200
+Subject: [Buildroot] [PATCH 1/9 v5] package/libapparmor: new package
+In-Reply-To: <cover.1585490494.git.yann.morin.1998@free.fr>
+References: <cover.1585490494.git.yann.morin.1998@free.fr>
+Message-ID: <0f52dcea9f6d9eae4286a6e2220a33034f302685.1585490494.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-This series is reworked of the previous work from Angelo:
-    http://lists.busybox.net/pipermail/buildroot/2020-March/278308.html
-    http://lists.busybox.net/pipermail/buildroot/2020-March/278307.html
+The layout of the package is not amenable to building both the library
+and the utilities at once, so this package will only install the
+libarary.
 
-Fundamentally, (almost) all the code is from Angelo, and it has jsut
-been spread across two packages.
+The other apparmor-related tools however will almost all want to always
+link with the static library (it's hard-coded in their Makefiles, like:
+AALIB = -Wl,-Bstatic -lapparmor -Wl,-Bdynamic -lpthread), so we also
+force the build of the static library.
 
-The way the apparmor package is laid out is not very amenable at doing a
-single package that builds everything: all the tools and utils depend on
-libapparmor, and that is better installed before the build of the tools
-is attempted.
+The kernel headers 3.16 at least are required, for CAP_AUDIT_READ.
 
-So, we split the packaging in two:
+We need to force the C standard to gnu99, otherwise:
 
-  - libapparmor, which is siolely responsible for installing
-    libapparmor and its python3 bindings,
+  - autoconf uses wchar_t in C99 test, so considers it to be missing
+    on toolchains without wchar, but wchar is not otherwise needed for
+    libapparmor;
 
-  - apparmor per-se, which is responsible for installing all the tools
-    and utilities.
+  - c99 is not enough, otherwise the build fails with errors like:
+        kernel.c:503:15: error: expected declaration specifiers or ?...? before ?(? token
+         extern typeof((__change_hat)) __old_change_hat __attribute__((alias ("__change_hat")));
+                       ^
 
-To be noted: most of the tools' Makefiles hard-code linking to the
-static libapparmor (without explanations), so rather than go against the
-tide, we just enforce building the static library (note also that we do
-not forbid building the shared one).
-
-The only major part that was dropped from the initial series, is support
-for writign the cache on read-write filesystems. The codition was based
-on BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW, but that does not prevent
-building an actually read-only filesystem at all (e.g. squashfs). So,
-more thoughts will have to be poured into this caching feature in a
-subsequent series.
-
-Chage v4 -> v5:  (adopted by Yann)
-  - split in two packages, one for the lib, ione for the utils
-  - reword all the commit logs
-  - fix dependencies (threads, mmu...)
-  - re-organise the conditions to install utils (python3 vs others)
-  - drop the cache writing for read-write filesystems
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit d0f5a5551ab86f6272f13deaa16dcdf4b07a524f
-
-  package/sysstat: bump to version 12.2.1 (2020-03-29 15:50:36 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 8b4415dad37fa81cf2d4adb09b27119b233bcd8a
-
-  package/apparmor: enable apache integration (2020-03-29 16:01:18 +0200)
-
-
-----------------------------------------------------------------
-Angelo Compagnucci (4):
-      package/libapparmor: new package
-      linux: enable AppArmor-related options if needed
-      package/apparmor: new package
-      package/apparmor: add option to install binutils
-
-Yann E. MORIN (5):
-      package/apparmor: add options to install utils
-      package/apparmor: add option to install generic profiles
-      package/libapparmor: enable python bindings
-      package/apparmor: enable PAM integration
-      package/apparmor: enable apache integration
-
- DEVELOPERS                                         |  1 +
- linux/linux.mk                                     |  5 ++
- package/Config.in                                  |  2 +
- package/apparmor/Config.in                         | 71 ++++++++++++++++
- package/apparmor/apparmor.hash                     |  4 +
- package/apparmor/apparmor.mk                       | 81 ++++++++++++++++++
- ...n_devel-fixing-for-crosscompiling-environ.patch | 96 ++++++++++++++++++++++
- ...-fixing-setup.py-call-when-crosscompiling.patch | 30 +++++++
- package/libapparmor/Config.in                      | 16 ++++
- package/libapparmor/libapparmor.hash               |  4 +
- package/libapparmor/libapparmor.mk                 | 41 +++++++++
- 11 files changed, 351 insertions(+)
- create mode 100644 package/apparmor/Config.in
- create mode 100644 package/apparmor/apparmor.hash
- create mode 100644 package/apparmor/apparmor.mk
- create mode 100644 package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch
- create mode 100644 package/libapparmor/0002-libapparmor-fixing-setup.py-call-when-crosscompiling.patch
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+[yann.morin.1998 at free.fr: strip down the patch to only build the lib]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/libapparmor/Config.in        | 16 ++++++++++++++++
+ package/libapparmor/libapparmor.hash |  4 ++++
+ package/libapparmor/libapparmor.mk   | 27 +++++++++++++++++++++++++++
+ 5 files changed, 49 insertions(+)
  create mode 100644 package/libapparmor/Config.in
  create mode 100644 package/libapparmor/libapparmor.hash
  create mode 100644 package/libapparmor/libapparmor.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f67ef86e6c..142f3b406d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -196,6 +196,7 @@ N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
+ F:	package/corkscrew/
+ F:	package/fail2ban/
+ F:	package/i2c-tools/
++F:	package/libapparmor/
+ F:	package/mender/
+ F:	package/mender-artifact/
+ F:	package/mono/
+diff --git a/package/Config.in b/package/Config.in
+index 7b73198d50..ae1bc2294d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1882,6 +1882,7 @@ endif
+ endmenu
+ 
+ menu "Security"
++	source "package/libapparmor/Config.in"
+ 	source "package/libselinux/Config.in"
+ 	source "package/libsemanage/Config.in"
+ 	source "package/libsepol/Config.in"
+diff --git a/package/libapparmor/Config.in b/package/libapparmor/Config.in
+new file mode 100644
+index 0000000000..a444a5708b
+--- /dev/null
++++ b/package/libapparmor/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_LIBAPPARMOR
++	bool "libapparmor"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
++	help
++	  AppArmor is an effective and easy-to-use Linux application
++	  security system. AppArmor proactively protects the operating
++	  system and applications from external or internal threats,
++	  even zero-day attacks, by enforcing good behavior and
++	  preventing even unknown application flaws from being
++	  exploited.
++
++	  This package installs only the library.
++
++	  http://wiki.apparmor.net
+diff --git a/package/libapparmor/libapparmor.hash b/package/libapparmor/libapparmor.hash
+new file mode 100644
+index 0000000000..3bff2bc853
+--- /dev/null
++++ b/package/libapparmor/libapparmor.hash
+@@ -0,0 +1,4 @@
++# locally computed
++sha256  267053234c68cdb122c5294d7c276b6e2f5fa7e75c6c2d23e3ce69f95d9a7639  apparmor-2.13.3.tar.gz
++sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libraries/libapparmor/COPYING.LGPL
+diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
+new file mode 100644
+index 0000000000..12efd4335a
+--- /dev/null
++++ b/package/libapparmor/libapparmor.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# libapparmor
++#
++################################################################################
++
++LIBAPPARMOR_VERSION_MAJOR = 2.13
++LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).3
++LIBAPPARMOR_SOURCE = apparmor-$(LIBAPPARMOR_VERSION).tar.gz
++LIBAPPARMOR_SITE = https://launchpad.net/apparmor/$(LIBAPPARMOR_VERSION_MAJOR)/$(LIBAPPARMOR_VERSION)/+download
++LIBAPPARMOR_LICENSE = LGPL-2.1
++LIBAPPARMOR_LICENSE_FILES = LICENSE libraries/libapparmor/COPYING.LGPL
++
++LIBAPPARMOR_DEPENDENCIES = host-bison host-flex host-pkgconf
++LIBAPPARMOR_SUBDIR = libraries/libapparmor
++LIBAPPARMOR_INSTALL_STAGING = YES
++
++# Most AppArmor tools will want to link to the static lib.
++# ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
++# provided by autoconf relies on wchar_t.
++LIBAPPARMOR_CONF_OPTS = \
++	ac_cv_prog_cc_c99=-std=gnu99 \
++	--enable-static \
++	--enable-man-pages=no \
++	--without-python
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
