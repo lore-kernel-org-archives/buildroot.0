@@ -1,128 +1,174 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Mar 2020 18:35:05 +0200
-Subject: [Buildroot] [git commit] package/gvfs: fix CVE-2019-12449
-Message-ID: <20200329163444.1189788EF2@busybox.osuosl.org>
+Date: Sun, 29 Mar 2020 18:32:21 +0200
+Subject: [Buildroot] [git commit] package/gvfs: fix CVE-2019-12448
+Message-ID: <20200329163443.F261388EF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc42ac086a1a897be5ca997e416040560aa15cb6
+commit: https://git.buildroot.net/buildroot/commit/?id=e49aa31f5ccd19078765e170dbfd01ff6e7fcb14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 An issue was discovered in GNOME gvfs 1.29.4 through 1.41.2.
-daemon/gvfsbackendadmin.c mishandles a file's user and group ownership
-during move (and copy with G_FILE_COPY_ALL_METADATA) operations from
-admin:// to file:// URIs, because root privileges are unavailable.
+daemon/gvfsbackendadmin.c has race conditions because the admin backend
+doesn't implement query_info_on_read/write.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...correct-ownership-when-moving-to-file-uri.patch | 84 ++++++++++++++++++++++
- package/gvfs/gvfs.mk                               |  3 +
- 2 files changed, 87 insertions(+)
+ ...dd-query_info_on_read-write-functionality.patch | 131 +++++++++++++++++++++
+ package/gvfs/gvfs.mk                               |   3 +
+ 2 files changed, 134 insertions(+)
 
-diff --git a/package/gvfs/0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch b/package/gvfs/0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
+diff --git a/package/gvfs/0002-admin-Add-query_info_on_read-write-functionality.patch b/package/gvfs/0002-admin-Add-query_info_on_read-write-functionality.patch
 new file mode 100644
-index 0000000000..29f7573a65
+index 0000000000..42174153d2
 --- /dev/null
-+++ b/package/gvfs/0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
-@@ -0,0 +1,84 @@
-+From d5dfd823c94045488aef8727c553f1e0f7666b90 Mon Sep 17 00:00:00 2001
++++ b/package/gvfs/0002-admin-Add-query_info_on_read-write-functionality.patch
+@@ -0,0 +1,131 @@
++From 5cd76d627f4d1982b6e77a0e271ef9301732d09e Mon Sep 17 00:00:00 2001
 +From: Ondrej Holy <oholy@redhat.com>
-+Date: Fri, 24 May 2019 09:43:43 +0200
-+Subject: [PATCH] admin: Ensure correct ownership when moving to file:// uri
++Date: Thu, 23 May 2019 10:24:36 +0200
++Subject: [PATCH] admin: Add query_info_on_read/write functionality
 +
-+User and group is not restored properly when moving (or copying with
-+G_FILE_COPY_ALL_METADATA) from admin:// to file://, because it is handled
-+by GIO fallback code, which doesn't run with root permissions. Let's
-+handle this case with pull method to ensure correct ownership.
++Admin backend doesn't implement query_info_on_read/write which might
++potentially lead to some race conditions which aren't really wanted
++especially in case of admin backend. Let's add this missing functionality.
 +
-+[Retrieved from:
-+https://gitlab.gnome.org/GNOME/gvfs/commit/d5dfd823c94045488aef8727c553f1e0f7666b90]
++[Retrieved fom:
++https://gitlab.gnome.org/GNOME/gvfs/commit/5cd76d627f4d1982b6e77a0e271ef9301732d09e]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ daemon/gvfsbackendadmin.c | 46 +++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 46 insertions(+)
++ daemon/gvfsbackendadmin.c | 79 +++++++++++++++++++++++++++++++++------
++ 1 file changed, 67 insertions(+), 12 deletions(-)
 +
 +diff --git a/daemon/gvfsbackendadmin.c b/daemon/gvfsbackendadmin.c
-+index 32b51b1a..9a7e8295 100644
++index 65a979e7..23d16f16 100644
 +--- a/daemon/gvfsbackendadmin.c
 ++++ b/daemon/gvfsbackendadmin.c
-+@@ -807,6 +807,51 @@ do_move (GVfsBackend *backend,
-+   complete_job (job, error);
++@@ -42,6 +42,8 @@
++ #include "gvfsjobopenforwrite.h"
++ #include "gvfsjobqueryattributes.h"
++ #include "gvfsjobqueryinfo.h"
+++#include "gvfsjobqueryinforead.h"
+++#include "gvfsjobqueryinfowrite.h"
++ #include "gvfsjobread.h"
++ #include "gvfsjobseekread.h"
++ #include "gvfsjobseekwrite.h"
++@@ -155,6 +157,19 @@ complete_job (GVfsJob *job,
++   g_vfs_job_succeeded (job);
 + }
 + 
 ++static void
-++do_pull (GVfsBackend *backend,
-++         GVfsJobPull *pull_job,
-++         const char *source,
-++         const char *local_path,
-++         GFileCopyFlags flags,
-++         gboolean remove_source,
-++         GFileProgressCallback progress_callback,
-++         gpointer progress_callback_data)
+++fix_file_info (GFileInfo *info)
 ++{
-++  GVfsBackendAdmin *self = G_VFS_BACKEND_ADMIN (backend);
-++  GVfsJob *job = G_VFS_JOB (pull_job);
-++  GError *error = NULL;
-++  GFile *src_file, *dst_file;
-++
-++  /* Pull method is necessary when user/group needs to be restored, return
-++   * G_IO_ERROR_NOT_SUPPORTED in other cases to proceed with the fallback code.
+++  /* Override read/write flags, since the above call will use access()
+++   * to determine permissions, which does not honor our privileged
+++   * capabilities.
 ++   */
-++  if (!(flags & G_FILE_COPY_ALL_METADATA))
-++    {
-++      g_vfs_job_failed_literal (G_VFS_JOB (job), G_IO_ERROR,
-++                                G_IO_ERROR_NOT_SUPPORTED,
-++                                _("Operation not supported"));
-++      return;
-++    }
-++
-++  if (!check_permission (self, job))
-++    return;
-++
-++  src_file = g_file_new_for_path (source);
-++  dst_file = g_file_new_for_path (local_path);
-++
-++  if (remove_source)
-++    g_file_move (src_file, dst_file, flags, job->cancellable,
-++                 progress_callback, progress_callback_data, &error);
-++  else
-++    g_file_copy (src_file, dst_file, flags, job->cancellable,
-++                 progress_callback, progress_callback_data, &error);
-++
-++  g_object_unref (src_file);
-++  g_object_unref (dst_file);
-++
-++  complete_job (job, error);
+++  g_file_info_set_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_READ, TRUE);
+++  g_file_info_set_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE, TRUE);
+++  g_file_info_set_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE, TRUE);
+++  g_file_info_set_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME, TRUE);
 ++}
 ++
 + static void
-+ do_query_settable_attributes (GVfsBackend *backend,
-+                               GVfsJobQueryAttributes *query_job,
-+@@ -927,6 +972,7 @@ g_vfs_backend_admin_class_init (GVfsBackendAdminClass * klass)
-+   backend_class->set_attribute = do_set_attribute;
-+   backend_class->delete = do_delete;
-+   backend_class->move = do_move;
-++  backend_class->pull = do_pull;
-+   backend_class->query_settable_attributes = do_query_settable_attributes;
-+   backend_class->query_writable_namespaces = do_query_writable_namespaces;
-+ }
++ do_query_info (GVfsBackend *backend,
++                GVfsJobQueryInfo *query_info_job,
++@@ -180,19 +195,57 @@ do_query_info (GVfsBackend *backend,
++   if (error != NULL)
++     goto out;
++ 
++-  /* Override read/write flags, since the above call will use access()
++-   * to determine permissions, which does not honor our privileged
++-   * capabilities.
++-   */
++-  g_file_info_set_attribute_boolean (real_info,
++-                                     G_FILE_ATTRIBUTE_ACCESS_CAN_READ, TRUE);
++-  g_file_info_set_attribute_boolean (real_info,
++-                                     G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE, TRUE);
++-  g_file_info_set_attribute_boolean (real_info,
++-                                     G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE, TRUE);
++-  g_file_info_set_attribute_boolean (real_info,
++-                                     G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME, TRUE);
+++  fix_file_info (real_info);
+++  g_file_info_copy_into (real_info, info);
+++  g_object_unref (real_info);
+++
+++ out:
+++  complete_job (job, error);
+++}
+++
+++static void
+++do_query_info_on_read (GVfsBackend *backend,
+++                       GVfsJobQueryInfoRead *query_info_job,
+++                       GVfsBackendHandle handle,
+++                       GFileInfo *info,
+++                       GFileAttributeMatcher *matcher)
+++{
+++  GVfsJob *job = G_VFS_JOB (query_info_job);
+++  GFileInputStream *stream = handle;
+++  GError *error = NULL;
+++  GFileInfo *real_info;
+++
+++  real_info = g_file_input_stream_query_info (stream, query_info_job->attributes,
+++                                              job->cancellable, &error);
+++  if (error != NULL)
+++    goto out;
+++
+++  fix_file_info (real_info);
+++  g_file_info_copy_into (real_info, info);
+++  g_object_unref (real_info);
+++
+++ out:
+++  complete_job (job, error);
+++}
+++
+++static void
+++do_query_info_on_write (GVfsBackend *backend,
+++                        GVfsJobQueryInfoWrite *query_info_job,
+++                        GVfsBackendHandle handle,
+++                        GFileInfo *info,
+++                        GFileAttributeMatcher *matcher)
+++{
+++  GVfsJob *job = G_VFS_JOB (query_info_job);
+++  GFileOutputStream *stream = handle;
+++  GError *error = NULL;
+++  GFileInfo *real_info;
+++
+++  real_info = g_file_output_stream_query_info (stream, query_info_job->attributes,
+++                                               job->cancellable, &error);
+++  if (error != NULL)
+++    goto out;
++ 
+++  fix_file_info (real_info);
++   g_file_info_copy_into (real_info, info);
++   g_object_unref (real_info);
++ 
++@@ -868,6 +921,8 @@ g_vfs_backend_admin_class_init (GVfsBackendAdminClass * klass)
++   backend_class->mount = do_mount;
++   backend_class->open_for_read = do_open_for_read;
++   backend_class->query_info = do_query_info;
+++  backend_class->query_info_on_read = do_query_info_on_read;
+++  backend_class->query_info_on_write = do_query_info_on_write;
++   backend_class->read = do_read;
++   backend_class->create = do_create;
++   backend_class->append_to = do_append_to;
 +-- 
 +2.24.1
 +
 diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index ec75852438..a3308b713d 100644
+index 6c927fa345..eb31f6f8df 100644
 --- a/package/gvfs/gvfs.mk
 +++ b/package/gvfs/gvfs.mk
-@@ -25,6 +25,9 @@ GVFS_IGNORE_CVES += CVE-2019-12448
- # 0004-admin-Use-fsuid-to-ensure-correct-file-ownership.patch
- GVFS_IGNORE_CVES += CVE-2019-12447
+@@ -18,6 +18,9 @@ GVFS_LIBS = $(TARGET_NLS_LIBS)
+ # 0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
+ GVFS_IGNORE_CVES += CVE-2019-3827
  
-+# 0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
-+GVFS_IGNORE_CVES += CVE-2019-12449
++# package/gvfs/0002-admin-Add-query_info_on_read-write-functionality.patch
++GVFS_IGNORE_CVES += CVE-2019-12448
 +
  # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
  # build system from searching the host paths.
