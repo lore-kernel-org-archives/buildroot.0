@@ -1,94 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Mar 2020 15:14:25 +0200
-Subject: [Buildroot] [PATCH v5 1/3] package/arm-gnu-a-toolchain: new
- package
-In-Reply-To: <1585371871-29406-2-git-send-email-sunil@amarulasolutions.com>
+Date: Sun, 29 Mar 2020 15:16:17 +0200
+Subject: [Buildroot] [PATCH v5 2/3] boot/arm-trusted-firmware: add
+ optional host-arm-gnu-a-toolchain dependency
+In-Reply-To: <1585371871-29406-3-git-send-email-sunil@amarulasolutions.com>
 References: <1585371871-29406-1-git-send-email-sunil@amarulasolutions.com>
- <1585371871-29406-2-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <20200329151425.25f92077@windsurf.home>
+ <1585371871-29406-3-git-send-email-sunil@amarulasolutions.com>
+Message-ID: <20200329151617.1ed31526@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-I've applied your patch, but after doing a number of changes, see below.
-
-On Sat, 28 Mar 2020 10:34:29 +0530
+On Sat, 28 Mar 2020 10:34:30 +0530
 sunil at amarulasolutions.com wrote:
 
->  DEVELOPERS                                         |  3 +++
->  package/Config.in.host                             |  1 +
->  package/arm-gnu-a-toolchain/Config.in.host         |  9 ++++++++
+> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN
+> +	bool "Needs arm32 bare metal toolchain"
 
-I've entirely dropped the visible Config.in.host option for this
-package, it is merely a build dependency of ATF, so we don't need (at
-this point at least) a visible option.
+Reworded to:
 
-> +N:	Suniel Mahesh <sunil@amarulasolutions.com>
-> +F:	package/arm-gnu-a-toolchain
+	bool "Needs arm-none-eabi toolchain"
 
-Directories end with a / in DEVELOPERS.
+> +	select BR2_PACKAGE_HOST_ARM_GNU_A_TOOLCHAIN
 
-> +config BR2_PACKAGE_HOST_ARM_GNU_A_TOOLCHAIN
-> +	bool "host arm-gnu-a-toolchain"
-> +	help
-> +	  arm trusted firmware requires a bare metal toolchain to build some platforms
-> +	  which host cortex-m series core, for instance rockchip rk3399 has a cortex-m0 core. 
-> +	  This package installs a pre-built cross-compilation ARM-A bare metal toolchain for
-> +	  the host machine.
+I've dropped this line since this option has been removed. However,
+I've added:
 
-Lines where way too long: you forgot to run "make check-package", which
-would have pointed out this coding style issue. Of course, since I
-dropped the Config.in.host, it was not a big issue.
+        depends on BR2_HOSTARCH = "x86_64"
 
-> --- /dev/null
-> +++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
-> @@ -0,0 +1,27 @@
-> +################################################################################
-> +#
-> +# arm-gnu-a-toolchain
-> +#
-> +################################################################################
-> +
-> +ARM_GNU_A_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel
+because the pre-built toolchain is only available for x86_64 host
+machines.
 
-You should have used the <pkg>_VERSION variable here instead of hardcoding 9.2-2019.12.
+> +        help
+> +          Select this option if your ATF board configuration
+> +          requires ARM32-A bare metal toolchain to be available.
 
-> +ARM_GNU_A_TOOLCHAIN_VERSION = 9.2-2019.12
-> +ARM_GNU_A_TOOLCHAIN_SOURCE = gcc-arm-$(ARM_GNU_A_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
-> +ARM_GNU_A_TOOLCHAIN_LICENSE = GPL-3.0+
-> +ARM_GNU_A_TOOLCHAIN_LICENSE_FILES =
+Indentation was not correct here: again, "make check-package" would
+have told you.
 
-I've dropped this last variable, since it's empty.
+But there was one more important thing that was forgotten: adding
+host-arm-gnu-a-toolchain to ATF_DEPENDENCIES, to ensure the toolchain
+is installed before ATF is built. So I've added:
 
-> +HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/gcc-arm-none-eabi
-> +
-> +define HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_CMDS
-> +	rm -rf $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
-> +	mkdir -p $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
-> +	cp -rf $(@D)/* $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
-> +
-> +	cd $(HOST_DIR)/bin && \
+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN),y)
+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-arm-gnu-a-toolchain
+endif
 
-You need to create $(HOST_DIR)/bin before cd-ing into it, as this
-directory may not exist.
-
-> +	for i in $(HOST_DIR)/opt/gcc-arm-none-eabi/bin/*; do \
-> +		ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
-
-Simplified as:
-
-        cd $(HOST_DIR)/bin && \
-        for i in ../opt/gcc-arm-none-eabi/bin/*; do \
-                ln -sf $$i; \
-        done
-
-I was also not sure these symlinks where really useful, it would have
-been possible to pass an explicit path to the toolchain when building
-ATF. But ok, I've kept the symlinks, we'll see how it goes.
+in arm-trusted-firmware.mk
 
 Thanks!
 
