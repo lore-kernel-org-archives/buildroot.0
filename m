@@ -1,136 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Mar 2020 19:28:18 +0200
-Subject: [Buildroot] [PATCH 1/5] package/gvfs: fix CVE-2019-3827
-In-Reply-To: <CAPi7W83=ZELwxEACGYeC7UhiOAhNWZjZp-8tCpZTEWc+0YoSwA@mail.gmail.com>
-References: <20200329160246.4053834-1-fontaine.fabrice@gmail.com>
- <20200329164916.GH22325@scaer>
- <CAPi7W83=ZELwxEACGYeC7UhiOAhNWZjZp-8tCpZTEWc+0YoSwA@mail.gmail.com>
-Message-ID: <20200329172818.GL22325@scaer>
+Date: Sun, 29 Mar 2020 19:24:21 +0200
+Subject: [Buildroot] [git commit] package/rpi-userland: bump version to
+ 6fb5973
+Message-ID: <20200329172014.C31B388F8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2cb327584d7ccbce29ee78d958c9732d9fb47de5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-29 19:12 +0200, Fabrice Fontaine spake thusly:
-> Le dim. 29 mars 2020 ? 18:49, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
-[--SNIP--]
-> > Any reason why you sent one patch for each CVE, rather than a single
-> > patch?
-> No special reason, I thought that it'll be easier to review one by one
-> instead of a single patch.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/rpi-userland/rpi-userland.hash | 4 ++--
+ package/rpi-userland/rpi-userland.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Yes, that's good.
-
-Stil, when all a commit does is backport upstream fixes, I'm OK with a
-single big commit (as long as backported patches have proper upstream
-URLs, and are really left otherwise totally untouched, code-wise).
-
-So, either way. Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > > ---
-> > >  ...authentication-agent-isn-t-available.patch | 46 +++++++++++++++++++
-> > >  package/gvfs/gvfs.mk                          |  3 ++
-> > >  2 files changed, 49 insertions(+)
-> > >  create mode 100644 package/gvfs/0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
-> > >
-> > > diff --git a/package/gvfs/0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch b/package/gvfs/0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
-> > > new file mode 100644
-> > > index 0000000000..2715371534
-> > > --- /dev/null
-> > > +++ b/package/gvfs/0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
-> > > @@ -0,0 +1,46 @@
-> > > +From d8d0c8c40049cfd824b2b90d0cd47914052b9811 Mon Sep 17 00:00:00 2001
-> > > +From: Ondrej Holy <oholy@redhat.com>
-> > > +Date: Wed, 2 Jan 2019 17:13:27 +0100
-> > > +Subject: [PATCH] admin: Prevent access if any authentication agent isn't
-> > > + available
-> > > +
-> > > +The backend currently allows to access and modify files without prompting
-> > > +for password if any polkit authentication agent isn't available. This seems
-> > > +isn't usually problem, because polkit agents are integral parts of
-> > > +graphical environments / linux distributions. The agents can't be simply
-> > > +disabled without root permissions and are automatically respawned. However,
-> > > +this might be a problem in some non-standard cases.
-> > > +
-> > > +This affects only users which belong to wheel group (i.e. those who are
-> > > +already allowed to use sudo). It doesn't allow privilege escalation for
-> > > +users, who don't belong to that group.
-> > > +
-> > > +Let's return permission denied error also when the subject can't be
-> > > +authorized by any polkit agent to prevent this behavior.
-> > > +
-> > > +Closes: https://gitlab.gnome.org/GNOME/gvfs/issues/355
-> > > +
-> > > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > > +[Retrieved from:
-> > > +https://gitlab.gnome.org/GNOME/gvfs/commit/d8d0c8c40049cfd824b2b90d0cd47914052b9811]
-> > > +---
-> > > + daemon/gvfsbackendadmin.c | 3 +--
-> > > + 1 file changed, 1 insertion(+), 2 deletions(-)
-> > > +
-> > > +diff --git a/daemon/gvfsbackendadmin.c b/daemon/gvfsbackendadmin.c
-> > > +index ec0f2392..0f849008 100644
-> > > +--- a/daemon/gvfsbackendadmin.c
-> > > ++++ b/daemon/gvfsbackendadmin.c
-> > > +@@ -130,8 +130,7 @@ check_permission (GVfsBackendAdmin *self,
-> > > +       return FALSE;
-> > > +     }
-> > > +
-> > > +-  is_authorized = polkit_authorization_result_get_is_authorized (result) ||
-> > > +-    polkit_authorization_result_get_is_challenge (result);
-> > > ++  is_authorized = polkit_authorization_result_get_is_authorized (result);
-> > > +
-> > > +   g_object_unref (result);
-> > > +
-> > > +--
-> > > +2.24.1
-> > > +
-> > > diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-> > > index c380a710fb..6c927fa345 100644
-> > > --- a/package/gvfs/gvfs.mk
-> > > +++ b/package/gvfs/gvfs.mk
-> > > @@ -15,6 +15,9 @@ GVFS_LICENSE = LGPL-2.0+
-> > >  GVFS_LICENSE_FILES = COPYING
-> > >  GVFS_LIBS = $(TARGET_NLS_LIBS)
-> > >
-> > > +# 0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
-> > > +GVFS_IGNORE_CVES += CVE-2019-3827
-> > > +
-> > >  # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
-> > >  # build system from searching the host paths.
-> > >  GVFS_CONF_ENV = \
-> > > --
-> > > 2.25.1
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-> Best Regards,
-> 
-> Fabrice
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
+index b6d9b99b3c..4a10536e74 100644
+--- a/package/rpi-userland/rpi-userland.hash
++++ b/package/rpi-userland/rpi-userland.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 cf4dff40a2f4ec38bc7e42a80b989df1bf88e12d714f7e681f83c4e5a588f5c9 rpi-userland-06bc6daa02137ca72b7a2104afad81e82a44de17.tar.gz
+-sha256 bee6f1249175683d8610651706e1aa7dffcbfd3f9c4c05bc1e5ab34f313c2db5 LICENCE
++sha256  f81fe28c636178645fb406cc87f543efa828ca896df856536f7b1b4ab54dfe0e  rpi-userland-6fb59736b1ae80fc62cddfe3309c800f72e1c07e.tar.gz
++sha256  bee6f1249175683d8610651706e1aa7dffcbfd3f9c4c05bc1e5ab34f313c2db5  LICENCE
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 7dd29e88e7..efb02f719f 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_USERLAND_VERSION = 06bc6daa02137ca72b7a2104afad81e82a44de17
++RPI_USERLAND_VERSION = 6fb59736b1ae80fc62cddfe3309c800f72e1c07e
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3-Clause
+ RPI_USERLAND_LICENSE_FILES = LICENCE
