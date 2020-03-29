@@ -1,32 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Mar 2020 22:56:49 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/ghostscript: add optional
- dependency to jbig2dec
-In-Reply-To: <20191106211005.16734-1-bernd.kuhls@t-online.de>
-References: <20191106211005.16734-1-bernd.kuhls@t-online.de>
-Message-ID: <20200329225649.4ec47c48@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 29 Mar 2020 23:01:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gupnp: disable examples
+Message-ID: <20200329210110.4101545-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  6 Nov 2019 22:10:04 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Disable examples through the new meson option (they are enabled by
+default)
 
-> Remove jbig2dec source files included in upstream tarball as well.
-> 
-> Needs http://patchwork.ozlabs.org/patch/1161981/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/ghostscript/ghostscript.mk | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gupnp/gupnp.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Both applied to master. Thanks!
-
-Thomas
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index 612359ba55..66a6e76574 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
+@@ -12,6 +12,7 @@ GUPNP_LICENSE = LGPL-2.0+
+ GUPNP_LICENSE_FILES = COPYING
+ GUPNP_INSTALL_STAGING = YES
+ GUPNP_DEPENDENCIES = host-pkgconf libglib2 libxml2 gssdp util-linux
++GUPNP_CONF_OPTS = -Dexamples=false
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ GUPNP_CONF_OPTS += -Dintrospection=true
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
