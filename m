@@ -1,58 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Mar 2020 16:50:50 +0200
-Subject: [Buildroot] [PATCH v3 1/7] package/vala/vala-wrapper: fix
- wrapper
-In-Reply-To: <20200327183000.1005676-1-aduskett@gmail.com>
-References: <20200327183000.1005676-1-aduskett@gmail.com>
-Message-ID: <20200329145050.GF22325@scaer>
+Date: Sun, 29 Mar 2020 16:52:01 +0200
+Subject: [Buildroot] [git commit] package/vala: also wrap vapigen
+Message-ID: <20200329145710.72AA088EF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c5c8cec5a5a7e9fe1c37081173ea526821f3f580
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-27 11:29 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Add double quotes around the $@ variable to prevent globbing.
+when compiling gobject-introspection .gir files, some packages use vapigen to
+generate a vala-api compatible .gir file. These packages tend to call vapigen
+directly instead of vala or valac.
 
-s/globbing/word splitting/
+Without the wrapper, building the .gir files fail. In the case of for example,
+gupnp-dlna throws the following error:
+"error: Package `Gst-1.0' not found in specified Vala API directories or
+GObject-Introspection GIR directories."
 
-Applied to master with that fixed (and a small tweak to the titile too).
-I also added yself as Reported-by, while at it. ;-)
+Installing the vala wrapper for vapigen fixes the above issue.
 
-Thanks!
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/vala/vala.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/vala/vala-wrapper | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/vala/vala-wrapper b/package/vala/vala-wrapper
-> index ae2f7ca671..84fc905b9f 100644
-> --- a/package/vala/vala-wrapper
-> +++ b/package/vala/vala-wrapper
-> @@ -1,2 +1,2 @@
->  #!/bin/sh
-> -$0- at VALA_VERSION@ --vapidir=${STAGING_DIR}/usr/share/vala/vapi --girdir=${STAGING_DIR}/usr/share/gir-1.0 $@
-> +$0- at VALA_VERSION@ --vapidir=${STAGING_DIR}/usr/share/vala/vapi --girdir=${STAGING_DIR}/usr/share/gir-1.0 "$@"
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index b8a69f8c5e..95365faf18 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -17,16 +17,19 @@ HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
+ HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
+ HOST_VALA_CONF_OPTS += --disable-valadoc
+ 
+-# We wrap vala & valac to point to the proper gir and vapi data dirs
++# We wrap vala, valac and vapigen to point to the proper gir and vapi data dirs
+ # Otherwise we'll get host directory data which isn't enough
+ define HOST_VALA_INSTALL_WRAPPER
+ 	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
+ 		$(HOST_DIR)/bin/vala
+ 	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
+ 		$(HOST_DIR)/bin/valac
++	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
++		$(HOST_DIR)/bin/vapigen
+ 	$(SED) 's, at VALA_VERSION@,$(VALA_VERSION_MAJOR),' \
+ 		$(HOST_DIR)/bin/vala \
+-		$(HOST_DIR)/bin/valac
++		$(HOST_DIR)/bin/valac \
++		$(HOST_DIR)/bin/vapigen
+ endef
+ HOST_VALA_POST_INSTALL_HOOKS += HOST_VALA_INSTALL_WRAPPER
+ 
