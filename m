@@ -1,66 +1,72 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Mar 2020 21:51:04 +0200
-Subject: [Buildroot] [git commit] package/gupnp: bump version to 1.2.2
-Message-ID: <20200329193741.C351889034@busybox.osuosl.org>
+Date: Sun, 29 Mar 2020 21:52:00 +0200
+Subject: [Buildroot] [PATCH v3 4/7] package/gssdp: bump version to 1.2.2
+In-Reply-To: <20200327183000.1005676-4-aduskett@gmail.com>
+References: <20200327183000.1005676-1-aduskett@gmail.com>
+ <20200327183000.1005676-4-aduskett@gmail.com>
+Message-ID: <20200329195200.GO22325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ef8c5d3dd8194059ca6907427dcdad2fab5d81d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Adam, All,
 
-Other changes:
-  - Convert the package type to meson as there is no longer autotools support.
+On 2020-03-27 11:29 -0700, aduskett at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-[yann.morin.1998 at free.fr: two spaces in hash file]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/gupnp/gupnp.hash |  6 +++---
- package/gupnp/gupnp.mk   | 10 +++++-----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+This version bump and the one for gupnp applied to master, thanks.
 
-diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
-index c530eb7ef5..24a0d36631 100644
---- a/package/gupnp/gupnp.hash
-+++ b/package/gupnp/gupnp.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.0/gupnp-1.0.4.sha256sum:
--sha256	8b0992650c6ef8566d2d0c9198c8a669106dc2c73aa908fcc4a4d043a8c0b544	gupnp-1.0.4.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.2.sha256sum:
-+sha256  9a80bd953e5c8772ad26b72f8da01cbe7241a113edd6084903f413ce751c9989  gupnp-1.2.2.tar.xz
- 
- # Hash for license file:
--sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-+sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-index 75bbfa8d1d..612359ba55 100644
---- a/package/gupnp/gupnp.mk
-+++ b/package/gupnp/gupnp.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GUPNP_VERSION_MAJOR = 1.0
--GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).4
-+GUPNP_VERSION_MAJOR = 1.2
-+GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).2
- GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
- GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
- GUPNP_LICENSE = LGPL-2.0+
-@@ -14,10 +14,10 @@ GUPNP_INSTALL_STAGING = YES
- GUPNP_DEPENDENCIES = host-pkgconf libglib2 libxml2 gssdp util-linux
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--GUPNP_CONF_OPTS += --enable-introspection
-+GUPNP_CONF_OPTS += -Dintrospection=true
- GUPNP_DEPENDENCIES += gobject-introspection
- else
--GUPNP_CONF_OPTS += --disable-introspection
-+GUPNP_CONF_OPTS += -Dintrospection=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/gssdp/gssdp.hash | 4 ++--
+>  package/gssdp/gssdp.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
+> index b389d0205c..325ac00171 100644
+> --- a/package/gssdp/gssdp.hash
+> +++ b/package/gssdp/gssdp.hash
+> @@ -1,5 +1,5 @@
+> -# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.0/gssdp-1.0.3.sha256sum:
+> -sha256 211387a62bc1d99821dd0333d873a781320287f5436f91e58b2ca145b378be41  gssdp-1.0.3.tar.xz
+> +# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.2/gssdp-1.2.2.sha256sum:
+> +sha256 cabb9e3b456b8354a55e23eb0207545d974643cda6d623523470ebbc4188b0a4  gssdp-1.2.2.tar.xz
+>  
+>  # Hash for license file:
+>  sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+> diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+> index d91c8acda0..14eec0b5fd 100644
+> --- a/package/gssdp/gssdp.mk
+> +++ b/package/gssdp/gssdp.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -GSSDP_VERSION_MAJOR = 1.0
+> -GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).3
+> +GSSDP_VERSION_MAJOR = 1.2
+> +GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).2
+>  GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
+>  GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
+>  GSSDP_LICENSE = LGPL-2.0+
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
