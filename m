@@ -1,71 +1,213 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Mar 2020 14:22:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-vfs-rar: bump version to
- 2.2.3-Leia
-Message-ID: <20200329122259.442023-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 29 Mar 2020 15:09:48 +0200
+Subject: [Buildroot] [git commit] configs/roc_rk3399_pc: new defconfig
+Message-ID: <20200329125649.05F238895B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated hash of lib/UnrarXLib/license.txt due to upstream changes:
-https://github.com/xbmc/vfs.rar/commits/Leia/lib/UnrarXLib/license.txt
+commit: https://git.buildroot.net/buildroot/commit/?id=80ae1aedcb3ac45e4be35d9536b8179ac2cb293c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changed addon license file to LICENSE.md.
+This initial support includes:
+Linux 5.4
+U-Boot 2020.01
+Arm Trusted Firmware v2.2
+Buildroot default packages.
 
-Updated dependencies due to upstream commit:
-https://github.com/xbmc/vfs.rar/commit/6c7a62439eac2b2afeb2bf8c241836cd2ab2b93e
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-vfs-rar/Config.in         | 2 +-
- package/kodi-vfs-rar/kodi-vfs-rar.hash | 6 +++---
- package/kodi-vfs-rar/kodi-vfs-rar.mk   | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ .gitlab-ci.yml                            |  1 +
+ DEVELOPERS                                |  2 ++
+ board/firefly/roc-rk3399-pc/extlinux.conf |  4 +++
+ board/firefly/roc-rk3399-pc/genimage.cfg  | 22 ++++++++++++
+ board/firefly/roc-rk3399-pc/post-build.sh |  5 +++
+ board/firefly/roc-rk3399-pc/readme.txt    | 40 ++++++++++++++++++++++
+ configs/roc_pc_rk3399_defconfig           | 56 +++++++++++++++++++++++++++++++
+ 7 files changed, 130 insertions(+)
 
-diff --git a/package/kodi-vfs-rar/Config.in b/package/kodi-vfs-rar/Config.in
-index f855fb6c9f..2d8b680572 100644
---- a/package/kodi-vfs-rar/Config.in
-+++ b/package/kodi-vfs-rar/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_KODI_VFS_RAR
- 	bool "kodi-vfs-rar"
--	select BR2_PACKAGE_LIBPLATFORM
-+	select BR2_PACKAGE_TINYXML
- 	help
- 	  RAR VFS addon for Kodi
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 72e2068ec2..cc67fc1b67 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -303,6 +303,7 @@ raspberrypi4_64_defconfig: { extends: .defconfig }
+ raspberrypi4_defconfig: { extends: .defconfig }
+ raspberrypi_defconfig: { extends: .defconfig }
+ riotboard_defconfig: { extends: .defconfig }
++roc_pc_rk3399_defconfig: { extends: .defconfig }
+ rock64_defconfig: { extends: .defconfig }
+ roseapplepi_defconfig: { extends: .defconfig }
+ s6lx9_microboard_defconfig: { extends: .defconfig }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2378264e7d..f67ef86e6c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2390,6 +2390,8 @@ F:	package/hwloc/
+ F:	package/powertop/
  
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-index 7c9053810a..80d04ebaca 100644
---- a/package/kodi-vfs-rar/kodi-vfs-rar.hash
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 09a16bf0be13c7d9ed43c6608f662374cb3b8b35c05492ce1117f58270d8d005  kodi-vfs-rar-60f92ff28ee6c94211b628990696c60518bffcf6.tar.gz
-+sha256 17105acd5d2d83747a402b0782e4d7fe0f3e3f3a208ea9614af56c10186a757d  kodi-vfs-rar-2.2.3-Leia.tar.gz
- # License files
--sha256 e0c2f13c3a78c8d2b91cb846b8a13fb650fcc88c0630e38ce9c0b7c34631d1cc  lib/UnrarXLib/license.txt
--sha256 649854722a936822ab52e0801c7d7274c9a1933c9f9566a83003c96ca2c9c657  debian/copyright
-+sha256 6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  lib/UnrarXLib/license.txt
-+sha256 310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
-index f7dcbbd111..be766080ed 100644
---- a/package/kodi-vfs-rar/kodi-vfs-rar.mk
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+ N:	Suniel Mahesh <sunil@amarulasolutions.com>
++F:	board/firefly/
++F:	configs/roc_pc_rk3399_defconfig
+ F:	package/arm-gnu-a-toolchain/
  
--KODI_VFS_RAR_VERSION = 60f92ff28ee6c94211b628990696c60518bffcf6
-+KODI_VFS_RAR_VERSION = 2.2.3-Leia
- KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
- KODI_VFS_RAR_LICENSE = unrar, GPL-2.0+
--KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt debian/copyright
--KODI_VFS_RAR_DEPENDENCIES = libplatform kodi
-+KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt LICENSE.md
-+KODI_VFS_RAR_DEPENDENCIES = kodi tinyxml
- 
- $(eval $(cmake-package))
--- 
-2.25.0
+ N:	Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+diff --git a/board/firefly/roc-rk3399-pc/extlinux.conf b/board/firefly/roc-rk3399-pc/extlinux.conf
+new file mode 100644
+index 0000000000..50a358fadc
+--- /dev/null
++++ b/board/firefly/roc-rk3399-pc/extlinux.conf
+@@ -0,0 +1,4 @@
++label RK3399RocPC linux
++  kernel /boot/Image
++  devicetree /boot/rk3399-roc-pc.dtb
++  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk0p1 rootwait
+diff --git a/board/firefly/roc-rk3399-pc/genimage.cfg b/board/firefly/roc-rk3399-pc/genimage.cfg
+new file mode 100644
+index 0000000000..966c869273
+--- /dev/null
++++ b/board/firefly/roc-rk3399-pc/genimage.cfg
+@@ -0,0 +1,22 @@
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot-tpl-spl-dtb {
++		in-partition-table = "no"
++		image = "idbloader.img"
++		offset = 32K
++	}
++
++	partition u-boot-dtb {
++		in-partition-table = "no"
++		image = "u-boot.itb"
++		offset = 8M
++		size = 30M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/firefly/roc-rk3399-pc/post-build.sh b/board/firefly/roc-rk3399-pc/post-build.sh
+new file mode 100755
+index 0000000000..1f5ff6a611
+--- /dev/null
++++ b/board/firefly/roc-rk3399-pc/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++
++install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
+diff --git a/board/firefly/roc-rk3399-pc/readme.txt b/board/firefly/roc-rk3399-pc/readme.txt
+new file mode 100644
+index 0000000000..8a6f1cdee6
+--- /dev/null
++++ b/board/firefly/roc-rk3399-pc/readme.txt
+@@ -0,0 +1,40 @@
++Libre Computer Board ROC-RK3399-PC
++===================================
++
++Build:
++
++  $ make roc_pc_rk3399_defconfig
++  $ make
++
++Files created in output directory
++=================================
++
++output/images
++
++????????? bl31.elf
++????????? idbloader.img
++????????? Image
++????????? rk3399-roc-pc.dtb
++????????? rootfs.ext2
++????????? rootfs.ext4 -> rootfs.ext2
++????????? rootfs.tar
++????????? sdcard.img
++????????? u-boot.bin
++????????? u-boot.itb
++
++Creating bootable SD card:
++==========================
++
++Simply invoke (as root)
++
++sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
++
++Where X is your SD card device
++
++Serial console
++--------------
++
++Baudrate for this board is 1500000
++
++Wiki link:
++https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/roc-rk3399-pc.html
+diff --git a/configs/roc_pc_rk3399_defconfig b/configs/roc_pc_rk3399_defconfig
+new file mode 100644
+index 0000000000..114b0e8c95
+--- /dev/null
++++ b/configs/roc_pc_rk3399_defconfig
+@@ -0,0 +1,56 @@
++# Architecture
++BR2_aarch64=y
++BR2_cortex_a72_a53=y
++
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++
++# Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="11a0a46a899fcc3b1fdb214b382f3d7495d88eca"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="roc-pc-rk3399"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.18"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-roc-pc"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# Filesystem
++BR2_TARGET_GENERIC_HOSTNAME="roc-rk3399-pc"
++BR2_TARGET_GENERIC_ISSUE="Welcome to ROC-RK3399-PC!"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/firefly/roc-rk3399-pc/genimage.cfg"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/firefly/roc-rk3399-pc/post-build.sh"
