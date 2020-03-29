@@ -1,10 +1,10 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sun, 29 Mar 2020 20:49:22 -0300
-Subject: [Buildroot] [PATCH 1/3] pakage/busybox: use same S02sysctl script
- as procps-ng
+Date: Sun, 29 Mar 2020 20:49:23 -0300
+Subject: [Buildroot] [PATCH 2/3] package/procps-ng: add busybox-related
+ comments to S02sysctl
 In-Reply-To: <20200329234924.14505-1-unixmania@gmail.com>
 References: <20200329234924.14505-1-unixmania@gmail.com>
-Message-ID: <20200329234924.14505-2-unixmania@gmail.com>
+Message-ID: <20200329234924.14505-3-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,95 +13,48 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-The scripts were already the same, except for some comments, so make the
-busybox S02sysctl a symlink to the procps-ng one, which works with both
-versions of the "sysctl" utility.
+Explain the busybox peculiarities and how the script works with both
+versions of the sysctl utility.
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- package/busybox/S02sysctl | 67 +--------------------------------------
- 1 file changed, 1 insertion(+), 66 deletions(-)
- mode change 100644 => 120000 package/busybox/S02sysctl
+ package/procps-ng/S02sysctl | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/package/busybox/S02sysctl b/package/busybox/S02sysctl
-deleted file mode 100644
-index 6bb2fa165e..0000000000
---- a/package/busybox/S02sysctl
-+++ /dev/null
-@@ -1,66 +0,0 @@
--#!/bin/sh
--
--PROGRAM="sysctl"
--
--SYSCTL_ARGS=""
--
--# shellcheck source=/dev/null
--[ -r "/etc/default/$PROGRAM" ] && . "/etc/default/$PROGRAM"
--
--# Files are read from directories in the SYSCTL_SOURCES list, in the given
--# order. A file may be used more than once, since there can be multiple
--# symlinks to it. No attempt is made to prevent this.
--SYSCTL_SOURCES="/etc/sysctl.d/ /usr/local/lib/sysctl.d/ /usr/lib/sysctl.d/ /lib/sysctl.d/ /etc/sysctl.conf"
--
--# Use some scripting to mimic the --system option of the sysctl provided by
--# procps-ng but still reporting errors. Users not interested on error report
--# can put "-e" in SYSCTL_ARGS.
+diff --git a/package/procps-ng/S02sysctl b/package/procps-ng/S02sysctl
+index 3a58578de4..fed64e91a6 100644
+--- a/package/procps-ng/S02sysctl
++++ b/package/procps-ng/S02sysctl
+@@ -1,4 +1,17 @@
+ #!/bin/sh
++#
++# This script is used by busybox and procps-ng.
++#
++# With procps-ng, the "--system" option of sysctl also enables "--ignore", so
++# errors are not reported via syslog. Use the run_logger function to mimic the
++# --system behavior, still reporting errors via syslog. Users not interested
++# on error reports can add "-e" to SYSCTL_ARGS.
++#
++# busybox does not have a "--system" option neither reports errors via syslog,
++# so the scripting provides a consistent behavior between the implementations.
++# Testing the busybox sysctl exit code is fruitless, as at the moment, since
++# its exit status is zero even if errors happen. Hopefully this will be fixed
++# in a future busybox version.
+ 
+ PROGRAM="sysctl"
+ 
+@@ -12,12 +25,6 @@ SYSCTL_ARGS=""
+ # symlinks to it. No attempt is made to prevent this.
+ SYSCTL_SOURCES="/etc/sysctl.d/ /usr/local/lib/sysctl.d/ /usr/lib/sysctl.d/ /lib/sysctl.d/ /etc/sysctl.conf"
+ 
+-# The "--system" option activates "--ignore", which is bad because invalid
+-# variable settings in the configuration files will not be reported on the
+-# system log. Use some scripting to mimic the --system behavior but still
+-# reporting errors. Users not interested on error report can put "-e" in
+-# SYSCTL_ARGS.
 -#
--# The file redirections do the following:
--#
--# - stdout is redirected to syslog with facility.level "kern.info"
--# - stderr is redirected to syslog with facility.level "kern.err"
--# - file dscriptor 4 is used to pass the result to the "start" function.
--#
--# Testing the sysctl exit code is fruitless, as at the moment, since it ends
--# with status zero even if errors happen. Hopefully this will be fixed in a
--# future version of Busybox.
--#
--run_program() {
--	# shellcheck disable=SC2086 # we need the word splitting
--	find $SYSCTL_SOURCES -maxdepth 1 -name '*.conf' -print0 2> /dev/null | \
--	xargs -0 -r -n 1 readlink -f | {
--		prog_status="OK"
--		while :; do
--			read -r file
--			if [ -z "$file" ]; then
--				echo "$prog_status" >&4
--				break
--			fi
--			echo "* Applying $file ..."
--			/sbin/sysctl -p "$file" $SYSCTL_ARGS || prog_status="FAIL"
--		done 2>&1 >&3 | /usr/bin/logger -t sysctl -p kern.err
--	} 3>&1 | /usr/bin/logger -t sysctl -p kern.info
--}
--
--start() {
--	printf '%s %s: ' "$1" "$PROGRAM"
--	status=$(run_program 4>&1)
--	echo "$status"
--	if [ "$status" = "OK" ]; then
--		return 0
--	fi
--	return 1
--}
--
--case "$1" in
--	start)
--		start "Running";;
--	restart|reload)
--		start "Rerunning";;
--	stop)
--		:;;
--	*)
--		echo "Usage: $0 {start|stop|restart|reload}"
--		exit 1
--esac
-diff --git a/package/busybox/S02sysctl b/package/busybox/S02sysctl
-new file mode 120000
-index 0000000000..796855c332
---- /dev/null
-+++ b/package/busybox/S02sysctl
-@@ -0,0 +1 @@
-+../procps-ng/S02sysctl
-\ No newline at end of file
+ # The file redirections do the following:
+ #
+ # - stdout is redirected to syslog with facility.level "kern.info"
 -- 
 2.18.2
