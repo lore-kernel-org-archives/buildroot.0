@@ -1,60 +1,31 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Mar 2020 16:34:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/hiredis: install alloc.h
-In-Reply-To: <20200329083650.2024350-1-fontaine.fabrice@gmail.com>
-References: <20200329083650.2024350-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200329143404.GE22325@scaer>
+Date: Sun, 29 Mar 2020 16:48:33 +0200
+Subject: [Buildroot] [git commit] package/vala: fix wrapper
+Message-ID: <20200329143604.1C89088EEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=30b6db05cb29b3a79c85f3bcc9c30a18d03c6cfa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-03-29 10:36 +0200, Fabrice Fontaine spake thusly:
-> This will fix build of collectd, proftpd ... with latest hiredis
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f5afe60defd63461a5fc06b26bd4759fb5f56a8f
->  - http://autobuild.buildroot.org/results/45e980c85d170827d3a41e7443cf1088b2d59ead
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Add double quotes around the $@ variable to prevent word splitting.
 
-Applied to master, thanks.
+Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[yann.morin.1998 at free.fr: s/globbing/word splitting/]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/vala/vala-wrapper | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/hiredis/hiredis.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
-> index 02055b05d4..230fb2d187 100644
-> --- a/package/hiredis/hiredis.mk
-> +++ b/package/hiredis/hiredis.mk
-> @@ -55,7 +55,7 @@ endif
->  define HIREDIS_INSTALL_STAGING_CMDS
->  	mkdir -p $(HIREDIS_INCLUDE_DIR)
->  	cp -dpfr $(@D)/hiredis.h $(@D)/async.h $(@D)/read.h $(@D)/sds.h \
-> -		$(@D)/adapters $(HIREDIS_INCLUDE_DIR)
-> +		$(@D)/alloc.h $(@D)/adapters $(HIREDIS_INCLUDE_DIR)
->  	$(INSTALL) -D -m 0644 $(@D)/hiredis.pc \
->  		$(STAGING_DIR)/usr/lib/pkgconfig/hiredis.pc
->  	$(HIREDIS_INSTALL_STAGING_STATIC_LIB)
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/vala/vala-wrapper b/package/vala/vala-wrapper
+index ae2f7ca671..84fc905b9f 100644
+--- a/package/vala/vala-wrapper
++++ b/package/vala/vala-wrapper
+@@ -1,2 +1,2 @@
+ #!/bin/sh
+-$0- at VALA_VERSION@ --vapidir=${STAGING_DIR}/usr/share/vala/vapi --girdir=${STAGING_DIR}/usr/share/gir-1.0 $@
++$0- at VALA_VERSION@ --vapidir=${STAGING_DIR}/usr/share/vala/vapi --girdir=${STAGING_DIR}/usr/share/gir-1.0 "$@"
