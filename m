@@ -1,33 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Mar 2020 21:19:23 +0200
-Subject: [Buildroot] [PATCH 1/2] package/mender: bump version to 2.2.0
-In-Reply-To: <20200328222612.3717621-1-aduskett@gmail.com>
-References: <20200328222612.3717621-1-aduskett@gmail.com>
-Message-ID: <20200329211923.06a94140@windsurf.home>
+Date: Sun, 29 Mar 2020 21:19:36 +0200
+Subject: [Buildroot] [PATCH] package/oprofile: fix build with binutils
+ >= 2.34
+In-Reply-To: <20200325062634.1780288-1-thomas.petazzoni@bootlin.com>
+References: <20200325062634.1780288-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20200329211936.28bc7e9a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 28 Mar 2020 15:26:10 -0700
-aduskett at gmail.com wrote:
+On Wed, 25 Mar 2020 07:26:34 +0100
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> From: Adam Duskett <Aduskett@gmail.com>
+> The libbfd library provided by binutils unfortunately changed its API
+> in binutils >= 2.34. This is causing some build failures at the moment
+> on architectures such as ARC that are using a very recent binutils
+> version, but it would also cause build failures on other architectures
+> once they start using binutils 2.34.
 > 
-> Other changes:
->   - Update license file hashes due to copyright year change.
->   - Remove vendor/github.com/konsorten/go-windows-terminal-sequences/LICENSE
->     as it no longer exists.
->   - Add new vendor/github.com/urfave/cli/LICENSE hash.
+> We fix this build issue by backporting an upstream oprofile
+> patch. However, this patch touches configure.ac, which means we need
+> to autoreconf, which needs another fix in configure.ac for autoreconf
+> to succeed.
 > 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> With all that in place, this commit fixes:
+> 
+>   http://autobuild.buildroot.net/results/583d281c6cd2aecb65556080b379db24101ae3a8/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/mender/mender.hash | 10 ++++------
->  package/mender/mender.mk   |  4 ++--
->  2 files changed, 6 insertions(+), 8 deletions(-)
+>  ...d-foreign-option-to-AM_INIT_AUTOMAKE.patch |  36 ++++
+>  ...o-handle-the-binutils-2.34-api-chang.patch | 169 ++++++++++++++++++
+>  package/oprofile/oprofile.mk                  |   3 +
+>  3 files changed, 208 insertions(+)
+>  create mode 100644 package/oprofile/0002-configure.ac-add-foreign-option-to-AM_INIT_AUTOMAKE.patch
+>  create mode 100644 package/oprofile/0003-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
 
-Both applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
