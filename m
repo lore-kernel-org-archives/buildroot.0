@@ -1,48 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Mar 2020 15:49:18 +0200
-Subject: [Buildroot] [git commit] package/rocksdb: fix build on m68k_cf
-Message-ID: <20200329133645.32FC488DA2@busybox.osuosl.org>
+Date: Sun, 29 Mar 2020 15:50:07 +0200
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/sample_gst1_python.py: fix flake8 errors
+Message-ID: <20200329133645.4675388DA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0ae390d43a70fd45a9956ab21622007d49eb068
+commit: https://git.buildroot.net/buildroot/commit/?id=f41ee450e5c970ae5284ccaef04dfe562215b92c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/04c5afff034d8d71d11b95c998e3156292852de6
+The older version of flake8 on the autobuilders does not support typehints.
+As such, flake8 throws the following error when scanning sample_gst1_python:
+E999 SyntaxError: invalid syntax
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Remove the typehinting from on_message to fix this issue.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rocksdb/rocksdb.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ support/testing/tests/package/sample_gst1_python.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rocksdb/rocksdb.mk b/package/rocksdb/rocksdb.mk
-index 5f9fd9f1cb..86732ad46c 100644
---- a/package/rocksdb/rocksdb.mk
-+++ b/package/rocksdb/rocksdb.mk
-@@ -12,6 +12,12 @@ ROCKSDB_INSTALL_STAGING = YES
+diff --git a/support/testing/tests/package/sample_gst1_python.py b/support/testing/tests/package/sample_gst1_python.py
+index d8cd3fb422..fab7e74f40 100644
+--- a/support/testing/tests/package/sample_gst1_python.py
++++ b/support/testing/tests/package/sample_gst1_python.py
+@@ -8,7 +8,7 @@ gi.require_version('Gst', '1.0')
+ from gi.repository import Gst, GLib  # noqa: E402
  
- ROCKSDB_MAKE_OPTS = PORTABLE=1
  
-+# Internal error, aborting at dwarf2cfi.c:2802 in connect_traces
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
-+ifeq ($(BR2_m68k_cf),y)
-+ROCKSDB_EXTRA_CXXFLAGS += -fno-defer-pop
-+endif
-+
- ifeq ($(BR2_PACKAGE_BZIP2),y)
- ROCKSDB_DEPENDENCIES += bzip2
- ROCKSDB_MAKE_OPTS += ROCKSDB_DISABLE_BZ2=0
-@@ -72,6 +78,8 @@ ROCKSDB_BUILD_TARGETS += shared_lib static_lib
- ROCKSDB_INSTALL_TARGETS += install-shared install-static
- endif
- 
-+ROCKSDB_MAKE_OPTS += EXTRA_CXXFLAGS="$(ROCKSDB_EXTRA_CXXFLAGS)"
-+
- define ROCKSDB_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(ROCKSDB_MAKE_OPTS) -C $(@D) \
- 		$(ROCKSDB_BUILD_TARGETS)
+-def on_message(bus: Gst.Bus, message: Gst.Message, loop: GLib.MainLoop):
++def on_message(bus, message, loop):
+     print('Received Gst.Message.type: {}'.format(message.type))
+     if message.type == Gst.MessageType.EOS:
+         loop.quit()
