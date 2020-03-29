@@ -1,32 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 29 Mar 2020 23:01:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gupnp: disable examples
-Message-ID: <20200329210110.4101545-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 29 Mar 2020 23:01:25 +0200
+Subject: [Buildroot] [PATCH v2 0/2] Frotz and XorCurses
+In-Reply-To: <20190912184013.17316-1-huth@tuxfamily.org>
+References: <20190912184013.17316-1-huth@tuxfamily.org>
+Message-ID: <20200329230125.45e34825@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable examples through the new meson option (they are enabled by
-default)
+Hello Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gupnp/gupnp.mk | 1 +
- 1 file changed, 1 insertion(+)
+On Thu, 12 Sep 2019 20:40:11 +0200
+Thomas Huth <huth@tuxfamily.org> wrote:
 
-diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-index 612359ba55..66a6e76574 100644
---- a/package/gupnp/gupnp.mk
-+++ b/package/gupnp/gupnp.mk
-@@ -12,6 +12,7 @@ GUPNP_LICENSE = LGPL-2.0+
- GUPNP_LICENSE_FILES = COPYING
- GUPNP_INSTALL_STAGING = YES
- GUPNP_DEPENDENCIES = host-pkgconf libglib2 libxml2 gssdp util-linux
-+GUPNP_CONF_OPTS = -Dexamples=false
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- GUPNP_CONF_OPTS += -Dintrospection=true
+> Thomas Huth (2):
+>   package/frotz: new package
+>   package/xorcurses: new package
+
+Thanks for those patches! However, you had some comments from Giulio
+and you never sent a new iteration of the patches. Also, at least frotz
+has seen several new upstream releases, including changes that seem to
+fix the Makefile.
+
+Could you respin new iteration of the patches ?
+
+Thanks!
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
