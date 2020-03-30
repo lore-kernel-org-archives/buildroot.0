@@ -1,9 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 30 Mar 2020 16:46:15 -0700
-Subject: [Buildroot] [PATCH 4/5] package/firewalld: new package
+Date: Mon, 30 Mar 2020 16:46:16 -0700
+Subject: [Buildroot] [PATCH 5/5] linux: add automatic firewalld config
+ selection
 In-Reply-To: <20200330234616.1665466-1-aduskett@gmail.com>
 References: <20200330234616.1665466-1-aduskett@gmail.com>
-Message-ID: <20200330234616.1665466-4-aduskett@gmail.com>
+Message-ID: <20200330234616.1665466-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,349 +13,202 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Firewalld provides a dynamically managed firewall with support for network or
-firewall zones to define the trust level of network connections or interfaces.
-It has support for IPv4, IPv6 firewall settings and for ethernet bridges and
-a separation of runtime and permanent configuration options.
-
-It also provides an interface for services or applications to add iptables and
-ebtables rules directly.
+Firewalld requires almost every single nftables rule enabled in the kernel to
+properly start. As such, if a user selects the firewalld package, it is much
+easier to select these options for them, must like we do for systemd or
+iptables.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- ...on-to-disable-building-documentation.patch | 90 +++++++++++++++++++
- package/firewalld/Config.in                   | 42 +++++++++
- package/firewalld/firewalld.hash              |  3 +
- package/firewalld/firewalld.init              | 52 +++++++++++
- package/firewalld/firewalld.mk                | 79 ++++++++++++++++
- 7 files changed, 268 insertions(+)
- create mode 100644 package/firewalld/0001-Add-an-option-to-disable-building-documentation.patch
- create mode 100644 package/firewalld/Config.in
- create mode 100644 package/firewalld/firewalld.hash
- create mode 100644 package/firewalld/firewalld.init
- create mode 100644 package/firewalld/firewalld.mk
+ linux/linux.mk | 175 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 175 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 64f0333fbb..240ceb6533 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -31,6 +31,7 @@ F:	package/audit/
- F:	package/busybox/
- F:	package/checkpolicy/
- F:	package/cppdb/
-+F:	package/firewalld/
- F:	package/gobject-introspection/
- F:	package/gstreamer1/gstreamer1/
- F:	package/gstreamer1/gstreamer1-mm/
-diff --git a/package/Config.in b/package/Config.in
-index e6c5bb11c6..dbe084711c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2016,6 +2016,7 @@ menu "Networking applications"
- 	source "package/fail2ban/Config.in"
- 	source "package/fastd/Config.in"
- 	source "package/fcgiwrap/Config.in"
-+	source "package/firewalld/Config.in"
- 	source "package/flannel/Config.in"
- 	source "package/fmc/Config.in"
- 	source "package/fping/Config.in"
-diff --git a/package/firewalld/0001-Add-an-option-to-disable-building-documentation.patch b/package/firewalld/0001-Add-an-option-to-disable-building-documentation.patch
-new file mode 100644
-index 0000000000..150a74a4a5
---- /dev/null
-+++ b/package/firewalld/0001-Add-an-option-to-disable-building-documentation.patch
-@@ -0,0 +1,90 @@
-+From 1627f1046515e93f7acb34fbfededecf9e1b16a7 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Aduskett@gmail.com>
-+Date: Sun, 29 Mar 2020 16:28:06 -0700
-+Subject: [PATCH] improvement: build: add an option to disable building
-+ documentation
-+
-+For embedded applications such as Buildroot or Yocto, the man pages may not be
-+desired or even capable of being built.
-+
-+On line 45 of configure.ac there is the line:
-+JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl], [DocBook XSL Stylesheets])
-+
-+There are three issues with this:
-+  - It requires building the xml-catalog package.
-+  - It automatically defaults to the host systems xml-catalog
-+    instead of the cross environments.
-+  - It isn't necessary to have a functioning firewalld.
-+
-+Create a new option: --disable-docs. By default, build the documentation, but
-+if a user passes --disable-docs documentation will no longer be built as
-+desired.
-+
-+Upstream-Status: Merged
-+See: https://github.com/firewalld/firewalld/pull/596
-+
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ configure.ac             | 7 ++++++-
-+ doc/man/man1/Makefile.am | 2 ++
-+ doc/man/man5/Makefile.am | 2 ++
-+ doc/xml/Makefile.am      | 2 ++
-+ 4 files changed, 12 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0758c69d..84f48037 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -42,7 +42,12 @@ GLIB_GSETTINGS
-+ 
-+ #############################################################
-+ 
-+-JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl], [DocBook XSL Stylesheets])
-++AC_ARG_ENABLE([docs],
-++    [AS_HELP_STRING([--disable-docs], [Disable building documentation])])
-++AM_CONDITIONAL([ENABLE_DOCS], [test x$enable_docs != xno])
-++AM_COND_IF([ENABLE_DOCS], [
-++    JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl], [DocBook XSL Stylesheets])
-++])
-+ 
-+ #############################################################
-+ 
-+diff --git a/doc/man/man1/Makefile.am b/doc/man/man1/Makefile.am
-+index 23343490..78c42fdc 100644
-+--- a/doc/man/man1/Makefile.am
-++++ b/doc/man/man1/Makefile.am
-+@@ -1,3 +1,5 @@
-++if ENABLE_DOCS
-+ EXTRA_DIST = $(man_MANS)
-+ 
-+ man_MANS = firewall*.1
-++endif
-+diff --git a/doc/man/man5/Makefile.am b/doc/man/man5/Makefile.am
-+index 6ba37a9b..2ed35461 100644
-+--- a/doc/man/man5/Makefile.am
-++++ b/doc/man/man5/Makefile.am
-+@@ -1,3 +1,5 @@
-++if ENABLE_DOCS
-+ EXTRA_DIST = $(man_MANS)
-+ 
-+ man_MANS = firewall*.5
-++endif
-+diff --git a/doc/xml/Makefile.am b/doc/xml/Makefile.am
-+index d0313e3e..44a32528 100644
-+--- a/doc/xml/Makefile.am
-++++ b/doc/xml/Makefile.am
-+@@ -1,5 +1,6 @@
-+ XSLTPROC = xsltproc
-+ 
-++if ENABLE_DOCS
-+ EXTRA_DIST = $(HTMLS:../html/%.html=%.xml) \
-+ 	authors.xml notes.xml seealso.xml errorcodes.xml \
-+ 	transform-man.xsl.in transform-html.xsl.in \
-+@@ -27,6 +28,7 @@ man5_MANS = \
-+ 	../man/man5/firewalld.service.5 \
-+ 	../man/man5/firewalld.zone.5 \
-+ 	../man/man5/firewalld.zones.5
-++endif
-+ 
-+ CLEAN_FILES = *~ errorcodes.xml
-+ DISTCLEANFILES = $(man_MANS) $(HTMLS) transform-*.xsl \
-diff --git a/package/firewalld/Config.in b/package/firewalld/Config.in
-new file mode 100644
-index 0000000000..2b74655b1a
---- /dev/null
-+++ b/package/firewalld/Config.in
-@@ -0,0 +1,42 @@
-+config BR2_PACKAGE_FIREWALLD
-+	bool "firewalld"
-+	depends on BR2_USE_MMU # ebtables, gobject-introspection
-+	depends on BR2_USE_WCHAR # dbus-python, gettext
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # nftables
-+	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS # gobject-introspection
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gobject-introspection
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
-+	depends on BR2_PACKAGE_DBUS # dbus-python
-+	depends on BR2_PACKAGE_PYTHON3 # gobject-introspection
-+	select BR2_PACKAGE_DBUS_PYTHON
-+	select BR2_PACKAGE_EBTABLES
-+	select BR2_PACKAGE_GETTEXT
-+	select BR2_PACKAGE_GOBJECT_INTROSPECTION
-+	select BR2_PACKAGE_IPSET
-+	select BR2_PACKAGE_IPTABLES
-+	select BR2_PACKAGE_JANSSON # Runtime
-+	select BR2_PACKAGE_NFTABLES
-+	select BR2_PACKAGE_PYTHON_DECORATOR
-+	select BR2_PACKAGE_PYTHON_GOBJECT
-+	select BR2_PACKAGE_PYTHON_SIX
-+	select BR2_PACKAGE_PYTHON_SLIP_DBUS
-+	help
-+	  Firewalld provides a dynamically managed firewall with
-+	  support for network or firewall zones to define the trust
-+	  level of network connections or interfaces. It has support
-+	  for IPv4, IPv6 firewall settings and for ethernet bridges and
-+	  a separation of runtime and permanent configuration options.
-+	  It also provides an interface for services or applications to
-+	  add ip*tables and ebtables rules directly.
-+
-+	  https://github.com/firewalld/firewalld
-+
-+comment "firewalld needs python3"
-+	depends on !BR2_PACKAGE_PYTHON3
-+
-+comment "firewalld needs a glibc toolchain w/ wchar, threads, gcc >= 4.9"
-+	depends on BR2_USE_MMU || !BR2_USE_WCHAR
-+	depends on BR2_PACKAGE_DBUS && BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/firewalld/firewalld.hash b/package/firewalld/firewalld.hash
-new file mode 100644
-index 0000000000..ed4ac54a67
---- /dev/null
-+++ b/package/firewalld/firewalld.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 cfdf40890bca18892d1695bd902ede695cb2a61e1fcf809a2f8c394ca788a31e firewalld-v0.8.1.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/firewalld/firewalld.init b/package/firewalld/firewalld.init
-new file mode 100644
-index 0000000000..72c9f7a31a
---- /dev/null
-+++ b/package/firewalld/firewalld.init
-@@ -0,0 +1,52 @@
-+#!/bin/sh
-+
-+firewalld=/usr/sbin/firewalld
-+pidfile=/var/run/firewalld.pid
-+
-+start() {
-+  printf "Starting firewalld: "
-+  start-stop-daemon -S -q --exec $firewalld
-+  [ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+stop() {
-+  printf "Stopping firewalld: "
-+  start-stop-daemon --stop --quiet --pidfile $pidfile
-+  [ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+reload(){
-+  printf "Reloading firewalld: "
-+  firewall-cmd --reload
-+  [ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+restart() {
-+  stop
-+  start
-+}
-+
-+status(){
-+  firewall-cmd --state
-+}
-+
-+
-+case "$1" in
-+    start)
-+      start
-+      ;;
-+    stop)
-+      stop
-+      ;;
-+    restart)
-+      restart
-+      ;;
-+    reload)
-+      reload
-+      ;;
-+    status)
-+      status
-+      ;;
-+    *)
-+      echo "Usage: $0 {start|stop|restart|reload|status}"
-+      exit 1
-+esac
-diff --git a/package/firewalld/firewalld.mk b/package/firewalld/firewalld.mk
-new file mode 100644
-index 0000000000..e028a01c84
---- /dev/null
-+++ b/package/firewalld/firewalld.mk
-@@ -0,0 +1,79 @@
-+################################################################################
-+#
-+# firewalld
-+#
-+################################################################################
-+
-+FIREWALLD_VERSION = v0.8.1
-+FIREWALLD_SITE = $(call github,firewalld,firewalld,$(FIREWALLD_VERSION))
-+FIREWALLD_LICENSE = GPL-2.0
-+FIREWALLD_LICENSE_FILES = COPYING
-+FIREWALLD_AUTORECONF = YES
-+FIREWALLD_DEPENDENCIES = \
-+	host-intltool \
-+	host-libglib2 \
-+	host-libxml2 \
-+	host-libxslt \
-+	dbus-python \
-+	dbus-python \
-+	ebtables \
-+	gettext \
-+	gobject-introspection \
-+	ipset \
-+	iptables \
-+	jansson \
-+	nftables \
-+	python3 \
-+	python-decorator \
-+	python-gobject \
-+	python-six \
-+	python-slip-dbus
-+
-+define FIREWALLD_RUN_AUTOGEN
-+	cd $(@D) && $(HOST_DIR)/bin/intltoolize --force
-+endef
-+FIREWALLD_PRE_CONFIGURE_HOOKS += FIREWALLD_RUN_AUTOGEN
-+
-+# iptables, ip6tables, ebtables, and ipset *should* be unnecessary
-+# when the nftables backend is available, because nftables supersedes all of
-+# them. However we still need to build and install iptables and ip6tables
-+# because application relying on direct passthrough rules (IE docker) will
-+# break.
-+# /etc/sysconfig/firewalld is a Red Hat-ism, only referenced by
-+# the Red Hat-specific init script which isn't used.
-+FIREWALLD_CONF_OPTS += \
-+	--disable-rpmmacros \
-+	--disable-sysconfig \
-+	--with-ip6tables-restore=/usr/sbin/ip6tables-restore \
-+	--with-ip6tables=/usr/sbin/ip6tables \
-+	--with-iptables-restore=/usr/sbin/iptables-restore \
-+	--with-iptables=/usr/sbin/iptables \
-+	--with-nft=/usr/sbin/nft \
-+	--without-ebtables \
-+	--without-ebtables-restore \
-+	--without-ipset \
-+	--without-xml-catalog
-+
-+
-+# Firewalld hard codes the python shebangs to the full path of the
-+# python-interpreter. IE: #!/home/buildroot/output/host/bin/python.
-+# Force the proper python path.
-+FIREWALLD_CONF_ENV += PYTHON="/usr/bin/env python$(PYTHON3_VERSION_MAJOR)"
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+FIREWALLD_CONF_OPTS += --with-systemd-unitdir=/usr/lib/systemd/system
-+else
-+FIREWALLD_CONF_OPTS += --disable-systemd
-+endif
-+
-+define FIREWALLD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(FIREWALLD_PKGDIR)/firewalld.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/firewalld.service
-+endef
-+
-+define FIREWALLD_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D $(FIREWALLD_PKGDIR)/firewalld.init \
-+		$(TARGET_DIR)/etc/init.d/S41firewalld
-+endef
-+
-+$(eval $(autotools-package))
+diff --git a/linux/linux.mk b/linux/linux.mk
+index b2ceeecafb..1927832e7e 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -358,6 +358,182 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 	$(if $(BR2_PACKAGE_AUDIT),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
++	$(if $(BR2_PACKAGE_FIREWALLD),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_COMMON,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_NETDEV,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_CONNCOUNT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_ZONES,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_PROCFS,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_EVENTS,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TIMEOUT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TIMESTAMP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_LABELS,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_DCCP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_GRE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_SCTP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_UDPLITE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_AMANDA,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_FTP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_H323,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_IRC,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_BROADCAST,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_NETBIOS_NS,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SNMP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_PPTP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SANE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SIP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TFTP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK_TIMEOUT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK_HELPER,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_NETLINK_GLUE_CT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_NEEDED,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_DCCP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_UDPLITE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_SCTP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_AMANDA,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_FTP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IRC,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_SIP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_TFTP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_REDIRECT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_SYNPROXY,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_SET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_NETDEV,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_NUMGEN,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FLOW_OFFLOAD,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_COUNTER,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CONNLIMIT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_LOG,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_LIMIT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_NAT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_TUNNEL,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_OBJREF,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_QUEUE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_QUOTA,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_INET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_COMPAT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_HASH,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_INET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_SOCKET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_OSF,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_TPROXY,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_NETDEV,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_NETDEV,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FWD_NETDEV,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_NETDEV,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_INET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_IP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_IPMAC,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_PORT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPMARK,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORTIP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORTNET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPMAC,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_MAC,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETPORTNET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETNET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETPORT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETIFACE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_LIST_SET,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DEFRAG_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_SOCKET_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TPROXY_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_ROUTE_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_ARP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_ARP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_REJECT_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_MASQUERADE_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_NAT_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR_IPV4,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_SNMP_BASIC,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_GRE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PPTP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_H323,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_AH,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_ECN,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_RPFILTER,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_TTL,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REJECT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_SYNPROXY,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_NETMAP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REDIRECT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MANGLE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_CLUSTERIP,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_ECN,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_TTL,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_RAW,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARPTABLES,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARPFILTER,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARP_MANGLE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_SOCKET_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TPROXY_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_ROUTE_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_NAT_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_REJECT_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_MASQUERADE_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_IPTABLES,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_AH,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_EUI64,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_FRAG,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_OPTS,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_HL,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_IPV6HEADER,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_MH,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_RPFILTER,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_RT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_SRH,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_HL,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_FILTER,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_REJECT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_SYNPROXY,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MANGLE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_RAW,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_NAT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_MASQUERADE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_NPT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DEFRAG_IPV6,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_BRIDGE,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_BRIDGE_REJECT,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_BRIDGE,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_INTEL_MICROCODE),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL,$(@D)/.config))
 -- 
 2.25.1
