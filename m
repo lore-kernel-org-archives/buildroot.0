@@ -1,35 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Mar 2020 08:26:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-vfs-rar: bump version to
- 2.2.3-Leia
-In-Reply-To: <20200329122259.442023-1-bernd.kuhls@t-online.de>
-References: <20200329122259.442023-1-bernd.kuhls@t-online.de>
-Message-ID: <20200330082651.75341409@windsurf.home>
+Date: Mon, 30 Mar 2020 08:38:35 +0200
+Subject: [Buildroot] [PATCH 1/1] Revert "package/opencv3: bump to
+ version 4.2.0"
+In-Reply-To: <CAPi7W83sKWaXCqbvy=efwP0kBGOaDXc4M-kxpQGQOqPshf1UYA@mail.gmail.com>
+References: <20200310223132.668486-1-fontaine.fabrice@gmail.com>
+ <CADvTj4oMaxJAUiUQJ8Ze22mrKytQZXbNWg4ysgf2TNMhcnButw@mail.gmail.com>
+ <CAPi7W83sKWaXCqbvy=efwP0kBGOaDXc4M-kxpQGQOqPshf1UYA@mail.gmail.com>
+Message-ID: <20200330083835.2a4d8967@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 29 Mar 2020 14:22:59 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Hello,
 
-> Updated hash of lib/UnrarXLib/license.txt due to upstream changes:
-> https://github.com/xbmc/vfs.rar/commits/Leia/lib/UnrarXLib/license.txt
-> 
-> Changed addon license file to LICENSE.md.
-> 
-> Updated dependencies due to upstream commit:
-> https://github.com/xbmc/vfs.rar/commit/6c7a62439eac2b2afeb2bf8c241836cd2ab2b93e
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi-vfs-rar/Config.in         | 2 +-
->  package/kodi-vfs-rar/kodi-vfs-rar.hash | 6 +++---
->  package/kodi-vfs-rar/kodi-vfs-rar.mk   | 6 +++---
->  3 files changed, 7 insertions(+), 7 deletions(-)
+On Wed, 11 Mar 2020 08:41:42 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Applied to master, thanks.
+> > > This reverts commit 5e51bb2756ee5063eff9a45a46033a449e2a6195.
+> > > Indeed, version 4.x is not backward with opencv 3.x, most of the C API
+> > > has been removed as stated in https://opencv.org/opencv-4-0.  
+> > I guess we need a separate opencv4 package then for this?  
+> Yes, I think this is the best course of action.
+
+What is the plan then with package/opencv ? Indeed, adding
+package/opencv4 would mean having 3 different versions of OpenCV
+supported. Does that make sense? Should we drop support for OpenCV 2.x ?
 
 Thomas
 -- 
