@@ -1,33 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Mar 2020 07:26:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.54.0
-In-Reply-To: <20200330000916.97641-1-james.hilliard1@gmail.com>
-References: <20200330000916.97641-1-james.hilliard1@gmail.com>
-Message-ID: <20200330072613.430fadf0@windsurf.home>
+Date: Mon, 30 Mar 2020 07:26:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/swupdate: add optional systemd
+ dependency
+In-Reply-To: <20200330002649.36004-1-james.hilliard1@gmail.com>
+References: <20200330002649.36004-1-james.hilliard1@gmail.com>
+Message-ID: <20200330072649.2c03052d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 29 Mar 2020 18:09:16 -0600
+On Sun, 29 Mar 2020 18:26:49 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Remove patches that are now upstream.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...onfig-add-pkg_config_libdir-property.patch | 102 ------------------
->  ...ction-determine-g-ir-scanner-and-g-i.patch |  62 -----------
->  ...es-gnome.py-Fix-giscanner-and-gicomp.patch |  41 -------
->  package/meson/meson.hash                      |   6 +-
->  package/meson/meson.mk                        |   2 +-
->  5 files changed, 4 insertions(+), 209 deletions(-)
->  delete mode 100644 package/meson/0003-envconfig-add-pkg_config_libdir-property.patch
->  delete mode 100644 package/meson/0004-gobject-introspection-determine-g-ir-scanner-and-g-i.patch
->  delete mode 100644 package/meson/0005-mesonbuild-modules-gnome.py-Fix-giscanner-and-gicomp.patch
+> Fixes:
+> core/notifier.c:27:10: fatal error: systemd/sd-daemon.h: No such file or directory
+>    27 | #include <systemd/sd-daemon.h>
+>       |          ^~~~~~~~~~~~~~~~~~~~~
 
-Applied to master, thanks.
+Under what situations/configurations to you have this build failure.
+Because I don't immediately see how adding an optional dependency can
+fix such a build failure.
+
+Thanks,
 
 Thomas
 -- 
