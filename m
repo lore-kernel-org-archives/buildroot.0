@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Mar 2020 23:54:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/hostapd: fix CVE-2019-16275
-Message-ID: <20200330215425.1360248-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Mar 2020 23:55:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: fix CVE-2019-16275
+Message-ID: <20200330215500.1360335-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,15 +18,15 @@ must send a crafted 802.11 frame from a location that is within the
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
  ...re-management-frame-from-unexpected-.patch | 77 +++++++++++++++++++
- package/hostapd/hostapd.mk                    |  4 +
- 2 files changed, 81 insertions(+)
- create mode 100644 package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
+ package/wpa_supplicant/wpa_supplicant.mk      |  3 +
+ 2 files changed, 80 insertions(+)
+ create mode 100644 package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
 
-diff --git a/package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch b/package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
+diff --git a/package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch b/package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
 new file mode 100644
 index 0000000000..959788c2e9
 --- /dev/null
-+++ b/package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
++++ b/package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
 @@ -0,0 +1,77 @@
 +From 8c07fa9eda13e835f3f968b2e1c9a8be3a851ff9 Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <j@w1.fi>
@@ -105,20 +105,19 @@ index 0000000000..959788c2e9
 +-- 
 +2.20.1
 +
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index f8c144c236..b94a0e4578 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -12,6 +12,10 @@ HOSTAPD_DEPENDENCIES = host-pkgconf
- HOSTAPD_CFLAGS = $(TARGET_CFLAGS)
- HOSTAPD_LICENSE = BSD-3-Clause
- HOSTAPD_LICENSE_FILES = README
-+
-+# 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
-+HOSTAPD_IGNORE_CVES += CVE-2019-16275
-+
- HOSTAPD_CONFIG_SET =
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 4f95ea6276..8e7b9c3a65 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -15,6 +15,9 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
+ WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
  
- HOSTAPD_CONFIG_ENABLE = \
++# 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
++WPA_SUPPLICANT_IGNORE_CVES += CVE-2019-16275
++
+ # install the wpa_client library
+ WPA_SUPPLICANT_INSTALL_STAGING = YES
+ 
 -- 
 2.25.1
