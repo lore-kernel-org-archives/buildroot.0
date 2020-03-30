@@ -1,38 +1,53 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Mar 2020 23:07:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/netdata: link with libatomic when
- needed
-Message-ID: <20200330210750.446080-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Mar 2020 23:49:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gupnp-tools: bump to version 0.10.0
+Message-ID: <20200330214913.1344862-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-netdata uses __atomic_fetch_add_2
+- Update indentation of hash file (two spaces)
+- Fix build with latest gupnp/gssdp thanks to
+  https://gitlab.gnome.org/GNOME/gupnp-tools/-/commit/41feb3168d3870e0d017c248f20cbe85bc5acde7
 
 Fixes:
- - http://autobuild.buildroot.org/results/1eb033ba7bf85ba3e25572a106f08faf49cd05b2
+ - No autobuilder failures yet
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/netdata/netdata.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/gupnp-tools/gupnp-tools.hash | 6 +++---
+ package/gupnp-tools/gupnp-tools.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
-index d169881a9c..529eb24e9c 100644
---- a/package/netdata/netdata.mk
-+++ b/package/netdata/netdata.mk
-@@ -47,6 +47,10 @@ else
- NETDATA_CONF_OPTS += --disable-https
- endif
+diff --git a/package/gupnp-tools/gupnp-tools.hash b/package/gupnp-tools/gupnp-tools.hash
+index b7015e13ad..30f1b8293d 100644
+--- a/package/gupnp-tools/gupnp-tools.hash
++++ b/package/gupnp-tools/gupnp-tools.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/0.8/gupnp-tools-0.8.15.sha256sum:
+-sha256	336ef4a09b9fc83444a1594c8215e2bed55fbea5b6d1bf6b54c63104b4c497ab	gupnp-tools-0.8.15.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/0.10/gupnp-tools-0.10.0.sha256sum:
++sha256  41da7ff5ba8e2425adcb64ca5e04c81f57ca20ec6fdb84923939fdad42c6a18d  gupnp-tools-0.10.0.tar.xz
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+NETDATA_CONF_ENV += LIBS=-latomic
-+endif
-+
- define NETDATA_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/netdata/S60netdata \
- 		$(TARGET_DIR)/etc/init.d/S60netdata
+ # Locally computed:
+-sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	COPYING
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
+index 6852697b8c..182b0145c8 100644
+--- a/package/gupnp-tools/gupnp-tools.mk
++++ b/package/gupnp-tools/gupnp-tools.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GUPNP_TOOLS_VERSION_MAJOR = 0.8
+-GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).15
++GUPNP_TOOLS_VERSION_MAJOR = 0.10
++GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).0
+ GUPNP_TOOLS_SOURCE = gupnp-tools-$(GUPNP_TOOLS_VERSION).tar.xz
+ GUPNP_TOOLS_SITE = \
+ 	http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/$(GUPNP_TOOLS_VERSION_MAJOR)
 -- 
 2.25.1
