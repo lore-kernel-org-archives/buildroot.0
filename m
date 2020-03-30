@@ -1,38 +1,48 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 29 Mar 2020 23:33:32 -0600
-Subject: [Buildroot] [PATCH 1/1] package/swupdate: add optional systemd
- dependency
-In-Reply-To: <20200330072649.2c03052d@windsurf.home>
-References: <20200330002649.36004-1-james.hilliard1@gmail.com>
- <20200330072649.2c03052d@windsurf.home>
-Message-ID: <CADvTj4p1T=XvmZwqvXtpZv-BzpBpU9izZ_yvhzwohc0f_ySWzA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Mar 2020 08:22:28 +0200
+Subject: [Buildroot] [git commit] package/freescale-imx: fix i.MX8MMini
+ configuration
+Message-ID: <20200330060937.1124F8A37D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 29, 2020 at 11:26 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Sun, 29 Mar 2020 18:26:49 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > Fixes:
-> > core/notifier.c:27:10: fatal error: systemd/sd-daemon.h: No such file or directory
-> >    27 | #include <systemd/sd-daemon.h>
-> >       |          ^~~~~~~~~~~~~~~~~~~~~
->
-> Under what situations/configurations to you have this build failure.
-> Because I don't immediately see how adding an optional dependency can
-> fix such a build failure.
-It happens when this is enabled:
-https://github.com/sbabic/swupdate/blob/2019.11/Kconfig#L104-L110
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+commit: https://git.buildroot.net/buildroot/commit/?id=43890423ddb97a10d1fb96ada869a08cc4c98272
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- Just like i.MX8MQ, i.MX8MMini is using Hantro VPU.
+- Platform name wasn't set for i.MX8Mini
+  -> now differencing IMX8MQ and IMX8MM for VPU package
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/freescale-imx/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index f42bb11a3c..0a5be9c75a 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -66,7 +66,8 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+ 	default "IMX6UL" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+ 	default "IMX7" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+ 	default "IMX8" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8
+-	default "IMX8" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
++	default "IMX8MQ" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
++	default "IMX8MM" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+ 	bool
+@@ -77,7 +78,8 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
+ 	bool
+-	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
++	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
++		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+ 
+ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+ 	bool
