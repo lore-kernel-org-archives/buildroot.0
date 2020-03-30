@@ -1,128 +1,80 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 30 Mar 2020 09:24:28 +0200
-Subject: [Buildroot] [PATCH v5 1/3] package/arm-gnu-a-toolchain: new
- package
-In-Reply-To: <20200329151425.25f92077@windsurf.home>
-References: <1585371871-29406-1-git-send-email-sunil@amarulasolutions.com>
- <1585371871-29406-2-git-send-email-sunil@amarulasolutions.com>
- <20200329151425.25f92077@windsurf.home>
-Message-ID: <CAAfyv3724WciWQ7anLt7xj1NhLKmH=40oyFK5Ozzh=rA0nGZ4g@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Mon, 30 Mar 2020 09:33:41 +0200
+Subject: [Buildroot] Buildroot LLVM support
+In-Reply-To: <003301d602a7$68975330$39c5f990$@ruhr-uni-bochum.de>
+References: <003301d602a7$68975330$39c5f990$@ruhr-uni-bochum.de>
+Message-ID: <09805a9e-f787-97a0-dddc-330241a01541@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hi Jan,
 
-On Sun, Mar 29, 2020 at 3:14 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> I've applied your patch, but after doing a number of changes, see below.
->
-> On Sat, 28 Mar 2020 10:34:29 +0530
-> sunil at amarulasolutions.com wrote:
->
-> >  DEVELOPERS                                         |  3 +++
-> >  package/Config.in.host                             |  1 +
-> >  package/arm-gnu-a-toolchain/Config.in.host         |  9 ++++++++
->
-> I've entirely dropped the visible Config.in.host option for this
-> package, it is merely a build dependency of ATF, so we don't need (at
-> this point at least) a visible option.
->
-> > +N:   Suniel Mahesh <sunil@amarulasolutions.com>
-> > +F:   package/arm-gnu-a-toolchain
->
-> Directories end with a / in DEVELOPERS.
->
-> > +config BR2_PACKAGE_HOST_ARM_GNU_A_TOOLCHAIN
-> > +     bool "host arm-gnu-a-toolchain"
-> > +     help
-> > +       arm trusted firmware requires a bare metal toolchain to build some platforms
-> > +       which host cortex-m series core, for instance rockchip rk3399 has a cortex-m0 core.
-> > +       This package installs a pre-built cross-compilation ARM-A bare metal toolchain for
-> > +       the host machine.
->
-> Lines where way too long: you forgot to run "make check-package", which
-> would have pointed out this coding style issue. Of course, since I
-> dropped the Config.in.host, it was not a big issue.
-Does it mean that with this we can enable same for nanopi NEO4 (which
-was dropped in 8af7b11bd8a95bc41e4de46f727f3b0afde465a4)
-with comment:
+Please send your mail with the Buildroot mailing list in copy, other
+contributors and maintainers can be interested by your work :)
 
-This defconfig tries to build an ARM Trusted Firmware version that
-    needs an ARM32 toolchain, which is not available as the platform is an
-    ARM64 one. The correct solution for this is to have a package in
-    Buildroot for an ARM32 bare-metal toolchain, but this wasn't done in
-    time for the 2019.08 release.
+Le 25/03/2020 ? 14:15, Jan Thoma a ?crit?:
+> Dear Mr. Naour,
+> 
+> I am a PhD student at Ruhr University Bochum (Germany). In my project, I
+> developed an extension for the RISCV instruction set and modified a CPU
+> (VexRiscv) to be able to handle the new instructions. I also modified the
+> LLVM compiler so that I am able to compile C code for the modified
+> instruction set. The CPU core is able to boot Buildroot Linux when compiled
+> with the Riscv GNU compiler. I would like to build a Linux version with LLVM
+> so that Linux boots with the modified instructions. 
+> 
+> Unfortunately, it seems that Buildroot doesn't offer the ability to be
+> cross-compiled with a LLVM compiler. In my research, I stumbled across a
+> Mail archive where you seemed to face a similar issue
+> (http://lists.busybox.net/pipermail/buildroot/2019-September/258744.html).
+> Did you succeed building Buildroot with Clang and if so, can you  help me
+> out on how to do this? Is there existing code / a buildroot version that
+> allows configuring the compiler to LLVM?
 
-but when I just reverted mentioned commit NEO4 boots fine without
-issue. So I'm bit confused if I need to add support for NEO4 with this
-changes to NEO4 and resurrect it? Thanks.
->
-> > --- /dev/null
-> > +++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
-> > @@ -0,0 +1,27 @@
-> > +################################################################################
-> > +#
-> > +# arm-gnu-a-toolchain
-> > +#
-> > +################################################################################
-> > +
-> > +ARM_GNU_A_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel
->
-> You should have used the <pkg>_VERSION variable here instead of hardcoding 9.2-2019.12.
->
-> > +ARM_GNU_A_TOOLCHAIN_VERSION = 9.2-2019.12
-> > +ARM_GNU_A_TOOLCHAIN_SOURCE = gcc-arm-$(ARM_GNU_A_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
-> > +ARM_GNU_A_TOOLCHAIN_LICENSE = GPL-3.0+
-> > +ARM_GNU_A_TOOLCHAIN_LICENSE_FILES =
->
-> I've dropped this last variable, since it's empty.
->
-> > +HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/gcc-arm-none-eabi
-> > +
-> > +define HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_CMDS
-> > +     rm -rf $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
-> > +     mkdir -p $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
-> > +     cp -rf $(@D)/* $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
-> > +
-> > +     cd $(HOST_DIR)/bin && \
->
-> You need to create $(HOST_DIR)/bin before cd-ing into it, as this
-> directory may not exist.
->
-> > +     for i in $(HOST_DIR)/opt/gcc-arm-none-eabi/bin/*; do \
-> > +             ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
->
-> Simplified as:
->
->         cd $(HOST_DIR)/bin && \
->         for i in ../opt/gcc-arm-none-eabi/bin/*; do \
->                 ln -sf $$i; \
->         done
->
-> I was also not sure these symlinks where really useful, it would have
-> been possible to pass an explicit path to the toolchain when building
-> ATF. But ok, I've kept the symlinks, we'll see how it goes.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I had some discussion with Lu?s Marques from lowrisc [1] but no patch has been
+posted to the mailing list so far.
+
+Feel free to contribute to the Buildroot project to enable riscv target for llvm
+and clang.
+
+About building all the userspace application and libraries with Clang, I posted
+a patch series to do this [2]. But it's outdated since llvm/clang was updated to
+version 9.x since then. This series is not an easy one, especially if you're not
+familiar with the Buildroot internals. But you can rework this series a post a
+new version if it works for you.
+
+You may be interested by [3] [4].
+
+[1]
+https://www.lowrisc.org/blog/2019/07/large-scale-risc-v-llvm-testing-with-buildroot/
+[2] http://patchwork.ozlabs.org/project/buildroot/list/?series=129565
+[3] https://www.linuxembedded.fr/2018/07/llvmclang-integration-into-buildroot/
+[4]
+https://www.linuxembedded.fr/2019/08/my-first-linux-kernel-built-with-clang-compiler/
+
+Best regards,
+Romain
 
 
-
-BR,
-
-marek
+> 
+> Many thanks!
+> 
+> Best regards,
+> Jan
+> 
+> --?
+> Jan Philipp Thoma
+> Research Assistant
+> 
+> Chair for Security Engineering (SecEng)
+> Dept. Electrical Engineering & Information Technology
+> Horst G?rtz Institute for IT-Security,
+> Ruhr-University Bochum, Germany
+> Building ID 2/647
+> Phone: +49 (0)234 32 27891
+> https://www.seceng.rub.de?
+> 
+> 
