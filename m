@@ -1,46 +1,48 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 30 Mar 2020 20:22:49 +0200
-Subject: [Buildroot] [PATCH 2/3] linux: fix option string for kernel 5.5.x
-In-Reply-To: <20200330182250.1515995-1-bernd.kuhls@t-online.de>
-References: <20200330182250.1515995-1-bernd.kuhls@t-online.de>
-Message-ID: <20200330182250.1515995-2-bernd.kuhls@t-online.de>
+Date: Mon, 30 Mar 2020 20:44:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python3: add optional dependency to
+ gettext
+Message-ID: <20200330184415.1803258-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Tested using this defconfig:
+
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_SYSTEM_ENABLE_NLS=y
+BR2_PACKAGE_PYTHON3=y
+
+Without this patch:
+$ readelf -a output/target/usr/lib/libpython3.8.so.1.0 | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
+With this patch:
+$ readelf -a output/target/usr/lib/libpython3.8.so.1.0 | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libintl.so.8]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/linux-headers/Config.in.host                            | 2 +-
- .../toolchain-external-custom/Config.in.options                 | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python3/python3.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5c5a9b0330..b89605bbf7 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -132,7 +132,7 @@ choice
- 	  in the choice, then select the latest version.
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index d12237300d..2656037efd 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -146,6 +146,10 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ PYTHON3_CONF_ENV += ac_cv_func_wcsftime=no
+ endif
  
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_5
--	bool "5.5.x or later"
-+	bool "5.5.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 31fe651081..91d55602e0 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -116,7 +116,7 @@ choice
- 	  in the choice, then select the latest version.
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_5
--	bool "5.5.x or later"
-+	bool "5.5.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4
++ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
++PYTHON3_DEPENDENCIES += gettext
++endif
++
+ PYTHON3_CONF_OPTS += \
+ 	--without-ensurepip \
+ 	--without-cxx-main \
 -- 
 2.25.0
