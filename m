@@ -1,41 +1,38 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Mar 2020 22:40:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tinyproxy: disable a2x
-Message-ID: <20200330204030.133514-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Mar 2020 23:07:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/netdata: link with libatomic when
+ needed
+Message-ID: <20200330210750.446080-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If a2x is found, tinyproxy won't touch the configuration files and will
-try to regenerate them which will result in the following build failure:
-
-make[4]: Entering directory `/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output/build/tinyproxy-1.10.0/docs/man5'
-  GEN      tinyproxy.conf.5
-  File "/accts/mlweber1/bin/a2x", line 76
-    print '%s: %s' % (PROG,msg)
-          ^
-SyntaxError: invalid syntax
+netdata uses __atomic_fetch_add_2
 
 Fixes:
- - http://autobuild.buildroot.org/results/fbd81c05f37a3db6df1cbc3495a89957c6587d25
+ - http://autobuild.buildroot.org/results/1eb033ba7bf85ba3e25572a106f08faf49cd05b2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/tinyproxy/tinyproxy.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/netdata/netdata.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/tinyproxy/tinyproxy.mk b/package/tinyproxy/tinyproxy.mk
-index 305be922f5..6120d183cc 100644
---- a/package/tinyproxy/tinyproxy.mk
-+++ b/package/tinyproxy/tinyproxy.mk
-@@ -9,5 +9,6 @@ TINYPROXY_SITE = https://github.com/tinyproxy/tinyproxy/releases/download/$(TINY
- TINYPROXY_SOURCE = tinyproxy-$(TINYPROXY_VERSION).tar.bz2
- TINYPROXY_LICENSE = GPL-2.0+
- TINYPROXY_LICENSE_FILES = COPYING
-+TINYPROXY_CONF_ENV = ac_cv_path_A2X=no
+diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
+index d169881a9c..529eb24e9c 100644
+--- a/package/netdata/netdata.mk
++++ b/package/netdata/netdata.mk
+@@ -47,6 +47,10 @@ else
+ NETDATA_CONF_OPTS += --disable-https
+ endif
  
- $(eval $(autotools-package))
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++NETDATA_CONF_ENV += LIBS=-latomic
++endif
++
+ define NETDATA_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/netdata/S60netdata \
+ 		$(TARGET_DIR)/etc/init.d/S60netdata
 -- 
 2.25.1
