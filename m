@@ -1,56 +1,54 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 30 Mar 2020 18:24:11 +0200
-Subject: [Buildroot] [PATCH 2/2] package/openssh: bump to version 8.2p1
-In-Reply-To: <20200330162411.9678-1-romain.naour@smile.fr>
-References: <20200330162411.9678-1-romain.naour@smile.fr>
-Message-ID: <20200330162411.9678-2-romain.naour@smile.fr>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon, 30 Mar 2020 09:31:21 -0700
+Subject: [Buildroot] [PATCH 1/1] package/libpjsip: bump version to 2.10
+Message-ID: <20200330163122.688981-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new version is mandatory to allow the glibc package bump to version 2.31.
-Otherwise it's not possible to connect to the remote host, as reported by [1] [2].
-Upstream commit [3][4] fixes the issue.
+From: Adam Duskett <Aduskett@gmail.com>
 
-[1] https://bugs.archlinux.org/task/65386
-[2] https://bugs.gentoo.org/708224
-[3] https://github.com/openssh/openssh-portable/commit/beee0ef61866cb567b9abc23bd850f922e59e3f0
-[4] https://github.com/openssh/openssh-portable/commit/69298ebfc2c066acee5d187eac8ce9f38c796630
+Other changes:
+  - Change the site URL as the upstream project has migrated to Github
 
-Release Note:
-https://www.openssh.com/txt/release-8.2
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/openssh/openssh.hash | 4 ++--
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libpjsip/libpjsip.hash | 5 +----
+ package/libpjsip/libpjsip.mk   | 8 +++++---
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 4db933f7b0..2f962d4337 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,4 +1,4 @@
--# From https://www.openssh.com/txt/release-8.1 (base64 encoded)
--sha256 02f5dbef3835d0753556f973cd57b4c19b6b1f6cd24c03445e23ac77ca1b93ff  openssh-8.1p1.tar.gz
-+# From https://www.openssh.com/txt/release-8.2 (base64 encoded)
-+sha256 43925151e6cf6cee1450190c0e9af4dc36b41c12737619edff8bcebdff64e671  openssh-8.2p1.tar.gz
- # Locally calculated
- sha256 73d0db766229670c7b4e1ec5e6baed54977a0694a565e7cc878c45ee834045d7  LICENCE
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 0411133bdc..d50572128a 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
+index bcf46ea5fb..68c2208885 100644
+--- a/package/libpjsip/libpjsip.hash
++++ b/package/libpjsip/libpjsip.hash
+@@ -1,6 +1,3 @@
+-# From https://www.pjsip.org/release/2.9/MD5SUM.TXT
+-md5	66757078e7bd7cf316acb0425c2fdd6f  pjproject-2.9.tar.bz2
+-
+ # Locally computed
+-sha256	d185ef7855c8ec07191dde92f54b65a7a4b7a6f7bf8c46f7af35ceeb1da2a636	pjproject-2.9.tar.bz2
++sha256	936a4c5b98601b52325463a397ddf11ab4106c6a7b04f8dc7cdd377efbb597de	pjproject-2.10.tar.gz
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 447f76be7f..f0956d11ae 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -4,9 +4,11 @@
  #
  ################################################################################
  
--OPENSSH_VERSION = 8.1p1
-+OPENSSH_VERSION = 8.2p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+-LIBPJSIP_VERSION = 2.9
+-LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
+-LIBPJSIP_SITE = https://www.pjsip.org/release/$(LIBPJSIP_VERSION)
++LIBPJSIP_VERSION = 2.10
++LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
++LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
++# https://github.com/pjsip/pjproject/archive/2.10.tar.gz
++
+ LIBPJSIP_DEPENDENCIES = libsrtp
+ LIBPJSIP_LICENSE = GPL-2.0+
+ LIBPJSIP_LICENSE_FILES = COPYING
 -- 
-2.21.1
+2.25.1
