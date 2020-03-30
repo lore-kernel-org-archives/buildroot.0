@@ -1,53 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 30 Mar 2020 17:31:41 +0300
-Subject: [Buildroot] [PATCH] package/linux-firmware: Add Wilocity 6210 11ad
- firmware
-Message-ID: <6c1b188c2a00e62ee950fd9987acfc0121afd39f.1585578701.git.baruch@tkos.co.il>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Mon, 30 Mar 2020 18:25:07 +0300
+Subject: [Buildroot] [PATCH 2/2] nanpi_neo4_config: Enable
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN optiony
+In-Reply-To: <1585574086-28047-2-git-send-email-marek.belisko@open-nandra.com>
+References: <1585574086-28047-1-git-send-email-marek.belisko@open-nandra.com>
+ <1585574086-28047-2-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <20200330152507.GA518052@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/linux-firmware/Config.in         | 5 +++++
- package/linux-firmware/linux-firmware.mk | 5 +++++
- 2 files changed, 10 insertions(+)
+> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+> ---
+>  configs/nanopi_neo4_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/configs/nanopi_neo4_defconfig b/configs/nanopi_neo4_defconfig
+> index 0e58aea..2bffe66 100644
+> --- a/configs/nanopi_neo4_defconfig
+> +++ b/configs/nanopi_neo4_defconfig
+> @@ -11,6 +11,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware"
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.0"
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index fb884842d66b..914b514f80bd 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -345,6 +345,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX
- 	help
- 	  Firmware files for WLAN and Bluetooth modules wl18xx
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_WILOCITY_WIL6210
-+	bool "Wilocity 6210"
-+	help
-+	  Firmware files for Qualcomm Atheros 11ad family of chips
-+
- endmenu
- 
- menu "Ethernet firmware"
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 21300ddc72de..e553a2a06383 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -373,6 +373,11 @@ LINUX_FIRMWARE_FILES += \
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_WILOCITY_WIL6210),y)
-+LINUX_FIRMWARE_FILES += wil6210.*
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160),y)
- LINUX_FIRMWARE_FILES += iwlwifi-3160-*.ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
--- 
-2.25.1
+I would suggest to write proper commit messages for these two patches.
+
+Otherwise neo4 build looks good:
+Tested-by: Sergey Matyukevich <geomatsi@gmail.com>
+
+Regards,
+Sergey
