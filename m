@@ -1,109 +1,36 @@
-From: Suniel Mahesh <sunil@amarulasolutions.com>
-Date: Mon, 30 Mar 2020 16:16:34 +0530
-Subject: [Buildroot] [PATCH v5 1/3] package/arm-gnu-a-toolchain: new
- package
-In-Reply-To: <20200329151425.25f92077@windsurf.home>
-References: <1585371871-29406-1-git-send-email-sunil@amarulasolutions.com>
- <1585371871-29406-2-git-send-email-sunil@amarulasolutions.com>
- <20200329151425.25f92077@windsurf.home>
-Message-ID: <CAM+7aWvjmOZEOji_+Q_TTraamwkRHk_fGPWvcKLHWXv2qDCvYQ@mail.gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Mon, 30 Mar 2020 08:16:09 -0300
+Subject: [Buildroot] [PATCH 0/3] Fix and improve the S02sysctl init
+ script
+In-Reply-To: <20200330072605.2dc561af@windsurf.home>
+References: <20200329234924.14505-1-unixmania@gmail.com>
+ <20200330072605.2dc561af@windsurf.home>
+Message-ID: <CAJ4jsac6RJdTCw1ige8ZrWidry7T1BiQyrYmXyUjnuwf9u0GOA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 29, 2020 at 6:44 PM Thomas Petazzoni
+On Mon, Mar 30, 2020 at 2:26 AM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
-> Hello,
+> On Sun, 29 Mar 2020 20:49:21 -0300
+> unixmania at gmail.com wrote:
 >
-> I've applied your patch, but after doing a number of changes, see below.
+> > Carlos Santos (3):
+> >   pakage/busybox: use same S02sysctl script as procps-ng
+> >   package/procps-ng: add busybox-related comments to S02sysctl
+> >   pakage/procps-ng: use logger in S02sysctl only if it is available
+>
+> Thanks, series applied. I must admit I'm starting to be a bit worried
+> by the complexity of what should be a simple script to load sysctl
+> values, but OK.
 
-Thanks for all the changes and suggestions. Next time I will make sure that I
-do make check-package before submitting.
+I don't like it, either, and will submit a patch to kmod fixing the
+behavior when the --system option is passed. Triggering the --ignore
+option seems to be a bug, since it is not documented in the manual
+page.
 
-Suniel
-
->
-> On Sat, 28 Mar 2020 10:34:29 +0530
-> sunil at amarulasolutions.com wrote:
->
-> >  DEVELOPERS                                         |  3 +++
-> >  package/Config.in.host                             |  1 +
-> >  package/arm-gnu-a-toolchain/Config.in.host         |  9 ++++++++
->
-> I've entirely dropped the visible Config.in.host option for this
-> package, it is merely a build dependency of ATF, so we don't need (at
-> this point at least) a visible option.
->
-> > +N:   Suniel Mahesh <sunil@amarulasolutions.com>
-> > +F:   package/arm-gnu-a-toolchain
->
-> Directories end with a / in DEVELOPERS.
->
-> > +config BR2_PACKAGE_HOST_ARM_GNU_A_TOOLCHAIN
-> > +     bool "host arm-gnu-a-toolchain"
-> > +     help
-> > +       arm trusted firmware requires a bare metal toolchain to build some platforms
-> > +       which host cortex-m series core, for instance rockchip rk3399 has a cortex-m0 core.
-> > +       This package installs a pre-built cross-compilation ARM-A bare metal toolchain for
-> > +       the host machine.
->
-> Lines where way too long: you forgot to run "make check-package", which
-> would have pointed out this coding style issue. Of course, since I
-> dropped the Config.in.host, it was not a big issue.
->
-> > --- /dev/null
-> > +++ b/package/arm-gnu-a-toolchain/arm-gnu-a-toolchain.mk
-> > @@ -0,0 +1,27 @@
-> > +################################################################################
-> > +#
-> > +# arm-gnu-a-toolchain
-> > +#
-> > +################################################################################
-> > +
-> > +ARM_GNU_A_TOOLCHAIN_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel
->
-> You should have used the <pkg>_VERSION variable here instead of hardcoding 9.2-2019.12.
->
-> > +ARM_GNU_A_TOOLCHAIN_VERSION = 9.2-2019.12
-> > +ARM_GNU_A_TOOLCHAIN_SOURCE = gcc-arm-$(ARM_GNU_A_TOOLCHAIN_VERSION)-x86_64-arm-none-eabi.tar.xz
-> > +ARM_GNU_A_TOOLCHAIN_LICENSE = GPL-3.0+
-> > +ARM_GNU_A_TOOLCHAIN_LICENSE_FILES =
->
-> I've dropped this last variable, since it's empty.
->
-> > +HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR = $(HOST_DIR)/opt/gcc-arm-none-eabi
-> > +
-> > +define HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_CMDS
-> > +     rm -rf $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
-> > +     mkdir -p $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
-> > +     cp -rf $(@D)/* $(HOST_ARM_GNU_A_TOOLCHAIN_INSTALL_DIR)
-> > +
-> > +     cd $(HOST_DIR)/bin && \
->
-> You need to create $(HOST_DIR)/bin before cd-ing into it, as this
-> directory may not exist.
->
-> > +     for i in $(HOST_DIR)/opt/gcc-arm-none-eabi/bin/*; do \
-> > +             ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
->
-> Simplified as:
->
->         cd $(HOST_DIR)/bin && \
->         for i in ../opt/gcc-arm-none-eabi/bin/*; do \
->                 ln -sf $$i; \
->         done
->
-> I was also not sure these symlinks where really useful, it would have
-> been possible to pass an explicit path to the toolchain when building
-> ATF. But ok, I've kept the symlinks, we'll see how it goes.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+-- 
+Carlos Santos <unixmania@gmail.com>
