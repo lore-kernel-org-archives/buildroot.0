@@ -1,46 +1,40 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 30 Mar 2020 18:38:04 +0200
-Subject: [Buildroot] [PATCH 2/2] nanpi_neo4_config: Enable
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN optiony
-In-Reply-To: <20200330152507.GA518052@curiosity>
-References: <1585574086-28047-1-git-send-email-marek.belisko@open-nandra.com>
- <1585574086-28047-2-git-send-email-marek.belisko@open-nandra.com>
- <20200330152507.GA518052@curiosity>
-Message-ID: <CAAfyv37yeZ_EcL8Pa1PURLcaXUvwGDv5jKLJEJ8WeHhvqbhuag@mail.gmail.com>
+From: Jianhui Zhao <zhaojh329@gmail.com>
+Date: Tue, 31 Mar 2020 00:43:38 +0800
+Subject: [Buildroot] [PATCH 1/1] package/libuwsc: bump version to 3.3.4
+Message-ID: <20200330164338.30051-1-zhaojh329@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 30, 2020 at 5:20 PM Sergey Matyukevich <geomatsi@gmail.com> wrote:
->
-> > Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
-> > ---
-> >  configs/nanopi_neo4_defconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/configs/nanopi_neo4_defconfig b/configs/nanopi_neo4_defconfig
-> > index 0e58aea..2bffe66 100644
-> > --- a/configs/nanopi_neo4_defconfig
-> > +++ b/configs/nanopi_neo4_defconfig
-> > @@ -11,6 +11,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-> >  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware"
-> >  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.0"
-> >  BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
-> >  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
->
-> I would suggest to write proper commit messages for these two patches.
-OK fine. I have in queue also patch for bumping kernel to 5.4 will
-test and post updated version. Thanks.
->
-> Otherwise neo4 build looks good:
-> Tested-by: Sergey Matyukevich <geomatsi@gmail.com>
->
-> Regards,
-> Sergey
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+---
+ package/libuwsc/libuwsc.hash | 2 +-
+ package/libuwsc/libuwsc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-BR,
-
-marek
+diff --git a/package/libuwsc/libuwsc.hash b/package/libuwsc/libuwsc.hash
+index f137b3613b..e2c8452389 100644
+--- a/package/libuwsc/libuwsc.hash
++++ b/package/libuwsc/libuwsc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 bae2cd13eda86876ebcf99a38a069f5e8c01717713d2fec25031051b9c47624b  libuwsc-3.3.2.tar.gz
++sha256 ef789ff35e537e5191ec0d13f3e0df54187a54eace611e283ad4172d4411d08b  libuwsc-3.3.4.tar.gz
+ sha256 e557975decde6439395e72dce7690d974d1a493722a7be5228794ec944f0c5db  LICENSE
+diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
+index 213b1d5891..c0c05e7223 100644
+--- a/package/libuwsc/libuwsc.mk
++++ b/package/libuwsc/libuwsc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUWSC_VERSION = 3.3.2
++LIBUWSC_VERSION = 3.3.4
+ LIBUWSC_SITE = https://github.com/zhaojh329/libuwsc/releases/download/v$(LIBUWSC_VERSION)
+ LIBUWSC_LICENSE = MIT
+ LIBUWSC_LICENSE_FILES = LICENSE
+-- 
+2.17.1
