@@ -1,82 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Mar 2020 07:18:53 +0200
-Subject: [Buildroot] [git commit] package/rng-tools: fix redefinition of
- encrypt
-Message-ID: <20200330051124.0BD3E8A2E5@busybox.osuosl.org>
+Date: Mon, 30 Mar 2020 07:24:49 +0200
+Subject: [Buildroot] [git commit] package/procps-ng: add busybox-related
+ comments to S02sysctl
+Message-ID: <20200330051124.3947D8A2E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eaf2051c3a1a02c1d18bdba4bb69c6b84cd5be40
+commit: https://git.buildroot.net/buildroot/commit/?id=16de37d96ba553f74622e72f173a71db8822b5a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/bb7dbd5a76c1ecd2a1d205f4a1c391095e653886
+Explain the busybox peculiarities and how the script works with both
+versions of the sysctl utility.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-rngd_jitter-disambiguate-call-to-encrypt.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ package/procps-ng/S02sysctl | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/package/rng-tools/0002-rngd_jitter-disambiguate-call-to-encrypt.patch b/package/rng-tools/0002-rngd_jitter-disambiguate-call-to-encrypt.patch
-new file mode 100644
-index 0000000000..99997ce866
---- /dev/null
-+++ b/package/rng-tools/0002-rngd_jitter-disambiguate-call-to-encrypt.patch
-@@ -0,0 +1,53 @@
-+From dab16a5fd4efde8ef569b358e19b1fcbc7d0d938 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 30 Mar 2020 00:10:46 +0200
-+Subject: [PATCH] rngd_jitter: disambiguate call to encrypt
-+
-+Commit 0f184ea7e792427fb20afe81d471b565aee96f0b disambiguate the call to
-+encrypt in rngd_rdrand.c but did not update rngd_jitter.c.
-+
-+This raise the following build failure:
-+
-+rngd_jitter.c:75:12: error: conflicting types for 'encrypt'
-+ static int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
-+            ^~~~~~~
-+In file included from rngd_jitter.c:27:
-+/home/dawncrow/buildroot-test/scripts/instance-0/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/unistd.h:1132:13: note: previous declaration of 'encrypt' was here
-+ extern void encrypt (char *__block, int __edflag) __THROW __nonnull ((1));
-+             ^~~~~~~
-+Makefile:770: recipe for target 'rngd-rngd_jitter.o' failed
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0ca6bf16e3acbc94065b88c4442d6595424b77cb
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/nhorman/rng-tools/pull/89]
-+---
-+ rngd_jitter.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/rngd_jitter.c b/rngd_jitter.c
-+index c1b1aca..49a3825 100644
-+--- a/rngd_jitter.c
-++++ b/rngd_jitter.c
-+@@ -72,7 +72,7 @@ unsigned char *aes_buf;
-+ char key[AES_BLOCK];
-+ static unsigned char iv_buf[CHUNK_SIZE] __attribute__((aligned(128)));
-+ 
-+-static int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
-++static int osslencrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
-+             unsigned char *iv, unsigned char *ciphertext)
-+ {
-+         EVP_CIPHER_CTX *ctx;
-+@@ -122,7 +122,7 @@ static inline int openssl_mangle(unsigned char *tmp, struct rng *ent_src)
-+         unsigned char ciphertext[CHUNK_SIZE * RDRAND_ROUNDS];
-+ 
-+         /* Encrypt the plaintext */
-+-        ciphertext_len = encrypt (tmp, strlen(tmp), key, iv_buf,
-++        ciphertext_len = osslencrypt (tmp, strlen(tmp), key, iv_buf,
-+                               ciphertext);
-+         if (!ciphertext_len)
-+                 return -1;
-+-- 
-+2.25.1
-+
+diff --git a/package/procps-ng/S02sysctl b/package/procps-ng/S02sysctl
+index 3a58578de4..fed64e91a6 100644
+--- a/package/procps-ng/S02sysctl
++++ b/package/procps-ng/S02sysctl
+@@ -1,4 +1,17 @@
+ #!/bin/sh
++#
++# This script is used by busybox and procps-ng.
++#
++# With procps-ng, the "--system" option of sysctl also enables "--ignore", so
++# errors are not reported via syslog. Use the run_logger function to mimic the
++# --system behavior, still reporting errors via syslog. Users not interested
++# on error reports can add "-e" to SYSCTL_ARGS.
++#
++# busybox does not have a "--system" option neither reports errors via syslog,
++# so the scripting provides a consistent behavior between the implementations.
++# Testing the busybox sysctl exit code is fruitless, as at the moment, since
++# its exit status is zero even if errors happen. Hopefully this will be fixed
++# in a future busybox version.
+ 
+ PROGRAM="sysctl"
+ 
+@@ -12,12 +25,6 @@ SYSCTL_ARGS=""
+ # symlinks to it. No attempt is made to prevent this.
+ SYSCTL_SOURCES="/etc/sysctl.d/ /usr/local/lib/sysctl.d/ /usr/lib/sysctl.d/ /lib/sysctl.d/ /etc/sysctl.conf"
+ 
+-# The "--system" option activates "--ignore", which is bad because invalid
+-# variable settings in the configuration files will not be reported on the
+-# system log. Use some scripting to mimic the --system behavior but still
+-# reporting errors. Users not interested on error report can put "-e" in
+-# SYSCTL_ARGS.
+-#
+ # The file redirections do the following:
+ #
+ # - stdout is redirected to syslog with facility.level "kern.info"
