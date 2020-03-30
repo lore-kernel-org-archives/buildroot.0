@@ -1,41 +1,43 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Mon, 30 Mar 2020 08:20:25 -0300
-Subject: [Buildroot] [PATCH 0/3] Fix and improve the S02sysctl init
- script
-In-Reply-To: <CAJ4jsac6RJdTCw1ige8ZrWidry7T1BiQyrYmXyUjnuwf9u0GOA@mail.gmail.com>
-References: <20200329234924.14505-1-unixmania@gmail.com>
- <20200330072605.2dc561af@windsurf.home>
- <CAJ4jsac6RJdTCw1ige8ZrWidry7T1BiQyrYmXyUjnuwf9u0GOA@mail.gmail.com>
-Message-ID: <CAJ4jsaeX_XmzwGNH-vghMqnGaWgaYmLA=zbxnn6oqcU7h6bcmg@mail.gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Mon, 30 Mar 2020 13:40:15 +0200
+Subject: [Buildroot] [PATCH 1/1] Config.in.legacy: move cegui06 package to
+ 2020.05 section
+Message-ID: <20200330114015.342650-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 30, 2020 at 8:16 AM Carlos Santos <unixmania@gmail.com> wrote:
->
-> On Mon, Mar 30, 2020 at 2:26 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > On Sun, 29 Mar 2020 20:49:21 -0300
-> > unixmania at gmail.com wrote:
-> >
-> > > Carlos Santos (3):
-> > >   pakage/busybox: use same S02sysctl script as procps-ng
-> > >   package/procps-ng: add busybox-related comments to S02sysctl
-> > >   pakage/procps-ng: use logger in S02sysctl only if it is available
-> >
-> > Thanks, series applied. I must admit I'm starting to be a bit worried
-> > by the complexity of what should be a simple script to load sysctl
-> > values, but OK.
->
-> I don't like it, either, and will submit a patch to kmod fixing the
-> behavior when the --system option is passed. Triggering the --ignore
-> option seems to be a bug, since it is not documented in the manual
-> page.
+During package update, the legacy option was set to the existing
+2020.02 release instead of the next 2020.05.
 
-Errata: will submit a patch to procps-ng.
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+ Config.in.legacy | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 4a9b2ead9d..63818ed6b8 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -153,8 +153,6 @@ config BR2_GCC_VERSION_5_X
+ 	  Support for gcc version 5.x has been removed. The current
+ 	  default version (8.x or later) has been selected instead.
+ 
+-comment "Legacy options removed in 2020.02"
+-
+ config BR2_PACKAGE_CEGUI06
+ 	bool "BR2_PACKAGE_CEGUI06 was renamed"
+ 	select BR2_PACKAGE_CEGUI
+@@ -163,6 +161,8 @@ config BR2_PACKAGE_CEGUI06
+ 	  The BR2_PACKAGE_CEGUI06 config symbol was renamed to
+ 	  BR2_PACKAGE_CEGUI.
+ 
++comment "Legacy options removed in 2020.02"
++
+ config BR2_PACKAGE_JAMVM
+ 	bool "jamvm removed"
+ 	select BR2_LEGACY
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.26.0
