@@ -1,63 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Mar 2020 22:24:19 +0200
-Subject: [Buildroot] [git commit] package/gssdp: build vala bindings for
- introspection
-Message-ID: <20200331210021.C2ABC8A49E@busybox.osuosl.org>
+Date: Tue, 31 Mar 2020 23:16:51 +0200
+Subject: [Buildroot] [PATCH v3 3/7] package/gssdp: enable vala support
+ if gobject-introspection is selected
+In-Reply-To: <20200327183000.1005676-3-aduskett@gmail.com>
+References: <20200327183000.1005676-1-aduskett@gmail.com>
+ <20200327183000.1005676-3-aduskett@gmail.com>
+Message-ID: <20200331211651.GT22325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d513e55930eda15a5fb15e00c1da774e6c18f66c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Adam, all,
 
-When building its introspection metadata description files, gssdp can
-also generate the associated vala bindings.
+On 2020-03-27 11:29 -0700, aduskett at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> gupnp gobject-introspection support requires gssdp built with vala bindings.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-Dependent packages may then use either or both the introspection
-metadata description files or the vala bindings to generate their own.
-For example; this is the case with gupnp, which requires the vala
-bindings from gssdp to be able to generate its introspection metadata
-description files and vala bindings.
+Applied to master with an extended commit log. Thanks! :-)
 
-Since there is no way to know whether the vala bindings are required or
-not, we always build them. host-vala has no dependency that is not
-already a dependency of gssdp, so the overhead is just the time to build
-host-vala itself, roughly 32s here when compared to 10+minutes to build
-all the dependencies of gssdp with introspection support.
+Regards,
+Yann E. MORIN.
 
-Fixes:
-  - http://autobuild.buildroot.org/results/06f879902a567c26bade630091b21b56f637bd60/
-  - http://autobuild.buildroot.org/results/457ecc20e1932e13e82ff6bdcaf4adaf97cb7d1d/
+> ---
+>  package/gssdp/gssdp.mk | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+> index bab3cbe0f7..d91c8acda0 100644
+> --- a/package/gssdp/gssdp.mk
+> +++ b/package/gssdp/gssdp.mk
+> @@ -12,15 +12,13 @@ GSSDP_LICENSE = LGPL-2.0+
+>  GSSDP_LICENSE_FILES = COPYING
+>  GSSDP_INSTALL_STAGING = YES
+>  GSSDP_DEPENDENCIES = host-pkgconf libglib2 libsoup
+> -GSSDP_CONF_OPTS = \
+> -	-Dexamples=false \
+> -	-Dvapi=false
+> +GSSDP_CONF_OPTS = -Dexamples=false
+>  
+>  ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+> -GSSDP_CONF_OPTS += -Dintrospection=true
+> -GSSDP_DEPENDENCIES += gobject-introspection
+> +GSSDP_CONF_OPTS += -Dintrospection=true -Dvapi=true
+> +GSSDP_DEPENDENCIES += host-vala gobject-introspection
+>  else
+> -GSSDP_CONF_OPTS += -Dintrospection=false
+> +GSSDP_CONF_OPTS += -Dintrospection=false -Dvapi=false
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/gssdp/gssdp.mk | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
-index 4b3ce854fc..14eec0b5fd 100644
---- a/package/gssdp/gssdp.mk
-+++ b/package/gssdp/gssdp.mk
-@@ -12,15 +12,13 @@ GSSDP_LICENSE = LGPL-2.0+
- GSSDP_LICENSE_FILES = COPYING
- GSSDP_INSTALL_STAGING = YES
- GSSDP_DEPENDENCIES = host-pkgconf libglib2 libsoup
--GSSDP_CONF_OPTS = \
--	-Dexamples=false \
--	-Dvapi=false
-+GSSDP_CONF_OPTS = -Dexamples=false
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--GSSDP_CONF_OPTS += -Dintrospection=true
--GSSDP_DEPENDENCIES += gobject-introspection
-+GSSDP_CONF_OPTS += -Dintrospection=true -Dvapi=true
-+GSSDP_DEPENDENCIES += host-vala gobject-introspection
- else
--GSSDP_CONF_OPTS += -Dintrospection=false
-+GSSDP_CONF_OPTS += -Dintrospection=false -Dvapi=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
