@@ -1,49 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 Mar 2020 23:23:57 +0200
-Subject: [Buildroot] [PATCH v3] configs/nenopi_neo4: new updated
- defconfig
-In-Reply-To: <1585637518-9836-1-git-send-email-marek.belisko@open-nandra.com>
-References: <1585637518-9836-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <20200331232357.0a50e3a3@windsurf.home>
+Date: Tue, 31 Mar 2020 23:25:48 +0200
+Subject: [Buildroot] [git commit] configs/mx53loco: bump the kernel version
+Message-ID: <20200331211228.F04F38A4A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marek,
+commit: https://git.buildroot.net/buildroot/commit/?id=d20217bd261d3820dd9e7b06d43b79c1825952a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 31 Mar 2020 08:51:58 +0200
-Marek Belisko <marek.belisko@open-nandra.com> wrote:
+Bump the kernel to the 5.4.27 version.
 
-> This patch revert 8af7b11bd8a95bc41e4de46f727f3b0afde465a4 and
-> add extra options to have build working
-> 
-> Updates:
-> - enable BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN
-> - bump kernel to 5.4
-> - increase default rootfs size to 70M
-> 
-> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/mx53loco_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thanks for this new version. I was about to apply, but found something
-important to be improved: could you use the mainline U-Boot instead?
-Most notably, this will allow you to use the idbloader.img target,
-which provides a ready-to-use binary for the first stage bootloader,
-which in turns allows to simplify the post-build script. See the
-configs/roc_pc_rk3399_defconfig configuration for an example of another
-platform using RK3399.
-
-Other minor nits: you should update the DEVELOPERS file to add yourself
-as a maintainer for this defconfig, and if possible update the
-.gitlab-ci.yml file by running "make .gitlab-ci.yml".
-
-Could you work on these improvements and send an updated version?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 8b78f65865..06f434e5de 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ 
+-# Linux headers same as kernel, a 5.2 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -28,7 +28,7 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.27"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
