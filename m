@@ -1,67 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 31 Mar 2020 23:17:28 +0200
-Subject: [Buildroot] [PATCH v3 6/7] package/gupnp: Depend on host-vala
- if gobject-introspection is selected.
-In-Reply-To: <20200327183000.1005676-6-aduskett@gmail.com>
-References: <20200327183000.1005676-1-aduskett@gmail.com>
- <20200327183000.1005676-6-aduskett@gmail.com>
-Message-ID: <20200331211728.GU22325@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 31 Mar 2020 23:23:57 +0200
+Subject: [Buildroot] [PATCH v3] configs/nenopi_neo4: new updated
+ defconfig
+In-Reply-To: <1585637518-9836-1-git-send-email-marek.belisko@open-nandra.com>
+References: <1585637518-9836-1-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <20200331232357.0a50e3a3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Hello Marek,
 
-On 2020-03-27 11:29 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
+On Tue, 31 Mar 2020 08:51:58 +0200
+Marek Belisko <marek.belisko@open-nandra.com> wrote:
+
+> This patch revert 8af7b11bd8a95bc41e4de46f727f3b0afde465a4 and
+> add extra options to have build working
 > 
-> Because there is no way to select host-vala explicitly and some packages may
-> require the vala bindings, it is better to unconditionally build the vala
-> bindings into the .gir and .typelib files.
+> Updates:
+> - enable BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN
+> - bump kernel to 5.4
+> - increase default rootfs size to 70M
 > 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 
-Applied to master with a tweaked comit log, thanks!
+Thanks for this new version. I was about to apply, but found something
+important to be improved: could you use the mainline U-Boot instead?
+Most notably, this will allow you to use the idbloader.img target,
+which provides a ready-to-use binary for the first stage bootloader,
+which in turns allows to simplify the post-build script. See the
+configs/roc_pc_rk3399_defconfig configuration for an example of another
+platform using RK3399.
 
-Regards,
-Yann E. MORIN.
+Other minor nits: you should update the DEVELOPERS file to add yourself
+as a maintainer for this defconfig, and if possible update the
+.gitlab-ci.yml file by running "make .gitlab-ci.yml".
 
-> ---
->  package/gupnp/gupnp.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-> index 612359ba55..c86eb6db2c 100644
-> --- a/package/gupnp/gupnp.mk
-> +++ b/package/gupnp/gupnp.mk
-> @@ -14,10 +14,10 @@ GUPNP_INSTALL_STAGING = YES
->  GUPNP_DEPENDENCIES = host-pkgconf libglib2 libxml2 gssdp util-linux
->  
->  ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-> -GUPNP_CONF_OPTS += -Dintrospection=true
-> -GUPNP_DEPENDENCIES += gobject-introspection
-> +GUPNP_CONF_OPTS += -Dintrospection=true -Dvapi=true
-> +GUPNP_DEPENDENCIES += host-vala gobject-introspection
->  else
-> -GUPNP_CONF_OPTS += -Dintrospection=false
-> +GUPNP_CONF_OPTS += -Dintrospection=false -Dvapi=false
->  endif
->  
->  $(eval $(meson-package))
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Could you work on these improvements and send an updated version?
 
+Thanks a lot!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
