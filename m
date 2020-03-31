@@ -1,115 +1,72 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 31 Mar 2020 07:48:13 +0300
-Subject: [Buildroot] [PATCH] strace: bump to version 5.5
-In-Reply-To: <20200331002148.45767-1-paul@crapouillou.net>
-References: <20200331002148.45767-1-paul@crapouillou.net>
-Message-ID: <87lfnhcepe.fsf@tarshish>
+From: David PIERRET <david.pierret@smile.fr>
+Date: Tue, 31 Mar 2020 07:34:50 +0200
+Subject: [Buildroot] [PATCH 2/2] package/openssh: bump to version 8.2p1
+In-Reply-To: <20200330162411.9678-2-romain.naour@smile.fr>
+References: <20200330162411.9678-1-romain.naour@smile.fr>
+ <20200330162411.9678-2-romain.naour@smile.fr>
+Message-ID: <CADyEP=TCvkTwoj4GrNqs_80nmNQ7493X-C01t6uG+f+55Dbr1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Paul,
+Hi,
 
-On Tue, Mar 31 2020, Paul Cercueil wrote:
-> And remove the patch that is now upstream.
+I'm not able to complete the boot on qemu_aarch64_virt_defconfig.
+boot stuck after the network initialisation.
+
+regards
+
+On Mon, Mar 30, 2020 at 6:24 PM Romain Naour <romain.naour@smile.fr> wrote:
 >
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-
-Evgeniy Didin posted this bump some time ago:
-
-  http://patchwork.ozlabs.org/patch/1235654/
-
-baruch
-
+> This new version is mandatory to allow the glibc package bump to version 2.31.
+> Otherwise it's not possible to connect to the remote host, as reported by [1] [2].
+> Upstream commit [3][4] fixes the issue.
+>
+> [1] https://bugs.archlinux.org/task/65386
+> [2] https://bugs.gentoo.org/708224
+> [3] https://github.com/openssh/openssh-portable/commit/beee0ef61866cb567b9abc23bd850f922e59e3f0
+> [4] https://github.com/openssh/openssh-portable/commit/69298ebfc2c066acee5d187eac8ce9f38c796630
+>
+> Release Note:
+> https://www.openssh.com/txt/release-8.2
+>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Reviewed-by: David Pierret <david.pierret@smile.fr>
 > ---
->  ...0001-filter_seccomp-fix-no-MMU-build.patch | 46 -------------------
->  package/strace/strace.hash                    |  4 +-
->  package/strace/strace.mk                      |  2 +-
->  3 files changed, 3 insertions(+), 49 deletions(-)
->  delete mode 100644 package/strace/0001-filter_seccomp-fix-no-MMU-build.patch
+>  package/openssh/openssh.hash | 4 ++--
+>  package/openssh/openssh.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/package/strace/0001-filter_seccomp-fix-no-MMU-build.patch b/package/strace/0001-filter_seccomp-fix-no-MMU-build.patch
-> deleted file mode 100644
-> index 27f6d1490b..0000000000
-> --- a/package/strace/0001-filter_seccomp-fix-no-MMU-build.patch
-> +++ /dev/null
-> @@ -1,46 +0,0 @@
-> -From fb4fdb83be36ff5e71426d2bdea81d035cdbd0b8 Mon Sep 17 00:00:00 2001
-> -From: Baruch Siach <baruch@tkos.co.il>
-> -Date: Mon, 13 Jan 2020 14:54:15 +0200
-> -Subject: [PATCH] filter_seccomp: fix no-MMU build
-> -
-> -Move the declaration of filter_generators out of HAVE_FORK ifdef to fix
-> -build for no-MMU targets:
-> -
-> -filter_seccomp.c: In function ?check_seccomp_filter_properties?:
-> -filter_seccomp.c:608:42: error: ?filter_generators? undeclared (first use in this function); did you mean ?linear_filter_generator??
-> -  for (unsigned int i = 0; i < ARRAY_SIZE(filter_generators); ++i) {
-> -                                          ^~~~~~~~~~~~~~~~~
-> -
-> -Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ----
-> -Upstream status: https://lists.strace.io/pipermail/strace-devel/2020-January/thread.html
-> -
-> -
-> - filter_seccomp.c | 4 ++--
-> - 1 file changed, 2 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/filter_seccomp.c b/filter_seccomp.c
-> -index 91f6bc42bce3..da1abc713dfc 100644
-> ---- a/filter_seccomp.c
-> -+++ b/filter_seccomp.c
-> -@@ -68,8 +68,6 @@ static const struct audit_arch_t audit_arch_vec[SUPPORTED_PERSONALITIES] = {
-> - # endif
-> - };
-> - 
-> --# ifdef HAVE_FORK
-> --
-> - typedef unsigned short (*filter_generator_t)(struct sock_filter *,
-> - 					     bool *overflow);
-> - static unsigned short linear_filter_generator(struct sock_filter *,
-> -@@ -92,6 +90,8 @@ static struct sock_fprog bpf_prog = {
-> - 	.filter = NULL,
-> - };
-> - 
-> -+# ifdef HAVE_FORK
-> -+
-> - static void ATTRIBUTE_NORETURN
-> - check_seccomp_order_do_child(void)
-> - {
-> --- 
-> -2.24.1
-> -
-> diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-> index dfc2143d65..44358e81a3 100644
-> --- a/package/strace/strace.hash
-> +++ b/package/strace/strace.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
-> -# https://strace.io/files/5.4/strace-5.4.tar.xz.asc
-> -sha256	f7d00514d51290b6db78ad7a9de709baf93caa5981498924cbc9a744cfd2a741	strace-5.4.tar.xz
-> +# https://strace.io/files/5.5/strace-5.5.tar.xz.asc
-> +sha256	9f58958c8e59ea62293d907d10572e352b582bd7948ed21aa28ebb47e5bf30ff	strace-5.5.tar.xz
->  sha256	739b2725197137a04ab48ee6b19da3fdf7e497249e0dedd9f51c11a570401ede	COPYING
->  sha256	7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa	LGPL-2.1-or-later
-> diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-> index 5ad249b13c..569a822e42 100644
-> --- a/package/strace/strace.mk
-> +++ b/package/strace/strace.mk
+> diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+> index 4db933f7b0..2f962d4337 100644
+> --- a/package/openssh/openssh.hash
+> +++ b/package/openssh/openssh.hash
+> @@ -1,4 +1,4 @@
+> -# From https://www.openssh.com/txt/release-8.1 (base64 encoded)
+> -sha256 02f5dbef3835d0753556f973cd57b4c19b6b1f6cd24c03445e23ac77ca1b93ff  openssh-8.1p1.tar.gz
+> +# From https://www.openssh.com/txt/release-8.2 (base64 encoded)
+> +sha256 43925151e6cf6cee1450190c0e9af4dc36b41c12737619edff8bcebdff64e671  openssh-8.2p1.tar.gz
+>  # Locally calculated
+>  sha256 73d0db766229670c7b4e1ec5e6baed54977a0694a565e7cc878c45ee834045d7  LICENCE
+> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+> index 0411133bdc..d50572128a 100644
+> --- a/package/openssh/openssh.mk
+> +++ b/package/openssh/openssh.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
->  
-> -STRACE_VERSION = 5.4
-> +STRACE_VERSION = 5.5
->  STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
->  STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
->  STRACE_LICENSE = LGPL-2.1+
-
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>
+> -OPENSSH_VERSION = 8.1p1
+> +OPENSSH_VERSION = 8.2p1
+>  OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+>  OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+>  OPENSSH_LICENSE_FILES = LICENCE
+> --
+> 2.21.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
