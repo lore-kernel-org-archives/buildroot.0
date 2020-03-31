@@ -1,41 +1,139 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Thu, 30 Apr 2020 18:03:27 -0300
-Subject: [Buildroot] [PATCH] package/stella: bump to version 6.1.2
-Message-ID: <20200430210327.31784-1-sergio.prado@e-labworks.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 1 Apr 2020 00:57:28 +0300
+Subject: [Buildroot] [PATCH v3 1/1] package/cog: add option for platform
+ DRM.
+In-Reply-To: <20200312194700.2836-1-cturner@igalia.com>
+References: <20200311103044.11422-1-cturner@igalia.com>
+ <20200312194700.2836-1-cturner@igalia.com>
+Message-ID: <20200401005728.GB394692@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- package/stella/stella.hash | 2 +-
- package/stella/stella.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Charlie,
 
-diff --git a/package/stella/stella.hash b/package/stella/stella.hash
-index fb7c598a2c78..0b50636a00e5 100644
---- a/package/stella/stella.hash
-+++ b/package/stella/stella.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  ddf53bb782c63c97c4e5d0fefa9eb256c62e0d5a328c78cc18f06eea45ba7369  stella-6.1.1-src.tar.xz
-+sha256  8086e57c231625f0b840ca361f493969247d20476cbb53609d778d37bda17c34  stella-6.1.2-src.tar.xz
- sha256  d207ee9e563fdd062582df8cbb6c8303b9879bd107692c0db2a32477e47dfa35  Copyright.txt
- sha256  58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
-diff --git a/package/stella/stella.mk b/package/stella/stella.mk
-index 74c131e72d86..53a1050cd8fa 100644
---- a/package/stella/stella.mk
-+++ b/package/stella/stella.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STELLA_VERSION = 6.1.1
-+STELLA_VERSION = 6.1.2
- STELLA_SOURCE = stella-$(STELLA_VERSION)-src.tar.xz
- STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VERSION)
- STELLA_LICENSE = GPL-2.0+
--- 
-2.17.1
+There was earlier a patch to update to Cog 0.6; I think it should not have
+conflicts with this one, but you may want to keep an eye on it:
+
+    https://patchwork.ozlabs.org/patch/1264879/
+
+
+On Thu, 12 Mar 2020 19:47:00 +0000, Charlie Turner <cturner@igalia.com> wrote:
+
+> Now that there's two platforms, the default-on behaviour for FDO has
+> been made configurable, so that you can choose DRM only platform for FDO
+> platform. Don't be confused that in both cases the *wpebackend-fdo*
+> package is required. This is an unfortunate naming issue.
+
+Whoops! You just made me realize that the naming of WPEBackend-fdo is
+not great. Unfortunately, it's a bit late to change it at this point O:-)
+
+> Signed-off-by: Charlie Turner <cturner@igalia.com>
+> ---
+>  package/cog/Config.in | 27 +++++++++++++++++++++++++++
+>  package/cog/cog.mk    | 18 +++++++++++++++---
+>  2 files changed, 42 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/cog/Config.in b/package/cog/Config.in
+> index b25991d4ae..664e055104 100644
+> --- a/package/cog/Config.in
+> +++ b/package/cog/Config.in
+> @@ -7,7 +7,11 @@ config BR2_PACKAGE_COG
+>  	depends on BR2_PACKAGE_WPEWEBKIT
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+>  	depends on BR2_USE_MMU # dbus
+> +	# For egl across all platforms, and gbm in the DRM platform.
+> +	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
+
+Cog's FDO plug-in works with drivers other than Mesa (for example the
+Vivante proprietary driver on i.MX hardware). This dependency should
+be under BR2_PACKAGE_COG_PLATFORM_DRM instead.
+
+> +
+>  	select BR2_PACKAGE_DBUS
+> +
+>  	help
+>  	  Single "window" launcher for the WebKit WPE port, and
+>  	  helper library for implementing WPE launcher. It does
+> @@ -26,4 +30,27 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
+>  	  string is used, there is no default and the URI to open
+>  	  must be always specified in the command line.
+>  
+> +config BR2_PACKAGE_COG_PLATFORM_FDO
+> +	bool "FreeDesktop.org backend"
+> +
+> +	select BR2_PACKAGE_LIBXKBCOMMON
+> +
+> +	help
+> +	  Enable the FreeDesktop.org backend.
+
+I would add in the help text that it uses Wayland and needs a compositor.
+
+> +
+> +config BR2_PACKAGE_COG_PLATFORM_DRM
+> +	bool "DRM backend"
+> +
+> +	depends on BR2_PACKAGE_HAS_UDEV # libinput
+> +
+> +	select BR2_PACKAGE_LIBDRM
+> +	select BR2_PACKAGE_LIBINPUT
+> +
+> +	help
+> +	  Enable the DRM platform backend. This allows Cog to run
+> +	  without a compositor like Weston.
+
+Instead of telling what it does not need to run, wouldn't it be better to
+write here that it runs directly on video drivers which support kernel mode
+setting (KMS) and Direct Rendering Manager?
+
+> +
+> +comment "DRM platform needs mesa3d w/ EGL driver and GBM"
+> +	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
+                                              || !BR2_PACKAGE_HAS_UDEV
+
+> +
+>  endif
+> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+> index d0e5b79c38..339187126a 100644
+> --- a/package/cog/cog.mk
+> +++ b/package/cog/cog.mk
+> @@ -8,13 +8,25 @@ COG_VERSION = 0.4.0
+>  COG_SITE = https://wpewebkit.org/releases
+>  COG_SOURCE = cog-$(COG_VERSION).tar.xz
+>  COG_INSTALL_STAGING = YES
+> -COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
+> +COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo wayland wayland-protocols
+>  COG_LICENSE = MIT
+>  COG_LICENSE_FILES = COPYING
+>  COG_CONF_OPTS = \
+>  	-DCOG_BUILD_PROGRAMS=ON \
+> -	-DCOG_PLATFORM_FDO=ON \
+> -	-DCOG_PLATFORM_DRM=OFF \
+>  	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
+>  
+> +ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
+> +COG_CONF_OPTS += -DCOG_PLATFORM_FDO=ON
+> +COG_DEPENDENCIES += libxkbcommon
+> +else
+> +COG_CONF_OPTS += -DCOG_PLATFORM_FDO=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+> +COG_CONF_OPTS += -DCOG_PLATFORM_DRM=ON
+> +COG_DEPENDENCIES += libdrm libinput
+> +else
+> +COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
+> +endif
+> +
+>  $(eval $(cmake-package))
+> -- 
+> 2.20.1
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200401/1277f9d3/attachment.asc>
