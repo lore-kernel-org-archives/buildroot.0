@@ -1,43 +1,45 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 31 Mar 2020 17:12:05 -0300
-Subject: [Buildroot] [PATCH] configs/mx53loco: Bump the kernel version
-Message-ID: <20200331201205.29690-1-festevam@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 31 Mar 2020 22:24:19 +0200
+Subject: [Buildroot] [git commit] package/gupnp: needs host-vala for
+ introspection
+Message-ID: <20200331210021.CE2C881641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump the kernel to the 5.4.27 version.
+commit: https://git.buildroot.net/buildroot/commit/?id=44473d33dddc6b85c56a2c289df0af81d3d30636
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Introspection support in gupnp is handled by way of vala tools and
+vala bindings.
+
+Even though host-vala is already a transitive dependency via gssdp,
+add it to gupnp for correctness sake; also explicitly enable the
+generation of the vala API, since it is required for introspection.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/mx53loco_defconfig | 6 +++---
+ package/gupnp/gupnp.mk | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index 8b78f65865..06f434e5de 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a8=y
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index 66a6e76574..dfe25e16c5 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
+@@ -15,10 +15,10 @@ GUPNP_DEPENDENCIES = host-pkgconf libglib2 libxml2 gssdp util-linux
+ GUPNP_CONF_OPTS = -Dexamples=false
  
--# Linux headers same as kernel, a 5.2 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-GUPNP_CONF_OPTS += -Dintrospection=true
+-GUPNP_DEPENDENCIES += gobject-introspection
++GUPNP_CONF_OPTS += -Dintrospection=true -Dvapi=true
++GUPNP_DEPENDENCIES += host-vala gobject-introspection
+ else
+-GUPNP_CONF_OPTS += -Dintrospection=false
++GUPNP_CONF_OPTS += -Dintrospection=false -Dvapi=false
+ endif
  
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -28,7 +28,7 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.9"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.27"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
--- 
-2.17.1
+ $(eval $(meson-package))
