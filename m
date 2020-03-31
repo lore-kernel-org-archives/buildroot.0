@@ -1,214 +1,99 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 30 Mar 2020 16:46:16 -0700
-Subject: [Buildroot] [PATCH 5/5] linux: add automatic firewalld config
- selection
-In-Reply-To: <20200330234616.1665466-1-aduskett@gmail.com>
-References: <20200330234616.1665466-1-aduskett@gmail.com>
-Message-ID: <20200330234616.1665466-5-aduskett@gmail.com>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Tue, 31 Mar 2020 02:21:48 +0200
+Subject: [Buildroot] [PATCH] strace: bump to version 5.5
+Message-ID: <20200331002148.45767-1-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+And remove the patch that is now upstream.
 
-Firewalld requires almost every single nftables rule enabled in the kernel to
-properly start. As such, if a user selects the firewalld package, it is much
-easier to select these options for them, must like we do for systemd or
-iptables.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- linux/linux.mk | 175 +++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 175 insertions(+)
+ ...0001-filter_seccomp-fix-no-MMU-build.patch | 46 -------------------
+ package/strace/strace.hash                    |  4 +-
+ package/strace/strace.mk                      |  2 +-
+ 3 files changed, 3 insertions(+), 49 deletions(-)
+ delete mode 100644 package/strace/0001-filter_seccomp-fix-no-MMU-build.patch
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index b2ceeecafb..1927832e7e 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -358,6 +358,182 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 	$(if $(BR2_PACKAGE_AUDIT),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
-+	$(if $(BR2_PACKAGE_FIREWALLD),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_COMMON,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_NETDEV,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_CONNCOUNT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_ZONES,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_PROCFS,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_EVENTS,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TIMEOUT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TIMESTAMP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_LABELS,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_DCCP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_GRE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_SCTP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_PROTO_UDPLITE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_AMANDA,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_FTP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_H323,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_IRC,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_BROADCAST,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_NETBIOS_NS,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SNMP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_PPTP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SANE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_SIP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_TFTP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK_TIMEOUT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CT_NETLINK_HELPER,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_NETLINK_GLUE_CT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_NEEDED,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_DCCP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_UDPLITE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_SCTP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_AMANDA,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_FTP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IRC,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_SIP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_TFTP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_REDIRECT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_SYNPROXY,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_SET,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_NETDEV,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_NUMGEN,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FLOW_OFFLOAD,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_COUNTER,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CONNLIMIT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_LOG,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_LIMIT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_NAT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_TUNNEL,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_OBJREF,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_QUEUE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_QUOTA,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_INET,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_COMPAT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_HASH,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_INET,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_SOCKET,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_OSF,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_TPROXY,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_NETDEV,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_NETDEV,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FWD_NETDEV,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_NETDEV,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_INET,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_IP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_IPMAC,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_BITMAP_PORT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPMARK,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORTIP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPPORTNET,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_IPMAC,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_MAC,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETPORTNET,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NET,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETNET,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETPORT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_HASH_NETIFACE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_SET_LIST_SET,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DEFRAG_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_SOCKET_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TPROXY_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_ROUTE_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_ARP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_ARP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_REJECT_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_MASQUERADE_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_NAT_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR_IPV4,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_SNMP_BASIC,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PROTO_GRE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_PPTP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_H323,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_AH,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_ECN,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_RPFILTER,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MATCH_TTL,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REJECT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_SYNPROXY,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_NETMAP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_REDIRECT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_MANGLE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_CLUSTERIP,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_ECN,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_TTL,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_RAW,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARPTABLES,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARPFILTER,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_ARP_MANGLE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_SOCKET_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TPROXY_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_ROUTE_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_CHAIN_NAT_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_MASQ_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REDIR_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_REJECT_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_DUP_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_FIB_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_FLOW_TABLE_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DUP_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_REJECT_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT_MASQUERADE_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_IPTABLES,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_AH,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_EUI64,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_FRAG,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_OPTS,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_HL,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_IPV6HEADER,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_MH,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_RPFILTER,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_RT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MATCH_SRH,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_HL,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_FILTER,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_REJECT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_SYNPROXY,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_MANGLE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_RAW,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_NAT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_MASQUERADE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP6_NF_TARGET_NPT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_DEFRAG_IPV6,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_BRIDGE,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NFT_BRIDGE_REJECT,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_LOG_BRIDGE,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_INTEL_MICROCODE),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL,$(@D)/.config))
+diff --git a/package/strace/0001-filter_seccomp-fix-no-MMU-build.patch b/package/strace/0001-filter_seccomp-fix-no-MMU-build.patch
+deleted file mode 100644
+index 27f6d1490b..0000000000
+--- a/package/strace/0001-filter_seccomp-fix-no-MMU-build.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From fb4fdb83be36ff5e71426d2bdea81d035cdbd0b8 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Mon, 13 Jan 2020 14:54:15 +0200
+-Subject: [PATCH] filter_seccomp: fix no-MMU build
+-
+-Move the declaration of filter_generators out of HAVE_FORK ifdef to fix
+-build for no-MMU targets:
+-
+-filter_seccomp.c: In function ?check_seccomp_filter_properties?:
+-filter_seccomp.c:608:42: error: ?filter_generators? undeclared (first use in this function); did you mean ?linear_filter_generator??
+-  for (unsigned int i = 0; i < ARRAY_SIZE(filter_generators); ++i) {
+-                                          ^~~~~~~~~~~~~~~~~
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://lists.strace.io/pipermail/strace-devel/2020-January/thread.html
+-
+-
+- filter_seccomp.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/filter_seccomp.c b/filter_seccomp.c
+-index 91f6bc42bce3..da1abc713dfc 100644
+---- a/filter_seccomp.c
+-+++ b/filter_seccomp.c
+-@@ -68,8 +68,6 @@ static const struct audit_arch_t audit_arch_vec[SUPPORTED_PERSONALITIES] = {
+- # endif
+- };
+- 
+--# ifdef HAVE_FORK
+--
+- typedef unsigned short (*filter_generator_t)(struct sock_filter *,
+- 					     bool *overflow);
+- static unsigned short linear_filter_generator(struct sock_filter *,
+-@@ -92,6 +90,8 @@ static struct sock_fprog bpf_prog = {
+- 	.filter = NULL,
+- };
+- 
+-+# ifdef HAVE_FORK
+-+
+- static void ATTRIBUTE_NORETURN
+- check_seccomp_order_do_child(void)
+- {
+--- 
+-2.24.1
+-
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index dfc2143d65..44358e81a3 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/5.4/strace-5.4.tar.xz.asc
+-sha256	f7d00514d51290b6db78ad7a9de709baf93caa5981498924cbc9a744cfd2a741	strace-5.4.tar.xz
++# https://strace.io/files/5.5/strace-5.5.tar.xz.asc
++sha256	9f58958c8e59ea62293d907d10572e352b582bd7948ed21aa28ebb47e5bf30ff	strace-5.5.tar.xz
+ sha256	739b2725197137a04ab48ee6b19da3fdf7e497249e0dedd9f51c11a570401ede	COPYING
+ sha256	7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa	LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 5ad249b13c..569a822e42 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRACE_VERSION = 5.4
++STRACE_VERSION = 5.5
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 -- 
 2.25.1
