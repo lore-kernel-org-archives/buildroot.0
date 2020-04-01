@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 31 Mar 2020 17:21:25 -0700
-Subject: [Buildroot] [PATCH 03/12] package/libgtk2: enable
+Date: Tue, 31 Mar 2020 17:21:26 -0700
+Subject: [Buildroot] [PATCH 04/12] package/libgtk3: enable
  gobject-introspection support
 In-Reply-To: <20200401002134.1779241-1-aduskett@gmail.com>
 References: <20200401002134.1779241-1-aduskett@gmail.com>
-Message-ID: <20200401002134.1779241-3-aduskett@gmail.com>
+Message-ID: <20200401002134.1779241-4-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,26 +18,34 @@ the dependency list and set the conf opt --enable-introspection.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/libgtk2/libgtk2.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/libgtk3/libgtk3.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index 710e6e47db..9b7d39a532 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -35,6 +35,13 @@ LIBGTK2_CONF_OPTS += \
- LIBGTK2_DEPENDENCIES += \
- 	fontconfig xlib_libX11 xlib_libXext xlib_libXrender
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 7df4426fa6..dbb975dbfd 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -20,7 +20,6 @@ LIBGTK3_CONF_ENV = \
+ 
+ LIBGTK3_CONF_OPTS = \
+ 	--disable-glibtest \
+-	--disable-introspection \
+ 	--enable-explicit-deps=no
+ HOST_LIBGTK3_CONF_OPTS = --disable-introspection
+ 
+@@ -43,6 +42,13 @@ else
+ LIBGTK3_CONF_OPTS += --disable-x11-backend
+ endif
  
 +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBGTK2_CONF_OPTS += --enable-introspection
-+LIBGTK2_DEPENDENCIES += gobject-introspection
++LIBGTK3_CONF_OPTS += --enable-introspection
++LIBGTK3_DEPENDENCIES += gobject-introspection
 +else
-+LIBGTK2_CONF_OPTS += --disable-introspection
++LIBGTK3_CONF_OPTS += --disable-introspection
 +endif
 +
- ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
- LIBGTK2_CONF_OPTS += --enable-xinerama
- LIBGTK2_DEPENDENCIES += xlib_libXinerama
+ ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
+ LIBGTK3_DEPENDENCIES += wayland wayland-protocols libxkbcommon
+ LIBGTK3_CONF_OPTS += --enable-wayland-backend
 -- 
 2.25.1
