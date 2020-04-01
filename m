@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 31 Mar 2020 17:21:31 -0700
-Subject: [Buildroot] [PATCH 09/12] package/libgee: enable
- gobject-introspection support
+Date: Tue, 31 Mar 2020 17:21:30 -0700
+Subject: [Buildroot] [PATCH 08/12] package/atk: enable gobject-introspection
+ support
 In-Reply-To: <20200401002134.1779241-1-aduskett@gmail.com>
 References: <20200401002134.1779241-1-aduskett@gmail.com>
-Message-ID: <20200401002134.1779241-9-aduskett@gmail.com>
+Message-ID: <20200401002134.1779241-8-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,31 @@ To: buildroot@busybox.net
 From: Adam Duskett <Aduskett@gmail.com>
 
 If gobject-introspection is selected, add the gobject-introspection package to
-the dependency list and set the conf opt --enable-introspection.
+the dependency list and set the conf opt -Dintrospection=true.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/libgee/libgee.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/atk/atk.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
-index 81fd354fe8..4b2581e171 100644
---- a/package/libgee/libgee.mk
-+++ b/package/libgee/libgee.mk
-@@ -13,4 +13,11 @@ LIBGEE_INSTALL_STAGING = YES
- LIBGEE_LICENSE = LGPL-2.1+
- LIBGEE_LICENSE_FILES = COPYING
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 7039666059..a16143d2c0 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -13,7 +13,13 @@ ATK_LICENSE_FILES = COPYING
+ ATK_INSTALL_STAGING = YES
+ ATK_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
  
+-ATK_CONF_OPTS = -Dintrospection=false
 +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBGEE_CONF_OPTS += --enable-introspection
-+LIBGEE_DEPENDENCIES += gobject-introspection
++ATK_CONF_OPTS += -Dintrospection=true
++ATK_DEPENDENCIES += gobject-introspection
 +else
-+LIBGEE_CONF_OPTS += --disable-introspection
++ATK_CONF_OPTS += -Dintrospection=false
 +endif
 +
- $(eval $(autotools-package))
+ ATK_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ $(eval $(meson-package))
 -- 
 2.25.1
