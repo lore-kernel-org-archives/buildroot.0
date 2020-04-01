@@ -1,31 +1,38 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 1 Apr 2020 13:41:37 -0300
-Subject: [Buildroot] kmscube: cannot fetch from cgit.freedesktop.org
-In-Reply-To: <9157c7b4-716b-dd9d-3ab7-5ff7ce411183@mind.be>
-References: <CAOMZO5B2ox8cpL8rMGrqD=gDg7-PVyiV7T_ci_8zFfSFMSq-Og@mail.gmail.com>
- <9157c7b4-716b-dd9d-3ab7-5ff7ce411183@mind.be>
-Message-ID: <CAOMZO5Bw9wnWCKBRfYY+f=6uzoucs5SiLFxd1HBRVwNdY4AMYg@mail.gmail.com>
+Date: Wed,  1 Apr 2020 14:05:03 -0300
+Subject: [Buildroot] [PATCH 1/2] kmscube: Change repository to gitlab
+Message-ID: <20200401170504.9307-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+The https://cgit.freedesktop.org/mesa/kmscube repository
+is mirrored from https://gitlab.freedesktop.org/mesa/kmscube, so
+switch to the gitlab one. 
 
-On Wed, Apr 1, 2020 at 1:37 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+The other advantage of using the gitlab repository is that it can handle
+archive downloads, so switch to it.
 
->  Indeed, cgit doesn't have archive downloads, so this wouldn't work.
->
-> [snip]
-> > wget "https://gitlab.freedesktop.org/mesa/kmscube/repository/archive.tar.gz?ref=4660a7dca6512b6e658759d00cff7d4ad2a2059d"
-> > -O archive.tar.gz
->
->  The proper way would be:
->
-> KMSCUBE_SITE =
-> https://gitlab.freedesktop.org/mesa/kmscube/-/archive/$(KMSCUBE_VERSION)
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ package/kmscube/kmscube.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Excellent, this works! Will submit a patch soon.
-
-Thanks for your help
+diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
+index 37983b1a78..73d290c88b 100644
+--- a/package/kmscube/kmscube.mk
++++ b/package/kmscube/kmscube.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ KMSCUBE_VERSION = 6cbd03ab94066dddbba7bedfde87c7c4319c18d5
+-KMSCUBE_SITE = https://cgit.freedesktop.org/mesa/kmscube/snapshot
++KMSCUBE_SITE = https://gitlab.freedesktop.org/mesa/kmscube/-/archive/$(KMSCUBE_VERSION)
+ KMSCUBE_LICENSE = MIT
+ KMSCUBE_DEPENDENCIES = host-pkgconf mesa3d libdrm
+ KMSCUBE_AUTORECONF = YES
+-- 
+2.17.1
