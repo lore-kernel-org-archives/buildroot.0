@@ -1,49 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 01 Apr 2020 22:48:37 +0200
-Subject: [Buildroot] [git commit] linux: Allow modprobe for out-of-tre
- modules
-In-Reply-To: <20200324223904.06924ade@windsurf.home> (Thomas Petazzoni's
- message of "Tue, 24 Mar 2020 22:39:04 +0100")
-References: <20200321203709.A5CAD83B8E@busybox.osuosl.org>
- <20200324223904.06924ade@windsurf.home>
-Message-ID: <87imijaq56.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  1 Apr 2020 23:46:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libexif: annotate CVEs
+Message-ID: <20200401214609.9184-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libexif/libexif.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
- > Hello,
- > On Sat, 21 Mar 2020 21:43:31 +0100
- > Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-
- >> +# Run depmod in a target-finalize hook, to encompass modules installed by
- >> +# packages.
- >> +define LINUX_RUN_DEPMOD
- >> +	$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED)
- >> +endef
- >> +LINUX_TARGET_FINALIZE_HOOKS += LINUX_RUN_DEPMOD
-
- > I believe this breaks the build of minnowboard_max_defconfig:
-
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/483712574
-
- > The kernel configuration of minnowboard_max_defconfig has
- > CONFIG_MODULES disabled, so there's no /lib/modules/4.19.8 folder,
- > causing this:
-
- > depmod: ERROR: could not open directory
- > /builds/buildroot.org/buildroot/output/target/lib/modules/4.19.8: No
- > such file or directory
- > depmod: FATAL: could not search modules: No such file or directory
- > Makefile:745: recipe for target 'target-finalize' failed
-
- > Do we need to grep into $(LINUX_DIR)/.config to check if
- > CONFIG_MODULES=y before calling depmod ?
-
-I believe so, similar to how we do it elsewhere in linux.mk.
-
+diff --git a/package/libexif/libexif.mk b/package/libexif/libexif.mk
+index a4ec5ed3cb..643d9ed893 100644
+--- a/package/libexif/libexif.mk
++++ b/package/libexif/libexif.mk
+@@ -12,4 +12,13 @@ LIBEXIF_DEPENDENCIES = host-pkgconf
+ LIBEXIF_LICENSE = LGPL-2.1+
+ LIBEXIF_LICENSE_FILES = COPYING
+ 
++# 0001-fixes-some-not-all-buffer-overreads-during-decoding-.patch
++LIBEXIF_IGNORE_CVES += CVE-2016-6328
++# 0002-On-saving-makernotes-make-sure-the-makernote-contain.patch
++LIBEXIF_IGNORE_CVES += CVE-2017-7544
++# 0004-Improve-deep-recursion-detection-in-exif_data_load_d.patch
++LIBEXIF_IGNORE_CVES += CVE-2018-20030
++# 0005-fix-CVE-2019-9278.patch
++LIBEXIF_IGNORE_CVES += CVE-2019-9278
++
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.25.1
