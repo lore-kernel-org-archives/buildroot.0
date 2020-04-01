@@ -1,8 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 31 Mar 2020 17:21:23 -0700
-Subject: [Buildroot] [PATCH 01/12] package/libsecret: enable
+Date: Tue, 31 Mar 2020 17:21:24 -0700
+Subject: [Buildroot] [PATCH 02/12] package/pango: enable
  gobject-introspection support
-Message-ID: <20200401002134.1779241-1-aduskett@gmail.com>
+In-Reply-To: <20200401002134.1779241-1-aduskett@gmail.com>
+References: <20200401002134.1779241-1-aduskett@gmail.com>
+Message-ID: <20200401002134.1779241-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +14,45 @@ To: buildroot@busybox.net
 From: Adam Duskett <Aduskett@gmail.com>
 
 If gobject-introspection is selected, add the gobject-introspection package to
-the dependency list and set the conf opt --enable-introspection.
+the dependency list and set the conf opt --enable-introspection for both host
+and target.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/libsecret/libsecret.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/pango/pango.mk | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
-index b48d2e7086..f87df47097 100644
---- a/package/libsecret/libsecret.mk
-+++ b/package/libsecret/libsecret.mk
-@@ -15,11 +15,17 @@ LIBSECRET_CONF_OPTS = \
- 	--disable-manpages \
- 	--disable-strict \
- 	--disable-coverage \
--	--enable-introspection=no \
- 	--enable-vala=no
- LIBSECRET_LICENSE = LGPL-2.1+
- LIBSECRET_LICENSE_FILES = COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 48edd18b05..046501da30 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -12,8 +12,8 @@ PANGO_INSTALL_STAGING = YES
+ PANGO_LICENSE = LGPL-2.0+
+ PANGO_LICENSE_FILES = COPYING
+ 
+-PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=false
+-HOST_PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=false
++PANGO_CONF_OPTS = -Duse_fontconfig=true
++HOST_PANGO_CONF_OPTS = -Duse_fontconfig=true
+ 
+ PANGO_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+@@ -33,6 +33,16 @@ HOST_PANGO_DEPENDENCIES = \
+ 	host-fontconfig \
+ 	host-freetype
  
 +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBSECRET_CONF_OPTS += --enable-introspection=yes
-+LIBSECRET_DEPENDENCIES += gobject-introspection
++PANGO_CONF_OPTS += -Dintrospection=true
++HOST_PANGO_CONF_OPTS += -Dintrospection=true
++PANGO_DEPENDENCIES += gobject-introspection
++HOST_PANGO_DEPENDENCIES += host-gobject-introspection
 +else
-+LIBSECRET_CONF_OPTS += --enable-introspection=no
++PANGO_CONF_OPTS += -Dintrospection=false
++HOST_PANGO_CONF_OPTS += -Dintrospection=false
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- LIBSECRET_DEPENDENCIES += libgcrypt
- LIBSECRET_CONF_OPTS += --enable-gcrypt \
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ PANGO_DEPENDENCIES += xlib_libX11
+ endif
 -- 
 2.25.1
