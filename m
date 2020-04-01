@@ -1,62 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Apr 2020 22:14:55 +0200
-Subject: [Buildroot] [PATCH 1/2] kmscube: Change repository to gitlab
-In-Reply-To: <20200401170504.9307-1-festevam@gmail.com>
-References: <20200401170504.9307-1-festevam@gmail.com>
-Message-ID: <20200401201455.GX22325@scaer>
+Date: Wed, 1 Apr 2020 22:16:51 +0200
+Subject: [Buildroot] [git commit] package/nftables: check for python
+Message-ID: <20200401200346.171D38A53B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d6f33d36af353668fe09a93a111c529e4ac5eaa7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-01 14:05 -0300, Fabio Estevam spake thusly:
-> The https://cgit.freedesktop.org/mesa/kmscube repository
-> is mirrored from https://gitlab.freedesktop.org/mesa/kmscube, so
-> switch to the gitlab one. 
-> 
-> The other advantage of using the gitlab repository is that it can handle
-> archive downloads, so switch to it.
-> 
-> Suggested-by: Arnout Vandecappelle <arnout@mind.be>
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+If python or python3 is selected, nftables should depend on the package
+and set the --enable-python option, otherwise set --disable-python
 
-Both applied to master, thanks.
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/nftables/nftables.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/kmscube/kmscube.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
-> index 37983b1a78..73d290c88b 100644
-> --- a/package/kmscube/kmscube.mk
-> +++ b/package/kmscube/kmscube.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  KMSCUBE_VERSION = 6cbd03ab94066dddbba7bedfde87c7c4319c18d5
-> -KMSCUBE_SITE = https://cgit.freedesktop.org/mesa/kmscube/snapshot
-> +KMSCUBE_SITE = https://gitlab.freedesktop.org/mesa/kmscube/-/archive/$(KMSCUBE_VERSION)
->  KMSCUBE_LICENSE = MIT
->  KMSCUBE_DEPENDENCIES = host-pkgconf mesa3d libdrm
->  KMSCUBE_AUTORECONF = YES
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 11ef6844ce..210e950c11 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -27,6 +27,13 @@ else
+ NFTABLES_CONF_OPTS += --without-json
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
++NFTABLES_CONF_OPTS += --enable-python
++NFTABLES_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
++else
++NFTABLES_CONF_OPTS += --disable-python
++endif
++
+ ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_LIBNFTNL_JSON),yy)
+ NFTABLES_LIBS += -ljansson -lm
+ endif
