@@ -1,64 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Apr 2020 22:18:27 +0200
-Subject: [Buildroot] [PATCH 1/5] package/nftables: check for python
-In-Reply-To: <20200330234616.1665466-1-aduskett@gmail.com>
-References: <20200330234616.1665466-1-aduskett@gmail.com>
-Message-ID: <20200401201827.GY22325@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 01 Apr 2020 22:48:37 +0200
+Subject: [Buildroot] [git commit] linux: Allow modprobe for out-of-tre
+ modules
+In-Reply-To: <20200324223904.06924ade@windsurf.home> (Thomas Petazzoni's
+ message of "Tue, 24 Mar 2020 22:39:04 +0100")
+References: <20200321203709.A5CAD83B8E@busybox.osuosl.org>
+ <20200324223904.06924ade@windsurf.home>
+Message-ID: <87imijaq56.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On 2020-03-30 16:46 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> If python or python3 is selected, nftables should depend on the package
-> and set the --enable-python option, otherwise set --disable-python
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+ > Hello,
+ > On Sat, 21 Mar 2020 21:43:31 +0100
+ > Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 
-This one patch applied to master, thanks.
+ >> +# Run depmod in a target-finalize hook, to encompass modules installed by
+ >> +# packages.
+ >> +define LINUX_RUN_DEPMOD
+ >> +	$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED)
+ >> +endef
+ >> +LINUX_TARGET_FINALIZE_HOOKS += LINUX_RUN_DEPMOD
 
-Regards,
-Yann E. MORIN.
+ > I believe this breaks the build of minnowboard_max_defconfig:
 
-> ---
->  package/nftables/nftables.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-> index 11ef6844ce..210e950c11 100644
-> --- a/package/nftables/nftables.mk
-> +++ b/package/nftables/nftables.mk
-> @@ -27,6 +27,13 @@ else
->  NFTABLES_CONF_OPTS += --without-json
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-> +NFTABLES_CONF_OPTS += --enable-python
-> +NFTABLES_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
-> +else
-> +NFTABLES_CONF_OPTS += --disable-python
-> +endif
-> +
->  ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_LIBNFTNL_JSON),yy)
->  NFTABLES_LIBS += -ljansson -lm
->  endif
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/483712574
+
+ > The kernel configuration of minnowboard_max_defconfig has
+ > CONFIG_MODULES disabled, so there's no /lib/modules/4.19.8 folder,
+ > causing this:
+
+ > depmod: ERROR: could not open directory
+ > /builds/buildroot.org/buildroot/output/target/lib/modules/4.19.8: No
+ > such file or directory
+ > depmod: FATAL: could not search modules: No such file or directory
+ > Makefile:745: recipe for target 'target-finalize' failed
+
+ > Do we need to grep into $(LINUX_DIR)/.config to check if
+ > CONFIG_MODULES=y before calling depmod ?
+
+I believe so, similar to how we do it elsewhere in linux.mk.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
