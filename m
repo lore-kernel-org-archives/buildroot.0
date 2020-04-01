@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 31 Mar 2020 17:21:27 -0700
-Subject: [Buildroot] [PATCH 05/12] package/json-glib: enable
+Date: Tue, 31 Mar 2020 17:21:31 -0700
+Subject: [Buildroot] [PATCH 09/12] package/libgee: enable
  gobject-introspection support
 In-Reply-To: <20200401002134.1779241-1-aduskett@gmail.com>
 References: <20200401002134.1779241-1-aduskett@gmail.com>
-Message-ID: <20200401002134.1779241-5-aduskett@gmail.com>
+Message-ID: <20200401002134.1779241-9-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +14,28 @@ To: buildroot@busybox.net
 From: Adam Duskett <Aduskett@gmail.com>
 
 If gobject-introspection is selected, add the gobject-introspection package to
-the dependency list and set the conf opt -Dintrospection=true.
+the dependency list and set the conf opt --enable-introspection.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/json-glib/json-glib.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/libgee/libgee.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index 7405b28b2e..accdb4f888 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
-@@ -17,7 +17,12 @@ JSON_GLIB_DEPENDENCIES = \
- 	host-pkgconf \
- 	libglib2
+diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
+index 81fd354fe8..4b2581e171 100644
+--- a/package/libgee/libgee.mk
++++ b/package/libgee/libgee.mk
+@@ -13,4 +13,11 @@ LIBGEE_INSTALL_STAGING = YES
+ LIBGEE_LICENSE = LGPL-2.1+
+ LIBGEE_LICENSE_FILES = COPYING
  
--JSON_GLIB_CONF_OPTS = -Dintrospection=false
 +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+JSON_GLIB_CONF_OPTS += -Dintrospection=true
-+JSON_GLIB_DEPENDENCIES += gobject-introspection
++LIBGEE_CONF_OPTS += --enable-introspection
++LIBGEE_DEPENDENCIES += gobject-introspection
 +else
-+JSON_GLIB_CONF_OPTS += -Dintrospection=false
++LIBGEE_CONF_OPTS += --disable-introspection
 +endif
- 
- JSON_GLIB_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- 
++
+ $(eval $(autotools-package))
 -- 
 2.25.1
