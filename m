@@ -1,25 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Apr 2020 23:41:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: bump
- version to 1.20.8
-In-Reply-To: <20200402205348.1232403-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 2 Apr 2020 22:53:48 +0200")
-References: <20200402205348.1232403-1-bernd.kuhls@t-online.de>
-Message-ID: <87o8s97eg2.fsf@dell.be.48ers.dk>
+Date: Thu, 02 Apr 2020 23:42:47 +0200
+Subject: [Buildroot] [PATCH] support/config-fragments/autobuild: update
+ OpenRISC toolchain
+In-Reply-To: <20200402211225.2975226-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 2 Apr 2020 23:12:24 +0200")
+References: <20200402211225.2975226-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87k12x7eeg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Removed patch applied upstream:
- > https://gitlab.freedesktop.org/xorg/xserver/-/commit/c2ef88c4d3a551ff7646bfb86550cae32b02a510
+ > Following commit eee96b0f0ad224b3e09a9b98c26d056e18f17fd5 that adds a
+ > gcc patch for OpenRISC, the OpenRISC pre-built toolchain was
+ > rebuilt. Let's use this new toolchain version for the autobuilders.
 
- > Removed md5 & sha1 hashes, not provided by upstream anymore.
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed, thanks.
 
