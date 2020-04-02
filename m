@@ -1,52 +1,73 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  2 Apr 2020 23:57:18 +0200
-Subject: [Buildroot] [PATCH] support/testing: update basic toolchain to
- bootlin bleeding-edge 2018.11-1
-Message-ID: <20200402215718.161290-1-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 2 Apr 2020 23:53:31 +0200
+Subject: [Buildroot] [git commit] package/libopenssl: security bump to
+ version 1.1.1f
+Message-ID: <20200402214407.728A587F43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the toolchain being used by the testsuite infra.
+commit: https://git.buildroot.net/buildroot/commit/?id=d397b231b7c7f02f9c52d13ac9d3d82b39f4f4c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The new toolchain 2018.11-1 is based on gcc 8.2, uClibc-ng 1.0.30,
-linux-headers 4.14 and binutils 2.31.1.
-Enable BR2_TOOLCHAIN_HAS_THREADS_DEBUG that is now required.
+Fixes the following security issues (1.1.1e):
 
-The old toolchain 2017.05 is based on gcc 4.9, uClibc-ng 1.0.25,
-linux-headers 3.10 and binutils 2.27.
+CVE-2019-1551 [Low severity]: There is an overflow bug in the x64_64
+Montgomery squaring procedure used in exponentiation with 512-bit moduli.
+No EC algorithms are affected.  Analysis suggests that attacks against
+2-prime RSA1024, 3-prime RSA1536, and DSA1024 as a result of this defect
+would be very difficult to perform and are not believed likely.  Attacks
+against DH512 are considered just feasible.  However, for an attack the
+target would have to re-use the DH512 private key, which is not recommended
+anyway.  Also applications directly using the low level API BN_mod_exp may
+be affected if they use BN_FLG_CONSTTIME.  Reported by OSS-Fuzz and Guido
+Vranken.
 
-Tested with gitlab
-https://gitlab.com/kubu93/buildroot/pipelines/132376578
+https://www.openssl.org/news/secadv/20191206.txt
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+CVE-2019-1563 [Low severity]: In situations where an attacker receives
+automated notification of the success or failure of a decryption attempt an
+attacker, after sending a very large number of messages to be decrypted, can
+recover a CMS/PKCS7 transported encryption key or decrypt any RSA encrypted
+message that was encrypted with the public RSA key, using a Bleichenbacher
+padding oracle attack.  Applications are not affected if they use a
+certificate together with the private RSA key to the CMS_decrypt or
+PKCS7_decrypt functions to select the correct recipient info to decrypt.
+Reported by Bernd Edlinger.
+
+https://www.openssl.org/news/secadv/20190910.txt
+
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+[Peter: mention security impact]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-(note some tests failed but it's not related to the toolchain version bump)
----
- support/testing/infra/basetest.py | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/libopenssl/libopenssl.hash | 2 +-
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index 5dc6034447..a97a814441 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -11,11 +11,11 @@ BASIC_TOOLCHAIN_CONFIG = \
-     BR2_TOOLCHAIN_EXTERNAL=y
-     BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-     BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2017.05-1078-g95b1dae.tar.bz2"
--    BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
--    BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-+    BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi/tarballs/armv5-eabi--uclibc--bleeding-edge-2018.11-1.tar.bz2"
-+    BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
-+    BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-     BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
--    # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-+    BR2_TOOLCHAIN_HAS_THREADS_DEBUG=y
-     BR2_TOOLCHAIN_EXTERNAL_CXX=y
-     """
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 1b239fbee7..3becd790ac 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+ # From https://www.openssl.org/source/openssl-1.1.1d.tar.gz.sha256
+-sha256	1e3a91bc1f9dfce01af26026f856e064eab4c8ee0a8f457b5ae30b40b8b711f2	openssl-1.1.1d.tar.gz
++sha256	186c6bfe6ecfba7a5b48c47f8a1673d0f3b0e5ba2e25602dd23b629975da3f35	openssl-1.1.1f.tar.gz
  
--- 
-2.25.1
+ # License files
+ sha256	c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c	LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index da4ae291c0..4639c63fac 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 1.1.1d
++LIBOPENSSL_VERSION = 1.1.1f
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
