@@ -1,45 +1,65 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu,  2 Apr 2020 15:08:40 +0200
-Subject: [Buildroot] [PATCH 0/2] imx: fix gpu graphics support
-Message-ID: <20200402130842.918696-1-gary.bisson@boundarydevices.com>
+Date: Thu,  2 Apr 2020 15:08:41 +0200
+Subject: [Buildroot] [PATCH 1/2] kernel-module-imx-gpu-viv: bump to version
+ 6.4.0.p1.0
+In-Reply-To: <20200402130842.918696-1-gary.bisson@boundarydevices.com>
+References: <20200402130842.918696-1-gary.bisson@boundarydevices.com>
+Message-ID: <20200402130842.918696-2-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This package has been tested on Nitrogen8M with the following commands:
+ # modprobe galcore
+ # cd /usr/share/examples/viv_samples/vdk/
+ # ./tutorial7
 
-The GPU Vivante have been updated but the kernel module wasn't. This
-mismatch will break graphics support for platforms unless they have the
-exact same version in-tree (only NXP defconfig right now).
+Also update the help text as we shouldn't specify a kernel revision. It
+is just that this module isn't meant for mainline kernel, only its NXP
+forked version.
 
-Also, while experimenting with the Wayland package I've noticed this
-build issue:
-In file included from host/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/egl.h:39,
-                 from ../libweston/renderer-gl/gl-renderer.h:36,
-                 from ../libweston/backend-drm/drm-gbm.c:42:
-host/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:144:10: fatal error: X11/Xlib.h: No such file or directory
-  144 | #include <X11/Xlib.h>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ package/freescale-imx/kernel-module-imx-gpu-viv/Config.in       | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash    | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk      | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-So the second patch takes care of fixing the eglplatform.h header like
-Jerome did for the fbbackend.
-
-Let me know if you have any questions.
-
-Regards,
-Gary
-
-Gary Bisson (2):
-  kernel-module-imx-gpu-viv: bump to version 6.4.0.p1.0
-  package/freescale-imx/imx-gpu-viv: fix build issue with Wayland
-    backend
-
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk     | 12 +++++++++---
- .../kernel-module-imx-gpu-viv/Config.in              |  2 +-
- .../kernel-module-imx-gpu-viv.hash                   |  2 +-
- .../kernel-module-imx-gpu-viv.mk                     |  2 +-
- 4 files changed, 12 insertions(+), 6 deletions(-)
-
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in b/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
+index 038bd4d483..4cea37a46c 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
+@@ -11,6 +11,6 @@ config BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV
+ 	  source code of the same version as base and include fixes
+ 	  and improvements developed by FSL Community.
+ 
+-	  This module is only meant for NXP-based kernel up to 4.1.x.
++	  This module is only meant for NXP-based kernel.
+ 
+ 	  https://github.com/Freescale/kernel-module-imx-gpu-viv
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index 19341db6ba..fe40692a6b 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  ad910b7d36dc433bbbe85808d278312e9199635aaa5d00097b70ffab11bde9e6  kernel-module-imx-gpu-viv-86354002bea77acd9ce1812712e9d8485b377ec8.tar.gz
++sha256  d747c39f900315f2f46b8397f55d199c7ece7328ae91ce21a2f5eb0895603865  kernel-module-imx-gpu-viv-4cc1368dc05073b368cfdbadfdf5de3a3d3b15f4.tar.gz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index c76a5ee386..e087ccaa12 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = 86354002bea77acd9ce1812712e9d8485b377ec8
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = 4cc1368dc05073b368cfdbadfdf5de3a3d3b15f4
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
 -- 
 2.25.1
