@@ -1,76 +1,378 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 2 Apr 2020 21:45:53 +0200
-Subject: [Buildroot] [git commit] package/gdb: bump to version 8.3.1
-Message-ID: <20200402195000.6B2F57FCB3@busybox.osuosl.org>
+Date: Thu, 2 Apr 2020 21:50:19 +0200
+Subject: [Buildroot] [git commit] package/libsndfile: add upstream security
+ fixes
+Message-ID: <20200402195000.8A181873EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1737fc1b601a03bd959ff8c6068acc520d59c49
+commit: https://git.buildroot.net/buildroot/commit/?id=76d5ab4d17fe00514c45323ab077d3b85a7add47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+- Fix CVE-2017-6892: In libsndfile version 1.0.28, an error in the
+  "aiff_read_chanmap()" function (aiff.c) can be exploited to cause an
+  out-of-bounds read memory access via a specially crafted AIFF file.
+
+- Fix CVE-2017-8361: The flac_buffer_copy function in flac.c in
+  libsndfile 1.0.28 allows remote attackers to cause a denial of service
+  (buffer overflow and application crash) or possibly have unspecified
+  other impact via a crafted audio file.
+
+- Fix CVE-2017-8362: The flac_buffer_copy function in flac.c in
+  libsndfile 1.0.28 allows remote attackers to cause a denial of service
+  (invalid read and application crash) via a crafted audio file.
+
+- Fix CVE-2017-8363: The flac_buffer_copy function in flac.c in
+  libsndfile 1.0.28 allows remote attackers to cause a denial of service
+  (heap-based buffer over-read and application crash) via a crafted
+  audio file.
+
+- Fix CVE-2017-8365: The i2les_array function in pcm.c in
+  libsndfile 1.0.28 allows remote attackers to cause a denial of service
+  (buffer over-read and application crash) via a crafted audio file.
+
+- Fix CVE-2017-12562: Heap-based Buffer Overflow in the
+  psf_binheader_writef function in common.c in libsndfile through 1.0.28
+  allows remote attackers to cause a denial of service (application
+  crash) or possibly have unspecified other impact.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch |  0
- ...-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch |  0
- package/gdb/{8.3 => 8.3.1}/0003-use-asm-sgidefs.h.patch        |  0
- .../gdb/{8.3 => 8.3.1}/0004-gdbserver-fix-build-for-m68k.patch |  0
- .../0005-nat-fork-inferior-include-linux-ptrace.h.patch        |  0
- package/gdb/Config.in.host                                     |  2 +-
- package/gdb/gdb.hash                                           | 10 +++++-----
- 7 files changed, 6 insertions(+), 6 deletions(-)
+ ...006-src-aiff.c-Fix-a-buffer-read-overflow.patch | 29 +++++++
+ .../0007-FLAC-Fix-a-buffer-read-overrun.patch      | 68 ++++++++++++++++
+ ...008-src-flac.c-Fix-a-buffer-read-overflow.patch | 54 +++++++++++++
+ .../0009-src-flac-c-Fix-another-memory-leak.patch  | 32 ++++++++
+ ...-buffer-overflows-when-writing-strings-in.patch | 92 ++++++++++++++++++++++
+ package/libsndfile/libsndfile.mk                   | 10 +++
+ 6 files changed, 285 insertions(+)
 
-diff --git a/package/gdb/8.3/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/8.3.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-similarity index 100%
-rename from package/gdb/8.3/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-rename to package/gdb/8.3.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-diff --git a/package/gdb/8.3/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/8.3.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-similarity index 100%
-rename from package/gdb/8.3/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-rename to package/gdb/8.3.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-diff --git a/package/gdb/8.3/0003-use-asm-sgidefs.h.patch b/package/gdb/8.3.1/0003-use-asm-sgidefs.h.patch
-similarity index 100%
-rename from package/gdb/8.3/0003-use-asm-sgidefs.h.patch
-rename to package/gdb/8.3.1/0003-use-asm-sgidefs.h.patch
-diff --git a/package/gdb/8.3/0004-gdbserver-fix-build-for-m68k.patch b/package/gdb/8.3.1/0004-gdbserver-fix-build-for-m68k.patch
-similarity index 100%
-rename from package/gdb/8.3/0004-gdbserver-fix-build-for-m68k.patch
-rename to package/gdb/8.3.1/0004-gdbserver-fix-build-for-m68k.patch
-diff --git a/package/gdb/8.3/0005-nat-fork-inferior-include-linux-ptrace.h.patch b/package/gdb/8.3.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-similarity index 100%
-rename from package/gdb/8.3/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-rename to package/gdb/8.3.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 5315f10493..2db73b10d6 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -71,5 +71,5 @@ config BR2_GDB_VERSION
- 	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
- 	default "8.1.1"    if BR2_GDB_VERSION_8_1
- 	default "8.2.1"    if BR2_GDB_VERSION_8_2 || !BR2_PACKAGE_HOST_GDB
--	default "8.3"	   if BR2_GDB_VERSION_8_3
-+	default "8.3.1"    if BR2_GDB_VERSION_8_3
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index b98d6d6a67..60b0954ff9 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -1,10 +1,10 @@
- # From ftp://gcc.gnu.org/pub/gdb/releases/sha512.sum
--sha512  7dcd5e8c90de92f577834d887b5f54edb93a07083bfe661bc46c270a6cc4919f0b348e7e2fe8ae4511298a570ef150eeefdc667ef7cf527f0cf60943177ab6c9	gdb-8.1.1.tar.xz
--sha512  2aa81cfd389bb48c35d7d9f95cc10e88b4f7ad4597bdde0f8f1fd312f60f10d9fb2cc6e5a9355227d89ff328f7feb0fc411a69394560cafeb9fa75d35d896d11	gdb-8.2.1.tar.xz
--sha512  47ac074d20a09a3fac8f4a41dce0a0cbe6ef702f7dc21ba8b7d650d306128dcae481e9a16bf65e596b3a541dc82ae57c02bcbb786d551b4ef3e2917b9b6f0ae1	gdb-8.3.tar.xz
-+sha512  7dcd5e8c90de92f577834d887b5f54edb93a07083bfe661bc46c270a6cc4919f0b348e7e2fe8ae4511298a570ef150eeefdc667ef7cf527f0cf60943177ab6c9  gdb-8.1.1.tar.xz
-+sha512  2aa81cfd389bb48c35d7d9f95cc10e88b4f7ad4597bdde0f8f1fd312f60f10d9fb2cc6e5a9355227d89ff328f7feb0fc411a69394560cafeb9fa75d35d896d11  gdb-8.2.1.tar.xz
-+sha512  9053a2dc6b9eb921907afbc4cecc75d635aa76df5e8c4f0e5824ccf57cb206b299c19b127fff000b65c334826ff8304a54ff6098428365a8e997cca886c39e9a  gdb-8.3.1.tar.xz
+diff --git a/package/libsndfile/0006-src-aiff.c-Fix-a-buffer-read-overflow.patch b/package/libsndfile/0006-src-aiff.c-Fix-a-buffer-read-overflow.patch
+new file mode 100644
+index 0000000000..68b9e8ed67
+--- /dev/null
++++ b/package/libsndfile/0006-src-aiff.c-Fix-a-buffer-read-overflow.patch
+@@ -0,0 +1,29 @@
++From f833c53cb596e9e1792949f762e0b33661822748 Mon Sep 17 00:00:00 2001
++From: Erik de Castro Lopo <erikd@mega-nerd.com>
++Date: Tue, 23 May 2017 20:15:24 +1000
++Subject: [PATCH] src/aiff.c: Fix a buffer read overflow
++
++Secunia Advisory SA76717.
++
++Found by: Laurent Delosieres, Secunia Research at Flexera Software
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/erikd/libsndfile/commit/f833c53cb596e9e1792949f762e0b33661822748]
++---
++ src/aiff.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/aiff.c b/src/aiff.c
++index 5b5f9f53..45864b76 100644
++--- a/src/aiff.c
+++++ b/src/aiff.c
++@@ -1759,7 +1759,7 @@ aiff_read_chanmap (SF_PRIVATE * psf, unsigned dword)
++ 		psf_binheader_readf (psf, "j", dword - bytesread) ;
++ 
++ 	if (map_info->channel_map != NULL)
++-	{	size_t chanmap_size = psf->sf.channels * sizeof (psf->channel_map [0]) ;
+++	{	size_t chanmap_size = SF_MIN (psf->sf.channels, layout_tag & 0xffff) * sizeof (psf->channel_map [0]) ;
++ 
++ 		free (psf->channel_map) ;
++ 
+diff --git a/package/libsndfile/0007-FLAC-Fix-a-buffer-read-overrun.patch b/package/libsndfile/0007-FLAC-Fix-a-buffer-read-overrun.patch
+new file mode 100644
+index 0000000000..b000143b70
+--- /dev/null
++++ b/package/libsndfile/0007-FLAC-Fix-a-buffer-read-overrun.patch
+@@ -0,0 +1,68 @@
++From fd0484aba8e51d16af1e3a880f9b8b857b385eb3 Mon Sep 17 00:00:00 2001
++From: Erik de Castro Lopo <erikd@mega-nerd.com>
++Date: Wed, 12 Apr 2017 19:45:30 +1000
++Subject: [PATCH] FLAC: Fix a buffer read overrun
++
++Buffer read overrun occurs when reading a FLAC file that switches
++from 2 channels to one channel mid-stream. Only option is to
++abort the read.
++
++Closes: https://github.com/erikd/libsndfile/issues/230
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/erikd/libsndfile/commit/fd0484aba8e51d16af1e3a880f9b8b857b385eb3]
++---
++ src/common.h  |  1 +
++ src/flac.c    | 13 +++++++++++++
++ src/sndfile.c |  1 +
++ 3 files changed, 15 insertions(+)
++
++diff --git a/src/common.h b/src/common.h
++index 0bd810c3..e2669b6a 100644
++--- a/src/common.h
+++++ b/src/common.h
++@@ -725,6 +725,7 @@ enum
++ 	SFE_FLAC_INIT_DECODER,
++ 	SFE_FLAC_LOST_SYNC,
++ 	SFE_FLAC_BAD_SAMPLE_RATE,
+++	SFE_FLAC_CHANNEL_COUNT_CHANGED,
++ 	SFE_FLAC_UNKOWN_ERROR,
++ 
++ 	SFE_WVE_NOT_WVE,
++diff --git a/src/flac.c b/src/flac.c
++index 84de0e26..986a7b8f 100644
++--- a/src/flac.c
+++++ b/src/flac.c
++@@ -434,6 +434,19 @@ sf_flac_meta_callback (const FLAC__StreamDecoder * UNUSED (decoder), const FLAC_
++ 
++ 	switch (metadata->type)
++ 	{	case FLAC__METADATA_TYPE_STREAMINFO :
+++			if (psf->sf.channels > 0 && psf->sf.channels != (int) metadata->data.stream_info.channels)
+++			{	psf_log_printf (psf, "Error: FLAC stream changed from %d to %d channels\n"
+++									"Nothing to be but to error out.\n" ,
+++									psf->sf.channels, metadata->data.stream_info.channels) ;
+++				psf->error = SFE_FLAC_CHANNEL_COUNT_CHANGED ;
+++				return ;
+++				} ;
+++
+++			if (psf->sf.channels > 0 && psf->sf.samplerate != (int) metadata->data.stream_info.sample_rate)
+++			{	psf_log_printf (psf, "Warning: FLAC stream changed sample rates from %d to %d.\n"
+++									"Carrying on as if nothing happened.",
+++									psf->sf.samplerate, metadata->data.stream_info.sample_rate) ;
+++				} ;
++ 			psf->sf.channels = metadata->data.stream_info.channels ;
++ 			psf->sf.samplerate = metadata->data.stream_info.sample_rate ;
++ 			psf->sf.frames = metadata->data.stream_info.total_samples ;
++diff --git a/src/sndfile.c b/src/sndfile.c
++index 41875610..e2a87be8 100644
++--- a/src/sndfile.c
+++++ b/src/sndfile.c
++@@ -245,6 +245,7 @@ ErrorStruct SndfileErrors [] =
++ 	{	SFE_FLAC_INIT_DECODER	, "Error : problem with initialization of the flac decoder." },
++ 	{	SFE_FLAC_LOST_SYNC		, "Error : flac decoder lost sync." },
++ 	{	SFE_FLAC_BAD_SAMPLE_RATE, "Error : flac does not support this sample rate." },
+++	{	SFE_FLAC_CHANNEL_COUNT_CHANGED, "Error : flac channel changed mid stream." },
++ 	{	SFE_FLAC_UNKOWN_ERROR	, "Error : unknown error in flac decoder." },
++ 
++ 	{	SFE_WVE_NOT_WVE			, "Error : not a WVE file." },
+diff --git a/package/libsndfile/0008-src-flac.c-Fix-a-buffer-read-overflow.patch b/package/libsndfile/0008-src-flac.c-Fix-a-buffer-read-overflow.patch
+new file mode 100644
+index 0000000000..f716e26867
+--- /dev/null
++++ b/package/libsndfile/0008-src-flac.c-Fix-a-buffer-read-overflow.patch
+@@ -0,0 +1,54 @@
++From ef1dbb2df1c0e741486646de40bd638a9c4cd808 Mon Sep 17 00:00:00 2001
++From: Erik de Castro Lopo <erikd@mega-nerd.com>
++Date: Fri, 14 Apr 2017 15:19:16 +1000
++Subject: [PATCH] src/flac.c: Fix a buffer read overflow
++
++A file (generated by a fuzzer) which increased the number of channels
++from one frame to the next could cause a read beyond the end of the
++buffer provided by libFLAC. Only option is to abort the read.
++
++Closes: https://github.com/erikd/libsndfile/issues/231
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/erikd/libsndfile/commit/ef1dbb2df1c0e741486646de40bd638a9c4cd808]
++---
++ src/flac.c | 11 +++++++++--
++ 1 file changed, 9 insertions(+), 2 deletions(-)
++
++diff --git a/src/flac.c b/src/flac.c
++index 5a4f8c21..e4f9aaa0 100644
++--- a/src/flac.c
+++++ b/src/flac.c
++@@ -169,6 +169,14 @@ flac_buffer_copy (SF_PRIVATE *psf)
++ 	const int32_t* const *buffer = pflac->wbuffer ;
++ 	unsigned i = 0, j, offset, channels, len ;
++ 
+++	if (psf->sf.channels != (int) frame->header.channels)
+++	{	psf_log_printf (psf, "Error: FLAC frame changed from %d to %d channels\n"
+++									"Nothing to do but to error out.\n" ,
+++									psf->sf.channels, frame->header.channels) ;
+++		psf->error = SFE_FLAC_CHANNEL_COUNT_CHANGED ;
+++		return 0 ;
+++		} ;
+++
++ 	/*
++ 	**	frame->header.blocksize is variable and we're using a constant blocksize
++ 	**	of FLAC__MAX_BLOCK_SIZE.
++@@ -202,7 +210,6 @@ flac_buffer_copy (SF_PRIVATE *psf)
++ 		return 0 ;
++ 		} ;
++ 
++-
++ 	len = SF_MIN (pflac->len, frame->header.blocksize) ;
++ 
++ 	if (pflac->remain % channels != 0)
++@@ -436,7 +443,7 @@ sf_flac_meta_callback (const FLAC__StreamDecoder * UNUSED (decoder), const FLAC_
++ 	{	case FLAC__METADATA_TYPE_STREAMINFO :
++ 			if (psf->sf.channels > 0 && psf->sf.channels != (int) metadata->data.stream_info.channels)
++ 			{	psf_log_printf (psf, "Error: FLAC stream changed from %d to %d channels\n"
++-									"Nothing to be but to error out.\n" ,
+++									"Nothing to do but to error out.\n" ,
++ 									psf->sf.channels, metadata->data.stream_info.channels) ;
++ 				psf->error = SFE_FLAC_CHANNEL_COUNT_CHANGED ;
++ 				return ;
+diff --git a/package/libsndfile/0009-src-flac-c-Fix-another-memory-leak.patch b/package/libsndfile/0009-src-flac-c-Fix-another-memory-leak.patch
+new file mode 100644
+index 0000000000..788b9b5187
+--- /dev/null
++++ b/package/libsndfile/0009-src-flac-c-Fix-another-memory-leak.patch
+@@ -0,0 +1,32 @@
++From cd7da8dbf6ee4310d21d9e44b385d6797160d9e8 Mon Sep 17 00:00:00 2001
++From: Erik de Castro Lopo <erikd@mega-nerd.com>
++Date: Wed, 12 Apr 2017 20:19:34 +1000
++Subject: [PATCH] src/flac.c: Fix another memory leak
++
++When the FLAC decoder was passed a malformed file, the associated
++`FLAC__StreamDecoder` object was not getting released.
++
++Closes: https://github.com/erikd/libsndfile/issues/233
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/erikd/libsndfile/commit/cd7da8dbf6ee4310d21d9e44b385d6797160d9e8]
++---
++ src/flac.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/src/flac.c b/src/flac.c
++index 986a7b8f..5a4f8c21 100644
++--- a/src/flac.c
+++++ b/src/flac.c
++@@ -841,7 +841,9 @@ flac_read_header (SF_PRIVATE *psf)
++ 
++ 	psf_log_printf (psf, "End\n") ;
++ 
++-	if (psf->error == 0)
+++	if (psf->error != 0)
+++		FLAC__stream_decoder_delete (pflac->fsd) ;
+++	else
++ 	{	FLAC__uint64 position ;
++ 
++ 		FLAC__stream_decoder_get_decode_position (pflac->fsd, &position) ;
+diff --git a/package/libsndfile/0010-src-common-c-Fix-heap-buffer-overflows-when-writing-strings-in.patch b/package/libsndfile/0010-src-common-c-Fix-heap-buffer-overflows-when-writing-strings-in.patch
+new file mode 100644
+index 0000000000..91aa36c9d6
+--- /dev/null
++++ b/package/libsndfile/0010-src-common-c-Fix-heap-buffer-overflows-when-writing-strings-in.patch
+@@ -0,0 +1,92 @@
++From cf7a8182c2642c50f1cf90dddea9ce96a8bad2e8 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rn=20Heusipp?= <osmanx@problemloesungsmaschine.de>
++Date: Wed, 14 Jun 2017 12:25:40 +0200
++Subject: [PATCH] src/common.c: Fix heap buffer overflows when writing strings
++ in binheader
++
++Fixes the following problems:
++ 1. Case 's' only enlarges the buffer by 16 bytes instead of size bytes.
++ 2. psf_binheader_writef() enlarges the header buffer (if needed) prior to the
++    big switch statement by an amount (16 bytes) which is enough for all cases
++    where only a single value gets added. Cases 's', 'S', 'p' however
++    additionally write an arbitrary length block of data and again enlarge the
++    buffer to the required amount. However, the required space calculation does
++    not take into account the size of the length field which gets output before
++    the data.
++ 3. Buffer size requirement calculation in case 'S' does not account for the
++    padding byte ("size += (size & 1) ;" happens after the calculation which
++    uses "size").
++ 4. Case 'S' can overrun the header buffer by 1 byte when no padding is
++    involved
++    ("memcpy (&(psf->header.ptr [psf->header.indx]), strptr, size + 1) ;" while
++    the buffer is only guaranteed to have "size" space available).
++ 5. "psf->header.ptr [psf->header.indx] = 0 ;" in case 'S' always writes 1 byte
++    beyond the space which is guaranteed to be allocated in the header buffer.
++ 6. Case 's' can overrun the provided source string by 1 byte if padding is
++    involved ("memcpy (&(psf->header.ptr [psf->header.indx]), strptr, size) ;"
++    where "size" is "strlen (strptr) + 1" (which includes the 0 terminator,
++    plus optionally another 1 which is padding and not guaranteed to be
++    readable via the source string pointer).
++
++Closes: https://github.com/erikd/libsndfile/issues/292
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/erikd/libsndfile/commit/cf7a8182c2642c50f1cf90dddea9ce96a8bad2e8]
++---
++ src/common.c | 15 +++++++--------
++ 1 file changed, 7 insertions(+), 8 deletions(-)
++
++diff --git a/src/common.c b/src/common.c
++index 1a6204ca..6b2a2ee9 100644
++--- a/src/common.c
+++++ b/src/common.c
++@@ -681,16 +681,16 @@ psf_binheader_writef (SF_PRIVATE *psf, const char *format, ...)
++ 					/* Write a C string (guaranteed to have a zero terminator). */
++ 					strptr = va_arg (argptr, char *) ;
++ 					size = strlen (strptr) + 1 ;
++-					size += (size & 1) ;
++ 
++-					if (psf->header.indx + (sf_count_t) size >= psf->header.len && psf_bump_header_allocation (psf, 16))
+++					if (psf->header.indx + 4 + (sf_count_t) size + (sf_count_t) (size & 1) > psf->header.len && psf_bump_header_allocation (psf, 4 + size + (size & 1)))
++ 						return count ;
++ 
++ 					if (psf->rwf_endian == SF_ENDIAN_BIG)
++-						header_put_be_int (psf, size) ;
+++						header_put_be_int (psf, size + (size & 1)) ;
++ 					else
++-						header_put_le_int (psf, size) ;
+++						header_put_le_int (psf, size + (size & 1)) ;
++ 					memcpy (&(psf->header.ptr [psf->header.indx]), strptr, size) ;
+++					size += (size & 1) ;
++ 					psf->header.indx += size ;
++ 					psf->header.ptr [psf->header.indx - 1] = 0 ;
++ 					count += 4 + size ;
++@@ -703,16 +703,15 @@ psf_binheader_writef (SF_PRIVATE *psf, const char *format, ...)
++ 					*/
++ 					strptr = va_arg (argptr, char *) ;
++ 					size = strlen (strptr) ;
++-					if (psf->header.indx + (sf_count_t) size > psf->header.len && psf_bump_header_allocation (psf, size))
+++					if (psf->header.indx + 4 + (sf_count_t) size + (sf_count_t) (size & 1) > psf->header.len && psf_bump_header_allocation (psf, 4 + size + (size & 1)))
++ 						return count ;
++ 					if (psf->rwf_endian == SF_ENDIAN_BIG)
++ 						header_put_be_int (psf, size) ;
++ 					else
++ 						header_put_le_int (psf, size) ;
++-					memcpy (&(psf->header.ptr [psf->header.indx]), strptr, size + 1) ;
+++					memcpy (&(psf->header.ptr [psf->header.indx]), strptr, size + (size & 1)) ;
++ 					size += (size & 1) ;
++ 					psf->header.indx += size ;
++-					psf->header.ptr [psf->header.indx] = 0 ;
++ 					count += 4 + size ;
++ 					break ;
++ 
++@@ -724,7 +723,7 @@ psf_binheader_writef (SF_PRIVATE *psf, const char *format, ...)
++ 					size = (size & 1) ? size : size + 1 ;
++ 					size = (size > 254) ? 254 : size ;
++ 
++-					if (psf->header.indx + (sf_count_t) size > psf->header.len && psf_bump_header_allocation (psf, size))
+++					if (psf->header.indx + 1 + (sf_count_t) size > psf->header.len && psf_bump_header_allocation (psf, 1 + size))
++ 						return count ;
++ 
++ 					header_put_byte (psf, size) ;
+diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
+index 63d9a521e6..7d1dca0599 100644
+--- a/package/libsndfile/libsndfile.mk
++++ b/package/libsndfile/libsndfile.mk
+@@ -24,6 +24,16 @@ LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
+ LIBSNDFILE_IGNORE_CVES += CVE-2018-19758
+ # 0005-wav_write_header-don-t-read-past-the-array-end.patch
+ LIBSNDFILE_IGNORE_CVES += CVE-2019-3832
++# 0006-src-aiff.c-Fix-a-buffer-read-overflow.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2017-6892
++# 0007-FLAC-Fix-a-buffer-read-overrun.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2017-8361
++# 0008-src-flac.c-Fix-a-buffer-read-overflow.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2017-8362 CVE-2017-8365
++# 0009-src-flac-c-Fix-another-memory-leak.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2017-8363
++# 0010-src-common-c-Fix-heap-buffer-overflows-when-writing-strings-in.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2017-12562
  
- # Locally calculated (fetched from Github)
--sha512  c33818f8679d99d5315220578864b04b87f69c46ebe62472809ee6e1d260e5ec84d598f38d80c127a2045d6624f28803c2720d89434204acbd94e988a45870f1 	gdb-arc-2019.09-release-gdb.tar.gz
-+sha512  c33818f8679d99d5315220578864b04b87f69c46ebe62472809ee6e1d260e5ec84d598f38d80c127a2045d6624f28803c2720d89434204acbd94e988a45870f1  gdb-arc-2019.09-release-gdb.tar.gz
- 
- # Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
--sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b	gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
-+sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b  gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
+ LIBSNDFILE_CONF_OPTS = \
+ 	--disable-sqlite \
