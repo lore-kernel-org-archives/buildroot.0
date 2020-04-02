@@ -1,60 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Apr 2020 16:39:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pigz: add host package support
-In-Reply-To: <20200310095816.5404-1-lpdev@cordier.org> (Louis-Paul Cordier's
- message of "Tue, 10 Mar 2020 10:58:16 +0100")
-References: <20200310095816.5404-1-lpdev@cordier.org>
-Message-ID: <87v9mi9cjx.fsf@dell.be.48ers.dk>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 2 Apr 2020 17:10:26 +0200
+Subject: [Buildroot] [PATCH 2/2] package/freescale-imx/imx-gpu-viv: fix
+ build issue with Wayland backend
+In-Reply-To: <20200402162543.595ed9e7@windsurf.home>
+References: <20200402130842.918696-1-gary.bisson@boundarydevices.com>
+ <20200402130842.918696-3-gary.bisson@boundarydevices.com>
+ <20200402162543.595ed9e7@windsurf.home>
+Message-ID: <20200402151026.GA934730@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Louis-Paul" == Louis-Paul Cordier <lpdev@cordier.org> writes:
+Hi Thomas,
 
- > Signed-off-by: Louis-Paul Cordier <lpdev@cordier.org>
- > ---
- >  package/Config.in.host      |  1 +
- >  package/pigz/Config.in      |  1 +
- >  package/pigz/Config.in.host |  9 +++++++++
- >  package/pigz/pigz.mk        | 10 ++++++++++
- >  4 files changed, 21 insertions(+)
- >  create mode 100644 package/pigz/Config.in.host
+On Thu, Apr 02, 2020 at 04:25:43PM +0200, Thomas Petazzoni wrote:
+> Hello Gary,
+> 
+> As usual, thanks for your work maintaining good support for i.MX
+> platforms in Buildroot. One question below.
 
- > diff --git a/package/Config.in.host b/package/Config.in.host
- > index c0ac4fbbcc..8eed4727bd 100644
- > --- a/package/Config.in.host
- > +++ b/package/Config.in.host
- > @@ -50,6 +50,7 @@ menu "Host utilities"
- >  	source "package/opkg-utils/Config.in.host"
- >  	source "package/parted/Config.in.host"
- >  	source "package/patchelf/Config.in.host"
- > +	source "package/pigz/Config.in.host"
- >  	source "package/pkgconf/Config.in.host"
- >  	source "package/pru-software-support/Config.in.host"
- >  	source "package/pwgen/Config.in.host"
- > diff --git a/package/pigz/Config.in b/package/pigz/Config.in
- > index af229060cf..a76146d8fc 100644
- > --- a/package/pigz/Config.in
- > +++ b/package/pigz/Config.in
- > @@ -2,6 +2,7 @@ config BR2_PACKAGE_PIGZ
- >  	bool "pigz"
- >  	depends on BR2_TOOLCHAIN_HAS_THREADS
- >  	select BR2_PACKAGE_ZLIB
- > +	select BR2_PACKAGE_HOST_ZLIB
+No problem.
 
-Ehh, it looks like this should have been added to Config.in.host? Care
-to send a patch fixing that?
+> On Thu,  2 Apr 2020 15:08:42 +0200
+> Gary Bisson <gary.bisson@boundarydevices.com> wrote:
+> 
+> >  ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
+> > -define IMX_GPU_VIV_FIXUP_FB_HEADERS
+> > +define IMX_GPU_VIV_FIXUP_HEADERS
+> >  	$(SED) '39i\
+> > -		#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
+> > +		#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) && !defined(WL_EGL_PLATFORM) \n\
+> >  		#define EGL_API_FB \n\
+> >  		#endif' $(STAGING_DIR)/usr/include/EGL/eglplatform.h
+> >  endef
+> > @@ -77,6 +77,12 @@ ifeq ($(IMX_GPU_VIV_LIB_TARGET),wl)
+> >  define IMX_GPU_VIV_FIXUP_PKGCONFIG
+> >  	ln -sf egl_wayland.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
+> >  endef
+> > +define IMX_GPU_VIV_FIXUP_HEADERS
+> > +	$(SED) '39i\
+> > +		#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) && !defined(WL_EGL_PLATFORM) \n\
+> > +		#define WL_EGL_PLATFORM\n\
+> > +		#endif' $(STAGING_DIR)/usr/include/EGL/eglplatform.h
+> > +endef
+> >  endif
+> 
+> Can we use a proper patch instead of these horrible SED calls ?
 
+I know it isn't an elegant solution and I am open to discussion.
+However modifying eglplatform.h still seems like the less intrusive
+solution.
 
- > +config BR2_PACKAGE_HOST_PIGZ
- > +	bool "host pigz"
- > +	help
- > +	  pigz, which stands for parallel implementation of gzip, is a
- > +	  fully functional replacement for gzip that exploits multiple
- > +	  processors and multiple cores to the hilt when compressing
- > +	  data.
+Do you have anything in mind?
 
--- 
-Bye, Peter Korsgaard
+What Yocto does is to patch packages that break by appending CFLAGS
+[1][2], I'd like to avoid such approach.
+
+Especially since in my case it happened building standard Weston
+package... It works in their case because they use a Weston fork (along
+with a libdrm fork, and wayland-protocols fork).
+
+Regards,
+Gary
+
+[1] https://github.com/Freescale/meta-freescale/blob/zeus/recipes-graphics/libsdl2/libsdl2_%25.bbappend
+[2] https://github.com/Freescale/meta-freescale/blob/zeus/recipes-graphics/libepoxy/libepoxy_1.5.%25.bbappend
