@@ -1,43 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  2 Apr 2020 18:28:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cjson: bump to version 1.7.13
-Message-ID: <20200402162800.15256-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 2 Apr 2020 18:28:56 +0200
+Subject: [Buildroot] [PATCH 1/2] kmscube: Change repository to gitlab
+In-Reply-To: <87mu7taoem.fsf@dell.be.48ers.dk>
+References: <20200401170504.9307-1-festevam@gmail.com>
+ <20200401201455.GX22325@scaer> <87mu7taoem.fsf@dell.be.48ers.dk>
+Message-ID: <20200402162856.GZ22325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation of hash file (two spaces)
+Peter, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cjson/cjson.hash | 4 ++--
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2020-04-02 17:38 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  > Fabio, All,
+>  > On 2020-04-01 14:05 -0300, Fabio Estevam spake thusly:
+>  >> The https://cgit.freedesktop.org/mesa/kmscube repository
+>  >> is mirrored from https://gitlab.freedesktop.org/mesa/kmscube, so
+>  >> switch to the gitlab one. 
+>  >> 
+>  >> The other advantage of using the gitlab repository is that it can handle
+>  >> archive downloads, so switch to it.
+>  >> 
+>  >> Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+>  >> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> 
+>  > Both applied to master, thanks.
+> 
+> NIT: The subject prefix should be package/kmscube, not just kmscube.
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index a02158321a..b99fcee8ba 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 760687665ab41a5cff9c40b1053c19572bcdaadef1194e5cba1b5e6f824686e7  cjson-1.7.12.tar.gz
--sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
-+sha256  d4e77a38f540f2c37f55758f2666655314f1f51c716fea5f279659940efdcf04  cjson-1.7.13.tar.gz
-+sha256  a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index b61d1ceb1b..31fef74d9b 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CJSON_VERSION = 1.7.12
-+CJSON_VERSION = 1.7.13
- CJSON_SITE = $(call github,DaveGamble,cjson,v$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
+Woops... :-(
+
+Regards,
+Yann E. MORIN.
+
+> -- 
+> Bye, Peter Korsgaard
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
