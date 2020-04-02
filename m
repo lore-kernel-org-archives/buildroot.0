@@ -1,60 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  2 Apr 2020 20:20:53 +0200
-Subject: [Buildroot] [PATCH] package/apache: security bump to version 2.4.43
-Message-ID: <20200402182053.5043-1-peter@korsgaard.com>
+Date: Thu, 02 Apr 2020 20:56:29 +0200
+Subject: [Buildroot] [PATCH 1/3] toolchain/Config.in: move
+ BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
+In-Reply-To: <20200330182250.1515995-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Mon, 30 Mar 2020 20:22:48 +0200")
+References: <20200330182250.1515995-1-bernd.kuhls@t-online.de>
+Message-ID: <87blo9af8i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-  *) SECURITY: CVE-2020-1934 (cve.mitre.org)
-     mod_proxy_ftp: Use of uninitialized value with malicious backend FTP
-     server. [Eric Covener]
+ > Config option was placed at the wrong position.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-  *) SECURITY: CVE-2020-1927 (cve.mitre.org)
-     rewrite, core: Set PCRE_DOTALL flag by default to avoid unpredictable
-     matches and substitutions with encoded line break characters.
-     The fix for CVE-2019-10098 was not effective.  [Ruediger Pluem]
+Committed, thanks.
 
-The LICENSE file has been updated to fix a s/waranties/warranties/ typo, so
-update the hash to match and adjust the spacing to match recent agreements:
+ > ---
+ >  toolchain/Config.in | 8 ++++----
+ >  1 file changed, 4 insertions(+), 4 deletions(-)
 
--This software is provided "as is" and any express or implied waranties,
-+This software is provided "as is" and any express or implied warranties,
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/apache/apache.hash | 6 +++---
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 24c00eb94c..7b0e4ad8e7 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,4 +1,4 @@
--# From http://archive.apache.org/dist/httpd/httpd-2.4.41.tar.bz2.sha256
--sha256 133d48298fe5315ae9366a0ec66282fa4040efa5d566174481077ade7d18ea40 httpd-2.4.41.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.43.tar.bz2.sha256
-+sha256  a497652ab3fc81318cdc2a203090a999150d86461acff97c1065dc910fe10f43  httpd-2.4.43.tar.bz2
- # Locally computed
--sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-+sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 5fcb9e5371..48a64eae0e 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > diff --git a/toolchain/Config.in b/toolchain/Config.in
+ > index 24bb982e9b..a34436d16b 100644
+ > --- a/toolchain/Config.in
+ > +++ b/toolchain/Config.in
+ > @@ -468,6 +468,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
+ >  config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ >  	bool
+ >  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
+ > +
+ > +config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
+ > +	bool
+ > +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ >  	select BR2_TOOLCHAIN_HEADERS_LATEST
  
--APACHE_VERSION = 2.4.41
-+APACHE_VERSION = 2.4.43
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+ >  # This should be selected by the latest version, above, to indicate that
+ > @@ -477,10 +481,6 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ >  config BR2_TOOLCHAIN_HEADERS_LATEST
+ >  	bool
+ 
+ > -config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
+ > -	bool
+ > -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ > -
+ >  # This order guarantees that the highest version is set, as kconfig
+ >  # stops affecting a value on the first matching default.
+ >  config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ > -- 
+ > 2.25.0
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
