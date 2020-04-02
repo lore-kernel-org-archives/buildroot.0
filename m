@@ -1,66 +1,79 @@
-From: Johan Derycke <johanderycke@gmail.com>
-Date: Thu, 2 Apr 2020 10:43:59 +0200
-Subject: [Buildroot] [PATCH v5 1/1] package/nodejs: Use zlib headers
- from HOST_ZLIB_SRCDIR for host-nodejs
-In-Reply-To: <CAKHhJn3X=JxgEyMzwUG_KfEcC9WYhFq972nfL=2cQcwoHokjXA@mail.gmail.com>
-References: <20200218031521.32988-1-james.hilliard1@gmail.com>
- <CAKHhJn3X=JxgEyMzwUG_KfEcC9WYhFq972nfL=2cQcwoHokjXA@mail.gmail.com>
-Message-ID: <CAKHhJn0FR09jtgk3n2a-e0a0UW_tCTRLh7vecnS+Q1Y06wXoNg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 02 Apr 2020 11:18:44 +0200
+Subject: [Buildroot] date command
+In-Reply-To: <2047d0f5.f3a.1710a050334.Coremail.mail_hysong@163.com> (shy's
+ message of "Tue, 24 Mar 2020 08:50:32 +0800 (CST)")
+References: <589197dd.b0b7.17107dc905e.Coremail.mail_hysong@163.com>
+ <20200323180549.6ccd2738@gmx.net>
+ <2047d0f5.f3a.1710a050334.Coremail.mail_hysong@163.com>
+Message-ID: <87a73ub5zf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Will probably also fix
-http://autobuild.buildroot.net/results/8ad67efd68b45a7e7f7734377e3863c4ad7fa101/
+>>>>> "shy" == shy  <mail_hysong@163.com> writes:
 
-Op di 31 mrt. 2020 om 15:11 schreef Johan Derycke <johanderycke@gmail.com>:
->
-> Op di 18 feb. 2020 om 04:15 schreef James Hilliard <james.hilliard1@gmail.com>:
-> >
-> > The nodejs configure.py file orders zlib headers before the bundled ICU
-> > headers. The zlib headers happen to be located in the system include
-> > directory, next to some system ICU headers (not bundled). If these are
-> > built before nodejs is, nodejs will get confused and try to use the
-> > system ICU headers instead of the bundled ones.
-> >
-> > Fix this by using headers from HOST_ZLIB_SRCDIR so that the ICU headers
-> > in the system include directory are not used.
-> >
-> > Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> > Changes v4 -> v5:
-> >   - use headers from HOST_ZLIB_SRCDIR
-> >   - use shared zlib instead of static zlib
-> > ---
-> >  package/nodejs/nodejs.mk | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> > index 0de3495df9..30f5b35809 100644
-> > --- a/package/nodejs/nodejs.mk
-> > +++ b/package/nodejs/nodejs.mk
-> > @@ -64,6 +64,8 @@ define HOST_NODEJS_CONFIGURE_CMDS
-> >                 --shared-openssl-includes=$(HOST_DIR)/include/openssl \
-> >                 --shared-openssl-libpath=$(HOST_DIR)/lib \
-> >                 --shared-zlib \
-> > +               --shared-zlib-includes=$(HOST_ZLIB_SRCDIR) \
-> > +               --shared-zlib-libpath=$(HOST_DIR)/lib \
-> >                 --no-cross-compiling \
-> >                 --with-intl=small-icu \
-> >         )
-> > --
-> > 2.20.1
-> >
->
-> Hi,
->
-> I had the same compilation issue on 2020.02. This patch fixed it for me.
->
-> Tested-by: Johan Derycke <johanderycke@gmail.com>
->
-> Best regards,
->
-> Johan
+ > Hi all:
+ > I test in buildroot and ubuntu, it all can't set time "1970-01-01 00:00:00", there is error message "date: can't set date: Invalid argument".
+ > I don't know why and how to solve the problem. It's UTC time and no timezone.
+
+
+ > 1. I use buildroot-2013.05, the busybox is in 1.21.1, the linux kernel is in version 4.4.39.
+
+
+ > # date -s "1970-01-20 00:00:00"
+ > Tue Jan 20 00:00:00 UTC 1970
+ > # date -R
+ > Tue, 20 Jan 1970 00:00:03 +0000
+ > # date -s "1970-01-01 00:00:00"
+ > date: can't set date: Invalid argument
+ > Thu Jan  1 00:00:00 UTC 1970
+
+ > 2. I test in ubuntu version 14.04.1.
+ > shy at ubuntu:/etc$ sudo date -s "2020-03-01 00:00:00"
+ > Sun Mar  1 00:00:00 UTC 2020
+ > shy at ubuntu:/etc$ date -R
+ > Sun, 01 Mar 2020 00:00:03 +0000
+
+ > shy at ubuntu:/etc$ sudo date -s "1970-01-01 00:00:00"
+
+ > date: cannot set date: Invalid argument
+
+ > Thu Jan  1 00:00:00 UTC 1970
+
+ > shy at ubuntu:/etc$ uname -a
+
+ > Linux ubuntu 4.4.0-142-generic #168~14.04.1-Ubuntu SMP Sat Jan 19 11:26:28 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
+
+This looks to be a kernel regression, presumably introduced by the year
+2038 work.
+
+Specifically, it seems to reject settimeofday with a tv_sec value less
+than 1171500:
+
+# strace -e settimeofday date -s '1970-01-14 13:24'
+settimeofday({tv_sec=1171440, tv_usec=0}, NULL) = -1 EINVAL (Invalid argument)
+date: can't set date: Invalid argument
+
+# strace -e settimeofday date -s '1970-01-14 13:25'
+settimeofday({tv_sec=1171500, tv_usec=0}, NULL) = 0
+Wed Jan 14 13:25:00 UTC 1970
+
+(here on 5.4.18).
+
+
+On an ancient 2.6.37 kernel it does work:
+
+strace -e settimeofday date -s '1970-01-14 13:24'
+settimeofday({tv_sec=1171440, tv_usec=0}, NULL) = 0
+Wed Jan 14 13:24:00 UTC 1970
++++ exited with 0 +++
+uname -r
+2.6.37.6
+
+Arnd, any ideas?
+
+-- 
+Bye, Peter Korsgaard
