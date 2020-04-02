@@ -1,59 +1,44 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 2 Apr 2020 02:27:25 +0300
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: bump to version
- 2.28.0
-In-Reply-To: <CADvTj4pkDTrCRAPd0Uk0EirN4T47XLTij+XVe==s9r3wt0GpOw@mail.gmail.com>
-References: <20200324215809.77787-1-james.hilliard1@gmail.com>
- <20200329221302.4d9a1022@windsurf.home>
- <CADvTj4pkDTrCRAPd0Uk0EirN4T47XLTij+XVe==s9r3wt0GpOw@mail.gmail.com>
-Message-ID: <20200402022725.GB702622@momiji>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Wed,  1 Apr 2020 18:12:23 -0700
+Subject: [Buildroot] [PATCH 1/1] package/systemd: bump version to 245.4
+Message-ID: <20200402011224.725831-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On Sun, 29 Mar 2020 22:27:15 -0600, James Hilliard <james.hilliard1@gmail.com> wrote:
-> On Sun, Mar 29, 2020 at 2:13 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > On Tue, 24 Mar 2020 15:58:09 -0600
-> > James Hilliard <james.hilliard1@gmail.com> wrote:
-> >
-> > > Adjust fix build with musl patch for 2.28.0.
-> > >
-> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > > ---
-> > >  package/wpewebkit/0001-Fix-build-with-musl.patch | 6 +++---
-> > >  package/wpewebkit/wpewebkit.hash                 | 8 ++++----
-> > >  package/wpewebkit/wpewebkit.mk                   | 2 +-
-> > >  3 files changed, 8 insertions(+), 8 deletions(-)
-> >
-> > Applied to master, thanks. Why isn't the musl patch upstream ? :-)
->
-> Not sure, maybe Adrian might know?
-
-Nobody has attempted to send the patch upstream. Maybe I can do it myself :]
-Note to self: The OpenBSD people are applying some patches which would be
-neat having upstream as well.
-
-Note that in WebKit trunk we have now a fix [1] which will explicitly set the
-thread stack sizes using ?pthread_attr_setstacksize()?, which should further
-help with Musl (and possibly uClibc) ? I have tried at backporting it over to
-the 2.28 release branch but it's not trivial and it will need another attempt
-at some point, or waiting until 2.30.x for it ;-)
-
-Cheers,
-?Adri?n
-
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-[1] https://bugs.webkit.org/show_bug.cgi?id=208223
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200402/5f924e59/attachment.asc>
+ package/systemd/systemd.hash | 2 +-
+ package/systemd/systemd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 4a398ef6bb..eacb797ed4 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256	6dc956a857c889d6f3cf7d768d4836db48a39e5bef5dd930fbed697ab2421a61	systemd-245.tar.gz
++sha256	bd1c467045989ab986b29d003f17960ccb201bc923093db978b4cfb299ae8a63	systemd-245.4.tar.gz
+ sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
+ sha256	f7299f5f5e8bdffd347dce1bed888b1cea6ddaf27de521c307265098bcbeae92	README
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 56459947c4..0a4a84e7e2 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 245
++SYSTEMD_VERSION = 245.4
+ SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+-- 
+2.25.1
