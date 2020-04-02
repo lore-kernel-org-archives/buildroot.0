@@ -1,378 +1,125 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 2 Apr 2020 21:50:19 +0200
-Subject: [Buildroot] [git commit] package/libsndfile: add upstream security
- fixes
-Message-ID: <20200402195000.8A181873EE@busybox.osuosl.org>
+Date: Thu, 2 Apr 2020 21:53:23 +0200
+Subject: [Buildroot] [git commit] package/hostapd: fix CVE-2019-16275
+Message-ID: <20200402195000.9DC1383BD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76d5ab4d17fe00514c45323ab077d3b85a7add47
+commit: https://git.buildroot.net/buildroot/commit/?id=749fbab0bb4bad3748d164f8c25485618f0ed1ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2017-6892: In libsndfile version 1.0.28, an error in the
-  "aiff_read_chanmap()" function (aiff.c) can be exploited to cause an
-  out-of-bounds read memory access via a specially crafted AIFF file.
-
-- Fix CVE-2017-8361: The flac_buffer_copy function in flac.c in
-  libsndfile 1.0.28 allows remote attackers to cause a denial of service
-  (buffer overflow and application crash) or possibly have unspecified
-  other impact via a crafted audio file.
-
-- Fix CVE-2017-8362: The flac_buffer_copy function in flac.c in
-  libsndfile 1.0.28 allows remote attackers to cause a denial of service
-  (invalid read and application crash) via a crafted audio file.
-
-- Fix CVE-2017-8363: The flac_buffer_copy function in flac.c in
-  libsndfile 1.0.28 allows remote attackers to cause a denial of service
-  (heap-based buffer over-read and application crash) via a crafted
-  audio file.
-
-- Fix CVE-2017-8365: The i2les_array function in pcm.c in
-  libsndfile 1.0.28 allows remote attackers to cause a denial of service
-  (buffer over-read and application crash) via a crafted audio file.
-
-- Fix CVE-2017-12562: Heap-based Buffer Overflow in the
-  psf_binheader_writef function in common.c in libsndfile through 1.0.28
-  allows remote attackers to cause a denial of service (application
-  crash) or possibly have unspecified other impact.
+hostapd before 2.10 and wpa_supplicant before 2.10 allow an incorrect
+indication of disconnection in certain situations because source address
+validation is mishandled. This is a denial of service that should have
+been prevented by PMF (aka management frame protection). The attacker
+must send a crafted 802.11 frame from a location that is within the
+802.11 communications range.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...006-src-aiff.c-Fix-a-buffer-read-overflow.patch | 29 +++++++
- .../0007-FLAC-Fix-a-buffer-read-overrun.patch      | 68 ++++++++++++++++
- ...008-src-flac.c-Fix-a-buffer-read-overflow.patch | 54 +++++++++++++
- .../0009-src-flac-c-Fix-another-memory-leak.patch  | 32 ++++++++
- ...-buffer-overflows-when-writing-strings-in.patch | 92 ++++++++++++++++++++++
- package/libsndfile/libsndfile.mk                   | 10 +++
- 6 files changed, 285 insertions(+)
+ ...-ignore-management-frame-from-unexpected-.patch | 77 ++++++++++++++++++++++
+ package/hostapd/hostapd.mk                         |  4 ++
+ 2 files changed, 81 insertions(+)
 
-diff --git a/package/libsndfile/0006-src-aiff.c-Fix-a-buffer-read-overflow.patch b/package/libsndfile/0006-src-aiff.c-Fix-a-buffer-read-overflow.patch
+diff --git a/package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch b/package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
 new file mode 100644
-index 0000000000..68b9e8ed67
+index 0000000000..959788c2e9
 --- /dev/null
-+++ b/package/libsndfile/0006-src-aiff.c-Fix-a-buffer-read-overflow.patch
-@@ -0,0 +1,29 @@
-+From f833c53cb596e9e1792949f762e0b33661822748 Mon Sep 17 00:00:00 2001
-+From: Erik de Castro Lopo <erikd@mega-nerd.com>
-+Date: Tue, 23 May 2017 20:15:24 +1000
-+Subject: [PATCH] src/aiff.c: Fix a buffer read overflow
++++ b/package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
+@@ -0,0 +1,77 @@
++From 8c07fa9eda13e835f3f968b2e1c9a8be3a851ff9 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <j@w1.fi>
++Date: Thu, 29 Aug 2019 11:52:04 +0300
++Subject: [PATCH] AP: Silently ignore management frame from unexpected source
++ address
 +
-+Secunia Advisory SA76717.
++Do not process any received Management frames with unexpected/invalid SA
++so that we do not add any state for unexpected STA addresses or end up
++sending out frames to unexpected destination. This prevents unexpected
++sequences where an unprotected frame might end up causing the AP to send
++out a response to another device and that other device processing the
++unexpected response.
 +
-+Found by: Laurent Delosieres, Secunia Research at Flexera Software
++In particular, this prevents some potential denial of service cases
++where the unexpected response frame from the AP might result in a
++connected station dropping its association.
++
++Signed-off-by: Jouni Malinen <j@w1.fi>
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +[Retrieved from:
-+https://github.com/erikd/libsndfile/commit/f833c53cb596e9e1792949f762e0b33661822748]
++https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch]
 +---
-+ src/aiff.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/ap/drv_callbacks.c | 13 +++++++++++++
++ src/ap/ieee802_11.c    | 12 ++++++++++++
++ 2 files changed, 25 insertions(+)
 +
-+diff --git a/src/aiff.c b/src/aiff.c
-+index 5b5f9f53..45864b76 100644
-+--- a/src/aiff.c
-++++ b/src/aiff.c
-+@@ -1759,7 +1759,7 @@ aiff_read_chanmap (SF_PRIVATE * psf, unsigned dword)
-+ 		psf_binheader_readf (psf, "j", dword - bytesread) ;
-+ 
-+ 	if (map_info->channel_map != NULL)
-+-	{	size_t chanmap_size = psf->sf.channels * sizeof (psf->channel_map [0]) ;
-++	{	size_t chanmap_size = SF_MIN (psf->sf.channels, layout_tag & 0xffff) * sizeof (psf->channel_map [0]) ;
-+ 
-+ 		free (psf->channel_map) ;
-+ 
-diff --git a/package/libsndfile/0007-FLAC-Fix-a-buffer-read-overrun.patch b/package/libsndfile/0007-FLAC-Fix-a-buffer-read-overrun.patch
-new file mode 100644
-index 0000000000..b000143b70
---- /dev/null
-+++ b/package/libsndfile/0007-FLAC-Fix-a-buffer-read-overrun.patch
-@@ -0,0 +1,68 @@
-+From fd0484aba8e51d16af1e3a880f9b8b857b385eb3 Mon Sep 17 00:00:00 2001
-+From: Erik de Castro Lopo <erikd@mega-nerd.com>
-+Date: Wed, 12 Apr 2017 19:45:30 +1000
-+Subject: [PATCH] FLAC: Fix a buffer read overrun
-+
-+Buffer read overrun occurs when reading a FLAC file that switches
-+from 2 channels to one channel mid-stream. Only option is to
-+abort the read.
-+
-+Closes: https://github.com/erikd/libsndfile/issues/230
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/erikd/libsndfile/commit/fd0484aba8e51d16af1e3a880f9b8b857b385eb3]
-+---
-+ src/common.h  |  1 +
-+ src/flac.c    | 13 +++++++++++++
-+ src/sndfile.c |  1 +
-+ 3 files changed, 15 insertions(+)
-+
-+diff --git a/src/common.h b/src/common.h
-+index 0bd810c3..e2669b6a 100644
-+--- a/src/common.h
-++++ b/src/common.h
-+@@ -725,6 +725,7 @@ enum
-+ 	SFE_FLAC_INIT_DECODER,
-+ 	SFE_FLAC_LOST_SYNC,
-+ 	SFE_FLAC_BAD_SAMPLE_RATE,
-++	SFE_FLAC_CHANNEL_COUNT_CHANGED,
-+ 	SFE_FLAC_UNKOWN_ERROR,
-+ 
-+ 	SFE_WVE_NOT_WVE,
-+diff --git a/src/flac.c b/src/flac.c
-+index 84de0e26..986a7b8f 100644
-+--- a/src/flac.c
-++++ b/src/flac.c
-+@@ -434,6 +434,19 @@ sf_flac_meta_callback (const FLAC__StreamDecoder * UNUSED (decoder), const FLAC_
-+ 
-+ 	switch (metadata->type)
-+ 	{	case FLAC__METADATA_TYPE_STREAMINFO :
-++			if (psf->sf.channels > 0 && psf->sf.channels != (int) metadata->data.stream_info.channels)
-++			{	psf_log_printf (psf, "Error: FLAC stream changed from %d to %d channels\n"
-++									"Nothing to be but to error out.\n" ,
-++									psf->sf.channels, metadata->data.stream_info.channels) ;
-++				psf->error = SFE_FLAC_CHANNEL_COUNT_CHANGED ;
-++				return ;
-++				} ;
++diff --git a/src/ap/drv_callbacks.c b/src/ap/drv_callbacks.c
++index 31587685fe3b..34ca379edc3d 100644
++--- a/src/ap/drv_callbacks.c
+++++ b/src/ap/drv_callbacks.c
++@@ -131,6 +131,19 @@ int hostapd_notif_assoc(struct hostapd_data *hapd, const u8 *addr,
++ 			   "hostapd_notif_assoc: Skip event with no address");
++ 		return -1;
++ 	}
 ++
-++			if (psf->sf.channels > 0 && psf->sf.samplerate != (int) metadata->data.stream_info.sample_rate)
-++			{	psf_log_printf (psf, "Warning: FLAC stream changed sample rates from %d to %d.\n"
-++									"Carrying on as if nothing happened.",
-++									psf->sf.samplerate, metadata->data.stream_info.sample_rate) ;
-++				} ;
-+ 			psf->sf.channels = metadata->data.stream_info.channels ;
-+ 			psf->sf.samplerate = metadata->data.stream_info.sample_rate ;
-+ 			psf->sf.frames = metadata->data.stream_info.total_samples ;
-+diff --git a/src/sndfile.c b/src/sndfile.c
-+index 41875610..e2a87be8 100644
-+--- a/src/sndfile.c
-++++ b/src/sndfile.c
-+@@ -245,6 +245,7 @@ ErrorStruct SndfileErrors [] =
-+ 	{	SFE_FLAC_INIT_DECODER	, "Error : problem with initialization of the flac decoder." },
-+ 	{	SFE_FLAC_LOST_SYNC		, "Error : flac decoder lost sync." },
-+ 	{	SFE_FLAC_BAD_SAMPLE_RATE, "Error : flac does not support this sample rate." },
-++	{	SFE_FLAC_CHANNEL_COUNT_CHANGED, "Error : flac channel changed mid stream." },
-+ 	{	SFE_FLAC_UNKOWN_ERROR	, "Error : unknown error in flac decoder." },
-+ 
-+ 	{	SFE_WVE_NOT_WVE			, "Error : not a WVE file." },
-diff --git a/package/libsndfile/0008-src-flac.c-Fix-a-buffer-read-overflow.patch b/package/libsndfile/0008-src-flac.c-Fix-a-buffer-read-overflow.patch
-new file mode 100644
-index 0000000000..f716e26867
---- /dev/null
-+++ b/package/libsndfile/0008-src-flac.c-Fix-a-buffer-read-overflow.patch
-@@ -0,0 +1,54 @@
-+From ef1dbb2df1c0e741486646de40bd638a9c4cd808 Mon Sep 17 00:00:00 2001
-+From: Erik de Castro Lopo <erikd@mega-nerd.com>
-+Date: Fri, 14 Apr 2017 15:19:16 +1000
-+Subject: [PATCH] src/flac.c: Fix a buffer read overflow
-+
-+A file (generated by a fuzzer) which increased the number of channels
-+from one frame to the next could cause a read beyond the end of the
-+buffer provided by libFLAC. Only option is to abort the read.
-+
-+Closes: https://github.com/erikd/libsndfile/issues/231
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/erikd/libsndfile/commit/ef1dbb2df1c0e741486646de40bd638a9c4cd808]
-+---
-+ src/flac.c | 11 +++++++++--
-+ 1 file changed, 9 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/flac.c b/src/flac.c
-+index 5a4f8c21..e4f9aaa0 100644
-+--- a/src/flac.c
-++++ b/src/flac.c
-+@@ -169,6 +169,14 @@ flac_buffer_copy (SF_PRIVATE *psf)
-+ 	const int32_t* const *buffer = pflac->wbuffer ;
-+ 	unsigned i = 0, j, offset, channels, len ;
-+ 
-++	if (psf->sf.channels != (int) frame->header.channels)
-++	{	psf_log_printf (psf, "Error: FLAC frame changed from %d to %d channels\n"
-++									"Nothing to do but to error out.\n" ,
-++									psf->sf.channels, frame->header.channels) ;
-++		psf->error = SFE_FLAC_CHANNEL_COUNT_CHANGED ;
-++		return 0 ;
-++		} ;
+++	if (is_multicast_ether_addr(addr) ||
+++	    is_zero_ether_addr(addr) ||
+++	    os_memcmp(addr, hapd->own_addr, ETH_ALEN) == 0) {
+++		/* Do not process any frames with unexpected/invalid SA so that
+++		 * we do not add any state for unexpected STA addresses or end
+++		 * up sending out frames to unexpected destination. */
+++		wpa_printf(MSG_DEBUG, "%s: Invalid SA=" MACSTR
+++			   " in received indication - ignore this indication silently",
+++			   __func__, MAC2STR(addr));
+++		return 0;
+++	}
 ++
-+ 	/*
-+ 	**	frame->header.blocksize is variable and we're using a constant blocksize
-+ 	**	of FLAC__MAX_BLOCK_SIZE.
-+@@ -202,7 +210,6 @@ flac_buffer_copy (SF_PRIVATE *psf)
-+ 		return 0 ;
-+ 		} ;
++ 	random_add_randomness(addr, ETH_ALEN);
 + 
-+-
-+ 	len = SF_MIN (pflac->len, frame->header.blocksize) ;
++ 	hostapd_logger(hapd, addr, HOSTAPD_MODULE_IEEE80211,
++diff --git a/src/ap/ieee802_11.c b/src/ap/ieee802_11.c
++index c85a28db44b7..e7065372e158 100644
++--- a/src/ap/ieee802_11.c
+++++ b/src/ap/ieee802_11.c
++@@ -4626,6 +4626,18 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
++ 	fc = le_to_host16(mgmt->frame_control);
++ 	stype = WLAN_FC_GET_STYPE(fc);
 + 
-+ 	if (pflac->remain % channels != 0)
-+@@ -436,7 +443,7 @@ sf_flac_meta_callback (const FLAC__StreamDecoder * UNUSED (decoder), const FLAC_
-+ 	{	case FLAC__METADATA_TYPE_STREAMINFO :
-+ 			if (psf->sf.channels > 0 && psf->sf.channels != (int) metadata->data.stream_info.channels)
-+ 			{	psf_log_printf (psf, "Error: FLAC stream changed from %d to %d channels\n"
-+-									"Nothing to be but to error out.\n" ,
-++									"Nothing to do but to error out.\n" ,
-+ 									psf->sf.channels, metadata->data.stream_info.channels) ;
-+ 				psf->error = SFE_FLAC_CHANNEL_COUNT_CHANGED ;
-+ 				return ;
-diff --git a/package/libsndfile/0009-src-flac-c-Fix-another-memory-leak.patch b/package/libsndfile/0009-src-flac-c-Fix-another-memory-leak.patch
-new file mode 100644
-index 0000000000..788b9b5187
---- /dev/null
-+++ b/package/libsndfile/0009-src-flac-c-Fix-another-memory-leak.patch
-@@ -0,0 +1,32 @@
-+From cd7da8dbf6ee4310d21d9e44b385d6797160d9e8 Mon Sep 17 00:00:00 2001
-+From: Erik de Castro Lopo <erikd@mega-nerd.com>
-+Date: Wed, 12 Apr 2017 20:19:34 +1000
-+Subject: [PATCH] src/flac.c: Fix another memory leak
+++	if (is_multicast_ether_addr(mgmt->sa) ||
+++	    is_zero_ether_addr(mgmt->sa) ||
+++	    os_memcmp(mgmt->sa, hapd->own_addr, ETH_ALEN) == 0) {
+++		/* Do not process any frames with unexpected/invalid SA so that
+++		 * we do not add any state for unexpected STA addresses or end
+++		 * up sending out frames to unexpected destination. */
+++		wpa_printf(MSG_DEBUG, "MGMT: Invalid SA=" MACSTR
+++			   " in received frame - ignore this frame silently",
+++			   MAC2STR(mgmt->sa));
+++		return 0;
+++	}
+++
++ 	if (stype == WLAN_FC_STYPE_BEACON) {
++ 		handle_beacon(hapd, mgmt, len, fi);
++ 		return 1;
++-- 
++2.20.1
 +
-+When the FLAC decoder was passed a malformed file, the associated
-+`FLAC__StreamDecoder` object was not getting released.
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index f8c144c236..b94a0e4578 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -12,6 +12,10 @@ HOSTAPD_DEPENDENCIES = host-pkgconf
+ HOSTAPD_CFLAGS = $(TARGET_CFLAGS)
+ HOSTAPD_LICENSE = BSD-3-Clause
+ HOSTAPD_LICENSE_FILES = README
 +
-+Closes: https://github.com/erikd/libsndfile/issues/233
++# 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
++HOSTAPD_IGNORE_CVES += CVE-2019-16275
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/erikd/libsndfile/commit/cd7da8dbf6ee4310d21d9e44b385d6797160d9e8]
-+---
-+ src/flac.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/flac.c b/src/flac.c
-+index 986a7b8f..5a4f8c21 100644
-+--- a/src/flac.c
-++++ b/src/flac.c
-+@@ -841,7 +841,9 @@ flac_read_header (SF_PRIVATE *psf)
-+ 
-+ 	psf_log_printf (psf, "End\n") ;
-+ 
-+-	if (psf->error == 0)
-++	if (psf->error != 0)
-++		FLAC__stream_decoder_delete (pflac->fsd) ;
-++	else
-+ 	{	FLAC__uint64 position ;
-+ 
-+ 		FLAC__stream_decoder_get_decode_position (pflac->fsd, &position) ;
-diff --git a/package/libsndfile/0010-src-common-c-Fix-heap-buffer-overflows-when-writing-strings-in.patch b/package/libsndfile/0010-src-common-c-Fix-heap-buffer-overflows-when-writing-strings-in.patch
-new file mode 100644
-index 0000000000..91aa36c9d6
---- /dev/null
-+++ b/package/libsndfile/0010-src-common-c-Fix-heap-buffer-overflows-when-writing-strings-in.patch
-@@ -0,0 +1,92 @@
-+From cf7a8182c2642c50f1cf90dddea9ce96a8bad2e8 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rn=20Heusipp?= <osmanx@problemloesungsmaschine.de>
-+Date: Wed, 14 Jun 2017 12:25:40 +0200
-+Subject: [PATCH] src/common.c: Fix heap buffer overflows when writing strings
-+ in binheader
-+
-+Fixes the following problems:
-+ 1. Case 's' only enlarges the buffer by 16 bytes instead of size bytes.
-+ 2. psf_binheader_writef() enlarges the header buffer (if needed) prior to the
-+    big switch statement by an amount (16 bytes) which is enough for all cases
-+    where only a single value gets added. Cases 's', 'S', 'p' however
-+    additionally write an arbitrary length block of data and again enlarge the
-+    buffer to the required amount. However, the required space calculation does
-+    not take into account the size of the length field which gets output before
-+    the data.
-+ 3. Buffer size requirement calculation in case 'S' does not account for the
-+    padding byte ("size += (size & 1) ;" happens after the calculation which
-+    uses "size").
-+ 4. Case 'S' can overrun the header buffer by 1 byte when no padding is
-+    involved
-+    ("memcpy (&(psf->header.ptr [psf->header.indx]), strptr, size + 1) ;" while
-+    the buffer is only guaranteed to have "size" space available).
-+ 5. "psf->header.ptr [psf->header.indx] = 0 ;" in case 'S' always writes 1 byte
-+    beyond the space which is guaranteed to be allocated in the header buffer.
-+ 6. Case 's' can overrun the provided source string by 1 byte if padding is
-+    involved ("memcpy (&(psf->header.ptr [psf->header.indx]), strptr, size) ;"
-+    where "size" is "strlen (strptr) + 1" (which includes the 0 terminator,
-+    plus optionally another 1 which is padding and not guaranteed to be
-+    readable via the source string pointer).
-+
-+Closes: https://github.com/erikd/libsndfile/issues/292
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/erikd/libsndfile/commit/cf7a8182c2642c50f1cf90dddea9ce96a8bad2e8]
-+---
-+ src/common.c | 15 +++++++--------
-+ 1 file changed, 7 insertions(+), 8 deletions(-)
-+
-+diff --git a/src/common.c b/src/common.c
-+index 1a6204ca..6b2a2ee9 100644
-+--- a/src/common.c
-++++ b/src/common.c
-+@@ -681,16 +681,16 @@ psf_binheader_writef (SF_PRIVATE *psf, const char *format, ...)
-+ 					/* Write a C string (guaranteed to have a zero terminator). */
-+ 					strptr = va_arg (argptr, char *) ;
-+ 					size = strlen (strptr) + 1 ;
-+-					size += (size & 1) ;
-+ 
-+-					if (psf->header.indx + (sf_count_t) size >= psf->header.len && psf_bump_header_allocation (psf, 16))
-++					if (psf->header.indx + 4 + (sf_count_t) size + (sf_count_t) (size & 1) > psf->header.len && psf_bump_header_allocation (psf, 4 + size + (size & 1)))
-+ 						return count ;
-+ 
-+ 					if (psf->rwf_endian == SF_ENDIAN_BIG)
-+-						header_put_be_int (psf, size) ;
-++						header_put_be_int (psf, size + (size & 1)) ;
-+ 					else
-+-						header_put_le_int (psf, size) ;
-++						header_put_le_int (psf, size + (size & 1)) ;
-+ 					memcpy (&(psf->header.ptr [psf->header.indx]), strptr, size) ;
-++					size += (size & 1) ;
-+ 					psf->header.indx += size ;
-+ 					psf->header.ptr [psf->header.indx - 1] = 0 ;
-+ 					count += 4 + size ;
-+@@ -703,16 +703,15 @@ psf_binheader_writef (SF_PRIVATE *psf, const char *format, ...)
-+ 					*/
-+ 					strptr = va_arg (argptr, char *) ;
-+ 					size = strlen (strptr) ;
-+-					if (psf->header.indx + (sf_count_t) size > psf->header.len && psf_bump_header_allocation (psf, size))
-++					if (psf->header.indx + 4 + (sf_count_t) size + (sf_count_t) (size & 1) > psf->header.len && psf_bump_header_allocation (psf, 4 + size + (size & 1)))
-+ 						return count ;
-+ 					if (psf->rwf_endian == SF_ENDIAN_BIG)
-+ 						header_put_be_int (psf, size) ;
-+ 					else
-+ 						header_put_le_int (psf, size) ;
-+-					memcpy (&(psf->header.ptr [psf->header.indx]), strptr, size + 1) ;
-++					memcpy (&(psf->header.ptr [psf->header.indx]), strptr, size + (size & 1)) ;
-+ 					size += (size & 1) ;
-+ 					psf->header.indx += size ;
-+-					psf->header.ptr [psf->header.indx] = 0 ;
-+ 					count += 4 + size ;
-+ 					break ;
-+ 
-+@@ -724,7 +723,7 @@ psf_binheader_writef (SF_PRIVATE *psf, const char *format, ...)
-+ 					size = (size & 1) ? size : size + 1 ;
-+ 					size = (size > 254) ? 254 : size ;
-+ 
-+-					if (psf->header.indx + (sf_count_t) size > psf->header.len && psf_bump_header_allocation (psf, size))
-++					if (psf->header.indx + 1 + (sf_count_t) size > psf->header.len && psf_bump_header_allocation (psf, 1 + size))
-+ 						return count ;
-+ 
-+ 					header_put_byte (psf, size) ;
-diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
-index 63d9a521e6..7d1dca0599 100644
---- a/package/libsndfile/libsndfile.mk
-+++ b/package/libsndfile/libsndfile.mk
-@@ -24,6 +24,16 @@ LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
- LIBSNDFILE_IGNORE_CVES += CVE-2018-19758
- # 0005-wav_write_header-don-t-read-past-the-array-end.patch
- LIBSNDFILE_IGNORE_CVES += CVE-2019-3832
-+# 0006-src-aiff.c-Fix-a-buffer-read-overflow.patch
-+LIBSNDFILE_IGNORE_CVES += CVE-2017-6892
-+# 0007-FLAC-Fix-a-buffer-read-overrun.patch
-+LIBSNDFILE_IGNORE_CVES += CVE-2017-8361
-+# 0008-src-flac.c-Fix-a-buffer-read-overflow.patch
-+LIBSNDFILE_IGNORE_CVES += CVE-2017-8362 CVE-2017-8365
-+# 0009-src-flac-c-Fix-another-memory-leak.patch
-+LIBSNDFILE_IGNORE_CVES += CVE-2017-8363
-+# 0010-src-common-c-Fix-heap-buffer-overflows-when-writing-strings-in.patch
-+LIBSNDFILE_IGNORE_CVES += CVE-2017-12562
+ HOSTAPD_CONFIG_SET =
  
- LIBSNDFILE_CONF_OPTS = \
- 	--disable-sqlite \
+ HOSTAPD_CONFIG_ENABLE = \
