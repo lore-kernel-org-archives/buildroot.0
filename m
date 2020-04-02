@@ -1,54 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 2 Apr 2020 21:56:32 +0200
-Subject: [Buildroot] [git commit] package/libpjsip: bump version to 2.10
-Message-ID: <20200402195008.3C42B81518@busybox.osuosl.org>
+Date: Thu, 2 Apr 2020 22:01:12 +0200
+Subject: [Buildroot] [git commit] package/libuwsc: bump version to 3.3.4
+Message-ID: <20200402195014.375508B448@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfbf7370dc65ced3797719c8d21efe7e0035057e
+commit: https://git.buildroot.net/buildroot/commit/?id=964fb4bf822a413b2a75ba6f9a582347d46488b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Other changes:
-  - Change the site URL as the upstream project has migrated to Github
+Adjust license hash for a change in email address:
+-Copyright (c) 2019 Jianhui Zhao <jianhuizhao329@gmail.com>
++Copyright (c) 2019 Jianhui Zhao <zhaojh329@gmail.com>
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpjsip/libpjsip.hash | 5 +----
- package/libpjsip/libpjsip.mk   | 8 +++++---
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ package/libuwsc/libuwsc.hash | 4 ++--
+ package/libuwsc/libuwsc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
-index bcf46ea5fb..68c2208885 100644
---- a/package/libpjsip/libpjsip.hash
-+++ b/package/libpjsip/libpjsip.hash
-@@ -1,6 +1,3 @@
--# From https://www.pjsip.org/release/2.9/MD5SUM.TXT
--md5	66757078e7bd7cf316acb0425c2fdd6f  pjproject-2.9.tar.bz2
--
- # Locally computed
--sha256	d185ef7855c8ec07191dde92f54b65a7a4b7a6f7bf8c46f7af35ceeb1da2a636	pjproject-2.9.tar.bz2
-+sha256	936a4c5b98601b52325463a397ddf11ab4106c6a7b04f8dc7cdd377efbb597de	pjproject-2.10.tar.gz
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 447f76be7f..f0956d11ae 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -4,9 +4,11 @@
+diff --git a/package/libuwsc/libuwsc.hash b/package/libuwsc/libuwsc.hash
+index f137b3613b..e73d105cd1 100644
+--- a/package/libuwsc/libuwsc.hash
++++ b/package/libuwsc/libuwsc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 bae2cd13eda86876ebcf99a38a069f5e8c01717713d2fec25031051b9c47624b  libuwsc-3.3.2.tar.gz
+-sha256 e557975decde6439395e72dce7690d974d1a493722a7be5228794ec944f0c5db  LICENSE
++sha256 ef789ff35e537e5191ec0d13f3e0df54187a54eace611e283ad4172d4411d08b  libuwsc-3.3.4.tar.gz
++sha256 99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
+index 213b1d5891..c0c05e7223 100644
+--- a/package/libuwsc/libuwsc.mk
++++ b/package/libuwsc/libuwsc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPJSIP_VERSION = 2.9
--LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
--LIBPJSIP_SITE = https://www.pjsip.org/release/$(LIBPJSIP_VERSION)
-+LIBPJSIP_VERSION = 2.10
-+LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
-+LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
-+# https://github.com/pjsip/pjproject/archive/2.10.tar.gz
-+
- LIBPJSIP_DEPENDENCIES = libsrtp
- LIBPJSIP_LICENSE = GPL-2.0+
- LIBPJSIP_LICENSE_FILES = COPYING
+-LIBUWSC_VERSION = 3.3.2
++LIBUWSC_VERSION = 3.3.4
+ LIBUWSC_SITE = https://github.com/zhaojh329/libuwsc/releases/download/v$(LIBUWSC_VERSION)
+ LIBUWSC_LICENSE = MIT
+ LIBUWSC_LICENSE_FILES = LICENSE
