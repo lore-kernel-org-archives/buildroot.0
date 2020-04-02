@@ -1,50 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  2 Apr 2020 23:45:49 +0200
-Subject: [Buildroot] [PATCH 2/2] linux: adjust BR2_LINUX_KERNEL_IMAGE_NAME
- help text
-In-Reply-To: <20200402214549.2977215-1-thomas.petazzoni@bootlin.com>
-References: <20200402214549.2977215-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200402214549.2977215-2-thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 02 Apr 2020 23:56:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: bump to version
+ 1.1.1f
+In-Reply-To: <20200402100820.22283-1-sebastien.szymanski@armadeus.com>
+ (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Thu, 2 Apr 2020
+ 12:08:20 +0200")
+References: <20200402100820.22283-1-sebastien.szymanski@armadeus.com>
+Message-ID: <87ftdl7dry.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The help text of BR2_LINUX_KERNEL_IMAGE_NAME is somewhat incomplete,
-in the sense that it assumes just a filename can be passed, while it
-can be a relative path, such as 'compressed/vmlinux.bin.z'. So make it
-clear that such paths are relative to arch/ARCH/boot/.
+>>>>> "S?bastien" == S?bastien Szymanski <sebastien.szymanski@armadeus.com> writes:
 
-Also, drop the part about this being only useful for Xtensa as this is
-not true: on MIPS it might be needed as well for some specific image
-types.
+ > Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 
-Reported-by: Paul Cercueil <paul@crapouillou.net>
-Cc: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+1.1.1e fixed two security issues, so this should be marked as a security
+bump.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 86b5092b8a..ddf0264d33 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -338,10 +338,10 @@ config BR2_LINUX_KERNEL_IMAGE_NAME
- 	string "Kernel image name"
- 	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
- 	help
--	  The filename of the kernel image, if it is different from the
--	  make target (above). Only Xtensa uses a filename different
--	  from the make target. Defaults to
--	  BR2_LINUX_KERNEL_IMAGE_TARGET_NAME.
-+	  The filename of the kernel image, if it is different from
-+	  the make target (above). Defaults to
-+	  BR2_LINUX_KERNEL_IMAGE_TARGET_NAME. If specified, the
-+	  filename is relative to arch/ARCH/boot/.
- 
- 	  If unsure, leave it empty.
- 
+Committed after adjusting the commit message to make this clear, thanks.
+
 -- 
-2.25.1
+Bye, Peter Korsgaard
