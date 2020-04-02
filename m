@@ -1,44 +1,36 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed,  1 Apr 2020 18:12:23 -0700
-Subject: [Buildroot] [PATCH 1/1] package/systemd: bump version to 245.4
-Message-ID: <20200402011224.725831-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 2 Apr 2020 07:35:42 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: fix build error
+In-Reply-To: <20200401170348.72cf210f@windsurf.home>
+References: <20190730115832.21008-1-b.bilas@grinn-global.com>
+ <20190730233029.7360e1bd@gmx.net>
+ <ff0a929f-f321-7eb6-a9ea-91abd85bacf5@grinn-global.com>
+ <20190811223051.707ac1a8@windsurf.home>
+ <238c867c-5852-8295-d62e-ee6bf6812391@benettiengineering.com>
+ <20200401170348.72cf210f@windsurf.home>
+Message-ID: <20200402073542.0b82827a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hello,
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, 1 Apr 2020 17:03:48 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 4a398ef6bb..eacb797ed4 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256	6dc956a857c889d6f3cf7d768d4836db48a39e5bef5dd930fbed697ab2421a61	systemd-245.tar.gz
-+sha256	bd1c467045989ab986b29d003f17960ccb201bc923093db978b4cfb299ae8a63	systemd-245.4.tar.gz
- sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
- sha256	f7299f5f5e8bdffd347dce1bed888b1cea6ddaf27de521c307265098bcbeae92	README
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 56459947c4..0a4a84e7e2 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSTEMD_VERSION = 245
-+SYSTEMD_VERSION = 245.4
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+> I am now trying to rebuild with gcc 7.5.0, since you said it was
+> successful for you. If it is, then the issue was not gcc bug 83623.
+
+For the record, gcc 7.5.0 indeed fixes the problem. So there must have
+been a fix between gcc 7.4.0 and 7.5.0 that fixes the qt5webengine
+build issue.
+
+Best regards,
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
