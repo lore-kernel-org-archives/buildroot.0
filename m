@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Apr 2020 17:38:25 +0200
-Subject: [Buildroot] [PATCH 1/2] kmscube: Change repository to gitlab
-In-Reply-To: <20200401201455.GX22325@scaer> (Yann E. MORIN's message of "Wed, 
- 1 Apr 2020 22:14:55 +0200")
-References: <20200401170504.9307-1-festevam@gmail.com>
- <20200401201455.GX22325@scaer>
-Message-ID: <87mu7taoem.fsf@dell.be.48ers.dk>
+Date: Thu, 02 Apr 2020 17:41:24 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: add version 5.5
+In-Reply-To: <20200329171804.GJ22325@scaer> (Yann E. MORIN's message of "Sun, 
+ 29 Mar 2020 19:18:04 +0200")
+References: <20200210162102.27584-1-jagan@amarulasolutions.com>
+ <20200329171804.GJ22325@scaer>
+Message-ID: <87imihao9n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,21 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fabio, All,
- > On 2020-04-01 14:05 -0300, Fabio Estevam spake thusly:
- >> The https://cgit.freedesktop.org/mesa/kmscube repository
- >> is mirrored from https://gitlab.freedesktop.org/mesa/kmscube, so
- >> switch to the gitlab one. 
- >> 
- >> The other advantage of using the gitlab repository is that it can handle
- >> archive downloads, so switch to it.
- >> 
- >> Suggested-by: Arnout Vandecappelle <arnout@mind.be>
- >> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > Jagan, All,
+ > On 2020-02-10 17:21 +0100, Jagan Teki spake thusly:
+ >> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 
- > Both applied to master, thanks.
+ > Finally applied to master, thanks!
 
-NIT: The subject prefix should be package/kmscube, not just kmscube.
+ > It's been a bit tough, because so much has changed in the meantime, so
+ > it was conflicting all over. I hope I did not bork it too much when
+ > doing the rease.
+
+ > In the process, I also switched over to 5.5.13, which had been released
+ > in the meantime.
+
+Thanks for taking care of it - Just in time for 5.5.x to go EOL now that
+5.6 is out ;)
 
 -- 
 Bye, Peter Korsgaard
