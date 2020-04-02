@@ -1,75 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 2 Apr 2020 14:16:14 +0200
-Subject: [Buildroot] [PATCH 1/2] support/testing: add openssh runtime
- test
-In-Reply-To: <cd51a10f-21ea-7395-91ec-093ae03f41d4@smile.fr>
-References: <20200330162411.9678-1-romain.naour@smile.fr>
- <20200331233206.632dcfce@windsurf.home>
- <cd51a10f-21ea-7395-91ec-093ae03f41d4@smile.fr>
-Message-ID: <20200402141614.54c9d1b6@windsurf.home>
+From: =?iso-8859-9?q?Naz=FDm_Gediz_AYDINDO=D0MU=DE?= <gediz.aydindogmus@genemek.com>
+Date: Thu, 2 Apr 2020 12:41:12 +0000
+Subject: [Buildroot] [PATCH 1/1] docs/manual: minor typo fix
+Message-ID: <a7c96e3f84a64afda9548fd5f535d40f@genemek.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, 2 Apr 2020 13:48:15 +0200
-Romain Naour <romain.naour@smile.fr> wrote:
+Definition of LIBFOO_USERS actually ends on 33rd line.
 
-> > Why use an x86-64 system? It forces you to build your own kernel? For
-> > this glibc configuration, you could build your own toolchain, but
-> > probably stick to using a prebuilt kernel.  
-> 
-> I reused the configuration for Docker, that's why I used x86_64.
+Signed-off-by: Naz?m Gediz Ayd?ndo?mu? <gediz.aydindogmus@genemek.com>
+---
+docs/manual/adding-packages-generic.txt | 2 +-
+1 file changed, 1 insertion(+), 1 deletion(-)
 
-OK, but then you have to build your own kernel, which is no really
-needed.
+diff --git a/docs/manual/adding-packages-generic.txt
+b/docs/manual/adding-packages-generic.txt
+index 8ee51ca57d..ed1e6acf57 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -142,7 +142,7 @@ All these steps rely on the +$(@D)+ variable, which
+contains the directory where the source code of the package has been
+extracted.
 
-> But the testsuite basically test only with uClibc-ng with an old toolchain by
-> default. It would be interesting to allow to select a custom toolchain.
+-On lines 31..43, we define a user that is used by this package (e.g.
++On lines 31..33, we define a user that is used by this package (e.g.
+to run a daemon as non-root) (+LIBFOO_USERS+).
 
-You can already select whatever toolchain you want, since you provide
-for each test case the toolchain.
-
-However, we could certainly update the default toolchain used in
-infra.basetest.BASIC_TOOLCHAIN_CONFIG
-
-> Also, I noticed that the build continue even if the defconfig provided contain
-> an option that is dropped by make olddefconfig.
-> 
-> For example, mesa3d:
-> https://git.buildroot.net/buildroot/commit/?id=faec5c583ec59e968fdb547aea93ab6ed001eb45
-> 
-> The symbol BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST was missing since only one
-> swrast driver can be enabled.
-> 
-> The test should stop is one of the provided symbol is missing (like
-> autobuild-run do).
-
-Sure, that would make sense.
-
-> >> +        BR2_TOOLCHAIN_BUILDROOT_GLIBC=y  
-> > 
-> > What about using the ARM ARM toolchain, and boot using the pre-built
-> > vexpress kernel ? This will significantly speed-up the build of the
-> > system for this runtime test.  
-> 
-> Because I made this test to trigger the openssh issue with glibc 2.31 (local
-> patch applied to do the version bump).
-
-Ah, OK, indeed.
-
-> That's why It's important for the testsuite to allow testing with several
-> toolchain (I believe).
-
-It already allows to do so: you did it!
-
-Best regards,
-
-Thomas
+On line 35..37, we define a device-node file used by this package
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
