@@ -1,36 +1,103 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 2 Apr 2020 07:35:42 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: fix build error
-In-Reply-To: <20200401170348.72cf210f@windsurf.home>
-References: <20190730115832.21008-1-b.bilas@grinn-global.com>
- <20190730233029.7360e1bd@gmx.net>
- <ff0a929f-f321-7eb6-a9ea-91abd85bacf5@grinn-global.com>
- <20190811223051.707ac1a8@windsurf.home>
- <238c867c-5852-8295-d62e-ee6bf6812391@benettiengineering.com>
- <20200401170348.72cf210f@windsurf.home>
-Message-ID: <20200402073542.0b82827a@windsurf.home>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 02 Apr 2020 09:09:05 +0300
+Subject: [Buildroot] [PATCH] package/linux-firmware: Add Wilocity 6210
+ 11ad firmware
+In-Reply-To: <20200331200332.GS22325@scaer>
+References: <6c1b188c2a00e62ee950fd9987acfc0121afd39f.1585578701.git.baruch@tkos.co.il>
+ <20200331200332.GS22325@scaer>
+Message-ID: <87r1x6beri.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yann,
 
-On Wed, 1 Apr 2020 17:03:48 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Tue, Mar 31 2020, Yann E. MORIN wrote:
+> On 2020-03-30 17:31 +0300, Baruch Siach spake thusly:
+>> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+>> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>> ---
+>>  package/linux-firmware/Config.in         | 5 +++++
+>>  package/linux-firmware/linux-firmware.mk | 5 +++++
+>>  2 files changed, 10 insertions(+)
+>> 
+>> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+>> index fb884842d66b..914b514f80bd 100644
+>> --- a/package/linux-firmware/Config.in
+>> +++ b/package/linux-firmware/Config.in
+>> @@ -345,6 +345,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX
+>>  	help
+>>  	  Firmware files for WLAN and Bluetooth modules wl18xx
+>>  
+>> +config BR2_PACKAGE_LINUX_FIRMWARE_WILOCITY_WIL6210
+>> +	bool "Wilocity 6210"
+>
+> I've been reminded recently that the options are all prefixed with the
+> vendor, followed by the model name/number, so in this case, it should
+> be:
+>
+>     config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOM_WIL6210
+>         bool "Qualcom Atheros wil6210"
 
-> I am now trying to rebuild with gcc 7.5.0, since you said it was
-> successful for you. If it is, then the issue was not gcc bug 83623.
+Wilocity is arguably also the vendor name.
 
-For the record, gcc 7.5.0 indeed fixes the problem. So there must have
-been a fix between gcc 7.4.0 and 7.5.0 that fixes the qt5webengine
-build issue.
+> So I was about to rename and apply, but then I noticed something weird
+> with the exiosting Atheros and Qualcom firmwares. We have:
+>
+>     config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA6174
+>         bool "Atheros 10k (QCA6174)"
+>         help
+>           Firmware files for the Atheros QCA6174 module
+>
+> And:
+>
+>     config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174
+>         bool "Qualcomm Atheros 6174"
+>         help
+>           Firmware files for the Qualcomm Atheros QCA6174 chip
+>
+> And indeed they both installs files from ath10k/QCA6174: the former
+> installs a selected set of files by name, while the latter installs
+> the whole directory (using _FILES instaed of DIRS, at that).
+>
+> Would wyou want to have a look amd fix that, then fix your patch and
+> resummit, please?
 
-Best regards,
+How would you like to fix that? Should we drop
+BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA6174 option since it installs
+less files?
 
-Thomas
+How is that related to this patch?
+
+baruch
+
+>> +	help
+>> +	  Firmware files for Qualcomm Atheros 11ad family of chips
+>> +
+>>  endmenu
+>>  
+>>  menu "Ethernet firmware"
+>> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+>> index 21300ddc72de..e553a2a06383 100644
+>> --- a/package/linux-firmware/linux-firmware.mk
+>> +++ b/package/linux-firmware/linux-firmware.mk
+>> @@ -373,6 +373,11 @@ LINUX_FIRMWARE_FILES += \
+>>  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
+>>  endif
+>>  
+>> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_WILOCITY_WIL6210),y)
+>> +LINUX_FIRMWARE_FILES += wil6210.*
+>> +LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
+>> +endif
+>> +
+>>  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160),y)
+>>  LINUX_FIRMWARE_FILES += iwlwifi-3160-*.ucode
+>>  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
