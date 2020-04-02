@@ -1,35 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Apr 2020 17:12:26 +0200
-Subject: [Buildroot] Suggestion: consider tzdata updates for LTS
-In-Reply-To: <20200402163559.27bd922a@windsurf.home> (Thomas Petazzoni's
- message of "Thu, 2 Apr 2020 16:35:59 +0200")
-References: <20200402163559.27bd922a@windsurf.home>
-Message-ID: <87r1x5aplx.fsf@dell.be.48ers.dk>
+Date: Thu, 02 Apr 2020 17:38:25 +0200
+Subject: [Buildroot] [PATCH 1/2] kmscube: Change repository to gitlab
+In-Reply-To: <20200401201455.GX22325@scaer> (Yann E. MORIN's message of "Wed, 
+ 1 Apr 2020 22:14:55 +0200")
+References: <20200401170504.9307-1-festevam@gmail.com>
+ <20200401201455.GX22325@scaer>
+Message-ID: <87mu7taoem.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Hello,
- > I'd like to propose that updates to the tzdata package are made to the
- > active LTS branch. Indeed, even "old" systems that are in production
- > want to stay up-to-date with timezone information changes. Some country
- > or geographic areas once in a while change their time zone rules, and
- > it makes sense to keep systems in the field update with that.
+ > Fabio, All,
+ > On 2020-04-01 14:05 -0300, Fabio Estevam spake thusly:
+ >> The https://cgit.freedesktop.org/mesa/kmscube repository
+ >> is mirrored from https://gitlab.freedesktop.org/mesa/kmscube, so
+ >> switch to the gitlab one. 
+ >> 
+ >> The other advantage of using the gitlab repository is that it can handle
+ >> archive downloads, so switch to it.
+ >> 
+ >> Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+ >> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
- > As I believe tzdata updates are pretty low risk, I would suggest that
- > we systematically backport updates to this package to the currently
- > maintained LTS branch.
+ > Both applied to master, thanks.
 
- > What do you think ?
-
-Makes sense to me. I will take care of pending tzdata updates during my
-next stable-update.
-
-Please ping me in case I miss any other important updates, thanks.
+NIT: The subject prefix should be package/kmscube, not just kmscube.
 
 -- 
 Bye, Peter Korsgaard
