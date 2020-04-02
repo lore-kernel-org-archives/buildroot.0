@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 02 Apr 2020 20:56:29 +0200
-Subject: [Buildroot] [PATCH 1/3] toolchain/Config.in: move
- BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
-In-Reply-To: <20200330182250.1515995-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 30 Mar 2020 20:22:48 +0200")
+Date: Thu, 02 Apr 2020 20:58:00 +0200
+Subject: [Buildroot] [PATCH 2/3] linux: fix option string for kernel
+ 5.5.x
+In-Reply-To: <20200330182250.1515995-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Mon, 30 Mar 2020 20:22:49 +0200")
 References: <20200330182250.1515995-1-bernd.kuhls@t-online.de>
-Message-ID: <87blo9af8i.fsf@dell.be.48ers.dk>
+ <20200330182250.1515995-2-bernd.kuhls@t-online.de>
+Message-ID: <877dyxaf5z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,48 +15,33 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Config option was placed at the wrong position.
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
  > ---
- >  toolchain/Config.in | 8 ++++----
- >  1 file changed, 4 insertions(+), 4 deletions(-)
+ >  package/linux-headers/Config.in.host                            | 2 +-
+ >  .../toolchain-external-custom/Config.in.options                 | 2 +-
 
- > diff --git a/toolchain/Config.in b/toolchain/Config.in
- > index 24bb982e9b..a34436d16b 100644
- > --- a/toolchain/Config.in
- > +++ b/toolchain/Config.in
- > @@ -468,6 +468,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
- >  config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- >  	bool
- >  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_3
- > +
- > +config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
- > +	bool
- > +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- >  	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- >  # This should be selected by the latest version, above, to indicate that
- > @@ -477,10 +481,6 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- >  config BR2_TOOLCHAIN_HEADERS_LATEST
- >  	bool
- 
- > -config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
- > -	bool
- > -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- > -
- >  # This order guarantees that the highest version is set, as kconfig
- >  # stops affecting a value on the first matching default.
- >  config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- > -- 
- > 2.25.0
+This change is not about linux?
 
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
+
+ > diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+ > index 5c5a9b0330..b89605bbf7 100644
+ > --- a/package/linux-headers/Config.in.host
+ > +++ b/package/linux-headers/Config.in.host
+ > @@ -132,7 +132,7 @@ choice
+ >  	  in the choice, then select the latest version.
+ 
+ >  config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_5
+ > -	bool "5.5.x or later"
+ > +	bool "5.5.x"
+
+Why? We've used the .. or later text ever since:
+
+commit 338e62bd5d23e843a4bf69c06a02681450e858ae
+Author: Vincent Fazio <vfazio@xes-inc.com>
+Date:   Wed Jan 15 19:29:07 2020 +0100
+
+   toolchain: allow using custom headers newer than latest known ones
 
 -- 
 Bye, Peter Korsgaard
