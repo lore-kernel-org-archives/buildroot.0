@@ -1,47 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 2 Apr 2020 22:01:12 +0200
-Subject: [Buildroot] [git commit] package/libuwsc: bump version to 3.3.4
-Message-ID: <20200402195014.375508B448@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 2 Apr 2020 22:04:00 +0200
+Subject: [Buildroot] [PATCH 1/2] support/testing: add openssh runtime
+ test
+In-Reply-To: <20200402214133.3d5ba92c@windsurf.home>
+References: <20200330162411.9678-1-romain.naour@smile.fr>
+ <20200331233206.632dcfce@windsurf.home>
+ <cd51a10f-21ea-7395-91ec-093ae03f41d4@smile.fr>
+ <20200402141614.54c9d1b6@windsurf.home>
+ <adbf598c-fea8-1176-53e2-ac9a85ef981c@smile.fr>
+ <20200402214133.3d5ba92c@windsurf.home>
+Message-ID: <7e3327f8-57d2-679f-1f7c-2cdfbfb5bf04@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=964fb4bf822a413b2a75ba6f9a582347d46488b3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Adjust license hash for a change in email address:
--Copyright (c) 2019 Jianhui Zhao <jianhuizhao329@gmail.com>
-+Copyright (c) 2019 Jianhui Zhao <zhaojh329@gmail.com>
+Le 02/04/2020 ? 21:41, Thomas Petazzoni a ?crit?:
+> On Thu, 2 Apr 2020 21:38:42 +0200
+> Romain Naour <romain.naour@smile.fr> wrote:
+> 
+>>>> But the testsuite basically test only with uClibc-ng with an old toolchain by
+>>>> default. It would be interesting to allow to select a custom toolchain.  
+>>>
+>>> You can already select whatever toolchain you want, since you provide
+>>> for each test case the toolchain.  
+>>
+>> I mean, I would be interesting to override or provide another toolchain. For
+>> example, a package test should be pass whatever the toolchain being used.
+> 
+> How would you handle that? The point of runtime tests is that they
+> should be reproducible so that we can track when they started failing.
+> We also can't run all tests on all toolchains/architectures, that's not
+> really realistic from a CPU time point of view, and from a test
+> maintenance point of view.
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libuwsc/libuwsc.hash | 4 ++--
- package/libuwsc/libuwsc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+My point is that we don't test with different gcc/binutils version and different
+libc implementation. But we have to use the same architecture since the Qemu
+command line is specific to the emulated architecture. If a test would be
+available for several architecture it would require to update the qemu command
+line (and the kernel configuration too).
 
-diff --git a/package/libuwsc/libuwsc.hash b/package/libuwsc/libuwsc.hash
-index f137b3613b..e73d105cd1 100644
---- a/package/libuwsc/libuwsc.hash
-+++ b/package/libuwsc/libuwsc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 bae2cd13eda86876ebcf99a38a069f5e8c01717713d2fec25031051b9c47624b  libuwsc-3.3.2.tar.gz
--sha256 e557975decde6439395e72dce7690d974d1a493722a7be5228794ec944f0c5db  LICENSE
-+sha256 ef789ff35e537e5191ec0d13f3e0df54187a54eace611e283ad4172d4411d08b  libuwsc-3.3.4.tar.gz
-+sha256 99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuwsc/libuwsc.mk b/package/libuwsc/libuwsc.mk
-index 213b1d5891..c0c05e7223 100644
---- a/package/libuwsc/libuwsc.mk
-+++ b/package/libuwsc/libuwsc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUWSC_VERSION = 3.3.2
-+LIBUWSC_VERSION = 3.3.4
- LIBUWSC_SITE = https://github.com/zhaojh329/libuwsc/releases/download/v$(LIBUWSC_VERSION)
- LIBUWSC_LICENSE = MIT
- LIBUWSC_LICENSE_FILES = LICENSE
+At least testing with several gcc and libc implementation would be good enough?
+
+> 
+>>> However, we could certainly update the default toolchain used in
+>>> infra.basetest.BASIC_TOOLCHAIN_CONFIG  
+>>
+>> What about using br-arm-full-2020.02 ?
+> 
+> Sure, would be good. Could you test this, do a Gitlab CI run, and see how it goes?
+
+Ok.
+
+Best regards,
+Romain
+
+> 
+> Thomas
+> 
