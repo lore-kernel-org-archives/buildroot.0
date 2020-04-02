@@ -1,47 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 2 Apr 2020 21:41:33 +0200
-Subject: [Buildroot] [PATCH 1/2] support/testing: add openssh runtime
- test
-In-Reply-To: <adbf598c-fea8-1176-53e2-ac9a85ef981c@smile.fr>
-References: <20200330162411.9678-1-romain.naour@smile.fr>
- <20200331233206.632dcfce@windsurf.home>
- <cd51a10f-21ea-7395-91ec-093ae03f41d4@smile.fr>
- <20200402141614.54c9d1b6@windsurf.home>
- <adbf598c-fea8-1176-53e2-ac9a85ef981c@smile.fr>
-Message-ID: <20200402214133.3d5ba92c@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 02 Apr 2020 21:44:35 +0200
+Subject: [Buildroot] [PATCH 1/1] docs/manual: minor typo fix
+In-Reply-To: <a7c96e3f84a64afda9548fd5f535d40f@genemek.com> (=?utf-8?Q?=22?=
+ =?utf-8?Q?Naz=C4=B1m?= Gediz
+ =?utf-8?Q?AYDINDO=C4=9EMU=C5=9E=22's?= message of "Thu, 2 Apr 2020 12:41:12
+ +0000")
+References: <a7c96e3f84a64afda9548fd5f535d40f@genemek.com>
+Message-ID: <87y2rd8yfw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2 Apr 2020 21:38:42 +0200
-Romain Naour <romain.naour@smile.fr> wrote:
+>>>>> "Naz?m" == Naz?m Gediz AYDINDO?MU? <gediz.aydindogmus@genemek.com> writes:
 
-> >> But the testsuite basically test only with uClibc-ng with an old toolchain by
-> >> default. It would be interesting to allow to select a custom toolchain.  
-> > 
-> > You can already select whatever toolchain you want, since you provide
-> > for each test case the toolchain.  
-> 
-> I mean, I would be interesting to override or provide another toolchain. For
-> example, a package test should be pass whatever the toolchain being used.
+ > MIME-Version: 1.0
+ > Content-Type: text/plain; charset=UTF-8
+ > Content-Transfer-Encoding: 8bit
 
-How would you handle that? The point of runtime tests is that they
-should be reproducible so that we can track when they started failing.
-We also can't run all tests on all toolchains/architectures, that's not
-really realistic from a CPU time point of view, and from a test
-maintenance point of view.
+ > Definition of LIBFOO_USERS actually ends on 33rd line.
 
-> > However, we could certainly update the default toolchain used in
-> > infra.basetest.BASIC_TOOLCHAIN_CONFIG  
-> 
-> What about using br-arm-full-2020.02 ?
+ > Signed-off-by: Naz?m Gediz Ayd?ndo?mu? <gediz.aydindogmus@genemek.com>
+ > ---
+ > docs/manual/adding-packages-generic.txt | 2 +-
+ > 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sure, would be good. Could you test this, do a Gitlab CI run, and see how it goes?
+ > diff --git a/docs/manual/adding-packages-generic.txt
+ > b/docs/manual/adding-packages-generic.txt
+ > index 8ee51ca57d..ed1e6acf57 100644
+ > --- a/docs/manual/adding-packages-generic.txt
+ > +++ b/docs/manual/adding-packages-generic.txt
+ > @@ -142,7 +142,7 @@ All these steps rely on the +$(@D)+ variable, which
+ > contains the directory where the source code of the package has been
+ > extracted.
 
-Thomas
+ > -On lines 31..43, we define a user that is used by this package (e.g.
+ > +On lines 31..33, we define a user that is used by this package (e.g.
+ > to run a daemon as non-root) (+LIBFOO_USERS+).
+
+Your mailed had unfortunately corrupted the patch, but I've fixed it up
+manually and applied, thanks!
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
