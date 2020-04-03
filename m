@@ -1,40 +1,173 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 3 Apr 2020 09:53:06 +0200
-Subject: [Buildroot] [git commit] package/netdata: link with libatomic when
- needed
-Message-ID: <20200403073947.3352D8152C@busybox.osuosl.org>
+Date: Fri, 3 Apr 2020 09:50:07 +0200
+Subject: [Buildroot] [git commit] package/cog: bump to version 0.6.0
+Message-ID: <20200403073947.28F738A6B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7bd6520810d2a4e955ff5a30b6f35db50a1ca83
+commit: https://git.buildroot.net/buildroot/commit/?id=1cb6009dda535786d566611e2ee0c651e3174fd7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-netdata uses __atomic_fetch_add_2
+Drop patches that are now upstream.
 
-Fixes:
- - http://autobuild.buildroot.org/results/1eb033ba7bf85ba3e25572a106f08faf49cd05b2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/netdata/netdata.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ ...xkb_data.state-is-not-null-before-calling.patch | 30 ----------------------
+ ...xkb_data.state-is-not-null-before-calling.patch | 30 ----------------------
+ ...xkb_data.keymap-is-not-null-before-callin.patch | 30 ----------------------
+ package/cog/cog.hash                               | 10 ++++----
+ package/cog/cog.mk                                 |  4 ++-
+ 5 files changed, 8 insertions(+), 96 deletions(-)
 
-diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
-index d169881a9c..529eb24e9c 100644
---- a/package/netdata/netdata.mk
-+++ b/package/netdata/netdata.mk
-@@ -47,6 +47,10 @@ else
- NETDATA_CONF_OPTS += --disable-https
- endif
+diff --git a/package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch b/package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
+deleted file mode 100644
+index 4e8d4ad121..0000000000
+--- a/package/cog/0001-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 9f1f1e64b65e6680d5cdedf5a3b753ef85fc01f4 Mon Sep 17 00:00:00 2001
+-From: James Hilliard <james.hilliard1@gmail.com>
+-Date: Tue, 18 Feb 2020 01:20:50 -0700
+-Subject: [PATCH] fdo: ensure xkb_data.state is not null before calling
+- xkb_state_update_mask (#180)
+-
+-[james.hilliard1 at gmail.com: backport from upstream commit
+-9f1f1e64b65e6680d5cdedf5a3b753ef85fc01f4]
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+----
+- platform/cog-platform-fdo.c | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/platform/cog-platform-fdo.c b/platform/cog-platform-fdo.c
+-index 36177fc..e6f1cb5 100644
+---- a/platform/cog-platform-fdo.c
+-+++ b/platform/cog-platform-fdo.c
+-@@ -894,6 +894,9 @@ keyboard_on_modifiers (void *data,
+-                        uint32_t mods_locked,
+-                        uint32_t group)
+- {
+-+    if (xkb_data.state == NULL)
+-+        return;
+-+
+-     xkb_state_update_mask (xkb_data.state,
+-                            mods_depressed,
+-                            mods_latched,
+--- 
+-2.20.1
+-
+diff --git a/package/cog/0002-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch b/package/cog/0002-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
+deleted file mode 100644
+index 48918001e9..0000000000
+--- a/package/cog/0002-fdo-ensure-xkb_data.state-is-not-null-before-calling.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 575ef199984ae4e8510ed36f8b1ae1babdff8ea9 Mon Sep 17 00:00:00 2001
+-From: James Hilliard <james.hilliard1@gmail.com>
+-Date: Thu, 26 Mar 2020 07:48:19 -0600
+-Subject: [PATCH] fdo: ensure xkb_data.state is not null before calling
+- xkb_state_key_get_one_sym (#192)
+-
+-[james.hilliard1 at gmail.com: backport from upstream commit
+-575ef199984ae4e8510ed36f8b1ae1babdff8ea9]
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+----
+- platform/cog-platform-fdo.c | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/platform/cog-platform-fdo.c b/platform/cog-platform-fdo.c
+-index 043f91d..93ff255 100644
+---- a/platform/cog-platform-fdo.c
+-+++ b/platform/cog-platform-fdo.c
+-@@ -919,6 +919,9 @@ capture_app_key_bindings (uint32_t keysym,
+- static void
+- handle_key_event (uint32_t key, uint32_t state, uint32_t time)
+- {
+-+    if (xkb_data.state == NULL)
+-+        return;
+-+
+-     uint32_t keysym = xkb_state_key_get_one_sym (xkb_data.state, key);
+-     uint32_t unicode = xkb_state_key_get_utf32 (xkb_data.state, key);
+- 
+--- 
+-2.20.1
+-
+diff --git a/package/cog/0003-fdo-ensure-xkb_data.keymap-is-not-null-before-callin.patch b/package/cog/0003-fdo-ensure-xkb_data.keymap-is-not-null-before-callin.patch
+deleted file mode 100644
+index 58842bb15c..0000000000
+--- a/package/cog/0003-fdo-ensure-xkb_data.keymap-is-not-null-before-callin.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 817f6c9dafd5ad23722eae0a8f43ba9211f37c95 Mon Sep 17 00:00:00 2001
+-From: James Hilliard <james.hilliard1@gmail.com>
+-Date: Thu, 26 Mar 2020 07:49:05 -0600
+-Subject: [PATCH] fdo: ensure xkb_data.keymap is not null before calling
+- xkb_keymap_key_repeats (#193)
+-
+-[james.hilliard1 at gmail.com: backport from upstream commit
+-817f6c9dafd5ad23722eae0a8f43ba9211f37c95]
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+----
+- platform/cog-platform-fdo.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/platform/cog-platform-fdo.c b/platform/cog-platform-fdo.c
+-index 93ff255..ecc05e9 100644
+---- a/platform/cog-platform-fdo.c
+-+++ b/platform/cog-platform-fdo.c
+-@@ -990,7 +990,8 @@ keyboard_on_key (void *data,
+-         memset (&wl_data.keyboard.repeat_data,
+-                 0x00,
+-                 sizeof (wl_data.keyboard.repeat_data));
+--    } else if (state == WL_KEYBOARD_KEY_STATE_PRESSED
+-+    } else if (xkb_data.keymap != NULL
+-+               && state == WL_KEYBOARD_KEY_STATE_PRESSED
+-                && xkb_keymap_key_repeats (xkb_data.keymap, key)) {
+-         if (wl_data.keyboard.repeat_data.event_source)
+-             g_source_remove (wl_data.keyboard.repeat_data.event_source);
+--- 
+-2.20.1
+-
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+index 2e37928fc6..dc5c1b3c46 100644
+--- a/package/cog/cog.hash
++++ b/package/cog/cog.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/cog-0.4.0.tar.xz.sums
+-md5 75a0838ee6c81bb8df1b254f525440a6 cog-0.4.0.tar.xz
+-sha1 284d2a641e6269b296057918602c8c94eb831527 cog-0.4.0.tar.xz
+-sha256 e9c13a51232434b7340a419b1e6f59c40c582cd80c8e60bd9ec7de16c904fc03 cog-0.4.0.tar.xz
++# From https://wpewebkit.org/releases/cog-0.6.0.tar.xz.sums
++md5  a97df4f0e2d25f4da7cd9bb55294d30e  cog-0.6.0.tar.xz
++sha1  9392d9251bab8a9f61d00297707e16a983127eae  cog-0.6.0.tar.xz
++sha256  208f58e0533b269400875237a95e994c93da7234a29fd1c904e756b88963e35d  cog-0.6.0.tar.xz
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+NETDATA_CONF_ENV += LIBS=-latomic
-+endif
-+
- define NETDATA_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/netdata/S60netdata \
- 		$(TARGET_DIR)/etc/init.d/S60netdata
+ # Hashes for license files:
+-sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
++sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index d0e5b79c38..64e2277e3d 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-COG_VERSION = 0.4.0
++COG_VERSION = 0.6.0
+ COG_SITE = https://wpewebkit.org/releases
+ COG_SOURCE = cog-$(COG_VERSION).tar.xz
+ COG_INSTALL_STAGING = YES
+@@ -15,6 +15,8 @@ COG_CONF_OPTS = \
+ 	-DCOG_BUILD_PROGRAMS=ON \
+ 	-DCOG_PLATFORM_FDO=ON \
+ 	-DCOG_PLATFORM_DRM=OFF \
++	-DCOG_WESTON_DIRECT_DISPLAY=OFF \
++	-DINSTALL_MAN_PAGES=OFF \
+ 	-DCOG_HOME_URI='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))'
+ 
+ $(eval $(cmake-package))
