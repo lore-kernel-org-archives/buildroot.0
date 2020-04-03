@@ -1,68 +1,75 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri,  3 Apr 2020 22:10:21 +0200
-Subject: [Buildroot] [PATCH v2] package/libnss: fix build failure on arm32
+Date: Fri, 3 Apr 2020 22:11:42 +0200
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure on arm32
  arch not armv7
-In-Reply-To: <03ce40bf-188e-80d9-e313-d33cd677f029@benettiengineering.com>
-References: <03ce40bf-188e-80d9-e313-d33cd677f029@benettiengineering.com>
-Message-ID: <20200403201021.44350-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <e0d7d363-ca5e-27d3-34d6-13bf0f20c85e@benettiengineering.com>
+References: <20200325143108.11935-1-giulio.benetti@benettiengineering.com>
+ <20200325154501.3e922440@windsurf.home>
+ <e0d7d363-ca5e-27d3-34d6-13bf0f20c85e@benettiengineering.com>
+Message-ID: <f60945cb-7f86-04b9-64c7-9b9028e02578@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NSS assumes that every neon arm32 build is an armv7, but this is
-not always true(i.e. build arm32 for armv8), so let's add a patch to
-remove -march=armv7 flag when building gcm-arm32-neon.c
+Hi Thomas,
 
-Fixes:
-http://autobuild.buildroot.net/results/464/464044fda2850123339de6c8071374e380636ee0/
+just sent a v2 for this with upstreamed patch:
+https://patchwork.ozlabs.org/patch/1266204/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
-V1->V2:
-* update with upstreamed patch:
-https://bugzilla.mozilla.org/show_bug.cgi?id=1624864
-* improve commit log
----
- ...t-force-ARMv7-for-gcm-arm32-neon-r-j.patch | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/libnss/0002-Bug-1624864-Don-t-force-ARMv7-for-gcm-arm32-neon-r-j.patch
-
-diff --git a/package/libnss/0002-Bug-1624864-Don-t-force-ARMv7-for-gcm-arm32-neon-r-j.patch b/package/libnss/0002-Bug-1624864-Don-t-force-ARMv7-for-gcm-arm32-neon-r-j.patch
-new file mode 100644
-index 0000000000..eae1ed974c
---- /dev/null
-+++ b/package/libnss/0002-Bug-1624864-Don-t-force-ARMv7-for-gcm-arm32-neon-r-j.patch
-@@ -0,0 +1,29 @@
-+From ab8d2425728f37b1f21dbff712daf4a767c82149 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 1 Apr 2020 09:41:08 -0700
-+Subject: [PATCH] Bug 1624864 - Don't force ARMv7 for gcm-arm32-neon r=jcj
-+
-+--HG--
-+extra : rebase_source : e046bbe45276b8cdf686c4f61006aff08865f1c0
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ nss/lib/freebl/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
-+index a03c0d108..898a0b9e0 100644
-+--- a/nss/lib/freebl/Makefile
-++++ b/nss/lib/freebl/Makefile
-+@@ -781,7 +781,7 @@ ifeq ($(CPU_ARCH),arm)
-+ USES_SOFTFLOAT_ABI := $(shell $(CC) -o - -E -dM - $(CFLAGS) < /dev/null | grep __SOFTFP__ > /dev/null && echo 1)
-+ $(OBJDIR)/$(PROG_PREFIX)aes-armv8$(OBJ_SUFFIX): CFLAGS += -march=armv8-a -mfpu=crypto-neon-fp-armv8$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
-+ ifndef NSS_DISABLE_ARM32_NEON
-+-$(OBJDIR)/$(PROG_PREFIX)gcm-arm32-neon$(OBJ_SUFFIX): CFLAGS += -march=armv7 -mfpu=neon$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
-++$(OBJDIR)/$(PROG_PREFIX)gcm-arm32-neon$(OBJ_SUFFIX): CFLAGS += -mfpu=neon$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
-+ endif
-+ endif
-+ ifeq ($(CPU_ARCH),aarch64)
-+-- 
-+2.20.1
-+
+Best regards
 -- 
-2.20.1
+Giulio Benetti
+Benetti Engineering sas
+
+On 3/25/20 4:13 PM, Giulio Benetti wrote:
+> Hi Thomas,
+> 
+> On 3/25/20 3:45 PM, Thomas Petazzoni wrote:
+>> On Wed, 25 Mar 2020 15:31:08 +0100
+>> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+>>
+>>> +diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
+>>> +index dc502f309..c7eb9c205 100644
+>>> +--- a/nss/lib/freebl/Makefile
+>>> ++++ b/nss/lib/freebl/Makefile
+>>> +@@ -781,7 +781,7 @@ ifeq ($(CPU_ARCH),arm)
+>>> + USES_SOFTFLOAT_ABI := $(shell $(CC) -o - -E -dM - $(CFLAGS) < /dev/null | grep __SOFTFP__ > /dev/null && echo 1)
+>>> + $(OBJDIR)/$(PROG_PREFIX)aes-armv8$(OBJ_SUFFIX): CFLAGS += -march=armv8-a -mfpu=crypto-neon-fp-armv8$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
+>>> + ifndef NSS_DISABLE_GCM_ARM32_NEON
+>>> +-$(OBJDIR)/$(PROG_PREFIX)gcm-arm32-neon$(OBJ_SUFFIX): CFLAGS += -march=armv7 -mfpu=neon$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
+>>> ++$(OBJDIR)/$(PROG_PREFIX)gcm-arm32-neon$(OBJ_SUFFIX): CFLAGS += -mfpu=neon$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
+>>
+>> But only ARMv7 can have NEON support support. So removing just
+>> -march=armv7 doesn't make sense. Actually, the issue is probably that
+>> they should be using -march=armv7-a, because -march=armv7 is the common
+>> subset of ARMv7-A, ARMv7-M and ARMv7-R, which I suppose doesn't include
+>> NEON.
+>>
+>> So while the patch work, its description is misleading at best,
+> 
+> yes, sorry
+> 
+>> and
+>> having -march=armv7-a here is probably the right fix.
+> 
+> But build failure we have here:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/483712746
+> is on cortex-A53 in 32-bit mode, so NEON is present and we are on arm,
+> but it is an armv8, not armv7, so we can't pass -march=armv7 to gcc.
+> 
+> Also they have added -march=armv7 to fix an armv6 build failure:
+> https://bugzilla.mozilla.org/show_bug.cgi?id=1612177
+> but how can that work on armv6? Probably it builds because -march=armv7
+> emits NEON macro in some way, but it shouldn't run correctly.
+> 
+> So basically with a better description I think my patch is correct.
+> The problem here is the case on armv8(32-bits mode) with -march=armv7
+> 
+> Another way is to avoid building gcm-arm32-neon.c on armv8 in 32 bits mode.
+> 
+> What do you think?
+> 
+> Kind regards
+> 
