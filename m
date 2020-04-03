@@ -1,35 +1,37 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 3 Apr 2020 11:50:50 +0200
-Subject: [Buildroot] [Question] How do I build source code at source
- folder?
-In-Reply-To: <1585904837068-0.post@n4.nabble.com>
-References: <1585904837068-0.post@n4.nabble.com>
-Message-ID: <CAEyMn7bt=wUY=RLDSE=QAD8F+ap5K4rRaB12Rs1SgjmOSeN_CQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 03 Apr 2020 12:03:23 +0000
+Subject: [Buildroot] [Bug 12741] New: I can't upload this file to sites
+ created on wordpress
+Message-ID: <bug-12741-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric,
+https://bugs.busybox.net/show_bug.cgi?id=12741
 
-Am Fr., 3. Apr. 2020 um 11:07 Uhr schrieb Eric Hsieh <psychesnet@gmail.com>:
->
-> Hi everyone,
->
-> Now, Im trying to create a special mode which can help me to build source
-> code at source folder instead of output/build folder. I checked the makefile
-> at package, looks like there is no directly way to be done.
-> So, I would like to ask is it possible to be done? If yes, please give me
-> some tips. Thanks.
+            Bug ID: 12741
+           Summary: I can't upload this file to sites created on wordpress
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: veronika.chuhalova at uvoteam.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-If you want to build a package from an external source folder you can
-specify the source directory by creating the  $(CONFIG_DIR)/local.mk
-file and set the <pkg>_OVERRIDE_SRCDIR varialbe. But this will
-copy/rsync your sources and build your package at output/build.
+Created attachment 8426
+  --> https://bugs.busybox.net/attachment.cgi?id=8426&action=edit
+I can't upload this file to sites created on wordpress
 
-Please check "8.13.6. Using Buildroot during development" in the
-buildroot user manual for more information about that.
+I can't upload this file to sites created on wordpress
 
 -- 
-Heiko
+You are receiving this mail because:
+You are on the CC list for the bug.
