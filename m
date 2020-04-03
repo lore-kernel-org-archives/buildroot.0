@@ -1,45 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  3 Apr 2020 11:30:39 +0200
-Subject: [Buildroot] [PATCH 2/2] package/wireguard-tools: bump version to
- 1.0.20200319
-In-Reply-To: <20200403093040.13425-1-peter@korsgaard.com>
-References: <20200403093040.13425-1-peter@korsgaard.com>
-Message-ID: <20200403093040.13425-2-peter@korsgaard.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Fri, 3 Apr 2020 11:50:50 +0200
+Subject: [Buildroot] [Question] How do I build source code at source
+ folder?
+In-Reply-To: <1585904837068-0.post@n4.nabble.com>
+References: <1585904837068-0.post@n4.nabble.com>
+Message-ID: <CAEyMn7bt=wUY=RLDSE=QAD8F+ap5K4rRaB12Rs1SgjmOSeN_CQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard-tools/wireguard-tools.hash | 4 ++--
- package/wireguard-tools/wireguard-tools.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Eric,
 
-diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
-index 9ea0d3ce86..475a7450a9 100644
---- a/package/wireguard-tools/wireguard-tools.hash
-+++ b/package/wireguard-tools/wireguard-tools.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-February/004963.html
--sha256  f5207248c6a3c3e3bfc9ab30b91c1897b00802ed861e1f9faaed873366078c64  wireguard-tools-1.0.20200206.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-March/005191.html
-+sha256  757ed31d4d48d5fd7853bfd9bfa6a3a1b53c24a94fe617439948784a2c0ed987  wireguard-tools-1.0.20200319.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
-index c2b2c36651..fc2ec876b3 100644
---- a/package/wireguard-tools/wireguard-tools.mk
-+++ b/package/wireguard-tools/wireguard-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_TOOLS_VERSION = 1.0.20200206
-+WIREGUARD_TOOLS_VERSION = 1.0.20200319
- WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
- WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
- WIREGUARD_TOOLS_LICENSE = GPL-2.0
+Am Fr., 3. Apr. 2020 um 11:07 Uhr schrieb Eric Hsieh <psychesnet@gmail.com>:
+>
+> Hi everyone,
+>
+> Now, Im trying to create a special mode which can help me to build source
+> code at source folder instead of output/build folder. I checked the makefile
+> at package, looks like there is no directly way to be done.
+> So, I would like to ask is it possible to be done? If yes, please give me
+> some tips. Thanks.
+
+If you want to build a package from an external source folder you can
+specify the source directory by creating the  $(CONFIG_DIR)/local.mk
+file and set the <pkg>_OVERRIDE_SRCDIR varialbe. But this will
+copy/rsync your sources and build your package at output/build.
+
+Please check "8.13.6. Using Buildroot during development" in the
+buildroot user manual for more information about that.
+
 -- 
-2.20.1
+Heiko
