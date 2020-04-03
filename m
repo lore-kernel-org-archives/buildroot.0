@@ -1,50 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 3 Apr 2020 00:25:34 +0200
-Subject: [Buildroot] [git commit] linux: adjust BR2_LINUX_KERNEL_IMAGE_NAME
- help text
-Message-ID: <20200402221305.2408580842@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 3 Apr 2020 07:18:29 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: do not install images in
+ subdirectories
+In-Reply-To: <877dyx7cfy.fsf@dell.be.48ers.dk>
+References: <20200402214549.2977215-1-thomas.petazzoni@bootlin.com>
+ <877dyx7cfy.fsf@dell.be.48ers.dk>
+Message-ID: <20200403071829.5711a113@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea044ee20c8b1a53cd75bc85e257674b8c106ee7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 03 Apr 2020 00:25:05 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-The help text of BR2_LINUX_KERNEL_IMAGE_NAME is somewhat incomplete,
-in the sense that it assumes just a filename can be passed, while it
-can be a relative path, such as 'compressed/vmlinux.bin.z'. So make it
-clear that such paths are relative to arch/ARCH/boot/.
+>  > Except that the line:  
+> 
+>  >   $(INSTALL) -m 0644 -D $(LINUX_IMAGE_PATH) $(1)/$(notdir $(LINUX_IMAGE_NAME))  
+> 
+> This is a bit confusing, as it is because notdir was NOT used that it
+> didn't work, so I've dropped that from the commit message and committed,
+> thanks.
 
-Also, drop the part about this being only useful for Xtensa as this is
-not true: on MIPS it might be needed as well for some specific image
-types.
+Gah, indeed, I copy/pasted the line after having done my change. Stupid
+me. Thanks for noticing and fixing this!
 
-Reported-by: Paul Cercueil <paul@crapouillou.net>
-Cc: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Thanks,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1adbd86b1f..9af7beefa6 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -338,10 +338,10 @@ config BR2_LINUX_KERNEL_IMAGE_NAME
- 	string "Kernel image name"
- 	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
- 	help
--	  The filename of the kernel image, if it is different from the
--	  make target (above). Only Xtensa uses a filename different
--	  from the make target. Defaults to
--	  BR2_LINUX_KERNEL_IMAGE_TARGET_NAME.
-+	  The filename of the kernel image, if it is different from
-+	  the make target (above). Defaults to
-+	  BR2_LINUX_KERNEL_IMAGE_TARGET_NAME. If specified, the
-+	  filename is relative to arch/ARCH/boot/.
- 
- 	  If unsure, leave it empty.
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
