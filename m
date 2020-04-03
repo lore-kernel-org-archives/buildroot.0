@@ -1,10 +1,10 @@
 From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Fri, 3 Apr 2020 22:13:44 +0200
-Subject: [Buildroot] [PATCH] package/cegui: force c++11 when xerces is
- used
-In-Reply-To: <20200403195305.33887-1-b.bilas@grinn-global.com>
+Date: Fri, 3 Apr 2020 22:14:29 +0200
+Subject: [Buildroot] [PATCH] package/xerces: force gcc at least 4.9
+In-Reply-To: <20200403195305.33887-2-b.bilas@grinn-global.com>
 References: <20200403195305.33887-1-b.bilas@grinn-global.com>
-Message-ID: <ee99ee7b-88a9-9b4d-6d51-48cef63622fe@grinn-global.com>
+ <20200403195305.33887-2-b.bilas@grinn-global.com>
+Message-ID: <151dc174-e7ea-7e77-c398-8c36049c9321@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,29 +16,31 @@ Please ignore this patch.
 Best
 Bartek
 On 03.04.2020 21:53, Bartosz Bilas wrote:
-> Fixes:
->   - http://autobuild.buildroot.net/results/ea04be78b31b3409801597fc0ebe04627742c0c8
->   - http://autobuild.buildroot.net/results/7de3a07c304e3939ec9fd164328d004a5a9bba6d
->   - http://autobuild.buildroot.net/results/472b4e8438c9100e06e401296f0417a463e5fcf1
->
-> and couple of others
+> Xerces uses char16_t which was introduced in c++11.
 >
 > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 > ---
->   package/cegui/cegui.mk | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+>   package/xerces/Config.in | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
 >
-> diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
-> index 657492a7f7..fe5ecc2e16 100644
-> --- a/package/cegui/cegui.mk
-> +++ b/package/cegui/cegui.mk
-> @@ -74,7 +74,8 @@ endif
+> diff --git a/package/xerces/Config.in b/package/xerces/Config.in
+> index 2edc4346b5..06b33674dc 100644
+> --- a/package/xerces/Config.in
+> +++ b/package/xerces/Config.in
+> @@ -1,10 +1,14 @@
+>   config BR2_PACKAGE_XERCES
+>   	bool "xerces-c++"
+>   	depends on BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # c++11
+> +	depends on BR2_HOST_GCC_AT_LEAST_4_9 # c++11
+>   	help
+>   	  Xerces-C++ is a validating XML parser written in portable C++.
 >   
->   ifeq ($(BR2_PACKAGE_XERCES),y)
->   CEGUI_DEPENDENCIES += xerces
-> -CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_XERCES=ON
-> +CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_XERCES=ON \
-> +		    -DCMAKE_CXX_STANDARD=11 # char16_t
->   else
->   CEGUI_CONF_OTPS += -DCEGUI_BUILD_XMLPARSER_XERCES=OFF
->   endif
+>   	  http://xerces.apache.org/xerces-c/
+>   
+> -comment "xerces-c++ needs a toolchain w/ C++, wchar"
+> -	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
+> +comment "xerces-c++ needs a toolchain w/ C++, wchar, gcc >= 4.9, host gcc >= 4.9"
+> +	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
+> +			BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 && \
+> +			BR2_HOST_GCC_AT_LEAST_4_9 )
