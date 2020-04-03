@@ -1,35 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 3 Apr 2020 07:18:29 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: do not install images in
- subdirectories
-In-Reply-To: <877dyx7cfy.fsf@dell.be.48ers.dk>
-References: <20200402214549.2977215-1-thomas.petazzoni@bootlin.com>
- <877dyx7cfy.fsf@dell.be.48ers.dk>
-Message-ID: <20200403071829.5711a113@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  3 Apr 2020 07:30:11 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libva: bump version to 2.7.0
+Message-ID: <20200403053012.356627-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 03 Apr 2020 00:25:05 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+Switched to github helper, upstream does not provide a tarball for this
+release.
 
->  > Except that the line:  
-> 
->  >   $(INSTALL) -m 0644 -D $(LINUX_IMAGE_PATH) $(1)/$(notdir $(LINUX_IMAGE_NAME))  
-> 
-> This is a bit confusing, as it is because notdir was NOT used that it
-> didn't work, so I've dropped that from the commit message and committed,
-> thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libva/libva.hash | 4 +---
+ package/libva/libva.mk   | 7 ++++---
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-Gah, indeed, I copy/pasted the line after having done my change. Stupid
-me. Thanks for noticing and fixing this!
-
-Thanks,
-
-Thomas
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 8edacf1289..53a9f3cceb 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,5 +1,3 @@
+-# From https://github.com/intel/libva/releases/download/2.6.1/libva-2.6.1.tar.bz2.sha1sum
+-sha1 6b218e5622174a37fd0cfd8777b10717c95bd20e  libva-2.6.1.tar.bz2
+ # Locally computed
+-sha256 6c57eb642d828af2411aa38f55dc10111e8c98976dbab8fd62e48629401eaea5  libva-2.6.1.tar.bz2
++sha256 0952ee21069c560f48ebafcba91e1ffb72e5a8736dbab3559af959221b51598f  libva-2.7.0.tar.gz
+ sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 5e9bedbbd5..f430847b2f 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
+ 
+-LIBVA_VERSION = 2.6.1
+-LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+-LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
++LIBVA_VERSION = 2.7.0
++LIBVA_SITE = $(call github,intel,libva,$(LIBVA_VERSION))
+ LIBVA_LICENSE = MIT
+ LIBVA_LICENSE_FILES = COPYING
+ LIBVA_INSTALL_STAGING = YES
++# github tarball does not include configure
++LIBVA_AUTORECONF = YES
+ LIBVA_DEPENDENCIES = host-pkgconf libdrm
+ 
+ # libdrm is a hard-dependency
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.0
