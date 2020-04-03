@@ -1,69 +1,57 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 3 Apr 2020 00:04:57 -0700
-Subject: [Buildroot] [PATCH v7 3/4] package/python-pybind11: new host
- package
-In-Reply-To: <CAMty3ZBFR+3bvhgLdL6tfELbu4e4S7zqniaS=yKeuNccOQOUkg@mail.gmail.com>
-References: <20200321190241.3590-1-jagan@amarulasolutions.com>
- <20200321190241.3590-4-jagan@amarulasolutions.com>
- <CALFsTFWUZaVntJKKxfBNOVgihs8eLmTU-YPZbdYswLZKuhhaYA@mail.gmail.com>
- <CAMty3ZBFR+3bvhgLdL6tfELbu4e4S7zqniaS=yKeuNccOQOUkg@mail.gmail.com>
-Message-ID: <CAFSsvmrE6Gc52iMC5=-QFJFtofqy_uu2mLezxBG=+zDbtRHgow@mail.gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Fri, 3 Apr 2020 09:11:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cegui: fix invalid cast
+In-Reply-To: <87blo97djo.fsf@dell.be.48ers.dk>
+References: <20200402161759.724740-1-b.bilas@grinn-global.com>
+ <87blo97djo.fsf@dell.be.48ers.dk>
+Message-ID: <1ce63cff-5da8-08c2-92d6-26ae30dc451c@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello;
+Hi Peter,
 
-Feel free to also add my patch which tests pybind11 into your series:
-https://patchwork.ozlabs.org/patch/1202658/
+On 03.04.2020 00:01, Peter Korsgaard wrote:
+>>>>>> "Bartosz" == Bartosz Bilas <b.bilas@grinn-global.com> writes:
+>   > Fixes:
+>   > - http://autobuild.buildroot.net/results/a76/a76e88d1805c836bf095b9b6ed5fb52aa0fcdc0a
+>   > - http://autobuild.buildroot.net/results/d24/d24ebb999215a23e0743c29ca137745417316bc4
+>   > - http://autobuild.buildroot.net/results/37b/37b46d25a98a17ead9133cba9fd6c8ebe8996d60
+>
+>   > and many many more...
+>
+>   > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+>   > ---
+>   >  ...tringTranscoder.cpp-use-cast-notatio.patch | 34 +++++++++++++++++++
+>   >  1 file changed, 34 insertions(+)
+>   >  create mode 100644 package/cegui/0002-cegui-src-IconvStringTranscoder.cpp-use-cast-notatio.patch
+>
+>   > diff --git
+>   > a/package/cegui/0002-cegui-src-IconvStringTranscoder.cpp-use-cast-notatio.patch
+>   > b/package/cegui/0002-cegui-src-IconvStringTranscoder.cpp-use-cast-notatio.patch
+>   > new file mode 100644
+>   > index 0000000000..4dbdafb079
+>   > --- /dev/null
+>   > +++ b/package/cegui/0002-cegui-src-IconvStringTranscoder.cpp-use-cast-notatio.patch
+>   > @@ -0,0 +1,34 @@
+>   > +From 4561bac9dddad8fd79e746ea1ddd89c20647a162 Mon Sep 17 00:00:00 2001
+>   > +From: Bartosz Bilas <b.bilas@grinn-global.com>
+>   > +Date: Thu, 2 Apr 2020 18:04:28 +0200
+>   > +Subject: [PATCH 1/1] cegui/src/IconvStringTranscoder.cpp: use cast notation
+>
+> Please use the -N option to git format-patch to get rid of the 1/1 as
+> pointed out by check-package:
+>
+> package/cegui/0002-cegui-src-IconvStringTranscoder.cpp-use-cast-notatio.patch:4: generate your patches with 'git format-patch -N'
+I'll keep it in my mind ;)
+>
+> Committed with that fixed, thanks. Do not forget to submit the patch
+> upstream.
+>
+That's already done.
 
-On Wed, Apr 1, 2020 at 8:22 AM Jagan Teki <jagan@amarulasolutions.com> wrote:
->
-> Hi Asaf,
->
-> On Wed, Mar 25, 2020 at 12:50 PM Asaf Kahlon <asafka7@gmail.com> wrote:
-> >
-> > Hello,
-> >
-> > On Sat, Mar 21, 2020 at 9:03 PM Jagan Teki <jagan@amarulasolutions.com> wrote:
-> > >
-> > > Add python-pybind11 package with 2.4.3 release version.
-> > >
-> > > Cc: Esben Haabendal <esben@geanix.com>
-> > > Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> > > ---
-> > > Changes for v7:
-> > > - update the commit message
-> > > - fix sha256 value of pybind11 LICENCE
-> > >
-> > >  DEVELOPERS                                   |  1 +
-> > >  package/Config.in.host                       |  1 +
-> > >  package/python-pybind11/Config.in.host       |  7 +++++++
-> > >  package/python-pybind11/python-pybind11.hash |  5 +++++
-> > >  package/python-pybind11/python-pybind11.mk   | 14 ++++++++++++++
-> > >  5 files changed, 28 insertions(+)
-> > >  create mode 100644 package/python-pybind11/Config.in.host
-> > >  create mode 100644 package/python-pybind11/python-pybind11.hash
-> > >  create mode 100644 package/python-pybind11/python-pybind11.mk
-> >
-> > I don't think pybind11 should be a host package. It's a header-only library
-> > and the headers are used to compile target sources (in your case - scipy).
-> > The headers should be only installed to the staging dir (like spdlog,
-> > for example).
-> > You can take a look here as a reference:
-> > https://patchwork.ozlabs.org/patch/1202657/
->
-> Thanks for commenting on this.
->
-> Please check this build log[1], it look phbind11 host package required
-> to build scipy. Let me know if I miss anything?
->
-> [1] https://gist.github.com/openedev/19eb3dcf1e56bd267a72b30417d1b3b4
->
-> Jagan.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Best
+Bartek
