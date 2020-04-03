@@ -1,28 +1,116 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Fri, 3 Apr 2020 19:33:33 +0530
-Subject: [Buildroot] [PATCH v7 3/4] package/python-pybind11: new host
- package
-In-Reply-To: <CAFSsvmrE6Gc52iMC5=-QFJFtofqy_uu2mLezxBG=+zDbtRHgow@mail.gmail.com>
-References: <20200321190241.3590-1-jagan@amarulasolutions.com>
- <20200321190241.3590-4-jagan@amarulasolutions.com>
- <CALFsTFWUZaVntJKKxfBNOVgihs8eLmTU-YPZbdYswLZKuhhaYA@mail.gmail.com>
- <CAMty3ZBFR+3bvhgLdL6tfELbu4e4S7zqniaS=yKeuNccOQOUkg@mail.gmail.com>
- <CAFSsvmrE6Gc52iMC5=-QFJFtofqy_uu2mLezxBG=+zDbtRHgow@mail.gmail.com>
-Message-ID: <CAMty3ZCoLiQmWLG36kU2ASJ0uk=GpJnvC46YJ2rNR4N+XwNBNg@mail.gmail.com>
+From: Jianhui Zhao <zhaojh329@gmail.com>
+Date: Fri,  3 Apr 2020 22:15:03 +0800
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: new package
+Message-ID: <20200403141503.21643-1-zhaojh329@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Apr 3, 2020 at 12:35 PM Adam Duskett <aduskett@gmail.com> wrote:
->
-> Hello;
->
-> Feel free to also add my patch which tests pybind11 into your series:
-> https://patchwork.ozlabs.org/patch/1202658/
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+---
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/libuhttpd/Config.in      |  8 +++++++
+ package/libuhttpd/libuhttpd.hash |  3 +++
+ package/libuhttpd/libuhttpd.mk   | 39 ++++++++++++++++++++++++++++++++
+ 5 files changed, 52 insertions(+)
+ create mode 100644 package/libuhttpd/Config.in
+ create mode 100644 package/libuhttpd/libuhttpd.hash
+ create mode 100644 package/libuhttpd/libuhttpd.mk
 
-As I said, this patch used pybind11 for host so are these tests common
-across host vs target? How can I test them?
-
-Jagan.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f1bf5c263c..c34018405c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1273,6 +1273,7 @@ F:	package/x11r7/xdriver_xf86-video-imx/
+ F:	package/x11r7/xdriver_xf86-video-imx-viv/
+ 
+ N:	Jianhui Zhao <zhaojh329@gmail.com>
++F:	package/libuhttpd/
+ F:	package/libuwsc/
+ F:	package/rtty/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 4aaf2d93f8..09f92f0b85 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1713,6 +1713,7 @@ menu "Networking"
+ 	source "package/libtirpc/Config.in"
+ 	source "package/libtorrent/Config.in"
+ 	source "package/libtorrent-rasterbar/Config.in"
++	source "package/libuhttpd/Config.in"
+ 	source "package/libupnp/Config.in"
+ 	source "package/libupnp18/Config.in"
+ 	source "package/libupnpp/Config.in"
+diff --git a/package/libuhttpd/Config.in b/package/libuhttpd/Config.in
+new file mode 100644
+index 0000000000..1ab39c5878
+--- /dev/null
++++ b/package/libuhttpd/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBUHTTPD
++	bool "libuhttpd"
++	select BR2_PACKAGE_LIBEV
++	help
++	  A lightweight and fully asynchronous HTTP server
++	  library based on libev
++
++	  https://github.com/zhaojh329/libuhttpd
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+new file mode 100644
+index 0000000000..89d6b74501
+--- /dev/null
++++ b/package/libuhttpd/libuhttpd.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 b329612e8454c335929021bb751e80f7875d06501034524f90abf830e6f68589  libuhttpd-3.1.1.tar.gz
++sha256 99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+new file mode 100644
+index 0000000000..f00d59748b
+--- /dev/null
++++ b/package/libuhttpd/libuhttpd.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# libuhttpd
++#
++################################################################################
++
++LIBUHTTPD_VERSION = 3.1.1
++LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
++LIBUHTTPD_LICENSE = MIT
++LIBUHTTPD_LICENSE_FILES = LICENSE
++LIBUHTTPD_INSTALL_STAGING = YES
++LIBUHTTPD_DEPENDENCIES = libev
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBUHTTPD_DEPENDENCIES += openssl
++LIBUHTTPD_CONF_OPTS += \
++	-DUHTTPD_SSL_SUPPORT=ON \
++	-DUHTTPD_USE_MBEDTLS=OFF \
++	-DUHTTPD_USE_OPENSSL=ON \
++	-DUHTTPD_USE_WOLFSSL=OFF
++else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
++LIBUHTTPD_DEPENDENCIES += wolfssl
++LIBUHTTPD_CONF_OPTS += \
++	-DUHTTPD_SSL_SUPPORT=ON \
++	-DUHTTPD_USE_MBEDTLS=OFF \
++	-DUHTTPD_USE_OPENSSL=OFF \
++	-DUHTTPD_USE_WOLFSSL=ON
++else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++LIBUHTTPD_DEPENDENCIES += mbedtls
++LIBUHTTPD_CONF_OPTS += \
++	-DUHTTPD_SSL_SUPPORT=ON \
++	-DUHTTPD_USE_MBEDTLS=ON \
++	-DUHTTPD_USE_OPENSSL=OFF \
++	-DUHTTPD_USE_WOLFSSL=OFF
++else
++LIBUHTTPD_CONF_OPTS += -DUHTTPD_SSL_SUPPORT=OFF
++endif
++
++$(eval $(cmake-package))
+-- 
+2.17.1
