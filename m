@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  4 Apr 2020 14:10:32 +0200
-Subject: [Buildroot] [PATCH 20/22] package/wireguard-linux-compat: bear the
- kernel options munging
+Date: Sat,  4 Apr 2020 14:10:33 +0200
+Subject: [Buildroot] [PATCH 21/22] package/libselinux: bear the kernel
+ options munging
 In-Reply-To: <cover.1586002215.git.yann.morin.1998@free.fr>
 References: <cover.1586002215.git.yann.morin.1998@free.fr>
-Message-ID: <6265250d1096ce11aa6a90bd0c6933d24fa72dab.1586002215.git.yann.morin.1998@free.fr>
+Message-ID: <2e26e65ead8f1fa43ada0c792b54b04d67606f18.1586002215.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +12,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
- linux/linux.mk                                           | 6 ------
- package/wireguard-linux-compat/wireguard-linux-compat.mk | 8 ++++++++
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ linux/linux.mk                   |  8 --------
+ package/libselinux/libselinux.mk | 10 ++++++++++
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index eb2bfbfa3f..b9e2058e29 100644
+index b9e2058e29..3762e718c6 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -355,12 +355,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NET))
--	$(if $(BR2_PACKAGE_WIREGUARD_LINUX_COMPAT),
+@@ -363,14 +363,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_FB)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
+-	$(if $(BR2_PACKAGE_LIBSELINUX),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX)
 -		$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
 -		$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NET_FOU)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MANAGER))
- 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB))
- 	$(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 747cef3e50..8c8743bb4b 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -11,5 +11,13 @@ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
- WIREGUARD_LINUX_COMPAT_LICENSE_FILES = COPYING
- WIREGUARD_LINUX_COMPAT_MODULE_SUBDIRS = src
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX))
+ 	$(PACKAGES_LINUX_CONFIG_FIXUPS)
+ endef
  
-+define WIREGUARD_LINUX_COMPAT_LINUX_CONFIG_FIXUPS
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 1461e34539..5f07236791 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -116,5 +116,15 @@ define HOST_LIBSELINUX_INSTALL_CMDS
+ 		$(HOST_LIBSELINUX_MAKE_OPTS) install-pywrap
+ endef
+ 
++define LIBSELINUX_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX)
 +	$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
 +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_FOU)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MANAGER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX)
 +endef
 +
- $(eval $(kernel-module))
  $(eval $(generic-package))
+ $(eval $(host-generic-package))
 -- 
 2.20.1
