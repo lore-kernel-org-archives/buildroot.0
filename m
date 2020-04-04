@@ -1,67 +1,110 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 4 Apr 2020 13:41:34 +0200
-Subject: [Buildroot] [Question] How do I build source code at source
- folder?
-In-Reply-To: <CAF6vTZZctgOOnqcseZ5-UVGQbg2baC8Le4qazOZ2rFpdH_3tcw@mail.gmail.com>
-References: <1585904837068-0.post@n4.nabble.com>
- <CAEyMn7bt=wUY=RLDSE=QAD8F+ap5K4rRaB12Rs1SgjmOSeN_CQ@mail.gmail.com>
- <CAF6vTZZctgOOnqcseZ5-UVGQbg2baC8Le4qazOZ2rFpdH_3tcw@mail.gmail.com>
-Message-ID: <20200404114134.GD22325@scaer>
+Date: Sat,  4 Apr 2020 14:10:30 +0200
+Subject: [Buildroot] [PATCH 00/22] linux: allow packages to set kconfig
+ options (branch yem/pkg-linux-opts)
+Message-ID: <cover.1586002215.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Psychesnet, All,
+Hello All!
 
-On 2020-04-04 14:52 +0800, Psychesnet Hsieh spake thusly:
-> Thanks and yes, I know I can use _OVERRIDE_SRCDIR to define local folder as source.
-> But what I need is directly build source code at source folder without copy/rsync.
+Currently, in the spirit of making it work out of the box, we have
+some linux kconfig options set depending on whether some packages
+are enabled or not.
 
-That is not possible.
+This list has been slowly growing over time, with now more than half
+of the kernel options being set by packages. Yet, some more packages
+will eventualy want to set some options, like the pending firewalld
+giant hairball [0]; this is going to be an insane and unmaintainable
+list.
+
+Furthermore, there is no mechanism to allow packages from a br2-external
+tree to easily provide options to be set in the kernel config.
+
+This series brings in such a mechanism, for packages to be able to
+provide a way to set linux kernel options, be they in-tree packages
+or not.
+
+Additionally, this makes the list more manageable, by splitting it
+over to the responsible packages.
+
+Finally, it brings a nice cleanup, where we no longer have to repeat
+the knowledge of how the .config file is named, as the name from the
+pkg-kconfig infra gets reused.
+
+[0] http://lists.busybox.net/pipermail/buildroot/2020-March/278683.html
+
 
 Regards,
 Yann E. MORIN.
 
-> And eventually the target object will install into output/fakeroot folder.
-> Do you have any idea to get it done? Thanks.
-> Heiko Thiery < [1]heiko.thiery@gmail.com> ? 2020?4?3? ??
-> ??5:51???
-> 
->   Hi Eric,
-> 
->   Am Fr., 3. Apr. 2020 um 11:07 Uhr schrieb Eric Hsieh < [2]psychesnet@gmail.com>:
->   >
->   > Hi everyone,
->   >
->   > Now, Im trying to create a special mode which can help me to build source
->   > code at source folder instead of output/build folder. I checked the makefile
->   > at package, looks like there is no directly way to be done.
->   > So, I would like to ask is it possible to be done? If yes, please give me
->   > some tips. Thanks.
-> 
->   If you want to build a package from an external source folder you can
->   specify the source directory by creating the? $(CONFIG_DIR)/ [3]local.mk
->   file and set the <pkg>_OVERRIDE_SRCDIR varialbe. But this will
->   copy/rsync your sources and build your package at output/build.
-> 
->   Please check "8.13.6. Using Buildroot during development" in the
->   buildroot user manual for more information about that.
-> 
->   --
->   Heiko
-> 
-> Links:
-> 1. mailto:heiko.thiery at gmail.com
-> 2. mailto:psychesnet at gmail.com
-> 3. http://local.mk
 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+The following changes since commit 9daf7483e9cf86d86797e799c73be80dbbbb9acf
 
+  package/ntp: security bump to version 4.2.8p14 (2020-04-03 10:04:25 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 681cc941334365689dadc41143521d842cd98189
+
+  package/kernel-module-imx-gpu-viv: bear the kernel options munging (2020-04-04 13:50:16 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (22):
+      core/pkg-utils: rationalise kconfig option mangling
+      core/pkg-utils: kconfig mangling defaults to current package's .config
+      boot/barebox: don't specify .config to munge
+      boot/uboot: don't specify .config to munge
+      boot/busybox: don't specify .config to munge
+      boot/swupdate: don't specify .config to munge
+      boot/uclibc: don't specify .config to munge
+      linux: don't specify .config to munge
+      linux: allow packages to set options
+      package/audit: bear the kernel options munging
+      package/intel-micro-code: bear the kernel options munging
+      package/ktap: bear the kernel options munging
+      package/pcm-tools: bear the kernel options munging
+      package/linux-tools/perf: bear the kernel options munging
+      package/systemd: bear the kernel options munging
+      package/smack: bear the kernel options munging
+      package/sunxi-mali-mainline-driver: bear the kernel options munging
+      package/iptables: bear the kernel options munging
+      package/xtables-addons: bear the kernel options munging
+      package/wireguard-linux-compat: bear the kernel options munging
+      package/libselinux: bear the kernel options munging
+      package/kernel-module-imx-gpu-viv: bear the kernel options munging
+
+ boot/barebox/barebox.mk                            |   4 +-
+ boot/uboot/uboot.mk                                |   6 +-
+ docs/manual/adding-packages-generic.txt            |   9 ++
+ linux/linux.mk                                     | 112 ++++-----------
+ package/audit/audit.mk                             |   5 +
+ package/busybox/busybox.mk                         |  71 +++++-----
+ .../kernel-module-imx-gpu-viv.mk                   |   4 +
+ package/intel-microcode/intel-microcode.mk         |   5 +
+ package/iptables/iptables.mk                       |   7 +
+ package/ktap/ktap.mk                               |   7 +
+ package/libselinux/libselinux.mk                   |  10 ++
+ package/linux-tools/linux-tool-perf.mk.in          |   4 +
+ package/pcm-tools/pcm-tools.mk                     |   4 +
+ package/pkg-generic.mk                             |   3 +
+ package/pkg-kconfig.mk                             |   2 +
+ package/pkg-utils.mk                               |  27 ++--
+ package/smack/smack.mk                             |   6 +
+ .../sunxi-mali-mainline-driver.mk                  |   5 +
+ package/swupdate/swupdate.mk                       |   4 +-
+ package/systemd/systemd.mk                         |   9 ++
+ package/uclibc/uclibc.mk                           | 152 ++++++++++-----------
+ .../wireguard-linux-compat.mk                      |   8 ++
+ package/xtables-addons/xtables-addons.mk           |   7 +
+ 23 files changed, 257 insertions(+), 214 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
