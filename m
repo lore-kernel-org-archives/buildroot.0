@@ -1,79 +1,37 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sat, 4 Apr 2020 21:19:30 +0200
-Subject: [Buildroot] systemd 245 build issues with the old codesourcery
- ARM 2014.05 toolchain
-In-Reply-To: <20200404175305.GG22325@scaer>
-References: <dc50e1db-aead-b8f5-cfd8-6645e433429f@smile.fr>
- <20200404175305.GG22325@scaer>
-Message-ID: <8e34eee5-6e6e-7aff-a0ab-bf86677b9313@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 4 Apr 2020 22:30:44 +0200
+Subject: [Buildroot] [git commit] package/libexif: annotate CVEs
+Message-ID: <20200404202606.E8F2C8B62D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=094d9857bde792c5e73ea06b3c13fcafc23f3392
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 04/04/2020 ? 19:53, Yann E. MORIN a ?crit?:
-> Romain, All,
-> 
-> On 2020-04-04 19:43 +0200, Romain Naour spake thusly:
->> Since the last systemd bump to version 245, all our systemd based tests are
->> failing to build:
-> [--SNIP--]
->> This is due to the following build issue:
->> ../src/shared/gpt.c:7:9: error: initializer element is not constant
->>          { GPT_ROOT_X86,              "root-x86"              },
-> [--SNIP--]
->> While searching for "error: initializer element is not constant" message, I
->> noticed a note about gcc 5 change about "Initializing statics with compound
->> literals":
->>
->> https://gcc.gnu.org/gcc-5/porting_to.html
->>
->> I'm not sure it's worth the effort to patch and try to upstream a patch to
->> systemd for the sake of building systemd with such old compiler (gcc < 5.0).
-> 
-> What about this patch:
-> 
->     diff --git a/package/systemd/Config.in b/package/systemd/Config.in
->     index bd638477a0..1280d82902 100644
->     --- a/package/systemd/Config.in
->     +++ b/package/systemd/Config.in
->     @@ -19,6 +19,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
->      	depends on !BR2_STATIC_LIBS # kmod
->      	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
->      	depends on BR2_USE_MMU # dbus
->     +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
->      	select BR2_PACKAGE_HAS_UDEV
->      	select BR2_PACKAGE_DBUS # runtime dependency only
->      	select BR2_PACKAGE_LIBCAP
->     diff --git a/system/Config.in b/system/Config.in
->     index c8c5be40e0..8c1d47f13f 100644
->     --- a/system/Config.in
->     +++ b/system/Config.in
->     @@ -121,6 +121,7 @@ config BR2_INIT_SYSTEMD
->      	depends on BR2_USE_MMU
->      	depends on !BR2_STATIC_LIBS
->      	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
->     +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
->      	select BR2_ROOTFS_MERGED_USR
->      	select BR2_PACKAGE_SYSTEMD
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libexif/libexif.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-I would restrict to BR2_TOOLCHAIN_GCC_AT_LEAST_5.
-
-But then, we have to update InitSystemSystemdBase to use another toolchain since
-the codesourcery ARM 2014.05 will not be usable.
-
-I can provide patches if every one is ok to use a bootlin toolchain 2017.05 or
-later :)
-
-Best regards,
-Romain
-
-
->      
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+diff --git a/package/libexif/libexif.mk b/package/libexif/libexif.mk
+index a4ec5ed3cb..643d9ed893 100644
+--- a/package/libexif/libexif.mk
++++ b/package/libexif/libexif.mk
+@@ -12,4 +12,13 @@ LIBEXIF_DEPENDENCIES = host-pkgconf
+ LIBEXIF_LICENSE = LGPL-2.1+
+ LIBEXIF_LICENSE_FILES = COPYING
+ 
++# 0001-fixes-some-not-all-buffer-overreads-during-decoding-.patch
++LIBEXIF_IGNORE_CVES += CVE-2016-6328
++# 0002-On-saving-makernotes-make-sure-the-makernote-contain.patch
++LIBEXIF_IGNORE_CVES += CVE-2017-7544
++# 0004-Improve-deep-recursion-detection-in-exif_data_load_d.patch
++LIBEXIF_IGNORE_CVES += CVE-2018-20030
++# 0005-fix-CVE-2019-9278.patch
++LIBEXIF_IGNORE_CVES += CVE-2019-9278
++
+ $(eval $(autotools-package))
