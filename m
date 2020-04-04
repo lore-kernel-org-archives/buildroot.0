@@ -1,20 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 04 Apr 2020 17:28:30 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{4, 5, 6}.x series
-In-Reply-To: <20200402193332.8831-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 2 Apr 2020 21:33:31 +0200")
-References: <20200402193332.8831-1-peter@korsgaard.com>
-Message-ID: <87wo6v46e9.fsf@dell.be.48ers.dk>
+Date: Sat, 04 Apr 2020 17:28:46 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libva: bump version to 2.7.0
+In-Reply-To: <20200403053012.356627-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 3 Apr 2020 07:30:11 +0200")
+References: <20200403053012.356627-1-bernd.kuhls@t-online.de>
+Message-ID: <87sghj46dt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Switched to github helper, upstream does not provide a tarball for this
+ > release.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
