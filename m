@@ -1,22 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 4 Apr 2020 22:56:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libexif: annotate CVEs
-In-Reply-To: <20200401214609.9184-1-fontaine.fabrice@gmail.com>
-References: <20200401214609.9184-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200404225656.6ef34f9f@windsurf.home>
+Date: Sat, 4 Apr 2020 22:57:23 +0200
+Subject: [Buildroot] [PATCH 1/2] kernel-module-imx-gpu-viv: bump to
+ version 6.4.0.p1.0
+In-Reply-To: <20200402130842.918696-2-gary.bisson@boundarydevices.com>
+References: <20200402130842.918696-1-gary.bisson@boundarydevices.com>
+ <20200402130842.918696-2-gary.bisson@boundarydevices.com>
+Message-ID: <20200404225723.25b1ad66@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  1 Apr 2020 23:46:09 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Thu,  2 Apr 2020 15:08:41 +0200
+Gary Bisson <gary.bisson@boundarydevices.com> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> This package has been tested on Nitrogen8M with the following commands:
+>  # modprobe galcore
+>  # cd /usr/share/examples/viv_samples/vdk/
+>  # ./tutorial7
+> 
+> Also update the help text as we shouldn't specify a kernel revision. It
+> is just that this module isn't meant for mainline kernel, only its NXP
+> forked version.
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 > ---
->  package/libexif/libexif.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  package/freescale-imx/kernel-module-imx-gpu-viv/Config.in       | 2 +-
+>  .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash    | 2 +-
+>  .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk      | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
