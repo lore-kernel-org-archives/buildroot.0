@@ -1,55 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 4 Apr 2020 17:26:59 +0200
-Subject: [Buildroot] [git commit] package/libva: bump version to 2.7.0
-Message-ID: <20200404151744.185AF8B4D3@busybox.osuosl.org>
+Date: Sat, 4 Apr 2020 17:27:50 +0200
+Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
+ version to 1.0.20200401
+Message-ID: <20200404151744.33614811E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=226bbae9d13e9fd46f81e75e60c8623085b4a0cd
+commit: https://git.buildroot.net/buildroot/commit/?id=4285b1bac3c0206a9d5b1ad350641b3a6e762878
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switched to github helper, upstream does not provide a tarball for this
-release.
+Matching the now-mainline wireguard code in kernel 5.6.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2020-April/005237.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libva/libva.hash | 4 +---
- package/libva/libva.mk   | 7 ++++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 8edacf1289..53a9f3cceb 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,5 +1,3 @@
--# From https://github.com/intel/libva/releases/download/2.6.1/libva-2.6.1.tar.bz2.sha1sum
--sha1 6b218e5622174a37fd0cfd8777b10717c95bd20e  libva-2.6.1.tar.bz2
- # Locally computed
--sha256 6c57eb642d828af2411aa38f55dc10111e8c98976dbab8fd62e48629401eaea5  libva-2.6.1.tar.bz2
-+sha256 0952ee21069c560f48ebafcba91e1ffb72e5a8736dbab3559af959221b51598f  libva-2.7.0.tar.gz
- sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 5e9bedbbd5..f430847b2f 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,12 +4,13 @@
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index 9e33c22f02..a9675b5180 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-February/005014.html
+-sha256  0def6f3608ec06f6dfc454aa5281a7c38b06ff27096cb341448d20602da4e923  wireguard-linux-compat-0.0.20200215.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-April/005237.html
++sha256  7dfb4a8315e1d6ae406ff32d01c496175df558dd65968a19e5222d02c7cfb77a  wireguard-linux-compat-1.0.20200401.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index 747cef3e50..d5a2341d77 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_VERSION = 2.6.1
--LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
--LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
-+LIBVA_VERSION = 2.7.0
-+LIBVA_SITE = $(call github,intel,libva,$(LIBVA_VERSION))
- LIBVA_LICENSE = MIT
- LIBVA_LICENSE_FILES = COPYING
- LIBVA_INSTALL_STAGING = YES
-+# github tarball does not include configure
-+LIBVA_AUTORECONF = YES
- LIBVA_DEPENDENCIES = host-pkgconf libdrm
- 
- # libdrm is a hard-dependency
+-WIREGUARD_LINUX_COMPAT_VERSION = 0.0.20200215
++WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200401
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
