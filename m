@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  4 Apr 2020 14:10:20 +0200
-Subject: [Buildroot] [PATCH 08/22] linux: don't specify .config to munge
+Date: Sat,  4 Apr 2020 14:10:18 +0200
+Subject: [Buildroot] [PATCH 06/22] boot/swupdate: don't specify .config to
+ munge
 In-Reply-To: <cover.1586002215.git.yann.morin.1998@free.fr>
 References: <cover.1586002215.git.yann.morin.1998@free.fr>
-Message-ID: <c2f00f8f2679ea055d0372e688a046e6abde30bb.1586002215.git.yann.morin.1998@free.fr>
+Message-ID: <212dfb3901eac9b0f651ab5beed80576b1986f39.1586002215.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,204 +12,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- linux/linux.mk | 140 ++++++++++++++++++++++++-------------------------
- 1 file changed, 70 insertions(+), 70 deletions(-)
+ package/swupdate/swupdate.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 3d9052a337..f6155a1a36 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -304,40 +304,40 @@ LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
- # option will be thrown away and ignored if it doesn't exist.
- ifeq ($(BR2_ENDIAN),"BIG")
- define LINUX_FIXUP_CONFIG_ENDIANNESS
--	$(call KCONFIG_ENABLE_OPT,CONFIG_CPU_BIG_ENDIAN,$(@D)/.config)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CPU_BIG_ENDIAN)
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 237a44e233..a472232470 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -77,7 +77,7 @@ ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER):$(BR2_STATIC_LIBS),y:)
+ SWUPDATE_DEPENDENCIES += luainterpreter host-pkgconf
+ # defines the base name for the pkg-config file ("lua" or "luajit")
+ define SWUPDATE_SET_LUA_VERSION
+-	$(call KCONFIG_SET_OPT,CONFIG_LUAPKG,$(BR2_PACKAGE_PROVIDES_LUAINTERPRETER),$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_SET_OPT,CONFIG_LUAPKG,$(BR2_PACKAGE_PROVIDES_LUAINTERPRETER))
  endef
+ SWUPDATE_MAKE_ENV += HAVE_LUA=y
  else
- define LINUX_FIXUP_CONFIG_ENDIANNESS
--	$(call KCONFIG_ENABLE_OPT,CONFIG_CPU_LITTLE_ENDIAN,$(@D)/.config)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CPU_LITTLE_ENDIAN)
+@@ -152,7 +152,7 @@ SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ define SWUPDATE_PREFER_STATIC
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC,$(SWUPDATE_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC)
  endef
  endif
  
- define LINUX_KCONFIG_FIXUP_CMDS
- 	$(if $(LINUX_NEEDS_MODULES),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_MODULES,$(@D)/.config))
--	$(call KCONFIG_ENABLE_OPT,$(strip $(LINUX_COMPRESSION_OPT_y)),$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_MODULES))
-+	$(call KCONFIG_ENABLE_OPT,$(strip $(LINUX_COMPRESSION_OPT_y)))
- 	$(foreach opt, $(LINUX_COMPRESSION_OPT_),
--		$(call KCONFIG_DISABLE_OPT,$(opt),$(@D)/.config)
-+		$(call KCONFIG_DISABLE_OPT,$(opt))
- 	)
- 	$(LINUX_FIXUP_CONFIG_ENDIANNESS)
- 	$(if $(BR2_arm)$(BR2_armeb),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI))
- 	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR))
- 	$(if $(BR2_ARC_PAGE_SIZE_4K),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K,$(@D)/.config)
--		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K,$(@D)/.config)
--		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K)
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K)
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K))
- 	$(if $(BR2_ARC_PAGE_SIZE_8K),
--		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K,$(@D)/.config)
--		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K,$(@D)/.config))
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K)
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K))
- 	$(if $(BR2_ARC_PAGE_SIZE_16K),
--		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K,$(@D)/.config)
--		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K,$(@D)/.config))
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K)
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K))
- 	$(if $(BR2_TARGET_ROOTFS_CPIO),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD))
- 	# As the kernel gets compiled before root filesystems are
- 	# built, we create a fake cpio file. It'll be
- 	# replaced later by the real cpio archive, and the kernel will be
-@@ -345,77 +345,77 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
- 		mkdir -p $(BINARIES_DIR)
- 		touch $(BINARIES_DIR)/rootfs.cpio
--		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
--		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
--		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
-+		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio")
-+		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0)
-+		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
--		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NET))
- 	$(if $(BR2_PACKAGE_AUDIT),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT))
- 	$(if $(BR2_PACKAGE_INTEL_MICROCODE),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL))
- 	$(if $(BR2_PACKAGE_KTAP),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER))
- 	$(if $(BR2_PACKAGE_LINUX_TOOLS_PERF),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS))
- 	$(if $(BR2_PACKAGE_PCM_TOOLS),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_X86_MSR,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_X86_MSR))
- 	$(if $(BR2_PACKAGE_SYSTEMD),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_XATTR,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_XATTR))
- 	$(if $(BR2_PACKAGE_SMACK),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SMACK,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SMACK)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK))
- 	$(if $(BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_CMA,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_DMA_CMA,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_CMA)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_DMA_CMA))
- 	$(if $(BR2_PACKAGE_IPTABLES),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES))
- 	$(if $(BR2_PACKAGE_XTABLES_ADDONS),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT))
- 	$(if $(BR2_PACKAGE_WIREGUARD_LINUX_COMPAT),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_INET,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NET_FOU,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MANAGER,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NET_FOU)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MANAGER))
- 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB))
- 	$(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
--		$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV,$(@D)/.config))
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV))
- 	$(if $(LINUX_KERNEL_CUSTOM_LOGO_PATH),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_FB,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_FB)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
- 	$(if $(BR2_PACKAGE_LIBSELINUX),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_INET,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX,$(@D)/.config))
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX))
- endef
- 
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
 -- 
 2.20.1
