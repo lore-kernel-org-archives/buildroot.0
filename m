@@ -1,69 +1,106 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sun, 5 Apr 2020 01:42:53 +0300
-Subject: [Buildroot] [PATCH 1/1] package/bubblewrap: security bump to
- version 0.4.1
-In-Reply-To: <20200404220648.1543017-1-fontaine.fabrice@gmail.com>
-References: <20200404220648.1543017-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200405014253.GB324638@momiji>
+Date: Sun, 5 Apr 2020 01:49:59 +0300
+Subject: [Buildroot] [PATCH v4] package/cog: add option for platform DRM.
+In-Reply-To: <20200404234630.712aca1d@windsurf.home>
+References: <20200312194700.2836-1-cturner@igalia.com>
+ <20200402113455.4391-1-cturner@igalia.com>
+ <20200404234630.712aca1d@windsurf.home>
+Message-ID: <20200405014959.GD324638@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  5 Apr 2020 00:06:48 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> Fix CVE-2020-5291: Bubblewrap (bwrap) before version 0.4.1, if installed
-> in setuid mode and the kernel supports unprivileged user namespaces,
-> then the `bwrap --userns2` option can be used to make the setuid process
-> keep running as root while being traceable. This can in turn be used to
-> gain root permissions. Note that this only affects the combination of
-> bubblewrap in setuid mode (which is typically used when unprivileged
-> user namespaces are not supported) and the support of unprivileged user
-> namespaces.
-> 
-> Also update indentation of hash file (two spaces)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Hello,
 
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+I am adding a few comments to Thomas' questions below.
 
-> ---
->  package/bubblewrap/bubblewrap.hash | 4 ++--
->  package/bubblewrap/bubblewrap.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+On Sat, 4 Apr 2020 23:46:30 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+ 
+> On Thu,  2 Apr 2020 12:34:55 +0100
+> Charlie Turner <cturner@igalia.com> wrote:
 > 
-> diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
-> index 6914a1ccd7..d3ccb4cb1f 100644
-> --- a/package/bubblewrap/bubblewrap.hash
-> +++ b/package/bubblewrap/bubblewrap.hash
-> @@ -1,5 +1,5 @@
->  # Locally computed:
-> -sha256 e5fe7d2f74bd7029b5306b0b70587cec31f74357739295e5276b4a3718712023 bubblewrap-0.4.0.tar.xz
-> +sha256  b9c69b9b1c61a608f34325c8e1a495229bacf6e4a07cbb0c80cf7a814d7ccc03  bubblewrap-0.4.1.tar.xz
->  
->  # Hash for license files:
-> -sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c COPYING
-> +sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-> diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
-> index 3da00a700d..388f64880e 100644
-> --- a/package/bubblewrap/bubblewrap.mk
-> +++ b/package/bubblewrap/bubblewrap.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -BUBBLEWRAP_VERSION = 0.4.0
-> +BUBBLEWRAP_VERSION = 0.4.1
->  BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
->  BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
->  BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
-> -- 
-> 2.25.1
+> > diff --git a/package/cog/Config.in b/package/cog/Config.in
+> > index b25991d4ae..6a7c5668a5 100644
+> > --- a/package/cog/Config.in
+> > +++ b/package/cog/Config.in
+> > @@ -7,7 +7,9 @@ config BR2_PACKAGE_COG
+> >  	depends on BR2_PACKAGE_WPEWEBKIT
+> >  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+> >  	depends on BR2_USE_MMU # dbus
+> > +
 > 
+> Why this new empty line?
+> 
+> >  	select BR2_PACKAGE_DBUS
+> > +
+> 
+> Ditto?
+> 
+> >  	help
+> >  	  Single "window" launcher for the WebKit WPE port, and
+> >  	  helper library for implementing WPE launcher. It does
+> > @@ -26,4 +28,30 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
+> >  	  string is used, there is no default and the URI to open
+> >  	  must be always specified in the command line.
+> >  
+> > +config BR2_PACKAGE_COG_PLATFORM_FDO
+> > +	bool "FreeDesktop.org backend"
+> > +
+> 
+> Don't add these empty lines.
+> 
+> > +	select BR2_PACKAGE_LIBXKBCOMMON
+> 
+> Why do we have this new dependency? I thought so far the FDO backend
+> was the default, so I assume it was the one used until now, and it
+> build with libxkbcommon.
+
+The dependency was needed already before, but I think we were just being
+lucky that it was being pulled in by some other dependency (probably by the
+Wayland package) and that's why things have been working without listing it
+here explicitly.
+
+> Also, if the FDO backend is currently enabled by default, and you make
+> it optional, you should have a "default y" on this option to keep
+> backward compatibility.
+
+Sounds sensible.
+
+> Another question: what happens if neither FDO nor DRM backends are
+> enabled?
+
+There is a fallback mode in Cog which is used for simple WPE backends like
+WPEBackend-rdk [1] if the ?--platform=?? option is not passed in the command
+line.
+ 
+> > diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+> > index d0e5b79c38..339187126a 100644
+> > --- a/package/cog/cog.mk
+> > +++ b/package/cog/cog.mk
+> > @@ -8,13 +8,25 @@ COG_VERSION = 0.4.0
+> >  COG_SITE = https://wpewebkit.org/releases
+> >  COG_SOURCE = cog-$(COG_VERSION).tar.xz
+> >  COG_INSTALL_STAGING = YES
+> > -COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
+> > +COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo wayland wayland-protocols
+> 
+> Why are you dropping the wayland and wayland-protocols dependencies?
+> Overall, it makes sense because cog does not depends/select wayland or
+> wayland-protocols. Ditto for wpebackend-fdo.
+
+We need those, but only when BR2_PACKAGE_COG_PLATFORM_FDO is enabled.
+
+Cheers,
+?Adri?n
+
+---
+[1] https://github.com/WebPlatformForEmbedded/WPEBackend-rdk
 -------------- next part --------------
 A non-text attachment was scrubbed...
 Name: signature.asc
 Type: application/pgp-signature
 Size: 195 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200405/d273ac74/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200405/5671cbc6/attachment.asc>
