@@ -1,97 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 4 Apr 2020 17:27:33 +0200
-Subject: [Buildroot] [git commit] package/libva-utils: bump version to 2.7.1
-Message-ID: <20200404151744.275478B4D4@busybox.osuosl.org>
+Date: Sat, 4 Apr 2020 17:28:05 +0200
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 20.0.4
+Message-ID: <20200404151744.4D5228A68D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3d4ed41f0e10e5553fd1ed1c72341a18366ae4f
+commit: https://git.buildroot.net/buildroot/commit/?id=0936fe3dcf50012422a6067812116cea81e9f58d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Removed patch which was applied upstream:
-https://github.com/intel/libva-utils/commit/bd01ba5a6b53370ee6465f393051908f9c6ddeba
-
-Switched to github helper, upstream does not provide a tarball for this
-release.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../libva-utils/0001-fix-build-without-x11.patch   | 33 ----------------------
- package/libva-utils/libva-utils.hash               |  4 +--
- package/libva-utils/libva-utils.mk                 |  7 +++--
- 3 files changed, 5 insertions(+), 39 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libva-utils/0001-fix-build-without-x11.patch b/package/libva-utils/0001-fix-build-without-x11.patch
-deleted file mode 100644
-index 0cb5030d7c..0000000000
---- a/package/libva-utils/0001-fix-build-without-x11.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 0d033c074b63ab0ef0798128b94b364ce33da93a Mon Sep 17 00:00:00 2001
--From: Ed Baker <edward.baker@intel.com>
--Date: Wed, 8 Jan 2020 13:43:38 -0700
--Subject: [PATCH] Ifdef va_x11 in VP sample for usrptr
--
--When updating libva-utils from 2.4.0 to 2.6.0 in Chrome OS I bumped into
--the following error:
--portage/media-video/libva-utils-2.6.0-r1/work/libva-utils-2.6.0/videoprocess/vppscaling_n_out_usrptr.cpp:41:10: fatal error:
--      'va/va_x11.h' file not found
--
--Downloaded from upstream PR:
--https://github.com/intel/libva-utils/pull/185
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--Signed-off-by: Edward Baker <edward.baker@intel.com>
-----
-- videoprocess/vppscaling_n_out_usrptr.cpp | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/videoprocess/vppscaling_n_out_usrptr.cpp b/videoprocess/vppscaling_n_out_usrptr.cpp
--index 4a3a222..a853442 100644
----- a/videoprocess/vppscaling_n_out_usrptr.cpp
--+++ b/videoprocess/vppscaling_n_out_usrptr.cpp
--@@ -38,7 +38,9 @@
-- #include <va/va.h>
-- #include <va/va_vpp.h>
-- #include "va_display.h"
--+#if 0
-- #include <va/va_x11.h>
--+#endif
-- 
-- #define MAX_LEN   1024
-- 
-diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-index 881b56fca1..4addb7be3a 100644
---- a/package/libva-utils/libva-utils.hash
-+++ b/package/libva-utils/libva-utils.hash
-@@ -1,5 +1,3 @@
--# From https://github.com/intel/libva-utils/releases/download/2.6.0/libva-utils-2.6.0.tar.bz2.sha1sum
--sha1 ef6f9abe8954ec94bae0ea3bc82ffd1fa4fc5735  libva-utils-2.6.0.tar.bz2
- # Locally computed
--sha256 2249b5d08bffc3862bbdcc9a6a4827afd504330b8d101564d39fe1a1e7adc426  libva-utils-2.6.0.tar.bz2
-+sha256 9cf35b971001e7143dda14207b6891c12619a72a2ab99a9133b3da5b9c4d97dd  libva-utils-2.7.1.tar.gz
- sha256 c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-index ad9acb229b..dee29c9891 100644
---- a/package/libva-utils/libva-utils.mk
-+++ b/package/libva-utils/libva-utils.mk
-@@ -4,11 +4,12 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 332d979397..077798ac77 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 20.0.3
++MESA3D_HEADERS_VERSION = 20.0.4
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 62ab461c4e..de8e92bc39 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2020-April/000576.html
+-sha256 d63aaf2c27143eded2f4f376f18f7a766ad997f8eeb96c357e8ade84e8a237af  mesa-20.0.3.tar.xz
+-sha512 e27d147bb85908cac4eb4b0f0505a7c539051805f54e6e50105c9e5c07d3b3b3c8524959b31eb97f8e8f6e5859f46cd257a25275e0671279f12ecd89ee13f7bf  mesa-20.0.3.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2020-April/000577.html
++sha256 c4ed491517a94118a7a611810eeb92645d42ffd82280dcd51be8cc2ba1aabba5  mesa-20.0.4.tar.xz
++sha512 17d8bc3b56779a8e5648d81da9ee97b66bcec015710801edce4e8055fbb314cd9ebc1d112e3035480ba844c7d9ae6b5b1f1eac0cc0817e69e9253a7748451a55  mesa-20.0.4.tar.xz
+ 
+ # License
+ sha256  1ddae7da415352a5b5360ff3a9d7ecf23ba81408f62eeecce0011f32e3ef9da6  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index bede7665ea..111151d342 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBVA_UTILS_VERSION = 2.6.0
--LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
--LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
-+LIBVA_UTILS_VERSION = 2.7.1
-+LIBVA_UTILS_SITE = $(call github,intel,libva-utils,$(LIBVA_UTILS_VERSION))
- LIBVA_UTILS_LICENSE = MIT
- LIBVA_UTILS_LICENSE_FILES = COPYING
-+# github tarball does not include configure
-+LIBVA_UTILS_AUTORECONF = YES
- LIBVA_UTILS_DEPENDENCIES = host-pkgconf libva
- 
- $(eval $(autotools-package))
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 20.0.3
++MESA3D_VERSION = 20.0.4
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
