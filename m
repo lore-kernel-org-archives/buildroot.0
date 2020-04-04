@@ -1,62 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 4 Apr 2020 17:26:49 +0200
-Subject: [Buildroot] [git commit] package/apache: security bump to version
- 2.4.43
-Message-ID: <20200404151743.F16228B4D3@busybox.osuosl.org>
+Date: Sat, 4 Apr 2020 17:26:59 +0200
+Subject: [Buildroot] [git commit] package/libva: bump version to 2.7.0
+Message-ID: <20200404151744.185AF8B4D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2bf40ad66b16744972443127e9ee6f8d8f32c476
+commit: https://git.buildroot.net/buildroot/commit/?id=226bbae9d13e9fd46f81e75e60c8623085b4a0cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Switched to github helper, upstream does not provide a tarball for this
+release.
 
-  *) SECURITY: CVE-2020-1934 (cve.mitre.org)
-     mod_proxy_ftp: Use of uninitialized value with malicious backend FTP
-     server. [Eric Covener]
-
-  *) SECURITY: CVE-2020-1927 (cve.mitre.org)
-     rewrite, core: Set PCRE_DOTALL flag by default to avoid unpredictable
-     matches and substitutions with encoded line break characters.
-     The fix for CVE-2019-10098 was not effective.  [Ruediger Pluem]
-
-The LICENSE file has been updated to fix a s/waranties/warranties/ typo, so
-update the hash to match and adjust the spacing to match recent agreements:
-
--This software is provided "as is" and any express or implied waranties,
-+This software is provided "as is" and any express or implied warranties,
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 6 +++---
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libva/libva.hash | 4 +---
+ package/libva/libva.mk   | 7 ++++---
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 24c00eb94c..7b0e4ad8e7 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,4 +1,4 @@
--# From http://archive.apache.org/dist/httpd/httpd-2.4.41.tar.bz2.sha256
--sha256 133d48298fe5315ae9366a0ec66282fa4040efa5d566174481077ade7d18ea40 httpd-2.4.41.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.43.tar.bz2.sha256
-+sha256  a497652ab3fc81318cdc2a203090a999150d86461acff97c1065dc910fe10f43  httpd-2.4.43.tar.bz2
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 8edacf1289..53a9f3cceb 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,5 +1,3 @@
+-# From https://github.com/intel/libva/releases/download/2.6.1/libva-2.6.1.tar.bz2.sha1sum
+-sha1 6b218e5622174a37fd0cfd8777b10717c95bd20e  libva-2.6.1.tar.bz2
  # Locally computed
--sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-+sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 5fcb9e5371..48a64eae0e 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
+-sha256 6c57eb642d828af2411aa38f55dc10111e8c98976dbab8fd62e48629401eaea5  libva-2.6.1.tar.bz2
++sha256 0952ee21069c560f48ebafcba91e1ffb72e5a8736dbab3559af959221b51598f  libva-2.7.0.tar.gz
+ sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 5e9bedbbd5..f430847b2f 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,12 +4,13 @@
  #
  ################################################################################
  
--APACHE_VERSION = 2.4.41
-+APACHE_VERSION = 2.4.43
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+-LIBVA_VERSION = 2.6.1
+-LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+-LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
++LIBVA_VERSION = 2.7.0
++LIBVA_SITE = $(call github,intel,libva,$(LIBVA_VERSION))
+ LIBVA_LICENSE = MIT
+ LIBVA_LICENSE_FILES = COPYING
+ LIBVA_INSTALL_STAGING = YES
++# github tarball does not include configure
++LIBVA_AUTORECONF = YES
+ LIBVA_DEPENDENCIES = host-pkgconf libdrm
+ 
+ # libdrm is a hard-dependency
