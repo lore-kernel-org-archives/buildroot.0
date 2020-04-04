@@ -1,117 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 4 Apr 2020 23:46:30 +0200
-Subject: [Buildroot] [PATCH v4] package/cog: add option for platform DRM.
-In-Reply-To: <20200402113455.4391-1-cturner@igalia.com>
-References: <20200312194700.2836-1-cturner@igalia.com>
- <20200402113455.4391-1-cturner@igalia.com>
-Message-ID: <20200404234630.712aca1d@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun,  5 Apr 2020 00:02:16 +0200
+Subject: [Buildroot] [PATCH 1/2] support/testing: update the ARM toolchain
+ used for the systemd init tests
+Message-ID: <20200404220217.362122-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As reported on the mailing list, there is a build issue with systemd 245
+when using gcc < 5.0:
 
-On Thu,  2 Apr 2020 12:34:55 +0100
-Charlie Turner <cturner@igalia.com> wrote:
+http://lists.busybox.net/pipermail/buildroot/2020-April/278931.html
 
-> diff --git a/package/cog/Config.in b/package/cog/Config.in
-> index b25991d4ae..6a7c5668a5 100644
-> --- a/package/cog/Config.in
-> +++ b/package/cog/Config.in
-> @@ -7,7 +7,9 @@ config BR2_PACKAGE_COG
->  	depends on BR2_PACKAGE_WPEWEBKIT
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
->  	depends on BR2_USE_MMU # dbus
-> +
+Update to the Bootling toolchain 2017.05 that meet the minimum requered
+version of toolchain componant:
+GCC           5.4.0
+linux-headers 3.10.105
 
-Why this new empty line?
+See:
+https://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi/readmes/armv5-eabi--glibc--stable-2017.05-toolchains-1-1.txt
 
->  	select BR2_PACKAGE_DBUS
-> +
+Tested:
+https://gitlab.com/kubu93/buildroot/pipelines/132890602
 
-Ditto?
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144403
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144405
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144406
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144408
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144410
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144412
 
->  	help
->  	  Single "window" launcher for the WebKit WPE port, and
->  	  helper library for implementing WPE launcher. It does
-> @@ -26,4 +28,30 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
->  	  string is used, there is no default and the URI to open
->  	  must be always specified in the command line.
->  
-> +config BR2_PACKAGE_COG_PLATFORM_FDO
-> +	bool "FreeDesktop.org backend"
-> +
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ support/testing/tests/init/test_systemd.py | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Don't add these empty lines.
-
-> +	select BR2_PACKAGE_LIBXKBCOMMON
-
-Why do we have this new dependency? I thought so far the FDO backend
-was the default, so I assume it was the one used until now, and it
-build with libxkbcommon.
-
-Also, if the FDO backend is currently enabled by default, and you make
-it optional, you should have a "default y" on this option to keep
-backward compatibility.
-
-Another question: what happens if neither FDO nor DRM backends are
-enabled?
-
-> +
-
-No empty line please.
-
-> +	help
-> +	  Enable the FreeDesktop.org backend. Cog will interface with
-> +	  a compositor over the Wayland protocol.
-> +
-> +config BR2_PACKAGE_COG_PLATFORM_DRM
-> +	bool "DRM backend"
-> +
-
-Not empty line please.
-
-> +	depends on BR2_PACKAGE_HAS_UDEV # libinput
-> +	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # gbm
-> +
-
-No empty line please.
-
-> +	select BR2_PACKAGE_LIBDRM
-> +	select BR2_PACKAGE_LIBINPUT
-> +
-> +	help
-> +	  Enable the DRM platform backend. Cog will interface directly
-> +	  with video drivers that support kernel mode-setting (KMS)
-> +	  via the DRM user-space API.
-> +
-> +comment "DRM platform needs mesa3d w/ EGL driver and GBM"
-> +	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
-> +
->  endif
-> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-> index d0e5b79c38..339187126a 100644
-> --- a/package/cog/cog.mk
-> +++ b/package/cog/cog.mk
-> @@ -8,13 +8,25 @@ COG_VERSION = 0.4.0
->  COG_SITE = https://wpewebkit.org/releases
->  COG_SOURCE = cog-$(COG_VERSION).tar.xz
->  COG_INSTALL_STAGING = YES
-> -COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
-> +COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo wayland wayland-protocols
-
-Why are you dropping the wayland and wayland-protocols dependencies?
-Overall, it makes sense because cog does not depends/select wayland or
-wayland-protocols. Ditto for wpebackend-fdo.
-
-But dropping these should be done as a separate preliminary patch.
-
-Thanks,
-
-Thomas
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+index 0ac18cb623..10634cbb1f 100644
+--- a/support/testing/tests/init/test_systemd.py
++++ b/support/testing/tests/init/test_systemd.py
+@@ -2,11 +2,24 @@ import infra.basetest
+ from tests.init.base import InitSystemBase as InitSystemBase
+ 
+ 
++# External Toolchain fragment imported from:
++# https://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi/fragments/armv5-eabi--glibc--stable-2017.05-toolchains-1-1.frag
+ class InitSystemSystemdBase(InitSystemBase):
+     config = \
+         """
+         BR2_arm=y
++        BR2_arm926t=y
++        BR2_ARM_CPU_ARMV5=y
++        BR2_ARM_EABI=y
++        BR2_ARM_SOFT_FLOAT=y
+         BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
++        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++        BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi--glibc--stable-2017.05-toolchains-1-1.tar.bz2"
++        BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
++        BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
++        BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+         BR2_INIT_SYSTEMD=y
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_LINUX_KERNEL=y
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
