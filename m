@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  4 Apr 2020 14:10:24 +0200
-Subject: [Buildroot] [PATCH 12/22] package/ktap: bear the kernel options
- munging
+Date: Sat,  4 Apr 2020 14:10:23 +0200
+Subject: [Buildroot] [PATCH 11/22] package/intel-micro-code: bear the kernel
+ options munging
 In-Reply-To: <cover.1586002215.git.yann.morin.1998@free.fr>
 References: <cover.1586002215.git.yann.morin.1998@free.fr>
-Message-ID: <d2d9bfee9725f3b234cdcfe66c9a284d439b3067.1586002215.git.yann.morin.1998@free.fr>
+Message-ID: <b9da188bfe92a27b8b797b7af395d97699d9c008.1586002215.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,44 +12,40 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Anders Darander <anders@chargestorm.se>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Carlos Santos <unixmania@gmail.com>
 ---
- linux/linux.mk       | 5 -----
- package/ktap/ktap.mk | 7 +++++++
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ linux/linux.mk                             | 3 ---
+ package/intel-microcode/intel-microcode.mk | 5 +++++
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index 65cfa5d7ad..157808a49d 100644
+index ea65286308..65cfa5d7ad 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -355,11 +355,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
+@@ -355,9 +355,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
  		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER))
  	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
  		$(call KCONFIG_ENABLE_OPT,CONFIG_NET))
--	$(if $(BR2_PACKAGE_KTAP),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER))
- 	$(if $(BR2_PACKAGE_LINUX_TOOLS_PERF),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS))
- 	$(if $(BR2_PACKAGE_PCM_TOOLS),
-diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
-index 3b9134da65..09daba5c53 100644
---- a/package/ktap/ktap.mk
-+++ b/package/ktap/ktap.mk
-@@ -25,5 +25,12 @@ endef
+-	$(if $(BR2_PACKAGE_INTEL_MICROCODE),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL))
+ 	$(if $(BR2_PACKAGE_KTAP),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS)
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 0492ace69e..f3d05d5f58 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -27,4 +27,9 @@ else
+ INTEL_MICROCODE_INSTALL_TARGET = NO
+ endif
  
- KTAP_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
- 
-+define KTAP_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER)
++define INTEL_MICROCODE_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL)
 +endef
 +
- $(eval $(kernel-module))
  $(eval $(generic-package))
 -- 
 2.20.1
