@@ -1,90 +1,129 @@
-From: Jianhui Zhao <zhaojh329@gmail.com>
-Date: Sat,  4 Apr 2020 17:50:40 +0800
-Subject: [Buildroot] [PATCH 1/1] package/rtty: bump version to 7.1.3
-Message-ID: <20200404095040.27898-1-zhaojh329@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 4 Apr 2020 13:40:30 +0200
+Subject: [Buildroot] [PATCH 0/9 v5] package/apparmor: new package
+ (branch yem/apparmor)
+In-Reply-To: <cover.1585490494.git.yann.morin.1998@free.fr>
+References: <cover.1585490494.git.yann.morin.1998@free.fr>
+Message-ID: <20200404114030.GC22325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
----
- ...ts.txt-fix-static-build-with-openssl.patch | 43 -------------------
- package/rtty/rtty.hash                        |  2 +-
- package/rtty/rtty.mk                          |  2 +-
- 3 files changed, 2 insertions(+), 45 deletions(-)
- delete mode 100644 package/rtty/0001-src-CMakeLists.txt-fix-static-build-with-openssl.patch
+Angelo, All,
 
-diff --git a/package/rtty/0001-src-CMakeLists.txt-fix-static-build-with-openssl.patch b/package/rtty/0001-src-CMakeLists.txt-fix-static-build-with-openssl.patch
-deleted file mode 100644
-index 590f336593..0000000000
---- a/package/rtty/0001-src-CMakeLists.txt-fix-static-build-with-openssl.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 225218e52ce387dc011431842ef6f45aeac74d33 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 26 Mar 2020 21:11:42 +0100
--Subject: [PATCH] src/CMakeLists.txt: fix static build with openssl
--
--As usual, cmake is unable to correctly handle static dependencies by its
--own and as a result a static build with openssl will fail on:
--
--/home/naourr/work/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o): in function `zlib_stateful_expand_block':
--/home/naourr/work/instance-0/output-1/build/libopenssl-1.1.1d/crypto/comp/c_zlib.c:201: undefined reference to `inflate'
--
--To fix this, use pkg-config to retrieve openssl dependencies such as -lz
--or -latomic and fallback on existing mechanism
--
--Fixes:
-- - http://autobuild.buildroot.org/results/6105b69d8598f0033044a26f53a768e2d4b2915e
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/zhaojh329/rtty/pull/64]
-----
-- src/CMakeLists.txt | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index bb65d43..b192606 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -29,7 +29,11 @@ set(RTTY_HAVE_MBEDTLS_CONFIG 0)
-- if(NOT RTTY_SSL_SUPPORT)
--     set(RTTY_SSL_SUPPORT_CONFIG 0)
-- else()
---    find_package(OpenSSL)
--+    find_package(PkgConfig QUIET)
--+    pkg_check_modules(OPENSSL QUIET openssl)
--+    if (NOT OPENSSL_FOUND)
--+        find_package(OpenSSL)
--+    endif()
--     find_package(WolfSSL)
--     find_package(MbedTLS)
-- 
---- 
--2.25.1
--
-diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
-index 51d4b9fd32..feaac4762d 100644
---- a/package/rtty/rtty.hash
-+++ b/package/rtty/rtty.hash
-@@ -1,2 +1,2 @@
--sha256  6faafe75d82edbcfe154da5f1ffc0ddfd14dd88a2315f19aeed7f2631df96f41  rtty-7.1.2.tar.gz
-+sha256  e10ee2048a29e18e6b21c77cb9cf7772eb95646e69567f8b40e85b816d93a3fa  rtty-7.1.3.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
-index 88599f6636..0b787a6353 100644
---- a/package/rtty/rtty.mk
-+++ b/package/rtty/rtty.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTTY_VERSION = 7.1.2
-+RTTY_VERSION = 7.1.3
- RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
- RTTY_LICENSE = MIT
- RTTY_LICENSE_FILES = LICENSE
+On 2020-03-29 16:01 +0200, Yann E. MORIN spake thusly:
+> This series is reworked of the previous work from Angelo:
+>     http://lists.busybox.net/pipermail/buildroot/2020-March/278308.html
+>     http://lists.busybox.net/pipermail/buildroot/2020-March/278307.html
+
+Angelo, did you have the opportunity to have a look at this series?
+
+Regards,
+Yann E. MORIN.
+
+> Fundamentally, (almost) all the code is from Angelo, and it has jsut
+> been spread across two packages.
+> 
+> The way the apparmor package is laid out is not very amenable at doing a
+> single package that builds everything: all the tools and utils depend on
+> libapparmor, and that is better installed before the build of the tools
+> is attempted.
+> 
+> So, we split the packaging in two:
+> 
+>   - libapparmor, which is siolely responsible for installing
+>     libapparmor and its python3 bindings,
+> 
+>   - apparmor per-se, which is responsible for installing all the tools
+>     and utilities.
+> 
+> To be noted: most of the tools' Makefiles hard-code linking to the
+> static libapparmor (without explanations), so rather than go against the
+> tide, we just enforce building the static library (note also that we do
+> not forbid building the shared one).
+> 
+> The only major part that was dropped from the initial series, is support
+> for writign the cache on read-write filesystems. The codition was based
+> on BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW, but that does not prevent
+> building an actually read-only filesystem at all (e.g. squashfs). So,
+> more thoughts will have to be poured into this caching feature in a
+> subsequent series.
+> 
+> Chage v4 -> v5:  (adopted by Yann)
+>   - split in two packages, one for the lib, ione for the utils
+>   - reword all the commit logs
+>   - fix dependencies (threads, mmu...)
+>   - re-organise the conditions to install utils (python3 vs others)
+>   - drop the cache writing for read-write filesystems
+> 
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> 
+> The following changes since commit d0f5a5551ab86f6272f13deaa16dcdf4b07a524f
+> 
+>   package/sysstat: bump to version 12.2.1 (2020-03-29 15:50:36 +0200)
+> 
+> 
+> are available in the git repository at:
+> 
+>   git://git.buildroot.org/~ymorin/git/buildroot.git
+> 
+> for you to fetch changes up to 8b4415dad37fa81cf2d4adb09b27119b233bcd8a
+> 
+>   package/apparmor: enable apache integration (2020-03-29 16:01:18 +0200)
+> 
+> 
+> ----------------------------------------------------------------
+> Angelo Compagnucci (4):
+>       package/libapparmor: new package
+>       linux: enable AppArmor-related options if needed
+>       package/apparmor: new package
+>       package/apparmor: add option to install binutils
+> 
+> Yann E. MORIN (5):
+>       package/apparmor: add options to install utils
+>       package/apparmor: add option to install generic profiles
+>       package/libapparmor: enable python bindings
+>       package/apparmor: enable PAM integration
+>       package/apparmor: enable apache integration
+> 
+>  DEVELOPERS                                         |  1 +
+>  linux/linux.mk                                     |  5 ++
+>  package/Config.in                                  |  2 +
+>  package/apparmor/Config.in                         | 71 ++++++++++++++++
+>  package/apparmor/apparmor.hash                     |  4 +
+>  package/apparmor/apparmor.mk                       | 81 ++++++++++++++++++
+>  ...n_devel-fixing-for-crosscompiling-environ.patch | 96 ++++++++++++++++++++++
+>  ...-fixing-setup.py-call-when-crosscompiling.patch | 30 +++++++
+>  package/libapparmor/Config.in                      | 16 ++++
+>  package/libapparmor/libapparmor.hash               |  4 +
+>  package/libapparmor/libapparmor.mk                 | 41 +++++++++
+>  11 files changed, 351 insertions(+)
+>  create mode 100644 package/apparmor/Config.in
+>  create mode 100644 package/apparmor/apparmor.hash
+>  create mode 100644 package/apparmor/apparmor.mk
+>  create mode 100644 package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch
+>  create mode 100644 package/libapparmor/0002-libapparmor-fixing-setup.py-call-when-crosscompiling.patch
+>  create mode 100644 package/libapparmor/Config.in
+>  create mode 100644 package/libapparmor/libapparmor.hash
+>  create mode 100644 package/libapparmor/libapparmor.mk
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
