@@ -1,41 +1,78 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  4 Apr 2020 23:32:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/efl: fix build with poppler and gcc
- 5
-Message-ID: <20200404213245.1519848-1-fontaine.fabrice@gmail.com>
+Date: Sat,  4 Apr 2020 23:36:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rng-tools: add nistbeacon option
+Message-ID: <20200404213653.1538752-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
--std=c++11 is needed to avoid the following build failure with poppler
-and gcc 5:
-
-/home/naourr/work/instance-0/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/poppler/cpp/poppler-page.h:40:37: note: C++11 'noexcept' only available with -std=c++11 or -std=gnu++11
-/home/naourr/work/instance-0/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/poppler/cpp/poppler-page.h:70:10: error: 'unique_ptr' in namespace 'std' does not name a template type
-     std::unique_ptr<text_box_data> m_data;
-          ^
-Fixes:
- - http://autobuild.buildroot.org/results/3428b9017168db9239756dc06cdaa5ae004cab97
+Add an option to enable nistbeacon which is available since version 6.1
+and
+https://github.com/nhorman/rng-tools/commit/aefe862e187a1ef608f9826b2b4a5bbabd5e9945
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/efl/efl.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/rng-tools/Config.in    | 17 +++++++++++++++++
+ package/rng-tools/rng-tools.mk | 11 ++++++++---
+ 2 files changed, 25 insertions(+), 3 deletions(-)
 
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index f1e69f8a23..d8364ed76f 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -257,6 +257,8 @@ EFL_CONF_OPTS += --disable-image-loader-webp
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+index a86fbb0f74..25b41f40d6 100644
+--- a/package/rng-tools/Config.in
++++ b/package/rng-tools/Config.in
+@@ -11,5 +11,22 @@ config BR2_PACKAGE_RNG_TOOLS
+ 
+ 	  http://sourceforge.net/projects/gkernel/
+ 
++if BR2_PACKAGE_RNG_TOOLS
++
++config BR2_PACKAGE_RNG_TOOLS_NISTBEACON
++	bool "NIST Entropy Beacon support"
++	select BR2_PACKAGE_JANSSON
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBXML2
++	help
++	  Enable NIST Entropy Beacon support.
++
++	  Entropy gathered from the NIST network entropy beacon. Note
++	  that this entropy source is disabled by default as it should
++	  never be used for cryptographic purposes, or any use case in
++	  which random data should be known only by a single entity.
++
++endif
++
+ comment "rng-tools needs a toolchain w/ NPTL"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index 8ebfc0975a..3baddb98ee 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -12,9 +12,7 @@ RNG_TOOLS_DEPENDENCIES = libsysfs jitterentropy-library host-pkgconf openssl
+ # From git
+ RNG_TOOLS_AUTORECONF = YES
+ 
+-RNG_TOOLS_CONF_OPTS = \
+-	--without-nistbeacon \
+-	--without-pkcs11
++RNG_TOOLS_CONF_OPTS = --without-pkcs11
+ 
+ # Work around for uClibc or musl toolchains which lack argp_*()
+ # functions.
+@@ -30,6 +28,13 @@ else
+ RNG_TOOLS_CONF_OPTS += --without-rtlsdr
  endif
  
- ifeq ($(BR2_PACKAGE_POPPLER),y)
-+# poppler needs c++11
-+EFL_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- EFL_DEPENDENCIES += poppler
- EFL_CONF_OPTS += --enable-poppler
- else
++ifeq ($(BR2_PACKAGE_RNG_TOOLS_NISTBEACON),y)
++RNG_TOOLS_DEPENDENCIES += jansson libcurl libxml2
++RNG_TOOLS_CONF_OPTS += --with-nistbeacon
++else
++RNG_TOOLS_CONF_OPTS += --without-nistbeacon
++endif
++
+ define RNG_TOOLS_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/rng-tools/S21rngd \
+ 		$(TARGET_DIR)/etc/init.d/S21rngd
 -- 
 2.25.1
