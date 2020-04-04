@@ -1,114 +1,168 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  4 Apr 2020 14:10:14 +0200
-Subject: [Buildroot] [PATCH 02/22] core/pkg-utils: kconfig mangling defaults
- to current package's .config
+Date: Sat,  4 Apr 2020 14:10:17 +0200
+Subject: [Buildroot] [PATCH 05/22] boot/busybox: don't specify .config to
+ munge
 In-Reply-To: <cover.1586002215.git.yann.morin.1998@free.fr>
 References: <cover.1586002215.git.yann.morin.1998@free.fr>
-Message-ID: <14c3b30890f0dbccd6954e9e6c88de483b321b65.1586002215.git.yann.morin.1998@free.fr>
+Message-ID: <c8af1522edd43a484be84eb07d196c929ae2d120.1586002215.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The kconfig mangling macros currently operate on the caller-supplied
-.config file, on the assumption that the caller will always know what
-file to mangle.
-
-This was correct so far, as packages would indeed only mangle their own
-.config files.
-
-However, the linux kernel does its mangling based on whether some
-packages are enabled or not. That list of conditional mangling is
-getting bigger and bigger with each new package that needs such
-mangling, culminating with the pending firewalld one [0]. Furthermore,
-this mangling is not accessible to packages in br2-external trees. So
-we'll want to have packages provide the mangling commands.
-
-So we'll want the mangling to be done on the linux' .config file,,i.e.
-and the expanding package context, not in the package calling the
-macros.
-
-But packages do not, and should not have knowledge about where the
-.config file is, nor how it is named.
-
-So we make the parameter to specify the .config file to mangle optional.
-If it is set, this is what the macros will mangle; if it is not set, the
-expanding packge's .config file will be used.
-
-This has the added benefit that we do not have to repeat in the
-exp[anding package context the knowledge of how the .config file is
-named:
-
-    FOO_KCONFIG_DOTCONFIG = .config
-    define FOO_KCONFIG_FIXUPS_CMDS
-        $(call KCONFIG_ENABLE_OPT,BLA,$(@D)/.config)
-    endef
-
-[0] http://lists.busybox.net/pipermail/buildroot/2020-March/278683.html
-
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Carlos Santos <unixmania@gmail.com>
 ---
- package/pkg-kconfig.mk |  2 ++
- package/pkg-utils.mk   | 19 +++++++++++++------
- 2 files changed, 15 insertions(+), 6 deletions(-)
+ package/busybox/busybox.mk | 71 +++++++++++++++++++-------------------
+ 1 file changed, 35 insertions(+), 36 deletions(-)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index e2d52ee8ed..9d65b21ec5 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -166,6 +166,7 @@ define $(2)_FIXUP_DOT_CONFIG
- 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index b9d82ed71e..de5c8cbe8c 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -80,7 +80,6 @@ BUSYBOX_CFLAGS += "`$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
+ BUSYBOX_CFLAGS_busybox += "`$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`"
+ endif
+ 
+-BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
+ # Allows the build system to tweak CFLAGS
+ BUSYBOX_MAKE_ENV = \
+ 	$(TARGET_MAKE_ENV) \
+@@ -148,53 +147,53 @@ define BUSYBOX_INSTALL_MDEV_CONF
+ 		$(TARGET_DIR)/etc/mdev.conf
+ endef
+ define BUSYBOX_SET_MDEV
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_MDEV,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MDEV_CONF,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MDEV_EXEC,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MDEV_LOAD_FIRMWARE,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_MDEV)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MDEV_CONF)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MDEV_EXEC)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MDEV_LOAD_FIRMWARE)
+ endef
+ endif
+ 
+ # sha passwords need USE_BB_CRYPT_SHA
+ ifeq ($(BR2_TARGET_GENERIC_PASSWD_SHA256)$(BR2_TARGET_GENERIC_PASSWD_SHA512),y)
+ define BUSYBOX_SET_CRYPT_SHA
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_CRYPT_SHA,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_CRYPT_SHA)
+ endef
+ endif
+ 
+ ifeq ($(BR2_USE_MMU),y)
+ define BUSYBOX_SET_MMU
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_NOMMU,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_DISABLE_OPT,CONFIG_NOMMU)
+ endef
+ else
+ define BUSYBOX_SET_MMU
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_NOMMU,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPON,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPOFF,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_BASH_COMPAT,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_BRACE_EXPANSION,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_HELP,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_INTERACTIVE,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_SAVEHISTORY,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_JOB,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_TICK,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_IF,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_LOOPS,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_CASE,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_FUNCTIONS,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_LOCAL,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_RANDOM_SUPPORT,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_EXPORT_N,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_MODE_X,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NOMMU)
++	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPON)
++	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPOFF)
++	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_BASH_COMPAT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_BRACE_EXPANSION)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_HELP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_INTERACTIVE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_SAVEHISTORY)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_JOB)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_TICK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_IF)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_LOOPS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_CASE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_FUNCTIONS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_LOCAL)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_RANDOM_SUPPORT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_EXPORT_N)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_MODE_X)
+ endef
+ endif
+ 
+ # If we're using static libs do the same for busybox
+ ifeq ($(BR2_STATIC_LIBS),y)
+ define BUSYBOX_PREFER_STATIC
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_STATIC)
+ endef
+ endif
+ 
+@@ -210,7 +209,7 @@ endef
+ ifeq ($(BR2_INIT_BUSYBOX),y)
+ 
+ define BUSYBOX_SET_INIT
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_INIT,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_INIT)
  endef
  
-+$$($(2)_DIR)/.stamp_kconfig_fixup_done: PKG=$(2)
- $$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
- 	$$($(2)_FIXUP_DOT_CONFIG)
+ ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+@@ -232,15 +231,15 @@ endif # BR2_INIT_BUSYBOX
+ ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
+ BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
+ define BUSYBOX_SET_SELINUX
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUX,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUXENABLED,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUX)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SELINUXENABLED)
+ endef
+ endif
  
-@@ -223,6 +224,7 @@ $(2)_CONFIGURATOR_MAKE_ENV = \
- # end up having a valid @D.
- #
- $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/.kconfig_editor_%
-+$$($(2)_DIR)/.kconfig_editor_%: PKG=$(2)
- $$($(2)_DIR)/.kconfig_editor_%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
- 	$$($(2)_CONFIGURATOR_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
- 		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS) $$(*)
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 91a492588e..6b254235ec 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -11,17 +11,24 @@
- # package, and more.
- #
- 
--# KCONFIG_MUNGE_DOT_CONFIG (option, newline, file)
-+# KCONFIG_DOT_CONFIG ([file])
-+KCONFIG_DOT_CONFIG = $(strip \
-+	$(if $(strip $(1)), $(1), \
-+		$($(PKG)_BUILDDIR)/$($(PKG)_KCONFIG_DOTCONFIG) \
-+	) \
-+)
-+
-+# KCONFIG_MUNGE_DOT_CONFIG (option, newline [, file])
- define KCONFIG_MUNGE_DOT_CONFIG
--	$(SED) "/\\<$(strip $(1))\\>/d" $(strip $(3))
--	echo '$(strip $(2))' >> $(strip $(3))
-+	$(SED) "/\\<$(strip $(1))\\>/d" $(call KCONFIG_DOT_CONFIG,$(3))
-+	echo '$(strip $(2))' >> $(call KCONFIG_DOT_CONFIG,$(3))
+ ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
+ define BUSYBOX_SET_INDIVIDUAL_BINARIES
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_INDIVIDUAL,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_INDIVIDUAL)
  endef
  
--# KCONFIG_ENABLE_OPT (option, file)
-+# KCONFIG_ENABLE_OPT (option [, file])
- KCONFIG_ENABLE_OPT  = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=y, $(2))
--# KCONFIG_SET_OPT (option, value, file)
-+# KCONFIG_SET_OPT (option, value [, file])
- KCONFIG_SET_OPT     = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=$(2), $(3))
--# KCONFIG_DISABLE_OPT  (option, file)
-+# KCONFIG_DISABLE_OPT  (option [, file])
- KCONFIG_DISABLE_OPT = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(SHARP_SIGN) $(1) is not set, $(2))
+ define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
+@@ -285,7 +284,7 @@ endif
  
- # Helper functions to determine the name of a package and its
+ ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
+ define BUSYBOX_SET_WATCHDOG
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG)
+ endef
+ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
+ 	$(INSTALL) -D -m 0755 package/busybox/S15watchdog \
+@@ -298,12 +297,12 @@ endif
+ # PAM support requires thread support in the toolchain
+ ifeq ($(BR2_PACKAGE_LINUX_PAM)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+ define BUSYBOX_LINUX_PAM
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM)
+ endef
+ BUSYBOX_DEPENDENCIES += linux-pam
+ else
+ define BUSYBOX_LINUX_PAM
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_DISABLE_OPT,CONFIG_PAM)
+ endef
+ endif
+ 
 -- 
 2.20.1
