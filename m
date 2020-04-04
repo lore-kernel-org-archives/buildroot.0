@@ -1,25 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 04 Apr 2020 20:52:46 +0000
-Subject: [Buildroot] [Bug 12751] OpenJdk package installation issues on
- target
-In-Reply-To: <bug-12751-163@https.bugs.busybox.net/>
-References: <bug-12751-163@https.bugs.busybox.net/>
-Message-ID: <bug-12751-163-H7a2UQPn8O@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 4 Apr 2020 22:55:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: bump version to 245.4
+In-Reply-To: <20200402011224.725831-1-aduskett@gmail.com>
+References: <20200402011224.725831-1-aduskett@gmail.com>
+Message-ID: <20200404225549.225d00c6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12751
+On Wed,  1 Apr 2020 18:12:23 -0700
+aduskett at gmail.com wrote:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/systemd/systemd.hash | 2 +-
+>  package/systemd/systemd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |aduskett at gmail.com
-                   |.org                        |
+Applied to master, thanks.
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
