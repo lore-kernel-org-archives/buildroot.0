@@ -1,8 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 03 Apr 2020 22:27:47 +0000
-Subject: [Buildroot] [Bug 12751] New: OpenJdk package installation issues on
+Date: Sat, 04 Apr 2020 04:28:46 +0000
+Subject: [Buildroot] [Bug 12751] OpenJdk package installation issues on
  target
-Message-ID: <bug-12751-163@https.bugs.busybox.net/>
+In-Reply-To: <bug-12751-163@https.bugs.busybox.net/>
+References: <bug-12751-163@https.bugs.busybox.net/>
+Message-ID: <bug-12751-163-PylRCzfK0E@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,56 +13,17 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=12751
 
-            Bug ID: 12751
-           Summary: OpenJdk package installation issues on target
-           Product: buildroot
-           Version: 2020.02
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ameya.joshi at rockwellcollins.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+--- Comment #1 from Ameya <ameya.joshi@rockwellcollins.com> ---
+I had "symlink" option selected inside "system configuration" page or maybe the 
 
-Hi,
+pc_x86_64_bios_defconfig has that selected by default.
 
-The current openjdk package INSTALL_TARGET_CMD installs only the lib and bin
-folder to /usr/lib
+Unchecking it should solve the buildroot error 
 
-the JRE/lib folder contains a modules file which in conflict with modules
-directory which has kernel modules
+But in our case , i do need the entire JDK on the system ,  and not just the
+libs and bin?
 
-i am doing a x86_64 build , the lib is symlinked to /usr/lib on target and all
-kernel modules get installed /lib/modules
-
-Sometimes the overwrite works during copy and kernel modules get replaced by
-java modules file
-
-cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/* $(TARGET_DIR)/usr/lib/
-
-Here is the error i have gotten:
-
->>> openjdk 13.0.2+8 Installing to target
-cp -dpfr
-/bulk/ajoshi2/nuc-build/build/openjdk-13.0.2+8/build/linux-*-release/images/jre/bin/*
-/bulk/ajoshi2/nuc-build/target/usr/bin/
-cp -dpfr
-/bulk/ajoshi2/nuc-build/build/openjdk-13.0.2+8/build/linux-*-release/images/jre/lib/*
-/bulk/ajoshi2/nuc-build/target/usr/lib/
-cp: cannot overwrite directory ?/bulk/ajoshi2/nuc-build/target/usr/lib/modules?
-with non-directory
-
-Can we update the INSTALL_TARGET_CMDS for openjdk to install the entire JDK
-inside /usr/lib/jvm folder and symlink the binaries?
-
-Regards,
-Ameya Joshi
-Sr Software Engineer
-Collins Aerospace
+can we have a option created in menuconfig to select that?
 
 -- 
 You are receiving this mail because:
