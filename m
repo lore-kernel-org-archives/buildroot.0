@@ -1,55 +1,71 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  5 Apr 2020 00:06:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bubblewrap: security bump to
- version 0.4.1
-Message-ID: <20200404220648.1543017-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun,  5 Apr 2020 00:08:41 +0200
+Subject: [Buildroot] [PATCHv2 1/2] support/testing: update the ARM toolchain
+ used for the systemd init tests
+Message-ID: <20200404220842.362610-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2020-5291: Bubblewrap (bwrap) before version 0.4.1, if installed
-in setuid mode and the kernel supports unprivileged user namespaces,
-then the `bwrap --userns2` option can be used to make the setuid process
-keep running as root while being traceable. This can in turn be used to
-gain root permissions. Note that this only affects the combination of
-bubblewrap in setuid mode (which is typically used when unprivileged
-user namespaces are not supported) and the support of unprivileged user
-namespaces.
+As reported on the mailing list, there is a build issue with systemd 245
+when using gcc < 5.0:
 
-Also update indentation of hash file (two spaces)
+http://lists.busybox.net/pipermail/buildroot/2020-April/278931.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Update to the Bootling toolchain 2017.05 that meet the minimum requered
+version of toolchain componant:
+GCC           5.4.0
+linux-headers 3.10.105
+
+See:
+https://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi/readmes/armv5-eabi--glibc--stable-2017.05-toolchains-1-1.txt
+
+Tested:
+https://gitlab.com/kubu93/buildroot/pipelines/132890602
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144403
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144405
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144406
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144408
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144410
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144412
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/bubblewrap/bubblewrap.hash | 4 ++--
- package/bubblewrap/bubblewrap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/testing/tests/init/test_systemd.py | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
-index 6914a1ccd7..d3ccb4cb1f 100644
---- a/package/bubblewrap/bubblewrap.hash
-+++ b/package/bubblewrap/bubblewrap.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256 e5fe7d2f74bd7029b5306b0b70587cec31f74357739295e5276b4a3718712023 bubblewrap-0.4.0.tar.xz
-+sha256  b9c69b9b1c61a608f34325c8e1a495229bacf6e4a07cbb0c80cf7a814d7ccc03  bubblewrap-0.4.1.tar.xz
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+index 0ac18cb623..10634cbb1f 100644
+--- a/support/testing/tests/init/test_systemd.py
++++ b/support/testing/tests/init/test_systemd.py
+@@ -2,11 +2,24 @@ import infra.basetest
+ from tests.init.base import InitSystemBase as InitSystemBase
  
- # Hash for license files:
--sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c COPYING
-+sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
-index 3da00a700d..388f64880e 100644
---- a/package/bubblewrap/bubblewrap.mk
-+++ b/package/bubblewrap/bubblewrap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
  
--BUBBLEWRAP_VERSION = 0.4.0
-+BUBBLEWRAP_VERSION = 0.4.1
- BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
- BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
- BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
++# External Toolchain fragment imported from:
++# https://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi/fragments/armv5-eabi--glibc--stable-2017.05-toolchains-1-1.frag
+ class InitSystemSystemdBase(InitSystemBase):
+     config = \
+         """
+         BR2_arm=y
++        BR2_arm926t=y
++        BR2_ARM_CPU_ARMV5=y
++        BR2_ARM_EABI=y
++        BR2_ARM_SOFT_FLOAT=y
+         BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
++        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++        BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi--glibc--stable-2017.05-toolchains-1-1.tar.bz2"
++        BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
++        BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
++        BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+         BR2_INIT_SYSTEMD=y
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_LINUX_KERNEL=y
 -- 
 2.25.1
