@@ -1,35 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 05 Apr 2020 08:02:55 +0000
-Subject: [Buildroot] [Bug 8541] fail to build host-fakeroot-1.20.2
-In-Reply-To: <bug-8541-163@https.bugs.busybox.net/>
-References: <bug-8541-163@https.bugs.busybox.net/>
-Message-ID: <bug-8541-163-0Icn1Qdt2e@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  5 Apr 2020 10:22:03 +0200
+Subject: [Buildroot] [PATCH] package/unbound: fix detection of libexpat
+Message-ID: <20200405082203.24014-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8541
+unbound open-codes the detection of libexpat, and as all packages doing
+so, look in host paths (/usr/local /opt/local /usr/lib /usr/pkg /usr/sfw
+/usr). Obviously this is wrong for cross-compilation.
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Do for libexpat as we do for openssl, and point unbound to staging dir,
+when we know expat is.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
+Fixes:
+    http://autobuild.buildroot.org/results/a89ea6aa1cd8c253b1260ea227fea3dc9b095fe8/
 
---- Comment #8 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-5p0ng3b0b
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Stefan Ott <stefan@ott.net>
+---
+ package/unbound/unbound.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Please open a new issue, rather than hijack this old one, which has already
-been resolved and fixed.
-
-Also, provide a bit more context about your failure: what distribution are
-building on, etc...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index 937165eca7..59543438fd 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -16,6 +16,7 @@ UNBOUND_CONF_OPTS = \
+ 	--with-pidfile=/var/run/unbound.pid \
+ 	--with-rootkey-file=/etc/unbound/root.key \
+ 	--enable-tfo-server \
++	--with-libexpat=$(STAGING_DIR)/usr \
+ 	--with-ssl=$(STAGING_DIR)/usr
+ 
+ # uClibc-ng does not have MSG_FASTOPEN
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
