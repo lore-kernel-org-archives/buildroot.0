@@ -1,58 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 5 Apr 2020 16:25:43 +0200
-Subject: [Buildroot] [git commit] package/bubblewrap: security bump to
- version 0.4.1
-Message-ID: <20200405141204.8947C84BFB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/unbound: fix detection of libexpat
+Message-ID: <20200405141204.A53BC8B862@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d82a5ade0b3ab8a7a5fe6351358429e3c457f2e2
+commit: https://git.buildroot.net/buildroot/commit/?id=3c4c508e7b7f01c6cc09b665dca866742eb76b70
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2020-5291: Bubblewrap (bwrap) before version 0.4.1, if installed
-in setuid mode and the kernel supports unprivileged user namespaces,
-then the `bwrap --userns2` option can be used to make the setuid process
-keep running as root while being traceable. This can in turn be used to
-gain root permissions. Note that this only affects the combination of
-bubblewrap in setuid mode (which is typically used when unprivileged
-user namespaces are not supported) and the support of unprivileged user
-namespaces.
+unbound open-codes the detection of libexpat, and as all packages doing
+so, look in host paths (/usr/local /opt/local /usr/lib /usr/pkg /usr/sfw
+/usr). Obviously this is wrong for cross-compilation.
 
-Also update indentation of hash file (two spaces)
+Do for libexpat as we do for openssl, and point unbound to staging dir,
+when we know expat is.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+Fixes:
+    http://autobuild.buildroot.org/results/a89ea6aa1cd8c253b1260ea227fea3dc9b095fe8/
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Stefan Ott <stefan@ott.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bubblewrap/bubblewrap.hash | 4 ++--
- package/bubblewrap/bubblewrap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/unbound/unbound.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
-index 6914a1ccd7..d3ccb4cb1f 100644
---- a/package/bubblewrap/bubblewrap.hash
-+++ b/package/bubblewrap/bubblewrap.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256 e5fe7d2f74bd7029b5306b0b70587cec31f74357739295e5276b4a3718712023 bubblewrap-0.4.0.tar.xz
-+sha256  b9c69b9b1c61a608f34325c8e1a495229bacf6e4a07cbb0c80cf7a814d7ccc03  bubblewrap-0.4.1.tar.xz
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index 937165eca7..59543438fd 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -16,6 +16,7 @@ UNBOUND_CONF_OPTS = \
+ 	--with-pidfile=/var/run/unbound.pid \
+ 	--with-rootkey-file=/etc/unbound/root.key \
+ 	--enable-tfo-server \
++	--with-libexpat=$(STAGING_DIR)/usr \
+ 	--with-ssl=$(STAGING_DIR)/usr
  
- # Hash for license files:
--sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c COPYING
-+sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
-index 3da00a700d..388f64880e 100644
---- a/package/bubblewrap/bubblewrap.mk
-+++ b/package/bubblewrap/bubblewrap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BUBBLEWRAP_VERSION = 0.4.0
-+BUBBLEWRAP_VERSION = 0.4.1
- BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
- BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
- BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
+ # uClibc-ng does not have MSG_FASTOPEN
