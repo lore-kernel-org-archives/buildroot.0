@@ -1,54 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Apr 2020 16:27:45 +0200
-Subject: [Buildroot] [git commit] package/cegui: disable xerces support
-Message-ID: <20200405141401.1DDB38B8CA@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  5 Apr 2020 16:28:23 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python3: add optional support for
+ berkeleydb
+In-Reply-To: <20200405142823.836514-1-bernd.kuhls@t-online.de>
+References: <20200405142823.836514-1-bernd.kuhls@t-online.de>
+Message-ID: <20200405142823.836514-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=689b9c1a7cf54b82e0a886bf71fda53731cf634c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Tested using this defconfig:
 
-Disable temporarily xerces's support due to used char16_t type
-which is not supported in the currently used cegui version (0-8-7)
-due to forced c++03 standard.
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_BERKELEYDB=y
 
-Fixes:
- - http://autobuild.buildroot.net/results/ea04be78b31b3409801597fc0ebe04627742c0c8
- - http://autobuild.buildroot.net/results/7de3a07c304e3939ec9fd164328d004a5a9bba6d
- - http://autobuild.buildroot.net/results/472b4e8438c9100e06e401296f0417a463e5fcf1
+Without this patch:
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+$ ls -la output/target/usr/lib/python3.8/lib-dynload | grep dbm
+$
+
+With this patch:
+
+$ ls -la output/target/usr/lib/python3.8/lib-dynload | grep dbm
+-rwxr-xr-x  1 bernd bernd   95240 Apr  5 16:19 _dbm.cpython-38-x86_64-linux-gnu.so
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/cegui/cegui.mk | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ package/python3/python3.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
-index 259e3e3735..134b222362 100644
---- a/package/cegui/cegui.mk
-+++ b/package/cegui/cegui.mk
-@@ -9,6 +9,7 @@ CEGUI_SITE = $(call github,cegui,cegui,v$(CEGUI_VERSION))
- CEGUI_LICENSE = MIT
- CEGUI_LICENSE_FILES = COPYING
- CEGUI_INSTALL_STAGING = YES
-+CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_XERCES=OFF
- CEGUI_DEPENDENCIES = glm \
- 		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
- 		$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
-@@ -72,13 +73,6 @@ else
- CEGUI_CONF_OPTS += -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 2656037efd..98c78bb156 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -150,6 +150,10 @@ ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
+ PYTHON3_DEPENDENCIES += gettext
  endif
  
--ifeq ($(BR2_PACKAGE_XERCES),y)
--CEGUI_DEPENDENCIES += xerces
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_XERCES=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_XERCES=OFF
--endif
--
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
- CEGUI_DEPENDENCIES += libxml2
- CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_LIBXML2=ON
++ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
++PYTHON3_DEPENDENCIES += berkeleydb
++endif
++
+ PYTHON3_CONF_OPTS += \
+ 	--without-ensurepip \
+ 	--without-cxx-main \
+-- 
+2.25.0
