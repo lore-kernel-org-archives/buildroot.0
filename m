@@ -1,47 +1,69 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 Apr 2020 01:04:12 +0200
-Subject: [Buildroot] [PATCH 5/7] support/testing: test_lxc: use ARM arm
- external toolchain
+Date: Mon,  6 Apr 2020 01:04:14 +0200
+Subject: [Buildroot] [PATCH 7/7] support/testing: check if the defconfig
+ provided for testing is valid
 In-Reply-To: <20200405230414.416403-1-romain.naour@gmail.com>
 References: <20200405230414.416403-1-romain.naour@gmail.com>
-Message-ID: <20200405230414.416403-5-romain.naour@gmail.com>
+Message-ID: <20200405230414.416403-7-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, the lxc test was using the ARM CodeSourcery 2014.05 armv5 toolchain.
-But the recent systemd version bump to 245 added a toolchain dependency
-on systemd package due to build issues with gcc < 5.0.
+Currently, the build continue even if some symbols disapear from
+the generated dot config file (.config).
 
-Before [1] the lxc test was failing to build with the ARM CodeSourcery 2014.05
-toolchain. After [1], the test is faling at runtime since the
-"BR2_INIT_SYSTEMD=y" symbol disapear from the dot config (.config) due to
-the new toolchain dependency.
+This patch add a new check in order to stop the test if one
+of the provided symbol is missing. This must be treated as error.
 
-Fix this by using the same toolchain as for the systemd tests [2]
+For example, if a symbol disapear due to new dependency constraints.
 
-[1] 2196ee25ff29c87001a42a382655d5b52d5de3c4
-[2] b3d979c0d1b10de501576644e7dcdba708889b0c
+Inspired by is_toolchain_usable() function from genrandconfig:
+https://git.busybox.net/buildroot/tree/utils/genrandconfig?h=2020.02#n164
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- support/testing/tests/package/test_lxc.py | 2 ++
- 1 file changed, 2 insertions(+)
+ support/testing/infra/builder.py | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/support/testing/tests/package/test_lxc.py b/support/testing/tests/package/test_lxc.py
-index 346247da08..b32b7a20c4 100644
---- a/support/testing/tests/package/test_lxc.py
-+++ b/support/testing/tests/package/test_lxc.py
-@@ -7,6 +7,8 @@ class TestLxc(infra.basetest.BRTest):
-     config = \
-             """
-             BR2_arm=y
-+            BR2_cortex_a9=y
-+            BR2_ARM_ENABLE_VFP=y
-             BR2_TOOLCHAIN_EXTERNAL=y
-             BR2_LINUX_KERNEL=y
-             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+index 88f01d15c0..922a707220 100644
+--- a/support/testing/infra/builder.py
++++ b/support/testing/infra/builder.py
+@@ -12,6 +12,23 @@ class Builder(object):
+         self.builddir = builddir
+         self.logfile = infra.open_log_file(builddir, "build", logtofile)
+ 
++    def is_defconfig_valid(self, configfile, defconfig):
++        """Check if the .config is contains all lines present in the defconfig."""
++        with open(configfile) as configf:
++            configlines = configf.readlines()
++
++        defconfiglines = defconfig.split("\n")
++
++        # Check that all the defconfig lines are still present
++        for defconfigline in defconfiglines:
++            if defconfigline + "\n" not in configlines:
++                self.logfile.write("WARN: defconfig can't be used\n")
++                self.logfile.write("      Missing: %s\n" % defconfigline.strip())
++                self.logfile.flush()
++                return False
++
++        return True
++
+     def configure(self, make_extra_opts=[], make_extra_env={}):
+         """Configure the build.
+ 
+@@ -47,6 +64,9 @@ class Builder(object):
+         if ret != 0:
+             raise SystemError("Cannot olddefconfig")
+ 
++        if not self.is_defconfig_valid(config_file, self.config):
++            raise SystemError("The defconfig is not valid")
++
+     def build(self, make_extra_opts=[], make_extra_env={}):
+         """Perform the build.
+ 
 -- 
 2.25.1
