@@ -1,84 +1,72 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Apr 2020 16:52:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: add optional dependency to
- libxcb
-Message-ID: <20200405145207.1258663-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 5 Apr 2020 17:56:46 +0200
+Subject: [Buildroot] glibc version choice ?
+Message-ID: <ec2476b1-3bb9-1ea4-fa63-6c5d4908a5d9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ffmpeg 3.3 added optional support for libxcb:
-https://git.ffmpeg.org/gitweb/ffmpeg.git/blob/HEAD:/Changelog#l282
+Hi All,
 
-This patch ensures a reproducable build of libavdevice.so:
+All Bootlin toolchains (generated using the Buildroot internal toolchain
+backend) has been rebuilt recently [1]. The toolchain-builder project provide
+two toolchain versions "stable" and "bleeding-edge" where different versions of
+gcc, binutils, linux-headers and gdb are used.
 
-$ readelf -a output/target/usr/lib/libavdevice.so | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libavfilter.so.7]
- 0x0000000000000001 (NEEDED)             Shared library: [libavformat.so.58]
- 0x0000000000000001 (NEEDED)             Shared library: [libavcodec.so.58]
- 0x0000000000000001 (NEEDED)             Shared library: [libavutil.so.56]
- 0x0000000000000001 (NEEDED)             Shared library: [libxcb.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libxcb-shm.so.0]
- 0x0000000000000001 (NEEDED)             Shared library: [libxcb-shape.so.0]
- 0x0000000000000001 (NEEDED)             Shared library: [libxcb-xfixes.so.0]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
+But both toolchain version use the same version of the libc implementation
+(glibc, musl and uClibc-ng). I will not talk about musl and uClibc-ng here since
+they don't provide stable branches. But the glibc project does [2], even for
+very old versions.
 
-compared to
+It may seem surprising to consider at the moment, a toolchain based on glibc
+2.30 or latter "stable".
 
-$ readelf -a output/target/usr/lib/libavdevice.so | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libavfilter.so.7]
- 0x0000000000000001 (NEEDED)             Shared library: [libavformat.so.58]
- 0x0000000000000001 (NEEDED)             Shared library: [libavcodec.so.58]
- 0x0000000000000001 (NEEDED)             Shared library: [libavutil.so.56]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
+|  Distro  |  release |  glibc  |
+|  Debian  |  Buster  |  2.28   |
+|  Ubuntu  |  19.10   |  2.30   |
+|  Ubuntu  |  18.04   |  2.27   |
+|  Fedora  |  f30     |  2.29   |
+|  Fedora  |  f31     |  2.30   |
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/Config.in |  7 +++++++
- package/ffmpeg/ffmpeg.mk | 11 +++++++++++
- 2 files changed, 18 insertions(+)
+Glibc (as for musl and uClibc-ng) are critical elements in a Linux system, each
+version bump may cause regressions that requires to fix several other projects.
+That is also why we use the version N-1 of gcc, binutils and gdb as default
+version in Buildroot.
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 33baff262e..2efef7dd86 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -67,6 +67,13 @@ config BR2_PACKAGE_FFMPEG_FFPROBE
- 	  FFprobe is a utility to determine the audio and video
- 	  characteristics of a container file.
- 
-+config BR2_PACKAGE_FFMPEG_XCBGRAB
-+	bool "Build X11 screen grabbing"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBXCB
-+	help
-+	  X11 screen grabbing using libxcb.
-+
- config BR2_PACKAGE_FFMPEG_AVRESAMPLE
- 	bool "Build libavresample"
- 	help
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index b7148bbba2..96455cb978 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -96,6 +96,17 @@ else
- FFMPEG_CONF_OPTS += --disable-ffprobe
- endif
- 
-+ifeq ($(BR2_PACKAGE_FFMPEG_XCBGRAB),y)
-+FFMPEG_CONF_OPTS += \
-+	--enable-libxcb \
-+	--enable-libxcb-shape \
-+	--enable-libxcb-shm \
-+	--enable-libxcb-xfixes
-+FFMPEG_DEPENDENCIES += libxcb
-+else
-+FFMPEG_CONF_OPTS += --disable-libxcb
-+endif
-+
- ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
- FFMPEG_CONF_OPTS += --enable-postproc
- else
--- 
-2.25.0
+Some example of issues related to glibc:
+
+- The latest version of glibc (2.31) at the time it's released, was not
+compiling with existing gcc released version (gcc 8.4 and 9.3 containing a fix
+was released after glibc 2.31).
+
+- glibc 2.31 doesn't build with gcc 7.5.0 due to libsanitizer code but the gcc
+7.5.0 code will not get maintained anymore.
+
+- openssh needs to be updated to 8.2p1 due to issue with glibc 2.31.
+
+- In the past we had an issue with glibc 2.26 release didn't compile C++ code on
+x86 using math function (-Os) [3].
+
+Also recent glibc release increased the requirement on gcc, so we can't compile
+glibc 2.30 with gcc < 6.2.
+
+This may be considered as serious issues to consider having a version choice for
+glibc package. Some years ago, there was the possibility in Buildroot to choose
+among 3 versions, but the choice was removed by [4].
+
+Note: Glibc release two versions per year (Febuary and August), so each version
+may not widely used by other Linux distributions.
+
+So what about reintroducing a version choice for glibc,@least a second choice
+with the version N-1 ?
+
+[1] https://toolchains.bootlin.com/news.html
+[2] https://sourceware.org/pipermail/libc-alpha/2020-March/112367.html
+[3] https://lwn.net/Articles/736429/
+[4]
+https://git.buildroot.net/buildroot/commit/?id=b1ca91c59db667fdd5e59f1a0c8ac11dc0a19816
+
+Best regards,
+Romain
