@@ -1,96 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Apr 2020 23:21:47 +0200
-Subject: [Buildroot] [PATCH] package/pkg-generic.mk: also replace /lib
- by STAGING_DIR/lib in .la files
-In-Reply-To: <20200405142143.4182009-1-thomas.petazzoni@bootlin.com>
-References: <20200405142143.4182009-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200405212147.GP22325@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  6 Apr 2020 01:04:08 +0200
+Subject: [Buildroot] [PATCH 1/7] support/testing: test_syslinux: fix flake8
+ errors
+Message-ID: <20200405230414.416403-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Reported by gitlab:
+https://gitlab.com/kubu93/buildroot/-/jobs/499374911
 
-On 2020-04-05 16:21 +0200, Thomas Petazzoni spake thusly:
-> After the staging installation, we replace a number of paths in
-> libtool .la files so that those paths point to STAGING_DIR instead to
-> location in the build machine.
-> 
-> However, we replace only paths that start with /usr. And it turns out
-> that the linux-pam package is configured with --libdir=/lib (linux-pam
-> seems to always be installed in /lib rather than /usr/lib).
-> 
-> Due to this, libpam.la contains the following line:
-> 
->   libdir='/lib'
-> 
-> When building a configuration that has:
-> 
->  - BR2_ROOTFS_MERGED_USR=y
->  - BR2_PACKAGE_LINUX_PAM=y
->  - BR2_PACKAGE_POLKIT=y
-> 
-> on a system that has its system-wide PAM library installed in /lib,
-> the build fails with:
-> 
-> /lib/libpam.so: file not recognized: File format not recognized
-> 
-> For some reason, libtool searches only in STAGING_DIR/usr/lib, but
-> when BR2_ROOTFS_MERGED_USR=y, STAGING_DIR/lib points to
-> STAGING_DIR/usr/lib, so libtool finds libpam.la. And this libpam.la
-> contains a bogus libdir='/lib' path. libtool then goes on, finds
-> /lib/libpam.so, and links with it, causing the build failure.
-> 
-> By doing the proper replacement of libdir='/lib', we have a correct
-> libpam.la, and solve the build issue.
-> 
-> There is no autobuilder failure associated to this issue, as it
-> requires /lib/libpam.so to exist. This is the case on ArchLinux, on
-> which Xogium reported the issue, which can also be reproduced in an
-> ArchLinux container.
-> 
-> Reported-by: Xogium <contact@xogium.me>
-> Cc: Xogium <contact@xogium.me>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/boot/test_syslinux.py | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-I tested the build before/after the patch, with/without a /lib/libpam.so
-(that I manually created on purpose). It was broken, it no longer is. ?
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkg-generic.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 20b07a7fa9..7679c41556 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -329,6 +329,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
->  			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
->  				-e "s:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
->  			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
-> +			-e "s:\(['= ]\)/lib:\\1 at STAGING_DIR@/lib:g" \
->  			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
->  				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
->  			-e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/support/testing/tests/boot/test_syslinux.py b/support/testing/tests/boot/test_syslinux.py
+index 6b1a8bc7d7..4105e5edac 100644
+--- a/support/testing/tests/boot/test_syslinux.py
++++ b/support/testing/tests/boot/test_syslinux.py
+@@ -1,13 +1,14 @@
+ import infra.basetest
+ 
++
+ class TestSysLinuxBase(infra.basetest.BRTest):
+     x86_toolchain_config = \
+         """
+-	BR2_x86_i686=y
+-	BR2_TOOLCHAIN_EXTERNAL=y
+-	BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-	BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2"
+-	BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
++        BR2_x86_i686=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++        BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2"
++        BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+         BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+         BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+         BR2_TOOLCHAIN_EXTERNAL_CXX=y
+@@ -46,6 +47,7 @@ class TestSysLinuxBase(infra.basetest.BRTest):
+         BR2_TARGET_SYSLINUX_EFI=y
+         """
+ 
++
+ class TestSysLinuxX86LegacyBios(TestSysLinuxBase):
+     config = \
+         TestSysLinuxBase.x86_toolchain_config + \
+@@ -55,6 +57,7 @@ class TestSysLinuxX86LegacyBios(TestSysLinuxBase):
+     def test_run(self):
+         pass
+ 
++
+ class TestSysLinuxX86EFI(TestSysLinuxBase):
+     config = \
+         TestSysLinuxBase.x86_toolchain_config + \
+@@ -64,6 +67,7 @@ class TestSysLinuxX86EFI(TestSysLinuxBase):
+     def test_run(self):
+         pass
+ 
++
+ class TestSysLinuxX86_64LegacyBios(TestSysLinuxBase):
+     config = \
+         TestSysLinuxBase.x86_64_toolchain_config + \
+@@ -73,6 +77,7 @@ class TestSysLinuxX86_64LegacyBios(TestSysLinuxBase):
+     def test_run(self):
+         pass
+ 
++
+ class TestSysLinuxX86_64EFI(TestSysLinuxBase):
+     config = \
+         TestSysLinuxBase.x86_64_toolchain_config + \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
