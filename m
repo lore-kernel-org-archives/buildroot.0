@@ -1,55 +1,47 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 Apr 2020 01:04:13 +0200
-Subject: [Buildroot] [PATCH 6/7] support/testing: don't use
- TestPythonPackageBase.config and linaro toolchain
+Date: Mon,  6 Apr 2020 01:04:12 +0200
+Subject: [Buildroot] [PATCH 5/7] support/testing: test_lxc: use ARM arm
+ external toolchain
 In-Reply-To: <20200405230414.416403-1-romain.naour@gmail.com>
 References: <20200405230414.416403-1-romain.naour@gmail.com>
-Message-ID: <20200405230414.416403-6-romain.naour@gmail.com>
+Message-ID: <20200405230414.416403-5-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-TestPythonPackageBase.config provide already the basic uClibc toolchain.
-So by adding the symbols for the linaro toolchain some warning are printed
-at while loading the configuration:
+Until now, the lxc test was using the ARM CodeSourcery 2014.05 armv5 toolchain.
+But the recent systemd version bump to 245 added a toolchain dependency
+on systemd package due to build issues with gcc < 5.0.
 
-.config:16:warning: override: reassigning to symbol BR2_TOOLCHAIN_EXTERNAL
-.config:16:warning: override: BR2_TOOLCHAIN_EXTERNAL changes choice state
-.config:17:warning: override: reassigning to symbol BR2_TARGET_ROOTFS_CPIO
-.config:21:warning: override: BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM changes choice state
+Before [1] the lxc test was failing to build with the ARM CodeSourcery 2014.05
+toolchain. After [1], the test is faling at runtime since the
+"BR2_INIT_SYSTEMD=y" symbol disapear from the dot config (.config) due to
+the new toolchain dependency.
 
-So, some symbol disapear from the generated dot config (.config) leading
-to an error due to a new check in the testsuite infra.
+Fix this by using the same toolchain as for the systemd tests [2]
 
-Since this test should use the Linaro toolchain, remove
-TestPythonPackageBase.config add BR2_arm=y and disable the rootfs tar option.
+[1] 2196ee25ff29c87001a42a382655d5b52d5de3c4
+[2] b3d979c0d1b10de501576644e7dcdba708889b0c
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Adam Duskett <Aduskett@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/package/test_gst1_python.py | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ support/testing/tests/package/test_lxc.py | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/support/testing/tests/package/test_gst1_python.py b/support/testing/tests/package/test_gst1_python.py
-index c6b337dd04..10d7907f8d 100644
---- a/support/testing/tests/package/test_gst1_python.py
-+++ b/support/testing/tests/package/test_gst1_python.py
-@@ -4,10 +4,12 @@ from tests.package.test_python import TestPythonPackageBase
- 
- class TestGst1Python(TestPythonPackageBase):
-     __test__ = True
--    config = TestPythonPackageBase.config + \
-+    config = \
-         """
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_arm=y
-         BR2_cortex_a9=y
-         BR2_ARM_ENABLE_VFP=y
-         BR2_ARM_EABIHF=y
+diff --git a/support/testing/tests/package/test_lxc.py b/support/testing/tests/package/test_lxc.py
+index 346247da08..b32b7a20c4 100644
+--- a/support/testing/tests/package/test_lxc.py
++++ b/support/testing/tests/package/test_lxc.py
+@@ -7,6 +7,8 @@ class TestLxc(infra.basetest.BRTest):
+     config = \
+             """
+             BR2_arm=y
++            BR2_cortex_a9=y
++            BR2_ARM_ENABLE_VFP=y
+             BR2_TOOLCHAIN_EXTERNAL=y
+             BR2_LINUX_KERNEL=y
+             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -- 
 2.25.1
