@@ -1,76 +1,75 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 5 Apr 2020 22:49:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump version to 3.1.3
-In-Reply-To: <20200405163512.5390b234@gmx.net>
-References: <20200405120505.5594-1-zhaojh329@gmail.com>
- <20200405163512.5390b234@gmx.net>
-Message-ID: <20200405224909.765cc01d@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 5 Apr 2020 23:17:26 +0200
+Subject: [Buildroot] [git commit] package/pkg-generic.mk: also replace /lib
+ by STAGING_DIR/lib in .la files
+Message-ID: <20200405210552.7DB4B8C062@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jianhui,
+commit: https://git.buildroot.net/buildroot/commit/?id=7ae7c82dd617cb76dd9f4e43b32eea151528d818
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 5 Apr 2020 16:35:12 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+After the staging installation, we replace a number of paths in libtool
+.la files so that those paths point to STAGING_DIR instead of a location
+in the build machine.
 
-> Hello Jianhui,
->
-> On Sun,  5 Apr 2020 20:05:05 +0800, Jianhui Zhao <zhaojh329@gmail.com> wrote:
->
-> > Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-> > ---
-> >  package/libuhttpd/libuhttpd.hash | 2 +-
-> >  package/libuhttpd/libuhttpd.mk   | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-> > index 65014cacf5..5c3359fdd3 100644
-> > --- a/package/libuhttpd/libuhttpd.hash
-> > +++ b/package/libuhttpd/libuhttpd.hash
-> > @@ -1,3 +1,3 @@
-> >  # Locally calculated
-> > -sha256 9f938b75074f812375c5079189f8299c328e94801117ab1190a29fae0806f1a8  libuhttpd-3.1.2.tar.gz
-> > +sha256 272e64fab9932039366270efa49dd4df98f5ebe8c76e51ae578594b37bf6eef4  libuhttpd-3.1.3.tar.gz
-> >  sha256 99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-> > diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-> > index ce805e8f08..0d75176d41 100644
-> > --- a/package/libuhttpd/libuhttpd.mk
-> > +++ b/package/libuhttpd/libuhttpd.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >
-> > -LIBUHTTPD_VERSION = 3.1.2
-> > +LIBUHTTPD_VERSION = 3.1.3
-> >  LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
-> >  LIBUHTTPD_LICENSE = MIT
-> >  LIBUHTTPD_LICENSE_FILES = LICENSE
->
-> Thanks for the update, one question:
->
-> From [1]:
->
->  + check_library_exists(dl dlopenx "" HAVE_DLOPEN)
->
-> Would have expected dlopen (not dlopenx)?
+However, we replace only paths that start with /usr. And it turns out
+that the linux-pam package is configured with --libdir=/lib (linux-pam
+seems to always be installed in /lib rather than /usr/lib).
 
-And still a problem with br-arm-cortex-m4-full:
+Due to this, libpam.la contains the following line:
 
-[ 81%] Linking C shared library libuhttpd.so
-ld (ld-elf2flt): -shared used without passing a shared library ID
-collect2: error: ld returned 1 exit status
+  libdir='/lib'
 
-Regards,
-Peter
+When building a configuration that has:
 
->
-> Regards,
-> Peter
->
-> [1] https://github.com/zhaojh329/libuhttpd/commit/44b35fd253d9557c5c61beab80c8086042fc09df
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ - BR2_ROOTFS_MERGED_USR=y
+ - BR2_PACKAGE_LINUX_PAM=y
+ - BR2_PACKAGE_POLKIT=y
+
+on a system that has its system-wide PAM library installed in /lib,
+the build fails with:
+
+/lib/libpam.so: file not recognized: File format not recognized
+
+For some reason, libtool searches only in STAGING_DIR/usr/lib, but
+when BR2_ROOTFS_MERGED_USR=y, STAGING_DIR/lib points to
+STAGING_DIR/usr/lib, so libtool finds libpam.la. And this libpam.la
+contains a bogus libdir='/lib' path. libtool then goes on, finds
+/lib/libpam.so, and links with it, causing the build failure.
+
+By doing the proper replacement of libdir='/lib', we have a correct
+libpam.la, and solve the build issue.
+
+There is no autobuilder failure associated to this issue, as it
+requires /lib/libpam.so to exist. This is the case on ArchLinux, on
+which Xogium reported the issue, which can also be reproduced in an
+ArchLinux container.
+
+Reported-by: Xogium <contact@xogium.me>
+Cc: Xogium <contact@xogium.me>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr:
+  - tested by manually creating a symlink to libpam.so in /lib
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-generic.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 20b07a7fa9..7679c41556 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -329,6 +329,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+ 				-e "s:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
+ 			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
++			-e "s:\(['= ]\)/lib:\\1 at STAGING_DIR@/lib:g" \
+ 			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+ 				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
+ 			-e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
