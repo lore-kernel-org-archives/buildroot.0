@@ -1,40 +1,73 @@
-From: Jianhui Zhao <zhaojh329@gmail.com>
-Date: Sun,  5 Apr 2020 20:05:05 +0800
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump version to 3.1.3
-Message-ID: <20200405120505.5594-1-zhaojh329@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  5 Apr 2020 15:07:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: remove optional libtheora
+ support
+Message-ID: <20200405130759.8096-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
----
- package/libuhttpd/libuhttpd.hash | 2 +-
- package/libuhttpd/libuhttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Kodi plays these files through ffmpeg and does not link to libtheora
+anymore, see PR 9686.
 
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index 65014cacf5..5c3359fdd3 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 9f938b75074f812375c5079189f8299c328e94801117ab1190a29fae0806f1a8  libuhttpd-3.1.2.tar.gz
-+sha256 272e64fab9932039366270efa49dd4df98f5ebe8c76e51ae578594b37bf6eef4  libuhttpd-3.1.3.tar.gz
- sha256 99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index ce805e8f08..0d75176d41 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ Config.in.legacy       | 6 ++++++
+ package/kodi/Config.in | 7 -------
+ package/kodi/kodi.mk   | 4 ----
+ 3 files changed, 6 insertions(+), 11 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 22f6a2778d..caf31d4be3 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
--LIBUHTTPD_VERSION = 3.1.2
-+LIBUHTTPD_VERSION = 3.1.3
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
+ comment "Legacy options removed in 2020.05"
+ 
++config BR2_PACKAGE_KODI_LIBTHEORA
++	bool "libtheora support in Kodi was removed"
++	select BR2_LEGACY
++	help
++	  Kodi does not need libtheora
++
+ config BR2_PACKAGE_CEGUI06
+ 	bool "BR2_PACKAGE_CEGUI06 was renamed"
+ 	select BR2_PACKAGE_CEGUI
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 07128ac3c5..f5b37cf7d2 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -251,13 +251,6 @@ config BR2_PACKAGE_KODI_LIBSMBCLIENT
+ 	help
+ 	  Enable Samba support
+ 
+-config BR2_PACKAGE_KODI_LIBTHEORA
+-	bool "theora"
+-	select BR2_PACKAGE_LIBTHEORA
+-	help
+-	  Enable Theora input support.
+-	  Select this if you want to play back OGG/OGV files (Video).
+-
+ config BR2_PACKAGE_KODI_LIBUSB
+ 	bool "usb"
+ 	# https://github.com/xbmc/xbmc/blob/Jarvis/configure.ac#L1554
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 71b6d44415..0c4704ea84 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -315,10 +315,6 @@ ifeq ($(BR2_PACKAGE_LIRC_TOOLS),y)
+ KODI_DEPENDENCIES += lirc-tools
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_KODI_LIBTHEORA),y)
+-KODI_DEPENDENCIES += libtheora
+-endif
+-
+ # kodi needs libva & libva-glx
+ ifeq ($(BR2_PACKAGE_KODI_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
+ KODI_DEPENDENCIES += mesa3d libva
 -- 
-2.17.1
+2.25.0
