@@ -1,64 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Apr 2020 20:32:10 +0200
-Subject: [Buildroot] [git commit] support/testing: fix systemd test by using
- a more recent gcc
-Message-ID: <20200405182013.C4A248BCE0@busybox.osuosl.org>
+Date: Sun, 5 Apr 2020 20:33:36 +0200
+Subject: [Buildroot] [git commit] package/systemd: make sure init choice and
+ package have same dependencies
+Message-ID: <20200405182013.E11BB8B8C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3d979c0d1b10de501576644e7dcdba708889b0c
+commit: https://git.buildroot.net/buildroot/commit/?id=b57632683b20869279bbe957cf69a5d2a7f1052a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As reported on the mailing list [0], there is a build issue with systemd
-245 when using gcc < 5.0, due to the following build issue:
+Currently, the dependencies for the init system choice, and the
+dependencies for the package, are slightly different, and not in the
+same order, the latter making it difficult to assess consistency between
+the two.
 
-    ../src/shared/gpt.c:7:9: error: initializer element is not constant
-             { GPT_ROOT_X86,              "root-x86"              },
+Fix all that, by cross-duplicating dependencies from the init choice and
+the package, and order the dependencies according to the manual (arch
+first, toolchain, then the others).
 
-The pre-built external toolchain we have for armv5 (the default with
-just BR2_arm=y) is a very old toolchain from CodeSourcery, which has a
-gcc 4.8; we have no other pre-built toolchains for armv5, except by
-using a custom one, like those from the Bootlin toolchain builder. But
-using a custom toolchain is not nice, as we want our runtime test to
-test nominal configurations.
+Note that some dependencies are redundant, but kept nonetheless for
+correctness:
 
-So, switch the systemd tests to use a Cortex-A9, so that we can use the
-ARM 2019.12 toolchain, and with VFP, so that it can boot in the qemu
-vexpress machine we use for the test-cases.
+  - BR2_USE_MMU is implied by BR2_TOOLCHAIN_USES_GLIBC, but systemd does
+    use fork();
 
-Fixes:
-    https://gitlab.com/buildroot.org/buildroot/-/jobs/498144403
-    https://gitlab.com/buildroot.org/buildroot/-/jobs/498144405
-    https://gitlab.com/buildroot.org/buildroot/-/jobs/498144406
-    https://gitlab.com/buildroot.org/buildroot/-/jobs/498144408
-    https://gitlab.com/buildroot.org/buildroot/-/jobs/498144410
-    https://gitlab.com/buildroot.org/buildroot/-/jobs/498144412
+  - !BR2_STATIC_LIBS is also implied by BR2_TOOLCHAIN_USES_GLIBC, but it
+    is also inherited from kmod which we select;
 
-[0] http://lists.busybox.net/pipermail/buildroot/2020-April/278931.html
+  - BR2_TOOLCHAIN_HAS_THREADS is also implied by BR2_TOOLCHAIN_USES_GLIBC,
+    but systemd does use pthread_*() functions.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[yann.morin.1998 at free.fr:
-  - just use cortex-a9_VFP, instead of using a bootlin toolchain
-  - adapt the commit log accordingly
-]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/init/test_systemd.py | 2 ++
- 1 file changed, 2 insertions(+)
+ package/systemd/Config.in | 7 +++++--
+ system/Config.in          | 5 +++--
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-index 0ac18cb623..371be4ad7d 100644
---- a/support/testing/tests/init/test_systemd.py
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -6,6 +6,8 @@ class InitSystemSystemdBase(InitSystemBase):
-     config = \
-         """
-         BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_INIT_SYSTEMD=y
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 4afe694413..8a3149ee5e 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -16,9 +16,12 @@ config BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+ menuconfig BR2_PACKAGE_SYSTEMD
+ 	bool "systemd"
+ 	depends on BR2_INIT_SYSTEMD
++	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS # kmod
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+-	depends on BR2_USE_MMU # dbus
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_TOOLCHAIN_HAS_SSP
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
+ 	select BR2_PACKAGE_HAS_UDEV
+diff --git a/system/Config.in b/system/Config.in
+index cdf9df61a7..5063797976 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -116,10 +116,11 @@ comment "openrc needs a toolchain w/ dynamic library"
+ config BR2_INIT_SYSTEMD
+ 	bool "systemd"
+ 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
+-	depends on BR2_TOOLCHAIN_HAS_SSP
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_TOOLCHAIN_HAS_SSP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	depends on BR2_HOST_GCC_AT_LEAST_5
