@@ -1,29 +1,40 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 5 Apr 2020 11:26:45 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-04-04
-In-Reply-To: <5e897a5c.1c69fb81.8bc12.5266SMTPIN_ADDED_MISSING@mx.google.com>
-References: <5e897a5c.1c69fb81.8bc12.5266SMTPIN_ADDED_MISSING@mx.google.com>
-Message-ID: <CAOMZO5DKU49kJvQYFUN309zhNeRVqK4UH8M3Wfi-qWSA5PUtAw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 5 Apr 2020 16:26:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bubblewrap: security bump to
+ version 0.4.1
+In-Reply-To: <20200404220648.1543017-1-fontaine.fabrice@gmail.com>
+References: <20200404220648.1543017-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200405162643.3557e18b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On Sun,  5 Apr 2020 00:06:48 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On Sun, Apr 5, 2020 at 3:27 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+> Fix CVE-2020-5291: Bubblewrap (bwrap) before version 0.4.1, if installed
+> in setuid mode and the kernel supports unprivileged user namespaces,
+> then the `bwrap --userns2` option can be used to make the setuid process
+> keep running as root while being traceable. This can in turn be used to
+> gain root permissions. Note that this only affects the combination of
+> bubblewrap in setuid mode (which is typically used when unprivileged
+> user namespaces are not supported) and the support of unprivileged user
+> namespaces.
+> 
+> Also update indentation of hash file (two spaces)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/bubblewrap/bubblewrap.hash | 4 ++--
+>  package/bubblewrap/bubblewrap.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
->                         defconfig |                        link to the job
-> ----------------------------------+--------------------------------------------------------------
->              freescale_imx6ullevk |  https://gitlab.com/buildroot.org/buildroot/-/jobs/498144069
->              freescale_imx6ullevk |  https://gitlab.com/buildroot.org/buildroot/-/jobs/498802708
->                             warp7 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/498144330
+Applied to master, thanks.
 
-All of these failures seem to be triggered due to a lack of hard disk space.
-
-Regards,
-
-Fabio Estevam
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
