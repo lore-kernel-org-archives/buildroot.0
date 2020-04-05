@@ -1,78 +1,51 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 Apr 2020 01:04:08 +0200
-Subject: [Buildroot] [PATCH 1/7] support/testing: test_syslinux: fix flake8
- errors
-Message-ID: <20200405230414.416403-1-romain.naour@gmail.com>
+Date: Mon,  6 Apr 2020 01:04:09 +0200
+Subject: [Buildroot] [PATCH 2/7] support/testing: test_syslinux: remove
+ BR2_TOOLCHAIN_EXTERNAL_LOCALE
+In-Reply-To: <20200405230414.416403-1-romain.naour@gmail.com>
+References: <20200405230414.416403-1-romain.naour@gmail.com>
+Message-ID: <20200405230414.416403-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reported by gitlab:
-https://gitlab.com/kubu93/buildroot/-/jobs/499374911
+The BR2_TOOLCHAIN_EXTERNAL_LOCALE is only defined for uClibc based
+custom external toolchains.
+
+The test_syslinux is using a glibc toolchain, so the
+"# BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set" line disapear from
+the generated dot config (.config) leading to an error due to
+a new check in the testsuite infra.
+
+There is the same problem with:
+BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
+BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
+BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/boot/test_syslinux.py | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ support/testing/tests/boot/test_syslinux.py | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/support/testing/tests/boot/test_syslinux.py b/support/testing/tests/boot/test_syslinux.py
-index 6b1a8bc7d7..4105e5edac 100644
+index 4105e5edac..f25cddfb6c 100644
 --- a/support/testing/tests/boot/test_syslinux.py
 +++ b/support/testing/tests/boot/test_syslinux.py
-@@ -1,13 +1,14 @@
- import infra.basetest
- 
-+
- class TestSysLinuxBase(infra.basetest.BRTest):
-     x86_toolchain_config = \
-         """
--	BR2_x86_i686=y
--	BR2_TOOLCHAIN_EXTERNAL=y
--	BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--	BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2"
--	BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
-+        BR2_x86_i686=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+        BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2"
-+        BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
-         BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-         BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+@@ -24,12 +24,8 @@ class TestSysLinuxBase(infra.basetest.BRTest):
+         BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--stable-2018.11-1.tar.bz2"
+         BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+         BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+-        # BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set
          BR2_TOOLCHAIN_EXTERNAL_CXX=y
-@@ -46,6 +47,7 @@ class TestSysLinuxBase(infra.basetest.BRTest):
-         BR2_TARGET_SYSLINUX_EFI=y
+         BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
+-        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
+-        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
+-        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
+         BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
          """
  
-+
- class TestSysLinuxX86LegacyBios(TestSysLinuxBase):
-     config = \
-         TestSysLinuxBase.x86_toolchain_config + \
-@@ -55,6 +57,7 @@ class TestSysLinuxX86LegacyBios(TestSysLinuxBase):
-     def test_run(self):
-         pass
- 
-+
- class TestSysLinuxX86EFI(TestSysLinuxBase):
-     config = \
-         TestSysLinuxBase.x86_toolchain_config + \
-@@ -64,6 +67,7 @@ class TestSysLinuxX86EFI(TestSysLinuxBase):
-     def test_run(self):
-         pass
- 
-+
- class TestSysLinuxX86_64LegacyBios(TestSysLinuxBase):
-     config = \
-         TestSysLinuxBase.x86_64_toolchain_config + \
-@@ -73,6 +77,7 @@ class TestSysLinuxX86_64LegacyBios(TestSysLinuxBase):
-     def test_run(self):
-         pass
- 
-+
- class TestSysLinuxX86_64EFI(TestSysLinuxBase):
-     config = \
-         TestSysLinuxBase.x86_64_toolchain_config + \
 -- 
 2.25.1
