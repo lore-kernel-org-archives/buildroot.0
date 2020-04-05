@@ -1,57 +1,84 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 5 Apr 2020 16:35:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump version to 3.1.3
-In-Reply-To: <20200405120505.5594-1-zhaojh329@gmail.com>
-References: <20200405120505.5594-1-zhaojh329@gmail.com>
-Message-ID: <20200405163512.5390b234@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  5 Apr 2020 16:52:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: add optional dependency to
+ libxcb
+Message-ID: <20200405145207.1258663-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jianhui,
+ffmpeg 3.3 added optional support for libxcb:
+https://git.ffmpeg.org/gitweb/ffmpeg.git/blob/HEAD:/Changelog#l282
 
-On Sun,  5 Apr 2020 20:05:05 +0800, Jianhui Zhao <zhaojh329@gmail.com> wrote:
+This patch ensures a reproducable build of libavdevice.so:
 
-> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-> ---
->  package/libuhttpd/libuhttpd.hash | 2 +-
->  package/libuhttpd/libuhttpd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-> index 65014cacf5..5c3359fdd3 100644
-> --- a/package/libuhttpd/libuhttpd.hash
-> +++ b/package/libuhttpd/libuhttpd.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 9f938b75074f812375c5079189f8299c328e94801117ab1190a29fae0806f1a8  libuhttpd-3.1.2.tar.gz
-> +sha256 272e64fab9932039366270efa49dd4df98f5ebe8c76e51ae578594b37bf6eef4  libuhttpd-3.1.3.tar.gz
->  sha256 99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-> diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-> index ce805e8f08..0d75176d41 100644
-> --- a/package/libuhttpd/libuhttpd.mk
-> +++ b/package/libuhttpd/libuhttpd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBUHTTPD_VERSION = 3.1.2
-> +LIBUHTTPD_VERSION = 3.1.3
->  LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
->  LIBUHTTPD_LICENSE = MIT
->  LIBUHTTPD_LICENSE_FILES = LICENSE
+$ readelf -a output/target/usr/lib/libavdevice.so | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libavfilter.so.7]
+ 0x0000000000000001 (NEEDED)             Shared library: [libavformat.so.58]
+ 0x0000000000000001 (NEEDED)             Shared library: [libavcodec.so.58]
+ 0x0000000000000001 (NEEDED)             Shared library: [libavutil.so.56]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-shm.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-shape.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-xfixes.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
 
-Thanks for the update, one question:
+compared to
 
-From [1]:
+$ readelf -a output/target/usr/lib/libavdevice.so | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libavfilter.so.7]
+ 0x0000000000000001 (NEEDED)             Shared library: [libavformat.so.58]
+ 0x0000000000000001 (NEEDED)             Shared library: [libavcodec.so.58]
+ 0x0000000000000001 (NEEDED)             Shared library: [libavutil.so.56]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
 
- + check_library_exists(dl dlopenx "" HAVE_DLOPEN)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/Config.in |  7 +++++++
+ package/ffmpeg/ffmpeg.mk | 11 +++++++++++
+ 2 files changed, 18 insertions(+)
 
-Would have expected dlopen (not dlopenx)?
-
-Regards,
-Peter
-
-[1] https://github.com/zhaojh329/libuhttpd/commit/44b35fd253d9557c5c61beab80c8086042fc09df
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 33baff262e..2efef7dd86 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -67,6 +67,13 @@ config BR2_PACKAGE_FFMPEG_FFPROBE
+ 	  FFprobe is a utility to determine the audio and video
+ 	  characteristics of a container file.
+ 
++config BR2_PACKAGE_FFMPEG_XCBGRAB
++	bool "Build X11 screen grabbing"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBXCB
++	help
++	  X11 screen grabbing using libxcb.
++
+ config BR2_PACKAGE_FFMPEG_AVRESAMPLE
+ 	bool "Build libavresample"
+ 	help
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index b7148bbba2..96455cb978 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -96,6 +96,17 @@ else
+ FFMPEG_CONF_OPTS += --disable-ffprobe
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FFMPEG_XCBGRAB),y)
++FFMPEG_CONF_OPTS += \
++	--enable-libxcb \
++	--enable-libxcb-shape \
++	--enable-libxcb-shm \
++	--enable-libxcb-xfixes
++FFMPEG_DEPENDENCIES += libxcb
++else
++FFMPEG_CONF_OPTS += --disable-libxcb
++endif
++
+ ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
+ FFMPEG_CONF_OPTS += --enable-postproc
+ else
+-- 
+2.25.0
