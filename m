@@ -1,78 +1,100 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Apr 2020 20:33:36 +0200
-Subject: [Buildroot] [git commit] package/systemd: make sure init choice and
- package have same dependencies
-Message-ID: <20200405182013.E11BB8B8C9@busybox.osuosl.org>
+Date: Sun, 5 Apr 2020 20:33:32 +0200
+Subject: [Buildroot] [git commit] package/systemd: add gcc >= 5.x dependency
+Message-ID: <20200405182013.D2EAD80DE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b57632683b20869279bbe957cf69a5d2a7f1052a
+commit: https://git.buildroot.net/buildroot/commit/?id=2196ee25ff29c87001a42a382655d5b52d5de3c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the dependencies for the init system choice, and the
-dependencies for the package, are slightly different, and not in the
-same order, the latter making it difficult to assess consistency between
-the two.
+As reported on the mailing list, there is a build issue with systemd 245
+when using gcc < 5.0:
 
-Fix all that, by cross-duplicating dependencies from the init choice and
-the package, and order the dependencies according to the manual (arch
-first, toolchain, then the others).
+http://lists.busybox.net/pipermail/buildroot/2020-April/278931.html
 
-Note that some dependencies are redundant, but kept nonetheless for
-correctness:
+Build issue:
+../src/shared/gpt.c:7:9: error: initializer element is not constant
+         { GPT_ROOT_X86,              "root-x86"              },
 
-  - BR2_USE_MMU is implied by BR2_TOOLCHAIN_USES_GLIBC, but systemd does
-    use fork();
+When testing with a toolchain using gcc 5.4.0 and the build is ok.
+http://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi--glibc--stable-2017.05-toolchains-1-1.tar.bz2
 
-  - !BR2_STATIC_LIBS is also implied by BR2_TOOLCHAIN_USES_GLIBC, but it
-    is also inherited from kmod which we select;
+While searching for "error: initializer element is not constant" message, we
+can notice a note about gcc 5 change about "Initializing statics with compound
+literals":
 
-  - BR2_TOOLCHAIN_HAS_THREADS is also implied by BR2_TOOLCHAIN_USES_GLIBC,
-    but systemd does use pthread_*() functions.
+https://gcc.gnu.org/gcc-5/porting_to.html
 
+Add a dependency on gcc 5 to avoid using to old compiler.
+
+There is the same issue with host-systemd with host gcc 4.9
+(tested with Debian Jessie). So, add a dependency on host gcc >= 5.x.
+
+Fixes:
+http://autobuild.buildroot.org/results/520/520dab2253f4cbe408a8177a6587dcb38c6ba215
+http://autobuild.buildroot.org/results/e0e/e0e0512de822864d670b5d176798a24ab09eed2d
+http://autobuild.buildroot.org/results/f56/f5660b2711627fcee4086e096e4ec4d9ba190ab6
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/systemd/Config.in | 7 +++++--
- system/Config.in          | 5 +++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ package/systemd/Config.in      | 2 ++
+ package/systemd/Config.in.host | 1 +
+ system/Config.in               | 8 ++++++--
+ 3 files changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 4afe694413..8a3149ee5e 100644
+index bd638477a0..4afe694413 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -16,9 +16,12 @@ config BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
- menuconfig BR2_PACKAGE_SYSTEMD
- 	bool "systemd"
- 	depends on BR2_INIT_SYSTEMD
-+	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU
+@@ -19,6 +19,8 @@ menuconfig BR2_PACKAGE_SYSTEMD
  	depends on !BR2_STATIC_LIBS # kmod
--	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
--	depends on BR2_USE_MMU # dbus
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_HAS_SSP
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_USE_MMU # dbus
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	depends on BR2_HOST_GCC_AT_LEAST_5 # host-systemd
  	select BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_DBUS # runtime dependency only
+ 	select BR2_PACKAGE_LIBCAP
+diff --git a/package/systemd/Config.in.host b/package/systemd/Config.in.host
+index 219f24239e..8e00bcf5c1 100644
+--- a/package/systemd/Config.in.host
++++ b/package/systemd/Config.in.host
+@@ -1,3 +1,4 @@
+ # Select this if you need host systemd tools (e.g. systemctl)
+ config BR2_PACKAGE_HOST_SYSTEMD
+ 	bool
++	depends on BR2_HOST_GCC_AT_LEAST_5
 diff --git a/system/Config.in b/system/Config.in
-index cdf9df61a7..5063797976 100644
+index c8c5be40e0..cdf9df61a7 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -116,10 +116,11 @@ comment "openrc needs a toolchain w/ dynamic library"
- config BR2_INIT_SYSTEMD
- 	bool "systemd"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_TOOLCHAIN_HAS_SSP
+@@ -121,15 +121,19 @@ config BR2_INIT_SYSTEMD
  	depends on BR2_USE_MMU
  	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_HAS_SSP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	depends on BR2_HOST_GCC_AT_LEAST_5
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	depends on BR2_HOST_GCC_AT_LEAST_5
+ 	select BR2_ROOTFS_MERGED_USR
+ 	select BR2_PACKAGE_SYSTEMD
+ 
+-comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.10"
++comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.10, host and target gcc >= 5"
+ 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
+ 		!BR2_TOOLCHAIN_HAS_SSP || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
++		!BR2_HOST_GCC_AT_LEAST_5
+ 
+ config BR2_INIT_NONE
+ 	bool "None"
