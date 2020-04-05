@@ -1,119 +1,146 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 5 Apr 2020 11:35:04 +0200
-Subject: [Buildroot] [PATCH 1/2] support/testing: update the ARM
- toolchain used for the systemd init tests
-In-Reply-To: <20200405090913.GK22325@scaer>
-References: <20200404220217.362122-1-romain.naour@gmail.com>
- <20200405084428.GJ22325@scaer> <20200405090913.GK22325@scaer>
-Message-ID: <cdfe1139-7a3a-149e-3f56-dddd65e2d038@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 5 Apr 2020 11:35:43 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/libuhttpd: new package
+In-Reply-To: <20200404170428.28121-1-zhaojh329@gmail.com>
+References: <20200404170428.28121-1-zhaojh329@gmail.com>
+Message-ID: <20200405113543.080f3212@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Hello Jianhui,
 
-Le 05/04/2020 ? 11:09, Yann E. MORIN a ?crit?:
-> Romain, All,
-> 
-> On 2020-04-05 10:44 +0200, Yann E. MORIN spake thusly:
->> On 2020-04-05 00:02 +0200, Romain Naour spake thusly:
->>> As reported on the mailing list, there is a build issue with systemd 245
->>> when using gcc < 5.0:
->>> http://lists.busybox.net/pipermail/buildroot/2020-April/278931.html
-> [--SNIP--]
->>>          BR2_TOOLCHAIN_EXTERNAL=y
->>> +        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
->>> +        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
->>> +        BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi--glibc--stable-2017.05-toolchains-1-1.tar.bz2"
->> I'd rather we use one of the known pre-built toolchains that is
->> available from the menuconfig. Unfortiunately, for armv5, we have no
->> better than the codesourcery one. But for armv7, we have a darn-recent
->> toolchain from ARM.
+On Sun,  5 Apr 2020 01:04:28 +0800, Jianhui Zhao <zhaojh329@gmail.com> wrote:
 
-Indeed, If we are agree to use armv7 instead of armv5 for the testsuite we
-should use the ARM arm toolchain.
+> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+>
+> ---
+> Changes v1 -> v2:
+>   - Fix build fail when not found libdl
 
-> 
-> Of course, I mistakenly replied to your v1 of your patchset, but this is
-> also valid for your v2...
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> So I think we just need to add BR2_cortex_a7 to this defconfig:
->>
->>     diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
->>     index 0ac18cb623..d679081768 100644
->>     --- a/support/testing/tests/init/test_systemd.py
->>     +++ b/support/testing/tests/init/test_systemd.py
->>     @@ -6,6 +6,7 @@ class InitSystemSystemdBase(InitSystemBase):
->>          config = \
->>              """
->>              BR2_arm=y
->>     +        BR2_cortex_a7=y
->>              BR2_TOOLCHAIN_EXTERNAL=y
->>              BR2_INIT_SYSTEMD=y
->>              BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
->>
->> Note that I am not saying the bootlin toolchains are bad. I am instead
->> saying that we should test with what is readily available in menuconfig,
->> so that we know users can have a working starting point.
+Thanks for the update, but it still fails:
 
-I was suggesting to use the upcoming Bootlin ARM toolchain 2020.02-2, but I'm
-fine with ARM arm toolchain.
+- br-arm-cortex-m4-full [ 8/44]: FAILED
 
->>
->> Runtime tests are not (IMHO) about testing corner cases, but to ensure
->> that the packages do build and run as expected in standard conditions.
+  make[3]: Entering directory '/home/seiderer/Work/Buildroot/test_libuhttpd_001/br-arm-cortex-m4-full/build/libuhttpd-3.1.2'
+  [...]
+  /home/seiderer/Work/Buildroot/test_libuhttpd_001/br-arm-cortex-m4-full/build/libuhttpd-3.1.2/src/uhttpd.c:32:10: fatal error: dlfcn.h: No such file or directory
+   #include <dlfcn.h>
 
-That's why I recently updated the basic toolchain used by the testsuite :)
+The check 'find_library(LIBDL dl)' (from [1]) is not enough as the
+toolchain provides an (empty) arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libdl.a
 
->>
->> Bootlin toolchains are not in the menuconfig, while the ARM toolchain
->> is, and that is what users will use 99.99% of the time. Hence we should
->> test with that.
+Maybe an explicit check on dlopen() available is needed (can be done with 'modern'
+cmake via CHECK_LIBRARY_EXISTS(), see [2])...
 
-So it also means that 99,99% of users using the ARM toolchain will use a glibc
-based toolchain. But we are testing with an uClibc-ng toolchain most of the
-time. Maybe we should do more tests with glibc and musl toolchain also with 2
-gcc version (the default version and the latest one) ?
+Regards,
+Peter
 
-See the discussion:
-http://lists.busybox.net/pipermail/buildroot/2020-April/278786.html
+[1] https://github.com/zhaojh329/libuhttpd/commit/ac25a305fe070bf16194b507bf9f8124d4990a78
+[2] https://cmake.org/cmake/help/v3.17/module/CheckLibraryExists.html
 
-Best regards,
-Romain
-
->>
->> Regards,
->> Yann E. MORIN.
->>
->>> +        BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
->>> +        BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
->>> +        BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
->>> +        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
->>>          BR2_INIT_SYSTEMD=y
->>>          BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
->>>          BR2_LINUX_KERNEL=y
->>> -- 
->>> 2.25.1
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->> -- 
->> .-----------------.--------------------.------------------.--------------------.
->> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->> '------------------------------^-------^------------------^--------------------'
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+> ---
+>  DEVELOPERS                       |  1 +
+>  package/Config.in                |  1 +
+>  package/libuhttpd/Config.in      |  8 +++++++
+>  package/libuhttpd/libuhttpd.hash |  3 +++
+>  package/libuhttpd/libuhttpd.mk   | 39 ++++++++++++++++++++++++++++++++
+>  5 files changed, 52 insertions(+)
+>  create mode 100644 package/libuhttpd/Config.in
+>  create mode 100644 package/libuhttpd/libuhttpd.hash
+>  create mode 100644 package/libuhttpd/libuhttpd.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index f1bf5c263c..c34018405c 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1273,6 +1273,7 @@ F:	package/x11r7/xdriver_xf86-video-imx/
+>  F:	package/x11r7/xdriver_xf86-video-imx-viv/
+>
+>  N:	Jianhui Zhao <zhaojh329@gmail.com>
+> +F:	package/libuhttpd/
+>  F:	package/libuwsc/
+>  F:	package/rtty/
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 4aaf2d93f8..09f92f0b85 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1713,6 +1713,7 @@ menu "Networking"
+>  	source "package/libtirpc/Config.in"
+>  	source "package/libtorrent/Config.in"
+>  	source "package/libtorrent-rasterbar/Config.in"
+> +	source "package/libuhttpd/Config.in"
+>  	source "package/libupnp/Config.in"
+>  	source "package/libupnp18/Config.in"
+>  	source "package/libupnpp/Config.in"
+> diff --git a/package/libuhttpd/Config.in b/package/libuhttpd/Config.in
+> new file mode 100644
+> index 0000000000..1ab39c5878
+> --- /dev/null
+> +++ b/package/libuhttpd/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_LIBUHTTPD
+> +	bool "libuhttpd"
+> +	select BR2_PACKAGE_LIBEV
+> +	help
+> +	  A lightweight and fully asynchronous HTTP server
+> +	  library based on libev
+> +
+> +	  https://github.com/zhaojh329/libuhttpd
+> diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+> new file mode 100644
+> index 0000000000..65014cacf5
+> --- /dev/null
+> +++ b/package/libuhttpd/libuhttpd.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256 9f938b75074f812375c5079189f8299c328e94801117ab1190a29fae0806f1a8  libuhttpd-3.1.2.tar.gz
+> +sha256 99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+> diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+> new file mode 100644
+> index 0000000000..ce805e8f08
+> --- /dev/null
+> +++ b/package/libuhttpd/libuhttpd.mk
+> @@ -0,0 +1,39 @@
+> +################################################################################
+> +#
+> +# libuhttpd
+> +#
+> +################################################################################
+> +
+> +LIBUHTTPD_VERSION = 3.1.2
+> +LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
+> +LIBUHTTPD_LICENSE = MIT
+> +LIBUHTTPD_LICENSE_FILES = LICENSE
+> +LIBUHTTPD_INSTALL_STAGING = YES
+> +LIBUHTTPD_DEPENDENCIES = libev
+> +
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +LIBUHTTPD_DEPENDENCIES += openssl
+> +LIBUHTTPD_CONF_OPTS += \
+> +	-DUHTTPD_SSL_SUPPORT=ON \
+> +	-DUHTTPD_USE_MBEDTLS=OFF \
+> +	-DUHTTPD_USE_OPENSSL=ON \
+> +	-DUHTTPD_USE_WOLFSSL=OFF
+> +else ifeq ($(BR2_PACKAGE_WOLFSSL),y)
+> +LIBUHTTPD_DEPENDENCIES += wolfssl
+> +LIBUHTTPD_CONF_OPTS += \
+> +	-DUHTTPD_SSL_SUPPORT=ON \
+> +	-DUHTTPD_USE_MBEDTLS=OFF \
+> +	-DUHTTPD_USE_OPENSSL=OFF \
+> +	-DUHTTPD_USE_WOLFSSL=ON
+> +else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+> +LIBUHTTPD_DEPENDENCIES += mbedtls
+> +LIBUHTTPD_CONF_OPTS += \
+> +	-DUHTTPD_SSL_SUPPORT=ON \
+> +	-DUHTTPD_USE_MBEDTLS=ON \
+> +	-DUHTTPD_USE_OPENSSL=OFF \
+> +	-DUHTTPD_USE_WOLFSSL=OFF
+> +else
+> +LIBUHTTPD_CONF_OPTS += -DUHTTPD_SSL_SUPPORT=OFF
+> +endif
+> +
+> +$(eval $(cmake-package))
