@@ -1,42 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 5 Apr 2020 16:25:43 +0200
-Subject: [Buildroot] [git commit] package/libuhttpd: bump version to 3.1.3
-Message-ID: <20200405141204.B123A8B862@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bubblewrap: security bump to
+ version 0.4.1
+Message-ID: <20200405141204.8947C84BFB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3c4eee3b7f20bbdc8b5f6bb3cc8ab5c94558127
+commit: https://git.buildroot.net/buildroot/commit/?id=d82a5ade0b3ab8a7a5fe6351358429e3c457f2e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Fix CVE-2020-5291: Bubblewrap (bwrap) before version 0.4.1, if installed
+in setuid mode and the kernel supports unprivileged user namespaces,
+then the `bwrap --userns2` option can be used to make the setuid process
+keep running as root while being traceable. This can in turn be used to
+gain root permissions. Note that this only affects the combination of
+bubblewrap in setuid mode (which is typically used when unprivileged
+user namespaces are not supported) and the support of unprivileged user
+namespaces.
+
+Also update indentation of hash file (two spaces)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libuhttpd/libuhttpd.hash | 2 +-
- package/libuhttpd/libuhttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bubblewrap/bubblewrap.hash | 4 ++--
+ package/bubblewrap/bubblewrap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index 65014cacf5..5c3359fdd3 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 9f938b75074f812375c5079189f8299c328e94801117ab1190a29fae0806f1a8  libuhttpd-3.1.2.tar.gz
-+sha256 272e64fab9932039366270efa49dd4df98f5ebe8c76e51ae578594b37bf6eef4  libuhttpd-3.1.3.tar.gz
- sha256 99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index ce805e8f08..0d75176d41 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
+diff --git a/package/bubblewrap/bubblewrap.hash b/package/bubblewrap/bubblewrap.hash
+index 6914a1ccd7..d3ccb4cb1f 100644
+--- a/package/bubblewrap/bubblewrap.hash
++++ b/package/bubblewrap/bubblewrap.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 e5fe7d2f74bd7029b5306b0b70587cec31f74357739295e5276b4a3718712023 bubblewrap-0.4.0.tar.xz
++sha256  b9c69b9b1c61a608f34325c8e1a495229bacf6e4a07cbb0c80cf7a814d7ccc03  bubblewrap-0.4.1.tar.xz
+ 
+ # Hash for license files:
+-sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c COPYING
++sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/bubblewrap/bubblewrap.mk b/package/bubblewrap/bubblewrap.mk
+index 3da00a700d..388f64880e 100644
+--- a/package/bubblewrap/bubblewrap.mk
++++ b/package/bubblewrap/bubblewrap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUHTTPD_VERSION = 3.1.2
-+LIBUHTTPD_VERSION = 3.1.3
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
+-BUBBLEWRAP_VERSION = 0.4.0
++BUBBLEWRAP_VERSION = 0.4.1
+ BUBBLEWRAP_SITE = https://github.com/containers/bubblewrap/releases/download/v$(BUBBLEWRAP_VERSION)
+ BUBBLEWRAP_SOURCE = bubblewrap-$(BUBBLEWRAP_VERSION).tar.xz
+ BUBBLEWRAP_DEPENDENCIES = host-pkgconf libcap
