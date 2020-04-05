@@ -1,34 +1,40 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sun, 5 Apr 2020 13:57:15 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-04-04
-In-Reply-To: <20200405062746.3ECF185F75@fraxinus.osuosl.org>
-References: <20200405062746.3ECF185F75@fraxinus.osuosl.org>
-Message-ID: <20200405105715.GA2143@curiosity>
+From: Jianhui Zhao <zhaojh329@gmail.com>
+Date: Sun,  5 Apr 2020 20:05:05 +0800
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump version to 3.1.3
+Message-ID: <20200405120505.5594-1-zhaojh329@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Apr 05, 2020 at 06:27:40AM -0000, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Autobuild statistics for 2020-04-04
-> ===============================
-> 
->       branch |  OK | NOK | TIM | TOT |
->   2019.02.x  |  8  |  0  |  0  |  8  |
->   2019.11.x  | 12  |  0  |  0  | 12  |
->   2020.02.x  | 17  |  3  |  0  | 20  |
->     master   | 138 | 58  |  0  | 196 |
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+---
+ package/libuhttpd/libuhttpd.hash | 2 +-
+ package/libuhttpd/libuhttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-Hello Thomas,
-
-Today I received two bug reports for orange-pi-one and macchiatobin boards.
-In both cases the reason of failure is 'No space left on device'. I randomly
-picked several other board failures and the reason seems to be the same.
-
-Regards,
-Sergey
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+index 65014cacf5..5c3359fdd3 100644
+--- a/package/libuhttpd/libuhttpd.hash
++++ b/package/libuhttpd/libuhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 9f938b75074f812375c5079189f8299c328e94801117ab1190a29fae0806f1a8  libuhttpd-3.1.2.tar.gz
++sha256 272e64fab9932039366270efa49dd4df98f5ebe8c76e51ae578594b37bf6eef4  libuhttpd-3.1.3.tar.gz
+ sha256 99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+index ce805e8f08..0d75176d41 100644
+--- a/package/libuhttpd/libuhttpd.mk
++++ b/package/libuhttpd/libuhttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUHTTPD_VERSION = 3.1.2
++LIBUHTTPD_VERSION = 3.1.3
+ LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
+ LIBUHTTPD_LICENSE = MIT
+ LIBUHTTPD_LICENSE_FILES = LICENSE
+-- 
+2.17.1
