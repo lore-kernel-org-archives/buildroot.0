@@ -1,71 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Apr 2020 22:38:07 +0200
-Subject: [Buildroot] [PATCH 01/12] package/libsecret: enable
- gobject-introspection support
-In-Reply-To: <20200401002134.1779241-1-aduskett@gmail.com>
-References: <20200401002134.1779241-1-aduskett@gmail.com>
-Message-ID: <20200406203807.GT22325@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 6 Apr 2020 22:38:45 +0200
+Subject: [Buildroot] [PATCH v3 7/7] package/gupnp-dlna: add optional
+ dependency for gobject-introspection
+In-Reply-To: <20200329204251.GP22325@scaer>
+References: <20200327183000.1005676-1-aduskett@gmail.com>
+ <20200327183000.1005676-7-aduskett@gmail.com>
+ <20200329204251.GP22325@scaer>
+Message-ID: <20200406223845.1a542ed2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Hello,
 
-On 2020-03-31 17:21 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
+On Sun, 29 Mar 2020 22:42:51 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+
+> So, vala is _not_ needed to build with introspection.
+
+Right, totally correct. HAVE_INTROSPECTION is used in
+libgupnp-dlna/Makefile.am and vala/Makefile.am. In the former case,
+Vala support is not needed.
+
+> As such, we have three options:
 > 
-> If gobject-introspection is selected, add the gobject-introspection package to
-> the dependency list and set the conf opt --enable-introspection.
+> 1. Forcibly bring a dependency ti host-vala and build vala bindings,
+>    like Adam did;
 > 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> 2. Add an option to gupnp-dlna to build vala bindings;
 
-Except for patch 2, on which Thomas asked a question that was not
-answered, I have applied the entire series to master, thanks!
+I would prefer this solution, but there may not even be a need to add
+an option: there is an AC_PATH_PROG check for vapigen, so probably we
+can feed some stupid autoconf cache variable to make sure vapigen is
+not detected, even if available.
 
-Regards,
-Yann E. MORIN.
+> 3. Add a vala/Config.in/host to manually enable vala, and thus
+>    automatically build the vala bindings.
 
-> ---
->  package/libsecret/libsecret.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
-> index b48d2e7086..f87df47097 100644
-> --- a/package/libsecret/libsecret.mk
-> +++ b/package/libsecret/libsecret.mk
-> @@ -15,11 +15,17 @@ LIBSECRET_CONF_OPTS = \
->  	--disable-manpages \
->  	--disable-strict \
->  	--disable-coverage \
-> -	--enable-introspection=no \
->  	--enable-vala=no
->  LIBSECRET_LICENSE = LGPL-2.1+
->  LIBSECRET_LICENSE_FILES = COPYING
->  
-> +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-> +LIBSECRET_CONF_OPTS += --enable-introspection=yes
-> +LIBSECRET_DEPENDENCIES += gobject-introspection
-> +else
-> +LIBSECRET_CONF_OPTS += --enable-introspection=no
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
->  LIBSECRET_DEPENDENCIES += libgcrypt
->  LIBSECRET_CONF_OPTS += --enable-gcrypt \
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I would really prefer to handle the whole Vala binding thing once
+someone really needs to do Vala stuff with gupnp-dlna.
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
