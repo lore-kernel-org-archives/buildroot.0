@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 6 Apr 2020 22:17:52 +0200
-Subject: [Buildroot] [PATCH 1/7] support/testing: test_syslinux: fix
- flake8 errors
-In-Reply-To: <20200405230414.416403-1-romain.naour@gmail.com>
+Date: Mon, 6 Apr 2020 22:19:40 +0200
+Subject: [Buildroot] [PATCH 6/7] support/testing: don't use
+ TestPythonPackageBase.config and linaro toolchain
+In-Reply-To: <20200405230414.416403-6-romain.naour@gmail.com>
 References: <20200405230414.416403-1-romain.naour@gmail.com>
-Message-ID: <20200406221752.0e466958@windsurf>
+ <20200405230414.416403-6-romain.naour@gmail.com>
+Message-ID: <20200406221940.57e37346@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  6 Apr 2020 01:04:08 +0200
+On Mon,  6 Apr 2020 01:04:13 +0200
 Romain Naour <romain.naour@gmail.com> wrote:
 
-> Reported by gitlab:
-> https://gitlab.com/kubu93/buildroot/-/jobs/499374911
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  support/testing/tests/boot/test_syslinux.py | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
+>  class TestGst1Python(TestPythonPackageBase):
+>      __test__ = True
+> -    config = TestPythonPackageBase.config + \
+> +    config = \
+>          """
+>          BR2_TOOLCHAIN_EXTERNAL=y
+>          BR2_TARGET_ROOTFS_CPIO=y
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        BR2_arm=y
+>          BR2_cortex_a9=y
+>          BR2_ARM_ENABLE_VFP=y
+>          BR2_ARM_EABIHF=y
 
-I've applied the entire series, with some changes on PATCH 6/7, to
-which I'll reply specifically.
-
-Thanks!
+I like when options are in the same order as they would appear in a
+defconfig, so I took this opportunity to re-order them this way.
 
 Thomas
 -- 
