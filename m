@@ -1,28 +1,35 @@
-From: Jianhui Zhao <zhaojh329@gmail.com>
-Date: Mon,  6 Apr 2020 12:38:26 +0800
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: fix typo
-Message-ID: <20200406043826.10420-1-zhaojh329@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 6 Apr 2020 07:21:59 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-04-04
+In-Reply-To: <20200405105715.GA2143@curiosity>
+References: <20200405062746.3ECF185F75@fraxinus.osuosl.org>
+ <20200405105715.GA2143@curiosity>
+Message-ID: <20200406072159.1254ced1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dlopenx -> dlopen
+Hello Sergey,
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
----
- package/libuhttpd/libuhttpd.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, 5 Apr 2020 13:57:15 +0300
+Sergey Matyukevich <geomatsi@gmail.com> wrote:
 
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index 5c3359fdd3..2ec19144b7 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 272e64fab9932039366270efa49dd4df98f5ebe8c76e51ae578594b37bf6eef4  libuhttpd-3.1.3.tar.gz
-+sha256 f1b79a9cee1dcfec0f693768687999062ed95c2307ec597fc3f32bc23f082531  libuhttpd-3.1.3.tar.gz
- sha256 99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+> Today I received two bug reports for orange-pi-one and macchiatobin boards.
+> In both cases the reason of failure is 'No space left on device'. I randomly
+> picked several other board failures and the reason seems to be the same.
+
+Thanks for reporting, I had also noticed the reason of those build
+failures. They all happen on Mind's autobuilder, so I notified Arnout
+Vandecappelle about this. Hopefully he will be able to resolve this
+issue before the next Gitlab CI run on defconfigs.
+
+Best regards,
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
