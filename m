@@ -1,41 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Apr 2020 22:35:22 +0200
-Subject: [Buildroot] [git commit] package/json-glib: enable
+Date: Mon, 6 Apr 2020 22:35:03 +0200
+Subject: [Buildroot] [git commit] package/libgtk2: enable
  gobject-introspection support
-Message-ID: <20200406202227.57C7581D3C@busybox.osuosl.org>
+Message-ID: <20200406202227.44C268D32F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4ed7dd4503ef7ed4ea955130a3d6b1e572e8331
+commit: https://git.buildroot.net/buildroot/commit/?id=68fbfa2fcadff58d495e9dbde4e47c8537928bc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 If gobject-introspection is selected, add the gobject-introspection package to
-the dependency list and set the conf opt -Dintrospection=true.
+the dependency list and set the conf opt --enable-introspection.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/json-glib/json-glib.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/libgtk2/libgtk2.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index 7405b28b2e..accdb4f888 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
-@@ -17,7 +17,12 @@ JSON_GLIB_DEPENDENCIES = \
- 	host-pkgconf \
- 	libglib2
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index 710e6e47db..9b7d39a532 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -35,6 +35,13 @@ LIBGTK2_CONF_OPTS += \
+ LIBGTK2_DEPENDENCIES += \
+ 	fontconfig xlib_libX11 xlib_libXext xlib_libXrender
  
--JSON_GLIB_CONF_OPTS = -Dintrospection=false
 +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+JSON_GLIB_CONF_OPTS += -Dintrospection=true
-+JSON_GLIB_DEPENDENCIES += gobject-introspection
++LIBGTK2_CONF_OPTS += --enable-introspection
++LIBGTK2_DEPENDENCIES += gobject-introspection
 +else
-+JSON_GLIB_CONF_OPTS += -Dintrospection=false
++LIBGTK2_CONF_OPTS += --disable-introspection
 +endif
- 
- JSON_GLIB_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- 
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
+ LIBGTK2_CONF_OPTS += --enable-xinerama
+ LIBGTK2_DEPENDENCIES += xlib_libXinerama
