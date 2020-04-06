@@ -1,69 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 6 Apr 2020 22:16:36 +0200
-Subject: [Buildroot] [git commit] support/testing: check if the defconfig
- provided for testing is valid
-Message-ID: <20200406200249.7CF328D1F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: test_lxc: use ARM arm
+ external toolchain
+Message-ID: <20200406200249.63D028D1F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50b747f212be2c9c0f7cf10c674ed488d042715c
+commit: https://git.buildroot.net/buildroot/commit/?id=abe170d94f3d4aadd852c7ee16bc3008e7faa3cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the build continue even if some symbols disapear from
-the generated dot config file (.config).
+Until now, the lxc test was using the ARM CodeSourcery 2014.05 armv5 toolchain.
+But the recent systemd version bump to 245 added a toolchain dependency
+on systemd package due to build issues with gcc < 5.0.
 
-This patch add a new check in order to stop the test if one
-of the provided symbol is missing. This must be treated as error.
+Before [1] the lxc test was failing to build with the ARM CodeSourcery 2014.05
+toolchain. After [1], the test is faling at runtime since the
+"BR2_INIT_SYSTEMD=y" symbol disapear from the dot config (.config) due to
+the new toolchain dependency.
 
-For example, if a symbol disapear due to new dependency constraints.
+Fix this by using the same toolchain as for the systemd tests [2]
 
-Inspired by is_toolchain_usable() function from genrandconfig:
-https://git.busybox.net/buildroot/tree/utils/genrandconfig?h=2020.02#n164
+[1] 2196ee25ff29c87001a42a382655d5b52d5de3c4
+[2] b3d979c0d1b10de501576644e7dcdba708889b0c
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/infra/builder.py | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ support/testing/tests/package/test_lxc.py | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
-index 88f01d15c0..922a707220 100644
---- a/support/testing/infra/builder.py
-+++ b/support/testing/infra/builder.py
-@@ -12,6 +12,23 @@ class Builder(object):
-         self.builddir = builddir
-         self.logfile = infra.open_log_file(builddir, "build", logtofile)
- 
-+    def is_defconfig_valid(self, configfile, defconfig):
-+        """Check if the .config is contains all lines present in the defconfig."""
-+        with open(configfile) as configf:
-+            configlines = configf.readlines()
-+
-+        defconfiglines = defconfig.split("\n")
-+
-+        # Check that all the defconfig lines are still present
-+        for defconfigline in defconfiglines:
-+            if defconfigline + "\n" not in configlines:
-+                self.logfile.write("WARN: defconfig can't be used\n")
-+                self.logfile.write("      Missing: %s\n" % defconfigline.strip())
-+                self.logfile.flush()
-+                return False
-+
-+        return True
-+
-     def configure(self, make_extra_opts=[], make_extra_env={}):
-         """Configure the build.
- 
-@@ -47,6 +64,9 @@ class Builder(object):
-         if ret != 0:
-             raise SystemError("Cannot olddefconfig")
- 
-+        if not self.is_defconfig_valid(config_file, self.config):
-+            raise SystemError("The defconfig is not valid")
-+
-     def build(self, make_extra_opts=[], make_extra_env={}):
-         """Perform the build.
- 
+diff --git a/support/testing/tests/package/test_lxc.py b/support/testing/tests/package/test_lxc.py
+index 346247da08..b32b7a20c4 100644
+--- a/support/testing/tests/package/test_lxc.py
++++ b/support/testing/tests/package/test_lxc.py
+@@ -7,6 +7,8 @@ class TestLxc(infra.basetest.BRTest):
+     config = \
+             """
+             BR2_arm=y
++            BR2_cortex_a9=y
++            BR2_ARM_ENABLE_VFP=y
+             BR2_TOOLCHAIN_EXTERNAL=y
+             BR2_LINUX_KERNEL=y
+             BR2_LINUX_KERNEL_CUSTOM_VERSION=y
