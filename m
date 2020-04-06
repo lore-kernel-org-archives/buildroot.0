@@ -1,97 +1,40 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Mon,  6 Apr 2020 20:35:59 +0200
-Subject: [Buildroot] [PATCH] package/libminizip: new package
-Message-ID: <20200406183559.130627-1-b.bilas@grinn-global.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 6 Apr 2020 20:45:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: fix typo
+In-Reply-To: <20200406043826.10420-1-zhaojh329@gmail.com>
+References: <20200406043826.10420-1-zhaojh329@gmail.com>
+Message-ID: <20200406204552.24818d1b@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libminizip is a minimalistic library that supports compressing,
-extracting, viewing, and manipulating zip files.
+Hello Jianhui,
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/libminizip/Config.in       | 11 +++++++++++
- package/libminizip/libminizip.hash |  2 ++
- package/libminizip/libminizip.mk   | 15 +++++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/libminizip/Config.in
- create mode 100644 package/libminizip/libminizip.hash
- create mode 100644 package/libminizip/libminizip.mk
+On Mon,  6 Apr 2020 12:38:26 +0800, Jianhui Zhao <zhaojh329@gmail.com> wrote:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e9ac2b7460..b6243276a3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -282,6 +282,7 @@ F:	package/orbit/
- N:	Bartosz Bilas <b.bilas@grinn-global.com>
- F:	board/stmicroelectronics/stm32mp157a-dk1/
- F:	configs/stm32mp157a_dk1_defconfig
-+F:	package/libminizip/
- F:	package/python-esptool/
- F:	package/python-pyaes/
- F:	package/qt5/qt5scxml/
-diff --git a/package/Config.in b/package/Config.in
-index 373868ca82..95727396ea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1278,6 +1278,7 @@ endmenu
- 
- menu "Compression and decompression"
- 	source "package/libarchive/Config.in"
-+	source "package/libminizip/Config.in"
- 	source "package/libmspack/Config.in"
- 	source "package/libsquish/Config.in"
- 	source "package/libzip/Config.in"
-diff --git a/package/libminizip/Config.in b/package/libminizip/Config.in
-new file mode 100644
-index 0000000000..5307db3c4f
---- /dev/null
-+++ b/package/libminizip/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBMINIZIP
-+	bool "libminizip"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  LibMinizip is a minimalistic library that supports compressing,
-+	  extracting, viewing, and manipulating zip files.
-+
-+	  This package includes development support files
-+	  for the minizip library.
-+
-+	  http://www.winimage.com/zLibDll/minizip.html
-diff --git a/package/libminizip/libminizip.hash b/package/libminizip/libminizip.hash
-new file mode 100644
-index 0000000000..1aa87a2901
---- /dev/null
-+++ b/package/libminizip/libminizip.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  78d87c463dd6bd446292fe0d3ee72878355b3b7fa52add5722671dfe9290f262  libminizip-1.1.tar.gz
-diff --git a/package/libminizip/libminizip.mk b/package/libminizip/libminizip.mk
-new file mode 100644
-index 0000000000..6ae3c6cb01
---- /dev/null
-+++ b/package/libminizip/libminizip.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libminizip
-+#
-+################################################################################
-+
-+LIBMINIZIP_VERSION = 1.1
-+LIBMINIZIP_SITE = $(call github,nmoinvaz,minizip,$(LIBMINIZIP_VERSION))
-+LIBMINIZIP_DEPENDENCIES = zlib
-+LIBMINIZIP_AUTORECONF = YES
-+LIBMINIZIP_INSTALL_STAGING = YES
-+LIBMINIZIP_LICENSE = Zlib
-+LIBMINIZIP_LICENSE_FILES = LICENSE
-+
-+$(eval $(autotools-package))
--- 
-2.26.0
+> dlopenx -> dlopen
+
+Thanks for fixing..., but changing a already published release is not
+a favored solution (gives problems with already downloaded/cached source
+files)...
+
+Regards,
+Peter
+
+>
+> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+> ---
+>  package/libuhttpd/libuhttpd.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+> index 5c3359fdd3..2ec19144b7 100644
+> --- a/package/libuhttpd/libuhttpd.hash
+> +++ b/package/libuhttpd/libuhttpd.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256 272e64fab9932039366270efa49dd4df98f5ebe8c76e51ae578594b37bf6eef4  libuhttpd-3.1.3.tar.gz
+> +sha256 f1b79a9cee1dcfec0f693768687999062ed95c2307ec597fc3f32bc23f082531  libuhttpd-3.1.3.tar.gz
+>  sha256 99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
