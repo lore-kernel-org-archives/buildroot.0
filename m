@@ -1,55 +1,97 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 6 Apr 2020 20:31:05 +0200
-Subject: [Buildroot] [PATCH v2] Bump to version 75
-In-Reply-To: <20200406141045.2668-1-grzegorz@blach.pl>
-References: <20200308121526.80350-1-grzegorz@blach.pl>
- <20200406141045.2668-1-grzegorz@blach.pl>
-Message-ID: <20200406203105.43af71e6@gmx.net>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Mon,  6 Apr 2020 20:35:59 +0200
+Subject: [Buildroot] [PATCH] package/libminizip: new package
+Message-ID: <20200406183559.130627-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Grzegorz,
+libminizip is a minimalistic library that supports compressing,
+extracting, viewing, and manipulating zip files.
 
-patch subject line should be
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/libminizip/Config.in       | 11 +++++++++++
+ package/libminizip/libminizip.hash |  2 ++
+ package/libminizip/libminizip.mk   | 15 +++++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/libminizip/Config.in
+ create mode 100644 package/libminizip/libminizip.hash
+ create mode 100644 package/libminizip/libminizip.mk
 
-	package/pigpio: bump version to 75
-
-Regards,
-Peter
-
-On Mon,  6 Apr 2020 16:10:45 +0200, m Blach <grzegorz@blach.pl> wrote:
-
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
-> Changes v1 -> v2:
->   - Bump from version 74 to 75
-> ---
->  package/pigpio/pigpio.hash | 2 +-
->  package/pigpio/pigpio.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
-> index f20b9bf6bb..5b87acf082 100644
-> --- a/package/pigpio/pigpio.hash
-> +++ b/package/pigpio/pigpio.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256	87ec2ec87cb6cb0f42af47868631e657217b5927cdfbea3ad0ecdc2ca885a2d1  pigpio-7301.tar.gz
-> +sha256	dfec8d06075a9336433d96a8e2f86810f3332d616cf0d6253d98ad78094aa15a  pigpio-75.tar.gz
->  sha256	6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
-> diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
-> index aed5f2744d..89d8deb9ea 100644
-> --- a/package/pigpio/pigpio.mk
-> +++ b/package/pigpio/pigpio.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -PIGPIO_VERSION = 7301
-> +PIGPIO_VERSION = 75
->  PIGPIO_SITE = $(call github,joan2937,pigpio,v$(PIGPIO_VERSION))
->  PIGPIO_LICENSE = Unlicense
->  PIGPIO_LICENSE_FILES = UNLICENCE
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e9ac2b7460..b6243276a3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -282,6 +282,7 @@ F:	package/orbit/
+ N:	Bartosz Bilas <b.bilas@grinn-global.com>
+ F:	board/stmicroelectronics/stm32mp157a-dk1/
+ F:	configs/stm32mp157a_dk1_defconfig
++F:	package/libminizip/
+ F:	package/python-esptool/
+ F:	package/python-pyaes/
+ F:	package/qt5/qt5scxml/
+diff --git a/package/Config.in b/package/Config.in
+index 373868ca82..95727396ea 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1278,6 +1278,7 @@ endmenu
+ 
+ menu "Compression and decompression"
+ 	source "package/libarchive/Config.in"
++	source "package/libminizip/Config.in"
+ 	source "package/libmspack/Config.in"
+ 	source "package/libsquish/Config.in"
+ 	source "package/libzip/Config.in"
+diff --git a/package/libminizip/Config.in b/package/libminizip/Config.in
+new file mode 100644
+index 0000000000..5307db3c4f
+--- /dev/null
++++ b/package/libminizip/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBMINIZIP
++	bool "libminizip"
++	select BR2_PACKAGE_ZLIB
++	help
++	  LibMinizip is a minimalistic library that supports compressing,
++	  extracting, viewing, and manipulating zip files.
++
++	  This package includes development support files
++	  for the minizip library.
++
++	  http://www.winimage.com/zLibDll/minizip.html
+diff --git a/package/libminizip/libminizip.hash b/package/libminizip/libminizip.hash
+new file mode 100644
+index 0000000000..1aa87a2901
+--- /dev/null
++++ b/package/libminizip/libminizip.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  78d87c463dd6bd446292fe0d3ee72878355b3b7fa52add5722671dfe9290f262  libminizip-1.1.tar.gz
+diff --git a/package/libminizip/libminizip.mk b/package/libminizip/libminizip.mk
+new file mode 100644
+index 0000000000..6ae3c6cb01
+--- /dev/null
++++ b/package/libminizip/libminizip.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libminizip
++#
++################################################################################
++
++LIBMINIZIP_VERSION = 1.1
++LIBMINIZIP_SITE = $(call github,nmoinvaz,minizip,$(LIBMINIZIP_VERSION))
++LIBMINIZIP_DEPENDENCIES = zlib
++LIBMINIZIP_AUTORECONF = YES
++LIBMINIZIP_INSTALL_STAGING = YES
++LIBMINIZIP_LICENSE = Zlib
++LIBMINIZIP_LICENSE_FILES = LICENSE
++
++$(eval $(autotools-package))
+-- 
+2.26.0
