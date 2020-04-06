@@ -1,24 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 06 Apr 2020 19:47:23 +0000
-Subject: [Buildroot] [Bug 12761] Buildroot fails when building GCNano
- binaries for the STM32MP1
-In-Reply-To: <bug-12761-163@https.bugs.busybox.net/>
-References: <bug-12761-163@https.bugs.busybox.net/>
-Message-ID: <bug-12761-163-LUz3s1H7jg@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 6 Apr 2020 21:49:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: fix typo
+In-Reply-To: <20200406204552.24818d1b@gmx.net>
+References: <20200406043826.10420-1-zhaojh329@gmail.com>
+ <20200406204552.24818d1b@gmx.net>
+Message-ID: <20200406214955.5d700ea6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12761
+Hello,
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Thanks for the bug report. Could you try building against the 4.19 kernel
-provided by ST at https://github.com/STMicroelectronics/linux/ ? It is very
-likely that the kernel driver they ship as part of the gcnano-binaries package
-builds fine only with their 4.19 kernel.
+On Mon, 6 Apr 2020 20:45:52 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
+> Hello Jianhui,
+> 
+> On Mon,  6 Apr 2020 12:38:26 +0800, Jianhui Zhao <zhaojh329@gmail.com> wrote:
+> 
+> > dlopenx -> dlopen  
+> 
+> Thanks for fixing..., but changing a already published release is not
+> a favored solution (gives problems with already downloaded/cached source
+> files)...
+
+Agreed. Could you please do a new release with the fix, and never
+modify existing releases in the future ?
+
+Thanks!
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
