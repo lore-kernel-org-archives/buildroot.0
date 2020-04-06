@@ -1,107 +1,42 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Mon, 6 Apr 2020 13:46:33 +0200
-Subject: [Buildroot] Strange non-deterministic error while building
- buildroot 2020.02 package iio-tools
-In-Reply-To: <04a6cac9-7763-db6d-b3c5-d6156b374196@microchip.com>
-References: <04a6cac9-7763-db6d-b3c5-d6156b374196@microchip.com>
-Message-ID: <26420_1586173595_5E8B169B_26420_140_1_20200406114633.GE3140@r-lnx-nyma7486-2>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 6 Apr 2020 13:59:19 +0200
+Subject: [Buildroot] [Question] How do I build source code at source
+ folder?
+In-Reply-To: <CAF6vTZbE4r1z0c4jSUy3g+C+nKgskdOdMp1XLSpUpZz16NC8XA@mail.gmail.com>
+References: <1585904837068-0.post@n4.nabble.com>
+ <CAEyMn7bt=wUY=RLDSE=QAD8F+ap5K4rRaB12Rs1SgjmOSeN_CQ@mail.gmail.com>
+ <CAF6vTZZctgOOnqcseZ5-UVGQbg2baC8Le4qazOZ2rFpdH_3tcw@mail.gmail.com>
+ <CAEyMn7ZJ1DUfmncko0ZOhdha9Ec9bN4F3ud=KBYF3yMJAW0g_w@mail.gmail.com>
+ <CAF6vTZbE4r1z0c4jSUy3g+C+nKgskdOdMp1XLSpUpZz16NC8XA@mail.gmail.com>
+Message-ID: <CAEyMn7ZpajO5S_u8P=iD8tG37UY3U1OO9=e3r20eik0D+CCAdQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eugen, All,
+Psychesnet, All,
 
-On 2020-04-06 11:38 +0000, Eugen.Hristev at microchip.com spake thusly:
-> Hello,
-> 
-> Has anyone encountered such error?
-> Attempting to build it again works... however it stopped at this error 
-> several times when building (10 % of cases)
-> 
-> At first I suspected my file system, but, why does this crash happen all 
-> the time in the same place ?
-> 
-> Thanks in advance !
-> 
->  >>> linux-tools  Building
-> PATH="/home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/host/bin:/home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" 
-> /usr/bin/make -j41 -C 
-> /home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/build/linux-linux-5.4-at91/tools/iio 
-> HOSTCC="/usr/bin/gcc -O2 
-> -I/home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/host/include 
-> -L/home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/host/lib 
-> -Wl,-rpath,/home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/host/lib" 
-> ARCH=arm 
-> INSTALL_MOD_PATH=/home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/target 
-> CROSS_COMPILE="/home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/host/bin/arm-buildroot-linux-gnueabihf-" 
-> DEPMOD=/home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/host/sbin/depmod 
-> INSTALL_MOD_STRIP=1
-> mkdir -p include/linux/iio 2>&1 || true
-> ln -sf 
-> /home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/build/linux-linux-5.4-at91/tools/iio/../../include/uapi/linux/iio/events.h 
-> include/linux/iio
-> ln -sf 
-> /home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/build/linux-linux-5.4-at91/tools/iio/../../include/uapi/linux/iio/types.h 
-> include/linux/iio
->    CC       iio_event_monitor.o
->    CC       lsiio.o
->    CC       iio_utils.o
->    CC       iio_generic_buffer.o
->    CC       iio_utils.o
->    CC       iio_utils.o
->    LD       iio_event_monitor-in.o
->    LD       iio_generic_buffer-in.o
-> /home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/host/bin/arm-buildroot-linux-gnueabihf-ld: 
-> iio_utils.o: file not recognized: file truncated
+Am Sa., 4. Apr. 2020 um 15:24 Uhr schrieb Psychesnet Hsieh
+<psychesnet@gmail.com>:
+>
+> Hi Heiko,
+>
+> From previous and some projects, we would like to build 3 kinds of source code in our code base.
+> 1. Directly build from open source, like lighttpd and ffmpeg. Basically, we don't need to change this a lot.
+>     Put some patches and apply menuconfig to select enable/disable it. Anything is good. This one, Buildroot can help a lot.
+> 2. Some binary code/source code from vendor/SDK. This one is familiar to open source, we don't need to change a lot, too.
+>     Follow SDK instructions and apply patch to Buildroot is enough to get anything done.
+> 3. Source code from our side, this part we change a lot and we would like to build it at source folder because
+>     A. We change git log at source folder, we can trace anything quickly, don't need to switch folder to build.
+>     B. We can build one source code instead of check anything, it is faster to build(makefile check dependency) and install into fakeroot folder to try.
+>     C. We won't forget to commit the code, because any operations at source folder.
+>
+> I believe buildroot is the best for small embedded system, and we would like to try if we can get item 3 done in our project.
+> I hope anything is clear. Thanks.
 
-I guess you'll want to cary linux commit 731b60afcb3d3 (tools: iio:
-Correctly add make dependency for iio_utils) as a local patch.
-
-Regards,
-Yann E. MORIN.
-
-> /home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/build/linux-linux-5.4-at91/tools/build/Makefile.build:144: 
-> recipe for target 'iio_generic_buffer-in.o' failed
-> make[3]: *** [iio_generic_buffer-in.o] Error 1
-> Makefile:49: recipe for target 'iio_generic_buffer-in.o' failed
-> make[2]: *** [iio_generic_buffer-in.o] Error 2
-> make[2]: *** Waiting for unfinished jobs....
->    LD       lsiio-in.o
-> package/pkg-generic.mk:266: recipe for target 
-> '/home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/build/linux-tools/.stamp_built' 
-> failed
-> make[1]: *** 
-> [/home/eugen/release-scripts-2004/build/buildroot/buildroot-at91/output/build/linux-tools/.stamp_built] 
-> Error 2
-> Makefile:84: recipe for target '_all' failed
-> make: *** [_all] Error 2
-> Buildroot: failed to make
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Sorry but I don't see why using the proposed <pkg>_OVERRIDE_SRCDIR
+will solve the things you want to achieve in item 3.
 
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+Heiko
