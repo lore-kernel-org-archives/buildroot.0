@@ -1,45 +1,73 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Mon,  6 Apr 2020 16:10:45 +0200
-Subject: [Buildroot] [PATCH v2] Bump to version 75
-In-Reply-To: <20200308121526.80350-1-grzegorz@blach.pl>
-References: <20200308121526.80350-1-grzegorz@blach.pl>
-Message-ID: <20200406141045.2668-1-grzegorz@blach.pl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 06 Apr 2020 15:09:47 +0000
+Subject: [Buildroot] [Bug 12761] New: Buildroot fails when building GCNano
+ binaries for the STM32MP1
+Message-ID: <bug-12761-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
-Changes v1 -> v2:
-  - Bump from version 74 to 75
----
- package/pigpio/pigpio.hash | 2 +-
- package/pigpio/pigpio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=12761
 
-diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
-index f20b9bf6bb..5b87acf082 100644
---- a/package/pigpio/pigpio.hash
-+++ b/package/pigpio/pigpio.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	87ec2ec87cb6cb0f42af47868631e657217b5927cdfbea3ad0ecdc2ca885a2d1  pigpio-7301.tar.gz
-+sha256	dfec8d06075a9336433d96a8e2f86810f3332d616cf0d6253d98ad78094aa15a  pigpio-75.tar.gz
- sha256	6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
-diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
-index aed5f2744d..89d8deb9ea 100644
---- a/package/pigpio/pigpio.mk
-+++ b/package/pigpio/pigpio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PIGPIO_VERSION = 7301
-+PIGPIO_VERSION = 75
- PIGPIO_SITE = $(call github,joan2937,pigpio,v$(PIGPIO_VERSION))
- PIGPIO_LICENSE = Unlicense
- PIGPIO_LICENSE_FILES = UNLICENCE
+            Bug ID: 12761
+           Summary: Buildroot fails when building GCNano binaries for the
+                    STM32MP1
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: adecker246 at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
+
+Attempting to build for the STM32MP175C target with the GCNano binaries to
+enable the GPU. I get the following error.
+
+https://pastebin.com/9VHWLK4D
+
+
+
+ CC [M] 
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/allocator/default/gc_hal_kernel_allocator_dma.o
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/allocator/default/gc_hal_kernel_allocator_dma.c:
+In function ?_DmaAlloc?:
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/allocator/default/gc_hal_kernel_allocator_dma.c:167:11:
+error: implicit declaration of function ?dma_alloc_writecombine?; did you mean
+?pgprot_writecombine?? [-Werror=implicit-function-declaration]
+  167 |         = dma_alloc_writecombine(galcore_device, NumPages * PAGE_SIZE, 
+&mdlPriv->dmaHandle, gfp);
+      |           ^~~~~~~~~~~~~~~~~~~~~~
+      |           pgprot_writecombine
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/allocator/default/gc_hal_kernel_allocator_dma.c:167:9:
+error: assignment to ?gctPOINTER? {aka ?void *?} from ?int? makes pointer from
+integer without a cast [-Werror=int-conversion]
+  167 |         = dma_alloc_writecombine(galcore_device, NumPages * PAGE_SIZE, 
+&mdlPriv->dmaHandle, gfp);
+      |         ^
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/allocator/default/gc_hal_kernel_allocator_dma.c:
+In function ?_DmaFree?:
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/allocator/default/gc_hal_kernel_allocator_dma.c:288:5:
+error: implicit declaration of function ?dma_free_writecombine?; did you mean
+?pgprot_writecombine?? [-Werror=implicit-function-declaration]
+  288 |     dma_free_writecombine(galcore_device, Mdl->numPages * PAGE_SIZE,
+mdlPriv->kvaddr, mdlPriv->dmaHandle);
+      |     ^~~~~~~~~~~~~~~~~~~~~
+      |     pgprot_writecombine
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/allocator/default/gc_hal_kernel_allocator_dma.c:
+In function ?_DmaMmap?:
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/allocator/default/gc_hal_kernel_allocator_dma.c:324:9:
+error: implicit declaration of function ?dma_mmap_writecombine?
+[-Werror=implicit-function-declaration]
+  324 |     if (dma_mmap_writecombine(gcvNULL,
+      |         ^~~~~~~~~~~~~~~~~~~~~
+
 -- 
-2.18.2
+You are receiving this mail because:
+You are on the CC list for the bug.
