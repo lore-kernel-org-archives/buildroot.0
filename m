@@ -1,39 +1,42 @@
-From: Ismael Luceno <ismael@iodev.co.uk>
-Date: Mon,  6 Apr 2020 23:11:05 +0200
-Subject: [Buildroot] [PATCH] package/axel: bump version to 2.17.8
-Message-ID: <20200406211105.6050-1-ismael@iodev.co.uk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 6 Apr 2020 18:16:38 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/civetweb: add
+ zlib optional dependency
+Message-ID: <20200406213553.D643A8D33A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
----
- package/axel/axel.hash | 2 +-
- package/axel/axel.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=b2d69924ff00610b6ed39bb27983550f27623a76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-diff --git a/package/axel/axel.hash b/package/axel/axel.hash
-index 9d1aecc4d902..933223ab2bdb 100644
---- a/package/axel/axel.hash
-+++ b/package/axel/axel.hash
-@@ -1,2 +1,2 @@
--sha256 b700b299fc8a369352a4672560ba833335142a6bfd280d5ccdc66dc2fa6bff86  axel-2.17.7.tar.xz
-+sha256 19c82a095e3ea84f1e24fe6fd6018ee06af73ee03ca8ecf31b34dcc57ef4351e  axel-2.17.8.tar.xz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/axel/axel.mk b/package/axel/axel.mk
-index b7ec2efb60de..5c7e99894efa 100644
---- a/package/axel/axel.mk
-+++ b/package/axel/axel.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+zlib is an optional dependency since version 1.11 and
+https://github.com/civetweb/civetweb/commit/6b8b15935378f71323ff95f907fa0d33841deac0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 41dfe5707cc7704d74604879035882b01f349ce8)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/civetweb/civetweb.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
+index 99da1b6f06..f05b29f3cd 100644
+--- a/package/civetweb/civetweb.mk
++++ b/package/civetweb/civetweb.mk
+@@ -38,6 +38,12 @@ else
+ CIVETWEB_COPT += -DNO_SSL
+ endif
  
--AXEL_VERSION = 2.17.7
-+AXEL_VERSION = 2.17.8
- AXEL_SITE = https://github.com/axel-download-accelerator/axel/releases/download/v$(AXEL_VERSION)
- AXEL_SOURCE = axel-$(AXEL_VERSION).tar.xz
- AXEL_LICENSE = GPL-2.0+
--- 
-2.26.0
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++CIVETWEB_CONF_OPTS += WITH_ZLIB=1
++CIVETWEB_LIBS += -lz
++CIVETWEB_DEPENDENCIES += zlib
++endif
++
+ ifeq ($(BR2_PACKAGE_CIVETWEB_SERVER),y)
+ CIVETWEB_BUILD_TARGETS += build
+ CIVETWEB_INSTALL_TARGETS += install
