@@ -1,28 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 6 Apr 2020 22:17:19 +0200
-Subject: [Buildroot] [PATCH] package/minizip: bump version to 2.9.2
-In-Reply-To: <20200405190218.122972-1-b.bilas@grinn-global.com>
-References: <20200405190218.122972-1-b.bilas@grinn-global.com>
-Message-ID: <20200406221719.4432489b@windsurf>
+Date: Mon, 6 Apr 2020 22:17:52 +0200
+Subject: [Buildroot] [PATCH 1/7] support/testing: test_syslinux: fix
+ flake8 errors
+In-Reply-To: <20200405230414.416403-1-romain.naour@gmail.com>
+References: <20200405230414.416403-1-romain.naour@gmail.com>
+Message-ID: <20200406221752.0e466958@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  5 Apr 2020 21:02:18 +0200
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+On Mon,  6 Apr 2020 01:04:08 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-> Bump package version and in addition update indentation of
-> hash file (two spaces).
+> Reported by gitlab:
+> https://gitlab.com/kubu93/buildroot/-/jobs/499374911
 > 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/minizip/minizip.hash | 4 ++--
->  package/minizip/minizip.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  support/testing/tests/boot/test_syslinux.py | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
 
-Applied to master, thanks.
+I've applied the entire series, with some changes on PATCH 6/7, to
+which I'll reply specifically.
+
+Thanks!
 
 Thomas
 -- 
