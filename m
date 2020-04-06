@@ -1,15 +1,15 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Apr 2020 22:35:41 +0200
-Subject: [Buildroot] [git commit] package/libmediaart: enable
+Date: Mon, 6 Apr 2020 22:35:01 +0200
+Subject: [Buildroot] [git commit] package/libsecret: enable
  gobject-introspection support
-Message-ID: <20200406202227.8C18583B8D@busybox.osuosl.org>
+Message-ID: <20200406202227.3B9D68D32F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10d807181a52066e71fb4944c26817549e34b616
+commit: https://git.buildroot.net/buildroot/commit/?id=07c05920d84e7ddeec34640beda5d393cb04340c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 If gobject-introspection is selected, add the gobject-introspection package to
@@ -18,22 +18,29 @@ the dependency list and set the conf opt --enable-introspection.
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libmediaart/libmediaart.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/libsecret/libsecret.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/libmediaart/libmediaart.mk b/package/libmediaart/libmediaart.mk
-index 4933b74c19..0d110a43e5 100644
---- a/package/libmediaart/libmediaart.mk
-+++ b/package/libmediaart/libmediaart.mk
-@@ -33,4 +33,11 @@ LIBMEDIAART_CONF_OPTS += \
- 	--disable-qt
- endif
+diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+index b48d2e7086..f87df47097 100644
+--- a/package/libsecret/libsecret.mk
++++ b/package/libsecret/libsecret.mk
+@@ -15,11 +15,17 @@ LIBSECRET_CONF_OPTS = \
+ 	--disable-manpages \
+ 	--disable-strict \
+ 	--disable-coverage \
+-	--enable-introspection=no \
+ 	--enable-vala=no
+ LIBSECRET_LICENSE = LGPL-2.1+
+ LIBSECRET_LICENSE_FILES = COPYING
  
 +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBMEDIAART_CONF_OPTS += --enable-introspection
-+LIBMEDIAART_DEPENDENCIES += gobject-introspection
++LIBSECRET_CONF_OPTS += --enable-introspection=yes
++LIBSECRET_DEPENDENCIES += gobject-introspection
 +else
-+LIBMEDIAART_CONF_OPTS += --disable-introspection
++LIBSECRET_CONF_OPTS += --enable-introspection=no
 +endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ LIBSECRET_DEPENDENCIES += libgcrypt
+ LIBSECRET_CONF_OPTS += --enable-gcrypt \
