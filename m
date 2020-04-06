@@ -1,51 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 6 Apr 2020 22:16:36 +0200
-Subject: [Buildroot] [git commit] support/testing: test_syslinux: remove
- BR2_TOOLCHAIN_EXTERNAL_LOCALE
-Message-ID: <20200406200249.3AC988D1F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: check if the defconfig
+ provided for testing is valid
+Message-ID: <20200406200249.7CF328D1F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cc3b0c7de19c826fe91e5d340c16528fbafc974
+commit: https://git.buildroot.net/buildroot/commit/?id=50b747f212be2c9c0f7cf10c674ed488d042715c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The BR2_TOOLCHAIN_EXTERNAL_LOCALE is only defined for uClibc based
-custom external toolchains.
+Currently, the build continue even if some symbols disapear from
+the generated dot config file (.config).
 
-The test_syslinux is using a glibc toolchain, so the
-"# BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set" line disapear from
-the generated dot config (.config) leading to an error due to
-a new check in the testsuite infra.
+This patch add a new check in order to stop the test if one
+of the provided symbol is missing. This must be treated as error.
 
-There is the same problem with:
-BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
-BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
-BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
+For example, if a symbol disapear due to new dependency constraints.
+
+Inspired by is_toolchain_usable() function from genrandconfig:
+https://git.busybox.net/buildroot/tree/utils/genrandconfig?h=2020.02#n164
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/boot/test_syslinux.py | 4 ----
- 1 file changed, 4 deletions(-)
+ support/testing/infra/builder.py | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/support/testing/tests/boot/test_syslinux.py b/support/testing/tests/boot/test_syslinux.py
-index 4105e5edac..f25cddfb6c 100644
---- a/support/testing/tests/boot/test_syslinux.py
-+++ b/support/testing/tests/boot/test_syslinux.py
-@@ -24,12 +24,8 @@ class TestSysLinuxBase(infra.basetest.BRTest):
-         BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--stable-2018.11-1.tar.bz2"
-         BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
-         BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
--        # BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set
-         BR2_TOOLCHAIN_EXTERNAL_CXX=y
-         BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
--        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
--        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
--        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
-         BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-         """
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+index 88f01d15c0..922a707220 100644
+--- a/support/testing/infra/builder.py
++++ b/support/testing/infra/builder.py
+@@ -12,6 +12,23 @@ class Builder(object):
+         self.builddir = builddir
+         self.logfile = infra.open_log_file(builddir, "build", logtofile)
+ 
++    def is_defconfig_valid(self, configfile, defconfig):
++        """Check if the .config is contains all lines present in the defconfig."""
++        with open(configfile) as configf:
++            configlines = configf.readlines()
++
++        defconfiglines = defconfig.split("\n")
++
++        # Check that all the defconfig lines are still present
++        for defconfigline in defconfiglines:
++            if defconfigline + "\n" not in configlines:
++                self.logfile.write("WARN: defconfig can't be used\n")
++                self.logfile.write("      Missing: %s\n" % defconfigline.strip())
++                self.logfile.flush()
++                return False
++
++        return True
++
+     def configure(self, make_extra_opts=[], make_extra_env={}):
+         """Configure the build.
+ 
+@@ -47,6 +64,9 @@ class Builder(object):
+         if ret != 0:
+             raise SystemError("Cannot olddefconfig")
+ 
++        if not self.is_defconfig_valid(config_file, self.config):
++            raise SystemError("The defconfig is not valid")
++
+     def build(self, make_extra_opts=[], make_extra_env={}):
+         """Perform the build.
  
