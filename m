@@ -1,43 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 6 Apr 2020 22:16:36 +0200
-Subject: [Buildroot] [git commit] support/testing: test_tmux: remove
- BR2_GENERATE_LOCALE
-Message-ID: <20200406200249.54DD68D1F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: test_syslinux: remove
+ BR2_TOOLCHAIN_EXTERNAL_LOCALE
+Message-ID: <20200406200249.3AC988D1F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96ee994443b3f3ca5e6259c684bbfb80ea5034ad
+commit: https://git.buildroot.net/buildroot/commit/?id=9cc3b0c7de19c826fe91e5d340c16528fbafc974
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The BR2_GENERATE_LOCALE can only be used by uClibc based toolchains with the
-internal toolchain backend [1].
+The BR2_TOOLCHAIN_EXTERNAL_LOCALE is only defined for uClibc based
+custom external toolchains.
 
-The test_tmux is using a external uClibc toolchain, so the
-"BR2_GENERATE_LOCALE="en_US.UTF-8"" line disapear from
+The test_syslinux is using a glibc toolchain, so the
+"# BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set" line disapear from
 the generated dot config (.config) leading to an error due to
 a new check in the testsuite infra.
 
-[1] https://git.buildroot.net/buildroot/commit/?id=bd0ffe2206fbd32baf7f4a1dc5fde81cfad70462
+There is the same problem with:
+BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
+BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
+BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/test_tmux.py | 1 -
- 1 file changed, 1 deletion(-)
+ support/testing/tests/boot/test_syslinux.py | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/support/testing/tests/package/test_tmux.py b/support/testing/tests/package/test_tmux.py
-index 7eb23cac97..b31854cab3 100644
---- a/support/testing/tests/package/test_tmux.py
-+++ b/support/testing/tests/package/test_tmux.py
-@@ -6,7 +6,6 @@ import infra.basetest
- class TestTmux(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+diff --git a/support/testing/tests/boot/test_syslinux.py b/support/testing/tests/boot/test_syslinux.py
+index 4105e5edac..f25cddfb6c 100644
+--- a/support/testing/tests/boot/test_syslinux.py
++++ b/support/testing/tests/boot/test_syslinux.py
+@@ -24,12 +24,8 @@ class TestSysLinuxBase(infra.basetest.BRTest):
+         BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--stable-2018.11-1.tar.bz2"
+         BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+         BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+-        # BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set
+         BR2_TOOLCHAIN_EXTERNAL_CXX=y
+         BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
+-        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
+-        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
+-        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
+         BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
          """
--        BR2_GENERATE_LOCALE="en_US.UTF-8"
-         BR2_PACKAGE_TMUX=y
-         BR2_TARGET_ROOTFS_CPIO=y
-         # BR2_TARGET_ROOTFS_TAR is not set
+ 
