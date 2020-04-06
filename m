@@ -1,57 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Apr 2020 17:17:48 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- package/kodi-screensaver-rsxs: switch license to GPL-2.0+
-Message-ID: <20200406150514.A541A87F68@busybox.osuosl.org>
+Date: Mon, 06 Apr 2020 17:19:12 +0200
+Subject: [Buildroot] [PATCH] support/scripts/check-kernel-headers.sh: do
+ not print error for loose checks
+In-Reply-To: <20200321135220.341529-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 21 Mar 2020 14:52:19 +0100")
+References: <20200321135220.341529-1-thomas.petazzoni@bootlin.com>
+ <20200321135220.341529-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87eet0y74f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a6a7732da56c679471eb8663e3e74775018132e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Upstream commit
-https://github.com/xbmc/screensavers.rsxs/commit/dbb88536964dc0ca4144016eb12f7307b60cb1fa
+ > The C program inside check-kernel-headers.sh has two checking mode: a
+ > strict and a loose one.
 
-removed lib/rsxs-1.0 which was licensed as GPL-3.0.
+ > In strict mode, we want the kernel headers version declared by the
+ > user to match exactly the one of the toolchain.
 
-During the latest version bump
-https://git.buildroot.net/buildroot/commit/package/kodi-screensaver-rsxs?id=e68bcc985fbb17e50cfa2944807090b6cd57c871
+ > In loose mode, we want the kernel headers version of the toolchain to
+ > be greater than or equal to the one declared by the user: this is used
+ > when we have a toolchain that has newer headers than the latest
+ > version known by Buildroot.
 
-KODI_SCREENSAVER_RSXS_LICENSE_FILES = lib/rsxs-1.0/COPYING
+ > However, in loose mode, we continue to show the "Incorrect kernel
+ > headers version" message, even though we then return a zero error
+ > code. This is very confusing: you see an error displayed on the
+ > terminal, but the build goes on.
 
-was removed but the corresponding license change was forgotton.
+ > We fix that by first doing the loose check first, and returning 0 if
+ > it succeeds. And then we move on with the strict check where we want
+ > the version to be identical.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4765abdd529fe918c2cc66dec31f6cb00bbd323d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash | 1 +
- package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
-index b2d9e33a57..8f34b349e7 100644
---- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256 22ff3f0ca9679c59ce1a90b98d918dd10a8012b789729b2e44c04d4ce8c86ad8  kodi-screensaver-rsxs-7cb648507440d87948dec10d5bfdab3b722d37fe.tar.gz
-+sha256 fa0ff8b6a6267b9477be7d505aa384056633b4be17e0b9d308df9bd70d1c99f6  debian/copyright
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-index e208698797..aa881d0d59 100644
---- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-@@ -6,7 +6,8 @@
- 
- KODI_SCREENSAVER_RSXS_VERSION = 7cb648507440d87948dec10d5bfdab3b722d37fe
- KODI_SCREENSAVER_RSXS_SITE = $(call github,xbmc,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
--KODI_SCREENSAVER_RSXS_LICENSE = GPL-3.0
-+KODI_SCREENSAVER_RSXS_LICENSE = GPL-2.0+
-+KODI_SCREENSAVER_RSXS_LICENSE_FILES = debian/copyright
- KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 gli glm jpeg kodi libpng libtool tiff
- 
- $(eval $(cmake-package))
+Committed to 2020.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
