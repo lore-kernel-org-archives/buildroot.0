@@ -1,68 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Apr 2020 20:20:17 +0200
-Subject: [Buildroot] [PATCH 1/4] package/qemu: disable libssh for the
- host variant
-In-Reply-To: <20200406142159.592563-1-romain.naour@gmail.com>
-References: <20200406142159.592563-1-romain.naour@gmail.com>
-Message-ID: <20200406182017.GQ22325@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 6 Apr 2020 20:31:05 +0200
+Subject: [Buildroot] [PATCH v2] Bump to version 75
+In-Reply-To: <20200406141045.2668-1-grzegorz@blach.pl>
+References: <20200308121526.80350-1-grzegorz@blach.pl>
+ <20200406141045.2668-1-grzegorz@blach.pl>
+Message-ID: <20200406203105.43af71e6@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Hello Grzegorz,
 
-On 2020-04-06 16:21 +0200, Romain Naour spake thusly:
-> There is no host-libssh in Buildroot, avoid qemu build system
-> to find libssh from the host.
-> 
-> Under certain circumstances (host distribution, openssl version), the
-> qemu-system binary fail to start:
-> 
-> host/bin/qemu-system-aarch64: symbol lookup error: /lib64/libssh.so.4: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
-> 
-> $ ldd output/host/bin/qemu-system-aarch64
-> 	[...]
-> 	libssh.so.4 => /lib64/libssh.so.4
-> 
-> Explicitely disable libssh for the host variant.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+patch subject line should be
 
-All 4 patches applied to master, thanks.
+	package/pigpio: bump version to 75
 
 Regards,
-Yann E. MORIN.
+Peter
 
+On Mon,  6 Apr 2020 16:10:45 +0200, m Blach <grzegorz@blach.pl> wrote:
+
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 > ---
->  package/qemu/qemu.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index b2249ed4ee..3c3b098a5b 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -303,6 +303,7 @@ define HOST_QEMU_CONFIGURE_CMDS
->  		--extra-cflags="$(HOST_QEMU_CFLAGS)" \
->  		--extra-ldflags="$(HOST_LDFLAGS)" \
->  		--python=$(HOST_DIR)/bin/python3 \
-> +		--disable-libssh \
->  		$(HOST_QEMU_OPTS)
->  endef
->  
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Changes v1 -> v2:
+>   - Bump from version 74 to 75
+> ---
+>  package/pigpio/pigpio.hash | 2 +-
+>  package/pigpio/pigpio.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
+> index f20b9bf6bb..5b87acf082 100644
+> --- a/package/pigpio/pigpio.hash
+> +++ b/package/pigpio/pigpio.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256	87ec2ec87cb6cb0f42af47868631e657217b5927cdfbea3ad0ecdc2ca885a2d1  pigpio-7301.tar.gz
+> +sha256	dfec8d06075a9336433d96a8e2f86810f3332d616cf0d6253d98ad78094aa15a  pigpio-75.tar.gz
+>  sha256	6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
+> diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
+> index aed5f2744d..89d8deb9ea 100644
+> --- a/package/pigpio/pigpio.mk
+> +++ b/package/pigpio/pigpio.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -PIGPIO_VERSION = 7301
+> +PIGPIO_VERSION = 75
+>  PIGPIO_SITE = $(call github,joan2937,pigpio,v$(PIGPIO_VERSION))
+>  PIGPIO_LICENSE = Unlicense
+>  PIGPIO_LICENSE_FILES = UNLICENCE
