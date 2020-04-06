@@ -1,80 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 6 Apr 2020 22:16:36 +0200
-Subject: [Buildroot] [git commit] support/testing: test_syslinux: fix flake8
- errors
-Message-ID: <20200406200249.2C67F8D1F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: test_tmux: remove
+ BR2_GENERATE_LOCALE
+Message-ID: <20200406200249.54DD68D1F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fa527851176ed00ab525e10c3f9cbfae787cfa0
+commit: https://git.buildroot.net/buildroot/commit/?id=96ee994443b3f3ca5e6259c684bbfb80ea5034ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reported by gitlab:
-https://gitlab.com/kubu93/buildroot/-/jobs/499374911
+The BR2_GENERATE_LOCALE can only be used by uClibc based toolchains with the
+internal toolchain backend [1].
+
+The test_tmux is using a external uClibc toolchain, so the
+"BR2_GENERATE_LOCALE="en_US.UTF-8"" line disapear from
+the generated dot config (.config) leading to an error due to
+a new check in the testsuite infra.
+
+[1] https://git.buildroot.net/buildroot/commit/?id=bd0ffe2206fbd32baf7f4a1dc5fde81cfad70462
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/boot/test_syslinux.py | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ support/testing/tests/package/test_tmux.py | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/support/testing/tests/boot/test_syslinux.py b/support/testing/tests/boot/test_syslinux.py
-index 6b1a8bc7d7..4105e5edac 100644
---- a/support/testing/tests/boot/test_syslinux.py
-+++ b/support/testing/tests/boot/test_syslinux.py
-@@ -1,13 +1,14 @@
- import infra.basetest
- 
-+
- class TestSysLinuxBase(infra.basetest.BRTest):
-     x86_toolchain_config = \
+diff --git a/support/testing/tests/package/test_tmux.py b/support/testing/tests/package/test_tmux.py
+index 7eb23cac97..b31854cab3 100644
+--- a/support/testing/tests/package/test_tmux.py
++++ b/support/testing/tests/package/test_tmux.py
+@@ -6,7 +6,6 @@ import infra.basetest
+ class TestTmux(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
          """
--	BR2_x86_i686=y
--	BR2_TOOLCHAIN_EXTERNAL=y
--	BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--	BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2"
--	BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
-+        BR2_x86_i686=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+        BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2"
-+        BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
-         BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-         BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-         BR2_TOOLCHAIN_EXTERNAL_CXX=y
-@@ -46,6 +47,7 @@ class TestSysLinuxBase(infra.basetest.BRTest):
-         BR2_TARGET_SYSLINUX_EFI=y
-         """
- 
-+
- class TestSysLinuxX86LegacyBios(TestSysLinuxBase):
-     config = \
-         TestSysLinuxBase.x86_toolchain_config + \
-@@ -55,6 +57,7 @@ class TestSysLinuxX86LegacyBios(TestSysLinuxBase):
-     def test_run(self):
-         pass
- 
-+
- class TestSysLinuxX86EFI(TestSysLinuxBase):
-     config = \
-         TestSysLinuxBase.x86_toolchain_config + \
-@@ -64,6 +67,7 @@ class TestSysLinuxX86EFI(TestSysLinuxBase):
-     def test_run(self):
-         pass
- 
-+
- class TestSysLinuxX86_64LegacyBios(TestSysLinuxBase):
-     config = \
-         TestSysLinuxBase.x86_64_toolchain_config + \
-@@ -73,6 +77,7 @@ class TestSysLinuxX86_64LegacyBios(TestSysLinuxBase):
-     def test_run(self):
-         pass
- 
-+
- class TestSysLinuxX86_64EFI(TestSysLinuxBase):
-     config = \
-         TestSysLinuxBase.x86_64_toolchain_config + \
+-        BR2_GENERATE_LOCALE="en_US.UTF-8"
+         BR2_PACKAGE_TMUX=y
+         BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
