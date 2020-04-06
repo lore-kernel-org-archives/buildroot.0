@@ -1,42 +1,46 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 Apr 2020 16:21:56 +0200
-Subject: [Buildroot] [PATCH 1/4] package/qemu: disable libssh for the host
- variant
-Message-ID: <20200406142159.592563-1-romain.naour@gmail.com>
+Date: Mon,  6 Apr 2020 16:21:57 +0200
+Subject: [Buildroot] [PATCH 2/4] package/qemu: disable vnc optional support
+ for the host variant
+In-Reply-To: <20200406142159.592563-1-romain.naour@gmail.com>
+References: <20200406142159.592563-1-romain.naour@gmail.com>
+Message-ID: <20200406142159.592563-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no host-libssh in Buildroot, avoid qemu build system
-to find libssh from the host.
-
-Under certain circumstances (host distribution, openssl version), the
-qemu-system binary fail to start:
-
-host/bin/qemu-system-aarch64: symbol lookup error: /lib64/libssh.so.4: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
+The vnc support is enabled by default and the build system
+will try to detect automatically some external libraries
+installed on the host for vnc-png, vnc-jpeg and vnc-sasl.
 
 $ ldd output/host/bin/qemu-system-aarch64
 	[...]
-	libssh.so.4 => /lib64/libssh.so.4
+	libpng16.so.16 => /lib64/libpng16.so.16
+or
+	libpng16.so.16 => output/host/lib/libpng16.so.16
+if host-libpng is built before host-qemu.
 
-Explicitely disable libssh for the host variant.
+Disable explicitely thoses options to improve the build
+reproducibility.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/qemu/qemu.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/qemu/qemu.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index b2249ed4ee..3c3b098a5b 100644
+index 3c3b098a5b..b8904ffe18 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -303,6 +303,7 @@ define HOST_QEMU_CONFIGURE_CMDS
- 		--extra-cflags="$(HOST_QEMU_CFLAGS)" \
+@@ -304,6 +304,9 @@ define HOST_QEMU_CONFIGURE_CMDS
  		--extra-ldflags="$(HOST_LDFLAGS)" \
  		--python=$(HOST_DIR)/bin/python3 \
-+		--disable-libssh \
+ 		--disable-libssh \
++		--disable-vnc-jpeg \
++		--disable-vnc-png \
++		--disable-vnc-sasl \
  		$(HOST_QEMU_OPTS)
  endef
  
