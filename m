@@ -1,39 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Apr 2020 22:35:39 +0200
-Subject: [Buildroot] [git commit] package/libgee: enable
- gobject-introspection support
-Message-ID: <20200406202227.806B47FA55@busybox.osuosl.org>
+Date: Mon, 6 Apr 2020 22:35:24 +0200
+Subject: [Buildroot] [git commit] package/gcr: enable gobject-introspection
+ support
+Message-ID: <20200406202227.6172481D3C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3915e17e7734ee3abe088d4ce1893eecd7cc4663
+commit: https://git.buildroot.net/buildroot/commit/?id=d4e7c720aa78dbe659db82f4eb38ff58ebae4c57
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 If gobject-introspection is selected, add the gobject-introspection package to
-the dependency list and set the conf opt --enable-introspection.
+the dependency list and set the conf opt --with-introspection.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libgee/libgee.mk | 7 +++++++
+ package/gcr/gcr.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
-index 81fd354fe8..4b2581e171 100644
---- a/package/libgee/libgee.mk
-+++ b/package/libgee/libgee.mk
-@@ -13,4 +13,11 @@ LIBGEE_INSTALL_STAGING = YES
- LIBGEE_LICENSE = LGPL-2.1+
- LIBGEE_LICENSE_FILES = COPYING
+diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
+index 2fe583978c..56bfe1110a 100644
+--- a/package/gcr/gcr.mk
++++ b/package/gcr/gcr.mk
+@@ -23,6 +23,13 @@ GCR_CONF_OPTS = \
+ GCR_LICENSE = LGPL-2.1+
+ GCR_LICENSE_FILES = COPYING
  
 +ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+LIBGEE_CONF_OPTS += --enable-introspection
-+LIBGEE_DEPENDENCIES += gobject-introspection
++GCR_DEPENDENCIES += gobject-introspection
++GCR_CONF_OPTS += --with-introspection
 +else
-+LIBGEE_CONF_OPTS += --disable-introspection
++GCR_CONF_OPTS += --without-introspection
 +endif
 +
- $(eval $(autotools-package))
+ # Only the X11 backend is supported for the simple GUI
+ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+ GCR_DEPENDENCIES += libgtk3
