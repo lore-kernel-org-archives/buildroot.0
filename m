@@ -1,29 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 6 Apr 2020 21:51:50 +0200
-Subject: [Buildroot] [PATCH v2] Bump to version 75
-In-Reply-To: <20200406141045.2668-1-grzegorz@blach.pl>
-References: <20200308121526.80350-1-grzegorz@blach.pl>
- <20200406141045.2668-1-grzegorz@blach.pl>
-Message-ID: <20200406215150.2ac578b0@windsurf>
+Date: Mon, 6 Apr 2020 21:52:08 +0200
+Subject: [Buildroot] [PATCH] package/libnss: fix build failure due to
+ patch not applicable
+In-Reply-To: <20200405171144.90701-1-giulio.benetti@benettiengineering.com>
+References: <20200405171144.90701-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20200406215208.0993560a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  6 Apr 2020 16:10:45 +0200
-Grzegorz Blach <grzegorz@blach.pl> wrote:
+On Sun,  5 Apr 2020 19:11:44 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+> Current 0001 patch has been committed into buildroot before being
+> upstreamed. Now that it's been upstreamed it changed a little, so this
+> makes patch 0002(based on upstream version of patch 0001) impossible to
+> apply causing build failure while applying patches. So let's update
+> patch 0001 with upstream one.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/c8a/c8a6776a3e9cec1dc67862e4972e3ca8f4562a50/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
-> Changes v1 -> v2:
->   - Bump from version 74 to 75
-> ---
->  package/pigpio/pigpio.hash | 2 +-
->  package/pigpio/pigpio.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  ...roduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch} | 61 ++++++++++---------
+>  package/libnss/libnss.mk                      |  4 +-
+>  2 files changed, 35 insertions(+), 30 deletions(-)
+>  rename package/libnss/{0001-Bug-1620799-Introduce-NSS_DISABLE_GCM_ARM32_NEON.patch => 0001-Bug-1620799-Introduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch} (71%)
 
-Applied to master after fixing the commit title. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
