@@ -1,44 +1,66 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon,  6 Apr 2020 09:50:44 -0700
-Subject: [Buildroot] [PATCH 1/1] package/libclc: disable ccache
-Message-ID: <20200406165045.2607140-1-aduskett@gmail.com>
+From: Charles Turner <cturner@igalia.com>
+Date: Mon, 06 Apr 2020 18:04:09 +0100
+Subject: [Buildroot] [PATCH v4] package/cog: add option for platform DRM.
+In-Reply-To: <20200405014959.GD324638@momiji>
+References: <20200312194700.2836-1-cturner@igalia.com>
+ <20200402113455.4391-1-cturner@igalia.com>
+ <20200404234630.712aca1d@windsurf.home> <20200405014959.GD324638@momiji>
+Message-ID: <092c5373232c820c5b730ff21d737b333c3f5dd2.camel@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hello,
 
-Configure.py extracts arch, vendor, and os from the passed
-toolchain string on line 180. When using ccache, the passed path string is
-"/usr/lib64/ccache/g++" which breaks the logic, causing the following error:
+Thank you for your reviews.
 
-Traceback (most recent call last):
-  File "./configure.py", line 180, in <module>
-    (t_arch, t_vendor, t_os) = target.split('-')
-ValueError: not enough values to unpack (expected 3, got 1)
+I have commented below. As an aside, I note my patch has been removed
+from the Patchwork interface[1]. My process so far was to find it
+there, copy the message ID, and continue the version bumps. However,
+now that I can't find it there, and that this has become a patch
+*series*, I will be sending new mails.
 
-Use --with-cxx-compiler=$(HOSTCXX_NOCCACHE) instead of $(HOSTCXX) to fix the
-above error.
+On Sun, 2020-04-05 at 01:49 +0300, Adrian Perez de Castro wrote:
+> Hello,
+> 
+> I am adding a few comments to Thomas' questions below.
+> 
+> On Sat, 4 Apr 2020 23:46:30 +0200, Thomas Petazzoni <
+> thomas.petazzoni at bootlin.com> wrote:
+>  
+> > On Thu,  2 Apr 2020 12:34:55 +0100
+> > Charlie Turner <cturner@igalia.com> wrote:
+> > 
+> > > diff --git a/package/cog/Config.in b/package/cog/Config.in
+> > > index b25991d4ae..6a7c5668a5 100644
+> > > --- a/package/cog/Config.in
+> > > +++ b/package/cog/Config.in
+> > > @@ -7,7 +7,9 @@ config BR2_PACKAGE_COG
+> > >  	depends on BR2_PACKAGE_WPEWEBKIT
+> > >  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+> > >  	depends on BR2_USE_MMU # dbus
+> > > +
+> > 
+> > Why this new empty line?
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/libclc/libclc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It was visually pleasing at the time, sorry for introducing an
+inconsistency, I should have checked.
 
-diff --git a/package/libclc/libclc.mk b/package/libclc/libclc.mk
-index 52249a7087..630616905c 100644
---- a/package/libclc/libclc.mk
-+++ b/package/libclc/libclc.mk
-@@ -25,7 +25,7 @@ LIBCLC_CONF_OPTS = \
- 	--prefix=/usr \
- 	--includedir=/usr/share \
- 	--pkgconfigdir=/usr/lib/pkgconfig \
--	--with-cxx-compiler=$(HOSTCXX)
-+	--with-cxx-compiler=$(HOSTCXX_NOCCACHE)
- 
- define LIBCLC_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.py $(LIBCLC_CONF_OPTS))
--- 
-2.25.1
+> > Why are you dropping the wayland and wayland-protocols
+> > dependencies?
+> > Overall, it makes sense because cog does not depends/select wayland
+> > or
+> > wayland-protocols. Ditto for wpebackend-fdo.
+> 
+> We need those, but only when BR2_PACKAGE_COG_PLATFORM_FDO is enabled.
+
+I slightly diverted here, wayland is needed for both FDO and DRM (FDO
+is a client and DRM is a server). Only FDO registers new protocols, so
+that is platform-specific.
+
+Best,
+	Charlie.
+
+[1] https://patchwork.ozlabs.org/project/buildroot/list/
