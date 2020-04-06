@@ -1,45 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Apr 2020 22:13:57 +0200
-Subject: [Buildroot] [git commit] package/libclc: disable ccache
-Message-ID: <20200406200041.E161F8CA68@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 6 Apr 2020 22:16:36 +0200
+Subject: [Buildroot] [git commit] support/testing: test_syslinux: fix flake8
+ errors
+Message-ID: <20200406200249.2C67F8D1F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bffce31ec19842c99a5f32891c3fba790d04349e
+commit: https://git.buildroot.net/buildroot/commit/?id=6fa527851176ed00ab525e10c3f9cbfae787cfa0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Configure.py extracts arch, vendor, and os from the passed
-toolchain string on line 180. When using ccache, the passed path string is
-"/usr/lib64/ccache/g++" which breaks the logic, causing the following error:
+Reported by gitlab:
+https://gitlab.com/kubu93/buildroot/-/jobs/499374911
 
-Traceback (most recent call last):
-  File "./configure.py", line 180, in <module>
-    (t_arch, t_vendor, t_os) = target.split('-')
-ValueError: not enough values to unpack (expected 3, got 1)
-
-Use --with-cxx-compiler=$(HOSTCXX_NOCCACHE) instead of $(HOSTCXX) to fix the
-above error.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libclc/libclc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/boot/test_syslinux.py | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/libclc/libclc.mk b/package/libclc/libclc.mk
-index 52249a7087..630616905c 100644
---- a/package/libclc/libclc.mk
-+++ b/package/libclc/libclc.mk
-@@ -25,7 +25,7 @@ LIBCLC_CONF_OPTS = \
- 	--prefix=/usr \
- 	--includedir=/usr/share \
- 	--pkgconfigdir=/usr/lib/pkgconfig \
--	--with-cxx-compiler=$(HOSTCXX)
-+	--with-cxx-compiler=$(HOSTCXX_NOCCACHE)
+diff --git a/support/testing/tests/boot/test_syslinux.py b/support/testing/tests/boot/test_syslinux.py
+index 6b1a8bc7d7..4105e5edac 100644
+--- a/support/testing/tests/boot/test_syslinux.py
++++ b/support/testing/tests/boot/test_syslinux.py
+@@ -1,13 +1,14 @@
+ import infra.basetest
  
- define LIBCLC_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.py $(LIBCLC_CONF_OPTS))
++
+ class TestSysLinuxBase(infra.basetest.BRTest):
+     x86_toolchain_config = \
+         """
+-	BR2_x86_i686=y
+-	BR2_TOOLCHAIN_EXTERNAL=y
+-	BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-	BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2"
+-	BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
++        BR2_x86_i686=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++        BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2"
++        BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+         BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+         BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+         BR2_TOOLCHAIN_EXTERNAL_CXX=y
+@@ -46,6 +47,7 @@ class TestSysLinuxBase(infra.basetest.BRTest):
+         BR2_TARGET_SYSLINUX_EFI=y
+         """
+ 
++
+ class TestSysLinuxX86LegacyBios(TestSysLinuxBase):
+     config = \
+         TestSysLinuxBase.x86_toolchain_config + \
+@@ -55,6 +57,7 @@ class TestSysLinuxX86LegacyBios(TestSysLinuxBase):
+     def test_run(self):
+         pass
+ 
++
+ class TestSysLinuxX86EFI(TestSysLinuxBase):
+     config = \
+         TestSysLinuxBase.x86_toolchain_config + \
+@@ -64,6 +67,7 @@ class TestSysLinuxX86EFI(TestSysLinuxBase):
+     def test_run(self):
+         pass
+ 
++
+ class TestSysLinuxX86_64LegacyBios(TestSysLinuxBase):
+     config = \
+         TestSysLinuxBase.x86_64_toolchain_config + \
+@@ -73,6 +77,7 @@ class TestSysLinuxX86_64LegacyBios(TestSysLinuxBase):
+     def test_run(self):
+         pass
+ 
++
+ class TestSysLinuxX86_64EFI(TestSysLinuxBase):
+     config = \
+         TestSysLinuxBase.x86_64_toolchain_config + \
