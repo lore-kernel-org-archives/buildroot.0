@@ -1,65 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Apr 2020 17:08:41 +0200
+Date: Mon, 6 Apr 2020 17:18:25 +0200
 Subject: [Buildroot] [git commit branch/2020.02.x]
- toolchain/toolchain-external: fix call to check_kernel_headers_version
-Message-ID: <20200406150514.92F078C5D4@busybox.osuosl.org>
+ support/scripts/check-kernel-headers.sh: do not print error for loose
+ checks
+Message-ID: <20200406150514.B467282277@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b5b681c7dcbe7786565f9e3e344bfd17f40bbb0
+commit: https://git.buildroot.net/buildroot/commit/?id=6bba85671be17ef89e482b9d3e8c9c1322e4d337
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-The external toolchain configure step calls the
-check_kernel_headers_version make function to compare the kernel
-headers version declared in the configuration with the actual kernel
-headers of the toolchain.
+The C program inside check-kernel-headers.sh has two checking mode: a
+strict and a loose one.
 
-This function takes 4 arguments, but due to a missing comma what
-should be the first two arguments are both passed into the first
-argument. Due to this, when check_kernel_headers_version does:
+In strict mode, we want the kernel headers version declared by the
+user to match exactly the one of the toolchain.
 
-	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3) \
-		$(if $(BR2_TOOLCHAIN_HEADERS_LATEST),$(4),strict); \
+In loose mode, we want the kernel headers version of the toolchain to
+be greater than or equal to the one declared by the user: this is used
+when we have a toolchain that has newer headers than the latest
+version known by Buildroot.
 
-Then:
+However, in loose mode, we continue to show the "Incorrect kernel
+headers version" message, even though we then return a zero error
+code. This is very confusing: you see an error displayed on the
+terminal, but the build goes on.
 
-  $(1) contains "$(BUILD_DIR) $$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))"
-  $(2) contains "$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))"
-  $(3) contains "$$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict))"
-
-So from the point of view of check-kernel-headers.sh, it already has
-four arguments, and therefore the additional argument passed by:
-
-   $(if $(BR2_TOOLCHAIN_HEADERS_LATEST),$(4),strict); \
-
-is ignored, defeating the $(BR2_TOOLCHAIN_HEADERS_LATEST) test.
-
-The practical consequence is that a toolchain that has 5.4 kernel
-headers but declared as using 5.3 kernel headers does not abort the
-build, because the check is considered "loose" while it should be
-"strict".
+We fix that by first doing the loose check first, and returning 0 if
+it succeeds. And then we move on with the strict check where we want
+the version to be identical.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 96f8d0bb4605d119d9c52b22e0032935b1fe8a29)
+(cherry picked from commit c3c4b3dfa8e0ef4f69583e9f705106feb8fbac07)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/scripts/check-kernel-headers.sh | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index b01082aadd..8667d7ddf6 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -540,7 +540,7 @@ define $(2)_CONFIGURE_CMDS
- 	$$(Q)$$(call check_unusable_toolchain,$$(TOOLCHAIN_EXTERNAL_CC))
- 	$$(Q)SYSROOT_DIR="$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC))" ; \
- 	$$(call check_kernel_headers_version,\
--		$$(BUILD_DIR)\
-+		$$(BUILD_DIR),\
- 		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
- 		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),\
- 		$$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict)); \
+diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+index 841df98b64..4e6dce5487 100755
+--- a/support/scripts/check-kernel-headers.sh
++++ b/support/scripts/check-kernel-headers.sh
+@@ -49,18 +49,20 @@ ${HOSTCC} -imacros "${SYSROOT}/usr/include/linux/version.h" \
+ int main(int argc __attribute__((unused)),
+          char** argv __attribute__((unused)))
+ {
+-    int ret = 0;
+     int l = LINUX_VERSION_CODE & ~0xFF;
+     int h = KERNEL_VERSION(${HDR_M},${HDR_m},0);
+ 
++    if ((l >= h) && !strcmp("${CHECK}", "loose"))
++        return 0;
++
+     if (l != h) {
+         printf("Incorrect selection of kernel headers: ");
+         printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
+                ((LINUX_VERSION_CODE>>16) & 0xFF),
+                ((LINUX_VERSION_CODE>>8) & 0xFF));
+-        ret = ((l >= h) && !strcmp("${CHECK}", "loose")) ? 0 : 1;
++        return 1;
+     }
+-    return ret;
++    return 0;
+ }
+ _EOF_
+ 
