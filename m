@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Apr 2020 18:16:46 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/civetweb: add
+Date: Mon, 6 Apr 2020 18:16:55 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/civetweb: add
  zlib optional dependency
-Message-ID: <20200406213602.0F5EB8D360@busybox.osuosl.org>
+Message-ID: <20200406213859.3E2EF8D377@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55c3bf4200c22e99e1c495f269dc107f8ddcce59
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a19efcf4edc11dce29258487a117007c5e99b598
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 zlib is an optional dependency since version 1.11 and
 https://github.com/civetweb/civetweb/commit/6b8b15935378f71323ff95f907fa0d33841deac0
@@ -24,7 +24,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-index 99da1b6f06..f05b29f3cd 100644
+index 1652239ebb..69a377d723 100644
 --- a/package/civetweb/civetweb.mk
 +++ b/package/civetweb/civetweb.mk
 @@ -38,6 +38,12 @@ else
