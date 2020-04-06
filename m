@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Apr 2020 17:08:46 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x]
+Date: Mon, 6 Apr 2020 17:08:41 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
  toolchain/toolchain-external: fix call to check_kernel_headers_version
-Message-ID: <20200406150506.AFB658C596@busybox.osuosl.org>
+Message-ID: <20200406150514.92F078C5D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66fbaad68b28d834e59df704d365eb87fd0fc92c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5b5b681c7dcbe7786565f9e3e344bfd17f40bbb0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 The external toolchain configure step calls the
 check_kernel_headers_version make function to compare the kernel
@@ -51,7 +51,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 1c43409514..444ff8d027 100644
+index b01082aadd..8667d7ddf6 100644
 --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
 +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
 @@ -540,7 +540,7 @@ define $(2)_CONFIGURE_CMDS
@@ -61,5 +61,5 @@ index 1c43409514..444ff8d027 100644
 -		$$(BUILD_DIR)\
 +		$$(BUILD_DIR),\
  		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
- 		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
- 	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
+ 		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),\
+ 		$$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict)); \
