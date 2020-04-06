@@ -1,99 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Apr 2020 23:53:48 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/bluez5_utils: fix
- build with kernel >= 5.2
-Message-ID: <20200406215531.EAF9F7F934@busybox.osuosl.org>
+Date: Mon, 6 Apr 2020 23:54:12 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/{bluez5_utils,
+ bluez5_utils-headers}: security bump to version 5.54
+Message-ID: <20200406215532.22DED81121@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7b6202c5f16798ff59b5653efeffdaad7ad3142
+commit: https://git.buildroot.net/buildroot/commit/?id=caf8533849a575602681445d23e47614d9facd8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/1b965c5d9c782d6689041eeeb7be3be4a4854346
+Fixes the following security issue:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- CVE-2020-0556: Improper access control in subsystem for BlueZ before
+  version 5.54 may allow an unauthenticated user to potentially enable
+  escalation of privilege and denial of service via adjacent access
+
+  https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00352.html
+
+Changes since version 5.52:
+
+5.54:
+  Fix issue with HOGP to accept data only from bonded devices.
+  Fix issue with A2DP sessions being connected at the same time.
+  Fix issue with class UUID matches before connecting profile.
+  Add support for handling MTU auto-tuning option for AVDTP.
+  Add support for new policy for Just-Works repairing.
+  Add support for Enhanced ATT bearer (EATT).
+
+5.53:
+  Fix issue with handling unregistration for advertisment.
+  Fix issue with A2DP and handling recovering process.
+  Fix issue with udpating input device information.
+  Add support for loading blocked keys.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4666e85cfbd482766d0f685869689749f44aea0c)
+(cherry picked from commit 3a678c952f4394b119d884ef22910f30860e1c2e)
+[Peter: mention security issue]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ls-Fix-build-after-y2038-changes-in-glibc.patch | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
+ package/bluez5_utils/bluez5_utils.hash               | 2 +-
+ package/bluez5_utils/bluez5_utils.mk                 | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch b/package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch
-new file mode 100644
-index 0000000000..7d08c6aa40
---- /dev/null
-+++ b/package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch
-@@ -0,0 +1,68 @@
-+From f36f71f60b1e68c0f12e615b9b128d089ec3dd19 Mon Sep 17 00:00:00 2001
-+From: Bastien Nocera <hadess@hadess.net>
-+Date: Fri, 7 Jun 2019 09:51:33 +0200
-+Subject: tools: Fix build after y2038 changes in glibc
-+
-+The 32-bit SIOCGSTAMP has been deprecated. Use the deprecated name
-+to fix the build.
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/tools/?id=f36f71f60b1e68c0f12e615b9b128d089ec3dd19]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ tools/l2test.c | 6 +++++-
-+ tools/rctest.c | 6 +++++-
-+ 2 files changed, 10 insertions(+), 2 deletions(-)
-+
-+(limited to 'tools')
-+
-+diff --git a/tools/l2test.c b/tools/l2test.c
-+index e755ac881..e787c2ce2 100644
-+--- a/tools/l2test.c
-++++ b/tools/l2test.c
-+@@ -55,6 +55,10 @@
-+ #define BREDR_DEFAULT_PSM	0x1011
-+ #define LE_DEFAULT_PSM		0x0080
-+ 
-++#ifndef SIOCGSTAMP_OLD
-++#define SIOCGSTAMP_OLD SIOCGSTAMP
-++#endif
-++
-+ /* Test modes */
-+ enum {
-+ 	SEND,
-+@@ -907,7 +911,7 @@ static void recv_mode(int sk)
-+ 			if (timestamp) {
-+ 				struct timeval tv;
-+ 
-+-				if (ioctl(sk, SIOCGSTAMP, &tv) < 0) {
-++				if (ioctl(sk, SIOCGSTAMP_OLD, &tv) < 0) {
-+ 					timestamp = 0;
-+ 					memset(ts, 0, sizeof(ts));
-+ 				} else {
-+diff --git a/tools/rctest.c b/tools/rctest.c
-+index 94490f462..bc8ed875d 100644
-+--- a/tools/rctest.c
-++++ b/tools/rctest.c
-+@@ -50,6 +50,10 @@
-+ 
-+ #include "src/shared/util.h"
-+ 
-++#ifndef SIOCGSTAMP_OLD
-++#define SIOCGSTAMP_OLD SIOCGSTAMP
-++#endif
-++
-+ /* Test modes */
-+ enum {
-+ 	SEND,
-+@@ -505,7 +509,7 @@ static void recv_mode(int sk)
-+ 			if (timestamp) {
-+ 				struct timeval tv;
-+ 
-+-				if (ioctl(sk, SIOCGSTAMP, &tv) < 0) {
-++				if (ioctl(sk, SIOCGSTAMP_OLD, &tv) < 0) {
-+ 					timestamp = 0;
-+ 					memset(ts, 0, sizeof(ts));
-+ 				} else {
-+-- 
-+cgit 1.2-0.3.lf.el7
-+
+diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+index c61f93a23c..871986c817 100644
+--- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
++++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils
+-BLUEZ5_UTILS_HEADERS_VERSION = 5.52
++BLUEZ5_UTILS_HEADERS_VERSION = 5.54
+ BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 00112bc0b6..3eb6912fb3 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  f7144ce2039202cfac18ccb52426efea11c98e4f6e1bb8041bcb994b8378560a  bluez-5.52.tar.xz
++sha256  68cdab9e63e8832b130d5979dc8c96fdb087b31278f342874d992af3e56656dc  bluez-5.54.tar.xz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 7c5202b717..c6c001f560 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.52
++BLUEZ5_UTILS_VERSION = 5.54
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
