@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Apr 2020 23:52:35 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/{bluez5_utils,
+Date: Mon, 6 Apr 2020 23:50:19 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/{bluez5_utils,
  bluez5_utils-headers}: security bump to version 5.54
-Message-ID: <20200406215536.8010A8CA6C@busybox.osuosl.org>
+Message-ID: <20200406215543.B33278CA0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99b59f196535412707fa371f75e01a0a6f00ccbe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=312a28cf64a035a9b729bf6a57c9c37294156953
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes the following security issue:
 
@@ -71,7 +71,7 @@ index 00112bc0b6..3eb6912fb3 100644
  sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
 diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 7c5202b717..c6c001f560 100644
+index 8f9249454d..e328f52eaf 100644
 --- a/package/bluez5_utils/bluez5_utils.mk
 +++ b/package/bluez5_utils/bluez5_utils.mk
 @@ -5,7 +5,7 @@
