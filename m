@@ -1,23 +1,125 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 6 Apr 2020 07:10:08 -0500
-Subject: [Buildroot] [PATCH 10/22] package/audit: bear the kernel
- options munging
-In-Reply-To: <ab7aa79cc97d2c90acef1312a298e0376c2a2db7.1586002215.git.yann.morin.1998@free.fr>
-References: <cover.1586002215.git.yann.morin.1998@free.fr>
- <ab7aa79cc97d2c90acef1312a298e0376c2a2db7.1586002215.git.yann.morin.1998@free.fr>
-Message-ID: <CANQCQpa1O55+hqffp2ts88i4i9CwsQKUEYEpJhpMrCN72wf9MQ@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon,  6 Apr 2020 15:56:21 +0200
+Subject: [Buildroot] [PATCH] package/openssh: allow separate selection of
+ client, server, keyutils
+Message-ID: <20200406135622.7645-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-On Sat, Apr 4, 2020 at 7:13 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+The openssh package comprises three separate entities: the SSH client, SSH
+server, and some SSH key utilities. One may want the client but not the
+server, the server but not the client, or maybe only the key utilities.
 
-Review-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Add separate options for each entity and update the files installed on
+target accordingly.
+
+On an ARM Cortex-A53 configuration, size of stripped binaries are:
+
+Client programs: 2213118 bytes (2161 KB)
+usr/bin/ssh,657180
+usr/bin/scp,99836
+usr/bin/ssh-add,312800
+usr/bin/ssh-agent,296428
+usr/libexec/ssh-keysign,398908
+usr/libexec/ssh-pkcs11-helper,292316
+usr/bin/sftp,144992
+usr/bin/ssh-copy-id,10658
+
+Server programs: 806840 bytes (787 KB)
+usr/libexec/sftp-server,112140
+usr/sbin/sshd,694168
+etc/init.d/S50sshd,532
+
+Key utilities: 789648 bytes (771 KB)
+usr/bin/ssh-keygen,398924
+usr/bin/ssh-keyscan,390724
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ package/openssh/Config.in  | 23 +++++++++++++++++++++++
+ package/openssh/openssh.mk | 31 ++++++++++++++++++++++++++++++-
+ 2 files changed, 53 insertions(+), 1 deletion(-)
+
+diff --git a/package/openssh/Config.in b/package/openssh/Config.in
+index 683a9c0e51..cc5998742e 100644
+--- a/package/openssh/Config.in
++++ b/package/openssh/Config.in
+@@ -9,3 +9,26 @@ config BR2_PACKAGE_OPENSSH
+ 	  friends.
+ 
+ 	  http://www.openssh.com/
++
++if BR2_PACKAGE_OPENSSH
++
++config BR2_PACKAGE_OPENSSH_CLIENT
++	bool "client"
++	default y
++	help
++	  Client programs: ssh, scp, sftp, ssh-agent, ssh-add,
++	  ssh-copy-id.
++
++config BR2_PACKAGE_OPENSSH_SERVER
++	bool "server"
++	default y
++	help
++	  Server programs: sshd, sftp-server
++
++config BR2_PACKAGE_OPENSSH_KEY_UTILS
++	bool "key utilities"
++	default y
++	help
++	  Key utilities: ssh-keygen, ssh-keyscan.
++
++endif
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index d50572128a..b0259de7dd 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -82,10 +82,39 @@ define OPENSSH_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S50sshd
+ endef
+ 
++ifeq ($(BR2_PACKAGE_OPENSSH_CLIENT),y)
+ define OPENSSH_INSTALL_SSH_COPY_ID
+ 	$(INSTALL) -D -m 755 $(@D)/contrib/ssh-copy-id $(TARGET_DIR)/usr/bin/ssh-copy-id
+ endef
+-
+ OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SSH_COPY_ID
++else
++define OPENSSH_REMOVE_CLIENT
++	for i in ssh scp sftp ssh-agent ssh-add ; do \
++		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
++	done
++	for i in ssh-keysign ssh-pkcs11-helper ; do \
++		rm -f $(TARGET_DIR)/usr/libexec/$$i ; \
++	done
++endef
++OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_REMOVE_CLIENT
++endif
++
++ifneq ($(BR2_PACKAGE_OPENSSH_SERVER),y)
++define OPENSSH_REMOVE_SERVER
++	rm -f $(TARGET_DIR)/usr/sbin/sshd
++	rm -f $(TARGET_DIR)/usr/libexec/sftp-server
++	rm -f $(TARGET_DIR)/etc/init.d/S50sshd
++endef
++OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_REMOVE_SERVER
++endif
++
++ifneq ($(BR2_PACKAGE_OPENSSH_KEY_UTILS),y)
++define OPENSSH_REMOVE_KEY_UTILS
++	for i in ssh-keygen ssh-keyscan ; do \
++		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
++	done
++endef
++OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_REMOVE_KEY_UTILS
++endif
+ 
+ $(eval $(autotools-package))
+-- 
+2.24.1
