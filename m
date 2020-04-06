@@ -1,46 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 6 Apr 2020 21:52:20 +0200
-Subject: [Buildroot] [git commit] package/minizip: bump version to 2.9.2
-Message-ID: <20200406193835.2E5918386E@busybox.osuosl.org>
+Date: Mon, 6 Apr 2020 21:52:16 +0200
+Subject: [Buildroot] [git commit] package/boinc: bump version to 7.16.6
+Message-ID: <20200406193835.2058E8386E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a852d3567104f10b3df82b9080020f83f48b116
+commit: https://git.buildroot.net/buildroot/commit/?id=cd07b01a8af8f7d30eb376ff2bbb1f9ea635779f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump package version and in addition update indentation of
-hash file (two spaces).
-
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/minizip/minizip.hash | 4 ++--
- package/minizip/minizip.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/boinc/boinc.hash | 2 +-
+ package/boinc/boinc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
-index e27eb03d94..0fed09735a 100644
---- a/package/minizip/minizip.hash
-+++ b/package/minizip/minizip.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 90481093302ccda81b2d129fea1800ea53be3f826ab0ec6176ad6807869ec4d9  minizip-2.9.1.tar.gz
--sha256 675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
-+sha256  8425399277d9d5e39454e655cfd3eb004607960c8358a3e732f5e741a6b5df0a  minizip-2.9.2.tar.gz
-+sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
-diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-index 40e6bcf9a8..313fe87a49 100644
---- a/package/minizip/minizip.mk
-+++ b/package/minizip/minizip.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
+index aa2aebcc4c..b842b6c017 100644
+--- a/package/boinc/boinc.hash
++++ b/package/boinc/boinc.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 33db60991b253e717c6124cce4750ae7729eaab4e54ec718b9e37f87012d668a  boinc-7.16.5.tar.gz
++sha256 caa567da8d3eb50859efe2eeba1c23c7b27d3b0f15b548136e75302713b25303  boinc-7.16.6.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
+diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+index 3dc1ea65ad..d32b258ea7 100644
+--- a/package/boinc/boinc.mk
++++ b/package/boinc/boinc.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MINIZIP_VERSION = 2.9.1
-+MINIZIP_VERSION = 2.9.2
- MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
- MINIZIP_DEPENDENCIES = \
- 	host-pkgconf \
+ BOINC_VERSION_MAJOR = 7.16
+-BOINC_VERSION = $(BOINC_VERSION_MAJOR).5
++BOINC_VERSION = $(BOINC_VERSION_MAJOR).6
+ BOINC_SITE = \
+ 	$(call github,BOINC,boinc,client_release/$(BOINC_VERSION_MAJOR)/$(BOINC_VERSION))
+ BOINC_LICENSE = LGPL-3.0+
