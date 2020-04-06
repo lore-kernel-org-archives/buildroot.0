@@ -1,71 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Apr 2020 17:18:25 +0200
+Date: Mon, 6 Apr 2020 17:17:48 +0200
 Subject: [Buildroot] [git commit branch/2020.02.x]
- support/scripts/check-kernel-headers.sh: do not print error for loose
- checks
-Message-ID: <20200406150514.B467282277@busybox.osuosl.org>
+ package/kodi-screensaver-rsxs: switch license to GPL-2.0+
+Message-ID: <20200406150514.A541A87F68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bba85671be17ef89e482b9d3e8c9c1322e4d337
+commit: https://git.buildroot.net/buildroot/commit/?id=6a6a7732da56c679471eb8663e3e74775018132e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-The C program inside check-kernel-headers.sh has two checking mode: a
-strict and a loose one.
+Upstream commit
+https://github.com/xbmc/screensavers.rsxs/commit/dbb88536964dc0ca4144016eb12f7307b60cb1fa
 
-In strict mode, we want the kernel headers version declared by the
-user to match exactly the one of the toolchain.
+removed lib/rsxs-1.0 which was licensed as GPL-3.0.
 
-In loose mode, we want the kernel headers version of the toolchain to
-be greater than or equal to the one declared by the user: this is used
-when we have a toolchain that has newer headers than the latest
-version known by Buildroot.
+During the latest version bump
+https://git.buildroot.net/buildroot/commit/package/kodi-screensaver-rsxs?id=e68bcc985fbb17e50cfa2944807090b6cd57c871
 
-However, in loose mode, we continue to show the "Incorrect kernel
-headers version" message, even though we then return a zero error
-code. This is very confusing: you see an error displayed on the
-terminal, but the build goes on.
+KODI_SCREENSAVER_RSXS_LICENSE_FILES = lib/rsxs-1.0/COPYING
 
-We fix that by first doing the loose check first, and returning 0 if
-it succeeds. And then we move on with the strict check where we want
-the version to be identical.
+was removed but the corresponding license change was forgotton.
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c3c4b3dfa8e0ef4f69583e9f705106feb8fbac07)
+(cherry picked from commit 4765abdd529fe918c2cc66dec31f6cb00bbd323d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/check-kernel-headers.sh | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash | 1 +
+ package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
-index 841df98b64..4e6dce5487 100755
---- a/support/scripts/check-kernel-headers.sh
-+++ b/support/scripts/check-kernel-headers.sh
-@@ -49,18 +49,20 @@ ${HOSTCC} -imacros "${SYSROOT}/usr/include/linux/version.h" \
- int main(int argc __attribute__((unused)),
-          char** argv __attribute__((unused)))
- {
--    int ret = 0;
-     int l = LINUX_VERSION_CODE & ~0xFF;
-     int h = KERNEL_VERSION(${HDR_M},${HDR_m},0);
+diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
+index b2d9e33a57..8f34b349e7 100644
+--- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
++++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256 22ff3f0ca9679c59ce1a90b98d918dd10a8012b789729b2e44c04d4ce8c86ad8  kodi-screensaver-rsxs-7cb648507440d87948dec10d5bfdab3b722d37fe.tar.gz
++sha256 fa0ff8b6a6267b9477be7d505aa384056633b4be17e0b9d308df9bd70d1c99f6  debian/copyright
+diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+index e208698797..aa881d0d59 100644
+--- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
++++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+@@ -6,7 +6,8 @@
  
-+    if ((l >= h) && !strcmp("${CHECK}", "loose"))
-+        return 0;
-+
-     if (l != h) {
-         printf("Incorrect selection of kernel headers: ");
-         printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
-                ((LINUX_VERSION_CODE>>16) & 0xFF),
-                ((LINUX_VERSION_CODE>>8) & 0xFF));
--        ret = ((l >= h) && !strcmp("${CHECK}", "loose")) ? 0 : 1;
-+        return 1;
-     }
--    return ret;
-+    return 0;
- }
- _EOF_
+ KODI_SCREENSAVER_RSXS_VERSION = 7cb648507440d87948dec10d5bfdab3b722d37fe
+ KODI_SCREENSAVER_RSXS_SITE = $(call github,xbmc,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
+-KODI_SCREENSAVER_RSXS_LICENSE = GPL-3.0
++KODI_SCREENSAVER_RSXS_LICENSE = GPL-2.0+
++KODI_SCREENSAVER_RSXS_LICENSE_FILES = debian/copyright
+ KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 gli glm jpeg kodi libpng libtool tiff
  
+ $(eval $(cmake-package))
