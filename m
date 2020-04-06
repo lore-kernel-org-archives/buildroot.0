@@ -1,39 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 6 Apr 2020 21:52:08 +0200
-Subject: [Buildroot] [PATCH] package/libnss: fix build failure due to
- patch not applicable
-In-Reply-To: <20200405171144.90701-1-giulio.benetti@benettiengineering.com>
-References: <20200405171144.90701-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200406215208.0993560a@windsurf>
+Date: Mon, 6 Apr 2020 21:52:20 +0200
+Subject: [Buildroot] [git commit] package/minizip: bump version to 2.9.2
+Message-ID: <20200406193835.2E5918386E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  5 Apr 2020 19:11:44 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0a852d3567104f10b3df82b9080020f83f48b116
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Current 0001 patch has been committed into buildroot before being
-> upstreamed. Now that it's been upstreamed it changed a little, so this
-> makes patch 0002(based on upstream version of patch 0001) impossible to
-> apply causing build failure while applying patches. So let's update
-> patch 0001 with upstream one.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/c8a/c8a6776a3e9cec1dc67862e4972e3ca8f4562a50/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  ...roduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch} | 61 ++++++++++---------
->  package/libnss/libnss.mk                      |  4 +-
->  2 files changed, 35 insertions(+), 30 deletions(-)
->  rename package/libnss/{0001-Bug-1620799-Introduce-NSS_DISABLE_GCM_ARM32_NEON.patch => 0001-Bug-1620799-Introduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch} (71%)
+Bump package version and in addition update indentation of
+hash file (two spaces).
 
-Applied to master, thanks.
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/minizip/minizip.hash | 4 ++--
+ package/minizip/minizip.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
+index e27eb03d94..0fed09735a 100644
+--- a/package/minizip/minizip.hash
++++ b/package/minizip/minizip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 90481093302ccda81b2d129fea1800ea53be3f826ab0ec6176ad6807869ec4d9  minizip-2.9.1.tar.gz
+-sha256 675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
++sha256  8425399277d9d5e39454e655cfd3eb004607960c8358a3e732f5e741a6b5df0a  minizip-2.9.2.tar.gz
++sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index 40e6bcf9a8..313fe87a49 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MINIZIP_VERSION = 2.9.1
++MINIZIP_VERSION = 2.9.2
+ MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
+ MINIZIP_DEPENDENCIES = \
+ 	host-pkgconf \
