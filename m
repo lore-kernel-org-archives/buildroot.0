@@ -1,7 +1,9 @@
 From: Charlie Turner <cturner@igalia.com>
-Date: Mon,  6 Apr 2020 18:16:22 +0100
-Subject: [Buildroot] [PATCH 1/3] package/cog: depend on libxkbcommon
-Message-ID: <20200406171624.18970-1-cturner@igalia.com>
+Date: Mon,  6 Apr 2020 18:16:23 +0100
+Subject: [Buildroot] [PATCH 2/3] package/cog: add wayland dependencies
+In-Reply-To: <20200406171624.18970-1-cturner@igalia.com>
+References: <20200406171624.18970-1-cturner@igalia.com>
+Message-ID: <20200406171624.18970-2-cturner@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +12,33 @@ To: buildroot@busybox.net
 
 The always-built FDO backend relies on this.
 ---
- package/cog/Config.in | 1 +
+ package/cog/Config.in | 2 ++
  package/cog/cog.mk    | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/package/cog/Config.in b/package/cog/Config.in
-index b25991d4ae..6671405230 100644
+index 6671405230..c20ee86827 100644
 --- a/package/cog/Config.in
 +++ b/package/cog/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_COG
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+@@ -9,6 +9,8 @@ config BR2_PACKAGE_COG
  	depends on BR2_USE_MMU # dbus
  	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_LIBXKBCOMMON
+ 	select BR2_PACKAGE_LIBXKBCOMMON
++	select BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
  	help
  	  Single "window" launcher for the WebKit WPE port, and
  	  helper library for implementing WPE launcher. It does
 diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index d0e5b79c38..dc287a8a16 100644
+index dc287a8a16..763d6d9699 100644
 --- a/package/cog/cog.mk
 +++ b/package/cog/cog.mk
 @@ -8,7 +8,7 @@ COG_VERSION = 0.4.0
  COG_SITE = https://wpewebkit.org/releases
  COG_SOURCE = cog-$(COG_VERSION).tar.xz
  COG_INSTALL_STAGING = YES
--COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
-+COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo libxkbcommon
+-COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo libxkbcommon
++COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo libxkbcommon wayland wayland-protocols
  COG_LICENSE = MIT
  COG_LICENSE_FILES = COPYING
  COG_CONF_OPTS = \
