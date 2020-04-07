@@ -1,41 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 09:10:48 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/gcc: bump 8.x
- series to version 8.4.0
-Message-ID: <20200407070402.91C56814CA@busybox.osuosl.org>
+Date: Tue, 7 Apr 2020 09:10:57 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/gcc: bump 9.x
+ series to version 9.3.0
+Message-ID: <20200407070402.A1BB3814CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56809418f0e6303022b05ddbb10dcec5459e6187
+commit: https://git.buildroot.net/buildroot/commit/?id=0219439a06f73cbfcd01a3bcea16093b830b4823
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Remove upstream patch [1].
+Remove upstream patch [1]
 Rebase and rename 0002-xtensa-fix-PR-target-91880.patch
+and 0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
 
-Tested using gitlab w/ Qemu runtime testing series [2] [3].
+Tested using gitlab with Qemu runtime testing series [2] [3].
 
-[1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=fba5d9b4c0f4488281efbeef56c100bb52e55165
-[2] https://gitlab.com/kubu93/buildroot/pipelines/124684030
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=2e1e7ad18e121663082525a872f0d6fb32db4535
+[2] https://gitlab.com/kubu93/buildroot/pipelines/125828238
 [3] http://patchwork.ozlabs.org/project/buildroot/list/?series=159088
+
+See:
+https://gcc.gnu.org/pipermail/gcc-announce/2020/000161.html
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b7c2a2f22e4ed733cd04cd109973a10194d78abe)
+(cherry picked from commit f6bf6281f018b4cc0ebb11227f68ac59001781ec)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...1-xtensa-backport-fix-for-PR-target-90922.patch | 43 ----------------------
- .../0001-xtensa-fix-PR-target-91880.patch}         | 10 +++--
+ .../0001-xtensa-fix-PR-target-91880.patch}         |  9 +++--
+ ...-Fix-issue-with-set_got-clobbering-LR-r9.patch} |  4 +-
  package/gcc/Config.in.host                         |  2 +-
  package/gcc/gcc.hash                               |  4 +-
- 4 files changed, 9 insertions(+), 50 deletions(-)
+ 5 files changed, 10 insertions(+), 52 deletions(-)
 
-diff --git a/package/gcc/8.3.0/0001-xtensa-backport-fix-for-PR-target-90922.patch b/package/gcc/8.3.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
+diff --git a/package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch b/package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
 deleted file mode 100644
-index c961ce5d24..0000000000
---- a/package/gcc/8.3.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
+index bc1d13a9e4..0000000000
+--- a/package/gcc/9.2.0/0001-xtensa-backport-fix-for-PR-target-90922.patch
 +++ /dev/null
 @@ -1,43 +0,0 @@
 -From a592242578e573778241cae6d3928c064dcdfda4 Mon Sep 17 00:00:00 2001
@@ -68,7 +73,7 @@ index c961ce5d24..0000000000
 -index 19bd616d67f6..ee5612441e25 100644
 ---- a/gcc/config/xtensa/xtensa.c
 -+++ b/gcc/config/xtensa/xtensa.c
--@@ -2862,7 +2862,8 @@ xtensa_expand_prologue (void)
+-@@ -2865,7 +2865,8 @@ xtensa_expand_prologue (void)
 - 			    gen_rtx_SET (mem, reg));
 - 	    }
 - 	}
@@ -81,25 +86,24 @@ index c961ce5d24..0000000000
 --- 
 -2.11.0
 -
-diff --git a/package/gcc/8.3.0/0002-xtensa-fix-PR-target-91880.patch b/package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch
-similarity index 86%
-rename from package/gcc/8.3.0/0002-xtensa-fix-PR-target-91880.patch
-rename to package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch
-index e653525011..119826b516 100644
---- a/package/gcc/8.3.0/0002-xtensa-fix-PR-target-91880.patch
-+++ b/package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch
+diff --git a/package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch b/package/gcc/9.3.0/0001-xtensa-fix-PR-target-91880.patch
+similarity index 88%
+rename from package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch
+rename to package/gcc/9.3.0/0001-xtensa-fix-PR-target-91880.patch
+index 0dbf1124a3..4e5aea2c7b 100644
+--- a/package/gcc/9.2.0/0002-xtensa-fix-PR-target-91880.patch
++++ b/package/gcc/9.3.0/0001-xtensa-fix-PR-target-91880.patch
 @@ -1,4 +1,4 @@
 -From 7c11710230921246156aecc20eb4b6ccaeaaa473 Mon Sep 17 00:00:00 2001
-+From 28623c81b50663e946790649352cb1b3ed23954d Mon Sep 17 00:00:00 2001
++From 0a59aa440a4c125b81504c777b066ae4eb1f09f0 Mon Sep 17 00:00:00 2001
  From: Max Filippov <jcmvbkbc@gmail.com>
  Date: Tue, 24 Sep 2019 04:15:17 -0700
  Subject: [PATCH] xtensa: fix PR target/91880
-@@ -15,14 +15,16 @@ gcc/
+@@ -15,14 +15,15 @@ gcc/
  	block that precedes the loop is empty.
  
  Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+[Romain: rebase on gcc 8.4.0]
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
  ---
  Backported from: r276166
  
@@ -109,42 +113,62 @@ index e653525011..119826b516 100644
  
  diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
 -index ee5612441e25..2527468d57db 100644
-+index 08f9f7c7a8f..de206527810 100644
++index ee5612441e2..2527468d57d 100644
  --- a/gcc/config/xtensa/xtensa.c
  +++ b/gcc/config/xtensa/xtensa.c
- @@ -4232,7 +4232,9 @@ hwloop_optimize (hwloop_info loop)
-@@ -45,5 +47,5 @@ index ee5612441e25..2527468d57db 100644
+ @@ -4235,7 +4235,9 @@ hwloop_optimize (hwloop_info loop)
+@@ -45,5 +46,5 @@ index ee5612441e25..2527468d57db 100644
                || (NOTE_P (entry_after)
   		 && NOTE_KIND (entry_after) != NOTE_INSN_BASIC_BLOCK))
  -- 
 -2.11.0
 +2.24.1
  
+diff --git a/package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch b/package/gcc/9.3.0/0002-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+similarity index 98%
+rename from package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+rename to package/gcc/9.3.0/0002-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+index bdde2ce762..e40b96fe0f 100644
+--- a/package/gcc/9.2.0/0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
++++ b/package/gcc/9.3.0/0002-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+@@ -1,4 +1,4 @@
+-From 94c7d630348671b781368d9270514dcf6c34e0c9 Mon Sep 17 00:00:00 2001
++From 1383012ae409ed91903b2b76ee15137bc1f89900 Mon Sep 17 00:00:00 2001
+ From: shorne <shorne@138bc75d-0d04-0410-961f-82ee72b054a4>
+ Date: Sat, 31 Aug 2019 06:00:56 +0000
+ Subject: [PATCH] or1k: Fix issue with set_got clobbering LR (r9)
+@@ -101,5 +101,5 @@ index 2dad51cd46b..88f3f02630f 100644
+     (clobber (reg:SI LR_REGNUM))]
+    ""
+ -- 
+-2.23.0
++2.24.1
+ 
 diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 3e4a4d907c..bdfa1b5916 100644
+index bdfa1b5916..243310f61e 100644
 --- a/package/gcc/Config.in.host
 +++ b/package/gcc/Config.in.host
-@@ -87,7 +87,7 @@ config BR2_GCC_VERSION
- 	string
+@@ -88,7 +88,7 @@ config BR2_GCC_VERSION
  	default "5.5.0"     if BR2_GCC_VERSION_5_X
  	default "7.5.0"     if BR2_GCC_VERSION_7_X
--	default "8.3.0"     if BR2_GCC_VERSION_8_X
-+	default "8.4.0"     if BR2_GCC_VERSION_8_X
- 	default "9.2.0"     if BR2_GCC_VERSION_9_X
+ 	default "8.4.0"     if BR2_GCC_VERSION_8_X
+-	default "9.2.0"     if BR2_GCC_VERSION_9_X
++	default "9.3.0"     if BR2_GCC_VERSION_9_X
  	default "arc-2019.09-release" if BR2_GCC_VERSION_ARC
  	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
+ 
 diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 65c8c0d794..ba63db1563 100644
+index ba63db1563..d9df3408d4 100644
 --- a/package/gcc/gcc.hash
 +++ b/package/gcc/gcc.hash
-@@ -2,8 +2,8 @@
- sha512  670ff52c2ae12c7852c12987e91798c5aa8bd6daf21f0d6e0cd57a4aa59cc4f06a837fe76426eaa1424cfddca937bed377680700eadc04d76b9180d462364fa1  gcc-5.5.0.tar.xz
- # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-7.5.0/sha512.sum
+@@ -4,8 +4,8 @@ sha512  670ff52c2ae12c7852c12987e91798c5aa8bd6daf21f0d6e0cd57a4aa59cc4f06a837fe7
  sha512  fe716cc19f2e3255d3a8b1b8290777bf769c6d98e6e0b07b81a3d6ad43f8af74cb170dfa18b1555dbfcd3f55ae582b91a286ccef496b9b65c1579902f96a1f60  gcc-7.5.0.tar.xz
--# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-8.3.0/sha512.sum
--sha512  1811337ae3add9680cec64968a2509d085b6dc5b6783fc1e8c295e3e47416196fd1a3ad8dfe7e10be2276b4f62c357659ce2902f239f60a8648548231b4b5802  gcc-8.3.0.tar.xz
-+# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
-+sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
- #  From ftp://gcc.gnu.org/pub/gcc/releases/gcc-9.2.0/sha512.sum
- sha512  a12dff52af876aee0fd89a8d09cdc455f35ec46845e154023202392adc164848faf8ee881b59b681b696e27c69fd143a214014db4214db62f9891a1c8365c040  gcc-9.2.0.tar.xz
+ # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
+ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
+-#  From ftp://gcc.gnu.org/pub/gcc/releases/gcc-9.2.0/sha512.sum
+-sha512  a12dff52af876aee0fd89a8d09cdc455f35ec46845e154023202392adc164848faf8ee881b59b681b696e27c69fd143a214014db4214db62f9891a1c8365c040  gcc-9.2.0.tar.xz
++#  From ftp://gcc.gnu.org/pub/gcc/releases/gcc-9.3.0/sha512.sum
++sha512  4b9e3639eef6e623747a22c37a904b4750c93b6da77cf3958d5047e9b5ebddb7eebe091cc16ca0a227c0ecbd2bf3b984b221130f269a97ee4cc18f9cf6c444de  gcc-9.3.0.tar.xz
  
+ # Locally calculated (fetched from Github)
+ sha512  84648d13f174102733e06ccdf7b351150babe06af0f2b99b8dfb2b2d3c3f13e424547349939806fe19932ad347977cad79cd8b37be9cbb03e6a4d03cdf95a72e  gcc-arc-2019.09-release.tar.gz
