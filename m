@@ -1,101 +1,90 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 7 Apr 2020 12:00:26 +0200
-Subject: [Buildroot] [PATCH] package/mtd: add upstream patch that fixes
- ubiformat return code
-In-Reply-To: <20200407095816.3499-1-patrickdepinguin@gmail.com>
-References: <20200407095816.3499-1-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LVQm9Wy=DeYkJKgWMUN4vTjxZSeL-tfK_p54sy1xMU6Mw@mail.gmail.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Tue,  7 Apr 2020 16:45:10 +0530
+Subject: [Buildroot] [PATCH v8 0/5] package/python-scipy: new package
+Message-ID: <20200407111515.21131-1-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-El mar., 7 abr. 2020 a las 11:58, Thomas De Schampheleire
-(<patrickdepinguin@gmail.com>) escribi?:
->
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->
-> ubiformat returns 255 even on successful format actions, since the upgrade
-> of mtd-utils to version 2.1.1.
->
-> Backport an upstream patch that fixes this issue. No new release is made
-> yet.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  ...-utils-Fix-return-value-of-ubiformat.patch | 60 +++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 package/mtd/0001-mtd-utils-Fix-return-value-of-ubiformat.patch
->
-> diff --git a/package/mtd/0001-mtd-utils-Fix-return-value-of-ubiformat.patch b/package/mtd/0001-mtd-utils-Fix-return-value-of-ubiformat.patch
-> new file mode 100644
-> index 0000000000..b316ecac12
-> --- /dev/null
-> +++ b/package/mtd/0001-mtd-utils-Fix-return-value-of-ubiformat.patch
-> @@ -0,0 +1,60 @@
-> +From 95633c4dfe943a701d4fcd809e6cabf4bf8710b8 Mon Sep 17 00:00:00 2001
-> +From: Barry Grussling <barry@grussling.com>
-> +Date: Sun, 12 Jan 2020 12:33:32 -0800
-> +Subject: [PATCH] mtd-utils: Fix return value of ubiformat
-> +
-> +This changeset fixes a feature regression in ubiformat.  Older versions of
-> +ubiformat, when invoked with a flash-image, would return 0 in the case no error
-> +was encountered.  Upon upgrading to latest, it was discovered that ubiformat
-> +returned 255 even without encountering an error condition.
-> +
-> +This changeset corrects the above issue and causes ubiformat, when given an
-> +image file, to return 0 when no errors are detected.
-> +
-> +Tested by running through my loading scripts and verifying ubiformat returned
-> +0.
-> +
-> +Signed-off-by: Barry Grussling <barry@grussling.com>
-> +Signed-off-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-> +[import into Buildroot]
-> +Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> +---
-> + ubi-utils/ubiformat.c | 7 +++++--
-> + 1 file changed, 5 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/ubi-utils/ubiformat.c b/ubi-utils/ubiformat.c
-> +index 64afad2..be40e52 100644
-> +--- a/ubi-utils/ubiformat.c
-> ++++ b/ubi-utils/ubiformat.c
-> +@@ -550,6 +550,7 @@ static int format(libmtd_t libmtd, const struct mtd_dev_info *mtd,
-> +       struct ubi_vtbl_record *vtbl;
-> +       int eb1 = -1, eb2 = -1;
-> +       long long ec1 = -1, ec2 = -1;
-> ++      int ret = -1;
-> +
-> +       write_size = UBI_EC_HDR_SIZE + mtd->subpage_size - 1;
-> +       write_size /= mtd->subpage_size;
-> +@@ -643,8 +644,10 @@ static int format(libmtd_t libmtd, const struct mtd_dev_info *mtd,
-> +       if (!args.quiet && !args.verbose)
-> +               printf("\n");
-> +
-> +-      if (novtbl)
-> ++      if (novtbl) {
-> ++              ret = 0;
-> +               goto out_free;
-> ++      }
-> +
-> +       if (eb1 == -1 || eb2 == -1) {
-> +               errmsg("no eraseblocks for volume table");
-> +@@ -669,7 +672,7 @@ static int format(libmtd_t libmtd, const struct mtd_dev_info *mtd,
-> +
-> + out_free:
-> +       free(hdr);
-> +-      return -1;
-> ++      return ret;
-> + }
-> +
-> + int main(int argc, char * const argv[])
-> +--
-> +2.24.1
-> +
-> --
-> 2.24.1
->
+This is v8 changes for python-scipy, here is the previous 
+version series[1].
 
-In my view this should be applied on both master and 2020.02.y.
+Changes for v8:
+- add python-pybind11 tests from Adam
+Changes for v7:
+- bump 1.181.2 numpy
+- drop 'BR2_PACKAGE_HOST_PYTHON_CYTHON' selection from numpy
+- drop python2 dependency from gnuradio.mk
+- drop python2 dependency from opencv3.mk
+- rephrase commit and comments of fixup npymath.ini
+- update commit message of pybind11, scipy
+- fix sha256 value of pybind11 LICENCE
+- drop 'BR2_PACKAGE_HOST_PYTHON_PYBIND11' selection from scipy 
+Changes for v6:
+- bump to numpy latest version
+- drop python2 dependecy on numpy seelcted packages
+- update numpy cross compilation changes
+- add pybind11 package
+- add latest python-scipy
+
+[1] https://patchwork.ozlabs.org/cover/1259531/
+
+Any inputs?
+Jagan.
+
+Adam Duskett (1):
+  support/testing: add python-pybind11 test
+
+Esben Haabendal (1):
+  package/python-numpy: fixup npymath.ini for numpy extensions
+
+Jagan Teki (3):
+  package/python-numpy: Bump to version 1.18.2
+  package/python-pybind11: new host package
+  package/python-scipy: new package
+
+ .gitlab-ci.yml                                |  2 +
+ DEVELOPERS                                    |  4 +
+ package/Config.in                             |  1 +
+ package/Config.in.host                        |  1 +
+ package/gnuradio/Config.in                    |  2 +-
+ package/gnuradio/gnuradio.mk                  |  4 +-
+ package/opencv3/Config.in                     |  2 +-
+ package/opencv3/opencv3.mk                    | 14 ----
+ package/python-numpy/Config.in                |  1 +
+ package/python-numpy/python-numpy.hash        | 14 ++--
+ package/python-numpy/python-numpy.mk          | 19 ++++-
+ package/python-pybind11/Config.in.host        |  7 ++
+ package/python-pybind11/python-pybind11.hash  |  5 ++
+ package/python-pybind11/python-pybind11.mk    | 14 ++++
+ package/python-scipy/Config.in                | 22 ++++++
+ package/python-scipy/python-scipy.hash        |  9 +++
+ package/python-scipy/python-scipy.mk          | 46 +++++++++++
+ .../br2-external/python-pybind11/Config.in    |  1 +
+ .../python-pybind11/external.desc             |  1 +
+ .../br2-external/python-pybind11/external.mk  |  1 +
+ .../Config.in                                 |  5 ++
+ .../pybind11_addition_example.cpp             |  9 +++
+ .../python-pybind11-addition-example.mk       | 39 ++++++++++
+ .../sample_python_pybind11.py                 |  4 +
+ .../tests/package/test_python_pybind11.py     | 76 +++++++++++++++++++
+ 25 files changed, 277 insertions(+), 26 deletions(-)
+ create mode 100644 package/python-pybind11/Config.in.host
+ create mode 100644 package/python-pybind11/python-pybind11.hash
+ create mode 100644 package/python-pybind11/python-pybind11.mk
+ create mode 100644 package/python-scipy/Config.in
+ create mode 100644 package/python-scipy/python-scipy.hash
+ create mode 100644 package/python-scipy/python-scipy.mk
+ create mode 100644 support/testing/tests/package/br2-external/python-pybind11/Config.in
+ create mode 100644 support/testing/tests/package/br2-external/python-pybind11/external.desc
+ create mode 100644 support/testing/tests/package/br2-external/python-pybind11/external.mk
+ create mode 100644 support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/Config.in
+ create mode 100644 support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/pybind11_addition_example.cpp
+ create mode 100644 support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/python-pybind11-addition-example.mk
+ create mode 100644 support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/sample_python_pybind11.py
+ create mode 100644 support/testing/tests/package/test_python_pybind11.py
+
+-- 
+2.17.1
