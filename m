@@ -1,37 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Apr 2020 09:17:35 +0200
-Subject: [Buildroot] [PATCH] package/gcc: bump to version 9.3.0
-In-Reply-To: <20200315161846.5827-1-romain.naour@smile.fr> (Romain Naour's
- message of "Sun, 15 Mar 2020 17:18:46 +0100")
-References: <20200315161846.5827-1-romain.naour@smile.fr>
-Message-ID: <87sghfrchc.fsf@dell.be.48ers.dk>
+Date: Tue, 7 Apr 2020 09:04:31 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] linux: Allow modprobe for
+ out-of-tree modules
+Message-ID: <20200407070402.7322C8D485@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8f5a610fe81676092a6960415717de731f43f8bf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Remove upstream patch [1]
- > Rebase and rename 0002-xtensa-fix-PR-target-91880.patch
- > and 0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+When a package installs a kernel module, it is currently not possible to
+have it loaded with modprobe or when the kernel requests an alias for
+it, as the module is not listed in /lib/modules/<kernel-version>/modules.dep
+and the associated files.
 
- > Tested using gitlab with Qemu runtime testing series [2] [3].
+So, we need to run depmod after all packages are installed, to register
+any such out-of-tree module.
 
- > [1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=2e1e7ad18e121663082525a872f0d6fb32db4535
- > [2] https://gitlab.com/kubu93/buildroot/pipelines/125828238
- > [3] http://patchwork.ozlabs.org/project/buildroot/list/?series=159088
+This means we should be able to let go of calling depmod at the time the
+kernel is installed, but if we pass an invalid command, the kernel
+whines:
 
- > See:
- > https://gcc.gnu.org/pipermail/gcc-announce/2020/000161.html
+      DEPMOD  5.4.27
+    ./scripts/depmod.sh: 46: /dev/null: Permission denied
+    make[2]: *** [Makefile:1326: _modinst_post] Error 126
 
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+This is because the kernel does not directly call to depmod, but uses a
+wrapper that is not happy if depmod is not depmod.
 
-Committed to 2020.02.x, thanks.
+Since the call to depmod does not cost much, we just keep it.
 
-Given that they are just about to go EOL (and we didn't backport gcc
-7.5.0) I have NOT committed to 2019.02.x and 2019.11.x.
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+[yann.morin.1998 at free.fr:
+  - keep calling depmod when installing kernel
+  - expand commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 82e7656400958d2a1aa458e86db518201e27e7fd)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/linux.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 4b60f33ff3..5baca23ea2 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -127,6 +127,8 @@ LINUX_POST_EXTRACT_HOOKS += LINUX_XTENSA_OVERLAY_EXTRACT
+ LINUX_EXTRA_DOWNLOADS += $(ARCH_XTENSA_OVERLAY_URL)
+ endif
+ 
++# We don't want to run depmod after installing the kernel. It's done in a
++# target-finalize hook, to encompass modules installed by packages.
+ LINUX_MAKE_FLAGS = \
+ 	HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
+ 	ARCH=$(KERNEL_ARCH) \
+@@ -526,6 +528,13 @@ define LINUX_INSTALL_TARGET_CMDS
+ 	$(LINUX_INSTALL_HOST_TOOLS)
+ endef
+ 
++# Run depmod in a target-finalize hook, to encompass modules installed by
++# packages.
++define LINUX_RUN_DEPMOD
++	$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED)
++endef
++LINUX_TARGET_FINALIZE_HOOKS += LINUX_RUN_DEPMOD
++
+ # Include all our extensions.
+ #
+ # Note: our package infrastructure uses the full-path of the last-scanned
