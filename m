@@ -1,25 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Apr 2020 09:01:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/screen: add linux-pam optional
- dependency
-In-Reply-To: <20200321174546.195830-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 21 Mar 2020 18:45:46 +0100")
-References: <20200321174546.195830-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a73nsrsf.fsf@dell.be.48ers.dk>
+Date: Tue, 7 Apr 2020 08:50:20 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/screen: add
+ linux-pam optional dependency
+Message-ID: <20200407064750.0D0D98A695@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c9c36c519c3d27398320958751c2c7c21d893d14
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > linux-pam is an optional dependency for more than 5 years:
- > https://git.savannah.gnu.org/cgit/screen.git/commit/src/configure.ac?h=screen-v4&id=a8dc1fb5b47ee52c79884fc5270805a3a39cda4a
+linux-pam is an optional dependency for more than 5 years:
+https://git.savannah.gnu.org/cgit/screen.git/commit/src/configure.ac?h=screen-v4&id=a8dc1fb5b47ee52c79884fc5270805a3a39cda4a
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit c685bded08f02ded5d45136e7a1328354bf6515f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/screen/screen.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Committed to 2019.02.x, 2019.11.x and 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+index 37d43366c2..3236a90a8f 100644
+--- a/package/screen/screen.mk
++++ b/package/screen/screen.mk
+@@ -14,6 +14,13 @@ SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
+ SCREEN_CONF_OPTS = --enable-colors256
+ SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
+ 
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++SCREEN_DEPENDENCIES += linux-pam
++SCREEN_CONF_OPTS += --enable-pam
++else
++SCREEN_CONF_OPTS += --disable-pam
++endif
++
+ define SCREEN_INSTALL_SCREENRC
+ 	$(INSTALL) -m 0755 -D $(@D)/etc/screenrc $(TARGET_DIR)/etc/screenrc
+ endef
