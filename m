@@ -1,52 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Apr 2020 21:20:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rng-tools: add nistbeacon option
-In-Reply-To: <20200404213653.1538752-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 4 Apr 2020 23:36:53 +0200")
-References: <20200404213653.1538752-1-fontaine.fabrice@gmail.com>
-Message-ID: <87d08jm7bw.fsf@dell.be.48ers.dk>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue,  7 Apr 2020 13:26:22 -0600
+Subject: [Buildroot] [PATCH v3 1/1] package/gcc: pass -Wno-error to debug
+ builds
+Message-ID: <20200407192622.46151-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Fixes:
+../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ?st.st_mode? may be used uninitialized in this function [-Werror=maybe-uninitialized]
+   return S_ISLNK (st.st_mode);
+                     ^
+Upstream has been unable to reproduce/fix properly, details:
+https://gcc.gnu.org/legacy-ml/gcc-patches/2019-03/threads.html#00827
 
- > Add an option to enable nistbeacon which is available since version 6.1
- > and
- > https://github.com/nhorman/rng-tools/commit/aefe862e187a1ef608f9826b2b4a5bbabd5e9945
+Upstream recommends passing -Wno-error as a workaround, see:
+https://gcc.gnu.org/pipermail/gcc-patches/2019-April/519867.html
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- >  package/rng-tools/Config.in    | 17 +++++++++++++++++
- >  package/rng-tools/rng-tools.mk | 11 ++++++++---
- >  2 files changed, 25 insertions(+), 3 deletions(-)
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v2 -> v3:
+  - add more details to message
+Changes v1 -> v2:
+  - add comment from Yocto recipes
+---
+ package/gcc/gcc.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- > diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
- > index a86fbb0f74..25b41f40d6 100644
- > --- a/package/rng-tools/Config.in
- > +++ b/package/rng-tools/Config.in
- > @@ -11,5 +11,22 @@ config BR2_PACKAGE_RNG_TOOLS
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 524ca83db0..fe7167b2f3 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -100,6 +100,11 @@ HOST_GCC_COMMON_CONF_ENV = \
+ GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+ GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
  
- >  	  http://sourceforge.net/projects/gkernel/
- 
- > +if BR2_PACKAGE_RNG_TOOLS
- > +
- > +config BR2_PACKAGE_RNG_TOOLS_NISTBEACON
- > +	bool "NIST Entropy Beacon support"
- > +	select BR2_PACKAGE_JANSSON
- > +	select BR2_PACKAGE_LIBCURL
- > +	select BR2_PACKAGE_LIBXML2
- > +	help
- > +	  Enable NIST Entropy Beacon support.
- > +
- > +	  Entropy gathered from the NIST network entropy beacon. Note
- > +	  that this entropy source is disabled by default as it should
- > +	  never be used for cryptographic purposes, or any use case in
- > +	  which random data should be known only by a single entity.
-
-Out of interest, what is the use case for this option?
-
++# used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ?st.st_mode? may be used uninitialized in this function [-Werror=maybe-uninitialized]
++ifeq ($(BR2_ENABLE_DEBUG),y)
++GCC_COMMON_TARGET_CFLAGS += -Wno-error
++endif
++
+ # Propagate options used for target software building to GCC target libs
+ HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
+ HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
 -- 
-Bye, Peter Korsgaard
+2.20.1
