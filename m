@@ -1,69 +1,103 @@
 From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Tue,  7 Apr 2020 16:45:12 +0530
-Subject: [Buildroot] [PATCH v8 2/5] package/python-numpy: fixup npymath.ini
- for numpy extensions
+Date: Tue,  7 Apr 2020 16:45:13 +0530
+Subject: [Buildroot] [PATCH v8 3/5] package/python-pybind11: new host package
 In-Reply-To: <20200407111515.21131-1-jagan@amarulasolutions.com>
 References: <20200407111515.21131-1-jagan@amarulasolutions.com>
-Message-ID: <20200407111515.21131-3-jagan@amarulasolutions.com>
+Message-ID: <20200407111515.21131-4-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Esben Haabendal <esben@geanix.com>
+Add python-pybind11 package with 2.4.3 release version.
 
-Inorder to build the numpy distutils extension packages like
-python-scipy, python-numba, it require an explicit pkg-config
-path fixup for npymath.ini.
-
-This pkg-config path fixup would update the prefix path of
-npymath.ini with actual target staging area where numpy core
-was built, so-that numpy distutils extension packages would
-explicitly link this config path for their package environment.
-
-Without this extension packages cannot find -lnpymath since
-it uses host libraries (like libnpymath.a).
-
-So, attach the post install staging hook with pkg-config
-path fixup for npymath.ini.
-
-Signed-off-by: Esben Haabendal <esben@geanix.com>
+Cc: Esben Haabendal <esben@geanix.com>
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
 Changes for v8:
 - none
 Changes for v7:
-- rephrase commit and comments of fixup npymath.ini
+- update the commit message
+- fix sha256 value of pybind11 LICENCE
 
- package/python-numpy/python-numpy.mk | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ DEVELOPERS                                   |  1 +
+ package/Config.in.host                       |  1 +
+ package/python-pybind11/Config.in.host       |  7 +++++++
+ package/python-pybind11/python-pybind11.hash |  5 +++++
+ package/python-pybind11/python-pybind11.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/python-pybind11/Config.in.host
+ create mode 100644 package/python-pybind11/python-pybind11.hash
+ create mode 100644 package/python-pybind11/python-pybind11.mk
 
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index 3f0df7a640..4d2e852b43 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -32,6 +32,21 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
- 	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
- endef
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a2c6da208b..308a59b264 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1151,6 +1151,7 @@ F:	configs/orangepi_win_defconfig
+ F:	configs/orangepi_zero_plus2_defconfig
+ F:	configs/pine64_defconfig
+ F:	configs/pine64_sopine_defconfig
++F:	package/python-pybind11
  
-+# Fixup the npymath.ini prefix path with actual target staging area where
-+# numpy core was built. Without this, target builds using numpy distutils
-+# extensions like python-scipy, python-numba cannot find -lnpymath since
-+# it uses host libraries (like libnpymath.a).
-+# So, the numpy distutils extension packages would explicitly link this
-+# config path for their package environment.
-+PYTHON_NUMPY_STAGING_DIR = $(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy
-+PYTHON_NUMPY_NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_STAGING_DIR)/core/lib/npy-pkg-config
-+define PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
-+	sed -e '/^pkgdir=/d' \
-+	    -e '/^prefix=/i pkgdir=$(PYTHON_NUMPY_STAGING_DIR)/core' \
-+	    -i $(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)/npymath.ini
-+endef
-+PYTHON_NUMPY_POST_INSTALL_STAGING_HOOKS += PYTHON_NUMPY_FIXUP_NPY_PKG_CONFIG_FILES
+ N:	James Hilliard <james.hilliard1@gmail.com>
+ F:	package/gensio/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index dfea478868..d63bf54aa7 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -57,6 +57,7 @@ menu "Host utilities"
+ 	source "package/python/Config.in.host"
+ 	source "package/python-cython/Config.in.host"
+ 	source "package/python-lxml/Config.in.host"
++	source "package/python-pybind11/Config.in.host"
+ 	source "package/python-six/Config.in.host"
+ 	source "package/python-xlrd/Config.in.host"
+ 	source "package/python3/Config.in.host"
+diff --git a/package/python-pybind11/Config.in.host b/package/python-pybind11/Config.in.host
+new file mode 100644
+index 0000000000..e4164efd9d
+--- /dev/null
++++ b/package/python-pybind11/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_PYTHON_PYBIND11
++	bool "host python-pybind11"
++	help
++	  Python module for Seamless operability between
++	  C++11 and Python.
 +
- # Some package may include few headers from NumPy, so let's install it
- # in the staging area.
- PYTHON_NUMPY_INSTALL_STAGING = YES
++	  https://github.com/pybind/pybind11
+diff --git a/package/python-pybind11/python-pybind11.hash b/package/python-pybind11/python-pybind11.hash
+new file mode 100644
+index 0000000000..880b678b94
+--- /dev/null
++++ b/package/python-pybind11/python-pybind11.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.python.org/pypi/pybind11/json
++md5  23fdca8191b16ce3e7f38fb9e4252b2d  pybind11-2.4.3.tar.gz
++sha256  72e6def53fb491f7f4e92692029d2e7bb5a0783314f20d80222735ff10a75758  pybind11-2.4.3.tar.gz
++# sha256 for LICENSE is locally computed
++sha256  9a37ea54aa3cf12c7f3292799f20822ffd4b9b7142b36a7a9997b28c39264dc9  LICENSE
+diff --git a/package/python-pybind11/python-pybind11.mk b/package/python-pybind11/python-pybind11.mk
+new file mode 100644
+index 0000000000..833ec92c86
+--- /dev/null
++++ b/package/python-pybind11/python-pybind11.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pybind11
++#
++################################################################################
++
++PYTHON_PYBIND11_VERSION = 2.4.3
++PYTHON_PYBIND11_SOURCE = pybind11-$(PYTHON_PYBIND11_VERSION).tar.gz
++PYTHON_PYBIND11_SITE = https://pypi.python.org/packages/aa/91/deb6743e79e22ab01502296570b39b8404f10cc507a6692d612a7fee8d51
++PYTHON_PYBIND11_SETUP_TYPE = setuptools
++PYTHON_PYBIND11_LICENSE = BSD
++PYTHON_PYBIND11_LICENSE_FILES = LICENSE
++
++$(eval $(host-python-package))
 -- 
 2.17.1
