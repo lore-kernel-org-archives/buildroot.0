@@ -1,53 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Apr 2020 17:01:11 +0200
-Subject: [Buildroot] [PATCH v8 0/5] package/python-scipy: new package
-In-Reply-To: <CAMty3ZCQ8qmZY9f=Lqv71fMYX3ej1eDxvL00w42B9fxSsagmjA@mail.gmail.com>
-References: <20200407111515.21131-1-jagan@amarulasolutions.com>
- <20200407134946.7b333d99@windsurf.home>
- <CAMty3ZCQ8qmZY9f=Lqv71fMYX3ej1eDxvL00w42B9fxSsagmjA@mail.gmail.com>
-Message-ID: <20200407150111.GP22325@scaer>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Tue,  7 Apr 2020 17:15:16 +0200
+Subject: [Buildroot] [PATCH] package/cegui: disable minizip support
+Message-ID: <20200407151516.120770-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jagan, All,
+Disable support for minizip since cegui is not compatible
+with the existing buildroot's version due to lack of
+necessary header. It will be restored when upstream will
+switch to the new version.
 
-On 2020-04-07 19:13 +0530, Jagan Teki spake thusly:
-> On Tue, Apr 7, 2020 at 5:19 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> > On Tue,  7 Apr 2020 16:45:10 +0530
-> > Jagan Teki <jagan@amarulasolutions.com> wrote:
-> > > This is v8 changes for python-scipy, here is the previous
-> > > version series[1].
-> > Thanks for this new iteration. Could you have a look at the backlog of
-> > patches at http://patchwork.ozlabs.org/project/buildroot/list/ and
-> > update any patch that is no longer relevant due to this new iteration
-> > to the state "Superseded" ? You can do that yourself for the patches
-> > that you have sent (provided that you have a patchwork account matching
-> > the e-mail used to send the patches). For the other patches, you can
-> > simply let us know, and we'll update the patch status.
-> >
-> > This helps us keep a patchwork backlog that makes sense.
-> 
-> Yes, I've updated all my previous version changes. regarding pybind11,
-> adam has this series [2]. I already incorporated test patch in my
-> series as per his request.
-> [2] http://patchwork.ozlabs.org/project/buildroot/list/?series=145831
+Fixes:
+ - http://autobuild.buildroot.net/results/65fa719e8b2466409a12eb103a8938e1488efc0c
+ - http://autobuild.buildroot.net/results/ef37a0cc16daacb7206d736c86b511c7d90eefe0
 
-So I've marked the seriers from Adam as superseded.
+and many more.
 
-However, there was a review of his pybind11 patch: since it installs
-only a header, it should be _INSTALL_TARGET = NO
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+ package/cegui/cegui.mk | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+index 134b222362..434201b1f8 100644
+--- a/package/cegui/cegui.mk
++++ b/package/cegui/cegui.mk
+@@ -9,7 +9,8 @@ CEGUI_SITE = $(call github,cegui,cegui,v$(CEGUI_VERSION))
+ CEGUI_LICENSE = MIT
+ CEGUI_LICENSE_FILES = COPYING
+ CEGUI_INSTALL_STAGING = YES
+-CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_XERCES=OFF
++CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_XERCES=OFF \
++		   -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF
+ CEGUI_DEPENDENCIES = glm \
+ 		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
+ 		$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
+@@ -66,13 +67,6 @@ else
+ CEGUI_CONF_OPTS += -DCEGUI_HAS_FREETYPE=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MINIZIP),y)
+-CEGUI_DEPENDENCIES += minizip
+-CEGUI_CONF_OPTS += -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=ON
+-else
+-CEGUI_CONF_OPTS += -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ CEGUI_DEPENDENCIES += libxml2
+ CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_LIBXML2=ON
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.0
