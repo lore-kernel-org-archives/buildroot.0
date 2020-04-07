@@ -1,97 +1,131 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 21:05:52 +0200
+Date: Tue, 7 Apr 2020 21:06:13 +0200
 Subject: [Buildroot] [git commit branch/2019.02.x] package/gvfs: fix
- CVE-2019-3827
-Message-ID: <20200407185302.70E598D71F@busybox.osuosl.org>
+ CVE-2019-12449
+Message-ID: <20200407185302.93EF28D71F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c193316caf490f5c0b79176fbc6383614512150
+commit: https://git.buildroot.net/buildroot/commit/?id=29155d20587f0c683b580b4329ab406adecd0114
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-An incorrect permission check in the admin backend in gvfs before
-version 1.39.4 was found that allows reading and modify arbitrary files
-by privileged users without asking for password when no authentication
-agent is running. This vulnerability can be exploited by malicious
-programs running under privileges of users belonging to the wheel group
-to further escalate its privileges by modifying system files without
-user's knowledge. Successful exploitation requires uncommon system
-configuration.
+An issue was discovered in GNOME gvfs 1.29.4 through 1.41.2.
+daemon/gvfsbackendadmin.c mishandles a file's user and group ownership
+during move (and copy with G_FILE_COPY_ALL_METADATA) operations from
+admin:// to file:// URIs, because root privileges are unavailable.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 346040e269162cebfb5f127c3e6baaa128880f6c)
+(cherry picked from commit fc42ac086a1a897be5ca997e416040560aa15cb6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-any-authentication-agent-isn-t-available.patch | 46 ++++++++++++++++++++++
- package/gvfs/gvfs.mk                               |  3 ++
- 2 files changed, 49 insertions(+)
+ ...correct-ownership-when-moving-to-file-uri.patch | 84 ++++++++++++++++++++++
+ package/gvfs/gvfs.mk                               |  3 +
+ 2 files changed, 87 insertions(+)
 
-diff --git a/package/gvfs/0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch b/package/gvfs/0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
+diff --git a/package/gvfs/0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch b/package/gvfs/0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
 new file mode 100644
-index 0000000000..b5a6d024cc
+index 0000000000..29f7573a65
 --- /dev/null
-+++ b/package/gvfs/0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
-@@ -0,0 +1,46 @@
-+From d8d0c8c40049cfd824b2b90d0cd47914052b9811 Mon Sep 17 00:00:00 2001
++++ b/package/gvfs/0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
+@@ -0,0 +1,84 @@
++From d5dfd823c94045488aef8727c553f1e0f7666b90 Mon Sep 17 00:00:00 2001
 +From: Ondrej Holy <oholy@redhat.com>
-+Date: Wed, 2 Jan 2019 17:13:27 +0100
-+Subject: [PATCH] admin: Prevent access if any authentication agent isn't
-+ available
++Date: Fri, 24 May 2019 09:43:43 +0200
++Subject: [PATCH] admin: Ensure correct ownership when moving to file:// uri
 +
-+The backend currently allows to access and modify files without prompting
-+for password if any polkit authentication agent isn't available. This seems
-+isn't usually problem, because polkit agents are integral parts of
-+graphical environments / linux distributions. The agents can't be simply
-+disabled without root permissions and are automatically respawned. However,
-+this might be a problem in some non-standard cases.
-+
-+This affects only users which belong to wheel group (i.e. those who are
-+already allowed to use sudo). It doesn't allow privilege escalation for
-+users, who don't belong to that group.
-+
-+Let's return permission denied error also when the subject can't be
-+authorized by any polkit agent to prevent this behavior.
-+
-+Closes: https://gitlab.gnome.org/GNOME/gvfs/issues/355
++User and group is not restored properly when moving (or copying with
++G_FILE_COPY_ALL_METADATA) from admin:// to file://, because it is handled
++by GIO fallback code, which doesn't run with root permissions. Let's
++handle this case with pull method to ensure correct ownership.
 +
 +[Retrieved from:
-+https://gitlab.gnome.org/GNOME/gvfs/commit/d8d0c8c40049cfd824b2b90d0cd47914052b9811]
++https://gitlab.gnome.org/GNOME/gvfs/commit/d5dfd823c94045488aef8727c553f1e0f7666b90]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ daemon/gvfsbackendadmin.c | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
++ daemon/gvfsbackendadmin.c | 46 +++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 46 insertions(+)
 +
 +diff --git a/daemon/gvfsbackendadmin.c b/daemon/gvfsbackendadmin.c
-+index ec0f2392..0f849008 100644
++index 32b51b1a..9a7e8295 100644
 +--- a/daemon/gvfsbackendadmin.c
 ++++ b/daemon/gvfsbackendadmin.c
-+@@ -130,8 +130,7 @@ check_permission (GVfsBackendAdmin *self,
-+       return FALSE;
-+     }
++@@ -807,6 +807,51 @@ do_move (GVfsBackend *backend,
++   complete_job (job, error);
++ }
 + 
-+-  is_authorized = polkit_authorization_result_get_is_authorized (result) ||
-+-    polkit_authorization_result_get_is_challenge (result);
-++  is_authorized = polkit_authorization_result_get_is_authorized (result);
-+ 
-+   g_object_unref (result);
-+ 
+++static void
+++do_pull (GVfsBackend *backend,
+++         GVfsJobPull *pull_job,
+++         const char *source,
+++         const char *local_path,
+++         GFileCopyFlags flags,
+++         gboolean remove_source,
+++         GFileProgressCallback progress_callback,
+++         gpointer progress_callback_data)
+++{
+++  GVfsBackendAdmin *self = G_VFS_BACKEND_ADMIN (backend);
+++  GVfsJob *job = G_VFS_JOB (pull_job);
+++  GError *error = NULL;
+++  GFile *src_file, *dst_file;
+++
+++  /* Pull method is necessary when user/group needs to be restored, return
+++   * G_IO_ERROR_NOT_SUPPORTED in other cases to proceed with the fallback code.
+++   */
+++  if (!(flags & G_FILE_COPY_ALL_METADATA))
+++    {
+++      g_vfs_job_failed_literal (G_VFS_JOB (job), G_IO_ERROR,
+++                                G_IO_ERROR_NOT_SUPPORTED,
+++                                _("Operation not supported"));
+++      return;
+++    }
+++
+++  if (!check_permission (self, job))
+++    return;
+++
+++  src_file = g_file_new_for_path (source);
+++  dst_file = g_file_new_for_path (local_path);
+++
+++  if (remove_source)
+++    g_file_move (src_file, dst_file, flags, job->cancellable,
+++                 progress_callback, progress_callback_data, &error);
+++  else
+++    g_file_copy (src_file, dst_file, flags, job->cancellable,
+++                 progress_callback, progress_callback_data, &error);
+++
+++  g_object_unref (src_file);
+++  g_object_unref (dst_file);
+++
+++  complete_job (job, error);
+++}
+++
++ static void
++ do_query_settable_attributes (GVfsBackend *backend,
++                               GVfsJobQueryAttributes *query_job,
++@@ -927,6 +972,7 @@ g_vfs_backend_admin_class_init (GVfsBackendAdminClass * klass)
++   backend_class->set_attribute = do_set_attribute;
++   backend_class->delete = do_delete;
++   backend_class->move = do_move;
+++  backend_class->pull = do_pull;
++   backend_class->query_settable_attributes = do_query_settable_attributes;
++   backend_class->query_writable_namespaces = do_query_writable_namespaces;
++ }
 +-- 
 +2.24.1
 +
 diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index c380a710fb..6c927fa345 100644
+index ec75852438..a3308b713d 100644
 --- a/package/gvfs/gvfs.mk
 +++ b/package/gvfs/gvfs.mk
-@@ -15,6 +15,9 @@ GVFS_LICENSE = LGPL-2.0+
- GVFS_LICENSE_FILES = COPYING
- GVFS_LIBS = $(TARGET_NLS_LIBS)
+@@ -25,6 +25,9 @@ GVFS_IGNORE_CVES += CVE-2019-12448
+ # 0004-admin-Use-fsuid-to-ensure-correct-file-ownership.patch
+ GVFS_IGNORE_CVES += CVE-2019-12447
  
-+# 0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
-+GVFS_IGNORE_CVES += CVE-2019-3827
++# 0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
++GVFS_IGNORE_CVES += CVE-2019-12449
 +
  # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
  # build system from searching the host paths.
