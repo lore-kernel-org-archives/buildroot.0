@@ -1,44 +1,46 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  7 Apr 2020 23:07:02 +0200
-Subject: [Buildroot] [PATCH v1 2/2] package/iwd: bump version to 1.6
-In-Reply-To: <20200407210702.10992-1-ps.report@gmx.net>
-References: <20200407210702.10992-1-ps.report@gmx.net>
-Message-ID: <20200407210702.10992-2-ps.report@gmx.net>
+Date: Tue,  7 Apr 2020 23:11:11 +0200
+Subject: [Buildroot] [PATCH v1] package/bcm2835: bump version to 1.63
+Message-ID: <20200407211111.11489-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- update license to GPL-3.0
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/iwd/iwd.hash | 2 +-
- package/iwd/iwd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bcm2835/bcm2835.hash | 4 ++--
+ package/bcm2835/bcm2835.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index 006916cdff..26ce712660 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  4d7c92b9fdbf14f46f208f1b053597a7e5225a4ad42369a3c28bcdb595087833  iwd-1.5.tar.gz
-+sha256  10b53cee9c38c9c60f83d4e16a446b27551b6187a2bd09d724f2238c99877f3f  iwd-1.6.tar.gz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index 799e631ba5..f3776fbfd4 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/bcm2835/bcm2835.hash b/package/bcm2835/bcm2835.hash
+index 025ef8be40..c722a97456 100644
+--- a/package/bcm2835/bcm2835.hash
++++ b/package/bcm2835/bcm2835.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  7beacda787d6073d0982bfe576c318bb2730700f7d0f7950c6e763dfcb06e0e5  bcm2835-1.62.tar.gz
+-sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  aec4b33ed9ecda4a1c4c12b8ed2abdd13cf87f352f0d27a24be726d11f1fbf54  bcm2835-1.63.tar.gz
++sha256  8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b  COPYING
+diff --git a/package/bcm2835/bcm2835.mk b/package/bcm2835/bcm2835.mk
+index 2435a42c95..d43dd7e574 100644
+--- a/package/bcm2835/bcm2835.mk
++++ b/package/bcm2835/bcm2835.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--IWD_VERSION = 1.5
-+IWD_VERSION = 1.6
- IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
- IWD_SITE_METHOD = git
- IWD_LICENSE = LGPL-2.1+
+-BCM2835_VERSION = 1.62
++BCM2835_VERSION = 1.63
+ BCM2835_SITE = http://www.airspayce.com/mikem/bcm2835
+-BCM2835_LICENSE = GPL-2.0
++BCM2835_LICENSE = GPL-3.0
+ BCM2835_LICENSE_FILES = COPYING
+ BCM2835_INSTALL_STAGING = YES
+ 
 -- 
 2.26.0
