@@ -1,43 +1,40 @@
-From: Jianhui zhao <zhaojh329@gmail.com>
-Date: Tue, 7 Apr 2020 11:16:15 +0800
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: fix typo
-In-Reply-To: <20200406214955.5d700ea6@windsurf>
-References: <20200406043826.10420-1-zhaojh329@gmail.com>
- <20200406204552.24818d1b@gmx.net>
- <20200406214955.5d700ea6@windsurf>
-Message-ID: <CAGN0SiE0jAjt=_Tzsx09-LWz144OMsDnGTRre79oXMzp0RLe-Q@mail.gmail.com>
+From: Jianhui Zhao <zhaojh329@gmail.com>
+Date: Tue,  7 Apr 2020 13:10:11 +0800
+Subject: [Buildroot] [PATCH v2 1/1] package/libuhttpd: bump version to 3.1.4
+Message-ID: <20200407051011.22254-1-zhaojh329@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes, will do.
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+---
+ package/libuhttpd/libuhttpd.hash | 2 +-
+ package/libuhttpd/libuhttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> ?2020?4?7??? ??3:49???
->
-> Hello,
->
-> On Mon, 6 Apr 2020 20:45:52 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > Hello Jianhui,
-> >
-> > On Mon,  6 Apr 2020 12:38:26 +0800, Jianhui Zhao <zhaojh329@gmail.com> wrote:
-> >
-> > > dlopenx -> dlopen
-> >
-> > Thanks for fixing..., but changing a already published release is not
-> > a favored solution (gives problems with already downloaded/cached source
-> > files)...
->
-> Agreed. Could you please do a new release with the fix, and never
-> modify existing releases in the future ?
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+index 5c3359fdd3..b520dda891 100644
+--- a/package/libuhttpd/libuhttpd.hash
++++ b/package/libuhttpd/libuhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 272e64fab9932039366270efa49dd4df98f5ebe8c76e51ae578594b37bf6eef4  libuhttpd-3.1.3.tar.gz
++sha256 cd76cf9a5d8c7f81832ab1b229ce3ff10137f161085f0170c128e43c49e905a4  libuhttpd-3.1.4.tar.gz
+ sha256 99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+index 0d75176d41..d3499373a6 100644
+--- a/package/libuhttpd/libuhttpd.mk
++++ b/package/libuhttpd/libuhttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUHTTPD_VERSION = 3.1.3
++LIBUHTTPD_VERSION = 3.1.4
+ LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
+ LIBUHTTPD_LICENSE = MIT
+ LIBUHTTPD_LICENSE_FILES = LICENSE
+-- 
+2.17.1
