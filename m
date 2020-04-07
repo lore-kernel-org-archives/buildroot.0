@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 08:50:20 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/screen: add
+Date: Tue, 7 Apr 2020 08:50:14 +0200
+Subject: [Buildroot] [git commit branch/2019.11.x] package/screen: add
  linux-pam optional dependency
-Message-ID: <20200407064750.0D0D98A695@busybox.osuosl.org>
+Message-ID: <20200407064753.8A05A88165@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9c36c519c3d27398320958751c2c7c21d893d14
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6867e34259feefe858d34c0bcfecf8d563708cb5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 linux-pam is an optional dependency for more than 5 years:
 https://git.savannah.gnu.org/cgit/screen.git/commit/src/configure.ac?h=screen-v4&id=a8dc1fb5b47ee52c79884fc5270805a3a39cda4a
@@ -24,7 +24,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/screen/screen.mk b/package/screen/screen.mk
-index 37d43366c2..3236a90a8f 100644
+index 91aa7c3a7a..ed02079412 100644
 --- a/package/screen/screen.mk
 +++ b/package/screen/screen.mk
 @@ -14,6 +14,13 @@ SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
