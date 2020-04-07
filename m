@@ -1,50 +1,26 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue,  7 Apr 2020 13:26:22 -0600
-Subject: [Buildroot] [PATCH v3 1/1] package/gcc: pass -Wno-error to debug
- builds
-Message-ID: <20200407192622.46151-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 07 Apr 2020 21:29:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: bump to version
+ 2.28.0
+In-Reply-To: <20200324215809.77787-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Tue, 24 Mar 2020 15:58:09 -0600")
+References: <20200324215809.77787-1-james.hilliard1@gmail.com>
+Message-ID: <878sj7m6wn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ?st.st_mode? may be used uninitialized in this function [-Werror=maybe-uninitialized]
-   return S_ISLNK (st.st_mode);
-                     ^
-Upstream has been unable to reproduce/fix properly, details:
-https://gcc.gnu.org/legacy-ml/gcc-patches/2019-03/threads.html#00827
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-Upstream recommends passing -Wno-error as a workaround, see:
-https://gcc.gnu.org/pipermail/gcc-patches/2019-April/519867.html
+ > Adjust fix build with musl patch for 2.28.0.
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v2 -> v3:
-  - add more details to message
-Changes v1 -> v2:
-  - add comment from Yocto recipes
----
- package/gcc/gcc.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+This is a security bump, so should be marked as such:
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 524ca83db0..fe7167b2f3 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -100,6 +100,11 @@ HOST_GCC_COMMON_CONF_ENV = \
- GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
- GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
- 
-+# used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ?st.st_mode? may be used uninitialized in this function [-Werror=maybe-uninitialized]
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+GCC_COMMON_TARGET_CFLAGS += -Wno-error
-+endif
-+
- # Propagate options used for target software building to GCC target libs
- HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
- HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
+https://webkitgtk.org/security/WSA-2020-0003.html
+
+What about the corresponding webkitgtk bump?
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
