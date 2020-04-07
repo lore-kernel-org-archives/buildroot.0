@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 21:02:48 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/vala: fix wrapper
-Message-ID: <20200407184931.40F5F8D6F2@busybox.osuosl.org>
+Date: Tue, 7 Apr 2020 21:02:43 +0200
+Subject: [Buildroot] [git commit branch/2019.11.x] package/vala: fix wrapper
+Message-ID: <20200407184935.E02AB8D703@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48d0d2c2a73d2147c929e8145d7eaa36553ef67d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=adb823e2e04527496fb63a7b3436d5f9a70a2194
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Add double quotes around the $@ variable to prevent word splitting.
 
