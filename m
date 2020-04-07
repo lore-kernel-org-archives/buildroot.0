@@ -1,25 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Apr 2020 20:52:50 +0200
-Subject: [Buildroot] [PATCH] docs/manual: small typo fixes and cleanup
-In-Reply-To: <20200328144138.31979-1-merlin.buege@tuhh.de> ("Merlin
- =?utf-8?Q?B=C3=BCge=22's?=
- message of "Sat, 28 Mar 2020 15:41:38 +0100")
-References: <20200328144138.31979-1-merlin.buege@tuhh.de>
-Message-ID: <87mu7nnn5p.fsf@dell.be.48ers.dk>
+Date: Tue, 7 Apr 2020 20:48:27 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual: small typo
+ fixes and cleanup
+Message-ID: <20200407183902.1962F8D5B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Merlin" == Merlin B?ge <merlin.buege@tuhh.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c786e3b5a25c3ea979d17eb71749ec2785fa5403
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Fix a few punctuation mistakes. The removed link is redundant, see the
- > previous sentence.
+Fix a few punctuation mistakes. The removed link is redundant, see the
+previous sentence.
 
- > Signed-off-by: Merlin B?ge <merlin.buege@tuhh.de>
+Signed-off-by: Merlin B??ge <merlin.buege@tuhh.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 20bd811c7ed5240d6eccde918161222de3bb6b4d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/common-usage.txt      | 2 +-
+ docs/manual/customize-patches.txt | 2 +-
+ docs/manual/customize-rootfs.txt  | 2 +-
+ docs/manual/writing-rules.txt     | 4 ++--
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-Committed to 2019.02.x, 2019.11.x and 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index a36301afd5..603430f451 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -88,7 +88,7 @@ to +make+ or set in the environment:
+   Buildroot stores the cached files when using ccache.
+   +
+ * +BR2_DL_DIR+ to override the directory in which
+-  Buildroot stores/retrieves downloaded files
++  Buildroot stores/retrieves downloaded files.
+   +
+   Note that the Buildroot download directory can also be set from the
+   configuration interface, so through the Buildroot +.config+ file. See
+diff --git a/docs/manual/customize-patches.txt b/docs/manual/customize-patches.txt
+index fa63541110..eb98d1bea2 100644
+--- a/docs/manual/customize-patches.txt
++++ b/docs/manual/customize-patches.txt
+@@ -53,7 +53,7 @@ directory.
+ The exception to +BR2_GLOBAL_PATCH_DIR+ being the preferred method for
+ specifying custom patches is +BR2_LINUX_KERNEL_PATCH+.
+ +BR2_LINUX_KERNEL_PATCH+ should be used to specify kernel patches that
+-are available at an URL. *Note:* +BR2_LINUX_KERNEL_PATCH+ specifies kernel
++are available at a URL. *Note:* +BR2_LINUX_KERNEL_PATCH+ specifies kernel
+ patches that are applied after patches available in +BR2_GLOBAL_PATCH_DIR+,
+ as it is done from a post-patch hook of the Linux package.
+ 
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index 6b72a37b32..e1dbadda5b 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -145,7 +145,7 @@ It is recommended to use the existing mechanisms to set file permissions
+ The difference between post-build scripts (above) and fakeroot scripts,
+   is that post-build scripts are not called in the fakeroot context.
+ +
+-.Note;
++.Note:
+ Using `fakeroot` is not an absolute substitute for actually being root.
+   `fakeroot` only ever fakes the file access rights and types (regular,
+   block-or-char device...) and uid/gid; these are emulated in-memory.
+diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
+index ca43272287..3b809d5c48 100644
+--- a/docs/manual/writing-rules.txt
++++ b/docs/manual/writing-rules.txt
+@@ -141,8 +141,8 @@ endif
+ The documentation uses the
+ http://www.methods.co.nz/asciidoc/[asciidoc] format.
+ 
+-For further details about the http://www.methods.co.nz/asciidoc/[asciidoc]
+-syntax, refer to http://www.methods.co.nz/asciidoc/userguide.html[].
++For further details about the asciidoc syntax, refer to
++http://www.methods.co.nz/asciidoc/userguide.html[].
+ 
+ === Support scripts
+ 
