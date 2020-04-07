@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 20:35:24 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/pure-ftpd: fix
+Date: Tue, 7 Apr 2020 20:34:31 +0200
+Subject: [Buildroot] [git commit branch/2019.11.x] package/pure-ftpd: fix
  CVE-2020-9274
-Message-ID: <20200407182154.DCACE8D567@busybox.osuosl.org>
+Message-ID: <20200407182200.A20AC8D5BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a47069aec7c7dcdd9fa980d7b2ae14e3bac3b73d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=609d90ca9b64aa73179003fd1e0cdb312038e3bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 An issue was discovered in Pure-FTPd 1.0.49. An uninitialized pointer
 vulnerability has been detected in the diraliases linked list. When the
