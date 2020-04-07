@@ -1,97 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Apr 2020 09:18:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rng-tools: add nistbeacon option
-In-Reply-To: <20200404213653.1538752-1-fontaine.fabrice@gmail.com>
-References: <20200404213653.1538752-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200407071853.GD22325@scaer>
+Date: Tue, 7 Apr 2020 09:45:35 +0200
+Subject: [Buildroot] [PATCH] package/libminizip: new package
+In-Reply-To: <47cf1b5b-79b5-c3dc-f648-35ba96383d56@grinn-global.com>
+References: <20200406183559.130627-1-b.bilas@grinn-global.com>
+ <20200407060433.GA22325@scaer>
+ <47cf1b5b-79b5-c3dc-f648-35ba96383d56@grinn-global.com>
+Message-ID: <20200407074535.GE22325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Bartosz, All,
 
-On 2020-04-04 23:36 +0200, Fabrice Fontaine spake thusly:
-> Add an option to enable nistbeacon which is available since version 6.1
-> and
-> https://github.com/nhorman/rng-tools/commit/aefe862e187a1ef608f9826b2b4a5bbabd5e9945
+On 2020-04-07 09:16 +0200, Bartosz Bilas spake thusly:
+> On 07.04.2020 08:04, Yann E. MORIN wrote:
+>  How is it different from package/minizip/ ?
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> That's the old, original version of minizip which contains some of necessary headers such as unzip.h which is required for one of
+> buildroot's package which started failing due to lack of it. The current version of minizip doesn't have it unfortunately .
+> Therefore I decided to create a new-separate package to provide that library only. I was wondering how to handle that, using the
+> existing minizip/libzlib package but nothing good came my mind :/ So it would be great if you had some idea? :)
 
-Applied to master, thanks.
+
+Why don't you just update our version of minizip to the newer version?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/rng-tools/Config.in    | 17 +++++++++++++++++
->  package/rng-tools/rng-tools.mk | 11 ++++++++---
->  2 files changed, 25 insertions(+), 3 deletions(-)
+> [0] [2]http://autobuild.buildroot.net/results/65fa719e8b2466409a12eb103a8938e1488efc0c
 > 
-> diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-> index a86fbb0f74..25b41f40d6 100644
-> --- a/package/rng-tools/Config.in
-> +++ b/package/rng-tools/Config.in
-> @@ -11,5 +11,22 @@ config BR2_PACKAGE_RNG_TOOLS
->  
->  	  http://sourceforge.net/projects/gkernel/
->  
-> +if BR2_PACKAGE_RNG_TOOLS
-> +
-> +config BR2_PACKAGE_RNG_TOOLS_NISTBEACON
-> +	bool "NIST Entropy Beacon support"
-> +	select BR2_PACKAGE_JANSSON
-> +	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_LIBXML2
-> +	help
-> +	  Enable NIST Entropy Beacon support.
-> +
-> +	  Entropy gathered from the NIST network entropy beacon. Note
-> +	  that this entropy source is disabled by default as it should
-> +	  never be used for cryptographic purposes, or any use case in
-> +	  which random data should be known only by a single entity.
-> +
-> +endif
-> +
->  comment "rng-tools needs a toolchain w/ NPTL"
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-> index 8ebfc0975a..3baddb98ee 100644
-> --- a/package/rng-tools/rng-tools.mk
-> +++ b/package/rng-tools/rng-tools.mk
-> @@ -12,9 +12,7 @@ RNG_TOOLS_DEPENDENCIES = libsysfs jitterentropy-library host-pkgconf openssl
->  # From git
->  RNG_TOOLS_AUTORECONF = YES
->  
-> -RNG_TOOLS_CONF_OPTS = \
-> -	--without-nistbeacon \
-> -	--without-pkcs11
-> +RNG_TOOLS_CONF_OPTS = --without-pkcs11
->  
->  # Work around for uClibc or musl toolchains which lack argp_*()
->  # functions.
-> @@ -30,6 +28,13 @@ else
->  RNG_TOOLS_CONF_OPTS += --without-rtlsdr
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_RNG_TOOLS_NISTBEACON),y)
-> +RNG_TOOLS_DEPENDENCIES += jansson libcurl libxml2
-> +RNG_TOOLS_CONF_OPTS += --with-nistbeacon
-> +else
-> +RNG_TOOLS_CONF_OPTS += --without-nistbeacon
-> +endif
-> +
->  define RNG_TOOLS_INSTALL_INIT_SYSV
->  	$(INSTALL) -D -m 755 package/rng-tools/S21rngd \
->  		$(TARGET_DIR)/etc/init.d/S21rngd
-> -- 
-> 2.25.1
+>  I've marked as "not applicable", then.Regards,
+>  Yann E. MORIN.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  --- DEVELOPERS                         |  1 +
+>   package/Config.in                  |  1 +
+>   package/libminizip/Config.in       | 11 +++++++++++
+>   package/libminizip/libminizip.hash |  2 ++
+>   package/libminizip/libminizip.mk   | 15 +++++++++++++++
+>   5 files changed, 30 insertions(+) create mode 100644 package/libminizip/Config.in
+>   create mode 100644 package/libminizip/libminizip.hash
+>   create mode 100644 package/libminizip/libminizip.mk
+>  diff --git a/DEVELOPERS b/DEVELOPERSindex e9ac2b7460..b6243276a3 100644
+>  --- a/DEVELOPERS+++ b/DEVELOPERS@@ -282,6 +282,7 @@ F:  package/orbit/
+>   N:     Bartosz Bilas
+>  [3]<b.bilas@grinn-global.com> F:   board/stmicroelectronics/stm32mp157a-dk1/
+>   F:     configs/stm32mp157a_dk1_defconfig+F:    package/libminizip/
+>   F:     package/python-esptool/ F:      package/python-pyaes/
+>   F:     package/qt5/qt5scxml/diff --git a/package/Config.in b/package/Config.in
+>  index 373868ca82..95727396ea 100644--- a/package/Config.in
+>  +++ b/package/Config.in@@ -1278,6 +1278,7 @@ endmenu
+>    menu "Compression and decompression"  source "package/libarchive/Config.in"
+>  +       source "package/libminizip/Config.in"   source "package/libmspack/Config.in"
+>          source "package/libsquish/Config.in"    source "package/libzip/Config.in"
+>  diff --git a/package/libminizip/Config.in b/package/libminizip/Config.in
+>  new file mode 100644index 0000000000..5307db3c4f
+>  --- /dev/null+++ b/package/libminizip/Config.in
+>  @@ -0,0 +1,11 @@+config BR2_PACKAGE_LIBMINIZIP
+>  +       bool "libminizip"+      select BR2_PACKAGE_ZLIB
+>  +       help+     LibMinizip is a minimalistic library that supports compressing,
+>  +         extracting, viewing, and manipulating zip files.
+>  ++        This package includes development support files
+>  +         for the minizip library.++     
+>  [4]http://www.winimage.com/zLibDll/minizip.html
+>  diff --git a/package/libminizip/libminizip.hash b/package/libminizip/libminizip.hash
+>  new file mode 100644index 0000000000..1aa87a2901
+>  --- /dev/null+++ b/package/libminizip/libminizip.hash
+>  @@ -0,0 +1,2 @@+# Locally computed+sha256  78d87c463dd6bd446292fe0d3ee72878355b3b7fa52add5722671dfe9290f262  libminizip-1.1.tar.gz
+>  diff --git a/package/libminizip/libminizip.mk b/package/libminizip/libminizip.mk
+>  new file mode 100644index 0000000000..6ae3c6cb01
+>  --- /dev/null+++ b/package/libminizip/libminizip.mk
+>  @@ -0,0 +1,15 @@+################################################################################
+>  +#+# libminizip+#+################################################################################
+>  ++LIBMINIZIP_VERSION = 1.1+LIBMINIZIP_SITE = $(call github,nmoinvaz,minizip,$(LIBMINIZIP_VERSION))
+>  +LIBMINIZIP_DEPENDENCIES = zlib+LIBMINIZIP_AUTORECONF = YES
+>  +LIBMINIZIP_INSTALL_STAGING = YES+LIBMINIZIP_LICENSE = Zlib
+>  +LIBMINIZIP_LICENSE_FILES = LICENSE++$(eval $(autotools-package))
+>  -- 2.26.0_______________________________________________
+>  buildroot mailing list
+>  [5]buildroot at busybox.net
+>  [6]http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> Best
+> Bartek
+> 
+> Links:
+> 1. mailto:b.bilas at grinn-global.com/
+> 2. http://autobuild.buildroot.net/results/65fa719e8b2466409a12eb103a8938e1488efc0c
+> 3. mailto:b.bilas at grinn-global.com/
+> 4. http://www.winimage.com/zLibDll/minizip.html
+> 5. mailto:buildroot at busybox.net/
+> 6. http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
