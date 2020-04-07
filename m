@@ -1,417 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 17:35:16 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/tslib: fix build
- with headers >= 4.16
-Message-ID: <20200407154547.DE8AC8A4B1@busybox.osuosl.org>
+Date: Tue, 07 Apr 2020 18:06:19 +0200
+Subject: [Buildroot] [PATCH] package/collectd: make network crypto
+ support discoverable
+In-Reply-To: <20200311133504.13911-1-p.debruijn@unilogic.nl> (Pascal de
+ Bruijn's message of "Wed, 11 Mar 2020 14:35:04 +0100")
+References: <20200311133504.13911-1-p.debruijn@unilogic.nl>
+Message-ID: <877dyrqo04.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fbb644a56345398875910054b6c3522ac52c2ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Pascal" == Pascal de Bruijn <p.debruijn@unilogic.nl> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/bc8bc3f1d88f3b64765025fee7f941d30a81ee46
+ > before it was completely non-obvious how to get crypto support
+ > in collectd's network module
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fedaa28079489b308f77d80a0cac8698d776df23)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...x-build-on-32bit-arches-with-64bit-time_t.patch | 386 +++++++++++++++++++++
- 1 file changed, 386 insertions(+)
+ > this introduces a collectd config option which makes sure
+ > gcrypt is built, and can't be accidentally unselected
+ > resulting in an accidental non-crypto build of collectd
 
-diff --git a/package/tslib/0001-Fix-build-on-32bit-arches-with-64bit-time_t.patch b/package/tslib/0001-Fix-build-on-32bit-arches-with-64bit-time_t.patch
-new file mode 100644
-index 0000000000..70a3f25f59
---- /dev/null
-+++ b/package/tslib/0001-Fix-build-on-32bit-arches-with-64bit-time_t.patch
-@@ -0,0 +1,386 @@
-+From 09eeff8c90a82e7aa9ff215320d558c1147982f6 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Sat, 30 Nov 2019 19:59:29 -0800
-+Subject: [PATCH] Fix build on 32bit arches with 64bit time_t
-+
-+time element is deprecated on new input_event structure in kernel's
-+input.h [1]
-+
-+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/libts/tslib/commit/a7a39a67f9a7f7fab9765d412ab42869a5c5c858]
-+---
-+ plugins/input-raw.c | 59 +++++++++++++++++++++++++++-------------
-+ tools/ts_uinput.c   | 66 ++++++++++++++++++++++++++++++---------------
-+ 2 files changed, 85 insertions(+), 40 deletions(-)
-+
-+diff --git a/plugins/input-raw.c b/plugins/input-raw.c
-+index 64f0156..f030836 100644
-+--- a/plugins/input-raw.c
-++++ b/plugins/input-raw.c
-+@@ -40,6 +40,11 @@
-+ # include <linux/input.h>
-+ #endif
-+ 
-++#ifndef input_event_sec
-++#define input_event_sec time.tv_sec
-++#define input_event_usec time.tv_usec
-++#endif
-++
-+ #ifndef EV_SYN /* 2.4 kernel headers */
-+ # define EV_SYN 0x00
-+ #endif
-+@@ -384,7 +389,8 @@ static int ts_input_read(struct tslib_module_info *inf,
-+ 						samp->y = i->current_y;
-+ 						samp->pressure = i->current_p;
-+ 					}
-+-					samp->tv = ev.time;
-++					samp->tv.tv_sec = ev.input_event_sec;
-++					samp->tv.tv_usec = ev.input_event_usec;
-+ 			#ifdef DEBUG
-+ 				fprintf(stderr,
-+ 					"RAW---------------------> %d %d %d %ld.%ld\n",
-+@@ -519,7 +525,8 @@ static int ts_input_read(struct tslib_module_info *inf,
-+ 					samp->pressure = i->current_p = ev.value;
-+ 					break;
-+ 				}
-+-				samp->tv = ev.time;
-++				samp->tv.tv_sec = ev.input_event_sec;
-++				samp->tv.tv_usec = ev.input_event_usec;
-+ 	#ifdef DEBUG
-+ 				fprintf(stderr,
-+ 					"RAW---------------------------> %d %d %d\n",
-+@@ -536,7 +543,8 @@ static int ts_input_read(struct tslib_module_info *inf,
-+ 						samp->x = 0;
-+ 						samp->y = 0;
-+ 						samp->pressure = 0;
-+-						samp->tv = ev.time;
-++						samp->tv.tv_sec = ev.input_event_sec;
-++						samp->tv.tv_usec = ev.input_event_usec;
-+ 						samp++;
-+ 						total++;
-+ 					}
-+@@ -651,7 +659,8 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
-+ 				switch (i->ev[it].code) {
-+ 				case BTN_TOUCH:
-+ 					i->buf[total][i->slot].pen_down = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					if (i->ev[it].value == 0)
-+ 						pen_up = 1;
-+@@ -751,7 +760,8 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
-+ 					// fall through
-+ 				case ABS_MT_POSITION_X:
-+ 					i->buf[total][i->slot].x = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					break;
-+ 				case ABS_Y:
-+@@ -760,7 +770,8 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
-+ 					// fall through
-+ 				case ABS_MT_POSITION_Y:
-+ 					i->buf[total][i->slot].y = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					break;
-+ 				case ABS_PRESSURE:
-+@@ -769,12 +780,14 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
-+ 					// fall through
-+ 				case ABS_MT_PRESSURE:
-+ 					i->buf[total][i->slot].pressure = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					break;
-+ 				case ABS_MT_TOOL_X:
-+ 					i->buf[total][i->slot].tool_x = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					/* for future use
-+ 					 * i->buf[total][i->slot].valid |= TSLIB_MT_VALID_TOOL;
-+@@ -782,7 +795,8 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
-+ 					break;
-+ 				case ABS_MT_TOOL_Y:
-+ 					i->buf[total][i->slot].tool_y = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					/* for future use
-+ 					 * i->buf[total][i->slot].valid |= TSLIB_MT_VALID_TOOL;
-+@@ -790,7 +804,8 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
-+ 					break;
-+ 				case ABS_MT_TOOL_TYPE:
-+ 					i->buf[total][i->slot].tool_type = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					/* for future use
-+ 					 * i->buf[total][i->slot].valid |= TSLIB_MT_VALID_TOOL;
-+@@ -798,12 +813,14 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
-+ 					break;
-+ 				case ABS_MT_ORIENTATION:
-+ 					i->buf[total][i->slot].orientation = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					break;
-+ 				case ABS_MT_DISTANCE:
-+ 					i->buf[total][i->slot].distance = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 
-+ 					if (i->special_device == EGALAX_VERSION_210) {
-+@@ -816,34 +833,40 @@ static int ts_input_read_mt(struct tslib_module_info *inf,
-+ 					break;
-+ 				case ABS_MT_BLOB_ID:
-+ 					i->buf[total][i->slot].blob_id = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					break;
-+ 				case ABS_MT_TOUCH_MAJOR:
-+ 					i->buf[total][i->slot].touch_major = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					if (i->ev[it].value == 0)
-+ 						i->buf[total][i->slot].pressure = 0;
-+ 					break;
-+ 				case ABS_MT_WIDTH_MAJOR:
-+ 					i->buf[total][i->slot].width_major = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					break;
-+ 				case ABS_MT_TOUCH_MINOR:
-+ 					i->buf[total][i->slot].touch_minor = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					break;
-+ 				case ABS_MT_WIDTH_MINOR:
-+ 					i->buf[total][i->slot].width_minor = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					break;
-+ 				case ABS_MT_TRACKING_ID:
-+ 					i->buf[total][i->slot].tracking_id = i->ev[it].value;
-+-					i->buf[total][i->slot].tv = i->ev[it].time;
-++					i->buf[total][i->slot].tv.tv_sec = i->ev[it].input_event_sec;
-++					i->buf[total][i->slot].tv.tv_usec = i->ev[it].input_event_usec;
-+ 					i->buf[total][i->slot].valid |= TSLIB_MT_VALID;
-+ 					if (i->ev[it].value == -1)
-+ 						i->buf[total][i->slot].pressure = 0;
-+diff --git a/tools/ts_uinput.c b/tools/ts_uinput.c
-+index 6ca4c3d..1832a07 100644
-+--- a/tools/ts_uinput.c
-++++ b/tools/ts_uinput.c
-+@@ -170,14 +170,16 @@ static int send_touch_events(struct data_t *data, struct ts_sample_mt **s,
-+ 				continue;
-+ 
-+ 			if (s[j][i].pen_down == 1) {
-+-				data->ev[c].time = s[j][i].tv;
-++				data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++				data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 				data->ev[c].type = EV_KEY;
-+ 				data->ev[c].code = BTN_TOUCH;
-+ 				data->ev[c].value = s[j][i].pen_down;
-+ 				c++;
-+ 			}
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_SLOT;
-+ 			data->ev[c].value = s[j][i].slot;
-+@@ -190,111 +192,129 @@ static int send_touch_events(struct data_t *data, struct ts_sample_mt **s,
-+ 			 * we should use slot 1 and so on.
-+ 			 */
-+ 			if (i == 0) {
-+-				data->ev[c].time = s[j][i].tv;
-++				data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++				data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 				data->ev[c].type = EV_ABS;
-+ 				data->ev[c].code = ABS_X;
-+ 				data->ev[c].value = s[j][i].x;
-+ 				c++;
-+ 
-+-				data->ev[c].time = s[j][i].tv;
-++				data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++				data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 				data->ev[c].type = EV_ABS;
-+ 				data->ev[c].code = ABS_Y;
-+ 				data->ev[c].value = s[j][i].y;
-+ 				c++;
-+ 
-+-				data->ev[c].time = s[j][i].tv;
-++				data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++				data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 				data->ev[c].type = EV_ABS;
-+ 				data->ev[c].code = ABS_PRESSURE;
-+ 				data->ev[c].value = s[j][i].pressure;
-+ 				c++;
-+ 			}
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_POSITION_X;
-+ 			data->ev[c].value = s[j][i].x;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_POSITION_Y;
-+ 			data->ev[c].value = s[j][i].y;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_PRESSURE;
-+ 			data->ev[c].value = s[j][i].pressure;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_TOUCH_MAJOR;
-+ 			data->ev[c].value = s[j][i].touch_major;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_WIDTH_MAJOR;
-+ 			data->ev[c].value = s[j][i].width_major;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_TOUCH_MINOR;
-+ 			data->ev[c].value = s[j][i].touch_minor;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_WIDTH_MINOR;
-+ 			data->ev[c].value = s[j][i].width_minor;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_TOOL_TYPE;
-+ 			data->ev[c].value = s[j][i].tool_type;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_TOOL_X;
-+ 			data->ev[c].value = s[j][i].tool_x;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_TOOL_Y;
-+ 			data->ev[c].value = s[j][i].tool_y;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_ORIENTATION;
-+ 			data->ev[c].value = s[j][i].orientation;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_DISTANCE;
-+ 			data->ev[c].value = s[j][i].distance;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_BLOB_ID;
-+ 			data->ev[c].value = s[j][i].blob_id;
-+ 			c++;
-+ 
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_ABS;
-+ 			data->ev[c].code = ABS_MT_TRACKING_ID;
-+ 			data->ev[c].value = s[j][i].tracking_id;
-+ 			c++;
-+ 
-+ 			if (data->mt_type_a == 1) {
-+-				data->ev[c].time = s[j][i].tv;
-++				data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++				data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 				data->ev[c].type = EV_SYN;
-+ 				data->ev[c].code = SYN_MT_REPORT;
-+ 				data->ev[c].value = 0;
-+@@ -302,7 +322,8 @@ static int send_touch_events(struct data_t *data, struct ts_sample_mt **s,
-+ 			}
-+ 
-+ 			if (s[j][i].pen_down == 0) {
-+-				data->ev[c].time = s[j][i].tv;
-++				data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++				data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 				data->ev[c].type = EV_KEY;
-+ 				data->ev[c].code = BTN_TOUCH;
-+ 				data->ev[c].value = s[j][i].pen_down;
-+@@ -312,7 +333,8 @@ static int send_touch_events(struct data_t *data, struct ts_sample_mt **s,
-+ 		}
-+ 
-+ 		if (c > 0) {
-+-			data->ev[c].time = s[j][i].tv;
-++			data->ev[c].input_event_sec = s[j][i].tv.tv_sec;
-++			data->ev[c].input_event_usec = s[j][i].tv.tv_usec;
-+ 			data->ev[c].type = EV_SYN;
-+ 			data->ev[c].code = SYN_REPORT;
-+ 			data->ev[c].value = 0;
+ > Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+ > ---
+ >  package/collectd/Config.in | 7 +++++++
+ >  1 file changed, 7 insertions(+)
+
+ > diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+ > index 303b5dc01b..4b34ec60eb 100644
+ > --- a/package/collectd/Config.in
+ > +++ b/package/collectd/Config.in
+ > @@ -603,6 +603,13 @@ config BR2_PACKAGE_COLLECTD_NETWORK
+ >  	help
+ >  	  Send/receive values from other instances of collectd.
+ 
+ > +config BR2_PACKAGE_COLLECTD_NETWORK_GCRYPT
+ > +	bool "crypto support"
+ > +	depends on BR2_PACKAGE_COLLECTD_NETWORK
+ > +	select BR2_PACKAGE_LIBGCRYPT
+ > +	help
+ > +	  Enable crypto support
+
+It would IMHO also make sense to change the conditional in collectd.mk
+to use this symbol so crypto support is really disabled if this option
+is turned off, otherwise it is just confusing in the other direction
+now.
+
+-- 
+Bye, Peter Korsgaard
