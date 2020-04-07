@@ -1,179 +1,146 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 21:05:08 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/gvfs: fix
- CVE-2019-12447
-Message-ID: <20200407185316.D609F8D783@busybox.osuosl.org>
+Date: Tue, 7 Apr 2020 21:04:41 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/gvfs: fix
+ CVE-2019-12795
+Message-ID: <20200407185329.0A45B8D7B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48d8166c71ca326b931afa86180f1df103c5eff2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=081c82c00ce5955cba4a852d47a8e99ac7a7b737
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-An issue was discovered in GNOME gvfs 1.29.4 through 1.41.2.
-daemon/gvfsbackendadmin.c mishandles file ownership because setfsuid is
-not used.
+daemon/gvfsdaemon.c in gvfsd from GNOME gvfs before 1.38.3, 1.40.x
+before 1.40.2, and 1.41.x before 1.41.3 opened a private D-Bus server
+socket without configuring an authorization rule. A local attacker could
+connect to this server socket and issue D-Bus method calls. (Note that
+the server socket only accepts a single connection, so the attacker
+would have to discover the server and connect to the socket before its
+owner does.)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 062d0f6913ed6e787123b32d0d8ffe9703efe3ce)
+(cherry picked from commit a9f38acbf2c28a9ec8c8e8e24e56b9ed4bc71778)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0003-admin-Allow-changing-file-owner.patch     | 34 ++++++++
- ...se-fsuid-to-ensure-correct-file-ownership.patch | 91 ++++++++++++++++++++++
- package/gvfs/gvfs.mk                               |  4 +
- 3 files changed, 129 insertions(+)
+ ...at-the-connecting-client-is-the-same-user.patch | 96 ++++++++++++++++++++++
+ package/gvfs/gvfs.mk                               |  3 +
+ 2 files changed, 99 insertions(+)
 
-diff --git a/package/gvfs/0003-admin-Allow-changing-file-owner.patch b/package/gvfs/0003-admin-Allow-changing-file-owner.patch
+diff --git a/package/gvfs/0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch b/package/gvfs/0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch
 new file mode 100644
-index 0000000000..04138b3957
+index 0000000000..56bef26b0f
 --- /dev/null
-+++ b/package/gvfs/0003-admin-Allow-changing-file-owner.patch
-@@ -0,0 +1,34 @@
-+From daf1163aba229afcfddf0f925aef7e97047e8959 Mon Sep 17 00:00:00 2001
-+From: Ondrej Holy <oholy@redhat.com>
-+Date: Thu, 23 May 2019 10:29:08 +0200
-+Subject: [PATCH] admin: Allow changing file owner
++++ b/package/gvfs/0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch
+@@ -0,0 +1,96 @@
++From 70dbfc68a79faac49bd3423e079cb6902522082a Mon Sep 17 00:00:00 2001
++From: Simon McVittie <smcv@collabora.com>
++Date: Wed, 5 Jun 2019 13:33:38 +0100
++Subject: [PATCH] gvfsdaemon: Check that the connecting client is the same user
 +
-+CAP_CHOWN is dropped together with other privilages and thus the backend
-+can't change file owner. This might be probably e.g. in case of copy
-+operation when G_FILE_COPY_ALL_METADATA is used. Let's keep CAP_CHOWN
-+to fix this.
++Otherwise, an attacker who learns the abstract socket address from
++netstat(8) or similar could connect to it and issue D-Bus method
++calls.
++
++Signed-off-by: Simon McVittie <smcv@collabora.com>
 +
 +[Retrieved from:
-+https://gitlab.gnome.org/GNOME/gvfs/commit/daf1163aba229afcfddf0f925aef7e97047e8959]
++https://gitlab.gnome.org/GNOME/gvfs/commit/70dbfc68a79faac49bd3423e079cb6902522082a]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ daemon/gvfsbackendadmin.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++ daemon/gvfsdaemon.c | 36 +++++++++++++++++++++++++++++++++++-
++ 1 file changed, 35 insertions(+), 1 deletion(-)
 +
-+diff --git a/daemon/gvfsbackendadmin.c b/daemon/gvfsbackendadmin.c
-+index 23d16f16..a74d09cf 100644
-+--- a/daemon/gvfsbackendadmin.c
-++++ b/daemon/gvfsbackendadmin.c
-+@@ -968,7 +968,8 @@ g_vfs_backend_admin_init (GVfsBackendAdmin *self)
-+ 
-+ #define REQUIRED_CAPS (CAP_TO_MASK(CAP_FOWNER) | \
-+                        CAP_TO_MASK(CAP_DAC_OVERRIDE) | \
-+-                       CAP_TO_MASK(CAP_DAC_READ_SEARCH))
-++                       CAP_TO_MASK(CAP_DAC_READ_SEARCH) | \
-++                       CAP_TO_MASK(CAP_CHOWN))
-+ 
-+ static void
-+ acquire_caps (uid_t uid)
-+-- 
-+2.24.1
-+
-diff --git a/package/gvfs/0004-admin-Use-fsuid-to-ensure-correct-file-ownership.patch b/package/gvfs/0004-admin-Use-fsuid-to-ensure-correct-file-ownership.patch
-new file mode 100644
-index 0000000000..22fe57002f
---- /dev/null
-+++ b/package/gvfs/0004-admin-Use-fsuid-to-ensure-correct-file-ownership.patch
-@@ -0,0 +1,91 @@
-+From 3895e09d784ebec0fbc4614d5c37068736120e1d Mon Sep 17 00:00:00 2001
-+From: Ondrej Holy <oholy@redhat.com>
-+Date: Thu, 23 May 2019 10:33:30 +0200
-+Subject: [PATCH] admin: Use fsuid to ensure correct file ownership
-+
-+Files created over admin backend should be owned by root, but they are
-+owned by the user itself. This is because the daemon drops the uid to
-+make dbus connection work. Use fsuid and euid to fix this issue.
-+
-+Closes: https://gitlab.gnome.org/GNOME/gvfs/issues/21
-+
-+[Retrieved from:
-+https://gitlab.gnome.org/GNOME/gvfs/commit/3895e09d784ebec0fbc4614d5c37068736120e1d]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ daemon/gvfsbackendadmin.c | 29 +++++++----------------------
-+ 1 file changed, 7 insertions(+), 22 deletions(-)
-+
-+diff --git a/daemon/gvfsbackendadmin.c b/daemon/gvfsbackendadmin.c
-+index a74d09cf..32b51b1a 100644
-+--- a/daemon/gvfsbackendadmin.c
-++++ b/daemon/gvfsbackendadmin.c
-+@@ -157,19 +157,6 @@ complete_job (GVfsJob *job,
-+   g_vfs_job_succeeded (job);
++diff --git a/daemon/gvfsdaemon.c b/daemon/gvfsdaemon.c
++index 406d4f8e..be148a7b 100644
++--- a/daemon/gvfsdaemon.c
+++++ b/daemon/gvfsdaemon.c
++@@ -79,6 +79,7 @@ struct _GVfsDaemon
++   
++   gint mount_counter;
++   
+++  GDBusAuthObserver *auth_observer;
++   GDBusConnection *conn;
++   GVfsDBusDaemon *daemon_skeleton;
++   GVfsDBusMountable *mountable_skeleton;
++@@ -171,6 +172,8 @@ g_vfs_daemon_finalize (GObject *object)
++     }
++   if (daemon->conn != NULL)
++     g_object_unref (daemon->conn);
+++  if (daemon->auth_observer != NULL)
+++    g_object_unref (daemon->auth_observer);
++   
++   g_hash_table_destroy (daemon->registered_paths);
++   g_hash_table_destroy (daemon->client_connections);
++@@ -236,6 +239,35 @@ name_vanished_handler (GDBusConnection *connection,
++   daemon->lost_main_daemon = TRUE;
 + }
 + 
-+-static void
-+-fix_file_info (GFileInfo *info)
-+-{
-+-  /* Override read/write flags, since the above call will use access()
-+-   * to determine permissions, which does not honor our privileged
-+-   * capabilities.
-+-   */
-+-  g_file_info_set_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_READ, TRUE);
-+-  g_file_info_set_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE, TRUE);
-+-  g_file_info_set_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE, TRUE);
-+-  g_file_info_set_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME, TRUE);
-+-}
-+-
-+ static void
-+ do_query_info (GVfsBackend *backend,
-+                GVfsJobQueryInfo *query_info_job,
-+@@ -195,7 +182,6 @@ do_query_info (GVfsBackend *backend,
-+   if (error != NULL)
-+     goto out;
-+ 
-+-  fix_file_info (real_info);
-+   g_file_info_copy_into (real_info, info);
-+   g_object_unref (real_info);
-+ 
-+@@ -220,7 +206,6 @@ do_query_info_on_read (GVfsBackend *backend,
-+   if (error != NULL)
-+     goto out;
-+ 
-+-  fix_file_info (real_info);
-+   g_file_info_copy_into (real_info, info);
-+   g_object_unref (real_info);
-+ 
-+@@ -245,7 +230,6 @@ do_query_info_on_write (GVfsBackend *backend,
-+   if (error != NULL)
-+     goto out;
-+ 
-+-  fix_file_info (real_info);
-+   g_file_info_copy_into (real_info, info);
-+   g_object_unref (real_info);
-+ 
-+@@ -977,14 +961,15 @@ acquire_caps (uid_t uid)
-+   struct __user_cap_header_struct hdr;
-+   struct __user_cap_data_struct data;
-+ 
-+-  /* Tell kernel not clear capabilities when dropping root */
-+-  if (prctl (PR_SET_KEEPCAPS, 1, 0, 0, 0) < 0)
-+-    g_error ("prctl(PR_SET_KEEPCAPS) failed");
-+-
-+-  /* Drop root uid, but retain the required permitted caps */
-+-  if (setuid (uid) < 0)
-++  /* Set euid to user to make dbus work */
-++  if (seteuid (uid) < 0)
-+     g_error ("unable to drop privs");
-+ 
-++  /* Set fsuid to still behave like root when working with files */
-++  setfsuid (0);
-++  if (setfsuid (-1) != 0)
-++   g_error ("setfsuid failed");
+++/*
+++ * Authentication observer signal handler that authorizes connections
+++ * from the same uid as this process. This matches the behaviour of a
+++ * libdbus DBusServer/DBusConnection when no DBusAllowUnixUserFunction
+++ * has been set, but is not the default in GDBus.
+++ */
+++static gboolean
+++authorize_authenticated_peer_cb (GDBusAuthObserver *observer,
+++                                 G_GNUC_UNUSED GIOStream *stream,
+++                                 GCredentials *credentials,
+++                                 G_GNUC_UNUSED gpointer user_data)
+++{
+++  gboolean authorized = FALSE;
 ++
-+   memset (&hdr, 0, sizeof(hdr));
-+   hdr.version = _LINUX_CAPABILITY_VERSION;
+++  if (credentials != NULL)
+++    {
+++      GCredentials *own_credentials;
+++
+++      own_credentials = g_credentials_new ();
+++
+++      if (g_credentials_is_same_user (credentials, own_credentials, NULL))
+++        authorized = TRUE;
+++
+++      g_object_unref (own_credentials);
+++    }
+++
+++  return authorized;
+++}
+++
++ static void
++ g_vfs_daemon_init (GVfsDaemon *daemon)
++ {
++@@ -265,6 +297,8 @@ g_vfs_daemon_init (GVfsDaemon *daemon)
 + 
++   daemon->conn = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
++   g_assert (daemon->conn != NULL);
+++  daemon->auth_observer = g_dbus_auth_observer_new ();
+++  g_signal_connect (daemon->auth_observer, "authorize-authenticated-peer", G_CALLBACK (authorize_authenticated_peer_cb), NULL);
++ 
++   daemon->daemon_skeleton = gvfs_dbus_daemon_skeleton_new ();
++   g_signal_connect (daemon->daemon_skeleton, "handle-get-connection", G_CALLBACK (handle_get_connection), daemon);
++@@ -876,7 +910,7 @@ handle_get_connection (GVfsDBusDaemon *object,
++   server = g_dbus_server_new_sync (address1,
++                                    G_DBUS_SERVER_FLAGS_NONE,
++                                    guid,
++-                                   NULL, /* GDBusAuthObserver */
+++                                   daemon->auth_observer,
++                                    NULL, /* GCancellable */
++                                    &error);
++   g_free (guid);
 +-- 
 +2.24.1
 +
 diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index eb31f6f8df..ec75852438 100644
+index a3308b713d..b3b18a3482 100644
 --- a/package/gvfs/gvfs.mk
 +++ b/package/gvfs/gvfs.mk
-@@ -21,6 +21,10 @@ GVFS_IGNORE_CVES += CVE-2019-3827
- # package/gvfs/0002-admin-Add-query_info_on_read-write-functionality.patch
- GVFS_IGNORE_CVES += CVE-2019-12448
+@@ -28,6 +28,9 @@ GVFS_IGNORE_CVES += CVE-2019-12447
+ # 0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
+ GVFS_IGNORE_CVES += CVE-2019-12449
  
-+# 0003-admin-Allow-changing-file-owner.patch
-+# 0004-admin-Use-fsuid-to-ensure-correct-file-ownership.patch
-+GVFS_IGNORE_CVES += CVE-2019-12447
++# 0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch
++GVFS_IGNORE_CVES += CVE-2019-12795
 +
  # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
  # build system from searching the host paths.
