@@ -1,51 +1,111 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Apr 2020 08:02:08 +0200
-Subject: [Buildroot] [PATCH] package/axel: bump version to 2.17.8
-In-Reply-To: <20200406211105.6050-1-ismael@iodev.co.uk>
-References: <20200406211105.6050-1-ismael@iodev.co.uk>
-Message-ID: <20200407060208.GZ22325@scaer>
+Date: Tue, 7 Apr 2020 08:04:33 +0200
+Subject: [Buildroot] [PATCH] package/libminizip: new package
+In-Reply-To: <20200406183559.130627-1-b.bilas@grinn-global.com>
+References: <20200406183559.130627-1-b.bilas@grinn-global.com>
+Message-ID: <20200407060433.GA22325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ismael, All,
+Bartosz, All,
 
-On 2020-04-06 23:11 +0200, Ismael Luceno spake thusly:
-> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+On 2020-04-06 20:35 +0200, Bartosz Bilas spake thusly:
+> libminizip is a minimalistic library that supports compressing,
+> extracting, viewing, and manipulating zip files.
+> 
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 
-Applied to master, thanks.
+How is it different from package/minizip/ ?
+
+I've marked as "not applicable", then.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/axel/axel.hash | 2 +-
->  package/axel/axel.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  DEVELOPERS                         |  1 +
+>  package/Config.in                  |  1 +
+>  package/libminizip/Config.in       | 11 +++++++++++
+>  package/libminizip/libminizip.hash |  2 ++
+>  package/libminizip/libminizip.mk   | 15 +++++++++++++++
+>  5 files changed, 30 insertions(+)
+>  create mode 100644 package/libminizip/Config.in
+>  create mode 100644 package/libminizip/libminizip.hash
+>  create mode 100644 package/libminizip/libminizip.mk
 > 
-> diff --git a/package/axel/axel.hash b/package/axel/axel.hash
-> index 9d1aecc4d902..933223ab2bdb 100644
-> --- a/package/axel/axel.hash
-> +++ b/package/axel/axel.hash
-> @@ -1,2 +1,2 @@
-> -sha256 b700b299fc8a369352a4672560ba833335142a6bfd280d5ccdc66dc2fa6bff86  axel-2.17.7.tar.xz
-> +sha256 19c82a095e3ea84f1e24fe6fd6018ee06af73ee03ca8ecf31b34dcc57ef4351e  axel-2.17.8.tar.xz
->  sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-> diff --git a/package/axel/axel.mk b/package/axel/axel.mk
-> index b7ec2efb60de..5c7e99894efa 100644
-> --- a/package/axel/axel.mk
-> +++ b/package/axel/axel.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index e9ac2b7460..b6243276a3 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -282,6 +282,7 @@ F:	package/orbit/
+>  N:	Bartosz Bilas <b.bilas@grinn-global.com>
+>  F:	board/stmicroelectronics/stm32mp157a-dk1/
+>  F:	configs/stm32mp157a_dk1_defconfig
+> +F:	package/libminizip/
+>  F:	package/python-esptool/
+>  F:	package/python-pyaes/
+>  F:	package/qt5/qt5scxml/
+> diff --git a/package/Config.in b/package/Config.in
+> index 373868ca82..95727396ea 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1278,6 +1278,7 @@ endmenu
 >  
-> -AXEL_VERSION = 2.17.7
-> +AXEL_VERSION = 2.17.8
->  AXEL_SITE = https://github.com/axel-download-accelerator/axel/releases/download/v$(AXEL_VERSION)
->  AXEL_SOURCE = axel-$(AXEL_VERSION).tar.xz
->  AXEL_LICENSE = GPL-2.0+
+>  menu "Compression and decompression"
+>  	source "package/libarchive/Config.in"
+> +	source "package/libminizip/Config.in"
+>  	source "package/libmspack/Config.in"
+>  	source "package/libsquish/Config.in"
+>  	source "package/libzip/Config.in"
+> diff --git a/package/libminizip/Config.in b/package/libminizip/Config.in
+> new file mode 100644
+> index 0000000000..5307db3c4f
+> --- /dev/null
+> +++ b/package/libminizip/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_LIBMINIZIP
+> +	bool "libminizip"
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  LibMinizip is a minimalistic library that supports compressing,
+> +	  extracting, viewing, and manipulating zip files.
+> +
+> +	  This package includes development support files
+> +	  for the minizip library.
+> +
+> +	  http://www.winimage.com/zLibDll/minizip.html
+> diff --git a/package/libminizip/libminizip.hash b/package/libminizip/libminizip.hash
+> new file mode 100644
+> index 0000000000..1aa87a2901
+> --- /dev/null
+> +++ b/package/libminizip/libminizip.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256  78d87c463dd6bd446292fe0d3ee72878355b3b7fa52add5722671dfe9290f262  libminizip-1.1.tar.gz
+> diff --git a/package/libminizip/libminizip.mk b/package/libminizip/libminizip.mk
+> new file mode 100644
+> index 0000000000..6ae3c6cb01
+> --- /dev/null
+> +++ b/package/libminizip/libminizip.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# libminizip
+> +#
+> +################################################################################
+> +
+> +LIBMINIZIP_VERSION = 1.1
+> +LIBMINIZIP_SITE = $(call github,nmoinvaz,minizip,$(LIBMINIZIP_VERSION))
+> +LIBMINIZIP_DEPENDENCIES = zlib
+> +LIBMINIZIP_AUTORECONF = YES
+> +LIBMINIZIP_INSTALL_STAGING = YES
+> +LIBMINIZIP_LICENSE = Zlib
+> +LIBMINIZIP_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(autotools-package))
 > -- 
 > 2.26.0
 > 
