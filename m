@@ -1,37 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 18:22:29 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/quagga: install
- quagga to staging
-Message-ID: <20200407180222.3D2DF8D596@busybox.osuosl.org>
+Date: Tue, 07 Apr 2020 20:21:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-pyyaml: bump to version
+ 5.3.1
+In-Reply-To: <87eet6b7nq.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Thu, 02 Apr 2020 10:42:33 +0200")
+References: <20200326100404.82191-1-james.hilliard1@gmail.com>
+ <87eet6b7nq.fsf@dell.be.48ers.dk>
+Message-ID: <878sj7p35x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73e918edd54e7da06c6ac2f346133b9dec1d1327
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-quagga installs libraries that provide interfaces to manage network routing
-that can be used by other applications.
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+ >> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: Graham Rhodes <graham.rhodes@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1e3cd85e7a6d81036d81f5cbf382065a007ee847)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/quagga/quagga.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Can you please mention whenever version bumps have security
+ > implications? E.G. looking at the 5.3.1 release the only change is:
 
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 96a971104b..0b352aa367 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -6,6 +6,7 @@
- 
- QUAGGA_VERSION = 1.2.4
- QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
-+QUAGGA_INSTALL_STAGING = YES
- QUAGGA_DEPENDENCIES = host-gawk host-pkgconf
- QUAGGA_LICENSE = GPL-2.0+
- QUAGGA_LICENSE_FILES = COPYING
+ > #386: Prevents arbitrary code execution during python/object/new
+ >  constructor
+
+ > https://github.com/yaml/pyyaml/pull/386
+
+ > Which sounds very much like a security bump to me.
+
+Committed to 2020.02.x after adding that information, thanks.
+
+I didn't backport it to 2019.02.x / 2019.11.x yet, as we need to ensure
+it doesn't break the version checks in docker-compose.
+
+-- 
+Bye, Peter Korsgaard
