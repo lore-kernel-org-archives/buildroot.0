@@ -1,102 +1,170 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Apr 2020 14:51:25 +0200
-Subject: [Buildroot] [arc-buildroot] [PATCH] toolchain: bump ARC tools
- to arc-2020.03-eng002
-In-Reply-To: <CY4PR1201MB0120B779B9C5AB3AA1BCE0E7A1C30@CY4PR1201MB0120.namprd12.prod.outlook.com>
-References: <20200406140719.41518-1-Evgeniy.Didin@synopsys.com>
- <20200407060912.GB22325@scaer>
- <CY4PR1201MB0120B779B9C5AB3AA1BCE0E7A1C30@CY4PR1201MB0120.namprd12.prod.outlook.com>
-Message-ID: <20200407125125.GN22325@scaer>
+From: iman ahmadvand <iman72411@gmail.com>
+Date: Tue, 7 Apr 2020 17:44:17 +0430
+Subject: [Buildroot] Failed to load libmmal.so from rpi-userland package
+ via buildroot toolchain on raspberry pi 4
+In-Reply-To: <20200328153430.436f5629@gmx.net>
+References: <CAPn7sn38WqJVgbLBkVj403GpkhcQx77HwdZ9zxEEvifO7qRbxg@mail.gmail.com>
+ <20200328113133.022b01b6@gmx.net>
+ <CAPn7sn0Pxy7TfxQ0VT9HUxGqSQiW2Nh0eo=SY2C+Rb=VEZRo2g@mail.gmail.com>
+ <20200328153430.436f5629@gmx.net>
+Message-ID: <CAPn7sn16ztGN=Hx_R7LFKcgF6VaZekG5PYbFmUwMK+VNioHswg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexey, All,
+Hi, peter.
 
-On 2020-04-07 09:37 +0000, Alexey Brodkin spake thusly:
-> > On 2020-04-06 17:07 +0300, Evgeniy Didin spake thusly:
-> > > This commit bumps ARC toolchain to arc-2020.03-eng002. We want
-> > > to test how new toolchain-eng002 builds packages, so we can make
-> > > fixes before release of toolchain.
+Sorry for the outdated reply!
+I just mean both cases, dlopeb() and ldd examine on libmmal.so succeed by
+changing to glibc (and also VLC codec plugin) as you suggested.
+But don't know what happens with uclibc! which break rpi-userland MMAL
+components register
+
+Regards.
+Iman.
+
+On Sat, Mar 28, 2020 at 7:04 PM Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Hello Iman,
+>
+> On Sat, 28 Mar 2020 17:14:59 +0430, iman ahmadvand <iman72411@gmail.com>
+> wrote:
+>
+> > Hi Peter.
+> >
+> > Exact same situation for me when changing to glibc or using external
+> linaro
+> > toolchain(which comes with glibc).
+>
+> What do you mean by 'exact same situation', the simple dlopen() test, or
+> the
+> complete VLC test? Did you do a *complete* re-build and complete
+> installation?
+> Can you show the output from 'ldd /usr/lib/libmmal.so'?
+>
+> Regards,
+> Peter
+>
+> > Don't know what's going on.
+> > Interesting thread: https://github.com/raspberrypi/userland/issues/178
+> >
+> > Regards.
+> > IMAN.
+> >
+> > On Sat, Mar 28, 2020 at 3:01 PM Peter Seiderer <ps.report@gmx.net>
+> wrote:
+> >
+> > > Hello Iman,
 > > >
-> > > Please note that it is an engineering build and it might have
-> > > all kind of breakages, please don't use it for production builds.
-> > 
-> > So why would we want to have it in Buildroot?
-> > 
-> > If you need to have some confidence about your toolchain, you could spin
-> > your own autobuilder and check the results (but not send them for
-> > a.b.o).
-> > 
-> > I've marked the patch as rejected, sorry.
-> 
-> I think we've been doing that for years. See:
-
-Thomas already mentioned that on IRC (after I replied), that we did have
-such toolchains in the past.
-
-However, I do not agree. The commit explicitly mentions "do not use for
-production builds". I don't want to carry in Buildroot such a toolchain.
-
-> And it's not only for spinning our WIP, as a matter of fact we
-> never post real WIP snapshots because that will introduce way too many
-> breakages we'll need to fix, so only when our extensive internal testing
-> shows acceptable results we're ready to use it for something else.
-> 
-> And there's yet another reason: that way we secure our more
-> recent toolchain in the next Buildroot release. See that eng002 is
-> supposed to become RC1 but now we're gated by some problems with Eclipse
-> IDE plugins (see https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/issues/255)
-> and just because of that non-related to the GNU toolchain itself problem we
-> might be ready to post RC1 (not to mention final release) in Buildroot
-> a bit too late and so use older toolchain for ARC until the next release
-> in a few months.
-
-Well, to me it is as all the other components: if they are not ready by
-the time we cut rc1, then too bad; they'll make it the next cycle, which
-is a mere three months later.
-
-> But if by the time of Buildroot's RC1 we have whatever pre-release version
-> of newer ARC GNU tools merged then we may easily bump version number before
-> Buildroot's release and in the worst case except name there will be 1 or 2
-> fixes.
-
-Sorry, but I do not buy that argument.
-
-The rc cycle of Buildroot is (to my point of view) not a way to provide rc
-cycle to components. The Buildroot rc cycle is for stabilising Buildroot
-itself, pointing to components that have alredy been stabilised (bugs
-are bugs, we can't predict them so it's OK to have a bug fix for a
-component).
-
-But I don;t think we should accept that the rc cycle of Buildroot serves
-as the rc cycle of components, which is bnasically what I understand as
-your reason for pushing an engineering build of your toolchain; even rc1
-of the toolchain would not be a candidate in my optinion.
-
-I know that my point diverges from previous behaviour. Other maintainers
-may also disagree. I'll mark the patch as new again in patchwork, so
-they have the opportunity to reverse my decision.
-
-> And as usual I'm happy to mention that we're getting closer and closer to
-> upstream so that in GCC10 we have pretty much all the changes we need as well
-> as upcoming Binutils as of now have everything for ARC. So I do expect to
-> drop ARC-fork from Buildroot soon in favor of just a few patches on top of the most
-> recent release.
-
-I do appreciate the work you are doing, and I find it great that we can
-soon build an upstream toolchain. Upstreaming the toolchain parts is a
-tough job, so I'm glad to see this positive report! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> > > On Sat, 28 Mar 2020 11:39:46 +0430, iman ahmadvand <
+> iman72411 at gmail.com>
+> > > wrote:
+> > >
+> > > > Hi everyone.
+> > > > It seems that loading the MMAL interface shared libraries from
+> > > rpi-userland
+> > > > package via simple dlopen is not possible, or more specific, the
+> packages
+> > > > or binaries such as VLC or VLC codec plugin (libavcodec_plugin)
+> could not
+> > > > load the libavcodec from FFmpeg which in turn depends on libmmal*.so
+> > > >
+> > > > The steps to reproduce(with BR2_PACKAGE_RPI_USERLAND enabled,
+> > > > BR2_STRIP_strip disabled, BR2_OPTIMIZE_0 enabled):
+> > > > git clone git://git.busybox.net/buildroot buildroot && cd buildroot
+> &&
+> > > git
+> > > > checkout 2019.11.01
+> > > > make raspberrypi4_defconfig && make all
+> > > >
+> > > > Then in this image try to run a simple c routine with dlopen(), if
+> you do
+> > > > so, for example, ./dltest /usr/lib/libmmal.so you will end up with:
+> > > >
+> > > > symbol 'mmal_port_payload_alloc': can't resolve symbol
+> > > > symbol 'mmal_port_payload_free': can't resolve symbol
+> > > > symbol 'mmal_port_log_category': can't resolve symbol
+> > > >
+> > >
+> > > Can confirm your failure...did not (yet) find out what fails exactly,
+> but
+> > > ldd produces the following ouput (mind the 0x00000000):
+> > >
+> > >         $ ldd /usr/lib/libmmal.so
+> > > checking sub-depends for '/usr/lib/libmmal_vc_client.so'
+> > > checking sub-depends for '/usr/lib/libmmal_components.so'
+> > > checking sub-depends for '/usr/lib/libvchiq_arm.so'
+> > > checking sub-depends for '/usr/lib/libvcsm.so'
+> > > checking sub-depends for '/usr/lib/libmmal_core.so'
+> > > checking sub-depends for '/usr/lib/libmmal_util.so'
+> > > checking sub-depends for '/usr/lib/libcontainers.so'
+> > > checking sub-depends for '/usr/lib/libvcos.so'
+> > > checking sub-depends for '/lib/libc.so.0'
+> > >         ld-uClibc.so.1 => /lib/ld-uClibc.so.1 (0xb6f8b000)
+> > >         libmmal_vc_client.so => /usr/lib/libmmal_vc_client.so
+> (0x00000000)
+> > >         libmmal_components.so => /usr/lib/libmmal_components.so
+> > > (0x00000000)
+> > >         libvchiq_arm.so => /usr/lib/libvchiq_arm.so (0x00000000)
+> > >         libvcsm.so => /usr/lib/libvcsm.so (0x00000000)
+> > >         libmmal_core.so => /usr/lib/libmmal_core.so (0x00000000)
+> > >         libmmal_util.so => /usr/lib/libmmal_util.so (0x00000000)
+> > >         libcontainers.so => /usr/lib/libcontainers.so (0x00000000)
+> > >         libvcos.so => /usr/lib/libvcos.so (0x00000000)
+> > >         libc.so.0 => /lib/libc.so.0 (0x00000000)
+> > >         /lib/ld-uClibc.so.1 => /lib/ld-uClibc.so.1 (0x00000000)
+> > >
+> > >
+> > > After changing the buildroot toolchain from uclibc to glibc (and a full
+> > > re-build) dlopen() of /usr/lib/libmmal.so works and ldd produces the
+> > > following output:
+> > >
+> > >         $ ldd /usr/lib/libmmal.so
+> > >         linux-vdso.so.1 (0xbea59000)
+> > >         libmmal_vc_client.so => /usr/lib/libmmal_vc_client.so
+> (0xb6f5f000)
+> > >         libmmal_components.so => /usr/lib/libmmal_components.so
+> > > (0xb6f44000)
+> > >         libvchiq_arm.so => /usr/lib/libvchiq_arm.so (0xb6f2e000)
+> > >         libvcsm.so => /usr/lib/libvcsm.so (0xb6f14000)
+> > >         libmmal_core.so => /usr/lib/libmmal_core.so (0xb6ef6000)
+> > >         libmmal_util.so => /usr/lib/libmmal_util.so (0xb6ed8000)
+> > >         libcontainers.so => /usr/lib/libcontainers.so (0xb6eb5000)
+> > >         libvcos.so => /usr/lib/libvcos.so (0xb6e9c000)
+> > >         libpthread.so.0 => /lib/libpthread.so.0 (0xb6e71000)
+> > >         libdl.so.2 => /lib/libdl.so.2 (0xb6e5e000)
+> > >         librt.so.1 => /lib/librt.so.1 (0xb6e47000)
+> > >         libc.so.6 => /lib/libc.so.6 (0xb6cfb000)
+> > >         /lib/ld-linux-armhf.so.3 (0xb6f8f000)
+> > >
+> > > Regards,
+> > > Peter
+> > >
+> > >
+> > > > Or for another proof of the issue, you can run VLC with X11 to play
+> an
+> > > > MPEG-4 video, and you will  end up with VLC could not load the codec
+> > > module
+> > > > because of the same thing:
+> > > >
+> > > > main debug: loading plugins cache file
+> /usr/lib/vlc/plugins/plugins.dat
+> > > > main warning: cannot read /usr/lib/vlc/plugins/plugins.dat: No such
+> > > > file or directory
+> > > > main debug: recursively browsing `/usr/lib/vlc/plugins'
+> > > > main warning: cannot load module
+> > > > `/usr/lib/vlc/plugins/codec/libavcodec_plugin.so' ((null)
+> > > >
+> > > > Any idea about this?
+> > > >
+> > > > Best Regards.
+> > > > IMAN.
+> > >
+> > >
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200407/1521159f/attachment.html>
