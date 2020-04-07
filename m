@@ -1,35 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Apr 2020 00:09:16 +0200
-Subject: [Buildroot] [PATCH v2 1/4] package/{bluez5_utils,
- bluez5_utils-headers}: bump to version 5.54
-In-Reply-To: <20200316165253.560773-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Mon, 16 Mar 2020 17:52:50 +0100")
-References: <20200316165253.560773-1-joerg.krause@embedded.rocks>
-Message-ID: <87imics1v7.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 07 Apr 2020 00:30:20 +0000
+Subject: [Buildroot] [Bug 12761] Buildroot fails when building GCNano
+ binaries for the STM32MP1
+In-Reply-To: <bug-12761-163@https.bugs.busybox.net/>
+References: <bug-12761-163@https.bugs.busybox.net/>
+Message-ID: <bug-12761-163-QiKVyj5gif@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+https://bugs.busybox.net/show_bug.cgi?id=12761
 
- > Changes since version 5.52:
- > 5.54:
- >   Fix issue with HOGP to accept data only from bonded devices.
- >   Fix issue with A2DP sessions being connected at the same time.
- >   Fix issue with class UUID matches before connecting profile.
- >   Add support for handling MTU auto-tuning option for AVDTP.
- >   Add support for new policy for Just-Works repairing.
- >   Add support for Enhanced ATT bearer (EATT).
+--- Comment #2 from Aaron Decker <adecker246@gmail.com> ---
+I gave that a shot using the tarball from the ST github. I get a different
+error:
 
-5.54 also fixes a security issue:
+https://pastebin.com/UL4vfkNG
 
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00352.html
 
-So I've cherry-picked it for 2019.02.x, 2019.11.x and 2020.02.x after
-updating the commit message to make the security impact clear.
+In file included from
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/gc_hal_kernel_linux.h:61,
+                 from
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/gc_hal_kernel_driver.c:62:
+./include/linux/module.h:133:6: error: ?init_module? specifies less restrictive
+attribute than its target ?gpu_init?: ?cold? [-Werror=missing-attributes]
+  133 |  int init_module(void) __attribute__((alias(#initfn)));
+      |      ^~~~~~~~~~~
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/gc_hal_kernel_driver.c:1267:1:
+note: in expansion of macro ?module_init?
+ 1267 | module_init(gpu_init);
+      | ^~~~~~~~~~~
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/gc_hal_kernel_driver.c:1224:19:
+note: ?init_module? target declared here
+ 1224 | static int __init gpu_init(void)
+      |                   ^~~~~~~~
+In file included from
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/gc_hal_kernel_linux.h:61,
+                 from
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/gc_hal_kernel_driver.c:62:
+./include/linux/module.h:139:7: error: ?cleanup_module? specifies less
+restrictive attribute than its target ?gpu_exit?: ?cold?
+[-Werror=missing-attributes]
+  139 |  void cleanup_module(void) __attribute__((alias(#exitfn)));
+      |       ^~~~~~~~~~~~~~
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/gc_hal_kernel_driver.c:1268:1:
+note: in expansion of macro ?module_exit?
+ 1268 | module_exit(gpu_exit);
+      | ^~~~~~~~~~~
+/home/ajdecker/projects/buildroot/output/build/gcnano-binaries-c01642ed5e18cf09ecd905af193e935cb3be95ed/./hal/os/linux/kernel/gc_hal_kernel_driver.c:1255:20:
+note: ?cleanup_module? target declared here
+ 1255 | static void __exit gpu_exit(void)
+      |                    ^~~~~~~~
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
