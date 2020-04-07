@@ -1,28 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Apr 2020 20:36:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pure-ftpd: fix CVE-2020-9274
-In-Reply-To: <20200328090042.950156-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 28 Mar 2020 10:00:42 +0100")
-References: <20200328090042.950156-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v9mbnnx6.fsf@dell.be.48ers.dk>
+Date: Tue, 7 Apr 2020 20:36:58 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libical: fix
+ CVE-2016-9584
+Message-ID: <20200407182310.0A5FE8D5E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b732ebe69558577c2ba80205b1e43751959bf7a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > An issue was discovered in Pure-FTPd 1.0.49. An uninitialized pointer
- > vulnerability has been detected in the diraliases linked list. When the
- > *lookup_alias(const char alias) or print_aliases(void) function is
- > called, they fail to correctly detect the end of the linked list and try
- > to access a non-existent list member. This is related to init_aliases in
- > diraliases.c.
+libical allows remote attackers to cause a denial of service
+(use-after-free) and possibly read heap memory via a crafted ics file.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 69b51259a2cccbbeff106b7d3536832ab999c0f1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...stattype_from_string-copy-the-reqstattype.patch | 27 ++++++++++++++++++++++
+ package/libical/libical.mk                         |  3 +++
+ 2 files changed, 30 insertions(+)
 
-Committed to 2019.02.x, 2019.11.x and 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch b/package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
+new file mode 100644
+index 0000000000..0d74835e44
+--- /dev/null
++++ b/package/libical/0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
+@@ -0,0 +1,27 @@
++From 6b9438d746cec6e4e632d78c5244f4be6314d1c9 Mon Sep 17 00:00:00 2001
++From: Allen Winter <allen.winter@kdab.com>
++Date: Sun, 28 May 2017 12:51:10 -0400
++Subject: [PATCH] icaltypes.c - icalreqstattype_from_string(), copy the
++ reqstattype's debug string into its own memory in the ring buffer.
++
++Issue#253
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved (and backported) from:
++https://github.com/libical/libical/commit/6b9438d746cec6e4e632d78c5244f4be6314d1c9]
++---
++ src/libical/icaltypes.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/libical/icaltypes.c b/src/libical/icaltypes.c
++index 70c50d29..85c33545 100644
++--- a/src/libical/icaltypes.c
+++++ b/src/libical/icaltypes.c
++@@ -140,7 +140,7 @@ struct icalreqstattype icalreqstattype_from_string(const char *str)
++ 
++   p2 = strchr(p1+1,';');
++   if (p2 != 0 && *p2 != 0){
++-    stat.debug = p2+1;
+++    stat.debug = icalmemory_tmp_copy(p2+1);
++   } 
++ 
++   return stat;
+diff --git a/package/libical/libical.mk b/package/libical/libical.mk
+index 7125aa8b19..f9a266026e 100644
+--- a/package/libical/libical.mk
++++ b/package/libical/libical.mk
+@@ -10,6 +10,9 @@ LIBICAL_INSTALL_STAGING = YES
+ LIBICAL_LICENSE = MPL-1.0 or LGPL-2.1
+ LIBICAL_LICENSE_FILES = LICENSE
+ 
++# 0002-icaltypes-c-icalreqstattype_from_string-copy-the-reqstattype.patch
++LIBICAL_IGNORE_CVES += CVE-2016-9584
++
+ # building without this option is broken, it is used by
+ # Gentoo/alpinelinux as well
+ LIBICAL_CONF_OPTS = -DSHARED_ONLY=true
