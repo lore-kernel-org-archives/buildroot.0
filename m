@@ -1,83 +1,78 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Wed,  8 Apr 2020 00:15:49 +0200
-Subject: [Buildroot] [PATCH] package/python-requests: backport from upstream
-Message-ID: <20200407221549.681860-1-romain.naour@gmail.com>
+Date: Wed, 8 Apr 2020 00:48:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to
+ version 20.2.1
+In-Reply-To: <20200213025837.46575-1-james.hilliard1@gmail.com>
+References: <20200213025837.46575-1-james.hilliard1@gmail.com>
+Message-ID: <89d27f68-9020-753b-cae2-72c6146bca2c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by the dockerCompose runtime test, there
-is a runtime issue due to python-requests package
-that restrict the dependency to all known version
-at the time of the release:
+Hi James, All,
 
-The python-requests is limited to python-idna < 2.9 but
-since the version bump [1] the DockerCompose test is broken.
+Le 13/02/2020 ? 03:58, James Hilliard a ?crit?:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-autobahn/python-autobahn.hash | 4 ++--
+>  package/python-autobahn/python-autobahn.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+> index 1dc6c1eeaf..204aba7783 100644
+> --- a/package/python-autobahn/python-autobahn.hash
+> +++ b/package/python-autobahn/python-autobahn.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/autobahn/json
+> -md5	472d965c75dba0f8cb5f3b9f9001ed1b  autobahn-19.11.1.tar.gz
+> -sha256	201b9879b49c6e259d4126dbafe9e3c73807de0c242d50065fbebc62c6ccb181  autobahn-19.11.1.tar.gz
+> +md5	8889605311865aa8fedd1819c6df2c30  autobahn-20.2.1.tar.gz
+> +sha256	1ec603ea374a3b9d85540c499709c41f35f7c6e288b571d12da14aba6c381211  autobahn-20.2.1.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256	0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+> diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+> index 6c5c608b9a..5d69253095 100644
+> --- a/package/python-autobahn/python-autobahn.mk
+> +++ b/package/python-autobahn/python-autobahn.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_AUTOBAHN_VERSION = 19.11.1
+> +PYTHON_AUTOBAHN_VERSION = 20.2.1
 
-pkg_resources.ContextualVersionConflict: (idna 2.9 (/usr/lib/python3.8/site-packages), Requirement.parse('idna<2.9,>=2.5'), {'requests'})
+This new version dropped the support of python2
 
-Upstream again the idna maximum version [2], backport
-this patch.
+https://github.com/crossbario/autobahn-python/commit/d3f674a09cd0ee2dbfb2eeb8d7f325af82db7606
 
-[1] 237d31bf5289a46583aa4bbc1fb7ed008b798de5
-[2] https://github.com/psf/requests/commit/c46f55bd48dabc02f033d252f8c64e2011f37361
+https://github.com/crossbario/autobahn-python/commit/c0223223f865603ce192e6d5cdbcf74849a4cdd8
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/498144417
+Also the dependency on python-six have been dropped
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- ...ncies-to-major-instead-of-minor-5342.patch | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch
+https://github.com/crossbario/autobahn-python/commit/e36818bbfcf748d764af39b4fd3c018e59640277
 
-diff --git a/package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch b/package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch
-new file mode 100644
-index 0000000000..b113c928d4
---- /dev/null
-+++ b/package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch
-@@ -0,0 +1,40 @@
-+From 9e9141ed638c3163c7fbf1a1f3a9b9f5a80bdf4f Mon Sep 17 00:00:00 2001
-+From: Chris Withers <chris@withers.org>
-+Date: Tue, 18 Feb 2020 14:58:27 +0000
-+Subject: [PATCH] Limit dependencies to major instead of minor (#5342)
-+
-+(cherry picked from commit c46f55bd48dabc02f033d252f8c64e2011f37361)
-+
-+[Romain backport from upstream to 2.22.0]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ setup.py | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 3dce2965..f0bfebcc 100755
-+--- a/setup.py
-++++ b/setup.py
-+@@ -42,8 +42,8 @@ if sys.argv[-1] == 'publish':
-+ packages = ['requests']
-+ 
-+ requires = [
-+-    'chardet>=3.0.2,<3.1.0',
-+-    'idna>=2.5,<2.9',
-++    'chardet>=3.0.2,<4',
-++    'idna>=2.5,<3',
-+     'urllib3>=1.21.1,<1.26,!=1.25.0,!=1.25.1',
-+     'certifi>=2017.4.17'
-+ 
-+@@ -101,7 +101,7 @@ setup(
-+     cmdclass={'test': PyTest},
-+     tests_require=test_requirements,
-+     extras_require={
-+-        'security': ['pyOpenSSL >= 0.14', 'cryptography>=1.3.4', 'idna>=2.0.0'],
-++        'security': ['pyOpenSSL >= 0.14', 'cryptography>=1.3.4'],
-+         'socks': ['PySocks>=1.5.6, !=1.5.7'],
-+         'socks:sys_platform == "win32" and python_version == "2.7"': ['win_inet_pton'],
-+     },
-+-- 
-+2.25.2
-+
--- 
-2.25.2
+So all packages that select python-autobahn must be updated due to theses
+changes and the python-autobahn runtime test for python2 must be removed since
+it's now broken:
+
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144499
+
+For the same reason, the python-Txaio runtime test for python2 is broken
+
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144572
+
+Can you have a look ?
+
+Best regards,
+Romain
+
+
+>  PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+> -PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/3f/f4/e907b172d3c1d912b8da57560b8b298ebad22f900f8a412002247716328a
+> +PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/ef/6d/74e6ceea815ee836a64846ace4f754dacaf8fae58a37b4d3c912bc9d37ea
+>  PYTHON_AUTOBAHN_LICENSE = MIT
+>  PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+>  PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+> 
