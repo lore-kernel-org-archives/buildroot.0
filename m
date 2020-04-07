@@ -1,53 +1,83 @@
-From: Laurent Gauthier (OSS) <laurent.gauthier_1@oss.nxp.com>
-Date: Tue,  7 Apr 2020 22:20:42 +0200
-Subject: [Buildroot] [PATCH 1/2] package/freescale-imx/imx-vpu: bump version
- to 5.4.39.1
-In-Reply-To: <20200407202044.9924-1-laurent.gauthier_1@oss.nxp.com>
-References: <20200407202044.9924-1-laurent.gauthier_1@oss.nxp.com>
-Message-ID: <20200407202044.9924-2-laurent.gauthier_1@oss.nxp.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed,  8 Apr 2020 00:15:49 +0200
+Subject: [Buildroot] [PATCH] package/python-requests: backport from upstream
+Message-ID: <20200407221549.681860-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Laurent GAUTHIER <laurent.gauthier_1@oss.nxp.com>
+As reported by the dockerCompose runtime test, there
+is a runtime issue due to python-requests package
+that restrict the dependency to all known version
+at the time of the release:
 
-To match NXP BSP 4.19.35_1.1.0 release:
-https://source.codeaurora.org/external/imx/meta-fsl-bsp-release/tree/imx/meta-bsp/recipes-bsp/imx-vpu?h=warrior-4.19.35-1.1.0
+The python-requests is limited to python-idna < 2.9 but
+since the version bump [1] the DockerCompose test is broken.
 
-Reviewed-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
-Reviewed-by: Julien Olivain <julien.olivain@oss.nxp.com>
-Signed-off-by: Laurent Gauthier <laurent.gauthier_1@oss.nxp.com>
+pkg_resources.ContextualVersionConflict: (idna 2.9 (/usr/lib/python3.8/site-packages), Requirement.parse('idna<2.9,>=2.5'), {'requests'})
+
+Upstream again the idna maximum version [2], backport
+this patch.
+
+[1] 237d31bf5289a46583aa4bbc1fb7ed008b798de5
+[2] https://github.com/psf/requests/commit/c46f55bd48dabc02f033d252f8c64e2011f37361
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144417
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/freescale-imx/imx-vpu/imx-vpu.hash | 6 +++---
- package/freescale-imx/imx-vpu/imx-vpu.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...ncies-to-major-instead-of-minor-5342.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch
 
-diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash b/package/freescale-imx/imx-vpu/imx-vpu.hash
-index 5fa93d8055..81ea35a7fb 100644
---- a/package/freescale-imx/imx-vpu/imx-vpu.hash
-+++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  34bed0ddf6c797f444bddfa5d5495adc751ff268b6431d8beb48129c89c9e47f  imx-vpu-5.4.38.bin
--sha256  78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
--sha256  fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
-+sha256  b7bb67b00daf436fd91a2760c2db375a962e2c919045ce8bf81bd54b95d999c5  imx-vpu-5.4.39.1.bin
-+sha256  d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
-+sha256  9665930f69c0b6f4a4c055d7fe2b8ee563e771efbc83892abb1955e61492cdf7  EULA
-diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
-index e30237508e..e61b9f829a 100644
---- a/package/freescale-imx/imx-vpu/imx-vpu.mk
-+++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMX_VPU_VERSION = 5.4.38
-+IMX_VPU_VERSION = 5.4.39.1
- IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
- IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
- 
+diff --git a/package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch b/package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch
+new file mode 100644
+index 0000000000..b113c928d4
+--- /dev/null
++++ b/package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch
+@@ -0,0 +1,40 @@
++From 9e9141ed638c3163c7fbf1a1f3a9b9f5a80bdf4f Mon Sep 17 00:00:00 2001
++From: Chris Withers <chris@withers.org>
++Date: Tue, 18 Feb 2020 14:58:27 +0000
++Subject: [PATCH] Limit dependencies to major instead of minor (#5342)
++
++(cherry picked from commit c46f55bd48dabc02f033d252f8c64e2011f37361)
++
++[Romain backport from upstream to 2.22.0]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ setup.py | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index 3dce2965..f0bfebcc 100755
++--- a/setup.py
+++++ b/setup.py
++@@ -42,8 +42,8 @@ if sys.argv[-1] == 'publish':
++ packages = ['requests']
++ 
++ requires = [
++-    'chardet>=3.0.2,<3.1.0',
++-    'idna>=2.5,<2.9',
+++    'chardet>=3.0.2,<4',
+++    'idna>=2.5,<3',
++     'urllib3>=1.21.1,<1.26,!=1.25.0,!=1.25.1',
++     'certifi>=2017.4.17'
++ 
++@@ -101,7 +101,7 @@ setup(
++     cmdclass={'test': PyTest},
++     tests_require=test_requirements,
++     extras_require={
++-        'security': ['pyOpenSSL >= 0.14', 'cryptography>=1.3.4', 'idna>=2.0.0'],
+++        'security': ['pyOpenSSL >= 0.14', 'cryptography>=1.3.4'],
++         'socks': ['PySocks>=1.5.6, !=1.5.7'],
++         'socks:sys_platform == "win32" and python_version == "2.7"': ['win_inet_pton'],
++     },
++-- 
++2.25.2
++
 -- 
-2.17.1
+2.25.2
