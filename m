@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 18:07:27 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/collectd: keep
+Date: Tue, 7 Apr 2020 18:07:17 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/collectd: keep
  postgresql_default.conf when needed
-Message-ID: <20200407155456.C4B9B8D476@busybox.osuosl.org>
+Message-ID: <20200407155540.384CA817D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7b4788b66f2c105e339d74c37c74e8a8da07d76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0798a93d2249f54015fd2209621edec15ab91be4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 $(TARGET_DIR)/usr/share/collectd/postgresql_default.conf
 should not be removed when postgresql support is enabled,
@@ -25,10 +25,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 9ff29fcbea..796799b352 100644
+index 9258977613..65307dce4c 100644
 --- a/package/collectd/collectd.mk
 +++ b/package/collectd/collectd.mk
-@@ -223,8 +223,14 @@ endif
+@@ -218,8 +218,14 @@ endif
  define COLLECTD_INSTALL_TARGET_CMDS
  	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
  	rm -f $(TARGET_DIR)/usr/bin/collectd-nagios
