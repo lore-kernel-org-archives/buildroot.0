@@ -1,269 +1,153 @@
 From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Tue,  7 Apr 2020 16:45:14 +0530
-Subject: [Buildroot] [PATCH v8 4/5] support/testing: add python-pybind11 test
+Date: Tue,  7 Apr 2020 16:45:15 +0530
+Subject: [Buildroot] [PATCH v8 5/5] package/python-scipy: new package
 In-Reply-To: <20200407111515.21131-1-jagan@amarulasolutions.com>
 References: <20200407111515.21131-1-jagan@amarulasolutions.com>
-Message-ID: <20200407111515.21131-5-jagan@amarulasolutions.com>
+Message-ID: <20200407111515.21131-6-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Add python-scipy with 1.4.1 release version.
 
-This test is a simple integration test of the python-pybind11 package.
-
-It consists of the following:
-- The python-pybind11-addition-example package compiles a simple cpp file
-  which adds two given numbers together and returns the results and installs
-  the compiled file to /root/
-  This example is from the following URL:
-    https://pybind11.readthedocs.io/en/stable/basics.html
-
-- The python-pybind11-addition-example package installs the
-  sample_python_pybind11.py file which imports the above-compiled file and adds
-  1 and 2 together to /root/
-
-- Execute the sample_python_pybind11.py in an emulator with the expected output
-  of 3 and an exit code of 0.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-[jagan: rebase, fix trailing whitespace, new line warninings]
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
-Changes for v8
-- new patch
+Changes for v8:
+- none
+Changes for v7:
+- update the commit message
+- fix sha256 value of pybind11 LICENCE
 
- .gitlab-ci.yml                                |  2 +
- DEVELOPERS                                    |  2 +
- .../br2-external/python-pybind11/Config.in    |  1 +
- .../python-pybind11/external.desc             |  1 +
- .../br2-external/python-pybind11/external.mk  |  1 +
- .../Config.in                                 |  5 ++
- .../pybind11_addition_example.cpp             |  9 +++
- .../python-pybind11-addition-example.mk       | 39 ++++++++++
- .../sample_python_pybind11.py                 |  4 +
- .../tests/package/test_python_pybind11.py     | 76 +++++++++++++++++++
- 10 files changed, 140 insertions(+)
- create mode 100644 support/testing/tests/package/br2-external/python-pybind11/Config.in
- create mode 100644 support/testing/tests/package/br2-external/python-pybind11/external.desc
- create mode 100644 support/testing/tests/package/br2-external/python-pybind11/external.mk
- create mode 100644 support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/Config.in
- create mode 100644 support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/pybind11_addition_example.cpp
- create mode 100644 support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/python-pybind11-addition-example.mk
- create mode 100644 support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/sample_python_pybind11.py
- create mode 100644 support/testing/tests/package/test_python_pybind11.py
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/python-scipy/Config.in         | 22 ++++++++++++
+ package/python-scipy/python-scipy.hash |  9 +++++
+ package/python-scipy/python-scipy.mk   | 46 ++++++++++++++++++++++++++
+ 5 files changed, 79 insertions(+)
+ create mode 100644 package/python-scipy/Config.in
+ create mode 100644 package/python-scipy/python-scipy.hash
+ create mode 100644 package/python-scipy/python-scipy.mk
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index d9519c3812..ce524337cb 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -471,6 +471,8 @@ tests.package.test_python_passlib.TestPythonPy2Passlib: { extends: .runtime_test
- tests.package.test_python_passlib.TestPythonPy3Passlib: { extends: .runtime_test }
- tests.package.test_python_pexpect.TestPythonPy2Pexpect: { extends: .runtime_test }
- tests.package.test_python_pexpect.TestPythonPy3Pexpect: { extends: .runtime_test }
-+tests.package.test_python_pybind11.TestPythonPy2Pybind11: { extends: .runtime_test }
-+tests.package.test_python_pybind11.TestPythonPy3Pybind11: { extends: .runtime_test }
- tests.package.test_python_pynacl.TestPythonPy2Pynacl: { extends: .runtime_test }
- tests.package.test_python_pynacl.TestPythonPy3Pynacl: { extends: .runtime_test }
- tests.package.test_python_pyyaml.TestPythonPy2Pyyaml: { extends: .runtime_test }
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 308a59b264..f06d54a662 100644
+index f06d54a662..3203b0bc47 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -85,6 +85,8 @@ F:	package/sngrep/
- F:	package/spidermonkey/
- F:	package/systemd/
- F:	support/testing/tests/package/test_python_gobject.py
-+F:	support/testing/tests/package/br2-external/python-pybind11/
-+F:	support/testing/tests/package/test_python_pybind11.py
+@@ -1154,6 +1154,7 @@ F:	configs/orangepi_zero_plus2_defconfig
+ F:	configs/pine64_defconfig
+ F:	configs/pine64_sopine_defconfig
+ F:	package/python-pybind11
++F:	package/python-scipy
  
- N:	Adam Heinrich <adam@adamh.cz>
- F:	package/jack1/
-diff --git a/support/testing/tests/package/br2-external/python-pybind11/Config.in b/support/testing/tests/package/br2-external/python-pybind11/Config.in
+ N:	James Hilliard <james.hilliard1@gmail.com>
+ F:	package/gensio/
+diff --git a/package/Config.in b/package/Config.in
+index afe32f52b4..f5af9b07ea 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1120,6 +1120,7 @@ menu "External python modules"
+ 	source "package/python-scandir/Config.in"
+ 	source "package/python-scapy/Config.in"
+ 	source "package/python-schedule/Config.in"
++	source "package/python-scipy/Config.in"
+ 	source "package/python-sdnotify/Config.in"
+ 	source "package/python-secretstorage/Config.in"
+ 	source "package/python-see/Config.in"
+diff --git a/package/python-scipy/Config.in b/package/python-scipy/Config.in
 new file mode 100644
-index 0000000000..27b502313b
+index 0000000000..4d8227c31a
 --- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind11/Config.in
-@@ -0,0 +1 @@
-+source "$BR2_EXTERNAL_PYTHON_PYBIND11_PATH/package/python-pybind11-addition-example/Config.in"
-diff --git a/support/testing/tests/package/br2-external/python-pybind11/external.desc b/support/testing/tests/package/br2-external/python-pybind11/external.desc
-new file mode 100644
-index 0000000000..04a636053a
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind11/external.desc
-@@ -0,0 +1 @@
-+name: PYTHON_PYBIND11
-diff --git a/support/testing/tests/package/br2-external/python-pybind11/external.mk b/support/testing/tests/package/br2-external/python-pybind11/external.mk
-new file mode 100644
-index 0000000000..db34e5f54d
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind11/external.mk
-@@ -0,0 +1 @@
-+include $(sort $(wildcard $(BR2_EXTERNAL_PYTHON_PYBIND11_PATH)/package/*/*.mk))
-diff --git a/support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/Config.in b/support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/Config.in
-new file mode 100644
-index 0000000000..7860559a13
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_PYTHON_PYBIND11_ADDITION_EXAMPLE
-+	bool "python-pybind11 addition example"
-+	depends on BR2_PACKAGE_PYTHON_PYBIND11
++++ b/package/python-scipy/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_PYTHON_SCIPY
++	bool "python-scipy"
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
++	depends on BR2_TOOLCHAIN_HAS_FORTRAN
++	depends on BR2_TOOLCHAIN_BUILDROOT_CXX
++	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_NUMPY
++	select BR2_PACKAGE_LAPACK
++	select BR2_PACKAGE_OPENBLAS
 +	help
-+	  Simple class for testing python-pybind11
-diff --git a/support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/pybind11_addition_example.cpp b/support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/pybind11_addition_example.cpp
++	  The SciPy library is one of the core packages that make up the SciPy
++	  stack. It provides many user-friendly and efficient numerical
++	  routines such as routines for numerical integration, interpolation,
++	  optimization, linear algebra and statistics.
++
++	  https://www.scipy.org/scipylib/
++
++comment "python-scipy needs toolchain w/ fortran and c++ and glibc or musl"
++	depends on BR2_PACKAGE_PYTHON3
++	depends on !BR2_TOOLCHAIN_HAS_FORTRAN || \
++		!BR2_TOOLCHAIN_BUILDROOT_CXX || \
++		(!BR2_TOOLCHAIN_USES_GLIBC && !BR2_TOOLCHAIN_USES_MUSL)
+diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
 new file mode 100644
-index 0000000000..61b3fce051
+index 0000000000..c9d295ef6b
 --- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/pybind11_addition_example.cpp
++++ b/package/python-scipy/python-scipy.hash
 @@ -0,0 +1,9 @@
-+#include <pybind11/pybind11.h>
-+
-+int add(int i, int j) {
-+    return i + j;
-+}
-+
-+PYBIND11_MODULE(pybind11_addition_example, m) {
-+    m.def("add", &add, "A function which adds two numbers");
-+}
-diff --git a/support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/python-pybind11-addition-example.mk b/support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/python-pybind11-addition-example.mk
++# Locally generated
++sha256 dee1bbf3a6c8f73b6b218cb28eed8dd13347ea2f87d572ce19b289d6fd3fbc59  scipy-1.4.1.tar.gz
++sha256 5cbdbe33385779958be8b9310497e32d2eec144d82ef425780d3e19f8af6de76  LICENSE.txt
++sha256 37e64a498894ac7c3b070023e3689e954a8ecf8a23b90968d09a455f1b4f7b35  scipy/linalg/src/lapack_deprecations/LICENSE
++sha256 606209a000716c5f66e33e180ce08434b96ed17db4975ab9723c6b5fbcc89609  scipy/ndimage/LICENSE.txt
++sha256 3df9207af2fdb861af0ae3b22026f163b9bcfab4e525dc4943afe2ffa3f77624  scipy/optimize/tnc/LICENSE
++sha256 f0cedf52503b2d42b83411a0a16e6fefac346dfad8fddc66f50050150123470c  scipy/sparse/linalg/dsolve/SuperLU/License.txt
++sha256 0926566f9f406178d1214f8cc796e166b1213dd7c05e0c5b461a8b8ac9e50bbe  scipy/sparse/linalg/eigen/arpack/ARPACK/COPYING
++sha256 34db0c0c4f931861d720555c9cd7a2e228d1290ba29af0f2ee80c41bb2038afb  scipy/spatial/qhull_src/COPYING.txt
+diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
 new file mode 100644
-index 0000000000..f620424fca
+index 0000000000..1d66b146ec
 --- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/python-pybind11-addition-example.mk
-@@ -0,0 +1,39 @@
++++ b/package/python-scipy/python-scipy.mk
+@@ -0,0 +1,46 @@
 +################################################################################
 +#
-+# python-pybind11_addition_example
++# python-scipy
 +#
 +################################################################################
 +
-+PYTHON_PYBIND11_ADDITION_EXAMPLE_DEPENDENCIES = python-pybind11
++PYTHON_SCIPY_VERSION = 1.4.1
++PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.gz
++PYTHON_SCIPY_SITE = https://pypi.python.org/packages/04/ab/e2eb3e3f90b9363040a3d885ccc5c79fe20c5b8a3caa8fe3bf47ff653260
++PYTHON_SCIPY_LICENSE = BSD-3-Clause, BSD-2-Clause, BSD, BSD-Style, \
++	Apache-2.0, MIT
++PYTHON_SCIPY_LICENSE_FILES = \
++	LICENSE.txt \
++	scipy/linalg/src/lapack_deprecations/LICENSE \
++	scipy/ndimage/LICENSE.txt \
++	scipy/optimize/tnc/LICENSE \
++	scipy/sparse/linalg/dsolve/SuperLU/License.txt \
++	scipy/sparse/linalg/eigen/arpack/ARPACK/COPYING \
++	scipy/spatial/qhull_src/COPYING.txt
++PYTHON_SCIPY_SETUP_TYPE = setuptools
++PYTHON_SCIPY_DEPENDENCIES += \
++	host-python-numpy \
++	host-python-pybind11 \
++	lapack \
++	openblas \
++	python-numpy
 +
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+PYTHON_PYBIND11_ADDITION_EXAMPLE_INCLUDES=`$(STAGING_DIR)/usr/bin/python2-config --includes`
-+PYTHON_PYBIND11_ADDITION_EXAMPLE_SUFFIX=`$(STAGING_DIR)/usr/bin/python2-config --extension-suffix`
-+else
-+PYTHON_PYBIND11_ADDITION_EXAMPLE_INCLUDES=`$(STAGING_DIR)/usr/bin/python3-config --includes`
-+PYTHON_PYBIND11_ADDITION_EXAMPLE_SUFFIX=`$(STAGING_DIR)/usr/bin/python3-config --extension-suffix`
-+endif
-+PYTHON_PYBIND11_ADDITION_EXAMPLE_OUTPUT=pybind11_addition_example$(PYTHON_PYBIND11_ADDITION_EXAMPLE_SUFFIX)
++PYTHON_SCIPY_BUILD_OPTS = config_fc --fcompiler=gnu95
++PYTHON_SCIPY_ENV += F90=$(TARGET_CROSS)gfortran F77=$(TARGET_CROSS)gfortran
 +
-+define PYTHON_PYBIND11_ADDITION_EXAMPLE_BUILD_CMDS
-+	$(INSTALL) -D $(PYTHON_PYBIND11_ADDITION_EXAMPLE_PKGDIR)/pybind11_addition_example.cpp \
-+		$(@D)/pybind11_addition_example.cpp
-+
-+	$(INSTALL) -D $(PYTHON_PYBIND11_ADDITION_EXAMPLE_PKGDIR)/sample_python_pybind11.py \
-+		$(@D)/sample_python_pybind11.py
-+
-+	cd $(@D); \
-+		$(TARGET_CXX) -std=c++11 -fPIC -shared \
-+		$(PYTHON_PYBIND11_ADDITION_EXAMPLE_INCLUDES) pybind11_addition_example.cpp \
-+		-o $(PYTHON_PYBIND11_ADDITION_EXAMPLE_OUTPUT)
++# Provide system configuration options to numpy distutils extenions, telling
++# to find all include files and libraries in staging directory.
++define PYTHON_SCIPY_CONFIGURE_CMDS
++	-rm -f $(@D)/site.cfg
++	echo "[DEFAULT]" >> $(@D)/site.cfg
++	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
++	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
 +endef
 +
-+define PYTHON_PYBIND11_ADDITION_EXAMPLE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/$(PYTHON_PYBIND11_ADDITION_EXAMPLE_OUTPUT) \
-+		$(TARGET_DIR)/root/$(PYTHON_PYBIND11_ADDITION_EXAMPLE_OUTPUT)
++# Use the target numpy pkg-config configuration files modified for target
++# cross-compilation.  Without this, numpy distutils will cause the linker to
++# link with host libnpymath.a.
++PYTHON_SCIPY_ENV += NPY_PKG_CONFIG_PATH=$(PYTHON_NUMPY_NPY_PKG_CONFIG_PATH)
++PYTHON_SCIPY_INSTALL_STAGING = YES
 +
-+	$(INSTALL) -D -m 755 $(@D)/sample_python_pybind11.py \
-+		$(TARGET_DIR)/root/sample_python_pybind11.py
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/sample_python_pybind11.py b/support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/sample_python_pybind11.py
-new file mode 100644
-index 0000000000..29196481e1
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/python-pybind11/package/python-pybind11-addition-example/sample_python_pybind11.py
-@@ -0,0 +1,4 @@
-+#!/usr/bin/env python
-+import pybind11_addition_example
-+
-+print(pybind11_addition_example.add(1, 2))
-diff --git a/support/testing/tests/package/test_python_pybind11.py b/support/testing/tests/package/test_python_pybind11.py
-new file mode 100644
-index 0000000000..12bd77807e
---- /dev/null
-+++ b/support/testing/tests/package/test_python_pybind11.py
-@@ -0,0 +1,76 @@
-+import os
-+import infra.basetest
-+
-+class TestPythonPy2Pybind11(infra.basetest.BRTest):
-+    br2_external = [infra.filepath("tests/package/br2-external/python-pybind11")]
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.86"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        BR2_PACKAGE_PYTHON=y
-+        BR2_PACKAGE_PYTHON_PYBIND11=y
-+        BR2_PACKAGE_PYTHON_PYBIND11_ADDITION_EXAMPLE=y
-+        """
-+
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        self.login()
-+        cmd = "python sample_python_pybind11.py"
-+        output, exit_code = self.emulator.run(cmd, 120)
-+        print(output)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output, ["3"])
-+
-+class TestPythonPy3Pybind11(infra.basetest.BRTest):
-+    br2_external = [infra.filepath("tests/package/br2-external/python-pybind11")]
-+    config = \
-+        """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.86"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_PYBIND11=y
-+        BR2_PACKAGE_PYTHON_PYBIND11_ADDITION_EXAMPLE=y
-+        """
-+
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(arch="aarch64",
-+                           kernel=kern,
-+                           kernel_cmdline=["console=ttyAMA0"],
-+                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M", "-initrd", img])
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        self.login()
-+        cmd = "python3 sample_python_pybind11.py"
-+        output, exit_code = self.emulator.run(cmd, 120)
-+        print(output)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output, ["3"])
++$(eval $(python-package))
 -- 
 2.17.1
