@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 21:10:02 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/cog: fix
+Date: Tue, 7 Apr 2020 21:09:46 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/cog: fix
  segfaults on null xkb_data keymap/state
-Message-ID: <20200407185648.A9A808D7B6@busybox.osuosl.org>
+Message-ID: <20200407185652.F3BFC8D9AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67287c7015c9caa5639a048c266a3e831dc40d3a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2e2f8c76cdf9de88bf67026e79a59fe98796861f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes:
 Program terminated with signal SIGSEGV, Segmentation fault.
