@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 20:48:27 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual: small typo
+Date: Tue, 7 Apr 2020 20:48:21 +0200
+Subject: [Buildroot] [git commit branch/2019.11.x] docs/manual: small typo
  fixes and cleanup
-Message-ID: <20200407183902.1962F8D5B6@busybox.osuosl.org>
+Message-ID: <20200407183907.07B0B8D5F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c786e3b5a25c3ea979d17eb71749ec2785fa5403
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d3c031d6f707b953a0af1a18ea10bfb728cd698e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fix a few punctuation mistakes. The removed link is redundant, see the
 previous sentence.
@@ -27,7 +27,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  4 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index a36301afd5..603430f451 100644
+index a87980d4a2..cd3d4afd6e 100644
 --- a/docs/manual/common-usage.txt
 +++ b/docs/manual/common-usage.txt
 @@ -88,7 +88,7 @@ to +make+ or set in the environment:
