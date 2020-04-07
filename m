@@ -1,56 +1,41 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Tue,  7 Apr 2020 17:15:16 +0200
-Subject: [Buildroot] [PATCH] package/cegui: disable minizip support
-Message-ID: <20200407151516.120770-1-b.bilas@grinn-global.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 07 Apr 2020 17:32:36 +0200
+Subject: [Buildroot] [PATCH v1 1/2] package/mesa3d: fix vc4 neon related
+ compile failure
+In-Reply-To: <20200309123432.5943-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Mon, 9 Mar 2020 13:34:31 +0100")
+References: <20200309123432.5943-1-ps.report@gmx.net>
+Message-ID: <87o8s3qpkb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable support for minizip since cegui is not compatible
-with the existing buildroot's version due to lack of
-necessary header. It will be restored when upstream will
-switch to the new version.
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Fixes:
- - http://autobuild.buildroot.net/results/65fa719e8b2466409a12eb103a8938e1488efc0c
- - http://autobuild.buildroot.net/results/ef37a0cc16daacb7206d736c86b511c7d90eefe0
+ > Add mesa3d patch to add a vc4 option to disable
+ > the optional neon support and set it dependent
+ > on BR2_ARM_CPU_HAS_NEON.
 
-and many more.
+ > Fixes:
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- package/cegui/cegui.mk | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ >   http://autobuild.buildroot.net/results/6387b0a99e1a0922811919623d9a10b0943988df
 
-diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
-index 134b222362..434201b1f8 100644
---- a/package/cegui/cegui.mk
-+++ b/package/cegui/cegui.mk
-@@ -9,7 +9,8 @@ CEGUI_SITE = $(call github,cegui,cegui,v$(CEGUI_VERSION))
- CEGUI_LICENSE = MIT
- CEGUI_LICENSE_FILES = COPYING
- CEGUI_INSTALL_STAGING = YES
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_XERCES=OFF
-+CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_XERCES=OFF \
-+		   -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF
- CEGUI_DEPENDENCIES = glm \
- 		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
- 		$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
-@@ -66,13 +67,6 @@ else
- CEGUI_CONF_OPTS += -DCEGUI_HAS_FREETYPE=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_MINIZIP),y)
--CEGUI_DEPENDENCIES += minizip
--CEGUI_CONF_OPTS += -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF
--endif
--
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
- CEGUI_DEPENDENCIES += libxml2
- CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_LIBXML2=ON
+ >   [1086/1254] Compiling C object 'src/gallium/drivers/vc4/691f666@@vc4_neon at sta/vc4_tiling_lt_neon.c.o'.
+ >   {standard input}: Assembler messages:
+ >   {standard input}:334: Error: selected processor does not support `vldm r4,{q0,q1,q2,q3}' in ARM mode
+ >   {standard input}:335: Error: selected processor does not support `vst1.8 d0,[r3],r2' in ARM mode
+ >   {standard input}:336: Error: selected processor does not support `vst1.8 d1,[r3],r2' in ARM mode
+ >   {standard input}:337: Error: selected processor does not support `vst1.8 d2,[r3],r2' in ARM mode
+ >   {standard input}:338: Error: selected processor does not support `vst1.8 d3,[r3],r2' in ARM mode
+ >   {standard input}:339: Error: selected processor does not support `vst1.8 d4,[r3],r2' in ARM mode
+ >   {standard input}:340: Error: selected processor does not support `vst1.8 d5,[r3],r2' in ARM mode
+ >   {standard input}:341: Error: selected processor does not support `vst1.8 d6,[r3],r2' in ARM mode
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed to 2020.02.x, thanks.
+
 -- 
-2.26.0
+Bye, Peter Korsgaard
