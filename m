@@ -1,47 +1,68 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  7 Apr 2020 23:12:03 +0200
-Subject: [Buildroot] [PATCH v1] package/ddrescue: bump version to 1.25
-Message-ID: <20200407211203.11761-1-ps.report@gmx.net>
+Date: Tue,  7 Apr 2020 23:12:38 +0200
+Subject: [Buildroot] [PATCH v1] package/assimp: bump version to 5.0.1
+Message-ID: <20200407211238.11904-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
-
-[1] https://lists.gnu.org/archive/html/info-gnu/2020-03/msg00002.html
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/ddrescue/ddrescue.hash | 6 +++---
- package/ddrescue/ddrescue.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...1-Fix-FBXConverter-use-proper-64-bit-constant.patch | 10 ++++++----
+ package/assimp/assimp.hash                             |  4 ++--
+ package/assimp/assimp.mk                               |  2 +-
+ 3 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/package/ddrescue/ddrescue.hash b/package/ddrescue/ddrescue.hash
-index ae370acbc9..6877b7008d 100644
---- a/package/ddrescue/ddrescue.hash
-+++ b/package/ddrescue/ddrescue.hash
-@@ -1,4 +1,4 @@
--# From https://lists.gnu.org/archive/html/info-gnu/2019-02/msg00012.html
--sha256 4b5d3feede70e3657ca6b3c7844f23131851cbb6af0cecc9721500f7d7021087 ddrescue-1.24.tar.lz
-+# From https://lists.gnu.org/archive/html/info-gnu/2020-03/msg00002.html
-+sha256  ce538ebd26a09f45da67d3ad3f7431932428231ceec7a2d255f716fa231a1063  ddrescue-1.25.tar.lz
- # Locally computed
--sha256 3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
-+sha256  3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
-diff --git a/package/ddrescue/ddrescue.mk b/package/ddrescue/ddrescue.mk
-index 4e03179133..f113681fa1 100644
---- a/package/ddrescue/ddrescue.mk
-+++ b/package/ddrescue/ddrescue.mk
+diff --git a/package/assimp/0001-Fix-FBXConverter-use-proper-64-bit-constant.patch b/package/assimp/0001-Fix-FBXConverter-use-proper-64-bit-constant.patch
+index bfcbeb55e3..1b23d66364 100644
+--- a/package/assimp/0001-Fix-FBXConverter-use-proper-64-bit-constant.patch
++++ b/package/assimp/0001-Fix-FBXConverter-use-proper-64-bit-constant.patch
+@@ -12,15 +12,17 @@ Use proper 64-bit constant for CONVERT_FBX_TIME(time) conversion, fixes:
+   code/FBXConverter.cpp:2878: error: integer constant is too large for 'long' type
+   code/FBXConverter.cpp:2888: error: integer constant is too large for 'long' type
+ 
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++[Rebased on 5.0.1]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+- code/FBXConverter.cpp | 2 +-
++ code/FBX/FBXConverter.cpp | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-diff --git a/code/FBXConverter.cpp b/code/FBXConverter.cpp
++diff --git a/code/FBX/FBXConverter.cpp b/code/FBXConverter.cpp
+ index e0c6b9c..b1e9a71 100644
+---- a/code/FBXConverter.cpp
+-+++ b/code/FBXConverter.cpp
++--- a/code/FBX/FBXConverter.cpp
+++++ b/code/FBX/FBXConverter.cpp
+ @@ -67,7 +67,7 @@ namespace FBX {
+  
+  #define MAGIC_NODE_TAG "_$AssimpFbx$"
+diff --git a/package/assimp/assimp.hash b/package/assimp/assimp.hash
+index 72d367ac43..df5daa79c9 100644
+--- a/package/assimp/assimp.hash
++++ b/package/assimp/assimp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 3520b1e9793b93a2ca3b797199e16f40d61762617e072f2d525fad70f9678a71  assimp-4.1.0.tar.gz
+-sha256 a26ccc3dbf2f58ea99c100945a8a126fa0f9f4d7fd2b49aa8bdb8e09355864d8  LICENSE
++sha256  11310ec1f2ad2cd46b95ba88faca8f7aaa1efe9aa12605c55e3de2b977b3dbfc  assimp-5.0.1.tar.gz
++sha256  a26ccc3dbf2f58ea99c100945a8a126fa0f9f4d7fd2b49aa8bdb8e09355864d8  LICENSE
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index ce02ef300c..5e8e825375 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DDRESCUE_VERSION = 1.24
-+DDRESCUE_VERSION = 1.25
- DDRESCUE_SOURCE = ddrescue-$(DDRESCUE_VERSION).tar.lz
- DDRESCUE_SITE = http://download.savannah.gnu.org/releases/ddrescue
- DDRESCUE_LICENSE = GPL-2.0+
+-ASSIMP_VERSION = 4.1.0
++ASSIMP_VERSION = 5.0.1
+ ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
+ ASSIMP_LICENSE = BSD-3-Clause
+ ASSIMP_LICENSE_FILES = LICENSE
 -- 
 2.26.0
