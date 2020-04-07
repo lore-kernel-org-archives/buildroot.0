@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Apr 2020 09:49:07 +0200
-Subject: [Buildroot] [PATCH 2/5] linux: add automatic nftables config
+Date: Tue, 7 Apr 2020 09:50:43 +0200
+Subject: [Buildroot] [PATCH 5/5] linux: add automatic firewalld config
  selection
-In-Reply-To: <20200330234616.1665466-2-aduskett@gmail.com>
+In-Reply-To: <20200330234616.1665466-5-aduskett@gmail.com>
 References: <20200330234616.1665466-1-aduskett@gmail.com>
- <20200330234616.1665466-2-aduskett@gmail.com>
-Message-ID: <20200407074907.GF22325@scaer>
+ <20200330234616.1665466-5-aduskett@gmail.com>
+Message-ID: <20200407075043.GG22325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,47 +17,16 @@ Adam, All,
 On 2020-03-30 16:46 -0700, aduskett at gmail.com spake thusly:
 > From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Select the minimum amount of kernel features to enable nftables when the
-> nftables package is selected.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  linux/linux.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 1927832e7e..3c797aab88 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -389,6 +389,10 @@ define LINUX_KCONFIG_FIXUP_CMDS
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER,$(@D)/.config)
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER,$(@D)/.config)
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES,$(@D)/.config))
-> +	$(if $(BR2_PACKAGE_NFTABLES),
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER,$(@D)/.config)
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES,$(@D)/.config)
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_INET,$(@D)/.config))
+> Firewalld requires almost every single nftables rule enabled in the kernel to
+> properly start. As such, if a user selects the firewalld package, it is much
+> easier to select these options for them, must like we do for systemd or
+> iptables.
 
-As you know, we have a pending series that moves such selections out of
-linux.mk and into the corresponding packages.
-
-As such, I'm not sure what to do with that patch for now. Since anyway
-the rest of the series is (or will soon be) marked as changes requested,
-I've done the same for that patch.
+As for the nftables patch earlier in that series, I've marked this patch
+as changes requested.
 
 Regards,
 Yann E. MORIN.
-
->  	$(if $(BR2_PACKAGE_XTABLES_ADDONS),
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED,$(@D)/.config)
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
