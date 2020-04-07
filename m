@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 20:36:49 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/libical: fix
+Date: Tue, 7 Apr 2020 20:36:41 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libical: fix
  CVE-2016-9584
-Message-ID: <20200407182314.23E3C8152C@busybox.osuosl.org>
+Message-ID: <20200407182318.6BFFD8D601@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d50c7661df86dba0770cda195bfe5d80d69066bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=69af93f5113f3fce31c6b1392612e7f88a6eee9b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 libical allows remote attackers to cause a denial of service
 (use-after-free) and possibly read heap memory via a crafted ics file.
