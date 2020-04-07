@@ -1,146 +1,177 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 21:06:36 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/gvfs: fix
- CVE-2019-12795
-Message-ID: <20200407185302.9CC938D71F@busybox.osuosl.org>
+Date: Tue, 7 Apr 2020 21:05:04 +0200
+Subject: [Buildroot] [git commit branch/2019.11.x] package/gvfs: fix
+ CVE-2019-12448
+Message-ID: <20200407185316.CD4048D783@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0b51aa35eabdb99c570c8cba243b19be3cd32e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2b82978b14054371313ff2cfd3457ea9ec1150ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-daemon/gvfsdaemon.c in gvfsd from GNOME gvfs before 1.38.3, 1.40.x
-before 1.40.2, and 1.41.x before 1.41.3 opened a private D-Bus server
-socket without configuring an authorization rule. A local attacker could
-connect to this server socket and issue D-Bus method calls. (Note that
-the server socket only accepts a single connection, so the attacker
-would have to discover the server and connect to the socket before its
-owner does.)
+An issue was discovered in GNOME gvfs 1.29.4 through 1.41.2.
+daemon/gvfsbackendadmin.c has race conditions because the admin backend
+doesn't implement query_info_on_read/write.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a9f38acbf2c28a9ec8c8e8e24e56b9ed4bc71778)
+(cherry picked from commit e49aa31f5ccd19078765e170dbfd01ff6e7fcb14)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...at-the-connecting-client-is-the-same-user.patch | 96 ++++++++++++++++++++++
- package/gvfs/gvfs.mk                               |  3 +
- 2 files changed, 99 insertions(+)
+ ...dd-query_info_on_read-write-functionality.patch | 131 +++++++++++++++++++++
+ package/gvfs/gvfs.mk                               |   3 +
+ 2 files changed, 134 insertions(+)
 
-diff --git a/package/gvfs/0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch b/package/gvfs/0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch
+diff --git a/package/gvfs/0002-admin-Add-query_info_on_read-write-functionality.patch b/package/gvfs/0002-admin-Add-query_info_on_read-write-functionality.patch
 new file mode 100644
-index 0000000000..56bef26b0f
+index 0000000000..42174153d2
 --- /dev/null
-+++ b/package/gvfs/0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch
-@@ -0,0 +1,96 @@
-+From 70dbfc68a79faac49bd3423e079cb6902522082a Mon Sep 17 00:00:00 2001
-+From: Simon McVittie <smcv@collabora.com>
-+Date: Wed, 5 Jun 2019 13:33:38 +0100
-+Subject: [PATCH] gvfsdaemon: Check that the connecting client is the same user
++++ b/package/gvfs/0002-admin-Add-query_info_on_read-write-functionality.patch
+@@ -0,0 +1,131 @@
++From 5cd76d627f4d1982b6e77a0e271ef9301732d09e Mon Sep 17 00:00:00 2001
++From: Ondrej Holy <oholy@redhat.com>
++Date: Thu, 23 May 2019 10:24:36 +0200
++Subject: [PATCH] admin: Add query_info_on_read/write functionality
 +
-+Otherwise, an attacker who learns the abstract socket address from
-+netstat(8) or similar could connect to it and issue D-Bus method
-+calls.
++Admin backend doesn't implement query_info_on_read/write which might
++potentially lead to some race conditions which aren't really wanted
++especially in case of admin backend. Let's add this missing functionality.
 +
-+Signed-off-by: Simon McVittie <smcv@collabora.com>
-+
-+[Retrieved from:
-+https://gitlab.gnome.org/GNOME/gvfs/commit/70dbfc68a79faac49bd3423e079cb6902522082a]
++[Retrieved fom:
++https://gitlab.gnome.org/GNOME/gvfs/commit/5cd76d627f4d1982b6e77a0e271ef9301732d09e]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ daemon/gvfsdaemon.c | 36 +++++++++++++++++++++++++++++++++++-
-+ 1 file changed, 35 insertions(+), 1 deletion(-)
++ daemon/gvfsbackendadmin.c | 79 +++++++++++++++++++++++++++++++++------
++ 1 file changed, 67 insertions(+), 12 deletions(-)
 +
-+diff --git a/daemon/gvfsdaemon.c b/daemon/gvfsdaemon.c
-+index 406d4f8e..be148a7b 100644
-+--- a/daemon/gvfsdaemon.c
-++++ b/daemon/gvfsdaemon.c
-+@@ -79,6 +79,7 @@ struct _GVfsDaemon
-+   
-+   gint mount_counter;
-+   
-++  GDBusAuthObserver *auth_observer;
-+   GDBusConnection *conn;
-+   GVfsDBusDaemon *daemon_skeleton;
-+   GVfsDBusMountable *mountable_skeleton;
-+@@ -171,6 +172,8 @@ g_vfs_daemon_finalize (GObject *object)
-+     }
-+   if (daemon->conn != NULL)
-+     g_object_unref (daemon->conn);
-++  if (daemon->auth_observer != NULL)
-++    g_object_unref (daemon->auth_observer);
-+   
-+   g_hash_table_destroy (daemon->registered_paths);
-+   g_hash_table_destroy (daemon->client_connections);
-+@@ -236,6 +239,35 @@ name_vanished_handler (GDBusConnection *connection,
-+   daemon->lost_main_daemon = TRUE;
++diff --git a/daemon/gvfsbackendadmin.c b/daemon/gvfsbackendadmin.c
++index 65a979e7..23d16f16 100644
++--- a/daemon/gvfsbackendadmin.c
+++++ b/daemon/gvfsbackendadmin.c
++@@ -42,6 +42,8 @@
++ #include "gvfsjobopenforwrite.h"
++ #include "gvfsjobqueryattributes.h"
++ #include "gvfsjobqueryinfo.h"
+++#include "gvfsjobqueryinforead.h"
+++#include "gvfsjobqueryinfowrite.h"
++ #include "gvfsjobread.h"
++ #include "gvfsjobseekread.h"
++ #include "gvfsjobseekwrite.h"
++@@ -155,6 +157,19 @@ complete_job (GVfsJob *job,
++   g_vfs_job_succeeded (job);
 + }
 + 
-++/*
-++ * Authentication observer signal handler that authorizes connections
-++ * from the same uid as this process. This matches the behaviour of a
-++ * libdbus DBusServer/DBusConnection when no DBusAllowUnixUserFunction
-++ * has been set, but is not the default in GDBus.
-++ */
-++static gboolean
-++authorize_authenticated_peer_cb (GDBusAuthObserver *observer,
-++                                 G_GNUC_UNUSED GIOStream *stream,
-++                                 GCredentials *credentials,
-++                                 G_GNUC_UNUSED gpointer user_data)
+++static void
+++fix_file_info (GFileInfo *info)
 ++{
-++  gboolean authorized = FALSE;
-++
-++  if (credentials != NULL)
-++    {
-++      GCredentials *own_credentials;
-++
-++      own_credentials = g_credentials_new ();
-++
-++      if (g_credentials_is_same_user (credentials, own_credentials, NULL))
-++        authorized = TRUE;
-++
-++      g_object_unref (own_credentials);
-++    }
-++
-++  return authorized;
+++  /* Override read/write flags, since the above call will use access()
+++   * to determine permissions, which does not honor our privileged
+++   * capabilities.
+++   */
+++  g_file_info_set_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_READ, TRUE);
+++  g_file_info_set_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE, TRUE);
+++  g_file_info_set_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE, TRUE);
+++  g_file_info_set_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME, TRUE);
 ++}
 ++
 + static void
-+ g_vfs_daemon_init (GVfsDaemon *daemon)
-+ {
-+@@ -265,6 +297,8 @@ g_vfs_daemon_init (GVfsDaemon *daemon)
++ do_query_info (GVfsBackend *backend,
++                GVfsJobQueryInfo *query_info_job,
++@@ -180,19 +195,57 @@ do_query_info (GVfsBackend *backend,
++   if (error != NULL)
++     goto out;
 + 
-+   daemon->conn = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-+   g_assert (daemon->conn != NULL);
-++  daemon->auth_observer = g_dbus_auth_observer_new ();
-++  g_signal_connect (daemon->auth_observer, "authorize-authenticated-peer", G_CALLBACK (authorize_authenticated_peer_cb), NULL);
++-  /* Override read/write flags, since the above call will use access()
++-   * to determine permissions, which does not honor our privileged
++-   * capabilities.
++-   */
++-  g_file_info_set_attribute_boolean (real_info,
++-                                     G_FILE_ATTRIBUTE_ACCESS_CAN_READ, TRUE);
++-  g_file_info_set_attribute_boolean (real_info,
++-                                     G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE, TRUE);
++-  g_file_info_set_attribute_boolean (real_info,
++-                                     G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE, TRUE);
++-  g_file_info_set_attribute_boolean (real_info,
++-                                     G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME, TRUE);
+++  fix_file_info (real_info);
+++  g_file_info_copy_into (real_info, info);
+++  g_object_unref (real_info);
+++
+++ out:
+++  complete_job (job, error);
+++}
+++
+++static void
+++do_query_info_on_read (GVfsBackend *backend,
+++                       GVfsJobQueryInfoRead *query_info_job,
+++                       GVfsBackendHandle handle,
+++                       GFileInfo *info,
+++                       GFileAttributeMatcher *matcher)
+++{
+++  GVfsJob *job = G_VFS_JOB (query_info_job);
+++  GFileInputStream *stream = handle;
+++  GError *error = NULL;
+++  GFileInfo *real_info;
+++
+++  real_info = g_file_input_stream_query_info (stream, query_info_job->attributes,
+++                                              job->cancellable, &error);
+++  if (error != NULL)
+++    goto out;
+++
+++  fix_file_info (real_info);
+++  g_file_info_copy_into (real_info, info);
+++  g_object_unref (real_info);
+++
+++ out:
+++  complete_job (job, error);
+++}
+++
+++static void
+++do_query_info_on_write (GVfsBackend *backend,
+++                        GVfsJobQueryInfoWrite *query_info_job,
+++                        GVfsBackendHandle handle,
+++                        GFileInfo *info,
+++                        GFileAttributeMatcher *matcher)
+++{
+++  GVfsJob *job = G_VFS_JOB (query_info_job);
+++  GFileOutputStream *stream = handle;
+++  GError *error = NULL;
+++  GFileInfo *real_info;
+++
+++  real_info = g_file_output_stream_query_info (stream, query_info_job->attributes,
+++                                               job->cancellable, &error);
+++  if (error != NULL)
+++    goto out;
 + 
-+   daemon->daemon_skeleton = gvfs_dbus_daemon_skeleton_new ();
-+   g_signal_connect (daemon->daemon_skeleton, "handle-get-connection", G_CALLBACK (handle_get_connection), daemon);
-+@@ -876,7 +910,7 @@ handle_get_connection (GVfsDBusDaemon *object,
-+   server = g_dbus_server_new_sync (address1,
-+                                    G_DBUS_SERVER_FLAGS_NONE,
-+                                    guid,
-+-                                   NULL, /* GDBusAuthObserver */
-++                                   daemon->auth_observer,
-+                                    NULL, /* GCancellable */
-+                                    &error);
-+   g_free (guid);
+++  fix_file_info (real_info);
++   g_file_info_copy_into (real_info, info);
++   g_object_unref (real_info);
++ 
++@@ -868,6 +921,8 @@ g_vfs_backend_admin_class_init (GVfsBackendAdminClass * klass)
++   backend_class->mount = do_mount;
++   backend_class->open_for_read = do_open_for_read;
++   backend_class->query_info = do_query_info;
+++  backend_class->query_info_on_read = do_query_info_on_read;
+++  backend_class->query_info_on_write = do_query_info_on_write;
++   backend_class->read = do_read;
++   backend_class->create = do_create;
++   backend_class->append_to = do_append_to;
 +-- 
 +2.24.1
 +
 diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index a3308b713d..b3b18a3482 100644
+index 6c927fa345..eb31f6f8df 100644
 --- a/package/gvfs/gvfs.mk
 +++ b/package/gvfs/gvfs.mk
-@@ -28,6 +28,9 @@ GVFS_IGNORE_CVES += CVE-2019-12447
- # 0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
- GVFS_IGNORE_CVES += CVE-2019-12449
+@@ -18,6 +18,9 @@ GVFS_LIBS = $(TARGET_NLS_LIBS)
+ # 0001-admin-Prevent-access-if-any-authentication-agent-isn-t-available.patch
+ GVFS_IGNORE_CVES += CVE-2019-3827
  
-+# 0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch
-+GVFS_IGNORE_CVES += CVE-2019-12795
++# package/gvfs/0002-admin-Add-query_info_on_read-write-functionality.patch
++GVFS_IGNORE_CVES += CVE-2019-12448
 +
  # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
  # build system from searching the host paths.
