@@ -1,30 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 Apr 2020 21:07:43 +0200
-Subject: [Buildroot] [PATCH 1/5] package/gvfs: fix CVE-2019-3827
-In-Reply-To: <20200329160246.4053834-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 29 Mar 2020 18:02:42 +0200")
-References: <20200329160246.4053834-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pncjm7wg.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 7 Apr 2020 21:08:29 +0200
+Subject: [Buildroot] [PATCH] package/gcc: bump to version 9.3.0
+In-Reply-To: <87sghfrchc.fsf@dell.be.48ers.dk>
+References: <20200315161846.5827-1-romain.naour@smile.fr>
+ <87sghfrchc.fsf@dell.be.48ers.dk>
+Message-ID: <961195de-36c5-a8a5-a231-69ea4544c6fd@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hi Peter,
 
- > An incorrect permission check in the admin backend in gvfs before
- > version 1.39.4 was found that allows reading and modify arbitrary files
- > by privileged users without asking for password when no authentication
- > agent is running. This vulnerability can be exploited by malicious
- > programs running under privileges of users belonging to the wheel group
- > to further escalate its privileges by modifying system files without
- > user's knowledge. Successful exploitation requires uncommon system
- > configuration.
+Le 07/04/2020 ? 09:17, Peter Korsgaard a ?crit?:
+>>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+> 
+>  > Remove upstream patch [1]
+>  > Rebase and rename 0002-xtensa-fix-PR-target-91880.patch
+>  > and 0003-or1k-Fix-issue-with-set_got-clobbering-LR-r9.patch
+> 
+>  > Tested using gitlab with Qemu runtime testing series [2] [3].
+> 
+>  > [1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=2e1e7ad18e121663082525a872f0d6fb32db4535
+>  > [2] https://gitlab.com/kubu93/buildroot/pipelines/125828238
+>  > [3] http://patchwork.ozlabs.org/project/buildroot/list/?series=159088
+> 
+>  > See:
+>  > https://gcc.gnu.org/pipermail/gcc-announce/2020/000161.html
+> 
+>  > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> 
+> Committed to 2020.02.x, thanks.
+> 
+> Given that they are just about to go EOL (and we didn't backport gcc
+> 7.5.0) I have NOT committed to 2019.02.x and 2019.11.x.
+> 
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Ok for me, same for gcc 8.4.0.
 
-Committed all 5 to 2019.02.x, 2019.11.x and 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+Romain
