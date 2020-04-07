@@ -1,59 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 09:06:39 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] linux: run depmod only if
- modules are enabled
-Message-ID: <20200407070402.80FE68D485@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 7 Apr 2020 09:17:25 +0200
+Subject: [Buildroot] [git commit] package/rng-tools: add nistbeacon option
+Message-ID: <20200407070414.2450C7FB8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3b746a156d3299107e3307bccf1b5fb80e9b0f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8ca63197813a41d00a68de178e0ae2b936691f1a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If the kernel configuration CONFIG_MODULES disabled, there's no
-/lib/modules/<version> directory, causing this:
+Add an option to enable nistbeacon which is available since version 6.1
+and
+https://github.com/nhorman/rng-tools/commit/aefe862e187a1ef608f9826b2b4a5bbabd5e9945
 
-depmod: ERROR: could not open directory [...]/target/lib/modules/4.19.8: No such file or directory
-depmod: FATAL: could not search modules: No such file or directory
-Makefile:745: recipe for target 'target-finalize' failed
-
-Fixes:
-
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712831
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712817
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712814
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712796
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712729
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712727
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712698
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712691
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712660
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712573
-https://gitlab.com/buildroot.org/buildroot/-/jobs/483712574
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 43f41a7bf8e92ad88d1e59c48b27718c343ca548)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- linux/linux.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/rng-tools/Config.in    | 17 +++++++++++++++++
+ package/rng-tools/rng-tools.mk | 11 ++++++++---
+ 2 files changed, 25 insertions(+), 3 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 5baca23ea2..097190dc0f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -531,7 +531,9 @@ endef
- # Run depmod in a target-finalize hook, to encompass modules installed by
- # packages.
- define LINUX_RUN_DEPMOD
--	$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED)
-+	if grep -q "CONFIG_MODULES=y" $(LINUX_DIR)/.config; then \
-+		$(HOST_DIR)/sbin/depmod -a -b $(TARGET_DIR) $(LINUX_VERSION_PROBED); \
-+	fi
- endef
- LINUX_TARGET_FINALIZE_HOOKS += LINUX_RUN_DEPMOD
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+index a86fbb0f74..25b41f40d6 100644
+--- a/package/rng-tools/Config.in
++++ b/package/rng-tools/Config.in
+@@ -11,5 +11,22 @@ config BR2_PACKAGE_RNG_TOOLS
  
+ 	  http://sourceforge.net/projects/gkernel/
+ 
++if BR2_PACKAGE_RNG_TOOLS
++
++config BR2_PACKAGE_RNG_TOOLS_NISTBEACON
++	bool "NIST Entropy Beacon support"
++	select BR2_PACKAGE_JANSSON
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBXML2
++	help
++	  Enable NIST Entropy Beacon support.
++
++	  Entropy gathered from the NIST network entropy beacon. Note
++	  that this entropy source is disabled by default as it should
++	  never be used for cryptographic purposes, or any use case in
++	  which random data should be known only by a single entity.
++
++endif
++
+ comment "rng-tools needs a toolchain w/ NPTL"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index 8ebfc0975a..3baddb98ee 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -12,9 +12,7 @@ RNG_TOOLS_DEPENDENCIES = libsysfs jitterentropy-library host-pkgconf openssl
+ # From git
+ RNG_TOOLS_AUTORECONF = YES
+ 
+-RNG_TOOLS_CONF_OPTS = \
+-	--without-nistbeacon \
+-	--without-pkcs11
++RNG_TOOLS_CONF_OPTS = --without-pkcs11
+ 
+ # Work around for uClibc or musl toolchains which lack argp_*()
+ # functions.
+@@ -30,6 +28,13 @@ else
+ RNG_TOOLS_CONF_OPTS += --without-rtlsdr
+ endif
+ 
++ifeq ($(BR2_PACKAGE_RNG_TOOLS_NISTBEACON),y)
++RNG_TOOLS_DEPENDENCIES += jansson libcurl libxml2
++RNG_TOOLS_CONF_OPTS += --with-nistbeacon
++else
++RNG_TOOLS_CONF_OPTS += --without-nistbeacon
++endif
++
+ define RNG_TOOLS_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/rng-tools/S21rngd \
+ 		$(TARGET_DIR)/etc/init.d/S21rngd
