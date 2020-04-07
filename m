@@ -1,146 +1,131 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 Apr 2020 21:05:25 +0200
+Date: Tue, 7 Apr 2020 21:05:14 +0200
 Subject: [Buildroot] [git commit branch/2019.11.x] package/gvfs: fix
- CVE-2019-12795
-Message-ID: <20200407185316.E9DDE8D783@busybox.osuosl.org>
+ CVE-2019-12449
+Message-ID: <20200407185316.DF2508D783@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49cd1061ee262f55322fece4979751991ec76778
+commit: https://git.buildroot.net/buildroot/commit/?id=21ed4c57afd0c40b23f2a63207a655cf3865ffac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
-daemon/gvfsdaemon.c in gvfsd from GNOME gvfs before 1.38.3, 1.40.x
-before 1.40.2, and 1.41.x before 1.41.3 opened a private D-Bus server
-socket without configuring an authorization rule. A local attacker could
-connect to this server socket and issue D-Bus method calls. (Note that
-the server socket only accepts a single connection, so the attacker
-would have to discover the server and connect to the socket before its
-owner does.)
+An issue was discovered in GNOME gvfs 1.29.4 through 1.41.2.
+daemon/gvfsbackendadmin.c mishandles a file's user and group ownership
+during move (and copy with G_FILE_COPY_ALL_METADATA) operations from
+admin:// to file:// URIs, because root privileges are unavailable.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a9f38acbf2c28a9ec8c8e8e24e56b9ed4bc71778)
+(cherry picked from commit fc42ac086a1a897be5ca997e416040560aa15cb6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...at-the-connecting-client-is-the-same-user.patch | 96 ++++++++++++++++++++++
+ ...correct-ownership-when-moving-to-file-uri.patch | 84 ++++++++++++++++++++++
  package/gvfs/gvfs.mk                               |  3 +
- 2 files changed, 99 insertions(+)
+ 2 files changed, 87 insertions(+)
 
-diff --git a/package/gvfs/0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch b/package/gvfs/0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch
+diff --git a/package/gvfs/0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch b/package/gvfs/0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
 new file mode 100644
-index 0000000000..56bef26b0f
+index 0000000000..29f7573a65
 --- /dev/null
-+++ b/package/gvfs/0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch
-@@ -0,0 +1,96 @@
-+From 70dbfc68a79faac49bd3423e079cb6902522082a Mon Sep 17 00:00:00 2001
-+From: Simon McVittie <smcv@collabora.com>
-+Date: Wed, 5 Jun 2019 13:33:38 +0100
-+Subject: [PATCH] gvfsdaemon: Check that the connecting client is the same user
++++ b/package/gvfs/0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
+@@ -0,0 +1,84 @@
++From d5dfd823c94045488aef8727c553f1e0f7666b90 Mon Sep 17 00:00:00 2001
++From: Ondrej Holy <oholy@redhat.com>
++Date: Fri, 24 May 2019 09:43:43 +0200
++Subject: [PATCH] admin: Ensure correct ownership when moving to file:// uri
 +
-+Otherwise, an attacker who learns the abstract socket address from
-+netstat(8) or similar could connect to it and issue D-Bus method
-+calls.
-+
-+Signed-off-by: Simon McVittie <smcv@collabora.com>
++User and group is not restored properly when moving (or copying with
++G_FILE_COPY_ALL_METADATA) from admin:// to file://, because it is handled
++by GIO fallback code, which doesn't run with root permissions. Let's
++handle this case with pull method to ensure correct ownership.
 +
 +[Retrieved from:
-+https://gitlab.gnome.org/GNOME/gvfs/commit/70dbfc68a79faac49bd3423e079cb6902522082a]
++https://gitlab.gnome.org/GNOME/gvfs/commit/d5dfd823c94045488aef8727c553f1e0f7666b90]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ daemon/gvfsdaemon.c | 36 +++++++++++++++++++++++++++++++++++-
-+ 1 file changed, 35 insertions(+), 1 deletion(-)
++ daemon/gvfsbackendadmin.c | 46 +++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 46 insertions(+)
 +
-+diff --git a/daemon/gvfsdaemon.c b/daemon/gvfsdaemon.c
-+index 406d4f8e..be148a7b 100644
-+--- a/daemon/gvfsdaemon.c
-++++ b/daemon/gvfsdaemon.c
-+@@ -79,6 +79,7 @@ struct _GVfsDaemon
-+   
-+   gint mount_counter;
-+   
-++  GDBusAuthObserver *auth_observer;
-+   GDBusConnection *conn;
-+   GVfsDBusDaemon *daemon_skeleton;
-+   GVfsDBusMountable *mountable_skeleton;
-+@@ -171,6 +172,8 @@ g_vfs_daemon_finalize (GObject *object)
-+     }
-+   if (daemon->conn != NULL)
-+     g_object_unref (daemon->conn);
-++  if (daemon->auth_observer != NULL)
-++    g_object_unref (daemon->auth_observer);
-+   
-+   g_hash_table_destroy (daemon->registered_paths);
-+   g_hash_table_destroy (daemon->client_connections);
-+@@ -236,6 +239,35 @@ name_vanished_handler (GDBusConnection *connection,
-+   daemon->lost_main_daemon = TRUE;
++diff --git a/daemon/gvfsbackendadmin.c b/daemon/gvfsbackendadmin.c
++index 32b51b1a..9a7e8295 100644
++--- a/daemon/gvfsbackendadmin.c
+++++ b/daemon/gvfsbackendadmin.c
++@@ -807,6 +807,51 @@ do_move (GVfsBackend *backend,
++   complete_job (job, error);
 + }
 + 
-++/*
-++ * Authentication observer signal handler that authorizes connections
-++ * from the same uid as this process. This matches the behaviour of a
-++ * libdbus DBusServer/DBusConnection when no DBusAllowUnixUserFunction
-++ * has been set, but is not the default in GDBus.
-++ */
-++static gboolean
-++authorize_authenticated_peer_cb (GDBusAuthObserver *observer,
-++                                 G_GNUC_UNUSED GIOStream *stream,
-++                                 GCredentials *credentials,
-++                                 G_GNUC_UNUSED gpointer user_data)
+++static void
+++do_pull (GVfsBackend *backend,
+++         GVfsJobPull *pull_job,
+++         const char *source,
+++         const char *local_path,
+++         GFileCopyFlags flags,
+++         gboolean remove_source,
+++         GFileProgressCallback progress_callback,
+++         gpointer progress_callback_data)
 ++{
-++  gboolean authorized = FALSE;
+++  GVfsBackendAdmin *self = G_VFS_BACKEND_ADMIN (backend);
+++  GVfsJob *job = G_VFS_JOB (pull_job);
+++  GError *error = NULL;
+++  GFile *src_file, *dst_file;
 ++
-++  if (credentials != NULL)
+++  /* Pull method is necessary when user/group needs to be restored, return
+++   * G_IO_ERROR_NOT_SUPPORTED in other cases to proceed with the fallback code.
+++   */
+++  if (!(flags & G_FILE_COPY_ALL_METADATA))
 ++    {
-++      GCredentials *own_credentials;
-++
-++      own_credentials = g_credentials_new ();
-++
-++      if (g_credentials_is_same_user (credentials, own_credentials, NULL))
-++        authorized = TRUE;
-++
-++      g_object_unref (own_credentials);
+++      g_vfs_job_failed_literal (G_VFS_JOB (job), G_IO_ERROR,
+++                                G_IO_ERROR_NOT_SUPPORTED,
+++                                _("Operation not supported"));
+++      return;
 ++    }
 ++
-++  return authorized;
+++  if (!check_permission (self, job))
+++    return;
+++
+++  src_file = g_file_new_for_path (source);
+++  dst_file = g_file_new_for_path (local_path);
+++
+++  if (remove_source)
+++    g_file_move (src_file, dst_file, flags, job->cancellable,
+++                 progress_callback, progress_callback_data, &error);
+++  else
+++    g_file_copy (src_file, dst_file, flags, job->cancellable,
+++                 progress_callback, progress_callback_data, &error);
+++
+++  g_object_unref (src_file);
+++  g_object_unref (dst_file);
+++
+++  complete_job (job, error);
 ++}
 ++
 + static void
-+ g_vfs_daemon_init (GVfsDaemon *daemon)
-+ {
-+@@ -265,6 +297,8 @@ g_vfs_daemon_init (GVfsDaemon *daemon)
-+ 
-+   daemon->conn = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-+   g_assert (daemon->conn != NULL);
-++  daemon->auth_observer = g_dbus_auth_observer_new ();
-++  g_signal_connect (daemon->auth_observer, "authorize-authenticated-peer", G_CALLBACK (authorize_authenticated_peer_cb), NULL);
-+ 
-+   daemon->daemon_skeleton = gvfs_dbus_daemon_skeleton_new ();
-+   g_signal_connect (daemon->daemon_skeleton, "handle-get-connection", G_CALLBACK (handle_get_connection), daemon);
-+@@ -876,7 +910,7 @@ handle_get_connection (GVfsDBusDaemon *object,
-+   server = g_dbus_server_new_sync (address1,
-+                                    G_DBUS_SERVER_FLAGS_NONE,
-+                                    guid,
-+-                                   NULL, /* GDBusAuthObserver */
-++                                   daemon->auth_observer,
-+                                    NULL, /* GCancellable */
-+                                    &error);
-+   g_free (guid);
++ do_query_settable_attributes (GVfsBackend *backend,
++                               GVfsJobQueryAttributes *query_job,
++@@ -927,6 +972,7 @@ g_vfs_backend_admin_class_init (GVfsBackendAdminClass * klass)
++   backend_class->set_attribute = do_set_attribute;
++   backend_class->delete = do_delete;
++   backend_class->move = do_move;
+++  backend_class->pull = do_pull;
++   backend_class->query_settable_attributes = do_query_settable_attributes;
++   backend_class->query_writable_namespaces = do_query_writable_namespaces;
++ }
 +-- 
 +2.24.1
 +
 diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index a3308b713d..b3b18a3482 100644
+index ec75852438..a3308b713d 100644
 --- a/package/gvfs/gvfs.mk
 +++ b/package/gvfs/gvfs.mk
-@@ -28,6 +28,9 @@ GVFS_IGNORE_CVES += CVE-2019-12447
- # 0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
- GVFS_IGNORE_CVES += CVE-2019-12449
+@@ -25,6 +25,9 @@ GVFS_IGNORE_CVES += CVE-2019-12448
+ # 0004-admin-Use-fsuid-to-ensure-correct-file-ownership.patch
+ GVFS_IGNORE_CVES += CVE-2019-12447
  
-+# 0006-gvfsdaemon-Check-that-the-connecting-client-is-the-same-user.patch
-+GVFS_IGNORE_CVES += CVE-2019-12795
++# 0005-admin-Ensure-correct-ownership-when-moving-to-file-uri.patch
++GVFS_IGNORE_CVES += CVE-2019-12449
 +
  # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
  # build system from searching the host paths.
