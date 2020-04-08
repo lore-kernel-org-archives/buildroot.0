@@ -1,23 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Apr 2020 00:03:28 +0200
+Date: Thu, 9 Apr 2020 00:02:26 +0200
 Subject: [Buildroot] [git commit branch/2019.02.x] package/gnutls: bump
- version to 3.6.9
-Message-ID: <20200409055611.6E8E07F8F8@busybox.osuosl.org>
+ version to 3.6.8
+Message-ID: <20200409055611.572A78E18A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbc75077a294dedf29561448626783aa27944fc6
+commit: https://git.buildroot.net/buildroot/commit/?id=3150de11b5c40eaeedecb21b1ca106655056bb60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Release notes:
-https://lists.gnupg.org/pipermail/gnutls-help/2019-July/004556.html
+https://lists.gnupg.org/pipermail/gnutls-help/2019-May/004527.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a9c509934e067716b0cf210b87c968ba69834d9f)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 9e2fcb2e251e0763c00583cc21d3e8cff968976f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/gnutls/gnutls.hash | 4 ++--
@@ -25,28 +25,28 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 5ab913ad6e..0149e4a277 100644
+index 8c0e0d69d5..5ab913ad6e 100644
 --- a/package/gnutls/gnutls.hash
 +++ b/package/gnutls/gnutls.hash
 @@ -1,6 +1,6 @@
  # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.8.tar.xz.sig
--sha256	aa81944e5635de981171772857e72be231a7e0f559ae0292d2737de475383e83	gnutls-3.6.8.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.9.tar.xz.sig
-+sha256	4331fca55817ecdd74450b908a6c29b4f05bb24dd13144c6284aa34d872e1fcb	gnutls-3.6.9.tar.xz
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.1.tar.xz.sig
+-sha256	881b26409ecd8ea4c514fd3fbdb6fae5fab422ca7b71116260e263940a4bbbad	gnutls-3.6.7.1.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.8.tar.xz.sig
++sha256	aa81944e5635de981171772857e72be231a7e0f559ae0292d2737de475383e83	gnutls-3.6.8.tar.xz
  # Locally calculated
  sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	doc/COPYING
  sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
 diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 700737050d..94935a3f9e 100644
+index f2e654fc1f..4f40b896ff 100644
 --- a/package/gnutls/gnutls.mk
 +++ b/package/gnutls/gnutls.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
  GNUTLS_VERSION_MAJOR = 3.6
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7.1
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
  GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
  GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
