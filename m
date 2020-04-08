@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 16:33:42 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/gcc: pass
+Date: Wed, 8 Apr 2020 16:33:35 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/gcc: pass
  -Wno-error to debug builds
-Message-ID: <20200408142037.9E5E78DFDE@busybox.osuosl.org>
+Message-ID: <20200408142044.A08008D5FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48f597a2b5186d12e9141d18d8ffbb0060621a13
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a279c559b895cad5a55e1a1127811446ad62024e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 gcc fails to build in debug build with debug optimisations:
 
@@ -42,10 +42,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 0cf31e41f5..b10d2a30e0 100644
+index 524ca83db0..fe7167b2f3 100644
 --- a/package/gcc/gcc.mk
 +++ b/package/gcc/gcc.mk
-@@ -103,6 +103,11 @@ HOST_GCC_COMMON_CONF_ENV = \
+@@ -100,6 +100,11 @@ HOST_GCC_COMMON_CONF_ENV = \
  GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
  GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
  
