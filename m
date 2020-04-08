@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 13:26:42 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] Makefile: make-4.3 now
+Date: Wed, 8 Apr 2020 13:26:35 +0200
+Subject: [Buildroot] [git commit branch/2019.11.x] Makefile: make-4.3 now
  longer un-escapes \# in macros
-Message-ID: <20200408111423.044858D71D@busybox.osuosl.org>
+Message-ID: <20200408111427.7CA968D9B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8b2e4b0a631a00da6d8d8fe52285257874dd6af
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=68ad270873e8153859dc25c6bd75df8c5d5cb0a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 make-4.3 shipped with a backward incompatible change in how sharp signs
 are handled in macros. Previously, up to make 4.2, the sharp sign would
@@ -44,7 +44,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 18 insertions(+), 4 deletions(-)
 
 diff --git a/support/misc/utils.mk b/support/misc/utils.mk
-index c44319338e..d3e49beb01 100644
+index b422c67d76..2f00ccfdb7 100644
 --- a/support/misc/utils.mk
 +++ b/support/misc/utils.mk
 @@ -14,6 +14,20 @@ comma := ,
@@ -69,7 +69,7 @@ index c44319338e..d3e49beb01 100644
  # (http://gmsl.sf.net). It is optimised very heavily because these macros
  # are used a lot. It is about 5 times faster than forking a shell and tr.
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 3c30a8268e..fb83edd586 100644
+index 996cc70d44..49d3209789 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
 @@ -119,12 +119,12 @@ copy_toolchain_sysroot = \
