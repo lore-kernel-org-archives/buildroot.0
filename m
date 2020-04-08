@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 13:30:46 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/kmscube: Change
+Date: Wed, 8 Apr 2020 13:30:30 +0200
+Subject: [Buildroot] [git commit branch/2019.11.x] package/kmscube: Change
  repository to gitlab
-Message-ID: <20200408111754.973808D9D9@busybox.osuosl.org>
+Message-ID: <20200408111800.19BA58D9F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=450918e9c4b8b83cd0e81c5933f0389bf3c60e47
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=118356dc5568be2f1355a8c177472e6b34b44e4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 The https://cgit.freedesktop.org/mesa/kmscube repository
 is mirrored from https://gitlab.freedesktop.org/mesa/kmscube, so
