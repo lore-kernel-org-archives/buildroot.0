@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Apr 2020 14:50:58 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: do not install images in
- subdirectories
-In-Reply-To: <20200402214549.2977215-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Thu, 2 Apr 2020 23:45:48 +0200")
+Date: Wed, 08 Apr 2020 14:51:04 +0200
+Subject: [Buildroot] [PATCH 2/2] linux: adjust
+ BR2_LINUX_KERNEL_IMAGE_NAME help text
+In-Reply-To: <20200402214549.2977215-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 2 Apr 2020 23:45:49 +0200")
 References: <20200402214549.2977215-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87wo6qjg3x.fsf@dell.be.48ers.dk>
+ <20200402214549.2977215-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87sghejg3r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,40 +15,14 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > The Linux kernel image is typically found in arch/ARCH/boot/, which is
- > why LINUX_IMAGE_PATH is defined as:
+ > The help text of BR2_LINUX_KERNEL_IMAGE_NAME is somewhat incomplete,
+ > in the sense that it assumes just a filename can be passed, while it
+ > can be a relative path, such as 'compressed/vmlinux.bin.z'. So make it
+ > clear that such paths are relative to arch/ARCH/boot/.
 
- > LINUX_IMAGE_PATH = $(LINUX_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
-
- > However, on MIPS, some kernel image types are available from
- > arch/mips/boot/compressed, or even at the top-level directory. For
- > such cases, LINUX_IMAGE_NAME might be set (using
- > BR2_LINUX_KERNEL_IMAGE_NAME) to values such as:
-
- >   compressed/vmlinux.bin.z
-
- > or
-
- >   ../../../uzImage.bin
-
- > Except that the line:
-
- >   $(INSTALL) -m 0644 -D $(LINUX_IMAGE_PATH) $(1)/$(notdir $(LINUX_IMAGE_NAME))
-
- > will lead to such images be installed in:
-
- >   $(TARGET_DIR)/boot/compressed/vmlinux.bin.z
- >   $(BINARIES_DIR)/compressed/vmlinux.bin.z
-
- > and:
-
- >   $(TARGET_DIR)/boot/../../../uzImage.bin
- >   $(BINARIES_DIR)/../../../uzImage.bin
-
- > which of course is completely bogus.
-
- > So let's install them under their name, not their full relative path
- > to arch/ARCH/boot/.
+ > Also, drop the part about this being only useful for Xtensa as this is
+ > not true: on MIPS it might be needed as well for some specific image
+ > types.
 
  > Reported-by: Paul Cercueil <paul@crapouillou.net>
  > Cc: Paul Cercueil <paul@crapouillou.net>
