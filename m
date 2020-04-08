@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 13:43:31 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/hostapd: fix
+Date: Wed, 8 Apr 2020 13:43:01 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/hostapd: fix
  CVE-2019-16275
-Message-ID: <20200408113314.731108DB3B@busybox.osuosl.org>
+Message-ID: <20200408113318.F2F0E8DB46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c15d95ae23d2cbd066a9d9b627b4026eb8ec0346
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e4526a5a2494966d19a9d48b0c3ddc8fc4631018
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 hostapd before 2.10 and wpa_supplicant before 2.10 allow an incorrect
 indication of disconnection in certain situations because source address
