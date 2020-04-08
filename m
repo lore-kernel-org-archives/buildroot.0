@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Apr 2020 21:18:57 +0200
-Subject: [Buildroot] [git commit] package/netdata: bump to 1.21.0
-Message-ID: <20200408190601.2B5818E041@busybox.osuosl.org>
+Date: Wed, 8 Apr 2020 21:19:07 +0200
+Subject: [Buildroot] [git commit] package/python-crontab: bump to version
+ 2.4.1
+Message-ID: <20200408190601.3C39789006@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11e2838b0e1009f8e1d48bfc223627c2dc7aeedb
+commit: https://git.buildroot.net/buildroot/commit/?id=a409dc8202adddc612a9d7b32b419923eb19a600
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/netdata/netdata.hash | 2 +-
- package/netdata/netdata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-crontab/python-crontab.hash | 6 +++---
+ package/python-crontab/python-crontab.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/netdata/netdata.hash b/package/netdata/netdata.hash
-index 6c79e97017..2d6bd2a9a8 100644
---- a/package/netdata/netdata.hash
-+++ b/package/netdata/netdata.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 c739e0fa8d6d7f433c0c7c8016b763e8f70519d67f0b5e7eca9ee5318f210d90  netdata-1.20.0.tar.gz
-+sha256 b6a80ac1e86d8a8d6fa16bba2ad15e8a8e5a89e3437cb7f30c538d11b95b5325  netdata-1.21.0.tar.gz
- sha256 0e5fd9d833efe9b79f784d1903281554af82d1b4261af67d35455728e5572aa6  LICENSE
-diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
-index 529eb24e9c..34d6d53d0f 100644
---- a/package/netdata/netdata.mk
-+++ b/package/netdata/netdata.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-crontab/python-crontab.hash b/package/python-crontab/python-crontab.hash
+index c4f3636f5c..f22e782a69 100644
+--- a/package/python-crontab/python-crontab.hash
++++ b/package/python-crontab/python-crontab.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-crontab/json
+-md5	e1f2ca65e0218a85c724e3d6058da2a3  python-crontab-2.4.0.tar.gz
+-sha256	3ac1608ff76032e6fc6e16b5fbf83b51557e0e066bf78e9f88571571e7bd7ae6  python-crontab-2.4.0.tar.gz
++md5  663bd09882c7caaa18be3c0cc0c7e716  python-crontab-2.4.1.tar.gz
++sha256  2366c7aa373118315de7c082401907bacd28e8b1e4e0a6d702334d17b89e71aa  python-crontab-2.4.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
+diff --git a/package/python-crontab/python-crontab.mk b/package/python-crontab/python-crontab.mk
+index f6bf8d7072..2abb4eed74 100644
+--- a/package/python-crontab/python-crontab.mk
++++ b/package/python-crontab/python-crontab.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--NETDATA_VERSION = 1.20.0
-+NETDATA_VERSION = 1.21.0
- NETDATA_SITE = $(call github,netdata,netdata,v$(NETDATA_VERSION))
- NETDATA_LICENSE = GPL-3.0+
- NETDATA_LICENSE_FILES = LICENSE
+-PYTHON_CRONTAB_VERSION = 2.4.0
+-PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/bc/03/852f9c5f8da7f58abce06fe8ae769cbcf6502f1c60684b16bad72ffcced3
++PYTHON_CRONTAB_VERSION = 2.4.1
++PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/09/b1/31d3ccf2ad3d4f7727b325ad7ea77d042e1939c5cacbf1d7478e391cca51
+ PYTHON_CRONTAB_SETUP_TYPE = setuptools
+ PYTHON_CRONTAB_LICENSE = LGPL-3.0+
+ PYTHON_CRONTAB_LICENSE_FILES = COPYING
