@@ -1,54 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Apr 2020 14:50:01 +0200
-Subject: [Buildroot] [git commit] package/libopenssl: security bump to
- version 1.1.1f
-In-Reply-To: <20200402214407.728A587F43@busybox.osuosl.org> (Peter Korsgaard's
- message of "Thu, 2 Apr 2020 23:53:31 +0200")
-References: <20200402214407.728A587F43@busybox.osuosl.org>
-Message-ID: <871roykupy.fsf@dell.be.48ers.dk>
+Date: Wed, 08 Apr 2020 14:50:58 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: do not install images in
+ subdirectories
+In-Reply-To: <20200402214549.2977215-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 2 Apr 2020 23:45:48 +0200")
+References: <20200402214549.2977215-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87wo6qjg3x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=d397b231b7c7f02f9c52d13ac9d3d82b39f4f4c5
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > The Linux kernel image is typically found in arch/ARCH/boot/, which is
+ > why LINUX_IMAGE_PATH is defined as:
 
- > Fixes the following security issues (1.1.1e):
+ > LINUX_IMAGE_PATH = $(LINUX_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
 
- > CVE-2019-1551 [Low severity]: There is an overflow bug in the x64_64
- > Montgomery squaring procedure used in exponentiation with 512-bit moduli.
- > No EC algorithms are affected.  Analysis suggests that attacks against
- > 2-prime RSA1024, 3-prime RSA1536, and DSA1024 as a result of this defect
- > would be very difficult to perform and are not believed likely.  Attacks
- > against DH512 are considered just feasible.  However, for an attack the
- > target would have to re-use the DH512 private key, which is not recommended
- > anyway.  Also applications directly using the low level API BN_mod_exp may
- > be affected if they use BN_FLG_CONSTTIME.  Reported by OSS-Fuzz and Guido
- > Vranken.
+ > However, on MIPS, some kernel image types are available from
+ > arch/mips/boot/compressed, or even at the top-level directory. For
+ > such cases, LINUX_IMAGE_NAME might be set (using
+ > BR2_LINUX_KERNEL_IMAGE_NAME) to values such as:
 
- > https://www.openssl.org/news/secadv/20191206.txt
+ >   compressed/vmlinux.bin.z
 
- > CVE-2019-1563 [Low severity]: In situations where an attacker receives
- > automated notification of the success or failure of a decryption attempt an
- > attacker, after sending a very large number of messages to be decrypted, can
- > recover a CMS/PKCS7 transported encryption key or decrypt any RSA encrypted
- > message that was encrypted with the public RSA key, using a Bleichenbacher
- > padding oracle attack.  Applications are not affected if they use a
- > certificate together with the private RSA key to the CMS_decrypt or
- > PKCS7_decrypt functions to select the correct recipient info to decrypt.
- > Reported by Bernd Edlinger.
+ > or
 
- > https://www.openssl.org/news/secadv/20190910.txt
+ >   ../../../uzImage.bin
 
- > Signed-off-by: Sbastien Szymanski <sebastien.szymanski@armadeus.com>
- > [Peter: mention security impact]
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Except that the line:
 
-Committed to 2019.02.x, 2019.11.x and 2020.02.x, thanks.
+ >   $(INSTALL) -m 0644 -D $(LINUX_IMAGE_PATH) $(1)/$(notdir $(LINUX_IMAGE_NAME))
+
+ > will lead to such images be installed in:
+
+ >   $(TARGET_DIR)/boot/compressed/vmlinux.bin.z
+ >   $(BINARIES_DIR)/compressed/vmlinux.bin.z
+
+ > and:
+
+ >   $(TARGET_DIR)/boot/../../../uzImage.bin
+ >   $(BINARIES_DIR)/../../../uzImage.bin
+
+ > which of course is completely bogus.
+
+ > So let's install them under their name, not their full relative path
+ > to arch/ARCH/boot/.
+
+ > Reported-by: Paul Cercueil <paul@crapouillou.net>
+ > Cc: Paul Cercueil <paul@crapouillou.net>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2020.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
