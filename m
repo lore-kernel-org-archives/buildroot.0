@@ -1,26 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 14:38:11 +0200
+Date: Wed, 8 Apr 2020 14:38:17 +0200
 Subject: [Buildroot] [git commit branch/2019.02.x] package/libopenssl: make
- use of linux-generic64 for 64-bit archs
-Message-ID: <20200408122825.764678DE6B@busybox.osuosl.org>
+ use of linux-x86 for i386
+Message-ID: <20200408122825.7EE048DE6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=009c8a6126decc073328b4df5fd7b9a5c0fd55de
+commit: https://git.buildroot.net/buildroot/commit/?id=d8d0cada48e1ca90a38912ed61f69e91712bff20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-It was tested with:
+Tested with:
 
-BR2_mips64el=y
-BR2_MIPS_NABI64=y
+BR2_x86_pentium4=y
 BR2_TOOLCHAIN_EXTERNAL=y
 BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64-n64-full-2019.05.1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2019.05.1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
 BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
 BR2_INIT_NONE=y
@@ -29,22 +28,21 @@ BR2_PACKAGE_OPENSSL=y
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1ebb35ee5fb7bd5e6278a84ac2c18aa0a38056fb)
+(cherry picked from commit 03b39f7869859bbab692e7728af3009ed38998f8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenssl/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libopenssl/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-index 732da5b4ef..4bc32e06a9 100644
+index 4bc32e06a9..5ca19b38f8 100644
 --- a/package/libopenssl/Config.in
 +++ b/package/libopenssl/Config.in
-@@ -24,6 +24,7 @@ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
+@@ -22,6 +22,7 @@ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
+ 	default "linux-ppc"			if BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
+ 	default "linux-ppc64"			if BR2_powerpc64
  	default "linux-ppc64le"			if BR2_powerpc64le
++	default "linux-x86"			if BR2_i386
  	default "linux-x86_64"			if BR2_x86_64
  	# no-asm is needed with generic architectures such as
--	# linux-generic32, see
-+	# linux-generic{32,64}, see
- 	# https://github.com/openssl/openssl/issues/9839
-+	default "linux-generic64 no-asm"	if BR2_ARCH_IS_64
- 	default "linux-generic32 no-asm"
+ 	# linux-generic{32,64}, see
