@@ -1,52 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Apr 2020 00:02:26 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/gnutls: bump
- version to 3.6.8
-Message-ID: <20200409055611.572A78E18A@busybox.osuosl.org>
+Date: Thu, 9 Apr 2020 00:03:00 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gnutls: make the
+ OpenSSL compatibility library optional
+Message-ID: <20200409055611.6326F7F8F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3150de11b5c40eaeedecb21b1ca106655056bb60
+commit: https://git.buildroot.net/buildroot/commit/?id=29d23c8c9e8afd550e65baff4d17b22daec0b491
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Release notes:
-https://lists.gnupg.org/pipermail/gnutls-help/2019-May/004527.html
+Add a BR2_PACKAGE_GNUTLS_OPENSSL option, disabled by default since it is
+not used by any package that depends on gnutls.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 9e2fcb2e251e0763c00583cc21d3e8cff968976f)
+The library is licensed under GPLv3, which can be a problem for embedded
+systems due to the so-called anti-tivoization clause.
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+[Thomas: don't repeat the license details for the gnutls-openssl case,
+simply append to them]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d4c12d6bcdfc2813dfac3d207d980e0497d33f5d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gnutls/Config.in |  5 +++++
+ package/gnutls/gnutls.mk | 11 +++++++++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 8c0e0d69d5..5ab913ad6e 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.1.tar.xz.sig
--sha256	881b26409ecd8ea4c514fd3fbdb6fae5fab422ca7b71116260e263940a4bbbad	gnutls-3.6.7.1.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.8.tar.xz.sig
-+sha256	aa81944e5635de981171772857e72be231a7e0f559ae0292d2737de475383e83	gnutls-3.6.8.tar.xz
- # Locally calculated
- sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	doc/COPYING
- sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index 7e8dcc1e4f..15b930b6bd 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -16,6 +16,11 @@ config BR2_PACKAGE_GNUTLS
+ 
+ if BR2_PACKAGE_GNUTLS
+ 
++config BR2_PACKAGE_GNUTLS_OPENSSL
++	bool "OpenSSL compatibility library"
++	help
++	  Install OpenSSL compatibility library.
++
+ config BR2_PACKAGE_GNUTLS_TOOLS
+ 	bool "install tools"
+ 	select BR2_PACKAGE_ARGP_STANDALONE \
 diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index f2e654fc1f..4f40b896ff 100644
+index 4f40b896ff..700737050d 100644
 --- a/package/gnutls/gnutls.mk
 +++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.6
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7.1
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
+@@ -8,8 +8,14 @@ GNUTLS_VERSION_MAJOR = 3.6
+ GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
  GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
  GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+-GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+-GNUTLS_LICENSE_FILES = doc/COPYING doc/COPYING.LESSER
++GNUTLS_LICENSE = LGPL-2.1+ (core library)
++GNUTLS_LICENSE_FILES = doc/COPYING.LESSER
++
++ifeq ($(BR2_PACKAGE_GNUTLS_OPENSSL),y)
++GNUTLS_LICENSE := $(GNUTLS_LICENSE), GPL-3.0+ (gnutls-openssl library)
++GNUTLS_LICENSE_FILES += doc/COPYING
++endif
++
+ GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
+ GNUTLS_CONF_OPTS = \
+ 	--disable-doc \
+@@ -20,6 +26,7 @@ GNUTLS_CONF_OPTS = \
+ 	--enable-openssl-compatibility \
+ 	--with-librt-prefix=$(STAGING_DIR) \
+ 	--without-tpm \
++	$(if $(BR2_PACKAGE_GNUTLS_OPENSSL),--enable,--disable)-openssl-compatibility \
+ 	$(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools)
+ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=yes \
+ 	ac_cv_header_wchar_h=$(if $(BR2_USE_WCHAR),yes,no) \
