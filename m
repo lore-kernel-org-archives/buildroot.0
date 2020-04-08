@@ -1,43 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 13:29:43 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/kmscube: Change
- repository to gitlab
-Message-ID: <20200408111805.A83CA8DA20@busybox.osuosl.org>
+Date: Wed, 08 Apr 2020 13:33:17 +0200
+Subject: [Buildroot] [PATCH 1/5] package/nftables: check for python
+In-Reply-To: <20200330234616.1665466-1-aduskett@gmail.com> (aduskett's message
+ of "Mon, 30 Mar 2020 16:46:12 -0700")
+References: <20200330234616.1665466-1-aduskett@gmail.com>
+Message-ID: <87r1wyky9u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=218cd2fa5b6e3a43bc8dbd9629cba38cf54e1ad7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
 
-The https://cgit.freedesktop.org/mesa/kmscube repository
-is mirrored from https://gitlab.freedesktop.org/mesa/kmscube, so
-switch to the gitlab one.
+ > From: Adam Duskett <Aduskett@gmail.com>
+ > If python or python3 is selected, nftables should depend on the package
+ > and set the --enable-python option, otherwise set --disable-python
 
-The other advantage of using the gitlab repository is that it can handle
-archive downloads, so switch to it.
+ > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-Suggested-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 396191b1562072de11a702ffb9d61e7de9f40c04)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kmscube/kmscube.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Committed to 2020.02.x, thanks.
 
-diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
-index 37983b1a78..73d290c88b 100644
---- a/package/kmscube/kmscube.mk
-+++ b/package/kmscube/kmscube.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- KMSCUBE_VERSION = 6cbd03ab94066dddbba7bedfde87c7c4319c18d5
--KMSCUBE_SITE = https://cgit.freedesktop.org/mesa/kmscube/snapshot
-+KMSCUBE_SITE = https://gitlab.freedesktop.org/mesa/kmscube/-/archive/$(KMSCUBE_VERSION)
- KMSCUBE_LICENSE = MIT
- KMSCUBE_DEPENDENCIES = host-pkgconf mesa3d libdrm
- KMSCUBE_AUTORECONF = YES
+-- 
+Bye, Peter Korsgaard
