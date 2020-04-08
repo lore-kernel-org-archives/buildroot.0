@@ -1,47 +1,48 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed,  8 Apr 2020 18:27:03 +0300
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version 2.28.0
-Message-ID: <20200408152703.1360075-1-aperez@igalia.com>
+Date: Wed, 8 Apr 2020 18:30:28 +0300
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: bump to version
+ 2.28.0
+In-Reply-To: <20200408175758.GB206676@momiji>
+References: <20200324215809.77787-1-james.hilliard1@gmail.com>
+ <878sj7m6wn.fsf@dell.be.48ers.dk>
+ <CADvTj4oSx2STbJmHpWtC4e0tGkqWN4yp66k+ss0TASjR=c-J0w@mail.gmail.com>
+ <20200408175758.GB206676@momiji>
+Message-ID: <20200408183028.GC211405@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Wed, 8 Apr 2020 17:57:58 +0300, Adrian Perez de Castro <aperez@igalia.com> wrote:
+> Hello,
+> 
+> On Tue, 7 Apr 2020 13:32:49 -0600, James Hilliard <james.hilliard1@gmail.com> wrote:
+> > On Tue, Apr 7, 2020 at 1:29 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+> > >
+> > > >>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+> > >
+> > >  > Adjust fix build with musl patch for 2.28.0.
+> > >
+> > > This is a security bump, so should be marked as such:
+> > >
+> > > https://webkitgtk.org/security/WSA-2020-0003.html
+> > >
+> > > What about the corresponding webkitgtk bump?
+> >
+> > I'm not really set up for testing webkitgtk, maybe Adrian can handle that.
+> 
+> I will be sending a patch to update WebKitGTK soon =)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 0dfbe93137..b63a734e3d 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.26.4.tar.xz.sums
--md5  60f881729f3b71244b7f6e58790073e0  webkitgtk-2.26.4.tar.xz
--sha1  72f209c08ecc8ad4f0f6b767d4fa1be7a652df33  webkitgtk-2.26.4.tar.xz
--sha256  4386900713dfadf9741177210b32623cab22562a79ffd0d446b66569934b113f  webkitgtk-2.26.4.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.28.0.tar.xz.sums
-+md5 0bf11df8117ea64f6b8de59d278a2c78 webkitgtk-2.28.0.tar.xz
-+sha1 927d0922b986fd06567015ce4425ed05d9fca209 webkitgtk-2.28.0.tar.xz
-+sha256 361f3d178f62a9c112cbadfedd46106c34455c26d57a12a28fb3b09178d20e8b webkitgtk-2.28.0.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index cdb6556554..2578847b05 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.26.4
-+WEBKITGTK_VERSION = 2.28.0
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
--- 
-2.26.0
+Here goes:
+
+  https://patchwork.ozlabs.org/patch/1268124/
+
+:-]
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200408/4010385b/attachment.asc>
