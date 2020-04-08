@@ -1,26 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Apr 2020 21:20:42 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-pigpio: bump to version
- 1.46
-In-Reply-To: <20200408114809.8954-1-grzegorz@blach.pl>
-References: <20200408114809.8954-1-grzegorz@blach.pl>
-Message-ID: <20200408212042.3302780e@windsurf.home>
+Date: Wed, 8 Apr 2020 21:21:24 +0200
+Subject: [Buildroot] [PATCH] package/netdata: bump to 1.21.0
+In-Reply-To: <20200408093619.649485-1-m.niestroj@grinn-global.com>
+References: <20200408093619.649485-1-m.niestroj@grinn-global.com>
+Message-ID: <20200408212124.74c19bb5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Apr 2020 13:48:07 +0200
-Grzegorz Blach <grzegorz@blach.pl> wrote:
+On Wed,  8 Apr 2020 11:36:19 +0200
+Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->  package/python-pigpio/python-pigpio.hash | 4 ++--
->  package/python-pigpio/python-pigpio.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/netdata/netdata.hash | 2 +-
+>  package/netdata/netdata.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
