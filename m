@@ -1,7 +1,10 @@
 From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Wed,  8 Apr 2020 13:48:07 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-pigpio: bump to version 1.46
-Message-ID: <20200408114809.8954-1-grzegorz@blach.pl>
+Date: Wed,  8 Apr 2020 13:48:08 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python-crontab: bump to version
+ 2.4.1
+In-Reply-To: <20200408114809.8954-1-grzegorz@blach.pl>
+References: <20200408114809.8954-1-grzegorz@blach.pl>
+Message-ID: <20200408114809.8954-2-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 ---
- package/python-pigpio/python-pigpio.hash | 4 ++--
- package/python-pigpio/python-pigpio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-crontab/python-crontab.hash | 6 +++---
+ package/python-crontab/python-crontab.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pigpio/python-pigpio.hash b/package/python-pigpio/python-pigpio.hash
-index 3498b762ee..dd7b7954a7 100644
---- a/package/python-pigpio/python-pigpio.hash
-+++ b/package/python-pigpio/python-pigpio.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/pigpio/json
--md5	a6817d953549c19522bae2d4f36251f4  pigpio-1.45.tar.gz
--sha256	a6a8dbc19e827046bde02b4c34ab725d55093490ed7bc1e7c80277adfadc16ac  pigpio-1.45.tar.gz
-+md5  5247f61642f14f65c2b42e130d49ab50  pigpio-1.46.tar.gz
-+sha256  f5f2562f8f7aab0c6cf7235e501e72bedbf063efda725c6086c352b5e4b2f59d  pigpio-1.46.tar.gz
-diff --git a/package/python-pigpio/python-pigpio.mk b/package/python-pigpio/python-pigpio.mk
-index 1e18d97840..fda5efb1ae 100644
---- a/package/python-pigpio/python-pigpio.mk
-+++ b/package/python-pigpio/python-pigpio.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-crontab/python-crontab.hash b/package/python-crontab/python-crontab.hash
+index c4f3636f5c..f22e782a69 100644
+--- a/package/python-crontab/python-crontab.hash
++++ b/package/python-crontab/python-crontab.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-crontab/json
+-md5	e1f2ca65e0218a85c724e3d6058da2a3  python-crontab-2.4.0.tar.gz
+-sha256	3ac1608ff76032e6fc6e16b5fbf83b51557e0e066bf78e9f88571571e7bd7ae6  python-crontab-2.4.0.tar.gz
++md5  663bd09882c7caaa18be3c0cc0c7e716  python-crontab-2.4.1.tar.gz
++sha256  2366c7aa373118315de7c082401907bacd28e8b1e4e0a6d702334d17b89e71aa  python-crontab-2.4.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
+diff --git a/package/python-crontab/python-crontab.mk b/package/python-crontab/python-crontab.mk
+index f6bf8d7072..2abb4eed74 100644
+--- a/package/python-crontab/python-crontab.mk
++++ b/package/python-crontab/python-crontab.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_PIGPIO_VERSION = 1.45
-+PYTHON_PIGPIO_VERSION = 1.46
- PYTHON_PIGPIO_SOURCE = pigpio-$(PYTHON_PIGPIO_VERSION).tar.gz
--PYTHON_PIGPIO_SITE = https://files.pythonhosted.org/packages/33/48/db99b4ccc9f895827aa96d35404bae803b31555cdef0c1356ad3b6fca2d5
-+PYTHON_PIGPIO_SITE = https://files.pythonhosted.org/packages/5d/ad/75966e59159a64f3d496bf730c54d6222d69a72261f1556232e25ce59edf
- PYTHON_PIGPIO_SETUP_TYPE = setuptools
- PYTHON_PIGPIO_LICENSE = Unlicense
- 
+-PYTHON_CRONTAB_VERSION = 2.4.0
+-PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/bc/03/852f9c5f8da7f58abce06fe8ae769cbcf6502f1c60684b16bad72ffcced3
++PYTHON_CRONTAB_VERSION = 2.4.1
++PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/09/b1/31d3ccf2ad3d4f7727b325ad7ea77d042e1939c5cacbf1d7478e391cca51
+ PYTHON_CRONTAB_SETUP_TYPE = setuptools
+ PYTHON_CRONTAB_LICENSE = LGPL-3.0+
+ PYTHON_CRONTAB_LICENSE_FILES = COPYING
 -- 
 2.18.2
