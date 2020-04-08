@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 13:43:46 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/wpa_supplicant:
- fix CVE-2019-16275
-Message-ID: <20200408113314.8311D8DA9F@busybox.osuosl.org>
+Date: Wed, 8 Apr 2020 13:43:31 +0200
+Subject: [Buildroot] [git commit branch/2019.11.x] package/hostapd: fix
+ CVE-2019-16275
+Message-ID: <20200408113314.731108DB3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7c094b86bcd7cbfed4c849b6e08be26f28e3eef
+commit: https://git.buildroot.net/buildroot/commit/?id=c15d95ae23d2cbd066a9d9b627b4026eb8ec0346
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 hostapd before 2.10 and wpa_supplicant before 2.10 allow an incorrect
@@ -21,18 +21,18 @@ must send a crafted 802.11 frame from a location that is within the
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 650d907c13e546d508feb6ef03a10cfe8609b3aa)
+(cherry picked from commit 749fbab0bb4bad3748d164f8c25485618f0ed1ce)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...-ignore-management-frame-from-unexpected-.patch | 77 ++++++++++++++++++++++
- package/wpa_supplicant/wpa_supplicant.mk           |  3 +
- 2 files changed, 80 insertions(+)
+ package/hostapd/hostapd.mk                         |  4 ++
+ 2 files changed, 81 insertions(+)
 
-diff --git a/package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch b/package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
+diff --git a/package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch b/package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
 new file mode 100644
 index 0000000000..959788c2e9
 --- /dev/null
-+++ b/package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
++++ b/package/hostapd/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
 @@ -0,0 +1,77 @@
 +From 8c07fa9eda13e835f3f968b2e1c9a8be3a851ff9 Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <j@w1.fi>
@@ -111,17 +111,18 @@ index 0000000000..959788c2e9
 +-- 
 +2.20.1
 +
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 9dcebca9bf..555393596a 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -15,6 +15,9 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
- WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
- WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
- 
-+# 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
-+WPA_SUPPLICANT_IGNORE_CVES += CVE-2019-16275
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index f8c144c236..b94a0e4578 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -12,6 +12,10 @@ HOSTAPD_DEPENDENCIES = host-pkgconf
+ HOSTAPD_CFLAGS = $(TARGET_CFLAGS)
+ HOSTAPD_LICENSE = BSD-3-Clause
+ HOSTAPD_LICENSE_FILES = README
 +
- # install the wpa_client library
- WPA_SUPPLICANT_INSTALL_STAGING = YES
++# 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
++HOSTAPD_IGNORE_CVES += CVE-2019-16275
++
+ HOSTAPD_CONFIG_SET =
  
+ HOSTAPD_CONFIG_ENABLE = \
