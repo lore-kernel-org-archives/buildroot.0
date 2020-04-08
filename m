@@ -1,37 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 13:33:42 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] docs/manual: minor typo
- fix
-Message-ID: <20200408112037.DDF7E8DA7B@busybox.osuosl.org>
+Date: Wed, 8 Apr 2020 13:32:35 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/nftables: check
+ for python
+Message-ID: <20200408112057.55A6E81476@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f51aebbc86532b691db6c5e5e26c1d433c2d32f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7f92c0475ddd82c33503221b566571e7f94877bf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Definition of LIBFOO_USERS actually ends on 33rd line.
+If python or python3 is selected, nftables should depend on the package
+and set the --enable-python option, otherwise set --disable-python
 
-Signed-off-by: Naz??m Gediz Ayd??ndo??mu?? <gediz.aydindogmus@genemek.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 61f01794c806fc5e4e225436bff49be9febf6c23)
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit d6f33d36af353668fe09a93a111c529e4ac5eaa7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-generic.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nftables/nftables.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 5486fa1ea6..7b8bd387f6 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -142,7 +142,7 @@ All these steps rely on the +$(@D)+ variable, which
- contains the directory where the source code of the package has been
- extracted.
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 11ef6844ce..210e950c11 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -27,6 +27,13 @@ else
+ NFTABLES_CONF_OPTS += --without-json
+ endif
  
--On lines 31..43, we define a user that is used by this package (e.g.
-+On lines 31..33, we define a user that is used by this package (e.g.
- to run a daemon as non-root) (+LIBFOO_USERS+).
- 
- On line 35..37, we define a device-node file used by this package
++ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
++NFTABLES_CONF_OPTS += --enable-python
++NFTABLES_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
++else
++NFTABLES_CONF_OPTS += --disable-python
++endif
++
+ ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_LIBNFTNL_JSON),yy)
+ NFTABLES_LIBS += -ljansson -lm
+ endif
