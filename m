@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 13:38:44 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/libsndfile: add
+Date: Wed, 8 Apr 2020 13:35:06 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libsndfile: add
  upstream security fixes
-Message-ID: <20200408112845.D268D8DAA1@busybox.osuosl.org>
+Message-ID: <20200408112851.6267882DF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5eeda60b6d075134b3d1d0d01852f3553a03b7a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=53c0425896871a1edbeb8f3df3b9cbe4df2cdeb6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 - Fix CVE-2017-6892: In libsndfile version 1.0.28, an error in the
   "aiff_read_chanmap()" function (aiff.c) can be exploited to cause an
@@ -49,7 +49,8 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  ...008-src-flac.c-Fix-a-buffer-read-overflow.patch | 54 +++++++++++++
  .../0009-src-flac-c-Fix-another-memory-leak.patch  | 32 ++++++++
  ...-buffer-overflows-when-writing-strings-in.patch | 92 ++++++++++++++++++++++
- 5 files changed, 275 insertions(+)
+ package/libsndfile/libsndfile.mk                   | 10 +++
+ 6 files changed, 285 insertions(+)
 
 diff --git a/package/libsndfile/0006-src-aiff.c-Fix-a-buffer-read-overflow.patch b/package/libsndfile/0006-src-aiff.c-Fix-a-buffer-read-overflow.patch
 new file mode 100644
@@ -356,3 +357,24 @@ index 0000000000..91aa36c9d6
 + 						return count ;
 + 
 + 					header_put_byte (psf, size) ;
+diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
+index 63d9a521e6..7d1dca0599 100644
+--- a/package/libsndfile/libsndfile.mk
++++ b/package/libsndfile/libsndfile.mk
+@@ -24,6 +24,16 @@ LIBSNDFILE_IGNORE_CVES += CVE-2018-13419
+ LIBSNDFILE_IGNORE_CVES += CVE-2018-19758
+ # 0005-wav_write_header-don-t-read-past-the-array-end.patch
+ LIBSNDFILE_IGNORE_CVES += CVE-2019-3832
++# 0006-src-aiff.c-Fix-a-buffer-read-overflow.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2017-6892
++# 0007-FLAC-Fix-a-buffer-read-overrun.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2017-8361
++# 0008-src-flac.c-Fix-a-buffer-read-overflow.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2017-8362 CVE-2017-8365
++# 0009-src-flac-c-Fix-another-memory-leak.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2017-8363
++# 0010-src-common-c-Fix-heap-buffer-overflows-when-writing-strings-in.patch
++LIBSNDFILE_IGNORE_CVES += CVE-2017-12562
+ 
+ LIBSNDFILE_CONF_OPTS = \
+ 	--disable-sqlite \
