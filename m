@@ -1,54 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  8 Apr 2020 23:00:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: security bump to version
- 2.1.4
-Message-ID: <20200408210006.540664-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 8 Apr 2020 22:59:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: drop python 2
+ support
+In-Reply-To: <20200408000948.52194-1-james.hilliard1@gmail.com>
+References: <20200408000948.52194-1-james.hilliard1@gmail.com>
+Message-ID: <20200408225927.6521d4f3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2020-11100: In hpack_dht_insert in hpack-tbl.c in the HPACK
-  decoder in HAProxy 1.8 through 2.x before 2.1.4, a remote attacker can
-  write arbitrary bytes around a certain location on the heap via a
-  crafted HTTP/2 request, possibly causing remote code execution.
-- Update indentation of hash file (two spaces)
+On Tue,  7 Apr 2020 18:09:48 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/haproxy/haproxy.hash | 10 +++++-----
- package/haproxy/haproxy.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+> Upstream removed python 2 support so we need to depend on python 3.
+> 
+> Removed python 2 autobahn tests.
+> 
+> Removed python-six dependency which is no longer used by autobahn.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 7f03e88d43..b89bda834b 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,6 +1,6 @@
--# From: http://www.haproxy.org/download/2.1/src/haproxy-2.1.2.tar.gz.sha256
--sha256	6079b08a8905ade5a9a2835ead8963ee10a855d8508a85efb7181eea2d310b77	haproxy-2.1.2.tar.gz
-+# From: http://www.haproxy.org/download/2.1/src/haproxy-2.1.4.tar.gz.sha256
-+sha256  51030ff696d7067162b4d24d354044293aecfbb36d7acc2f840c8d928bfe91cd  haproxy-2.1.4.tar.gz
- # Locally computed:
--sha256	0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28	LICENSE
--sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	doc/lgpl.txt
--sha256	ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7	doc/gpl.txt
-+sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
-+sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-+sha256  ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7  doc/gpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 673e092d48..6752367fac 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- HAPROXY_VERSION_MAJOR = 2.1
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).2
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+I agree with Romain: this commit log was not sufficiently documented.
+References to the appropriate upstream commits + indication of what was
+the first upstream release to drop Python 2.x support and to drop
+python-six usage would have been relevant.
+
+So I have extended the commit log with all those details, and applied.
+For future patches, it would be nice if you could document the commit
+log a bit more.
+
+Thanks!
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
