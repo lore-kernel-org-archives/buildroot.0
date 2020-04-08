@@ -1,86 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Apr 2020 22:55:07 +0200
-Subject: [Buildroot] [git commit] package/python-autobahn: drop python 2
- support
-Message-ID: <20200408204359.9441F8E133@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  8 Apr 2020 23:00:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: security bump to version
+ 2.1.4
+Message-ID: <20200408210006.540664-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a99ce44b43a3cfe0ff5b0c6b1c3fce08857297b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- Fix CVE-2020-11100: In hpack_dht_insert in hpack-tbl.c in the HPACK
+  decoder in HAProxy 1.8 through 2.x before 2.1.4, a remote attacker can
+  write arbitrary bytes around a certain location on the heap via a
+  crafted HTTP/2 request, possibly causing remote code execution.
+- Update indentation of hash file (two spaces)
 
-Upstream commit
-https://github.com/crossbario/autobahn-python/commit/c0223223f865603ce192e6d5cdbcf74849a4cdd8,
-which has been part of the releases since v20.1.2 has dropped support
-for Python 2.x. So python-autobahn is now only available for Python
-3.x.
-
-We therefore remove the Python 2.x autobahn tests, and while at it,
-drop the python-six dependency, which is no longer needed since
-upstream commit
-https://github.com/crossbario/autobahn-python/commit/79bd2ba41b83950614a2928eeda4704c1d149a20,
-part of the releases since v20.1.3.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .gitlab-ci.yml                                        |  1 -
- package/python-autobahn/Config.in                     |  3 ++-
- support/testing/tests/package/test_python_autobahn.py | 10 ----------
- 3 files changed, 2 insertions(+), 12 deletions(-)
+ package/haproxy/haproxy.hash | 10 +++++-----
+ package/haproxy/haproxy.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index d833ce4555..03ff010fae 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -456,7 +456,6 @@ tests.package.test_python_argh.TestPythonPy2Argh: { extends: .runtime_test }
- tests.package.test_python_argh.TestPythonPy3Argh: { extends: .runtime_test }
- tests.package.test_python_attrs.TestPythonPy2Attrs: { extends: .runtime_test }
- tests.package.test_python_attrs.TestPythonPy3Attrs: { extends: .runtime_test }
--tests.package.test_python_autobahn.TestPythonPy2Autobahn: { extends: .runtime_test }
- tests.package.test_python_autobahn.TestPythonPy3Autobahn: { extends: .runtime_test }
- tests.package.test_python_automat.TestPythonPy2Automat: { extends: .runtime_test }
- tests.package.test_python_automat.TestPythonPy3Automat: { extends: .runtime_test }
-diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
-index ba54d8b12f..78b16897bc 100644
---- a/package/python-autobahn/Config.in
-+++ b/package/python-autobahn/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_PYTHON_AUTOBAHN
- 	bool "python-autobahn"
- 	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography -> python-pyasn
-+	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
--	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TXAIO # runtime
- 	help
- 	  WebSocket client and server library, WAMP real-time
-@@ -12,3 +12,4 @@ config BR2_PACKAGE_PYTHON_AUTOBAHN
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 7f03e88d43..b89bda834b 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,6 +1,6 @@
+-# From: http://www.haproxy.org/download/2.1/src/haproxy-2.1.2.tar.gz.sha256
+-sha256	6079b08a8905ade5a9a2835ead8963ee10a855d8508a85efb7181eea2d310b77	haproxy-2.1.2.tar.gz
++# From: http://www.haproxy.org/download/2.1/src/haproxy-2.1.4.tar.gz.sha256
++sha256  51030ff696d7067162b4d24d354044293aecfbb36d7acc2f840c8d928bfe91cd  haproxy-2.1.4.tar.gz
+ # Locally computed:
+-sha256	0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28	LICENSE
+-sha256	5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	doc/lgpl.txt
+-sha256	ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7	doc/gpl.txt
++sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
++sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
++sha256  ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7  doc/gpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 673e092d48..6752367fac 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- comment "python-autobahn needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_PYTHON3
-diff --git a/support/testing/tests/package/test_python_autobahn.py b/support/testing/tests/package/test_python_autobahn.py
-index af1f617d6d..a237ce465d 100644
---- a/support/testing/tests/package/test_python_autobahn.py
-+++ b/support/testing/tests/package/test_python_autobahn.py
-@@ -1,16 +1,6 @@
- from tests.package.test_python import TestPythonPackageBase
- 
- 
--class TestPythonPy2Autobahn(TestPythonPackageBase):
--    __test__ = True
--    config = TestPythonPackageBase.config + \
--        """
--        BR2_PACKAGE_PYTHON=y
--        BR2_PACKAGE_PYTHON_AUTOBAHN=y
--        """
--    sample_scripts = ["tests/package/sample_python_autobahn.py"]
--
--
- class TestPythonPy3Autobahn(TestPythonPackageBase):
-     __test__ = True
-     config = TestPythonPackageBase.config + \
+ HAPROXY_VERSION_MAJOR = 2.1
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).2
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-- 
+2.25.1
