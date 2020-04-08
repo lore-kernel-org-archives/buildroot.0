@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 14:35:37 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
+Date: Wed, 8 Apr 2020 14:34:51 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
  package/x11r7/xserver_xorg-server: bump version to 1.20.8
-Message-ID: <20200408122227.B0D8B8DB5C@busybox.osuosl.org>
+Message-ID: <20200408122231.E9E938DB62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20a90dd3598a5afcfb3ab27947ae709577bab07c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9378c2e64780d63ecfed6854ea84bc9de226c17d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Removed patch applied upstream:
 https://gitlab.freedesktop.org/xorg/xserver/-/commit/c2ef88c4d3a551ff7646bfb86550cae32b02a510
