@@ -1,43 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 13:32:35 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/nftables: check
- for python
-Message-ID: <20200408112057.55A6E81476@busybox.osuosl.org>
+Date: Wed, 8 Apr 2020 13:33:36 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] docs/manual: minor typo
+ fix
+Message-ID: <20200408112057.7102481185@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f92c0475ddd82c33503221b566571e7f94877bf
+commit: https://git.buildroot.net/buildroot/commit/?id=f74ae7bdec68a700e28c9b9fb0dac734c55616b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-If python or python3 is selected, nftables should depend on the package
-and set the --enable-python option, otherwise set --disable-python
+Definition of LIBFOO_USERS actually ends on 33rd line.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d6f33d36af353668fe09a93a111c529e4ac5eaa7)
+Signed-off-by: Naz??m Gediz Ayd??ndo??mu?? <gediz.aydindogmus@genemek.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 61f01794c806fc5e4e225436bff49be9febf6c23)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nftables/nftables.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ docs/manual/adding-packages-generic.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 11ef6844ce..210e950c11 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -27,6 +27,13 @@ else
- NFTABLES_CONF_OPTS += --without-json
- endif
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 8ee51ca57d..ed1e6acf57 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -142,7 +142,7 @@ All these steps rely on the +$(@D)+ variable, which
+ contains the directory where the source code of the package has been
+ extracted.
  
-+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-+NFTABLES_CONF_OPTS += --enable-python
-+NFTABLES_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
-+else
-+NFTABLES_CONF_OPTS += --disable-python
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS)$(BR2_PACKAGE_LIBNFTNL_JSON),yy)
- NFTABLES_LIBS += -ljansson -lm
- endif
+-On lines 31..43, we define a user that is used by this package (e.g.
++On lines 31..33, we define a user that is used by this package (e.g.
+ to run a daemon as non-root) (+LIBFOO_USERS+).
+ 
+ On line 35..37, we define a device-node file used by this package
