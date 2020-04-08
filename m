@@ -1,37 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 13:33:36 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] docs/manual: minor typo
- fix
-Message-ID: <20200408112057.7102481185@busybox.osuosl.org>
+Date: Wed, 08 Apr 2020 13:42:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libsndfile: add upstream
+ security fixes
+In-Reply-To: <20200330221719.1371791-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 31 Mar 2020 00:17:19 +0200")
+References: <20200330221719.1371791-1-fontaine.fabrice@gmail.com>
+Message-ID: <87imiakxuk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f74ae7bdec68a700e28c9b9fb0dac734c55616b8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Definition of LIBFOO_USERS actually ends on 33rd line.
+ > - Fix CVE-2017-6892: In libsndfile version 1.0.28, an error in the
+ >   "aiff_read_chanmap()" function (aiff.c) can be exploited to cause an
+ >   out-of-bounds read memory access via a specially crafted AIFF file.
 
-Signed-off-by: Naz??m Gediz Ayd??ndo??mu?? <gediz.aydindogmus@genemek.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 61f01794c806fc5e4e225436bff49be9febf6c23)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/adding-packages-generic.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > - Fix CVE-2017-8361: The flac_buffer_copy function in flac.c in
+ >   libsndfile 1.0.28 allows remote attackers to cause a denial of service
+ >   (buffer overflow and application crash) or possibly have unspecified
+ >   other impact via a crafted audio file.
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 8ee51ca57d..ed1e6acf57 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -142,7 +142,7 @@ All these steps rely on the +$(@D)+ variable, which
- contains the directory where the source code of the package has been
- extracted.
- 
--On lines 31..43, we define a user that is used by this package (e.g.
-+On lines 31..33, we define a user that is used by this package (e.g.
- to run a daemon as non-root) (+LIBFOO_USERS+).
- 
- On line 35..37, we define a device-node file used by this package
+ > - Fix CVE-2017-8362: The flac_buffer_copy function in flac.c in
+ >   libsndfile 1.0.28 allows remote attackers to cause a denial of service
+ >   (invalid read and application crash) via a crafted audio file.
+
+ > - Fix CVE-2017-8363: The flac_buffer_copy function in flac.c in
+ >   libsndfile 1.0.28 allows remote attackers to cause a denial of service
+ >   (heap-based buffer over-read and application crash) via a crafted
+ >   audio file.
+
+ > - Fix CVE-2017-8365: The i2les_array function in pcm.c in
+ >   libsndfile 1.0.28 allows remote attackers to cause a denial of service
+ >   (buffer over-read and application crash) via a crafted audio file.
+
+ > - Fix CVE-2017-12562: Heap-based Buffer Overflow in the
+ >   psf_binheader_writef function in common.c in libsndfile through 1.0.28
+ >   allows remote attackers to cause a denial of service (application
+ >   crash) or possibly have unspecified other impact.
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2019.02.x, 2019.11.x and 2020.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
