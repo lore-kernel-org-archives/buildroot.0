@@ -1,103 +1,89 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 8 Apr 2020 15:15:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: drop python 2
+Date: Wed, 8 Apr 2020 15:23:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-txaio: drop python 2
  support
-In-Reply-To: <20200408000948.52194-1-james.hilliard1@gmail.com>
-References: <20200408000948.52194-1-james.hilliard1@gmail.com>
-Message-ID: <cabca3d2-9163-a000-fc16-b897b8b34856@gmail.com>
+In-Reply-To: <20200408001925.52913-1-james.hilliard1@gmail.com>
+References: <20200408001925.52913-1-james.hilliard1@gmail.com>
+Message-ID: <31670b6a-bb7a-3f00-4794-c93c5abd27e7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi James, All,
-
-Le 08/04/2020 ? 02:09, James Hilliard a ?crit?:
+Le 08/04/2020 ? 02:19, James Hilliard a ?crit?:
 > Upstream removed python 2 support so we need to depend on python 3.
 > 
-> Removed python 2 autobahn tests.
+> Removed python 2 txaio tests.
 > 
-> Removed python-six dependency which is no longer used by autobahn.
-
-Don't hesitate to use all links to the upstream changes and our discussion on
-the mailing list.
-
-http://lists.busybox.net/pipermail/buildroot/2020-April/279309.html
-
+> Removed python-six dependency which is no longer used by txaio.
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  .gitlab-ci.yml                                        |  1 -
->  package/python-autobahn/Config.in                     |  3 ++-
->  support/testing/tests/package/test_python_autobahn.py | 10 ----------
->  3 files changed, 2 insertions(+), 12 deletions(-)
+>  .gitlab-ci.yml                                     |  1 -
+>  package/python-txaio/Config.in                     |  2 +-
+>  support/testing/tests/package/test_python_txaio.py | 11 -----------
+>  3 files changed, 1 insertion(+), 13 deletions(-)
 > 
 > diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index d833ce4555..03ff010fae 100644
+> index d833ce4555..3963258628 100644
 > --- a/.gitlab-ci.yml
 > +++ b/.gitlab-ci.yml
-> @@ -456,7 +456,6 @@ tests.package.test_python_argh.TestPythonPy2Argh: { extends: .runtime_test }
->  tests.package.test_python_argh.TestPythonPy3Argh: { extends: .runtime_test }
->  tests.package.test_python_attrs.TestPythonPy2Attrs: { extends: .runtime_test }
->  tests.package.test_python_attrs.TestPythonPy3Attrs: { extends: .runtime_test }
-> -tests.package.test_python_autobahn.TestPythonPy2Autobahn: { extends: .runtime_test }
->  tests.package.test_python_autobahn.TestPythonPy3Autobahn: { extends: .runtime_test }
->  tests.package.test_python_automat.TestPythonPy2Automat: { extends: .runtime_test }
->  tests.package.test_python_automat.TestPythonPy3Automat: { extends: .runtime_test }
-> diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
-> index ba54d8b12f..78b16897bc 100644
-> --- a/package/python-autobahn/Config.in
-> +++ b/package/python-autobahn/Config.in
-> @@ -1,8 +1,8 @@
->  config BR2_PACKAGE_PYTHON_AUTOBAHN
->  	bool "python-autobahn"
->  	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography -> python-pyasn
-> +	depends on BR2_PACKAGE_PYTHON3
-
-I checked that all packages selecting python-autobahn (python-daphne and
-python-crossbar) are already python3 only.
-
->  	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+> @@ -497,7 +497,6 @@ tests.package.test_python_treq.TestPythonPy2Treq: { extends: .runtime_test }
+>  tests.package.test_python_treq.TestPythonPy3Treq: { extends: .runtime_test }
+>  tests.package.test_python_twisted.TestPythonPy2Twisted: { extends: .runtime_test }
+>  tests.package.test_python_twisted.TestPythonPy3Twisted: { extends: .runtime_test }
+> -tests.package.test_python_txaio.TestPythonPy2Txaio: { extends: .runtime_test }
+>  tests.package.test_python_txaio.TestPythonPy3Txaio: { extends: .runtime_test }
+>  tests.package.test_python_txtorcon.TestPythonPy2Txtorcon: { extends: .runtime_test }
+>  tests.package.test_python_txtorcon.TestPythonPy3Txtorcon: { extends: .runtime_test }
+> diff --git a/package/python-txaio/Config.in b/package/python-txaio/Config.in
+> index 9d4238215e..19a318a902 100644
+> --- a/package/python-txaio/Config.in
+> +++ b/package/python-txaio/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_PACKAGE_PYTHON_TXAIO
+>  	bool "python-txaio"
 > -	select BR2_PACKAGE_PYTHON_SIX # runtime
 
-Maybe we have double check if python-daphne or python-crossbar are not using
-python-six at runtime.
+Indeed python-six is not needed anymore since it was removed from 20.3.1 version.
 
-Otherwise,
- Reviewed-by: Romain Naour <romain.naour@gmail.com>
+https://github.com/crossbario/txaio/commit/62b0e7eaa22769687df1de8f57374cb0a42bdc4d
+
+> +	depends on BR2_PACKAGE_PYTHON3
+
+I checked that all packages selecting python-txaio (python-autobahn and
+python-crossbar) are already python3 only.
+
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
 Romain
 
 
->  	select BR2_PACKAGE_PYTHON_TXAIO # runtime
 >  	help
->  	  WebSocket client and server library, WAMP real-time
-> @@ -12,3 +12,4 @@ config BR2_PACKAGE_PYTHON_AUTOBAHN
+>  	  Compatibility API between asyncio/Twisted/Trollius.
 >  
->  comment "python-autobahn needs a toolchain w/ C++"
->  	depends on !BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_PACKAGE_PYTHON3
-> diff --git a/support/testing/tests/package/test_python_autobahn.py b/support/testing/tests/package/test_python_autobahn.py
-> index af1f617d6d..a237ce465d 100644
-> --- a/support/testing/tests/package/test_python_autobahn.py
-> +++ b/support/testing/tests/package/test_python_autobahn.py
-> @@ -1,16 +1,6 @@
+> diff --git a/support/testing/tests/package/test_python_txaio.py b/support/testing/tests/package/test_python_txaio.py
+> index 7bff1bc23c..f1bb2c79a6 100644
+> --- a/support/testing/tests/package/test_python_txaio.py
+> +++ b/support/testing/tests/package/test_python_txaio.py
+> @@ -1,17 +1,6 @@
 >  from tests.package.test_python import TestPythonPackageBase
 >  
 >  
-> -class TestPythonPy2Autobahn(TestPythonPackageBase):
+> -class TestPythonPy2Txaio(TestPythonPackageBase):
 > -    __test__ = True
 > -    config = TestPythonPackageBase.config + \
 > -        """
 > -        BR2_PACKAGE_PYTHON=y
-> -        BR2_PACKAGE_PYTHON_AUTOBAHN=y
+> -        BR2_PACKAGE_PYTHON_TXAIO=y
+> -        BR2_PACKAGE_PYTHON_TWISTED=y
 > -        """
-> -    sample_scripts = ["tests/package/sample_python_autobahn.py"]
+> -    sample_scripts = ["tests/package/sample_python_txaio_twisted.py"]
 > -
 > -
->  class TestPythonPy3Autobahn(TestPythonPackageBase):
+>  class TestPythonPy3Txaio(TestPythonPackageBase):
 >      __test__ = True
 >      config = TestPythonPackageBase.config + \
 > 
