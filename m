@@ -1,25 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Apr 2020 15:03:22 +0200
-Subject: [Buildroot] [PATCH] package/kmscube: Use the official gitlab URL
-In-Reply-To: <20200404135750.29434-1-festevam@gmail.com> (Fabio Estevam's
- message of "Sat, 4 Apr 2020 10:57:50 -0300")
-References: <20200404135750.29434-1-festevam@gmail.com>
-Message-ID: <87ftdejfj9.fsf@dell.be.48ers.dk>
+Date: Wed, 8 Apr 2020 15:02:17 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/kmscube: Use the
+ official gitlab URL
+Message-ID: <20200408124933.0A99C8D460@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c6ee381c4876e85d689b62fe9da3f2261015acec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > The cgit URL is a mirror of the gitlab repository.
- > The README.md file of the kmscube project also points
- > to the gitlab repository, so switch the URL accordingly.
+The cgit URL is a mirror of the gitlab repository.
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+The README.md file of the kmscube project also points
+to the gitlab repository, so switch the URL accordingly.
 
-Committed to 2019.02.x, 2019.11.x and 2020.02.x, thanks.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 8ab9acbed8a46e1ba60b3ad18a2d9ec8d8b852b5)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/kmscube/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/kmscube/Config.in b/package/kmscube/Config.in
+index b9fe627c87..b6ad305bfb 100644
+--- a/package/kmscube/Config.in
++++ b/package/kmscube/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_KMSCUBE
+ 	help
+ 	  kmscube is an application to test kms/drm drivers.
+ 
+-	  https://cgit.freedesktop.org/mesa/kmscube/
++	  https://gitlab.freedesktop.org/mesa/kmscube
