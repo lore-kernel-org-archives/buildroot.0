@@ -1,26 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 09 Apr 2020 08:09:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnutls: security bump to 3.6.13
-In-Reply-To: <20200407073644.2561937-1-stefan.sorensen@spectralink.com>
- ("Stefan =?utf-8?Q?S=C3=B8rensen=22's?= message of "Tue, 7 Apr 2020
- 09:36:44 +0200")
-References: <20200407073644.2561937-1-stefan.sorensen@spectralink.com>
-Message-ID: <87mu7lgpgv.fsf@dell.be.48ers.dk>
+Date: Thu, 9 Apr 2020 00:03:28 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gnutls: bump
+ version to 3.6.9
+Message-ID: <20200409055611.6E8E07F8F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stefan" == Stefan S?rensen <stefan.sorensen@spectralink.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fbc75077a294dedf29561448626783aa27944fc6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Fixes the following security issue:
- >  * CVE-2020-11501: It was found that GnuTLS 3.6.3 introduced a
- >    regression in the DTLS protocol implementation. This caused the DTLS
- >    client to not contribute any randomness to the DTLS negotiation
- >    breaking the security guarantees of the DTLS protocol.
+Release notes:
+https://lists.gnupg.org/pipermail/gnutls-help/2019-July/004556.html
 
-Committed to 2019.02.x, 2019.11.x and 2020.02.x, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a9c509934e067716b0cf210b87c968ba69834d9f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 5ab913ad6e..0149e4a277 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.8.tar.xz.sig
+-sha256	aa81944e5635de981171772857e72be231a7e0f559ae0292d2737de475383e83	gnutls-3.6.8.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.9.tar.xz.sig
++sha256	4331fca55817ecdd74450b908a6c29b4f05bb24dd13144c6284aa34d872e1fcb	gnutls-3.6.9.tar.xz
+ # Locally calculated
+ sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	doc/COPYING
+ sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 700737050d..94935a3f9e 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.6
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
