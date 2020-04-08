@@ -1,68 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Apr 2020 23:04:29 +0200
-Subject: [Buildroot] [PATCH v1 2/2] package/python-flask: fix runtime
- python modules dependencies
-In-Reply-To: <20200408224025.088155ab@gmx.net> (Peter Seiderer's message of
- "Wed, 8 Apr 2020 22:40:25 +0200")
-References: <20200322211002.30765-1-ps.report@gmx.net>
- <20200322211002.30765-2-ps.report@gmx.net>
- <87h7xvp760.fsf@dell.be.48ers.dk> <20200408224025.088155ab@gmx.net>
-Message-ID: <87r1wxheoy.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 8 Apr 2020 23:15:41 +0200
+Subject: [Buildroot] [PATCH v1] package/assimp: bump version to 5.0.1
+In-Reply-To: <20200408224700.76701687@gmx.net>
+References: <20200407211238.11904-1-ps.report@gmx.net>
+ <20200408213140.0a4f6706@windsurf.home>
+ <20200408224700.76701687@gmx.net>
+Message-ID: <20200408231541.6319760f@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+Hello Thomas,
 
- > Hello Peter,
- > On Tue, 07 Apr 2020 18:55:19 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+On Wed, 8 Apr 2020 22:47:00 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
 
- >> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
- >> 
- >> > - add python setuptools runtime dependency, fixes:
- >> >   ModuleNotFoundError: No module named 'pkg_resources'
- >> 
- >> Hmm, the only instance of pkg_resources I see is in src/flask/cli.py:
- >> 
- >> def _load_plugin_commands(self):
- >> if self._loaded_plugin_commands:
- >> return
- >> try:
- >> import pkg_resources
- >> except ImportError:
- >> self._loaded_plugin_commands = True
- >> return
- >> 
- >> for ep in pkg_resources.iter_entry_points("flask.commands"):
- >> self.add_command(ep.load(), ep.name)
- >> self._loaded_plugin_commands = True
- >> 
- >> Which seems to nicely deal with missing pkg_resources.
+> Hello Thomas,
+>
+> On Wed, 8 Apr 2020 21:31:40 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>
+> > On Tue,  7 Apr 2020 23:12:38 +0200
+> > Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > > ---
+> > >  ...1-Fix-FBXConverter-use-proper-64-bit-constant.patch | 10 ++++++----
+> > >  package/assimp/assimp.hash                             |  4 ++--
+> > >  package/assimp/assimp.mk                               |  2 +-
+> > >  3 files changed, 9 insertions(+), 7 deletions(-)
+> >
+> > Applied, thanks. Could you submit the patch we have to the upstream
+> > project?
+>
+> Already on my ToDo list ;-)...
 
- > Did re-run my flask test (reverted this patch) and try to run a simple hello
- > world example (from [1]):
+Seems Fabrice Fontaine already handled it, see [1], but the change did not
+make it into the 5.0.1 release...
 
- >         $ cat hello.py
- > from flask import Flask
+Regards,
+Peter
 
- > app = Flask(__name__)
+[1] https://github.com/assimp/assimp/commit/32781a566db2cd6022c7020ff2ac591d753c11ab
 
- > @app.route('/')
- > def hello_world():
- >     return 'Hello, World!'
-
- >         $ env FLASK_APP=hello.py flask run --host=0.0.0.0
- > Traceback (most recent call last):
- >   File "/usr/bin/flask", line 6, in <module>
- >     from pkg_resources import load_entry_point
- > ModuleNotFoundError: No module named 'pkg_resources'
-
-Ahh, indeed. The click stuff generates the flask script, so that is why
-it isn't in the source tree and I didn't see it with grep.
-
-The other feedback should be correct though.
-
--- 
-Bye, Peter Korsgaard
+>
+> >
+> > Also did you test building the qt53d package after this update? It is
+> > the only package in Buildroot that uses assimp.
+>
+> Yes...and compiled without failure after the assimp version bump...
+>
+> Regards,
+> Peter
+>
+> >
+> > Thanks!
+> >
+> > Thomas
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
