@@ -1,40 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Apr 2020 22:59:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: drop python 2
- support
-In-Reply-To: <20200408000948.52194-1-james.hilliard1@gmail.com>
-References: <20200408000948.52194-1-james.hilliard1@gmail.com>
-Message-ID: <20200408225927.6521d4f3@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  8 Apr 2020 23:05:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.5.6
+Message-ID: <20200408210500.542094-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  7 Apr 2020 18:09:48 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Update indentation of hash file (two spaces)
 
-> Upstream removed python 2 support so we need to depend on python 3.
-> 
-> Removed python 2 autobahn tests.
-> 
-> Removed python-six dependency which is no longer used by autobahn.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/whois/whois.hash | 6 +++---
+ package/whois/whois.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-I agree with Romain: this commit log was not sufficiently documented.
-References to the appropriate upstream commits + indication of what was
-the first upstream release to drop Python 2.x support and to drop
-python-six usage would have been relevant.
-
-So I have extended the commit log with all those details, and applied.
-For future patches, it would be nice if you could document the commit
-log a bit more.
-
-Thanks!
-
-Thomas
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index b83ea68d28..4dc4c3e220 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,5 +1,5 @@
+-# From http://snapshot.debian.org/archive/debian/20200123T155144Z/pool/main/w/whois/whois_5.5.5.dsc
+-sha256	c30e8a444482eadac157be42649833ef77c5ea9fb5cbcbabb6ee3f2254e5530d	whois_5.5.5.tar.xz
++# From http://snapshot.debian.org/archive/debian/20200216T145122Z/pool/main/w/whois/whois_5.5.6.dsc
++sha256  cba1e9000c60950f46a96ba23e8eea8aee240a2b8560e63a6bfb33f9034af14e  whois_5.5.6.tar.xz
+ 
+ # Hash for license file:
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index 417f5c76af..a96f20caae 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-WHOIS_VERSION = 5.5.5
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20200123T155144Z/pool/main/w/whois
++WHOIS_VERSION = 5.5.6
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20200216T145122Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ WHOIS_DEPENDENCIES = \
+ 	host-pkgconf \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
