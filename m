@@ -1,27 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Apr 2020 21:31:05 +0200
-Subject: [Buildroot] [PATCH v1] package/bcm2835: bump version to 1.63
-In-Reply-To: <20200407211111.11489-1-ps.report@gmx.net>
-References: <20200407211111.11489-1-ps.report@gmx.net>
-Message-ID: <20200408213105.60978770@windsurf.home>
+Date: Wed, 8 Apr 2020 21:31:40 +0200
+Subject: [Buildroot] [PATCH v1] package/assimp: bump version to 5.0.1
+In-Reply-To: <20200407211238.11904-1-ps.report@gmx.net>
+References: <20200407211238.11904-1-ps.report@gmx.net>
+Message-ID: <20200408213140.0a4f6706@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  7 Apr 2020 23:11:11 +0200
+On Tue,  7 Apr 2020 23:12:38 +0200
 Peter Seiderer <ps.report@gmx.net> wrote:
 
-> - update license to GPL-3.0
-> 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/bcm2835/bcm2835.hash | 4 ++--
->  package/bcm2835/bcm2835.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  ...1-Fix-FBXConverter-use-proper-64-bit-constant.patch | 10 ++++++----
+>  package/assimp/assimp.hash                             |  4 ++--
+>  package/assimp/assimp.mk                               |  2 +-
+>  3 files changed, 9 insertions(+), 7 deletions(-)
 
-Applied to master, thanks.
+Applied, thanks. Could you submit the patch we have to the upstream
+project?
+
+Also did you test building the qt53d package after this update? It is
+the only package in Buildroot that uses assimp.
+
+Thanks!
 
 Thomas
 -- 
