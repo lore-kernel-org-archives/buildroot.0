@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 16:28:04 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/vlc: fix build
+Date: Wed, 8 Apr 2020 16:27:22 +0200
+Subject: [Buildroot] [git commit branch/2019.11.x] package/vlc: fix build
  with opencv3
-Message-ID: <20200408141525.98CB38DFAD@busybox.osuosl.org>
+Message-ID: <20200408141531.1EE578DFBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6ae7fa22d87ffe3f2d71b4b8197698f27453886
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=aeebbf1ee6ee08fcbc615866a555d6789ae7f7c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/210424bd33f660aa0757f62a558e1e03faf0f371
