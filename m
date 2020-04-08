@@ -1,127 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 13:43:07 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/wpa_supplicant:
- fix CVE-2019-16275
-Message-ID: <20200408113319.0AF5F8DAA4@busybox.osuosl.org>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Wed,  8 Apr 2020 13:48:07 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-pigpio: bump to version 1.46
+Message-ID: <20200408114809.8954-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9afafc0456f377f457fa0ff472d3b6856eb07a80
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
-
-hostapd before 2.10 and wpa_supplicant before 2.10 allow an incorrect
-indication of disconnection in certain situations because source address
-validation is mishandled. This is a denial of service that should have
-been prevented by PMF (aka management frame protection). The attacker
-must send a crafted 802.11 frame from a location that is within the
-802.11 communications range.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 650d907c13e546d508feb6ef03a10cfe8609b3aa)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 ---
- ...-ignore-management-frame-from-unexpected-.patch | 77 ++++++++++++++++++++++
- package/wpa_supplicant/wpa_supplicant.mk           |  3 +
- 2 files changed, 80 insertions(+)
+ package/python-pigpio/python-pigpio.hash | 4 ++--
+ package/python-pigpio/python-pigpio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch b/package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
-new file mode 100644
-index 0000000000..959788c2e9
---- /dev/null
-+++ b/package/wpa_supplicant/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
-@@ -0,0 +1,77 @@
-+From 8c07fa9eda13e835f3f968b2e1c9a8be3a851ff9 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Thu, 29 Aug 2019 11:52:04 +0300
-+Subject: [PATCH] AP: Silently ignore management frame from unexpected source
-+ address
-+
-+Do not process any received Management frames with unexpected/invalid SA
-+so that we do not add any state for unexpected STA addresses or end up
-+sending out frames to unexpected destination. This prevents unexpected
-+sequences where an unprotected frame might end up causing the AP to send
-+out a response to another device and that other device processing the
-+unexpected response.
-+
-+In particular, this prevents some potential denial of service cases
-+where the unexpected response frame from the AP might result in a
-+connected station dropping its association.
-+
-+Signed-off-by: Jouni Malinen <j@w1.fi>
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch]
-+---
-+ src/ap/drv_callbacks.c | 13 +++++++++++++
-+ src/ap/ieee802_11.c    | 12 ++++++++++++
-+ 2 files changed, 25 insertions(+)
-+
-+diff --git a/src/ap/drv_callbacks.c b/src/ap/drv_callbacks.c
-+index 31587685fe3b..34ca379edc3d 100644
-+--- a/src/ap/drv_callbacks.c
-++++ b/src/ap/drv_callbacks.c
-+@@ -131,6 +131,19 @@ int hostapd_notif_assoc(struct hostapd_data *hapd, const u8 *addr,
-+ 			   "hostapd_notif_assoc: Skip event with no address");
-+ 		return -1;
-+ 	}
-++
-++	if (is_multicast_ether_addr(addr) ||
-++	    is_zero_ether_addr(addr) ||
-++	    os_memcmp(addr, hapd->own_addr, ETH_ALEN) == 0) {
-++		/* Do not process any frames with unexpected/invalid SA so that
-++		 * we do not add any state for unexpected STA addresses or end
-++		 * up sending out frames to unexpected destination. */
-++		wpa_printf(MSG_DEBUG, "%s: Invalid SA=" MACSTR
-++			   " in received indication - ignore this indication silently",
-++			   __func__, MAC2STR(addr));
-++		return 0;
-++	}
-++
-+ 	random_add_randomness(addr, ETH_ALEN);
-+ 
-+ 	hostapd_logger(hapd, addr, HOSTAPD_MODULE_IEEE80211,
-+diff --git a/src/ap/ieee802_11.c b/src/ap/ieee802_11.c
-+index c85a28db44b7..e7065372e158 100644
-+--- a/src/ap/ieee802_11.c
-++++ b/src/ap/ieee802_11.c
-+@@ -4626,6 +4626,18 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
-+ 	fc = le_to_host16(mgmt->frame_control);
-+ 	stype = WLAN_FC_GET_STYPE(fc);
-+ 
-++	if (is_multicast_ether_addr(mgmt->sa) ||
-++	    is_zero_ether_addr(mgmt->sa) ||
-++	    os_memcmp(mgmt->sa, hapd->own_addr, ETH_ALEN) == 0) {
-++		/* Do not process any frames with unexpected/invalid SA so that
-++		 * we do not add any state for unexpected STA addresses or end
-++		 * up sending out frames to unexpected destination. */
-++		wpa_printf(MSG_DEBUG, "MGMT: Invalid SA=" MACSTR
-++			   " in received frame - ignore this frame silently",
-++			   MAC2STR(mgmt->sa));
-++		return 0;
-++	}
-++
-+ 	if (stype == WLAN_FC_STYPE_BEACON) {
-+ 		handle_beacon(hapd, mgmt, len, fi);
-+ 		return 1;
-+-- 
-+2.20.1
-+
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 4f95ea6276..8e7b9c3a65 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -15,6 +15,9 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
- WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
- WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+diff --git a/package/python-pigpio/python-pigpio.hash b/package/python-pigpio/python-pigpio.hash
+index 3498b762ee..dd7b7954a7 100644
+--- a/package/python-pigpio/python-pigpio.hash
++++ b/package/python-pigpio/python-pigpio.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/pigpio/json
+-md5	a6817d953549c19522bae2d4f36251f4  pigpio-1.45.tar.gz
+-sha256	a6a8dbc19e827046bde02b4c34ab725d55093490ed7bc1e7c80277adfadc16ac  pigpio-1.45.tar.gz
++md5  5247f61642f14f65c2b42e130d49ab50  pigpio-1.46.tar.gz
++sha256  f5f2562f8f7aab0c6cf7235e501e72bedbf063efda725c6086c352b5e4b2f59d  pigpio-1.46.tar.gz
+diff --git a/package/python-pigpio/python-pigpio.mk b/package/python-pigpio/python-pigpio.mk
+index 1e18d97840..fda5efb1ae 100644
+--- a/package/python-pigpio/python-pigpio.mk
++++ b/package/python-pigpio/python-pigpio.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+# 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
-+WPA_SUPPLICANT_IGNORE_CVES += CVE-2019-16275
-+
- # install the wpa_client library
- WPA_SUPPLICANT_INSTALL_STAGING = YES
+-PYTHON_PIGPIO_VERSION = 1.45
++PYTHON_PIGPIO_VERSION = 1.46
+ PYTHON_PIGPIO_SOURCE = pigpio-$(PYTHON_PIGPIO_VERSION).tar.gz
+-PYTHON_PIGPIO_SITE = https://files.pythonhosted.org/packages/33/48/db99b4ccc9f895827aa96d35404bae803b31555cdef0c1356ad3b6fca2d5
++PYTHON_PIGPIO_SITE = https://files.pythonhosted.org/packages/5d/ad/75966e59159a64f3d496bf730c54d6222d69a72261f1556232e25ce59edf
+ PYTHON_PIGPIO_SETUP_TYPE = setuptools
+ PYTHON_PIGPIO_LICENSE = Unlicense
  
+-- 
+2.18.2
