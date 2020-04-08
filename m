@@ -1,45 +1,103 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 15:02:05 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/sysdig: update
- upstream URL in Config.in
-Message-ID: <20200408124937.2F7558DF19@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 8 Apr 2020 15:15:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: drop python 2
+ support
+In-Reply-To: <20200408000948.52194-1-james.hilliard1@gmail.com>
+References: <20200408000948.52194-1-james.hilliard1@gmail.com>
+Message-ID: <cabca3d2-9163-a000-fc16-b897b8b34856@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66097d544d42d66bb6151254b6489886a148fc3e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+Hi James, All,
 
-The sysdig homepage we have points to an "on-sale" domain, that is
-purportedly serving malware while at it. Update to point to the wiki on
-github instead.
+Le 08/04/2020 ? 02:09, James Hilliard a ?crit?:
+> Upstream removed python 2 support so we need to depend on python 3.
+> 
+> Removed python 2 autobahn tests.
+> 
+> Removed python-six dependency which is no longer used by autobahn.
 
-Fixes #12746.
+Don't hesitate to use all links to the upstream changes and our discussion on
+the mailing list.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[yann.morin.1998 at free.fr:
-  - use wiki instead of git repo
-  - expand commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ca3166da48bbb4247f5823b2a53499c8959c4705)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sysdig/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+http://lists.busybox.net/pipermail/buildroot/2020-April/279309.html
 
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index 672c44d211..8c93e2beee 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -23,7 +23,7 @@ config BR2_PACKAGE_SYSDIG
- 	  Think of it as strace + tcpdump + lsof + awesome sauce.
- 	  With a little Lua cherry on top.
- 
--	  http://sysdig.org
-+	  https://github.com/draios/sysdig/wiki
- 
- comment "sysdig needs a glibc or uclibc toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  .gitlab-ci.yml                                        |  1 -
+>  package/python-autobahn/Config.in                     |  3 ++-
+>  support/testing/tests/package/test_python_autobahn.py | 10 ----------
+>  3 files changed, 2 insertions(+), 12 deletions(-)
+> 
+> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> index d833ce4555..03ff010fae 100644
+> --- a/.gitlab-ci.yml
+> +++ b/.gitlab-ci.yml
+> @@ -456,7 +456,6 @@ tests.package.test_python_argh.TestPythonPy2Argh: { extends: .runtime_test }
+>  tests.package.test_python_argh.TestPythonPy3Argh: { extends: .runtime_test }
+>  tests.package.test_python_attrs.TestPythonPy2Attrs: { extends: .runtime_test }
+>  tests.package.test_python_attrs.TestPythonPy3Attrs: { extends: .runtime_test }
+> -tests.package.test_python_autobahn.TestPythonPy2Autobahn: { extends: .runtime_test }
+>  tests.package.test_python_autobahn.TestPythonPy3Autobahn: { extends: .runtime_test }
+>  tests.package.test_python_automat.TestPythonPy2Automat: { extends: .runtime_test }
+>  tests.package.test_python_automat.TestPythonPy3Automat: { extends: .runtime_test }
+> diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
+> index ba54d8b12f..78b16897bc 100644
+> --- a/package/python-autobahn/Config.in
+> +++ b/package/python-autobahn/Config.in
+> @@ -1,8 +1,8 @@
+>  config BR2_PACKAGE_PYTHON_AUTOBAHN
+>  	bool "python-autobahn"
+>  	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography -> python-pyasn
+> +	depends on BR2_PACKAGE_PYTHON3
+
+I checked that all packages selecting python-autobahn (python-daphne and
+python-crossbar) are already python3 only.
+
+>  	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+> -	select BR2_PACKAGE_PYTHON_SIX # runtime
+
+Maybe we have double check if python-daphne or python-crossbar are not using
+python-six at runtime.
+
+Otherwise,
+ Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+
+>  	select BR2_PACKAGE_PYTHON_TXAIO # runtime
+>  	help
+>  	  WebSocket client and server library, WAMP real-time
+> @@ -12,3 +12,4 @@ config BR2_PACKAGE_PYTHON_AUTOBAHN
+>  
+>  comment "python-autobahn needs a toolchain w/ C++"
+>  	depends on !BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_PACKAGE_PYTHON3
+> diff --git a/support/testing/tests/package/test_python_autobahn.py b/support/testing/tests/package/test_python_autobahn.py
+> index af1f617d6d..a237ce465d 100644
+> --- a/support/testing/tests/package/test_python_autobahn.py
+> +++ b/support/testing/tests/package/test_python_autobahn.py
+> @@ -1,16 +1,6 @@
+>  from tests.package.test_python import TestPythonPackageBase
+>  
+>  
+> -class TestPythonPy2Autobahn(TestPythonPackageBase):
+> -    __test__ = True
+> -    config = TestPythonPackageBase.config + \
+> -        """
+> -        BR2_PACKAGE_PYTHON=y
+> -        BR2_PACKAGE_PYTHON_AUTOBAHN=y
+> -        """
+> -    sample_scripts = ["tests/package/sample_python_autobahn.py"]
+> -
+> -
+>  class TestPythonPy3Autobahn(TestPythonPackageBase):
+>      __test__ = True
+>      config = TestPythonPackageBase.config + \
+> 
