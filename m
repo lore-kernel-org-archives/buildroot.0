@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 16:31:57 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/pkg-generic.mk:
+Date: Wed, 8 Apr 2020 16:31:47 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/pkg-generic.mk:
  also replace /lib by STAGING_DIR/lib in .la files
-Message-ID: <20200408141851.78903811BE@busybox.osuosl.org>
+Message-ID: <20200408141858.A27D28D3D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f29abed9f869e455d496168b4e5bb3d0a689da22
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=db8d624958409d0e6b35f0853b3afb29a22c60f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 After the staging installation, we replace a number of paths in libtool
 .la files so that those paths point to STAGING_DIR instead of a location
@@ -64,10 +64,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b4aa9f1b18..e47a8fe28d 100644
+index 20b07a7fa9..7679c41556 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -315,6 +315,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+@@ -329,6 +329,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
  			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
  				-e "s:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
  			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
