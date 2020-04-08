@@ -1,46 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 16:12:55 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/wireguard-tools:
- bump version to 1.0.20200319
-Message-ID: <20200408141053.75FE98DFAA@busybox.osuosl.org>
+Date: Wed, 08 Apr 2020 16:29:15 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/vlc: fix build with opencv3
+In-Reply-To: <20200308222246.1392316-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 8 Mar 2020 23:22:46 +0100")
+References: <20200308222246.1392316-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tv1uhwzo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4eb7aa1ea7bcc8570dae6bfa9d0aaff8226603e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 11036ca0d21889f1e80ca68de8a8fcdc020700bb)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard-tools/wireguard-tools.hash | 4 ++--
- package/wireguard-tools/wireguard-tools.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/210424bd33f660aa0757f62a558e1e03faf0f371
 
-diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
-index 9ea0d3ce86..475a7450a9 100644
---- a/package/wireguard-tools/wireguard-tools.hash
-+++ b/package/wireguard-tools/wireguard-tools.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-February/004963.html
--sha256  f5207248c6a3c3e3bfc9ab30b91c1897b00802ed861e1f9faaed873366078c64  wireguard-tools-1.0.20200206.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-March/005191.html
-+sha256  757ed31d4d48d5fd7853bfd9bfa6a3a1b53c24a94fe617439948784a2c0ed987  wireguard-tools-1.0.20200319.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
-index c2b2c36651..fc2ec876b3 100644
---- a/package/wireguard-tools/wireguard-tools.mk
-+++ b/package/wireguard-tools/wireguard-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_TOOLS_VERSION = 1.0.20200206
-+WIREGUARD_TOOLS_VERSION = 1.0.20200319
- WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
- WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
- WIREGUARD_TOOLS_LICENSE = GPL-2.0
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Thomas Petazzoni):
+ >  - Update patch so it does not break the build with OpenCV 2.x
+
+Committed to 2019.02.x, 2019.11.x and 2020.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
