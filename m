@@ -1,129 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 14:38:07 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libopenssl: move
- target arch selection to Config.in
-Message-ID: <20200408122825.6D1E08DE6A@busybox.osuosl.org>
+Date: Wed, 8 Apr 2020 14:38:38 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libopenssl:
+ security bump to version 1.1.1f
+Message-ID: <20200408122825.90E6F8DE6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e639476fdb4ad708718593086d3ccadab56dd4c
+commit: https://git.buildroot.net/buildroot/commit/?id=e2d8ee3bec618cc043ba5a720763de4dda38017f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-The logic to select the proper OpenSSL target arch in libopenssl.mk is
-not easy to read, so let's move it to Config.in where we have some
-nice constructs for that kind of value selection.
+Fixes the following security issues (1.1.1e):
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e3159cad7174bfc029c8229d3c525b1545d695e8)
+CVE-2019-1551 [Low severity]: There is an overflow bug in the x64_64
+Montgomery squaring procedure used in exponentiation with 512-bit moduli.
+No EC algorithms are affected.  Analysis suggests that attacks against
+2-prime RSA1024, 3-prime RSA1536, and DSA1024 as a result of this defect
+would be very difficult to perform and are not believed likely.  Attacks
+against DH512 are considered just feasible.  However, for an attack the
+target would have to re-use the DH512 private key, which is not recommended
+anyway.  Also applications directly using the low level API BN_mod_exp may
+be affected if they use BN_FLG_CONSTTIME.  Reported by OSS-Fuzz and Guido
+Vranken.
+
+https://www.openssl.org/news/secadv/20191206.txt
+
+CVE-2019-1563 [Low severity]: In situations where an attacker receives
+automated notification of the success or failure of a decryption attempt an
+attacker, after sending a very large number of messages to be decrypted, can
+recover a CMS/PKCS7 transported encryption key or decrypt any RSA encrypted
+message that was encrypted with the public RSA key, using a Bleichenbacher
+padding oracle attack.  Applications are not affected if they use a
+certificate together with the private RSA key to the CMS_decrypt or
+PKCS7_decrypt functions to select the correct recipient info to decrypt.
+Reported by Bernd Edlinger.
+
+https://www.openssl.org/news/secadv/20190910.txt
+
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+[Peter: mention security impact]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d397b231b7c7f02f9c52d13ac9d3d82b39f4f4c5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenssl/Config.in     | 29 +++++++++++++++++++++++++++++
- package/libopenssl/libopenssl.mk | 35 +----------------------------------
- package/openssl/Config.in        |  2 ++
- 3 files changed, 32 insertions(+), 34 deletions(-)
+ package/libopenssl/libopenssl.hash | 2 +-
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-new file mode 100644
-index 0000000000..732da5b4ef
---- /dev/null
-+++ b/package/libopenssl/Config.in
-@@ -0,0 +1,29 @@
-+# 4xx PowerPC cores seem to have trouble with openssl's ASM
-+# optimizations
-+config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
-+	bool
-+	default y if BR2_powerpc
-+	depends on !BR2_powerpc_401
-+	depends on !BR2_powerpc_403
-+	depends on !BR2_powerpc_405
-+	depends on !BR2_powerpc_405fp
-+	depends on !BR2_powerpc_440
-+	depends on !BR2_powerpc_440fp
-+
-+config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH
-+	string
-+	# Use "gcc" minimalistic target to disable DSO
-+	# no-asm is needed with generic architectures such as gcc, see
-+	# https://github.com/openssl/openssl/issues/9839
-+	default "gcc no-asm"			if BR2_STATIC_LIBS
-+	# Doesn't work for thumb-only (Cortex-M?)
-+	default "linux-armv4"			if BR2_ARM_CPU_HAS_ARM
-+	default "linux-aarch64"			if BR2_aarch64
-+	default "linux-ppc"			if BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
-+	default "linux-ppc64"			if BR2_powerpc64
-+	default "linux-ppc64le"			if BR2_powerpc64le
-+	default "linux-x86_64"			if BR2_x86_64
-+	# no-asm is needed with generic architectures such as
-+	# linux-generic32, see
-+	# https://github.com/openssl/openssl/issues/9839
-+	default "linux-generic32 no-asm"
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 1b239fbee7..3becd790ac 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+ # From https://www.openssl.org/source/openssl-1.1.1d.tar.gz.sha256
+-sha256	1e3a91bc1f9dfce01af26026f856e064eab4c8ee0a8f457b5ae30b40b8b711f2	openssl-1.1.1d.tar.gz
++sha256	186c6bfe6ecfba7a5b48c47f8a1673d0f3b0e5ba2e25602dd23b629975da3f35	openssl-1.1.1f.tar.gz
+ 
+ # License files
+ sha256	c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c	LICENSE
 diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index a1bbf9a900..da4ae291c0 100644
+index da4ae291c0..4639c63fac 100644
 --- a/package/libopenssl/libopenssl.mk
 +++ b/package/libopenssl/libopenssl.mk
-@@ -12,9 +12,7 @@ LIBOPENSSL_LICENSE_FILES = LICENSE
- LIBOPENSSL_INSTALL_STAGING = YES
- LIBOPENSSL_DEPENDENCIES = zlib
- HOST_LIBOPENSSL_DEPENDENCIES = host-zlib
--# no-asm is needed with generic architectures such as linux-generic32, see
--# https://github.com/openssl/openssl/issues/9839
--LIBOPENSSL_TARGET_ARCH = linux-generic32 no-asm
-+LIBOPENSSL_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH))
- LIBOPENSSL_CFLAGS = $(TARGET_CFLAGS)
- LIBOPENSSL_PROVIDES = openssl
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -55,37 +53,6 @@ ifeq ($(BR2_TOOLCHAIN_HAS_UCONTEXT),)
- LIBOPENSSL_CFLAGS += -DOPENSSL_NO_ASYNC
- endif
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--# Use "gcc" minimalistic target to disable DSO
--# no-asm is needed with generic architectures such as gcc, see
--# https://github.com/openssl/openssl/issues/9839
--LIBOPENSSL_TARGET_ARCH = gcc no-asm
--else
--# Some architectures are optimized in OpenSSL
--# Doesn't work for thumb-only (Cortex-M?)
--ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
--LIBOPENSSL_TARGET_ARCH = linux-armv4
--endif
--ifeq ($(ARCH),aarch64)
--LIBOPENSSL_TARGET_ARCH = linux-aarch64
--endif
--ifeq ($(ARCH),powerpc)
--# 4xx cores seem to have trouble with openssl's ASM optimizations
--ifeq ($(BR2_powerpc_401)$(BR2_powerpc_403)$(BR2_powerpc_405)$(BR2_powerpc_405fp)$(BR2_powerpc_440)$(BR2_powerpc_440fp),)
--LIBOPENSSL_TARGET_ARCH = linux-ppc
--endif
--endif
--ifeq ($(ARCH),powerpc64)
--LIBOPENSSL_TARGET_ARCH = linux-ppc64
--endif
--ifeq ($(ARCH),powerpc64le)
--LIBOPENSSL_TARGET_ARCH = linux-ppc64le
--endif
--ifeq ($(ARCH),x86_64)
--LIBOPENSSL_TARGET_ARCH = linux-x86_64
--endif
--endif
--
- define HOST_LIBOPENSSL_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(HOST_CONFIGURE_OPTS) \
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index d84033141f..b0837ba303 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -43,6 +43,8 @@ config BR2_PACKAGE_LIBOPENSSL_ENGINES
- 	help
- 	  Install additional encryption engine libraries.
- 
-+source "package/libopenssl/Config.in"
-+
- endif
- 
- config BR2_PACKAGE_LIBRESSL
+-LIBOPENSSL_VERSION = 1.1.1d
++LIBOPENSSL_VERSION = 1.1.1f
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
