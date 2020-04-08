@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 14:38:38 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libopenssl:
+Date: Wed, 8 Apr 2020 14:36:55 +0200
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libopenssl:
  security bump to version 1.1.1f
-Message-ID: <20200408122825.90E6F8DE6B@busybox.osuosl.org>
+Message-ID: <20200408122831.3FA8A8DE72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e2d8ee3bec618cc043ba5a720763de4dda38017f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fbaf0b7839723069c0321098a439c506996287c7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 Fixes the following security issues (1.1.1e):
 
@@ -61,7 +61,7 @@ index 1b239fbee7..3becd790ac 100644
  # License files
  sha256	c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c	LICENSE
 diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index da4ae291c0..4639c63fac 100644
+index a1bbf9a900..6fb35075ff 100644
 --- a/package/libopenssl/libopenssl.mk
 +++ b/package/libopenssl/libopenssl.mk
 @@ -4,7 +4,7 @@
