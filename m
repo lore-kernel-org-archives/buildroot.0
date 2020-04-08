@@ -1,38 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 16:30:36 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mcrypt: annotate
- CVEs
-Message-ID: <20200408141858.99CC180070@busybox.osuosl.org>
+Date: Wed, 8 Apr 2020 16:33:49 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gcc: pass
+ -Wno-error to debug builds
+Message-ID: <20200408142006.C82118DFD6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d9ebbb158cc068f66b38f4599072c2b9143cc3f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d02c62fbde1b9abaffe12990e1cb5bfe532ef77b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cdfa84a80d204b2ac0c28103606c2dc4f8bb2f10)
+gcc fails to build in debug build with debug optimisations:
+
+BR2_x86_corei7=y
+BR2_ENABLE_DEBUG=y
+BR2_DEBUG_3=y
+BR2_OPTIMIZE_G=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+
+which fails with:
+    ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ???st.st_mode??? may be used uninitialized in this function [-Werror=maybe-uninitialized]
+       return S_ISLNK (st.st_mode);
+                     ^
+Upstream has been unable to reproduce/fix properly, details:
+https://gcc.gnu.org/legacy-ml/gcc-patches/2019-03/threads.html#00827
+
+Upstream recommends passing -Wno-error as a workaround, see:
+https://gcc.gnu.org/pipermail/gcc-patches/2019-April/519867.html
+
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[yann.morin.1998 at free.fr: add the reproducing defconfig]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit dcaf6e75acb4d21c2c31c70b054dac8d18710fcb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mcrypt/mcrypt.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/gcc/gcc.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/mcrypt/mcrypt.mk b/package/mcrypt/mcrypt.mk
-index f98895f401..a04b973750 100644
---- a/package/mcrypt/mcrypt.mk
-+++ b/package/mcrypt/mcrypt.mk
-@@ -14,4 +14,11 @@ MCRYPT_CONF_OPTS = --with-libmcrypt-prefix=$(STAGING_DIR)/usr
- MCRYPT_LICENSE = GPL-3.0
- MCRYPT_LICENSE_FILES = COPYING
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 5901624ea5..a6a122fa64 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -106,6 +106,11 @@ HOST_GCC_COMMON_CONF_ENV = \
+ GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+ GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
  
-+# 0001-CVE-2012-4409.patch
-+MCRYPT_IGNORE_CVES += CVE-2012-4409
-+# 0002-CVE-2012-4426.patch
-+MCRYPT_IGNORE_CVES += CVE-2012-4426
-+# 0003-CVE-2012-4527.patch
-+MCRYPT_IGNORE_CVES += CVE-2012-4527
++# used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ???st.st_mode??? may be used uninitialized in this function [-Werror=maybe-uninitialized]
++ifeq ($(BR2_ENABLE_DEBUG),y)
++GCC_COMMON_TARGET_CFLAGS += -Wno-error
++endif
 +
- $(eval $(autotools-package))
+ # Propagate options used for target software building to GCC target libs
+ HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
+ HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
