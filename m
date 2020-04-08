@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Apr 2020 21:20:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version
- 2.28.0
-In-Reply-To: <20200408152703.1360075-1-aperez@igalia.com>
-References: <20200408152703.1360075-1-aperez@igalia.com>
-Message-ID: <20200408212028.72d19606@windsurf.home>
+Date: Wed, 8 Apr 2020 21:20:42 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-pigpio: bump to version
+ 1.46
+In-Reply-To: <20200408114809.8954-1-grzegorz@blach.pl>
+References: <20200408114809.8954-1-grzegorz@blach.pl>
+Message-ID: <20200408212042.3302780e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Apr 2020 18:27:03 +0300
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+On Wed,  8 Apr 2020 13:48:07 +0200
+Grzegorz Blach <grzegorz@blach.pl> wrote:
 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 > ---
->  package/webkitgtk/webkitgtk.hash | 8 ++++----
->  package/webkitgtk/webkitgtk.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/python-pigpio/python-pigpio.hash | 4 ++--
+>  package/python-pigpio/python-pigpio.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
