@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 13:41:39 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libsndfile: add
+Date: Wed, 8 Apr 2020 13:38:44 +0200
+Subject: [Buildroot] [git commit branch/2019.11.x] package/libsndfile: add
  upstream security fixes
-Message-ID: <20200408112841.A48AA8DA9A@busybox.osuosl.org>
+Message-ID: <20200408112845.D268D8DAA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fcddadfc1906c5004830b1ef0d128b2ef9fb290
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e5eeda60b6d075134b3d1d0d01852f3553a03b7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
 
 - Fix CVE-2017-6892: In libsndfile version 1.0.28, an error in the
   "aiff_read_chanmap()" function (aiff.c) can be exploited to cause an
