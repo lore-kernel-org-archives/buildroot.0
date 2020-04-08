@@ -1,61 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Apr 2020 16:32:37 +0200
-Subject: [Buildroot] [PATCH] package/pkg-generic.mk: also replace /lib
- by STAGING_DIR/lib in .la files
-In-Reply-To: <20200405142143.4182009-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 5 Apr 2020 16:21:42 +0200")
-References: <20200405142143.4182009-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87h7xuhwu2.fsf@dell.be.48ers.dk>
+Date: Wed, 8 Apr 2020 16:32:06 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/pkg-generic.mk:
+ also replace /lib by STAGING_DIR/lib in .la files
+Message-ID: <20200408141846.E42C58DFC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b9ae276e6e46e53673af2c6aa12e0289ecd98805
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > After the staging installation, we replace a number of paths in
- > libtool .la files so that those paths point to STAGING_DIR instead to
- > location in the build machine.
+After the staging installation, we replace a number of paths in libtool
+.la files so that those paths point to STAGING_DIR instead of a location
+in the build machine.
 
- > However, we replace only paths that start with /usr. And it turns out
- > that the linux-pam package is configured with --libdir=/lib (linux-pam
- > seems to always be installed in /lib rather than /usr/lib).
+However, we replace only paths that start with /usr. And it turns out
+that the linux-pam package is configured with --libdir=/lib (linux-pam
+seems to always be installed in /lib rather than /usr/lib).
 
- > Due to this, libpam.la contains the following line:
+Due to this, libpam.la contains the following line:
 
- >   libdir='/lib'
+  libdir='/lib'
 
- > When building a configuration that has:
+When building a configuration that has:
 
- >  - BR2_ROOTFS_MERGED_USR=y
- >  - BR2_PACKAGE_LINUX_PAM=y
- >  - BR2_PACKAGE_POLKIT=y
+ - BR2_ROOTFS_MERGED_USR=y
+ - BR2_PACKAGE_LINUX_PAM=y
+ - BR2_PACKAGE_POLKIT=y
 
- > on a system that has its system-wide PAM library installed in /lib,
- > the build fails with:
+on a system that has its system-wide PAM library installed in /lib,
+the build fails with:
 
- > /lib/libpam.so: file not recognized: File format not recognized
+/lib/libpam.so: file not recognized: File format not recognized
 
- > For some reason, libtool searches only in STAGING_DIR/usr/lib, but
- > when BR2_ROOTFS_MERGED_USR=y, STAGING_DIR/lib points to
- > STAGING_DIR/usr/lib, so libtool finds libpam.la. And this libpam.la
- > contains a bogus libdir='/lib' path. libtool then goes on, finds
- > /lib/libpam.so, and links with it, causing the build failure.
+For some reason, libtool searches only in STAGING_DIR/usr/lib, but
+when BR2_ROOTFS_MERGED_USR=y, STAGING_DIR/lib points to
+STAGING_DIR/usr/lib, so libtool finds libpam.la. And this libpam.la
+contains a bogus libdir='/lib' path. libtool then goes on, finds
+/lib/libpam.so, and links with it, causing the build failure.
 
- > By doing the proper replacement of libdir='/lib', we have a correct
- > libpam.la, and solve the build issue.
+By doing the proper replacement of libdir='/lib', we have a correct
+libpam.la, and solve the build issue.
 
- > There is no autobuilder failure associated to this issue, as it
- > requires /lib/libpam.so to exist. This is the case on ArchLinux, on
- > which Xogium reported the issue, which can also be reproduced in an
- > ArchLinux container.
+There is no autobuilder failure associated to this issue, as it
+requires /lib/libpam.so to exist. This is the case on ArchLinux, on
+which Xogium reported the issue, which can also be reproduced in an
+ArchLinux container.
 
- > Reported-by: Xogium <contact@xogium.me>
- > Cc: Xogium <contact@xogium.me>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reported-by: Xogium <contact@xogium.me>
+Cc: Xogium <contact@xogium.me>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr:
+  - tested by manually creating a symlink to libpam.so in /lib
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 7ae7c82dd617cb76dd9f4e43b32eea151528d818)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-generic.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed to 2019.02.x, 2019.11.x and 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index a5ed64e5f0..e31585779d 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -315,6 +315,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+ 				-e "s:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
+ 			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
++			-e "s:\(['= ]\)/lib:\\1 at STAGING_DIR@/lib:g" \
+ 			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+ 				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
+ 			-e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
