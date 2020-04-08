@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 Apr 2020 14:52:03 +0200
-Subject: [Buildroot] [git commit branch/2019.11.x] package/ntp: security
+Date: Wed, 8 Apr 2020 14:51:35 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/ntp: security
  bump to version 4.2.8p14
-Message-ID: <20200408123908.C928A8DF02@busybox.osuosl.org>
+Message-ID: <20200408123915.BFD9F8DF07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e6bbed3097a30c012c9d942cf44bde5f3496ea6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cee522be2c1903cfd00e134d65d152b1e61e39e2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 "This release fixes three security issues in ntpd and provides 46
 bugfixes and addresses 4 other issues." [1]
@@ -76,7 +76,7 @@ index 4014936e61..fdb5bacade 100644
 +sha256  1960e4f081f6aafd108d721bc3ab15f9e8dfd08dc08339aa95bca9d2545e4eb7  ntp-4.2.8p14.tar.gz
 +sha256  957e6a13445cc61ab1ca3dc80d8c269cf9b0a6d9eaec20f9f39639b0b3e66ee8  COPYRIGHT
 diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 56050f4fe1..a60dc79c01 100644
+index 4cede8b154..3af3e01a52 100644
 --- a/package/ntp/ntp.mk
 +++ b/package/ntp/ntp.mk
 @@ -5,7 +5,7 @@
