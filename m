@@ -1,53 +1,107 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu,  9 Apr 2020 19:00:10 +0300
-Subject: [Buildroot] [PATCH] package/python-cython: bump to version 0.29.16
-In-Reply-To: <20200409160014.18401-1-asafka7@gmail.com>
-References: <20200409160014.18401-1-asafka7@gmail.com>
-Message-ID: <20200409160014.18401-2-asafka7@gmail.com>
+Date: Thu,  9 Apr 2020 19:00:09 +0300
+Subject: [Buildroot] [PATCH] package/collectd: bump to version 5.11.0
+Message-ID: <20200409160014.18401-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add use two spaces for license files indentation.
+Drop patch (already on upstream).
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-cython/python-cython.hash | 8 ++++----
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ ...-protobuf-util-time_util.h-detection.patch | 50 -------------------
+ package/collectd/collectd.hash                |  6 +--
+ package/collectd/collectd.mk                  |  4 +-
+ 3 files changed, 5 insertions(+), 55 deletions(-)
+ delete mode 100644 package/collectd/0001-configure.ac-fix-protobuf-util-time_util.h-detection.patch
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 06ebbd5a9d..703676efc3 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5	63c819697ed7ce89c6455ff578312a26  Cython-0.29.15.tar.gz
--sha256	60d859e1efa5cc80436d58aecd3718ff2e74b987db0518376046adedba97ac30  Cython-0.29.15.tar.gz
-+md5  a899abaa48b68bb679aef45ceb4b89d3  Cython-0.29.16.tar.gz
-+sha256  232755284f942cbb3b43a06cd85974ef3c970a021aef19b5243c03ee2b08fa05  Cython-0.29.16.tar.gz
- # Locally computed sha256 checksums
--sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
--sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-+sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
-+sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 997a38db1c..d011e61017 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
+diff --git a/package/collectd/0001-configure.ac-fix-protobuf-util-time_util.h-detection.patch b/package/collectd/0001-configure.ac-fix-protobuf-util-time_util.h-detection.patch
+deleted file mode 100644
+index 5eb22bef46..0000000000
+--- a/package/collectd/0001-configure.ac-fix-protobuf-util-time_util.h-detection.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From a81fb110f7685b3268cd921ba72a00796f43d034 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 29 Oct 2019 10:25:07 +0100
+-Subject: [PATCH] configure.ac: fix protobuf/util/time_util.h detection
+-
+-Add -std=c++11 when checking gor protobuf/util/time_util.h otherwise
+-test will fail on:
+-
+-configure:104495: checking google/protobuf/util/time_util.h usability
+-configure:104495: /home/br-user/autobuild/run/instance-2/output/host/bin/mips-linux-gnu-g++ -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_FORTIFY_SOURCE=1  -pthread  conftest.cpp >&5
+-In file included from /home/br-user/autobuild/run/instance-2/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/atomic:38:0,
+-                 from /home/br-user/autobuild/run/instance-2/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/google/protobuf/io/coded_stream.h:113,
+-                 from /home/br-user/autobuild/run/instance-2/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/google/protobuf/duration.pb.h:23,
+-                 from /home/br-user/autobuild/run/instance-2/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/google/protobuf/util/time_util.h:52,
+-                 from conftest.cpp:188:
+-/home/br-user/autobuild/run/instance-2/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support is currently experimental, and must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
+-
+-Fixes:
+- - http://autobuild.buildroot.net/results/0d486edaf4c51b6438adeec61fe2c55099862acb
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/collectd/collectd/pull/3325]
+----
+- configure.ac | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 34386d06..59a7f355 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -2722,6 +2722,7 @@ if test "x$withval" != "xno"; then
+-   else
+-     AC_MSG_RESULT([no])
+-     with_libgrpcpp="no (requires C++11 support)"
+-+    with_libprotobuf="no (<google/protobuf/util/time_util.h> requires C++11 support)"
+-   fi
+- fi
+- 
+-@@ -4568,7 +4569,7 @@ if test "x$withval" != "xno"; then
+-   AC_CHECK_LIB([protobuf], [main],
+-     [
+-       SAVE_CPPFLAGS="$CPPFLAGS"
+--      CPPFLAGS="$with_libprotobuf_cppflags $PROTOBUF_CFLAGS"
+-+      CPPFLAGS="-std=c++11 $with_libprotobuf_cppflags $PROTOBUF_CFLAGS"
+-       if test "x$PROTOBUF_LIBS" = "x"
+-       then
+-         PROTOBUF_LIBS="-lprotobuf"
+--- 
+-2.23.0
+-
+diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
+index 7f716b7a93..0378eca11f 100644
+--- a/package/collectd/collectd.hash
++++ b/package/collectd/collectd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed checksums
+-sha512	1296085fb19bba0c7b7d8684ec877851158b25c9f7b58fc3ae602fba7d7dc718876e730e1cdba96d39101cc5452705bb3445aaee717b219025ae816299b6a3c5	collectd-5.10.0.tar.bz2
+-sha256	a03359f563023e744c2dc743008a00a848f4cd506e072621d86b6d8313c0375b	collectd-5.10.0.tar.bz2
+-sha1	9d64ec4e6e834b8e417e282390e2a9c57934d3bc	collectd-5.10.0.tar.bz2
++sha512	87671545e3d01770c204ba4439265d1c0add6a105bf04ff02dc04db3731fd933d32ecb9b0dc15f2e504d70c3e421a64cf19728c897aa4fb1fda86e393ffc15bf	collectd-5.11.0.tar.bz2
++sha256	37b10a806e34aa8570c1cafa6006c604796fae13cc2e1b3e630d33dcba9e5db2	collectd-5.11.0.tar.bz2
++sha1	18bfb0be0493ed4a1b5d73c8bcc3f28d37652480	collectd-5.11.0.tar.bz2
+ sha256	ed0409b2b1c30566dab5fcdaf46ee70e140c99788e22f0267645a9357b476ae4	COPYING
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 65307dce4c..97e1d17b5e 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CYTHON_VERSION = 0.29.15
-+PYTHON_CYTHON_VERSION = 0.29.16
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/d9/82/d01e767abb9c4a5c07a6a1e6f4d5a8dfce7369318d31f48a52374094372e
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/49/8a/6a4135469372da2e3d9f88f71c6d00d8a07ef65f121eeca0c7ae21697219
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+-COLLECTD_VERSION = 5.10.0
++COLLECTD_VERSION = 5.11.0
+ COLLECTD_SITE = \
+-	https://github.com/collectd/collectd/releases/download/$(COLLECTD_VERSION)
++	https://github.com/collectd/collectd/releases/download/collectd-$(COLLECTD_VERSION)
+ COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
+ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+ COLLECTD_INSTALL_STAGING = YES
 -- 
 2.26.0
