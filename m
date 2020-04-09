@@ -1,118 +1,53 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 9 Apr 2020 22:47:50 +0200
-Subject: [Buildroot] [PATCH v1] package/ell: fix compile with older
- toolchains
-In-Reply-To: <20200409203500.18857-1-ps.report@gmx.net>
-References: <20200409203500.18857-1-ps.report@gmx.net>
-Message-ID: <20200409224750.736128c8@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu,  9 Apr 2020 22:58:55 +0200
+Subject: [Buildroot] [PATCH] core/show-info: do not show install types for
+ host packages
+Message-ID: <20200409205855.21194-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  9 Apr 2020 22:35:00 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+By their very nature, host packages have no target, staging, or
+images install steps; they have a single install step, that is
+always performed.
 
-> Older toolchains need to include sys/types.h and sys/socket.h before
-> linux/if.h, RTA_PREF was introduces with linux-4.1.x.
->
-> Fixes:
->
->   http://autobuild.buildroot.net/results/2d1/2d1a3f82abb8475d39908b22f775c2dac781f330
->
->   In file included from ell/rtnl.c:28:0:
->   .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:185:19: error: field 'ifru_addr' has incomplete type
->   .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:186:19: error: field 'ifru_dstaddr' has incomplete type
->   .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:187:19: error: field 'ifru_broadaddr' has incomplete type
->   .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:188:19: error: field 'ifru_netmask' has incomplete type
->   .../arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:189:20: error: field 'ifru_hwaddr' has incomplete type
->   ell/rtnl.c: In function 'l_rtnl_route_extract':
->   ell/rtnl.c:120:8: error: 'RTA_PREF' undeclared (first use in this function)
+However, we currently report those three types of install, which
+is misleading at best, and really incorrect.
 
-And suggested upstream:
+If we were to report any install type for host package, that would
+be a single one, and it would always be true.
 
-https://ml01.01.org/hyperkitty/list/ell at lists.01.org/thread/TOJ5XEY7X6WMOMJHX4KWI5LFEOX2QTBQ/
+So, do not report any install type for host packages, as it does
+not make sense to report anything that is always true.
 
-Regards,
-Peter
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Vadim Kochan <vadim4j@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/pkg-utils.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
->
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...nl-fix-compile-with-older-toolchains.patch | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
->
-> diff --git a/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch b/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
-> new file mode 100644
-> index 0000000000..a9828f1904
-> --- /dev/null
-> +++ b/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
-> @@ -0,0 +1,67 @@
-> +From 60b4cd4c703be380aef194d31a1ffc4b42431bde Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Thu, 9 Apr 2020 22:21:36 +0200
-> +Subject: [PATCH] ell/rtnl: fix compile with older toolchains
-> +
-> +Older toolchains need to include sys/types.h and sys/socket.h before
-> +linux/if.h, RTA_PREF was introduces with linux-4.1.x.
-> +
-> +Fixes:
-> +
-> +  In file included from ell/rtnl.c:28:0:
-> +  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:185:19: error: field 'ifru_addr' has incomplete type
-> +  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:186:19: error: field 'ifru_dstaddr' has incomplete type
-> +  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:187:19: error: field 'ifru_broadaddr' has incomplete type
-> +  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:188:19: error: field 'ifru_netmask' has incomplete type
-> +  .../arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:189:20: error: field 'ifru_hwaddr' has incomplete type
-> +  ell/rtnl.c: In function 'l_rtnl_route_extract':
-> +  ell/rtnl.c:120:8: error: 'RTA_PREF' undeclared (first use in this function)
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + configure.ac | 2 ++
-> + ell/rtnl.c   | 7 ++++++-
-> + 2 files changed, 8 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index 0351f89..3be35a4 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -113,6 +113,8 @@ AC_CHECK_LIB(dl, dlopen, dummy=yes,
-> +
-> + AC_CHECK_HEADERS(linux/types.h linux/if_alg.h)
-> +
-> ++AC_CHECK_DECLS([RTA_PREF], [], [], [[#include <linux/rtnetlink.h>]])
-> ++
-> + AC_ARG_ENABLE(glib, AC_HELP_STRING([--enable-glib],
-> + 				[enable ell/glib main loop example]),
-> + 					[enable_glib=${enableval}])
-> +diff --git a/ell/rtnl.c b/ell/rtnl.c
-> +index dc83937..3493d34 100644
-> +--- a/ell/rtnl.c
-> ++++ b/ell/rtnl.c
-> +@@ -25,8 +25,9 @@
-> + #endif
-> +
-> + #define _GNU_SOURCE
-> +-#include <linux/if.h>
-> ++#include <sys/types.h>
-> + #include <sys/socket.h>
-> ++#include <linux/if.h>
-> + #include <arpa/inet.h>
-> +
-> + #include "util.h"
-> +@@ -35,6 +36,10 @@
-> + #include "rtnl.h"
-> + #include "private.h"
-> +
-> ++#if defined HAVE_DECL_RTA_PREF && !HAVE_DECL_RTA_PREF
-> ++#define RTA_PREF 20
-> ++#endif
-> ++
-> + static size_t rta_add_u8(void *rta_buf, unsigned short type, uint8_t value)
-> + {
-> + 	struct rtattr *rta = rta_buf;
-> +--
-> +2.26.0
-> +
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index d324934dba..14101fcc2a 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -112,9 +112,11 @@ define _json-info-pkg-details
+ 	"version": "$($(1)_DL_VERSION)",
+ 	"licenses": "$($(1)_LICENSE)",
+ 	"dl_dir": "$($(1)_DL_SUBDIR)",
+-	"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET)),
+-	"install_staging": $(call yesno-to-bool,$($(1)_INSTALL_STAGING)),
+-	"install_images": $(call yesno-to-bool,$($(1)_INSTALL_IMAGES)),
++	$(if $(filter target,$($(1)_TYPE)), \
++		"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET))$(comma) \
++		"install_staging": $(call yesno-to-bool,$($(1)_INSTALL_STAGING))$(comma) \
++		"install_images": $(call yesno-to-bool,$($(1)_INSTALL_IMAGES))$(comma) \
++	)
+ 	"downloads": [
+ 	$(foreach dl,$(sort $($(1)_ALL_DOWNLOADS)),
+ 		{
+-- 
+2.20.1
