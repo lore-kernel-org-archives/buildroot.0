@@ -1,53 +1,108 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu,  9 Apr 2020 14:25:29 -0600
-Subject: [Buildroot] [PATCH v3 2/2] package/ser2net: bump to version 4.1.6
-In-Reply-To: <20200409202529.62795-1-james.hilliard1@gmail.com>
-References: <20200409202529.62795-1-james.hilliard1@gmail.com>
-Message-ID: <20200409202529.62795-2-james.hilliard1@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu,  9 Apr 2020 22:35:00 +0200
+Subject: [Buildroot] [PATCH v1] package/ell: fix compile with older
+ toolchains
+Message-ID: <20200409203500.18857-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v2 -> v3:
-  - remove fixes from commit message as it is no longer relevant
-Changes v1 -> v2:
-  - rebase on top of master
----
- package/ser2net/ser2net.hash | 8 ++++----
- package/ser2net/ser2net.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Older toolchains need to include sys/types.h and sys/socket.h before
+linux/if.h, RTA_PREF was introduces with linux-4.1.x.
 
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index 9a61564b0e..1eaad2c584 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5 1a42e9605342fd3d6fa41b48be7f564a  ser2net-4.1.2.tar.gz
--sha1 2a40a94e37d89ca795b3a8f692583c78259383c1  ser2net-4.1.2.tar.gz
-+md5  96498fab618ff23ae2791eefc86a5066  ser2net-4.1.6.tar.gz
-+sha1  3b31fbbbdab2c658bb0dc19ed93c7d8474ecdd25  ser2net-4.1.6.tar.gz
- # Locally computed:
--sha256 9bdc33476834bbbdcbfbb77ff8f1b1952fe2e7e19dde7e6f7932cea0cec958c7  ser2net-4.1.2.tar.gz
--sha256 501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-+sha256  757505db9afc21a448cb008a3b9a9040cdc17c348ef42a55c9e672d4ccf71e9f  ser2net-4.1.6.tar.gz
-+sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index 08f1fe0c8b..da0aa6c156 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SER2NET_VERSION = 4.1.2
-+SER2NET_VERSION = 4.1.6
- SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPL-2.0+
- SER2NET_LICENSE_FILES = COPYING
+Fixes:
+
+  http://autobuild.buildroot.net/results/2d1/2d1a3f82abb8475d39908b22f775c2dac781f330
+
+  In file included from ell/rtnl.c:28:0:
+  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:185:19: error: field 'ifru_addr' has incomplete type
+  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:186:19: error: field 'ifru_dstaddr' has incomplete type
+  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:187:19: error: field 'ifru_broadaddr' has incomplete type
+  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:188:19: error: field 'ifru_netmask' has incomplete type
+  .../arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:189:20: error: field 'ifru_hwaddr' has incomplete type
+  ell/rtnl.c: In function 'l_rtnl_route_extract':
+  ell/rtnl.c:120:8: error: 'RTA_PREF' undeclared (first use in this function)
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...nl-fix-compile-with-older-toolchains.patch | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
+ create mode 100644 package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
+
+diff --git a/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch b/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
+new file mode 100644
+index 0000000000..a9828f1904
+--- /dev/null
++++ b/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
+@@ -0,0 +1,67 @@
++From 60b4cd4c703be380aef194d31a1ffc4b42431bde Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Thu, 9 Apr 2020 22:21:36 +0200
++Subject: [PATCH] ell/rtnl: fix compile with older toolchains
++
++Older toolchains need to include sys/types.h and sys/socket.h before
++linux/if.h, RTA_PREF was introduces with linux-4.1.x.
++
++Fixes:
++
++  In file included from ell/rtnl.c:28:0:
++  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:185:19: error: field 'ifru_addr' has incomplete type
++  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:186:19: error: field 'ifru_dstaddr' has incomplete type
++  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:187:19: error: field 'ifru_broadaddr' has incomplete type
++  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:188:19: error: field 'ifru_netmask' has incomplete type
++  .../arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:189:20: error: field 'ifru_hwaddr' has incomplete type
++  ell/rtnl.c: In function 'l_rtnl_route_extract':
++  ell/rtnl.c:120:8: error: 'RTA_PREF' undeclared (first use in this function)
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac | 2 ++
++ ell/rtnl.c   | 7 ++++++-
++ 2 files changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 0351f89..3be35a4 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -113,6 +113,8 @@ AC_CHECK_LIB(dl, dlopen, dummy=yes,
++ 
++ AC_CHECK_HEADERS(linux/types.h linux/if_alg.h)
++ 
+++AC_CHECK_DECLS([RTA_PREF], [], [], [[#include <linux/rtnetlink.h>]])
+++
++ AC_ARG_ENABLE(glib, AC_HELP_STRING([--enable-glib],
++ 				[enable ell/glib main loop example]),
++ 					[enable_glib=${enableval}])
++diff --git a/ell/rtnl.c b/ell/rtnl.c
++index dc83937..3493d34 100644
++--- a/ell/rtnl.c
+++++ b/ell/rtnl.c
++@@ -25,8 +25,9 @@
++ #endif
++ 
++ #define _GNU_SOURCE
++-#include <linux/if.h>
+++#include <sys/types.h>
++ #include <sys/socket.h>
+++#include <linux/if.h>
++ #include <arpa/inet.h>
++ 
++ #include "util.h"
++@@ -35,6 +36,10 @@
++ #include "rtnl.h"
++ #include "private.h"
++ 
+++#if defined HAVE_DECL_RTA_PREF && !HAVE_DECL_RTA_PREF
+++#define RTA_PREF 20
+++#endif
+++
++ static size_t rta_add_u8(void *rta_buf, unsigned short type, uint8_t value)
++ {
++ 	struct rtattr *rta = rta_buf;
++-- 
++2.26.0
++
 -- 
-2.20.1
+2.26.0
