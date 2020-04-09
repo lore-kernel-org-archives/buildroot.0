@@ -1,107 +1,51 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu,  9 Apr 2020 19:00:09 +0300
-Subject: [Buildroot] [PATCH] package/collectd: bump to version 5.11.0
-Message-ID: <20200409160014.18401-1-asafka7@gmail.com>
+Date: Thu,  9 Apr 2020 19:00:11 +0300
+Subject: [Buildroot] [PATCH] package/python-fire: bump to version 0.3.1
+In-Reply-To: <20200409160014.18401-1-asafka7@gmail.com>
+References: <20200409160014.18401-1-asafka7@gmail.com>
+Message-ID: <20200409160014.18401-3-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch (already on upstream).
+And use two spaces for license file indentation.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- ...-protobuf-util-time_util.h-detection.patch | 50 -------------------
- package/collectd/collectd.hash                |  6 +--
- package/collectd/collectd.mk                  |  4 +-
- 3 files changed, 5 insertions(+), 55 deletions(-)
- delete mode 100644 package/collectd/0001-configure.ac-fix-protobuf-util-time_util.h-detection.patch
+ package/python-fire/python-fire.hash | 6 +++---
+ package/python-fire/python-fire.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/collectd/0001-configure.ac-fix-protobuf-util-time_util.h-detection.patch b/package/collectd/0001-configure.ac-fix-protobuf-util-time_util.h-detection.patch
-deleted file mode 100644
-index 5eb22bef46..0000000000
---- a/package/collectd/0001-configure.ac-fix-protobuf-util-time_util.h-detection.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From a81fb110f7685b3268cd921ba72a00796f43d034 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 29 Oct 2019 10:25:07 +0100
--Subject: [PATCH] configure.ac: fix protobuf/util/time_util.h detection
--
--Add -std=c++11 when checking gor protobuf/util/time_util.h otherwise
--test will fail on:
--
--configure:104495: checking google/protobuf/util/time_util.h usability
--configure:104495: /home/br-user/autobuild/run/instance-2/output/host/bin/mips-linux-gnu-g++ -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_FORTIFY_SOURCE=1  -pthread  conftest.cpp >&5
--In file included from /home/br-user/autobuild/run/instance-2/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/atomic:38:0,
--                 from /home/br-user/autobuild/run/instance-2/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/google/protobuf/io/coded_stream.h:113,
--                 from /home/br-user/autobuild/run/instance-2/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/google/protobuf/duration.pb.h:23,
--                 from /home/br-user/autobuild/run/instance-2/output/host/mips-buildroot-linux-gnu/sysroot/usr/include/google/protobuf/util/time_util.h:52,
--                 from conftest.cpp:188:
--/home/br-user/autobuild/run/instance-2/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support is currently experimental, and must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
--
--Fixes:
-- - http://autobuild.buildroot.net/results/0d486edaf4c51b6438adeec61fe2c55099862acb
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/collectd/collectd/pull/3325]
-----
-- configure.ac | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 34386d06..59a7f355 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -2722,6 +2722,7 @@ if test "x$withval" != "xno"; then
--   else
--     AC_MSG_RESULT([no])
--     with_libgrpcpp="no (requires C++11 support)"
--+    with_libprotobuf="no (<google/protobuf/util/time_util.h> requires C++11 support)"
--   fi
-- fi
-- 
--@@ -4568,7 +4569,7 @@ if test "x$withval" != "xno"; then
--   AC_CHECK_LIB([protobuf], [main],
--     [
--       SAVE_CPPFLAGS="$CPPFLAGS"
---      CPPFLAGS="$with_libprotobuf_cppflags $PROTOBUF_CFLAGS"
--+      CPPFLAGS="-std=c++11 $with_libprotobuf_cppflags $PROTOBUF_CFLAGS"
--       if test "x$PROTOBUF_LIBS" = "x"
--       then
--         PROTOBUF_LIBS="-lprotobuf"
---- 
--2.23.0
--
-diff --git a/package/collectd/collectd.hash b/package/collectd/collectd.hash
-index 7f716b7a93..0378eca11f 100644
---- a/package/collectd/collectd.hash
-+++ b/package/collectd/collectd.hash
+diff --git a/package/python-fire/python-fire.hash b/package/python-fire/python-fire.hash
+index 411270b70e..a6a2df8c00 100644
+--- a/package/python-fire/python-fire.hash
++++ b/package/python-fire/python-fire.hash
 @@ -1,5 +1,5 @@
- # Locally computed checksums
--sha512	1296085fb19bba0c7b7d8684ec877851158b25c9f7b58fc3ae602fba7d7dc718876e730e1cdba96d39101cc5452705bb3445aaee717b219025ae816299b6a3c5	collectd-5.10.0.tar.bz2
--sha256	a03359f563023e744c2dc743008a00a848f4cd506e072621d86b6d8313c0375b	collectd-5.10.0.tar.bz2
--sha1	9d64ec4e6e834b8e417e282390e2a9c57934d3bc	collectd-5.10.0.tar.bz2
-+sha512	87671545e3d01770c204ba4439265d1c0add6a105bf04ff02dc04db3731fd933d32ecb9b0dc15f2e504d70c3e421a64cf19728c897aa4fb1fda86e393ffc15bf	collectd-5.11.0.tar.bz2
-+sha256	37b10a806e34aa8570c1cafa6006c604796fae13cc2e1b3e630d33dcba9e5db2	collectd-5.11.0.tar.bz2
-+sha1	18bfb0be0493ed4a1b5d73c8bcc3f28d37652480	collectd-5.11.0.tar.bz2
- sha256	ed0409b2b1c30566dab5fcdaf46ee70e140c99788e22f0267645a9357b476ae4	COPYING
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 65307dce4c..97e1d17b5e 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
+ # md5, sha256 from https://pypi.org/pypi/fire/json
+-md5	9f3a91c285b50351d039b6f0bb91aac3  fire-0.2.1.tar.gz
+-sha256	6865fefc6981a713d2ce56a2a2c92c56c729269f74a6cddd6f4b94d16ae084c9  fire-0.2.1.tar.gz
++md5  af6da611394a2332fbd5bd9f1227254e  fire-0.3.1.tar.gz
++sha256  9736a16227c3d469e5d2d296bce5b4d8fa8d7851e953bda327a455fc2994307f  fire-0.3.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	a5de77b62266bca0bb97bf058992f0b0f308a83a8ca55ee10fbf6bd8ed8f7ed0  LICENSE
++sha256  a5de77b62266bca0bb97bf058992f0b0f308a83a8ca55ee10fbf6bd8ed8f7ed0  LICENSE
+diff --git a/package/python-fire/python-fire.mk b/package/python-fire/python-fire.mk
+index 6471a4d143..343abbca7d 100644
+--- a/package/python-fire/python-fire.mk
++++ b/package/python-fire/python-fire.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--COLLECTD_VERSION = 5.10.0
-+COLLECTD_VERSION = 5.11.0
- COLLECTD_SITE = \
--	https://github.com/collectd/collectd/releases/download/$(COLLECTD_VERSION)
-+	https://github.com/collectd/collectd/releases/download/collectd-$(COLLECTD_VERSION)
- COLLECTD_SOURCE = collectd-$(COLLECTD_VERSION).tar.bz2
- COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
- COLLECTD_INSTALL_STAGING = YES
+-PYTHON_FIRE_VERSION = 0.2.1
++PYTHON_FIRE_VERSION = 0.3.1
+ PYTHON_FIRE_SOURCE = fire-$(PYTHON_FIRE_VERSION).tar.gz
+-PYTHON_FIRE_SITE = https://files.pythonhosted.org/packages/d9/69/faeaae8687f4de0f5973694d02e9d6c3eb827636a009157352d98de1129e
++PYTHON_FIRE_SITE = https://files.pythonhosted.org/packages/34/a7/0e22e70778aca01a52b9c899d9c145c6396d7b613719cd63db97ffa13f2f
+ PYTHON_FIRE_SETUP_TYPE = setuptools
+ PYTHON_FIRE_LICENSE = Apache-2.0
+ PYTHON_FIRE_LICENSE_FILES = LICENSE
 -- 
 2.26.0
