@@ -1,64 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Apr 2020 12:44:12 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] Update for 2019.02.11
-Message-ID: <20200409103323.153D38E20C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 9 Apr 2020 13:34:34 +0200
+Subject: [Buildroot] how to make two defconfig simultaneously
+In-Reply-To: <VI1PR04MB513697495A894BC827B3CF0DFEC10@VI1PR04MB5136.eurprd04.prod.outlook.com>
+References: <VI1PR04MB513697495A894BC827B3CF0DFEC10@VI1PR04MB5136.eurprd04.prod.outlook.com>
+Message-ID: <20200409133434.20276005@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a6d31c87e1573bc83986471c194b944d7a365b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Hello,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 21 +++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 23 insertions(+), 2 deletions(-)
+On Thu, 9 Apr 2020 08:13:52 +0000
+Jerry Huang <jerry.huang@nxp.com> wrote:
 
-diff --git a/CHANGES b/CHANGES
-index a620a69955..3e6ed5a742 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,24 @@
-+2019.02.11, released April 9th, 2020
-+
-+	Important / security related fixes.
-+
-+	core: Fix compatibility with make 4.3+. Also fixup /lib
-+	references in libtool .la files, similar to how it is done for
-+	/usr/*.
-+
-+	toolchain: Fix kernel headers validation check for external
-+	toolchains.
-+
-+	Updated/fixed packages: barebox-aux, bluez5_utils, busybox,
-+	civetweb, collectd, ffmpeg, gcc, gnutls, gvfs, haproxy,
-+	hiredis, kmscube, libical, libopenssl, libsndfile,
-+	linux-tools, ntp, php, pure-ftpd, screen, sysdig, tor,
-+	util-linux, vala, vlc, xserver_xorg-server
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12746: "sysdig" package description points to http://sysdig.org, ..
-+
- 2019.02.10, released March 16th, 2020
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 1f6c2a6dd6..0cbe1076c5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2019.02.10
-+export BR2_VERSION := 2019.02.11
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1584393000
-+BR2_VERSION_EPOCH = 1586429000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+> Hi, all guys,
+> Is there any mechanism to make two defconfig simultaneously ?
+> For example:
+> "make xxx_defcofnig yyy_defconfig"
+
+It is not clear what you want to achieve. Do you want to build
+xxx_defconfig and yyy_defconfig as two separate configurations and two
+separate builds ?
+
+Or do you want to combine them together because each describes only one
+part of the overall system ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
