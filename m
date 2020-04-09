@@ -1,47 +1,64 @@
-From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Thu, 9 Apr 2020 11:16:46 +0200
-Subject: [Buildroot] [PATCH v1 1/5] package/python-flask: remove
- erroneously python-lxml dependency
-In-Reply-To: <20200408204828.998-1-ps.report@gmx.net>
-References: <20200408204828.998-1-ps.report@gmx.net>
-Message-ID: <3f1da423-9d47-da59-861a-11bc98510fdc@armadeus.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 9 Apr 2020 12:44:12 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] Update for 2019.02.11
+Message-ID: <20200409103323.153D38E20C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=5a6d31c87e1573bc83986471c194b944d7a365b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-On 4/8/20 10:48 PM, Peter Seiderer wrote:
-> Remove erroneously python-lxml dependency (as noted by
-> Peter Korsgaard).
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 21 +++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 23 insertions(+), 2 deletions(-)
 
-Reviewed-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-
-Regards,
-
-> ---
->  package/python-flask/Config.in | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/package/python-flask/Config.in b/package/python-flask/Config.in
-> index 72fcb61999..556afab6d2 100644
-> --- a/package/python-flask/Config.in
-> +++ b/package/python-flask/Config.in
-> @@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_FLASK
->  	bool "python-flask"
->  	select BR2_PACKAGE_PYTHON_CLICK # runtime
->  	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
-> -	select BR2_PACKAGE_PYTHON_LXML # runtime
->  	select BR2_PACKAGE_PYTHON_WERKZEUG # runtime
->  	select BR2_PACKAGE_PYTHON_ITSDANGEROUS # runtime
->  	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-> 
-
-
--- 
-S?bastien Szymanski, Armadeus Systems
-Software engineer
+diff --git a/CHANGES b/CHANGES
+index a620a69955..3e6ed5a742 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,24 @@
++2019.02.11, released April 9th, 2020
++
++	Important / security related fixes.
++
++	core: Fix compatibility with make 4.3+. Also fixup /lib
++	references in libtool .la files, similar to how it is done for
++	/usr/*.
++
++	toolchain: Fix kernel headers validation check for external
++	toolchains.
++
++	Updated/fixed packages: barebox-aux, bluez5_utils, busybox,
++	civetweb, collectd, ffmpeg, gcc, gnutls, gvfs, haproxy,
++	hiredis, kmscube, libical, libopenssl, libsndfile,
++	linux-tools, ntp, php, pure-ftpd, screen, sysdig, tor,
++	util-linux, vala, vlc, xserver_xorg-server
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#12746: "sysdig" package description points to http://sysdig.org, ..
++
+ 2019.02.10, released March 16th, 2020
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 1f6c2a6dd6..0cbe1076c5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2019.02.10
++export BR2_VERSION := 2019.02.11
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1584393000
++BR2_VERSION_EPOCH = 1586429000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
