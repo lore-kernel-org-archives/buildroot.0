@@ -1,53 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  9 Apr 2020 22:58:55 +0200
-Subject: [Buildroot] [PATCH] core/show-info: do not show install types for
- host packages
-Message-ID: <20200409205855.21194-1-yann.morin.1998@free.fr>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu,  9 Apr 2020 15:25:42 -0600
+Subject: [Buildroot] [PATCH 1/1] package/v4l2loopback: bump to version 0.12.4
+Message-ID: <20200409212542.119416-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By their very nature, host packages have no target, staging, or
-images install steps; they have a single install step, that is
-always performed.
-
-However, we currently report those three types of install, which
-is misleading at best, and really incorrect.
-
-If we were to report any install type for host package, that would
-be a single one, and it would always be true.
-
-So, do not report any install type for host packages, as it does
-not make sense to report anything that is always true.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Vadim Kochan <vadim4j@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/pkg-utils.mk | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/v4l2loopback/v4l2loopback.hash | 4 ++--
+ package/v4l2loopback/v4l2loopback.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index d324934dba..14101fcc2a 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -112,9 +112,11 @@ define _json-info-pkg-details
- 	"version": "$($(1)_DL_VERSION)",
- 	"licenses": "$($(1)_LICENSE)",
- 	"dl_dir": "$($(1)_DL_SUBDIR)",
--	"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET)),
--	"install_staging": $(call yesno-to-bool,$($(1)_INSTALL_STAGING)),
--	"install_images": $(call yesno-to-bool,$($(1)_INSTALL_IMAGES)),
-+	$(if $(filter target,$($(1)_TYPE)), \
-+		"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET))$(comma) \
-+		"install_staging": $(call yesno-to-bool,$($(1)_INSTALL_STAGING))$(comma) \
-+		"install_images": $(call yesno-to-bool,$($(1)_INSTALL_IMAGES))$(comma) \
-+	)
- 	"downloads": [
- 	$(foreach dl,$(sort $($(1)_ALL_DOWNLOADS)),
- 		{
+diff --git a/package/v4l2loopback/v4l2loopback.hash b/package/v4l2loopback/v4l2loopback.hash
+index b9d65c821c..97645ea827 100644
+--- a/package/v4l2loopback/v4l2loopback.hash
++++ b/package/v4l2loopback/v4l2loopback.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	3f6bb14b80865ec8df557c26fd2c5ba91d726580773a75a62aa2959864ef70ba  v4l2loopback-0.12.3.tar.gz
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  6483a64050d1c32de909a34379913d2f949141ed37a2ccc250d491a40bf96af9  v4l2loopback-0.12.4.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
+index 8fa0704989..1fc2e16524 100644
+--- a/package/v4l2loopback/v4l2loopback.mk
++++ b/package/v4l2loopback/v4l2loopback.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-V4L2LOOPBACK_VERSION = 0.12.3
++V4L2LOOPBACK_VERSION = 0.12.4
+ V4L2LOOPBACK_SITE = $(call github,umlaeute,v4l2loopback,v$(V4L2LOOPBACK_VERSION))
+ V4L2LOOPBACK_LICENSE = GPL-2.0+
+ V4L2LOOPBACK_LICENSE_FILES = COPYING
 -- 
 2.20.1
