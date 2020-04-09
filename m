@@ -1,38 +1,38 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Thu,  9 Apr 2020 09:35:15 -0300
-Subject: [Buildroot] [PATCH v2 2/5] package/mesa3d: Select LIBDRM_FREEDRENO
- for freedreno
+Date: Thu,  9 Apr 2020 09:35:16 -0300
+Subject: [Buildroot] [PATCH v2 3/5] configs/imx6-sabresd_qt5: Select
+ MESA3D_OPENGL_EGL
 In-Reply-To: <20200409123518.19576-1-festevam@gmail.com>
 References: <20200409123518.19576-1-festevam@gmail.com>
-Message-ID: <20200409123518.19576-2-festevam@gmail.com>
+Message-ID: <20200409123518.19576-3-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mesa3d freedreno driver is not usable without the corresponding
-libdrm support for this platform, so select LIBDRM_FREEDRENO.
+Now that MESA3D_OPENGL_EGL is not automatically selected by the mesa3d 
+etnaviv driver, explicitly select it in the config file.
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
 Changes since v1:
-- None
+- Mention mesa3d etanviv instead of kmscube in the commit log
 
- package/mesa3d/Config.in | 1 +
+ configs/imx6-sabresd_qt5_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 6f78da174c..dd512d9b76 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -112,6 +112,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
- 	bool "Gallium freedreno driver"
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_FREEDRENO
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	help
- 	  Mesa driver for Freedreno GPUs.
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index 47c00284d9..647be06d00 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -50,6 +50,7 @@ BR2_PACKAGE_MESA3D=y
+ BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
+ BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
+ BR2_PACKAGE_MESA3D_OPENGL_ES=y
++BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+ 
+ # Fonts
+ BR2_PACKAGE_BITSTREAM_VERA=y
 -- 
 2.17.1
