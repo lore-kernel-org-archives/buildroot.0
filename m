@@ -1,51 +1,51 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu,  9 Apr 2020 19:00:11 +0300
-Subject: [Buildroot] [PATCH] package/python-fire: bump to version 0.3.1
+Date: Thu,  9 Apr 2020 19:00:12 +0300
+Subject: [Buildroot] [PATCH] package/python-psutil: bump to version 5.7.0
 In-Reply-To: <20200409160014.18401-1-asafka7@gmail.com>
 References: <20200409160014.18401-1-asafka7@gmail.com>
-Message-ID: <20200409160014.18401-3-asafka7@gmail.com>
+Message-ID: <20200409160014.18401-4-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And use two spaces for license file indentation.
+Add use two spaces for license file hash indentation.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-fire/python-fire.hash | 6 +++---
- package/python-fire/python-fire.mk   | 4 ++--
+ package/python-psutil/python-psutil.hash | 6 +++---
+ package/python-psutil/python-psutil.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-fire/python-fire.hash b/package/python-fire/python-fire.hash
-index 411270b70e..a6a2df8c00 100644
---- a/package/python-fire/python-fire.hash
-+++ b/package/python-fire/python-fire.hash
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index 7f3d629d66..0000d6033c 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fire/json
--md5	9f3a91c285b50351d039b6f0bb91aac3  fire-0.2.1.tar.gz
--sha256	6865fefc6981a713d2ce56a2a2c92c56c729269f74a6cddd6f4b94d16ae084c9  fire-0.2.1.tar.gz
-+md5  af6da611394a2332fbd5bd9f1227254e  fire-0.3.1.tar.gz
-+sha256  9736a16227c3d469e5d2d296bce5b4d8fa8d7851e953bda327a455fc2994307f  fire-0.3.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5	b2c94e0368fc6e6f237a7252f8e85ca2  psutil-5.6.7.tar.gz
+-sha256	ffad8eb2ac614518bbe3c0b8eb9dffdb3a8d2e3a7d5da51c5b974fb723a5c5aa  psutil-5.6.7.tar.gz
++md5  ed7b0f11ed214bcabbe76b7cf52f3ae3  psutil-5.7.0.tar.gz
++sha256  685ec16ca14d079455892f25bd124df26ff9137664af445563c1bd36629b5e0e  psutil-5.7.0.tar.gz
  # Locally computed sha256 checksums
--sha256	a5de77b62266bca0bb97bf058992f0b0f308a83a8ca55ee10fbf6bd8ed8f7ed0  LICENSE
-+sha256  a5de77b62266bca0bb97bf058992f0b0f308a83a8ca55ee10fbf6bd8ed8f7ed0  LICENSE
-diff --git a/package/python-fire/python-fire.mk b/package/python-fire/python-fire.mk
-index 6471a4d143..343abbca7d 100644
---- a/package/python-fire/python-fire.mk
-+++ b/package/python-fire/python-fire.mk
+-sha256	24c12984500caa07ffdce19eebc06396c5e6d244b573bc6c438f4a6ef8e56c1b  LICENSE
++sha256  24c12984500caa07ffdce19eebc06396c5e6d244b573bc6c438f4a6ef8e56c1b  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 62a94f3c41..5f87e723cc 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FIRE_VERSION = 0.2.1
-+PYTHON_FIRE_VERSION = 0.3.1
- PYTHON_FIRE_SOURCE = fire-$(PYTHON_FIRE_VERSION).tar.gz
--PYTHON_FIRE_SITE = https://files.pythonhosted.org/packages/d9/69/faeaae8687f4de0f5973694d02e9d6c3eb827636a009157352d98de1129e
-+PYTHON_FIRE_SITE = https://files.pythonhosted.org/packages/34/a7/0e22e70778aca01a52b9c899d9c145c6396d7b613719cd63db97ffa13f2f
- PYTHON_FIRE_SETUP_TYPE = setuptools
- PYTHON_FIRE_LICENSE = Apache-2.0
- PYTHON_FIRE_LICENSE_FILES = LICENSE
+-PYTHON_PSUTIL_VERSION = 5.6.7
++PYTHON_PSUTIL_VERSION = 5.7.0
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/73/93/4f8213fbe66fc20cb904f35e6e04e20b47b85bee39845cc66a0bcf5ccdcb
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/c4/b8/3512f0e93e0db23a71d82485ba256071ebef99b227351f0f5540f744af41
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
 -- 
 2.26.0
