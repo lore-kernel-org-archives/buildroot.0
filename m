@@ -1,34 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 Apr 2020 13:34:34 +0200
-Subject: [Buildroot] how to make two defconfig simultaneously
-In-Reply-To: <VI1PR04MB513697495A894BC827B3CF0DFEC10@VI1PR04MB5136.eurprd04.prod.outlook.com>
-References: <VI1PR04MB513697495A894BC827B3CF0DFEC10@VI1PR04MB5136.eurprd04.prod.outlook.com>
-Message-ID: <20200409133434.20276005@windsurf.home>
+From: Angelos Oikonomopoulos <angelos@igalia.com>
+Date: Thu,  9 Apr 2020 13:46:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdb: allow building against python3
+ for host-gdb
+Message-ID: <20200409114638.16432-1-angelos@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Some gdb extensions require python3, so this simply adds a
+configuration option to point the host GDB at python3.
 
-On Thu, 9 Apr 2020 08:13:52 +0000
-Jerry Huang <jerry.huang@nxp.com> wrote:
+Signed-off-by: Angelos Oikonomopoulos <angelos@igalia.com>
+---
+ package/gdb/Config.in.host | 14 ++++++++++++++
+ package/gdb/gdb.mk         |  7 +++++++
+ 2 files changed, 21 insertions(+)
 
-> Hi, all guys,
-> Is there any mechanism to make two defconfig simultaneously ?
-> For example:
-> "make xxx_defcofnig yyy_defconfig"
-
-It is not clear what you want to achieve. Do you want to build
-xxx_defconfig and yyy_defconfig as two separate configurations and two
-separate builds ?
-
-Or do you want to combine them together because each describes only one
-part of the overall system ?
-
-Thomas
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 2db73b10d6..553166b340 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -37,6 +37,20 @@ config BR2_PACKAGE_HOST_GDB_PYTHON
+ 	help
+ 	  This option enables the Python support in the cross gdb.
+ 
++if BR2_PACKAGE_HOST_GDB_PYTHON
++
++choice  BR2_PACKAGE_HOST_GDB_PYTHON_VERSION
++	prompt "Python version for GDB"
++	default BR2_PACKAGE_HOST_GDB_PYTHON_VERSION_2
++config BR2_PACKAGE_HOST_GDB_PYTHON_VERSION_2
++	bool "python 2.7"
++config BR2_PACKAGE_HOST_GDB_PYTHON_VERSION_3
++	bool "python 3.8"
++	select BR2_PACKAGE_HOST_PYTHON3
++endchoice
++
++endif
++
+ config BR2_PACKAGE_HOST_GDB_SIM
+ 	bool "Simulator support"
+ 	depends on !BR2_arc
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 01f7e14460..8f614f6318 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -236,8 +236,15 @@ HOST_GDB_CONF_OPTS += --disable-tui
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HOST_GDB_PYTHON),y)
++ifeq ($(BR2_PACKAGE_HOST_GDB_PYTHON_VERSION_2),y)
+ HOST_GDB_CONF_OPTS += --with-python=$(HOST_DIR)/bin/python2
+ HOST_GDB_DEPENDENCIES += host-python
++else ifeq ($(BR2_PACKAGE_HOST_GDB_PYTHON_VERSION_3),y)
++HOST_GDB_CONF_OPTS += --with-python=$(HOST_DIR)/bin/python3
++HOST_GDB_DEPENDENCIES += host-python3
++else
++$(error Unknown python version selected for GDB)
++endif
+ else
+ HOST_GDB_CONF_OPTS += --without-python
+ endif
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.1
