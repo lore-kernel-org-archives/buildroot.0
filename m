@@ -1,50 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Apr 2020 08:33:23 +0200
-Subject: [Buildroot] [git commit] package/whois: bump to version 5.5.6
-Message-ID: <20200409062402.517F08E1A7@busybox.osuosl.org>
+Date: Thu, 9 Apr 2020 09:11:44 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/hiredis: install
+ alloc.h
+Message-ID: <20200409065754.483438E1E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75021e0ceb841d743390a9fceff8d0ae4f513db2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=8fd5c96339d7664204901fe2144fd9e33ef5b9ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Update indentation of hash file (two spaces)
+This will fix build of collectd, proftpd ... with latest hiredis
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f5afe60defd63461a5fc06b26bd4759fb5f56a8f
+ - http://autobuild.buildroot.org/results/45e980c85d170827d3a41e7443cf1088b2d59ead
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b72be8c48b7c110f5e63e741599ceca1d0352fbc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/whois/whois.hash | 6 +++---
- package/whois/whois.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/hiredis/hiredis.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index b83ea68d28..4dc4c3e220 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,5 +1,5 @@
--# From http://snapshot.debian.org/archive/debian/20200123T155144Z/pool/main/w/whois/whois_5.5.5.dsc
--sha256	c30e8a444482eadac157be42649833ef77c5ea9fb5cbcbabb6ee3f2254e5530d	whois_5.5.5.tar.xz
-+# From http://snapshot.debian.org/archive/debian/20200216T145122Z/pool/main/w/whois/whois_5.5.6.dsc
-+sha256  cba1e9000c60950f46a96ba23e8eea8aee240a2b8560e63a6bfb33f9034af14e  whois_5.5.6.tar.xz
- 
- # Hash for license file:
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index 417f5c76af..a96f20caae 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--WHOIS_VERSION = 5.5.5
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20200123T155144Z/pool/main/w/whois
-+WHOIS_VERSION = 5.5.6
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20200216T145122Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- WHOIS_DEPENDENCIES = \
- 	host-pkgconf \
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index 02055b05d4..230fb2d187 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -55,7 +55,7 @@ endif
+ define HIREDIS_INSTALL_STAGING_CMDS
+ 	mkdir -p $(HIREDIS_INCLUDE_DIR)
+ 	cp -dpfr $(@D)/hiredis.h $(@D)/async.h $(@D)/read.h $(@D)/sds.h \
+-		$(@D)/adapters $(HIREDIS_INCLUDE_DIR)
++		$(@D)/alloc.h $(@D)/adapters $(HIREDIS_INCLUDE_DIR)
+ 	$(INSTALL) -D -m 0644 $(@D)/hiredis.pc \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/hiredis.pc
+ 	$(HIREDIS_INSTALL_STAGING_STATIC_LIB)
