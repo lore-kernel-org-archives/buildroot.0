@@ -1,34 +1,118 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 9 Apr 2020 22:36:28 +0200
-Subject: [Buildroot] [PATCH v1 1/2] package/ell: bump version to 0.30
-In-Reply-To: <87eesxgpan.fsf@dell.be.48ers.dk>
-References: <20200407210702.10992-1-ps.report@gmx.net>
- <87eesxgpan.fsf@dell.be.48ers.dk>
-Message-ID: <20200409223628.6b3d6896@gmx.net>
+Date: Thu, 9 Apr 2020 22:47:50 +0200
+Subject: [Buildroot] [PATCH v1] package/ell: fix compile with older
+ toolchains
+In-Reply-To: <20200409203500.18857-1-ps.report@gmx.net>
+References: <20200409203500.18857-1-ps.report@gmx.net>
+Message-ID: <20200409224750.736128c8@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+On Thu,  9 Apr 2020 22:35:00 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
 
-On Thu, 09 Apr 2020 08:13:04 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+> Older toolchains need to include sys/types.h and sys/socket.h before
+> linux/if.h, RTA_PREF was introduces with linux-4.1.x.
+>
+> Fixes:
+>
+>   http://autobuild.buildroot.net/results/2d1/2d1a3f82abb8475d39908b22f775c2dac781f330
+>
+>   In file included from ell/rtnl.c:28:0:
+>   .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:185:19: error: field 'ifru_addr' has incomplete type
+>   .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:186:19: error: field 'ifru_dstaddr' has incomplete type
+>   .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:187:19: error: field 'ifru_broadaddr' has incomplete type
+>   .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:188:19: error: field 'ifru_netmask' has incomplete type
+>   .../arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:189:20: error: field 'ifru_hwaddr' has incomplete type
+>   ell/rtnl.c: In function 'l_rtnl_route_extract':
+>   ell/rtnl.c:120:8: error: 'RTA_PREF' undeclared (first use in this function)
 
-> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
->
->  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->
-> This causes some build issues:
->
-> http://autobuild.buildroot.net/?reason=ell-0.30
->
-> Care to take a look?
->
+And suggested upstream:
 
-Should be fixes with [1]...
+https://ml01.01.org/hyperkitty/list/ell at lists.01.org/thread/TOJ5XEY7X6WMOMJHX4KWI5LFEOX2QTBQ/
 
 Regards,
 Peter
 
-[1] http://patchwork.ozlabs.org/patch/1268819/
+>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  ...nl-fix-compile-with-older-toolchains.patch | 67 +++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
+>
+> diff --git a/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch b/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
+> new file mode 100644
+> index 0000000000..a9828f1904
+> --- /dev/null
+> +++ b/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
+> @@ -0,0 +1,67 @@
+> +From 60b4cd4c703be380aef194d31a1ffc4b42431bde Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Thu, 9 Apr 2020 22:21:36 +0200
+> +Subject: [PATCH] ell/rtnl: fix compile with older toolchains
+> +
+> +Older toolchains need to include sys/types.h and sys/socket.h before
+> +linux/if.h, RTA_PREF was introduces with linux-4.1.x.
+> +
+> +Fixes:
+> +
+> +  In file included from ell/rtnl.c:28:0:
+> +  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:185:19: error: field 'ifru_addr' has incomplete type
+> +  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:186:19: error: field 'ifru_dstaddr' has incomplete type
+> +  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:187:19: error: field 'ifru_broadaddr' has incomplete type
+> +  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:188:19: error: field 'ifru_netmask' has incomplete type
+> +  .../arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:189:20: error: field 'ifru_hwaddr' has incomplete type
+> +  ell/rtnl.c: In function 'l_rtnl_route_extract':
+> +  ell/rtnl.c:120:8: error: 'RTA_PREF' undeclared (first use in this function)
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + configure.ac | 2 ++
+> + ell/rtnl.c   | 7 ++++++-
+> + 2 files changed, 8 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 0351f89..3be35a4 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -113,6 +113,8 @@ AC_CHECK_LIB(dl, dlopen, dummy=yes,
+> +
+> + AC_CHECK_HEADERS(linux/types.h linux/if_alg.h)
+> +
+> ++AC_CHECK_DECLS([RTA_PREF], [], [], [[#include <linux/rtnetlink.h>]])
+> ++
+> + AC_ARG_ENABLE(glib, AC_HELP_STRING([--enable-glib],
+> + 				[enable ell/glib main loop example]),
+> + 					[enable_glib=${enableval}])
+> +diff --git a/ell/rtnl.c b/ell/rtnl.c
+> +index dc83937..3493d34 100644
+> +--- a/ell/rtnl.c
+> ++++ b/ell/rtnl.c
+> +@@ -25,8 +25,9 @@
+> + #endif
+> +
+> + #define _GNU_SOURCE
+> +-#include <linux/if.h>
+> ++#include <sys/types.h>
+> + #include <sys/socket.h>
+> ++#include <linux/if.h>
+> + #include <arpa/inet.h>
+> +
+> + #include "util.h"
+> +@@ -35,6 +36,10 @@
+> + #include "rtnl.h"
+> + #include "private.h"
+> +
+> ++#if defined HAVE_DECL_RTA_PREF && !HAVE_DECL_RTA_PREF
+> ++#define RTA_PREF 20
+> ++#endif
+> ++
+> + static size_t rta_add_u8(void *rta_buf, unsigned short type, uint8_t value)
+> + {
+> + 	struct rtattr *rta = rta_buf;
+> +--
+> +2.26.0
+> +
