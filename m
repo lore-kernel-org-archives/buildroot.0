@@ -1,80 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 09 Apr 2020 18:28:14 +0200
-Subject: [Buildroot] Buildroot 2019.02.11 released, 2019.02.x is EOL
-Message-ID: <87v9m8fwtd.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  9 Apr 2020 19:36:16 +0200
+Subject: [Buildroot] [PATCH 1/3] package/kodi-inputstream-adaptive: bump
+ version to 2.4.4-Leia
+Message-ID: <20200409173618.22363-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
-
-Buildroot 2019.02.11 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2019.02.11.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2019.02.11.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2019.02.11 is a bugfix release on the previous long term
-release, fixing a number of important / security related issues
-discovered since the 2019.02.10 release.
-
-Notice that the 2019.02.x series is now end of life unless somebody
-steps up to take over maintenance. Please migrate to the 2020.02 series
-instead which will be supported until April 2021.
-
-- core: Fix compatibility with make 4.3+.
-  Also fixup /lib references in libtool .la files, similar to how it is
-  done for /usr/*.
-
-- Toolchain: Fix kernel headers validation check for external toolchains.
-
-- Security fixes for bluez5_utils, gnutls, gvfs, haproxy, hiredis,
-  libical, libopenssl, libsndfile, ntp, php, pure-ftpd, tor
-
-- Fixes for download/compilation/runtime/license issues in barebox-aux,
-  busybox, civetweb, collectd, ffmpeg, gcc, kmscube, linux-tools, screen,
-  util-linux, vala, vlc, xserver_xorg-server
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.11
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2019.02.10..
-
-    15  Fabrice Fontaine
-     7  Peter Korsgaard
-     6  Bernd Kuhls
-     5  Thomas Petazzoni
-     4  Carlos Santos
-     3  Yann E. MORIN
-     2  Fabio Estevam
-     2  S?bastien Szymanski
-     1  Adam Duskett
-     1  Anatoly Borodin
-     1  James Hilliard
-     1  J?rg Krause
-     1  Merlin B?ge
-     1  Naz?m Gediz AYDINDO?MU?
-     1  Pascal de Bruijn
-     1  Peter Seiderer
-     1  Robert Hancock
-     1  Stefan S?rensen
-     1  Yaroslav Syrytsia
-
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 4cdfe5aeac..ff520781ac 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 83c3d1c45ed5f63d95ca8fa93fcf57fb249586987f9fe74ef4857ca660ed2f64  kodi-inputstream-adaptive-2.4.3-Leia.tar.gz
++sha256 ec2264aa620faa547e589b705c0393dbbfe4a8f866215d9a9f3d5b3ceea6560e  kodi-inputstream-adaptive-2.4.4-Leia.tar.gz
+ sha256 89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index bf7f64ca72..cd34047db4 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.3-Leia
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.4-Leia
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
 -- 
-Bye, Peter Korsgaard
+2.25.0
