@@ -1,46 +1,41 @@
-From: Vladimir Oltean <olteanv@gmail.com>
-Date: Thu, 9 Apr 2020 15:16:36 +0300
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 9 Apr 2020 14:25:07 +0200
 Subject: [Buildroot] how to make two defconfig simultaneously
-In-Reply-To: <20200409133434.20276005@windsurf.home>
+In-Reply-To: <CA+h21hpmV55Nh7HUA5WZ3QKU+yCPsnoLOVuNge8VyMbbK6EtHg@mail.gmail.com>
 References: <VI1PR04MB513697495A894BC827B3CF0DFEC10@VI1PR04MB5136.eurprd04.prod.outlook.com>
  <20200409133434.20276005@windsurf.home>
-Message-ID: <CA+h21hpmV55Nh7HUA5WZ3QKU+yCPsnoLOVuNge8VyMbbK6EtHg@mail.gmail.com>
+ <CA+h21hpmV55Nh7HUA5WZ3QKU+yCPsnoLOVuNge8VyMbbK6EtHg@mail.gmail.com>
+Message-ID: <20200409142507.5de703f4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On Thu, 9 Apr 2020 15:16:36 +0300
+Vladimir Oltean <olteanv@gmail.com> wrote:
 
-On Thu, 9 Apr 2020 at 14:34, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Thu, 9 Apr 2020 08:13:52 +0000
-> Jerry Huang <jerry.huang@nxp.com> wrote:
->
-> > Hi, all guys,
-> > Is there any mechanism to make two defconfig simultaneously ?
-> > For example:
-> > "make xxx_defcofnig yyy_defconfig"
->
-> It is not clear what you want to achieve. Do you want to build
-> xxx_defconfig and yyy_defconfig as two separate configurations and two
-> separate builds ?
->
-> Or do you want to combine them together because each describes only one
-> part of the overall system ?
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com  
+> 
+> I would assume the question is about merging a defconfig with multiple
+> fragments.
 
-I would assume the question is about merging a defconfig with multiple
-fragments.
+Then:
 
-Thanks,
--Vladimir
+$ ./support/kconfig/merge_config.sh fragment1 fragment2
+
+see also
+https://bootlin.com/doc/training/buildroot/buildroot-slides.pdf slides
+43 and 44.
+
+However, I would recommend to *not* store fragments under configs/ with
+a _defconfig suffix, as this is normally used for complete defconfigs,
+not fragments.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
