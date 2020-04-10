@@ -1,25 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Apr 2020 22:23:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.4.3
-In-Reply-To: <20200410124841.3226726-1-bernd.kuhls@t-online.de>
-References: <20200410124841.3226726-1-bernd.kuhls@t-online.de>
-Message-ID: <20200410222359.081bc6c1@windsurf.home>
+Date: Fri, 10 Apr 2020 22:24:07 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libdvdread: bump version to
+ 6.1.1
+In-Reply-To: <20200410130450.3320905-1-bernd.kuhls@t-online.de>
+References: <20200410130450.3320905-1-bernd.kuhls@t-online.de>
+Message-ID: <20200410222407.48a80396@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 10 Apr 2020 14:48:41 +0200
+On Fri, 10 Apr 2020 15:04:48 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
+> Changelog:
+> https://code.videolan.org/videolan/libdvdread/-/blob/master/NEWS
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/fetchmail/fetchmail.hash | 9 +++++----
->  package/fetchmail/fetchmail.mk   | 2 +-
->  2 files changed, 6 insertions(+), 5 deletions(-)
+>  package/libdvdread/libdvdread.hash | 12 ++++++------
+>  package/libdvdread/libdvdread.mk   |  2 +-
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 
-Applied to master, thanks.
+All three patches applied to master, thanks.
 
 Thomas
 -- 
