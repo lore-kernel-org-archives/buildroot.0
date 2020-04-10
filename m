@@ -1,47 +1,109 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 10 Apr 2020 22:26:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mtdev: bump to version 1.1.6
-Message-ID: <20200410202621.650851-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 10 Apr 2020 22:25:53 +0200
+Subject: [Buildroot] [PATCH v6 19/28] core/pkg-infra: Add per-package
+ support in qmake infra
+In-Reply-To: <20200217212350.29750-20-anaumann@ultratronik.de>
+References: <20200217212350.29750-1-anaumann@ultratronik.de>
+ <20200217212350.29750-20-anaumann@ultratronik.de>
+Message-ID: <20200410202553.GJ29898@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update indentation of hash file (two spaces)
-- This bump will fix build with musl 1.2.0
+Andreas, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/5861dc032ba2d0e092f742674759b39f393a710d
+On 2020-02-17 22:23 +0100, Andreas Naumann spake thusly:
+> Qmake configured packages will, by default, use the absolute HostPrefix/Sysroot
+> pathes set during configuration/building of qt5base for their install
+> destinations.
+> For the per-package host/staging infrastructure, this causes non-qt5base
+> packages to litter the qt5base folders. In addition, buildroots target-install
+> step subsequently fails because the respective files are missing from the
+> per-package sysroot of the package itself.
+> 
+> Fortunately, qmake's built-in pathes can be overridden by placing a custom
+> qt.conf next to the qmake binary. This is already used to facilitate SDK
+> relocation. So for per-package path manipulation we can reuse that method, but
+> need to change the host/sysroot values according to each per-package
+> path.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mtdev/mtdev.hash | 4 ++--
- package/mtdev/mtdev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Neat! :-)
 
-diff --git a/package/mtdev/mtdev.hash b/package/mtdev/mtdev.hash
-index 7ead723ef4..355e50ff6f 100644
---- a/package/mtdev/mtdev.hash
-+++ b/package/mtdev/mtdev.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 6677d5708a7948840de734d8b4675d5980d4561171c5a8e89e54adf7a13eba7f  mtdev-1.1.5.tar.bz2
--sha256 795bfe74daae59a97d3a0c8ec0ba0f08c243adf94a3aa7981a4136fce31d55b4  COPYING
-+sha256  15d7b28da8ac71d8bc8c9287c2045fd174267bc740bec10cfda332dc1204e0e0  mtdev-1.1.6.tar.bz2
-+sha256  795bfe74daae59a97d3a0c8ec0ba0f08c243adf94a3aa7981a4136fce31d55b4  COPYING
-diff --git a/package/mtdev/mtdev.mk b/package/mtdev/mtdev.mk
-index f4c38d5c41..7191858187 100644
---- a/package/mtdev/mtdev.mk
-+++ b/package/mtdev/mtdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MTDEV_VERSION = 1.1.5
-+MTDEV_VERSION = 1.1.6
- MTDEV_SOURCE = mtdev-$(MTDEV_VERSION).tar.bz2
- MTDEV_SITE = http://bitmath.org/code/mtdev
- 
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+> ---
+[--SNIP--]
+> diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+> index d94d9cc99f..eb2a749678 100644
+> --- a/package/qt5/qt5.mk
+> +++ b/package/qt5/qt5.mk
+> @@ -17,5 +17,20 @@ QT5_SITE = https://download.qt.io/archive/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)
+>  
+>  include $(sort $(wildcard package/qt5/*/*.mk))
+>  
+> +# The file "qt.conf" can be used to override the hard-coded paths that are
+> +# compiled into the Qt library. We need it to make "qmake" relocatable and
+> +# tweak the per-package install pathes
+> +define QT5_INSTALL_QT_CONF
+> +	rm -f $(HOST_DIR)/bin/qt.conf && \
+
+This rm is superfluous, since you're overwriting the file anyway...
+
+> +	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
+> +		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
+                                     ^
+Here -------------------------------/
+
+No need to resend jsut for that, it can be fixed locally when applying.
+Otherwise:
+
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +
+> +ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
+> +define QT5_QT_CONF_FIXUP
+> +        $(QT5_INSTALL_QT_CONF)
+> +endef
+> +endif
+> +
+>  # Variable for other Qt applications to use
+>  QT5_QMAKE = $(HOST_DIR)/bin/qmake -spec devices/linux-buildroot-g++
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index 03f984ef8c..960a802b3b 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -352,13 +352,6 @@ define QT5BASE_CONFIGURE_CMDS
+>  	)
+>  endef
+>  
+> -# The file "qt.conf" can be used to override the hard-coded paths that are
+> -# compiled into the Qt library. We need it to make "qmake" relocatable.
+> -define QT5BASE_INSTALL_QT_CONF
+> -	sed -e "s|@@HOST_DIR@@|$(HOST_DIR)|" -e "s|@@STAGING_DIR@@|$(STAGING_DIR)|" \
+> -		$(QT5BASE_PKGDIR)/qt.conf.in > $(HOST_DIR)/bin/qt.conf
+> -endef
+> -
+> -QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5BASE_INSTALL_QT_CONF
+> +QT5BASE_POST_INSTALL_STAGING_HOOKS += QT5_INSTALL_QT_CONF
+>  
+>  $(eval $(qmake-package))
+> -- 
+> 2.25.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
