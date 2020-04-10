@@ -1,134 +1,52 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Fri, 10 Apr 2020 23:16:59 +0300
-Subject: [Buildroot] [PATCH] configs/snps_arc*_defconfig: update linux
- version
-Message-ID: <20200410201659.24208-1-Evgeniy.Didin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 10 Apr 2020 22:23:49 +0200
+Subject: [Buildroot] [PATCH] package/gr-osmosdr: bump to 0.2.0
+In-Reply-To: <20200410150111.15360-1-gwenj@trabucayre.com>
+References: <20200410150111.15360-1-gwenj@trabucayre.com>
+Message-ID: <20200410222349.111429ea@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With this commit we update for ARC boards Linux kernel
-version to 5.6.3 and Linux headers version to 5.6.
+On Fri, 10 Apr 2020 17:01:11 +0200
+Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
 
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: arc-buildroot at synopsys.com
----
- configs/snps_arc700_axs101_defconfig  | 6 +++---
- configs/snps_archs38_axs103_defconfig | 6 +++---
- configs/snps_archs38_haps_defconfig   | 6 +++---
- configs/snps_archs38_hsdk_defconfig   | 6 +++---
- configs/snps_archs38_vdk_defconfig    | 6 +++---
- 5 files changed, 15 insertions(+), 15 deletions(-)
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Since, gr-osmosdr is python3 only, drop everything related to python2.
+> python-cheetah is no more mandatory, so drop this too.
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+>  package/gr-osmosdr/Config.in       | 1 +
+>  package/gr-osmosdr/gr-osmosdr.hash | 2 +-
+>  package/gr-osmosdr/gr-osmosdr.mk   | 8 ++++----
+>  3 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
+> index 1e80137f35..3d12540c7d 100644
+> --- a/package/gr-osmosdr/Config.in
+> +++ b/package/gr-osmosdr/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_GR_OSMOSDR
+>  	bool "gr-osmosdr"
+>  	depends on BR2_PACKAGE_GNURADIO
+> +	depends on BR2_PACKAGE_PYTHON3
 
-diff --git a/configs/snps_arc700_axs101_defconfig b/configs/snps_arc700_axs101_defconfig
-index 5d9b5a5139..080250e92b 100644
---- a/configs/snps_arc700_axs101_defconfig
-+++ b/configs/snps_arc700_axs101_defconfig
-@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
- BR2_LINUX_KERNEL_DEFCONFIG="axs101"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
-diff --git a/configs/snps_archs38_axs103_defconfig b/configs/snps_archs38_axs103_defconfig
-index c6e2b10f0f..c5847809ba 100644
---- a/configs/snps_archs38_axs103_defconfig
-+++ b/configs/snps_archs38_axs103_defconfig
-@@ -9,13 +9,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
- BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
-diff --git a/configs/snps_archs38_haps_defconfig b/configs/snps_archs38_haps_defconfig
-index cb5edea2c8..a95d760df2 100644
---- a/configs/snps_archs38_haps_defconfig
-+++ b/configs/snps_archs38_haps_defconfig
-@@ -7,12 +7,12 @@ BR2_TARGET_GENERIC_HOSTNAME="zebu_hs"
- BR2_TARGET_GENERIC_ISSUE="Welcome to the HAPS Development Platform"
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
- BR2_LINUX_KERNEL_DEFCONFIG="haps_hs_smp"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
-index 646cd99d99..af7cba6c2e 100644
---- a/configs/snps_archs38_hsdk_defconfig
-+++ b/configs/snps_archs38_hsdk_defconfig
-@@ -2,8 +2,8 @@
- BR2_arcle=y
- BR2_archs38_full=y
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
- 
- # System
- BR2_TARGET_GENERIC_HOSTNAME="hsdk"
-@@ -13,7 +13,7 @@ BR2_SYSTEM_DHCP="eth0"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
- BR2_LINUX_KERNEL_DEFCONFIG="hsdk"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/synopsys/hsdk/linux.fragment"
- 
-diff --git a/configs/snps_archs38_vdk_defconfig b/configs/snps_archs38_vdk_defconfig
-index 7c7834f9bd..8d8e9f7559 100644
---- a/configs/snps_archs38_vdk_defconfig
-+++ b/configs/snps_archs38_vdk_defconfig
-@@ -8,13 +8,13 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
- BR2_TARGET_ROOTFS_EXT2=y
- 
--# Linux headers same as kernel, a 4.19 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+# Linux headers same as kernel, a 5.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
- BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38_smp"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+Why do you add this dependency? The package itself only requires
+host-python3, not the target python.
+
+However, the BR2_PACKAGE_GR_OSMOSDR_PYTHON option would indeed need
+this dependency.
+
+Am I missing something ?
+
+Thanks,
+
+Thomas
 -- 
-2.16.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
