@@ -1,35 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Apr 2020 22:32:25 +0200
-Subject: [Buildroot] [git commit] package/strongswan: annotate CVEs
-Message-ID: <20200410202616.3B55D8E26E@busybox.osuosl.org>
+Date: Fri, 10 Apr 2020 22:32:31 +0200
+Subject: [Buildroot] [git commit] package/subversion: bump to version 1.13.0
+Message-ID: <20200410202616.490178E2FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=758a23fd89410b1f1b9bd1df0bd27de19135818e
+commit: https://git.buildroot.net/buildroot/commit/?id=85aeb5b3506e32426e75e385ce835b02c0a65be3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- Update site to get latest release
+- Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/strongswan/strongswan.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/subversion/subversion.hash | 6 +++---
+ package/subversion/subversion.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 021a59cecc..7f1752ce57 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -43,6 +43,11 @@ STRONGSWAN_CONF_OPTS += \
- 	--with-imcvdir=/usr/lib/ipsec/imcvs \
- 	--with-dev-headers=/usr/include
+diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
+index 581834f98d..f78990cbb3 100644
+--- a/package/subversion/subversion.hash
++++ b/package/subversion/subversion.hash
+@@ -1,5 +1,5 @@
+-# From https://www.apache.org/dist/subversion/subversion-1.12.2.tar.bz2.sha512
+-sha512 b1f859b460afa54598778d8633f648acb4fa46138f7d6f0c1451e3c6a1de71df859233cd9ac7f19f0f20d7237ed3988f0a38da7552ffa58391e19d957bc7c136 subversion-1.12.2.tar.bz2
++# From https://www.apache.org/dist/subversion/subversion-1.13.0.tar.bz2.sha512
++sha512  36f390b412bf772bf894efc2aadc247f12ca30ac407e04f664c14411c3519e1bb242d1239f2f44cbcb86eafc7c413efc8eadbfe1d1e75118235a7b7adc6c85b2  subversion-1.13.0.tar.bz2
  
-+# strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
-+STRONGSWAN_IGNORE_CVES += CVE-2018-16151 CVE-2018-16152
-+# strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
-+STRONGSWAN_IGNORE_CVES += CVE-2018-17540
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- STRONGSWAN_CONF_ENV += LIBS='-latomic'
- endif
+ # Locally calculated
+-sha256 484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad LICENSE
++sha256  484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad  LICENSE
+diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
+index 2044a6420f..010329357c 100644
+--- a/package/subversion/subversion.mk
++++ b/package/subversion/subversion.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-SUBVERSION_VERSION = 1.12.2
++SUBVERSION_VERSION = 1.13.0
+ SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
+-SUBVERSION_SITE = http://mirror.catn.com/pub/apache/subversion
++SUBVERSION_SITE = https://downloads.apache.org/subversion
+ SUBVERSION_LICENSE = Apache-2.0
+ SUBVERSION_LICENSE_FILES = LICENSE
+ SUBVERSION_DEPENDENCIES = \
