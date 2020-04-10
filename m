@@ -1,42 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 10 Apr 2020 23:24:21 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-03-28
-In-Reply-To: <20200329062631.A05FE86DAF@whitealder.osuosl.org>
-References: <20200329062631.A05FE86DAF@whitealder.osuosl.org>
-Message-ID: <1f99043b-54f8-882c-4d74-e9a99eaca971@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 10 Apr 2020 15:34:14 -0600
+Subject: [Buildroot] [PATCH 1/1] package/wireguard-linux-compat: depend on
+ headers < 5.6
+Message-ID: <20200410213414.60355-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since wireguard is built into kernels 5.6 and later we can't build
+wireguard-linux-compat on them, so we need to depend on
+!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6.
 
-Le 29/03/2020 ? 08:26, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> Detail of runtime-test failures
-> -------------------------------
-> 
->              runtime-test |                        link to the job                        | orph?
-> --------------------------+---------------------------------------------------------------+------
-[...]
->       TestPythonPy3Django |  https://gitlab.com/buildroot.org/buildroot/-/jobs/488816222  | ORPH 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/wireguard-linux-compat/Config.in | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-I'm unable to reproduce this issue on my pc or in the Docker image used in gitlab.
-
-I used docker pull buildroot/base:20191027.2027 to download the docker image and
-run the test in it.
-
-It look like a timing issue due:
-
-  # give some time to setup the server
-  cmd += "sleep 30"
-
-https://git.buildroot.net/buildroot/tree/support/testing/tests/package/test_python_django.py?h=2020.02.1#n18
-
-Any idea ?
-
-Best regards,
-Romain
+diff --git a/package/wireguard-linux-compat/Config.in b/package/wireguard-linux-compat/Config.in
+index 4ee214be63..5ecb4ef591 100644
+--- a/package/wireguard-linux-compat/Config.in
++++ b/package/wireguard-linux-compat/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+ 	depends on BR2_LINUX_KERNEL
+ 	# kernel module requires 3.10+
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++	# kernel module incompatible with 5.6+
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+ 	help
+ 	  WireGuard is an extremely simple yet fast and modern VPN
+ 	  that utilizes state-of-the-art cryptography. It aims to be
+@@ -20,4 +22,8 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+ 	  https://www.wireguard.com
+ 
+ comment "wireguard-linux-compat needs a toolchain w/ headers >= 3.10"
+-	depends on BR2_LINUX_KERNEL && !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++	depends on BR2_LINUX_KERNEL && !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 \
++		&& !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
++
++comment "wireguard-linux-compat cannot be used with kernels that have native wireguard support"
++	depends on BR2_LINUX_KERNEL && BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+-- 
+2.20.1
