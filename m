@@ -1,123 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 10 Apr 2020 18:32:37 +0200
-Subject: [Buildroot] [PATCH v1] package/assimp: fix musl zlib/zip related
- compile failure
-Message-ID: <20200410163237.30240-1-ps.report@gmx.net>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Fri, 10 Apr 2020 19:31:17 +0200
+Subject: [Buildroot] [PATCH 1/2] package/p7zip: fix CVE-2016-9296
+Message-ID: <20200410173118.21538-1-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As assimp fails to use system provided zlib/zip (and is picky
-about the provided versions) use assimp contributed one
-and backport one part of upstream patch to fix musl compile.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/4b373ae7d8fd40efe3e2592f94f2d769d6a77669
-
-  In file included from .../assimp-5.0.1/code/3MF/D3MFExporter.cpp:61:
-  .../assimp-5.0.1/contrib/zip/src/zip.h:30:15: error: conflicting declaration 'typedef long int ssize_t'
-   typedef long  ssize_t;  /* byte count or error */
-                 ^~~~~~~
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- ...ssize_t-typedef-mismatch-for-musl-co.patch | 50 +++++++++++++++++++
- package/assimp/Config.in                      |  1 -
- package/assimp/assimp.mk                      |  3 +-
- 3 files changed, 51 insertions(+), 3 deletions(-)
- create mode 100644 package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch
+ package/p7zip/0001-CVE-2016-9296.patch | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 package/p7zip/0001-CVE-2016-9296.patch
 
-diff --git a/package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch b/package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch
+diff --git a/package/p7zip/0001-CVE-2016-9296.patch b/package/p7zip/0001-CVE-2016-9296.patch
 new file mode 100644
-index 0000000000..a9a30c4834
+index 0000000000..42245c92c0
 --- /dev/null
-+++ b/package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch
-@@ -0,0 +1,50 @@
-+From 3fef857a570d1ef2c96401358fe8e239625b48c9 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Fri, 10 Apr 2020 18:11:50 +0200
-+Subject: [PATCH] contrib/zip: fix ssize_t typedef mismatch for musl compile
++++ b/package/p7zip/0001-CVE-2016-9296.patch
+@@ -0,0 +1,23 @@
++From: Robert Luberda <robert@debian.org>
++Date: Sat, 19 Nov 2016 08:48:08 +0100
++Subject: Fix nullptr dereference (CVE-2016-9296)
 +
-+Musl uses defines __DEFINED_ssize_t to indicate ssize_t
-+availability. So backport this part of upstream commit [1]
-+to fixl musl compile.
-+
-+https://github.com/assimp/assimp/commit/f78446b14aff46db2ef27d062a275b6a01fd68b1
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++Patch taken from https://sourceforge.net/p/p7zip/bugs/185/
 +---
-+ contrib/zip/src/zip.h | 13 +++++++++++--
-+ 1 file changed, 11 insertions(+), 2 deletions(-)
++ CPP/7zip/Archive/7z/7zIn.cpp | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+diff --git a/contrib/zip/src/zip.h b/contrib/zip/src/zip.h
-+index 5f39df50..4672eb3e 100644
-+--- a/contrib/zip/src/zip.h
-++++ b/contrib/zip/src/zip.h
-+@@ -20,8 +20,9 @@ extern "C" {
-+ #endif
++diff --git a/CPP/7zip/Archive/7z/7zIn.cpp b/CPP/7zip/Archive/7z/7zIn.cpp
++index b0c6b98..7c6dde2 100644
++--- a/CPP/7zip/Archive/7z/7zIn.cpp
+++++ b/CPP/7zip/Archive/7z/7zIn.cpp
++@@ -1097,7 +1097,8 @@ HRESULT CInArchive::ReadAndDecodePackedStreams(
++       if (CrcCalc(data, unpackSize) != folders.FolderCRCs.Vals[i])
++         ThrowIncorrect();
++   }
++-  HeadersSize += folders.PackPositions[folders.NumPackStreams];
+++  if (folders.PackPositions)
+++      HeadersSize += folders.PackPositions[folders.NumPackStreams];
++   return S_OK;
++ }
 + 
-+ #if !defined(_SSIZE_T_DEFINED) && !defined(_SSIZE_T_DEFINED_) &&               \
-+-    !defined(_SSIZE_T) && !defined(_SSIZE_T_) && !defined(__ssize_t_defined)
-+-#define _SSIZE_T
-++    !defined(__DEFINED_ssize_t) && !defined(__ssize_t_defined) &&              \
-++    !defined(_SSIZE_T) && !defined(_SSIZE_T_)
-++
-+ // 64-bit Windows is the only mainstream platform
-+ // where sizeof(long) != sizeof(void*)
-+ #ifdef _WIN64
-+@@ -29,6 +30,14 @@ typedef long long  ssize_t;  /* byte count or error */
-+ #else
-+ typedef long  ssize_t;  /* byte count or error */
-+ #endif
-++
-++#define _SSIZE_T_DEFINED
-++#define _SSIZE_T_DEFINED_
-++#define __DEFINED_ssize_t
-++#define __ssize_t_defined
-++#define _SSIZE_T
-++#define _SSIZE_T_
-++
-+ #endif
-+ 
-+ #ifndef MAX_PATH
-+-- 
-+2.26.0
-+
-diff --git a/package/assimp/Config.in b/package/assimp/Config.in
-index 42bfee945d..9bdc054909 100644
---- a/package/assimp/Config.in
-+++ b/package/assimp/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_ASSIMP
- 	bool "assimp"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_ZLIB
- 	help
- 	  Open Asset Import Library (assimp) is a portable Open Source
- 	  library to import various well-known 3D model formats in a
-diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
-index 5e8e825375..4aeb2963a9 100644
---- a/package/assimp/assimp.mk
-+++ b/package/assimp/assimp.mk
-@@ -8,7 +8,6 @@ ASSIMP_VERSION = 5.0.1
- ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
- ASSIMP_LICENSE = BSD-3-Clause
- ASSIMP_LICENSE_FILES = LICENSE
--ASSIMP_DEPENDENCIES = zlib
- ASSIMP_INSTALL_STAGING = YES
- 
- # relocation truncated to fit: R_68K_GOT16O
-@@ -28,7 +27,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
- ASSIMP_CXXFLAGS += -O0
- endif
- 
--ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF \
-+ASSIMP_CONF_OPTS += -DASSIMP_BUILD_ZLIB=ON -DASSIMP_BUILD_TESTS=OFF \
- 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(ASSIMP_CXXFLAGS)"
- 
- $(eval $(cmake-package))
 -- 
-2.26.0
+2.17.1
