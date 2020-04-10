@@ -1,49 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Apr 2020 22:23:49 +0200
-Subject: [Buildroot] [PATCH] package/gr-osmosdr: bump to 0.2.0
-In-Reply-To: <20200410150111.15360-1-gwenj@trabucayre.com>
-References: <20200410150111.15360-1-gwenj@trabucayre.com>
-Message-ID: <20200410222349.111429ea@windsurf.home>
+Date: Fri, 10 Apr 2020 22:23:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.4.3
+In-Reply-To: <20200410124841.3226726-1-bernd.kuhls@t-online.de>
+References: <20200410124841.3226726-1-bernd.kuhls@t-online.de>
+Message-ID: <20200410222359.081bc6c1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 10 Apr 2020 17:01:11 +0200
-Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+On Fri, 10 Apr 2020 14:48:41 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> Since, gr-osmosdr is python3 only, drop everything related to python2.
-> python-cheetah is no more mandatory, so drop this too.
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/gr-osmosdr/Config.in       | 1 +
->  package/gr-osmosdr/gr-osmosdr.hash | 2 +-
->  package/gr-osmosdr/gr-osmosdr.mk   | 8 ++++----
->  3 files changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
-> index 1e80137f35..3d12540c7d 100644
-> --- a/package/gr-osmosdr/Config.in
-> +++ b/package/gr-osmosdr/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_GR_OSMOSDR
->  	bool "gr-osmosdr"
->  	depends on BR2_PACKAGE_GNURADIO
-> +	depends on BR2_PACKAGE_PYTHON3
+>  package/fetchmail/fetchmail.hash | 9 +++++----
+>  package/fetchmail/fetchmail.mk   | 2 +-
+>  2 files changed, 6 insertions(+), 5 deletions(-)
 
-Why do you add this dependency? The package itself only requires
-host-python3, not the target python.
-
-However, the BR2_PACKAGE_GR_OSMOSDR_PYTHON option would indeed need
-this dependency.
-
-Am I missing something ?
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
