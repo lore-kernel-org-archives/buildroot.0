@@ -1,47 +1,54 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 10 Apr 2020 14:48:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.4.3
-Message-ID: <20200410124841.3226726-1-bernd.kuhls@t-online.de>
+Date: Fri, 10 Apr 2020 15:04:48 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libdvdread: bump version to 6.1.1
+Message-ID: <20200410130450.3320905-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Changelog:
+https://code.videolan.org/videolan/libdvdread/-/blob/master/NEWS
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/fetchmail/fetchmail.hash | 9 +++++----
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/libdvdread/libdvdread.hash | 12 ++++++------
+ package/libdvdread/libdvdread.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 08a7a0ef48..e55aa5733c 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,6 +1,7 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/36773211/
--sha1 1aadf078ed8fb1b6c93e9126cc0375b1f740301a  fetchmail-6.4.1.tar.xz
--sha256 3f33f11dd08c3e8cc3e9d18eec686b1626d4818f4d5a72791507bbc4dce6a9a0  fetchmail-6.4.1.tar.xz
--sha512 940b8df52f963f71537962ebe2b2cb88298fd2b54ca79932e5c974abe850f0b59cdc4919d606ee4f210e82d1e0a6f090ea87f1d3bdea18b531d4fbb36f7f9ea0  fetchmail-6.4.1.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/36971969/
-+sha256 b0360e14b9aa5d065eef8ff99ad0347ef6cbbfc934c8114908295a402a09d3e4  fetchmail-6.4.3.tar.xz
-+# From https://sourceforge.net/projects/fetchmail/files/branch_6.4/
-+sha1 14dbbad6714d3498920ed4058479a3ddf34fe96c  fetchmail-6.4.3.tar.xz
-+md5 614d5a05ac9a042bfc9317e5499bafd4  fetchmail-6.4.3.tar.xz
- # Locally computed:
- sha256 89d6efe79c78f965b256e007d6acc367fff982c59b6195fb6ec5895ea0fc9bd5  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index b8e3c667e3..4b1aa645dd 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libdvdread/libdvdread.hash b/package/libdvdread/libdvdread.hash
+index c6b5807af9..00066619ce 100644
+--- a/package/libdvdread/libdvdread.hash
++++ b/package/libdvdread/libdvdread.hash
+@@ -1,9 +1,9 @@
+-# From http://download.videolan.org/pub/videolan/libdvdread/6.0.2/libdvdread-6.0.2.tar.bz2.md5
+-md5 49990935174bf6b2fa501e789c578135 libdvdread-6.0.2.tar.bz2
+-# From http://download.videolan.org/pub/videolan/libdvdread/6.0.2/libdvdread-6.0.2.tar.bz2.sha1
+-sha1 a3d4b85cbe52b11cff7587ed010fa38ce512fd95 libdvdread-6.0.2.tar.bz2
+-# From http://download.videolan.org/pub/videolan/libdvdread/6.0.2/libdvdread-6.0.2.tar.bz2.sha256
+-sha256 f91401af213b219cdde24b46c50a57f29301feb7f965678f1d7ed4632cc6feb0 libdvdread-6.0.2.tar.bz2
++# From http://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2.md5
++md5 09c7423568fb679279fd2a2bc6b10b6e libdvdread-6.1.1.tar.bz2
++# From http://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2.sha1
++sha1 d2e5056de89fb5fed478c0af5a72e8b781d0c396 libdvdread-6.1.1.tar.bz2
++# From http://download.videolan.org/pub/videolan/libdvdread/6.1.1/libdvdread-6.1.1.tar.bz2.sha256
++sha256 3e357309a17c5be3731385b9eabda6b7e3fa010f46022a06f104553bf8e21796 libdvdread-6.1.1.tar.bz2
+ 
+ # Hash for license file:
+ sha256	d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572	COPYING
+diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
+index 7744fc42ac..9a8eb7cacd 100644
+--- a/package/libdvdread/libdvdread.mk
++++ b/package/libdvdread/libdvdread.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- FETCHMAIL_VERSION_MAJOR = 6.4
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).1
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).3
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+-LIBDVDREAD_VERSION = 6.0.2
++LIBDVDREAD_VERSION = 6.1.1
+ LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.bz2
+ LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_VERSION)
+ LIBDVDREAD_INSTALL_STAGING = YES
 -- 
 2.25.0
