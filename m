@@ -1,78 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 10 Apr 2020 22:42:41 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] Update for 2020.02.1
-Message-ID: <20200410202919.F13298E301@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/v4l2loopback: bump to version
+ 0.12.4
+Message-ID: <20200410203127.398658E391@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80e565bbebc61bf113bcd3b3475fa27a5127f466
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=834ec784ab735eebac14432ed23827c85ba24040
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- CHANGES  | 35 +++++++++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 37 insertions(+), 2 deletions(-)
+ package/v4l2loopback/v4l2loopback.hash | 4 ++--
+ package/v4l2loopback/v4l2loopback.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 7433147e3c..5b54eb0e35 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,38 @@
-+2020.02.1, released April 10th, 2020
-+
-+	Important / security related fixes.
-+
-+	core: Also fixup /lib references in libtool .la files, similar
-+	to how it is done for /usr/*.
-+
-+	Various fixes for builds with per-package target/host
-+	directories.
-+
-+	toolchain: Fix kernel headers validation check for external
-+	toolchains. Fix make 4.3+ compatibility in external toolchain
-+	logic.
-+
-+	fs/initramfs: fix show-info so it also shows the usual
-+	rootfs-related variables.
-+
-+	Updated/fixed packages: arm-trusted-firmware, barebox-aux,
-+	bluez5_utils, bubblewrap, busybox, civetweb, cog, collectd,
-+	ffmpeg, gcc, gnutls, gssdp, gvfs, haproxy, hiredis, hostapd,
-+	kmscube, kodi-screensaver-rsxs, libical, libinput, libexif,
-+	libopenssl, libsndfile, linux, linux-tools, llvm, localedef,
-+	mcrypt, mesa3d, meson, monit, nftables, ntp, opencv3,
-+	oprofile, php, pinentry, polkit, pure-ftpd, python-pyyaml,
-+	qt5, quagga, radvd, rcw, redis, rocksdb, samba4, screen,
-+	sdbusplus, swupdate, sysdig, sysklogd, syslinux, syslog-ng,
-+	tor, tslib, uacme, util-linux, vala, vlc,
-+	wireguard-linux-compat, wireguard-tools, wireshark,
-+	wpa_supplicant, xserver_xorg-server
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12711: host-localedef 2.30-20 fails to compile on fedora 32
-+	#12746: "sysdig" package description points to http://sysdig.org, ..
-+
- 2020.02, released March 8th, 2020
+diff --git a/package/v4l2loopback/v4l2loopback.hash b/package/v4l2loopback/v4l2loopback.hash
+index b9d65c821c..97645ea827 100644
+--- a/package/v4l2loopback/v4l2loopback.hash
++++ b/package/v4l2loopback/v4l2loopback.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	3f6bb14b80865ec8df557c26fd2c5ba91d726580773a75a62aa2959864ef70ba  v4l2loopback-0.12.3.tar.gz
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  6483a64050d1c32de909a34379913d2f949141ed37a2ccc250d491a40bf96af9  v4l2loopback-0.12.4.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
+index 8fa0704989..1fc2e16524 100644
+--- a/package/v4l2loopback/v4l2loopback.mk
++++ b/package/v4l2loopback/v4l2loopback.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	Various fixes.
-diff --git a/Makefile b/Makefile
-index c76d4cf70e..ddc1265d0b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2020.02
-+export BR2_VERSION := 2020.02.1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1583701800
-+BR2_VERSION_EPOCH = 1586551000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+-V4L2LOOPBACK_VERSION = 0.12.3
++V4L2LOOPBACK_VERSION = 0.12.4
+ V4L2LOOPBACK_SITE = $(call github,umlaeute,v4l2loopback,v$(V4L2LOOPBACK_VERSION))
+ V4L2LOOPBACK_LICENSE = GPL-2.0+
+ V4L2LOOPBACK_LICENSE_FILES = COPYING
