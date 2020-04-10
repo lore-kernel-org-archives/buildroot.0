@@ -1,52 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Apr 2020 22:32:31 +0200
-Subject: [Buildroot] [git commit] package/subversion: bump to version 1.13.0
-Message-ID: <20200410202616.490178E2FB@busybox.osuosl.org>
+Date: Fri, 10 Apr 2020 22:31:29 +0200
+Subject: [Buildroot] [git commit] package/i2pd: bump to version 2.31.0
+Message-ID: <20200410202616.2D94E8E2F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85aeb5b3506e32426e75e385ce835b02c0a65be3
+commit: https://git.buildroot.net/buildroot/commit/?id=cff4137d79502b785c0abf7628eafe5c5b4c8dc9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- Update site to get latest release
-- Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/subversion/subversion.hash | 6 +++---
- package/subversion/subversion.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/i2pd/i2pd.hash | 2 +-
+ package/i2pd/i2pd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
-index 581834f98d..f78990cbb3 100644
---- a/package/subversion/subversion.hash
-+++ b/package/subversion/subversion.hash
-@@ -1,5 +1,5 @@
--# From https://www.apache.org/dist/subversion/subversion-1.12.2.tar.bz2.sha512
--sha512 b1f859b460afa54598778d8633f648acb4fa46138f7d6f0c1451e3c6a1de71df859233cd9ac7f19f0f20d7237ed3988f0a38da7552ffa58391e19d957bc7c136 subversion-1.12.2.tar.bz2
-+# From https://www.apache.org/dist/subversion/subversion-1.13.0.tar.bz2.sha512
-+sha512  36f390b412bf772bf894efc2aadc247f12ca30ac407e04f664c14411c3519e1bb242d1239f2f44cbcb86eafc7c413efc8eadbfe1d1e75118235a7b7adc6c85b2  subversion-1.13.0.tar.bz2
- 
- # Locally calculated
--sha256 484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad LICENSE
-+sha256  484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad  LICENSE
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index 2044a6420f..010329357c 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
+index 26d3be6914..93e9070066 100644
+--- a/package/i2pd/i2pd.hash
++++ b/package/i2pd/i2pd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  25915cbd33a9f53c89ddf7fbd68fccc5ffc89ab40d4445ccc813da74fae154f2  i2pd-2.30.0.tar.gz
++sha256  7e37abcf49e9f59ef6939069f4d74fc6bf29b09deec111bd3561021fc1349528  i2pd-2.31.0.tar.gz
+ sha256  d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c  LICENSE
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index 56af5cb44b..0d2daa10f5 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SUBVERSION_VERSION = 1.12.2
-+SUBVERSION_VERSION = 1.13.0
- SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
--SUBVERSION_SITE = http://mirror.catn.com/pub/apache/subversion
-+SUBVERSION_SITE = https://downloads.apache.org/subversion
- SUBVERSION_LICENSE = Apache-2.0
- SUBVERSION_LICENSE_FILES = LICENSE
- SUBVERSION_DEPENDENCIES = \
+-I2PD_VERSION = 2.30.0
++I2PD_VERSION = 2.31.0
+ I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+ I2PD_LICENSE = BSD-3-Clause
+ I2PD_LICENSE_FILES = LICENSE
