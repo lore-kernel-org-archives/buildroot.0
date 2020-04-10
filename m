@@ -1,51 +1,134 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Apr 2020 22:15:25 +0200
-Subject: [Buildroot] [git commit] package/libbluray: bump version to 1.2.0
-Message-ID: <20200410200128.500768E268@busybox.osuosl.org>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Fri, 10 Apr 2020 23:16:59 +0300
+Subject: [Buildroot] [PATCH] configs/snps_arc*_defconfig: update linux
+ version
+Message-ID: <20200410201659.24208-1-Evgeniy.Didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c5fb3f8f409f8c828fa69c6aba5f8ce2dc5c686
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+With this commit we update for ARC boards Linux kernel
+version to 5.6.3 and Linux headers version to 5.6.
 
-Changelog:
-https://code.videolan.org/videolan/libbluray/-/blob/master/ChangeLog
-
-Updated download URL.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
 ---
- package/libbluray/libbluray.hash | 4 ++--
- package/libbluray/libbluray.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ configs/snps_arc700_axs101_defconfig  | 6 +++---
+ configs/snps_archs38_axs103_defconfig | 6 +++---
+ configs/snps_archs38_haps_defconfig   | 6 +++---
+ configs/snps_archs38_hsdk_defconfig   | 6 +++---
+ configs/snps_archs38_vdk_defconfig    | 6 +++---
+ 5 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
-index 1757192b00..c92d9f9549 100644
---- a/package/libbluray/libbluray.hash
-+++ b/package/libbluray/libbluray.hash
-@@ -1,4 +1,4 @@
--# From http://get.videolan.org/libbluray/1.1.2/libbluray-1.1.2.tar.bz2.sha512
--sha512 5a82af6c1840a1dcb31d06d90203c68e2c4f0bbadc9212eb0bb2776d42b0ab3793a769ebe07b3051be151e8b15876874d5a0658292f72b7126dd915a1ada3fe7  libbluray-1.1.2.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libbluray/1.2.0/libbluray-1.2.0.tar.bz2.sha512
-+sha512 d10413b6b86ff2d2e7c4b0103546f2142727cc5209ddb7b227aa74e27384f2e0b9abee37bf8ccc5b0cdfcaeebfb0669cf20903a247df278a8ad6dbd27469d324  libbluray-1.2.0.tar.bz2
- # Locally computed
- sha256 b3aa400aca6d2ba1f0bd03bd98d03d1fe7489a3bbb26969d72016360af8a5c9d  COPYING
-diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
-index 49ee933d0a..67ea139d58 100644
---- a/package/libbluray/libbluray.mk
-+++ b/package/libbluray/libbluray.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/configs/snps_arc700_axs101_defconfig b/configs/snps_arc700_axs101_defconfig
+index 5d9b5a5139..080250e92b 100644
+--- a/configs/snps_arc700_axs101_defconfig
++++ b/configs/snps_arc700_axs101_defconfig
+@@ -8,13 +8,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
  
--LIBBLURAY_VERSION = 1.1.2
--LIBBLURAY_SITE = http://get.videolan.org/libbluray/$(LIBBLURAY_VERSION)
-+LIBBLURAY_VERSION = 1.2.0
-+LIBBLURAY_SITE = http://download.videolan.org/pub/videolan/libbluray/$(LIBBLURAY_VERSION)
- LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
- LIBBLURAY_INSTALL_STAGING = YES
- LIBBLURAY_LICENSE = LGPL-2.1+
+-# Linux headers same as kernel, a 4.19 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++# Linux headers same as kernel, a 5.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs101"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+diff --git a/configs/snps_archs38_axs103_defconfig b/configs/snps_archs38_axs103_defconfig
+index c6e2b10f0f..c5847809ba 100644
+--- a/configs/snps_archs38_axs103_defconfig
++++ b/configs/snps_archs38_axs103_defconfig
+@@ -9,13 +9,13 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
+ 
+-# Linux headers same as kernel, a 4.19 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++# Linux headers same as kernel, a 5.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+diff --git a/configs/snps_archs38_haps_defconfig b/configs/snps_archs38_haps_defconfig
+index cb5edea2c8..a95d760df2 100644
+--- a/configs/snps_archs38_haps_defconfig
++++ b/configs/snps_archs38_haps_defconfig
+@@ -7,12 +7,12 @@ BR2_TARGET_GENERIC_HOSTNAME="zebu_hs"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to the HAPS Development Platform"
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Linux headers same as kernel, a 4.19 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++# Linux headers same as kernel, a 5.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="haps_hs_smp"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
+index 646cd99d99..af7cba6c2e 100644
+--- a/configs/snps_archs38_hsdk_defconfig
++++ b/configs/snps_archs38_hsdk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arcle=y
+ BR2_archs38_full=y
+ 
+-# Linux headers same as kernel, a 4.19 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++# Linux headers same as kernel, a 5.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+ 
+ # System
+ BR2_TARGET_GENERIC_HOSTNAME="hsdk"
+@@ -13,7 +13,7 @@ BR2_SYSTEM_DHCP="eth0"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="hsdk"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/synopsys/hsdk/linux.fragment"
+ 
+diff --git a/configs/snps_archs38_vdk_defconfig b/configs/snps_archs38_vdk_defconfig
+index 7c7834f9bd..8d8e9f7559 100644
+--- a/configs/snps_archs38_vdk_defconfig
++++ b/configs/snps_archs38_vdk_defconfig
+@@ -8,13 +8,13 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+-# Linux headers same as kernel, a 4.19 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++# Linux headers same as kernel, a 5.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.31"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38_smp"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+-- 
+2.16.2
