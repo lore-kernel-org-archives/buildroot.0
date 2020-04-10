@@ -1,112 +1,87 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 10 Apr 2020 09:48:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stellarium: bump version to 0.20.0
-Message-ID: <20200410074801.783932-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 10 Apr 2020 10:14:12 +0200
+Subject: [Buildroot] Buildroot 2019.11.3 released, 2019.11.x is EOL
+Message-ID: <87r1wvg3l7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added upstream commit to fix build error.
-Switched to sha256 hash provided by upstream.
+Hi,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...uilding-Stellarium-without-scripting.patch | 56 +++++++++++++++++++
- package/stellarium/stellarium.hash            |  6 +-
- package/stellarium/stellarium.mk              |  2 +-
- 3 files changed, 60 insertions(+), 4 deletions(-)
- create mode 100644 package/stellarium/0001-Fix-building-Stellarium-without-scripting.patch
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-diff --git a/package/stellarium/0001-Fix-building-Stellarium-without-scripting.patch b/package/stellarium/0001-Fix-building-Stellarium-without-scripting.patch
-new file mode 100644
-index 0000000000..de0a656f01
---- /dev/null
-+++ b/package/stellarium/0001-Fix-building-Stellarium-without-scripting.patch
-@@ -0,0 +1,56 @@
-+From a5786f16b6330a4b6d4adb11e8d9bea23956977e Mon Sep 17 00:00:00 2001
-+From: Alexander Wolf <alex.v.wolf@gmail.com>
-+Date: Tue, 31 Mar 2020 16:49:15 +0700
-+Subject: [PATCH] Fix building Stellarium without scripting
-+
-+Downloaded from upstream commit
-+https://github.com/Stellarium/stellarium/commit/a5786f16b6330a4b6d4adb11e8d9bea23956977e
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ plugins/NavStars/src/NavStars.cpp | 3 +--
-+ src/gui/StelGui.cpp               | 4 +++-
-+ 2 files changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/plugins/NavStars/src/NavStars.cpp b/plugins/NavStars/src/NavStars.cpp
-+index 7ef8cfb1d4..aa67bcc266 100644
-+--- a/plugins/NavStars/src/NavStars.cpp
-++++ b/plugins/NavStars/src/NavStars.cpp
-+@@ -35,7 +35,6 @@
-+ #include "NavStarsWindow.hpp"
-+ #include "NavStarsCalculator.hpp"
-+ #include "Planet.hpp"
-+-#include <StelMainScriptAPI.hpp>
-+ 
-+ #include <QList>
-+ #include <QSharedPointer>
-+@@ -489,7 +488,7 @@ void NavStars::extraInfo(StelCore* core, const StelObjectP& selectedObject, bool
-+ 	jde = core->getJDE();
-+ 
-+ 	NavStarsCalculator calc;
-+-	calc.setUTC(StelMainScriptAPI::getDate("utc"))
-++	calc.setUTC(StelUtils::julianDayToISO8601String(jd))
-+ 		.setLatDeg(core->getCurrentLocation().latitude)
-+ 		.setLonDeg(core->getCurrentLocation().longitude)
-+ 		.setJd(jd)
-+diff --git a/src/gui/StelGui.cpp b/src/gui/StelGui.cpp
-+index 09ef4ba8ca..c2eb91b35a 100644
-+--- a/src/gui/StelGui.cpp
-++++ b/src/gui/StelGui.cpp
-+@@ -225,13 +225,15 @@ void StelGui::init(QGraphicsWidget *atopLevelGraphicsWidget)
-+ 	QString windowsGroup = N_("Windows");
-+ 	QString miscGroup = N_("Miscellaneous");
-+ 	actionsMgr->addAction("actionQuit_Global", miscGroup, N_("Quit"), this, "quit()", "Ctrl+Q", "Ctrl+X");
-++
-++#ifndef DISABLE_SCRIPTING
-+ 	actionsMgr->addAction("actionIncrease_Script_Speed", datetimeGroup, N_("Speed up the script execution rate"), this, "increaseScriptSpeed()");
-+ 	actionsMgr->addAction("actionDecrease_Script_Speed", datetimeGroup, N_("Slow down the script execution rate"), this, "decreaseScriptSpeed()");
-+ 	actionsMgr->addAction("actionSet_Real_Script_Speed", datetimeGroup, N_("Set the normal script execution rate"), this, "setRealScriptSpeed()");
-+ 	actionsMgr->addAction("actionStop_Script", datetimeGroup, N_("Stop script execution"), this, "stopScript()", "Ctrl+D, S");
-+ 	actionsMgr->addAction("actionPause_Script", datetimeGroup, N_("Pause script execution"), this, "pauseScript()", "Ctrl+D, P");
-+ 	actionsMgr->addAction("actionResume_Script", datetimeGroup, N_("Resume script execution"), this, "resumeScript()", "Ctrl+D, R");
-+-
-++#endif
-+ #ifdef ENABLE_SCRIPT_CONSOLE
-+ 	actionsMgr->addAction("actionShow_ScriptConsole_Window_Global", windowsGroup, N_("Script console window"), scriptConsole, "visible", "F12", "", true);
-+ #endif
-diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
-index ea1256df1b..c816abe963 100644
---- a/package/stellarium/stellarium.hash
-+++ b/package/stellarium/stellarium.hash
-@@ -1,6 +1,6 @@
- # From https://github.com/Stellarium/stellarium/releases
--md5 2de84da8a2256f3239174e3ad8f83a5b  stellarium-0.19.3.tar.gz
--sha1 a82cfa21c8dcfbd0a0cf4e30c4ea017ceb2f87a5  stellarium-0.19.3.tar.gz
-+md5 9c7059f6d3f0ea0f97147456f6d00069  stellarium-0.20.0.tar.gz
-+sha1 2a86e4401d99efc7c46e182778522c4fb6cf7193  stellarium-0.20.0.tar.gz
-+sha256 07ed1785d28f761511dc22f9b09ce70e96b5113fc7769fcdf4478f7a5a035370  stellarium-0.20.0.tar.gz
- # Locally computed
--sha256 176e15d8d18340cf8c8cfed14f364cbda345d94e77cc97589c163c45d9cb225d  stellarium-0.19.3.tar.gz
- sha256 3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
-diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
-index ff1eb27018..1d5a1e636a 100644
---- a/package/stellarium/stellarium.mk
-+++ b/package/stellarium/stellarium.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STELLARIUM_VERSION = 0.19.3
-+STELLARIUM_VERSION = 0.20.0
- STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
- STELLARIUM_LICENSE = GPL-2.0+
- STELLARIUM_LICENSE_FILES = COPYING
+Buildroot 2019.11.3 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2019.11.3.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2019.11.3.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2019.11.3 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2019.11.2 release.
+
+- core: Fix compatibility with make 4.3+.
+  Also fixup /lib references in libtool .la files, similar to how it is
+  done for /usr/*.
+
+- Toolchain: Fix kernel headers validation check for external toolchains.
+
+- Security fixes for bluez5_utils, gnutls, gvfs, haproxy, hiredis,
+  hostapd, libical, libopenssl, libsndfile, ntp, php, pure-ftpd, redis,
+  tor, wpa_supplicant
+
+- Fixes for download/compilation/runtime/license issues in barebox-aux,
+  busybox, civetweb, cog, collectd, ffmpeg, gcc, gssdp, kmscube,
+  linux-tools, llvm, radvd, samba4, screen, syslinux, syslog-ng, uacme,
+  util-linux, vala, vlc, xserver_xorg-server
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2019.11.3
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Notice that the 2019.11.x series is now end of life. Please migrate to
+the 2020.02.x series instead which will be supported until April 2021.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2019.11.2..
+
+    16  Fabrice Fontaine
+     6  Peter Korsgaard
+     3  Carlos Santos
+     3  Thomas Petazzoni
+     3  Yann E. MORIN
+     2  Adam Duskett
+     2  Fabio Estevam
+     2  James Hilliard
+     2  Romain Naour
+     2  S?bastien Szymanski
+     1  Alexander Dahl
+     1  Alexander Mukhin
+     1  Anatoly Borodin
+     1  Baruch Siach
+     1  Bernd Kuhls
+     1  Joseph Kogut
+     1  J?rg Krause
+     1  Merlin B?ge
+     1  Naz?m Gediz AYDINDO?MU?
+     1  Pascal de Bruijn
+     1  Peter Seiderer
+     1  Robert Hancock
+     1  Stefan S?rensen
+     1  Thomas De Schampheleire
+     1  Titouan Christophe
+     1  Yaroslav Syrytsia
+
 -- 
-2.25.0
+Bye, Peter Korsgaard
