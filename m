@@ -1,44 +1,124 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Apr 2020 22:42:41 +0200
-Subject: [Buildroot] [git commit] package/v4l2loopback: bump to version
- 0.12.4
-Message-ID: <20200410203127.398658E391@busybox.osuosl.org>
+Date: Fri, 10 Apr 2020 22:45:24 +0200
+Subject: [Buildroot] [git commit] package/assimp: fix musl zlib/zip related
+ compile failure
+Message-ID: <20200410203127.5841A8E391@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=834ec784ab735eebac14432ed23827c85ba24040
+commit: https://git.buildroot.net/buildroot/commit/?id=b529a582ba4d7671597e95d7ab54ee652cbbc261
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+As assimp fails to use system provided zlib/zip (and is picky
+about the provided versions) use assimp contributed one
+and backport one part of upstream patch to fix musl compile.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/4b373ae7d8fd40efe3e2592f94f2d769d6a77669
+
+  In file included from .../assimp-5.0.1/code/3MF/D3MFExporter.cpp:61:
+  .../assimp-5.0.1/contrib/zip/src/zip.h:30:15: error: conflicting declaration 'typedef long int ssize_t'
+   typedef long  ssize_t;  /* byte count or error */
+                 ^~~~~~~
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/v4l2loopback/v4l2loopback.hash | 4 ++--
- package/v4l2loopback/v4l2loopback.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-fix-ssize_t-typedef-mismatch-for-musl-co.patch | 50 ++++++++++++++++++++++
+ package/assimp/Config.in                           |  1 -
+ package/assimp/assimp.mk                           |  3 +-
+ 3 files changed, 51 insertions(+), 3 deletions(-)
 
-diff --git a/package/v4l2loopback/v4l2loopback.hash b/package/v4l2loopback/v4l2loopback.hash
-index b9d65c821c..97645ea827 100644
---- a/package/v4l2loopback/v4l2loopback.hash
-+++ b/package/v4l2loopback/v4l2loopback.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	3f6bb14b80865ec8df557c26fd2c5ba91d726580773a75a62aa2959864ef70ba  v4l2loopback-0.12.3.tar.gz
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  6483a64050d1c32de909a34379913d2f949141ed37a2ccc250d491a40bf96af9  v4l2loopback-0.12.4.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
-index 8fa0704989..1fc2e16524 100644
---- a/package/v4l2loopback/v4l2loopback.mk
-+++ b/package/v4l2loopback/v4l2loopback.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch b/package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch
+new file mode 100644
+index 0000000000..a9a30c4834
+--- /dev/null
++++ b/package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch
+@@ -0,0 +1,50 @@
++From 3fef857a570d1ef2c96401358fe8e239625b48c9 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 10 Apr 2020 18:11:50 +0200
++Subject: [PATCH] contrib/zip: fix ssize_t typedef mismatch for musl compile
++
++Musl uses defines __DEFINED_ssize_t to indicate ssize_t
++availability. So backport this part of upstream commit [1]
++to fixl musl compile.
++
++https://github.com/assimp/assimp/commit/f78446b14aff46db2ef27d062a275b6a01fd68b1
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ contrib/zip/src/zip.h | 13 +++++++++++--
++ 1 file changed, 11 insertions(+), 2 deletions(-)
++
++diff --git a/contrib/zip/src/zip.h b/contrib/zip/src/zip.h
++index 5f39df50..4672eb3e 100644
++--- a/contrib/zip/src/zip.h
+++++ b/contrib/zip/src/zip.h
++@@ -20,8 +20,9 @@ extern "C" {
++ #endif
++ 
++ #if !defined(_SSIZE_T_DEFINED) && !defined(_SSIZE_T_DEFINED_) &&               \
++-    !defined(_SSIZE_T) && !defined(_SSIZE_T_) && !defined(__ssize_t_defined)
++-#define _SSIZE_T
+++    !defined(__DEFINED_ssize_t) && !defined(__ssize_t_defined) &&              \
+++    !defined(_SSIZE_T) && !defined(_SSIZE_T_)
+++
++ // 64-bit Windows is the only mainstream platform
++ // where sizeof(long) != sizeof(void*)
++ #ifdef _WIN64
++@@ -29,6 +30,14 @@ typedef long long  ssize_t;  /* byte count or error */
++ #else
++ typedef long  ssize_t;  /* byte count or error */
++ #endif
+++
+++#define _SSIZE_T_DEFINED
+++#define _SSIZE_T_DEFINED_
+++#define __DEFINED_ssize_t
+++#define __ssize_t_defined
+++#define _SSIZE_T
+++#define _SSIZE_T_
+++
++ #endif
++ 
++ #ifndef MAX_PATH
++-- 
++2.26.0
++
+diff --git a/package/assimp/Config.in b/package/assimp/Config.in
+index 42bfee945d..9bdc054909 100644
+--- a/package/assimp/Config.in
++++ b/package/assimp/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_ASSIMP
+ 	bool "assimp"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+-	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Open Asset Import Library (assimp) is a portable Open Source
+ 	  library to import various well-known 3D model formats in a
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index 5e8e825375..4aeb2963a9 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -8,7 +8,6 @@ ASSIMP_VERSION = 5.0.1
+ ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
+ ASSIMP_LICENSE = BSD-3-Clause
+ ASSIMP_LICENSE_FILES = LICENSE
+-ASSIMP_DEPENDENCIES = zlib
+ ASSIMP_INSTALL_STAGING = YES
  
--V4L2LOOPBACK_VERSION = 0.12.3
-+V4L2LOOPBACK_VERSION = 0.12.4
- V4L2LOOPBACK_SITE = $(call github,umlaeute,v4l2loopback,v$(V4L2LOOPBACK_VERSION))
- V4L2LOOPBACK_LICENSE = GPL-2.0+
- V4L2LOOPBACK_LICENSE_FILES = COPYING
+ # relocation truncated to fit: R_68K_GOT16O
+@@ -28,7 +27,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+ ASSIMP_CXXFLAGS += -O0
+ endif
+ 
+-ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF \
++ASSIMP_CONF_OPTS += -DASSIMP_BUILD_ZLIB=ON -DASSIMP_BUILD_TESTS=OFF \
+ 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(ASSIMP_CXXFLAGS)"
+ 
+ $(eval $(cmake-package))
