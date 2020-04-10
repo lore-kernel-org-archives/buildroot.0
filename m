@@ -1,45 +1,40 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 10 Apr 2020 20:53:33 +0200
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.51.1
-Message-ID: <20200410185333.65973-1-giulio.benetti@benettiengineering.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 10 Apr 2020 21:03:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/i2pd: bump to version 2.31.0
+Message-ID: <20200410190323.129998-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.51.1_release_notes
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/i2pd/i2pd.hash | 2 +-
+ package/i2pd/i2pd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 7f496311f4..dfeae24278 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_51_RTM/src/SHA256SUMS
--sha256	75348b3b3229362486c57a880db917da1f96ef4eb639dc9cc2ff17d72268459c  nss-3.51.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_51_1_RTM/src/SHA256SUMS
-+sha256	085c5eaceef040eddea639e2e068e70f0e368f840327a678ef74ae3d6c15ca78  nss-3.51.1.tar.gz
- # Locally calculated
- sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 3b12e8c41d..81ebb7ad03 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
+index 26d3be6914..93e9070066 100644
+--- a/package/i2pd/i2pd.hash
++++ b/package/i2pd/i2pd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  25915cbd33a9f53c89ddf7fbd68fccc5ffc89ab40d4445ccc813da74fae154f2  i2pd-2.30.0.tar.gz
++sha256  7e37abcf49e9f59ef6939069f4d74fc6bf29b09deec111bd3561021fc1349528  i2pd-2.31.0.tar.gz
+ sha256  d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c  LICENSE
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index 56af5cb44b..0d2daa10f5 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.51
-+LIBNSS_VERSION = 3.51.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-I2PD_VERSION = 2.30.0
++I2PD_VERSION = 2.31.0
+ I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+ I2PD_LICENSE = BSD-3-Clause
+ I2PD_LICENSE_FILES = LICENSE
 -- 
-2.20.1
+2.25.1
