@@ -1,47 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Apr 2020 22:24:52 +0200
-Subject: [Buildroot] [git commit] package/libnss: bump version to 3.51.1
-Message-ID: <20200410201713.AAAE18E26F@busybox.osuosl.org>
+Date: Fri, 10 Apr 2020 22:32:25 +0200
+Subject: [Buildroot] [git commit] package/strongswan: annotate CVEs
+Message-ID: <20200410202616.3B55D8E26E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0dc00cba35940a0aa7ba29082f1cd02833ba6e26
+commit: https://git.buildroot.net/buildroot/commit/?id=758a23fd89410b1f1b9bd1df0bd27de19135818e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.51.1_release_notes
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/strongswan/strongswan.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 7f496311f4..dfeae24278 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_51_RTM/src/SHA256SUMS
--sha256	75348b3b3229362486c57a880db917da1f96ef4eb639dc9cc2ff17d72268459c  nss-3.51.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_51_1_RTM/src/SHA256SUMS
-+sha256	085c5eaceef040eddea639e2e068e70f0e368f840327a678ef74ae3d6c15ca78  nss-3.51.1.tar.gz
- # Locally calculated
- sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 3b12e8c41d..81ebb7ad03 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 021a59cecc..7f1752ce57 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -43,6 +43,11 @@ STRONGSWAN_CONF_OPTS += \
+ 	--with-imcvdir=/usr/lib/ipsec/imcvs \
+ 	--with-dev-headers=/usr/include
  
--LIBNSS_VERSION = 3.51
-+LIBNSS_VERSION = 3.51.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
++# strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
++STRONGSWAN_IGNORE_CVES += CVE-2018-16151 CVE-2018-16152
++# strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
++STRONGSWAN_IGNORE_CVES += CVE-2018-17540
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ STRONGSWAN_CONF_ENV += LIBS='-latomic'
+ endif
