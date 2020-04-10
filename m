@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 10 Apr 2020 21:03:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/i2pd: bump to version 2.31.0
-Message-ID: <20200410190323.129998-1-fontaine.fabrice@gmail.com>
+Date: Fri, 10 Apr 2020 21:11:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/strongswan: annotate CVEs
+Message-ID: <20200410191104.130653-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/i2pd/i2pd.hash | 2 +-
- package/i2pd/i2pd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/strongswan/strongswan.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
-index 26d3be6914..93e9070066 100644
---- a/package/i2pd/i2pd.hash
-+++ b/package/i2pd/i2pd.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  25915cbd33a9f53c89ddf7fbd68fccc5ffc89ab40d4445ccc813da74fae154f2  i2pd-2.30.0.tar.gz
-+sha256  7e37abcf49e9f59ef6939069f4d74fc6bf29b09deec111bd3561021fc1349528  i2pd-2.31.0.tar.gz
- sha256  d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c  LICENSE
-diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
-index 56af5cb44b..0d2daa10f5 100644
---- a/package/i2pd/i2pd.mk
-+++ b/package/i2pd/i2pd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 021a59cecc..7f1752ce57 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -43,6 +43,11 @@ STRONGSWAN_CONF_OPTS += \
+ 	--with-imcvdir=/usr/lib/ipsec/imcvs \
+ 	--with-dev-headers=/usr/include
  
--I2PD_VERSION = 2.30.0
-+I2PD_VERSION = 2.31.0
- I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
- I2PD_LICENSE = BSD-3-Clause
- I2PD_LICENSE_FILES = LICENSE
++# strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
++STRONGSWAN_IGNORE_CVES += CVE-2018-16151 CVE-2018-16152
++# strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
++STRONGSWAN_IGNORE_CVES += CVE-2018-17540
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ STRONGSWAN_CONF_ENV += LIBS='-latomic'
+ endif
 -- 
 2.25.1
