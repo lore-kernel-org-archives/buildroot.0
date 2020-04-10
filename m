@@ -1,87 +1,104 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Apr 2020 10:14:12 +0200
-Subject: [Buildroot] Buildroot 2019.11.3 released, 2019.11.x is EOL
-Message-ID: <87r1wvg3l7.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 10 Apr 2020 12:39:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fmt: bump version to 6.2.0
+Message-ID: <20200410103943.1899361-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Added upstream commit to fix Kodi build error.
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...g-of-unsigned-char-strings-in-printf.patch | 54 +++++++++++++++++++
+ package/fmt/fmt.hash                          |  2 +-
+ package/fmt/fmt.mk                            |  2 +-
+ 3 files changed, 56 insertions(+), 2 deletions(-)
+ create mode 100644 package/fmt/0001-Fix-handling-of-unsigned-char-strings-in-printf.patch
 
-Buildroot 2019.11.3 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2019.11.3.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2019.11.3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2019.11.3 is a bugfix release, fixing a number of important /
-security related issues discovered since the 2019.11.2 release.
-
-- core: Fix compatibility with make 4.3+.
-  Also fixup /lib references in libtool .la files, similar to how it is
-  done for /usr/*.
-
-- Toolchain: Fix kernel headers validation check for external toolchains.
-
-- Security fixes for bluez5_utils, gnutls, gvfs, haproxy, hiredis,
-  hostapd, libical, libopenssl, libsndfile, ntp, php, pure-ftpd, redis,
-  tor, wpa_supplicant
-
-- Fixes for download/compilation/runtime/license issues in barebox-aux,
-  busybox, civetweb, cog, collectd, ffmpeg, gcc, gssdp, kmscube,
-  linux-tools, llvm, radvd, samba4, screen, syslinux, syslog-ng, uacme,
-  util-linux, vala, vlc, xserver_xorg-server
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2019.11.3
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Notice that the 2019.11.x series is now end of life. Please migrate to
-the 2020.02.x series instead which will be supported until April 2021.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2019.11.2..
-
-    16  Fabrice Fontaine
-     6  Peter Korsgaard
-     3  Carlos Santos
-     3  Thomas Petazzoni
-     3  Yann E. MORIN
-     2  Adam Duskett
-     2  Fabio Estevam
-     2  James Hilliard
-     2  Romain Naour
-     2  S?bastien Szymanski
-     1  Alexander Dahl
-     1  Alexander Mukhin
-     1  Anatoly Borodin
-     1  Baruch Siach
-     1  Bernd Kuhls
-     1  Joseph Kogut
-     1  J?rg Krause
-     1  Merlin B?ge
-     1  Naz?m Gediz AYDINDO?MU?
-     1  Pascal de Bruijn
-     1  Peter Seiderer
-     1  Robert Hancock
-     1  Stefan S?rensen
-     1  Thomas De Schampheleire
-     1  Titouan Christophe
-     1  Yaroslav Syrytsia
-
+diff --git a/package/fmt/0001-Fix-handling-of-unsigned-char-strings-in-printf.patch b/package/fmt/0001-Fix-handling-of-unsigned-char-strings-in-printf.patch
+new file mode 100644
+index 0000000000..41c72aa4a3
+--- /dev/null
++++ b/package/fmt/0001-Fix-handling-of-unsigned-char-strings-in-printf.patch
+@@ -0,0 +1,54 @@
++From 7d01859ef16e6b65bc023ad8bebfedecb088bf81 Mon Sep 17 00:00:00 2001
++From: Victor Zverovich <viz@fb.com>
++Date: Wed, 8 Apr 2020 12:32:34 -0700
++Subject: [PATCH] Fix handling of unsigned char strings in printf
++
++Downloaded from upstream commit
++https://github.com/fmtlib/fmt/commit/7d01859ef16e6b65bc023ad8bebfedecb088bf81
++
++to fix Kodi build error:
++https://github.com/xbmc/xbmc/issues/17629
++https://github.com/fmtlib/fmt/issues/1620
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ include/fmt/core.h  | 8 ++++++++
++ test/printf-test.cc | 6 ++++++
++ 2 files changed, 14 insertions(+)
++
++diff --git a/include/fmt/core.h b/include/fmt/core.h
++index 6df2875ac..dc10722bf 100644
++--- a/include/fmt/core.h
+++++ b/include/fmt/core.h
++@@ -972,6 +972,14 @@ template <typename Context> struct arg_mapper {
++     static_assert(std::is_same<char_type, char>::value, "invalid string type");
++     return reinterpret_cast<const char*>(val);
++   }
+++  FMT_CONSTEXPR const char* map(signed char* val) {
+++    const auto* const_val = val;
+++    return map(const_val);
+++  }
+++  FMT_CONSTEXPR const char* map(unsigned char* val) {
+++    const auto* const_val = val;
+++    return map(const_val);
+++  }
++ 
++   FMT_CONSTEXPR const void* map(void* val) { return val; }
++   FMT_CONSTEXPR const void* map(const void* val) { return val; }
++diff --git a/test/printf-test.cc b/test/printf-test.cc
++index 5aaa27b13..545e02aab 100644
++--- a/test/printf-test.cc
+++++ b/test/printf-test.cc
++@@ -447,6 +447,12 @@ TEST(PrintfTest, String) {
++   EXPECT_PRINTF(L"    (null)", L"%10s", null_wstr);
++ }
++ 
+++TEST(PrintfTest, UCharString) {
+++  unsigned char str[] = "test";
+++  unsigned char* pstr = str;
+++  EXPECT_EQ("test", fmt::sprintf("%s", pstr));
+++}
+++
++ TEST(PrintfTest, Pointer) {
++   int n;
++   void* p = &n;
+diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
+index 24d05e7789..29b8237082 100644
+--- a/package/fmt/fmt.hash
++++ b/package/fmt/fmt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 1cafc80701b746085dddf41bd9193e6d35089e1c6ec1940e037fcb9c98f62365  fmt-6.1.2.tar.gz
++sha256 fe6e4ff397e01c379fc4532519339c93da47404b9f6674184a458a9967a76575  fmt-6.2.0.tar.gz
+ sha256 825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
+diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
+index 5dc3088e89..9601141e06 100644
+--- a/package/fmt/fmt.mk
++++ b/package/fmt/fmt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FMT_VERSION = 6.1.2
++FMT_VERSION = 6.2.0
+ FMT_SITE = $(call github,fmtlib,fmt,$(FMT_VERSION))
+ FMT_LICENSE = MIT with exception
+ FMT_LICENSE_FILES = LICENSE.rst
 -- 
-Bye, Peter Korsgaard
+2.25.0
