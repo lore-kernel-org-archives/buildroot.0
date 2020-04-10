@@ -1,124 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Apr 2020 22:45:24 +0200
-Subject: [Buildroot] [git commit] package/assimp: fix musl zlib/zip related
- compile failure
-Message-ID: <20200410203127.5841A8E391@busybox.osuosl.org>
+Date: Fri, 10 Apr 2020 22:42:57 +0200
+Subject: [Buildroot] [git commit] package/stellarium: bump version to 0.20.0
+Message-ID: <20200410203127.437BF8E391@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b529a582ba4d7671597e95d7ab54ee652cbbc261
+commit: https://git.buildroot.net/buildroot/commit/?id=29f718278ba8a13365bdecbf7e6a15e8b1ef3c7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As assimp fails to use system provided zlib/zip (and is picky
-about the provided versions) use assimp contributed one
-and backport one part of upstream patch to fix musl compile.
+Added upstream commit to fix build error.
+Switched to sha256 hash provided by upstream.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/4b373ae7d8fd40efe3e2592f94f2d769d6a77669
-
-  In file included from .../assimp-5.0.1/code/3MF/D3MFExporter.cpp:61:
-  .../assimp-5.0.1/contrib/zip/src/zip.h:30:15: error: conflicting declaration 'typedef long int ssize_t'
-   typedef long  ssize_t;  /* byte count or error */
-                 ^~~~~~~
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-fix-ssize_t-typedef-mismatch-for-musl-co.patch | 50 ++++++++++++++++++++++
- package/assimp/Config.in                           |  1 -
- package/assimp/assimp.mk                           |  3 +-
- 3 files changed, 51 insertions(+), 3 deletions(-)
+ ...Fix-building-Stellarium-without-scripting.patch | 56 ++++++++++++++++++++++
+ package/stellarium/stellarium.hash                 |  6 +--
+ package/stellarium/stellarium.mk                   |  2 +-
+ 3 files changed, 60 insertions(+), 4 deletions(-)
 
-diff --git a/package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch b/package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch
+diff --git a/package/stellarium/0001-Fix-building-Stellarium-without-scripting.patch b/package/stellarium/0001-Fix-building-Stellarium-without-scripting.patch
 new file mode 100644
-index 0000000000..a9a30c4834
+index 0000000000..de0a656f01
 --- /dev/null
-+++ b/package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch
-@@ -0,0 +1,50 @@
-+From 3fef857a570d1ef2c96401358fe8e239625b48c9 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Fri, 10 Apr 2020 18:11:50 +0200
-+Subject: [PATCH] contrib/zip: fix ssize_t typedef mismatch for musl compile
++++ b/package/stellarium/0001-Fix-building-Stellarium-without-scripting.patch
+@@ -0,0 +1,56 @@
++From a5786f16b6330a4b6d4adb11e8d9bea23956977e Mon Sep 17 00:00:00 2001
++From: Alexander Wolf <alex.v.wolf@gmail.com>
++Date: Tue, 31 Mar 2020 16:49:15 +0700
++Subject: [PATCH] Fix building Stellarium without scripting
 +
-+Musl uses defines __DEFINED_ssize_t to indicate ssize_t
-+availability. So backport this part of upstream commit [1]
-+to fixl musl compile.
++Downloaded from upstream commit
++https://github.com/Stellarium/stellarium/commit/a5786f16b6330a4b6d4adb11e8d9bea23956977e
 +
-+https://github.com/assimp/assimp/commit/f78446b14aff46db2ef27d062a275b6a01fd68b1
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ contrib/zip/src/zip.h | 13 +++++++++++--
-+ 1 file changed, 11 insertions(+), 2 deletions(-)
++ plugins/NavStars/src/NavStars.cpp | 3 +--
++ src/gui/StelGui.cpp               | 4 +++-
++ 2 files changed, 4 insertions(+), 3 deletions(-)
 +
-+diff --git a/contrib/zip/src/zip.h b/contrib/zip/src/zip.h
-+index 5f39df50..4672eb3e 100644
-+--- a/contrib/zip/src/zip.h
-++++ b/contrib/zip/src/zip.h
-+@@ -20,8 +20,9 @@ extern "C" {
-+ #endif
++diff --git a/plugins/NavStars/src/NavStars.cpp b/plugins/NavStars/src/NavStars.cpp
++index 7ef8cfb1d4..aa67bcc266 100644
++--- a/plugins/NavStars/src/NavStars.cpp
+++++ b/plugins/NavStars/src/NavStars.cpp
++@@ -35,7 +35,6 @@
++ #include "NavStarsWindow.hpp"
++ #include "NavStarsCalculator.hpp"
++ #include "Planet.hpp"
++-#include <StelMainScriptAPI.hpp>
 + 
-+ #if !defined(_SSIZE_T_DEFINED) && !defined(_SSIZE_T_DEFINED_) &&               \
-+-    !defined(_SSIZE_T) && !defined(_SSIZE_T_) && !defined(__ssize_t_defined)
-+-#define _SSIZE_T
-++    !defined(__DEFINED_ssize_t) && !defined(__ssize_t_defined) &&              \
-++    !defined(_SSIZE_T) && !defined(_SSIZE_T_)
-++
-+ // 64-bit Windows is the only mainstream platform
-+ // where sizeof(long) != sizeof(void*)
-+ #ifdef _WIN64
-+@@ -29,6 +30,14 @@ typedef long long  ssize_t;  /* byte count or error */
-+ #else
-+ typedef long  ssize_t;  /* byte count or error */
-+ #endif
-++
-++#define _SSIZE_T_DEFINED
-++#define _SSIZE_T_DEFINED_
-++#define __DEFINED_ssize_t
-++#define __ssize_t_defined
-++#define _SSIZE_T
-++#define _SSIZE_T_
-++
-+ #endif
++ #include <QList>
++ #include <QSharedPointer>
++@@ -489,7 +488,7 @@ void NavStars::extraInfo(StelCore* core, const StelObjectP& selectedObject, bool
++ 	jde = core->getJDE();
 + 
-+ #ifndef MAX_PATH
-+-- 
-+2.26.0
-+
-diff --git a/package/assimp/Config.in b/package/assimp/Config.in
-index 42bfee945d..9bdc054909 100644
---- a/package/assimp/Config.in
-+++ b/package/assimp/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_ASSIMP
- 	bool "assimp"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_ZLIB
- 	help
- 	  Open Asset Import Library (assimp) is a portable Open Source
- 	  library to import various well-known 3D model formats in a
-diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
-index 5e8e825375..4aeb2963a9 100644
---- a/package/assimp/assimp.mk
-+++ b/package/assimp/assimp.mk
-@@ -8,7 +8,6 @@ ASSIMP_VERSION = 5.0.1
- ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
- ASSIMP_LICENSE = BSD-3-Clause
- ASSIMP_LICENSE_FILES = LICENSE
--ASSIMP_DEPENDENCIES = zlib
- ASSIMP_INSTALL_STAGING = YES
++ 	NavStarsCalculator calc;
++-	calc.setUTC(StelMainScriptAPI::getDate("utc"))
+++	calc.setUTC(StelUtils::julianDayToISO8601String(jd))
++ 		.setLatDeg(core->getCurrentLocation().latitude)
++ 		.setLonDeg(core->getCurrentLocation().longitude)
++ 		.setJd(jd)
++diff --git a/src/gui/StelGui.cpp b/src/gui/StelGui.cpp
++index 09ef4ba8ca..c2eb91b35a 100644
++--- a/src/gui/StelGui.cpp
+++++ b/src/gui/StelGui.cpp
++@@ -225,13 +225,15 @@ void StelGui::init(QGraphicsWidget *atopLevelGraphicsWidget)
++ 	QString windowsGroup = N_("Windows");
++ 	QString miscGroup = N_("Miscellaneous");
++ 	actionsMgr->addAction("actionQuit_Global", miscGroup, N_("Quit"), this, "quit()", "Ctrl+Q", "Ctrl+X");
+++
+++#ifndef DISABLE_SCRIPTING
++ 	actionsMgr->addAction("actionIncrease_Script_Speed", datetimeGroup, N_("Speed up the script execution rate"), this, "increaseScriptSpeed()");
++ 	actionsMgr->addAction("actionDecrease_Script_Speed", datetimeGroup, N_("Slow down the script execution rate"), this, "decreaseScriptSpeed()");
++ 	actionsMgr->addAction("actionSet_Real_Script_Speed", datetimeGroup, N_("Set the normal script execution rate"), this, "setRealScriptSpeed()");
++ 	actionsMgr->addAction("actionStop_Script", datetimeGroup, N_("Stop script execution"), this, "stopScript()", "Ctrl+D, S");
++ 	actionsMgr->addAction("actionPause_Script", datetimeGroup, N_("Pause script execution"), this, "pauseScript()", "Ctrl+D, P");
++ 	actionsMgr->addAction("actionResume_Script", datetimeGroup, N_("Resume script execution"), this, "resumeScript()", "Ctrl+D, R");
++-
+++#endif
++ #ifdef ENABLE_SCRIPT_CONSOLE
++ 	actionsMgr->addAction("actionShow_ScriptConsole_Window_Global", windowsGroup, N_("Script console window"), scriptConsole, "visible", "F12", "", true);
++ #endif
+diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
+index ea1256df1b..c816abe963 100644
+--- a/package/stellarium/stellarium.hash
++++ b/package/stellarium/stellarium.hash
+@@ -1,6 +1,6 @@
+ # From https://github.com/Stellarium/stellarium/releases
+-md5 2de84da8a2256f3239174e3ad8f83a5b  stellarium-0.19.3.tar.gz
+-sha1 a82cfa21c8dcfbd0a0cf4e30c4ea017ceb2f87a5  stellarium-0.19.3.tar.gz
++md5 9c7059f6d3f0ea0f97147456f6d00069  stellarium-0.20.0.tar.gz
++sha1 2a86e4401d99efc7c46e182778522c4fb6cf7193  stellarium-0.20.0.tar.gz
++sha256 07ed1785d28f761511dc22f9b09ce70e96b5113fc7769fcdf4478f7a5a035370  stellarium-0.20.0.tar.gz
+ # Locally computed
+-sha256 176e15d8d18340cf8c8cfed14f364cbda345d94e77cc97589c163c45d9cb225d  stellarium-0.19.3.tar.gz
+ sha256 3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+index ff1eb27018..1d5a1e636a 100644
+--- a/package/stellarium/stellarium.mk
++++ b/package/stellarium/stellarium.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # relocation truncated to fit: R_68K_GOT16O
-@@ -28,7 +27,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
- ASSIMP_CXXFLAGS += -O0
- endif
- 
--ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF \
-+ASSIMP_CONF_OPTS += -DASSIMP_BUILD_ZLIB=ON -DASSIMP_BUILD_TESTS=OFF \
- 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(ASSIMP_CXXFLAGS)"
- 
- $(eval $(cmake-package))
+-STELLARIUM_VERSION = 0.19.3
++STELLARIUM_VERSION = 0.20.0
+ STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
+ STELLARIUM_LICENSE = GPL-2.0+
+ STELLARIUM_LICENSE_FILES = COPYING
