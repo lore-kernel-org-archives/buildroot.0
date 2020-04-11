@@ -1,44 +1,119 @@
 From: Alexey Lukyanchuk <skif@skif-web.ru>
-Date: Sat, 11 Apr 2020 12:40:19 +0300
-Subject: [Buildroot] [PATCH 0/0] buildroot printing fault
-Message-ID: <20200411094022.13773-1-skif@skif-web.ru>
+Date: Sat, 11 Apr 2020 12:40:22 +0300
+Subject: [Buildroot] [PATCH 3/3] package/ghostscript: add cups support
+In-Reply-To: <20200411094022.13773-1-skif@skif-web.ru>
+References: <20200411094022.13773-1-skif@skif-web.ru>
+Message-ID: <20200411094022.13773-4-skif@skif-web.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There are multiple issues in buildroot that faults cups printing.
+Ghostscript can be used for cups printing.
 
-First trouble is incorrect qpdf buiding.
-Qpdf is mandatory dependence of cups.
-In current master, qpdf builds with incorrect --no-random option. On 
-any work< qpdf send 'no such file' error. For example:
-qpdf /usr/share/cups/data/secret.pdf -
+In current version it's disabled, but may be needed for some customers.
 
-This commmand must get PDF file in stdout.But only 'No such file or
- directory' error present.
-
-0/1 patch fix this by changing configure options to 
-with-random=/dev/random.
-
-Next global problem - cups-filters need ghostscript.
-From  https://github.com/OpenPrinting/cups-filters/blob/master/README :
-By default, pdftops uses Ghostscript if this does not get changed
-    at compile time, for example by the Linux distribution vendor.
-
-0/2 patch fix id by settinbg ghostscript as default render if 
-ghostscript enabled in voard config.
-
-Last trouble - ghostscript building without cups support.
-
-0/3 patch fix is by removing disable-patch option. Now, if cups is 
-enabled, it will be added to dependencies and correct configure 
-options added to ghostscript building. Also fixed ghostscript 
-buildroot building issue with unpleasant hack in configure.ac, which 
-broke pkg-config. It's broke cups search by ghostscript configure 
-script.
-GHOSTSCRIPT_CUPS_CONFIG_FIX also needed for this task.
+This patch add cups support if cups enabled.
+Also patch fix configure.ac for cross-compilation.
 
 Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
 ---
+ .../ghostscript/0002-add-cups-support.patch   | 54 +++++++++++++++++++
+ package/ghostscript/ghostscript.mk            | 13 +++++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 package/ghostscript/0002-add-cups-support.patch
+
+diff --git a/package/ghostscript/0002-add-cups-support.patch b/package/ghostscript/0002-add-cups-support.patch
+new file mode 100644
+index 0000000000..262a06c102
+--- /dev/null
++++ b/package/ghostscript/0002-add-cups-support.patch
+@@ -0,0 +1,54 @@
++--- a/configure.ac
+++++ b/configure.ac
++@@ -199,30 +199,6 @@
++ 
++ dnl pkg-config is used for several tests now...
++ AC_PATH_TOOL(PKGCONFIG, pkg-config)
++-
++-# this is an unpleasant hack
++-# but if we are cross compiling, and there isn't a matching
++-# pkconfig for the --host setting, then don't use the 'local'
++-# pkconfig at all
++-if test x"$cross_compiling" = x"yes"; then
++-  AC_PATH_PROG(BUILD_PKGCONFIG, pkg-config)
++-  if test x"$BUILD_PKGCONFIG" = x"$PKGCONFIG" ; then
++-    PKGCONFIG=
++-  fi
++-fi
++-
++-AC_PATH_TOOL(STRIP_XE, strip)
++-
++-# this is an unpleasant hack
++-# but if we are cross compiling, and there isn't a matching
++-# pkconfig for the --host setting, then don't use the 'local'
++-# pkconfig at all
++-if test x"$cross_compiling" = x"yes"; then
++-  AC_PATH_PROG(BUILD_STRIP_XE, strip)
++-  if test x"$BUILD_STRIP_XE" = x"$STRIP_XE" ; then
++-    STRIP_XE=
++-  fi
++-fi
++ 
++ dnl --------------------------------------------------  
++ dnl Allow excluding the contributed drivers
++@@ -1432,12 +1408,6 @@
++         if test x$with_local_cups != xyes; then
++             if test x"$CUPSCONFIG" = x""; then
++               AC_PATH_TOOL(CUPSCONFIG,cups-config)
++-              if test x"$cross_compiling" = x"yes"; then
++-                AC_PATH_PROG(BUILD_CUPSCONFIG, cups-config)
++-                if test x"$BUILD_CUPSCONFIG" = x"$CUPSCONFIG" ; then
++-                  CUPSCONFIG=
++-                fi
++-              fi
++             fi
++             # check for a libcups header
++             AC_CHECK_HEADER([cups/cups.h],[],[CUPSCONFIG=""])
++@@ -1473,7 +1443,6 @@
++                 else
++                   CUPSDATA="`$CUPSCONFIG --datadir`"
++                 fi
++-
++                 CUPSINCLUDE="include $srcdir/cups/cups.mak"
++                 CUPSDEV="cups"
++ 
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 1d6f8d04a0..69a444209b 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -10,6 +10,7 @@ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
+ # 0001-Fix-cross-compilation-issue.patch
++GHOSTSCRIPT_INSTALL_STAGING = YES
+ GHOSTSCRIPT_AUTORECONF = YES
+ GHOSTSCRIPT_DEPENDENCIES = \
+ 	host-lcms2 \
+@@ -68,6 +69,18 @@ else
+ GHOSTSCRIPT_CONF_OPTS += --disable-openjpeg
+ endif
+ 
++define GHOSTSCRIPT_CUPS_CONFIG_FIX
++cp $(HOST_DIR)/x86_64-buildroot-linux-gnu/sysroot/usr/bin/cups-config  $(HOST_DIR)/usr/bin/
++endef
++
++ifeq ($(BR2_PACKAGE_CUPS),y)
++GHOSTSCRIPT_DEPENDENCIES += cups
++GHOSTSCRIPT_PRE_CONFIGURE_HOOKS += GHOSTSCRIPT_CUPS_CONFIG_FIX
++GHOSTSCRIPT_CONF_OPTS += --enable-cups
++else
++GHOSTSCRIPT_CONF_OPTS += --disable-cups
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+ GHOSTSCRIPT_DEPENDENCIES += xlib_libX11
+ GHOSTSCRIPT_CONF_OPTS += --with-x
+-- 
+2.17.1
