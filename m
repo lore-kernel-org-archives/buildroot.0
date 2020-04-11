@@ -1,62 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 15:26:49 +0200
-Subject: [Buildroot] [PATCH] package/linux-tools: selftests: add numactl
- dependency for net tests
-In-Reply-To: <20200325164240.22747-1-vadim4j@gmail.com>
-References: <20200325164240.22747-1-vadim4j@gmail.com>
-Message-ID: <20200411152649.3830039d@windsurf.home>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Sat, 11 Apr 2020 15:36:15 +0200
+Subject: [Buildroot] [PATCH 2/3] package/p7zip: fix CVE-2017-17969
+In-Reply-To: <20200411133616.31897-1-nerv@dawncrow.de>
+References: <20200411133616.31897-1-nerv@dawncrow.de>
+Message-ID: <20200411133616.31897-2-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadym,
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/p7zip/0002-CVE-2017-17969.patch | 37 +++++++++++++++++++++++++
+ package/p7zip/p7zip.mk                  |  2 ++
+ 2 files changed, 39 insertions(+)
+ create mode 100644 package/p7zip/0002-CVE-2017-17969.patch
 
-On Wed, 25 Mar 2020 18:42:40 +0200
-Vadym Kochan <vadim4j@gmail.com> wrote:
-
-> Linux selftests/net/reuseport_bpf_numa.c requires numa.h header which
-> is provided by numactl package. Otherwise net tests are failed to
-> install.
-> 
-> Signed-off-by: Vadym Kochan <vadim4j@gmail.com>
-
-Thanks for your patch. However, I think this is not going in the right
-direction. Indeed, the selftests have many more dependencies:
-
- - The BPF tests need libcap and libelf
-
- - The gpio tests require libmount from util-linux
-
- - The memfd tests require fuse
-
- - The netfilter tests require libmnl
-
-etc.
-
-So, I think we should:
-
- - Pass FORCE_TARGETS=1 during the build so that the build aborts if a
-   required dependency is not found.
-
- - Switch to using more optional dependencies, and disable the TARGETS
-   that we cannot build by passing the appropriate SKIP_TARGETS value
-   to the Makefile.
-
-Could you work on this ? We probably need to make libcap-ng optional,
-but also popt. The other options that are selected by
-BR2_PACKAGE_LINUX_TOOLS_SELFTESTS might also need to be revisited.
-
-An alternative is to just say that we don't care about making all of
-that optional, and simply unconditionally enable all the dependencies
-that selftests need, to build everything. Easier, but that's not the
-normal Buildroot design principle.
-
-Best regards,
-
-Thomas
+diff --git a/package/p7zip/0002-CVE-2017-17969.patch b/package/p7zip/0002-CVE-2017-17969.patch
+new file mode 100644
+index 0000000000..9198127cb9
+--- /dev/null
++++ b/package/p7zip/0002-CVE-2017-17969.patch
+@@ -0,0 +1,37 @@
++From: =?utf-8?q?Antoine_Beaupr=C3=A9?= <anarcat@debian.org>
++Date: Fri, 2 Feb 2018 11:11:41 +0100
++Subject: Heap-based buffer overflow in 7zip/Compress/ShrinkDecoder.cpp
++
++Origin: vendor, https://sourceforge.net/p/p7zip/bugs/_discuss/thread/0920f369/27d7/attachment/CVE-2017-17969.patch
++Forwarded: https://sourceforge.net/p/p7zip/bugs/_discuss/thread/0920f369/#27d7
++Bug: https://sourceforge.net/p/p7zip/bugs/204/
++Bug-Debian: https://bugs.debian.org/888297
++Bug-Debian-Security: https://security-tracker.debian.org/tracker/CVE-2017-17969
++Reviewed-by: Salvatore Bonaccorso <carnil@debian.org>
++Last-Update: 2018-02-01
++Applied-Upstream: 18.00-beta
++
++Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
++---
++ CPP/7zip/Compress/ShrinkDecoder.cpp | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/CPP/7zip/Compress/ShrinkDecoder.cpp b/CPP/7zip/Compress/ShrinkDecoder.cpp
++index 80b7e67..ca37764 100644
++--- a/CPP/7zip/Compress/ShrinkDecoder.cpp
+++++ b/CPP/7zip/Compress/ShrinkDecoder.cpp
++@@ -121,8 +121,13 @@ HRESULT CDecoder::CodeReal(ISequentialInStream *inStream, ISequentialOutStream *
++     {
++       _stack[i++] = _suffixes[cur];
++       cur = _parents[cur];
+++      if (cur >= kNumItems || i >= kNumItems)
+++        break;
++     }
++-    
+++
+++    if (cur >= kNumItems || i >= kNumItems)
+++      break;
+++
++     _stack[i++] = (Byte)cur;
++     lastChar2 = (Byte)cur;
++ 
+diff --git a/package/p7zip/p7zip.mk b/package/p7zip/p7zip.mk
+index 66d3198c17..be95995bab 100644
+--- a/package/p7zip/p7zip.mk
++++ b/package/p7zip/p7zip.mk
+@@ -12,6 +12,8 @@ P7ZIP_LICENSE_FILES = DOC/License.txt
+ 
+ # 0001-CVE-2016-9296.patch
+ P7ZIP_IGNORE_CVES += CVE-2016-9296
++# 0002-CVE-2017-17969.patch
++P7ZIP_IGNORE_CVES += CVE-2017-17969
+ 
+ # p7zip buildsystem is a mess: it plays dirty tricks with CFLAGS and
+ # CXXFLAGS, so we can't pass them. Instead, it accepts ALLFLAGS_C
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
