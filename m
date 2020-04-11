@@ -1,97 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Apr 2020 15:22:58 +0200
-Subject: [Buildroot] [PATCH 5/8] core/show-info: report whether a
- package is overriden
-In-Reply-To: <20200411144248.49090e99@windsurf.home>
-References: <cover.1586592741.git.yann.morin.1998@free.fr>
- <524b53bb81ecd33c55b242d239bee93f57c6c98b.1586592741.git.yann.morin.1998@free.fr>
- <20200411103602.75d8b9f2@windsurf.home>
- <20200411094436.GK29898@scaer>
- <20200411144248.49090e99@windsurf.home>
-Message-ID: <20200411132258.GM29898@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 11 Apr 2020 15:26:49 +0200
+Subject: [Buildroot] [PATCH] package/linux-tools: selftests: add numactl
+ dependency for net tests
+In-Reply-To: <20200325164240.22747-1-vadim4j@gmail.com>
+References: <20200325164240.22747-1-vadim4j@gmail.com>
+Message-ID: <20200411152649.3830039d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello Vadym,
 
-On 2020-04-11 14:42 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 11 Apr 2020 11:44:36 +0200
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Wed, 25 Mar 2020 18:42:40 +0200
+Vadym Kochan <vadim4j@gmail.com> wrote:
+
+> Linux selftests/net/reuseport_bpf_numa.c requires numa.h header which
+> is provided by numactl package. Otherwise net tests are failed to
+> install.
 > 
-> > > I don't have a good suggestion, but I'm not sure "overriden" is the
-> > > most appropriate term. Indeed, the download/extract/patch steps are
-> > > also replaced by a rsync step for packages that use _SITE_METHOD =
-> > > local, and such packages are not "overriden".  
-> > 
-> > It is very unfortunate that we conflate the two conditions.
-> 
-> Well, from an internal implementation point of view, SITE_METHOD =
-> local and OVERRIDE_SRCDIR are just exactly the same thing.
+> Signed-off-by: Vadym Kochan <vadim4j@gmail.com>
 
-But that is an implementation detail, indeed.
+Thanks for your patch. However, I think this is not going in the right
+direction. Indeed, the selftests have many more dependencies:
 
-In fact, we should have had local support without override support. And
-then we should have grafted override suport on top of the local one,
-while the code as it is makes local re-use the override code...
+ - The BPF tests need libcap and libelf
 
-I'll try to hack a cleanup in that area...
+ - The gpio tests require libmount from util-linux
 
-> Perhaps you could use:
-> 
-> 	"rsynced": $(if $($(1)_OVERRIDE_SRCDIR),true,false),
+ - The memfd tests require fuse
 
-Fact is, that still does not reflect what I want to expose. An overriden
-package is de-facto not reproducible, while a local package may.
+ - The netfilter tests require libmnl
 
-But I don't care enough to argue further. "resynced" gets the same value
-as "overriden", and since we can;t get the semantic of "overriden", it
-is as good as it is.
+etc.
 
-> as this is really annotates the fact that the package source code is
-> rsynced. You could even make it clearer with "source-rsynced" or
-> something like that.
-> 
-> > We can't even reconstruct the override by looking at whether
-> > _SITE_METHOD == local, because even local packages may be overriden...
-> 
-> Indeed.
-> 
-> > So, is it worth that I try and untangle the tow notions? Given the
-> > feedback on the rest of this eries, I don;t want to invest too much time
-> > if there is no chance of it getting in...
-> 
-> I think this particular patch is OK, even though admittedly the
-> external tool could just watch for the correct stamp files to show up:
-> if .stamp_downloaded shows up, we're downloading it normally, if
-> .stamp_rsynced shows up, we have a local or overridden package.
-> 
-> In the design of the tool, it would be good to make sure that top-level
-> parallel build is taken into account.
+So, I think we should:
 
-Which is exactly what I am trying to achieve here: provide all the info
-about the internal details, so that the tool does not have to guess.
+ - Pass FORCE_TARGETS=1 during the build so that the build aborts if a
+   required dependency is not found.
 
-But personally I don't care about such a tool; I'm just trying to make
-life easier for those (like eeppeliteloop in Cc) who want such tools.
+ - Switch to using more optional dependencies, and disable the TARGETS
+   that we cannot build by passing the appropriate SKIP_TARGETS value
+   to the Makefile.
 
-Regards,
-Yann E. MORIN.
+Could you work on this ? We probably need to make libcap-ng optional,
+but also popt. The other options that are selected by
+BR2_PACKAGE_LINUX_TOOLS_SELFTESTS might also need to be revisited.
 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+An alternative is to just say that we don't care about making all of
+that optional, and simply unconditionally enable all the dependencies
+that selftests need, to build everything. Easier, but that's not the
+normal Buildroot design principle.
 
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
