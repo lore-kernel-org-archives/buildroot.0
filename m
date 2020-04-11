@@ -1,119 +1,84 @@
-From: Alexey Lukyanchuk <skif@skif-web.ru>
-Date: Sat, 11 Apr 2020 12:40:22 +0300
-Subject: [Buildroot] [PATCH 3/3] package/ghostscript: add cups support
-In-Reply-To: <20200411094022.13773-1-skif@skif-web.ru>
-References: <20200411094022.13773-1-skif@skif-web.ru>
-Message-ID: <20200411094022.13773-4-skif@skif-web.ru>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 11 Apr 2020 11:44:36 +0200
+Subject: [Buildroot] [PATCH 5/8] core/show-info: report whether a
+ package is overriden
+In-Reply-To: <20200411103602.75d8b9f2@windsurf.home>
+References: <cover.1586592741.git.yann.morin.1998@free.fr>
+ <524b53bb81ecd33c55b242d239bee93f57c6c98b.1586592741.git.yann.morin.1998@free.fr>
+ <20200411103602.75d8b9f2@windsurf.home>
+Message-ID: <20200411094436.GK29898@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ghostscript can be used for cups printing.
+Thomas, All,
 
-In current version it's disabled, but may be needed for some customers.
+On 2020-04-11 10:36 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 11 Apr 2020 10:12:30 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> 
+> > When a package is overridden, the download, extract, and patch
+> > stampfiles are replaced by a single rsync stampfile.
+> > 
+> > People (and scripts) who want to report on the current status of the
+> > build, will want to know what stamp file to look at.
+> > 
+> > Expose in show-info whether the package is overridden or not.
+> > 
+> > We do not expose the override location, because this is a purely-local
+> > information, and show info should never contain such local information
+> > (the output of show-info can be shared). Besides, that information is
+> > already known by the user, as they passed it to Buildroot via local.mk
+> > to begin with.
+> > 
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > Cc: Vadim Kochan <vadim4j@gmail.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > Cc: eeppeliteloop at gmail.com
+> > ---
+> >  package/pkg-utils.mk | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> > index 66504d0be2..98e3ede3d1 100644
+> > --- a/package/pkg-utils.mk
+> > +++ b/package/pkg-utils.mk
+> > @@ -100,6 +100,7 @@ define _json-info-pkg
+> >  		"virtual": false$(comma)
+> >  		$(call _json-info-pkg-details,$(1)) \
+> >  	)
+> > +	"overriden": $(if $($(1)_OVERRIDE_SRCDIR),true,false),
+> 
+> I don't have a good suggestion, but I'm not sure "overriden" is the
+> most appropriate term. Indeed, the download/extract/patch steps are
+> also replaced by a rsync step for packages that use _SITE_METHOD =
+> local, and such packages are not "overriden".
 
-This patch add cups support if cups enabled.
-Also patch fix configure.ac for cross-compilation.
+It is very unfortunate that we conflate the two conditions.
 
-Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
----
- .../ghostscript/0002-add-cups-support.patch   | 54 +++++++++++++++++++
- package/ghostscript/ghostscript.mk            | 13 +++++
- 2 files changed, 67 insertions(+)
- create mode 100644 package/ghostscript/0002-add-cups-support.patch
+We can't even reconstruct the override by looking at whether
+_SITE_METHOD == local, because even local packages may be overriden...
 
-diff --git a/package/ghostscript/0002-add-cups-support.patch b/package/ghostscript/0002-add-cups-support.patch
-new file mode 100644
-index 0000000000..262a06c102
---- /dev/null
-+++ b/package/ghostscript/0002-add-cups-support.patch
-@@ -0,0 +1,54 @@
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -199,30 +199,6 @@
-+ 
-+ dnl pkg-config is used for several tests now...
-+ AC_PATH_TOOL(PKGCONFIG, pkg-config)
-+-
-+-# this is an unpleasant hack
-+-# but if we are cross compiling, and there isn't a matching
-+-# pkconfig for the --host setting, then don't use the 'local'
-+-# pkconfig at all
-+-if test x"$cross_compiling" = x"yes"; then
-+-  AC_PATH_PROG(BUILD_PKGCONFIG, pkg-config)
-+-  if test x"$BUILD_PKGCONFIG" = x"$PKGCONFIG" ; then
-+-    PKGCONFIG=
-+-  fi
-+-fi
-+-
-+-AC_PATH_TOOL(STRIP_XE, strip)
-+-
-+-# this is an unpleasant hack
-+-# but if we are cross compiling, and there isn't a matching
-+-# pkconfig for the --host setting, then don't use the 'local'
-+-# pkconfig at all
-+-if test x"$cross_compiling" = x"yes"; then
-+-  AC_PATH_PROG(BUILD_STRIP_XE, strip)
-+-  if test x"$BUILD_STRIP_XE" = x"$STRIP_XE" ; then
-+-    STRIP_XE=
-+-  fi
-+-fi
-+ 
-+ dnl --------------------------------------------------  
-+ dnl Allow excluding the contributed drivers
-+@@ -1432,12 +1408,6 @@
-+         if test x$with_local_cups != xyes; then
-+             if test x"$CUPSCONFIG" = x""; then
-+               AC_PATH_TOOL(CUPSCONFIG,cups-config)
-+-              if test x"$cross_compiling" = x"yes"; then
-+-                AC_PATH_PROG(BUILD_CUPSCONFIG, cups-config)
-+-                if test x"$BUILD_CUPSCONFIG" = x"$CUPSCONFIG" ; then
-+-                  CUPSCONFIG=
-+-                fi
-+-              fi
-+             fi
-+             # check for a libcups header
-+             AC_CHECK_HEADER([cups/cups.h],[],[CUPSCONFIG=""])
-+@@ -1473,7 +1443,6 @@
-+                 else
-+                   CUPSDATA="`$CUPSCONFIG --datadir`"
-+                 fi
-+-
-+                 CUPSINCLUDE="include $srcdir/cups/cups.mak"
-+                 CUPSDEV="cups"
-+ 
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 1d6f8d04a0..69a444209b 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -10,6 +10,7 @@ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_LICENSE = AGPL-3.0
- GHOSTSCRIPT_LICENSE_FILES = LICENSE
- # 0001-Fix-cross-compilation-issue.patch
-+GHOSTSCRIPT_INSTALL_STAGING = YES
- GHOSTSCRIPT_AUTORECONF = YES
- GHOSTSCRIPT_DEPENDENCIES = \
- 	host-lcms2 \
-@@ -68,6 +69,18 @@ else
- GHOSTSCRIPT_CONF_OPTS += --disable-openjpeg
- endif
- 
-+define GHOSTSCRIPT_CUPS_CONFIG_FIX
-+cp $(HOST_DIR)/x86_64-buildroot-linux-gnu/sysroot/usr/bin/cups-config  $(HOST_DIR)/usr/bin/
-+endef
-+
-+ifeq ($(BR2_PACKAGE_CUPS),y)
-+GHOSTSCRIPT_DEPENDENCIES += cups
-+GHOSTSCRIPT_PRE_CONFIGURE_HOOKS += GHOSTSCRIPT_CUPS_CONFIG_FIX
-+GHOSTSCRIPT_CONF_OPTS += --enable-cups
-+else
-+GHOSTSCRIPT_CONF_OPTS += --disable-cups
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
- GHOSTSCRIPT_DEPENDENCIES += xlib_libX11
- GHOSTSCRIPT_CONF_OPTS += --with-x
+So, is it worth that I try and untangle the tow notions? Given the
+feedback on the rest of this eries, I don;t want to invest too much time
+if there is no chance of it getting in...
+
+Regards,
+Yann E. MORIN.
+
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
