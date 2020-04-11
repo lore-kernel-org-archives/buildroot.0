@@ -1,35 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 10:32:35 +0200
-Subject: [Buildroot] [git commit] configs/imx6-sabresd_qt5: Select
- MESA3D_OPENGL_EGL
-Message-ID: <20200411082714.5B7BF8E4DB@busybox.osuosl.org>
+Date: Sat, 11 Apr 2020 10:32:02 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: do not select
+ MESA3D_OPENGL_EGL for etnaviv
+Message-ID: <20200411082714.2EB738E4DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1b4c54254310d15b596d39514b10497e75be5a6
+commit: https://git.buildroot.net/buildroot/commit/?id=5b03d4203250a98fd0c8fd6e4eefa532d950d26b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that MESA3D_OPENGL_EGL is not automatically selected by the mesa3d
-etnaviv driver, explicitly select it in the config file.
+As suggested by Thomas, BR2_PACKAGE_MESA3D_OPENGL_EGL should not
+be automatically selected by the etnaviv driver.
 
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/imx6-sabresd_qt5_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/mesa3d/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index 47c00284d9..647be06d00 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -50,6 +50,7 @@ BR2_PACKAGE_MESA3D=y
- BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
- BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
- BR2_PACKAGE_MESA3D_OPENGL_ES=y
-+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 16d77f42c2..6f78da174c 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -106,7 +106,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_ETNAVIV
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+-	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	help
+ 	  Mesa driver for Vivante GPUs.
  
- # Fonts
- BR2_PACKAGE_BITSTREAM_VERA=y
