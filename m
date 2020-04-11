@@ -1,60 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Apr 2020 10:12:30 +0200
-Subject: [Buildroot] [PATCH 0/8] core/show-info: export extra information
- about the package build (branch yem/show-info-extras)
-Message-ID: <cover.1586592741.git.yann.morin.1998@free.fr>
+Date: Sat, 11 Apr 2020 10:12:26 +0200
+Subject: [Buildroot] [PATCH 1/8] core/show-info: do not show install types
+ for host packages
+In-Reply-To: <cover.1586592741.git.yann.morin.1998@free.fr>
+References: <cover.1586592741.git.yann.morin.1998@free.fr>
+Message-ID: <c714f1890e448d102aaef9eaf2f2d286df265c85.1586592741.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+By their very nature, host packages have no target, staging, or
+images install steps; they have a single install step, that is
+always performed.
 
-People (and scripts) who want to report on the build progress will need
-ato peek inside the internal details of the package build steps, so we
-expose this extra information in show-info.
+However, we currently report those three types of install, which
+is misleading at best, and really incorrect.
 
-Suggested-by: eeppeliteloop at gmail.com
+If we were to report any install type for host package, that would
+be a single one, and it would always be true.
 
+So, do not report any install type for host packages, as it does
+not make sense to report anything that is always true.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Vadim Kochan <vadim4j@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: eeppeliteloop at gmail.com
+---
+ package/pkg-utils.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-
-The following changes since commit 91238c2605babd1a3d262bacdf04e14d39e59810
-
-  package/uftp: bump to version 4.10.2 (2020-04-11 10:07:02 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 0493cfafbdc9dd03d461d8707de2358156f9ad5d
-
-  core/show-info: report image name of filesystems (2020-04-11 10:10:18 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (8):
-      core/show-info: do not show install types for host packages
-      infra/pkg-generic: don't set INSTALL_{TARGET,STAGING,IMAGES} for host
-      core/show-info: report install types for virtual packages too
-      core/show-info: report the package build directory
-      core/show-info: report whether a package is overriden
-      core/show-info: report package stamp files
-      core/show-info: report the ordered list of build steps
-      core/show-info: report image name of filesystems
-
- package/pkg-generic.mk |  7 +++----
- package/pkg-utils.mk   | 52 +++++++++++++++++++++++++++++++++++++++++++++++---
- 2 files changed, 52 insertions(+), 7 deletions(-)
-
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index d324934dba..14101fcc2a 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -112,9 +112,11 @@ define _json-info-pkg-details
+ 	"version": "$($(1)_DL_VERSION)",
+ 	"licenses": "$($(1)_LICENSE)",
+ 	"dl_dir": "$($(1)_DL_SUBDIR)",
+-	"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET)),
+-	"install_staging": $(call yesno-to-bool,$($(1)_INSTALL_STAGING)),
+-	"install_images": $(call yesno-to-bool,$($(1)_INSTALL_IMAGES)),
++	$(if $(filter target,$($(1)_TYPE)), \
++		"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET))$(comma) \
++		"install_staging": $(call yesno-to-bool,$($(1)_INSTALL_STAGING))$(comma) \
++		"install_images": $(call yesno-to-bool,$($(1)_INSTALL_IMAGES))$(comma) \
++	)
+ 	"downloads": [
+ 	$(foreach dl,$(sort $($(1)_ALL_DOWNLOADS)),
+ 		{
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
