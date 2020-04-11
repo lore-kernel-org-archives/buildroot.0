@@ -1,51 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 16:19:03 +0200
-Subject: [Buildroot] [PATCH 7/8] core/show-info: report the ordered list
- of build steps
-In-Reply-To: <CAB4xu_1Bv4gsebOQrUfKM_ChD6q7-e15YTGPqwj4PBx3hzkrOA@mail.gmail.com>
-References: <cover.1586592741.git.yann.morin.1998@free.fr>
- <93a3545d1fe7b47cdfb32edc7db3fd54600fecd9.1586592741.git.yann.morin.1998@free.fr>
- <20200411103950.4a21b23e@windsurf.home>
- <CAB4xu_1Bv4gsebOQrUfKM_ChD6q7-e15YTGPqwj4PBx3hzkrOA@mail.gmail.com>
-Message-ID: <20200411161903.7b007feb@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 11 Apr 2020 16:57:50 +0200
+Subject: [Buildroot] [PATCH] support/testing: test_python_django: use the
+ timeout_multiplier value
+Message-ID: <20200411145750.7655-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 11 Apr 2020 09:41:47 -0400
-Philippe Proulx <eeppeliteloop@gmail.com> wrote:
+As reported by our gitlab runtime test [1] and on the mailing list [2],
+the test_python_django is failing only on gitlab due to slow (but free)
+gitlab runners. This is due to django server taking a lot of time to
+start. Since the django server is started in background through pexpect,
+we can't easily wait for the last startup line:
 
-> Replying for patch 6/8 and this one.
-> 
-> Is the `show-info` target considered a public API?
+"January 01, 1970 - 00:00:41
 
-Somewhat yes: the goal of show-info is that people can craft their own
-tooling on top of it. Breaking the show-info output would break such
-tools.
+Django version 3.0.4, using settings 'testsite.settings'
 
-> If so, without a
-> version, it means it can never break. So let me suggest another layout
-> which breaks `show-info` (name it `show-info-2` if you will).
-> 
-> Output example (using YAML only for clarity here):
+Starting development server at http://0.0.0.0:1234/
 
-[...]
+Quit the server with CONTROL-C."
 
-This could certainly work, and reduces a bit the duplication of
-information.
+In the failing gitlab job, we don't see such lines.
 
-However, I still don't understand why your tool is not capable of
-having this knowledge about the stamp files. This is something that
-rarely changes. I think we haven't changed the stamp files since... 5
-years? More? If your tool is in the Buildroot tree itself, it can
-simply be updated if there is ever a change in the sequencing of steps.
+If we increase a lot the timout, the test pass.
 
-Best regards,
+Use timeout_multiplier introduced by [3] in order to adjust the
+timeout.
 
-Thomas
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/488816222
+
+Tested:
+https://gitlab.com/kubu93/buildroot/-/jobs/507458355
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/488816222
+[2] http://lists.busybox.net/pipermail/buildroot/2020-April/279598.html
+[3] 6e45e33f27d5ae6fa0ab5aad3f032d886a886037
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Adam Duskett <Aduskett@gmail.com>
+---
+This patch should be backported to 2020.02.x
+---
+ support/testing/tests/package/test_python_django.py | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/support/testing/tests/package/test_python_django.py b/support/testing/tests/package/test_python_django.py
+index 6b31833a0f..0b7d35bb6a 100644
+--- a/support/testing/tests/package/test_python_django.py
++++ b/support/testing/tests/package/test_python_django.py
+@@ -6,18 +6,20 @@ class TestPythonDjango(TestPythonPackageBase):
+     sample_scripts = ["tests/package/sample_python_django.py"]
+ 
+     def run_sample_scripts(self):
++        timeout = 35 * self.emulator.timeout_multiplier
++
+         cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
+-        self.assertRunOk(cmd, timeout=30)
++        self.assertRunOk(cmd, timeout=timeout)
+ 
+         cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py migrate"
+-        output, exit_code = self.emulator.run(cmd, timeout=30)
++        output, exit_code = self.emulator.run(cmd, timeout=timeout)
+         self.assertIn("Operations to perform:", output[0])
+         self.assertEqual(exit_code, 0)
+ 
+         cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py runserver 0.0.0.0:1234 & "
+         # give some time to setup the server
+-        cmd += "sleep 30"
+-        self.assertRunOk(cmd, timeout=35)
++        cmd += "sleep {}".format(str(30 * self.emulator.timeout_multiplier))
++        self.assertRunOk(cmd, timeout=timeout)
+ 
+         cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:1234"
+         self.assertRunOk(cmd)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.2
