@@ -1,40 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 16:01:16 +0200
-Subject: [Buildroot] [pkg-luarocks v2 1/5] package/luarocks: now luajit
- is dynamically detected by luarocks
-In-Reply-To: <20200322080706.19806-1-francois.perrad@gadz.org>
-References: <20200322080706.19806-1-francois.perrad@gadz.org>
-Message-ID: <20200411160116.0ef7e18c@windsurf.home>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sat, 11 Apr 2020 16:10:02 +0200
+Subject: [Buildroot] [PATCH] package/libhttpparser: bump to version 2.9.4
+Message-ID: <1586614202-30443-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 22 Mar 2020 09:07:02 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+This includes the following changes:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/luarocks/luarocks.mk | 7 -------
->  1 file changed, 7 deletions(-)
+2343fd6 v2.9.4
+714cbb2 Fix ABI breakage
+1c02cb9 Correct test name and numbering
 
-Why no commit log? Come on Fran?ois, we've asked you many, many, many,
-many times to have more details in your commit log. So an empty commit
-should definitely be a sign that the patch is not good.
+And update hash file formatting (2 spaces).
 
-So, I've taken the time to extend the commit log by doing some research
-in the Luarocks Git commit history. See:
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/libhttpparser/libhttpparser.hash | 4 ++--
+ package/libhttpparser/libhttpparser.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-  https://git.buildroot.org/buildroot/commit/?id=a27d01cde157ea0534ba66fecc3e8fb82cde9155
-
-It would really be nice if you could help us by providing more detailed
-commit logs.
-
-Thanks for your help.
-
-Thomas
+diff --git a/package/libhttpparser/libhttpparser.hash b/package/libhttpparser/libhttpparser.hash
+index 4634b06..6ab63e8 100644
+--- a/package/libhttpparser/libhttpparser.hash
++++ b/package/libhttpparser/libhttpparser.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 8fa0ab8770fd8425a9b431fdbf91623c4d7a9cdb842b9339289bd2b0b01b0d3d  libhttpparser-2.9.3.tar.gz
+-sha256 79e6ba8b687cb54786207342b9b6fcee0ac10218453ed9009b84d949b2233cc0  LICENSE-MIT
++sha256  467b9e30fd0979ee301065e70f637d525c28193449e1b13fbcb1b1fab3ad224f  libhttpparser-2.9.4.tar.gz
++sha256  79e6ba8b687cb54786207342b9b6fcee0ac10218453ed9009b84d949b2233cc0  LICENSE-MIT
+diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
+index d7b6907..5cf7f77 100644
+--- a/package/libhttpparser/libhttpparser.mk
++++ b/package/libhttpparser/libhttpparser.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBHTTPPARSER_VERSION = 2.9.3
++LIBHTTPPARSER_VERSION = 2.9.4
+ LIBHTTPPARSER_SITE = $(call github,nodejs,http-parser,v$(LIBHTTPPARSER_VERSION))
+ LIBHTTPPARSER_INSTALL_STAGING = YES
+ LIBHTTPPARSER_LICENSE = MIT
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
