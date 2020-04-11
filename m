@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Apr 2020 11:44:36 +0200
-Subject: [Buildroot] [PATCH 5/8] core/show-info: report whether a
- package is overriden
-In-Reply-To: <20200411103602.75d8b9f2@windsurf.home>
+Date: Sat, 11 Apr 2020 11:49:16 +0200
+Subject: [Buildroot] [PATCH 3/8] core/show-info: report install types
+ for virtual packages too
+In-Reply-To: <20200411104104.6a01dba7@windsurf.home>
 References: <cover.1586592741.git.yann.morin.1998@free.fr>
- <524b53bb81ecd33c55b242d239bee93f57c6c98b.1586592741.git.yann.morin.1998@free.fr>
- <20200411103602.75d8b9f2@windsurf.home>
-Message-ID: <20200411094436.GK29898@scaer>
+ <df507703c3c71ec7f2f774ee140bcde5cb9a8a5b.1586592741.git.yann.morin.1998@free.fr>
+ <20200411104104.6a01dba7@windsurf.home>
+Message-ID: <20200411094916.GL29898@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,65 +15,33 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2020-04-11 10:36 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 11 Apr 2020 10:12:30 +0200
+On 2020-04-11 10:41 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 11 Apr 2020 10:12:28 +0200
 > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 > 
-> > When a package is overridden, the download, extract, and patch
-> > stampfiles are replaced by a single rsync stampfile.
-> > 
-> > People (and scripts) who want to report on the current status of the
-> > build, will want to know what stamp file to look at.
-> > 
-> > Expose in show-info whether the package is overridden or not.
-> > 
-> > We do not expose the override location, because this is a purely-local
-> > information, and show info should never contain such local information
-> > (the output of show-info can be shared). Besides, that information is
-> > already known by the user, as they passed it to Buildroot via local.mk
-> > to begin with.
-> > 
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Cc: Vadim Kochan <vadim4j@gmail.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > Cc: eeppeliteloop at gmail.com
-> > ---
-> >  package/pkg-utils.mk | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> > index 66504d0be2..98e3ede3d1 100644
-> > --- a/package/pkg-utils.mk
-> > +++ b/package/pkg-utils.mk
-> > @@ -100,6 +100,7 @@ define _json-info-pkg
-> >  		"virtual": false$(comma)
-> >  		$(call _json-info-pkg-details,$(1)) \
-> >  	)
-> > +	"overriden": $(if $($(1)_OVERRIDE_SRCDIR),true,false),
-> 
-> I don't have a good suggestion, but I'm not sure "overriden" is the
-> most appropriate term. Indeed, the download/extract/patch steps are
-> also replaced by a rsync step for packages that use _SITE_METHOD =
-> local, and such packages are not "overriden".
+> > Although virtual packages do not usually install anything, they do
+> > participate in the dependency chain, and they also transition smoothly
+> > from 'not handled yet' all the way down to 'all set'.
+> I'm having a hard time to understand what you mean by:
+>   they also transition smoothly from 'not handled yet' all the way down
+>   to 'all set'.
+> Could you clarify ?
 
-It is very unfortunate that we conflate the two conditions.
+I mean that virtual package, like all other packages, have a sequence of
+a few steps that transition the virtual package from "not handled yet"
+to "installed and dependencies can start", i.e. virtual packages are:
 
-We can't even reconstruct the override by looking at whether
-_SITE_METHOD == local, because even local packages may be overriden...
+ 1. configured
+ 2. built
+ 3. installed in staging (optional)
+ 4. installed in target (optional)
+ 5. isntalled in images (optional)
 
-So, is it worth that I try and untangle the tow notions? Given the
-feedback on the rest of this eries, I don;t want to invest too much time
-if there is no chance of it getting in...
+Virtual packages are just packages in this respect. It's just that their
+deoendencies are treated specially.
 
 Regards,
 Yann E. MORIN.
-
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
