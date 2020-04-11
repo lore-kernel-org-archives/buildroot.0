@@ -1,45 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 10:12:17 +0200
-Subject: [Buildroot] [PATCH v1] package/ell: fix compile with older
- toolchains
-In-Reply-To: <20200409203500.18857-1-ps.report@gmx.net>
-References: <20200409203500.18857-1-ps.report@gmx.net>
-Message-ID: <20200411101217.1237fe4f@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 11 Apr 2020 10:12:30 +0200
+Subject: [Buildroot] [PATCH 0/8] core/show-info: export extra information
+ about the package build (branch yem/show-info-extras)
+Message-ID: <cover.1586592741.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  9 Apr 2020 22:35:00 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+Hello All!
 
-> Older toolchains need to include sys/types.h and sys/socket.h before
-> linux/if.h, RTA_PREF was introduces with linux-4.1.x.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/2d1/2d1a3f82abb8475d39908b22f775c2dac781f330
-> 
->   In file included from ell/rtnl.c:28:0:
->   .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:185:19: error: field 'ifru_addr' has incomplete type
->   .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:186:19: error: field 'ifru_dstaddr' has incomplete type
->   .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:187:19: error: field 'ifru_broadaddr' has incomplete type
->   .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:188:19: error: field 'ifru_netmask' has incomplete type
->   .../arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:189:20: error: field 'ifru_hwaddr' has incomplete type
->   ell/rtnl.c: In function 'l_rtnl_route_extract':
->   ell/rtnl.c:120:8: error: 'RTA_PREF' undeclared (first use in this function)
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...nl-fix-compile-with-older-toolchains.patch | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
+People (and scripts) who want to report on the build progress will need
+ato peek inside the internal details of the package build steps, so we
+expose this extra information in show-info.
 
-Applied to master, thanks.
+Suggested-by: eeppeliteloop at gmail.com
 
-Thomas
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 91238c2605babd1a3d262bacdf04e14d39e59810
+
+  package/uftp: bump to version 4.10.2 (2020-04-11 10:07:02 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 0493cfafbdc9dd03d461d8707de2358156f9ad5d
+
+  core/show-info: report image name of filesystems (2020-04-11 10:10:18 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (8):
+      core/show-info: do not show install types for host packages
+      infra/pkg-generic: don't set INSTALL_{TARGET,STAGING,IMAGES} for host
+      core/show-info: report install types for virtual packages too
+      core/show-info: report the package build directory
+      core/show-info: report whether a package is overriden
+      core/show-info: report package stamp files
+      core/show-info: report the ordered list of build steps
+      core/show-info: report image name of filesystems
+
+ package/pkg-generic.mk |  7 +++----
+ package/pkg-utils.mk   | 52 +++++++++++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 52 insertions(+), 7 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
