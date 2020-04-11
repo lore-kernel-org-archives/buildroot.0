@@ -1,188 +1,64 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Sat, 11 Apr 2020 09:41:47 -0400
-Subject: [Buildroot] [PATCH 7/8] core/show-info: report the ordered list
- of build steps
-In-Reply-To: <20200411103950.4a21b23e@windsurf.home>
-References: <cover.1586592741.git.yann.morin.1998@free.fr>
- <93a3545d1fe7b47cdfb32edc7db3fd54600fecd9.1586592741.git.yann.morin.1998@free.fr>
- <20200411103950.4a21b23e@windsurf.home>
-Message-ID: <CAB4xu_1Bv4gsebOQrUfKM_ChD6q7-e15YTGPqwj4PBx3hzkrOA@mail.gmail.com>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Sat, 11 Apr 2020 15:36:14 +0200
+Subject: [Buildroot] [PATCH 1/3] package/p7zip: fix CVE-2016-9296
+Message-ID: <20200411133616.31897-1-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 11, 2020 at 4:39 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Sat, 11 Apr 2020 10:12:32 +0200
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
->
-> > People (and scritps) who want to report on the build progress, now know
-> > where and what to look for (build directory and stampfiles), but they
-> > also need to know the ordering of those stampfiles.
-> >
-> > The stampfiles item is a dictionary; dictionaries are guaranteed to not
-> > be ordered, so even if we output the stampfiles in order, we can expect
-> > users of that dictionary to get them back in order.
-> >
-> > Expose the build steps in a list, which is guaranteed to be ordered.
-> >
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Cc: Vadim Kochan <vadim4j@gmail.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > Cc: eeppeliteloop at gmail.com
-> > ---
-> >  package/pkg-utils.mk | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
->
-> Meh, just like PATCH 6/8, I'm not sure. This is going to be a lot of
-> additional information in the JSON, almost duplicated for every
-> package, and there is really nothing bad in the "progress showing" tool
-> to have knowledge about these steps. It's not like they are changing
-> all the time.
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/p7zip/0001-CVE-2016-9296.patch | 25 +++++++++++++++++++++++++
+ package/p7zip/p7zip.mk                 |  3 +++
+ 2 files changed, 28 insertions(+)
+ create mode 100644 package/p7zip/0001-CVE-2016-9296.patch
 
-Replying for patch 6/8 and this one.
-
-Is the `show-info` target considered a public API? If so, without a
-version, it means it can never break. So let me suggest another layout
-which breaks `show-info` (name it `show-info-2` if you will).
-
-Output example (using YAML only for clarity here):
-
-    version: 2
-    build_steps:
-      target:
-        - name: download
-          stamp_file: .stamp_downloaded
-        - name: extract
-          stamp_file: .stamp_extracted
-        - name: patch
-          stamp_file: .stamp_patched
-        - name: build
-          stamp_file: .stamp_configured
-        - name: configure
-          stamp_file: .stamp_built
-        - name: install_staging
-          stamp_file: .stamp_staging_installed
-        - name: install_target
-          stamp_file: .stamp_target_installed
-        - name: install_image
-          stamp_file: .stamp_image_installed
-        ...
-      host:
-        - ...
-      rootfs:
-        - ...
-    packages:
-      target:
-        libglib2:
-          virtual: false
-          version: 2.64.1
-          licenses: LGPL-2.1+
-          dl_dir: libglib2
-          downloads:
-            - source: glib-2.64.1.tar.xz
-              uris:
-                - http+http://ftp.gnome.org/pub/gnome/sources/glib/2.64
-                - http|urlencode+http://sources.buildroot.net/libglib2
-                - http|urlencode+http://sources.buildroot.net
-          overriden: false
-          build_dir: build/libglib2-2.64.1/
-          build_steps:
-            - download
-            - extract
-            - patch
-            - build
-            - configure
-            - install_staging
-            - install_target
-          dependencies:
-            - host-libglib2
-            - host-meson
-            - host-pkgconf
-            - host-skeleton
-            - host-tar
-            - libffi
-            - pcre
-            - skeleton
-            - toolchain
-            - zlib
-          reverse_dependencies:
-            - cairo
-        ...
-      host:
-        ...
-      rootfs:
-        ...
-
-So, changes:
-
-* A root `version` entry indicates the API version.
-
-* The root `build_steps` object indicates all the _possible_ (sorted)
-  build steps for each package type.
-
-  Each build step in the array has its name and its corresponding
-  stamp file to indicate when it's completed.
-
-  As Yann wrote:
-
-  > However, the names of those stamp files are purely an implementation
-  > detail (even if they are very unlikely to ever change).
-
-* The root `packages` object contains the package information for each
-  package type.
-
-  Not strictly related to this patch or the previous one, but instead
-  of repeating the type in each object, you can just group packages
-  by type.
-
-* For each package object, the `build_steps` array indicate what are the
-  build steps for this package.
-
-  Each item is the name of a build step in the corresponding root
-  `build_steps` object's array.
-
-* For a target package, the `install_staging`, `install_target`, and
-  `install_images` entries are removed.
-
-  They are not needed anymore because `build_steps` offers the same
-  information.
-
-  I understand some build steps could be implicit and not listed here,
-  but with my suggestion, you already have what's needed for any build
-  monitoring tool to watch a specific package build process if:
-
-  * Some of the implicit build steps become optional in the future for
-    any reason that you don't know now.
-
-  * You add new types of build steps: simply describe them in the
-    `build_steps` root arrays.
-
-  Both scenarios won't require an API version bump.
-
-If you're not willing to break `show-info` and don't want `show-info-2`,
-then you can:
-
-* Keep `show-info` as is:
-
-  * Augment a package information with `build_steps` (like above).
-
-  * Keep the `install_*` entries which become redundant.
-
-* Have another make target, say `show-build-steps`, which only prints
-  the root `build_steps` object above.
-
-What do you think?
-
-Phil
-
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/p7zip/0001-CVE-2016-9296.patch b/package/p7zip/0001-CVE-2016-9296.patch
+new file mode 100644
+index 0000000000..6e6fc9f58f
+--- /dev/null
++++ b/package/p7zip/0001-CVE-2016-9296.patch
+@@ -0,0 +1,25 @@
++From: Robert Luberda <robert@debian.org>
++Date: Sat, 19 Nov 2016 08:48:08 +0100
++Subject: Fix nullptr dereference (CVE-2016-9296)
++
++Patch taken from https://sourceforge.net/p/p7zip/bugs/185/
++
++Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
++---
++ CPP/7zip/Archive/7z/7zIn.cpp | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/CPP/7zip/Archive/7z/7zIn.cpp b/CPP/7zip/Archive/7z/7zIn.cpp
++index b0c6b98..7c6dde2 100644
++--- a/CPP/7zip/Archive/7z/7zIn.cpp
+++++ b/CPP/7zip/Archive/7z/7zIn.cpp
++@@ -1097,7 +1097,8 @@ HRESULT CInArchive::ReadAndDecodePackedStreams(
++       if (CrcCalc(data, unpackSize) != folders.FolderCRCs.Vals[i])
++         ThrowIncorrect();
++   }
++-  HeadersSize += folders.PackPositions[folders.NumPackStreams];
+++  if (folders.PackPositions)
+++      HeadersSize += folders.PackPositions[folders.NumPackStreams];
++   return S_OK;
++ }
++ 
+diff --git a/package/p7zip/p7zip.mk b/package/p7zip/p7zip.mk
+index ff0dd01e02..66d3198c17 100644
+--- a/package/p7zip/p7zip.mk
++++ b/package/p7zip/p7zip.mk
+@@ -10,6 +10,9 @@ P7ZIP_SITE = http://downloads.sourceforge.net/project/p7zip/p7zip/$(P7ZIP_VERSIO
+ P7ZIP_LICENSE = LGPL-2.1+ with unRAR restriction
+ P7ZIP_LICENSE_FILES = DOC/License.txt
+ 
++# 0001-CVE-2016-9296.patch
++P7ZIP_IGNORE_CVES += CVE-2016-9296
++
+ # p7zip buildsystem is a mess: it plays dirty tricks with CFLAGS and
+ # CXXFLAGS, so we can't pass them. Instead, it accepts ALLFLAGS_C
+ # and ALLFLAGS_CPP as variables to pass the CFLAGS and CXXFLAGS.
+-- 
+2.17.1
