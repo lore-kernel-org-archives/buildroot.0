@@ -1,35 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 10:32:21 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: select LIBDRM_FREEDRENO
- for freedreno
-Message-ID: <20200411082714.493EF8E4C0@busybox.osuosl.org>
+Date: Sat, 11 Apr 2020 10:49:15 +0200
+Subject: [Buildroot] [git commit] package/python3: add optional dependency
+ to gettext
+Message-ID: <20200411083739.8B32B8E4E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e49db51dc4a18df4a6aa6c590e0adb678df3f7fc
+commit: https://git.buildroot.net/buildroot/commit/?id=2a36dad00823ec3bcefdd3f82cfe75d55c0caeb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The mesa3d freedreno driver is not usable without the corresponding
-libdrm support for this platform, so select LIBDRM_FREEDRENO.
+Tested using this defconfig:
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_SYSTEM_ENABLE_NLS=y
+BR2_PACKAGE_PYTHON3=y
+
+Without this patch:
+$ readelf -a output/target/usr/lib/libpython3.8.so.1.0 | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
+With this patch:
+$ readelf -a output/target/usr/lib/libpython3.8.so.1.0 | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libintl.so.8]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/python3/python3.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 6f78da174c..dd512d9b76 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -112,6 +112,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
- 	bool "Gallium freedreno driver"
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_FREEDRENO
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	help
- 	  Mesa driver for Freedreno GPUs.
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index d12237300d..2656037efd 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -146,6 +146,10 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ PYTHON3_CONF_ENV += ac_cv_func_wcsftime=no
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
++PYTHON3_DEPENDENCIES += gettext
++endif
++
+ PYTHON3_CONF_OPTS += \
+ 	--without-ensurepip \
+ 	--without-cxx-main \
