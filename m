@@ -1,65 +1,48 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Sat, 11 Apr 2020 15:58:32 +0200
-Subject: [Buildroot] [PATCH] package/openal: bump to version 1.20.1
-Message-ID: <20200411135832.20507-1-nerv@dawncrow.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 11 Apr 2020 15:58:42 +0200
+Subject: [Buildroot] [git commit] package/luarocks: luajit is now detected
+ automatically by luarocks
+Message-ID: <20200411134553.165118E522@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/openal/Config.in   | 8 +++++---
- package/openal/openal.hash | 2 +-
- package/openal/openal.mk   | 2 +-
- 3 files changed, 7 insertions(+), 5 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=a27d01cde157ea0534ba66fecc3e8fb82cde9155
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/openal/Config.in b/package/openal/Config.in
-index a564156555..d129906d2c 100644
---- a/package/openal/Config.in
-+++ b/package/openal/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+Since luarocks commit
+https://github.com/luarocks/luarocks/commit/ffab9f32698431bb901b786460e4695806ebcf30,
+available since luarocks v3.2.0, LuaJIT is now detected
+automatically. It is therefore no longer necessary to explicitly
+indicate in lua_interpreter that LuaJIT is used.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/luarocks/luarocks.mk | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 123f8c0734..d48c95ced9 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -33,17 +33,10 @@ define HOST_LUAROCKS_CONFIGURE_CMDS
+ 	cd $(@D) && ./configure $(HOST_LUAROCKS_CONF_OPTS)
+ endef
  
- config BR2_PACKAGE_OPENAL
- 	bool "openal"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
-@@ -26,7 +27,8 @@ config BR2_PACKAGE_OPENAL
+-ifeq ($(BR2_PACKAGE_LUAJIT),y)
+-define LUAROCKS_CONFIGURE_INTERPRETER_LUAJIT
+-	echo "lua_interpreter = [[luajit]]" >> $(LUAROCKS_CONFIG_FILE)
+-endef
+-endif
+-
+ define HOST_LUAROCKS_INSTALL_CMDS
+ 	rm -f $(LUAROCKS_CONFIG_FILE)
+ 	$(MAKE1) -C $(@D) install
+ 	cat $(HOST_LUAROCKS_PKGDIR)/luarocks-br-config.lua >> $(LUAROCKS_CONFIG_FILE)
+-	$(LUAROCKS_CONFIGURE_INTERPRETER_LUAJIT)
+ endef
  
- 	  http://kcat.strangesoft.net/openal.html
- 
--comment "openal needs a toolchain w/ NPTL, C++"
-+comment "openal needs a target gcc >= 5 w/ C++14, NPTL"
- 	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
--		|| !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
-+		!BR2_INSTALL_LIBSTDCPP
-diff --git a/package/openal/openal.hash b/package/openal/openal.hash
-index a133808cae..917be2843c 100644
---- a/package/openal/openal.hash
-+++ b/package/openal/openal.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 9f3536ab2bb7781dbafabc6a61e0b34b17edd16bd6c2eaf2ae71bc63078f98c7  openal-1.19.1.tar.gz
-+sha256 c32d10473457a8b545aab50070fe84be2b5b041e1f2099012777ee6be0057c13  openal-1.20.1.tar.gz
- sha256 d808ce217e5b611854da622b57ec29fe545584c48bc5352fae72a4b6e5074a15  COPYING
-diff --git a/package/openal/openal.mk b/package/openal/openal.mk
-index 8e761a8d9b..ed63abfb3f 100644
---- a/package/openal/openal.mk
-+++ b/package/openal/openal.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENAL_VERSION = 1.19.1
-+OPENAL_VERSION = 1.20.1
- OPENAL_SITE = $(call github,kcat,openal-soft,openal-soft-$(OPENAL_VERSION))
- OPENAL_LICENSE = LGPL-2.0+
- OPENAL_LICENSE_FILES = COPYING
--- 
-2.17.1
+ $(eval $(host-generic-package))
