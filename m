@@ -1,64 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Apr 2020 08:43:29 +0200
-Subject: [Buildroot] [git commit] Update for 2020.02.1
-Message-ID: <20200411063447.831F18E2F6@busybox.osuosl.org>
+Date: Sat, 11 Apr 2020 08:48:25 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2020.02.1
+Message-ID: <20200411063447.8CC508E26F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=673d54c6005c25007bdcfa9b014f9dbd104c86db
+commit: https://git.buildroot.net/buildroot/commit/?id=32b7fd9fbd076dea976c8e0f69dbd0a697571042
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 80e565bbebc61bf113bcd3b3475fa27a5127f466)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index d7c1e7df20..60177304b3 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,38 @@
-+2020.02.1, released April 10th, 2020
-+
-+	Important / security related fixes.
-+
-+	core: Also fixup /lib references in libtool .la files, similar
-+	to how it is done for /usr/*.
-+
-+	Various fixes for builds with per-package target/host
-+	directories.
-+
-+	toolchain: Fix kernel headers validation check for external
-+	toolchains. Fix make 4.3+ compatibility in external toolchain
-+	logic.
-+
-+	fs/initramfs: fix show-info so it also shows the usual
-+	rootfs-related variables.
-+
-+	Updated/fixed packages: arm-trusted-firmware, barebox-aux,
-+	bluez5_utils, bubblewrap, busybox, civetweb, cog, collectd,
-+	ffmpeg, gcc, gnutls, gssdp, gvfs, haproxy, hiredis, hostapd,
-+	kmscube, kodi-screensaver-rsxs, libical, libinput, libexif,
-+	libopenssl, libsndfile, linux, linux-tools, llvm, localedef,
-+	mcrypt, mesa3d, meson, monit, nftables, ntp, opencv3,
-+	oprofile, php, pinentry, polkit, pure-ftpd, python-pyyaml,
-+	qt5, quagga, radvd, rcw, redis, rocksdb, samba4, screen,
-+	sdbusplus, swupdate, sysdig, sysklogd, syslinux, syslog-ng,
-+	tor, tslib, uacme, util-linux, vala, vlc,
-+	wireguard-linux-compat, wireguard-tools, wireshark,
-+	wpa_supplicant, xserver_xorg-server
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12711: host-localedef 2.30-20 fails to compile on fedora 32
-+	#12746: "sysdig" package description points to http://sysdig.org, ..
-+
- 2020.02, released March 8th, 2020
+diff --git a/docs/website/download.html b/docs/website/download.html
+index bc759ae3d1..51ec042a6a 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
- 	Various fixes.
+-      <h3 style="text-align: center;">Latest stable / long term support release: <b>2020.02</b></h3>
++      <h3 style="text-align: center;">Latest stable / long term support release: <b>2020.02.1</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.02.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.02.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2020.02.tar.gz">buildroot-2020.02.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.02.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.02.1.tar.gz">buildroot-2020.02.1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2020.02.1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.02.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.02.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.02.tar.bz2">buildroot-2020.02.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.02.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.02.1.tar.bz2">buildroot-2020.02.1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2020.02.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ <!--
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 21dbc66550..7d1508c53c 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.02.1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 April 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2020.02.1 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2020.02 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.1">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-April/279600.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.02.1.tar.bz2">2020.02.1 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
