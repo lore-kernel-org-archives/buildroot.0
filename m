@@ -1,53 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Apr 2020 08:31:47 +0200
-Subject: [Buildroot] [git commit] Update for 2019.02.11
-Message-ID: <20200411063447.4B0AD8E2F6@busybox.osuosl.org>
+Date: Sat, 11 Apr 2020 08:42:34 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2019.11.3
+Message-ID: <20200411063447.6F0B58E2F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eea7f7a60c34efd10a23e30794db0a390e0c09bd
+commit: https://git.buildroot.net/buildroot/commit/?id=ceb89051d8d8ca9d9601d153aa74ecd600947c1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5a6d31c87e1573bc83986471c194b944d7a365b7)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ docs/website/news.html | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 57a53083ed..5285806551 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -901,6 +901,27 @@
- 	#11761: Building custom kernel 5.1-rc3 or later breaks on objtool
- 	#11816: Only selected coreutils binaries are installed
+diff --git a/docs/website/news.html b/docs/website/news.html
+index f08c89acff..21dbc66550 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,28 @@
+ <h2>News</h2>
+ <ul class="timeline">
  
-+2019.02.11, released April 9th, 2020
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2019.11.3 released, 2019.11.x series EOL</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 April 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2019.11.3 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2019.11.2 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.11.3">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-April/279539.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2019.11.3.tar.bz2">2019.11.3 release</a>.</p>
 +
-+	Important / security related fixes.
++	  <p>Notice that the 2019.11.x series is now end of life. Please migrate to
++	  the 2020.02 series instead which will be supported until April 2021.</p>
++      </div>
++    </div>
++  </li>
 +
-+	core: Fix compatibility with make 4.3+. Also fixup /lib
-+	references in libtool .la files, similar to how it is done for
-+	/usr/*.
-+
-+	toolchain: Fix kernel headers validation check for external
-+	toolchains.
-+
-+	Updated/fixed packages: barebox-aux, bluez5_utils, busybox,
-+	civetweb, collectd, ffmpeg, gcc, gnutls, gvfs, haproxy,
-+	hiredis, kmscube, libical, libopenssl, libsndfile,
-+	linux-tools, ntp, php, pure-ftpd, screen, sysdig, tor,
-+	util-linux, vala, vlc, xserver_xorg-server
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12746: "sysdig" package description points to http://sysdig.org, ..
-+
- 2019.02.10, released March 16th, 2020
- 
- 	Important / security related fixes.
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
