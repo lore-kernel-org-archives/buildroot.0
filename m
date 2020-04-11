@@ -1,39 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 10:31:30 +0200
-Subject: [Buildroot] [PATCH] package/python-crossbar: add missing
- runtime dependency on python-werkzeug
-In-Reply-To: <20200408213000.212212-1-romain.naour@gmail.com>
-References: <20200408213000.212212-1-romain.naour@gmail.com>
-Message-ID: <20200411103130.4a0480d2@windsurf.home>
+Date: Sat, 11 Apr 2020 10:36:02 +0200
+Subject: [Buildroot] [PATCH 5/8] core/show-info: report whether a
+ package is overriden
+In-Reply-To: <524b53bb81ecd33c55b242d239bee93f57c6c98b.1586592741.git.yann.morin.1998@free.fr>
+References: <cover.1586592741.git.yann.morin.1998@free.fr>
+ <524b53bb81ecd33c55b242d239bee93f57c6c98b.1586592741.git.yann.morin.1998@free.fr>
+Message-ID: <20200411103602.75d8b9f2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  8 Apr 2020 23:30:00 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+On Sat, 11 Apr 2020 10:12:30 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Upstream commit
-> https://github.com/crossbario/crossbar/commit/b9c295d3cfa923b383f93fe534d40e42c56576dc
-> which has been part of the releases since v19.10.1 has added
-> werkzeug dependency.
+> When a package is overridden, the download, extract, and patch
+> stampfiles are replaced by a single rsync stampfile.
 > 
-> Without werkzeug package, the test TestPythonPy3Crossbar
-> is failing at runtime with this error:
+> People (and scripts) who want to report on the current status of the
+> build, will want to know what stamp file to look at.
 > 
-> ModuleNotFoundError: No module named 'werkzeug'
+> Expose in show-info whether the package is overridden or not.
 > 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/498144523
+> We do not expose the override location, because this is a purely-local
+> information, and show info should never contain such local information
+> (the output of show-info can be shared). Besides, that information is
+> already known by the user, as they passed it to Buildroot via local.mk
+> to begin with.
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Vadim Kochan <vadim4j@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: eeppeliteloop at gmail.com
 > ---
->  package/python-crossbar/Config.in | 1 +
+>  package/pkg-utils.mk | 1 +
 >  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index 66504d0be2..98e3ede3d1 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -100,6 +100,7 @@ define _json-info-pkg
+>  		"virtual": false$(comma)
+>  		$(call _json-info-pkg-details,$(1)) \
+>  	)
+> +	"overriden": $(if $($(1)_OVERRIDE_SRCDIR),true,false),
 
-Applied to master, thanks.
+I don't have a good suggestion, but I'm not sure "overriden" is the
+most appropriate term. Indeed, the download/extract/patch steps are
+also replaced by a rsync step for packages that use _SITE_METHOD =
+local, and such packages are not "overriden".
 
 Thomas
 -- 
