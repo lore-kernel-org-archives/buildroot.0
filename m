@@ -1,49 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Apr 2020 10:12:33 +0200
-Subject: [Buildroot] [PATCH 8/8] core/show-info: report image name of
- filesystems
-In-Reply-To: <cover.1586592741.git.yann.morin.1998@free.fr>
-References: <cover.1586592741.git.yann.morin.1998@free.fr>
-Message-ID: <0493cfafbdc9dd03d461d8707de2358156f9ad5d.1586592741.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 11 Apr 2020 10:12:51 +0200
+Subject: [Buildroot] [git commit] package/kodi-vfs-rar: bump version to
+ 2.3.0-Leia
+Message-ID: <20200411075857.6C6E68E491@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The rootfses, unlike packages, do not have stampfiles to represent
-whether they are built or not. Indeed, we always rebuild the rootfs, and
-there is a single step to do.
+commit: https://git.buildroot.net/buildroot/commit/?id=1bf655cd79981c04c76583a81d710ddffe72013f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hpwever, people (and scripts) who want to report on the build progress,
-will want to know whether each rootfs has been built already or not.
-
-Expose in show-info the name of the file that wil contain the rootfs
-image.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Vadim Kochan <vadim4j@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: eeppeliteloop at gmail.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-utils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/kodi-vfs-rar/kodi-vfs-rar.hash | 2 +-
+ package/kodi-vfs-rar/kodi-vfs-rar.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index bcdbf568fe..a464b660ef 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -174,6 +174,10 @@ define _json-info-pkg-details
- endef
+diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
+index 80d04ebaca..592b82f878 100644
+--- a/package/kodi-vfs-rar/kodi-vfs-rar.hash
++++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 17105acd5d2d83747a402b0782e4d7fe0f3e3f3a208ea9614af56c10186a757d  kodi-vfs-rar-2.2.3-Leia.tar.gz
++sha256 07ab4a4e5f2ad9e6c7e15badb3474d3f4d9d5e1405c4ff82815cc44452177e3b  kodi-vfs-rar-2.3.0-Leia.tar.gz
+ # License files
+ sha256 6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  lib/UnrarXLib/license.txt
+ sha256 310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
+index be766080ed..3bbe7be95d 100644
+--- a/package/kodi-vfs-rar/kodi-vfs-rar.mk
++++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define _json-info-fs
-+	"image_name": $(if $($(1)_FINAL_IMAGE_NAME), \
-+				"$($(1)_FINAL_IMAGE_NAME)", \
-+				null \
-+			),
- 	"dependencies": [
- 		$(call make-comma-list,$(sort $($(1)_DEPENDENCIES)))
- 	]
--- 
-2.20.1
+-KODI_VFS_RAR_VERSION = 2.2.3-Leia
++KODI_VFS_RAR_VERSION = 2.3.0-Leia
+ KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
+ KODI_VFS_RAR_LICENSE = unrar, GPL-2.0+
+ KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt LICENSE.md
