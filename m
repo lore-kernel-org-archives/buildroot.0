@@ -1,68 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 15:43:54 +0200
-Subject: [Buildroot] [PATCH v2] package/gdb: Add support for host-gdb
- with python3
-In-Reply-To: <20200323064621.205273-1-rfried.dev@gmail.com>
-References: <20200323064621.205273-1-rfried.dev@gmail.com>
-Message-ID: <20200411154354.367a6113@windsurf.home>
+Date: Sat, 11 Apr 2020 15:49:15 +0200
+Subject: [Buildroot] [git commit] package/psplash: add host-gdk-pixbuf
+ mandatory dependency
+Message-ID: <20200411133515.E3C0F8E51D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Mar 2020 08:46:21 +0200
-Ramon Fried <rfried.dev@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4dcb7582a0af072ef7d592e1408c980d2a19cb0d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> host-gdb was limited to link only with Python 2 although
-> it's possible to build Python 3 for host.
-> Add the ability to link with Python 3.
-> 
-> Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
-> ---
-> v2: Add choice menu for mutaly exclusive selection of Python3/2
->   as suggested by Romain
-> 
->  package/gdb/Config.in.host | 16 ++++++++++++++--
->  package/gdb/gdb.mk         |  3 +++
->  2 files changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-> index 5315f10493..e5e8fae5eb 100644
-> --- a/package/gdb/Config.in.host
-> +++ b/package/gdb/Config.in.host
-> @@ -32,10 +32,22 @@ config BR2_PACKAGE_HOST_GDB_TUI
->  	help
->  	  This option enables terminal user interface (TUI) for gdb
->  
-> +choice
-> +	prompt "Python support"
-> +	help
-> +	  Select the version of Python you wish to use
-> +
->  config BR2_PACKAGE_HOST_GDB_PYTHON
-> -	bool "Python support"
-> +	bool "Python 2 support"
->  	help
-> -	  This option enables the Python support in the cross gdb.
-> +	  This option enables the Python 2 support in the cross gdb.
-> +
-> +config BR2_PACKAGE_HOST_GDB_PYTHON3
-> +	bool "Python 3 support"
-> +	help
-> +	  This option enables the Python 3 support in the cross gdb.
-> +
+gdk-pixbuf-csource is needed since
+http://git.yoctoproject.org/cgit/cgit.cgi/psplash/commit/?id=f7a354dd7991bda57ab8b26d6491687d777f88da
 
-With this choice of two options.. you were forced to have either
-Python2 or Python3 support in gdb, it was no longer possible to *not*
-have Python support. So I've added a third option,
-BR2_PACKAGE_HOST_GDB_NOPYTHON, which allows to not have Python support
-in host-gdb.
+Fixes:
+ - http://autobuild.buildroot.org/results/cb46d93b90ca3b297d0e18fd84796660e20c3a52
 
-Applied with this change. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/psplash/psplash.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+index 39fcc2235f..a0f01869b4 100644
+--- a/package/psplash/psplash.mk
++++ b/package/psplash/psplash.mk
+@@ -9,7 +9,7 @@ PSPLASH_SITE = git://git.yoctoproject.org/psplash
+ PSPLASH_LICENSE = GPL-2.0+
+ PSPLASH_LICENSE_FILES = COPYING
+ PSPLASH_AUTORECONF = YES
+-PSPLASH_DEPENDENCIES = host-pkgconf
++PSPLASH_DEPENDENCIES = host-gdk-pixbuf host-pkgconf
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ PSPLASH_DEPENDENCIES += systemd
