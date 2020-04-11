@@ -1,128 +1,97 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 15:03:47 +0200
-Subject: [Buildroot] [RFC v4 3/3] package/qt5/qt5wayland: fix compile
- for rpi3
-In-Reply-To: <20200403212357.26997-3-ps.report@gmx.net>
-References: <20200403212357.26997-1-ps.report@gmx.net>
- <20200403212357.26997-3-ps.report@gmx.net>
-Message-ID: <20200411150347.2dd79d94@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 11 Apr 2020 15:22:58 +0200
+Subject: [Buildroot] [PATCH 5/8] core/show-info: report whether a
+ package is overriden
+In-Reply-To: <20200411144248.49090e99@windsurf.home>
+References: <cover.1586592741.git.yann.morin.1998@free.fr>
+ <524b53bb81ecd33c55b242d239bee93f57c6c98b.1586592741.git.yann.morin.1998@free.fr>
+ <20200411103602.75d8b9f2@windsurf.home>
+ <20200411094436.GK29898@scaer>
+ <20200411144248.49090e99@windsurf.home>
+Message-ID: <20200411132258.GM29898@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  3 Apr 2020 23:23:57 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+Thomas, All,
 
-> Add three patches to fix compile for rpi3.
+On 2020-04-11 14:42 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 11 Apr 2020 11:44:36 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > > I don't have a good suggestion, but I'm not sure "overriden" is the
+> > > most appropriate term. Indeed, the download/extract/patch steps are
+> > > also replaced by a rsync step for packages that use _SITE_METHOD =
+> > > local, and such packages are not "overriden".  
+> > 
+> > It is very unfortunate that we conflate the two conditions.
+> 
+> Well, from an internal implementation point of view, SITE_METHOD =
+> local and OVERRIDE_SRCDIR are just exactly the same thing.
 
-I'm not super at ease with the patches. Especially, I'm always worried
-about a commit that fixes things for one particular platform: patches 1
-and 3 don't seem at all related to Rpi3 specifically.
+But that is an implementation detail, indeed.
 
-> diff --git a/package/qt5/qt5wayland/0001-fix-libdrm-related-configure-test-failure.patch b/package/qt5/qt5wayland/0001-fix-libdrm-related-configure-test-failure.patch
-> new file mode 100644
-> index 0000000000..b4d0a2c302
-> --- /dev/null
-> +++ b/package/qt5/qt5wayland/0001-fix-libdrm-related-configure-test-failure.patch
-> @@ -0,0 +1,56 @@
-> +From ba93ccba2aa70bd76f0af43675fa5864e166e3c3 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Fri, 3 Apr 2020 21:52:30 +0200
-> +Subject: [PATCH 1/3] fix libdrm related configure test failure
+In fact, we should have had local support without override support. And
+then we should have grafted override suport on top of the local one,
+while the code as it is makes local re-use the override code...
 
-Nit: use git format-patch -N to generate patches.
+I'll try to hack a cleanup in that area...
 
-> +
-> +Fixes:
-> +
-> +  Project ERROR: Test config.qtwayland_client.tests.dmabuf-server-buffer tries to use undeclared library 'drm'
-> +  Project ERROR: Test config.qtwayland_compositor.tests.dmabuf-server-buffer tries to use undeclared library 'drm'
-> +  Project ERROR: Test config.qtwayland_compositor.tests.dmabuf-client-buffer tries to use undeclared library 'drm'
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Perhaps you could use:
+> 
+> 	"rsynced": $(if $($(1)_OVERRIDE_SRCDIR),true,false),
 
-Should the "drm" library be declared somewhere instead? How is this
-building for upstream?
+Fact is, that still does not reflect what I want to expose. An overriden
+package is de-facto not reproducible, while a local package may.
 
-> diff --git a/package/qt5/qt5wayland/0002-brcm-egl-needs-wayland-scanner-client-wayland-protoc.patch b/package/qt5/qt5wayland/0002-brcm-egl-needs-wayland-scanner-client-wayland-protoc.patch
-> new file mode 100644
-> index 0000000000..f14c374e76
-> --- /dev/null
-> +++ b/package/qt5/qt5wayland/0002-brcm-egl-needs-wayland-scanner-client-wayland-protoc.patch
-> @@ -0,0 +1,36 @@
-> +From 4770af94884be5a603934b36e6804eed7d18d43c Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Fri, 3 Apr 2020 22:42:23 +0200
-> +Subject: [PATCH 2/3] brcm-egl: needs
-> + wayland-scanner-client-wayland-protocol-include
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Fixes:
-> +
-> +  wayland-brcm-client-protocol.h: In function ?wl_buffer* qt_brcm_create_buffer(qt_brcm*, int32_t, int32_t, wl_array*)?:
-> +  wayland-brcm-client-protocol.h:115:29: error: ?wl_buffer_interface? was not declared in this scope; did you mean ?qt_brcm_interface??
-> +    115 |     QT_BRCM_CREATE_BUFFER, &wl_buffer_interface, NULL, width, height, data);
-> +        |                             ^~~~~~~~~~~~~~~~~~~
-> +        |                             qt_brcm_interface
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+But I don't care enough to argue further. "resynced" gets the same value
+as "overriden", and since we can;t get the semantic of "overriden", it
+is as good as it is.
 
-A bit more explanation on the relationship between the build issue and
-the fix would be good.
+> as this is really annotates the fact that the package source code is
+> rsynced. You could even make it clearer with "source-rsynced" or
+> something like that.
+> 
+> > We can't even reconstruct the override by looking at whether
+> > _SITE_METHOD == local, because even local packages may be overriden...
+> 
+> Indeed.
+> 
+> > So, is it worth that I try and untangle the tow notions? Given the
+> > feedback on the rest of this eries, I don;t want to invest too much time
+> > if there is no chance of it getting in...
+> 
+> I think this particular patch is OK, even though admittedly the
+> external tool could just watch for the correct stamp files to show up:
+> if .stamp_downloaded shows up, we're downloading it normally, if
+> .stamp_rsynced shows up, we have a local or overridden package.
+> 
+> In the design of the tool, it would be good to make sure that top-level
+> parallel build is taken into account.
 
-> diff --git a/package/qt5/qt5wayland/0003-examples-fix-wayland-texture-sharing-custom-composit.patch b/package/qt5/qt5wayland/0003-examples-fix-wayland-texture-sharing-custom-composit.patch
-> new file mode 100644
-> index 0000000000..1f0f919c93
-> --- /dev/null
-> +++ b/package/qt5/qt5wayland/0003-examples-fix-wayland-texture-sharing-custom-composit.patch
-> @@ -0,0 +1,42 @@
-> +From f7d96ddd00f868810ed2ca260acd41435717e6b8 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Fri, 3 Apr 2020 22:40:29 +0200
-> +Subject: [PATCH 3/3] examples: fix wayland/texture-sharing/custom-compositor
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Fixes:
-> +
-> +  main.cpp:83:33: error: ?GL_RGBA8? was not declared in this scope; did you mean ?GL_RGBA4??
-> +     83 |             *glInternalFormat = GL_RGBA8;
-> +        |                                 ^~~~~~~~
-> +        |                                 GL_RGBA4
-> +  main.cpp:120:33: error: ?GL_RGBA8? was not declared in this scope; did you mean ?GL_RGBA4??
-> +    120 |             *glInternalFormat = GL_RGBA8;
-> +        |                                 ^~~~~~~~
-> +        |                                 GL_RGBA4
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + examples/wayland/texture-sharing/custom-compositor/main.cpp | 4 ++++
-> + 1 file changed, 4 insertions(+)
-> +
-> +diff --git a/examples/wayland/texture-sharing/custom-compositor/main.cpp b/examples/wayland/texture-sharing/custom-compositor/main.cpp
-> +index a39c8c3..af37502 100644
-> +--- a/examples/wayland/texture-sharing/custom-compositor/main.cpp
-> ++++ b/examples/wayland/texture-sharing/custom-compositor/main.cpp
-> +@@ -63,6 +63,10 @@
-> + 
-> + #include "QtWaylandCompositor/private/qwltexturesharingextension_p.h"
-> + 
-> ++#ifndef GL_RGBA8
-> ++#define GL_RGBA8 0x8058
-> ++#endif
+Which is exactly what I am trying to achieve here: provide all the info
+about the internal details, so that the tool does not have to guess.
 
-This feels like a hack. What should normally be providing the GL_RGBA8
-define? The OpenGL headers?
+But personally I don't care about such a tool; I'm just trying to make
+life easier for those (like eeppeliteloop in Cc) who want such tools.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
