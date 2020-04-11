@@ -1,49 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 10:56:18 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python3: add optional support
- for berkeleydb
-In-Reply-To: <20200405142823.836514-2-bernd.kuhls@t-online.de>
-References: <20200405142823.836514-1-bernd.kuhls@t-online.de>
- <20200405142823.836514-2-bernd.kuhls@t-online.de>
-Message-ID: <20200411105618.0626ffa3@windsurf.home>
+Date: Sat, 11 Apr 2020 10:57:12 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: add optional dependency to
+ libxcb
+Message-ID: <20200411084346.8778D8E4EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=10954dfe68fc323d9e612275096028ad9fb0e25e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  5 Apr 2020 16:28:23 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+ffmpeg 3.3 added optional support for libxcb:
+https://git.ffmpeg.org/gitweb/ffmpeg.git/blob/HEAD:/Changelog#l282
 
-> +ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
-> +PYTHON3_DEPENDENCIES += berkeleydb
-> +endif
+This patch ensures a reproducible build of libavdevice.so:
 
-For all Python modules that have external dependencies, we like to have
-an option that allows to explicitly disable it:
+$ readelf -a output/target/usr/lib/libavdevice.so | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libavfilter.so.7]
+ 0x0000000000000001 (NEEDED)             Shared library: [libavformat.so.58]
+ 0x0000000000000001 (NEEDED)             Shared library: [libavcodec.so.58]
+ 0x0000000000000001 (NEEDED)             Shared library: [libavutil.so.56]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-shm.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-shape.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-xfixes.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
 
-0018-Add-an-option-to-disable-the-curses-module.patch
-0019-Add-an-option-to-disable-expat.patch
-0020-Add-an-option-to-disable-CJK-codecs.patch
-0021-Add-an-option-to-disable-NIS.patch
-0022-Add-an-option-to-disable-unicodedata.patch
-0023-Add-an-option-to-disable-IDLE.patch
-0024-Add-an-option-to-disable-decimal.patch
-0025-Add-an-option-to-disable-the-ossaudiodev-module.patch
-0026-Add-an-option-to-disable-openssl-support.patch
-0027-Add-an-option-to-disable-the-readline-module.patch
-0028-Add-options-to-disable-zlib-bzip2-and-xz-modules.patch
+compared to
 
-Could you add a similar patch to explicitly disable the build of the
-dbm module when berkeleydb is not available, and then use that new
-option in python3.mk ?
+$ readelf -a output/target/usr/lib/libavdevice.so | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libavfilter.so.7]
+ 0x0000000000000001 (NEEDED)             Shared library: [libavformat.so.58]
+ 0x0000000000000001 (NEEDED)             Shared library: [libavcodec.so.58]
+ 0x0000000000000001 (NEEDED)             Shared library: [libavutil.so.56]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
 
-Thanks!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ffmpeg/Config.in |  7 +++++++
+ package/ffmpeg/ffmpeg.mk | 11 +++++++++++
+ 2 files changed, 18 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 33baff262e..2efef7dd86 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -67,6 +67,13 @@ config BR2_PACKAGE_FFMPEG_FFPROBE
+ 	  FFprobe is a utility to determine the audio and video
+ 	  characteristics of a container file.
+ 
++config BR2_PACKAGE_FFMPEG_XCBGRAB
++	bool "Build X11 screen grabbing"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBXCB
++	help
++	  X11 screen grabbing using libxcb.
++
+ config BR2_PACKAGE_FFMPEG_AVRESAMPLE
+ 	bool "Build libavresample"
+ 	help
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index b7148bbba2..96455cb978 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -96,6 +96,17 @@ else
+ FFMPEG_CONF_OPTS += --disable-ffprobe
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FFMPEG_XCBGRAB),y)
++FFMPEG_CONF_OPTS += \
++	--enable-libxcb \
++	--enable-libxcb-shape \
++	--enable-libxcb-shm \
++	--enable-libxcb-xfixes
++FFMPEG_DEPENDENCIES += libxcb
++else
++FFMPEG_CONF_OPTS += --disable-libxcb
++endif
++
+ ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
+ FFMPEG_CONF_OPTS += --enable-postproc
+ else
