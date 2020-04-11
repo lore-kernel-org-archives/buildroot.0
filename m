@@ -1,51 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Apr 2020 08:42:34 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2019.11.3
-Message-ID: <20200411063447.6F0B58E2F6@busybox.osuosl.org>
+Date: Sat, 11 Apr 2020 08:43:29 +0200
+Subject: [Buildroot] [git commit] Update for 2020.02.1
+Message-ID: <20200411063447.831F18E2F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ceb89051d8d8ca9d9601d153aa74ecd600947c1e
+commit: https://git.buildroot.net/buildroot/commit/?id=673d54c6005c25007bdcfa9b014f9dbd104c86db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 80e565bbebc61bf113bcd3b3475fa27a5127f466)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/news.html | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ CHANGES | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index f08c89acff..21dbc66550 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,28 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/CHANGES b/CHANGES
+index d7c1e7df20..60177304b3 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,38 @@
++2020.02.1, released April 10th, 2020
++
++	Important / security related fixes.
++
++	core: Also fixup /lib references in libtool .la files, similar
++	to how it is done for /usr/*.
++
++	Various fixes for builds with per-package target/host
++	directories.
++
++	toolchain: Fix kernel headers validation check for external
++	toolchains. Fix make 4.3+ compatibility in external toolchain
++	logic.
++
++	fs/initramfs: fix show-info so it also shows the usual
++	rootfs-related variables.
++
++	Updated/fixed packages: arm-trusted-firmware, barebox-aux,
++	bluez5_utils, bubblewrap, busybox, civetweb, cog, collectd,
++	ffmpeg, gcc, gnutls, gssdp, gvfs, haproxy, hiredis, hostapd,
++	kmscube, kodi-screensaver-rsxs, libical, libinput, libexif,
++	libopenssl, libsndfile, linux, linux-tools, llvm, localedef,
++	mcrypt, mesa3d, meson, monit, nftables, ntp, opencv3,
++	oprofile, php, pinentry, polkit, pure-ftpd, python-pyyaml,
++	qt5, quagga, radvd, rcw, redis, rocksdb, samba4, screen,
++	sdbusplus, swupdate, sysdig, sysklogd, syslinux, syslog-ng,
++	tor, tslib, uacme, util-linux, vala, vlc,
++	wireguard-linux-compat, wireguard-tools, wireshark,
++	wpa_supplicant, xserver_xorg-server
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#12711: host-localedef 2.30-20 fails to compile on fedora 32
++	#12746: "sysdig" package description points to http://sysdig.org, ..
++
+ 2020.02, released March 8th, 2020
  
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2019.11.3 released, 2019.11.x series EOL</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 April 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2019.11.3 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2019.11.2 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.11.3">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-April/279539.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2019.11.3.tar.bz2">2019.11.3 release</a>.</p>
-+
-+	  <p>Notice that the 2019.11.x series is now end of life. Please migrate to
-+	  the 2020.02 series instead which will be supported until April 2021.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ 	Various fixes.
