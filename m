@@ -1,32 +1,61 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Apr 2020 14:34:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdvdread: fix build with gcc-4.8
-Message-ID: <20200411123451.52419-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 11 Apr 2020 14:42:48 +0200
+Subject: [Buildroot] [PATCH 5/8] core/show-info: report whether a
+ package is overriden
+In-Reply-To: <20200411094436.GK29898@scaer>
+References: <cover.1586592741.git.yann.morin.1998@free.fr>
+ <524b53bb81ecd33c55b242d239bee93f57c6c98b.1586592741.git.yann.morin.1998@free.fr>
+ <20200411103602.75d8b9f2@windsurf.home>
+ <20200411094436.GK29898@scaer>
+Message-ID: <20200411144248.49090e99@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/28a/28a2e837eae1dae9214fab1aec119a9aa6b2e5c0/
+On Sat, 11 Apr 2020 11:44:36 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdvdread/libdvdread.mk | 1 +
- 1 file changed, 1 insertion(+)
+> > I don't have a good suggestion, but I'm not sure "overriden" is the
+> > most appropriate term. Indeed, the download/extract/patch steps are
+> > also replaced by a rsync step for packages that use _SITE_METHOD =
+> > local, and such packages are not "overriden".  
+> 
+> It is very unfortunate that we conflate the two conditions.
 
-diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
-index 9a8eb7cacd..aa91d3162a 100644
---- a/package/libdvdread/libdvdread.mk
-+++ b/package/libdvdread/libdvdread.mk
-@@ -10,6 +10,7 @@ LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_V
- LIBDVDREAD_INSTALL_STAGING = YES
- LIBDVDREAD_LICENSE = GPL-2.0+
- LIBDVDREAD_LICENSE_FILES = COPYING
-+LIBDVDREAD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
- LIBDVDREAD_CONF_OPTS = --with-libdvdcss
- LIBDVDREAD_DEPENDENCIES = libdvdcss host-pkgconf
- 
+Well, from an internal implementation point of view, SITE_METHOD =
+local and OVERRIDE_SRCDIR are just exactly the same thing.
+
+Perhaps you could use:
+
+	"rsynced": $(if $($(1)_OVERRIDE_SRCDIR),true,false),
+
+as this is really annotates the fact that the package source code is
+rsynced. You could even make it clearer with "source-rsynced" or
+something like that.
+
+> We can't even reconstruct the override by looking at whether
+> _SITE_METHOD == local, because even local packages may be overriden...
+
+Indeed.
+
+> So, is it worth that I try and untangle the tow notions? Given the
+> feedback on the rest of this eries, I don;t want to invest too much time
+> if there is no chance of it getting in...
+
+I think this particular patch is OK, even though admittedly the
+external tool could just watch for the correct stamp files to show up:
+if .stamp_downloaded shows up, we're downloading it normally, if
+.stamp_rsynced shows up, we have a local or overridden package.
+
+In the design of the tool, it would be good to make sure that top-level
+parallel build is taken into account.
+
+Best regards,
+
+Thomas
 -- 
-2.25.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
