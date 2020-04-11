@@ -1,32 +1,30 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Apr 2020 10:12:27 +0200
-Subject: [Buildroot] [PATCH 2/8] infra/pkg-generic: don't set
- INSTALL_{TARGET, STAGING, IMAGES} for host
+Date: Sat, 11 Apr 2020 10:12:28 +0200
+Subject: [Buildroot] [PATCH 3/8] core/show-info: report install types for
+ virtual packages too
 In-Reply-To: <cover.1586592741.git.yann.morin.1998@free.fr>
 References: <cover.1586592741.git.yann.morin.1998@free.fr>
-Message-ID: <c6febf929ca8d42bbd7d053643dc342272fe4f74.1586592741.git.yann.morin.1998@free.fr>
+Message-ID: <df507703c3c71ec7f2f774ee140bcde5cb9a8a5b.1586592741.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By their very nature, host packages have no target, staging, or
-images install steps; they have a single install step, that is
-always performed.
+Although virtual packages do not usually install anything, they do
+participate in the dependency chain, and they also transition smoothly
+from 'not handled yet' all the way down to 'all set'. And in fact, it
+happens that some virtual packages do install something; for example,
+the virtual package 'toolchain' does tweak the musl headers during a
+post staging hook.
 
-As sucj, setting the corresponding _INSTALL_{TARGET,STAGING,IMAGES}
-variables does not make sense for host packages.
+As such, people may want to know when those packages have been handled.
+To that goal, they will need to know what stampfile to look at (the
+target, staging, or images ones) to identify what step the virtual
+package is at.
 
-However, people (and scripts) may get confused when they process the
-output of printvars, e.g.:
-
-    $ make printvars VARS=HOST_LIBTOOL_INSTALL_TARGET
-    HOST_LIBTOOL_INSTALL_TARGET=YES
-
-Only set those variables for target packages. There is no corresponding
-variable for host packages, as they are always installed (and only
-once).
+So, report the type of install steps for virtual packages too, which
+means for all packages.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Vadim Kochan <vadim4j@gmail.com>
@@ -34,33 +32,36 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: eeppeliteloop at gmail.com
 ---
- package/pkg-generic.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/pkg-utils.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 7679c41556..8cd5a7ff62 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -706,10 +706,6 @@ $(2)_FINAL_RECURSIVE_RDEPENDENCIES = $$(sort \
- 	) \
- 	$$($(2)_FINAL_RECURSIVE_RDEPENDENCIES__X))
- 
--$(2)_INSTALL_STAGING		?= NO
--$(2)_INSTALL_IMAGES		?= NO
--$(2)_INSTALL_TARGET		?= YES
--
- # define sub-target stamps
- $(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
- $(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
-@@ -770,6 +766,9 @@ $(1):			$(1)-install
- ifeq ($$($(2)_TYPE),host)
- $(1)-install:	        $(1)-install-host
- else
-+$(2)_INSTALL_STAGING	?= NO
-+$(2)_INSTALL_IMAGES	?= NO
-+$(2)_INSTALL_TARGET	?= YES
- $(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
- endif
- 
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 14101fcc2a..b6c6aeeb40 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -100,6 +100,11 @@ define _json-info-pkg
+ 		"virtual": false$(comma)
+ 		$(call _json-info-pkg-details,$(1)) \
+ 	)
++	$(if $(filter target,$($(1)_TYPE)), \
++		"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET))$(comma) \
++		"install_staging": $(call yesno-to-bool,$($(1)_INSTALL_STAGING))$(comma) \
++		"install_images": $(call yesno-to-bool,$($(1)_INSTALL_IMAGES))$(comma) \
++	)
+ 	"dependencies": [
+ 		$(call make-comma-list,$(sort $($(1)_FINAL_ALL_DEPENDENCIES)))
+ 	],
+@@ -112,11 +117,6 @@ define _json-info-pkg-details
+ 	"version": "$($(1)_DL_VERSION)",
+ 	"licenses": "$($(1)_LICENSE)",
+ 	"dl_dir": "$($(1)_DL_SUBDIR)",
+-	$(if $(filter target,$($(1)_TYPE)), \
+-		"install_target": $(call yesno-to-bool,$($(1)_INSTALL_TARGET))$(comma) \
+-		"install_staging": $(call yesno-to-bool,$($(1)_INSTALL_STAGING))$(comma) \
+-		"install_images": $(call yesno-to-bool,$($(1)_INSTALL_IMAGES))$(comma) \
+-	)
+ 	"downloads": [
+ 	$(foreach dl,$(sort $($(1)_ALL_DOWNLOADS)),
+ 		{
 -- 
 2.20.1
