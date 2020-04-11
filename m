@@ -1,39 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 10:04:46 +0200
-Subject: [Buildroot] [PATCH v3 1/2] package/gensio: bump to version 2.0.1
-In-Reply-To: <20200409202529.62795-1-james.hilliard1@gmail.com>
-References: <20200409202529.62795-1-james.hilliard1@gmail.com>
-Message-ID: <20200411100446.5d5f9a15@windsurf.home>
+Date: Sat, 11 Apr 2020 10:06:53 +0200
+Subject: [Buildroot] [git commit] package/python-py: bump to version 1.8.1
+Message-ID: <20200411075350.5B23D82135@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  9 Apr 2020 14:25:28 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=73deb45a265bed7ee52aea5ede96e49ec15f8695
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Removed patch that is now upstream.
-> 
-> Removed GENSIO_AUTORECONF as we no longer patch configure.ac.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-> Changes v2 -> v3:
->   - remove fixes from commit message as it is no longer relevant
-> Changes v1 -> v2:
->   - rebase on top of master
-> ---
->  ...r-Rename-some-variables-to-tr_stdxxx.patch | 109 ------------------
->  package/gensio/gensio.hash                    |   6 +-
->  package/gensio/gensio.mk                      |   4 +-
->  3 files changed, 4 insertions(+), 115 deletions(-)
->  delete mode 100644 package/gensio/0001-filter-Rename-some-variables-to-tr_stdxxx.patch
+And use two spaces for indentation in hash file.
 
-Both applied, thanks!
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-py/python-py.hash | 6 +++---
+ package/python-py/python-py.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-py/python-py.hash b/package/python-py/python-py.hash
+index f8e6446338..150428b606 100644
+--- a/package/python-py/python-py.hash
++++ b/package/python-py/python-py.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/py/json
+-md5	d9e30436ce7e79f30847f9b30b62e149  py-1.8.0.tar.gz
+-sha256	dc639b046a6e2cff5bbe40194ad65936d6ba360b52b3c3fe1d08a82dd50b5e53  py-1.8.0.tar.gz
++md5  42c67de84b07ac9cc867b8b70843a45b  py-1.8.1.tar.gz
++sha256  5e27081401262157467ad6e7f851b7aa402c5852dbcb3dae06768434de5752aa  py-1.8.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
++sha256  2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
+diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
+index 1592b5c6b4..42171a6785 100644
+--- a/package/python-py/python-py.mk
++++ b/package/python-py/python-py.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PY_VERSION = 1.8.0
++PYTHON_PY_VERSION = 1.8.1
+ PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
+-PYTHON_PY_SITE = https://files.pythonhosted.org/packages/f1/5a/87ca5909f400a2de1561f1648883af74345fe96349f34f737cdfc94eba8c
++PYTHON_PY_SITE = https://files.pythonhosted.org/packages/bd/8f/169d08dcac7d6e311333c96b63cbe92e7947778475e1a619b674989ba1ed
+ PYTHON_PY_DEPENDENCIES = host-python-setuptools-scm
+ PYTHON_PY_SETUP_TYPE = setuptools
+ PYTHON_PY_LICENSE = MIT
