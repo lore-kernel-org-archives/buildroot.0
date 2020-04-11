@@ -1,57 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 10:36:02 +0200
-Subject: [Buildroot] [PATCH 5/8] core/show-info: report whether a
- package is overriden
-In-Reply-To: <524b53bb81ecd33c55b242d239bee93f57c6c98b.1586592741.git.yann.morin.1998@free.fr>
+Date: Sat, 11 Apr 2020 10:38:42 +0200
+Subject: [Buildroot] [PATCH 6/8] core/show-info: report package stamp
+ files
+In-Reply-To: <39b4e30872bf54a34bf482576022c0d025b89b25.1586592741.git.yann.morin.1998@free.fr>
 References: <cover.1586592741.git.yann.morin.1998@free.fr>
- <524b53bb81ecd33c55b242d239bee93f57c6c98b.1586592741.git.yann.morin.1998@free.fr>
-Message-ID: <20200411103602.75d8b9f2@windsurf.home>
+ <39b4e30872bf54a34bf482576022c0d025b89b25.1586592741.git.yann.morin.1998@free.fr>
+Message-ID: <20200411103842.3d095fbf@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 11 Apr 2020 10:12:30 +0200
+On Sat, 11 Apr 2020 10:12:31 +0200
 "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> When a package is overridden, the download, extract, and patch
-> stampfiles are replaced by a single rsync stampfile.
-> 
-> People (and scripts) who want to report on the current status of the
-> build, will want to know what stamp file to look at.
-> 
-> Expose in show-info whether the package is overridden or not.
-> 
-> We do not expose the override location, because this is a purely-local
-> information, and show info should never contain such local information
-> (the output of show-info can be shared). Besides, that information is
-> already known by the user, as they passed it to Buildroot via local.mk
-> to begin with.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Vadim Kochan <vadim4j@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: eeppeliteloop at gmail.com
-> ---
->  package/pkg-utils.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 66504d0be2..98e3ede3d1 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -100,6 +100,7 @@ define _json-info-pkg
->  		"virtual": false$(comma)
->  		$(call _json-info-pkg-details,$(1)) \
->  	)
-> +	"overriden": $(if $($(1)_OVERRIDE_SRCDIR),true,false),
+> +	"stamp_files": {
+> +		$(if $($(1)_OVERRIDE_SRCDIR), \
+> +			"rsync": "$(notdir $($(1)_TARGET_RSYNC))"$(comma) \
+> +			, \
+> +			"download": "$(notdir $($(1)_TARGET_SOURCE))"$(comma) \
+> +			"extract": "$(notdir $($(1)_TARGET_EXTRACT))"$(comma) \
+> +			"patch": "$(notdir $($(1)_TARGET_PATCH))"$(comma) \
+> +		)
+> +		"configure": "$(notdir $($(1)_TARGET_CONFIGURE))",
+> +		"build": "$(notdir $($(1)_TARGET_BUILD))",
+> +		$(if $(filter YES,$($(1)_INSTALL_STAGING)),\
+> +			"install_staging": "$(notdir $($(1)_TARGET_INSTALL_STAGING))"$(comma) \
+> +		)
+> +		$(if $(filter YES,$($(1)_INSTALL_TARGET)),\
+> +			"install_target": "$(notdir $($(1)_TARGET_INSTALL_TARGET))"$(comma) \
+> +		)
+> +		$(if $(filter YES,$($(1)_INSTALL_IMAGES)),\
+> +			"install_images": "$(notdir $($(1)_TARGET_INSTALL_IMAGES))"$(comma) \
+> +		)
+> +		$(if $(filter host,$($(1)_TYPE)), \
+> +			"install":  "$(notdir $($(1)_TARGET_INSTALL_HOST))"$(comma) \
+> +		)
 
-I don't have a good suggestion, but I'm not sure "overriden" is the
-most appropriate term. Indeed, the download/extract/patch steps are
-also replaced by a rsync step for packages that use _SITE_METHOD =
-local, and such packages are not "overriden".
+Isn't this going to add for each package exactly the same information,
+over and over again ? I.e, just the names of stamp files, again, again,
+and again. This seems like a big waste of space, making the JSON output
+very noisy. I think the tool showing the progress should simply know
+what the stamp files are.
 
 Thomas
 -- 
