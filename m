@@ -1,40 +1,58 @@
 From: Alexey Lukyanchuk <skif@skif-web.ru>
-Date: Sat, 11 Apr 2020 12:40:20 +0300
-Subject: [Buildroot] [PATCH 1/3] package/qpdf: fix 'no such file' exeption
+Date: Sat, 11 Apr 2020 12:40:21 +0300
+Subject: [Buildroot] [PATCH 2/3] package/cups-filters: add ghostscript
+ support
 In-Reply-To: <20200411094022.13773-1-skif@skif-web.ru>
 References: <20200411094022.13773-1-skif@skif-web.ru>
-Message-ID: <20200411094022.13773-2-skif@skif-web.ru>
+Message-ID: <20200411094022.13773-3-skif@skif-web.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qpdf need '--with-random' option for proper work.
-This problem broke cups printing.
+Cups-filters can work around ghostscript render instead of pdftops.
 
-Without it, app crashed with 'no such file' error.
-It's can me tested by command like 'qpd some_pdf.pdf -'.
+It's solve some troubles with printers. For example, in current
+buildroot version pdftopsget FILTER ERROR message and broken printing.
 
-This patch change configure options to '--with-random=/dev/random'
+Also ghostscriot have support of multiple printer models.
+
+This patch check, is ghostscript enabled. If yes, default render will
+send to ghostscript.
 
 Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
 ---
- package/qpdf/qpdf.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cups-filters/cups-filters.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-index ac703d716e..9368496069 100644
---- a/package/qpdf/qpdf.mk
-+++ b/package/qpdf/qpdf.mk
-@@ -11,7 +11,7 @@ QPDF_LICENSE = Apache-2.0 or Artistic-2.0
- QPDF_LICENSE_FILES = LICENSE.txt Artistic-2.0
- QPDF_DEPENDENCIES = host-pkgconf zlib jpeg
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 3bb33d963c..75447b2b7e 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -11,8 +11,7 @@ CUPS_FILTERS_LICENSE_FILES = COPYING
  
--QPDF_CONF_OPTS = --without-random
-+QPDF_CONF_OPTS += --with-random=/dev/random
+ CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
  
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- QPDF_CONF_OPTS += --enable-crypto-gnutls
+-CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
+-	--disable-mutool \
++CUPS_FILTERS_CONF_OPTS = --disable-mutool \
+ 	--disable-foomatic \
+ 	--disable-braille \
+ 	--with-cups-config=$(STAGING_DIR)/usr/bin/cups-config \
+@@ -20,6 +19,13 @@ CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
+ 	--with-pdftops=pdftops \
+ 	--with-jpeg
+ 
++ifeq ($(BR2_PACKAGE_GHOSTSCRIPT),y)
++CUPS_FILTERS_CONF_OPTS += --with-pdftops=gs
++CUPS_FILTERS_DEPENDENCIES += ghostscript
++else
++CUPS_FILTERS_CONF_OPTS += --with-pdftops=pdftops
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ CUPS_FILTERS_CONF_OPTS += --with-png
+ CUPS_FILTERS_DEPENDENCIES += libpng
 -- 
 2.17.1
