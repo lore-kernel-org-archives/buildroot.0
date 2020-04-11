@@ -1,51 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 11 Apr 2020 08:37:35 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2019.02.11
-Message-ID: <20200411063447.52F508E2F6@busybox.osuosl.org>
+Date: Sat, 11 Apr 2020 08:39:08 +0200
+Subject: [Buildroot] [git commit] Update for 2019.11.3
+Message-ID: <20200411063447.5EF2F8E2F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37b24ef6dbacadd1f6ba76c30eed6dfa3f46d54e
+commit: https://git.buildroot.net/buildroot/commit/?id=ed4f7ddf49c0d328da8c08bbc4e8ad689a198a0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7d3fc9d795f757f3191750491555495626e3bfdb)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/news.html | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ CHANGES | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 061159747a..f08c89acff 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,28 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/CHANGES b/CHANGES
+index 5285806551..d7c1e7df20 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -154,6 +154,31 @@
+ 	#12536: Linux-Headers extracting failure
+ 	#12546: Ninja 1.10 build Error
  
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2019.02.11 released, 2019.02.x series EOL</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>9 April 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2019.02.11 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2019.02.10 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.11">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-April/279523.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2019.02.11.tar.bz2">2019.02.11 release</a>.</p>
++2019.11.3, released April 10th, 2020
 +
-+	  <p>Notice that the 2019.02.x series is now end of life. Please migrate to
-+	  the 2020.02 series instead which will be supported until April 2021.</p>
-+      </div>
-+    </div>
-+  </li>
++	Important / security related fixes.
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	core: Fix compatibility with make 4.3+. Also fixup /lib
++	references in libtool .la files, similar to how it is done for
++	/usr/*.
++
++	toolchain: Fix kernel headers validation check for external
++	toolchains.
++
++	fs/initramfs: fix show-info so it also shows the usual
++	rootfs-related variables.
++
++	Updated/fixed packages: barebox-aux, bluez5_utils, busybox,
++	civetweb, cog, collectd, ffmpeg, gcc, gnutls, gssdp, gvfs, haproxy,
++	hiredis, hostapd, kmscube, libical, libopenssl, libsndfile,
++	linux-tools, llvm, monit, ntp, php, pure-ftpd, radvd, redis,
++	samba4, screen, sysdig, syslinux, syslog-ng, tor, uacme,
++	util-linux, vala, vlc, wpa_supplicant, xserver_xorg-server
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#12746: "sysdig" package description points to http://sysdig.org, ..
++
+ 2019.11.2, released March 16th, 2020
+ 
+ 	Important / security related fixes.
