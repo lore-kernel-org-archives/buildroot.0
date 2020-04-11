@@ -1,163 +1,71 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 11 Apr 2020 17:24:54 +0200
-Subject: [Buildroot] [RFC v4 3/3] package/qt5/qt5wayland: fix compile
- for rpi3
-In-Reply-To: <20200411150347.2dd79d94@windsurf.home>
-References: <20200403212357.26997-1-ps.report@gmx.net>
- <20200403212357.26997-3-ps.report@gmx.net>
- <20200411150347.2dd79d94@windsurf.home>
-Message-ID: <20200411172454.707a25ac@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 11 Apr 2020 17:27:26 +0200
+Subject: [Buildroot] [PATCH 7/8] core/show-info: report the ordered list
+ of build steps
+In-Reply-To: <CAB4xu_15BFXQ3VFnrp8j5b8ivr=pGN2HN5UarW8dz-R+XRk5Dw@mail.gmail.com>
+References: <cover.1586592741.git.yann.morin.1998@free.fr>
+ <93a3545d1fe7b47cdfb32edc7db3fd54600fecd9.1586592741.git.yann.morin.1998@free.fr>
+ <20200411103950.4a21b23e@windsurf.home>
+ <CAB4xu_1Bv4gsebOQrUfKM_ChD6q7-e15YTGPqwj4PBx3hzkrOA@mail.gmail.com>
+ <20200411161903.7b007feb@windsurf.home>
+ <CAB4xu_15BFXQ3VFnrp8j5b8ivr=pGN2HN5UarW8dz-R+XRk5Dw@mail.gmail.com>
+Message-ID: <20200411172726.555e75b8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello,
 
-On Sat, 11 Apr 2020 15:03:47 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Sat, 11 Apr 2020 11:06:05 -0400
+Philippe Proulx <eeppeliteloop@gmail.com> wrote:
 
-> On Fri,  3 Apr 2020 23:23:57 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
+> > However, I still don't understand why your tool is not capable of
+> > having this knowledge about the stamp files. This is something that
+> > rarely changes. I think we haven't changed the stamp files since... 5
+> > years? More? If your tool is in the Buildroot tree itself, it can
+> > simply be updated if there is ever a change in the sequencing of steps.  
 > 
-> > Add three patches to fix compile for rpi3.
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
+> Yes of course.
 > 
-> I'm not super at ease with the patches. Especially, I'm always worried
-> about a commit that fixes things for one particular platform: patches 1
-> and 3 don't seem at all related to Rpi3 specifically.
+> I was only trying to improve Yann's solution considering your comments
+> about data redundancy.
 
-That is why this is sent as an extra patch (and as RFC)...should have marked
-it as WIP ;-)
- 
+Sure, and your proposal makes sense if we believe we need to have this
+build sequencing information exposed in the JSON output.
+
+> If you tell me that things such build step order and stamp file names do
+> not change for many years and as such can be considered as interfaces,
+> I'm fine with this.
+
+I don't think we can really consider these as stable interfaces, but it
+is sufficiently stable to rely on it.
+
+> It's always a balance between adding the same logic to all the viewers
+> and generating less data.
 > 
-> > diff --git a/package/qt5/qt5wayland/0001-fix-libdrm-related-configure-test-failure.patch b/package/qt5/qt5wayland/0001-fix-libdrm-related-configure-test-failure.patch
-> > new file mode 100644
-> > index 0000000000..b4d0a2c302
-> > --- /dev/null
-> > +++ b/package/qt5/qt5wayland/0001-fix-libdrm-related-configure-test-failure.patch
-> > @@ -0,0 +1,56 @@
-> > +From ba93ccba2aa70bd76f0af43675fa5864e166e3c3 Mon Sep 17 00:00:00 2001
-> > +From: Peter Seiderer <ps.report@gmx.net>
-> > +Date: Fri, 3 Apr 2020 21:52:30 +0200
-> > +Subject: [PATCH 1/3] fix libdrm related configure test failure  
+> My tool could be part of the Buildroot project, but I doubt you'll want
+> something that depends on PyQt5 in there.
+
+I don't see why we couldn't have it in the tree. It's not a mandatory
+tool, so it's fine to have something that depends on PyQt5.
+
+> However, I could certainly contribute a Python module which offers
+> utilities over the `show-info` output so as to have a versioned,
+> object-oriented API, and then import it from an external tool. This
+> way, even if `show-info` changes, the Python module can continue to
+> offer the same (non-breaking) interface.
 > 
-> Nit: use git format-patch -N to generate patches.
+> I still think we somewhat need the `build_dir` entry though.
 
-Ups..., will do....
+Yes, for the build_dir entry, I definitely agree, it is useful and
+needed.
 
-> 
-> > +
-> > +Fixes:
-> > +
-> > +  Project ERROR: Test config.qtwayland_client.tests.dmabuf-server-buffer tries to use undeclared library 'drm'
-> > +  Project ERROR: Test config.qtwayland_compositor.tests.dmabuf-server-buffer tries to use undeclared library 'drm'
-> > +  Project ERROR: Test config.qtwayland_compositor.tests.dmabuf-client-buffer tries to use undeclared library 'drm'
-> > +
-> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
-> 
-> Should the "drm" library be declared somewhere instead? How is this
-> building for upstream?
+Best regards,
 
-Seems they always build with libdrm available....
-
-Did not find the right way to fix it for the qt configure framework,
-but opened an upstream bug report [1], [2]...but no feedback yet...
-
-> 
-> > diff --git a/package/qt5/qt5wayland/0002-brcm-egl-needs-wayland-scanner-client-wayland-protoc.patch b/package/qt5/qt5wayland/0002-brcm-egl-needs-wayland-scanner-client-wayland-protoc.patch
-> > new file mode 100644
-> > index 0000000000..f14c374e76
-> > --- /dev/null
-> > +++ b/package/qt5/qt5wayland/0002-brcm-egl-needs-wayland-scanner-client-wayland-protoc.patch
-> > @@ -0,0 +1,36 @@
-> > +From 4770af94884be5a603934b36e6804eed7d18d43c Mon Sep 17 00:00:00 2001
-> > +From: Peter Seiderer <ps.report@gmx.net>
-> > +Date: Fri, 3 Apr 2020 22:42:23 +0200
-> > +Subject: [PATCH 2/3] brcm-egl: needs
-> > + wayland-scanner-client-wayland-protocol-include
-> > +MIME-Version: 1.0
-> > +Content-Type: text/plain; charset=UTF-8
-> > +Content-Transfer-Encoding: 8bit
-> > +
-> > +Fixes:
-> > +
-> > +  wayland-brcm-client-protocol.h: In function ?wl_buffer* qt_brcm_create_buffer(qt_brcm*, int32_t, int32_t, wl_array*)?:
-> > +  wayland-brcm-client-protocol.h:115:29: error: ?wl_buffer_interface? was not declared in this scope; did you mean ?qt_brcm_interface??
-> > +    115 |     QT_BRCM_CREATE_BUFFER, &wl_buffer_interface, NULL, width, height, data);
-> > +        |                             ^~~~~~~~~~~~~~~~~~~
-> > +        |                             qt_brcm_interface
-> > +
-> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
-> 
-> A bit more explanation on the relationship between the build issue and
-> the fix would be good.
-
-Will try give an better explanation...., positive feedback from
-upstream [3], [4]..., only the target branch seems questionable...
-
-> 
-> > diff --git a/package/qt5/qt5wayland/0003-examples-fix-wayland-texture-sharing-custom-composit.patch b/package/qt5/qt5wayland/0003-examples-fix-wayland-texture-sharing-custom-composit.patch
-> > new file mode 100644
-> > index 0000000000..1f0f919c93
-> > --- /dev/null
-> > +++ b/package/qt5/qt5wayland/0003-examples-fix-wayland-texture-sharing-custom-composit.patch
-> > @@ -0,0 +1,42 @@
-> > +From f7d96ddd00f868810ed2ca260acd41435717e6b8 Mon Sep 17 00:00:00 2001
-> > +From: Peter Seiderer <ps.report@gmx.net>
-> > +Date: Fri, 3 Apr 2020 22:40:29 +0200
-> > +Subject: [PATCH 3/3] examples: fix wayland/texture-sharing/custom-compositor
-> > +MIME-Version: 1.0
-> > +Content-Type: text/plain; charset=UTF-8
-> > +Content-Transfer-Encoding: 8bit
-> > +
-> > +Fixes:
-> > +
-> > +  main.cpp:83:33: error: ?GL_RGBA8? was not declared in this scope; did you mean ?GL_RGBA4??
-> > +     83 |             *glInternalFormat = GL_RGBA8;
-> > +        |                                 ^~~~~~~~
-> > +        |                                 GL_RGBA4
-> > +  main.cpp:120:33: error: ?GL_RGBA8? was not declared in this scope; did you mean ?GL_RGBA4??
-> > +    120 |             *glInternalFormat = GL_RGBA8;
-> > +        |                                 ^~~~~~~~
-> > +        |                                 GL_RGBA4
-> > +
-> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > +---
-> > + examples/wayland/texture-sharing/custom-compositor/main.cpp | 4 ++++
-> > + 1 file changed, 4 insertions(+)
-> > +
-> > +diff --git a/examples/wayland/texture-sharing/custom-compositor/main.cpp b/examples/wayland/texture-sharing/custom-compositor/main.cpp
-> > +index a39c8c3..af37502 100644
-> > +--- a/examples/wayland/texture-sharing/custom-compositor/main.cpp
-> > ++++ b/examples/wayland/texture-sharing/custom-compositor/main.cpp
-> > +@@ -63,6 +63,10 @@
-> > + 
-> > + #include "QtWaylandCompositor/private/qwltexturesharingextension_p.h"
-> > + 
-> > ++#ifndef GL_RGBA8
-> > ++#define GL_RGBA8 0x8058
-> > ++#endif  
-> 
-> This feels like a hack. What should normally be providing the GL_RGBA8
-> define? The OpenGL headers?
-
-Same 'hack' is used at some other Qt locations and patch is
-upstream accepted [5], [6] as is ;-)
-
-Will wait some time for more feedback...., and provide an updated
-buildroot patch soon...
-
-Regards,
-Peter
-
-[1] https://bugreports.qt.io/browse/QTBUG-83303
-[2] https://codereview.qt-project.org/c/qt/qtwayland/+/296213
-[3] https://bugreports.qt.io/browse/QTBUG-83305
-[4] https://codereview.qt-project.org/c/qt/qtwayland/+/296215
-[5] https://bugreports.qt.io/browse/QTBUG-83304
-[6] https://codereview.qt-project.org/c/qt/qtwayland/+/296214
-
-> 
-> Thomas
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
