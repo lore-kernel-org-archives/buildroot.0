@@ -1,263 +1,188 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Sat, 11 Apr 2020 15:36:16 +0200
-Subject: [Buildroot] [PATCH 3/3] package/p7zip: fix CVE-2018-5996
-In-Reply-To: <20200411133616.31897-1-nerv@dawncrow.de>
-References: <20200411133616.31897-1-nerv@dawncrow.de>
-Message-ID: <20200411133616.31897-3-nerv@dawncrow.de>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Date: Sat, 11 Apr 2020 09:41:47 -0400
+Subject: [Buildroot] [PATCH 7/8] core/show-info: report the ordered list
+ of build steps
+In-Reply-To: <20200411103950.4a21b23e@windsurf.home>
+References: <cover.1586592741.git.yann.morin.1998@free.fr>
+ <93a3545d1fe7b47cdfb32edc7db3fd54600fecd9.1586592741.git.yann.morin.1998@free.fr>
+ <20200411103950.4a21b23e@windsurf.home>
+Message-ID: <CAB4xu_1Bv4gsebOQrUfKM_ChD6q7-e15YTGPqwj4PBx3hzkrOA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/p7zip/0003-CVE-2018-5996.patch | 223 +++++++++++++++++++++++++
- package/p7zip/p7zip.mk                 |   2 +
- 2 files changed, 225 insertions(+)
- create mode 100644 package/p7zip/0003-CVE-2018-5996.patch
+On Sat, Apr 11, 2020 at 4:39 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Sat, 11 Apr 2020 10:12:32 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>
+> > People (and scritps) who want to report on the build progress, now know
+> > where and what to look for (build directory and stampfiles), but they
+> > also need to know the ordering of those stampfiles.
+> >
+> > The stampfiles item is a dictionary; dictionaries are guaranteed to not
+> > be ordered, so even if we output the stampfiles in order, we can expect
+> > users of that dictionary to get them back in order.
+> >
+> > Expose the build steps in a list, which is guaranteed to be ordered.
+> >
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > Cc: Vadim Kochan <vadim4j@gmail.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > Cc: eeppeliteloop at gmail.com
+> > ---
+> >  package/pkg-utils.mk | 15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+>
+> Meh, just like PATCH 6/8, I'm not sure. This is going to be a lot of
+> additional information in the JSON, almost duplicated for every
+> package, and there is really nothing bad in the "progress showing" tool
+> to have knowledge about these steps. It's not like they are changing
+> all the time.
 
-diff --git a/package/p7zip/0003-CVE-2018-5996.patch b/package/p7zip/0003-CVE-2018-5996.patch
-new file mode 100644
-index 0000000000..dc3e90ad3a
---- /dev/null
-+++ b/package/p7zip/0003-CVE-2018-5996.patch
-@@ -0,0 +1,223 @@
-+From: Robert Luberda <robert@debian.org>
-+Date: Sun, 28 Jan 2018 23:47:40 +0100
-+Subject: CVE-2018-5996
-+
-+Hopefully fix Memory Corruptions via RAR PPMd (CVE-2018-5996) by
-+applying a few changes from 7Zip 18.00-beta.
-+
-+Bug-Debian: https://bugs.debian.org/#888314
-+
-+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-+---
-+ CPP/7zip/Compress/Rar1Decoder.cpp | 13 +++++++++----
-+ CPP/7zip/Compress/Rar1Decoder.h   |  1 +
-+ CPP/7zip/Compress/Rar2Decoder.cpp | 10 +++++++++-
-+ CPP/7zip/Compress/Rar2Decoder.h   |  1 +
-+ CPP/7zip/Compress/Rar3Decoder.cpp | 23 ++++++++++++++++++++---
-+ CPP/7zip/Compress/Rar3Decoder.h   |  2 ++
-+ 6 files changed, 42 insertions(+), 8 deletions(-)
-+
-+diff --git a/CPP/7zip/Compress/Rar1Decoder.cpp b/CPP/7zip/Compress/Rar1Decoder.cpp
-+index 1aaedcc..68030c7 100644
-+--- a/CPP/7zip/Compress/Rar1Decoder.cpp
-++++ b/CPP/7zip/Compress/Rar1Decoder.cpp
-+@@ -29,7 +29,7 @@ public:
-+ };
-+ */
-+ 
-+-CDecoder::CDecoder(): m_IsSolid(false) { }
-++CDecoder::CDecoder(): m_IsSolid(false), _errorMode(false) { }
-+ 
-+ void CDecoder::InitStructures()
-+ {
-+@@ -406,9 +406,14 @@ HRESULT CDecoder::CodeReal(ISequentialInStream *inStream, ISequentialOutStream *
-+   InitData();
-+   if (!m_IsSolid)
-+   {
-++    _errorMode = false;
-+     InitStructures();
-+     InitHuff();
-+   }
-++
-++  if (_errorMode)
-++    return S_FALSE;
-++
-+   if (m_UnpackSize > 0)
-+   {
-+     GetFlagsBuf();
-+@@ -477,9 +482,9 @@ STDMETHODIMP CDecoder::Code(ISequentialInStream *inStream, ISequentialOutStream
-+     const UInt64 *inSize, const UInt64 *outSize, ICompressProgressInfo *progress)
-+ {
-+   try { return CodeReal(inStream, outStream, inSize, outSize, progress); }
-+-  catch(const CInBufferException &e) { return e.ErrorCode; }
-+-  catch(const CLzOutWindowException &e) { return e.ErrorCode; }
-+-  catch(...) { return S_FALSE; }
-++  catch(const CInBufferException &e) { _errorMode = true; return e.ErrorCode; }
-++  catch(const CLzOutWindowException &e) { _errorMode = true; return e.ErrorCode; }
-++  catch(...) { _errorMode = true; return S_FALSE; }
-+ }
-+ 
-+ STDMETHODIMP CDecoder::SetDecoderProperties2(const Byte *data, UInt32 size)
-+diff --git a/CPP/7zip/Compress/Rar1Decoder.h b/CPP/7zip/Compress/Rar1Decoder.h
-+index 630f089..01b606b 100644
-+--- a/CPP/7zip/Compress/Rar1Decoder.h
-++++ b/CPP/7zip/Compress/Rar1Decoder.h
-+@@ -39,6 +39,7 @@ public:
-+ 
-+   Int64 m_UnpackSize;
-+   bool m_IsSolid;
-++  bool _errorMode;
-+ 
-+   UInt32 ReadBits(int numBits);
-+   HRESULT CopyBlock(UInt32 distance, UInt32 len);
-+diff --git a/CPP/7zip/Compress/Rar2Decoder.cpp b/CPP/7zip/Compress/Rar2Decoder.cpp
-+index b3f2b4b..0580c8d 100644
-+--- a/CPP/7zip/Compress/Rar2Decoder.cpp
-++++ b/CPP/7zip/Compress/Rar2Decoder.cpp
-+@@ -80,7 +80,8 @@ static const UInt32 kHistorySize = 1 << 20;
-+ static const UInt32 kWindowReservSize = (1 << 22) + 256;
-+ 
-+ CDecoder::CDecoder():
-+-  m_IsSolid(false)
-++  m_IsSolid(false),
-++  m_TablesOK(false)
-+ {
-+ }
-+ 
-+@@ -100,6 +101,8 @@ UInt32 CDecoder::ReadBits(unsigned numBits) { return m_InBitStream.ReadBits(numB
-+ 
-+ bool CDecoder::ReadTables(void)
-+ {
-++  m_TablesOK = false;
-++
-+   Byte levelLevels[kLevelTableSize];
-+   Byte newLevels[kMaxTableSize];
-+   m_AudioMode = (ReadBits(1) == 1);
-+@@ -170,6 +173,8 @@ bool CDecoder::ReadTables(void)
-+   }
-+   
-+   memcpy(m_LastLevels, newLevels, kMaxTableSize);
-++  m_TablesOK = true;
-++
-+   return true;
-+ }
-+ 
-+@@ -344,6 +349,9 @@ HRESULT CDecoder::CodeReal(ISequentialInStream *inStream, ISequentialOutStream *
-+       return S_FALSE;
-+   }
-+ 
-++  if (!m_TablesOK)
-++    return S_FALSE;
-++
-+   UInt64 startPos = m_OutWindowStream.GetProcessedSize();
-+   while (pos < unPackSize)
-+   {
-+diff --git a/CPP/7zip/Compress/Rar2Decoder.h b/CPP/7zip/Compress/Rar2Decoder.h
-+index 3a0535c..0e9005f 100644
-+--- a/CPP/7zip/Compress/Rar2Decoder.h
-++++ b/CPP/7zip/Compress/Rar2Decoder.h
-+@@ -139,6 +139,7 @@ class CDecoder :
-+ 
-+   UInt64 m_PackSize;
-+   bool m_IsSolid;
-++  bool m_TablesOK;
-+ 
-+   void InitStructures();
-+   UInt32 ReadBits(unsigned numBits);
-+diff --git a/CPP/7zip/Compress/Rar3Decoder.cpp b/CPP/7zip/Compress/Rar3Decoder.cpp
-+index 3bf2513..6cb8a6a 100644
-+--- a/CPP/7zip/Compress/Rar3Decoder.cpp
-++++ b/CPP/7zip/Compress/Rar3Decoder.cpp
-+@@ -92,7 +92,8 @@ CDecoder::CDecoder():
-+   _writtenFileSize(0),
-+   _vmData(0),
-+   _vmCode(0),
-+-  m_IsSolid(false)
-++  m_IsSolid(false),
-++  _errorMode(false)
-+ {
-+   Ppmd7_Construct(&_ppmd);
-+ }
-+@@ -545,6 +546,9 @@ HRESULT CDecoder::ReadTables(bool &keepDecompressing)
-+     return InitPPM();
-+   }
-+ 
-++  TablesRead = false;
-++  TablesOK = false;
-++
-+   _lzMode = true;
-+   PrevAlignBits = 0;
-+   PrevAlignCount = 0;
-+@@ -606,6 +610,9 @@ HRESULT CDecoder::ReadTables(bool &keepDecompressing)
-+       }
-+     }
-+   }
-++  if (InputEofError())
-++    return S_FALSE;
-++
-+   TablesRead = true;
-+ 
-+   // original code has check here:
-+@@ -623,6 +630,9 @@ HRESULT CDecoder::ReadTables(bool &keepDecompressing)
-+   RIF(m_LenDecoder.Build(&newLevels[kMainTableSize + kDistTableSize + kAlignTableSize]));
-+ 
-+   memcpy(m_LastLevels, newLevels, kTablesSizesSum);
-++
-++  TablesOK = true;
-++
-+   return S_OK;
-+ }
-+ 
-+@@ -824,7 +834,12 @@ HRESULT CDecoder::CodeReal(ICompressProgressInfo *progress)
-+     PpmEscChar = 2;
-+     PpmError = true;
-+     InitFilters();
-++    _errorMode = false;
-+   }
-++
-++  if (_errorMode)
-++    return S_FALSE;
-++
-+   if (!m_IsSolid || !TablesRead)
-+   {
-+     bool keepDecompressing;
-+@@ -838,6 +853,8 @@ HRESULT CDecoder::CodeReal(ICompressProgressInfo *progress)
-+     bool keepDecompressing;
-+     if (_lzMode)
-+     {
-++      if (!TablesOK)
-++        return S_FALSE;
-+       RINOK(DecodeLZ(keepDecompressing))
-+     }
-+     else
-+@@ -901,8 +918,8 @@ STDMETHODIMP CDecoder::Code(ISequentialInStream *inStream, ISequentialOutStream
-+     _unpackSize = outSize ? *outSize : (UInt64)(Int64)-1;
-+     return CodeReal(progress);
-+   }
-+-  catch(const CInBufferException &e)  { return e.ErrorCode; }
-+-  catch(...) { return S_FALSE; }
-++  catch(const CInBufferException &e)  { _errorMode = true; return e.ErrorCode; }
-++  catch(...) { _errorMode = true; return S_FALSE; }
-+   // CNewException is possible here. But probably CNewException is caused
-+   // by error in data stream.
-+ }
-+diff --git a/CPP/7zip/Compress/Rar3Decoder.h b/CPP/7zip/Compress/Rar3Decoder.h
-+index c130cec..2f72d7d 100644
-+--- a/CPP/7zip/Compress/Rar3Decoder.h
-++++ b/CPP/7zip/Compress/Rar3Decoder.h
-+@@ -192,6 +192,7 @@ class CDecoder:
-+   UInt32 _lastFilter;
-+ 
-+   bool m_IsSolid;
-++  bool _errorMode;
-+ 
-+   bool _lzMode;
-+   bool _unsupportedFilter;
-+@@ -200,6 +201,7 @@ class CDecoder:
-+   UInt32 PrevAlignCount;
-+ 
-+   bool TablesRead;
-++  bool TablesOK;
-+ 
-+   CPpmd7 _ppmd;
-+   int PpmEscChar;
-diff --git a/package/p7zip/p7zip.mk b/package/p7zip/p7zip.mk
-index be95995bab..59cd9b7e95 100644
---- a/package/p7zip/p7zip.mk
-+++ b/package/p7zip/p7zip.mk
-@@ -14,6 +14,8 @@ P7ZIP_LICENSE_FILES = DOC/License.txt
- P7ZIP_IGNORE_CVES += CVE-2016-9296
- # 0002-CVE-2017-17969.patch
- P7ZIP_IGNORE_CVES += CVE-2017-17969
-+# 0003-CVE-2018-5996.patch
-+P7ZIP_IGNORE_CVES += CVE-2018-5996
- 
- # p7zip buildsystem is a mess: it plays dirty tricks with CFLAGS and
- # CXXFLAGS, so we can't pass them. Instead, it accepts ALLFLAGS_C
--- 
-2.17.1
+Replying for patch 6/8 and this one.
+
+Is the `show-info` target considered a public API? If so, without a
+version, it means it can never break. So let me suggest another layout
+which breaks `show-info` (name it `show-info-2` if you will).
+
+Output example (using YAML only for clarity here):
+
+    version: 2
+    build_steps:
+      target:
+        - name: download
+          stamp_file: .stamp_downloaded
+        - name: extract
+          stamp_file: .stamp_extracted
+        - name: patch
+          stamp_file: .stamp_patched
+        - name: build
+          stamp_file: .stamp_configured
+        - name: configure
+          stamp_file: .stamp_built
+        - name: install_staging
+          stamp_file: .stamp_staging_installed
+        - name: install_target
+          stamp_file: .stamp_target_installed
+        - name: install_image
+          stamp_file: .stamp_image_installed
+        ...
+      host:
+        - ...
+      rootfs:
+        - ...
+    packages:
+      target:
+        libglib2:
+          virtual: false
+          version: 2.64.1
+          licenses: LGPL-2.1+
+          dl_dir: libglib2
+          downloads:
+            - source: glib-2.64.1.tar.xz
+              uris:
+                - http+http://ftp.gnome.org/pub/gnome/sources/glib/2.64
+                - http|urlencode+http://sources.buildroot.net/libglib2
+                - http|urlencode+http://sources.buildroot.net
+          overriden: false
+          build_dir: build/libglib2-2.64.1/
+          build_steps:
+            - download
+            - extract
+            - patch
+            - build
+            - configure
+            - install_staging
+            - install_target
+          dependencies:
+            - host-libglib2
+            - host-meson
+            - host-pkgconf
+            - host-skeleton
+            - host-tar
+            - libffi
+            - pcre
+            - skeleton
+            - toolchain
+            - zlib
+          reverse_dependencies:
+            - cairo
+        ...
+      host:
+        ...
+      rootfs:
+        ...
+
+So, changes:
+
+* A root `version` entry indicates the API version.
+
+* The root `build_steps` object indicates all the _possible_ (sorted)
+  build steps for each package type.
+
+  Each build step in the array has its name and its corresponding
+  stamp file to indicate when it's completed.
+
+  As Yann wrote:
+
+  > However, the names of those stamp files are purely an implementation
+  > detail (even if they are very unlikely to ever change).
+
+* The root `packages` object contains the package information for each
+  package type.
+
+  Not strictly related to this patch or the previous one, but instead
+  of repeating the type in each object, you can just group packages
+  by type.
+
+* For each package object, the `build_steps` array indicate what are the
+  build steps for this package.
+
+  Each item is the name of a build step in the corresponding root
+  `build_steps` object's array.
+
+* For a target package, the `install_staging`, `install_target`, and
+  `install_images` entries are removed.
+
+  They are not needed anymore because `build_steps` offers the same
+  information.
+
+  I understand some build steps could be implicit and not listed here,
+  but with my suggestion, you already have what's needed for any build
+  monitoring tool to watch a specific package build process if:
+
+  * Some of the implicit build steps become optional in the future for
+    any reason that you don't know now.
+
+  * You add new types of build steps: simply describe them in the
+    `build_steps` root arrays.
+
+  Both scenarios won't require an API version bump.
+
+If you're not willing to break `show-info` and don't want `show-info-2`,
+then you can:
+
+* Keep `show-info` as is:
+
+  * Augment a package information with `build_steps` (like above).
+
+  * Keep the `install_*` entries which become redundant.
+
+* Have another make target, say `show-build-steps`, which only prints
+  the root `build_steps` object above.
+
+What do you think?
+
+Phil
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
