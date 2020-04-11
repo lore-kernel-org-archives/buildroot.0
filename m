@@ -1,81 +1,79 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 11 Apr 2020 16:57:50 +0200
-Subject: [Buildroot] [PATCH] support/testing: test_python_django: use the
- timeout_multiplier value
-Message-ID: <20200411145750.7655-1-romain.naour@gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Date: Sat, 11 Apr 2020 11:06:05 -0400
+Subject: [Buildroot] [PATCH 7/8] core/show-info: report the ordered list
+ of build steps
+In-Reply-To: <20200411161903.7b007feb@windsurf.home>
+References: <cover.1586592741.git.yann.morin.1998@free.fr>
+ <93a3545d1fe7b47cdfb32edc7db3fd54600fecd9.1586592741.git.yann.morin.1998@free.fr>
+ <20200411103950.4a21b23e@windsurf.home>
+ <CAB4xu_1Bv4gsebOQrUfKM_ChD6q7-e15YTGPqwj4PBx3hzkrOA@mail.gmail.com>
+ <20200411161903.7b007feb@windsurf.home>
+Message-ID: <CAB4xu_15BFXQ3VFnrp8j5b8ivr=pGN2HN5UarW8dz-R+XRk5Dw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by our gitlab runtime test [1] and on the mailing list [2],
-the test_python_django is failing only on gitlab due to slow (but free)
-gitlab runners. This is due to django server taking a lot of time to
-start. Since the django server is started in background through pexpect,
-we can't easily wait for the last startup line:
+On Sat, Apr 11, 2020 at 10:19 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Sat, 11 Apr 2020 09:41:47 -0400
+> Philippe Proulx <eeppeliteloop@gmail.com> wrote:
+>
+> > Replying for patch 6/8 and this one.
+> >
+> > Is the `show-info` target considered a public API?
+>
+> Somewhat yes: the goal of show-info is that people can craft their own
+> tooling on top of it. Breaking the show-info output would break such
+> tools.
+>
+> > If so, without a
+> > version, it means it can never break. So let me suggest another layout
+> > which breaks `show-info` (name it `show-info-2` if you will).
+> >
+> > Output example (using YAML only for clarity here):
+>
+> [...]
+>
+> This could certainly work, and reduces a bit the duplication of
+> information.
+>
+> However, I still don't understand why your tool is not capable of
+> having this knowledge about the stamp files. This is something that
+> rarely changes. I think we haven't changed the stamp files since... 5
+> years? More? If your tool is in the Buildroot tree itself, it can
+> simply be updated if there is ever a change in the sequencing of steps.
 
-"January 01, 1970 - 00:00:41
+Yes of course.
 
-Django version 3.0.4, using settings 'testsite.settings'
+I was only trying to improve Yann's solution considering your comments
+about data redundancy.
 
-Starting development server at http://0.0.0.0:1234/
+If you tell me that things such build step order and stamp file names do
+not change for many years and as such can be considered as interfaces,
+I'm fine with this.
 
-Quit the server with CONTROL-C."
+It's always a balance between adding the same logic to all the viewers
+and generating less data.
 
-In the failing gitlab job, we don't see such lines.
+My tool could be part of the Buildroot project, but I doubt you'll want
+something that depends on PyQt5 in there. However, I could certainly
+contribute a Python module which offers utilities over the `show-info`
+output so as to have a versioned, object-oriented API, and then import
+it from an external tool. This way, even if `show-info` changes, the
+Python module can continue to offer the same (non-breaking) interface.
 
-If we increase a lot the timout, the test pass.
+I still think we somewhat need the `build_dir` entry though.
 
-Use timeout_multiplier introduced by [3] in order to adjust the
-timeout.
+Phil
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/488816222
-
-Tested:
-https://gitlab.com/kubu93/buildroot/-/jobs/507458355
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/jobs/488816222
-[2] http://lists.busybox.net/pipermail/buildroot/2020-April/279598.html
-[3] 6e45e33f27d5ae6fa0ab5aad3f032d886a886037
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Adam Duskett <Aduskett@gmail.com>
----
-This patch should be backported to 2020.02.x
----
- support/testing/tests/package/test_python_django.py | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/support/testing/tests/package/test_python_django.py b/support/testing/tests/package/test_python_django.py
-index 6b31833a0f..0b7d35bb6a 100644
---- a/support/testing/tests/package/test_python_django.py
-+++ b/support/testing/tests/package/test_python_django.py
-@@ -6,18 +6,20 @@ class TestPythonDjango(TestPythonPackageBase):
-     sample_scripts = ["tests/package/sample_python_django.py"]
- 
-     def run_sample_scripts(self):
-+        timeout = 35 * self.emulator.timeout_multiplier
-+
-         cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
--        self.assertRunOk(cmd, timeout=30)
-+        self.assertRunOk(cmd, timeout=timeout)
- 
-         cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py migrate"
--        output, exit_code = self.emulator.run(cmd, timeout=30)
-+        output, exit_code = self.emulator.run(cmd, timeout=timeout)
-         self.assertIn("Operations to perform:", output[0])
-         self.assertEqual(exit_code, 0)
- 
-         cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py runserver 0.0.0.0:1234 & "
-         # give some time to setup the server
--        cmd += "sleep 30"
--        self.assertRunOk(cmd, timeout=35)
-+        cmd += "sleep {}".format(str(30 * self.emulator.timeout_multiplier))
-+        self.assertRunOk(cmd, timeout=timeout)
- 
-         cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:1234"
-         self.assertRunOk(cmd)
--- 
-2.25.2
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
