@@ -1,51 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Apr 2020 10:57:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: add optional dependency
- to libxcb
-In-Reply-To: <20200405145207.1258663-1-bernd.kuhls@t-online.de>
-References: <20200405145207.1258663-1-bernd.kuhls@t-online.de>
-Message-ID: <20200411105757.63b0801f@windsurf.home>
+Date: Sat, 11 Apr 2020 10:59:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdb: allow building against
+ python3 for host-gdb
+In-Reply-To: <20200409114638.16432-1-angelos@igalia.com>
+References: <20200409114638.16432-1-angelos@igalia.com>
+Message-ID: <20200411105957.33d4b42d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  5 Apr 2020 16:52:07 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Thu,  9 Apr 2020 13:46:38 +0200
+Angelos Oikonomopoulos <angelos@igalia.com> wrote:
 
-> ffmpeg 3.3 added optional support for libxcb:
-> https://git.ffmpeg.org/gitweb/ffmpeg.git/blob/HEAD:/Changelog#l282
+> Some gdb extensions require python3, so this simply adds a
+> configuration option to point the host GDB at python3.
 > 
-> This patch ensures a reproducable build of libavdevice.so:
-> 
-> $ readelf -a output/target/usr/lib/libavdevice.so | grep NEEDED
->  0x0000000000000001 (NEEDED)             Shared library: [libavfilter.so.7]
->  0x0000000000000001 (NEEDED)             Shared library: [libavformat.so.58]
->  0x0000000000000001 (NEEDED)             Shared library: [libavcodec.so.58]
->  0x0000000000000001 (NEEDED)             Shared library: [libavutil.so.56]
->  0x0000000000000001 (NEEDED)             Shared library: [libxcb.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libxcb-shm.so.0]
->  0x0000000000000001 (NEEDED)             Shared library: [libxcb-shape.so.0]
->  0x0000000000000001 (NEEDED)             Shared library: [libxcb-xfixes.so.0]
->  0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
-> 
-> compared to
-> 
-> $ readelf -a output/target/usr/lib/libavdevice.so | grep NEEDED
->  0x0000000000000001 (NEEDED)             Shared library: [libavfilter.so.7]
->  0x0000000000000001 (NEEDED)             Shared library: [libavformat.so.58]
->  0x0000000000000001 (NEEDED)             Shared library: [libavcodec.so.58]
->  0x0000000000000001 (NEEDED)             Shared library: [libavutil.so.56]
->  0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Angelos Oikonomopoulos <angelos@igalia.com>
 > ---
->  package/ffmpeg/Config.in |  7 +++++++
->  package/ffmpeg/ffmpeg.mk | 11 +++++++++++
->  2 files changed, 18 insertions(+)
+>  package/gdb/Config.in.host | 14 ++++++++++++++
+>  package/gdb/gdb.mk         |  7 +++++++
+>  2 files changed, 21 insertions(+)
 
-Applied to master, thanks.
+Thanks a lot Angelos for your contribution. However, we already have a
+similar patch in our backlog of patches to review and merge:
+
+  http://patchwork.ozlabs.org/patch/1259866/
+
+Thanks!
 
 Thomas
 -- 
