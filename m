@@ -1,82 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Apr 2020 20:12:52 +0200
+Date: Sat, 11 Apr 2020 20:20:17 +0200
 Subject: [Buildroot] [PATCH 7/8] core/show-info: report the ordered list
  of build steps
-In-Reply-To: <20200411161903.7b007feb@windsurf.home>
+In-Reply-To: <CAB4xu_15BFXQ3VFnrp8j5b8ivr=pGN2HN5UarW8dz-R+XRk5Dw@mail.gmail.com>
 References: <cover.1586592741.git.yann.morin.1998@free.fr>
  <93a3545d1fe7b47cdfb32edc7db3fd54600fecd9.1586592741.git.yann.morin.1998@free.fr>
  <20200411103950.4a21b23e@windsurf.home>
  <CAB4xu_1Bv4gsebOQrUfKM_ChD6q7-e15YTGPqwj4PBx3hzkrOA@mail.gmail.com>
  <20200411161903.7b007feb@windsurf.home>
-Message-ID: <20200411181252.GP29898@scaer>
+ <CAB4xu_15BFXQ3VFnrp8j5b8ivr=pGN2HN5UarW8dz-R+XRk5Dw@mail.gmail.com>
+Message-ID: <20200411182017.GQ29898@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Philippe, All,
 
-On 2020-04-11 16:19 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 11 Apr 2020 09:41:47 -0400
-> Philippe Proulx <eeppeliteloop@gmail.com> wrote:
-> > Replying for patch 6/8 and this one.
-> > Is the `show-info` target considered a public API?
-> Somewhat yes: the goal of show-info is that people can craft their own
-> tooling on top of it. Breaking the show-info output would break such
-> tools.
+On 2020-04-11 11:06 -0400, Philippe Proulx spake thusly:
+> On Sat, Apr 11, 2020 at 10:19 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+[--SNIP--]
+> If you tell me that things such build step order and stamp file names do
+> not change for many years and as such can be considered as interfaces,
+> I'm fine with this.
 
-Which in some cases wil not be avoidable, see my previous reply.
+They are not an interface, definitely not (IMHO). But they are stable
+enough that you can build something on them and not expect a breakage
+that often.
 
-> > If so, without a
-> > version, it means it can never break. So let me suggest another layout
-> > which breaks `show-info` (name it `show-info-2` if you will).
-> > 
-> > Output example (using YAML only for clarity here):
-> This could certainly work, and reduces a bit the duplication of
-> information.
+But an interface? No, we can't commit to that.
 
-The show-info is not for human consumption, I don't see a problem with
-its content growing.
+> It's always a balance between adding the same logic to all the viewers
+> and generating less data.
 
-Also, as I explained in my previous reply to Philippe, having the
-information where it is needed (i.e at the package level) allows to
-process show-info in a stream, without having to memorise anything.
+Since the output of show-info is for machine consumption, and is not
+geared at human consuption without first being processed, I don;t see a
+problem with generating "more" data.
 
-OTOH, having metadata description means the whole of show-info as to be
-loaded in memory before any rocessing can outcur, since the content of
-json is not guaranteeed to be ordered.
+> My tool could be part of the Buildroot project, but I doubt you'll want
+> something that depends on PyQt5 in there.
 
-Yes, we could try and get our bare show-info output would be ordered,
-but as soon as it gets processed (e.g. with json_pp or whatever), the
-ordering would get lost.
+Not a problem, as it is not a mandatory tool. We already have
+utils/brmake that uses unbuffer, which is not available on most distros
+by default.
 
-> However, I still don't understand why your tool is not capable of
-> having this knowledge about the stamp files. This is something that
-> rarely changes. I think we haven't changed the stamp files since... 5
-> years? More? If your tool is in the Buildroot tree itself, it can
-> simply be updated if there is ever a change in the sequencing of steps.
+> However, I could certainly
+> contribute a Python module which offers utilities over the `show-info`
+> output so as to have a versioned, object-oriented API, and then import
+> it from an external tool. This way, even if `show-info` changes, the
+> Python module can continue to offer the same (non-breaking) interface.
 
-That's true. But if you want to consider show-info to be a public API
-and thus be stable,m then you would have to consider the stampfiles to
-also be public API and thus stable, which is definitely what we want.
+You can't guarantee that either: some keys may disapear, so such a
+module could not expose them any more either, so not a stable API.
 
-But that's also true that it changes so rarely that it would be
-acceptable to break the tools.
-
-And if we have such tools in-tree, we can fix them as we change the
-internal details.
+All you could provide as a stable API, is a way to rerieve basic
+information, like the list of packages and such. Or a way to query
+keys, which would not provide much more than what 'import json' would.
 
 Regards,
 Yann E. MORIN.
 
-> Best regards,
+> I still think we somewhat need the `build_dir` entry though.
 > 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> Phil
+> 
+> >
+> > Best regards,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
