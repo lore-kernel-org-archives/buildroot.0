@@ -1,65 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 22:25:10 +0200
-Subject: [Buildroot] [PATCH v2 1/2] pkgconf: Add a host-pkg-config
- wrapper script.
-In-Reply-To: <20200210155548.31928-1-nicolas.cavallari@green-communications.fr>
-References: <20200210155548.31928-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20200412222510.3f51d985@windsurf.home>
+Date: Sun, 12 Apr 2020 22:31:54 +0200
+Subject: [Buildroot] [git commit] package/mbuffer: new package
+Message-ID: <20200412202709.6B9F08E849@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nicolas,
+commit: https://git.buildroot.net/buildroot/commit/?id=e50649e86cfee7491fe721049d355017b79c13af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 10 Feb 2020 16:55:47 +0100
-Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
+Signed-off-by: Mircea Gliga <gliga.mircea@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                   |  3 +++
+ package/Config.in            |  1 +
+ package/mbuffer/Config.in    | 11 +++++++++++
+ package/mbuffer/mbuffer.hash |  5 +++++
+ package/mbuffer/mbuffer.mk   | 19 +++++++++++++++++++
+ 5 files changed, 39 insertions(+)
 
-> The host-pkg-config wrapper script replicate the configuration
-> present in HOST_MAKE_ENV, with the exception of PKG_CONFIG_LIBDIR
-> whose default is already equal to what we want.
-> 
-> This wrapper script can be used with build systems that recognise the
-> difference between a host dependency and a target dependency.
-> 
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> 
-> --
-> 
-> HOST_MAKE_ENV could be modified to use host-pkg-config, but since we
-> cannot guarantee that every host package will use the PKG_CONFIG
-> environment variable (instead of e.g. finding pkg-config in $PATH), the
-> other PKG_CONFIG_* variables probably need to be kept as well, so it
-> wouldn't be useful to use it there.
-> ---
->  package/pkgconf/host-pkg-config | 8 ++++++++
->  package/pkgconf/pkgconf.mk      | 3 +++
->  2 files changed, 11 insertions(+)
->  create mode 100644 package/pkgconf/host-pkg-config
-
-I believe this series is no longer needed, since
-4e0bc29993376613d200e892d491e31ea5a49622 was merged.
-
-In addition, your series was not completely fixing the problem. Indeed
-with your series, target packages built with meson would use the cross
-pkg-config, while host packages built with meson would use the "native"
-pkg-config.
-
-But there is one case that your series doesn't handle: some target
-packages do internally build a host tool, which requires some external
-libraries that are detected by pkg-config. Meson has the correct logic
-to handle that, and pass the right pkg-config arguments. But your
-solution would not allow to support such situations, while the solution
-implemented in 4e0bc29993376613d200e892d491e31ea5a49622 does.
-
-Of course, if you still an issue in the meson pkg-config handling,
-please let us know.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ed6b3b699f..f974f4c3e0 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1846,6 +1846,9 @@ F:	package/libfribidi/
+ N:	Min Xu <xuminready@gmail.com>
+ F:	package/shadowsocks-libev/
+ 
++N:	Mircea Gliga <gliga.mircea@gmail.com>
++F:	package/mbuffer/
++
+ N:	Mirza Krak <mirza.krak@northern.tech>
+ F:	package/mender/
+ F:	package/mender-artifact/
+diff --git a/package/Config.in b/package/Config.in
+index ace7dde860..d2b0a9c357 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1729,6 +1729,7 @@ menu "Networking"
+ 	source "package/libwebsockets/Config.in"
+ 	source "package/libyang/Config.in"
+ 	source "package/lksctp-tools/Config.in"
++	source "package/mbuffer/Config.in"
+ 	source "package/mongoose/Config.in"
+ 	source "package/nanomsg/Config.in"
+ 	source "package/neon/Config.in"
+diff --git a/package/mbuffer/Config.in b/package/mbuffer/Config.in
+new file mode 100644
+index 0000000000..81e61877e3
+--- /dev/null
++++ b/package/mbuffer/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_MBUFFER
++	bool "mbuffer"
++	depends on !BR2_STATIC_LIBS # dlopen()
++	help
++	  mbuffer is a tool for buffering data streams with a large set
++	  of unique features.
++
++	  http://www.maier-komor.de/mbuffer.html
++
++comment "mbuffer needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/mbuffer/mbuffer.hash b/package/mbuffer/mbuffer.hash
+new file mode 100644
+index 0000000000..80b7b1f26c
+--- /dev/null
++++ b/package/mbuffer/mbuffer.hash
+@@ -0,0 +1,5 @@
++# From http://www.maier-komor.de/mbuffer.html
++md5 e4acaa1e6a9a879e7394f04e02e1ae83  mbuffer-20191016.tgz
++
++# Locally computed after checking signature upstream
++sha256 8dc210454765c18901074bc16e126c655135a486e73d69855caf74a157ddbe17  mbuffer-20191016.tgz
+diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
+new file mode 100644
+index 0000000000..6ff6e27a39
+--- /dev/null
++++ b/package/mbuffer/mbuffer.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# mbuffer
++#
++################################################################################
++
++MBUFFER_VERSION = 20191016
++MBUFFER_SOURCE = mbuffer-$(MBUFFER_VERSION).tgz
++MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
++MBUFFER_LICENSE = GPL-3.0+
++MBUFFER_LICENSE_FILES = LICENSE
++MBUFFER_CONF_OPTS = --disable-debug
++MBUFFER_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
++
++# we don't need tests & co. so we specify a target
++# so that the others don't get built, e.g idev.so
++MBUFFER_MAKE_OPTS += mbuffer
++
++$(eval $(autotools-package))
