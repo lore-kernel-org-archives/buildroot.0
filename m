@@ -1,30 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 23:25:04 +0200
-Subject: [Buildroot] [PATCH] package/can-utils: bump to version
- 2020.02.04
-In-Reply-To: <277bf7cab1292b4a03da8fd4aa5ba724575dfaa4.1586709602.git.baruch@tkos.co.il>
-References: <277bf7cab1292b4a03da8fd4aa5ba724575dfaa4.1586709602.git.baruch@tkos.co.il>
-Message-ID: <20200412232504.163b445c@windsurf.home>
+Date: Sun, 12 Apr 2020 23:25:36 +0200
+Subject: [Buildroot] [git commit] package/libdvdread: fix build with gcc-4.8
+Message-ID: <20200412211133.54C698E93E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 12 Apr 2020 19:40:02 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=71a46eb5725d7dc51266bdee0b9aa27172f140d5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/can-utils/can-utils.hash | 2 +-
->  package/can-utils/can-utils.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/28a/28a2e837eae1dae9214fab1aec119a9aa6b2e5c0/
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libdvdread/libdvdread.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
+index 9a8eb7cacd..aa91d3162a 100644
+--- a/package/libdvdread/libdvdread.mk
++++ b/package/libdvdread/libdvdread.mk
+@@ -10,6 +10,7 @@ LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_V
+ LIBDVDREAD_INSTALL_STAGING = YES
+ LIBDVDREAD_LICENSE = GPL-2.0+
+ LIBDVDREAD_LICENSE_FILES = COPYING
++LIBDVDREAD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
+ LIBDVDREAD_CONF_OPTS = --with-libdvdcss
+ LIBDVDREAD_DEPENDENCIES = libdvdcss host-pkgconf
+ 
