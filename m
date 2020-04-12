@@ -1,58 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 23:15:07 +0200
-Subject: [Buildroot] [git commit] package/openldap: bump version to 2.4.49
-Message-ID: <20200412210109.E7CD88E8B1@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 23:14:12 +0200
+Subject: [Buildroot] [git commit] package/nmon: bump version to 16m
+Message-ID: <20200412210109.BCE7F8E919@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8961000fe8ae1129bacf44adf219d9c4e4307d77
+commit: https://git.buildroot.net/buildroot/commit/?id=e84edd44ac89365b89cf1a6eec24b15d327796f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-https://lists.openldap.org/hyperkitty/list/openldap-announce at openldap.org/thread/VMMBUCQHEDF6QA4CDOONP2CDQEOR5YQA/
-
-Switched _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/openldap/openldap.hash | 10 +++++-----
- package/openldap/openldap.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/nmon/nmon.hash | 6 +++---
+ package/nmon/nmon.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
-index 9ea1e7a55d..7f159cb6d0 100644
---- a/package/openldap/openldap.hash
-+++ b/package/openldap/openldap.hash
-@@ -1,7 +1,7 @@
--# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.48.md5
--md5 0729a0711fe096831dedc159e0bbe73f  openldap-2.4.48.tgz
--# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.48.sha1
--sha1 c1984e80f6db038b317bf931866adb38e5537dcd  openldap-2.4.48.tgz
-+# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.49.md5
-+md5 2a47a6bb4319357ea7b032c45283e79e  openldap-2.4.49.tgz
-+# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.49.sha1
-+sha1 f0caeca122e6f90e6ac5cc8ba36fe9cec13826da  openldap-2.4.49.tgz
+diff --git a/package/nmon/nmon.hash b/package/nmon/nmon.hash
+index 432f71d846..fd3f09c63a 100644
+--- a/package/nmon/nmon.hash
++++ b/package/nmon/nmon.hash
+@@ -1,5 +1,5 @@
+ # From https://sourceforge.net/projects/nmon/files/
+-md5 246ccfc74d5af55d992601fc4d3d4a72  lmon16g.c
+-sha1 926217a98f78dd398d4d5690d7b10b8b2b620168  lmon16g.c
++md5 df67f07ea4006c6204acff586beada81  lmon16m.c
++sha1 68cd02be19036a287fe352823db93223e73a9411  lmon16m.c
  # Locally computed
--sha256 d9523ffcab5cd14b709fcf3cb4d04e8bc76bb8970113255f372bc74954c6074d  openldap-2.4.48.tgz
-+sha256 e3b117944b4180f23befe87d0dcf47f29de775befbc469dcf4ac3dab3311e56e  openldap-2.4.49.tgz
- sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index 4417bb659b..a5f6067494 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
-@@ -4,9 +4,9 @@
+-sha256 da82dd693b503b062854dfe7dbb5d36b347872ab44a4aa05b97e9d577747f688  lmon16g.c
++sha256 2bed4d45fdfdf1d1387ec91e139c04975d5f838e3e0d53c0fe2d803a707e5fc1  lmon16m.c
+diff --git a/package/nmon/nmon.mk b/package/nmon/nmon.mk
+index f7edd66a26..8b39748cce 100644
+--- a/package/nmon/nmon.mk
++++ b/package/nmon/nmon.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENLDAP_VERSION = 2.4.48
-+OPENLDAP_VERSION = 2.4.49
- OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
--OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
-+OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
- OPENLDAP_LICENSE = OpenLDAP Public License
- OPENLDAP_LICENSE_FILES = LICENSE
- OPENLDAP_INSTALL_STAGING = YES
+-NMON_VERSION = 16g
++NMON_VERSION = 16m
+ NMON_SITE = https://sourceforge.net/projects/nmon/files
+ NMON_SOURCE = lmon$(NMON_VERSION).c
+ NMON_LICENSE = GPL-3.0+
