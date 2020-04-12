@@ -1,45 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 23:17:02 +0200
-Subject: [Buildroot] [git commit] package/mpd: bump version to 0.21.22
-Message-ID: <20200412210304.6BF578E925@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 23:17:06 +0200
+Subject: [Buildroot] [git commit] package/msgpack: bump version to 3.2.1
+Message-ID: <20200412210304.73A6F8E918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a738b5476f1ed7fe7a205542cdd5ce19937d17e
+commit: https://git.buildroot.net/buildroot/commit/?id=9b25b54af369de9fe67ed16f89f2db352cd2d8f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changelog:
-https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.21.22/NEWS
+https://github.com/msgpack/msgpack-c/blob/master/CHANGELOG.md
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
+ package/msgpack/msgpack.hash | 2 +-
+ package/msgpack/msgpack.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 70ca9df582..bce2d7e919 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  422ef0a996d961f3ebc6856395f3a855b45fa0059910e878fb98281007e510e1  mpd-0.21.20.tar.xz
-+sha256  565687d1899b585350cd66b603e46e5b79affc0a0e36d96d8953c6ccc6f69ba2  mpd-0.21.22.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index a879a33d33..a7adfc0406 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
+index 6b3a7ef134..3829a70222 100644
+--- a/package/msgpack/msgpack.hash
++++ b/package/msgpack/msgpack.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  ff865a36bad5c72b8e7ebc4b7cf5f27a820fce4faff9c571c1791e3728355a39  msgpack-3.2.0.tar.gz
++sha256  464f46744a6be778626d11452c4db3c2d09461080c6db42e358e21af19d542f6  msgpack-3.2.1.tar.gz
+ sha256  664550b43996452a5a2c7471bb0ff77185a58c69ccafa60f983dc4c162e1ee22  COPYING
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
+index 1e13464ca1..81670deddc 100644
+--- a/package/msgpack/msgpack.mk
++++ b/package/msgpack/msgpack.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.21
--MPD_VERSION = $(MPD_VERSION_MAJOR).20
-+MPD_VERSION = $(MPD_VERSION_MAJOR).22
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+-MSGPACK_VERSION = 3.2.0
++MSGPACK_VERSION = 3.2.1
+ MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
+ MSGPACK_LICENSE = BSL-1.0
+ MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
