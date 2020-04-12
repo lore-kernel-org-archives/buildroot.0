@@ -1,40 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 23:35:34 +0200
-Subject: [Buildroot] [git commit] package/openvpn: add pkcs11 support
-Message-ID: <20200412212155.E46E58E94B@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 23:37:34 +0200
+Subject: [Buildroot] [PATCH v2] pkcs11-helper: new package
+In-Reply-To: <20191030005604.81615-2-aduskett@gmail.com>
+References: <20191030005604.81615-1-aduskett@gmail.com>
+ <20191030005604.81615-2-aduskett@gmail.com>
+Message-ID: <20200412233734.29ae1f7f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf8eca8fd3126e8727f12c1daa87be3b63b1419f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-If the pkcs11-helper package is selected, add the package to the
-dependency list and explicitly set --enable-pkcs11.
+The commit title was not correct, should have been:
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/openvpn/openvpn.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+	package/pkcs11-helper: new package
 
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 64f459eee3..6c0f70ce89 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -51,6 +51,13 @@ else
- OPENVPN_CONF_OPTS += --disable-plugin-auth-pam
- endif
- 
-+ifeq ($(BR2_PACKAGE_PKCS11_HELPER),y)
-+OPENVPN_DEPENDENCIES += pkcs11-helper
-+OPENVPN_CONF_OPTS += --enable-pkcs11
-+else
-+OPENVPN_CONF_OPTS += --disable-pkcs11
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- OPENVPN_DEPENDENCIES += systemd
- OPENVPN_CONF_OPTS += --enable-systemd
+On Tue, 29 Oct 2019 17:56:03 -0700
+aduskett at gmail.com wrote:
+
+> +config BR2_PACKAGE_PKCS11_HELPER_GNUTLS_ENGINE
+> +	bool "gnutls engine support"
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_USE_WCHAR
+> +	select BR2_PACKAGE_GNUTLS
+> +
+> +comment "gnutls support needs a toolchain w/ wchar, dynamic library"
+> +	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
+> +
+> +config BR2_PACKAGE_PKCS11_HELPER_MBEDTLS_ENGINE
+> +	bool "mbedtls engine support"
+> +	select BR2_PACKAGE_MBEDTLS
+> +
+> +config BR2_PACKAGE_PKCS11_HELPER_NSS_ENGINE
+> +	bool "nss engine support"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+> +	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
+> +	depends on !BR2_STATIC_LIBS
+> +	select BR2_PACKAGE_LIBNSS
+> +
+> +comment "nss support needs a toolchain w/ threads, dynamic library"
+> +	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> +
+> +config BR2_PACKAGE_PKCS11_HELPER_OPENSSL_ENGINE
+> +	bool "openssl engine support"
+> +	select BR2_PACKAGE_OPENSSL
+
+I have dropped all those sub-options, and replaced them by automatic
+detection in the .mk file: we enable the crypto backends depending on
+which packages are available.
+
+Applied with those changes. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
