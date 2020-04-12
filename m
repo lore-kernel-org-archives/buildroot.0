@@ -1,30 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 11:05:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iwd: fix build with gcc 4.8
-In-Reply-To: <20200411213318.972221-1-fontaine.fabrice@gmail.com>
-References: <20200411213318.972221-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200412110553.7809e91c@windsurf.home>
+Date: Sun, 12 Apr 2020 11:07:58 +0200
+Subject: [Buildroot] [PATCH 1/1] v4l2loopback: enable required kernel
+ options
+In-Reply-To: <20200411222542.64271-1-james.hilliard1@gmail.com>
+References: <20200411222542.64271-1-james.hilliard1@gmail.com>
+Message-ID: <20200412110758.208a4683@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 11 Apr 2020 23:33:18 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello James,
 
-> +SOL_NETLINK is used since commit
-> +87a198111af1ea67053895f7435fb99e3cdd2159 resulting in the following
-> +build failure with gcc 4.8:
-> +
-> +src/frame-xchg.c: In function 'frame_watch_group_io_read':
-> +src/frame-xchg.c:328:27: error: 'SOL_NETLINK' undeclared (first use in this function)
-> +   if (cmsg->cmsg_level != SOL_NETLINK)
+On Sat, 11 Apr 2020 16:25:42 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-I don't understand a failure like this can be related to the compiler
-version. Could you clarify?
+> Fixes:
+> ERROR: "video_ioctl2" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
+> ERROR: "__video_register_device" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
+> ERROR: "v4l2_ctrl_new_custom" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
+> ERROR: "v4l2_ctrl_handler_init_class" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
+> ERROR: "video_device_release" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
+> ERROR: "video_device_alloc" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
+> ERROR: "v4l2_device_register" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
+> ERROR: "v4l2_ctrl_handler_free" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
+> ERROR: "v4l2_device_unregister" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
+> ERROR: "video_unregister_device" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
+> ERROR: "video_devdata" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Thanks,
+Thanks James. I'm going to mark this one as Changes Requested, as we
+are soon going to merge the series from Yann that reworks how we handle
+the interaction between enabled packages and kernel config options, see:
+
+  http://patchwork.ozlabs.org/project/buildroot/list/?series=168565
+
+If you can resend on top of this series, it would be ideal. Thanks!
+
+Best regards,
 
 Thomas
 -- 
