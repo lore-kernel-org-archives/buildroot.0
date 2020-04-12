@@ -1,58 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Apr 2020 15:30:58 +0200
-Subject: [Buildroot] [git commit] package/jpeg: properly indent in menuconfig
-Message-ID: <20200412131657.02FE08E6E3@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 12 Apr 2020 15:38:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: enable nss-mymachines
+ when machined is enabled
+In-Reply-To: <20200308222711.75586-1-james.hilliard1@gmail.com>
+References: <20200308222711.75586-1-james.hilliard1@gmail.com>
+Message-ID: <20200412153801.2d176206@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a48ac725f1829660641c348c062159d07519b45
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun,  8 Mar 2020 16:27:11 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Since there is a variable definition between the definition of
-BR2_PACKAGE_JPEG and the choice depending on it, the choice is
-not indented bewlo the "jpeg support" prompt, like we like to
-have:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/systemd/systemd.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-    [*] jpeg support
-        jpeg variant (jpeg-turbo)  --->
+Applied to master, thanks. For this one and the nss-resolve patch, does
+it make sense to tweak nssswitch.conf to enable those NSS modules when
+they are available ?
 
-Move the BR2_PACKAGE_JPEG right before the choice (really, move
-BR2_PACKAGE_JPEG_SIMD_SUPPORT before BR2_PACKAGE_JPEG, but diff
-finds the move of BR2_PACKAGE_JPEG is smaller to display):
-
-    [*] jpeg support
-          jpeg variant (jpeg-turbo)  --->
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/jpeg/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
-index 3d0fea83b1..97139c7849 100644
---- a/package/jpeg/Config.in
-+++ b/package/jpeg/Config.in
-@@ -1,8 +1,3 @@
--config BR2_PACKAGE_JPEG
--	bool "jpeg support"
--	help
--	  Select the desired JPEG library provider.
--
- # jpeg-turbo has simd support for some architectures
- config BR2_PACKAGE_JPEG_SIMD_SUPPORT
- 	bool
-@@ -11,6 +6,11 @@ config BR2_PACKAGE_JPEG_SIMD_SUPPORT
- 	default y if BR2_POWERPC_CPU_HAS_ALTIVEC
- 	default y if BR2_aarch64 || BR2_aarch64_be
- 
-+config BR2_PACKAGE_JPEG
-+	bool "jpeg support"
-+	help
-+	  Select the desired JPEG library provider.
-+
- if BR2_PACKAGE_JPEG
- 
- choice
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
