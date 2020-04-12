@@ -1,52 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 16:11:55 +0200
-Subject: [Buildroot] [PATCH v5 0/5] gitlab Qemu runtime testing
-In-Reply-To: <20200217205030.8157-1-romain.naour@smile.fr>
-References: <20200217205030.8157-1-romain.naour@smile.fr>
-Message-ID: <20200412161155.51b6bc98@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 12 Apr 2020 16:14:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mutt: bump version to 1.13.5
+Message-ID: <20200412141439.1325730-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Changelog: http://www.mutt.org/
 
-On Mon, 17 Feb 2020 21:50:25 +0100
-Romain Naour <romain.naour@smile.fr> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Jugurtha BELKALEM (2):
->   support/scripts/boot-qemu-image.py: boot Qemu images with Qemu-system.
->   gitlab.yml.in*: enable Qemu gitlab testing
-> 
-> Romain Naour (3):
->   board/qemu: add defconfig file name as tag after the qemu command line
->   board/qemu: add post-image script for gitlab qemu testing
->   configs/qemu*: use the post-image script with "$(BR2_DEFCONFIG)" as
->     argument.
-
-Overall, I am quite happy with the series. There are just two things
-that I am not entirely sure about:
-
- (1) The logic that tests $CI_JOB_NAME in board/qemu/post-image.sh, to
-     test if we are running under Gitlab CI or not. It feels a bit
-     hackish to me. Should this magic be there, or instead tweaked by
-     the Gitlab CI testing stuff directly ?
-
- (2) We now generate this start-qemu.sh script in $(BINARIES_DIR), but
-     in fact only really use it for Gitlab CI testing. Should we make
-     this start-qemu.sh script more prominently useful ? Or should we
-     instead not have any start-qemu.sh script, and have the Gitlab CI
-     testing logic directly find what the Qemu command line should be ?
-
-That being said, this series has been around for a long time, so unless
-I get some feedback on these questions, I'm going to apply it as-is, we
-can always improve on top of that later on.
-
-Best regards,
-
-Thomas
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index f0b0153221..f822cfee6e 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 78423016b5f2fcb31bfd156999ff6638177be4459230d2ee61a81e5641d07378  mutt-1.13.3.tar.gz
++sha256 6cd71b5b3e6b255afef6bed3b5e1e8ee9819b3d7c9839fd95e798045882aa653  mutt-1.13.5.tar.gz
+ sha256 732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 9cf8304bfe..a71c0e3551 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MUTT_VERSION = 1.13.3
++MUTT_VERSION = 1.13.5
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.0
