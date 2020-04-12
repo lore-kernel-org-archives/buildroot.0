@@ -1,49 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 12:00:18 +0200
-Subject: [Buildroot] [git commit] package/gnupg2: bump to version 2.2.20
-Message-ID: <20200412094620.B04B68E5BB@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 12:00:10 +0200
+Subject: [Buildroot] [git commit] package/skalibs: bump version to 2.9.2.1
+Message-ID: <20200412094620.9D5378E589@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58e260f34f6eb75c50fd3a4cc45de2e0aa5c7879
+commit: https://git.buildroot.net/buildroot/commit/?id=149e604057e496e9b35588798e3bd32bee102e2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Updated license hash due to copyright year bump:
+http://git.skarnet.org/cgi-bin/cgit.cgi/skalibs/commit/?id=3f090bb2fe66f9fd79c75344fa7f03a76ea67e00
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/skalibs/skalibs.hash | 4 ++--
+ package/skalibs/skalibs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index 2dee44283b..99100e3179 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,7 +1,7 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
--sha1 e24a1208ffe69d7436b2f27e99542a85f34d0ac0  gnupg-2.2.19.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2020q1/000444.html
-+sha1 d5290f0781df5dc83302127d6065fb59b35e53d7  gnupg-2.2.20.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.19.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.20.tar.bz2.sig
- # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256 242554c0e06f3a83c420b052f750b65ead711cc3fddddb5e7274fcdbb4e9dec0  gnupg-2.2.19.tar.bz2
-+sha256 04a7c9d48b74c399168ee8270e548588ddbe52218c337703d7f06373d326ca30  gnupg-2.2.20.tar.bz2
- sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 28e946b400..c4a0ec980b 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
+diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
+index bb5a60212f..6736dd8440 100644
+--- a/package/skalibs/skalibs.hash
++++ b/package/skalibs/skalibs.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256 d3b204afc462b9659e0c16f6df1c796e7612534f537eec053529f67ddcd086a5  skalibs-2.9.1.0.tar.gz
+-sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
++sha256 250b99b53dd413172db944b31c1b930aa145ac79fe6c5d7e6869ef804228c539  skalibs-2.9.2.1.tar.gz
++sha256 5443ac67e8d74ac614ced7bc64211ce90ccedb7778a68bfe9e68a8b234c9503e  COPYING
+diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
+index 8b995f7961..1c73f26fe7 100644
+--- a/package/skalibs/skalibs.mk
++++ b/package/skalibs/skalibs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.2.19
-+GNUPG2_VERSION = 2.2.20
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+-SKALIBS_VERSION = 2.9.1.0
++SKALIBS_VERSION = 2.9.2.1
+ SKALIBS_SITE = http://skarnet.org/software/skalibs
+ SKALIBS_LICENSE = ISC
+ SKALIBS_LICENSE_FILES = COPYING
