@@ -1,42 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 23:10:51 +0200
-Subject: [Buildroot] [git commit] configs/beelink_gs1: bump to kernel 5.5
-Message-ID: <20200412210109.9205E8E919@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 23:14:03 +0200
+Subject: [Buildroot] [git commit] package/mtools: bump version to 4.0.24
+Message-ID: <20200412210109.ACBC38E919@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f37e4ded45914be147ec06e3b246a39f4b464d62
+commit: https://git.buildroot.net/buildroot/commit/?id=f880286657e46e20c02705d6f26e100f21938cd0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bumping to kernel 5.5 add many new features compare to
-the actual 5.3 used on Beelink GS1.
-Which are crypto, USB3, GPU, IR, S/PDIF and RTC.
+Release notes:
+https://lists.gnu.org/archive/html/info-mtools/2020-03/msg00000.html
 
-Signed-off-by: Cl??ment P??ron <peron.clem@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/beelink_gs1_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mtools/mtools.hash | 2 +-
+ package/mtools/mtools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
-index c48c02c450..04c8b544ea 100644
---- a/configs/beelink_gs1_defconfig
-+++ b/configs/beelink_gs1_defconfig
-@@ -9,11 +9,11 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/beelink/gs1/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beelink/gs1/genimage.cfg"
+diff --git a/package/mtools/mtools.hash b/package/mtools/mtools.hash
+index 1efc99a6b2..8930c02198 100644
+--- a/package/mtools/mtools.hash
++++ b/package/mtools/mtools.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	c708ff513fada78060a9e55db7c8d169d82d0e3d4afbd7c2744dce6ae0bfdb6d	mtools-4.0.23.tar.lz
++sha256	c443306ae1c5ae9ce749e6f0acc4b8f02d583fe6e4b3732489edb2e7329307d6	mtools-4.0.24.tar.lz
  
--# Kernel Linux headers same as kernel, a 5.3 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
-+# Kernel Linux headers same as kernel, a 5.5 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_5=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.5.4"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h6-beelink-gs1"
+ # Locally calculated
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
+index bd3444022f..268c3003d7 100644
+--- a/package/mtools/mtools.mk
++++ b/package/mtools/mtools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MTOOLS_VERSION = 4.0.23
++MTOOLS_VERSION = 4.0.24
+ MTOOLS_SOURCE = mtools-$(MTOOLS_VERSION).tar.lz
+ MTOOLS_SITE = $(BR2_GNU_MIRROR)/mtools
+ MTOOLS_LICENSE = GPL-3.0+
