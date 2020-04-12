@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 23:14:07 +0200
-Subject: [Buildroot] [git commit] package/nginx: bump version to 1.17.9
-Message-ID: <20200412210109.B4E9C8E919@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 23:14:51 +0200
+Subject: [Buildroot] [git commit] package/openblas: bump version to 0.3.9
+Message-ID: <20200412210109.D28578E8B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a4517d874a4ce9e16bf574ab27fe59957d6b0a9
+commit: https://git.buildroot.net/buildroot/commit/?id=8e7022d291c8411c31e7651c2792e3f25f47ee9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: http://nginx.org/en/CHANGES
+Changelog: http://www.openblas.net/Changelog.txt
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
+ package/openblas/openblas.hash | 2 +-
+ package/openblas/openblas.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 8c5b80f80e..3ec7ff2444 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	b62756842807e5693b794e5d0ae289bd8ae5b098e66538b2a91eb80f25c591ff	nginx-1.17.7.tar.gz
-+sha256	7dd65d405c753c41b7fdab9415cfb4bdbaf093ec6d9f7432072d52cb7bcbb689	nginx-1.17.9.tar.gz
- # License files, locally calculated
- sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 5c828d3bb0..9bbb3fc201 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
+diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
+index 0683d2a646..c58def9d5d 100644
+--- a/package/openblas/openblas.hash
++++ b/package/openblas/openblas.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8f86ade36f0dbed9ac90eb62575137388359d97d8f93093b38abe166ad7ef3a8  openblas-0.3.8.tar.gz
++sha256  17d4677264dfbc4433e97076220adc79b050e4f8a083ea3f853a53af253bc380  openblas-0.3.9.tar.gz
+ sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index 105c03713b..9701df9148 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGINX_VERSION = 1.17.7
-+NGINX_VERSION = 1.17.9
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+-OPENBLAS_VERSION = 0.3.8
++OPENBLAS_VERSION = 0.3.9
+ OPENBLAS_SITE = $(call github,xianyi,OpenBLAS,v$(OPENBLAS_VERSION))
+ OPENBLAS_LICENSE = BSD-3-Clause
+ OPENBLAS_LICENSE_FILES = LICENSE
