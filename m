@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 12:00:05 +0200
-Subject: [Buildroot] [git commit] package/mcelog: bump version to 168
-Message-ID: <20200412094620.863008E5BB@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 12:00:18 +0200
+Subject: [Buildroot] [git commit] package/gnupg2: bump to version 2.2.20
+Message-ID: <20200412094620.B04B68E5BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46c5c15c0d77b6e87f9a78f026906dcd1545954d
+commit: https://git.buildroot.net/buildroot/commit/?id=58e260f34f6eb75c50fd3a4cc45de2e0aa5c7879
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mcelog/mcelog.hash | 2 +-
- package/mcelog/mcelog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
-index c323d681cc..dea97eb427 100644
---- a/package/mcelog/mcelog.hash
-+++ b/package/mcelog/mcelog.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 a18fdef9cfe2dfaefa09087c616c376a301dc87b1fa14a37476d97370962c668  mcelog-165.tar.gz
-+sha256 11c0f9ab9c97e12d912a51d2b4d2ee937378c5b08a3bb4e34214e0736c6fb7ef  mcelog-168.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
-index cedf474ac0..dcabc2c96f 100644
---- a/package/mcelog/mcelog.mk
-+++ b/package/mcelog/mcelog.mk
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 2dee44283b..99100e3179 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q4/000443.html
+-sha1 e24a1208ffe69d7436b2f27e99542a85f34d0ac0  gnupg-2.2.19.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2020q1/000444.html
++sha1 d5290f0781df5dc83302127d6065fb59b35e53d7  gnupg-2.2.20.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.19.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.20.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256 242554c0e06f3a83c420b052f750b65ead711cc3fddddb5e7274fcdbb4e9dec0  gnupg-2.2.19.tar.bz2
++sha256 04a7c9d48b74c399168ee8270e548588ddbe52218c337703d7f06373d326ca30  gnupg-2.2.20.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 28e946b400..c4a0ec980b 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MCELOG_VERSION = 165
-+MCELOG_VERSION = 168
- MCELOG_SITE = $(call github,andikleen,mcelog,v$(MCELOG_VERSION))
- MCELOG_LICENSE = GPL-2.0
- MCELOG_LICENSE_FILES = LICENSE
+-GNUPG2_VERSION = 2.2.19
++GNUPG2_VERSION = 2.2.20
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
