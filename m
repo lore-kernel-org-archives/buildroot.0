@@ -1,25 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 12:00:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mcelog: bump version to 168
-In-Reply-To: <20200412083321.855187-1-bernd.kuhls@t-online.de>
-References: <20200412083321.855187-1-bernd.kuhls@t-online.de>
-Message-ID: <20200412120059.7b765dd4@windsurf.home>
+Date: Sun, 12 Apr 2020 12:01:09 +0200
+Subject: [Buildroot] [PATCH 1/2] package/skalibs: bump version to 2.9.2.1
+In-Reply-To: <20200412084121.867943-1-bernd.kuhls@t-online.de>
+References: <20200412084121.867943-1-bernd.kuhls@t-online.de>
+Message-ID: <20200412120109.0c0e954c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 12 Apr 2020 10:33:21 +0200
+On Sun, 12 Apr 2020 10:41:20 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
+> Updated license hash due to copyright year bump:
+> http://git.skarnet.org/cgi-bin/cgit.cgi/skalibs/commit/?id=3f090bb2fe66f9fd79c75344fa7f03a76ea67e00
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/mcelog/mcelog.hash | 2 +-
->  package/mcelog/mcelog.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/skalibs/skalibs.hash | 4 ++--
+>  package/skalibs/skalibs.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both applied, thanks!
 
 Thomas
 -- 
