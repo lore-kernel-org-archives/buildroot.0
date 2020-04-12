@@ -1,44 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 23:13:57 +0200
-Subject: [Buildroot] [git commit] package/mutt: bump version to 1.13.5
-Message-ID: <20200412210109.A44678E919@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 23:14:07 +0200
+Subject: [Buildroot] [git commit] package/nginx: bump version to 1.17.9
+Message-ID: <20200412210109.B4E9C8E919@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44090c97e10541ef1570f3e29222b3c1e6536e09
+commit: https://git.buildroot.net/buildroot/commit/?id=7a4517d874a4ce9e16bf574ab27fe59957d6b0a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: http://www.mutt.org/
+Changelog: http://nginx.org/en/CHANGES
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
+ package/nginx/nginx.hash | 2 +-
+ package/nginx/nginx.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index f0b0153221..f822cfee6e 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 78423016b5f2fcb31bfd156999ff6638177be4459230d2ee61a81e5641d07378  mutt-1.13.3.tar.gz
-+sha256 6cd71b5b3e6b255afef6bed3b5e1e8ee9819b3d7c9839fd95e798045882aa653  mutt-1.13.5.tar.gz
- sha256 732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 9cf8304bfe..a71c0e3551 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 8c5b80f80e..3ec7ff2444 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	b62756842807e5693b794e5d0ae289bd8ae5b098e66538b2a91eb80f25c591ff	nginx-1.17.7.tar.gz
++sha256	7dd65d405c753c41b7fdab9415cfb4bdbaf093ec6d9f7432072d52cb7bcbb689	nginx-1.17.9.tar.gz
+ # License files, locally calculated
+ sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 5c828d3bb0..9bbb3fc201 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MUTT_VERSION = 1.13.3
-+MUTT_VERSION = 1.13.5
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
+-NGINX_VERSION = 1.17.7
++NGINX_VERSION = 1.17.9
+ NGINX_SITE = http://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
