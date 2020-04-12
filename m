@@ -1,77 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 13:49:45 +0200
-Subject: [Buildroot] [git commit] package/gr-osmosdr: bump to 0.2.0
-Message-ID: <20200412113634.E208A8E65D@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 13:50:44 +0200
+Subject: [Buildroot] [PATCH v2] package/gr-osmosdr: bump to 0.2.0
+In-Reply-To: <20200411093353.22655-1-gwenj@trabucayre.com>
+References: <20200411093353.22655-1-gwenj@trabucayre.com>
+Message-ID: <20200412135044.036fbd93@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e54e960ebd4c536627a9a1db41e1b8fba0a83261
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 11 Apr 2020 11:33:53 +0200
+Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
 
-gr-osmosdr is now python3 only, so drop everything related to python2.
-python-cheetah is no longer mandatory, so drop this too.
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Since, gr-osmosdr is python3 only, drop everything related to python2.
+> python-cheetah is no more mandatory, so drop this too.
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+> Changes v1 -> v2:
+>  * depends on BR2_PACKAGE_PYTHON3 is only mandatory when BR2_PACKAGE_GR_OSMOSDR_PYTHON is set (Thomas)
+> ---
+>  package/gr-osmosdr/Config.in       | 1 +
+>  package/gr-osmosdr/gr-osmosdr.hash | 2 +-
+>  package/gr-osmosdr/gr-osmosdr.mk   | 8 ++++----
+>  3 files changed, 6 insertions(+), 5 deletions(-)
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gr-osmosdr/Config.in       | 1 +
- package/gr-osmosdr/gr-osmosdr.hash | 2 +-
- package/gr-osmosdr/gr-osmosdr.mk   | 8 ++++----
- 3 files changed, 6 insertions(+), 5 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
-index 1e80137f35..a38082af98 100644
---- a/package/gr-osmosdr/Config.in
-+++ b/package/gr-osmosdr/Config.in
-@@ -14,6 +14,7 @@ if BR2_PACKAGE_GR_OSMOSDR
- config BR2_PACKAGE_GR_OSMOSDR_PYTHON
- 	bool "python support"
- 	depends on BR2_PACKAGE_GNURADIO_PYTHON
-+	depends on BR2_PACKAGE_PYTHON3
- 	help
- 	  Enable Python support
- 
-diff --git a/package/gr-osmosdr/gr-osmosdr.hash b/package/gr-osmosdr/gr-osmosdr.hash
-index 4a1e56abae..64959c8e74 100644
---- a/package/gr-osmosdr/gr-osmosdr.hash
-+++ b/package/gr-osmosdr/gr-osmosdr.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256 48f92dc02b86ce6d299b35db249f2c8099bb45326c979b6225a020a4188e4204 gr-osmosdr-46698a67e7e06419eefaf45c95129c0c12669045.tar.gz
-+sha256 9812429d97bc54f0a8917b880ca9e7e2421c66aeaac8ce5608161a8ae7007122 gr-osmosdr-0.2.0.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING
-diff --git a/package/gr-osmosdr/gr-osmosdr.mk b/package/gr-osmosdr/gr-osmosdr.mk
-index fcc817fe85..c5d6ddc2e2 100644
---- a/package/gr-osmosdr/gr-osmosdr.mk
-+++ b/package/gr-osmosdr/gr-osmosdr.mk
-@@ -4,15 +4,15 @@
- #
- ################################################################################
- 
--GR_OSMOSDR_VERSION = 46698a67e7e06419eefaf45c95129c0c12669045
--GR_OSMOSDR_SITE = $(call github,osmocom,gr-osmosdr,$(GR_OSMOSDR_VERSION))
-+GR_OSMOSDR_VERSION = 0.2.0
-+GR_OSMOSDR_SITE = $(call github,osmocom,gr-osmosdr,v$(GR_OSMOSDR_VERSION))
- GR_OSMOSDR_LICENSE = GPL-3.0+
- GR_OSMOSDR_LICENSE_FILES = COPYING
- 
- # gr-osmosdr prevents doing an in-source-tree build
- GR_OSMOSDR_SUPPORTS_IN_SOURCE_BUILD = NO
- 
--GR_OSMOSDR_DEPENDENCIES = gnuradio host-python-cheetah
-+GR_OSMOSDR_DEPENDENCIES = gnuradio host-python3
- 
- GR_OSMOSDR_CONF_OPTS = \
- 	-DENABLE_DEFAULT=OFF \
-@@ -24,7 +24,7 @@ GR_OSMOSDR_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_GR_OSMOSDR_PYTHON),y)
- GR_OSMOSDR_CONF_OPTS += -DENABLE_PYTHON=ON
--GR_OSMOSDR_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),python3,python)
-+GR_OSMOSDR_DEPENDENCIES += python3
- else
- GR_OSMOSDR_CONF_OPTS += -DENABLE_PYTHON=OFF
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
