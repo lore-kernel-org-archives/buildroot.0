@@ -1,49 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 23:13:53 +0200
-Subject: [Buildroot] [git commit] package/msmtp: bump version to 1.8.7
-Message-ID: <20200412210109.9B9338E919@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 23:13:57 +0200
+Subject: [Buildroot] [git commit] package/mutt: bump version to 1.13.5
+Message-ID: <20200412210109.A44678E919@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=142b39da706b1ab3c7cd769e1dabd7a6b85cc8a3
+commit: https://git.buildroot.net/buildroot/commit/?id=44090c97e10541ef1570f3e29222b3c1e6536e09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/marlam/msmtp-mirror/blob/master/NEWS
+Changelog: http://www.mutt.org/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/msmtp/msmtp.hash | 4 ++--
- package/msmtp/msmtp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
-index 9849c547c2..b2aa47cd8f 100644
---- a/package/msmtp/msmtp.hash
-+++ b/package/msmtp/msmtp.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking signature
--# https://marlam.de/msmtp/releases/msmtp-1.8.6.tar.xz.sig
--sha256	6625f147430c65ba8527f52c4fe5d4d33552d3c0fb6d793ba7df819a3b3042e1	msmtp-1.8.6.tar.xz
-+# https://marlam.de/msmtp/releases/msmtp-1.8.7.tar.xz.sig
-+sha256	9a53bcdc244ec5b1a806934ecc7746d9d09db581f587bedf597e9da2f48c51f1	msmtp-1.8.7.tar.xz
- 
- # Hash for license file:
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index 1518aa10e4..8c260471e6 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index f0b0153221..f822cfee6e 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 78423016b5f2fcb31bfd156999ff6638177be4459230d2ee61a81e5641d07378  mutt-1.13.3.tar.gz
++sha256 6cd71b5b3e6b255afef6bed3b5e1e8ee9819b3d7c9839fd95e798045882aa653  mutt-1.13.5.tar.gz
+ sha256 732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 9cf8304bfe..a71c0e3551 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MSMTP_VERSION = 1.8.6
-+MSMTP_VERSION = 1.8.7
- MSMTP_SITE = https://marlam.de/msmtp/releases
- MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
- MSMTP_DEPENDENCIES = host-pkgconf
+-MUTT_VERSION = 1.13.3
++MUTT_VERSION = 1.13.5
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
