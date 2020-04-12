@@ -1,42 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 21:45:24 +0200
-Subject: [Buildroot] [git commit] package/snappy: bump to version 1.1.8
-Message-ID: <20200412193727.D2EDD8E81E@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 21:50:46 +0200
+Subject: [Buildroot] [git commit] package/python-cbor2: new package
+Message-ID: <20200412193727.E13CF8E80A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7a7873cf622d2ed89d156e996b578de301cd1f3
+commit: https://git.buildroot.net/buildroot/commit/?id=8371f096225d12ac66fd46edacb1e90d875af423
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Pure Python CBOR (de)serializer with extensive tag support.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/snappy/snappy.hash | 2 +-
- package/snappy/snappy.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/python-cbor2/Config.in         |  6 ++++++
+ package/python-cbor2/python-cbor2.hash |  5 +++++
+ package/python-cbor2/python-cbor2.mk   | 14 ++++++++++++++
+ 5 files changed, 27 insertions(+)
 
-diff --git a/package/snappy/snappy.hash b/package/snappy/snappy.hash
-index e9ac4324c0..c08c5b7fe4 100644
---- a/package/snappy/snappy.hash
-+++ b/package/snappy/snappy.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 3dfa02e873ff51a11ee02b9ca391807f0c8ea0529a4924afa645fbf97163f9d4  snappy-1.1.7.tar.gz
-+sha256 16b677f07832a612b0836178db7f374e414f94657c138e6993cbfc5dcc58651f  snappy-1.1.8.tar.gz
- sha256 55172044f7e241207117448a4d9d6ba1d0925c8ad66b5d4c08c70adfa9cc3de6  COPYING
-diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
-index 74d398de81..b764a0e4d0 100644
---- a/package/snappy/snappy.mk
-+++ b/package/snappy/snappy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNAPPY_VERSION = 1.1.7
-+SNAPPY_VERSION = 1.1.8
- SNAPPY_SITE = $(call github,google,snappy,$(SNAPPY_VERSION))
- SNAPPY_LICENSE = BSD-3-Clause
- SNAPPY_LICENSE_FILES = COPYING
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c17d92ed4b..644397eff5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1193,6 +1193,7 @@ F:	package/python-argon2-cffi/
+ F:	package/python-async-lru/
+ F:	package/python-async-timeout/
+ F:	package/python-brotli/
++F:	package/python-cbor2/
+ F:	package/python-cchardet/
+ F:	package/python-flatbuffers/
+ F:	package/python-frozenlist/
+diff --git a/package/Config.in b/package/Config.in
+index 7c9575c8b7..3657a15fad 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -895,6 +895,7 @@ menu "External python modules"
+ 	source "package/python-can/Config.in"
+ 	source "package/python-canopen/Config.in"
+ 	source "package/python-cbor/Config.in"
++	source "package/python-cbor2/Config.in"
+ 	source "package/python-cchardet/Config.in"
+ 	source "package/python-certifi/Config.in"
+ 	source "package/python-cffi/Config.in"
+diff --git a/package/python-cbor2/Config.in b/package/python-cbor2/Config.in
+new file mode 100644
+index 0000000000..ba9383f787
+--- /dev/null
++++ b/package/python-cbor2/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_CBOR2
++	bool "python-cbor2"
++	help
++	  Pure Python CBOR (de)serializer with extensive tag support.
++
++	  https://cbor2.readthedocs.io/
+diff --git a/package/python-cbor2/python-cbor2.hash b/package/python-cbor2/python-cbor2.hash
+new file mode 100644
+index 0000000000..abc049b82e
+--- /dev/null
++++ b/package/python-cbor2/python-cbor2.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/cbor2/json
++md5	47653309cff623382c770841847dafaf  cbor2-5.0.1.tar.gz
++sha256	4299db69e5ac7b3026abb2a639737c72804511130ced81f660a9cb9222352dba  cbor2-5.0.1.tar.gz
++# Locally computed sha256 checksums
++sha256	6163f7987dfb38d6bc320ce2b70b2f02b862bc41126516d552ef1cd43247e758  LICENSE.txt
+diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
+new file mode 100644
+index 0000000000..d504e33d2d
+--- /dev/null
++++ b/package/python-cbor2/python-cbor2.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-cbor2
++#
++################################################################################
++
++PYTHON_CBOR2_VERSION = 5.0.1
++PYTHON_CBOR2_SOURCE = cbor2-$(PYTHON_CBOR2_VERSION).tar.gz
++PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/3e/2c/188d040bd4cf99012d0e847a3d95bf1ef1f783859b09eb9f736950af84f0
++PYTHON_CBOR2_SETUP_TYPE = setuptools
++PYTHON_CBOR2_LICENSE = MIT
++PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
