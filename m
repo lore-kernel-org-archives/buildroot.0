@@ -1,38 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 11:57:08 +0200
-Subject: [Buildroot] [pkg-luarocks v2 2/5] pkg-luarocks: refactor infra
-In-Reply-To: <20200322080706.19806-2-francois.perrad@gadz.org>
-References: <20200322080706.19806-1-francois.perrad@gadz.org>
- <20200322080706.19806-2-francois.perrad@gadz.org>
-Message-ID: <20200412115708.4af92356@windsurf.home>
+Date: Sun, 12 Apr 2020 11:57:38 +0200
+Subject: [Buildroot] [git commit] package/gobject-introspection: bump to
+ version 2.64.1
+Message-ID: <20200412094438.0DBE58E568@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 22 Mar 2020 09:07:03 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5e774faa48931f55441f56c4fce05ccb81b69664
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> move stuff from luarocks.mk and luarocks-br-config.lua
-> to pkg-luarocks.mk
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/luarocks/luarocks-br-config.lua |  8 --------
->  package/luarocks/luarocks.mk            | 11 -----------
->  package/pkg-luarocks.mk                 | 20 +++++++++++++++++---
->  3 files changed, 17 insertions(+), 22 deletions(-)
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gobject-introspection/gobject-introspection.hash | 4 ++--
+ package/gobject-introspection/gobject-introspection.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I have applied, but after extending the commit log to give more details
-about what is happening:
-
-  https://git.buildroot.org/buildroot/commit/?id=052629291449147ff18dc6ff63a94f043ea4aadf
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gobject-introspection/gobject-introspection.hash b/package/gobject-introspection/gobject-introspection.hash
+index c6923f8599..68bf63e055 100644
+--- a/package/gobject-introspection/gobject-introspection.hash
++++ b/package/gobject-introspection/gobject-introspection.hash
+@@ -1,4 +1,4 @@
+-#From http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/1.64/gobject-introspection-1.64.0.sha256sum
+-sha256 eac05a63091c81adfdc8ef34820bcc7e7778c5b9e34734d344fc9e69ddf4fc82 gobject-introspection-1.64.0.tar.xz
++#From http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/1.64/gobject-introspection-1.64.1.sha256sum
++sha256 80beae6728c134521926affff9b2e97125749b38d38744dc901f4010ee3e7fa7 gobject-introspection-1.64.1.tar.xz
+ sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5 COPYING.LGPL
+ sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING.GPL
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index 0a395b814c..eefb2c83f7 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.64
+-GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).0
++GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).1
+ GOBJECT_INTROSPECTION_SITE = http://ftp.gnome.org/pub/GNOME/sources/gobject-introspection/$(GOBJECT_INTROSPECTION_VERSION_MAJOR)
+ GOBJECT_INTROSPECTION_SOURCE = gobject-introspection-$(GOBJECT_INTROSPECTION_VERSION).tar.xz
+ GOBJECT_INTROSPECTION_INSTALL_STAGING = YES
