@@ -1,46 +1,330 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 23:14:12 +0200
-Subject: [Buildroot] [git commit] package/nmon: bump version to 16m
-Message-ID: <20200412210109.BCE7F8E919@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 23:08:22 +0200
+Subject: [Buildroot] [git commit] configs/beelink_gs1: bump to U-Boot 2020.01
+Message-ID: <20200412210109.89FBE8E919@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e84edd44ac89365b89cf1a6eec24b15d327796f6
+commit: https://git.buildroot.net/buildroot/commit/?id=e210080d2ab4d77862c42d2b318e21fab461f127
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The U-boot patch has been upstreamed.
+
+Bump U-boot version and drop the patch.
+
+Signed-off-by: Cl??ment P??ron <peron.clem@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nmon/nmon.hash | 6 +++---
- package/nmon/nmon.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-arm-dts-sync-dts-for-Allwinner-H6.patch   | 279 ---------------------
+ configs/beelink_gs1_defconfig                      |   3 +-
+ 2 files changed, 1 insertion(+), 281 deletions(-)
 
-diff --git a/package/nmon/nmon.hash b/package/nmon/nmon.hash
-index 432f71d846..fd3f09c63a 100644
---- a/package/nmon/nmon.hash
-+++ b/package/nmon/nmon.hash
-@@ -1,5 +1,5 @@
- # From https://sourceforge.net/projects/nmon/files/
--md5 246ccfc74d5af55d992601fc4d3d4a72  lmon16g.c
--sha1 926217a98f78dd398d4d5690d7b10b8b2b620168  lmon16g.c
-+md5 df67f07ea4006c6204acff586beada81  lmon16m.c
-+sha1 68cd02be19036a287fe352823db93223e73a9411  lmon16m.c
- # Locally computed
--sha256 da82dd693b503b062854dfe7dbb5d36b347872ab44a4aa05b97e9d577747f688  lmon16g.c
-+sha256 2bed4d45fdfdf1d1387ec91e139c04975d5f838e3e0d53c0fe2d803a707e5fc1  lmon16m.c
-diff --git a/package/nmon/nmon.mk b/package/nmon/nmon.mk
-index f7edd66a26..8b39748cce 100644
---- a/package/nmon/nmon.mk
-+++ b/package/nmon/nmon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/beelink/gs1/patches/uboot/0001-arm-dts-sync-dts-for-Allwinner-H6.patch b/board/beelink/gs1/patches/uboot/0001-arm-dts-sync-dts-for-Allwinner-H6.patch
+deleted file mode 100644
+index 8e695f6416..0000000000
+--- a/board/beelink/gs1/patches/uboot/0001-arm-dts-sync-dts-for-Allwinner-H6.patch
++++ /dev/null
+@@ -1,279 +0,0 @@
+-From 99cade8743158889b3e8db93c003b3318ebd4bda Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+-Date: Sun, 11 Aug 2019 22:38:57 +0200
+-Subject: [PATCH] arm: dts: sync dts for Allwinner H6
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Sync Kernel DTS for Allwinner H6 boards.
+-
+-Drop /omit-if-no-ref/ keyword as it's not supported by U-boot.
+-
+-commit <d45331b00ddb> Linux 5.3-rc4
+-
+-Signed-off-by: Cl??ment P??ron <peron.clem@gmail.com>
+----
+- arch/arm/dts/sun50i-h6-beelink-gs1.dts | 76 ++++++++++++++++++++++++++
+- arch/arm/dts/sun50i-h6-pine-h64.dts    | 12 ++++
+- arch/arm/dts/sun50i-h6.dtsi            | 46 +++++++++++++++-
+- 3 files changed, 131 insertions(+), 3 deletions(-)
+-
+-diff --git a/arch/arm/dts/sun50i-h6-beelink-gs1.dts b/arch/arm/dts/sun50i-h6-beelink-gs1.dts
+-index 54b0882bed..0dc33c90dd 100644
+---- a/arch/arm/dts/sun50i-h6-beelink-gs1.dts
+-+++ b/arch/arm/dts/sun50i-h6-beelink-gs1.dts
+-@@ -14,6 +14,7 @@
+- 	compatible = "azw,beelink-gs1", "allwinner,sun50i-h6";
+- 
+- 	aliases {
+-+		ethernet0 = &emac;
+- 		serial0 = &uart0;
+- 	};
+- 
+-@@ -21,6 +22,17 @@
+- 		stdout-path = "serial0:115200n8";
+- 	};
+- 
+-+	connector {
+-+		compatible = "hdmi-connector";
+-+		type = "a";
+-+
+-+		port {
+-+			hdmi_con_in: endpoint {
+-+				remote-endpoint = <&hdmi_out_con>;
+-+			};
+-+		};
+-+	};
+-+
+- 	leds {
+- 		compatible = "gpio-leds";
+- 
+-@@ -41,6 +53,40 @@
+- 	};
+- };
+- 
+-+&de {
+-+	status = "okay";
+-+};
+-+
+-+&ehci0 {
+-+	status = "okay";
+-+};
+-+
+-+&emac {
+-+	pinctrl-names = "default";
+-+	pinctrl-0 = <&ext_rgmii_pins>;
+-+	phy-mode = "rgmii";
+-+	phy-handle = <&ext_rgmii_phy>;
+-+	phy-supply = <&reg_aldo2>;
+-+	status = "okay";
+-+};
+-+
+-+&hdmi {
+-+	status = "okay";
+-+};
+-+
+-+&hdmi_out {
+-+	hdmi_out_con: endpoint {
+-+		remote-endpoint = <&hdmi_con_in>;
+-+	};
+-+};
+-+
+-+&mdio {
+-+	ext_rgmii_phy: ethernet-phy at 1 {
+-+		compatible = "ethernet-phy-ieee802.3-c22";
+-+		reg = <1>;
+-+	};
+-+};
+-+
+- &mmc0 {
+- 	vmmc-supply = <&reg_cldo1>;
+- 	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;
+-@@ -57,6 +103,15 @@
+- 	status = "okay";
+- };
+- 
+-+&ohci0 {
+-+	status = "okay";
+-+};
+-+
+-+&pio {
+-+	vcc-pd-supply = <&reg_cldo1>;
+-+	vcc-pg-supply = <&reg_aldo1>;
+-+};
+-+
+- &r_i2c {
+- 	status = "okay";
+- 
+-@@ -177,8 +232,29 @@
+- 	};
+- };
+- 
+-+&r_pio {
+-+	/*
+-+	 * PL0 and PL1 are used for PMIC I2C
+-+	 * don't enable the pl-supply else
+-+	 * it will fail at boot
+-+	 *
+-+	 * vcc-pl-supply = <&reg_aldo1>;
+-+	 */
+-+	vcc-pm-supply = <&reg_aldo1>;
+-+};
+-+
+- &uart0 {
+- 	pinctrl-names = "default";
+- 	pinctrl-0 = <&uart0_ph_pins>;
+- 	status = "okay";
+- };
+-+
+-+&usb2otg {
+-+	dr_mode = "host";
+-+	status = "okay";
+-+};
+-+
+-+&usb2phy {
+-+	usb0_vbus-supply = <&reg_vcc5v>;
+-+	status = "okay";
+-+};
+-diff --git a/arch/arm/dts/sun50i-h6-pine-h64.dts b/arch/arm/dts/sun50i-h6-pine-h64.dts
+-index 4802902e12..1898345183 100644
+---- a/arch/arm/dts/sun50i-h6-pine-h64.dts
+-+++ b/arch/arm/dts/sun50i-h6-pine-h64.dts
+-@@ -127,6 +127,12 @@
+- 	status = "okay";
+- };
+- 
+-+&pio {
+-+	vcc-pc-supply = <&reg_bldo2>;
+-+	vcc-pd-supply = <&reg_cldo1>;
+-+	vcc-pg-supply = <&reg_aldo1>;
+-+};
+-+
+- &r_i2c {
+- 	status = "okay";
+- 
+-@@ -243,10 +249,16 @@
+- 	pcf8563: rtc at 51 {
+- 		compatible = "nxp,pcf8563";
+- 		reg = <0x51>;
+-+		interrupt-parent = <&r_intc>;
+-+		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+- 		#clock-cells = <0>;
+- 	};
+- };
+- 
+-+&r_pio {
+-+	vcc-pm-supply = <&reg_aldo1>;
+-+};
+-+
+- &uart0 {
+- 	pinctrl-names = "default";
+- 	pinctrl-0 = <&uart0_ph_pins>;
+-diff --git a/arch/arm/dts/sun50i-h6.dtsi b/arch/arm/dts/sun50i-h6.dtsi
+-index e0dc4a05c1..a117f479ae 100644
+---- a/arch/arm/dts/sun50i-h6.dtsi
+-+++ b/arch/arm/dts/sun50i-h6.dtsi
+-@@ -101,7 +101,7 @@
+- 		#size-cells = <1>;
+- 		ranges;
+- 
+--		display-engine at 1000000 {
+-+		bus at 1000000 {
+- 			compatible = "allwinner,sun50i-h6-de3",
+- 				     "allwinner,sun50i-a64-de2";
+- 			reg = <0x1000000 0x400000>;
+-@@ -203,11 +203,32 @@
+- 			#reset-cells = <1>;
+- 		};
+- 
+-+		dma: dma-controller at 3002000 {
+-+			compatible = "allwinner,sun50i-h6-dma";
+-+			reg = <0x03002000 0x1000>;
+-+			interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
+-+			clocks = <&ccu CLK_BUS_DMA>, <&ccu CLK_MBUS_DMA>;
+-+			clock-names = "bus", "mbus";
+-+			dma-channels = <16>;
+-+			dma-requests = <46>;
+-+			resets = <&ccu RST_BUS_DMA>;
+-+			#dma-cells = <1>;
+-+		};
+-+
+- 		sid: sid at 3006000 {
+- 			compatible = "allwinner,sun50i-h6-sid";
+- 			reg = <0x03006000 0x400>;
+- 		};
+- 
+-+		watchdog: watchdog at 30090a0 {
+-+			compatible = "allwinner,sun50i-h6-wdt",
+-+				     "allwinner,sun6i-a31-wdt";
+-+			reg = <0x030090a0 0x20>;
+-+			interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
+-+			/* Broken on some H6 boards */
+-+			status = "disabled";
+-+		};
+-+
+- 		pio: pinctrl at 300b000 {
+- 			compatible = "allwinner,sun50i-h6-pinctrl";
+- 			reg = <0x0300b000 0x400>;
+-@@ -243,6 +264,18 @@
+- 				bias-pull-up;
+- 			};
+- 
+-+			/*
+-+			 * /omit-if-no-ref/ isn't supported by U-boot
+-+			 * keep this comment to avoid bad sync with Linux
+-+			 */
+-+			mmc1_pins: mmc1-pins {
+-+				pins = "PG0", "PG1", "PG2", "PG3",
+-+				       "PG4", "PG5";
+-+				function = "mmc1";
+-+				drive-strength = <30>;
+-+				bias-pull-up;
+-+			};
+-+
+- 			mmc2_pins: mmc2-pins {
+- 				pins = "PC1", "PC4", "PC5", "PC6",
+- 				       "PC7", "PC8", "PC9", "PC10",
+-@@ -294,6 +327,8 @@
+- 			resets = <&ccu RST_BUS_MMC1>;
+- 			reset-names = "ahb";
+- 			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
+-+			pinctrl-names = "default";
+-+			pinctrl-0 = <&mmc1_pins>;
+- 			status = "disabled";
+- 			#address-cells = <1>;
+- 			#size-cells = <0>;
+-@@ -445,7 +480,6 @@
+- 			resets = <&ccu RST_BUS_OHCI3>,
+- 				 <&ccu RST_BUS_EHCI3>;
+- 			phys = <&usb2phy 3>;
+--			phy-names = "usb";
+- 			status = "disabled";
+- 		};
+- 
+-@@ -457,7 +491,6 @@
+- 				 <&ccu CLK_USB_OHCI3>;
+- 			resets = <&ccu RST_BUS_OHCI3>;
+- 			phys = <&usb2phy 3>;
+--			phy-names = "usb";
+- 			status = "disabled";
+- 		};
+- 
+-@@ -613,6 +646,13 @@
+- 			#reset-cells = <1>;
+- 		};
+- 
+-+		r_watchdog: watchdog at 7020400 {
+-+			compatible = "allwinner,sun50i-h6-wdt",
+-+				     "allwinner,sun6i-a31-wdt";
+-+			reg = <0x07020400 0x20>;
+-+			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
+-+		};
+-+
+- 		r_intc: interrupt-controller at 7021000 {
+- 			compatible = "allwinner,sun50i-h6-r-intc",
+- 				     "allwinner,sun6i-a31-r-intc";
+--- 
+-2.20.1
+-
+diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
+index e5354168db..c48c02c450 100644
+--- a/configs/beelink_gs1_defconfig
++++ b/configs/beelink_gs1_defconfig
+@@ -8,7 +8,6 @@ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/beelink/gs1/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beelink/gs1/genimage.cfg"
+-BR2_GLOBAL_PATCH_DIR="board/beelink/gs1/patches/"
  
--NMON_VERSION = 16g
-+NMON_VERSION = 16m
- NMON_SITE = https://sourceforge.net/projects/nmon/files
- NMON_SOURCE = lmon$(NMON_VERSION).c
- NMON_LICENSE = GPL-3.0+
+ # Kernel Linux headers same as kernel, a 5.3 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
+@@ -32,7 +31,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_h6"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="beelink_gs1"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
