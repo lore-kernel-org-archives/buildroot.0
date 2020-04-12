@@ -1,43 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Apr 2020 12:20:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: bump version to 0.21.22
-Message-ID: <20200412102024.1277808-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 12 Apr 2020 12:26:22 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-vuplus: needs gcc >= 4.9
+Message-ID: <20200412101339.0C0938E5C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.21.22/NEWS
+commit: https://git.buildroot.net/buildroot/commit/?id=76c2914703166eeb179c9392740ee2301235eb02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Since commit 2cc2ae83fca29e3f70a42759a105bb1495831e7e, kodi-pvr-vuplus
+has a dependency on json-for-modern-cpp, but the dependency of
+json-for-modern-cpp on gcc >= 4.9 was not propagated. Let's fix that.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-pvr-vuplus/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 70ca9df582..bce2d7e919 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  422ef0a996d961f3ebc6856395f3a855b45fa0059910e878fb98281007e510e1  mpd-0.21.20.tar.xz
-+sha256  565687d1899b585350cd66b603e46e5b79affc0a0e36d96d8953c6ccc6f69ba2  mpd-0.21.22.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index a879a33d33..a7adfc0406 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
+index 96320f6fcb..b6a03e843f 100644
+--- a/package/kodi-pvr-vuplus/Config.in
++++ b/package/kodi-pvr-vuplus/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_VUPLUS
+ 	bool "kodi-pvr-vuplus"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # json-for-modern-cpp
+ 	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
+ 	select BR2_PACKAGE_TINYXML
+@@ -7,3 +8,6 @@ config BR2_PACKAGE_KODI_PVR_VUPLUS
+ 	  VuPlus PVR client addon for Kodi
  
- MPD_VERSION_MAJOR = 0.21
--MPD_VERSION = $(MPD_VERSION_MAJOR).20
-+MPD_VERSION = $(MPD_VERSION_MAJOR).22
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
--- 
-2.25.0
+ 	  https://github.com/kodi-pvr/pvr.vuplus
++
++comment "kodi-pvr-vuplus needs a toolchain w/ gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
