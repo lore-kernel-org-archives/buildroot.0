@@ -1,38 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 15:49:05 +0200
-Subject: [Buildroot] [git commit] package/wget: add optional dependency to
- libiconv
-Message-ID: <20200412133503.5503A8E778@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 15:49:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wget: add optional dependency
+ to libiconv
+In-Reply-To: <20200316191527.551576-1-bernd.kuhls@t-online.de>
+References: <20200316191527.551576-1-bernd.kuhls@t-online.de>
+Message-ID: <20200412154920.78daa2f0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3460121b14899960cfd7bced43e914bbc758152
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 16 Mar 2020 20:15:27 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-wget has an optional dependency to libiconv:
-http://git.savannah.gnu.org/cgit/wget.git/tree/configure.ac#n344
+> wget has an optional dependency to libiconv:
+> http://git.savannah.gnu.org/cgit/wget.git/tree/configure.ac#n344
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/wget/wget.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wget/wget.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 7b9c3e75d9..ed3f1fdff9 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -21,6 +21,10 @@ else
- WGET_CONF_OPTS += --without-ssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+WGET_DEPENDENCIES += libiconv
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBIDN2),y)
- WGET_CONF_OPTS += --with-libidn
- WGET_DEPENDENCIES += libidn2
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
