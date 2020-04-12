@@ -1,69 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 12 Apr 2020 14:21:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnetfilter_conntrack: add libmnl
- to Libs.Private
-Message-ID: <20200412122107.1071258-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Apr 2020 14:27:23 +0200
+Subject: [Buildroot] [git commit] package/linux-firmware: Add Wilocity 6210
+ 11ad firmware
+Message-ID: <20200412121910.BEC738E65C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will fix a static build failure with dnsmasq on latest
-libnetfilter_conntrack
+commit: https://git.buildroot.net/buildroot/commit/?id=b522710337b81312f018c2eb122a87941fc685a2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/3fdc2cba20162eb86eaa5c49a056fb40fb18a392
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 5 +++++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch b/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
-new file mode 100644
-index 0000000000..921837df07
---- /dev/null
-+++ b/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
-@@ -0,0 +1,38 @@
-+From 93bbd7e56cefc8488a61892b3bf5df63a175d20d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 12 Apr 2020 14:05:15 +0200
-+Subject: [PATCH] libnetfilter_conntrack.pc.in: add LIBMNL_LIBS to Libs.Private
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index a2b41ccc5b..eba58014b6 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -340,6 +340,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX
+ 	help
+ 	  Firmware files for WLAN and Bluetooth modules wl18xx
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_WIL6210
++	bool "Qualcomm Atheros wil6210"
++	help
++	  Firmware files for Qualcomm Atheros 11ad family of chips
 +
-+Since version 1.0.8 and commit
-+c1c0f16c1fedb46547c2e104beeaaeac5933b214, libnetfilter_conntrack depends
-+on libmnl so add it to Libs.Private.
+ endmenu
+ 
+ menu "Ethernet firmware"
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index ba24f61c10..cbad8d592a 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -366,6 +366,11 @@ LINUX_FIRMWARE_FILES += \
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_WIL6210),y)
++LINUX_FIRMWARE_FILES += wil6210.*
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
++endif
 +
-+Otherwise, applications such as dnsmasq will fail to link on:
-+
-+/home/buildroot/autobuild/instance-0/output-1/host/bin/arm-linux-gcc -Wl,-elf2flt -static -o dnsmasq cache.o rfc1035.o util.o option.o forward.o network.o dnsmasq.o dhcp.o lease.o rfc2131.o netlink.o dbus.o bpf.o helper.o tftp.o log.o conntrack.o dhcp6.o rfc3315.o dhcp-common.o outpacket.o radv.o slaac.o auth.o ipset.o domain.o dnssec.o blockdata.o tables.o loop.o inotify.o poll.o rrfilter.o edns0.o arp.o crypto.o dump.o ubus.o metrics.o -L/home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib -lnetfilter_conntrack -L/home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib -lnfnetlink
-+/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: /home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libnetfilter_conntrack.a(api.o): in function `nfct_fill_hdr.constprop.4':
-+api.c:(.text+0x34): undefined reference to `mnl_nlmsg_put_header'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/3fdc2cba20162eb86eaa5c49a056fb40fb18a392
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to Pablo Neira Ayuso <pablo@netfilter.org>]
-+---
-+ libnetfilter_conntrack.pc.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libnetfilter_conntrack.pc.in b/libnetfilter_conntrack.pc.in
-+index 857f993..fbd7132 100644
-+--- a/libnetfilter_conntrack.pc.in
-++++ b/libnetfilter_conntrack.pc.in
-+@@ -12,5 +12,5 @@ Version: @VERSION@
-+ Requires: libnfnetlink
-+ Conflicts:
-+ Libs: -L${libdir} -lnetfilter_conntrack
-+-Libs.private: @LIBNFNETLINK_LIBS@
-++Libs.private: @LIBNFNETLINK_LIBS@ @LIBMNL_LIBS@
-+ Cflags: -I${includedir}
-+-- 
-+2.25.1
-+
--- 
-2.25.1
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160),y)
+ LINUX_FIRMWARE_FILES += iwlwifi-3160-*.ucode
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
