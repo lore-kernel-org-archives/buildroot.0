@@ -1,45 +1,78 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Apr 2020 16:17:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mtools: bump version to 4.0.24
-Message-ID: <20200412141716.1334652-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 12 Apr 2020 16:13:19 +0200
+Subject: [Buildroot] [git commit] package/libargon2: bump to version 20190702
+Message-ID: <20200412140524.F18208E77F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://lists.gnu.org/archive/html/info-mtools/2020-03/msg00000.html
+commit: https://git.buildroot.net/buildroot/commit/?id=019f9a8bb440543b1f4c5c1d0afe04b48a72bdbd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+- There is no incompatibility of this version with php, the issue was
+  due to libargon2 itself that installs library to lib/x86_64-linux-gnu
+  on Linux x86_64 host since
+  https://github.com/P-H-C/phc-winner-argon2/commit/d3639142fa71f8095ee36e64068f71b3c97baf6d
+- Update indentation of hash file (two spaces)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mtools/mtools.hash | 2 +-
- package/mtools/mtools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libargon2/libargon2.hash |  4 ++--
+ package/libargon2/libargon2.mk   | 11 ++++++-----
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/mtools/mtools.hash b/package/mtools/mtools.hash
-index 1efc99a6b2..8930c02198 100644
---- a/package/mtools/mtools.hash
-+++ b/package/mtools/mtools.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	c708ff513fada78060a9e55db7c8d169d82d0e3d4afbd7c2744dce6ae0bfdb6d	mtools-4.0.23.tar.lz
-+sha256	c443306ae1c5ae9ce749e6f0acc4b8f02d583fe6e4b3732489edb2e7329307d6	mtools-4.0.24.tar.lz
- 
+diff --git a/package/libargon2/libargon2.hash b/package/libargon2/libargon2.hash
+index c524b42718..331eea99f4 100644
+--- a/package/libargon2/libargon2.hash
++++ b/package/libargon2/libargon2.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
-index bd3444022f..268c3003d7 100644
---- a/package/mtools/mtools.mk
-+++ b/package/mtools/mtools.mk
-@@ -4,7 +4,7 @@
+-sha256 eaea0172c1f4ee4550d1b6c9ce01aab8d1ab66b4207776aa67991eb5872fdcd8  libargon2-20171227.tar.gz
+-sha256 220f8736a89ff51c92ef3d497f413b48e6cf1df3d6278bc909c6308c78e1718e  LICENSE
++sha256  daf972a89577f8772602bf2eb38b6a3dd3d922bf5724d45e7f9589b5e830442c  libargon2-20190702.tar.gz
++sha256  220f8736a89ff51c92ef3d497f413b48e6cf1df3d6278bc909c6308c78e1718e  LICENSE
+diff --git a/package/libargon2/libargon2.mk b/package/libargon2/libargon2.mk
+index e10343a15e..b3f6e1b216 100644
+--- a/package/libargon2/libargon2.mk
++++ b/package/libargon2/libargon2.mk
+@@ -4,18 +4,19 @@
  #
  ################################################################################
  
--MTOOLS_VERSION = 4.0.23
-+MTOOLS_VERSION = 4.0.24
- MTOOLS_SOURCE = mtools-$(MTOOLS_VERSION).tar.lz
- MTOOLS_SITE = $(BR2_GNU_MIRROR)/mtools
- MTOOLS_LICENSE = GPL-3.0+
--- 
-2.25.0
+-# 20190702 is not recognized by php7.3
+-LIBARGON2_VERSION = 20171227
++LIBARGON2_VERSION = 20190702
+ LIBARGON2_SITE = $(call github,P-H-C,phc-winner-argon2,$(LIBARGON2_VERSION))
+ LIBARGON2_LICENSE = CC0-1.0 or Apache-2.0
+ LIBARGON2_LICENSE_FILES = LICENSE
+ LIBARGON2_INSTALL_STAGING = YES
+ 
++LIBARGON2_OPTS = LIBRARY_REL=lib
++
+ # GCC_TARGET_ARCH is not defined for all architectures, but libargon2
+ # only uses it to detect if some x86 optimizations can be used, and
+ # GCC_TARGET_ARCH is defined on x86.
+ ifneq ($(GCC_TARGET_ARCH),)
+-LIBARGON2_OPTS = OPTTARGET=$(GCC_TARGET_ARCH)
++LIBARGON2_OPTS += OPTTARGET=$(GCC_TARGET_ARCH)
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+@@ -29,12 +30,12 @@ endef
+ 
+ define LIBARGON2_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+-		DESTDIR=$(STAGING_DIR) install
++		$(LIBARGON2_OPTS) DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define LIBARGON2_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+-		DESTDIR=$(TARGET_DIR) install
++		$(LIBARGON2_OPTS) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
