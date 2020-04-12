@@ -1,43 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 11:07:58 +0200
-Subject: [Buildroot] [PATCH 1/1] v4l2loopback: enable required kernel
- options
-In-Reply-To: <20200411222542.64271-1-james.hilliard1@gmail.com>
-References: <20200411222542.64271-1-james.hilliard1@gmail.com>
-Message-ID: <20200412110758.208a4683@windsurf.home>
+Date: Sun, 12 Apr 2020 11:57:08 +0200
+Subject: [Buildroot] [pkg-luarocks v2 2/5] pkg-luarocks: refactor infra
+In-Reply-To: <20200322080706.19806-2-francois.perrad@gadz.org>
+References: <20200322080706.19806-1-francois.perrad@gadz.org>
+ <20200322080706.19806-2-francois.perrad@gadz.org>
+Message-ID: <20200412115708.4af92356@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello James,
+On Sun, 22 Mar 2020 09:07:03 +0100
+Francois Perrad <fperrad@gmail.com> wrote:
 
-On Sat, 11 Apr 2020 16:25:42 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
-
-> Fixes:
-> ERROR: "video_ioctl2" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
-> ERROR: "__video_register_device" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
-> ERROR: "v4l2_ctrl_new_custom" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
-> ERROR: "v4l2_ctrl_handler_init_class" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
-> ERROR: "video_device_release" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
-> ERROR: "video_device_alloc" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
-> ERROR: "v4l2_device_register" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
-> ERROR: "v4l2_ctrl_handler_free" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
-> ERROR: "v4l2_device_unregister" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
-> ERROR: "video_unregister_device" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
-> ERROR: "video_devdata" [/home/buildroot/buildroot/output/build/v4l2loopback-0.12.4/./v4l2loopback.ko] undefined!
+> move stuff from luarocks.mk and luarocks-br-config.lua
+> to pkg-luarocks.mk
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luarocks/luarocks-br-config.lua |  8 --------
+>  package/luarocks/luarocks.mk            | 11 -----------
+>  package/pkg-luarocks.mk                 | 20 +++++++++++++++++---
+>  3 files changed, 17 insertions(+), 22 deletions(-)
 
-Thanks James. I'm going to mark this one as Changes Requested, as we
-are soon going to merge the series from Yann that reworks how we handle
-the interaction between enabled packages and kernel config options, see:
+I have applied, but after extending the commit log to give more details
+about what is happening:
 
-  http://patchwork.ozlabs.org/project/buildroot/list/?series=168565
-
-If you can resend on top of this series, it would be ideal. Thanks!
+  https://git.buildroot.org/buildroot/commit/?id=052629291449147ff18dc6ff63a94f043ea4aadf
 
 Best regards,
 
