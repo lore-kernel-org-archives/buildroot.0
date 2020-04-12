@@ -1,63 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 22:42:57 +0200
-Subject: [Buildroot] [PATCH 1/1] mbuffer: new package
-In-Reply-To: <20200211134652.2909-1-gliga.mircea@gmail.com>
-References: <20200211134652.2909-1-gliga.mircea@gmail.com>
-Message-ID: <20200412224257.4ca7f569@windsurf.home>
+Date: Sun, 12 Apr 2020 22:47:54 +0200
+Subject: [Buildroot] [git commit] package/ogre: fix build with RELRO
+Message-ID: <20200412203420.15EF48E8B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mircea,
+commit: https://git.buildroot.net/buildroot/commit/?id=506740c0306b04de2ce3f5dc79d116f0e5631917
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 11 Feb 2020 15:46:52 +0200
-Mircea Gliga <gliga.mircea@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/b64dfcd8e576666e8a4a52da81a2f5a92b779dc7
 
-> Signed-off-by: Mircea Gliga <gliga.mircea@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-PrecompiledHeader.cmake-Add-c-argument-t.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-Sorry for the long delay. I have now applied your patch, with a few
-changes.
-
-First, I changed the commit title to "package/mbuffer: new package", to
-follow our convention.
-
->  package/Config.in            |  1 +
->  package/mbuffer/Config.in    |  8 ++++++++
->  package/mbuffer/mbuffer.hash |  5 +++++
->  package/mbuffer/mbuffer.mk   | 19 +++++++++++++++++++
-
-I've added an entry for this package in the DEVELOPERS file.
-
-> diff --git a/package/mbuffer/Config.in b/package/mbuffer/Config.in
-> new file mode 100644
-> index 0000000000..5c733c0ec5
-> --- /dev/null
-> +++ b/package/mbuffer/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_MBUFFER
-> +	bool "mbuffer"
-> +	depends on !BR2_STATIC_LIBS
-
-I've added a comment that explains why we have this dependency:
-
-	depends on !BR2_STATIC_LIBS # dlopen()
-
-> +	help
-> +	  mbuffer is a tool for buffering data streams with a large set
-> +	  of unique features.
-> +
-> +	  http://www.maier-komor.de/mbuffer.html
-
-And here I've added a Config.in comment that shows up in
-BR2_STATIC_LIBS configurations, so that users now why mbuffer is not
-available.
-
-Applied with those changes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ogre/0001-CMake-Utils-PrecompiledHeader.cmake-Add-c-argument-t.patch b/package/ogre/0001-CMake-Utils-PrecompiledHeader.cmake-Add-c-argument-t.patch
+new file mode 100644
+index 0000000000..97f4e24890
+--- /dev/null
++++ b/package/ogre/0001-CMake-Utils-PrecompiledHeader.cmake-Add-c-argument-t.patch
+@@ -0,0 +1,57 @@
++From f480ac538eb69086d4b7db855c2a457d5d6420d4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 10 Feb 2020 14:05:12 +0100
++Subject: [PATCH] CMake/Utils/PrecompiledHeader.cmake: Add -c argument to build
++ precompiled headers
++
++Add "-c" argument when building precompiled headers to fix build with
++RELRO.
++
++More information on a similar issue with domoticz can be found here:
++https://patchwork.ozlabs.org/patch/1187328:
++
++"The problem AFAICS is that if no -c or similar option is given, GCC
++decides what needs to be done based on the rest of the arguments. If the
++rest of the arguments include a -Wl,... option, it decides that linking
++needs to be done. If the rest of the arguments are just header files, it
++decides to create a precompiled header."
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8fabf8d270b9257c3a9db6a2f17f1c08ec9428d3
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream: https://github.com/OGRECave/ogre/commit/de4d5c920e23e1e2b21dc5c8192ef74ba6210cca]
++---
++ CMake/Utils/PrecompiledHeader.cmake | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/CMake/Utils/PrecompiledHeader.cmake b/CMake/Utils/PrecompiledHeader.cmake
++index a02d99acd..bfb0059db 100644
++--- a/CMake/Utils/PrecompiledHeader.cmake
+++++ b/CMake/Utils/PrecompiledHeader.cmake
++@@ -133,11 +133,11 @@ MACRO(_PCH_GET_COMPILE_COMMAND out_command _input _output)
++             STRING(REGEX REPLACE "^ +" "" pchsupport_compiler_cxx_arg1 ${CMAKE_CXX_COMPILER_ARG1})
++ 
++             SET(${out_command}
++-              ${CMAKE_CXX_COMPILER} ${pchsupport_compiler_cxx_arg1} ${_compile_FLAGS} -x c++-header -o ${_output} ${_input}
+++              ${CMAKE_CXX_COMPILER} ${pchsupport_compiler_cxx_arg1} ${_compile_FLAGS} -x c++-header -c -o ${_output} ${_input}
++               )
++         ELSE(CMAKE_CXX_COMPILER_ARG1)
++             SET(${out_command}
++-              ${CMAKE_CXX_COMPILER}  ${_compile_FLAGS} -x c++-header -o ${_output} ${_input}
+++              ${CMAKE_CXX_COMPILER}  ${_compile_FLAGS} -x c++-header -c -o ${_output} ${_input}
++               )
++         ENDIF(CMAKE_CXX_COMPILER_ARG1)
++     ELSE(CMAKE_COMPILER_IS_GNUCXX)
++@@ -291,7 +291,7 @@ MACRO(ADD_PRECOMPILED_HEADER _targetName _input)
++     set_target_properties(${_targetName}_pch_dephelp PROPERTIES INCLUDE_DIRECTORIES "${DIRINC}")
++ 
++     #MESSAGE("_compile_FLAGS: ${_compile_FLAGS}")
++-    #message("COMMAND ${CMAKE_CXX_COMPILER}	${_compile_FLAGS} -x c++-header -o ${_output} ${_input}")
+++    #message("COMMAND ${CMAKE_CXX_COMPILER}	${_compile_FLAGS} -x c++-header -c -o ${_output} ${_input}")
++ 
++     ADD_CUSTOM_COMMAND(
++       OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${_name}"
++-- 
++2.24.1
++
