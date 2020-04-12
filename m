@@ -1,100 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Apr 2020 22:21:02 +0200
-Subject: [Buildroot] [git commit] package/libid3tag: switch to debian to fix
- CVEs
-Message-ID: <20200412200701.1F8D78E83B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 12 Apr 2020 22:22:19 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/mariadb: patch
+ mariadb_config to add sysroot path
+In-Reply-To: <20200213174655.17309-1-bluemrp9@gmail.com>
+References: <20200213174655.17309-1-bluemrp9@gmail.com>
+Message-ID: <20200412222219.34d94ceb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=210ccaef5784011bc035d0ae13611cb4e76f389f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 13 Feb 2020 09:46:55 -0800
+Ryan Coe <bluemrp9@gmail.com> wrote:
 
-Upstream libid3tag is dead since 2004 so switch to debian to get two
-patches that fix the following CVEs:
- - CVE-2004-2779: id3_utf16_deserialize() in utf16.c in libid3tag
-   through 0.15.1b misparses ID3v2 tags encoded in UTF-16 with an odd
-   number of bytes, triggering an endless loop allocating memory until
-   an OOM condition is reached, leading to denial-of-service (DoS).
- - CVE-2017-11550: The id3_ucs4_length function in ucs4.c in libid3tag
-   0.15.1b allows remote attackers to cause a denial of service (NULL
-   Pointer Dereference and application crash) via a crafted mp3 file.
- - CVE-2017-11551: The id3_field_parse function in field.c in libid3tag
-   0.15.1b allows remote attackers to cause a denial of service (OOM)
-   via a crafted MP3 file.
+> This patch adds @CMAKE_SYSROOT@ to mariadb_config.c.in. Without it,
+> mariadb_config and mysql_config incorrectly returns host paths for
+> include paths and library paths.
+> 
+> Upstream report and status:
+> https://jira.mariadb.org/browse/CONC-454
+> https://github.com/mariadb-corporation/mariadb-connector-c/pull/127
+> 
+> Reported-by: Alexey Lukyanchuk <skif@skif-web.ru>
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> ---
+> Changes v3 -> v4:
+>   - add upstream status (suggested by Peter)
+> Changes v2 -> v3:
+>   - remove extra slash between CMAKE_SYSROOT and CMAKE_INSTALL_PREFIX
+> Changes v1 -> v2:
+>   - no change
+> ---
+>  ...2-add-sysroot-path-to-mariadb_config.patch | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 package/mariadb/0002-add-sysroot-path-to-mariadb_config.patch
 
-Moreover, drop patch (replaced by add-m4-directory.patch debian patch)
+Applied to master, thanks. I have updated the upstream status, since
+the patch has been accepted upstream. Thanks!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libid3tag/0001-configure-automake-foreign.patch | 16 ----------------
- package/libid3tag/libid3tag.hash                        |  7 +++++--
- package/libid3tag/libid3tag.mk                          | 11 ++++++++++-
- 3 files changed, 15 insertions(+), 19 deletions(-)
-
-diff --git a/package/libid3tag/0001-configure-automake-foreign.patch b/package/libid3tag/0001-configure-automake-foreign.patch
-deleted file mode 100644
-index 8521d559f2..0000000000
---- a/package/libid3tag/0001-configure-automake-foreign.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--configure: don't require GNU-specific files when running automake
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--diff -durN libid3tag-0.15.1b.orig/configure.ac libid3tag-0.15.1b/configure.ac
----- libid3tag-0.15.1b.orig/configure.ac	2004-01-24 00:22:46.000000000 +0100
--+++ libid3tag-0.15.1b/configure.ac	2018-11-25 15:31:04.184342212 +0100
--@@ -26,7 +26,7 @@
-- 
-- AC_CONFIG_SRCDIR([id3tag.h])
-- 
---AM_INIT_AUTOMAKE
--+AM_INIT_AUTOMAKE([foreign])
-- 
-- AM_CONFIG_HEADER([config.h])
-- 
-diff --git a/package/libid3tag/libid3tag.hash b/package/libid3tag/libid3tag.hash
-index 82ad59d9ac..9aa1d00270 100644
---- a/package/libid3tag/libid3tag.hash
-+++ b/package/libid3tag/libid3tag.hash
-@@ -1,4 +1,7 @@
--# Locally computed:
--sha256  63da4f6e7997278f8a3fef4c6a372d342f705051d1eeb6a46a86b03610e26151  libid3tag-0.15.1b.tar.gz
-+# From http://snapshot.debian.org/archive/debian/20190310T213528Z/pool/main/libi/libid3tag/libid3tag_0.15.1b-14.dsc
-+sha256  63da4f6e7997278f8a3fef4c6a372d342f705051d1eeb6a46a86b03610e26151  libid3tag_0.15.1b.orig.tar.gz
-+sha256  f174cafe02bef25a9ad8cb7f9ce80119147297a7036f50878e85ac0d7ae09c62  libid3tag_0.15.1b-14.debian.tar.xz
-+
-+# Hash for license files:
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
- sha256  7f12ad28dc075763e91b91bfa60fad04062380011ddad8f6bac21dd7b1f44367  COPYRIGHT
-diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
-index 3ec145725f..14a7f3f938 100644
---- a/package/libid3tag/libid3tag.mk
-+++ b/package/libid3tag/libid3tag.mk
-@@ -5,12 +5,21 @@
- ################################################################################
- 
- LIBID3TAG_VERSION = 0.15.1b
--LIBID3TAG_SITE = http://downloads.sourceforge.net/project/mad/libid3tag/$(LIBID3TAG_VERSION)
-+LIBID3TAG_PATCH = libid3tag_$(LIBID3TAG_VERSION)-14.debian.tar.xz
-+LIBID3TAG_SOURCE = libid3tag_$(LIBID3TAG_VERSION).orig.tar.gz
-+LIBID3TAG_SITE = \
-+	http://snapshot.debian.org/archive/debian/20190310T213528Z/pool/main/libi/libid3tag
- LIBID3TAG_LICENSE = GPL-2.0+
- LIBID3TAG_LICENSE_FILES = COPYING COPYRIGHT
- LIBID3TAG_INSTALL_STAGING = YES
- LIBID3TAG_DEPENDENCIES = zlib
- 
-+# debian/patches/10_utf16.dpatch
-+LIBID3TAG_IGNORE_CVES += CVE-2004-2779 CVE-2017-11551
-+
-+# debian/patches/11_unknown_encoding.dpatch
-+LIBID3TAG_IGNORE_CVES += CVE-2017-11550
-+
- # Force autoreconf to be able to use a more recent libtool script, that
- # is able to properly behave in the face of a missing C++ compiler.
- LIBID3TAG_AUTORECONF = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
