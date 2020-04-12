@@ -1,37 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 12 Apr 2020 15:47:09 +0200
-Subject: [Buildroot] [git commit] package/systemd: add openssl support
-Message-ID: <20200412133307.AAFF78E773@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/systemd: enable nss-resolve when
+ resolve is enabled
+Message-ID: <20200412133307.8DA438E774@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9cc35d8fce1ecbdbcbbba3dc4621b5ceb9ede6f
+commit: https://git.buildroot.net/buildroot/commit/?id=12a808f2547da361c28e0b07642a4243b9c6fce7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/systemd/systemd.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/systemd/systemd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 7d0789f493..14490106aa 100644
+index 009f599c10..5f6c8a60bb 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -165,6 +165,13 @@ else
- SYSTEMD_CONF_OPTS += -Dp11kit=false
+@@ -361,10 +361,10 @@ define SYSTEMD_INSTALL_RESOLVCONF_HOOK
+ 	ln -sf ../run/systemd/resolve/resolv.conf \
+ 		$(TARGET_DIR)/etc/resolv.conf
+ endef
+-SYSTEMD_CONF_OPTS += -Dresolve=true
++SYSTEMD_CONF_OPTS += -Dnss-resolve=true -Dresolve=true
+ SYSTEMD_RESOLVED_USER = systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
+ else
+-SYSTEMD_CONF_OPTS += -Dresolve=false
++SYSTEMD_CONF_OPTS += -Dnss-resolve=false -Dresolve=false
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+SYSTEMD_DEPENDENCIES += openssl
-+SYSTEMD_CONF_OPTS += -Dopenssl=true
-+else
-+SYSTEMD_CONF_OPTS += -Dopenssl=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_PCRE2),y)
- SYSTEMD_DEPENDENCIES += pcre2
- SYSTEMD_CONF_OPTS += -Dpcre2=true
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
