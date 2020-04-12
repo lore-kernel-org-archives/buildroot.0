@@ -1,62 +1,65 @@
-From: =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-Date: Sun, 12 Apr 2020 13:06:32 +0200
-Subject: [Buildroot] [PATCH] package/jpeg-turbo: Add an option to allow
- tools install
-Message-ID: <20200412110632.4901-1-peron.clem@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 12 Apr 2020 13:37:33 +0200
+Subject: [Buildroot] [git commit] package/p7zip: fix CVE-2016-9296
+Message-ID: <20200412113302.BA9908E656@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-JPEG Turbo tools are not useless for everybody.
+commit: https://git.buildroot.net/buildroot/commit/?id=f2047e3d0000675c51288d16335b94481da63802
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an option to allow their installation.
-
-Signed-off-by: Cl?ment P?ron <peron.clem@gmail.com>
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jpeg-turbo/jpeg-turbo.mk | 6 ++++--
- package/jpeg/Config.in           | 9 +++++++++
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ package/p7zip/0001-CVE-2016-9296.patch | 25 +++++++++++++++++++++++++
+ package/p7zip/p7zip.mk                 |  3 +++
+ 2 files changed, 28 insertions(+)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 126b470630b2..9d487e29c5d3 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -41,10 +41,12 @@ ifeq ($(BR2_STATIC_LIBS),)
- JPEG_TURBO_CONF_OPTS += -DCMAKE_POSITION_INDEPENDENT_CODE=ON
- endif
- 
--define JPEG_TURBO_REMOVE_USELESS_TOOLS
-+define JPEG_TURBO_REMOVE_TOOLS
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,cjpeg djpeg jpegtran rdjpgcom tjbench wrjpgcom)
- endef
- 
--JPEG_TURBO_POST_INSTALL_TARGET_HOOKS += JPEG_TURBO_REMOVE_USELESS_TOOLS
-+ifneq ($(BR2_PACKAGE_JPEG_TURBO_TOOLS),y)
-+	JPEG_TURBO_POST_INSTALL_TARGET_HOOKS += JPEG_TURBO_REMOVE_TOOLS
-+endif
- 
- $(eval $(cmake-package))
-diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
-index 3d0fea83b182..11ea01daf35b 100644
---- a/package/jpeg/Config.in
-+++ b/package/jpeg/Config.in
-@@ -38,6 +38,15 @@ config BR2_PACKAGE_JPEG_TURBO
- 
- 	  http://www.libjpeg-turbo.org
- 
-+config BR2_PACKAGE_JPEG_TURBO_TOOLS
-+	bool "jpeg-turbo tools"
-+	depends on BR2_PACKAGE_JPEG_TURBO
-+	default n
-+	help
-+	  Libjpeg-turbo can also provide some tools like  cjpeg,
-+	  djpeg, jpegtran, rdjpgcom, tjbench and wrjpgcom.
-+	  If you want to keep them enable this option.
+diff --git a/package/p7zip/0001-CVE-2016-9296.patch b/package/p7zip/0001-CVE-2016-9296.patch
+new file mode 100644
+index 0000000000..6e6fc9f58f
+--- /dev/null
++++ b/package/p7zip/0001-CVE-2016-9296.patch
+@@ -0,0 +1,25 @@
++From: Robert Luberda <robert@debian.org>
++Date: Sat, 19 Nov 2016 08:48:08 +0100
++Subject: Fix nullptr dereference (CVE-2016-9296)
 +
- # libjpeg from br2-external trees, if any
- source "$BR2_BASE_DIR/.br2-external.in.jpeg"
++Patch taken from https://sourceforge.net/p/p7zip/bugs/185/
++
++Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
++---
++ CPP/7zip/Archive/7z/7zIn.cpp | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/CPP/7zip/Archive/7z/7zIn.cpp b/CPP/7zip/Archive/7z/7zIn.cpp
++index b0c6b98..7c6dde2 100644
++--- a/CPP/7zip/Archive/7z/7zIn.cpp
+++++ b/CPP/7zip/Archive/7z/7zIn.cpp
++@@ -1097,7 +1097,8 @@ HRESULT CInArchive::ReadAndDecodePackedStreams(
++       if (CrcCalc(data, unpackSize) != folders.FolderCRCs.Vals[i])
++         ThrowIncorrect();
++   }
++-  HeadersSize += folders.PackPositions[folders.NumPackStreams];
+++  if (folders.PackPositions)
+++      HeadersSize += folders.PackPositions[folders.NumPackStreams];
++   return S_OK;
++ }
++ 
+diff --git a/package/p7zip/p7zip.mk b/package/p7zip/p7zip.mk
+index ff0dd01e02..66d3198c17 100644
+--- a/package/p7zip/p7zip.mk
++++ b/package/p7zip/p7zip.mk
+@@ -10,6 +10,9 @@ P7ZIP_SITE = http://downloads.sourceforge.net/project/p7zip/p7zip/$(P7ZIP_VERSIO
+ P7ZIP_LICENSE = LGPL-2.1+ with unRAR restriction
+ P7ZIP_LICENSE_FILES = DOC/License.txt
  
--- 
-2.20.1
++# 0001-CVE-2016-9296.patch
++P7ZIP_IGNORE_CVES += CVE-2016-9296
++
+ # p7zip buildsystem is a mess: it plays dirty tricks with CFLAGS and
+ # CXXFLAGS, so we can't pass them. Instead, it accepts ALLFLAGS_C
+ # and ALLFLAGS_CPP as variables to pass the CFLAGS and CXXFLAGS.
