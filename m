@@ -1,54 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Apr 2020 23:14:45 +0200
-Subject: [Buildroot] [git commit] package/omniorb: bump version to 4.2.4
-Message-ID: <20200412210109.CAA668E91A@busybox.osuosl.org>
+Date: Sun, 12 Apr 2020 23:13:53 +0200
+Subject: [Buildroot] [git commit] package/msmtp: bump version to 1.8.7
+Message-ID: <20200412210109.9B9338E919@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56caec96da46c092514637c8b32f882da7c97e2a
+commit: https://git.buildroot.net/buildroot/commit/?id=142b39da706b1ab3c7cd769e1dabd7a6b85cc8a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://sourceforge.net/projects/omniorb/files/omniORB/omniORB-4.2.4/
-
-Added md5 hash provided by upstream.
+Changelog:
+https://github.com/marlam/msmtp-mirror/blob/master/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/omniorb/omniorb.hash | 7 ++++---
- package/omniorb/omniorb.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/msmtp/msmtp.hash | 4 ++--
+ package/msmtp/msmtp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/omniorb/omniorb.hash b/package/omniorb/omniorb.hash
-index 9911c4d6af..5ac8614689 100644
---- a/package/omniorb/omniorb.hash
-+++ b/package/omniorb/omniorb.hash
-@@ -1,7 +1,8 @@
--# From http://sourceforge.net/projects/omniorb/files/omniORB/omniORB-4.2.3/
--sha1	0af1b8c181088c096de237315cce7b52fc457c78  omniORB-4.2.3.tar.bz2
-+# From https://sourceforge.net/projects/omniorb/files/omniORB/omniORB-4.2.4/
-+sha1 a6f3c8e96fc09c4ef8d75bd495bbc5256a4773ee  omniORB-4.2.4.tar.bz2
-+md5 de961e8aa29f3eed95ea40a94c1cccdf  omniORB-4.2.4.tar.bz2
+diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
+index 9849c547c2..b2aa47cd8f 100644
+--- a/package/msmtp/msmtp.hash
++++ b/package/msmtp/msmtp.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking signature
+-# https://marlam.de/msmtp/releases/msmtp-1.8.6.tar.xz.sig
+-sha256	6625f147430c65ba8527f52c4fe5d4d33552d3c0fb6d793ba7df819a3b3042e1	msmtp-1.8.6.tar.xz
++# https://marlam.de/msmtp/releases/msmtp-1.8.7.tar.xz.sig
++sha256	9a53bcdc244ec5b1a806934ecc7746d9d09db581f587bedf597e9da2f48c51f1	msmtp-1.8.7.tar.xz
  
- # Locally generated
--sha256	26412ac08ab495ce5a6a8e40961fa20b7c43f623c6c26b616d210ca32f078bca  omniORB-4.2.3.tar.bz2
-+sha256	28c01cd0df76c1e81524ca369dc9e6e75f57dc70f30688c99c67926e4bdc7a6f  omniORB-4.2.4.tar.bz2
- sha256	126647a6ee062fe46f8f3766965dc62e031c0a31238a347e4bc07aab2ac1e2a7  COPYING
- sha256	eaf5b13ffd5355da7c0b83074e4b798152ff7086c95c4f3045122a06e2673eb9  COPYING.LIB
-diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
-index b5caf6ff8b..4ecbb9d2c9 100644
---- a/package/omniorb/omniorb.mk
-+++ b/package/omniorb/omniorb.mk
+ # Hash for license file:
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index 1518aa10e4..8c260471e6 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OMNIORB_VERSION = 4.2.3
-+OMNIORB_VERSION = 4.2.4
- OMNIORB_SITE = http://downloads.sourceforge.net/project/omniorb/omniORB/omniORB-$(OMNIORB_VERSION)
- OMNIORB_SOURCE = omniORB-$(OMNIORB_VERSION).tar.bz2
- OMNIORB_INSTALL_STAGING = YES
+-MSMTP_VERSION = 1.8.6
++MSMTP_VERSION = 1.8.7
+ MSMTP_SITE = https://marlam.de/msmtp/releases
+ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
