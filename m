@@ -1,44 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Apr 2020 12:36:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/msgpack: bump version to 3.2.1
-Message-ID: <20200412103621.1287449-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 12 Apr 2020 12:51:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iwd: fix build with gcc 4.8
+In-Reply-To: <20200412110553.7809e91c@windsurf.home>
+References: <20200411213318.972221-1-fontaine.fabrice@gmail.com>
+ <20200412110553.7809e91c@windsurf.home>
+Message-ID: <CAPi7W80PFd99Jr-+8YqU38Hn8k_sLBhooOWvWsobc7zKZPRNMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://github.com/msgpack/msgpack-c/blob/master/CHANGELOG.md
+Le dim. 12 avr. 2020 ? 11:05, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Sat, 11 Apr 2020 23:33:18 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > +SOL_NETLINK is used since commit
+> > +87a198111af1ea67053895f7435fb99e3cdd2159 resulting in the following
+> > +build failure with gcc 4.8:
+> > +
+> > +src/frame-xchg.c: In function 'frame_watch_group_io_read':
+> > +src/frame-xchg.c:328:27: error: 'SOL_NETLINK' undeclared (first use in this function)
+> > +   if (cmsg->cmsg_level != SOL_NETLINK)
+>
+> I don't understand a failure like this can be related to the compiler
+> version. Could you clarify?
+My bad, you're right, the issue is due to glibc that doesn't support
+SOL_NETLINK before version 2.24 and
+https://github.com/bminor/glibc/commit/f9b437d5efce93800b51ad2a437c8b1c9616bf80#diff-9256189095e7df9c0688498779241729
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/msgpack/msgpack.hash | 2 +-
- package/msgpack/msgpack.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
-index 6b3a7ef134..3829a70222 100644
---- a/package/msgpack/msgpack.hash
-+++ b/package/msgpack/msgpack.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  ff865a36bad5c72b8e7ebc4b7cf5f27a820fce4faff9c571c1791e3728355a39  msgpack-3.2.0.tar.gz
-+sha256  464f46744a6be778626d11452c4db3c2d09461080c6db42e358e21af19d542f6  msgpack-3.2.1.tar.gz
- sha256  664550b43996452a5a2c7471bb0ff77185a58c69ccafa60f983dc4c162e1ee22  COPYING
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
-index 1e13464ca1..81670deddc 100644
---- a/package/msgpack/msgpack.mk
-+++ b/package/msgpack/msgpack.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MSGPACK_VERSION = 3.2.0
-+MSGPACK_VERSION = 3.2.1
- MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
- MSGPACK_LICENSE = BSL-1.0
- MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
--- 
-2.25.0
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
