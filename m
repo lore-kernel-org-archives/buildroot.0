@@ -1,70 +1,42 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 12 Apr 2020 18:35:25 +0200
-Subject: [Buildroot] [PATCH v1] package/assimp: fix static only compile
-Message-ID: <20200412163525.21139-1-ps.report@gmx.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 12 Apr 2020 19:40:02 +0300
+Subject: [Buildroot] [PATCH] package/can-utils: bump to version 2020.02.04
+Message-ID: <277bf7cab1292b4a03da8fd4aa5ba724575dfaa4.1586709602.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch to disable internal dynamic zlib library building, fixes
-compile failure for static only toolchains (and assimp links
-against the static one).
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/7c2db184ee200d1719308f38f42382bb39d8d5c6
-
-  [13%] Linking C shared library ../../lib/libzlib.so
-  .../arm-buildroot-linux-uclibcgnueabi/bin/ld: .../host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(__uClibc_main.os): in function `__uClibc_fini':
-  __uClibc_main.c:(.text+0x15c): undefined reference to `__fini_array_start'
-  .../arm-buildroot-linux-uclibcgnueabi/bin/ld: __uClibc_main.c:(.text+0x160): undefined reference to `__fini_array_end'
-  .../arm-buildroot-linux-uclibcgnueabi/bin/ld: final link failed: bad value
-  collect2: error: ld returned 1 exit status
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...lib-disable-dynamic-library-building.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch
+ package/can-utils/can-utils.hash | 2 +-
+ package/can-utils/can-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch b/package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch
-new file mode 100644
-index 0000000000..8661311be5
---- /dev/null
-+++ b/package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch
-@@ -0,0 +1,31 @@
-+From 2b8684aded0c383be64bac0fa59e39870252963f Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 12 Apr 2020 18:19:13 +0200
-+Subject: [PATCH] contrib/zlib: disable dynamic library building
-+
-+Fixes compile failure for static only toolchains (and assimp
-+links against the static one).
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ contrib/zlib/CMakeLists.txt | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/contrib/zlib/CMakeLists.txt b/contrib/zlib/CMakeLists.txt
-+index 9d1fcc94..78346233 100644
-+--- a/contrib/zlib/CMakeLists.txt
-++++ b/contrib/zlib/CMakeLists.txt
-+@@ -195,10 +195,7 @@ if(MINGW)
-+     set(ZLIB_DLL_SRCS ${CMAKE_CURRENT_BINARY_DIR}/zlib1rc.obj)
-+ endif(MINGW)
-+ 
-+-add_library(zlib SHARED ${ZLIB_SRCS} ${ZLIB_ASMS} ${ZLIB_DLL_SRCS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})
-+ add_library(zlibstatic STATIC ${ZLIB_SRCS} ${ZLIB_ASMS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})
-+-set_target_properties(zlib PROPERTIES DEFINE_SYMBOL ZLIB_DLL)
-+-set_target_properties(zlib PROPERTIES SOVERSION 1)
-+ 
-+ INSTALL( TARGETS zlibstatic
-+          LIBRARY DESTINATION ${ASSIMP_LIB_INSTALL_DIR}
-+-- 
-+2.26.0
-+
+diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
+index adbf5b0bcac2..f76576773a74 100644
+--- a/package/can-utils/can-utils.hash
++++ b/package/can-utils/can-utils.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  ea0f96a02af37f16713284c7bdccdbae716d9bcb979ccfb51185d696c31f9ecf  can-utils-2020.02.0.tar.gz
++sha256  a766aad89955b9cfcca27f61ef988fa169565c3657d2789808c0f33a7afa23c8  can-utils-2020.02.04.tar.gz
+ sha256  c3dc748f5e725cf5ed89784fe78e4ff1b05d309bf1e7ade4c572e8fde1b8406c  LICENSES/BSD-3-Clause
+ sha256  995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  LICENSES/GPL-2.0-only.txt
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+index cd4dba56167d..5227bf4852a0 100644
+--- a/package/can-utils/can-utils.mk
++++ b/package/can-utils/can-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CAN_UTILS_VERSION = 2020.02.0
++CAN_UTILS_VERSION = 2020.02.04
+ CAN_UTILS_SITE = $(call github,linux-can,can-utils,v$(CAN_UTILS_VERSION))
+ CAN_UTILS_LICENSE = BSD-3-Clause or GPL-2.0
+ CAN_UTILS_LICENSE_FILES = LICENSES/BSD-3-Clause LICENSES/GPL-2.0-only.txt
 -- 
-2.26.0
+2.25.1
