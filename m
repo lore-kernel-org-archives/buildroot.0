@@ -1,53 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Apr 2020 21:55:59 +0200
-Subject: [Buildroot] [git commit] boot/uboot: bump to version 2020.04
-Message-ID: <20200413194153.E7E658EA8A@busybox.osuosl.org>
+Date: Mon, 13 Apr 2020 21:56:00 +0200
+Subject: [Buildroot] [git commit] package/lldpd: bump to version 1.0.5
+Message-ID: <20200413194154.0E6B18EA8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02bddcea7d3d6d3c7ed822734e2b20e5ade71c8b
+commit: https://git.buildroot.net/buildroot/commit/?id=5591f639dc63598c46b3b6899f45003056e09887
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See https://lists.denx.de/pipermail/u-boot/2020-April/406522.html
+Add tarball signature information.
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Use https for site.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lldpd/lldpd.hash | 8 +++++---
+ package/lldpd/lldpd.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index ffc441d670..7a6f5053fd 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -41,7 +41,7 @@ choice
- 	  Select the specific U-Boot version you want to use
+diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
+index c12e004784..4283b4aec8 100644
+--- a/package/lldpd/lldpd.hash
++++ b/package/lldpd/lldpd.hash
+@@ -1,3 +1,5 @@
+-# Locally computed
+-sha256 5319bc032fabf1008d5d91e280276aa7f1bbfbb70129d8526cd4526d7c22724f  lldpd-1.0.4.tar.gz
+-sha256 0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
++# Locally computed after checking gpg key
++# https://media.luffy.cx/files/lldpd/lldpd-1.0.5.tar.gz.gpg
++# using key AEF2348766F371C689A7360095A42FE8353525F9
++sha256  2dd3b212f4dbabfcbb2794c0010b245f9f8e74b387984e757be6243a74c6cb99  lldpd-1.0.5.tar.gz
++sha256  0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
+diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
+index 264323a879..585d1ed7ba 100644
+--- a/package/lldpd/lldpd.mk
++++ b/package/lldpd/lldpd.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2020.01"
-+	bool "2020.04"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -89,7 +89,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2020.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2020.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index 6c17ef02b2..8274246cf6 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  aa453c603208b1b27bd03525775a7f79b443adec577fdc6e8f06974025a135f1  u-boot-2020.01.tar.bz2
-+sha256  fe732aaf037d9cc3c0909bad8362af366ae964bbdac6913a34081ff4ad565372  u-boot-2020.04.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+-LLDPD_VERSION = 1.0.4
+-LLDPD_SITE = http://media.luffy.cx/files/lldpd
++LLDPD_VERSION = 1.0.5
++LLDPD_SITE = https://media.luffy.cx/files/lldpd
+ LLDPD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_CHECK),check) \
+ 	host-pkgconf \
