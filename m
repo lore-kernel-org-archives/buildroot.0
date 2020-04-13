@@ -1,52 +1,46 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 13 Apr 2020 22:24:06 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/mfgtools: drop package
-In-Reply-To: <20200210162656.GD335587@p1g2.work>
-References: <20200109191020.1282319-1-joerg.krause@embedded.rocks>
- <20200109191020.1282319-2-joerg.krause@embedded.rocks>
- <20200210162656.GD335587@p1g2.work>
-Message-ID: <3e5e773be990132bab2d0067c5e2d69d02c8fe31.camel@embedded.rocks>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Apr 2020 22:24:29 +0200
+Subject: [Buildroot] [git commit] package/lsscsi: bump version to 0.31
+Message-ID: <20200413201030.D870B8EB2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+commit: https://git.buildroot.net/buildroot/commit/?id=710bcdabfa498ee1d25676ef497d08d4f6f7922a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 2020-02-10 at 17:26 +0100, Gary Bisson wrote:
-> Hi Jorge,
-> 
-> On Thu, Jan 09, 2020 at 08:10:20PM +0100, J?rg Krause wrote:
-> > As suggested in [1] the package mfgtools is dropped.
-> > 
-> > NXP did replaced the old mfgtools with the version number 0.2
-> > enterily with the uuu (Universal Update Utility) which is somehow
-> > named mfgtools 3.0 although the version scheme for the uuu tool is
-> > 1.xx.yyy.
-> > 
-> > As the old mfgtools scripts are not compatible with the new uuu
-> > tool and as imx-uuu goes hand-in-hand with imx-uuc, which we ship
-> > for the target, the mfgtools package is dropped.
-> 
-> I know I'm the one who pushed for that commit to happen but now want to
-> mitigate the claim above.
+Changelog: http://sg.danny.cz/scsi/lsscsi.ChangeLog
 
-Thanks for your feedback and sorry for my late reply.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998 at free.fr: two spaces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/lsscsi/lsscsi.hash | 4 ++--
+ package/lsscsi/lsscsi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> True uuu depends on imx-uuc and mfgtools (1st of its name) too. BUT by
-> looking at imx-uuc, the two use cases are separated into 2 different
-> files:
-> - uu.c: daemon that uses utp protocol to communicate with host
-> - ufb.c: daemon that uses fastboot protocol to communicate with host
-
-In fact, I am using mfgtools without imx-uuc, but with U-Boot.
-
-> So I think it should be safe to have both host clients co-existing for
-> now. Maybe uu.c will be removed at some point in the future but I guess
-> NXP will leave it there for a while.
-
-So, lets just update mfgtools to latest version (1.3.154), right?
-
-Best regards
-J?rg Krause
+diff --git a/package/lsscsi/lsscsi.hash b/package/lsscsi/lsscsi.hash
+index fe1bc5d8b4..d444c7e059 100644
+--- a/package/lsscsi/lsscsi.hash
++++ b/package/lsscsi/lsscsi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 619a2187405f02c5f57682f3478bffc75326803cd08839e39d434250c5518b15  lsscsi-0.30.tgz
+-sha256 dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
++sha256  12bf1973014803c6fd6d547e7594a4c049f0eef3bf5d22190d4be29d7c09f3ca  lsscsi-0.31.tgz
++sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+diff --git a/package/lsscsi/lsscsi.mk b/package/lsscsi/lsscsi.mk
+index 70c5226d9b..e9a5255397 100644
+--- a/package/lsscsi/lsscsi.mk
++++ b/package/lsscsi/lsscsi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LSSCSI_VERSION = 0.30
++LSSCSI_VERSION = 0.31
+ LSSCSI_SOURCE = lsscsi-$(LSSCSI_VERSION).tgz
+ LSSCSI_SITE = http://sg.danny.cz/scsi
+ LSSCSI_LICENSE = GPL-2.0+
