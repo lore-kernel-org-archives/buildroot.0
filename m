@@ -1,94 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Apr 2020 22:45:26 +0200
-Subject: [Buildroot] [PATCH 3/3] package/sdparm: bump version to 1.11
-In-Reply-To: <20200413125305.881053-3-bernd.kuhls@t-online.de>
-References: <20200413125305.881053-1-bernd.kuhls@t-online.de>
- <20200413125305.881053-3-bernd.kuhls@t-online.de>
-Message-ID: <20200413204526.GA5853@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 13 Apr 2020 22:49:11 +0200
+Subject: [Buildroot] [git commit] package/privoxy: bump to version 3.0.28
+Message-ID: <20200413203522.382618EB6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=eb0cd9cf120892e3efc865be25e95d67ee580ca3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-13 14:53 +0200, Bernd Kuhls spake thusly:
-> Release notes: https://www.spinics.net/lists/linux-scsi/msg139073.html
-> 
-> Updated license according to release notes:
-> 
->    - update BSD license from 3 to 2 clause aka FreeBSD
->      license (without reference to FreeBSD project)
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/sdparm/sdparm.hash | 2 +-
->  package/sdparm/sdparm.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/sdparm/sdparm.hash b/package/sdparm/sdparm.hash
-> index 22d6b5b87b..a44d94d261 100644
-> --- a/package/sdparm/sdparm.hash
-> +++ b/package/sdparm/sdparm.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  7dc9e148cef22744e00809dad21b59ac544e3615001bc1b2399978f73e1d58ca  sdparm-1.10.tar.xz
-> +sha256  483931fc636794d898549706ae247d7cfdd047a9b517b7d856ff102e386112db  sdparm-1.11.tar.xz
->  sha256  4f98444e14adb18a94a65c3ded5f0dad42d382c6a2288b593a2d5bd5ecc4f46d  COPYING
+- Update indentation of hash file (two spaces)
+- Add sha256 hash
 
-So we have a license change, and the license file does not change? That
-shall raise an eyebrow... See below...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/privoxy/privoxy.hash | 7 ++++---
+ package/privoxy/privoxy.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-> diff --git a/package/sdparm/sdparm.mk b/package/sdparm/sdparm.mk
-> index b9fac518c8..59a32820ff 100644
-> --- a/package/sdparm/sdparm.mk
-> +++ b/package/sdparm/sdparm.mk
-> @@ -4,10 +4,10 @@
->  #
->  ################################################################################
->  
-> -SDPARM_VERSION = 1.10
-> +SDPARM_VERSION = 1.11
->  SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tar.xz
->  SDPARM_SITE = http://sg.danny.cz/sg/p
-> -SDPARM_LICENSE = BSD-3-Clause
-> +SDPARM_LICENSE = BSD-2-Clause
->  SDPARM_LICENSE_FILES = COPYING
-
-This is not good. The COPYING still contains the text of BSD-3-clause.
-
-There is however a BSD-LICENSE file, which appropriately contains the
-BSD-2-clause text.
-
-Can you please:
-
- 1. see with upstream whether they still need COPYING, and if yes to
-    what files it still applies,
-
- 2. folowup here with an updated patch, and the resolution in the commit
-    log ?
-
-Thanks you!
-
-In the meantime, I've marked the patch as Changes Requested in patchwork.
-
-Regards,
-Yann E. MORIN.
-
->  ifeq ($(BR2_PACKAGE_SG3_UTILS),y)
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
+index 9cf08f1163..84daf5c611 100644
+--- a/package/privoxy/privoxy.hash
++++ b/package/privoxy/privoxy.hash
+@@ -1,5 +1,6 @@
+-# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.26%20%28stable%29/
+-md5 8a1c842112ccea68c19b7ceb4a0e999f  privoxy-3.0.26-stable-src.tar.gz
+-sha1 b646624006225979f83453ba542e448667f45998  privoxy-3.0.26-stable-src.tar.gz
++# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.28%20%28stable%29/
++md5  c7e8900d5aff33d9a5fc37ac28154f21  privoxy-3.0.28-stable-src.tar.gz
++sha1  fa8f9f355a48afe94afcaef31c5404b2294c1043  privoxy-3.0.28-stable-src.tar.gz
+ # Locally computed
++sha256  b5d78cc036aaadb3b7cf860e9d598d7332af468926a26e2d56167f1cb6f2824a  privoxy-3.0.28-stable-src.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
+index df0e7372ac..f12d015efa 100644
+--- a/package/privoxy/privoxy.mk
++++ b/package/privoxy/privoxy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PRIVOXY_VERSION = 3.0.26
++PRIVOXY_VERSION = 3.0.28
+ PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
+ PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
+ # configure not shipped
