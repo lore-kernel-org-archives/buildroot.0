@@ -1,25 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Apr 2020 21:57:11 +0200
-Subject: [Buildroot] [PATCH] package/libkrb5: bump to 1.18.1
-In-Reply-To: <20200413160503.3493-1-nerv@dawncrow.de>
-References: <20200413160503.3493-1-nerv@dawncrow.de>
-Message-ID: <20200413215711.6fe9671d@windsurf.home>
+Date: Mon, 13 Apr 2020 21:57:15 +0200
+Subject: [Buildroot] [PATCH] package/lldpd: bump to version 1.0.5
+In-Reply-To: <449140f382302aa015df218429e2e071b6ed55ba.1586796897.git.baruch@tkos.co.il>
+References: <449140f382302aa015df218429e2e071b6ed55ba.1586796897.git.baruch@tkos.co.il>
+Message-ID: <20200413215715.5e69b70e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Apr 2020 18:05:03 +0200
-Andr? Hentschel <nerv@dawncrow.de> wrote:
+On Mon, 13 Apr 2020 19:54:57 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-> The hash of the NOTICE file has changed due to update in copyright year
+> Add tarball signature information.
 > 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> Use https for site.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/libkrb5/libkrb5.hash | 4 ++--
->  package/libkrb5/libkrb5.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/lldpd/lldpd.hash | 8 +++++---
+>  package/lldpd/lldpd.mk   | 4 ++--
+>  2 files changed, 7 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
