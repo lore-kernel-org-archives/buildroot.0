@@ -1,44 +1,144 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Apr 2020 20:19:12 +0300
-Subject: [Buildroot] [PATCH 1/2] package/skalibs: bump to version 2.9.2.1
-Message-ID: <020235cf3f45c498c2d5ce483d8efef08a9a1709.1586798353.git.baruch@tkos.co.il>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 13 Apr 2020 12:29:58 -0500
+Subject: [Buildroot] [[RFC]] RFC: switch selinux to use project release date
+ instead of version
+Message-ID: <20200413172958.55199-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update license hash; copyright year update.
+ - example shows conversion of libselinux and libsepol using version
+ - adapts patch paths and legal-info path changes
 
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+NOTE requires first applying http://patchwork.ozlabs.org/project/buildroot/patch/20200204103322.428413-1-aduskett at gmail.com/
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/skalibs/skalibs.hash | 4 ++--
- package/skalibs/skalibs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libselinux/0001-fix-musl-build.patch              | 6 +++---
+ ...ot-use-PYCEXT-and-rely-on-the-installed-file-nam.patch | 8 ++++----
+ ...3-fix-building-against-musl-and-uclibc-libraries.patch | 8 ++++----
+ package/libselinux/libselinux.hash                        | 8 ++++----
+ package/libselinux/libselinux.mk                          | 8 +++++---
+ package/libsepol/libsepol.mk                              | 4 ++--
+ 6 files changed, 22 insertions(+), 20 deletions(-)
 
-diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
-index bb5a60212f90..9d9505ed1095 100644
---- a/package/skalibs/skalibs.hash
-+++ b/package/skalibs/skalibs.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256 d3b204afc462b9659e0c16f6df1c796e7612534f537eec053529f67ddcd086a5  skalibs-2.9.1.0.tar.gz
--sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
-+sha256  250b99b53dd413172db944b31c1b930aa145ac79fe6c5d7e6869ef804228c539  skalibs-2.9.2.1.tar.gz
-+sha256  5443ac67e8d74ac614ced7bc64211ce90ccedb7778a68bfe9e68a8b234c9503e  COPYING
-diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
-index 8b995f796161..1c73f26fe777 100644
---- a/package/skalibs/skalibs.mk
-+++ b/package/skalibs/skalibs.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libselinux/0001-fix-musl-build.patch b/package/libselinux/0001-fix-musl-build.patch
+index 44189e6400..dbe88b4fc2 100644
+--- a/package/libselinux/0001-fix-musl-build.patch
++++ b/package/libselinux/0001-fix-musl-build.patch
+@@ -14,10 +14,10 @@ completely written from scratch, and non-optimal.
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ [Updated for 3.0]
+ Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+-diff --git a/src/booleans.c b/src/booleans.c
++diff --git a/libselinux/src/booleans.c b/libselinux/src/booleans.c
+ index ffa8d26..8569002 100644
+---- a/src/booleans.c
+-+++ b/src/booleans.c
++--- a/libselinux/src/booleans.c
+++++ b/libselinux/src/booleans.c
+ @@ -65,6 +65,14 @@ int security_get_boolean_names(char ***names, int *len)
+  		goto bad;
+  	}
+diff --git a/package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch b/package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
+index d2acbc2b7d..9b021c34ed 100644
+--- a/package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
++++ b/package/libselinux/0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
+@@ -20,13 +20,13 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ [Refreshed for 3.0]
+ Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+ ---
+- src/Makefile | 3 +--
++ libselinux/src/Makefile | 3 +--
+  1 file changed, 1 insertion(+), 2 deletions(-)
+ 
+-diff --git a/src/Makefile b/src/Makefile
++diff --git a/libselinux/src/Makefile b/libselinux/src/Makefile
+ index 4b6a4d4..7b14ef1 100644
+---- a/src/Makefile
+-+++ b/src/Makefile
++--- a/libselinux/src/Makefile
+++++ b/libselinux/src/Makefile
+ @@ -15,7 +15,6 @@ INCLUDEDIR ?= $(PREFIX)/include
+  PYINC ?= $(shell $(PKG_CONFIG) --cflags $(PYPREFIX))
+  PYLIBS ?= $(shell $(PKG_CONFIG) --libs $(PYPREFIX))
+diff --git a/package/libselinux/0003-fix-building-against-musl-and-uclibc-libraries.patch b/package/libselinux/0003-fix-building-against-musl-and-uclibc-libraries.patch
+index 21cac0f153..19e9ee68b1 100644
+--- a/package/libselinux/0003-fix-building-against-musl-and-uclibc-libraries.patch
++++ b/package/libselinux/0003-fix-building-against-musl-and-uclibc-libraries.patch
+@@ -10,13 +10,13 @@ to fail.
+ Add the FTS_LDLIBS variable to the LDLIBS variable in utils/Makefile to fix
+ compiling against uClibc and musl.
+ ---
+- libselinux/utils/Makefile | 2 +-
++ libselinux/libselinux/utils/Makefile | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-diff --git a/utils/Makefile b/utils/Makefile
++diff --git a/libselinux/utils/Makefile b/libselinux/utils/Makefile
+ index 36150638..a5632b7c 100644
+---- a/utils/Makefile
+-+++ b/utils/Makefile
++--- a/libselinux/utils/Makefile
+++++ b/libselinux/utils/Makefile
+ @@ -45,7 +45,7 @@ endif
+  
+  override CFLAGS += -I../include -D_GNU_SOURCE $(DISABLE_FLAGS) $(PCRE_CFLAGS)
+diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
+index d1b4210483..8ec2cbb9f1 100644
+--- a/package/libselinux/libselinux.hash
++++ b/package/libselinux/libselinux.hash
+@@ -1,5 +1,5 @@
+-# From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 2ea2b30f671dae9d6b1391cbe8fb2ce5d36a3ee4fb1cd3c32f0d933c31b82433 libselinux-3.0.tar.gz
+-
++# Generated locally as upstream releases in artifact
++# files under a overall YYYYMMDD dated selinux release
++sha256 4cc134210d8cca6c410b7b8c91993e10c6d5b077102ed27e6976bb6d9e483f0d libselinux-20191204.tar.gz
+ # Hash for license file
+-sha256 86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364 LICENSE
++sha256 86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364 libselinux/LICENSE
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 5f87b5bc90..6b004e34be 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -4,15 +4,17 @@
  #
  ################################################################################
  
--SKALIBS_VERSION = 2.9.1.0
-+SKALIBS_VERSION = 2.9.2.1
- SKALIBS_SITE = http://skarnet.org/software/skalibs
- SKALIBS_LICENSE = ISC
- SKALIBS_LICENSE_FILES = COPYING
+-LIBSELINUX_VERSION = 3.0
+-LIBSELINUX_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
++LIBSELINUX_VERSION = 20191204
++LIBSELINUX_SITE = $(call github,SELinuxProject,selinux,$(LIBSELINUX_VERSION))
+ LIBSELINUX_LICENSE = Public Domain
+-LIBSELINUX_LICENSE_FILES = LICENSE
++LIBSELINUX_LICENSE_FILES = libselinux/LICENSE
+ 
+ LIBSELINUX_DEPENDENCIES = $(BR2_COREUTILS_HOST_DEPENDENCY) libsepol pcre
+ 
+ LIBSELINUX_INSTALL_STAGING = YES
+ 
++LIBSELINUX_SUBDIR = $(@D)/$(LIBSELINUX_NAME)
++
+ # Set SHLIBDIR to /usr/lib so it has the same value than LIBDIR, as a result
+ # we won't have to use a relative path in 0002-revert-ln-relative.patch
+ LIBSELINUX_MAKE_OPTS = \
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index 62b0744aa3..d8d8bdae86 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSEPOL_VERSION = 2.9
+-LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
++LIBSEPOL_VERSION = $(LIBSELINUX_VERSION)
++LIBSEPOL_SITE = $(call github,SELinuxProject,selinux,$(LIBSELINUX_VERSION))
+ LIBSEPOL_LICENSE = LGPL-2.1+
+ LIBSEPOL_LICENSE_FILES = COPYING
+ 
 -- 
-2.25.1
+2.17.1
