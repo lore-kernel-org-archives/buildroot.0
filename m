@@ -1,53 +1,42 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 13 Apr 2020 15:01:16 +0200
-Subject: [Buildroot] [PATCH v1] package/assimp: fix static only compile
-In-Reply-To: <20200412232237.4bf4011f@windsurf.home>
-References: <20200412163525.21139-1-ps.report@gmx.net>
- <20200412232237.4bf4011f@windsurf.home>
-Message-ID: <20200413150116.1616f49d@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 13 Apr 2020 15:05:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/unrar: bump version to 5.9.2
+Message-ID: <20200413130551.885399-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Release notes: https://www.rarlab.com/rarnew.htm
 
-On Sun, 12 Apr 2020 23:22:37 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/unrar/unrar.hash | 2 +-
+ package/unrar/unrar.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> On Sun, 12 Apr 2020 18:35:25 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > Add patch to disable internal dynamic zlib library building, fixes
-> > compile failure for static only toolchains (and assimp links
-> > against the static one).
-> >
-> > Fixes:
-> >
-> >   http://autobuild.buildroot.net/results/7c2db184ee200d1719308f38f42382bb39d8d5c6
-> >
-> >   [13%] Linking C shared library ../../lib/libzlib.so
-> >   .../arm-buildroot-linux-uclibcgnueabi/bin/ld: .../host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(__uClibc_main.os): in function `__uClibc_fini':
-> >   __uClibc_main.c:(.text+0x15c): undefined reference to `__fini_array_start'
-> >   .../arm-buildroot-linux-uclibcgnueabi/bin/ld: __uClibc_main.c:(.text+0x160): undefined reference to `__fini_array_end'
-> >   .../arm-buildroot-linux-uclibcgnueabi/bin/ld: final link failed: bad value
-> >   collect2: error: ld returned 1 exit status
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  ...lib-disable-dynamic-library-building.patch | 31 +++++++++++++++++++
-> >  1 file changed, 31 insertions(+)
-> >  create mode 100644 package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch
->
-> Applied to master, thanks. I assume you have submitted the patch
-> upstream :-)
-
-Yep, just done (see [1])...
-
-Regards,
-Peter
-
-[1] https://github.com/assimp/assimp/pull/3146
-
->
-> Thomas
+diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
+index f688a4e364..86549b4ea7 100644
+--- a/package/unrar/unrar.hash
++++ b/package/unrar/unrar.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	3591685c8f5bbcb0be09de3d0a0544adb88966b9cccb80986f6cd2b534fd91a6	unrarsrc-5.8.3.tar.gz
++sha256	73d3baf18cf0a197976af2794a848893c35e7d42cee0ff364c89d2e476ebdaa6	unrarsrc-5.9.2.tar.gz
+ sha256	6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a	license.txt
+diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
+index cdaff26988..5c6f4b58da 100644
+--- a/package/unrar/unrar.mk
++++ b/package/unrar/unrar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UNRAR_VERSION = 5.8.3
++UNRAR_VERSION = 5.9.2
+ UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
+ UNRAR_SITE = http://www.rarlab.com/rar
+ UNRAR_LICENSE = unrar
+-- 
+2.25.0
