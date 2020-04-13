@@ -1,44 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Apr 2020 10:32:34 +0200
-Subject: [Buildroot] [git commit] package/vnstat: bump version to 2.6
-Message-ID: <20200413083634.119778E9BE@busybox.osuosl.org>
+Date: Mon, 13 Apr 2020 10:50:31 +0200
+Subject: [Buildroot] [git commit] package/strace: bump to version 5.6
+Message-ID: <20200413083634.538518E967@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4b188e1d40f99cf66eb5690a9edcc90b1c693d1
+commit: https://git.buildroot.net/buildroot/commit/?id=5234acc639034c3fd3ab76908fd06471f73129c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://humdi.net/vnstat/CHANGES
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vnstat/vnstat.hash | 2 +-
- package/vnstat/vnstat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/strace/strace.hash | 4 ++--
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
-index 94b4adc40b..6934c569b2 100644
---- a/package/vnstat/vnstat.hash
-+++ b/package/vnstat/vnstat.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 a0955999abd56d5463d257ffdccc9b1e9ad9ea504de81e64ba4c197f1245abaa  vnstat-2.4.tar.gz
-+sha256 89276e0a7281943edb554b874078278ad947dc312938a2451e03eb80679f7ff7  vnstat-2.6.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
-index f0ef1cc69d..be1b75a6b3 100644
---- a/package/vnstat/vnstat.mk
-+++ b/package/vnstat/vnstat.mk
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index 5b645ebe7e..720f358c5b 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/5.5/strace-5.5.tar.xz.asc
+-sha256  9f58958c8e59ea62293d907d10572e352b582bd7948ed21aa28ebb47e5bf30ff  strace-5.5.tar.xz
++# https://strace.io/files/5.6/strace-5.6.tar.xz.asc
++sha256  189968eeae06ed9e20166ec55a830943c84374676a457c9fe010edc7541f1b01  strace-5.6.tar.xz
+ sha256  6370eb67db918210944a8511a6995ebe9567852f26b4f15a01e5c8cf2aef7c46  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 569a822e42..5c101419f4 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VNSTAT_VERSION = 2.4
-+VNSTAT_VERSION = 2.6
- VNSTAT_SITE = http://humdi.net/vnstat
- VNSTAT_LICENSE = GPL-2.0
- VNSTAT_LICENSE_FILES = COPYING
+-STRACE_VERSION = 5.5
++STRACE_VERSION = 5.6
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
