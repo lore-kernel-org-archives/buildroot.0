@@ -1,72 +1,82 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Apr 2020 22:12:02 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libva-utils: switch back to
- upstream-provided tarball
-In-Reply-To: <20200413134713.1120377-1-bernd.kuhls@t-online.de>
-References: <20200413134713.1120377-1-bernd.kuhls@t-online.de>
-Message-ID: <20200413201202.GY29898@scaer>
+Date: Mon, 13 Apr 2020 22:18:54 +0200
+Subject: [Buildroot] [git commit] package/libglfw: bump version to 3.3.2
+Message-ID: <20200413200524.85A8F8EB19@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=4aa6345bebce882dd4b3b2dc6e5ffe61440cf937
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-13 15:47 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Changelog: https://www.glfw.org/changelog.html
 
-Both patches applied to master. I just reordred them so the lib comes
-first, no particualr reasons, it jsut seems more logical in my twisted
-head. Tanks!
+Updated license hash due to upstream commit:
+https://github.com/glfw/glfw/commit/f764836e58ec47b7e105687630c75f8161ffcaa8
 
-Regards,
-Yann E. MORIN.
+xlib_libXi is now a mandatory dependency:
+https://github.com/glfw/glfw/commit/9cc83cf07f47ac8acf46ae12f0f9312fe39cfd6e
+https://github.com/glfw/glfw/commit/b383e70021bc875e6fb5c1a693e5aa85fbc160d5
 
-> ---
->  package/libva-utils/libva-utils.hash | 2 +-
->  package/libva-utils/libva-utils.mk   | 5 ++---
->  2 files changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-> index 4addb7be3a..f6b10f84fb 100644
-> --- a/package/libva-utils/libva-utils.hash
-> +++ b/package/libva-utils/libva-utils.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256 9cf35b971001e7143dda14207b6891c12619a72a2ab99a9133b3da5b9c4d97dd  libva-utils-2.7.1.tar.gz
-> +sha256 ffcd698a7d4312750d7c9338ba6b26774c7028ee6f9f3cbbf34c122c05bcea9a  libva-utils-2.7.1.tar.bz2
->  sha256 c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
-> diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-> index dee29c9891..cb1df66459 100644
-> --- a/package/libva-utils/libva-utils.mk
-> +++ b/package/libva-utils/libva-utils.mk
-> @@ -5,11 +5,10 @@
->  ################################################################################
->  
->  LIBVA_UTILS_VERSION = 2.7.1
-> -LIBVA_UTILS_SITE = $(call github,intel,libva-utils,$(LIBVA_UTILS_VERSION))
-> +LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
-> +LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
->  LIBVA_UTILS_LICENSE = MIT
->  LIBVA_UTILS_LICENSE_FILES = COPYING
-> -# github tarball does not include configure
-> -LIBVA_UTILS_AUTORECONF = YES
->  LIBVA_UTILS_DEPENDENCIES = host-pkgconf libva
->  
->  $(eval $(autotools-package))
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998 at free.fr: two spaces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libglfw/Config.in    | 1 +
+ package/libglfw/libglfw.hash | 4 ++--
+ package/libglfw/libglfw.mk   | 8 ++------
+ 3 files changed, 5 insertions(+), 8 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libglfw/Config.in b/package/libglfw/Config.in
+index 045bd269e4..06f4376453 100644
+--- a/package/libglfw/Config.in
++++ b/package/libglfw/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBGLFW
+ 	depends on BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXI
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
+ 	help
+diff --git a/package/libglfw/libglfw.hash b/package/libglfw/libglfw.hash
+index 6796b81368..c21a595bbc 100644
+--- a/package/libglfw/libglfw.hash
++++ b/package/libglfw/libglfw.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 81bf5fde487676a8af55cb317830703086bb534c53968d71936e7b48ee5a0f3e  libglfw-3.3.tar.gz
+-sha256 8ea14fdc7efee7fe53c79101b97049bd547dc6686cfa05df4f0686146a561423  LICENSE.md
++sha256  98768e12e615fbe9f3386f5bbfeb91b5a3b45a8c4c77159cef06b1f6ff749537  libglfw-3.3.2.tar.gz
++sha256  149704059b5d0bf551637e50042dd4de9c2cae921021f6636298911e3a5f9462  LICENSE.md
+diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
+index aac5b1799d..63d2a88bf8 100644
+--- a/package/libglfw/libglfw.mk
++++ b/package/libglfw/libglfw.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBGLFW_VERSION = 3.3
++LIBGLFW_VERSION = 3.3.2
+ LIBGLFW_SITE = $(call github,glfw,glfw,$(LIBGLFW_VERSION))
+ LIBGLFW_INSTALL_STAGING = YES
+ LIBGLFW_DEPENDENCIES = libgl xlib_libXcursor xlib_libXext \
+-	xlib_libXinerama xlib_libXrandr
++	xlib_libXi xlib_libXinerama xlib_libXrandr
+ LIBGLFW_LICENSE = Zlib
+ LIBGLFW_LICENSE_FILES = LICENSE.md
+ 
+@@ -17,10 +17,6 @@ LIBGLFW_CONF_OPTS += \
+ 	-DGLFW_BUILD_TESTS=OFF \
+ 	-DGLFW_BUILD_DOCS=OFF
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
+-LIBGLFW_DEPENDENCIES += xlib_libXi
+-endif
+-
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
+ LIBGLFW_DEPENDENCIES += xlib_libXxf86vm
+ endif
