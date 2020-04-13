@@ -1,30 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Apr 2020 21:57:00 +0200
-Subject: [Buildroot] [PATCH] package/libssh: security bump to version
- 0.9.4
-In-Reply-To: <9aa0bdcf9bae257961438cd369b273fade725f95.1586789244.git.baruch@tkos.co.il>
-References: <9aa0bdcf9bae257961438cd369b273fade725f95.1586789244.git.baruch@tkos.co.il>
-Message-ID: <20200413215700.4a6ab421@windsurf.home>
+Date: Mon, 13 Apr 2020 21:57:07 +0200
+Subject: [Buildroot] [PATCH] package/uboot-tools: bump to version 2020.04
+In-Reply-To: <1586792302-13887-2-git-send-email-pjtexier@koncepto.io>
+References: <1586792302-13887-1-git-send-email-pjtexier@koncepto.io>
+ <1586792302-13887-2-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20200413215707.615c6c8f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Apr 2020 17:47:24 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+On Mon, 13 Apr 2020 17:38:22 +0200
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-> Fixes CVE-2020-1730: Possible DoS in client and server when handling
-> AES-CTR keys with OpenSSL.
+> - Bump to version 2020.04
 > 
-> Format hash file with two spaces delimiter.
-> 
-> Cc: Scott Fan <fancp2007@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 > ---
->  package/libssh/libssh.hash | 4 ++--
->  package/libssh/libssh.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/uboot-tools/uboot-tools.hash | 2 +-
+>  package/uboot-tools/uboot-tools.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
