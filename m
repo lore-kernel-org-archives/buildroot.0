@@ -1,42 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Apr 2020 15:05:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/unrar: bump version to 5.9.2
-Message-ID: <20200413130551.885399-1-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 13 Apr 2020 16:09:52 +0300
+Subject: [Buildroot] [PATCH] package/grep: bump to version 3.4
+Message-ID: <94b6205c8d5c2b1e81cdd0c89415862ade6d349c.1586783392.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.rarlab.com/rarnew.htm
+Format hash file with two spaces delimiter.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/unrar/unrar.hash | 2 +-
- package/unrar/unrar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/grep/grep.hash | 6 +++---
+ package/grep/grep.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
-index f688a4e364..86549b4ea7 100644
---- a/package/unrar/unrar.hash
-+++ b/package/unrar/unrar.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	3591685c8f5bbcb0be09de3d0a0544adb88966b9cccb80986f6cd2b534fd91a6	unrarsrc-5.8.3.tar.gz
-+sha256	73d3baf18cf0a197976af2794a848893c35e7d42cee0ff364c89d2e476ebdaa6	unrarsrc-5.9.2.tar.gz
- sha256	6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a	license.txt
-diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
-index cdaff26988..5c6f4b58da 100644
---- a/package/unrar/unrar.mk
-+++ b/package/unrar/unrar.mk
+diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+index 4aa7b4ecb834..47bf550a2000 100644
+--- a/package/grep/grep.hash
++++ b/package/grep/grep.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature
+-# http://ftp.gnu.org/gnu/grep/grep-3.3.tar.xz.sig
++# http://ftp.gnu.org/gnu/grep/grep-3.4.tar.xz.sig
+ # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+-sha256 b960541c499619efd6afe1fa795402e4733c8e11ebf9fafccc0bb4bccdc5b514  grep-3.3.tar.xz
+-sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
++sha256  58e6751c41a7c25bfc6e9363a41786cff3ba5709cf11d5ad903cf7cce31cc3fb  grep-3.4.tar.xz
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index cc80553eb915..ef1bbb44879c 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UNRAR_VERSION = 5.8.3
-+UNRAR_VERSION = 5.9.2
- UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
- UNRAR_SITE = http://www.rarlab.com/rar
- UNRAR_LICENSE = unrar
+-GREP_VERSION = 3.3
++GREP_VERSION = 3.4
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
 -- 
-2.25.0
+2.25.1
