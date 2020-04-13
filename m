@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Apr 2020 10:51:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: bump version to 3.0.9.2
-In-Reply-To: <20200413073413.404330-1-bernd.kuhls@t-online.de>
-References: <20200413073413.404330-1-bernd.kuhls@t-online.de>
-Message-ID: <20200413105118.04c84c37@windsurf.home>
+Date: Mon, 13 Apr 2020 10:51:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/utf8proc: bump version to 2.5.0
+In-Reply-To: <20200413073844.407777-1-bernd.kuhls@t-online.de>
+References: <20200413073844.407777-1-bernd.kuhls@t-online.de>
+Message-ID: <20200413105121.5bfdabc4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Apr 2020 09:34:13 +0200
+On Mon, 13 Apr 2020 09:38:44 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Changelog:
-> http://git.videolan.org/?p=vlc/vlc-3.0.git;a=blob_plain;f=NEWS
+> Changelog: https://github.com/JuliaStrings/utf8proc/blob/master/NEWS.md
+> 
+> Updated license hash due to upstream commit:
+> https://github.com/JuliaStrings/utf8proc/commit/0dc0fcf8db4ae2ff1971d4f0f86a2d83b14d863d
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  .../0006-Don-t-assume-strerror_l-is-available.patch  |  6 +++---
->  package/vlc/vlc.hash                                 | 12 ++++++------
->  package/vlc/vlc.mk                                   |  2 +-
->  3 files changed, 10 insertions(+), 10 deletions(-)
+>  package/utf8proc/utf8proc.hash | 4 ++--
+>  package/utf8proc/utf8proc.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
