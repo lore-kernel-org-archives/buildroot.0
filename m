@@ -1,97 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Apr 2020 22:21:59 +0200
-Subject: [Buildroot] [git commit] package/alsa-lib: bump version to 1.2.2
-Message-ID: <20200413200934.345238EB27@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 13 Apr 2020 22:24:06 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/mfgtools: drop package
+In-Reply-To: <20200210162656.GD335587@p1g2.work>
+References: <20200109191020.1282319-1-joerg.krause@embedded.rocks>
+ <20200109191020.1282319-2-joerg.krause@embedded.rocks>
+ <20200210162656.GD335587@p1g2.work>
+Message-ID: <3e5e773be990132bab2d0067c5e2d69d02c8fe31.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0cf16ca0a41cce5d1afa9f837053f6756b241e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Gary,
 
-Changelog: https://www.alsa-project.org/wiki/Changes_v1.2.1.2_v1.2.2
+On Mon, 2020-02-10 at 17:26 +0100, Gary Bisson wrote:
+> Hi Jorge,
+> 
+> On Thu, Jan 09, 2020 at 08:10:20PM +0100, J?rg Krause wrote:
+> > As suggested in [1] the package mfgtools is dropped.
+> > 
+> > NXP did replaced the old mfgtools with the version number 0.2
+> > enterily with the uuu (Universal Update Utility) which is somehow
+> > named mfgtools 3.0 although the version scheme for the uuu tool is
+> > 1.xx.yyy.
+> > 
+> > As the old mfgtools scripts are not compatible with the new uuu
+> > tool and as imx-uuu goes hand-in-hand with imx-uuc, which we ship
+> > for the target, the mfgtools package is dropped.
+> 
+> I know I'm the one who pushed for that commit to happen but now want to
+> mitigate the claim above.
 
-Removed patch applied upstream:
-https://github.com/alsa-project/alsa-lib/commit/8e2c70add782f997f7c269ed3f722888e56ff024
+Thanks for your feedback and sorry for my late reply.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[yann.morin.1998 at free.fr: two spaces in hash file]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...02-src-ucm-main.c-fix-build-without-mixer.patch | 39 ----------------------
- package/alsa-lib/alsa-lib.hash                     |  6 ++--
- package/alsa-lib/alsa-lib.mk                       |  2 +-
- 3 files changed, 4 insertions(+), 43 deletions(-)
+> True uuu depends on imx-uuc and mfgtools (1st of its name) too. BUT by
+> looking at imx-uuc, the two use cases are separated into 2 different
+> files:
+> - uu.c: daemon that uses utp protocol to communicate with host
+> - ufb.c: daemon that uses fastboot protocol to communicate with host
 
-diff --git a/package/alsa-lib/0002-src-ucm-main.c-fix-build-without-mixer.patch b/package/alsa-lib/0002-src-ucm-main.c-fix-build-without-mixer.patch
-deleted file mode 100644
-index 4d3ad11175..0000000000
---- a/package/alsa-lib/0002-src-ucm-main.c-fix-build-without-mixer.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 65eb51668f87668d994f260f36a6325f248cdff3 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 3 Dec 2019 18:56:40 +0100
--Subject: [PATCH] src/ucm/main.c: fix build without mixer
--
--Commit 4ce38a5ff466d18039b2606938f866ea3a6c9f3c breaks the build without
--mixer on:
--
--  CCLD     libasound.la
--/home/buildroot/autobuild/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/8.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: ucm/.libs/libucm.a(main.o): in function `snd_use_case_set':
--main.c:(.text+0x185c): undefined reference to `snd_mixer_selem_id_parse'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/4d91c9f82a2a61c50c457a851073b85cc09ea345
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/alsa-project/alsa-lib/pull/15]
-----
-- src/ucm/main.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/ucm/main.c b/src/ucm/main.c
--index d2078a23..61922f10 100644
----- a/src/ucm/main.c
--+++ b/src/ucm/main.c
--@@ -2115,8 +2115,10 @@ int snd_use_case_parse_selem_id(snd_mixer_selem_id_t *dst,
-- 				const char *ucm_id,
-- 				const char *value)
-- {
--+#ifdef BUILD_MIXER
-- 	if (strcmp(ucm_id, "PlaybackMixerId") == 0 ||
-- 	    strcmp(ucm_id, "CaptureMixerId") == 0)
-- 		return snd_mixer_selem_id_parse(dst, value);
--+#endif
-- 	return -EINVAL;
-- }
---- 
--2.24.0
--
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
-index 2f34a12fb5..a4656e230c 100644
---- a/package/alsa-lib/alsa-lib.hash
-+++ b/package/alsa-lib/alsa-lib.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 958e260e3673f1f6ff6b2d2c0df3fc2e469bea5b2957163ce96ce17f23e87943  alsa-lib-1.2.1.2.tar.bz2
--sha256 32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
--sha256 bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
-+sha256  d8e853d8805574777bbe40937812ad1419c9ea7210e176f0def3e6ed255ab3ec  alsa-lib-1.2.2.tar.bz2
-+sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
-+sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index 38bd0fb70a..1855eb3d08 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ALSA_LIB_VERSION = 1.2.1.2
-+ALSA_LIB_VERSION = 1.2.2
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
- ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
+In fact, I am using mfgtools without imx-uuc, but with U-Boot.
+
+> So I think it should be safe to have both host clients co-existing for
+> now. Maybe uu.c will be removed at some point in the future but I guess
+> NXP will leave it there for a while.
+
+So, lets just update mfgtools to latest version (1.3.154), right?
+
+Best regards
+J?rg Krause
