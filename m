@@ -1,106 +1,92 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Apr 2020 22:41:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libglfw: bump version to 3.3.2
-In-Reply-To: <20200413114337.824847-1-bernd.kuhls@t-online.de>
-References: <20200413114337.824847-1-bernd.kuhls@t-online.de>
-Message-ID: <20200413204119.GZ29898@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 13 Apr 2020 22:44:39 +0200
+Subject: [Buildroot] [git commit] package/python-greenlet: new package
+Message-ID: <20200413203033.DAAB28EB65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=826ef33bedc0f2f39a38622f066978cd9cc05226
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-13 13:43 +0200, Bernd Kuhls spake thusly:
-> Changelog: https://www.glfw.org/changelog.html
-> 
-> Updated license hash due to upstream commit:
-> https://github.com/glfw/glfw/commit/f764836e58ec47b7e105687630c75f8161ffcaa8
-> 
-> xlib_libXi is now a mandatory dependency:
-> https://github.com/glfw/glfw/commit/9cc83cf07f47ac8acf46ae12f0f9312fe39cfd6e
-> https://github.com/glfw/glfw/commit/b383e70021bc875e6fb5c1a693e5aa85fbc160d5
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Thomas: add PSF-2.0 to the licenses and LICENSE.PSF to the license files.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-greenlet/Config.in            |  6 ++++++
+ package/python-greenlet/python-greenlet.hash |  6 ++++++
+ package/python-greenlet/python-greenlet.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
-I have applied most of your update wave, except for two patches to which
-I'll reply separately.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libglfw/Config.in    | 1 +
->  package/libglfw/libglfw.hash | 4 ++--
->  package/libglfw/libglfw.mk   | 8 ++------
->  3 files changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/libglfw/Config.in b/package/libglfw/Config.in
-> index 045bd269e4..06f4376453 100644
-> --- a/package/libglfw/Config.in
-> +++ b/package/libglfw/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBGLFW
->  	depends on BR2_PACKAGE_HAS_LIBGL
->  	select BR2_PACKAGE_XLIB_LIBXCURSOR
->  	select BR2_PACKAGE_XLIB_LIBXEXT
-> +	select BR2_PACKAGE_XLIB_LIBXI
->  	select BR2_PACKAGE_XLIB_LIBXINERAMA
->  	select BR2_PACKAGE_XLIB_LIBXRANDR
->  	help
-> diff --git a/package/libglfw/libglfw.hash b/package/libglfw/libglfw.hash
-> index 6796b81368..fa2c5246aa 100644
-> --- a/package/libglfw/libglfw.hash
-> +++ b/package/libglfw/libglfw.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256 81bf5fde487676a8af55cb317830703086bb534c53968d71936e7b48ee5a0f3e  libglfw-3.3.tar.gz
-> -sha256 8ea14fdc7efee7fe53c79101b97049bd547dc6686cfa05df4f0686146a561423  LICENSE.md
-> +sha256 98768e12e615fbe9f3386f5bbfeb91b5a3b45a8c4c77159cef06b1f6ff749537  libglfw-3.3.2.tar.gz
-> +sha256 149704059b5d0bf551637e50042dd4de9c2cae921021f6636298911e3a5f9462  LICENSE.md
-> diff --git a/package/libglfw/libglfw.mk b/package/libglfw/libglfw.mk
-> index aac5b1799d..63d2a88bf8 100644
-> --- a/package/libglfw/libglfw.mk
-> +++ b/package/libglfw/libglfw.mk
-> @@ -4,11 +4,11 @@
->  #
->  ################################################################################
->  
-> -LIBGLFW_VERSION = 3.3
-> +LIBGLFW_VERSION = 3.3.2
->  LIBGLFW_SITE = $(call github,glfw,glfw,$(LIBGLFW_VERSION))
->  LIBGLFW_INSTALL_STAGING = YES
->  LIBGLFW_DEPENDENCIES = libgl xlib_libXcursor xlib_libXext \
-> -	xlib_libXinerama xlib_libXrandr
-> +	xlib_libXi xlib_libXinerama xlib_libXrandr
->  LIBGLFW_LICENSE = Zlib
->  LIBGLFW_LICENSE_FILES = LICENSE.md
->  
-> @@ -17,10 +17,6 @@ LIBGLFW_CONF_OPTS += \
->  	-DGLFW_BUILD_TESTS=OFF \
->  	-DGLFW_BUILD_DOCS=OFF
->  
-> -ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
-> -LIBGLFW_DEPENDENCIES += xlib_libXi
-> -endif
-> -
->  ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
->  LIBGLFW_DEPENDENCIES += xlib_libXxf86vm
->  endif
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fa87dcb6cb..375ab07092 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1200,6 +1200,7 @@ F:	package/python-cbor2/
+ F:	package/python-cchardet/
+ F:	package/python-flatbuffers/
+ F:	package/python-frozenlist/
++F:	package/python-greenlet/
+ F:	package/python-janus/
+ F:	package/python-logstash/
+ F:	package/python-multidict/
+diff --git a/package/Config.in b/package/Config.in
+index e2868dd1b5..ccf54f2417 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -964,6 +964,7 @@ menu "External python modules"
+ 	source "package/python-futures/Config.in"
+ 	source "package/python-gitdb2/Config.in"
+ 	source "package/python-gobject/Config.in"
++	source "package/python-greenlet/Config.in"
+ 	source "package/python-gunicorn/Config.in"
+ 	source "package/python-h2/Config.in"
+ 	source "package/python-hiredis/Config.in"
+diff --git a/package/python-greenlet/Config.in b/package/python-greenlet/Config.in
+new file mode 100644
+index 0000000000..ef82375b0b
+--- /dev/null
++++ b/package/python-greenlet/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_GREENLET
++	bool "python-greenlet"
++	help
++	  Lightweight in-process concurrent programming.
++
++	  https://github.com/python-greenlet/greenlet
+diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
+new file mode 100644
+index 0000000000..4cbadaedb1
+--- /dev/null
++++ b/package/python-greenlet/python-greenlet.hash
+@@ -0,0 +1,6 @@
++# md5, sha256 from https://pypi.org/pypi/greenlet/json
++md5	10fa304f673fc18b28fa6d8c6658cb80  greenlet-0.4.15.tar.gz
++sha256	9416443e219356e3c31f1f918a91badf2e37acf297e2fa13d24d1cc2380f8fbc  greenlet-0.4.15.tar.gz
++# Locally computed sha256 checksums
++sha256	bbde55d5456a1e912633ed3f66d1dbd9504e3e3dce4f4c2015043cdcbc56e697  LICENSE
++sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
+diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
+new file mode 100644
+index 0000000000..01d578a183
+--- /dev/null
++++ b/package/python-greenlet/python-greenlet.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-greenlet
++#
++################################################################################
++
++PYTHON_GREENLET_VERSION = 0.4.15
++PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
++PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/f8/e8/b30ae23b45f69aa3f024b46064c0ac8e5fcb4f22ace0dca8d6f9c8bbe5e7
++PYTHON_GREENLET_SETUP_TYPE = distutils
++PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
++PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
++
++$(eval $(python-package))
