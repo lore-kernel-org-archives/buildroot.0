@@ -1,49 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Apr 2020 17:47:24 +0300
-Subject: [Buildroot] [PATCH] package/libssh: security bump to version 0.9.4
-Message-ID: <9aa0bdcf9bae257961438cd369b273fade725f95.1586789244.git.baruch@tkos.co.il>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon, 13 Apr 2020 17:38:21 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2020.04
+Message-ID: <1586792302-13887-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2020-1730: Possible DoS in client and server when handling
-AES-CTR keys with OpenSSL.
+See https://lists.denx.de/pipermail/u-boot/2020-April/406522.html
 
-Format hash file with two spaces delimiter.
-
-Cc: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/libssh/libssh.hash | 4 ++--
- package/libssh/libssh.mk   | 2 +-
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index ca296701bf27..62b860300aea 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
- # https://www.libssh.org/files/0.9/libssh-0.9.3.tar.xz.asc
- # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
--sha256 2c8b5f894dced58b3d629f16f3afa6562c20b4bdc894639163cf657833688f0c  libssh-0.9.3.tar.xz
--sha256 1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
-+sha256  150897a569852ac05aac831dc417a7ba8e610c86ca2e0154a99c6ade2486226b  libssh-0.9.4.tar.xz
-+sha256  1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 52517a5dd0d7..abc9aec9a3cb 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index ffc441d..7a6f505 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -41,7 +41,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
  
- LIBSSH_VERSION_MAJOR = 0.9
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).3
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).4
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2020.01"
++	bool "2020.04"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -89,7 +89,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2020.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2020.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index 6c17ef0..8274246 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  aa453c603208b1b27bd03525775a7f79b443adec577fdc6e8f06974025a135f1  u-boot-2020.01.tar.bz2
++sha256  fe732aaf037d9cc3c0909bad8362af366ae964bbdac6913a34081ff4ad565372  u-boot-2020.04.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
 -- 
-2.25.1
+2.7.4
