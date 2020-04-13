@@ -1,149 +1,79 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Apr 2020 09:25:23 +0200
-Subject: [Buildroot] [PATCH v5 2/5] board/qemu: add post-image script
- for gitlab qemu testing
-In-Reply-To: <20200217205030.8157-3-romain.naour@smile.fr>
-References: <20200217205030.8157-1-romain.naour@smile.fr>
- <20200217205030.8157-3-romain.naour@smile.fr>
-Message-ID: <20200413072523.GW29898@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 13 Apr 2020 09:34:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: bump version to 3.0.9.2
+Message-ID: <20200413073413.404330-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, jugurtha, All,
+Changelog:
+http://git.videolan.org/?p=vlc/vlc-3.0.git;a=blob_plain;f=NEWS
 
-On 2020-02-17 21:50 +0100, Romain Naour spake thusly:
-> This commit add a post-image script to be used by each qemu
-> board defconfig in order to generate start-qemu.sh in BINARIES_DIR.
-> The start-qemu.sh script can be used by Buildroot user to start
-> Qemu or by a gitlab CI.
-> start-qemu.sh is not started automatically at the end of the build.
-> 
-> To find the correct qemu command line, we use the second post
-> script argument which must contain "$(BR2_DEFCONFIG)"
-> 
->   BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
-> 
-> The post-image script expect something like
-> "/path/to/qemu_aarch64_virt_defconfig" in BR2_DEFCONFIG.
-> 
-> Doing a basename allow to retrieve the name of the defconfig
-> file that should match on on the "tag" previously introduced in
-> readme.txt files.
-> 
-> The script start-qemu.sh is able to modify the qemu command
-> line if CI_JOB_NAME defined in the environment. This allow
-> to disable the graphical output and redirect serial I/Os to
-> console.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../0006-Don-t-assume-strerror_l-is-available.patch  |  6 +++---
+ package/vlc/vlc.hash                                 | 12 ++++++------
+ package/vlc/vlc.mk                                   |  2 +-
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-Like Thomas, I'm not too keen on this gitlab-ci knowledge leaking in
-there...
-
-I think we can abstract that in the post-build script to just prepare
-the two sets of options, the default one (graphical), or the serial-only
-case, and store both sets in start-qemu.sh.
-
-Then start-qemu.sh chooses which to use based on ${1}: if it is
-'serial-only' (or whatever), then ti uses the serial-only options,
-otherwise it uses the graphical options.
-
-I've already hack that: http://code.bulix.org/ip443p-1282035?raw
-
-Of course, whis will require a bit of rewriting in the latter patch that
-tries to extract the qemu command line to run it in gitlab-ci, but I've
-anyway already replied to that patch (hint: it would just need to call
-start-qemu.sh with the new parameter).
-
-I understand this review is coming late, so I'll take on me to apply
-those changes and respin the series a bit later today...
-
-Regards,
-Yann E. MORIN.
-
-> Only sh4/sh4eb needs a special handling by adding
-> "-serial stdio -display none" instead of "-display none".
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> ---
-> v5: update the script after Thomas's review [1] [2]
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2020-February/273820.html
-> [2] http://lists.busybox.net/pipermail/buildroot/2020-February/273822.html
-> ---
->  board/qemu/post-image.sh | 50 ++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 50 insertions(+)
->  create mode 100755 board/qemu/post-image.sh
-> 
-> diff --git a/board/qemu/post-image.sh b/board/qemu/post-image.sh
-> new file mode 100755
-> index 0000000000..804c5f6110
-> --- /dev/null
-> +++ b/board/qemu/post-image.sh
-> @@ -0,0 +1,50 @@
-> +#!/bin/bash
-> +
-> +QEMU_BOARD_DIR="$(dirname $0)"
-> +DEFCONFIG_NAME="$(basename $2)"
-> +README_FILES="${QEMU_BOARD_DIR}/*/readme.txt"
-> +START_QEMU_SCRIPT="${BINARIES_DIR}/start-qemu.sh"
-> +
-> +if [[ "${DEFCONFIG_NAME}" =~ ^"qemu_*" ]]; then
-> +    # Not a Qemu defconfig, can't test.
-> +    exit 0
-> +fi
-> +
-> +# Search for "# qemu_*_defconfig" tag in all readme.txt files.
-> +# Qemu command line on multilines using back slash are accepted.
-> +QEMU_CMD_LINE=$(sed -r ':a; /\\$/N; s/\\\n//; s/\t/ /; ta; /# '${DEFCONFIG_NAME}'$/!d; s/#.*//' ${README_FILES})
-> +
-> +if [ -z "$QEMU_CMD_LINE" ]; then
-> +    # No Qemu cmd line found, can't test.
-> +    exit 0
-> +fi
-> +
-> +# Replace output/images path by ${IMAGE_DIR} since the script
-> +# will be in the same directory as the kernel and the rootfs images.
-> +QEMU_CMD_LINE=${QEMU_CMD_LINE//output\/images/\${IMAGE_DIR\}}
-> +
-> +# Test if we are running in gitlab
-> +if [ -n "$CI_JOB_NAME" ]; then
-> +    # Remove -serial stdio if present
-> +    QEMU_CMD_LINE=${QEMU_CMD_LINE//-serial stdio/}
-> +
-> +    # Disable graphical output and redirect serial I/Os to console
-> +    case ${DEFCONFIG_NAME} in
-> +        # Special case for SH4
-> +        qemu_sh4eb_r2d_defconfig | qemu_sh4_r2d_defconfig)
-> +            QEMU_CMD_LINE="$QEMU_CMD_LINE -serial stdio -display none"
-> +            ;;
-> +        *)
-> +            QEMU_CMD_LINE="$QEMU_CMD_LINE -nographic"
-> +            ;;
-> +    esac
-> +fi
-> +
-> +cat << EOF > $START_QEMU_SCRIPT
-> +#!/bin/sh
-> +IMAGE_DIR="\$(dirname \$0)"
-> +
-> +$QEMU_CMD_LINE
-> +EOF
-> +
-> +chmod +x $START_QEMU_SCRIPT
-> -- 
-> 2.24.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/vlc/0006-Don-t-assume-strerror_l-is-available.patch b/package/vlc/0006-Don-t-assume-strerror_l-is-available.patch
+index 6775086553..cd839b7379 100644
+--- a/package/vlc/0006-Don-t-assume-strerror_l-is-available.patch
++++ b/package/vlc/0006-Don-t-assume-strerror_l-is-available.patch
+@@ -11,7 +11,7 @@ Fix compile error
+ Code for #else condition was taken from
+ http://patches.osdyson.org/patch/series/view/vlc/2.2.0~rc2-1+dyson2/dyson.patch
+ 
+-[Bernd: rebased for vlc-3.0.6]
++[Bernd: rebased for vlc-3.0.6 & 3.0.9.2]
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  configure.ac      | 2 +-
+@@ -26,8 +26,8 @@ index dfb4c1c329..bfe43512a2 100644
+  need_libc=false
+  
+  dnl Check for usual libc functions
+--AC_CHECK_FUNCS([accept4 daemon fcntl flock fstatvfs fork getenv getpwuid_r isatty lstat memalign mkostemp mmap newlocale open_memstream openat pipe2 pread posix_fadvise posix_madvise posix_memalign setlocale stricmp strnicmp strptime uselocale])
+-+AC_CHECK_FUNCS([accept4 daemon fcntl flock fstatvfs fork getenv getpwuid_r isatty lstat memalign mkostemp mmap newlocale open_memstream openat pipe2 pread posix_fadvise posix_madvise posix_memalign setlocale strerror_l stricmp strnicmp strptime uselocale])
++-AC_CHECK_FUNCS([accept4 daemon fcntl flock fstatvfs fork getenv getmntent_r getpwuid_r isatty lstat memalign mkostemp mmap newlocale open_memstream openat pipe2 pread posix_fadvise posix_madvise posix_memalign setlocale stricmp strnicmp strptime uselocale])
+++AC_CHECK_FUNCS([accept4 daemon fcntl flock fstatvfs fork getenv getmntent_r getpwuid_r isatty lstat memalign mkostemp mmap newlocale open_memstream openat pipe2 pread posix_fadvise posix_madvise posix_memalign setlocale strerror_l stricmp strnicmp strptime uselocale])
+  AC_REPLACE_FUNCS([aligned_alloc atof atoll dirfd fdopendir ffsll flockfile fsync getdelim getpid lfind lldiv memrchr nrand48 poll recvmsg rewind sendmsg setenv strcasecmp strcasestr strdup strlcpy strndup strnlen strnstr strsep strtof strtok_r strtoll swab tdestroy tfind timegm timespec_get strverscmp pathconf])
+  AC_REPLACE_FUNCS([gettimeofday])
+  AC_CHECK_FUNC(fdatasync,,
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index d1d3e45b0c..9eb8ec9dcb 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,9 +1,9 @@
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.8/vlc-3.0.8.tar.xz.sha256
+-sha256 e0149ef4a20a19b9ecd87309c2d27787ee3f47dfd47c6639644bc1f6fd95bdf6 vlc-3.0.8.tar.xz
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.8/vlc-3.0.8.tar.xz.sha1
+-sha1 424a9795e051c198e7fa28107b15809ee6820d43 vlc-3.0.8.tar.xz
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.8/vlc-3.0.8.tar.xz.md5
+-md5 744442ec0c145453ea1d257914c8072e vlc-3.0.8.tar.xz
++# From https://get.videolan.org/vlc/3.0.9.2/vlc-3.0.9.2.tar.xz.sha256
++sha256 a9bdad293d81cd48516abad8d490d8ab4012964ae541ff19e00021e071e47601 vlc-3.0.9.2.tar.xz
++# From https://get.videolan.org/vlc/3.0.9.2/vlc-3.0.9.2.tar.xz.sha1
++sha1 f68eb80c6cb2baa96279b85f04f08fffc7dbf308 vlc-3.0.9.2.tar.xz
++# From https://get.videolan.org/vlc/3.0.9.2/vlc-3.0.9.2.tar.xz.md5
++md5 bdedd425a7d41dc0664b1e65286c523c vlc-3.0.9.2.tar.xz
+ # Locally computed
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 4b1cd68d8b..801b99f884 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VLC_VERSION = 3.0.8
++VLC_VERSION = 3.0.9.2
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.0
