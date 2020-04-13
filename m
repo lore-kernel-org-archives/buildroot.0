@@ -1,48 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Apr 2020 10:33:24 +0200
-Subject: [Buildroot] [git commit] package/utf8proc: bump version to 2.5.0
-Message-ID: <20200413083634.2A26D8E9C0@busybox.osuosl.org>
+Date: Mon, 13 Apr 2020 10:50:20 +0200
+Subject: [Buildroot] [git commit] package/libhdhomerun: bump version to
+ 20200225
+Message-ID: <20200413083634.42AEE8E9C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3be09e04250490f52e112d4890925bfbf647e136
+commit: https://git.buildroot.net/buildroot/commit/?id=9c6ce0d166b02e4684962c4f73e352702ac0376a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Changelog: https://github.com/JuliaStrings/utf8proc/blob/master/NEWS.md
-
-Updated license hash due to upstream commit:
-https://github.com/JuliaStrings/utf8proc/commit/0dc0fcf8db4ae2ff1971d4f0f86a2d83b14d863d
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/utf8proc/utf8proc.hash | 4 ++--
- package/utf8proc/utf8proc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libhdhomerun/libhdhomerun.hash | 2 +-
+ package/libhdhomerun/libhdhomerun.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/utf8proc/utf8proc.hash b/package/utf8proc/utf8proc.hash
-index da85a3c7cc..f7b8776a53 100644
---- a/package/utf8proc/utf8proc.hash
-+++ b/package/utf8proc/utf8proc.hash
+diff --git a/package/libhdhomerun/libhdhomerun.hash b/package/libhdhomerun/libhdhomerun.hash
+index 8b45486a12..6dd3719ff2 100644
+--- a/package/libhdhomerun/libhdhomerun.hash
++++ b/package/libhdhomerun/libhdhomerun.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256 b2e5d547c1d94762a6d03a7e05cea46092aab68636460ff8648f1295e2cdfbd7  utf8proc-2.4.0.tar.gz
--sha256 6acb7a86aca74317c6b4dddc2eadeb53bededb95a94a48c3fcd517f4473a653d  LICENSE.md
-+sha256 d4e8dfc898cfd062493cb7f42d95d70ccdd3a4cd4d90bec0c71b47cca688f1be  utf8proc-2.5.0.tar.gz
-+sha256 fbc720fcc90fb44396985646f67e4d19be03e0c0539f7138ed9dc6efba49dc49  LICENSE.md
-diff --git a/package/utf8proc/utf8proc.mk b/package/utf8proc/utf8proc.mk
-index 2d60387e70..2bb1939914 100644
---- a/package/utf8proc/utf8proc.mk
-+++ b/package/utf8proc/utf8proc.mk
+ # Locally computed
+-sha256 9a60f663b00de5f820bdb85806662e25f22da248b14942e33a8b43a0331f855a  libhdhomerun_20190621.tgz
++sha256 f6493e4a643a4ba9c3b2424b7f491186efc2ba5fd93d2285d65b7c5aca676cf9  libhdhomerun_20200225.tgz
+ sha256 9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
+index 8281b2462b..f7e96ddd26 100644
+--- a/package/libhdhomerun/libhdhomerun.mk
++++ b/package/libhdhomerun/libhdhomerun.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UTF8PROC_VERSION = 2.4.0
-+UTF8PROC_VERSION = 2.5.0
- UTF8PROC_SITE = $(call github,JuliaStrings,utf8proc,v$(UTF8PROC_VERSION))
- UTF8PROC_LICENSE = MIT
- UTF8PROC_LICENSE_FILES = LICENSE.md
+-LIBHDHOMERUN_VERSION = 20190621
++LIBHDHOMERUN_VERSION = 20200225
+ LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
+ LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
+ LIBHDHOMERUN_LICENSE = LGPL-2.1+
