@@ -1,59 +1,40 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 13 Apr 2020 16:55:19 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-cryptography: bump to
- version 2.9
-Message-ID: <20200413225519.122489-1-james.hilliard1@gmail.com>
+Date: Mon, 13 Apr 2020 17:05:21 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-service-identity: select
+ pyasn1 instead of pyasn
+Message-ID: <20200413230521.123397-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We can remove CFLAGS="$(TARGET_CFLAGS) -pthread" as of upstream commit:
-https://github.com/pyca/cryptography/commit/085382fb17a560dd11e4710077b63a26d5dcf05c
+The python-pyasn package is an outdated version of python-pyasn1 and
+should not be used.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-cryptography/python-cryptography.hash | 10 +++++-----
- package/python-cryptography/python-cryptography.mk   |  5 ++---
- 2 files changed, 7 insertions(+), 8 deletions(-)
+ package/python-service-identity/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index 30ffa73d72..1323e490dd 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -1,7 +1,7 @@
- # md5, sha256 from https://pypi.org/pypi/cryptography/json
--md5	77730058b556c6d9838679a94c6229ce  cryptography-2.8.tar.gz
--sha256	3cda1f0ed8747339bbdf71b9f38ca74c7b592f24f65cdb3ab3765e4b02871651  cryptography-2.8.tar.gz
-+md5  b1d1802e8874fa7d18e84bfe5607333f  cryptography-2.9.tar.gz
-+sha256  0cacd3ef5c604b8e5f59bf2582c076c98a37fe206b31430d0cd08138aff0986e  cryptography-2.9.tar.gz
- # Locally computed sha256 checksums
--sha256	35452b557fab0efb1e80d7edb9c4e5118b9384082adaa051dde342102cb9de8d  LICENSE
--sha256	aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
--sha256	602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb  LICENSE.BSD
-+sha256  35452b557fab0efb1e80d7edb9c4e5118b9384082adaa051dde342102cb9de8d  LICENSE
-+sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
-+sha256  602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb  LICENSE.BSD
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 54437ae688..5e58266e64 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
- 
--PYTHON_CRYPTOGRAPHY_VERSION = 2.8
-+PYTHON_CRYPTOGRAPHY_VERSION = 2.9
- PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/be/60/da377e1bed002716fb2d5d1d1cab720f298cb33ecff7bf7adea72788e4e4
-+PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/9d/0a/d7060601834b1a0a84845d6ae2cd59be077aafa2133455062e47c9733024
- PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
- PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python-cffi openssl
--PYTHON_CRYPTOGRAPHY_ENV = CFLAGS="$(TARGET_CFLAGS) -pthread"
- 
- $(eval $(python-package))
+diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
+index f1ce5312c8..0260ab4010 100644
+--- a/package/python-service-identity/Config.in
++++ b/package/python-service-identity/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+ 	bool "python-service-identity"
+-	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl, python-pyasn
++	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
+ 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
+ 	select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
+ 	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_PYASN # runtime
+-	select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
++	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
++	select BR2_PACKAGE_PYTHON_PYASN1_MODULES # runtime
+ 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+ 	help
+ 	  Service identity verification for pyOpenSSL.
 -- 
 2.20.1
