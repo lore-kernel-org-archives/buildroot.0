@@ -1,42 +1,149 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Apr 2020 09:25:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vnstat: bump version to 2.6
-Message-ID: <20200413072517.355611-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Apr 2020 09:25:23 +0200
+Subject: [Buildroot] [PATCH v5 2/5] board/qemu: add post-image script
+ for gitlab qemu testing
+In-Reply-To: <20200217205030.8157-3-romain.naour@smile.fr>
+References: <20200217205030.8157-1-romain.naour@smile.fr>
+ <20200217205030.8157-3-romain.naour@smile.fr>
+Message-ID: <20200413072523.GW29898@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://humdi.net/vnstat/CHANGES
+Romain, jugurtha, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/vnstat/vnstat.hash | 2 +-
- package/vnstat/vnstat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2020-02-17 21:50 +0100, Romain Naour spake thusly:
+> This commit add a post-image script to be used by each qemu
+> board defconfig in order to generate start-qemu.sh in BINARIES_DIR.
+> The start-qemu.sh script can be used by Buildroot user to start
+> Qemu or by a gitlab CI.
+> start-qemu.sh is not started automatically at the end of the build.
+> 
+> To find the correct qemu command line, we use the second post
+> script argument which must contain "$(BR2_DEFCONFIG)"
+> 
+>   BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+> 
+> The post-image script expect something like
+> "/path/to/qemu_aarch64_virt_defconfig" in BR2_DEFCONFIG.
+> 
+> Doing a basename allow to retrieve the name of the defconfig
+> file that should match on on the "tag" previously introduced in
+> readme.txt files.
+> 
+> The script start-qemu.sh is able to modify the qemu command
+> line if CI_JOB_NAME defined in the environment. This allow
+> to disable the graphical output and redirect serial I/Os to
+> console.
 
-diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
-index 94b4adc40b..6934c569b2 100644
---- a/package/vnstat/vnstat.hash
-+++ b/package/vnstat/vnstat.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 a0955999abd56d5463d257ffdccc9b1e9ad9ea504de81e64ba4c197f1245abaa  vnstat-2.4.tar.gz
-+sha256 89276e0a7281943edb554b874078278ad947dc312938a2451e03eb80679f7ff7  vnstat-2.6.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
-index f0ef1cc69d..be1b75a6b3 100644
---- a/package/vnstat/vnstat.mk
-+++ b/package/vnstat/vnstat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VNSTAT_VERSION = 2.4
-+VNSTAT_VERSION = 2.6
- VNSTAT_SITE = http://humdi.net/vnstat
- VNSTAT_LICENSE = GPL-2.0
- VNSTAT_LICENSE_FILES = COPYING
+Like Thomas, I'm not too keen on this gitlab-ci knowledge leaking in
+there...
+
+I think we can abstract that in the post-build script to just prepare
+the two sets of options, the default one (graphical), or the serial-only
+case, and store both sets in start-qemu.sh.
+
+Then start-qemu.sh chooses which to use based on ${1}: if it is
+'serial-only' (or whatever), then ti uses the serial-only options,
+otherwise it uses the graphical options.
+
+I've already hack that: http://code.bulix.org/ip443p-1282035?raw
+
+Of course, whis will require a bit of rewriting in the latter patch that
+tries to extract the qemu command line to run it in gitlab-ci, but I've
+anyway already replied to that patch (hint: it would just need to call
+start-qemu.sh with the new parameter).
+
+I understand this review is coming late, so I'll take on me to apply
+those changes and respin the series a bit later today...
+
+Regards,
+Yann E. MORIN.
+
+> Only sh4/sh4eb needs a special handling by adding
+> "-serial stdio -display none" instead of "-display none".
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> ---
+> v5: update the script after Thomas's review [1] [2]
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2020-February/273820.html
+> [2] http://lists.busybox.net/pipermail/buildroot/2020-February/273822.html
+> ---
+>  board/qemu/post-image.sh | 50 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>  create mode 100755 board/qemu/post-image.sh
+> 
+> diff --git a/board/qemu/post-image.sh b/board/qemu/post-image.sh
+> new file mode 100755
+> index 0000000000..804c5f6110
+> --- /dev/null
+> +++ b/board/qemu/post-image.sh
+> @@ -0,0 +1,50 @@
+> +#!/bin/bash
+> +
+> +QEMU_BOARD_DIR="$(dirname $0)"
+> +DEFCONFIG_NAME="$(basename $2)"
+> +README_FILES="${QEMU_BOARD_DIR}/*/readme.txt"
+> +START_QEMU_SCRIPT="${BINARIES_DIR}/start-qemu.sh"
+> +
+> +if [[ "${DEFCONFIG_NAME}" =~ ^"qemu_*" ]]; then
+> +    # Not a Qemu defconfig, can't test.
+> +    exit 0
+> +fi
+> +
+> +# Search for "# qemu_*_defconfig" tag in all readme.txt files.
+> +# Qemu command line on multilines using back slash are accepted.
+> +QEMU_CMD_LINE=$(sed -r ':a; /\\$/N; s/\\\n//; s/\t/ /; ta; /# '${DEFCONFIG_NAME}'$/!d; s/#.*//' ${README_FILES})
+> +
+> +if [ -z "$QEMU_CMD_LINE" ]; then
+> +    # No Qemu cmd line found, can't test.
+> +    exit 0
+> +fi
+> +
+> +# Replace output/images path by ${IMAGE_DIR} since the script
+> +# will be in the same directory as the kernel and the rootfs images.
+> +QEMU_CMD_LINE=${QEMU_CMD_LINE//output\/images/\${IMAGE_DIR\}}
+> +
+> +# Test if we are running in gitlab
+> +if [ -n "$CI_JOB_NAME" ]; then
+> +    # Remove -serial stdio if present
+> +    QEMU_CMD_LINE=${QEMU_CMD_LINE//-serial stdio/}
+> +
+> +    # Disable graphical output and redirect serial I/Os to console
+> +    case ${DEFCONFIG_NAME} in
+> +        # Special case for SH4
+> +        qemu_sh4eb_r2d_defconfig | qemu_sh4_r2d_defconfig)
+> +            QEMU_CMD_LINE="$QEMU_CMD_LINE -serial stdio -display none"
+> +            ;;
+> +        *)
+> +            QEMU_CMD_LINE="$QEMU_CMD_LINE -nographic"
+> +            ;;
+> +    esac
+> +fi
+> +
+> +cat << EOF > $START_QEMU_SCRIPT
+> +#!/bin/sh
+> +IMAGE_DIR="\$(dirname \$0)"
+> +
+> +$QEMU_CMD_LINE
+> +EOF
+> +
+> +chmod +x $START_QEMU_SCRIPT
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
