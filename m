@@ -1,25 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Apr 2020 09:53:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mc: fix typo in gpm dependency
-In-Reply-To: <20200413065616.20674-1-bernd.kuhls@t-online.de>
-References: <20200413065616.20674-1-bernd.kuhls@t-online.de>
-Message-ID: <20200413095344.297c1f0b@windsurf.home>
+Date: Mon, 13 Apr 2020 09:53:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mc: fix gpm typo
+In-Reply-To: <20200413065648.1086539-1-fontaine.fabrice@gmail.com>
+References: <20200413065648.1086539-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200413095355.354afb95@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Apr 2020 08:56:16 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Mon, 13 Apr 2020 08:56:48 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fixes:
-> http://autobuild.buildroot.net/results/3c9/3c9eb8a0db26770e69d47eee70100a556dd130b3/
+> Fix typo added by commit 9cae8f557b9d3f18ccf3694155f452d6b55de5f6
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mc/mc.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Fixes:
+>  - http://autobuild.buildroot.org/results/3c9eb8a0db26770e69d47eee70100a556dd130b3
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Gah, sorry, I have also seen the issue in the autobuilders before
 looking at the backlog of patches, so I pushed my patch first. Sorry
