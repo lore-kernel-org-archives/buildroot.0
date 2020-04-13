@@ -1,46 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Apr 2020 16:09:52 +0300
-Subject: [Buildroot] [PATCH] package/grep: bump to version 3.4
-Message-ID: <94b6205c8d5c2b1e81cdd0c89415862ade6d349c.1586783392.git.baruch@tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 13 Apr 2020 15:47:12 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libva-utils: switch back to
+ upstream-provided tarball
+Message-ID: <20200413134713.1120377-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Format hash file with two spaces delimiter.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/grep/grep.hash | 6 +++---
- package/grep/grep.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libva-utils/libva-utils.hash | 2 +-
+ package/libva-utils/libva-utils.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/grep/grep.hash b/package/grep/grep.hash
-index 4aa7b4ecb834..47bf550a2000 100644
---- a/package/grep/grep.hash
-+++ b/package/grep/grep.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature
--# http://ftp.gnu.org/gnu/grep/grep-3.3.tar.xz.sig
-+# http://ftp.gnu.org/gnu/grep/grep-3.4.tar.xz.sig
- # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
--sha256 b960541c499619efd6afe1fa795402e4733c8e11ebf9fafccc0bb4bccdc5b514  grep-3.3.tar.xz
--sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-+sha256  58e6751c41a7c25bfc6e9363a41786cff3ba5709cf11d5ad903cf7cce31cc3fb  grep-3.4.tar.xz
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index cc80553eb915..ef1bbb44879c 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
+index 4addb7be3a..f6b10f84fb 100644
+--- a/package/libva-utils/libva-utils.hash
++++ b/package/libva-utils/libva-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 9cf35b971001e7143dda14207b6891c12619a72a2ab99a9133b3da5b9c4d97dd  libva-utils-2.7.1.tar.gz
++sha256 ffcd698a7d4312750d7c9338ba6b26774c7028ee6f9f3cbbf34c122c05bcea9a  libva-utils-2.7.1.tar.bz2
+ sha256 c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
+diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
+index dee29c9891..cb1df66459 100644
+--- a/package/libva-utils/libva-utils.mk
++++ b/package/libva-utils/libva-utils.mk
+@@ -5,11 +5,10 @@
  ################################################################################
  
--GREP_VERSION = 3.3
-+GREP_VERSION = 3.4
- GREP_SITE = $(BR2_GNU_MIRROR)/grep
- GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_LICENSE = GPL-3.0+
+ LIBVA_UTILS_VERSION = 2.7.1
+-LIBVA_UTILS_SITE = $(call github,intel,libva-utils,$(LIBVA_UTILS_VERSION))
++LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
++LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
+ LIBVA_UTILS_LICENSE = MIT
+ LIBVA_UTILS_LICENSE_FILES = COPYING
+-# github tarball does not include configure
+-LIBVA_UTILS_AUTORECONF = YES
+ LIBVA_UTILS_DEPENDENCIES = host-pkgconf libva
+ 
+ $(eval $(autotools-package))
 -- 
-2.25.1
+2.25.0
