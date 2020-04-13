@@ -1,79 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Apr 2020 09:34:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: bump version to 3.0.9.2
-Message-ID: <20200413073413.404330-1-bernd.kuhls@t-online.de>
+Date: Mon, 13 Apr 2020 09:38:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/utf8proc: bump version to 2.5.0
+Message-ID: <20200413073844.407777-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-http://git.videolan.org/?p=vlc/vlc-3.0.git;a=blob_plain;f=NEWS
+Changelog: https://github.com/JuliaStrings/utf8proc/blob/master/NEWS.md
+
+Updated license hash due to upstream commit:
+https://github.com/JuliaStrings/utf8proc/commit/0dc0fcf8db4ae2ff1971d4f0f86a2d83b14d863d
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0006-Don-t-assume-strerror_l-is-available.patch  |  6 +++---
- package/vlc/vlc.hash                                 | 12 ++++++------
- package/vlc/vlc.mk                                   |  2 +-
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ package/utf8proc/utf8proc.hash | 4 ++--
+ package/utf8proc/utf8proc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vlc/0006-Don-t-assume-strerror_l-is-available.patch b/package/vlc/0006-Don-t-assume-strerror_l-is-available.patch
-index 6775086553..cd839b7379 100644
---- a/package/vlc/0006-Don-t-assume-strerror_l-is-available.patch
-+++ b/package/vlc/0006-Don-t-assume-strerror_l-is-available.patch
-@@ -11,7 +11,7 @@ Fix compile error
- Code for #else condition was taken from
- http://patches.osdyson.org/patch/series/view/vlc/2.2.0~rc2-1+dyson2/dyson.patch
- 
--[Bernd: rebased for vlc-3.0.6]
-+[Bernd: rebased for vlc-3.0.6 & 3.0.9.2]
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  configure.ac      | 2 +-
-@@ -26,8 +26,8 @@ index dfb4c1c329..bfe43512a2 100644
-  need_libc=false
-  
-  dnl Check for usual libc functions
---AC_CHECK_FUNCS([accept4 daemon fcntl flock fstatvfs fork getenv getpwuid_r isatty lstat memalign mkostemp mmap newlocale open_memstream openat pipe2 pread posix_fadvise posix_madvise posix_memalign setlocale stricmp strnicmp strptime uselocale])
--+AC_CHECK_FUNCS([accept4 daemon fcntl flock fstatvfs fork getenv getpwuid_r isatty lstat memalign mkostemp mmap newlocale open_memstream openat pipe2 pread posix_fadvise posix_madvise posix_memalign setlocale strerror_l stricmp strnicmp strptime uselocale])
-+-AC_CHECK_FUNCS([accept4 daemon fcntl flock fstatvfs fork getenv getmntent_r getpwuid_r isatty lstat memalign mkostemp mmap newlocale open_memstream openat pipe2 pread posix_fadvise posix_madvise posix_memalign setlocale stricmp strnicmp strptime uselocale])
-++AC_CHECK_FUNCS([accept4 daemon fcntl flock fstatvfs fork getenv getmntent_r getpwuid_r isatty lstat memalign mkostemp mmap newlocale open_memstream openat pipe2 pread posix_fadvise posix_madvise posix_memalign setlocale strerror_l stricmp strnicmp strptime uselocale])
-  AC_REPLACE_FUNCS([aligned_alloc atof atoll dirfd fdopendir ffsll flockfile fsync getdelim getpid lfind lldiv memrchr nrand48 poll recvmsg rewind sendmsg setenv strcasecmp strcasestr strdup strlcpy strndup strnlen strnstr strsep strtof strtok_r strtoll swab tdestroy tfind timegm timespec_get strverscmp pathconf])
-  AC_REPLACE_FUNCS([gettimeofday])
-  AC_CHECK_FUNC(fdatasync,,
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index d1d3e45b0c..9eb8ec9dcb 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,9 +1,9 @@
--# From http://download.videolan.org/pub/videolan/vlc/3.0.8/vlc-3.0.8.tar.xz.sha256
--sha256 e0149ef4a20a19b9ecd87309c2d27787ee3f47dfd47c6639644bc1f6fd95bdf6 vlc-3.0.8.tar.xz
--# From http://download.videolan.org/pub/videolan/vlc/3.0.8/vlc-3.0.8.tar.xz.sha1
--sha1 424a9795e051c198e7fa28107b15809ee6820d43 vlc-3.0.8.tar.xz
--# From http://download.videolan.org/pub/videolan/vlc/3.0.8/vlc-3.0.8.tar.xz.md5
--md5 744442ec0c145453ea1d257914c8072e vlc-3.0.8.tar.xz
-+# From https://get.videolan.org/vlc/3.0.9.2/vlc-3.0.9.2.tar.xz.sha256
-+sha256 a9bdad293d81cd48516abad8d490d8ab4012964ae541ff19e00021e071e47601 vlc-3.0.9.2.tar.xz
-+# From https://get.videolan.org/vlc/3.0.9.2/vlc-3.0.9.2.tar.xz.sha1
-+sha1 f68eb80c6cb2baa96279b85f04f08fffc7dbf308 vlc-3.0.9.2.tar.xz
-+# From https://get.videolan.org/vlc/3.0.9.2/vlc-3.0.9.2.tar.xz.md5
-+md5 bdedd425a7d41dc0664b1e65286c523c vlc-3.0.9.2.tar.xz
- # Locally computed
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 4b1cd68d8b..801b99f884 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
+diff --git a/package/utf8proc/utf8proc.hash b/package/utf8proc/utf8proc.hash
+index da85a3c7cc..f7b8776a53 100644
+--- a/package/utf8proc/utf8proc.hash
++++ b/package/utf8proc/utf8proc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b2e5d547c1d94762a6d03a7e05cea46092aab68636460ff8648f1295e2cdfbd7  utf8proc-2.4.0.tar.gz
+-sha256 6acb7a86aca74317c6b4dddc2eadeb53bededb95a94a48c3fcd517f4473a653d  LICENSE.md
++sha256 d4e8dfc898cfd062493cb7f42d95d70ccdd3a4cd4d90bec0c71b47cca688f1be  utf8proc-2.5.0.tar.gz
++sha256 fbc720fcc90fb44396985646f67e4d19be03e0c0539f7138ed9dc6efba49dc49  LICENSE.md
+diff --git a/package/utf8proc/utf8proc.mk b/package/utf8proc/utf8proc.mk
+index 2d60387e70..2bb1939914 100644
+--- a/package/utf8proc/utf8proc.mk
++++ b/package/utf8proc/utf8proc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VLC_VERSION = 3.0.8
-+VLC_VERSION = 3.0.9.2
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+-UTF8PROC_VERSION = 2.4.0
++UTF8PROC_VERSION = 2.5.0
+ UTF8PROC_SITE = $(call github,JuliaStrings,utf8proc,v$(UTF8PROC_VERSION))
+ UTF8PROC_LICENSE = MIT
+ UTF8PROC_LICENSE_FILES = LICENSE.md
 -- 
 2.25.0
