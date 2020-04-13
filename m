@@ -1,54 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Apr 2020 15:51:27 +0200
-Subject: [Buildroot] [PATCH] azure-iot-sdk-c: fix missing libraries
-In-Reply-To: <20190923115206.4468-1-stephan.hoffmann@ext.grandcentrix.net>
-References: <20190923115206.4468-1-stephan.hoffmann@ext.grandcentrix.net>
-Message-ID: <20200413155127.763bbdcc@windsurf.home>
+Date: Mon, 13 Apr 2020 15:53:06 +0200
+Subject: [Buildroot] [PATCH v2] configs/imx6ullevk: new defconfig
+ board/freescale/imx6ullevk/readme.txt: new readme for the imx6ullevk board.
+ DEVELOPERS: Add myself as the maintainer of imx6ullevk.
+In-Reply-To: <20190926181419.18710-1-jeffrey.kinross@i3pd.com>
+References: <20190521204534.27569-1-jeffrey.kinross@i3pd.com>
+ <20190926181419.18710-1-jeffrey.kinross@i3pd.com>
+Message-ID: <20200413155306.78792b5f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Sep 2019 13:52:06 +0200
-<stephan.hoffmann@ext.grandcentrix.net> wrote:
+Hello Jeffrey,
 
-> From: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
+On Thu, 26 Sep 2019 13:14:20 -0500
+Jeffrey Kinross <jeffrey.kinross@i3pd.com> wrote:
+
+> Changes v1 -> v2:
+>  - DEVELOPERS - Add myself as maintainer of configs/imx6ullevk (suggested by Gilles Talis)
+>  - configs/imx6ullevk - Use the FSL kernel and uboot. Pin the kernel and uboot version (suggested by Thomas Petazzoni)
 > 
-> libparson.so and libumqtt.so.1 are missing.
+> configs/imx6ullevk: new defconfig
+> board/freescale/imx6ullevk/readme.txt: new readme for the imx6ullevk board.
+> DEVELOPERS: Add myself as the maintainer of imx6ullevk.
 > 
-> The package builds libparson, but does not install it.
-> It also does not install the symlinks for libumqtt.so.1.1.11.
+> Add support for imx6ullevk board, using the kernel and uboot from the FSL Community BSP.
 > 
-> Signed-off-by: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
-> ---
->  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 24 +++++++++++++++++-----
->  1 file changed, 19 insertions(+), 5 deletions(-)
+> Signed-off-by: Jeffrey Kinross <jeffrey.kinross@i3pd.com>
 
-So I finally applied this, but after doing quite a bit of rework. For
-example, your patch was not correct as it was creating the .so symlinks
-unconditionally, even when BR2_STATIC_LIBS=y, i.e even when static
-libraries are used. Another issue is that you were reformatting the
-list of libraries to have one per-line, in the same patch. And you were
-fixing the libparson and libumqtt issues in the same patch.
+Thanks a lot for your contribution. However in the mean time, we have
+merged
+https://git.buildroot.org/buildroot/tree/configs/freescale_imx6ullevk_defconfig
+which supports the same board, also with the NXP-provided kernel and
+U-Boot.
 
-So, I first applied three preparation commits:
+Best regards,
 
-  https://git.buildroot.org/buildroot/commit/?id=c71030f0fab49be4061fb999a8eabe4190f1f18d
-  https://git.buildroot.org/buildroot/commit/?id=59de11b0476699ddeb2cbcd30a524b849249956a
-  https://git.buildroot.org/buildroot/commit/?id=43822bb6db8851df4d6568622b58196895028f91
-
-Then, I applied your fix for libumqtt.so:
-
-  https://git.buildroot.org/buildroot/commit/?id=570dd0c31b2149cd913866eb6777caa4a1b05a56
-
-And your fix for libparson.so:
-
-  https://git.buildroot.org/buildroot/commit/?id=94120fd7c71881e7b3963d5db27802241d9eeed2
-
-Thanks!
-
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
