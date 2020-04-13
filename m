@@ -1,38 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Apr 2020 22:03:35 +0200
-Subject: [Buildroot] [RESEND PATCH v2 0/3] configs,
- board: add OLPC XO laptops
-In-Reply-To: <20191030123909.443536-1-lkundrak@v3.sk>
-References: <20191030123909.443536-1-lkundrak@v3.sk>
-Message-ID: <20200413220335.014c6814@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 13 Apr 2020 22:03:38 +0200
+Subject: [Buildroot] [PATCH v5 0/5] gitlab Qemu runtime testing
+In-Reply-To: <20200413195614.GX29898@scaer>
+References: <20200217205030.8157-1-romain.naour@smile.fr>
+ <20200413195614.GX29898@scaer>
+Message-ID: <2a3b16a5-4f03-77c1-374e-736445b94209@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Lubomir,
+Hi Yann, All,
 
-On Wed, 30 Oct 2019 13:39:06 +0100
-Lubomir Rintel <lkundrak@v3.sk> wrote:
+Le 13/04/2020 ? 21:56, Yann E. MORIN a ?crit?:
+> Roma, Jugurtha, All,
+> 
+> On 2020-02-17 21:50 +0100, Romain Naour spake thusly:
+>> This new iteration take into account the previous review with
+>> some additional rework [1] [2] [5] [6].
+>>
+>> Remove patch already merged.
+>>
+>> Based on the Yann's review during the Buildroot Developper meeting
+>> FOSDEM 2020 [2], add a tag in each readme file to easily retrieve
+>> the qemu command line to be used for runtime testing in gitlab.
+>>
+>> This tag is used by a post-image script to generate a script
+>> called start-qemu.sh that can be used by users or by a new python
+>> script for running the test in gitlab but only when a Qemu
+>> defconfig is built.
+>>
+>> Finally add this new python script to .gitlab-ci.yml.
+>>
+>> This series has been tested on Gitlab [3], please ignore the
+>> failing test related to missing host-python3 modules needed by
+>> optee-os package [4].
+> 
+> I've finally applied this series, after reworking in-depth the two
+> scripts. Please review the commits and watch the pipelines, and yell at
+> me if I broke it too badly... Thanks you!
 
-> This is a resend of a set that adds configurations for a pair of OLPC XO
-> laptops. Compared to the previous iteration it bumps the kernel version to
-> a later stable release.
+Thanks you too for improving the series!
 
-Sorry for the very long delay in getting back to you. Since it's been
-so long, I really hesitated in just applying your patches, but there
-are really too many things to change, which we cannot easily do without
-access to the hardware to verify that things continue to work.
+Best regards,
+Romain
 
-So I'll reply to the individual patches. Hopefully you will find some
-time to take the comments into account and respin a new iteration of
-this series.
 
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> 
+> Regards,
+> Yann E. MORIN.
+> 
