@@ -1,44 +1,47 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 13 Apr 2020 17:38:22 +0200
-Subject: [Buildroot] [PATCH] package/uboot-tools: bump to version 2020.04
-In-Reply-To: <1586792302-13887-1-git-send-email-pjtexier@koncepto.io>
-References: <1586792302-13887-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <1586792302-13887-2-git-send-email-pjtexier@koncepto.io>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Mon, 13 Apr 2020 18:05:03 +0200
+Subject: [Buildroot] [PATCH] package/libkrb5: bump to 1.18.1
+Message-ID: <20200413160503.3493-1-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump to version 2020.04
+The hash of the NOTICE file has changed due to update in copyright year
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
 ---
- package/uboot-tools/uboot-tools.hash | 2 +-
- package/uboot-tools/uboot-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libkrb5/libkrb5.hash | 4 ++--
+ package/libkrb5/libkrb5.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
-index 6c17ef0..8274246 100644
---- a/package/uboot-tools/uboot-tools.hash
-+++ b/package/uboot-tools/uboot-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  aa453c603208b1b27bd03525775a7f79b443adec577fdc6e8f06974025a135f1  u-boot-2020.01.tar.bz2
-+sha256  fe732aaf037d9cc3c0909bad8362af366ae964bbdac6913a34081ff4ad565372  u-boot-2020.04.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 8cafc08..a06c259 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
+index aa7c3a3778..658c4539f6 100644
+--- a/package/libkrb5/libkrb5.hash
++++ b/package/libkrb5/libkrb5.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	5a6e2284a53de5702d3dc2be3b9339c963f9b5397d3fbbc53beb249380a781f5	krb5-1.17.tar.gz
++sha256	02a4e700f10936f937cd1a4c303cab8687a11abecc6107bd4b706b9329cd5400	krb5-1.18.1.tar.gz
+ 
+ # Hash for license file:
+-sha256	5149ea464bde245388d313309539e142156d371788ae57bbd4feb223757f6da1	NOTICE
++sha256	b7a5f14a8719bce5e49a761998aa55438fc890fb40f71228d6a49546f6d5690d	NOTICE
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+index 44a20b3707..f7cd677def 100644
+--- a/package/libkrb5/libkrb5.mk
++++ b/package/libkrb5/libkrb5.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--UBOOT_TOOLS_VERSION = 2020.01
-+UBOOT_TOOLS_VERSION = 2020.04
- UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPL-2.0+
+-LIBKRB5_VERSION_MAJOR = 1.17
+-LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR)
++LIBKRB5_VERSION_MAJOR = 1.18
++LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).1
+ LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION_MAJOR)
+ LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
+ LIBKRB5_SUBDIR = src
 -- 
-2.7.4
+2.17.1
