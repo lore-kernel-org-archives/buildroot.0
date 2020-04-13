@@ -1,50 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Apr 2020 10:49:44 +0200
-Subject: [Buildroot] [git commit] package/tinyxml2: bump version to 8.0.0
-Message-ID: <20200413083634.36C458E9C1@busybox.osuosl.org>
+Date: Mon, 13 Apr 2020 10:32:34 +0200
+Subject: [Buildroot] [git commit] package/vnstat: bump version to 2.6
+Message-ID: <20200413083634.119778E9BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ef2a3cc435f4642a7faa3ca98c63cfa810e7e8d
+commit: https://git.buildroot.net/buildroot/commit/?id=e4b188e1d40f99cf66eb5690a9edcc90b1c693d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switched license file to LICENSE.txt due to upstream commit:
-https://github.com/leethomason/tinyxml2/commit/db39dbc0fdf0376674b0fd94a6ff9f16a4d5b174
+Changelog: https://humdi.net/vnstat/CHANGES
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tinyxml2/tinyxml2.hash | 4 ++--
- package/tinyxml2/tinyxml2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/vnstat/vnstat.hash | 2 +-
+ package/vnstat/vnstat.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tinyxml2/tinyxml2.hash b/package/tinyxml2/tinyxml2.hash
-index bb0f8108f9..3c59d159b5 100644
---- a/package/tinyxml2/tinyxml2.hash
-+++ b/package/tinyxml2/tinyxml2.hash
+diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
+index 94b4adc40b..6934c569b2 100644
+--- a/package/vnstat/vnstat.hash
++++ b/package/vnstat/vnstat.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 68ebd396a4220d5a9b5a621c6e9c66349c5cfdf5efaea3f16e3bb92e45f4e2a3  tinyxml2-7.1.0.tar.gz
--sha256 beed3466425970b9d970e573947f1fe7d3cbe41ed7e2c39b0daf45f7de053c43  readme.md
-+sha256 6ce574fbb46751842d23089485ae73d3db12c1b6639cda7721bf3a7ee862012c  tinyxml2-8.0.0.tar.gz
-+sha256 9332252e9b9e46db8285d4a3f0bf25f139bf1dca6781b956d57f2302efca6432  LICENSE.txt
-diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
-index 67f626428a..b06d849b21 100644
---- a/package/tinyxml2/tinyxml2.mk
-+++ b/package/tinyxml2/tinyxml2.mk
-@@ -4,10 +4,10 @@
+-sha256 a0955999abd56d5463d257ffdccc9b1e9ad9ea504de81e64ba4c197f1245abaa  vnstat-2.4.tar.gz
++sha256 89276e0a7281943edb554b874078278ad947dc312938a2451e03eb80679f7ff7  vnstat-2.6.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
+index f0ef1cc69d..be1b75a6b3 100644
+--- a/package/vnstat/vnstat.mk
++++ b/package/vnstat/vnstat.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TINYXML2_VERSION = 7.1.0
-+TINYXML2_VERSION = 8.0.0
- TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
- TINYXML2_LICENSE = Zlib
--TINYXML2_LICENSE_FILES = readme.md
-+TINYXML2_LICENSE_FILES = LICENSE.txt
- TINYXML2_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_STATIC_LIBS),y)
+-VNSTAT_VERSION = 2.4
++VNSTAT_VERSION = 2.6
+ VNSTAT_SITE = http://humdi.net/vnstat
+ VNSTAT_LICENSE = GPL-2.0
+ VNSTAT_LICENSE_FILES = COPYING
