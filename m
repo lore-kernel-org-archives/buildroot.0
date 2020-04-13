@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Apr 2020 10:50:31 +0200
-Subject: [Buildroot] [git commit] package/strace: bump to version 5.6
-Message-ID: <20200413083634.538518E967@busybox.osuosl.org>
+Date: Mon, 13 Apr 2020 10:33:24 +0200
+Subject: [Buildroot] [git commit] package/utf8proc: bump version to 2.5.0
+Message-ID: <20200413083634.2A26D8E9C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5234acc639034c3fd3ab76908fd06471f73129c6
+commit: https://git.buildroot.net/buildroot/commit/?id=3be09e04250490f52e112d4890925bfbf647e136
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Changelog: https://github.com/JuliaStrings/utf8proc/blob/master/NEWS.md
+
+Updated license hash due to upstream commit:
+https://github.com/JuliaStrings/utf8proc/commit/0dc0fcf8db4ae2ff1971d4f0f86a2d83b14d863d
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
+ package/utf8proc/utf8proc.hash | 4 ++--
+ package/utf8proc/utf8proc.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 5b645ebe7e..720f358c5b 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/5.5/strace-5.5.tar.xz.asc
--sha256  9f58958c8e59ea62293d907d10572e352b582bd7948ed21aa28ebb47e5bf30ff  strace-5.5.tar.xz
-+# https://strace.io/files/5.6/strace-5.6.tar.xz.asc
-+sha256  189968eeae06ed9e20166ec55a830943c84374676a457c9fe010edc7541f1b01  strace-5.6.tar.xz
- sha256  6370eb67db918210944a8511a6995ebe9567852f26b4f15a01e5c8cf2aef7c46  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 569a822e42..5c101419f4 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
+diff --git a/package/utf8proc/utf8proc.hash b/package/utf8proc/utf8proc.hash
+index da85a3c7cc..f7b8776a53 100644
+--- a/package/utf8proc/utf8proc.hash
++++ b/package/utf8proc/utf8proc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b2e5d547c1d94762a6d03a7e05cea46092aab68636460ff8648f1295e2cdfbd7  utf8proc-2.4.0.tar.gz
+-sha256 6acb7a86aca74317c6b4dddc2eadeb53bededb95a94a48c3fcd517f4473a653d  LICENSE.md
++sha256 d4e8dfc898cfd062493cb7f42d95d70ccdd3a4cd4d90bec0c71b47cca688f1be  utf8proc-2.5.0.tar.gz
++sha256 fbc720fcc90fb44396985646f67e4d19be03e0c0539f7138ed9dc6efba49dc49  LICENSE.md
+diff --git a/package/utf8proc/utf8proc.mk b/package/utf8proc/utf8proc.mk
+index 2d60387e70..2bb1939914 100644
+--- a/package/utf8proc/utf8proc.mk
++++ b/package/utf8proc/utf8proc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRACE_VERSION = 5.5
-+STRACE_VERSION = 5.6
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+-UTF8PROC_VERSION = 2.4.0
++UTF8PROC_VERSION = 2.5.0
+ UTF8PROC_SITE = $(call github,JuliaStrings,utf8proc,v$(UTF8PROC_VERSION))
+ UTF8PROC_LICENSE = MIT
+ UTF8PROC_LICENSE_FILES = LICENSE.md
