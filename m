@@ -1,45 +1,74 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 14 Apr 2020 19:02:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/comix-cursors: bump version to 0.9.1
-Message-ID: <20200414170235.347489-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 14 Apr 2020 19:02:37 +0200
+Subject: [Buildroot] [PATCH 6/6] package/collectd: add buddyinfo option
+In-Reply-To: <CALFsTFWYW3rLQunMO3EkDy3_FJMX+KPi2HhNdEsOmMnQCkHtEg@mail.gmail.com>
+References: <20200414163800.2230496-1-fontaine.fabrice@gmail.com>
+ <20200414163800.2230496-6-fontaine.fabrice@gmail.com>
+ <CALFsTFWYW3rLQunMO3EkDy3_FJMX+KPi2HhNdEsOmMnQCkHtEg@mail.gmail.com>
+Message-ID: <CAPi7W831KMEOOe5bVqmmhxVT+ug87C5+Akya7xo8RLPK8MpNHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://gitlab.com/limitland/comixcursors/-/blob/master/NEWS
+Hi Asaf
 
-Original repository was moved to gitlab.com, changed _SITE accordingly.
+Le mar. 14 avr. 2020 ? 18:51, Asaf Kahlon <asafka7@gmail.com> a ?crit :
+>
+> Hello,
+>
+> On Tue, Apr 14, 2020 at 7:36 PM Fabrice Fontaine
+> <fontaine.fabrice@gmail.com> wrote:
+> >
+> > buddyinfo is available since version 5.11.0 and
+> > https://github.com/collectd/collectd/commit/cb19ecf90d89a79836b8b5236d2b66277dd79c5f
+> >
+> > It is currently enabled by default
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/collectd/Config.in   | 5 +++++
+> >  package/collectd/collectd.mk | 1 +
+> >  2 files changed, 6 insertions(+)
+> >
+> > diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+> > index 15c871025c..1f55271a97 100644
+> > --- a/package/collectd/Config.in
+> > +++ b/package/collectd/Config.in
+> > @@ -128,6 +128,11 @@ config BR2_PACKAGE_COLLECTD_BIND
+> >         help
+> >           Collects BIND DNS statistics.
+> >
+> > +config BR2_PACKAGE_BUDDYINFO
+> I guess you meant to call this "BR2_PACKAGE_COLLECTD_BUDDYINFO".
+Indeed, thanks for spotting this. I made two many patches on collectd
+... I'll send a v2.
+>
+> > +       bool "buddyinfo"
+> > +       help
+> > +         Statistics from buddyinfo file about memory fragmentation.
+> > +
+> >  config BR2_PACKAGE_COLLECTD_CAPABILITIES
+> >         bool "capabilities"
+> >         select BR2_PACKAGE_JANSSON
+> > diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+> > index f04ccdb2ff..6bd1754ad7 100644
+> > --- a/package/collectd/collectd.mk
+> > +++ b/package/collectd/collectd.mk
+> > @@ -51,6 +51,7 @@ COLLECTD_CONF_OPTS += \
+> >         $(if $(BR2_PACKAGE_COLLECTD_APCUPS),--enable-apcups,--disable-apcups) \
+> >         $(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
+> >         $(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
+> > +       $(if $(BR2_PACKAGE_COLLECTD_BUDDYINFO),--enable-buddyinfo,--disable-buddyinfo) \
+> >         $(if $(BR2_PACKAGE_COLLECTD_CAPABILITIES),--enable-capabilities,--disable-capabilities) \
+> >         $(if $(BR2_PACKAGE_COLLECTD_CEPH),--enable-ceph,--disable-ceph) \
+> >         $(if $(BR2_PACKAGE_COLLECTD_CHRONY),--enable-chrony,--disable-chrony) \
+> > --
+> > 2.25.1
+> >
+> Regards,
+> Asaf.
+Best Regards,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/comix-cursors/comix-cursors.hash | 2 +-
- package/comix-cursors/comix-cursors.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/comix-cursors/comix-cursors.hash b/package/comix-cursors/comix-cursors.hash
-index d7f33ca078..e03808c3f8 100644
---- a/package/comix-cursors/comix-cursors.hash
-+++ b/package/comix-cursors/comix-cursors.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	3109e4d19d930a6a2a5c3422ebaaa2002640169118f9b12c042bb64995f3ec31	ComixCursors-0.8.2.tar.bz2
-+sha256	9e68ea8ff230dcc793528aa5da9a38b9bf61c478cd6868b4e4f5da659746a019	ComixCursors-0.9.1.tar.bz2
-diff --git a/package/comix-cursors/comix-cursors.mk b/package/comix-cursors/comix-cursors.mk
-index 6cc73764ad..7b034ccee7 100644
---- a/package/comix-cursors/comix-cursors.mk
-+++ b/package/comix-cursors/comix-cursors.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--COMIX_CURSORS_VERSION = 0.8.2
--COMIX_CURSORS_SITE = http://limitland.de/downloads/comixcursors
-+COMIX_CURSORS_VERSION = 0.9.1
-+COMIX_CURSORS_SITE = https://limitland.gitlab.io/comixcursors
- COMIX_CURSORS_SOURCE = ComixCursors-$(COMIX_CURSORS_VERSION).tar.bz2
- COMIX_CURSORS_LICENSE = GPL-3.0
- COMIX_CURSORS_STRIP_COMPONENTS = 0
--- 
-2.25.0
+Fabrice
