@@ -1,85 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Apr 2020 18:37:56 +0200
-Subject: [Buildroot] [PATCH 2/6] package/collectd: remove lvm
-In-Reply-To: <20200414163800.2230496-1-fontaine.fabrice@gmail.com>
-References: <20200414163800.2230496-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200414163800.2230496-2-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 14 Apr 2020 18:36:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/check: bump version to 0.14.0
+Message-ID: <20200414163631.344155-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lvm has been removed since version 5.11.0 and
-https://github.com/collectd/collectd/commit/0e73c26f5670b2f11eecfdadaf545bcc7f260658
+Release notes: https://github.com/libcheck/check/releases/tag/0.14.0
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy             |  6 ++++++
- package/collectd/Config.in   | 13 -------------
- package/collectd/collectd.mk |  2 --
- 3 files changed, 6 insertions(+), 15 deletions(-)
+ package/check/check.hash | 2 +-
+ package/check/check.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 95f17b1b31..78b3b81e54 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+diff --git a/package/check/check.hash b/package/check/check.hash
+index 291b5d095e..52839a68b4 100644
+--- a/package/check/check.hash
++++ b/package/check/check.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256	c4336b31447acc7e3266854f73ec188cdb15554d0edd44739631da174a569909	check-0.13.0.tar.gz
++sha256	bd0f0ca1be65b70238b32f8e9fe5d36dc2fbf7a759b7edf28e75323a7d74f30b	check-0.14.0.tar.gz
+ # License files, locally calculated
+ sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	COPYING.LESSER
+diff --git a/package/check/check.mk b/package/check/check.mk
+index b02136dcb2..6bec07adbd 100644
+--- a/package/check/check.mk
++++ b/package/check/check.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2020.05"
- 
-+config BR2_PACKAGE_COLLECTD_LVM
-+	bool "lvm support in collectd was removed"
-+	select BR2_LEGACY
-+	help
-+	  collectd removed LVM plugin, liblvm2app has been deprecated
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA6174
- 	bool "duplicate QCA6174 firmware symbol removed"
- 	select BR2_LEGACY
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 4b34ec60eb..1b6b3384c4 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -296,19 +296,6 @@ config BR2_PACKAGE_COLLECTD_LOAD
- 	help
- 	  Collects the system load.
- 
--config BR2_PACKAGE_COLLECTD_LVM
--	bool "lvm"
--	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2 app library
--	select BR2_PACKAGE_LVM2
--	select BR2_PACKAGE_LVM2_APP_LIBRARY
--	help
--	  Collects the size of logical volumes (LV) and free space
--	  inside a volume group (VG) from Linux' Logical Volume Manager
--	  (LVM).
--
--comment "lvm needs a glibc or uClibc toolchain"
--	depends on BR2_TOOLCHAIN_USES_MUSL
--
- config BR2_PACKAGE_COLLECTD_MD
- 	bool "md"
- 	help
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index dda15b0162..24cdad7e1b 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -88,7 +88,6 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_LOGFILE),--enable-logfile,--disable-logfile) \
- 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),--enable-log_logstash,--disable-log_logstash) \
- 	$(if $(BR2_PACKAGE_COLLECTD_LUA),--enable-lua,--disable-lua) \
--	$(if $(BR2_PACKAGE_COLLECTD_LVM),--enable-lvm,--disable-lvm) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MD),--enable-md,--disable-md) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),--enable-memcachec,--disable-memcachec) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHED),--enable-memcached,--disable-memcached) \
-@@ -162,7 +161,6 @@ COLLECTD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
- 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),yajl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_LUA),lua) \
--	$(if $(BR2_PACKAGE_COLLECTD_LVM),lvm2) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),libmemcached) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MODBUS),libmodbus) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MQTT),mosquitto) \
+-CHECK_VERSION = 0.13.0
++CHECK_VERSION = 0.14.0
+ CHECK_SITE = https://github.com/libcheck/check/releases/download/$(CHECK_VERSION)
+ CHECK_INSTALL_STAGING = YES
+ CHECK_DEPENDENCIES = host-pkgconf
 -- 
-2.25.1
+2.25.0
