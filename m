@@ -1,59 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Apr 2020 18:44:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mbedtls: security bump to version
- 2.16.6
-Message-ID: <20200414164448.2233648-1-fontaine.fabrice@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue, 14 Apr 2020 19:51:21 +0300
+Subject: [Buildroot] [PATCH 6/6] package/collectd: add buddyinfo option
+In-Reply-To: <20200414163800.2230496-6-fontaine.fabrice@gmail.com>
+References: <20200414163800.2230496-1-fontaine.fabrice@gmail.com>
+ <20200414163800.2230496-6-fontaine.fabrice@gmail.com>
+Message-ID: <CALFsTFWYW3rLQunMO3EkDy3_FJMX+KPi2HhNdEsOmMnQCkHtEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2020-10932: fix side channel in ECC code that allowed an
-  adversary with access to precise enough timing and memory access
-  information (typically an untrusted operating system attacking a
-  secure enclave) to fully recover an ECDSA private key.
-- Fix a potentially remotely exploitable buffer overread in a DTLS
-  client when parsing the Hello Verify Request message.
-- Fix bug in DTLS handling of new associations with the same parameters
-  (RFC 6347 section 4.2.8): after sending its HelloVerifyRequest, the
-  server would end up with corrupted state and only send invalid records
-  to the client. An attacker able to send forged UDP packets to the
-  server could use that to obtain a Denial of Service. This could only
-  happen when MBEDTLS_SSL_DTLS_CLIENT_PORT_REUSE was enabled in
-  config.h (which it is by default).
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mbedtls/mbedtls.hash | 6 +++---
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Tue, Apr 14, 2020 at 7:36 PM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> buddyinfo is available since version 5.11.0 and
+> https://github.com/collectd/collectd/commit/cb19ecf90d89a79836b8b5236d2b66277dd79c5f
+>
+> It is currently enabled by default
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/collectd/Config.in   | 5 +++++
+>  package/collectd/collectd.mk | 1 +
+>  2 files changed, 6 insertions(+)
+>
+> diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+> index 15c871025c..1f55271a97 100644
+> --- a/package/collectd/Config.in
+> +++ b/package/collectd/Config.in
+> @@ -128,6 +128,11 @@ config BR2_PACKAGE_COLLECTD_BIND
+>         help
+>           Collects BIND DNS statistics.
+>
+> +config BR2_PACKAGE_BUDDYINFO
+I guess you meant to call this "BR2_PACKAGE_COLLECTD_BUDDYINFO".
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 92e7d35a64..17ac18bb25 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,5 +1,5 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.5-and-2.7.14-released
--sha1  c36962183e05467aa1dadafcaacf90216a737866  mbedtls-2.16.5-apache.tgz
--sha256  65b4c6cec83e048fd1c675e9a29a394ea30ad0371d37b5742453f74084e7b04d  mbedtls-2.16.5-apache.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.6-and-2.7.15-released
-+sha1  3cb5b681597a5bd798d31038c129c0dc911d8a2c  mbedtls-2.16.6-apache.tgz
-+sha256  66455e23a6190a30142cdc1113f7418158839331a9d8e6b0778631d077281770  mbedtls-2.16.6-apache.tgz
- # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 5d0dd87339..50121fa6c7 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.16.5
-+MBEDTLS_VERSION = 2.16.6
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
--- 
-2.25.1
+> +       bool "buddyinfo"
+> +       help
+> +         Statistics from buddyinfo file about memory fragmentation.
+> +
+>  config BR2_PACKAGE_COLLECTD_CAPABILITIES
+>         bool "capabilities"
+>         select BR2_PACKAGE_JANSSON
+> diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+> index f04ccdb2ff..6bd1754ad7 100644
+> --- a/package/collectd/collectd.mk
+> +++ b/package/collectd/collectd.mk
+> @@ -51,6 +51,7 @@ COLLECTD_CONF_OPTS += \
+>         $(if $(BR2_PACKAGE_COLLECTD_APCUPS),--enable-apcups,--disable-apcups) \
+>         $(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
+>         $(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
+> +       $(if $(BR2_PACKAGE_COLLECTD_BUDDYINFO),--enable-buddyinfo,--disable-buddyinfo) \
+>         $(if $(BR2_PACKAGE_COLLECTD_CAPABILITIES),--enable-capabilities,--disable-capabilities) \
+>         $(if $(BR2_PACKAGE_COLLECTD_CEPH),--enable-ceph,--disable-ceph) \
+>         $(if $(BR2_PACKAGE_COLLECTD_CHRONY),--enable-chrony,--disable-chrony) \
+> --
+> 2.25.1
+>
+Regards,
+Asaf.
