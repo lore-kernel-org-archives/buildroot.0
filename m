@@ -1,11 +1,10 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 14 Apr 2020 12:30:33 -0500
-Subject: [Buildroot] [PATCH] package/netsnmp: unix domain socket
- transport
-In-Reply-To: <20200414182415.4ba118eb@windsurf.home>
-References: <20200414131720.14201-1-matthew.weber@rockwellcollins.com>
- <20200414182415.4ba118eb@windsurf.home>
-Message-ID: <CANQCQpb5GJh_AACj+N1EcEXvHj+cAV+zapYBo7i3fwxPdgHFXA@mail.gmail.com>
+Date: Tue, 14 Apr 2020 12:31:33 -0500
+Subject: [Buildroot] [PATCH] package/swupdate: Add basic systemd service
+In-Reply-To: <20200414182350.34184f96@windsurf.home>
+References: <20200414135231.27737-1-matthew.weber@rockwellcollins.com>
+ <20200414182350.34184f96@windsurf.home>
+Message-ID: <CANQCQpbw3B7mRiMeX-amqFCoHfypheBP2mSaCtKQc68nK9gErQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +13,42 @@ To: buildroot@busybox.net
 
 Thomas,
 
-
-On Tue, Apr 14, 2020 at 11:26 AM Thomas Petazzoni
+On Tue, Apr 14, 2020 at 11:24 AM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
-> On Tue, 14 Apr 2020 08:17:20 -0500
+> On Tue, 14 Apr 2020 08:52:31 -0500
 > Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 >
-> > From: Ryan Steffens <ryan.steffens@rockwellcollins.com>
+> > From: Sam Voss <sam.voss@rockwellcollins.com>
 > >
-> > Signed-off-by: Ryan Steffens <ryan.steffens@rockwellcollins.com>
-> > Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> > Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
 > > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> > ---
+> >  package/swupdate/swupdate.mk      | 10 ++++++++++
+> >  package/swupdate/swupdate.service | 17 +++++++++++++++++
+> >  2 files changed, 27 insertions(+)
+> >  create mode 100644 package/swupdate/swupdate.service
+> >
+> > diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+> > index 2b51edb66d..2300220d93 100644
+> > --- a/package/swupdate/swupdate.mk
+> > +++ b/package/swupdate/swupdate.mk
+> > @@ -189,4 +189,14 @@ $(error No Swupdate configuration file specified, check your BR2_PACKAGE_SWUPDAT
+> >  endif
+> >  endif
+> >
+> > +ifeq ($(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE),y)
+> > +define SWUPDATE_INSTALL_INIT_SYSTEMD
+> > +     $(INSTALL) -D -m 644 package/swupdate/swupdate.service \
+> > +             $(TARGET_DIR)/usr/lib/systemd/system/swupdate.service
+> > +     mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> > +     ln -sf ../../../../usr/lib/systemd/system/swupdate.service \
+> > +             $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/swupdate.service
 >
-> Empty commit log -> there is no justification/explanation for this
-> change.
+> This symlink is no longer needed now that we have host-systemd as far
+> as I understand.
 >
-> Could you expand the commit log ?
 
-I'll check, I believe the use case is using a subagent.  We'll get a
-v2 updated with a description.
+Is there a good example of how that works?
 
 Matt
