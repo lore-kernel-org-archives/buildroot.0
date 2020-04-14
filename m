@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 14 Apr 2020 10:25:27 -0500
-Subject: [Buildroot] [PATCH v3 7/8] package/checkpolicy: bump version to 3.0
+Date: Tue, 14 Apr 2020 10:25:22 -0500
+Subject: [Buildroot] [PATCH v3 2/8] package/libsemanage: bump version to 3.0
 In-Reply-To: <20200414152528.20758-1-matthew.weber@rockwellcollins.com>
 References: <20200414152528.20758-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20200414152528.20758-8-matthew.weber@rockwellcollins.com>
+Message-ID: <20200414152528.20758-3-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,52 +12,84 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <aduskett@gmail.com>
 
+Other changes:
+  - Remove the Python2 check, as 3.0 has removed support for Python2.
+
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
 Changes v2 -> v3
  - Matt switched over the versioning to use dates
 ---
- package/checkpolicy/checkpolicy.hash | 9 ++++-----
- package/checkpolicy/checkpolicy.mk   | 8 +++++---
- 2 files changed, 9 insertions(+), 8 deletions(-)
+ package/libsemanage/libsemanage.hash |  5 +++--
+ package/libsemanage/libsemanage.mk   | 20 +++++++-------------
+ 2 files changed, 10 insertions(+), 15 deletions(-)
 
-diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
-index 9e77b9b027..1d20ad3eca 100644
---- a/package/checkpolicy/checkpolicy.hash
-+++ b/package/checkpolicy/checkpolicy.hash
-@@ -1,5 +1,4 @@
--# https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 a946c32b284532447857e4c48830f8816867c61220c8c08bdd32e6f691335f8e  checkpolicy-2.9.tar.gz
--
--# Hash for license file
--sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index 871ed192c4..3090847686 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
+@@ -1,5 +1,6 @@
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 2576349d344492e73b468059767268dec1dabd8c35f3c7222c3ec2448737bc1c libsemanage-2.9.tar.gz
 +# Generated locally as upstream releases in artifact
-+# files under a overall YYYYMMDD dated selinux release
-+sha256 4cc134210d8cca6c410b7b8c91993e10c6d5b077102ed27e6976bb6d9e483f0d checkpolicy-20191204.tar.gz
-+sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 checkpolicy/COPYING
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
-index 8f1ec72549..a4b31718f7 100644
---- a/package/checkpolicy/checkpolicy.mk
-+++ b/package/checkpolicy/checkpolicy.mk
++sha256 4cc134210d8cca6c410b7b8c91993e10c6d5b077102ed27e6976bb6d9e483f0d libsemanage-20191204.tar.gz
+ 
+ # Hash for license file
+-sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
++sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 libsemanage/COPYING
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index fd90346049..0bd529f876 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
 @@ -4,13 +4,15 @@
  #
  ################################################################################
  
--CHECKPOLICY_VERSION = 2.9
--CHECKPOLICY_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
-+CHECKPOLICY_VERSION = $(LIBSELINUX_VERSION)
-+CHECKPOLICY_SITE = $(LIBSELINUX_SITE)
- CHECKPOLICY_LICENSE = GPL-2.0
--CHECKPOLICY_LICENSE_FILES = COPYING
-+CHECKPOLICY_LICENSE_FILES = $(CHECKPOLICY_NAME)/COPYING
+-LIBSEMANAGE_VERSION = 2.9
+-LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
++LIBSEMANAGE_VERSION = $(LIBSELINUX_VERSION)
++LIBSEMANAGE_SITE = $(LIBSELINUX_SITE)
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+-LIBSEMANAGE_LICENSE_FILES = COPYING
++LIBSEMANAGE_LICENSE_FILES = $(LIBSEMANAGE_NAME)/COPYING
+ LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux bzip2
+ LIBSEMANAGE_INSTALL_STAGING = YES
  
- CHECKPOLICY_DEPENDENCIES = libselinux flex host-flex host-bison
- 
-+CHECKPOLICY_SUBDIR = $(@D)/$(CHECKPOLICY_NAME)
++LIBSEMANAGE_SUBDIR = $(@D)/$(LIBSEMANAGE_NAME)
 +
- CHECKPOLICY_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) \
- 	LEX="$(HOST_DIR)/bin/flex" \
- 	YACC="$(HOST_DIR)/bin/bison -y"
+ LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
+ 
+ define LIBSEMANAGE_BUILD_CMDS
+@@ -31,7 +33,8 @@ HOST_LIBSEMANAGE_DEPENDENCIES = \
+ 	host-libsepol \
+ 	host-libselinux \
+ 	host-bzip2 \
+-	host-swig
++	host-swig \
++	host-python3
+ 
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	$(HOST_CONFIGURE_OPTS) \
+@@ -39,19 +42,10 @@ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/" \
+ 	DEFAULT_SEMANAGE_CONF_LOCATION=$(HOST_DIR)/etc/selinux/semanage.conf
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	PYINC="-I$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)/" \
+ 	PYTHONLIBDIR="$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/" \
+ 	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
+-else
+-HOST_LIBSEMANAGE_DEPENDENCIES += host-python
+-HOST_LIBSEMANAGE_MAKE_OPTS += \
+-	PYINC="-I$(HOST_DIR)/include/python$(PYTHON_VERSION_MAJOR)/" \
+-	PYTHONLIBDIR="$(HOST_DIR)/lib/python$(PYTHON_VERSION_MAJOR)/" \
+-	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
+-endif
+ 
+ define HOST_LIBSEMANAGE_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) all
 -- 
 2.17.1
