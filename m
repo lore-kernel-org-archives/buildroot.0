@@ -1,8 +1,7 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 13 Apr 2020 19:46:14 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-flatbuffers: bump to version
- 1.12
-Message-ID: <20200414014614.104581-1-james.hilliard1@gmail.com>
+Date: Mon, 13 Apr 2020 19:49:20 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-h2: bump to version 3.2.0
+Message-ID: <20200414014920.125741-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,35 +10,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-flatbuffers/python-flatbuffers.hash | 4 ++--
- package/python-flatbuffers/python-flatbuffers.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-h2/python-h2.hash | 6 +++---
+ package/python-h2/python-h2.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-flatbuffers/python-flatbuffers.hash b/package/python-flatbuffers/python-flatbuffers.hash
-index 0cb5437906..ba7df6babc 100644
---- a/package/python-flatbuffers/python-flatbuffers.hash
-+++ b/package/python-flatbuffers/python-flatbuffers.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/flatbuffers/json
--md5  b5f6c2246f45636dd49d9ff8a00d7f1c  flatbuffers-1.11.tar.gz
--sha256  f24185db54193540e3d684dc98aa7c2d89882341641548ceb36fd2589fef6c4e  flatbuffers-1.11.tar.gz
-+md5  b9a5b8dfbbb4751788529310118ea6db  flatbuffers-1.12.tar.gz
-+sha256  63bb9a722d5e373701913e226135b28a6f6ac200d5cc7b4d919fa38d73b44610  flatbuffers-1.12.tar.gz
-diff --git a/package/python-flatbuffers/python-flatbuffers.mk b/package/python-flatbuffers/python-flatbuffers.mk
-index d0374c4787..33bb57ddf3 100644
---- a/package/python-flatbuffers/python-flatbuffers.mk
-+++ b/package/python-flatbuffers/python-flatbuffers.mk
+diff --git a/package/python-h2/python-h2.hash b/package/python-h2/python-h2.hash
+index 1d5df8878d..4193567d37 100644
+--- a/package/python-h2/python-h2.hash
++++ b/package/python-h2/python-h2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/h2/json
+-md5	950b5a62a2a608dc4547a01edf99aa8f  h2-3.1.1.tar.gz
+-sha256	b8a32bd282594424c0ac55845377eea13fa54fe4a8db012f3a198ed923dc3ab4  h2-3.1.1.tar.gz
++md5  197a99c09f344a0dd987fab9801dc8d0  h2-3.2.0.tar.gz
++sha256  875f41ebd6f2c44781259005b157faed1a5031df3ae5aa7bcb4628a6c0782f14  h2-3.2.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	663f9253e13519b82ab4a6b1caab6bed05aada70517f28cd0254be8a9fa19ed6  LICENSE
++sha256  663f9253e13519b82ab4a6b1caab6bed05aada70517f28cd0254be8a9fa19ed6  LICENSE
+diff --git a/package/python-h2/python-h2.mk b/package/python-h2/python-h2.mk
+index 0043ee2d50..81397bbb10 100644
+--- a/package/python-h2/python-h2.mk
++++ b/package/python-h2/python-h2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FLATBUFFERS_VERSION = 1.11
-+PYTHON_FLATBUFFERS_VERSION = 1.12
- PYTHON_FLATBUFFERS_SOURCE = flatbuffers-$(PYTHON_FLATBUFFERS_VERSION).tar.gz
--PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/c6/b6/21478b76aa7ccab58da3beb85746b6844dee2112c0cc25b51ec64b46bdbb
-+PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/4d/c4/7b995ab9bf0c7eaf10c386d29a03408dfcf72648df4102b1f18896c3aeea
- PYTHON_FLATBUFFERS_LICENSE = Apache-2.0
- PYTHON_FLATBUFFERS_SETUP_TYPE = setuptools
- 
+-PYTHON_H2_VERSION = 3.1.1
++PYTHON_H2_VERSION = 3.2.0
+ PYTHON_H2_SOURCE = h2-$(PYTHON_H2_VERSION).tar.gz
+-PYTHON_H2_SITE = https://files.pythonhosted.org/packages/56/73/0bc3a2f4238bdfbd9b0dc41a972fb558d96e8580ef2a37129ee5a54fa04e
++PYTHON_H2_SITE = https://files.pythonhosted.org/packages/08/0a/033df0fc05fe94f72517ccd393dd9ff99b1773fd198307638e6d3568a518
+ PYTHON_H2_SETUP_TYPE = setuptools
+ PYTHON_H2_LICENSE = MIT
+ PYTHON_H2_LICENSE_FILES = LICENSE
 -- 
 2.20.1
