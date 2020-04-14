@@ -1,40 +1,42 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 14 Apr 2020 11:44:04 +0200
-Subject: [Buildroot] [PATCH] package/python-cbor2: needs
- host-python-setuptools-scm
-In-Reply-To: <20200414065915.8310-1-asafka7@gmail.com>
-References: <20200414065915.8310-1-asafka7@gmail.com>
-Message-ID: <CAGm1_ksJuWSx6RRho8k47chX62ZpQBXt8Djzp0XQs2=jvAR5GA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 14 Apr 2020 12:22:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libid3tag: needs host-gperf
+Message-ID: <20200414102259.1285346-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 14, 2020 at 9:00 AM Asaf Kahlon <asafka7@gmail.com> wrote:
->
-> Fixes:
->   http://autobuild.buildroot.net/results/124e1e628c78449fbaa027d74ab871b36d782343/
->
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Since switch to debian in commit
+210ccaef5784011bc035d0ae13611cb4e76f389f, host-gperf is needed to
+generate frametype.c which is empty by default otherwise build with
+madplay will fail on:
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+configure:17243: checking for snd_pcm_open in -lasound
+configure:17268: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/powerpc64-linux-gcc -o conftest -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=1  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lid3tag  >&5
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/8.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libid3tag.so: undefined reference to `id3_frametype_lookup'
 
-> ---
->  package/python-cbor2/python-cbor2.mk | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
-> index d504e33d2d..d0cee7e941 100644
-> --- a/package/python-cbor2/python-cbor2.mk
-> +++ b/package/python-cbor2/python-cbor2.mk
-> @@ -10,5 +10,6 @@ PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/3e/2c/188d040bd4cf99
->  PYTHON_CBOR2_SETUP_TYPE = setuptools
->  PYTHON_CBOR2_LICENSE = MIT
->  PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
-> +PYTHON_CBOR2_DEPENDENCIES = host-python-setuptools-scm
->
->  $(eval $(python-package))
-> --
-> 2.26.0
->
+Fixes:
+ - http://autobuild.buildroot.org/results/15a8c7f6e34b26446179c04383719ea71495403e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libid3tag/libid3tag.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
+index 14a7f3f938..5d7b219bb1 100644
+--- a/package/libid3tag/libid3tag.mk
++++ b/package/libid3tag/libid3tag.mk
+@@ -12,7 +12,7 @@ LIBID3TAG_SITE = \
+ LIBID3TAG_LICENSE = GPL-2.0+
+ LIBID3TAG_LICENSE_FILES = COPYING COPYRIGHT
+ LIBID3TAG_INSTALL_STAGING = YES
+-LIBID3TAG_DEPENDENCIES = zlib
++LIBID3TAG_DEPENDENCIES = host-gperf zlib
+ 
+ # debian/patches/10_utf16.dpatch
+ LIBID3TAG_IGNORE_CVES += CVE-2004-2779 CVE-2017-11551
+-- 
+2.25.1
