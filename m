@@ -1,43 +1,60 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 14 Apr 2020 13:26:21 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: use -msse2 only
- when supported
-Message-ID: <20200414102621.18804-1-asafka7@gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Tue, 14 Apr 2020 07:46:50 -0300
+Subject: [Buildroot] [PATCH v2 1/2] Strip binaries in the rootfs
+ creation instead of in target-finalize
+In-Reply-To: <20200414073604.5f2fc158@windsurf.home>
+References: <20191001013654.22298-1-unixmania@gmail.com>
+ <20191001013654.22298-2-unixmania@gmail.com>
+ <20200413160247.6e8ee01b@windsurf.home>
+ <CAJ4jsae5MWs3GjaPvz57HOiJN=+Lf1dGw0HdAN0nVpm7RsoYfA@mail.gmail.com>
+ <20200414073604.5f2fc158@windsurf.home>
+Message-ID: <CAJ4jsadzQELders8gEGFK8_kvdAnchzvGOre3_ppBwRvkTO4RA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package adds the '-msse2' flag according to the result of the
-pythonic "platform.machine()" statement, which runs on the host
-and doesn't necessarily reflects the existence of this flag on
-the target compiler.
-Hence, we'll set the 'optimzed' variable in setup.py only when
-we know SSE2 is supported.
+ing Tue, Apr 14, 2020 at 2:36 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Carlos,
+>
+> On Mon, 13 Apr 2020 20:41:11 -0300
+> Carlos Santos <unixmania@gmail.com> wrote:
+>
+> > > There's been feedback from both Yann and me on this patch, and both of
+> > > us think this is not the approach we want to take. Instead, we'd rather
+> > > see everything installed to STAGING_DIR as the way of fixing the
+> > > original issue.
+> > >
+> > > So I've marked both patches as Rejected in patchwork. Of course, if
+> > > other people disagree with this decision, we can always revisit and
+> > > rediscuss the matter.
+> >
+> > Just to remind you, the problem was reported two and a half years ago
+> > and the situation is still the same. Perfect is the enemy of good and
+> > later easily becomes never. Anyway, your project, your rules.
 
-Fixes:
-  http://autobuild.buildroot.net/results/8c8aee8c8a0062575f489042bb11cc8515cbe48c/
+---8<---
+> Have you read our concerns ? As far as I can see, your only reply was
+> to make it optional, which really only makes the whole thing even more
+> complicated.
+---8<---
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-argon2-cffi/python-argon2-cffi.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+I have read the concerns. They sound reasonable but at the same time
+there was an assumption (or promise) that the problem would vanish
+once the dichotomy between staging/ and target/ be eliminated. Fair
+enough, but no ETA was provided and the fact that the problem still
+exists should be an alert about how difficult the solution is.
 
-diff --git a/package/python-argon2-cffi/python-argon2-cffi.mk b/package/python-argon2-cffi/python-argon2-cffi.mk
-index 099574e9c3..9f73e75c1e 100644
---- a/package/python-argon2-cffi/python-argon2-cffi.mk
-+++ b/package/python-argon2-cffi/python-argon2-cffi.mk
-@@ -12,4 +12,10 @@ PYTHON_ARGON2_CFFI_LICENSE = MIT
- PYTHON_ARGON2_CFFI_LICENSE_FILES = LICENSE
- PYTHON_ARGON2_CFFI_DEPENDENCIES = host-python-cffi
- 
-+define PYTHON_ARGON2_CFFI_SET_OPTIMZED_FLAG
-+        $(SED) 's;^\(optimized = *\)\(.*\);\1$(if $(BR2_X86_CPU_HAS_SSE2),True,False);' $(@D)/setup.py
-+endef
-+
-+PYTHON_ARGON2_CFFI_POST_PATCH_HOOKS += PYTHON_ARGON2_CFFI_SET_OPTIMZED_FLAG
-+
- $(eval $(python-package))
+So two questions must be answered:
+
+1. Is the problem reported by Ciro Santilli in bug 10386 real? If the
+answer is "no", there's nothing else to argue about. Otherwise, jump
+to question 2.
+
+2. Is anybody able to estimate how long it will take to provide a solution?
+
 -- 
-2.26.0
+Carlos Santos <unixmania@gmail.com>
