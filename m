@@ -1,66 +1,56 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Apr 2020 19:12:44 +0200
-Subject: [Buildroot] [PATCH v2,
- 5/6] package/collectd: add capabilities option
+Date: Tue, 14 Apr 2020 19:12:45 +0200
+Subject: [Buildroot] [PATCH v2,6/6] package/collectd: add buddyinfo option
 In-Reply-To: <20200414171245.2235154-1-fontaine.fabrice@gmail.com>
 References: <20200414171245.2235154-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200414171245.2235154-5-fontaine.fabrice@gmail.com>
+Message-ID: <20200414171245.2235154-6-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-capabilities plugin is available since version 5.11.0 and
-https://github.com/collectd/collectd/commit/b934f1572cdb54cf485b600546a72dbf9929ba2c
+buddyinfo is available since version 5.11.0 and
+https://github.com/collectd/collectd/commit/cb19ecf90d89a79836b8b5236d2b66277dd79c5f
 
-It is currently enabled by default depending on jansson and
-libmicrohttpd availability
+It is currently enabled by default
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/collectd/Config.in   | 8 ++++++++
- package/collectd/collectd.mk | 2 ++
- 2 files changed, 10 insertions(+)
+Changes v1 -> v2 (after review of Asaf Kahlon):
+ - Add missing COLLECTD_ prefix for buddyinfo option in Config.in
+
+ package/collectd/Config.in   | 5 +++++
+ package/collectd/collectd.mk | 1 +
+ 2 files changed, 6 insertions(+)
 
 diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 7186d67c36..15c871025c 100644
+index 15c871025c..1c4bf5e9b5 100644
 --- a/package/collectd/Config.in
 +++ b/package/collectd/Config.in
-@@ -128,6 +128,14 @@ config BR2_PACKAGE_COLLECTD_BIND
+@@ -128,6 +128,11 @@ config BR2_PACKAGE_COLLECTD_BIND
  	help
  	  Collects BIND DNS statistics.
  
-+config BR2_PACKAGE_COLLECTD_CAPABILITIES
-+	bool "capabilities"
-+	select BR2_PACKAGE_JANSSON
-+	select BR2_PACKAGE_LIBMICROHTTPD
++config BR2_PACKAGE_COLLECTD_BUDDYINFO
++	bool "buddyinfo"
 +	help
-+	  Collects selected static platform data using dmidecode and
-+	  expose it through micro embedded webserver.
++	  Statistics from buddyinfo file about memory fragmentation.
 +
- config BR2_PACKAGE_COLLECTD_CEPH
- 	bool "ceph"
- 	select BR2_PACKAGE_YAJL
+ config BR2_PACKAGE_COLLECTD_CAPABILITIES
+ 	bool "capabilities"
+ 	select BR2_PACKAGE_JANSSON
 diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 964f4dc694..f04ccdb2ff 100644
+index f04ccdb2ff..6bd1754ad7 100644
 --- a/package/collectd/collectd.mk
 +++ b/package/collectd/collectd.mk
 @@ -51,6 +51,7 @@ COLLECTD_CONF_OPTS += \
  	$(if $(BR2_PACKAGE_COLLECTD_APCUPS),--enable-apcups,--disable-apcups) \
  	$(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
  	$(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
-+	$(if $(BR2_PACKAGE_COLLECTD_CAPABILITIES),--enable-capabilities,--disable-capabilities) \
++	$(if $(BR2_PACKAGE_COLLECTD_BUDDYINFO),--enable-buddyinfo,--disable-buddyinfo) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CAPABILITIES),--enable-capabilities,--disable-capabilities) \
  	$(if $(BR2_PACKAGE_COLLECTD_CEPH),--enable-ceph,--disable-ceph) \
  	$(if $(BR2_PACKAGE_COLLECTD_CHRONY),--enable-chrony,--disable-chrony) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CGROUPS),--enable-cgroups,--disable-cgroups) \
-@@ -153,6 +154,7 @@ COLLECTD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_COLLECTD_AMQP),rabbitmq-c) \
- 	$(if $(BR2_PACKAGE_COLLECTD_APACHE),libcurl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_BIND),libcurl libxml2) \
-+	$(if $(BR2_PACKAGE_COLLECTD_CAPABILITIES),jansson libmicrohttpd) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CEPH),yajl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CURL),libcurl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),libcurl yajl) \
 -- 
 2.25.1
