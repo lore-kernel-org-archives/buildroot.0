@@ -1,40 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Apr 2020 14:07:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkcs11-helper: needs dynamic library
-Message-ID: <20200414120715.1449106-1-fontaine.fabrice@gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 14 Apr 2020 08:17:20 -0500
+Subject: [Buildroot] [PATCH] package/netsnmp: unix domain socket transport
+Message-ID: <20200414131720.14201-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pkcs11-helper unconditionally use dlfcn.h in lib/pkcs11h-core.c
+From: Ryan Steffens <ryan.steffens@rockwellcollins.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/3411074765312e67dab0f71876a254721911714f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Ryan Steffens <ryan.steffens@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/pkcs11-helper/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/netsnmp/netsnmp.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/pkcs11-helper/Config.in b/package/pkcs11-helper/Config.in
-index da000b7010..36204d7d33 100644
---- a/package/pkcs11-helper/Config.in
-+++ b/package/pkcs11-helper/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PKCS11_HELPER
- 	bool "pkcs11-helper"
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	help
- 	  pkcs11-helper is a library that simplifies the interaction
- 	  with PKCS#11 providers for end-user applications.
-@@ -17,3 +18,6 @@ config BR2_PACKAGE_PKCS11_HELPER
- 	  perform signature and decryption.
- 
- 	  https://github.com/OpenSC/pkcs11-helper
-+
-+comment "pkcs11-helper needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 28f564f2f7..a1ce3c8605 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -38,7 +38,6 @@ NETSNMP_CONF_OPTS = \
+ 	--with-sys-location="Unknown" \
+ 	--with-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES))" \
+ 	--with-out-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES))" \
+-	--with-out-transports="Unix" \
+ 	--disable-manuals
+ NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true install
+ NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
 -- 
-2.25.1
+2.18.0
