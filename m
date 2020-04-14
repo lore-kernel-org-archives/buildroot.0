@@ -1,49 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 14 Apr 2020 17:43:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bitstream: bump version to 1.5
-Message-ID: <20200414154313.19393-1-bernd.kuhls@t-online.de>
+Date: Tue, 14 Apr 2020 17:55:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/botan: bump version to 2.14.0
+Message-ID: <20200414155541.143326-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://mailman.videolan.org/pipermail/bitstream-devel/2018-November/000116.html
+Release notes: https://botan.randombit.net/news.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/bitstream/bitstream.hash | 8 ++++----
- package/bitstream/bitstream.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/botan/botan.hash | 3 ++-
+ package/botan/botan.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/bitstream/bitstream.hash b/package/bitstream/bitstream.hash
-index 89da7c6fd0..0d2e5a1f1a 100644
---- a/package/bitstream/bitstream.hash
-+++ b/package/bitstream/bitstream.hash
-@@ -1,6 +1,6 @@
--# From https://get.videolan.org/bitstream/1.4/bitstream-1.4.tar.bz2.md5
--md5 dfb1449194250b2d364d54b5bbac858d  bitstream-1.4.tar.bz2
--# From https://get.videolan.org/bitstream/1.4/bitstream-1.4.tar.bz2.sha256
--sha256 b2484940d3b8733bec9dd1ec1731de428261dff31c9f95874264be9dc9ce786b  bitstream-1.4.tar.bz2
-+# From https://get.videolan.org/bitstream/1.5/bitstream-1.5.tar.bz2.md5
-+md5 34630d13332fd1575bcc8531b0a596be  bitstream-1.5.tar.bz2
-+# From https://get.videolan.org/bitstream/1.5/bitstream-1.5.tar.bz2.sha256
-+sha256 45fc5a5a6e4537a69fa8440821e87b76252135180a3070c631b0b36ce0a3b90a  bitstream-1.5.tar.bz2
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index 29efddb35c..15e79bbe40 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,3 +1,4 @@
++# From https://botan.randombit.net/releases/sha256sums.txt
++sha256  0c10f12b424a40ee19bde00292098e201d7498535c062d8d5b586d07861a54b5  Botan-2.14.0.tar.xz
  # Locally computed
- sha256 9644a812f9a8377a59acb7092a36ce8882a39743425d9171a8fb84637e2f6e04  COPYING
-diff --git a/package/bitstream/bitstream.mk b/package/bitstream/bitstream.mk
-index 1746d1386c..12124a63d3 100644
---- a/package/bitstream/bitstream.mk
-+++ b/package/bitstream/bitstream.mk
+-sha256  f57ae42a41e1091bca58f44f41addebd9a390b651603952c881ec89d50187e90  Botan-2.13.0.tar.xz
+ sha256  fb7f0322d36fba55ca17d77bc203a9f09a40daa8a249b75cf8887aba36cec9d0  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 6394b5ef95..a5551b110f 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BITSTREAM_VERSION = 1.4
-+BITSTREAM_VERSION = 1.5
- BITSTREAM_SOURCE = bitstream-$(BITSTREAM_VERSION).tar.bz2
- BITSTREAM_SITE = https://get.videolan.org/bitstream/$(BITSTREAM_VERSION)
- BITSTREAM_LICENSE = MIT
+-BOTAN_VERSION = 2.13.0
++BOTAN_VERSION = 2.14.0
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
 -- 
 2.25.0
