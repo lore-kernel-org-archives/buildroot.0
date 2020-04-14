@@ -1,42 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Apr 2020 12:22:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libid3tag: needs host-gperf
-Message-ID: <20200414102259.1285346-1-fontaine.fabrice@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue, 14 Apr 2020 13:26:21 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: use -msse2 only
+ when supported
+Message-ID: <20200414102621.18804-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since switch to debian in commit
-210ccaef5784011bc035d0ae13611cb4e76f389f, host-gperf is needed to
-generate frametype.c which is empty by default otherwise build with
-madplay will fail on:
-
-configure:17243: checking for snd_pcm_open in -lasound
-configure:17268: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/powerpc64-linux-gcc -o conftest -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=1  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lid3tag  >&5
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/8.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libid3tag.so: undefined reference to `id3_frametype_lookup'
+The package adds the '-msse2' flag according to the result of the
+pythonic "platform.machine()" statement, which runs on the host
+and doesn't necessarily reflects the existence of this flag on
+the target compiler.
+Hence, we'll set the 'optimzed' variable in setup.py only when
+we know SSE2 is supported.
 
 Fixes:
- - http://autobuild.buildroot.org/results/15a8c7f6e34b26446179c04383719ea71495403e
+  http://autobuild.buildroot.net/results/8c8aee8c8a0062575f489042bb11cc8515cbe48c/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/libid3tag/libid3tag.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-argon2-cffi/python-argon2-cffi.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
-index 14a7f3f938..5d7b219bb1 100644
---- a/package/libid3tag/libid3tag.mk
-+++ b/package/libid3tag/libid3tag.mk
-@@ -12,7 +12,7 @@ LIBID3TAG_SITE = \
- LIBID3TAG_LICENSE = GPL-2.0+
- LIBID3TAG_LICENSE_FILES = COPYING COPYRIGHT
- LIBID3TAG_INSTALL_STAGING = YES
--LIBID3TAG_DEPENDENCIES = zlib
-+LIBID3TAG_DEPENDENCIES = host-gperf zlib
+diff --git a/package/python-argon2-cffi/python-argon2-cffi.mk b/package/python-argon2-cffi/python-argon2-cffi.mk
+index 099574e9c3..9f73e75c1e 100644
+--- a/package/python-argon2-cffi/python-argon2-cffi.mk
++++ b/package/python-argon2-cffi/python-argon2-cffi.mk
+@@ -12,4 +12,10 @@ PYTHON_ARGON2_CFFI_LICENSE = MIT
+ PYTHON_ARGON2_CFFI_LICENSE_FILES = LICENSE
+ PYTHON_ARGON2_CFFI_DEPENDENCIES = host-python-cffi
  
- # debian/patches/10_utf16.dpatch
- LIBID3TAG_IGNORE_CVES += CVE-2004-2779 CVE-2017-11551
++define PYTHON_ARGON2_CFFI_SET_OPTIMZED_FLAG
++        $(SED) 's;^\(optimized = *\)\(.*\);\1$(if $(BR2_X86_CPU_HAS_SSE2),True,False);' $(@D)/setup.py
++endef
++
++PYTHON_ARGON2_CFFI_POST_PATCH_HOOKS += PYTHON_ARGON2_CFFI_SET_OPTIMZED_FLAG
++
+ $(eval $(python-package))
 -- 
-2.25.1
+2.26.0
