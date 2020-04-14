@@ -1,29 +1,38 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 14 Apr 2020 14:50:32 -0300
-Subject: [Buildroot] Setting better names for partitions
-Message-ID: <CAOMZO5Cr9PUnSNDtMk7rcA_mC3FTe1AkCJT=9Jpj4WUKSMeDJw@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 14 Apr 2020 12:55:00 -0500
+Subject: [Buildroot] [PATCH v2] package/netsnmp: unix domain socket transport
+Message-ID: <20200414175500.28891-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Ryan Steffens <ryan.steffens@rockwellcollins.com>
 
-On i.MX we usually generate the boot images via
-board/freescale/common/imx/post-image.sh script, which creates two
-partitions:
-- One that contains the dtb and kernel
-- One for rootfs
+Adds support for connecting unix socket based AgentX subagents
 
-The names of these partitions are strings like 5934-861D and
-ad09a287-46a9-4790-ba97-fbbb549e5e96.
+Signed-off-by: Ryan Steffens <ryan.steffens@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+Changes v1 -> v2
+ - (Thomas) Added a commit message about why
+---
+ package/netsnmp/netsnmp.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-Is there a way to specify a better name for the partitions? Something
-like "boot" and "rootfs" instead?
-
-If so, how can this be achieved?
-
-Thanks,
-
-Fabio Estevam
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index ed573c51e3..904279d1fb 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -30,7 +30,6 @@ NETSNMP_CONF_OPTS = \
+ 	--with-sys-location="Unknown" \
+ 	--with-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES))" \
+ 	--with-out-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES))" \
+-	--with-out-transports="Unix" \
+ 	--disable-manuals
+ NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true install
+ NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
+-- 
+2.17.1
