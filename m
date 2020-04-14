@@ -1,110 +1,74 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 14 Apr 2020 10:25:51 +0200
-Subject: [Buildroot] [PATCH 2/2] package/netopeer2-cli: add package
-In-Reply-To: <20200414082548.8625-1-heiko.thiery@gmail.com>
-References: <20200414082548.8625-1-heiko.thiery@gmail.com>
-Message-ID: <20200414082548.8625-3-heiko.thiery@gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Tue, 14 Apr 2020 10:51:54 +0200
+Subject: [Buildroot] [PATCH] package/gnuradio: revert patch 003 suppression
+Message-ID: <20200414085154.12044-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-netopeer2 cli is a simple command line interface to connect to a
-NETCONF server (device).
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Patch 0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch is applied
+in gnuradio master branch but has not been backported to maint-3.8.
+So this patch can't be supressed.
+
+Fix:
+- http://autobuild.buildroot.net/results/79a7dabc20016bcf11afe22e6a5691edbba2455b/
+- http://autobuild.buildroot.net/results/7342833ebcc8f399d98ba05e63fce6b60403371e/
+- http://autobuild.buildroot.net/results/1807c1b054623148f0a2e55dd998b0b428f48b47/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/netopeer2-cli/Config.in          | 20 ++++++++++++++++++++
- package/netopeer2-cli/netopeer2-cli.hash |  1 +
- package/netopeer2-cli/netopeer2-cli.mk   | 17 +++++++++++++++++
- 5 files changed, 40 insertions(+)
- create mode 100644 package/netopeer2-cli/Config.in
- create mode 120000 package/netopeer2-cli/netopeer2-cli.hash
- create mode 100644 package/netopeer2-cli/netopeer2-cli.mk
+ ....h-drop-boost-cstdint.hpp-and-use-cs.patch | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 79980863c7..fb2763adaf 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1106,6 +1106,7 @@ F:	package/python-sip/
- N:	Heiko Thiery <heiko.thiery@gmail.com>
- F:	package/libnetconf2/
- F:	package/libyang/
-+F:	package/netopeer2-cli/
- F:	package/netopeer2-server/
- F:	package/sysrepo/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 78c0d4b7ce..49c020cae6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1736,6 +1736,7 @@ menu "Networking"
- 	source "package/mongoose/Config.in"
- 	source "package/nanomsg/Config.in"
- 	source "package/neon/Config.in"
-+	source "package/netopeer2-cli/Config.in"
- 	source "package/netopeer2-server/Config.in"
- 	source "package/nghttp2/Config.in"
- 	source "package/norm/Config.in"
-diff --git a/package/netopeer2-cli/Config.in b/package/netopeer2-cli/Config.in
+diff --git a/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch b/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch
 new file mode 100644
-index 0000000000..70210597a1
+index 0000000000..532bebcf2e
 --- /dev/null
-+++ b/package/netopeer2-cli/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_NETOPEER2_CLI
-+	bool "netopeer2-cli"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBYANG
-+	select BR2_PACKAGE_LIBNETCONF2
-+	select BR2_PACKAGE_LIBSSH
-+	select BR2_PACKAGE_LIBSSH_SERVER
-+	select BR2_PACKAGE_PCRE # libyang
-+	select BR2_PACKAGE_PCRE_UCP # libyang
-+	help
-+	  Netopeer2 is a set of tools implementing network
-+	  configuration tools based on the NETCONF Protocol.
++++ b/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch
+@@ -0,0 +1,39 @@
++From f643bc12100c67288adda3699a9e61d6a66fb529 Mon Sep 17 00:00:00 2001
++From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Date: Fri, 7 Feb 2020 16:49:30 +0100
++Subject: [PATCH] gr-digital:glfsr.h: drop boost/cstdint.hpp and use cstdint
 +
-+	  This is the CLI client part.
++gr-digital/glfsr.h include boost/cstdint.hpp to have uintxx_t.
++These types are in boost namespace but nor using namespace xxx, nor boost:: are used.
++The result is :
++In file included from /home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/glfsr.cc:23:
++/home/buildroot/autobuild/instance-0/output-1/build/gnuradio-3.8.0.0/gr-digital/lib/../include/gnuradio/digital/glfsr.h:42:5: error: 'uint32_t' does not name a type; did you mean 'u_int32_t'?
++uint32_t d_shift_register;
++^~~~~~~~
++u_int32_t
 +
-+	  https://github.com/CESNET/Netopeer2
++Since Gnuradio policy is Less boost == better and C++11 is used, use cstdint
++instead of boost/cstdint.hpp.
 +
-+comment "netopeer2cli needs a toolchain w/ threads, dynamic libraray"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/netopeer2-cli/netopeer2-cli.hash b/package/netopeer2-cli/netopeer2-cli.hash
-new file mode 120000
-index 0000000000..1abc5dfda4
---- /dev/null
-+++ b/package/netopeer2-cli/netopeer2-cli.hash
-@@ -0,0 +1 @@
-+../netopeer2-server/netopeer2-server.hash
-\ No newline at end of file
-diff --git a/package/netopeer2-cli/netopeer2-cli.mk b/package/netopeer2-cli/netopeer2-cli.mk
-new file mode 100644
-index 0000000000..be82161d43
---- /dev/null
-+++ b/package/netopeer2-cli/netopeer2-cli.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# netopeer2-cli
-+#
-+################################################################################
++[backported from 475e4a156b516c089175afb998acdc80b740b437]
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ gr-digital/include/gnuradio/digital/glfsr.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+NETOPEER2_CLI_VERSION = 1.1.7
-+NETOPEER2_CLI_SOURCE = netopeer2-$(NETOPEER2_CLI_VERSION).tar.gz
-+NETOPEER2_CLI_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_CLI_VERSION))
-+NETOPEER2_CLI_DL_SUBDIR = netopeer2
-+NETOPEER2_CLI_LICENSE = BSD-3-Clause
-+NETOPEER2_CLI_LICENSE_FILES = LICENSE
-+NETOPEER2_CLI_SUBDIR = cli
-+NETOPEER2_CLI_INSTALL_STAGING = YES
-+NETOPEER2_CLI_DEPENDENCIES = libnetconf2 libyang
++diff --git a/gr-digital/include/gnuradio/digital/glfsr.h b/gr-digital/include/gnuradio/digital/glfsr.h
++index 0b5141f1f..1003bcd01 100644
++--- a/gr-digital/include/gnuradio/digital/glfsr.h
+++++ b/gr-digital/include/gnuradio/digital/glfsr.h
++@@ -24,7 +24,7 @@
++ #define INCLUDED_DIGITAL_GLFSR_H
++ 
++ #include <gnuradio/digital/api.h>
++-#include <boost/cstdint.hpp>
+++#include <cstdint>
++ 
++ namespace gr {
++ namespace digital {
++-- 
++2.24.1
 +
-+$(eval $(cmake-package))
 -- 
-2.20.1
+2.24.1
