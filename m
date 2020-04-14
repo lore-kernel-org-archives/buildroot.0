@@ -1,81 +1,40 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 14 Apr 2020 11:35:47 +0200
-Subject: [Buildroot] [PATCH v5 2/9] package/qoriq-rcw: move rcw into nxp
- and rename it
-In-Reply-To: <20200207083857.28058-2-jerry.huang@nxp.com>
-References: <20200207083857.28058-1-jerry.huang@nxp.com>
- <20200207083857.28058-2-jerry.huang@nxp.com>
-Message-ID: <CAEyMn7bcTuhn_+NkJ_Ja48h32V4nv18_AUQXu+1tu2hJOuqAoA@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 14 Apr 2020 11:44:04 +0200
+Subject: [Buildroot] [PATCH] package/python-cbor2: needs
+ host-python-setuptools-scm
+In-Reply-To: <20200414065915.8310-1-asafka7@gmail.com>
+References: <20200414065915.8310-1-asafka7@gmail.com>
+Message-ID: <CAGm1_ksJuWSx6RRho8k47chX62ZpQBXt8Djzp0XQs2=jvAR5GA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jerry,
+On Tue, Apr 14, 2020 at 9:00 AM Asaf Kahlon <asafka7@gmail.com> wrote:
+>
+> Fixes:
+>   http://autobuild.buildroot.net/results/124e1e628c78449fbaa027d74ab871b36d782343/
+>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-Am Fr., 7. Feb. 2020 um 09:41 Uhr schrieb Changming Huang <jerry.huang@nxp.com>:
->
-> Move package/rcw into package/nxp,
-> and rename it to qoriq-rcw.
->
-> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
 > ---
-> changes since v4:
-> no changes.
+>  package/python-cbor2/python-cbor2.mk | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> changes since v3:
-> no changes.
+> diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
+> index d504e33d2d..d0cee7e941 100644
+> --- a/package/python-cbor2/python-cbor2.mk
+> +++ b/package/python-cbor2/python-cbor2.mk
+> @@ -10,5 +10,6 @@ PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/3e/2c/188d040bd4cf99
+>  PYTHON_CBOR2_SETUP_TYPE = setuptools
+>  PYTHON_CBOR2_LICENSE = MIT
+>  PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
+> +PYTHON_CBOR2_DEPENDENCIES = host-python-setuptools-scm
 >
-> changes since v2:
-> 1. change the package name to qoriq-rcw to keep consistent with imx-xxx.
-> 2. add the handing in Config.in.legacy
+>  $(eval $(python-package))
+> --
+> 2.26.0
 >
-> changes since v1:
-> 1. new patch.
-> 2. move rcw to sub-directory freescale-qoriq.
-> 3. rename to fsl-qoriq-rcw.
-> ---
->  Config.in.legacy                              | 16 ++++++
->  DEVELOPERS                                    |  2 +-
->  package/Config.in.host                        |  2 +-
->  package/{rcw => nxp/qoriq-rcw}/Config.in.host |  6 +--
->  .../rcw.hash => nxp/qoriq-rcw/qoriq-rcw.hash} |  2 +-
->  package/nxp/qoriq-rcw/qoriq-rcw.mk            | 50 +++++++++++++++++++
->  package/rcw/rcw.mk                            | 50 -------------------
->  7 files changed, 72 insertions(+), 56 deletions(-)
->  rename package/{rcw => nxp/qoriq-rcw}/Config.in.host (88%)
->  rename package/{rcw/rcw.hash => nxp/qoriq-rcw/qoriq-rcw.hash} (82%)
->  create mode 100644 package/nxp/qoriq-rcw/qoriq-rcw.mk
->  delete mode 100644 package/rcw/rcw.mk
->
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 3c6984d886..2473282e9d 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -258,6 +258,22 @@ config BR2_BINUTILS_VERSION_2_30_X
->           current default version (2.31 or later) has been selected
->           instead.
->
-> +config BR2_PACKAGE_HOST_RCW
-> +       bool "rcw package was removed"
-> +       select BR2_LEGACY
-> +       help
-> +         Because rcw package has been renamed to qoriq-rcw and moved
-> +         to "nxp", option BR2_PACKAGE_HOST_RCW is removed, the option
-> +         BR2_PACKAGE_HOST_QORIQ_RCW can be used for QorIQ platforms.
-> +
-> +config BR2_PACKAGE_HOST_RCW
-> +       bool "rcw package was removed"
-> +       select BR2_LEGACY
-> +       help
-> +         Because rcw package has been renamed to qoriq-rcw and moved
-> +         to "nxp", option BR2_PACKAGE_HOST_RCW is removed, the option
-> +         BR2_PACKAGE_HOST_QORIQ_RCW can be used for QorIQ platforms.
-> +
-
-here seems to be a mistake ... the BR2_PACKAGE_HOST_RCW section is
-there twice :-/
-
--- 
-Heiko
