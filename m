@@ -1,81 +1,81 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Tue, 14 Apr 2020 11:14:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libgit2: Bump to version 1.0.0
-Message-ID: <20200414091439.25465-1-nicolas.cavallari@green-communications.fr>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Tue, 14 Apr 2020 11:35:47 +0200
+Subject: [Buildroot] [PATCH v5 2/9] package/qoriq-rcw: move rcw into nxp
+ and rename it
+In-Reply-To: <20200207083857.28058-2-jerry.huang@nxp.com>
+References: <20200207083857.28058-1-jerry.huang@nxp.com>
+ <20200207083857.28058-2-jerry.huang@nxp.com>
+Message-ID: <CAEyMn7bcTuhn_+NkJ_Ja48h32V4nv18_AUQXu+1tu2hJOuqAoA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version changes the required dependencies as well as introducing
-new bundled ones...
+Hi Jerry,
 
-- Start depending on httpparser, instead of using the bundled one.
-- Force using regcomp instead of using a bundled pcre.
-- Add license for a bundled wildmatch and sha1.
+Am Fr., 7. Feb. 2020 um 09:41 Uhr schrieb Changming Huang <jerry.huang@nxp.com>:
+>
+> Move package/rcw into package/nxp,
+> and rename it to qoriq-rcw.
+>
+> Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+> ---
+> changes since v4:
+> no changes.
+>
+> changes since v3:
+> no changes.
+>
+> changes since v2:
+> 1. change the package name to qoriq-rcw to keep consistent with imx-xxx.
+> 2. add the handing in Config.in.legacy
+>
+> changes since v1:
+> 1. new patch.
+> 2. move rcw to sub-directory freescale-qoriq.
+> 3. rename to fsl-qoriq-rcw.
+> ---
+>  Config.in.legacy                              | 16 ++++++
+>  DEVELOPERS                                    |  2 +-
+>  package/Config.in.host                        |  2 +-
+>  package/{rcw => nxp/qoriq-rcw}/Config.in.host |  6 +--
+>  .../rcw.hash => nxp/qoriq-rcw/qoriq-rcw.hash} |  2 +-
+>  package/nxp/qoriq-rcw/qoriq-rcw.mk            | 50 +++++++++++++++++++
+>  package/rcw/rcw.mk                            | 50 -------------------
+>  7 files changed, 72 insertions(+), 56 deletions(-)
+>  rename package/{rcw => nxp/qoriq-rcw}/Config.in.host (88%)
+>  rename package/{rcw/rcw.hash => nxp/qoriq-rcw/qoriq-rcw.hash} (82%)
+>  create mode 100644 package/nxp/qoriq-rcw/qoriq-rcw.mk
+>  delete mode 100644 package/rcw/rcw.mk
+>
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 3c6984d886..2473282e9d 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -258,6 +258,22 @@ config BR2_BINUTILS_VERSION_2_30_X
+>           current default version (2.31 or later) has been selected
+>           instead.
+>
+> +config BR2_PACKAGE_HOST_RCW
+> +       bool "rcw package was removed"
+> +       select BR2_LEGACY
+> +       help
+> +         Because rcw package has been renamed to qoriq-rcw and moved
+> +         to "nxp", option BR2_PACKAGE_HOST_RCW is removed, the option
+> +         BR2_PACKAGE_HOST_QORIQ_RCW can be used for QorIQ platforms.
+> +
+> +config BR2_PACKAGE_HOST_RCW
+> +       bool "rcw package was removed"
+> +       select BR2_LEGACY
+> +       help
+> +         Because rcw package has been renamed to qoriq-rcw and moved
+> +         to "nxp", option BR2_PACKAGE_HOST_RCW is removed, the option
+> +         BR2_PACKAGE_HOST_QORIQ_RCW can be used for QorIQ platforms.
+> +
 
-Tested with multiple check-pkg -a invocations, with multiple
-dependencies configurations.
+here seems to be a mistake ... the BR2_PACKAGE_HOST_RCW section is
+there twice :-/
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
----
- package/libgit2/Config.in    |  2 ++
- package/libgit2/libgit2.hash |  4 ++--
- package/libgit2/libgit2.mk   | 10 ++++++----
- 3 files changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/package/libgit2/Config.in b/package/libgit2/Config.in
-index 53ba4d4245..02c51448ff 100644
---- a/package/libgit2/Config.in
-+++ b/package/libgit2/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_LIBGIT2
- 	bool "libgit2"
-+	depends on !BR2_STATIC_LIBS # libhttpparser
-+	select BR2_PACKAGE_LIBHTTPPARSER
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  libgit2 is a portable, pure C implementation of the Git core
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index d4912c0327..a7d910e3bf 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	30f3877469d09f2e4a21be933b4e2800560d16646028dd800744dc5f7fb0c749  libgit2-0.28.4.tar.gz
--sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
-+sha256	6a1fa16a7f6335ce8b2630fbdbb5e57c4027929ebc56fcd1ac55edb141b409b4  libgit2-1.0.0.tar.gz
-+sha256	afc8bde99ba630012107c25d3c42dde628ec5f0cd3f428131f7e3a0f7d58ff42  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index 909fcb83f0..9c3de6c8c6 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LIBGIT2_VERSION = 0.28.4
--LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
--LIBGIT2_LICENSE = GPL-2.0 with linking exception
-+LIBGIT2_VERSION = 1.0.0
-+LIBGIT2_SITE = https://github.com/libgit2/libgit2/releases/download/v1.0.0
-+LIBGIT2_LICENSE = GPL-2.0 with linking exception, BSD 4-clause variant (wildmatch), MIT (sha1)
- LIBGIT2_LICENSE_FILES = COPYING
- LIBGIT2_INSTALL_STAGING = YES
- 
-@@ -14,9 +14,11 @@ LIBGIT2_CONF_OPTS = \
- 	-DUSE_GSSAPI=OFF \
- 	-DBUILD_CLAR=OFF \
- 	-DUSE_ICONV=ON \
-+	-DREGEX_BACKEND=regcomp \
-+	-DUSE_HTTP_PARSER=system \
- 	-DTHREADSAFE=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
- 
--LIBGIT2_DEPENDENCIES = zlib
-+LIBGIT2_DEPENDENCIES = zlib libhttpparser
- 
- # If libiconv is available (for !locale toolchains), then we can use
- # it for iconv support. Note that USE_ICONV=ON is still correct even
 -- 
-2.25.1
+Heiko
