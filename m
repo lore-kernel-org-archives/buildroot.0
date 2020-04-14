@@ -1,60 +1,83 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Tue, 14 Apr 2020 07:46:50 -0300
-Subject: [Buildroot] [PATCH v2 1/2] Strip binaries in the rootfs
- creation instead of in target-finalize
-In-Reply-To: <20200414073604.5f2fc158@windsurf.home>
-References: <20191001013654.22298-1-unixmania@gmail.com>
- <20191001013654.22298-2-unixmania@gmail.com>
- <20200413160247.6e8ee01b@windsurf.home>
- <CAJ4jsae5MWs3GjaPvz57HOiJN=+Lf1dGw0HdAN0nVpm7RsoYfA@mail.gmail.com>
- <20200414073604.5f2fc158@windsurf.home>
-Message-ID: <CAJ4jsadzQELders8gEGFK8_kvdAnchzvGOre3_ppBwRvkTO4RA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 14 Apr 2020 13:56:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/strace: fix build without fork
+Message-ID: <20200414115641.1374238-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ing Tue, Apr 14, 2020 at 2:36 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Carlos,
->
-> On Mon, 13 Apr 2020 20:41:11 -0300
-> Carlos Santos <unixmania@gmail.com> wrote:
->
-> > > There's been feedback from both Yann and me on this patch, and both of
-> > > us think this is not the approach we want to take. Instead, we'd rather
-> > > see everything installed to STAGING_DIR as the way of fixing the
-> > > original issue.
-> > >
-> > > So I've marked both patches as Rejected in patchwork. Of course, if
-> > > other people disagree with this decision, we can always revisit and
-> > > rediscuss the matter.
-> >
-> > Just to remind you, the problem was reported two and a half years ago
-> > and the situation is still the same. Perfect is the enemy of good and
-> > later easily becomes never. Anyway, your project, your rules.
+Fixes:
+ - http://autobuild.buildroot.org/results/ffc81d3798379a9c34c7a708ebbdea27409f755d
 
----8<---
-> Have you read our concerns ? As far as I can see, your only reply was
-> to make it optional, which really only makes the whole thing even more
-> complicated.
----8<---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...yscall_info.c-fix-build-without-fork.patch | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/strace/0001-ptrace_syscall_info.c-fix-build-without-fork.patch
 
-I have read the concerns. They sound reasonable but at the same time
-there was an assumption (or promise) that the problem would vanish
-once the dichotomy between staging/ and target/ be eliminated. Fair
-enough, but no ETA was provided and the fact that the problem still
-exists should be an alert about how difficult the solution is.
-
-So two questions must be answered:
-
-1. Is the problem reported by Ciro Santilli in bug 10386 real? If the
-answer is "no", there's nothing else to argue about. Otherwise, jump
-to question 2.
-
-2. Is anybody able to estimate how long it will take to provide a solution?
-
+diff --git a/package/strace/0001-ptrace_syscall_info.c-fix-build-without-fork.patch b/package/strace/0001-ptrace_syscall_info.c-fix-build-without-fork.patch
+new file mode 100644
+index 0000000000..c28eaddbab
+--- /dev/null
++++ b/package/strace/0001-ptrace_syscall_info.c-fix-build-without-fork.patch
+@@ -0,0 +1,56 @@
++From ba0d1193b31e8822744ae250d8e984dad32e7e49 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 14 Apr 2020 13:45:29 +0200
++Subject: [PATCH] ptrace_syscall_info.c: fix build without fork
++
++Build without fork fails on:
++
++ptrace_syscall_info.c:33:27: error: 'expected_entry_size' defined but not used [-Werror=unused-const-variable=]
++ static const unsigned int expected_entry_size =
++                           ^~~~~~~~~~~~~~~~~~~
++ptrace_syscall_info.c:31:27: error: 'expected_none_size' defined but not used [-Werror=unused-const-variable=]
++ static const unsigned int expected_none_size =
++                           ^~~~~~~~~~~~~~~~~~
++ptrace_syscall_info.c:24:1: error: 'kill_tracee' defined but not used [-Werror=unused-function]
++ kill_tracee(pid_t pid)
++ ^~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/ffc81d3798379a9c34c7a708ebbdea27409f755d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/strace/strace/pull/135]
++---
++ ptrace_syscall_info.c | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/ptrace_syscall_info.c b/ptrace_syscall_info.c
++index acea27ec..0bfd91c5 100644
++--- a/ptrace_syscall_info.c
+++++ b/ptrace_syscall_info.c
++@@ -20,18 +20,20 @@
++ 
++ bool ptrace_get_syscall_info_supported;
++ 
+++#define FAIL	do { ptrace_stop = -1U; goto done; } while (0)
+++
+++#ifdef HAVE_FORK
++ static int
++ kill_tracee(pid_t pid)
++ {
++ 	return kill_save_errno(pid, SIGKILL);
++ }
++ 
++-#define FAIL	do { ptrace_stop = -1U; goto done; } while (0)
++-
++ static const unsigned int expected_none_size =
++ 	offsetof(struct_ptrace_syscall_info, entry);
++ static const unsigned int expected_entry_size =
++ 	offsetofend(struct_ptrace_syscall_info, entry.args);
+++#endif /* HAVE_FORK */
++ static const unsigned int expected_exit_size =
++ 	offsetofend(struct_ptrace_syscall_info, exit.is_error);
++ static const unsigned int expected_seccomp_size =
++-- 
++2.25.1
++
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.25.1
