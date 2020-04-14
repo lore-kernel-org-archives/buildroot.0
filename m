@@ -1,74 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Apr 2020 19:02:37 +0200
-Subject: [Buildroot] [PATCH 6/6] package/collectd: add buddyinfo option
-In-Reply-To: <CALFsTFWYW3rLQunMO3EkDy3_FJMX+KPi2HhNdEsOmMnQCkHtEg@mail.gmail.com>
-References: <20200414163800.2230496-1-fontaine.fabrice@gmail.com>
- <20200414163800.2230496-6-fontaine.fabrice@gmail.com>
- <CALFsTFWYW3rLQunMO3EkDy3_FJMX+KPi2HhNdEsOmMnQCkHtEg@mail.gmail.com>
-Message-ID: <CAPi7W831KMEOOe5bVqmmhxVT+ug87C5+Akya7xo8RLPK8MpNHA@mail.gmail.com>
+Date: Tue, 14 Apr 2020 19:12:40 +0200
+Subject: [Buildroot] [PATCH v2,1/6] package/collectd: drop autoreconf
+Message-ID: <20200414171245.2235154-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Asaf
+autoreconf is not needed since bump to version 5.11.0 in commit
+57adbfc482454e3fb17172626b2dc971afaf5cfd which dropped patch
 
-Le mar. 14 avr. 2020 ? 18:51, Asaf Kahlon <asafka7@gmail.com> a ?crit :
->
-> Hello,
->
-> On Tue, Apr 14, 2020 at 7:36 PM Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> wrote:
-> >
-> > buddyinfo is available since version 5.11.0 and
-> > https://github.com/collectd/collectd/commit/cb19ecf90d89a79836b8b5236d2b66277dd79c5f
-> >
-> > It is currently enabled by default
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/collectd/Config.in   | 5 +++++
-> >  package/collectd/collectd.mk | 1 +
-> >  2 files changed, 6 insertions(+)
-> >
-> > diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-> > index 15c871025c..1f55271a97 100644
-> > --- a/package/collectd/Config.in
-> > +++ b/package/collectd/Config.in
-> > @@ -128,6 +128,11 @@ config BR2_PACKAGE_COLLECTD_BIND
-> >         help
-> >           Collects BIND DNS statistics.
-> >
-> > +config BR2_PACKAGE_BUDDYINFO
-> I guess you meant to call this "BR2_PACKAGE_COLLECTD_BUDDYINFO".
-Indeed, thanks for spotting this. I made two many patches on collectd
-... I'll send a v2.
->
-> > +       bool "buddyinfo"
-> > +       help
-> > +         Statistics from buddyinfo file about memory fragmentation.
-> > +
-> >  config BR2_PACKAGE_COLLECTD_CAPABILITIES
-> >         bool "capabilities"
-> >         select BR2_PACKAGE_JANSSON
-> > diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-> > index f04ccdb2ff..6bd1754ad7 100644
-> > --- a/package/collectd/collectd.mk
-> > +++ b/package/collectd/collectd.mk
-> > @@ -51,6 +51,7 @@ COLLECTD_CONF_OPTS += \
-> >         $(if $(BR2_PACKAGE_COLLECTD_APCUPS),--enable-apcups,--disable-apcups) \
-> >         $(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
-> >         $(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
-> > +       $(if $(BR2_PACKAGE_COLLECTD_BUDDYINFO),--enable-buddyinfo,--disable-buddyinfo) \
-> >         $(if $(BR2_PACKAGE_COLLECTD_CAPABILITIES),--enable-capabilities,--disable-capabilities) \
-> >         $(if $(BR2_PACKAGE_COLLECTD_CEPH),--enable-ceph,--disable-ceph) \
-> >         $(if $(BR2_PACKAGE_COLLECTD_CHRONY),--enable-chrony,--disable-chrony) \
-> > --
-> > 2.25.1
-> >
-> Regards,
-> Asaf.
-Best Regards,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/collectd/collectd.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-Fabrice
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index c09edebfc9..dda15b0162 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -12,8 +12,6 @@ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+ COLLECTD_INSTALL_STAGING = YES
+ COLLECTD_LICENSE = MIT (daemon, plugins), GPL-2.0 (plugins), LGPL-2.1 (plugins)
+ COLLECTD_LICENSE_FILES = COPYING
+-# We're patching configure.ac
+-COLLECTD_AUTORECONF = YES
+ 
+ # These require unmet dependencies, are fringe, pointless or deprecated
+ COLLECTD_PLUGINS_DISABLE = \
+-- 
+2.25.1
