@@ -1,56 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Apr 2020 19:12:45 +0200
-Subject: [Buildroot] [PATCH v2,6/6] package/collectd: add buddyinfo option
-In-Reply-To: <20200414171245.2235154-1-fontaine.fabrice@gmail.com>
-References: <20200414171245.2235154-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200414171245.2235154-6-fontaine.fabrice@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 14 Apr 2020 12:20:40 -0500
+Subject: [Buildroot] [PATCH v3 0/8] Bump of SElinux related libs/tools
+ to 3.0
+In-Reply-To: <20200414182303.250cc38d@windsurf.home>
+References: <20200414152528.20758-1-matthew.weber@rockwellcollins.com>
+ <20200414182303.250cc38d@windsurf.home>
+Message-ID: <CANQCQpYUoZX=L7LMJ_Mkhvak0y_48RZuYaaHzx5MFAvwhQtArQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-buddyinfo is available since version 5.11.0 and
-https://github.com/collectd/collectd/commit/cb19ecf90d89a79836b8b5236d2b66277dd79c5f
+Thomas,
 
-It is currently enabled by default
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Asaf Kahlon):
- - Add missing COLLECTD_ prefix for buddyinfo option in Config.in
+On Tue, Apr 14, 2020 at 11:25 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Tue, 14 Apr 2020 10:25:20 -0500
+> Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+>
+> >  - Switches to using the date (i.e. 20191204) abased release tagging
+> >    for better alignment with https://release-monitoring.org/project/01717/
+> >
+> >  - Added selinux-python which was missed in the v2 of this bump by
+> >    Adam (http://patchwork.ozlabs.org/project/buildroot/list/?series=156673)
+>
+> I am not sure I like the change to using the single big tarball with
+> everything included, and then have each individual package build its
+> own sub-directory. They ship individual tarballs, it seems a lot better
+> to use that.
+>
+> Is the only benefit of that change the fact that it will match with
+> what release monitoring says ?
 
- package/collectd/Config.in   | 5 +++++
- package/collectd/collectd.mk | 1 +
- 2 files changed, 6 insertions(+)
+Correct.  If we do stay with the x.y instead, I think it still makes
+sense to use the $(LIBSELINUX_VERION) across all those packages as the
+bumps should always be the same version for those 7 packages.
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 15c871025c..1c4bf5e9b5 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -128,6 +128,11 @@ config BR2_PACKAGE_COLLECTD_BIND
- 	help
- 	  Collects BIND DNS statistics.
- 
-+config BR2_PACKAGE_COLLECTD_BUDDYINFO
-+	bool "buddyinfo"
-+	help
-+	  Statistics from buddyinfo file about memory fragmentation.
-+
- config BR2_PACKAGE_COLLECTD_CAPABILITIES
- 	bool "capabilities"
- 	select BR2_PACKAGE_JANSSON
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index f04ccdb2ff..6bd1754ad7 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -51,6 +51,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_APCUPS),--enable-apcups,--disable-apcups) \
- 	$(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
- 	$(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
-+	$(if $(BR2_PACKAGE_COLLECTD_BUDDYINFO),--enable-buddyinfo,--disable-buddyinfo) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CAPABILITIES),--enable-capabilities,--disable-capabilities) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CEPH),--enable-ceph,--disable-ceph) \
- 	$(if $(BR2_PACKAGE_COLLECTD_CHRONY),--enable-chrony,--disable-chrony) \
--- 
-2.25.1
+>
+> Even Fedora, who is the original project using release-monitoring uses
+> the real version numbers for SELinux:
+>
+> $ rpm -qa | grep libselinux
+> libselinux-utils-2.9-5.fc31.x86_64
+> libselinux-2.9-5.fc31.i686
+> libselinux-devel-2.9-5.fc31.x86_64
+> libselinux-2.9-5.fc31.x86_64
+>
+> So to me, it seems like we should instead change the versions reported
+> by release-monitoring.org instead.
+
+Is there a way to reorder the versions on release monitoring instead?
+As it just happens the dates end up at the top of the list
+https://release-monitoring.org/project/01717/
+
+Matt
