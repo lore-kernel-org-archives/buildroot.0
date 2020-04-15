@@ -1,52 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 15 Apr 2020 21:35:54 +0200
-Subject: [Buildroot] [git commit] package/python-httplib2: bump to version
- 0.17.2
-Message-ID: <20200415192340.5413C8EB88@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-crossbar: bump to version
+ 20.4.1
+Message-ID: <20200415192340.6157B83A31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70af540964d8deb1780bb3480779cd8048f2bad4
+commit: https://git.buildroot.net/buildroot/commit/?id=e6dddf3f141b0ffe4230885abb5d1724a2d7ac79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash change is due to httplib2 package version number update.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-httplib2/python-httplib2.hash | 6 +++---
- package/python-httplib2/python-httplib2.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-crossbar/python-crossbar.hash | 4 ++--
+ package/python-crossbar/python-crossbar.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-httplib2/python-httplib2.hash b/package/python-httplib2/python-httplib2.hash
-index fe9995a9b3..c272d8517c 100644
---- a/package/python-httplib2/python-httplib2.hash
-+++ b/package/python-httplib2/python-httplib2.hash
+diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
+index 1be4c72b76..12e4b0232c 100644
+--- a/package/python-crossbar/python-crossbar.hash
++++ b/package/python-crossbar/python-crossbar.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/httplib2/json
--md5  4a55ae1d33721110bf81b4d197bfa862  httplib2-0.17.0.tar.gz
--sha256  de96d0a49f46d0ee7e0aae80141d37b8fcd6a68fb05d02e0b82c128592dd8261  httplib2-0.17.0.tar.gz
-+md5  4c05b09eb6f6c20a31ca488c7a87dda9  httplib2-0.17.2.tar.gz
-+sha256  eb7a6b137ae31e61c5f429083c5bebb71fe5fd1958e7f3d5c39b21b11cd4b290  httplib2-0.17.2.tar.gz
- # Locally computer sha256 checksums
--sha256  bbc124e160cd5c0381fe9560aaed43462dd60371210dbb2c87f00b7fec9a05ba  PKG-INFO
-+sha256  4205f0d88e04380ba13b9c60e2f85771196b66ee84bf48971d30d82a78e84c3f  PKG-INFO
-diff --git a/package/python-httplib2/python-httplib2.mk b/package/python-httplib2/python-httplib2.mk
-index f9e1d8b3d7..fbdb6d83c4 100644
---- a/package/python-httplib2/python-httplib2.mk
-+++ b/package/python-httplib2/python-httplib2.mk
+ # md5, sha256 from https://pypi.org/pypi/crossbar/json
+-md5  bacb1f25cbf8fcdd0568325ef04a721c  crossbar-20.2.1.tar.gz
+-sha256  a63951780fde8c46834c70a637d97f3b2028da637b7a4f793b624532f7a45863  crossbar-20.2.1.tar.gz
++md5  b0ac2a71449988df629d216a90d1f21f  crossbar-20.4.1.tar.gz
++sha256  6bf215348bc6fdce7d41c77e4aa0e023c6a6208291eebc520a3d153f36f601d6  crossbar-20.4.1.tar.gz
+ # Locally computed
+ sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  crossbar/LICENSE
+diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
+index 84d4177daa..77565b7068 100644
+--- a/package/python-crossbar/python-crossbar.mk
++++ b/package/python-crossbar/python-crossbar.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HTTPLIB2_VERSION = 0.17.0
-+PYTHON_HTTPLIB2_VERSION = 0.17.2
- PYTHON_HTTPLIB2_SOURCE = httplib2-$(PYTHON_HTTPLIB2_VERSION).tar.gz
--PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/6d/97/8225643419a53dd52d84c34d9d1e99bdbe18083dc760e7a2d0c47c0fab93
-+PYTHON_HTTPLIB2_SITE = https://files.pythonhosted.org/packages/1b/f0/a35a448afea308aeb6a1430dbcfb46f4cef11360cbc18f22af6e567bb847
- PYTHON_HTTPLIB2_SETUP_TYPE = setuptools
- PYTHON_HTTPLIB2_LICENSE = MIT
- PYTHON_HTTPLIB2_LICENSE_FILES = PKG-INFO
+-PYTHON_CROSSBAR_VERSION = 20.2.1
++PYTHON_CROSSBAR_VERSION = 20.4.1
+ PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
+-PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/78/f0/82970d84abd532bdea007322b73bfe2d7762194b85155296b76ba48724e9
++PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/2c/0c/054ac48881390c83f8bee2a1b50cd5fa6322aa83f589090ced572079b974
+ PYTHON_CROSSBAR_LICENSE = AGPL-3.0
+ PYTHON_CROSSBAR_LICENSE_FILES = crossbar/LICENSE
+ PYTHON_CROSSBAR_SETUP_TYPE = setuptools
