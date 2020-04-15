@@ -1,120 +1,49 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 15 Apr 2020 20:21:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtirpc: bump to version 1.2.6
-Message-ID: <20200415182153.14511-1-petr.vorel@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 15 Apr 2020 21:35:54 +0200
+Subject: [Buildroot] [git commit] package/python-engineio: bump to version
+ 3.12.1
+Message-ID: <20200415192340.6A8428EB5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes build on riscv64:
+commit: https://git.buildroot.net/buildroot/commit/?id=0e5a7639e685f36d28cb8756612a4d5537b2b39b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-http://autobuild.buildroot.net/results/a334f774e95fb7805568fc3868d5cf1d790a6e73
-http://autobuild.buildroot.net/results/9cf80bdd4d329788c89596b56205ef215ee09c35
-
-There is also a fix for build with -fno-common (default for gcc-10)
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Tested
+ package/python-engineio/python-engineio.hash | 6 +++---
+ package/python-engineio/python-engineio.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: OK
-                          br-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-
-                             andes-nds32 [ 1/44]: OK
-                             arm-aarch64 [ 2/44]: OK
-                        br-aarch64-glibc [ 3/44]: OK
-                           br-arcle-hs38 [ 4/44]: OK
-                            br-arm-basic [ 5/44]: OK
-                  br-arm-cortex-a9-glibc [ 6/44]: OK
-                   br-arm-cortex-a9-musl [ 7/44]: OK
-                   br-arm-cortex-m4-full [ 8/44]: OK
-                             br-arm-full [ 9/44]: OK
-                    br-arm-full-nothread [10/44]: SKIPPED
-                      br-arm-full-static [11/44]: OK
-                br-i386-pentium-mmx-musl [12/44]: OK
-                   br-i386-pentium4-full [13/44]: OK
-                    br-microblazeel-full [14/44]: OK
-                      br-mipsel-o32-full [15/44]: OK
-                 br-mips32r6-el-hf-glibc [16/44]: OK
-                      br-mips64-n64-full [17/44]: OK
-                 br-mips64r6-el-hf-glibc [18/44]: OK
-                       br-m68k-5208-full [19/44]: OK
-                      br-m68k-68040-full [20/44]: OK
-                          br-nios2-glibc [21/44]: OK
-                      br-openrisc-uclibc [22/44]: OK
-                  br-powerpc-e500mc-full [23/44]: OK
-               br-powerpc-603e-basic-cpp [24/44]: OK
-             br-powerpc64le-power8-glibc [25/44]: OK
-               br-powerpc64-power7-glibc [26/44]: OK
-                              br-riscv32 [27/44]: OK
-                              br-riscv64 [28/44]: OK
-                             br-sh4-full [29/44]: OK
-                         br-sparc-uclibc [30/44]: OK
-                        br-sparc64-glibc [31/44]: OK
-                          br-xtensa-full [32/44]: OK
-                    br-x86-64-core2-full [33/44]: OK
-                          br-x86-64-musl [34/44]: OK
-                       linaro-aarch64-be [35/44]: OK
-                          linaro-aarch64 [36/44]: OK
-                              linaro-arm [37/44]: OK
-                     sourcery-arm-armv4t [38/44]: OK
-                            sourcery-arm [39/44]: OK
-                     sourcery-arm-thumb2 [40/44]: OK
-                           sourcery-mips [41/44]: OK
-                         sourcery-mips64 [42/44]: OK
-                          sourcery-nios2 [43/44]: OK
-                         sourcery-x86-64 [44/44]: OK
-44 builds, 1 skipped, 0 build failed, 0 legal-info failed
-
- package/iputils/iputils.mk     | 3 +++
- package/libtirpc/libtirpc.hash | 4 ++--
- package/libtirpc/libtirpc.mk   | 2 +-
- 3 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 0d260891e2..073c81edf7 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -31,6 +31,9 @@ else
- IPUTILS_CONF_OPTS += -DUSE_IDN=false
- endif
- 
-+#$(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+IPUTILS_DEPENDENCIES += libiconv
-+
- ifeq ($(BR2_PACKAGE_NETTLE),y)
- IPUTILS_CONF_OPTS += -DUSE_CRYPTO=nettle
- IPUTILS_DEPENDENCIES += nettle
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-index a7907dc7b2..044a69b56a 100644
---- a/package/libtirpc/libtirpc.hash
-+++ b/package/libtirpc/libtirpc.hash
+diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
+index f10e69af65..ef852cf1ad 100644
+--- a/package/python-engineio/python-engineio.hash
++++ b/package/python-engineio/python-engineio.hash
 @@ -1,5 +1,5 @@
- # From sourceforge's info on download page:
--sha1 ab80619b214d93e5cfbf22a0d01e1ee06d434326  libtirpc-1.2.5.tar.bz2
-+sha1 f182235e32942fc0ac6b9b5b6fe7e32f69362659  libtirpc-1.2.6.tar.bz2
- # Locally computed
--sha256 f3b6350c7e9c3cd9c58fc7a5e5f8e6be469cc571bb5eb31eb9790b3e675186ca  libtirpc-1.2.5.tar.bz2
-+sha256 4278e9a5181d5af9cd7885322fdecebc444f9a3da87c526e7d47f7a12a37d1cc  dl/libtirpc/libtirpc-1.2.6.tar.bz2
- sha256 17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 879b21e665..f1bdc32eba 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/python-engineio/json
+-md5	bec3b06a112a7f09a0a9c92b627282fe  python-engineio-3.10.0.tar.gz
+-sha256	9c9a6035b4b5e5a225f426f846afa14cf627f7571d1ae02167cb703fefd134b7  python-engineio-3.10.0.tar.gz
++md5  e6ea8b3f2f32eeeb02014c46092f2adb  python-engineio-3.12.1.tar.gz
++sha256  2481732d93646998f7372ef0ecf003af7817b82720b881db173c3d50b4887916  python-engineio-3.12.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
++sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index 62036a9c76..36ca326877 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBTIRPC_VERSION = 1.2.5
-+LIBTIRPC_VERSION = 1.2.6
- LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- LIBTIRPC_LICENSE = BSD-3-Clause
--- 
-2.26.0
+-PYTHON_ENGINEIO_VERSION = 3.10.0
+-PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/78/8e/c58cf2725fd17d65b9fe818b70aff4ccce4903b47aaee6f4321727a8b8bb
++PYTHON_ENGINEIO_VERSION = 3.12.1
++PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/71/5d/620b75396ce993001cbccc80dd786ab09a16a8e3f6c4878ad05f051064d6
+ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
