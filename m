@@ -1,61 +1,38 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 15 Apr 2020 09:36:55 -0300
-Subject: [Buildroot] [PATCH 1/2] imx/genimage: Specify the volume-label for
- vfat
-Message-ID: <20200415123656.13298-1-festevam@gmail.com>
+Date: Wed, 15 Apr 2020 09:36:56 -0300
+Subject: [Buildroot] [PATCH 2/2] fs/ext2: Pass a default string to
+ filesystem label
+In-Reply-To: <20200415123656.13298-1-festevam@gmail.com>
+References: <20200415123656.13298-1-festevam@gmail.com>
+Message-ID: <20200415123656.13298-2-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently the volume-label for the vfat partition is a string with
-the following pattern: 5934-861D.
+Currently the volume-label for the root filesystem partition is a string
+wit the following pattern: ad09a287-46a9-4790-ba97-fbbb549e5e96.
 
-Specify the volume-label as "boot" to make it easier to identify it. 
+Specify the volume-label as "rootfs" to make it easier to identify it. 
 
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- board/freescale/common/imx/genimage.cfg.template      | 1 +
- board/freescale/common/imx/genimage.cfg.template_imx8 | 1 +
- board/freescale/common/imx/genimage.cfg.template_spl  | 1 +
- 3 files changed, 3 insertions(+)
+ fs/ext2/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/freescale/common/imx/genimage.cfg.template b/board/freescale/common/imx/genimage.cfg.template
-index 2a7036a7df..61b09bde9f 100644
---- a/board/freescale/common/imx/genimage.cfg.template
-+++ b/board/freescale/common/imx/genimage.cfg.template
-@@ -9,6 +9,7 @@
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index 74bacc1141..333ead95fe 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -43,6 +43,7 @@ config BR2_TARGET_ROOTFS_EXT2_REV
  
- image boot.vfat {
-   vfat {
-+    label = "boot"
-     files = {
-       %FILES%
-     }
-diff --git a/board/freescale/common/imx/genimage.cfg.template_imx8 b/board/freescale/common/imx/genimage.cfg.template_imx8
-index bd5f6cdc73..84a812f986 100644
---- a/board/freescale/common/imx/genimage.cfg.template_imx8
-+++ b/board/freescale/common/imx/genimage.cfg.template_imx8
-@@ -9,6 +9,7 @@
+ config BR2_TARGET_ROOTFS_EXT2_LABEL
+ 	string "filesystem label"
++	default "rootfs"
  
- image boot.vfat {
-   vfat {
-+    label = "boot"
-     files = {
-       %FILES%
-     }
-diff --git a/board/freescale/common/imx/genimage.cfg.template_spl b/board/freescale/common/imx/genimage.cfg.template_spl
-index d2d810777b..3b0667c383 100644
---- a/board/freescale/common/imx/genimage.cfg.template_spl
-+++ b/board/freescale/common/imx/genimage.cfg.template_spl
-@@ -9,6 +9,7 @@
- 
- image boot.vfat {
-   vfat {
-+    label = "boot"
-     files = {
-       %FILES%
-     }
+ config BR2_TARGET_ROOTFS_EXT2_SIZE
+ 	string "exact size"
 -- 
 2.17.1
