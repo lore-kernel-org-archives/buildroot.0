@@ -1,49 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Apr 2020 22:22:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libid3tag: needs host-gperf
-In-Reply-To: <20200414102259.1285346-1-fontaine.fabrice@gmail.com>
-References: <20200414102259.1285346-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200415222244.41dd959d@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 15 Apr 2020 22:30:06 +0200
+Subject: [Buildroot] [PATCH v3 1/4] package/python-iptables: add
+ explicit dependency on dynamic libs
+In-Reply-To: <20200311105447.23808-1-frank.vanbever@essensium.com>
+References: <20200228163917.10596-1-frank.vanbever@essensium.com>
+ <20200311105447.23808-1-frank.vanbever@essensium.com>
+Message-ID: <20200415203006.GI5853@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 14 Apr 2020 12:22:59 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Frank, All,
 
-> Since switch to debian in commit
-> 210ccaef5784011bc035d0ae13611cb4e76f389f, host-gperf is needed to
-> generate frametype.c which is empty by default otherwise build with
+On 2020-03-11 11:54 +0100, Frank Vanbever spake thusly:
+> The package uses ctypes.CDLL extensively which only makes sense when dynamic
+> libraries are available.
+> 
+> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
 
-When I run "make libid3tag-patch", frametype.c is definitely not empty.
-frametype.c is newer than frametype.gperf:
+Patches 1, 2, and 4, which are all backports of upstream commits,
+applied to master, thanks.
 
-$ stat -c %y frametype.gperf frametype.c Makefile.am 
-2004-01-23 10:41:32.000000000 +0100
-2004-02-17 03:34:39.000000000 +0100
-2020-04-15 22:19:56.233134509 +0200
+I'm still pondering how to improve patch 3, though, as I concur with
+Thomas that it would be nice if we could do better... I'm not gonna
+sweat it, though...
 
-However, the Makefile.am seems to be touched by one of the patches, and
-the Makefile rule to regenerate using gperf goes like this:
+Regards,
+Yann E. MORIN.
 
-$(srcdir)/frametype.c: $(srcdir)/frametype.gperf Makefile.am
-        cd $(srcdir) &&  \
-        gperf -tCcTonD -K id -N id3_frametype_lookup -s -3 -k '*'  \
-                frametype.gperf |  \
-        sed -e 's/\(struct id3_frametype\);/\1/' |  \
-        sed -e '/\$$''Id: /s/\$$//g' >frametype.c
+> ---
+> v2 -> v3:
+>  - None
+> v1 -> v2:
+>  - Add some additional explanation in commit message.
+> 
+> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+> ---
+>  package/python-iptables/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/python-iptables/Config.in b/package/python-iptables/Config.in
+> index e55359963e..a35577bad3 100644
+> --- a/package/python-iptables/Config.in
+> +++ b/package/python-iptables/Config.in
+> @@ -1,7 +1,11 @@
+>  config BR2_PACKAGE_PYTHON_IPTABLES
+>  	bool "python-iptables"
+> +	depends on !BR2_STATIC_LIBS
+>  	select BR2_PACKAGE_IPTABLES # runtime dependency
+>  	help
+>  	  Python bindings for iptables.
+>  
+>  	  https://github.com/ldx/python-iptables
+> +
+> +comment "python-iptables needs a toolchain w/ dynamic library"
+> +	depends on BR2_STATIC_LIBS
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-So, since the .c is older than the Makefile.am, it tries to regenerate
-with gperf.
-
-Could you double check this, and adjust the commit log as necessary ?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
