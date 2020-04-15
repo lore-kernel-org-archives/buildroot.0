@@ -1,49 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Apr 2020 21:35:54 +0200
-Subject: [Buildroot] [git commit] package/python-engineio: bump to version
- 3.12.1
-Message-ID: <20200415192340.6A8428EB5B@busybox.osuosl.org>
+Date: Wed, 15 Apr 2020 21:37:14 +0200
+Subject: [Buildroot] [git commit] package/python-cbor2: bump to version 5.1.0
+Message-ID: <20200415192340.B3B768776C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e5a7639e685f36d28cb8756612a4d5537b2b39b
+commit: https://git.buildroot.net/buildroot/commit/?id=108d1452c6a4d8f419f7106af6d8f79cee210772
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add missing host-python-setuptools-scm dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-engineio/python-engineio.hash | 6 +++---
- package/python-engineio/python-engineio.mk   | 4 ++--
+ package/python-cbor2/python-cbor2.hash | 6 +++---
+ package/python-cbor2/python-cbor2.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
-index f10e69af65..ef852cf1ad 100644
---- a/package/python-engineio/python-engineio.hash
-+++ b/package/python-engineio/python-engineio.hash
+diff --git a/package/python-cbor2/python-cbor2.hash b/package/python-cbor2/python-cbor2.hash
+index abc049b82e..70e16cae2d 100644
+--- a/package/python-cbor2/python-cbor2.hash
++++ b/package/python-cbor2/python-cbor2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-engineio/json
--md5	bec3b06a112a7f09a0a9c92b627282fe  python-engineio-3.10.0.tar.gz
--sha256	9c9a6035b4b5e5a225f426f846afa14cf627f7571d1ae02167cb703fefd134b7  python-engineio-3.10.0.tar.gz
-+md5  e6ea8b3f2f32eeeb02014c46092f2adb  python-engineio-3.12.1.tar.gz
-+sha256  2481732d93646998f7372ef0ecf003af7817b82720b881db173c3d50b4887916  python-engineio-3.12.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cbor2/json
+-md5	47653309cff623382c770841847dafaf  cbor2-5.0.1.tar.gz
+-sha256	4299db69e5ac7b3026abb2a639737c72804511130ced81f660a9cb9222352dba  cbor2-5.0.1.tar.gz
++md5  b7c3b94ad5b78ba144ed4df9e55ce2ea  cbor2-5.1.0.tar.gz
++sha256  43ce11e8c2fe4971d386d1a60cf83bfa0a4a667b97668ba76acbf5e6398821aa  cbor2-5.1.0.tar.gz
  # Locally computed sha256 checksums
--sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
-+sha256  c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
-diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
-index 62036a9c76..36ca326877 100644
---- a/package/python-engineio/python-engineio.mk
-+++ b/package/python-engineio/python-engineio.mk
-@@ -4,8 +4,8 @@
+-sha256	6163f7987dfb38d6bc320ce2b70b2f02b862bc41126516d552ef1cd43247e758  LICENSE.txt
++sha256  6163f7987dfb38d6bc320ce2b70b2f02b862bc41126516d552ef1cd43247e758  LICENSE.txt
+diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
+index d0cee7e941..850ee7c50d 100644
+--- a/package/python-cbor2/python-cbor2.mk
++++ b/package/python-cbor2/python-cbor2.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ENGINEIO_VERSION = 3.10.0
--PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/78/8e/c58cf2725fd17d65b9fe818b70aff4ccce4903b47aaee6f4321727a8b8bb
-+PYTHON_ENGINEIO_VERSION = 3.12.1
-+PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/71/5d/620b75396ce993001cbccc80dd786ab09a16a8e3f6c4878ad05f051064d6
- PYTHON_ENGINEIO_SETUP_TYPE = setuptools
- PYTHON_ENGINEIO_LICENSE = MIT
- PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
+-PYTHON_CBOR2_VERSION = 5.0.1
++PYTHON_CBOR2_VERSION = 5.1.0
+ PYTHON_CBOR2_SOURCE = cbor2-$(PYTHON_CBOR2_VERSION).tar.gz
+-PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/3e/2c/188d040bd4cf99012d0e847a3d95bf1ef1f783859b09eb9f736950af84f0
++PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/ee/80/bc617b7fd89855649e48eb8242e09535e1b75371ec8389313fa0f97e2a70
+ PYTHON_CBOR2_SETUP_TYPE = setuptools
+ PYTHON_CBOR2_LICENSE = MIT
+ PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
