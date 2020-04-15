@@ -1,50 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 15 Apr 2020 21:35:54 +0200
-Subject: [Buildroot] [git commit] package/python-certifi: bump to version
- 2020.4.5.1
-Message-ID: <20200415192340.4B33183A31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-flatbuffers: bump to
+ version 1.12
+Message-ID: <20200415192340.73F528E15A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c45d939d8d1b8011a1bd66cc780d6b2bf492efb8
+commit: https://git.buildroot.net/buildroot/commit/?id=61d1899b826968bf006cc174eb89ce3236491085
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-certifi/python-certifi.hash | 6 +++---
- package/python-certifi/python-certifi.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-flatbuffers/python-flatbuffers.hash | 4 ++--
+ package/python-flatbuffers/python-flatbuffers.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index 122ad55cad..698653d3c2 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/certifi/json
--md5	cadd4e373fc08f649fa39b82aed9ad96  certifi-2019.9.11.tar.gz
--sha256	e4f3620cfea4f83eedc95b24abd9cd56f3c4b146dd0177e83a21b4eb49e21e50  certifi-2019.9.11.tar.gz
-+md5  8e90cfd6fc5ddd7e3011958d8a7fcab4  certifi-2020.4.5.1.tar.gz
-+sha256  51fcb31174be6e6664c5f69e3e1691a2d72a1a12e90f872cbdb1567eb47b6519  certifi-2020.4.5.1.tar.gz
- # Locally computed sha256 checksums
--sha256	6a70a4bf6b010016d59a64b8ae4ad8dc7f5ef16f1fb453cc2ecd771c5a341131  LICENSE
-+sha256  6a70a4bf6b010016d59a64b8ae4ad8dc7f5ef16f1fb453cc2ecd771c5a341131  LICENSE
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index e614b8356e..324657dea6 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
+diff --git a/package/python-flatbuffers/python-flatbuffers.hash b/package/python-flatbuffers/python-flatbuffers.hash
+index 0cb5437906..ba7df6babc 100644
+--- a/package/python-flatbuffers/python-flatbuffers.hash
++++ b/package/python-flatbuffers/python-flatbuffers.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/flatbuffers/json
+-md5  b5f6c2246f45636dd49d9ff8a00d7f1c  flatbuffers-1.11.tar.gz
+-sha256  f24185db54193540e3d684dc98aa7c2d89882341641548ceb36fd2589fef6c4e  flatbuffers-1.11.tar.gz
++md5  b9a5b8dfbbb4751788529310118ea6db  flatbuffers-1.12.tar.gz
++sha256  63bb9a722d5e373701913e226135b28a6f6ac200d5cc7b4d919fa38d73b44610  flatbuffers-1.12.tar.gz
+diff --git a/package/python-flatbuffers/python-flatbuffers.mk b/package/python-flatbuffers/python-flatbuffers.mk
+index d0374c4787..33bb57ddf3 100644
+--- a/package/python-flatbuffers/python-flatbuffers.mk
++++ b/package/python-flatbuffers/python-flatbuffers.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 2019.9.11
-+PYTHON_CERTIFI_VERSION = 2020.4.5.1
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/62/85/7585750fd65599e88df0fed59c74f5075d4ea2fe611deceb95dd1c2fb25b
-+PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/b8/e2/a3a86a67c3fc8249ed305fc7b7d290ebe5e4d46ad45573884761ef4dea7b
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+-PYTHON_FLATBUFFERS_VERSION = 1.11
++PYTHON_FLATBUFFERS_VERSION = 1.12
+ PYTHON_FLATBUFFERS_SOURCE = flatbuffers-$(PYTHON_FLATBUFFERS_VERSION).tar.gz
+-PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/c6/b6/21478b76aa7ccab58da3beb85746b6844dee2112c0cc25b51ec64b46bdbb
++PYTHON_FLATBUFFERS_SITE = https://files.pythonhosted.org/packages/4d/c4/7b995ab9bf0c7eaf10c386d29a03408dfcf72648df4102b1f18896c3aeea
+ PYTHON_FLATBUFFERS_LICENSE = Apache-2.0
+ PYTHON_FLATBUFFERS_SETUP_TYPE = setuptools
+ 
