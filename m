@@ -1,51 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Apr 2020 21:41:29 +0200
-Subject: [Buildroot] [git commit] package/bitstream: bump version to 1.5
-Message-ID: <20200415193448.8C17D8ECD1@busybox.osuosl.org>
+Date: Wed, 15 Apr 2020 21:42:29 +0200
+Subject: [Buildroot] [git commit] package/ccache: bump version to 3.7.9
+Message-ID: <20200415193448.B128B8ECD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56d740b0dd75226b139240f04d76dd0c56bd6c3d
+commit: https://git.buildroot.net/buildroot/commit/?id=4e47e0e1791b7dfee3be51efe4a0341c09fac1a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://mailman.videolan.org/pipermail/bitstream-devel/2018-November/000116.html
+Release notes: https://ccache.dev/releasenotes.html#_ccache_3_7_9
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bitstream/bitstream.hash | 8 ++++----
- package/bitstream/bitstream.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/ccache/ccache.hash | 2 +-
+ package/ccache/ccache.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bitstream/bitstream.hash b/package/bitstream/bitstream.hash
-index 89da7c6fd0..0d2e5a1f1a 100644
---- a/package/bitstream/bitstream.hash
-+++ b/package/bitstream/bitstream.hash
-@@ -1,6 +1,6 @@
--# From https://get.videolan.org/bitstream/1.4/bitstream-1.4.tar.bz2.md5
--md5 dfb1449194250b2d364d54b5bbac858d  bitstream-1.4.tar.bz2
--# From https://get.videolan.org/bitstream/1.4/bitstream-1.4.tar.bz2.sha256
--sha256 b2484940d3b8733bec9dd1ec1731de428261dff31c9f95874264be9dc9ce786b  bitstream-1.4.tar.bz2
-+# From https://get.videolan.org/bitstream/1.5/bitstream-1.5.tar.bz2.md5
-+md5 34630d13332fd1575bcc8531b0a596be  bitstream-1.5.tar.bz2
-+# From https://get.videolan.org/bitstream/1.5/bitstream-1.5.tar.bz2.sha256
-+sha256 45fc5a5a6e4537a69fa8440821e87b76252135180a3070c631b0b36ce0a3b90a  bitstream-1.5.tar.bz2
- # Locally computed
- sha256 9644a812f9a8377a59acb7092a36ce8882a39743425d9171a8fb84637e2f6e04  COPYING
-diff --git a/package/bitstream/bitstream.mk b/package/bitstream/bitstream.mk
-index 1746d1386c..12124a63d3 100644
---- a/package/bitstream/bitstream.mk
-+++ b/package/bitstream/bitstream.mk
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 3b9dac28b6..0bd00e07d0 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,4 +1,4 @@
+ # sha256 computed locally
+-sha256  99ea7b8fc34fdd5dc628169f452086c1f4d8ca3a1e52bd484fbdef3516893672  ccache-3.7.8.tar.xz
++sha256  f893da7543bfb9172bd55e603fcbdfcd83e6def176a28689c13235695b4cf44b  ccache-3.7.9.tar.xz
+ sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
+ sha256  4f63223bcdee822d55a6768cc8399ffe06401d7a03cfe79e1dc305f50dc22c59  LICENSE.adoc
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 1e8b9b7c25..276665c3fc 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BITSTREAM_VERSION = 1.4
-+BITSTREAM_VERSION = 1.5
- BITSTREAM_SOURCE = bitstream-$(BITSTREAM_VERSION).tar.bz2
- BITSTREAM_SITE = https://get.videolan.org/bitstream/$(BITSTREAM_VERSION)
- BITSTREAM_LICENSE = MIT
+-CCACHE_VERSION = 3.7.8
++CCACHE_VERSION = 3.7.9
+ CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPL-3.0+, others
