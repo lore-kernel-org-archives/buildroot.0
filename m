@@ -1,53 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Apr 2020 23:03:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtirpc: bump to version 1.2.6
-In-Reply-To: <20200415182153.14511-1-petr.vorel@gmail.com>
-References: <20200415182153.14511-1-petr.vorel@gmail.com>
-Message-ID: <20200415230316.16b31c66@windsurf.home>
+Date: Wed, 15 Apr 2020 23:07:12 +0200
+Subject: [Buildroot] [git commit] configs/solidrun_macchiatobin_mainline:
+ bump Linux and U-Boot versions
+Message-ID: <20200415205308.CA5598EDA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 15 Apr 2020 20:21:53 +0200
-Petr Vorel <petr.vorel@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=06d0e99c2e9a438643a2998b568436ed359e3aa8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index 0d260891e2..073c81edf7 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -31,6 +31,9 @@ else
->  IPUTILS_CONF_OPTS += -DUSE_IDN=false
->  endif
->  
-> +#$(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> +IPUTILS_DEPENDENCIES += libiconv
-> +
+Bump Linux to 5.6.3, U-Boot to 2020.01. New kernel and modules based
+on arm64 defconfig do not fit into default size filesystem anymore.
+So increase filesystem size to 120M.
 
-Really ? :-)
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/solidrun_macchiatobin_mainline_defconfig | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
->  ifeq ($(BR2_PACKAGE_NETTLE),y)
->  IPUTILS_CONF_OPTS += -DUSE_CRYPTO=nettle
->  IPUTILS_DEPENDENCIES += nettle
-> diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-> index a7907dc7b2..044a69b56a 100644
-> --- a/package/libtirpc/libtirpc.hash
-> +++ b/package/libtirpc/libtirpc.hash
-> @@ -1,5 +1,5 @@
->  # From sourceforge's info on download page:
-> -sha1 ab80619b214d93e5cfbf22a0d01e1ee06d434326  libtirpc-1.2.5.tar.bz2
-> +sha1 f182235e32942fc0ac6b9b5b6fe7e32f69362659  libtirpc-1.2.6.tar.bz2
->  # Locally computed
-> -sha256 f3b6350c7e9c3cd9c58fc7a5e5f8e6be469cc571bb5eb31eb9790b3e675186ca  libtirpc-1.2.5.tar.bz2
-> +sha256 4278e9a5181d5af9cd7885322fdecebc444f9a3da87c526e7d47f7a12a37d1cc  dl/libtirpc/libtirpc-1.2.6.tar.bz2
-
-                                                                             ^^^ really ? :-)
-
-I fixed both issues, and applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/solidrun_macchiatobin_mainline_defconfig b/configs/solidrun_macchiatobin_mainline_defconfig
+index e601092d67..f1ca7764b1 100644
+--- a/configs/solidrun_macchiatobin_mainline_defconfig
++++ b/configs/solidrun_macchiatobin_mainline_defconfig
+@@ -1,5 +1,5 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+ BR2_TARGET_GENERIC_HOSTNAME="mcbin"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
+ 
+@@ -19,7 +19,7 @@ BR2_TARGET_MV_DDR_MARVELL=y
+ # U-Boot
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_USE_DEFCONFIG=y
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mvebu_mcbin-88f8040"
+@@ -28,7 +28,7 @@ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/solidrun/macchiatobin/uboot-fragme
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
+@@ -40,6 +40,8 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_TAR=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/solidrun/macchiatobin/genimage.cfg"
