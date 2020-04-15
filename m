@@ -1,9 +1,9 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 15 Apr 2020 18:18:29 +0200
-Subject: [Buildroot] [PATCH 5/7] configs/nitrogen*: bump kernel revision
+Date: Wed, 15 Apr 2020 18:18:30 +0200
+Subject: [Buildroot] [PATCH 6/7] configs/nitrogen*: bump u-boot revision
 In-Reply-To: <20200415161831.2093348-1-gary.bisson@boundarydevices.com>
 References: <20200415161831.2093348-1-gary.bisson@boundarydevices.com>
-Message-ID: <20200415161831.2093348-6-gary.bisson@boundarydevices.com>
+Message-ID: <20200415161831.2093348-7-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,9 +11,9 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Changelog:
-- fix PMIC issue for i.MX8MMini
-- add support for MCP25xxFD SPI to CAN chip
-- fix external module build issue for GCC >= 9
+- fix serial# variable creation for i.MX8MQ/MM/MN
+- improve display selection
+- fix fastboot support for boards with 1GB of RAM only
 - add BD Nano board support
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
@@ -26,69 +26,69 @@ Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
  5 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index 7330d00f69..f134c442d4 100644
+index f134c442d4..c9fe0f46b1 100644
 --- a/configs/nitrogen6sx_defconfig
 +++ b/configs/nitrogen6sx_defconfig
-@@ -35,7 +35,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/boot.cmd"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- # Last version of branch boundary-imx_4.14.x_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/208127fd.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Last version of branch boundary-v2018.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/26bfd1de.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6sx"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
 diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index cd0697dbfb..e0939af14e 100644
+index e0939af14e..00b28d2ab1 100644
 --- a/configs/nitrogen6x_defconfig
 +++ b/configs/nitrogen6x_defconfig
-@@ -35,7 +35,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/boot.cmd"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- # Last version of branch boundary-imx_4.14.x_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/208127fd.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Last version of branch boundary-v2018.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/26bfd1de.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6q"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
 diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index 7a2ff4d3ad..586c0e0ee1 100644
+index 586c0e0ee1..d9a216d491 100644
 --- a/configs/nitrogen7_defconfig
 +++ b/configs/nitrogen7_defconfig
-@@ -34,7 +34,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/boot.cmd"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- # Last version of branch boundary-imx_4.14.x_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/208127fd.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Last version of branch boundary-v2018.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/26bfd1de.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen7"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
 diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
-index a1e555a84a..cfe0ed1a9b 100644
+index cfe0ed1a9b..26b9d768e3 100644
 --- a/configs/nitrogen8m_defconfig
 +++ b/configs/nitrogen8m_defconfig
-@@ -49,7 +49,7 @@ BR2_TARGET_UBOOT_SPL=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- # Latest revision  of branch boundary-imx_4.14.x_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/208127fd.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8m"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2018.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/26bfd1de.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
-index a7aa55c527..5af1b5251e 100644
+index 5af1b5251e..96ab0d044e 100644
 --- a/configs/nitrogen8mm_defconfig
 +++ b/configs/nitrogen8mm_defconfig
-@@ -49,7 +49,7 @@ BR2_TARGET_UBOOT_SPL=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- # Latest revision  of branch boundary-imx_4.14.x_2.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/208127fd.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mm_2g"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2018.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/26bfd1de.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 -- 
 2.25.1
