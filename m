@@ -1,84 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Apr 2020 21:58:49 +0200
-Subject: [Buildroot] [git commit] package/strace: fix build without fork
-Message-ID: <20200415194441.1B2A48ECF3@busybox.osuosl.org>
+Date: Wed, 15 Apr 2020 22:00:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/strace: fix build without fork
+In-Reply-To: <20200414115641.1374238-1-fontaine.fabrice@gmail.com>
+References: <20200414115641.1374238-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200415220011.28b6aa24@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7925e19fd7b613bb97b1691552fe76100ca4dde0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 14 Apr 2020 13:56:41 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/ffc81d3798379a9c34c7a708ebbdea27409f755d
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ffc81d3798379a9c34c7a708ebbdea27409f755d
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...yscall_info.c-fix-build-without-fork.patch | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 package/strace/0001-ptrace_syscall_info.c-fix-build-without-fork.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ace_syscall_info.c-fix-build-without-fork.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+Applied to master, thanks. I've even updated the upstream status of the
+patch, since it was applied upstream. Thanks!
 
-diff --git a/package/strace/0001-ptrace_syscall_info.c-fix-build-without-fork.patch b/package/strace/0001-ptrace_syscall_info.c-fix-build-without-fork.patch
-new file mode 100644
-index 0000000000..596524e4f4
---- /dev/null
-+++ b/package/strace/0001-ptrace_syscall_info.c-fix-build-without-fork.patch
-@@ -0,0 +1,56 @@
-+From ba0d1193b31e8822744ae250d8e984dad32e7e49 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 14 Apr 2020 13:45:29 +0200
-+Subject: [PATCH] ptrace_syscall_info.c: fix build without fork
-+
-+Build without fork fails on:
-+
-+ptrace_syscall_info.c:33:27: error: 'expected_entry_size' defined but not used [-Werror=unused-const-variable=]
-+ static const unsigned int expected_entry_size =
-+                           ^~~~~~~~~~~~~~~~~~~
-+ptrace_syscall_info.c:31:27: error: 'expected_none_size' defined but not used [-Werror=unused-const-variable=]
-+ static const unsigned int expected_none_size =
-+                           ^~~~~~~~~~~~~~~~~~
-+ptrace_syscall_info.c:24:1: error: 'kill_tracee' defined but not used [-Werror=unused-function]
-+ kill_tracee(pid_t pid)
-+ ^~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/ffc81d3798379a9c34c7a708ebbdea27409f755d
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream: https://github.com/strace/strace/commit/897f3d053305ae2fb8e99371b4effb9b3f5c0000]
-+---
-+ ptrace_syscall_info.c | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/ptrace_syscall_info.c b/ptrace_syscall_info.c
-+index acea27ec..0bfd91c5 100644
-+--- a/ptrace_syscall_info.c
-++++ b/ptrace_syscall_info.c
-+@@ -20,18 +20,20 @@
-+ 
-+ bool ptrace_get_syscall_info_supported;
-+ 
-++#define FAIL	do { ptrace_stop = -1U; goto done; } while (0)
-++
-++#ifdef HAVE_FORK
-+ static int
-+ kill_tracee(pid_t pid)
-+ {
-+ 	return kill_save_errno(pid, SIGKILL);
-+ }
-+ 
-+-#define FAIL	do { ptrace_stop = -1U; goto done; } while (0)
-+-
-+ static const unsigned int expected_none_size =
-+ 	offsetof(struct_ptrace_syscall_info, entry);
-+ static const unsigned int expected_entry_size =
-+ 	offsetofend(struct_ptrace_syscall_info, entry.args);
-++#endif /* HAVE_FORK */
-+ static const unsigned int expected_exit_size =
-+ 	offsetofend(struct_ptrace_syscall_info, exit.is_error);
-+ static const unsigned int expected_seccomp_size =
-+-- 
-+2.25.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
