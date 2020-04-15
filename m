@@ -1,53 +1,65 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Wed, 15 Apr 2020 15:15:52 +0200
-Subject: [Buildroot] [PATCH 2/2] fs/ext2: Pass a default string to
- filesystem label
-In-Reply-To: <20200415123656.13298-2-festevam@gmail.com>
-References: <20200415123656.13298-1-festevam@gmail.com>
- <20200415123656.13298-2-festevam@gmail.com>
-Message-ID: <f4791bd9-5a07-961f-ab05-3fe78e074b1e@koncepto.io>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 15 Apr 2020 08:21:39 -0500
+Subject: [Buildroot] [PATCH] package/swupdate: Add basic systemd service
+In-Reply-To: <CANQCQpbw3B7mRiMeX-amqFCoHfypheBP2mSaCtKQc68nK9gErQ@mail.gmail.com>
+References: <20200414135231.27737-1-matthew.weber@rockwellcollins.com>
+ <20200414182350.34184f96@windsurf.home>
+ <CANQCQpbw3B7mRiMeX-amqFCoHfypheBP2mSaCtKQc68nK9gErQ@mail.gmail.com>
+Message-ID: <CANQCQpZUJLxcyS1pREFKBb8eYPg5SmbJ1vRg0Q4H7Kcdv++REQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio,
+Thomas,
 
-Le 15/04/2020 ? 14:36, Fabio Estevam a ?crit?:
-> Currently the volume-label for the root filesystem partition is a string
-> wit the following pattern: ad09a287-46a9-4790-ba97-fbbb549e5e96.
-> 
-> Specify the volume-label as "rootfs" to make it easier to identify it.
-> 
-> Suggested-by: Arnout Vandecappelle <arnout@mind.be>
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-Tested-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+On Tue, Apr 14, 2020 at 12:31 PM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Thomas,
+>
+> On Tue, Apr 14, 2020 at 11:24 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > On Tue, 14 Apr 2020 08:52:31 -0500
+> > Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+> >
+> > > From: Sam Voss <sam.voss@rockwellcollins.com>
+> > >
+> > > Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+> > > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> > > ---
+> > >  package/swupdate/swupdate.mk      | 10 ++++++++++
+> > >  package/swupdate/swupdate.service | 17 +++++++++++++++++
+> > >  2 files changed, 27 insertions(+)
+> > >  create mode 100644 package/swupdate/swupdate.service
+> > >
+> > > diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+> > > index 2b51edb66d..2300220d93 100644
+> > > --- a/package/swupdate/swupdate.mk
+> > > +++ b/package/swupdate/swupdate.mk
+> > > @@ -189,4 +189,14 @@ $(error No Swupdate configuration file specified, check your BR2_PACKAGE_SWUPDAT
+> > >  endif
+> > >  endif
+> > >
+> > > +ifeq ($(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE),y)
+> > > +define SWUPDATE_INSTALL_INIT_SYSTEMD
+> > > +     $(INSTALL) -D -m 644 package/swupdate/swupdate.service \
+> > > +             $(TARGET_DIR)/usr/lib/systemd/system/swupdate.service
+> > > +     mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> > > +     ln -sf ../../../../usr/lib/systemd/system/swupdate.service \
+> > > +             $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/swupdate.service
+> >
+> > This symlink is no longer needed now that we have host-systemd as far
+> > as I understand.
+> >
+>
+> Is there a good example of how that works?
 
-Thanks !
+Nevermind, I looked through [231ad359bcc0] package/systemd: use
+host-systemctl preset all to enable units.  Seems pretty transparent.
+I'll send an update.
 
-Pierre-Jean
-
-> ---
->   fs/ext2/Config.in | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-> index 74bacc1141..333ead95fe 100644
-> --- a/fs/ext2/Config.in
-> +++ b/fs/ext2/Config.in
-> @@ -43,6 +43,7 @@ config BR2_TARGET_ROOTFS_EXT2_REV
->   
->   config BR2_TARGET_ROOTFS_EXT2_LABEL
->   	string "filesystem label"
-> +	default "rootfs"
->   
->   config BR2_TARGET_ROOTFS_EXT2_SIZE
->   	string "exact size"
-> 
-
--- 
-Pierre-Jean Texier
-Embedded Linux Engineer
-https://koncepto.io
+Matt
