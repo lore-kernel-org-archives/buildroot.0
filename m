@@ -1,52 +1,56 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 15 Apr 2020 08:30:06 +0200
-Subject: [Buildroot] [PATCH v3,4/6] package/collectd: add InfluxDB support
+Date: Wed, 15 Apr 2020 08:30:08 +0200
+Subject: [Buildroot] [PATCH v3,6/6] package/collectd: add buddyinfo option
 In-Reply-To: <20200415063008.2237470-1-fontaine.fabrice@gmail.com>
 References: <20200415063008.2237470-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200415063008.2237470-4-fontaine.fabrice@gmail.com>
+Message-ID: <20200415063008.2237470-6-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-InfluxDB support is available since version 5.11.0 and
-https://github.com/collectd/collectd/commit/605fcdcddeefb23b945203079e5c87625ce0e336
+buddyinfo is available since version 5.11.0 and
+https://github.com/collectd/collectd/commit/cb19ecf90d89a79836b8b5236d2b66277dd79c5f
+
+It is currently enabled by default
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/collectd/Config.in   | 6 ++++++
+Changes v1 -> v2 (after review of Asaf Kahlon):
+ - Add missing COLLECTD_ prefix for buddyinfo option in Config.in
+
+ package/collectd/Config.in   | 5 +++++
  package/collectd/collectd.mk | 1 +
- 2 files changed, 7 insertions(+)
+ 2 files changed, 6 insertions(+)
 
 diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index f1f3c2ed9f..7186d67c36 100644
+index 3fc07a9014..54b218754a 100644
 --- a/package/collectd/Config.in
 +++ b/package/collectd/Config.in
-@@ -638,6 +638,12 @@ config BR2_PACKAGE_COLLECTD_WRITEHTTP
- 	  Sends values collected to a web-server using HTTP POST and
- 	  PUTVAL.
- 
-+config BR2_PACKAGE_COLLECTD_WRITEINFLUXDBUDP
-+	bool "write_influxdb_udp"
-+	help
-+	  Sends data to an instance of InfluxDB using the "Line
-+	  Protocol".
-+
- config BR2_PACKAGE_COLLECTD_WRITELOG
- 	bool "write_log"
+@@ -128,6 +128,11 @@ config BR2_PACKAGE_COLLECTD_BIND
  	help
+ 	  Collects BIND DNS statistics.
+ 
++config BR2_PACKAGE_COLLECTD_BUDDYINFO
++	bool "buddyinfo"
++	help
++	  Statistics from buddyinfo file about memory fragmentation.
++
+ config BR2_PACKAGE_COLLECTD_CAPABILITIES
+ 	bool "capabilities"
+ 	depends on BR2_aarch64 || BR2_i386 || BR2_x86_64 # dmidecode
 diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 52b218e139..964f4dc694 100644
+index f04ccdb2ff..6bd1754ad7 100644
 --- a/package/collectd/collectd.mk
 +++ b/package/collectd/collectd.mk
-@@ -140,6 +140,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_VMEM),--enable-vmem,--disable-vmem) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WIRELESS),--enable-wireless,--disable-wireless) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITEHTTP),--enable-write_http,--disable-write_http) \
-+	$(if $(BR2_PACKAGE_COLLECTD_WRITEINFLUXDBUDP),--enable-write_influxdb_udp,--disable-write_influxdb_udp) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITELOG),--enable-write_log,--disable-write_log) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS),--enable-write_prometheus,--disable-write_prometheus) \
- 	$(if $(BR2_PACKAGE_COLLECTD_WRITEREDIS),--enable-write_redis,--disable-write_redis) \
+@@ -51,6 +51,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_APCUPS),--enable-apcups,--disable-apcups) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
++	$(if $(BR2_PACKAGE_COLLECTD_BUDDYINFO),--enable-buddyinfo,--disable-buddyinfo) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CAPABILITIES),--enable-capabilities,--disable-capabilities) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CEPH),--enable-ceph,--disable-ceph) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CHRONY),--enable-chrony,--disable-chrony) \
 -- 
 2.25.1
