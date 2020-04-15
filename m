@@ -1,39 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Apr 2020 22:49:26 +0200
-Subject: [Buildroot] [git commit] fs/ext2: pass a default string to
- filesystem label
-Message-ID: <20200415203641.5F9E68ED90@busybox.osuosl.org>
+Date: Wed, 15 Apr 2020 22:50:10 +0200
+Subject: [Buildroot] [git commit] configs/acmesystems*: drop
+ BR2_TARGET_ROOTFS_EXT2_LABEL options
+Message-ID: <20200415203641.684208ED92@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5631c3802458c3fc6ce87a9d8c20dbe7fbf1e3d5
+commit: https://git.buildroot.net/buildroot/commit/?id=75fd330a5434f4db33c03a86df9c2d55d7ade7a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently the volume-label for the root filesystem partition is a string
-wit the following pattern: ad09a287-46a9-4790-ba97-fbbb549e5e96.
+BR2_TARGET_ROOTFS_EXT2_LABEL now defaults to "rootfs", so repeating
+that in those defconfigs is no longer necessary.
 
-Specify the volume-label as "rootfs" to make it easier to identify it.
-
-Suggested-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Tested-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- fs/ext2/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ configs/acmesystems_aria_g25_128mb_defconfig    | 1 -
+ configs/acmesystems_aria_g25_256mb_defconfig    | 1 -
+ configs/acmesystems_arietta_g25_128mb_defconfig | 1 -
+ configs/acmesystems_arietta_g25_256mb_defconfig | 1 -
+ 4 files changed, 4 deletions(-)
 
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index 74bacc1141..333ead95fe 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -43,6 +43,7 @@ config BR2_TARGET_ROOTFS_EXT2_REV
+diff --git a/configs/acmesystems_aria_g25_128mb_defconfig b/configs/acmesystems_aria_g25_128mb_defconfig
+index 4f8f4d5406..cf62b5b72e 100644
+--- a/configs/acmesystems_aria_g25_128mb_defconfig
++++ b/configs/acmesystems_aria_g25_128mb_defconfig
+@@ -24,7 +24,6 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # Root filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
  
- config BR2_TARGET_ROOTFS_EXT2_LABEL
- 	string "filesystem label"
-+	default "rootfs"
+ # AT91bootstrap bootloader
+ BR2_TARGET_AT91BOOTSTRAP3=y
+diff --git a/configs/acmesystems_aria_g25_256mb_defconfig b/configs/acmesystems_aria_g25_256mb_defconfig
+index 4569a7b7aa..496ccd6853 100644
+--- a/configs/acmesystems_aria_g25_256mb_defconfig
++++ b/configs/acmesystems_aria_g25_256mb_defconfig
+@@ -24,7 +24,6 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # Root filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
  
- config BR2_TARGET_ROOTFS_EXT2_SIZE
- 	string "exact size"
+ # AT91bootstrap bootloader
+ BR2_TARGET_AT91BOOTSTRAP3=y
+diff --git a/configs/acmesystems_arietta_g25_128mb_defconfig b/configs/acmesystems_arietta_g25_128mb_defconfig
+index 0174f356da..17ef7e757c 100644
+--- a/configs/acmesystems_arietta_g25_128mb_defconfig
++++ b/configs/acmesystems_arietta_g25_128mb_defconfig
+@@ -24,7 +24,6 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # Root filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
+ 
+ # AT91bootstrap bootloader
+ BR2_TARGET_AT91BOOTSTRAP3=y
+diff --git a/configs/acmesystems_arietta_g25_256mb_defconfig b/configs/acmesystems_arietta_g25_256mb_defconfig
+index 14e4dd00be..aa0236bbb3 100644
+--- a/configs/acmesystems_arietta_g25_256mb_defconfig
++++ b/configs/acmesystems_arietta_g25_256mb_defconfig
+@@ -24,7 +24,6 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # Root filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_LABEL="rootfs"
+ 
+ # AT91bootstrap bootloader
+ BR2_TARGET_AT91BOOTSTRAP3=y
