@@ -1,145 +1,94 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Apr 2020 22:37:06 +0200
-Subject: [Buildroot] [PATCH 2/3] package/daq: bump version to 2.0.7
-In-Reply-To: <20200414194840.1344508-2-bernd.kuhls@t-online.de>
-References: <20200414194840.1344508-1-bernd.kuhls@t-online.de>
- <20200414194840.1344508-2-bernd.kuhls@t-online.de>
-Message-ID: <20200414203706.GF5853@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 15 Apr 2020 07:38:40 +0200
+Subject: [Buildroot] Setting better names for partitions
+In-Reply-To: <CAOMZO5Cr9PUnSNDtMk7rcA_mC3FTe1AkCJT=9Jpj4WUKSMeDJw@mail.gmail.com>
+References: <CAOMZO5Cr9PUnSNDtMk7rcA_mC3FTe1AkCJT=9Jpj4WUKSMeDJw@mail.gmail.com>
+Message-ID: <20200415073840.7f790c52@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Hello Fabio,
 
-On 2020-04-14 21:48 +0200, Bernd Kuhls spake thusly:
-> Added md5 hash provided by upstream.
+On Tue, 14 Apr 2020 14:50:32 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
+
+> On i.MX we usually generate the boot images via
+> board/freescale/common/imx/post-image.sh script, which creates two
+> partitions:
+> - One that contains the dtb and kernel
+> - One for rootfs
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> Please note that building this version without autoreconf is broken on
-> my system in contrast to version 2.0.6, reason unknown after comparing
-> the source code of both versions. The configure script is re-run during
-> build
-
-The reason is that configure.ac is more recent than the rest of the
-autotools files (and in fact more recent than all the other files). Even
-Makefile.am is more recent than Makefile.in:
-
-    $ ls -1Art
-    README
-    missing
-    Makefile.in
-    Makefile.am
-    m4
-    ltmain.sh
-    install-sh
-    depcomp
-    daq.dsp
-    COPYING
-    configure
-    config.sub
-    config.h.in
-    config.guess
-    compile
-    ChangeLog
-    api
-    aclocal.m4
-    sfbpf
-    os-daq-modules
-    daq.vcxproj
-    configure.ac
-
-    $ stat configure.ac configure
-      File: configure.ac
-      Size: 11296           Blocks: 24         IO Block: 4096   regular file
-    Device: 10301h/66305d   Inode: 7884583     Links: 1
-    Access: (0444/-r--r--r--)  Uid: ( 1000/  ymorin)   Gid: ( 1000/  ymorin)
-    Access: 2020-04-14 22:22:36.035348803 +0200
-    Modify: 2020-04-08 14:23:58.000000000 +0200
-    Change: 2020-04-14 22:22:36.035348803 +0200
-     Birth: -
-      File: configure
-      Size: 497485          Blocks: 976        IO Block: 4096   regular file
-    Device: 10301h/66305d   Inode: 7879943     Links: 1
-    Access: (0555/-r-xr-xr-x)  Uid: ( 1000/  ymorin)   Gid: ( 1000/  ymorin)
-    Access: 2020-04-14 22:22:36.027348801 +0200
-    Modify: 2020-04-08 14:23:57.000000000 +0200
-    Change: 2020-04-14 22:22:36.031348803 +0200
-     Birth: -
-
-So we can see that configure is oh-so=slightly older than configure.ac.
-So 'make' will try to resolve the problem by generating it again, which,
-as you discovered, does not work so nicely. We could solve the issue
-without running autoreconf with somthing like:
-
-    define DAQ_TOUCH_AUTOSTUFF
-        touch $(@D)/configure
-        touch $(@D)/Makefile.in
-    endef
-
-That, provided that configure is indeed in sync with configure.ac, of
-course. Note also that there might be an issue with Makefile.{am,in} in
-sub-directories, as the .in are at exactly the same date as the .am.
-
-Can you check if the above inded fixes the issue? If so, can you respin
-a series, please? Note, this is still acceptable to have the paralle
-fixup even if autoreconf is not mandatory.
-
-Additionaly, I wonder why we don't switch to snort 3.0 and daq 2.2.2,
-instead. Any idea?
-
-Regards,
-Yann E. MORIN.
-
-> causing an error because of variables missing at this stage in
-> DAQ_CONF_ENV to fix libpcap detection. Running autoreconf fixes this
-> problem so I took the freedom to add the parallel build fix used by
-> Gentoo in this series to save some build time again.
+> The names of these partitions are strings like 5934-861D and
+> ad09a287-46a9-4790-ba97-fbbb549e5e96.
 > 
->  package/daq/daq.hash | 4 +++-
->  package/daq/daq.mk   | 2 +-
->  2 files changed, 4 insertions(+), 2 deletions(-)
+> Is there a way to specify a better name for the partitions? Something
+> like "boot" and "rootfs" instead?
 > 
-> diff --git a/package/daq/daq.hash b/package/daq/daq.hash
-> index 6a0cb5ed07..680988c6d7 100644
-> --- a/package/daq/daq.hash
-> +++ b/package/daq/daq.hash
-> @@ -1,5 +1,7 @@
-> +# From https://www.snort.org/downloads/snort/md5s
-> +md5 ea796f001d1b00302e4e69e337ab2460 daq-2.0.7.tar.gz
->  # Locally computed:
-> -sha256 d41da5f7793e66044e6927dd868c0525e7ee4ec1a3515bf74ef9a30cd9273af0  daq-2.0.6.tar.gz
-> +sha256 bdc4e5a24d1ea492c39ee213a63c55466a2e8114b6a9abed609927ae13a7705e  daq-2.0.7.tar.gz
->  
->  # Hash for license files:
->  sha256 07f28289c09fd9eb5a6ff7bc710ff40363601b1bbc6f3637d8ed412150e90819  COPYING
-> diff --git a/package/daq/daq.mk b/package/daq/daq.mk
-> index 06983c0b6d..f7360cdb3d 100644
-> --- a/package/daq/daq.mk
-> +++ b/package/daq/daq.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -DAQ_VERSION = 2.0.6
-> +DAQ_VERSION = 2.0.7
->  DAQ_SITE = https://www.snort.org/downloads/snort
->  DAQ_LICENSE = GPL-2.0
->  DAQ_LICENSE_FILES = COPYING
-> -- 
-> 2.25.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> If so, how can this be achieved?
 
+With DOS partition tables, there is no concept of "partition name" as
+the partition table doesn't have any entry/space to store partition
+names.
+
+The strings like 5934-861D and ad09a287-46a9-4790-ba97-fbbb549e5e96 are
+filesystems labels.
+
+According to https://github.com/pengutronix/genimage/ and from a quick
+look at the code, it seems like you can set such labels by doing:
+
+	label = "boot"
+	label = "rootfs"
+
+inside the description of such images.
+
+However, notice that when we do:
+
+image boot.vfat {
+  vfat {
+    files = {
+      "bcm2708-rpi-b.dtb",
+      "bcm2708-rpi-b-plus.dtb",
+      "bcm2708-rpi-cm.dtb",
+      "rpi-firmware/bootcode.bin",
+      "rpi-firmware/cmdline.txt",
+      "rpi-firmware/config.txt",
+      "rpi-firmware/fixup.dat",
+      "rpi-firmware/start.elf",
+      "zImage"
+    }
+  }
+  size = 32M
+}
+
+
+image sdcard.img {
+  hdimage {
+  }
+
+  partition boot {
+    partition-type = 0xC
+    bootable = "true"
+    image = "boot.vfat"
+  }
+
+  partition rootfs {
+    partition-type = 0x83
+    image = "rootfs.ext4"
+  }
+}
+
+The FAT filesystem image is created by genimage, and therefore the
+label property would have an effect. However, the ext4 filesystem image
+is created by Buildroot, so you will have to use the
+BR2_TARGET_ROOTFS_EXT2_LABEL Buildroot option to set the label.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
