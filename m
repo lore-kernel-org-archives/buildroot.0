@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Apr 2020 21:42:35 +0200
-Subject: [Buildroot] [git commit] package/check: bump version to 0.14.0
-Message-ID: <20200415193448.B92EA8ECD1@busybox.osuosl.org>
+Date: Wed, 15 Apr 2020 21:48:07 +0200
+Subject: [Buildroot] [git commit] package/comix-cursors: bump version to
+ 0.9.1
+Message-ID: <20200415193448.CDAA781332@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0fa2e4e2f08a1cd4304ca442e4bfba3727fbfbb
+commit: https://git.buildroot.net/buildroot/commit/?id=e446ab01d3c4d49365595aaa43652de9c79bd5f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://github.com/libcheck/check/releases/tag/0.14.0
+Changelog: https://gitlab.com/limitland/comixcursors/-/blob/master/NEWS
+
+Original repository was moved to gitlab.com, changed _SITE accordingly.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/check/check.hash | 2 +-
- package/check/check.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/comix-cursors/comix-cursors.hash | 2 +-
+ package/comix-cursors/comix-cursors.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/check/check.hash b/package/check/check.hash
-index 291b5d095e..52839a68b4 100644
---- a/package/check/check.hash
-+++ b/package/check/check.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256	c4336b31447acc7e3266854f73ec188cdb15554d0edd44739631da174a569909	check-0.13.0.tar.gz
-+sha256	bd0f0ca1be65b70238b32f8e9fe5d36dc2fbf7a759b7edf28e75323a7d74f30b	check-0.14.0.tar.gz
- # License files, locally calculated
- sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	COPYING.LESSER
-diff --git a/package/check/check.mk b/package/check/check.mk
-index b02136dcb2..6bec07adbd 100644
---- a/package/check/check.mk
-+++ b/package/check/check.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/comix-cursors/comix-cursors.hash b/package/comix-cursors/comix-cursors.hash
+index d7f33ca078..e03808c3f8 100644
+--- a/package/comix-cursors/comix-cursors.hash
++++ b/package/comix-cursors/comix-cursors.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	3109e4d19d930a6a2a5c3422ebaaa2002640169118f9b12c042bb64995f3ec31	ComixCursors-0.8.2.tar.bz2
++sha256	9e68ea8ff230dcc793528aa5da9a38b9bf61c478cd6868b4e4f5da659746a019	ComixCursors-0.9.1.tar.bz2
+diff --git a/package/comix-cursors/comix-cursors.mk b/package/comix-cursors/comix-cursors.mk
+index 6cc73764ad..7b034ccee7 100644
+--- a/package/comix-cursors/comix-cursors.mk
++++ b/package/comix-cursors/comix-cursors.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--CHECK_VERSION = 0.13.0
-+CHECK_VERSION = 0.14.0
- CHECK_SITE = https://github.com/libcheck/check/releases/download/$(CHECK_VERSION)
- CHECK_INSTALL_STAGING = YES
- CHECK_DEPENDENCIES = host-pkgconf
+-COMIX_CURSORS_VERSION = 0.8.2
+-COMIX_CURSORS_SITE = http://limitland.de/downloads/comixcursors
++COMIX_CURSORS_VERSION = 0.9.1
++COMIX_CURSORS_SITE = https://limitland.gitlab.io/comixcursors
+ COMIX_CURSORS_SOURCE = ComixCursors-$(COMIX_CURSORS_VERSION).tar.bz2
+ COMIX_CURSORS_LICENSE = GPL-3.0
+ COMIX_CURSORS_STRIP_COMPONENTS = 0
