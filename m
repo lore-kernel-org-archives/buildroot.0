@@ -1,38 +1,26 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 15 Apr 2020 09:36:56 -0300
-Subject: [Buildroot] [PATCH 2/2] fs/ext2: Pass a default string to
- filesystem label
-In-Reply-To: <20200415123656.13298-1-festevam@gmail.com>
-References: <20200415123656.13298-1-festevam@gmail.com>
-Message-ID: <20200415123656.13298-2-festevam@gmail.com>
+Date: Wed, 15 Apr 2020 09:38:35 -0300
+Subject: [Buildroot] Setting better names for partitions
+In-Reply-To: <ba08e518-3d50-0840-0a31-bd6e32cd8a17@mind.be>
+References: <CAOMZO5Cr9PUnSNDtMk7rcA_mC3FTe1AkCJT=9Jpj4WUKSMeDJw@mail.gmail.com>
+ <20200415073840.7f790c52@windsurf.home>
+ <ba08e518-3d50-0840-0a31-bd6e32cd8a17@mind.be>
+Message-ID: <CAOMZO5ChL+7E1COKxVqLiNZ0UWKfzojGS2tc0xwJeDBr_uFrtg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently the volume-label for the root filesystem partition is a string
-wit the following pattern: ad09a287-46a9-4790-ba97-fbbb549e5e96.
+Hi Thomas and Arnout,
 
-Specify the volume-label as "rootfs" to make it easier to identify it. 
+On Wed, Apr 15, 2020 at 4:27 AM Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Suggested-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- fs/ext2/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+>  It might make sense to change the default of that config to rootfs instead of
+> empty. The aria and arietta defconfigs already override it to exactly that.
 
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index 74bacc1141..333ead95fe 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -43,6 +43,7 @@ config BR2_TARGET_ROOTFS_EXT2_REV
- 
- config BR2_TARGET_ROOTFS_EXT2_LABEL
- 	string "filesystem label"
-+	default "rootfs"
- 
- config BR2_TARGET_ROOTFS_EXT2_SIZE
- 	string "exact size"
--- 
-2.17.1
+Thanks for your help! Now I get proper volume-labels.
+
+I have sent two patches to address that.
+
+Thanks
