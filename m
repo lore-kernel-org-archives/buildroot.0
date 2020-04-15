@@ -1,90 +1,89 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 15 Apr 2020 07:59:13 -0500
-Subject: [Buildroot] [PATCH v4 0/8] Bump of SELinux related libs/tools to 3.0
-Message-ID: <20200415125921.57648-1-matthew.weber@rockwellcollins.com>
+Date: Wed, 15 Apr 2020 07:59:15 -0500
+Subject: [Buildroot] [PATCH v4 2/8] package/libsemanage: bump version to 3.0
+In-Reply-To: <20200415125921.57648-1-matthew.weber@rockwellcollins.com>
+References: <20200415125921.57648-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20200415125921.57648-3-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-v4
- * Dropped proposed v3 date based version and switched back to x.y
- * Thomas P. has added a release-monitoring.org bug report on sematic
-   vs date version ordering (https://github.com/fedora-infra/anitya/issues/897)
- * Set the version and site in each package to avoid variable expansion
-   issues
+From: Adam Duskett <aduskett@gmail.com>
 
-v3
- * Switches to using the date (i.e. 20191204) abased release tagging
-   for better alignment with https://release-monitoring.org/project/01717/
- * Sharing libselinux version and site across all related selinux pkgs
- * Added selinux-python which was missed in the v2 of this bump by
-   Adam (http://patchwork.ozlabs.org/project/buildroot/list/?series=156673)
+Other changes:
+  - Remove the Python2 check, as 3.0 has removed support for Python2.
 
-v1 / v2
- * Adam's series here:
-    v2 - http://patchwork.ozlabs.org/project/buildroot/list/?series=156673
-    v1 - http://patchwork.ozlabs.org/project/buildroot/list/?series=147113
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+Changes
+v3 -> v4
+ - Switched back to using x.y for versioning
 
+v2 -> v3
+ - Matt switched over the versioning to use dates
+---
+ package/libsemanage/libsemanage.hash |  2 +-
+ package/libsemanage/libsemanage.mk   | 16 ++++------------
+ 2 files changed, 5 insertions(+), 13 deletions(-)
 
-Tested with the following reduced configuration for legal info and build.
-
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-BR2_PACKAGE_POLICYCOREUTILS=y
-BR2_PACKAGE_RESTORECOND=y
-BR2_PACKAGE_SELINUX_PYTHON=y
-BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW=y
-BR2_PACKAGE_SETOOLS=y
-BR2_TARGET_ROOTFS_EXT2=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-Adam Duskett (7):
-  package/libselinux: bump version to 3.0
-  package/libsemanage: bump version to 3.0
-  package/libsepol: bump version to 3.0
-  package/policycoreutils: bump version to 3.0
-  package/restorecond: bump version to 3.0
-  package/semodule-utils: bump version to 3.0
-  package/checkpolicy: bump version to 3.0
-
-Matt Weber (1):
-  package/selinux-python: bump to version 3.0
-
- package/checkpolicy/checkpolicy.hash          |   2 +-
- package/checkpolicy/checkpolicy.mk            |   4 +-
- package/libselinux/0001-fix-musl-build.patch  |  22 +-
- ...-and-rely-on-the-installed-file-nam.patch} |   8 +-
- ...ng-against-musl-and-uclibc-libraries.patch |  32 +++
- ...ython-distutils-to-install-SELinux-p.patch | 207 ------------------
- ...-t-pass-bogus-I-and-L-to-python-setu.patch |  34 ---
- package/libselinux/libselinux.hash            |   2 +-
- package/libselinux/libselinux.mk              |  25 +--
- package/libsemanage/libsemanage.hash          |   2 +-
- package/libsemanage/libsemanage.mk            |  16 +-
- package/libsepol/Config.in                    |   3 +-
- package/libsepol/libsepol.hash                |   2 +-
- package/libsepol/libsepol.mk                  |   4 +-
- package/policycoreutils/policycoreutils.hash  |   2 +-
- package/policycoreutils/policycoreutils.mk    |   4 +-
- package/restorecond/restorecond.hash          |   2 +-
- package/restorecond/restorecond.mk            |   4 +-
- package/selinux-python/selinux-python.hash    |   2 +-
- package/selinux-python/selinux-python.mk      |   4 +-
- package/semodule-utils/semodule-utils.hash    |   2 +-
- package/semodule-utils/semodule-utils.mk      |   4 +-
- 22 files changed, 84 insertions(+), 303 deletions(-)
- rename package/libselinux/{0006-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch => 0002-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch} (94%)
- create mode 100644 package/libselinux/0003-fix-building-against-musl-and-uclibc-libraries.patch
- delete mode 100644 package/libselinux/0003-libselinux-Use-Python-distutils-to-install-SELinux-p.patch
- delete mode 100644 package/libselinux/0004-src-Makefile-don-t-pass-bogus-I-and-L-to-python-setu.patch
-
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index 871ed192c4..85dafeb44d 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
+@@ -1,5 +1,5 @@
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 2576349d344492e73b468059767268dec1dabd8c35f3c7222c3ec2448737bc1c libsemanage-2.9.tar.gz
++sha256 a497b0720d54eac427f1f3f618eed417e50ed8f4e47ed0f7a1d391bd416e84cf libsemanage-3.0.tar.gz
+ 
+ # Hash for license file
+ sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index fd90346049..cdf1a2f2f8 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSEMANAGE_VERSION = 2.9
+-LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
++LIBSEMANAGE_VERSION = 3.0
++LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
+ LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux bzip2
+@@ -31,7 +31,8 @@ HOST_LIBSEMANAGE_DEPENDENCIES = \
+ 	host-libsepol \
+ 	host-libselinux \
+ 	host-bzip2 \
+-	host-swig
++	host-swig \
++	host-python3
+ 
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	$(HOST_CONFIGURE_OPTS) \
+@@ -39,19 +40,10 @@ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/" \
+ 	DEFAULT_SEMANAGE_CONF_LOCATION=$(HOST_DIR)/etc/selinux/semanage.conf
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
+ HOST_LIBSEMANAGE_MAKE_OPTS += \
+ 	PYINC="-I$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)/" \
+ 	PYTHONLIBDIR="$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/" \
+ 	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
+-else
+-HOST_LIBSEMANAGE_DEPENDENCIES += host-python
+-HOST_LIBSEMANAGE_MAKE_OPTS += \
+-	PYINC="-I$(HOST_DIR)/include/python$(PYTHON_VERSION_MAJOR)/" \
+-	PYTHONLIBDIR="$(HOST_DIR)/lib/python$(PYTHON_VERSION_MAJOR)/" \
+-	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
+-endif
+ 
+ define HOST_LIBSEMANAGE_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) all
 -- 
 2.17.1
