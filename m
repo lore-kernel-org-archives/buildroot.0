@@ -1,46 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Apr 2020 22:48:01 +0200
-Subject: [Buildroot] [PATCH] package/gnuradio: revert patch 003
- suppression
-In-Reply-To: <20200414085154.12044-1-gwenj@trabucayre.com>
-References: <20200414085154.12044-1-gwenj@trabucayre.com>
-Message-ID: <20200415224801.75b052b3@windsurf.home>
+Date: Wed, 15 Apr 2020 22:48:23 +0200
+Subject: [Buildroot] [git commit] package/libid3tag: needs host-gperf
+Message-ID: <20200415203419.705FA8ED79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 14 Apr 2020 10:51:54 +0200
-Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7ecd0e4edf9f42795ef70097a8f205b2aaa67a6d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> Patch 0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch is applied
-> in gnuradio master branch but has not been backported to maint-3.8.
-> So this patch can't be supressed.
+Since switch to debian in commit
+210ccaef5784011bc035d0ae13611cb4e76f389f, host-gperf is needed to
+generate frametype.c because debian/patches/add-m4-directory.patch
+patches Makefile.am. As a side effect, libid3tag tries to generate
+frametype.c from frametype.gperf due to following rule:
 
-It's good to point to which specific commit introduced the issue, so I
-reworded this to:
+$(srcdir)/frametype.c: $(srcdir)/frametype.gperf Makefile.am
+        cd $(srcdir) &&  \
+        gperf -tCcTonD -K id -N id3_frametype_lookup -s -3 -k '*'  \
+                frametype.gperf |  \
+        sed -e 's/\(struct id3_frametype\);/\1/' |  \
+        sed -e '/\$$''Id: /s/\$$//g' >frametype.c
 
-    In commit 14476b7fcaf102dcc39b5d4919a4f08660f821de ("package/gnuradio:
-    bump to 3.8.1.0"), all gnuradio patches were dropped. However, it
-    turns out that the path
-    0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch was
-    applied in gnuradio master branch but has not been backported to
-    maint-3.8.  So this patch can't be supressed as we are using gnuradio
-    3.8.1.0.
-    
+If host-gperf is not available, frametype.c will be empty and build with
+madplay will fail on:
 
-> diff --git a/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch b/package/gnuradio/0003-gr-digital-glfsr.h-drop-boost-cstdint.hpp-and-use-cs.patch
+configure:17243: checking for snd_pcm_open in -lasound
+configure:17268: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/powerpc64-linux-gcc -o conftest -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=1  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lid3tag  >&5
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/8.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libid3tag.so: undefined reference to `id3_frametype_lookup'
 
-0003... but it's now the only patch on gnuradio, so I renamed it to
-0001.
+Fixes:
+ - http://autobuild.buildroot.org/results/15a8c7f6e34b26446179c04383719ea71495403e
 
-Applied with this fixed. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libid3tag/libid3tag.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
+index 14a7f3f938..5d7b219bb1 100644
+--- a/package/libid3tag/libid3tag.mk
++++ b/package/libid3tag/libid3tag.mk
+@@ -12,7 +12,7 @@ LIBID3TAG_SITE = \
+ LIBID3TAG_LICENSE = GPL-2.0+
+ LIBID3TAG_LICENSE_FILES = COPYING COPYRIGHT
+ LIBID3TAG_INSTALL_STAGING = YES
+-LIBID3TAG_DEPENDENCIES = zlib
++LIBID3TAG_DEPENDENCIES = host-gperf zlib
+ 
+ # debian/patches/10_utf16.dpatch
+ LIBID3TAG_IGNORE_CVES += CVE-2004-2779 CVE-2017-11551
