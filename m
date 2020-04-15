@@ -1,89 +1,124 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 15 Apr 2020 22:24:46 +0200
-Subject: [Buildroot] [git commit] package/python-iptables: account for
- platform tag in extensions
-Message-ID: <20200415201730.729FC8ECF1@busybox.osuosl.org>
+Date: Wed, 15 Apr 2020 22:24:41 +0200
+Subject: [Buildroot] [git commit] package/python-iptables: try known libc
+ instead of find_library()
+Message-ID: <20200415201730.691978ECF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52276cdda34aa986410626592031560bf64d788b
+commit: https://git.buildroot.net/buildroot/commit/?id=90c18ab269c600ee7643f69212713ee3b74c38bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-EXT_SUFFIX in Python versions > 3.5 contains a platform tag which only applies
-to cpython extensions. Given that ctypes.util.find_library does not work on the
-target due to the absence of the underlying tools '.so' needs to be added as a
-possible suffix for libraries to enable python-iptables to find the iptables
-shared libraries.
+ctypes.util.find_library() depends on gcc and friends to detect the location of
+a given shared library. Given that these are not available on the target and
+that python-iptables depends on this functionality we need to work around this.
+The SONAMEs of the libc are well known so we try the known ones for glibc,
+uClibc and musl.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=12271
 
 Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...dd-.so-as-additional-shared-object-suffix.patch | 57 ++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ .../0001-Add-separate-mechanism-to-load-libc.patch | 90 ++++++++++++++++++++++
+ 1 file changed, 90 insertions(+)
 
-diff --git a/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch b/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
+diff --git a/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch b/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
 new file mode 100644
-index 0000000000..41d49fc1e6
+index 0000000000..2a344c2f55
 --- /dev/null
-+++ b/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
-@@ -0,0 +1,57 @@
-+From 899d25c511c6ce779b7153e9ae2e41055b30b9c5 Mon Sep 17 00:00:00 2001
++++ b/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
+@@ -0,0 +1,90 @@
++From e3557528d7cdcdc2c579212be8837bc9b54635a4 Mon Sep 17 00:00:00 2001
 +From: Frank Vanbever <frank.vanbever@essensium.com>
-+Date: Mon, 9 Mar 2020 12:36:47 +0100
-+Subject: [PATCH] Add '.so' as additional shared object suffix
++Date: Thu, 20 Feb 2020 12:14:08 +0100
++Subject: [PATCH] Add separate mechanism to load libc
 +
-+EXT_SUFFIX includes a platform information tag starting from Python 3.5 [0]
-+For example:
++ctypes.util.find_library() always returns None for systems which do not have the
++tools installed to determine the location of a given shared library (i.e.
++ldconfig, gcc, objdump). If find_libary() fails attempt to load known libc by
++SONAME.
 +
-+    >>> sysconfig.get_config_var("EXT_SUFFIX")
-+    '.cpython-38-aarch64-linux-gnu.so'
-+
-+This suffix only applies to cpython extensions i.e. not to the iptables shared
-+objects.
-+
-+Adding '.so' as an additional suffix for shared objects fixes the issue.
-+
-+Fixes: Issue #301
++Upstream: https://github.com/ldx/python-iptables/commit/e3557528d7cdcdc2c579212be8837bc9b54635a4
 +
 +Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-+
-+Backported from: 899d25c511c6ce779b7153e9ae2e41055b30b9c5
-+
-+[0]: https://docs.python.org/3/whatsnew/3.5.html#build-and-c-api-changes
 +---
-+ iptc/util.py | 13 ++++++++++---
-+ 1 file changed, 10 insertions(+), 3 deletions(-)
++ iptc/ip4tc.py   |  4 ++--
++ iptc/util.py    | 16 ++++++++++++++++
++ iptc/xtables.py |  4 ++--
++ 3 files changed, 20 insertions(+), 4 deletions(-)
 +
++diff --git a/iptc/ip4tc.py b/iptc/ip4tc.py
++index 4c5d690..4ddd2dc 100644
++--- a/iptc/ip4tc.py
+++++ b/iptc/ip4tc.py
++@@ -9,7 +9,7 @@ import socket
++ import struct
++ import weakref
++ 
++-from .util import find_library, load_kernel
+++from .util import find_library, load_kernel, find_libc
++ from .xtables import (XT_INV_PROTO, NFPROTO_IPV4, XTablesError, xtables,
++                       xt_align, xt_counters, xt_entry_target, xt_entry_match)
++ 
++@@ -26,7 +26,7 @@ if not hasattr(socket, 'IPPROTO_SCTP'):
++ 
++ _IFNAMSIZ = 16
++ 
++-_libc = ct.CDLL("libc.so.6")
+++_libc = find_libc()
++ _get_errno_loc = _libc.__errno_location
++ _get_errno_loc.restype = ct.POINTER(ct.c_int)
++ _malloc = _libc.malloc
 +diff --git a/iptc/util.py b/iptc/util.py
-+index e6b1649..04fe905 100644
++index ae5fb9b..e6b1649 100644
 +--- a/iptc/util.py
 ++++ b/iptc/util.py
-+@@ -80,12 +80,19 @@ def _do_find_library(name):
++@@ -109,3 +109,19 @@ def find_library(*names):
++             major = int(m.group(1))
++         return lib, major
++     return None, None
+++
+++
+++def find_libc():
+++    lib = ctypes.util.find_library('c')
+++    if lib is not None:
+++        return ctypes.CDLL(lib, mode=ctypes.RTLD_GLOBAL)
+++
+++    libnames = ['libc.so.6', 'libc.so.0', 'libc.so']
+++    for name in libnames:
+++        try:
+++            lib = ctypes.CDLL(name, mode=ctypes.RTLD_GLOBAL)
+++            return lib
+++        except:
+++            pass
+++
+++    return None
++diff --git a/iptc/xtables.py b/iptc/xtables.py
++index 93bc080..cf21029 100644
++--- a/iptc/xtables.py
+++++ b/iptc/xtables.py
++@@ -6,7 +6,7 @@ import sys
++ import weakref
++ 
++ from . import version
++-from .util import find_library
+++from .util import find_library, find_libc
++ from .errors import *
++ 
++ XT_INV_PROTO = 0x40  # invert the sense of PROTO
++@@ -792,7 +792,7 @@ class xtables_target(ct.Union):
++                 ("v12", _xtables_target_v12)]
 + 
 + 
-+ def _find_library(*names):
-++    exts = []
-+     if version_info >= (3, 3):
-+-        ext = get_config_var("EXT_SUFFIX")
-++        exts.append(get_config_var("EXT_SUFFIX"))
-+     else:
-+-        ext = get_config_var('SO')
-++        exts.append(get_config_var('SO'))
-++
-++    if version_info >= (3, 5):
-++        exts.append('.so')
-++
-+     for name in names:
-+-        libnames = [name, "lib" + name, name + ext, "lib" + name + ext]
-++        libnames = [name, "lib" + name]
-++        for ext in exts:
-++            libnames += [name + ext, "lib" + name + ext]
-+         libdir = os.environ.get('IPTABLES_LIBDIR', None)
-+         if libdir is not None:
-+             libdirs = libdir.split(':')
++-_libc, _ = find_library("c")
+++_libc = find_libc()
++ _optind = ct.c_long.in_dll(_libc, "optind")
++ _optarg = ct.c_char_p.in_dll(_libc, "optarg")
++ 
 +-- 
 +2.20.1
 +
