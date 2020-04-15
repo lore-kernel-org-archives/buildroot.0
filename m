@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Apr 2020 21:42:29 +0200
-Subject: [Buildroot] [git commit] package/ccache: bump version to 3.7.9
-Message-ID: <20200415193448.B128B8ECD1@busybox.osuosl.org>
+Date: Wed, 15 Apr 2020 21:41:35 +0200
+Subject: [Buildroot] [git commit] package/botan: bump version to 2.14.0
+Message-ID: <20200415193448.93B318ECD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e47e0e1791b7dfee3be51efe4a0341c09fac1a5
+commit: https://git.buildroot.net/buildroot/commit/?id=9bb3b4952e8438c4e2cb05224e7f0a7005af2337
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://ccache.dev/releasenotes.html#_ccache_3_7_9
+Release notes: https://botan.randombit.net/news.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ccache/ccache.hash | 2 +-
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/botan/botan.hash | 3 ++-
+ package/botan/botan.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 3b9dac28b6..0bd00e07d0 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  99ea7b8fc34fdd5dc628169f452086c1f4d8ca3a1e52bd484fbdef3516893672  ccache-3.7.8.tar.xz
-+sha256  f893da7543bfb9172bd55e603fcbdfcd83e6def176a28689c13235695b4cf44b  ccache-3.7.9.tar.xz
- sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
- sha256  4f63223bcdee822d55a6768cc8399ffe06401d7a03cfe79e1dc305f50dc22c59  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 1e8b9b7c25..276665c3fc 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index 29efddb35c..15e79bbe40 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,3 +1,4 @@
++# From https://botan.randombit.net/releases/sha256sums.txt
++sha256  0c10f12b424a40ee19bde00292098e201d7498535c062d8d5b586d07861a54b5  Botan-2.14.0.tar.xz
+ # Locally computed
+-sha256  f57ae42a41e1091bca58f44f41addebd9a390b651603952c881ec89d50187e90  Botan-2.13.0.tar.xz
+ sha256  fb7f0322d36fba55ca17d77bc203a9f09a40daa8a249b75cf8887aba36cec9d0  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 6394b5ef95..a5551b110f 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CCACHE_VERSION = 3.7.8
-+CCACHE_VERSION = 3.7.9
- CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
+-BOTAN_VERSION = 2.13.0
++BOTAN_VERSION = 2.14.0
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
