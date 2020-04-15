@@ -1,50 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Apr 2020 22:48:38 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/libid3tag: needs host-gperf
-In-Reply-To: <20200415203631.11960-1-fontaine.fabrice@gmail.com>
-References: <20200415203631.11960-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200415224838.4ccf5a49@windsurf.home>
+Date: Wed, 15 Apr 2020 22:49:00 +0200
+Subject: [Buildroot] [git commit] board/freescale: specify the volume-label
+ for FAT partition
+Message-ID: <20200415203641.56F318ED8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 15 Apr 2020 22:36:31 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a52ab35dcea3672a8c24d19b3908c0f3709813ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Since switch to debian in commit
-> 210ccaef5784011bc035d0ae13611cb4e76f389f, host-gperf is needed to
-> generate frametype.c because debian/patches/add-m4-directory.patch
-> patches Makefile.am. As a side effect, libid3tag tries to generate
-> frametype.c from frametype.gperf due to following rule:
-> 
-> $(srcdir)/frametype.c: $(srcdir)/frametype.gperf Makefile.am
->         cd $(srcdir) &&  \
->         gperf -tCcTonD -K id -N id3_frametype_lookup -s -3 -k '*'  \
->                 frametype.gperf |  \
->         sed -e 's/\(struct id3_frametype\);/\1/' |  \
->         sed -e '/\$$''Id: /s/\$$//g' >frametype.c
-> 
-> If host-gperf is not available, frametype.c will be empty and build with
-> madplay will fail on:
-> 
-> configure:17243: checking for snd_pcm_open in -lasound
-> configure:17268: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/powerpc64-linux-gcc -o conftest -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=1  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lid3tag  >&5
-> /home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/8.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libid3tag.so: undefined reference to `id3_frametype_lookup'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/15a8c7f6e34b26446179c04383719ea71495403e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Fix commit message
+Currently the volume-label for the vfat partition is a string with
+the following pattern: 5934-861D.
 
-Applied to master, thanks.
+Specify the volume-label as "boot" to make it easier to identify it.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Tested-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/freescale/common/imx/genimage.cfg.template      | 1 +
+ board/freescale/common/imx/genimage.cfg.template_imx8 | 1 +
+ board/freescale/common/imx/genimage.cfg.template_spl  | 1 +
+ 3 files changed, 3 insertions(+)
+
+diff --git a/board/freescale/common/imx/genimage.cfg.template b/board/freescale/common/imx/genimage.cfg.template
+index 2a7036a7df..61b09bde9f 100644
+--- a/board/freescale/common/imx/genimage.cfg.template
++++ b/board/freescale/common/imx/genimage.cfg.template
+@@ -9,6 +9,7 @@
+ 
+ image boot.vfat {
+   vfat {
++    label = "boot"
+     files = {
+       %FILES%
+     }
+diff --git a/board/freescale/common/imx/genimage.cfg.template_imx8 b/board/freescale/common/imx/genimage.cfg.template_imx8
+index bd5f6cdc73..84a812f986 100644
+--- a/board/freescale/common/imx/genimage.cfg.template_imx8
++++ b/board/freescale/common/imx/genimage.cfg.template_imx8
+@@ -9,6 +9,7 @@
+ 
+ image boot.vfat {
+   vfat {
++    label = "boot"
+     files = {
+       %FILES%
+     }
+diff --git a/board/freescale/common/imx/genimage.cfg.template_spl b/board/freescale/common/imx/genimage.cfg.template_spl
+index d2d810777b..3b0667c383 100644
+--- a/board/freescale/common/imx/genimage.cfg.template_spl
++++ b/board/freescale/common/imx/genimage.cfg.template_spl
+@@ -9,6 +9,7 @@
+ 
+ image boot.vfat {
+   vfat {
++    label = "boot"
+     files = {
+       %FILES%
+     }
