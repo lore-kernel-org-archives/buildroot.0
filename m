@@ -1,49 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Apr 2020 22:32:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libgit2: Bump to version 1.0.0
-In-Reply-To: <20200414091439.25465-1-nicolas.cavallari@green-communications.fr>
-References: <20200414091439.25465-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20200415223258.2d5d406c@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 15 Apr 2020 22:36:31 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/libid3tag: needs host-gperf
+Message-ID: <20200415203631.11960-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 14 Apr 2020 11:14:39 +0200
-Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
+Since switch to debian in commit
+210ccaef5784011bc035d0ae13611cb4e76f389f, host-gperf is needed to
+generate frametype.c because debian/patches/add-m4-directory.patch
+patches Makefile.am. As a side effect, libid3tag tries to generate
+frametype.c from frametype.gperf due to following rule:
 
-> diff --git a/package/libgit2/Config.in b/package/libgit2/Config.in
-> index 53ba4d4245..02c51448ff 100644
-> --- a/package/libgit2/Config.in
-> +++ b/package/libgit2/Config.in
-> @@ -1,5 +1,7 @@
->  config BR2_PACKAGE_LIBGIT2
->  	bool "libgit2"
-> +	depends on !BR2_STATIC_LIBS # libhttpparser
+$(srcdir)/frametype.c: $(srcdir)/frametype.gperf Makefile.am
+        cd $(srcdir) &&  \
+        gperf -tCcTonD -K id -N id3_frametype_lookup -s -3 -k '*'  \
+                frametype.gperf |  \
+        sed -e 's/\(struct id3_frametype\);/\1/' |  \
+        sed -e '/\$$''Id: /s/\$$//g' >frametype.c
 
-This requires the addition of a Config.in comment.
+If host-gperf is not available, frametype.c will be empty and build with
+madplay will fail on:
 
-> -LIBGIT2_VERSION = 0.28.4
-> -LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
-> -LIBGIT2_LICENSE = GPL-2.0 with linking exception
-> +LIBGIT2_VERSION = 1.0.0
-> +LIBGIT2_SITE = https://github.com/libgit2/libgit2/releases/download/v1.0.0
+configure:17243: checking for snd_pcm_open in -lasound
+configure:17268: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/powerpc64-linux-gcc -o conftest -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=1  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lid3tag  >&5
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/8.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libid3tag.so: undefined reference to `id3_frametype_lookup'
 
-Instead of hardcoding v1.0.0 in the URL, use $(LIBGIT2_VERSION)
+Fixes:
+ - http://autobuild.buildroot.org/results/15a8c7f6e34b26446179c04383719ea71495403e
 
-> +LIBGIT2_LICENSE = GPL-2.0 with linking exception, BSD 4-clause variant (wildmatch), MIT (sha1)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Fix commit message
 
-But here is the part that made me not apply the patch: this BSD
-4-clause variant thing. The license text is at
-https://github.com/libgit2/libgit2/blob/master/COPYING#L995 and it
-doesn't seem to be a license known at https://spdx.org/licenses/. I'm
-not sure how to properly encode it.
+ package/libid3tag/libid3tag.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yann, Arnout, any suggestion?
-
-Thomas
+diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
+index 14a7f3f938..5d7b219bb1 100644
+--- a/package/libid3tag/libid3tag.mk
++++ b/package/libid3tag/libid3tag.mk
+@@ -12,7 +12,7 @@ LIBID3TAG_SITE = \
+ LIBID3TAG_LICENSE = GPL-2.0+
+ LIBID3TAG_LICENSE_FILES = COPYING COPYRIGHT
+ LIBID3TAG_INSTALL_STAGING = YES
+-LIBID3TAG_DEPENDENCIES = zlib
++LIBID3TAG_DEPENDENCIES = host-gperf zlib
+ 
+ # debian/patches/10_utf16.dpatch
+ LIBID3TAG_IGNORE_CVES += CVE-2004-2779 CVE-2017-11551
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
