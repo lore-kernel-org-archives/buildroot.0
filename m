@@ -1,124 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 15 Apr 2020 22:24:41 +0200
-Subject: [Buildroot] [git commit] package/python-iptables: try known libc
- instead of find_library()
-Message-ID: <20200415201730.691978ECF1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 15 Apr 2020 22:32:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libgit2: Bump to version 1.0.0
+In-Reply-To: <20200414091439.25465-1-nicolas.cavallari@green-communications.fr>
+References: <20200414091439.25465-1-nicolas.cavallari@green-communications.fr>
+Message-ID: <20200415223258.2d5d406c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90c18ab269c600ee7643f69212713ee3b74c38bd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 14 Apr 2020 11:14:39 +0200
+Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
 
-ctypes.util.find_library() depends on gcc and friends to detect the location of
-a given shared library. Given that these are not available on the target and
-that python-iptables depends on this functionality we need to work around this.
-The SONAMEs of the libc are well known so we try the known ones for glibc,
-uClibc and musl.
+> diff --git a/package/libgit2/Config.in b/package/libgit2/Config.in
+> index 53ba4d4245..02c51448ff 100644
+> --- a/package/libgit2/Config.in
+> +++ b/package/libgit2/Config.in
+> @@ -1,5 +1,7 @@
+>  config BR2_PACKAGE_LIBGIT2
+>  	bool "libgit2"
+> +	depends on !BR2_STATIC_LIBS # libhttpparser
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=12271
+This requires the addition of a Config.in comment.
 
-Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../0001-Add-separate-mechanism-to-load-libc.patch | 90 ++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
+> -LIBGIT2_VERSION = 0.28.4
+> -LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+> -LIBGIT2_LICENSE = GPL-2.0 with linking exception
+> +LIBGIT2_VERSION = 1.0.0
+> +LIBGIT2_SITE = https://github.com/libgit2/libgit2/releases/download/v1.0.0
 
-diff --git a/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch b/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
-new file mode 100644
-index 0000000000..2a344c2f55
---- /dev/null
-+++ b/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
-@@ -0,0 +1,90 @@
-+From e3557528d7cdcdc2c579212be8837bc9b54635a4 Mon Sep 17 00:00:00 2001
-+From: Frank Vanbever <frank.vanbever@essensium.com>
-+Date: Thu, 20 Feb 2020 12:14:08 +0100
-+Subject: [PATCH] Add separate mechanism to load libc
-+
-+ctypes.util.find_library() always returns None for systems which do not have the
-+tools installed to determine the location of a given shared library (i.e.
-+ldconfig, gcc, objdump). If find_libary() fails attempt to load known libc by
-+SONAME.
-+
-+Upstream: https://github.com/ldx/python-iptables/commit/e3557528d7cdcdc2c579212be8837bc9b54635a4
-+
-+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-+---
-+ iptc/ip4tc.py   |  4 ++--
-+ iptc/util.py    | 16 ++++++++++++++++
-+ iptc/xtables.py |  4 ++--
-+ 3 files changed, 20 insertions(+), 4 deletions(-)
-+
-+diff --git a/iptc/ip4tc.py b/iptc/ip4tc.py
-+index 4c5d690..4ddd2dc 100644
-+--- a/iptc/ip4tc.py
-++++ b/iptc/ip4tc.py
-+@@ -9,7 +9,7 @@ import socket
-+ import struct
-+ import weakref
-+ 
-+-from .util import find_library, load_kernel
-++from .util import find_library, load_kernel, find_libc
-+ from .xtables import (XT_INV_PROTO, NFPROTO_IPV4, XTablesError, xtables,
-+                       xt_align, xt_counters, xt_entry_target, xt_entry_match)
-+ 
-+@@ -26,7 +26,7 @@ if not hasattr(socket, 'IPPROTO_SCTP'):
-+ 
-+ _IFNAMSIZ = 16
-+ 
-+-_libc = ct.CDLL("libc.so.6")
-++_libc = find_libc()
-+ _get_errno_loc = _libc.__errno_location
-+ _get_errno_loc.restype = ct.POINTER(ct.c_int)
-+ _malloc = _libc.malloc
-+diff --git a/iptc/util.py b/iptc/util.py
-+index ae5fb9b..e6b1649 100644
-+--- a/iptc/util.py
-++++ b/iptc/util.py
-+@@ -109,3 +109,19 @@ def find_library(*names):
-+             major = int(m.group(1))
-+         return lib, major
-+     return None, None
-++
-++
-++def find_libc():
-++    lib = ctypes.util.find_library('c')
-++    if lib is not None:
-++        return ctypes.CDLL(lib, mode=ctypes.RTLD_GLOBAL)
-++
-++    libnames = ['libc.so.6', 'libc.so.0', 'libc.so']
-++    for name in libnames:
-++        try:
-++            lib = ctypes.CDLL(name, mode=ctypes.RTLD_GLOBAL)
-++            return lib
-++        except:
-++            pass
-++
-++    return None
-+diff --git a/iptc/xtables.py b/iptc/xtables.py
-+index 93bc080..cf21029 100644
-+--- a/iptc/xtables.py
-++++ b/iptc/xtables.py
-+@@ -6,7 +6,7 @@ import sys
-+ import weakref
-+ 
-+ from . import version
-+-from .util import find_library
-++from .util import find_library, find_libc
-+ from .errors import *
-+ 
-+ XT_INV_PROTO = 0x40  # invert the sense of PROTO
-+@@ -792,7 +792,7 @@ class xtables_target(ct.Union):
-+                 ("v12", _xtables_target_v12)]
-+ 
-+ 
-+-_libc, _ = find_library("c")
-++_libc = find_libc()
-+ _optind = ct.c_long.in_dll(_libc, "optind")
-+ _optarg = ct.c_char_p.in_dll(_libc, "optarg")
-+ 
-+-- 
-+2.20.1
-+
+Instead of hardcoding v1.0.0 in the URL, use $(LIBGIT2_VERSION)
+
+> +LIBGIT2_LICENSE = GPL-2.0 with linking exception, BSD 4-clause variant (wildmatch), MIT (sha1)
+
+But here is the part that made me not apply the patch: this BSD
+4-clause variant thing. The license text is at
+https://github.com/libgit2/libgit2/blob/master/COPYING#L995 and it
+doesn't seem to be a license known at https://spdx.org/licenses/. I'm
+not sure how to properly encode it.
+
+Yann, Arnout, any suggestion?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
