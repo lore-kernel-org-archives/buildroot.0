@@ -1,49 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 15 Apr 2020 21:35:54 +0200
-Subject: [Buildroot] [git commit] package/python-crossbar: bump to version
- 20.4.1
-Message-ID: <20200415192340.6157B83A31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-h2: bump to version 3.2.0
+Message-ID: <20200415192340.835DB8EB5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6dddf3f141b0ffe4230885abb5d1724a2d7ac79
+commit: https://git.buildroot.net/buildroot/commit/?id=c8276ff5123dd56fd9ceb5077c0c2296177d9cf3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-crossbar/python-crossbar.hash | 4 ++--
- package/python-crossbar/python-crossbar.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-h2/python-h2.hash | 6 +++---
+ package/python-h2/python-h2.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
-index 1be4c72b76..12e4b0232c 100644
---- a/package/python-crossbar/python-crossbar.hash
-+++ b/package/python-crossbar/python-crossbar.hash
+diff --git a/package/python-h2/python-h2.hash b/package/python-h2/python-h2.hash
+index 1d5df8878d..4193567d37 100644
+--- a/package/python-h2/python-h2.hash
++++ b/package/python-h2/python-h2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/crossbar/json
--md5  bacb1f25cbf8fcdd0568325ef04a721c  crossbar-20.2.1.tar.gz
--sha256  a63951780fde8c46834c70a637d97f3b2028da637b7a4f793b624532f7a45863  crossbar-20.2.1.tar.gz
-+md5  b0ac2a71449988df629d216a90d1f21f  crossbar-20.4.1.tar.gz
-+sha256  6bf215348bc6fdce7d41c77e4aa0e023c6a6208291eebc520a3d153f36f601d6  crossbar-20.4.1.tar.gz
- # Locally computed
- sha256  57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6  crossbar/LICENSE
-diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
-index 84d4177daa..77565b7068 100644
---- a/package/python-crossbar/python-crossbar.mk
-+++ b/package/python-crossbar/python-crossbar.mk
+ # md5, sha256 from https://pypi.org/pypi/h2/json
+-md5	950b5a62a2a608dc4547a01edf99aa8f  h2-3.1.1.tar.gz
+-sha256	b8a32bd282594424c0ac55845377eea13fa54fe4a8db012f3a198ed923dc3ab4  h2-3.1.1.tar.gz
++md5  197a99c09f344a0dd987fab9801dc8d0  h2-3.2.0.tar.gz
++sha256  875f41ebd6f2c44781259005b157faed1a5031df3ae5aa7bcb4628a6c0782f14  h2-3.2.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	663f9253e13519b82ab4a6b1caab6bed05aada70517f28cd0254be8a9fa19ed6  LICENSE
++sha256  663f9253e13519b82ab4a6b1caab6bed05aada70517f28cd0254be8a9fa19ed6  LICENSE
+diff --git a/package/python-h2/python-h2.mk b/package/python-h2/python-h2.mk
+index 0043ee2d50..81397bbb10 100644
+--- a/package/python-h2/python-h2.mk
++++ b/package/python-h2/python-h2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CROSSBAR_VERSION = 20.2.1
-+PYTHON_CROSSBAR_VERSION = 20.4.1
- PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
--PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/78/f0/82970d84abd532bdea007322b73bfe2d7762194b85155296b76ba48724e9
-+PYTHON_CROSSBAR_SITE = https://files.pythonhosted.org/packages/2c/0c/054ac48881390c83f8bee2a1b50cd5fa6322aa83f589090ced572079b974
- PYTHON_CROSSBAR_LICENSE = AGPL-3.0
- PYTHON_CROSSBAR_LICENSE_FILES = crossbar/LICENSE
- PYTHON_CROSSBAR_SETUP_TYPE = setuptools
+-PYTHON_H2_VERSION = 3.1.1
++PYTHON_H2_VERSION = 3.2.0
+ PYTHON_H2_SOURCE = h2-$(PYTHON_H2_VERSION).tar.gz
+-PYTHON_H2_SITE = https://files.pythonhosted.org/packages/56/73/0bc3a2f4238bdfbd9b0dc41a972fb558d96e8580ef2a37129ee5a54fa04e
++PYTHON_H2_SITE = https://files.pythonhosted.org/packages/08/0a/033df0fc05fe94f72517ccd393dd9ff99b1773fd198307638e6d3568a518
+ PYTHON_H2_SETUP_TYPE = setuptools
+ PYTHON_H2_LICENSE = MIT
+ PYTHON_H2_LICENSE_FILES = LICENSE
