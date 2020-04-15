@@ -1,9 +1,10 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 15 Apr 2020 07:59:15 -0500
-Subject: [Buildroot] [PATCH v4 2/8] package/libsemanage: bump version to 3.0
+Date: Wed, 15 Apr 2020 07:59:17 -0500
+Subject: [Buildroot] [PATCH v4 4/8] package/policycoreutils: bump version to
+ 3.0
 In-Reply-To: <20200415125921.57648-1-matthew.weber@rockwellcollins.com>
 References: <20200415125921.57648-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20200415125921.57648-3-matthew.weber@rockwellcollins.com>
+Message-ID: <20200415125921.57648-5-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,9 +12,6 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 From: Adam Duskett <aduskett@gmail.com>
-
-Other changes:
-  - Remove the Python2 check, as 3.0 has removed support for Python2.
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
@@ -25,65 +23,33 @@ v3 -> v4
 v2 -> v3
  - Matt switched over the versioning to use dates
 ---
- package/libsemanage/libsemanage.hash |  2 +-
- package/libsemanage/libsemanage.mk   | 16 ++++------------
- 2 files changed, 5 insertions(+), 13 deletions(-)
+ package/policycoreutils/policycoreutils.hash | 2 +-
+ package/policycoreutils/policycoreutils.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
-index 871ed192c4..85dafeb44d 100644
---- a/package/libsemanage/libsemanage.hash
-+++ b/package/libsemanage/libsemanage.hash
-@@ -1,5 +1,5 @@
- # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 2576349d344492e73b468059767268dec1dabd8c35f3c7222c3ec2448737bc1c libsemanage-2.9.tar.gz
-+sha256 a497b0720d54eac427f1f3f618eed417e50ed8f4e47ed0f7a1d391bd416e84cf libsemanage-3.0.tar.gz
- 
- # Hash for license file
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index fd90346049..cdf1a2f2f8 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
+diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
+index c601c7818b..206d2e35a7 100644
+--- a/package/policycoreutils/policycoreutils.hash
++++ b/package/policycoreutils/policycoreutils.hash
+@@ -1,3 +1,3 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 c53c344f28007b3c0742bd958751e9b5d2385898adeb8aec6281ae57342f0f7b policycoreutils-2.9.tar.gz
++sha256 3379c9bd722e36be9bf8856c6fa373bfa9b33305ac9da5fc807cfe7fa605f489 policycoreutils-3.0.tar.gz
+ sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index 6cd5a019c5..a06c7847ab 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBSEMANAGE_VERSION = 2.9
--LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
-+LIBSEMANAGE_VERSION = 3.0
-+LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
- LIBSEMANAGE_LICENSE = LGPL-2.1+
- LIBSEMANAGE_LICENSE_FILES = COPYING
- LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux bzip2
-@@ -31,7 +31,8 @@ HOST_LIBSEMANAGE_DEPENDENCIES = \
- 	host-libsepol \
- 	host-libselinux \
- 	host-bzip2 \
--	host-swig
-+	host-swig \
-+	host-python3
+-POLICYCOREUTILS_VERSION = 2.9
+-POLICYCOREUTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
++POLICYCOREUTILS_VERSION = 3.0
++POLICYCOREUTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
+ POLICYCOREUTILS_LICENSE = GPL-2.0
+ POLICYCOREUTILS_LICENSE_FILES = COPYING
  
- HOST_LIBSEMANAGE_MAKE_OPTS += \
- 	$(HOST_CONFIGURE_OPTS) \
-@@ -39,19 +40,10 @@ HOST_LIBSEMANAGE_MAKE_OPTS += \
- 	SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/" \
- 	DEFAULT_SEMANAGE_CONF_LOCATION=$(HOST_DIR)/etc/selinux/semanage.conf
- 
--ifeq ($(BR2_PACKAGE_PYTHON3),y)
--HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
- HOST_LIBSEMANAGE_MAKE_OPTS += \
- 	PYINC="-I$(HOST_DIR)/include/python$(PYTHON3_VERSION_MAJOR)/" \
- 	PYTHONLIBDIR="$(HOST_DIR)/lib/python$(PYTHON3_VERSION_MAJOR)/" \
- 	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
--else
--HOST_LIBSEMANAGE_DEPENDENCIES += host-python
--HOST_LIBSEMANAGE_MAKE_OPTS += \
--	PYINC="-I$(HOST_DIR)/include/python$(PYTHON_VERSION_MAJOR)/" \
--	PYTHONLIBDIR="$(HOST_DIR)/lib/python$(PYTHON_VERSION_MAJOR)/" \
--	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
--endif
- 
- define HOST_LIBSEMANAGE_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) all
 -- 
 2.17.1
