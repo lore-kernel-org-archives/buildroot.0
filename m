@@ -1,104 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 15 Apr 2020 09:40:29 +0200
-Subject: [Buildroot] [PATCH v3 0/8] Bump of SElinux related libs/tools
- to 3.0
-In-Reply-To: <20200415074355.4f382f62@windsurf.home>
-References: <20200414152528.20758-1-matthew.weber@rockwellcollins.com>
- <20200414182303.250cc38d@windsurf.home>
- <CANQCQpYUoZX=L7LMJ_Mkhvak0y_48RZuYaaHzx5MFAvwhQtArQ@mail.gmail.com>
- <20200415074355.4f382f62@windsurf.home>
-Message-ID: <1427fb1c-7f5b-1a83-a735-107745b842ef@mind.be>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 15 Apr 2020 12:46:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libssh: add patch to fix reported
+ version
+Message-ID: <20200415104639.1229-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The released libssh package does wrongly reports the previous version.
+This patch fixes the version field in the lib.
 
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ .../0001-libssh.h-bump-to-version-0.9.4.patch | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch
 
-On 15/04/2020 07:43, Thomas Petazzoni wrote:
-> Hello,
-> 
-> +Yann, Arnout, Adam.
-> 
-> On Tue, 14 Apr 2020 12:20:40 -0500
-> Matthew Weber <matthew.weber@collins.com> wrote:
-> 
->>> Is the only benefit of that change the fact that it will match with
->>> what release monitoring says ?  
->>
->> Correct.  If we do stay with the x.y instead, I think it still makes
->> sense to use the $(LIBSELINUX_VERION) across all those packages as the
->> bumps should always be the same version for those 7 packages.
-> 
-> I never remember what are the rules to share a package <pkg>_VERSION
-> variable with other packages. 
-
- You can only do that if it's included from a place that guarantees the
-ordering, like e.g. for qt5: package/qt5/qt5.mk sets the version and *then*
-include's package/qt5/qt5base/qt5base.mk.
-
- In any other case, it should be duplicated.
-
-> For example for mesa3d/mesa3d-headers, we
-> do not share the version information, we duplicate it:
-> 
-> # Not possible to directly refer to mesa3d variables, because of
-> # first/second expansion trickery...
-> MESA3D_HEADERS_VERSION = 20.0.4
-> 
-> But in protobuf/python-protobuf:
-> 
-> # When bumping this package, make sure to also verify if the
-> # python-protobuf package still works, as they share the same
-> # version/site variables.
-> PROTOBUF_VERSION = 3.11.4
-> 
-> PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
-
- This *accidentally* works because we sort the included files in the top-level
-Makefile and protobuf < python-protobuf. It's a pretty dangerous thing to do though.
-
-> PYTHON_PROTOBUF_SOURCE = protobuf-python-$(PYTHON_PROTOBUF_VERSION).tar.gz
-> PYTHON_PROTOBUF_SITE = $(PROTOBUF_SITE)
-> 
-> Here we share the version number.
-> 
-> Yann, Arnout, could you re-explain this ? :-)
-> 
->>> So to me, it seems like we should instead change the versions reported
->>> by release-monitoring.org instead.  
->>
->> Is there a way to reorder the versions on release monitoring instead?
->> As it just happens the dates end up at the top of the list
->> https://release-monitoring.org/project/01717/
-> 
-> I have filled in a bug report at
-> https://github.com/fedora-infra/anitya/issues/897 about this. I
-> *believe* that with the current description of the project, only
-> semantic versions should be displayed, because a prefix of libselinux-
-> for the tags is specified. So it should filter the tags that have the
-> form libselinux-<something>, and extract the <something>. The other
-> versions that are there might date back from when this was not
-> specified, and need to be purged.
-> 
-> Overall, I'll mark your series as Changes Requested. I would suggest to
-> bump to 3.0, without sharing the version for now, so that we can get
-> the 3.0 version bump merged soon.
-
- Ack, no sharing of versions please.
-
-
- Note that I have a vague idea of how we may be able to share versions (+ some
-other features). It is currently not possible because the _VERSION is used
-(indirectly) in some rules and conditions in the expansion of
-inner-generic-package. So my idea was to delay expansion of
-inner-generic-package until after all the packages have been included. This
-would also make it possible, for instance, to override a package version in a
-br2_external, and indeed modify any package variable in the external. And it
-would also make it possible to limit the expansion to just what is specified in
-PACKAGES, which would speed up the `make` invocation significantly (I estimate a
-factor of two).
-
- Regards,
- Arnout
+diff --git a/package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch b/package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch
+new file mode 100644
+index 0000000000..d6ec50509e
+--- /dev/null
++++ b/package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch
+@@ -0,0 +1,29 @@
++From 8d8428cbbc2c00d078cfbc967e4e6fee7ff7bf0b Mon Sep 17 00:00:00 2001
++From: Heiko Thiery <heiko.thiery@gmail.com>
++Date: Wed, 15 Apr 2020 11:57:29 +0200
++Subject: [PATCH] libssh.h: bump to version 0.9.4
++
++In the released version of libssh the version bump was not done
++properly. Therefore the current release 0.9.4 reports 0.9.3.
++
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ include/libssh/libssh.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/libssh/libssh.h b/include/libssh/libssh.h
++index 79030131..e2a8d991 100644
++--- a/include/libssh/libssh.h
+++++ b/include/libssh/libssh.h
++@@ -79,7 +79,7 @@
++ /* libssh version */
++ #define LIBSSH_VERSION_MAJOR  0
++ #define LIBSSH_VERSION_MINOR  9
++-#define LIBSSH_VERSION_MICRO  3
+++#define LIBSSH_VERSION_MICRO  4
++ 
++ #define LIBSSH_VERSION_INT SSH_VERSION_INT(LIBSSH_VERSION_MAJOR, \
++                                            LIBSSH_VERSION_MINOR, \
++-- 
++2.20.1
++
+-- 
+2.20.1
