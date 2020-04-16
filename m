@@ -1,71 +1,46 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 15 Apr 2020 16:00:58 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: use -msse2
- only when supported
-In-Reply-To: <CADvTj4qP_7s6rv=TC_wwSb3ZUPtBbcdOGyDhcLokafz37x3NTA@mail.gmail.com>
-References: <20200414102621.18804-1-asafka7@gmail.com>
- <20200415221030.1e6aafd0@windsurf.home>
- <CADvTj4qvvg4skQyYYkCTNeqUy4FUOe5nmX32ks5o8pFDCVyKpg@mail.gmail.com>
- <CADvTj4qP_7s6rv=TC_wwSb3ZUPtBbcdOGyDhcLokafz37x3NTA@mail.gmail.com>
-Message-ID: <CADvTj4pmNBNN_O9CbKyR+aYFSNx=kCu-3zmLevS-O5z7KDFe2A@mail.gmail.com>
+Date: Wed, 15 Apr 2020 18:59:18 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-treq: bump to version 20.3.0
+Message-ID: <20200416005918.118881-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 15, 2020 at 2:22 PM James Hilliard
-<james.hilliard1@gmail.com> wrote:
->
-> On Wed, Apr 15, 2020 at 2:20 PM James Hilliard
-> <james.hilliard1@gmail.com> wrote:
-> >
-> > On Wed, Apr 15, 2020 at 2:10 PM Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> wrote:
-> > >
-> > > Hello Asaf,
-> > >
-> > > On Tue, 14 Apr 2020 13:26:21 +0300
-> > > Asaf Kahlon <asafka7@gmail.com> wrote:
-> > >
-> > > > The package adds the '-msse2' flag according to the result of the
-> > > > pythonic "platform.machine()" statement, which runs on the host
-> > > > and doesn't necessarily reflects the existence of this flag on
-> > > > the target compiler.
-> > > > Hence, we'll set the 'optimzed' variable in setup.py only when
-> > >
-> > > optimzed -> optimized
-> > >
-> > > > +define PYTHON_ARGON2_CFFI_SET_OPTIMZED_FLAG
-> > >
-> > > optimized
-> > >
-> > > > +        $(SED) 's;^\(optimized = *\)\(.*\);\1$(if $(BR2_X86_CPU_HAS_SSE2),True,False);' $(@D)/setup.py
-> > > > +endef
-> > > > +
-> > > > +PYTHON_ARGON2_CFFI_POST_PATCH_HOOKS += PYTHON_ARGON2_CFFI_SET_OPTIMZED_FLAG
-> > >
-> > > optimized
-> > >
-> > > But can't we do better here ? Check if the compiler supports the -msse2
-> > > flag ? See
-> > > https://github.com/pybind/python_example/blob/master/setup.py#L38 for
-> > > an example on how to do that.
-> > Ah, that looks better, I had submitted
-> > https://github.com/hynek/argon2-cffi/pull/59
-> > to avoid having to patch setup.py, I'll see if I can get that working.
-> Oh, just noticed we'll probably still need both since argon2-cffi
-> supports python2.
-Nevermind, that comment appears to be totally inaccurate as Python
-3.6's CCompiler
-does not actually have a has_flag method at all, however we can just include the
-function which seems to work. I've updated my pull request with a reworked
-version of has_flag which seems to work.
-> > >
-> > > Thanks!
-> > >
-> > > Thomas
-> > > --
-> > > Thomas Petazzoni, CTO, Bootlin
-> > > Embedded Linux and Kernel engineering
-> > > https://bootlin.com
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-treq/python-treq.hash | 4 ++--
+ package/python-treq/python-treq.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-treq/python-treq.hash b/package/python-treq/python-treq.hash
+index a2c0ea33f1..288279cbd8 100644
+--- a/package/python-treq/python-treq.hash
++++ b/package/python-treq/python-treq.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/treq/json
+-md5	a8e33a4b3259b45e08e1e0a5960f76f7  treq-18.6.0.tar.gz
+-sha256	91e09ff6b524cc90aa5e934b909c8d0d1a9d36ebd618b6c38e37b17013e69f48  treq-18.6.0.tar.gz
++md5  b75f6c89fd481989a9cfdec8d61a6d84  treq-20.3.0.tar.gz
++sha256  a72d7587d6f81c7a32620b00175825b4334bafbde73d37098d139ac7b11dca98  treq-20.3.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7cc1b65e1937b1cc07052bb864ec96d8e5fd413400c0842e5b89a8201a600293  LICENSE
+diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
+index a79e2bac73..320f57b6f2 100644
+--- a/package/python-treq/python-treq.mk
++++ b/package/python-treq/python-treq.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TREQ_VERSION = 18.6.0
++PYTHON_TREQ_VERSION = 20.3.0
+ PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
+-PYTHON_TREQ_SITE = https://pypi.python.org/packages/cb/c5/c83628d7e1a5d62a71eab0a5d1cdcdc53b49ead873f52975457ff2a8ae21
++PYTHON_TREQ_SITE = https://files.pythonhosted.org/packages/98/09/25064d7224efde9fd51e8865353d516c53306e476eab27ab21fb258cf7d4
+ PYTHON_TREQ_LICENSE = MIT
+ PYTHON_TREQ_LICENSE_FILES = LICENSE
+ PYTHON_TREQ_SETUP_TYPE = setuptools
+-- 
+2.20.1
