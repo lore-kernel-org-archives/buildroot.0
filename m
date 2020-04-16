@@ -1,65 +1,48 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 16 Apr 2020 04:38:01 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python{3}-setuptools: bump to
- version 44.0.0
-Message-ID: <20200416103801.71629-1-james.hilliard1@gmail.com>
+Date: Thu, 16 Apr 2020 04:42:01 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-tabledata: bump to version
+ 1.1.2
+Message-ID: <20200416104201.13191-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is the latest version of setuptools that supports python2.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-setuptools/python-setuptools.hash | 4 ++--
- package/python-setuptools/python-setuptools.mk   | 4 ++--
- package/python3-setuptools/python3-setuptools.mk | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-tabledata/python-tabledata.hash | 6 +++---
+ package/python-tabledata/python-tabledata.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index cc4a831d2e..769b68c35d 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
-@@ -1,4 +1,4 @@
- # From https://pypi.org/pypi/setuptools/json
--md5  89a592d733b31e180a4b6ad760c0685a  setuptools-41.4.0.zip
--sha256  7eae782ccf36b790c21bde7d86a4f303a441cd77036b25c559a602cf5186ce4d  setuptools-41.4.0.zip
-+md5  32b6cdce670ce462086d246bea181e9d  setuptools-44.0.0.zip
-+sha256  e5baf7723e5bb8382fc146e33032b241efc63314211a3a120aaa55d62d2bb008  setuptools-44.0.0.zip
- sha256  c32a3ac395af6321efd28be73d06a00f0db6ab887d1c21d4fec46128d2056d5a  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 163ba869ca..2cb575ae22 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -6,9 +6,9 @@
+diff --git a/package/python-tabledata/python-tabledata.hash b/package/python-tabledata/python-tabledata.hash
+index 9d8564db30..5c9a538f66 100644
+--- a/package/python-tabledata/python-tabledata.hash
++++ b/package/python-tabledata/python-tabledata.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/tabledata/json
+-md5	3a97a7bd3f2687a139578a79353a8188  tabledata-0.9.1.tar.gz
+-sha256	a2c59603ecb56cd2161a72978d56876377ba6a27a3e6d87e1874ba4d5ab02796  tabledata-0.9.1.tar.gz
++md5  7d1ab52001d85d19d86f08a5ad8aab58  tabledata-1.1.2.tar.gz
++sha256  db893596ab9066e5c4f002ae0fed70657e3b75cceb52dd1de5a0e145e338d830  tabledata-1.1.2.tar.gz
+ # Locally computed sha256 checksums
+-sha256	bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
++sha256  bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
+diff --git a/package/python-tabledata/python-tabledata.mk b/package/python-tabledata/python-tabledata.mk
+index c1381928c4..c1503e69cb 100644
+--- a/package/python-tabledata/python-tabledata.mk
++++ b/package/python-tabledata/python-tabledata.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Please keep in sync with
- # package/python3-setuptools/python3-setuptools.mk
--PYTHON_SETUPTOOLS_VERSION = 41.4.0
-+PYTHON_SETUPTOOLS_VERSION = 44.0.0
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/f4/d5/a6c19dcbcbc267aca376558797f036d9bcdff344c9f785fe7d0fe9a5f2a7
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
-diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
-index 078cd9b072..3f4f1100fe 100644
---- a/package/python3-setuptools/python3-setuptools.mk
-+++ b/package/python3-setuptools/python3-setuptools.mk
-@@ -6,9 +6,9 @@
- 
- # Please keep in sync with
- # package/python-setuptools/python-setuptools.mk
--PYTHON3_SETUPTOOLS_VERSION = 41.4.0
-+PYTHON3_SETUPTOOLS_VERSION = 44.0.0
- PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).zip
--PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/f4/d5/a6c19dcbcbc267aca376558797f036d9bcdff344c9f785fe7d0fe9a5f2a7
-+PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
- PYTHON3_SETUPTOOLS_LICENSE = MIT
- PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON3_SETUPTOOLS_SETUP_TYPE = setuptools
+-PYTHON_TABLEDATA_VERSION = 0.9.1
++PYTHON_TABLEDATA_VERSION = 1.1.2
+ PYTHON_TABLEDATA_SOURCE = tabledata-$(PYTHON_TABLEDATA_VERSION).tar.gz
+-PYTHON_TABLEDATA_SITE = https://files.pythonhosted.org/packages/7d/20/7178ce0e3e34d5aff07e2280522b7e1bc23d4f2fbb916b765bbb41b22174
++PYTHON_TABLEDATA_SITE = https://files.pythonhosted.org/packages/73/7c/67eec8e92504b8e00e5cc0053a3401bd1441eefc70cecfa4427bfcf76b89
+ PYTHON_TABLEDATA_SETUP_TYPE = setuptools
+ PYTHON_TABLEDATA_LICENSE = MIT
+ PYTHON_TABLEDATA_LICENSE_FILES = LICENSE
 -- 
 2.20.1
