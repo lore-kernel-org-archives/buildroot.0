@@ -1,70 +1,47 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 16 Apr 2020 03:38:01 -0600
-Subject: [Buildroot] [PATCH 1/1] package/bitstream: update tarball URL
-In-Reply-To: <CADvTj4qzg-o03A=fDoaOO75j5BJOdcPtSU5Oo-Unqwfn1cOciQ@mail.gmail.com>
-References: <20200416052508.11828-1-bernd.kuhls@t-online.de>
- <20200416074413.2f833747@windsurf.home>
- <CADvTj4qzg-o03A=fDoaOO75j5BJOdcPtSU5Oo-Unqwfn1cOciQ@mail.gmail.com>
-Message-ID: <CADvTj4os_y3ZFEN=qzRmi=F=pf+NoR7GPNKE7gezAsGgDq9GWA@mail.gmail.com>
+Date: Thu, 16 Apr 2020 03:42:24 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to version
+ 20.4.2
+Message-ID: <20200416094224.68330-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 16, 2020 at 3:26 AM James Hilliard
-<james.hilliard1@gmail.com> wrote:
->
-> On Wed, Apr 15, 2020 at 11:44 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > On Thu, 16 Apr 2020 07:25:08 +0200
-> > Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> >
-> > > Use direct URL of upstream server instead of using an URL which causes
-> > > redirects to, sometimes unreliable, mirror sites.
-> > >
-> > > Fixes:
-> > > http://autobuild.buildroot.net/results/cf1/cf1f80519570fdecacfeb45ac4a3ee9725be4b0f/
-> > >
-> > > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > > ---
-> > >  package/bitstream/bitstream.mk | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/package/bitstream/bitstream.mk b/package/bitstream/bitstream.mk
-> > > index 12124a63d3..617cb96520 100644
-> > > --- a/package/bitstream/bitstream.mk
-> > > +++ b/package/bitstream/bitstream.mk
-> > > @@ -6,7 +6,7 @@
-> > >
-> > >  BITSTREAM_VERSION = 1.5
-> > >  BITSTREAM_SOURCE = bitstream-$(BITSTREAM_VERSION).tar.bz2
-> > > -BITSTREAM_SITE = https://get.videolan.org/bitstream/$(BITSTREAM_VERSION)
-> > > +BITSTREAM_SITE = http://download.videolan.org/pub/videolan/bitstream/$(BITSTREAM_VERSION)
-> >
-> > But we're using get.videolan.org in a number of other packages,
-> > especially VLC. Isn't that a temporary issue that doesn't require
-> > changing the package ? I've reported the issue on the #videolan IRC
-> > channel.
-> This might be a dns issue as download.videolan.org is failing to resolve on one
-> of my systems, although my autobuilder which is failing a bunch can resolve it.
->
-> At the moment it probably makes sense to manually upload the package
-> to buildroot's
-> mirrors so that we don't get so many autobuild failures.
-Oh, FYI this is probably resolved now, my autobuilder can now get the file from
-get.videolan.org, may have been an internet line issue as I just briefly had the
-fiber line internet connection drop out on it for a few minutes and it
-works after
-the connection came back seemingly.
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 3e4c167cfe..a49de07b70 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5  d8a916d44eced92c3152ac59b2805118  autobahn-20.4.1.tar.gz
+-sha256  6d3989e4d8b0e961c9d3bb1fe133099767bbd5080cea21b2bdc2a0a1b4581b2e  autobahn-20.4.1.tar.gz
++md5  9702594ee1c5613e9bb31af105140b5b  autobahn-20.4.2.tar.gz
++sha256  1c943f94bb759c07445a6984a3bc4c76f73e2a90a1fc2c3521c211579b73d3db  autobahn-20.4.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index 17bf338c24..d4e52352f2 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AUTOBAHN_VERSION = 20.4.1
++PYTHON_AUTOBAHN_VERSION = 20.4.2
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/a3/2e/58f68840eef4a6740a41f59c5d3206a76e49993f90c954ae9777b120e09c
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/13/0e/b182b46ea437e59003de78c68bb00824d304dcfe58e7235f29c4f275eca0
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+-- 
+2.20.1
