@@ -1,55 +1,48 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 16 Apr 2020 04:04:28 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-pycairo: bump to version
- 1.19.1
-Message-ID: <20200416100428.91405-1-james.hilliard1@gmail.com>
+Date: Thu, 16 Apr 2020 04:07:58 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-pycparser: bump to version
+ 2.20
+Message-ID: <20200416100758.64334-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-License hash change is due to upstream commit:
-https://github.com/pygobject/pycairo/commit/886ecfd5286a8af2202e521ef2d4d7fac18f1d6f
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pycairo/python-pycairo.hash | 10 +++++-----
- package/python-pycairo/python-pycairo.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-pycparser/python-pycparser.hash | 6 +++---
+ package/python-pycparser/python-pycparser.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pycairo/python-pycairo.hash b/package/python-pycairo/python-pycairo.hash
-index f0b76b1e38..c617d8b601 100644
---- a/package/python-pycairo/python-pycairo.hash
-+++ b/package/python-pycairo/python-pycairo.hash
-@@ -1,7 +1,7 @@
- # md5, sha256 from https://pypi.org/pypi/pycairo/json
--md5	be2ba51f234270dec340f28f1695a95e  pycairo-1.18.2.tar.gz
--sha256	dcb853fd020729516e8828ad364084e752327d4cff8505d20b13504b32b16531  pycairo-1.18.2.tar.gz
-+md5  59bc5c5d1debc3af0f6791af9d612551  pycairo-1.19.1.tar.gz
-+sha256  2c143183280feb67f5beb4e543fd49990c28e7df427301ede04fc550d3562e84  pycairo-1.19.1.tar.gz
+diff --git a/package/python-pycparser/python-pycparser.hash b/package/python-pycparser/python-pycparser.hash
+index 6230f7cc83..0426444399 100644
+--- a/package/python-pycparser/python-pycparser.hash
++++ b/package/python-pycparser/python-pycparser.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pycparser/json
+-md5	76396762adc3fa769c83d8e202d36b6f  pycparser-2.19.tar.gz
+-sha256	a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3  pycparser-2.19.tar.gz
++md5  b8f88de737db8c346ee8d31c07c7a25a  pycparser-2.20.tar.gz
++sha256  2d475327684562c3a96cc71adf7dc8c4f0565175cf86b6d7a404ff4c771f15f0  pycparser-2.20.tar.gz
  # Locally computed sha256 checksums
--sha256	22c7747e2decb1b26e395b45dbaeb627784ef7fdbf2b80ac09a26a560277e58a  COPYING
--sha256	d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
--sha256	53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING-MPL-1.1
-+sha256  360b9a526d47c51a7cab7f1ec49ca5893050562d639b742d588934ff84823a72  COPYING
-+sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
-+sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING-MPL-1.1
-diff --git a/package/python-pycairo/python-pycairo.mk b/package/python-pycairo/python-pycairo.mk
-index 5a48a2a29a..c635498d52 100644
---- a/package/python-pycairo/python-pycairo.mk
-+++ b/package/python-pycairo/python-pycairo.mk
+-sha256	3c76629880aec2f8578ed914701a4ff9e5da8b60acb8b7ec675abf83c90c5168  LICENSE
++sha256  3c76629880aec2f8578ed914701a4ff9e5da8b60acb8b7ec675abf83c90c5168  LICENSE
+diff --git a/package/python-pycparser/python-pycparser.mk b/package/python-pycparser/python-pycparser.mk
+index c07edaaa25..8af37fce98 100644
+--- a/package/python-pycparser/python-pycparser.mk
++++ b/package/python-pycparser/python-pycparser.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCAIRO_VERSION = 1.18.2
-+PYTHON_PYCAIRO_VERSION = 1.19.1
- PYTHON_PYCAIRO_SOURCE = pycairo-$(PYTHON_PYCAIRO_VERSION).tar.gz
--PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/3c/1a/c0478ecab31baae50fda9956547788afbd0ca563adc52c9b03cab30f17eb
-+PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/e8/9d/c8be300fc6b1298559d37a071c3833b0b251e0fff334d2e4c408d5789162
- PYTHON_PYCAIRO_SETUP_TYPE = setuptools
- PYTHON_PYCAIRO_DEPENDENCIES = cairo
- PYTHON_PYCAIRO_LICENSE = LGPL-2.1 or MPL-1.1
+-PYTHON_PYCPARSER_VERSION = 2.19
++PYTHON_PYCPARSER_VERSION = 2.20
+ PYTHON_PYCPARSER_SOURCE = pycparser-$(PYTHON_PYCPARSER_VERSION).tar.gz
+-PYTHON_PYCPARSER_SITE = https://files.pythonhosted.org/packages/68/9e/49196946aee219aead1290e00d1e7fdeab8567783e83e1b9ab5585e6206a
++PYTHON_PYCPARSER_SITE = https://files.pythonhosted.org/packages/0f/86/e19659527668d70be91d0369aeaa055b4eb396b0f387a4f92293a20035bd
+ PYTHON_PYCPARSER_SETUP_TYPE = setuptools
+ PYTHON_PYCPARSER_LICENSE = BSD-3-Clause
+ PYTHON_PYCPARSER_LICENSE_FILES = LICENSE
 -- 
 2.20.1
