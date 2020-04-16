@@ -1,50 +1,101 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 16 Apr 2020 04:15:00 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-pyzmq: bump to version 19.0.0
-Message-ID: <20200416101500.102891-1-james.hilliard1@gmail.com>
+Date: Thu, 16 Apr 2020 04:27:13 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-requests: bump to version
+ 2.23.0
+Message-ID: <20200416102713.110388-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Drop patch that is now upstream.
+
+License hash change is due to date change in upstream commit:
+https://github.com/psf/requests/commit/a29be8f9ccf13c887e0f8861c2a35fb5289b9e3f
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyzmq/python-pyzmq.hash | 10 +++++-----
- package/python-pyzmq/python-pyzmq.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ ...ncies-to-major-instead-of-minor-5342.patch | 40 -------------------
+ package/python-requests/python-requests.hash  |  6 +--
+ package/python-requests/python-requests.mk    |  4 +-
+ 3 files changed, 5 insertions(+), 45 deletions(-)
+ delete mode 100644 package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch
 
-diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
-index 96e0ab9ffc..ff091c2fe3 100644
---- a/package/python-pyzmq/python-pyzmq.hash
-+++ b/package/python-pyzmq/python-pyzmq.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pyzmq/json
--md5    d850bbab7c7f558b91c95b19028ff4b8  pyzmq-18.1.1.tar.gz
--sha256 8c69a6cbfa94da29a34f6b16193e7c15f5d3220cb772d6d17425ff3faa063a6d  pyzmq-18.1.1.tar.gz
--# Locally calculated
--sha256 aef3b80570351d44e29c22d080d4e9e106b34f3fdbc5cdf9636994474c72b1a2   COPYING.BSD
--sha256 44b23767df3c0fe27f88981f09bc7f50a1695cec4b24252fa5f55f03e76bcd6d   COPYING.LESSER
-+md5  4650e45ebcf8e08620211c0e720d6066  pyzmq-19.0.0.tar.gz
-+sha256  5e1f65e576ab07aed83f444e201d86deb01cd27dcf3f37c727bc8729246a60a8  pyzmq-19.0.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  aef3b80570351d44e29c22d080d4e9e106b34f3fdbc5cdf9636994474c72b1a2  COPYING.BSD
-+sha256  44b23767df3c0fe27f88981f09bc7f50a1695cec4b24252fa5f55f03e76bcd6d  COPYING.LESSER
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index 0ba0c8d980..b912d5322b 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
+diff --git a/package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch b/package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch
+deleted file mode 100644
+index b113c928d4..0000000000
+--- a/package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 9e9141ed638c3163c7fbf1a1f3a9b9f5a80bdf4f Mon Sep 17 00:00:00 2001
+-From: Chris Withers <chris@withers.org>
+-Date: Tue, 18 Feb 2020 14:58:27 +0000
+-Subject: [PATCH] Limit dependencies to major instead of minor (#5342)
+-
+-(cherry picked from commit c46f55bd48dabc02f033d252f8c64e2011f37361)
+-
+-[Romain backport from upstream to 2.22.0]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- setup.py | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/setup.py b/setup.py
+-index 3dce2965..f0bfebcc 100755
+---- a/setup.py
+-+++ b/setup.py
+-@@ -42,8 +42,8 @@ if sys.argv[-1] == 'publish':
+- packages = ['requests']
+- 
+- requires = [
+--    'chardet>=3.0.2,<3.1.0',
+--    'idna>=2.5,<2.9',
+-+    'chardet>=3.0.2,<4',
+-+    'idna>=2.5,<3',
+-     'urllib3>=1.21.1,<1.26,!=1.25.0,!=1.25.1',
+-     'certifi>=2017.4.17'
+- 
+-@@ -101,7 +101,7 @@ setup(
+-     cmdclass={'test': PyTest},
+-     tests_require=test_requirements,
+-     extras_require={
+--        'security': ['pyOpenSSL >= 0.14', 'cryptography>=1.3.4', 'idna>=2.0.0'],
+-+        'security': ['pyOpenSSL >= 0.14', 'cryptography>=1.3.4'],
+-         'socks': ['PySocks>=1.5.6, !=1.5.7'],
+-         'socks:sys_platform == "win32" and python_version == "2.7"': ['win_inet_pton'],
+-     },
+--- 
+-2.25.2
+-
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index 42f45d3a44..b252e3a781 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/requests/json
+-md5	ee28bee2de76e9198fc41e48f3a7dd47  requests-2.22.0.tar.gz
+-sha256	11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4  requests-2.22.0.tar.gz
++md5  abfdc28db1065bbd0bc32592ac9d27a6  requests-2.23.0.tar.gz
++sha256  b3f43d496c6daba4493e7c431722aeb7dbc6288f52a6e04e7b6023b0247817e6  requests-2.23.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	be41abac2c40f8530307e8d172c590b476f4a488bc6a68f8de57b7cf64786687  LICENSE
++sha256  8837a2f33a61bcee175c028ff16d1c160aba48a3aebe1495ace709be4e62636b  LICENSE
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index e64db94523..1adf564015 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYZMQ_VERSION = 18.1.1
-+PYTHON_PYZMQ_VERSION = 19.0.0
- PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
--PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/3c/83/7ecbe9b762829f589fa9734026e0ccb63cb128fe5615ae1698f65df72bfe
-+PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/16/4c/762c2c3063c4d45baf4a49acea7a4f561f7b78a45cd04b58d63f4c5f6b8d
- PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
- # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
- PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
+-PYTHON_REQUESTS_VERSION = 2.22.0
++PYTHON_REQUESTS_VERSION = 2.23.0
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/01/62/ddcf76d1d19885e8579acb1b1df26a852b03472c0e46d2b959a714c90608
++PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/f5/4f/280162d4bd4d8aad241a21aecff7a6e46891b905a4341e7ab549ebaf7915
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
 -- 
 2.20.1
