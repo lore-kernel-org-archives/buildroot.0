@@ -1,116 +1,88 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 16 Apr 2020 19:41:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to 7.4.5
-Message-ID: <20200416174135.1632869-1-bernd.kuhls@t-online.de>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 16 Apr 2020 14:02:09 -0500
+Subject: [Buildroot] [PATCH v3] package/swupdate: add basic systemd service
+Message-ID: <20200416190209.40757-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.5
+From: Sam Voss <sam.voss@rockwellcollins.com>
 
-Fixes CVE-2020-7067.
-
-Removed patch applied upstream.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- ...Check-for-sys-auxv.h-before-using-it.patch | 60 -------------------
- package/php/php.hash                          |  2 +-
- package/php/php.mk                            |  2 +-
- 3 files changed, 2 insertions(+), 62 deletions(-)
- delete mode 100644 package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
 
-diff --git a/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch b/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
-deleted file mode 100644
-index 559c64db8a..0000000000
---- a/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--From f150702d5ab72878d45b722b6d7d4194db92c44a Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Mon, 9 Mar 2020 15:36:48 +0100
--Subject: [PATCH] Check for sys/auxv.h before using it.
--
--Fixes aarch64 compile wiht uclibc-ng (does not provide
--sys/auxv.h header file).
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
--Upstream: https://github.com/php/php-src/commit/f73528f0e0d59ac744ccb4a94a3a9d7b9f0fba1b
-----
-- configure.ac         | 1 +
-- ext/standard/crc32.c | 9 +++++++--
-- 2 files changed, 8 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 5219a5f2..caf62302 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -440,6 +440,7 @@ resolv.h \
-- strings.h \
-- syslog.h \
-- sysexits.h \
--+sys/auxv.h \
-- sys/ioctl.h \
-- sys/file.h \
-- sys/mman.h \
--diff --git a/ext/standard/crc32.c b/ext/standard/crc32.c
--index c3ca5903..e59ab45f 100644
----- a/ext/standard/crc32.c
--+++ b/ext/standard/crc32.c
--@@ -17,10 +17,15 @@
-- */
-- 
-- #include "php.h"
--+#ifdef PHP_WIN32
--+#include "config.w32.h"
--+#else
--+#include <php_config.h>
--+#endif
-- #include "basic_functions.h"
-- #include "crc32.h"
-- 
---#if defined(__aarch64__)
--+#if defined(__aarch64__) && defined(HAVE_SYS_AUXV_H)
-- # include <arm_acle.h>
-- # if defined(__linux__)
-- #  include <sys/auxv.h>
--@@ -85,7 +90,7 @@ PHP_NAMED_FUNCTION(php_if_crc32)
-- 
-- 	crc = crcinit^0xFFFFFFFF;
-- 
---#if defined(__aarch64__)
--+#if defined(__aarch64__) && defined(HAVE_SYS_AUXV_H)
-- 	if (has_crc32_insn()) {
-- 		crc = crc32_aarch64(crc, p, nr);
-- 		RETURN_LONG(crc^0xFFFFFFFF);
---- 
--2.25.1
--
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 4584524f1c..a0b8fd4688 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256 1873c4cefdd3df9a78dcffb2198bba5c2f0464f55c9c960720c84df483fca74c  php-7.4.4.tar.xz
-+sha256 d059fd7f55bdc4d2eada15a00a2976697010d3631ef6f83149cc5289e1f23c2c  php-7.4.5.tar.xz
+Test cfg for verifying systemd created the symlink:
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_SYSTEMD=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+BR2_PACKAGE_SWUPDATE=y
+BR2_TARGET_ROOTFS_EXT2=y
+
+Changes
+v2 -> v3
+ - During testing we found that the service killmode needed adjusting to
+   prevent a hang/timeout during shutdown/reboot
+   (https://github.com/sbabic/meta-swupdate/blob/master/recipes-support/swupdate/swupdate/swupdate.service)
+
+v1 -> v2
+[Thomas P
+ - Remove symlink because it is created by
+   [231ad359bcc0] package/systemd: use host-systemctl preset all to enable units
+---
+ package/swupdate/swupdate.mk      |  8 ++++++++
+ package/swupdate/swupdate.service | 18 ++++++++++++++++++
+ 2 files changed, 26 insertions(+)
+ create mode 100644 package/swupdate/swupdate.service
+
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 2b51edb66d..f31b7f3883 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -189,4 +189,12 @@ $(error No Swupdate configuration file specified, check your BR2_PACKAGE_SWUPDAT
+ endif
+ endif
  
- # License file
- sha256 0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index f62204c2a5..91f82dbf31 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.4.4
-+PHP_VERSION = 7.4.5
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE),y)
++define SWUPDATE_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/swupdate/swupdate.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/swupdate.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++endef
++endif
++
+ $(eval $(kconfig-package))
+diff --git a/package/swupdate/swupdate.service b/package/swupdate/swupdate.service
+new file mode 100644
+index 0000000000..232bd9956e
+--- /dev/null
++++ b/package/swupdate/swupdate.service
+@@ -0,0 +1,18 @@
++[Unit]
++Description=SWUpdate daemon
++Documentation=https://github.com/sbabic/swupdate
++Documentation=https://sbabic.github.io/swupdate
++
++[Service]
++# Default environment variables in case /etc/default/swupdate isn't providing them
++Environment=SWU_POST_UPDATE_CMD="touch /tmp/.swu_complete"
++Environment=SWU_WEBSERVER_ARGS="-p 8080 -r /var/www/swupdate/"
++
++# Always take what is in the environment files when exists
++EnvironmentFile=/etc/default/swupdate
++
++ExecStart=/usr/bin/swupdate ${SWU_KEY_ARGS} -p ${SWU_POST_UPDATE_CMD} -v -L -w "${SWU_WEBSERVER_ARGS}"
++KillMode=mixed
++
++[Install]
++WantedBy=multi-user.target
 -- 
-2.26.1
+2.17.1
