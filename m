@@ -1,8 +1,7 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 16 Apr 2020 04:07:58 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-pycparser: bump to version
- 2.20
-Message-ID: <20200416100758.64334-1-james.hilliard1@gmail.com>
+Date: Thu, 16 Apr 2020 04:15:00 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-pyzmq: bump to version 19.0.0
+Message-ID: <20200416101500.102891-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,38 +10,41 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pycparser/python-pycparser.hash | 6 +++---
- package/python-pycparser/python-pycparser.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pyzmq/python-pyzmq.hash | 10 +++++-----
+ package/python-pyzmq/python-pyzmq.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-pycparser/python-pycparser.hash b/package/python-pycparser/python-pycparser.hash
-index 6230f7cc83..0426444399 100644
---- a/package/python-pycparser/python-pycparser.hash
-+++ b/package/python-pycparser/python-pycparser.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycparser/json
--md5	76396762adc3fa769c83d8e202d36b6f  pycparser-2.19.tar.gz
--sha256	a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3  pycparser-2.19.tar.gz
-+md5  b8f88de737db8c346ee8d31c07c7a25a  pycparser-2.20.tar.gz
-+sha256  2d475327684562c3a96cc71adf7dc8c4f0565175cf86b6d7a404ff4c771f15f0  pycparser-2.20.tar.gz
- # Locally computed sha256 checksums
--sha256	3c76629880aec2f8578ed914701a4ff9e5da8b60acb8b7ec675abf83c90c5168  LICENSE
-+sha256  3c76629880aec2f8578ed914701a4ff9e5da8b60acb8b7ec675abf83c90c5168  LICENSE
-diff --git a/package/python-pycparser/python-pycparser.mk b/package/python-pycparser/python-pycparser.mk
-index c07edaaa25..8af37fce98 100644
---- a/package/python-pycparser/python-pycparser.mk
-+++ b/package/python-pycparser/python-pycparser.mk
+diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
+index 96e0ab9ffc..ff091c2fe3 100644
+--- a/package/python-pyzmq/python-pyzmq.hash
++++ b/package/python-pyzmq/python-pyzmq.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pyzmq/json
+-md5    d850bbab7c7f558b91c95b19028ff4b8  pyzmq-18.1.1.tar.gz
+-sha256 8c69a6cbfa94da29a34f6b16193e7c15f5d3220cb772d6d17425ff3faa063a6d  pyzmq-18.1.1.tar.gz
+-# Locally calculated
+-sha256 aef3b80570351d44e29c22d080d4e9e106b34f3fdbc5cdf9636994474c72b1a2   COPYING.BSD
+-sha256 44b23767df3c0fe27f88981f09bc7f50a1695cec4b24252fa5f55f03e76bcd6d   COPYING.LESSER
++md5  4650e45ebcf8e08620211c0e720d6066  pyzmq-19.0.0.tar.gz
++sha256  5e1f65e576ab07aed83f444e201d86deb01cd27dcf3f37c727bc8729246a60a8  pyzmq-19.0.0.tar.gz
++# Locally computed sha256 checksums
++sha256  aef3b80570351d44e29c22d080d4e9e106b34f3fdbc5cdf9636994474c72b1a2  COPYING.BSD
++sha256  44b23767df3c0fe27f88981f09bc7f50a1695cec4b24252fa5f55f03e76bcd6d  COPYING.LESSER
+diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
+index 0ba0c8d980..b912d5322b 100644
+--- a/package/python-pyzmq/python-pyzmq.mk
++++ b/package/python-pyzmq/python-pyzmq.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCPARSER_VERSION = 2.19
-+PYTHON_PYCPARSER_VERSION = 2.20
- PYTHON_PYCPARSER_SOURCE = pycparser-$(PYTHON_PYCPARSER_VERSION).tar.gz
--PYTHON_PYCPARSER_SITE = https://files.pythonhosted.org/packages/68/9e/49196946aee219aead1290e00d1e7fdeab8567783e83e1b9ab5585e6206a
-+PYTHON_PYCPARSER_SITE = https://files.pythonhosted.org/packages/0f/86/e19659527668d70be91d0369aeaa055b4eb396b0f387a4f92293a20035bd
- PYTHON_PYCPARSER_SETUP_TYPE = setuptools
- PYTHON_PYCPARSER_LICENSE = BSD-3-Clause
- PYTHON_PYCPARSER_LICENSE_FILES = LICENSE
+-PYTHON_PYZMQ_VERSION = 18.1.1
++PYTHON_PYZMQ_VERSION = 19.0.0
+ PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
+-PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/3c/83/7ecbe9b762829f589fa9734026e0ccb63cb128fe5615ae1698f65df72bfe
++PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/16/4c/762c2c3063c4d45baf4a49acea7a4f561f7b78a45cd04b58d63f4c5f6b8d
+ PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
+ # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
+ PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
 -- 
 2.20.1
