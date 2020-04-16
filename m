@@ -1,67 +1,36 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Thu, 16 Apr 2020 00:21:37 -0300
-Subject: [Buildroot] [PATCH v2] package/openrc: enable support when
- libselinux is selected
-Message-ID: <20200416032137.721705-1-unixmania@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 16 Apr 2020 07:25:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bitstream: update tarball URL
+Message-ID: <20200416052508.11828-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Use direct URL of upstream server instead of using an URL which causes
+redirects to, sometimes unreliable, mirror sites.
 
-OpenRC suports SELinux, so there is no reason to forcibly disable it.
+Fixes:
+http://autobuild.buildroot.net/results/cf1/cf1f80519570fdecacfeb45ac4a3ee9725be4b0f/
 
-Notice this only allows OpenRC to perform the initial policy load and
-set the enforcing mode. In order really use SELinux it's also necessary
-to select refpolicy, which provides a policy, and policycoreutils, which
-provides restorecon and other SELinux utilities.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Tested-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Tested on QEMU, with ext4fs, selecting refpolicy and policycoreutils.
-Only disabled and permissive modes were used, since the enforcing mode
-currently does not work. See the help text in
+ package/bitstream/bitstream.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    package/refpolicy/Config.in for additional details.
----
-CC: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
-Changes v1->v2:
-  - Improve the commit message, as suggested by Yann E. MORIN
-  - Explain which tests were performed
----
- package/openrc/openrc.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index 6057451bfe..97536dad37 100644
---- a/package/openrc/openrc.mk
-+++ b/package/openrc/openrc.mk
-@@ -18,7 +18,6 @@ OPENRC_MAKE_OPTS = \
- 	LIBNAME=lib \
- 	LIBEXECDIR=/usr/libexec/rc \
- 	MKPKGCONFIG=no \
--	MKSELINUX=no \
- 	MKSYSVINIT=yes \
- 	BRANDING="Buildroot $(BR2_VERSION_FULL)" \
- 	CC=$(TARGET_CC)
-@@ -29,6 +28,13 @@ else
- OPENRC_MAKE_OPTS += MKSTATICLIBS=yes
- endif
+diff --git a/package/bitstream/bitstream.mk b/package/bitstream/bitstream.mk
+index 12124a63d3..617cb96520 100644
+--- a/package/bitstream/bitstream.mk
++++ b/package/bitstream/bitstream.mk
+@@ -6,7 +6,7 @@
  
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+OPENRC_MAKE_OPTS += MKSELINUX=yes
-+OPENRC_DEPENDENCIES += libselinux
-+else
-+OPENRC_MAKE_OPTS += MKSELINUX=no
-+endif
-+
- define OPENRC_BUILD_CMDS
- 	$(MAKE) $(OPENRC_MAKE_OPTS) -C $(@D)
- endef
+ BITSTREAM_VERSION = 1.5
+ BITSTREAM_SOURCE = bitstream-$(BITSTREAM_VERSION).tar.bz2
+-BITSTREAM_SITE = https://get.videolan.org/bitstream/$(BITSTREAM_VERSION)
++BITSTREAM_SITE = http://download.videolan.org/pub/videolan/bitstream/$(BITSTREAM_VERSION)
+ BITSTREAM_LICENSE = MIT
+ BITSTREAM_LICENSE_FILES = COPYING
+ 
 -- 
-2.18.2
+2.26.1
