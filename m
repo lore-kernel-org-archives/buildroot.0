@@ -1,199 +1,109 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 16 Apr 2020 14:29:40 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/netopeer2-server: add package
+Date: Thu, 16 Apr 2020 14:29:41 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/netopeer2-cli: add package
 In-Reply-To: <20200416122939.10312-1-heiko.thiery@gmail.com>
 References: <20200416122939.10312-1-heiko.thiery@gmail.com>
-Message-ID: <20200416122939.10312-2-heiko.thiery@gmail.com>
+Message-ID: <20200416122939.10312-3-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Netopeer2 is a set of tools implementing network configuration
-tools based on the NETCONF Protocol. This is the second
-generation of the toolset, originally available as the Netopeer
-project. Netopeer2 is based on the new generation of the NETCONF
-and YANG libraries - libyang and libnetconf2. The Netopeer
-server uses sysrepo as a NETCONF datastore implementation.
+netopeer2 cli is a simple command line interface to connect to a
+NETCONF server (device).
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/netopeer2-server/Config.in            | 43 ++++++++++++++++
- package/netopeer2-server/S52netopeer2-server  | 50 +++++++++++++++++++
- .../netopeer2-server/netopeer2-server.hash    |  3 ++
- package/netopeer2-server/netopeer2-server.mk  | 21 ++++++++
- 6 files changed, 119 insertions(+)
- create mode 100644 package/netopeer2-server/Config.in
- create mode 100644 package/netopeer2-server/S52netopeer2-server
- create mode 100644 package/netopeer2-server/netopeer2-server.hash
- create mode 100644 package/netopeer2-server/netopeer2-server.mk
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/netopeer2-cli/Config.in          | 20 ++++++++++++++++++++
+ package/netopeer2-cli/netopeer2-cli.hash |  1 +
+ package/netopeer2-cli/netopeer2-cli.mk   | 17 +++++++++++++++++
+ 5 files changed, 40 insertions(+)
+ create mode 100644 package/netopeer2-cli/Config.in
+ create mode 120000 package/netopeer2-cli/netopeer2-cli.hash
+ create mode 100644 package/netopeer2-cli/netopeer2-cli.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3d9c976a95..42748655d8 100644
+index 42748655d8..1d07420157 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -1106,6 +1106,7 @@ F:	package/python-sip/
  N:	Heiko Thiery <heiko.thiery@gmail.com>
  F:	package/libnetconf2/
  F:	package/libyang/
-+F:	package/netopeer2-server/
++F:	package/netopeer2-cli/
+ F:	package/netopeer2-server/
  F:	package/sysrepo/
  
- N:	Henrique Camargo <henrique@henriquecamargo.com>
 diff --git a/package/Config.in b/package/Config.in
-index ccf54f2417..78c0d4b7ce 100644
+index 78c0d4b7ce..49c020cae6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -1736,6 +1736,7 @@ menu "Networking"
  	source "package/mongoose/Config.in"
  	source "package/nanomsg/Config.in"
  	source "package/neon/Config.in"
-+	source "package/netopeer2-server/Config.in"
++	source "package/netopeer2-cli/Config.in"
+ 	source "package/netopeer2-server/Config.in"
  	source "package/nghttp2/Config.in"
  	source "package/norm/Config.in"
- 	source "package/nss-mdns/Config.in"
-diff --git a/package/netopeer2-server/Config.in b/package/netopeer2-server/Config.in
+diff --git a/package/netopeer2-cli/Config.in b/package/netopeer2-cli/Config.in
 new file mode 100644
-index 0000000000..56b1f296d6
+index 0000000000..70210597a1
 --- /dev/null
-+++ b/package/netopeer2-server/Config.in
-@@ -0,0 +1,43 @@
-+comment "netopeer2server needs a toolchain w/ C++, threads, dynamic library, host gcc >= 4.8"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_HOST_GCC_AT_LEAST_4_8
-+
-+config BR2_PACKAGE_NETOPEER2_SERVER
-+	bool "netopeer2-server"
-+	depends on BR2_USE_MMU # sysrepo
-+	depends on !BR2_STATIC_LIBS # sysrepo
-+	depends on BR2_INSTALL_LIBSTDCPP # sysrepo
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++++ b/package/netopeer2-cli/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_NETOPEER2_CLI
++	bool "netopeer2-cli"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
 +	select BR2_PACKAGE_LIBYANG
 +	select BR2_PACKAGE_LIBNETCONF2
-+	select BR2_PACKAGE_PCRE # sysrepo
-+	select BR2_PACKAGE_PCRE_UCP # syrepo
-+	select BR2_PACKAGE_SYSREPO
-+	# at least one transport mechanism is mandatory
-+	select BR2_PACKAGE_NETOPEER2_SERVER_SSH if !BR2_PACKAGE_NETOPEER2_SERVER_TLS
-+
++	select BR2_PACKAGE_LIBSSH
++	select BR2_PACKAGE_LIBSSH_SERVER
++	select BR2_PACKAGE_PCRE # libyang
++	select BR2_PACKAGE_PCRE_UCP # libyang
 +	help
 +	  Netopeer2 is a set of tools implementing network
 +	  configuration tools based on the NETCONF Protocol.
 +
-+	  This is the server part.
++	  This is the CLI client part.
 +
 +	  https://github.com/CESNET/Netopeer2
 +
-+if BR2_PACKAGE_NETOPEER2_SERVER
-+
-+config BR2_PACKAGE_NETOPEER2_SERVER_TLS
-+	bool "TLS transport"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Enable TLS transport layer support.
-+
-+config BR2_PACKAGE_NETOPEER2_SERVER_SSH
-+	bool "SSH transport"
-+	select BR2_PACKAGE_LIBSSH
-+	select BR2_PACKAGE_LIBSSH_SERVER
-+	help
-+	  Enable SSH transport layer support.
-+
-+endif
-diff --git a/package/netopeer2-server/S52netopeer2-server b/package/netopeer2-server/S52netopeer2-server
-new file mode 100644
-index 0000000000..cf53a8f109
++comment "netopeer2cli needs a toolchain w/ threads, dynamic libraray"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/netopeer2-cli/netopeer2-cli.hash b/package/netopeer2-cli/netopeer2-cli.hash
+new file mode 120000
+index 0000000000..1abc5dfda4
 --- /dev/null
-+++ b/package/netopeer2-server/S52netopeer2-server
-@@ -0,0 +1,50 @@
-+#!/bin/sh
-+
-+DAEMON="netopeer2-server"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+NETOPEER2_SERVER_ARGS=""
-+
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+
-+	start-stop-daemon -S -b -q -p $PIDFILE -x "/usr/bin/$DAEMON" \
-+		-- $NETOPEER2_SERVER_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p $PIDFILE
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	sleep 1
-+	start
-+}
-+
-+reload() {
-+	# we do not support real reload .. just restart
-+	restart
-+}
-+
-+case "$1" in
-+	start|stop|restart|reload)
-+		"$1";;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+esac
-diff --git a/package/netopeer2-server/netopeer2-server.hash b/package/netopeer2-server/netopeer2-server.hash
++++ b/package/netopeer2-cli/netopeer2-cli.hash
+@@ -0,0 +1 @@
++../netopeer2-server/netopeer2-server.hash
+\ No newline at end of file
+diff --git a/package/netopeer2-cli/netopeer2-cli.mk b/package/netopeer2-cli/netopeer2-cli.mk
 new file mode 100644
-index 0000000000..e1d2886847
+index 0000000000..be82161d43
 --- /dev/null
-+++ b/package/netopeer2-server/netopeer2-server.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  6c5fc09aed76e0bd7b1b5751dc408966ae9985d2a48109c3f622746e49999b16  netopeer2-1.1.7.tar.gz
-+sha256  b46f161fbdcf127d3ef22602e15958c3092fe3294f71a2dc8cdf8f6689cba95b  LICENSE
-diff --git a/package/netopeer2-server/netopeer2-server.mk b/package/netopeer2-server/netopeer2-server.mk
-new file mode 100644
-index 0000000000..b6a1f4dae8
---- /dev/null
-+++ b/package/netopeer2-server/netopeer2-server.mk
-@@ -0,0 +1,21 @@
++++ b/package/netopeer2-cli/netopeer2-cli.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# netopeer2-server
++# netopeer2-cli
 +#
 +################################################################################
 +
-+NETOPEER2_SERVER_VERSION = 1.1.7
-+NETOPEER2_SERVER_SOURCE = netopeer2-$(NETOPEER2_SERVER_VERSION).tar.gz
-+NETOPEER2_SERVER_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_SERVER_VERSION))
-+NETOPEER2_SERVER_DL_SUBDIR = netopeer2
-+NETOPEER2_SERVER_LICENSE = BSD-3-Clause
-+NETOPEER2_SERVER_LICENSE_FILES = LICENSE
-+NETOPEER2_SERVER_SUBDIR = server
-+NETOPEER2_SERVER_DEPENDENCIES = libnetconf2 libyang sysrepo
-+
-+define NETOPEER2_SERVER_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 755 -D package/netopeer2-server/S52netopeer2-server \
-+		$(TARGET_DIR)/etc/init.d/S52netopeer2-server
-+endef
++NETOPEER2_CLI_VERSION = 1.1.7
++NETOPEER2_CLI_SOURCE = netopeer2-$(NETOPEER2_CLI_VERSION).tar.gz
++NETOPEER2_CLI_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_CLI_VERSION))
++NETOPEER2_CLI_DL_SUBDIR = netopeer2
++NETOPEER2_CLI_LICENSE = BSD-3-Clause
++NETOPEER2_CLI_LICENSE_FILES = LICENSE
++NETOPEER2_CLI_SUBDIR = cli
++NETOPEER2_CLI_INSTALL_STAGING = YES
++NETOPEER2_CLI_DEPENDENCIES = libnetconf2 libyang
 +
 +$(eval $(cmake-package))
 -- 
