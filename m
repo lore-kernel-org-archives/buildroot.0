@@ -1,47 +1,51 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 16 Apr 2020 04:54:52 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-more-itertools: bump to
- version 8.2.0
-Message-ID: <20200416105452.83076-1-james.hilliard1@gmail.com>
+Date: Thu, 16 Apr 2020 04:58:41 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-mbstrdecoder: bump to
+ version 1.0.0
+Message-ID: <20200416105841.61664-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Commit hash change is due to line endings change not in upstream
+git repo.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-more-itertools/python-more-itertools.hash | 4 ++--
- package/python-more-itertools/python-more-itertools.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-mbstrdecoder/python-mbstrdecoder.hash | 6 +++---
+ package/python-mbstrdecoder/python-mbstrdecoder.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-more-itertools/python-more-itertools.hash b/package/python-more-itertools/python-more-itertools.hash
-index 3bb65897c0..1b4ffef2b6 100644
---- a/package/python-more-itertools/python-more-itertools.hash
-+++ b/package/python-more-itertools/python-more-itertools.hash
+diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.hash b/package/python-mbstrdecoder/python-mbstrdecoder.hash
+index b46f5d7cf9..f8103b0add 100644
+--- a/package/python-mbstrdecoder/python-mbstrdecoder.hash
++++ b/package/python-mbstrdecoder/python-mbstrdecoder.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/more-itertools/json
--md5	f647bfd27243a7bebe53b5ddb6a3b1c4  more-itertools-7.2.0.tar.gz
--sha256	409cd48d4db7052af495b09dec721011634af3753ae1ef92d2b32f73a745f832  more-itertools-7.2.0.tar.gz
-+md5  55e7e0a5eabc5a57bc8353c65c6f9965  more-itertools-8.2.0.tar.gz
-+sha256  b1ddb932186d8a6ac451e1d95844b382f55e12686d51ca0c68b6f61f2ab7a507  more-itertools-8.2.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/mbstrdecoder/json
+-md5	6dd814b20e7c68c2da2afe5bf72a5e9d  mbstrdecoder-0.8.1.tar.gz
+-sha256	dabfae008a6b3b78f09847c2a73e9e866f97dcd9b52f7ccadf3b05a10a3656e6  mbstrdecoder-0.8.1.tar.gz
++md5  3ab822b853bfd2f08e35ba85c1ac2e2e  mbstrdecoder-1.0.0.tar.gz
++sha256  9df7778c0c051c98f6b5a848909202e5cd423c9692665b20d1a9bd0f771b8235  mbstrdecoder-1.0.0.tar.gz
  # Locally computed sha256 checksums
- sha256  09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46  LICENSE
-diff --git a/package/python-more-itertools/python-more-itertools.mk b/package/python-more-itertools/python-more-itertools.mk
-index 4932fdc4a0..334ef5e13a 100644
---- a/package/python-more-itertools/python-more-itertools.mk
-+++ b/package/python-more-itertools/python-more-itertools.mk
+-sha256	7fcef461a93fea587224132a865d1285969c9bec15baf59caeb7a8c7638a8744  LICENSE
++sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
+diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.mk b/package/python-mbstrdecoder/python-mbstrdecoder.mk
+index 4400cd6731..4a768ef695 100644
+--- a/package/python-mbstrdecoder/python-mbstrdecoder.mk
++++ b/package/python-mbstrdecoder/python-mbstrdecoder.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MORE_ITERTOOLS_VERSION = 7.2.0
-+PYTHON_MORE_ITERTOOLS_VERSION = 8.2.0
- PYTHON_MORE_ITERTOOLS_SOURCE = more-itertools-$(PYTHON_MORE_ITERTOOLS_VERSION).tar.gz
--PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/c2/31/45f61c8927c9550109f1c4b99ba3ca66d328d889a9c9853a808bff1c9fa0
-+PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/a0/47/6ff6d07d84c67e3462c50fa33bf649cda859a8773b53dc73842e84455c05
- PYTHON_MORE_ITERTOOLS_SETUP_TYPE = setuptools
- PYTHON_MORE_ITERTOOLS_LICENSE = MIT
- PYTHON_MORE_ITERTOOLS_LICENSE_FILES = LICENSE
+-PYTHON_MBSTRDECODER_VERSION = 0.8.1
++PYTHON_MBSTRDECODER_VERSION = 1.0.0
+ PYTHON_MBSTRDECODER_SOURCE = mbstrdecoder-$(PYTHON_MBSTRDECODER_VERSION).tar.gz
+-PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/fd/0f/11982e1321f484b5ec85bb3e03878c9636ca5328fbcbed8b25ecbd76fd44
++PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/5e/05/7dd1704e3e1522757708f59e727b540a6e5032ba6bb20e73851da7111b11
+ PYTHON_MBSTRDECODER_SETUP_TYPE = setuptools
+ PYTHON_MBSTRDECODER_LICENSE = MIT
+ PYTHON_MBSTRDECODER_LICENSE_FILES = LICENSE
 -- 
 2.20.1
