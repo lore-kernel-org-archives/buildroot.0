@@ -1,61 +1,43 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 16 Apr 2020 14:18:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sysrepo: drop unneeded dependencies
-Message-ID: <20200416121816.5203-1-heiko.thiery@gmail.com>
+Date: Thu, 16 Apr 2020 14:29:38 +0200
+Subject: [Buildroot] [PATCH v2 0/2] Add netopeer2 server and cli package
+Message-ID: <20200416122939.10312-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following dependencies are no longer needed:
-- libev
-- libavl
-- protobuf-c
+This patchset adds netopeer2 support to buildroot (cli and server).
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/sysrepo/Config.in  | 5 -----
- package/sysrepo/sysrepo.mk | 4 ++--
- 2 files changed, 2 insertions(+), 7 deletions(-)
+Changes v1 -> v2:
+- remove unneeded selects formerly coming from sysrepo
+ - BR2_PACKAGE_LIBAVL
+ - BR2_PACKAGE_LIBEV
+ - BR2_PACKAGE_PROTOBUF_C
 
-diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
-index 31f817faa1..8de141efc2 100644
---- a/package/sysrepo/Config.in
-+++ b/package/sysrepo/Config.in
-@@ -5,13 +5,9 @@ config BR2_PACKAGE_SYSREPO
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # host-protobuf
--	select BR2_PACKAGE_LIBAVL
--	select BR2_PACKAGE_LIBEV
- 	select BR2_PACKAGE_LIBYANG
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_PCRE_UCP
--	select BR2_PACKAGE_PROTOBUF_C
- 	help
- 	  Sysrepo is an YANG-based configuration and operational state
- 	  data store for Unix/Linux applications.
-@@ -31,4 +27,3 @@ comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index 0ca4d2591e..67290dad4f 100644
---- a/package/sysrepo/sysrepo.mk
-+++ b/package/sysrepo/sysrepo.mk
-@@ -9,8 +9,8 @@ SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
- SYSREPO_INSTALL_STAGING = YES
- SYSREPO_LICENSE = Apache-2.0
- SYSREPO_LICENSE_FILES = LICENSE
--SYSREPO_DEPENDENCIES = libev libavl libyang pcre protobuf-c host-sysrepo
--HOST_SYSREPO_DEPENDENCIES = host-libev host-libavl host-libyang host-pcre host-protobuf-c
-+SYSREPO_DEPENDENCIES = libyang pcre host-sysrepo
-+HOST_SYSREPO_DEPENDENCIES = host-libyang host-pcre
- 
- SYSREPO_CONF_OPTS = \
- 	-DCMAKE_BUILD_TYPE=Release \
+Heiko Thiery (2):
+  package/netopeer2-server: add package
+  package/netopeer2-cli: add package
+
+ DEVELOPERS                                    |  2 +
+ package/Config.in                             |  2 +
+ package/netopeer2-cli/Config.in               | 20 ++++++++
+ package/netopeer2-cli/netopeer2-cli.hash      |  1 +
+ package/netopeer2-cli/netopeer2-cli.mk        | 17 +++++++
+ package/netopeer2-server/Config.in            | 43 ++++++++++++++++
+ package/netopeer2-server/S52netopeer2-server  | 50 +++++++++++++++++++
+ .../netopeer2-server/netopeer2-server.hash    |  3 ++
+ package/netopeer2-server/netopeer2-server.mk  | 21 ++++++++
+ 9 files changed, 159 insertions(+)
+ create mode 100644 package/netopeer2-cli/Config.in
+ create mode 120000 package/netopeer2-cli/netopeer2-cli.hash
+ create mode 100644 package/netopeer2-cli/netopeer2-cli.mk
+ create mode 100644 package/netopeer2-server/Config.in
+ create mode 100644 package/netopeer2-server/S52netopeer2-server
+ create mode 100644 package/netopeer2-server/netopeer2-server.hash
+ create mode 100644 package/netopeer2-server/netopeer2-server.mk
+
 -- 
 2.20.1
