@@ -1,45 +1,61 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 16 Apr 2020 14:00:44 +0200
-Subject: [Buildroot] [PATCH] package/lua-lyaml: bump to version 6.2.5
-Message-ID: <20200416120044.5568-1-francois.perrad@gadz.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 16 Apr 2020 14:18:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sysrepo: drop unneeded dependencies
+Message-ID: <20200416121816.5203-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-diff LICENSE:
-- Copyright (C) 2013-2019 Gary V. Vaughan
-+ Copyright (C) 2013-2020 Gary V. Vaughan
+The following dependencies are no longer needed:
+- libev
+- libavl
+- protobuf-c
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/lua-lyaml/lua-lyaml.hash | 4 ++--
- package/lua-lyaml/lua-lyaml.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/sysrepo/Config.in  | 5 -----
+ package/sysrepo/sysrepo.mk | 4 ++--
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/lua-lyaml/lua-lyaml.hash b/package/lua-lyaml/lua-lyaml.hash
-index dd1978385..188194425 100644
---- a/package/lua-lyaml/lua-lyaml.hash
-+++ b/package/lua-lyaml/lua-lyaml.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256 f4015ba47a389fc4fe0656cbcb8a216239275ec53309a0df79b0733c843e7bba  lua-lyaml-6.2.4.tar.gz
--sha256 c7ec2f52d258088437cddeeee38cfc97d60d464c8801aa77decefb993400ec6e  LICENSE
-+sha256 16bbc8e3bf1ad3cf29bdefc24cd136959481ec03bd52da94c3c1f6fa5ae299ce  lua-lyaml-6.2.5.tar.gz
-+sha256 81e4ea1d897e259b31111adc2d3c185fe23e435942ff3e9de8c8c9c5d01247d0  LICENSE
-diff --git a/package/lua-lyaml/lua-lyaml.mk b/package/lua-lyaml/lua-lyaml.mk
-index c88a438d5..b16faeae6 100644
---- a/package/lua-lyaml/lua-lyaml.mk
-+++ b/package/lua-lyaml/lua-lyaml.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
+index 31f817faa1..8de141efc2 100644
+--- a/package/sysrepo/Config.in
++++ b/package/sysrepo/Config.in
+@@ -5,13 +5,9 @@ config BR2_PACKAGE_SYSREPO
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # host-protobuf
+-	select BR2_PACKAGE_LIBAVL
+-	select BR2_PACKAGE_LIBEV
+ 	select BR2_PACKAGE_LIBYANG
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_PCRE_UCP
+-	select BR2_PACKAGE_PROTOBUF_C
+ 	help
+ 	  Sysrepo is an YANG-based configuration and operational state
+ 	  data store for Unix/Linux applications.
+@@ -31,4 +27,3 @@ comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index 0ca4d2591e..67290dad4f 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
+@@ -9,8 +9,8 @@ SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
+ SYSREPO_INSTALL_STAGING = YES
+ SYSREPO_LICENSE = Apache-2.0
+ SYSREPO_LICENSE_FILES = LICENSE
+-SYSREPO_DEPENDENCIES = libev libavl libyang pcre protobuf-c host-sysrepo
+-HOST_SYSREPO_DEPENDENCIES = host-libev host-libavl host-libyang host-pcre host-protobuf-c
++SYSREPO_DEPENDENCIES = libyang pcre host-sysrepo
++HOST_SYSREPO_DEPENDENCIES = host-libyang host-pcre
  
--LUA_LYAML_VERSION = 6.2.4
-+LUA_LYAML_VERSION = 6.2.5
- LUA_LYAML_NAME_UPSTREAM = lyaml
- LUA_LYAML_SITE = $(call github,gvvaughan,$(LUA_LYAML_NAME_UPSTREAM),v$(LUA_LYAML_VERSION))
- LUA_LYAML_LICENSE = MIT
+ SYSREPO_CONF_OPTS = \
+ 	-DCMAKE_BUILD_TYPE=Release \
 -- 
 2.20.1
