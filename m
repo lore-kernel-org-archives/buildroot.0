@@ -1,88 +1,51 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 16 Apr 2020 14:02:09 -0500
-Subject: [Buildroot] [PATCH v3] package/swupdate: add basic systemd service
-Message-ID: <20200416190209.40757-1-matthew.weber@rockwellcollins.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu, 16 Apr 2020 17:07:25 -0300
+Subject: [Buildroot] [PATCH] configs/wandboard: Bump U-Boot and kernel
+ versions
+Message-ID: <20200416200725.29618-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sam Voss <sam.voss@rockwellcollins.com>
+Bump U-Boot to version 2020.04 and kernel to 5.6.3.
 
-Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
+ configs/wandboard_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Test cfg for verifying systemd created the symlink:
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_INIT_SYSTEMD=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-BR2_PACKAGE_SWUPDATE=y
-BR2_TARGET_ROOTFS_EXT2=y
-
-Changes
-v2 -> v3
- - During testing we found that the service killmode needed adjusting to
-   prevent a hang/timeout during shutdown/reboot
-   (https://github.com/sbabic/meta-swupdate/blob/master/recipes-support/swupdate/swupdate/swupdate.service)
-
-v1 -> v2
-[Thomas P
- - Remove symlink because it is created by
-   [231ad359bcc0] package/systemd: use host-systemctl preset all to enable units
----
- package/swupdate/swupdate.mk      |  8 ++++++++
- package/swupdate/swupdate.service | 18 ++++++++++++++++++
- 2 files changed, 26 insertions(+)
- create mode 100644 package/swupdate/swupdate.service
-
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 2b51edb66d..f31b7f3883 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -189,4 +189,12 @@ $(error No Swupdate configuration file specified, check your BR2_PACKAGE_SWUPDAT
- endif
- endif
- 
-+ifeq ($(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE),y)
-+define SWUPDATE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/swupdate/swupdate.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/swupdate.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+endef
-+endif
-+
- $(eval $(kconfig-package))
-diff --git a/package/swupdate/swupdate.service b/package/swupdate/swupdate.service
-new file mode 100644
-index 0000000000..232bd9956e
---- /dev/null
-+++ b/package/swupdate/swupdate.service
-@@ -0,0 +1,18 @@
-+[Unit]
-+Description=SWUpdate daemon
-+Documentation=https://github.com/sbabic/swupdate
-+Documentation=https://sbabic.github.io/swupdate
-+
-+[Service]
-+# Default environment variables in case /etc/default/swupdate isn't providing them
-+Environment=SWU_POST_UPDATE_CMD="touch /tmp/.swu_complete"
-+Environment=SWU_WEBSERVER_ARGS="-p 8080 -r /var/www/swupdate/"
-+
-+# Always take what is in the environment files when exists
-+EnvironmentFile=/etc/default/swupdate
-+
-+ExecStart=/usr/bin/swupdate ${SWU_KEY_ARGS} -p ${SWU_POST_UPDATE_CMD} -v -L -w "${SWU_WEBSERVER_ARGS}"
-+KillMode=mixed
-+
-+[Install]
-+WantedBy=multi-user.target
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index 1f42707ef0..4882042a1a 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+@@ -14,13 +14,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="wandboard"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
 -- 
 2.17.1
