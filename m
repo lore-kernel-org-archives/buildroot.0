@@ -1,48 +1,51 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 16 Apr 2020 04:42:01 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-tabledata: bump to version
- 1.1.2
-Message-ID: <20200416104201.13191-1-james.hilliard1@gmail.com>
+Date: Thu, 16 Apr 2020 04:49:57 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-dataproperty: bump to
+ version 0.48.1
+Message-ID: <20200416104957.89939-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Commit hash change is due to line endings change not in upstream
+git repo.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-tabledata/python-tabledata.hash | 6 +++---
- package/python-tabledata/python-tabledata.mk   | 4 ++--
+ package/python-dataproperty/python-dataproperty.hash | 6 +++---
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-tabledata/python-tabledata.hash b/package/python-tabledata/python-tabledata.hash
-index 9d8564db30..5c9a538f66 100644
---- a/package/python-tabledata/python-tabledata.hash
-+++ b/package/python-tabledata/python-tabledata.hash
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index 2a16250650..bd23c461b1 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tabledata/json
--md5	3a97a7bd3f2687a139578a79353a8188  tabledata-0.9.1.tar.gz
--sha256	a2c59603ecb56cd2161a72978d56876377ba6a27a3e6d87e1874ba4d5ab02796  tabledata-0.9.1.tar.gz
-+md5  7d1ab52001d85d19d86f08a5ad8aab58  tabledata-1.1.2.tar.gz
-+sha256  db893596ab9066e5c4f002ae0fed70657e3b75cceb52dd1de5a0e145e338d830  tabledata-1.1.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dataproperty/json
+-md5	8280a85691959d988e58f52c0ed3d311  DataProperty-0.43.1.tar.gz
+-sha256	ac2bc221a53fcd2afa140d1feb45cadbe62b335f667dba1e08e3c43a93339103  DataProperty-0.43.1.tar.gz
++md5  14a3e13d611d063df43304c3adeb6d12  DataProperty-0.48.1.tar.gz
++sha256  96bd47c14b4aaba4780d77fa4d2c876cf35eb6848ab1df1a6338447b6c2c10e4  DataProperty-0.48.1.tar.gz
  # Locally computed sha256 checksums
--sha256	bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
-+sha256  bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
-diff --git a/package/python-tabledata/python-tabledata.mk b/package/python-tabledata/python-tabledata.mk
-index c1381928c4..c1503e69cb 100644
---- a/package/python-tabledata/python-tabledata.mk
-+++ b/package/python-tabledata/python-tabledata.mk
+-sha256	98799b7c99b561c5ffa3ac86600e501f761afa8e72af8a2515026445fe134105  LICENSE
++sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 74eeb859a8..33e07bc676 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TABLEDATA_VERSION = 0.9.1
-+PYTHON_TABLEDATA_VERSION = 1.1.2
- PYTHON_TABLEDATA_SOURCE = tabledata-$(PYTHON_TABLEDATA_VERSION).tar.gz
--PYTHON_TABLEDATA_SITE = https://files.pythonhosted.org/packages/7d/20/7178ce0e3e34d5aff07e2280522b7e1bc23d4f2fbb916b765bbb41b22174
-+PYTHON_TABLEDATA_SITE = https://files.pythonhosted.org/packages/73/7c/67eec8e92504b8e00e5cc0053a3401bd1441eefc70cecfa4427bfcf76b89
- PYTHON_TABLEDATA_SETUP_TYPE = setuptools
- PYTHON_TABLEDATA_LICENSE = MIT
- PYTHON_TABLEDATA_LICENSE_FILES = LICENSE
+-PYTHON_DATAPROPERTY_VERSION = 0.43.1
++PYTHON_DATAPROPERTY_VERSION = 0.48.1
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/95/68/fb3498145a106f700ff304158b6d0f0c76eb3001ee5129a4f16c9846b338
++PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/2e/b5/d644919656adf4e7ae94b5479a3fec7497060c89292c335b27e59d66706f
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
 -- 
 2.20.1
