@@ -1,55 +1,45 @@
 From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Fri, 17 Apr 2020 13:36:43 +0000
-Subject: [Buildroot] [PATCH 1/1] package/nftables: use --with-mini-gmp when
- gmp is not selected
-Message-ID: <20200417133643.1756986-1-adrien@gallouet.fr>
+Date: Fri, 17 Apr 2020 13:59:40 +0000
+Subject: [Buildroot] [PATCH 1/1] package/glorytun: bump version to 0.3.4
+Message-ID: <20200417135940.1771832-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The hash of the license file has changed due to year update:
+
+-Copyright (c) 2015-2019, Adrien Gallou?t <adrien@gallouet.fr>
++Copyright (c) 2015-2020, Adrien Gallou?t <adrien@gallouet.fr>
+
 Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 ---
- package/nftables/Config.in   | 1 -
- package/nftables/nftables.mk | 8 +++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ package/glorytun/glorytun.hash | 4 ++--
+ package/glorytun/glorytun.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nftables/Config.in b/package/nftables/Config.in
-index 6452ab4f52..8d172b7256 100644
---- a/package/nftables/Config.in
-+++ b/package/nftables/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_NFTABLES
- 	bool "nftables"
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
--	select BR2_PACKAGE_GMP
- 	select BR2_PACKAGE_LIBMNL
- 	select BR2_PACKAGE_LIBNFTNL
- 	help
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 210e950c11..1fac9dd3bf 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -7,12 +7,18 @@
- NFTABLES_VERSION = 0.9.3
- NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
- NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
--NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
-+NFTABLES_DEPENDENCIES = libmnl libnftnl host-bison host-flex \
- 	host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- NFTABLES_LICENSE = GPL-2.0
- NFTABLES_LICENSE_FILES = COPYING
- NFTABLES_CONF_OPTS = --disable-man-doc --disable-pdf-doc
+diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
+index 30e8fd34ae..9d1b797787 100644
+--- a/package/glorytun/glorytun.hash
++++ b/package/glorytun/glorytun.hash
+@@ -1,2 +1,2 @@
+-sha256 457552232c72d5fec7ba46382784685c2e8167d49d8182ab3afbfb2b0bce1b01  glorytun-0.2.2.tar.gz
+-sha256 02e492aa724ce3a64800ed9429cbabf811935ad1be95d667fae9187baa94e359  LICENSE
++sha256 137d9c525a05bb605163df0465367d36e943715ca773ce43d5ea66f0597600a3  glorytun-0.3.4.tar.gz
++sha256 3d9ddddb8807c305287d9dbab58473e5307e9c91651c43c654a0828855d2b373  LICENSE
+diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
+index 9207388d7e..d128ae835d 100644
+--- a/package/glorytun/glorytun.mk
++++ b/package/glorytun/glorytun.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_GMP),y)
-+NFTABLES_DEPENDENCIES += gmp
-+else
-+NFTABLES_CONF_OPTS += --with-mini-gmp
-+endif
-+
- ifeq ($(BR2_PACKAGE_READLINE),y)
- NFTABLES_DEPENDENCIES += readline
- NFTABLES_LIBS += -lncurses
+-GLORYTUN_VERSION = 0.2.2
++GLORYTUN_VERSION = 0.3.4
+ GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
+ GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
+ GLORYTUN_LICENSE = BSD-2-clause
 -- 
 2.25.2
