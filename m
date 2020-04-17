@@ -1,53 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 21:41:49 +0200
-Subject: [Buildroot] [git commit] package/python-mbstrdecoder: bump to
- version 1.0.0
-Message-ID: <20200417192946.7D6BA8EEBF@busybox.osuosl.org>
+Date: Fri, 17 Apr 2020 21:40:29 +0200
+Subject: [Buildroot] [git commit] package/python{3}-setuptools: bump to
+ version 44.0.0
+Message-ID: <20200417192946.57FC88EEBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba80b801627d0798471da7d4100204ce5b5555be
+commit: https://git.buildroot.net/buildroot/commit/?id=07f044b79c4b9b4a578a3252d2a9efa94f8232f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit hash change is due to line endings change not in upstream
-git repo.
+This is the latest version of setuptools that supports python2.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-mbstrdecoder/python-mbstrdecoder.hash | 6 +++---
- package/python-mbstrdecoder/python-mbstrdecoder.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-setuptools/python-setuptools.hash | 4 ++--
+ package/python-setuptools/python-setuptools.mk   | 4 ++--
+ package/python3-setuptools/python3-setuptools.mk | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.hash b/package/python-mbstrdecoder/python-mbstrdecoder.hash
-index b46f5d7cf9..f8103b0add 100644
---- a/package/python-mbstrdecoder/python-mbstrdecoder.hash
-+++ b/package/python-mbstrdecoder/python-mbstrdecoder.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mbstrdecoder/json
--md5	6dd814b20e7c68c2da2afe5bf72a5e9d  mbstrdecoder-0.8.1.tar.gz
--sha256	dabfae008a6b3b78f09847c2a73e9e866f97dcd9b52f7ccadf3b05a10a3656e6  mbstrdecoder-0.8.1.tar.gz
-+md5  3ab822b853bfd2f08e35ba85c1ac2e2e  mbstrdecoder-1.0.0.tar.gz
-+sha256  9df7778c0c051c98f6b5a848909202e5cd423c9692665b20d1a9bd0f771b8235  mbstrdecoder-1.0.0.tar.gz
- # Locally computed sha256 checksums
--sha256	7fcef461a93fea587224132a865d1285969c9bec15baf59caeb7a8c7638a8744  LICENSE
-+sha256  7588265082eed5e9f4afd5090c57e610b740ec547b16aaaab739ba07c5eefb15  LICENSE
-diff --git a/package/python-mbstrdecoder/python-mbstrdecoder.mk b/package/python-mbstrdecoder/python-mbstrdecoder.mk
-index 4400cd6731..4a768ef695 100644
---- a/package/python-mbstrdecoder/python-mbstrdecoder.mk
-+++ b/package/python-mbstrdecoder/python-mbstrdecoder.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
+index cc4a831d2e..769b68c35d 100644
+--- a/package/python-setuptools/python-setuptools.hash
++++ b/package/python-setuptools/python-setuptools.hash
+@@ -1,4 +1,4 @@
+ # From https://pypi.org/pypi/setuptools/json
+-md5  89a592d733b31e180a4b6ad760c0685a  setuptools-41.4.0.zip
+-sha256  7eae782ccf36b790c21bde7d86a4f303a441cd77036b25c559a602cf5186ce4d  setuptools-41.4.0.zip
++md5  32b6cdce670ce462086d246bea181e9d  setuptools-44.0.0.zip
++sha256  e5baf7723e5bb8382fc146e33032b241efc63314211a3a120aaa55d62d2bb008  setuptools-44.0.0.zip
+ sha256  c32a3ac395af6321efd28be73d06a00f0db6ab887d1c21d4fec46128d2056d5a  LICENSE
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 163ba869ca..2cb575ae22 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -6,9 +6,9 @@
  
--PYTHON_MBSTRDECODER_VERSION = 0.8.1
-+PYTHON_MBSTRDECODER_VERSION = 1.0.0
- PYTHON_MBSTRDECODER_SOURCE = mbstrdecoder-$(PYTHON_MBSTRDECODER_VERSION).tar.gz
--PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/fd/0f/11982e1321f484b5ec85bb3e03878c9636ca5328fbcbed8b25ecbd76fd44
-+PYTHON_MBSTRDECODER_SITE = https://files.pythonhosted.org/packages/5e/05/7dd1704e3e1522757708f59e727b540a6e5032ba6bb20e73851da7111b11
- PYTHON_MBSTRDECODER_SETUP_TYPE = setuptools
- PYTHON_MBSTRDECODER_LICENSE = MIT
- PYTHON_MBSTRDECODER_LICENSE_FILES = LICENSE
+ # Please keep in sync with
+ # package/python3-setuptools/python3-setuptools.mk
+-PYTHON_SETUPTOOLS_VERSION = 41.4.0
++PYTHON_SETUPTOOLS_VERSION = 44.0.0
+ PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
+-PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/f4/d5/a6c19dcbcbc267aca376558797f036d9bcdff344c9f785fe7d0fe9a5f2a7
++PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
+ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
+diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
+index 078cd9b072..3f4f1100fe 100644
+--- a/package/python3-setuptools/python3-setuptools.mk
++++ b/package/python3-setuptools/python3-setuptools.mk
+@@ -6,9 +6,9 @@
+ 
+ # Please keep in sync with
+ # package/python-setuptools/python-setuptools.mk
+-PYTHON3_SETUPTOOLS_VERSION = 41.4.0
++PYTHON3_SETUPTOOLS_VERSION = 44.0.0
+ PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).zip
+-PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/f4/d5/a6c19dcbcbc267aca376558797f036d9bcdff344c9f785fe7d0fe9a5f2a7
++PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
+ PYTHON3_SETUPTOOLS_LICENSE = MIT
+ PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON3_SETUPTOOLS_SETUP_TYPE = setuptools
