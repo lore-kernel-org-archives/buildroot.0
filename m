@@ -1,32 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 17 Apr 2020 18:55:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdvdnav: fix build with gcc-4.8
-Message-ID: <20200417165514.18540-1-bernd.kuhls@t-online.de>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri, 17 Apr 2020 15:24:15 -0300
+Subject: [Buildroot] [PATCH] board/freescale/mxs: specify the volume-label
+ for vfat
+Message-ID: <20200417182415.13512-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/c95/c9514368b98bc3a7f7ab92cb33c54bd3ffd9a232/
+Currently the volume-label for the vfat partition is a string with
+the following pattern: 5934-861D.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Specify the volume-label as "boot" to make it easier to identify it.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/libdvdnav/libdvdnav.mk | 1 +
+ board/freescale/common/mxs/genimage.cfg.template | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libdvdnav/libdvdnav.mk b/package/libdvdnav/libdvdnav.mk
-index d4c3b0c200..4d1d49f1a1 100644
---- a/package/libdvdnav/libdvdnav.mk
-+++ b/package/libdvdnav/libdvdnav.mk
-@@ -8,6 +8,7 @@ LIBDVDNAV_VERSION = 6.1.0
- LIBDVDNAV_SOURCE = libdvdnav-$(LIBDVDNAV_VERSION).tar.bz2
- LIBDVDNAV_SITE = http://www.videolan.org/pub/videolan/libdvdnav/$(LIBDVDNAV_VERSION)
- LIBDVDNAV_INSTALL_STAGING = YES
-+LIBDVDNAV_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
- LIBDVDNAV_DEPENDENCIES = libdvdread host-pkgconf
- LIBDVDNAV_LICENSE = GPL-2.0+
- LIBDVDNAV_LICENSE_FILES = COPYING
+diff --git a/board/freescale/common/mxs/genimage.cfg.template b/board/freescale/common/mxs/genimage.cfg.template
+index e094fb7f2c..c9da452821 100644
+--- a/board/freescale/common/mxs/genimage.cfg.template
++++ b/board/freescale/common/mxs/genimage.cfg.template
+@@ -8,6 +8,7 @@
+ 
+ image boot.vfat {
+ 	vfat {
++		label = "boot"
+ 		files = {
+ 			%FILES%
+ 		}
 -- 
-2.26.1
+2.17.1
