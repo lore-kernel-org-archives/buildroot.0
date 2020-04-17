@@ -1,45 +1,33 @@
-From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
-Date: Fri, 17 Apr 2020 13:59:40 +0000
-Subject: [Buildroot] [PATCH 1/1] package/glorytun: bump version to 0.3.4
-Message-ID: <20200417135940.1771832-1-adrien@gallouet.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 17 Apr 2020 16:16:48 +0200
+Subject: [Buildroot] [PATCH v3] package/swupdate: add basic systemd
+ service
+In-Reply-To: <CANQCQpY50FLwcx40f2o=aqSK5tjNbHge1QyuJ7-aofbpO3P75A@mail.gmail.com>
+References: <20200416190209.40757-1-matthew.weber@rockwellcollins.com>
+ <20200417085648.68898eb5@windsurf.home>
+ <CANQCQpY50FLwcx40f2o=aqSK5tjNbHge1QyuJ7-aofbpO3P75A@mail.gmail.com>
+Message-ID: <20200417161649.5f906c1a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The hash of the license file has changed due to year update:
+On Fri, 17 Apr 2020 07:33:46 -0500
+Matthew Weber <matthew.weber@collins.com> wrote:
 
--Copyright (c) 2015-2019, Adrien Gallou?t <adrien@gallouet.fr>
-+Copyright (c) 2015-2020, Adrien Gallou?t <adrien@gallouet.fr>
+> Yeah the problematic part is that the web server args require a
+> specific quoting so that that sub option can pick those up.  I'll take
+> a look at the yocto approach as they went to a shell script launch
+> instead to add swupdate.d/ as an option as well.   [1][2]  Maybe we
+> just adopt exactly what they're doing as it doesn't look to bad
+> (config file is in a different location)
 
-Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
----
- package/glorytun/glorytun.hash | 4 ++--
- package/glorytun/glorytun.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Yes, the "arguments in the arguments" logic of swupdate has also caused
+me some troubles not long ago. It's not such a great idea :-/
 
-diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
-index 30e8fd34ae..9d1b797787 100644
---- a/package/glorytun/glorytun.hash
-+++ b/package/glorytun/glorytun.hash
-@@ -1,2 +1,2 @@
--sha256 457552232c72d5fec7ba46382784685c2e8167d49d8182ab3afbfb2b0bce1b01  glorytun-0.2.2.tar.gz
--sha256 02e492aa724ce3a64800ed9429cbabf811935ad1be95d667fae9187baa94e359  LICENSE
-+sha256 137d9c525a05bb605163df0465367d36e943715ca773ce43d5ea66f0597600a3  glorytun-0.3.4.tar.gz
-+sha256 3d9ddddb8807c305287d9dbab58473e5307e9c91651c43c654a0828855d2b373  LICENSE
-diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
-index 9207388d7e..d128ae835d 100644
---- a/package/glorytun/glorytun.mk
-+++ b/package/glorytun/glorytun.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GLORYTUN_VERSION = 0.2.2
-+GLORYTUN_VERSION = 0.3.4
- GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
- GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
- GLORYTUN_LICENSE = BSD-2-clause
+Thomas
 -- 
-2.25.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
