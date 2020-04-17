@@ -1,102 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 21:40:09 +0200
-Subject: [Buildroot] [git commit] package/python-requests: bump to version
- 2.23.0
-Message-ID: <20200417192946.4CD828EEC5@busybox.osuosl.org>
+Date: Fri, 17 Apr 2020 21:39:04 +0200
+Subject: [Buildroot] [git commit] package/python-pycairo: bump to version
+ 1.19.1
+Message-ID: <20200417192946.34FAC8EEBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d21c66cfa6e052cc11158d331ea416471cb2c235
+commit: https://git.buildroot.net/buildroot/commit/?id=f40ca11fe8fc7c4309840bc6c065b5669d410fbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch that is now upstream.
-
-License hash change is due to date change in upstream commit:
-https://github.com/psf/requests/commit/a29be8f9ccf13c887e0f8861c2a35fb5289b9e3f
+License hash change is due to upstream commit:
+https://github.com/pygobject/pycairo/commit/886ecfd5286a8af2202e521ef2d4d7fac18f1d6f
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...pendencies-to-major-instead-of-minor-5342.patch | 40 ----------------------
- package/python-requests/python-requests.hash       |  6 ++--
- package/python-requests/python-requests.mk         |  4 +--
- 3 files changed, 5 insertions(+), 45 deletions(-)
+ package/python-pycairo/python-pycairo.hash | 10 +++++-----
+ package/python-pycairo/python-pycairo.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch b/package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch
-deleted file mode 100644
-index b113c928d4..0000000000
---- a/package/python-requests/0001-Limit-dependencies-to-major-instead-of-minor-5342.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 9e9141ed638c3163c7fbf1a1f3a9b9f5a80bdf4f Mon Sep 17 00:00:00 2001
--From: Chris Withers <chris@withers.org>
--Date: Tue, 18 Feb 2020 14:58:27 +0000
--Subject: [PATCH] Limit dependencies to major instead of minor (#5342)
--
--(cherry picked from commit c46f55bd48dabc02f033d252f8c64e2011f37361)
--
--[Romain backport from upstream to 2.22.0]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- setup.py | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/setup.py b/setup.py
--index 3dce2965..f0bfebcc 100755
----- a/setup.py
--+++ b/setup.py
--@@ -42,8 +42,8 @@ if sys.argv[-1] == 'publish':
-- packages = ['requests']
-- 
-- requires = [
---    'chardet>=3.0.2,<3.1.0',
---    'idna>=2.5,<2.9',
--+    'chardet>=3.0.2,<4',
--+    'idna>=2.5,<3',
--     'urllib3>=1.21.1,<1.26,!=1.25.0,!=1.25.1',
--     'certifi>=2017.4.17'
-- 
--@@ -101,7 +101,7 @@ setup(
--     cmdclass={'test': PyTest},
--     tests_require=test_requirements,
--     extras_require={
---        'security': ['pyOpenSSL >= 0.14', 'cryptography>=1.3.4', 'idna>=2.0.0'],
--+        'security': ['pyOpenSSL >= 0.14', 'cryptography>=1.3.4'],
--         'socks': ['PySocks>=1.5.6, !=1.5.7'],
--         'socks:sys_platform == "win32" and python_version == "2.7"': ['win_inet_pton'],
--     },
---- 
--2.25.2
--
-diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-index 42f45d3a44..b252e3a781 100644
---- a/package/python-requests/python-requests.hash
-+++ b/package/python-requests/python-requests.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/requests/json
--md5	ee28bee2de76e9198fc41e48f3a7dd47  requests-2.22.0.tar.gz
--sha256	11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4  requests-2.22.0.tar.gz
-+md5  abfdc28db1065bbd0bc32592ac9d27a6  requests-2.23.0.tar.gz
-+sha256  b3f43d496c6daba4493e7c431722aeb7dbc6288f52a6e04e7b6023b0247817e6  requests-2.23.0.tar.gz
+diff --git a/package/python-pycairo/python-pycairo.hash b/package/python-pycairo/python-pycairo.hash
+index f0b76b1e38..c617d8b601 100644
+--- a/package/python-pycairo/python-pycairo.hash
++++ b/package/python-pycairo/python-pycairo.hash
+@@ -1,7 +1,7 @@
+ # md5, sha256 from https://pypi.org/pypi/pycairo/json
+-md5	be2ba51f234270dec340f28f1695a95e  pycairo-1.18.2.tar.gz
+-sha256	dcb853fd020729516e8828ad364084e752327d4cff8505d20b13504b32b16531  pycairo-1.18.2.tar.gz
++md5  59bc5c5d1debc3af0f6791af9d612551  pycairo-1.19.1.tar.gz
++sha256  2c143183280feb67f5beb4e543fd49990c28e7df427301ede04fc550d3562e84  pycairo-1.19.1.tar.gz
  # Locally computed sha256 checksums
--sha256	be41abac2c40f8530307e8d172c590b476f4a488bc6a68f8de57b7cf64786687  LICENSE
-+sha256  8837a2f33a61bcee175c028ff16d1c160aba48a3aebe1495ace709be4e62636b  LICENSE
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index e64db94523..1adf564015 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
+-sha256	22c7747e2decb1b26e395b45dbaeb627784ef7fdbf2b80ac09a26a560277e58a  COPYING
+-sha256	d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
+-sha256	53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING-MPL-1.1
++sha256  360b9a526d47c51a7cab7f1ec49ca5893050562d639b742d588934ff84823a72  COPYING
++sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING-LGPL-2.1
++sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING-MPL-1.1
+diff --git a/package/python-pycairo/python-pycairo.mk b/package/python-pycairo/python-pycairo.mk
+index 5a48a2a29a..c635498d52 100644
+--- a/package/python-pycairo/python-pycairo.mk
++++ b/package/python-pycairo/python-pycairo.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REQUESTS_VERSION = 2.22.0
-+PYTHON_REQUESTS_VERSION = 2.23.0
- PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
--PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/01/62/ddcf76d1d19885e8579acb1b1df26a852b03472c0e46d2b959a714c90608
-+PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/f5/4f/280162d4bd4d8aad241a21aecff7a6e46891b905a4341e7ab549ebaf7915
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+-PYTHON_PYCAIRO_VERSION = 1.18.2
++PYTHON_PYCAIRO_VERSION = 1.19.1
+ PYTHON_PYCAIRO_SOURCE = pycairo-$(PYTHON_PYCAIRO_VERSION).tar.gz
+-PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/3c/1a/c0478ecab31baae50fda9956547788afbd0ca563adc52c9b03cab30f17eb
++PYTHON_PYCAIRO_SITE = https://files.pythonhosted.org/packages/e8/9d/c8be300fc6b1298559d37a071c3833b0b251e0fff334d2e4c408d5789162
+ PYTHON_PYCAIRO_SETUP_TYPE = setuptools
+ PYTHON_PYCAIRO_DEPENDENCIES = cairo
+ PYTHON_PYCAIRO_LICENSE = LGPL-2.1 or MPL-1.1
