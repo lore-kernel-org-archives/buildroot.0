@@ -1,27 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 22:06:08 +0200
-Subject: [Buildroot] [PATCH] package/lua-lyaml: bump to version 6.2.5
-In-Reply-To: <20200416120044.5568-1-francois.perrad@gadz.org>
-References: <20200416120044.5568-1-francois.perrad@gadz.org>
-Message-ID: <20200417220608.4b11e4d9@windsurf.home>
+Date: Fri, 17 Apr 2020 22:06:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to
+ 7.4.5
+In-Reply-To: <20200416174135.1632869-1-bernd.kuhls@t-online.de>
+References: <20200416174135.1632869-1-bernd.kuhls@t-online.de>
+Message-ID: <20200417220614.6f781ea7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Apr 2020 14:00:44 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Thu, 16 Apr 2020 19:41:35 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> diff LICENSE:
-> - Copyright (C) 2013-2019 Gary V. Vaughan
-> + Copyright (C) 2013-2020 Gary V. Vaughan
+> Changelog: https://www.php.net/ChangeLog-7.php#7.4.5
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Fixes CVE-2020-7067.
+> 
+> Removed patch applied upstream.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/lua-lyaml/lua-lyaml.hash | 4 ++--
->  package/lua-lyaml/lua-lyaml.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  ...Check-for-sys-auxv.h-before-using-it.patch | 60 -------------------
+>  package/php/php.hash                          |  2 +-
+>  package/php/php.mk                            |  2 +-
+>  3 files changed, 2 insertions(+), 62 deletions(-)
+>  delete mode 100644 package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
 
 Applied to master, thanks.
 
