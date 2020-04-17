@@ -1,50 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 21:39:51 +0200
-Subject: [Buildroot] [git commit] package/python-pycparser: bump to version
- 2.20
-Message-ID: <20200417192946.3BF828EEC2@busybox.osuosl.org>
+Date: Fri, 17 Apr 2020 21:41:25 +0200
+Subject: [Buildroot] [git commit] package/python-dataproperty: bump to
+ version 0.48.1
+Message-ID: <20200417192946.6A39F8EEBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69fc88828518ae36ffeaf27b8b41f91fb2049f99
+commit: https://git.buildroot.net/buildroot/commit/?id=56e2fdb1e2a9254387b8832b2c83c892a7998a72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Commit hash change is due to line endings change not in upstream
+git repo.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pycparser/python-pycparser.hash | 6 +++---
- package/python-pycparser/python-pycparser.mk   | 4 ++--
+ package/python-dataproperty/python-dataproperty.hash | 6 +++---
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pycparser/python-pycparser.hash b/package/python-pycparser/python-pycparser.hash
-index 6230f7cc83..0426444399 100644
---- a/package/python-pycparser/python-pycparser.hash
-+++ b/package/python-pycparser/python-pycparser.hash
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index 2a16250650..bd23c461b1 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycparser/json
--md5	76396762adc3fa769c83d8e202d36b6f  pycparser-2.19.tar.gz
--sha256	a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3  pycparser-2.19.tar.gz
-+md5  b8f88de737db8c346ee8d31c07c7a25a  pycparser-2.20.tar.gz
-+sha256  2d475327684562c3a96cc71adf7dc8c4f0565175cf86b6d7a404ff4c771f15f0  pycparser-2.20.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dataproperty/json
+-md5	8280a85691959d988e58f52c0ed3d311  DataProperty-0.43.1.tar.gz
+-sha256	ac2bc221a53fcd2afa140d1feb45cadbe62b335f667dba1e08e3c43a93339103  DataProperty-0.43.1.tar.gz
++md5  14a3e13d611d063df43304c3adeb6d12  DataProperty-0.48.1.tar.gz
++sha256  96bd47c14b4aaba4780d77fa4d2c876cf35eb6848ab1df1a6338447b6c2c10e4  DataProperty-0.48.1.tar.gz
  # Locally computed sha256 checksums
--sha256	3c76629880aec2f8578ed914701a4ff9e5da8b60acb8b7ec675abf83c90c5168  LICENSE
-+sha256  3c76629880aec2f8578ed914701a4ff9e5da8b60acb8b7ec675abf83c90c5168  LICENSE
-diff --git a/package/python-pycparser/python-pycparser.mk b/package/python-pycparser/python-pycparser.mk
-index c07edaaa25..8af37fce98 100644
---- a/package/python-pycparser/python-pycparser.mk
-+++ b/package/python-pycparser/python-pycparser.mk
+-sha256	98799b7c99b561c5ffa3ac86600e501f761afa8e72af8a2515026445fe134105  LICENSE
++sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 74eeb859a8..33e07bc676 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCPARSER_VERSION = 2.19
-+PYTHON_PYCPARSER_VERSION = 2.20
- PYTHON_PYCPARSER_SOURCE = pycparser-$(PYTHON_PYCPARSER_VERSION).tar.gz
--PYTHON_PYCPARSER_SITE = https://files.pythonhosted.org/packages/68/9e/49196946aee219aead1290e00d1e7fdeab8567783e83e1b9ab5585e6206a
-+PYTHON_PYCPARSER_SITE = https://files.pythonhosted.org/packages/0f/86/e19659527668d70be91d0369aeaa055b4eb396b0f387a4f92293a20035bd
- PYTHON_PYCPARSER_SETUP_TYPE = setuptools
- PYTHON_PYCPARSER_LICENSE = BSD-3-Clause
- PYTHON_PYCPARSER_LICENSE_FILES = LICENSE
+-PYTHON_DATAPROPERTY_VERSION = 0.43.1
++PYTHON_DATAPROPERTY_VERSION = 0.48.1
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/95/68/fb3498145a106f700ff304158b6d0f0c76eb3001ee5129a4f16c9846b338
++PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/2e/b5/d644919656adf4e7ae94b5479a3fec7497060c89292c335b27e59d66706f
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
