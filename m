@@ -1,27 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 22:00:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python{3}-setuptools: bump to
- version 44.0.0
-In-Reply-To: <20200416103801.71629-1-james.hilliard1@gmail.com>
-References: <20200416103801.71629-1-james.hilliard1@gmail.com>
-Message-ID: <20200417220018.2712f005@windsurf.home>
+Date: Fri, 17 Apr 2020 22:00:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-tabledata: bump to
+ version 1.1.2
+In-Reply-To: <20200416104201.13191-1-james.hilliard1@gmail.com>
+References: <20200416104201.13191-1-james.hilliard1@gmail.com>
+Message-ID: <20200417220022.6f664203@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Apr 2020 04:38:01 -0600
+On Thu, 16 Apr 2020 04:42:01 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> This is the latest version of setuptools that supports python2.
-> 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-setuptools/python-setuptools.hash | 4 ++--
->  package/python-setuptools/python-setuptools.mk   | 4 ++--
->  package/python3-setuptools/python3-setuptools.mk | 4 ++--
->  3 files changed, 6 insertions(+), 6 deletions(-)
+>  package/python-tabledata/python-tabledata.hash | 6 +++---
+>  package/python-tabledata/python-tabledata.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
