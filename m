@@ -1,120 +1,132 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 17 Apr 2020 16:18:55 +0300
-Subject: [Buildroot] [PATCH v2 1/1] package/libfuse3: new package
-Message-ID: <20200417131855.4803-1-asafka7@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Fri, 17 Apr 2020 15:28:09 +0200
+Subject: [Buildroot] [PATCH] package/asn1c: new host package
+In-Reply-To: <20200110211420.7704-1-sergio.prado@e-labworks.com>
+References: <20200110211420.7704-1-sergio.prado@e-labworks.com>
+Message-ID: <CAEyMn7Y=aY1zO0Wm5wVzHrdmn=CDrzJJ=aepgm5rXXJ4Hir-uw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package is separated from the regular libfuse package, as it
-contains new API (and can co-exist with libfuse).
+HI Sergio,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
-v1->v2:
-* Use two spaced for hash file indentation
-* Bump to latest version
-* Remove redundant LIBFUSE3_SOURCE
-* Use the 'github' macro
+I tested the package with: utils/test-pkg -p host-asn1c
+                             br-arm-full [1/6]: OK
+                  br-arm-cortex-a9-glibc [2/6]: OK
+                   br-arm-cortex-m4-full [3/6]: OK
+                          br-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: OK
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/libfuse3/Config.in     | 14 ++++++++++++++
- package/libfuse3/libfuse3.hash |  3 +++
- package/libfuse3/libfuse3.mk   | 26 ++++++++++++++++++++++++++
- 5 files changed, 45 insertions(+)
- create mode 100644 package/libfuse3/Config.in
- create mode 100644 package/libfuse3/libfuse3.hash
- create mode 100644 package/libfuse3/libfuse3.mk
+and it builds.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3d9c976a95..99d9ba3b7d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -259,6 +259,7 @@ F:	configs/raspberrypi4_64_defconfig
- 
- N:	Asaf Kahlon <asafka7@gmail.com>
- F:	package/collectd/
-+F:	package/libfuse3/
- F:	package/libuv/
- F:	package/python*
- F:	package/snmpclitools/
-diff --git a/package/Config.in b/package/Config.in
-index ccf54f2417..43bdbdfda8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1359,6 +1359,7 @@ menu "Filesystem"
- 	source "package/libconfig/Config.in"
- 	source "package/libconfuse/Config.in"
- 	source "package/libfuse/Config.in"
-+	source "package/libfuse3/Config.in"
- 	source "package/liblockfile/Config.in"
- 	source "package/libnfs/Config.in"
- 	source "package/libsysfs/Config.in"
-diff --git a/package/libfuse3/Config.in b/package/libfuse3/Config.in
-new file mode 100644
-index 0000000000..584d3bf132
---- /dev/null
-+++ b/package/libfuse3/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LIBFUSE3
-+	bool "libfuse3"
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  The reference implementation of the Linux FUSE
-+	  (Filesystem in Userspace) interface.
-+
-+	  https://github.com/libfuse/libfuse
-+
-+comment "libfuse3 needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-new file mode 100644
-index 0000000000..bc09da4cf8
---- /dev/null
-+++ b/package/libfuse3/libfuse3.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated sha256 checksums
-+sha256  4f3dea4979c30fbd85f46b8812bee5945bd6bb4487165eb01ecde57bbfbb332f  libfuse3-3.9.1.tar.gz
-+sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-new file mode 100644
-index 0000000000..d23d8d9a43
---- /dev/null
-+++ b/package/libfuse3/libfuse3.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# libfuse3
-+#
-+################################################################################
-+
-+LIBFUSE3_VERSION = 3.9.1
-+LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
-+LIBFUSE3_LICENSE = LGPL-2.1
-+LIBFUSE3_LICENSE_FILES = LICENSE
-+LIBFUSE3_INSTALL_STAGING = YES
-+LIBFUSE3_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+LIBFUSE3_CONF_OPTS = \
-+	-Dexamples=false \
-+	-Dudevrulesdir=/lib/udev/rules.d \
-+	-Duseroot=false
-+
-+define LIBFUSE3_DEVICES
-+	/dev/fuse  c  666  0  0  10  229  0  0  -
-+endef
-+
-+define LIBFUSE3_PERMISSIONS
-+	/usr/bin/fusermount3 f 4755 0 0 - - - - -
-+endef
-+
-+$(eval $(meson-package))
+Just some small comment below:
+
+Am Fr., 10. Jan. 2020 um 22:21 Uhr schrieb Sergio Prado
+<sergio.prado@e-labworks.com>:
+>
+> The asn1c is a free, open source compiler of ASN.1 specifications into C
+> source code.
+>
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+
+Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
+
+> ---
+>  DEVELOPERS                   |  1 +
+>  package/Config.in.host       |  1 +
+>  package/asn1c/Config.in.host | 11 +++++++++++
+>  package/asn1c/asn1c.hash     |  5 +++++
+>  package/asn1c/asn1c.mk       | 12 ++++++++++++
+>  5 files changed, 30 insertions(+)
+>  create mode 100644 package/asn1c/Config.in.host
+>  create mode 100644 package/asn1c/asn1c.hash
+>  create mode 100644 package/asn1c/asn1c.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 80843dd1a113..287e222cdf57 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2241,6 +2241,7 @@ N:        Sergio Prado <sergio.prado@e-labworks.com>
+>  F:     board/toradex/apalis-imx6/
+>  F:     configs/toradex_apalis_imx6_defconfig
+>  F:     package/aoetools/
+> +F:     package/asn1c/
+>  F:     package/curlpp/
+>  F:     package/daq/
+>  F:     package/libgdiplus/
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 62e860d7c36c..a012ffaa38e9 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -2,6 +2,7 @@ menu "Host utilities"
+>
+>         source "package/aespipe/Config.in.host"
+>         source "package/android-tools/Config.in.host"
+> +       source "package/asn1c/Config.in.host"
+>         source "package/btrfs-progs/Config.in.host"
+>         source "package/cargo/Config.in.host"
+>         source "package/cbootimage/Config.in.host"
+> diff --git a/package/asn1c/Config.in.host b/package/asn1c/Config.in.host
+> new file mode 100644
+> index 000000000000..951f5f66915e
+> --- /dev/null
+> +++ b/package/asn1c/Config.in.host
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_HOST_ASN1C
+> +       bool "host asn1c"
+> +       help
+> +         ASN.1 stands for Abstract Syntax Notation One and allows
+> +         to describe complex data structures independently of any
+> +         particular programming language.
+> +
+> +         The asn1c is a free, open source compiler of ASN.1
+> +         specifications into C source code.
+> +
+> +         http://lionet.info/asn1c
+> diff --git a/package/asn1c/asn1c.hash b/package/asn1c/asn1c.hash
+> new file mode 100644
+> index 000000000000..a4fd3beffa53
+> --- /dev/null
+> +++ b/package/asn1c/asn1c.hash
+> @@ -0,0 +1,5 @@
+> +# Locally computed:
+> +sha256 8007440b647ef2dd9fb73d931c33ac11764e6afb2437dbe638bb4e5fc82386b9  asn1c-0.9.28.tar.gz
+> +
+> +# Hash for license files:
+> +sha256 bcc636802a52ace2255212be15fb707084af87061b5cfd37eb84dcf6a02cc48b  LICENSE
+> diff --git a/package/asn1c/asn1c.mk b/package/asn1c/asn1c.mk
+> new file mode 100644
+> index 000000000000..314462a92bf9
+> --- /dev/null
+> +++ b/package/asn1c/asn1c.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# asn1c
+> +#
+> +################################################################################
+> +
+> +ASN1C_VERSION = 0.9.28
+> +ASN1C_SITE = https://github.com/vlm/asn1c/releases/download/v$(ASN1C_VERSION)
+
+You can use the github macro to set the <pkg>_SITE variable:
+ASN1C_SITE = $(call github,vlm,asn1c,v$(ASN1C_VERSION))
+
+> +ASN1C_LICENSE = BSD-2-Clause
+> +ASN1C_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(host-autotools-package))
+> --
+> 2.17.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.26.0
+BR,
+Heiko
