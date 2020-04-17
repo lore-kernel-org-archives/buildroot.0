@@ -1,30 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 22:07:34 +0200
-Subject: [Buildroot] [PATCH] configs/warp7: bump kernel and U-Boot
- version
-In-Reply-To: <1587070529-7113-1-git-send-email-pjtexier@koncepto.io>
-References: <1587070529-7113-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20200417220734.37309c45@windsurf.home>
+Date: Fri, 17 Apr 2020 22:08:15 +0200
+Subject: [Buildroot] [git commit] package/python-dpkt: remove Python2 only
+ dependency
+Message-ID: <20200417195400.25C388EF83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Apr 2020 22:55:29 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=12ccb92fce1ecb4215ff1071656292a5b9d4313d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Bump U-Boot to 2020.04 and kernel to version 5.6.3
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  configs/warp7_defconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+python-dpkt supports both Python flavors.
 
-Applied to master, thanks.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-dpkt/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-dpkt/Config.in b/package/python-dpkt/Config.in
+index d8e3388d7e..9bd7a98d26 100644
+--- a/package/python-dpkt/Config.in
++++ b/package/python-dpkt/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_DPKT
+ 	bool "python-dpkt"
+-	depends on BR2_PACKAGE_PYTHON
+-	select BR2_PACKAGE_PYTHON_ZLIB
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+ 	help
+ 	  Fast, simple packet creation / parsing, with definitions
+ 	  for the basic TCP/IP protocols.
