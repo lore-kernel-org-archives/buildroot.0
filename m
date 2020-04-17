@@ -1,53 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 21:41:25 +0200
-Subject: [Buildroot] [git commit] package/python-dataproperty: bump to
- version 0.48.1
-Message-ID: <20200417192946.6A39F8EEBF@busybox.osuosl.org>
+Date: Fri, 17 Apr 2020 21:42:12 +0200
+Subject: [Buildroot] [git commit] package/python-secretstorage: bump to
+ version 3.1.2
+Message-ID: <20200417192946.927AB8EEBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56e2fdb1e2a9254387b8832b2c83c892a7998a72
+commit: https://git.buildroot.net/buildroot/commit/?id=711b85158e537581f25ec86a7f145a0e56bc955a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit hash change is due to line endings change not in upstream
-git repo.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-dataproperty/python-dataproperty.hash | 6 +++---
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-secretstorage/python-secretstorage.hash | 4 ++--
+ package/python-secretstorage/python-secretstorage.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index 2a16250650..bd23c461b1 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
+diff --git a/package/python-secretstorage/python-secretstorage.hash b/package/python-secretstorage/python-secretstorage.hash
+index 3f096a3965..a8e535f892 100644
+--- a/package/python-secretstorage/python-secretstorage.hash
++++ b/package/python-secretstorage/python-secretstorage.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dataproperty/json
--md5	8280a85691959d988e58f52c0ed3d311  DataProperty-0.43.1.tar.gz
--sha256	ac2bc221a53fcd2afa140d1feb45cadbe62b335f667dba1e08e3c43a93339103  DataProperty-0.43.1.tar.gz
-+md5  14a3e13d611d063df43304c3adeb6d12  DataProperty-0.48.1.tar.gz
-+sha256  96bd47c14b4aaba4780d77fa4d2c876cf35eb6848ab1df1a6338447b6c2c10e4  DataProperty-0.48.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/secretstorage/json
+-md5	12ea3fc6640e857331eb80ed46a7da20  SecretStorage-3.1.1.tar.gz
+-sha256	20c797ae48a4419f66f8d28fc221623f11fc45b6828f96bdb1ad9990acb59f92  SecretStorage-3.1.1.tar.gz
++md5  c2a8c0e08e5da198fc38c379b98c28f1  SecretStorage-3.1.2.tar.gz
++sha256  15da8a989b65498e29be338b3b279965f1b8f09b9668bd8010da183024c8bff6  SecretStorage-3.1.2.tar.gz
  # Locally computed sha256 checksums
--sha256	98799b7c99b561c5ffa3ac86600e501f761afa8e72af8a2515026445fe134105  LICENSE
-+sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 74eeb859a8..33e07bc676 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
+ sha256  70f6bfca77633c35efa218328eda5486d7054c2914d61820980e378797520a25  LICENSE
+diff --git a/package/python-secretstorage/python-secretstorage.mk b/package/python-secretstorage/python-secretstorage.mk
+index 4a8b6ac903..4c209bf513 100644
+--- a/package/python-secretstorage/python-secretstorage.mk
++++ b/package/python-secretstorage/python-secretstorage.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DATAPROPERTY_VERSION = 0.43.1
-+PYTHON_DATAPROPERTY_VERSION = 0.48.1
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/95/68/fb3498145a106f700ff304158b6d0f0c76eb3001ee5129a4f16c9846b338
-+PYTHON_DATAPROPERTY_SITE = https://files.pythonhosted.org/packages/2e/b5/d644919656adf4e7ae94b5479a3fec7497060c89292c335b27e59d66706f
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+-PYTHON_SECRETSTORAGE_VERSION = 3.1.1
++PYTHON_SECRETSTORAGE_VERSION = 3.1.2
+ PYTHON_SECRETSTORAGE_SOURCE = SecretStorage-$(PYTHON_SECRETSTORAGE_VERSION).tar.gz
+-PYTHON_SECRETSTORAGE_SITE = https://files.pythonhosted.org/packages/a6/89/df343dbc2957a317127e7ff2983230dc5336273be34f2e1911519d85aeb5
++PYTHON_SECRETSTORAGE_SITE = https://files.pythonhosted.org/packages/fd/9f/36197c75d9a09b1ab63f56cb985af6cd858ca3fc41fd9cd890ce69bae5b9
+ PYTHON_SECRETSTORAGE_SETUP_TYPE = setuptools
+ PYTHON_SECRETSTORAGE_LICENSE = BSD-3-Clause
+ PYTHON_SECRETSTORAGE_LICENSE_FILES = LICENSE
