@@ -1,24 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 22:03:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-crossbar: bump to
- version 20.4.2
-In-Reply-To: <20200416095002.124304-1-james.hilliard1@gmail.com>
-References: <20200416095002.124304-1-james.hilliard1@gmail.com>
-Message-ID: <20200417220330.2193a44b@windsurf.home>
+Date: Fri, 17 Apr 2020 22:03:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python{,
+ 3}-mako: bump to version 1.1.2
+In-Reply-To: <20200416095602.91630-1-james.hilliard1@gmail.com>
+References: <20200416095602.91630-1-james.hilliard1@gmail.com>
+Message-ID: <20200417220336.4998274b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Apr 2020 03:50:02 -0600
+On Thu, 16 Apr 2020 03:56:02 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-crossbar/python-crossbar.hash | 4 ++--
->  package/python-crossbar/python-crossbar.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/python-mako/python-mako.hash | 6 +++---
+>  package/python-mako/python-mako.mk   | 4 ++--
+>  package/python3-mako/python3-mako.mk | 4 ++--
+>  3 files changed, 7 insertions(+), 7 deletions(-)
 
 Applied to master, thanks.
 
