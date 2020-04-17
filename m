@@ -1,49 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 21:42:12 +0200
-Subject: [Buildroot] [git commit] package/python-secretstorage: bump to
- version 3.1.2
-Message-ID: <20200417192946.927AB8EEBF@busybox.osuosl.org>
+Date: Fri, 17 Apr 2020 21:40:49 +0200
+Subject: [Buildroot] [git commit] package/python-tabledata: bump to version
+ 1.1.2
+Message-ID: <20200417192946.60F9C8EEBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=711b85158e537581f25ec86a7f145a0e56bc955a
+commit: https://git.buildroot.net/buildroot/commit/?id=d99b20e66e848c69e23bfbdfc84cab11575fa47b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-secretstorage/python-secretstorage.hash | 4 ++--
- package/python-secretstorage/python-secretstorage.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-tabledata/python-tabledata.hash | 6 +++---
+ package/python-tabledata/python-tabledata.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-secretstorage/python-secretstorage.hash b/package/python-secretstorage/python-secretstorage.hash
-index 3f096a3965..a8e535f892 100644
---- a/package/python-secretstorage/python-secretstorage.hash
-+++ b/package/python-secretstorage/python-secretstorage.hash
+diff --git a/package/python-tabledata/python-tabledata.hash b/package/python-tabledata/python-tabledata.hash
+index 9d8564db30..5c9a538f66 100644
+--- a/package/python-tabledata/python-tabledata.hash
++++ b/package/python-tabledata/python-tabledata.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/secretstorage/json
--md5	12ea3fc6640e857331eb80ed46a7da20  SecretStorage-3.1.1.tar.gz
--sha256	20c797ae48a4419f66f8d28fc221623f11fc45b6828f96bdb1ad9990acb59f92  SecretStorage-3.1.1.tar.gz
-+md5  c2a8c0e08e5da198fc38c379b98c28f1  SecretStorage-3.1.2.tar.gz
-+sha256  15da8a989b65498e29be338b3b279965f1b8f09b9668bd8010da183024c8bff6  SecretStorage-3.1.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/tabledata/json
+-md5	3a97a7bd3f2687a139578a79353a8188  tabledata-0.9.1.tar.gz
+-sha256	a2c59603ecb56cd2161a72978d56876377ba6a27a3e6d87e1874ba4d5ab02796  tabledata-0.9.1.tar.gz
++md5  7d1ab52001d85d19d86f08a5ad8aab58  tabledata-1.1.2.tar.gz
++sha256  db893596ab9066e5c4f002ae0fed70657e3b75cceb52dd1de5a0e145e338d830  tabledata-1.1.2.tar.gz
  # Locally computed sha256 checksums
- sha256  70f6bfca77633c35efa218328eda5486d7054c2914d61820980e378797520a25  LICENSE
-diff --git a/package/python-secretstorage/python-secretstorage.mk b/package/python-secretstorage/python-secretstorage.mk
-index 4a8b6ac903..4c209bf513 100644
---- a/package/python-secretstorage/python-secretstorage.mk
-+++ b/package/python-secretstorage/python-secretstorage.mk
+-sha256	bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
++sha256  bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
+diff --git a/package/python-tabledata/python-tabledata.mk b/package/python-tabledata/python-tabledata.mk
+index c1381928c4..c1503e69cb 100644
+--- a/package/python-tabledata/python-tabledata.mk
++++ b/package/python-tabledata/python-tabledata.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SECRETSTORAGE_VERSION = 3.1.1
-+PYTHON_SECRETSTORAGE_VERSION = 3.1.2
- PYTHON_SECRETSTORAGE_SOURCE = SecretStorage-$(PYTHON_SECRETSTORAGE_VERSION).tar.gz
--PYTHON_SECRETSTORAGE_SITE = https://files.pythonhosted.org/packages/a6/89/df343dbc2957a317127e7ff2983230dc5336273be34f2e1911519d85aeb5
-+PYTHON_SECRETSTORAGE_SITE = https://files.pythonhosted.org/packages/fd/9f/36197c75d9a09b1ab63f56cb985af6cd858ca3fc41fd9cd890ce69bae5b9
- PYTHON_SECRETSTORAGE_SETUP_TYPE = setuptools
- PYTHON_SECRETSTORAGE_LICENSE = BSD-3-Clause
- PYTHON_SECRETSTORAGE_LICENSE_FILES = LICENSE
+-PYTHON_TABLEDATA_VERSION = 0.9.1
++PYTHON_TABLEDATA_VERSION = 1.1.2
+ PYTHON_TABLEDATA_SOURCE = tabledata-$(PYTHON_TABLEDATA_VERSION).tar.gz
+-PYTHON_TABLEDATA_SITE = https://files.pythonhosted.org/packages/7d/20/7178ce0e3e34d5aff07e2280522b7e1bc23d4f2fbb916b765bbb41b22174
++PYTHON_TABLEDATA_SITE = https://files.pythonhosted.org/packages/73/7c/67eec8e92504b8e00e5cc0053a3401bd1441eefc70cecfa4427bfcf76b89
+ PYTHON_TABLEDATA_SETUP_TYPE = setuptools
+ PYTHON_TABLEDATA_LICENSE = MIT
+ PYTHON_TABLEDATA_LICENSE_FILES = LICENSE
