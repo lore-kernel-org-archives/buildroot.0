@@ -1,24 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 22:00:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-secretstorage: bump to
- version 3.1.2
-In-Reply-To: <20200416112255.124329-1-james.hilliard1@gmail.com>
-References: <20200416112255.124329-1-james.hilliard1@gmail.com>
-Message-ID: <20200417220042.41a81e06@windsurf.home>
+Date: Fri, 17 Apr 2020 22:00:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-simpleaudio: bump to
+ version 1.0.4
+In-Reply-To: <20200416112808.33170-1-james.hilliard1@gmail.com>
+References: <20200416112808.33170-1-james.hilliard1@gmail.com>
+Message-ID: <20200417220046.5fa3c64f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Apr 2020 05:22:55 -0600
+On Thu, 16 Apr 2020 05:28:08 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-secretstorage/python-secretstorage.hash | 4 ++--
->  package/python-secretstorage/python-secretstorage.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/python-simpleaudio/python-simpleaudio.hash | 6 +++---
+>  package/python-simpleaudio/python-simpleaudio.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
