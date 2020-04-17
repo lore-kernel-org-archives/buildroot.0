@@ -1,27 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 22:01:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fbgrab: bump to version 1.3.3
-In-Reply-To: <1587016216-14126-1-git-send-email-timo.ketola@exertus.fi>
-References: <1587016216-14126-1-git-send-email-timo.ketola@exertus.fi>
-Message-ID: <20200417220148.27681102@windsurf.home>
+Date: Fri, 17 Apr 2020 22:02:11 +0200
+Subject: [Buildroot] [PATCH] package/prosody: bump to version 0.11.5
+In-Reply-To: <20200416062907.23461-1-francois.perrad@gadz.org>
+References: <20200416062907.23461-1-francois.perrad@gadz.org>
+Message-ID: <20200417220211.2c87ffa8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Apr 2020 08:50:16 +0300
-Timo Ketola <timo.ketola@exertus.fi> wrote:
+On Thu, 16 Apr 2020 08:29:07 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> The pixfmt report bug has been fixed upstream.
-> 
-> Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/fbgrab/0100-fix-pixfmt-report.patch | 24 ------------------------
->  package/fbgrab/fbgrab.hash                  |  2 +-
->  package/fbgrab/fbgrab.mk                    |  2 +-
->  3 files changed, 2 insertions(+), 26 deletions(-)
->  delete mode 100644 package/fbgrab/0100-fix-pixfmt-report.patch
+>  package/prosody/prosody.hash | 8 ++++----
+>  package/prosody/prosody.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
