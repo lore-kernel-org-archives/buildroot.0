@@ -1,42 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 22:15:46 +0200
-Subject: [Buildroot] [PATCH v4 1/8] package/libselinux: bump version to
- 3.0
-In-Reply-To: <20200415125921.57648-2-matthew.weber@rockwellcollins.com>
-References: <20200415125921.57648-1-matthew.weber@rockwellcollins.com>
- <20200415125921.57648-2-matthew.weber@rockwellcollins.com>
-Message-ID: <20200417221546.5901429e@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 17 Apr 2020 22:16:24 +0200
+Subject: [Buildroot] [PATCH] support/scripts/boot-qemu-image.py: wait before
+ using expect
+Message-ID: <20200417201626.342738-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As reported by a gitlab runtime test [1] and on the mailing list
+[2], some runtime tests are failing on slow host machines when
+the qemu-system-<arch> is missing on the host.
 
-I've applied, after adjusting two minor nits.
+The boot-qemu-image.py script need to wait some time after
+calling pexpect.spawn() in order to make sure that the qemu
+process has been executed in start-qemu.sh.
 
-On Wed, 15 Apr 2020 07:59:14 -0500
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+If start-qemu.sh failed due to missing qemu-system binary
+an exception will be thrown by child.expect() and catched
+by the error handling (pexpect.EOF).
 
-> From: Adam Duskett <aduskett@gmail.com>
-> 
-> Other changes:
->   - Remove upstream packages.
+Thanks to Yann for the help while investigating the issue.
 
-                      ^^^^ patches
+Tested:
+https://gitlab.com/kubu93/buildroot/pipelines/136431059
 
-> -ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
->  ifeq ($(BR2_PACKAGE_PYTHON3),y)
->  LIBSELINUX_DEPENDENCIES += python3 host-swig
->  LIBSELINUX_PYLIBVER = python$(PYTHON3_VERSION_MAJOR)
+[1] https://gitlab.com/kubu93/buildroot/pipelines/135487475
+[2] http://lists.busybox.net/pipermail/buildroot/2020-April/280037.html
 
-This variable was no longer used anywhere, so I dropped it.
+Fixes:
+https://gitlab.com/kubu93/buildroot/-/jobs/509053135
 
-Thanks,
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/scripts/boot-qemu-image.py | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thomas
+diff --git a/support/scripts/boot-qemu-image.py b/support/scripts/boot-qemu-image.py
+index 2c1afba398..721bc38ecc 100755
+--- a/support/scripts/boot-qemu-image.py
++++ b/support/scripts/boot-qemu-image.py
+@@ -5,6 +5,7 @@
+ import pexpect
+ import sys
+ import os
++import time
+ 
+ 
+ def main():
+@@ -26,6 +27,10 @@ def main():
+     # We want only stdout into the log to avoid double echo
+     child.logfile = sys.stdout
+ 
++    # Let the spawn actually try to fork+exec to the wrapper, and then
++    # let the wrapper exec the qemu process.
++    time.sleep(5)
++
+     try:
+         child.expect(["buildroot login:", pexpect.TIMEOUT], timeout=60)
+     except pexpect.EOF as e:
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.2
