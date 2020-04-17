@@ -1,32 +1,126 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 22:08:27 +0200
-Subject: [Buildroot] [PATCH] package/python-dpkt: remove Python2 only
- dependency
-In-Reply-To: <20200416052754.2628-1-yegorslists@googlemail.com>
-References: <20200416052754.2628-1-yegorslists@googlemail.com>
-Message-ID: <20200417220827.4aac0012@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 17 Apr 2020 22:08:33 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/kodi: add optional support for
+ gbm
+Message-ID: <20200417200833.1759653-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Apr 2020 07:27:54 +0200
-yegorslists at googlemail.com wrote:
+For details see upstream PR 11955.
 
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> python-dpkt supports both Python flavors.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python-dpkt/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: fixed dependencies (Thomas)
+    opengl support requires libglu:
+    https://github.com/xbmc/xbmc/blob/Leia/cmake/modules/FindOpenGl.cmake#L35
 
-Applied to master, thanks.
+ package/kodi/Config.in | 43 +++++++++++++++++++++++++++++++++++++++++-
+ package/kodi/kodi.mk   | 14 ++++++++++++++
+ 2 files changed, 56 insertions(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index f5b37cf7d2..2759f013c5 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -17,6 +17,24 @@ comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, t
+ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+ 	bool
+ 
++config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GL
++	bool
++	default y
++	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_MESA3D_GBM
++	depends on BR2_PACKAGE_HAS_UDEV # libinput
++	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
++
++config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GLES
++	bool
++	default y
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_HAS_LIBGLES
++	depends on BR2_PACKAGE_MESA3D_GBM
++	depends on BR2_PACKAGE_HAS_UDEV # libinput
++	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
++
+ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
+ 	bool
+ 	default y
+@@ -198,6 +216,25 @@ choice
+ 	prompt "platform"
+ 	default BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
+ 
++config BR2_PACKAGE_KODI_PLATFORM_GBM_GL
++	bool "gbm/OpenGL"
++	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GL
++	select BR2_PACKAGE_LIBGLU
++	select BR2_PACKAGE_LIBINPUT
++	select BR2_PACKAGE_LIBXKBCOMMON
++
++config BR2_PACKAGE_KODI_PLATFORM_GBM_GLES
++	bool "gbm/GLES"
++	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GLES
++	select BR2_PACKAGE_LIBINPUT
++	select BR2_PACKAGE_LIBXKBCOMMON
++
++comment "gbm support needs EGL or GLES support"
++	depends on \
++		BR2_PACKAGE_MESA3D_GBM && \
++		!BR2_PACKAGE_HAS_LIBEGL && \
++		!BR2_PACKAGE_HAS_LIBGLES
++
+ config BR2_PACKAGE_KODI_PLATFORM_RBPI
+ 	bool "Raspberry Pi"
+ 	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
+@@ -264,6 +301,8 @@ config BR2_PACKAGE_KODI_LIBUSB
+ config BR2_PACKAGE_KODI_LIBVA
+ 	bool "va"
+ 	depends on \
++		BR2_PACKAGE_KODI_PLATFORM_GBM_GL || \
++		BR2_PACKAGE_KODI_PLATFORM_GBM_GLES || \
+ 		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL || \
+ 		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES || \
+ 		BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
+@@ -271,8 +310,10 @@ config BR2_PACKAGE_KODI_LIBVA
+ 	help
+ 	  Enable libva support.
+ 
+-comment "libva support needs platform 'Wayland' or 'X11/OpenGL'"
++comment "libva support needs platform 'gbm', 'Wayland' or 'X11/OpenGL'"
+ 	depends on \
++		!BR2_PACKAGE_KODI_PLATFORM_GBM_GL && \
++		!BR2_PACKAGE_KODI_PLATFORM_GBM_GLES && \
+ 		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL && \
+ 		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES && \
+ 		!BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 0c4704ea84..a1b2997d35 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -169,6 +169,20 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ KODI_CXX_FLAGS += -latomic
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KODI_PLATFORM_GBM_GL),y)
++KODI_CONF_OPTS += \
++	-DCORE_PLATFORM_NAME=gbm \
++	-DGBM_RENDER_SYSTEM=gl
++KODI_DEPENDENCIES += libegl libgl libglu libinput libxkbcommon mesa3d
++endif
++
++ifeq ($(BR2_PACKAGE_KODI_PLATFORM_GBM_GLES),y)
++KODI_CONF_OPTS += \
++	-DCORE_PLATFORM_NAME=gbm \
++	-DGBM_RENDER_SYSTEM=gles
++KODI_DEPENDENCIES += libegl libgles libinput libxkbcommon mesa3d
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_PLATFORM_RBPI),y)
+ KODI_CONF_OPTS += -DCORE_PLATFORM_NAME=rbpi
+ KODI_DEPENDENCIES += libinput libxkbcommon rpi-userland
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.1
