@@ -1,35 +1,156 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 17 Apr 2020 15:24:15 -0300
-Subject: [Buildroot] [PATCH] board/freescale/mxs: specify the volume-label
- for vfat
-Message-ID: <20200417182415.13512-1-festevam@gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Fri, 17 Apr 2020 15:20:56 -0300
+Subject: [Buildroot] [PATCH] package/asn1c: new host package
+In-Reply-To: <CAEyMn7Y=aY1zO0Wm5wVzHrdmn=CDrzJJ=aepgm5rXXJ4Hir-uw@mail.gmail.com>
+References: <20200110211420.7704-1-sergio.prado@e-labworks.com>
+ <CAEyMn7Y=aY1zO0Wm5wVzHrdmn=CDrzJJ=aepgm5rXXJ4Hir-uw@mail.gmail.com>
+Message-ID: <CANu7NGu_VgBoGTJQZpEP-7vyY=qjH-Ctk3rSk1tYpV=Tu2K_Lw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently the volume-label for the vfat partition is a string with
-the following pattern: 5934-861D.
+Hi Heiko,
 
-Specify the volume-label as "boot" to make it easier to identify it.
+Thanks a lot for the review. I'll send V2.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- board/freescale/common/mxs/genimage.cfg.template | 1 +
- 1 file changed, 1 insertion(+)
+Best regards,
 
-diff --git a/board/freescale/common/mxs/genimage.cfg.template b/board/freescale/common/mxs/genimage.cfg.template
-index e094fb7f2c..c9da452821 100644
---- a/board/freescale/common/mxs/genimage.cfg.template
-+++ b/board/freescale/common/mxs/genimage.cfg.template
-@@ -8,6 +8,7 @@
- 
- image boot.vfat {
- 	vfat {
-+		label = "boot"
- 		files = {
- 			%FILES%
- 		}
--- 
-2.17.1
+Sergio Prado
+Embedded Labworks
+
+Em sex., 17 de abr. de 2020 ?s 10:28, Heiko Thiery <heiko.thiery@gmail.com>
+escreveu:
+
+> HI Sergio,
+>
+> I tested the package with: utils/test-pkg -p host-asn1c
+>                              br-arm-full [1/6]: OK
+>                   br-arm-cortex-a9-glibc [2/6]: OK
+>                    br-arm-cortex-m4-full [3/6]: OK
+>                           br-x86-64-musl [4/6]: OK
+>                       br-arm-full-static [5/6]: OK
+>                             sourcery-arm [6/6]: OK
+>
+> and it builds.
+>
+> Just some small comment below:
+>
+> Am Fr., 10. Jan. 2020 um 22:21 Uhr schrieb Sergio Prado
+> <sergio.prado@e-labworks.com>:
+> >
+> > The asn1c is a free, open source compiler of ASN.1 specifications into C
+> > source code.
+> >
+> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+>
+> Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
+>
+> > ---
+> >  DEVELOPERS                   |  1 +
+> >  package/Config.in.host       |  1 +
+> >  package/asn1c/Config.in.host | 11 +++++++++++
+> >  package/asn1c/asn1c.hash     |  5 +++++
+> >  package/asn1c/asn1c.mk       | 12 ++++++++++++
+> >  5 files changed, 30 insertions(+)
+> >  create mode 100644 package/asn1c/Config.in.host
+> >  create mode 100644 package/asn1c/asn1c.hash
+> >  create mode 100644 package/asn1c/asn1c.mk
+> >
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 80843dd1a113..287e222cdf57 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -2241,6 +2241,7 @@ N:        Sergio Prado <
+> sergio.prado at e-labworks.com>
+> >  F:     board/toradex/apalis-imx6/
+> >  F:     configs/toradex_apalis_imx6_defconfig
+> >  F:     package/aoetools/
+> > +F:     package/asn1c/
+> >  F:     package/curlpp/
+> >  F:     package/daq/
+> >  F:     package/libgdiplus/
+> > diff --git a/package/Config.in.host b/package/Config.in.host
+> > index 62e860d7c36c..a012ffaa38e9 100644
+> > --- a/package/Config.in.host
+> > +++ b/package/Config.in.host
+> > @@ -2,6 +2,7 @@ menu "Host utilities"
+> >
+> >         source "package/aespipe/Config.in.host"
+> >         source "package/android-tools/Config.in.host"
+> > +       source "package/asn1c/Config.in.host"
+> >         source "package/btrfs-progs/Config.in.host"
+> >         source "package/cargo/Config.in.host"
+> >         source "package/cbootimage/Config.in.host"
+> > diff --git a/package/asn1c/Config.in.host b/package/asn1c/Config.in.host
+> > new file mode 100644
+> > index 000000000000..951f5f66915e
+> > --- /dev/null
+> > +++ b/package/asn1c/Config.in.host
+> > @@ -0,0 +1,11 @@
+> > +config BR2_PACKAGE_HOST_ASN1C
+> > +       bool "host asn1c"
+> > +       help
+> > +         ASN.1 stands for Abstract Syntax Notation One and allows
+> > +         to describe complex data structures independently of any
+> > +         particular programming language.
+> > +
+> > +         The asn1c is a free, open source compiler of ASN.1
+> > +         specifications into C source code.
+> > +
+> > +         http://lionet.info/asn1c
+> > diff --git a/package/asn1c/asn1c.hash b/package/asn1c/asn1c.hash
+> > new file mode 100644
+> > index 000000000000..a4fd3beffa53
+> > --- /dev/null
+> > +++ b/package/asn1c/asn1c.hash
+> > @@ -0,0 +1,5 @@
+> > +# Locally computed:
+> > +sha256
+> 8007440b647ef2dd9fb73d931c33ac11764e6afb2437dbe638bb4e5fc82386b9
+> asn1c-0.9.28.tar.gz
+> > +
+> > +# Hash for license files:
+> > +sha256
+> bcc636802a52ace2255212be15fb707084af87061b5cfd37eb84dcf6a02cc48b  LICENSE
+> > diff --git a/package/asn1c/asn1c.mk b/package/asn1c/asn1c.mk
+> > new file mode 100644
+> > index 000000000000..314462a92bf9
+> > --- /dev/null
+> > +++ b/package/asn1c/asn1c.mk
+> > @@ -0,0 +1,12 @@
+> >
+> +################################################################################
+> > +#
+> > +# asn1c
+> > +#
+> >
+> +################################################################################
+> > +
+> > +ASN1C_VERSION = 0.9.28
+> > +ASN1C_SITE =
+> https://github.com/vlm/asn1c/releases/download/v$(ASN1C_VERSION)
+>
+> You can use the github macro to set the <pkg>_SITE variable:
+> ASN1C_SITE = $(call github,vlm,asn1c,v$(ASN1C_VERSION))
+>
+> > +ASN1C_LICENSE = BSD-2-Clause
+> > +ASN1C_LICENSE_FILES = LICENSE
+> > +
+> > +$(eval $(host-autotools-package))
+> > --
+> > 2.17.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> BR,
+> Heiko
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200417/c685809b/attachment.html>
