@@ -1,37 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 22:06:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to
- 7.4.5
-In-Reply-To: <20200416174135.1632869-1-bernd.kuhls@t-online.de>
-References: <20200416174135.1632869-1-bernd.kuhls@t-online.de>
-Message-ID: <20200417220614.6f781ea7@windsurf.home>
+Date: Fri, 17 Apr 2020 22:07:01 +0200
+Subject: [Buildroot] [git commit] configs/wandboard: bump U-Boot and kernel
+ versions
+Message-ID: <20200417195248.B52098EF7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Apr 2020 19:41:35 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8ab43e00934841ee257956f0a2b5f8aefa25fdc9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Changelog: https://www.php.net/ChangeLog-7.php#7.4.5
-> 
-> Fixes CVE-2020-7067.
-> 
-> Removed patch applied upstream.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...Check-for-sys-auxv.h-before-using-it.patch | 60 -------------------
->  package/php/php.hash                          |  2 +-
->  package/php/php.mk                            |  2 +-
->  3 files changed, 2 insertions(+), 62 deletions(-)
->  delete mode 100644 package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
+Bump U-Boot to version 2020.04 and kernel to 5.6.3.
 
-Applied to master, thanks.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/wandboard_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index 1f42707ef0..4882042a1a 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+@@ -14,13 +14,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="wandboard"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
