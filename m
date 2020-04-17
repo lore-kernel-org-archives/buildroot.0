@@ -1,47 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 22:32:07 +0200
-Subject: [Buildroot] [git commit] package/restorecond: bump version to 3.0
-Message-ID: <20200417203421.98D2C8F030@busybox.osuosl.org>
+Date: Fri, 17 Apr 2020 22:32:21 +0200
+Subject: [Buildroot] [git commit] package/semodule-utils: bump version to 3.0
+Message-ID: <20200417203421.A32E08F030@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e726331689dc2f8b0b2d6573fb814c05dce49c00
+commit: https://git.buildroot.net/buildroot/commit/?id=c7088d2615df6ee90d066ab029a7035525768629
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/restorecond/restorecond.hash | 2 +-
- package/restorecond/restorecond.mk   | 4 ++--
+ package/semodule-utils/semodule-utils.hash | 2 +-
+ package/semodule-utils/semodule-utils.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/restorecond/restorecond.hash b/package/restorecond/restorecond.hash
-index 7a82bda370..7532bbf054 100644
---- a/package/restorecond/restorecond.hash
-+++ b/package/restorecond/restorecond.hash
+diff --git a/package/semodule-utils/semodule-utils.hash b/package/semodule-utils/semodule-utils.hash
+index 386b442618..c1a4ef1b9b 100644
+--- a/package/semodule-utils/semodule-utils.hash
++++ b/package/semodule-utils/semodule-utils.hash
 @@ -1,5 +1,5 @@
  # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 cbf9820583e641ee0462fa7bc89e6024676af281e025703e17b2d019b1a25a4f restorecond-2.9.tar.gz
-+sha256 32a92c9f4bf48c613f9f467ced58d8c369eec8892239cd44d5d0e139b41926dc restorecond-3.0.tar.gz
+-sha256 8083679ee634570f6e9a18632f2c2862b9134fa308b689b2e1952a369ae5d907 semodule-utils-2.9.tar.gz
++sha256 14ee2db21f36766ffbbb65770f8e7236d21675db9f0f5d40f50974711da598cf semodule-utils-3.0.tar.gz
  
  # Hash for license file
  sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
-diff --git a/package/restorecond/restorecond.mk b/package/restorecond/restorecond.mk
-index c519b5de2b..0cf0ec35e9 100644
---- a/package/restorecond/restorecond.mk
-+++ b/package/restorecond/restorecond.mk
+diff --git a/package/semodule-utils/semodule-utils.mk b/package/semodule-utils/semodule-utils.mk
+index 7102dbc5e0..ec1759ece1 100644
+--- a/package/semodule-utils/semodule-utils.mk
++++ b/package/semodule-utils/semodule-utils.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--RESTORECOND_VERSION = 2.9
--RESTORECOND_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
-+RESTORECOND_VERSION = 3.0
-+RESTORECOND_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
- RESTORECOND_LICENSE = GPL-2.0
- RESTORECOND_LICENSE_FILES = COPYING
- 
+-SEMODULE_UTILS_VERSION = 2.9
+-SEMODULE_UTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
++SEMODULE_UTILS_VERSION = 3.0
++SEMODULE_UTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/20191204
+ SEMODULE_UTILS_LICENSE = GPL-2.0
+ SEMODULE_UTILS_LICENSE_FILES = COPYING
+ SEMODULE_UTILS_DEPENDENCIES = libsepol
