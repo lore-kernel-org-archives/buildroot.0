@@ -1,75 +1,63 @@
-From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Fri, 17 Apr 2020 12:17:28 +0200
-Subject: [Buildroot] compilation issue with a uboot-tools / ubootenv client
- program
-Message-ID: <790fd2c10c690f6e5df1c312c709b2c136d75a74.camel@orolia.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 17 Apr 2020 13:17:30 +0200
+Subject: [Buildroot] [git commit] package/sysrepo: drop unneeded dependencies
+Message-ID: <20200417110610.C45438EE42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I'm upgrading the buildroot version we're shipping in our products,
-from buildroot 2019.02.5 to 2020.02.1.
+commit: https://git.buildroot.net/buildroot/commit/?id=20cc566e5ad07c92537593e27f850e695701deac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-My issue is that I have a program which interacts with the u-boot
-environment and thus, uses the headers of the ubootenv library provided
-by uboot-tools, which doesn't compile anymore.
+The following dependencies are no longer needed:
+- libev
+- libavl
+- protobuf-c
 
-Concretely during the compilation, gcc complains of a missing env.h
-header, which is included by the fw_env.h that my program is using.
-Exact error:
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/sysrepo/Config.in  | 5 -----
+ package/sysrepo/sysrepo.mk | 4 ++--
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-[ 50%] Building C object CMakeFiles/fw-env-reproducer.dir/main.o
-In file included from
-/home/ncarrier/workspace/buildroot/output/build/fw-env-
-reproducer/main.c:2:
-/home/ncarrier/workspace/buildroot/output/host/arm-buildroot-linux-
-uclibcgnueabihf/sysroot/usr/include/fw_env.h:7:10: fatal error: env.h:
-No such file or directory
- #include <env.h>
-          ^~~~~~~
-compilation terminated.
-
-
-You'll find attached a patch, which can be applied on top of both the 
-2020.02.1 and 2019.02.5 tags, adding a minimal reproducer code which
-shows the problem.
-
-The steps I take to reproduce it are:
-
-rm -rf output
-git checkout 2020.02.1
-git am 0001-fw_env.h-issue-reproducer-example.patch
-make raspberrypi0_defconfig
-./utils/config --enable fw-env-reproducer
-make fw-env-reproducer
-
--> the compilation fails.
-
-rm -rf output
-git checkout 2019.02.5
-git am 0001-fw_env.h-issue-reproducer-example.patch
-make raspberrypi0_defconfig
-./utils/config --enable fw-env-reproducer
-make fw-env-reproducer
-
--> the compilation succeeds.
-
-
-Am I doing something wrong?
-My current workaround is to revert back the uboot-tools package to the
-state it had in the 2019.02.5 but my instinct is telling me that it's
-not the right thing to do :)
-
--- 
-Nicolas CARRIER | Senior Development Engineer |  
-nicolas.carrier at orolia.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-fw_env.h-issue-reproducer-example.patch
-Type: text/x-patch
-Size: 2855 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200417/da2a5bb9/attachment.bin>
+diff --git a/package/sysrepo/Config.in b/package/sysrepo/Config.in
+index 31f817faa1..8de141efc2 100644
+--- a/package/sysrepo/Config.in
++++ b/package/sysrepo/Config.in
+@@ -5,13 +5,9 @@ config BR2_PACKAGE_SYSREPO
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # host-protobuf
+-	select BR2_PACKAGE_LIBAVL
+-	select BR2_PACKAGE_LIBEV
+ 	select BR2_PACKAGE_LIBYANG
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_PCRE_UCP
+-	select BR2_PACKAGE_PROTOBUF_C
+ 	help
+ 	  Sysrepo is an YANG-based configuration and operational state
+ 	  data store for Unix/Linux applications.
+@@ -31,4 +27,3 @@ comment "sysrepo needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+index 0ca4d2591e..67290dad4f 100644
+--- a/package/sysrepo/sysrepo.mk
++++ b/package/sysrepo/sysrepo.mk
+@@ -9,8 +9,8 @@ SYSREPO_SITE = $(call github,sysrepo,sysrepo,v$(SYSREPO_VERSION))
+ SYSREPO_INSTALL_STAGING = YES
+ SYSREPO_LICENSE = Apache-2.0
+ SYSREPO_LICENSE_FILES = LICENSE
+-SYSREPO_DEPENDENCIES = libev libavl libyang pcre protobuf-c host-sysrepo
+-HOST_SYSREPO_DEPENDENCIES = host-libev host-libavl host-libyang host-pcre host-protobuf-c
++SYSREPO_DEPENDENCIES = libyang pcre host-sysrepo
++HOST_SYSREPO_DEPENDENCIES = host-libyang host-pcre
+ 
+ SYSREPO_CONF_OPTS = \
+ 	-DCMAKE_BUILD_TYPE=Release \
