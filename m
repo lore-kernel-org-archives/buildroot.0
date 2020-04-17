@@ -1,10 +1,8 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Fri, 17 Apr 2020 16:29:22 -0700
-Subject: [Buildroot] [PATCH 4/4] package/openjdk: add support for building
- the full jdk
-In-Reply-To: <20200417232922.3762195-1-aduskett@gmail.com>
-References: <20200417232922.3762195-1-aduskett@gmail.com>
-Message-ID: <20200417232922.3762195-4-aduskett@gmail.com>
+Date: Fri, 17 Apr 2020 16:29:44 -0700
+Subject: [Buildroot] [PATCH/2020.02.x 1/1] package/openjdk: fix installation
+ with merged usr directories
+Message-ID: <20200417232944.3762457-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,84 +11,88 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Some users may require the full JDK on the target to debug or compile programs.
-This change is relatively trivial to add.
+Currently, Buildroot installs the jre libraries using
+cp -dprf /build/linux-*-release/images/jre/lib/* $(TARGET_DIR)/usr/lib/
 
-To install the full JDK, do the following:
-  - Add a new entry in package/openjdk/Config.in with the variable
-    BR2_PACKAGE_OPENJDK_FULL_JDK
+However, if a system has a merged /usr directory, and there is a
+built kernel before installing OpenJDK, the installation fails because
+jre/lib has binary modules file, which causes the following error:
+cp: cannot overwrite directory '/usr/lib/modules with non-directory
 
-  - Check for this variable in openjdk.mk, if it is selected set the following
-    variables:
-      OPENJDK_INSTALL_DIR = jdk
-      OPENJDK_MAKE_TARGET=jdk-image
-    Otherwise, set the variables to jre and legacy-jre-image respectively.
+The obvious fix is to install the modules to /usr/lib/jvm/ and set the
+appropriate rpaths via the --with-extra-ldflags conf option. However, this fix
+does not work because the binaries themselves do not link against libjava.so
+and instead search for libjava.so with hardcoded paths in the following
+directories:
+  - /usr/lib
+  - /usr/jre/lib
+  - $(dirname $0)/../lib
 
-  - change legacy-jre-image to $(OPENJDK_MAKE_TARGET) in the OPENJD_BUILD_CMDS
-    define.
+As such, most distributions such as Redhat create the directory
+/usr/lib/jvm/java-$(JAVA_VERSION)/ and install all directories and files
+found in images/jre to that directory, and then symlink the binaries to
+/usr/bin.
 
-  - Change jre/* to $(OPENJDK_INSTALL_DIR)/* in the OPENJDK_INSTALL_TARGET_CMDS
-    define
+However, because Buildroot does not need to support multiple versions of java
+concurrently, there is no need for the java-$(JAVA_VERSION) directory.
+
+To fix the above error, perform the following changes:
+  - Introduce the variable "OPENJDK_INSTALL_BASE" which points to usr/lib/jvm
+  - Set the --with-extra-ldflags conf_opt to
+      "-Wl,-rpath,/$(OPENJDK_INSTALL_BASE)/lib,-rpath,
+      /$(OPENJDK_INSTALL_BASE)/lib/$(OPENJDK_JVM_VARIANT)"
+  - Run "mkdir -p $(TARGET_DIR)/usr/lib/jvm" in the INSTALL_TARGET_CMDS step.
+  - Copy both the lib and bin directories to /usr/lib/jvm/
+  - Symlink the binaries in /usr/lib/jvm/bin/ to /usr/bin.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=12751
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/openjdk/Config.in  |  7 +++++++
- package/openjdk/openjdk.mk | 12 ++++++++++--
- 2 files changed, 17 insertions(+), 2 deletions(-)
+ package/openjdk/openjdk.mk | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
-index 61294ec49f..158f3031c3 100644
---- a/package/openjdk/Config.in
-+++ b/package/openjdk/Config.in
-@@ -49,6 +49,13 @@ config BR2_PACKAGE_OPENJDK
- 
- if BR2_PACKAGE_OPENJDK
- 
-+config BR2_PACKAGE_OPENJDK_FULL_JDK
-+	bool "Build the full JDK"
-+	help
-+	  Install the full JDK instead of just the run time.
-+	  Selecting this option will increase the file system by
-+	  approximately 110M.
-+
- choice
- 	prompt "openjdk variant"
- 	default BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER if !BR2_powerpc
 diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 19e71e98b2..e8803f3cb5 100644
+index 030a205228..fba53f739a 100644
 --- a/package/openjdk/openjdk.mk
 +++ b/package/openjdk/openjdk.mk
 @@ -46,6 +46,14 @@ OPENJDK_JVM_VARIANT = zero
  OPENJDK_DEPENDENCIES += libffi
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENJDK_FULL_JDK),y)
-+OPENJDK_INSTALL_DIR = jdk
-+OPENJDK_MAKE_TARGET=jdk-image
-+else
-+OPENJDK_INSTALL_DIR = jre
-+OPENJDK_MAKE_TARGET=legacy-jre-image
-+endif
++# Because jre/lib has a modules file, installation on a system with a merged
++# /usr directory, and a built Kernel before OpenJDK, the following error
++# occurs: "cp: cannot overwrite directory '/usr/lib/modules with non-directory"
++# To prevent this error, we follow what other distributions traditionally do:
++# Install the OpenJDK files in /usr/lib/jvm/ and symlink the binaries to
++# /usr/bin.
++OPENJDK_INSTALL_BASE=usr/lib/jvm
 +
- # Because jre/lib has a modules file, installation on a system with a merged
- # /usr directory, and a built Kernel before OpenJDK, the following error
- # occurs: "cp: cannot overwrite directory '/usr/lib/modules with non-directory"
-@@ -117,14 +125,14 @@ endef
- # Make -jn is unsupported. Instead, set the "--with-jobs=" configure option,
- # and use $(MAKE1).
- define OPENJDK_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) legacy-jre-image
-+	$(TARGET_MAKE_ENV) $(OPENJDK_CONF_ENV) $(MAKE1) -C $(@D) $(OPENJDK_MAKE_TARGET)
- endef
- 
+ # OpenJDK ignores some variables unless passed via the environment.
+ # These variables are PATH, LD, CC, CXX, and CPP.
+ # OpenJDK defaults ld to the ld binary but passes -Xlinker and -z as
+@@ -75,6 +83,7 @@ OPENJDK_CONF_OPTS = \
+ 	--with-devkit=$(HOST_DIR) \
+ 	--with-extra-cflags="$(TARGET_CFLAGS)" \
+ 	--with-extra-cxxflags="$(TARGET_CXXFLAGS)" \
++	--with-extra-ldflags="-Wl,-rpath,/$(OPENJDK_INSTALL_BASE)/lib,-rpath,/$(OPENJDK_INSTALL_BASE)/lib/$(OPENJDK_JVM_VARIANT)" \
+ 	--with-giflib=system \
+ 	--with-jobs=$(PARALLEL_JOBS) \
+ 	--with-jvm-variants=$(OPENJDK_JVM_VARIANT) \
+@@ -114,8 +123,12 @@ endef
  # Calling make install always builds and installs the JDK instead of the JRE,
  # which makes manual installation necessary.
  define OPENJDK_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
--	cp -dpfr $(@D)/build/linux-*-release/images/jre/* \
-+	cp -dpfr $(@D)/build/linux-*-release/images/$(OPENJDK_INSTALL_DIR)/* \
- 		$(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
- 	cd $(TARGET_DIR)/usr/bin && ln -snf ../../$(OPENJDK_INSTALL_BASE)/bin/* .
+-	cp -dpfr $(@D)/build/linux-*-release/images/jre/bin/* $(TARGET_DIR)/usr/bin/
+-	cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/* $(TARGET_DIR)/usr/lib/
++	mkdir -p $(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
++	cp -dpfr $(@D)/build/linux-*-release/images/jre/bin/ \
++		$(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
++	cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/ \
++		$(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
++	cd $(TARGET_DIR)/usr/bin && ln -snf ../../$(OPENJDK_INSTALL_BASE)/bin/* .
  endef
+ 
+ $(eval $(generic-package))
 -- 
 2.25.2
