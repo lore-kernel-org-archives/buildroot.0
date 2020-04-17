@@ -1,164 +1,193 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 23:10:42 +0200
-Subject: [Buildroot] [git commit] configs/olpc_xo1: new defconfig
-Message-ID: <20200417205654.6316A8F055@busybox.osuosl.org>
+Date: Fri, 17 Apr 2020 22:57:11 +0200
+Subject: [Buildroot] [git commit] board/olpc: add common scripts and files
+ for OLPC laptops
+Message-ID: <20200417205654.5899F8F055@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ad185c305379d04b3c2357d456797a78ba09976
+commit: https://git.buildroot.net/buildroot/commit/?id=4cdca2cd5012f713098032bb688d5714763f9991
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This defconfig supports the OLPC XO-1 platform.
+There are muliple generations of OLPC laptops, x86 ones based on
+Geode, VIA and ARM based with Marvell Armada. All of boot with
+OpenFirmware and share some peripherals.
+
+This patch adds the common files.
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml               |  1 +
- DEVELOPERS                   |  1 +
- board/olpc/xo-1/linux.config | 81 ++++++++++++++++++++++++++++++++++++++++++++
- configs/olpc_xo1_defconfig   | 23 +++++++++++++
- 4 files changed, 106 insertions(+)
+ DEVELOPERS               |  3 +++
+ board/olpc/genimage.cfg  |  9 +++++++
+ board/olpc/linux.config  | 66 ++++++++++++++++++++++++++++++++++++++++++++++++
+ board/olpc/olpc.fth      | 46 +++++++++++++++++++++++++++++++++
+ board/olpc/post-build.sh |  4 +++
+ 5 files changed, 128 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index efce0d5c66..b8629bd920 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -243,6 +243,7 @@ olimex_a20_olinuxino_micro_defconfig: { extends: .defconfig }
- olimex_a33_olinuxino_defconfig: { extends: .defconfig }
- olimex_a64_olinuxino_defconfig: { extends: .defconfig }
- olimex_imx233_olinuxino_defconfig: { extends: .defconfig }
-+olpc_xo1_defconfig: { extends: .defconfig }
- openblocks_a6_defconfig: { extends: .defconfig }
- orangepi_lite2_defconfig: { extends: .defconfig }
- orangepi_lite_defconfig: { extends: .defconfig }
 diff --git a/DEVELOPERS b/DEVELOPERS
-index b35f543d00..7cf0630fb8 100644
+index 3d9c976a95..b35f543d00 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1544,6 +1544,7 @@ F:	package/fswebcam/
+@@ -1542,6 +1542,9 @@ F:	support/legal-info/
+ N:	Lucas De Marchi <lucas.de.marchi@gmail.com>
+ F:	package/fswebcam/
  
- N:	Lubomir Rintel <lkundrak@v3.sk>
- F:	board/olpc/
-+F:	configs/olpc_xo1_defconfig
- 
++N:	Lubomir Rintel <lkundrak@v3.sk>
++F:	board/olpc/
++
  N:	Ludovic Desroches <ludovic.desroches@microchip.com>
  F:	board/atmel/
-diff --git a/board/olpc/xo-1/linux.config b/board/olpc/xo-1/linux.config
+ F:	configs/at91*
+diff --git a/board/olpc/genimage.cfg b/board/olpc/genimage.cfg
 new file mode 100644
-index 0000000000..72d18ae009
+index 0000000000..baafe31714
 --- /dev/null
-+++ b/board/olpc/xo-1/linux.config
-@@ -0,0 +1,81 @@
-+# CONFIG_64BIT is not set
-+CONFIG_IOSF_MBI=y
-+CONFIG_MGEODE_LX=y
-+CONFIG_X86_MSR=y
-+CONFIG_HZ_100=y
-+CONFIG_KEXEC=y
-+CONFIG_PHYSICAL_START=0x400000
-+CONFIG_CMDLINE_BOOL=y
-+# CONFIG_ACPI is not set
-+CONFIG_CPU_IDLE=y
-+CONFIG_CPU_IDLE_GOV_LADDER=y
-+CONFIG_OLPC=y
-+CONFIG_OLPC_XO1_PM=y
-+CONFIG_OLPC_XO1_RTC=y
-+CONFIG_OLPC_XO1_SCI=y
-+# CONFIG_FIRMWARE_MEMMAP is not set
-+# CONFIG_VIRTUALIZATION is not set
-+CONFIG_ARCH_MMAP_RND_BITS=16
-+CONFIG_REFCOUNT_FULL=y
-+CONFIG_SPARSEMEM_MANUAL=y
-+CONFIG_CMA=y
-+CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_MTD_REDBOOT_PARTS=y
-+CONFIG_MTD_REDBOOT_DIRECTORY_BLOCK=0
-+CONFIG_MTD_ONENAND_GENERIC=y
-+CONFIG_MTD_NAND_CAFE=y
-+CONFIG_MTD_UBI=y
-+CONFIG_CS5535_MFGPT=y
-+CONFIG_CS5535_CLOCK_EVENT_SRC=y
-+CONFIG_SENSORS_LIS3_SPI=y
-+CONFIG_MOUSE_PS2_OLPC=y
-+CONFIG_SERIAL_8250_NR_UARTS=1
-+CONFIG_SERIAL_8250_RUNTIME_UARTS=1
-+CONFIG_SERIAL_8250_EXTENDED=y
-+CONFIG_SERIAL_8250_MANY_PORTS=y
-+CONFIG_SERIAL_8250_SHARE_IRQ=y
-+CONFIG_SERIAL_8250_DETECT_IRQ=y
-+CONFIG_SERIAL_8250_RSA=y
-+CONFIG_HW_RANDOM=y
-+# CONFIG_HW_RANDOM_VIA is not set
-+CONFIG_NVRAM=y
-+CONFIG_SCx200_ACB=y
-+CONFIG_PINCTRL=y
-+CONFIG_PINCTRL_SINGLE=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_GPIO_CS5535=y
-+CONFIG_THERMAL=y
-+CONFIG_WATCHDOG=y
-+CONFIG_GEODE_WDT=y
-+CONFIG_MFD_CS5535=y
-+CONFIG_MFD_MAX8925=y
-+CONFIG_VIDEO_CAFE_CCIC=y
-+CONFIG_FB_TILEBLITTING=y
-+CONFIG_FB_VESA=y
-+CONFIG_FB_GEODE=y
-+CONFIG_FB_GEODE_LX=y
-+CONFIG_BACKLIGHT_MAX8925=y
-+CONFIG_VGACON_SOFT_SCROLLBACK=y
-+CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
-+CONFIG_SND_OSSEMUL=y
-+CONFIG_SND_DYNAMIC_MINORS=y
-+CONFIG_SND_AC97_POWER_SAVE=y
-+CONFIG_SND_CS5535AUDIO=y
-+CONFIG_USB_EHCI_ROOT_HUB_TT=y
-+CONFIG_USB_OHCI_HCD=y
-+CONFIG_FB_OLPC_DCON=y
-+CONFIG_XO1_RFKILL=y
-+CONFIG_RESET_CONTROLLER=y
-+CONFIG_GENERIC_PHY=y
-+CONFIG_PROC_KCORE=y
-+CONFIG_HUGETLBFS=y
-+CONFIG_JFFS2_FS_WBUF_VERIFY=y
-+CONFIG_JFFS2_SUMMARY=y
-+CONFIG_JFFS2_FS_XATTR=y
-+CONFIG_JFFS2_COMPRESSION_OPTIONS=y
-+CONFIG_UBIFS_FS=y
-+CONFIG_PCI=y
-+CONFIG_LIBERTAS_USB=m
-+CONFIG_LIBERTAS_MESH=y
-+CONFIG_LIBERTAS_THINFIRM=m
-+CONFIG_LIBERTAS_THINFIRM_USB=m
-diff --git a/configs/olpc_xo1_defconfig b/configs/olpc_xo1_defconfig
++++ b/board/olpc/genimage.cfg
+@@ -0,0 +1,9 @@
++image sdcard.img {
++	hdimage {
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/olpc/linux.config b/board/olpc/linux.config
 new file mode 100644
-index 0000000000..48b394ac78
+index 0000000000..0ea622eeec
 --- /dev/null
-+++ b/configs/olpc_xo1_defconfig
-@@ -0,0 +1,23 @@
-+BR2_x86_geode=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/olpc/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olpc/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olpc/xo-1/linux.config"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olpc/linux.config"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_USB8388_V9=y
-+BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_USB8388_OLPC=y
-+BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_USB_THINFIRM=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_LABEL="XO1"
-+BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
-+BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O dir_index,^huge_file,^64bit,^extent"
-+BR2_PACKAGE_HOST_GENIMAGE=y
++++ b/board/olpc/linux.config
+@@ -0,0 +1,66 @@
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_PREEMPT=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_CFG80211=y
++CONFIG_CFG80211_WEXT=y
++CONFIG_MAC80211=y
++CONFIG_RFKILL=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_SCSI=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_BLK_DEV_SR=y
++CONFIG_CHR_DEV_SG=y
++CONFIG_NETDEVICES=y
++CONFIG_LIBERTAS=m
++CONFIG_INPUT_MOUSEDEV=y
++CONFIG_INPUT_MOUSEDEV_PSAUX=y
++CONFIG_INPUT_MOUSEDEV_SCREEN_X=1200
++CONFIG_INPUT_MOUSEDEV_SCREEN_Y=900
++CONFIG_INPUT_EVDEV=y
++CONFIG_INPUT_TABLET=y
++CONFIG_SERIO_OLPC_APSP=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_BATTERY_OLPC=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_MEDIA_SUPPORT=y
++CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_MEDIA_CONTROLLER=y
++CONFIG_VIDEO_V4L2_SUBDEV_API=y
++CONFIG_MEDIA_USB_SUPPORT=y
++CONFIG_USB_VIDEO_CLASS=m
++CONFIG_V4L_PLATFORM_DRIVERS=y
++CONFIG_DRM=y
++CONFIG_DRM_PANEL_SIMPLE=m
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_FB_SIMPLE=y
++CONFIG_LCD_CLASS_DEVICE=y
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_USB=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_STORAGE=y
++CONFIG_MMC=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_PCI=y
++CONFIG_MMC_SDHCI_PLTFM=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
++CONFIG_RTC_CLASS=y
++CONFIG_EXT4_FS=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_FONTS=y
++CONFIG_FONT_TER16x32=y
+diff --git a/board/olpc/olpc.fth b/board/olpc/olpc.fth
+new file mode 100644
+index 0000000000..678f0af5b5
+--- /dev/null
++++ b/board/olpc/olpc.fth
+@@ -0,0 +1,46 @@
++\ OLPC XO boot script
++
++: (visible)  " unfreeze visible" evaluate  ;
++' (visible) catch  drop  forget (visible)
++
++" /aliases" find-device " last" get-property
++abort" No last alias"
++" /pci/sd at c"          2over substring?  if  " root=/dev/mmcblk0p1 " to boot-file  then
++" /sd/sdhci at d4280000" 2over substring?  if  " root=/dev/mmcblk1p1 " to boot-file  then
++" /pci/usb@"          2over substring?  if  " root=/dev/sda1 "      to boot-file  then
++" /usb@"              2over substring?  if  " root=/dev/sda1 "      to boot-file  then
++2drop
++
++root-device " compatible" get-property dend  if  0 0  then  ( compatible$ )
++" olpc,xo-1.75" 2over sindex -1 > if  ( compatible$ )
++   \ Version check on XO-1.75
++   " mrvl,mmp2" 2over sindex -1 =  if ( compatible$ )
++      2drop                           ( )
++      cr
++      ." Firmware Q4E00 or newer is needed to boot a Devicetree enabled kernel." cr
++      cr
++      ." One way to update is to copy http://dev.laptop.org/~quozl/q4e00ja.rom" cr
++      ." to a FAT partition on a USB flash stick and run ""flash u:\q4e00ja.rom""" cr
++      cr
++      ." Aborting boot." cr
++      " show-sad" evaluate
++      abort
++   then
++then ( compatible$ )
++
++" mmp" 2swap sindex -1 > if
++   \ A Marvell MMP-based machine
++   " last:\boot\zImage" to boot-device
++   boot-file " console=ttyS2,115200 " $cat2 to boot-file
++else
++    \ Assume XO-1
++   " last:\boot\bzImage" to boot-device
++   boot-file " console=ttyS0,115200 reboot=pci " $cat2 to boot-file
++then
++
++\ Pick a terminal that looks better on the XO screen
++root-device " architecture" get-property dend  if  0 0  else  1-  then
++" OLPC" $=  if  boot-file " fbcon=font:TER16x32 vt.color=0xf0 " $cat2 to boot-file  then
++
++boot-file " console=tty0 rootwait" $cat2 to boot-file
++boot
+diff --git a/board/olpc/post-build.sh b/board/olpc/post-build.sh
+new file mode 100755
+index 0000000000..4d4cf97086
+--- /dev/null
++++ b/board/olpc/post-build.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++install -m 0644 -D $BOARD_DIR/olpc.fth $TARGET_DIR/boot/olpc.fth
