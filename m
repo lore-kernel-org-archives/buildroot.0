@@ -1,49 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 22:02:26 +0200
-Subject: [Buildroot] [git commit] package/python-autobahn: bump to version
- 20.4.2
-Message-ID: <20200417194859.411A58EF63@busybox.osuosl.org>
+Date: Fri, 17 Apr 2020 22:01:18 +0200
+Subject: [Buildroot] [git commit] package/fbgrab: bump to version 1.3.3
+Message-ID: <20200417194859.2E9108EF63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=674c4ab6ad19406227c756778f8195eb3490ba63
+commit: https://git.buildroot.net/buildroot/commit/?id=5f45727ad269c486b92241bb3f5a43b37b353d4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+The pixfmt report bug has been fixed upstream.
+
+Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-autobahn/python-autobahn.hash | 4 ++--
- package/python-autobahn/python-autobahn.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/fbgrab/0100-fix-pixfmt-report.patch | 24 ------------------------
+ package/fbgrab/fbgrab.hash                  |  2 +-
+ package/fbgrab/fbgrab.mk                    |  2 +-
+ 3 files changed, 2 insertions(+), 26 deletions(-)
 
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index 3e4c167cfe..a49de07b70 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/autobahn/json
--md5  d8a916d44eced92c3152ac59b2805118  autobahn-20.4.1.tar.gz
--sha256  6d3989e4d8b0e961c9d3bb1fe133099767bbd5080cea21b2bdc2a0a1b4581b2e  autobahn-20.4.1.tar.gz
-+md5  9702594ee1c5613e9bb31af105140b5b  autobahn-20.4.2.tar.gz
-+sha256  1c943f94bb759c07445a6984a3bc4c76f73e2a90a1fc2c3521c211579b73d3db  autobahn-20.4.2.tar.gz
- # Locally computed sha256 checksums
- sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index 17bf338c24..d4e52352f2 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/fbgrab/0100-fix-pixfmt-report.patch b/package/fbgrab/0100-fix-pixfmt-report.patch
+deleted file mode 100644
+index 8cff7ef8c3..0000000000
+--- a/package/fbgrab/0100-fix-pixfmt-report.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Fix pixel format report
+-
+-When fbgrab tells about the framebuffer pixel format, blue and green
+-are accidentally swapped in 'length' and 'msb_right' columns. Let's
+-order everything as RGB.
+-
+-Upstream-Status: Submitted [Gunnar Monell <gmo@linux.nu>]
+-
+-Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+-
+-diff -u a/fbgrab.c b/fbgrab.c
+---- a/fbgrab.c	2018-03-07 11:42:04.739250433 +0200
+-+++ b/fbgrab.c	2018-03-07 11:43:26.128043877 +0200
+-@@ -169,8 +169,8 @@
+-         fprintf(stderr, "bits_per_pixel: %i\n", fb_varinfo_p->bits_per_pixel);
+-         fprintf(stderr, "grayscale: %s\n", fb_varinfo_p->grayscale ? "true" : "false");
+-         fprintf(stderr, "red:   offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->red.offset, fb_varinfo_p->red.length, fb_varinfo_p->red.msb_right);
+--        fprintf(stderr, "blue:  offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->blue.offset, fb_varinfo_p->green.length, fb_varinfo_p->green.msb_right);
+--        fprintf(stderr, "green: offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->green.offset, fb_varinfo_p->blue.length, fb_varinfo_p->blue.msb_right);
+-+        fprintf(stderr, "green: offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->green.offset, fb_varinfo_p->green.length, fb_varinfo_p->green.msb_right);
+-+        fprintf(stderr, "blue:  offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->blue.offset, fb_varinfo_p->blue.length, fb_varinfo_p->blue.msb_right);
+-         fprintf(stderr, "alpha: offset: %i, length: %i, msb_right: %i\n", fb_varinfo_p->transp.offset, fb_varinfo_p->transp.length, fb_varinfo_p->transp.msb_right);
+-         fprintf(stderr, "pixel format: %s\n", fb_varinfo_p->nonstd == 0 ? "standard" : "non-standard");
+-     }
+diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
+index 6cd19dc1d5..414a93c99e 100644
+--- a/package/fbgrab/fbgrab.hash
++++ b/package/fbgrab/fbgrab.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3314a932f830e32feaf36914e1b43326529fe35b7eb7410ff55f16c930ddfbcb  fbgrab-1.3.1.tar.gz
++sha256  2bfdad379579c4ca1a910d0a8ac63183ef2c12a45e6b7d402fd045d83bb3faee  fbgrab-1.3.3.tar.gz
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+index 43fd0ba948..6d2f09bc21 100644
+--- a/package/fbgrab/fbgrab.mk
++++ b/package/fbgrab/fbgrab.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_AUTOBAHN_VERSION = 20.4.1
-+PYTHON_AUTOBAHN_VERSION = 20.4.2
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/a3/2e/58f68840eef4a6740a41f59c5d3206a76e49993f90c954ae9777b120e09c
-+PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/13/0e/b182b46ea437e59003de78c68bb00824d304dcfe58e7235f29c4f275eca0
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+-FBGRAB_VERSION = 1.3.1
++FBGRAB_VERSION = 1.3.3
+ FBGRAB_SITE = $(call github,GunnarMonell,fbgrab,$(FBGRAB_VERSION))
+ FBGRAB_DEPENDENCIES = libpng
+ FBGRAB_LICENSE = GPL-2.0
