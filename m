@@ -1,132 +1,55 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 17 Apr 2020 15:28:09 +0200
-Subject: [Buildroot] [PATCH] package/asn1c: new host package
-In-Reply-To: <20200110211420.7704-1-sergio.prado@e-labworks.com>
-References: <20200110211420.7704-1-sergio.prado@e-labworks.com>
-Message-ID: <CAEyMn7Y=aY1zO0Wm5wVzHrdmn=CDrzJJ=aepgm5rXXJ4Hir-uw@mail.gmail.com>
+From: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>
+Date: Fri, 17 Apr 2020 13:36:43 +0000
+Subject: [Buildroot] [PATCH 1/1] package/nftables: use --with-mini-gmp when
+ gmp is not selected
+Message-ID: <20200417133643.1756986-1-adrien@gallouet.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI Sergio,
+Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
+---
+ package/nftables/Config.in   | 1 -
+ package/nftables/nftables.mk | 8 +++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-I tested the package with: utils/test-pkg -p host-asn1c
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: OK
-                          br-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-
-and it builds.
-
-Just some small comment below:
-
-Am Fr., 10. Jan. 2020 um 22:21 Uhr schrieb Sergio Prado
-<sergio.prado@e-labworks.com>:
->
-> The asn1c is a free, open source compiler of ASN.1 specifications into C
-> source code.
->
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-
-Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
-
-> ---
->  DEVELOPERS                   |  1 +
->  package/Config.in.host       |  1 +
->  package/asn1c/Config.in.host | 11 +++++++++++
->  package/asn1c/asn1c.hash     |  5 +++++
->  package/asn1c/asn1c.mk       | 12 ++++++++++++
->  5 files changed, 30 insertions(+)
->  create mode 100644 package/asn1c/Config.in.host
->  create mode 100644 package/asn1c/asn1c.hash
->  create mode 100644 package/asn1c/asn1c.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 80843dd1a113..287e222cdf57 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2241,6 +2241,7 @@ N:        Sergio Prado <sergio.prado@e-labworks.com>
->  F:     board/toradex/apalis-imx6/
->  F:     configs/toradex_apalis_imx6_defconfig
->  F:     package/aoetools/
-> +F:     package/asn1c/
->  F:     package/curlpp/
->  F:     package/daq/
->  F:     package/libgdiplus/
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 62e860d7c36c..a012ffaa38e9 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -2,6 +2,7 @@ menu "Host utilities"
->
->         source "package/aespipe/Config.in.host"
->         source "package/android-tools/Config.in.host"
-> +       source "package/asn1c/Config.in.host"
->         source "package/btrfs-progs/Config.in.host"
->         source "package/cargo/Config.in.host"
->         source "package/cbootimage/Config.in.host"
-> diff --git a/package/asn1c/Config.in.host b/package/asn1c/Config.in.host
-> new file mode 100644
-> index 000000000000..951f5f66915e
-> --- /dev/null
-> +++ b/package/asn1c/Config.in.host
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_HOST_ASN1C
-> +       bool "host asn1c"
-> +       help
-> +         ASN.1 stands for Abstract Syntax Notation One and allows
-> +         to describe complex data structures independently of any
-> +         particular programming language.
-> +
-> +         The asn1c is a free, open source compiler of ASN.1
-> +         specifications into C source code.
-> +
-> +         http://lionet.info/asn1c
-> diff --git a/package/asn1c/asn1c.hash b/package/asn1c/asn1c.hash
-> new file mode 100644
-> index 000000000000..a4fd3beffa53
-> --- /dev/null
-> +++ b/package/asn1c/asn1c.hash
-> @@ -0,0 +1,5 @@
-> +# Locally computed:
-> +sha256 8007440b647ef2dd9fb73d931c33ac11764e6afb2437dbe638bb4e5fc82386b9  asn1c-0.9.28.tar.gz
-> +
-> +# Hash for license files:
-> +sha256 bcc636802a52ace2255212be15fb707084af87061b5cfd37eb84dcf6a02cc48b  LICENSE
-> diff --git a/package/asn1c/asn1c.mk b/package/asn1c/asn1c.mk
-> new file mode 100644
-> index 000000000000..314462a92bf9
-> --- /dev/null
-> +++ b/package/asn1c/asn1c.mk
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# asn1c
-> +#
-> +################################################################################
-> +
-> +ASN1C_VERSION = 0.9.28
-> +ASN1C_SITE = https://github.com/vlm/asn1c/releases/download/v$(ASN1C_VERSION)
-
-You can use the github macro to set the <pkg>_SITE variable:
-ASN1C_SITE = $(call github,vlm,asn1c,v$(ASN1C_VERSION))
-
-> +ASN1C_LICENSE = BSD-2-Clause
-> +ASN1C_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(host-autotools-package))
-> --
-> 2.17.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/nftables/Config.in b/package/nftables/Config.in
+index 6452ab4f52..8d172b7256 100644
+--- a/package/nftables/Config.in
++++ b/package/nftables/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_NFTABLES
+ 	bool "nftables"
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+-	select BR2_PACKAGE_GMP
+ 	select BR2_PACKAGE_LIBMNL
+ 	select BR2_PACKAGE_LIBNFTNL
+ 	help
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 210e950c11..1fac9dd3bf 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -7,12 +7,18 @@
+ NFTABLES_VERSION = 0.9.3
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
+ NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
+-NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
++NFTABLES_DEPENDENCIES = libmnl libnftnl host-bison host-flex \
+ 	host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ NFTABLES_LICENSE = GPL-2.0
+ NFTABLES_LICENSE_FILES = COPYING
+ NFTABLES_CONF_OPTS = --disable-man-doc --disable-pdf-doc
+ 
++ifeq ($(BR2_PACKAGE_GMP),y)
++NFTABLES_DEPENDENCIES += gmp
++else
++NFTABLES_CONF_OPTS += --with-mini-gmp
++endif
++
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ NFTABLES_DEPENDENCIES += readline
+ NFTABLES_LIBS += -lncurses
 -- 
-BR,
-Heiko
+2.25.2
