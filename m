@@ -1,50 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 Apr 2020 21:40:49 +0200
-Subject: [Buildroot] [git commit] package/python-tabledata: bump to version
- 1.1.2
-Message-ID: <20200417192946.60F9C8EEBF@busybox.osuosl.org>
+Date: Fri, 17 Apr 2020 21:41:37 +0200
+Subject: [Buildroot] [git commit] package/python-more-itertools: bump to
+ version 8.2.0
+Message-ID: <20200417192946.7343C8EEC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d99b20e66e848c69e23bfbdfc84cab11575fa47b
+commit: https://git.buildroot.net/buildroot/commit/?id=0347ac4ed1c055eb0f258f29da2a51eea0d19074
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-tabledata/python-tabledata.hash | 6 +++---
- package/python-tabledata/python-tabledata.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-more-itertools/python-more-itertools.hash | 4 ++--
+ package/python-more-itertools/python-more-itertools.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-tabledata/python-tabledata.hash b/package/python-tabledata/python-tabledata.hash
-index 9d8564db30..5c9a538f66 100644
---- a/package/python-tabledata/python-tabledata.hash
-+++ b/package/python-tabledata/python-tabledata.hash
+diff --git a/package/python-more-itertools/python-more-itertools.hash b/package/python-more-itertools/python-more-itertools.hash
+index 3bb65897c0..1b4ffef2b6 100644
+--- a/package/python-more-itertools/python-more-itertools.hash
++++ b/package/python-more-itertools/python-more-itertools.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tabledata/json
--md5	3a97a7bd3f2687a139578a79353a8188  tabledata-0.9.1.tar.gz
--sha256	a2c59603ecb56cd2161a72978d56876377ba6a27a3e6d87e1874ba4d5ab02796  tabledata-0.9.1.tar.gz
-+md5  7d1ab52001d85d19d86f08a5ad8aab58  tabledata-1.1.2.tar.gz
-+sha256  db893596ab9066e5c4f002ae0fed70657e3b75cceb52dd1de5a0e145e338d830  tabledata-1.1.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/more-itertools/json
+-md5	f647bfd27243a7bebe53b5ddb6a3b1c4  more-itertools-7.2.0.tar.gz
+-sha256	409cd48d4db7052af495b09dec721011634af3753ae1ef92d2b32f73a745f832  more-itertools-7.2.0.tar.gz
++md5  55e7e0a5eabc5a57bc8353c65c6f9965  more-itertools-8.2.0.tar.gz
++sha256  b1ddb932186d8a6ac451e1d95844b382f55e12686d51ca0c68b6f61f2ab7a507  more-itertools-8.2.0.tar.gz
  # Locally computed sha256 checksums
--sha256	bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
-+sha256  bebbdf0524a147f89a615fff53d79bdc90cbc7631550fb4b725cd3f3bdcd24f6  LICENSE
-diff --git a/package/python-tabledata/python-tabledata.mk b/package/python-tabledata/python-tabledata.mk
-index c1381928c4..c1503e69cb 100644
---- a/package/python-tabledata/python-tabledata.mk
-+++ b/package/python-tabledata/python-tabledata.mk
+ sha256  09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46  LICENSE
+diff --git a/package/python-more-itertools/python-more-itertools.mk b/package/python-more-itertools/python-more-itertools.mk
+index 4932fdc4a0..334ef5e13a 100644
+--- a/package/python-more-itertools/python-more-itertools.mk
++++ b/package/python-more-itertools/python-more-itertools.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TABLEDATA_VERSION = 0.9.1
-+PYTHON_TABLEDATA_VERSION = 1.1.2
- PYTHON_TABLEDATA_SOURCE = tabledata-$(PYTHON_TABLEDATA_VERSION).tar.gz
--PYTHON_TABLEDATA_SITE = https://files.pythonhosted.org/packages/7d/20/7178ce0e3e34d5aff07e2280522b7e1bc23d4f2fbb916b765bbb41b22174
-+PYTHON_TABLEDATA_SITE = https://files.pythonhosted.org/packages/73/7c/67eec8e92504b8e00e5cc0053a3401bd1441eefc70cecfa4427bfcf76b89
- PYTHON_TABLEDATA_SETUP_TYPE = setuptools
- PYTHON_TABLEDATA_LICENSE = MIT
- PYTHON_TABLEDATA_LICENSE_FILES = LICENSE
+-PYTHON_MORE_ITERTOOLS_VERSION = 7.2.0
++PYTHON_MORE_ITERTOOLS_VERSION = 8.2.0
+ PYTHON_MORE_ITERTOOLS_SOURCE = more-itertools-$(PYTHON_MORE_ITERTOOLS_VERSION).tar.gz
+-PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/c2/31/45f61c8927c9550109f1c4b99ba3ca66d328d889a9c9853a808bff1c9fa0
++PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/a0/47/6ff6d07d84c67e3462c50fa33bf649cda859a8773b53dc73842e84455c05
+ PYTHON_MORE_ITERTOOLS_SETUP_TYPE = setuptools
+ PYTHON_MORE_ITERTOOLS_LICENSE = MIT
+ PYTHON_MORE_ITERTOOLS_LICENSE_FILES = LICENSE
