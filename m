@@ -1,58 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Apr 2020 14:46:00 +0200
-Subject: [Buildroot] [git commit] package/polkit: add upstream memory leak
- fix
-Message-ID: <20200418123232.B73908E1E5@busybox.osuosl.org>
+Date: Sat, 18 Apr 2020 14:45:50 +0200
+Subject: [Buildroot] [git commit] package/polkit: install service file
+Message-ID: <20200418123232.AEC258ED79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba70e29fea9fd76ffafd77401073d2142cbdfd21
+commit: https://git.buildroot.net/buildroot/commit/?id=3f885d9dfe061e0401a6c13871ae9301e68db862
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch fixes two small memory leaks.
+The default installed service file is missing a target, which causes preset-all
+to not enable the service.
 
-Upstream commit: 28e3a6653d8c3777b07e0128a0d97d46e586e311
+Add the service file to package/polkit with the addition of:
+
+[Install]
+WantedBy=multi-user.target
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/polkit/0002-jsauthority-memleak.patch | 28 +++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ package/polkit/polkit.mk      |  6 ++++++
+ package/polkit/polkit.service | 12 ++++++++++++
+ 2 files changed, 18 insertions(+)
 
-diff --git a/package/polkit/0002-jsauthority-memleak.patch b/package/polkit/0002-jsauthority-memleak.patch
+diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
+index 8572d8b9ba..ee0b3674de 100644
+--- a/package/polkit/polkit.mk
++++ b/package/polkit/polkit.mk
+@@ -43,4 +43,10 @@ define POLKIT_PERMISSIONS
+ 	/usr/bin/pkexec f 4755 root root - - - - -
+ endef
+ 
++define POLKIT_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 $(POLKIT_PKGDIR)/polkit.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/polkit.service
++
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/polkit/polkit.service b/package/polkit/polkit.service
 new file mode 100644
-index 0000000000..4f0733185c
+index 0000000000..a69b28cd93
 --- /dev/null
-+++ b/package/polkit/0002-jsauthority-memleak.patch
-@@ -0,0 +1,28 @@
-+From 28e3a6653d8c3777b07e0128a0d97d46e586e311 Mon Sep 17 00:00:00 2001
-+From: Jan Rybar <jrybar@redhat.com>
-+Date: Tue, 8 Oct 2019 13:28:18 +0000
-+Subject: [PATCH] jsauthority: Fix two minor memory leaks
++++ b/package/polkit/polkit.service
+@@ -0,0 +1,12 @@
++[Unit]
 +
-+(cherry picked from commit 28e3a6653d8c3777b07e0128a0d97d46e586e311)
-+Signed-off-by: Jan Rybar <jrybar@redhat.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ src/polkitbackend/polkitbackendjsauthority.cpp | 2 ++
-+ 1 file changed, 2 insertions(+)
++Description=Authorization Manager
++Documentation=man:polkit(8)
 +
-+diff --git a/src/polkitbackend/polkitbackendjsauthority.cpp b/src/polkitbackend/polkitbackendjsauthority.cpp
-+index 9b752d1..e97b8aa 100644
-+--- a/src/polkitbackend/polkitbackendjsauthority.cpp
-++++ b/src/polkitbackend/polkitbackendjsauthority.cpp
-+@@ -567,6 +567,8 @@ polkit_backend_js_authority_finalize (GObject *object)
-+   g_strfreev (authority->priv->rules_dirs);
-+ 
-+   delete authority->priv->ac;
-++  delete authority->priv->js_global;
-++  delete authority->priv->js_polkit;
-+ 
-+   JS_DestroyContext (authority->priv->cx);
-+   /* JS_ShutDown (); */
-+-- 
-+2.24.1
++[Service]
++Type=dbus
++BusName=org.freedesktop.PolicyKit1
++ExecStart=/usr/lib/polkit-1/polkitd --no-debug
 +
++[Install]
++WantedBy=multi-user.target
