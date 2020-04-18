@@ -1,64 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Apr 2020 15:25:23 +0200
-Subject: [Buildroot] [git commit] package/php: fix gd extension dependencies
- and options
-Message-ID: <20200418131118.1836B8EF70@busybox.osuosl.org>
+Date: Sat, 18 Apr 2020 15:26:40 +0200
+Subject: [Buildroot] [PATCH 2/2] package/php: fix gd dependencies
+In-Reply-To: <20200418090343.140078-2-aussedat.louis@gmail.com>
+References: <20200418090343.140078-1-aussedat.louis@gmail.com>
+ <20200418090343.140078-2-aussedat.louis@gmail.com>
+Message-ID: <20200418152640.0c88904a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31c5fd8f4b1ee26881ac37e55b0967bed0c6ebd2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Louis,
 
-Due to migration to pkg-config in php 7.4, the detection of
-library dependencies has been changed.
+On Sat, 18 Apr 2020 11:03:43 +0200
+Louis Aussedat <aussedat.louis@gmail.com> wrote:
 
-source from php.net:
---with-gd becomes --enable-gd
---with-png-dir has been removed. libpng is required.
---with-zlib-dir has been removed. zlib is required.
---with-freetype-dir becomes --with-freetype
---with-jpeg-dir becomes --with-jpeg
+> Due to migration to pkg-config in php 7.4, the detection of
+> library dependencies has been changed.
+> 
+> source from php.net:
+> --with-gd becomes --enable-gd
+> --with-png-dir has been removed. libpng is required.
+> --with-zlib-dir has been removed. zlib is required.
+> --with-freetype-dir becomes --with-freetype
+> --with-jpeg-dir becomes --with-jpeg
+> 
+> Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
 
-Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/php/Config.ext |  1 +
- package/php/php.mk     | 10 ++++------
- 2 files changed, 5 insertions(+), 6 deletions(-)
+I've applied. However, we are currently using the bundled libgd source
+code that comes from PHP, but it would be good to use an external gd
+library from package/gd. This would also allow to make the
+freetype/jpeg dependencies optional.
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 193bc1bd03..66ee935cf0 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -256,6 +256,7 @@ config BR2_PACKAGE_PHP_EXT_GD
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  GD support
- 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 8282bb1cc7..4d2f1b8f63 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -327,12 +327,10 @@ endif
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_GD),y)
- PHP_CONF_OPTS += \
--	--with-gd \
--	--with-jpeg-dir=$(STAGING_DIR)/usr \
--	--with-png-dir=$(STAGING_DIR)/usr \
--	--with-zlib-dir=$(STAGING_DIR)/usr \
--	--with-freetype-dir=$(STAGING_DIR)/usr
--PHP_DEPENDENCIES += jpeg libpng freetype
-+	--enable-gd \
-+	--with-jpeg \
-+	--with-freetype
-+PHP_DEPENDENCIES += jpeg libpng freetype zlib
- endif
- 
- ifeq ($(BR2_PACKAGE_PHP_SAPI_FPM),y)
+Could you have a look at doing this?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
