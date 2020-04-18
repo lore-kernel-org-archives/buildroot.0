@@ -1,58 +1,66 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 18 Apr 2020 12:01:24 +0200
-Subject: [Buildroot] compilation issue with a uboot-tools / ubootenv
- client program
-In-Reply-To: <7af4b2f6-543d-86ba-d392-9101cf7e14ce@smile.fr>
-References: <790fd2c10c690f6e5df1c312c709b2c136d75a74.camel@orolia.com>
- <7af4b2f6-543d-86ba-d392-9101cf7e14ce@smile.fr>
-Message-ID: <f07c0918-fec3-557c-35af-0efafc9d8ffc@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 18 Apr 2020 12:01:34 +0200
+Subject: [Buildroot] [PATCH 1/4] package/openjdk: fix hash
+In-Reply-To: <20200417232922.3762195-1-aduskett@gmail.com>
+References: <20200417232922.3762195-1-aduskett@gmail.com>
+Message-ID: <20200418120134.0a54a287@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nicolas, All,
+On Fri, 17 Apr 2020 16:29:19 -0700
+aduskett at gmail.com wrote:
 
-Le 17/04/2020 ? 13:24, Romain Naour a ?crit?:
-> Hi Nicolas,
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Le 17/04/2020 ? 12:17, Nicolas Carrier a ?crit?:
->> Hello,
->> I'm upgrading the buildroot version we're shipping in our products,
->> from buildroot 2019.02.5 to 2020.02.1.
->>
->> My issue is that I have a program which interacts with the u-boot
->> environment and thus, uses the headers of the ubootenv library provided
->> by uboot-tools, which doesn't compile anymore.
->>
->> Concretely during the compilation, gcc complains of a missing env.h
->> header, which is included by the fw_env.h that my program is using.
->> Exact error:
->>
->> [ 50%] Building C object CMakeFiles/fw-env-reproducer.dir/main.o
->> In file included from
->> /home/ncarrier/workspace/buildroot/output/build/fw-env-
->> reproducer/main.c:2:
->> /home/ncarrier/workspace/buildroot/output/host/arm-buildroot-linux-
->> uclibcgnueabihf/sysroot/usr/include/fw_env.h:7:10: fatal error: env.h:
->> No such file or directory
->>  #include <env.h>
->>           ^~~~~~~
->> compilation terminated.
-> 
-> This is an upstream change from uboot, see :
-> https://gitlab.denx.de/u-boot/u-boot/-/commit/9fb625ce05539fe6876a59ce1dcadb76b33c6f6e
+> The hash should be
+> 6815dbac7dd0f86291254e84ed17565c89477eeb6b0847a9648b00ecb4f07634
 
-It's seems an upstream bug since env_set() is not used in fw_env tool.
+No, the hash was
+6815dbac7dd0f86291254e84ed17565c89477eeb6b0847a9648b00ecb4f07634, and
+it is now
+fcd13ebd63d40c1c2f3cabfb7bc368962ff7b5935523be2a0e769352987145ae.
 
-Adding env.h is an error since it also include compiler.h (and others uboot
-internal includes) which is not present in STAGING_DIR.
+But still, why do you fix hashes like that, without investigating at
+least a little bit what's going on? How come we committed a wrong hash?
+How come there are no build failures related to this incorrect hash?
 
-Nicolas removed env.h from fw_env tool and fixed it's build issue.
+If you look at
+http://autobuild.buildroot.net/results/0a4/0a4608828365df301114b533d6b59a4733599d94/build-end.log,
+you will see why:
 
-This problem is present since uboot v2019.10, so the uboot version present in
-Buildroot 2020.02 is affected.
+ - We download from the original upstream location, and indeed the hash
+   of the upstream tarball is
+   fcd13ebd63d40c1c2f3cabfb7bc368962ff7b5935523be2a0e769352987145ae,
+   but we expect
+   6815dbac7dd0f86291254e84ed17565c89477eeb6b0847a9648b00ecb4f07634
 
-Best regards,
-Romain
+ - So we fallback to sources.buildroot.net, and here the tarball has
+   the expected hash, i.e
+   6815dbac7dd0f86291254e84ed17565c89477eeb6b0847a9648b00ecb4f07634
+
+So this means that:
+
+ (1) Upstream changed the contents of their tarball, which is really
+     BAD and we want to understand what are the changes. So you should
+     diff the new upstream  tarball, and the tarball that we have in
+     sources.buildroot.net and investigate the differences.
+
+ (2) We need to notify upstream that this is really bad.
+
+ (3) You can't change the hash just like this, because it would mean
+     that the hash would no longer match with the tarball we have
+     backed up on sources.buildroot.net.
+
+If we have hashes, it's not to blindly update them. We have hashes
+precisely to detect that kind of situation, so if you blindly update
+the hashes without doing any investigation, it makes it completely
+useless to have hashes.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
