@@ -1,231 +1,82 @@
 From: Dagg Stompler <daggs@gmx.com>
-Date: Sat, 18 Apr 2020 18:10:19 +0300
-Subject: [Buildroot] [PATCH 4/5] board/odroidc2: add board
+Date: Sat, 18 Apr 2020 18:10:20 +0300
+Subject: [Buildroot] [PATCH 5/5] configs/odroidc2: add build config
 In-Reply-To: <20200418151020.17197-1-daggs@gmx.com>
 References: <20200418151020.17197-1-daggs@gmx.com>
-Message-ID: <20200418151020.17197-4-daggs@gmx.com>
+Message-ID: <20200418151020.17197-5-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-re add the odroidc2 board to buildroot.
- - uses latest uboot.
- - uses kernel 5.6
+add config to buildroot which allows building an image which
+can run on Hardkernel's Odroid C2 board.
 
 Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
- board/hardkernel/odroidc2/boot.cmd            | 11 ++++
- board/hardkernel/odroidc2/genimage.cfg        | 33 +++++++++++
- board/hardkernel/odroidc2/post-build.sh       |  8 +++
- board/hardkernel/odroidc2/post-image.sh       | 29 ++++++++++
- board/hardkernel/odroidc2/readme.txt          | 57 +++++++++++++++++++
- .../rootfs_overlay/etc/init.d/S09modload      | 23 ++++++++
- 6 files changed, 161 insertions(+)
- create mode 100644 board/hardkernel/odroidc2/boot.cmd
- create mode 100644 board/hardkernel/odroidc2/genimage.cfg
- create mode 100755 board/hardkernel/odroidc2/post-build.sh
- create mode 100755 board/hardkernel/odroidc2/post-image.sh
- create mode 100644 board/hardkernel/odroidc2/readme.txt
- create mode 100755 board/hardkernel/odroidc2/rootfs_overlay/etc/init.d/S09modload
+ DEVELOPERS                 |  1 +
+ configs/odroidc2_defconfig | 40 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 41 insertions(+)
+ create mode 100644 configs/odroidc2_defconfig
 
-diff --git a/board/hardkernel/odroidc2/boot.cmd b/board/hardkernel/odroidc2/boot.cmd
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8e12ede746..21e7bb1719 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -640,6 +640,7 @@ F:	arch/Config.in.powerpc
+ F:	package/kvm-unit-tests
+
+ N:	Dagg Stompler <daggs@gmx.com>
++F:	board/odroidc2/
+ F:	package/meson-tools/
+ F:	package/OdroidC2ATF/
+
+diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
 new file mode 100644
-index 0000000000..d800a6d44b
+index 0000000000..3680fad91a
 --- /dev/null
-+++ b/board/hardkernel/odroidc2/boot.cmd
-@@ -0,0 +1,11 @@
-+setenv kernel_filename "Image"
-+setenv fdt_filename "meson-gxbb-odroidc2.dtb"
-+setenv bootargs "console=ttyAML0,115200n8 earlyprintk root=/dev/mmcblk1p2 rootwait rw"
++++ b/configs/odroidc2_defconfig
+@@ -0,0 +1,40 @@
++# Architecture
++BR2_aarch64=y
 +
-+echo > Loading Kernel...
-+fatload mmc 0:1 ${kernel_addr_r} ${kernel_filename}
-+echo > Loading FDT...
-+fatload mmc 0:1 ${fdt_addr_r} ${fdt_filename}
++# Toolchain
++BR2_GCC_VERSION_9_X=y
 +
-+echo > Booting System...
-+booti ${kernel_addr_r} - ${fdt_addr_r}
-diff --git a/board/hardkernel/odroidc2/genimage.cfg b/board/hardkernel/odroidc2/genimage.cfg
-new file mode 100644
-index 0000000000..a36b924b08
---- /dev/null
-+++ b/board/hardkernel/odroidc2/genimage.cfg
-@@ -0,0 +1,33 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"Image",
-+			"meson-gxbb-odroidc2.dtb",
-+			"boot.scr"
-+		}
-+	}
-+	size = 64M
-+}
++# System
++BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAML0"
++BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_ROOTFS_OVERLAY="board/hardkernel/odroidc2/rootfs_overlay"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/hardkernel/odroidc2/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="yes"
 +
-+image sdcard.img {
-+	hdimage {
-+	}
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-odroidc2"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 +
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "uboot-odc2.img"
-+		offset = 49664
-+	}
++# U-Boot
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
++BR2_TARGET_UBOOT_BOARDNAME="odroid-c2"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/hardkernel/odroidc2/boot.cmd"
 +
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/hardkernel/odroidc2/post-build.sh b/board/hardkernel/odroidc2/post-build.sh
-new file mode 100755
-index 0000000000..745fb2a724
---- /dev/null
-+++ b/board/hardkernel/odroidc2/post-build.sh
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+# post-build.sh for Odroid C2 taken from CubieBoard's post-build.sh
-+# 2013, Carlo Caione <carlo.caione@gmail.com>
-+
-+BOARD_DIR="$(dirname $0)"
-+MKIMAGE=$HOST_DIR/bin/mkimage
-+
-+${MKIMAGE} -A arm64 -O linux -T script -C none -n "Boot script" -d "${BOARD_DIR}/boot.cmd" ${BINARIES_DIR}/boot.scr
-diff --git a/board/hardkernel/odroidc2/post-image.sh b/board/hardkernel/odroidc2/post-image.sh
-new file mode 100755
-index 0000000000..3783a65a1c
---- /dev/null
-+++ b/board/hardkernel/odroidc2/post-image.sh
-@@ -0,0 +1,29 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+SIGNED_UBOOT_IMG="${BINARIES_DIR}/uboot-odc2.img"
-+ODRODIDC2_ATF_FOLDER="${HOST_DIR}/usr/share/odroidc2_atf"
-+IM_FILE="${ODRODIDC2_ATF_FOLDER}/bl1.bin.hardkernel"
-+
-+${HOST_DIR}/bin/fip_create --bl30 ${ODRODIDC2_ATF_FOLDER}/bl30.bin --bl301 ${ODRODIDC2_ATF_FOLDER}/bl301.bin --bl31 ${ODRODIDC2_ATF_FOLDER}/bl31.bin --bl33 ${BINARIES_DIR}/u-boot.bin ${BINARIES_DIR}/fip.bin
-+${HOST_DIR}/bin/fip_create --dump ${BINARIES_DIR}/fip.bin
-+cat ${ODRODIDC2_ATF_FOLDER}/bl2.package ${BINARIES_DIR}/fip.bin > ${BINARIES_DIR}/boot_new.bin
-+${HOST_DIR}/bin/amlbootsig ${BINARIES_DIR}/boot_new.bin ${BINARIES_DIR}/u-boot.img
-+
-+dd if=${BINARIES_DIR}/u-boot.img of=${SIGNED_UBOOT_IMG} bs=512 skip=96
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage                           \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-+
-+dd if=${IM_FILE} of=${BINARIES_DIR}/sdcard.img bs=1 count=442 conv=sync,notrunc
-+dd if=${IM_FILE} of=${BINARIES_DIR}/sdcard.img bs=512 skip=1 seek=1 conv=fsync,notrunc
-+
-+rm -rf ${BINARIES_DIR}/fip.bin ${BINARIES_DIR}/boot_new.bin ${BINARIES_DIR}/u-boot.img
-diff --git a/board/hardkernel/odroidc2/readme.txt b/board/hardkernel/odroidc2/readme.txt
-new file mode 100644
-index 0000000000..ef5a91d453
---- /dev/null
-+++ b/board/hardkernel/odroidc2/readme.txt
-@@ -0,0 +1,57 @@
-+ODROID-C2
-+
-+Intro
-+=====
-+To be able to use ODROID-C2 board with the images generated by
-+Buildroot, you have to prepare the SDCard or eMMC.
-+
-+How to build it
-+===============
-+
-+  $ make odroidc2_defconfig
-+
-+Then you can edit the build options using
-+
-+  $ make menuconfig
-+
-+Compile all and build rootfs image:
-+
-+  $ make
-+
-+Note: you will need to have access to the network, since Buildroot will
-+download the packages' sources.
-+
-+Result of the build
-+-------------------
-+
-+After building, you should obtain this tree:
-+
-+    output/images/
-+    +-- Image
-+    +-- uImage			   [2]
-+    +-- boot.scr                   [1]
-+    +-- boot.vfat
-+    +-- meson-gxbb-odroidc2.dtb
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4
-+    +-- rootfs.tar
-+    +-- sdcard.img
-+    +-- uboot-odc2.img		   [3]
-+    `-- u-boot.bin
-+
-+[1] This is the ODROID-C2 configuration file used in u-boot.
-+[2] This is the ODROID-C2 kernel image file which will be booted.
-+[3] This is the ODROID-C2 signed u-boot image which will be used.
-+
-+How to write the SD card or eMMC
-+================================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card or eMMC with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Insert the SDcard into your ODROID-C2, and power it up. Your new system
-+should come up now.
-diff --git a/board/hardkernel/odroidc2/rootfs_overlay/etc/init.d/S09modload b/board/hardkernel/odroidc2/rootfs_overlay/etc/init.d/S09modload
-new file mode 100755
-index 0000000000..9345a411b3
---- /dev/null
-+++ b/board/hardkernel/odroidc2/rootfs_overlay/etc/init.d/S09modload
-@@ -0,0 +1,23 @@
-+#!/bin/sh
-+#
-+
-+load_drivers()
-+{
-+	echo "Loading needed modules..."
-+	for file in $(echo "dwmac_generic dwmac-meson8b meson_dw_hdmi meson_gxbb_wdt"); do
-+		modprobe ${file}
-+	done
-+}
-+
-+case "$1" in
-+	start)
-+		load_drivers
-+		;;
-+	stop)
-+		;;
-+	restart|reload)
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		exit 1
-+esac
++# Required tools to create the SD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MESON_TOOLS=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_ODROIDC2ATF=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 --
 2.26.1
