@@ -1,46 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Apr 2020 19:23:34 +0200
-Subject: [Buildroot] [PATCHv2] support/scripts/boot-qemu-image.py:
- handle when pexpect.spawn() exit early
-In-Reply-To: <20200418184718.43631b8e@windsurf.home>
-References: <20200418161023.1221799-1-romain.naour@gmail.com>
- <20200418184718.43631b8e@windsurf.home>
-Message-ID: <20200418172334.GS5853@scaer>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Sat, 18 Apr 2020 20:27:56 +0200
+Subject: [Buildroot] [PATCH v4] configs/nenopi_neo4: new updated
+ defconfig
+In-Reply-To: <20200418181818.518d2882@windsurf.home>
+References: <1586891009-3147-1-git-send-email-marek.belisko@open-nandra.com>
+ <20200418181818.518d2882@windsurf.home>
+Message-ID: <CAAfyv35fRRDrYFSzLokg6sPhpQ=fDcHaCenD3qJFn9-hP6Fyvg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-04-18 18:47 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 18 Apr 2020 18:10:23 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
-> 
-> > diff --git a/support/scripts/boot-qemu-image.py b/support/scripts/boot-qemu-image.py
-> > index 2c1afba398..f2abaf83ed 100755
-> > --- a/support/scripts/boot-qemu-image.py
-> > +++ b/support/scripts/boot-qemu-image.py
-> > @@ -34,7 +34,7 @@ def main():
-> >          # In this case, spawn above will succeed at starting the wrapper
-> >          # start-qemu.sh, but that one will fail (exit with 127) in such
-> >          # a situation.
-> > -        exit = [int(l.split(' ')[1])
-> > +        exit = [int(l.split(' ')[1] if l is None else int(127))
-> 
-> I know I'm not very good with Python, but if I read this correctly you
-> are doing l.split() if l is None here, so you're trying to do a
-> l.split() precisely when is None... Are you sure this is working ?
+Hi Thomas.
 
-Besides, it is not None we should test against, but 'None"  (the string
-'None', not the object None).
+On Sat, Apr 18, 2020 at 6:18 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Marek,
+>
+> I've applied, with some very minor tweaks.
+Thanks a lot for fixes and for everything.
+>
+> First, typo in the commit title nenopi -> nanopi
+>
+> On Tue, 14 Apr 2020 21:03:29 +0200
+> Marek Belisko <marek.belisko@open-nandra.com> wrote:
+>
+> > This patch revert 8af7b11bd8a95bc41e4de46f727f3b0afde465a4 and
+> > add extra options to have build working
+>
+> I've improved the wording a bit, because this is not just about
+> reverting a previous patch.
+>
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 375ab07..dfcb7e4 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -1605,6 +1605,8 @@ F:      package/libatasmart/
+> >  F:   package/polkit/
+> >  F:   package/sg3_utils/
+> >  F:   package/udisks/
+> > +F:   board/friendlyarm/nanopi-m4/
+> > +F:   configs/nanopi_neo4_defconfig
+>
+> Alphabetic ordering was not good here.
+>
+> So I fixed those minor details, and applied. Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-Regards,
-Yann E. MORIN.
+BR,
+
+marek
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
+
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
