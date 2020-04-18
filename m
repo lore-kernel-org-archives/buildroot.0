@@ -1,105 +1,104 @@
 From: Dagg Stompler <daggs@gmx.com>
-Date: Sat, 18 Apr 2020 18:10:17 +0300
-Subject: [Buildroot] [PATCH 2/5] meson-tools: new Package
+Date: Sat, 18 Apr 2020 18:10:18 +0300
+Subject: [Buildroot] [PATCH 3/5] OdroidC2ATF: new Package
 In-Reply-To: <20200418151020.17197-1-daggs@gmx.com>
 References: <20200418151020.17197-1-daggs@gmx.com>
-Message-ID: <20200418151020.17197-2-daggs@gmx.com>
+Message-ID: <20200418151020.17197-3-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-add meson-tools for handling of amlogic boards boot firmware signatures
+introduce a package that holds the ATF for AmLogic's Odroid C2 boards
 
 Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
- DEVELOPERS                           |  3 +++
+ DEVELOPERS                           |  1 +
  package/Config.in.host               |  1 +
- package/meson-tools/Config.in.host   |  9 +++++++++
- package/meson-tools/meson-tools.hash |  2 ++
- package/meson-tools/meson-tools.mk   | 24 ++++++++++++++++++++++++
- 5 files changed, 39 insertions(+)
- create mode 100644 package/meson-tools/Config.in.host
- create mode 100644 package/meson-tools/meson-tools.hash
- create mode 100644 package/meson-tools/meson-tools.mk
+ package/OdroidC2ATF/Config.in.host   |  8 ++++++++
+ package/OdroidC2ATF/OdroidC2ATF.hash |  2 ++
+ package/OdroidC2ATF/OdroidC2ATF.mk   | 26 ++++++++++++++++++++++++++
+ 5 files changed, 38 insertions(+)
+ create mode 100644 package/OdroidC2ATF/Config.in.host
+ create mode 100644 package/OdroidC2ATF/OdroidC2ATF.hash
+ create mode 100644 package/OdroidC2ATF/OdroidC2ATF.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index f94d3e4faf..94d9c68208 100644
+index 94d9c68208..8e12ede746 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -639,6 +639,9 @@ N:	Cyril Bur <cyrilbur@gmail.com>
- F:	arch/Config.in.powerpc
- F:	package/kvm-unit-tests
+@@ -641,6 +641,7 @@ F:	package/kvm-unit-tests
 
-+N:	Dagg Stompler <daggs@gmx.com>
-+F:	package/meson-tools/
-+
+ N:	Dagg Stompler <daggs@gmx.com>
+ F:	package/meson-tools/
++F:	package/OdroidC2ATF/
+
  N:	Daniel J. Leach <dleach@belcan.com>
  F:	package/dacapo/
-
 diff --git a/package/Config.in.host b/package/Config.in.host
-index eb8f63f689..a5ad2a3f11 100644
+index a5ad2a3f11..f753182136 100644
 --- a/package/Config.in.host
 +++ b/package/Config.in.host
-@@ -42,6 +42,7 @@ menu "Host utilities"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/lttng-babeltrace/Config.in.host"
- 	source "package/mender-artifact/Config.in.host"
-+	source "package/meson-tools/Config.in.host"
- 	source "package/mfgtools/Config.in.host"
- 	source "package/mkpasswd/Config.in.host"
+@@ -48,6 +48,7 @@ menu "Host utilities"
  	source "package/mtd/Config.in.host"
-diff --git a/package/meson-tools/Config.in.host b/package/meson-tools/Config.in.host
+ 	source "package/mtools/Config.in.host"
+ 	source "package/mxsldr/Config.in.host"
++	source "package/OdroidC2ATF/Config.in.host"
+ 	source "package/omap-u-boot-utils/Config.in.host"
+ 	source "package/openocd/Config.in.host"
+ 	source "package/opkg-utils/Config.in.host"
+diff --git a/package/OdroidC2ATF/Config.in.host b/package/OdroidC2ATF/Config.in.host
 new file mode 100644
-index 0000000000..d90be61aeb
+index 0000000000..a8199d4f57
 --- /dev/null
-+++ b/package/meson-tools/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_MESON_TOOLS
-+	bool "host meson-tools"
++++ b/package/OdroidC2ATF/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_ODROIDC2ATF
++	bool "host OdroidC2ATF"
 +	help
-+	  meson-tools is a collection of tools for use with
-+	  the Amlogic Meson family of ARM based SoCs.
-+	  it allows management of signatures which are required
-+	  for booting amlogic based boards with u-boot.
++	  OdroidC2ATF is a package that holst the minimal file needed for the ATF (ARM Trusted Firmware) from hardkernel's
++	  uboot repository and uses it to allow safe boot of mainline u-boot kernels.
++	  the files were taken without chaning from https://github.com/hardkernel/u-boot/tree/odroidc2-v2015.01
 +
-+	  https://github.com/afaerber/meson-tools
-diff --git a/package/meson-tools/meson-tools.hash b/package/meson-tools/meson-tools.hash
++	  https://github.com/daggs1/OdroidC2ATF
+diff --git a/package/OdroidC2ATF/OdroidC2ATF.hash b/package/OdroidC2ATF/OdroidC2ATF.hash
 new file mode 100644
-index 0000000000..f10f5d8590
+index 0000000000..b9ec3bddb7
 --- /dev/null
-+++ b/package/meson-tools/meson-tools.hash
++++ b/package/OdroidC2ATF/OdroidC2ATF.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	10d707b2f741df03ff5000f2a82c6f577036ce1cd34d9278b22b92cb616b6fce	meson-tools-0a02e2d34413f4bf9b15946352bc8c8ee13a5843.tar.gz
-diff --git a/package/meson-tools/meson-tools.mk b/package/meson-tools/meson-tools.mk
++sha256	991fb15908410c6c8a6ef2e0da368ca8e2b813d123382f0e8958814ad0aead97  OdroidC2ATF-13a8560b2884cb5fa13537e1aa193e3cb7b2d996.tar.gz
+diff --git a/package/OdroidC2ATF/OdroidC2ATF.mk b/package/OdroidC2ATF/OdroidC2ATF.mk
 new file mode 100644
-index 0000000000..7fe115c6dd
+index 0000000000..166ce839b2
 --- /dev/null
-+++ b/package/meson-tools/meson-tools.mk
-@@ -0,0 +1,24 @@
++++ b/package/OdroidC2ATF/OdroidC2ATF.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# meson-tools
++# Odroidc2ATF
 +#
 +################################################################################
 +
-+HOST_MESON_TOOLS_VERSION = 0a02e2d34413f4bf9b15946352bc8c8ee13a5843
-+HOST_MESON_TOOLS_SITE = $(call github,afaerber,meson-tools,$(HOST_MESON_TOOLS_VERSION))
-+HOST_MESON_TOOLS_LICENSE = GPL-2.0+
-+HOST_MESON_TOOLS_LICENSE_FILES = COPYING README.md
-+HOST_MESON_TOOLS_DEPENDENCIES = host-openssl
++HOST_ODROIDC2ATF_VERSION = 13a8560b2884cb5fa13537e1aa193e3cb7b2d996
++HOST_ODROIDC2ATF_SITE = $(call github,daggs1,OdroidC2ATF,$(HOST_ODROIDC2ATF_VERSION))
++HOST_ODROIDC2ATF_LICENSE = GPL-2.0
++HOST_ODROIDC2ATF_LICENSE_FILES = COPYING COPYING.txt README
++HOST_ODROIDC2ATF_FIRMWARE_FOLDER = $(HOST_DIR)/usr/share/odroidc2_atf
++HOST_ODROIDC2ATF_FIRMWARE_FILES = bins/bl1.bin.hardkernel bins/bl30.bin bins/bl301.bin bins/bl31.bin bins/bl2.package
 +
-+HOST_MESON_TOOLS_PROGS = amlbootsig unamlbootsig amlinfo
-+
-+define HOST_MESON_TOOLS_BUILD_CMDS
-+	$(MAKE) -C $(@D) CC="$(HOSTCC)" CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS) -lssl -lcrypto"
++define HOST_ODROIDC2ATF_BUILD_CMDS
++	$(MAKE) -C $(@D)/fip_create CC="$(HOSTCC)" CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)"
 +endef
 +
-+define HOST_MESON_TOOLS_INSTALL_CMDS
-+	$(foreach f,$(HOST_MESON_TOOLS_PROGS),
-+		$(INSTALL) -D -m 0755 $(@D)/$(f) $(HOST_DIR)/bin/$(f))
++define HOST_ODROIDC2ATF_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/fip_create/fip_create $(HOST_DIR)/bin
++	mkdir -p $(HOST_ODROIDC2ATF_FIRMWARE_FOLDER)
++	$(foreach f,$(HOST_ODROIDC2ATF_FIRMWARE_FILES),
++		$(INSTALL) -D -m 0644 $(@D)/$(f) $(HOST_ODROIDC2ATF_FIRMWARE_FOLDER)/
++	)
 +endef
 +
 +$(eval $(host-generic-package))
