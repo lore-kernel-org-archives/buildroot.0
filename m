@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 19 Apr 2020 00:59:03 +0200
-Subject: [Buildroot] [PATCH v1 3/6] package/qt5tools: drop all legacy gcc
+Date: Sun, 19 Apr 2020 00:59:05 +0200
+Subject: [Buildroot] [PATCH v1 5/6] package/qt5webkit: drop all legacy gcc
  requierements below 5.0
 In-Reply-To: <20200418225906.17514-1-ps.report@gmx.net>
 References: <20200418225906.17514-1-ps.report@gmx.net>
-Message-ID: <20200418225906.17514-3-ps.report@gmx.net>
+Message-ID: <20200418225906.17514-5-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +15,31 @@ As qt5 requires as minimum gcc 5.0 drop all legacy requierements below.
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/qt5/qt5tools/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/qt5/qt5webkit/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
-index 60106c1ee3..f01b51d2e8 100644
---- a/package/qt5/qt5tools/Config.in
-+++ b/package/qt5/qt5tools/Config.in
-@@ -23,7 +23,6 @@ config BR2_PACKAGE_QT5TOOLS_QDOC_TOOL
- 	# currently supported in Buildroot, unless the target is
- 	# already supported by llvm.
- 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # llvm, clang
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # llvm, clang
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # llvm, clang
- 	depends on BR2_INSTALL_LIBSTDCPP # llvm, clang
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # llvm, clang
+diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+index e071dff208..5adcddfb5d 100644
+--- a/package/qt5/qt5webkit/Config.in
++++ b/package/qt5/qt5webkit/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_QT5WEBKIT
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	depends on BR2_INSTALL_LIBSTDCPP # leveldb
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # icu
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # leveldb
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	# assumes a FPU is available on MIPS
+@@ -31,8 +30,8 @@ config BR2_PACKAGE_QT5WEBKIT
+ 
+ 	  http://doc.qt.io/archives/qt-5.5/qtwebkit-index.html
+ 
+-comment "qt5webkit needs a toolchain w/ dynamic library, gcc >= 4.8"
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++comment "qt5webkit needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_MIPS_SOFT_FLOAT
 -- 
 2.26.0
