@@ -1,10 +1,10 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 18 Apr 2020 19:14:08 -0300
-Subject: [Buildroot] [PATCH v2 2/5] package/busybox: add modules-load init
- script
+Date: Sat, 18 Apr 2020 19:14:09 -0300
+Subject: [Buildroot] [PATCH v2 3/5] package/dmraid: use modules-load to load
+ the kernel module
 In-Reply-To: <20200418221411.1549783-1-unixmania@gmail.com>
 References: <20200418221411.1549783-1-unixmania@gmail.com>
-Message-ID: <20200418221411.1549783-3-unixmania@gmail.com>
+Message-ID: <20200418221411.1549783-4-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,66 +13,53 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-Use some scripting to mimic the systemd "modules-load" and the OpenRC
-"modules" services (load kernel modules based on static configuration).
-
-At the moment package/busybox/S02modules-load is a symlink to the kmod
-script, since it works with both versions of the "modprobe" utility.
+This is compatible with BusyBox/sysvinit (via S02modules-load), OpenRC
+and systemd. It also prevents trying to load the module each time the
+init script is executed.
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
-
-package/busybox/
-
 ---
-CC: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested on QEMU with a kernel config with MD=y and DM_<FOO>=m. Only the
+module loading was tested, since there is no RAID device.
 ---
-Changes v1->v2:
-- Rename S02modules-load to S11modules-load to ensure that it runs after
-  S10mdev and S10udev, which both are going to trigger cold-plug events
-  that may in turn trigger module loading, as observed by Yann E. MORIN.
----
- package/busybox/S11modules-load |  1 +
- package/busybox/busybox.mk      | 12 ++++++++++++
- 2 files changed, 13 insertions(+)
- create mode 120000 package/busybox/S11modules-load
+ package/dmraid/S20dmraid |  3 ---
+ package/dmraid/dmraid.mk | 12 ++++++++++++
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/package/busybox/S11modules-load b/package/busybox/S11modules-load
-new file mode 120000
-index 0000000000..44623673ff
---- /dev/null
-+++ b/package/busybox/S11modules-load
-@@ -0,0 +1 @@
-+../kmod/S11modules-load
-\ No newline at end of file
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 5d5f3e92bd..3512bf77b5 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -264,6 +264,17 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
- endef
- endif
+diff --git a/package/dmraid/S20dmraid b/package/dmraid/S20dmraid
+index b3bfdcc84b..ff325154c6 100644
+--- a/package/dmraid/S20dmraid
++++ b/package/dmraid/S20dmraid
+@@ -2,9 +2,6 @@
  
-+# Only install our modules-load script if no other package does it.
-+ifeq ($(BR2_PACKAGE_KMOD_TOOLS),)
-+define BUSYBOX_INSTALL_MODULES_SCRIPT
-+	if grep -q CONFIG_MODPROBE=y $(@D)/.config; \
-+	then \
-+		$(INSTALL) -m 0755 -D package/busybox/S11modules-load \
-+			$(TARGET_DIR)/etc/init.d/S11modules-load; \
-+	fi
+ set -e
+ 
+-# try to load module in case that hasn't been done yet
+-modprobe dm-mod >/dev/null 2>&1
+-
+ case "$1" in
+ 	start|"")
+ 		echo "Setting up DMRAID devices..."
+diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
+index 0382cd4d99..c8facbdabd 100644
+--- a/package/dmraid/dmraid.mk
++++ b/package/dmraid/dmraid.mk
+@@ -21,4 +21,16 @@ define DMRAID_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S20dmraid
+ endef
+ 
++ifeq ($(BR2_LINUX_KERNEL),y)
++define DMRAID_GEN_MODULES_CONF
++	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/modules-load.d
++	{ \
++		find $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/kernel/drivers/md -name 'dm[_-]mod.ko*'; \
++	} 2> /dev/null | { \
++		sed 's:^.*/::; s:\.ko[^ ]*::'; \
++	} > $(TARGET_DIR)/etc/modules-load.d/20-dmraid.conf
 +endef
++DMRAID_TARGET_FINALIZE_HOOKS += DMRAID_GEN_MODULES_CONF
 +endif
 +
- # Only install our sysctl scripts if no other package does it.
- ifeq ($(BR2_PACKAGE_PROCPS_NG),)
- define BUSYBOX_INSTALL_SYSCTL_SCRIPT
-@@ -368,6 +379,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
-+	$(BUSYBOX_INSTALL_MODULES_SCRIPT)
- 	$(BUSYBOX_INSTALL_SYSCTL_SCRIPT)
- 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
- endef
+ $(eval $(autotools-package))
 -- 
 2.18.2
