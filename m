@@ -1,102 +1,134 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 18 Apr 2020 12:31:08 +0200
-Subject: [Buildroot] [PATCH] package/environment-setup: new package
-Message-ID: <20200418103108.1877-1-angelo@amarulasolutions.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Apr 2020 14:02:11 +0200
+Subject: [Buildroot] [PATCH 4/4] package/openjdk: add support for
+ building the full jdk
+In-Reply-To: <20200417232922.3762195-4-aduskett@gmail.com>
+References: <20200417232922.3762195-1-aduskett@gmail.com>
+ <20200417232922.3762195-4-aduskett@gmail.com>
+Message-ID: <20200418120211.GN5853@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Install an helper script to setup a build environment
-based on buildroot. It's useful when you export an sdk
-and want to use buildroot to build an external project.
+Adam, All,
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- docs/manual/using-buildroot-toolchain.txt     |  7 +++++
- package/Config.in                             |  1 +
- package/environment-setup/Config.in           |  6 ++++
- .../environment-setup/environment-setup.mk    | 28 +++++++++++++++++++
- 4 files changed, 42 insertions(+)
- create mode 100644 package/environment-setup/Config.in
- create mode 100644 package/environment-setup/environment-setup.mk
+On 2020-04-17 16:29 -0700, aduskett at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Some users may require the full JDK on the target to debug or compile programs.
+> This change is relatively trivial to add.
 
-diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
-index 0c0c35fced..15096cfec8 100644
---- a/docs/manual/using-buildroot-toolchain.txt
-+++ b/docs/manual/using-buildroot-toolchain.txt
-@@ -27,6 +27,13 @@ Upon extracting the SDK tarball, the user must run the script
- +relocate-sdk.sh+ (located at the top directory of the SDK), to make
- sure all paths are updated with the new location.
- 
-+For your convenience, by selecting the package BR2_PACKAGE_ENVIRONMENT_SETUP,
-+you can have a +setup-environment.sh+ script installed in +output/host/+.
-+This script can be sourced with +. environment-setup.sh+ to launch
-+the buildroot shell. Inside this shell, you will find an environment already
-+set up with the correct PATH, the complete list of +target configure+
-+variables and some useful commands like the +configure+ alias.
-+
- Alternatively, if you just want to prepare the SDK without generating
- the tarball (e.g. because you will just be moving the +host+ directory,
- or will be generating the tarball on your own), Buildroot also allows
-diff --git a/package/Config.in b/package/Config.in
-index ccf54f2417..eff51d7451 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1949,6 +1949,7 @@ menu "Miscellaneous"
- 	source "package/collectl/Config.in"
- 	source "package/domoticz/Config.in"
- 	source "package/empty/Config.in"
-+	source "package/environment-setup/Config.in"
- 	source "package/gnuradio/Config.in"
- 	source "package/googlefontdirectory/Config.in"
- 	source "package/gqrx/Config.in"
-diff --git a/package/environment-setup/Config.in b/package/environment-setup/Config.in
-new file mode 100644
-index 0000000000..f0fcc7d0f8
---- /dev/null
-+++ b/package/environment-setup/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_ENVIRONMENT_SETUP
-+	bool "Environment setup"
-+	help
-+	  Install an helper script to setup a build environment
-+	  based on buildroot. It's useful when you export an sdk
-+	  and want to use buildroot to build an external project
-diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-new file mode 100644
-index 0000000000..840ee2a1a0
---- /dev/null
-+++ b/package/environment-setup/environment-setup.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# environment-setup
-+#
-+################################################################################
-+
-+ENVIRONMENT_SETUP_FILE = $(HOST_DIR)/environment-setup.sh
-+ENVIRONMENT_SETUP_SED_EXP = --expression='s+$(HOST_DIR)+\$$SDK_PATH+g'
-+
-+define ENVIRONMENT_SETUP_INSTALL_TARGET_CMDS
-+	cp package/environment-setup/environment-setup.sh $(ENVIRONMENT_SETUP_FILE)
-+	for var in $(TARGET_CONFIGURE_OPTS); do \
-+		echo export \"$$var\" | sed $(ENVIRONMENT_SETUP_SED_EXP) >> $(ENVIRONMENT_SETUP_FILE); \
-+	done
-+	echo export \"CROSS_COMPILE=$(TARGET_CROSS)\" | sed $(ENVIRONMENT_SETUP_SED_EXP) >> $(ENVIRONMENT_SETUP_FILE)
-+	echo export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
-+		--host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		--exec-prefix=/usr \
-+		--sysconfdir=/etc \
-+		--localstatedir=/var \
-+		--program-prefix=\" >> $(ENVIRONMENT_SETUP_FILE)
-+	echo "PS1=\"\[\e[32m\]buildroot-$(BR2_VERSION)\[\e[m\]:\[\e[34m\]\w\[\e[m\]\$$ \"" >> $(ENVIRONMENT_SETUP_FILE)
-+	echo alias "configure=\"./configure \$${CONFIGURE_FLAGS}\"" >> $(ENVIRONMENT_SETUP_FILE)
-+endef
-+
-+$(eval $(generic-package))
+I concur with Thomas on that one: we do not want to support doing
+development on the target.
+
+I've marked the patch as rejected in patchwork, now.
+
+Still, please read on for further review of this comit log...
+
+> To install the full JDK, do the following:
+>   - Add a new entry in package/openjdk/Config.in with the variable
+>     BR2_PACKAGE_OPENJDK_FULL_JDK
+> 
+>   - Check for this variable in openjdk.mk, if it is selected set the following
+>     variables:
+>       OPENJDK_INSTALL_DIR = jdk
+>       OPENJDK_MAKE_TARGET=jdk-image
+>     Otherwise, set the variables to jre and legacy-jre-image respectively.
+> 
+>   - change legacy-jre-image to $(OPENJDK_MAKE_TARGET) in the OPENJD_BUILD_CMDS
+>     define.
+> 
+>   - Change jre/* to $(OPENJDK_INSTALL_DIR)/* in the OPENJDK_INSTALL_TARGET_CMDS
+>     define
+
+Again, this commit log is not very helpful: it explains what is done,
+which is not so much interesting in itself: it is just restating what
+the code does, so it is bnetter to look at the code. What a commit log
+should do, is explain *why* a change needs to be done.
+
+Basically, a commit log should be a three-stage story:
+
+ 1. description of the problem
+ 2. explanations of why the problem occurs
+ 3. explanations on how we solve the problem
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/openjdk/Config.in  |  7 +++++++
+>  package/openjdk/openjdk.mk | 12 ++++++++++--
+>  2 files changed, 17 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
+> index 61294ec49f..158f3031c3 100644
+> --- a/package/openjdk/Config.in
+> +++ b/package/openjdk/Config.in
+> @@ -49,6 +49,13 @@ config BR2_PACKAGE_OPENJDK
+>  
+>  if BR2_PACKAGE_OPENJDK
+>  
+> +config BR2_PACKAGE_OPENJDK_FULL_JDK
+> +	bool "Build the full JDK"
+> +	help
+> +	  Install the full JDK instead of just the run time.
+> +	  Selecting this option will increase the file system by
+> +	  approximately 110M.
+> +
+>  choice
+>  	prompt "openjdk variant"
+>  	default BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER if !BR2_powerpc
+> diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+> index 19e71e98b2..e8803f3cb5 100644
+> --- a/package/openjdk/openjdk.mk
+> +++ b/package/openjdk/openjdk.mk
+> @@ -46,6 +46,14 @@ OPENJDK_JVM_VARIANT = zero
+>  OPENJDK_DEPENDENCIES += libffi
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_OPENJDK_FULL_JDK),y)
+> +OPENJDK_INSTALL_DIR = jdk
+> +OPENJDK_MAKE_TARGET=jdk-image
+> +else
+> +OPENJDK_INSTALL_DIR = jre
+> +OPENJDK_MAKE_TARGET=legacy-jre-image
+> +endif
+> +
+>  # Because jre/lib has a modules file, installation on a system with a merged
+>  # /usr directory, and a built Kernel before OpenJDK, the following error
+>  # occurs: "cp: cannot overwrite directory '/usr/lib/modules with non-directory"
+> @@ -117,14 +125,14 @@ endef
+>  # Make -jn is unsupported. Instead, set the "--with-jobs=" configure option,
+>  # and use $(MAKE1).
+>  define OPENJDK_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) legacy-jre-image
+> +	$(TARGET_MAKE_ENV) $(OPENJDK_CONF_ENV) $(MAKE1) -C $(@D) $(OPENJDK_MAKE_TARGET)
+>  endef
+>  
+>  # Calling make install always builds and installs the JDK instead of the JRE,
+>  # which makes manual installation necessary.
+>  define OPENJDK_INSTALL_TARGET_CMDS
+>  	mkdir -p $(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
+> -	cp -dpfr $(@D)/build/linux-*-release/images/jre/* \
+> +	cp -dpfr $(@D)/build/linux-*-release/images/$(OPENJDK_INSTALL_DIR)/* \
+>  		$(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
+>  	cd $(TARGET_DIR)/usr/bin && ln -snf ../../$(OPENJDK_INSTALL_BASE)/bin/* .
+>  endef
+> -- 
+> 2.25.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
