@@ -1,63 +1,58 @@
-From: Louis Aussedat <aussedat.louis@gmail.com>
-Date: Sat, 18 Apr 2020 11:03:43 +0200
-Subject: [Buildroot] [PATCH 2/2] package/php: fix gd dependencies
-In-Reply-To: <20200418090343.140078-1-aussedat.louis@gmail.com>
-References: <20200418090343.140078-1-aussedat.louis@gmail.com>
-Message-ID: <20200418090343.140078-2-aussedat.louis@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 18 Apr 2020 12:01:24 +0200
+Subject: [Buildroot] compilation issue with a uboot-tools / ubootenv
+ client program
+In-Reply-To: <7af4b2f6-543d-86ba-d392-9101cf7e14ce@smile.fr>
+References: <790fd2c10c690f6e5df1c312c709b2c136d75a74.camel@orolia.com>
+ <7af4b2f6-543d-86ba-d392-9101cf7e14ce@smile.fr>
+Message-ID: <f07c0918-fec3-557c-35af-0efafc9d8ffc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Due to migration to pkg-config in php 7.4, the detection of
-library dependencies has been changed.
+Hi Nicolas, All,
 
-source from php.net:
---with-gd becomes --enable-gd
---with-png-dir has been removed. libpng is required.
---with-zlib-dir has been removed. zlib is required.
---with-freetype-dir becomes --with-freetype
---with-jpeg-dir becomes --with-jpeg
+Le 17/04/2020 ? 13:24, Romain Naour a ?crit?:
+> Hi Nicolas,
+> 
+> Le 17/04/2020 ? 12:17, Nicolas Carrier a ?crit?:
+>> Hello,
+>> I'm upgrading the buildroot version we're shipping in our products,
+>> from buildroot 2019.02.5 to 2020.02.1.
+>>
+>> My issue is that I have a program which interacts with the u-boot
+>> environment and thus, uses the headers of the ubootenv library provided
+>> by uboot-tools, which doesn't compile anymore.
+>>
+>> Concretely during the compilation, gcc complains of a missing env.h
+>> header, which is included by the fw_env.h that my program is using.
+>> Exact error:
+>>
+>> [ 50%] Building C object CMakeFiles/fw-env-reproducer.dir/main.o
+>> In file included from
+>> /home/ncarrier/workspace/buildroot/output/build/fw-env-
+>> reproducer/main.c:2:
+>> /home/ncarrier/workspace/buildroot/output/host/arm-buildroot-linux-
+>> uclibcgnueabihf/sysroot/usr/include/fw_env.h:7:10: fatal error: env.h:
+>> No such file or directory
+>>  #include <env.h>
+>>           ^~~~~~~
+>> compilation terminated.
+> 
+> This is an upstream change from uboot, see :
+> https://gitlab.denx.de/u-boot/u-boot/-/commit/9fb625ce05539fe6876a59ce1dcadb76b33c6f6e
 
-Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
----
- package/php/Config.ext |  1 +
- package/php/php.mk     | 10 ++++------
- 2 files changed, 5 insertions(+), 6 deletions(-)
+It's seems an upstream bug since env_set() is not used in fw_env tool.
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 193bc1bd03..66ee935cf0 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -256,6 +256,7 @@ config BR2_PACKAGE_PHP_EXT_GD
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  GD support
- 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 8282bb1cc7..4d2f1b8f63 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -327,12 +327,10 @@ endif
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_GD),y)
- PHP_CONF_OPTS += \
--	--with-gd \
--	--with-jpeg-dir=$(STAGING_DIR)/usr \
--	--with-png-dir=$(STAGING_DIR)/usr \
--	--with-zlib-dir=$(STAGING_DIR)/usr \
--	--with-freetype-dir=$(STAGING_DIR)/usr
--PHP_DEPENDENCIES += jpeg libpng freetype
-+	--enable-gd \
-+	--with-jpeg \
-+	--with-freetype
-+PHP_DEPENDENCIES += jpeg libpng freetype zlib
- endif
- 
- ifeq ($(BR2_PACKAGE_PHP_SAPI_FPM),y)
--- 
-2.26.0
+Adding env.h is an error since it also include compiler.h (and others uboot
+internal includes) which is not present in STAGING_DIR.
+
+Nicolas removed env.h from fw_env tool and fixed it's build issue.
+
+This problem is present since uboot v2019.10, so the uboot version present in
+Buildroot 2020.02 is affected.
+
+Best regards,
+Romain
