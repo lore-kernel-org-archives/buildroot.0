@@ -1,42 +1,23 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 18 Apr 2020 18:39:23 -0300
-Subject: [Buildroot] [PATCH] package/busybox: add BUSYBOX_INSTALL_INIT_OPENRC
-Message-ID: <20200418213923.1548313-1-unixmania@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 18 Apr 2020 21:40:23 +0000
+Subject: [Buildroot] [Bug 12786] Systemd spawns two getty processes when the
+ getty port is set to console
+In-Reply-To: <bug-12786-163@https.bugs.busybox.net/>
+References: <bug-12786-163@https.bugs.busybox.net/>
+Message-ID: <bug-12786-163-NjIGVZQK27@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=12786
 
-Install the sysvinit scripts, for the moment, but not S02sysctl, since
-openrc provides /etc/init.d/sysctl.
+--- Comment #1 from Matt Weber <matthew.weber@rockwellcollins.com> ---
+ I can confirm I see similar with aarch64 build using master.  I noticed it is
+possible to login and run commands you just have to keep escaping the new getty
+:-)
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
- package/busybox/busybox.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index b9d82ed71e..5d5f3e92bd 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -355,6 +355,15 @@ define BUSYBOX_INSTALL_TARGET_CMDS
- 	$(BUSYBOX_INSTALL_MDEV_CONF)
- endef
- 
-+# Install the sysvinit scripts, for the moment, but not those that already
-+# have a corresponding one in openrc.
-+define BUSYBOX_INSTALL_INIT_OPENRC
-+	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
-+	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
-+	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
-+	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
-+endef
-+
- define BUSYBOX_INSTALL_INIT_SYSV
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
 -- 
-2.18.2
+You are receiving this mail because:
+You are on the CC list for the bug.
