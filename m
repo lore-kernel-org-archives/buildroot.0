@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 19 Apr 2020 00:59:06 +0200
-Subject: [Buildroot] [PATCH v1 6/6] package/qt-webkit-kiosk: drop all legacy
+Date: Sun, 19 Apr 2020 00:59:04 +0200
+Subject: [Buildroot] [PATCH v1 4/6] package/qt5webengine: drop all legacy
  gcc requierements below 5.0
 In-Reply-To: <20200418225906.17514-1-ps.report@gmx.net>
 References: <20200418225906.17514-1-ps.report@gmx.net>
-Message-ID: <20200418225906.17514-6-ps.report@gmx.net>
+Message-ID: <20200418225906.17514-4-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,31 +15,32 @@ As qt5 requires as minimum gcc 5.0 drop all legacy requierements below.
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/qt-webkit-kiosk/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/qt5/qt5webengine/Config.in | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/qt-webkit-kiosk/Config.in b/package/qt-webkit-kiosk/Config.in
-index 46688a227b..b620154ed1 100644
---- a/package/qt-webkit-kiosk/Config.in
-+++ b/package/qt-webkit-kiosk/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK
- 	depends on BR2_PACKAGE_QT5
- 	depends on !BR2_STATIC_LIBS # qt5webkit
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5webkit
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # qt5webkit -> icu
- 	depends on !BR2_BINFMT_FLAT # qt5webkit -> icu
- 	depends on !BR2_MIPS_SOFT_FLOAT # qt5webkit
- 	select BR2_PACKAGE_OPENSSL
-@@ -25,8 +24,8 @@ config BR2_PACKAGE_QT_WEBKIT_KIOSK_SOUNDS
+diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
+index a05205c7ad..56b6da8b0e 100644
+--- a/package/qt5/qt5webengine/Config.in
++++ b/package/qt5/qt5webengine/Config.in
+@@ -10,10 +10,9 @@ config BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT # qt5base-icu
+ 	depends on BR2_USE_MMU # libglib2, qt5base-dbus
  
- endif
+-comment "qt5webengine needs udev /dev management and a glibc toolchain w/ gcc >= 4.8, threads, wchar"
++comment "qt5webengine needs udev /dev management and a glibc toolchain w/ threads, wchar"
+ 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_USES_GLIBC || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
  
--comment "qt-webkit-kiosk needs a toolchain w/ dynamic library, gcc >= 4.8"
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+comment "qt-webkit-kiosk needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_MIPS_SOFT_FLOAT
+ comment "qt5webengine needs an OpenGL and EGL-capable backend"
+@@ -24,7 +23,6 @@ config BR2_PACKAGE_QT5WEBENGINE
+ 	bool "qt5webengine"
+ 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # qt5base-icu
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
 -- 
 2.26.0
