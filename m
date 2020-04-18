@@ -1,36 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Apr 2020 15:31:24 +0200
-Subject: [Buildroot] [git commit] package/imx-mkimage: add support for
- i.MX8M Nano
-Message-ID: <20200418132828.CFD5C8EF62@busybox.osuosl.org>
+Date: Sat, 18 Apr 2020 15:32:05 +0200
+Subject: [Buildroot] [git commit] configs/nitrogen*: bump kernel revision
+Message-ID: <20200418132828.E93538F08B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a0323c5dfcbce91010b3158d3488a1ade7bdec6
+commit: https://git.buildroot.net/buildroot/commit/?id=85025a94b2d0ae971c368a00db8ab52688e14290
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This CPU uses the same tools to generate boot images as 8MQ/8MMini.
+Changelog:
+- fix PMIC issue for i.MX8MMini
+- add support for MCP25xxFD SPI to CAN chip
+- fix external module build issue for GCC >= 9
+- add BD Nano board support
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Cc: Erik Larsson <karl.erik.larsson at gmail.com
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/imx-mkimage/imx-mkimage.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/nitrogen6sx_defconfig | 2 +-
+ configs/nitrogen6x_defconfig  | 2 +-
+ configs/nitrogen7_defconfig   | 2 +-
+ configs/nitrogen8m_defconfig  | 2 +-
+ configs/nitrogen8mm_defconfig | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
-index 270ef2ee01..ed0e435a73 100644
---- a/package/imx-mkimage/imx-mkimage.mk
-+++ b/package/imx-mkimage/imx-mkimage.mk
-@@ -11,7 +11,7 @@ IMX_MKIMAGE_LICENSE = GPL-2.0+
- IMX_MKIMAGE_LICENSE_FILES = COPYING
- HOST_IMX_MKIMAGE_DEPENDENCIES = host-zlib
- 
--ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM),y)
-+ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN),y)
- # i.MX8M needs a different binary
- define HOST_IMX_MKIMAGE_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index 7330d00f69..f134c442d4 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -35,7 +35,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/boot.cmd"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_4.14.x_2.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/208127fd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index cd0697dbfb..e0939af14e 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -35,7 +35,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/boot.cmd"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_4.14.x_2.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/208127fd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index 7a2ff4d3ad..586c0e0ee1 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -34,7 +34,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/boundarydevices/common/boot.cmd"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_4.14.x_2.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/208127fd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
+index a1e555a84a..cfe0ed1a9b 100644
+--- a/configs/nitrogen8m_defconfig
++++ b/configs/nitrogen8m_defconfig
+@@ -49,7 +49,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Latest revision  of branch boundary-imx_4.14.x_2.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/208127fd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
+index a7aa55c527..5af1b5251e 100644
+--- a/configs/nitrogen8mm_defconfig
++++ b/configs/nitrogen8mm_defconfig
+@@ -49,7 +49,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Latest revision  of branch boundary-imx_4.14.x_2.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/208127fd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
