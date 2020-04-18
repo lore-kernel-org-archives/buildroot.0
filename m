@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Apr 2020 14:55:16 +0200
-Subject: [Buildroot] [PATCH 1/4] package/polkit: install service file
-In-Reply-To: <20200418025816.1642936-1-aduskett@gmail.com>
-References: <20200418025816.1642936-1-aduskett@gmail.com>
-Message-ID: <20200418145516.230bb8eb@windsurf.home>
+Date: Sat, 18 Apr 2020 14:56:35 +0200
+Subject: [Buildroot] [PATCH v4] package/swupdate: add basic systemd/sysv
+ service
+In-Reply-To: <20200418003110.44556-1-matthew.weber@rockwellcollins.com>
+References: <20200418003110.44556-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20200418145635.70ec949f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 17 Apr 2020 19:58:13 -0700
-aduskett at gmail.com wrote:
+Hello,
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> The default installed service file is missing a target, which causes preset-all
-> to not enable the service.
-> 
-> Add the service file to package/polkit with the addition of:
-> 
-> [Install]
-> WantedBy=multi-user.target
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/polkit/polkit.mk      |  6 ++++++
->  package/polkit/polkit.service | 12 ++++++++++++
->  2 files changed, 18 insertions(+)
->  create mode 100644 package/polkit/polkit.service
+On Fri, 17 Apr 2020 19:31:10 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-I've applied the series. However, I hesitated to apply PATCH 1/4:
-upstream provides a service file so it would be better to be able to
-use it. Could you report to upstream the missing [Install] section in
-the .service file ?
 
-Thanks,
+> +ifeq ($(BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE),y)
+> +define SWUPDATE_INSTALL_COMMON
+> +	mkdir -p $(TARGET_DIR)/etc/swupdate/conf.d \
+> +		$(TARGET_DIR)/usr/lib/swupdate/conf.d
+> +	$(INSTALL) -D -m 755 package/swupdate/swupdate.sh \
+> +		$(TARGET_DIR)/usr/lib/swupdate
+
+Should have been a full destination path.
+
+> +define SWUPDATE_INSTALL_INIT_SYSV
+> +	$(SWUPDATE_INSTALL_COMMON)
+> +	$(INSTALL) -D -m 755 package/swupdate/S80SWUpdate \
+> +		$(TARGET_DIR)/etc/init.d/
+
+Ditto. And also, why S80SWUpdate instead of S80swupdate? I've renamed
+to lower-case.
+
+Applied with those minor nits fixed.
+
+Thanks a lot!
 
 Thomas
 -- 
