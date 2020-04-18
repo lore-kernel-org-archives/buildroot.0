@@ -1,40 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Apr 2020 14:54:26 +0200
-Subject: [Buildroot] [PATCH] package/environment-setup: new package
-In-Reply-To: <20200418124525.GR5853@scaer>
-References: <20200418103108.1877-1-angelo@amarulasolutions.com>
- <20200418124525.GR5853@scaer>
-Message-ID: <20200418145426.7ce8e43d@windsurf.home>
+Date: Sat, 18 Apr 2020 14:55:16 +0200
+Subject: [Buildroot] [PATCH 1/4] package/polkit: install service file
+In-Reply-To: <20200418025816.1642936-1-aduskett@gmail.com>
+References: <20200418025816.1642936-1-aduskett@gmail.com>
+Message-ID: <20200418145516.230bb8eb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 18 Apr 2020 14:45:25 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Fri, 17 Apr 2020 19:58:13 -0700
+aduskett at gmail.com wrote:
 
-> > +For your convenience, by selecting the package BR2_PACKAGE_ENVIRONMENT_SETUP,
-> > +you can have a +setup-environment.sh+ script installed in +output/host/+.
-> > +This script can be sourced with +. environment-setup.sh+ to launch
-> > +the buildroot shell. Inside this shell, you will find an environment already
-> > +set up with the correct PATH, the complete list of +target configure+
-> > +variables and some useful commands like the +configure+ alias.  
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> I don't think this should warrant a blurb in the manual. Otherwise, you
-> would have to add the same for the meson cross-compilation file that we
-> provide. And the ones for cmake as well...
+> The default installed service file is missing a target, which causes preset-all
+> to not enable the service.
+> 
+> Add the service file to package/polkit with the addition of:
+> 
+> [Install]
+> WantedBy=multi-user.target
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/polkit/polkit.mk      |  6 ++++++
+>  package/polkit/polkit.service | 12 ++++++++++++
+>  2 files changed, 18 insertions(+)
+>  create mode 100644 package/polkit/polkit.service
 
-I actually think the meson cross-compilation, the cmake toolchain file
-and al. should be documented in the manual. I'm not sure where exactly.
-In fact we should probably a section "Application development" in
-Buildroot, where we cover how to manually build stuff against the
-Buildroot toolchain, how to use the SDK, how to use the local site
-method or <pkg>_OVERRIDE_SRCDIR, etc.
+I've applied the series. However, I hesitated to apply PATCH 1/4:
+upstream provides a service file so it would be better to be able to
+use it. Could you report to upstream the missing [Install] section in
+the .service file ?
 
-Besides that aspect, I agree with Yann's review.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
