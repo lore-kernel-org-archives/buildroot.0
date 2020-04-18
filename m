@@ -1,10 +1,10 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sat, 18 Apr 2020 19:14:10 -0300
-Subject: [Buildroot] [PATCH v2 4/5] package/owfs: use modules-load to load
- the kernel module
+Date: Sat, 18 Apr 2020 19:14:11 -0300
+Subject: [Buildroot] [PATCH v2 5/5] package/ti-sgx-km: use modules-load to
+ load the kernel module
 In-Reply-To: <20200418221411.1549783-1-unixmania@gmail.com>
 References: <20200418221411.1549783-1-unixmania@gmail.com>
-Message-ID: <20200418221411.1549783-5-unixmania@gmail.com>
+Message-ID: <20200418221411.1549783-6-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,49 +17,65 @@ This is compatible with BusyBox/sysvinit (via S02modules-load), OpenRC
 and systemd. It also prevents trying to load the module each time the
 init script is executed.
 
+Remove the insmod command from the ti-sgx-um init script.
+
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
-Tested on QEMU with a kernel config with FUSE_FS=m. Only the module
-loading was tested, since there is no 1-wire device.
+Tested on a BeagleBone Black card using beaglebone_qt5_defconfig.
 ---
- package/owfs/S60owfs |  2 --
- package/owfs/owfs.mk | 11 +++++++++++
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ package/ti-sgx-km/ti-sgx-km.mk | 10 ++++++++++
+ package/ti-sgx-um/S80ti-sgx    | 19 ++-----------------
+ 2 files changed, 12 insertions(+), 17 deletions(-)
 
-diff --git a/package/owfs/S60owfs b/package/owfs/S60owfs
-index feed676f8a..46b7ec775d 100644
---- a/package/owfs/S60owfs
-+++ b/package/owfs/S60owfs
-@@ -10,8 +10,6 @@ OWFS_ARGS=""
- case "$1" in
- start)
- 	printf "Starting ${NAME}: "
--	# Fuse may be in a module, so try to load it
--	modprobe -q fuse && printf "[fuse] "
- 	mkdir -p ${OWFS_MOUNTPOINT}
- 	start-stop-daemon -S -x ${DAEMON} -- \
- 		--pid_file ${PID_F} -m ${OWFS_MOUNTPOINT} ${OWFS_DEVICES} \
-diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
-index ffc0b3098d..a09a4bb37b 100644
---- a/package/owfs/owfs.mk
-+++ b/package/owfs/owfs.mk
-@@ -35,6 +35,17 @@ define OWFS_CREATE_MOUNTPOINT
- 	mkdir -p $(TARGET_DIR)/dev/1wire
+diff --git a/package/ti-sgx-km/ti-sgx-km.mk b/package/ti-sgx-km/ti-sgx-km.mk
+index ae294c300a..7f627f276b 100644
+--- a/package/ti-sgx-km/ti-sgx-km.mk
++++ b/package/ti-sgx-km/ti-sgx-km.mk
+@@ -33,4 +33,14 @@ define TI_SGX_KM_INSTALL_TARGET_CMDS
+ 		kbuild_install -C $(@D)/$(TI_SGX_KM_SUBDIR)
  endef
- OWFS_POST_INSTALL_TARGET_HOOKS += OWFS_CREATE_MOUNTPOINT
-+ifeq ($(BR2_LINUX_KERNEL),y)
-+define OWFS_GEN_MODULES_CONF
+ 
++define TI_SGX_KM_GEN_MODULES_CONF
 +	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/modules-load.d
 +	{ \
-+		find $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/kernel/fs/fuse -name 'fuse.ko*'; \
++		find $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/extra -name 'pvrsrvkm.ko*'; \
 +	} 2> /dev/null | { \
 +		sed 's:^.*/::; s:\.ko[^ ]*::'; \
-+	} > $(TARGET_DIR)/etc/modules-load.d/60-owfs.conf
++	} > $(TARGET_DIR)/etc/modules-load.d/50-ti-sgx-km.conf
 +endef
-+OWFS_TARGET_FINALIZE_HOOKS += OWFS_GEN_MODULES_CONF
-+endif
- else
- OWFS_CONF_OPTS += --disable-owfs
- endif
++TI_SGX_KM_TARGET_FINALIZE_HOOKS += TI_SGX_KM_GEN_MODULES_CONF
++
+ $(eval $(generic-package))
+diff --git a/package/ti-sgx-um/S80ti-sgx b/package/ti-sgx-um/S80ti-sgx
+index 2630a0576a..0f183b6fc5 100644
+--- a/package/ti-sgx-um/S80ti-sgx
++++ b/package/ti-sgx-um/S80ti-sgx
+@@ -1,24 +1,9 @@
+ #!/bin/sh
+ 
+-pvrsrvkm_ko="/lib/modules/$(/bin/uname -r)/extra/pvrsrvkm.ko"
+-
+-pvr_loaded() {
+-	/sbin/lsmod | /bin/grep -q '^\<pvrsrvkm\>'
+-}
+-
+-pvr_load() {
+-	/sbin/insmod "$pvrsrvkm_ko" > /dev/null 2>&1
+-}
+-
+ start() {
+-	printf 'Loading pvrsrvkm module: '
+-	pvr_loaded || pvr_load
++	printf 'Starting PowerVR services: '
++	/usr/bin/pvrsrvctl --start --no-module > /dev/null 2>&1
+ 	status=$?
+-	if [ "$status" -eq 0 ]; then
+-		printf 'Starting PowerVR services: '
+-		/usr/bin/pvrsrvctl --start --no-module > /dev/null 2>&1
+-		status=$?
+-	fi
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
+ 	else
 -- 
 2.18.2
