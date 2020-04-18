@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Apr 2020 14:21:28 +0200
-Subject: [Buildroot] [PATCH 3/4] package/openjdk: copy all directories
- and files when installing
-In-Reply-To: <20200417232922.3762195-3-aduskett@gmail.com>
+Date: Sat, 18 Apr 2020 14:26:11 +0200
+Subject: [Buildroot] [PATCH 2/4] package/openjdk: fix installation with
+ merged usr directories
+In-Reply-To: <20200417232922.3762195-2-aduskett@gmail.com>
 References: <20200417232922.3762195-1-aduskett@gmail.com>
- <20200417232922.3762195-3-aduskett@gmail.com>
-Message-ID: <20200418122128.GP5853@scaer>
+ <20200417232922.3762195-2-aduskett@gmail.com>
+Message-ID: <20200418122611.GQ5853@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,51 +16,46 @@ Adam, All,
 
 On 2020-04-17 16:29 -0700, aduskett at gmail.com spake thusly:
 > From: Adam Duskett <Aduskett@gmail.com>
+> Currently, Buildroot installs the jre libraries using
+> cp -dprf /build/linux-*-release/images/jre/lib/* $(TARGET_DIR)/usr/lib/
 > 
-> Several directories and files are currently not installed during the
-> target installation, these include:
->   - conf
->     Several configuration files, including security configuration files which
->     may be necessary for running various java applications.
-> 
->   - legal
->     This directory contains legal notices that some java applications may
->     require.
+> However, if a system has a merged /usr directory, and there is a
+> built kernel before installing OpenJDK, the installation fails because
+> jre/lib has binary modules file, which causes the following error:
+> cp: cannot overwrite directory '/usr/lib/modules with non-directory
+[--SNIP--]
+> diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+> index edc86c6fbe..d540b65edc 100644
+> --- a/package/openjdk/openjdk.mk
+> +++ b/package/openjdk/openjdk.mk
+[--SNIP--]
+> @@ -114,8 +123,12 @@ endef
+>  # Calling make install always builds and installs the JDK instead of the JRE,
+>  # which makes manual installation necessary.
+>  define OPENJDK_INSTALL_TARGET_CMDS
+> -	cp -dpfr $(@D)/build/linux-*-release/images/jre/bin/* $(TARGET_DIR)/usr/bin/
+> -	cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/* $(TARGET_DIR)/usr/lib/
+> +	mkdir -p $(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
+> +	cp -dpfr $(@D)/build/linux-*-release/images/jre/bin/ \
+> +		$(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
+> +	cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/ \
+> +		$(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
 
-At runtime, really?
+Additional nit in addition to the previous review...
 
->   - release
->     This directory contains a list of modules included in the image.
-> 
-> Because these directories take up less than of megabyte extra, it is not an
-> issue to install all of them.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+When the target is a directory, make it sure to copy to a directory by
+appending a trailing '/' :
 
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+    cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/ \
+        (TARGET_DIR)/$(OPENJDK_INSTALL_BASE)/
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/openjdk/openjdk.mk | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-> index d540b65edc..19e71e98b2 100644
-> --- a/package/openjdk/openjdk.mk
-> +++ b/package/openjdk/openjdk.mk
-> @@ -124,9 +124,7 @@ endef
->  # which makes manual installation necessary.
->  define OPENJDK_INSTALL_TARGET_CMDS
->  	mkdir -p $(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
-> -	cp -dpfr $(@D)/build/linux-*-release/images/jre/bin/ \
-> -		$(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
-> -	cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/ \
-> +	cp -dpfr $(@D)/build/linux-*-release/images/jre/* \
->  		$(TARGET_DIR)/$(OPENJDK_INSTALL_BASE)
->  	cd $(TARGET_DIR)/usr/bin && ln -snf ../../$(OPENJDK_INSTALL_BASE)/bin/* .
+> +	cd $(TARGET_DIR)/usr/bin && ln -snf ../../$(OPENJDK_INSTALL_BASE)/bin/* .
 >  endef
+>  
+>  $(eval $(generic-package))
 > -- 
 > 2.25.2
 > 
