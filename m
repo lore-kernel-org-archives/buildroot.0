@@ -1,65 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Apr 2020 18:30:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apcupsd: new package
-In-Reply-To: <20200413222930.99472-1-james.hilliard1@gmail.com>
-References: <20200413222930.99472-1-james.hilliard1@gmail.com>
-Message-ID: <20200418183040.386d3ab3@windsurf.home>
+Date: Sat, 18 Apr 2020 18:47:18 +0200
+Subject: [Buildroot] [PATCHv2] support/scripts/boot-qemu-image.py:
+ handle when pexpect.spawn() exit early
+In-Reply-To: <20200418161023.1221799-1-romain.naour@gmail.com>
+References: <20200418161023.1221799-1-romain.naour@gmail.com>
+Message-ID: <20200418184718.43631b8e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello James,
+On Sat, 18 Apr 2020 18:10:23 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-Thanks for this new package. I have a number of comments, see below.
+> diff --git a/support/scripts/boot-qemu-image.py b/support/scripts/boot-qemu-image.py
+> index 2c1afba398..f2abaf83ed 100755
+> --- a/support/scripts/boot-qemu-image.py
+> +++ b/support/scripts/boot-qemu-image.py
+> @@ -34,7 +34,7 @@ def main():
+>          # In this case, spawn above will succeed at starting the wrapper
+>          # start-qemu.sh, but that one will fail (exit with 127) in such
+>          # a situation.
+> -        exit = [int(l.split(' ')[1])
+> +        exit = [int(l.split(' ')[1] if l is None else int(127))
 
-On Mon, 13 Apr 2020 16:29:30 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
-
-> diff --git a/package/apcupsd/Config.in b/package/apcupsd/Config.in
-> new file mode 100644
-> index 0000000000..d8bf07e1fa
-> --- /dev/null
-> +++ b/package/apcupsd/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_APCUPSD
-> +	bool "apcupsd"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-> +	select BR2_PACKAGE_LIBUSB
-> +	select BR2_PACKAGE_LIBUSB_COMPAT
-
-I think we don't want to make libusb a mandatory dependency, see below.
-
-> +APCUPSD_VERSION = 3.14.14
-> +APCUPSD_SITE = http://downloads.sourceforge.net/project/apcupsd/apcupsd%20-%20Stable/$(APCUPSD_VERSION)
-> +APCUPSD_LICENSE = GPL-2.0
-> +APCUPSD_LICENSE_FILES = COPYING
-> +APCUPSD_DEPENDENCIES = libusb libusb-compat
-> +APCUPSD_CONF_OPTS = \
-> +	  --enable-apcsmart \
-> +	  --enable-dumb \
-> +	  --enable-usb \
-> +	  --enable-net \
-> +	  --enable-snmp \
-> +	  --disable-test \
-> +	  --enable-pcnet \
-> +	  --enable-modbus-usb \
-> +	  --enable-modbus
-
-I think we need to be more flexible, and keep the libusb dependency
-optional, because it really is optional. Could you add a bunch of
-sub-options to BR2_PACKAGE_APCUPSD to enable/disable the most relevant
-features? apcsmart, usb, net, snmp, pcnet, modbus, modbus-usb seem
-quite logical to have. Only select libusb/libusb-compat when needed.
-
-Also, you will need to feed in the autoconf variable cache the path to
-libusb-config, otherwise it might end up using the libusb-config from
-the host machine if it exists.
-
-Could you have a look at improving the package in these directions?
-
-Thanks a lot,
+I know I'm not very good with Python, but if I read this correctly you
+are doing l.split() if l is None here, so you're trying to do a
+l.split() precisely when is None... Are you sure this is working ?
 
 Thomas
 -- 
