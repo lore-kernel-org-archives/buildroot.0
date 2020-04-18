@@ -1,31 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Apr 2020 15:10:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkcs11-helper: bump version to
- 1.26
-In-Reply-To: <20200418031556.1711155-1-aduskett@gmail.com>
-References: <20200418031556.1711155-1-aduskett@gmail.com>
-Message-ID: <20200418151015.34004e89@windsurf.home>
+Date: Sat, 18 Apr 2020 15:25:23 +0200
+Subject: [Buildroot] [git commit] package/php: fix gd extension dependencies
+ and options
+Message-ID: <20200418131118.1836B8EF70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 17 Apr 2020 20:15:56 -0700
-aduskett at gmail.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=31c5fd8f4b1ee26881ac37e55b0967bed0c6ebd2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/pkcs11-helper/pkcs11-helper.hash | 2 +-
->  package/pkcs11-helper/pkcs11-helper.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Due to migration to pkg-config in php 7.4, the detection of
+library dependencies has been changed.
 
-Applied to master, thanks.
+source from php.net:
+--with-gd becomes --enable-gd
+--with-png-dir has been removed. libpng is required.
+--with-zlib-dir has been removed. zlib is required.
+--with-freetype-dir becomes --with-freetype
+--with-jpeg-dir becomes --with-jpeg
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/php/Config.ext |  1 +
+ package/php/php.mk     | 10 ++++------
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 193bc1bd03..66ee935cf0 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -256,6 +256,7 @@ config BR2_PACKAGE_PHP_EXT_GD
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  GD support
+ 
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 8282bb1cc7..4d2f1b8f63 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -327,12 +327,10 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_PHP_EXT_GD),y)
+ PHP_CONF_OPTS += \
+-	--with-gd \
+-	--with-jpeg-dir=$(STAGING_DIR)/usr \
+-	--with-png-dir=$(STAGING_DIR)/usr \
+-	--with-zlib-dir=$(STAGING_DIR)/usr \
+-	--with-freetype-dir=$(STAGING_DIR)/usr
+-PHP_DEPENDENCIES += jpeg libpng freetype
++	--enable-gd \
++	--with-jpeg \
++	--with-freetype
++PHP_DEPENDENCIES += jpeg libpng freetype zlib
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PHP_SAPI_FPM),y)
