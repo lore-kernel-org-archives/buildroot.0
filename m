@@ -1,66 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Apr 2020 14:46:42 +0200
-Subject: [Buildroot] [git commit] package/polkit: add upstream fix for
- SIGTTOU
-Message-ID: <20200418123232.C242F8ED79@busybox.osuosl.org>
+Date: Sat, 18 Apr 2020 14:46:48 +0200
+Subject: [Buildroot] [git commit] package/polkit: enable
+ gobject-introspection support
+Message-ID: <20200418123232.CB5868E1E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d749be3e1c144ed711908da49dac9f274bfc996
+commit: https://git.buildroot.net/buildroot/commit/?id=41dacc973b04f6873960aec05a949f434f719e43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If tty_handler() resets terminal while pkttyagent is run in background job,
-the process gets stopped by SIGTTOU. This impacts systemctl, hence it must
-be blocked for a while and then the process gets killed anyway.
-
-Upstream commit: 28e3a6653d8c3777b07e0128a0d97d46e586e311
+If gobject-introspection is selected, add the gobject-introspection package to
+the dependency list and set the conf opt --enable-introspection.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...03-polkit-0.116-pkttyagent-sigttou-bg-job.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/polkit/polkit.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch b/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
-new file mode 100644
-index 0000000000..fb41df3af2
---- /dev/null
-+++ b/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
-@@ -0,0 +1,34 @@
-+From 76aae4fce586b400f5fe08df31497db19d624609 Mon Sep 17 00:00:00 2001
-+From: Jan Rybar <jrybar@redhat.com>
-+Date: Thu, 1 Aug 2019 06:46:10 +0000
-+Subject: [PATCH] pkttyagent: process stopped by SIGTTOU if run in background
-+ job
+diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
+index ee0b3674de..3ae42b2312 100644
+--- a/package/polkit/polkit.mk
++++ b/package/polkit/polkit.mk
+@@ -26,6 +26,13 @@ POLKIT_CONF_OPTS = \
+ 	--disable-libelogind \
+ 	--disable-libsystemd-login
+ 
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++POLKIT_CONF_OPTS += --enable-introspection
++POLKIT_DEPENDENCIES += gobject-introspection
++else
++POLKIT_CONF_OPTS += --disable-introspection
++endif
 +
-+
-+(cherry picked from commit 76aae4fce586b400f5fe08df31497db19d624609)
-+Signed-off-by: Jan Rybar <jrybar@redhat.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ src/programs/pkttyagent.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/src/programs/pkttyagent.c b/src/programs/pkttyagent.c
-+index 3c8d502..13879a2 100644
-+--- a/src/programs/pkttyagent.c
-++++ b/src/programs/pkttyagent.c
-+@@ -264,6 +264,12 @@ main (int argc, char *argv[])
-+ 
-+   memset (&sa, 0, sizeof (sa));
-+   sa.sa_handler = &tty_handler;
-++/* If tty_handler() resets terminal while pkttyagent is run in background job,
-++   the process gets stopped by SIGTTOU. This impacts systemctl, hence it must
-++   be blocked for a while and then the process gets killed anyway.
-++ */
-++  sigemptyset(&sa.sa_mask);
-++  sigaddset(&sa.sa_mask, SIGTTOU);
-+   sigaction (SIGTERM, &sa, &savesigterm);
-+   sigaction (SIGINT, &sa, &savesigint);
-+   sigaction (SIGTSTP, &sa, &savesigtstp);
-+-- 
-+2.24.1
-+
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ POLKIT_DEPENDENCIES += linux-pam
+ POLKIT_CONF_OPTS += --with-authfw=pam
