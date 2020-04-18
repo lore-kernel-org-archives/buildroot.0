@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Apr 2020 00:34:16 +0000
+Date: Sat, 18 Apr 2020 00:35:03 +0000
 Subject: [Buildroot] [Bug 12751] OpenJdk package installation issues on
  target
 In-Reply-To: <bug-12751-163@https.bugs.busybox.net/>
 References: <bug-12751-163@https.bugs.busybox.net/>
-Message-ID: <bug-12751-163-rZcRAI0tqj@https.bugs.busybox.net/>
+Message-ID: <bug-12751-163-w4UtLwhcVP@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,7 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=12751
 
---- Comment #4 from Ameya <ameya.joshi@rockwellcollins.com> ---
+--- Comment #5 from Ameya <ameya.joshi@rockwellcollins.com> ---
 Hi Adam,
 
 I get error while applying the patch 
