@@ -1,48 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Apr 2020 18:18:18 +0200
-Subject: [Buildroot] [PATCH v4] configs/nenopi_neo4: new updated
- defconfig
-In-Reply-To: <1586891009-3147-1-git-send-email-marek.belisko@open-nandra.com>
-References: <1586891009-3147-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <20200418181818.518d2882@windsurf.home>
+Date: Sat, 18 Apr 2020 18:20:52 +0200
+Subject: [Buildroot] [git commit] package/netsnmp: unix domain socket
+ transport
+Message-ID: <20200418160725.A3F328F10A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marek,
+commit: https://git.buildroot.net/buildroot/commit/?id=8aef2d3a5b1e56c82d4d61deded1a742899b1a1c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I've applied, with some very minor tweaks.
+The support for Unix domain socket transport was disabled as part of
+the bump of netsnmp from 5.5 to 5.6 in commit
+de642c9904b13914017af6f10db144d559d6bd0c, but with no apparent reason.
 
-First, typo in the commit title nenopi -> nanopi
+This support is needed to allow Unix socket based AgentX subagents to
+connect to netsnmp, so let's re-enable it.
 
-On Tue, 14 Apr 2020 21:03:29 +0200
-Marek Belisko <marek.belisko@open-nandra.com> wrote:
+Signed-off-by: Ryan Steffens <ryan.steffens@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/netsnmp/netsnmp.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-> This patch revert 8af7b11bd8a95bc41e4de46f727f3b0afde465a4 and
-> add extra options to have build working
-
-I've improved the wording a bit, because this is not just about
-reverting a previous patch.
-
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 375ab07..dfcb7e4 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1605,6 +1605,8 @@ F:	package/libatasmart/
->  F:	package/polkit/
->  F:	package/sg3_utils/
->  F:	package/udisks/
-> +F:	board/friendlyarm/nanopi-m4/
-> +F:	configs/nanopi_neo4_defconfig
-
-Alphabetic ordering was not good here.
-
-So I fixed those minor details, and applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index ed573c51e3..904279d1fb 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -30,7 +30,6 @@ NETSNMP_CONF_OPTS = \
+ 	--with-sys-location="Unknown" \
+ 	--with-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES))" \
+ 	--with-out-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES))" \
+-	--with-out-transports="Unix" \
+ 	--disable-manuals
+ NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true install
+ NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
