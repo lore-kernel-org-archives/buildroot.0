@@ -1,41 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Apr 2020 18:20:52 +0200
-Subject: [Buildroot] [git commit] package/netsnmp: unix domain socket
+Date: Sat, 18 Apr 2020 18:22:28 +0200
+Subject: [Buildroot] [PATCH v2] package/netsnmp: unix domain socket
  transport
-Message-ID: <20200418160725.A3F328F10A@busybox.osuosl.org>
+In-Reply-To: <20200414175500.28891-1-matthew.weber@rockwellcollins.com>
+References: <20200414175500.28891-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20200418182228.083489da@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8aef2d3a5b1e56c82d4d61deded1a742899b1a1c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 14 Apr 2020 12:55:00 -0500
+Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
-The support for Unix domain socket transport was disabled as part of
-the bump of netsnmp from 5.5 to 5.6 in commit
-de642c9904b13914017af6f10db144d559d6bd0c, but with no apparent reason.
+> From: Ryan Steffens <ryan.steffens@rockwellcollins.com>
+> 
+> Adds support for connecting unix socket based AgentX subagents
+> 
+> Signed-off-by: Ryan Steffens <ryan.steffens@rockwellcollins.com>
+> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
-This support is needed to allow Unix socket based AgentX subagents to
-connect to netsnmp, so let's re-enable it.
+I have further extended the commit log, and applied. Especially, it is
+always useful to go back in the history of the package and try to
+figure out the reason why something was done in a given way, and now
+needs to be done differently.
 
-Signed-off-by: Ryan Steffens <ryan.steffens@rockwellcollins.com>
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/netsnmp/netsnmp.mk | 1 -
- 1 file changed, 1 deletion(-)
+Thanks!
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index ed573c51e3..904279d1fb 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -30,7 +30,6 @@ NETSNMP_CONF_OPTS = \
- 	--with-sys-location="Unknown" \
- 	--with-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES))" \
- 	--with-out-mib-modules="$(call qstrip,$(BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES))" \
--	--with-out-transports="Unix" \
- 	--disable-manuals
- NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true install
- NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
