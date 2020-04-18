@@ -1,31 +1,45 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Apr 2020 00:35:03 +0000
-Subject: [Buildroot] [Bug 12751] OpenJdk package installation issues on
- target
-In-Reply-To: <bug-12751-163@https.bugs.busybox.net/>
-References: <bug-12751-163@https.bugs.busybox.net/>
-Message-ID: <bug-12751-163-w4UtLwhcVP@https.bugs.busybox.net/>
+Date: Sat, 18 Apr 2020 01:17:44 +0000
+Subject: [Buildroot] [Bug 12786] New: Systemd spawns two getty processes
+ when the getty port is set to console
+Message-ID: <bug-12786-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12751
+https://bugs.busybox.net/show_bug.cgi?id=12786
 
---- Comment #5 from Ameya <ameya.joshi@rockwellcollins.com> ---
-Hi Adam,
+            Bug ID: 12786
+           Summary: Systemd spawns two getty processes when the getty port
+                    is set to console
+           Product: buildroot
+           Version: 2020.02.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: aduskett at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-I get error while applying the patch 
+Very straight forward.
 
-https://patchwork.ozlabs.org/project/buildroot/patch/20200417232922.3762195-4-aduskett at gmail.com/
+When systemd is selected as the init system, and BR2_TARGET_GENERIC_GETTY_PORT
+is set to console, two gettys are spawned which prevents a user from logging
+in.
 
+How to reproduce:
 
-Also i looked at the patch it replaces the existing build and install commands 
-so if a user doesnt want a full JDK it wont work right?
+make qemu_x86_64_defconfig
+menuconfig -> System configuration -> Init system -> systemd
+make
 
-Regards,
-Ameya
+Then run the resulting image.
 
 -- 
 You are receiving this mail because:
