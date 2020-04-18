@@ -1,146 +1,42 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sat, 18 Apr 2020 14:26:43 -0700
-Subject: [Buildroot] [PATCH 2/2] package/mender: add support for update
- modules
-In-Reply-To: <20200418212643.2743304-1-aduskett@gmail.com>
-References: <20200418212643.2743304-1-aduskett@gmail.com>
-Message-ID: <20200418212643.2743304-2-aduskett@gmail.com>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Sat, 18 Apr 2020 18:39:23 -0300
+Subject: [Buildroot] [PATCH] package/busybox: add BUSYBOX_INSTALL_INIT_OPENRC
+Message-ID: <20200418213923.1548313-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
 
-Mender has support for performing other types of updates other than just
-overwriting the rootfs partition that isn't currently in use on the target.
+Install the sysvinit scripts, for the moment, but not S02sysctl, since
+openrc provides /etc/init.d/sysctl.
 
-Some of the default provided modules provide support for:
-  - Updating a docker container.
-  - Running a script.
-  - Installing an RPM.
-  - Overwriting a directory.
-  - Updating a single-file.
-
-The single-file update module is used by upstream for onboarding a new device
-to a server, and this fails with Buildroot devices because the modules are
-currently not installed.
-
-Install the directory, script, and single-file modules by default, and
-install the docker or rpm script if their respective packages are selected.
-
-Also provide a patch that removes bashisms from the docker and single-file
-modules.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- ...ashisms-in-the-update-module-scripts.patch | 71 +++++++++++++++++++
- package/mender/mender.mk                      |  7 ++
- 2 files changed, 78 insertions(+)
- create mode 100644 package/mender/0001-remove-bashisms-in-the-update-module-scripts.patch
+ package/busybox/busybox.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/mender/0001-remove-bashisms-in-the-update-module-scripts.patch b/package/mender/0001-remove-bashisms-in-the-update-module-scripts.patch
-new file mode 100644
-index 0000000000..b5194f7bf9
---- /dev/null
-+++ b/package/mender/0001-remove-bashisms-in-the-update-module-scripts.patch
-@@ -0,0 +1,71 @@
-+From 7027a47b46b646090f1351ecb156992b60416690 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <Aduskett@gmail.com>
-+Date: Sat, 18 Apr 2020 13:56:31 -0700
-+Subject: [PATCH] Remove bashisms in the update module scripts
-+
-+The only update module to actually have any bashisms was the docker module,
-+and the bashisms were trivial to remove.
-+
-+Changes to docker:
-+  - Change any [[ ]] call to [ ]
-+  - Quote any shell calls in [ -n ]
-+  - Change the shebang from #!/bin/bash to #!/bin/sh
-+
-+Changes to single-file:
-+  - Change the shebang from #!/bin/bash to #!/bin/sh
-+  - No other bashisms are currently present in the file.
-+
-+Upstream-status: Pending
-+https://github.com/mendersoftware/mender/pull/524
-+
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-+---
-+ support/modules/docker      | 10 +++++-----
-+ support/modules/single-file |  2 +-
-+ 2 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/support/modules/docker b/support/modules/docker
-+index 941be09..07ea174 100755
-+--- a/support/modules/docker
-++++ b/support/modules/docker
-+@@ -1,4 +1,4 @@
-+-#!/bin/bash
-++#!/bin/sh
-+ 
-+ set -e
-+ 
-+@@ -19,7 +19,7 @@ case "$STATE" in
-+ 
-+     ArtifactInstall)
-+         docker ps -q > $prev_containers_file
-+-        [[ -n $(cat $prev_containers_file) ]] && docker stop $(cat $prev_containers_file)
-++        [ -n "$(cat $prev_containers_file)" ] && docker stop $(cat $prev_containers_file)
-+         for container in $(jq -r ".containers[]" "$FILES"/header/meta-data); do
-+             docker pull $container
-+             docker run -dt $container
-+@@ -27,9 +27,9 @@ case "$STATE" in
-+         ;;
-+ 
-+     ArtifactRollback)
-+-        [[ -f $prev_containers_file ]] || exit 1
-+-        [[ -n  "$(docker ps -q)" ]] && docker stop $(docker ps -q)
-+-        [[ -n $(cat $prev_containers_file) ]] && docker start $(cat $prev_containers_file)
-++        [ -f $prev_containers_file ] || exit 1
-++        [ -n  "$(docker ps -q)" ] && docker stop $(docker ps -q)
-++        [ -n "$(cat $prev_containers_file)" ] && docker start $(cat $prev_containers_file)
-+         ;;
-+ esac
-+ 
-+diff --git a/support/modules/single-file b/support/modules/single-file
-+index d1d9f40..ed1868b 100755
-+--- a/support/modules/single-file
-++++ b/support/modules/single-file
-+@@ -1,4 +1,4 @@
-+-#!/bin/bash
-++#!/bin/sh
-+ 
-+ set -e
-+ 
-+-- 
-+2.25.2
-+
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index e1ca976797..be169ad213 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -39,6 +39,9 @@ MENDER_DEPENDENCIES = xz
- 
- MENDER_LDFLAGS = -X main.Version=$(MENDER_VERSION)
- 
-+MENDER_UPDATE_MODULES_FILES = directory script single-file
-+MENDER_UPDATE_MODULES_FILES += $(if $(BR2_PACKAGE_DOCKER_CLI),docker)
-+MENDER_UPDATE_MODULES_FILES +=  $(if $(BR2_PACKAGE_RPM),rpm)
- define MENDER_INSTALL_CONFIG_FILES
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/mender/scripts
- 	echo -n "3" > $(TARGET_DIR)/etc/mender/scripts/version
-@@ -63,6 +66,10 @@ define MENDER_INSTALL_CONFIG_FILES
- 
- 	mkdir -p $(TARGET_DIR)/var/lib
- 	ln -snf /var/run/mender $(TARGET_DIR)/var/lib/mender
-+	$(foreach f,$(MENDER_UPDATE_MODULES_FILES), \
-+		$(INSTALL) -D -m 0755 $(@D)/support/modules/$(notdir $(f)) \
-+			$(TARGET_DIR)/usr/share/mender/modules/v3/$(notdir $(f))
-+	)
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index b9d82ed71e..5d5f3e92bd 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -355,6 +355,15 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
  endef
  
- MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
++# Install the sysvinit scripts, for the moment, but not those that already
++# have a corresponding one in openrc.
++define BUSYBOX_INSTALL_INIT_OPENRC
++	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
++	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
++	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
++	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
++endef
++
+ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
 -- 
-2.25.2
+2.18.2
