@@ -1,115 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Apr 2020 15:33:08 +0200
-Subject: [Buildroot] [git commit] configs/nitrogen8mn: new defconfig
-Message-ID: <20200418132829.0EACA8F08C@busybox.osuosl.org>
+Date: Sat, 18 Apr 2020 15:31:17 +0200
+Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: add
+ support for i.MX8M Nano
+Message-ID: <20200418132828.BF4488F08C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e68470c0e03949628955802c2c11c80e1bf9f224
+commit: https://git.buildroot.net/buildroot/commit/?id=0abeb4c10dca9ae353c70a7cb2471bba0a3dd40e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-NXP i.MX8MNano based SBC with 1GB of LPDDR4 and 16GB eMMC.
-
-More details on the platform here:
-https://boundarydevices.com/product/nitrogen8m-nano/
+This CPU requires the same (LP)DDR training binaries as i.MX8M Mini.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Cc: Refik Tuzakli <tuzakli.refik@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                          |  1 +
- board/boundarydevices/common/readme.txt |  4 +++
- configs/nitrogen8mn_defconfig           | 56 +++++++++++++++++++++++++++++++++
- 3 files changed, 61 insertions(+)
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 2dcc98dfb7..43423e543a 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -234,6 +234,7 @@ nitrogen6x_defconfig: { extends: .defconfig }
- nitrogen7_defconfig: { extends: .defconfig }
- nitrogen8m_defconfig: { extends: .defconfig }
- nitrogen8mm_defconfig: { extends: .defconfig }
-+nitrogen8mn_defconfig: { extends: .defconfig }
- odroidxu4_defconfig: { extends: .defconfig }
- olimex_a10_olinuxino_lime_defconfig: { extends: .defconfig }
- olimex_a13_olinuxino_defconfig: { extends: .defconfig }
-diff --git a/board/boundarydevices/common/readme.txt b/board/boundarydevices/common/readme.txt
-index 0022628d82..d1bb3fa598 100644
---- a/board/boundarydevices/common/readme.txt
-+++ b/board/boundarydevices/common/readme.txt
-@@ -27,6 +27,10 @@ Here is the list of targeted platforms per defconfig:
-   - Nitrogen8MMini
-   - Nitrogen8MMini_SOM
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 246bfdfaa1..cd0dafb3de 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -18,7 +18,7 @@ define FIRMWARE_IMX_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(FIRMWARE_IMX_DL_DIR)/$(FIRMWARE_IMX_SOURCE))
+ endef
  
-+- nitrogen8mn_defconfig
-+  - Nitrogen8MNano
-+  - Nitrogen8MNano_SOM
-+
- To install, simply copy the image to your storage (SD, eMMC, USB):
- 
- $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
-new file mode 100644
-index 0000000000..b78eba1422
---- /dev/null
-+++ b/configs/nitrogen8mn_defconfig
-@@ -0,0 +1,56 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_cortex_a53=y
-+
-+# System
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mn-nitrogen8_nano.dtb"
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_IMX_MKIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Linux headers same as kernel, a 4.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+
-+# DDR training binaries
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+
-+# ARM Trusted Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-+# Latest revision of branch boundary-imx_4.14.98_2.3.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/99e07a29.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8_nano_8mn1gr0"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+# Latest revision of branch boundary-imx_v2018.07
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_SPL=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+# Latest revision  of branch boundary-imx_4.14.x_2.0.0_ga
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/519c6839.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="boundary"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mn-nitrogen8_nano freescale/imx8mn-nitrogen8mn freescale/imx8mn-nitrogen8mn_som"
+-ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM),y)
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN),y)
+ FIRMWARE_IMX_INSTALL_IMAGES = YES
+ FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+ define FIRMWARE_IMX_PREPARE_LPDDR4_FW
