@@ -1,46 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 16:28:12 +0200
-Subject: [Buildroot] [PATCH 06/12] package/gcr: enable
- gobject-introspection support
-In-Reply-To: <20200401002134.1779241-6-aduskett@gmail.com>
-References: <20200401002134.1779241-1-aduskett@gmail.com>
- <20200401002134.1779241-6-aduskett@gmail.com>
-Message-ID: <20200419162812.38b77a38@windsurf.home>
+Date: Sun, 19 Apr 2020 16:29:08 +0200
+Subject: [Buildroot] [git commit] package/busybox: add
+ BUSYBOX_INSTALL_INIT_OPENRC
+Message-ID: <20200419141448.BBE228F205@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 31 Mar 2020 17:21:28 -0700
-aduskett at gmail.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5a8f2da98d631af66b5b618067728c23920ba3fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> If gobject-introspection is selected, add the gobject-introspection package to
-> the dependency list and set the conf opt --with-introspection.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/gcr/gcr.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+Install the sysvinit scripts, for the moment, but not S02sysctl, since
+openrc provides /etc/init.d/sysctl.
 
-This fails to build:
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/busybox/busybox.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-  XSLTPROC Gcr-3.gir
-/bin/bash: xsltproc: command not found
-Makefile:6878: recipe for target 'Gcr-3.gir' failed
-
-See:
-
-  http://autobuild.buildroot.net/results/178/178ea11b71c87e167fc3f3787fb31ce4ebacb4ff/build-end.log
-
-Could you have a look ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index b9d82ed71e..5d5f3e92bd 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -355,6 +355,15 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
+ endef
+ 
++# Install the sysvinit scripts, for the moment, but not those that already
++# have a corresponding one in openrc.
++define BUSYBOX_INSTALL_INIT_OPENRC
++	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
++	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
++	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
++	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
++endef
++
+ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
