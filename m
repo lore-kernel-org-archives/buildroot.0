@@ -1,53 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 16:31:35 +0200
-Subject: [Buildroot] [WIP] package/efl: bump to version 1.23.3
-In-Reply-To: <20200104011453.516356-1-romain.naour@gmail.com>
-References: <20200104011453.516356-1-romain.naour@gmail.com>
-Message-ID: <20200419163135.53e82041@windsurf.home>
+From: Julien Olivain <juju@cotds.org>
+Date: Sun, 19 Apr 2020 17:43:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dtc: bump version to 1.6.0
+Message-ID: <20200419154300.203136-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  4 Jan 2020 02:14:53 +0100
-Romain Naour <romain.naour@gmail.com> wrote:
+When host compiler is gcc 10 (for example on Fedora 32), dtc 1.5.1
+fail to build with the error:
+/usr/bin/ld: dtc-parser.tab.o:(.bss+0x20): multiple definition of `yylloc'; dtc-lexer.lex.o:(.bss+0x0): first defined here
+collect2: error: ld returned 1 exit status
 
-> - Remove upstream patch [1].
-> - Switch to meson build system.
-> - The cryptography backends is now mandatory, use openssl for the host
-> and use openssl by default for the target if gnutls is not selected.
-> - Add host-giflib since the dependency can't be disabled anymore.
-> (even by adding gif in HOST_EFL_EVAS_LOADERS_DISABLER).
-> - Disable explicitely meson build options that was not previously handled
-> (avahi, emotion, ecore-imf-loarders...)
-> - Elput support is now enabled through drm meson option [2], remove
->   BR2_PACKAGE_EFL_ELPUT.
-> - Update license file hash (csharp licensing information, cxx bindings licensing)
-> - Add COPYING.images and licenses/COPYING.ASL license file.
-> - The evas png loader is now mandatory [3]
-> (even by adding png in EFL_EVAS_LOADERS_DISABLER).
-> - Same for the evas gif loader [4].
-> - Backport an upstream patch to fix the evas build with -Dwl=false.
-> 
-> See:
-> https://www.enlightenment.org/news/efl-1.23.0
-> https://www.enlightenment.org/news/efl-1.23.1
-> https://www.enlightenment.org/news/efl-1.23.2
-> 
-> [1] https://git.enlightenment.org/core/efl.git/commit/?id=c46a8143916f0d3f66bbdffc7107c97c88df212d
-> [2] https://git.enlightenment.org/core/efl.git/tree/meson.build?h=v1.23.3#n297
-> [3] https://git.enlightenment.org/core/efl.git/tree/src/modules/evas/meson.build?h=v1.23.3#n2
-> [4] https://git.enlightenment.org/core/efl.git/tree/src/modules/evas/meson.build?h=v1.23.3#n4
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+dtc 1.6.0 fixes this issue in the commit:
+https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=0e9225eb0dfec51def612b928d2f1836b092bc7e
 
-Since your feedback was that this patch wasn't ready, and that we
-should probably wait for EFL 1.24 to be released, I've marked this
-patch as Changes Requested. Thanks!
+Also adopt new spacing convention in .hash files (two spaces).
 
-Thomas
+Signed-off-by: Julien Olivain <juju@cotds.org>
+---
+ package/dtc/dtc.hash | 8 ++++----
+ package/dtc/dtc.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
+index e4d6c02544..902ce1baf9 100644
+--- a/package/dtc/dtc.hash
++++ b/package/dtc/dtc.hash
+@@ -1,7 +1,7 @@
+ # from https://www.kernel.org/pub/software/utils/dtc/sha256sums.asc
+-sha256 660b74039690fc37013660544d09191834efb58503c73c555c5513ba75ab031f  dtc-1.5.1.tar.xz
++sha256  10503b0217e1b07933e29e8d347a00015b2431bea5f59afe0bed3af30340c82d  dtc-1.6.0.tar.xz
+ 
+ # Hash for license files
+-sha256 78e1e1ce5728a990d59c7de61d4741c49185d5129daf783b386380a214328d68  README.license
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  GPL
+-sha256 6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  BSD-2-Clause
++sha256  78e1e1ce5728a990d59c7de61d4741c49185d5129daf783b386380a214328d68  README.license
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  GPL
++sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  BSD-2-Clause
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index d532487dd1..956a60b29d 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DTC_VERSION = 1.5.1
++DTC_VERSION = 1.6.0
+ DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
+ DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
+ DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.0
