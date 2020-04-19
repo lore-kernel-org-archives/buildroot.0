@@ -1,48 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 15:03:05 +0200
-Subject: [Buildroot] [PATCH v1 2/6] package/qt5base: drop all legacy gcc
- requierements below 5.0
-In-Reply-To: <20200418225906.17514-2-ps.report@gmx.net>
-References: <20200418225906.17514-1-ps.report@gmx.net>
- <20200418225906.17514-2-ps.report@gmx.net>
-Message-ID: <20200419150305.5a898e07@windsurf.home>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sun, 19 Apr 2020 09:47:48 -0300
+Subject: [Buildroot] [PATCH] package/asn1c: new host package
+In-Reply-To: <CAEyMn7ZJS0uSQk4yaU=bEsXNpJoRj767A-3M_p5ONjsB_35x+w@mail.gmail.com>
+References: <20200110211420.7704-1-sergio.prado@e-labworks.com>
+ <CAEyMn7Y=aY1zO0Wm5wVzHrdmn=CDrzJJ=aepgm5rXXJ4Hir-uw@mail.gmail.com>
+ <87imhwcfbq.fsf@tarshish>
+ <CAEyMn7ZJS0uSQk4yaU=bEsXNpJoRj767A-3M_p5ONjsB_35x+w@mail.gmail.com>
+Message-ID: <CANu7NGuPU+2ozuf0xDnGC3DeBF7+q9kMrBg+oe6mRSOAA9Ee5Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 19 Apr 2020 00:59:02 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+Hi Heiko, Baruch,
 
-> As qt5 requires as minimum gcc 5.0 drop all legacy requierements below.
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/qt5/qt5base/Config.in | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
+So it looks like I don't need to rework the patch, thanks.
 
-I have not applied this one, and neither the remaining patches in the
-series. Indeed, we normally want to propagate "depends on" to all
-reverse dependencies, even if in practice it is already not possible to
-select a given option due to it being hidden by a "depends on" at a
-higher level.
+Best regards,
 
-We believe that always duplicating improves consistency and helps
-avoiding mistakes. I agree that we are not 100% consistent on this
-throughout the tree, but the direction we want to go to is to replicate
-these "depends no", not get rid of them.
+Sergio Prado
+Embedded Labworks
+Mobile: +55 11 97123-3420
 
-I agree that this is a very 'opinionated' decision and I am myself a
-bit split between the two possibilities we have. But the overall
-consensus seems to be that we should have that duplication.
 
-So, I've marked PATCH 2/6 to 6/6 as Rejected.
+Em dom., 19 de abr. de 2020 ?s 02:39, Heiko Thiery <heiko.thiery@gmail.com>
+escreveu:
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Hi Baruch, Hi Sergio,
+>
+> Am So., 19. Apr. 2020 um 05:41 Uhr schrieb Baruch Siach <baruch@tkos.co.il
+> >:
+> >
+> > Hi Heiko, Sergio,
+> >
+> > On Fri, Apr 17 2020, Heiko Thiery wrote:
+> > >> +ASN1C_VERSION = 0.9.28
+> > >> +ASN1C_SITE =
+> https://github.com/vlm/asn1c/releases/download/v$(ASN1C_VERSION)
+> > >
+> > > You can use the github macro to set the <pkg>_SITE variable:
+> > > ASN1C_SITE = $(call github,vlm,asn1c,v$(ASN1C_VERSION))
+> >
+> > When the package author provides a tarball we usually prefer to use it.
+> >
+> >   If the package you wish to add does have a release section on GitHub,
+> >   the maintainer may have uploaded a release tarball, or the release may
+> >   just point to the automatically generated tarball from the git tag. If
+> >   there is a release tarball uploaded by the maintainer, we prefer to use
+> >   that since it may be slightly different (e.g. it contains a configure
+> >   script so we don?t need to do AUTORECONF).
+> >
+> > This is quoted from
+> > https://buildroot.org/downloads/manual/manual.html#github-download-url
+> >
+> > In this case the tarball indeed contains a pre-generated configure
+> > script.
+> >
+>
+> You're right. The released version should be preferred.
+>
+> > baruch
+> >
+> > --
+> >      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> >
+> =}------------------------------------------------ooO--U--Ooo------------{=
+> >    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>
+> Sorry for that mistake.
+>
+> --
+> Heiko
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200419/995e940d/attachment.html>
