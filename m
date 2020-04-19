@@ -1,117 +1,120 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 14:56:25 +0200
-Subject: [Buildroot] [git commit] package/python-pyasn-modules: remove
- duplicate package
-Message-ID: <20200419124204.17747813E2@busybox.osuosl.org>
+Date: Sun, 19 Apr 2020 14:57:09 +0200
+Subject: [Buildroot] [git commit] package/qt5: bump minimum gcc requirement
+ to 5.0
+Message-ID: <20200419124252.E3CB38F192@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5511c07f6b4a9e35ef399069bda56b6bbab936d6
+commit: https://git.buildroot.net/buildroot/commit/?id=24c66484e1bb88961042caf690af3e6bf396ab65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a duplicate of python-pyasn1-modules.
+As a side effect of avoiding gcc bug 57694 ([1]) through commit
+'GCC: revoke constexpr before 5.0' ([2]) for qtbase the minimum
+gcc requirement was lifted to 5.0 ([3], [4]), so bump the
+buildroot determined one too.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Adjust the two packages (pinentry, wireshark) which are brave enough
+to do a 'select BR2_PACKAGE_QT5' accordingly.
+
+Fixes:
+  http://autobuild.buildroot.net/results/74f5249d1ee14c1269685af53a65055da7dc2ee6
+
+  ../../include/QtCore/../../src/corelib/thread/qbasicatomic.h:61:4: error: #error "Qt requires C++11 support"
+   #  error "Qt requires C++11 support"
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=57694
+[2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=c61cedcc5475a77fb94ed12788f61039835f8079
+[3] https://codereview.qt-project.org/c/qt/qtbase/+/285582
+[4] https://bugreports.qt.io/browse/QTBUG-81761
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                                       |  7 +++++++
- DEVELOPERS                                             |  1 -
- package/Config.in                                      |  1 -
- package/python-pyasn-modules/Config.in                 | 11 -----------
- package/python-pyasn-modules/python-pyasn-modules.hash |  5 -----
- package/python-pyasn-modules/python-pyasn-modules.mk   | 14 --------------
- 6 files changed, 7 insertions(+), 32 deletions(-)
+ package/pinentry/Config.in  | 6 +++---
+ package/qt5/Config.in       | 6 +++---
+ package/wireshark/Config.in | 6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 95f17b1b31..7058da5cb9 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index ef70908502..23f532e2e6 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -61,7 +61,7 @@ config BR2_PACKAGE_PINENTRY_QT5
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5_0
+ 	depends on !BR2_arc
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_QT5
+@@ -70,10 +70,10 @@ config BR2_PACKAGE_PINENTRY_QT5
+ 	help
+ 	  The pinentry-qt5 tool
  
- comment "Legacy options removed in 2020.05"
+-comment "pinentry-qt5 needs a toolchain w/ wchar, NPTL, gcc >= 4.8, C++, dynamic library"
++comment "pinentry-qt5 needs a toolchain w/ wchar, NPTL, gcc >= 5.0, C++, dynamic library"
+ 	depends on !BR2_arc
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_5_0 || \
+ 		BR2_STATIC_LIBS
  
-+config BR2_PACKAGE_PYTHON_PYASN_MODULES
-+	bool "duplicate python-pyasn1-modules package removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_PYTHON_PYASN1_MODULES
-+	help
-+	  This package was a duplicate of python-pyasn1-modules.
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA6174
- 	bool "duplicate QCA6174 firmware symbol removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 67456d0c4b..a13a1694ea 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1763,7 +1763,6 @@ F:	package/python-crossbar/
- F:	package/python-lmdb/
- F:	package/python-mistune/
- F:	package/python-netaddr/
--F:	package/python-pyasn-modules/
- F:	package/python-pygments/
- F:	package/python-pynacl/
- F:	package/python-pytrie/
-diff --git a/package/Config.in b/package/Config.in
-index 7a0ff1716d..55634e9479 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1066,7 +1066,6 @@ menu "External python modules"
- 	source "package/python-py/Config.in"
- 	source "package/python-pyaes/Config.in"
- 	source "package/python-pyasn/Config.in"
--	source "package/python-pyasn-modules/Config.in"
- 	source "package/python-pyasn1/Config.in"
- 	source "package/python-pyasn1-modules/Config.in"
- 	source "package/python-pycairo/Config.in"
-diff --git a/package/python-pyasn-modules/Config.in b/package/python-pyasn-modules/Config.in
-deleted file mode 100644
-index cedd68b34e..0000000000
---- a/package/python-pyasn-modules/Config.in
-+++ /dev/null
-@@ -1,11 +0,0 @@
--config BR2_PACKAGE_PYTHON_PYASN_MODULES
--	bool "python-pyasn-modules"
--	depends on BR2_INSTALL_LIBSTDCPP
--	select BR2_PACKAGE_PYTHON_PYASN # runtime
--	help
--	  A collection of ASN.1-based protocols modules.
--
--	  https://pypi.python.org/pypi/pyasn1-modules
--
--comment "python-pyasn-modules needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pyasn-modules/python-pyasn-modules.hash b/package/python-pyasn-modules/python-pyasn-modules.hash
-deleted file mode 100644
-index e5880d24ea..0000000000
---- a/package/python-pyasn-modules/python-pyasn-modules.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=178129bc7fbf07215c25230c5f053f81
--md5	178129bc7fbf07215c25230c5f053f81  pyasn1-modules-0.0.8.tar.gz
--# Locally computed
--sha256	10561934f1829bcc455c7ecdcdacdb4be5ffd3696f26f468eb6eb41e107f3837  pyasn1-modules-0.0.8.tar.gz
--sha256  8bea85439e7446ecb270079cce926d605a7d10f51fe8789b1aeced557dcbe1b6  LICENSE.txt
-diff --git a/package/python-pyasn-modules/python-pyasn-modules.mk b/package/python-pyasn-modules/python-pyasn-modules.mk
-deleted file mode 100644
-index b5e853aa2a..0000000000
---- a/package/python-pyasn-modules/python-pyasn-modules.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# python-pyasn-modules
--#
--################################################################################
--
--PYTHON_PYASN_MODULES_VERSION = 0.0.8
--PYTHON_PYASN_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN_MODULES_VERSION).tar.gz
--PYTHON_PYASN_MODULES_SITE = https://pypi.python.org/packages/source/p/pyasn1-modules
--PYTHON_PYASN_MODULES_LICENSE = BSD-2-Clause
--PYTHON_PYASN_MODULES_LICENSE_FILES = LICENSE.txt
--PYTHON_PYASN_MODULES_SETUP_TYPE = setuptools
--
--$(eval $(python-package))
+ endif
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 77dce16038..cd9c93735d 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -11,19 +11,19 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	# ARM needs BLX, so v5t+
+ 	depends on !BR2_ARM_CPU_ARMV4
+ 
+-comment "Qt5 needs a toolchain w/ gcc >= 4.8, wchar, NPTL, C++, dynamic library"
++comment "Qt5 needs a toolchain w/ gcc >= 5.0, wchar, NPTL, C++, dynamic library"
+ 	depends on !BR2_ARM_CPU_ARMV4
+ 	depends on !BR2_arc
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_5_0
+ 
+ menuconfig BR2_PACKAGE_QT5
+ 	bool "Qt5"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5_0 # C++11, GCC_BUG_57694
+ 	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
+ 	# no built-in double-conversion support
+ 	depends on !BR2_arc
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+index e52edb9f69..f55cfeb497 100644
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -21,7 +21,7 @@ config BR2_PACKAGE_WIRESHARK_GUI
+ 	default y
+ 	depends on BR2_INSTALL_LIBSTDCPP # qt5
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # qt5
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # qt5
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5_0 # qt5
+ 	depends on !BR2_arc # qt5
+ 	depends on BR2_PACKAGE_HAS_UDEV # qt5 input
+ 	select BR2_PACKAGE_QT5
+@@ -36,10 +36,10 @@ config BR2_PACKAGE_WIRESHARK_GUI
+ 	help
+ 	  Enable Qt5 GUI
+ 
+-comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, gcc >= 4.8"
++comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, gcc >= 5.0"
+ 	depends on !BR2_arc
+ 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_5_0
+ 
+ endif # BR2_PACKAGE_WIRESHARK
+ 
