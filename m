@@ -1,127 +1,27 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 19 Apr 2020 11:14:51 -0700
-Subject: [Buildroot] [PATCH 21/22] package/libselinux: bear the kernel
- options munging
-In-Reply-To: <CANQCQpbDROdWVy7kXj+fLAGtJaoZLGiJirH2odftbWOXqBK8og@mail.gmail.com>
-References: <cover.1586002215.git.yann.morin.1998@free.fr>
- <2e26e65ead8f1fa43ada0c792b54b04d67606f18.1586002215.git.yann.morin.1998@free.fr>
- <CANQCQpbDROdWVy7kXj+fLAGtJaoZLGiJirH2odftbWOXqBK8og@mail.gmail.com>
-Message-ID: <CAFSsvmo4p0At2_vEo00qz_5qnkEHks_0vTa3EFhjbNZka3=ApQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 19 Apr 2020 18:53:07 +0000
+Subject: [Buildroot] [Bug 12786] Systemd spawns two getty processes when the
+ getty port is set to console
+In-Reply-To: <bug-12786-163@https.bugs.busybox.net/>
+References: <bug-12786-163@https.bugs.busybox.net/>
+Message-ID: <bug-12786-163-YS4ojzoX66@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann;
+https://bugs.busybox.net/show_bug.cgi?id=12786
 
-This is a great addition and really does a wonderful job of cleaning
-up the kernel config options.
-Thanks for the hard work!
+--- Comment #2 from Adam Duskett <aduskett@gmail.com> ---
+After I did a quick google search I found a post on stack exchange that
+indicates this has been an issue since at least version 2019.02!
 
-Reviewed-by: Adam Duskett <aduskett@gmail.com>
-Tested-by: Adam Duskett <aduskett@gmail.com>
+https://unix.stackexchange.com/questions/566959/how-to-prevent-console-getty-service-to-start
 
-On Mon, Apr 6, 2020 at 5:09 AM Matthew Weber <matthew.weber@collins.com> wrote:
->
-> Yann,
->
->
-> On Sat, Apr 4, 2020 at 7:13 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Cc: Adam Duskett <aduskett@gmail.com>
-> > Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
->
-> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
->
-> Thanks Yann, this is a nice cleanup!
->
-> > Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
-> > ---
-> >  linux/linux.mk                   |  8 --------
-> >  package/libselinux/libselinux.mk | 10 ++++++++++
-> >  2 files changed, 10 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/linux/linux.mk b/linux/linux.mk
-> > index b9e2058e29..3762e718c6 100644
-> > --- a/linux/linux.mk
-> > +++ b/linux/linux.mk
-> > @@ -363,14 +363,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
-> >                 $(call KCONFIG_ENABLE_OPT,CONFIG_FB)
-> >                 $(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
-> >                 $(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
-> > -       $(if $(BR2_PACKAGE_LIBSELINUX),
-> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT)
-> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX)
-> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_INET)
-> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
-> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
-> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX))
-> >         $(PACKAGES_LINUX_CONFIG_FIXUPS)
-> >  endef
-> >
-> > diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-> > index 1461e34539..5f07236791 100644
-> > --- a/package/libselinux/libselinux.mk
-> > +++ b/package/libselinux/libselinux.mk
-> > @@ -116,5 +116,15 @@ define HOST_LIBSELINUX_INSTALL_CMDS
-> >                 $(HOST_LIBSELINUX_MAKE_OPTS) install-pywrap
-> >  endef
-> >
-> > +define LIBSELINUX_LINUX_CONFIG_FIXUPS
-> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT)
-> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX)
-> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_INET)
-> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
-> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
-> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX)
-> > +endef
-> > +
-> >  $(eval $(generic-package))
-> >  $(eval $(host-generic-package))
-> > --
-> > 2.20.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
-> --
->
-> Matthew Weber | Associate Director Software Engineer | Commercial Avionics
->
-> COLLINS AEROSPACE
->
-> 400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
->
-> Tel: +1 319 295 7349 | FAX: +1 319 263 6099
->
-> matthew.weber at collins.com | collinsaerospace.com
->
->
->
-> CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-> privileged information of Collins Aerospace and its affiliated
-> companies. If you are not the intended recipient, please 1) Do not
-> disclose, copy, distribute or use this message or its contents. 2)
-> Advise the sender by return email. 3) Delete all copies (including all
-> attachments) from your computer. Your cooperation is greatly
-> appreciated.
->
->
-> Any export restricted material should be shared using my
-> matthew.weber at corp.rockwellcollins.com address.
->
->
-> ALPHA BRAVO COLLINS | Aerospace Redefined
->
->          __ l __
->
->  \- - - -o-(_)-o- - - -/
+The logic behind /dev/console in systemd.mk is a bit complex and I am not sure
+where to start.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
