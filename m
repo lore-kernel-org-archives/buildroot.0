@@ -1,204 +1,43 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 18 Apr 2020 18:39:53 -0600
-Subject: [Buildroot] [PATCH v2 1/1] package/apcupsd: new package
-Message-ID: <20200419003953.11676-1-james.hilliard1@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 19 Apr 2020 06:41:29 +0300
+Subject: [Buildroot] [PATCH] package/asn1c: new host package
+In-Reply-To: <CAEyMn7Y=aY1zO0Wm5wVzHrdmn=CDrzJJ=aepgm5rXXJ4Hir-uw@mail.gmail.com>
+References: <20200110211420.7704-1-sergio.prado@e-labworks.com>
+ <CAEyMn7Y=aY1zO0Wm5wVzHrdmn=CDrzJJ=aepgm5rXXJ4Hir-uw@mail.gmail.com>
+Message-ID: <87imhwcfbq.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apcupsd is a UPS control system that permits orderly shutdown of your
-computer in the event of a power failure.
+Hi Heiko, Sergio,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - set ac_cv_path_usbcfg
-  - add apcupsd config sub-options
----
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/apcupsd/Config.in    | 58 +++++++++++++++++++++++++++++++
- package/apcupsd/apcupsd.hash |  6 ++++
- package/apcupsd/apcupsd.mk   | 67 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 133 insertions(+)
- create mode 100644 package/apcupsd/Config.in
- create mode 100644 package/apcupsd/apcupsd.hash
- create mode 100644 package/apcupsd/apcupsd.mk
+On Fri, Apr 17 2020, Heiko Thiery wrote:
+>> +ASN1C_VERSION = 0.9.28
+>> +ASN1C_SITE = https://github.com/vlm/asn1c/releases/download/v$(ASN1C_VERSION)
+>
+> You can use the github macro to set the <pkg>_SITE variable:
+> ASN1C_SITE = $(call github,vlm,asn1c,v$(ASN1C_VERSION))
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c831d9d2d1..67456d0c4b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1171,6 +1171,7 @@ F:	configs/pine64_defconfig
- F:	configs/pine64_sopine_defconfig
- 
- N:	James Hilliard <james.hilliard1@gmail.com>
-+F:	package/apcupsd/
- F:	package/gensio/
- F:	package/lua-std-debug/
- F:	package/lua-std-normalize/
-diff --git a/package/Config.in b/package/Config.in
-index ccf54f2417..7a0ff1716d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -415,6 +415,7 @@ endmenu
- 	source "package/aer-inject/Config.in"
- 	source "package/am335x-pru-package/Config.in"
- 	source "package/amd-catalyst/Config.in"
-+	source "package/apcupsd/Config.in"
- 	source "package/avrdude/Config.in"
- 	source "package/bcache-tools/Config.in"
- 	source "package/biosdevname/Config.in"
-diff --git a/package/apcupsd/Config.in b/package/apcupsd/Config.in
-new file mode 100644
-index 0000000000..937b062628
---- /dev/null
-+++ b/package/apcupsd/Config.in
-@@ -0,0 +1,58 @@
-+config BR2_PACKAGE_APCUPSD
-+	bool "apcupsd"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  A daemon for controlling APC UPSes.
-+
-+	  http://www.apcupsd.org/
-+
-+if BR2_PACKAGE_APCUPSD
-+
-+config BR2_PACKAGE_APCUPSD_APCSMART
-+	bool "apcsmart"
-+	help
-+	  Compile APC SmartUPS serial driver
-+
-+config BR2_PACKAGE_APCUPSD_DUMB
-+	bool "dumb"
-+	help
-+	  Compile dumb UPS driver
-+
-+config BR2_PACKAGE_APCUPSD_USB
-+	bool "usb"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
-+	help
-+	  Compile USB UPS code
-+
-+config BR2_PACKAGE_APCUPSD_NET
-+	bool "net"
-+	help
-+	  Compile networking driver for slaves
-+
-+config BR2_PACKAGE_APCUPSD_SNMP
-+	bool "snmp"
-+	help
-+	  Compile SNMP driver
-+
-+config BR2_PACKAGE_APCUPSD_PCNET
-+	bool "pcnet"
-+	help
-+	  Compile PCNET driver code
-+
-+config BR2_PACKAGE_APCUPSD_MODBUS_USB
-+	bool "modbus usb"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
-+	select BR2_PACKAGE_APCUPSD_MODBUS
-+	help
-+	  Compile MODBUS/USB driver code
-+
-+config BR2_PACKAGE_APCUPSD_MODBUS
-+	bool "modbus"
-+	help
-+	  Compile MODBUS driver code
-+
-+endif
-diff --git a/package/apcupsd/apcupsd.hash b/package/apcupsd/apcupsd.hash
-new file mode 100644
-index 0000000000..6795560f62
---- /dev/null
-+++ b/package/apcupsd/apcupsd.hash
-@@ -0,0 +1,6 @@
-+# From https://sourceforge.net/projects/apcupsd/files/apcupsd%20-%20Stable/3.14.14/
-+md5  cc8f5ced77f38906a274787acb9bc980  apcupsd-3.14.14.tar.gz
-+sha1  f027fa141c929371fe860443b6d911ef3a3606fb  apcupsd-3.14.14.tar.gz
-+# Locally computed:
-+sha256  db7748559b6b4c3784f9856561ef6ac6199ef7bd019b3edcd7e0a647bf8f9867  apcupsd-3.14.14.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
-new file mode 100644
-index 0000000000..789a84a8ca
---- /dev/null
-+++ b/package/apcupsd/apcupsd.mk
-@@ -0,0 +1,67 @@
-+################################################################################
-+#
-+# apcupsd
-+#
-+################################################################################
-+
-+APCUPSD_VERSION = 3.14.14
-+APCUPSD_SITE = http://downloads.sourceforge.net/project/apcupsd/apcupsd%20-%20Stable/$(APCUPSD_VERSION)
-+APCUPSD_LICENSE = GPL-2.0
-+APCUPSD_LICENSE_FILES = COPYING
-+APCUPSD_CONF_OPTS = --disable-test
-+
-+ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
-+APCUPSD_CONF_ENV = ac_cv_path_usbcfg=$(STAGING_DIR)/usr/bin/libusb-config
-+endif
-+
-+ifeq ($(BR2_PACKAGE_APCUPSD_APCSMART),y)
-+APCUPSD_CONF_OPTS += --enable-apcsmart
-+else
-+APCUPSD_CONF_OPTS += --disable-apcsmart
-+endif
-+
-+ifeq ($(BR2_PACKAGE_APCUPSD_DUMB),y)
-+APCUPSD_CONF_OPTS += --enable-dumb
-+else
-+APCUPSD_CONF_OPTS += --disable-dumb
-+endif
-+
-+ifeq ($(BR2_PACKAGE_APCUPSD_USB),y)
-+APCUPSD_CONF_OPTS += --enable-usb
-+APCUPSD_DEPENDENCIES = libusb libusb-compat
-+else
-+APCUPSD_CONF_OPTS += --disable-usb
-+endif
-+
-+ifeq ($(BR2_PACKAGE_APCUPSD_NET),y)
-+APCUPSD_CONF_OPTS += --enable-net
-+else
-+APCUPSD_CONF_OPTS += --disable-net
-+endif
-+
-+ifeq ($(BR2_PACKAGE_APCUPSD_SNMP),y)
-+APCUPSD_CONF_OPTS += --enable-snmp
-+else
-+APCUPSD_CONF_OPTS += --disable-snmp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_APCUPSD_PCNET),y)
-+APCUPSD_CONF_OPTS += --enable-pcnet
-+else
-+APCUPSD_CONF_OPTS += --disable-pcnet
-+endif
-+
-+ifeq ($(BR2_PACKAGE_APCUPSD_MODBUS_USB),y)
-+APCUPSD_CONF_OPTS += --enable-modbus-usb
-+APCUPSD_DEPENDENCIES = libusb libusb-compat
-+else
-+APCUPSD_CONF_OPTS += --disable-modbus-usb
-+endif
-+
-+ifeq ($(BR2_PACKAGE_APCUPSD_MODBUS),y)
-+APCUPSD_CONF_OPTS += --enable-modbus
-+else
-+APCUPSD_CONF_OPTS += --disable-modbus
-+endif
-+
-+$(eval $(autotools-package))
--- 
-2.20.1
+When the package author provides a tarball we usually prefer to use it.
+
+  If the package you wish to add does have a release section on GitHub,
+  the maintainer may have uploaded a release tarball, or the release may
+  just point to the automatically generated tarball from the git tag. If
+  there is a release tarball uploaded by the maintainer, we prefer to use
+  that since it may be slightly different (e.g. it contains a configure
+  script so we don?t need to do AUTORECONF).
+
+This is quoted from
+https://buildroot.org/downloads/manual/manual.html#github-download-url
+
+In this case the tarball indeed contains a pre-generated configure
+script.
+
+baruch
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
