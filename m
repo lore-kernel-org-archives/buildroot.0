@@ -1,83 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 23:22:48 +0200
-Subject: [Buildroot] [git commit] package/stella: bump to version 6.1.1
-Message-ID: <20200419210827.05DD38F31C@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Apr 2020 23:30:23 +0200
+Subject: [Buildroot] [git commit] package/collectd: remove lvm
+Message-ID: <20200419211617.7FC6D8F31B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7210c24e343a13e58d1d45b7e0c4bdb51854857
+commit: https://git.buildroot.net/buildroot/commit/?id=01192342dcdb60444a93a33d2964954516073d24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch already applied upstream.
+lvm has been removed since version 5.11.0 and
+https://github.com/collectd/collectd/commit/0e73c26f5670b2f11eecfdadaf545bcc7f260658
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../stella/0002-Do-not-strip-when-installing.patch | 26 ----------------------
- ...-PAGE_SIZE.patch => 0002-undef-PAGE_SIZE.patch} |  0
- package/stella/stella.hash                         |  2 +-
- package/stella/stella.mk                           |  2 +-
- 4 files changed, 2 insertions(+), 28 deletions(-)
+ Config.in.legacy             |  6 ++++++
+ package/collectd/Config.in   | 13 -------------
+ package/collectd/collectd.mk |  2 --
+ 3 files changed, 6 insertions(+), 15 deletions(-)
 
-diff --git a/package/stella/0002-Do-not-strip-when-installing.patch b/package/stella/0002-Do-not-strip-when-installing.patch
-deleted file mode 100644
-index 8a95a81a5a..0000000000
---- a/package/stella/0002-Do-not-strip-when-installing.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From d506a586b299682a425d3c3de68baefb7221fa9a Mon Sep 17 00:00:00 2001
--From: Sergio Prado <sergio.prado@e-labworks.com>
--Date: Sun, 30 Jul 2017 18:25:12 -0300
--Subject: [PATCH 2/2] Do not strip when installing
--
--Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-----
-- Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 346640e53bea..fedaed05a4d6 100644
----- a/Makefile
--+++ b/Makefile
--@@ -173,7 +173,7 @@ config.mak: $(srcdir)/configure
-- 
-- install: all
-- 	$(INSTALL) -d "$(DESTDIR)$(BINDIR)"
---	$(INSTALL) -c -s -m 755 "$(srcdir)/stella$(EXEEXT)" "$(DESTDIR)$(BINDIR)/stella$(EXEEXT)"
--+	$(INSTALL) -c -m 755 "$(srcdir)/stella$(EXEEXT)" "$(DESTDIR)$(BINDIR)/stella$(EXEEXT)"
-- 	$(INSTALL) -d "$(DESTDIR)$(DOCDIR)"
-- 	$(INSTALL) -c -m 644 "$(srcdir)/Announce.txt" "$(srcdir)/Changes.txt" "$(srcdir)/Copyright.txt" "$(srcdir)/License.txt" "$(srcdir)/README-SDL.txt" "$(srcdir)/Readme.txt" "$(srcdir)/Todo.txt" "$(srcdir)/docs/index.html" "$(srcdir)/docs/debugger.html" "$(DESTDIR)$(DOCDIR)/"
-- 	$(INSTALL) -d "$(DESTDIR)$(DOCDIR)/graphics"
---- 
--1.9.1
--
-diff --git a/package/stella/0003-undef-PAGE_SIZE.patch b/package/stella/0002-undef-PAGE_SIZE.patch
-similarity index 100%
-rename from package/stella/0003-undef-PAGE_SIZE.patch
-rename to package/stella/0002-undef-PAGE_SIZE.patch
-diff --git a/package/stella/stella.hash b/package/stella/stella.hash
-index 395ee18d35..dcc56aadf6 100644
---- a/package/stella/stella.hash
-+++ b/package/stella/stella.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 bcbd82294f97d00457fdb727e9b08ff73b685dc7f77704cea1eceb58d8967387  stella-6.0.2-src.tar.xz
-+sha256 ddf53bb782c63c97c4e5d0fefa9eb256c62e0d5a328c78cc18f06eea45ba7369  stella-6.1.1-src.tar.xz
- sha256 062e708b8b88ea911b5c08000f1c4a5588235aa0c303bc893b5d92fb45cafd04  Copyright.txt
- sha256 58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
-diff --git a/package/stella/stella.mk b/package/stella/stella.mk
-index 1295b75274..74c131e72d 100644
---- a/package/stella/stella.mk
-+++ b/package/stella/stella.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7058da5cb9..c3c4259dbe 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
--STELLA_VERSION = 6.0.2
-+STELLA_VERSION = 6.1.1
- STELLA_SOURCE = stella-$(STELLA_VERSION)-src.tar.xz
- STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VERSION)
- STELLA_LICENSE = GPL-2.0+
+ comment "Legacy options removed in 2020.05"
+ 
++config BR2_PACKAGE_COLLECTD_LVM
++	bool "lvm support in collectd was removed"
++	select BR2_LEGACY
++	help
++	  collectd removed LVM plugin, liblvm2app has been deprecated
++
+ config BR2_PACKAGE_PYTHON_PYASN_MODULES
+ 	bool "duplicate python-pyasn1-modules package removed"
+ 	select BR2_LEGACY
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 4b34ec60eb..1b6b3384c4 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -296,19 +296,6 @@ config BR2_PACKAGE_COLLECTD_LOAD
+ 	help
+ 	  Collects the system load.
+ 
+-config BR2_PACKAGE_COLLECTD_LVM
+-	bool "lvm"
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2 app library
+-	select BR2_PACKAGE_LVM2
+-	select BR2_PACKAGE_LVM2_APP_LIBRARY
+-	help
+-	  Collects the size of logical volumes (LV) and free space
+-	  inside a volume group (VG) from Linux' Logical Volume Manager
+-	  (LVM).
+-
+-comment "lvm needs a glibc or uClibc toolchain"
+-	depends on BR2_TOOLCHAIN_USES_MUSL
+-
+ config BR2_PACKAGE_COLLECTD_MD
+ 	bool "md"
+ 	help
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index dda15b0162..24cdad7e1b 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -88,7 +88,6 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOGFILE),--enable-logfile,--disable-logfile) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),--enable-log_logstash,--disable-log_logstash) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LUA),--enable-lua,--disable-lua) \
+-	$(if $(BR2_PACKAGE_COLLECTD_LVM),--enable-lvm,--disable-lvm) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MD),--enable-md,--disable-md) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),--enable-memcachec,--disable-memcachec) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHED),--enable-memcached,--disable-memcached) \
+@@ -162,7 +161,6 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),yajl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LUA),lua) \
+-	$(if $(BR2_PACKAGE_COLLECTD_LVM),lvm2) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),libmemcached) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MODBUS),libmodbus) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MQTT),mosquitto) \
