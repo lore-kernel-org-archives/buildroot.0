@@ -1,106 +1,117 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 14:55:34 +0200
-Subject: [Buildroot] [git commit] board/olpc: add readme.txt
-Message-ID: <20200419124116.C2B0E803E1@busybox.osuosl.org>
+Date: Sun, 19 Apr 2020 14:56:25 +0200
+Subject: [Buildroot] [git commit] package/python-pyasn-modules: remove
+ duplicate package
+Message-ID: <20200419124204.17747813E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f6f42636b45b1164fd16728e8ae29d7dd7c6120
+commit: https://git.buildroot.net/buildroot/commit/?id=5511c07f6b4a9e35ef399069bda56b6bbab936d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This adds some instructions on how to build and run images for the OLPC
-XO laptops.
+This is a duplicate of python-pyasn1-modules.
 
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/olpc/readme.txt | 78 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 78 insertions(+)
+ Config.in.legacy                                       |  7 +++++++
+ DEVELOPERS                                             |  1 -
+ package/Config.in                                      |  1 -
+ package/python-pyasn-modules/Config.in                 | 11 -----------
+ package/python-pyasn-modules/python-pyasn-modules.hash |  5 -----
+ package/python-pyasn-modules/python-pyasn-modules.mk   | 14 --------------
+ 6 files changed, 7 insertions(+), 32 deletions(-)
 
-diff --git a/board/olpc/readme.txt b/board/olpc/readme.txt
-new file mode 100644
-index 0000000000..d57635926e
---- /dev/null
-+++ b/board/olpc/readme.txt
-@@ -0,0 +1,78 @@
-+OLPC XO Laptops
-+===============
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 95f17b1b31..7058da5cb9 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2020.05"
+ 
++config BR2_PACKAGE_PYTHON_PYASN_MODULES
++	bool "duplicate python-pyasn1-modules package removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_PYTHON_PYASN1_MODULES
++	help
++	  This package was a duplicate of python-pyasn1-modules.
 +
-+This document explains how to build and run images that run on the OLPC
-+XO laptops.
-+
-+Supported models
-+----------------
-+
-+* OLPC XO-1
-+  The original NS Geode based OLPC laptop, uses the x86 architecture.
-+
-+* OLPC XO-7.5
-+  The ARM-based laptop. Needs a recent enough firmware to provide a good
-+  enough flattened device tree to the kernel.
-+
-+Configure and build
-+===================
-+
-+  $ make olpc_xo1_defconfig   # Configure for XO-1
-+
-+or:
-+
-+  $ make olpc_xo175_defconfig # Configure for XO-1.75
-+
-+Then:
-+
-+  $ make menuconfig           # Customize the build configuration
-+  $ make                      # Build
-+
-+Create the bootable media
-+=========================
-+
-+When the build is finished, the resulting image file will be called
-+"sdcard.img". It can be written directly to a SD-card or and USB flash stick.
-+
-+Please double check that you're using the right device (e.g. with "lsblk"
-+command). Doing the following will DESTROY ALL DATA that's currently on the
-+media.
-+
-+  # cat output/images/sdcard.img >/dev/<device>
-+
-+Preparing the machine
-+=====================
-+
-+Firmware security
-+-----------------
-+
-+Most OLPC machines were shipped with the security system that disallows
-+booting unsigned software. If this is the case with your machine, in order
-+to run the image you've built on it you'll need to get a developer key and
-+deactivate the security system.
-+
-+The procedure is descriped in the OLPC wiki:
-+http://wiki.laptop.org/go/Activation_and_Developer_Keys
-+
-+Firmware upgrade
-+----------------
-+
-+It is always preferrable to use an up to date firmware. The firmware images
-+are available at http://wiki.laptop.org/go/Firmware. For the XO-1.75 laptop
-+to boot the mainline kernel a firmware Q4E00JA or newer is needed. You can
-+get it at http://dev.laptop.org/~quozl/q4e00ja.rom.
-+
-+To update the firmware, place the .rom file on to your bootable media,
-+connect a charged battery pack and a wall adapter, and enter the Open
-+Firmware prompt by pressing ESC during the early boot (needs an unlocked
-+laptop -- see "Firmware security" above). Then use the "flash" command
-+to update the firmware:
-+
-+  ok flash ext:\q4e00ja.rom   \ Flash the "q4e00ja.rom" from the SD card
-+  ok flash u:\q4e00ja.rom     \ Flash the "q4e00ja.rom" from USB stick
-+
-+Booting the machine
-+===================
-+
-+Once your machine is unlocked, it will automatically boot from your media
-+wherever it will detect it attached to the USB bus or the SD card slot.
+ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA6174
+ 	bool "duplicate QCA6174 firmware symbol removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 67456d0c4b..a13a1694ea 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1763,7 +1763,6 @@ F:	package/python-crossbar/
+ F:	package/python-lmdb/
+ F:	package/python-mistune/
+ F:	package/python-netaddr/
+-F:	package/python-pyasn-modules/
+ F:	package/python-pygments/
+ F:	package/python-pynacl/
+ F:	package/python-pytrie/
+diff --git a/package/Config.in b/package/Config.in
+index 7a0ff1716d..55634e9479 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1066,7 +1066,6 @@ menu "External python modules"
+ 	source "package/python-py/Config.in"
+ 	source "package/python-pyaes/Config.in"
+ 	source "package/python-pyasn/Config.in"
+-	source "package/python-pyasn-modules/Config.in"
+ 	source "package/python-pyasn1/Config.in"
+ 	source "package/python-pyasn1-modules/Config.in"
+ 	source "package/python-pycairo/Config.in"
+diff --git a/package/python-pyasn-modules/Config.in b/package/python-pyasn-modules/Config.in
+deleted file mode 100644
+index cedd68b34e..0000000000
+--- a/package/python-pyasn-modules/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_PYTHON_PYASN_MODULES
+-	bool "python-pyasn-modules"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	select BR2_PACKAGE_PYTHON_PYASN # runtime
+-	help
+-	  A collection of ASN.1-based protocols modules.
+-
+-	  https://pypi.python.org/pypi/pyasn1-modules
+-
+-comment "python-pyasn-modules needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-pyasn-modules/python-pyasn-modules.hash b/package/python-pyasn-modules/python-pyasn-modules.hash
+deleted file mode 100644
+index e5880d24ea..0000000000
+--- a/package/python-pyasn-modules/python-pyasn-modules.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=178129bc7fbf07215c25230c5f053f81
+-md5	178129bc7fbf07215c25230c5f053f81  pyasn1-modules-0.0.8.tar.gz
+-# Locally computed
+-sha256	10561934f1829bcc455c7ecdcdacdb4be5ffd3696f26f468eb6eb41e107f3837  pyasn1-modules-0.0.8.tar.gz
+-sha256  8bea85439e7446ecb270079cce926d605a7d10f51fe8789b1aeced557dcbe1b6  LICENSE.txt
+diff --git a/package/python-pyasn-modules/python-pyasn-modules.mk b/package/python-pyasn-modules/python-pyasn-modules.mk
+deleted file mode 100644
+index b5e853aa2a..0000000000
+--- a/package/python-pyasn-modules/python-pyasn-modules.mk
++++ /dev/null
+@@ -1,14 +0,0 @@
+-################################################################################
+-#
+-# python-pyasn-modules
+-#
+-################################################################################
+-
+-PYTHON_PYASN_MODULES_VERSION = 0.0.8
+-PYTHON_PYASN_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN_MODULES_VERSION).tar.gz
+-PYTHON_PYASN_MODULES_SITE = https://pypi.python.org/packages/source/p/pyasn1-modules
+-PYTHON_PYASN_MODULES_LICENSE = BSD-2-Clause
+-PYTHON_PYASN_MODULES_LICENSE_FILES = LICENSE.txt
+-PYTHON_PYASN_MODULES_SETUP_TYPE = setuptools
+-
+-$(eval $(python-package))
