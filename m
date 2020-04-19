@@ -1,44 +1,58 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 19 Apr 2020 15:36:14 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: use -msse2
- only when supported
-In-Reply-To: <20200419160048.26a0eba3@windsurf.home>
-References: <20200414102621.18804-1-asafka7@gmail.com>
- <20200415221030.1e6aafd0@windsurf.home>
- <CADvTj4qvvg4skQyYYkCTNeqUy4FUOe5nmX32ks5o8pFDCVyKpg@mail.gmail.com>
- <CADvTj4qP_7s6rv=TC_wwSb3ZUPtBbcdOGyDhcLokafz37x3NTA@mail.gmail.com>
- <CADvTj4pmNBNN_O9CbKyR+aYFSNx=kCu-3zmLevS-O5z7KDFe2A@mail.gmail.com>
- <20200419160048.26a0eba3@windsurf.home>
-Message-ID: <CADvTj4rE92fjEQ8T2yLtR2MtPUeR51-LtN6_V+2P_Jy2WRoVhg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Apr 2020 23:38:35 +0200
+Subject: [Buildroot] [PATCH v3,1/6] package/collectd: drop autoreconf
+In-Reply-To: <20200415063008.2237470-1-fontaine.fabrice@gmail.com>
+References: <20200415063008.2237470-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200419213835.GE5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Apr 19, 2020 at 8:00 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Wed, 15 Apr 2020 16:00:58 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > Nevermind, that comment appears to be totally inaccurate as Python
-> > 3.6's CCompiler
-> > does not actually have a has_flag method at all, however we can just include the
-> > function which seems to work. I've updated my pull request with a reworked
-> > version of has_flag which seems to work.
->
-> Do you have some news about the upstream patch to fix this issue ? It
-> would be good to fix it in Buildroot, as the build continues to fail.
-I was waiting on upstream to merge the patch I sent but it should fix this.
-https://github.com/hynek/argon2-cffi/pull/59
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Fabrice, All,
+
+On 2020-04-15 08:30 +0200, Fabrice Fontaine spake thusly:
+> autoreconf is not needed since bump to version 5.11.0 in commit
+> 57adbfc482454e3fb17172626b2dc971afaf5cfd which dropped patch
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Patches 1 and 2 applied to master, thanks. I'm deffering the rest of the
+series for a while, waiting for feedback from the other maintainers...
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/collectd/collectd.mk | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+> index c09edebfc9..dda15b0162 100644
+> --- a/package/collectd/collectd.mk
+> +++ b/package/collectd/collectd.mk
+> @@ -12,8 +12,6 @@ COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+>  COLLECTD_INSTALL_STAGING = YES
+>  COLLECTD_LICENSE = MIT (daemon, plugins), GPL-2.0 (plugins), LGPL-2.1 (plugins)
+>  COLLECTD_LICENSE_FILES = COPYING
+> -# We're patching configure.ac
+> -COLLECTD_AUTORECONF = YES
+>  
+>  # These require unmet dependencies, are fringe, pointless or deprecated
+>  COLLECTD_PLUGINS_DISABLE = \
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
