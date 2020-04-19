@@ -1,44 +1,127 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 19 Apr 2020 18:24:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wavpack: bump to version 5.3.0
-Message-ID: <20200419162419.326174-1-fontaine.fabrice@gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sun, 19 Apr 2020 11:14:51 -0700
+Subject: [Buildroot] [PATCH 21/22] package/libselinux: bear the kernel
+ options munging
+In-Reply-To: <CANQCQpbDROdWVy7kXj+fLAGtJaoZLGiJirH2odftbWOXqBK8og@mail.gmail.com>
+References: <cover.1586002215.git.yann.morin.1998@free.fr>
+ <2e26e65ead8f1fa43ada0c792b54b04d67606f18.1586002215.git.yann.morin.1998@free.fr>
+ <CANQCQpbDROdWVy7kXj+fLAGtJaoZLGiJirH2odftbWOXqBK8og@mail.gmail.com>
+Message-ID: <CAFSsvmo4p0At2_vEo00qz_5qnkEHks_0vTa3EFhjbNZka3=ApQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update hash of COPYING (update in year):
-https://github.com/dbry/WavPack/commit/350b6d7737383029573ea2cce9bd94f1b6756bbd
+Yann;
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/wavpack/wavpack.hash | 4 ++--
- package/wavpack/wavpack.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+This is a great addition and really does a wonderful job of cleaning
+up the kernel config options.
+Thanks for the hard work!
 
-diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
-index 6b1f90a1fe..eeef730321 100644
---- a/package/wavpack/wavpack.hash
-+++ b/package/wavpack/wavpack.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  77e5b1cfa26e387e4275b362f0c3fb9a27106447d9bce00f9f794f30badb77e3  wavpack-5.2.0.tar.xz
--sha256  2ab58075e26305cc16920e9867c1d43f46ce81adab2051100dd316a3a93a2619  COPYING
-+sha256  b444379a0bee0330f137cb3e9a100e6a12a63a6d01987ba66b3729f85e282307  wavpack-5.3.0.tar.xz
-+sha256  a0bbe245dfe263f73946b72306e8336818009ff1e52b119784c288f2785fc260  COPYING
-diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
-index 8cb7754b2b..6403f93ac9 100644
---- a/package/wavpack/wavpack.mk
-+++ b/package/wavpack/wavpack.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WAVPACK_VERSION = 5.2.0
-+WAVPACK_VERSION = 5.3.0
- WAVPACK_SITE = \
- 	https://github.com/dbry/WavPack/releases/download/$(WAVPACK_VERSION)
- WAVPACK_SOURCE = wavpack-$(WAVPACK_VERSION).tar.xz
--- 
-2.25.1
+Reviewed-by: Adam Duskett <aduskett@gmail.com>
+Tested-by: Adam Duskett <aduskett@gmail.com>
+
+On Mon, Apr 6, 2020 at 5:09 AM Matthew Weber <matthew.weber@collins.com> wrote:
+>
+> Yann,
+>
+>
+> On Sat, Apr 4, 2020 at 7:13 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > Cc: Adam Duskett <aduskett@gmail.com>
+> > Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+>
+> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+>
+> Thanks Yann, this is a nice cleanup!
+>
+> > Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+> > ---
+> >  linux/linux.mk                   |  8 --------
+> >  package/libselinux/libselinux.mk | 10 ++++++++++
+> >  2 files changed, 10 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/linux/linux.mk b/linux/linux.mk
+> > index b9e2058e29..3762e718c6 100644
+> > --- a/linux/linux.mk
+> > +++ b/linux/linux.mk
+> > @@ -363,14 +363,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
+> >                 $(call KCONFIG_ENABLE_OPT,CONFIG_FB)
+> >                 $(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
+> >                 $(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
+> > -       $(if $(BR2_PACKAGE_LIBSELINUX),
+> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT)
+> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX)
+> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_INET)
+> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_NET)
+> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
+> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
+> > -               $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX))
+> >         $(PACKAGES_LINUX_CONFIG_FIXUPS)
+> >  endef
+> >
+> > diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+> > index 1461e34539..5f07236791 100644
+> > --- a/package/libselinux/libselinux.mk
+> > +++ b/package/libselinux/libselinux.mk
+> > @@ -116,5 +116,15 @@ define HOST_LIBSELINUX_INSTALL_CMDS
+> >                 $(HOST_LIBSELINUX_MAKE_OPTS) install-pywrap
+> >  endef
+> >
+> > +define LIBSELINUX_LINUX_CONFIG_FIXUPS
+> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT)
+> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX)
+> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_INET)
+> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_NET)
+> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
+> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
+> > +       $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX)
+> > +endef
+> > +
+> >  $(eval $(generic-package))
+> >  $(eval $(host-generic-package))
+> > --
+> > 2.20.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+>
+> --
+>
+> Matthew Weber | Associate Director Software Engineer | Commercial Avionics
+>
+> COLLINS AEROSPACE
+>
+> 400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+>
+> Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+>
+> matthew.weber at collins.com | collinsaerospace.com
+>
+>
+>
+> CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+> privileged information of Collins Aerospace and its affiliated
+> companies. If you are not the intended recipient, please 1) Do not
+> disclose, copy, distribute or use this message or its contents. 2)
+> Advise the sender by return email. 3) Delete all copies (including all
+> attachments) from your computer. Your cooperation is greatly
+> appreciated.
+>
+>
+> Any export restricted material should be shared using my
+> matthew.weber at corp.rockwellcollins.com address.
+>
+>
+> ALPHA BRAVO COLLINS | Aerospace Redefined
+>
+>          __ l __
+>
+>  \- - - -o-(_)-o- - - -/
