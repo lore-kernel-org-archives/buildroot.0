@@ -1,45 +1,204 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 19 Apr 2020 00:59:05 +0200
-Subject: [Buildroot] [PATCH v1 5/6] package/qt5webkit: drop all legacy gcc
- requierements below 5.0
-In-Reply-To: <20200418225906.17514-1-ps.report@gmx.net>
-References: <20200418225906.17514-1-ps.report@gmx.net>
-Message-ID: <20200418225906.17514-5-ps.report@gmx.net>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 18 Apr 2020 18:39:53 -0600
+Subject: [Buildroot] [PATCH v2 1/1] package/apcupsd: new package
+Message-ID: <20200419003953.11676-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As qt5 requires as minimum gcc 5.0 drop all legacy requierements below.
+Apcupsd is a UPS control system that permits orderly shutdown of your
+computer in the event of a power failure.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/qt5/qt5webkit/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Changes v1 -> v2:
+  - set ac_cv_path_usbcfg
+  - add apcupsd config sub-options
+---
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/apcupsd/Config.in    | 58 +++++++++++++++++++++++++++++++
+ package/apcupsd/apcupsd.hash |  6 ++++
+ package/apcupsd/apcupsd.mk   | 67 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 133 insertions(+)
+ create mode 100644 package/apcupsd/Config.in
+ create mode 100644 package/apcupsd/apcupsd.hash
+ create mode 100644 package/apcupsd/apcupsd.mk
 
-diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
-index e071dff208..5adcddfb5d 100644
---- a/package/qt5/qt5webkit/Config.in
-+++ b/package/qt5/qt5webkit/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_QT5WEBKIT
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	depends on BR2_INSTALL_LIBSTDCPP # leveldb
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # icu
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # leveldb
- 	depends on !BR2_BINFMT_FLAT # icu
- 	# assumes a FPU is available on MIPS
-@@ -31,8 +30,8 @@ config BR2_PACKAGE_QT5WEBKIT
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c831d9d2d1..67456d0c4b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1171,6 +1171,7 @@ F:	configs/pine64_defconfig
+ F:	configs/pine64_sopine_defconfig
  
- 	  http://doc.qt.io/archives/qt-5.5/qtwebkit-index.html
- 
--comment "qt5webkit needs a toolchain w/ dynamic library, gcc >= 4.8"
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+comment "qt5webkit needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_MIPS_SOFT_FLOAT
+ N:	James Hilliard <james.hilliard1@gmail.com>
++F:	package/apcupsd/
+ F:	package/gensio/
+ F:	package/lua-std-debug/
+ F:	package/lua-std-normalize/
+diff --git a/package/Config.in b/package/Config.in
+index ccf54f2417..7a0ff1716d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -415,6 +415,7 @@ endmenu
+ 	source "package/aer-inject/Config.in"
+ 	source "package/am335x-pru-package/Config.in"
+ 	source "package/amd-catalyst/Config.in"
++	source "package/apcupsd/Config.in"
+ 	source "package/avrdude/Config.in"
+ 	source "package/bcache-tools/Config.in"
+ 	source "package/biosdevname/Config.in"
+diff --git a/package/apcupsd/Config.in b/package/apcupsd/Config.in
+new file mode 100644
+index 0000000000..937b062628
+--- /dev/null
++++ b/package/apcupsd/Config.in
+@@ -0,0 +1,58 @@
++config BR2_PACKAGE_APCUPSD
++	bool "apcupsd"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  A daemon for controlling APC UPSes.
++
++	  http://www.apcupsd.org/
++
++if BR2_PACKAGE_APCUPSD
++
++config BR2_PACKAGE_APCUPSD_APCSMART
++	bool "apcsmart"
++	help
++	  Compile APC SmartUPS serial driver
++
++config BR2_PACKAGE_APCUPSD_DUMB
++	bool "dumb"
++	help
++	  Compile dumb UPS driver
++
++config BR2_PACKAGE_APCUPSD_USB
++	bool "usb"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBUSB_COMPAT
++	help
++	  Compile USB UPS code
++
++config BR2_PACKAGE_APCUPSD_NET
++	bool "net"
++	help
++	  Compile networking driver for slaves
++
++config BR2_PACKAGE_APCUPSD_SNMP
++	bool "snmp"
++	help
++	  Compile SNMP driver
++
++config BR2_PACKAGE_APCUPSD_PCNET
++	bool "pcnet"
++	help
++	  Compile PCNET driver code
++
++config BR2_PACKAGE_APCUPSD_MODBUS_USB
++	bool "modbus usb"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBUSB_COMPAT
++	select BR2_PACKAGE_APCUPSD_MODBUS
++	help
++	  Compile MODBUS/USB driver code
++
++config BR2_PACKAGE_APCUPSD_MODBUS
++	bool "modbus"
++	help
++	  Compile MODBUS driver code
++
++endif
+diff --git a/package/apcupsd/apcupsd.hash b/package/apcupsd/apcupsd.hash
+new file mode 100644
+index 0000000000..6795560f62
+--- /dev/null
++++ b/package/apcupsd/apcupsd.hash
+@@ -0,0 +1,6 @@
++# From https://sourceforge.net/projects/apcupsd/files/apcupsd%20-%20Stable/3.14.14/
++md5  cc8f5ced77f38906a274787acb9bc980  apcupsd-3.14.14.tar.gz
++sha1  f027fa141c929371fe860443b6d911ef3a3606fb  apcupsd-3.14.14.tar.gz
++# Locally computed:
++sha256  db7748559b6b4c3784f9856561ef6ac6199ef7bd019b3edcd7e0a647bf8f9867  apcupsd-3.14.14.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
+new file mode 100644
+index 0000000000..789a84a8ca
+--- /dev/null
++++ b/package/apcupsd/apcupsd.mk
+@@ -0,0 +1,67 @@
++################################################################################
++#
++# apcupsd
++#
++################################################################################
++
++APCUPSD_VERSION = 3.14.14
++APCUPSD_SITE = http://downloads.sourceforge.net/project/apcupsd/apcupsd%20-%20Stable/$(APCUPSD_VERSION)
++APCUPSD_LICENSE = GPL-2.0
++APCUPSD_LICENSE_FILES = COPYING
++APCUPSD_CONF_OPTS = --disable-test
++
++ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
++APCUPSD_CONF_ENV = ac_cv_path_usbcfg=$(STAGING_DIR)/usr/bin/libusb-config
++endif
++
++ifeq ($(BR2_PACKAGE_APCUPSD_APCSMART),y)
++APCUPSD_CONF_OPTS += --enable-apcsmart
++else
++APCUPSD_CONF_OPTS += --disable-apcsmart
++endif
++
++ifeq ($(BR2_PACKAGE_APCUPSD_DUMB),y)
++APCUPSD_CONF_OPTS += --enable-dumb
++else
++APCUPSD_CONF_OPTS += --disable-dumb
++endif
++
++ifeq ($(BR2_PACKAGE_APCUPSD_USB),y)
++APCUPSD_CONF_OPTS += --enable-usb
++APCUPSD_DEPENDENCIES = libusb libusb-compat
++else
++APCUPSD_CONF_OPTS += --disable-usb
++endif
++
++ifeq ($(BR2_PACKAGE_APCUPSD_NET),y)
++APCUPSD_CONF_OPTS += --enable-net
++else
++APCUPSD_CONF_OPTS += --disable-net
++endif
++
++ifeq ($(BR2_PACKAGE_APCUPSD_SNMP),y)
++APCUPSD_CONF_OPTS += --enable-snmp
++else
++APCUPSD_CONF_OPTS += --disable-snmp
++endif
++
++ifeq ($(BR2_PACKAGE_APCUPSD_PCNET),y)
++APCUPSD_CONF_OPTS += --enable-pcnet
++else
++APCUPSD_CONF_OPTS += --disable-pcnet
++endif
++
++ifeq ($(BR2_PACKAGE_APCUPSD_MODBUS_USB),y)
++APCUPSD_CONF_OPTS += --enable-modbus-usb
++APCUPSD_DEPENDENCIES = libusb libusb-compat
++else
++APCUPSD_CONF_OPTS += --disable-modbus-usb
++endif
++
++ifeq ($(BR2_PACKAGE_APCUPSD_MODBUS),y)
++APCUPSD_CONF_OPTS += --enable-modbus
++else
++APCUPSD_CONF_OPTS += --disable-modbus
++endif
++
++$(eval $(autotools-package))
 -- 
-2.26.0
+2.20.1
