@@ -1,79 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Apr 2020 22:50:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dtc: bump version to 1.6.0
-In-Reply-To: <20200419154300.203136-1-juju@cotds.org>
-References: <20200419154300.203136-1-juju@cotds.org>
-Message-ID: <20200419205003.GC5035@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 19 Apr 2020 22:50:18 +0200
+Subject: [Buildroot] [git commit] package/haproxy: fix build on m68k
+Message-ID: <20200419203556.76CD98F310@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=fb7fd98774b94d7c50f381ae4e2d005db21afb3e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-19 17:43 +0200, Julien Olivain spake thusly:
-> When host compiler is gcc 10 (for example on Fedora 32), dtc 1.5.1
-> fail to build with the error:
-> /usr/bin/ld: dtc-parser.tab.o:(.bss+0x20): multiple definition of `yylloc'; dtc-lexer.lex.o:(.bss+0x0): first defined here
-> collect2: error: ld returned 1 exit status
-> 
-> dtc 1.6.0 fixes this issue in the commit:
-> https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=0e9225eb0dfec51def612b928d2f1836b092bc7e
-> 
-> Also adopt new spacing convention in .hash files (two spaces).
+When threads are enabled, haproxy expects that pthread_getcpuclockid is
+available which is not the case on m68k. Fix this by enabling threads
+support only if NPTL is available.
 
-Thanks for the spaces! ;-)
+Fixes:
+ - http://autobuild.buildroot.org/results/52cc4b1fcac2a4fc84ab15ec4c692d2cd9b6d8bd
 
-> Signed-off-by: Julien Olivain <juju@cotds.org>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/haproxy/haproxy.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/dtc/dtc.hash | 8 ++++----
->  package/dtc/dtc.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
-> index e4d6c02544..902ce1baf9 100644
-> --- a/package/dtc/dtc.hash
-> +++ b/package/dtc/dtc.hash
-> @@ -1,7 +1,7 @@
->  # from https://www.kernel.org/pub/software/utils/dtc/sha256sums.asc
-> -sha256 660b74039690fc37013660544d09191834efb58503c73c555c5513ba75ab031f  dtc-1.5.1.tar.xz
-> +sha256  10503b0217e1b07933e29e8d347a00015b2431bea5f59afe0bed3af30340c82d  dtc-1.6.0.tar.xz
->  
->  # Hash for license files
-> -sha256 78e1e1ce5728a990d59c7de61d4741c49185d5129daf783b386380a214328d68  README.license
-> -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  GPL
-> -sha256 6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  BSD-2-Clause
-> +sha256  78e1e1ce5728a990d59c7de61d4741c49185d5129daf783b386380a214328d68  README.license
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  GPL
-> +sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  BSD-2-Clause
-> diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-> index d532487dd1..956a60b29d 100644
-> --- a/package/dtc/dtc.mk
-> +++ b/package/dtc/dtc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -DTC_VERSION = 1.5.1
-> +DTC_VERSION = 1.6.0
->  DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
->  DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
->  DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
-> -- 
-> 2.26.0
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 6752367fac..e59896b485 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -19,7 +19,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ HAPROXY_LIBS += -latomic
+ endif
+ 
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
+ # threads uses atomics on gcc >= 4.7 and sync otherwise (see
+ # include/common/hathreads.h)
+ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7):$(BR2_TOOLCHAIN_HAS_ATOMIC),y:y)
