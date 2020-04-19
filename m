@@ -1,27 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 10:24:02 +0200
-Subject: [Buildroot] [PATCH] package/luarocks: fix typo
-In-Reply-To: <20200419074827.11205-1-francois.perrad@gadz.org>
-References: <20200419074827.11205-1-francois.perrad@gadz.org>
-Message-ID: <20200419102402.557dcebf@windsurf.home>
+Date: Sun, 19 Apr 2020 10:24:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: security bump version
+ to 2.4.9
+In-Reply-To: <20200419075919.287521-1-bernd.kuhls@t-online.de>
+References: <20200419075919.287521-1-bernd.kuhls@t-online.de>
+Message-ID: <20200419102405.52a81353@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 19 Apr 2020 09:48:27 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Sun, 19 Apr 2020 09:59:19 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> many build are broken, that starts by this kind of message:
->  Warning: could not load configuration file `.../host/etc/luarocks/config.lua` given in environment variable LUAROCKS_CONFIG
+> Changelog:
+> https://github.com/OpenVPN/openvpn/blob/release/2.4/ChangeLog
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Fixes CVE-2020-11810.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/luarocks/luarocks.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/openvpn/openvpn.hash | 2 +-
+>  package/openvpn/openvpn.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks. Sorry for the typo, my fault :-/
+Applied to master, thanks.
 
 Thomas
 -- 
