@@ -1,31 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 22:20:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wavpack: bump to version 5.3.0
-In-Reply-To: <20200419162419.326174-1-fontaine.fabrice@gmail.com>
-References: <20200419162419.326174-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200419222039.3e731d4f@windsurf.home>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sun, 19 Apr 2020 17:33:11 -0300
+Subject: [Buildroot] [PATCH] package/stella: bump to version 6.1.1
+Message-ID: <20200419203311.29211-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 19 Apr 2020 18:24:19 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Drop patch already applied upstream.
 
-> Update hash of COPYING (update in year):
-> https://github.com/dbry/WavPack/commit/350b6d7737383029573ea2cce9bd94f1b6756bbd
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/wavpack/wavpack.hash | 4 ++--
->  package/wavpack/wavpack.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ .../0002-Do-not-strip-when-installing.patch   | 26 -------------------
+ ..._SIZE.patch => 0002-undef-PAGE_SIZE.patch} |  0
+ package/stella/stella.hash                    |  2 +-
+ package/stella/stella.mk                      |  2 +-
+ 4 files changed, 2 insertions(+), 28 deletions(-)
+ delete mode 100644 package/stella/0002-Do-not-strip-when-installing.patch
+ rename package/stella/{0003-undef-PAGE_SIZE.patch => 0002-undef-PAGE_SIZE.patch} (100%)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/stella/0002-Do-not-strip-when-installing.patch b/package/stella/0002-Do-not-strip-when-installing.patch
+deleted file mode 100644
+index 8a95a81a5ac2..000000000000
+--- a/package/stella/0002-Do-not-strip-when-installing.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From d506a586b299682a425d3c3de68baefb7221fa9a Mon Sep 17 00:00:00 2001
+-From: Sergio Prado <sergio.prado@e-labworks.com>
+-Date: Sun, 30 Jul 2017 18:25:12 -0300
+-Subject: [PATCH 2/2] Do not strip when installing
+-
+-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+----
+- Makefile | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 346640e53bea..fedaed05a4d6 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -173,7 +173,7 @@ config.mak: $(srcdir)/configure
+- 
+- install: all
+- 	$(INSTALL) -d "$(DESTDIR)$(BINDIR)"
+--	$(INSTALL) -c -s -m 755 "$(srcdir)/stella$(EXEEXT)" "$(DESTDIR)$(BINDIR)/stella$(EXEEXT)"
+-+	$(INSTALL) -c -m 755 "$(srcdir)/stella$(EXEEXT)" "$(DESTDIR)$(BINDIR)/stella$(EXEEXT)"
+- 	$(INSTALL) -d "$(DESTDIR)$(DOCDIR)"
+- 	$(INSTALL) -c -m 644 "$(srcdir)/Announce.txt" "$(srcdir)/Changes.txt" "$(srcdir)/Copyright.txt" "$(srcdir)/License.txt" "$(srcdir)/README-SDL.txt" "$(srcdir)/Readme.txt" "$(srcdir)/Todo.txt" "$(srcdir)/docs/index.html" "$(srcdir)/docs/debugger.html" "$(DESTDIR)$(DOCDIR)/"
+- 	$(INSTALL) -d "$(DESTDIR)$(DOCDIR)/graphics"
+--- 
+-1.9.1
+-
+diff --git a/package/stella/0003-undef-PAGE_SIZE.patch b/package/stella/0002-undef-PAGE_SIZE.patch
+similarity index 100%
+rename from package/stella/0003-undef-PAGE_SIZE.patch
+rename to package/stella/0002-undef-PAGE_SIZE.patch
+diff --git a/package/stella/stella.hash b/package/stella/stella.hash
+index 395ee18d3534..dcc56aadf6e3 100644
+--- a/package/stella/stella.hash
++++ b/package/stella/stella.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256 bcbd82294f97d00457fdb727e9b08ff73b685dc7f77704cea1eceb58d8967387  stella-6.0.2-src.tar.xz
++sha256 ddf53bb782c63c97c4e5d0fefa9eb256c62e0d5a328c78cc18f06eea45ba7369  stella-6.1.1-src.tar.xz
+ sha256 062e708b8b88ea911b5c08000f1c4a5588235aa0c303bc893b5d92fb45cafd04  Copyright.txt
+ sha256 58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
+diff --git a/package/stella/stella.mk b/package/stella/stella.mk
+index 1295b7527475..74c131e72d86 100644
+--- a/package/stella/stella.mk
++++ b/package/stella/stella.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STELLA_VERSION = 6.0.2
++STELLA_VERSION = 6.1.1
+ STELLA_SOURCE = stella-$(STELLA_VERSION)-src.tar.xz
+ STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VERSION)
+ STELLA_LICENSE = GPL-2.0+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
