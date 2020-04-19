@@ -1,139 +1,113 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 19 Apr 2020 23:02:49 +0200
-Subject: [Buildroot] [PATCH] package/matio: new package
-In-Reply-To: <20200413065130.13799-1-gwenj@trabucayre.com>
-References: <20200413065130.13799-1-gwenj@trabucayre.com>
-Message-ID: <CAEyMn7Y_Z=CqrymbiFBsvEQ+rC90bxuCR7CJFADi0xq4vnWmCg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Apr 2020 23:14:56 +0200
+Subject: [Buildroot] [PATCH v3,
+ 3/6] package/collectd: add DPDK_TELEMETRY option
+In-Reply-To: <20200415063008.2237470-3-fontaine.fabrice@gmail.com>
+References: <20200415063008.2237470-1-fontaine.fabrice@gmail.com>
+ <20200415063008.2237470-3-fontaine.fabrice@gmail.com>
+Message-ID: <20200419211456.GD5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gwenhael,
+Fabrice, All,
 
-I just have some small comments about the style. See below.
++Peter, +Thomas, +Arnout for your feedback below...
 
-Am Mo., 13. Apr. 2020 um 08:53 Uhr schrieb Gwenhael Goavec-Merou
-<gwenj@trabucayre.com>:
->
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
->
-> matio is an C library for reading and writing MATLAB MAT files.
->
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+On 2020-04-15 08:30 +0200, Fabrice Fontaine spake thusly:
+> DPDK support is available since version 5.11.0 and
+> https://github.com/collectd/collectd/commit/00cbd4d2c016a676db476ae66bbc58d6bf11a6a0
+> 
+> It depends on jansson and is currently enabled by default raising the
+> following build failure on musl:
+> 
+> src/dpdk_telemetry.c:43:10: fatal error: sys/unistd.h: No such file or directory
+>  #include <sys/unistd.h>
+>           ^~~~~~~~~~~~~~
+> 
+> Fixes:
+>  - autobuild.buildroot.org/results/aafb8c72f147fefc7a988c45e4dc17de48b07a95
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  DEVELOPERS               |  1 +
->  package/Config.in        |  1 +
->  package/matio/Config.in  | 14 ++++++++++++++
->  package/matio/matio.hash |  5 +++++
->  package/matio/matio.mk   | 29 +++++++++++++++++++++++++++++
->  5 files changed, 50 insertions(+)
->  create mode 100644 package/matio/Config.in
->  create mode 100644 package/matio/matio.hash
->  create mode 100644 package/matio/matio.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index ac3d89dd0a..a207a750f2 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1096,6 +1096,7 @@ F:        package/gnuradio/
->  F:     package/gqrx/
->  F:     package/gr-osmosdr/
->  F:     package/libusbgx/
-> +F:     package/matio/
->  F:     package/python-cheetah/
->  F:     package/python-markdown/
->  F:     package/python-remi/
-> diff --git a/package/Config.in b/package/Config.in
-> index b5bf4e32d3..f632727015 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1864,6 +1864,7 @@ endif
->         source "package/liquid-dsp/Config.in"
->         source "package/llvm/Config.in"
->         source "package/lttng-libust/Config.in"
-> +       source "package/matio/Config.in"
->         source "package/mpc/Config.in"
->         source "package/mpdecimal/Config.in"
->         source "package/mpfr/Config.in"
-> diff --git a/package/matio/Config.in b/package/matio/Config.in
-> new file mode 100644
-> index 0000000000..e1dc96a2ed
-> --- /dev/null
-> +++ b/package/matio/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_MATIO
-> +       bool "matio"
-> +       select BR2_PACKAGE_ZLIB
-> +       help
-> +         matio is an C library for reading and writing MATLAB MAT
-> +         files.
-
-I think there should be a blank line before the project URL.
-
-> +         https://sourceforge.net/projects/matio
-> +
-> +if BR2_PACKAGE_MATIO
-> +
-> +config BR2_PACKAGE_MATIO_SPARSE
-> +       bool "sparse support"
-> +
+>  ...c-dpdk_telemetry.c-fix-build-on-musl.patch | 37 +++++++++++++++++++
+>  package/collectd/Config.in                    |  7 ++++
+>  package/collectd/collectd.mk                  |  5 +++
+>  3 files changed, 49 insertions(+)
+>  create mode 100644 package/collectd/0001-src-dpdk_telemetry.c-fix-build-on-musl.patch
+> 
+[--SNIP--]
+> diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+> index 24cdad7e1b..52b218e139 100644
+> --- a/package/collectd/collectd.mk
+> +++ b/package/collectd/collectd.mk
+> @@ -66,6 +66,7 @@ COLLECTD_CONF_OPTS += \
+>  	$(if $(BR2_PACKAGE_COLLECTD_DF),--enable-df,--disable-df) \
+>  	$(if $(BR2_PACKAGE_COLLECTD_DISK),--enable-disk,--disable-disk) \
+>  	$(if $(BR2_PACKAGE_COLLECTD_DNS),--enable-dns,--disable-dns) \
+> +	$(if $(BR2_PACKAGE_COLLECTD_DPDK_TELEMETRY),--enable-dpdk_telemetry,--disable-dpdk_telemetry) \
+>  	$(if $(BR2_PACKAGE_COLLECTD_DRBD),--enable-drbd,--disable-drbd) \
+>  	$(if $(BR2_PACKAGE_COLLECTD_EMPTY_COUNTER),--enable-match_empty_counter,--disable-match_empty_counter) \
+>  	$(if $(BR2_PACKAGE_COLLECTD_ENTROPY),--enable-entropy,--disable-entropy) \
+> @@ -156,6 +157,7 @@ COLLECTD_DEPENDENCIES = \
+>  	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),libcurl yajl) \
+>  	$(if $(BR2_PACKAGE_COLLECTD_CURL_XML),libcurl libxml2) \
+>  	$(if $(BR2_PACKAGE_COLLECTD_DNS),libpcap) \
+> +	$(if $(BR2_PACKAGE_COLLECTD_DPKD_TELEMETRY),jansson) \
+>  	$(if $(BR2_PACKAGE_COLLECTD_GPS),gpsd) \
+>  	$(if $(BR2_PACKAGE_COLLECTD_GRPC),grpc) \
+>  	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),iptables) \
+> @@ -186,6 +188,9 @@ COLLECTD_DEPENDENCIES = \
+>  ifeq ($(BR2_PACKAGE_GRPC),y)
+>  COLLECTD_CONF_OPTS += --with-libgrpc++=$(STAGING_DIR)/usr
+>  endif
+> +ifeq ($(BR2_PACKAGE_JANSSON),y)
+> +COLLECTD_CONF_OPTS += --with-libjansson=$(STAGING_DIR)/usr
 > +endif
-> diff --git a/package/matio/matio.hash b/package/matio/matio.hash
-> new file mode 100644
-> index 0000000000..d84f50e0b2
-> --- /dev/null
-> +++ b/package/matio/matio.hash
-> @@ -0,0 +1,5 @@
-> +# From https://sourceforge.net/projects/matio/files/matio/1.5.17/
-> +sha512  af8ff11c7c44fea9ea6886e381f49ef9186946f3def98ad9695f2d5d1df045c35e8f4ceac12a44be397f7bbd708b4803762b5ce54c45b60a9f446d551c04f5d2  matio-1.5.17.tar.gz
-> +# Locally computed
-> +sha256  5e455527d370ab297c4abe5a2ab4d599c93ac7c1a0c85d841cc5c22f8221c400  matio-1.5.17.tar.gz
-> +sha256  62a0cab69eeadb3697a2249d5a869915b89e62b59b794dd70802c2b8624ed374  COPYING
-> diff --git a/package/matio/matio.mk b/package/matio/matio.mk
-> new file mode 100644
-> index 0000000000..02c3733413
-> --- /dev/null
-> +++ b/package/matio/matio.mk
-> @@ -0,0 +1,29 @@
-> +################################################################################
-> +#
-> +# matio
-> +#
-> +################################################################################
-> +
-> +MATIO_VERSION = 1.5.17
-> +MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
-> +MATIO_LICENSE = BSD-2-Clause
-> +MATIO_LICENSE_FILES = COPYING
-> +
-> +MATIO_DEPENDENCIES = zlib
-> +
-> +# For third-party blocks, the matio libraries are mandatory at
-> +# compile time.
-> +MATIO_INSTALL_STAGING = YES
 
-The blank lines above should be removed and the comment is not needed.
-The use of staging should be clear.
+This code is bugging me: it decorelates the --enable/disable options,
+the dependencies and the --with option.
 
-> +
-> +# va_copy()
-> +MATIO_CONF_ENV += ac_cv_va_copy=yes
+With this patch, this means that is jansoon is enabled, but DPDK
+telemetry is not, then we still pass --with-libjansson.
 
-The '+' can be omitted. Just '=' is ok.
+I think the $(if blabla,--enable-bla,--disable-bla) construct should be
+limited to thos options that do not require a dependency or another
+--with option. If it does, then we should revert to using the
+traditional conditional block:
 
-> +
-> +MATIO_CONF_OPTS = --enable-mat73=no
-> +
-> +ifeq ($(BR2_PACKAGE_MATIO_SPARSE),y)
-> +MATIO_CONF_OPTS += --enable-extended-sparse=yes
-> +else
-> +MATIO_CONF_OPTS += --enable-extended-sparse=no
-> +endif
-> +
-> +$(eval $(autotools-package))
+    ifeq ($(BR2_PACKAGE_COLLECTD_DPDK_TELEMETRY),y)
+    COLLECTD_DEPENDENCIES += jansson
+    COLLECTD_CONF_OPTS += --enable-dpdk_telemetry --with-libjansson=$(STAGING_DIR)/usr
+    else
+    COLLECTD_CONF_OPTS += --disable-dpdk_telemetr
+    endif
+
+I know you mimicked the existing code, but short of fixing it, could you
+please respin patches 3-6 with that in mind, pretty please? But first
+wait a bit for another maintainer to expres their opionion: Peter,
+Thomas, Arnout: what's your feeling?
+
+Regards,
+Yann E. MORIN.
+
+>  ifeq ($(BR2_PACKAGE_LIBCURL),y)
+>  COLLECTD_CONF_OPTS += --with-libcurl=$(STAGING_DIR)/usr
+>  endif
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-BR,
-Heiko
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
