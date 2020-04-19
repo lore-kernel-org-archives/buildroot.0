@@ -1,36 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Apr 2020 01:30:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: manage BUILD_STATIC_LIBS
-Message-ID: <20200419233009.386275-1-fontaine.fabrice@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 19 Apr 2020 17:38:23 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-greenlet: disable on
+ unsupported architectures
+Message-ID: <20200419233823.29410-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use BUILD_STATIC_LIBS which has been added in version 3.1.4 with
-https://github.com/zhaojh329/libuhttpd/commit/4d0f435e0b96140f7b74239bbe2f76d5f7d782b7
+Fixes:
+http://autobuild.buildroot.net/results/416/4161bfcd9577cdc6b9795fc3d6903f3bcc124f99/build-end.log
+http://autobuild.buildroot.net/results/be7/be709462bbab54e4f405302d54d157218f867939/build-end.log
+http://autobuild.buildroot.net/results/b0c/b0ca52e3948cbbc5bb8c6ce08932e355653b08d7/build-end.log
+http://autobuild.buildroot.net/results/cd7/cd748aa26fdabcef72a581e1fe26edac14d07d2d/build-end.log
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/libuhttpd/libuhttpd.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/python-greenlet/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index d3499373a6..59a8b45c07 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -36,4 +36,11 @@ else
- LIBUHTTPD_CONF_OPTS += -DUHTTPD_SSL_SUPPORT=OFF
- endif
+diff --git a/package/python-greenlet/Config.in b/package/python-greenlet/Config.in
+index ef82375b0b..eae76ef6be 100644
+--- a/package/python-greenlet/Config.in
++++ b/package/python-greenlet/Config.in
+@@ -1,5 +1,11 @@
+ config BR2_PACKAGE_PYTHON_GREENLET
+ 	bool "python-greenlet"
++	depends on !BR2_arceb
++	depends on !BR2_arcle
++	depends on !BR2_microblazebe
++	depends on !BR2_microblazeel
++	depends on !BR2_or1k
++	depends on !BR2_sh
+ 	help
+ 	  Lightweight in-process concurrent programming.
  
-+# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
-+ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+LIBUHTTPD_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+LIBUHTTPD_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
-+endif
-+
- $(eval $(cmake-package))
 -- 
-2.25.1
+2.20.1
