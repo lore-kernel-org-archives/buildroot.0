@@ -1,65 +1,83 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Apr 2020 23:59:03 +0200
-Subject: [Buildroot] [git commit] package/nftables: use bundled mini-gmp
- without full-blown system gmp
-Message-ID: <20200419214454.B0C158F359@busybox.osuosl.org>
+Date: Mon, 20 Apr 2020 00:00:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nftables: use --with-mini-gmp
+ when gmp is not selected
+In-Reply-To: <20200417133643.1756986-1-adrien@gallouet.fr>
+References: <20200417133643.1756986-1-adrien@gallouet.fr>
+Message-ID: <20200419220038.GF5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e93621d532da2e7fe2ac5b1855b43f6c49d539fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Adrien, All,
 
-ntables bundles a mini implementation of gmp that can be used if the
-system lacks the full-blown gmp.
+On 2020-04-17 13:36 +0000, Adrien Gallou?t spake thusly:
+> Signed-off-by: Adrien Gallou?t <adrien@gallouet.fr>
 
-Signed-off-by: Adrien Gallou??t <adrien@gallouet.fr>
-[yann.morin.1998 at free.fr:
+Applied to master with two small changes:
   - explicitly disable mini-gmp when full one is enabled
-  - reword and expand commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/nftables/Config.in   | 1 -
- package/nftables/nftables.mk | 9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+  - reword and extend commit log
 
-diff --git a/package/nftables/Config.in b/package/nftables/Config.in
-index 6452ab4f52..8d172b7256 100644
---- a/package/nftables/Config.in
-+++ b/package/nftables/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_NFTABLES
- 	bool "nftables"
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
--	select BR2_PACKAGE_GMP
- 	select BR2_PACKAGE_LIBMNL
- 	select BR2_PACKAGE_LIBNFTNL
- 	help
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 210e950c11..1eef43586c 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -7,12 +7,19 @@
- NFTABLES_VERSION = 0.9.3
- NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
- NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
--NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
-+NFTABLES_DEPENDENCIES = libmnl libnftnl host-bison host-flex \
- 	host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- NFTABLES_LICENSE = GPL-2.0
- NFTABLES_LICENSE_FILES = COPYING
- NFTABLES_CONF_OPTS = --disable-man-doc --disable-pdf-doc
- 
-+ifeq ($(BR2_PACKAGE_GMP),y)
-+NFTABLES_DEPENDENCIES += gmp
-+NFTABLES_CONF_OPTS += --without-mini-gmp
-+else
-+NFTABLES_CONF_OPTS += --with-mini-gmp
-+endif
-+
- ifeq ($(BR2_PACKAGE_READLINE),y)
- NFTABLES_DEPENDENCIES += readline
- NFTABLES_LIBS += -lncurses
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/nftables/Config.in   | 1 -
+>  package/nftables/nftables.mk | 8 +++++++-
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/nftables/Config.in b/package/nftables/Config.in
+> index 6452ab4f52..8d172b7256 100644
+> --- a/package/nftables/Config.in
+> +++ b/package/nftables/Config.in
+> @@ -2,7 +2,6 @@ config BR2_PACKAGE_NFTABLES
+>  	bool "nftables"
+>  	depends on BR2_USE_WCHAR
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+> -	select BR2_PACKAGE_GMP
+>  	select BR2_PACKAGE_LIBMNL
+>  	select BR2_PACKAGE_LIBNFTNL
+>  	help
+> diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+> index 210e950c11..1fac9dd3bf 100644
+> --- a/package/nftables/nftables.mk
+> +++ b/package/nftables/nftables.mk
+> @@ -7,12 +7,18 @@
+>  NFTABLES_VERSION = 0.9.3
+>  NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
+>  NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
+> -NFTABLES_DEPENDENCIES = gmp libmnl libnftnl host-bison host-flex \
+> +NFTABLES_DEPENDENCIES = libmnl libnftnl host-bison host-flex \
+>  	host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+>  NFTABLES_LICENSE = GPL-2.0
+>  NFTABLES_LICENSE_FILES = COPYING
+>  NFTABLES_CONF_OPTS = --disable-man-doc --disable-pdf-doc
+>  
+> +ifeq ($(BR2_PACKAGE_GMP),y)
+> +NFTABLES_DEPENDENCIES += gmp
+> +else
+> +NFTABLES_CONF_OPTS += --with-mini-gmp
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_READLINE),y)
+>  NFTABLES_DEPENDENCIES += readline
+>  NFTABLES_LIBS += -lncurses
+> -- 
+> 2.25.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
