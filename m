@@ -1,45 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 15:59:50 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/apcupsd: new package
-In-Reply-To: <20200419003953.11676-1-james.hilliard1@gmail.com>
-References: <20200419003953.11676-1-james.hilliard1@gmail.com>
-Message-ID: <20200419155950.3e3be703@windsurf.home>
+Date: Sun, 19 Apr 2020 16:00:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: use -msse2
+ only when supported
+In-Reply-To: <CADvTj4pmNBNN_O9CbKyR+aYFSNx=kCu-3zmLevS-O5z7KDFe2A@mail.gmail.com>
+References: <20200414102621.18804-1-asafka7@gmail.com>
+ <20200415221030.1e6aafd0@windsurf.home>
+ <CADvTj4qvvg4skQyYYkCTNeqUy4FUOe5nmX32ks5o8pFDCVyKpg@mail.gmail.com>
+ <CADvTj4qP_7s6rv=TC_wwSb3ZUPtBbcdOGyDhcLokafz37x3NTA@mail.gmail.com>
+ <CADvTj4pmNBNN_O9CbKyR+aYFSNx=kCu-3zmLevS-O5z7KDFe2A@mail.gmail.com>
+Message-ID: <20200419160048.26a0eba3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 18 Apr 2020 18:39:53 -0600
+Hello,
+
+On Wed, 15 Apr 2020 16:00:58 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Apcupsd is a UPS control system that permits orderly shutdown of your
-> computer in the event of a power failure.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - set ac_cv_path_usbcfg
->   - add apcupsd config sub-options
-> ---
->  DEVELOPERS                   |  1 +
->  package/Config.in            |  1 +
->  package/apcupsd/Config.in    | 58 +++++++++++++++++++++++++++++++
->  package/apcupsd/apcupsd.hash |  6 ++++
->  package/apcupsd/apcupsd.mk   | 67 ++++++++++++++++++++++++++++++++++++
->  5 files changed, 133 insertions(+)
->  create mode 100644 package/apcupsd/Config.in
->  create mode 100644 package/apcupsd/apcupsd.hash
->  create mode 100644 package/apcupsd/apcupsd.mk
+> Nevermind, that comment appears to be totally inaccurate as Python
+> 3.6's CCompiler
+> does not actually have a has_flag method at all, however we can just include the
+> function which seems to work. I've updated my pull request with a reworked
+> version of has_flag which seems to work.
 
-The build fails when the host machine doesn't have 'man' and 'col' to
-generate the documentation:
+Do you have some news about the upstream patch to fix this issue ? It
+would be good to fix it in Buildroot, as the build continues to fail.
 
-  http://autobuild.buildroot.net/results/e65/e65c23c3c1cae9aa9d697323fabf8a6f310fc3ba/build-end.log
-
-Could you have a look ?
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
