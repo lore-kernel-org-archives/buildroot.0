@@ -1,46 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 22:19:15 +0200
-Subject: [Buildroot] [git commit] package/wavpack: bump to version 5.3.0
-Message-ID: <20200419200502.BA6E28F271@busybox.osuosl.org>
+Date: Sun, 19 Apr 2020 22:19:06 +0200
+Subject: [Buildroot] [git commit] package/wireshark: security bump to
+ version 3.2.3
+Message-ID: <20200419200502.8ED0F8F2A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c355c8f7e9b4fdb1905063141393825e44b54c84
+commit: https://git.buildroot.net/buildroot/commit/?id=94fd6bdcc993a10b702be6add0fa8ae607b3666c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of COPYING (update in year):
-https://github.com/dbry/WavPack/commit/350b6d7737383029573ea2cce9bd94f1b6756bbd
+Fix CVE-2020-11647: In Wireshark 3.2.0 to 3.2.2, 3.0.0 to 3.0.9, and
+2.6.0 to 2.6.15, the BACapp dissector could crash. This was addressed
+in epan/dissectors/packet-bacapp.c by limiting the amount of recursion.
+
+https://www.wireshark.org/security/wnpa-sec-2020-07.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wavpack/wavpack.hash | 4 ++--
- package/wavpack/wavpack.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
-index 6b1f90a1fe..eeef730321 100644
---- a/package/wavpack/wavpack.hash
-+++ b/package/wavpack/wavpack.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  77e5b1cfa26e387e4275b362f0c3fb9a27106447d9bce00f9f794f30badb77e3  wavpack-5.2.0.tar.xz
--sha256  2ab58075e26305cc16920e9867c1d43f46ce81adab2051100dd316a3a93a2619  COPYING
-+sha256  b444379a0bee0330f137cb3e9a100e6a12a63a6d01987ba66b3729f85e282307  wavpack-5.3.0.tar.xz
-+sha256  a0bbe245dfe263f73946b72306e8336818009ff1e52b119784c288f2785fc260  COPYING
-diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
-index 8cb7754b2b..6403f93ac9 100644
---- a/package/wavpack/wavpack.mk
-+++ b/package/wavpack/wavpack.mk
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 8b8261840a..d4d0c9e48f 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.2.txt
+-sha1  9cc54a56e9c2ed77e1bc436d9ae2f7bba68d26f8  wireshark-3.2.2.tar.xz
+-sha256  5f5923ef4c3fee370ed0ca1bb324f37c246015eba4a7e74ab95d9208feeded79  wireshark-3.2.2.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.3.txt
++sha1  4656856a40b294f183900ba47651b0fc8e3950fd  wireshark-3.2.3.tar.xz
++sha256  f007e4b88c86d95e33af03e057ecc03635f54466d02371bc26489eabb274faba  wireshark-3.2.3.tar.xz
+ 
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index ead6b164ed..c262891dcd 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAVPACK_VERSION = 5.2.0
-+WAVPACK_VERSION = 5.3.0
- WAVPACK_SITE = \
- 	https://github.com/dbry/WavPack/releases/download/$(WAVPACK_VERSION)
- WAVPACK_SOURCE = wavpack-$(WAVPACK_VERSION).tar.xz
+-WIRESHARK_VERSION = 3.2.2
++WIRESHARK_VERSION = 3.2.3
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
