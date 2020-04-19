@@ -1,122 +1,40 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 19 Apr 2020 16:47:19 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-pyasn: remove duplicate
- package
-Message-ID: <20200419224719.28092-1-james.hilliard1@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 20 Apr 2020 00:50:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/exfatprogs: needs wchar
+Message-ID: <20200419225024.341725-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a duplicate of python-pyasn1.
+exfatprogs unconditionally uses wchar_t in libexfat.h
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/884bbaec2bbbff33c30a0bebda3d95198aa1281c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- Config.in.legacy                       |  7 +++++++
- DEVELOPERS                             |  1 -
- package/Config.in                      |  1 -
- package/python-pyasn/Config.in         | 14 --------------
- package/python-pyasn/python-pyasn.hash |  6 ------
- package/python-pyasn/python-pyasn.mk   | 14 --------------
- 6 files changed, 7 insertions(+), 36 deletions(-)
- delete mode 100644 package/python-pyasn/Config.in
- delete mode 100644 package/python-pyasn/python-pyasn.hash
- delete mode 100644 package/python-pyasn/python-pyasn.mk
+ package/exfatprogs/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 7058da5cb9..7f6f782e6d 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/exfatprogs/Config.in b/package/exfatprogs/Config.in
+index 99defb5b69..4f50427a68 100644
+--- a/package/exfatprogs/Config.in
++++ b/package/exfatprogs/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_EXFATPROGS
+ 	bool "exfatprogs"
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  exFAT filesystem userspace utilities.
  
- comment "Legacy options removed in 2020.05"
+@@ -11,3 +12,6 @@ config BR2_PACKAGE_EXFATPROGS
+ 	  programs in package/exfat-utils.
  
-+config BR2_PACKAGE_PYTHON_PYASN
-+	bool "duplicate python-pyasn1 package removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_PYTHON_PYASN1
-+	help
-+	  This package was a duplicate of python-pyasn1.
+ 	  https://github.com/exfatprogs/exfatprogs
 +
- config BR2_PACKAGE_PYTHON_PYASN_MODULES
- 	bool "duplicate python-pyasn1-modules package removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0360dbc769..5f80af2a5f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2253,7 +2253,6 @@ F:	package/davfs2/
- N:	Ryan Barnett <ryan.barnett@rockwellcollins.com>
- F:	package/atftp/
- F:	package/miraclecast/
--F:	package/python-pyasn/
- F:	package/python-pycrypto/
- F:	package/python-pysnmp/
- F:	package/python-pysnmp-mibs/
-diff --git a/package/Config.in b/package/Config.in
-index 9ae9e0bb65..ef63daf97c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1067,7 +1067,6 @@ menu "External python modules"
- 	source "package/python-py/Config.in"
- 	source "package/python-pyaes/Config.in"
- 	source "package/python-pyalsa/Config.in"
--	source "package/python-pyasn/Config.in"
- 	source "package/python-pyasn1/Config.in"
- 	source "package/python-pyasn1-modules/Config.in"
- 	source "package/python-pycairo/Config.in"
-diff --git a/package/python-pyasn/Config.in b/package/python-pyasn/Config.in
-deleted file mode 100644
-index 2396194df6..0000000000
---- a/package/python-pyasn/Config.in
-+++ /dev/null
-@@ -1,14 +0,0 @@
--config BR2_PACKAGE_PYTHON_PYASN
--	bool "python-pyasn"
--	depends on BR2_INSTALL_LIBSTDCPP
--	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
--	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
--	help
--	  PyASN is a Python extension module that enables you to
--	  perform very fast IP address to Autonomous System Number
--	  lookups.
--
--	  https://github.com/hadiasghari/pyasn
--
--comment "python-pyasn needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pyasn/python-pyasn.hash b/package/python-pyasn/python-pyasn.hash
-deleted file mode 100644
-index c08b64dd25..0000000000
---- a/package/python-pyasn/python-pyasn.hash
-+++ /dev/null
-@@ -1,6 +0,0 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f00a02a631d4016818659d1cc38d229a, sha256 locally computed
--md5     f00a02a631d4016818659d1cc38d229a  pyasn1-0.1.9.tar.gz
--sha256  853cacd96d1f701ddd67aa03ecc05f51890135b7262e922710112f12a2ed2a7f  pyasn1-0.1.9.tar.gz
--
--# Locally calculated
--sha256  8bea85439e7446ecb270079cce926d605a7d10f51fe8789b1aeced557dcbe1b6  LICENSE.txt
-diff --git a/package/python-pyasn/python-pyasn.mk b/package/python-pyasn/python-pyasn.mk
-deleted file mode 100644
-index f34520f835..0000000000
---- a/package/python-pyasn/python-pyasn.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# python-pyasn
--#
--################################################################################
--
--PYTHON_PYASN_VERSION = 0.1.9
--PYTHON_PYASN_SOURCE = pyasn1-$(PYTHON_PYASN_VERSION).tar.gz
--PYTHON_PYASN_SITE = https://pypi.python.org/packages/source/p/pyasn1
--PYTHON_PYASN_LICENSE = BSD-2-Clause
--PYTHON_PYASN_LICENSE_FILES = LICENSE.txt
--PYTHON_PYASN_SETUP_TYPE = setuptools
--
--$(eval $(python-package))
++comment "exfatprogs needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
 -- 
-2.20.1
+2.25.1
