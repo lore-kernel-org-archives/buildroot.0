@@ -1,31 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 10:24:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openvpn: security bump version
- to 2.4.9
-In-Reply-To: <20200419075919.287521-1-bernd.kuhls@t-online.de>
-References: <20200419075919.287521-1-bernd.kuhls@t-online.de>
-Message-ID: <20200419102405.52a81353@windsurf.home>
+Date: Sun, 19 Apr 2020 10:24:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-coherence: select pyasn1
+ instead of pyasn
+In-Reply-To: <CADvTj4r+2Vk+En2ChzexRakSoY_RXjKbNTMG1dHPS1K8p2tcfQ@mail.gmail.com>
+References: <20200413231704.124258-1-james.hilliard1@gmail.com>
+ <20200419101835.303af37c@windsurf.home>
+ <CADvTj4r+2Vk+En2ChzexRakSoY_RXjKbNTMG1dHPS1K8p2tcfQ@mail.gmail.com>
+Message-ID: <20200419102454.1edc926e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 19 Apr 2020 09:59:19 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Sun, 19 Apr 2020 02:21:30 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Changelog:
-> https://github.com/OpenVPN/openvpn/blob/release/2.4/ChangeLog
-> 
-> Fixes CVE-2020-11810.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/openvpn/openvpn.hash | 2 +-
->  package/openvpn/openvpn.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> > Applied to master, thanks. I assume your plan is to get rid of
+> > python-pyasn and python-pyasn-modules now?  
+> Yep, was just waiting on these to be merged first.
 
-Applied to master, thanks.
+In this sort of situation, you can also send a series of patches. The
+fact that they are sent as as series makes it clear that they have a
+dependency.
+
+Thanks!
 
 Thomas
 -- 
