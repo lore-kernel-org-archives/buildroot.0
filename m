@@ -1,57 +1,52 @@
-From: Julien Olivain <juju@cotds.org>
-Date: Sun, 19 Apr 2020 17:43:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dtc: bump version to 1.6.0
-Message-ID: <20200419154300.203136-1-juju@cotds.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 19 Apr 2020 18:10:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
+ 3.2.3
+Message-ID: <20200419161026.144201-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When host compiler is gcc 10 (for example on Fedora 32), dtc 1.5.1
-fail to build with the error:
-/usr/bin/ld: dtc-parser.tab.o:(.bss+0x20): multiple definition of `yylloc'; dtc-lexer.lex.o:(.bss+0x0): first defined here
-collect2: error: ld returned 1 exit status
+Fix CVE-2020-11647: In Wireshark 3.2.0 to 3.2.2, 3.0.0 to 3.0.9, and
+2.6.0 to 2.6.15, the BACapp dissector could crash. This was addressed
+in epan/dissectors/packet-bacapp.c by limiting the amount of recursion.
 
-dtc 1.6.0 fixes this issue in the commit:
-https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=0e9225eb0dfec51def612b928d2f1836b092bc7e
+https://www.wireshark.org/security/wnpa-sec-2020-07.html
 
-Also adopt new spacing convention in .hash files (two spaces).
-
-Signed-off-by: Julien Olivain <juju@cotds.org>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dtc/dtc.hash | 8 ++++----
- package/dtc/dtc.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
-index e4d6c02544..902ce1baf9 100644
---- a/package/dtc/dtc.hash
-+++ b/package/dtc/dtc.hash
-@@ -1,7 +1,7 @@
- # from https://www.kernel.org/pub/software/utils/dtc/sha256sums.asc
--sha256 660b74039690fc37013660544d09191834efb58503c73c555c5513ba75ab031f  dtc-1.5.1.tar.xz
-+sha256  10503b0217e1b07933e29e8d347a00015b2431bea5f59afe0bed3af30340c82d  dtc-1.6.0.tar.xz
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 8b8261840a..d4d0c9e48f 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.2.txt
+-sha1  9cc54a56e9c2ed77e1bc436d9ae2f7bba68d26f8  wireshark-3.2.2.tar.xz
+-sha256  5f5923ef4c3fee370ed0ca1bb324f37c246015eba4a7e74ab95d9208feeded79  wireshark-3.2.2.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.3.txt
++sha1  4656856a40b294f183900ba47651b0fc8e3950fd  wireshark-3.2.3.tar.xz
++sha256  f007e4b88c86d95e33af03e057ecc03635f54466d02371bc26489eabb274faba  wireshark-3.2.3.tar.xz
  
- # Hash for license files
--sha256 78e1e1ce5728a990d59c7de61d4741c49185d5129daf783b386380a214328d68  README.license
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  GPL
--sha256 6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  BSD-2-Clause
-+sha256  78e1e1ce5728a990d59c7de61d4741c49185d5129daf783b386380a214328d68  README.license
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  GPL
-+sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  BSD-2-Clause
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index d532487dd1..956a60b29d 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index ead6b164ed..c262891dcd 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DTC_VERSION = 1.5.1
-+DTC_VERSION = 1.6.0
- DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
- DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
- DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
+-WIRESHARK_VERSION = 3.2.2
++WIRESHARK_VERSION = 3.2.3
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 -- 
-2.26.0
+2.25.1
