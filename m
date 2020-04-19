@@ -1,40 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 15:58:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-dataproperty: bump to
- version 0.48.1
-In-Reply-To: <20200416104957.89939-1-james.hilliard1@gmail.com>
-References: <20200416104957.89939-1-james.hilliard1@gmail.com>
-Message-ID: <20200419155804.333e7c76@windsurf.home>
+Date: Sun, 19 Apr 2020 15:59:50 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/apcupsd: new package
+In-Reply-To: <20200419003953.11676-1-james.hilliard1@gmail.com>
+References: <20200419003953.11676-1-james.hilliard1@gmail.com>
+Message-ID: <20200419155950.3e3be703@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 Apr 2020 04:49:57 -0600
+On Sat, 18 Apr 2020 18:39:53 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Commit hash change is due to line endings change not in upstream
-> git repo.
+> Apcupsd is a UPS control system that permits orderly shutdown of your
+> computer in the event of a power failure.
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/python-dataproperty/python-dataproperty.hash | 6 +++---
->  package/python-dataproperty/python-dataproperty.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+> Changes v1 -> v2:
+>   - set ac_cv_path_usbcfg
+>   - add apcupsd config sub-options
+> ---
+>  DEVELOPERS                   |  1 +
+>  package/Config.in            |  1 +
+>  package/apcupsd/Config.in    | 58 +++++++++++++++++++++++++++++++
+>  package/apcupsd/apcupsd.hash |  6 ++++
+>  package/apcupsd/apcupsd.mk   | 67 ++++++++++++++++++++++++++++++++++++
+>  5 files changed, 133 insertions(+)
+>  create mode 100644 package/apcupsd/Config.in
+>  create mode 100644 package/apcupsd/apcupsd.hash
+>  create mode 100644 package/apcupsd/apcupsd.mk
 
-This breaks the build, because python-dataproperty is Python 3.x only now:
+The build fails when the host machine doesn't have 'man' and 'col' to
+generate the documentation:
 
-  https://github.com/thombashi/DataProperty/commit/d3fdde41af0151e2f04a3a79bea1fb33a28a98f7#diff-2eeaed663bd0d25b7e608891384b7298
+  http://autobuild.buildroot.net/results/e65/e65c23c3c1cae9aa9d697323fabf8a6f310fc3ba/build-end.log
 
-Build issue:
+Could you have a look ?
 
-  http://autobuild.buildroot.net/results/c5b/c5bc5036b950e0a775a62fbf32f2315954a236a5/build-end.log
-
-Could you send a patch that adds the Python 3.x to python-dataproperty,
-and all its reverse dependencies ?
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
