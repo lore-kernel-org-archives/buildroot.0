@@ -1,37 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 10:18:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-coherence: select pyasn1
- instead of pyasn
-In-Reply-To: <20200413231704.124258-1-james.hilliard1@gmail.com>
-References: <20200413231704.124258-1-james.hilliard1@gmail.com>
-Message-ID: <20200419101835.303af37c@windsurf.home>
+Date: Sun, 19 Apr 2020 10:19:04 +0200
+Subject: [Buildroot] [git commit] package/kodi-screensaver-stars: bump
+ version to 2.1.4
+Message-ID: <20200419080447.10EA48F13F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 Apr 2020 17:17:04 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bf05a5870f7f401a6924fcddfdb410371330f573
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The python-pyasn package is an outdated version of python-pyasn1 and
-> should not be used.
-> 
-> We no longer need to depend on BR2_INSTALL_LIBSTDCPP as python-pyasn1
-> does not depend on it.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-coherence/Config.in | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
+Switched license file to LICENSE.md.
 
-Applied to master, thanks. I assume your plan is to get rid of
-python-pyasn and python-pyasn-modules now?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-screensaver-stars/kodi-screensaver-stars.hash | 4 ++--
+ package/kodi-screensaver-stars/kodi-screensaver-stars.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
+index 9ff902243f..9d6ce8aaf9 100644
+--- a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
++++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 dca39e68d803cca3c1d9524df17feb3e12fc7eeae4166c6311a97dc68c29f523  kodi-screensaver-stars-2.1.3-Leia.tar.gz
+-sha256 004b08d7a7bbd574c6e3a4499c13b4f930de780e0cae5b35f85310642d5cdd1e  debian/copyright
++sha256 98972a9af45015d902ade50db822dbded52d4473acde6bc4b01a5ab8c4af4269  kodi-screensaver-stars-2.1.4-Leia.tar.gz
++sha256 310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
+index 678165b666..ca51921b50 100644
+--- a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
++++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_STARS_VERSION = 2.1.3-Leia
++KODI_SCREENSAVER_STARS_VERSION = 2.1.4-Leia
+ KODI_SCREENSAVER_STARS_SITE = $(call github,xbmc,screensaver.stars,$(KODI_SCREENSAVER_STARS_VERSION))
+ KODI_SCREENSAVER_STARS_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_STARS_LICENSE_FILES = debian/copyright
++KODI_SCREENSAVER_STARS_LICENSE_FILES = LICENSE.md
+ KODI_SCREENSAVER_STARS_DEPENDENCIES = kodi
+ 
+ $(eval $(cmake-package))
