@@ -1,31 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 22:50:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: fix build on m68k
-In-Reply-To: <20191101111005.21389-1-fontaine.fabrice@gmail.com>
-References: <20191101111005.21389-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200419225038.1be1de14@windsurf.home>
+Date: Sun, 19 Apr 2020 23:00:56 +0200
+Subject: [Buildroot] [PATCH] package/modem-manager: use libqmi and
+ libmbim if they are selected
+In-Reply-To: <20191104124844.8112-1-unixmania@gmail.com>
+References: <20191104124844.8112-1-unixmania@gmail.com>
+Message-ID: <20200419230056.7df2d309@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  1 Nov 2019 12:10:05 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Carlos, Aleksander, Yegor,
 
-> When threads are enabled, haproxy expects that pthread_getcpuclockid is
-> available which is not the case on m68k. Fix this by enabling threads
-> support only if NPTL is available.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/52cc4b1fcac2a4fc84ab15ec4c692d2cd9b6d8bd
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/haproxy/haproxy.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon,  4 Nov 2019 09:48:44 -0300
+unixmania at gmail.com wrote:
 
-Applied to master, thanks.
+> If we have a cnfiguration like this
+> 
+>     BR2_PACKAGE_MODEM_MANAGER=y
+>     # BR2_PACKAGE_MODEM_MANAGER_LIBMBIM is not set
+>     BR2_PACKAGE_MODEM_MANAGER_LIBQMI=y
+>     [...]
+>     BR2_PACKAGE_LIBMBIM=y
+
+I had a new look at this. We need a new iteration of this patch, since
+the build issue doesn't exist anymore.
+
+However, I would suggest to take a simpler approach:
+
+ - Keep the BR2_PACKAGE_MODEM_MANAGER_LIBMBIM and
+   BR2_PACKAGE_MODEM_MANAGER_LIBQMI options.
+
+ - Change modem-manager.mk to test BR2_PACKAGE_LIBMBIM and
+   BR2_PACKAGE_QMI instead of BR2_PACKAGE_MODEM_MANAGER_LIBMBIM and
+   BR2_PACKAGE_MODEM_MANAGER_LIBQMI.
+
+Also, as was pointed out during the discussion, it would be good to
+change the network-manager package to not force the modem-manager
+MBIM/QMI support when modem-manager support is enabled. I.e, remove the
+following lines:
+
+        select BR2_PACKAGE_MODEM_MANAGER_LIBMBIM
+        select BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+
+from package/network-manager/Config.in
+
+Could one of you have a look ?
+
+Thanks a lot!
 
 Thomas
 -- 
