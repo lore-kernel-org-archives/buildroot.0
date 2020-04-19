@@ -1,33 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 15:00:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pyasn-modules: remove
- duplicate package
-In-Reply-To: <20200419085011.103843-1-james.hilliard1@gmail.com>
-References: <20200419085011.103843-1-james.hilliard1@gmail.com>
-Message-ID: <20200419150017.5f12df64@windsurf.home>
+Date: Sun, 19 Apr 2020 15:00:30 +0200
+Subject: [Buildroot] [PATCH v1 1/6] package/qt5: bump minimum gcc
+ requirement to 5.0
+In-Reply-To: <20200418225906.17514-1-ps.report@gmx.net>
+References: <20200418225906.17514-1-ps.report@gmx.net>
+Message-ID: <20200419150030.62aac734@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 19 Apr 2020 02:50:11 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Sun, 19 Apr 2020 00:59:01 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> This is a duplicate of python-pyasn1-modules.
+> As a side effect of avoiding gcc bug 57694 ([1]) through commit
+> 'GCC: revoke constexpr before 5.0' ([2]) for qtbase the minimum
+> gcc requirement was lifted to 5.0 ([3], [4]), so bump the
+> buildroot determined one too.
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Adjust the two packages (pinentry, wireshark) which are brave enough
+> to do a 'select BR2_PACKAGE_QT5' accordingly.
+
+Huhu, "brave enough" :-)
+
+> Fixes:
+>   http://autobuild.buildroot.net/results/74f5249d1ee14c1269685af53a65055da7dc2ee6
+> 
+>   ../../include/QtCore/../../src/corelib/thread/qbasicatomic.h:61:4: error: #error "Qt requires C++11 support"
+>    #  error "Qt requires C++11 support"
+> 
+> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=57694
+> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=c61cedcc5475a77fb94ed12788f61039835f8079
+> [3] https://codereview.qt-project.org/c/qt/qtbase/+/285582
+> [4] https://bugreports.qt.io/browse/QTBUG-81761
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  Config.in.legacy                                   |  7 +++++++
->  DEVELOPERS                                         |  1 -
->  package/Config.in                                  |  1 -
->  package/python-pyasn-modules/Config.in             | 11 -----------
->  .../python-pyasn-modules/python-pyasn-modules.hash |  5 -----
->  .../python-pyasn-modules/python-pyasn-modules.mk   | 14 --------------
->  6 files changed, 7 insertions(+), 32 deletions(-)
->  delete mode 100644 package/python-pyasn-modules/Config.in
->  delete mode 100644 package/python-pyasn-modules/python-pyasn-modules.hash
->  delete mode 100644 package/python-pyasn-modules/python-pyasn-modules.mk
+>  package/pinentry/Config.in  | 6 +++---
+>  package/qt5/Config.in       | 6 +++---
+>  package/wireshark/Config.in | 6 +++---
+>  3 files changed, 9 insertions(+), 9 deletions(-)
 
 Applied to master, thanks.
 
