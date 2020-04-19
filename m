@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Apr 2020 22:19:10 +0200
-Subject: [Buildroot] [git commit] package/libtorrent-rasterbar: bump to
- version 1.2.6
-Message-ID: <20200419200502.A420B8F271@busybox.osuosl.org>
+Date: Sun, 19 Apr 2020 22:19:15 +0200
+Subject: [Buildroot] [git commit] package/wavpack: bump to version 5.3.0
+Message-ID: <20200419200502.BA6E28F271@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=974316d7d902e84d5ea66c7090dc9e21a9a4d877
+commit: https://git.buildroot.net/buildroot/commit/?id=c355c8f7e9b4fdb1905063141393825e44b54c84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Update hash of COPYING (update in year):
+https://github.com/dbry/WavPack/commit/350b6d7737383029573ea2cce9bd94f1b6756bbd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 2 +-
- package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wavpack/wavpack.hash | 4 ++--
+ package/wavpack/wavpack.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-index 78dbdf8ae4..b8fd5e2c80 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
+index 6b1f90a1fe..eeef730321 100644
+--- a/package/wavpack/wavpack.hash
++++ b/package/wavpack/wavpack.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8759bddb589006ee164438588adaf007325b3bcaf6ae4c64d87a2b914409c680  libtorrent-rasterbar-1.2.4.tar.gz
-+sha256  8f69befe449f7211afc665726d24fde62f019800b060b5c6c9804793929a4407  libtorrent-rasterbar-1.2.6.tar.gz
- sha256  f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8  COPYING
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-index 5b80e99238..2e0fc23edd 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+ # locally computed hash
+-sha256  77e5b1cfa26e387e4275b362f0c3fb9a27106447d9bce00f9f794f30badb77e3  wavpack-5.2.0.tar.xz
+-sha256  2ab58075e26305cc16920e9867c1d43f46ce81adab2051100dd316a3a93a2619  COPYING
++sha256  b444379a0bee0330f137cb3e9a100e6a12a63a6d01987ba66b3729f85e282307  wavpack-5.3.0.tar.xz
++sha256  a0bbe245dfe263f73946b72306e8336818009ff1e52b119784c288f2785fc260  COPYING
+diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
+index 8cb7754b2b..6403f93ac9 100644
+--- a/package/wavpack/wavpack.mk
++++ b/package/wavpack/wavpack.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTORRENT_RASTERBAR_VERSION = 1.2.4
-+LIBTORRENT_RASTERBAR_VERSION = 1.2.6
- LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
- LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
- LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
+-WAVPACK_VERSION = 5.2.0
++WAVPACK_VERSION = 5.3.0
+ WAVPACK_SITE = \
+ 	https://github.com/dbry/WavPack/releases/download/$(WAVPACK_VERSION)
+ WAVPACK_SOURCE = wavpack-$(WAVPACK_VERSION).tar.xz
