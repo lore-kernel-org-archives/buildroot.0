@@ -1,215 +1,317 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Apr 2020 15:06:03 +0200
-Subject: [Buildroot] [PATCH 1/2] support/scripts: add check-dotconfig.py
-In-Reply-To: <20200420091757.2931721-1-romain.naour@gmail.com>
-References: <20200420091757.2931721-1-romain.naour@gmail.com>
-Message-ID: <20200420130603.GH5035@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 20 Apr 2020 15:48:45 +0200
+Subject: [Buildroot] [PATCH 1/2] package/linux-pam: enable back on musl
+Message-ID: <20200420134846.391273-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Add two upstream patches to fix build on musl
 
-On 2020-04-20 11:17 +0200, Romain Naour spake thusly:
-> For the same reason as for 50b747f212be2c9c0f7cf10c674ed488d042715c,
-> we need to check if the generated configuration file (.config)
-> contains all symbols present in the defconfig file.
-> 
-> If not there is an issue with the defconfig.
-> 
-> This script will be used in .gitlab-ci.yml.
-> 
-> Inspired by is_toolchain_usable() function from genrandconfig:
-> https://git.busybox.net/buildroot/tree/utils/genrandconfig?h=2020.02#n164
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  support/scripts/check-dotconfig.py | 37 ++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100755 support/scripts/check-dotconfig.py
-> 
-> diff --git a/support/scripts/check-dotconfig.py b/support/scripts/check-dotconfig.py
-> new file mode 100755
-> index 0000000000..9e60810c1d
-> --- /dev/null
-> +++ b/support/scripts/check-dotconfig.py
-> @@ -0,0 +1,37 @@
-> +#!/usr/bin/env python3
-> +
-> +# This script check if the .config is contains all lines present in the defconfig.
-> +
-> +import sys
-> +
-> +
-> +def main():
-> +    if not (len(sys.argv) == 3):
-> +        print("Error: incorrect number of arguments")
-> +        print("""Usage: check-dotconfig <configfile> <defconfig>""")
-> +        sys.exit(1)
-> +
-> +    configfile = sys.argv[1]
-> +    defconfig = sys.argv[2]
-> +
-> +    with open(configfile) as configf:
-> +        configlines = configf.readlines()
-> +
-> +    defconfiglines = []
-> +    with open(defconfig) as defconfigf:
-> +        for line in defconfigf.readlines():
-> +            if line.startswith("BR2_"):
-> +                defconfiglines.append(line)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0003-Replace-strndupa-with-strncpy.patch  | 75 +++++++++++++++++++
+ ...astlog-when-logwtmp-is-not-available.patch | 60 +++++++++++++++
+ package/linux-pam/Config.in                   |  5 +-
+ package/nodm/Config.in                        |  5 +-
+ package/openvmtools/Config.in                 |  5 +-
+ package/python-pam/Config.in                  |  6 +-
+ package/rsh-redone/Config.in                  | 10 +--
+ package/util-linux/Config.in                  |  5 +-
+ 8 files changed, 149 insertions(+), 22 deletions(-)
+ create mode 100644 package/linux-pam/0003-Replace-strndupa-with-strncpy.patch
+ create mode 100644 package/linux-pam/0004-build-ignore-pam_lastlog-when-logwtmp-is-not-available.patch
 
-And what about lines that match '# foo is not set' ?
-We also want to ensure those are still present too.
-
-> +    # Check that all the defconfig lines are still present
-> +    for defconfigline in defconfiglines:
-> +        if defconfigline not in configlines:
-> +            print("WARN: defconfig can't be used\n")
-> +            print("      Missing: %s\n" % defconfigline.strip())
-> +            return False
-
-This only reports a single missing variable, while there can more than
-one.
-
-Here is a proposal for an updated script:
-
-    #!/usr/bin/env python3
-
-    # This scripts check that all lines present in the defconfig are
-    # still present in the .config
-
-    import sys
-
-
-    def main():
-        if not (len(sys.argv) == 3):
-            print("Error: incorrect number of arguments")
-            print("""Usage: check-dotconfig <configfile> <defconfig>""")
-            sys.exit(1)
-
-        configfile = sys.argv[1]
-        defconfig = sys.argv[2]
-
-        # strip() to get rid of trailing \n
-        with open(configfile) as configf:
-            configlines = [l.strip() for l in configf.readlines()]
-
-        defconfiglines = []
-        with open(defconfig) as defconfigf:
-            for line in defconfigf.readlines():
-                # strip() to get rid of trailing \n
-                line = line.strip()
-                if line.startswith("BR2_"):
-                    defconfiglines.append(line)
-                elif line.startswith('# BR2_') and line.endswith(' is not set'):
-                    defconfiglines.append(line)
-
-        # Check that all the defconfig lines are still present
-        missing = [defconfigline.strip() for defconfigline in defconfiglines
-                   if defconfigline not in configlines]
-
-        if len(missing):
-            print("WARN: defconfig {} can't be used:".format(defconfig))
-            for m in missing:
-                print("      Missing: {}".format(m))
-        sys.exit(1 if len(missing) else 0)
-
-
-    if __name__ == "__main__":
-        main()
-
-
-And with this script, I ran:
-
-    $ for cfg in $(make list-defconfigs |sed -r -e '/ - /!d; s/  (.*) - .*/\1/'); do
-        make "${cfg}" >/dev/null 2>&1
-        support/scripts/check-dotconfig.py .config configs/"${cfg}"
-    done
-    WARN: defconfig configs/amarula_a64_relic_defconfig can't be used:
-          Missing: BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT=y
-    WARN: defconfig configs/beaglebone_qt5_defconfig can't be used:
-          Missing: BR2_PACKAGE_QT5=y
-          Missing: BR2_PACKAGE_QT5BASE_EXAMPLES=y
-          Missing: BR2_PACKAGE_QT5BASE_EGLFS=y
-          Missing: BR2_PACKAGE_QT5BASE_DEFAULT_QPA="wayland"
-          Missing: BR2_PACKAGE_QT5QUICKCONTROLS=y
-          Missing: BR2_PACKAGE_QT5WAYLAND=y
-          Missing: BR2_PACKAGE_QT5WAYLAND_COMPOSITOR=y
-    WARN: defconfig configs/engicam_imx6qdl_icore_qt5_defconfig can't be used:
-          Missing: BR2_PACKAGE_QT5=y
-          Missing: BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-          Missing: BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-          Missing: BR2_PACKAGE_QT5BASE_LINUXFB=y
-          Missing: BR2_PACKAGE_QT5BASE_FONTCONFIG=y
-          Missing: BR2_PACKAGE_QT5BASE_GIF=y
-          Missing: BR2_PACKAGE_QT5BASE_JPEG=y
-          Missing: BR2_PACKAGE_GLMARK2=y
-          Missing: BR2_PACKAGE_QT5CINEX=y
-          Missing: BR2_PACKAGE_QT5CINEX_HD=y
-    WARN: defconfig configs/freescale_imx28evk_defconfig can't be used:
-          Missing: BR2_TARGET_ROOTFS_EXT4=y
-    WARN: defconfig configs/imx23evk_defconfig can't be used:
-          Missing: BR2_TARGET_ROOTFS_EXT4=y
-    WARN: defconfig configs/imx6-sabresd_qt5_defconfig can't be used:
-          Missing: BR2_PACKAGE_QT5=y
-          Missing: BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-          Missing: BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-          Missing: BR2_PACKAGE_QT5BASE_LINUXFB=y
-          Missing: BR2_PACKAGE_QT5BASE_FONTCONFIG=y
-          Missing: BR2_PACKAGE_QT5BASE_GIF=y
-          Missing: BR2_PACKAGE_QT5BASE_JPEG=y
-          Missing: BR2_PACKAGE_QT5CINEX=y
-          Missing: BR2_PACKAGE_QT5CINEX_HD=y
-    WARN: defconfig configs/minnowboard_max-graphical_defconfig can't be used:
-          Missing: BR2_PACKAGE_GLMARK2=y
-          Missing: BR2_PACKAGE_MESA3D_DEMOS=y
-    WARN: defconfig configs/nanopi_r1_defconfig can't be used:
-          Missing: BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_r1"
-    WARN: defconfig configs/olimex_a20_olinuxino_lime2_defconfig can't be used:
-          Missing: BR2_PACKAGE_SUNXI_MALI_MAINLINE=y
-          Missing: BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER=y
-    WARN: defconfig configs/olimex_a20_olinuxino_lime_defconfig can't be used:
-          Missing: BR2_PACKAGE_SUNXI_MALI_MAINLINE=y
-          Missing: BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER=y
-    WARN: defconfig configs/olimex_imx233_olinuxino_defconfig can't be used:
-          Missing: BR2_TARGET_ROOTFS_EXT4=y
-    WARN: defconfig configs/qemu_ppc_virtex_ml507_defconfig can't be used:
-          Missing: BR2_SOFT_FLOAT=y
-    WARN: defconfig configs/qemu_riscv32_virt_defconfig can't be used:
-          Missing: BR2_TARGET_OPENSBI_USE_PLAT=y
-    WARN: defconfig configs/qemu_riscv64_virt_defconfig can't be used:
-          Missing: BR2_TARGET_OPENSBI_USE_PLAT=y
-    WARN: defconfig configs/raspberrypi3_qt5we_defconfig can't be used:
-          Missing: BR2_PACKAGE_QT5=y
-          Missing: BR2_PACKAGE_QT5BASE_EXAMPLES=y
-          Missing: BR2_PACKAGE_QT5BASE_GIF=y
-          Missing: BR2_PACKAGE_QT5BASE_JPEG=y
-          Missing: BR2_PACKAGE_QT5BASE_PNG=y
-          Missing: BR2_PACKAGE_QT5WEBENGINE=y
-          Missing: BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS=y
-
-
-> +    return True
-> +
-> +
-> +if __name__ == "__main__":
-> +    main()
-> -- 
-> 2.25.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/linux-pam/0003-Replace-strndupa-with-strncpy.patch b/package/linux-pam/0003-Replace-strndupa-with-strncpy.patch
+new file mode 100644
+index 0000000000..9793f8caf1
+--- /dev/null
++++ b/package/linux-pam/0003-Replace-strndupa-with-strncpy.patch
+@@ -0,0 +1,75 @@
++From 91d4678388b2a7d768ee2ec8cc569e11fc223ffd Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Sun, 15 Jul 2018 20:43:44 -0700
++Subject: [PATCH] Replace strndupa with strncpy
++
++glibc only. A static string is better.
++
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
++[Retrieved from:
++https://github.com/linux-pam/linux-pam/commit/91d4678388b2a7d768ee2ec8cc569e11fc223ffd]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ modules/pam_exec/pam_exec.c | 31 +++++++++++--------------------
++ 1 file changed, 11 insertions(+), 20 deletions(-)
++
++diff --git a/modules/pam_exec/pam_exec.c b/modules/pam_exec/pam_exec.c
++index 52dc6818..6cad16e4 100644
++--- a/modules/pam_exec/pam_exec.c
+++++ b/modules/pam_exec/pam_exec.c
++@@ -102,7 +102,7 @@ call_exec (const char *pam_type, pam_handle_t *pamh,
++   int use_stdout = 0;
++   int optargc;
++   const char *logfile = NULL;
++-  const char *authtok = NULL;
+++  char authtok[PAM_MAX_RESP_SIZE] = {};
++   pid_t pid;
++   int fds[2];
++   int stdout_fds[2];
++@@ -180,12 +180,12 @@ call_exec (const char *pam_type, pam_handle_t *pamh,
++ 	      if (resp)
++ 		{
++ 		  pam_set_item (pamh, PAM_AUTHTOK, resp);
++-		  authtok = strndupa (resp, PAM_MAX_RESP_SIZE);
+++		  strncpy (authtok, resp, sizeof(authtok) - 1);
++ 		  _pam_drop (resp);
++ 		}
++ 	    }
++ 	  else
++-	    authtok = strndupa (void_pass, PAM_MAX_RESP_SIZE);
+++	    strncpy (authtok, void_pass, sizeof(authtok) - 1);
++ 
++ 	  if (pipe(fds) != 0)
++ 	    {
++@@ -225,23 +225,14 @@ call_exec (const char *pam_type, pam_handle_t *pamh,
++ 
++       if (expose_authtok) /* send the password to the child */
++ 	{
++-	  if (authtok != NULL)
++-	    {            /* send the password to the child */
++-	      if (debug)
++-		pam_syslog (pamh, LOG_DEBUG, "send password to child");
++-	      if (write(fds[1], authtok, strlen(authtok)+1) == -1)
++-		pam_syslog (pamh, LOG_ERR,
++-			    "sending password to child failed: %m");
++-	      authtok = NULL;
++-	    }
++-	  else
++-	    {
++-	      if (write(fds[1], "", 1) == -1)   /* blank password */
++-		pam_syslog (pamh, LOG_ERR,
++-			    "sending password to child failed: %m");
++-	    }
++-        close(fds[0]);       /* close here to avoid possible SIGPIPE above */
++-        close(fds[1]);
+++	  if (debug)
+++	    pam_syslog (pamh, LOG_DEBUG, "send password to child");
+++	  if (write(fds[1], authtok, strlen(authtok)) == -1)
+++	    pam_syslog (pamh, LOG_ERR,
+++			      "sending password to child failed: %m");
+++
+++          close(fds[0]);       /* close here to avoid possible SIGPIPE above */
+++          close(fds[1]);
++ 	}
++ 
++       if (use_stdout)
+diff --git a/package/linux-pam/0004-build-ignore-pam_lastlog-when-logwtmp-is-not-available.patch b/package/linux-pam/0004-build-ignore-pam_lastlog-when-logwtmp-is-not-available.patch
+new file mode 100644
+index 0000000000..8ff0ac155a
+--- /dev/null
++++ b/package/linux-pam/0004-build-ignore-pam_lastlog-when-logwtmp-is-not-available.patch
+@@ -0,0 +1,60 @@
++From 73bf6d25ddb7a2cb73bceda3d880174b1d1e4a26 Mon Sep 17 00:00:00 2001
++From: Yousong Zhou <yszhou4tech@gmail.com>
++Date: Wed, 17 Jun 2015 21:18:05 +0800
++Subject: [PATCH] build: ignore pam_lastlog when logwtmp is not available.
++
++* configure.ac: check logwtmp and set COND_BUILD_PAM_LASTLOG
++* modules/pam_lastlog/Makefile.am: check COND_BUILD_PAM_LASTLOG
++
++Signed-off-by: Yousong Zhou <yszhou4tech@gmail.com>
++[Retrieved from:
++https://github.com/linux-pam/linux-pam/commit/73bf6d25ddb7a2cb73bceda3d880174b1d1e4a26]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac        | 2 ++
++ modules/Makefile.am | 8 ++++++--
++ 2 files changed, 8 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 69748614..4d1b1965 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -534,8 +534,10 @@ AC_CHECK_FUNCS(getutent_r getpwnam_r getpwuid_r getgrnam_r getgrgid_r getspnam_r
++ AC_CHECK_FUNCS(getgrouplist getline getdelim)
++ AC_CHECK_FUNCS(inet_ntop inet_pton innetgr)
++ AC_CHECK_FUNCS([ruserok_af ruserok], [break])
+++AC_CHECK_FUNCS([logwtmp])
++ 
++ AM_CONDITIONAL([COND_BUILD_PAM_RHOSTS], [test "$ac_cv_func_ruserok_af" = yes -o "$ac_cv_func_ruserok" = yes])
+++AM_CONDITIONAL([COND_BUILD_PAM_LASTLOG], [test "$ac_cv_func_logwtmp" = yes])
++ 
++ AC_CHECK_FUNCS(unshare, [UNSHARE=yes], [UNSHARE=no])
++ AM_CONDITIONAL([HAVE_UNSHARE], [test "$UNSHARE" = yes])
++diff --git a/modules/Makefile.am b/modules/Makefile.am
++index 9ad26a9b..b98dc5c8 100644
++--- a/modules/Makefile.am
+++++ b/modules/Makefile.am
++@@ -6,9 +6,13 @@ if COND_BUILD_PAM_RHOSTS
++ 	MAYBE_PAM_RHOSTS = pam_rhosts
++ endif
++ 
+++if COND_BUILD_PAM_LASTLOG
+++	MAYBE_PAM_LASTLOG = pam_lastlog
+++endif
+++
++ SUBDIRS := pam_access pam_cracklib pam_debug pam_deny pam_echo \
++ 	pam_env pam_exec pam_faildelay pam_filter pam_ftp \
++-	pam_group pam_issue pam_keyinit pam_lastlog pam_limits \
+++	pam_group pam_issue pam_keyinit pam_limits \
++ 	pam_listfile pam_localuser pam_loginuid pam_mail \
++ 	pam_mkhomedir pam_motd pam_namespace pam_nologin \
++ 	pam_permit pam_pwhistory pam_rootok pam_securetty \
++@@ -16,7 +20,7 @@ SUBDIRS := pam_access pam_cracklib pam_debug pam_deny pam_echo \
++ 	pam_succeed_if pam_tally pam_tally2 pam_time pam_timestamp \
++ 	pam_tty_audit pam_umask \
++ 	pam_unix pam_userdb pam_warn pam_wheel pam_xauth \
++-	$(MAYBE_PAM_RHOSTS)
+++	$(MAYBE_PAM_RHOSTS) $(MAYBE_PAM_LASTLOG)
++ 
++ CLEANFILES = *~
++ 
+diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
+index 1396549366..84aee5cdd4 100644
+--- a/package/linux-pam/Config.in
++++ b/package/linux-pam/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_LINUX_PAM
+ 	bool "linux-pam"
+ 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
+ 	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_FLEX
+ 	help
+@@ -11,6 +10,6 @@ config BR2_PACKAGE_LINUX_PAM
+ 
+ 	  http://linux-pam.org
+ 
+-comment "linux-pam needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
++comment "linux-pam needs a toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
++		|| BR2_STATIC_LIBS
+diff --git a/package/nodm/Config.in b/package/nodm/Config.in
+index 38171e8dcf..2dd6f1e1cf 100644
+--- a/package/nodm/Config.in
++++ b/package/nodm/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_NODM
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+ 	depends on !BR2_STATIC_LIBS # linux-pam
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ 	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_LINUX_PAM
+@@ -18,7 +17,7 @@ config BR2_PACKAGE_NODM
+ 
+ 	  https://github.com/spanezz/nodm/
+ 
+-comment "nodm needs a glibc or uClibc toolchain w/ wchar, locale, dynamic library"
++comment "nodm needs a toolchain w/ wchar, locale, dynamic library"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
++		|| BR2_STATIC_LIBS
+diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+index 1a077a2a47..a50b6b9b3e 100644
+--- a/package/openvmtools/Config.in
++++ b/package/openvmtools/Config.in
+@@ -27,13 +27,12 @@ config BR2_PACKAGE_OPENVMTOOLS_PAM
+ 	# linux-pam needs locale and wchar, but we already have this
+ 	# dependency on the main symbol, above.
+ 	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+ 	  Support for PAM in openvmtools
+ 
+-comment "PAM support needs a glibc toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
++comment "PAM support needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_OPENVMTOOLS_RESOLUTIONKMS
+ 	bool "resolutionkms support"
+diff --git a/package/python-pam/Config.in b/package/python-pam/Config.in
+index 02865d00d6..92ba105ebf 100644
+--- a/package/python-pam/Config.in
++++ b/package/python-pam/Config.in
+@@ -1,7 +1,6 @@
+-comment "python-pam needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
++comment "python-pam needs a toolchain w/ wchar, locale, dynamic library"
+ 	depends on BR2_PACKAGE_PYTHON
+-	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
+-		BR2_TOOLCHAIN_USES_MUSL
++	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_PYTHON_PAM
+ 	bool "python-pam"
+@@ -10,7 +9,6 @@ config BR2_PACKAGE_PYTHON_PAM
+ 	depends on BR2_USE_WCHAR # linux-pam
+ 	depends on BR2_USE_MMU # linux-pam
+ 	depends on !BR2_STATIC_LIBS # linux-pam
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+ 	  PAM (Pluggable Authentication Module) bindings for Python.
+diff --git a/package/rsh-redone/Config.in b/package/rsh-redone/Config.in
+index 1335c85739..5647d7edef 100644
+--- a/package/rsh-redone/Config.in
++++ b/package/rsh-redone/Config.in
+@@ -17,13 +17,12 @@ config BR2_PACKAGE_RSH_REDONE_RLOGIND
+ 	bool "rlogind"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ 	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 
+-comment "rlogind needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
++comment "rlogind needs a toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
++		|| BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_RSH_REDONE_RSH
+ 	bool "rsh"
+@@ -32,12 +31,11 @@ config BR2_PACKAGE_RSH_REDONE_RSHD
+ 	bool "rshd"
+ 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ 	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 
+-comment "rshd needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
++comment "rshd needs a toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
++		|| BR2_STATIC_LIBS
+ 
+ endif
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 996f0cd7fa..aa3c1a5f76 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -84,15 +84,14 @@ config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
+ 	bool "chfn/chsh"
+ 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+ 	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ 	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+ 	  Change login shell, real user name and information
+ 
+-comment "chfn/chsh needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
++comment "chfn/chsh needs a toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
++		|| BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_UTIL_LINUX_CHMEM
+ 	bool "chmem"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
