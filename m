@@ -1,73 +1,53 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 20 Apr 2020 11:17:56 +0200
-Subject: [Buildroot] [PATCH 1/2] support/scripts: add check-dotconfig.py
-Message-ID: <20200420091757.2931721-1-romain.naour@gmail.com>
+Date: Mon, 20 Apr 2020 11:17:57 +0200
+Subject: [Buildroot] [PATCH 2/2] gitlab-ci: check generated config files
+In-Reply-To: <20200420091757.2931721-1-romain.naour@gmail.com>
+References: <20200420091757.2931721-1-romain.naour@gmail.com>
+Message-ID: <20200420091757.2931721-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the same reason as for 50b747f212be2c9c0f7cf10c674ed488d042715c,
-we need to check if the generated configuration file (.config)
-contains all symbols present in the defconfig file.
+Use the script added by the previous patch to check
+generated config files.
 
-If not there is an issue with the defconfig.
-
-This script will be used in .gitlab-ci.yml.
-
-Inspired by is_toolchain_usable() function from genrandconfig:
-https://git.busybox.net/buildroot/tree/utils/genrandconfig?h=2020.02#n164
+Tested on gitlab:
+https://gitlab.com/kubu93/buildroot/pipelines/137597966
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/check-dotconfig.py | 37 ++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100755 support/scripts/check-dotconfig.py
+No particular issues was found on existing defconfigs.
+---
+ .gitlab-ci.yml    | 1 +
+ .gitlab-ci.yml.in | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/support/scripts/check-dotconfig.py b/support/scripts/check-dotconfig.py
-new file mode 100755
-index 0000000000..9e60810c1d
---- /dev/null
-+++ b/support/scripts/check-dotconfig.py
-@@ -0,0 +1,37 @@
-+#!/usr/bin/env python3
-+
-+# This script check if the .config is contains all lines present in the defconfig.
-+
-+import sys
-+
-+
-+def main():
-+    if not (len(sys.argv) == 3):
-+        print("Error: incorrect number of arguments")
-+        print("""Usage: check-dotconfig <configfile> <defconfig>""")
-+        sys.exit(1)
-+
-+    configfile = sys.argv[1]
-+    defconfig = sys.argv[2]
-+
-+    with open(configfile) as configf:
-+        configlines = configf.readlines()
-+
-+    defconfiglines = []
-+    with open(defconfig) as defconfigf:
-+        for line in defconfigf.readlines():
-+            if line.startswith("BR2_"):
-+                defconfiglines.append(line)
-+
-+    # Check that all the defconfig lines are still present
-+    for defconfigline in defconfiglines:
-+        if defconfigline not in configlines:
-+            print("WARN: defconfig can't be used\n")
-+            print("      Missing: %s\n" % defconfigline.strip())
-+            return False
-+
-+    return True
-+
-+
-+if __name__ == "__main__":
-+    main()
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index fa8e077a07..0d06a1b7cf 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -47,6 +47,7 @@ check-package:
+     script:
+         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
+         - make ${DEFCONFIG_NAME}
++        - ./support/scripts/check-dotconfig.py .config ./configs/${DEFCONFIG_NAME}
+         - echo 'Build buildroot'
+         - |
+             make > >(tee build.log |grep '>>>') 2>&1 || {
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index 6b09730a65..413c6d2956 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -47,6 +47,7 @@ check-package:
+     script:
+         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
+         - make ${DEFCONFIG_NAME}
++        - ./support/scripts/check-dotconfig.py .config ./configs/${DEFCONFIG_NAME}
+         - echo 'Build buildroot'
+         - |
+             make > >(tee build.log |grep '>>>') 2>&1 || {
 -- 
 2.25.3
