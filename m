@@ -1,38 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Apr 2020 18:00:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stella: fix legal-info
-In-Reply-To: <20200420142309.549296-1-fontaine.fabrice@gmail.com>
-References: <20200420142309.549296-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200420180029.5fad4d18@windsurf.home>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon, 20 Apr 2020 18:07:48 +0200
+Subject: [Buildroot] [PATCH] package/armadio: fix build when host has hdf5
+Message-ID: <20200420160748.26197-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 20 Apr 2020 16:23:09 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-> Commit a7210c24e343a13e58d1d45b7e0c4bdb51854857 forgot to update hash of
-> Copyright which has changed due to update in year:
-> 
-> https://github.com/stella-emu/stella/commit/275666b0af3e029b44be7e676526b8172da44736
-> https://github.com/stella-emu/stella/commit/9ad47ae5f3457693944a3754432ff1236c67203c
-> 
-> While at it, update indentation of hash file to two spaces
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/38fa47221f36f3db603ee54c86b9747b0c6ca5d7
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/stella/stella.hash | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+When host computer has hdf5 library installed, armadillo fails to build with:
 
-Applied to master, thanks.
+[...]
+aarch64-buildroot-linux-gnu-g++: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include/hdf5/serial'
+make[3]: *** [CMakeFiles/armadillo.dir/build.make:63: CMakeFiles/armadillo.dir/src/wrapper1.cpp.o] Error 1
+aarch64-buildroot-linux-gnu-g++: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include/hdf5/serial'
+[...]
 
-Thomas
+This issue seems known and is mentionned in a message, displayed at detection step:
+
+[...]
+-- *** If use of HDF5 is causing problems,
+-- *** rerun cmake with HDF5 detection disabled:
+-- *** cmake -D DETECT_HDF5=false .
+--
+[...]
+
+Since hdf5 in not supported by buildroot, this patch force disabling this detection.
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/armadillo/armadillo.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index d9a28e9878..f693d8c946 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -12,4 +12,6 @@ ARMADILLO_INSTALL_STAGING = YES
+ ARMADILLO_LICENSE = Apache-2.0
+ ARMADILLO_LICENSE_FILES = LICENSE.txt
+ 
++ARMADILLO_CONF_OPTS = -DDETECT_HDF5=false
++
+ $(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
