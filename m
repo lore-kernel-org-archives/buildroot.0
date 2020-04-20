@@ -1,42 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Apr 2020 07:45:04 +0200
-Subject: [Buildroot] [git commit] package/exfatprogs: needs wchar
-Message-ID: <20200420053724.CE9C98F3B2@busybox.osuosl.org>
+Date: Mon, 20 Apr 2020 07:46:55 +0200
+Subject: [Buildroot] [git commit] package/libuhttpd: manage BUILD_STATIC_LIBS
+Message-ID: <20200420053724.EE9128F385@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5d2f8bb53d8391749728960deefc98b72dccd85
+commit: https://git.buildroot.net/buildroot/commit/?id=2004cf740a2e0a81bc700274daa257c9b702e444
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-exfatprogs unconditionally uses wchar_t in libexfat.h
-
-Fixes:
- - http://autobuild.buildroot.org/results/884bbaec2bbbff33c30a0bebda3d95198aa1281c
+Use BUILD_STATIC_LIBS which has been added in version 3.1.4 with
+https://github.com/zhaojh329/libuhttpd/commit/4d0f435e0b96140f7b74239bbe2f76d5f7d782b7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/exfatprogs/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libuhttpd/libuhttpd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/exfatprogs/Config.in b/package/exfatprogs/Config.in
-index 99defb5b69..4f50427a68 100644
---- a/package/exfatprogs/Config.in
-+++ b/package/exfatprogs/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_EXFATPROGS
- 	bool "exfatprogs"
-+	depends on BR2_USE_WCHAR
- 	help
- 	  exFAT filesystem userspace utilities.
+diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+index d3499373a6..59a8b45c07 100644
+--- a/package/libuhttpd/libuhttpd.mk
++++ b/package/libuhttpd/libuhttpd.mk
+@@ -36,4 +36,11 @@ else
+ LIBUHTTPD_CONF_OPTS += -DUHTTPD_SSL_SUPPORT=OFF
+ endif
  
-@@ -11,3 +12,6 @@ config BR2_PACKAGE_EXFATPROGS
- 	  programs in package/exfat-utils.
- 
- 	  https://github.com/exfatprogs/exfatprogs
++# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
++ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++LIBUHTTPD_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
++else ifeq ($(BR2_SHARED_LIBS),y)
++LIBUHTTPD_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
++endif
 +
-+comment "exfatprogs needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
+ $(eval $(cmake-package))
