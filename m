@@ -1,60 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Apr 2020 18:59:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfuse3: fix build without C++
-Message-ID: <20200420165955.1271763-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 20 Apr 2020 20:04:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pixman: bump version to 0.40.0
+Message-ID: <20200420180400.36290-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/a6e64213f2910b2b81e79cb1e96e558413d7f70a
+Upstream now provides sha256 & sha512 hashes only.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Switch _SITE to https and use upstream-provided xz tarball.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...on.build-libfuse-is-a-C-only-project.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch
+ package/pixman/pixman.hash | 8 ++++----
+ package/pixman/pixman.mk   | 6 +++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch b/package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch
-new file mode 100644
-index 0000000000..d50f7cccf2
---- /dev/null
-+++ b/package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch
-@@ -0,0 +1,33 @@
-+From 6e0013f549b6b586e3943b76f9359b0aa98130c0 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 20 Apr 2020 18:41:58 +0200
-+Subject: [PATCH] meson.build: libfuse is a C only project
+diff --git a/package/pixman/pixman.hash b/package/pixman/pixman.hash
+index 7a79c206f1..c7cd0cab9b 100644
+--- a/package/pixman/pixman.hash
++++ b/package/pixman/pixman.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-April/002991.html
+-md5 16a350a8a40116ddf67632a1d2623711  pixman-0.38.4.tar.bz2
+-sha1 87e1abc91ac4e5dfcc275f744f1d0ec3277ee7cd  pixman-0.38.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-April/003043.html
++sha256 da8ed9fe2d1c5ef8ce5d1207992db959226bd4e37e3f88acf908fd9a71e2704e  pixman-0.40.0.tar.xz
++sha512 8a60edb113d68791b41bd90b761ff7b3934260cb3dada3234c9351416f61394e4157353bc4d61b8f6c2c619de470f6feefffb4935bfcf79d291ece6285de7270  pixman-0.40.0.tar.xz
 +
-+Do not mandate cpp otherwise build without a C++ compiler will fail on:
-+
-+../output-1/build/libfuse3-3.9.1/meson.build:1:0: ERROR: Unknown compiler(s): [['/home/buildroot/autobuild/instance-2/output-1/host/bin/microblazeel-buildroot-linux-uclibc-g++']]
-+The follow exceptions were encountered:
-+Running "/home/buildroot/autobuild/instance-2/output-1/host/bin/microblazeel-buildroot-linux-uclibc-g++ --version" gave "[Errno 2] No such file or directory: '/home/buildroot/autobuild/instance-2/output-1/host/bin/microblazeel-buildroot-linux-uclibc-g++'"
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a6e64213f2910b2b81e79cb1e96e558413d7f70a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/libfuse/libfuse/pull/511]
-+---
-+ meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 69b3630..4428bdb 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -1,4 +1,4 @@
-+-project('libfuse3', ['cpp', 'c'], version: '3.9.1',
-++project('libfuse3', ['c'], version: '3.9.1',
-+         meson_version: '>= 0.42',
-+         default_options: [ 'buildtype=debugoptimized' ])
-+ 
-+-- 
-+2.25.1
-+
+ # Locally computed
+-sha256 84abb7fa2541af24d9c3b34bf75d6ac60cc94ac4410061bbb295b66a29221550  pixman-0.38.4.tar.bz2
+ sha256 fac9270f0987b96ff4533fca3548c633e02083cbba4a0172a3b149b2e4019793  COPYING
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index e566603d29..a446ebca46 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PIXMAN_VERSION = 0.38.4
+-PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.bz2
+-PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
++PIXMAN_VERSION = 0.40.0
++PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.xz
++PIXMAN_SITE = https://xorg.freedesktop.org/releases/individual/lib
+ PIXMAN_LICENSE = MIT
+ PIXMAN_LICENSE_FILES = COPYING
+ 
 -- 
-2.25.1
+2.26.1
