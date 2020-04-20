@@ -1,67 +1,64 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Mon, 20 Apr 2020 17:36:09 +0200
-Subject: [Buildroot] [PATCH] package/qt5/Config.in: fix typo
-In-Reply-To: <20200420152910.GI5035@scaer>
-References: <20200420151024.41482-1-b.bilas@grinn-global.com>
- <20200420152910.GI5035@scaer>
-Message-ID: <3fc1e8b1-1a19-5ed5-7636-d22fe8525227@grinn-global.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 20 Apr 2020 17:48:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/odhcp6c: bump to version
+ 49305e6847efa43e008d0bebdc176e1833120947
+Message-ID: <20200420154843.1022440-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Switch to official openwrt site instead of sbyx github fork which is not
+up to date anymore. This bump will fix build with musl 1.2.0 thanks to
+https://git.openwrt.org/?p=project/odhcp6c.git;a=commit;h=49305e6847efa43e008d0bebdc176e1833120947
 
-On 20.04.2020 17:29, Yann E. MORIN wrote:
-> Bartosz, All,
->
-> On 2020-04-20 17:10 +0200, Bartosz Bilas spake thusly:
->> There is no BR2_TOOLCHAIN_GCC_AT_LEAST_5_0 option
->> but BR2_TOOLCHAIN_GCC_AT_LEAST_5.
->>
->> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> I also fixed pinentry and wireshark, which had the incorrect version
-> introduced with the same commit as qt5. Adapted the commit log and
-> pushed to master, thanks.
-maybe a good idea would be to introduce some verify-tests for those 
-non-existing options (if it's possible ofc.) because as we see someone 
-can make the same mistake again.
->
-> Regards,
-> Yann E. MORIN.
->
->> ---
->>   package/qt5/Config.in | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
->> index cd9c93735d..c716919476 100644
->> --- a/package/qt5/Config.in
->> +++ b/package/qt5/Config.in
->> @@ -16,14 +16,14 @@ comment "Qt5 needs a toolchain w/ gcc >= 5.0, wchar, NPTL, C++, dynamic library"
->>   	depends on !BR2_arc
->>   	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
->>   		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
->> -		!BR2_TOOLCHAIN_GCC_AT_LEAST_5_0
->> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
->>   
->>   menuconfig BR2_PACKAGE_QT5
->>   	bool "Qt5"
->>   	depends on BR2_INSTALL_LIBSTDCPP
->>   	depends on BR2_USE_WCHAR
->>   	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5_0 # C++11, GCC_BUG_57694
->> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++11, GCC_BUG_57694
->>   	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
->>   	# no built-in double-conversion support
->>   	depends on !BR2_arc
->> -- 
->> 2.26.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-Best
-Bartek
+Also update indentation of hash file (two spaces)
+
+Fixes:
+ - http://autobuild.buildroot.org/results/fcd89dd076887e9b590ffa672decf2c84a6d57f8
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/odhcp6c/Config.in    | 2 +-
+ package/odhcp6c/odhcp6c.hash | 4 ++--
+ package/odhcp6c/odhcp6c.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/odhcp6c/Config.in b/package/odhcp6c/Config.in
+index 97ea4b44ef..ca3a2f6424 100644
+--- a/package/odhcp6c/Config.in
++++ b/package/odhcp6c/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_ODHCP6C
+ 	  odhcp6c is a minimal DHCPv6 and RA-client for use in
+ 	  embedded Linux systems, especially routers.
+ 
+-	  https://github.com/sbyx/odhcp6c
++	  https://git.openwrt.org/project/odhcp6c.git
+diff --git a/package/odhcp6c/odhcp6c.hash b/package/odhcp6c/odhcp6c.hash
+index 8b16fa98bb..2ac4a68219 100644
+--- a/package/odhcp6c/odhcp6c.hash
++++ b/package/odhcp6c/odhcp6c.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 6d472320ccfa2e57197596869507f2a4bf9900a502939404bf0c033dceeadf5f odhcp6c-d2e247d8d87ecf8c60fcf0acdad05667bd379521.tar.gz
+-sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4 COPYING
++sha256  e715c1408982152306c65f1c3ce7c58fb6f15fa8f9626c266819119239f32418  odhcp6c-f575351cbb3defc0bf52680c9082912a6c264374.tar.gz
++sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
+index 3b4e7580a2..b13c724542 100644
+--- a/package/odhcp6c/odhcp6c.mk
++++ b/package/odhcp6c/odhcp6c.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ODHCP6C_VERSION = d2e247d8d87ecf8c60fcf0acdad05667bd379521
+-ODHCP6C_SITE = $(call github,sbyx,odhcp6c,$(ODHCP6C_VERSION))
++ODHCP6C_VERSION = f575351cbb3defc0bf52680c9082912a6c264374
++ODHCP6C_SITE = git://git.openwrt.org/project/odhcp6c.git
+ ODHCP6C_LICENSE = GPL-2.0
+ ODHCP6C_LICENSE_FILES = COPYING
+ 
+-- 
+2.25.1
