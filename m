@@ -1,51 +1,72 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Apr 2020 23:08:13 +0200
-Subject: [Buildroot] [PATCH 1/2] package/mc: fix build with NLS
-In-Reply-To: <20200420201644.1954370-1-fontaine.fabrice@gmail.com>
-References: <20200420201644.1954370-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200420210813.GK5035@scaer>
+Date: Mon, 20 Apr 2020 23:08:41 +0200
+Subject: [Buildroot] [PATCH] packages/exim: enable parallel make
+In-Reply-To: <20200420163645.17803-1-luca@lucaceresoli.net>
+References: <20200420163645.17803-1-luca@lucaceresoli.net>
+Message-ID: <20200420210841.GL5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Luca, All,
 
-On 2020-04-20 22:16 +0200, Fabrice Fontaine spake thusly:
-> gettext is an optional dependency since version 4.8.24 and
-> https://github.com/MidnightCommander/mc/commit/f30e6ff283f4bc86177e4360de94dad794678395
+On 2020-04-20 18:36 +0200, Luca Ceresoli spake thusly:
+> Parallel make used to be broken in exim, as reported in its docs. Now that
+> line has disappeared from the docs, and parallel make is actually working.
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/0e72b0b5b7d7009bd5ad5f15917e94c86e99131b
+> Tested with 'make exim-dirclean ; time make BR2_JLEVEL=999 exim': builds
+> still succeed and the build time decreases from 34 to 11 seconds on my
+> host.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Both patches applied to master, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/mc/mc.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  package/exim/exim.mk | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
 > 
-> diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-> index f83905d89b..4e76b618d8 100644
-> --- a/package/mc/mc.mk
-> +++ b/package/mc/mc.mk
-> @@ -9,7 +9,8 @@ MC_SOURCE = mc-$(MC_VERSION).tar.xz
->  MC_SITE = http://ftp.midnight-commander.org
->  MC_LICENSE = GPL-3.0+
->  MC_LICENSE_FILES = COPYING
-> -MC_DEPENDENCIES = libglib2 host-pkgconf
-> +MC_DEPENDENCIES = libglib2 host-pkgconf $(TARGET_NLS_DEPENDENCIES)
-> +MC_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+> index 8d5b6e415b62..dc445c6d93c0 100644
+> --- a/package/exim/exim.mk
+> +++ b/package/exim/exim.mk
+> @@ -120,16 +120,14 @@ endif
 >  
->  ifeq ($(BR2_PACKAGE_GPM),y)
->  MC_CONF_OPTS += --with-gpm-mouse
+>  # We need the host version of macro_predef during the build, before
+>  # building it we need to prepare the makefile.
+> -# "The -j (parallel) flag must not be used with make"
+> -# (http://www.exim.org/exim-html-current/doc/html/spec_html/ch04.html)
+>  define EXIM_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) makefile
+> -	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)/build-br macro_predef \
+> +	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) makefile
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build-br macro_predef \
+>  		CC=$(HOSTCC) \
+>  		LNCC=$(HOSTCC) \
+>  		CFLAGS="-std=c99 $(HOST_CFLAGS)" \
+>  		LFLAGS="-fPIC $(HOST_LDFLAGS)"
+> -	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS) \
+> +	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
+>  		CFLAGS="-std=c99 $(TARGET_CFLAGS)"
+>  endef
+>  
+> @@ -137,7 +135,7 @@ endef
+>  # something when installing...
+>  define EXIM_INSTALL_TARGET_CMDS
+>  	DESTDIR=$(TARGET_DIR) INSTALL_ARG="-no_chown -no_symlink" build=br \
+> -	  $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS) \
+> +	  $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
+>  		CFLAGS="-std=c99 $(TARGET_CFLAGS)" \
+>  		install
+>  	chmod u+s $(TARGET_DIR)/usr/sbin/exim
 > -- 
-> 2.25.1
+> 2.26.1
 > 
 > _______________________________________________
 > buildroot mailing list
