@@ -1,53 +1,37 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Apr 2020 22:00:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix glibc build with
- old toolchains
-Message-ID: <20200420200058.1660444-1-fontaine.fabrice@gmail.com>
+Date: Mon, 20 Apr 2020 22:16:43 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mc: fix build with NLS
+Message-ID: <20200420201644.1954370-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For an unknown reason, since bump to version 3.0.0, we got build failure
-due to -D_FILE_OFFSET_BITS==64:
-
-/home/naourr/work/instance-2/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
- # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
-   ^
-
-Update our workaround to also filter CPPFLAGS fix the issue and seems
-right as we're doing it for all the other affected packages
-(restorecond, elfutils ...)
+gettext is an optional dependency since version 4.8.24 and
+https://github.com/MidnightCommander/mc/commit/f30e6ff283f4bc86177e4360de94dad794678395
 
 Fixes:
- - http://autobuild.buildroot.org/results/200fd0accf6a1926251243b05e600fbf591bb3a2
+ - http://autobuild.buildroot.org/results/0e72b0b5b7d7009bd5ad5f15917e94c86e99131b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libselinux/libselinux.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/mc/mc.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index b53146e30b..258065b79d 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -45,12 +45,13 @@ define LIBSELINUX_BUILD_PYTHON_BINDINGS
- endef
- endif # python3
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index f83905d89b..4e76b618d8 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
+@@ -9,7 +9,8 @@ MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE = GPL-3.0+
+ MC_LICENSE_FILES = COPYING
+-MC_DEPENDENCIES = libglib2 host-pkgconf
++MC_DEPENDENCIES = libglib2 host-pkgconf $(TARGET_NLS_DEPENDENCIES)
++MC_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
  
--# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc
--# 2.22. We set CFLAGS and LDFLAGS here because we want to win over the
--# CFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
-+# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22. We
-+# set CFLAGS, CPPFLAGS and LDFLAGS here because we want to win over the
-+# CFLAGS/CPPFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
- # when the python binding is enabled.
- LIBSELINUX_MAKE_OPTS += \
- 	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
-+	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))" \
- 	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
- 
- define LIBSELINUX_BUILD_CMDS
+ ifeq ($(BR2_PACKAGE_GPM),y)
+ MC_CONF_OPTS += --with-gpm-mouse
 -- 
 2.25.1
