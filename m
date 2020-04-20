@@ -1,99 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Apr 2020 23:23:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libzip: bump version to 1.6.1
-In-Reply-To: <20200420181430.45762-1-bernd.kuhls@t-online.de>
-References: <20200420181430.45762-1-bernd.kuhls@t-online.de>
-Message-ID: <20200420212316.GO5035@scaer>
+Date: Mon, 20 Apr 2020 23:24:04 +0200
+Subject: [Buildroot] [git commit] package/pixman: bump version to 0.40.0
+Message-ID: <20200420211007.09CE78F521@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3eb09d057b9a4134a356b5c320149f42eff78123
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-20 20:14 +0200, Bernd Kuhls spake thusly:
-> Use new upstream URL libzip.org.
-> 
-> Add optional dependency to liblzma introduced with version 1.6.0:
-> https://libzip.org/news/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Upstream now provides sha256 & sha512 hashes only.
 
-Applied to master after fixing the spaces in the hash file. Thanks!
+Switch _SITE to https and use upstream-provided xz tarball.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998 at free.fr: two spaces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pixman/pixman.hash | 10 +++++-----
+ package/pixman/pixman.mk   |  6 +++---
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-> ---
->  package/libzip/Config.in   |  2 +-
->  package/libzip/libzip.hash |  4 ++--
->  package/libzip/libzip.mk   | 11 +++++++++--
->  3 files changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/libzip/Config.in b/package/libzip/Config.in
-> index c6ddabe6b5..a603d9abf1 100644
-> --- a/package/libzip/Config.in
-> +++ b/package/libzip/Config.in
-> @@ -8,7 +8,7 @@ config BR2_PACKAGE_LIBZIP
->  	  This package also contains zipcmp, ziptorrent and zipmerge
->  	  utilities.
->  
-> -	  http://www.nih.at/libzip/
-> +	  https://libzip.org/
->  
->  comment "libzip needs a toolchain w/ dynamic library"
->  	depends on BR2_STATIC_LIBS
-> diff --git a/package/libzip/libzip.hash b/package/libzip/libzip.hash
-> index eb11b526fb..676cdce7f3 100644
-> --- a/package/libzip/libzip.hash
-> +++ b/package/libzip/libzip.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256	b3de4d4bd49a01e0cab3507fc163f88e1651695b6b9cb25ad174dbe319d4a3b4  libzip-1.5.2.tar.xz
-> -sha256  04464e729973cf58189051e7a3e8bca2acce9a1058c735e9e2eb1fdbe0fbbf50  LICENSE
-> +sha256 705dac7a671b3f440181481e607b0908129a9cf1ddfcba75d66436c0e7d33641  libzip-1.6.1.tar.xz
-> +sha256 af6d9141427cf40b7d1fa6d7f5473b06a7faa9f9b0a2ea588eb6ba7b2e1c8a9e  LICENSE
-> diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
-> index a312dd90df..f021e06b66 100644
-> --- a/package/libzip/libzip.mk
-> +++ b/package/libzip/libzip.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -LIBZIP_VERSION = 1.5.2
-> -LIBZIP_SITE = http://www.nih.at/libzip
-> +LIBZIP_VERSION = 1.6.1
-> +LIBZIP_SITE = https://libzip.org/download
->  LIBZIP_SOURCE = libzip-$(LIBZIP_VERSION).tar.xz
->  LIBZIP_LICENSE = BSD-3-Clause
->  LIBZIP_LICENSE_FILES = LICENSE
-> @@ -38,5 +38,12 @@ LIBZIP_DEPENDENCIES += musl-fts
->  LIBZIP_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-lfts
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_XZ),y)
-> +LIBZIP_DEPENDENCIES += xz
-> +LIBZIP_CONF_OPTS += -DENABLE_LZMA=ON
-> +else
-> +LIBZIP_CONF_OPTS += -DENABLE_LZMA=OFF
-> +endif
-> +
->  $(eval $(cmake-package))
->  $(eval $(host-cmake-package))
-> -- 
-> 2.26.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pixman/pixman.hash b/package/pixman/pixman.hash
+index 7a79c206f1..1af632a9f4 100644
+--- a/package/pixman/pixman.hash
++++ b/package/pixman/pixman.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2019-April/002991.html
+-md5 16a350a8a40116ddf67632a1d2623711  pixman-0.38.4.tar.bz2
+-sha1 87e1abc91ac4e5dfcc275f744f1d0ec3277ee7cd  pixman-0.38.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-April/003043.html
++sha256  da8ed9fe2d1c5ef8ce5d1207992db959226bd4e37e3f88acf908fd9a71e2704e  pixman-0.40.0.tar.xz
++sha512  8a60edb113d68791b41bd90b761ff7b3934260cb3dada3234c9351416f61394e4157353bc4d61b8f6c2c619de470f6feefffb4935bfcf79d291ece6285de7270  pixman-0.40.0.tar.xz
++
+ # Locally computed
+-sha256 84abb7fa2541af24d9c3b34bf75d6ac60cc94ac4410061bbb295b66a29221550  pixman-0.38.4.tar.bz2
+-sha256 fac9270f0987b96ff4533fca3548c633e02083cbba4a0172a3b149b2e4019793  COPYING
++sha256  fac9270f0987b96ff4533fca3548c633e02083cbba4a0172a3b149b2e4019793  COPYING
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index e566603d29..a446ebca46 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PIXMAN_VERSION = 0.38.4
+-PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.bz2
+-PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
++PIXMAN_VERSION = 0.40.0
++PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.xz
++PIXMAN_SITE = https://xorg.freedesktop.org/releases/individual/lib
+ PIXMAN_LICENSE = MIT
+ PIXMAN_LICENSE_FILES = COPYING
+ 
