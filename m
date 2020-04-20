@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Apr 2020 17:48:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/odhcp6c: bump to version
- 49305e6847efa43e008d0bebdc176e1833120947
-Message-ID: <20200420154843.1022440-1-fontaine.fabrice@gmail.com>
+Date: Mon, 20 Apr 2020 17:50:38 +0200
+Subject: [Buildroot] [PATCH v2, 1/1] package/odhcp6c: bump to version
+ f575351cbb3defc0bf52680c9082912a6c264374
+Message-ID: <20200420155038.1022633-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,6 +20,9 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix version in title
+
  package/odhcp6c/Config.in    | 2 +-
  package/odhcp6c/odhcp6c.hash | 4 ++--
  package/odhcp6c/odhcp6c.mk   | 4 ++--
