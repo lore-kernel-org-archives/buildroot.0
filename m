@@ -1,61 +1,73 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 20 Apr 2020 11:52:42 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-04-17
-Message-ID: <0ed57aae-eade-1cce-b5c7-1cdfa19bb09c@trabucayre.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 20 Apr 2020 11:17:56 +0200
+Subject: [Buildroot] [PATCH 1/2] support/scripts: add check-dotconfig.py
+Message-ID: <20200420091757.2931721-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+For the same reason as for 50b747f212be2c9c0f7cf10c674ed488d042715c,
+we need to check if the generated configuration file (.config)
+contains all symbols present in the defconfig file.
 
-On 18/04/2020 08:21, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Recent build failures and runtime-tests failures
-> ================================================
-> 
-> This is the list of Buildroot build failures that occurred on
-> 2020-04-17, and for which you are a registered architecture developer,
-> package developer or defconfig developer. This list also include
-> runtime tests failures. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
-> 
-> Results for the 'master' branch
-> -------------------------------
-> 
-> Build failures related to your packages:
-> 
->      arch     |             reason             |                                       url
-> -------------+--------------------------------+---------------------------------------------------------------------------------
-[...]
->      arc      |        gr-osmosdr-0.2.0        | http://autobuild.buildroot.net/results/124fc9515440e6a3399387345d501283c5526dd5
->    riscv64    |        gr-osmosdr-0.2.0        | http://autobuild.buildroot.net/results/721eb4da402a85155c6bb4a334ed344c9fc34593
->      arm      |        gr-osmosdr-0.2.0        | http://autobuild.buildroot.net/results/91820e11fb987ad5800145d79a5e784e0ae11fb9
->      arm      |        gr-osmosdr-0.2.0        | http://autobuild.buildroot.net/results/9aa895562b6bd962ddf013d2ace30516c0f2faea
->     mipsel    |        gr-osmosdr-0.2.0        | http://autobuild.buildroot.net/results/a00a5f078da3b15e9769edd1b0ed48453bd63473
->     xtensa    |        gr-osmosdr-0.2.0        | http://autobuild.buildroot.net/results/b87b184a870ed664d7d3d0186f22c91cabb10556
->      arm      |        gr-osmosdr-0.2.0        | http://autobuild.buildroot.net/results/fcec6cae0c381aec07ab6e798856c4445b7e1b0b
->      mips     |        gr-osmosdr-0.2.0        | http://autobuild.buildroot.net/results/ea9a7dfd30395812bb48ef66e7b9c4174a425d10
-[...]
+If not there is an issue with the defconfig.
 
-I've done some cross test to fix these issue:
-- without cmake in the host, cmake(3.15) is provided by buildroot: OK
-- with cmake < 3.10, same: OK
-- with cmake 3.13: KO
-- with cmake 3.16: OK
+This script will be used in .gitlab-ci.yml.
 
-I suspect a problem in FindBoost.cmake for cmake version < 3.13 (3.14)
+Inspired by is_toolchain_usable() function from genrandconfig:
+https://git.busybox.net/buildroot/tree/utils/genrandconfig?h=2020.02#n164
 
-What is the best way? Doing a workaround in gr-osmosdr or changing 
-BR2_CMAKE_VERSION_MIN for 3.14 in
-support/dependencies/check-host-cmake.mk
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/check-dotconfig.py | 37 ++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100755 support/scripts/check-dotconfig.py
 
-I suppose if this issue impact gr-osmosdr, some others packages may have 
-the same problem.
-
-Thank you
-Gwen
+diff --git a/support/scripts/check-dotconfig.py b/support/scripts/check-dotconfig.py
+new file mode 100755
+index 0000000000..9e60810c1d
+--- /dev/null
++++ b/support/scripts/check-dotconfig.py
+@@ -0,0 +1,37 @@
++#!/usr/bin/env python3
++
++# This script check if the .config is contains all lines present in the defconfig.
++
++import sys
++
++
++def main():
++    if not (len(sys.argv) == 3):
++        print("Error: incorrect number of arguments")
++        print("""Usage: check-dotconfig <configfile> <defconfig>""")
++        sys.exit(1)
++
++    configfile = sys.argv[1]
++    defconfig = sys.argv[2]
++
++    with open(configfile) as configf:
++        configlines = configf.readlines()
++
++    defconfiglines = []
++    with open(defconfig) as defconfigf:
++        for line in defconfigf.readlines():
++            if line.startswith("BR2_"):
++                defconfiglines.append(line)
++
++    # Check that all the defconfig lines are still present
++    for defconfigline in defconfiglines:
++        if defconfigline not in configlines:
++            print("WARN: defconfig can't be used\n")
++            print("      Missing: %s\n" % defconfigline.strip())
++            return False
++
++    return True
++
++
++if __name__ == "__main__":
++    main()
+-- 
+2.25.3
