@@ -1,53 +1,51 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 20 Apr 2020 11:17:57 +0200
-Subject: [Buildroot] [PATCH 2/2] gitlab-ci: check generated config files
-In-Reply-To: <20200420091757.2931721-1-romain.naour@gmail.com>
-References: <20200420091757.2931721-1-romain.naour@gmail.com>
-Message-ID: <20200420091757.2931721-2-romain.naour@gmail.com>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Mon, 20 Apr 2020 11:11:45 +0200
+Subject: [Buildroot] [PATCH] package/modem-manager: use libqmi and
+ libmbim if they are selected
+In-Reply-To: <20200419230056.7df2d309@windsurf.home>
+References: <20191104124844.8112-1-unixmania@gmail.com>
+ <20200419230056.7df2d309@windsurf.home>
+Message-ID: <CAAP7ucJXDvXxAjDKYLxTiBhakitTv7ri4yi0b4sT8qZJg=LCaw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the script added by the previous patch to check
-generated config files.
+Hey Thomas,
 
-Tested on gitlab:
-https://gitlab.com/kubu93/buildroot/pipelines/137597966
+>
+> However, I would suggest to take a simpler approach:
+>
+>  - Keep the BR2_PACKAGE_MODEM_MANAGER_LIBMBIM and
+>    BR2_PACKAGE_MODEM_MANAGER_LIBQMI options.
+>
+>  - Change modem-manager.mk to test BR2_PACKAGE_LIBMBIM and
+>    BR2_PACKAGE_QMI instead of BR2_PACKAGE_MODEM_MANAGER_LIBMBIM and
+>    BR2_PACKAGE_MODEM_MANAGER_LIBQMI.
+>
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-No particular issues was found on existing defconfigs.
----
- .gitlab-ci.yml    | 1 +
- .gitlab-ci.yml.in | 1 +
- 2 files changed, 2 insertions(+)
+I'm not sure what you mean with the above paragraph. What do you mean
+with e.g. "testing" BR2_PACKAGE_LIBMBIM instead of
+BR2_PACKAGE_:MODEM_MANAGER_LIBMBIM?
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index fa8e077a07..0d06a1b7cf 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -47,6 +47,7 @@ check-package:
-     script:
-         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-         - make ${DEFCONFIG_NAME}
-+        - ./support/scripts/check-dotconfig.py .config ./configs/${DEFCONFIG_NAME}
-         - echo 'Build buildroot'
-         - |
-             make > >(tee build.log |grep '>>>') 2>&1 || {
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index 6b09730a65..413c6d2956 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -47,6 +47,7 @@ check-package:
-     script:
-         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-         - make ${DEFCONFIG_NAME}
-+        - ./support/scripts/check-dotconfig.py .config ./configs/${DEFCONFIG_NAME}
-         - echo 'Build buildroot'
-         - |
-             make > >(tee build.log |grep '>>>') 2>&1 || {
+> Also, as was pointed out during the discussion, it would be good to
+> change the network-manager package to not force the modem-manager
+> MBIM/QMI support when modem-manager support is enabled. I.e, remove the
+> following lines:
+>
+>         select BR2_PACKAGE_MODEM_MANAGER_LIBMBIM
+>         select BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+>
+> from package/network-manager/Config.in
+>
+
+I agree with this change in NM, I'll send a patch for that. But is it
+just removing those lines? Ideally, MBIM and QMI (and QMI over MBIM)
+support should be "the default" when building MM, and the users can
+disable them explicitly if not required. I'm not sure how to handle
+that in buildroot, truth be told.
+
 -- 
-2.25.3
+Aleksander
+https://aleksander.es
