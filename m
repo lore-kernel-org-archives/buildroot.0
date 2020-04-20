@@ -1,52 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Apr 2020 07:16:23 +0200
-Subject: [Buildroot] [PATCH v3,
- 3/6] package/collectd: add DPDK_TELEMETRY option
-In-Reply-To: <20200419211456.GD5035@scaer>
-References: <20200415063008.2237470-1-fontaine.fabrice@gmail.com>
- <20200415063008.2237470-3-fontaine.fabrice@gmail.com>
- <20200419211456.GD5035@scaer>
-Message-ID: <20200420071623.307504f7@windsurf.home>
+Date: Mon, 20 Apr 2020 07:18:07 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: remove Rhys Willians from
+ lirc-tools
+Message-ID: <20200420050440.BB47C8F37C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 19 Apr 2020 23:14:56 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=45e8a699a94e1f622484de4e2a8d4c9e443653e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > @@ -186,6 +188,9 @@ COLLECTD_DEPENDENCIES = \
-> >  ifeq ($(BR2_PACKAGE_GRPC),y)
-> >  COLLECTD_CONF_OPTS += --with-libgrpc++=$(STAGING_DIR)/usr
-> >  endif
-> > +ifeq ($(BR2_PACKAGE_JANSSON),y)
-> > +COLLECTD_CONF_OPTS += --with-libjansson=$(STAGING_DIR)/usr
-> > +endif  
-> 
-> This code is bugging me: it decorelates the --enable/disable options,
-> the dependencies and the --with option.
-> 
-> With this patch, this means that is jansoon is enabled, but DPDK
-> telemetry is not, then we still pass --with-libjansson.
+Rhys has asked through private e-mail to be removed:
 
-If libjansson is only detected/used when --enable-dpdk-telemetry is
-passed, then I agree with you.
+==
+Please can I be removed as the developer, as I???m not longer involved.
 
-> I think the $(if blabla,--enable-bla,--disable-bla) construct should be
-> limited to thos options that do not require a dependency or another
-> --with option. If it does, then we should revert to using the
-> traditional conditional block:
+Cheers Rhys
+==
 
-I agree that I don't like how collectd.mk is written today. I very much
-prefer each option to be handled in one place, like you illustrated
-below, rather than handling separately the <pkg>_DEPENDENCIES part and
-the <pkg>_CONF_OPTS part.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0360dbc769..0e83844a26 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2166,9 +2166,6 @@ F:	package/libfreeimage/
+ N:	Renaud Aubin <root@renaud.io>
+ F:	package/libhttpparser/
+ 
+-N:	Rhys Williams <github@wilberforce.co.nz>
+-F:	package/lirc-tools/
+-
+ N:	Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+ F:	package/atop/
+ F:	package/thermald/
