@@ -1,136 +1,99 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Mon, 20 Apr 2020 17:56:40 -0500
-Subject: [Buildroot] [PATCH 8/8] package/mongodb: bump to version 4.2.4
-In-Reply-To: <20200323104909.16765-8-yegorslists@googlemail.com>
-References: <20200323104909.16765-1-yegorslists@googlemail.com>
- <20200323104909.16765-8-yegorslists@googlemail.com>
-Message-ID: <CAMQcK5L+D_aONSbczyJOtU0TOmUeOMNM-4Raq+Oqgg6_9h3PDQ@mail.gmail.com>
+From: Mark Huang <mark.huang@cerebras.net>
+Date: Mon, 20 Apr 2020 22:04:02 +0000
+Subject: [Buildroot] [PATCH 1/1] package/fakedate: Skip other fakedates
+ in PATH
+In-Reply-To: <20200420211724.GM5035@scaer>
+References: <E260DE97-5F54-42B7-96EB-80FFABAD9775@cerebras.net>
+ <20200420211724.GM5035@scaer>
+Message-ID: <9E3D68DB-99B2-433F-8F19-75C06F162336@cerebras.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor/All,
+Hi Yann,
 
-On Mon, Mar 23, 2020 at 5:54 AM <yegorslists@googlemail.com> wrote:
->
-> From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> - Drop !BR2_PACKAGE_PYTHON3 dependency as SConstruct requires
->   host-python3 since version 4.1.10 and:
->   https://github.com/mongodb/mongo/commit/8dd6d4755734ed37c1b98dfdefce3ca6bc65f1f6
-> - host-python-psutil is needed since 4.1.8 and
->   https://github.com/mongodb/mongo/commit/ff03811e31851984617d73739de8acc7640b19a2
-> - Drop unneeded host-python-typing dependency
-> - C++17 and so gcc 7 is required since 4.1.8 and
->   https://github.com/mongodb/mongo/commit/01d84b2565fc9ea9626a55dcf1f3f817968088f2
-> - Set --disable-minimum-compiler-version-enforcement as mongodb enforces
->   gcc >= 8.2 since verson 4.1.8 and
->   https://github.com/mongodb/mongo/commit/9ac90b128ebeb1bb431ebe3fe9176cb6142818cb
-> - Explictly disable ssl if needed as ssl is enabled by default
-> - Add host-python-cheetah dependency if needed
-> - Manage new http-client option added in version 4.1.2 and
->   https://github.com/mongodb/mongo/commit/4d7dcca91bc2bbde65843fe88c41fa040e0d1877
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> [Titouan: Fix patch conflicts with master]
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/mongodb/Config.in    |  8 +++-----
->  package/mongodb/mongodb.hash |  2 +-
->  package/mongodb/mongodb.mk   | 27 ++++++++++++++++++---------
->  3 files changed, 22 insertions(+), 15 deletions(-)
+Thanks for taking the time to review.
 
-I've run into an error when compiling for an x86-64 bit platform for
-the core-i5 architecture:
+I actually tried an approach similar to your suggestion earlier. It works, but only if all of the fakedate copies agree on the algorithm, i.e. are fixed. I have a few production SDKs for various platforms in my PATH, some from older versions of buildroot. It will be a while until I can deprecate all of those SDKs out of my PATH. Until then, I can at least re-order the SDKs in my PATH such that the first one has a fixed fakedate. If fakedate doesn't try to recurse at all; i.e. if it just tries to find /usr/bin/date from the get go; then it will be more backward-compatible with the others. I considered a couple of other options as well:
 
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(node_data.cpp.o):
-relocation R_X86_64_32 against `.bss' can not be used when making a
-PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(null.cpp.o):
-relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
-making a PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(ostream_wrapper.cpp.o):
-relocation R_X86_64_32 against `.bss' can not be used when making a
-PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(parse.cpp.o):
-relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
-making a PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(parser.cpp.o):
-relocation R_X86_64_32 against `.bss' can not be used when making a
-PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(regex_yaml.cpp.o):
-relocation R_X86_64_32 against `.bss' can not be used when making a
-PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(scanner.cpp.o):
-relocation R_X86_64_32 against `.bss' can not be used when making a
-PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(scantoken.cpp.o):
-relocation R_X86_64_32 against `.bss' can not be used when making a
-PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(simplekey.cpp.o):
-relocation R_X86_64_32 against `.bss' can not be used when making a
-PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(singledocparser.cpp.o):
-relocation R_X86_64_32 against `.bss' can not be used when making a
-PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(stream.cpp.o):
-relocation R_X86_64_32 against `.data' can not be used when making a
-PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(tag.cpp.o):
-relocation R_X86_64_32 against `.bss' can not be used when making a
-PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(binary.cpp.o):
-relocation R_X86_64_32S against `.rodata' can not be used when making
-a PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(directives.cpp.o):
-relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
-making a PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(nodebuilder.cpp.o):
-relocation R_X86_64_32S against symbol `_ZTVN4YAML11NodeBuilderE' can
-not be used when making a PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(scanscalar.cpp.o):
-relocation R_X86_64_32 against symbol `_ZGVZN4YAML3Exp5EmptyEvE1e' can
-not be used when making a PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(scantag.cpp.o):
-relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
-making a PIE object; recompile with -fPIC
-/tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-/tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(exp.cpp.o):
-relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
-making a PIE object; recompile with -fPIC
-/accts
+1. Calling file(1) to see if $P/date is application/x-executable. Probably the most robust, but depends on file(1).
+2. Installing fakedate as fakedate and date as a symlink to it, and checking to see if $P/date is a symlink to fakedate. The clearest and most future-compatible solution, but the same problem as above (not backward-compatible).
 
-Do you have any ideas of what the issue is?
+I decided that grepping for SOURCE_DATE_EPOCH was simpler.
 
-I have BR2_SHARED_LIBS set along with using the latest stable bootlin
-toolchain for x86-64-core-i7 toolchain:
+I would also accept that having multiple buildroot SDKs in your PATH is not a valid use case, and could just maintain this patch in my own fork.
 
-https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--stable-2020.02-2.tar.bz2
+Thanks again,
 
-Please let me know if you need any more information in order to
-recreate the problem.
+--Mark
 
-[...]
+?On 4/20/20, 2:17 PM, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Thanks,
--Ryan
+    Mark, All,
+    
+    On 2020-04-20 18:56 +0000, Mark Huang spake thusly:
+    > If multiple buildroot SDKs are in PATH before /usr/bin (usually accidentally,
+    > but there may be some valid use cases for this), the first two copies of
+    > fakedate will go into a loop calling each other without ever finding
+    > /usr/bin/date. Grep for SOURCE_DATE_EPOCH in the candidate date binary, for
+    > additional verification that it's not another copy of fakedate.
+    > 
+    > Signed-off-by: Mark Huang <mark.huang@cerebras.net>
+    > ---
+    >  package/fakedate/fakedate | 2 +-
+    >  1 file changed, 1 insertion(+), 1 deletion(-)
+    > 
+    > diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
+    > index a64d9b9..7b04568 100755
+    > --- a/package/fakedate/fakedate
+    > +++ b/package/fakedate/fakedate
+    > @@ -23,7 +23,7 @@ DATE_BIN=false
+    >  # Instead, find path of true `date' binary.
+    >  for P in `echo $PATH | tr ':' ' '`; do
+    >      if [ -x "$P/date" ]; then
+    > -        if ! [ "$P/date" -ef "$0" ]; then
+    > +        if ! [ "$P/date" -ef "$0" ] && ! grep -q SOURCE_DATE_EPOCH "$P/date" ; then
+    
+    Thanks for this patch. I don't think this to be reliable enough, though.
+    
+    Instead, what you want is iterate over PATH until you find ${0}, and
+    then take the next 'date' that matches, something like (to be tested!):
+    
+        # Find the 'date' executable that comes *after* us in PATH, to avoid
+        # inifinite recursion:
+        found_self=false
+        for P in `echo $PATH | tr ':' ' '`; do
+            if [ -x "$P/date"]; then
+                ${found_self} && { DATE_BIN="$P/date"; break; }
+                [ "$P/date" -ef "$0" ] && found_self=true
+            fi
+        done
+    
+    Can you lok into tht, and respin, please? In the meantime, I've marked
+    the patch as chagnes requested in patchwork.
+    
+    Regards,
+    Yann E. MORIN.
+    
+    >              DATE_BIN="$P/date"
+    >              break;
+    >          fi
+    > --
+    > 1.8.3.1
+    > 
+    > 
+    > _______________________________________________
+    > buildroot mailing list
+    > buildroot at busybox.net
+    > http://lists.busybox.net/mailman/listinfo/buildroot
+    
+    -- 
+    .-----------------.--------------------.------------------.--------------------.
+    |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+    | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+    | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+    | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+    '------------------------------^-------^------------------^--------------------'
+    
