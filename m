@@ -1,30 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Apr 2020 07:53:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apcupsd: disable docs
-In-Reply-To: <20200419224009.27450-1-james.hilliard1@gmail.com>
-References: <20200419224009.27450-1-james.hilliard1@gmail.com>
-Message-ID: <20200420075311.04788a6b@windsurf.home>
+Date: Mon, 20 Apr 2020 07:53:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-pyasn: remove duplicate
+ package
+In-Reply-To: <20200419224719.28092-1-james.hilliard1@gmail.com>
+References: <20200419224719.28092-1-james.hilliard1@gmail.com>
+Message-ID: <20200420075315.39ee26d3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 19 Apr 2020 16:40:09 -0600
+On Sun, 19 Apr 2020 16:47:19 -0600
 James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> We can skip building docs by only running make against subdirs that are
-> not "doc".
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/e65/e65c23c3c1cae9aa9d697323fabf8a6f310fc3ba/build-end.log
+> This is a duplicate of python-pyasn1.
 > 
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/apcupsd/apcupsd.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  Config.in.legacy                       |  7 +++++++
+>  DEVELOPERS                             |  1 -
+>  package/Config.in                      |  1 -
+>  package/python-pyasn/Config.in         | 14 --------------
+>  package/python-pyasn/python-pyasn.hash |  6 ------
+>  package/python-pyasn/python-pyasn.mk   | 14 --------------
+>  6 files changed, 7 insertions(+), 36 deletions(-)
+>  delete mode 100644 package/python-pyasn/Config.in
+>  delete mode 100644 package/python-pyasn/python-pyasn.hash
+>  delete mode 100644 package/python-pyasn/python-pyasn.mk
 
-Applied, thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
