@@ -1,40 +1,192 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Apr 2020 16:23:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stella: fix legal-info
-Message-ID: <20200420142309.549296-1-fontaine.fabrice@gmail.com>
+Date: Mon, 20 Apr 2020 16:45:35 +0200
+Subject: [Buildroot] [PATCH v3,1/2] package/daq3: new package
+Message-ID: <20200420144536.708646-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit a7210c24e343a13e58d1d45b7e0c4bdb51854857 forgot to update hash of
-Copyright which has changed due to update in year:
+Add daq3 package to be able to add the snort3 package.
 
-https://github.com/stella-emu/stella/commit/275666b0af3e029b44be7e676526b8172da44736
-https://github.com/stella-emu/stella/commit/9ad47ae5f3457693944a3754432ff1236c67203c
+snort3 has an official dependency on daq 2.2.2 but this version is two
+years old so it seems more reasonable to add a daq3 package instead of
+a daq22 package.
 
-While at it, update indentation of hash file to two spaces
+daq3 (and daq 2.2.x) is not compatatible with snort as daq_load_modules
+has been removed from daq 2.2.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/38fa47221f36f3db603ee54c86b9747b0c6ca5d7
+daq3 package has been created from the daq package, here is a summary of
+the changes:
+- Drop patch (not needed anymore)
+- Enable parallel build as there is no more tokdefs.h
+- Drop libdnet dependency
+- Drop host-bison and host-flex dependencies
+- Drop libpcap workarounds
+- ipq module dropped since version 3.0.0-alpha1 and
+  https://github.com/snort3/libdaq/commit/80c62799a936118c80894bf91f396c8aa8ba45a6
+- Add LICENSE file (same content than COPYING)
+- Update hash of COPYING (project name and GPLv2 text updated with
+  https://github.com/snort3/libdaq/commit/46e8722da230082a5728175270ea3c04432d1af0)
+- Add a dependency on gcc 4.9 for {t,u}h_{d,s}port that are protected on
+  glibc by _FAVOR_BSD (and so !defined _GNU_SOURCE) until version 2.19:
+  https://sourceware.org/git/?p=glibc.git;a=commit;h=7011c2622fe3e10a29dbe74f06aaebd07710127d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/stella/stella.hash | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes v2 -> v3 (after review of Heiko Thiery):
+ - Bump to latest upstream version (and so drop second patch)
+ - Update indentation of hash file to two spaces)
+ - Fix first patch
 
-diff --git a/package/stella/stella.hash b/package/stella/stella.hash
-index dcc56aadf6..fb7c598a2c 100644
---- a/package/stella/stella.hash
-+++ b/package/stella/stella.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 ddf53bb782c63c97c4e5d0fefa9eb256c62e0d5a328c78cc18f06eea45ba7369  stella-6.1.1-src.tar.xz
--sha256 062e708b8b88ea911b5c08000f1c4a5588235aa0c303bc893b5d92fb45cafd04  Copyright.txt
--sha256 58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
-+sha256  ddf53bb782c63c97c4e5d0fefa9eb256c62e0d5a328c78cc18f06eea45ba7369  stella-6.1.1-src.tar.xz
-+sha256  d207ee9e563fdd062582df8cbb6c8303b9879bd107692c0db2a32477e47dfa35  Copyright.txt
-+sha256  58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...0001-configure.ac-make-C-11-optional.patch | 38 +++++++++++++++++++
+ package/daq3/Config.in                        | 14 +++++++
+ package/daq3/daq3.hash                        |  6 +++
+ package/daq3/daq3.mk                          | 30 +++++++++++++++
+ 6 files changed, 90 insertions(+)
+ create mode 100644 package/daq3/0001-configure.ac-make-C-11-optional.patch
+ create mode 100644 package/daq3/Config.in
+ create mode 100644 package/daq3/daq3.hash
+ create mode 100644 package/daq3/daq3.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b64ad3854f..fdc6632a45 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -849,6 +849,7 @@ F:	package/belle-sip/
+ F:	package/belr/
+ F:	package/boinc/
+ F:	package/cairo/
++F:	package/daq3/
+ F:	package/duktape/
+ F:	package/expat/
+ F:	package/flatbuffers/
+diff --git a/package/Config.in b/package/Config.in
+index a9c6f6fcbc..bbeafb0e92 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1651,6 +1651,7 @@ menu "Networking"
+ 	source "package/curlpp/Config.in"
+ 	source "package/czmq/Config.in"
+ 	source "package/daq/Config.in"
++	source "package/daq3/Config.in"
+ 	source "package/davici/Config.in"
+ 	source "package/enet/Config.in"
+ 	source "package/filemq/Config.in"
+diff --git a/package/daq3/0001-configure.ac-make-C-11-optional.patch b/package/daq3/0001-configure.ac-make-C-11-optional.patch
+new file mode 100644
+index 0000000000..eae3a30eed
+--- /dev/null
++++ b/package/daq3/0001-configure.ac-make-C-11-optional.patch
+@@ -0,0 +1,38 @@
++From b4008beada22d705d8a9aa5486b68789c31b139c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 27 Jan 2020 13:44:15 +0100
++Subject: [PATCH] configure.ac: make C++11 optional
++
++C++11 is optional otherwise build without C++ will fail on:
++checking whether no supports C++11 features with -std=gnu++11... no
++checking whether no supports C++11 features with -std=gnu++0x... no
++checking whether no supports C++11 features with -std=c++11... no
++checking whether no supports C++11 features with +std=c++11... no
++checking whether no supports C++11 features with -h std=c++11... no
++checking whether no supports C++11 features with -std=c++0x... no
++checking whether no supports C++11 features with +std=c++0x... no
++checking whether no supports C++11 features with -h std=c++0x... no
++configure: error: *** A compiler with support for C++11 language features is required.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent yet]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 2b7d67d..0add302 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -29,7 +29,7 @@ AC_PROG_CXX
++ AM_PROG_AR
++ AC_PROG_SED
++ 
++-AX_CXX_COMPILE_STDCXX_11
+++AX_CXX_COMPILE_STDCXX_11(,optional)
++ 
++ LT_INIT
++ 
++-- 
++2.24.1
++
+diff --git a/package/daq3/Config.in b/package/daq3/Config.in
+new file mode 100644
+index 0000000000..ad7d55db5b
+--- /dev/null
++++ b/package/daq3/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_DAQ3
++	bool "daq3"
++	depends on !BR2_PACKAGE_DAQ
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	help
++	  DAQ is a Data Acquisition library for packet I/O from the
++	  Snort project.
++
++	  https://www.snort.org
++
++comment "daq3 needs a toolchain w/ dynamic library, gcc >= 4.9"
++	depends on !BR2_PACKAGE_DAQ
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/daq3/daq3.hash b/package/daq3/daq3.hash
+new file mode 100644
+index 0000000000..51842dccbd
+--- /dev/null
++++ b/package/daq3/daq3.hash
+@@ -0,0 +1,6 @@
++# Locally computed:
++sha256  7e5bb5487b774324156770b3505a9aa932c3fcf03d4a9aa905d286d2a71f996a  daq3-3.0.0-alpha4.tar.gz
++
++# Hash for license files:
++sha256  64601289158eddad72cb4de72652f9e64dc886942c910b38ddee93ba13b0db26  COPYING
++sha256  64601289158eddad72cb4de72652f9e64dc886942c910b38ddee93ba13b0db26  LICENSE
+diff --git a/package/daq3/daq3.mk b/package/daq3/daq3.mk
+new file mode 100644
+index 0000000000..c4356ce2b7
+--- /dev/null
++++ b/package/daq3/daq3.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# daq3
++#
++################################################################################
++
++DAQ3_VERSION = 3.0.0-alpha4
++DAQ3_SITE = $(call github,snort3,libdaq,v$(DAQ3_VERSION))
++DAQ3_LICENSE = GPL-2.0
++DAQ3_LICENSE_FILES = COPYING LICENSE
++DAQ3_INSTALL_STAGING = YES
++DAQ3_DEPENDENCIES = host-pkgconf
++# From git
++DAQ3_AUTORECONF = YES
++
++ifeq ($(BR2_PACKAGE_LIBNETFILTER_QUEUE),y)
++DAQ3_DEPENDENCIES += libnetfilter_queue
++DAQ3_CONF_OPTS += --enable-nfq-module
++else
++DAQ3_CONF_OPTS += --disable-nfq-module
++endif
++
++ifeq ($(BR2_PACKAGE_LIBPCAP),y)
++DAQ3_DEPENDENCIES += libpcap
++DAQ3_CONF_OPTS += --enable-pcap-module
++else
++DAQ3_CONF_OPTS += --disable-pcap-module
++endif
++
++$(eval $(autotools-package))
 -- 
 2.25.1
