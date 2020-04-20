@@ -1,194 +1,279 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Apr 2020 09:52:54 +0200
-Subject: [Buildroot] [git commit] package/libapparmor: enable python bindings
-Message-ID: <20200420075435.7EAC08F447@busybox.osuosl.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 20 Apr 2020 10:19:08 +0200
+Subject: [Buildroot] [PATCH v2,1/2] package/daq3: new package
+In-Reply-To: <20200129210543.244766-1-fontaine.fabrice@gmail.com>
+References: <20200129210543.244766-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAEyMn7bMiWYF4Bd6XFcyVo0qAp_stbzhPKidt8gXdmCx8NH9Vg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01a82c14012370a3bdff15e6bd761acc10fd79f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Fabrice,
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-[yann.morin.1998 at free.fr: split off into its own patch]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- ...n_devel-fixing-for-crosscompiling-environ.patch | 96 ++++++++++++++++++++++
- ...-fixing-setup.py-call-when-crosscompiling.patch | 30 +++++++
- package/libapparmor/libapparmor.mk                 | 17 +++-
- 3 files changed, 141 insertions(+), 2 deletions(-)
+just tested the package all available passed.
 
-diff --git a/package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch b/package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch
-new file mode 100644
-index 0000000000..7b902d5970
---- /dev/null
-+++ b/package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch
-@@ -0,0 +1,96 @@
-+From 235ce271f3fee53b918317ebb73a47b3c6a7ae03 Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo@amarulasolutions.com>
-+Date: Tue, 24 Mar 2020 22:53:37 +0100
-+Subject: [PATCH] m4: ac_python_devel: fixing for crosscompiling environments
-+
-+In a crosscompiling environment it's common to have a python executable
-+running for the host system with a python-config reporting the host
-+configuration and a second python-config reporting the target configuration.
-+In such cases, relying on the default oython-config is wrong and breaks
-+the cross compilation.
-+
-+This patch adds a PYTHON_CONFIG variable that can be pointed to the second
-+python-config and fixes the rest of the m4 accordingly.
-+
-+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-+---
-+ libraries/libapparmor/m4/ac_python_devel.m4 | 25 ++++++++++++++++-----
-+ 1 file changed, 19 insertions(+), 6 deletions(-)
-+
-+diff --git a/libraries/libapparmor/m4/ac_python_devel.m4 b/libraries/libapparmor/m4/ac_python_devel.m4
-+index 2ea7dc77..6454e2d8 100644
-+--- a/libraries/libapparmor/m4/ac_python_devel.m4
-++++ b/libraries/libapparmor/m4/ac_python_devel.m4
-+@@ -13,6 +13,11 @@ AC_DEFUN([AC_PYTHON_DEVEL],[
-+            PYTHON_VERSION=""
-+         fi
-+ 
-++        AC_PATH_PROG([PYTHON_CONFIG],[`basename [$PYTHON]-config`])
-++        if test -z "$PYTHON_CONFIG"; then
-++           AC_MSG_ERROR([Cannot find python$PYTHON_VERSION-config in your system path])
-++        fi
-++
-+         #
-+         # Check for a version of Python >= 2.1.0
-+         #
-+@@ -79,8 +84,8 @@ $ac_distutils_result])
-+         # Check for Python include path
-+         #
-+         AC_MSG_CHECKING([for Python include path])
-+-        if type $PYTHON-config; then
-+-                PYTHON_CPPFLAGS=`$PYTHON-config --includes`
-++        if type $PYTHON_CONFIG; then
-++                PYTHON_CPPFLAGS=`$PYTHON_CONFIG --includes`
-+         fi
-+         if test -z "$PYTHON_CPPFLAGS"; then
-+                 python_path=`$PYTHON -c "import sys; import distutils.sysconfig;\
-+@@ -97,8 +102,8 @@ sys.stdout.write('%s\n' % distutils.sysconfig.get_python_inc());"`
-+         # Check for Python library path
-+         #
-+         AC_MSG_CHECKING([for Python library path])
-+-        if type $PYTHON-config; then
-+-                PYTHON_LDFLAGS=`$PYTHON-config --ldflags`
-++        if type $PYTHON_CONFIG; then
-++                PYTHON_LDFLAGS=`$PYTHON_CONFIG --ldflags`
-+         fi
-+         if test -z "$PYTHON_LDFLAGS"; then
-+                 # (makes two attempts to ensure we've got a version number
-+@@ -136,10 +141,14 @@ sys.stdout.write('%s\n' % distutils.sysconfig.get_python_lib(0,0));"`
-+         # libraries which must be linked in when embedding
-+         #
-+         AC_MSG_CHECKING(python extra libraries)
-++        if type $PYTHON_CONFIG; then
-++                PYTHON_EXTRA_LIBS=`$PYTHON_CONFIG --libs --embed` || \
-++                        PYTHON_EXTRA_LIBS=''
-++        fi
-+         if test -z "$PYTHON_EXTRA_LIBS"; then
-+            PYTHON_EXTRA_LIBS=`$PYTHON -c "import sys; import distutils.sysconfig; \
-+ conf = distutils.sysconfig.get_config_var; \
-+-sys.stdout.write('%s %s\n' % (conf('LOCALMODLIBS'), conf('LIBS')))"`
-++sys.stdout.write('%s %s %s\n' % (conf('BLDLIBRARY'), conf('LOCALMODLIBS'), conf('LIBS')))"`
-+         fi
-+         AC_MSG_RESULT([$PYTHON_EXTRA_LIBS])
-+         AC_SUBST(PYTHON_EXTRA_LIBS)
-+@@ -148,6 +157,10 @@ sys.stdout.write('%s %s\n' % (conf('LOCALMODLIBS'), conf('LIBS')))"`
-+         # linking flags needed when embedding
-+         #
-+         AC_MSG_CHECKING(python extra linking flags)
-++        if type $PYTHON_CONFIG; then
-++                PYTHON_EXTRA_LDFLAGS=`$PYTHON_CONFIG --ldflags --embed` || \
-++                        PYTHON_EXTRA_LDFLAGS=''
-++        fi
-+         if test -z "$PYTHON_EXTRA_LDFLAGS"; then
-+                 PYTHON_EXTRA_LDFLAGS=`$PYTHON -c "import sys; import distutils.sysconfig; \
-+ conf = distutils.sysconfig.get_config_var; \
-+@@ -164,7 +177,7 @@ sys.stdout.write('%s\n' % conf('LINKFORSHARED'))"`
-+         # save current global flags
-+         ac_save_LIBS="$LIBS"
-+         ac_save_CPPFLAGS="$CPPFLAGS"
-+-        LIBS="$ac_save_LIBS $PYTHON_LDFLAGS"
-++        LIBS="$ac_save_LIBS $PYTHON_EXTRA_LIBS $PYTHON_LDFLAGS"
-+         CPPFLAGS="$ac_save_CPPFLAGS $PYTHON_CPPFLAGS"
-+         AC_TRY_LINK([
-+                 #include <Python.h>
-+-- 
-+2.17.1
-+
-diff --git a/package/libapparmor/0002-libapparmor-fixing-setup.py-call-when-crosscompiling.patch b/package/libapparmor/0002-libapparmor-fixing-setup.py-call-when-crosscompiling.patch
-new file mode 100644
-index 0000000000..8d6ca86e47
---- /dev/null
-+++ b/package/libapparmor/0002-libapparmor-fixing-setup.py-call-when-crosscompiling.patch
-@@ -0,0 +1,30 @@
-+From cf61d1257b9a5f12fdf6f4dd6a2746f77b23a8a0 Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo@amarulasolutions.com>
-+Date: Tue, 24 Mar 2020 23:02:08 +0100
-+Subject: [PATCH] libapparmor: fixing setup.py call when crosscompiling
-+
-+When crosscompiling, setupy.py should be called passing the settings
-+discovered by ac_python_devel.m4 and not using the default system
-+settings.
-+
-+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-+---
-+ libraries/libapparmor/swig/python/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libraries/libapparmor/swig/python/Makefile.am b/libraries/libapparmor/swig/python/Makefile.am
-+index 421acba9..6c60181e 100644
-+--- a/libraries/libapparmor/swig/python/Makefile.am
-++++ b/libraries/libapparmor/swig/python/Makefile.am
-+@@ -11,7 +11,7 @@ MOSTLYCLEANFILES=libapparmor_wrap.c LibAppArmor.py
-+ 
-+ all-local: libapparmor_wrap.c setup.py
-+ 	if test ! -f libapparmor_wrap.c; then cp $(srcdir)/libapparmor_wrap.c . ; fi
-+-	$(PYTHON) setup.py build
-++	CC="$(CC)" CFLAGS="$(PYTHON_CPPFLAGS)" LDSHARED="$(CC) -shared" LDFLAGS="$(PYTHON_LDFLAGS)" $(PYTHON) setup.py build
-+ 
-+ install-exec-local:
-+ 	$(PYTHON) setup.py install --root="/$(DESTDIR)" --prefix="$(prefix)"
-+-- 
-+2.17.1
-+
-diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
-index 483be9d474..188ccc0db5 100644
---- a/package/libapparmor/libapparmor.mk
-+++ b/package/libapparmor/libapparmor.mk
-@@ -15,13 +15,26 @@ LIBAPPARMOR_DEPENDENCIES = host-bison host-flex host-pkgconf
- LIBAPPARMOR_SUBDIR = libraries/libapparmor
- LIBAPPARMOR_INSTALL_STAGING = YES
- 
-+# Patches 0001 and 0002 touch Makefile.am and an m4 file
-+LIBAPPARMOR_AUTORECONF = YES
-+
- # Most AppArmor tools will want to link to the static lib.
- # ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
- # provided by autoconf relies on wchar_t.
- LIBAPPARMOR_CONF_OPTS = \
- 	ac_cv_prog_cc_c99=-std=gnu99 \
- 	--enable-static \
--	--disable-man-pages \
--	--without-python
-+	--disable-man-pages
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+LIBAPPARMOR_DEPENDENCIES += host-python3 host-swig python3
-+LIBAPPARMOR_CONF_OPTS += \
-+	--with-python \
-+	PYTHON=$(HOST_DIR)/usr/bin/python3 \
-+	PYTHON_CONFIG=$(STAGING_DIR)/usr/bin/python3-config \
-+	SWIG=$(SWIG)
-+else
-+LIBAPPARMOR_CONF_OPTS += --without-python
-+endif
- 
- $(eval $(autotools-package))
+# utils/test-pkg -p daq3
+                             br-arm-full [1/6]: OK
+                  br-arm-cortex-a9-glibc [2/6]: OK
+                   br-arm-cortex-m4-full [3/6]: SKIPPED
+                          br-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: SKIPPED
+                            sourcery-arm [6/6]: SKIPPED
+
+One small comment below.
+
+Am Mi., 29. Jan. 2020 um 22:04 Uhr schrieb Fabrice Fontaine
+<fontaine.fabrice@gmail.com>:
+>
+> Add daq3 package to be able to add the snort3 package.
+>
+> snort3 has an official dependency on daq 2.2.2 but this version is two
+> years old so it seems more reasonable to add a daq3 package instead of
+> a daq22 package.
+>
+> daq3 (and daq 2.2.x) is not compatatible with snort as daq_load_modules
+> has been removed from daq 2.2.x
+>
+> daq3 package has been created from the daq package, here is a summary of
+> the changes:
+> - Drop patch (not needed anymore)
+> - Enable parallel build as there is no more tokdefs.h
+> - Drop libdnet dependency
+> - Drop host-bison and host-flex dependencies
+> - Drop libpcap workarounds
+> - ipq module dropped since version 3.0.0-alpha1 and
+>   https://github.com/snort3/libdaq/commit/80c62799a936118c80894bf91f396c8aa8ba45a6
+> - Add LICENSE file (same content than COPYING)
+> - Update hash of COPYING (project name and GPLv2 text updated with
+>   https://github.com/snort3/libdaq/commit/46e8722da230082a5728175270ea3c04432d1af0)
+> - Add a dependency on gcc 4.9 for {t,u}h_{d,s}port that are protected on
+>   glibc by _FAVOR_BSD (and so !defined _GNU_SOURCE) until version 2.19:
+>   https://sourceware.org/git/?p=glibc.git;a=commit;h=7011c2622fe3e10a29dbe74f06aaebd07710127d
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
+
+> ---
+>  DEVELOPERS                                    |  1 +
+>  package/Config.in                             |  1 +
+>  ...0001-configure.ac-make-C-11-optional.patch | 38 ++++++++++++++++++
+>  ...lly-disable-FST-module-if-C-11-is-no.patch | 39 +++++++++++++++++++
+>  package/daq3/Config.in                        | 14 +++++++
+>  package/daq3/daq3.hash                        |  6 +++
+>  package/daq3/daq3.mk                          | 30 ++++++++++++++
+>  7 files changed, 129 insertions(+)
+>  create mode 100644 package/daq3/0001-configure.ac-make-C-11-optional.patch
+>  create mode 100644 package/daq3/0002-configure.ac-really-disable-FST-module-if-C-11-is-no.patch
+>  create mode 100644 package/daq3/Config.in
+>  create mode 100644 package/daq3/daq3.hash
+>  create mode 100644 package/daq3/daq3.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index d5f7bdb8f7..e9cc2442ce 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -823,6 +823,7 @@ F:  package/openzwave/
+>  N:     Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>  F:     package/boinc/
+>  F:     package/cairo/
+> +F:     package/daq3/
+>  F:     package/duktape/
+>  F:     package/expat/
+>  F:     package/flatbuffers/
+> diff --git a/package/Config.in b/package/Config.in
+> index db35848fed..31396650cf 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1617,6 +1617,7 @@ menu "Networking"
+>         source "package/curlpp/Config.in"
+>         source "package/czmq/Config.in"
+>         source "package/daq/Config.in"
+> +       source "package/daq3/Config.in"
+>         source "package/davici/Config.in"
+>         source "package/enet/Config.in"
+>         source "package/filemq/Config.in"
+> diff --git a/package/daq3/0001-configure.ac-make-C-11-optional.patch b/package/daq3/0001-configure.ac-make-C-11-optional.patch
+> new file mode 100644
+> index 0000000000..d8f59326bc
+> --- /dev/null
+> +++ b/package/daq3/0001-configure.ac-make-C-11-optional.patch
+> @@ -0,0 +1,38 @@
+> +From b4008beada22d705d8a9aa5486b68789c31b139c Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Mon, 27 Jan 2020 13:44:15 +0100
+> +Subject: [PATCH 2/2] configure.ac: make C++11 optional
+> +
+> +C++11 is optional otherwise build without C++ will fail on:
+> +checking whether no supports C++11 features with -std=gnu++11... no
+> +checking whether no supports C++11 features with -std=gnu++0x... no
+> +checking whether no supports C++11 features with -std=c++11... no
+> +checking whether no supports C++11 features with +std=c++11... no
+> +checking whether no supports C++11 features with -h std=c++11... no
+> +checking whether no supports C++11 features with -std=c++0x... no
+> +checking whether no supports C++11 features with +std=c++0x... no
+> +checking whether no supports C++11 features with -h std=c++0x... no
+> +configure: error: *** A compiler with support for C++11 language features is required.
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: not sent yet]
+> +---
+> + configure.ac | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 2b7d67d..0add302 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -29,7 +29,7 @@ AC_PROG_CXX
+> + AM_PROG_AR
+> + AC_PROG_SED
+> +
+> +-AX_CXX_COMPILE_STDCXX_11
+> ++AX_CXX_COMPILE_STDCXX_11(,optional)
+> +
+> + LT_INIT
+> +
+> +--
+> +2.24.1
+> +
+> diff --git a/package/daq3/0002-configure.ac-really-disable-FST-module-if-C-11-is-no.patch b/package/daq3/0002-configure.ac-really-disable-FST-module-if-C-11-is-no.patch
+> new file mode 100644
+> index 0000000000..ec84c88ce3
+> --- /dev/null
+> +++ b/package/daq3/0002-configure.ac-really-disable-FST-module-if-C-11-is-no.patch
+> @@ -0,0 +1,39 @@
+> +From 60dd4f4efe447f8df38ef7a5742b849bc23c498a Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Mon, 27 Jan 2020 13:54:28 +0100
+> +Subject: [PATCH 2/2] configure.ac: really disable FST module if C++11 is not
+> + available
+> +
+> +Move AM_CONDITIONAL that set [BUILD_FST_MODULE] after the check for
+> +C++11 otherwise FST will always be enabled and the build will fail
+> +without C++11
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://github.com/snort3/libdaq/pull/6]
+> +---
+> + configure.ac | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index f669875..0634420 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -185,7 +185,6 @@ AM_COND_IF([BUILD_DUMP_MODULE], [AC_CONFIG_FILES([modules/dump/libdaq_static_dum
+> + AC_ARG_ENABLE(fst-module,
+> +               AS_HELP_STRING([--disable-fst-module],[do not build the bundled FST module]),
+> +               [enable_fst_module="$enableval"], [enable_fst_module="$DEFAULT_ENABLE"])
+> +-AM_CONDITIONAL([BUILD_FST_MODULE], [test "$enable_fst_module" = yes])
+> + if test "$enable_fst_module" = yes; then
+> +     if test "$HAVE_CXX11" = 1 ; then
+> +         DAQ_FST_LIBS="-lstdc++"
+> +@@ -200,6 +199,7 @@ if test "$enable_fst_module" = yes; then
+> +         enable_fst_module=no
+> +     fi
+> + fi
+> ++AM_CONDITIONAL([BUILD_FST_MODULE], [test "$enable_fst_module" = yes])
+> + AM_COND_IF([BUILD_FST_MODULE], [AC_CONFIG_FILES([modules/fst/libdaq_static_fst.pc])])
+> +
+> + # Netmap Module
+> +--
+> +2.24.1
+> +
+
+Some small thing:
+
+# utils/check-package package/daq3/*
+package/daq3/0001-configure.ac-make-C-11-optional.patch:4: generate
+your patches with 'git format-patch -N'
+package/daq3/0002-configure.ac-really-disable-FST-module-if-C-11-is-no.patch:4:
+generate your patches with 'git format-patch -N'
+
+
+> diff --git a/package/daq3/Config.in b/package/daq3/Config.in
+> new file mode 100644
+> index 0000000000..ad7d55db5b
+> --- /dev/null
+> +++ b/package/daq3/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_DAQ3
+> +       bool "daq3"
+> +       depends on !BR2_PACKAGE_DAQ
+> +       depends on !BR2_STATIC_LIBS # dlfcn.h
+> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> +       help
+> +         DAQ is a Data Acquisition library for packet I/O from the
+> +         Snort project.
+> +
+> +         https://www.snort.org
+> +
+> +comment "daq3 needs a toolchain w/ dynamic library, gcc >= 4.9"
+> +       depends on !BR2_PACKAGE_DAQ
+> +       depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> diff --git a/package/daq3/daq3.hash b/package/daq3/daq3.hash
+> new file mode 100644
+> index 0000000000..643e1768f6
+> --- /dev/null
+> +++ b/package/daq3/daq3.hash
+> @@ -0,0 +1,6 @@
+> +# Locally computed:
+> +sha256 5a54e804d57b4fa4e31bff331af3d5b96edcd6d45156805843275f6725097e40  daq3-3.0.0-alpha3.tar.gz
+> +
+> +# Hash for license files:
+> +sha256 64601289158eddad72cb4de72652f9e64dc886942c910b38ddee93ba13b0db26  COPYING
+> +sha256 64601289158eddad72cb4de72652f9e64dc886942c910b38ddee93ba13b0db26  LICENSE
+> diff --git a/package/daq3/daq3.mk b/package/daq3/daq3.mk
+> new file mode 100644
+> index 0000000000..0fc4c8aa1b
+> --- /dev/null
+> +++ b/package/daq3/daq3.mk
+> @@ -0,0 +1,30 @@
+> +################################################################################
+> +#
+> +# daq3
+> +#
+> +################################################################################
+> +
+> +DAQ3_VERSION = 3.0.0-alpha3
+
+Newer version (v3.0.0-alpha4) seems to be available upstream with one
+of your patch applied.
+
+> +DAQ3_SITE = $(call github,snort3,libdaq,v$(DAQ3_VERSION))
+> +DAQ3_LICENSE = GPL-2.0
+> +DAQ3_LICENSE_FILES = COPYING LICENSE
+> +DAQ3_INSTALL_STAGING = YES
+> +DAQ3_DEPENDENCIES = host-pkgconf
+> +# From git
+> +DAQ3_AUTORECONF = YES
+> +
+> +ifeq ($(BR2_PACKAGE_LIBNETFILTER_QUEUE),y)
+> +DAQ3_DEPENDENCIES += libnetfilter_queue
+> +DAQ3_CONF_OPTS += --enable-nfq-module
+> +else
+> +DAQ3_CONF_OPTS += --disable-nfq-module
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBPCAP),y)
+> +DAQ3_DEPENDENCIES += libpcap
+> +DAQ3_CONF_OPTS += --enable-pcap-module
+> +else
+> +DAQ3_CONF_OPTS += --disable-pcap-module
+> +endif
+> +
+> +$(eval $(autotools-package))
+> --
+> 2.24.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+--
+BR,
+Heiko
