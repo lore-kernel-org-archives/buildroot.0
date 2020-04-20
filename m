@@ -1,78 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Apr 2020 23:17:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fakedate: Skip other fakedates
- in PATH
-In-Reply-To: <E260DE97-5F54-42B7-96EB-80FFABAD9775@cerebras.net>
-References: <E260DE97-5F54-42B7-96EB-80FFABAD9775@cerebras.net>
-Message-ID: <20200420211724.GM5035@scaer>
+Date: Mon, 20 Apr 2020 23:18:30 +0200
+Subject: [Buildroot] [git commit] package/libselinux: fix glibc build with
+ old toolchains
+Message-ID: <20200420210428.D9C768F4E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=85ed7e7f7a460c78d03edeeeaa3e0271497003c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-20 18:56 +0000, Mark Huang spake thusly:
-> If multiple buildroot SDKs are in PATH before /usr/bin (usually accidentally,
-> but there may be some valid use cases for this), the first two copies of
-> fakedate will go into a loop calling each other without ever finding
-> /usr/bin/date. Grep for SOURCE_DATE_EPOCH in the candidate date binary, for
-> additional verification that it's not another copy of fakedate.
-> 
-> Signed-off-by: Mark Huang <mark.huang@cerebras.net>
-> ---
->  package/fakedate/fakedate | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/fakedate/fakedate b/package/fakedate/fakedate
-> index a64d9b9..7b04568 100755
-> --- a/package/fakedate/fakedate
-> +++ b/package/fakedate/fakedate
-> @@ -23,7 +23,7 @@ DATE_BIN=false
->  # Instead, find path of true `date' binary.
->  for P in `echo $PATH | tr ':' ' '`; do
->      if [ -x "$P/date" ]; then
-> -        if ! [ "$P/date" -ef "$0" ]; then
-> +        if ! [ "$P/date" -ef "$0" ] && ! grep -q SOURCE_DATE_EPOCH "$P/date" ; then
+For an unknown reason, since bump to version 3.0.0, we got build failure
+due to -D_FILE_OFFSET_BITS==64:
 
-Thanks for this patch. I don't think this to be reliable enough, though.
+/home/naourr/work/instance-2/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+ # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+   ^
 
-Instead, what you want is iterate over PATH until you find ${0}, and
-then take the next 'date' that matches, something like (to be tested!):
+Update our workaround to also filter CPPFLAGS fix the issue and seems
+right as we're doing it for all the other affected packages
+(restorecond, elfutils ...)
 
-    # Find the 'date' executable that comes *after* us in PATH, to avoid
-    # inifinite recursion:
-    found_self=false
-    for P in `echo $PATH | tr ':' ' '`; do
-        if [ -x "$P/date"]; then
-            ${found_self} && { DATE_BIN="$P/date"; break; }
-            [ "$P/date" -ef "$0" ] && found_self=true
-        fi
-    done
+Fixes:
+ - http://autobuild.buildroot.org/results/200fd0accf6a1926251243b05e600fbf591bb3a2
 
-Can you lok into tht, and respin, please? In the meantime, I've marked
-the patch as chagnes requested in patchwork.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Tested-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libselinux/libselinux.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
->              DATE_BIN="$P/date"
->              break;
->          fi
-> --
-> 1.8.3.1
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index b53146e30b..258065b79d 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -45,12 +45,13 @@ define LIBSELINUX_BUILD_PYTHON_BINDINGS
+ endef
+ endif # python3
+ 
+-# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc
+-# 2.22. We set CFLAGS and LDFLAGS here because we want to win over the
+-# CFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
++# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22. We
++# set CFLAGS, CPPFLAGS and LDFLAGS here because we want to win over the
++# CFLAGS/CPPFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
+ # when the python binding is enabled.
+ LIBSELINUX_MAKE_OPTS += \
+ 	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
++	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))" \
+ 	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
+ 
+ define LIBSELINUX_BUILD_CMDS
