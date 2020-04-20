@@ -1,41 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Apr 2020 07:18:07 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: remove Rhys Willians from
- lirc-tools
-Message-ID: <20200420050440.BB47C8F37C@busybox.osuosl.org>
+Date: Mon, 20 Apr 2020 07:43:53 +0200
+Subject: [Buildroot] [git commit] package/apcupsd: disable docs
+Message-ID: <20200420052956.6223C8F386@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45e8a699a94e1f622484de4e2a8d4c9e443653e5
+commit: https://git.buildroot.net/buildroot/commit/?id=21d19f5c74a6e954364fd6b58b6a86e1091042c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rhys has asked through private e-mail to be removed:
+We can skip building docs by only running make against subdirs that are
+not "doc".
 
-==
-Please can I be removed as the developer, as I???m not longer involved.
+Fixes:
+http://autobuild.buildroot.net/results/e65/e65c23c3c1cae9aa9d697323fabf8a6f310fc3ba/build-end.log
 
-Cheers Rhys
-==
-
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ package/apcupsd/apcupsd.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0360dbc769..0e83844a26 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2166,9 +2166,6 @@ F:	package/libfreeimage/
- N:	Renaud Aubin <root@renaud.io>
- F:	package/libhttpparser/
+diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
+index e750657236..ff9cc9242f 100644
+--- a/package/apcupsd/apcupsd.mk
++++ b/package/apcupsd/apcupsd.mk
+@@ -64,4 +64,14 @@ else
+ APCUPSD_CONF_OPTS += --disable-usb
+ endif
  
--N:	Rhys Williams <github@wilberforce.co.nz>
--F:	package/lirc-tools/
--
- N:	Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
- F:	package/atop/
- F:	package/thermald/
++define APCUPSD_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/platforms
++endef
++
++define APCUPSD_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/platforms DESTDIR=$(TARGET_DIR) install
++endef
++
+ $(eval $(autotools-package))
