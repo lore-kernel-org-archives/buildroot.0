@@ -1,77 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Apr 2020 23:19:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix glibc build
- with old toolchains
-In-Reply-To: <20200420200058.1660444-1-fontaine.fabrice@gmail.com>
-References: <20200420200058.1660444-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200420211945.GN5035@scaer>
+Date: Mon, 20 Apr 2020 23:22:27 +0200
+Subject: [Buildroot] [git commit] package/libzip: bump version to 1.6.1
+Message-ID: <20200420210818.30B238F4FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=947dea93085709186633355d4704e9f8cc21ff2d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-20 22:00 +0200, Fabrice Fontaine spake thusly:
-> For an unknown reason, since bump to version 3.0.0, we got build failure
-> due to -D_FILE_OFFSET_BITS==64:
-> 
-> /home/naourr/work/instance-2/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
->  # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
->    ^
-> 
-> Update our workaround to also filter CPPFLAGS fix the issue and seems
-> right as we're doing it for all the other affected packages
-> (restorecond, elfutils ...)
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/200fd0accf6a1926251243b05e600fbf591bb3a2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Use new upstream URL libzip.org.
 
-Applied to master, thanks!
+Add optional dependency to liblzma introduced with version 1.6.0:
+https://libzip.org/news/
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998 at free.fr: two spaces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libzip/Config.in   |  2 +-
+ package/libzip/libzip.hash |  4 ++--
+ package/libzip/libzip.mk   | 11 +++++++++--
+ 3 files changed, 12 insertions(+), 5 deletions(-)
 
-> ---
->  package/libselinux/libselinux.mk | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-> index b53146e30b..258065b79d 100644
-> --- a/package/libselinux/libselinux.mk
-> +++ b/package/libselinux/libselinux.mk
-> @@ -45,12 +45,13 @@ define LIBSELINUX_BUILD_PYTHON_BINDINGS
->  endef
->  endif # python3
->  
-> -# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc
-> -# 2.22. We set CFLAGS and LDFLAGS here because we want to win over the
-> -# CFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
-> +# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22. We
-> +# set CFLAGS, CPPFLAGS and LDFLAGS here because we want to win over the
-> +# CFLAGS/CPPFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
->  # when the python binding is enabled.
->  LIBSELINUX_MAKE_OPTS += \
->  	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
-> +	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))" \
->  	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
->  
->  define LIBSELINUX_BUILD_CMDS
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libzip/Config.in b/package/libzip/Config.in
+index c6ddabe6b5..a603d9abf1 100644
+--- a/package/libzip/Config.in
++++ b/package/libzip/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_LIBZIP
+ 	  This package also contains zipcmp, ziptorrent and zipmerge
+ 	  utilities.
+ 
+-	  http://www.nih.at/libzip/
++	  https://libzip.org/
+ 
+ comment "libzip needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/libzip/libzip.hash b/package/libzip/libzip.hash
+index eb11b526fb..af4c9db509 100644
+--- a/package/libzip/libzip.hash
++++ b/package/libzip/libzip.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	b3de4d4bd49a01e0cab3507fc163f88e1651695b6b9cb25ad174dbe319d4a3b4  libzip-1.5.2.tar.xz
+-sha256  04464e729973cf58189051e7a3e8bca2acce9a1058c735e9e2eb1fdbe0fbbf50  LICENSE
++sha256  705dac7a671b3f440181481e607b0908129a9cf1ddfcba75d66436c0e7d33641  libzip-1.6.1.tar.xz
++sha256  af6d9141427cf40b7d1fa6d7f5473b06a7faa9f9b0a2ea588eb6ba7b2e1c8a9e  LICENSE
+diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
+index a312dd90df..f021e06b66 100644
+--- a/package/libzip/libzip.mk
++++ b/package/libzip/libzip.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBZIP_VERSION = 1.5.2
+-LIBZIP_SITE = http://www.nih.at/libzip
++LIBZIP_VERSION = 1.6.1
++LIBZIP_SITE = https://libzip.org/download
+ LIBZIP_SOURCE = libzip-$(LIBZIP_VERSION).tar.xz
+ LIBZIP_LICENSE = BSD-3-Clause
+ LIBZIP_LICENSE_FILES = LICENSE
+@@ -38,5 +38,12 @@ LIBZIP_DEPENDENCIES += musl-fts
+ LIBZIP_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-lfts
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XZ),y)
++LIBZIP_DEPENDENCIES += xz
++LIBZIP_CONF_OPTS += -DENABLE_LZMA=ON
++else
++LIBZIP_CONF_OPTS += -DENABLE_LZMA=OFF
++endif
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
