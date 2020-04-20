@@ -1,33 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Apr 2020 07:53:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-pyasn: remove duplicate
- package
-In-Reply-To: <20200419224719.28092-1-james.hilliard1@gmail.com>
-References: <20200419224719.28092-1-james.hilliard1@gmail.com>
-Message-ID: <20200420075315.39ee26d3@windsurf.home>
+Date: Mon, 20 Apr 2020 07:53:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/exfatprogs: needs wchar
+In-Reply-To: <20200419225024.341725-1-fontaine.fabrice@gmail.com>
+References: <20200419225024.341725-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200420075319.20dc24d6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 19 Apr 2020 16:47:19 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Mon, 20 Apr 2020 00:50:24 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> This is a duplicate of python-pyasn1.
+> exfatprogs unconditionally uses wchar_t in libexfat.h
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/884bbaec2bbbff33c30a0bebda3d95198aa1281c
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  Config.in.legacy                       |  7 +++++++
->  DEVELOPERS                             |  1 -
->  package/Config.in                      |  1 -
->  package/python-pyasn/Config.in         | 14 --------------
->  package/python-pyasn/python-pyasn.hash |  6 ------
->  package/python-pyasn/python-pyasn.mk   | 14 --------------
->  6 files changed, 7 insertions(+), 36 deletions(-)
->  delete mode 100644 package/python-pyasn/Config.in
->  delete mode 100644 package/python-pyasn/python-pyasn.hash
->  delete mode 100644 package/python-pyasn/python-pyasn.mk
+>  package/exfatprogs/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 
 Applied to master, thanks.
 
