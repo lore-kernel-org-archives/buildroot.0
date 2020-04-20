@@ -1,317 +1,741 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Apr 2020 15:48:45 +0200
-Subject: [Buildroot] [PATCH 1/2] package/linux-pam: enable back on musl
-Message-ID: <20200420134846.391273-1-fontaine.fabrice@gmail.com>
+Date: Mon, 20 Apr 2020 15:48:46 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libpam-tacplus: fix build on musl
+In-Reply-To: <20200420134846.391273-1-fontaine.fabrice@gmail.com>
+References: <20200420134846.391273-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200420134846.391273-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add two upstream patches to fix build on musl
+Retrieve two upstream patches to fix build on musl
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0003-Replace-strndupa-with-strncpy.patch  | 75 +++++++++++++++++++
- ...astlog-when-logwtmp-is-not-available.patch | 60 +++++++++++++++
- package/linux-pam/Config.in                   |  5 +-
- package/nodm/Config.in                        |  5 +-
- package/openvmtools/Config.in                 |  5 +-
- package/python-pam/Config.in                  |  6 +-
- package/rsh-redone/Config.in                  | 10 +--
- package/util-linux/Config.in                  |  5 +-
- 8 files changed, 149 insertions(+), 22 deletions(-)
- create mode 100644 package/linux-pam/0003-Replace-strndupa-with-strncpy.patch
- create mode 100644 package/linux-pam/0004-build-ignore-pam_lastlog-when-logwtmp-is-not-available.patch
+ .../0002-Drop-u_char-and-u_short.patch        | 653 ++++++++++++++++++
+ ...0003-Fix-unused-parameters-with-musl.patch |  52 ++
+ 2 files changed, 705 insertions(+)
+ create mode 100644 package/libpam-tacplus/0002-Drop-u_char-and-u_short.patch
+ create mode 100644 package/libpam-tacplus/0003-Fix-unused-parameters-with-musl.patch
 
-diff --git a/package/linux-pam/0003-Replace-strndupa-with-strncpy.patch b/package/linux-pam/0003-Replace-strndupa-with-strncpy.patch
+diff --git a/package/libpam-tacplus/0002-Drop-u_char-and-u_short.patch b/package/libpam-tacplus/0002-Drop-u_char-and-u_short.patch
 new file mode 100644
-index 0000000000..9793f8caf1
+index 0000000000..1921938356
 --- /dev/null
-+++ b/package/linux-pam/0003-Replace-strndupa-with-strncpy.patch
-@@ -0,0 +1,75 @@
-+From 91d4678388b2a7d768ee2ec8cc569e11fc223ffd Mon Sep 17 00:00:00 2001
-+From: Rosen Penev <rosenp@gmail.com>
-+Date: Sun, 15 Jul 2018 20:43:44 -0700
-+Subject: [PATCH] Replace strndupa with strncpy
++++ b/package/libpam-tacplus/0002-Drop-u_char-and-u_short.patch
+@@ -0,0 +1,653 @@
++From b6ec2208640456a9422a74b4f39a50ddb65e4970 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 25 Jan 2020 10:42:20 +0100
++Subject: [PATCH] Drop u_char and u_short
 +
-+glibc only. A static string is better.
++Replace u_char and u_short by unsigned char and unsigned short to fix
++build on musl
 +
-+Signed-off-by: Rosen Penev <rosenp@gmail.com>
-+[Retrieved from:
-+https://github.com/linux-pam/linux-pam/commit/91d4678388b2a7d768ee2ec8cc569e11fc223ffd]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/kravietz/pam_tacplus/commit/b6ec2208640456a9422a74b4f39a50ddb65e4970]
 +---
-+ modules/pam_exec/pam_exec.c | 31 +++++++++++--------------------
-+ 1 file changed, 11 insertions(+), 20 deletions(-)
++ libtac/include/libtac.h  |  8 ++--
++ libtac/include/tacplus.h | 88 ++++++++++++++++++++--------------------
++ libtac/lib/acct_r.c      |  4 +-
++ libtac/lib/acct_s.c      | 20 ++++-----
++ libtac/lib/attrib.c      |  6 +--
++ libtac/lib/authen_r.c    |  2 +-
++ libtac/lib/authen_s.c    | 14 +++----
++ libtac/lib/author_r.c    | 22 +++++-----
++ libtac/lib/author_s.c    | 18 ++++----
++ libtac/lib/cont_s.c      |  4 +-
++ libtac/lib/crypt.c       | 10 ++---
++ libtac/lib/header.c      |  2 +-
++ 12 files changed, 99 insertions(+), 99 deletions(-)
 +
-+diff --git a/modules/pam_exec/pam_exec.c b/modules/pam_exec/pam_exec.c
-+index 52dc6818..6cad16e4 100644
-+--- a/modules/pam_exec/pam_exec.c
-++++ b/modules/pam_exec/pam_exec.c
-+@@ -102,7 +102,7 @@ call_exec (const char *pam_type, pam_handle_t *pamh,
-+   int use_stdout = 0;
-+   int optargc;
-+   const char *logfile = NULL;
-+-  const char *authtok = NULL;
-++  char authtok[PAM_MAX_RESP_SIZE] = {};
-+   pid_t pid;
-+   int fds[2];
-+   int stdout_fds[2];
-+@@ -180,12 +180,12 @@ call_exec (const char *pam_type, pam_handle_t *pamh,
-+ 	      if (resp)
-+ 		{
-+ 		  pam_set_item (pamh, PAM_AUTHTOK, resp);
-+-		  authtok = strndupa (resp, PAM_MAX_RESP_SIZE);
-++		  strncpy (authtok, resp, sizeof(authtok) - 1);
-+ 		  _pam_drop (resp);
-+ 		}
-+ 	    }
-+ 	  else
-+-	    authtok = strndupa (void_pass, PAM_MAX_RESP_SIZE);
-++	    strncpy (authtok, void_pass, sizeof(authtok) - 1);
++diff --git a/libtac/include/libtac.h b/libtac/include/libtac.h
++index 4922bf7..d8c7289 100644
++--- a/libtac/include/libtac.h
+++++ b/libtac/include/libtac.h
++@@ -96,7 +96,7 @@ typedef unsigned int u_int32_t;
 + 
-+ 	  if (pipe(fds) != 0)
-+ 	    {
-+@@ -225,23 +225,14 @@ call_exec (const char *pam_type, pam_handle_t *pamh,
++ struct tac_attrib {
++ 	char *attr;
++-	u_char attr_len;
+++	unsigned char attr_len;
++ 	struct tac_attrib *next;
++ };
 + 
-+       if (expose_authtok) /* send the password to the child */
-+ 	{
-+-	  if (authtok != NULL)
-+-	    {            /* send the password to the child */
-+-	      if (debug)
-+-		pam_syslog (pamh, LOG_DEBUG, "send password to child");
-+-	      if (write(fds[1], authtok, strlen(authtok)+1) == -1)
-+-		pam_syslog (pamh, LOG_ERR,
-+-			    "sending password to child failed: %m");
-+-	      authtok = NULL;
-+-	    }
-+-	  else
-+-	    {
-+-	      if (write(fds[1], "", 1) == -1)   /* blank password */
-+-		pam_syslog (pamh, LOG_ERR,
-+-			    "sending password to child failed: %m");
-+-	    }
-+-        close(fds[0]);       /* close here to avoid possible SIGPIPE above */
-+-        close(fds[1]);
-++	  if (debug)
-++	    pam_syslog (pamh, LOG_DEBUG, "send password to child");
-++	  if (write(fds[1], authtok, strlen(authtok)) == -1)
-++	    pam_syslog (pamh, LOG_ERR,
-++			      "sending password to child failed: %m");
++@@ -169,12 +169,12 @@ int tac_connect_single(const struct addrinfo *, const char *, struct addrinfo *,
++ char *tac_ntop(const struct sockaddr *);
++ 
++ int tac_authen_send(int, const char *, const char *, const char *, const char *,
++-		u_char);
+++		unsigned char);
++ int tac_authen_read(int, struct areply *);
++ int tac_cont_send_seq(int, const char *, int);
++ #define tac_cont_send(fd, pass) tac_cont_send_seq((fd), (pass), 3)
++-HDR *_tac_req_header(u_char, int);
++-void _tac_crypt(u_char *, const HDR *);
+++HDR *_tac_req_header(unsigned char, int);
+++void _tac_crypt(unsigned char *, const HDR *);
++ void tac_add_attrib(struct tac_attrib **, char *, char *);
++ void tac_free_attrib(struct tac_attrib **);
++ char *tac_acct_flag2str(int);
++diff --git a/libtac/include/tacplus.h b/libtac/include/tacplus.h
++index 90d7c8b..2ac8848 100644
++--- a/libtac/include/tacplus.h
+++++ b/libtac/include/tacplus.h
++@@ -24,7 +24,7 @@
++ 
++ /* All tacacs+ packets have the same header format */
++ struct tac_plus_pak_hdr {
++-    u_char version;
+++    unsigned char version;
++ 
++ #define TAC_PLUS_MAJOR_VER_MASK 0xf0
++ #define TAC_PLUS_MAJOR_VER      0xc0
++@@ -35,14 +35,14 @@ struct tac_plus_pak_hdr {
++ #define TAC_PLUS_MINOR_VER_1 0x01
++ #define TAC_PLUS_VER_1  (TAC_PLUS_MAJOR_VER | TAC_PLUS_MINOR_VER_1)
++ 
++-    u_char type;
+++    unsigned char type;
++ 
++ #define TAC_PLUS_AUTHEN 0x01
++ #define TAC_PLUS_AUTHOR	0x02
++ #define TAC_PLUS_ACCT   0x03
++ 
++-    u_char seq_no;        /* packet sequence number */
++-    u_char encryption;    /* packet is encrypted or cleartext */
+++    unsigned char seq_no;        /* packet sequence number */
+++    unsigned char encryption;    /* packet is encrypted or cleartext */
++ 
++ #define TAC_PLUS_ENCRYPTED_FLAG      0x00    /* packet is encrypted */
++ #define TAC_PLUS_UNENCRYPTED_FLAG    0x01    /* packet is unencrypted */
++@@ -59,21 +59,21 @@ typedef struct tac_plus_pak_hdr HDR;
++ 
++ /* Authentication packet NAS sends to us */ 
++ struct authen_start {
++-    u_char action;
+++    unsigned char action;
++ 
++ #define TAC_PLUS_AUTHEN_LOGIN    0x01
++ #define TAC_PLUS_AUTHEN_CHPASS   0x02
++ #define TAC_PLUS_AUTHEN_SENDPASS 0x03 /* deprecated */
++ #define TAC_PLUS_AUTHEN_SENDAUTH 0x04
++ 
++-    u_char priv_lvl;
+++    unsigned char priv_lvl;
++ 
++ #define TAC_PLUS_PRIV_LVL_MIN  0x00
++ #define TAC_PLUS_PRIV_LVL_MAX  0x0f
++ #define TAC_PLUS_PRIV_LVL_USER 0x01
++ #define TAC_PLUS_PRIV_LVL_ROOT 0x0f
++ 
++-    u_char authen_type;
+++    unsigned char authen_type;
++ 
++ #define TAC_PLUS_AUTHEN_TYPE_ASCII  0x01
++ #define TAC_PLUS_AUTHEN_TYPE_PAP    0x02
++@@ -81,7 +81,7 @@ struct authen_start {
++ #define TAC_PLUS_AUTHEN_TYPE_ARAP   0x04
++ #define TAC_PLUS_AUTHEN_TYPE_MSCHAP 0x05
++ 
++-    u_char service;
+++    unsigned char service;
++ 
++ #define TAC_PLUS_AUTHEN_SVC_NONE    0x00
++ #define TAC_PLUS_AUTHEN_SVC_LOGIN   0x01
++@@ -94,19 +94,19 @@ struct authen_start {
++ #define TAC_PLUS_AUTHEN_SVC_NASI    0x08
++ #define TAC_PLUS_AUTHEN_SVC_FWPROXY 0x09
++ 
++-    u_char user_len;
++-    u_char port_len;
++-    u_char r_addr_len;
++-    u_char data_len;
+++    unsigned char user_len;
+++    unsigned char port_len;
+++    unsigned char r_addr_len;
+++    unsigned char data_len;
++ };
++ 
++ #define TAC_AUTHEN_START_FIXED_FIELDS_SIZE 8
++ 
++ /* Authentication continue packet NAS sends to us */ 
++ struct authen_cont {
++-    u_short user_msg_len;
++-    u_short user_data_len;
++-    u_char flags;
+++    unsigned short user_msg_len;
+++    unsigned short user_data_len;
+++    unsigned char flags;
++ 
++ #define TAC_PLUS_CONTINUE_FLAG_ABORT 0x01
++ 
++@@ -116,7 +116,7 @@ struct authen_cont {
++ 
++ /* Authentication reply packet we send to NAS */ 
++ struct authen_reply {
++-    u_char status;
+++    unsigned char status;
++ 
++ #define TAC_PLUS_AUTHEN_STATUS_PASS    0x01
++ #define TAC_PLUS_AUTHEN_STATUS_FAIL    0x02
++@@ -127,12 +127,12 @@ struct authen_reply {
++ #define TAC_PLUS_AUTHEN_STATUS_ERROR   0x07 
++ #define TAC_PLUS_AUTHEN_STATUS_FOLLOW  0x21
++ 
++-    u_char flags;
+++    unsigned char flags;
++ 
++ #define TAC_PLUS_AUTHEN_FLAG_NOECHO 0x01
++ 
++-    u_short msg_len;
++-    u_short data_len;
+++    unsigned short msg_len;
+++    unsigned short data_len;
++ };
++ 
++ #define TAC_AUTHEN_REPLY_FIXED_FIELDS_SIZE 6
++@@ -158,29 +158,29 @@ struct authen_reply {
++ #define AUTHEN_METH_RCMD       TAC_PLUS_AUTHEN_METH_RCMD
++ 
++ struct acct {
++-    u_char flags;
+++    unsigned char flags;
++ 
++ #define TAC_PLUS_ACCT_FLAG_MORE     0x01
++ #define TAC_PLUS_ACCT_FLAG_START    0x02
++ #define TAC_PLUS_ACCT_FLAG_STOP     0x04
++ #define TAC_PLUS_ACCT_FLAG_WATCHDOG 0x08
++ 	    
++-    u_char authen_method;
++-    u_char priv_lvl;
++-    u_char authen_type;
++-    u_char authen_service;
++-    u_char user_len;
++-    u_char port_len;
++-    u_char r_addr_len;
++-    u_char arg_cnt;    /* the number of cmd args */
+++    unsigned char authen_method;
+++    unsigned char priv_lvl;
+++    unsigned char authen_type;
+++    unsigned char authen_service;
+++    unsigned char user_len;
+++    unsigned char port_len;
+++    unsigned char r_addr_len;
+++    unsigned char arg_cnt;    /* the number of cmd args */
++ };
++ 
++ #define TAC_ACCT_REQ_FIXED_FIELDS_SIZE 9
++ 
++ struct acct_reply {
++-    u_short msg_len;
++-    u_short data_len;
++-    u_char status;
+++    unsigned short msg_len;
+++    unsigned short data_len;
+++    unsigned char status;
++ 
++ #define TAC_PLUS_ACCT_STATUS_SUCCESS 0x1
++ #define TAC_PLUS_ACCT_STATUS_ERROR   0x2
++@@ -192,25 +192,25 @@ struct acct_reply {
++ 
++ /* An authorization request packet */
++ struct author {
++-    u_char authen_method;
++-    u_char priv_lvl;
++-    u_char authen_type;
++-    u_char service;
++-
++-    u_char user_len;
++-    u_char port_len;
++-    u_char r_addr_len;
++-    u_char arg_cnt;    /* the number of args */
+++    unsigned char authen_method;
+++    unsigned char priv_lvl;
+++    unsigned char authen_type;
+++    unsigned char service;
 ++
-++          close(fds[0]);       /* close here to avoid possible SIGPIPE above */
-++          close(fds[1]);
+++    unsigned char user_len;
+++    unsigned char port_len;
+++    unsigned char r_addr_len;
+++    unsigned char arg_cnt;    /* the number of args */
++ };
++ 
++ #define TAC_AUTHOR_REQ_FIXED_FIELDS_SIZE 8
++ 
++ /* An authorization reply packet */
++ struct author_reply {
++-    u_char status;
++-    u_char arg_cnt;
++-    u_short msg_len;
++-    u_short data_len;
+++    unsigned char status;
+++    unsigned char arg_cnt;
+++    unsigned short msg_len;
+++    unsigned short data_len;
++ 
++ #define TAC_PLUS_AUTHOR_STATUS_PASS_ADD  0x01
++ #define TAC_PLUS_AUTHOR_STATUS_PASS_REPL 0x02
++diff --git a/libtac/lib/acct_r.c b/libtac/lib/acct_r.c
++index 44992e6..29ed901 100644
++--- a/libtac/lib/acct_r.c
+++++ b/libtac/lib/acct_r.c
++@@ -110,7 +110,7 @@ int tac_acct_read(int fd, struct areply *re) {
++     }
++ 
++     /* decrypt the body */
++-    _tac_crypt((u_char *) tb, &th);
+++    _tac_crypt((unsigned char *) tb, &th);
++ 
++     /* Convert network byte order to host byte order */
++     tb->msg_len  = ntohs(tb->msg_len);
++@@ -133,7 +133,7 @@ int tac_acct_read(int fd, struct areply *re) {
++     /* save status and clean up */
++     if(tb->msg_len) {
++         msg=(char *) xcalloc(1, tb->msg_len+1);
++-        bcopy((u_char *) tb+TAC_ACCT_REPLY_FIXED_FIELDS_SIZE, msg, tb->msg_len);
+++        bcopy((unsigned char *) tb+TAC_ACCT_REPLY_FIXED_FIELDS_SIZE, msg, tb->msg_len);
++         msg[(int)tb->msg_len] = '\0';
++         re->msg = msg;      /* Freed by caller */
++     }
++diff --git a/libtac/lib/acct_s.c b/libtac/lib/acct_s.c
++index db68067..4338ef2 100644
++--- a/libtac/lib/acct_s.c
+++++ b/libtac/lib/acct_s.c
++@@ -50,14 +50,14 @@ int tac_acct_send(int fd, int type, const char *user, char *tty,
++ 
++     HDR *th;
++     struct acct tb;
++-    u_char user_len, port_len, r_addr_len;
+++    unsigned char user_len, port_len, r_addr_len;
++     struct tac_attrib *a;
++     int i = 0;    /* arg count */
++     int pkt_len = 0;
++     int pktl = 0;
++     int w;    /* write count */
++-    u_char *pkt=NULL;
++-    /* u_char *pktp; */             /* obsolute */
+++    unsigned char *pkt=NULL;
+++    /* unsigned char *pktp; */             /* obsolute */
++     int ret = 0;
++ 
++     th = _tac_req_header(TAC_PLUS_ACCT, 0);
++@@ -71,11 +71,11 @@ int tac_acct_send(int fd, int type, const char *user, char *tty,
++         (tac_encryption) ? "yes" : "no", \
++         tac_acct_flag2str(type));
++         
++-    user_len=(u_char) strlen(user);
++-    port_len=(u_char) strlen(tty);
++-    r_addr_len=(u_char) strlen(r_addr);
+++    user_len=(unsigned char) strlen(user);
+++    port_len=(unsigned char) strlen(tty);
+++    r_addr_len=(unsigned char) strlen(r_addr);
++ 
++-    tb.flags=(u_char) type;
+++    tb.flags=(unsigned char) type;
++     tb.authen_method=tac_authen_method;
++     tb.priv_lvl=tac_priv_lvl;
++     if (!*tac_login) {
++@@ -96,7 +96,7 @@ int tac_acct_send(int fd, int type, const char *user, char *tty,
++     tb.r_addr_len=r_addr_len;
++ 
++     /* allocate packet */
++-    pkt=(u_char *) xcalloc(1, TAC_ACCT_REQ_FIXED_FIELDS_SIZE);
+++    pkt=(unsigned char *) xcalloc(1, TAC_ACCT_REQ_FIXED_FIELDS_SIZE);
++     pkt_len=sizeof(tb);
++ 
++     /* fill attribute length fields */
++@@ -104,7 +104,7 @@ int tac_acct_send(int fd, int type, const char *user, char *tty,
++     while (a) {
++         pktl = pkt_len;
++         pkt_len += sizeof(a->attr_len);
++-        pkt = (u_char*) xrealloc(pkt, pkt_len);
+++        pkt = (unsigned char*) xrealloc(pkt, pkt_len);
++ 
++         /* see comments in author_s.c
++         pktp=pkt + pkt_len;
++@@ -132,7 +132,7 @@ int tac_acct_send(int fd, int type, const char *user, char *tty,
++ #define PUTATTR(data, len) \
++     pktl = pkt_len; \
++     pkt_len += len; \
++-    pkt = (u_char*) xrealloc(pkt, pkt_len); \
+++    pkt = (unsigned char*) xrealloc(pkt, pkt_len); \
++     bcopy(data, pkt + pktl, len);
++ 
++     /* fill user and port fields */
++diff --git a/libtac/lib/attrib.c b/libtac/lib/attrib.c
++index b8a7d82..c148288 100644
++--- a/libtac/lib/attrib.c
+++++ b/libtac/lib/attrib.c
++@@ -29,14 +29,14 @@ void tac_add_attrib(struct tac_attrib **attr, char *name, char *value) {
++ 
++ void tac_add_attrib_pair(struct tac_attrib **attr, char *name, char sep, char *value) {
++     struct tac_attrib *a;
++-    u_char l1 = (u_char) strlen(name);
++-    u_char l2;
+++    unsigned char l1 = (unsigned char) strlen(name);
+++    unsigned char l2;
++     int total_len;
++ 
++     if (value == NULL) {
++         l2 = 0;
++     } else {
++-        l2 = (u_char) strlen(value);
+++        l2 = (unsigned char) strlen(value);
++     }
++     total_len = l1 + l2 + 1; /* "name" + "=" + "value" */
++ 
++diff --git a/libtac/lib/authen_r.c b/libtac/lib/authen_r.c
++index cc03e9b..3ffdc4d 100644
++--- a/libtac/lib/authen_r.c
+++++ b/libtac/lib/authen_r.c
++@@ -106,7 +106,7 @@ int tac_authen_read(int fd, struct areply *re) {
 + 	}
 + 
-+       if (use_stdout)
-diff --git a/package/linux-pam/0004-build-ignore-pam_lastlog-when-logwtmp-is-not-available.patch b/package/linux-pam/0004-build-ignore-pam_lastlog-when-logwtmp-is-not-available.patch
++ 	/* decrypt the body */
++-	_tac_crypt((u_char *) tb, &th);
+++	_tac_crypt((unsigned char *) tb, &th);
++ 
++ 	/* Convert network byte order to host byte order */
++ 	tb->msg_len = ntohs(tb->msg_len);
++diff --git a/libtac/lib/authen_s.c b/libtac/lib/authen_s.c
++index b33d954..3bbb51a 100644
++--- a/libtac/lib/authen_s.c
+++++ b/libtac/lib/authen_s.c
++@@ -34,7 +34,7 @@
++ 
++ /* assume digest points to a buffer MD5_LEN size */
++ static void
++-digest_chap(u_char digest[MD5_LBLOCK], uint8_t id,
+++digest_chap(unsigned char digest[MD5_LBLOCK], uint8_t id,
++             const char *pass, unsigned pass_len,
++             const char *chal, unsigned chal_len) {
++ 
++@@ -46,8 +46,8 @@ digest_chap(u_char digest[MD5_LBLOCK], uint8_t id,
++      * for a single call.
++      */
++     MD5_Update(&mdcontext, &id, sizeof(id));
++-    MD5_Update(&mdcontext, (const u_char *)pass, pass_len);
++-    MD5_Update(&mdcontext, (const u_char *)chal, chal_len);
+++    MD5_Update(&mdcontext, (const unsigned char *)pass, pass_len);
+++    MD5_Update(&mdcontext, (const unsigned char *)chal, chal_len);
++     MD5_Final(digest, &mdcontext);
++ }
++ 
++@@ -62,7 +62,7 @@ digest_chap(u_char digest[MD5_LBLOCK], uint8_t id,
++  *             LIBTAC_STATUS_ASSEMBLY_ERR
++  */
++ int tac_authen_send(int fd, const char *user, const char *pass, const char *tty,
++-		const char *r_addr, u_char action) {
+++		const char *r_addr, unsigned char action) {
++ 
++ 	HDR *th; /* TACACS+ packet header */
++ 	struct authen_start tb; /* message body */
++@@ -72,7 +72,7 @@ int tac_authen_send(int fd, const char *user, const char *pass, const char *tty,
++ 	int ret = 0;
++ 	char *chal = "1234123412341234";
++ 	char *token = NULL;
++-	u_char *pkt = NULL;
+++	unsigned char *pkt = NULL;
++ 	const uint8_t id = 5;
++ 
++ 	th = _tac_req_header(TAC_PLUS_AUTHEN, 0);
++@@ -99,7 +99,7 @@ int tac_authen_send(int fd, const char *user, const char *pass, const char *tty,
++ 	r_addr_len = strlen(r_addr);
++ 
++ 	if (!strcmp(tac_login, "chap")) {
++-		u_char digest[MD5_LBLOCK];
+++		unsigned char digest[MD5_LBLOCK];
++ 
++ 		digest_chap(digest, id, pass, pass_len, chal, chal_len);
++ 
++@@ -159,7 +159,7 @@ int tac_authen_send(int fd, const char *user, const char *pass, const char *tty,
++ 	}
++ 
++ 	/* build the packet */
++-	pkt = (u_char *) xcalloc(1, bodylength + 10);
+++	pkt = (unsigned char *) xcalloc(1, bodylength + 10);
++ 
++ 	bcopy(&tb, pkt + pkt_len, sizeof(tb)); /* packet body beginning */
++ 	pkt_len += sizeof(tb);
++diff --git a/libtac/lib/author_r.c b/libtac/lib/author_r.c
++index a677de0..19a72c9 100644
++--- a/libtac/lib/author_r.c
+++++ b/libtac/lib/author_r.c
++@@ -43,7 +43,7 @@ int tac_author_read(int fd, struct areply *re) {
++ 	struct author_reply *tb = NULL;
++ 	size_t len_from_header, len_from_body;
++ 	ssize_t packet_read;
++-	u_char *pktp = NULL;
+++	unsigned char *pktp = NULL;
++ 	char *msg = NULL;
++ 	int timeleft = 0;
++ 	re->msg = NULL;
++@@ -114,7 +114,7 @@ int tac_author_read(int fd, struct areply *re) {
++ 	}
++ 
++ 	/* decrypt the body */
++-	_tac_crypt((u_char *) tb, &th);
+++	_tac_crypt((unsigned char *) tb, &th);
++ 
++ 	/* Convert network byte order to host byte order */
++ 	tb->msg_len = ntohs(tb->msg_len);
++@@ -127,7 +127,7 @@ int tac_author_read(int fd, struct areply *re) {
++ 	len_from_body = TAC_AUTHOR_REPLY_FIXED_FIELDS_SIZE + tb->msg_len
++ 			+ tb->data_len;
++ 
++-	pktp = (u_char *) tb + TAC_AUTHOR_REPLY_FIXED_FIELDS_SIZE;
+++	pktp = (unsigned char *) tb + TAC_AUTHOR_REPLY_FIXED_FIELDS_SIZE;
++ 
++ 	/* cycle through the arguments supplied in the packet */
++ 	for (r = 0; r < tb->arg_cnt && r < TAC_PLUS_MAX_ARGCOUNT;
++@@ -141,7 +141,7 @@ int tac_author_read(int fd, struct areply *re) {
++ 			free(tb);
++ 			return re->status;
++ 		}
++-		len_from_body += sizeof(u_char); /* add arg length field's size*/
+++		len_from_body += sizeof(unsigned char); /* add arg length field's size*/
++ 		len_from_body += *pktp; /* add arg length itself */
++ 		pktp++;
++ 	}
++@@ -160,8 +160,8 @@ int tac_author_read(int fd, struct areply *re) {
++ 	if (tb->msg_len) {
++ 		char *msg = (char *) xcalloc(1, tb->msg_len + 1);
++ 		bcopy(
++-				(u_char *) tb + TAC_AUTHOR_REPLY_FIXED_FIELDS_SIZE
++-						+ (tb->arg_cnt) * sizeof(u_char), msg, tb->msg_len);
+++				(unsigned char *) tb + TAC_AUTHOR_REPLY_FIXED_FIELDS_SIZE
+++						+ (tb->arg_cnt) * sizeof(unsigned char), msg, tb->msg_len);
++ 		msg[(int) tb->msg_len] = '\0';
++ 		re->msg = msg; /* freed by caller */
++ 	}
++@@ -170,8 +170,8 @@ int tac_author_read(int fd, struct areply *re) {
++ 	if (tb->data_len) {
++ 		char *smsg = (char *) xcalloc(1, tb->data_len + 1);
++ 		bcopy(
++-				(u_char *) tb + TAC_AUTHOR_REPLY_FIXED_FIELDS_SIZE
++-						+ (tb->arg_cnt) * sizeof(u_char) + tb->msg_len, smsg,
+++				(unsigned char *) tb + TAC_AUTHOR_REPLY_FIXED_FIELDS_SIZE
+++						+ (tb->arg_cnt) * sizeof(unsigned char) + tb->msg_len, smsg,
++ 				tb->data_len);
++ 		smsg[(int) tb->data_len] = '\0';
++ 		TACSYSLOG(LOG_ERR, "%s: reply message: %s", __FUNCTION__, smsg);
++@@ -190,7 +190,7 @@ int tac_author_read(int fd, struct areply *re) {
++ 		/*FALLTHRU*/
++ 
++ 	case TAC_PLUS_AUTHOR_STATUS_PASS_ADD: {
++-		u_char *argp;
+++		unsigned char *argp;
++ 
++ 		if (!re->msg)
++ 			re->msg = xstrdup(author_ok_msg);
++@@ -198,8 +198,8 @@ int tac_author_read(int fd, struct areply *re) {
++ 
++ 		/* add attributes received to attribute list returned to
++ 		 the client */
++-		pktp = (u_char *) tb + TAC_AUTHOR_REPLY_FIXED_FIELDS_SIZE;
++-		argp = pktp + (tb->arg_cnt * sizeof(u_char)) + tb->msg_len
+++		pktp = (unsigned char *) tb + TAC_AUTHOR_REPLY_FIXED_FIELDS_SIZE;
+++		argp = pktp + (tb->arg_cnt * sizeof(unsigned char)) + tb->msg_len
++ 				+ tb->data_len;
++ 		TACSYSLOG(LOG_DEBUG, "Args cnt %d", tb->arg_cnt);
++ 		/* argp points to current argument string
++diff --git a/libtac/lib/author_s.c b/libtac/lib/author_s.c
++index d067e2c..db05008 100644
++--- a/libtac/lib/author_s.c
+++++ b/libtac/lib/author_s.c
++@@ -37,14 +37,14 @@ int tac_author_send(int fd, const char *user, char *tty, char *r_addr,
++ 
++ 	HDR *th;
++ 	struct author tb;
++-	u_char user_len, port_len, r_addr_len;
+++	unsigned char user_len, port_len, r_addr_len;
++ 	struct tac_attrib *a;
++ 	int i = 0; /* attributes count */
++ 	int pkt_len = 0; /* current packet length */
++ 	int pktl = 0; /* temporary storage for previous pkt_len values */
++ 	int w; /* write() return value */
++-	u_char *pkt = NULL; /* packet building pointer */
++-	/* u_char *pktp; *//* obsolete */
+++	unsigned char *pkt = NULL; /* packet building pointer */
+++	/* unsigned char *pktp; *//* obsolete */
++ 	int ret = 0;
++ 
++ 	th = _tac_req_header(TAC_PLUS_AUTHOR, 0);
++@@ -59,9 +59,9 @@ int tac_author_send(int fd, const char *user, char *tty, char *r_addr,
++ 					__FUNCTION__, user,
++ 					tty, r_addr, tac_encryption ? "yes" : "no");
++ 
++-	user_len = (u_char) strlen(user);
++-	port_len = (u_char) strlen(tty);
++-	r_addr_len = (u_char) strlen(r_addr);
+++	user_len = (unsigned char) strlen(user);
+++	port_len = (unsigned char) strlen(tty);
+++	r_addr_len = (unsigned char) strlen(r_addr);
++ 
++ 	tb.authen_method = tac_authen_method;
++ 	tb.priv_lvl = tac_priv_lvl;
++@@ -83,7 +83,7 @@ int tac_author_send(int fd, const char *user, char *tty, char *r_addr,
++ 	tb.r_addr_len = r_addr_len;
++ 
++ 	/* allocate packet */
++-	pkt = (u_char *) xcalloc(1, TAC_AUTHOR_REQ_FIXED_FIELDS_SIZE);
+++	pkt = (unsigned char *) xcalloc(1, TAC_AUTHOR_REQ_FIXED_FIELDS_SIZE);
++ 	pkt_len = sizeof(tb);
++ 
++ 	/* fill attribute length fields */
++@@ -91,7 +91,7 @@ int tac_author_send(int fd, const char *user, char *tty, char *r_addr,
++ 	while (a) {
++ 		pktl = pkt_len;
++ 		pkt_len += sizeof(a->attr_len);
++-		pkt = (u_char*) xrealloc(pkt, pkt_len);
+++		pkt = (unsigned char*) xrealloc(pkt, pkt_len);
++ 
++ 		/* bad method: realloc() is allowed to return different pointer
++ 		 with each call
++@@ -120,7 +120,7 @@ int tac_author_send(int fd, const char *user, char *tty, char *r_addr,
++ #define PUTATTR(data, len) \
++     pktl = pkt_len; \
++     pkt_len += len; \
++-    pkt = (u_char*) xrealloc(pkt, pkt_len); \
+++    pkt = (unsigned char*) xrealloc(pkt, pkt_len); \
++     bcopy(data, pkt + pktl, len);
++ 
++ 	/* fill user and port fields */
++diff --git a/libtac/lib/cont_s.c b/libtac/lib/cont_s.c
++index e281567..50c01d9 100644
++--- a/libtac/lib/cont_s.c
+++++ b/libtac/lib/cont_s.c
++@@ -41,7 +41,7 @@ int tac_cont_send_seq(int fd, const char *pass, int seq) {
++ 	int pass_len, bodylength, w;
++ 	int pkt_len = 0;
++ 	int ret = 0;
++-	u_char *pkt = NULL;
+++	unsigned char *pkt = NULL;
++ 
++ 	th = _tac_req_header(TAC_PLUS_AUTHEN, 1);
++ 
++@@ -75,7 +75,7 @@ int tac_cont_send_seq(int fd, const char *pass, int seq) {
++ 	}
++ 
++ 	/* build the packet */
++-	pkt = (u_char *) xcalloc(1, bodylength);
+++	pkt = (unsigned char *) xcalloc(1, bodylength);
++ 
++ 	bcopy(&tb, pkt + pkt_len, TAC_AUTHEN_CONT_FIXED_FIELDS_SIZE); /* packet body beginning */
++ 	pkt_len += TAC_AUTHEN_CONT_FIXED_FIELDS_SIZE;
++diff --git a/libtac/lib/crypt.c b/libtac/lib/crypt.c
++index b3e3158..5bf0107 100644
++--- a/libtac/lib/crypt.c
+++++ b/libtac/lib/crypt.c
++@@ -36,7 +36,7 @@
++    Use data from packet header and secret, which
++    should be a global variable */
++ static void _tac_md5_pad(const HDR *hdr,
++-        u_char *new_digest, u_char *old_digest)  {
+++        unsigned char *new_digest, unsigned char *old_digest)  {
++     unsigned tac_secret_len = strlen(tac_secret);
++     MD5_CTX mdcontext;
++ 
++@@ -45,8 +45,8 @@ static void _tac_md5_pad(const HDR *hdr,
++ 
++     /* place session_id, key, version and seq_no in buffer */
++     MD5_Init(&mdcontext);
++-    MD5_Update(&mdcontext, (const u_char *) &hdr->session_id, sizeof(hdr->session_id));
++-    MD5_Update(&mdcontext, (const u_char *) tac_secret, tac_secret_len);
+++    MD5_Update(&mdcontext, (const unsigned char *) &hdr->session_id, sizeof(hdr->session_id));
+++    MD5_Update(&mdcontext, (const unsigned char *) tac_secret, tac_secret_len);
++     MD5_Update(&mdcontext, &hdr->version, sizeof(hdr->version));
++     MD5_Update(&mdcontext, &hdr->seq_no, sizeof(hdr->seq_no));
++ 
++@@ -62,12 +62,12 @@ static void _tac_md5_pad(const HDR *hdr,
++ /* Perform encryption/decryption on buffer. This means simply XORing
++    each byte from buffer with according byte from pseudo-random
++    pad. */
++-void _tac_crypt(u_char *buf, const HDR *th) {
+++void _tac_crypt(unsigned char *buf, const HDR *th) {
++     unsigned i, j, length = ntohl(th->datalength);
++  
++     /* null operation if no encryption requested */
++     if((tac_secret != NULL) && (th->encryption & TAC_PLUS_UNENCRYPTED_FLAG) != TAC_PLUS_UNENCRYPTED_FLAG) {
++-        u_char digest[MD5_LBLOCK];
+++        unsigned char digest[MD5_LBLOCK];
++  
++         for (i=0; i<length; i++) {
++             j = i % MD5_LBLOCK;
++diff --git a/libtac/lib/header.c b/libtac/lib/header.c
++index 2156d2a..7331947 100644
++--- a/libtac/lib/header.c
+++++ b/libtac/lib/header.c
++@@ -66,7 +66,7 @@ int tac_readtimeout_enable = 0;
++  * field depends on the TACACS+ request type and thus it
++  * cannot be predefined.
++  */
++-HDR *_tac_req_header(u_char type, int cont_session) {
+++HDR *_tac_req_header(unsigned char type, int cont_session) {
++     HDR *th;
++ 
++     th=(HDR *) xcalloc(1, TAC_PLUS_HDR_SIZE);
+diff --git a/package/libpam-tacplus/0003-Fix-unused-parameters-with-musl.patch b/package/libpam-tacplus/0003-Fix-unused-parameters-with-musl.patch
 new file mode 100644
-index 0000000000..8ff0ac155a
+index 0000000000..b9e48841c0
 --- /dev/null
-+++ b/package/linux-pam/0004-build-ignore-pam_lastlog-when-logwtmp-is-not-available.patch
-@@ -0,0 +1,60 @@
-+From 73bf6d25ddb7a2cb73bceda3d880174b1d1e4a26 Mon Sep 17 00:00:00 2001
-+From: Yousong Zhou <yszhou4tech@gmail.com>
-+Date: Wed, 17 Jun 2015 21:18:05 +0800
-+Subject: [PATCH] build: ignore pam_lastlog when logwtmp is not available.
++++ b/package/libpam-tacplus/0003-Fix-unused-parameters-with-musl.patch
+@@ -0,0 +1,52 @@
++From a46b3f48d27f6a229627ef731fc23e3971056caa Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 25 Jan 2020 10:51:36 +0100
++Subject: [PATCH] Fix unused parameters with musl
 +
-+* configure.ac: check logwtmp and set COND_BUILD_PAM_LASTLOG
-+* modules/pam_lastlog/Makefile.am: check COND_BUILD_PAM_LASTLOG
-+
-+Signed-off-by: Yousong Zhou <yszhou4tech@gmail.com>
-+[Retrieved from:
-+https://github.com/linux-pam/linux-pam/commit/73bf6d25ddb7a2cb73bceda3d880174b1d1e4a26]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/kravietz/pam_tacplus/commit/a46b3f48d27f6a229627ef731fc23e3971056caa]
 +---
-+ configure.ac        | 2 ++
-+ modules/Makefile.am | 8 ++++++--
-+ 2 files changed, 8 insertions(+), 2 deletions(-)
++ support.c | 1 +
++ tacc.c    | 3 +++
++ 2 files changed, 4 insertions(+)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 69748614..4d1b1965 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -534,8 +534,10 @@ AC_CHECK_FUNCS(getutent_r getpwnam_r getpwuid_r getgrnam_r getgrgid_r getspnam_r
-+ AC_CHECK_FUNCS(getgrouplist getline getdelim)
-+ AC_CHECK_FUNCS(inet_ntop inet_pton innetgr)
-+ AC_CHECK_FUNCS([ruserok_af ruserok], [break])
-++AC_CHECK_FUNCS([logwtmp])
++diff --git a/support.c b/support.c
++index 6e3fe45..76a5102 100644
++--- a/support.c
+++++ b/support.c
++@@ -116,6 +116,7 @@ int converse(pam_handle_t *pamh, int nargs, const struct pam_message *message,
++ int tacacs_get_password(pam_handle_t *pamh, int flags __Unused,
++                         int ctrl, char **password) {
 + 
-+ AM_CONDITIONAL([COND_BUILD_PAM_RHOSTS], [test "$ac_cv_func_ruserok_af" = yes -o "$ac_cv_func_ruserok" = yes])
-++AM_CONDITIONAL([COND_BUILD_PAM_LASTLOG], [test "$ac_cv_func_logwtmp" = yes])
+++    (void) flags;
++     const void *pam_pass;
++     char *pass = NULL;
 + 
-+ AC_CHECK_FUNCS(unshare, [UNSHARE=yes], [UNSHARE=no])
-+ AM_CONDITIONAL([HAVE_UNSHARE], [test "$UNSHARE" = yes])
-+diff --git a/modules/Makefile.am b/modules/Makefile.am
-+index 9ad26a9b..b98dc5c8 100644
-+--- a/modules/Makefile.am
-++++ b/modules/Makefile.am
-+@@ -6,9 +6,13 @@ if COND_BUILD_PAM_RHOSTS
-+ 	MAYBE_PAM_RHOSTS = pam_rhosts
-+ endif
++diff --git a/tacc.c b/tacc.c
++index 302058a..ef9d081 100644
++--- a/tacc.c
+++++ b/tacc.c
++@@ -498,6 +498,7 @@ int main(int argc, char **argv) {
++ }
 + 
-++if COND_BUILD_PAM_LASTLOG
-++	MAYBE_PAM_LASTLOG = pam_lastlog
-++endif
-++
-+ SUBDIRS := pam_access pam_cracklib pam_debug pam_deny pam_echo \
-+ 	pam_env pam_exec pam_faildelay pam_filter pam_ftp \
-+-	pam_group pam_issue pam_keyinit pam_lastlog pam_limits \
-++	pam_group pam_issue pam_keyinit pam_limits \
-+ 	pam_listfile pam_localuser pam_loginuid pam_mail \
-+ 	pam_mkhomedir pam_motd pam_namespace pam_nologin \
-+ 	pam_permit pam_pwhistory pam_rootok pam_securetty \
-+@@ -16,7 +20,7 @@ SUBDIRS := pam_access pam_cracklib pam_debug pam_deny pam_echo \
-+ 	pam_succeed_if pam_tally pam_tally2 pam_time pam_timestamp \
-+ 	pam_tty_audit pam_umask \
-+ 	pam_unix pam_userdb pam_warn pam_wheel pam_xauth \
-+-	$(MAYBE_PAM_RHOSTS)
-++	$(MAYBE_PAM_RHOSTS) $(MAYBE_PAM_LASTLOG)
++ void sighandler(int sig __Unused) {
+++    (void) sig;
++     TACDEBUG(LOG_DEBUG, "caught signal %d", sig);
++ }
 + 
-+ CLEANFILES = *~
++@@ -602,12 +603,14 @@ void showversion(char *progname) {
++ }
 + 
-diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
-index 1396549366..84aee5cdd4 100644
---- a/package/linux-pam/Config.in
-+++ b/package/linux-pam/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_LINUX_PAM
- 	bool "linux-pam"
- 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
- 	depends on !BR2_STATIC_LIBS
--	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_FLEX
- 	help
-@@ -11,6 +10,6 @@ config BR2_PACKAGE_LINUX_PAM
- 
- 	  http://linux-pam.org
- 
--comment "linux-pam needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
-+comment "linux-pam needs a toolchain w/ wchar, locale, dynamic library"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-+		|| BR2_STATIC_LIBS
-diff --git a/package/nodm/Config.in b/package/nodm/Config.in
-index 38171e8dcf..2dd6f1e1cf 100644
---- a/package/nodm/Config.in
-+++ b/package/nodm/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_NODM
- 	depends on BR2_PACKAGE_XORG7
- 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
- 	depends on !BR2_STATIC_LIBS # linux-pam
--	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	depends on BR2_USE_MMU # linux-pam
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_LINUX_PAM
-@@ -18,7 +17,7 @@ config BR2_PACKAGE_NODM
- 
- 	  https://github.com/spanezz/nodm/
- 
--comment "nodm needs a glibc or uClibc toolchain w/ wchar, locale, dynamic library"
-+comment "nodm needs a toolchain w/ wchar, locale, dynamic library"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-+		|| BR2_STATIC_LIBS
-diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
-index 1a077a2a47..a50b6b9b3e 100644
---- a/package/openvmtools/Config.in
-+++ b/package/openvmtools/Config.in
-@@ -27,13 +27,12 @@ config BR2_PACKAGE_OPENVMTOOLS_PAM
- 	# linux-pam needs locale and wchar, but we already have this
- 	# dependency on the main symbol, above.
- 	depends on !BR2_STATIC_LIBS
--	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  Support for PAM in openvmtools
- 
--comment "PAM support needs a glibc toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-+comment "PAM support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_OPENVMTOOLS_RESOLUTIONKMS
- 	bool "resolutionkms support"
-diff --git a/package/python-pam/Config.in b/package/python-pam/Config.in
-index 02865d00d6..92ba105ebf 100644
---- a/package/python-pam/Config.in
-+++ b/package/python-pam/Config.in
-@@ -1,7 +1,6 @@
--comment "python-pam needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
-+comment "python-pam needs a toolchain w/ wchar, locale, dynamic library"
- 	depends on BR2_PACKAGE_PYTHON
--	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
--		BR2_TOOLCHAIN_USES_MUSL
-+	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_PYTHON_PAM
- 	bool "python-pam"
-@@ -10,7 +9,6 @@ config BR2_PACKAGE_PYTHON_PAM
- 	depends on BR2_USE_WCHAR # linux-pam
- 	depends on BR2_USE_MMU # linux-pam
- 	depends on !BR2_STATIC_LIBS # linux-pam
--	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  PAM (Pluggable Authentication Module) bindings for Python.
-diff --git a/package/rsh-redone/Config.in b/package/rsh-redone/Config.in
-index 1335c85739..5647d7edef 100644
---- a/package/rsh-redone/Config.in
-+++ b/package/rsh-redone/Config.in
-@@ -17,13 +17,12 @@ config BR2_PACKAGE_RSH_REDONE_RLOGIND
- 	bool "rlogind"
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
--	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	depends on BR2_USE_MMU # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 
--comment "rlogind needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
-+comment "rlogind needs a toolchain w/ wchar, locale, dynamic library"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-+		|| BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_RSH_REDONE_RSH
- 	bool "rsh"
-@@ -32,12 +31,11 @@ config BR2_PACKAGE_RSH_REDONE_RSHD
- 	bool "rshd"
- 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
--	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	depends on BR2_USE_MMU # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 
--comment "rshd needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
-+comment "rshd needs a toolchain w/ wchar, locale, dynamic library"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-+		|| BR2_STATIC_LIBS
- 
- endif
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 996f0cd7fa..aa3c1a5f76 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -84,15 +84,14 @@ config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
- 	bool "chfn/chsh"
- 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
- 	depends on !BR2_STATIC_LIBS
--	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	depends on BR2_USE_MMU # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  Change login shell, real user name and information
- 
--comment "chfn/chsh needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
-+comment "chfn/chsh needs a toolchain w/ wchar, locale, dynamic library"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-+		|| BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_UTIL_LINUX_CHMEM
- 	bool "chmem"
++ void timeout_handler(int signum __Unused) {
+++    (void) signum;
++     syslog(LOG_ERR, "timeout reading password from user %s", g_user);
++ }
++ 
++ #ifdef TACDEBUG_AT_RUNTIME
++ void logmsg(int level __Unused, const char *fmt, ...)
++ {
+++    (void) level;
++     va_list ap;
++ 
++     va_start(ap, fmt);
 -- 
 2.25.1
