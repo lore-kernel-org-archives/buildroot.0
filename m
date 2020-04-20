@@ -1,103 +1,67 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Apr 2020 22:16:44 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mc: do not install mc.lib twice
-In-Reply-To: <20200420201644.1954370-1-fontaine.fabrice@gmail.com>
-References: <20200420201644.1954370-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200420201644.1954370-2-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 20 Apr 2020 22:46:52 +0200
+Subject: [Buildroot] [git commit] package/libfuse3: fix build without C++
+Message-ID: <20200420203423.5B3868F4CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=f0b00164ae21a8cc443a5e3f98f14637644fdea7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes:
- - http://autobuild.buildroot.org/results/1fded9bacffdc57fea9cb151ed889f48ceb5ff8d
+ - http://autobuild.buildroot.org/results/a6e64213f2910b2b81e79cb1e96e558413d7f70a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...Makefile-am-install-mc-lib-only-once.patch | 60 +++++++++++++++++++
- package/mc/mc.mk                              |  2 +
- 2 files changed, 62 insertions(+)
- create mode 100644 package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch
+ ...1-meson.build-libfuse-is-a-C-only-project.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch b/package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch
+diff --git a/package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch b/package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch
 new file mode 100644
-index 0000000000..be9bf7a402
+index 0000000000..279f590ce9
 --- /dev/null
-+++ b/package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch
-@@ -0,0 +1,60 @@
-+From afb09f7cd7024484845ade25e15b8b93d6cf2d2c Mon Sep 17 00:00:00 2001
-+From: Sergei Trofimovich <slyfox@gentoo.org>
-+Date: Tue, 3 Mar 2020 09:26:12 +0000
-+Subject: [PATCH] Ticket #4070: misc/Makefile.am: install mc.lib only once.
++++ b/package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch
+@@ -0,0 +1,39 @@
++From fc25c5002cae23151309fce6059e230545fd4d82 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 20 Apr 2020 21:20:19 +0200
++Subject: [PATCH] Do not require C++ compiler for building
 +
-+Before the change mc.lib was installed twice due to being
-+in two _DATA variables:
-+
-+dist_pkgdata_DATA = \
-+        mc.lib
-+
-+pkgdata_DATA = \
-+        $(dist_pkgdata_DATA) \
-+        $(PKGDATA_OUT)
-+
-+This causes occasional install failures when two parallel
-+`/usr/bin/install` calls race in installing the file:
-+
-+$ make -j20 DESTDIR=/var/tmp/portage/app-misc/mc-4.8.24/image install
-+...
-+ /usr/lib/portage/python3.6/ebuild-helpers/xattr/install \
-+    -c -m 644 mc.lib '/var/tmp/portage/app-misc/mc-4.8.24/image/usr/share/mc'
-+ /usr/lib/portage/python3.6/ebuild-helpers/xattr/install \
-+    -c -m 644 mc.lib mc.charsets '/var/tmp/portage/app-misc/mc-4.8.24/image/usr/share/mc'
-+...
-+ /usr/bin/install: cannot create regular file
-+   '/var/tmp/portage/app-misc/mc-4.8.24/image/usr/share/mc/mc.lib': File exists
-+
-+After the change mc.lib is present only in dist_pkgdata_DATA.
-+
-+Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
-+Signed-off-by: Andrew Borodin <aborodin@vmail.ru>
++Fixes:
++ - http://autobuild.buildroot.org/results/a6e64213f2910b2b81e79cb1e96e558413d7f70a
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +[Retrieved from:
-+https://github.com/MidnightCommander/mc/commit/afb09f7cd7024484845ade25e15b8b93d6cf2d2c]
++https://github.com/libfuse/libfuse/commit/fc25c5002cae23151309fce6059e230545fd4d82]
 +---
-+ misc/Makefile.am | 2 --
-+ 1 file changed, 2 deletions(-)
++ example/meson.build | 2 +-
++ meson.build         | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/misc/Makefile.am b/misc/Makefile.am
-+index 8ed1826136..24f4a0e1ad 100644
-+--- a/misc/Makefile.am
-++++ b/misc/Makefile.am
-+@@ -17,7 +17,6 @@ dist_pkgdata_DATA = \
-+ 	mc.lib
++diff --git a/example/meson.build b/example/meson.build
++index 3edddea9..2342df9c 100644
++--- a/example/meson.build
+++++ b/example/meson.build
++@@ -31,7 +31,7 @@ foreach ex : threaded_examples
++                install: false)
++ endforeach
 + 
-+ pkgdata_DATA = \
-+-	$(dist_pkgdata_DATA) \
-+ 	$(PKGDATA_OUT)
++-if not platform.endswith('bsd') and platform != 'dragonfly'
+++if not platform.endswith('bsd') and platform != 'dragonfly' and add_languages('cpp', required : false)
++     executable('passthrough_hp', 'passthrough_hp.cc',
++                dependencies: [ thread_dep, libfuse_dep ],
++                install: false)
++diff --git a/meson.build b/meson.build
++index 69b3630d..4428bdb9 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -1,4 +1,4 @@
++-project('libfuse3', ['cpp', 'c'], version: '3.9.1',
+++project('libfuse3', ['c'], version: '3.9.1',
++         meson_version: '>= 0.42',
++         default_options: [ 'buildtype=debugoptimized' ])
 + 
-+ SCRIPTS_IN = \
-+@@ -54,7 +53,6 @@ EXTRA_DIST = \
-+ 	$(LIBFILES_SCRIPT) \
-+ 	$(SCRIPTS_IN) \
-+ 	$(noinst_DATA) \
-+-	$(dist_pkgdata_DATA) \
-+ 	$(PKGDATA_IN)
-+ 
-+ install-data-hook:
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index 4e76b618d8..b689e50e73 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -11,6 +11,8 @@ MC_LICENSE = GPL-3.0+
- MC_LICENSE_FILES = COPYING
- MC_DEPENDENCIES = libglib2 host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- MC_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
-+# We're patching misc/Makefile.am
-+MC_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_GPM),y)
- MC_CONF_OPTS += --with-gpm-mouse
--- 
-2.25.1
