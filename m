@@ -1,26 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Apr 2020 07:53:27 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libuwsc: manage
+Date: Mon, 20 Apr 2020 07:53:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: manage
  BUILD_STATIC_LIBS
-In-Reply-To: <20200419232628.385881-2-fontaine.fabrice@gmail.com>
-References: <20200419232628.385881-1-fontaine.fabrice@gmail.com>
- <20200419232628.385881-2-fontaine.fabrice@gmail.com>
-Message-ID: <20200420075327.56b09aff@windsurf.home>
+In-Reply-To: <20200419233009.386275-1-fontaine.fabrice@gmail.com>
+References: <20200419233009.386275-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200420075330.2062b68e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 20 Apr 2020 01:26:28 +0200
+On Mon, 20 Apr 2020 01:30:09 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Use BUILD_STATIC_LIBS added in version 3.3.5 with
-> https://github.com/zhaojh329/libuwsc/commit/1759dfd7d9f65775dc0a27e85b8c8c482efbfd00
+> Use BUILD_STATIC_LIBS which has been added in version 3.1.4 with
+> https://github.com/zhaojh329/libuhttpd/commit/4d0f435e0b96140f7b74239bbe2f76d5f7d782b7
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libuwsc/libuwsc.mk | 7 +++++++
+>  package/libuhttpd/libuhttpd.mk | 7 +++++++
 >  1 file changed, 7 insertions(+)
 
 Applied to master, thanks.
