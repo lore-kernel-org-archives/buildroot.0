@@ -1,71 +1,128 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Apr 2020 18:34:02 +0200
-Subject: [Buildroot] [PATCH v3, 1/1] package/odhcp6c: bump to version
- f575351cbb3defc0bf52680c9082912a6c264374
-Message-ID: <20200420163402.1026751-1-fontaine.fabrice@gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Mon, 20 Apr 2020 18:38:22 +0200
+Subject: [Buildroot] [PATCH v2] package/log4qt: new package
+Message-ID: <20200420163822.411924-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to official openwrt site instead of sbyx github fork which is not
-up to date anymore. This bump will fix build with musl 1.2.0 thanks to
-https://git.openwrt.org/?p=project/odhcp6c.git;a=commit;h=49305e6847efa43e008d0bebdc176e1833120947
+Log4Qt is a C++ port of the Apache Software Foundation
+Log4j package using the Qt Framework.
 
-Also update indentation of hash file (two spaces)
-
-Fixes:
- - http://autobuild.buildroot.org/results/fcd89dd076887e9b590ffa672decf2c84a6d57f8
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
-Changes v2 -> v3 (after review of Baruch Siach):
- - Use https transport
-
 Changes v1 -> v2:
- - Fix version in title
+ - bump version to 1.5.1
+ - use qmake pkg infra
+ - propagate dependencies from qt5 package
+ - improve commit message
 
- package/odhcp6c/Config.in    | 2 +-
- package/odhcp6c/odhcp6c.hash | 4 ++--
- package/odhcp6c/odhcp6c.mk   | 5 +++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/log4qt/Config.in   | 19 +++++++++++++++++++
+ package/log4qt/log4qt.hash |  3 +++
+ package/log4qt/log4qt.mk   | 31 +++++++++++++++++++++++++++++++
+ 5 files changed, 55 insertions(+)
+ create mode 100644 package/log4qt/Config.in
+ create mode 100644 package/log4qt/log4qt.hash
+ create mode 100644 package/log4qt/log4qt.mk
 
-diff --git a/package/odhcp6c/Config.in b/package/odhcp6c/Config.in
-index 97ea4b44ef..ca3a2f6424 100644
---- a/package/odhcp6c/Config.in
-+++ b/package/odhcp6c/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_ODHCP6C
- 	  odhcp6c is a minimal DHCPv6 and RA-client for use in
- 	  embedded Linux systems, especially routers.
- 
--	  https://github.com/sbyx/odhcp6c
-+	  https://git.openwrt.org/project/odhcp6c.git
-diff --git a/package/odhcp6c/odhcp6c.hash b/package/odhcp6c/odhcp6c.hash
-index 8b16fa98bb..2ac4a68219 100644
---- a/package/odhcp6c/odhcp6c.hash
-+++ b/package/odhcp6c/odhcp6c.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 6d472320ccfa2e57197596869507f2a4bf9900a502939404bf0c033dceeadf5f odhcp6c-d2e247d8d87ecf8c60fcf0acdad05667bd379521.tar.gz
--sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4 COPYING
-+sha256  e715c1408982152306c65f1c3ce7c58fb6f15fa8f9626c266819119239f32418  odhcp6c-f575351cbb3defc0bf52680c9082912a6c264374.tar.gz
-+sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
-index 3b4e7580a2..c7f214ff7a 100644
---- a/package/odhcp6c/odhcp6c.mk
-+++ b/package/odhcp6c/odhcp6c.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--ODHCP6C_VERSION = d2e247d8d87ecf8c60fcf0acdad05667bd379521
--ODHCP6C_SITE = $(call github,sbyx,odhcp6c,$(ODHCP6C_VERSION))
-+ODHCP6C_VERSION = f575351cbb3defc0bf52680c9082912a6c264374
-+ODHCP6C_SITE = https://git.openwrt.org/project/odhcp6c.git
-+ODHCP6C_SITE_METHOD = git
- ODHCP6C_LICENSE = GPL-2.0
- ODHCP6C_LICENSE_FILES = COPYING
- 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b64ad3854f..9a8dc583e9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -288,6 +288,7 @@ F:	package/python-canopen/
+ N:	Bartosz Bilas <b.bilas@grinn-global.com>
+ F:	board/stmicroelectronics/stm32mp157a-dk1/
+ F:	configs/stm32mp157a_dk1_defconfig
++F:	package/log4qt/
+ F:	package/python-esptool/
+ F:	package/python-pyaes/
+ F:	package/qt5/qt5scxml/
+diff --git a/package/Config.in b/package/Config.in
+index a9c6f6fcbc..071ab35781 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1597,6 +1597,7 @@ menu "Logging"
+ 	source "package/log4cplus/Config.in"
+ 	source "package/log4cpp/Config.in"
+ 	source "package/log4cxx/Config.in"
++	source "package/log4qt/Config.in"
+ 	source "package/opentracing-cpp/Config.in"
+ 	source "package/spdlog/Config.in"
+ 	source "package/zlog/Config.in"
+diff --git a/package/log4qt/Config.in b/package/log4qt/Config.in
+new file mode 100644
+index 0000000000..1b716bbc51
+--- /dev/null
++++ b/package/log4qt/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LOG4QT
++	bool "log4qt"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_QT5
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # c++11 qt5base
++	depends on !BR2_STATIC_LIBS
++	help
++	  Log4Qt is a C++ port of the Apache Software Foundation
++	  Log4j package using the Qt Framework. It is intended to be
++	  used by open source and commercial Qt projects.
++
++	  https://github.com/MEONMedical/Log4Qt
++
++comment "Log4Qt needs qt5, a toolchain w/ gcc >= 5.0, wchar, NPTL, C++, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_PACKAGE_QT5
+diff --git a/package/log4qt/log4qt.hash b/package/log4qt/log4qt.hash
+new file mode 100644
+index 0000000000..757bab1a25
+--- /dev/null
++++ b/package/log4qt/log4qt.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  ff17b794ca7d5290a150a53f6272e6a30a7f4d942aa58298a8328bf10a65858a  log4qt-1.5.1.tar.gz
++sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  LICENSE
+diff --git a/package/log4qt/log4qt.mk b/package/log4qt/log4qt.mk
+new file mode 100644
+index 0000000000..f6560894b3
+--- /dev/null
++++ b/package/log4qt/log4qt.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# log4qt
++#
++################################################################################
++
++LOG4QT_VERSION = 1.5.1
++LOG4QT_SITE = $(call github,MEONMedical,Log4Qt,v$(LOG4QT_VERSION))
++LOG4QT_DEPENDENCIES += qt5base
++LOG4QT_LICENSE = Apache-2.0
++LOG4QT_LICENSE_FILES = LICENSE
++LOG4QT_INSTALL_STAGING = YES
++
++define LOG4QT_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)/usr
++endef
++
++define LOG4QT_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)/usr
++endef
++
++ifeq ($(BR2_PACKAGE_QT5BASE_SQLITE_QT),y)
++LOG4QT_CONF_OPTS += "QT += sql"
++endif
++
++ifeq ($(BR2_PACKAGE_SQLITE)$(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),yy)
++LOG4QT_CONF_OPTS += "QT += sql"
++LOG4QT_DEPENDENCIES += sqlite
++endif
++
++$(eval $(qmake-package))
 -- 
-2.25.1
+2.26.1
