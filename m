@@ -1,82 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Apr 2020 23:08:41 +0200
-Subject: [Buildroot] [PATCH] packages/exim: enable parallel make
-In-Reply-To: <20200420163645.17803-1-luca@lucaceresoli.net>
-References: <20200420163645.17803-1-luca@lucaceresoli.net>
-Message-ID: <20200420210841.GL5035@scaer>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 20 Apr 2020 14:14:52 -0700
+Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix glibc build
+ with old toolchains
+In-Reply-To: <20200420200058.1660444-1-fontaine.fabrice@gmail.com>
+References: <20200420200058.1660444-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAFSsvmqDs=+7==ueo5R03tte35m5Q=w2LQ3wf8bLoOf36rZyeQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+All;
 
-On 2020-04-20 18:36 +0200, Luca Ceresoli spake thusly:
-> Parallel make used to be broken in exim, as reported in its docs. Now that
-> line has disappeared from the docs, and parallel make is actually working.
-> 
-> Tested with 'make exim-dirclean ; time make BR2_JLEVEL=999 exim': builds
-> still succeed and the build time decreases from 34 to 11 seconds on my
-> host.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by Adam Duskett <Aduskett@gmail.com>
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
+On Mon, Apr 20, 2020 at 12:59 PM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> For an unknown reason, since bump to version 3.0.0, we got build failure
+> due to -D_FILE_OFFSET_BITS==64:
+>
+> /home/naourr/work/instance-2/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+>  # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+>    ^
+>
+> Update our workaround to also filter CPPFLAGS fix the issue and seems
+> right as we're doing it for all the other affected packages
+> (restorecond, elfutils ...)
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/200fd0accf6a1926251243b05e600fbf591bb3a2
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/exim/exim.mk | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-> index 8d5b6e415b62..dc445c6d93c0 100644
-> --- a/package/exim/exim.mk
-> +++ b/package/exim/exim.mk
-> @@ -120,16 +120,14 @@ endif
->  
->  # We need the host version of macro_predef during the build, before
->  # building it we need to prepare the makefile.
-> -# "The -j (parallel) flag must not be used with make"
-> -# (http://www.exim.org/exim-html-current/doc/html/spec_html/ch04.html)
->  define EXIM_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) makefile
-> -	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)/build-br macro_predef \
-> +	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) makefile
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build-br macro_predef \
->  		CC=$(HOSTCC) \
->  		LNCC=$(HOSTCC) \
->  		CFLAGS="-std=c99 $(HOST_CFLAGS)" \
->  		LFLAGS="-fPIC $(HOST_LDFLAGS)"
-> -	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS) \
-> +	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
->  		CFLAGS="-std=c99 $(TARGET_CFLAGS)"
+>  package/libselinux/libselinux.mk | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+> index b53146e30b..258065b79d 100644
+> --- a/package/libselinux/libselinux.mk
+> +++ b/package/libselinux/libselinux.mk
+> @@ -45,12 +45,13 @@ define LIBSELINUX_BUILD_PYTHON_BINDINGS
 >  endef
->  
-> @@ -137,7 +135,7 @@ endef
->  # something when installing...
->  define EXIM_INSTALL_TARGET_CMDS
->  	DESTDIR=$(TARGET_DIR) INSTALL_ARG="-no_chown -no_symlink" build=br \
-> -	  $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS) \
-> +	  $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
->  		CFLAGS="-std=c99 $(TARGET_CFLAGS)" \
->  		install
->  	chmod u+s $(TARGET_DIR)/usr/sbin/exim
-> -- 
-> 2.26.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>  endif # python3
+>
+> -# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc
+> -# 2.22. We set CFLAGS and LDFLAGS here because we want to win over the
+> -# CFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
+> +# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22. We
+> +# set CFLAGS, CPPFLAGS and LDFLAGS here because we want to win over the
+> +# CFLAGS/CPPFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
+>  # when the python binding is enabled.
+>  LIBSELINUX_MAKE_OPTS += \
+>         CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
+> +       CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))" \
+>         LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
+>
+>  define LIBSELINUX_BUILD_CMDS
+> --
+> 2.25.1
+>
