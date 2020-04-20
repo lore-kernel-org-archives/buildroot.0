@@ -1,41 +1,46 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Mon, 20 Apr 2020 17:10:24 +0200
-Subject: [Buildroot] [PATCH] package/qt5/Config.in: fix typo
-Message-ID: <20200420151024.41482-1-b.bilas@grinn-global.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 20 Apr 2020 17:25:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lvm2: add missing dependency to
+ lvmetad
+Message-ID: <20200420152557.824148-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no BR2_TOOLCHAIN_GCC_AT_LEAST_5_0 option
-but BR2_TOOLCHAIN_GCC_AT_LEAST_5.
+Commit 9889b8ce7fcef50fb5089f6e3e84b54f730d0ca6 forgot to propagate
+dependency from lvm2-app-library to lvmetad
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Fixes:
+ - No autobuilder failures yet
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/qt5/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/lvm2/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index cd9c93735d..c716919476 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -16,14 +16,14 @@ comment "Qt5 needs a toolchain w/ gcc >= 5.0, wchar, NPTL, C++, dynamic library"
- 	depends on !BR2_arc
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_5_0
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+index a41bb053b5..a9c5c453fc 100644
+--- a/package/lvm2/Config.in
++++ b/package/lvm2/Config.in
+@@ -49,6 +49,7 @@ comment "lvm2 application library needs a glibc or uClibc toolchain"
  
- menuconfig BR2_PACKAGE_QT5
- 	bool "Qt5"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5_0 # C++11, GCC_BUG_57694
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++11, GCC_BUG_57694
- 	depends on !BR2_ARM_CPU_ARMV4 # needs ARMv5+
- 	# no built-in double-conversion support
- 	depends on !BR2_arc
+ config BR2_PACKAGE_LVM2_LVMETAD
+ 	bool "install lvmetad"
++	depends on !BR2_TOOLCHAIN_USES_MUSL # lvm2-app-library
+ 	select BR2_PACKAGE_LVM2_APP_LIBRARY
+ 	help
+ 	  Install lvmetad
+@@ -60,6 +61,9 @@ config BR2_PACKAGE_LVM2_LVMETAD
+ 	  system.  lvmetad can be a disadvantage when disk event
+ 	  notifications from the system are unreliable.
+ 
++comment "lvmetad daemon needs a glibc or uClibc toolchain"
++	depends on BR2_TOOLCHAIN_USES_MUSL
++
+ endif
+ 
+ comment "lvm2 needs a toolchain w/ threads, dynamic library"
 -- 
-2.26.1
+2.25.1
