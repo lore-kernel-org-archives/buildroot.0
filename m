@@ -1,102 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Apr 2020 22:54:27 +0200
-Subject: [Buildroot] [git commit] package/mc: do not install mc.lib twice
-Message-ID: <20200420204005.EDE768F4CC@busybox.osuosl.org>
+Date: Mon, 20 Apr 2020 23:08:04 +0200
+Subject: [Buildroot] [git commit] packages/exim: enable parallel make
+Message-ID: <20200420205343.BE5078F4E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1f0ed672351494d66ed2f648de8d14992db2bc8
+commit: https://git.buildroot.net/buildroot/commit/?id=153b78ee2640938db328edb64e6c40e064154957
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/1fded9bacffdc57fea9cb151ed889f48ceb5ff8d
+Parallel make used to be broken in exim, as reported in its docs. Now that
+line has disappeared from the docs, and parallel make is actually working.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Tested with 'make exim-dirclean ; time make BR2_JLEVEL=999 exim': builds
+still succeed and the build time decreases from 34 to 11 seconds on my
+host.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...misc-Makefile-am-install-mc-lib-only-once.patch | 60 ++++++++++++++++++++++
- package/mc/mc.mk                                   |  2 +
- 2 files changed, 62 insertions(+)
+ package/exim/exim.mk | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch b/package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch
-new file mode 100644
-index 0000000000..be9bf7a402
---- /dev/null
-+++ b/package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch
-@@ -0,0 +1,60 @@
-+From afb09f7cd7024484845ade25e15b8b93d6cf2d2c Mon Sep 17 00:00:00 2001
-+From: Sergei Trofimovich <slyfox@gentoo.org>
-+Date: Tue, 3 Mar 2020 09:26:12 +0000
-+Subject: [PATCH] Ticket #4070: misc/Makefile.am: install mc.lib only once.
-+
-+Before the change mc.lib was installed twice due to being
-+in two _DATA variables:
-+
-+dist_pkgdata_DATA = \
-+        mc.lib
-+
-+pkgdata_DATA = \
-+        $(dist_pkgdata_DATA) \
-+        $(PKGDATA_OUT)
-+
-+This causes occasional install failures when two parallel
-+`/usr/bin/install` calls race in installing the file:
-+
-+$ make -j20 DESTDIR=/var/tmp/portage/app-misc/mc-4.8.24/image install
-+...
-+ /usr/lib/portage/python3.6/ebuild-helpers/xattr/install \
-+    -c -m 644 mc.lib '/var/tmp/portage/app-misc/mc-4.8.24/image/usr/share/mc'
-+ /usr/lib/portage/python3.6/ebuild-helpers/xattr/install \
-+    -c -m 644 mc.lib mc.charsets '/var/tmp/portage/app-misc/mc-4.8.24/image/usr/share/mc'
-+...
-+ /usr/bin/install: cannot create regular file
-+   '/var/tmp/portage/app-misc/mc-4.8.24/image/usr/share/mc/mc.lib': File exists
-+
-+After the change mc.lib is present only in dist_pkgdata_DATA.
-+
-+Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
-+Signed-off-by: Andrew Borodin <aborodin@vmail.ru>
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/MidnightCommander/mc/commit/afb09f7cd7024484845ade25e15b8b93d6cf2d2c]
-+---
-+ misc/Makefile.am | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/misc/Makefile.am b/misc/Makefile.am
-+index 8ed1826136..24f4a0e1ad 100644
-+--- a/misc/Makefile.am
-++++ b/misc/Makefile.am
-+@@ -17,7 +17,6 @@ dist_pkgdata_DATA = \
-+ 	mc.lib
-+ 
-+ pkgdata_DATA = \
-+-	$(dist_pkgdata_DATA) \
-+ 	$(PKGDATA_OUT)
-+ 
-+ SCRIPTS_IN = \
-+@@ -54,7 +53,6 @@ EXTRA_DIST = \
-+ 	$(LIBFILES_SCRIPT) \
-+ 	$(SCRIPTS_IN) \
-+ 	$(noinst_DATA) \
-+-	$(dist_pkgdata_DATA) \
-+ 	$(PKGDATA_IN)
-+ 
-+ install-data-hook:
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index 4e76b618d8..b689e50e73 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -11,6 +11,8 @@ MC_LICENSE = GPL-3.0+
- MC_LICENSE_FILES = COPYING
- MC_DEPENDENCIES = libglib2 host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- MC_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
-+# We're patching misc/Makefile.am
-+MC_AUTORECONF = YES
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 8d5b6e415b..dc445c6d93 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -120,16 +120,14 @@ endif
  
- ifeq ($(BR2_PACKAGE_GPM),y)
- MC_CONF_OPTS += --with-gpm-mouse
+ # We need the host version of macro_predef during the build, before
+ # building it we need to prepare the makefile.
+-# "The -j (parallel) flag must not be used with make"
+-# (http://www.exim.org/exim-html-current/doc/html/spec_html/ch04.html)
+ define EXIM_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) makefile
+-	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)/build-br macro_predef \
++	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) makefile
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build-br macro_predef \
+ 		CC=$(HOSTCC) \
+ 		LNCC=$(HOSTCC) \
+ 		CFLAGS="-std=c99 $(HOST_CFLAGS)" \
+ 		LFLAGS="-fPIC $(HOST_LDFLAGS)"
+-	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS) \
++	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
+ 		CFLAGS="-std=c99 $(TARGET_CFLAGS)"
+ endef
+ 
+@@ -137,7 +135,7 @@ endef
+ # something when installing...
+ define EXIM_INSTALL_TARGET_CMDS
+ 	DESTDIR=$(TARGET_DIR) INSTALL_ARG="-no_chown -no_symlink" build=br \
+-	  $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS) \
++	  $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
+ 		CFLAGS="-std=c99 $(TARGET_CFLAGS)" \
+ 		install
+ 	chmod u+s $(TARGET_DIR)/usr/sbin/exim
