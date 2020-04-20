@@ -1,69 +1,53 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Apr 2020 21:32:30 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/libfuse3: fix build without C++
-Message-ID: <20200420193230.1517772-1-fontaine.fabrice@gmail.com>
+Date: Mon, 20 Apr 2020 22:00:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix glibc build with
+ old toolchains
+Message-ID: <20200420200058.1660444-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+For an unknown reason, since bump to version 3.0.0, we got build failure
+due to -D_FILE_OFFSET_BITS==64:
+
+/home/naourr/work/instance-2/output-1/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/fts.h:41:3: error: #error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+ # error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
+   ^
+
+Update our workaround to also filter CPPFLAGS fix the issue and seems
+right as we're doing it for all the other affected packages
+(restorecond, elfutils ...)
+
 Fixes:
- - http://autobuild.buildroot.org/results/a6e64213f2910b2b81e79cb1e96e558413d7f70a
+ - http://autobuild.buildroot.org/results/200fd0accf6a1926251243b05e600fbf591bb3a2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Use upstream patch
+ package/libselinux/libselinux.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
- ...on.build-libfuse-is-a-C-only-project.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch
-
-diff --git a/package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch b/package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch
-new file mode 100644
-index 0000000000..279f590ce9
---- /dev/null
-+++ b/package/libfuse3/0001-meson.build-libfuse-is-a-C-only-project.patch
-@@ -0,0 +1,39 @@
-+From fc25c5002cae23151309fce6059e230545fd4d82 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 20 Apr 2020 21:20:19 +0200
-+Subject: [PATCH] Do not require C++ compiler for building
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a6e64213f2910b2b81e79cb1e96e558413d7f70a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/libfuse/libfuse/commit/fc25c5002cae23151309fce6059e230545fd4d82]
-+---
-+ example/meson.build | 2 +-
-+ meson.build         | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/example/meson.build b/example/meson.build
-+index 3edddea9..2342df9c 100644
-+--- a/example/meson.build
-++++ b/example/meson.build
-+@@ -31,7 +31,7 @@ foreach ex : threaded_examples
-+                install: false)
-+ endforeach
-+ 
-+-if not platform.endswith('bsd') and platform != 'dragonfly'
-++if not platform.endswith('bsd') and platform != 'dragonfly' and add_languages('cpp', required : false)
-+     executable('passthrough_hp', 'passthrough_hp.cc',
-+                dependencies: [ thread_dep, libfuse_dep ],
-+                install: false)
-+diff --git a/meson.build b/meson.build
-+index 69b3630d..4428bdb9 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -1,4 +1,4 @@
-+-project('libfuse3', ['cpp', 'c'], version: '3.9.1',
-++project('libfuse3', ['c'], version: '3.9.1',
-+         meson_version: '>= 0.42',
-+         default_options: [ 'buildtype=debugoptimized' ])
-+ 
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index b53146e30b..258065b79d 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -45,12 +45,13 @@ define LIBSELINUX_BUILD_PYTHON_BINDINGS
+ endef
+ endif # python3
+ 
+-# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc
+-# 2.22. We set CFLAGS and LDFLAGS here because we want to win over the
+-# CFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
++# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22. We
++# set CFLAGS, CPPFLAGS and LDFLAGS here because we want to win over the
++# CFLAGS/CPPFLAGS/LDFLAGS definitions passed by $(PKG_PYTHON_DISTUTILS_ENV)
+ # when the python binding is enabled.
+ LIBSELINUX_MAKE_OPTS += \
+ 	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
++	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))" \
+ 	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
+ 
+ define LIBSELINUX_BUILD_CMDS
 -- 
 2.25.1
