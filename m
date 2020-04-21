@@ -1,39 +1,57 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 21 Apr 2020 08:08:53 -0500
-Subject: [Buildroot] [PATCH] package/swupdate: note init script tokenizing
- limitation
-Message-ID: <20200421130853.34356-1-matthew.weber@rockwellcollins.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Tue, 21 Apr 2020 15:36:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump to v1.1.1g
+Message-ID: <20200421133651.6921-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Command line options reference:
-https://sbabic.github.io/swupdate/_sources/swupdate.txt
+This fixes CVE-2020-1967:
+Server or client applications that call the SSL_check_chain() function during
+or after a TLS 1.3 handshake may crash due to a NULL pointer dereference as a
+result of incorrect handling of the "signature_algorithms_cert" TLS extension.
+The crash occurs if an invalid or unrecognised signature algorithm is received
+from the peer. This could be exploited by a malicious peer in a Denial of
+Service attack. OpenSSL version 1.1.1d, 1.1.1e, and 1.1.1f are affected by this
+issue. This issue did not affect OpenSSL versions prior to 1.1.1d.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+See https://www.openssl.org/news/secadv/20200421.txt
+
+Also update the hash file to the new two spaces convention
+
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
+ package/libopenssl/libopenssl.hash | 6 +++---
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I didn't find a good way around this without completely changing
-how the upstream scripts were working or requiring a full shell.
----
- package/swupdate/swupdate.sh | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/swupdate/swupdate.sh b/package/swupdate/swupdate.sh
-index 17d99ef0d4..31ec536373 100644
---- a/package/swupdate/swupdate.sh
-+++ b/package/swupdate/swupdate.sh
-@@ -5,6 +5,9 @@
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 3becd790ac..121e10c410 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.1.1d.tar.gz.sha256
+-sha256	186c6bfe6ecfba7a5b48c47f8a1673d0f3b0e5ba2e25602dd23b629975da3f35	openssl-1.1.1f.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1g.tar.gz.sha256
++sha256  ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46  openssl-1.1.1g.tar.gz
  
- # Override these variables in sourced script(s) located
- # in /usr/lib/swupdate/conf.d or /etc/swupdate/conf.d
-+# NOTE: There are substrings used in some swupdate commands which will
-+#       need to be wrapped in a script to prevent tokenizing
-+#       ( -p/-P post/pre cmds are good examples)
- SWUPDATE_ARGS="-v ${SWUPDATE_EXTRA_ARGS}"
- SWUPDATE_WEBSERVER_ARGS=""
- SWUPDATE_SURICATTA_ARGS=""
+ # License files
+-sha256	c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c	LICENSE
++sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 4639c63fac..a300458f85 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 1.1.1f
++LIBOPENSSL_VERSION = 1.1.1g
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
 -- 
-2.17.1
+2.24.1
