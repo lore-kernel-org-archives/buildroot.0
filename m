@@ -1,58 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 22:37:28 +0200
-Subject: [Buildroot] [PATCH v2] package/uacme: bump version to 1.2.2
-In-Reply-To: <20200418212617.rmizagunxkkzwwom@einstein.dilieto.eu>
-References: <20200418212617.rmizagunxkkzwwom@einstein.dilieto.eu>
-Message-ID: <20200421223728.6f56ef29@windsurf.home>
+Date: Tue, 21 Apr 2020 22:40:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iwd: fix build with gcc 4.8
+In-Reply-To: <CAPi7W80PFd99Jr-+8YqU38Hn8k_sLBhooOWvWsobc7zKZPRNMw@mail.gmail.com>
+References: <20200411213318.972221-1-fontaine.fabrice@gmail.com>
+ <20200412110553.7809e91c@windsurf.home>
+ <CAPi7W80PFd99Jr-+8YqU38Hn8k_sLBhooOWvWsobc7zKZPRNMw@mail.gmail.com>
+Message-ID: <20200421224035.69f803e0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nicola,
+On Sun, 12 Apr 2020 12:51:43 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On Sat, 18 Apr 2020 23:26:17 +0200
-Nicola Di Lieto <nicola.dilieto@gmail.com> wrote:
+> > I don't understand a failure like this can be related to the compiler
+> > version. Could you clarify?  
+> My bad, you're right, the issue is due to glibc that doesn't support
+> SOL_NETLINK before version 2.24 and
+> https://github.com/bminor/glibc/commit/f9b437d5efce93800b51ad2a437c8b1c9616bf80#diff-9256189095e7df9c0688498779241729
 
-> This version includes a new binary named "ualpn", a proxying
-> ACMEv2 tls-alpn-01 responder.
-> 
-> Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Then, could you submit an updated version, both to upstream and to
+Buildroot ?
 
-I've applied, with some changes. See below.
-
-> +if BR2_PACKAGE_UACME
-> +
-> +config BR2_PACKAGE_UACME_UALPN
-> +	bool "enable ualpn"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_LIBEV
-> +	default y
-
-We typically don't enable by default sub-options / optional features,
-so I've dropped this "default y". It was also generating a "make
-check-package" warning due to the ordering of statements.
-
-> -UACME_VERSION = 1.0.22
-> +UACME_VERSION = 1.2.2
->  # Released versions are on branch upstream/latest, tagged as
->  # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
->  # include .tarball-version
-> @@ -26,4 +26,10 @@ UACME_CONF_OPTS += --with-openssl
->  UACME_DEPENDENCIES += openssl
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_UACME_UALPN),y)
-> +UACME_DEPENDENCIES += libev
-
-I've added a:
-
-UACME_CONF_OPTS += --with-ualpn
-
-as we like to be explicit when enabling and disabling features.l
-
-Thanks!
+Thanks a lot!
 
 Thomas
 -- 
