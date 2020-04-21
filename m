@@ -1,44 +1,55 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 21 Apr 2020 19:26:42 +0200
-Subject: [Buildroot] [PATCHv2 08/12]
- configs/engicam_imx6qdl_icore_qt5_defconfig: needs udev to select glmark2
+Date: Tue, 21 Apr 2020 19:26:43 +0200
+Subject: [Buildroot] [PATCHv2 09/12] configs/olimex_a20_olinuxino_lime{,
+ 2}_defconfig: use a glibc toolchain
 In-Reply-To: <20200421172646.3340666-1-romain.naour@gmail.com>
 References: <20200421172646.3340666-1-romain.naour@gmail.com>
-Message-ID: <20200421172646.3340666-8-romain.naour@gmail.com>
+Message-ID: <20200421172646.3340666-9-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_PACKAGE_GLMARK2 is lost while loading the defconfig with:
-make engicam_imx6qdl_icore_qt5_defconfig
-
-In order to select gmark2 package, BR2_PACKAGE_GLMARK2_FLAVOR_ANY option
-must be set.
-
-Based on the defconfig without X11 and wayland package, the only missing
-option to select BR2_PACKAGE_GLMARK2_FLAVOR_ANY is BR2_PACKAGE_HAS_UDEV.
-The only possible option is to enable one of the udev provider
-(eudev or systemd). Select eudev package for /dev management.
+Since 2e71b396a171594d5b913d8b8c11079d376198ed, this defconfig needs
+a glibc toolchain to select sunxi-mali-mainline package.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Francois Perrad <francois.perrad@gadz.org>
 ---
- configs/engicam_imx6qdl_icore_qt5_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++++
+ configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/configs/engicam_imx6qdl_icore_qt5_defconfig b/configs/engicam_imx6qdl_icore_qt5_defconfig
-index 8f9c9326a9..b893c6aead 100644
---- a/configs/engicam_imx6qdl_icore_qt5_defconfig
-+++ b/configs/engicam_imx6qdl_icore_qt5_defconfig
-@@ -9,6 +9,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index 6daa27b631..eb6a82c2f6 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -6,6 +6,10 @@ BR2_ARM_EABIHF=y
+ # Linux headers same as kernel, a 5.4 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
  
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++# Toolchain
++# glibc is needed for sunxi-mali-mainline-package.
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index bb555005e9..740fd4357a 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -6,6 +6,10 @@ BR2_ARM_EABIHF=y
+ # Linux headers same as kernel, a 5.4 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
  
- # Bootloader
- BR2_TARGET_UBOOT=y
++# Toolchain
++# glibc is needed for sunxi-mali-mainline-package.
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
 -- 
 2.25.3
