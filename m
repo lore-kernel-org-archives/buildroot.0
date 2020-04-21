@@ -1,41 +1,42 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 21 Apr 2020 19:26:39 +0200
-Subject: [Buildroot] [PATCHv2 05/12]
- configs:minnowboard_max-graphical_defconfig: re-enable GLX support
+Date: Tue, 21 Apr 2020 19:26:40 +0200
+Subject: [Buildroot] [PATCHv2 06/12] configs/nanopi_r1_defconfig: remove
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG
 In-Reply-To: <20200421172646.3340666-1-romain.naour@gmail.com>
 References: <20200421172646.3340666-1-romain.naour@gmail.com>
-Message-ID: <20200421172646.3340666-5-romain.naour@gmail.com>
+Message-ID: <20200421172646.3340666-6-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This defconfig loses mesa3d-demo and glmark2 package since commit
-5cb821d5635626b7327d5d704555c412e5ed5a1f that introduced an
-explicit option to enable GLX support.
+This defconfig use a custom defconfig file located
+in board/friendlyarm/nanopi-r1/uboot/nanopi_r1_defconfig.
+
+BR2_TARGET_UBOOT_BOARD_DEFCONFIG is used to provide the name
+of a in-tree defconfig. Since a custom defconfig is used,
+this option is lost while loading the defconfig with:
+make nanopi_r1_defconfig
 
 This fixes the new defconfig check.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
-This patch should be backported to 2020.02.x and 2019.11.x.
----
- configs/minnowboard_max-graphical_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ configs/nanopi_r1_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
-index 33630c6b09..910c324e25 100644
---- a/configs/minnowboard_max-graphical_defconfig
-+++ b/configs/minnowboard_max-graphical_defconfig
-@@ -42,6 +42,7 @@ BR2_PACKAGE_MESA3D_DEMOS=y
- BR2_PACKAGE_MESA3D=y
- BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
- BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-+BR2_PACKAGE_MESA3D_OPENGL_GLX=y
- 
- # Framebuffer (just for testing purposes)
- BR2_PACKAGE_FB_TEST_APP=y
+diff --git a/configs/nanopi_r1_defconfig b/configs/nanopi_r1_defconfig
+index 112e84f786..4c45110bd2 100644
+--- a/configs/nanopi_r1_defconfig
++++ b/configs/nanopi_r1_defconfig
+@@ -15,7 +15,6 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_r1"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_CUSTOM_DTS_PATH="board/friendlyarm/nanopi-r1/uboot/sun8i-h3-nanopi-r1.dts"
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -- 
 2.25.3
