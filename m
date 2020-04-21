@@ -1,49 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 21:34:15 +0200
-Subject: [Buildroot] [git commit] package/libupnp18: bump to version 1.8.7
-Message-ID: <20200421191949.D7D9F8FA92@busybox.osuosl.org>
+Date: Tue, 21 Apr 2020 21:34:11 +0200
+Subject: [Buildroot] [git commit] package/lirc-tools: fix build with musl
+ 1.2.0
+Message-ID: <20200421191949.CEE258FA91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d50d8c6bfc536eee1e2f469b06123ac8413f57a
+commit: https://git.buildroot.net/buildroot/commit/?id=3d7d7b8120db24b636a8cf245eb8277e8377bf8b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation of hash file (two spaces)
+Fixes:
+ - http://autobuild.buildroot.org/results/fdb67297e551c5422fc5f4e058463876682b07f9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libupnp18/libupnp18.hash | 8 ++++----
- package/libupnp18/libupnp18.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...gins-devinput.c-fix-build-with-musl-1.2.0.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
-index 68aee9ba62..ba9ce1bcdf 100644
---- a/package/libupnp18/libupnp18.hash
-+++ b/package/libupnp18/libupnp18.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.6/libupnp-1.8.6.tar.bz2.sha1
--sha1 6132a949d7536dac835172609d1def1e7f2bd232  libupnp-1.8.6.tar.bz2
-+# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.7/libupnp-1.8.7.tar.bz2.sha1
-+sha1  2ea3011180c58b0584f0cb73cc8e685a0a1c4ec8  libupnp-1.8.7.tar.bz2
- # Locally computed:
--sha256	65faf240f8ccee50cc0e7fe7fb21dcd79f743fc227a9b652b091f50f6956c2c7	libupnp-1.8.6.tar.bz2
--sha256	c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3	COPYING
-+sha256  e38c69b2b67322e67cd53680db9b02c7c1f720a47a3cd626fd89d57d2dca93b8  libupnp-1.8.7.tar.bz2
-+sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
-index f73c656831..f17a1a720d 100644
---- a/package/libupnp18/libupnp18.mk
-+++ b/package/libupnp18/libupnp18.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUPNP18_VERSION = 1.8.6
-+LIBUPNP18_VERSION = 1.8.7
- LIBUPNP18_SOURCE = libupnp-$(LIBUPNP18_VERSION).tar.bz2
- LIBUPNP18_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP18_VERSION)
- LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
+diff --git a/package/lirc-tools/0004-plugins-devinput.c-fix-build-with-musl-1.2.0.patch b/package/lirc-tools/0004-plugins-devinput.c-fix-build-with-musl-1.2.0.patch
+new file mode 100644
+index 0000000000..e4c02cf458
+--- /dev/null
++++ b/package/lirc-tools/0004-plugins-devinput.c-fix-build-with-musl-1.2.0.patch
+@@ -0,0 +1,42 @@
++From 74909db0342c7aff29e15972c9928f3bef56d5a6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 21 Apr 2020 12:14:13 +0200
++Subject: [PATCH] plugins/devinput.c: fix build with musl 1.2.0
++
++time element is deprecated on new input_event structure in kernel's
++input.h [1]
++
++[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ plugins/devinput.c | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/plugins/devinput.c b/plugins/devinput.c
++index 77828b44..e5a52e42 100644
++--- a/plugins/devinput.c
+++++ b/plugins/devinput.c
++@@ -51,6 +51,10 @@
++ #define LONG(x) ((x) / BITS_PER_LONG)
++ #define test_bit(bit, array)    ((array[LONG(bit)] >> OFF(bit)) & 1)
++ 
+++#ifndef input_event_sec
+++#define input_event_sec time.tv_sec
+++#define input_event_usec time.tv_usec
+++#endif
++ 
++ static const logchannel_t logchannel = LOG_DRIVER;
++ 
++@@ -458,7 +462,7 @@ char* devinput_rec(struct ir_remote* remotes)
++ 		return 0;
++ 	}
++ 
++-	log_trace("time %ld.%06ld  type %d  code %d  value %d", event.time.tv_sec, event.time.tv_usec, event.type,
+++	log_trace("time %ld.%06ld  type %d  code %d  value %d", event.input_event_sec, event.input_event_usec, event.type,
++ 		  event.code, event.value);
++ 
++ 	value = (unsigned)event.value;
++-- 
++2.25.1
++
