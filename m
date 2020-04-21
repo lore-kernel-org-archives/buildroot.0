@@ -1,47 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 22:09:45 +0200
-Subject: [Buildroot] [PATCHv2 01/12] support/scripts: add
- check-dotconfig.py
-In-Reply-To: <20200421172646.3340666-1-romain.naour@gmail.com>
-References: <20200421172646.3340666-1-romain.naour@gmail.com>
-Message-ID: <20200421220945.39040a00@windsurf.home>
+Date: Tue, 21 Apr 2020 22:12:37 +0200
+Subject: [Buildroot] [git commit] package/collectd: fix dependency of
+ network-gcrypt
+Message-ID: <20200421195857.06BC88FB55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 21 Apr 2020 19:26:35 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a71b9a111fdf308e0d2c8384f360ef2b29e7a553
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For the same reason as for 50b747f212be2c9c0f7cf10c674ed488d042715c,
-> we need to check if the generated configuration file (.config)
-> contains all symbols present in the defconfig file.
-> 
-> If not there is an issue with the defconfig.
-> 
-> This script will be used in .gitlab-ci.yml.
-> 
-> Inspired by is_toolchain_usable() function from genrandconfig:
-> https://git.busybox.net/buildroot/tree/utils/genrandconfig?h=2020.02#n164
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
-> v2: update with the improved patch suggested by Yann.
->     http://lists.busybox.net/pipermail/buildroot/2020-April/280679.html
-> ---
->  support/scripts/check-dotconfig.py | 44 ++++++++++++++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100755 support/scripts/check-dotconfig.py
+Commit c8b8744a1aeebeba4035fdba9556226696ac2abd forgot to propagate
+libgcrypt reverse dependency
 
-I have applied patches 3 to 11 in this series. For PATCH 03/11, I fixed
-up the android-tools selection, as I replied to the patch. All other
-patches were applied as-is. Thanks!
+Fixes:
+ - http://autobuild.buildroot.org/results/98c7734dccb4e01c02f4680cfbdf82ee59e17935
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/collectd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 1b6b3384c4..188be3c0fb 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -592,6 +592,7 @@ config BR2_PACKAGE_COLLECTD_NETWORK
+ 
+ config BR2_PACKAGE_COLLECTD_NETWORK_GCRYPT
+ 	bool "crypto support"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 	depends on BR2_PACKAGE_COLLECTD_NETWORK
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	help
