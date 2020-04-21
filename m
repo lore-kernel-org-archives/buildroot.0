@@ -1,77 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 22:29:16 +0200
-Subject: [Buildroot] [git commit] package/libssh: add patch to fix regression
-Message-ID: <20200421201520.EF09F8D9E8@busybox.osuosl.org>
+Date: Tue, 21 Apr 2020 22:29:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump to
+ v1.1.1g
+In-Reply-To: <20200421133651.6921-1-titouan.christophe@railnova.eu>
+References: <20200421133651.6921-1-titouan.christophe@railnova.eu>
+Message-ID: <20200421222954.3781cc2a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39099153d9404cd6f107f0fd92ce8686bbd1beb2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 21 Apr 2020 15:36:51 +0200
+Titouan Christophe <titouan.christophe@railnova.eu> wrote:
 
-The libssh server is used by libnetconf2. With libssh version 0.9.4 a
-regression was introduced that wrongly leads to session closed after the
-poll timeout.
+> This fixes CVE-2020-1967:
+> Server or client applications that call the SSL_check_chain() function during
+> or after a TLS 1.3 handshake may crash due to a NULL pointer dereference as a
+> result of incorrect handling of the "signature_algorithms_cert" TLS extension.
+> The crash occurs if an invalid or unrecognised signature algorithm is received
+> from the peer. This could be exploited by a malicious peer in a Denial of
+> Service attack. OpenSSL version 1.1.1d, 1.1.1e, and 1.1.1f are affected by this
+> issue. This issue did not affect OpenSSL versions prior to 1.1.1d.
+> 
+> See https://www.openssl.org/news/secadv/20200421.txt
+> 
+> Also update the hash file to the new two spaces convention
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> ---
+>  package/libopenssl/libopenssl.hash | 6 +++---
+>  package/libopenssl/libopenssl.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-The patch comes from upstrem:
-https://git.libssh.org/projects/libssh.git/commit/?id=6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4
+Applied to master, thanks.
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...oid-returning-SSH_AGAIN-from-ssh_channel_.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
-
-diff --git a/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch b/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
-new file mode 100644
-index 0000000000..9cc9389479
---- /dev/null
-+++ b/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
-@@ -0,0 +1,45 @@
-+From 6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4 Mon Sep 17 00:00:00 2001
-+From: Jakub Jelen <jjelen@redhat.com>
-+Date: Thu, 16 Apr 2020 11:13:34 +0200
-+Subject: [PATCH] channels: Avoid returning SSH_AGAIN from
-+ ssh_channel_poll_timeout()
-+
-+This addresses a regression introduced in 3bad0607, partially fixed in 022409e9,
-+but the function was still able to return SSH_AGAIN, which was not expected by
-+callers.
-+
-+Based on discussion in [1] and [2]
-+
-+[1] https://gitlab.com/libssh/libssh-mirror/-/merge_requests/101
-+[2] https://www.libssh.org/archive/libssh/2020-03/0000029.html
-+
-+Signed-off-by: Jakub Jelen <jjelen@redhat.com>
-+Reviewed-by: Anderson Toshiyuki Sasaki <ansasaki@redhat.com>
-+
-+[Backport from upstream commit:
-+6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4]
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+---
-+ src/channels.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/src/channels.c b/src/channels.c
-+index bcc1c207..9fe309d0 100644
-+--- a/src/channels.c
-++++ b/src/channels.c
-+@@ -3116,6 +3116,12 @@ int ssh_channel_poll_timeout(ssh_channel channel, int timeout, int is_stderr)
-+         session->session_state == SSH_SESSION_STATE_ERROR) {
-+         rc = SSH_ERROR;
-+         goto out;
-++    } else if (rc == SSH_AGAIN) {
-++        /* If the above timeout expired, it is ok and we do not need to
-++         * attempt to check the read buffer. The calling functions do not
-++         * expect us to return SSH_AGAIN either here. */
-++        rc = SSH_OK;
-++        goto out;
-+     }
-+     len = ssh_buffer_get_len(stdbuf);
-+     if (len > 0) {
-+-- 
-+2.20.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
