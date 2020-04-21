@@ -1,57 +1,32 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Tue, 21 Apr 2020 15:36:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump to v1.1.1g
-Message-ID: <20200421133651.6921-1-titouan.christophe@railnova.eu>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 Apr 2020 16:35:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/selinux: fix circular dependency
+In-Reply-To: <20200421094849.2476332-1-fontaine.fabrice@gmail.com>
+References: <20200421094849.2476332-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200421163546.321335bf@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes CVE-2020-1967:
-Server or client applications that call the SSL_check_chain() function during
-or after a TLS 1.3 handshake may crash due to a NULL pointer dereference as a
-result of incorrect handling of the "signature_algorithms_cert" TLS extension.
-The crash occurs if an invalid or unrecognised signature algorithm is received
-from the peer. This could be exploited by a malicious peer in a Denial of
-Service attack. OpenSSL version 1.1.1d, 1.1.1e, and 1.1.1f are affected by this
-issue. This issue did not affect OpenSSL versions prior to 1.1.1d.
+Hello Fabrice,
 
-See https://www.openssl.org/news/secadv/20200421.txt
+On Tue, 21 Apr 2020 11:48:49 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Also update the hash file to the new two spaces convention
+> Fix circular dependency added by commit
+> 791292c48d5165515ca08f35d8cbc1ef78d3ed95
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- package/libopenssl/libopenssl.hash | 6 +++---
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Could you give more details about the circular dependency? How is
+changing a "select" by a "depends on" going to fix it? Especially since
+the select was in fact already there, just conditional on
+!BR2_PACKAGE_PYTHON.
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 3becd790ac..121e10c410 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.1.1d.tar.gz.sha256
--sha256	186c6bfe6ecfba7a5b48c47f8a1673d0f3b0e5ba2e25602dd23b629975da3f35	openssl-1.1.1f.tar.gz
-+# From https://www.openssl.org/source/openssl-1.1.1g.tar.gz.sha256
-+sha256  ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46  openssl-1.1.1g.tar.gz
- 
- # License files
--sha256	c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c	LICENSE
-+sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 4639c63fac..a300458f85 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENSSL_VERSION = 1.1.1f
-+LIBOPENSSL_VERSION = 1.1.1g
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+Thanks,
+
+Thomas
 -- 
-2.24.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
