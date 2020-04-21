@@ -1,48 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 22:12:51 +0200
-Subject: [Buildroot] [git commit] package/midori: needs gcc >= 7
-Message-ID: <20200421195857.1719B8FB55@busybox.osuosl.org>
+Date: Tue, 21 Apr 2020 22:11:53 +0200
+Subject: [Buildroot] [git commit] package/libopenssl: security bump to
+ v1.1.1g
+Message-ID: <20200421195856.EF7E68FB55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de5a74193b270e4bff19a45a4b82a70fb70857fa
+commit: https://git.buildroot.net/buildroot/commit/?id=849aee4f8805cce89376c0cd1ce23721436a90ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4 forgot to propagate
-gcc >= 7 dependency to midori
+This fixes CVE-2020-1967:
+Server or client applications that call the SSL_check_chain() function during
+or after a TLS 1.3 handshake may crash due to a NULL pointer dereference as a
+result of incorrect handling of the "signature_algorithms_cert" TLS extension.
+The crash occurs if an invalid or unrecognised signature algorithm is received
+from the peer. This could be exploited by a malicious peer in a Denial of
+Service attack. OpenSSL version 1.1.1d, 1.1.1e, and 1.1.1f are affected by this
+issue. This issue did not affect OpenSSL versions prior to 1.1.1d.
 
-Fixes:
- - http://autobuild.buildroot.org/results/736a99dcaa72fba3f06775d08c4395f506fce944
+See https://www.openssl.org/news/secadv/20200421.txt
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Also update the hash file to the new two spaces convention
+
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/midori/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/libopenssl/libopenssl.hash | 6 +++---
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index 64139ce49e..089f36ced8 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -1,7 +1,7 @@
--comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6"
-+comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 7"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_6 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
- 		!BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 3becd790ac..121e10c410 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.1.1d.tar.gz.sha256
+-sha256	186c6bfe6ecfba7a5b48c47f8a1673d0f3b0e5ba2e25602dd23b629975da3f35	openssl-1.1.1f.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1g.tar.gz.sha256
++sha256  ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46  openssl-1.1.1g.tar.gz
  
- config BR2_PACKAGE_MIDORI
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_MIDORI
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt, gcr, gnupg2
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # webkitgtk
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # webkitgtk
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	# GCR can only be used with the X11 backend
+ # License files
+-sha256	c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c	LICENSE
++sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 4639c63fac..a300458f85 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 1.1.1f
++LIBOPENSSL_VERSION = 1.1.1g
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
