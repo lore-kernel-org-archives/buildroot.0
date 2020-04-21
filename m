@@ -1,50 +1,44 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 21 Apr 2020 19:26:41 +0200
-Subject: [Buildroot] [PATCHv2 07/12] configs: remove
- BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
+Date: Tue, 21 Apr 2020 19:26:42 +0200
+Subject: [Buildroot] [PATCHv2 08/12]
+ configs/engicam_imx6qdl_icore_qt5_defconfig: needs udev to select glmark2
 In-Reply-To: <20200421172646.3340666-1-romain.naour@gmail.com>
 References: <20200421172646.3340666-1-romain.naour@gmail.com>
-Message-ID: <20200421172646.3340666-7-romain.naour@gmail.com>
+Message-ID: <20200421172646.3340666-8-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This option has been removed since 6836f2a70acd259a846c88968924d60afef8cc16.
+The BR2_PACKAGE_GLMARK2 is lost while loading the defconfig with:
+make engicam_imx6qdl_icore_qt5_defconfig
 
-This fixes the new defconfig check.
+In order to select gmark2 package, BR2_PACKAGE_GLMARK2_FLAVOR_ANY option
+must be set.
+
+Based on the defconfig without X11 and wayland package, the only missing
+option to select BR2_PACKAGE_GLMARK2_FLAVOR_ANY is BR2_PACKAGE_HAS_UDEV.
+The only possible option is to enable one of the udev provider
+(eudev or systemd). Select eudev package for /dev management.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Fabio Estevam <festevam@gmail.com>
 ---
- configs/engicam_imx6qdl_icore_qt5_defconfig | 1 -
- configs/imx6-sabresd_qt5_defconfig          | 1 -
- 2 files changed, 2 deletions(-)
+ configs/engicam_imx6qdl_icore_qt5_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/configs/engicam_imx6qdl_icore_qt5_defconfig b/configs/engicam_imx6qdl_icore_qt5_defconfig
-index 62d3008b4d..8f9c9326a9 100644
+index 8f9c9326a9..b893c6aead 100644
 --- a/configs/engicam_imx6qdl_icore_qt5_defconfig
 +++ b/configs/engicam_imx6qdl_icore_qt5_defconfig
-@@ -51,7 +51,6 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+@@ -9,6 +9,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
  
- # qt5
- BR2_PACKAGE_QT5=y
--BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
- BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
- BR2_PACKAGE_QT5BASE_LINUXFB=y
- BR2_PACKAGE_QT5BASE_FONTCONFIG=y
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index 0b11225b72..df50990dc6 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -70,7 +70,6 @@ BR2_PACKAGE_MESA3D_DEMOS=y
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
  
- # Qt5
- BR2_PACKAGE_QT5=y
--BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
- BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
- BR2_PACKAGE_QT5BASE_LINUXFB=y
- BR2_PACKAGE_QT5BASE_FONTCONFIG=y
+ # Bootloader
+ BR2_TARGET_UBOOT=y
 -- 
 2.25.3
