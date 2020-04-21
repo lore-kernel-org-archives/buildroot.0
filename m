@@ -1,158 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 Apr 2020 20:38:17 +0200
-Subject: [Buildroot] [PATCH 8/8] package/mongodb: bump to version 4.2.4
-In-Reply-To: <CAMQcK5Jeg4iHakW=b1kd_m6A8PAJvke_1P_e3Kr5B8sU25tROw@mail.gmail.com>
-References: <20200323104909.16765-1-yegorslists@googlemail.com>
- <20200323104909.16765-8-yegorslists@googlemail.com>
- <CAMQcK5L+D_aONSbczyJOtU0TOmUeOMNM-4Raq+Oqgg6_9h3PDQ@mail.gmail.com>
- <CAMQcK5Jeg4iHakW=b1kd_m6A8PAJvke_1P_e3Kr5B8sU25tROw@mail.gmail.com>
-Message-ID: <CAPi7W817eSQBx+6GXyXw7G7KrdayYyQHwLZEzDcs-M_C7tHEFQ@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 21 Apr 2020 13:37:27 -0500
+Subject: [Buildroot] [PATCH] package/rsyslog: bump to 8.2002.0
+Message-ID: <20200421183727.40382-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ryan,
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/rsyslog/rsyslog.hash | 8 ++++----
+ package/rsyslog/rsyslog.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Le mar. 21 avr. 2020 ? 18:06, Ryan Barnett <ryan.barnett@collins.com> a ?crit :
->
-> Yegor/All,
->
-> On Mon, Apr 20, 2020 at 5:56 PM Ryan Barnett
-> <ryan.barnett@rockwellcollins.com> wrote:
-> >
-> > I've run into an error when compiling for an x86-64 bit platform for
-> > the core-i5 architecture:
-> >
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(node_data.cpp.o):
-> > relocation R_X86_64_32 against `.bss' can not be used when making a
-> > PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(null.cpp.o):
-> > relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
-> > making a PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(ostream_wrapper.cpp.o):
-> > relocation R_X86_64_32 against `.bss' can not be used when making a
-> > PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(parse.cpp.o):
-> > relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
-> > making a PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(parser.cpp.o):
-> > relocation R_X86_64_32 against `.bss' can not be used when making a
-> > PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(regex_yaml.cpp.o):
-> > relocation R_X86_64_32 against `.bss' can not be used when making a
-> > PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(scanner.cpp.o):
-> > relocation R_X86_64_32 against `.bss' can not be used when making a
-> > PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(scantoken.cpp.o):
-> > relocation R_X86_64_32 against `.bss' can not be used when making a
-> > PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(simplekey.cpp.o):
-> > relocation R_X86_64_32 against `.bss' can not be used when making a
-> > PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(singledocparser.cpp.o):
-> > relocation R_X86_64_32 against `.bss' can not be used when making a
-> > PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(stream.cpp.o):
-> > relocation R_X86_64_32 against `.data' can not be used when making a
-> > PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(tag.cpp.o):
-> > relocation R_X86_64_32 against `.bss' can not be used when making a
-> > PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(binary.cpp.o):
-> > relocation R_X86_64_32S against `.rodata' can not be used when making
-> > a PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(directives.cpp.o):
-> > relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
-> > making a PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(nodebuilder.cpp.o):
-> > relocation R_X86_64_32S against symbol `_ZTVN4YAML11NodeBuilderE' can
-> > not be used when making a PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(scanscalar.cpp.o):
-> > relocation R_X86_64_32 against symbol `_ZGVZN4YAML3Exp5EmptyEvE1e' can
-> > not be used when making a PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(scantag.cpp.o):
-> > relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
-> > making a PIE object; recompile with -fPIC
-> > /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
-> > /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(exp.cpp.o):
-> > relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
-> > making a PIE object; recompile with -fPIC
-> > /accts
-> >
-> > Do you have any ideas of what the issue is?
-> >
-> > I have BR2_SHARED_LIBS set along with using the latest stable bootlin
-> > toolchain for x86-64-core-i7 toolchain:
-> >
-> > https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--stable-2020.02-2.tar.bz2
-> >
-> > Please let me know if you need any more information in order to
-> > recreate the problem.
->
-> Here is the defconfig based on qemu_x86_64_defconfig which will
-> reproduce the issue:
->
-> BR2_x86_64=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--stable-2020.02-2.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
-> BR2_SYSTEM_DHCP="eth0"
-> BR2_ROOTFS_POST_BUILD_SCRIPT="board/qemu/x86_64/post-build.sh"
-> BR2_LINUX_KERNEL=y
-> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.91"
-> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
-> BR2_PACKAGE_MONGODB=y
-> BR2_TARGET_ROOTFS_EXT2=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> BR2_PACKAGE_HOST_QEMU=y
-> BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-Thanks for this defconfig, I was able to reproduce your issue.
-The patch that fixes it is available here:
-https://patchwork.ozlabs.org/project/buildroot/patch/20200421183543.4135516-1-fontaine.fabrice at gmail.com
->
-> Thanks,
-> -Ryan
->
-> ---
-> Ryan Barnett | Sr Systems Engineer | Commercial Avionics
-> COLLINS AEROSPACE
-> 400 Collins Rd NE, Cedar Rapids, IA 52498 USA
-> ryan.barnett at collins.com | collinsaerospace.com
->
-> CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-> privileged information of Collins Aerospace and its affiliated
-> companies. If you are not the intended recipient, please 1) Do not
-> disclose, copy, distribute or use this message or its contents. 2)
-> Advise the sender by return email. 3) Delete all copies (including all
-> attachments) from your computer. Your cooperation is greatly
-> appreciated.
-Best Regards,
-
-Fabrice
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index 22372a92a7..0ed50f8199 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,7 +1,7 @@
+ # From http://www.rsyslog.com/downloads/download-v8-stable/
+-sha256	e1f4776b1c62ad7220f4d624a89a96b0c3d4738006899356eaaef0f1f91ee104	rsyslog-8.1911.0.tar.gz
++sha256  fe86c14d860da1202c76616feac0539ea5a40a4ad182d74b7d6d2419cc2381f8  rsyslog-8.2002.0.tar.gz
+ 
+ # Locally calculated
+-sha256	054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083	COPYING
+-sha256	8743ad560dea1229d4f46cd603e10874db41a27f3c74f64e958ef123f3943fab	COPYING.ASL20
+-sha256	4038442ca5bde8ffd243cfc235cb4455e7d618d47558ea3d8284733f71d904ed	COPYING.LESSER
++sha256  054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083  COPYING
++sha256  8743ad560dea1229d4f46cd603e10874db41a27f3c74f64e958ef123f3943fab  COPYING.ASL20
++sha256  4038442ca5bde8ffd243cfc235cb4455e7d618d47558ea3d8284733f71d904ed  COPYING.LESSER
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index c4446c210d..27d482fdec 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RSYSLOG_VERSION = 8.1911.0
++RSYSLOG_VERSION = 8.2002.0
+ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
+ RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
+ RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
+-- 
+2.17.1
