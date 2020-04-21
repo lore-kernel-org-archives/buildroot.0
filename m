@@ -1,7 +1,7 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 21 Apr 2020 13:37:27 -0500
-Subject: [Buildroot] [PATCH] package/rsyslog: bump to 8.2002.0
-Message-ID: <20200421183727.40382-1-matthew.weber@rockwellcollins.com>
+Date: Tue, 21 Apr 2020 13:40:36 -0500
+Subject: [Buildroot] [PATCH] package/logrotate: bump to 3.16.0
+Message-ID: <20200421184036.60705-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,38 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/rsyslog/rsyslog.hash | 8 ++++----
- package/rsyslog/rsyslog.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/logrotate/logrotate.hash | 2 +-
+ package/logrotate/logrotate.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
-index 22372a92a7..0ed50f8199 100644
---- a/package/rsyslog/rsyslog.hash
-+++ b/package/rsyslog/rsyslog.hash
-@@ -1,7 +1,7 @@
- # From http://www.rsyslog.com/downloads/download-v8-stable/
--sha256	e1f4776b1c62ad7220f4d624a89a96b0c3d4738006899356eaaef0f1f91ee104	rsyslog-8.1911.0.tar.gz
-+sha256  fe86c14d860da1202c76616feac0539ea5a40a4ad182d74b7d6d2419cc2381f8  rsyslog-8.2002.0.tar.gz
- 
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+index 6da14797fe..24f2cd834f 100644
+--- a/package/logrotate/logrotate.hash
++++ b/package/logrotate/logrotate.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256	054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083	COPYING
--sha256	8743ad560dea1229d4f46cd603e10874db41a27f3c74f64e958ef123f3943fab	COPYING.ASL20
--sha256	4038442ca5bde8ffd243cfc235cb4455e7d618d47558ea3d8284733f71d904ed	COPYING.LESSER
-+sha256  054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083  COPYING
-+sha256  8743ad560dea1229d4f46cd603e10874db41a27f3c74f64e958ef123f3943fab  COPYING.ASL20
-+sha256  4038442ca5bde8ffd243cfc235cb4455e7d618d47558ea3d8284733f71d904ed  COPYING.LESSER
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index c4446c210d..27d482fdec 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
+-sha256 a7b20f5184c9598c36546f9200d3bd616d561478a0423ab8074e97a1cd7b1c25  logrotate-3.15.1.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256 bc6acfd09925045d48b5ff553c24c567cfd5f59d513c4ac34bfb51fa6b79dc8a  logrotate-3.16.0.tar.gz
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 831e23935d..aabf73b6b4 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RSYSLOG_VERSION = 8.1911.0
-+RSYSLOG_VERSION = 8.2002.0
- RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
- RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
+-LOGROTATE_VERSION = 3.15.1
++LOGROTATE_VERSION = 3.16.0
+ LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
+ LOGROTATE_LICENSE = GPL-2.0+
+ LOGROTATE_LICENSE_FILES = COPYING
 -- 
 2.17.1
