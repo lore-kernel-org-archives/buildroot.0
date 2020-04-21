@@ -1,61 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 16:51:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mbuffer: fix build with powerpc
-In-Reply-To: <20200421123852.3529227-1-fontaine.fabrice@gmail.com>
-References: <20200421123852.3529227-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200421165157.6cc14384@windsurf.home>
+Date: Tue, 21 Apr 2020 16:55:10 +0200
+Subject: [Buildroot] [PATCH] package/linux-tools: selftests: add numactl
+ dependency for net tests
+In-Reply-To: <20200421175140.n5l3vn7rh642widp@vkochan-ThinkPad-T470p>
+References: <20200325164240.22747-1-vadim4j@gmail.com>
+ <20200411152649.3830039d@windsurf.home>
+ <20200421175140.n5l3vn7rh642widp@vkochan-ThinkPad-T470p>
+Message-ID: <20200421165510.0616fc36@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hello,
 
-On Tue, 21 Apr 2020 14:38:52 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Tue, 21 Apr 2020 20:51:40 +0300
+Vadim Kochan <vadim4j@gmail.com> wrote:
 
-> ++#if defined(__linux) || defined(__linux__)
-> + #include <linux/limits.h>
+> > So, I think we should:
+> > 
+> >  - Pass FORCE_TARGETS=1 during the build so that the build aborts if a
+> >    required dependency is not found.
+> > 
+> >  - Switch to using more optional dependencies, and disable the TARGETS
+> >    that we cannot build by passing the appropriate SKIP_TARGETS value
+> >    to the Makefile.
+> > 
+> > Could you work on this ? We probably need to make libcap-ng optional,
+> > but also popt. The other options that are selected by
+> > BR2_PACKAGE_LINUX_TOOLS_SELFTESTS might also need to be revisited.
+> > 
+> > An alternative is to just say that we don't care about making all of
+> > that optional, and simply unconditionally enable all the dependencies
+> > that selftests need, to build everything. Easier, but that's not the
+> > normal Buildroot design principle.
+> > 
+> > Best regards,
+> > 
+> > Thomas  
+> 
+> Yes, I understand your point. I think it would be useful to add config
+> options per each selftests subsystem to easy turn it on.
 
-This shouldn't include <linux/limits.h> directly. Indeed, PIPE_BUF is
-defined by the POSIX standard as being defined in <limits.h>, see man
-limits.h(0P):
+I don't know if we really want to add one sub-option for each selftest
+subsystem, that would be quite a lot.
 
-       {PIPE_BUF}
-             Maximum number of bytes that is guaranteed to be atomic when writing to a pipe.
-             Minimum Acceptable Value: {_POSIX_PIPE_BUF}
-
-However, it is only defined if _POSIX_SOURCE is defined, which may gets
-done automatically or not depending on which C standard you're building
-with.
-
-Demo:
-
-$ cat toto.c 
-#include <limits.h>
-#include <stdio.h>
-int main(void) { printf("%d\n", PIPE_BUF); return 0; }
-
-$ gcc -std=c89 -o toto toto.c 
-toto.c: In function ?main?:
-toto.c:4:33: error: ?PIPE_BUF? undeclared (first use in this function)
-    4 | int main(void) { printf("%d\n", PIPE_BUF); return 0; }
-      |                                 ^~~~~~~~
-toto.c:4:33: note: each undeclared identifier is reported only once for each function it appears in
-
-$ gcc -std=gnu89 -o toto toto.c
-$ # i.e, builds fine!
-
-$ gcc -std=c89 -D_POSIX_SOURCE -o toto toto.c
-$ # i.e, builds fine!
-
-That being said, it's not your fault: the upstream code already does
-the bad thing of including <linux/limits.h>.
-
-And BTW, this issue has nothing to do with PowerPC at all. As you can
-see, even on my x64-64 platform, if you use PIPE_BUF in c89 or c99
-code, it doesn't work unless you define _POSIX_SOURCE.
+However, we should properly enable/disable selftest subsystems
+depending on the availability of the necessary dependencies. For
+example, if numactl is enabled, then we enable the network-related
+selftests, otherwise we disable them.
 
 Best regards,
 
