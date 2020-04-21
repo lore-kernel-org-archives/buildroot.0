@@ -1,61 +1,48 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 21 Apr 2020 14:49:42 -0600
-Subject: [Buildroot] [PATCH v2] package/python-pycrypto: fix python3.8
- compatibility
-In-Reply-To: <20200421222847.09432773@windsurf.home>
-References: <20200420140724.3206074-1-romain.naour@gmail.com>
- <20200421222847.09432773@windsurf.home>
-Message-ID: <CADvTj4qJ3jC_y_rNwwbDF5jq7xF8BAF39uqnuQKQgi3nxYTaBg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 Apr 2020 22:51:14 +0200
+Subject: [Buildroot] [git commit] package/libglib2: restore use of system
+ printf
+Message-ID: <20200421203653.0ADE48FB6E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 21, 2020 at 2:28 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon, 20 Apr 2020 16:07:24 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
->
-> > Apply the patch from Fedora 31 [1][2] to replace the user-space RNG with a
-> > thin wrapper to os.urandom. This allow to fixes compatibility with
-> > Python 3.8 since the code containing time.clock() is removed.
-> >
-> > time.clock() was deprecated in Python 3.3 and removed in Python 3.8.
-> >
-> > [1] https://src.fedoraproject.org/rpms/python-crypto/c/a5fd7148fb0e9d5526f24feb1bb708bf203480b9?branch=f31
-> > [2] https://src.fedoraproject.org/rpms/python-crypto/blob/f31/f/pycrypto-2.6.1-use-os-random.patch
-> >
-> > Fixes:
-> > https://gitlab.com/buildroot.org/buildroot/-/jobs/498144209
-> >
-> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> > ---
-> > This patch would allow to use python2 and python3.
-> > To be backported to Buildroot 2020.02 to fixes the qemu-arm-vexpress-tz defconfig.
-> > ---
-> >  ...2-pycrypto-2.6.1-use-os-random.patch.patch | 1904 +++++++++++++++++
-> >  1 file changed, 1904 insertions(+)
-> >  create mode 100644 package/python-pycrypto/0002-pycrypto-2.6.1-use-os-random.patch.patch
->
-> Meh, the Fedora patch is really gigantic. I think the option suggested
-> by James makes a lot of sense. I think even for 2020.02.x it could be
-> an acceptable solution. As you said, the only user of
-> host-python-pycrypto is crda, so it's not a huge effort to quickly test
-> that it still builds fine on 2020.02.x with python-pycryptodome.
-Actually we probably just need to add python-m2crypto and drop
-https://github.com/buildroot/buildroot/blob/master/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
-as it appears that python-m2crypto added support for python 3.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+commit: https://git.buildroot.net/buildroot/commit/?id=4f91198f0d878adee4f3fd6c6991879c1255951a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Prior to commit 4102db0f7a ("package/libglib2: bump to version 2.60.3")
+which converted libglib2 to meson, Buildroot used to set a range of
+autoconf options to bypass tests that require running binaries.
+
+The meson version of libglib2's build system has many fewer of these
+checks, but there are still some and these can be fed the "correct"
+answer by adding properties to cross-compilation.conf.
+
+Add the necessary properties to indicate that we have C99 compliant
+print functions to avoid pulling in the gnulib fallback.
+
+Signed-off-by: John Keeping <john@metanate.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libglib2/libglib2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index f9e45f70aa..7106124d72 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -52,6 +52,11 @@ LIBGLIB2_CONF_OPTS = \
+ 	-Dinstalled_tests=false \
+ 	-Doss_fuzz=disabled
+ 
++LIBGLIB2_MESON_EXTRA_PROPERTIES = \
++	have_c99_vsnprintf=true \
++	have_c99_snprintf=true \
++	have_unix98_printf=true
++
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ LIBGLIB2_DEPENDENCIES += libiconv
+ endif
