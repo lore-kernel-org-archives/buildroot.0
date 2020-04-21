@@ -1,46 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 08:23:48 +0200
-Subject: [Buildroot] [git commit] package/oniguruma: bump to version 6.9.5
-Message-ID: <20200421060922.C1C388F691@busybox.osuosl.org>
+Date: Tue, 21 Apr 2020 08:25:08 +0200
+Subject: [Buildroot] [git commit] package/lua-utf8: bump to version 0.1.2
+Message-ID: <20200421061043.5392A8F69C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab8964ae77c03213ccb3d730117634e0521f6524
+commit: https://git.buildroot.net/buildroot/commit/?id=0f0649140f73645f4cd00c9c0d27c50e9fa1caf9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of COPYING (update in year):
-https://github.com/kkos/oniguruma/commit/1952e8970a7449d5ca42a7f3bd9ce26ec6e32f43
+switch of rocks maintainer
+from https://luarocks.org/modules/dannote/utf8
+to https://luarocks.org/modules/xavier-wang/luautf8
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+the upstream author stays http://github.com/starwing/luautf8
+
+now, the version scheme is aligned on the upstream one,
+and the version 0.1.2 was released on 06 Apr 2020.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/oniguruma/oniguruma.hash | 4 ++--
- package/oniguruma/oniguruma.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lua-utf8/lua-utf8.hash | 3 ++-
+ package/lua-utf8/lua-utf8.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
-index b0764ab1fc..82354d4b9e 100644
---- a/package/oniguruma/oniguruma.hash
-+++ b/package/oniguruma/oniguruma.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4669d22ff7e0992a7e93e116161cac9c0949cd8960d1c562982026726f0e6d53  onig-6.9.4.tar.gz
--sha256  ae266a1ad1c2ef50baf14a1a2993e926cd46d09c6cc8b0b3a8498e44da2746b8  COPYING
-+sha256  2f25cc3165e6da4b12dcabdb6b77c48f436d835e127ec2e3cad7abae9ea8e9a6  onig-6.9.5.tar.gz
-+sha256  6c7038393e8f30fee16257e713f77e383712f1465d6d25929596746b10b42bd3  COPYING
-diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
-index 2126ff9120..d1ff1f115f 100644
---- a/package/oniguruma/oniguruma.mk
-+++ b/package/oniguruma/oniguruma.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/lua-utf8/lua-utf8.hash b/package/lua-utf8/lua-utf8.hash
+index e119f94352..28cdfb397a 100644
+--- a/package/lua-utf8/lua-utf8.hash
++++ b/package/lua-utf8/lua-utf8.hash
+@@ -1,2 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 c9ceb3a9f327b3215cdf959eebf616970b5b0427ca3fde05b19f8236defa4b91  utf8-1.2-0.src.rock
++sha256 b6f16ea49232b212870ab0612a8188d8956fdf6369835e3ae7df517550be18e0  luautf8-0.1.2-2.src.rock
++sha256 74506285923bcc3e58aaca1b774db26461021783d02b2dc26bafcaa02ef7a00b  luautf8-0.1.2/LICENSE
+diff --git a/package/lua-utf8/lua-utf8.mk b/package/lua-utf8/lua-utf8.mk
+index 7ed4f3fbed..9799f40982 100644
+--- a/package/lua-utf8/lua-utf8.mk
++++ b/package/lua-utf8/lua-utf8.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ONIGURUMA_VERSION = 6.9.4
-+ONIGURUMA_VERSION = 6.9.5
- ONIGURUMA_SITE = \
- 	https://github.com/kkos/oniguruma/releases/download/v$(ONIGURUMA_VERSION)
- ONIGURUMA_SOURCE = onig-$(ONIGURUMA_VERSION).tar.gz
+-LUA_UTF8_VERSION = 1.2-0
+-LUA_UTF8_NAME_UPSTREAM = utf8
+-LUA_UTF8_SUBDIR = luautf8
++LUA_UTF8_VERSION = 0.1.2-2
++LUA_UTF8_NAME_UPSTREAM = luautf8
+ LUA_UTF8_LICENSE = MIT
++LUA_UTF8_LICENSE_FILES = $(LUA_UTF8_SUBDIR)/LICENSE
+ 
+ $(eval $(luarocks-package))
