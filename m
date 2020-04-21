@@ -1,16 +1,22 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 Apr 2020 14:00:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lirc-tools: fix build with musl
- 1.2.0
-Message-ID: <20200421120012.3320782-1-fontaine.fabrice@gmail.com>
+Date: Tue, 21 Apr 2020 14:01:42 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/lirc-tools: fix build with musl 1.2.0
+Message-ID: <20200421120142.3320986-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ - http://autobuild.buildroot.org/results/fdb67297e551c5422fc5f4e058463876682b07f9
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Add autobuilder link
+
  ...devinput.c-fix-build-with-musl-1.2.0.patch | 42 +++++++++++++++++++
  1 file changed, 42 insertions(+)
  create mode 100644 package/lirc-tools/0004-plugins-devinput.c-fix-build-with-musl-1.2.0.patch
