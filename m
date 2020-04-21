@@ -1,48 +1,56 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 Apr 2020 11:26:47 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 Apr 2020 11:41:15 +0200
 Subject: [Buildroot] [PATCH 1/1] package/ibm-sw-tpm2: enable only on
  supported architectures
-Message-ID: <20200421092647.2452590-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <20200421092647.2452590-1-fontaine.fabrice@gmail.com>
+References: <20200421092647.2452590-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200421114115.097bcfe6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/12d2c27c38cc52248d3277995a9bb5eae4b8bb9e
- - http://autobuild.buildroot.org/results/34151bded9737f7c128b7a2d763c9e0af8018068
- - http://autobuild.buildroot.org/results/9abbbdd2735991277c0b821a47c579b053335caf
+On Tue, 21 Apr 2020 11:26:47 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/ibm-sw-tpm2/Config.in | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+> Fixes:
+>  - http://autobuild.buildroot.org/results/12d2c27c38cc52248d3277995a9bb5eae4b8bb9e
+>  - http://autobuild.buildroot.org/results/34151bded9737f7c128b7a2d763c9e0af8018068
+>  - http://autobuild.buildroot.org/results/9abbbdd2735991277c0b821a47c579b053335caf
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/ibm-sw-tpm2/Config.in b/package/ibm-sw-tpm2/Config.in
-index dc5630490f..1f97b62405 100644
---- a/package/ibm-sw-tpm2/Config.in
-+++ b/package/ibm-sw-tpm2/Config.in
-@@ -1,5 +1,14 @@
-+config BR2_PACKAGE_IBM_SW_TPM2_ARCH_SUPPORTS
-+	bool
-+	# see src/LibSupport.h
-+	default y if BR2_arm || BR2_armeb
-+	default y if BR2_aarch64 || BR2_aarch64_be
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_powerpc64 || BR2_powerpc64le
-+
- config BR2_PACKAGE_IBM_SW_TPM2
- 	bool "ibm-sw-tpm2"
-+	depends on BR2_PACKAGE_IBM_SW_TPM2_ARCH_SUPPORTS
- 	depends on !BR2_STATIC_LIBS # ibm-sw-tpm2
- 	select BR2_PACKAGE_OPENSSL
- 	# libressl is not supported
-@@ -13,4 +22,5 @@ config BR2_PACKAGE_IBM_SW_TPM2
- 	  https://sourceforge.net/projects/ibmswtpm2/
- 
- comment "ibm-sw-tpm2 needs a toolchain w/ dynamic library"
-+	depends on BR2_PACKAGE_IBM_SW_TPM2_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS
+I was also looking at this issue, and I believe it might be easier to
+really fix the problem.
+
+Indeed, it's just:
+
+#ifndef RADIX_BITS
+#   if defined(__x86_64__) || defined(__x86_64)                         \
+    || defined(__amd64__) || defined(__amd64) || defined(_WIN64) || defined(_M_X64) \
+    || defined(_M_ARM64) || defined(__aarch64__) \
+    || defined(__powerpc64__) || defined(__ppc64__)
+#       define RADIX_BITS                      64
+#   elif defined(__i386__) || defined(__i386) || defined(i386)          \
+    || defined(_WIN32) || defined(_M_IX86)                              \
+    || defined(_M_ARM) || defined(__arm__) || defined(__thumb__)
+#       define RADIX_BITS                      32
+#   else
+#       error Unable to determine RADIX_BITS from compiler environment
+#   endif
+#endif // RADIX_BITS
+
+that causes problems.
+
+And this crap can most likely be replaced by:
+
+#define RADIX_BITS __WORDSIZE
+
+Best regards,
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
