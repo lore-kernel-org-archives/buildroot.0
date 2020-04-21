@@ -1,34 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 08:48:57 +0200
-Subject: [Buildroot] [git commit] package/apcupsd: uses fork(), needs MMU
-Message-ID: <20200421063623.C73298F93A@busybox.osuosl.org>
+Date: Tue, 21 Apr 2020 08:49:59 +0200
+Subject: [Buildroot] [git commit] package/apcupsd: add missing Config.in
+ comment about C++ dependency
+Message-ID: <20200421063623.D4F258F6CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=209ea2414bbba0ae7444934c5cad228b07b2daa2
+commit: https://git.buildroot.net/buildroot/commit/?id=4e5bb9d8c2e2df33409d4888ffd5d81397514c51
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/19af985de6e26813b841e7019051da3043c2b7d1/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/apcupsd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/apcupsd/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/apcupsd/Config.in b/package/apcupsd/Config.in
-index fc77e7c208..eabfb14842 100644
+index eabfb14842..2849736a1a 100644
 --- a/package/apcupsd/Config.in
 +++ b/package/apcupsd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_APCUPSD
- 	bool "apcupsd"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  A daemon for controlling APC UPSes.
+@@ -63,3 +63,7 @@ comment "usb support needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
+ endif
++
++comment "apcupsd needs a toolchain w/ C++"
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP
