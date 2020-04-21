@@ -1,28 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 22:30:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/midori: needs gcc >= 7
-In-Reply-To: <20200421172632.4124853-1-fontaine.fabrice@gmail.com>
-References: <20200421172632.4124853-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200421223000.5b0aa11c@windsurf.home>
+Date: Tue, 21 Apr 2020 22:30:06 +0200
+Subject: [Buildroot] [PATCH] package/libssh: add patch to fix regression
+In-Reply-To: <20200421084650.11391-1-heiko.thiery@gmail.com>
+References: <20200421084650.11391-1-heiko.thiery@gmail.com>
+Message-ID: <20200421223006.1f7eab3b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 21 Apr 2020 19:26:32 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Tue, 21 Apr 2020 10:46:51 +0200
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-> Commit ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4 forgot to propagate
-> gcc >= 7 dependency to midori
+> The libssh server is used by libnetconf2. With libssh version 0.9.4 a
+> regression was introduced that wrongly leads to session closed after the
+> poll timeout.
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/736a99dcaa72fba3f06775d08c4395f506fce944
+> The patch comes from upstrem:
+> https://git.libssh.org/projects/libssh.git/commit/?id=6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 > ---
->  package/midori/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  ...eturning-SSH_AGAIN-from-ssh_channel_.patch | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
 
 Applied to master, thanks.
 
