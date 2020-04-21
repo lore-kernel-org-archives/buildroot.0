@@ -1,67 +1,50 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 21 Apr 2020 19:26:38 +0200
-Subject: [Buildroot] [PATCHv2 04/12] configs: fix typo
- BR2_TARGET_ROOTFS_EXT2_4
+Date: Tue, 21 Apr 2020 19:26:41 +0200
+Subject: [Buildroot] [PATCHv2 07/12] configs: remove
+ BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
 In-Reply-To: <20200421172646.3340666-1-romain.naour@gmail.com>
 References: <20200421172646.3340666-1-romain.naour@gmail.com>
-Message-ID: <20200421172646.3340666-4-romain.naour@gmail.com>
+Message-ID: <20200421172646.3340666-7-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ext4 option is BR2_TARGET_ROOTFS_EXT2_4 not
-BR2_TARGET_ROOTFS_EXT_4.
+This option has been removed since 6836f2a70acd259a846c88968924d60afef8cc16.
 
 This fixes the new defconfig check.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Fabio Estevam <fabio.estevam@nxp.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/freescale_imx28evk_defconfig      | 2 +-
- configs/imx23evk_defconfig                | 2 +-
- configs/olimex_imx233_olinuxino_defconfig | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ configs/engicam_imx6qdl_icore_qt5_defconfig | 1 -
+ configs/imx6-sabresd_qt5_defconfig          | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/configs/freescale_imx28evk_defconfig b/configs/freescale_imx28evk_defconfig
-index b0a0c15ef8..520c63f673 100644
---- a/configs/freescale_imx28evk_defconfig
-+++ b/configs/freescale_imx28evk_defconfig
-@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT_FORMAT_SD=y
+diff --git a/configs/engicam_imx6qdl_icore_qt5_defconfig b/configs/engicam_imx6qdl_icore_qt5_defconfig
+index 62d3008b4d..8f9c9326a9 100644
+--- a/configs/engicam_imx6qdl_icore_qt5_defconfig
++++ b/configs/engicam_imx6qdl_icore_qt5_defconfig
+@@ -51,7 +51,6 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
  
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT4=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
+ # qt5
+ BR2_PACKAGE_QT5=y
+-BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+ BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+ BR2_PACKAGE_QT5BASE_LINUXFB=y
+ BR2_PACKAGE_QT5BASE_FONTCONFIG=y
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index 0b11225b72..df50990dc6 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -70,7 +70,6 @@ BR2_PACKAGE_MESA3D_DEMOS=y
  
- # To generate SD Image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/imx23evk_defconfig b/configs/imx23evk_defconfig
-index 87610d1b72..b5bfc849b4 100644
---- a/configs/imx23evk_defconfig
-+++ b/configs/imx23evk_defconfig
-@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT_FORMAT_SD=y
- 
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT4=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- 
- # To generate SD card image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
-index 26e5ad1393..275dd98afe 100644
---- a/configs/olimex_imx233_olinuxino_defconfig
-+++ b/configs/olimex_imx233_olinuxino_defconfig
-@@ -33,7 +33,7 @@ BR2_PACKAGE_ZD1211_FIRMWARE=y
- 
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT4=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
- # U-Boot
+ # Qt5
+ BR2_PACKAGE_QT5=y
+-BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+ BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+ BR2_PACKAGE_QT5BASE_LINUXFB=y
+ BR2_PACKAGE_QT5BASE_FONTCONFIG=y
 -- 
 2.25.3
