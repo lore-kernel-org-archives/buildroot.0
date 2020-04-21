@@ -1,33 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 22:40:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iwd: fix build with gcc 4.8
-In-Reply-To: <CAPi7W80PFd99Jr-+8YqU38Hn8k_sLBhooOWvWsobc7zKZPRNMw@mail.gmail.com>
-References: <20200411213318.972221-1-fontaine.fabrice@gmail.com>
- <20200412110553.7809e91c@windsurf.home>
- <CAPi7W80PFd99Jr-+8YqU38Hn8k_sLBhooOWvWsobc7zKZPRNMw@mail.gmail.com>
-Message-ID: <20200421224035.69f803e0@windsurf.home>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 21 Apr 2020 14:49:42 -0600
+Subject: [Buildroot] [PATCH v2] package/python-pycrypto: fix python3.8
+ compatibility
+In-Reply-To: <20200421222847.09432773@windsurf.home>
+References: <20200420140724.3206074-1-romain.naour@gmail.com>
+ <20200421222847.09432773@windsurf.home>
+Message-ID: <CADvTj4qJ3jC_y_rNwwbDF5jq7xF8BAF39uqnuQKQgi3nxYTaBg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 12 Apr 2020 12:51:43 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> > I don't understand a failure like this can be related to the compiler
-> > version. Could you clarify?  
-> My bad, you're right, the issue is due to glibc that doesn't support
-> SOL_NETLINK before version 2.24 and
-> https://github.com/bminor/glibc/commit/f9b437d5efce93800b51ad2a437c8b1c9616bf80#diff-9256189095e7df9c0688498779241729
-
-Then, could you submit an updated version, both to upstream and to
-Buildroot ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On Tue, Apr 21, 2020 at 2:28 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Mon, 20 Apr 2020 16:07:24 +0200
+> Romain Naour <romain.naour@gmail.com> wrote:
+>
+> > Apply the patch from Fedora 31 [1][2] to replace the user-space RNG with a
+> > thin wrapper to os.urandom. This allow to fixes compatibility with
+> > Python 3.8 since the code containing time.clock() is removed.
+> >
+> > time.clock() was deprecated in Python 3.3 and removed in Python 3.8.
+> >
+> > [1] https://src.fedoraproject.org/rpms/python-crypto/c/a5fd7148fb0e9d5526f24feb1bb708bf203480b9?branch=f31
+> > [2] https://src.fedoraproject.org/rpms/python-crypto/blob/f31/f/pycrypto-2.6.1-use-os-random.patch
+> >
+> > Fixes:
+> > https://gitlab.com/buildroot.org/buildroot/-/jobs/498144209
+> >
+> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> > ---
+> > This patch would allow to use python2 and python3.
+> > To be backported to Buildroot 2020.02 to fixes the qemu-arm-vexpress-tz defconfig.
+> > ---
+> >  ...2-pycrypto-2.6.1-use-os-random.patch.patch | 1904 +++++++++++++++++
+> >  1 file changed, 1904 insertions(+)
+> >  create mode 100644 package/python-pycrypto/0002-pycrypto-2.6.1-use-os-random.patch.patch
+>
+> Meh, the Fedora patch is really gigantic. I think the option suggested
+> by James makes a lot of sense. I think even for 2020.02.x it could be
+> an acceptable solution. As you said, the only user of
+> host-python-pycrypto is crda, so it's not a huge effort to quickly test
+> that it still builds fine on 2020.02.x with python-pycryptodome.
+Actually we probably just need to add python-m2crypto and drop
+https://github.com/buildroot/buildroot/blob/master/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
+as it appears that python-m2crypto added support for python 3.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
