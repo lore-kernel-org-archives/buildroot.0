@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Apr 2020 21:52:58 +0200
-Subject: [Buildroot] [PATCHv2 02/12] gitlab-ci: check generated config
- files
-In-Reply-To: <20200421172646.3340666-2-romain.naour@gmail.com>
+Date: Tue, 21 Apr 2020 21:54:39 +0200
+Subject: [Buildroot] [PATCHv2 07/12] configs: remove
+ BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
+In-Reply-To: <20200421172646.3340666-7-romain.naour@gmail.com>
 References: <20200421172646.3340666-1-romain.naour@gmail.com>
- <20200421172646.3340666-2-romain.naour@gmail.com>
-Message-ID: <20200421195258.GW5035@scaer>
+ <20200421172646.3340666-7-romain.naour@gmail.com>
+Message-ID: <20200421195439.GX5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,61 +15,54 @@ To: buildroot@busybox.net
 Romain, All,
 
 On 2020-04-21 19:26 +0200, Romain Naour spake thusly:
-> Use the script added by the previous patch to check
-> generated config files.
-> 
-> Tested on gitlab:
-> https://gitlab.com/kubu93/buildroot/pipelines/137597966
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  .gitlab-ci.yml    | 1 +
->  .gitlab-ci.yml.in | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index fa8e077a07..0d06a1b7cf 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -47,6 +47,7 @@ check-package:
->      script:
->          - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
->          - make ${DEFCONFIG_NAME}
-> +        - ./support/scripts/check-dotconfig.py .config ./configs/${DEFCONFIG_NAME}
+> This option has been removed since 6836f2a70acd259a846c88968924d60afef8cc16.
 
-We can't add the check in the pipelines before all the defconfigs are
-fixed, otherwise the failed checks would end the job in error on the
-spot, preventing the defconfig from building.
+I suppose this commit is the reason you pulled me in as Cc of this
+patch. ;-)
 
-So, the defconfig fixes should come first (but Thomas is supposed to
-apply them as I write this! ;-) )
+Damn... ;-)
+
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->          - echo 'Build buildroot'
->          - |
->              make > >(tee build.log |grep '>>>') 2>&1 || {
-> diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-> index 6b09730a65..413c6d2956 100644
-> --- a/.gitlab-ci.yml.in
-> +++ b/.gitlab-ci.yml.in
-> @@ -47,6 +47,7 @@ check-package:
->      script:
->          - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
->          - make ${DEFCONFIG_NAME}
-> +        - ./support/scripts/check-dotconfig.py .config ./configs/${DEFCONFIG_NAME}
->          - echo 'Build buildroot'
->          - |
->              make > >(tee build.log |grep '>>>') 2>&1 || {
+> This fixes the new defconfig check.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  configs/engicam_imx6qdl_icore_qt5_defconfig | 1 -
+>  configs/imx6-sabresd_qt5_defconfig          | 1 -
+>  2 files changed, 2 deletions(-)
+> 
+> diff --git a/configs/engicam_imx6qdl_icore_qt5_defconfig b/configs/engicam_imx6qdl_icore_qt5_defconfig
+> index 62d3008b4d..8f9c9326a9 100644
+> --- a/configs/engicam_imx6qdl_icore_qt5_defconfig
+> +++ b/configs/engicam_imx6qdl_icore_qt5_defconfig
+> @@ -51,7 +51,6 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  
+>  # qt5
+>  BR2_PACKAGE_QT5=y
+> -BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+>  BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+>  BR2_PACKAGE_QT5BASE_LINUXFB=y
+>  BR2_PACKAGE_QT5BASE_FONTCONFIG=y
+> diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+> index 0b11225b72..df50990dc6 100644
+> --- a/configs/imx6-sabresd_qt5_defconfig
+> +++ b/configs/imx6-sabresd_qt5_defconfig
+> @@ -70,7 +70,6 @@ BR2_PACKAGE_MESA3D_DEMOS=y
+>  
+>  # Qt5
+>  BR2_PACKAGE_QT5=y
+> -BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+>  BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+>  BR2_PACKAGE_QT5BASE_LINUXFB=y
+>  BR2_PACKAGE_QT5BASE_FONTCONFIG=y
 > -- 
 > 2.25.3
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
