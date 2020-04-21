@@ -1,44 +1,31 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 21 Apr 2020 13:55:55 -0500
-Subject: [Buildroot] [PATCH] package/openresolv: bump to 3.10.0
-Message-ID: <20200421185555.23330-1-matthew.weber@rockwellcollins.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 21 Apr 2020 16:28:53 -0300
+Subject: [Buildroot] [PATCHv2 08/12]
+ configs/engicam_imx6qdl_icore_qt5_defconfig: needs udev to select glmark2
+In-Reply-To: <20200421172646.3340666-8-romain.naour@gmail.com>
+References: <20200421172646.3340666-1-romain.naour@gmail.com>
+ <20200421172646.3340666-8-romain.naour@gmail.com>
+Message-ID: <CAOMZO5Bwbm071cmEC21ojs6h=ZO4StR_2--1RXHsrEQVQbsLpg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-License file change was a date update to 2020
-https://github.com/rsmarples/openresolv/commit/e114fa2672a86a3b827599d4c4c5ec2ead0a94c2#diff-9879d6db96fd29134fc802214163b95a
+On Tue, Apr 21, 2020 at 2:26 PM Romain Naour <romain.naour@gmail.com> wrote:
+>
+> The BR2_PACKAGE_GLMARK2 is lost while loading the defconfig with:
+> make engicam_imx6qdl_icore_qt5_defconfig
+>
+> In order to select gmark2 package, BR2_PACKAGE_GLMARK2_FLAVOR_ANY option
+> must be set.
+>
+> Based on the defconfig without X11 and wayland package, the only missing
+> option to select BR2_PACKAGE_GLMARK2_FLAVOR_ANY is BR2_PACKAGE_HAS_UDEV.
+> The only possible option is to enable one of the udev provider
+> (eudev or systemd). Select eudev package for /dev management.
+>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Fabio Estevam <festevam@gmail.com>
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/openresolv/openresolv.hash | 4 ++--
- package/openresolv/openresolv.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/openresolv/openresolv.hash b/package/openresolv/openresolv.hash
-index b8eb4346b8..f2a101df39 100644
---- a/package/openresolv/openresolv.hash
-+++ b/package/openresolv/openresolv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 0024df7c4568a157db1c3511a55d37d442629d586c575d9e0f9c2004df8297bd openresolv-3.9.2.tar.gz
--sha256 f78b2c2bfb333e66e935c81510580d002b6e2009a5b8132b3b5be8ed8f8f3fa7 LICENSE
-+sha256  7d74c669849183ecefdfcec30d25664b1ca24ba1ca8c2ad5de50fcaeef3b4810  openresolv-3.10.0.tar.gz
-+sha256  384740bf5e19e7628d20f4dcc22925062fdc6020e9a6f074e567d4d797be57a0  LICENSE
-diff --git a/package/openresolv/openresolv.mk b/package/openresolv/openresolv.mk
-index 3a64446698..44e0720428 100644
---- a/package/openresolv/openresolv.mk
-+++ b/package/openresolv/openresolv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENRESOLV_VERSION = 3.9.2
-+OPENRESOLV_VERSION = 3.10.0
- OPENRESOLV_SITE = $(call github,rsmarples,openresolv,openresolv-$(OPENRESOLV_VERSION))
- OPENRESOLV_LICENSE = BSD-2-Clause
- OPENRESOLV_LICENSE_FILES = LICENSE
--- 
-2.17.1
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
