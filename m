@@ -1,7 +1,7 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 21 Apr 2020 13:25:20 -0500
-Subject: [Buildroot] [PATCH] package/tini: bump to 0.19.0
-Message-ID: <20200421182520.22416-1-matthew.weber@rockwellcollins.com>
+Date: Tue, 21 Apr 2020 13:30:09 -0500
+Subject: [Buildroot] [PATCH] package/iw: bump to 5.4
+Message-ID: <20200421183009.64414-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/tini/tini.hash | 4 ++--
- package/tini/tini.mk   | 2 +-
+ package/iw/iw.hash | 4 ++--
+ package/iw/iw.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tini/tini.hash b/package/tini/tini.hash
-index 7c548183b6..83a97a40a3 100644
---- a/package/tini/tini.hash
-+++ b/package/tini/tini.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256	e5f46bca81266bdd511cf08018d66866870531794569c04f9b45f50dd23c28b0	LICENSE
--sha256	1097675352d6317b547e73f9dc7c6839fd0bb0d96dafc2e5c95506bb324049a2  tini-0.18.0.tar.gz
-+sha256  e5f46bca81266bdd511cf08018d66866870531794569c04f9b45f50dd23c28b0  LICENSE
-+sha256  0fd35a7030052acd9f58948d1d900fe1e432ee37103c5561554408bdac6bbf0d  tini-0.19.0.tar.gz
-diff --git a/package/tini/tini.mk b/package/tini/tini.mk
-index 986e612a83..157477f8df 100644
---- a/package/tini/tini.mk
-+++ b/package/tini/tini.mk
+diff --git a/package/iw/iw.hash b/package/iw/iw.hash
+index 458262b712..0aa51563f1 100644
+--- a/package/iw/iw.hash
++++ b/package/iw/iw.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/network/iw/sha256sums.asc
+-sha256	04afe857bc8dea67e461946de30ae1b012954b6965839c5c3fda7d0ed15505d5	iw-5.3.tar.xz
++sha256  a2469f677088d7b1070a7fbb28f3c747041697e8f6ec70783339cb1bc27a395f  iw-5.4.tar.xz
+ # Locally calculated
+-sha256	5932fb70481e128940168a5fdf133e6454293c0865c7e757874b235cb6daa2af	COPYING
++sha256  5932fb70481e128940168a5fdf133e6454293c0865c7e757874b235cb6daa2af  COPYING
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index fae65f739d..2250ea413b 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TINI_VERSION = 0.18.0
-+TINI_VERSION = 0.19.0
- TINI_SITE = $(call github,krallin,tini,v$(TINI_VERSION))
- TINI_LICENSE = MIT
- TINI_LICENSE_FILES = LICENSE
+-IW_VERSION = 5.3
++IW_VERSION = 5.4
+ IW_SOURCE = iw-$(IW_VERSION).tar.xz
+ IW_SITE = $(BR2_KERNEL_MIRROR)/software/network/iw
+ IW_LICENSE = ISC
 -- 
 2.17.1
