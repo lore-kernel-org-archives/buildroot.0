@@ -1,49 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 23:06:14 +0200
-Subject: [Buildroot] [git commit] package/python-markdown: fix Python
- version dependency
-Message-ID: <20200421205302.401F38FB73@busybox.osuosl.org>
+Date: Tue, 21 Apr 2020 23:17:10 +0200
+Subject: [Buildroot] [PATCH] package/python-markdown: fix Python version
+ dependency
+In-Reply-To: <20200310114101.6726-1-yegorslists@googlemail.com>
+References: <20200310114101.6726-1-yegorslists@googlemail.com>
+Message-ID: <20200421231710.30b7f293@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e5723ee589e8d205883c15ca863c01f94b8854f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 10 Mar 2020 12:41:01 +0100
+yegorslists at googlemail.com wrote:
 
-Since upstream commit
-https://github.com/Python-Markdown/markdown/commit/dab931f597cdc5b57d4e2458840fb991606506bc,
-merged since version 3.2 of python-markdown, the Python 2.x support
-has been dropped.
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> The latest version has dropped Python 2 support.
 
-So our commit 6e538bf642d3584032d63bb54d24b88ab57e4283
-("package/python-markdown: bump to version 3.2.1") should have made
-python-markdown available only for Python 3.x.
+"The latest version" is very vague. Read this statement in 6 months,
+and it no longer makes sense. I've extended the commit log quite a bit:
 
-Fixes:
-http://autobuild.buildroot.net/results/6d1e796f6658accb3eafef265935db5e464638fe
+  https://git.buildroot.org/buildroot/commit/?id=1e5723ee589e8d205883c15ca863c01f94b8854f
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
-Tested-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-markdown/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+and applied to master. Thanks!
 
-diff --git a/package/python-markdown/Config.in b/package/python-markdown/Config.in
-index 6706684142..454c2729bd 100644
---- a/package/python-markdown/Config.in
-+++ b/package/python-markdown/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_PYTHON_MARKDOWN
- 	bool "python-markdown"
-+	depends on BR2_PACKAGE_PYTHON3
- 	# runtime dependency on Python's xml module
--	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT
- 	help
- 	  This is a Python implementation of John Gruber's Markdown
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
