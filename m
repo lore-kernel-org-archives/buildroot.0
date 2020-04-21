@@ -1,62 +1,64 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Tue, 21 Apr 2020 12:13:18 -0500
-Subject: [Buildroot] [PATCH v2 3/3] packageJopenjdk: add support for
- building the full jdk
-In-Reply-To: <20200418190701.2629613-3-aduskett@gmail.com>
-References: <20200418190701.2629613-1-aduskett@gmail.com>
- <20200418190701.2629613-3-aduskett@gmail.com>
-Message-ID: <CAMQcK5+ZQVMF3AmYsC+wb+dK=sU34GnTg8ex4jZQsm2kXWhseA@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue, 21 Apr 2020 20:24:45 +0300
+Subject: [Buildroot] [PATCH v3,
+ 4/6] package/collectd: add InfluxDB support
+In-Reply-To: <20200415063008.2237470-4-fontaine.fabrice@gmail.com>
+References: <20200415063008.2237470-1-fontaine.fabrice@gmail.com>
+ <20200415063008.2237470-4-fontaine.fabrice@gmail.com>
+Message-ID: <CALFsTFXf-iGuOZr82OQgk_jOvhBdmXzNCzV1jtfsTKja0v=Big@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam,
+Hello,
 
-Thank you for posting this series of patches. Below is some minor feedback:
-
-Title has a misspelling:
-
-s:packageJopenjd:package/openjdk:
-
-On Sat, Apr 18, 2020 at 2:12 PM <aduskett@gmail.com> wrote:
+On Wed, Apr 15, 2020 at 9:28 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
 >
-> From: Adam Duskett <Aduskett@gmail.com>
+> InfluxDB support is available since version 5.11.0 and
+> https://github.com/collectd/collectd/commit/605fcdcddeefb23b945203079e5c87625ce0e336
 >
-> Some users may require the full JDK on the target to debug their programs.
-> This change is relatively trivial to add.
->
-> While the full JDK does have programs used for compiling on a target,
-> which is against Buildroot policy, the JDK also has several utilities used for
-> debugging purposes, which the JRE target does not build, and Buildroot supports
-> applications used for debugging purposes such as GDB.
->
-> As such, JDK support should be available for debugging purposes, and a note in
-> the Config.in file has been added under the JDK section, which informs the user
-> that JDK support is for debugging purposes only and that developing on a
-> target is not supported by Buildroot.
->
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Changes v1 -> v2:
->   - Added a much more thurough commit message as to why the JDK may be useful.
-
-s/thurough/through/
-
->   - Added a note in the Config.in file explaining that full JDK support is
->     only for debugging purposes.
->   - Added a target_finalize_hook which removes the include and demo directory
->     from the target.
+>  package/collectd/Config.in   | 6 ++++++
+>  package/collectd/collectd.mk | 1 +
+>  2 files changed, 7 insertions(+)
 >
->  package/openjdk/Config.in  | 54 ++++++++++++++++++++++++++++++++++++++
->  package/openjdk/openjdk.mk | 21 +++++++++++++--
->  2 files changed, 73 insertions(+), 2 deletions(-)
+> diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+> index f1f3c2ed9f..7186d67c36 100644
+> --- a/package/collectd/Config.in
+> +++ b/package/collectd/Config.in
+> @@ -638,6 +638,12 @@ config BR2_PACKAGE_COLLECTD_WRITEHTTP
+>           Sends values collected to a web-server using HTTP POST and
+>           PUTVAL.
+>
+> +config BR2_PACKAGE_COLLECTD_WRITEINFLUXDBUDP
+> +       bool "write_influxdb_udp"
+> +       help
+> +         Sends data to an instance of InfluxDB using the "Line
+> +         Protocol".
+> +
+>  config BR2_PACKAGE_COLLECTD_WRITELOG
+>         bool "write_log"
+>         help
+> diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+> index 52b218e139..964f4dc694 100644
+> --- a/package/collectd/collectd.mk
+> +++ b/package/collectd/collectd.mk
+> @@ -140,6 +140,7 @@ COLLECTD_CONF_OPTS += \
+>         $(if $(BR2_PACKAGE_COLLECTD_VMEM),--enable-vmem,--disable-vmem) \
+>         $(if $(BR2_PACKAGE_COLLECTD_WIRELESS),--enable-wireless,--disable-wireless) \
+>         $(if $(BR2_PACKAGE_COLLECTD_WRITEHTTP),--enable-write_http,--disable-write_http) \
+> +       $(if $(BR2_PACKAGE_COLLECTD_WRITEINFLUXDBUDP),--enable-write_influxdb_udp,--disable-write_influxdb_udp) \
+>         $(if $(BR2_PACKAGE_COLLECTD_WRITELOG),--enable-write_log,--disable-write_log) \
+>         $(if $(BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS),--enable-write_prometheus,--disable-write_prometheus) \
+>         $(if $(BR2_PACKAGE_COLLECTD_WRITEREDIS),--enable-write_redis,--disable-write_redis) \
+> --
+> 2.25.1
+>
+Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
 
-Reviewed-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Tested-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-
-Built and runtime tested on x86-64 platform.
-
-Thanks,
--Ryan
+Regards,
+Asaf.
