@@ -1,55 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 08:25:08 +0200
-Subject: [Buildroot] [git commit] package/lua-utf8: bump to version 0.1.2
-Message-ID: <20200421061043.5392A8F69C@busybox.osuosl.org>
+Date: Tue, 21 Apr 2020 08:25:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/stella: drop unneeded patches
+In-Reply-To: <20200420150451.779129-1-fontaine.fabrice@gmail.com>
+References: <20200420150451.779129-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200421082532.3ba8113c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f0649140f73645f4cd00c9c0d27c50e9fa1caf9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 20 Apr 2020 17:04:51 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-switch of rocks maintainer
-from https://luarocks.org/modules/dannote/utf8
-to https://luarocks.org/modules/xavier-wang/luautf8
+> Patches are not needed since bump to version 6.1.1 thanks to
+> https://github.com/stella-emu/stella/commit/72932aa09e022ef38a9b58721d89a02a66c29aa4
+> https://github.com/stella-emu/stella/commit/74450028fcf28f521951631570093494f17c4d95
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../0001-Add-cross-compilation-support.patch  | 29 ----------
+>  package/stella/0002-undef-PAGE_SIZE.patch     | 53 -------------------
+>  2 files changed, 82 deletions(-)
+>  delete mode 100644 package/stella/0001-Add-cross-compilation-support.patch
+>  delete mode 100644 package/stella/0002-undef-PAGE_SIZE.patch
 
-the upstream author stays http://github.com/starwing/luautf8
+Thanks for providing additional explanations. I've applied your patch
+to master. Thanks!
 
-now, the version scheme is aligned on the upstream one,
-and the version 0.1.2 was released on 06 Apr 2020.
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/lua-utf8/lua-utf8.hash | 3 ++-
- package/lua-utf8/lua-utf8.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/package/lua-utf8/lua-utf8.hash b/package/lua-utf8/lua-utf8.hash
-index e119f94352..28cdfb397a 100644
---- a/package/lua-utf8/lua-utf8.hash
-+++ b/package/lua-utf8/lua-utf8.hash
-@@ -1,2 +1,3 @@
- # computed by luarocks/buildroot
--sha256 c9ceb3a9f327b3215cdf959eebf616970b5b0427ca3fde05b19f8236defa4b91  utf8-1.2-0.src.rock
-+sha256 b6f16ea49232b212870ab0612a8188d8956fdf6369835e3ae7df517550be18e0  luautf8-0.1.2-2.src.rock
-+sha256 74506285923bcc3e58aaca1b774db26461021783d02b2dc26bafcaa02ef7a00b  luautf8-0.1.2/LICENSE
-diff --git a/package/lua-utf8/lua-utf8.mk b/package/lua-utf8/lua-utf8.mk
-index 7ed4f3fbed..9799f40982 100644
---- a/package/lua-utf8/lua-utf8.mk
-+++ b/package/lua-utf8/lua-utf8.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LUA_UTF8_VERSION = 1.2-0
--LUA_UTF8_NAME_UPSTREAM = utf8
--LUA_UTF8_SUBDIR = luautf8
-+LUA_UTF8_VERSION = 0.1.2-2
-+LUA_UTF8_NAME_UPSTREAM = luautf8
- LUA_UTF8_LICENSE = MIT
-+LUA_UTF8_LICENSE_FILES = $(LUA_UTF8_SUBDIR)/LICENSE
- 
- $(eval $(luarocks-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
