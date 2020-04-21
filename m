@@ -1,54 +1,66 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 Apr 2020 16:53:15 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/selinux-python: fix dependency
-Message-ID: <20200421145315.3562089-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 Apr 2020 16:51:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mbuffer: fix build with powerpc
+In-Reply-To: <20200421123852.3529227-1-fontaine.fabrice@gmail.com>
+References: <20200421123852.3529227-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200421165157.6cc14384@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 791292c48d5165515ca08f35d8cbc1ef78d3ed95 forgot to add
-!BR2_PACKAGE_PYTHON dependency, without it the following error will be
-raised if the user selects BR2_PACKAGE_PYTHON and python-selinux:
+Hello Fabrice,
 
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_PYTHON3
-  Depends on [n]: !BR2_PACKAGE_PYTHON [=y] && BR2_USE_WCHAR [=y] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && !BR2_STATIC_LIBS [=n]
-  Selected by [y]:
-  - BR2_PACKAGE_SELINUX_PYTHON [=y] && BR2_USE_MMU [=y] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && !BR2_STATIC_LIBS [=n]
+On Tue, 21 Apr 2020 14:38:52 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - No autobuilder failures yet
+> ++#if defined(__linux) || defined(__linux__)
+> + #include <linux/limits.h>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Fix commit message, keep select and add a !BR2_PACKAGE_PYTHON
-   dependency
+This shouldn't include <linux/limits.h> directly. Indeed, PIPE_BUF is
+defined by the POSIX standard as being defined in <limits.h>, see man
+limits.h(0P):
 
- package/selinux-python/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+       {PIPE_BUF}
+             Maximum number of bytes that is guaranteed to be atomic when writing to a pipe.
+             Minimum Acceptable Value: {_POSIX_PIPE_BUF}
 
-diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
-index 1a610b29f0..862a63095a 100644
---- a/package/selinux-python/Config.in
-+++ b/package/selinux-python/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SELINUX_PYTHON
- 	bool "selinux-python"
-+	depends on !BR2_PACKAGE_PYTHON
- 	depends on BR2_USE_MMU
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-@@ -37,6 +38,9 @@ config BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
- 
- endif
- 
-+comment "selinux-python needs python3"
-+	depends on BR2_PACKAGE_PYTHON
-+
- comment "selinux-python packages needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+However, it is only defined if _POSIX_SOURCE is defined, which may gets
+done automatically or not depending on which C standard you're building
+with.
+
+Demo:
+
+$ cat toto.c 
+#include <limits.h>
+#include <stdio.h>
+int main(void) { printf("%d\n", PIPE_BUF); return 0; }
+
+$ gcc -std=c89 -o toto toto.c 
+toto.c: In function ?main?:
+toto.c:4:33: error: ?PIPE_BUF? undeclared (first use in this function)
+    4 | int main(void) { printf("%d\n", PIPE_BUF); return 0; }
+      |                                 ^~~~~~~~
+toto.c:4:33: note: each undeclared identifier is reported only once for each function it appears in
+
+$ gcc -std=gnu89 -o toto toto.c
+$ # i.e, builds fine!
+
+$ gcc -std=c89 -D_POSIX_SOURCE -o toto toto.c
+$ # i.e, builds fine!
+
+That being said, it's not your fault: the upstream code already does
+the bad thing of including <linux/limits.h>.
+
+And BTW, this issue has nothing to do with PowerPC at all. As you can
+see, even on my x64-64 platform, if you use PIPE_BUF in c89 or c99
+code, it doesn't work unless you define _POSIX_SOURCE.
+
+Best regards,
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
