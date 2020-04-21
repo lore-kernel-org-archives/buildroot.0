@@ -1,39 +1,50 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 21 Apr 2020 19:26:44 +0200
-Subject: [Buildroot] [PATCHv2 10/12]
- configs/qemu_ppc_virtex_ml507_defconfig: select BR2_POWERPC_SOFT_FLOAT
+Date: Tue, 21 Apr 2020 19:26:45 +0200
+Subject: [Buildroot] [PATCHv2 11/12] configs/qemu_riscv*: remove
+ BR2_TARGET_OPENSBI_USE_PLAT
 In-Reply-To: <20200421172646.3340666-1-romain.naour@gmail.com>
 References: <20200421172646.3340666-1-romain.naour@gmail.com>
-Message-ID: <20200421172646.3340666-10-romain.naour@gmail.com>
+Message-ID: <20200421172646.3340666-11-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_SOFT_FLOAT option is lost while loading the defconfig with:
-make qemu_ppc_virtex_ml507_defconfig
+This option never existed in opensbi package.
 
-On powerpc, BR2_POWERPC_SOFT_FLOAT must be used to enable soft
-floating point support.
+This fixes the new defconfig check.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Alistair Francis <alistair.francis@wdc.com>
 ---
- configs/qemu_ppc_virtex_ml507_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/qemu_riscv32_virt_defconfig | 1 -
+ configs/qemu_riscv64_virt_defconfig | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
-index 2ecf9464d9..8d8f1358d0 100644
---- a/configs/qemu_ppc_virtex_ml507_defconfig
-+++ b/configs/qemu_ppc_virtex_ml507_defconfig
-@@ -14,7 +14,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+index 427ea47387..f47700f4ab 100644
+--- a/configs/qemu_riscv32_virt_defconfig
++++ b/configs/qemu_riscv32_virt_defconfig
+@@ -27,7 +27,6 @@ BR2_LINUX_KERNEL_IMAGE=y
  
- # Use soft float
--BR2_SOFT_FLOAT=y
-+BR2_POWERPC_SOFT_FLOAT=y
+ # Bootloader
+ BR2_TARGET_OPENSBI=y
+-BR2_TARGET_OPENSBI_USE_PLAT=y
+ BR2_TARGET_OPENSBI_PLAT="qemu/virt"
  
- # Kernel
- BR2_LINUX_KERNEL=y
+ # host-qemu for gitlab testing
+diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+index 2125324aff..659a6046ed 100644
+--- a/configs/qemu_riscv64_virt_defconfig
++++ b/configs/qemu_riscv64_virt_defconfig
+@@ -26,7 +26,6 @@ BR2_LINUX_KERNEL_IMAGE=y
+ 
+ # Bootloader
+ BR2_TARGET_OPENSBI=y
+-BR2_TARGET_OPENSBI_USE_PLAT=y
+ BR2_TARGET_OPENSBI_PLAT="qemu/virt"
+ 
+ # host-qemu for gitlab testing
 -- 
 2.25.3
