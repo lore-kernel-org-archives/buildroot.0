@@ -1,47 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 Apr 2020 15:03:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libupnp18: bump to version 1.8.7
-Message-ID: <20200421130329.3558402-1-fontaine.fabrice@gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 21 Apr 2020 08:08:53 -0500
+Subject: [Buildroot] [PATCH] package/swupdate: note init script tokenizing
+ limitation
+Message-ID: <20200421130853.34356-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation of hash file (two spaces)
+Command line options reference:
+https://sbabic.github.io/swupdate/_sources/swupdate.txt
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/libupnp18/libupnp18.hash | 8 ++++----
- package/libupnp18/libupnp18.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
-index 68aee9ba62..ba9ce1bcdf 100644
---- a/package/libupnp18/libupnp18.hash
-+++ b/package/libupnp18/libupnp18.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.6/libupnp-1.8.6.tar.bz2.sha1
--sha1 6132a949d7536dac835172609d1def1e7f2bd232  libupnp-1.8.6.tar.bz2
-+# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.7/libupnp-1.8.7.tar.bz2.sha1
-+sha1  2ea3011180c58b0584f0cb73cc8e685a0a1c4ec8  libupnp-1.8.7.tar.bz2
- # Locally computed:
--sha256	65faf240f8ccee50cc0e7fe7fb21dcd79f743fc227a9b652b091f50f6956c2c7	libupnp-1.8.6.tar.bz2
--sha256	c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3	COPYING
-+sha256  e38c69b2b67322e67cd53680db9b02c7c1f720a47a3cd626fd89d57d2dca93b8  libupnp-1.8.7.tar.bz2
-+sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
-index f73c656831..f17a1a720d 100644
---- a/package/libupnp18/libupnp18.mk
-+++ b/package/libupnp18/libupnp18.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+I didn't find a good way around this without completely changing
+how the upstream scripts were working or requiring a full shell.
+---
+ package/swupdate/swupdate.sh | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/swupdate/swupdate.sh b/package/swupdate/swupdate.sh
+index 17d99ef0d4..31ec536373 100644
+--- a/package/swupdate/swupdate.sh
++++ b/package/swupdate/swupdate.sh
+@@ -5,6 +5,9 @@
  
--LIBUPNP18_VERSION = 1.8.6
-+LIBUPNP18_VERSION = 1.8.7
- LIBUPNP18_SOURCE = libupnp-$(LIBUPNP18_VERSION).tar.bz2
- LIBUPNP18_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP18_VERSION)
- LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
+ # Override these variables in sourced script(s) located
+ # in /usr/lib/swupdate/conf.d or /etc/swupdate/conf.d
++# NOTE: There are substrings used in some swupdate commands which will
++#       need to be wrapped in a script to prevent tokenizing
++#       ( -p/-P post/pre cmds are good examples)
+ SWUPDATE_ARGS="-v ${SWUPDATE_EXTRA_ARGS}"
+ SWUPDATE_WEBSERVER_ARGS=""
+ SWUPDATE_SURICATTA_ARGS=""
 -- 
-2.25.1
+2.17.1
