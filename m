@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 08:25:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/stella: drop unneeded patches
-In-Reply-To: <20200420150451.779129-1-fontaine.fabrice@gmail.com>
-References: <20200420150451.779129-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200421082532.3ba8113c@windsurf.home>
+Date: Tue, 21 Apr 2020 08:25:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/oniguruma: bump to version 6.9.5
+In-Reply-To: <20200420135324.396466-1-fontaine.fabrice@gmail.com>
+References: <20200420135324.396466-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200421082539.647eeb4f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 20 Apr 2020 17:04:51 +0200
+On Mon, 20 Apr 2020 15:53:24 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Patches are not needed since bump to version 6.1.1 thanks to
-> https://github.com/stella-emu/stella/commit/72932aa09e022ef38a9b58721d89a02a66c29aa4
-> https://github.com/stella-emu/stella/commit/74450028fcf28f521951631570093494f17c4d95
+> Update hash of COPYING (update in year):
+> https://github.com/kkos/oniguruma/commit/1952e8970a7449d5ca42a7f3bd9ce26ec6e32f43
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../0001-Add-cross-compilation-support.patch  | 29 ----------
->  package/stella/0002-undef-PAGE_SIZE.patch     | 53 -------------------
->  2 files changed, 82 deletions(-)
->  delete mode 100644 package/stella/0001-Add-cross-compilation-support.patch
->  delete mode 100644 package/stella/0002-undef-PAGE_SIZE.patch
+>  package/oniguruma/oniguruma.hash | 4 ++--
+>  package/oniguruma/oniguruma.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks for providing additional explanations. I've applied your patch
-to master. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
