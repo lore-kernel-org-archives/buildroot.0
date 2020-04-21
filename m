@@ -1,98 +1,82 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 21 Apr 2020 19:26:46 +0200
-Subject: [Buildroot] [PATCHv2 12/12] gitlab-ci: check all defconfigs on
- every push
-In-Reply-To: <20200421172646.3340666-1-romain.naour@gmail.com>
-References: <20200421172646.3340666-1-romain.naour@gmail.com>
-Message-ID: <20200421172646.3340666-12-romain.naour@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Tue, 21 Apr 2020 20:25:09 +0300
+Subject: [Buildroot] [PATCH v3,
+ 5/6] package/collectd: add capabilities option
+In-Reply-To: <20200415063008.2237470-5-fontaine.fabrice@gmail.com>
+References: <20200415063008.2237470-1-fontaine.fabrice@gmail.com>
+ <20200415063008.2237470-5-fontaine.fabrice@gmail.com>
+Message-ID: <CALFsTFUGkEk66SasixmJm=5NHi8z8FdkL7BQJKwoxaEKC8OxjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A defconfig check has been introduced by a previous
-patch to test each defconfig before the building them.
-But those builds are done every week or more.
+Hello,
 
-Checking a defconfig can be done on every push to the
-repository since it take few seconds for each.
+On Wed, Apr 15, 2020 at 9:28 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> capabilities plugin is available since version 5.11.0 and
+> https://github.com/collectd/collectd/commit/b934f1572cdb54cf485b600546a72dbf9929ba2c
+>
+> It is currently enabled by default depending on jansson and
+> libmicrohttpd availability
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v2 -> v3 (after review of Thomas Petazzoni):
+>  - Add dmidecode runtime dependency
+>
+>  package/collectd/Config.in   | 10 ++++++++++
+>  package/collectd/collectd.mk |  2 ++
+>  2 files changed, 12 insertions(+)
+>
+> diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+> index 7186d67c36..3fc07a9014 100644
+> --- a/package/collectd/Config.in
+> +++ b/package/collectd/Config.in
+> @@ -128,6 +128,16 @@ config BR2_PACKAGE_COLLECTD_BIND
+>         help
+>           Collects BIND DNS statistics.
+>
+> +config BR2_PACKAGE_COLLECTD_CAPABILITIES
+> +       bool "capabilities"
+> +       depends on BR2_aarch64 || BR2_i386 || BR2_x86_64 # dmidecode
+> +       select BR2_PACKAGE_DMIDECODE # runtime
+> +       select BR2_PACKAGE_JANSSON
+> +       select BR2_PACKAGE_LIBMICROHTTPD
+> +       help
+> +         Collects selected static platform data using dmidecode and
+> +         expose it through micro embedded webserver.
+> +
+>  config BR2_PACKAGE_COLLECTD_CEPH
+>         bool "ceph"
+>         select BR2_PACKAGE_YAJL
+> diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+> index 964f4dc694..f04ccdb2ff 100644
+> --- a/package/collectd/collectd.mk
+> +++ b/package/collectd/collectd.mk
+> @@ -51,6 +51,7 @@ COLLECTD_CONF_OPTS += \
+>         $(if $(BR2_PACKAGE_COLLECTD_APCUPS),--enable-apcups,--disable-apcups) \
+>         $(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
+>         $(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
+> +       $(if $(BR2_PACKAGE_COLLECTD_CAPABILITIES),--enable-capabilities,--disable-capabilities) \
+>         $(if $(BR2_PACKAGE_COLLECTD_CEPH),--enable-ceph,--disable-ceph) \
+>         $(if $(BR2_PACKAGE_COLLECTD_CHRONY),--enable-chrony,--disable-chrony) \
+>         $(if $(BR2_PACKAGE_COLLECTD_CGROUPS),--enable-cgroups,--disable-cgroups) \
+> @@ -153,6 +154,7 @@ COLLECTD_DEPENDENCIES = \
+>         $(if $(BR2_PACKAGE_COLLECTD_AMQP),rabbitmq-c) \
+>         $(if $(BR2_PACKAGE_COLLECTD_APACHE),libcurl) \
+>         $(if $(BR2_PACKAGE_COLLECTD_BIND),libcurl libxml2) \
+> +       $(if $(BR2_PACKAGE_COLLECTD_CAPABILITIES),jansson libmicrohttpd) \
+>         $(if $(BR2_PACKAGE_COLLECTD_CEPH),yajl) \
+>         $(if $(BR2_PACKAGE_COLLECTD_CURL),libcurl) \
+>         $(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),libcurl yajl) \
+> --
+> 2.25.1
+>
+Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
 
-This would allow to detect as soon as possible a problem
-in a defconfig and in particular Kconfig symbols that
-disapear from the generated .config file.
-
-Although we could have used one job for each defconfig
-check, we need to limit the number of jobs since gitlab
-can limit the number of jobs in active pipelines.
-(500 by default [1]).
-
-So, add a new job called defconfig_check that test all
-defconfig in one go.
-
-The test curently take 3 minutes 31 seconds to run in
-a gitlab runner.
-
-Tested:
-https://gitlab.com/kubu93/buildroot/-/jobs/520646767
-
-[1] https://gitlab.com/gitlab-org/gitlab/-/blob/4108625e85990fd9d4520365a03bb1bad625ac35/doc/administration/instance_limits.md#number-of-jobs-in-active-pipelines
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .gitlab-ci.yml    | 13 +++++++++++++
- .gitlab-ci.yml.in | 13 +++++++++++++
- 2 files changed, 26 insertions(+)
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 0d06a1b7cf..a060b545de 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -43,6 +43,19 @@ check-package:
-     script:
-         - make check-package
- 
-+defconfig_check:
-+    extends: .check_base
-+    script:
-+        - >
-+           failed=0;
-+           for defconfig in $(cd configs; ls *_defconfig);
-+           do
-+               echo "Configure Buildroot for ${defconfig}";
-+               make ${defconfig} 2>&1 >/dev/null;
-+               ./support/scripts/check-dotconfig.py .config configs/${defconfig} || failed=1;
-+           done;
-+           exit ${failed};
-+
- .defconfig_base:
-     script:
-         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index 413c6d2956..d8dc11af79 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -43,6 +43,19 @@ check-package:
-     script:
-         - make check-package
- 
-+defconfig_check:
-+    extends: .check_base
-+    script:
-+        - >
-+           failed=0;
-+           for defconfig in $(cd configs; ls *_defconfig);
-+           do
-+               echo "Configure Buildroot for ${defconfig}";
-+               make ${defconfig} 2>&1 >/dev/null;
-+               ./support/scripts/check-dotconfig.py .config configs/${defconfig} || failed=1;
-+           done;
-+           exit ${failed};
-+
- .defconfig_base:
-     script:
-         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
--- 
-2.25.3
+Regards,
+Asaf.
