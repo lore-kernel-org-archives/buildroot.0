@@ -1,39 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 22:07:06 +0200
-Subject: [Buildroot] [git commit]
- configs:minnowboard_max-graphical_defconfig: re-enable GLX support
-Message-ID: <20200421195434.2417B8FB45@busybox.osuosl.org>
+Date: Tue, 21 Apr 2020 22:08:03 +0200
+Subject: [Buildroot] [git commit] configs/qemu_riscv*: remove
+ BR2_TARGET_OPENSBI_USE_PLAT
+Message-ID: <20200421195434.57C998FB47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffedbd1c531812804668a5b1ea1772f737f2f996
+commit: https://git.buildroot.net/buildroot/commit/?id=8dd067ef3ae92eda4d883dd002c4b48b60dd4e8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This defconfig loses mesa3d-demo and glmark2 package since commit
-5cb821d5635626b7327d5d704555c412e5ed5a1f that introduced an
-explicit option to enable GLX support.
+This option never existed in opensbi package.
 
 This fixes the new defconfig check.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Alistair Francis <alistair.francis@wdc.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/minnowboard_max-graphical_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ configs/qemu_riscv32_virt_defconfig | 1 -
+ configs/qemu_riscv64_virt_defconfig | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
-index 33630c6b09..910c324e25 100644
---- a/configs/minnowboard_max-graphical_defconfig
-+++ b/configs/minnowboard_max-graphical_defconfig
-@@ -42,6 +42,7 @@ BR2_PACKAGE_MESA3D_DEMOS=y
- BR2_PACKAGE_MESA3D=y
- BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
- BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-+BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+index 427ea47387..f47700f4ab 100644
+--- a/configs/qemu_riscv32_virt_defconfig
++++ b/configs/qemu_riscv32_virt_defconfig
+@@ -27,7 +27,6 @@ BR2_LINUX_KERNEL_IMAGE=y
  
- # Framebuffer (just for testing purposes)
- BR2_PACKAGE_FB_TEST_APP=y
+ # Bootloader
+ BR2_TARGET_OPENSBI=y
+-BR2_TARGET_OPENSBI_USE_PLAT=y
+ BR2_TARGET_OPENSBI_PLAT="qemu/virt"
+ 
+ # host-qemu for gitlab testing
+diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+index 2125324aff..659a6046ed 100644
+--- a/configs/qemu_riscv64_virt_defconfig
++++ b/configs/qemu_riscv64_virt_defconfig
+@@ -26,7 +26,6 @@ BR2_LINUX_KERNEL_IMAGE=y
+ 
+ # Bootloader
+ BR2_TARGET_OPENSBI=y
+-BR2_TARGET_OPENSBI_USE_PLAT=y
+ BR2_TARGET_OPENSBI_PLAT="qemu/virt"
+ 
+ # host-qemu for gitlab testing
