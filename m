@@ -1,247 +1,142 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 21 Apr 2020 10:27:48 -0500
-Subject: [Buildroot] [PATCH v2 1/5] package/kmod: add modules-load init
- script
-In-Reply-To: <20200418221411.1549783-2-unixmania@gmail.com>
-References: <20200418221411.1549783-1-unixmania@gmail.com>
- <20200418221411.1549783-2-unixmania@gmail.com>
-Message-ID: <CANQCQpbgKX9sG+E==EUEY9Q3A4aqaP73jUMH9+xsc96La_dRrg@mail.gmail.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Tue, 21 Apr 2020 11:05:30 -0500
+Subject: [Buildroot] [PATCH 8/8] package/mongodb: bump to version 4.2.4
+In-Reply-To: <CAMQcK5L+D_aONSbczyJOtU0TOmUeOMNM-4Raq+Oqgg6_9h3PDQ@mail.gmail.com>
+References: <20200323104909.16765-1-yegorslists@googlemail.com>
+ <20200323104909.16765-8-yegorslists@googlemail.com>
+ <CAMQcK5L+D_aONSbczyJOtU0TOmUeOMNM-4Raq+Oqgg6_9h3PDQ@mail.gmail.com>
+Message-ID: <CAMQcK5Jeg4iHakW=b1kd_m6A8PAJvke_1P_e3Kr5B8sU25tROw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos,
+Yegor/All,
 
+On Mon, Apr 20, 2020 at 5:56 PM Ryan Barnett
+<ryan.barnett@rockwellcollins.com> wrote:
+>
+> I've run into an error when compiling for an x86-64 bit platform for
+> the core-i5 architecture:
+>
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(node_data.cpp.o):
+> relocation R_X86_64_32 against `.bss' can not be used when making a
+> PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(null.cpp.o):
+> relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
+> making a PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(ostream_wrapper.cpp.o):
+> relocation R_X86_64_32 against `.bss' can not be used when making a
+> PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(parse.cpp.o):
+> relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
+> making a PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(parser.cpp.o):
+> relocation R_X86_64_32 against `.bss' can not be used when making a
+> PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(regex_yaml.cpp.o):
+> relocation R_X86_64_32 against `.bss' can not be used when making a
+> PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(scanner.cpp.o):
+> relocation R_X86_64_32 against `.bss' can not be used when making a
+> PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(scantoken.cpp.o):
+> relocation R_X86_64_32 against `.bss' can not be used when making a
+> PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(simplekey.cpp.o):
+> relocation R_X86_64_32 against `.bss' can not be used when making a
+> PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(singledocparser.cpp.o):
+> relocation R_X86_64_32 against `.bss' can not be used when making a
+> PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(stream.cpp.o):
+> relocation R_X86_64_32 against `.data' can not be used when making a
+> PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(tag.cpp.o):
+> relocation R_X86_64_32 against `.bss' can not be used when making a
+> PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(binary.cpp.o):
+> relocation R_X86_64_32S against `.rodata' can not be used when making
+> a PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(directives.cpp.o):
+> relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
+> making a PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(nodebuilder.cpp.o):
+> relocation R_X86_64_32S against symbol `_ZTVN4YAML11NodeBuilderE' can
+> not be used when making a PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(scanscalar.cpp.o):
+> relocation R_X86_64_32 against symbol `_ZGVZN4YAML3Exp5EmptyEvE1e' can
+> not be used when making a PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(scantag.cpp.o):
+> relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
+> making a PIE object; recompile with -fPIC
+> /tmp/mongodb-buildhost/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/8.4.0/../../../../x86_64-buildroot-linux-gnu/bin/ld:
+> /tmp/mongodb-buildhost/x86_64-buildroot-linux-gnu/sysroot/lib/../lib64/libyaml-cpp.a(exp.cpp.o):
+> relocation R_X86_64_32 against `.rodata.str1.1' can not be used when
+> making a PIE object; recompile with -fPIC
+> /accts
+>
+> Do you have any ideas of what the issue is?
+>
+> I have BR2_SHARED_LIBS set along with using the latest stable bootlin
+> toolchain for x86-64-core-i7 toolchain:
+>
+> https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--stable-2020.02-2.tar.bz2
+>
+> Please let me know if you need any more information in order to
+> recreate the problem.
 
-On Sat, Apr 18, 2020 at 5:16 PM <unixmania@gmail.com> wrote:
->
-> From: Carlos Santos <unixmania@gmail.com>
->
-> Use some scripting to mimic the systemd "modules-load" and the OpenRC
-> "modules" services (load kernel modules based on static configuration).
->
+Here is the defconfig based on qemu_x86_64_defconfig which will
+reproduce the issue:
 
-Thanks for sending this.  I know I carry a lot of kmod loading scripts
-that all look the same and should have been upstreamed :-)
+BR2_x86_64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--stable-2020.02-2.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
+BR2_SYSTEM_DHCP="eth0"
+BR2_ROOTFS_POST_BUILD_SCRIPT="board/qemu/x86_64/post-build.sh"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.91"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+BR2_PACKAGE_MONGODB=y
+BR2_TARGET_ROOTFS_EXT2=y
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_PACKAGE_HOST_QEMU=y
+BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 
-Just a note, I noticed this debian example script for sysv and it can
-also handle options.  Usually having the ability to provide module
-options is one of the reasons to break out to use modules in some of
-our use cases.
-https://github.com/SebKuzminsky/kmod/blob/master/debian/kmod.init
+Thanks,
+-Ryan
 
-
-> The configuration files should simply contain a list of kernel module
-> names to load, separated by newlines. Empty lines and lines whose first
-> non-whitespace character is # or ; are ignored.
->
-> The configuration directory list and file format is the same as the one
-> described in modules-load.d(5). Files are loaded in the following order:
->
->   /etc/modules-load.d/*.conf
->   /run/modules-load.d/*.conf
->   /usr/lib/modules-load.d/*.conf
->
-> This roughly mimics the logic used by systemd but the files are not
-> sorted by their filename in lexicographic order as systemd does.
->
-> Notice that OpenRC uses /etc/modules-load.d/*.conf, only, and does not
-> ignore lines beginning with ';'.
->
-> The file redirections do the following:
->
-> - stdout is redirected to syslog with facility.level "kern.info"
-> - stderr is redirected to syslog with facility.level "kern.err"
-> - file dscriptor 4 is used to pass the result to the "start" function.
->
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
-> CC: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
-> Changes v1->v2:
-> - Redirect output to syslog only if /usr/bin/logger exists, as made in
->   package/procps-ng/S02sysctl.
-> - Use the MODULES_LOAD_ARGS variable, optionally set in
->   /etc/default/modules-load.
-> - Rename S02modules-load to S11modules-load to ensure that it runs after
->   S10mdev and S10udev, which both are going to trigger cold-plug events
->   that may in turn trigger module loading, as observed by Yann E. MORIN.
-> - Prevent the installation of S11modules-load with openrc, which already
->   provides the /etc/init.d/modules script.
-> - Reorganize the comments in S11modules-load.
-> ---
->  package/kmod/S11modules-load | 115 +++++++++++++++++++++++++++++++++++
->  package/kmod/kmod.mk         |  10 +++
->  2 files changed, 125 insertions(+)
->  create mode 100644 package/kmod/S11modules-load
->
-> diff --git a/package/kmod/S11modules-load b/package/kmod/S11modules-load
-> new file mode 100644
-> index 0000000000..9010230e23
-> --- /dev/null
-> +++ b/package/kmod/S11modules-load
-> @@ -0,0 +1,115 @@
-> +#!/bin/sh
-> +#
-> +# Use some scripting to mimic the systemd "modules-load" and the OpenRC
-> +# "modules" services (load kernel modules based on static configuration).
-> +#
-> +# The configuration files should simply contain a list of kernel module
-> +# names to load, separated by newlines. Empty lines and lines whose first
-> +# non-whitespace character is # or ; are ignored.
-> +#
-> +# The configuration directory list and file format is the same as the one
-> +# described in modules-load.d(5). Files are loaded in the following order:
-> +#
-> +#   /etc/modules-load.d/*.conf
-> +#   /run/modules-load.d/*.conf
-> +#   /usr/lib/modules-load.d/*.conf
-> +#
-> +# This roughly mimics the logic used by systemd but the files are not sorted
-> +# by their filename in lexicographic order as systemd does.
-> +#
-> +# Notice that OpenRC uses /etc/modules-load.d/*.conf, only, and does not
-> +# ignore lines beginning with ';'.
-> +#
-> +
-> +PROGRAM="modules-load"
-> +
-> +MODULES_LOAD_ARGS=""
-> +
-> +# Add "-q" to MODULES_LOAD_ARGS to disable error messages.
-> +# shellcheck source=/dev/null
-> +[ -r "/etc/default/$PROGRAM" ] && . "/etc/default/$PROGRAM"
-> +
-> +# Files are read from directories in the MODULES_SOURCES list, in the given
-> +# order. A file may be used more than once, since there can be multiple
-> +# symlinks to it. No attempt is made to prevent this.
-> +MODULES_SOURCES="/etc/modules-load.d/ /run/modules-load.d/ /usr/lib/modules-load.d/"
-> +
-> +# If the logger utility is available all messages are sent to syslog, except
-> +# for the final status. The file redirections do the following:
-> +#
-> +# - stdout is redirected to syslog with facility.level "kern.info"
-> +# - stderr is redirected to syslog with facility.level "kern.err"
-> +# - file dscriptor 4 is used to pass the result to the "start" function.
-> +#
-> +run_logger() {
-> +       # shellcheck disable=SC2086 # we need the word splitting
-> +       find $MODULES_SOURCES -maxdepth 1 -name '*.conf' -print0 2> /dev/null | \
-> +       xargs -0 -r -n 1 readlink -f | {
-> +               prog_status="OK"
-> +               while :; do
-> +                       read -r file || {
-> +                               echo "$prog_status" >&4
-> +                               break
-> +                       }
-> +                       echo "* Applying $file ..."
-> +                       while :; do
-> +                               read -r mod || break
-> +                               case "$mod" in
-> +                                       ''|'#'*|';'*) ;;
-> +                                       *) /sbin/modprobe $MODULES_LOAD_ARGS "$mod" || prog_status="FAIL"
-> +                               esac
-> +                       done < "$file"
-> +               done 2>&1 >&3 | /usr/bin/logger -t "$PROGRAM" -p kern.err
-> +       } 3>&1 | /usr/bin/logger -t "$PROGRAM" -p kern.info
-> +}
-> +
-> +# If logger is not available all messages are sent to stdout/stderr.
-> +run_std() {
-> +       # shellcheck disable=SC2086 # we need the word splitting
-> +       find $MODULES_SOURCES -maxdepth 1 -name '*.conf' -print0 2> /dev/null | \
-> +       xargs -0 -r -n 1 readlink -f | {
-> +               prog_status="OK"
-> +               while :; do
-> +                       read -r file || {
-> +                               echo "$prog_status" >&4
-> +                               break
-> +                       }
-> +                       echo "* Applying $file ..."
-> +                       while :; do
-> +                               read -r mod || break
-> +                               case "$mod" in
-> +                                       ''|'#'*|';'*) ;;
-> +                                       *) /sbin/modprobe $MODULES_LOAD_ARGS "$mod" || prog_status="FAIL"
-> +                               esac
-> +                       done < "$file"
-> +               done
-> +       }
-> +}
-> +
-> +if [ -x /usr/bin/logger ]; then
-> +       run_program="run_logger"
-> +else
-> +       run_program="run_std"
-> +fi
-> +
-> +start() {
-> +       printf '%s %s: ' "$1" "$PROGRAM"
-> +       status=$("$run_program" 4>&1)
-> +       echo "$status"
-> +       if [ "$status" = "OK" ]; then
-> +               return 0
-> +       fi
-> +       return 1
-> +}
-> +
-> +case "$1" in
-> +       start)
-> +               start "Running";;
-> +       restart|reload)
-> +               start "Rerunning";;
-> +       stop)
-> +               :;;
-> +       *)
-> +               echo "Usage: $0 {start|stop|restart|reload}"
-> +               exit 1
-> +esac
-> diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-> index e2dfea5c7b..9b6735e2d0 100644
-> --- a/package/kmod/kmod.mk
-> +++ b/package/kmod/kmod.mk
-> @@ -60,6 +60,16 @@ else
->  KMOD_BIN_PATH = ../usr/bin/kmod
->  endif
->
-> +# Avoid installing S11modules-load, since openrc provides /etc/init.d/modules.
-> +define KMOD_INSTALL_INIT_OPENRC
-> +       @:
-> +endef
-> +
-> +define KMOD_INSTALL_INIT_SYSV
-> +       $(INSTALL) -m 0755 -D package/kmod/S11modules-load \
-> +               $(TARGET_DIR)/etc/init.d/S11modules-load
-> +endef
-> +
->  define KMOD_INSTALL_TOOLS
->         for i in depmod insmod lsmod modinfo modprobe rmmod; do \
->                 ln -sf $(KMOD_BIN_PATH) $(TARGET_DIR)/sbin/$$i; \
-> --
-> 2.18.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
--- 
-
-Matthew Weber | Associate Director Software Engineer | Commercial Avionics
-
+---
+Ryan Barnett | Sr Systems Engineer | Commercial Avionics
 COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
+400 Collins Rd NE, Cedar Rapids, IA 52498 USA
+ryan.barnett at collins.com | collinsaerospace.com
 
 CONFIDENTIALITY WARNING: This message may contain proprietary and/or
 privileged information of Collins Aerospace and its affiliated
@@ -250,14 +145,3 @@ disclose, copy, distribute or use this message or its contents. 2)
 Advise the sender by return email. 3) Delete all copies (including all
 attachments) from your computer. Your cooperation is greatly
 appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
-
-
-ALPHA BRAVO COLLINS | Aerospace Redefined
-
-         __ l __
-
- \- - - -o-(_)-o- - - -/
