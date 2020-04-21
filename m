@@ -1,43 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 08:27:35 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/gerbera: bump to version
- 1.4.0
-In-Reply-To: <20200420064817.11124-1-joerg.krause@embedded.rocks>
-References: <20200420064817.11124-1-joerg.krause@embedded.rocks>
-Message-ID: <20200421082735.7af99a84@windsurf.home>
+Date: Tue, 21 Apr 2020 08:48:57 +0200
+Subject: [Buildroot] [git commit] package/apcupsd: uses fork(), needs MMU
+Message-ID: <20200421063623.C73298F93A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 20 Apr 2020 08:48:17 +0200
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=209ea2414bbba0ae7444934c5cad228b07b2daa2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Also:
->  * Drop patch 0001 (fix static linking of libmagic) applied upstream
->  * Add optional dependency on libmatroska
->  * Add upstream patch to fix building with libmatroska
->  * Adjust spacing in hash file to 2 spaces
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
-> v2:
->  * Add missing "Backported from" to upstream patch
-> ---
->  ...indLibMagic.cmake-fix-static-linking.patch | 60 -------------------
->  ...build-without-js-taglib-or-atrailers.patch | 51 ++++++++++++++++
->  package/gerbera/config.xml                    |  4 ++
->  package/gerbera/gerbera.hash                  |  4 +-
->  package/gerbera/gerbera.mk                    |  9 ++-
->  5 files changed, 65 insertions(+), 63 deletions(-)
->  delete mode 100644 package/gerbera/0001-cmake-FindLibMagic.cmake-fix-static-linking.patch
->  create mode 100644 package/gerbera/0001-fix-matroska-build-without-js-taglib-or-atrailers.patch
+Fixes:
 
-Applied to master, thanks.
+  http://autobuild.buildroot.net/results/19af985de6e26813b841e7019051da3043c2b7d1/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/apcupsd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/apcupsd/Config.in b/package/apcupsd/Config.in
+index fc77e7c208..eabfb14842 100644
+--- a/package/apcupsd/Config.in
++++ b/package/apcupsd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_APCUPSD
+ 	bool "apcupsd"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  A daemon for controlling APC UPSes.
+ 
