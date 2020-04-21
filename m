@@ -1,108 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Apr 2020 18:50:50 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/mbuffer: fix build with c89 or c99
-In-Reply-To: <20200421152437.3605594-1-fontaine.fabrice@gmail.com>
-References: <20200421152437.3605594-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200421165050.GU5035@scaer>
+Date: Tue, 21 Apr 2020 19:00:39 +0200
+Subject: [Buildroot] [git commit] package/selinux-python: fix dependency
+Message-ID: <20200421164704.1A8428F961@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice. All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b68c7b3c6c4315128bad02929cf000c181f15ca8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-21 17:24 +0200, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/5f4e9079b3377a869ec7002a8138b80eb6194bbb
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Define _POSIX_SOURCE instead of including linux/limits.h
-> 
->  ...gure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch | 38 +++++++++++++++++++
->  package/mbuffer/mbuffer.mk                    |  2 +
->  2 files changed, 40 insertions(+)
->  create mode 100644 package/mbuffer/0002-configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch
-> 
-> diff --git a/package/mbuffer/0002-configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch b/package/mbuffer/0002-configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch
-> new file mode 100644
-> index 0000000000..f116bd575a
-> --- /dev/null
-> +++ b/package/mbuffer/0002-configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch
-> @@ -0,0 +1,38 @@
-> +From 1f2a7e575b3594ef02aae85eee8d1feac0c08266 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Tue, 21 Apr 2020 14:30:20 +0200
-> +Subject: [PATCH] configure.in: set AC_USE_SYSTEM_EXTENSIONS
-> +
-> +Set AC_USE_SYSTEM_EXTENSIONS so _POSIX_SOURCE will be defined and the
-> +following build failure will be avoided when building in c89 or c99
-> +mode:
-> +
-> +log.c: In function 'infomsg':
-> +log.c:123:12: error: 'PIPE_BUF' undeclared (first use in this function)
-> +   if (s <= PIPE_BUF) {
-> +            ^~~~~~~~
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/5f4e9079b3377a869ec7002a8138b80eb6194bbb
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: sent to thomas at maier-komor.de]
-> +---
-> + configure.in | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/configure.in b/configure.in
-> +index 02921c2..078373c 100644
-> +--- a/configure.in
-> ++++ b/configure.in
-> +@@ -30,6 +30,7 @@ AC_PROG_CC_C99
-> + AC_PROG_CC(cc gcc)
-> + AC_C_RESTRICT
-> + AC_C_INLINE
-> ++AC_USE_SYSTEM_EXTENSIONS
+Commit 791292c48d5165515ca08f35d8cbc1ef78d3ed95 forgot to add
+!BR2_PACKAGE_PYTHON dependency, without it the following error will be
+raised if the user selects BR2_PACKAGE_PYTHON and python-selinux:
 
-As per the documentation, AC_USE_SYSTEM_EXTENSIONS must be used before
-any macros that run the compiler, and I believe AC_C_RESTRICT and
-AC_C_INLINE both do.
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_PYTHON3
+  Depends on [n]: !BR2_PACKAGE_PYTHON [=y] && BR2_USE_WCHAR [=y] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && !BR2_STATIC_LIBS [=n]
+  Selected by [y]:
+  - BR2_PACKAGE_SELINUX_PYTHON [=y] && BR2_USE_MMU [=y] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && !BR2_STATIC_LIBS [=n]
 
-Regards,
-Yann E. MORIN.
+Fixes:
+ - No autobuilder failures yet
 
-> + if test "${USRCFLAGS}" = "" ; then
-> + 	if test "${GCC}" = "yes" ; then
-> +-- 
-> +2.25.1
-> +
-> diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
-> index 6ff6e27a39..324780fe69 100644
-> --- a/package/mbuffer/mbuffer.mk
-> +++ b/package/mbuffer/mbuffer.mk
-> @@ -11,6 +11,8 @@ MBUFFER_LICENSE = GPL-3.0+
->  MBUFFER_LICENSE_FILES = LICENSE
->  MBUFFER_CONF_OPTS = --disable-debug
->  MBUFFER_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
-> +# We're patching configure.in
-> +MBUFFER_AUTORECONF = YES
->  
->  # we don't need tests & co. so we specify a target
->  # so that the others don't get built, e.g idev.so
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: add dependency on MMU]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/selinux-python/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
+index 1a610b29f0..0f1c281777 100644
+--- a/package/selinux-python/Config.in
++++ b/package/selinux-python/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SELINUX_PYTHON
+ 	bool "selinux-python"
++	depends on !BR2_PACKAGE_PYTHON
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -37,6 +38,10 @@ config BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
+ 
+ endif
+ 
++comment "selinux-python needs python3"
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_PYTHON
++
+ comment "selinux-python packages needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
