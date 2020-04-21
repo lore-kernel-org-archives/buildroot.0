@@ -1,26 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 08:25:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/oniguruma: bump to version 6.9.5
-In-Reply-To: <20200420135324.396466-1-fontaine.fabrice@gmail.com>
-References: <20200420135324.396466-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200421082539.647eeb4f@windsurf.home>
+Date: Tue, 21 Apr 2020 08:25:45 +0200
+Subject: [Buildroot] [PATCH] package/lua-utf8: bump to version 0.1.2
+In-Reply-To: <20200420060715.31260-1-francois.perrad@gadz.org>
+References: <20200420060715.31260-1-francois.perrad@gadz.org>
+Message-ID: <20200421082545.088b8425@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 20 Apr 2020 15:53:24 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 20 Apr 2020 08:07:15 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Update hash of COPYING (update in year):
-> https://github.com/kkos/oniguruma/commit/1952e8970a7449d5ca42a7f3bd9ce26ec6e32f43
+> switch of rocks maintainer
+> from https://luarocks.org/modules/dannote/utf8
+> to https://luarocks.org/modules/xavier-wang/luautf8
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> the upstream author stays http://github.com/starwing/luautf8
+> 
+> now, the version scheme is aligned on the upstream one,
+> and the version 0.1.2 was released on 06 Apr 2020.
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/oniguruma/oniguruma.hash | 4 ++--
->  package/oniguruma/oniguruma.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/lua-utf8/lua-utf8.hash | 3 ++-
+>  package/lua-utf8/lua-utf8.mk   | 6 +++---
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
