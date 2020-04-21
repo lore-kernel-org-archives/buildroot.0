@@ -1,54 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Apr 2020 23:24:29 +0200
-Subject: [Buildroot] [git commit] package/openjdk: copy all directories and
- files when installing
-Message-ID: <20200421211028.9B956814A9@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 Apr 2020 23:26:18 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/ncurses: bump to version
+ 6.2
+In-Reply-To: <20200229232016.4174325-1-aduskett@gmail.com>
+References: <20200229232016.4174325-1-aduskett@gmail.com>
+Message-ID: <20200421232618.18245478@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63b576095b1dbabaf15a6eee7ceabed6d868a707
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Several directories and files are currently not installed during the
-target installation, these include:
-  - conf
-    Several configuration files, including security configuration files which
-    may be necessary for running various java applications.
++Thomas DS, since he added all the patches for ncurses 6.1
 
-  - legal
-    This directory contains legal notices that some java applications may
-    require, as they may print legal information and will throw exceptions at
-    runtime if the legal files are not present on the system.
+On Sat, 29 Feb 2020 15:20:15 -0800
+aduskett at gmail.com wrote:
 
-  - release
-    This file contains a list of modules included in the image.
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Other changes:
+>   - Update hash for the license file due to copyright year changes.
+>   - Remove patches that are incorporated in this version.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-Because these directories take up less than of megabyte extra, it is not an
-issue to install all of them.
+But then, shouldn't we add all of the ncurses-6.2 patches available at
+https://invisible-mirror.net/archives/ncurses/6.2/. I remember Thomas
+DS discussed ncurses patches during the latest Buildroot meeting, and a
+number of them (at least for ncurses 6.1) contained security fixes.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Reviewed-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Tested-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/openjdk/openjdk.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+It's not clear what those patches are though, as they seem to contain
+also the 6.1 -> 6.2 changes.
 
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 963c2bbebe..ffa62dd10d 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -123,9 +123,7 @@ endef
- # which makes manual installation necessary.
- define OPENJDK_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)$(OPENJDK_INSTALL_BASE)
--	cp -dpfr $(@D)/build/linux-*-release/images/jre/bin/ \
--		$(TARGET_DIR)$(OPENJDK_INSTALL_BASE)/
--	cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/ \
-+	cp -dpfr $(@D)/build/linux-*-release/images/jre/* \
- 		$(TARGET_DIR)$(OPENJDK_INSTALL_BASE)/
- 	cd $(TARGET_DIR)/usr/bin && ln -snf ../..$(OPENJDK_INSTALL_BASE)/bin/* .
- endef
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
