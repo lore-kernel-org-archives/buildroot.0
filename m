@@ -1,68 +1,54 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Tue, 21 Apr 2020 20:51:40 +0300
-Subject: [Buildroot] [PATCH] package/linux-tools: selftests: add numactl
- dependency for net tests
-In-Reply-To: <20200411152649.3830039d@windsurf.home>
-References: <20200325164240.22747-1-vadim4j@gmail.com>
- <20200411152649.3830039d@windsurf.home>
-Message-ID: <20200421175140.n5l3vn7rh642widp@vkochan-ThinkPad-T470p>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 21 Apr 2020 16:53:15 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/selinux-python: fix dependency
+Message-ID: <20200421145315.3562089-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Commit 791292c48d5165515ca08f35d8cbc1ef78d3ed95 forgot to add
+!BR2_PACKAGE_PYTHON dependency, without it the following error will be
+raised if the user selects BR2_PACKAGE_PYTHON and python-selinux:
 
-On Sat, Apr 11, 2020 at 03:26:49PM +0200, Thomas Petazzoni wrote:
-> Hello Vadym,
-> 
-> On Wed, 25 Mar 2020 18:42:40 +0200
-> Vadym Kochan <vadim4j@gmail.com> wrote:
-> 
-> > Linux selftests/net/reuseport_bpf_numa.c requires numa.h header which
-> > is provided by numactl package. Otherwise net tests are failed to
-> > install.
-> > 
-> > Signed-off-by: Vadym Kochan <vadim4j@gmail.com>
-> 
-> Thanks for your patch. However, I think this is not going in the right
-> direction. Indeed, the selftests have many more dependencies:
-> 
->  - The BPF tests need libcap and libelf
-> 
->  - The gpio tests require libmount from util-linux
-> 
->  - The memfd tests require fuse
-> 
->  - The netfilter tests require libmnl
-> 
-> etc.
-> 
-> So, I think we should:
-> 
->  - Pass FORCE_TARGETS=1 during the build so that the build aborts if a
->    required dependency is not found.
-> 
->  - Switch to using more optional dependencies, and disable the TARGETS
->    that we cannot build by passing the appropriate SKIP_TARGETS value
->    to the Makefile.
-> 
-> Could you work on this ? We probably need to make libcap-ng optional,
-> but also popt. The other options that are selected by
-> BR2_PACKAGE_LINUX_TOOLS_SELFTESTS might also need to be revisited.
-> 
-> An alternative is to just say that we don't care about making all of
-> that optional, and simply unconditionally enable all the dependencies
-> that selftests need, to build everything. Easier, but that's not the
-> normal Buildroot design principle.
-> 
-> Best regards,
-> 
-> Thomas
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_PYTHON3
+  Depends on [n]: !BR2_PACKAGE_PYTHON [=y] && BR2_USE_WCHAR [=y] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && !BR2_STATIC_LIBS [=n]
+  Selected by [y]:
+  - BR2_PACKAGE_SELINUX_PYTHON [=y] && BR2_USE_MMU [=y] && BR2_USE_WCHAR [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && !BR2_STATIC_LIBS [=n]
 
-Yes, I understand your point. I think it would be useful to add config
-options per each selftests subsystem to easy turn it on.
+Fixes:
+ - No autobuilder failures yet
 
-Regards,
-Vadym Kochan
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Fix commit message, keep select and add a !BR2_PACKAGE_PYTHON
+   dependency
+
+ package/selinux-python/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/selinux-python/Config.in b/package/selinux-python/Config.in
+index 1a610b29f0..862a63095a 100644
+--- a/package/selinux-python/Config.in
++++ b/package/selinux-python/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SELINUX_PYTHON
+ 	bool "selinux-python"
++	depends on !BR2_PACKAGE_PYTHON
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -37,6 +38,9 @@ config BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
+ 
+ endif
+ 
++comment "selinux-python needs python3"
++	depends on BR2_PACKAGE_PYTHON
++
+ comment "selinux-python packages needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-- 
+2.25.1
