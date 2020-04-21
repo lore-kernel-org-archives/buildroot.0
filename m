@@ -1,36 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 21:32:42 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: remove
- board/friendlyarm/nanopi-m4
-In-Reply-To: <20200421171258.1893120-1-aduskett@gmail.com>
-References: <20200421171258.1893120-1-aduskett@gmail.com>
-Message-ID: <20200421213242.029a6ca5@windsurf.home>
+Date: Tue, 21 Apr 2020 21:34:15 +0200
+Subject: [Buildroot] [git commit] package/libupnp18: bump to version 1.8.7
+Message-ID: <20200421191949.D7D9F8FA92@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 21 Apr 2020 10:12:58 -0700
-aduskett at gmail.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1d50d8c6bfc536eee1e2f469b06123ac8413f57a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> When running get-developers the following warning is shown:
-> WARNING: 'board/friendlyarm/nanopi-m4/' doesn't match any file
-> 
-> This defconfig was removed with commit a24bd8936f57a590f810e14d7828cf1bddce580e
-> which was on August 29th of 2019.
+Update indentation of hash file (two spaces)
 
-This is not what happened. This line was added much more recently, in
-commit 84ba2e8bf5f1e3a9d0d01a577f72cfd51f88a7b6, but it had a typo: it
-should have pointed to board/friendlyarm/nanopi-neo4/. So instead I
-fixed the typo.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libupnp18/libupnp18.hash | 8 ++++----
+ package/libupnp18/libupnp18.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thanks for noticing!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
+index 68aee9ba62..ba9ce1bcdf 100644
+--- a/package/libupnp18/libupnp18.hash
++++ b/package/libupnp18/libupnp18.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.6/libupnp-1.8.6.tar.bz2.sha1
+-sha1 6132a949d7536dac835172609d1def1e7f2bd232  libupnp-1.8.6.tar.bz2
++# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.7/libupnp-1.8.7.tar.bz2.sha1
++sha1  2ea3011180c58b0584f0cb73cc8e685a0a1c4ec8  libupnp-1.8.7.tar.bz2
+ # Locally computed:
+-sha256	65faf240f8ccee50cc0e7fe7fb21dcd79f743fc227a9b652b091f50f6956c2c7	libupnp-1.8.6.tar.bz2
+-sha256	c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3	COPYING
++sha256  e38c69b2b67322e67cd53680db9b02c7c1f720a47a3cd626fd89d57d2dca93b8  libupnp-1.8.7.tar.bz2
++sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
+index f73c656831..f17a1a720d 100644
+--- a/package/libupnp18/libupnp18.mk
++++ b/package/libupnp18/libupnp18.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUPNP18_VERSION = 1.8.6
++LIBUPNP18_VERSION = 1.8.7
+ LIBUPNP18_SOURCE = libupnp-$(LIBUPNP18_VERSION).tar.bz2
+ LIBUPNP18_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP18_VERSION)
+ LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
