@@ -1,68 +1,84 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Tue, 21 Apr 2020 20:25:33 +0300
-Subject: [Buildroot] [PATCH v3,
- 6/6] package/collectd: add buddyinfo option
-In-Reply-To: <20200415063008.2237470-6-fontaine.fabrice@gmail.com>
-References: <20200415063008.2237470-1-fontaine.fabrice@gmail.com>
- <20200415063008.2237470-6-fontaine.fabrice@gmail.com>
-Message-ID: <CALFsTFU_D_3y6sMAcqbgCvVrz59uUoShk0-ZZvGoG6br-5-iOg@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 21 Apr 2020 19:26:35 +0200
+Subject: [Buildroot] [PATCHv2 01/12] support/scripts: add check-dotconfig.py
+Message-ID: <20200421172646.3340666-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+For the same reason as for 50b747f212be2c9c0f7cf10c674ed488d042715c,
+we need to check if the generated configuration file (.config)
+contains all symbols present in the defconfig file.
 
-On Wed, Apr 15, 2020 at 9:29 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> buddyinfo is available since version 5.11.0 and
-> https://github.com/collectd/collectd/commit/cb19ecf90d89a79836b8b5236d2b66277dd79c5f
->
-> It is currently enabled by default
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Asaf Kahlon):
->  - Add missing COLLECTD_ prefix for buddyinfo option in Config.in
->
->  package/collectd/Config.in   | 5 +++++
->  package/collectd/collectd.mk | 1 +
->  2 files changed, 6 insertions(+)
->
-> diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-> index 3fc07a9014..54b218754a 100644
-> --- a/package/collectd/Config.in
-> +++ b/package/collectd/Config.in
-> @@ -128,6 +128,11 @@ config BR2_PACKAGE_COLLECTD_BIND
->         help
->           Collects BIND DNS statistics.
->
-> +config BR2_PACKAGE_COLLECTD_BUDDYINFO
-> +       bool "buddyinfo"
-> +       help
-> +         Statistics from buddyinfo file about memory fragmentation.
-> +
->  config BR2_PACKAGE_COLLECTD_CAPABILITIES
->         bool "capabilities"
->         depends on BR2_aarch64 || BR2_i386 || BR2_x86_64 # dmidecode
-> diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-> index f04ccdb2ff..6bd1754ad7 100644
-> --- a/package/collectd/collectd.mk
-> +++ b/package/collectd/collectd.mk
-> @@ -51,6 +51,7 @@ COLLECTD_CONF_OPTS += \
->         $(if $(BR2_PACKAGE_COLLECTD_APCUPS),--enable-apcups,--disable-apcups) \
->         $(if $(BR2_PACKAGE_COLLECTD_BATTERY),--enable-battery,--disable-battery) \
->         $(if $(BR2_PACKAGE_COLLECTD_BIND),--enable-bind,--disable-bind) \
-> +       $(if $(BR2_PACKAGE_COLLECTD_BUDDYINFO),--enable-buddyinfo,--disable-buddyinfo) \
->         $(if $(BR2_PACKAGE_COLLECTD_CAPABILITIES),--enable-capabilities,--disable-capabilities) \
->         $(if $(BR2_PACKAGE_COLLECTD_CEPH),--enable-ceph,--disable-ceph) \
->         $(if $(BR2_PACKAGE_COLLECTD_CHRONY),--enable-chrony,--disable-chrony) \
-> --
-> 2.25.1
->
-Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
+If not there is an issue with the defconfig.
 
-Regards,
-Asaf.
+This script will be used in .gitlab-ci.yml.
+
+Inspired by is_toolchain_usable() function from genrandconfig:
+https://git.busybox.net/buildroot/tree/utils/genrandconfig?h=2020.02#n164
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+v2: update with the improved patch suggested by Yann.
+    http://lists.busybox.net/pipermail/buildroot/2020-April/280679.html
+---
+ support/scripts/check-dotconfig.py | 44 ++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100755 support/scripts/check-dotconfig.py
+
+diff --git a/support/scripts/check-dotconfig.py b/support/scripts/check-dotconfig.py
+new file mode 100755
+index 0000000000..81c83a8481
+--- /dev/null
++++ b/support/scripts/check-dotconfig.py
+@@ -0,0 +1,44 @@
++#!/usr/bin/env python3
++
++# This scripts check that all lines present in the defconfig are
++# still present in the .config
++
++import sys
++
++
++def main():
++    if not (len(sys.argv) == 3):
++        print("Error: incorrect number of arguments")
++        print("""Usage: check-dotconfig <configfile> <defconfig>""")
++        sys.exit(1)
++
++    configfile = sys.argv[1]
++    defconfig = sys.argv[2]
++
++    # strip() to get rid of trailing \n
++    with open(configfile) as configf:
++        configlines = [l.strip() for l in configf.readlines()]
++
++    defconfiglines = []
++    with open(defconfig) as defconfigf:
++        for line in defconfigf.readlines():
++            # strip() to get rid of trailing \n
++            line = line.strip()
++            if line.startswith("BR2_"):
++                defconfiglines.append(line)
++            elif line.startswith('# BR2_') and line.endswith(' is not set'):
++                defconfiglines.append(line)
++
++    # Check that all the defconfig lines are still present
++    missing = [defconfigline.strip() for defconfigline in defconfiglines
++               if defconfigline not in configlines]
++
++    if len(missing):
++        print("WARN: defconfig {} can't be used:".format(defconfig))
++        for m in missing:
++            print("      Missing: {}".format(m))
++    sys.exit(1 if len(missing) else 0)
++
++
++if __name__ == "__main__":
++    main()
+-- 
+2.25.3
