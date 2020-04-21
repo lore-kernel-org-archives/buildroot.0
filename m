@@ -1,65 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 Apr 2020 14:38:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mbuffer: fix build with powerpc
-Message-ID: <20200421123852.3529227-1-fontaine.fabrice@gmail.com>
+Date: Tue, 21 Apr 2020 15:03:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libupnp18: bump to version 1.8.7
+Message-ID: <20200421130329.3558402-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/5f4e9079b3377a869ec7002a8138b80eb6194bbb
+Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0002-log.c-fix-build-with-powerpc.patch   | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/mbuffer/0002-log.c-fix-build-with-powerpc.patch
+ package/libupnp18/libupnp18.hash | 8 ++++----
+ package/libupnp18/libupnp18.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mbuffer/0002-log.c-fix-build-with-powerpc.patch b/package/mbuffer/0002-log.c-fix-build-with-powerpc.patch
-new file mode 100644
-index 0000000000..9873a72d01
---- /dev/null
-+++ b/package/mbuffer/0002-log.c-fix-build-with-powerpc.patch
-@@ -0,0 +1,38 @@
-+From 9fbda0adbf59a44f5f0d725f5c31f88ccec7ca56 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 21 Apr 2020 14:30:20 +0200
-+Subject: [PATCH] log.c: fix build with powerpc
-+
-+Include linux/limits.h if __linux__ is defined to avoid the following
-+build failure:
-+
-+log.c: In function 'infomsg':
-+log.c:123:12: error: 'PIPE_BUF' undeclared (first use in this function)
-+   if (s <= PIPE_BUF) {
-+            ^~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/5f4e9079b3377a869ec7002a8138b80eb6194bbb
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to thomas at maier-komor.de]
-+---
-+ log.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/log.c b/log.c
-+index 6ea6507..738d493 100644
-+--- a/log.c
-++++ b/log.c
-+@@ -29,7 +29,7 @@
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+-#if defined(__linux)
-++#if defined(__linux) || defined(__linux__)
-+ #include <linux/limits.h>
-+ #elif defined(__bsd)
-+ #include <sys/syslimits.h>
-+-- 
-+2.25.1
-+
+diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
+index 68aee9ba62..ba9ce1bcdf 100644
+--- a/package/libupnp18/libupnp18.hash
++++ b/package/libupnp18/libupnp18.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.6/libupnp-1.8.6.tar.bz2.sha1
+-sha1 6132a949d7536dac835172609d1def1e7f2bd232  libupnp-1.8.6.tar.bz2
++# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.7/libupnp-1.8.7.tar.bz2.sha1
++sha1  2ea3011180c58b0584f0cb73cc8e685a0a1c4ec8  libupnp-1.8.7.tar.bz2
+ # Locally computed:
+-sha256	65faf240f8ccee50cc0e7fe7fb21dcd79f743fc227a9b652b091f50f6956c2c7	libupnp-1.8.6.tar.bz2
+-sha256	c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3	COPYING
++sha256  e38c69b2b67322e67cd53680db9b02c7c1f720a47a3cd626fd89d57d2dca93b8  libupnp-1.8.7.tar.bz2
++sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
+index f73c656831..f17a1a720d 100644
+--- a/package/libupnp18/libupnp18.mk
++++ b/package/libupnp18/libupnp18.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUPNP18_VERSION = 1.8.6
++LIBUPNP18_VERSION = 1.8.7
+ LIBUPNP18_SOURCE = libupnp-$(LIBUPNP18_VERSION).tar.bz2
+ LIBUPNP18_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP18_VERSION)
+ LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
 -- 
 2.25.1
