@@ -1,41 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 22:51:31 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/libglib2: restore use of
- system printf
-In-Reply-To: <20200311112256.2849174-2-john@metanate.com>
-References: <20200311112256.2849174-1-john@metanate.com>
- <20200311112256.2849174-2-john@metanate.com>
-Message-ID: <20200421225131.5411a02a@windsurf.home>
+Date: Tue, 21 Apr 2020 22:54:41 +0200
+Subject: [Buildroot] [PATCH] package/collectd: make network crypto
+ support discoverable
+In-Reply-To: <877dyrqo04.fsf@dell.be.48ers.dk>
+References: <20200311133504.13911-1-p.debruijn@unilogic.nl>
+ <877dyrqo04.fsf@dell.be.48ers.dk>
+Message-ID: <20200421225441.640279ab@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 11 Mar 2020 11:22:56 +0000
-John Keeping <john@metanate.com> wrote:
+On Tue, 07 Apr 2020 18:06:19 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> Prior to commit 4102db0f7a ("package/libglib2: bump to version 2.60.3")
-> which converted libglib2 to meson, Buildroot used to set a range of
-> autoconf options to bypass tests that require running binaries.
+>  > +config BR2_PACKAGE_COLLECTD_NETWORK_GCRYPT
+>  > +	bool "crypto support"
+>  > +	depends on BR2_PACKAGE_COLLECTD_NETWORK
+>  > +	select BR2_PACKAGE_LIBGCRYPT
+>  > +	help
+>  > +	  Enable crypto support  
 > 
-> The meson version of libglib2's build system has many fewer of these
-> checks, but there are still some and these can be fed the "correct"
-> answer by adding properties to cross-compilation.conf.
-> 
-> Add the necessary properties to indicate that we have C99 compliant
-> print functions to avoid pulling in the gnulib fallback.
-> 
-> Signed-off-by: John Keeping <john@metanate.com>
-> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> v2:
-> - Add Peter's reviewed-by - thanks!
-> ---
->  package/libglib2/libglib2.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+> It would IMHO also make sense to change the conditional in collectd.mk
+> to use this symbol so crypto support is really disabled if this option
+> is turned off, otherwise it is just confusing in the other direction
+> now.
 
-Applied to master, thanks.
+Indeed. Pascal, could you send a patch implementing this?
+
+Thanks,
 
 Thomas
 -- 
