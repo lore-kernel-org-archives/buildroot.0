@@ -1,34 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Apr 2020 22:30:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/collectd: fix dependency of
- network-gcrypt
-In-Reply-To: <20200421171220.4120564-1-fontaine.fabrice@gmail.com>
-References: <20200421171220.4120564-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200421223054.76bcfdf1@windsurf.home>
+Date: Tue, 21 Apr 2020 22:31:13 +0200
+Subject: [Buildroot] [git commit] package/python-crossbar: needs cbor2
+Message-ID: <20200421201648.625E08FB5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 21 Apr 2020 19:12:20 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1849c3916a5ca7ff564338a2d902e0050bdaef04
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Commit c8b8744a1aeebeba4035fdba9556226696ac2abd forgot to propagate
-> libgcrypt reverse dependency
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/98c7734dccb4e01c02f4680cfbdf82ee59e17935
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/collectd/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Since upstream commit 71f81bf83d3a1d4c564131ed7408f4d7ffe79242, cbor2
+is needed by crossbar. This commit first appeared in crossbar release
+v19.3.1, which means it is needed since the version bump that took
+place in Buildroot commit 44a9f390efc282f41052b39716eab04cd76b1680.
 
-Applied to master, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/517918425
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-crossbar/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+index 2b9077ae87..50b70b8e02 100644
+--- a/package/python-crossbar/Config.in
++++ b/package/python-crossbar/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	select BR2_PACKAGE_PYTHON_AUTOBAHN
+ 	select BR2_PACKAGE_PYTHON_BITSTRING
+ 	select BR2_PACKAGE_PYTHON_CBOR
++	select BR2_PACKAGE_PYTHON_CBOR2
+ 	select BR2_PACKAGE_PYTHON_CLICK
+ 	select BR2_PACKAGE_PYTHON_CONSTANTLY
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
