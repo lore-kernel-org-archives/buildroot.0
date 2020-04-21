@@ -1,42 +1,38 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 21 Apr 2020 13:30:09 -0500
-Subject: [Buildroot] [PATCH] package/iw: bump to 5.4
-Message-ID: <20200421183009.64414-1-matthew.weber@rockwellcollins.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 21 Apr 2020 20:35:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/yaml-cpp: build shared library if
+ needed
+Message-ID: <20200421183543.4135516-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/iw/iw.hash | 4 ++--
- package/iw/iw.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+yaml-cpp builds only a static library by default, this will raise a
+build failure with upcoming mongodb 4.2.x as reported by Ryan Barnett
+due to mongodb linking with a static library that obviously will miss
+-fPIC
 
-diff --git a/package/iw/iw.hash b/package/iw/iw.hash
-index 458262b712..0aa51563f1 100644
---- a/package/iw/iw.hash
-+++ b/package/iw/iw.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/iw/sha256sums.asc
--sha256	04afe857bc8dea67e461946de30ae1b012954b6965839c5c3fda7d0ed15505d5	iw-5.3.tar.xz
-+sha256  a2469f677088d7b1070a7fbb28f3c747041697e8f6ec70783339cb1bc27a395f  iw-5.4.tar.xz
- # Locally calculated
--sha256	5932fb70481e128940168a5fdf133e6454293c0865c7e757874b235cb6daa2af	COPYING
-+sha256  5932fb70481e128940168a5fdf133e6454293c0865c7e757874b235cb6daa2af  COPYING
-diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-index fae65f739d..2250ea413b 100644
---- a/package/iw/iw.mk
-+++ b/package/iw/iw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/yaml-cpp/yaml-cpp.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/yaml-cpp/yaml-cpp.mk b/package/yaml-cpp/yaml-cpp.mk
+index 906e554ed7..beb8d6f55f 100644
+--- a/package/yaml-cpp/yaml-cpp.mk
++++ b/package/yaml-cpp/yaml-cpp.mk
+@@ -15,4 +15,10 @@ YAML_CPP_CONF_OPTS += \
+ 	-DYAML_CPP_BUILD_TESTS=OFF \
+ 	-DYAML_CPP_BUILD_TOOLS=OFF
  
--IW_VERSION = 5.3
-+IW_VERSION = 5.4
- IW_SOURCE = iw-$(IW_VERSION).tar.xz
- IW_SITE = $(BR2_KERNEL_MIRROR)/software/network/iw
- IW_LICENSE = ISC
++ifeq ($(BR2_STATIC_LIBS),y)
++YAML_CPP_CONF_OPTS += -DYAML_BUILD_SHARED_LIBS=OFF
++else
++YAML_CPP_CONF_OPTS += -DYAML_BUILD_SHARED_LIBS=ON
++endif
++
+ $(eval $(cmake-package))
 -- 
-2.17.1
+2.25.1
