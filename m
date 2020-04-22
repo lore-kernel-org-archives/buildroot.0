@@ -1,192 +1,147 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 22 Apr 2020 13:15:59 -0700
-Subject: [Buildroot] [PATCH 2/2] package/{openjdk,
- openjdk-bin}: add support for building either lts or latest
-In-Reply-To: <20200422195704.GE5035@scaer>
-References: <20200422192118.4039564-1-aduskett@gmail.com>
- <20200422192118.4039564-2-aduskett@gmail.com>
- <20200422195704.GE5035@scaer>
-Message-ID: <CAFSsvmpWhNS2Ax9nZ3Bop9xCi_D7ST868--t+E7DhMZHK-44gw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Apr 2020 22:18:56 +0200
+Subject: [Buildroot] [PATCH] package/apache: fix apxs destdir prefix
+In-Reply-To: <1587545029-22187-1-git-send-email-angelo@amarulasolutions.com>
+References: <1587545029-22187-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20200422201856.GH5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello;
+Angelo, All,
 
-On Wed, Apr 22, 2020 at 12:57 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Adam, All,
->
-> On 2020-04-22 12:21 -0700, aduskett at gmail.com spake thusly:
-> > From: Adam Duskett <Aduskett@gmail.com>
-> >
-> > As Java is used quite a bit in the enterprise world, having the option to
-> > build the LTS version of OpenJDK is quite convenient and also a requirement
-> > for many companies wanting to use Java.
-> >
-> > As such, there are three options:
-> >   1) Continue only to support the latest version of OpenJDK.
-> >   2) Downgrade our existing OpenJDK package from 14 to 11.
-> >   3) Add an option to support either OpenJDK 11 or 14.
->
-> We recently dropped such a choice from another major package, qt5,
-> where we decided to only support the latest version as we do for
-> basically all userland programs (with very little exceptions).
->
-What I found in the logs about QT5 support is the following:
-"As discussed during the FOSDEM2019 develop days, Qt 5.6 is very old (5.6.3
-was released in September 2017, and 5.6.x became EOL in March 2019), so drop
-it before the new Buildroot LTS release:"
+On 2020-04-22 10:43 +0200, Angelo Compagnucci spake thusly:
+> Apache version 2.4.43 introduced a problem in apxs path handling.
+> In buildroot apxs and config_vars.mk, all the paths are expressed
+> as absolute so the trick of guessing a destdir path to prefix to all
+> the others is not needed and produces wrong paths in the form of
+> destdir + full path.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/c41f31566974209897a3a1ec35afe2536fb248cc
+> http://autobuild.buildroot.net/results/b93f19976ce96e79ea159c25ed74a7377c78f334
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  ...support-for-cross-compiling-to-apxs.-If-a.patch | 87 ++++++++++++++++++++++
+>  1 file changed, 87 insertions(+)
+>  create mode 100644 package/apache/0005-Revert-Add-support-for-cross-compiling-to-apxs.-If-a.patch
+> 
+> diff --git a/package/apache/0005-Revert-Add-support-for-cross-compiling-to-apxs.-If-a.patch b/package/apache/0005-Revert-Add-support-for-cross-compiling-to-apxs.-If-a.patch
+> new file mode 100644
+> index 0000000..2520a31
+> --- /dev/null
+> +++ b/package/apache/0005-Revert-Add-support-for-cross-compiling-to-apxs.-If-a.patch
+> @@ -0,0 +1,87 @@
+> +From 6d8eaefb733a99fa5a95d2b4a86706a7cbe12d36 Mon Sep 17 00:00:00 2001
+> +From: Angelo Compagnucci <angelo@amarulasolutions.com>
+> +Date: Wed, 22 Apr 2020 10:25:22 +0200
+> +Subject: [PATCH] Revert "Add support for cross compiling to apxs. If apxs is
+> + being executed from somewhere"
+> +
+> +This reverts commit c7d7b6d1a3b3c4b2c7ad19258fd0d388901a1c9d.
 
-So it seems like QT5.6 support was dropped not because of the two versions, but
-because 5.6 was being EOLed and was quite old.
+Rather than reverting an upstream patch that puports to actually support
+cross-compilation, can we instead revisit our hack that shoehorns the
+absolute patchs to begin  with?
+    https://git.buildroot.org/buildroot/tree/package/apache/apache.mk#n101
 
-Just a thought.
+Regards,
+Yann E. MORIN.
 
-Adam
+> +In buildroot apxs and config_vars.mk, all the paths are expressed
+> +as absolute so the trick of guessing a destdir path to prefix to all
+> +the others is not needed and produces wrong paths in the form of
+> +destdir + full path.
+> +
+> +Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> +---
+> + support/apxs.in | 22 ++++++----------------
+> + 1 file changed, 6 insertions(+), 16 deletions(-)
+> +
+> +diff --git a/support/apxs.in b/support/apxs.in
+> +index 65e1288..6ba0bf0 100644
+> +--- a/support/apxs.in
+> ++++ b/support/apxs.in
+> +@@ -23,20 +23,10 @@ package apxs;
+> + ##  Configuration
+> + ##
+> + 
+> +-#   are we building in a cross compile environment? If so, destdir contains
+> +-#   the base directory of the cross compiled environment, otherwise destdir
+> +-#   is the empty string.
+> +-
+> +-my $destdir = "";
+> +-my $ddi = rindex($0, "@exp_bindir@");
+> +-if ($ddi >= 0) {
+> +-  $destdir = substr($0, 0, $ddi);
+> +-}
+> +-
+> + my %config_vars = ();
+> + 
+> + my $installbuilddir = "@exp_installbuilddir@";
+> +-get_config_vars($destdir . "$installbuilddir/config_vars.mk",\%config_vars);
+> ++get_config_vars("$installbuilddir/config_vars.mk",\%config_vars);
+> + 
+> + # read the configuration variables once
+> + 
+> +@@ -51,10 +41,10 @@ my $CFG_CFLAGS     = join ' ', map { get_vars($_) }
+> +   qw(SHLTCFLAGS CFLAGS NOTEST_CPPFLAGS EXTRA_CPPFLAGS EXTRA_CFLAGS);
+> + my $CFG_LDFLAGS    = join ' ', map { get_vars($_) }
+> +   qw(LDFLAGS NOTEST_LDFLAGS SH_LDFLAGS);
+> +-my $includedir     = $destdir . get_vars("includedir");
+> ++my $includedir     = get_vars("includedir");
+> + my $CFG_INCLUDEDIR = eval qq("$includedir");
+> + my $CFG_CC         = get_vars("CC");
+> +-my $libexecdir     = $destdir . get_vars("libexecdir");
+> ++my $libexecdir     = get_vars("libexecdir");
+> + my $CFG_LIBEXECDIR = eval qq("$libexecdir");
+> + my $sbindir        = get_vars("sbindir");
+> + my $CFG_SBINDIR    = eval qq("$sbindir");
+> +@@ -350,7 +340,7 @@ if ($opt_q) {
+> +     }
+> + }
+> + 
+> +-my $apr_config = $destdir . get_vars("APR_CONFIG");
+> ++my $apr_config = get_vars("APR_CONFIG");
+> + 
+> + if (! -x "$apr_config") {
+> +     error("$apr_config not found!");
+> +@@ -361,7 +351,7 @@ my $apr_major_version = (split /\./, `$apr_config --version`)[0];
+> + 
+> + my $apu_config = "";
+> + if ($apr_major_version < 2) {
+> +-    $apu_config = $destdir . get_vars("APU_CONFIG");
+> ++    $apu_config = get_vars("APU_CONFIG");
+> + 
+> +     if (! -x "$apu_config") {
+> +         error("$apu_config not found!");
+> +@@ -516,7 +506,7 @@ if ($opt_i or $opt_e) {
+> +         #  use .so unambigiously for installed shared library modules
+> +         $t =~ s|\.[^./\\]+$|\.so|;
+> +         if ($opt_i) {
+> +-	    push(@cmds, $destdir . "$installbuilddir/instdso.sh SH_LIBTOOL='" .
+> ++	    push(@cmds, "$installbuilddir/instdso.sh SH_LIBTOOL='" .
+> +                  "$libtool' $f $CFG_LIBEXECDIR");
+> + 	    push(@cmds, "chmod 755 $CFG_LIBEXECDIR/$t");
+> +         }
+> +-- 
+> +2.7.4
+> +
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-> Adding back such a choice in another package does not got with this
-> trend, though...
->
-> So I'm deferring the decision for now untill there is more fedback than
-> just "but this is LTS" and "but we need the latest".
->
-> Note: the diff itself is not a problem, it loks sane enough. The problem
-> really is the choice.
->
-> Regards,
-> Yann E. MORIN.
->
-> > OpenJDK 11 and 14 currently have:
-> >   - The same configure options.
-> >   - The same license files and hashes for those license files.
-> >   - The same dependencies.
-> >   - The same method to build and install.
-> >
-> > As such, supporting both 11 and 14 is not only an easy option to add to
-> > Buildroot, but also a nice feature for users who wish to use Java in an
-> > embedded environment with a company that mandates the use of the LTS version.
-> >
-> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> > ---
-> >  package/openjdk-bin/openjdk-bin.hash |  3 +++
-> >  package/openjdk-bin/openjdk-bin.mk   |  8 ++++++++
-> >  package/openjdk/Config.in            | 14 ++++++++++++++
-> >  package/openjdk/openjdk.hash         |  1 +
-> >  package/openjdk/openjdk.mk           |  9 +++++++++
-> >  5 files changed, 35 insertions(+)
-> >
-> > diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-> > index 52380f55ae..065eda0603 100644
-> > --- a/package/openjdk-bin/openjdk-bin.hash
-> > +++ b/package/openjdk-bin/openjdk-bin.hash
-> > @@ -1,6 +1,9 @@
-> >  # From https://github.com/AdoptOpenJDK/openjdk14-binaries/releases
-> >  sha256  9ddf9b35996fbd784a53fff3e0d59920a7d5acf1a82d4c8d70906957ac146cd1  OpenJDK14U-jdk_x64_linux_hotspot_14.0.1_7.tar.gz
-> >
-> > +# From https://github.com/AdoptOpenJDK/openjdk11-binaries/releases
-> > +sha256  ee60304d782c9d5654bf1a6b3f38c683921c1711045e1db94525a51b7024a2ca  OpenJDK11U-jdk_x64_linux_hotspot_11.0.7_10.tar.gz
-> > +
-> >  # Locally calculated
-> >  sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-> >  sha256  a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb  legal/java.prefs/ASSEMBLY_EXCEPTION
-> > diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-> > index ca8e11fe13..4d7043c831 100644
-> > --- a/package/openjdk-bin/openjdk-bin.mk
-> > +++ b/package/openjdk-bin/openjdk-bin.mk
-> > @@ -4,11 +4,19 @@
-> >  #
-> >  ################################################################################
-> >
-> > +ifeq ($(BR2_OPENJDK_VERSION_11_X),y)
-> > +HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.7
-> > +HOST_OPENJDK_BIN_VERSION_MINOR = 10
-> > +HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
-> > +HOST_OPENJDK_BIN_SOURCE = OpenJDK11U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
-> > +HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
-> > +else
-> >  HOST_OPENJDK_BIN_VERSION_MAJOR = 14.0.1
-> >  HOST_OPENJDK_BIN_VERSION_MINOR = 7
-> >  HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
-> >  HOST_OPENJDK_BIN_SOURCE = OpenJDK14U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
-> >  HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
-> > +endif
-> >  HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
-> >  HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
-> >
-> > diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
-> > index 61294ec49f..3b27a7e03c 100644
-> > --- a/package/openjdk/Config.in
-> > +++ b/package/openjdk/Config.in
-> > @@ -49,6 +49,20 @@ config BR2_PACKAGE_OPENJDK
-> >
-> >  if BR2_PACKAGE_OPENJDK
-> >
-> > +choice
-> > +     prompt "openjdk version"
-> > +     default BR2_OPENJDK_VERSION_11_X
-> > +     help
-> > +       Select the version of OpenJDK you wish to use.
-> > +
-> > +config BR2_OPENJDK_VERSION_11_X
-> > +     bool "OpenJDK 11 (LTS)"
-> > +
-> > +config BR2_OPENJDK_VERSION_14_X
-> > +     bool "OpenJDK 14 (Latest)"
-> > +
-> > +endchoice
-> > +
-> >  choice
-> >       prompt "openjdk variant"
-> >       default BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER if !BR2_powerpc
-> > diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-> > index e453d12d1a..2279c8b971 100644
-> > --- a/package/openjdk/openjdk.hash
-> > +++ b/package/openjdk/openjdk.hash
-> > @@ -1,3 +1,4 @@
-> >  # Locally computed
-> >  sha256  301203cbda9c40a5fc496b3299806995ac4833b39c6d2e8470fd85a35461afd4  jdk-14.0.1+7.tar.gz
-> > +sha256  d105471d06568e4659c21518d1bf42b8ebab5c70539e9777d570549a98ed2a8a  jdk-11.0.7+10.tar.gz
-> >  sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-> > diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-> > index d33459db97..d16d6c09e2 100644
-> > --- a/package/openjdk/openjdk.mk
-> > +++ b/package/openjdk/openjdk.mk
-> > @@ -4,11 +4,20 @@
-> >  #
-> >  ################################################################################
-> >
-> > +ifeq ($(BR2_OPENJDK_VERSION_11_X),y)
-> > +OPENJDK_VERSION_MAJOR = 11.0.7
-> > +OPENJDK_VERSION_MINOR = 10
-> > +OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
-> > +OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
-> > +OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk11u/archive
-> > +else
-> >  OPENJDK_VERSION_MAJOR = 14.0.1
-> >  OPENJDK_VERSION_MINOR = 7
-> >  OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
-> >  OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
-> >  OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk14u/archive
-> > +endif
-> > +
-> >  OPENJDK_LICENSE = GPL-2.0+ with exception
-> >  OPENJDK_LICENSE_FILES = LICENSE
-> >
-> > --
-> > 2.25.3
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
