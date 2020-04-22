@@ -1,40 +1,78 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 22 Apr 2020 21:38:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iproute2: bump to version 5.6.0
-Message-ID: <20200422193806.26726-1-petr.vorel@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Apr 2020 21:46:37 +0200
+Subject: [Buildroot] [git commit] package/{openjdk,
+ openjdk-bin}: bump version to 14.0.1+7
+Message-ID: <20200422193744.9FCEF8FBC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/iproute2/iproute2.hash | 2 +-
- package/iproute2/iproute2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=e56d21ad6333eb800db4e8c7135dead0f317546b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index c451cfa941..27b4eaaa15 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256	bac543435cac208a11db44c9cc8e35aa902befef8750594654ee71941c388f7b  iproute2-5.5.0.tar.xz
-+sha256	1b5b0e25ce6e23da7526ea1da044e814ad85ba761b10dd29c2b027c056b04692  iproute2-5.6.0.tar.xz
- sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index a2e2d25d81..6d20f65f34 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/openjdk-bin/openjdk-bin.hash | 8 ++++----
+ package/openjdk-bin/openjdk-bin.mk   | 4 ++--
+ package/openjdk/openjdk.hash         | 4 ++--
+ package/openjdk/openjdk.mk           | 4 ++--
+ 4 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 98e039c17e..52380f55ae 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,6 +1,6 @@
+-# From https://github.com/AdoptOpenJDK/openjdk12-binaries/releases
+-sha256  6c06853332585ab58834d9e8a02774b388e6e062ef6c4084b4f058c67f2e81b5	OpenJDK14U-jdk_x64_linux_hotspot_14_36.tar.gz
++# From https://github.com/AdoptOpenJDK/openjdk14-binaries/releases
++sha256  9ddf9b35996fbd784a53fff3e0d59920a7d5acf1a82d4c8d70906957ac146cd1  OpenJDK14U-jdk_x64_linux_hotspot_14.0.1_7.tar.gz
+ 
+ # Locally calculated
+-sha256	4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726	legal/java.prefs/LICENSE
+-sha256	a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb	legal/java.prefs/ASSEMBLY_EXCEPTION
++sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
++sha256  a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb  legal/java.prefs/ASSEMBLY_EXCEPTION
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 31dc4a4666..ca8e11fe13 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--IPROUTE2_VERSION = 5.5.0
-+IPROUTE2_VERSION = 5.6.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
--- 
-2.26.1
+-HOST_OPENJDK_BIN_VERSION_MAJOR = 14
+-HOST_OPENJDK_BIN_VERSION_MINOR = 36
++HOST_OPENJDK_BIN_VERSION_MAJOR = 14.0.1
++HOST_OPENJDK_BIN_VERSION_MINOR = 7
+ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ HOST_OPENJDK_BIN_SOURCE = OpenJDK14U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+ HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index d5be642052..e453d12d1a 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 6815dbac7dd0f86291254e84ed17565c89477eeb6b0847a9648b00ecb4f07634  jdk-14+36.tar.gz
+-sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
++sha256  301203cbda9c40a5fc496b3299806995ac4833b39c6d2e8470fd85a35461afd4  jdk-14.0.1+7.tar.gz
++sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index 70e21feb32..a045e74844 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPENJDK_VERSION_MAJOR = 14
+-OPENJDK_VERSION_MINOR = 36
++OPENJDK_VERSION_MAJOR = 14.0.1
++OPENJDK_VERSION_MINOR = 7
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
+ OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk14u/archive
