@@ -1,51 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Apr 2020 18:43:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python: bump version to 2.7.18
-Message-ID: <20200422164345.531430-1-bernd.kuhls@t-online.de>
+Date: Wed, 22 Apr 2020 18:46:44 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libva: bump version to 2.7.1
+In-Reply-To: <20200422164644.531698-1-bernd.kuhls@t-online.de>
+References: <20200422164644.531698-1-bernd.kuhls@t-online.de>
+Message-ID: <20200422164644.531698-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://pythoninsider.blogspot.com/2020/04/python-2718-last-release-of-python-2.html
+Changelog:
+https://github.com/intel/libva/blob/5cef34fdf55b5f8a08fbfdfe5c5f8cc13b1d77ed/NEWS
 
-Updated license hash due to upstream commit:
-https://github.com/python/cpython/commit/aa5b196c180d4c1dbe5a8593e55066e630d38c09
+Added upstream sha1 hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python/python.hash | 8 ++++----
- package/python/python.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libva/libva.hash | 6 ++++--
+ package/libva/libva.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/python/python.hash b/package/python/python.hash
-index aa809b9a61..f5e51d9638 100644
---- a/package/python/python.hash
-+++ b/package/python/python.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-2717/
--md5 b3b6d2c92f42a60667814358ab9f0cfd Python-2.7.17.tar.xz
-+# From https://www.python.org/downloads/release/python-2718/
-+md5  fd6cc8ec0a78c44036f825e739f36e5a Python-2.7.18.tar.xz
- # Locally calculated
--sha256 4d43f033cdbd0aa7b7023c81b0e986fd11e653b5248dac9144d508f11812ba41  Python-2.7.17.tar.xz
--sha256 a77d71d6be6f9032e6b6e5d2cf6da68f9eeab9036edfbc043633c8979cd5e82c  LICENSE
-+sha256  b62c0e7937551d0cc02b8fd5cb0f544f9405bafc9a54d3808ed4594812edef43  Python-2.7.18.tar.xz
-+sha256  de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23  LICENSE
-diff --git a/package/python/python.mk b/package/python/python.mk
-index f9d5619612..ccaaadd012 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index ad9f9003a9..6251876036 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,3 +1,5 @@
++# From https://github.com/intel/libva/releases/download/2.7.1/libva-2.7.1.tar.bz2.sha1sum
++sha1  75010bde98182c707e20910253b735cea43e068d  libva-2.7.1.tar.bz2
+ # Locally computed
+-sha256 b75be416615dea75c74314fae8919dd72ca46d06b4e009e029661c2c51d87d70  libva-2.7.0.tar.bz2
+-sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
++sha256  a00ff19d9f969259b9784172adad7788dbf3de827d985c5d27c230efd5d98a04  libva-2.7.1.tar.bz2
++sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 84819ae2ef..b0c0b9b3cc 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PYTHON_VERSION_MAJOR = 2.7
--PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).17
-+PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).18
- PYTHON_SOURCE = Python-$(PYTHON_VERSION).tar.xz
- PYTHON_SITE = https://python.org/ftp/python/$(PYTHON_VERSION)
- PYTHON_LICENSE = Python-2.0, others
+-LIBVA_VERSION = 2.7.0
++LIBVA_VERSION = 2.7.1
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
 -- 
 2.26.2
