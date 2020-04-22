@@ -1,121 +1,117 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 22 Apr 2020 10:43:49 +0200
-Subject: [Buildroot] [PATCH] package/apache: fix apxs destdir prefix
-Message-ID: <1587545029-22187-1-git-send-email-angelo@amarulasolutions.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 22 Apr 2020 10:49:56 +0200
+Subject: [Buildroot] [PATCH] configs/nitrogen*: bump u-boot revision
+Message-ID: <20200422084956.646996-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apache version 2.4.43 introduced a problem in apxs path handling.
-In buildroot apxs and config_vars.mk, all the paths are expressed
-as absolute so the trick of guessing a destdir path to prefix to all
-the others is not needed and produces wrong paths in the form of
-destdir + full path.
+Latest bump introduced a regression for Nitrogen8MM, now fixed.
 
-Fixes:
-http://autobuild.buildroot.net/results/c41f31566974209897a3a1ec35afe2536fb248cc
-http://autobuild.buildroot.net/results/b93f19976ce96e79ea159c25ed74a7377c78f334
+Changelog:
+- Fix Nitrogen8MM SPL regression
+- Add multi-rank lpddr4 training support
+- Improve fastboot support
+- Add Android AVB / BCB support
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/517918160
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- ...support-for-cross-compiling-to-apxs.-If-a.patch | 87 ++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
- create mode 100644 package/apache/0005-Revert-Add-support-for-cross-compiling-to-apxs.-If-a.patch
+Sorry about this, our internal Jenkins server didn't send the email to
+tell us about that regression. Build server now fixed on our side so
+this shouldn't happen again.
 
-diff --git a/package/apache/0005-Revert-Add-support-for-cross-compiling-to-apxs.-If-a.patch b/package/apache/0005-Revert-Add-support-for-cross-compiling-to-apxs.-If-a.patch
-new file mode 100644
-index 0000000..2520a31
---- /dev/null
-+++ b/package/apache/0005-Revert-Add-support-for-cross-compiling-to-apxs.-If-a.patch
-@@ -0,0 +1,87 @@
-+From 6d8eaefb733a99fa5a95d2b4a86706a7cbe12d36 Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo@amarulasolutions.com>
-+Date: Wed, 22 Apr 2020 10:25:22 +0200
-+Subject: [PATCH] Revert "Add support for cross compiling to apxs. If apxs is
-+ being executed from somewhere"
-+
-+This reverts commit c7d7b6d1a3b3c4b2c7ad19258fd0d388901a1c9d.
-+
-+In buildroot apxs and config_vars.mk, all the paths are expressed
-+as absolute so the trick of guessing a destdir path to prefix to all
-+the others is not needed and produces wrong paths in the form of
-+destdir + full path.
-+
-+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-+---
-+ support/apxs.in | 22 ++++++----------------
-+ 1 file changed, 6 insertions(+), 16 deletions(-)
-+
-+diff --git a/support/apxs.in b/support/apxs.in
-+index 65e1288..6ba0bf0 100644
-+--- a/support/apxs.in
-++++ b/support/apxs.in
-+@@ -23,20 +23,10 @@ package apxs;
-+ ##  Configuration
-+ ##
-+ 
-+-#   are we building in a cross compile environment? If so, destdir contains
-+-#   the base directory of the cross compiled environment, otherwise destdir
-+-#   is the empty string.
-+-
-+-my $destdir = "";
-+-my $ddi = rindex($0, "@exp_bindir@");
-+-if ($ddi >= 0) {
-+-  $destdir = substr($0, 0, $ddi);
-+-}
-+-
-+ my %config_vars = ();
-+ 
-+ my $installbuilddir = "@exp_installbuilddir@";
-+-get_config_vars($destdir . "$installbuilddir/config_vars.mk",\%config_vars);
-++get_config_vars("$installbuilddir/config_vars.mk",\%config_vars);
-+ 
-+ # read the configuration variables once
-+ 
-+@@ -51,10 +41,10 @@ my $CFG_CFLAGS     = join ' ', map { get_vars($_) }
-+   qw(SHLTCFLAGS CFLAGS NOTEST_CPPFLAGS EXTRA_CPPFLAGS EXTRA_CFLAGS);
-+ my $CFG_LDFLAGS    = join ' ', map { get_vars($_) }
-+   qw(LDFLAGS NOTEST_LDFLAGS SH_LDFLAGS);
-+-my $includedir     = $destdir . get_vars("includedir");
-++my $includedir     = get_vars("includedir");
-+ my $CFG_INCLUDEDIR = eval qq("$includedir");
-+ my $CFG_CC         = get_vars("CC");
-+-my $libexecdir     = $destdir . get_vars("libexecdir");
-++my $libexecdir     = get_vars("libexecdir");
-+ my $CFG_LIBEXECDIR = eval qq("$libexecdir");
-+ my $sbindir        = get_vars("sbindir");
-+ my $CFG_SBINDIR    = eval qq("$sbindir");
-+@@ -350,7 +340,7 @@ if ($opt_q) {
-+     }
-+ }
-+ 
-+-my $apr_config = $destdir . get_vars("APR_CONFIG");
-++my $apr_config = get_vars("APR_CONFIG");
-+ 
-+ if (! -x "$apr_config") {
-+     error("$apr_config not found!");
-+@@ -361,7 +351,7 @@ my $apr_major_version = (split /\./, `$apr_config --version`)[0];
-+ 
-+ my $apu_config = "";
-+ if ($apr_major_version < 2) {
-+-    $apu_config = $destdir . get_vars("APU_CONFIG");
-++    $apu_config = get_vars("APU_CONFIG");
-+ 
-+     if (! -x "$apu_config") {
-+         error("$apu_config not found!");
-+@@ -516,7 +506,7 @@ if ($opt_i or $opt_e) {
-+         #  use .so unambigiously for installed shared library modules
-+         $t =~ s|\.[^./\\]+$|\.so|;
-+         if ($opt_i) {
-+-	    push(@cmds, $destdir . "$installbuilddir/instdso.sh SH_LIBTOOL='" .
-++	    push(@cmds, "$installbuilddir/instdso.sh SH_LIBTOOL='" .
-+                  "$libtool' $f $CFG_LIBEXECDIR");
-+ 	    push(@cmds, "chmod 755 $CFG_LIBEXECDIR/$t");
-+         }
-+-- 
-+2.7.4
-+
+Thanks,
+Gary
+---
+ configs/nitrogen6sx_defconfig | 2 +-
+ configs/nitrogen6x_defconfig  | 2 +-
+ configs/nitrogen7_defconfig   | 2 +-
+ configs/nitrogen8m_defconfig  | 2 +-
+ configs/nitrogen8mm_defconfig | 2 +-
+ configs/nitrogen8mn_defconfig | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index c9fe0f46b1..dc65ccf9f6 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Last version of branch boundary-v2018.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e5abcffa.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6sx"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 00b28d2ab1..6ecac6e8b0 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Last version of branch boundary-v2018.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e5abcffa.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6q"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index d9a216d491..c1d4f5a9a0 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Last version of branch boundary-v2018.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e5abcffa.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen7"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
+index 26b9d768e3..e0b1850f02 100644
+--- a/configs/nitrogen8m_defconfig
++++ b/configs/nitrogen8m_defconfig
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8m"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2018.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e5abcffa.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
+index 96ab0d044e..082f9e355a 100644
+--- a/configs/nitrogen8mm_defconfig
++++ b/configs/nitrogen8mm_defconfig
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mm_2g"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2018.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e5abcffa.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
+index b78eba1422..e7a0151e8c 100644
+--- a/configs/nitrogen8mn_defconfig
++++ b/configs/nitrogen8mn_defconfig
+@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8_nano_8mn1gr0"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+ # Latest revision of branch boundary-imx_v2018.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e5abcffa.tar.gz"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
 -- 
-2.7.4
+2.25.1
