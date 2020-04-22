@@ -1,51 +1,144 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Wed, 22 Apr 2020 17:34:42 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain/toolchain-external: install ldd
- on the target
-Message-ID: <20200422153442.31989-1-sebastien.szymanski@armadeus.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 22 Apr 2020 18:24:18 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/python-mbstrdecoder: needs python3
+Message-ID: <20200422162418.488244-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+python2 has been dropped since version 1.0.0 and
+https://github.com/thombashi/mbstrdecoder/commit/d8f6fd76452ef82d08d1633a0e484349fedc190b
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/324dc351752d412a315955faf69e8f5637e75123
 
-It could be usefull to have ldd on the target so install it.
-
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-[S?bastien: add commit message]
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- toolchain/toolchain-external/pkg-toolchain-external.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Changes v1 -> v2 (after review of Baruch Siach):
+ - Drop unneeded selects due to python3 dependency
 
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 8667d7ddf6..6d91cb5d1e 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -499,6 +499,12 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
- 	fi
- endef
+ package/python-dataproperty/Config.in  | 4 +---
+ package/python-mbstrdecoder/Config.in  | 1 +
+ package/python-pytablereader/Config.in | 2 +-
+ package/python-pytablewriter/Config.in | 3 +--
+ package/python-simplesqlite/Config.in  | 4 ++--
+ package/python-sqliteschema/Config.in  | 1 +
+ package/python-tabledata/Config.in     | 3 +--
+ package/python-typepy/Config.in        | 3 +--
+ 8 files changed, 9 insertions(+), 12 deletions(-)
+
+diff --git a/package/python-dataproperty/Config.in b/package/python-dataproperty/Config.in
+index 2d42b02c6c..2c5da40ff2 100644
+--- a/package/python-dataproperty/Config.in
++++ b/package/python-dataproperty/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_PYTHON_DATAPROPERTY
+ 	bool "python-dataproperty"
+-	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
++	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
+ 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
+diff --git a/package/python-mbstrdecoder/Config.in b/package/python-mbstrdecoder/Config.in
+index 017002c97a..8982814cea 100644
+--- a/package/python-mbstrdecoder/Config.in
++++ b/package/python-mbstrdecoder/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_MBSTRDECODER
+ 	bool "python-mbstrdecoder"
++	depends on BR2_PACKAGE_PYTHON3
+ 	help
+ 	  multi-byte character string decoder.
  
-+define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LDD
-+	$(Q)if test -f $(STAGING_DIR)/usr/bin/ldd ; then \
-+		$(INSTALL) -D $(STAGING_DIR)/usr/bin/ldd $(TARGET_DIR)/usr/bin/ldd ; \
-+		$(SED) 's:.*/bin/bash:#!/bin/sh:' $(TARGET_DIR)/usr/bin/ldd ; \
-+	fi
-+endef
- 
- ################################################################################
- # inner-toolchain-external-package -- defines the generic installation rules
-@@ -593,6 +599,7 @@ define $(2)_INSTALL_TARGET_CMDS
- 	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
- 	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
- 	$$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
-+	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LDD)
- endef
- 
- # Call the generic package infrastructure to generate the necessary
+diff --git a/package/python-pytablereader/Config.in b/package/python-pytablereader/Config.in
+index 6d61208bb6..e6b2a4a306 100644
+--- a/package/python-pytablereader/Config.in
++++ b/package/python-pytablereader/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYTABLEREADER
+ 	bool "python-pytablereader"
+-	depends on BR2_PACKAGE_PYTHON3 # python-pathpy
++	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder, python-pathpy
+ 	select BR2_PACKAGE_PYTHON_BEAUTIFULSOUP4 # runtime
+ 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
+ 	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
+diff --git a/package/python-pytablewriter/Config.in b/package/python-pytablewriter/Config.in
+index 9fed52c83f..b95ee35778 100644
+--- a/package/python-pytablewriter/Config.in
++++ b/package/python-pytablewriter/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_PYTHON_PYTABLEWRITER
+ 	bool "python-pytablewriter"
++	depends on BR2_PACKAGE_PYTHON3 # python-dataproperty, python-mbstrdecoder
+ 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
+-	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
+ 	select BR2_PACKAGE_PYTHON_MSGFY # runtime
+ 	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
+diff --git a/package/python-simplesqlite/Config.in b/package/python-simplesqlite/Config.in
+index c03411b90f..7e5484f494 100644
+--- a/package/python-simplesqlite/Config.in
++++ b/package/python-simplesqlite/Config.in
+@@ -1,12 +1,12 @@
+ config BR2_PACKAGE_PYTHON_SIMPLESQLITE
+ 	bool "python-simplesqlite"
++	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
+ 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
+ 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
+ 	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+-	select BR2_PACKAGE_PYTHON_SQLITE if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_SQLITE if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
+ 	select BR2_PACKAGE_PYTHON_SQLITESCHEMA # runtime
+ 	select BR2_PACKAGE_PYTHON_TABLEDATA # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
+diff --git a/package/python-sqliteschema/Config.in b/package/python-sqliteschema/Config.in
+index b9568adbea..8383647129 100644
+--- a/package/python-sqliteschema/Config.in
++++ b/package/python-sqliteschema/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_SQLITESCHEMA
+ 	bool "python-sqliteschema"
++	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+diff --git a/package/python-tabledata/Config.in b/package/python-tabledata/Config.in
+index bd856d23e4..a73207f9c0 100644
+--- a/package/python-tabledata/Config.in
++++ b/package/python-tabledata/Config.in
+@@ -1,9 +1,8 @@
+ config BR2_PACKAGE_PYTHON_TABLEDATA
+ 	bool "python-tabledata"
++	depends on BR2_PACKAGE_PYTHON3 # python-dataproperty, python-typepy
+ 	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+-	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPEPY # runtime
+ 	help
+diff --git a/package/python-typepy/Config.in b/package/python-typepy/Config.in
+index 6079857070..0d58efb341 100644
+--- a/package/python-typepy/Config.in
++++ b/package/python-typepy/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_PYTHON_TYPEPY
+ 	bool "python-typepy"
++	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
+ 	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
+-	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
+ 	select BR2_PACKAGE_PYTHON_PYTZ # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
 -- 
-2.25.3
+2.25.1
