@@ -1,56 +1,76 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 22 Apr 2020 10:07:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: fix bump to version
- 1.3.2
-Message-ID: <20200422080751.4180403-1-fontaine.fabrice@gmail.com>
+Date: Wed, 22 Apr 2020 10:16:28 +0200
+Subject: [Buildroot] [PATCH v2, 1/1] package/iwd: fix build with glibc < 2.24
+Message-ID: <20200422081628.4181172-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit e69b8ddd43292b03b8f30f748ee2279b8df64c47 bumped paho-mqtt-c to
-version 1.3.2 but hash was wrong moreover licence has changed to EPL-2.0
-since
-https://github.com/eclipse/paho.mqtt.c/commit/1e91229cb6403e3a9b02dfdc11c71b04c0518cff
-
-So fix that and add LICENSE to the list of license files
-
 Fixes:
- - http://autobuild.buildroot.org/results/7ea1791778053613e9ef6b146dbd1992a0f63dc6
+ - http://autobuild.buildroot.org/results/63f983aa22ca5303a55bc55e004f05a94e5f7259
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/paho-mqtt-c/paho-mqtt-c.hash | 5 +++--
- package/paho-mqtt-c/paho-mqtt-c.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Fix commit title and message: issue is due to glibc, not gcc
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 80231c762a..8f6ca61480 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,4 +1,5 @@
- # Locally computed:
--sha256  c2d74a37c8e23d6eef229db0e04cb8e511571562668808e02d836e82d5bbd0ae  paho-mqtt-c-1.3.2.tar.gz
-+sha256  c426334c2ffc9f7a230e3de5162bdbc1762f8f60ffe27460e553edb74c7e0681  paho-mqtt-c-1.3.2.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
--sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
-+sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
-+sha256  99d3a5c5cc2812f0593a85ec7c1b6dd83e8477b5090c01d9de0d49d49f367a4a  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index 49d5be3777..7cace9a607 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -6,8 +6,8 @@
- 
- PAHO_MQTT_C_VERSION = 1.3.2
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
--PAHO_MQTT_C_LICENSE = EPL-1.0 or BSD-3-Clause
--PAHO_MQTT_C_LICENSE_FILES = epl-v10 edl-v10
-+PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
-+PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
- PAHO_MQTT_C_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ ...ame-xchg.c-fix-build-with-glibc-2.24.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
+
+diff --git a/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch b/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
+new file mode 100644
+index 0000000000..cd0bae4835
+--- /dev/null
++++ b/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
+@@ -0,0 +1,46 @@
++From 44cd3719eb94c8d5776b37c73993eea0617902f7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 11 Apr 2020 23:21:42 +0200
++Subject: [PATCH] frame-xchg.c: fix build with glibc < 2.24
++
++SOL_NETLINK is used since commit
++87a198111af1ea67053895f7435fb99e3cdd2159 resulting in the following
++build failure with glibc < 2.24:
++
++src/frame-xchg.c: In function 'frame_watch_group_io_read':
++src/frame-xchg.c:328:27: error: 'SOL_NETLINK' undeclared (first use in this function)
++   if (cmsg->cmsg_level != SOL_NETLINK)
++                           ^
++
++This failure is due to glibc that doesn't support SOL_NETLINK before
++version 2.24 and
++https://github.com/bminor/glibc/commit/f9b437d5efce93800b51ad2a437c8b1c9616bf80
++
++Fixes:
++ - http://autobuild.buildroot.org/results/3485088b84111c271bbcfaf025aa4103c6452072
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/ZRN25CA5I7PGUTFIRJLLXN7VHWGDAZDN]
++---
++ src/frame-xchg.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/frame-xchg.c b/src/frame-xchg.c
++index 50351615..4c950fd3 100644
++--- a/src/frame-xchg.c
+++++ b/src/frame-xchg.c
++@@ -42,6 +42,10 @@
++ #include "src/netdev.h"
++ #include "src/frame-xchg.h"
++ 
+++#ifndef SOL_NETLINK
+++#define SOL_NETLINK 270
+++#endif
+++
++ struct watch_group {
++ 	/*
++ 	 * Group IDs, except 0, are per wdev for user's convenience.
++-- 
++2.25.1
++
 -- 
 2.25.1
