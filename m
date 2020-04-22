@@ -1,31 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Apr 2020 18:46:43 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libva-utils: add upstream sha1 hash
-Message-ID: <20200422164644.531698-1-bernd.kuhls@t-online.de>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Wed, 22 Apr 2020 10:01:08 -0700
+Subject: [Buildroot] [PATCH 1/1] package/openjdk: Remove sparc support
+Message-ID: <20200422170108.3161301-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformat remaining hashes.
+From: Adam Duskett <Aduskett@gmail.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Sparc support is deprecated and may be removed in future releases. There are
+two choices to fix this issue:
+
+1) Set --enable-deprecated-ports=yes in the CONF_OPTS to supress the error.
+2) Remove support for Sparc.
+
+Because this port is deprecated, it's safer to remove support alltogether.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/libva-utils/libva-utils.hash | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/openjdk/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-index f6b10f84fb..45bbbf8517 100644
---- a/package/libva-utils/libva-utils.hash
-+++ b/package/libva-utils/libva-utils.hash
-@@ -1,3 +1,5 @@
-+# From https://github.com/intel/libva-utils/releases/download/2.7.1/libva-utils-2.7.1.tar.bz2.sha1sum
-+sha1  9e86f45f76c169e7d376ab757d5bf14b7641475b  libva-utils-2.7.1.tar.bz2
- # Locally computed
--sha256 ffcd698a7d4312750d7c9338ba6b26774c7028ee6f9f3cbbf34c122c05bcea9a  libva-utils-2.7.1.tar.bz2
--sha256 c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
-+sha256  ffcd698a7d4312750d7c9338ba6b26774c7028ee6f9f3cbbf34c122c05bcea9a  libva-utils-2.7.1.tar.bz2
-+sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
+diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
+index 61294ec49f..df769bbb35 100644
+--- a/package/openjdk/Config.in
++++ b/package/openjdk/Config.in
+@@ -11,7 +11,6 @@ config BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
+ 	default y if BR2_m68k
+ 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+ 	default y if BR2_sh
+-	default y if BR2_sparc || BR2_sparc64
+ 
+ config BR2_PACKAGE_OPENJDK
+ 	bool "openjdk"
 -- 
-2.26.2
+2.25.3
