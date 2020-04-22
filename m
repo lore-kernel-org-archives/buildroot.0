@@ -1,76 +1,67 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 22 Apr 2020 10:16:28 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/iwd: fix build with glibc < 2.24
-Message-ID: <20200422081628.4181172-1-fontaine.fabrice@gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Wed, 22 Apr 2020 14:23:36 +0300
+Subject: [Buildroot] [PATCH] package/linux-tools: selftests: add numactl
+ dependency for net tests
+In-Reply-To: <20200421165510.0616fc36@windsurf.home>
+References: <20200325164240.22747-1-vadim4j@gmail.com>
+ <20200411152649.3830039d@windsurf.home>
+ <20200421175140.n5l3vn7rh642widp@vkochan-ThinkPad-T470p>
+ <20200421165510.0616fc36@windsurf.home>
+Message-ID: <20200422112336.6cwyac5wim5i43n2@vkochan-ThinkPad-T470p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/63f983aa22ca5303a55bc55e004f05a94e5f7259
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Fix commit title and message: issue is due to glibc, not gcc
+On Tue, Apr 21, 2020 at 04:55:10PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 21 Apr 2020 20:51:40 +0300
+> Vadim Kochan <vadim4j@gmail.com> wrote:
+> 
+> > > So, I think we should:
+> > > 
+> > >  - Pass FORCE_TARGETS=1 during the build so that the build aborts if a
+> > >    required dependency is not found.
+> > > 
+> > >  - Switch to using more optional dependencies, and disable the TARGETS
+> > >    that we cannot build by passing the appropriate SKIP_TARGETS value
+> > >    to the Makefile.
+> > > 
+> > > Could you work on this ? We probably need to make libcap-ng optional,
+> > > but also popt. The other options that are selected by
+> > > BR2_PACKAGE_LINUX_TOOLS_SELFTESTS might also need to be revisited.
+> > > 
+> > > An alternative is to just say that we don't care about making all of
+> > > that optional, and simply unconditionally enable all the dependencies
+> > > that selftests need, to build everything. Easier, but that's not the
+> > > normal Buildroot design principle.
+> > > 
+> > > Best regards,
+> > > 
+> > > Thomas  
+> > 
+> > Yes, I understand your point. I think it would be useful to add config
+> > options per each selftests subsystem to easy turn it on.
+> 
+> I don't know if we really want to add one sub-option for each selftest
+> subsystem, that would be quite a lot.
+> 
+> However, we should properly enable/disable selftest subsystems
+> depending on the availability of the necessary dependencies. For
+> example, if numactl is enabled, then we enable the network-related
+> selftests, otherwise we disable them.
+> 
+> Best regards,
+> 
+> Thomas
 
- ...ame-xchg.c-fix-build-with-glibc-2.24.patch | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
+My only concern is that user should guess which packages are needed for
+particular test suites (I mean at least per sub-system), or document it
+somewhere ?
 
-diff --git a/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch b/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
-new file mode 100644
-index 0000000000..cd0bae4835
---- /dev/null
-+++ b/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
-@@ -0,0 +1,46 @@
-+From 44cd3719eb94c8d5776b37c73993eea0617902f7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 11 Apr 2020 23:21:42 +0200
-+Subject: [PATCH] frame-xchg.c: fix build with glibc < 2.24
-+
-+SOL_NETLINK is used since commit
-+87a198111af1ea67053895f7435fb99e3cdd2159 resulting in the following
-+build failure with glibc < 2.24:
-+
-+src/frame-xchg.c: In function 'frame_watch_group_io_read':
-+src/frame-xchg.c:328:27: error: 'SOL_NETLINK' undeclared (first use in this function)
-+   if (cmsg->cmsg_level != SOL_NETLINK)
-+                           ^
-+
-+This failure is due to glibc that doesn't support SOL_NETLINK before
-+version 2.24 and
-+https://github.com/bminor/glibc/commit/f9b437d5efce93800b51ad2a437c8b1c9616bf80
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/3485088b84111c271bbcfaf025aa4103c6452072
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/ZRN25CA5I7PGUTFIRJLLXN7VHWGDAZDN]
-+---
-+ src/frame-xchg.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/frame-xchg.c b/src/frame-xchg.c
-+index 50351615..4c950fd3 100644
-+--- a/src/frame-xchg.c
-++++ b/src/frame-xchg.c
-+@@ -42,6 +42,10 @@
-+ #include "src/netdev.h"
-+ #include "src/frame-xchg.h"
-+ 
-++#ifndef SOL_NETLINK
-++#define SOL_NETLINK 270
-++#endif
-++
-+ struct watch_group {
-+ 	/*
-+ 	 * Group IDs, except 0, are per wdev for user's convenience.
-+-- 
-+2.25.1
-+
--- 
-2.25.1
+Regards,
+Vadym Kochan
