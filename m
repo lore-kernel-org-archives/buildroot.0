@@ -1,27 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 22 Apr 2020 08:22:48 +0000
-Subject: [Buildroot] [Bug 12801] Flag '-Wa,
- --noexecstack' is missing when building uclibc with newer binutils
-In-Reply-To: <bug-12801-163@https.bugs.busybox.net/>
-References: <bug-12801-163@https.bugs.busybox.net/>
-Message-ID: <bug-12801-163-3f5nOykxIJ@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 22 Apr 2020 10:24:04 +0200
+Subject: [Buildroot] [PATCH] package/linux-tools: selftests: add numactl
+ dependency for net tests
+In-Reply-To: <20200422112336.6cwyac5wim5i43n2@vkochan-ThinkPad-T470p>
+References: <20200325164240.22747-1-vadim4j@gmail.com>
+ <20200411152649.3830039d@windsurf.home>
+ <20200421175140.n5l3vn7rh642widp@vkochan-ThinkPad-T470p>
+ <20200421165510.0616fc36@windsurf.home>
+ <20200422112336.6cwyac5wim5i43n2@vkochan-ThinkPad-T470p>
+Message-ID: <20200422102404.05b99229@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12801
+On Wed, 22 Apr 2020 14:23:36 +0300
+Vadim Kochan <vadim4j@gmail.com> wrote:
 
-Marcel Patzlaff <m.patzlaff@pilz.de> changed:
+> My only concern is that user should guess which packages are needed for
+> particular test suites (I mean at least per sub-system), or document it
+> somewhere ?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 OS|Linux                       |All
-             Target|                            |ARM Cortex A9
-              Build|                            |x86_64 laptop
-           Hardware|PC                          |All
+This is pretty common in Buildroot that we have automatic optional
+dependencies: we enable a feature if the necessary dependencies are
+available. Having sub-options for everything would be a nightmare.
 
+In addition, if a user had to build the selftests manually, he would
+also have to figure out "aaah, I need numactl to build the network
+tests".
+
+In any case, the Buildroot .mk clearly documents the fact that package
+ABC is needed to get a given feature in package XYZ.
+
+Best regards,
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
