@@ -1,134 +1,132 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 22 Apr 2020 18:44:44 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-mbstrdecoder: needs
- python3
-In-Reply-To: <20200422153905.465881-1-fontaine.fabrice@gmail.com>
-References: <20200422153905.465881-1-fontaine.fabrice@gmail.com>
-Message-ID: <87ftcvbk43.fsf@tarshish>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 22 Apr 2020 18:01:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libspatialindex: bump to version
+ 1.9.3
+Message-ID: <20200422160104.470956-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+- Drop patch (already in version)
+- Update indentation in hash file (two spaces)
+- Add upstream to allow building static library
 
-On Wed, Apr 22 2020, Fabrice Fontaine wrote:
-> python2 has been dropped since version 1.0.0 and
-> https://github.com/thombashi/mbstrdecoder/commit/d8f6fd76452ef82d08d1633a0e484349fedc190b
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/324dc351752d412a315955faf69e8f5637e75123
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/python-dataproperty/Config.in  | 1 +
->  package/python-mbstrdecoder/Config.in  | 1 +
->  package/python-pytablereader/Config.in | 2 +-
->  package/python-pytablewriter/Config.in | 1 +
->  package/python-simplesqlite/Config.in  | 1 +
->  package/python-sqliteschema/Config.in  | 1 +
->  package/python-tabledata/Config.in     | 1 +
->  package/python-typepy/Config.in        | 1 +
->  8 files changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/package/python-dataproperty/Config.in b/package/python-dataproperty/Config.in
-> index 2d42b02c6c..a0167edc11 100644
-> --- a/package/python-dataproperty/Config.in
-> +++ b/package/python-dataproperty/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_DATAPROPERTY
->  	bool "python-dataproperty"
-> +	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
->  	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
->  	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON # runtime
->  	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...on-t-force-the-build-of-a-shared-lib.patch | 35 -------------------
+ .../0001-allow-building-static-libs.patch     | 32 +++++++++++++++++
+ package/libspatialindex/libspatialindex.hash  |  6 ++--
+ package/libspatialindex/libspatialindex.mk    |  2 +-
+ 4 files changed, 36 insertions(+), 39 deletions(-)
+ delete mode 100644 package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch
+ create mode 100644 package/libspatialindex/0001-allow-building-static-libs.patch
 
-All these are now redundant. There are more below.
-
-baruch
-
-> diff --git a/package/python-mbstrdecoder/Config.in b/package/python-mbstrdecoder/Config.in
-> index 017002c97a..8982814cea 100644
-> --- a/package/python-mbstrdecoder/Config.in
-> +++ b/package/python-mbstrdecoder/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_MBSTRDECODER
->  	bool "python-mbstrdecoder"
-> +	depends on BR2_PACKAGE_PYTHON3
->  	help
->  	  multi-byte character string decoder.
->  
-> diff --git a/package/python-pytablereader/Config.in b/package/python-pytablereader/Config.in
-> index 6d61208bb6..302acb0ef3 100644
-> --- a/package/python-pytablereader/Config.in
-> +++ b/package/python-pytablereader/Config.in
-> @@ -1,6 +1,6 @@
->  config BR2_PACKAGE_PYTHON_PYTABLEREADER
->  	bool "python-pytablereader"
-> -	depends on BR2_PACKAGE_PYTHON3 # python-pathpy
-> +	depends on BR2_PACKAGE_PYTHON3 # pyhton-mbstrdecoder, python-pathpy
->  	select BR2_PACKAGE_PYTHON_BEAUTIFULSOUP4 # runtime
->  	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
->  	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
-> diff --git a/package/python-pytablewriter/Config.in b/package/python-pytablewriter/Config.in
-> index 9fed52c83f..e711bcc593 100644
-> --- a/package/python-pytablewriter/Config.in
-> +++ b/package/python-pytablewriter/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_PYTABLEWRITER
->  	bool "python-pytablewriter"
-> +	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
->  	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
->  	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
->  	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
-> diff --git a/package/python-simplesqlite/Config.in b/package/python-simplesqlite/Config.in
-> index c03411b90f..f86a093309 100644
-> --- a/package/python-simplesqlite/Config.in
-> +++ b/package/python-simplesqlite/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_SIMPLESQLITE
->  	bool "python-simplesqlite"
-> +	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
->  	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
->  	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
->  	select BR2_PACKAGE_PYTHON_PATHVALIDATE # runtime
-> diff --git a/package/python-sqliteschema/Config.in b/package/python-sqliteschema/Config.in
-> index b9568adbea..8383647129 100644
-> --- a/package/python-sqliteschema/Config.in
-> +++ b/package/python-sqliteschema/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_SQLITESCHEMA
->  	bool "python-sqliteschema"
-> +	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
->  	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
->  	select BR2_PACKAGE_PYTHON_MBSTRDECODER # runtime
->  	select BR2_PACKAGE_PYTHON_SIX # runtime
-> diff --git a/package/python-tabledata/Config.in b/package/python-tabledata/Config.in
-> index bd856d23e4..869f505690 100644
-> --- a/package/python-tabledata/Config.in
-> +++ b/package/python-tabledata/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_TABLEDATA
->  	bool "python-tabledata"
-> +	depends on BR2_PACKAGE_PYTHON3 # python-dataproperty, python-typepy
->  	select BR2_PACKAGE_PYTHON_DATAPROPERTY # runtime
->  	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
->  	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
-> diff --git a/package/python-typepy/Config.in b/package/python-typepy/Config.in
-> index 6079857070..4c3765f82c 100644
-> --- a/package/python-typepy/Config.in
-> +++ b/package/python-typepy/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_TYPEPY
->  	bool "python-typepy"
-> +	depends on BR2_PACKAGE_PYTHON3 # python-mbstrdecoder
->  	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
->  	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
->  	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
-
-
+diff --git a/package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch b/package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch
+deleted file mode 100644
+index 3316a3825d..0000000000
+--- a/package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 2333cd804e33e67567b656b847094cd9a8c8fbbf Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 22 Sep 2019 20:58:19 +0200
+-Subject: [PATCH] CMakeLists.txt: don't force the build of a shared library
+-
+-Building a shared library doesn't work on all platforms, so instead,
+-let CMake rely on the standard BUILD_SHARED_LIBS variable to decide
+-whether a static or shared library should be built.
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://github.com/libspatialindex/libspatialindex/pull/158]
+----
+- src/CMakeLists.txt | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index e6b733b..f8a4980 100644
+---- a/src/CMakeLists.txt
+-+++ b/src/CMakeLists.txt
+-@@ -194,9 +194,9 @@ if (NOT WITH_STATIC_LASZIP)
+- endif()
+- endif()
+- 
+--add_library(${SIDX_LIB_NAME} SHARED ${SIDX_SOURCES})
+-+add_library(${SIDX_LIB_NAME} ${SIDX_SOURCES})
+- 
+--add_library(${SIDX_C_LIB_NAME} SHARED ${SIDX_CAPI_CPP})
+-+add_library(${SIDX_C_LIB_NAME} ${SIDX_CAPI_CPP})
+- 
+- target_link_libraries(${SIDX_C_LIB_NAME}
+-   ${SIDX_LIB_NAME}
+--- 
+-2.23.0
+-
+diff --git a/package/libspatialindex/0001-allow-building-static-libs.patch b/package/libspatialindex/0001-allow-building-static-libs.patch
+new file mode 100644
+index 0000000000..09435cc1f8
+--- /dev/null
++++ b/package/libspatialindex/0001-allow-building-static-libs.patch
+@@ -0,0 +1,32 @@
++From caee28d84685071da3ff3a4ea57ff0b6ae64fc87 Mon Sep 17 00:00:00 2001
++From: SpaceIm <30052553+SpaceIm@users.noreply.github.com>
++Date: Sat, 28 Mar 2020 19:08:40 +0100
++Subject: [PATCH] allow building static libs (#183)
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/libspatialindex/libspatialindex/commit/caee28d84685071da3ff3a4ea57ff0b6ae64fc87]
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index c34ee8d..3bfac51 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -43,7 +43,6 @@ SET(SIDX_VERSION_MINOR "9")
++ SET(SIDX_VERSION_PATCH "3")
++ SET(SIDX_LIB_VERSION "6.1.1")
++ SET(SIDX_LIB_SOVERSION "6")
++-SET(BUILD_SHARED_LIBS ON)
++ 
++ 
++ set(SIDX_VERSION_STRING "${SIDX_VERSION_MAJOR}.${SIDX_VERSION_MINOR}.${SIDX_VERSION_PATCH}")
++@@ -52,6 +51,7 @@ set(SIDX_VERSION_STRING "${SIDX_VERSION_MAJOR}.${SIDX_VERSION_MINOR}.${SIDX_VERS
++ # libspatialindex general cmake options
++ #------------------------------------------------------------------------------
++ 
+++option(BUILD_SHARED_LIBS "Build shared libraries" ON)
++ option(SIDX_BUILD_TESTS "Enables integrated test suites" OFF)
++ 
++ 
+diff --git a/package/libspatialindex/libspatialindex.hash b/package/libspatialindex/libspatialindex.hash
+index 4eda28237d..ca679db968 100644
+--- a/package/libspatialindex/libspatialindex.hash
++++ b/package/libspatialindex/libspatialindex.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/libspatialindex/libspatialindex/releases/download/1.9.0/spatialindex-src-1.9.0.tar.bz2.sha512sum
+-sha512 dbf9601c878f245899d7336347674e96e8eeb715ec33a36ade44f3cc821c1dca7995cb09197a382bfd97da75c38f37b04f4d8f81ffbf38fef65fff82c5d1d2f3 spatialindex-src-1.9.0.tar.bz2
++# From https://github.com/libspatialindex/libspatialindex/releases/download/1.9.3/spatialindex-src-1.9.3.tar.bz2.sha512sum
++sha512  7922807a2f7026542a014d3d7943da5410429b291cf469267ffea5b8075eab2a94e68b6c013425615d221b930fd319c403f3bf43404c9b1d2c92d0e2baae3066  spatialindex-src-1.9.3.tar.bz2
+ 
+ # Hash for license file
+-sha256 b63ebfaca9d7ce582580f3e11acabc9d2e37c46ce234533f7fa8a6c7278898a0 COPYING
++sha256  b63ebfaca9d7ce582580f3e11acabc9d2e37c46ce234533f7fa8a6c7278898a0  COPYING
+diff --git a/package/libspatialindex/libspatialindex.mk b/package/libspatialindex/libspatialindex.mk
+index 57088a2e12..0ff313d817 100644
+--- a/package/libspatialindex/libspatialindex.mk
++++ b/package/libspatialindex/libspatialindex.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSPATIALINDEX_VERSION = 1.9.0
++LIBSPATIALINDEX_VERSION = 1.9.3
+ LIBSPATIALINDEX_SITE = \
+ 	https://github.com/libspatialindex/libspatialindex/releases/download/$(LIBSPATIALINDEX_VERSION)
+ LIBSPATIALINDEX_SOURCE = spatialindex-src-$(LIBSPATIALINDEX_VERSION).tar.bz2
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.25.1
