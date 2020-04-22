@@ -1,147 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Apr 2020 22:18:56 +0200
-Subject: [Buildroot] [PATCH] package/apache: fix apxs destdir prefix
-In-Reply-To: <1587545029-22187-1-git-send-email-angelo@amarulasolutions.com>
-References: <1587545029-22187-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20200422201856.GH5035@scaer>
+Date: Wed, 22 Apr 2020 22:11:15 +0200
+Subject: [Buildroot] [git commit] package/iproute2: bump to version 5.6.0
+Message-ID: <20200422201313.F08318FBD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=1685cc8af952e7e11affc12d06f800e9611a0626
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-22 10:43 +0200, Angelo Compagnucci spake thusly:
-> Apache version 2.4.43 introduced a problem in apxs path handling.
-> In buildroot apxs and config_vars.mk, all the paths are expressed
-> as absolute so the trick of guessing a destdir path to prefix to all
-> the others is not needed and produces wrong paths in the form of
-> destdir + full path.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/c41f31566974209897a3a1ec35afe2536fb248cc
-> http://autobuild.buildroot.net/results/b93f19976ce96e79ea159c25ed74a7377c78f334
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  ...support-for-cross-compiling-to-apxs.-If-a.patch | 87 ++++++++++++++++++++++
->  1 file changed, 87 insertions(+)
->  create mode 100644 package/apache/0005-Revert-Add-support-for-cross-compiling-to-apxs.-If-a.patch
-> 
-> diff --git a/package/apache/0005-Revert-Add-support-for-cross-compiling-to-apxs.-If-a.patch b/package/apache/0005-Revert-Add-support-for-cross-compiling-to-apxs.-If-a.patch
-> new file mode 100644
-> index 0000000..2520a31
-> --- /dev/null
-> +++ b/package/apache/0005-Revert-Add-support-for-cross-compiling-to-apxs.-If-a.patch
-> @@ -0,0 +1,87 @@
-> +From 6d8eaefb733a99fa5a95d2b4a86706a7cbe12d36 Mon Sep 17 00:00:00 2001
-> +From: Angelo Compagnucci <angelo@amarulasolutions.com>
-> +Date: Wed, 22 Apr 2020 10:25:22 +0200
-> +Subject: [PATCH] Revert "Add support for cross compiling to apxs. If apxs is
-> + being executed from somewhere"
-> +
-> +This reverts commit c7d7b6d1a3b3c4b2c7ad19258fd0d388901a1c9d.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+[yann.morin.1998 at free.fr: two spaces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/iproute2/iproute2.hash | 4 ++--
+ package/iproute2/iproute2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Rather than reverting an upstream patch that puports to actually support
-cross-compilation, can we instead revisit our hack that shoehorns the
-absolute patchs to begin  with?
-    https://git.buildroot.org/buildroot/tree/package/apache/apache.mk#n101
-
-Regards,
-Yann E. MORIN.
-
-> +In buildroot apxs and config_vars.mk, all the paths are expressed
-> +as absolute so the trick of guessing a destdir path to prefix to all
-> +the others is not needed and produces wrong paths in the form of
-> +destdir + full path.
-> +
-> +Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> +---
-> + support/apxs.in | 22 ++++++----------------
-> + 1 file changed, 6 insertions(+), 16 deletions(-)
-> +
-> +diff --git a/support/apxs.in b/support/apxs.in
-> +index 65e1288..6ba0bf0 100644
-> +--- a/support/apxs.in
-> ++++ b/support/apxs.in
-> +@@ -23,20 +23,10 @@ package apxs;
-> + ##  Configuration
-> + ##
-> + 
-> +-#   are we building in a cross compile environment? If so, destdir contains
-> +-#   the base directory of the cross compiled environment, otherwise destdir
-> +-#   is the empty string.
-> +-
-> +-my $destdir = "";
-> +-my $ddi = rindex($0, "@exp_bindir@");
-> +-if ($ddi >= 0) {
-> +-  $destdir = substr($0, 0, $ddi);
-> +-}
-> +-
-> + my %config_vars = ();
-> + 
-> + my $installbuilddir = "@exp_installbuilddir@";
-> +-get_config_vars($destdir . "$installbuilddir/config_vars.mk",\%config_vars);
-> ++get_config_vars("$installbuilddir/config_vars.mk",\%config_vars);
-> + 
-> + # read the configuration variables once
-> + 
-> +@@ -51,10 +41,10 @@ my $CFG_CFLAGS     = join ' ', map { get_vars($_) }
-> +   qw(SHLTCFLAGS CFLAGS NOTEST_CPPFLAGS EXTRA_CPPFLAGS EXTRA_CFLAGS);
-> + my $CFG_LDFLAGS    = join ' ', map { get_vars($_) }
-> +   qw(LDFLAGS NOTEST_LDFLAGS SH_LDFLAGS);
-> +-my $includedir     = $destdir . get_vars("includedir");
-> ++my $includedir     = get_vars("includedir");
-> + my $CFG_INCLUDEDIR = eval qq("$includedir");
-> + my $CFG_CC         = get_vars("CC");
-> +-my $libexecdir     = $destdir . get_vars("libexecdir");
-> ++my $libexecdir     = get_vars("libexecdir");
-> + my $CFG_LIBEXECDIR = eval qq("$libexecdir");
-> + my $sbindir        = get_vars("sbindir");
-> + my $CFG_SBINDIR    = eval qq("$sbindir");
-> +@@ -350,7 +340,7 @@ if ($opt_q) {
-> +     }
-> + }
-> + 
-> +-my $apr_config = $destdir . get_vars("APR_CONFIG");
-> ++my $apr_config = get_vars("APR_CONFIG");
-> + 
-> + if (! -x "$apr_config") {
-> +     error("$apr_config not found!");
-> +@@ -361,7 +351,7 @@ my $apr_major_version = (split /\./, `$apr_config --version`)[0];
-> + 
-> + my $apu_config = "";
-> + if ($apr_major_version < 2) {
-> +-    $apu_config = $destdir . get_vars("APU_CONFIG");
-> ++    $apu_config = get_vars("APU_CONFIG");
-> + 
-> +     if (! -x "$apu_config") {
-> +         error("$apu_config not found!");
-> +@@ -516,7 +506,7 @@ if ($opt_i or $opt_e) {
-> +         #  use .so unambigiously for installed shared library modules
-> +         $t =~ s|\.[^./\\]+$|\.so|;
-> +         if ($opt_i) {
-> +-	    push(@cmds, $destdir . "$installbuilddir/instdso.sh SH_LIBTOOL='" .
-> ++	    push(@cmds, "$installbuilddir/instdso.sh SH_LIBTOOL='" .
-> +                  "$libtool' $f $CFG_LIBEXECDIR");
-> + 	    push(@cmds, "chmod 755 $CFG_LIBEXECDIR/$t");
-> +         }
-> +-- 
-> +2.7.4
-> +
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index c451cfa941..0477eb71bf 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	bac543435cac208a11db44c9cc8e35aa902befef8750594654ee71941c388f7b  iproute2-5.5.0.tar.xz
+-sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
++sha256  1b5b0e25ce6e23da7526ea1da044e814ad85ba761b10dd29c2b027c056b04692  iproute2-5.6.0.tar.xz
++sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index a2e2d25d81..6d20f65f34 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 5.5.0
++IPROUTE2_VERSION = 5.6.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
