@@ -1,48 +1,78 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 22 Apr 2020 21:20:59 +0200
-Subject: [Buildroot] [PATCH 3/3] package/uacme: ualpn needs X509 unsupported
- critical extension support
-In-Reply-To: <20200422192059.790299-1-fontaine.fabrice@gmail.com>
-References: <20200422192059.790299-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200422192059.790299-3-fontaine.fabrice@gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Wed, 22 Apr 2020 12:21:17 -0700
+Subject: [Buildroot] [PATCH 1/2] package/{openjdk,
+ openjdk-bin}: bump version to 14.0.1+7
+Message-ID: <20200422192118.4039564-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 1.2 and
-https://github.com/ndilieto/uacme/commit/ae483af8953fa478de1e224c0c556ba3a77e3e01,
-ualpn on mbedtls needs X509 unsupported critical extension support
+From: Adam Duskett <Aduskett@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/5d42189299549cd655218e9e7cfcfa63e79f74ec
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/uacme/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/openjdk-bin/openjdk-bin.hash | 8 ++++----
+ package/openjdk-bin/openjdk-bin.mk   | 4 ++--
+ package/openjdk/openjdk.hash         | 4 ++--
+ package/openjdk/openjdk.mk           | 4 ++--
+ 4 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/uacme/Config.in b/package/uacme/Config.in
-index c27727d8c7..0d7cea6d6b 100644
---- a/package/uacme/Config.in
-+++ b/package/uacme/Config.in
-@@ -38,6 +38,7 @@ endchoice
- config BR2_PACKAGE_UACME_UALPN
- 	bool "enable ualpn"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PACKAGE_UACME_MBEDTLS || BR2_PACKAGE_MBEDTLS_X509_UNSUPPORTED_CRITICAL_EXTENSION
- 	select BR2_PACKAGE_LIBEV
- 	help
- 	  Build and install ualpn, the transparent proxying tls-alpn-01
-@@ -46,4 +47,8 @@ config BR2_PACKAGE_UACME_UALPN
- comment "ualpn needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 98e039c17e..52380f55ae 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,6 +1,6 @@
+-# From https://github.com/AdoptOpenJDK/openjdk12-binaries/releases
+-sha256  6c06853332585ab58834d9e8a02774b388e6e062ef6c4084b4f058c67f2e81b5	OpenJDK14U-jdk_x64_linux_hotspot_14_36.tar.gz
++# From https://github.com/AdoptOpenJDK/openjdk14-binaries/releases
++sha256  9ddf9b35996fbd784a53fff3e0d59920a7d5acf1a82d4c8d70906957ac146cd1  OpenJDK14U-jdk_x64_linux_hotspot_14.0.1_7.tar.gz
  
-+comment "ualpn needs X509 unsupported critical extension support in mbedtls"
-+	depends on BR2_PACKAGE_UACME_MBEDTLS
-+	depends on !BR2_PACKAGE_MBEDTLS_X509_UNSUPPORTED_CRITICAL_EXTENSION
-+
- endif
+ # Locally calculated
+-sha256	4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726	legal/java.prefs/LICENSE
+-sha256	a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb	legal/java.prefs/ASSEMBLY_EXCEPTION
++sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
++sha256  a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb  legal/java.prefs/ASSEMBLY_EXCEPTION
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 31dc4a4666..ca8e11fe13 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-HOST_OPENJDK_BIN_VERSION_MAJOR = 14
+-HOST_OPENJDK_BIN_VERSION_MINOR = 36
++HOST_OPENJDK_BIN_VERSION_MAJOR = 14.0.1
++HOST_OPENJDK_BIN_VERSION_MINOR = 7
+ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ HOST_OPENJDK_BIN_SOURCE = OpenJDK14U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+ HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index d5be642052..e453d12d1a 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 6815dbac7dd0f86291254e84ed17565c89477eeb6b0847a9648b00ecb4f07634  jdk-14+36.tar.gz
+-sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
++sha256  301203cbda9c40a5fc496b3299806995ac4833b39c6d2e8470fd85a35461afd4  jdk-14.0.1+7.tar.gz
++sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index ffa62dd10d..d33459db97 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPENJDK_VERSION_MAJOR = 14
+-OPENJDK_VERSION_MINOR = 36
++OPENJDK_VERSION_MAJOR = 14.0.1
++OPENJDK_VERSION_MINOR = 7
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
+ OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk14u/archive
 -- 
-2.25.1
+2.25.3
