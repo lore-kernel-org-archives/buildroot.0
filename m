@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 22 Apr 2020 11:15:19 +0000
+Date: Wed, 22 Apr 2020 12:37:08 +0000
 Subject: [Buildroot] [Bug 12801] Flag '-Wa,
  --noexecstack' is missing when building uclibc with newer binutils
 In-Reply-To: <bug-12801-163@https.bugs.busybox.net/>
 References: <bug-12801-163@https.bugs.busybox.net/>
-Message-ID: <bug-12801-163-KyLP8XJXwa@https.bugs.busybox.net/>
+Message-ID: <bug-12801-163-8xjHeFaVBa@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,30 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=12801
 
-Marcel Patzlaff <m.patzlaff@pilz.de> changed:
+romain.naour at gmail.com changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-            Product|buildroot                   |uClibc
-          Component|Other                       |Other
-           Assignee|unassigned at buildroot.uclibc |unassigned at uclibc.org
-                   |.org                        |
-                 CC|                            |uclibc-cvs at uclibc.org
+           Assignee|unassigned at uclibc.org       |wbx at openadk.org
 
---- Comment #3 from Marcel Patzlaff <m.patzlaff@pilz.de> ---
-I finally found what the problem is. The check_as macro in uclibc/Rules.mak
-does not function with newer binutils versions anymore. Executing the check
-manually yield:
+--- Comment #4 from romain.naour at gmail.com ---
+Hi Marcel,
 
-$ /opt/debug/buildroot_toolchain/usr/bin/arm-se-linux-uclibcgnueabihf-gcc
--Wa,--noexecstack -Wa,-Z -c -o /dev/null -xassembler /dev/null || echo "WTF"
+I'm able to reproduce the issue.
 
-Assembler messages:
-Fatal error: The input '/dev/null' and output '/dev/null' files are the same
+Indeed the error message come from a new as check from binutils 2.31.x series:
 
+https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=67f846b59b32f3d704c601669409c2584383fea9
 
-So basically, this seems to be uClibc bug.
+See similar report and kernel commit:
+https://lkml.org/lkml/2018/8/9/233
+
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=e9666d10a5677a494260d60d1fa0b73cc7646eb3
+
+I'm adding Waldemar in Cc of this bug.
+
+Best regards,
+Romain
 
 -- 
 You are receiving this mail because:
