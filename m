@@ -1,69 +1,53 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 22 Apr 2020 00:49:42 -0600
-Subject: [Buildroot] [PATCH 1/1] package/apcupsd: always depend on threads
-Message-ID: <20200422064942.77442-1-james.hilliard1@gmail.com>
+Date: Wed, 22 Apr 2020 00:54:05 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: use -msse2
+ only when supported
+In-Reply-To: <20200414102621.18804-1-asafka7@gmail.com>
+References: <20200414102621.18804-1-asafka7@gmail.com>
+Message-ID: <CADvTj4psbzVUKohk=AyR5zn_rVgnVGk6U7=EdAH+Sqd28rKSeA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/aa2ad7bdb37da611a4ec863ed2e986f34ea5228b/build-end.log
+I think we should maybe just merge this for now so that autobuilders
+stop failing,
+once my upstream PR is merged and the package is updated we can then remove
+this workaround.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/apcupsd/Config.in | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
-
-diff --git a/package/apcupsd/Config.in b/package/apcupsd/Config.in
-index 2849736a1a..e3fcc1e014 100644
---- a/package/apcupsd/Config.in
-+++ b/package/apcupsd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_APCUPSD
- 	bool "apcupsd"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	help
- 	  A daemon for controlling APC UPSes.
-@@ -26,16 +27,12 @@ config BR2_PACKAGE_APCUPSD_MODBUS
- 
- config BR2_PACKAGE_APCUPSD_MODBUS_USB
- 	bool "modbus usb"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	select BR2_PACKAGE_APCUPSD_MODBUS
- 	help
- 	  Compile MODBUS/USB driver code
- 
--comment "modbus usb support needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
- config BR2_PACKAGE_APCUPSD_NET
- 	bool "net"
- 	help
-@@ -53,17 +50,13 @@ config BR2_PACKAGE_APCUPSD_SNMP
- 
- config BR2_PACKAGE_APCUPSD_USB
- 	bool "usb"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
- 	  Compile USB UPS code
- 
--comment "usb support needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
- endif
- 
--comment "apcupsd needs a toolchain w/ C++"
-+comment "apcupsd needs a toolchain w/ C++, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
--- 
-2.20.1
+On Tue, Apr 14, 2020 at 4:27 AM Asaf Kahlon <asafka7@gmail.com> wrote:
+>
+> The package adds the '-msse2' flag according to the result of the
+> pythonic "platform.machine()" statement, which runs on the host
+> and doesn't necessarily reflects the existence of this flag on
+> the target compiler.
+> Hence, we'll set the 'optimzed' variable in setup.py only when
+> we know SSE2 is supported.
+>
+> Fixes:
+>   http://autobuild.buildroot.net/results/8c8aee8c8a0062575f489042bb11cc8515cbe48c/
+>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  package/python-argon2-cffi/python-argon2-cffi.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/package/python-argon2-cffi/python-argon2-cffi.mk b/package/python-argon2-cffi/python-argon2-cffi.mk
+> index 099574e9c3..9f73e75c1e 100644
+> --- a/package/python-argon2-cffi/python-argon2-cffi.mk
+> +++ b/package/python-argon2-cffi/python-argon2-cffi.mk
+> @@ -12,4 +12,10 @@ PYTHON_ARGON2_CFFI_LICENSE = MIT
+>  PYTHON_ARGON2_CFFI_LICENSE_FILES = LICENSE
+>  PYTHON_ARGON2_CFFI_DEPENDENCIES = host-python-cffi
+>
+> +define PYTHON_ARGON2_CFFI_SET_OPTIMZED_FLAG
+> +        $(SED) 's;^\(optimized = *\)\(.*\);\1$(if $(BR2_X86_CPU_HAS_SSE2),True,False);' $(@D)/setup.py
+> +endef
+> +
+> +PYTHON_ARGON2_CFFI_POST_PATCH_HOOKS += PYTHON_ARGON2_CFFI_SET_OPTIMZED_FLAG
+> +
+>  $(eval $(python-package))
+> --
+> 2.26.0
+>
