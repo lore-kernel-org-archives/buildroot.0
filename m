@@ -1,103 +1,132 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 22 Apr 2020 22:38:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fio: bump to 3.19
-Message-ID: <20200422203829.31227-1-heiko.thiery@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Apr 2020 22:52:24 +0200
+Subject: [Buildroot] [git commit] package/libspatialindex: bump to version
+ 1.9.3
+Message-ID: <20200422203818.AD9728FBFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add upstream patch to fix build on musl
-- update indentation of hash file (two spaces)
+commit: https://git.buildroot.net/buildroot/commit/?id=81bd89f0449979302c3857d1dfe2cdcc3af5208d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+- Drop patch (already in version)
+- Update indentation in hash file (two spaces)
+- Add upstream to allow building static library
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...io_uring-don-t-use-rand48_r-variants.patch | 49 +++++++++++++++++++
- package/fio/fio.hash                          |  6 +--
- package/fio/fio.mk                            |  2 +-
- 3 files changed, 53 insertions(+), 4 deletions(-)
- create mode 100644 package/fio/0001-t-io_uring-don-t-use-rand48_r-variants.patch
+ ...txt-don-t-force-the-build-of-a-shared-lib.patch | 35 ----------------------
+ .../0001-allow-building-static-libs.patch          | 32 ++++++++++++++++++++
+ package/libspatialindex/libspatialindex.hash       |  6 ++--
+ package/libspatialindex/libspatialindex.mk         |  2 +-
+ 4 files changed, 36 insertions(+), 39 deletions(-)
 
-diff --git a/package/fio/0001-t-io_uring-don-t-use-rand48_r-variants.patch b/package/fio/0001-t-io_uring-don-t-use-rand48_r-variants.patch
+diff --git a/package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch b/package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch
+deleted file mode 100644
+index 3316a3825d..0000000000
+--- a/package/libspatialindex/0001-CMakeLists.txt-don-t-force-the-build-of-a-shared-lib.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 2333cd804e33e67567b656b847094cd9a8c8fbbf Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 22 Sep 2019 20:58:19 +0200
+-Subject: [PATCH] CMakeLists.txt: don't force the build of a shared library
+-
+-Building a shared library doesn't work on all platforms, so instead,
+-let CMake rely on the standard BUILD_SHARED_LIBS variable to decide
+-whether a static or shared library should be built.
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://github.com/libspatialindex/libspatialindex/pull/158]
+----
+- src/CMakeLists.txt | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index e6b733b..f8a4980 100644
+---- a/src/CMakeLists.txt
+-+++ b/src/CMakeLists.txt
+-@@ -194,9 +194,9 @@ if (NOT WITH_STATIC_LASZIP)
+- endif()
+- endif()
+- 
+--add_library(${SIDX_LIB_NAME} SHARED ${SIDX_SOURCES})
+-+add_library(${SIDX_LIB_NAME} ${SIDX_SOURCES})
+- 
+--add_library(${SIDX_C_LIB_NAME} SHARED ${SIDX_CAPI_CPP})
+-+add_library(${SIDX_C_LIB_NAME} ${SIDX_CAPI_CPP})
+- 
+- target_link_libraries(${SIDX_C_LIB_NAME}
+-   ${SIDX_LIB_NAME}
+--- 
+-2.23.0
+-
+diff --git a/package/libspatialindex/0001-allow-building-static-libs.patch b/package/libspatialindex/0001-allow-building-static-libs.patch
 new file mode 100644
-index 0000000000..8d6830ac81
+index 0000000000..09435cc1f8
 --- /dev/null
-+++ b/package/fio/0001-t-io_uring-don-t-use-rand48_r-variants.patch
-@@ -0,0 +1,49 @@
-+From 5e8865c0e08861558c1253c521dc9098d0c773ee Mon Sep 17 00:00:00 2001
-+From: Jens Axboe <axboe@kernel.dk>
-+Date: Mon, 16 Mar 2020 08:30:36 -0600
-+Subject: [PATCH] t/io_uring: don't use *rand48_r() variants
++++ b/package/libspatialindex/0001-allow-building-static-libs.patch
+@@ -0,0 +1,32 @@
++From caee28d84685071da3ff3a4ea57ff0b6ae64fc87 Mon Sep 17 00:00:00 2001
++From: SpaceIm <30052553+SpaceIm@users.noreply.github.com>
++Date: Sat, 28 Mar 2020 19:08:40 +0100
++Subject: [PATCH] allow building static libs (#183)
 +
-+Not available on all platforms.
-+
-+Signed-off-by: Jens Axboe <axboe@kernel.dk>
-+
-+[Patch from upstream
-+https://github.com/axboe/fio/commit/5e8865c0e08861558c1253c521dc9098d0c773ee]
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/libspatialindex/libspatialindex/commit/caee28d84685071da3ff3a4ea57ff0b6ae64fc87]
 +---
-+ t/io_uring.c | 5 ++---
-+ 1 file changed, 2 insertions(+), 3 deletions(-)
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/t/io_uring.c b/t/io_uring.c
-+index e84a2b6b..d48db1e9 100644
-+--- a/t/io_uring.c
-++++ b/t/io_uring.c
-+@@ -63,7 +63,6 @@ struct file {
-+ struct submitter {
-+ 	pthread_t thread;
-+ 	int ring_fd;
-+-	struct drand48_data rand;
-+ 	struct io_sq_ring sq_ring;
-+ 	struct io_uring_sqe *sqes;
-+ 	struct io_cq_ring cq_ring;
-+@@ -170,7 +169,7 @@ static void init_io(struct submitter *s, unsigned index)
-+ 	}
-+ 	f->pending_ios++;
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index c34ee8d..3bfac51 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -43,7 +43,6 @@ SET(SIDX_VERSION_MINOR "9")
++ SET(SIDX_VERSION_PATCH "3")
++ SET(SIDX_LIB_VERSION "6.1.1")
++ SET(SIDX_LIB_SOVERSION "6")
++-SET(BUILD_SHARED_LIBS ON)
 + 
-+-	lrand48_r(&s->rand, &r);
-++	r = lrand48();
-+ 	offset = (r % (f->max_blocks - 1)) * BS;
 + 
-+ 	if (register_files) {
-+@@ -286,7 +285,7 @@ static void *submitter_fn(void *data)
++ set(SIDX_VERSION_STRING "${SIDX_VERSION_MAJOR}.${SIDX_VERSION_MINOR}.${SIDX_VERSION_PATCH}")
++@@ -52,6 +51,7 @@ set(SIDX_VERSION_STRING "${SIDX_VERSION_MAJOR}.${SIDX_VERSION_MINOR}.${SIDX_VERS
++ # libspatialindex general cmake options
++ #------------------------------------------------------------------------------
 + 
-+ 	printf("submitter=%d\n", gettid());
+++option(BUILD_SHARED_LIBS "Build shared libraries" ON)
++ option(SIDX_BUILD_TESTS "Enables integrated test suites" OFF)
 + 
-+-	srand48_r(pthread_self(), &s->rand);
-++	srand48(pthread_self());
 + 
-+ 	prepped = 0;
-+ 	do {
-+-- 
-+2.20.1
-+
-diff --git a/package/fio/fio.hash b/package/fio/fio.hash
-index 4b6c9b8c1d..d95deb20b0 100644
---- a/package/fio/fio.hash
-+++ b/package/fio/fio.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256 2aa68326266ef074ecc0892ebfe165e28c981282f345ee05f9d06f11ada3f052  fio-3.17.tar.gz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256 8a240c1ad13d1fe3e58588643d81d0695899be4a669fe6d8fafa76ca6a89db2c  MORAL-LICENSE
-+sha256  a2f885834900f554127718716338914791f5d72800b6f9e3edf173b94b5a2e4e  fio-3.19.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  8a240c1ad13d1fe3e58588643d81d0695899be4a669fe6d8fafa76ca6a89db2c  MORAL-LICENSE
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-index 5761d1c282..3ddd74eda4 100644
---- a/package/fio/fio.mk
-+++ b/package/fio/fio.mk
+diff --git a/package/libspatialindex/libspatialindex.hash b/package/libspatialindex/libspatialindex.hash
+index 4eda28237d..ca679db968 100644
+--- a/package/libspatialindex/libspatialindex.hash
++++ b/package/libspatialindex/libspatialindex.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/libspatialindex/libspatialindex/releases/download/1.9.0/spatialindex-src-1.9.0.tar.bz2.sha512sum
+-sha512 dbf9601c878f245899d7336347674e96e8eeb715ec33a36ade44f3cc821c1dca7995cb09197a382bfd97da75c38f37b04f4d8f81ffbf38fef65fff82c5d1d2f3 spatialindex-src-1.9.0.tar.bz2
++# From https://github.com/libspatialindex/libspatialindex/releases/download/1.9.3/spatialindex-src-1.9.3.tar.bz2.sha512sum
++sha512  7922807a2f7026542a014d3d7943da5410429b291cf469267ffea5b8075eab2a94e68b6c013425615d221b930fd319c403f3bf43404c9b1d2c92d0e2baae3066  spatialindex-src-1.9.3.tar.bz2
+ 
+ # Hash for license file
+-sha256 b63ebfaca9d7ce582580f3e11acabc9d2e37c46ce234533f7fa8a6c7278898a0 COPYING
++sha256  b63ebfaca9d7ce582580f3e11acabc9d2e37c46ce234533f7fa8a6c7278898a0  COPYING
+diff --git a/package/libspatialindex/libspatialindex.mk b/package/libspatialindex/libspatialindex.mk
+index 57088a2e12..0ff313d817 100644
+--- a/package/libspatialindex/libspatialindex.mk
++++ b/package/libspatialindex/libspatialindex.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FIO_VERSION = 3.17
-+FIO_VERSION = 3.19
- FIO_SITE = http://brick.kernel.dk/snaps
- FIO_LICENSE = GPL-2.0
- FIO_LICENSE_FILES = COPYING MORAL-LICENSE
--- 
-2.20.1
+-LIBSPATIALINDEX_VERSION = 1.9.0
++LIBSPATIALINDEX_VERSION = 1.9.3
+ LIBSPATIALINDEX_SITE = \
+ 	https://github.com/libspatialindex/libspatialindex/releases/download/$(LIBSPATIALINDEX_VERSION)
+ LIBSPATIALINDEX_SOURCE = spatialindex-src-$(LIBSPATIALINDEX_VERSION).tar.bz2
