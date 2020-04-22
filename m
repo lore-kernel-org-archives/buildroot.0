@@ -1,175 +1,153 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Apr 2020 21:57:04 +0200
-Subject: [Buildroot] [PATCH 2/2] package/{openjdk,
- openjdk-bin}: add support for building either lts or latest
-In-Reply-To: <20200422192118.4039564-2-aduskett@gmail.com>
-References: <20200422192118.4039564-1-aduskett@gmail.com>
- <20200422192118.4039564-2-aduskett@gmail.com>
-Message-ID: <20200422195704.GE5035@scaer>
+Date: Wed, 22 Apr 2020 22:01:54 +0200
+Subject: [Buildroot] [git commit] package/ltp-testsuite: fix build with musl
+ 1.2.0
+Message-ID: <20200422194734.CEA158FBCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c0885a35b2a48f77e29722ef25dbb7c53b2c7623
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-22 12:21 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> As Java is used quite a bit in the enterprise world, having the option to
-> build the LTS version of OpenJDK is quite convenient and also a requirement
-> for many companies wanting to use Java.
-> 
-> As such, there are three options:
->   1) Continue only to support the latest version of OpenJDK.
->   2) Downgrade our existing OpenJDK package from 14 to 11.
->   3) Add an option to support either OpenJDK 11 or 14.
+Fixes:
+ - http://autobuild.buildroot.org/results/57e8d2a53f99dc804d66482f71653957fd1a6e47
 
-We recently dropped such a choice from another major package, qt5,
-whwere we decided to only support the latest version, like we do for
-basically all userland programs (with very little exceptions).
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...-time64-unsafe-syscalls-before-using-them.patch | 123 +++++++++++++++++++++
+ 1 file changed, 123 insertions(+)
 
-Adding back such a choice in another package does not got with this
-trend, though...
-
-So I'm deferring the decision for now untill there is more fedback than
-just "but this is LTS" and "but we need the latest".
-
-Note: the diff itself is not a problem, it loks sane enough. The problem
-really is the choice.
-
-Regards,
-Yann E. MORIN.
-
-> OpenJDK 11 and 14 currently have:
->   - The same configure options.
->   - The same license files and hashes for those license files.
->   - The same dependencies.
->   - The same method to build and install.
-> 
-> As such, supporting both 11 and 14 is not only an easy option to add to
-> Buildroot, but also a nice feature for users who wish to use Java in an
-> embedded environment with a company that mandates the use of the LTS version.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/openjdk-bin/openjdk-bin.hash |  3 +++
->  package/openjdk-bin/openjdk-bin.mk   |  8 ++++++++
->  package/openjdk/Config.in            | 14 ++++++++++++++
->  package/openjdk/openjdk.hash         |  1 +
->  package/openjdk/openjdk.mk           |  9 +++++++++
->  5 files changed, 35 insertions(+)
-> 
-> diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-> index 52380f55ae..065eda0603 100644
-> --- a/package/openjdk-bin/openjdk-bin.hash
-> +++ b/package/openjdk-bin/openjdk-bin.hash
-> @@ -1,6 +1,9 @@
->  # From https://github.com/AdoptOpenJDK/openjdk14-binaries/releases
->  sha256  9ddf9b35996fbd784a53fff3e0d59920a7d5acf1a82d4c8d70906957ac146cd1  OpenJDK14U-jdk_x64_linux_hotspot_14.0.1_7.tar.gz
->  
-> +# From https://github.com/AdoptOpenJDK/openjdk11-binaries/releases
-> +sha256  ee60304d782c9d5654bf1a6b3f38c683921c1711045e1db94525a51b7024a2ca  OpenJDK11U-jdk_x64_linux_hotspot_11.0.7_10.tar.gz
-> +
->  # Locally calculated
->  sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
->  sha256  a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb  legal/java.prefs/ASSEMBLY_EXCEPTION
-> diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-> index ca8e11fe13..4d7043c831 100644
-> --- a/package/openjdk-bin/openjdk-bin.mk
-> +++ b/package/openjdk-bin/openjdk-bin.mk
-> @@ -4,11 +4,19 @@
->  #
->  ################################################################################
->  
-> +ifeq ($(BR2_OPENJDK_VERSION_11_X),y)
-> +HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.7
-> +HOST_OPENJDK_BIN_VERSION_MINOR = 10
-> +HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
-> +HOST_OPENJDK_BIN_SOURCE = OpenJDK11U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
-> +HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
-> +else
->  HOST_OPENJDK_BIN_VERSION_MAJOR = 14.0.1
->  HOST_OPENJDK_BIN_VERSION_MINOR = 7
->  HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
->  HOST_OPENJDK_BIN_SOURCE = OpenJDK14U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
->  HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
-> +endif
->  HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
->  HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
->  
-> diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
-> index 61294ec49f..3b27a7e03c 100644
-> --- a/package/openjdk/Config.in
-> +++ b/package/openjdk/Config.in
-> @@ -49,6 +49,20 @@ config BR2_PACKAGE_OPENJDK
->  
->  if BR2_PACKAGE_OPENJDK
->  
-> +choice
-> +	prompt "openjdk version"
-> +	default BR2_OPENJDK_VERSION_11_X
-> +	help
-> +	  Select the version of OpenJDK you wish to use.
-> +
-> +config BR2_OPENJDK_VERSION_11_X
-> +	bool "OpenJDK 11 (LTS)"
-> +
-> +config BR2_OPENJDK_VERSION_14_X
-> +	bool "OpenJDK 14 (Latest)"
-> +
-> +endchoice
-> +
->  choice
->  	prompt "openjdk variant"
->  	default BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER if !BR2_powerpc
-> diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-> index e453d12d1a..2279c8b971 100644
-> --- a/package/openjdk/openjdk.hash
-> +++ b/package/openjdk/openjdk.hash
-> @@ -1,3 +1,4 @@
->  # Locally computed
->  sha256  301203cbda9c40a5fc496b3299806995ac4833b39c6d2e8470fd85a35461afd4  jdk-14.0.1+7.tar.gz
-> +sha256  d105471d06568e4659c21518d1bf42b8ebab5c70539e9777d570549a98ed2a8a  jdk-11.0.7+10.tar.gz
->  sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-> diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-> index d33459db97..d16d6c09e2 100644
-> --- a/package/openjdk/openjdk.mk
-> +++ b/package/openjdk/openjdk.mk
-> @@ -4,11 +4,20 @@
->  #
->  ################################################################################
->  
-> +ifeq ($(BR2_OPENJDK_VERSION_11_X),y)
-> +OPENJDK_VERSION_MAJOR = 11.0.7
-> +OPENJDK_VERSION_MINOR = 10
-> +OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
-> +OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
-> +OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk11u/archive
-> +else
->  OPENJDK_VERSION_MAJOR = 14.0.1
->  OPENJDK_VERSION_MINOR = 7
->  OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
->  OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
->  OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk14u/archive
-> +endif
-> +
->  OPENJDK_LICENSE = GPL-2.0+ with exception
->  OPENJDK_LICENSE_FILES = LICENSE
->  
-> -- 
-> 2.25.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ltp-testsuite/0001-syscalls-Check-for-time64-unsafe-syscalls-before-using-them.patch b/package/ltp-testsuite/0001-syscalls-Check-for-time64-unsafe-syscalls-before-using-them.patch
+new file mode 100644
+index 0000000000..e447dd5182
+--- /dev/null
++++ b/package/ltp-testsuite/0001-syscalls-Check-for-time64-unsafe-syscalls-before-using-them.patch
+@@ -0,0 +1,123 @@
++From 5b57ae2913e2d2d167cbd3822784b4c4ba336812 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Wed, 19 Feb 2020 22:52:04 -0800
++Subject: [PATCH] syscalls: Check for time64 unsafe syscalls before using them
++
++musl is using 64bit time_t now on 32bit architectures and these syscalls
++no longer exist, therefore its better to check for them being available
++before using them
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Reviewed-by: Yang Xu <xuyang2018.jy@cn.fujitsu.com>
++Reviewed-by: Petr Vorel <pvorel@suse.cz>
++Signed-off-by: Petr Vorel <pvorel@suse.cz>
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/linux-test-project/ltp/commit/5b57ae2913e2d2d167cbd3822784b4c4ba336812]
++---
++ lib/tst_clocks.c                                 | 16 ++++++----------
++ .../syscalls/gettimeofday/gettimeofday01.c       |  6 ++----
++ .../syscalls/gettimeofday/gettimeofday02.c       |  8 +++-----
++ 3 files changed, 11 insertions(+), 19 deletions(-)
++
++diff --git a/lib/tst_clocks.c b/lib/tst_clocks.c
++index 5195da38f3..fa2f1cb842 100644
++--- a/lib/tst_clocks.c
+++++ b/lib/tst_clocks.c
++@@ -3,28 +3,24 @@
++  * Copyright (c) 2017 Cyril Hrubis <chrubis@suse.cz>
++  */
++ 
++-/*
++- * clock_gettime() and clock_getres() functions
++- */
++-
++-#define _GNU_SOURCE
++-#include <unistd.h>
++ #include <time.h>
++-#include <sys/syscall.h>
++ 
+++#define TST_NO_DEFAULT_MAIN
+++#include "tst_test.h"
++ #include "tst_clocks.h"
+++#include "lapi/syscalls.h"
++ 
++ int tst_clock_getres(clockid_t clk_id, struct timespec *res)
++ {
++-	return syscall(SYS_clock_getres, clk_id, res);
+++	return tst_syscall(__NR_clock_getres, clk_id, res);
++ }
++ 
++ int tst_clock_gettime(clockid_t clk_id, struct timespec *ts)
++ {
++-	return syscall(SYS_clock_gettime, clk_id, ts);
+++	return tst_syscall(__NR_clock_gettime, clk_id, ts);
++ }
++ 
++ int tst_clock_settime(clockid_t clk_id, struct timespec *ts)
++ {
++-	return syscall(SYS_clock_settime, clk_id, ts);
+++	return tst_syscall(__NR_clock_settime, clk_id, ts);
++ }
++diff --git a/testcases/kernel/syscalls/gettimeofday/gettimeofday01.c b/testcases/kernel/syscalls/gettimeofday/gettimeofday01.c
++index 583d8f7b9b..08ea1673ad 100644
++--- a/testcases/kernel/syscalls/gettimeofday/gettimeofday01.c
+++++ b/testcases/kernel/syscalls/gettimeofday/gettimeofday01.c
++@@ -38,10 +38,8 @@
++ #include <sys/time.h>
++ #include <errno.h>
++ #include "test.h"
++-#include <sys/syscall.h>
++ #include <unistd.h>
++-
++-#define gettimeofday(a,b)  syscall(__NR_gettimeofday,a,b)
+++#include "lapi/syscalls.h"
++ 
++ char *TCID = "gettimeofday01";
++ int TST_TOTAL = 1;
++@@ -63,7 +61,7 @@ int main(int ac, char **av)
++ 	for (lc = 0; TEST_LOOPING(lc); lc++) {
++ 		tst_count = 0;
++ 
++-		TEST(gettimeofday((void *)-1, (void *)-1));
+++		TEST(ltp_syscall(__NR_gettimeofday, (void *)-1, (void *)-1));
++ 
++ 		/* gettimeofday returns an int, so we need to turn the long
++ 		 * TEST_RETURN into an int to test with */
++diff --git a/testcases/kernel/syscalls/gettimeofday/gettimeofday02.c b/testcases/kernel/syscalls/gettimeofday/gettimeofday02.c
++index 1d60f448e8..5170ad2f78 100644
++--- a/testcases/kernel/syscalls/gettimeofday/gettimeofday02.c
+++++ b/testcases/kernel/syscalls/gettimeofday/gettimeofday02.c
++@@ -16,14 +16,12 @@
++ #include <stdint.h>
++ #include <sys/time.h>
++ #include <stdlib.h>
++-#include <sys/syscall.h>
++ #include <unistd.h>
++ #include <time.h>
++ #include <errno.h>
++ 
++ #include "tst_test.h"
++-
++-#define gettimeofday(a,b)  syscall(__NR_gettimeofday,a,b)
+++#include "lapi/syscalls.h"
++ 
++ static volatile sig_atomic_t done;
++ static char *str_rtime;
++@@ -48,13 +46,13 @@ static void verify_gettimeofday(void)
++ 
++ 	alarm(rtime);
++ 
++-	if (gettimeofday(&tv1, NULL)) {
+++	if (tst_syscall(__NR_gettimeofday, &tv1, NULL)) {
++ 		tst_res(TBROK | TERRNO, "gettimeofday() failed");
++ 		return;
++ 	}
++ 
++ 	while (!done) {
++-		if (gettimeofday(&tv2, NULL)) {
+++		if (tst_syscall(__NR_gettimeofday, &tv2, NULL)) {
++ 			tst_res(TBROK | TERRNO, "gettimeofday() failed");
++ 			return;
++ 		}
