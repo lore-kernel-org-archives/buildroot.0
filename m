@@ -1,81 +1,94 @@
-From: Julien Grossholtz <julien.grossholtz@openest.io>
-Date: Wed, 22 Apr 2020 16:41:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: fix bump to
- version 1.3.2
-In-Reply-To: <20200422080751.4180403-1-fontaine.fabrice@gmail.com>
-References: <20200422080751.4180403-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAFN3DJgf3+-myGn1eFcT64CM6de1gYdUWL+rqRrHuvLHWqRHmA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 22 Apr 2020 18:44:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtasn1: bump to version 4.16.0
+Message-ID: <20200422164413.518719-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you for the fix, I am sure I checked the hash, but I missed
-something. I applied your patch and it is OK.
+- Add patch to fix build
+- Update indentation of hash file (two spaces)
 
-Regards,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...fuzz-Makefile.am-do-not-force-static.patch | 35 +++++++++++++++++++
+ package/libtasn1/libtasn1.hash                | 10 +++---
+ package/libtasn1/libtasn1.mk                  |  2 +-
+ 3 files changed, 41 insertions(+), 6 deletions(-)
+ create mode 100644 package/libtasn1/0001-fuzz-Makefile.am-do-not-force-static.patch
 
-
-Le mer. 22 avr. 2020 ? 10:06, Fabrice Fontaine
-<fontaine.fabrice@gmail.com> a ?crit :
->
-> Commit e69b8ddd43292b03b8f30f748ee2279b8df64c47 bumped paho-mqtt-c to
-> version 1.3.2 but hash was wrong moreover licence has changed to EPL-2.0
-> since
-> https://github.com/eclipse/paho.mqtt.c/commit/1e91229cb6403e3a9b02dfdc11c71b04c0518cff
->
-> So fix that and add LICENSE to the list of license files
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/7ea1791778053613e9ef6b146dbd1992a0f63dc6
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/paho-mqtt-c/paho-mqtt-c.hash | 5 +++--
->  package/paho-mqtt-c/paho-mqtt-c.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-> index 80231c762a..8f6ca61480 100644
-> --- a/package/paho-mqtt-c/paho-mqtt-c.hash
-> +++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-> @@ -1,4 +1,5 @@
->  # Locally computed:
-> -sha256  c2d74a37c8e23d6eef229db0e04cb8e511571562668808e02d836e82d5bbd0ae  paho-mqtt-c-1.3.2.tar.gz
-> +sha256  c426334c2ffc9f7a230e3de5162bdbc1762f8f60ffe27460e553edb74c7e0681  paho-mqtt-c-1.3.2.tar.gz
->  sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
-> -sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
-> +sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
-> +sha256  99d3a5c5cc2812f0593a85ec7c1b6dd83e8477b5090c01d9de0d49d49f367a4a  LICENSE
-> diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-> index 49d5be3777..7cace9a607 100644
-> --- a/package/paho-mqtt-c/paho-mqtt-c.mk
-> +++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-> @@ -6,8 +6,8 @@
->
->  PAHO_MQTT_C_VERSION = 1.3.2
->  PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
-> -PAHO_MQTT_C_LICENSE = EPL-1.0 or BSD-3-Clause
-> -PAHO_MQTT_C_LICENSE_FILES = epl-v10 edl-v10
-> +PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
-> +PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
->  PAHO_MQTT_C_INSTALL_STAGING = YES
->
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> --
-> 2.25.1
->
-
-
+diff --git a/package/libtasn1/0001-fuzz-Makefile.am-do-not-force-static.patch b/package/libtasn1/0001-fuzz-Makefile.am-do-not-force-static.patch
+new file mode 100644
+index 0000000000..1f1abc7d9d
+--- /dev/null
++++ b/package/libtasn1/0001-fuzz-Makefile.am-do-not-force-static.patch
+@@ -0,0 +1,35 @@
++From cf1b20f3d881a1cfbf8cae1f615f45a5a4fbb3b4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 22 Apr 2020 18:35:55 +0200
++Subject: [PATCH] fuzz/Makefile.am: do not force static
++
++Don't force static when linking corpus2arry to libtasn1 otherwise the
++build will fail if libtasn1 has been built only as a shared library:
++
++  CCLD     corpus2array
++/home/fabrice/buildroot/output/host/lib/gcc/arm-buildroot-linux-musleabihf/8.4.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: attempted static link of dynamic object `../lib/.libs/libtasn1.so'
++collect2: error: ld returned 1 exit status
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.com/gnutls/libtasn1/-/merge_requests/61]
++---
++ fuzz/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/fuzz/Makefile.am b/fuzz/Makefile.am
++index c6310d1..1fb7152 100644
++--- a/fuzz/Makefile.am
+++++ b/fuzz/Makefile.am
++@@ -26,7 +26,7 @@ AM_CFLAGS = $(WERROR_CFLAGS) $(WARN_CFLAGS) $(CODE_COVERAGE_CFLAGS)
++ AM_CPPFLAGS = -I$(top_builddir)/lib/includes -I$(top_srcdir)/lib/includes -I$(srcdir) \
++  -I$(top_builddir)/lib/gl -I$(top_srcdir)/lib/gl -DSRCDIR=\"$(abs_srcdir)\" \
++  $(CODE_COVERAGE_CPPFLAGS)
++-AM_LDFLAGS = -no-install -static
+++AM_LDFLAGS = -no-install
++ 
++ LDADD = ../lib/gl/libgnu.la ../lib/libtasn1.la $(FUZZ_LIBS) $(CODE_COVERAGE_LIBS)
++ 
++-- 
++2.25.1
++
+diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
+index e25e18abf8..93cfa1a68b 100644
+--- a/package/libtasn1/libtasn1.hash
++++ b/package/libtasn1/libtasn1.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.14.tar.gz.sig
+-sha256	9e604ba5c5c8ea403487695c2e407405820d98540d9de884d6e844f9a9c5ba08	libtasn1-4.14.tar.gz
++# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.16.0.tar.gz.sig
++sha256  0e0fb0903839117cb6e3b56e68222771bebf22ad7fc2295a0ed7d576e8d4329d  libtasn1-4.16.0.tar.gz
+ # Locally calculated
+-sha256	7446831f659f7ebfd8d497acc7f05dfa8e31c6cb6ba1b45df33d4895ab80f5a6	LICENSE
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
+-sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	doc/COPYING.LESSER
++sha256  7446831f659f7ebfd8d497acc7f05dfa8e31c6cb6ba1b45df33d4895ab80f5a6  LICENSE
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  doc/COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index 50afc4cdf9..d721e79a6a 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBTASN1_VERSION = 4.14
++LIBTASN1_VERSION = 4.16.0
+ LIBTASN1_SITE = $(BR2_GNU_MIRROR)/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+ LIBTASN1_LICENSE = GPL-3.0+ (tests, tools), LGPL-2.1+ (library)
 -- 
-
-Julien Grossholtz
-Embedded Linux Expert
-julien.grossholtz at openest.io
-+33 7 68 49 83 47
-
-
-Logiciels embarqu?s pour syst?mes intelligents
-
-15, avenue du Rhin ? 67100 Strasbourg ? www.openest.io
+2.25.1
