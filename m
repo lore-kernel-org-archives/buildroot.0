@@ -1,117 +1,151 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 22 Apr 2020 10:49:56 +0200
-Subject: [Buildroot] [PATCH] configs/nitrogen*: bump u-boot revision
-Message-ID: <20200422084956.646996-1-gary.bisson@boundarydevices.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 22 Apr 2020 11:02:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix build with musl
+ 1.2.0
+Message-ID: <20200422090246.353974-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Latest bump introduced a regression for Nitrogen8MM, now fixed.
+Fixes:
+ - http://autobuild.buildroot.org/results/57e8d2a53f99dc804d66482f71653957fd1a6e47
 
-Changelog:
-- Fix Nitrogen8MM SPL regression
-- Add multi-rank lpddr4 training support
-- Improve fastboot support
-- Add Android AVB / BCB support
-
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/517918160
-
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Sorry about this, our internal Jenkins server didn't send the email to
-tell us about that regression. Build server now fixed on our side so
-this shouldn't happen again.
+ ...64-unsafe-syscalls-before-using-them.patch | 123 ++++++++++++++++++
+ 1 file changed, 123 insertions(+)
+ create mode 100644 package/ltp-testsuite/0001-syscalls-Check-for-time64-unsafe-syscalls-before-using-them.patch
 
-Thanks,
-Gary
----
- configs/nitrogen6sx_defconfig | 2 +-
- configs/nitrogen6x_defconfig  | 2 +-
- configs/nitrogen7_defconfig   | 2 +-
- configs/nitrogen8m_defconfig  | 2 +-
- configs/nitrogen8mm_defconfig | 2 +-
- configs/nitrogen8mn_defconfig | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index c9fe0f46b1..dc65ccf9f6 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Last version of branch boundary-v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e5abcffa.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6sx"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 00b28d2ab1..6ecac6e8b0 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Last version of branch boundary-v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e5abcffa.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6q"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index d9a216d491..c1d4f5a9a0 100644
---- a/configs/nitrogen7_defconfig
-+++ b/configs/nitrogen7_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Last version of branch boundary-v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e5abcffa.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen7"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
-index 26b9d768e3..e0b1850f02 100644
---- a/configs/nitrogen8m_defconfig
-+++ b/configs/nitrogen8m_defconfig
-@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8m"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-imx_v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e5abcffa.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
-index 96ab0d044e..082f9e355a 100644
---- a/configs/nitrogen8mm_defconfig
-+++ b/configs/nitrogen8mm_defconfig
-@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mm_2g"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-imx_v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e5abcffa.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
-index b78eba1422..e7a0151e8c 100644
---- a/configs/nitrogen8mn_defconfig
-+++ b/configs/nitrogen8mn_defconfig
-@@ -39,7 +39,7 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8_nano_8mn1gr0"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
- # Latest revision of branch boundary-imx_v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/bd4e3154.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e5abcffa.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+diff --git a/package/ltp-testsuite/0001-syscalls-Check-for-time64-unsafe-syscalls-before-using-them.patch b/package/ltp-testsuite/0001-syscalls-Check-for-time64-unsafe-syscalls-before-using-them.patch
+new file mode 100644
+index 0000000000..e447dd5182
+--- /dev/null
++++ b/package/ltp-testsuite/0001-syscalls-Check-for-time64-unsafe-syscalls-before-using-them.patch
+@@ -0,0 +1,123 @@
++From 5b57ae2913e2d2d167cbd3822784b4c4ba336812 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Wed, 19 Feb 2020 22:52:04 -0800
++Subject: [PATCH] syscalls: Check for time64 unsafe syscalls before using them
++
++musl is using 64bit time_t now on 32bit architectures and these syscalls
++no longer exist, therefore its better to check for them being available
++before using them
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Reviewed-by: Yang Xu <xuyang2018.jy@cn.fujitsu.com>
++Reviewed-by: Petr Vorel <pvorel@suse.cz>
++Signed-off-by: Petr Vorel <pvorel@suse.cz>
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/linux-test-project/ltp/commit/5b57ae2913e2d2d167cbd3822784b4c4ba336812]
++---
++ lib/tst_clocks.c                                 | 16 ++++++----------
++ .../syscalls/gettimeofday/gettimeofday01.c       |  6 ++----
++ .../syscalls/gettimeofday/gettimeofday02.c       |  8 +++-----
++ 3 files changed, 11 insertions(+), 19 deletions(-)
++
++diff --git a/lib/tst_clocks.c b/lib/tst_clocks.c
++index 5195da38f3..fa2f1cb842 100644
++--- a/lib/tst_clocks.c
+++++ b/lib/tst_clocks.c
++@@ -3,28 +3,24 @@
++  * Copyright (c) 2017 Cyril Hrubis <chrubis@suse.cz>
++  */
++ 
++-/*
++- * clock_gettime() and clock_getres() functions
++- */
++-
++-#define _GNU_SOURCE
++-#include <unistd.h>
++ #include <time.h>
++-#include <sys/syscall.h>
++ 
+++#define TST_NO_DEFAULT_MAIN
+++#include "tst_test.h"
++ #include "tst_clocks.h"
+++#include "lapi/syscalls.h"
++ 
++ int tst_clock_getres(clockid_t clk_id, struct timespec *res)
++ {
++-	return syscall(SYS_clock_getres, clk_id, res);
+++	return tst_syscall(__NR_clock_getres, clk_id, res);
++ }
++ 
++ int tst_clock_gettime(clockid_t clk_id, struct timespec *ts)
++ {
++-	return syscall(SYS_clock_gettime, clk_id, ts);
+++	return tst_syscall(__NR_clock_gettime, clk_id, ts);
++ }
++ 
++ int tst_clock_settime(clockid_t clk_id, struct timespec *ts)
++ {
++-	return syscall(SYS_clock_settime, clk_id, ts);
+++	return tst_syscall(__NR_clock_settime, clk_id, ts);
++ }
++diff --git a/testcases/kernel/syscalls/gettimeofday/gettimeofday01.c b/testcases/kernel/syscalls/gettimeofday/gettimeofday01.c
++index 583d8f7b9b..08ea1673ad 100644
++--- a/testcases/kernel/syscalls/gettimeofday/gettimeofday01.c
+++++ b/testcases/kernel/syscalls/gettimeofday/gettimeofday01.c
++@@ -38,10 +38,8 @@
++ #include <sys/time.h>
++ #include <errno.h>
++ #include "test.h"
++-#include <sys/syscall.h>
++ #include <unistd.h>
++-
++-#define gettimeofday(a,b)  syscall(__NR_gettimeofday,a,b)
+++#include "lapi/syscalls.h"
++ 
++ char *TCID = "gettimeofday01";
++ int TST_TOTAL = 1;
++@@ -63,7 +61,7 @@ int main(int ac, char **av)
++ 	for (lc = 0; TEST_LOOPING(lc); lc++) {
++ 		tst_count = 0;
++ 
++-		TEST(gettimeofday((void *)-1, (void *)-1));
+++		TEST(ltp_syscall(__NR_gettimeofday, (void *)-1, (void *)-1));
++ 
++ 		/* gettimeofday returns an int, so we need to turn the long
++ 		 * TEST_RETURN into an int to test with */
++diff --git a/testcases/kernel/syscalls/gettimeofday/gettimeofday02.c b/testcases/kernel/syscalls/gettimeofday/gettimeofday02.c
++index 1d60f448e8..5170ad2f78 100644
++--- a/testcases/kernel/syscalls/gettimeofday/gettimeofday02.c
+++++ b/testcases/kernel/syscalls/gettimeofday/gettimeofday02.c
++@@ -16,14 +16,12 @@
++ #include <stdint.h>
++ #include <sys/time.h>
++ #include <stdlib.h>
++-#include <sys/syscall.h>
++ #include <unistd.h>
++ #include <time.h>
++ #include <errno.h>
++ 
++ #include "tst_test.h"
++-
++-#define gettimeofday(a,b)  syscall(__NR_gettimeofday,a,b)
+++#include "lapi/syscalls.h"
++ 
++ static volatile sig_atomic_t done;
++ static char *str_rtime;
++@@ -48,13 +46,13 @@ static void verify_gettimeofday(void)
++ 
++ 	alarm(rtime);
++ 
++-	if (gettimeofday(&tv1, NULL)) {
+++	if (tst_syscall(__NR_gettimeofday, &tv1, NULL)) {
++ 		tst_res(TBROK | TERRNO, "gettimeofday() failed");
++ 		return;
++ 	}
++ 
++ 	while (!done) {
++-		if (gettimeofday(&tv2, NULL)) {
+++		if (tst_syscall(__NR_gettimeofday, &tv2, NULL)) {
++ 			tst_res(TBROK | TERRNO, "gettimeofday() failed");
++ 			return;
++ 		}
 -- 
 2.25.1
