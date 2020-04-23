@@ -1,33 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Apr 2020 22:49:35 +0200
-Subject: [Buildroot] [PATCH 1/3] package/mbedtls: add
- BR2_PACKAGE_MBEDTLS_X509_UNSUPPORTED_CRITICAL_EXTENSION
-In-Reply-To: <20200423202726.GR5035@scaer>
-References: <20200422192059.790299-1-fontaine.fabrice@gmail.com>
- <20200423220905.06d9dc59@windsurf.home>
- <20200423202726.GR5035@scaer>
-Message-ID: <20200423224935.44b7e7ab@windsurf.home>
+Date: Thu, 23 Apr 2020 22:50:05 +0200
+Subject: [Buildroot] [git commit] package/uacme: bump version to 1.2.3
+Message-ID: <20200423203554.1DFA18FDC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 23 Apr 2020 22:27:26 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5946c1fe99f90c8f78170e6eed78adb03860e1d6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Second, patch 2 does not fix the problem, which is only fixed with patch
-> 3. Semantically, the last two patches should be reversed: first fix the
-> problem (use of X.509 extension), then add a feature (choice of
-> backend).
+This version fixes https://github.com/ndilieto/uacme/issues/22
 
-I thought the idea of patch 2 was that it would allow to select the
-BR2_PACKAGE_MBEDTLS_X509_UNSUPPORTED_CRITICAL_EXTENSION option in patch
-3, but indeed, it does not. This makes patch 2 and the whole series
-even more awkward.
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index abc30a7e54..44cff5cf61 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	26fa153118fc895f0961502d644e3606cccb7fb261594c2b7dd293decd0b0174        uacme-1.2.2.tar.gz
++sha256	7e737eadc4495512f4f41e39b6ed4e14476922e26953f1be3446d69c8e63d189        uacme-1.2.3.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 61d3f11ca1..6df13eced6 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UACME_VERSION = 1.2.2
++UACME_VERSION = 1.2.3
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
