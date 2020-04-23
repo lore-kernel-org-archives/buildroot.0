@@ -1,7 +1,7 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu, 23 Apr 2020 10:29:52 -0700
-Subject: [Buildroot] [PATCH v2 1/2] package/python-slip-dbus: new package
-Message-ID: <20200423172953.279430-1-aduskett@gmail.com>
+Date: Thu, 23 Apr 2020 10:33:01 -0700
+Subject: [Buildroot] [PATCH v3 1/2] package/python-slip-dbus: new package
+Message-ID: <20200423173302.280424-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
