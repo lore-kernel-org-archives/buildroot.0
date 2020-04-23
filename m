@@ -1,54 +1,46 @@
-From: Timo Ketola <timo.ketola@exertus.fi>
-Date: Thu, 23 Apr 2020 14:06:45 +0300
-Subject: [Buildroot] [PATCH v2 1/1] package/freescale-imx/imx-gpu-g2d: fix
- the file name
-In-Reply-To: <1587617509-15087-1-git-send-email-timo.ketola@exertus.fi>
-References: <1587617509-15087-1-git-send-email-timo.ketola@exertus.fi>
-Message-ID: <1587640005-22386-1-git-send-email-timo.ketola@exertus.fi>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 23 Apr 2020 14:24:16 +0200
+Subject: [Buildroot] [PATCH] package/perl: bump perl-cross to version 1.3.3
+Message-ID: <20200423122416.23085-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NXP apparently changed file naming convention for this particular file.
-
-Fixes:
-1d0ea8d433 (package/freescale-imx/imx-gpu-g2d: bump to version 6.4.0.p1.0)
-
-Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-Changes v1 -> v2:
+ package/perl/perl.hash | 4 ++--
+ package/perl/perl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- - Add 'Fixes:' line as suggested by Gary
-
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash | 2 +-
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-index 8ecfbfe..98ca7fb 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 7c153fedb..21704a8bb 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -3,8 +3,8 @@ md5  4bfa12b528522a50de0470b8b70b9b3b  perl-5.30.2.tar.xz
+ sha1  d82cdaa610a3e749e821fc77004b1b4bfd5ebd28  perl-5.30.2.tar.xz
+ sha256  a1aa88bd6fbbdc2e82938afbb76c408b0ea847317737b712dc196cc7907a5259  perl-5.30.2.tar.xz
+ 
+-# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.2/perl-cross-1.3.2.hash
+-sha256  defa12f0ad7be0b6c48b4f76e2fb5b37c1b37fbeb6e9ebe938279cd539a0c20c  perl-cross-1.3.2.tar.gz
++# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.3/perl-cross-1.3.3.hash
++sha256  3cea71d443cd28c6aa3c3c79d6db38267303cfac8e54b8a6d7ef8d448deefb25  perl-cross-1.3.3.tar.gz
+ 
  # Locally calculated
--sha256	6d6d02d035d988cbdb2014794f2efe970a3f5ac277202882bbf553bb7fd789d2  imx-gpu-g2d-6.4.0.p1.0-aarch32.bin
-+sha256	6d6d02d035d988cbdb2014794f2efe970a3f5ac277202882bbf553bb7fd789d2  imx-gpu-g2d-6.4.0.p1.0-arm.bin
- sha256	35885f435dbe951d2c0f439a376ed8a59a50b67a1b7e1e14fa2ab03995abb1ad  imx-gpu-g2d-6.4.0.p1.0-aarch64.bin
- sha256	d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
- sha256	9665930f69c0b6f4a4c055d7fe2b8ee563e771efbc83892abb1955e61492cdf7  EULA
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-index 6598e4c..7700170 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-@@ -7,7 +7,7 @@
- ifeq ($(BR2_aarch64),y)
- IMX_GPU_G2D_VERSION = 6.4.0.p1.0-aarch64
- else
--IMX_GPU_G2D_VERSION = 6.4.0.p1.0-aarch32
-+IMX_GPU_G2D_VERSION = 6.4.0.p1.0-arm
- endif
- IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
+ sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index c865fc768..64d453cad 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -13,7 +13,7 @@ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.3.2
++PERL_CROSS_VERSION = 1.3.3
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
 -- 
-2.7.4
+2.20.1
