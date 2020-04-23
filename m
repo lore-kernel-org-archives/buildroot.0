@@ -1,81 +1,184 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Apr 2020 22:57:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: fix bump to
- version 1.3.2
-In-Reply-To: <CAFN3DJgf3+-myGn1eFcT64CM6de1gYdUWL+rqRrHuvLHWqRHmA@mail.gmail.com>
-References: <20200422080751.4180403-1-fontaine.fabrice@gmail.com>
- <CAFN3DJgf3+-myGn1eFcT64CM6de1gYdUWL+rqRrHuvLHWqRHmA@mail.gmail.com>
-Message-ID: <20200423225753.46614fb5@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 23 Apr 2020 22:58:20 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/python-slip-dbus: new package
+In-Reply-To: <20200423173302.280424-1-aduskett@gmail.com>
+References: <20200423173302.280424-1-aduskett@gmail.com>
+Message-ID: <20200423205820.GS5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 22 Apr 2020 16:41:30 +0200
-Julien Grossholtz <julien.grossholtz@openest.io> wrote:
+Adam, All,
 
-> Thank you for the fix, I am sure I checked the hash, but I missed
-> something. I applied your patch and it is OK.
+On 2020-04-23 10:33 -0700, aduskett at gmail.com spake thusly:
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> Regards,
+> This package provides a dbus.service.Object derivative that ends
+> itself after a certain time without being used and/or if there
+> are no clients anymore on the message bus.
 > 
+> The package also provides a set of convenience functions and decorators for
+> integrating a dbus service with PolicyKit.
 > 
-> Le mer. 22 avr. 2020 ? 10:06, Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> a ?crit :
-> >
-> > Commit e69b8ddd43292b03b8f30f748ee2279b8df64c47 bumped paho-mqtt-c to
-> > version 1.3.2 but hash was wrong moreover licence has changed to EPL-2.0
-> > since
-> > https://github.com/eclipse/paho.mqtt.c/commit/1e91229cb6403e3a9b02dfdc11c71b04c0518cff
-> >
-> > So fix that and add LICENSE to the list of license files
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/7ea1791778053613e9ef6b146dbd1992a0f63dc6
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/paho-mqtt-c/paho-mqtt-c.hash | 5 +++--
-> >  package/paho-mqtt-c/paho-mqtt-c.mk   | 4 ++--
-> >  2 files changed, 5 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-> > index 80231c762a..8f6ca61480 100644
-> > --- a/package/paho-mqtt-c/paho-mqtt-c.hash
-> > +++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-> > @@ -1,4 +1,5 @@
-> >  # Locally computed:
-> > -sha256  c2d74a37c8e23d6eef229db0e04cb8e511571562668808e02d836e82d5bbd0ae  paho-mqtt-c-1.3.2.tar.gz
-> > +sha256  c426334c2ffc9f7a230e3de5162bdbc1762f8f60ffe27460e553edb74c7e0681  paho-mqtt-c-1.3.2.tar.gz
-> >  sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
-> > -sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
-> > +sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
-> > +sha256  99d3a5c5cc2812f0593a85ec7c1b6dd83e8477b5090c01d9de0d49d49f367a4a  LICENSE
-> > diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-> > index 49d5be3777..7cace9a607 100644
-> > --- a/package/paho-mqtt-c/paho-mqtt-c.mk
-> > +++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-> > @@ -6,8 +6,8 @@
-> >
-> >  PAHO_MQTT_C_VERSION = 1.3.2
-> >  PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
-> > -PAHO_MQTT_C_LICENSE = EPL-1.0 or BSD-3-Clause
-> > -PAHO_MQTT_C_LICENSE_FILES = epl-v10 edl-v10
-> > +PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
-> > +PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
-> >  PAHO_MQTT_C_INSTALL_STAGING = YES
-> >
-> >  ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> > --
-> > 2.25.1
-> >  
+> Firewalld depends on this package.
 > 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - Combine dependency comment (Yann)
+>   - Add a more detailed commit message. (Yann)
+>   - Add an explination for the PYTHON_SLIP_DBUS_APPEND_VERSION hook. (Yann)
 > 
+>  DEVELOPERS                                    |  1 +
+>  package/Config.in                             |  1 +
+>  package/python-slip-dbus/Config.in            | 27 +++++++++++++++++++
+>  .../python-slip-dbus/python-slip-dbus.hash    |  3 +++
+>  package/python-slip-dbus/python-slip-dbus.mk  | 23 ++++++++++++++++
+>  5 files changed, 55 insertions(+)
+>  create mode 100644 package/python-slip-dbus/Config.in
+>  create mode 100644 package/python-slip-dbus/python-slip-dbus.hash
+>  create mode 100644 package/python-slip-dbus/python-slip-dbus.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 56178ba100..e0ab2f61bf 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -74,6 +74,7 @@ F:	package/python-nested-dict/
+>  F:	package/python-pbr/
+>  F:	package/python-pip/
+>  F:	package/python-psycopg2/
+> +F:	package/python-slip-dbus/
+>  F:	package/python-smmap2/
+>  F:	package/python-sqlalchemy/
+>  F:	package/python-sqlparse/
+> diff --git a/package/Config.in b/package/Config.in
+> index a9c6f6fcbc..918052bc38 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1149,6 +1149,7 @@ menu "External python modules"
+>  	source "package/python-singledispatch/Config.in"
+>  	source "package/python-sip/Config.in"
+>  	source "package/python-six/Config.in"
+> +	source "package/python-slip-dbus/Config.in"
+>  	source "package/python-slob/Config.in"
+>  	source "package/python-smbus-cffi/Config.in"
+>  	source "package/python-smmap2/Config.in"
+> diff --git a/package/python-slip-dbus/Config.in b/package/python-slip-dbus/Config.in
+> new file mode 100644
+> index 0000000000..3e1c8adc03
+> --- /dev/null
+> +++ b/package/python-slip-dbus/Config.in
+> @@ -0,0 +1,27 @@
+> +config BR2_PACKAGE_PYTHON_SLIP_DBUS
+> +	bool "python-slip-dbus"
+> +	depends on BR2_USE_MMU # libglib2, gobject-introspection
+> +	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS # gobject-introspection
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gobject-introspection
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
 
+Is it a real dependency of py-slip-dbus, or is it inherited from dbus?
 
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
+> +	depends on BR2_PACKAGE_PYTHON3 # gobject-introspection
+
+gobject-introspection, really? You're not selecting it below, but you
+are selecting python-gobject. So you should reference the inheritance
+being on python-gobject, not goi:
+
+    depends on BR2_PACKAGE_PYTHON3 # python-gobject
+
+> +	select BR2_PACKAGE_DBUS # runtime
+> +	select BR2_PACKAGE_DBUS_PYTHON # runtime
+
+You must inherit the wchar dependency from dbus-python.
+
+> +	select BR2_PACKAGE_PYTHON_DECORATOR  # runtime
+> +	select BR2_PACKAGE_PYTHON_GOBJECT  # runtime
+> +	select BR2_PACKAGE_PYTHON_SIX # runtime
+> +	help
+> +	  A dbus.service.Object derivative that ends
+> +	  itself after a certain time without being used and/or if there
+> +	  are no clients anymore on the message bus, as well as
+> +	  convenience functions and decorators for integrating a dbus
+> +	  service with PolicyKit.
+> +
+> +	  https://github.com/nphilipp/python-slip
+> +
+> +comment "python-slip-dbus needs python3, and a glibc toolchain w/ gcc >= 4.9, threads"
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_USES_GLIBC \
+> +		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_PYTHON3
+> diff --git a/package/python-slip-dbus/python-slip-dbus.hash b/package/python-slip-dbus/python-slip-dbus.hash
+> new file mode 100644
+> index 0000000000..8a88533169
+> --- /dev/null
+> +++ b/package/python-slip-dbus/python-slip-dbus.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed
+> +sha256  7a52ebe49945cd27d06a1172042a55eb5c79cfda49b742153fa076d1d9bd99a1  python-slip-0.6.5.tar.gz
+> +sha256  1ca3e8f71b7de618968e7ea9fe47822d9e704dc476aef8544033abedec355225  COPYING
+> diff --git a/package/python-slip-dbus/python-slip-dbus.mk b/package/python-slip-dbus/python-slip-dbus.mk
+> new file mode 100644
+> index 0000000000..5c2f416f5d
+> --- /dev/null
+> +++ b/package/python-slip-dbus/python-slip-dbus.mk
+> @@ -0,0 +1,23 @@
+> +################################################################################
+> +#
+> +# python-slip-dbus
+> +#
+> +################################################################################
+> +
+> +PYTHON_SLIP_DBUS_VERSION = 0.6.5
+> +PYTHON_SLIP_DBUS_SOURCE = python-slip-$(PYTHON_SLIP_DBUS_VERSION).tar.gz
+> +PYTHON_SLIP_DBUS_SITE = https://github.com/nphilipp/python-slip/archive
+
+This line is the expeansion of the github helper.
+
+However, you should not use that, but the relased tarball, which is only
+available as a .tar.bz2:
+
+    PYTHON_SLIP_DBUS_SOURCE = python-slip-$(PYTHON_SLIP_DBUS_VERSION).tar.bz2
+    PYTHON_SLIP_DBUS_SITE = https://github.com/nphilipp/python-slip/releases/download/python-slip-$(PYTHON_SLIP_DBUS_VERSION)
+
+> +PYTHON_SLIP_DBUS_LICENSE = GPL-2.0+
+> +PYTHON_SLIP_DBUS_LICENSE_FILES = COPYING
+> +PYTHON_SLIP_DBUS_SETUP_TYPE = distutils
+> +PYTHON_SLIP_DBUS_DEPENDENCIES = python-gobject
+> +
+> +# Python-slip-dbus only packages a setup.py.in file with a @VERSION@ variable,
+> +# so we must create the file ourselves and sed the appropriate version number.
+> +define PYTHON_SLIP_DBUS_APPEND_VERSION
+> +	cd $(@D) && \
+> +		sed -e 's/@VERSION@/$(PYTHON_SLIP_DBUS_VERSION)/g' setup.py.in > setup.py
+
+Useless use of cd:
+
+    sed -e 's/@VERSION@/$(PYTHON_SLIP_DBUS_VERSION)/g' \
+        $(@D)/setup.py.in >$(@D)/setup.py
+
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +PYTHON_SLIP_DBUS_PRE_CONFIGURE_HOOKS += PYTHON_SLIP_DBUS_APPEND_VERSION
+> +
+> +$(eval $(python-package))
+> -- 
+> 2.25.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
