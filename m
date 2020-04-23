@@ -1,62 +1,78 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 23 Apr 2020 06:44:26 +0000
-Subject: [Buildroot] [Bug 12806] New: There are multiple issues in buildroot
- that faults cups printing
-Message-ID: <bug-12806-163@https.bugs.busybox.net/>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 23 Apr 2020 08:55:14 +0200
+Subject: [Buildroot] [PATCH 6/8] package/python3-pyyaml: add special
+ host variant
+In-Reply-To: <CAMQcK5K=okZopvaBnQ7aKnSodBpaoOdgumTP3to0+-K_gzEdBw@mail.gmail.com>
+References: <20200323104909.16765-1-yegorslists@googlemail.com>
+ <20200323104909.16765-6-yegorslists@googlemail.com>
+ <CAMQcK5K=okZopvaBnQ7aKnSodBpaoOdgumTP3to0+-K_gzEdBw@mail.gmail.com>
+Message-ID: <CAGm1_ksyG7fEdwCYv_hxesdJtKcbX1Zj8EN_uqOLWhA6t6wUWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12806
+Hi Ryan,
 
-            Bug ID: 12806
-           Summary: There are multiple issues in buildroot that faults
-                    cups printing
-           Product: buildroot
-           Version: 2020.02.1
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: critical
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: skif at skif-web.ru
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Tue, Apr 21, 2020 at 10:00 PM Ryan Barnett <ryan.barnett@collins.com> wrote:
+>
+> Yegor,
+>
+> I've been working on testing that your patch series builds/works to
+> fix the issue with MongoDB not compiling with Buildroot 2020.02.
+> Please see my feedback in regards to your current patch set below:
+>
+> On Mon, Mar 23, 2020 at 5:50 AM <yegorslists@googlemail.com> wrote:
+> >
+> > From: Yegor Yefremov <yegorslists@googlemail.com>
+> >
+> > Needed to build mongodb.
+> >
+> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > ---
+> >  package/python3-pyyaml/python3-pyyaml.hash |  1 +
+> >  package/python3-pyyaml/python3-pyyaml.mk   | 20 ++++++++++++++++++++
+> >  2 files changed, 21 insertions(+)
+> >  create mode 120000 package/python3-pyyaml/python3-pyyaml.hash
+> >  create mode 100644 package/python3-pyyaml/python3-pyyaml.mk
+> >
+> > diff --git a/package/python3-pyyaml/python3-pyyaml.hash b/package/python3-pyyaml/python3-pyyaml.hash
+> > new file mode 120000
+> > index 0000000000..afa4932ecb
+> > --- /dev/null
+> > +++ b/package/python3-pyyaml/python3-pyyaml.hash
+> > @@ -0,0 +1 @@
+> > +../python-pyyaml/python-pyyaml.hash
+> > \ No newline at end of file
+> > diff --git a/package/python3-pyyaml/python3-pyyaml.mk b/package/python3-pyyaml/python3-pyyaml.mk
+> > new file mode 100644
+> > index 0000000000..3026135fca
+> > --- /dev/null
+> > +++ b/package/python3-pyyaml/python3-pyyaml.mk
+> > @@ -0,0 +1,20 @@
+> > +################################################################################
+> > +#
+> > +# python3-pyyaml
+> > +#
+> > +################################################################################
+> > +
+> > +# Please keep in sync with
+> > +# package/python-pyyaml/python-pyyaml.mk
+> > +PYTHON3_PYYAML_VERSION = 5.3
+>
+> This currently does not work as python-pyyaml has been bumped to version 5.3.1.
+>
+> https://patchwork.ozlabs.org/project/buildroot/patch/20200326100404.82191-1-james.hilliard1 at gmail.com/
+>
+> Changing version to 5.3.1 fixes this.
 
-First trouble is incorrect qpdf buiding.
-Qpdf is mandatory dependence of cups.
-In current master, qpdf builds with incorrect --no-random option. On 
-any work< qpdf send 'no such file' error. For example:
-qpdf /usr/share/cups/data/secret.pdf -
+Thanks for your feedback and testing. The problem is, there is still
+no agreement on how to proceed. One way is to create python3-*
+packages and the other is to remove Python2 support (see comments to
+my patch [1]).
 
-This commmand must get PDF file in stdout.But only 'No such file or
- directory' error present.
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20200323104909.16765-3-yegorslists at googlemail.com/
 
-0/1 patch fix this by changing configure options to 
-with-random=/dev/random.
-
-Next global problem - cups-filters need ghostscript.
-From  https://github.com/OpenPrinting/cups-filters/blob/master/README :
-By default, pdftops uses Ghostscript if this does not get changed
-    at compile time, for example by the Linux distribution vendor.
-
-0/2 patch fix id by settinbg ghostscript as default render if 
-ghostscript enabled in voard config.
-
-Last trouble - ghostscript building without cups support.
-
-0/3 patch fix is by removing disable-patch option. Now, if cups is 
-enabled, it will be added to dependencies and correct configure 
-options added to ghostscript building. Also fixed ghostscript 
-buildroot building issue with unpleasant hack in configure.ac, which 
-broke pkg-config. It's broke cups search by ghostscript configure 
-script.
-GHOSTSCRIPT_CUPS_CONFIG_FIX also needed for this task.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards,
+Yegor
