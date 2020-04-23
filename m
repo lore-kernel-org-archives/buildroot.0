@@ -1,26 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Apr 2020 23:26:40 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/iwd: fix build with glibc < 2.24
-In-Reply-To: <20200422081628.4181172-1-fontaine.fabrice@gmail.com>
-References: <20200422081628.4181172-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200423232640.64e029c7@windsurf.home>
+Date: Thu, 23 Apr 2020 23:26:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 20.0.5
+In-Reply-To: <20200423053123.817991-1-bernd.kuhls@t-online.de>
+References: <20200423053123.817991-1-bernd.kuhls@t-online.de>
+Message-ID: <20200423232659.17da8220@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 22 Apr 2020 10:16:28 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Thu, 23 Apr 2020 07:31:23 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/63f983aa22ca5303a55bc55e004f05a94e5f7259
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Fix commit title and message: issue is due to glibc, not gcc
+>  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+>  package/mesa3d/mesa3d.hash               | 6 +++---
+>  package/mesa3d/mesa3d.mk                 | 2 +-
+>  3 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
