@@ -1,48 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Apr 2020 22:10:05 +0200
-Subject: [Buildroot] [git commit] package/python-colorama: bump to 0.4.3
-Message-ID: <20200423195713.9083D8FC66@busybox.osuosl.org>
+Date: Thu, 23 Apr 2020 22:12:50 +0200
+Subject: [Buildroot] [git commit] package/protobuf-c: bump to 1.3.3
+Message-ID: <20200423195817.DC0E98FC6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d329c4b71f89b75ac9697eddb9f08d2dc2ca87e
+commit: https://git.buildroot.net/buildroot/commit/?id=6f65465f02534a1e9443b944a98ec0b5d754e2bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-colorama/python-colorama.hash | 5 ++---
- package/python-colorama/python-colorama.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/protobuf-c/protobuf-c.hash | 4 ++--
+ package/protobuf-c/protobuf-c.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-colorama/python-colorama.hash b/package/python-colorama/python-colorama.hash
-index 06f61f80af..312b9e1f7d 100644
---- a/package/python-colorama/python-colorama.hash
-+++ b/package/python-colorama/python-colorama.hash
-@@ -1,5 +1,4 @@
--# md5, sha256 from https://pypi.org/pypi/colorama/json
--md5	f927529cd1735f6f50ee2c61628e9c1f  colorama-0.4.1.tar.gz
--sha256	05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d  colorama-0.4.1.tar.gz
-+# sha256 from https://pypi.org/pypi/colorama/json
-+sha256  e96da0d330793e2cb9485e9ddfd918d456036c7149416295932478192f4436a1  colorama-0.4.3.tar.gz
- # Locally computed sha256 checksums
- sha256	cac35c02686e5d04a5a7140bfb3b36e73aed496656e891102e428886d7930318  LICENSE.txt
-diff --git a/package/python-colorama/python-colorama.mk b/package/python-colorama/python-colorama.mk
-index 2f4bc5e1f1..6117b853a2 100644
---- a/package/python-colorama/python-colorama.mk
-+++ b/package/python-colorama/python-colorama.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
+index 4f9c75a02f..abc11afc58 100644
+--- a/package/protobuf-c/protobuf-c.hash
++++ b/package/protobuf-c/protobuf-c.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	5205312e561b75b9d2db671b22f28d67afb5c7d1fef94a6f2d29d775ca4e0519  protobuf-c-1.3.2.tar.gz
+-sha256	20e800cad4550f4b19bb37fc9577dac21de13333ae66497c4c45ae489c35c34a  LICENSE
++sha256  8515da8b84ea36768ae69a52f9ede8d718936d6058077265b6e458cfc55f8bdb  protobuf-c-1.3.3.tar.gz
++sha256  20e800cad4550f4b19bb37fc9577dac21de13333ae66497c4c45ae489c35c34a  LICENSE
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index 2770d35b7b..f28f5ff57f 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_COLORAMA_VERSION = 0.4.1
-+PYTHON_COLORAMA_VERSION = 0.4.3
- PYTHON_COLORAMA_SOURCE = colorama-$(PYTHON_COLORAMA_VERSION).tar.gz
--PYTHON_COLORAMA_SITE = https://files.pythonhosted.org/packages/76/53/e785891dce0e2f2b9f4b4ff5bc6062a53332ed28833c7afede841f46a5db
-+PYTHON_COLORAMA_SITE = https://files.pythonhosted.org/packages/82/75/f2a4c0c94c85e2693c229142eb448840fba0f9230111faa889d1f541d12d
- PYTHON_COLORAMA_SETUP_TYPE = setuptools
- PYTHON_COLORAMA_LICENSE = BSD-3-Clause
- PYTHON_COLORAMA_LICENSE_FILES = LICENSE.txt
+-PROTOBUF_C_VERSION = 1.3.2
++PROTOBUF_C_VERSION = 1.3.3
+ PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,v$(PROTOBUF_C_VERSION))
+ PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+ HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
