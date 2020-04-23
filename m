@@ -1,74 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Apr 2020 23:26:10 +0200
-Subject: [Buildroot] [git commit] package/iwd: fix build with glibc < 2.24
-Message-ID: <20200423211154.115188FDDD@busybox.osuosl.org>
+Date: Thu, 23 Apr 2020 23:26:40 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/iwd: fix build with glibc < 2.24
+In-Reply-To: <20200422081628.4181172-1-fontaine.fabrice@gmail.com>
+References: <20200422081628.4181172-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200423232640.64e029c7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d22f3d1124db2b1460df6e42e7d323efde3fce86
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 22 Apr 2020 10:16:28 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/63f983aa22ca5303a55bc55e004f05a94e5f7259
+> Fixes:
+>  - http://autobuild.buildroot.org/results/63f983aa22ca5303a55bc55e004f05a94e5f7259
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2 (after review of Thomas Petazzoni):
+>  - Fix commit title and message: issue is due to glibc, not gcc
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...01-frame-xchg.c-fix-build-with-glibc-2.24.patch | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch b/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
-new file mode 100644
-index 0000000000..cd0bae4835
---- /dev/null
-+++ b/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
-@@ -0,0 +1,46 @@
-+From 44cd3719eb94c8d5776b37c73993eea0617902f7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 11 Apr 2020 23:21:42 +0200
-+Subject: [PATCH] frame-xchg.c: fix build with glibc < 2.24
-+
-+SOL_NETLINK is used since commit
-+87a198111af1ea67053895f7435fb99e3cdd2159 resulting in the following
-+build failure with glibc < 2.24:
-+
-+src/frame-xchg.c: In function 'frame_watch_group_io_read':
-+src/frame-xchg.c:328:27: error: 'SOL_NETLINK' undeclared (first use in this function)
-+   if (cmsg->cmsg_level != SOL_NETLINK)
-+                           ^
-+
-+This failure is due to glibc that doesn't support SOL_NETLINK before
-+version 2.24 and
-+https://github.com/bminor/glibc/commit/f9b437d5efce93800b51ad2a437c8b1c9616bf80
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/3485088b84111c271bbcfaf025aa4103c6452072
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/ZRN25CA5I7PGUTFIRJLLXN7VHWGDAZDN]
-+---
-+ src/frame-xchg.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/frame-xchg.c b/src/frame-xchg.c
-+index 50351615..4c950fd3 100644
-+--- a/src/frame-xchg.c
-++++ b/src/frame-xchg.c
-+@@ -42,6 +42,10 @@
-+ #include "src/netdev.h"
-+ #include "src/frame-xchg.h"
-+ 
-++#ifndef SOL_NETLINK
-++#define SOL_NETLINK 270
-++#endif
-++
-+ struct watch_group {
-+ 	/*
-+ 	 * Group IDs, except 0, are per wdev for user's convenience.
-+-- 
-+2.25.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
