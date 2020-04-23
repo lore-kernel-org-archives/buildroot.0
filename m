@@ -1,184 +1,236 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Apr 2020 22:00:19 +0200
-Subject: [Buildroot] [PATCH 2/2] package/{openjdk,
- openjdk-bin}: add support for building either lts or latest
-In-Reply-To: <20200422192118.4039564-2-aduskett@gmail.com>
-References: <20200422192118.4039564-1-aduskett@gmail.com>
- <20200422192118.4039564-2-aduskett@gmail.com>
-Message-ID: <20200423200019.GP5035@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 23 Apr 2020 22:01:40 +0200
+Subject: [Buildroot] [git commit] package/linknx: bump to version 0.0.1.38
+Message-ID: <20200423195116.A3B518FC5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d5503c5cd37ea319d97aaaf22fc318d298ded0e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-22 12:21 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> As Java is used quite a bit in the enterprise world, having the option to
-> build the LTS version of OpenJDK is quite convenient and also a requirement
-> for many companies wanting to use Java.
-> 
-> As such, there are three options:
->   1) Continue only to support the latest version of OpenJDK.
->   2) Downgrade our existing OpenJDK package from 14 to 11.
->   3) Add an option to support either OpenJDK 11 or 14.
-> 
-> OpenJDK 11 and 14 currently have:
->   - The same configure options.
->   - The same license files and hashes for those license files.
->   - The same dependencies.
->   - The same method to build and install.
-> 
-> As such, supporting both 11 and 14 is not only an easy option to add to
-> Buildroot, but also a nice feature for users who wish to use Java in an
-> embedded environment with a company that mandates the use of the LTS version.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+- Drop first and second patches (already in version)
+- Retrieve third patch from upstream
+- Retrieve an additionnal patch from upstream
+- host-gettext is needed for AM_ICONV since
+  https://github.com/linknx/linknx/commit/0512f6d0a07d50df33bfdca22d48360d164922a8
+- Update indentation of hash file (two spaces)
 
-I was not too much in favour of the patch, and when we discussed it
-between maintainers, we all were also rather unsure about it either.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../linknx/0001-Link-with-libiconv-if-needed.patch | 30 --------------
+ ...01-configure-ac-tweak-CPPUNIT-conditional.patch | 47 ++++++++++++++++++++++
+ .../0002-configure.ac-always-define-CPPUNIT.patch  | 34 ----------------
+ ...src-Makefile.am-fix-linking-with-log4cpp.patch} | 14 +++----
+ package/linknx/linknx.hash                         |  4 +-
+ package/linknx/linknx.mk                           |  4 +-
+ 6 files changed, 58 insertions(+), 75 deletions(-)
 
-But the simplicity of the patch, and the fact that Java (whether we like
-it or not) is a prominent language and OpenJDK a prominent package, we
-concluded that the harm of introducing that choice was not that bad in
-the end, and reverting is always an option should things turn bad.
-
-so I have applied, after tweaking it a bit:
-
-  - made latest the default, so that existing defconfig files are not
-    impacted
-
-  - rename the options to LTS and LATEST, so it is obvious that the
-    choice is about that, not about 11 vs. 14
-
-  - misc eye-candy about choice location in the file, blabla my usual
-    grumpyness... ;-)
-
-Appiled to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/openjdk-bin/openjdk-bin.hash |  3 +++
->  package/openjdk-bin/openjdk-bin.mk   |  8 ++++++++
->  package/openjdk/Config.in            | 14 ++++++++++++++
->  package/openjdk/openjdk.hash         |  1 +
->  package/openjdk/openjdk.mk           |  9 +++++++++
->  5 files changed, 35 insertions(+)
-> 
-> diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-> index 52380f55ae..065eda0603 100644
-> --- a/package/openjdk-bin/openjdk-bin.hash
-> +++ b/package/openjdk-bin/openjdk-bin.hash
-> @@ -1,6 +1,9 @@
->  # From https://github.com/AdoptOpenJDK/openjdk14-binaries/releases
->  sha256  9ddf9b35996fbd784a53fff3e0d59920a7d5acf1a82d4c8d70906957ac146cd1  OpenJDK14U-jdk_x64_linux_hotspot_14.0.1_7.tar.gz
->  
-> +# From https://github.com/AdoptOpenJDK/openjdk11-binaries/releases
-> +sha256  ee60304d782c9d5654bf1a6b3f38c683921c1711045e1db94525a51b7024a2ca  OpenJDK11U-jdk_x64_linux_hotspot_11.0.7_10.tar.gz
-> +
->  # Locally calculated
->  sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
->  sha256  a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb  legal/java.prefs/ASSEMBLY_EXCEPTION
-> diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-> index ca8e11fe13..4d7043c831 100644
-> --- a/package/openjdk-bin/openjdk-bin.mk
-> +++ b/package/openjdk-bin/openjdk-bin.mk
-> @@ -4,11 +4,19 @@
->  #
->  ################################################################################
->  
-> +ifeq ($(BR2_OPENJDK_VERSION_11_X),y)
-> +HOST_OPENJDK_BIN_VERSION_MAJOR = 11.0.7
-> +HOST_OPENJDK_BIN_VERSION_MINOR = 10
-> +HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
-> +HOST_OPENJDK_BIN_SOURCE = OpenJDK11U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
-> +HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
-> +else
->  HOST_OPENJDK_BIN_VERSION_MAJOR = 14.0.1
->  HOST_OPENJDK_BIN_VERSION_MINOR = 7
->  HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
->  HOST_OPENJDK_BIN_SOURCE = OpenJDK14U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
->  HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk14-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
-> +endif
->  HOST_OPENJDK_BIN_LICENSE = GPL-2.0+ with exception
->  HOST_OPENJDK_BIN_LICENSE_FILES = legal/java.prefs/LICENSE legal/java.prefs/ASSEMBLY_EXCEPTION
->  
-> diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
-> index 61294ec49f..3b27a7e03c 100644
-> --- a/package/openjdk/Config.in
-> +++ b/package/openjdk/Config.in
-> @@ -49,6 +49,20 @@ config BR2_PACKAGE_OPENJDK
->  
->  if BR2_PACKAGE_OPENJDK
->  
-> +choice
-> +	prompt "openjdk version"
-> +	default BR2_OPENJDK_VERSION_11_X
-> +	help
-> +	  Select the version of OpenJDK you wish to use.
-> +
-> +config BR2_OPENJDK_VERSION_11_X
-> +	bool "OpenJDK 11 (LTS)"
-> +
-> +config BR2_OPENJDK_VERSION_14_X
-> +	bool "OpenJDK 14 (Latest)"
-> +
-> +endchoice
-> +
->  choice
->  	prompt "openjdk variant"
->  	default BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER if !BR2_powerpc
-> diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-> index e453d12d1a..2279c8b971 100644
-> --- a/package/openjdk/openjdk.hash
-> +++ b/package/openjdk/openjdk.hash
-> @@ -1,3 +1,4 @@
->  # Locally computed
->  sha256  301203cbda9c40a5fc496b3299806995ac4833b39c6d2e8470fd85a35461afd4  jdk-14.0.1+7.tar.gz
-> +sha256  d105471d06568e4659c21518d1bf42b8ebab5c70539e9777d570549a98ed2a8a  jdk-11.0.7+10.tar.gz
->  sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-> diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-> index d33459db97..d16d6c09e2 100644
-> --- a/package/openjdk/openjdk.mk
-> +++ b/package/openjdk/openjdk.mk
-> @@ -4,11 +4,20 @@
->  #
->  ################################################################################
->  
-> +ifeq ($(BR2_OPENJDK_VERSION_11_X),y)
-> +OPENJDK_VERSION_MAJOR = 11.0.7
-> +OPENJDK_VERSION_MINOR = 10
-> +OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
-> +OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
-> +OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk11u/archive
-> +else
->  OPENJDK_VERSION_MAJOR = 14.0.1
->  OPENJDK_VERSION_MINOR = 7
->  OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
->  OPENJDK_SOURCE = jdk-$(OPENJDK_VERSION).tar.gz
->  OPENJDK_SITE = https://hg.openjdk.java.net/jdk-updates/jdk14u/archive
-> +endif
-> +
->  OPENJDK_LICENSE = GPL-2.0+ with exception
->  OPENJDK_LICENSE_FILES = LICENSE
->  
-> -- 
-> 2.25.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/linknx/0001-Link-with-libiconv-if-needed.patch b/package/linknx/0001-Link-with-libiconv-if-needed.patch
+deleted file mode 100644
+index 81b1fb7927..0000000000
+--- a/package/linknx/0001-Link-with-libiconv-if-needed.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 87373f6c2b48619bb11e566e5eb16ea49d47beb7 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 19 Apr 2019 17:07:10 +0200
+-Subject: [PATCH] Link with libiconv if needed
+-
+-Commit 2cc3a93dcf2703b3b418e0a99975f556354fb1b1 added an include to
+-iconv which can be provided by libiconv so search and link for it if
+-needed
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/linknx/linknx/pull/41]
+----
+- configure.ac | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 22f242c..779fd6f 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -15,6 +15,7 @@ AC_CHECK_HEADER(argp.h,,[AC_MSG_ERROR([argp_parse not found])])
+- AC_SEARCH_LIBS(argp_parse,argp,,[AC_MSG_ERROR([argp_parse not found])])
+- 
+- # Checks for libraries.
+-+AC_SEARCH_LIBS(libiconv_open,iconv)
+- LIBCURL_CHECK_CONFIG([yes], [7.14.0])
+- 
+- # Checks for header files.
+--- 
+-2.20.1
+-
+diff --git a/package/linknx/0001-configure-ac-tweak-CPPUNIT-conditional.patch b/package/linknx/0001-configure-ac-tweak-CPPUNIT-conditional.patch
+new file mode 100644
+index 0000000000..733e2927dd
+--- /dev/null
++++ b/package/linknx/0001-configure-ac-tweak-CPPUNIT-conditional.patch
+@@ -0,0 +1,47 @@
++From 8e7da14647dada5eee8f583b0814bffb31d1b91e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 21 Apr 2019 23:17:34 +0200
++Subject: [PATCH] configure.ac: tweak CPPUNIT conditional
++
++Following review of buildroot's patch
++(http://patchwork.ozlabs.org/patch/1088520), tweak CPPUNIT to move call
++to AM_CONDITIONAL outside condition
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/linknx/linknx/commit/8e7da14647dada5eee8f583b0814bffb31d1b91e]
++---
++ configure.ac | 10 ++++------
++ 1 file changed, 4 insertions(+), 6 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 51d8ae66..4d9d8efa 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -135,22 +135,20 @@ if test x"$WITH_CPPUNIT" != xno; then
++       AC_DEFINE([HAVE_CPPUNIT], [1], [cppunit])
++       AC_SUBST(CPPUNIT_CFLAGS)
++       AC_SUBST(CPPUNIT_LIBS)
++-      AM_CONDITIONAL(CPPUNIT, true)
+++      found_cppunit=yes
++     ],[
++       AC_MSG_RESULT([no])
++-      AM_CONDITIONAL(CPPUNIT, false)
++     ])
++   else
++     PKG_CHECK_MODULES(CPPUNIT, $CPPUNITPC >= 1.9.6, [
++       AC_DEFINE([HAVE_CPPUNIT], [1], [cppunit])
++       AC_SUBST(CPPUNIT_CFLAGS)
++       AC_SUBST(CPPUNIT_LIBS)
++-      AM_CONDITIONAL([CPPUNIT], true)
++-    ],[AM_CONDITIONAL([CPPUNIT], false)])
+++      found_cppunit=yes
+++    ])
++   fi
++-else
++-  AM_CONDITIONAL([CPPUNIT], false)
++ fi
+++AM_CONDITIONAL([CPPUNIT], [test x"$found_cppunit" = xyes])
++ 
++ dnl #########################################################################
++ dnl Check if using log4cpp
+diff --git a/package/linknx/0002-configure.ac-always-define-CPPUNIT.patch b/package/linknx/0002-configure.ac-always-define-CPPUNIT.patch
+deleted file mode 100644
+index 158bad9e9f..0000000000
+--- a/package/linknx/0002-configure.ac-always-define-CPPUNIT.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 1b4a770af42f7d33ad174524b94ea4d2fc7133da Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 21 Apr 2019 19:31:50 +0200
+-Subject: [PATCH] configure.ac: always define CPPUNIT
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/4b042b7e18425690ec26b4977865516bedcb9edb
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/linknx/linknx/pull/42]
+----
+- configure.ac | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 779fd6f..51d8ae6 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -145,8 +145,11 @@ if test x"$WITH_CPPUNIT" != xno; then
+-       AC_DEFINE([HAVE_CPPUNIT], [1], [cppunit])
+-       AC_SUBST(CPPUNIT_CFLAGS)
+-       AC_SUBST(CPPUNIT_LIBS)
+--    ])
+-+      AM_CONDITIONAL([CPPUNIT], true)
+-+    ],[AM_CONDITIONAL([CPPUNIT], false)])
+-   fi
+-+else
+-+  AM_CONDITIONAL([CPPUNIT], false)
+- fi
+- 
+- dnl #########################################################################
+--- 
+-2.20.1
+-
+diff --git a/package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch b/package/linknx/0002-src-Makefile.am-fix-linking-with-log4cpp.patch
+similarity index 85%
+rename from package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch
+rename to package/linknx/0002-src-Makefile.am-fix-linking-with-log4cpp.patch
+index 253c1f6f23..4f1a8e4356 100644
+--- a/package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch
++++ b/package/linknx/0002-src-Makefile.am-fix-linking-with-log4cpp.patch
+@@ -1,6 +1,6 @@
+-From b4595154e84e21abdc0c89f937c410cf8280991c Mon Sep 17 00:00:00 2001
++From 048b9ae8f3c07be217f1738c35ab995ab6394453 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 13 May 2019 22:14:43 +0200
++Date: Sun, 8 Mar 2020 10:02:07 +0100
+ Subject: [PATCH] src/Makefile.am: fix linking with log4cpp
+ 
+ linknx fails to build with log4cpp because LOG4CPP_CFLAGS (which
+@@ -16,13 +16,14 @@ Fixes:
+  - http://autobuild.buildroot.org/results/1863f8f27041bc15ca68e786ba3b8e4764c40574
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: not sent yet]
++[Retrieved from:
++https://github.com/linknx/linknx/commit/048b9ae8f3c07be217f1738c35ab995ab6394453]
+ ---
+  src/Makefile.am | 3 ++-
+  1 file changed, 2 insertions(+), 1 deletion(-)
+ 
+ diff --git a/src/Makefile.am b/src/Makefile.am
+-index 6a4f493..92d147c 100644
++index 6e0dc03b..5065c248 100644
+ --- a/src/Makefile.am
+ +++ b/src/Makefile.am
+ @@ -6,6 +6,7 @@ else
+@@ -32,8 +33,5 @@ index 6a4f493..92d147c 100644
+ -AM_CPPFLAGS=-I$(top_srcdir)/include -I$(top_srcdir)/ticpp $(B64_CFLAGS) $(PTH_CPPFLAGS) $(LIBCURL_CPPFLAGS) $(LOG4CPP_CFLAGS) $(LUA_CFLAGS) $(MYSQL_CFLAGS) $(ESMTP_CFLAGS)
+ +AM_CPPFLAGS=-I$(top_srcdir)/include -I$(top_srcdir)/ticpp $(B64_CFLAGS) $(PTH_CPPFLAGS) $(LIBCURL_CPPFLAGS) $(LUA_CFLAGS) $(MYSQL_CFLAGS) $(ESMTP_CFLAGS)
+ +AM_CXXFLAGS=$(LOG4CPP_CFLAGS)
+- linknx_LDADD=$(top_srcdir)/ticpp/libticpp.a $(B64_LIBS) $(PTH_LDFLAGS) $(PTH_LIBS) $(LIBCURL) $(LOG4CPP_LIBS) $(LUA_LIBS) $(MYSQL_LIBS) $(ESMTP_LIBS) -lm
++ linknx_LDADD=$(top_srcdir)/ticpp/libticpp.a $(LIBICONV) $(B64_LIBS) $(PTH_LDFLAGS) $(PTH_LIBS) $(LIBCURL) $(LOG4CPP_LIBS) $(LUA_LIBS) $(MYSQL_LIBS) $(ESMTP_LIBS) -lm
+  linknx_SOURCES=linknx.cpp logger.cpp ruleserver.cpp objectcontroller.cpp eibclient.c threads.cpp timermanager.cpp  persistentstorage.cpp xmlserver.cpp smsgateway.cpp emailgateway.cpp knxconnection.cpp services.cpp suncalc.cpp  luacondition.cpp ioport.cpp ruleserver.h objectcontroller.h threads.h timermanager.h persistentstorage.h xmlserver.h smsgateway.h emailgateway.h knxconnection.h services.h suncalc.h luacondition.h ioport.h logger.h
+--- 
+-2.20.1
+-
+diff --git a/package/linknx/linknx.hash b/package/linknx/linknx.hash
+index 79113e6e70..86ec522809 100644
+--- a/package/linknx/linknx.hash
++++ b/package/linknx/linknx.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 3c3aaf8c409538153b15f5fb975a4485e58c4820cfea289a3f20777ba69782ab  linknx-0.0.1.37.tar.gz
+-sha256 c03cea027b4b40e4402fabd08557736727ec3d5bc54ad64ab6472de432198cad  LICENSE
++sha256  00c53776c2e871295459ede922402d8ad0208367d2364781fdb92ddafad94d3d  linknx-0.0.1.38.tar.gz
++sha256  c03cea027b4b40e4402fabd08557736727ec3d5bc54ad64ab6472de432198cad  LICENSE
+diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
+index c75f0655d6..dbee0742fe 100644
+--- a/package/linknx/linknx.mk
++++ b/package/linknx/linknx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINKNX_VERSION = 0.0.1.37
++LINKNX_VERSION = 0.0.1.38
+ LINKNX_SITE = $(call github,linknx,linknx,$(LINKNX_VERSION))
+ LINKNX_LICENSE = GPL-2.0+
+ LINKNX_LICENSE_FILES = LICENSE
+@@ -17,7 +17,9 @@ LINKNX_CONF_OPTS = \
+ 	--with-pth=$(STAGING_DIR)/usr \
+ 	--disable-smtp
+ 
++# add host-gettext for AM_ICONV macro
+ LINKNX_DEPENDENCIES = \
++	host-gettext \
+ 	host-pkgconf \
+ 	libpthsem \
+ 	$(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone) \
