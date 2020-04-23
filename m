@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Apr 2020 22:50:12 +0200
-Subject: [Buildroot] [git commit] package/luafilesystem: bump to version
- 1.8.0
-Message-ID: <20200423203554.299118FDC7@busybox.osuosl.org>
+Date: Thu, 23 Apr 2020 22:54:25 +0200
+Subject: [Buildroot] [git commit] package/apcupsd: always depend on threads
+Message-ID: <20200423204007.38DB48FDCC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2af08373668be47e858d233962dd3c55b69de465
+commit: https://git.buildroot.net/buildroot/commit/?id=30365ace8a564576775896c859fc79c4813d5c98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes:
+http://autobuild.buildroot.net/results/aa2ad7bdb37da611a4ec863ed2e986f34ea5228b/build-end.log
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luafilesystem/luafilesystem.hash | 2 +-
- package/luafilesystem/luafilesystem.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/apcupsd/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/luafilesystem/luafilesystem.hash b/package/luafilesystem/luafilesystem.hash
-index 9afc05c256..747b984802 100644
---- a/package/luafilesystem/luafilesystem.hash
-+++ b/package/luafilesystem/luafilesystem.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 65e6d437e577a1d6cd509b6cd224d2cb9501d58d32a72cafbd4fd3f911681576  luafilesystem-1.7.0-2.src.rock
-+sha256 576270a55752894254c2cba0d49d73595d37ec4ea8a75e557fdae7aff80e19cf  luafilesystem-1.8.0-1.src.rock
- sha256 beb2c9eed6466d572c3888028a77421206053a3c023429cbd69e5015badba842  luafilesystem/LICENSE
-diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
-index 37f265e2b6..b8b07176c6 100644
---- a/package/luafilesystem/luafilesystem.mk
-+++ b/package/luafilesystem/luafilesystem.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/apcupsd/Config.in b/package/apcupsd/Config.in
+index 2849736a1a..4bc523eed4 100644
+--- a/package/apcupsd/Config.in
++++ b/package/apcupsd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_APCUPSD
+ 	bool "apcupsd"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  A daemon for controlling APC UPSes.
+@@ -64,6 +65,6 @@ comment "usb support needs a toolchain w/ threads"
  
--LUAFILESYSTEM_VERSION = 1.7.0-2
-+LUAFILESYSTEM_VERSION = 1.8.0-1
- LUAFILESYSTEM_SUBDIR = luafilesystem
- LUAFILESYSTEM_LICENSE = MIT
- LUAFILESYSTEM_LICENSE_FILES = $(LUAFILESYSTEM_SUBDIR)/LICENSE
+ endif
+ 
+-comment "apcupsd needs a toolchain w/ C++"
++comment "apcupsd needs a toolchain w/ C++, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
