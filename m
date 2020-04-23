@@ -1,64 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Apr 2020 23:23:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd: bump version to v245.5
-In-Reply-To: <20200423174005.292532-1-aduskett@gmail.com>
-References: <20200423174005.292532-1-aduskett@gmail.com>
-Message-ID: <20200423212316.GU5035@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 23 Apr 2020 23:26:10 +0200
+Subject: [Buildroot] [git commit] package/iwd: fix build with glibc < 2.24
+Message-ID: <20200423211154.115188FDDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d22f3d1124db2b1460df6e42e7d323efde3fce86
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-23 10:40 -0700, aduskett at gmail.com spake thusly:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/63f983aa22ca5303a55bc55e004f05a94e5f7259
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...01-frame-xchg.c-fix-build-with-glibc-2.24.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/systemd/systemd.hash | 2 +-
->  package/systemd/systemd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-> index eacb797ed4..ea67a0ef7f 100644
-> --- a/package/systemd/systemd.hash
-> +++ b/package/systemd/systemd.hash
-> @@ -1,5 +1,5 @@
->  # sha256 locally computed
-> -sha256	bd1c467045989ab986b29d003f17960ccb201bc923093db978b4cfb299ae8a63	systemd-245.4.tar.gz
-> +sha256	b754d75617665a53bd0a1e8f5ec526b383f17e1cc06d1056399e5859e0b6fe06	systemd-245.5.tar.gz
->  sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
->  sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
->  sha256	f7299f5f5e8bdffd347dce1bed888b1cea6ddaf27de521c307265098bcbeae92	README
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 296d975a7f..b45a70b7ad 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SYSTEMD_VERSION = 245.4
-> +SYSTEMD_VERSION = 245.5
->  SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
->  SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
->  SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
-> -- 
-> 2.25.3
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch b/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
+new file mode 100644
+index 0000000000..cd0bae4835
+--- /dev/null
++++ b/package/iwd/0001-frame-xchg.c-fix-build-with-glibc-2.24.patch
+@@ -0,0 +1,46 @@
++From 44cd3719eb94c8d5776b37c73993eea0617902f7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 11 Apr 2020 23:21:42 +0200
++Subject: [PATCH] frame-xchg.c: fix build with glibc < 2.24
++
++SOL_NETLINK is used since commit
++87a198111af1ea67053895f7435fb99e3cdd2159 resulting in the following
++build failure with glibc < 2.24:
++
++src/frame-xchg.c: In function 'frame_watch_group_io_read':
++src/frame-xchg.c:328:27: error: 'SOL_NETLINK' undeclared (first use in this function)
++   if (cmsg->cmsg_level != SOL_NETLINK)
++                           ^
++
++This failure is due to glibc that doesn't support SOL_NETLINK before
++version 2.24 and
++https://github.com/bminor/glibc/commit/f9b437d5efce93800b51ad2a437c8b1c9616bf80
++
++Fixes:
++ - http://autobuild.buildroot.org/results/3485088b84111c271bbcfaf025aa4103c6452072
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/ZRN25CA5I7PGUTFIRJLLXN7VHWGDAZDN]
++---
++ src/frame-xchg.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/frame-xchg.c b/src/frame-xchg.c
++index 50351615..4c950fd3 100644
++--- a/src/frame-xchg.c
+++++ b/src/frame-xchg.c
++@@ -42,6 +42,10 @@
++ #include "src/netdev.h"
++ #include "src/frame-xchg.h"
++ 
+++#ifndef SOL_NETLINK
+++#define SOL_NETLINK 270
+++#endif
+++
++ struct watch_group {
++ 	/*
++ 	 * Group IDs, except 0, are per wdev for user's convenience.
++-- 
++2.25.1
++
