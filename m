@@ -1,63 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Apr 2020 22:09:05 +0200
-Subject: [Buildroot] [PATCH 1/3] package/mbedtls: add
- BR2_PACKAGE_MBEDTLS_X509_UNSUPPORTED_CRITICAL_EXTENSION
-In-Reply-To: <20200422192059.790299-1-fontaine.fabrice@gmail.com>
-References: <20200422192059.790299-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200423220905.06d9dc59@windsurf.home>
+Date: Thu, 23 Apr 2020 22:10:05 +0200
+Subject: [Buildroot] [git commit] package/python-colorama: bump to 0.4.3
+Message-ID: <20200423195713.9083D8FC66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 22 Apr 2020 21:20:57 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5d329c4b71f89b75ac9697eddb9f08d2dc2ca87e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add an option to enable
-> MBEDTLS_X509_ALLOW_UNSUPPORTED_CRITICAL_EXTENSION
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mbedtls/Config.in  | 10 ++++++++++
->  package/mbedtls/mbedtls.mk |  8 ++++++++
->  2 files changed, 18 insertions(+)
-> 
-> diff --git a/package/mbedtls/Config.in b/package/mbedtls/Config.in
-> index a39ba65d98..e48f0473b0 100644
-> --- a/package/mbedtls/Config.in
-> +++ b/package/mbedtls/Config.in
-> @@ -29,4 +29,14 @@ config BR2_PACKAGE_MBEDTLS_COMPRESSION
->  	  sure CRIME and similar attacks are not applicable to your
->  	  particular situation.
->  
-> +config BR2_PACKAGE_MBEDTLS_X509_UNSUPPORTED_CRITICAL_EXTENSION
-> +	bool "allow X509 unsupported critical extension"
-> +	help
-> +	  If set, the X509 parser will not break-off when parsing an
-> +	  X509 certificate and encountering an unknown critical
-> +	  extension.
-> +
-> +	  Warning: Depending on your PKI use, enabling this can be a
-> +	  security risk!
-> +
->  endif
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-colorama/python-colorama.hash | 5 ++---
+ package/python-colorama/python-colorama.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-This whole series is pretty awkward. Shouldn't we instead simply not
-allow the use of uacme mbedtls crypto backend ?
-
-What is this X509_UNSUPPORTED_CRITICAL_EXTENSION functionality that is
-so weird that it requires patching the mbedtls config.h file ? Why is
-uacme absolutely requiring this functionality that no other user of
-mbedtls requires ?
-
-Until these questions are answered, I'd prefer to drop support for
-mbedtls as a crypto backend for uacme.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-colorama/python-colorama.hash b/package/python-colorama/python-colorama.hash
+index 06f61f80af..312b9e1f7d 100644
+--- a/package/python-colorama/python-colorama.hash
++++ b/package/python-colorama/python-colorama.hash
+@@ -1,5 +1,4 @@
+-# md5, sha256 from https://pypi.org/pypi/colorama/json
+-md5	f927529cd1735f6f50ee2c61628e9c1f  colorama-0.4.1.tar.gz
+-sha256	05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d  colorama-0.4.1.tar.gz
++# sha256 from https://pypi.org/pypi/colorama/json
++sha256  e96da0d330793e2cb9485e9ddfd918d456036c7149416295932478192f4436a1  colorama-0.4.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256	cac35c02686e5d04a5a7140bfb3b36e73aed496656e891102e428886d7930318  LICENSE.txt
+diff --git a/package/python-colorama/python-colorama.mk b/package/python-colorama/python-colorama.mk
+index 2f4bc5e1f1..6117b853a2 100644
+--- a/package/python-colorama/python-colorama.mk
++++ b/package/python-colorama/python-colorama.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_COLORAMA_VERSION = 0.4.1
++PYTHON_COLORAMA_VERSION = 0.4.3
+ PYTHON_COLORAMA_SOURCE = colorama-$(PYTHON_COLORAMA_VERSION).tar.gz
+-PYTHON_COLORAMA_SITE = https://files.pythonhosted.org/packages/76/53/e785891dce0e2f2b9f4b4ff5bc6062a53332ed28833c7afede841f46a5db
++PYTHON_COLORAMA_SITE = https://files.pythonhosted.org/packages/82/75/f2a4c0c94c85e2693c229142eb448840fba0f9230111faa889d1f541d12d
+ PYTHON_COLORAMA_SETUP_TYPE = setuptools
+ PYTHON_COLORAMA_LICENSE = BSD-3-Clause
+ PYTHON_COLORAMA_LICENSE_FILES = LICENSE.txt
