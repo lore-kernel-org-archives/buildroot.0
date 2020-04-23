@@ -1,29 +1,31 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 23 Apr 2020 06:43:06 +0000
-Subject: [Buildroot] [Bug 12661] cups problems in buildroot
-In-Reply-To: <bug-12661-163@https.bugs.busybox.net/>
-References: <bug-12661-163@https.bugs.busybox.net/>
-Message-ID: <bug-12661-163-bI7UqmJyB4@https.bugs.busybox.net/>
+Date: Thu, 23 Apr 2020 06:44:26 +0000
+Subject: [Buildroot] [Bug 12806] New: There are multiple issues in buildroot
+ that faults cups printing
+Message-ID: <bug-12806-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12661
+https://bugs.busybox.net/show_bug.cgi?id=12806
 
---- Comment #3 from Alexey <skif@skif-web.ru> ---
-I found the answer myself
-
-It's big complex ptobleb with qpdf, cups-filters and ghostscrips
-patchs sumbitted:
-
-http://lists.busybox.net/pipermail/buildroot/2020-April/279672.html
-http://lists.busybox.net/pipermail/buildroot/2020-April/279676.html
-http://lists.busybox.net/pipermail/buildroot/2020-April/279677.html
-http://lists.busybox.net/pipermail/buildroot/2020-April/279673.html
-
-There are multiple issues in buildroot that faults cups printing.
+            Bug ID: 12806
+           Summary: There are multiple issues in buildroot that faults
+                    cups printing
+           Product: buildroot
+           Version: 2020.02.1
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: skif at skif-web.ru
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
 First trouble is incorrect qpdf buiding.
 Qpdf is mandatory dependence of cups.
