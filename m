@@ -1,91 +1,131 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 24 Apr 2020 23:40:20 +0200
-Subject: [Buildroot] [PATCH] package/apparmor: fix compilation with libintl
-Message-ID: <20200424214020.381865-1-angelo@amarulasolutions.com>
+Date: Fri, 24 Apr 2020 23:40:38 +0200
+Subject: [Buildroot] [PATCH] package/apparmor: bump to version 2.13.4
+Message-ID: <20200424214038.382827-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libintl is enabled, Apparmor should link againts libintl.
-The attached patch is already sent upstream.
+This patch bumps apparmor/libapparmor to version 2.13.4.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- ...inutils-fix-compilation-with-libintl.patch | 48 +++++++++++++++++++
- package/apparmor/apparmor.mk                  |  4 ++
- 2 files changed, 52 insertions(+)
- create mode 100644 package/apparmor/0001-parser-binutils-fix-compilation-with-libintl.patch
+ package/apparmor/apparmor.hash                |  2 +-
+ package/apparmor/apparmor.mk                  |  2 +-
+ ...el-fixing-for-crosscompiling-environ.patch | 21 +++++++------------
+ package/libapparmor/libapparmor.hash          |  2 +-
+ package/libapparmor/libapparmor.mk            |  2 +-
+ 5 files changed, 12 insertions(+), 17 deletions(-)
 
-diff --git a/package/apparmor/0001-parser-binutils-fix-compilation-with-libintl.patch b/package/apparmor/0001-parser-binutils-fix-compilation-with-libintl.patch
-new file mode 100644
-index 0000000000..d3f4a51646
---- /dev/null
-+++ b/package/apparmor/0001-parser-binutils-fix-compilation-with-libintl.patch
-@@ -0,0 +1,48 @@
-+From c9fe40d9386a5e4cf99f44df9b98382d83f1c4f4 Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo@amarulasolutions.com>
-+Date: Fri, 24 Apr 2020 17:34:24 +0200
-+Subject: [PATCH] parser: binutils: fix compilation with libintl
-+
-+When libintl is available on the system, we need to link against the
-+libintl library too.
-+
-+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-+---
-+ binutils/Makefile | 4 ++++
-+ parser/Makefile   | 5 +++++
-+ 2 files changed, 9 insertions(+)
-+
-+diff --git a/binutils/Makefile b/binutils/Makefile
-+index 11459bec..d8c1b634 100644
-+--- a/binutils/Makefile
-++++ b/binutils/Makefile
-+@@ -56,6 +56,10 @@ SBINTOOLS = aa-status
-+ 
-+ AALIB = -Wl,-Bstatic -lapparmor  -Wl,-Bdynamic -lpthread
-+ 
-++ifdef WITH_LIBINTL
-++	AALIB += -lintl
-++endif
-++
-+ ifdef USE_SYSTEM
-+   # Using the system libapparmor so Makefile dependencies can't be used
-+   LIBAPPARMOR_A =
-+diff --git a/parser/Makefile b/parser/Makefile
-+index eab64be9..998230ee 100644
-+--- a/parser/Makefile
-++++ b/parser/Makefile
-+@@ -91,6 +91,11 @@ AAREOBJECTS = $(AAREOBJECT)
-+ AARE_LDFLAGS = -static-libgcc -static-libstdc++ -L. $(LDFLAGS)
-+ AALIB = -Wl,-Bstatic -lapparmor -Wl,-Bdynamic -lpthread
-+ 
-++ifdef WITH_LIBINTL
-++	AALIB += -lintl
-++endif
-++
-++
-+ ifdef USE_SYSTEM
-+   # Using the system libapparmor so Makefile dependencies can't be used
-+   LIBAPPARMOR_A =
-+-- 
-+2.25.1
-+
+diff --git a/package/apparmor/apparmor.hash b/package/apparmor/apparmor.hash
+index 91ab51f6ab..c7caef7beb 100644
+--- a/package/apparmor/apparmor.hash
++++ b/package/apparmor/apparmor.hash
+@@ -1,4 +1,4 @@
+ # locally computed
+-sha256  267053234c68cdb122c5294d7c276b6e2f5fa7e75c6c2d23e3ce69f95d9a7639  apparmor-2.13.3.tar.gz
++sha256  90bf86c07ffbe2c22be46d75c7345fad12d5911653c59750a37d59c63ad5d10e  apparmor-2.13.4.tar.gz
+ sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
+ sha256  dd54950fa69a3096fe907a466a454d217ccca9bca77398d5232704766d5a0040  parser/COPYING.GPL
 diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-index 9180fcd803..c3b9d9fab9 100644
+index c3b9d9fab9..5c67e15106 100644
 --- a/package/apparmor/apparmor.mk
 +++ b/package/apparmor/apparmor.mk
-@@ -17,6 +17,10 @@ APPARMOR_DEPENDENCIES = libapparmor
- APPARMOR_TOOLS = parser
- APPARMOR_MAKE_OPTS = USE_SYSTEM=1 DISTRO=unknown
+@@ -6,7 +6,7 @@
  
-+ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
-+APPARMOR_MAKE_OPTS += WITH_LIBINTL=1
-+endif
-+
- ifeq ($(BR2_PACKAGE_APPARMOR_BINUTILS),y)
- APPARMOR_TOOLS += binutils
- endif
+ # When updating the version here, please also update the libapparmor package
+ APPARMOR_VERSION_MAJOR = 2.13
+-APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).3
++APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).4
+ APPARMOR_SITE = https://launchpad.net/apparmor/$(APPARMOR_VERSION_MAJOR)/$(APPARMOR_VERSION)/+download
+ APPARMOR_DL_SUBDIR = libapparmor
+ APPARMOR_LICENSE = GPL-2.0
+diff --git a/package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch b/package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch
+index 7b902d5970..ecd8d6c163 100644
+--- a/package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch
++++ b/package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch
+@@ -1,4 +1,4 @@
+-From 235ce271f3fee53b918317ebb73a47b3c6a7ae03 Mon Sep 17 00:00:00 2001
++From 64e5c6b23de9c147881680f3daccb995263c34a3 Mon Sep 17 00:00:00 2001
+ From: Angelo Compagnucci <angelo@amarulasolutions.com>
+ Date: Tue, 24 Mar 2020 22:53:37 +0100
+ Subject: [PATCH] m4: ac_python_devel: fixing for crosscompiling environments
+@@ -14,11 +14,11 @@ python-config and fixes the rest of the m4 accordingly.
+ 
+ Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ ---
+- libraries/libapparmor/m4/ac_python_devel.m4 | 25 ++++++++++++++++-----
+- 1 file changed, 19 insertions(+), 6 deletions(-)
++ libraries/libapparmor/m4/ac_python_devel.m4 | 23 ++++++++++++++++-----
++ 1 file changed, 18 insertions(+), 5 deletions(-)
+ 
+ diff --git a/libraries/libapparmor/m4/ac_python_devel.m4 b/libraries/libapparmor/m4/ac_python_devel.m4
+-index 2ea7dc77..6454e2d8 100644
++index 29cf090d..6454e2d8 100644
+ --- a/libraries/libapparmor/m4/ac_python_devel.m4
+ +++ b/libraries/libapparmor/m4/ac_python_devel.m4
+ @@ -13,6 +13,11 @@ AC_DEFUN([AC_PYTHON_DEVEL],[
+@@ -55,7 +55,7 @@ index 2ea7dc77..6454e2d8 100644
+          fi
+          if test -z "$PYTHON_LDFLAGS"; then
+                  # (makes two attempts to ensure we've got a version number
+-@@ -136,10 +141,14 @@ sys.stdout.write('%s\n' % distutils.sysconfig.get_python_lib(0,0));"`
++@@ -136,6 +141,10 @@ sys.stdout.write('%s\n' % distutils.sysconfig.get_python_lib(0,0));"`
+          # libraries which must be linked in when embedding
+          #
+          AC_MSG_CHECKING(python extra libraries)
+@@ -66,12 +66,7 @@ index 2ea7dc77..6454e2d8 100644
+          if test -z "$PYTHON_EXTRA_LIBS"; then
+             PYTHON_EXTRA_LIBS=`$PYTHON -c "import sys; import distutils.sysconfig; \
+  conf = distutils.sysconfig.get_config_var; \
+--sys.stdout.write('%s %s\n' % (conf('LOCALMODLIBS'), conf('LIBS')))"`
+-+sys.stdout.write('%s %s %s\n' % (conf('BLDLIBRARY'), conf('LOCALMODLIBS'), conf('LIBS')))"`
+-         fi
+-         AC_MSG_RESULT([$PYTHON_EXTRA_LIBS])
+-         AC_SUBST(PYTHON_EXTRA_LIBS)
+-@@ -148,6 +157,10 @@ sys.stdout.write('%s %s\n' % (conf('LOCALMODLIBS'), conf('LIBS')))"`
++@@ -148,6 +157,10 @@ sys.stdout.write('%s %s %s\n' % (conf('BLDLIBRARY'), conf('LOCALMODLIBS'), conf(
+          # linking flags needed when embedding
+          #
+          AC_MSG_CHECKING(python extra linking flags)
+@@ -86,11 +81,11 @@ index 2ea7dc77..6454e2d8 100644
+          # save current global flags
+          ac_save_LIBS="$LIBS"
+          ac_save_CPPFLAGS="$CPPFLAGS"
+--        LIBS="$ac_save_LIBS $PYTHON_LDFLAGS"
++-        LIBS="$ac_save_LIBS $PYTHON_LDFLAGS $PYTHON_EXTRA_LIBS"
+ +        LIBS="$ac_save_LIBS $PYTHON_EXTRA_LIBS $PYTHON_LDFLAGS"
+          CPPFLAGS="$ac_save_CPPFLAGS $PYTHON_CPPFLAGS"
+          AC_TRY_LINK([
+                  #include <Python.h>
+ -- 
+-2.17.1
++2.25.1
+ 
+diff --git a/package/libapparmor/libapparmor.hash b/package/libapparmor/libapparmor.hash
+index 3bff2bc853..a0ff221914 100644
+--- a/package/libapparmor/libapparmor.hash
++++ b/package/libapparmor/libapparmor.hash
+@@ -1,4 +1,4 @@
+ # locally computed
+-sha256  267053234c68cdb122c5294d7c276b6e2f5fa7e75c6c2d23e3ce69f95d9a7639  apparmor-2.13.3.tar.gz
++sha256  90bf86c07ffbe2c22be46d75c7345fad12d5911653c59750a37d59c63ad5d10e  apparmor-2.13.4.tar.gz
+ sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libraries/libapparmor/COPYING.LGPL
+diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
+index 98037c64a6..db5839b07c 100644
+--- a/package/libapparmor/libapparmor.mk
++++ b/package/libapparmor/libapparmor.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version here, please also update the apparmor package
+ LIBAPPARMOR_VERSION_MAJOR = 2.13
+-LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).3
++LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).4
+ LIBAPPARMOR_SOURCE = apparmor-$(LIBAPPARMOR_VERSION).tar.gz
+ LIBAPPARMOR_SITE = https://launchpad.net/apparmor/$(LIBAPPARMOR_VERSION_MAJOR)/$(LIBAPPARMOR_VERSION)/+download
+ LIBAPPARMOR_LICENSE = LGPL-2.1
 -- 
 2.25.1
