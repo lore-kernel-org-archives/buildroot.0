@@ -1,131 +1,201 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 24 Apr 2020 23:40:38 +0200
-Subject: [Buildroot] [PATCH] package/apparmor: bump to version 2.13.4
-Message-ID: <20200424214038.382827-1-angelo@amarulasolutions.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Apr 2020 00:14:48 +0200
+Subject: [Buildroot] [PATCH v3 2/2] package/firewalld: new package
+In-Reply-To: <CAFSsvmqFEN7TM5JQOaeMrTd2KaxT6K=7xAku21YvzuLjW9-psg@mail.gmail.com>
+References: <20200423173302.280424-1-aduskett@gmail.com>
+ <20200423173302.280424-2-aduskett@gmail.com>
+ <20200423211911.GT5035@scaer>
+ <CAFSsvmqFEN7TM5JQOaeMrTd2KaxT6K=7xAku21YvzuLjW9-psg@mail.gmail.com>
+Message-ID: <20200424221448.GM5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps apparmor/libapparmor to version 2.13.4.
+Adam, All,
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/apparmor/apparmor.hash                |  2 +-
- package/apparmor/apparmor.mk                  |  2 +-
- ...el-fixing-for-crosscompiling-environ.patch | 21 +++++++------------
- package/libapparmor/libapparmor.hash          |  2 +-
- package/libapparmor/libapparmor.mk            |  2 +-
- 5 files changed, 12 insertions(+), 17 deletions(-)
+On 2020-04-24 12:14 -0700, Adam Duskett spake thusly:
+> On Thu, Apr 23, 2020 at 2:19 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >
+> > On 2020-04-23 10:33 -0700, aduskett at gmail.com spake thusly:
+> > > From: Adam Duskett <Aduskett@gmail.com>
+> > >
+> > > Firewalld provides a dynamically managed firewall with
+> > > support for network or firewall zones to define the trust level of network
+> > > connections or interfaces.
+> > >
+> > > Items of note:
+> > >
+> > >  - Iptables is set as a requirement because many applications such as Docker
+> > >    require direct-passthrough rules which firewalld does not support.
+> > >
+> > >  - Setting FIREWALLD_AUTORECONF=YES results in the following error:
+> > >    "error: cannot find input file: `po/Makefile.in.in'" As such, a manual call
+> > >    to autogen.sh is necessary with PATH=$(BR_PATH) set to ensure the script
+> > >    uses the host intltoolize binary.
+> >
+> > I think we can do better. ;-)
+> >
+> >     # Prpare the tree as autogen.sh would; allows using _AUTORECONF=YES
+> >     define FIREWALLD_INTLTOOLIZE
+> >         ls -1 $(@D)/po/*.po |sed -r -e 's:.*/::; s:.po$$::' >$(@D)/po/LINGUAS
+> >         cd $(@D) && $(HOST_DIR)/bin/intltoolize --force --automake
+> >     endef
+> >     FIREWALLD_PRE_CONFIGURE_HOOKS += FIREWALLD_INTLTOOLIZE
+> >
+> I heavily disagree:
+> 1) The existing autogen.sh script may change in the future which would
+> make this macro
+>     more unmaintanable.
+> 2) package/sdl/sdl.mk has PATH=$(BR_PATH) ./autogen.sh, which means
+> there is already
+>     a precident for this kind of logic.
 
-diff --git a/package/apparmor/apparmor.hash b/package/apparmor/apparmor.hash
-index 91ab51f6ab..c7caef7beb 100644
---- a/package/apparmor/apparmor.hash
-+++ b/package/apparmor/apparmor.hash
-@@ -1,4 +1,4 @@
- # locally computed
--sha256  267053234c68cdb122c5294d7c276b6e2f5fa7e75c6c2d23e3ce69f95d9a7639  apparmor-2.13.3.tar.gz
-+sha256  90bf86c07ffbe2c22be46d75c7345fad12d5911653c59750a37d59c63ad5d10e  apparmor-2.13.4.tar.gz
- sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
- sha256  dd54950fa69a3096fe907a466a454d217ccca9bca77398d5232704766d5a0040  parser/COPYING.GPL
-diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-index c3b9d9fab9..5c67e15106 100644
---- a/package/apparmor/apparmor.mk
-+++ b/package/apparmor/apparmor.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version here, please also update the libapparmor package
- APPARMOR_VERSION_MAJOR = 2.13
--APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).3
-+APPARMOR_VERSION = $(APPARMOR_VERSION_MAJOR).4
- APPARMOR_SITE = https://launchpad.net/apparmor/$(APPARMOR_VERSION_MAJOR)/$(APPARMOR_VERSION)/+download
- APPARMOR_DL_SUBDIR = libapparmor
- APPARMOR_LICENSE = GPL-2.0
-diff --git a/package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch b/package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch
-index 7b902d5970..ecd8d6c163 100644
---- a/package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch
-+++ b/package/libapparmor/0001-m4-ac_python_devel-fixing-for-crosscompiling-environ.patch
-@@ -1,4 +1,4 @@
--From 235ce271f3fee53b918317ebb73a47b3c6a7ae03 Mon Sep 17 00:00:00 2001
-+From 64e5c6b23de9c147881680f3daccb995263c34a3 Mon Sep 17 00:00:00 2001
- From: Angelo Compagnucci <angelo@amarulasolutions.com>
- Date: Tue, 24 Mar 2020 22:53:37 +0100
- Subject: [PATCH] m4: ac_python_devel: fixing for crosscompiling environments
-@@ -14,11 +14,11 @@ python-config and fixes the rest of the m4 accordingly.
- 
- Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
- ---
-- libraries/libapparmor/m4/ac_python_devel.m4 | 25 ++++++++++++++++-----
-- 1 file changed, 19 insertions(+), 6 deletions(-)
-+ libraries/libapparmor/m4/ac_python_devel.m4 | 23 ++++++++++++++++-----
-+ 1 file changed, 18 insertions(+), 5 deletions(-)
- 
- diff --git a/libraries/libapparmor/m4/ac_python_devel.m4 b/libraries/libapparmor/m4/ac_python_devel.m4
--index 2ea7dc77..6454e2d8 100644
-+index 29cf090d..6454e2d8 100644
- --- a/libraries/libapparmor/m4/ac_python_devel.m4
- +++ b/libraries/libapparmor/m4/ac_python_devel.m4
- @@ -13,6 +13,11 @@ AC_DEFUN([AC_PYTHON_DEVEL],[
-@@ -55,7 +55,7 @@ index 2ea7dc77..6454e2d8 100644
-          fi
-          if test -z "$PYTHON_LDFLAGS"; then
-                  # (makes two attempts to ensure we've got a version number
--@@ -136,10 +141,14 @@ sys.stdout.write('%s\n' % distutils.sysconfig.get_python_lib(0,0));"`
-+@@ -136,6 +141,10 @@ sys.stdout.write('%s\n' % distutils.sysconfig.get_python_lib(0,0));"`
-          # libraries which must be linked in when embedding
-          #
-          AC_MSG_CHECKING(python extra libraries)
-@@ -66,12 +66,7 @@ index 2ea7dc77..6454e2d8 100644
-          if test -z "$PYTHON_EXTRA_LIBS"; then
-             PYTHON_EXTRA_LIBS=`$PYTHON -c "import sys; import distutils.sysconfig; \
-  conf = distutils.sysconfig.get_config_var; \
---sys.stdout.write('%s %s\n' % (conf('LOCALMODLIBS'), conf('LIBS')))"`
--+sys.stdout.write('%s %s %s\n' % (conf('BLDLIBRARY'), conf('LOCALMODLIBS'), conf('LIBS')))"`
--         fi
--         AC_MSG_RESULT([$PYTHON_EXTRA_LIBS])
--         AC_SUBST(PYTHON_EXTRA_LIBS)
--@@ -148,6 +157,10 @@ sys.stdout.write('%s %s\n' % (conf('LOCALMODLIBS'), conf('LIBS')))"`
-+@@ -148,6 +157,10 @@ sys.stdout.write('%s %s %s\n' % (conf('BLDLIBRARY'), conf('LOCALMODLIBS'), conf(
-          # linking flags needed when embedding
-          #
-          AC_MSG_CHECKING(python extra linking flags)
-@@ -86,11 +81,11 @@ index 2ea7dc77..6454e2d8 100644
-          # save current global flags
-          ac_save_LIBS="$LIBS"
-          ac_save_CPPFLAGS="$CPPFLAGS"
---        LIBS="$ac_save_LIBS $PYTHON_LDFLAGS"
-+-        LIBS="$ac_save_LIBS $PYTHON_LDFLAGS $PYTHON_EXTRA_LIBS"
- +        LIBS="$ac_save_LIBS $PYTHON_EXTRA_LIBS $PYTHON_LDFLAGS"
-          CPPFLAGS="$ac_save_CPPFLAGS $PYTHON_CPPFLAGS"
-          AC_TRY_LINK([
-                  #include <Python.h>
- -- 
--2.17.1
-+2.25.1
- 
-diff --git a/package/libapparmor/libapparmor.hash b/package/libapparmor/libapparmor.hash
-index 3bff2bc853..a0ff221914 100644
---- a/package/libapparmor/libapparmor.hash
-+++ b/package/libapparmor/libapparmor.hash
-@@ -1,4 +1,4 @@
- # locally computed
--sha256  267053234c68cdb122c5294d7c276b6e2f5fa7e75c6c2d23e3ce69f95d9a7639  apparmor-2.13.3.tar.gz
-+sha256  90bf86c07ffbe2c22be46d75c7345fad12d5911653c59750a37d59c63ad5d10e  apparmor-2.13.4.tar.gz
- sha256  a7e0cdcbea5c14927cedfc600d46526bdcbb1eb0a4d951e2ea53c2a6de159cb4  LICENSE
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libraries/libapparmor/COPYING.LGPL
-diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
-index 98037c64a6..db5839b07c 100644
---- a/package/libapparmor/libapparmor.mk
-+++ b/package/libapparmor/libapparmor.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version here, please also update the apparmor package
- LIBAPPARMOR_VERSION_MAJOR = 2.13
--LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).3
-+LIBAPPARMOR_VERSION = $(LIBAPPARMOR_VERSION_MAJOR).4
- LIBAPPARMOR_SOURCE = apparmor-$(LIBAPPARMOR_VERSION).tar.gz
- LIBAPPARMOR_SITE = https://launchpad.net/apparmor/$(LIBAPPARMOR_VERSION_MAJOR)/$(LIBAPPARMOR_VERSION)/+download
- LIBAPPARMOR_LICENSE = LGPL-2.1
+Few things:
+
+ 1- the autogen.sh script calls autoreconf with a different set of
+    arguments as our infra does, notably it does not pass the paths to
+    the other tools, and as such does not pass the paths to the autoconf
+    local include directories;
+
+ 2- the SDL autoreconf does not work with our AUTORECONF=YES infra,
+    while firewalld should work nicely after the intltoolize preparation
+    step.
+
+ 3- indeed it puts a little bit more burden on our shoulders, but in
+    fact all this discussion is moot is you switch to using the released
+    tarball, rather than a git cnashot: be careful that the github
+    helper macro will point to a github-generated tarball. However,
+    firewalld maintainers has uploaded a released tarball:
+
+    https://github.com/firewalld/firewalld/releases/download/v0.8.2/firewalld-0.8.2.tar.gz
+
+So, if you switch to that, we no longer need to autoreconf (unless
+you're going to patch one of the autotools files...)
+
+> > >  - Setting PYTHON="/usr/bin/env python$(PYTHON3_VERSION_MAJOR)" prevents
+> > >    Firewalld from setting the shebang in the installed python files to the full
+> > >    path to the python interpreter used when building.
+> > >
+> > >  - The bundled provided SYSV init file has several bashisms and requires
+> > >    /etc/init.d/functions which buildroot doesn't provide. So instead, we
+> > >    provide a more simple init.d file in the package directory, which does not
+> > >    require bash.
+> > >
+> > > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> > > ---
+> > [--SNIP--]
+> > > diff --git a/package/firewalld/firewalld.hash b/package/firewalld/firewalld.hash
+> > > new file mode 100644
+> > > index 0000000000..93cf67ccea
+> > > --- /dev/null
+> > > +++ b/package/firewalld/firewalld.hash
+> > > @@ -0,0 +1,3 @@
+> > > +# Locally computed
+> > > +sha256  769c57d5c49218821ad30639a3f802831f9618899e403a811802c56e30f93c79  firewalld-v0.8.2.tar.gz
+> > > +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> > > diff --git a/package/firewalld/firewalld.mk b/package/firewalld/firewalld.mk
+> > > new file mode 100644
+> > > index 0000000000..aedc250be1
+> > > --- /dev/null
+> > > +++ b/package/firewalld/firewalld.mk
+> > > @@ -0,0 +1,84 @@
+> > > +# iptables, ip6tables, ebtables, and ipset *should* be unnecessary
+> > > +# when the nftables backend is available, because nftables supersedes all of
+> > > +# them. However we still need to build and install iptables and ip6tables
+> > > +# because application relying on direct passthrough rules (IE docker) will
+> > > +# break.
+> >
+> > So it should nt be the responsibility of firewalld to select iptables or
+> > ebtables, but the individual applications, like docker, which should
+> > either unconditionally select them, or conditionally select them, like
+> > for example:
+> >
+> Possibly? This change would have the potential to make things far more
+> complicated,
+> as docker is just one example. I can't find a distribution (including
+> OE) that does not always
+> compile firewalld with iptables.
+
+OK, so this comment of mine is moot: I read in diagonal, and too fast.
+Ignore it and keep your code+comment as-is, sorry...
+
+Yet, there is still a little nit, below...
+
+> >     seelct BR2_PACKAGE_IPTABLES if BR2_PACKAGE_FIREWALLD
+> >
+> > > +# /etc/sysconfig/firewalld is a Red Hat-ism, only referenced by
+> > > +# the Red Hat-specific init script which isn't used, so we set
+> > > +# --disable-sysconfig.
+> > > +FIREWALLD_CONF_OPTS += \
+> > > +     --disable-rpmmacros \
+> > > +     --disable-sysconfig \
+> > > +     --with-ip6tables-restore=/usr/sbin/ip6tables-restore \
+> > > +     --with-ip6tables=/usr/sbin/ip6tables \
+> > > +     --with-iptables-restore=/usr/sbin/iptables-restore \
+> > > +     --with-iptables=/usr/sbin/iptables \
+> > > +     --with-nft=/usr/sbin/nft \
+> > > +     --without-ebtables \
+> > > +     --without-ebtables-restore \
+> > > +     --without-ipset \
+
+Why are you selecting BR2_PACKAGE_EBTABLES and BR2_PACKAGE_IPSET in
+Config.in if you explicitly disable support for them here?
+
+Regards,
+Yann E. MORIN.
+
+> > > +     --without-xml-catalog
+> > > +
+> > > +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> > > +FIREWALLD_DEPENDENCIES += systemd
+> > > +FIREWALLD_CONF_OPTS += --with-systemd-unitdir=/usr/lib/systemd/system
+> >
+> > We also want an explicit --enable-systemd
+> >
+> > This was just a quick review, I may come back to it later in the WE...
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > > +else
+> > > +FIREWALLD_CONF_OPTS += --disable-systemd
+> > > +endif
+> > > +
+> > > +define FIREWALLD_INSTALL_INIT_SYSTEMD
+> > > +     $(INSTALL) -D -m 0644 $(@D)/config/firewalld.service \
+> > > +             $(TARGET_DIR)/usr/lib/systemd/system/firewalld.service
+> > > +endef
+> > > +
+> > > +# The bundled sysvinit file requires /etc/init.d/functions which is not
+> > > +# provided by buildroot. As such, we provide our own firewalld init file.
+> > > +define FIREWALLD_INSTALL_INIT_SYSV
+> > > +     $(INSTALL) -D -m 0755 $(FIREWALLD_PKGDIR)/S41firewalld \
+> > > +             $(TARGET_DIR)/etc/init.d/S41firewalld
+> > > +endef
+> > > +
+> > > +$(eval $(autotools-package))
+> > > --
+> > > 2.25.3
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> > --
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
