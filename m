@@ -1,34 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 24 Apr 2020 11:27:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: disable test plugin
-Message-ID: <20200424092732.50603-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Apr 2020 11:29:35 +0200
+Subject: [Buildroot] [git commit] package/apache: fixing apxs path mangling
+Message-ID: <20200424092224.BC8998FE80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-test plugin needs dynamic library support
+commit: https://git.buildroot.net/buildroot/commit/?id=aa04edab77c75bc04ffb52755430bcdeb19c6d74
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Latest version of Apache introduce a new apxs with a slightly modified
+path handling logic. In order to simplify the crosscompilation, the
+software removes the common prefix from bin install dir and build
+install dir, but for this to work they both should have a common prefix.
+
+So we introduce a new regexp to fix /usr/bin to staging dir, the regexps
+are also fixed to replace only the exact path between double quotes, to
+avoid replacing the she-bang line.
 
 Fixes:
- - http://autobuild.buildroot.org/results/ce7c69ceac3390f6d22f777e4cf908188486c6b7
+http://autobuild.buildroot.net/results/c41f31566974209897a3a1ec35afe2536fb248cc
+http://autobuild.buildroot.net/results/b93f19976ce96e79ea159c25ed74a7377c78f334
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+[yann.morin.1998 at free.fr:
+  - add the last few words about the she-bang blurb
+  - do not use quotes in the existing /sur/bin regexp
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libuhttpd/libuhttpd.mk | 1 +
+ package/apache/apache.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index 59a8b45c07..9c026cff02 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -10,6 +10,7 @@ LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
- LIBUHTTPD_INSTALL_STAGING = YES
- LIBUHTTPD_DEPENDENCIES = libev
-+LIBUHTTPD_CONF_OPTS = -DBUILD_TEST_PLUGIN=OFF
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 48a64eae0e..068f36e325 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -99,6 +99,7 @@ APACHE_CONF_OPTS += --disable-deflate
+ endif
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBUHTTPD_DEPENDENCIES += openssl
--- 
-2.25.1
+ define APACHE_FIX_STAGING_APACHE_CONFIG
++	$(SED) 's%"/usr/bin"%"$(STAGING_DIR)/usr/bin"%' $(STAGING_DIR)/usr/bin/apxs
+ 	$(SED) 's%/usr/build%$(STAGING_DIR)/usr/build%' $(STAGING_DIR)/usr/bin/apxs
+ 	$(SED) 's%^prefix =.*%prefix = $(STAGING_DIR)/usr%' $(STAGING_DIR)/usr/build/config_vars.mk
+ endef
