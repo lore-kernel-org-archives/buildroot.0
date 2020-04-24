@@ -1,25 +1,24 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 24 Apr 2020 06:33:58 +0000
-Subject: [Buildroot] [Bug 11866] iniramfs file system fails to boot using
- Grub on EFI x86_64
-In-Reply-To: <bug-11866-163@https.bugs.busybox.net/>
-References: <bug-11866-163@https.bugs.busybox.net/>
-Message-ID: <bug-11866-163-hbW8P2lc5C@https.bugs.busybox.net/>
+Date: Fri, 24 Apr 2020 06:55:01 +0000
+Subject: [Buildroot] [Bug 12811] bootstrap stuck and no login prompt
+In-Reply-To: <bug-12811-163@https.bugs.busybox.net/>
+References: <bug-12811-163@https.bugs.busybox.net/>
+Message-ID: <bug-12811-163-S6jOG8OdkT@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11866
+https://bugs.busybox.net/show_bug.cgi?id=12811
 
---- Comment #5 from Timo Ketola <timo.ketola@exertus.fi> ---
-There is no entry for fs/cpio in the DEVELOPERS file. This bug and the patch
-feels like orphaned.
+--- Comment #2 from cjdc <cristovao.cordeiro@sixsq.com> ---
+Thanks. I naively assumed such changed would be done automatically.
 
-What should we do?
+It worked for the cmdline.txt.
 
-Pete, would you be able to evaluate and test the patch?
+For the openssh however, I assume that is a change that can only be done with
+post-scripts?
 
 -- 
 You are receiving this mail because:
