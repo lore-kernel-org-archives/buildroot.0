@@ -1,29 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Apr 2020 16:46:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rsync: annotate CVE-2017-16548
-In-Reply-To: <CACrMeVBacEVkaA5_qu7z+WVeEGBbTHOVWm+EuaZVHHEu0Mwjdg@mail.gmail.com>
-References: <20200301192727.209357-1-fontaine.fabrice@gmail.com>
- <20200423235315.24b6e0e6@windsurf.home>
- <CACrMeVBacEVkaA5_qu7z+WVeEGBbTHOVWm+EuaZVHHEu0Mwjdg@mail.gmail.com>
-Message-ID: <20200424164642.6d40f924@windsurf.home>
+From: Kevin Vigouroux <ke.vigouroux@laposte.net>
+Date: Fri, 24 Apr 2020 17:00:52 +0200
+Subject: [Buildroot] [Golang] Add support for a bootstrap binary
+Message-ID: <87ftct2ajf.fsf@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 24 Apr 2020 10:36:02 -0400
-Akshay Bhat <akshay.bhat@timesys.com> wrote:
+Hello,
 
-> Thanks for finding this. I have sent the below information to NVD,
-> will post back once I hear more:
-> There is an error in the cpe version information for:
-> https://nvd.nist.gov/vuln/detail/CVE-2017-16548
+Currently, on the supported systems, one way to build Go on the host
+machine is to build it from a binary bootstrap toolchain because the
+source bootstrap toolchain (Go 1.4) does not target some supported
+architectures (ppc64le, aarch64...).
 
-Wow, thanks a lot for sending this up to the NVD database maintainers!
+In practice, I would like to be able to build Go on a *aarch64*
+machine. Then, cross-compiled Go packages to run them on an *arm*
+machine.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+References:
+  - https://golang.org/doc/install/source#bootstrapFromBinaryRelease
+  - https://golang.org/doc/install/source#environment ($GOHOSTOS and
+  $GOHOSTARCH)
+
+Best regards,
+Kevin Vigouroux.
