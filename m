@@ -1,48 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Apr 2020 11:29:35 +0200
-Subject: [Buildroot] [git commit] package/apache: fixing apxs path mangling
-Message-ID: <20200424092224.BC8998FE80@busybox.osuosl.org>
+Date: Fri, 24 Apr 2020 11:39:52 +0200
+Subject: [Buildroot] [PATCH] package/apache: fixing apxs path mangling
+In-Reply-To: <1587717119-16710-1-git-send-email-angelo@amarulasolutions.com>
+References: <1587717119-16710-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20200424093952.GB5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa04edab77c75bc04ffb52755430bcdeb19c6d74
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Angelo, All,
 
-Latest version of Apache introduce a new apxs with a slightly modified
-path handling logic. In order to simplify the crosscompilation, the
-software removes the common prefix from bin install dir and build
-install dir, but for this to work they both should have a common prefix.
+On 2020-04-24 10:31 +0200, Angelo Compagnucci spake thusly:
+> Latest version of Apache introduce a new apxs with a slightly modified
+> path handling logic. In order to simplify the crosscompilation, the
+> software removes the common prefix from bin install dir and build
+> install dir, but for this to work they both should have a common
+> prefix. So we introduce a new regexp to fix /usr/bin to staging dir,
+> the regexps are also fixed to replace only the exact path between
+> double quotes.a
 
-So we introduce a new regexp to fix /usr/bin to staging dir, the regexps
-are also fixed to replace only the exact path between double quotes, to
-avoid replacing the she-bang line.
+There was a stray 'a' at the end of the sentence, so I replaced it with:
 
-Fixes:
-http://autobuild.buildroot.net/results/c41f31566974209897a3a1ec35afe2536fb248cc
-http://autobuild.buildroot.net/results/b93f19976ce96e79ea159c25ed74a7377c78f334
+    ', to avoid replacing the she-bang line.'
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-[yann.morin.1998 at free.fr:
-  - add the last few words about the she-bang blurb
-  - do not use quotes in the existing /sur/bin regexp
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/apache/apache.mk | 1 +
- 1 file changed, 1 insertion(+)
+Also, I did not see the point of enclosing the existing /usr/build
+pattern in double-quotes, as it still works without. Yes, i see the
+consistency with /usr/bin, but then it woudl still be inconsustent with
+the prefix replacement pattern anyway... So I dropped the double quotes
+for /usr/build.
 
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 48a64eae0e..068f36e325 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -99,6 +99,7 @@ APACHE_CONF_OPTS += --disable-deflate
- endif
- 
- define APACHE_FIX_STAGING_APACHE_CONFIG
-+	$(SED) 's%"/usr/bin"%"$(STAGING_DIR)/usr/bin"%' $(STAGING_DIR)/usr/bin/apxs
- 	$(SED) 's%/usr/build%$(STAGING_DIR)/usr/build%' $(STAGING_DIR)/usr/bin/apxs
- 	$(SED) 's%^prefix =.*%prefix = $(STAGING_DIR)/usr%' $(STAGING_DIR)/usr/build/config_vars.mk
- endef
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> Fixes:
+> http://autobuild.buildroot.net/results/c41f31566974209897a3a1ec35afe2536fb248cc
+> http://autobuild.buildroot.net/results/b93f19976ce96e79ea159c25ed74a7377c78f334
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  package/apache/apache.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+> index 48a64ea..f0775e6 100644
+> --- a/package/apache/apache.mk
+> +++ b/package/apache/apache.mk
+> @@ -99,7 +99,8 @@ APACHE_CONF_OPTS += --disable-deflate
+>  endif
+>  
+>  define APACHE_FIX_STAGING_APACHE_CONFIG
+> -	$(SED) 's%/usr/build%$(STAGING_DIR)/usr/build%' $(STAGING_DIR)/usr/bin/apxs
+> +	$(SED) 's%"/usr/bin"%"$(STAGING_DIR)/usr/bin"%' $(STAGING_DIR)/usr/bin/apxs
+> +	$(SED) 's%"/usr/build"%"$(STAGING_DIR)/usr/build"%' $(STAGING_DIR)/usr/bin/apxs
+>  	$(SED) 's%^prefix =.*%prefix = $(STAGING_DIR)/usr%' $(STAGING_DIR)/usr/build/config_vars.mk
+>  endef
+>  APACHE_POST_INSTALL_STAGING_HOOKS += APACHE_FIX_STAGING_APACHE_CONFIG
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
