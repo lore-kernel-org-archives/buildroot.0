@@ -1,50 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 24 Apr 2020 16:01:01 +0200
-Subject: [Buildroot] [PATCH 1/3] package/mbedtls: add
- BR2_PACKAGE_MBEDTLS_X509_UNSUPPORTED_CRITICAL_EXTENSION
-In-Reply-To: <20200424152143.45b838c3@windsurf.home>
-References: <20200422192059.790299-1-fontaine.fabrice@gmail.com>
- <20200423220905.06d9dc59@windsurf.home>
- <20200423232758.zwos3e5f55pz23ld@einstein.dilieto.eu>
- <20200424090710.GA5035@scaer>
- <20200424112639.xdzs4ggqtijcij74@einstein.dilieto.eu>
- <20200424113226.mhi7l3r46wluyu7v@einstein.dilieto.eu>
- <20200424114813.GH5035@scaer>
- <20200424131108.ntkqvq7dlwgbsx6k@einstein.dilieto.eu>
- <CAPi7W810oEfbH60FeNzOO=-rt1VZFWgpXSz87yX-aWS9Q_2iAw@mail.gmail.com>
- <20200424152143.45b838c3@windsurf.home>
-Message-ID: <CAPi7W83ckzDLDPug8dGiGmH6-t9WMRtjnAegpYXnRxOahV4EfQ@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 24 Apr 2020 16:18:32 +0200
+Subject: [Buildroot] [PATCH 1/8] package/perl-data-uuid: bump to version
+ 1.226
+Message-ID: <20200424141839.1594-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl-data-uuid/perl-data-uuid.hash | 6 +++---
+ package/perl-data-uuid/perl-data-uuid.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Le ven. 24 avr. 2020 ? 15:21, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Fri, 24 Apr 2020 15:20:19 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > > I propose making BR2_PACKAGE_UACME_UALPN depend on !BR2_PACKAGE_MBEDTLS.
-> > > Would that be acceptable?
-> > I think it should depend on !BR2_PACKAGE_UACME_MBEDTLS (added by the
-> > second patch of this serie).
-> > Otherwise, a user won't be able to select ualpn with a gnutls-enabled
-> > uacme if he has also enabled mbedlts for an other purpose.
->
-> Or instead make sure ualpn can be enabled only if either gnutls or
-> openssl are available, and tweak the .mk file to use gnutls or openssl
-> instead of mbedtls when ualpn is enabled.
-OK, v2 sent.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
-
-Fabrice
+diff --git a/package/perl-data-uuid/perl-data-uuid.hash b/package/perl-data-uuid/perl-data-uuid.hash
+index 280567177..b2c862960 100644
+--- a/package/perl-data-uuid/perl-data-uuid.hash
++++ b/package/perl-data-uuid/perl-data-uuid.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    71510bbcce760c394591fca83a9b5e6d Data-UUID-1.224.tar.gz
+-sha256 c958c17502bbef5eccf40c040874895747f7f9b9f9e5192c18688370981bf47c Data-UUID-1.224.tar.gz
++md5  13468e0fb65a0b5ce27b8628cb2f0109  Data-UUID-1.226.tar.gz
++sha256  093d57ffa0d411a94bafafae495697db26f5c9d0277198fe3f7cf2be22996453  Data-UUID-1.226.tar.gz
+ 
+ # computed by scancpan
+-sha256 0560c8eea8e1fb8173faa6c2e9b7e9f8728b8ae8250a814709a53c30b778d5fb LICENSE
++sha256  0560c8eea8e1fb8173faa6c2e9b7e9f8728b8ae8250a814709a53c30b778d5fb  LICENSE
+diff --git a/package/perl-data-uuid/perl-data-uuid.mk b/package/perl-data-uuid/perl-data-uuid.mk
+index 00dccdb7e..93060964b 100644
+--- a/package/perl-data-uuid/perl-data-uuid.mk
++++ b/package/perl-data-uuid/perl-data-uuid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_DATA_UUID_VERSION = 1.224
++PERL_DATA_UUID_VERSION = 1.226
+ PERL_DATA_UUID_SOURCE = Data-UUID-$(PERL_DATA_UUID_VERSION).tar.gz
+ PERL_DATA_UUID_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RJ/RJBS
+ # The license is documented at
+-- 
+2.20.1
