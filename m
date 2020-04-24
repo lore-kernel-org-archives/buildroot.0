@@ -1,201 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Apr 2020 00:14:48 +0200
-Subject: [Buildroot] [PATCH v3 2/2] package/firewalld: new package
-In-Reply-To: <CAFSsvmqFEN7TM5JQOaeMrTd2KaxT6K=7xAku21YvzuLjW9-psg@mail.gmail.com>
-References: <20200423173302.280424-1-aduskett@gmail.com>
- <20200423173302.280424-2-aduskett@gmail.com>
- <20200423211911.GT5035@scaer>
- <CAFSsvmqFEN7TM5JQOaeMrTd2KaxT6K=7xAku21YvzuLjW9-psg@mail.gmail.com>
-Message-ID: <20200424221448.GM5035@scaer>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 24 Apr 2020 16:47:52 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to version
+ 20.4.3
+Message-ID: <20200424224752.63673-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Autobahn recently added a feature called xbr which we don't support,
+let's remove this before building autobahn.
 
-On 2020-04-24 12:14 -0700, Adam Duskett spake thusly:
-> On Thu, Apr 23, 2020 at 2:19 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > On 2020-04-23 10:33 -0700, aduskett at gmail.com spake thusly:
-> > > From: Adam Duskett <Aduskett@gmail.com>
-> > >
-> > > Firewalld provides a dynamically managed firewall with
-> > > support for network or firewall zones to define the trust level of network
-> > > connections or interfaces.
-> > >
-> > > Items of note:
-> > >
-> > >  - Iptables is set as a requirement because many applications such as Docker
-> > >    require direct-passthrough rules which firewalld does not support.
-> > >
-> > >  - Setting FIREWALLD_AUTORECONF=YES results in the following error:
-> > >    "error: cannot find input file: `po/Makefile.in.in'" As such, a manual call
-> > >    to autogen.sh is necessary with PATH=$(BR_PATH) set to ensure the script
-> > >    uses the host intltoolize binary.
-> >
-> > I think we can do better. ;-)
-> >
-> >     # Prpare the tree as autogen.sh would; allows using _AUTORECONF=YES
-> >     define FIREWALLD_INTLTOOLIZE
-> >         ls -1 $(@D)/po/*.po |sed -r -e 's:.*/::; s:.po$$::' >$(@D)/po/LINGUAS
-> >         cd $(@D) && $(HOST_DIR)/bin/intltoolize --force --automake
-> >     endef
-> >     FIREWALLD_PRE_CONFIGURE_HOOKS += FIREWALLD_INTLTOOLIZE
-> >
-> I heavily disagree:
-> 1) The existing autogen.sh script may change in the future which would
-> make this macro
->     more unmaintanable.
-> 2) package/sdl/sdl.mk has PATH=$(BR_PATH) ./autogen.sh, which means
-> there is already
->     a precident for this kind of logic.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-autobahn/python-autobahn.hash |  4 ++--
+ package/python-autobahn/python-autobahn.mk   | 16 ++++++++++++++--
+ 2 files changed, 16 insertions(+), 4 deletions(-)
 
-Few things:
-
- 1- the autogen.sh script calls autoreconf with a different set of
-    arguments as our infra does, notably it does not pass the paths to
-    the other tools, and as such does not pass the paths to the autoconf
-    local include directories;
-
- 2- the SDL autoreconf does not work with our AUTORECONF=YES infra,
-    while firewalld should work nicely after the intltoolize preparation
-    step.
-
- 3- indeed it puts a little bit more burden on our shoulders, but in
-    fact all this discussion is moot is you switch to using the released
-    tarball, rather than a git cnashot: be careful that the github
-    helper macro will point to a github-generated tarball. However,
-    firewalld maintainers has uploaded a released tarball:
-
-    https://github.com/firewalld/firewalld/releases/download/v0.8.2/firewalld-0.8.2.tar.gz
-
-So, if you switch to that, we no longer need to autoreconf (unless
-you're going to patch one of the autotools files...)
-
-> > >  - Setting PYTHON="/usr/bin/env python$(PYTHON3_VERSION_MAJOR)" prevents
-> > >    Firewalld from setting the shebang in the installed python files to the full
-> > >    path to the python interpreter used when building.
-> > >
-> > >  - The bundled provided SYSV init file has several bashisms and requires
-> > >    /etc/init.d/functions which buildroot doesn't provide. So instead, we
-> > >    provide a more simple init.d file in the package directory, which does not
-> > >    require bash.
-> > >
-> > > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> > > ---
-> > [--SNIP--]
-> > > diff --git a/package/firewalld/firewalld.hash b/package/firewalld/firewalld.hash
-> > > new file mode 100644
-> > > index 0000000000..93cf67ccea
-> > > --- /dev/null
-> > > +++ b/package/firewalld/firewalld.hash
-> > > @@ -0,0 +1,3 @@
-> > > +# Locally computed
-> > > +sha256  769c57d5c49218821ad30639a3f802831f9618899e403a811802c56e30f93c79  firewalld-v0.8.2.tar.gz
-> > > +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> > > diff --git a/package/firewalld/firewalld.mk b/package/firewalld/firewalld.mk
-> > > new file mode 100644
-> > > index 0000000000..aedc250be1
-> > > --- /dev/null
-> > > +++ b/package/firewalld/firewalld.mk
-> > > @@ -0,0 +1,84 @@
-> > > +# iptables, ip6tables, ebtables, and ipset *should* be unnecessary
-> > > +# when the nftables backend is available, because nftables supersedes all of
-> > > +# them. However we still need to build and install iptables and ip6tables
-> > > +# because application relying on direct passthrough rules (IE docker) will
-> > > +# break.
-> >
-> > So it should nt be the responsibility of firewalld to select iptables or
-> > ebtables, but the individual applications, like docker, which should
-> > either unconditionally select them, or conditionally select them, like
-> > for example:
-> >
-> Possibly? This change would have the potential to make things far more
-> complicated,
-> as docker is just one example. I can't find a distribution (including
-> OE) that does not always
-> compile firewalld with iptables.
-
-OK, so this comment of mine is moot: I read in diagonal, and too fast.
-Ignore it and keep your code+comment as-is, sorry...
-
-Yet, there is still a little nit, below...
-
-> >     seelct BR2_PACKAGE_IPTABLES if BR2_PACKAGE_FIREWALLD
-> >
-> > > +# /etc/sysconfig/firewalld is a Red Hat-ism, only referenced by
-> > > +# the Red Hat-specific init script which isn't used, so we set
-> > > +# --disable-sysconfig.
-> > > +FIREWALLD_CONF_OPTS += \
-> > > +     --disable-rpmmacros \
-> > > +     --disable-sysconfig \
-> > > +     --with-ip6tables-restore=/usr/sbin/ip6tables-restore \
-> > > +     --with-ip6tables=/usr/sbin/ip6tables \
-> > > +     --with-iptables-restore=/usr/sbin/iptables-restore \
-> > > +     --with-iptables=/usr/sbin/iptables \
-> > > +     --with-nft=/usr/sbin/nft \
-> > > +     --without-ebtables \
-> > > +     --without-ebtables-restore \
-> > > +     --without-ipset \
-
-Why are you selecting BR2_PACKAGE_EBTABLES and BR2_PACKAGE_IPSET in
-Config.in if you explicitly disable support for them here?
-
-Regards,
-Yann E. MORIN.
-
-> > > +     --without-xml-catalog
-> > > +
-> > > +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> > > +FIREWALLD_DEPENDENCIES += systemd
-> > > +FIREWALLD_CONF_OPTS += --with-systemd-unitdir=/usr/lib/systemd/system
-> >
-> > We also want an explicit --enable-systemd
-> >
-> > This was just a quick review, I may come back to it later in the WE...
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > > +else
-> > > +FIREWALLD_CONF_OPTS += --disable-systemd
-> > > +endif
-> > > +
-> > > +define FIREWALLD_INSTALL_INIT_SYSTEMD
-> > > +     $(INSTALL) -D -m 0644 $(@D)/config/firewalld.service \
-> > > +             $(TARGET_DIR)/usr/lib/systemd/system/firewalld.service
-> > > +endef
-> > > +
-> > > +# The bundled sysvinit file requires /etc/init.d/functions which is not
-> > > +# provided by buildroot. As such, we provide our own firewalld init file.
-> > > +define FIREWALLD_INSTALL_INIT_SYSV
-> > > +     $(INSTALL) -D -m 0755 $(FIREWALLD_PKGDIR)/S41firewalld \
-> > > +             $(TARGET_DIR)/etc/init.d/S41firewalld
-> > > +endef
-> > > +
-> > > +$(eval $(autotools-package))
-> > > --
-> > > 2.25.3
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index a49de07b70..a5aa2a5a7d 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5  9702594ee1c5613e9bb31af105140b5b  autobahn-20.4.2.tar.gz
+-sha256  1c943f94bb759c07445a6984a3bc4c76f73e2a90a1fc2c3521c211579b73d3db  autobahn-20.4.2.tar.gz
++md5  dcae3cf26203aa4bbd9912137e5c9512  autobahn-20.4.3.tar.gz
++sha256  c6fe745d52ba9f9eecf791cd31f558df42aebfc4f9ee558a8f1d18c707e1ae1f  autobahn-20.4.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index d4e52352f2..dc9290b1cd 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -4,11 +4,23 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AUTOBAHN_VERSION = 20.4.2
++PYTHON_AUTOBAHN_VERSION = 20.4.3
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/13/0e/b182b46ea437e59003de78c68bb00824d304dcfe58e7235f29c4f275eca0
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/cb/16/38d27874ef827974f44acb6dd64a92a9248b624734c0e84b91083c2d9350
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+ 
++define PYTHON_AUTOBAHN_REMOVE_XBR
++	rm -rf $(@D)/autobahn/xbr
++	rm -f $(@D)/autobahn/asyncio/xbr.py
++	rm -f $(@D)/autobahn/twisted/xbr.py
++	sed -i -e "/'autobahn\.xbr',/d" $(@D)/setup.py
++	sed -i -e "/'xbr': \['\.\/xbr\/contracts\/\*\.json'\],/d" $(@D)/setup.py
++	sed -i -e '/"xbrnetwork = autobahn\.xbr\._cli:_main",/d' $(@D)/setup.py
++	sed -i -e '/xbr/d' $(@D)/MANIFEST.in
++endef
++
++PYTHON_AUTOBAHN_POST_EXTRACT_HOOKS = PYTHON_AUTOBAHN_REMOVE_XBR
++
+ $(eval $(python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
