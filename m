@@ -1,52 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Apr 2020 15:00:57 +0200
-Subject: [Buildroot] [PATCH 4/8] package/python3-cheetah: add special
- host variant
-In-Reply-To: <20200323104909.16765-4-yegorslists@googlemail.com>
-References: <20200323104909.16765-1-yegorslists@googlemail.com>
- <20200323104909.16765-4-yegorslists@googlemail.com>
-Message-ID: <20200424150057.3f6981ff@windsurf.home>
+From: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Date: Fri, 24 Apr 2020 15:11:08 +0200
+Subject: [Buildroot] [PATCH 1/3] package/mbedtls: add
+ BR2_PACKAGE_MBEDTLS_X509_UNSUPPORTED_CRITICAL_EXTENSION
+In-Reply-To: <20200424114813.GH5035@scaer>
+References: <20200422192059.790299-1-fontaine.fabrice@gmail.com>
+ <20200423220905.06d9dc59@windsurf.home>
+ <20200423232758.zwos3e5f55pz23ld@einstein.dilieto.eu>
+ <20200424090710.GA5035@scaer>
+ <20200424112639.xdzs4ggqtijcij74@einstein.dilieto.eu>
+ <20200424113226.mhi7l3r46wluyu7v@einstein.dilieto.eu>
+ <20200424114813.GH5035@scaer>
+Message-ID: <20200424131108.ntkqvq7dlwgbsx6k@einstein.dilieto.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Mar 2020 11:49:05 +0100
-yegorslists at googlemail.com wrote:
+On Fri, Apr 24, 2020 at 01:48:13PM +0200, Yann E. MORIN wrote:
+>Until then, my opinion is that we should just stop building uacme with
+>embedtls.
 
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Needed to build mongodb.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python3-cheetah/python-cheetah.mk    | 18 ++++++++++++++++++
+Please do not confuse the main binary uacme (which is perfecty OK and 
+*does not* require the new TLS extension) with ualpn, a separate and 
+optional binary recently added to the uacme distribution to answer 
+tls-alpn-01 challenges (which requires the new TLS extension).
 
-The name of the .mk file was wrong, it should have been python3-cheetah.mk.
+Building ualpn should actually be disabled by default in buildroot 
+(check BR2_PACKAGE_UACME_UALPN in package/uacme/Config.in)
 
-With your version of the patch, check-package was complaining quite
-loudly:
-
-package/python3-cheetah/python-cheetah.mk:9: possible typo: PYTHON3_CHEETAH_VERSION -> *PYTHON_CHEETAH*
-package/python3-cheetah/python-cheetah.mk:10: possible typo: PYTHON3_CHEETAH_SOURCE -> *PYTHON_CHEETAH*
-package/python3-cheetah/python-cheetah.mk:11: possible typo: PYTHON3_CHEETAH_SITE -> *PYTHON_CHEETAH*
-package/python3-cheetah/python-cheetah.mk:12: possible typo: PYTHON3_CHEETAH_LICENSE -> *PYTHON_CHEETAH*
-package/python3-cheetah/python-cheetah.mk:13: possible typo: PYTHON3_CHEETAH_LICENSE_FILES -> *PYTHON_CHEETAH*
-package/python3-cheetah/python-cheetah.mk:14: possible typo: PYTHON3_CHEETAH_SETUP_TYPE -> *PYTHON_CHEETAH*
-package/python3-cheetah/python-cheetah.mk:15: possible typo: HOST_PYTHON3_CHEETAH_DL_SUBDIR -> *PYTHON_CHEETAH*
-package/python3-cheetah/python-cheetah.mk:16: possible typo: HOST_PYTHON3_CHEETAH_NEEDS_HOST_PYTHON -> *PYTHON_CHEETAH
-
-> +# Please keep in sync with
-> +# package/python-cheetah/python-cheetah.mk
-
-This comment fits on one line. And I've added the corresponding comment
-in package/python-cheetah/python-cheetah.mk.
-
-Applied with these changes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I propose making BR2_PACKAGE_UACME_UALPN depend on !BR2_PACKAGE_MBEDTLS.  
+Would that be acceptable?
