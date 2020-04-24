@@ -1,10 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 24 Apr 2020 16:18:35 +0200
-Subject: [Buildroot] [PATCH 4/8] package/perl-mojolicious: bump to version
- 8.40
+Date: Fri, 24 Apr 2020 16:18:38 +0200
+Subject: [Buildroot] [PATCH 7/8] package/perl-net-ssh2: bump to version 0.71
 In-Reply-To: <20200424141839.1594-1-francois.perrad@gadz.org>
 References: <20200424141839.1594-1-francois.perrad@gadz.org>
-Message-ID: <20200424141839.1594-4-francois.perrad@gadz.org>
+Message-ID: <20200424141839.1594-7-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +12,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-mojolicious/perl-mojolicious.hash | 6 +++---
- package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-net-ssh2/perl-net-ssh2.hash | 6 +++---
+ package/perl-net-ssh2/perl-net-ssh2.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
-index f409e484d..1f837cbd5 100644
---- a/package/perl-mojolicious/perl-mojolicious.hash
-+++ b/package/perl-mojolicious/perl-mojolicious.hash
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.hash b/package/perl-net-ssh2/perl-net-ssh2.hash
+index 006f79477..d65b6f36b 100644
+--- a/package/perl-net-ssh2/perl-net-ssh2.hash
++++ b/package/perl-net-ssh2/perl-net-ssh2.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    c714aae5e1c3914efc0352531718c473 Mojolicious-8.32.tar.gz
--sha256 503450e76b5d114c79a01b76a3c661c8138c5729062582a88e307a4d46f9de85 Mojolicious-8.32.tar.gz
-+md5  9502ffca0dac9cb85caac9a1913108d5  Mojolicious-8.40.tar.gz
-+sha256  185ec9ccd3012c391db863635b7c1dd06927e7b4f2d436a45b64154fd56578c3  Mojolicious-8.40.tar.gz
+-md5    ef8d282c410728aa452fb380a7d22b05 Net-SSH2-0.70.tar.gz
+-sha256 47236af8f4a5e4cfa3036f7969d940247349b65b032478a0c72ba0b2e398b000 Net-SSH2-0.70.tar.gz
++md5  baa1b19fec9ca37ecfc12a22ba0c9122  Net-SSH2-0.71.tar.gz
++sha256  ee411ec263c900c441fd1c490e9d52fc56b0bb32e1ed98869229501b200f8fa2  Net-SSH2-0.71.tar.gz
  
  # computed by scancpan
--sha256 19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a LICENSE
-+sha256  19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a  LICENSE
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index 62281d7de..140c089ab 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
-@@ -4,7 +4,7 @@
+-sha256 3e479d43f8316315caa30ba00b7a143175326a3be83fd4e03146c831afaa22bd README
++sha256  b9fe64368dd41bb5b9405b23f95ee0deb970427895ab0119eb3cd4d221764c1d  README.pod
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.mk b/package/perl-net-ssh2/perl-net-ssh2.mk
+index e75d01d9b..10657c39c 100644
+--- a/package/perl-net-ssh2/perl-net-ssh2.mk
++++ b/package/perl-net-ssh2/perl-net-ssh2.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PERL_MOJOLICIOUS_VERSION = 8.32
-+PERL_MOJOLICIOUS_VERSION = 8.40
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
- PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
+-PERL_NET_SSH2_VERSION = 0.70
++PERL_NET_SSH2_VERSION = 0.71
+ PERL_NET_SSH2_SOURCE = Net-SSH2-$(PERL_NET_SSH2_VERSION).tar.gz
+-PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SA/SALVA
++PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RK/RKITOVER
+ PERL_NET_SSH2_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_SSH2_LICENSE_FILES = README
++PERL_NET_SSH2_LICENSE_FILES = README.pod
+ PERL_NET_SSH2_DEPENDENCIES = libssh2 zlib
+ PERL_NET_SSH2_DISTNAME = Net-SSH2
+ 
 -- 
 2.20.1
