@@ -1,73 +1,74 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 24 Apr 2020 17:04:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtasn1: fix build with gcc 4.8
-Message-ID: <20200424150449.822656-1-fontaine.fabrice@gmail.com>
+From: Patzlaff, Marcel <m.patzlaff@pilz.de>
+Date: Fri, 24 Apr 2020 12:47:04 +0000
+Subject: [Buildroot] [PATCH 1/1] package/uclibc: Patch to fix check_as macro
+ in Rules.mak
+Message-ID: <AM0P194MB06448CBCB64FBB28F3240C118BD00@AM0P194MB0644.EURP194.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/0030c903abf6c964806a97067af94a99867a3896
+This introduces a patch for uClibc to fix a feature check macro which
+does not work when building with binutils 2.31.x or higher. Without
+this fix, all binaries of uClibc will always request an executable
+stack and thus all other binaries that link to it!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+See also https://bugs.busybox.net/show_bug.cgi?id=12801
+
+Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
 ---
- ...orpus2array.c-fix-build-with-gcc-4.8.patch | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/libtasn1/0002-fuzz-corpus2array.c-fix-build-with-gcc-4.8.patch
+ ...heck_as-for-recent-binutils-versions.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch
 
-diff --git a/package/libtasn1/0002-fuzz-corpus2array.c-fix-build-with-gcc-4.8.patch b/package/libtasn1/0002-fuzz-corpus2array.c-fix-build-with-gcc-4.8.patch
+diff --git a/package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch b/package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch
 new file mode 100644
-index 0000000000..e44dd5c8e4
+index 0000000000..1e8ca1e682
 --- /dev/null
-+++ b/package/libtasn1/0002-fuzz-corpus2array.c-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,46 @@
-+From f633abcfb9cff19efca53aa68ddc96217e7487ae Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 24 Apr 2020 16:57:35 +0200
-+Subject: [PATCH] fuzz/corpus2array.c: fix build with gcc 4.8
++++ b/package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch
+@@ -0,0 +1,42 @@
++From 9c0a3c5c80cd9dbd1aa7b04dd7ad2d8ea98b244e Mon Sep 17 00:00:00 2001
++From: Marcel Patzlaff <m.patzlaff@pilz.de>
++Date: Fri, 24 Apr 2020 14:09:23 +0200
++Subject: [PATCH 1/1] Rules.mak: Fix check_as for recent binutils versions
 +
-+Fix the following build failure with gcc 4.8:
++As described in https://bugs.busybox.net/show_bug.cgi?id=12801 the
++check for '-Wa,--noexecstack' is not working since binutils 2.31.x.
 +
-+corpus2array.c:123:4: error: 'for' loop initial declarations are only allowed in C99 mode
-+    for (int i = 8; i < 32 ; i++) {
-+    ^
-+corpus2array.c:123:4: note: use option -std=c99 or -std=gnu99 to compile your code
++This fix adapts the approach already taken with check_ld and uses a
++temporary file. Further, check_gcc is also adapted to avoid future
++problems.
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0030c903abf6c964806a97067af94a99867a3896
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not sent yet]
++Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
 +---
-+ fuzz/corpus2array.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ Rules.mak | 10 ++++++----
++ 1 file changed, 6 insertions(+), 4 deletions(-)
 +
-+diff --git a/fuzz/corpus2array.c b/fuzz/corpus2array.c
-+index fc30524..b2d01ee 100644
-+--- a/fuzz/corpus2array.c
-++++ b/fuzz/corpus2array.c
-+@@ -112,7 +112,7 @@ int main(void)
-+ 			printf("  { NULL");
++diff --git a/Rules.mak b/Rules.mak
++index 6a9f5cbca..a10518c03 100644
++--- a/Rules.mak
+++++ b/Rules.mak
++@@ -189,11 +189,13 @@ endif
 + 
-+ 		if (e.type) {
-+-			int add = 0;
-++			int i, add = 0;
-+ 
-+ 			// we leave the lowest 8 bit out
-+ 			if ((e.type & 0xFF) == 17) {
-+@@ -120,7 +120,7 @@ int main(void)
-+ 				add = 1;
-+ 			}
-+ 
-+-			for (int i = 8; i < 32 ; i++) {
-++			for (i = 8; i < 32 ; i++) {
-+ 				if ((e.type & (1U << i)) && typename[i - 8]) {
-+ 					printf(add ? "|%s" : ", %s", typename[i - 8]);
-+ 					add = 1;
++ # A nifty macro to make testing gcc features easier
++ check_gcc=$(shell \
++-	if $(CC) $(1) -S -o /dev/null -xc /dev/null > /dev/null 2>&1; \
++-	then echo "$(1)"; else echo "$(2)"; fi)
+++	tf="/tmp/cgccucl$$$$.o"; \
+++	if $(CC) $(1) -S -o $$tf -xc /dev/null > /dev/null 2>&1; \
+++	then echo "$(1)"; else echo "$(2)"; fi; rm -f $$tf )
++ check_as=$(shell \
++-	if $(CC) -Wa,$(1) -Wa,-Z -c -o /dev/null -xassembler /dev/null > /dev/null 2>&1; \
++-	then echo "-Wa,$(1)"; fi)
+++	tf="/tmp/casucl$$$$.o"; \
+++	if $(CC) -Wa,$(1) -Wa,-Z -c -o $$tf -xassembler /dev/null > /dev/null 2>&1; \
+++	then echo "-Wa,$(1)"; fi; rm -f $$tf )
++ check_ld=$(shell \
++ 	tf="/tmp/clducl$$$$.c"; echo "int _start(){return 0;}int main(){return 0;}" >$$tf; \
++ 	if $(CC) $(LDFLAG-fuse-ld) $(CFLAG_-Wl--no-warn-mismatch) -Wl,$(1) $(CFLAG_-nostdlib) -o /dev/null $$tf > /dev/null 2>&1; \
 +-- 
-+2.25.1
++2.20.1
 +
 -- 
-2.25.1
+2.20.1
