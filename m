@@ -1,121 +1,61 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Fri, 24 Apr 2020 10:56:24 +0200
-Subject: [Buildroot] [PATCH v2] package/matio: new package
-Message-ID: <20200424085624.23908-1-gwenj@trabucayre.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Apr 2020 11:07:10 +0200
+Subject: [Buildroot] [PATCH 1/3] package/mbedtls: add
+ BR2_PACKAGE_MBEDTLS_X509_UNSUPPORTED_CRITICAL_EXTENSION
+In-Reply-To: <20200423232758.zwos3e5f55pz23ld@einstein.dilieto.eu>
+References: <20200422192059.790299-1-fontaine.fabrice@gmail.com>
+ <20200423220905.06d9dc59@windsurf.home>
+ <20200423232758.zwos3e5f55pz23ld@einstein.dilieto.eu>
+Message-ID: <20200424090710.GA5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Nicola, Fabrice, Thomas, All,
 
-matio is an C library for reading and writing MATLAB MAT files.
+On 2020-04-24 01:27 +0200, Nicola Di Lieto spake thusly:
+> On Thu, Apr 23, 2020 at 10:09:05PM +0200, Thomas Petazzoni wrote:
+> >What is this X509_UNSUPPORTED_CRITICAL_EXTENSION functionality that is
+> >so weird that it requires patching the mbedtls config.h file ? Why is
+> >uacme absolutely requiring this functionality that no other user of
+> >mbedtls requires ?
+> 
+> There is an explanation at
+> https://github.com/ndilieto/uacme/issues/23
+> 
+> Briefly, tls-alpn-01 validation requires (as per RFC8737 section 6.1) a new
+> critical certificate extension. mbedTLS doesn't know about it and refuses to
+> parse any certificate with such extension unless that build feature is
+> enabled.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
-Changes v1 -> v2:
- * add one blank line befor URL (Heiko)
- * drop blank lines around MATIO_DEPENDENCIES and MATIO_INSTALL_STAGING (Heiko)
- * drop comment about STAGING (Heiko)
- * += -> + for MATIO_CONF_ENV (Heiko)
----
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/matio/Config.in  | 15 +++++++++++++++
- package/matio/matio.hash |  5 +++++
- package/matio/matio.mk   | 25 +++++++++++++++++++++++++
- 5 files changed, 47 insertions(+)
- create mode 100644 package/matio/Config.in
- create mode 100644 package/matio/matio.hash
- create mode 100644 package/matio/matio.mk
+So, I think I now wrapped my head around this issue, and I think I got
+it. Here's what I understood from the different resources [0] [1]:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c57bc1c5c9..6cd115be38 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1101,6 +1101,7 @@ F:	package/gnuradio/
- F:	package/gqrx/
- F:	package/gr-osmosdr/
- F:	package/libusbgx/
-+F:	package/matio/
- F:	package/python-cheetah/
- F:	package/python-markdown/
- F:	package/python-remi/
-diff --git a/package/Config.in b/package/Config.in
-index a9c6f6fcbc..f7c48d2d9e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1868,6 +1868,7 @@ endif
- 	source "package/liquid-dsp/Config.in"
- 	source "package/llvm/Config.in"
- 	source "package/lttng-libust/Config.in"
-+	source "package/matio/Config.in"
- 	source "package/mpc/Config.in"
- 	source "package/mpdecimal/Config.in"
- 	source "package/mpfr/Config.in"
-diff --git a/package/matio/Config.in b/package/matio/Config.in
-new file mode 100644
-index 0000000000..b6c4223e44
---- /dev/null
-+++ b/package/matio/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_MATIO
-+	bool "matio"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  matio is an C library for reading and writing MATLAB MAT
-+	  files.
-+
-+	  https://sourceforge.net/projects/matio
-+
-+if BR2_PACKAGE_MATIO
-+
-+config BR2_PACKAGE_MATIO_SPARSE
-+	bool "sparse support"
-+
-+endif
-diff --git a/package/matio/matio.hash b/package/matio/matio.hash
-new file mode 100644
-index 0000000000..d84f50e0b2
---- /dev/null
-+++ b/package/matio/matio.hash
-@@ -0,0 +1,5 @@
-+# From https://sourceforge.net/projects/matio/files/matio/1.5.17/
-+sha512  af8ff11c7c44fea9ea6886e381f49ef9186946f3def98ad9695f2d5d1df045c35e8f4ceac12a44be397f7bbd708b4803762b5ce54c45b60a9f446d551c04f5d2  matio-1.5.17.tar.gz
-+# Locally computed
-+sha256  5e455527d370ab297c4abe5a2ab4d599c93ac7c1a0c85d841cc5c22f8221c400  matio-1.5.17.tar.gz
-+sha256  62a0cab69eeadb3697a2249d5a869915b89e62b59b794dd70802c2b8624ed374  COPYING
-diff --git a/package/matio/matio.mk b/package/matio/matio.mk
-new file mode 100644
-index 0000000000..2ac46f10ad
---- /dev/null
-+++ b/package/matio/matio.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# matio
-+#
-+################################################################################
-+
-+MATIO_VERSION = 1.5.17
-+MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
-+MATIO_LICENSE = BSD-2-Clause
-+MATIO_LICENSE_FILES = COPYING
-+MATIO_DEPENDENCIES = zlib
-+MATIO_INSTALL_STAGING = YES
-+
-+# va_copy()
-+MATIO_CONF_ENV = ac_cv_va_copy=yes
-+
-+MATIO_CONF_OPTS = --enable-mat73=no
-+
-+ifeq ($(BR2_PACKAGE_MATIO_SPARSE),y)
-+MATIO_CONF_OPTS += --enable-extended-sparse=yes
-+else
-+MATIO_CONF_OPTS += --enable-extended-sparse=no
-+endif
-+
-+$(eval $(autotools-package))
+  - in X.509, some extensions can be added to certificates
+  - an extension can be marked as 'critical' or 'not critical'
+  - an X.509 parser that encounters an extension marked 'critical' when
+    parsing a certificate, and that does not recognise that extension,
+    *must* reject that certificate.
+
+mbedtls does the right thing here: it rejects such certificates.
+
+However, embedtls has an option to treat thoe 'critical' extensions as
+if they were 'not critical'.
+
+I think we should refuse to use mbedtls with uacme.
+
+[0] https://en.wikipedia.org/wiki/X.509
+[1] https://github.com/ndilieto/uacme/issues/23
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
