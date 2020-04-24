@@ -1,46 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Apr 2020 11:45:59 +0200
-Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump version to
- 1.0.20200413
-Message-ID: <20200425094600.26046-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 24 Apr 2020 15:16:17 +0200
+Subject: [Buildroot] [git commit] package/python3-requests: add special host
+ variant
+Message-ID: <20200425093247.D9DB7805E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2020-April/005295.html
+commit: https://git.buildroot.net/buildroot/commit/?id=97ac0abad212d5bd78acf9f01d56cee2dcb9f1ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Needed to build mongodb.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-requests/python-requests.mk     |  1 +
+ package/python3-requests/python3-requests.hash |  1 +
+ package/python3-requests/python3-requests.mk   | 17 +++++++++++++++++
+ 3 files changed, 19 insertions(+)
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index a9675b5180..d308f47a13 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-April/005237.html
--sha256  7dfb4a8315e1d6ae406ff32d01c496175df558dd65968a19e5222d02c7cfb77a  wireguard-linux-compat-1.0.20200401.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-April/005296.html
-+sha256  cf166348fbb67419528e73049ce001d29131aea367fa6aef9d3e223f7251e116  wireguard-linux-compat-1.0.20200413.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index d5a2341d77..27f5981ae3 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 1adf564015..9d36346b65 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
+@@ -4,6 +4,7 @@
  #
  ################################################################################
  
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200401
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200413
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
--- 
-2.20.1
++# Please keep in sync with package/python3-requests/python3-requests.mk
+ PYTHON_REQUESTS_VERSION = 2.23.0
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+ PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/f5/4f/280162d4bd4d8aad241a21aecff7a6e46891b905a4341e7ab549ebaf7915
+diff --git a/package/python3-requests/python3-requests.hash b/package/python3-requests/python3-requests.hash
+new file mode 120000
+index 0000000000..19e182d4a6
+--- /dev/null
++++ b/package/python3-requests/python3-requests.hash
+@@ -0,0 +1 @@
++../python-requests/python-requests.hash
+\ No newline at end of file
+diff --git a/package/python3-requests/python3-requests.mk b/package/python3-requests/python3-requests.mk
+new file mode 100644
+index 0000000000..e2bb00eab2
+--- /dev/null
++++ b/package/python3-requests/python3-requests.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# python3-requests
++#
++################################################################################
++
++# Please keep in sync with package/python-requests/python-requests.mk
++PYTHON3_REQUESTS_VERSION = 2.23.0
++PYTHON3_REQUESTS_SOURCE = requests-$(PYTHON3_REQUESTS_VERSION).tar.gz
++PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/f5/4f/280162d4bd4d8aad241a21aecff7a6e46891b905a4341e7ab549ebaf7915
++PYTHON3_REQUESTS_SETUP_TYPE = setuptools
++PYTHON3_REQUESTS_LICENSE = Apache-2.0
++PYTHON3_REQUESTS_LICENSE_FILES = LICENSE
++HOST_PYTHON3_REQUESTS_DL_SUBDIR = python-requests
++HOST_PYTHON3_REQUESTS_NEEDS_HOST_PYTHON = python3
++
++$(eval $(host-python-package))
