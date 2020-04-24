@@ -1,34 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 24 Apr 2020 20:03:21 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/libtasn1: fix build with gcc 4.8
-Message-ID: <20200424180321.892100-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 24 Apr 2020 19:02:06 +0000
+Subject: [Buildroot] [Bug 12811] bootstrap stuck and no login prompt
+In-Reply-To: <bug-12811-163@https.bugs.busybox.net/>
+References: <bug-12811-163@https.bugs.busybox.net/>
+Message-ID: <bug-12811-163-WU2pWS2Gf7@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/0030c903abf6c964806a97067af94a99867a3896
+https://bugs.busybox.net/show_bug.cgi?id=12811
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Set -std=gnu99 instead of patching source code
+Peter Seiderer <ps.report@gmx.net> changed:
 
- package/libtasn1/libtasn1.mk | 2 ++
- 1 file changed, 2 insertions(+)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |INVALID
 
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index 9b8260ab48..d5a6c69965 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -17,4 +17,6 @@ LIBTASN1_AUTORECONF = YES
- # 'missing' fallback logic botched so disable it completely
- LIBTASN1_CONF_ENV = MAKEINFO="true"
- 
-+LIBTASN1_CONF_OPTS = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
-+
- $(eval $(autotools-package))
+--- Comment #3 from Peter Seiderer <ps.report@gmx.net> ---
+> Thanks. I naively assumed such changed would be done automatically.
+
+No..., buildroot is not about automatically customizing every possible
+selection of features..., just a starting point for your own project (see below
+and [1] for customize support)...
+
+> It worked for the cmdline.txt.
+
+Good news...
+
+> For the openssh however, I assume that is a change that can only be done with post-scripts?
+
+Yes, one of the many possibilities to customize your project, see [1] for
+alternatives...
+
+Closing the bug (as it is not a bug, but a feature ;-)), feel free to turn to
+the mailing list for further questions/support...
+
+[1] https://buildroot.org/downloads/manual/manual.html#rootfs-custom
+
 -- 
-2.25.1
+You are receiving this mail because:
+You are on the CC list for the bug.
