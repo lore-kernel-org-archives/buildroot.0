@@ -1,103 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Apr 2020 19:36:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtasn1: fix build with gcc 4.8
-In-Reply-To: <20200424150449.822656-1-fontaine.fabrice@gmail.com>
-References: <20200424150449.822656-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200424173634.GL5035@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 24 Apr 2020 19:53:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libspatialindex: fix build with
+ microblaze
+Message-ID: <20200424175345.829372-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Add an upstream patch so the microblaze workaround for gcc bug 68485
+won't get ignored
 
-On 2020-04-24 17:04 +0200, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/0030c903abf6c964806a97067af94a99867a3896
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...orpus2array.c-fix-build-with-gcc-4.8.patch | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 package/libtasn1/0002-fuzz-corpus2array.c-fix-build-with-gcc-4.8.patch
-> 
-> diff --git a/package/libtasn1/0002-fuzz-corpus2array.c-fix-build-with-gcc-4.8.patch b/package/libtasn1/0002-fuzz-corpus2array.c-fix-build-with-gcc-4.8.patch
-> new file mode 100644
-> index 0000000000..e44dd5c8e4
-> --- /dev/null
-> +++ b/package/libtasn1/0002-fuzz-corpus2array.c-fix-build-with-gcc-4.8.patch
-> @@ -0,0 +1,46 @@
-> +From f633abcfb9cff19efca53aa68ddc96217e7487ae Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Fri, 24 Apr 2020 16:57:35 +0200
-> +Subject: [PATCH] fuzz/corpus2array.c: fix build with gcc 4.8
-> +
-> +Fix the following build failure with gcc 4.8:
-> +
-> +corpus2array.c:123:4: error: 'for' loop initial declarations are only allowed in C99 mode
-> +    for (int i = 8; i < 32 ; i++) {
-> +    ^
-> +corpus2array.c:123:4: note: use option -std=c99 or -std=gnu99 to compile your code
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/0030c903abf6c964806a97067af94a99867a3896
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: not sent yet]
-> +---
-> + fuzz/corpus2array.c | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/fuzz/corpus2array.c b/fuzz/corpus2array.c
-> +index fc30524..b2d01ee 100644
-> +--- a/fuzz/corpus2array.c
-> ++++ b/fuzz/corpus2array.c
-> +@@ -112,7 +112,7 @@ int main(void)
-> + 			printf("  { NULL");
-> + 
-> + 		if (e.type) {
-> +-			int add = 0;
-> ++			int i, add = 0;
-> + 
-> + 			// we leave the lowest 8 bit out
-> + 			if ((e.type & 0xFF) == 17) {
-> +@@ -120,7 +120,7 @@ int main(void)
-> + 				add = 1;
-> + 			}
-> + 
-> +-			for (int i = 8; i < 32 ; i++) {
-> ++			for (i = 8; i < 32 ; i++) {
+Fixes:
+ - http://autobuild.buildroot.org/results/e4ad8fdeafce9d4a07d5554d98dfcb2fa5c05568
 
-I think a better solution would be to switch to using -std=gnu99 (or
-std=c99). For example:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-CMakeLists.txt-fix-CMAKE_BUILD_TYPE.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/libspatialindex/0002-CMakeLists.txt-fix-CMAKE_BUILD_TYPE.patch
 
-    LIBTASN1_CONF_OPTS = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
-
-I've doen a quick test-build, and it seems to fit the bill here. Care to
-sanity-check this proposal and resend, please?
-
-Regards,
-Yann E. MORIN.
-
-> + 				if ((e.type & (1U << i)) && typename[i - 8]) {
-> + 					printf(add ? "|%s" : ", %s", typename[i - 8]);
-> + 					add = 1;
-> +-- 
-> +2.25.1
-> +
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libspatialindex/0002-CMakeLists.txt-fix-CMAKE_BUILD_TYPE.patch b/package/libspatialindex/0002-CMakeLists.txt-fix-CMAKE_BUILD_TYPE.patch
+new file mode 100644
+index 0000000000..fe94020fd8
+--- /dev/null
++++ b/package/libspatialindex/0002-CMakeLists.txt-fix-CMAKE_BUILD_TYPE.patch
+@@ -0,0 +1,30 @@
++From 26d417b9f981cf9a6df42d89fd297539b96180cb Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 24 Apr 2020 18:03:31 +0200
++Subject: [PATCH] CMakeLists.txt: fix CMAKE_BUILD_TYPE (#188)
++
++The user is unable to override CMAKE_BUILD_TYPE since version 1.9.1 and
++https://github.com/libspatialindex/libspatialindex/commit/e3bcccf38d9f100b59ccf29f7e1cfa174969decd
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/libspatialindex/libspatialindex/commit/26d417b9f981cf9a6df42d89fd297539b96180cb]
++---
++ CMakeLists.txt | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 191ac72..84676a2 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -93,8 +93,10 @@ INCLUDE (CheckIncludeFiles)
++ 
++ # note we default to RelWithDebInfo mode
++ if(NOT MSVC_IDE)
+++  if(NOT CMAKE_BUILD_TYPE)
++   set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
++     "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel" FORCE)
+++  endif()
++   message(STATUS "Setting libspatialindex build type - ${CMAKE_BUILD_TYPE}")
++ endif()
++ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
