@@ -1,102 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Apr 2020 14:05:45 +0200
-Subject: [Buildroot] [PATCH v2] package/matio: new package
-In-Reply-To: <20200424085624.23908-1-gwenj@trabucayre.com>
-References: <20200424085624.23908-1-gwenj@trabucayre.com>
-Message-ID: <20200424120545.GK5035@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 24 Apr 2020 14:16:25 +0200
+Subject: [Buildroot] [PATCH 1/1] toolchain/toolchain-external: install
+ ldd on the target
+In-Reply-To: <20200424120246.GJ5035@scaer>
+References: <20200422153442.31989-1-sebastien.szymanski@armadeus.com>
+ <20200424120246.GJ5035@scaer>
+Message-ID: <20200424141625.5cd80421@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gwenhael, All,
+On Fri, 24 Apr 2020 14:02:46 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On 2020-04-24 10:56 +0200, Gwenhael Goavec-Merou spake thusly:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> What does ldd bring that can't be already achieved? For example on my
+> host system:
 > 
-> matio is an C library for reading and writing MATLAB MAT files.
+>     $ ldd /bin/bash
+>         linux-vdso.so.1 (0x00007ffea5be0000)
+>         libtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007f2ea6fa0000)
+>         libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f2ea6f9a000)
+>         libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f2ea6da9000)
+>         /lib64/ld-linux-x86-64.so.2 (0x00007f2ea7114000)
 > 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
-[--SNIP--]
-> diff --git a/package/matio/Config.in b/package/matio/Config.in
-> new file mode 100644
-> index 0000000000..b6c4223e44
-> --- /dev/null
-> +++ b/package/matio/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_MATIO
-> +	bool "matio"
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  matio is an C library for reading and writing MATLAB MAT
-> +	  files.
-> +
-> +	  https://sourceforge.net/projects/matio
-> +
-> +if BR2_PACKAGE_MATIO
-> +
-> +config BR2_PACKAGE_MATIO_SPARSE
-> +	bool "sparse support"
+>     $ LD_TRACE_LOADED_OBJECTS=1 /bin/bash
+>         linux-vdso.so.1 (0x00007ffd3d3a7000)
+>         libtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007f46883cd000)
+>         libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f46883c7000)
+>         libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f46881d6000)
+>         /lib64/ld-linux-x86-64.so.2 (0x00007f4688419000)
 
-Why do we need this top be optional? Does it increase the size
-considerably?
+I guess the main thing that it brings is that people know about "ldd"
+in general, while nobody knows about LD_TRACE_LOADED_OBJECTS :)
 
-Im intrigued, because...
-
-[--SNIP--]
-> diff --git a/package/matio/matio.mk b/package/matio/matio.mk
-> new file mode 100644
-> index 0000000000..2ac46f10ad
-> --- /dev/null
-> +++ b/package/matio/matio.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +# matio
-> +#
-> +################################################################################
-> +
-> +MATIO_VERSION = 1.5.17
-> +MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
-> +MATIO_LICENSE = BSD-2-Clause
-> +MATIO_LICENSE_FILES = COPYING
-> +MATIO_DEPENDENCIES = zlib
-> +MATIO_INSTALL_STAGING = YES
-> +
-> +# va_copy()
-> +MATIO_CONF_ENV = ac_cv_va_copy=yes
-> +
-> +MATIO_CONF_OPTS = --enable-mat73=no
-
-... here you explicitly disable a feature.
-
-> +ifeq ($(BR2_PACKAGE_MATIO_SPARSE),y)
-> +MATIO_CONF_OPTS += --enable-extended-sparse=yes
-> +else
-> +MATIO_CONF_OPTS += --enable-extended-sparse=no
-
-Usually, we use: --enable-extended-sparse and --disable-extended-sparse=yes
-
-Regards,
-Yann E. MORIN.
-
-> +endif
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
