@@ -1,41 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 24 Apr 2020 14:37:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gcr: gobject-introspection needs
- xsltproc
-Message-ID: <20200424123715.624655-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 24 Apr 2020 14:37:03 +0200
+Subject: [Buildroot] [git commit] package/wireguard-linux-compat: depend on
+ headers < 5.6
+Message-ID: <20200424122241.994F08FEC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build of gcr with gobject-introspection needs host-libxslt otherwise
-build will fail on:
+commit: https://git.buildroot.net/buildroot/commit/?id=da5afc10a45d1e1b5ab7ab6f9230ed7ba44581e7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  XSLTPROC Gcr-3.gir
-/bin/bash: xsltproc: command not found
-Makefile:6878: recipe for target 'Gcr-3.gir' failed
+Since wireguard is built into kernels 5.6 and later we can't build
+wireguard-linux-compat on them, so we need to depend on
+!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6.
 
-Fixes:
- - http://autobuild.buildroot.org/results/c08efff174d4773074e6cf3374228b48e057917b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gcr/gcr.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/wireguard-linux-compat/Config.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
-index 56bfe1110a..97a0e22064 100644
---- a/package/gcr/gcr.mk
-+++ b/package/gcr/gcr.mk
-@@ -24,7 +24,7 @@ GCR_LICENSE = LGPL-2.1+
- GCR_LICENSE_FILES = COPYING
+diff --git a/package/wireguard-linux-compat/Config.in b/package/wireguard-linux-compat/Config.in
+index 4ee214be63..6e41a0951b 100644
+--- a/package/wireguard-linux-compat/Config.in
++++ b/package/wireguard-linux-compat/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+ 	depends on BR2_LINUX_KERNEL
+ 	# kernel module requires 3.10+
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++	# kernel module incompatible with 5.6+
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+ 	help
+ 	  WireGuard is an extremely simple yet fast and modern VPN
+ 	  that utilizes state-of-the-art cryptography. It aims to be
+@@ -20,4 +22,6 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+ 	  https://www.wireguard.com
  
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--GCR_DEPENDENCIES += gobject-introspection
-+GCR_DEPENDENCIES += gobject-introspection host-libxslt
- GCR_CONF_OPTS += --with-introspection
- else
- GCR_CONF_OPTS += --without-introspection
--- 
-2.25.1
+ comment "wireguard-linux-compat needs a toolchain w/ headers >= 3.10"
+-	depends on BR2_LINUX_KERNEL && !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++	depends on BR2_LINUX_KERNEL
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
