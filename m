@@ -1,53 +1,84 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 24 Apr 2020 16:18:38 +0200
-Subject: [Buildroot] [PATCH 7/8] package/perl-net-ssh2: bump to version 0.71
-In-Reply-To: <20200424141839.1594-1-francois.perrad@gadz.org>
-References: <20200424141839.1594-1-francois.perrad@gadz.org>
-Message-ID: <20200424141839.1594-7-francois.perrad@gadz.org>
+From: Akshay Bhat <akshay.bhat@timesys.com>
+Date: Fri, 24 Apr 2020 10:36:02 -0400
+Subject: [Buildroot] [PATCH 1/1] package/rsync: annotate CVE-2017-16548
+In-Reply-To: <20200423235315.24b6e0e6@windsurf.home>
+References: <20200301192727.209357-1-fontaine.fabrice@gmail.com>
+ <20200423235315.24b6e0e6@windsurf.home>
+Message-ID: <CACrMeVBacEVkaA5_qu7z+WVeEGBbTHOVWm+EuaZVHHEu0Mwjdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl-net-ssh2/perl-net-ssh2.hash | 6 +++---
- package/perl-net-ssh2/perl-net-ssh2.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+On Thu, Apr 23, 2020 at 5:53 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> I'm adding in Cc: Matthew Weber and Akshay Bhat for the interaction
+> with NVD.
+>
+> Also adding Titouan Christophe for the discussion about our script that
+> does the CVE checking.
+>
+> On Sun,  1 Mar 2020 20:27:27 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > CVE-2017-165484 is misclassified (by our CVE tracker) as affecting
+> > version 3.1.3, while in fact it affects 3.1.2 and 3.1.3-development
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/rsync/rsync.mk | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+> > index 52875e428a..95d19a7f4c 100644
+> > --- a/package/rsync/rsync.mk
+> > +++ b/package/rsync/rsync.mk
+> > @@ -13,6 +13,10 @@ RSYNC_CONF_OPTS = \
+> >       --with-included-zlib=no \
+> >       --with-included-popt=no
+> >
+> > +# CVE-2017-165484 is misclassified (by our CVE tracker) as affecting version 3.1.3,
+> > +# while in fact it affects 3.1.2 and 3.1.3-development
+> > +RSYNC_IGNORE_CVES += CVE-2017-16548
+>
+> Indeed commit 47a63d90e71d3e19e0e96052bb8c6b9cb140ecc1 which fixes this
+> CVE is part of the 3.1.3 release. This means the NVD database is wrong.
+>
+> Instead of doing a workaround in Buildroot, can we report this to the
+> NVD maintainers ?
 
-diff --git a/package/perl-net-ssh2/perl-net-ssh2.hash b/package/perl-net-ssh2/perl-net-ssh2.hash
-index 006f79477..d65b6f36b 100644
---- a/package/perl-net-ssh2/perl-net-ssh2.hash
-+++ b/package/perl-net-ssh2/perl-net-ssh2.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    ef8d282c410728aa452fb380a7d22b05 Net-SSH2-0.70.tar.gz
--sha256 47236af8f4a5e4cfa3036f7969d940247349b65b032478a0c72ba0b2e398b000 Net-SSH2-0.70.tar.gz
-+md5  baa1b19fec9ca37ecfc12a22ba0c9122  Net-SSH2-0.71.tar.gz
-+sha256  ee411ec263c900c441fd1c490e9d52fc56b0bb32e1ed98869229501b200f8fa2  Net-SSH2-0.71.tar.gz
- 
- # computed by scancpan
--sha256 3e479d43f8316315caa30ba00b7a143175326a3be83fd4e03146c831afaa22bd README
-+sha256  b9fe64368dd41bb5b9405b23f95ee0deb970427895ab0119eb3cd4d221764c1d  README.pod
-diff --git a/package/perl-net-ssh2/perl-net-ssh2.mk b/package/perl-net-ssh2/perl-net-ssh2.mk
-index e75d01d9b..10657c39c 100644
---- a/package/perl-net-ssh2/perl-net-ssh2.mk
-+++ b/package/perl-net-ssh2/perl-net-ssh2.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PERL_NET_SSH2_VERSION = 0.70
-+PERL_NET_SSH2_VERSION = 0.71
- PERL_NET_SSH2_SOURCE = Net-SSH2-$(PERL_NET_SSH2_VERSION).tar.gz
--PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SA/SALVA
-+PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RK/RKITOVER
- PERL_NET_SSH2_LICENSE = Artistic or GPL-1.0+
--PERL_NET_SSH2_LICENSE_FILES = README
-+PERL_NET_SSH2_LICENSE_FILES = README.pod
- PERL_NET_SSH2_DEPENDENCIES = libssh2 zlib
- PERL_NET_SSH2_DISTNAME = Net-SSH2
- 
--- 
-2.20.1
+
+Thanks for finding this. I have sent the below information to NVD,
+will post back once I hear more:
+There is an error in the cpe version information for:
+https://nvd.nist.gov/vuln/detail/CVE-2017-16548
+
+The correct range should be:
+From (excluding)
+2.6.9
+Up to (including)
+3.1.2
+
+Details:
+Commit fixing the CVE:
+https://git.samba.org/rsync.git/?p=rsync.git;a=commit;h=47a63d90e71d3e19e0e96052bb8c6b9cb140ecc1
+
+Versions Containing fix:
+$ git tag --contains 47a63d90e71d3e19e0e96052bb8c6b9cb140ecc1
+v3.1.3
+v3.1.3pre1
+
+Commit introducing the CVE:
+$ git log --oneline --diff-filter=A -- xattrs.c
+16edf865 The improved --xattrs option is landing on the trunk.
+Version introducing the CVE (excluding):
+$ git -c 'versionsort.suffix=pre' tag --no-contains 16edf8659
+--sort=-version:refname |head -1
+v2.6.9
+
+Thanks,
+Akshay
