@@ -1,18 +1,18 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Apr 2020 14:59:46 +0200
-Subject: [Buildroot] [PATCH 3/8] package/python3-regex: add special
- package variant for the host build
-In-Reply-To: <20200323104909.16765-3-yegorslists@googlemail.com>
+Date: Fri, 24 Apr 2020 15:00:57 +0200
+Subject: [Buildroot] [PATCH 4/8] package/python3-cheetah: add special
+ host variant
+In-Reply-To: <20200323104909.16765-4-yegorslists@googlemail.com>
 References: <20200323104909.16765-1-yegorslists@googlemail.com>
- <20200323104909.16765-3-yegorslists@googlemail.com>
-Message-ID: <20200424145946.66d14428@windsurf.home>
+ <20200323104909.16765-4-yegorslists@googlemail.com>
+Message-ID: <20200424150057.3f6981ff@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Mar 2020 11:49:04 +0100
+On Mon, 23 Mar 2020 11:49:05 +0100
 yegorslists at googlemail.com wrote:
 
 > From: Yegor Yefremov <yegorslists@googlemail.com>
@@ -21,25 +21,29 @@ yegorslists at googlemail.com wrote:
 > 
 > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/python3-regex/python3-regex.hash |  1 +
->  package/python3-regex/python3-regex.mk   | 17 +++++++++++++++++
->  2 files changed, 18 insertions(+)
->  create mode 120000 package/python3-regex/python3-regex.hash
->  create mode 100644 package/python3-regex/python3-regex.mk
+>  package/python3-cheetah/python-cheetah.mk    | 18 ++++++++++++++++++
 
-Like Romain, I don't really like that we're adding more and more
-duplicated packages for host-python3, but we don't really have a good
-solution today. And since the mid-term plan is to get rid of Python
-2.x, I don't think it's very useful to implement an alternate solution
-now.
+The name of the .mk file was wrong, it should have been python3-cheetah.mk.
+
+With your version of the patch, check-package was complaining quite
+loudly:
+
+package/python3-cheetah/python-cheetah.mk:9: possible typo: PYTHON3_CHEETAH_VERSION -> *PYTHON_CHEETAH*
+package/python3-cheetah/python-cheetah.mk:10: possible typo: PYTHON3_CHEETAH_SOURCE -> *PYTHON_CHEETAH*
+package/python3-cheetah/python-cheetah.mk:11: possible typo: PYTHON3_CHEETAH_SITE -> *PYTHON_CHEETAH*
+package/python3-cheetah/python-cheetah.mk:12: possible typo: PYTHON3_CHEETAH_LICENSE -> *PYTHON_CHEETAH*
+package/python3-cheetah/python-cheetah.mk:13: possible typo: PYTHON3_CHEETAH_LICENSE_FILES -> *PYTHON_CHEETAH*
+package/python3-cheetah/python-cheetah.mk:14: possible typo: PYTHON3_CHEETAH_SETUP_TYPE -> *PYTHON_CHEETAH*
+package/python3-cheetah/python-cheetah.mk:15: possible typo: HOST_PYTHON3_CHEETAH_DL_SUBDIR -> *PYTHON_CHEETAH*
+package/python3-cheetah/python-cheetah.mk:16: possible typo: HOST_PYTHON3_CHEETAH_NEEDS_HOST_PYTHON -> *PYTHON_CHEETAH
 
 > +# Please keep in sync with
-> +# package/python-regex/python-regex.mk
+> +# package/python-cheetah/python-cheetah.mk
 
-I've put this comment on one line, and also added the comment in
-package/python-regex/python-regex.mk.
+This comment fits on one line. And I've added the corresponding comment
+in package/python-cheetah/python-cheetah.mk.
 
-Applied with this change. Thanks!
+Applied with these changes. Thanks!
 
 Thomas
 -- 
