@@ -1,58 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Apr 2020 13:37:30 +0200
-Subject: [Buildroot] [PATCH] configs/olpc_xo175: needs host-openssl for
- kernel build
-In-Reply-To: <20200423221833.26434-1-lkundrak@v3.sk>
-References: <20200423221833.26434-1-lkundrak@v3.sk>
-Message-ID: <20200424113730.GF5035@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 24 Apr 2020 13:39:27 +0200
+Subject: [Buildroot] [PATCH 1/2] package/fluidsynth: add sdl2 optional
+ dependency
+Message-ID: <20200424113928.213441-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lubomir, all,
+sdl2 is an optional dependency (enabled by default) since version 2.1.0:
+https://github.com/FluidSynth/fluidsynth/commit/978283bbf0309191a441121b7ea867e41e329d3b
 
-On 2020-04-24 00:18 +0200, Lubomir Rintel spake thusly:
-> Fixes:
-> 
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/517918177
-> 
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/fluidsynth/Config.in     | 10 ++++++++++
+ package/fluidsynth/fluidsynth.mk |  7 +++++++
+ 2 files changed, 17 insertions(+)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  configs/olpc_xo175_defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/configs/olpc_xo175_defconfig b/configs/olpc_xo175_defconfig
-> index 4317e72a78..6e31ecf92c 100644
-> --- a/configs/olpc_xo175_defconfig
-> +++ b/configs/olpc_xo175_defconfig
-> @@ -11,6 +11,7 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olpc/xo-1.75/linux.config"
->  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olpc/linux.config"
->  BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->  BR2_PACKAGE_LINUX_FIRMWARE=y
->  BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8=y
->  BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V9=y
-> -- 
-> 2.26.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/fluidsynth/Config.in b/package/fluidsynth/Config.in
+index c1cb923489..9b4d05bbb9 100644
+--- a/package/fluidsynth/Config.in
++++ b/package/fluidsynth/Config.in
+@@ -86,6 +86,16 @@ comment "pulseaudio support needs a toolchain w/ dynamic library, wchar, threads
+ 	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
+ 	depends on BR2_STATIC_LIBS || !BR2_USE_MMU || !BR2_TOOLCHAIN_HAS_THREADS
+ 
++config BR2_PACKAGE_FLUIDSYNTH_SDL2
++	bool "sdl2"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_SDL2
++	help
++	  Enable SDL2 audio support.
++
++comment "SDL2 audio support needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ comment "Misc options"
+ 
+ config BR2_PACKAGE_FLUIDSYNTH_DBUS
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index 2bd792dbaf..98eb1ad30c 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
+@@ -66,4 +66,11 @@ else
+ FLUIDSYNTH_CONF_OPTS += -Denable-readline=0
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FLUIDSYNTH_SDL2),y)
++FLUIDSYNTH_CONF_OPTS += -Denable-sdl2=1
++FLUIDSYNTH_DEPENDENCIES += sdl2
++else
++FLUIDSYNTH_CONF_OPTS += -Denable-sdl2=0
++endif
++
+ $(eval $(cmake-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
