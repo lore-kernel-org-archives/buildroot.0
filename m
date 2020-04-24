@@ -1,38 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Apr 2020 14:39:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wireguard-linux-compat: depend
- on headers < 5.6
-In-Reply-To: <20200410213414.60355-1-james.hilliard1@gmail.com>
-References: <20200410213414.60355-1-james.hilliard1@gmail.com>
-Message-ID: <20200424143907.2bbed23c@windsurf.home>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Fri, 24 Apr 2020 14:47:14 +0200
+Subject: [Buildroot] [PATCH v2] package/matio: new package
+In-Reply-To: <20200424120545.GK5035@scaer>
+References: <20200424085624.23908-1-gwenj@trabucayre.com>
+ <20200424120545.GK5035@scaer>
+Message-ID: <20200424144714.698b3255@x230_1.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 10 Apr 2020 15:34:14 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Yann, all
+On Fri, 24 Apr 2020 14:05:45 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Since wireguard is built into kernels 5.6 and later we can't build
-> wireguard-linux-compat on them, so we need to depend on
-> !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6.
+> Gwenhael, All,
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> On 2020-04-24 10:56 +0200, Gwenhael Goavec-Merou spake thusly:
+> > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> > 
+> > matio is an C library for reading and writing MATLAB MAT files.
+> > 
+> > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> > ---  
+> [--SNIP--]
+> > diff --git a/package/matio/Config.in b/package/matio/Config.in
+> > new file mode 100644
+> > index 0000000000..b6c4223e44
+> > --- /dev/null
+> > +++ b/package/matio/Config.in
+> > @@ -0,0 +1,15 @@
+> > +config BR2_PACKAGE_MATIO
+> > +	bool "matio"
+> > +	select BR2_PACKAGE_ZLIB
+> > +	help
+> > +	  matio is an C library for reading and writing MATLAB MAT
+> > +	  files.
+> > +
+> > +	  https://sourceforge.net/projects/matio
+> > +
+> > +if BR2_PACKAGE_MATIO
+> > +
+> > +config BR2_PACKAGE_MATIO_SPARSE
+> > +	bool "sparse support"  
+> 
+> Why do we need this top be optional? Does it increase the size
+> considerably?
+>
+I need to check 
+>
+> Im intrigued, because...
+> 
+> [--SNIP--]
+> > diff --git a/package/matio/matio.mk b/package/matio/matio.mk
+> > new file mode 100644
+> > index 0000000000..2ac46f10ad
+> > --- /dev/null
+> > +++ b/package/matio/matio.mk
+> > @@ -0,0 +1,25 @@
+> > +################################################################################
+> > +#
+> > +# matio
+> > +#
+> > +################################################################################
+> > +
+> > +MATIO_VERSION = 1.5.17
+> > +MATIO_SITE =
+> > http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
+> > +MATIO_LICENSE = BSD-2-Clause +MATIO_LICENSE_FILES = COPYING
+> > +MATIO_DEPENDENCIES = zlib
+> > +MATIO_INSTALL_STAGING = YES
+> > +
+> > +# va_copy()
+> > +MATIO_CONF_ENV = ac_cv_va_copy=yes
+> > +
+> > +MATIO_CONF_OPTS = --enable-mat73=no  
+> 
+> ... here you explicitly disable a feature.
+>
+This feature requires hdf5, not available. I must add a message to explain why
 
-I've applied to master.
-
-> +comment "wireguard-linux-compat cannot be used with kernels that have native wireguard support"
-> +	depends on BR2_LINUX_KERNEL && BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
-
-I believe this comment was not really useful. Indeed, if you have Linux
-greater or equal than 5.6, you can use the built-in wireguard support,
-there's no need for an exernal module. So I dropped this comment.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> 
+> > +ifeq ($(BR2_PACKAGE_MATIO_SPARSE),y)
+> > +MATIO_CONF_OPTS += --enable-extended-sparse=yes
+> > +else
+> > +MATIO_CONF_OPTS += --enable-extended-sparse=no  
+> 
+> Usually, we use: --enable-extended-sparse and --disable-extended-sparse=yes
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> > +endif
+> > +
+> > +$(eval $(autotools-package))
+> > -- 
+> > 2.25.1
+> > 
+Regards,
+Gwen
