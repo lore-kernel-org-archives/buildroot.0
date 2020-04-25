@@ -1,55 +1,56 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 25 Apr 2020 22:34:05 +0200
-Subject: [Buildroot] [PATCH 1/2] board/qemu/microblaze: convert kernel
- patch to git format
-In-Reply-To: <20200425222010.2f6d9899@windsurf.home>
-References: <20200425195848.205599-1-romain.naour@gmail.com>
- <20200425222010.2f6d9899@windsurf.home>
-Message-ID: <64e4de9f-0b98-ae17-93a5-52e8582d7095@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Apr 2020 22:34:43 +0200
+Subject: [Buildroot] [git commit] package/proftpd: add mod_sftp_sql
+Message-ID: <20200425202029.0E8909037F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2003a003f47de7dd6cac64d5ecfbdd29fac43112
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 25/04/2020 ? 22:20, Thomas Petazzoni a ?crit?:
-> On Sat, 25 Apr 2020 21:58:47 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
-> 
->> Convert the patch for microblaze kernel added for kernel 3.14 by
->> Waldemar to git format.
->>
->> Note: the Waldemar Sob line is missing in the original patch:
->> fa2798548368d51998fad18d7f6d1ae0ed065b33
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Waldemar Brodkorb <wbx@openadk.org>
->> ---
->>  ...xilinx-xemaclite-add-2.00.b-revision.patch | 34 +++++++++++++++++++
->>  .../microblazebe-mmu/xilinx-xemaclite.patch   | 11 ------
->>  ...xilinx-xemaclite-add-2.00.b-revision.patch | 34 +++++++++++++++++++
->>  .../microblazeel-mmu/xilinx-xemaclite.patch   | 11 ------
->>  configs/qemu_microblazebe_mmu_defconfig       |  2 +-
->>  configs/qemu_microblazeel_mmu_defconfig       |  2 +-
->>  6 files changed, 70 insertions(+), 24 deletions(-)
->>  create mode 100644 board/qemu/microblazebe-mmu/0001-net-xilinx-xemaclite-add-2.00.b-revision.patch
->>  delete mode 100644 board/qemu/microblazebe-mmu/xilinx-xemaclite.patch
->>  create mode 100644 board/qemu/microblazeel-mmu/0001-net-xilinx-xemaclite-add-2.00.b-revision.patch
->>  delete mode 100644 board/qemu/microblazeel-mmu/xilinx-xemaclite.patch
-> 
-> Series applied. Thanks a lot for the good work, very nice to see these
-> defconfigs maintained and updated.
+update to add mod_sftp_sql for proftpd as a build option
+http://www.proftpd.org/docs/contrib/mod_sftp_sql.html
 
-The last time the kernel was updated by my colleague G?r?me, he spent some days
-to do the same work. Thanks the Qemu runtime testing it's really easier than
-before (Thanks to Yann for the help and final review).
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/proftpd/Config.in  | 7 +++++++
+ package/proftpd/proftpd.mk | 4 ++++
+ 2 files changed, 11 insertions(+)
 
-Best regards,
-Romain
-
-
-> 
-> Thomas
-> 
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index 4a544f0c50..4898f49dd2 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -47,6 +47,13 @@ config BR2_PACKAGE_PROFTPD_MOD_SQL_SQLITE
+ 
+ endif
+ 
++config BR2_PACKAGE_PROFTPD_MOD_SFTP_SQL
++	bool "mod_sftp_sql support"
++	select BR2_PACKAGE_PROFTPD_MOD_SQL
++	select BR2_PACKAGE_PROFTPD_MOD_SFTP
++	help
++	  Compile ProFTPD with mod_sftp_sql support
++
+ config BR2_PACKAGE_PROFTPD_MOD_QUOTATAB
+ 	bool "mod_quotatab support"
+ 	help
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 946a37d69e..e126d0e0a4 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -60,6 +60,10 @@ PROFTPD_MODULES += mod_sql_sqlite
+ PROFTPD_DEPENDENCIES += sqlite
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PROFTPD_MOD_SFTP_SQL),y)
++PROFTPD_MODULES += mod_sftp_sql
++endif
++
+ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_QUOTATAB),y)
+ PROFTPD_MODULES += mod_quotatab
+ endif
