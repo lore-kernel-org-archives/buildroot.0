@@ -1,32 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 22:13:19 +0200
-Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump
- version to 1.0.20200413
-In-Reply-To: <20200425094600.26046-1-peter@korsgaard.com>
-References: <20200425094600.26046-1-peter@korsgaard.com>
-Message-ID: <20200425221319.02400631@windsurf.home>
+Date: Sat, 25 Apr 2020 22:13:32 +0200
+Subject: [Buildroot] [git commit] package/mtdev2tuio: fix build with musl
+ 1.2.0
+Message-ID: <20200425200118.3E6CC9032D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 25 Apr 2020 11:45:59 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1d282014ce547a5dce2f6c379e3e3905ed9246db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For details, see the announcement:
-> https://lists.zx2c4.com/pipermail/wireguard/2020-April/005295.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
->  package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/a30823f1388f37820d8a4f29b9b2c1de9b3992ac
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...02-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch b/package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch
+new file mode 100644
+index 0000000000..24ceff52ee
+--- /dev/null
++++ b/package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch
+@@ -0,0 +1,57 @@
++From 6fb492ba72b4ecbe5ebba44647e838fb998ee061 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 25 Apr 2020 12:19:32 +0200
++Subject: [PATCH] mtdev2tuio.c: fix build with musl 1.2.0
++
++time element is deprecated on new input_event structure in kernel's
++input.h [1]
++
++[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/olivopaolo/mtdev2tuio/pull/6]
++---
++ mtdev2tuio.c | 13 +++++++++----
++ 1 file changed, 9 insertions(+), 4 deletions(-)
++
++diff --git a/mtdev2tuio.c b/mtdev2tuio.c
++index 3a9174f..fced70c 100644
++--- a/mtdev2tuio.c
+++++ b/mtdev2tuio.c
++@@ -47,8 +47,13 @@
++ 
++ typedef __u64 nstime;
++ 
++-static inline __u64 timeval_to_ns(const struct timeval *tv) {
++-  return ((__u64) tv->tv_sec * NSEC_PER_SEC) + tv->tv_usec * NSEC_PER_USEC ;
+++#ifndef input_event_sec
+++#define input_event_sec time.tv_sec
+++#define input_event_usec time.tv_usec
+++#endif
+++
+++static inline __u64 timeval_to_ns(const struct input_event *ev) {
+++  return ((__u64) ev->input_event_sec * NSEC_PER_SEC) + ev->input_event_usec * NSEC_PER_USEC ;
++ }
++ 
++ static float calc_speed(float s, float s_1, nstime t, nstime t_1) {
++@@ -159,7 +164,7 @@ static void process_event(struct state_t *s, struct device_t *d, const struct in
++       case ABS_MT_POSITION_X:
++ 	s->slot[s->cs].x_1 = s->slot[s->cs].x ;
++ 	s->slot[s->cs].x = (ev->value - d->x_ofs) * d->x_scale ;
++-	time = timeval_to_ns(&ev->time) ;
+++	time = timeval_to_ns(ev) ;
++ 	s->slot[s->cs].X = calc_speed(s->slot[s->cs].x, s->slot[s->cs].x_1, time, s->slot[s->cs].t_x) ;
++ 	s->slot[s->cs].t_x = time ;
++ 	// this slot has been changed
++@@ -168,7 +173,7 @@ static void process_event(struct state_t *s, struct device_t *d, const struct in
++       case ABS_MT_POSITION_Y :
++ 	s->slot[s->cs].y_1 = s->slot[s->cs].y ;
++ 	s->slot[s->cs].y = (ev->value - d->y_ofs) * d->y_scale ;
++-	time = timeval_to_ns(&ev->time) ;
+++	time = timeval_to_ns(ev) ;
++ 	s->slot[s->cs].Y = calc_speed(s->slot[s->cs].y, s->slot[s->cs].y_1, time, s->slot[s->cs].t_y) ;
++ 	s->slot[s->cs].t_y = time ;
++ 	// this slot has been changed
++-- 
++2.25.1
++
