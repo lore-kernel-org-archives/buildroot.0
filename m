@@ -1,54 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 15:25:01 +0200
-Subject: [Buildroot] [PATCH 1/1] utils: add a csv to xml conversion
- script for legal info, rendering as html
-In-Reply-To: <20191027161523.30907-1-nicolas.carrier@orolia.com>
-References: <20191027161523.30907-1-nicolas.carrier@orolia.com>
-Message-ID: <20200425152501.610b7663@windsurf.home>
+Date: Sat, 25 Apr 2020 15:28:58 +0200
+Subject: [Buildroot] [PATCH] package/apparmor: fix compilation with
+ libintl
+In-Reply-To: <20200424214020.381865-1-angelo@amarulasolutions.com>
+References: <20200424214020.381865-1-angelo@amarulasolutions.com>
+Message-ID: <20200425152858.58cabcdd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Fri, 24 Apr 2020 23:40:20 +0200
+Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
 
-+Cc the other Buildroot maintainers, as I'm taking a decision on this.
-
-On Sun, 27 Oct 2019 16:15:30 +0000
-Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
-
-> An xsl file is provided alongside the python script, which is referenced
-> by the generated xml.
-> This xsl file can be customized at will by users if they want to add, say
-> extra information, styling or even a logo...
-> When the xml file is served in http, browsers like firefox can render it
-> as if it was pure HTML.
+> When libintl is enabled, Apparmor should link againts libintl.
+> The attached patch is already sent upstream.
 > 
-> Otherwise, the following command-line can generate actual HTML from this
-> xml:
->     xsltproc --output manifest.html manifest.xml
-> 
-> The current script version passes flake8 with no warning.
-> 
-> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-So, I'm not thrilled by this, for several reasons:
+There's no autobuilder reference in your commit log, but I assume this
+is fixing:
 
- - Why generate a CSV, and then convert to it to XML ? If anything,
-   let's generate the XML directly.
+  http://autobuild.buildroot.net/results/8bf/8bf5ce74721f828b01fd708443d020cdf8dc7d3a/build-end.log
 
- - Why XML ? We already have CSV information for legal-info, and JSON
-   output for "make show-info". Let's not add another data description
-   "language".
-
- - We know have "make show-info", which pretty much gives the same
-   information as what is in the legal-info manifest. If not, we can
-   probably extend the "show-info" output.
-
-So, I'm going to mark this patch as rejected.
-
-Best regards,
+Correct ?
 
 Thomas
 -- 
