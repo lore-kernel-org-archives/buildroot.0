@@ -1,63 +1,60 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sat, 25 Apr 2020 01:49:31 -0700
-Subject: [Buildroot] [PATCH] package/binutils: fix xtensa PR ld/25861
-In-Reply-To: <a547d3fe-ff67-d2d9-4059-f0f4dee414e8@gmail.com>
-References: <20200423031145.18873-1-jcmvbkbc@gmail.com>
- <20200423233221.28e17e3a@windsurf.home>
- <a547d3fe-ff67-d2d9-4059-f0f4dee414e8@gmail.com>
-Message-ID: <CAMo8Bf+bTa=m9sH+uFWJCtMi7sb22FmekbxdVijz4sY+n4d-jA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 25 Apr 2020 10:50:43 +0200
+Subject: [Buildroot] [git commit] package/wireguard-linux-compat: depend
+ on headers < 5.6
+In-Reply-To: <20200424122241.994F08FEC1@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Fri, 24 Apr 2020 14:37:03 +0200")
+References: <20200424122241.994F08FEC1@busybox.osuosl.org>
+Message-ID: <87mu70t0d8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 25, 2020 at 1:24 AM Romain Naour <romain.naour@gmail.com> wrote:
->
-> Hi Max, All,
->
-> Le 23/04/2020 ? 23:32, Thomas Petazzoni a ?crit :
-> > On Wed, 22 Apr 2020 20:11:45 -0700
-> > Max Filippov <jcmvbkbc@gmail.com> wrote:
-> >
-> >> Handle link-time relaxation of full 16-bit difference values correctly
-> >> in xtensa linker. This fixes the following kind of build errors:
-> >>
-> >> .../five-point.cpp:338:(.debug_line+0x3b12):
-> >>              dangerous relocation: overflow after relaxation
-> >>
-> >> Backported from:
-> >> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=30ce8e47fad9b057b6d7af9e1d43061126d34d20
-> >> Fixes:
-> >> http://autobuild.buildroot.net/results/67a5545779bbe8ca2b21da1f3ff2002053710ce1/
-> >> http://autobuild.buildroot.net/results/87f38998d2d60b6bce3128589973187ef9596e28/
-> >>
-> >> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> >> ---
-> >>  .../2.31.1/0019-xtensa-fix-PR-ld-25861.patch  | 376 +++++++++++++++
-> >>  .../2.32/0008-xtensa-fix-PR-ld-25861.patch    | 432 ++++++++++++++++++
-> >>  .../2.33.1/0005-xtensa-fix-PR-ld-25861.patch  | 432 ++++++++++++++++++
-> >>  3 files changed, 1240 insertions(+)
-> >>  create mode 100644 package/binutils/2.31.1/0019-xtensa-fix-PR-ld-25861.patch
-> >>  create mode 100644 package/binutils/2.32/0008-xtensa-fix-PR-ld-25861.patch
-> >>  create mode 100644 package/binutils/2.33.1/0005-xtensa-fix-PR-ld-25861.patch
-> >
-> > Applied to master, thanks.
->
-> Thanks for your work on xtensa!
->
-> There is a new a build issue while building qemu_xtensa defconfigs:
->
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/526035785
->
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/526035783
->
-> Probably due to this patch.
->
-> Can you have a look?
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Yes, XTENSA_NDIFF relocations are handled incorrectly, I'm testing a fix.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=da5afc10a45d1e1b5ab7ab6f9230ed7ba44581e7
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+ > Since wireguard is built into kernels 5.6 and later we can't build
+ > wireguard-linux-compat on them, so we need to depend on
+ > !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6.
+
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+ >  package/wireguard-linux-compat/Config.in | 6 +++++-
+ >  1 file changed, 5 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/wireguard-linux-compat/Config.in b/package/wireguard-linux-compat/Config.in
+ > index 4ee214be63..6e41a0951b 100644
+ > --- a/package/wireguard-linux-compat/Config.in
+ > +++ b/package/wireguard-linux-compat/Config.in
+ > @@ -3,6 +3,8 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+ >  	depends on BR2_LINUX_KERNEL
+ >  	# kernel module requires 3.10+
+ >  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ > +	# kernel module incompatible with 5.6+
+ > +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+
+Maybe a better wording would be ".. in upstream linux since 5.6" rather
+than incompatible so it is clearer what to do if you use 5.6+.
+
+ >  	help
+ >  	  WireGuard is an extremely simple yet fast and modern VPN
+ >  	  that utilizes state-of-the-art cryptography. It aims to be
+ > @@ -20,4 +22,6 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+ >  	  https://www.wireguard.com
+ 
+ >  comment "wireguard-linux-compat needs a toolchain w/ headers >= 3.10"
+ > -	depends on BR2_LINUX_KERNEL && !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ > +	depends on BR2_LINUX_KERNEL
+ > +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+ > +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+
+If the headers are < than 3.10, then they are also < 5.6, so this is
+redundant.
 
 -- 
-Thanks.
--- Max
+Bye, Peter Korsgaard
