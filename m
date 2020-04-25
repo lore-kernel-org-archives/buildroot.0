@@ -1,47 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Apr 2020 11:56:03 +0200
-Subject: [Buildroot] [git commit] package/wireguard-linux-compat: tweak
- kernel-headers < 5.6 logic
-Message-ID: <20200425094139.9C1168FEFF@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Apr 2020 11:58:27 +0200
+Subject: [Buildroot] [PATCH 5/8] package/python3-requests: add special
+ host variant
+In-Reply-To: <20200323104909.16765-5-yegorslists@googlemail.com>
+References: <20200323104909.16765-1-yegorslists@googlemail.com>
+ <20200323104909.16765-5-yegorslists@googlemail.com>
+Message-ID: <20200425115827.16fc95f4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74a865b1fc85352b814d032fa8725ace13f27eca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 23 Mar 2020 11:49:06 +0100
+yegorslists at googlemail.com wrote:
 
-The reason why the external wireguard kernel module is not allowed with
-kernel headers >= 5.6 is that wireguard is included in the upstream kernel
-since 5.6 rather than some kind of (fixable) incompatibility issue.  Adjust
-the comment to make that clear.
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Needed to build mongodb.
+> 
+> Also convert python-requests to host package.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/python-requests/python-requests.mk     |  1 +
+>  package/python3-requests/python3-requests.hash |  1 +
+>  package/python3-requests/python3-requests.mk   | 18 ++++++++++++++++++
+>  3 files changed, 20 insertions(+)
+>  create mode 120000 package/python3-requests/python3-requests.hash
+>  create mode 100644 package/python3-requests/python3-requests.mk
+> 
+> diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+> index e64db94523..8c012145f3 100644
+> --- a/package/python-requests/python-requests.mk
+> +++ b/package/python-requests/python-requests.mk
+> @@ -12,3 +12,4 @@ PYTHON_REQUESTS_LICENSE = Apache-2.0
+>  PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+>  
+>  $(eval $(python-package))
+> +$(eval $(host-python-package))
 
-While we're at it, drop the redundant !5.6 dependency on the kernel headers
-dependency comment.  If headers are older than 3.10, then they are also
-older than 5.6, so the statement is redundant.
+There was no need to add a host variant to python-requests, only
+host-python3-requests is needed. However, I've added a comment in this
+file to indicate that the version needs to stay in sync with the one in
+python3-requests.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard-linux-compat/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> +# Please keep in sync with
+> +# package/python-requests/python-requests.mk
+> +PYTHON3_REQUESTS_VERSION = 2.22.0
+> +PYTHON3_REQUESTS_SOURCE = requests-$(PYTHON3_REQUESTS_VERSION).tar.gz
+> +PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/01/62/ddcf76d1d19885e8579acb1b1df26a852b03472c0e46d2b959a714c90608
 
-diff --git a/package/wireguard-linux-compat/Config.in b/package/wireguard-linux-compat/Config.in
-index 6e41a0951b..5a323a35e5 100644
---- a/package/wireguard-linux-compat/Config.in
-+++ b/package/wireguard-linux-compat/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
- 	depends on BR2_LINUX_KERNEL
- 	# kernel module requires 3.10+
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
--	# kernel module incompatible with 5.6+
-+	# kernel module in upstream linux since 5.6
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
- 	help
- 	  WireGuard is an extremely simple yet fast and modern VPN
-@@ -23,5 +23,4 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
- 
- comment "wireguard-linux-compat needs a toolchain w/ headers >= 3.10"
- 	depends on BR2_LINUX_KERNEL
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+I've updated to be in sync with python-requests, which is at 2.23.0.
+
+Applied with those changes. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
