@@ -1,48 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 21:55:39 +0200
-Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
- version to 1.0.20200413
-Message-ID: <20200425194103.0310F90328@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 25 Apr 2020 13:55:52 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to
+ version 20.4.3
+In-Reply-To: <20200425215311.6ab6210d@windsurf.home>
+References: <20200424224752.63673-1-james.hilliard1@gmail.com>
+ <20200425153040.297e371c@windsurf.home>
+ <CADvTj4ptKKjxeu6YHNGC+ANffqnOzgswFjAD54H15BTsghx5MA@mail.gmail.com>
+ <20200425215311.6ab6210d@windsurf.home>
+Message-ID: <CADvTj4pu05H-Q8jEnrn+pHNZpHHDwfkSy0xE8thHe-e+g5UwbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66962e9bb86ea63b985c261b653ddfcf1345eef7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For details, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2020-April/005295.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index a9675b5180..d308f47a13 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-April/005237.html
--sha256  7dfb4a8315e1d6ae406ff32d01c496175df558dd65968a19e5222d02c7cfb77a  wireguard-linux-compat-1.0.20200401.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-April/005296.html
-+sha256  cf166348fbb67419528e73049ce001d29131aea367fa6aef9d3e223f7251e116  wireguard-linux-compat-1.0.20200413.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index d5a2341d77..27f5981ae3 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200401
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200413
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+On Sat, Apr 25, 2020 at 1:53 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello James,
+>
+> On Sat, 25 Apr 2020 13:31:31 -0600
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> > > Why don't we support it? Can it be made optional in a way that is
+> > > acceptable upstream?
+> > This feature is very dependency heavy to begin with(we don't have
+> > buildroot packages for most) and not relevant to most autobahn use
+> > cases.
+>
+> OK.
+>
+> > I just got something merged upstream which should simplify stripping
+> > xbr however.
+>
+> Would be good, indeed.
+>
+> > > Urgh, we want a patch, not tweaks like that. I guess perhaps the patch
+> > > doesn't need to remove the actual source files, just remove the
+> > > handling in setup.py.
+> > I'll respin this once upstream has a new release with the ENV variable I
+> > added that strips xbr during installation, not stripping xbr results in a fairly
+> > large target size increase, nearly 10MB from the looks of it.
+>
+> Sounds good. Thanks!
+If you'd like you can merge just the version bump part without the xbr strip
+for now.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
