@@ -1,99 +1,43 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 25 Apr 2020 16:03:56 +0200
-Subject: [Buildroot] [PATCH v2] package/apparmor: fix compilation with
- libintl
-Message-ID: <20200425140356.6448-1-angelo@amarulasolutions.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Apr 2020 16:08:39 +0200
+Subject: [Buildroot] [git commit] package/docker-engine: bump version to
+ 19.03.7
+Message-ID: <20200425135438.127B090027@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libintl is enabled, Apparmor should link againts libintl.
-The patch is already sent upstream.
+commit: https://git.buildroot.net/buildroot/commit/?id=e505bc4777a61407115fb3fb918f29e62b3caa88
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/8bf/8bf5ce74721f828b01fd708443d020cdf8dc7d3a
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changelo:
-v1->v2:
-* Adding autobuild ref (Thomas P.)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- ...inutils-fix-compilation-with-libintl.patch | 48 +++++++++++++++++++
- package/apparmor/apparmor.mk                  |  4 ++
- 2 files changed, 52 insertions(+)
- create mode 100644 package/apparmor/0001-parser-binutils-fix-compilation-with-libintl.patch
-
-diff --git a/package/apparmor/0001-parser-binutils-fix-compilation-with-libintl.patch b/package/apparmor/0001-parser-binutils-fix-compilation-with-libintl.patch
-new file mode 100644
-index 0000000000..d3f4a51646
---- /dev/null
-+++ b/package/apparmor/0001-parser-binutils-fix-compilation-with-libintl.patch
-@@ -0,0 +1,48 @@
-+From c9fe40d9386a5e4cf99f44df9b98382d83f1c4f4 Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo@amarulasolutions.com>
-+Date: Fri, 24 Apr 2020 17:34:24 +0200
-+Subject: [PATCH] parser: binutils: fix compilation with libintl
-+
-+When libintl is available on the system, we need to link against the
-+libintl library too.
-+
-+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-+---
-+ binutils/Makefile | 4 ++++
-+ parser/Makefile   | 5 +++++
-+ 2 files changed, 9 insertions(+)
-+
-+diff --git a/binutils/Makefile b/binutils/Makefile
-+index 11459bec..d8c1b634 100644
-+--- a/binutils/Makefile
-++++ b/binutils/Makefile
-+@@ -56,6 +56,10 @@ SBINTOOLS = aa-status
-+ 
-+ AALIB = -Wl,-Bstatic -lapparmor  -Wl,-Bdynamic -lpthread
-+ 
-++ifdef WITH_LIBINTL
-++	AALIB += -lintl
-++endif
-++
-+ ifdef USE_SYSTEM
-+   # Using the system libapparmor so Makefile dependencies can't be used
-+   LIBAPPARMOR_A =
-+diff --git a/parser/Makefile b/parser/Makefile
-+index eab64be9..998230ee 100644
-+--- a/parser/Makefile
-++++ b/parser/Makefile
-+@@ -91,6 +91,11 @@ AAREOBJECTS = $(AAREOBJECT)
-+ AARE_LDFLAGS = -static-libgcc -static-libstdc++ -L. $(LDFLAGS)
-+ AALIB = -Wl,-Bstatic -lapparmor -Wl,-Bdynamic -lpthread
-+ 
-++ifdef WITH_LIBINTL
-++	AALIB += -lintl
-++endif
-++
-++
-+ ifdef USE_SYSTEM
-+   # Using the system libapparmor so Makefile dependencies can't be used
-+   LIBAPPARMOR_A =
-+-- 
-+2.25.1
-+
-diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-index 097c9cfba7..5c67e15106 100644
---- a/package/apparmor/apparmor.mk
-+++ b/package/apparmor/apparmor.mk
-@@ -17,6 +17,10 @@ APPARMOR_DEPENDENCIES = libapparmor
- APPARMOR_TOOLS = parser
- APPARMOR_MAKE_OPTS = USE_SYSTEM=1 DISTRO=unknown
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 1f1643d377..4c031574af 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	bc5d1ac503e44593be8003ed0ad9c75bf0da535db19837a9338429c438bd4637  docker-engine-19.03.5.tar.gz
++sha256	6621da5b75cecd1f6f57389a4611d3dd00eeedd8765db63ae5538122fdac27da  docker-engine-19.03.7.tar.gz
+ sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index eb3a7fd29f..df27cb17b5 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
-+APPARMOR_MAKE_OPTS += WITH_LIBINTL=1
-+endif
-+
- ifeq ($(BR2_PACKAGE_APPARMOR_BINUTILS),y)
- APPARMOR_TOOLS += binutils
- endif
--- 
-2.25.1
+-DOCKER_ENGINE_VERSION = 19.03.5
++DOCKER_ENGINE_VERSION = 19.03.7
+ DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
