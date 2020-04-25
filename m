@@ -1,85 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 25 Apr 2020 12:48:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mtdev2tuio: fix build with musl
- 1.2.0
-Message-ID: <20200425104816.1229406-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Apr 2020 14:02:03 +0200
+Subject: [Buildroot] [PATCH 7/8] package/python3-psutil: add a special
+ host variant
+In-Reply-To: <20200323104909.16765-7-yegorslists@googlemail.com>
+References: <20200323104909.16765-1-yegorslists@googlemail.com>
+ <20200323104909.16765-7-yegorslists@googlemail.com>
+Message-ID: <20200425140203.64c06def@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/a30823f1388f37820d8a4f29b9b2c1de9b3992ac
+On Mon, 23 Mar 2020 11:49:08 +0100
+yegorslists at googlemail.com wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...dev2tuio.c-fix-build-with-musl-1.2.0.patch | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch
+> diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+> index cfb015cfe6..b050547624 100644
+> --- a/package/python-psutil/python-psutil.mk
+> +++ b/package/python-psutil/python-psutil.mk
+> @@ -11,8 +11,5 @@ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+>  PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+>  PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+>  
+> -# Needed to build mongodb
+> -HOST_PYTHON_PSUTIL_NEEDS_HOST_PYTHON = python3
 
-diff --git a/package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch b/package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch
-new file mode 100644
-index 0000000000..24ceff52ee
---- /dev/null
-+++ b/package/mtdev2tuio/0002-mtdev2tuio.c-fix-build-with-musl-1.2.0.patch
-@@ -0,0 +1,57 @@
-+From 6fb492ba72b4ecbe5ebba44647e838fb998ee061 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 25 Apr 2020 12:19:32 +0200
-+Subject: [PATCH] mtdev2tuio.c: fix build with musl 1.2.0
-+
-+time element is deprecated on new input_event structure in kernel's
-+input.h [1]
-+
-+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/olivopaolo/mtdev2tuio/pull/6]
-+---
-+ mtdev2tuio.c | 13 +++++++++----
-+ 1 file changed, 9 insertions(+), 4 deletions(-)
-+
-+diff --git a/mtdev2tuio.c b/mtdev2tuio.c
-+index 3a9174f..fced70c 100644
-+--- a/mtdev2tuio.c
-++++ b/mtdev2tuio.c
-+@@ -47,8 +47,13 @@
-+ 
-+ typedef __u64 nstime;
-+ 
-+-static inline __u64 timeval_to_ns(const struct timeval *tv) {
-+-  return ((__u64) tv->tv_sec * NSEC_PER_SEC) + tv->tv_usec * NSEC_PER_USEC ;
-++#ifndef input_event_sec
-++#define input_event_sec time.tv_sec
-++#define input_event_usec time.tv_usec
-++#endif
-++
-++static inline __u64 timeval_to_ns(const struct input_event *ev) {
-++  return ((__u64) ev->input_event_sec * NSEC_PER_SEC) + ev->input_event_usec * NSEC_PER_USEC ;
-+ }
-+ 
-+ static float calc_speed(float s, float s_1, nstime t, nstime t_1) {
-+@@ -159,7 +164,7 @@ static void process_event(struct state_t *s, struct device_t *d, const struct in
-+       case ABS_MT_POSITION_X:
-+ 	s->slot[s->cs].x_1 = s->slot[s->cs].x ;
-+ 	s->slot[s->cs].x = (ev->value - d->x_ofs) * d->x_scale ;
-+-	time = timeval_to_ns(&ev->time) ;
-++	time = timeval_to_ns(ev) ;
-+ 	s->slot[s->cs].X = calc_speed(s->slot[s->cs].x, s->slot[s->cs].x_1, time, s->slot[s->cs].t_x) ;
-+ 	s->slot[s->cs].t_x = time ;
-+ 	// this slot has been changed
-+@@ -168,7 +173,7 @@ static void process_event(struct state_t *s, struct device_t *d, const struct in
-+       case ABS_MT_POSITION_Y :
-+ 	s->slot[s->cs].y_1 = s->slot[s->cs].y ;
-+ 	s->slot[s->cs].y = (ev->value - d->y_ofs) * d->y_scale ;
-+-	time = timeval_to_ns(&ev->time) ;
-++	time = timeval_to_ns(ev) ;
-+ 	s->slot[s->cs].Y = calc_speed(s->slot[s->cs].y, s->slot[s->cs].y_1, time, s->slot[s->cs].t_y) ;
-+ 	s->slot[s->cs].t_y = time ;
-+ 	// this slot has been changed
-+-- 
-+2.25.1
-+
+I dropped this chunk, since I did not apply PATCH 1/8. I've however
+added a comment in python-psutil.mk to tell that the version should be
+kept in sync with python3-psutil.
+
+> +# Please keep in sync with
+> +# package/python-mako/python-psutil.mk
+                   ^^^^^ should have been psutil
+
+> +PYTHON3_PSUTIL_VERSION = 5.6.7
+> +PYTHON3_PSUTIL_SOURCE = psutil-$(PYTHON3_PSUTIL_VERSION).tar.gz
+> +PYTHON3_PSUTIL_SITE = https://files.pythonhosted.org/packages/73/93/4f8213fbe66fc20cb904f35e6e04e20b47b85bee39845cc66a0bcf5ccdcb
+
+I've updated the version and site to be in sync with python-psutil.
+
+Applied with those changes. Thanks!
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
