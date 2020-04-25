@@ -1,48 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 14:48:15 +0200
-Subject: [Buildroot] [git commit] package/perl-data-uuid: bump to version
- 1.226
-Message-ID: <20200425123632.A7FC68FF89@busybox.osuosl.org>
+Date: Sat, 25 Apr 2020 14:48:16 +0200
+Subject: [Buildroot] [git commit] package/perl-net-ssh2: bump to version 0.71
+Message-ID: <20200425123632.E48DE8FF89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08cab922e90443c640eb818543a5cb94ce886021
+commit: https://git.buildroot.net/buildroot/commit/?id=8cd10122e7288105f1d5cc40324d2a11e89819dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-data-uuid/perl-data-uuid.hash | 6 +++---
- package/perl-data-uuid/perl-data-uuid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-net-ssh2/perl-net-ssh2.hash | 6 +++---
+ package/perl-net-ssh2/perl-net-ssh2.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-data-uuid/perl-data-uuid.hash b/package/perl-data-uuid/perl-data-uuid.hash
-index 280567177f..b2c8629605 100644
---- a/package/perl-data-uuid/perl-data-uuid.hash
-+++ b/package/perl-data-uuid/perl-data-uuid.hash
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.hash b/package/perl-net-ssh2/perl-net-ssh2.hash
+index 006f79477c..d65b6f36b8 100644
+--- a/package/perl-net-ssh2/perl-net-ssh2.hash
++++ b/package/perl-net-ssh2/perl-net-ssh2.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    71510bbcce760c394591fca83a9b5e6d Data-UUID-1.224.tar.gz
--sha256 c958c17502bbef5eccf40c040874895747f7f9b9f9e5192c18688370981bf47c Data-UUID-1.224.tar.gz
-+md5  13468e0fb65a0b5ce27b8628cb2f0109  Data-UUID-1.226.tar.gz
-+sha256  093d57ffa0d411a94bafafae495697db26f5c9d0277198fe3f7cf2be22996453  Data-UUID-1.226.tar.gz
+-md5    ef8d282c410728aa452fb380a7d22b05 Net-SSH2-0.70.tar.gz
+-sha256 47236af8f4a5e4cfa3036f7969d940247349b65b032478a0c72ba0b2e398b000 Net-SSH2-0.70.tar.gz
++md5  baa1b19fec9ca37ecfc12a22ba0c9122  Net-SSH2-0.71.tar.gz
++sha256  ee411ec263c900c441fd1c490e9d52fc56b0bb32e1ed98869229501b200f8fa2  Net-SSH2-0.71.tar.gz
  
  # computed by scancpan
--sha256 0560c8eea8e1fb8173faa6c2e9b7e9f8728b8ae8250a814709a53c30b778d5fb LICENSE
-+sha256  0560c8eea8e1fb8173faa6c2e9b7e9f8728b8ae8250a814709a53c30b778d5fb  LICENSE
-diff --git a/package/perl-data-uuid/perl-data-uuid.mk b/package/perl-data-uuid/perl-data-uuid.mk
-index 00dccdb7e6..93060964bb 100644
---- a/package/perl-data-uuid/perl-data-uuid.mk
-+++ b/package/perl-data-uuid/perl-data-uuid.mk
-@@ -4,7 +4,7 @@
+-sha256 3e479d43f8316315caa30ba00b7a143175326a3be83fd4e03146c831afaa22bd README
++sha256  b9fe64368dd41bb5b9405b23f95ee0deb970427895ab0119eb3cd4d221764c1d  README.pod
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.mk b/package/perl-net-ssh2/perl-net-ssh2.mk
+index e75d01d9bd..10657c39ca 100644
+--- a/package/perl-net-ssh2/perl-net-ssh2.mk
++++ b/package/perl-net-ssh2/perl-net-ssh2.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PERL_DATA_UUID_VERSION = 1.224
-+PERL_DATA_UUID_VERSION = 1.226
- PERL_DATA_UUID_SOURCE = Data-UUID-$(PERL_DATA_UUID_VERSION).tar.gz
- PERL_DATA_UUID_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RJ/RJBS
- # The license is documented at
+-PERL_NET_SSH2_VERSION = 0.70
++PERL_NET_SSH2_VERSION = 0.71
+ PERL_NET_SSH2_SOURCE = Net-SSH2-$(PERL_NET_SSH2_VERSION).tar.gz
+-PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SA/SALVA
++PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RK/RKITOVER
+ PERL_NET_SSH2_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_SSH2_LICENSE_FILES = README
++PERL_NET_SSH2_LICENSE_FILES = README.pod
+ PERL_NET_SSH2_DEPENDENCIES = libssh2 zlib
+ PERL_NET_SSH2_DISTNAME = Net-SSH2
+ 
