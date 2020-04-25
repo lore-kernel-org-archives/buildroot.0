@@ -1,259 +1,132 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 23:38:39 +0200
-Subject: [Buildroot] [git commit] package/wlroots: new package
-Message-ID: <20200425212525.2DADE9039E@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Apr 2020 23:45:28 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: add option to define custom
+ dependencies
+In-Reply-To: <2530327.UWAnRXb5oC@diego>
+References: <20200425000629.2068191-1-heiko@sntech.de>
+ <20200425211350.GR5035@scaer>
+ <20200425232245.6e13c5a6@windsurf.home> <2530327.UWAnRXb5oC@diego>
+Message-ID: <20200425214528.GT5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db5bccc04489672ded8a639f97b19a18e85ddd70
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Heiko, All,
 
-wlroots is a modular library which provides building blocks to
-implement Wayland compositors. wlroots is a dependency of the
-Cage Wayland compositor.
+On 2020-04-25 23:31 +0200, Heiko St?bner spake thusly:
+> Am Samstag, 25. April 2020, 23:22:45 CEST schrieb Thomas Petazzoni:
+> > On Sat, 25 Apr 2020 23:13:50 +0200
+> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > > My opinion on that patch is that i am definitely not in favour of it. If
+> > > we go that route, then we would have to allow adding any such arbitrary
+> > > dependencies to a wide range of packages.
+> > 
+> > Without necessarily strongly supporting Heiko's patch, I think it is
+> > important to keep in mind that U-Boot is not a package like any others.
+> > We offer version selection for U-Boot, custom Git/Subversion repo
+> > selection, which we do not offer for other packages. U-Boot has
+> > zillions of forks, support for gazillions platforms each with their own
+> > funky requirements.
+> > 
+> > We've already added a BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS to pass custom
+> > make options, adding the possibility to add custom dependencies would
+> > go in the same direction.
+> > 
+> > I however agree that this kind of option is a good recipe for people to
+> > do their own hacks on their side, instead of finding a proper way to do
+> > it that can be upstreamed to Buildroot.
+> > 
+> > > Now, there are two situations:
+> > > 
+> > >   - the tool is already in Buildroot: add a new _NEEDS_FOO option like
+> > >     we already have.
+> > > 
+> > >   - the tool is in a br2-external tre: this is in my opinion better
+> > >     served by working on the evaluation-postpone changes Arnou and I
+> > >     have been suggesting for quite a while now.
+> > 
+> > I think it would make sense to hear about what Heiko's use case exactly
+> > is, this might help.
+> 
+> the use-case is:
+> - a u-boot config fragment specifying key-dir and key-hint for signing
+>   uboot parts - see [0]
+> - our own package managing these (and other) keys
+> - and thus us wanting to make sure the key package gets "build" before
+>   u-boot itself
+> 
+> I'm not overly attached to my patch, but it somehow felt in line with
+> also the config-fragment option, that allows including other random
+> fragments into the board config file for the u-boot build.
+> 
+> So yes, the required package is in a br2-external tree. What is this
+> "evaluation-postpone" thingy?
 
-https://github.com/swaywm/wlroots/
+The basic idea is to postpone the evaluation of all the *-pacakage
+macros to after all packages have indeed been parsed.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- ...pkg-config-to-find-wayland-scanner-when-c.patch | 45 ++++++++++++
- package/wlroots/Config.in                          | 49 +++++++++++++
- package/wlroots/wlroots.hash                       |  5 ++
- package/wlroots/wlroots.mk                         | 82 ++++++++++++++++++++++
- 6 files changed, 183 insertions(+)
+For example (just for the illustration sake, it would probably be a
+little bit more complex, but not by far):
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c57bc1c5c9..d6557f1143 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -99,6 +99,7 @@ F:	package/cog/
- F:	package/libepoxy/
- F:	package/libwpe/
- F:	package/webkitgtk/
-+F:	package/wlroots/
- F:	package/woff2/
- F:	package/wpebackend-fdo/
- F:	package/wpewebkit/
-diff --git a/package/Config.in b/package/Config.in
-index 9a6461277e..6c55c5bc42 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1460,6 +1460,7 @@ menu "Graphics"
- 	source "package/waylandpp/Config.in"
- 	source "package/webkitgtk/Config.in"
- 	source "package/webp/Config.in"
-+	source "package/wlroots/Config.in"
- 	source "package/woff2/Config.in"
- 	source "package/wpebackend-fdo/Config.in"
- 	source "package/wpewebkit/Config.in"
-diff --git a/package/wlroots/0001-Do-not-use-pkg-config-to-find-wayland-scanner-when-c.patch b/package/wlroots/0001-Do-not-use-pkg-config-to-find-wayland-scanner-when-c.patch
-new file mode 100644
-index 0000000000..898506a0dc
---- /dev/null
-+++ b/package/wlroots/0001-Do-not-use-pkg-config-to-find-wayland-scanner-when-c.patch
-@@ -0,0 +1,45 @@
-+From 72138a67c8e6b0154aadc1b5fcb3d661033fbcd3 Mon Sep 17 00:00:00 2001
-+From: Adrian Perez de Castro <aperez@igalia.com>
-+Date: Thu, 13 Jun 2019 02:13:47 +0300
-+Subject: [PATCH] Do not use pkg-config to find wayland-scanner when cross
-+ building
-+
-+When cross-compiling it is still needed to run a native wayland-scanner,
-+but many tools for the task will still have pkg-config return the
-+location of wayland-scanner for the target in some location which may
-+be the same as for some native installation of wayland-scanner; but
-+which is not the copy of the program that the compilation system wants
-+packages to use (which are typically in a "host tools" directory
-+elsewhere).
-+
-+This disables usage of pkg-config to find wayland-scanner when
-+cross-compiling because most tools for the job will set $PATH in a way
-+that the correct installation of the tool will be found first.
-+
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+[Upstream status: https://github.com/swaywm/wlroots/pull/1722]
-+
-+---
-+ protocol/meson.build | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/protocol/meson.build b/protocol/meson.build
-+index 7cc10320..73c06b24 100644
-+--- a/protocol/meson.build
-++++ b/protocol/meson.build
-+@@ -1,6 +1,11 @@
-+ wl_protocol_dir = wayland_protos.get_pkgconfig_variable('pkgdatadir')
-+ 
-+-wayland_scanner_dep = dependency('wayland-scanner', required: false, native: true)
-++if meson.is_cross_build()
-++	wayland_scanner_dep = disabler()
-++else
-++	wayland_scanner_dep = dependency('wayland-scanner', required: false, native: true)
-++endif
-++
-+ if wayland_scanner_dep.found()
-+ 	wayland_scanner = find_program(
-+ 		wayland_scanner_dep.get_pkgconfig_variable('wayland_scanner'),
-+-- 
-+2.22.0
-+
-diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
-new file mode 100644
-index 0000000000..37261d0ca6
---- /dev/null
-+++ b/package/wlroots/Config.in
-@@ -0,0 +1,49 @@
-+comment "wlroots needs udev, mesa3d w/ EGL and GLES support"
-+	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
-+		!BR2_PACKAGE_MESA3D_OPENGL_ES || \
-+		!BR2_PACKAGE_HAS_UDEV
-+
-+comment "wlroots needs a toolchain w/ threads, locale, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_ENABLE_LOCALE || \
-+		BR2_STATIC_LIBS
-+
-+config BR2_PACKAGE_WLROOTS
-+	bool "wlroots"
-+	depends on !BR2_STATIC_LIBS # wayland
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm, wayland
-+	depends on BR2_ENABLE_LOCALE # libinput
-+	depends on BR2_PACKAGE_HAS_UDEV # libinput
-+	# Technically wlroots should work with any OpenGL implementation
-+	# which provides EGL, GLES2, and libgbm; but in practice only
-+	# Mesa ships an usable libgbm.
-+	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
-+	depends on BR2_PACKAGE_MESA3D_OPENGL_ES
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBINPUT
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+	select BR2_PACKAGE_PIXMAN
-+	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+	help
-+	  wlroots is a modular Wayland library for building compositors
-+	  which implements many of their common features.
-+
-+	  https://github.com/swaywm/wlroots
-+
-+if BR2_PACKAGE_WLROOTS
-+
-+config BR2_PACKAGE_WLROOTS_RDP
-+	bool "RDP backend"
-+	depends on BR2_PACKAGE_FREERDP
-+	help
-+	  Support Wayland sessions served using the RDP protocol
-+
-+config BR2_PACKAGE_WLROOTS_X11
-+	bool "X11 backend"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	help
-+	  Support Wayland sessions nested inside a X11 window
-+
-+endif
-diff --git a/package/wlroots/wlroots.hash b/package/wlroots/wlroots.hash
-new file mode 100644
-index 0000000000..6056a81ba5
---- /dev/null
-+++ b/package/wlroots/wlroots.hash
-@@ -0,0 +1,5 @@
-+# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.8.1/wlroots-0.8.1.tar.gz.sig
-+sha256 202b86e0e21699b6660bbda56afc2e3358db7252f83ff69c89f01926b4900d98  wlroots-0.8.1.tar.gz
-+
-+# Hashes for license files:
-+sha256 ffd3737a478b83a8b51b42757d3bf909ef36694508355879722e11fc1fa6736b  LICENSE
-diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
-new file mode 100644
-index 0000000000..52bc4c30e8
---- /dev/null
-+++ b/package/wlroots/wlroots.mk
-@@ -0,0 +1,82 @@
-+################################################################################
-+#
-+# wlroots
-+#
-+################################################################################
-+
-+WLROOTS_VERSION = 0.8.1
-+WLROOTS_SITE = https://github.com/swaywm/wlroots/releases/download/$(WLROOTS_VERSION)
-+WLROOTS_LICENSE = MIT
-+WLROOTS_INSTALL_STAGING = YES
-+
-+WLROOTS_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-wayland \
-+	libinput \
-+	libxkbcommon \
-+	mesa3d \
-+	pixman \
-+	udev \
-+	wayland \
-+	wayland-protocols
-+
-+WLROOTS_CONF_OPTS = -Dexamples=false
-+
-+ifeq ($(BR2_PACKAGE_FFMPEG),y)
-+WLROOTS_DEPENDENCIES += ffmpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+WLROOTS_CONF_OPTS += -Dlibcap=enabled
-+WLROOTS_DEPENDENCIES += libcap
-+else
-+WLROOTS_CONF_OPTS += -Dlibcap=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+WLROOTS_DEPENDENCIES += libpng
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
-+WLROOTS_CONF_OPTS += -Dlogind=enabled -Dlogind-provider=systemd
-+WLROOTS_DEPENDENCIES += systemd
-+else
-+WLROOTS_CONF_OPTS += -Dlogind=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WLROOTS_RDP),y)
-+WLROOTS_CONF_OPTS += -Dfreerdp=enabled
-+WLROOTS_DEPENDENCIES += freerdp
-+else
-+WLROOTS_CONF_OPTS += -Dfreerdp=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
-+WLROOTS_CONF_OPTS += -Dx11-backend=enabled
-+WLROOTS_DEPENDENCIES += xlib_libX11
-+else
-+WLROOTS_CONF_OPTS += -Dx11-backend=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBXCB),y)
-+WLROOTS_CONF_OPTS += -Dxwayland=enabled
-+WLROOTS_DEPENDENCIES += libxcb
-+else
-+WLROOTS_CONF_OPTS += -Dxwayland=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XCB_UTIL),y)
-+WLROOTS_CONF_OPTS += -Dxcb-errors=enabled
-+WLROOTS_DEPENDENCIES += xcb-util
-+else
-+WLROOTS_CONF_OPTS += -Dxcb-errors=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XCB_UTIL_WM),y)
-+WLROOTS_CONF_OPTS += -Dxcb-icccm=enabled
-+WLROOTS_DEPENDENCIES += xcb-util-wm
-+else
-+WLROOTS_CONF_OPTS += -Dxcb-icccm=disabled
-+endif
-+
-+$(eval $(meson-package))
+    define autotool-package
+    $(1)_PKG_TYPE = autotools
+    $(1)_PKG_NAME := $(pkgname)
+    $(1)_PKG_DIR := $(pkgdir)
+    # A very few other stuff, but really not much, even probably nothing
+    REGISTERED_PACKAGES += $($(1)_PKG_NAME)
+    endef
+
+And so on for all the other infras.
+
+And eventually, after all the packages are parsed, that is after
+inclusion of all the br2-external trees, a little codde block that
+iterates over all registered pacakges:
+
+    $(foreach pkg, $(REGISTERED_PACKAGES), \
+        $(eval $(call $(call UPPERCASE,$(pkg))-inner)))
+
+Of course, that also need a bit of adaptation in all of the *-inner
+infras, but that should be manageable.
+
+The benefits of that would be for br2-external trees, giving them:
+
+  - the ability to change the version
+
+  - the ability to add new dependencies, add new configure options etc...
+    it would even be possible to remove some dependencies or config
+    options...
+
+  - the ability to change the package infra, use an newer version using
+    meson when we have an older usig autotools (or most probably the
+    other way around...
+
+  - the ability to even completely override the whole package
+
+  - ...
+
+This would be a single answer to all the problems that have been
+reported when using br2-external trees.
+
+Not that I am very happy to have to provide such a solution, but I
+prefer a single, generic answer rather than a myriad of hacks every
+where and ekse...
+
+Regards,
+Yann E. MORIN.
+
+> 
+> [0] https://patchwork.ozlabs.org/project/uboot/patch/20200421002333.111461-6-heiko at sntech.de/
+> and other patches in that series
+> 
+> 
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
