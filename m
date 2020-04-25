@@ -1,46 +1,53 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Apr 2020 23:15:32 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package/mesa3d-headers: fix install
- of dri.pc
-References: <20191023062220.5646-1-bernd.kuhls@t-online.de>
- <20191023062220.5646-2-bernd.kuhls@t-online.de>
- <20200425225823.2f68e8ef@windsurf.home>
-Message-ID: <XnsABAAEC95DD55CberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Apr 2020 23:17:06 +0200
+Subject: [Buildroot] [PATCH 1/1] board/raspberrypi/post-build.sh: let
+ HDMI console depends on generic getty option
+In-Reply-To: <20191028090150.15099-1-mailist@logilin.fr>
+References: <20191028090150.15099-1-mailist@logilin.fr>
+Message-ID: <20200425231706.37aa1c26@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+On Mon, 28 Oct 2019 10:01:50 +0100
+Christophe Blaess <mailist@logilin.fr> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> 
-wrote in news:20200425225823.2f68e8ef at windsurf.home:
-
-> Hello Bernd,
+> From: Christophe Blaess <christophe.blaess@logilin.fr>
 > 
-> On Wed, 23 Oct 2019 08:22:19 +0200
-> Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> When the BR2_TARGET_GENERIC_GETTY option is disabled, the inittab line
+> running getty on serial console is commented out. But the line running
+> the HDMI console on Raspberry Pi is still enabled. With this patch the
+> HDMI getty line is removed.
 > 
->> Due to the switch of mesa3d to the meson build system the upstream
->> tarball does not include dri.pc.in anymore, it is created during the
->> build now:
->> 
-https://cgit.freedesktop.org/mesa/mesa/tree/src/mesa/drivers/dri/meson.build?
-h=19.2#n93
->> 
->> In order to provide dri.pc we need to add a version taken from a dri-
->> based mesa3d build to our source repository, by doing so we can reduce
->> the number of sed commands.
-> 
-> I am sorry, but I don't understand the reasoning behind this patch. If
-> the new meson build system produces a dri.pc file, why don't we use it?
-> What is wrong with it?
+> Signed-off-by: Christophe Blaess <christophe.blaess@logilin.fr>
 
-Hi Thomas,
+I understand your idea, but I think it is misleading. Indeed, when you
+configure a getty with BR2_TARGET_GENERIC_GETTY, you configure on which
+tty device this getty will run, using sub-options. So when you disable
+this BR2_TARGET_GENERIC_GETTY option, you expect only that one getty to
+be disabled.
 
-the mesa3d-headers package does not use the mesa3d meson build system, it 
-uses the buildroot generic-package infrastructure and copies files from the 
-mesa3d source tarball, which is lacking dri.pc.in now, to staging dir.
+I don't think this should affect other gettys potentially enabled by
+the post-build script.
 
-Regards, Bernd
+It is pretty uncommon in our defconfigs to have two gettys running. We
+did this for RaspberryPi because a number of newcomers build our
+defconfig, and test it on hardware without a serial port.
+
+If you don't like to have this getty, just tweak the post-build, or add
+your own, etc. A defconfig provided by upstream Buildroot is anyway
+just a starting point to do your own thing.
+
+Due to this, I'm going to mark this patch as Rejected in our patch
+tracking system. Of course, if others disagree or there are some
+stronger arguments, I'd definitely be willing to revisit this decision.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
