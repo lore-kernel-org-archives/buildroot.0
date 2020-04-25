@@ -1,57 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 11:58:27 +0200
-Subject: [Buildroot] [PATCH 5/8] package/python3-requests: add special
+Date: Sat, 25 Apr 2020 11:59:54 +0200
+Subject: [Buildroot] [PATCH 6/8] package/python3-pyyaml: add special
  host variant
-In-Reply-To: <20200323104909.16765-5-yegorslists@googlemail.com>
+In-Reply-To: <20200323104909.16765-6-yegorslists@googlemail.com>
 References: <20200323104909.16765-1-yegorslists@googlemail.com>
- <20200323104909.16765-5-yegorslists@googlemail.com>
-Message-ID: <20200425115827.16fc95f4@windsurf.home>
+ <20200323104909.16765-6-yegorslists@googlemail.com>
+Message-ID: <20200425115954.28c664b7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Mar 2020 11:49:06 +0100
+On Mon, 23 Mar 2020 11:49:07 +0100
 yegorslists at googlemail.com wrote:
 
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Needed to build mongodb.
-> 
-> Also convert python-requests to host package.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/python-requests/python-requests.mk     |  1 +
->  package/python3-requests/python3-requests.hash |  1 +
->  package/python3-requests/python3-requests.mk   | 18 ++++++++++++++++++
->  3 files changed, 20 insertions(+)
->  create mode 120000 package/python3-requests/python3-requests.hash
->  create mode 100644 package/python3-requests/python3-requests.mk
-> 
-> diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-> index e64db94523..8c012145f3 100644
-> --- a/package/python-requests/python-requests.mk
-> +++ b/package/python-requests/python-requests.mk
-> @@ -12,3 +12,4 @@ PYTHON_REQUESTS_LICENSE = Apache-2.0
->  PYTHON_REQUESTS_LICENSE_FILES = LICENSE
->  
->  $(eval $(python-package))
-> +$(eval $(host-python-package))
+>  package/python3-pyyaml/python3-pyyaml.hash |  1 +
+>  package/python3-pyyaml/python3-pyyaml.mk   | 20 ++++++++++++++++++++
 
-There was no need to add a host variant to python-requests, only
-host-python3-requests is needed. However, I've added a comment in this
-file to indicate that the version needs to stay in sync with the one in
-python3-requests.
+I've modified python-pyyaml.mk to indicate that its version should stay
+in sync with python3-pyyaml.
 
 > +# Please keep in sync with
-> +# package/python-requests/python-requests.mk
-> +PYTHON3_REQUESTS_VERSION = 2.22.0
-> +PYTHON3_REQUESTS_SOURCE = requests-$(PYTHON3_REQUESTS_VERSION).tar.gz
-> +PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/01/62/ddcf76d1d19885e8579acb1b1df26a852b03472c0e46d2b959a714c90608
+> +# package/python-pyyaml/python-pyyaml.mk
+> +PYTHON3_PYYAML_VERSION = 5.3
+> +PYTHON3_PYYAML_SOURCE = PyYAML-$(PYTHON3_PYYAML_VERSION).tar.gz
+> +PYTHON3_PYYAML_SITE = https://files.pythonhosted.org/packages/3d/d9/ea9816aea31beeadccd03f1f8b625ecf8f645bd66744484d162d84803ce5
 
-I've updated to be in sync with python-requests, which is at 2.23.0.
+Updated to use the same version as python-pyyaml, i.e version 5.3.1.
+
+> +PYTHON3_PYYAML_SETUP_TYPE = distutils
+> +PYTHON3_PYYAML_LICENSE = MIT
+> +PYTHON3_PYYAML_LICENSE_FILES = LICENSE
+> +PYTHON3_PYYAML_DEPENDENCIES = libyaml
+
+This line was not needed, since there is no target version of
+python3-pyyaml, so I dropped this line.
 
 Applied with those changes. Thanks!
 
