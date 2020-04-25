@@ -1,39 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 22:58:23 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package/mesa3d-headers: fix install
- of dri.pc
-In-Reply-To: <20191023062220.5646-2-bernd.kuhls@t-online.de>
-References: <20191023062220.5646-1-bernd.kuhls@t-online.de>
- <20191023062220.5646-2-bernd.kuhls@t-online.de>
-Message-ID: <20200425225823.2f68e8ef@windsurf.home>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 25 Apr 2020 15:07:56 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to
+ version 20.4.3
+In-Reply-To: <20200425220904.3e117d7a@windsurf.home>
+References: <20200424224752.63673-1-james.hilliard1@gmail.com>
+ <20200425153040.297e371c@windsurf.home>
+ <CADvTj4ptKKjxeu6YHNGC+ANffqnOzgswFjAD54H15BTsghx5MA@mail.gmail.com>
+ <20200425215311.6ab6210d@windsurf.home>
+ <CADvTj4pu05H-Q8jEnrn+pHNZpHHDwfkSy0xE8thHe-e+g5UwbQ@mail.gmail.com>
+ <20200425220904.3e117d7a@windsurf.home>
+Message-ID: <CADvTj4qZX6Qqs8aYV3+OS-aaTbFyDGMbWBXCQWUoiOt3uLSfJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
-
-On Wed, 23 Oct 2019 08:22:19 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-
-> Due to the switch of mesa3d to the meson build system the upstream
-> tarball does not include dri.pc.in anymore, it is created during the
-> build now:
-> https://cgit.freedesktop.org/mesa/mesa/tree/src/mesa/drivers/dri/meson.build?h=19.2#n93
-> 
-> In order to provide dri.pc we need to add a version taken from a dri-
-> based mesa3d build to our source repository, by doing so we can reduce
-> the number of sed commands.
-
-I am sorry, but I don't understand the reasoning behind this patch. If
-the new meson build system produces a dri.pc file, why don't we use it?
-What is wrong with it?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On Sat, Apr 25, 2020 at 2:09 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Sat, 25 Apr 2020 13:55:52 -0600
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> > If you'd like you can merge just the version bump part without the xbr strip
+> > for now.
+>
+> But you said we don't have what is needed for xbr. Or is that "just"
+> runtime dependencies that are missing?
+Yeah, it's runtime dependencies.
+>
+> If that really brings 10 MB of additional useless stuff, I think I'd
+> prefer to hold off on the version bump, and do it once there is a good
+> solution to avoid installing xbr.
+>
+It doesn't make a difference since the current version also has xbr.
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
