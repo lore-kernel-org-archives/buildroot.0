@@ -1,31 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 21:51:09 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/python-mbstrdecoder: needs python3
-In-Reply-To: <20200422162418.488244-1-fontaine.fabrice@gmail.com>
-References: <20200422162418.488244-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200425215109.286d1bf9@windsurf.home>
+Date: Sat, 25 Apr 2020 21:53:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to
+ version 20.4.3
+In-Reply-To: <CADvTj4ptKKjxeu6YHNGC+ANffqnOzgswFjAD54H15BTsghx5MA@mail.gmail.com>
+References: <20200424224752.63673-1-james.hilliard1@gmail.com>
+ <20200425153040.297e371c@windsurf.home>
+ <CADvTj4ptKKjxeu6YHNGC+ANffqnOzgswFjAD54H15BTsghx5MA@mail.gmail.com>
+Message-ID: <20200425215311.6ab6210d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 22 Apr 2020 18:24:18 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello James,
 
-> python2 has been dropped since version 1.0.0 and
-> https://github.com/thombashi/mbstrdecoder/commit/d8f6fd76452ef82d08d1633a0e484349fedc190b
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/324dc351752d412a315955faf69e8f5637e75123
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Baruch Siach):
->  - Drop unneeded selects due to python3 dependency
+On Sat, 25 Apr 2020 13:31:31 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Applied to master, thanks.
+> > Why don't we support it? Can it be made optional in a way that is
+> > acceptable upstream?  
+> This feature is very dependency heavy to begin with(we don't have
+> buildroot packages for most) and not relevant to most autobahn use
+> cases.
+
+OK.
+
+> I just got something merged upstream which should simplify stripping
+> xbr however.
+
+Would be good, indeed.
+
+> > Urgh, we want a patch, not tweaks like that. I guess perhaps the patch
+> > doesn't need to remove the actual source files, just remove the
+> > handling in setup.py.  
+> I'll respin this once upstream has a new release with the ENV variable I
+> added that strips xbr during installation, not stripping xbr results in a fairly
+> large target size increase, nearly 10MB from the looks of it.
+
+Sounds good. Thanks!
 
 Thomas
 -- 
