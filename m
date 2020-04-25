@@ -1,31 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Apr 2020 09:03:13 +0200
-Subject: [Buildroot] [git commit] package/gcc: fix check-package
-In-Reply-To: <20200410192013.4AB618E244@busybox.osuosl.org> (Yann E. MORIN's
- message of "Fri, 10 Apr 2020 21:30:14 +0200")
-References: <20200410192013.4AB618E244@busybox.osuosl.org>
-Message-ID: <87pnbwujwu.fsf@dell.be.48ers.dk>
+Date: Sat, 25 Apr 2020 09:04:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/strongswan: annotate CVEs
+In-Reply-To: <20200410191104.130653-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 10 Apr 2020 21:11:04 +0200")
+References: <20200410191104.130653-1-fontaine.fabrice@gmail.com>
+Message-ID: <87lfmkujv2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=2a6003ddd5a495f5e580a5dc05d71705fd4da27a
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
- > Commit dcaf6e75a (package/gcc: pass -Wno-error to debug builds)
- > introduced non-ASCII characters in a comment, copy-pasted from a
- > terminal output.
-
- > check-package does not like non-ASCII characters, and whines about
- > them.
-
- > Replace the fancy quotes by standard ASCII ones.
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2020.02.x, thanks.
 
