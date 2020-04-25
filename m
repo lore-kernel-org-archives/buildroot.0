@@ -1,43 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Apr 2020 09:00:02 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/gcc: fix
- check-package
-Message-ID: <20200425065639.F23098FC46@busybox.osuosl.org>
+Date: Sat, 25 Apr 2020 09:00:37 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/strongswan:
+ annotate CVEs
+Message-ID: <20200425065640.0C8CC8FC47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=219da1fbd1ad2bc58f587bf67e93ed7b1883f44d
+commit: https://git.buildroot.net/buildroot/commit/?id=e27ccc1915f99cdcf0314462a557a4cc9bac2c4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Commit dcaf6e75a (package/gcc: pass -Wno-error to debug builds)
-introduced non-ASCII characters in a comment, copy-pasted from a
-terminal output.
-
-check-package does not like non-ASCII characters, and whines about
-them.
-
-Replace the fancy quotes by standard ASCII ones.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2a6003ddd5a495f5e580a5dc05d71705fd4da27a)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 758a23fd89410b1f1b9bd1df0bd27de19135818e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/gcc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/strongswan/strongswan.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index fe7167b2f3..50f2a3fcb7 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -100,7 +100,7 @@ HOST_GCC_COMMON_CONF_ENV = \
- GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
- GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 021a59cecc..7f1752ce57 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -43,6 +43,11 @@ STRONGSWAN_CONF_OPTS += \
+ 	--with-imcvdir=/usr/lib/ipsec/imcvs \
+ 	--with-dev-headers=/usr/include
  
--# used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ???st.st_mode??? may be used uninitialized in this function [-Werror=maybe-uninitialized]
-+# used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: 'st.st_mode' may be used uninitialized in this function [-Werror=maybe-uninitialized]
- ifeq ($(BR2_ENABLE_DEBUG),y)
- GCC_COMMON_TARGET_CFLAGS += -Wno-error
++# strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
++STRONGSWAN_IGNORE_CVES += CVE-2018-16151 CVE-2018-16152
++# strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
++STRONGSWAN_IGNORE_CVES += CVE-2018-17540
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ STRONGSWAN_CONF_ENV += LIBS='-latomic'
  endif
