@@ -1,45 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 21:37:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/syrepo: fix SysV init script
-In-Reply-To: <CAEyMn7arhktDMYurpWu-8E=vqFYFvez17sqdAm+m+vC7BkgptA@mail.gmail.com>
-References: <20200420095738.16104-1-heiko.thiery@gmail.com>
- <20200425162221.5105443c@windsurf.home>
- <CAEyMn7arhktDMYurpWu-8E=vqFYFvez17sqdAm+m+vC7BkgptA@mail.gmail.com>
-Message-ID: <20200425213717.46a38cbf@windsurf.home>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Sat, 25 Apr 2020 14:44:55 -0500
+Subject: [Buildroot] [PATCH] package/conntrack-tools: bump to version 1.4.6
+Message-ID: <20200425194455.18881-1-ryanbarnett3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 25 Apr 2020 17:26:49 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+---
+ package/conntrack-tools/conntrack-tools.hash | 2 +-
+ package/conntrack-tools/conntrack-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> > > The sysrepo-plugind does not support to be controlled via the PID by the
-> > > start-stop-daemon. This is because sysrepo-plugind does a fork.
-> > > Thus the daemon is running with another PID known by start-stop-daemon.  
-> >
-> > "known" by start-stop-daemon, or "not known" ?  
-> 
-> Ok, I was unclear. The PID used by the daemon is another one that the
-> start-stop-daemon knows.
-> 
-> >
-> > Also, it is not very clear. Indeed, in the "start" step, you're not
-> > asking start-stop-daemon to create a PID file using the -m option. So
-> > you're relying on the daemon to create one. Is this PID file incorrect
-> > ? Normally, when it is created by the daemon itself, even if the daemon
-> > forks, it should be fine.  
-> 
-> I recognized that and tried to do it that way (with the -m option).
-> But in doing so I figured out that the "stop" step does not work. The
-> daemon is running by a PID that is +1 compared to the one the
-> start-stop-daemon knows from the PIDFILE.
-
-But is sysrepo-plugind creating its own pidfile ?
-
-Thomas
+diff --git a/package/conntrack-tools/conntrack-tools.hash b/package/conntrack-tools/conntrack-tools.hash
+index cd95a06dc1..ae9af25e8f 100644
+--- a/package/conntrack-tools/conntrack-tools.hash
++++ b/package/conntrack-tools/conntrack-tools.hash
+@@ -1,4 +1,4 @@
+ # From https://netfilter.org/projects/conntrack-tools/downloads.html
+-sha256 36c6d99c7684851d4d72e75bd07ff3f0ff1baaf4b6f069eb7244990cd1a9a462  conntrack-tools-1.4.5.tar.bz2
++sha256 590859cc848245dbfd9c6487761dd303b3a1771e007f4f42213063ca56205d5f  conntrack-tools-1.4.6.tar.bz2
+ # Locally calculated
+ sha256 91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
+diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
+index 77fcb52956..145b6d785f 100644
+--- a/package/conntrack-tools/conntrack-tools.mk
++++ b/package/conntrack-tools/conntrack-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONNTRACK_TOOLS_VERSION = 1.4.5
++CONNTRACK_TOOLS_VERSION = 1.4.6
+ CONNTRACK_TOOLS_SOURCE = conntrack-tools-$(CONNTRACK_TOOLS_VERSION).tar.bz2
+ CONNTRACK_TOOLS_SITE = http://www.netfilter.org/projects/conntrack-tools/files
+ CONNTRACK_TOOLS_DEPENDENCIES = host-pkgconf \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
