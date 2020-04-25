@@ -1,50 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 23:17:06 +0200
-Subject: [Buildroot] [PATCH 1/1] board/raspberrypi/post-build.sh: let
- HDMI console depends on generic getty option
-In-Reply-To: <20191028090150.15099-1-mailist@logilin.fr>
-References: <20191028090150.15099-1-mailist@logilin.fr>
-Message-ID: <20200425231706.37aa1c26@windsurf.home>
+Date: Sat, 25 Apr 2020 23:22:45 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: add option to define custom
+ dependencies
+In-Reply-To: <20200425211350.GR5035@scaer>
+References: <20200425000629.2068191-1-heiko@sntech.de>
+ <20200425153810.2e86813e@windsurf.home>
+ <20200425211350.GR5035@scaer>
+Message-ID: <20200425232245.6e13c5a6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 28 Oct 2019 10:01:50 +0100
-Christophe Blaess <mailist@logilin.fr> wrote:
+Hello,
 
-> From: Christophe Blaess <christophe.blaess@logilin.fr>
+On Sat, 25 Apr 2020 23:13:50 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+
+> My opinion on that patch is that i am definitely not in favour of it. If
+> we go that route, then we would have to allow adding any such arbitrary
+> dependencies to a wide range of packages.
+
+Without necessarily strongly supporting Heiko's patch, I think it is
+important to keep in mind that U-Boot is not a package like any others.
+We offer version selection for U-Boot, custom Git/Subversion repo
+selection, which we do not offer for other packages. U-Boot has
+zillions of forks, support for gazillions platforms each with their own
+funky requirements.
+
+We've already added a BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS to pass custom
+make options, adding the possibility to add custom dependencies would
+go in the same direction.
+
+I however agree that this kind of option is a good recipe for people to
+do their own hacks on their side, instead of finding a proper way to do
+it that can be upstreamed to Buildroot.
+
+> Now, there are two situations:
 > 
-> When the BR2_TARGET_GENERIC_GETTY option is disabled, the inittab line
-> running getty on serial console is commented out. But the line running
-> the HDMI console on Raspberry Pi is still enabled. With this patch the
-> HDMI getty line is removed.
+>   - the tool is already in Buildroot: add a new _NEEDS_FOO option like
+>     we already have.
 > 
-> Signed-off-by: Christophe Blaess <christophe.blaess@logilin.fr>
+>   - the tool is in a br2-external tre: this is in my opinion better
+>     served by working on the evaluation-postpone changes Arnou and I
+>     have been suggesting for quite a while now.
 
-I understand your idea, but I think it is misleading. Indeed, when you
-configure a getty with BR2_TARGET_GENERIC_GETTY, you configure on which
-tty device this getty will run, using sub-options. So when you disable
-this BR2_TARGET_GENERIC_GETTY option, you expect only that one getty to
-be disabled.
-
-I don't think this should affect other gettys potentially enabled by
-the post-build script.
-
-It is pretty uncommon in our defconfigs to have two gettys running. We
-did this for RaspberryPi because a number of newcomers build our
-defconfig, and test it on hardware without a serial port.
-
-If you don't like to have this getty, just tweak the post-build, or add
-your own, etc. A defconfig provided by upstream Buildroot is anyway
-just a starting point to do your own thing.
-
-Due to this, I'm going to mark this patch as Rejected in our patch
-tracking system. Of course, if others disagree or there are some
-stronger arguments, I'd definitely be willing to revisit this decision.
-
-Thanks!
+I think it would make sense to hear about what Heiko's use case exactly
+is, this might help.
 
 Thomas
 -- 
