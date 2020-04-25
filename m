@@ -1,51 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 14:02:14 +0200
-Subject: [Buildroot] [PATCH 8/8] package/mongodb: bump to version 4.2.4
-In-Reply-To: <20200323104909.16765-8-yegorslists@googlemail.com>
-References: <20200323104909.16765-1-yegorslists@googlemail.com>
- <20200323104909.16765-8-yegorslists@googlemail.com>
-Message-ID: <20200425140214.6c83e359@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Apr 2020 14:06:34 +0200
+Subject: [Buildroot] [git commit] fs/cpio: make initramfs init script
+ survive 'console=' kernel argument
+Message-ID: <20200425115158.EAE338FF50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Mar 2020 11:49:09 +0100
-yegorslists at googlemail.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=98a6f1fc02e41ac30db24ac2b7262033faabacde
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> - Drop !BR2_PACKAGE_PYTHON3 dependency as SConstruct requires
->   host-python3 since version 4.1.10 and:
->   https://github.com/mongodb/mongo/commit/8dd6d4755734ed37c1b98dfdefce3ca6bc65f1f6
-> - host-python-psutil is needed since 4.1.8 and
->   https://github.com/mongodb/mongo/commit/ff03811e31851984617d73739de8acc7640b19a2
-> - Drop unneeded host-python-typing dependency
-> - C++17 and so gcc 7 is required since 4.1.8 and
->   https://github.com/mongodb/mongo/commit/01d84b2565fc9ea9626a55dcf1f3f817968088f2
-> - Set --disable-minimum-compiler-version-enforcement as mongodb enforces
->   gcc >= 8.2 since verson 4.1.8 and
->   https://github.com/mongodb/mongo/commit/9ac90b128ebeb1bb431ebe3fe9176cb6142818cb
-> - Explictly disable ssl if needed as ssl is enabled by default
-> - Add host-python-cheetah dependency if needed
-> - Manage new http-client option added in version 4.1.2 and
->   https://github.com/mongodb/mongo/commit/4d7dcca91bc2bbde65843fe88c41fa040e0d1877
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> [Titouan: Fix patch conflicts with master]
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/mongodb/Config.in    |  8 +++-----
->  package/mongodb/mongodb.hash |  2 +-
->  package/mongodb/mongodb.mk   | 27 ++++++++++++++++++---------
->  3 files changed, 22 insertions(+), 15 deletions(-)
+When booting with 'console=<empty>' in the kernel command line (as e.g.
+U-Boot does with silent flags in effect), opening /dev/console fails.
 
-Applied to master, thanks.
+As per POSIX [0], when iany redirection fails, the shell running exec
+shal exit in error. So, when 'console=<empty>' is specified.
+/dev/console can't be opened, and the redirection fails, and /init is
+killed.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+That behaviour was fixed on the kernel side with commit 2bd3a997befc2
+(Open /dev/console from rootfs), present since 2.6.34, released in May
+2010, so any [dr]ecent kernel will have that fix.
+
+Furthermore, busybox will fix things up anyway (in bb_sanitize_stdio()),
+falling back to opening /dev/null if no console is availble. systemd
+does a similar thing (in make_console_stdio()), and sysvinit again has
+a similar approach (in console_init()).
+
+The archealogy search turned up those relevant commits:
+
+    2011-08-04 10a130f91e initramfs/init: make sure that 0, 1, 2 fds are available
+        introduces the three exec redirections in initramfs
+
+    2011-09-06 3fac21ef8d cpio: fix boot with dynamic /dev
+        introduces the three exec redirections in cpio
+
+    2011-09-06 13a3afc536 fs/initramfs: refactor with fs/cpio
+        dropped the initramfs tweaks to reuse the cpio ones
+
+    2012-11-04 e1ebae700a fs/common: Create initial console device
+        introduces the /dev/console char,5,1 pseudo device creation in
+        cpio
+
+    2018-03-31 dec061adce fs/cpio: don't extend packages' permissions table
+        switched from the permission-table to a manual mknod to create
+        /dev/console
+
+The redirections were added before we could guarantee there was a
+/dev/console in the rootfs.
+
+We're now guaranteed to have /dev/console in an initramfs, and any recent
+kernel will automatically open /dev/console before spawning /init.
+
+The three redirections are useless now, and cause harm under certain
+conditions. Drop them.
+
+[0] https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_20_01
+
+Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+[yann.morin.1998 at free.fr:
+  - extend commit log with the analysis done with Peter
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ fs/cpio/init | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/fs/cpio/init b/fs/cpio/init
+index dbe09ac68e..b0af18b67a 100755
+--- a/fs/cpio/init
++++ b/fs/cpio/init
+@@ -1,7 +1,4 @@
+ #!/bin/sh
+ # devtmpfs does not get automounted for initramfs
+ /bin/mount -t devtmpfs devtmpfs /dev
+-exec 0</dev/console
+-exec 1>/dev/console
+-exec 2>/dev/console
+ exec /sbin/init "$@"
