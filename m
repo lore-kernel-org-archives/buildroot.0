@@ -1,31 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 22:17:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exfatprogs: add patch fixing
- missing <sys/types.h>
-In-Reply-To: <20200424202959.77348-1-james.hilliard1@gmail.com>
-References: <20200424202959.77348-1-james.hilliard1@gmail.com>
-Message-ID: <20200425221735.0c7071e6@windsurf.home>
+Date: Sat, 25 Apr 2020 22:18:21 +0200
+Subject: [Buildroot] [PATCH] package/conntrack-tools: bump to version
+ 1.4.6
+In-Reply-To: <20200425194455.18881-1-ryanbarnett3@gmail.com>
+References: <20200425194455.18881-1-ryanbarnett3@gmail.com>
+Message-ID: <20200425221821.4a5e2caf@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 24 Apr 2020 14:29:59 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Sat, 25 Apr 2020 14:44:55 -0500
+Ryan Barnett <ryanbarnett3@gmail.com> wrote:
 
-> This patch had been merged by upstream but appears to have been
-> accidentially overwritten with a force push. Let's add back the
-> rebased version until fixed by upstream.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/667/667409f1d44a3f9be43aaff3f9a3426fe1386de2/build-end.log
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 > ---
->  ...rogs-add-missing-include-sys-types.h.patch | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 package/exfatprogs/0001-exfatprogs-add-missing-include-sys-types.h.patch
+>  package/conntrack-tools/conntrack-tools.hash | 2 +-
+>  package/conntrack-tools/conntrack-tools.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
