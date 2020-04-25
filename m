@@ -1,41 +1,49 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Sat, 25 Apr 2020 14:44:55 -0500
-Subject: [Buildroot] [PATCH] package/conntrack-tools: bump to version 1.4.6
-Message-ID: <20200425194455.18881-1-ryanbarnett3@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Apr 2020 21:29:18 +0200
+Subject: [Buildroot] [git commit] package/rauc: bump to version 1.3
+Message-ID: <20200425193620.4BA7E90321@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
----
- package/conntrack-tools/conntrack-tools.hash | 2 +-
- package/conntrack-tools/conntrack-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=ce6b0ace35ff176e9116227bba7952874b026305
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/conntrack-tools/conntrack-tools.hash b/package/conntrack-tools/conntrack-tools.hash
-index cd95a06dc1..ae9af25e8f 100644
---- a/package/conntrack-tools/conntrack-tools.hash
-+++ b/package/conntrack-tools/conntrack-tools.hash
+See: https://github.com/rauc/rauc/releases/tag/v1.3
+
+And update hash file formatting (2 spaces).
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rauc/rauc.hash | 6 +++---
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index 54760347c7..b73eb60d86 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
 @@ -1,4 +1,4 @@
- # From https://netfilter.org/projects/conntrack-tools/downloads.html
--sha256 36c6d99c7684851d4d72e75bd07ff3f0ff1baaf4b6f069eb7244990cd1a9a462  conntrack-tools-1.4.5.tar.bz2
-+sha256 590859cc848245dbfd9c6487761dd303b3a1771e007f4f42213063ca56205d5f  conntrack-tools-1.4.6.tar.bz2
- # Locally calculated
- sha256 91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
-index 77fcb52956..145b6d785f 100644
---- a/package/conntrack-tools/conntrack-tools.mk
-+++ b/package/conntrack-tools/conntrack-tools.mk
+ # Locally calculated, after verifying against
+-# https://github.com/rauc/rauc/releases/download/v1.2/rauc-1.2.tar.xz.asc
+-sha256 224683fc1fac50ccb89128aa786445cd8e26bb25deafd4410e0807187376e661 rauc-1.2.tar.xz
+-sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
++# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.3.tar.xz.asc
++sha256  4f6144447254753fcd19f2c5c70e79fa91d27253185b8928436f01528aa65e6c  rauc-1.3.tar.xz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 5a208e07ae..5c5bd993ba 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CONNTRACK_TOOLS_VERSION = 1.4.5
-+CONNTRACK_TOOLS_VERSION = 1.4.6
- CONNTRACK_TOOLS_SOURCE = conntrack-tools-$(CONNTRACK_TOOLS_VERSION).tar.bz2
- CONNTRACK_TOOLS_SITE = http://www.netfilter.org/projects/conntrack-tools/files
- CONNTRACK_TOOLS_DEPENDENCIES = host-pkgconf \
--- 
-2.17.1
+-RAUC_VERSION = 1.2
++RAUC_VERSION = 1.3
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
