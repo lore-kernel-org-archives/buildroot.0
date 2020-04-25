@@ -1,60 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Apr 2020 10:50:43 +0200
-Subject: [Buildroot] [git commit] package/wireguard-linux-compat: depend
- on headers < 5.6
-In-Reply-To: <20200424122241.994F08FEC1@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Fri, 24 Apr 2020 14:37:03 +0200")
-References: <20200424122241.994F08FEC1@busybox.osuosl.org>
-Message-ID: <87mu70t0d8.fsf@dell.be.48ers.dk>
+Date: Sat, 25 Apr 2020 11:45:59 +0200
+Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump version to
+ 1.0.20200413
+Message-ID: <20200425094600.26046-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2020-April/005295.html
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=da5afc10a45d1e1b5ab7ab6f9230ed7ba44581e7
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Since wireguard is built into kernels 5.6 and later we can't build
- > wireguard-linux-compat on them, so we need to depend on
- > !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6.
-
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > ---
- >  package/wireguard-linux-compat/Config.in | 6 +++++-
- >  1 file changed, 5 insertions(+), 1 deletion(-)
-
- > diff --git a/package/wireguard-linux-compat/Config.in b/package/wireguard-linux-compat/Config.in
- > index 4ee214be63..6e41a0951b 100644
- > --- a/package/wireguard-linux-compat/Config.in
- > +++ b/package/wireguard-linux-compat/Config.in
- > @@ -3,6 +3,8 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
- >  	depends on BR2_LINUX_KERNEL
- >  	# kernel module requires 3.10+
- >  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- > +	# kernel module incompatible with 5.6+
- > +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
-
-Maybe a better wording would be ".. in upstream linux since 5.6" rather
-than incompatible so it is clearer what to do if you use 5.6+.
-
- >  	help
- >  	  WireGuard is an extremely simple yet fast and modern VPN
- >  	  that utilizes state-of-the-art cryptography. It aims to be
- > @@ -20,4 +22,6 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
- >  	  https://www.wireguard.com
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index a9675b5180..d308f47a13 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-April/005237.html
+-sha256  7dfb4a8315e1d6ae406ff32d01c496175df558dd65968a19e5222d02c7cfb77a  wireguard-linux-compat-1.0.20200401.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-April/005296.html
++sha256  cf166348fbb67419528e73049ce001d29131aea367fa6aef9d3e223f7251e116  wireguard-linux-compat-1.0.20200413.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index d5a2341d77..27f5981ae3 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- >  comment "wireguard-linux-compat needs a toolchain w/ headers >= 3.10"
- > -	depends on BR2_LINUX_KERNEL && !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- > +	depends on BR2_LINUX_KERNEL
- > +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
- > +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-
-If the headers are < than 3.10, then they are also < 5.6, so this is
-redundant.
-
+-WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200401
++WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200413
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
 -- 
-Bye, Peter Korsgaard
+2.20.1
