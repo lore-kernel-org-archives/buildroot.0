@@ -1,51 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 14:48:16 +0200
-Subject: [Buildroot] [git commit] package/moo: bump to version 2.004000
-Message-ID: <20200425123632.CF1818FF8B@busybox.osuosl.org>
+Date: Sat, 25 Apr 2020 14:48:15 +0200
+Subject: [Buildroot] [git commit] package/perl-io-socket-ssl: bump to
+ version 2.068
+Message-ID: <20200425123632.B1F4C8FF89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ab26e641961077f50a583ac2718512632e3356c
+commit: https://git.buildroot.net/buildroot/commit/?id=40e11c8a993715146014a0b6e71d2c5dbb72f12b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-diff LICENSE:
--This software is Copyright (c) 2019 by mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>.
-+This software is Copyright (c) 2020 by mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-moo/perl-moo.hash | 6 +++---
- package/perl-moo/perl-moo.mk   | 2 +-
+ package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 6 +++---
+ package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-moo/perl-moo.hash b/package/perl-moo/perl-moo.hash
-index 21bcc6cca5..00e8117ad9 100644
---- a/package/perl-moo/perl-moo.hash
-+++ b/package/perl-moo/perl-moo.hash
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+index d849060f71..2180b6be35 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    53af7e7849492a8e3994ee379d12e348 Moo-2.003006.tar.gz
--sha256 bcb2092ab18a45005b5e2e84465ebf3a4999d8e82a43a09f5a94d859ae7f2472 Moo-2.003006.tar.gz
-+md5  e542104553d616b15631b5c66ccee904  Moo-2.004000.tar.gz
-+sha256  323240d000394cf38ec42e865b05cb8928f625c82c9391cd2cdc72b33c51b834  Moo-2.004000.tar.gz
+-md5    1d55e9f66ca442f4e0ae4d018e3067fc IO-Socket-SSL-2.067.tar.gz
+-sha256 ef8842806d047cf56e2af64add4ed30b24547bcbb50e8df33cee0c54609af1c1 IO-Socket-SSL-2.067.tar.gz
++md5  4230c829c8875889848093b2b46a7284  IO-Socket-SSL-2.068.tar.gz
++sha256  4420fc0056f1827b4dd1245eacca0da56e2182b4ef6fc078f107dc43c3fb8ff9  IO-Socket-SSL-2.068.tar.gz
  
  # computed by scancpan
--sha256 88f4a8719c584d756dcfeebc7f35643066354188bfb57c672fbafcd44e044e9c LICENSE
-+sha256  0f2d6b537f7a735c981511875d832bc8ff767bf97d62848cf0bada964e40aadd  LICENSE
-diff --git a/package/perl-moo/perl-moo.mk b/package/perl-moo/perl-moo.mk
-index 6913776401..fce88f6add 100644
---- a/package/perl-moo/perl-moo.mk
-+++ b/package/perl-moo/perl-moo.mk
+-sha256 090aff5421fd55a9dceeaf6c612c36360402e8d29c1284aef88c87be565ce032 README
++sha256  090aff5421fd55a9dceeaf6c612c36360402e8d29c1284aef88c87be565ce032  README
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+index 4ab1f1fbe1..b6c0ceb37f 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MOO_VERSION = 2.003006
-+PERL_MOO_VERSION = 2.004000
- PERL_MOO_SOURCE = Moo-$(PERL_MOO_VERSION).tar.gz
- PERL_MOO_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
- PERL_MOO_LICENSE = Artistic or GPL-1.0+
+-PERL_IO_SOCKET_SSL_VERSION = 2.067
++PERL_IO_SOCKET_SSL_VERSION = 2.068
+ PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
+ PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
+ PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPL-1.0+
