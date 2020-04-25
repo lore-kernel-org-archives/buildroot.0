@@ -1,65 +1,102 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat, 25 Apr 2020 21:58:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/syrepo: fix SysV init script
-In-Reply-To: <20200425213717.46a38cbf@windsurf.home>
-References: <20200420095738.16104-1-heiko.thiery@gmail.com>
- <20200425162221.5105443c@windsurf.home>
- <CAEyMn7arhktDMYurpWu-8E=vqFYFvez17sqdAm+m+vC7BkgptA@mail.gmail.com>
- <20200425213717.46a38cbf@windsurf.home>
-Message-ID: <CAEyMn7atSwtJ6XHD3utVG+LWp7kprdKdufD5e6-qP_61_qHZMw@mail.gmail.com>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Sat, 25 Apr 2020 15:00:10 -0500
+Subject: [Buildroot] [PATCH] package/davfs2: bump to version 1.5.6
+Message-ID: <20200425200010.6870-1-ryanbarnett3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Remove 0002-fix-iconv.patch as this has been fixed as part of bug
+56178 which is a part of the 1.5.6 release.
 
-Am Sa., 25. Apr. 2020 um 21:37 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> On Sat, 25 Apr 2020 17:26:49 +0200
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > > > The sysrepo-plugind does not support to be controlled via the PID by the
-> > > > start-stop-daemon. This is because sysrepo-plugind does a fork.
-> > > > Thus the daemon is running with another PID known by start-stop-daemon.
-> > >
-> > > "known" by start-stop-daemon, or "not known" ?
-> >
-> > Ok, I was unclear. The PID used by the daemon is another one that the
-> > start-stop-daemon knows.
-> >
-> > >
-> > > Also, it is not very clear. Indeed, in the "start" step, you're not
-> > > asking start-stop-daemon to create a PID file using the -m option. So
-> > > you're relying on the daemon to create one. Is this PID file incorrect
-> > > ? Normally, when it is created by the daemon itself, even if the daemon
-> > > forks, it should be fine.
-> >
-> > I recognized that and tried to do it that way (with the -m option).
-> > But in doing so I figured out that the "stop" step does not work. The
-> > daemon is running by a PID that is +1 compared to the one the
-> > start-stop-daemon knows from the PIDFILE.
->
-> But is sysrepo-plugind creating its own pidfile ?
+  http://savannah.nongnu.org/bugs/?56178
 
-No it doesn't. The confusion is due to my bad commit message ;-/ I try
-to explain it better.
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+---
+ package/davfs2/0002-fix-iconv.patch | 48 -----------------------------
+ package/davfs2/davfs2.hash          |  2 +-
+ package/davfs2/davfs2.mk            |  2 +-
+ 3 files changed, 2 insertions(+), 50 deletions(-)
+ delete mode 100644 package/davfs2/0002-fix-iconv.patch
 
-The current script is not able to stop the daemon.
-
-Options to fix the problem:
-
-A) By adding the "-m -p $PIDFILE" option the pid file will be created
-but it will not contain the correct PID used by the daemon. This is
-obviously because the daemon forks.
-B) By not starting the daemon in background (sysrepo-plugind -d) and
-let do it by start-stop-daemon with "-b" option the log messages of
-the daemon will not longer ends in the syslog but to stderr.
-C) start the daemon without a pidfile and stop the daemon with the "-x" option.
-
-I think the best option is C. This is what the patch does.
-
+diff --git a/package/davfs2/0002-fix-iconv.patch b/package/davfs2/0002-fix-iconv.patch
+deleted file mode 100644
+index f2bae8f8e9..0000000000
+--- a/package/davfs2/0002-fix-iconv.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-webdav.c: fix iconv calls
+-
+-Replace HAVE_ICONV_H by HAVE_ICONV to fix build with iconv indeed
+-HAVE_ICONV_H is never set as AC_CHECK_HEADERS is not called to check for
+-iconv.h
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://savannah.nongnu.org/bugs/index.php?56178]
+-
+-diff -Naurp davfs2-1.5.4-orig/src/webdav.c davfs2-1.5.4/src/webdav.c
+---- davfs2-1.5.4-orig/src/webdav.c	2019-04-20 12:12:38.252599230 +0200
+-+++ davfs2-1.5.4/src/webdav.c	2019-04-20 12:13:33.012925300 +0200
+-@@ -25,7 +25,7 @@
+- #ifdef HAVE_FCNTL_H
+- #include <fcntl.h>
+- #endif
+--#ifdef HAVE_ICONV_H
+-+#ifdef HAVE_ICONV
+- #include <iconv.h>
+- #endif
+- #ifdef HAVE_LANGINFO_H
+-@@ -231,7 +231,7 @@ static int initialized;
+-    Needed by  ssl_verify() which may be called at any time. */
+- static int have_terminal;
+- 
+--#ifdef HAVE_ICONV_H
+-+#ifdef HAVE_ICONV
+- /* Handle to convert character encoding from utf-8 to LC_CTYPE.
+-    If NULL no conversion is done. */
+- static iconv_t from_utf_8;
+-@@ -264,7 +264,7 @@ static char **cookie_list;
+- /* Private function prototypes and inline functions */
+- /*==================================================*/
+- 
+--#ifdef HAVE_ICONV_H
+-+#ifdef HAVE_ICONV
+- static void
+- convert(char **s, iconv_t conv);
+- #endif
+-@@ -337,7 +337,7 @@ dav_init_webdav(const dav_args *args)
+-     if (args->neon_debug & ~NE_DBG_HTTPPLAIN)
+-         syslog(LOG_MAKEPRI(LOG_DAEMON, LOG_DEBUG), "Initializing webdav");
+- 
+--#ifdef HAVE_ICONV_H
+-+#ifdef HAVE_ICONV
+-     char *lc_charset = nl_langinfo(CODESET);
+-     if (lc_charset && strcasecmp(lc_charset, "UTF-8") != 0) {
+-         from_utf_8 = iconv_open(lc_charset, "UTF-8");
+diff --git a/package/davfs2/davfs2.hash b/package/davfs2/davfs2.hash
+index 7e2078bec5..b8ac0af1b5 100644
+--- a/package/davfs2/davfs2.hash
++++ b/package/davfs2/davfs2.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 587c6a25ad78109995a7ccb8e60aa1c491b149f2c99d47033f3d5e648430ad2f  davfs2-1.5.5.tar.gz
++sha256 417476cdcfd53966b2dcfaf12455b54f315959b488a89255ab4b44586153d801  davfs2-1.5.6.tar.gz
+ # License file, locally calculated
+ sha256 0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
+diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
+index 90f73f4df0..a73093a52a 100644
+--- a/package/davfs2/davfs2.mk
++++ b/package/davfs2/davfs2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DAVFS2_VERSION = 1.5.5
++DAVFS2_VERSION = 1.5.6
+ DAVFS2_SITE = http://download.savannah.nongnu.org/releases/davfs2
+ DAVFS2_LICENSE = GPL-3.0+
+ DAVFS2_LICENSE_FILES = COPYING
 -- 
-Heiko
+2.17.1
