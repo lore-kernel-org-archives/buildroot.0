@@ -1,28 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Apr 2020 09:06:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boinc: set curl-config
-In-Reply-To: <20200410210025.738362-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 10 Apr 2020 23:00:25 +0200")
-References: <20200410210025.738362-1-fontaine.fabrice@gmail.com>
-Message-ID: <87d07wujr4.fsf@dell.be.48ers.dk>
+Date: Sat, 25 Apr 2020 09:10:08 +0200
+Subject: [Buildroot] [PATCH v1 1/5] package/python-flask: remove
+ erroneously python-lxml dependency
+In-Reply-To: <20200408204828.998-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Wed, 8 Apr 2020 22:48:24 +0200")
+References: <20200408204828.998-1-ps.report@gmx.net>
+Message-ID: <878sikujlb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > Build can fail because boinc uses curl-config that it founds on host:
- > checking for curl-config... /usr/bin/curl-config
- > checking for the version of libcurl... 7.47.0
- > checking for libcurl >= version 7.17.1... yes
- > checking whether libcurl is usable... no
+ > Remove erroneously python-lxml dependency (as noted by
+ > Peter Korsgaard).
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/26ab8024e3ef70b898981763f4ea89b647cc9f4b
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Committed to 2020.02.x, thanks.
 
