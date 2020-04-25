@@ -1,67 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 11:50:39 +0200
-Subject: [Buildroot] [PATCH v2] package/matio: new package
-In-Reply-To: <20200424085624.23908-1-gwenj@trabucayre.com>
-References: <20200424085624.23908-1-gwenj@trabucayre.com>
-Message-ID: <20200425115039.5280d03d@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 25 Apr 2020 11:56:03 +0200
+Subject: [Buildroot] [git commit] package/wireguard-linux-compat: tweak
+ kernel-headers < 5.6 logic
+Message-ID: <20200425094139.9C1168FEFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 24 Apr 2020 10:56:24 +0200
-Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=74a865b1fc85352b814d032fa8725ace13f27eca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> diff --git a/package/matio/matio.hash b/package/matio/matio.hash
-> new file mode 100644
-> index 0000000000..d84f50e0b2
-> --- /dev/null
-> +++ b/package/matio/matio.hash
-> @@ -0,0 +1,5 @@
-> +# From https://sourceforge.net/projects/matio/files/matio/1.5.17/
-> +sha512  af8ff11c7c44fea9ea6886e381f49ef9186946f3def98ad9695f2d5d1df045c35e8f4ceac12a44be397f7bbd708b4803762b5ce54c45b60a9f446d551c04f5d2  matio-1.5.17.tar.gz
-> +# Locally computed
-> +sha256  5e455527d370ab297c4abe5a2ab4d599c93ac7c1a0c85d841cc5c22f8221c400  matio-1.5.17.tar.gz
+The reason why the external wireguard kernel module is not allowed with
+kernel headers >= 5.6 is that wireguard is included in the upstream kernel
+since 5.6 rather than some kind of (fixable) incompatibility issue.  Adjust
+the comment to make that clear.
 
-If there's an upstream provided sha512 hash, I'm not sure it's really
-useful to add a locally calculated sha256 hash.
+While we're at it, drop the redundant !5.6 dependency on the kernel headers
+dependency comment.  If headers are older than 3.10, then they are also
+older than 5.6, so the statement is redundant.
 
-> +MATIO_VERSION = 1.5.17
-> +MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
-> +MATIO_LICENSE = BSD-2-Clause
-> +MATIO_LICENSE_FILES = COPYING
-> +MATIO_DEPENDENCIES = zlib
-> +MATIO_INSTALL_STAGING = YES
-> +
-> +# va_copy()
-> +MATIO_CONF_ENV = ac_cv_va_copy=yes
-> +
-> +MATIO_CONF_OPTS = --enable-mat73=no
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard-linux-compat/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Please use:
-
-	--disable-mat73
-
-> +
-> +ifeq ($(BR2_PACKAGE_MATIO_SPARSE),y)
-> +MATIO_CONF_OPTS += --enable-extended-sparse=yes
-
-Just:
-
-	--enable-extended-sparse
-
-> +else
-> +MATIO_CONF_OPTS += --enable-extended-sparse=no
-
-Use:
-
-	--disable-extended-sparse
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/wireguard-linux-compat/Config.in b/package/wireguard-linux-compat/Config.in
+index 6e41a0951b..5a323a35e5 100644
+--- a/package/wireguard-linux-compat/Config.in
++++ b/package/wireguard-linux-compat/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+ 	depends on BR2_LINUX_KERNEL
+ 	# kernel module requires 3.10+
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+-	# kernel module incompatible with 5.6+
++	# kernel module in upstream linux since 5.6
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+ 	help
+ 	  WireGuard is an extremely simple yet fast and modern VPN
+@@ -23,5 +23,4 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+ 
+ comment "wireguard-linux-compat needs a toolchain w/ headers >= 3.10"
+ 	depends on BR2_LINUX_KERNEL
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
