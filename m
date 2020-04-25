@@ -1,65 +1,47 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 25 Apr 2020 17:22:39 +0300
-Subject: [Buildroot] [PATCH 1/1] libuv, uvw: bump to versions 1.37.0,
- 2.5.0_libuv-v1.37
-Message-ID: <20200425142239.444381-1-asafka7@gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sat, 25 Apr 2020 16:30:37 +0200
+Subject: [Buildroot] [PATCH] package/rauc: bump to version 1.3
+Message-ID: <1587825037-9766-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- package/uvw/uvw.hash     | 2 +-
- package/uvw/uvw.mk       | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+See: https://github.com/rauc/rauc/releases/tag/v1.3
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 270fba722d..8e1824f397 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ff84a26c79559e511f087aa67925c3b4e0f0aac60cd8039d4d38b292f208ff58  libuv-1.35.0.tar.gz
-+sha256  7afa3c8a326b3eed02a9addb584ae7e995ae4d30516cad5e1e4af911931162a6  libuv-1.37.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 7e75dcb194..e61f565b54 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -6,7 +6,7 @@
- 
- # When bumping libuv, check if a new version of uvw is available
- # and bump it too.
--LIBUV_VERSION = 1.35.0
-+LIBUV_VERSION = 1.37.0
- LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
-diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
-index c74db9b916..bdc1524bfe 100644
---- a/package/uvw/uvw.hash
-+++ b/package/uvw/uvw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  578179ee76d010c5c9fb180a1b60e45e9f04968718d62c51ec0f71b43564bab9  uvw-2.3.1_libuv-v1.34.tar.gz
-+sha256  bae3e0eccee602b3fb86d89db0c69ae2022a92142f50a042f0949da678614a6c  uvw-2.5.0_libuv-v1.37.tar.gz
- sha256  755b2f245af22830c15b60c54469c0d92fbed42009b0d0074cec4b3959905757  LICENSE
-diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
-index 71b23b2ac1..98c61c80ac 100644
---- a/package/uvw/uvw.mk
-+++ b/package/uvw/uvw.mk
+And update hash file formatting (2 spaces).
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/rauc/rauc.hash | 6 +++---
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index 5476034..b73eb60 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated, after verifying against
+-# https://github.com/rauc/rauc/releases/download/v1.2/rauc-1.2.tar.xz.asc
+-sha256 224683fc1fac50ccb89128aa786445cd8e26bb25deafd4410e0807187376e661 rauc-1.2.tar.xz
+-sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
++# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.3.tar.xz.asc
++sha256  4f6144447254753fcd19f2c5c70e79fa91d27253185b8928436f01528aa65e6c  rauc-1.3.tar.xz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 5a208e0..5c5bd99 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UVW_VERSION = 2.3.1_libuv-v1.34
-+UVW_VERSION = 2.5.0_libuv-v1.37
- UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
- UVW_INSTALL_STAGING = YES
- UVW_INSTALL_TARGET = NO
+-RAUC_VERSION = 1.2
++RAUC_VERSION = 1.3
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
 -- 
-2.26.2
+2.7.4
