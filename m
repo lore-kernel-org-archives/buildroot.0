@@ -1,56 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Apr 2020 09:09:44 +0200
+Date: Sat, 25 Apr 2020 09:09:03 +0200
 Subject: [Buildroot] [git commit branch/2020.02.x] package/python-flask:
- bump version to 1.1.2
-Message-ID: <20200425065640.4D2218FC46@busybox.osuosl.org>
+ update homepage URL
+Message-ID: <20200425065640.442D78FC46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53a0b978ffa1ab86ae4da35fae17ee6fb98ebba1
+commit: https://git.buildroot.net/buildroot/commit/?id=960f2e0de78d17005fda5bfc2354ff13dc3deab1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Reviewed-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 196109cb63885c5d85f284cbb00254c02b71ec0b)
+(cherry picked from commit 3572176dcdd7b653a1948fc3fe2b672b2fa55f99)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-flask/python-flask.hash | 9 +++++----
- package/python-flask/python-flask.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/python-flask/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
-index 24f68c6605..c6ccd633f8 100644
---- a/package/python-flask/python-flask.hash
-+++ b/package/python-flask/python-flask.hash
-@@ -1,6 +1,7 @@
--# md5, sha256 from https://pypi.org/pypi/flask/json
--md5	0e3ed44ece1c489ed835d1b7047e349c  Flask-1.1.1.tar.gz
--sha256	13f9f196f330c7c2c5d7a5cf91af894110ca0215ac051b5844701f2bfd934d52  Flask-1.1.1.tar.gz
--# Locally computed sha256 checksums
-+# From https://pypi.org/project/Flask/#copy-hash-modal-911ffb67-fe84-4e25-a1a9-f4c745a0a980
-+md5  0da4145d172993cd28a6c619630cc19c  Flask-1.1.2.tar.gz
-+sha256	4efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc9353d34b21f4b127060  Flask-1.1.2.tar.gz
-+
-+# License files
- sha256	489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.rst
- sha256	0ef3ae025f4a398761079f0d687ff3d66f4fef3a32ac2607318e909c0cba9150  docs/license.rst
-diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
-index 0cd1a18018..cc39bf7e49 100644
---- a/package/python-flask/python-flask.mk
-+++ b/package/python-flask/python-flask.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/python-flask/Config.in b/package/python-flask/Config.in
+index 556afab6d2..0e5b64ce59 100644
+--- a/package/python-flask/Config.in
++++ b/package/python-flask/Config.in
+@@ -13,4 +13,4 @@ config BR2_PACKAGE_PYTHON_FLASK
+ 	  Flask is a microframework for Python based on Werkzeug,
+ 	  Jinja 2 and good intentions.
  
--PYTHON_FLASK_VERSION = 1.1.1
-+PYTHON_FLASK_VERSION = 1.1.2
- PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
--PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/2e/80/3726a729de758513fd3dbc64e93098eb009c49305a97c6751de55b20b694
-+PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/4e/0b/cb02268c90e67545a0e3a37ea1ca3d45de3aca43ceb7dbf1712fb5127d5d
- PYTHON_FLASK_SETUP_TYPE = setuptools
- PYTHON_FLASK_LICENSE = BSD-3-Clause
- PYTHON_FLASK_LICENSE_FILES = LICENSE.rst docs/license.rst
+-	  http://flask.pocoo.org/
++	  https://palletsprojects.com/p/flask
