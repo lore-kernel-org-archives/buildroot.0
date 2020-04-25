@@ -1,35 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 25 Apr 2020 12:10:15 +0000
-Subject: [Buildroot] [Bug 11866] iniramfs file system fails to boot using
- Grub on EFI x86_64
-In-Reply-To: <bug-11866-163@https.bugs.busybox.net/>
-References: <bug-11866-163@https.bugs.busybox.net/>
-Message-ID: <bug-11866-163-VwJjKDvUmO@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Apr 2020 14:47:16 +0200
+Subject: [Buildroot] [PATCH 1/8] package/perl-data-uuid: bump to version
+ 1.226
+In-Reply-To: <20200424141839.1594-1-francois.perrad@gadz.org>
+References: <20200424141839.1594-1-francois.perrad@gadz.org>
+Message-ID: <20200425144716.73a388d0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11866
+On Fri, 24 Apr 2020 16:18:32 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/perl-data-uuid/perl-data-uuid.hash | 6 +++---
+>  package/perl-data-uuid/perl-data-uuid.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|---                         |FIXED
+Series applied. Thanks!
 
---- Comment #7 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Pete, Timo, All,
-
-Fixed with commit 98a6f1fc02e41ac30db24ac2b7262033faabacde.
-
-Thanks for the patience while waiting for that fix.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
