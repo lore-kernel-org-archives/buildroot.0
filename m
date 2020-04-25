@@ -1,83 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Apr 2020 14:06:34 +0200
-Subject: [Buildroot] [git commit] fs/cpio: make initramfs init script
+Date: Sat, 25 Apr 2020 14:08:25 +0200
+Subject: [Buildroot] [PATCH 1/1] fs/cpio: make initramfs init script
  survive 'console=' kernel argument
-Message-ID: <20200425115158.EAE338FF50@busybox.osuosl.org>
+In-Reply-To: <80e3e080-0af3-99de-ff8f-9de5e3dca8a6@exertus.fi>
+References: <80e3e080-0af3-99de-ff8f-9de5e3dca8a6@exertus.fi>
+Message-ID: <20200425120825.GP5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98a6f1fc02e41ac30db24ac2b7262033faabacde
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Timo, All,
 
-When booting with 'console=<empty>' in the kernel command line (as e.g.
-U-Boot does with silent flags in effect), opening /dev/console fails.
+On 2019-09-23 10:58 +0000, Timo Ketola spake thusly:
+> When booting with 'console=<empty>' in the kernel command line (as e.g.
+> U-Boot does with silent flags in effect), opening /dev/console fails.
+> That is fatal in the /init script and kernel will panic. It is also
+> needless, because the kernel tries to open it anyway (well, as long as
+> we have console node in initramfs /dev; cpio.mk creates that alright).
+> 
+> Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
 
-As per POSIX [0], when iany redirection fails, the shell running exec
-shal exit in error. So, when 'console=<empty>' is specified.
-/dev/console can't be opened, and the redirection fails, and /init is
-killed.
+I've applied to master, after extending the commit log with all the gory
+details explaininng why we can indeed safely remove those redisrections
+now.
 
-That behaviour was fixed on the kernel side with commit 2bd3a997befc2
-(Open /dev/console from rootfs), present since 2.6.34, released in May
-2010, so any [dr]ecent kernel will have that fix.
+Thank you for the patience on this patch.
 
-Furthermore, busybox will fix things up anyway (in bb_sanitize_stdio()),
-falling back to opening /dev/null if no console is availble. systemd
-does a similar thing (in make_console_stdio()), and sysvinit again has
-a similar approach (in console_init()).
+Thanks also to Peter for helping on IRC about this research.
 
-The archealogy search turned up those relevant commits:
+Regards,
+Yann E. MORIN.
 
-    2011-08-04 10a130f91e initramfs/init: make sure that 0, 1, 2 fds are available
-        introduces the three exec redirections in initramfs
+> ---
+>  fs/cpio/init | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/fs/cpio/init b/fs/cpio/init
+> index dbe09ac..72b2401 100755
+> --- a/fs/cpio/init
+> +++ b/fs/cpio/init
+> @@ -1,7 +1,5 @@
+>  #!/bin/sh
+>  # devtmpfs does not get automounted for initramfs
+>  /bin/mount -t devtmpfs devtmpfs /dev
+> -exec 0</dev/console
+> -exec 1>/dev/console
+> -exec 2>/dev/console
+> +
+>  exec /sbin/init "$@"
+> -- 
+> 2.7.4
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-    2011-09-06 3fac21ef8d cpio: fix boot with dynamic /dev
-        introduces the three exec redirections in cpio
-
-    2011-09-06 13a3afc536 fs/initramfs: refactor with fs/cpio
-        dropped the initramfs tweaks to reuse the cpio ones
-
-    2012-11-04 e1ebae700a fs/common: Create initial console device
-        introduces the /dev/console char,5,1 pseudo device creation in
-        cpio
-
-    2018-03-31 dec061adce fs/cpio: don't extend packages' permissions table
-        switched from the permission-table to a manual mknod to create
-        /dev/console
-
-The redirections were added before we could guarantee there was a
-/dev/console in the rootfs.
-
-We're now guaranteed to have /dev/console in an initramfs, and any recent
-kernel will automatically open /dev/console before spawning /init.
-
-The three redirections are useless now, and cause harm under certain
-conditions. Drop them.
-
-[0] https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_20_01
-
-Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-[yann.morin.1998 at free.fr:
-  - extend commit log with the analysis done with Peter
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- fs/cpio/init | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/fs/cpio/init b/fs/cpio/init
-index dbe09ac68e..b0af18b67a 100755
---- a/fs/cpio/init
-+++ b/fs/cpio/init
-@@ -1,7 +1,4 @@
- #!/bin/sh
- # devtmpfs does not get automounted for initramfs
- /bin/mount -t devtmpfs devtmpfs /dev
--exec 0</dev/console
--exec 1>/dev/console
--exec 2>/dev/console
- exec /sbin/init "$@"
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
