@@ -1,48 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Apr 2020 09:08:43 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-flask: fix
- runtime python modules dependencies
-Message-ID: <20200425065640.2D87E8FC46@busybox.osuosl.org>
+Date: Sat, 25 Apr 2020 09:06:09 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/boinc: set
+ curl-config
+Message-ID: <20200425065640.24F1B8E300@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0395e882e301445fcf3c04a6b0a6de70a2da2282
+commit: https://git.buildroot.net/buildroot/commit/?id=9a90e951f76c5211cd36e26fe1082e2c35228590
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-- add python setuptools runtime dependency, fixes:
-  ModuleNotFoundError: No module named 'pkg_resources'
+Build can fail because boinc uses curl-config that it founds on host:
 
-- add python libxml2 runtime dependency, fixes:
-  ModuleNotFoundError: No module named 'xml'
+checking for curl-config... /usr/bin/curl-config
+checking for the version of libcurl... 7.47.0
+checking for libcurl >= version 7.17.1... yes
+checking whether libcurl is usable... no
 
-- add python ssl runtime dependency, fixes:
-  AttributeError: 'NoneType' object has no attribute 'SSLContext'
+Fixes:
+ - http://autobuild.buildroot.org/results/26ab8024e3ef70b898981763f4ea89b647cc9f4b
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6576d26024f40647a15633b52a2a27c5779801e5)
+(cherry picked from commit 546d280b24e6fc5019555a7ad0e9653f604c40c6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-flask/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/boinc/boinc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-flask/Config.in b/package/python-flask/Config.in
-index 6f77913ed1..72fcb61999 100644
---- a/package/python-flask/Config.in
-+++ b/package/python-flask/Config.in
-@@ -2,8 +2,12 @@ config BR2_PACKAGE_PYTHON_FLASK
- 	bool "python-flask"
- 	select BR2_PACKAGE_PYTHON_CLICK # runtime
- 	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
-+	select BR2_PACKAGE_PYTHON_LXML # runtime
- 	select BR2_PACKAGE_PYTHON_WERKZEUG # runtime
- 	select BR2_PACKAGE_PYTHON_ITSDANGEROUS # runtime
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
- 	help
+diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+index 827eaa0c84..5dccf4c43f 100644
+--- a/package/boinc/boinc.mk
++++ b/package/boinc/boinc.mk
+@@ -15,6 +15,7 @@ BOINC_LICENSE = LGPL-3.0+
+ BOINC_LICENSE_FILES = COPYING COPYING.LESSER
+ BOINC_DEPENDENCIES = host-pkgconf libcurl openssl
+ BOINC_AUTORECONF = YES
++BOINC_CONF_ENV = ac_cv_path__libcurl_config=$(STAGING_DIR)/usr/bin/curl-config
+ BOINC_CONF_OPTS = \
+ 	--disable-apps \
+ 	--disable-boinczip \
