@@ -1,41 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 22:07:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/syrepo: fix SysV init script
-In-Reply-To: <CAEyMn7atSwtJ6XHD3utVG+LWp7kprdKdufD5e6-qP_61_qHZMw@mail.gmail.com>
-References: <20200420095738.16104-1-heiko.thiery@gmail.com>
- <20200425162221.5105443c@windsurf.home>
- <CAEyMn7arhktDMYurpWu-8E=vqFYFvez17sqdAm+m+vC7BkgptA@mail.gmail.com>
- <20200425213717.46a38cbf@windsurf.home>
- <CAEyMn7atSwtJ6XHD3utVG+LWp7kprdKdufD5e6-qP_61_qHZMw@mail.gmail.com>
-Message-ID: <20200425220758.7e83e2e0@windsurf.home>
+Date: Sat, 25 Apr 2020 22:09:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-autobahn: bump to
+ version 20.4.3
+In-Reply-To: <CADvTj4pu05H-Q8jEnrn+pHNZpHHDwfkSy0xE8thHe-e+g5UwbQ@mail.gmail.com>
+References: <20200424224752.63673-1-james.hilliard1@gmail.com>
+ <20200425153040.297e371c@windsurf.home>
+ <CADvTj4ptKKjxeu6YHNGC+ANffqnOzgswFjAD54H15BTsghx5MA@mail.gmail.com>
+ <20200425215311.6ab6210d@windsurf.home>
+ <CADvTj4pu05H-Q8jEnrn+pHNZpHHDwfkSy0xE8thHe-e+g5UwbQ@mail.gmail.com>
+Message-ID: <20200425220904.3e117d7a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 25 Apr 2020 21:58:56 +0200
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+On Sat, 25 Apr 2020 13:55:52 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> No it doesn't. The confusion is due to my bad commit message ;-/ I try
-> to explain it better.
-> 
-> The current script is not able to stop the daemon.
-> 
-> Options to fix the problem:
-> 
-> A) By adding the "-m -p $PIDFILE" option the pid file will be created
-> but it will not contain the correct PID used by the daemon. This is
-> obviously because the daemon forks.
-> B) By not starting the daemon in background (sysrepo-plugind -d) and
-> let do it by start-stop-daemon with "-b" option the log messages of
-> the daemon will not longer ends in the syslog but to stderr.
-> C) start the daemon without a pidfile and stop the daemon with the "-x" option.
-> 
-> I think the best option is C. This is what the patch does.
+> If you'd like you can merge just the version bump part without the xbr strip
+> for now.
 
-Absolutely :-) I'll update the commit message with this explanation
-when applying.
+But you said we don't have what is needed for xbr. Or is that "just"
+runtime dependencies that are missing?
+
+If that really brings 10 MB of additional useless stuff, I think I'd
+prefer to hold off on the version bump, and do it once there is a good
+solution to avoid installing xbr.
 
 Thanks!
 
