@@ -1,40 +1,46 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 25 Apr 2020 15:56:08 -0400
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: disable tests and
- cpack docs
-Message-ID: <20200425195608.9627-1-danomimanchego123@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Apr 2020 22:07:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/syrepo: fix SysV init script
+In-Reply-To: <CAEyMn7atSwtJ6XHD3utVG+LWp7kprdKdufD5e6-qP_61_qHZMw@mail.gmail.com>
+References: <20200420095738.16104-1-heiko.thiery@gmail.com>
+ <20200425162221.5105443c@windsurf.home>
+ <CAEyMn7arhktDMYurpWu-8E=vqFYFvez17sqdAm+m+vC7BkgptA@mail.gmail.com>
+ <20200425213717.46a38cbf@windsurf.home>
+ <CAEyMn7atSwtJ6XHD3utVG+LWp7kprdKdufD5e6-qP_61_qHZMw@mail.gmail.com>
+Message-ID: <20200425220758.7e83e2e0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-paho-mqtt-c by default enables the building of test materials and
-install of CPack documentation:
+On Sat, 25 Apr 2020 21:58:56 +0200
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-PAHO_ENABLE_TESTING - "Build tests and run"
-PAHO_ENABLE_CPACK - "Enable CPack"
+> No it doesn't. The confusion is due to my bad commit message ;-/ I try
+> to explain it better.
+> 
+> The current script is not able to stop the daemon.
+> 
+> Options to fix the problem:
+> 
+> A) By adding the "-m -p $PIDFILE" option the pid file will be created
+> but it will not contain the correct PID used by the daemon. This is
+> obviously because the daemon forks.
+> B) By not starting the daemon in background (sysrepo-plugind -d) and
+> let do it by start-stop-daemon with "-b" option the log messages of
+> the daemon will not longer ends in the syslog but to stderr.
+> C) start the daemon without a pidfile and stop the daemon with the "-x" option.
+> 
+> I think the best option is C. This is what the patch does.
 
-Let's disable these to save a couple megabytes and time.  This is
-in keeping with the generic settings in pkg-cmake.mk.
+Absolutely :-) I'll update the commit message with this explanation
+when applying.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/paho-mqtt-c/paho-mqtt-c.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Thanks!
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index 7cace9a607..b2d9955ea3 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -10,6 +10,8 @@ PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
- PAHO_MQTT_C_INSTALL_STAGING = YES
- 
-+PAHO_MQTT_C_CONF_OPTS += -DPAHO_ENABLE_TESTING=FALSE -DPAHO_ENABLE_CPACK=FALSE
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- PAHO_MQTT_C_DEPENDENCIES += openssl
- PAHO_MQTT_C_CONF_OPTS += -DPAHO_WITH_SSL=TRUE
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
