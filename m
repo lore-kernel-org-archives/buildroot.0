@@ -1,47 +1,74 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 25 Apr 2020 15:30:02 -0600
-Subject: [Buildroot] [PATCH v2 1/1] package/python-autobahn: bump to version
- 20.4.3
-Message-ID: <20200425213002.96598-1-james.hilliard1@gmail.com>
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+Date: Sat, 25 Apr 2020 23:31:27 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: add option to define custom
+ dependencies
+In-Reply-To: <20200425232245.6e13c5a6@windsurf.home>
+References: <20200425000629.2068191-1-heiko@sntech.de>
+ <20200425211350.GR5035@scaer> <20200425232245.6e13c5a6@windsurf.home>
+Message-ID: <2530327.UWAnRXb5oC@diego>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-autobahn/python-autobahn.hash | 4 ++--
- package/python-autobahn/python-autobahn.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi Thomas, Yann,
 
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index a49de07b70..a5aa2a5a7d 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/autobahn/json
--md5  9702594ee1c5613e9bb31af105140b5b  autobahn-20.4.2.tar.gz
--sha256  1c943f94bb759c07445a6984a3bc4c76f73e2a90a1fc2c3521c211579b73d3db  autobahn-20.4.2.tar.gz
-+md5  dcae3cf26203aa4bbd9912137e5c9512  autobahn-20.4.3.tar.gz
-+sha256  c6fe745d52ba9f9eecf791cd31f558df42aebfc4f9ee558a8f1d18c707e1ae1f  autobahn-20.4.3.tar.gz
- # Locally computed sha256 checksums
- sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index d4e52352f2..37b3d33534 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_AUTOBAHN_VERSION = 20.4.2
-+PYTHON_AUTOBAHN_VERSION = 20.4.3
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/13/0e/b182b46ea437e59003de78c68bb00824d304dcfe58e7235f29c4f275eca0
-+PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/cb/16/38d27874ef827974f44acb6dd64a92a9248b624734c0e84b91083c2d9350
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
--- 
-2.20.1
+Am Samstag, 25. April 2020, 23:22:45 CEST schrieb Thomas Petazzoni:
+> Hello,
+> 
+> On Sat, 25 Apr 2020 23:13:50 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> 
+> > My opinion on that patch is that i am definitely not in favour of it. If
+> > we go that route, then we would have to allow adding any such arbitrary
+> > dependencies to a wide range of packages.
+> 
+> Without necessarily strongly supporting Heiko's patch, I think it is
+> important to keep in mind that U-Boot is not a package like any others.
+> We offer version selection for U-Boot, custom Git/Subversion repo
+> selection, which we do not offer for other packages. U-Boot has
+> zillions of forks, support for gazillions platforms each with their own
+> funky requirements.
+> 
+> We've already added a BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS to pass custom
+> make options, adding the possibility to add custom dependencies would
+> go in the same direction.
+> 
+> I however agree that this kind of option is a good recipe for people to
+> do their own hacks on their side, instead of finding a proper way to do
+> it that can be upstreamed to Buildroot.
+> 
+> > Now, there are two situations:
+> > 
+> >   - the tool is already in Buildroot: add a new _NEEDS_FOO option like
+> >     we already have.
+> > 
+> >   - the tool is in a br2-external tre: this is in my opinion better
+> >     served by working on the evaluation-postpone changes Arnou and I
+> >     have been suggesting for quite a while now.
+> 
+> I think it would make sense to hear about what Heiko's use case exactly
+> is, this might help.
+
+the use-case is:
+- a u-boot config fragment specifying key-dir and key-hint for signing
+  uboot parts - see [0]
+- our own package managing these (and other) keys
+- and thus us wanting to make sure the key package gets "build" before
+  u-boot itself
+
+I'm not overly attached to my patch, but it somehow felt in line with
+also the config-fragment option, that allows including other random
+fragments into the board config file for the u-boot build.
+
+So yes, the required package is in a br2-external tree. What is this
+"evaluation-postpone" thingy?
+
+
+Thanks
+Heiko
+
+
+[0] https://patchwork.ozlabs.org/project/uboot/patch/20200421002333.111461-6-heiko at sntech.de/
+and other patches in that series
