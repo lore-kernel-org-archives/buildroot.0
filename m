@@ -1,44 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Apr 2020 09:06:09 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/boinc: set
- curl-config
-Message-ID: <20200425065640.24F1B8E300@busybox.osuosl.org>
+Date: Sat, 25 Apr 2020 09:00:02 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/gcc: fix
+ check-package
+Message-ID: <20200425065639.F23098FC46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a90e951f76c5211cd36e26fe1082e2c35228590
+commit: https://git.buildroot.net/buildroot/commit/?id=219da1fbd1ad2bc58f587bf67e93ed7b1883f44d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Build can fail because boinc uses curl-config that it founds on host:
+Commit dcaf6e75a (package/gcc: pass -Wno-error to debug builds)
+introduced non-ASCII characters in a comment, copy-pasted from a
+terminal output.
 
-checking for curl-config... /usr/bin/curl-config
-checking for the version of libcurl... 7.47.0
-checking for libcurl >= version 7.17.1... yes
-checking whether libcurl is usable... no
+check-package does not like non-ASCII characters, and whines about
+them.
 
-Fixes:
- - http://autobuild.buildroot.org/results/26ab8024e3ef70b898981763f4ea89b647cc9f4b
+Replace the fancy quotes by standard ASCII ones.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 546d280b24e6fc5019555a7ad0e9653f604c40c6)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 2a6003ddd5a495f5e580a5dc05d71705fd4da27a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boinc/boinc.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/gcc/gcc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 827eaa0c84..5dccf4c43f 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -15,6 +15,7 @@ BOINC_LICENSE = LGPL-3.0+
- BOINC_LICENSE_FILES = COPYING COPYING.LESSER
- BOINC_DEPENDENCIES = host-pkgconf libcurl openssl
- BOINC_AUTORECONF = YES
-+BOINC_CONF_ENV = ac_cv_path__libcurl_config=$(STAGING_DIR)/usr/bin/curl-config
- BOINC_CONF_OPTS = \
- 	--disable-apps \
- 	--disable-boinczip \
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index fe7167b2f3..50f2a3fcb7 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -100,7 +100,7 @@ HOST_GCC_COMMON_CONF_ENV = \
+ GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+ GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+-# used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: ???st.st_mode??? may be used uninitialized in this function [-Werror=maybe-uninitialized]
++# used to fix ../../../../libsanitizer/libbacktrace/../../libbacktrace/elf.c:772:21: error: 'st.st_mode' may be used uninitialized in this function [-Werror=maybe-uninitialized]
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+ GCC_COMMON_TARGET_CFLAGS += -Wno-error
+ endif
