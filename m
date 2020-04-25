@@ -1,137 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 22:42:14 +0200
-Subject: [Buildroot] [git commit] package/libopenssl: add PPC64BE ELFv2
- support
-Message-ID: <20200425202815.D459E90390@busybox.osuosl.org>
+Date: Sat, 25 Apr 2020 22:53:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-bsdiff4: new packge
+In-Reply-To: <20200227204335.25823-1-asafka7@gmail.com>
+References: <20200227204335.25823-1-asafka7@gmail.com>
+Message-ID: <20200425225358.1dcd475b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10347376ae4ada63833a51cf7963e400f8139202
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-musl libc uses ELFv2 by default for all PPC64 targets.
+On Thu, 27 Feb 2020 22:43:35 +0200
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-Now, OpenSSL libraries built with musl targeting PPC64BE should build
-and function as expected.
+> License file isn't shipped with the package, so PKG-INFO
+> is used instead.
 
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...se-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch | 35 ++++++++++++
- ...erlasm-ppc-xlate.pl-add-linux64v2-flavour.patch | 64 ++++++++++++++++++++++
- 2 files changed, 99 insertions(+)
+I am concerned by the license here.
 
-diff --git a/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-new file mode 100644
-index 0000000000..3d6eaf49d2
---- /dev/null
-+++ b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-@@ -0,0 +1,35 @@
-+From b57cc2e4ee21babacbffc243626de72c248068ea Mon Sep 17 00:00:00 2001
-+From: Andy Polyakov <appro@openssl.org>
-+Date: Sun, 5 May 2019 18:30:55 +0200
-+Subject: [PATCH] Configure: use ELFv2 ABI on some ppc64 big endian systems
-+
-+If _CALL_ELF is defined to be 2, it's an ELFv2 system.
-+Conditionally switch to the v2 perlasm scheme.
-+
-+Reviewed-by: Paul Dale <paul.dale@oracle.com>
-+Reviewed-by: Richard Levitte <levitte@openssl.org>
-+(Merged from https://github.com/openssl/openssl/pull/8883)
-+[vfazio: fixup for 1.1.1d]
-+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-+---
-+ Configure | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/Configure b/Configure
-+index 5a699836f3..f9152b1702 100755
-+--- a/Configure
-++++ b/Configure
-+@@ -1413,6 +1413,10 @@ my %predefined_CXX = $config{CXX}
-+     ? compiler_predefined($config{CROSS_COMPILE}.$config{CXX})
-+     : ();
-+ 
-++if ($target eq "linux-ppc64" && !$disabled{asm}) {
-++       $target{perlasm_scheme} = "linux64v2" if ($predefined_C{_CALL_ELF} == 2);
-++}
-++
-+ # Check for makedepend capabilities.
-+ if (!$disabled{makedepend}) {
-+     if ($config{target} =~ /^(VC|vms)-/) {
-+-- 
-+2.25.0
-+
-diff --git a/package/libopenssl/0005-crypto-perlasm-ppc-xlate.pl-add-linux64v2-flavour.patch b/package/libopenssl/0005-crypto-perlasm-ppc-xlate.pl-add-linux64v2-flavour.patch
-new file mode 100644
-index 0000000000..30bddc23de
---- /dev/null
-+++ b/package/libopenssl/0005-crypto-perlasm-ppc-xlate.pl-add-linux64v2-flavour.patch
-@@ -0,0 +1,64 @@
-+From 07a0bbdd179a52907485fd793f0df31c097447af Mon Sep 17 00:00:00 2001
-+From: Andy Polyakov <appro@openssl.org>
-+Date: Sun, 5 May 2019 18:25:50 +0200
-+Subject: [PATCH] crypto/perlasm/ppc-xlate.pl: add linux64v2 flavour
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+This is a big endian ELFv2 configuration. ELFv2 was already being
-+used for little endian, and big endian was traditionally ELFv1
-+but there are practical configurations that use ELFv2 with big
-+endian nowadays (Ad??lie Linux, Void Linux, possibly Gentoo, etc.)
-+
-+Reviewed-by: Paul Dale <paul.dale@oracle.com>
-+Reviewed-by: Richard Levitte <levitte@openssl.org>
-+(Merged from https://github.com/openssl/openssl/pull/8883)
-+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-+---
-+ crypto/perlasm/ppc-xlate.pl | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/crypto/perlasm/ppc-xlate.pl b/crypto/perlasm/ppc-xlate.pl
-+index d220c6245b..eec82b8d48 100755
-+--- a/crypto/perlasm/ppc-xlate.pl
-++++ b/crypto/perlasm/ppc-xlate.pl
-+@@ -49,7 +49,7 @@ my $globl = sub {
-+ 	/osx/		&& do { $name = "_$name";
-+ 				last;
-+ 			      };
-+-	/linux.*(32|64le)/
-++	/linux.*(32|64(le|v2))/
-+ 			&& do {	$ret .= ".globl	$name";
-+ 				if (!$$type) {
-+ 				    $ret .= "\n.type	$name,\@function";
-+@@ -80,7 +80,7 @@ my $globl = sub {
-+ };
-+ my $text = sub {
-+     my $ret = ($flavour =~ /aix/) ? ".csect\t.text[PR],7" : ".text";
-+-    $ret = ".abiversion	2\n".$ret	if ($flavour =~ /linux.*64le/);
-++    $ret = ".abiversion	2\n".$ret	if ($flavour =~ /linux.*64(le|v2)/);
-+     $ret;
-+ };
-+ my $machine = sub {
-+@@ -186,7 +186,7 @@ my $vmr = sub {
-+ 
-+ # Some ABIs specify vrsave, special-purpose register #256, as reserved
-+ # for system use.
-+-my $no_vrsave = ($flavour =~ /aix|linux64le/);
-++my $no_vrsave = ($flavour =~ /aix|linux64(le|v2)/);
-+ my $mtspr = sub {
-+     my ($f,$idx,$ra) = @_;
-+     if ($idx == 256 && $no_vrsave) {
-+@@ -318,7 +318,7 @@ while($line=<>) {
-+ 	if ($label) {
-+ 	    my $xlated = ($GLOBALS{$label} or $label);
-+ 	    print "$xlated:";
-+-	    if ($flavour =~ /linux.*64le/) {
-++	    if ($flavour =~ /linux.*64(le|v2)/) {
-+ 		if ($TYPES{$label} =~ /function/) {
-+ 		    printf "\n.localentry	%s,0\n",$xlated;
-+ 		}
-+-- 
-+2.25.0
-+
+> +PYTHON_BSDIFF4_VERSION = 1.1.9
+> +PYTHON_BSDIFF4_SOURCE = bsdiff4-$(PYTHON_BSDIFF4_VERSION).tar.gz
+> +PYTHON_BSDIFF4_SITE = https://files.pythonhosted.org/packages/39/34/bd2ae6cd4b2a5d3af9173a9d7f6ecd2723ea7b0401ad807a0c7e7b50faa3
+> +PYTHON_BSDIFF4_LICENSE = BSD-2-Clause
+> +PYTHON_BSDIFF4_LICENSE_FILES = PKG-INFO
+
+PKG-INFO only says "BSD", and nothing in the source code indicates what
+is the license.
+
+The only indication is in core.c, which contains:
+
+/*
+  The code below is mostly derived from cx_bsdiff (written by Anthony
+  Tuininga, http://cx-bsdiff.sourceforge.net/).  The cx_bsdiff code in
+  turn was derived from bsdiff, the standalone utility produced for BSD
+  which can be found at http://www.daemonology.net/bsdiff.
+*/
+
+If we visit http://cx-bsdiff.sourceforge.net/ we can find
+http://cx-bsdiff.sourceforge.net/LICENSE.txt, which is not the
+BSD-2-Clause, but some weird license called the "BSD Protection
+License", which is known by SPDX as BSD-Protection:
+https://spdx.org/licenses/BSD-Protection.html
+
+Could you try to clarify what is the license of this package ? It would
+be really good for PyPi to be a bit more "strict" in the description of
+the licenses.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
