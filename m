@@ -1,38 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Apr 2020 09:00:37 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/strongswan:
- annotate CVEs
-Message-ID: <20200425065640.0C8CC8FC47@busybox.osuosl.org>
+Date: Sat, 25 Apr 2020 09:08:51 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/python-flask:
+ remove erroneously python-lxml dependency
+Message-ID: <20200425065640.36E4E8FC47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e27ccc1915f99cdcf0314462a557a4cc9bac2c4e
+commit: https://git.buildroot.net/buildroot/commit/?id=edcebfba7323ec3a129d721976142ae694e08c79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Remove erroneously python-lxml dependency (as noted by
+Peter Korsgaard).
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 758a23fd89410b1f1b9bd1df0bd27de19135818e)
+(cherry picked from commit ebc55329cb7f7dda52b54afab140cfca5d1f8dc5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strongswan/strongswan.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/python-flask/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 021a59cecc..7f1752ce57 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -43,6 +43,11 @@ STRONGSWAN_CONF_OPTS += \
- 	--with-imcvdir=/usr/lib/ipsec/imcvs \
- 	--with-dev-headers=/usr/include
- 
-+# strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
-+STRONGSWAN_IGNORE_CVES += CVE-2018-16151 CVE-2018-16152
-+# strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
-+STRONGSWAN_IGNORE_CVES += CVE-2018-17540
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- STRONGSWAN_CONF_ENV += LIBS='-latomic'
- endif
+diff --git a/package/python-flask/Config.in b/package/python-flask/Config.in
+index 72fcb61999..556afab6d2 100644
+--- a/package/python-flask/Config.in
++++ b/package/python-flask/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_FLASK
+ 	bool "python-flask"
+ 	select BR2_PACKAGE_PYTHON_CLICK # runtime
+ 	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
+-	select BR2_PACKAGE_PYTHON_LXML # runtime
+ 	select BR2_PACKAGE_PYTHON_WERKZEUG # runtime
+ 	select BR2_PACKAGE_PYTHON_ITSDANGEROUS # runtime
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
