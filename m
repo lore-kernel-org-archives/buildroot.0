@@ -1,47 +1,68 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sat, 25 Apr 2020 16:30:37 +0200
-Subject: [Buildroot] [PATCH] package/rauc: bump to version 1.3
-Message-ID: <1587825037-9766-1-git-send-email-pjtexier@koncepto.io>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sat, 25 Apr 2020 17:26:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/syrepo: fix SysV init script
+In-Reply-To: <20200425162221.5105443c@windsurf.home>
+References: <20200420095738.16104-1-heiko.thiery@gmail.com>
+ <20200425162221.5105443c@windsurf.home>
+Message-ID: <CAEyMn7arhktDMYurpWu-8E=vqFYFvez17sqdAm+m+vC7BkgptA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See: https://github.com/rauc/rauc/releases/tag/v1.3
+Hi Thomas and all,
 
-And update hash file formatting (2 spaces).
+Am Sa., 25. Apr. 2020 um 16:22 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> Hello Heiko,
+>
+> Minor nit: typo in commit title: syrepo -> sysrepo. More questions below.
+>
+> On Mon, 20 Apr 2020 11:57:38 +0200
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> > The sysrepo-plugind does not support to be controlled via the PID by the
+> > start-stop-daemon. This is because sysrepo-plugind does a fork.
+> > Thus the daemon is running with another PID known by start-stop-daemon.
+>
+> "known" by start-stop-daemon, or "not known" ?
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- package/rauc/rauc.hash | 6 +++---
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Ok, I was unclear. The PID used by the daemon is another one that the
+start-stop-daemon knows.
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index 5476034..b73eb60 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated, after verifying against
--# https://github.com/rauc/rauc/releases/download/v1.2/rauc-1.2.tar.xz.asc
--sha256 224683fc1fac50ccb89128aa786445cd8e26bb25deafd4410e0807187376e661 rauc-1.2.tar.xz
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
-+# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.3.tar.xz.asc
-+sha256  4f6144447254753fcd19f2c5c70e79fa91d27253185b8928436f01528aa65e6c  rauc-1.3.tar.xz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 5a208e0..5c5bd99 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RAUC_VERSION = 1.2
-+RAUC_VERSION = 1.3
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
+>
+> Also, it is not very clear. Indeed, in the "start" step, you're not
+> asking start-stop-daemon to create a PID file using the -m option. So
+> you're relying on the daemon to create one. Is this PID file incorrect
+> ? Normally, when it is created by the daemon itself, even if the daemon
+> forks, it should be fine.
+
+I recognized that and tried to do it that way (with the -m option).
+But in doing so I figured out that the "stop" step does not work. The
+daemon is running by a PID that is +1 compared to the one the
+start-stop-daemon knows from the PIDFILE.
+
+>
+> Otherwise, can you ask the daemon not to fork, and let
+> start-stop-daemon take care of this ?
+
+When I ask the daemon not to fork the output does not go any longer to
+the syslog. Instead it goes to stderr [1]. I dont think this is the
+way it should
+
+[1] https://github.com/sysrepo/sysrepo/blob/master/src/executables/sysrepo-plugind.c#L78
+
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+Thank you for the review.
+
 -- 
-2.7.4
+Heiko
