@@ -1,46 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Apr 2020 14:02:03 +0200
-Subject: [Buildroot] [PATCH 7/8] package/python3-psutil: add a special
- host variant
-In-Reply-To: <20200323104909.16765-7-yegorslists@googlemail.com>
+Date: Sat, 25 Apr 2020 14:02:14 +0200
+Subject: [Buildroot] [PATCH 8/8] package/mongodb: bump to version 4.2.4
+In-Reply-To: <20200323104909.16765-8-yegorslists@googlemail.com>
 References: <20200323104909.16765-1-yegorslists@googlemail.com>
- <20200323104909.16765-7-yegorslists@googlemail.com>
-Message-ID: <20200425140203.64c06def@windsurf.home>
+ <20200323104909.16765-8-yegorslists@googlemail.com>
+Message-ID: <20200425140214.6c83e359@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Mar 2020 11:49:08 +0100
+On Mon, 23 Mar 2020 11:49:09 +0100
 yegorslists at googlemail.com wrote:
 
-> diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-> index cfb015cfe6..b050547624 100644
-> --- a/package/python-psutil/python-psutil.mk
-> +++ b/package/python-psutil/python-psutil.mk
-> @@ -11,8 +11,5 @@ PYTHON_PSUTIL_SETUP_TYPE = setuptools
->  PYTHON_PSUTIL_LICENSE = BSD-3-Clause
->  PYTHON_PSUTIL_LICENSE_FILES = LICENSE
->  
-> -# Needed to build mongodb
-> -HOST_PYTHON_PSUTIL_NEEDS_HOST_PYTHON = python3
+> From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> 
+> - Drop !BR2_PACKAGE_PYTHON3 dependency as SConstruct requires
+>   host-python3 since version 4.1.10 and:
+>   https://github.com/mongodb/mongo/commit/8dd6d4755734ed37c1b98dfdefce3ca6bc65f1f6
+> - host-python-psutil is needed since 4.1.8 and
+>   https://github.com/mongodb/mongo/commit/ff03811e31851984617d73739de8acc7640b19a2
+> - Drop unneeded host-python-typing dependency
+> - C++17 and so gcc 7 is required since 4.1.8 and
+>   https://github.com/mongodb/mongo/commit/01d84b2565fc9ea9626a55dcf1f3f817968088f2
+> - Set --disable-minimum-compiler-version-enforcement as mongodb enforces
+>   gcc >= 8.2 since verson 4.1.8 and
+>   https://github.com/mongodb/mongo/commit/9ac90b128ebeb1bb431ebe3fe9176cb6142818cb
+> - Explictly disable ssl if needed as ssl is enabled by default
+> - Add host-python-cheetah dependency if needed
+> - Manage new http-client option added in version 4.1.2 and
+>   https://github.com/mongodb/mongo/commit/4d7dcca91bc2bbde65843fe88c41fa040e0d1877
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> [Titouan: Fix patch conflicts with master]
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/mongodb/Config.in    |  8 +++-----
+>  package/mongodb/mongodb.hash |  2 +-
+>  package/mongodb/mongodb.mk   | 27 ++++++++++++++++++---------
+>  3 files changed, 22 insertions(+), 15 deletions(-)
 
-I dropped this chunk, since I did not apply PATCH 1/8. I've however
-added a comment in python-psutil.mk to tell that the version should be
-kept in sync with python3-psutil.
-
-> +# Please keep in sync with
-> +# package/python-mako/python-psutil.mk
-                   ^^^^^ should have been psutil
-
-> +PYTHON3_PSUTIL_VERSION = 5.6.7
-> +PYTHON3_PSUTIL_SOURCE = psutil-$(PYTHON3_PSUTIL_VERSION).tar.gz
-> +PYTHON3_PSUTIL_SITE = https://files.pythonhosted.org/packages/73/93/4f8213fbe66fc20cb904f35e6e04e20b47b85bee39845cc66a0bcf5ccdcb
-
-I've updated the version and site to be in sync with python-psutil.
-
-Applied with those changes. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
