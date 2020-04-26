@@ -1,40 +1,111 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 26 Apr 2020 09:21:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sg3_utils: link with libatomic when
- needed
-Message-ID: <20200426072116.1594619-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Apr 2020 11:21:31 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package/mesa3d-headers: fix install
+ of dri.pc
+In-Reply-To: <20191023062220.5646-2-bernd.kuhls@t-online.de>
+References: <20191023062220.5646-1-bernd.kuhls@t-online.de>
+ <20191023062220.5646-2-bernd.kuhls@t-online.de>
+Message-ID: <20200426092131.GV5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sg3_utils uses __atomic_fetch_add_4 since version 1.45 and
-https://github.com/hreinecke/sg3_utils/commit/e9445f4efc012d37809342ba21f16360a0208f06
+Bernd, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/7773ead32375ca9073f45db83dac299aa2edd619
+On 2019-10-23 08:22 +0200, Bernd Kuhls spake thusly:
+> Due to the switch of mesa3d to the meson build system the upstream
+> tarball does not include dri.pc.in anymore, it is created during the
+> build now:
+> https://cgit.freedesktop.org/mesa/mesa/tree/src/mesa/drivers/dri/meson.build?h=19.2#n93
+> 
+> In order to provide dri.pc we need to add a version taken from a dri-
+> based mesa3d build to our source repository, by doing so we can reduce
+> the number of sed commands.
+> 
+> Without this patch the build of xserver_xorg-server, switched to virtual
+> opengl provider, will fail:
+> 
+> checking for XSERVERCFLAGS... no
+> configure: error: Package requirements (fixesproto >= 5.0 damageproto
+>  >= 1.1 xcmiscproto >= 1.2.0 xtrans >= 1.3.5 bigreqsproto >= 1.1.0
+>  xproto >= 7.0.31 randrproto >= 1.6.0 renderproto >= 0.11 xextproto
+>  >= 7.2.99.901 inputproto >= 2.3 kbproto >= 1.0.3 fontsproto >= 2.1.3
+>  pixman-1 >= 0.27.2 videoproto recordproto >= 1.13.99.1 resourceproto
+>  >= 1.2.0 xf86driproto >= 2.1.0 glproto >= 1.4.17 dri >= 7.8.0 dri3proto
+>  presentproto >= 1.1 xineramaproto xkbfile  pixman-1 >= 0.27.2 xfont2
+>  >= 2.0.0 xau xshmfence >= 1.1 xdmcp) were not met:
+> 
+> Package 'dri', required by 'virtual:world', not found
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/sg3_utils/sg3_utils.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+I have entirely reworked the commit log to be more explicit about the
+meson buildsystem referecne that is confusing.
 
-diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
-index 4685169e39..11b3691ffc 100644
---- a/package/sg3_utils/sg3_utils.mk
-+++ b/package/sg3_utils/sg3_utils.mk
-@@ -20,6 +20,11 @@ SG3_UTILS_AUTORECONF = YES
- # install the libsgutils2 library
- SG3_UTILS_INSTALL_STAGING = YES
- 
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+SG3_UTILS_CONF_ENV += LIBS="-latomic"
-+endif
-+
- ifeq ($(BR2_PACKAGE_SG3_UTILS_PROGS),)
- define SG3_UTILS_REMOVE_PROGS
- 	for prog in \
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> v2: no changes, included in new series switching xserver_xorg-server
+>     to virtual opengl provider
+> 
+>  package/mesa3d-headers/dri.pc            | 10 ++++++++++
+>  package/mesa3d-headers/mesa3d-headers.mk |  9 ++-------
+>  2 files changed, 12 insertions(+), 7 deletions(-)
+>  create mode 100644 package/mesa3d-headers/dri.pc
+> 
+> diff --git a/package/mesa3d-headers/dri.pc b/package/mesa3d-headers/dri.pc
+> new file mode 100644
+> index 0000000000..bd9a33b6c6
+> --- /dev/null
+> +++ b/package/mesa3d-headers/dri.pc
+> @@ -0,0 +1,10 @@
+> +prefix=/usr
+> +libdir=${prefix}/lib
+> +includedir=${prefix}/include
+> +
+> +dridriverdir=/usr/lib/dri
+> +
+> +Name: dri
+> +Description: Direct Rendering Infrastructure
+> +Version: @VERSION@
+> +Cflags: -I${includedir}
+> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+> index 8670184742..99d6e52498 100644
+> --- a/package/mesa3d-headers/mesa3d-headers.mk
+> +++ b/package/mesa3d-headers/mesa3d-headers.mk
+> @@ -34,13 +34,8 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
+>  # Not using $(SED) because we do not want to work in-place, and $(SED)
+>  # contains -i.
+>  define MESA3D_HEADERS_BUILD_DRI_PC
+> -	sed -e 's:@\(exec_\)\?prefix@:/usr:' \
+> -	    -e 's:@libdir@:$${exec_prefix}/lib:' \
+> -	    -e 's:@includedir@:$${prefix}/include:' \
+> -	    -e 's:@DRI_DRIVER_INSTALL_DIR@:$${libdir}/dri:' \
+> -	    -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
+> -	    -e 's:@DRI_PC_REQ_PRIV@::' \
+> -	    $(@D)/src/mesa/drivers/dri/dri.pc.in \
+> +	sed -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
+> +	    package/mesa3d-headers/dri.pc \
+>  	    >$(@D)/src/mesa/drivers/dri/dri.pc
+>  endef
+>  
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
