@@ -1,84 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Apr 2020 13:48:55 +0200
-Subject: [Buildroot] [PATCH] board/qemu: remove the Qemu version from
- readme.txt
-In-Reply-To: <20200426103917.659829-1-romain.naour@gmail.com>
-References: <20200426103917.659829-1-romain.naour@gmail.com>
-Message-ID: <20200426114855.GA28666@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 26 Apr 2020 13:57:34 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-04-25
+In-Reply-To: <CAJiuCcdouYYbp1yvQcjpE5-E5S2xXsUf02Boccwz+PPos0BgEQ@mail.gmail.com>
+References: <5ea529b6.1c69fb81.2cc08.1f4eSMTPIN_ADDED_MISSING@mx.google.com>
+ <CAJiuCcdouYYbp1yvQcjpE5-E5S2xXsUf02Boccwz+PPos0BgEQ@mail.gmail.com>
+Message-ID: <20200426135734.3d370dbe@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+On Sun, 26 Apr 2020 12:24:20 +0200
+Cl?ment P?ron <peron.clem@gmail.com> wrote:
 
-On 2020-04-26 12:39 +0200, Romain Naour spake thusly:
-> The Qemu version present in readme.txt files was needed when
-> the Buildroot's Qemu defconfig was tested manually using the
-> qemu-system-<arch> binary already present on the host.
+> > Build failures related to your defconfigs:
+> >
+> >                         defconfig |                        link to the job
+> > ----------------------------------+--------------------------------------------------------------
+> >                       beelink_gs1 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/526035566
+> >  
 > 
-> This information is now incorrect since we are using host-qemu
-> package, currently at 4.2.0 version, to do a runtime test since
-> 0c7935063851accf3db4c9eb2fc4f11c3da0c391.
-> 
-> For m68k-q800, we can use the upstream qemu since 4.2.0 release
-> [1].
-> 
-> So, remove this line from the readme.txt.
-> 
-> [1] https://www.qemu.org/2019/12/13/qemu-4-2-0/
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> The defconfig is missing HOST_PYTHON is this something that should
+> also trigger on computer where python-dev is installed?
 
-Applied to master, thanks.
+It's a Python 2.x vs. Python 3.x issue. the beelink_gs1 defconfig properly has:
 
-Regards,
-Yann E. MORIN.
+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 
-> ---
->  board/qemu/aarch64-virt/readme.txt     | 2 --
->  board/qemu/arm-versatile/readme.txt    | 2 --
->  board/qemu/arm-vexpress-tz/readme.txt  | 2 --
->  board/qemu/arm-vexpress/readme.txt     | 2 --
->  board/qemu/m68k-mcf5208/readme.txt     | 2 --
->  board/qemu/m68k-q800/readme.txt        | 3 ---
->  board/qemu/microblazebe-mmu/readme.txt | 2 --
->  board/qemu/microblazeel-mmu/readme.txt | 2 --
->  board/qemu/mips32r2-malta/readme.txt   | 2 --
->  board/qemu/mips32r2el-malta/readme.txt | 2 --
->  board/qemu/mips32r6-malta/readme.txt   | 2 --
->  board/qemu/mips32r6el-malta/readme.txt | 2 --
->  board/qemu/mips64-malta/readme.txt     | 2 --
->  board/qemu/mips64el-malta/readme.txt   | 2 --
->  board/qemu/mips64r6-malta/readme.txt   | 2 --
->  board/qemu/mips64r6el-malta/readme.txt | 2 --
->  board/qemu/nios2-10m50/readme.txt      | 2 --
->  board/qemu/or1k/readme.txt             | 2 --
->  board/qemu/ppc-g3beige/readme.txt      | 2 --
->  board/qemu/ppc-mac99/readme.txt        | 2 --
->  board/qemu/ppc-mpc8544ds/readme.txt    | 2 --
->  board/qemu/ppc-virtex-ml507/readme.txt | 2 --
->  board/qemu/ppc64-e5500/readme.txt      | 2 --
->  board/qemu/ppc64-pseries/readme.txt    | 2 --
->  board/qemu/ppc64le-pseries/readme.txt  | 2 --
->  board/qemu/riscv32-virt/readme.txt     | 2 --
->  board/qemu/riscv64-virt/readme.txt     | 2 --
->  board/qemu/sh4-r2d/readme.txt          | 2 --
->  board/qemu/sh4eb-r2d/readme.txt        | 2 --
->  board/qemu/sparc-ss10/readme.txt       | 2 --
->  board/qemu/sparc64-sun4u/readme.txt    | 2 --
->  board/qemu/x86/readme.txt              | 2 --
->  board/qemu/x86_64/readme.txt           | 2 --
->  board/qemu/xtensa-lx60/readme.txt      | 2 --
->  34 files changed, 69 deletions(-)
+which pulls in host-python and host-swig as dependencies of uboot.
+Unfortunately, recent versions of U-Boot (since 2020.01) are now using
+python3 in the pylibfdt code, so we need to have a dependency on
+host-python3. 
 
+There is some on-going discussion about this on
+http://patchwork.ozlabs.org/project/buildroot/patch/20200425000629.2068191-1-heiko at sntech.de/
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
