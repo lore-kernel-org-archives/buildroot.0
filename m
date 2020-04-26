@@ -1,13 +1,16 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sun, 26 Apr 2020 22:50:21 +0300
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to version
- 2.28.2
-Message-ID: <20200426195021.2625617-1-aperez@igalia.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Apr 2020 21:55:16 +0200
+Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
+ version 2.28.2
+Message-ID: <20200426194053.67C0581059@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e028d52b7eb6681474add386af62b48d3f2989c6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This is a minor release which provides fixes for CVE-2020-11793,
 CVE-2020-3887, CVE-2020-3894, and CVE-2020-3899.
@@ -28,11 +31,29 @@ Note that the above does not cover all the CVEs, and a new advisory
 including them is expected to be published in the next days.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[yann.morin.1998 at free.fr: two spaces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
+ package/webkitgtk/webkitgtk.hash | 6 +++---
  package/wpewebkit/wpewebkit.hash | 8 ++++----
  package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index b63a734e3d..1d79d34e27 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+ # From https://webkitgtk.org/releases/webkitgtk-2.28.0.tar.xz.sums
+-md5 0bf11df8117ea64f6b8de59d278a2c78 webkitgtk-2.28.0.tar.xz
+-sha1 927d0922b986fd06567015ce4425ed05d9fca209 webkitgtk-2.28.0.tar.xz
+-sha256 361f3d178f62a9c112cbadfedd46106c34455c26d57a12a28fb3b09178d20e8b webkitgtk-2.28.0.tar.xz
++md5  0bf11df8117ea64f6b8de59d278a2c78  webkitgtk-2.28.0.tar.xz
++sha1  927d0922b986fd06567015ce4425ed05d9fca209  webkitgtk-2.28.0.tar.xz
++sha256  361f3d178f62a9c112cbadfedd46106c34455c26d57a12a28fb3b09178d20e8b  webkitgtk-2.28.0.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
 diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
 index 2e7016fe38..8c660d3003 100644
 --- a/package/wpewebkit/wpewebkit.hash
@@ -62,5 +83,3 @@ index 9c969cae5a..a6124d3529 100644
  WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
  WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
  WPEWEBKIT_INSTALL_STAGING = YES
--- 
-2.26.2
