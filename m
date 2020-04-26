@@ -1,77 +1,70 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sun, 26 Apr 2020 21:03:04 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-bsdiff4: new packge
-In-Reply-To: <20200425225358.1dcd475b@windsurf.home>
-References: <20200227204335.25823-1-asafka7@gmail.com>
- <20200425225358.1dcd475b@windsurf.home>
-Message-ID: <CALFsTFWmorvAwBK5t44rdX8u2uux+isunOB8M4irPvGBMUnGiA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Apr 2020 21:21:30 +0200
+Subject: [Buildroot] [PATCH v4,
+ 1/1] package/uacme: don't allow mbedtls with ualpn
+In-Reply-To: <20200426141309.61837b4f@windsurf.home>
+References: <20200426110534.1758730-1-fontaine.fabrice@gmail.com>
+ <20200426113639.GA5035@scaer>
+ <20200426141309.61837b4f@windsurf.home>
+Message-ID: <20200426192130.GD28666@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Thomas, All,
 
-On Sat, Apr 25, 2020 at 11:53 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Thu, 27 Feb 2020 22:43:35 +0200
-> Asaf Kahlon <asafka7@gmail.com> wrote:
->
-> > License file isn't shipped with the package, so PKG-INFO
-> > is used instead.
->
-> I am concerned by the license here.
->
-> > +PYTHON_BSDIFF4_VERSION = 1.1.9
-> > +PYTHON_BSDIFF4_SOURCE = bsdiff4-$(PYTHON_BSDIFF4_VERSION).tar.gz
-> > +PYTHON_BSDIFF4_SITE = https://files.pythonhosted.org/packages/39/34/bd2ae6cd4b2a5d3af9173a9d7f6ecd2723ea7b0401ad807a0c7e7b50faa3
-> > +PYTHON_BSDIFF4_LICENSE = BSD-2-Clause
-> > +PYTHON_BSDIFF4_LICENSE_FILES = PKG-INFO
->
-> PKG-INFO only says "BSD", and nothing in the source code indicates what
-> is the license.
->
-> The only indication is in core.c, which contains:
->
-> /*
->   The code below is mostly derived from cx_bsdiff (written by Anthony
->   Tuininga, http://cx-bsdiff.sourceforge.net/).  The cx_bsdiff code in
->   turn was derived from bsdiff, the standalone utility produced for BSD
->   which can be found at http://www.daemonology.net/bsdiff.
-> */
->
-> If we visit http://cx-bsdiff.sourceforge.net/ we can find
-> http://cx-bsdiff.sourceforge.net/LICENSE.txt, which is not the
-> BSD-2-Clause, but some weird license called the "BSD Protection
-> License", which is known by SPDX as BSD-Protection:
-> https://spdx.org/licenses/BSD-Protection.html
->
-> Could you try to clarify what is the license of this package ? It would
-> be really good for PyPi to be a bit more "strict" in the description of
-> the licenses.
-Thanks for the reply!
-I privately contacted the maintainer of the package and he told me he released
-the package under BSD-2-Clause (as in the current patch).
-Moreover, according to spdx_lookup, it has 90.5% confidence that BSD-2-Clause
-is the type of the license file committed in the repo (which, as
-stated in the commit
-message, unfortunately isn't shipped with the package).
+On 2020-04-26 14:13 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 26 Apr 2020 13:36:39 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> 
+> > > +choice
+> > > +	prompt "Crypto Backend"
+> > > +	help
+> > > +	  Select crypto library to be used in uacme.
+> > > +
+> > > +config BR2_PACKAGE_UACME_GNUTLS
+> > > +	bool "gnutls"
+> > > +	depends on BR2_PACKAGE_GNUTLS
+> > > +
+> > > +config BR2_PACKAGE_UACME_MBEDTLS
+> > > +	bool "mbedtls"
+> > > +	depends on BR2_PACKAGE_MBEDTLS
+> > > +	depends on !BR2_PACKAGE_UACME_UALPN
+> > > +
+> > > +comment "mbedtls crypto backend unavailable with ualpn"
+> > > +	depends on BR2_PACKAGE_MBEDTLS
+> > > +	depends on BR2_PACKAGE_UACME_UALPN
+> > > +
+> > > +config BR2_PACKAGE_UACME_OPENSSL
+> > > +	bool "openssl"
+> > > +	depends on BR2_PACKAGE_OPENSSL
+> > > +
+> > > +endchoice  
+> > Sorry, but this is still not correct: enable mbedtls, then enable uacme
+> > and ualpn: there is no crypto backend selectable in the choice...
+> Do we need a choice in the first place ?
 
-Do you want to apply the current version of the patch?
-Do you have any other suggestion?
+We already have a few packages (libcurl, libssh, libssh2) that have a
+choice for the crypto backend, so why not for uacme?
 
->
-> Thanks!
->
+Yes, the above are all libraries, but that is not much different for an
+application I believe.
+
+Regards,
+Yann E. MORIN.
+
 > Thomas
-> --
+> -- 
 > Thomas Petazzoni, CTO, Bootlin
 > Embedded Linux and Kernel engineering
 > https://bootlin.com
 
-Best regards,
-Asaf.
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
