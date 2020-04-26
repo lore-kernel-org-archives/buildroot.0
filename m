@@ -1,127 +1,180 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 27 Apr 2020 00:33:22 +0200
-Subject: [Buildroot] [PATCH 3/6] boot/optee-os: replace pycrypto by
- pycryptodomex
+Date: Mon, 27 Apr 2020 00:33:23 +0200
+Subject: [Buildroot] [PATCH 4/6] package/python-pycrypto: remove package
 In-Reply-To: <20200426223325.1468127-1-romain.naour@gmail.com>
 References: <20200426223325.1468127-1-romain.naour@gmail.com>
-Message-ID: <20200426223325.1468127-3-romain.naour@gmail.com>
+Message-ID: <20200426223325.1468127-4-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From [1] included in optee-os release 3.7.0:
-"PyCryptodome is a fork of PyCrypto, which is not maintained any more
-(the last release dates back to 2013 [2]). It exposes almost the same
-API, but there are a few incompatibilities [3]."
+This package doesn't work with Python 3.8 since the code contains
+time.clock() that was deprecated in Python 3.3 and removed in Python 3.8.
 
-pem_to_pub_c.py/sign.py scripts still use pycrypto that is replaced
-by pycryptodomex. Add a patch to use pycryptodomex but don't use
-upstream commit since it also switches from the algorithm
-TEE_ALG_RSASSA_PKCS1_V1_5_SHA256 to TEE_ALG_RSASSA_PKCS1_PSS_MGF1_SHA256
-when replacing pycrypto to pycryptodomex [4].
+Instead of applying non upstream patches from Fedora [1], python-pycrypto
+was replaced by python-pycryptodomex for crda and optee-os package.
+Now we can remove safely this package.
 
-[1] https://github.com/OP-TEE/optee_os/commit/90ad2450436fdd9fc0d28a3f92f3fbcfd89a38f0
-[2] https://pypi.org/project/pycrypto/#history
-[3] https://pycryptodome.readthedocs.io/en/latest/src/vs_pycrypto.html
-[4] https://github.com/OP-TEE/optee_os/commit/ababd72d2fd76cb2ded8e202b49db28d6545f6eb
+[1] http://lists.busybox.net/pipermail/buildroot/2020-April/280683.html
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/526035730
+https://gitlab.com/buildroot.org/buildroot/-/jobs/498144209
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: James Hilliard <james.hilliard1@gmail.com>
 ---
-For master and 2020.02.x.
----
- ...o_pub_c.py-sign.py-use-pycryptodomex.patch | 64 +++++++++++++++++++
- boot/optee-os/optee-os.mk                     |  2 +-
- 2 files changed, 65 insertions(+), 1 deletion(-)
- create mode 100644 boot/optee-os/0001-scripts-pem_to_pub_c.py-sign.py-use-pycryptodomex.patch
+ Config.in.legacy                              |  7 +++
+ package/Config.in                             |  1 -
+ .../0001-remove-incorrect-header-path.patch   | 21 --------
+ package/python-pycrypto/Config.in             |  8 ---
+ package/python-pycrypto/python-pycrypto.hash  |  7 ---
+ package/python-pycrypto/python-pycrypto.mk    | 49 -------------------
+ 6 files changed, 7 insertions(+), 86 deletions(-)
+ delete mode 100644 package/python-pycrypto/0001-remove-incorrect-header-path.patch
+ delete mode 100644 package/python-pycrypto/Config.in
+ delete mode 100644 package/python-pycrypto/python-pycrypto.hash
+ delete mode 100644 package/python-pycrypto/python-pycrypto.mk
 
-diff --git a/boot/optee-os/0001-scripts-pem_to_pub_c.py-sign.py-use-pycryptodomex.patch b/boot/optee-os/0001-scripts-pem_to_pub_c.py-sign.py-use-pycryptodomex.patch
-new file mode 100644
-index 0000000000..1ce960e0e3
---- /dev/null
-+++ b/boot/optee-os/0001-scripts-pem_to_pub_c.py-sign.py-use-pycryptodomex.patch
-@@ -0,0 +1,64 @@
-+From 06e71feaeb08349abe56b50c3dfb08a8341cf55f Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 26 Apr 2020 21:55:55 +0200
-+Subject: [PATCH] scripts/pem_to_pub_c.py/sign.py: use pycryptodomex
-+
-+These scripts still use pycrypto.
-+
-+From [1]:
-+"PyCryptodome is a fork of PyCrypto, which is not maintained any more
-+(the last release dates back to 2013 [2]). It exposes almost the same
-+API, but there are a few incompatibilities [3]."
-+
-+Don't use upstream commit since it also switches from the algorithm
-+TEE_ALG_RSASSA_PKCS1_V1_5_SHA256 to TEE_ALG_RSASSA_PKCS1_PSS_MGF1_SHA256
-+when replacing pycrypto to pycryptodomex [4].
-+
-+[1] https://github.com/OP-TEE/optee_os/commit/90ad2450436fdd9fc0d28a3f92f3fbcfd89a38f0
-+[2] https://pypi.org/project/pycrypto/#history
-+[3] https://pycryptodome.readthedocs.io/en/latest/src/vs_pycrypto.html
-+[4] https://github.com/OP-TEE/optee_os/commit/ababd72d2fd76cb2ded8e202b49db28d6545f6eb
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ scripts/pem_to_pub_c.py | 4 ++--
-+ scripts/sign.py         | 8 ++++----
-+ 2 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/scripts/pem_to_pub_c.py b/scripts/pem_to_pub_c.py
-+index 3a896a39..d3f0e500 100755
-+--- a/scripts/pem_to_pub_c.py
-++++ b/scripts/pem_to_pub_c.py
-+@@ -21,8 +21,8 @@ def get_args():
-+ 
-+ def main():
-+     import array
-+-    from Crypto.PublicKey import RSA
-+-    from Crypto.Util.number import long_to_bytes
-++    from Cryptodome.PublicKey import RSA
-++    from Cryptodome.Util.number import long_to_bytes
-+ 
-+     args = get_args()
-+ 
-+diff --git a/scripts/sign.py b/scripts/sign.py
-+index 2939c591..80ce2e9f 100755
-+--- a/scripts/sign.py
-++++ b/scripts/sign.py
-+@@ -121,10 +121,10 @@ def get_args(logger):
-+ 
-+ 
-+ def main():
-+-    from Crypto.Signature import PKCS1_v1_5
-+-    from Crypto.Hash import SHA256
-+-    from Crypto.PublicKey import RSA
-+-    from Crypto.Util.number import ceil_div
-++    from Cryptodome.Signature import PKCS1_v1_5
-++    from Cryptodome.Hash import SHA256
-++    from Cryptodome.PublicKey import RSA
-++    from Cryptodome.Util.number import ceil_div
-+     import base64
-+     import logging
-+     import os
-+-- 
-+2.25.3
-+
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index acdb25b479..c6d1bbd48a 100644
---- a/boot/optee-os/optee-os.mk
-+++ b/boot/optee-os/optee-os.mk
-@@ -21,7 +21,7 @@ else
- OPTEE_OS_SITE = $(call github,OP-TEE,optee_os,$(OPTEE_OS_VERSION))
- endif
+diff --git a/Config.in.legacy b/Config.in.legacy
+index c92023310d..807cfe4bf3 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
--OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycrypto host-python-pyelftools
-+OPTEE_OS_DEPENDENCIES = host-openssl host-python-pycryptodomex host-python-pyelftools
+ comment "Legacy options removed in 2020.05"
  
- # On 64bit targets, OP-TEE OS can be built in 32bit mode, or
- # can be built in 64bit mode and support 32bit and 64bit
++config BR2_PACKAGE_PYTHON_PYCRYPTO
++	bool "python-pycrypto package removed"
++	select BR2_LEGACY
++	help
++	  This package has been removed, use python-pycryptodomex
++	  instead.
++
+ config BR2_PACKAGE_COLLECTD_LVM
+ 	bool "lvm support in collectd was removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index bf02870ea2..42684a630f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1074,7 +1074,6 @@ menu "External python modules"
+ 	source "package/python-pycares/Config.in"
+ 	source "package/python-pycli/Config.in"
+ 	source "package/python-pycparser/Config.in"
+-	source "package/python-pycrypto/Config.in"
+ 	source "package/python-pycryptodomex/Config.in"
+ 	source "package/python-pydal/Config.in"
+ 	source "package/python-pydantic/Config.in"
+diff --git a/package/python-pycrypto/0001-remove-incorrect-header-path.patch b/package/python-pycrypto/0001-remove-incorrect-header-path.patch
+deleted file mode 100644
+index 9268d311d5..0000000000
+--- a/package/python-pycrypto/0001-remove-incorrect-header-path.patch
++++ /dev/null
+@@ -1,21 +0,0 @@
+-Do not use /usr/include for headers
+-
+-Using /usr/include is wrong when doing cross-compilation, so get rid
+-of it, and rely on the compiler to use the appropriate default paths
+-for headers.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/setup.py
+-===================================================================
+---- a/setup.py
+-+++ b/setup.py
+-@@ -370,7 +370,7 @@
+-       'ext_modules': plat_ext + [
+-             # _fastmath (uses GNU mp library)
+-             Extension("Crypto.PublicKey._fastmath",
+--                      include_dirs=['src/','/usr/include/'],
+-+                      include_dirs=['src/'],
+-                       libraries=['gmp'],
+-                       sources=["src/_fastmath.c"]),
+- 
+diff --git a/package/python-pycrypto/Config.in b/package/python-pycrypto/Config.in
+deleted file mode 100644
+index e998ecf89c..0000000000
+--- a/package/python-pycrypto/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_PYTHON_PYCRYPTO
+-	bool "python-pycrypto"
+-	select BR2_PACKAGE_GMP
+-	help
+-	  PyCrypto is a collection of cryptographic algorithms and
+-	  protocols, implemented for use from Python.
+-
+-	  http://www.pycrypto.org/
+diff --git a/package/python-pycrypto/python-pycrypto.hash b/package/python-pycrypto/python-pycrypto.hash
+deleted file mode 100644
+index a16a446084..0000000000
+--- a/package/python-pycrypto/python-pycrypto.hash
++++ /dev/null
+@@ -1,7 +0,0 @@
+-# Locally calculated after checking pgp signature
+-sha256  f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c  pycrypto-2.6.1.tar.gz
+-# Locally computed
+-sha256  15925a98d05c6d086c30943e4eacdbd361bcf76daa109b6e6dfc9d0c4ad9ed64  COPYRIGHT
+-sha256  10c41e1aaf84bd3546d1ff7ef89454817744fd2c18cdd80a137e802095448016  LEGAL/copy/LICENSE.libtom
+-sha256  253a271c681cd4b3f9503659fe754ee305efe68ebb6e8733b7f436d73845a32c  LEGAL/copy/LICENSE.python-2.2
+-sha256  96f9a25274a59843715a26986e4a2427c312a1d86b9207f26fcafcea47a417fe  LEGAL/copy/LICENSE.original
+diff --git a/package/python-pycrypto/python-pycrypto.mk b/package/python-pycrypto/python-pycrypto.mk
+deleted file mode 100644
+index 927ba918ae..0000000000
+--- a/package/python-pycrypto/python-pycrypto.mk
++++ /dev/null
+@@ -1,49 +0,0 @@
+-################################################################################
+-#
+-# python-pycrypto
+-#
+-################################################################################
+-
+-PYTHON_PYCRYPTO_VERSION = 2.6.1
+-PYTHON_PYCRYPTO_SOURCE = pycrypto-$(PYTHON_PYCRYPTO_VERSION).tar.gz
+-PYTHON_PYCRYPTO_SITE = http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto
+-PYTHON_PYCRYPTO_SETUP_TYPE = distutils
+-
+-PYTHON_PYCRYPTO_LICENSE = Public Domain, Python 2.2 License (HMAC.py, setup.py)
+-PYTHON_PYCRYPTO_LICENSE_FILES = \
+-	COPYRIGHT LEGAL/copy/LICENSE.libtom \
+-	LEGAL/copy/LICENSE.python-2.2
+-
+-# The pycrypto package contains a LICENSE.orig file, but our patching
+-# infrastrucure removes all .orig file, so we must rename that license
+-# file prior to patching, so it is still available to the legal-info
+-# infrastructure
+-define PYTHON_PYCRYPTO_RENAME_LICENSE
+-	mv $(@D)/LEGAL/copy/LICENSE.orig $(@D)/LEGAL/copy/LICENSE.original
+-endef
+-PYTHON_PYCRYPTO_POST_EXTRACT_HOOKS += PYTHON_PYCRYPTO_RENAME_LICENSE
+-HOST_PYTHON_PYCRYPTO_POST_EXTRACT_HOOKS += PYTHON_PYCRYPTO_RENAME_LICENSE
+-PYTHON_PYCRYPTO_LICENSE_FILES += LEGAL/copy/LICENSE.original
+-
+-PYTHON_PYCRYPTO_DEPENDENCIES = gmp
+-HOST_PYTHON_PYCRYPTO_DEPENDENCIES = host-gmp
+-
+-# The configure step needs to be run outside of the setup.py since it isn't
+-# run correctly for cross-compiling
+-define PYTHON_PYCRYPTO_CONFIGURE_CMDS
+-	(cd $(@D) && \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	$(TARGET_CONFIGURE_ARGS) \
+-	./configure \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--sysconfdir=/etc \
+-		--program-prefix="" \
+-	)
+-endef
+-
+-$(eval $(python-package))
+-$(eval $(host-python-package))
 -- 
 2.25.3
