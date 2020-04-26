@@ -1,412 +1,337 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 26 Apr 2020 12:39:17 +0200
-Subject: [Buildroot] [PATCH] board/qemu: remove the Qemu version from
- readme.txt
-Message-ID: <20200426103917.659829-1-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 26 Apr 2020 12:54:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/linux-pam: another fix for musl
+Message-ID: <20200426105418.1757408-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Qemu version present in readme.txt files was needed when
-the Buildroot's Qemu defconfig was tested manually using the
-qemu-system-<arch> binary already present on the host.
+Add an upstream patch to remove u_intX_t, this will fix a build failure
+with python-pam
 
-This information is now incorrect since we are using host-qemu
-package, currently at 4.2.0 version, to do a runtime test since
-0c7935063851accf3db4c9eb2fc4f11c3da0c391.
+Fixes:
+ - http://autobuild.buildroot.org/results/80b38ed2c21655ac5548c56c3229e51d226bed2a
 
-For m68k-q800, we can use the upstream qemu since 4.2.0 release
-[1].
-
-So, remove this line from the readme.txt.
-
-[1] https://www.qemu.org/2019/12/13/qemu-4-2-0/
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- board/qemu/aarch64-virt/readme.txt     | 2 --
- board/qemu/arm-versatile/readme.txt    | 2 --
- board/qemu/arm-vexpress-tz/readme.txt  | 2 --
- board/qemu/arm-vexpress/readme.txt     | 2 --
- board/qemu/m68k-mcf5208/readme.txt     | 2 --
- board/qemu/m68k-q800/readme.txt        | 3 ---
- board/qemu/microblazebe-mmu/readme.txt | 2 --
- board/qemu/microblazeel-mmu/readme.txt | 2 --
- board/qemu/mips32r2-malta/readme.txt   | 2 --
- board/qemu/mips32r2el-malta/readme.txt | 2 --
- board/qemu/mips32r6-malta/readme.txt   | 2 --
- board/qemu/mips32r6el-malta/readme.txt | 2 --
- board/qemu/mips64-malta/readme.txt     | 2 --
- board/qemu/mips64el-malta/readme.txt   | 2 --
- board/qemu/mips64r6-malta/readme.txt   | 2 --
- board/qemu/mips64r6el-malta/readme.txt | 2 --
- board/qemu/nios2-10m50/readme.txt      | 2 --
- board/qemu/or1k/readme.txt             | 2 --
- board/qemu/ppc-g3beige/readme.txt      | 2 --
- board/qemu/ppc-mac99/readme.txt        | 2 --
- board/qemu/ppc-mpc8544ds/readme.txt    | 2 --
- board/qemu/ppc-virtex-ml507/readme.txt | 2 --
- board/qemu/ppc64-e5500/readme.txt      | 2 --
- board/qemu/ppc64-pseries/readme.txt    | 2 --
- board/qemu/ppc64le-pseries/readme.txt  | 2 --
- board/qemu/riscv32-virt/readme.txt     | 2 --
- board/qemu/riscv64-virt/readme.txt     | 2 --
- board/qemu/sh4-r2d/readme.txt          | 2 --
- board/qemu/sh4eb-r2d/readme.txt        | 2 --
- board/qemu/sparc-ss10/readme.txt       | 2 --
- board/qemu/sparc64-sun4u/readme.txt    | 2 --
- board/qemu/x86/readme.txt              | 2 --
- board/qemu/x86_64/readme.txt           | 2 --
- board/qemu/xtensa-lx60/readme.txt      | 2 --
- 34 files changed, 69 deletions(-)
+ ...99-uintX_t-types-instead-of-u_intX_t.patch | 307 ++++++++++++++++++
+ 1 file changed, 307 insertions(+)
+ create mode 100644 package/linux-pam/0005-libpamc-Use-ISO-C99-uintX_t-types-instead-of-u_intX_t.patch
 
-diff --git a/board/qemu/aarch64-virt/readme.txt b/board/qemu/aarch64-virt/readme.txt
-index f12bed4e06..db35a3a7a8 100644
---- a/board/qemu/aarch64-virt/readme.txt
-+++ b/board/qemu/aarch64-virt/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-   qemu-system-aarch64 -M virt -cpu cortex-a53 -nographic -smp 1 -kernel output/images/Image -append "rootwait root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 # qemu_aarch64_virt_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile/readme.txt
-index 97331b2f03..223bd55c01 100644
---- a/board/qemu/arm-versatile/readme.txt
-+++ b/board/qemu/arm-versatile/readme.txt
-@@ -8,5 +8,3 @@ Or for the noMMU emulation:
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/arm-vexpress-tz/readme.txt b/board/qemu/arm-vexpress-tz/readme.txt
-index 35ff018aec..b235ba5cd7 100644
---- a/board/qemu/arm-vexpress-tz/readme.txt
-+++ b/board/qemu/arm-vexpress-tz/readme.txt
-@@ -29,8 +29,6 @@ number of cores.
- Note: "-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic"
- brings network support that is used i.e. in OP-TEE regression tests.
- 
--Tested with QEMU 2.12.0, and 3.1.0.
--
- 
- -- Boot Details --
- 
-diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
-index ff7790744f..8d1bb72f83 100644
---- a/board/qemu/arm-vexpress/readme.txt
-+++ b/board/qemu/arm-vexpress/readme.txt
-@@ -7,5 +7,3 @@ graphical window is the framebuffer.
- 
- If you want to emulate more cores change "-smp 1" to "-smp 2" for
- dual-core or even "smp -4" for a quad-core configuration.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/m68k-mcf5208/readme.txt b/board/qemu/m68k-mcf5208/readme.txt
-index 76dce0ab94..79bf7146a2 100644
---- a/board/qemu/m68k-mcf5208/readme.txt
-+++ b/board/qemu/m68k-mcf5208/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-  qemu-system-m68k -M mcf5208evb -cpu m5208 -kernel output/images/vmlinux -nographic # qemu_m68k_mcf5208_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/m68k-q800/readme.txt b/board/qemu/m68k-q800/readme.txt
-index 4ed328507a..f1db57d52b 100644
---- a/board/qemu/m68k-q800/readme.txt
-+++ b/board/qemu/m68k-q800/readme.txt
-@@ -3,6 +3,3 @@ Run the emulation with:
-  qemu-system-m68k -M q800 -kernel output/images/vmlinux -nographic -drive file=output/images/rootfs.ext2,format=raw -append "rootwait root=/dev/sda console=ttyS0" # qemu_m68k_q800_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.11.0 from https://github.com/vivier/qemu-m68k
--You need following branch: q800-v2.11.0
-diff --git a/board/qemu/microblazebe-mmu/readme.txt b/board/qemu/microblazebe-mmu/readme.txt
-index 3d5064cbd3..7bb986422c 100644
---- a/board/qemu/microblazebe-mmu/readme.txt
-+++ b/board/qemu/microblazebe-mmu/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-  qemu-system-microblaze -M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio # qemu_microblazebe_mmu_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
-index c9f94f8de5..20fa0072ed 100644
---- a/board/qemu/microblazeel-mmu/readme.txt
-+++ b/board/qemu/microblazeel-mmu/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-  qemu-system-microblazeel -M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio # qemu_microblazeel_mmu_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/mips32r2-malta/readme.txt b/board/qemu/mips32r2-malta/readme.txt
-index 0fb8e47999..db1db65b1e 100644
---- a/board/qemu/mips32r2-malta/readme.txt
-+++ b/board/qemu/mips32r2-malta/readme.txt
-@@ -5,5 +5,3 @@ Run the emulation with:
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer. No keyboard support has been
- enabled.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/mips32r2el-malta/readme.txt b/board/qemu/mips32r2el-malta/readme.txt
-index 1613757657..4dc0e64e02 100644
---- a/board/qemu/mips32r2el-malta/readme.txt
-+++ b/board/qemu/mips32r2el-malta/readme.txt
-@@ -5,5 +5,3 @@ Run the emulation with:
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer. No keyboard support has been
- enabled.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/mips32r6-malta/readme.txt b/board/qemu/mips32r6-malta/readme.txt
-index 21854a7f90..9ad4959f09 100644
---- a/board/qemu/mips32r6-malta/readme.txt
-+++ b/board/qemu/mips32r6-malta/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-  qemu-system-mips -M malta -cpu mips32r6-generic -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -append "rootwait root=/dev/hda" -nographic # qemu_mips32r6_malta_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/mips32r6el-malta/readme.txt b/board/qemu/mips32r6el-malta/readme.txt
-index d1bd3de7fa..96c9dc88bf 100644
---- a/board/qemu/mips32r6el-malta/readme.txt
-+++ b/board/qemu/mips32r6el-malta/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-  qemu-system-mipsel -M malta -cpu mips32r6-generic -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -append "rootwait root=/dev/hda" -net nic,model=pcnet -net user -nographic # qemu_mips32r6el_malta_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/mips64-malta/readme.txt b/board/qemu/mips64-malta/readme.txt
-index 6a411d23d2..7432dac1a1 100644
---- a/board/qemu/mips64-malta/readme.txt
-+++ b/board/qemu/mips64-malta/readme.txt
-@@ -4,5 +4,3 @@ Run the emulation with:
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/mips64el-malta/readme.txt b/board/qemu/mips64el-malta/readme.txt
-index d7dea160ff..f67ac91ac4 100644
---- a/board/qemu/mips64el-malta/readme.txt
-+++ b/board/qemu/mips64el-malta/readme.txt
-@@ -4,5 +4,3 @@ Run the emulation with:
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/mips64r6-malta/readme.txt b/board/qemu/mips64r6-malta/readme.txt
-index a5637b763c..252a543192 100644
---- a/board/qemu/mips64r6-malta/readme.txt
-+++ b/board/qemu/mips64r6-malta/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-  qemu-system-mips64 -M malta -cpu I6400 -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -append "rootwait root=/dev/hda" -nographic # qemu_mips64r6_malta_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/mips64r6el-malta/readme.txt b/board/qemu/mips64r6el-malta/readme.txt
-index 48ed0ff6fb..e9d02e772a 100644
---- a/board/qemu/mips64r6el-malta/readme.txt
-+++ b/board/qemu/mips64r6el-malta/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-  qemu-system-mips64el -M malta -cpu I6400 -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -append "rootwait root=/dev/hda" -nographic # qemu_mips64r6el_malta_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/nios2-10m50/readme.txt b/board/qemu/nios2-10m50/readme.txt
-index d240891873..f8f8f3b3a5 100644
---- a/board/qemu/nios2-10m50/readme.txt
-+++ b/board/qemu/nios2-10m50/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-   qemu-system-nios2 -kernel output/images/vmlinux -nographic # qemu_nios2_10m50_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0.
-diff --git a/board/qemu/or1k/readme.txt b/board/qemu/or1k/readme.txt
-index 72c9e3c3cf..2ea797440a 100644
---- a/board/qemu/or1k/readme.txt
-+++ b/board/qemu/or1k/readme.txt
-@@ -5,5 +5,3 @@ Run the emulation with:
- The login prompt will appear in the terminal that started Qemu.
- 
- Ethernet support is not working, yet.
--
--Tested with QEMU 2.12.0.
-diff --git a/board/qemu/ppc-g3beige/readme.txt b/board/qemu/ppc-g3beige/readme.txt
-index 40021f0a17..e6c9c2016e 100644
---- a/board/qemu/ppc-g3beige/readme.txt
-+++ b/board/qemu/ppc-g3beige/readme.txt
-@@ -4,5 +4,3 @@ Run the emulation with:
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/ppc-mac99/readme.txt b/board/qemu/ppc-mac99/readme.txt
-index f1b722bdb8..fb94a7837d 100644
---- a/board/qemu/ppc-mac99/readme.txt
-+++ b/board/qemu/ppc-mac99/readme.txt
-@@ -1,5 +1,3 @@
- Run the emulation with:
- 
-   qemu-system-ppc -nographic -vga none -M mac99 -cpu g4 -m 1G -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -net nic,model=sungem -net user -append "root=/dev/sda" # qemu_ppc_mac99_defconfig
--
--Tested with QEMU 3.1.0
-diff --git a/board/qemu/ppc-mpc8544ds/readme.txt b/board/qemu/ppc-mpc8544ds/readme.txt
-index 32be8a9290..d34d64c336 100644
---- a/board/qemu/ppc-mpc8544ds/readme.txt
-+++ b/board/qemu/ppc-mpc8544ds/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-  qemu-system-ppc -M mpc8544ds -kernel output/images/vmlinux -serial stdio -net nic,model=e1000 -net user # qemu_ppc_mpc8544ds_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/ppc-virtex-ml507/readme.txt b/board/qemu/ppc-virtex-ml507/readme.txt
-index 567ba7e6a7..feb4b2d7d6 100644
---- a/board/qemu/ppc-virtex-ml507/readme.txt
-+++ b/board/qemu/ppc-virtex-ml507/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-  qemu-system-ppc -M virtex-ml507 -kernel output/images/vmlinux -m 256 -nographic -append "console=ttyS0" -dtb output/images/virtex440-ml507.dtb # qemu_ppc_virtex_ml507_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/ppc64-e5500/readme.txt b/board/qemu/ppc64-e5500/readme.txt
-index 74b7c32820..61d51f7f4d 100644
---- a/board/qemu/ppc64-e5500/readme.txt
-+++ b/board/qemu/ppc64-e5500/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-  qemu-system-ppc64 -M ppce500 -cpu e5500 -m 256 -kernel output/images/uImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "console=ttyS0 rootwait root=/dev/vda" -serial mon:stdio -nographic # qemu_ppc64_e5500_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/ppc64-pseries/readme.txt b/board/qemu/ppc64-pseries/readme.txt
-index cf82edacc5..cbd3c6ca2b 100644
---- a/board/qemu/ppc64-pseries/readme.txt
-+++ b/board/qemu/ppc64-pseries/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-  qemu-system-ppc64 -M pseries -cpu POWER7 -m 256 -kernel output/images/vmlinux -append "console=hvc0 rootwait root=/dev/sda" -drive file=output/images/rootfs.ext2,if=scsi,index=0,format=raw -serial stdio -display curses # qemu_ppc64_pseries_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/ppc64le-pseries/readme.txt b/board/qemu/ppc64le-pseries/readme.txt
-index 00a38e9fc1..8ee72ea6cf 100644
---- a/board/qemu/ppc64le-pseries/readme.txt
-+++ b/board/qemu/ppc64le-pseries/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
- qemu-system-ppc64 -M pseries -cpu POWER8 -m 256 -kernel output/images/vmlinux -append "console=hvc0 rootwait root=/dev/sda" -drive file=output/images/rootfs.ext2,if=scsi,index=0,format=raw -serial stdio -display curses # qemu_ppc64le_pseries_defconfig
- 
- The login prompt will appear in the terminal window.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
-index 98028a980f..6a848270bd 100644
---- a/board/qemu/riscv32-virt/readme.txt
-+++ b/board/qemu/riscv32-virt/readme.txt
-@@ -3,5 +3,3 @@ Run Linux in emulation with:
-   qemu-system-riscv32 -M virt -kernel output/images/fw_jump.elf -device loader,file=output/images/Image,addr=0x80400000 -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 3.1
-diff --git a/board/qemu/riscv64-virt/readme.txt b/board/qemu/riscv64-virt/readme.txt
-index 4b05784549..81b5246e66 100644
---- a/board/qemu/riscv64-virt/readme.txt
-+++ b/board/qemu/riscv64-virt/readme.txt
-@@ -3,5 +3,3 @@ Run Linux in emulation with:
-   qemu-system-riscv64 -M virt -kernel output/images/fw_jump.elf -device loader,file=output/images/Image,addr=0x80200000 -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv64_virt_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 3.1
-diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
-index f5364fdfec..b0799e47a8 100644
---- a/board/qemu/sh4-r2d/readme.txt
-+++ b/board/qemu/sh4-r2d/readme.txt
-@@ -4,5 +4,3 @@ Run the emulation with:
- 
- The login prompt will appear in the terminal that started Qemu.
- The graphical window is the framebuffer.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/sh4eb-r2d/readme.txt b/board/qemu/sh4eb-r2d/readme.txt
-index 8a3373481a..9f3dd8b20b 100644
---- a/board/qemu/sh4eb-r2d/readme.txt
-+++ b/board/qemu/sh4eb-r2d/readme.txt
-@@ -4,5 +4,3 @@ Run the emulation with:
- 
- The login prompt will appear in the terminal that started Qemu.
- The graphical window is the framebuffer.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/sparc-ss10/readme.txt b/board/qemu/sparc-ss10/readme.txt
-index e317ccdae5..d624b82d9f 100644
---- a/board/qemu/sparc-ss10/readme.txt
-+++ b/board/qemu/sparc-ss10/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-   qemu-system-sparc -M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2,format=raw -append "rootwait root=/dev/sda console=ttyS0,115200" -serial stdio -net nic,model=lance -net user # qemu_sparc_ss10_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/sparc64-sun4u/readme.txt b/board/qemu/sparc64-sun4u/readme.txt
-index 439ecbf312..17d8cbdf9b 100644
---- a/board/qemu/sparc64-sun4u/readme.txt
-+++ b/board/qemu/sparc64-sun4u/readme.txt
-@@ -3,5 +3,3 @@ Run the emulation with:
-   qemu-system-sparc64 -M sun4u -kernel output/images/vmlinux -append "rootwait root=/dev/sda console=ttyS0,115200" -serial stdio -drive file=output/images/rootfs.ext2,format=raw -net nic,model=e1000 -net user # qemu_sparc64_sun4u_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
-index 951bf11a68..a1f232e2e4 100644
---- a/board/qemu/x86/readme.txt
-+++ b/board/qemu/x86/readme.txt
-@@ -5,5 +5,3 @@ Run the emulation with:
- Optionally add -smp N to emulate a SMP system with N CPUs.
- 
- The login prompt will appear in the graphical window.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
-index 8b8efa7e8c..2b2ae3be20 100644
---- a/board/qemu/x86_64/readme.txt
-+++ b/board/qemu/x86_64/readme.txt
-@@ -5,5 +5,3 @@ Run the emulation with:
- Optionally add -smp N to emulate a SMP system with N CPUs.
- 
- The login prompt will appear in the graphical window.
--
--Tested with QEMU 2.12.0
-diff --git a/board/qemu/xtensa-lx60/readme.txt b/board/qemu/xtensa-lx60/readme.txt
-index 54355564d4..6f0e2710c0 100644
---- a/board/qemu/xtensa-lx60/readme.txt
-+++ b/board/qemu/xtensa-lx60/readme.txt
-@@ -5,5 +5,3 @@ Run the emulation with:
-  qemu-system-xtensa -M lx60 -cpu dc233c -monitor null -nographic -kernel output/images/Image.elf # qemu_xtensa_lx60_nommu_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
--
--Tested with QEMU 2.12.0
+diff --git a/package/linux-pam/0005-libpamc-Use-ISO-C99-uintX_t-types-instead-of-u_intX_t.patch b/package/linux-pam/0005-libpamc-Use-ISO-C99-uintX_t-types-instead-of-u_intX_t.patch
+new file mode 100644
+index 0000000000..12a1f44910
+--- /dev/null
++++ b/package/linux-pam/0005-libpamc-Use-ISO-C99-uintX_t-types-instead-of-u_intX_t.patch
+@@ -0,0 +1,307 @@
++From 5956cf525bfb53ed0c5cade3b58f18fde4f85c42 Mon Sep 17 00:00:00 2001
++From: TBK <tbk@jjtc.eu>
++Date: Wed, 26 Feb 2020 00:24:39 +0100
++Subject: [PATCH] libpamc: Use ISO C99 uintX_t types instead of u_intX_t
++
++u_intX_t is a glibcism this fixes the issue of compiling against musl libc.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/linux-pam/linux-pam/commit/5956cf525bfb53ed0c5cade3b58f18fde4f85c42]
++---
++ libpamc/include/security/pam_client.h | 21 ++++++------
++ libpamc/libpamc.h                     |  1 +
++ libpamc/pamc_converse.c               |  8 ++---
++ libpamc/test/regress/test.libpamc.c   |  3 +-
++ modules/pam_timestamp/sha1.c          | 46 +++++++++++++--------------
++ modules/pam_timestamp/sha1.h          |  5 +--
++ 6 files changed, 44 insertions(+), 40 deletions(-)
++
++diff --git a/libpamc/include/security/pam_client.h b/libpamc/include/security/pam_client.h
++index 86672a2e..41f83da6 100644
++--- a/libpamc/include/security/pam_client.h
+++++ b/libpamc/include/security/pam_client.h
++@@ -16,6 +16,7 @@ extern "C" {
++ #include <unistd.h>
++ #include <string.h>
++ #include <stdio.h>
+++#include <stdint.h>
++ #include <sys/types.h>
++ 
++ /* opaque agent handling structure */
++@@ -23,7 +24,7 @@ extern "C" {
++ typedef struct pamc_handle_s *pamc_handle_t;
++ 
++ /* binary prompt structure pointer */
++-typedef struct { u_int32_t length; u_int8_t control; } *pamc_bp_t;
+++typedef struct { uint32_t length; uint8_t control; } *pamc_bp_t;
++ 
++ /*
++  * functions provided by libpamc
++@@ -90,10 +91,10 @@ char **pamc_list_agents(pamc_handle_t pch);
++ # define PAM_BP_FREE        free
++ #endif /* PAM_BP_FREE */
++ 
++-#define __PAM_BP_WOCTET(x,y)  (*((y) + (u_int8_t *)(x)))
++-#define __PAM_BP_ROCTET(x,y)  (*((y) + (const u_int8_t *)(x)))
+++#define __PAM_BP_WOCTET(x,y)  (*((y) + (uint8_t *)(x)))
+++#define __PAM_BP_ROCTET(x,y)  (*((y) + (const uint8_t *)(x)))
++ 
++-#define PAM_BP_MIN_SIZE       (sizeof(u_int32_t) + sizeof(u_int8_t))
+++#define PAM_BP_MIN_SIZE       (sizeof(uint32_t) + sizeof(uint8_t))
++ #define PAM_BP_MAX_LENGTH     0x20000                   /* an advisory limit */
++ #define PAM_BP_WCONTROL(x)    (__PAM_BP_WOCTET(x,4))
++ #define PAM_BP_RCONTROL(x)    (__PAM_BP_ROCTET(x,4))
++@@ -102,8 +103,8 @@ char **pamc_list_agents(pamc_handle_t pch);
++ 			       (__PAM_BP_ROCTET(x,2)<< 8)+      \
++ 			       (__PAM_BP_ROCTET(x,3)    ))
++ #define PAM_BP_LENGTH(x)      (PAM_BP_SIZE(x) - PAM_BP_MIN_SIZE)
++-#define PAM_BP_WDATA(x)       (PAM_BP_MIN_SIZE + (u_int8_t *) (x))
++-#define PAM_BP_RDATA(x)       (PAM_BP_MIN_SIZE + (const u_int8_t *) (x))
+++#define PAM_BP_WDATA(x)       (PAM_BP_MIN_SIZE + (uint8_t *) (x))
+++#define PAM_BP_RDATA(x)       (PAM_BP_MIN_SIZE + (const uint8_t *) (x))
++ 
++ /* Note, this macro always '\0' terminates renewed packets */
++ 
++@@ -111,13 +112,13 @@ char **pamc_list_agents(pamc_handle_t pch);
++ do {                                                                       \
++     if ((old_p) != NULL) {                                                 \
++ 	if (*(old_p)) {                                                    \
++-	    u_int32_t __size;                                              \
+++	    uint32_t __size;                                              \
++             __size = PAM_BP_SIZE(*(old_p));                                \
++ 	    memset(*(old_p), 0, __size);                                   \
++ 	    PAM_BP_FREE(*(old_p));                                         \
++ 	}                                                                  \
++ 	if (cntrl) {                                                       \
++-	    u_int32_t __size;                                              \
+++	    uint32_t __size;                                              \
++                                                                            \
++ 	    __size = PAM_BP_MIN_SIZE + data_length;                        \
++ 	    if ((*(old_p) = PAM_BP_CALLOC(1, 1+__size))) {                 \
++@@ -140,7 +141,7 @@ do {                                                                       \
++ #define PAM_BP_FILL(prmpt, offset, length, data)                           \
++ do {                                                                       \
++     size_t bp_length;                                                      \
++-    u_int8_t *prompt = (u_int8_t *) (prmpt);                               \
+++    uint8_t *prompt = (uint8_t *) (prmpt);                               \
++     bp_length = PAM_BP_LENGTH(prompt);                                     \
++     if (bp_length < ((length)+(offset))) {                                 \
++ 	PAM_BP_ASSERT("attempt to write over end of prompt");              \
++@@ -151,7 +152,7 @@ do {                                                                       \
++ #define PAM_BP_EXTRACT(prmpt, offset, length, data)                        \
++ do {                                                                       \
++     size_t __bp_length;                                                    \
++-    const u_int8_t *__prompt = (const u_int8_t *) (prmpt);                 \
+++    const uint8_t *__prompt = (const uint8_t *) (prmpt);                 \
++     __bp_length = PAM_BP_LENGTH(__prompt);                                 \
++     if (((offset) < 0) || (__bp_length < ((length)+(offset)))              \
++ 	|| ((length) < 0)) {                                               \
++diff --git a/libpamc/libpamc.h b/libpamc/libpamc.h
++index 93c833c6..a22f52ea 100644
++--- a/libpamc/libpamc.h
+++++ b/libpamc/libpamc.h
++@@ -16,6 +16,7 @@
++ #include <sys/types.h>
++ #include <dirent.h>
++ #include <sys/wait.h>
+++#include <stdint.h>
++ #include <stdlib.h>
++ #include <errno.h>
++ #include <ctype.h>
++diff --git a/libpamc/pamc_converse.c b/libpamc/pamc_converse.c
++index bb9c6dfd..f8f60edf 100644
++--- a/libpamc/pamc_converse.c
+++++ b/libpamc/pamc_converse.c
++@@ -34,8 +34,8 @@ static int __pamc_select_agent(pamc_handle_t pch, char *agent_id)
++ 
++ int pamc_converse(pamc_handle_t pch, pamc_bp_t *prompt_p)
++ {
++-    u_int32_t size, offset=0;
++-    u_int8_t control, raw[PAM_BP_MIN_SIZE];
+++    uint32_t size, offset=0;
+++    uint8_t control, raw[PAM_BP_MIN_SIZE];
++ 
++     D(("called"));
++ 
++@@ -110,7 +110,7 @@ int pamc_converse(pamc_handle_t pch, pamc_bp_t *prompt_p)
++     /* pump all of the prompt into the agent */
++     do {
++ 	int rval = write(pch->current->writer,
++-			 offset + (const u_int8_t *) (*prompt_p),
+++			 offset + (const uint8_t *) (*prompt_p),
++ 			 size - offset);
++ 	if (rval == -1) {
++ 	    switch (errno) {
++@@ -172,7 +172,7 @@ int pamc_converse(pamc_handle_t pch, pamc_bp_t *prompt_p)
++        value from the previous loop */
++ 
++     while (offset < size) {
++-	int rval = read(pch->current->reader, offset + (u_int8_t *) *prompt_p,
+++	int rval = read(pch->current->reader, offset + (uint8_t *) *prompt_p,
++ 			size-offset);
++ 
++ 	if (rval == -1) {
++diff --git a/libpamc/test/regress/test.libpamc.c b/libpamc/test/regress/test.libpamc.c
++index b0fff9c6..4251b4fa 100644
++--- a/libpamc/test/regress/test.libpamc.c
+++++ b/libpamc/test/regress/test.libpamc.c
++@@ -5,6 +5,7 @@
++  */
++ 
++ #include <stdio.h>
+++#include <stdint.h>
++ #include <string.h>
++ #include <security/pam_client.h>
++ #include <ctype.h>
++@@ -157,7 +158,7 @@ char *create_digest(int length, const char *raw)
++     return temp_packet.buffer;
++ }
++ 
++-void packet_to_prompt(pamc_bp_t *prompt_p, u_int8_t control,
+++void packet_to_prompt(pamc_bp_t *prompt_p, uint8_t control,
++ 		      struct internal_packet *packet)
++ {
++     PAM_BP_RENEW(prompt_p, control, packet->at);
++diff --git a/modules/pam_timestamp/sha1.c b/modules/pam_timestamp/sha1.c
++index 576b4b41..af3ccb97 100644
++--- a/modules/pam_timestamp/sha1.c
+++++ b/modules/pam_timestamp/sha1.c
++@@ -56,34 +56,34 @@ padding[SHA1_BLOCK_SIZE] = {
++ 	   0, 0, 0, 0, 0, 0, 0, 0,     0, 0, 0, 0, 0, 0, 0, 0,
++ };
++ 
++-static u_int32_t
++-F(u_int32_t b, u_int32_t c, u_int32_t d)
+++static uint32_t
+++F(uint32_t b, uint32_t c, uint32_t d)
++ {
++ 	return (b & c) | ((~b) & d);
++ }
++ 
++-static u_int32_t
++-G(u_int32_t b, u_int32_t c, u_int32_t d)
+++static uint32_t
+++G(uint32_t b, uint32_t c, uint32_t d)
++ {
++ 	return b ^ c ^ d;
++ }
++ 
++-static u_int32_t
++-H(u_int32_t b, u_int32_t c, u_int32_t d)
+++static uint32_t
+++H(uint32_t b, uint32_t c, uint32_t d)
++ {
++ 	return (b & c) | (b & d) | (c & d);
++ }
++ 
++-static u_int32_t
++-RL(u_int32_t n, u_int32_t s)
+++static uint32_t
+++RL(uint32_t n, uint32_t s)
++ {
++ 	return (n << s) | (n >> (32 - s));
++ }
++ 
++-static u_int32_t
++-sha1_round(u_int32_t (*FUNC)(u_int32_t, u_int32_t, u_int32_t),
++-      u_int32_t a, u_int32_t b, u_int32_t c, u_int32_t d, u_int32_t e,
++-      u_int32_t i, u_int32_t n)
+++static uint32_t
+++sha1_round(uint32_t (*FUNC)(uint32_t, uint32_t, uint32_t),
+++      uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e,
+++      uint32_t i, uint32_t n)
++ {
++ 	return RL(a, 5) + FUNC(b, c, d) + e + i + n;
++ }
++@@ -100,10 +100,10 @@ sha1_init(struct sha1_context *ctx)
++ }
++ 
++ static void
++-sha1_process(struct sha1_context *ctx, u_int32_t buffer[SHA1_BLOCK_SIZE / 4])
+++sha1_process(struct sha1_context *ctx, uint32_t buffer[SHA1_BLOCK_SIZE / 4])
++ {
++-	u_int32_t a, b, c, d, e, temp;
++-	u_int32_t data[80];
+++	uint32_t a, b, c, d, e, temp;
+++	uint32_t data[80];
++ 	int i;
++ 
++ 	for (i = 0; i < 16; i++) {
++@@ -150,14 +150,14 @@ void
++ sha1_update(struct sha1_context *ctx, const unsigned char *data, size_t length)
++ {
++ 	size_t i = 0, l = length, c, t;
++-	u_int32_t count = 0;
+++	uint32_t count = 0;
++ 
++ 	/* Process any pending + data blocks. */
++ 	while (l + ctx->pending_count >= SHA1_BLOCK_SIZE) {
++ 		c = ctx->pending_count;
++ 		t = SHA1_BLOCK_SIZE - c;
++ 		memcpy(ctx->pending + c, &data[i], t);
++-		sha1_process(ctx, (u_int32_t*) ctx->pending);
+++		sha1_process(ctx, (uint32_t*) ctx->pending);
++ 		i += t;
++ 		l -= t;
++ 		ctx->pending_count = 0;
++@@ -188,7 +188,7 @@ sha1_output(struct sha1_context *ctx, unsigned char *out)
++ 
++ 	/* Output the sum. */
++ 	if (out != NULL) {
++-		u_int32_t c;
+++		uint32_t c;
++ 		memcpy(&ctx2, ctx, sizeof(ctx2));
++ 
++ 		/* Pad this block. */
++@@ -197,10 +197,10 @@ sha1_output(struct sha1_context *ctx, unsigned char *out)
++ 		       padding, SHA1_BLOCK_SIZE - c);
++ 
++ 		/* Do we need to process two blocks now? */
++-		if (c >= (SHA1_BLOCK_SIZE - (sizeof(u_int32_t) * 2))) {
+++		if (c >= (SHA1_BLOCK_SIZE - (sizeof(uint32_t) * 2))) {
++ 			/* Process this block. */
++ 			sha1_process(&ctx2,
++-				    (u_int32_t*) ctx2.pending);
+++				    (uint32_t*) ctx2.pending);
++ 			/* Set up another block. */
++ 			ctx2.pending_count = 0;
++ 			memset(ctx2.pending, 0, SHA1_BLOCK_SIZE);
++@@ -218,10 +218,10 @@ sha1_output(struct sha1_context *ctx, unsigned char *out)
++ 		ctx2.counts[0] = htonl(ctx2.counts[0]);
++ 		ctx2.counts[1] = htonl(ctx2.counts[1]);
++ 		memcpy(ctx2.pending + 56,
++-		       &ctx2.counts[1], sizeof(u_int32_t));
+++		       &ctx2.counts[1], sizeof(uint32_t));
++ 		memcpy(ctx2.pending + 60,
++-		       &ctx2.counts[0], sizeof(u_int32_t));
++-		sha1_process(&ctx2, (u_int32_t*) ctx2.pending);
+++		       &ctx2.counts[0], sizeof(uint32_t));
+++		sha1_process(&ctx2, (uint32_t*) ctx2.pending);
++ 
++ 		/* Output the data. */
++ 		out[ 3] = (ctx2.a >>  0) & 0xff;
++diff --git a/modules/pam_timestamp/sha1.h b/modules/pam_timestamp/sha1.h
++index 667b87ca..a445e4e6 100644
++--- a/modules/pam_timestamp/sha1.h
+++++ b/modules/pam_timestamp/sha1.h
++@@ -38,6 +38,7 @@
++ #ifndef pam_timestamp_sha1_h
++ #define pam_timestamp_sha1_h
++ 
+++#include <stdint.h>
++ #include <sys/types.h>
++ 
++ #define SHA1_BLOCK_SIZE 64
++@@ -45,9 +46,9 @@
++ struct sha1_context {
++ 	size_t count;
++ 	unsigned char pending[SHA1_BLOCK_SIZE];
++-	u_int32_t counts[2];
+++	uint32_t counts[2];
++ 	size_t pending_count;
++-	u_int32_t a, b, c, d, e;
+++	uint32_t a, b, c, d, e;
++ };
++ 
++ #define SHA1_OUTPUT_SIZE 20
 -- 
-2.25.3
+2.25.1
