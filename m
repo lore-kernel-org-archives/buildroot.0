@@ -1,90 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Apr 2020 11:22:00 +0200
-Subject: [Buildroot] [git commit] package/mesa3d-headers: fix install of
- dri.pc
-Message-ID: <20200426090723.AC2B990588@busybox.osuosl.org>
+Date: Sun, 26 Apr 2020 11:45:10 +0200
+Subject: [Buildroot] [git commit] package/uacme: bump version to 1.2.4
+Message-ID: <20200426093050.35DE7907C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9014c21cac83b3bb6a038ad7dd4b06cde136d3ae
+commit: https://git.buildroot.net/buildroot/commit/?id=812cc01f6962926769422b5dbc9d652aca5982ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mesa3d-headers is a little bit special: it uses the same sources as
-the mesa3d package, named just 'mesa' upstream. mesa uses the meson
-buildsystem, an that is what we use in the mesa3d package.
-
-However, mesa3d-headers does not install the whole of mesa; it only
-installs a select set of headers for those binary blobs that do not
-provide them.
-
-mesa does not provide such a feature (only installing headers) with
-its meson buildsystem. As a consequence, we've made mesa3d-headers a
-generic package, that basically only copies headers over.
-
-Additionally, mesa3d-headers also provides the dri.pc file for when
-Xorg is enabled; see 7468b60e7c (package/mesa3d-headers: also install
-dri header and .pc file).
-
-We used to manually generate that file from a .in template that was
-present in mesa source code at the time it was still using autotools.
-But when they switched over to using meson, the template was dropped
-[0], and the dri.pc is now entirely generated using meson internals
-[1].
-
-So we now have no template present in the source code, so we must
-come up with our own. This simplifies the replacement pattern to
-just inject the version string.
-
-[0] https://cgit.freedesktop.org/mesa/mesa/commit/?id=158758618264eac113025a86a360dc305ed4498b
-[1] https://cgit.freedesktop.org/mesa/mesa/tree/src/mesa/drivers/dri/meson.build?h=19.2#n93
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Tested-by: Vincent Fazio <vfazio@xes-inc.com>
-[yann.morin.1998 at free.fr:
-  - entirely rework the commit log
-]
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+[yann.morin.1998 at free.fr: two spaces in hash file]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mesa3d-headers/dri.pc            | 10 ++++++++++
- package/mesa3d-headers/mesa3d-headers.mk |  9 ++-------
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ package/uacme/uacme.hash | 4 ++--
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d-headers/dri.pc b/package/mesa3d-headers/dri.pc
-new file mode 100644
-index 0000000000..bd9a33b6c6
---- /dev/null
-+++ b/package/mesa3d-headers/dri.pc
-@@ -0,0 +1,10 @@
-+prefix=/usr
-+libdir=${prefix}/lib
-+includedir=${prefix}/include
-+
-+dridriverdir=/usr/lib/dri
-+
-+Name: dri
-+Description: Direct Rendering Infrastructure
-+Version: @VERSION@
-+Cflags: -I${includedir}
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 2801da1156..b12dad7bd0 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -34,13 +34,8 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
- # Not using $(SED) because we do not want to work in-place, and $(SED)
- # contains -i.
- define MESA3D_HEADERS_BUILD_DRI_PC
--	sed -e 's:@\(exec_\)\?prefix@:/usr:' \
--	    -e 's:@libdir@:$${exec_prefix}/lib:' \
--	    -e 's:@includedir@:$${prefix}/include:' \
--	    -e 's:@DRI_DRIVER_INSTALL_DIR@:$${libdir}/dri:' \
--	    -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
--	    -e 's:@DRI_PC_REQ_PRIV@::' \
--	    $(@D)/src/mesa/drivers/dri/dri.pc.in \
-+	sed -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
-+	    package/mesa3d-headers/dri.pc \
- 	    >$(@D)/src/mesa/drivers/dri/dri.pc
- endef
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index 44cff5cf61..b3ec7ed6f2 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	7e737eadc4495512f4f41e39b6ed4e14476922e26953f1be3446d69c8e63d189        uacme-1.2.3.tar.gz
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
++sha256  7757883ffc305018d3d181a26d0b82a8a0c1f1d5eea21a14979b2c69750b595e  uacme-1.2.4.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 6df13eced6..7e544fce79 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-UACME_VERSION = 1.2.3
++UACME_VERSION = 1.2.4
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
