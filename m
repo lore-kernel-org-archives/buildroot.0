@@ -1,54 +1,99 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Apr 2020 11:46:15 +0200
-Subject: [Buildroot] [PATCH] package/uacme: bump version to 1.2.4
-In-Reply-To: <20200426051144.mo22upvwkgewyyhc@einstein.dilieto.eu>
-References: <20200426051144.mo22upvwkgewyyhc@einstein.dilieto.eu>
-Message-ID: <20200426094615.GW5035@scaer>
+Date: Sun, 26 Apr 2020 11:53:50 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/uacme: select openssl or gnutls with ualpn
+In-Reply-To: <20200424140008.675730-1-fontaine.fabrice@gmail.com>
+References: <20200424140008.675730-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200426095350.GX5035@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nicola, All,
+Fabrice, All,
 
-On 2020-04-26 07:11 +0200, Nicola Di Lieto spake thusly:
-> Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
+On 2020-04-24 16:00 +0200, Fabrice Fontaine spake thusly:
+> ualpn with mbedtls requires the activation of
+> MBEDTLS_X509_ALLOW_UNSUPPORTED_CRITICAL_EXTENSION on mbedtls which can
+> be a security risk. So if the user selects ualpn, make sure that openssl
+> or gnutls are selected and used as the crypto library instead of mbedtls
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/5d42189299549cd655218e9e7cfcfa63e79f74ec
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2 (after review of Thomas Petazzoni and Yann E. Morin):
+>  - Do not use ualpn with mbedtls
+> 
+>  package/uacme/Config.in | 1 +
+>  package/uacme/uacme.mk  | 4 +++-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/uacme/Config.in b/package/uacme/Config.in
+> index 58b7c534e7..5840ccd5f9 100644
+> --- a/package/uacme/Config.in
+> +++ b/package/uacme/Config.in
+> @@ -20,6 +20,7 @@ config BR2_PACKAGE_UACME_UALPN
+>  	bool "enable ualpn"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	select BR2_PACKAGE_LIBEV
+> +	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
+>  	help
+>  	  Build and install ualpn, the transparent proxying tls-alpn-01
+>  	  challenge responder.
+> diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+> index 6df13eced6..b6488afebc 100644
+> --- a/package/uacme/uacme.mk
+> +++ b/package/uacme/uacme.mk
+> @@ -15,10 +15,12 @@ UACME_DEPENDENCIES = libcurl
+>  
+>  UACME_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+>  
+> +# ualpn requires MBEDTLS_X509_ALLOW_UNSUPPORTED_CRITICAL_EXTENSION in mbedtls
+> +# which can be a security risk so don't use mbedtls if ualpn is requested
+>  ifeq ($(BR2_PACKAGE_GNUTLS),y)
+>  UACME_CONF_OPTS += --with-gnutls
+>  UACME_DEPENDENCIES += gnutls
+> -else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
+> +else ifeq ($(BR2_PACKAGE_MBEDTLS):$(BR2_PACKAGE_UACME_UALPN),y:)
 
-Applied to master, thanks.
+This condition is a bit too confusing, I'm afraid.
+
+Since you will want to add a choice of the backend, I think it is better
+to do so and disable the embdetls backend when ualpn is enabled,
+something like:
+
+    choice
+        bool "crypto backend"
+
+    config BR2_PACKAGE_UACME_CRYPTO_GNUTLS
+        bool "gnuttls"
+
+    config BR2_PACKAGE_UACME_CRYPTO_EMBEDTLS
+        bool "embedtls"
+        depends on !BR2_PACKAGE_UACME_UALPN
+
+    comment "embedtls backend unavaialbe for ualpn"
+        depends on BR2_PACKAGE_UACME_UALPN
+
+    config BR2_PACKAGE_UACME_CRYPTO_OPENSSL
+        bool "openssl"
+
+    endchoice
+
+(note the other dependencies, if any swould be needed, are missing in
+each entry of the choice, like wchar and !static for gnutls)
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> package/uacme/uacme.hash | 2 +-
-> package/uacme/uacme.mk   | 2 +-
-> 2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
-> index 44cff5cf61..ac8c19e34c 100644
-> --- a/package/uacme/uacme.hash
-> +++ b/package/uacme/uacme.hash
-> @@ -1,3 +1,3 @@
-> # Locally computed:
-> -sha256	7e737eadc4495512f4f41e39b6ed4e14476922e26953f1be3446d69c8e63d189        uacme-1.2.3.tar.gz
-> +sha256	7757883ffc305018d3d181a26d0b82a8a0c1f1d5eea21a14979b2c69750b595e	uacme-1.2.4.tar.gz
-> sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-> diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
-> index 6df13eced6..7e544fce79 100644
-> --- a/package/uacme/uacme.mk
-> +++ b/package/uacme/uacme.mk
-> @@ -4,7 +4,7 @@
-> #
-> ################################################################################
-> 
-> -UACME_VERSION = 1.2.3
-> +UACME_VERSION = 1.2.4
-> # Released versions are on branch upstream/latest, tagged as
-> # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
-> # include .tarball-version
+>  UACME_CONF_OPTS += --with-mbedtls
+>  UACME_DEPENDENCIES += mbedtls
+>  else ifeq ($(BR2_PACKAGE_OPENSSL),y)
 > -- 
-> 2.11.0
+> 2.25.1
 > 
 > _______________________________________________
 > buildroot mailing list
