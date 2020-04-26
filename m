@@ -1,41 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 Apr 2020 13:57:34 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-04-25
-In-Reply-To: <CAJiuCcdouYYbp1yvQcjpE5-E5S2xXsUf02Boccwz+PPos0BgEQ@mail.gmail.com>
-References: <5ea529b6.1c69fb81.2cc08.1f4eSMTPIN_ADDED_MISSING@mx.google.com>
- <CAJiuCcdouYYbp1yvQcjpE5-E5S2xXsUf02Boccwz+PPos0BgEQ@mail.gmail.com>
-Message-ID: <20200426135734.3d370dbe@windsurf.home>
+Date: Sun, 26 Apr 2020 14:13:09 +0200
+Subject: [Buildroot] [PATCH v4,
+ 1/1] package/uacme: don't allow mbedtls with ualpn
+In-Reply-To: <20200426113639.GA5035@scaer>
+References: <20200426110534.1758730-1-fontaine.fabrice@gmail.com>
+ <20200426113639.GA5035@scaer>
+Message-ID: <20200426141309.61837b4f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 26 Apr 2020 12:24:20 +0200
-Cl?ment P?ron <peron.clem@gmail.com> wrote:
+On Sun, 26 Apr 2020 13:36:39 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> > Build failures related to your defconfigs:
-> >
-> >                         defconfig |                        link to the job
-> > ----------------------------------+--------------------------------------------------------------
-> >                       beelink_gs1 |  https://gitlab.com/buildroot.org/buildroot/-/jobs/526035566
-> >  
+> > +choice
+> > +	prompt "Crypto Backend"
+> > +	help
+> > +	  Select crypto library to be used in uacme.
+> > +
+> > +config BR2_PACKAGE_UACME_GNUTLS
+> > +	bool "gnutls"
+> > +	depends on BR2_PACKAGE_GNUTLS
+> > +
+> > +config BR2_PACKAGE_UACME_MBEDTLS
+> > +	bool "mbedtls"
+> > +	depends on BR2_PACKAGE_MBEDTLS
+> > +	depends on !BR2_PACKAGE_UACME_UALPN
+> > +
+> > +comment "mbedtls crypto backend unavailable with ualpn"
+> > +	depends on BR2_PACKAGE_MBEDTLS
+> > +	depends on BR2_PACKAGE_UACME_UALPN
+> > +
+> > +config BR2_PACKAGE_UACME_OPENSSL
+> > +	bool "openssl"
+> > +	depends on BR2_PACKAGE_OPENSSL
+> > +
+> > +endchoice  
 > 
-> The defconfig is missing HOST_PYTHON is this something that should
-> also trigger on computer where python-dev is installed?
+> Sorry, but this is still not correct: enable mbedtls, then enable uacme
+> and ualpn: there is no crypto backend selectable in the choice...
 
-It's a Python 2.x vs. Python 3.x issue. the beelink_gs1 defconfig properly has:
-
-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-
-which pulls in host-python and host-swig as dependencies of uboot.
-Unfortunately, recent versions of U-Boot (since 2020.01) are now using
-python3 in the pylibfdt code, so we need to have a dependency on
-host-python3. 
-
-There is some on-going discussion about this on
-http://patchwork.ozlabs.org/project/buildroot/patch/20200425000629.2068191-1-heiko at sntech.de/
+Do we need a choice in the first place ?
 
 Thomas
 -- 
