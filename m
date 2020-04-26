@@ -1,58 +1,52 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 27 Apr 2020 00:33:25 +0200
-Subject: [Buildroot] [PATCH 6/6] configs/qemu_arm_vexpress_tz_defconfig:
- build start-qemu.sh
-In-Reply-To: <20200426223325.1468127-1-romain.naour@gmail.com>
-References: <20200426223325.1468127-1-romain.naour@gmail.com>
-Message-ID: <20200426223325.1468127-6-romain.naour@gmail.com>
+Date: Mon, 27 Apr 2020 01:01:30 +0200
+Subject: [Buildroot] [PATCH] [RFC] support/testing: test_lua_utf8: fix test
+ after bump to lua-utf8 0.1.2
+Message-ID: <20200426230130.1578616-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When tags was added by commit 011206b2bffd509b29365bc1eaa761414ee13726
-to detect the qemu command line, the qemu_arm_vexpress_tz_defconfig
-was ignored due to a build issue.
+The commit 0f0649140f73645f4cd00c9c0d27c50e9fa1caf9 introduced a change
+in the module name: utf8 -> lua-utf8.
 
-This build issue has been fixed by previous patches, so we can
-enable the runtime testing by adding the tag in the readme.txt
-and the post-image script in the defconfig.
+The packages-file-list.txt show the change in the files intalled on the rootfs:
+
+[lua-utf8 0.1.2-2 latest version]
+lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/doc/LICENSE
+lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/doc/README.md
+lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/luautf8-0.1.2-2.rockspec
+lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/rock_manifest
+lua-utf8,./usr/lib/lua/5.1/lua-utf8.so
+
+[lua-utf8 1.2-0 previous version]
+lua-utf8,./usr/lib/luarocks/rocks-5.1/utf8/1.2-0/doc/README.md
+lua-utf8,./usr/lib/luarocks/rocks-5.1/utf8/1.2-0/utf8-1.2-0.rockspec
+lua-utf8,./usr/lib/luarocks/rocks-5.1/utf8/1.2-0/rock_manifest
+lua-utf8,./usr/lib/lua/5.1/utf8.so
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/526036036
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Francois Perrad <francois.perrad@gadz.org>
 ---
- board/qemu/arm-vexpress-tz/readme.txt  | 2 +-
- configs/qemu_arm_vexpress_tz_defconfig | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+I'm really not sure if it's the correct fixes.
+---
+ support/testing/tests/package/test_lua_utf8.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/qemu/arm-vexpress-tz/readme.txt b/board/qemu/arm-vexpress-tz/readme.txt
-index b235ba5cd7..abce750291 100644
---- a/board/qemu/arm-vexpress-tz/readme.txt
-+++ b/board/qemu/arm-vexpress-tz/readme.txt
-@@ -18,7 +18,7 @@ secure and non-secure worlds.
- 	-serial stdio \
- 	-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic \
- 	-semihosting-config enable,target=native \
--	-bios bl1.bin
-+	-bios bl1.bin # qemu_arm_vexpress_tz_defconfig
+diff --git a/support/testing/tests/package/test_lua_utf8.py b/support/testing/tests/package/test_lua_utf8.py
+index 3eab19dd4d..3757bf283c 100644
+--- a/support/testing/tests/package/test_lua_utf8.py
++++ b/support/testing/tests/package/test_lua_utf8.py
+@@ -22,4 +22,4 @@ class TestLuajitUtf8(TestLuaBase):
  
- The boot stage traces (if any) followed by the login prompt will appear
- in the terminal that started QEMU.
-diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
-index b4a6e72635..a829e1376b 100644
---- a/configs/qemu_arm_vexpress_tz_defconfig
-+++ b/configs/qemu_arm_vexpress_tz_defconfig
-@@ -47,6 +47,10 @@ BR2_PACKAGE_HOST_PYTHON3=y
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_PACKAGE_PYTHON3=y
- 
-+# Image
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
-+
- # U-boot for booting the dear Linux kernel
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+     def test_run(self):
+         self.login()
+-        self.module_test("utf8")
++        self.module_test("lua-utf8")
 -- 
 2.25.3
