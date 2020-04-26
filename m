@@ -1,137 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Apr 2020 21:38:38 +0200
-Subject: [Buildroot] [PATCH v4,
- 1/1] package/uacme: don't allow mbedtls with ualpn
-In-Reply-To: <CAPi7W80pWfiaoxoC4rYKv8Bj87s9TU0URBGKwXYxDU-ssNNn_A@mail.gmail.com>
-References: <20200426110534.1758730-1-fontaine.fabrice@gmail.com>
- <20200426113639.GA5035@scaer>
- <20200426141309.61837b4f@windsurf.home>
- <CAPi7W80pWfiaoxoC4rYKv8Bj87s9TU0URBGKwXYxDU-ssNNn_A@mail.gmail.com>
-Message-ID: <20200426193838.GE28666@scaer>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Sun, 26 Apr 2020 22:50:21 +0300
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to version
+ 2.28.2
+Message-ID: <20200426195021.2625617-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+This is a minor release which provides fixes for CVE-2020-11793,
+CVE-2020-3887, CVE-2020-3894, and CVE-2020-3899.
 
-On 2020-04-26 14:30 +0200, Fabrice Fontaine spake thusly:
-> Le dim. 26 avr. 2020 ? 14:13, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> a ?crit :
-> > On Sun, 26 Apr 2020 13:36:39 +0200
-> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > > > +choice
-> > > > +   prompt "Crypto Backend"
+Updating from 2.28.0 also brings a few rendering fixes, a build fix
+on MIPS64, a build fix for GStreamer 1.12, and solves a couple of
+crashes. The full release notes covering 2.28.1 and 2.28.2 can be
+found at:
 
-Note that a choice must define its type, so use 'bool', not 'prompt'.
+  https://wpewebkit.org/release/wpewebkit-2.28.1.html
+  https://wpewebkit.org/release/wpewebkit-2.28.2.html
 
-Yes, I know we have a lot of choices that use 'prompt' and do not spcify
-their types. That's not a reason to continue begin wrong. ;-) We also
-have quite a few choices that correctly use 'bool', so that would not be
-a first either.
+A detailed security advisory can be found at:
 
-(Note: choices can be tristate, too, even if we don't use tristates in
-Buildroot, hence the reason to specify the type.)
+  https://wpewebkit.org/security/WSA-2020-0004.html
 
-> > > > +   help
-> > > > +     Select crypto library to be used in uacme.
-> > > > +
-> > > > +config BR2_PACKAGE_UACME_GNUTLS
-> > > > +   bool "gnutls"
-> > > > +   depends on BR2_PACKAGE_GNUTLS
-> > > > +
-> > > > +config BR2_PACKAGE_UACME_MBEDTLS
-> > > > +   bool "mbedtls"
-> > > > +   depends on BR2_PACKAGE_MBEDTLS
-> > > > +   depends on !BR2_PACKAGE_UACME_UALPN
-> > > > +
-> > > > +comment "mbedtls crypto backend unavailable with ualpn"
-> > > > +   depends on BR2_PACKAGE_MBEDTLS
-> > > > +   depends on BR2_PACKAGE_UACME_UALPN
-> > > > +
-> > > > +config BR2_PACKAGE_UACME_OPENSSL
-> > > > +   bool "openssl"
-> > > > +   depends on BR2_PACKAGE_OPENSSL
-> > > > +
-> > > > +endchoice
-> > >
-> > > Sorry, but this is still not correct: enable mbedtls, then enable uacme
-> > > and ualpn: there is no crypto backend selectable in the choice...
-> >
-> > Do we need a choice in the first place ?
-> v2 didn't add a choice but it was a bit too confusing so I made v3/v4
-> upon Yann's request. I'll wait for your feedback before making a new
-> iteration.
+Note that the above does not cover all the CVEs, and a new advisory
+including them is expected to be published in the next days.
 
-For the record, v1 of the patchset had a choice. It was not the choice
-that propmpted a respin, but the way the patches were ordered (i.e. the
-fix was coming after the features).
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/wpewebkit/wpewebkit.hash | 8 ++++----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-It turns out that adding the choice can be both the fix (for the ualpn
-incompatibility with mbedtls) *and* the feature (choosing the crypto
-backend).
-
-One way to solve the issue would be something like:
-
-    diff --git a/package/uacme/Config.in b/package/uacme/Config.in
-    index 58b7c534e7..53a0ab4bf2 100644
-    --- a/package/uacme/Config.in
-    +++ b/package/uacme/Config.in
-    @@ -16,14 +16,36 @@ config BR2_PACKAGE_UACME
-     
-     if BR2_PACKAGE_UACME
-     
-    +choice
-    +	bool "crypto backend"
-    +
-    +config BR2_PACKAGE_UACME_CRYPTO_GNUTLS
-    +	bool "gnutls"
-    +	depends on BR2_PACKAGE_GNUTLS
-    +
-    +config BR2_PACKAGE_UACME_CRYPTO_MBEDTLS
-    +	bool "mbedtls"
-    +	depends on BR2_PACKAGE_MBEDTLS
-    +
-    +config BR2_PACKAGE_UACME_CRYPTO_OPENSSL
-    +	bool "openssl"
-    +	depends on BR2_PACKAGE_OPENSSL
-    +
-    +endchoice
-    +
-     config BR2_PACKAGE_UACME_UALPN
-     	bool "enable ualpn"
-     	depends on BR2_TOOLCHAIN_HAS_THREADS
-    +	depends on !BR2_PACKAGE_UACME_CRYPTO_MBEDTLS
-     	select BR2_PACKAGE_LIBEV
-     	help
-     	  Build and install ualpn, the transparent proxying tls-alpn-01
-     	  challenge responder.
-     
-    +comment "ualpn incompatible with the mbedtls crypto backend"
-    +	depends on BR2_TOOLCHAIN_HAS_THREADS
-    +	depends on !BR2_PACKAGE_UACME_CRYPTO_MBEDTLS
-    +
-     comment "ualpn needs a toolchain w/ threads"
-     	depends on !BR2_TOOLCHAIN_HAS_THREADS
-     
-
-Regards,
-Yann E. MORIN.
-
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> Best Regards,
-> 
-> Fabrice
-
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 2e7016fe38..8c660d3003 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.28.0.tar.xz.sums
+-md5  4298b9d38b4f05f92995422ea9979893  wpewebkit-2.28.0.tar.xz
+-sha1  9e791b6112cca8cda51ae7e991b545f4bf0bb46c  wpewebkit-2.28.0.tar.xz
+-sha256  a85cd3cb46206a4929a9562d53379a7e7e2ec1a3224b34e2dcf5da30bb906722  wpewebkit-2.28.0.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.28.2.tar.xz.sums
++md5  c1f17d4b031e9462692443e3c089789c  wpewebkit-2.28.2.tar.xz
++sha1  b109cfec921eb466227ab3b8d21c5f5717311c8e  wpewebkit-2.28.2.tar.xz
++sha256  6929d28744702ead3574484ca02645c457a6fdcd6b43ccc9766d98dc3664e8dc  wpewebkit-2.28.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 9c969cae5a..a6124d3529 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPEWEBKIT_VERSION = 2.28.0
++WPEWEBKIT_VERSION = 2.28.2
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
