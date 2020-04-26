@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 26 Apr 2020 13:02:38 +0200
-Subject: [Buildroot] [PATCH v3,
- 1/1] package/uacme: select openssl or gnutls with ualpn
-Message-ID: <20200426110238.1758413-1-fontaine.fabrice@gmail.com>
+Date: Sun, 26 Apr 2020 13:05:34 +0200
+Subject: [Buildroot] [PATCH v4,
+ 1/1] package/uacme: don't allow mbedtls with ualpn
+Message-ID: <20200426110534.1758730-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,6 +21,9 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v3 -> v4:
+ - Fix commit title
+
 Changes v2 -> v3 (after review of Yann E. Morin):
  - Put back the option to select crypto backend and do not allow the
    user to select mbedtls with ualpn
