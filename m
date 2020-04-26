@@ -1,48 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 26 Apr 2020 12:04:48 +0200
-Subject: [Buildroot] [PATCH] configs/qemu_riscv64_virt: update defconfigs to
- Linux 5.4.35
-Message-ID: <20200426100448.655706-1-romain.naour@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Apr 2020 11:58:19 +0200
+Subject: [Buildroot] [git commit] package/e2fsprogs: bump to version 1.45.6
+Message-ID: <20200426100131.EADF9907D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Contrary to riscv32, the qemu_riscv64_virt defconfig doesn't needs
-any specific change. It could have been updated to Linux 5.4.35 in
-the commit 80a044703a40bd7418a2b906ff08362ef5460b87.
+commit: https://git.buildroot.net/buildroot/commit/?id=3938f87e41a166e76d083ef5709407b6e7f956c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So, update the kernel version to 5.4.35.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Tested locally.
----
- configs/qemu_riscv64_virt_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/e2fsprogs/e2fsprogs.hash | 4 ++--
+ package/e2fsprogs/e2fsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-index a376b7dec2..dbe6107b62 100644
---- a/configs/qemu_riscv64_virt_defconfig
-+++ b/configs/qemu_riscv64_virt_defconfig
-@@ -13,13 +13,13 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index 3ecbe4eaa7..b563af27f2 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,5 +1,5 @@
+-# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.5/sha256sums.asc
+-sha256  f9faccc0d90f73556e797dc7cc5979b582bd50d3f8609c0f2ad48c736d44aede  e2fsprogs-1.45.5.tar.xz
++# https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.6/sha256sums.asc
++sha256  ffa7ae6954395abdc50d0f8605d8be84736465afc53b8938ef473fcf7ff44256  e2fsprogs-1.45.6.tar.xz
+ # Locally calculated
+ sha256  5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
+ sha256  032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index fd59f701d6..41986eec58 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 5.1 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.35"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_IMAGE=y
- 
--- 
-2.25.3
+-E2FSPROGS_VERSION = 1.45.5
++E2FSPROGS_VERSION = 1.45.6
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
