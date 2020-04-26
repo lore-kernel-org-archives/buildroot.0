@@ -1,35 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 26 Apr 2020 00:47:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkcs11-helper: needs host-pkgconf
-Message-ID: <20200425224719.1548095-1-fontaine.fabrice@gmail.com>
+From: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Date: Sun, 26 Apr 2020 07:11:44 +0200
+Subject: [Buildroot] [PATCH] package/uacme: bump version to 1.2.4
+Message-ID: <20200426051144.mo22upvwkgewyyhc@einstein.dilieto.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pkg-config is used unconditionally in configure.ac to find dependencies
-(openssl, gnutls and nss)
-
-Fixes:
- - http://autobuild.buildroot.org/results/c01ae4f1a7babf94c841d4bb737408a9c8869845
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com>
 ---
- package/pkcs11-helper/pkcs11-helper.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/uacme/uacme.hash | 2 +-
+ package/uacme/uacme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkcs11-helper/pkcs11-helper.mk b/package/pkcs11-helper/pkcs11-helper.mk
-index 24e0c65d84..a95340daf7 100644
---- a/package/pkcs11-helper/pkcs11-helper.mk
-+++ b/package/pkcs11-helper/pkcs11-helper.mk
-@@ -8,6 +8,7 @@ PKCS11_HELPER_VERSION = 1.26
- PKCS11_HELPER_SITE = $(call github,OpenSC,pkcs11-helper,pkcs11-helper-$(PKCS11_HELPER_VERSION))
- PKCS11_HELPER_LICENSE = GPL-2.0 or BSD-3-Clause
- PKCS11_HELPER_LICENSE_FILES = COPYING COPYING.BSD COPYING.GPL
-+PKCS11_HELPER_DEPENDENCIES = host-pkgconf
- PKCS11_HELPER_AUTORECONF = YES
- PKCS11_HELPER_INSTALL_STAGING = YES
+diff --git a/package/uacme/uacme.hash b/package/uacme/uacme.hash
+index 44cff5cf61..ac8c19e34c 100644
+--- a/package/uacme/uacme.hash
++++ b/package/uacme/uacme.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	7e737eadc4495512f4f41e39b6ed4e14476922e26953f1be3446d69c8e63d189        uacme-1.2.3.tar.gz
++sha256	7757883ffc305018d3d181a26d0b82a8a0c1f1d5eea21a14979b2c69750b595e	uacme-1.2.4.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
+index 6df13eced6..7e544fce79 100644
+--- a/package/uacme/uacme.mk
++++ b/package/uacme/uacme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-UACME_VERSION = 1.2.3
++UACME_VERSION = 1.2.4
+ # Released versions are on branch upstream/latest, tagged as
+ # upstream/X.Y.Z Do not use vX.Y.Z tags from master, as they do not
+ # include .tarball-version
 -- 
-2.25.1
+2.11.0
