@@ -1,180 +1,46 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 27 Apr 2020 00:33:23 +0200
-Subject: [Buildroot] [PATCH 4/6] package/python-pycrypto: remove package
+Date: Mon, 27 Apr 2020 00:33:24 +0200
+Subject: [Buildroot] [PATCH 5/6] board/qemu/post-image.sh: start from a shell
 In-Reply-To: <20200426223325.1468127-1-romain.naour@gmail.com>
 References: <20200426223325.1468127-1-romain.naour@gmail.com>
-Message-ID: <20200426223325.1468127-4-romain.naour@gmail.com>
+Message-ID: <20200426223325.1468127-5-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package doesn't work with Python 3.8 since the code contains
-time.clock() that was deprecated in Python 3.3 and removed in Python 3.8.
+Usually the qemu command line start directly with "qemu-system-<arch> ...".
+But the command line for qemu_arm_vexpress_tz_defconfig start by doing
+"cd output/images && ../host/bin/qemu-system-arm". This is necessary
+since boot binaries, except BL1, are primarily loaded via semi-hosting
+so all binaries has to reside in the same directory as QEMU is started
+from [1].
 
-Instead of applying non upstream patches from Fedora [1], python-pycrypto
-was replaced by python-pycryptodomex for crda and optee-os package.
-Now we can remove safely this package.
+The start-qemu.sh script fail to start qemu since it use exec on the
+"cd" command. To work around this issue, use "exec sh -c":
+exec sh -c "${QEMU_CMD_LINE} \${EXTRA_ARGS}"
 
-[1] http://lists.busybox.net/pipermail/buildroot/2020-April/280683.html
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/498144209
+[1] https://github.com/ARM-software/arm-trusted-firmware/blob/4ebbea9592ab37fc62217d0ac62fa13a3e063527/docs/plat/qemu.rst
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in.legacy                              |  7 +++
- package/Config.in                             |  1 -
- .../0001-remove-incorrect-header-path.patch   | 21 --------
- package/python-pycrypto/Config.in             |  8 ---
- package/python-pycrypto/python-pycrypto.hash  |  7 ---
- package/python-pycrypto/python-pycrypto.mk    | 49 -------------------
- 6 files changed, 7 insertions(+), 86 deletions(-)
- delete mode 100644 package/python-pycrypto/0001-remove-incorrect-header-path.patch
- delete mode 100644 package/python-pycrypto/Config.in
- delete mode 100644 package/python-pycrypto/python-pycrypto.hash
- delete mode 100644 package/python-pycrypto/python-pycrypto.mk
+ board/qemu/post-image.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index c92023310d..807cfe4bf3 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/board/qemu/post-image.sh b/board/qemu/post-image.sh
+index 9a4d216274..bf3e4df0b9 100755
+--- a/board/qemu/post-image.sh
++++ b/board/qemu/post-image.sh
+@@ -49,7 +49,7 @@ cat <<-_EOF_ > "${START_QEMU_SCRIPT}"
+ 	fi
  
- comment "Legacy options removed in 2020.05"
+ 	export PATH="${HOST_DIR}/bin:\${PATH}"
+-	exec ${QEMU_CMD_LINE} \${EXTRA_ARGS}
++	exec sh -c "${QEMU_CMD_LINE} \${EXTRA_ARGS}"
+ _EOF_
  
-+config BR2_PACKAGE_PYTHON_PYCRYPTO
-+	bool "python-pycrypto package removed"
-+	select BR2_LEGACY
-+	help
-+	  This package has been removed, use python-pycryptodomex
-+	  instead.
-+
- config BR2_PACKAGE_COLLECTD_LVM
- 	bool "lvm support in collectd was removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index bf02870ea2..42684a630f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1074,7 +1074,6 @@ menu "External python modules"
- 	source "package/python-pycares/Config.in"
- 	source "package/python-pycli/Config.in"
- 	source "package/python-pycparser/Config.in"
--	source "package/python-pycrypto/Config.in"
- 	source "package/python-pycryptodomex/Config.in"
- 	source "package/python-pydal/Config.in"
- 	source "package/python-pydantic/Config.in"
-diff --git a/package/python-pycrypto/0001-remove-incorrect-header-path.patch b/package/python-pycrypto/0001-remove-incorrect-header-path.patch
-deleted file mode 100644
-index 9268d311d5..0000000000
---- a/package/python-pycrypto/0001-remove-incorrect-header-path.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Do not use /usr/include for headers
--
--Using /usr/include is wrong when doing cross-compilation, so get rid
--of it, and rely on the compiler to use the appropriate default paths
--for headers.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/setup.py
--===================================================================
----- a/setup.py
--+++ b/setup.py
--@@ -370,7 +370,7 @@
--       'ext_modules': plat_ext + [
--             # _fastmath (uses GNU mp library)
--             Extension("Crypto.PublicKey._fastmath",
---                      include_dirs=['src/','/usr/include/'],
--+                      include_dirs=['src/'],
--                       libraries=['gmp'],
--                       sources=["src/_fastmath.c"]),
-- 
-diff --git a/package/python-pycrypto/Config.in b/package/python-pycrypto/Config.in
-deleted file mode 100644
-index e998ecf89c..0000000000
---- a/package/python-pycrypto/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_PYTHON_PYCRYPTO
--	bool "python-pycrypto"
--	select BR2_PACKAGE_GMP
--	help
--	  PyCrypto is a collection of cryptographic algorithms and
--	  protocols, implemented for use from Python.
--
--	  http://www.pycrypto.org/
-diff --git a/package/python-pycrypto/python-pycrypto.hash b/package/python-pycrypto/python-pycrypto.hash
-deleted file mode 100644
-index a16a446084..0000000000
---- a/package/python-pycrypto/python-pycrypto.hash
-+++ /dev/null
-@@ -1,7 +0,0 @@
--# Locally calculated after checking pgp signature
--sha256  f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c  pycrypto-2.6.1.tar.gz
--# Locally computed
--sha256  15925a98d05c6d086c30943e4eacdbd361bcf76daa109b6e6dfc9d0c4ad9ed64  COPYRIGHT
--sha256  10c41e1aaf84bd3546d1ff7ef89454817744fd2c18cdd80a137e802095448016  LEGAL/copy/LICENSE.libtom
--sha256  253a271c681cd4b3f9503659fe754ee305efe68ebb6e8733b7f436d73845a32c  LEGAL/copy/LICENSE.python-2.2
--sha256  96f9a25274a59843715a26986e4a2427c312a1d86b9207f26fcafcea47a417fe  LEGAL/copy/LICENSE.original
-diff --git a/package/python-pycrypto/python-pycrypto.mk b/package/python-pycrypto/python-pycrypto.mk
-deleted file mode 100644
-index 927ba918ae..0000000000
---- a/package/python-pycrypto/python-pycrypto.mk
-+++ /dev/null
-@@ -1,49 +0,0 @@
--################################################################################
--#
--# python-pycrypto
--#
--################################################################################
--
--PYTHON_PYCRYPTO_VERSION = 2.6.1
--PYTHON_PYCRYPTO_SOURCE = pycrypto-$(PYTHON_PYCRYPTO_VERSION).tar.gz
--PYTHON_PYCRYPTO_SITE = http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto
--PYTHON_PYCRYPTO_SETUP_TYPE = distutils
--
--PYTHON_PYCRYPTO_LICENSE = Public Domain, Python 2.2 License (HMAC.py, setup.py)
--PYTHON_PYCRYPTO_LICENSE_FILES = \
--	COPYRIGHT LEGAL/copy/LICENSE.libtom \
--	LEGAL/copy/LICENSE.python-2.2
--
--# The pycrypto package contains a LICENSE.orig file, but our patching
--# infrastrucure removes all .orig file, so we must rename that license
--# file prior to patching, so it is still available to the legal-info
--# infrastructure
--define PYTHON_PYCRYPTO_RENAME_LICENSE
--	mv $(@D)/LEGAL/copy/LICENSE.orig $(@D)/LEGAL/copy/LICENSE.original
--endef
--PYTHON_PYCRYPTO_POST_EXTRACT_HOOKS += PYTHON_PYCRYPTO_RENAME_LICENSE
--HOST_PYTHON_PYCRYPTO_POST_EXTRACT_HOOKS += PYTHON_PYCRYPTO_RENAME_LICENSE
--PYTHON_PYCRYPTO_LICENSE_FILES += LEGAL/copy/LICENSE.original
--
--PYTHON_PYCRYPTO_DEPENDENCIES = gmp
--HOST_PYTHON_PYCRYPTO_DEPENDENCIES = host-gmp
--
--# The configure step needs to be run outside of the setup.py since it isn't
--# run correctly for cross-compiling
--define PYTHON_PYCRYPTO_CONFIGURE_CMDS
--	(cd $(@D) && \
--	$(TARGET_CONFIGURE_OPTS) \
--	$(TARGET_CONFIGURE_ARGS) \
--	./configure \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--sysconfdir=/etc \
--		--program-prefix="" \
--	)
--endef
--
--$(eval $(python-package))
--$(eval $(host-python-package))
+ chmod +x "${START_QEMU_SCRIPT}"
 -- 
 2.25.3
