@@ -1,42 +1,87 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 26 Apr 2020 15:56:15 -0600
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.54.1
-Message-ID: <20200426215615.94066-1-james.hilliard1@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 27 Apr 2020 00:25:54 +0200
+Subject: [Buildroot] [PATCH v2] package/python-pycrypto: fix python3.8
+ compatibility
+In-Reply-To: <CADvTj4qJ3jC_y_rNwwbDF5jq7xF8BAF39uqnuQKQgi3nxYTaBg@mail.gmail.com>
+References: <20200420140724.3206074-1-romain.naour@gmail.com>
+ <20200421222847.09432773@windsurf.home>
+ <CADvTj4qJ3jC_y_rNwwbDF5jq7xF8BAF39uqnuQKQgi3nxYTaBg@mail.gmail.com>
+Message-ID: <73a3a2b2-7279-c46a-e79b-2fe0a68cecfc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi James, All,
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index bbb031957b..1fb902742d 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.54.0/meson-0.54.0.tar.gz.asc
--sha256  dde5726d778112acbd4a67bb3633ab2ee75d33d1e879a6283a7b4a44c3363c27  meson-0.54.0.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.54.1/meson-0.54.1.tar.gz.asc
-+sha256  2f76fb4572762be13ee479292610091b4509af5788bcceb391fe222bcd0296dc  meson-0.54.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 2e6c4cea71..fea2807d9f 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 0.54.0
-+MESON_VERSION = 0.54.1
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
--- 
-2.20.1
+Le 21/04/2020 ? 22:49, James Hilliard a ?crit?:
+> On Tue, Apr 21, 2020 at 2:28 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>>
+>> On Mon, 20 Apr 2020 16:07:24 +0200
+>> Romain Naour <romain.naour@gmail.com> wrote:
+>>
+>>> Apply the patch from Fedora 31 [1][2] to replace the user-space RNG with a
+>>> thin wrapper to os.urandom. This allow to fixes compatibility with
+>>> Python 3.8 since the code containing time.clock() is removed.
+>>>
+>>> time.clock() was deprecated in Python 3.3 and removed in Python 3.8.
+>>>
+>>> [1] https://src.fedoraproject.org/rpms/python-crypto/c/a5fd7148fb0e9d5526f24feb1bb708bf203480b9?branch=f31
+>>> [2] https://src.fedoraproject.org/rpms/python-crypto/blob/f31/f/pycrypto-2.6.1-use-os-random.patch
+>>>
+>>> Fixes:
+>>> https://gitlab.com/buildroot.org/buildroot/-/jobs/498144209
+>>>
+>>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>>> ---
+>>> This patch would allow to use python2 and python3.
+>>> To be backported to Buildroot 2020.02 to fixes the qemu-arm-vexpress-tz defconfig.
+>>> ---
+>>>  ...2-pycrypto-2.6.1-use-os-random.patch.patch | 1904 +++++++++++++++++
+>>>  1 file changed, 1904 insertions(+)
+>>>  create mode 100644 package/python-pycrypto/0002-pycrypto-2.6.1-use-os-random.patch.patch
+>>
+>> Meh, the Fedora patch is really gigantic. I think the option suggested
+>> by James makes a lot of sense. I think even for 2020.02.x it could be
+>> an acceptable solution. As you said, the only user of
+>> host-python-pycrypto is crda, so it's not a huge effort to quickly test
+>> that it still builds fine on 2020.02.x with python-pycryptodome.
+> Actually we probably just need to add python-m2crypto and drop
+> https://github.com/buildroot/buildroot/blob/master/package/crda/0001-crda-support-python-3-in-utils-key2pub.py.patch
+> as it appears that python-m2crypto added support for python 3.
+
+python-m2crypto was removed from Buildroot by commit [1], it was only used by
+crda package. But since crda is a "legacy" package, I don't think it's worth the
+effort to re-add this package.
+
+From [2]
+  "CRDA is no longer needed as of kernel v4.15 since commit 007f6c5e6eb45
+  ("cfg80211: support loading regulatory database as firmware file") added
+  support to use the kernel's firmware request API which looks for the
+  firmware on /lib/firmware. Because of this CRDA is legacy software for
+  older kernels. It will continue to be maintained."
+
+[1]
+https://git.buildroot.net/buildroot/commit/?id=484c04878e5e76cdc0cc33c7646f98ab41698a7e
+[2]
+https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/crda.git/tree/README?id=9856751feaf7b102547cea678a5da6c94252d83d#n8
+
+
+Best regards,
+Romain
+
+
+>>
+>> Best regards,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Bootlin
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
