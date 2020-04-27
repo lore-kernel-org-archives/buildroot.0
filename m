@@ -1,68 +1,50 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 27 Apr 2020 22:36:56 +0200
-Subject: [Buildroot] [PATCH v5 2/3] package/environment-setup: add configure
- alias
-In-Reply-To: <20200427203657.77392-1-angelo@amarulasolutions.com>
-References: <20200427203657.77392-1-angelo@amarulasolutions.com>
-Message-ID: <20200427203657.77392-2-angelo@amarulasolutions.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Mon, 27 Apr 2020 22:38:33 +0200
+Subject: [Buildroot] [PATCH] package/cegui: disable ogre support
+In-Reply-To: <20200427221945.5528d702@windsurf.home>
+References: <20200427200909.6753-1-b.bilas@grinn-global.com>
+ <20200427221945.5528d702@windsurf.home>
+Message-ID: <37c0f608-c22e-37e5-8a82-b6c0d21e88bb@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Hello Thomas,
 
-In order to simplify the usage of a buildroot toolchain within
-the buildroot shell, a "configure" alias is provided to call
-./configure with the correct flags.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- docs/manual/using-buildroot-toolchain.txt      | 4 ++--
- package/environment-setup/environment-setup    | 1 +
- package/environment-setup/environment-setup.mk | 2 ++
- 3 files changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
-index 7b2de4bdfa..187ffd472b 100644
---- a/docs/manual/using-buildroot-toolchain.txt
-+++ b/docs/manual/using-buildroot-toolchain.txt
-@@ -31,8 +31,8 @@ For your convenience, by selecting the package BR2_PACKAGE_ENVIRONMENT_SETUP,
- you can have a +setup-environment+ script installed in +output/host/+.
- This script can be sourced with +. your/sdk/path/environment-setup+ to launch
- the buildroot shell. Inside this shell, you will find an environment already
--set up with the correct PATH and the complete list of +target configure
--options+.
-+set up with the correct PATH, the complete list of +target configure
-+options+ and some useful commands.
- 
- Alternatively, if you just want to prepare the SDK without generating
- the tarball (e.g. because you will just be moving the +host+ directory,
-diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
-index b48f1979d6..db652fe090 100644
---- a/package/environment-setup/environment-setup
-+++ b/package/environment-setup/environment-setup
-@@ -11,6 +11,7 @@ Some tips:
- * PATH is now pointing to the HOST_DIR path
- * Target configure options are already exported
- * To configure do "./configure $CONFIGURE_FLAGS"
-+* Alternatively use the alias "configure"
- 
- EOF
- SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
-diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-index 7c6e352bde..3ffa8896cb 100644
---- a/package/environment-setup/environment-setup.mk
-+++ b/package/environment-setup/environment-setup.mk
-@@ -23,6 +23,8 @@ define ENVIRONMENT_SETUP_INSTALL_TARGET_CMDS
- 		--sysconfdir=/etc \
- 		--localstatedir=/var \
- 		--program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-+	printf "alias configure=\"./configure \$${CONFIGURE_FLAGS}\"\n" \
-+		>> $(ENVIRONMENT_SETUP_FILE)
- 	$(SED) $(ENVIRONMENT_SETUP_HOST_BIN_DIR_SED_EXP) \
- 		-e $(ENVIRONMENT_SETUP_HOST_DIR_SED_EXP) \
- 		-e $(ENVIRONMENT_SETUP_CROSS_COMPILE_SED_EXP) \
--- 
-2.25.1
+On 27.04.2020 22:19, Thomas Petazzoni wrote:
+> On Mon, 27 Apr 2020 22:09:09 +0200
+> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+>
+>> Buildroot's ogre version isn't compatible with current (v0-8-7) cegui
+>> therefore disable support for that. It will be restored when upstream will
+>> switch to the new version.
+>>
+>> Fixes:
+>>    - http://autobuild.buildroot.net/results/8ee717ac4d596fc0af274037841ac4ed6862ddaa/
+>>
+>> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+>> ---
+>>   package/cegui/cegui.mk | 10 ++--------
+>>   1 file changed, 2 insertions(+), 8 deletions(-)
+> Applied, thanks.
+>
+> To be honest, I think it was a mistake to support all those optional
+> features without testing them. Xerces, then minizip, now ogre. I would
+> have very much preferred to disable all these features unconditionally,
+> and then people who need them can add the necessary conditions.
+Some of them are fixed on the master branch, some of them came up due to 
+conflict with package version ( such as buildroot's minizip which is 
+actually a fork of original zlib). I've checked some of them but that's 
+tricky to verify every possibility as it's being done by autobuilders 
+but I try to fix that as fast as possible ;) We can disable all of them 
+or check autobuilders results and fix it. I've asked the maintainers 
+about new release which will fix some of the issues so I hope it will be 
+done soon.
+>
+> BTW, are you using cegui in some projects ?
+I'm not but I was. Now I'm trying to keep this package to be built fine 
+under buildroot.
+>
+> Thomas
