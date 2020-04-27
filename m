@@ -1,72 +1,33 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 27 Apr 2020 19:03:23 +0200
-Subject: [Buildroot] [PATCH] [RFC] support/testing: test_lua_utf8: fix
- test after bump to lua-utf8 0.1.2
-In-Reply-To: <20200426230130.1578616-1-romain.naour@gmail.com>
-References: <20200426230130.1578616-1-romain.naour@gmail.com>
-Message-ID: <CAB0FRssX+o4LxABhW2cY-Y_ZTfLW=ddyhebK2eGgfu4VpRVL-g@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon, 27 Apr 2020 20:39:31 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-pycairo: depend on python3
+Message-ID: <20200427173931.332855-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lun. 27 avr. 2020 ? 01:01, Romain Naour <romain.naour@gmail.com> a
-?crit :
+Since version 1.19.0 pycairo doesn't support Python 2 anymore.
 
-> The commit 0f0649140f73645f4cd00c9c0d27c50e9fa1caf9 introduced a change
-> in the module name: utf8 -> lua-utf8.
->
-> The packages-file-list.txt show the change in the files intalled on the
-> rootfs:
->
-> [lua-utf8 0.1.2-2 latest version]
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/doc/LICENSE
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/doc/README.md
->
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/luautf8-0.1.2-2.rockspec
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/rock_manifest
-> lua-utf8,./usr/lib/lua/5.1/lua-utf8.so
->
-> [lua-utf8 1.2-0 previous version]
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/utf8/1.2-0/doc/README.md
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/utf8/1.2-0/utf8-1.2-0.rockspec
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/utf8/1.2-0/rock_manifest
-> lua-utf8,./usr/lib/lua/5.1/utf8.so
->
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/526036036
->
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Francois Perrad <francois.perrad@gadz.org>
->
+Fixes:
+ - http://autobuild.buildroot.net/results/4d47c71f75a61810c5f58a720245bef38b3f3db0
 
-The 2 variants (Lua & LuaJIT) must have the same fix.
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-pycairo/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Fran?ois
-
-
-> ---
-> I'm really not sure if it's the correct fixes.
-> ---
->  support/testing/tests/package/test_lua_utf8.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/support/testing/tests/package/test_lua_utf8.py
-> b/support/testing/tests/package/test_lua_utf8.py
-> index 3eab19dd4d..3757bf283c 100644
-> --- a/support/testing/tests/package/test_lua_utf8.py
-> +++ b/support/testing/tests/package/test_lua_utf8.py
-> @@ -22,4 +22,4 @@ class TestLuajitUtf8(TestLuaBase):
->
->      def test_run(self):
->          self.login()
-> -        self.module_test("utf8")
-> +        self.module_test("lua-utf8")
-> --
-> 2.25.3
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200427/01592b7f/attachment.html>
+diff --git a/package/python-pycairo/Config.in b/package/python-pycairo/Config.in
+index 0d8de977e1..a44a0421e6 100644
+--- a/package/python-pycairo/Config.in
++++ b/package/python-pycairo/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYCAIRO
+ 	bool "python-pycairo"
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_CAIRO
+ 	help
+ 	  Python interface for cairo.
+-- 
+2.26.2
