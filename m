@@ -1,76 +1,64 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 27 Apr 2020 20:02:55 +0000
-Subject: [Buildroot] [Bug 12821] New: Vagrantfile in download page still
- points to 2020.02
-Message-ID: <bug-12821-163@https.bugs.busybox.net/>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Mon, 27 Apr 2020 15:02:44 -0500
+Subject: [Buildroot] [PATCH] package/ebtables: bump to version 2.0.11
+In-Reply-To: <20200427212303.4b4cb6ab@windsurf.home>
+References: <20200426132940.25969-1-ryanbarnett3@gmail.com>
+ <20200427212303.4b4cb6ab@windsurf.home>
+Message-ID: <CALq67GAv1jE5y2qoD5JSqt=oUFTAM3zeEoRVkajFijuWw51tqQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12821
+Thomas,
 
-            Bug ID: 12821
-           Summary: Vagrantfile in download page still points to 2020.02
-           Product: buildroot
-           Version: 2020.02
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Outdated package
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: phernandez at luxoft.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Mon, Apr 27, 2020 at 2:23 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Sun, 26 Apr 2020 08:29:40 -0500
+> Ryan Barnett <ryanbarnett3@gmail.com> wrote:
+>
+> > With the version bump to 2.0.11, ebtables switch to autotools build
+> > system. In addition, ebtables-{restore/save} moved to being installed
+> > as ebtables-legacy-{restore/save}.
+> >
+> > Changes to support this version bump include:
+> >
+> >  * Utilize configure options for static library support
+> >  * Remove ebtables-restore config option as configure scripts checks
+> >    dependencies for ebtables-legacy-restore.
+>
+> This does not really explain why we remove this option. What checks are
+> done? Why do these checks mean we have to remove this option?
 
-I followed the instructions inside the Buildroot user manual and in section 3,
-it asks you to get the Vagrantfile  from
-https://buildroot.org/downloads/Vagrantfile but this is still pointing to
-2020.02 and should be pointing to 2020.02.1
+The configure script (autotools) provides support for:
 
-2020.02 is not able to compile using the config file from
-freescale_imx8mmevk_defconfig, it end up with the next error without image
-creation:
+--enable-static
+or
+--enabled-shared
 
-remote: Enumerating objects: 54171, done.
-remote: Counting objects: 100% (54171/54171), done.
-remote: Compressing objects: 100% (9304/9304), done.
-error: cannot fork() for index-pack: Cannot allocate memory
-fatal: fetch-pack: unable to fork off index-pack
-Detected a corrupted git cache.
-This is the second time in a row; bailing out
---2020-04-24 22:54:26-- 
-http://sources.buildroot.net/linux/linux-rel_imx_4.14.98_2.0.0_ga.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 104.26.1.37,
-104.26.0.37, 2606:4700:20::681a:125, ...
-Connecting to sources.buildroot.net (sources.buildroot.net)|104.26.1.37|:80...
-connected.
-HTTP request sent, awaiting response... 404 Not Found
-2020-04-24 22:54:26 ERROR 404: Not Found.
+This enables building of static libraries from the config.log:
 
---2020-04-24 22:54:26-- 
-http://sources.buildroot.net/linux-rel_imx_4.14.98_2.0.0_ga.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 104.26.0.37,
-104.26.1.37, 2606:4700:20::681a:25, ...
-Connecting to sources.buildroot.net (sources.buildroot.net)|104.26.0.37|:80...
-connected.
-HTTP request sent, awaiting response... 404 Not Found
-2020-04-24 22:54:27 ERROR 404: Not Found.
+configure:12059: checking whether to build shared libraries
+configure:12084: result: no
+configure:12087: checking whether to build static libraries
+configure:12091: result: yes
 
-package/pkg-generic.mk:167: recipe for target
-'/home/vagrant/Gemini/test_capxl_daemons_for_gemini/capxl/output/build/linux-headers-rel_imx_4.14.98_2.0.0_ga/.stamp_downloaded'
-failed
-make[1]: ***
-[/home/vagrant/Gemini/test_capxl_daemons_for_gemini/capxl/output/build/linux-headers-rel_imx_4.14.98_2.0.0_ga/.stamp_downloaded]
-Error 1
-Makefile:84: recipe for target '_all' failed
-make: *** [_all] Error 2
+Will updated the commit message to reflect this.
 
-This is not happening in version 2020.02.1
+> I think it's a bit annoying to have an option for the "save" tool but
+> not the corresponding option for the "restore" tool.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Would the better option be to move both config options to legacy and
+select bash when ebtables is selected?
+
+ebtables has renamed ebtables-{save/restore} to
+ebtables-legacy-{save/restore}. ebtables-legacy-save would then be
+replaced by the bash script which is currently being patch in by
+default.
+
+http://git.netfilter.org/ebtables/commit/?id=6218f812d894fdd733d95c3c86b385f6f223a36a
+
+Thanks,
+-Ryan
