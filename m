@@ -1,108 +1,338 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Apr 2020 22:41:27 +0200
-Subject: [Buildroot] [PATCH] package/ibm-sw-tpm2: add patch to fix build
- issues on several architectures
-In-Reply-To: <20200427054649.1666163-1-thomas.petazzoni@bootlin.com>
-References: <20200427054649.1666163-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200427204127.GB11346@scaer>
+Date: Mon, 27 Apr 2020 22:43:43 +0200
+Subject: [Buildroot] [git commit] package/linux-pam: another fix for musl
+Message-ID: <20200427202924.070C39097F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2d239aa13659445d57fae60f393e190d0306d134
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-27 07:46 +0200, Thomas Petazzoni spake thusly:
-> src/LibSupport.h has some logic to find the wordsize of the current
-> architecture, using an explicit list of CPU architectures. This makes
-> the build fail on a number of CPU architectures that are not
-> explicitly handled.
-> 
-> Let's instead use the __WORDSIZE definition of the C library, which is
-> guaranteed to be available for all CPU architectures.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/a235345477ea2ec3b0dd4ffed4d7667d46caec48/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  ...-Use-__WORDSIZE-to-define-RADIX_BITS.patch | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch
-> 
-> diff --git a/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch b/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch
-> new file mode 100644
-> index 0000000000..a19160f68c
-> --- /dev/null
-> +++ b/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch
-> @@ -0,0 +1,44 @@
-> +From 24a352fc99ebde22235b05b18615817ef7f4263c Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +Date: Sun, 26 Apr 2020 15:33:39 +0200
-> +Subject: [PATCH] Use __WORDSIZE to define RADIX_BITS
-> +
-> +This allows to avoid having to support each CPU architecture
-> +individually.
-> +
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Add an upstream patch to remove u_intX_t, this will fix a build failure
+with python-pam
 
-I know this upstream is on sourceforge, but could you try the extra
-effort to push them this patch? ;-]
+Fixes:
+ - http://autobuild.buildroot.org/results/80b38ed2c21655ac5548c56c3229e51d226bed2a
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...ISO-C99-uintX_t-types-instead-of-u_intX_t.patch | 307 +++++++++++++++++++++
+ 1 file changed, 307 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> +---
-> + src/LibSupport.h | 17 +++--------------
-> + 1 file changed, 3 insertions(+), 14 deletions(-)
-> +
-> +diff --git a/src/LibSupport.h b/src/LibSupport.h
-> +index b2e6a51..f064d20 100644
-> +--- a/src/LibSupport.h
-> ++++ b/src/LibSupport.h
-> +@@ -64,20 +64,9 @@
-> + #ifndef _LIB_SUPPORT_H_
-> + #define _LIB_SUPPORT_H_
-> + 
-> +-#ifndef RADIX_BITS
-> +-#   if defined(__x86_64__) || defined(__x86_64)				\
-> +-    || defined(__amd64__) || defined(__amd64) || defined(_WIN64) || defined(_M_X64) \
-> +-    || defined(_M_ARM64) || defined(__aarch64__) \
-> +-    || defined(__powerpc64__) || defined(__ppc64__)
-> +-#       define RADIX_BITS                      64
-> +-#   elif defined(__i386__) || defined(__i386) || defined(i386)		\
-> +-    || defined(_WIN32) || defined(_M_IX86)				\
-> +-    || defined(_M_ARM) || defined(__arm__) || defined(__thumb__)
-> +-#       define RADIX_BITS                      32
-> +-#   else
-> +-#       error Unable to determine RADIX_BITS from compiler environment
-> +-#   endif
-> +-#endif // RADIX_BITS
-> ++#include <limits.h>
-> ++
-> ++#define RADIX_BITS __WORDSIZE
-> + 
-> + // These macros use the selected libraries to the proper include files.
-> + #define LIB_QUOTE(_STRING_) #_STRING_
-> +-- 
-> +2.25.3
-> +
-> -- 
-> 2.25.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/linux-pam/0005-libpamc-Use-ISO-C99-uintX_t-types-instead-of-u_intX_t.patch b/package/linux-pam/0005-libpamc-Use-ISO-C99-uintX_t-types-instead-of-u_intX_t.patch
+new file mode 100644
+index 0000000000..12a1f44910
+--- /dev/null
++++ b/package/linux-pam/0005-libpamc-Use-ISO-C99-uintX_t-types-instead-of-u_intX_t.patch
+@@ -0,0 +1,307 @@
++From 5956cf525bfb53ed0c5cade3b58f18fde4f85c42 Mon Sep 17 00:00:00 2001
++From: TBK <tbk@jjtc.eu>
++Date: Wed, 26 Feb 2020 00:24:39 +0100
++Subject: [PATCH] libpamc: Use ISO C99 uintX_t types instead of u_intX_t
++
++u_intX_t is a glibcism this fixes the issue of compiling against musl libc.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/linux-pam/linux-pam/commit/5956cf525bfb53ed0c5cade3b58f18fde4f85c42]
++---
++ libpamc/include/security/pam_client.h | 21 ++++++------
++ libpamc/libpamc.h                     |  1 +
++ libpamc/pamc_converse.c               |  8 ++---
++ libpamc/test/regress/test.libpamc.c   |  3 +-
++ modules/pam_timestamp/sha1.c          | 46 +++++++++++++--------------
++ modules/pam_timestamp/sha1.h          |  5 +--
++ 6 files changed, 44 insertions(+), 40 deletions(-)
++
++diff --git a/libpamc/include/security/pam_client.h b/libpamc/include/security/pam_client.h
++index 86672a2e..41f83da6 100644
++--- a/libpamc/include/security/pam_client.h
+++++ b/libpamc/include/security/pam_client.h
++@@ -16,6 +16,7 @@ extern "C" {
++ #include <unistd.h>
++ #include <string.h>
++ #include <stdio.h>
+++#include <stdint.h>
++ #include <sys/types.h>
++ 
++ /* opaque agent handling structure */
++@@ -23,7 +24,7 @@ extern "C" {
++ typedef struct pamc_handle_s *pamc_handle_t;
++ 
++ /* binary prompt structure pointer */
++-typedef struct { u_int32_t length; u_int8_t control; } *pamc_bp_t;
+++typedef struct { uint32_t length; uint8_t control; } *pamc_bp_t;
++ 
++ /*
++  * functions provided by libpamc
++@@ -90,10 +91,10 @@ char **pamc_list_agents(pamc_handle_t pch);
++ # define PAM_BP_FREE        free
++ #endif /* PAM_BP_FREE */
++ 
++-#define __PAM_BP_WOCTET(x,y)  (*((y) + (u_int8_t *)(x)))
++-#define __PAM_BP_ROCTET(x,y)  (*((y) + (const u_int8_t *)(x)))
+++#define __PAM_BP_WOCTET(x,y)  (*((y) + (uint8_t *)(x)))
+++#define __PAM_BP_ROCTET(x,y)  (*((y) + (const uint8_t *)(x)))
++ 
++-#define PAM_BP_MIN_SIZE       (sizeof(u_int32_t) + sizeof(u_int8_t))
+++#define PAM_BP_MIN_SIZE       (sizeof(uint32_t) + sizeof(uint8_t))
++ #define PAM_BP_MAX_LENGTH     0x20000                   /* an advisory limit */
++ #define PAM_BP_WCONTROL(x)    (__PAM_BP_WOCTET(x,4))
++ #define PAM_BP_RCONTROL(x)    (__PAM_BP_ROCTET(x,4))
++@@ -102,8 +103,8 @@ char **pamc_list_agents(pamc_handle_t pch);
++ 			       (__PAM_BP_ROCTET(x,2)<< 8)+      \
++ 			       (__PAM_BP_ROCTET(x,3)    ))
++ #define PAM_BP_LENGTH(x)      (PAM_BP_SIZE(x) - PAM_BP_MIN_SIZE)
++-#define PAM_BP_WDATA(x)       (PAM_BP_MIN_SIZE + (u_int8_t *) (x))
++-#define PAM_BP_RDATA(x)       (PAM_BP_MIN_SIZE + (const u_int8_t *) (x))
+++#define PAM_BP_WDATA(x)       (PAM_BP_MIN_SIZE + (uint8_t *) (x))
+++#define PAM_BP_RDATA(x)       (PAM_BP_MIN_SIZE + (const uint8_t *) (x))
++ 
++ /* Note, this macro always '\0' terminates renewed packets */
++ 
++@@ -111,13 +112,13 @@ char **pamc_list_agents(pamc_handle_t pch);
++ do {                                                                       \
++     if ((old_p) != NULL) {                                                 \
++ 	if (*(old_p)) {                                                    \
++-	    u_int32_t __size;                                              \
+++	    uint32_t __size;                                              \
++             __size = PAM_BP_SIZE(*(old_p));                                \
++ 	    memset(*(old_p), 0, __size);                                   \
++ 	    PAM_BP_FREE(*(old_p));                                         \
++ 	}                                                                  \
++ 	if (cntrl) {                                                       \
++-	    u_int32_t __size;                                              \
+++	    uint32_t __size;                                              \
++                                                                            \
++ 	    __size = PAM_BP_MIN_SIZE + data_length;                        \
++ 	    if ((*(old_p) = PAM_BP_CALLOC(1, 1+__size))) {                 \
++@@ -140,7 +141,7 @@ do {                                                                       \
++ #define PAM_BP_FILL(prmpt, offset, length, data)                           \
++ do {                                                                       \
++     size_t bp_length;                                                      \
++-    u_int8_t *prompt = (u_int8_t *) (prmpt);                               \
+++    uint8_t *prompt = (uint8_t *) (prmpt);                               \
++     bp_length = PAM_BP_LENGTH(prompt);                                     \
++     if (bp_length < ((length)+(offset))) {                                 \
++ 	PAM_BP_ASSERT("attempt to write over end of prompt");              \
++@@ -151,7 +152,7 @@ do {                                                                       \
++ #define PAM_BP_EXTRACT(prmpt, offset, length, data)                        \
++ do {                                                                       \
++     size_t __bp_length;                                                    \
++-    const u_int8_t *__prompt = (const u_int8_t *) (prmpt);                 \
+++    const uint8_t *__prompt = (const uint8_t *) (prmpt);                 \
++     __bp_length = PAM_BP_LENGTH(__prompt);                                 \
++     if (((offset) < 0) || (__bp_length < ((length)+(offset)))              \
++ 	|| ((length) < 0)) {                                               \
++diff --git a/libpamc/libpamc.h b/libpamc/libpamc.h
++index 93c833c6..a22f52ea 100644
++--- a/libpamc/libpamc.h
+++++ b/libpamc/libpamc.h
++@@ -16,6 +16,7 @@
++ #include <sys/types.h>
++ #include <dirent.h>
++ #include <sys/wait.h>
+++#include <stdint.h>
++ #include <stdlib.h>
++ #include <errno.h>
++ #include <ctype.h>
++diff --git a/libpamc/pamc_converse.c b/libpamc/pamc_converse.c
++index bb9c6dfd..f8f60edf 100644
++--- a/libpamc/pamc_converse.c
+++++ b/libpamc/pamc_converse.c
++@@ -34,8 +34,8 @@ static int __pamc_select_agent(pamc_handle_t pch, char *agent_id)
++ 
++ int pamc_converse(pamc_handle_t pch, pamc_bp_t *prompt_p)
++ {
++-    u_int32_t size, offset=0;
++-    u_int8_t control, raw[PAM_BP_MIN_SIZE];
+++    uint32_t size, offset=0;
+++    uint8_t control, raw[PAM_BP_MIN_SIZE];
++ 
++     D(("called"));
++ 
++@@ -110,7 +110,7 @@ int pamc_converse(pamc_handle_t pch, pamc_bp_t *prompt_p)
++     /* pump all of the prompt into the agent */
++     do {
++ 	int rval = write(pch->current->writer,
++-			 offset + (const u_int8_t *) (*prompt_p),
+++			 offset + (const uint8_t *) (*prompt_p),
++ 			 size - offset);
++ 	if (rval == -1) {
++ 	    switch (errno) {
++@@ -172,7 +172,7 @@ int pamc_converse(pamc_handle_t pch, pamc_bp_t *prompt_p)
++        value from the previous loop */
++ 
++     while (offset < size) {
++-	int rval = read(pch->current->reader, offset + (u_int8_t *) *prompt_p,
+++	int rval = read(pch->current->reader, offset + (uint8_t *) *prompt_p,
++ 			size-offset);
++ 
++ 	if (rval == -1) {
++diff --git a/libpamc/test/regress/test.libpamc.c b/libpamc/test/regress/test.libpamc.c
++index b0fff9c6..4251b4fa 100644
++--- a/libpamc/test/regress/test.libpamc.c
+++++ b/libpamc/test/regress/test.libpamc.c
++@@ -5,6 +5,7 @@
++  */
++ 
++ #include <stdio.h>
+++#include <stdint.h>
++ #include <string.h>
++ #include <security/pam_client.h>
++ #include <ctype.h>
++@@ -157,7 +158,7 @@ char *create_digest(int length, const char *raw)
++     return temp_packet.buffer;
++ }
++ 
++-void packet_to_prompt(pamc_bp_t *prompt_p, u_int8_t control,
+++void packet_to_prompt(pamc_bp_t *prompt_p, uint8_t control,
++ 		      struct internal_packet *packet)
++ {
++     PAM_BP_RENEW(prompt_p, control, packet->at);
++diff --git a/modules/pam_timestamp/sha1.c b/modules/pam_timestamp/sha1.c
++index 576b4b41..af3ccb97 100644
++--- a/modules/pam_timestamp/sha1.c
+++++ b/modules/pam_timestamp/sha1.c
++@@ -56,34 +56,34 @@ padding[SHA1_BLOCK_SIZE] = {
++ 	   0, 0, 0, 0, 0, 0, 0, 0,     0, 0, 0, 0, 0, 0, 0, 0,
++ };
++ 
++-static u_int32_t
++-F(u_int32_t b, u_int32_t c, u_int32_t d)
+++static uint32_t
+++F(uint32_t b, uint32_t c, uint32_t d)
++ {
++ 	return (b & c) | ((~b) & d);
++ }
++ 
++-static u_int32_t
++-G(u_int32_t b, u_int32_t c, u_int32_t d)
+++static uint32_t
+++G(uint32_t b, uint32_t c, uint32_t d)
++ {
++ 	return b ^ c ^ d;
++ }
++ 
++-static u_int32_t
++-H(u_int32_t b, u_int32_t c, u_int32_t d)
+++static uint32_t
+++H(uint32_t b, uint32_t c, uint32_t d)
++ {
++ 	return (b & c) | (b & d) | (c & d);
++ }
++ 
++-static u_int32_t
++-RL(u_int32_t n, u_int32_t s)
+++static uint32_t
+++RL(uint32_t n, uint32_t s)
++ {
++ 	return (n << s) | (n >> (32 - s));
++ }
++ 
++-static u_int32_t
++-sha1_round(u_int32_t (*FUNC)(u_int32_t, u_int32_t, u_int32_t),
++-      u_int32_t a, u_int32_t b, u_int32_t c, u_int32_t d, u_int32_t e,
++-      u_int32_t i, u_int32_t n)
+++static uint32_t
+++sha1_round(uint32_t (*FUNC)(uint32_t, uint32_t, uint32_t),
+++      uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e,
+++      uint32_t i, uint32_t n)
++ {
++ 	return RL(a, 5) + FUNC(b, c, d) + e + i + n;
++ }
++@@ -100,10 +100,10 @@ sha1_init(struct sha1_context *ctx)
++ }
++ 
++ static void
++-sha1_process(struct sha1_context *ctx, u_int32_t buffer[SHA1_BLOCK_SIZE / 4])
+++sha1_process(struct sha1_context *ctx, uint32_t buffer[SHA1_BLOCK_SIZE / 4])
++ {
++-	u_int32_t a, b, c, d, e, temp;
++-	u_int32_t data[80];
+++	uint32_t a, b, c, d, e, temp;
+++	uint32_t data[80];
++ 	int i;
++ 
++ 	for (i = 0; i < 16; i++) {
++@@ -150,14 +150,14 @@ void
++ sha1_update(struct sha1_context *ctx, const unsigned char *data, size_t length)
++ {
++ 	size_t i = 0, l = length, c, t;
++-	u_int32_t count = 0;
+++	uint32_t count = 0;
++ 
++ 	/* Process any pending + data blocks. */
++ 	while (l + ctx->pending_count >= SHA1_BLOCK_SIZE) {
++ 		c = ctx->pending_count;
++ 		t = SHA1_BLOCK_SIZE - c;
++ 		memcpy(ctx->pending + c, &data[i], t);
++-		sha1_process(ctx, (u_int32_t*) ctx->pending);
+++		sha1_process(ctx, (uint32_t*) ctx->pending);
++ 		i += t;
++ 		l -= t;
++ 		ctx->pending_count = 0;
++@@ -188,7 +188,7 @@ sha1_output(struct sha1_context *ctx, unsigned char *out)
++ 
++ 	/* Output the sum. */
++ 	if (out != NULL) {
++-		u_int32_t c;
+++		uint32_t c;
++ 		memcpy(&ctx2, ctx, sizeof(ctx2));
++ 
++ 		/* Pad this block. */
++@@ -197,10 +197,10 @@ sha1_output(struct sha1_context *ctx, unsigned char *out)
++ 		       padding, SHA1_BLOCK_SIZE - c);
++ 
++ 		/* Do we need to process two blocks now? */
++-		if (c >= (SHA1_BLOCK_SIZE - (sizeof(u_int32_t) * 2))) {
+++		if (c >= (SHA1_BLOCK_SIZE - (sizeof(uint32_t) * 2))) {
++ 			/* Process this block. */
++ 			sha1_process(&ctx2,
++-				    (u_int32_t*) ctx2.pending);
+++				    (uint32_t*) ctx2.pending);
++ 			/* Set up another block. */
++ 			ctx2.pending_count = 0;
++ 			memset(ctx2.pending, 0, SHA1_BLOCK_SIZE);
++@@ -218,10 +218,10 @@ sha1_output(struct sha1_context *ctx, unsigned char *out)
++ 		ctx2.counts[0] = htonl(ctx2.counts[0]);
++ 		ctx2.counts[1] = htonl(ctx2.counts[1]);
++ 		memcpy(ctx2.pending + 56,
++-		       &ctx2.counts[1], sizeof(u_int32_t));
+++		       &ctx2.counts[1], sizeof(uint32_t));
++ 		memcpy(ctx2.pending + 60,
++-		       &ctx2.counts[0], sizeof(u_int32_t));
++-		sha1_process(&ctx2, (u_int32_t*) ctx2.pending);
+++		       &ctx2.counts[0], sizeof(uint32_t));
+++		sha1_process(&ctx2, (uint32_t*) ctx2.pending);
++ 
++ 		/* Output the data. */
++ 		out[ 3] = (ctx2.a >>  0) & 0xff;
++diff --git a/modules/pam_timestamp/sha1.h b/modules/pam_timestamp/sha1.h
++index 667b87ca..a445e4e6 100644
++--- a/modules/pam_timestamp/sha1.h
+++++ b/modules/pam_timestamp/sha1.h
++@@ -38,6 +38,7 @@
++ #ifndef pam_timestamp_sha1_h
++ #define pam_timestamp_sha1_h
++ 
+++#include <stdint.h>
++ #include <sys/types.h>
++ 
++ #define SHA1_BLOCK_SIZE 64
++@@ -45,9 +46,9 @@
++ struct sha1_context {
++ 	size_t count;
++ 	unsigned char pending[SHA1_BLOCK_SIZE];
++-	u_int32_t counts[2];
+++	uint32_t counts[2];
++ 	size_t pending_count;
++-	u_int32_t a, b, c, d, e;
+++	uint32_t a, b, c, d, e;
++ };
++ 
++ #define SHA1_OUTPUT_SIZE 20
