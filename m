@@ -1,49 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 22:30:10 +0200
-Subject: [Buildroot] [git commit] package/dbus-python: bump to version 1.2.16
-Message-ID: <20200427201527.DFA599096A@busybox.osuosl.org>
+Date: Mon, 27 Apr 2020 22:28:09 +0200
+Subject: [Buildroot] [git commit] package/python-autobahn: bump to version
+ 20.4.3
+Message-ID: <20200427201527.CCD549096A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7dca21adf40a921a169a67c042bd63d1af5e56ec
+commit: https://git.buildroot.net/buildroot/commit/?id=0a4b98ed7d60430b38411e681090d390fb84cbb1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Convert hash file from tabs to spaces.
-
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dbus-python/dbus-python.hash | 6 +++---
- package/dbus-python/dbus-python.mk   | 2 +-
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dbus-python/dbus-python.hash b/package/dbus-python/dbus-python.hash
-index 58b0a75908..e65695d616 100644
---- a/package/dbus-python/dbus-python.hash
-+++ b/package/dbus-python/dbus-python.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--sha256	cdd4de2c4f5e58f287b12013ed7b41dee81d503c8d0d2397c5bd2fb01badf260	dbus-python-1.2.12.tar.gz
-+sha256  11238f1d86c995d8aed2e22f04a1e3779f0d70e587caffeab4857f3c662ed5a4  dbus-python-1.2.16.tar.gz
- 
- # Locally calculated
--sha256	1e4562245383fdb5203b1769789e5b28bba21af4923aea7e8b2614f7f93623c0	COPYING
--sha256	064523e3ab64d6f03904132b2cc4a1bd8500586edb4cd050c2ff2b96aed4c33b	dbus-gmain/COPYING
-+sha256  1e4562245383fdb5203b1769789e5b28bba21af4923aea7e8b2614f7f93623c0  COPYING
-+sha256  064523e3ab64d6f03904132b2cc4a1bd8500586edb4cd050c2ff2b96aed4c33b  dbus-gmain/COPYING
-diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
-index cf4882d8ee..f4b8996d76 100644
---- a/package/dbus-python/dbus-python.mk
-+++ b/package/dbus-python/dbus-python.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index a49de07b70..a5aa2a5a7d 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5  9702594ee1c5613e9bb31af105140b5b  autobahn-20.4.2.tar.gz
+-sha256  1c943f94bb759c07445a6984a3bc4c76f73e2a90a1fc2c3521c211579b73d3db  autobahn-20.4.2.tar.gz
++md5  dcae3cf26203aa4bbd9912137e5c9512  autobahn-20.4.3.tar.gz
++sha256  c6fe745d52ba9f9eecf791cd31f558df42aebfc4f9ee558a8f1d18c707e1ae1f  autobahn-20.4.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index d4e52352f2..37b3d33534 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--DBUS_PYTHON_VERSION = 1.2.12
-+DBUS_PYTHON_VERSION = 1.2.16
- DBUS_PYTHON_SITE = http://dbus.freedesktop.org/releases/dbus-python
- DBUS_PYTHON_INSTALL_STAGING = YES
- DBUS_PYTHON_LICENSE = MIT (dbus-python), AFL-2.1 or GPL-2.0+ (dbus-gmain)
+-PYTHON_AUTOBAHN_VERSION = 20.4.2
++PYTHON_AUTOBAHN_VERSION = 20.4.3
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/13/0e/b182b46ea437e59003de78c68bb00824d304dcfe58e7235f29c4f275eca0
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/cb/16/38d27874ef827974f44acb6dd64a92a9248b624734c0e84b91083c2d9350
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
