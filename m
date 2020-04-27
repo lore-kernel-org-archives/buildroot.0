@@ -1,83 +1,46 @@
-From: Mircea GLIGA <mgliga@bitdefender.com>
-Date: Mon, 27 Apr 2020 19:22:03 +0300
-Subject: [Buildroot] [PATCH v4 1/3] package/environment-setup: new
- package
-In-Reply-To: <20200425124836.122729-1-angelo@amarulasolutions.com>
-References: <20200425124836.122729-1-angelo@amarulasolutions.com>
-Message-ID: <96aada93-1fbf-19c5-ad8e-e293b121468a@bitdefender.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 27 Apr 2020 20:54:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcec: bump version to 5.0.0
+Message-ID: <20200427185445.233090-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, All
+Updated license hash due to upstream commit:
+https://github.com/Pulse-Eight/libcec/commit/d5e5200ed1a998af24fa5290ad764e0a2ed086c6
 
-I have some ideas to improve the environment script.
-In order to keep project/team specific customization outside of
-Buildroot, we can add a new configuration variable e.g.
-`BR2_ENVIRONMENT_SETUP_FILE_SNIPPET`.
-We can use this to specify an external, additional file, which adds
-further customizations, e.g. PS1, could be others too
-And right at the end of `ENVIRONMENT_SETUP_INSTALL_TARGET_CMDS`, add
-the contents of that file:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libcec/libcec.hash | 4 ++--
+ package/libcec/libcec.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-`cat BR2_ENVIRONMENT_SETUP_FILE_SNIPPET >> $(ENVIRONMENT_SETUP_FILE)`
-
-If this new config value is empty, we only have the original version of
-the environment-setup file.
-
-Also, I've added cleanup code(see below) to the variables inside the
-`environment-setup` script:
-
-* take advantage of the fact that we've updated the PATH, so don't use
-absolute paths
-* long absolute paths makes verbose builds difficult to read/follow
-* use the CROSS_COMPILE variable in the definition of AR, CC, etc
-
-This results in a more compact/readable code.
-
-All the best,
-Mircea
-
-
-diff --git a/package/environment-setup/environment-setup.mk 
-b/package/environment-setup/environment-setup.mk
-index fc74594459..b057c4fa34 100644
---- a/package/environment-setup/environment-setup.mk
-+++ b/package/environment-setup/environment-setup.mk
-@@ -5,14 +5,16 @@
+diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
+index c457ee7097..000a4f7b40 100644
+--- a/package/libcec/libcec.hash
++++ b/package/libcec/libcec.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 035c617e48e14b1d70c503c5fefce42142198e36fefa0f8b01f0228df65edb52  libcec-91da1b6d5daecd3c85a1ac06d325ee4554f69b83.tar.gz
+-sha256 3618005b3db4eb8ede7292d233e6c41605cb8dcbd33e8790eff6e29c1e4f3789  COPYING
++sha256  7c6ef02f39918ac88a3dac8ea35021f6c4b4b695df9204b3ac9faca673c706cc  libcec-5.0.0.tar.gz
++sha256  0137261d24ce001fc5237aacddd267533e0f150ac23cf21acffea599f7358f7a  COPYING
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index e85fd6a4d3..8c0981e488 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-################################################################################
-
-  ENVIRONMENT_SETUP_FILE = $(HOST_DIR)/environment-setup
-+ENVIRONMENT_SETUP_CROSS_COMPILE_SED_EXP = 
-'s+$(TARGET_CROSS)+\$${CROSS_COMPILE}+g'
-+ENVIRONMENT_SETUP_PATH_SED_EXP = 's+$(HOST_DIR)/bin/++g'
-  ENVIRONMENT_SETUP_HOST_DIR_SED_EXP = 's+$(HOST_DIR)+\$$SDK_PATH+g'
-
-  define ENVIRONMENT_SETUP_INSTALL_TARGET_CMDS
-  	cp package/environment-setup/environment-setup $(ENVIRONMENT_SETUP_FILE)
-+	printf "export \"CROSS_COMPILE=$(GNU_TARGET_NAME)-\"\n" >> 
-$(ENVIRONMENT_SETUP_FILE)
-  	for var in $(TARGET_CONFIGURE_OPTS); do \
-  		printf "export \"$$var\"\n" >> $(ENVIRONMENT_SETUP_FILE); \
-  	done
--	printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >> 
-$(ENVIRONMENT_SETUP_FILE)
-  	printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
-  		--host=$(GNU_TARGET_NAME) \
-  		--build=$(GNU_HOST_NAME) \
-@@ -21,7 +23,7 @@ define ENVIRONMENT_SETUP_INSTALL_TARGET_CMDS
-  		--sysconfdir=/etc \
-  		--localstatedir=/var \
-  		--program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
--	$(SED) $(ENVIRONMENT_SETUP_HOST_DIR_SED_EXP) $(ENVIRONMENT_SETUP_FILE)
-+	$(SED) $(ENVIRONMENT_SETUP_CROSS_COMPILE_SED_EXP) -e 
-$(ENVIRONMENT_SETUP_PATH_SED_EXP) -e 
-$(ENVIRONMENT_SETUP_HOST_DIR_SED_EXP) $(ENVIRONMENT_SETUP_FILE)
-  	printf 
-"PS1=\"\[\e[32m\]buildroot-$(BR2_VERSION)\[\e[m\]:\[\e[34m\]\w\[\e[m\]\$$ 
-\"\n" \
-  		>> $(ENVIRONMENT_SETUP_FILE)
-  endef
+-LIBCEC_VERSION = 91da1b6d5daecd3c85a1ac06d325ee4554f69b83
+-LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
++LIBCEC_VERSION = 5.0.0
++LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPL-2.0+
+ LIBCEC_LICENSE_FILES = COPYING
+ 
+-- 
+2.26.2
