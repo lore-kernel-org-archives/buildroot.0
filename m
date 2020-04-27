@@ -1,47 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 22:27:54 +0200
-Subject: [Buildroot] [git commit] package/dialog: bump to version
- 1.3-20200327
-Message-ID: <20200427201527.C31B49096A@busybox.osuosl.org>
+Date: Mon, 27 Apr 2020 22:30:10 +0200
+Subject: [Buildroot] [git commit] package/dbus-python: bump to version 1.2.16
+Message-ID: <20200427201527.DFA599096A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90a9e3fa566e9786f19ff3c3aa1c55a5197125d9
+commit: https://git.buildroot.net/buildroot/commit/?id=7dca21adf40a921a169a67c042bd63d1af5e56ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash file to two space format.
+Convert hash file from tabs to spaces.
 
 Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dialog/dialog.hash | 4 ++--
- package/dialog/dialog.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dbus-python/dbus-python.hash | 6 +++---
+ package/dbus-python/dbus-python.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dialog/dialog.hash b/package/dialog/dialog.hash
-index e1768588d8..2286590b66 100644
---- a/package/dialog/dialog.hash
-+++ b/package/dialog/dialog.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/dbus-python/dbus-python.hash b/package/dbus-python/dbus-python.hash
+index 58b0a75908..e65695d616 100644
+--- a/package/dbus-python/dbus-python.hash
++++ b/package/dbus-python/dbus-python.hash
+@@ -1,6 +1,6 @@
  # Locally calculated after checking pgp signature
--sha256 10f7c02ee5dea311e61b0d3e29eb6e18bcedd6fb6672411484c1a37729cbd7a6  dialog-1.3-20191210.tgz
-+sha256  466163e8b97c2b7709d00389199add3156bd813f60ccb0335d0a30f2d4a17f99  dialog-1.3-20200327.tgz
- # Locally computed
--sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-+sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index f3b66bae09..1c98d354e3 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
+-sha256	cdd4de2c4f5e58f287b12013ed7b41dee81d503c8d0d2397c5bd2fb01badf260	dbus-python-1.2.12.tar.gz
++sha256  11238f1d86c995d8aed2e22f04a1e3779f0d70e587caffeab4857f3c662ed5a4  dbus-python-1.2.16.tar.gz
+ 
+ # Locally calculated
+-sha256	1e4562245383fdb5203b1769789e5b28bba21af4923aea7e8b2614f7f93623c0	COPYING
+-sha256	064523e3ab64d6f03904132b2cc4a1bd8500586edb4cd050c2ff2b96aed4c33b	dbus-gmain/COPYING
++sha256  1e4562245383fdb5203b1769789e5b28bba21af4923aea7e8b2614f7f93623c0  COPYING
++sha256  064523e3ab64d6f03904132b2cc4a1bd8500586edb4cd050c2ff2b96aed4c33b  dbus-gmain/COPYING
+diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
+index cf4882d8ee..f4b8996d76 100644
+--- a/package/dbus-python/dbus-python.mk
++++ b/package/dbus-python/dbus-python.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DIALOG_VERSION = 1.3-20191210
-+DIALOG_VERSION = 1.3-20200327
- DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
- DIALOG_SITE = https://invisible-mirror.net/archives/dialog
- DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
+-DBUS_PYTHON_VERSION = 1.2.12
++DBUS_PYTHON_VERSION = 1.2.16
+ DBUS_PYTHON_SITE = http://dbus.freedesktop.org/releases/dbus-python
+ DBUS_PYTHON_INSTALL_STAGING = YES
+ DBUS_PYTHON_LICENSE = MIT (dbus-python), AFL-2.1 or GPL-2.0+ (dbus-gmain)
