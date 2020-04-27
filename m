@@ -1,44 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 21:41:13 +0200
-Subject: [Buildroot] [git commit] package/meson: bump to version 0.54.1
-Message-ID: <20200427192631.DD17F908EC@busybox.osuosl.org>
+Date: Mon, 27 Apr 2020 21:41:43 +0200
+Subject: [Buildroot] [git commit] package/python-pycairo: depend on python3
+Message-ID: <20200427192701.51EC5908F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb3c480ffc12d925c1835bb75965cb96e7ef4907
+commit: https://git.buildroot.net/buildroot/commit/?id=3be1f6c326637374e9baf8d4ab2de206f09c9259
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Since version 1.19.0 pycairo doesn't support Python 2 anymore.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/4d47c71f75a61810c5f58a720245bef38b3f3db0
+
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pycairo/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index bbb031957b..1fb902742d 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.54.0/meson-0.54.0.tar.gz.asc
--sha256  dde5726d778112acbd4a67bb3633ab2ee75d33d1e879a6283a7b4a44c3363c27  meson-0.54.0.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.54.1/meson-0.54.1.tar.gz.asc
-+sha256  2f76fb4572762be13ee479292610091b4509af5788bcceb391fe222bcd0296dc  meson-0.54.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 2e6c4cea71..fea2807d9f 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MESON_VERSION = 0.54.0
-+MESON_VERSION = 0.54.1
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+diff --git a/package/python-pycairo/Config.in b/package/python-pycairo/Config.in
+index 0d8de977e1..a44a0421e6 100644
+--- a/package/python-pycairo/Config.in
++++ b/package/python-pycairo/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PYCAIRO
+ 	bool "python-pycairo"
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_CAIRO
+ 	help
+ 	  Python interface for cairo.
