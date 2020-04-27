@@ -1,50 +1,82 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Mon, 27 Apr 2020 22:38:33 +0200
-Subject: [Buildroot] [PATCH] package/cegui: disable ogre support
-In-Reply-To: <20200427221945.5528d702@windsurf.home>
-References: <20200427200909.6753-1-b.bilas@grinn-global.com>
- <20200427221945.5528d702@windsurf.home>
-Message-ID: <37c0f608-c22e-37e5-8a82-b6c0d21e88bb@grinn-global.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 27 Apr 2020 22:36:50 +0200
+Subject: [Buildroot] [git commit] package/ibm-sw-tpm2: add patch to fix
+ build issues on several architectures
+Message-ID: <20200427202555.D017E9097A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=26e37cef1627faa1f5ab8935482e2b2bc3465c33
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 27.04.2020 22:19, Thomas Petazzoni wrote:
-> On Mon, 27 Apr 2020 22:09:09 +0200
-> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
->
->> Buildroot's ogre version isn't compatible with current (v0-8-7) cegui
->> therefore disable support for that. It will be restored when upstream will
->> switch to the new version.
->>
->> Fixes:
->>    - http://autobuild.buildroot.net/results/8ee717ac4d596fc0af274037841ac4ed6862ddaa/
->>
->> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
->> ---
->>   package/cegui/cegui.mk | 10 ++--------
->>   1 file changed, 2 insertions(+), 8 deletions(-)
-> Applied, thanks.
->
-> To be honest, I think it was a mistake to support all those optional
-> features without testing them. Xerces, then minizip, now ogre. I would
-> have very much preferred to disable all these features unconditionally,
-> and then people who need them can add the necessary conditions.
-Some of them are fixed on the master branch, some of them came up due to 
-conflict with package version ( such as buildroot's minizip which is 
-actually a fork of original zlib). I've checked some of them but that's 
-tricky to verify every possibility as it's being done by autobuilders 
-but I try to fix that as fast as possible ;) We can disable all of them 
-or check autobuilders results and fix it. I've asked the maintainers 
-about new release which will fix some of the issues so I hope it will be 
-done soon.
->
-> BTW, are you using cegui in some projects ?
-I'm not but I was. Now I'm trying to keep this package to be built fine 
-under buildroot.
->
-> Thomas
+src/LibSupport.h has some logic to find the wordsize of the current
+architecture, using an explicit list of CPU architectures. This makes
+the build fail on a number of CPU architectures that are not
+explicitly handled.
+
+Let's instead use the __WORDSIZE definition of the C library, which is
+guaranteed to be available for all CPU architectures.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/a235345477ea2ec3b0dd4ffed4d7667d46caec48/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+
+diff --git a/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch b/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch
+new file mode 100644
+index 0000000000..a19160f68c
+--- /dev/null
++++ b/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch
+@@ -0,0 +1,44 @@
++From 24a352fc99ebde22235b05b18615817ef7f4263c Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 26 Apr 2020 15:33:39 +0200
++Subject: [PATCH] Use __WORDSIZE to define RADIX_BITS
++
++This allows to avoid having to support each CPU architecture
++individually.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/LibSupport.h | 17 +++--------------
++ 1 file changed, 3 insertions(+), 14 deletions(-)
++
++diff --git a/src/LibSupport.h b/src/LibSupport.h
++index b2e6a51..f064d20 100644
++--- a/src/LibSupport.h
+++++ b/src/LibSupport.h
++@@ -64,20 +64,9 @@
++ #ifndef _LIB_SUPPORT_H_
++ #define _LIB_SUPPORT_H_
++ 
++-#ifndef RADIX_BITS
++-#   if defined(__x86_64__) || defined(__x86_64)				\
++-    || defined(__amd64__) || defined(__amd64) || defined(_WIN64) || defined(_M_X64) \
++-    || defined(_M_ARM64) || defined(__aarch64__) \
++-    || defined(__powerpc64__) || defined(__ppc64__)
++-#       define RADIX_BITS                      64
++-#   elif defined(__i386__) || defined(__i386) || defined(i386)		\
++-    || defined(_WIN32) || defined(_M_IX86)				\
++-    || defined(_M_ARM) || defined(__arm__) || defined(__thumb__)
++-#       define RADIX_BITS                      32
++-#   else
++-#       error Unable to determine RADIX_BITS from compiler environment
++-#   endif
++-#endif // RADIX_BITS
+++#include <limits.h>
+++
+++#define RADIX_BITS __WORDSIZE
++ 
++ // These macros use the selected libraries to the proper include files.
++ #define LIB_QUOTE(_STRING_) #_STRING_
++-- 
++2.25.3
++
