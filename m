@@ -1,54 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 23:57:04 +0200
-Subject: [Buildroot] [PATCH 1/3] board/freescale/imx: Add helper to
- generate fw binary
-In-Reply-To: <20200427213402.6148-1-xroumegue@gmail.com>
-References: <20200427213402.6148-1-xroumegue@gmail.com>
-Message-ID: <20200427235704.56fcde61@windsurf.home>
+Date: Mon, 27 Apr 2020 23:58:22 +0200
+Subject: [Buildroot] [PATCH v4 1/3] package/libtextstyle: new package
+In-Reply-To: <20200421205504.3061551-1-aduskett@gmail.com>
+References: <20200421205504.3061551-1-aduskett@gmail.com>
+Message-ID: <20200427235822.56d30c15@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Xavier,
+Hello,
 
-On Mon, 27 Apr 2020 23:34:00 +0200
-Xavier Roumegue <xroumegue@gmail.com> wrote:
+On Tue, 21 Apr 2020 13:55:02 -0700
+aduskett at gmail.com wrote:
 
-> This script aims to create an imx compatible boot image embedding
-> mainline components, using only upstream uboot mkimage tool, avoiding
-> dependencies on proprietary imx mkimage.
-> 
-> Mainline u-boot can generate a bootable image, but SPL soc proprietary
-> firmware dependencies have to be copied on uboot root dir.
-> 
-> This script prevents additional buildroot uboot recipe hacking to handle
-> custom SoC uboot build process.
-> 
-> The script actions summary is:
-> - Append DDR4 firmware to uboot spl binary
-> - Generate imx mkimage configuration file, extracting entry points from
->   relevant elf files on the fly.
-> - Generate imx boot image using uboot upstream mkimage tool
-> 
-> Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
+> +LIBTEXTSTYLE_VERSION = 0.20.1
 
-Thanks for this proposal. Could you share a bit more details about the
-upstream U-Boot i.MX8 image generation logic? How does it work, how do
-you trigger it, which FW binaries need to be copied to the U-Boot build
-directory, etc. ?
+I've added a comment above this to ask this version to be kept in sync
+with gettext-gnu.
 
->  .../common/imx/imx8-generate-fw-image.sh      | 52 +++++++++++++++++++
+> +LIBTEXTSTYLE_SITE = $(BR2_GNU_MIRROR)/gettext
+> +LIBTEXTSTYLE_SOURCE = gettext-$(LIBTEXTSTYLE_VERSION).tar.xz
+> +LIBTEXTSTYLE_INSTALL_STAGING = YES
+> +LIBTEXTSTYLE_LICENSE = GPL-3.0+
+> +LIBTEXTSTYLE_LICENSE_FILES = COPYING
 
-We should perhaps find better names to distinguish
-imx8-bootloader-prepare.sh from imx8-generate-fw-image.sh, and make it
-clear which one is for which situation.
+I've added:
 
-Also, is your script suitable for all i.MX8? I see upstream U-Boot has
-separate image tools for i.MX8 and i.MX8M.
+HOST_LIBTEXTSTYLE_DL_SUBDIR = gettext-gnu
 
-Thanks for your feedback,
+so that the downloaded gettext tarball is shared with gettext-gnu.
+
+Applied with this change. Thanks!
 
 Thomas
 -- 
