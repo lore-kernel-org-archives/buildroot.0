@@ -1,25 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 22:28:02 +0200
-Subject: [Buildroot] [PATCH] package/dialog: bump to version 1.3-20200327
-In-Reply-To: <20200425214650.5576-1-ryanbarnett3@gmail.com>
-References: <20200425214650.5576-1-ryanbarnett3@gmail.com>
-Message-ID: <20200427222802.667541f2@windsurf.home>
+Date: Mon, 27 Apr 2020 22:28:18 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/python-autobahn: bump to
+ version 20.4.3
+In-Reply-To: <20200425213002.96598-1-james.hilliard1@gmail.com>
+References: <20200425213002.96598-1-james.hilliard1@gmail.com>
+Message-ID: <20200427222818.20d63a57@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 25 Apr 2020 16:46:50 -0500
-Ryan Barnett <ryanbarnett3@gmail.com> wrote:
+On Sat, 25 Apr 2020 15:30:02 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Update hash file to two space format.
-> 
-> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/dialog/dialog.hash | 4 ++--
->  package/dialog/dialog.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/python-autobahn/python-autobahn.hash | 4 ++--
+>  package/python-autobahn/python-autobahn.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
