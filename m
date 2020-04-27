@@ -1,34 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 22:28:48 +0200
-Subject: [Buildroot] [PATCH] package/dhcp: bump to version 4.4.2
-In-Reply-To: <20200425212830.12910-1-ryanbarnett3@gmail.com>
-References: <20200425212830.12910-1-ryanbarnett3@gmail.com>
-Message-ID: <20200427222848.0d702f3a@windsurf.home>
+Date: Mon, 27 Apr 2020 22:27:54 +0200
+Subject: [Buildroot] [git commit] package/dialog: bump to version
+ 1.3-20200327
+Message-ID: <20200427201527.C31B49096A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 25 Apr 2020 16:28:30 -0500
-Ryan Barnett <ryanbarnett3@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=90a9e3fa566e9786f19ff3c3aa1c55a5197125d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Removed 0001-*.patch as it is included with the maintenance release.
-> The LICENSE file hash changed due to Copyright year updating to
-> include 2020.
-> 
-> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-> ---
->  ...ibility-headers-updated-util-bind-sh.patch | 87 -------------------
->  package/dhcp/dhcp.hash                        |  6 +-
->  package/dhcp/dhcp.mk                          |  2 +-
->  3 files changed, 4 insertions(+), 91 deletions(-)
->  delete mode 100644 package/dhcp/0001-master-Added-includes-of-new-BIND9-compatibility-headers-updated-util-bind-sh.patch
+Update hash file to two space format.
 
-Applied to master, thanks.
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dialog/dialog.hash | 4 ++--
+ package/dialog/dialog.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dialog/dialog.hash b/package/dialog/dialog.hash
+index e1768588d8..2286590b66 100644
+--- a/package/dialog/dialog.hash
++++ b/package/dialog/dialog.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256 10f7c02ee5dea311e61b0d3e29eb6e18bcedd6fb6672411484c1a37729cbd7a6  dialog-1.3-20191210.tgz
++sha256  466163e8b97c2b7709d00389199add3156bd813f60ccb0335d0a30f2d4a17f99  dialog-1.3-20200327.tgz
+ # Locally computed
+-sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
+index f3b66bae09..1c98d354e3 100644
+--- a/package/dialog/dialog.mk
++++ b/package/dialog/dialog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DIALOG_VERSION = 1.3-20191210
++DIALOG_VERSION = 1.3-20200327
+ DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
+ DIALOG_SITE = https://invisible-mirror.net/archives/dialog
+ DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
