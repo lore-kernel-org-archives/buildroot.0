@@ -1,60 +1,238 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 22:03:21 +0200
-Subject: [Buildroot] [git commit] support/testing: test_lua_utf8: fix test
- after bump to lua-utf8 0.1.2
-Message-ID: <20200427194843.C06B59091D@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 27 Apr 2020 22:04:40 +0200
+Subject: [Buildroot] [PATCH] infra: add the transient download mechanism
+Message-ID: <20200427200440.26864-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3b3571fab34b4a08fea69d019c0727b794cae6a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+People have been hollering for a long time, asking for a way to be able
+to trigger a build that will always get the current HEAD (or whatever it
+is called outside of git) of a branch, whatever the conditions, so that
+they can trigger automated builds (e.g. in a CI or whatever) to test
+their greatest and latest changes, by pushing again and again ad libitum
+on the same branch, without having the need to update the sha1 in the
+.mk of the affected package.
 
-The commit 0f0649140f73645f4cd00c9c0d27c50e9fa1caf9 introduced a change
-in the module name: utf8 -> lua-utf8.
+We introduce the concept of a transient download, which means that
+Buildroot will never consider any already downloaded archive, and so
+will re-download it (but only if the package has not already been
+downloaded for the current build).
 
-The packages-file-list.txt show the change in the files intalled on the rootfs:
+A package declares its download as transient with:
+  FOO_TRANSIENT_DOWNLOAD = YES
 
-[lua-utf8 0.1.2-2 latest version]
-lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/doc/LICENSE
-lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/doc/README.md
-lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/luautf8-0.1.2-2.rockspec
-lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/rock_manifest
-lua-utf8,./usr/lib/lua/5.1/lua-utf8.so
+Since the check is done in the download wrapper, we have no TOCTOU race
+in case two builds would attempt the same transient download: the archive
+is only replaced atomically as usual.
 
-[lua-utf8 1.2-0 previous version]
-lua-utf8,./usr/lib/luarocks/rocks-5.1/utf8/1.2-0/doc/README.md
-lua-utf8,./usr/lib/luarocks/rocks-5.1/utf8/1.2-0/utf8-1.2-0.rockspec
-lua-utf8,./usr/lib/luarocks/rocks-5.1/utf8/1.2-0/rock_manifest
-lua-utf8,./usr/lib/lua/5.1/utf8.so
+So, if the package uses a branch as version, the branch's HEAD at that
+very moment will be re-downloaded.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/526036036
+Obviously, such builds are not reproducible.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+This also has the pitfall that two builds in parallel may get slightly
+different content for the same branch, and the first build could end up
+using the download of the second build:
+
+    build-1             build-2
+
+    download
+    |                   download
+    |                   |
+    save to dl-dir      |
+    [...]               save to dl-dir
+    extract
+
+Also, as noticed by Thomas, legal-info of build-1 is not correct when
+executed after build-2 downloaded the archive. But since such CI builds
+are expected to be done during development, legal-info is usually not
+that important in that case (and even then, such packages are probably
+proprietary packages that are probably "FOO_REDISTRIBUTE = NO" already
+anyway).
+
+Furthermore, even with a single build, it might not get what it expects:
+
+    developer           CI
+
+    git push branch
+    |                   trigger build-1
+    git push branch     |
+                        download
+
+In that case the build in the CI gets the code of the second push, which
+might or might not be the expected behaviour.
+
+We would also want to always print the "Downlaoding" message for
+transient packages, while keeping it silent for the already-downloaded
+packages. But that would make the code a bit more comples. We just
+simplify it by always displaying that message, even if there is actually
+nothing to download (this actually makes the download step more like the
+others, btw: if there is nothing to do to vonfigure, we are still
+printing the "Cofuiguring " message, etc...).
+
+Finally, by design, we can't check the hashes for a transient package.
+
+For people who are aiming at their feet, we're now providing them with
+a loaded gun. ;-]
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
 ---
- support/testing/tests/package/test_lua_utf8.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes RFC -> v1:
+  - only be transient with 'YES', not with 'NO'  (Thomas)
+  - add blurb about legal-info  (Thomas)
+  - do not check hash for transient downloads
+  - rename variable: DOWNLOAD_TRANSIENT -> TRANSIENT_DOWNLOAD
+  - typoes fixed (and probably others added)
+  - always print "Downloading"
+  - rework the commit log
+---
+ docs/manual/adding-packages-generic.txt | 27 ++++++++++++++++++++++---
+ package/pkg-download.mk                 |  1 +
+ package/pkg-generic.mk                  | 20 +++++++++++-------
+ support/download/dl-wrapper             |  8 +++++---
+ 4 files changed, 43 insertions(+), 13 deletions(-)
 
-diff --git a/support/testing/tests/package/test_lua_utf8.py b/support/testing/tests/package/test_lua_utf8.py
-index 3eab19dd4d..5946a439cf 100644
---- a/support/testing/tests/package/test_lua_utf8.py
-+++ b/support/testing/tests/package/test_lua_utf8.py
-@@ -10,7 +10,7 @@ class TestLuaUtf8(TestLuaBase):
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index ed1e6acf57..5546baef52 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -206,12 +206,14 @@ information is (assuming the package name is +libfoo+) :
+   ** a tag for a git tree +LIBFOO_VERSION = v0.1.2+
+ +
+ .Note:
+-Using a branch name as +FOO_VERSION+ is not supported, because it does
+-not and can not work as people would expect it should:
++Using a branch name as +FOO_VERSION+, although technically possible,
++is highly discouraged, because it does not and can not work as people
++would expect it should:
+ +
+   1. due to local caching, Buildroot will not re-fetch the repository,
+      so people who expect to be able to follow the remote repository
+-     would be quite surprised and disappointed;
++     would be quite surprised and disappointed (but see
++     +LIBFOO_TRANSIENT_DOWNLOAD+, later);
+   2. because two builds can never be perfectly simultaneous, and because
+      the remote repository may get new commits on the branch anytime,
+      two users, using the same Buildroot tree and building the same
+@@ -342,6 +344,25 @@ not and can not work as people would expect it should:
+   submodules when they contain bundled libraries, in which case we
+   prefer to use those libraries from their own package.
  
-     def test_run(self):
-         self.login()
--        self.module_test("utf8")
-+        self.module_test("lua-utf8")
++* +LIBFOO_TRANSIENT_DOWNLOAD+ can be set to +YES+ or +NO+ (the default).
++  If set to +YES+, the download for that package will be attempted at
++  every build from scratch; any already downloaded archive is ignored
++  as if missing. This may help when a branch is specified in
++  +LIBFOO_VERSION+, and the head/tip of the branch is to be built, like
++  a CI pipeline would need for example. This still suffers from the
++  other issues listed above about using branches, though, the most
++  obvious being the *lack of reproducibility*. Besides, it has its own
++  pitfalls that one must be aware of as well:
++  ** when two builds are running in parallel on the same machine, there
++     is a TOCTOU race for each build to download and extract the archive,
++     so each build may not get what it downloaded, but what the other
++     build did download;
++  ** as a consequence, legal-info is not reliable when a package is
++     transient;
++  ** if a branch is pushed to an automated build bot (in a CI for
++     example), and then re-pushed to while the build is still in
++     progress, the build may get the wrong version of the branch.
++
+ * +LIBFOO_STRIP_COMPONENTS+ is the number of leading components
+   (directories) that tar must strip from file names on extraction.
+   The tarball for most packages has one leading component named
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index de619ba90a..58f202984f 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -108,6 +108,7 @@ define DOWNLOAD
+ 		-n '$($(2)_BASENAME_RAW)' \
+ 		-N '$($(2)_RAWNAME)' \
+ 		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
++		$(if $(filter YES,$($(2)_TRANSIENT_DOWNLOAD)),-F) \
+ 		$(if $($(2)_GIT_SUBMODULES),-r) \
+ 		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(2)),-u $(uri)) \
+ 		$(QUIET) \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 8cd5a7ff62..6a54c32e45 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -167,13 +167,7 @@ $(BUILD_DIR)/%/.stamp_downloaded:
+ 	@$(call step_start,download)
+ 	$(call prepare-per-package-directory,$($(PKG)_FINAL_DOWNLOAD_DEPENDENCIES))
+ 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+-# Only show the download message if it isn't already downloaded
+-	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
+-		if test ! -e $($(PKG)_DL_DIR)/`basename $$p` ; then \
+-			$(call MESSAGE,"Downloading") ; \
+-			break ; \
+-		fi ; \
+-	done
++	@$(call MESSAGE,"Downloading")
+ 	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p),$(PKG))$(sep))
+ 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)mkdir -p $(@D)
+@@ -577,10 +571,22 @@ ifndef $(2)_DL_OPTS
+  endif
+ endif
  
++ifndef $(2)_TRANSIENT_DOWNLOAD
++ ifdef $(3)_TRANSIENT_DOWNLOAD
++  $(2)_TRANSIENT_DOWNLOAD = $$($(3)_TRANSIENT_DOWNLOAD)
++ else
++  $(2)_TRANSIENT_DOWNLOAD = NO
++ endif
++endif
++
+ ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE_METHOD)),)
+ BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+ endif
  
- class TestLuajitUtf8(TestLuaBase):
-@@ -22,4 +22,4 @@ class TestLuajitUtf8(TestLuaBase):
++ifeq ($$(filter YES,$$($(2)_TRANSIENT_DOWNLOAD)),YES)
++BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
++endif
++
+ # Do not accept to download git submodule if not using the git method
+ ifneq ($$($(2)_GIT_SUBMODULES),)
+  ifneq ($$($(2)_SITE_METHOD),git)
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 3315bd410e..ab22ca7e4f 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -21,11 +21,12 @@ export BR_BACKEND_DL_GETOPTS=":hc:d:o:n:N:H:ru:qf:e"
  
-     def test_run(self):
-         self.login()
--        self.module_test("utf8")
-+        self.module_test("lua-utf8")
+ main() {
+     local OPT OPTARG
+-    local backend output hfile recurse quiet rc
++    local backend output hfile recurse quiet rc force
+     local -a uris
+ 
+     # Parse our options; anything after '--' is for the backend
+-    while getopts ":c:d:D:o:n:N:H:rf:u:q" OPT; do
++    force=false
++    while getopts ":c:d:D:o:n:N:H:rf:u:qF" OPT; do
+         case "${OPT}" in
+         c)  cset="${OPTARG}";;
+         d)  dl_dir="${OPTARG}";;
+@@ -38,6 +39,7 @@ main() {
+         f)  filename="${OPTARG}";;
+         u)  uris+=( "${OPTARG}" );;
+         q)  quiet="-q";;
++        F)  force=true;;
+         :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+         \?) error "unknown option '%s'\n" "${OPTARG}";;
+         esac
+@@ -67,7 +69,7 @@ main() {
+     # - matches all its hashes: do not download it again and exit promptly
+     # - fails at least one of its hashes: force a re-download
+     # - there's no hash (but a .hash file): consider it a hard error
+-    if [ -e "${output}" ]; then
++    if ! ${force} && [ -e "${output}" ]; then
+         if support/download/check-hash ${quiet} "${hfile}" "${output}" "${output##*/}"; then
+             exit 0
+         elif [ ${?} -ne 2 ]; then
+-- 
+2.20.1
