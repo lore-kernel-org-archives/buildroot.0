@@ -1,60 +1,44 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 27 Apr 2020 18:09:29 +0200
-Subject: [Buildroot] [PATCH 5/6] board/qemu/post-image.sh: start from a
- shell
-In-Reply-To: <20200426223325.1468127-5-romain.naour@gmail.com>
-References: <20200426223325.1468127-1-romain.naour@gmail.com>
- <20200426223325.1468127-5-romain.naour@gmail.com>
-Message-ID: <d499ec8a-9e8f-b900-04d2-654df9f8f9fb@gmail.com>
+From: Geoff Levand <geoff@infradead.org>
+Date: Mon, 27 Apr 2020 16:09:32 +0000
+Subject: [Buildroot] [PATCH v1 2/2] package/flannel: bump version to 0.12.0
+In-Reply-To: <cover.1588003514.git.geoff@infradead.org>
+References: <cover.1588003514.git.geoff@infradead.org>
+Message-ID: <e4d06c38e72920cfeae2209fa4edc0f7acb74017.1588003514.git.geoff@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+Bump flannel version from 0.5.5 to 0.12.0.
 
-Le 27/04/2020 ? 00:33, Romain Naour a ?crit?:
-> Usually the qemu command line start directly with "qemu-system-<arch> ...".
-> But the command line for qemu_arm_vexpress_tz_defconfig start by doing
-> "cd output/images && ../host/bin/qemu-system-arm". This is necessary
-> since boot binaries, except BL1, are primarily loaded via semi-hosting
-> so all binaries has to reside in the same directory as QEMU is started
-> from [1].
-> 
-> The start-qemu.sh script fail to start qemu since it use exec on the
-> "cd" command. To work around this issue, use "exec sh -c":
-> exec sh -c "${QEMU_CMD_LINE} \${EXTRA_ARGS}"
-> 
-> [1] https://github.com/ARM-software/arm-trusted-firmware/blob/4ebbea9592ab37fc62217d0ac62fa13a3e063527/docs/plat/qemu.rst
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  board/qemu/post-image.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/board/qemu/post-image.sh b/board/qemu/post-image.sh
-> index 9a4d216274..bf3e4df0b9 100755
-> --- a/board/qemu/post-image.sh
-> +++ b/board/qemu/post-image.sh
-> @@ -49,7 +49,7 @@ cat <<-_EOF_ > "${START_QEMU_SCRIPT}"
->  	fi
->  
->  	export PATH="${HOST_DIR}/bin:\${PATH}"
-> -	exec ${QEMU_CMD_LINE} \${EXTRA_ARGS}
-> +	exec sh -c "${QEMU_CMD_LINE} \${EXTRA_ARGS}"
+Signed-off-by: Geoff Levand <geoff@infradead.org>
+---
+ package/flannel/flannel.hash | 2 +-
+ package/flannel/flannel.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This patch is not ok as is since we need to escape double quotes from
-"${QEMU_CMD_LINE}
-
-example:
--append \"rootwait root=/dev/sda console=ttySC1,115200 noiotrap\"
-
-Best regards,
-Romain
-
->  _EOF_
->  
->  chmod +x "${START_QEMU_SCRIPT}"
-> 
+diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
+index 57c2daf6dc..8195140f8e 100644
+--- a/package/flannel/flannel.hash
++++ b/package/flannel/flannel.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 dbbcb08c0e70713b0c920387a9967e5b30ef833c8118c847edbbca4f68ff0562 v0.5.5.tar.gz
++sha256 7375318b288bcff733aabfe1a1007d478cb9091cdaffe68c8253ddd93bc070ed v0.12.0.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
+diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+index 0af06c7656..8aa960f086 100644
+--- a/package/flannel/flannel.mk
++++ b/package/flannel/flannel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLANNEL_VERSION = 0.5.5
++FLANNEL_VERSION = 0.12.0
+ FLANNEL_SITE = https://github.com/coreos/flannel/archive
+ FLANNEL_SOURCE = v$(FLANNEL_VERSION).tar.gz
+ 
+-- 
+2.20.1
