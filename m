@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 21:55:52 +0200
-Subject: [Buildroot] [git commit] package/kexec: bump version to 2.0.20
-Message-ID: <20200427194802.B7B6F90916@busybox.osuosl.org>
+Date: Mon, 27 Apr 2020 21:58:16 +0200
+Subject: [Buildroot] [git commit] package/flannel: bump version to 0.12.0
+Message-ID: <20200427194802.C072490917@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3a8afb9ab8280fca7181238f20ed221130c425f
+commit: https://git.buildroot.net/buildroot/commit/?id=d5ad2f9f5b8f0f1de0a5cc3bcf265c436d0872b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump kexec version from 2.0.18 to 2.0.20.
+Bump flannel version from 0.5.5 to 0.12.0.
 
 Signed-off-by: Geoff Levand <geoff@infradead.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kexec/kexec.hash | 2 +-
- package/kexec/kexec.mk   | 2 +-
+ package/flannel/flannel.hash | 2 +-
+ package/flannel/flannel.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-index f87692b689..302e079066 100644
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256 f020f07341977eb512663e301c2de60c6589e141467c16a8efd58243c0b2b238 kexec-tools-2.0.18.tar.xz
-+sha256 dad8077f0315445d1f6335579fc4ade222facf82a67124974c7be5303ba4f8c8 kexec-tools-2.0.20.tar.xz
- # locally calculated
- sha256 fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7 COPYING
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index b011c0b4e5..63fcc074b5 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
+diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
+index 57c2daf6dc..8195140f8e 100644
+--- a/package/flannel/flannel.hash
++++ b/package/flannel/flannel.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 dbbcb08c0e70713b0c920387a9967e5b30ef833c8118c847edbbca4f68ff0562 v0.5.5.tar.gz
++sha256 7375318b288bcff733aabfe1a1007d478cb9091cdaffe68c8253ddd93bc070ed v0.12.0.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
+diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+index 0af06c7656..8aa960f086 100644
+--- a/package/flannel/flannel.mk
++++ b/package/flannel/flannel.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KEXEC_VERSION = 2.0.18
-+KEXEC_VERSION = 2.0.20
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPL-2.0
+-FLANNEL_VERSION = 0.5.5
++FLANNEL_VERSION = 0.12.0
+ FLANNEL_SITE = https://github.com/coreos/flannel/archive
+ FLANNEL_SOURCE = v$(FLANNEL_VERSION).tar.gz
+ 
