@@ -1,45 +1,60 @@
-From: Geoff Levand <geoff@infradead.org>
-Date: Mon, 27 Apr 2020 16:09:32 +0000
-Subject: [Buildroot] [PATCH v1 1/2] package/kexec: bump version to 2.0.20
-In-Reply-To: <cover.1588003514.git.geoff@infradead.org>
-References: <cover.1588003514.git.geoff@infradead.org>
-Message-ID: <d54561126b007de1fb1c2b1f2e4cb77f347f8209.1588003514.git.geoff@infradead.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 27 Apr 2020 18:09:29 +0200
+Subject: [Buildroot] [PATCH 5/6] board/qemu/post-image.sh: start from a
+ shell
+In-Reply-To: <20200426223325.1468127-5-romain.naour@gmail.com>
+References: <20200426223325.1468127-1-romain.naour@gmail.com>
+ <20200426223325.1468127-5-romain.naour@gmail.com>
+Message-ID: <d499ec8a-9e8f-b900-04d2-654df9f8f9fb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump kexec version from 2.0.18 to 2.0.20.
+Hi Yann, All,
 
-Signed-off-by: Geoff Levand <geoff@infradead.org>
----
- package/kexec/kexec.hash | 2 +-
- package/kexec/kexec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Le 27/04/2020 ? 00:33, Romain Naour a ?crit?:
+> Usually the qemu command line start directly with "qemu-system-<arch> ...".
+> But the command line for qemu_arm_vexpress_tz_defconfig start by doing
+> "cd output/images && ../host/bin/qemu-system-arm". This is necessary
+> since boot binaries, except BL1, are primarily loaded via semi-hosting
+> so all binaries has to reside in the same directory as QEMU is started
+> from [1].
+> 
+> The start-qemu.sh script fail to start qemu since it use exec on the
+> "cd" command. To work around this issue, use "exec sh -c":
+> exec sh -c "${QEMU_CMD_LINE} \${EXTRA_ARGS}"
+> 
+> [1] https://github.com/ARM-software/arm-trusted-firmware/blob/4ebbea9592ab37fc62217d0ac62fa13a3e063527/docs/plat/qemu.rst
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  board/qemu/post-image.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/board/qemu/post-image.sh b/board/qemu/post-image.sh
+> index 9a4d216274..bf3e4df0b9 100755
+> --- a/board/qemu/post-image.sh
+> +++ b/board/qemu/post-image.sh
+> @@ -49,7 +49,7 @@ cat <<-_EOF_ > "${START_QEMU_SCRIPT}"
+>  	fi
+>  
+>  	export PATH="${HOST_DIR}/bin:\${PATH}"
+> -	exec ${QEMU_CMD_LINE} \${EXTRA_ARGS}
+> +	exec sh -c "${QEMU_CMD_LINE} \${EXTRA_ARGS}"
 
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-index f87692b689..16b2e1aa4d 100644
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256 f020f07341977eb512663e301c2de60c6589e141467c16a8efd58243c0b2b238 kexec-tools-2.0.18.tar.xz
-+sha256 dad8077f0315445d1f6335579fc4ade222facf82a67124974c7be5303ba4f8c8  kexec-tools-2.0.20.tar.xz
- # locally calculated
- sha256 fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7 COPYING
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index b011c0b4e5..63fcc074b5 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KEXEC_VERSION = 2.0.18
-+KEXEC_VERSION = 2.0.20
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPL-2.0
--- 
-2.20.1
+This patch is not ok as is since we need to escape double quotes from
+"${QEMU_CMD_LINE}
+
+example:
+-append \"rootwait root=/dev/sda console=ttySC1,115200 noiotrap\"
+
+Best regards,
+Romain
+
+>  _EOF_
+>  
+>  chmod +x "${START_QEMU_SCRIPT}"
+> 
