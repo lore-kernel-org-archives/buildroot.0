@@ -1,43 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 07:35:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-bsdiff4: new packge
-In-Reply-To: <CALFsTFWmorvAwBK5t44rdX8u2uux+isunOB8M4irPvGBMUnGiA@mail.gmail.com>
-References: <20200227204335.25823-1-asafka7@gmail.com>
- <20200425225358.1dcd475b@windsurf.home>
- <CALFsTFWmorvAwBK5t44rdX8u2uux+isunOB8M4irPvGBMUnGiA@mail.gmail.com>
-Message-ID: <20200427073510.7b889f25@windsurf.home>
+Date: Mon, 27 Apr 2020 07:46:49 +0200
+Subject: [Buildroot] [PATCH] package/ibm-sw-tpm2: add patch to fix build
+ issues on several architectures
+Message-ID: <20200427054649.1666163-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+src/LibSupport.h has some logic to find the wordsize of the current
+architecture, using an explicit list of CPU architectures. This makes
+the build fail on a number of CPU architectures that are not
+explicitly handled.
 
-On Sun, 26 Apr 2020 21:03:04 +0300
-Asaf Kahlon <asafka7@gmail.com> wrote:
+Let's instead use the __WORDSIZE definition of the C library, which is
+guaranteed to be available for all CPU architectures.
 
-> > Could you try to clarify what is the license of this package ? It would
-> > be really good for PyPi to be a bit more "strict" in the description of
-> > the licenses.  
-> Thanks for the reply!
-> I privately contacted the maintainer of the package and he told me he released
-> the package under BSD-2-Clause (as in the current patch).
-> Moreover, according to spdx_lookup, it has 90.5% confidence that BSD-2-Clause
-> is the type of the license file committed in the repo (which, as
-> stated in the commit
-> message, unfortunately isn't shipped with the package).
-> 
-> Do you want to apply the current version of the patch?
-> Do you have any other suggestion?
+Fixes:
 
-If you are in contact with the maintainer, it would be nice if he could
-add an explicit "LICENSE" file that clarifies the license.
+  http://autobuild.buildroot.net/results/a235345477ea2ec3b0dd4ffed4d7667d46caec48/
 
-Thanks a lot!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-Use-__WORDSIZE-to-define-RADIX_BITS.patch | 44 +++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch
 
-Thomas
+diff --git a/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch b/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch
+new file mode 100644
+index 0000000000..a19160f68c
+--- /dev/null
++++ b/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch
+@@ -0,0 +1,44 @@
++From 24a352fc99ebde22235b05b18615817ef7f4263c Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 26 Apr 2020 15:33:39 +0200
++Subject: [PATCH] Use __WORDSIZE to define RADIX_BITS
++
++This allows to avoid having to support each CPU architecture
++individually.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/LibSupport.h | 17 +++--------------
++ 1 file changed, 3 insertions(+), 14 deletions(-)
++
++diff --git a/src/LibSupport.h b/src/LibSupport.h
++index b2e6a51..f064d20 100644
++--- a/src/LibSupport.h
+++++ b/src/LibSupport.h
++@@ -64,20 +64,9 @@
++ #ifndef _LIB_SUPPORT_H_
++ #define _LIB_SUPPORT_H_
++ 
++-#ifndef RADIX_BITS
++-#   if defined(__x86_64__) || defined(__x86_64)				\
++-    || defined(__amd64__) || defined(__amd64) || defined(_WIN64) || defined(_M_X64) \
++-    || defined(_M_ARM64) || defined(__aarch64__) \
++-    || defined(__powerpc64__) || defined(__ppc64__)
++-#       define RADIX_BITS                      64
++-#   elif defined(__i386__) || defined(__i386) || defined(i386)		\
++-    || defined(_WIN32) || defined(_M_IX86)				\
++-    || defined(_M_ARM) || defined(__arm__) || defined(__thumb__)
++-#       define RADIX_BITS                      32
++-#   else
++-#       error Unable to determine RADIX_BITS from compiler environment
++-#   endif
++-#endif // RADIX_BITS
+++#include <limits.h>
+++
+++#define RADIX_BITS __WORDSIZE
++ 
++ // These macros use the selected libraries to the proper include files.
++ #define LIB_QUOTE(_STRING_) #_STRING_
++-- 
++2.25.3
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.3
