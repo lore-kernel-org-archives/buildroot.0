@@ -1,54 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 22:11:33 +0200
-Subject: [Buildroot] [git commit] package/cegui: disable ogre support
-Message-ID: <20200427195650.B20899092E@busybox.osuosl.org>
+Date: Mon, 27 Apr 2020 22:15:17 +0200
+Subject: [Buildroot] [PATCH] package/ebtables: bump to version 2.0.11
+In-Reply-To: <CALq67GAv1jE5y2qoD5JSqt=oUFTAM3zeEoRVkajFijuWw51tqQ@mail.gmail.com>
+References: <20200426132940.25969-1-ryanbarnett3@gmail.com>
+ <20200427212303.4b4cb6ab@windsurf.home>
+ <CALq67GAv1jE5y2qoD5JSqt=oUFTAM3zeEoRVkajFijuWw51tqQ@mail.gmail.com>
+Message-ID: <20200427221517.29e4eb7d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b48e419af0bd3786580151d26b8a9b11441c1db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 27 Apr 2020 15:02:44 -0500
+Ryan Barnett <ryanbarnett3@gmail.com> wrote:
 
-Buildroot's ogre version isn't compatible with current (v0-8-7) cegui
-therefore disable support for that. It will be restored when upstream will
-switch to the new version.
+> Thomas,
+> 
+> On Mon, Apr 27, 2020 at 2:23 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > On Sun, 26 Apr 2020 08:29:40 -0500
+> > Ryan Barnett <ryanbarnett3@gmail.com> wrote:
+> >  
+> > > With the version bump to 2.0.11, ebtables switch to autotools build
+> > > system. In addition, ebtables-{restore/save} moved to being installed
+> > > as ebtables-legacy-{restore/save}.
+> > >
+> > > Changes to support this version bump include:
+> > >
+> > >  * Utilize configure options for static library support
+> > >  * Remove ebtables-restore config option as configure scripts checks
+> > >    dependencies for ebtables-legacy-restore.  
+> >
+> > This does not really explain why we remove this option. What checks are
+> > done? Why do these checks mean we have to remove this option?  
+> 
+> The configure script (autotools) provides support for:
+> 
+> --enable-static
+> or
+> --enabled-shared
+> 
+> This enables building of static libraries from the config.log:
+> 
+> configure:12059: checking whether to build shared libraries
+> configure:12084: result: no
+> configure:12087: checking whether to build static libraries
+> configure:12091: result: yes
+> 
+> Will updated the commit message to reflect this.
 
-Fixes:
-  - http://autobuild.buildroot.net/results/8ee717ac4d596fc0af274037841ac4ed6862ddaa/
+My question was not about static/shared, but about ebtables-restore.
+BTW, --enable-static/--enable-shared is handled by the
+autotools-package infra in a generic way.
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/cegui/cegui.mk | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+> > I think it's a bit annoying to have an option for the "save" tool but
+> > not the corresponding option for the "restore" tool.  
+> 
+> Would the better option be to move both config options to legacy and
+> select bash when ebtables is selected?
 
-diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
-index 434201b1f8..673340194a 100644
---- a/package/cegui/cegui.mk
-+++ b/package/cegui/cegui.mk
-@@ -10,7 +10,8 @@ CEGUI_LICENSE = MIT
- CEGUI_LICENSE_FILES = COPYING
- CEGUI_INSTALL_STAGING = YES
- CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_XERCES=OFF \
--		   -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF
-+		   -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF \
-+		   -DCEGUI_BUILD_RENDERER_OGRE=OFF
- CEGUI_DEPENDENCIES = glm \
- 		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
- 		$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
-@@ -25,13 +26,6 @@ else
- CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_OGRE),y)
--CEGUI_DEPENDENCIES += ogre
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_RENDERER_OGRE=ON
--else
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_RENDERER_OGRE=OFF
--endif
--
- ifeq ($(BR2_PACKAGE_EXPAT),y)
- CEGUI_DEPENDENCIES += expat
- CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_EXPAT=ON
+It's always a bit annoying to force bash when it's only needed by a
+script that may not even be necessary.
+
+> ebtables has renamed ebtables-{save/restore} to
+> ebtables-legacy-{save/restore}. ebtables-legacy-save would then be
+> replaced by the bash script which is currently being patch in by
+> default.
+> 
+> http://git.netfilter.org/ebtables/commit/?id=6218f812d894fdd733d95c3c86b385f6f223a36a
+
+Why not simply preserve both options, and keep things working like they
+are today, of course with the installed binaries having a different
+name (ebtables-legacy-<foo>) ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
