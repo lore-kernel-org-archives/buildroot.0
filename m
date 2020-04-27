@@ -1,30 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 22:27:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/waf: bump to version 2.0.20
-In-Reply-To: <20200427092720.16214-1-titouan.christophe@railnova.eu>
-References: <20200427092720.16214-1-titouan.christophe@railnova.eu>
-Message-ID: <20200427222703.1bcbe9c2@windsurf.home>
+Date: Mon, 27 Apr 2020 22:27:26 +0200
+Subject: [Buildroot] [git commit] package/libarchive: add mbedtls support
+Message-ID: <20200427201243.02C3E90952@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 27 Apr 2020 11:27:20 +0200
-Titouan Christophe <titouan.christophe@railnova.eu> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=66f8ed24db27ee66f2ef5953e7c22e8e0db0383e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Also switch to the new 2 spaces convention for the hash file
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> ---
->  package/waf/waf.hash | 4 ++--
->  package/waf/waf.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libarchive/libarchive.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 89eeffe92e..4aabbea560 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -9,7 +9,6 @@ LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
+ LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
+ LIBARCHIVE_LICENSE_FILES = COPYING
+-LIBARCHIVE_CONF_OPTS = --without-mbedtls
+ 
+ ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
+ ifeq ($(BR2_STATIC_LIBS),y)
+@@ -92,6 +91,13 @@ else
+ LIBARCHIVE_CONF_OPTS += --without-lzo2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++LIBARCHIVE_DEPENDENCIES += mbedtls
++LIBARCHIVE_CONF_OPTS += --with-mbedtls
++else
++LIBARCHIVE_CONF_OPTS += --without-mbedtls
++endif
++
+ ifeq ($(BR2_PACKAGE_NETTLE),y)
+ LIBARCHIVE_DEPENDENCIES += nettle
+ LIBARCHIVE_CONF_OPTS += --with-nettle
