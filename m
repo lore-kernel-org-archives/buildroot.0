@@ -1,44 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 21:58:16 +0200
-Subject: [Buildroot] [git commit] package/flannel: bump version to 0.12.0
-Message-ID: <20200427194802.C072490917@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 27 Apr 2020 20:02:55 +0000
+Subject: [Buildroot] [Bug 12821] New: Vagrantfile in download page still
+ points to 2020.02
+Message-ID: <bug-12821-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5ad2f9f5b8f0f1de0a5cc3bcf265c436d0872b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=12821
 
-Bump flannel version from 0.5.5 to 0.12.0.
+            Bug ID: 12821
+           Summary: Vagrantfile in download page still points to 2020.02
+           Product: buildroot
+           Version: 2020.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: phernandez at luxoft.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Geoff Levand <geoff@infradead.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/flannel/flannel.hash | 2 +-
- package/flannel/flannel.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I followed the instructions inside the Buildroot user manual and in section 3,
+it asks you to get the Vagrantfile  from
+https://buildroot.org/downloads/Vagrantfile but this is still pointing to
+2020.02 and should be pointing to 2020.02.1
 
-diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
-index 57c2daf6dc..8195140f8e 100644
---- a/package/flannel/flannel.hash
-+++ b/package/flannel/flannel.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 dbbcb08c0e70713b0c920387a9967e5b30ef833c8118c847edbbca4f68ff0562 v0.5.5.tar.gz
-+sha256 7375318b288bcff733aabfe1a1007d478cb9091cdaffe68c8253ddd93bc070ed v0.12.0.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
-diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
-index 0af06c7656..8aa960f086 100644
---- a/package/flannel/flannel.mk
-+++ b/package/flannel/flannel.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLANNEL_VERSION = 0.5.5
-+FLANNEL_VERSION = 0.12.0
- FLANNEL_SITE = https://github.com/coreos/flannel/archive
- FLANNEL_SOURCE = v$(FLANNEL_VERSION).tar.gz
- 
+2020.02 is not able to compile using the config file from
+freescale_imx8mmevk_defconfig, it end up with the next error without image
+creation:
+
+remote: Enumerating objects: 54171, done.
+remote: Counting objects: 100% (54171/54171), done.
+remote: Compressing objects: 100% (9304/9304), done.
+error: cannot fork() for index-pack: Cannot allocate memory
+fatal: fetch-pack: unable to fork off index-pack
+Detected a corrupted git cache.
+This is the second time in a row; bailing out
+--2020-04-24 22:54:26-- 
+http://sources.buildroot.net/linux/linux-rel_imx_4.14.98_2.0.0_ga.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 104.26.1.37,
+104.26.0.37, 2606:4700:20::681a:125, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|104.26.1.37|:80...
+connected.
+HTTP request sent, awaiting response... 404 Not Found
+2020-04-24 22:54:26 ERROR 404: Not Found.
+
+--2020-04-24 22:54:26-- 
+http://sources.buildroot.net/linux-rel_imx_4.14.98_2.0.0_ga.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 104.26.0.37,
+104.26.1.37, 2606:4700:20::681a:25, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|104.26.0.37|:80...
+connected.
+HTTP request sent, awaiting response... 404 Not Found
+2020-04-24 22:54:27 ERROR 404: Not Found.
+
+package/pkg-generic.mk:167: recipe for target
+'/home/vagrant/Gemini/test_capxl_daemons_for_gemini/capxl/output/build/linux-headers-rel_imx_4.14.98_2.0.0_ga/.stamp_downloaded'
+failed
+make[1]: ***
+[/home/vagrant/Gemini/test_capxl_daemons_for_gemini/capxl/output/build/linux-headers-rel_imx_4.14.98_2.0.0_ga/.stamp_downloaded]
+Error 1
+Makefile:84: recipe for target '_all' failed
+make: *** [_all] Error 2
+
+This is not happening in version 2020.02.1
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
