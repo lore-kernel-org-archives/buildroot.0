@@ -1,38 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Apr 2020 22:25:55 +0200
-Subject: [Buildroot] [PATCH 0/2] tz: bump to version 2020a
-In-Reply-To: <20200427071144.30237-1-post@lespocky.de>
-References: <20200427071144.30237-1-post@lespocky.de>
-Message-ID: <20200427202555.GA11346@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Apr 2020 22:26:40 +0200
+Subject: [Buildroot] [git commit] package/waf: bump to version 2.0.20
+Message-ID: <20200427201157.8C2A19094A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b3d3e5888b343214233aba30ad70815bfee5a368
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-27 09:11 +0200, Alexander Dahl spake thusly:
-> Hello everyone,
-> 
-> the 2020a release of the timezone database tz code and data is
-> available ? announcement here:
+Also switch to the new 2 spaces convention for the hash file
 
-Series applied to master, thanks.
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/waf/waf.hash | 4 ++--
+ package/waf/waf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> https://mm.icann.org/pipermail/tz-announce/2020-April/000058.html
-> 
-> Nice to have for stable.
-
-This will ahve to be picked up by Peter, if he sees fit...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/waf/waf.hash b/package/waf/waf.hash
+index 572562cf92..15db32f384 100644
+--- a/package/waf/waf.hash
++++ b/package/waf/waf.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha1    d857c29d49848e0fc42e69daa25e0ec2e732ac17                          waf-2.0.19
+-sha256  ba63c90a865a9bcf46926c4e6776f9a3f73d29f33d49b7f61f96bc37b7397cef  waf-2.0.19
++sha1  92212071a63ce38fdfd69fb8332f04e84d1f6635  waf-2.0.20
++sha256  bf971e98edc2414968a262c6aa6b88541a26c3cd248689c89f4c57370955ee7f  waf-2.0.20
+diff --git a/package/waf/waf.mk b/package/waf/waf.mk
+index ae3eb0f1ed..56b6d9e033 100644
+--- a/package/waf/waf.mk
++++ b/package/waf/waf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAF_VERSION = 2.0.19
++WAF_VERSION = 2.0.20
+ WAF_SOURCE = waf-$(WAF_VERSION)
+ WAF_SITE = https://waf.io
+ 
