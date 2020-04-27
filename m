@@ -1,49 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 21:35:52 +0200
-Subject: [Buildroot] [Buildroot 2020.02.1] Problems with x86_64-jaguar
- buildroot-toolchain-built kernel
-In-Reply-To: <BL0PR10MB286624EC6E8417F3DA28E257FFAF0@BL0PR10MB2866.namprd10.prod.outlook.com>
-References: <BL0PR10MB2866A594CDE0E5FD74BC767BFFAE0@BL0PR10MB2866.namprd10.prod.outlook.com>
- <BL0PR10MB286624EC6E8417F3DA28E257FFAF0@BL0PR10MB2866.namprd10.prod.outlook.com>
-Message-ID: <20200427213552.57ea2ac7@windsurf.home>
+Date: Mon, 27 Apr 2020 21:41:13 +0200
+Subject: [Buildroot] [git commit] package/meson: bump to version 0.54.1
+Message-ID: <20200427192631.DD17F908EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cb3c480ffc12d925c1835bb75965cb96e7ef4907
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 27 Apr 2020 06:49:35 +0000
-"Olivier, Alain [COMRES/EUR/BLU]" <Alain.Olivier@Emerson.com> wrote:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> I am experiencing the following problem when building a basic environment for a board running on a AMD GX-222GC (should be Jaguar subarch).
-> The default external toolchain is amd-2016.11-19 from CodeBench. Kernel built with that toolchain boots correctly.
-> Instead, if I build the same kernel, same configuration, with the toolchain built by buildroot, the kernel doen not boot! Not even a kernel panic, machine just resets.
-
-I assume you are the person who also asked the same question on StackOverflow:
-
-  https://stackoverflow.com/questions/61457023/why-is-my-kernel-resetting-my-machine-immediately
-
-The critical bit of information missing in your e-mail, but that you
-gave as a reply on stack overflow is that you are testing on 4.4.57.
-
-However, there was an issue in Linux where using a toolchain that uses
-binutils >= 2.31 would generate a non-bootable kernel. This was fixed
-upstream, and then backported to the 4.4.x stable branch in commit:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=073bb7ddd35ca8f17a170258dacbe384935a43c8
-
-This commit is available in the 4.4.x branch as of 4.4.124.
-
-How do I immediately know that? I debugged exactly this issue last
-week, where a Linux 4.4.39 built with Buildroot 2019.11 was booting
-fine, but not built with Buildroot 2020.02 :-)
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index bbb031957b..1fb902742d 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.54.0/meson-0.54.0.tar.gz.asc
+-sha256  dde5726d778112acbd4a67bb3633ab2ee75d33d1e879a6283a7b4a44c3363c27  meson-0.54.0.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.54.1/meson-0.54.1.tar.gz.asc
++sha256  2f76fb4572762be13ee479292610091b4509af5788bcceb391fe222bcd0296dc  meson-0.54.1.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 2e6c4cea71..fea2807d9f 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 0.54.0
++MESON_VERSION = 0.54.1
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
