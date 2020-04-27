@@ -1,67 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 21:08:49 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: add option to define custom
- dependencies
-In-Reply-To: <794007695.ejsOJfsjEF@diego>
-References: <20200425000629.2068191-1-heiko@sntech.de>
- <20200427174108.6f7f8e86@windsurf.home>
- <bd6aea3f-408b-a1b2-5d54-89da4db5f4ae@mind.be>
- <794007695.ejsOJfsjEF@diego>
-Message-ID: <20200427210849.436f0a53@windsurf.home>
+Date: Mon, 27 Apr 2020 21:23:03 +0200
+Subject: [Buildroot] [PATCH] package/ebtables: bump to version 2.0.11
+In-Reply-To: <20200426132940.25969-1-ryanbarnett3@gmail.com>
+References: <20200426132940.25969-1-ryanbarnett3@gmail.com>
+Message-ID: <20200427212303.4b4cb6ab@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 27 Apr 2020 20:19:45 +0200
-Heiko Stuebner <heiko.stuebner@theobroma-systems.com> wrote:
+On Sun, 26 Apr 2020 08:29:40 -0500
+Ryan Barnett <ryanbarnett3@gmail.com> wrote:
 
-> Am Montag, 27. April 2020, 18:59:51 CEST schrieb Arnout Vandecappelle:
-> > On 27/04/2020 17:41, Thomas Petazzoni wrote:  
-> > > Thanks. Should I nevertheless introduce the PYLIBFDT_PYTHON3 and
-> > > PYELFTOOLS_PYTHON3 options, in addition to this ? Or do we for these
-> > > new use cases favor using only the CUSTOM_DEPENDENCIES solution ?  
-> > 
-> >  Given how controversial this new option is, I guess it's better to add the
-> > -python3 options.  
+> With the version bump to 2.0.11, ebtables switch to autotools build
+> system. In addition, ebtables-{restore/save} moved to being installed
+> as ebtables-legacy-{restore/save}.
 > 
-> personally I imagined CUSTOM_DEPENDENCIES to _not_ be preferred
-> over standard options.
+> Changes to support this version bump include:
+> 
+>  * Utilize configure options for static library support
+>  * Remove ebtables-restore config option as configure scripts checks
+>    dependencies for ebtables-legacy-restore.
 
-Indeed, they are not necessarily mutually exclusive.
+This does not really explain why we remove this option. What checks are
+done? Why do these checks mean we have to remove this option?
 
-> I.e. things like BR2_TARGET_UBOOT_NEEDS_ATF_BL31 come with their
-> own special handling for example for including the bl31 binary into the
-> build.
-
-NEEDS_ATF_BL31 indeed does more than adding dependencies. But:
-
-ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
-UBOOT_DEPENDENCIES += host-dtc
-endif
-
-ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)
-UBOOT_DEPENDENCIES += host-python host-swig
-endif
-
-ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS),y)
-UBOOT_DEPENDENCIES += host-python-pyelftools
-endif
-
-ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSSL),y)
-UBOOT_DEPENDENCIES += host-openssl
-endif
-
-ifeq ($(BR2_TARGET_UBOOT_NEEDS_LZOP),y)
-UBOOT_DEPENDENCIES += host-lzop
-endif
-
-is really all about adding dependencies, and we need two more.
-
-But OK, I'll cook a patch to support the Python 3.x situation.
-
-Thanks!
+I think it's a bit annoying to have an option for the "save" tool but
+not the corresponding option for the "restore" tool.
 
 Thomas
 -- 
