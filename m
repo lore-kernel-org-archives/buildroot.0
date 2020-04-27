@@ -1,93 +1,154 @@
 From: Xavier Roumegue <xroumegue@gmail.com>
-Date: Mon, 27 Apr 2020 23:34:00 +0200
-Subject: [Buildroot] [PATCH 1/3] board/freescale/imx: Add helper to generate
- fw binary
-Message-ID: <20200427213402.6148-1-xroumegue@gmail.com>
+Date: Mon, 27 Apr 2020 23:34:01 +0200
+Subject: [Buildroot] [PATCH 2/3] configs/imx8mmevk: new defconfig
+In-Reply-To: <20200427213402.6148-1-xroumegue@gmail.com>
+References: <20200427213402.6148-1-xroumegue@gmail.com>
+Message-ID: <20200427213402.6148-2-xroumegue@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This script aims to create an imx compatible boot image embedding
-mainline components, using only upstream uboot mkimage tool, avoiding
-dependencies on proprietary imx mkimage.
+Introduce NXP imx8mm evk board configuration that uses mainline atf,
+uboot and kernel.
 
-Mainline u-boot can generate a bootable image, but SPL soc proprietary
-firmware dependencies have to be copied on uboot root dir.
-
-This script prevents additional buildroot uboot recipe hacking to handle
-custom SoC uboot build process.
-
-The script actions summary is:
-- Append DDR4 firmware to uboot spl binary
-- Generate imx mkimage configuration file, extracting entry points from
-  relevant elf files on the fly.
-- Generate imx boot image using uboot upstream mkimage tool
+Mainline uboot mkimage tool generates the boot image.
 
 Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
+Tested-by: Julien Olivain <juju@cotds.org>
 ---
- .../common/imx/imx8-generate-fw-image.sh      | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100755 board/freescale/common/imx/imx8-generate-fw-image.sh
+ .gitlab-ci.yml                       |  1 +
+ DEVELOPERS                           |  3 +++
+ board/freescale/imx8mmevk/readme.txt | 35 ++++++++++++++++++++++--
+ configs/imx8mmevk_defconfig          | 40 ++++++++++++++++++++++++++++
+ 4 files changed, 77 insertions(+), 2 deletions(-)
+ create mode 100644 configs/imx8mmevk_defconfig
 
-diff --git a/board/freescale/common/imx/imx8-generate-fw-image.sh b/board/freescale/common/imx/imx8-generate-fw-image.sh
-new file mode 100755
-index 0000000000..eb9e96265b
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index fa8e077a07..0a348d35ac 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -210,6 +210,7 @@ imx6ulevk_defconfig: { extends: .defconfig }
+ imx6ulpico_defconfig: { extends: .defconfig }
+ imx7d-sdb_defconfig: { extends: .defconfig }
+ imx7dpico_defconfig: { extends: .defconfig }
++imx8mmevk_defconfig: { extends: .defconfig }
+ imx8mmpico_defconfig: { extends: .defconfig }
+ imx8mpico_defconfig: { extends: .defconfig }
+ lafrite_defconfig: { extends: .defconfig }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 34e19b451e..aa9504d25f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2637,6 +2637,9 @@ F:	package/python-pyusb/
+ N:	Wojciech Nizi?ski <niziak@spox.org>
+ F:	package/fwup/
+ 
++N:	Xavier Roumegue <xroumegue@gmail.com>
++F:	configs/imx8mmevk_defconfig
++
+ N:	Yann E. MORIN <yann.morin.1998@free.fr>
+ F:	board/friendlyarm/nanopi-neo/
+ F:	configs/nanopi_neo_defconfig
+diff --git a/board/freescale/imx8mmevk/readme.txt b/board/freescale/imx8mmevk/readme.txt
+index 7b69405d30..e695dbe779 100644
+--- a/board/freescale/imx8mmevk/readme.txt
++++ b/board/freescale/imx8mmevk/readme.txt
+@@ -5,8 +5,8 @@ Freescale i.MX8MM EVK board
+ This file documents the Buildroot support for the Freescale i.MX8MM
+ EVK board.
+ 
+-Build
+-=====
++Building with NXP ATF, U-Boot and kernel
++========================================
+ 
+ First, configure Buildroot for the i.MX8MM EVK board:
+ 
+@@ -32,6 +32,37 @@ You will find in output/images/ the following files:
+   - u-boot-nodtb.bin
+   - u-boot-spl-ddr.bin
+ 
++Building with mainline ATF, U-Boot and kernel
++=============================================
++First, configure Buildroot for the i.MX8MM EVK board:
++
++  make imx8mmevk_defconfig
++
++Build all components:
++
++  make
++
++You will find in output/images/ the following files:
++    - bl31.bin
++    - bootimage.cfg
++    - boot.vfat
++    - Image
++    - imx8-boot-sd.bin
++    - imx8mm-evk.dtb
++    - lpddr4_pmu_train_fw.bin
++    - rootfs.ext2
++    - rootfs.ext4
++    - rootfs.tar
++    - sdcard.img
++    - signed_hdmi_imx8m.bin
++    - u-boot
++    - u-boot.bin
++    - u-boot.itb
++    - u-boot-nodtb.bin
++    - u-boot-spl
++    - u-boot-spl.bin
++    - u-boot-spl-ddr.bin
++
+ Create a bootable SD card
+ =========================
+ 
+diff --git a/configs/imx8mmevk_defconfig b/configs/imx8mmevk_defconfig
+new file mode 100644
+index 0000000000..5b2b11b1c6
 --- /dev/null
-+++ b/board/freescale/common/imx/imx8-generate-fw-image.sh
-@@ -0,0 +1,52 @@
-+#!/usr/bin/env bash
-+
-+get_entry()
-+{
-+    local elf_file=$1
-+    readelf -h "$elf_file" | sed -e '/Entry/!d;s/.*:.*\(0x[0-9a-fA-F]\)/\1/g'
-+}
-+
-+gen_cfg_file()
-+{
-+cat <<EOF > "$CFG_OUTFILE"
-+#define __ASSEMBLY__
-+
-+FIT
-+BOOT_FROM	sd
-+LOADER		${SPL_DDR_BIN}	${SPL_ENTRY}
-+SECOND_LOADER	${UBOOT_BIN}		${UBOOT_ENTRY} 0x60000
-+
-+EOF
-+}
-+
-+gen_1stloader_bin()
-+{
-+    SPL_BIN_PAD="$(mktemp --suffix spl_pad.bin)"
-+    dd if="${SPL_BIN}" of="${SPL_BIN_PAD}"  bs=4 conv=sync
-+    cat "${SPL_BIN_PAD}" "${DDR_FW_BIN}" > "${SPL_DDR_BIN}"
-+}
-+
-+gen_fw_image()
-+{
-+    "${HOST_DIR}"/bin/mkimage -n "${CFG_OUTFILE}" -T imx8mimage -e "${SPL_ENTRY}" -d "${UBOOT_BIN}" "${FLASH_BIN}"
-+
-+}
-+main()
-+{
-+    UBOOT_BIN="${BINARIES_DIR}/u-boot.itb"
-+    UBOOT_ELF="${BINARIES_DIR}/u-boot"
-+    SPL_DDR_BIN="${BINARIES_DIR}/u-boot-spl-ddr.bin"
-+    SPL_BIN="${BINARIES_DIR}/u-boot-spl.bin"
-+    SPL_ELF="${BINARIES_DIR}/u-boot-spl"
-+    CFG_OUTFILE="${BINARIES_DIR}/bootimage.cfg"
-+    FLASH_BIN="${BINARIES_DIR}/imx8-boot-sd.bin"
-+    UBOOT_ENTRY="$(get_entry "${UBOOT_ELF}")"
-+    SPL_ENTRY="$(get_entry "${SPL_ELF}")"
-+    DDR_FW_BIN="${BINARIES_DIR}/lpddr4_pmu_train_fw.bin"
-+
-+    gen_1stloader_bin
-+    gen_cfg_file
-+    gen_fw_image
-+}
-+
-+main "$@"
++++ b/configs/imx8mmevk_defconfig
+@@ -0,0 +1,40 @@
++BR2_aarch64=y
++BR2_ARM_FPU_VFPV3=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-generate-fw-image.sh board/freescale/common/imx/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.7"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
++BR2_PACKAGE_FIRMWARE_IMX=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.3"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_ELF=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin spl/u-boot-spl"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="ATF_LOAD_ADDR=0x920000"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
 -- 
 2.25.1
