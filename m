@@ -1,42 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 22:26:57 +0200
-Subject: [Buildroot] [PATCH] configs/qemu_sh4{,
- eb}-r2d: remove kernel patch "restore the old sh-sci driver
- behaviour"
-In-Reply-To: <20200427160544.1166301-1-romain.naour@gmail.com>
-References: <20200427160544.1166301-1-romain.naour@gmail.com>
-Message-ID: <20200427222657.07c22235@windsurf.home>
+Date: Mon, 27 Apr 2020 22:27:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/waf: bump to version 2.0.20
+In-Reply-To: <20200427092720.16214-1-titouan.christophe@railnova.eu>
+References: <20200427092720.16214-1-titouan.christophe@railnova.eu>
+Message-ID: <20200427222703.1bcbe9c2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 27 Apr 2020 18:05:44 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+On Mon, 27 Apr 2020 11:27:20 +0200
+Titouan Christophe <titouan.christophe@railnova.eu> wrote:
 
-> This reverts commit f7a887c3682282a281206bca61724a750c326b3d and
-> 23aee3eac497f15f901ddf99ab3aa81af747f7e5 since the kernel patch
-> is not needed as soon as qemu >= 3.1.0 is used with a kernel >=
-> 4.11-rc1.
+> Also switch to the new 2 spaces convention for the hash file
 > 
-> The qemu emulation of sh-sci driver was fixed by adding basic
-> timeout handling for 9600 bps [1].
-> 
-> [1] https://git.qemu.org/?p=qemu.git;a=commit;h=71bb4ce1b5592cdc03abc48cdf4ecb15b2db81a0
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 > ---
-> @Thomas: Removing this patch is ok for toolchain-builder since Ubuntu disco use qemu 3.1.x.
-> ---
->  ...-sci-increase-RX-FIFO-trigger-defaul.patch | 61 -------------------
->  ...-sci-increase-RX-FIFO-trigger-defaul.patch | 61 -------------------
->  configs/qemu_sh4_r2d_defconfig                |  1 -
->  configs/qemu_sh4eb_r2d_defconfig              |  1 -
->  4 files changed, 124 deletions(-)
->  delete mode 100644 board/qemu/sh4-r2d/patches/linux/0001-Revert-serial-sh-sci-increase-RX-FIFO-trigger-defaul.patch
->  delete mode 100644 board/qemu/sh4eb-r2d/patches/linux/0001-Revert-serial-sh-sci-increase-RX-FIFO-trigger-defaul.patch
+>  package/waf/waf.hash | 4 ++--
+>  package/waf/waf.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
