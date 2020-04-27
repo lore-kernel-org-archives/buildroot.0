@@ -1,46 +1,70 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 27 Apr 2020 20:54:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcec: bump version to 5.0.0
-Message-ID: <20200427185445.233090-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Apr 2020 21:08:49 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: add option to define custom
+ dependencies
+In-Reply-To: <794007695.ejsOJfsjEF@diego>
+References: <20200425000629.2068191-1-heiko@sntech.de>
+ <20200427174108.6f7f8e86@windsurf.home>
+ <bd6aea3f-408b-a1b2-5d54-89da4db5f4ae@mind.be>
+ <794007695.ejsOJfsjEF@diego>
+Message-ID: <20200427210849.436f0a53@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated license hash due to upstream commit:
-https://github.com/Pulse-Eight/libcec/commit/d5e5200ed1a998af24fa5290ad764e0a2ed086c6
+On Mon, 27 Apr 2020 20:19:45 +0200
+Heiko Stuebner <heiko.stuebner@theobroma-systems.com> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libcec/libcec.hash | 4 ++--
- package/libcec/libcec.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Am Montag, 27. April 2020, 18:59:51 CEST schrieb Arnout Vandecappelle:
+> > On 27/04/2020 17:41, Thomas Petazzoni wrote:  
+> > > Thanks. Should I nevertheless introduce the PYLIBFDT_PYTHON3 and
+> > > PYELFTOOLS_PYTHON3 options, in addition to this ? Or do we for these
+> > > new use cases favor using only the CUSTOM_DEPENDENCIES solution ?  
+> > 
+> >  Given how controversial this new option is, I guess it's better to add the
+> > -python3 options.  
+> 
+> personally I imagined CUSTOM_DEPENDENCIES to _not_ be preferred
+> over standard options.
 
-diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
-index c457ee7097..000a4f7b40 100644
---- a/package/libcec/libcec.hash
-+++ b/package/libcec/libcec.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 035c617e48e14b1d70c503c5fefce42142198e36fefa0f8b01f0228df65edb52  libcec-91da1b6d5daecd3c85a1ac06d325ee4554f69b83.tar.gz
--sha256 3618005b3db4eb8ede7292d233e6c41605cb8dcbd33e8790eff6e29c1e4f3789  COPYING
-+sha256  7c6ef02f39918ac88a3dac8ea35021f6c4b4b695df9204b3ac9faca673c706cc  libcec-5.0.0.tar.gz
-+sha256  0137261d24ce001fc5237aacddd267533e0f150ac23cf21acffea599f7358f7a  COPYING
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index e85fd6a4d3..8c0981e488 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBCEC_VERSION = 91da1b6d5daecd3c85a1ac06d325ee4554f69b83
--LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
-+LIBCEC_VERSION = 5.0.0
-+LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
- LIBCEC_LICENSE = GPL-2.0+
- LIBCEC_LICENSE_FILES = COPYING
- 
+Indeed, they are not necessarily mutually exclusive.
+
+> I.e. things like BR2_TARGET_UBOOT_NEEDS_ATF_BL31 come with their
+> own special handling for example for including the bl31 binary into the
+> build.
+
+NEEDS_ATF_BL31 indeed does more than adding dependencies. But:
+
+ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
+UBOOT_DEPENDENCIES += host-dtc
+endif
+
+ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)
+UBOOT_DEPENDENCIES += host-python host-swig
+endif
+
+ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS),y)
+UBOOT_DEPENDENCIES += host-python-pyelftools
+endif
+
+ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSSL),y)
+UBOOT_DEPENDENCIES += host-openssl
+endif
+
+ifeq ($(BR2_TARGET_UBOOT_NEEDS_LZOP),y)
+UBOOT_DEPENDENCIES += host-lzop
+endif
+
+is really all about adding dependencies, and we need two more.
+
+But OK, I'll cook a patch to support the Python 3.x situation.
+
+Thanks!
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
