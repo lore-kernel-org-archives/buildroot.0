@@ -1,49 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 22:10:54 +0200
-Subject: [Buildroot] [PATCH] support/testing: test_lua_utf8: fix test
- after bump to lua-utf8 0.1.2
-In-Reply-To: <20200427165759.18091-1-francois.perrad@gadz.org>
-References: <20200427165759.18091-1-francois.perrad@gadz.org>
-Message-ID: <20200427221054.26c93a52@windsurf.home>
+Date: Mon, 27 Apr 2020 22:04:32 +0200
+Subject: [Buildroot] [git commit] package/git: indicate that license file
+ hashes are locally calculated
+Message-ID: <20200427195650.A7DB39092E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 27 Apr 2020 18:57:59 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=80898842bfddf8c5fe0c9884aaa3140f0e2a6d10
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The commit 0f0649140f73645f4cd00c9c0d27c50e9fa1caf9 introduced a change
-> in the module name: utf8 -> lua-utf8.
-> 
-> The packages-file-list.txt show the change in the files intalled on the rootfs:
-> 
-> [lua-utf8 0.1.2-2 latest version]
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/doc/LICENSE
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/doc/README.md
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/luautf8-0.1.2-2.rockspec
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/luautf8/0.1.2-2/rock_manifest
-> lua-utf8,./usr/lib/lua/5.1/lua-utf8.so
-> 
-> [lua-utf8 1.2-0 previous version]
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/utf8/1.2-0/doc/README.md
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/utf8/1.2-0/utf8-1.2-0.rockspec
-> lua-utf8,./usr/lib/luarocks/rocks-5.1/utf8/1.2-0/rock_manifest
-> lua-utf8,./usr/lib/lua/5.1/utf8.so
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/526036036
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  support/testing/tests/package/test_lua_utf8.py | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/git/git.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 6261b93ab9..d043590222 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,4 +1,5 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+ sha256  6d65132471df9e531807cb2746f8be317e22a343b9385bbe11c9ce7f0d2fc848  git-2.26.2.tar.xz
++# Locally calculated
+ sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
