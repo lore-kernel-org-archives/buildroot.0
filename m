@@ -1,54 +1,51 @@
-From: Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Date: Mon, 27 Apr 2020 12:58:18 +0530
-Subject: [Buildroot] [PATCH 1/1] package/gflags: force Release mode
-In-Reply-To: <20200425162244.1289359-1-fontaine.fabrice@gmail.com>
-References: <20200425162244.1289359-1-fontaine.fabrice@gmail.com>
-Message-ID: <CA+NV+V=_q_XTaYSfcYDE9xunqd4SAo+AB_5c6oNDS-kXNq6yUQ@mail.gmail.com>
+From: Yann CARDAILLAC <yann.cardaillac@smile.fr>
+Date: Mon, 27 Apr 2020 09:34:37 +0200
+Subject: [Buildroot] Build qt5webengine or chromium faster
+Message-ID: <CAA984JXXz=j_E3_EHLP5nR_hdm_-sMAWTvE3PdBjonf7rGMgXQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 25, 2020 at 9:51 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Force Release otherwise libraries will be suffixed by _debug which will raise
-> unexpected build failures with packages that use gflags (e.g. rocksdb)
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/3545774258babc3584f69e7d523efdf7fff1acb5
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/gflags/gflags.mk | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/package/gflags/gflags.mk b/package/gflags/gflags.mk
-> index c4fce45b3e..f32869f70d 100644
-> --- a/package/gflags/gflags.mk
-> +++ b/package/gflags/gflags.mk
-> @@ -10,8 +10,12 @@ GFLAGS_INSTALL_STAGING = YES
->  GFLAGS_LICENSE = BSD-3-Clause
->  GFLAGS_LICENSE_FILES = COPYING.txt
->
-> +# Force Release otherwise libraries will be suffixed by _debug which will raise
-> +# unexpected build failures with packages that use gflags (e.g. rocksdb)
-> +GFLAGS_CONF_OPTS = -DCMAKE_BUILD_TYPE=Release
+Hi guys,
 
-I think pkgconfig can solve this problem. Rocksdb has CMake support
-which uses pkgconfig to find gflags.
+I was wondering if there's any recommended way to build chromium (or
+qtwebengine) faster? Up to know I wasn't using chromium on our project and
+build time was around 40mn. That was very acceptable for our CI jobs and we
+could afford to build the full defconfig every time we merge/push code.
+Now with chromium on the defconfig, full build takes more than 3 hours...
+So my question is simple, how in such a case do you recommend to work ? Is
+there any way to use "pre built" packages in a not too dirty way ?
+I know that this is not really the buildroot philosophy however I believe
+some buildroot users might have needed the same build trick than I do.
+I thought about hosting all the binaries that I have built and then writing
+a simple package that will take all of them and install them on
+staging/target. But that's probably not the best way.
+Any advice would be appreciated at this point !
 
-Regards,
-Rahul
+Best regards,
 
-> +
->  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-> -GFLAGS_CONF_OPTS = -DBUILD_gflags_LIB=OFF \
-> +GFLAGS_CONF_OPTS += -DBUILD_gflags_LIB=OFF \
->         -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DNO_THREADS"
->  endif
->
-> --
-> 2.25.1
->
+Yann Cardaillac
+
+-- 
+[image: SMILE] <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*Yann CARDAILLAC*
+Ing?nieur Syst?mes Embarqu?s
+
+[image: email] yann.cardaillac at smile.fr
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+
+[image: eco] Pour la plan?te, n'imprimez ce mail que si c'est n?cessaire
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200427/fd1ac8b4/attachment.html>
