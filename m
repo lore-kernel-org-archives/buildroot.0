@@ -1,43 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Apr 2020 22:04:06 +0200
-Subject: [Buildroot] [git commit] package/git: bump to 2.26.2
-Message-ID: <20200427195650.9EFA39092E@busybox.osuosl.org>
+Date: Mon, 27 Apr 2020 22:11:33 +0200
+Subject: [Buildroot] [git commit] package/cegui: disable ogre support
+Message-ID: <20200427195650.B20899092E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65418eabd45f37bad5e44b1df0f9e124672f62fc
+commit: https://git.buildroot.net/buildroot/commit/?id=3b48e419af0bd3786580151d26b8a9b11441c1db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Buildroot's ogre version isn't compatible with current (v0-8-7) cegui
+therefore disable support for that. It will be restored when upstream will
+switch to the new version.
+
+Fixes:
+  - http://autobuild.buildroot.net/results/8ee717ac4d596fc0af274037841ac4ed6862ddaa/
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cegui/cegui.mk | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 04e6002cd1..6261b93ab9 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,4 +1,4 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  888228408f254634330234df3cece734d190ef6381063821f31ec020538f0368  git-2.26.1.tar.xz
-+sha256  6d65132471df9e531807cb2746f8be317e22a343b9385bbe11c9ce7f0d2fc848  git-2.26.2.tar.xz
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 446f035fec..0a67a7e1e2 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+index 434201b1f8..673340194a 100644
+--- a/package/cegui/cegui.mk
++++ b/package/cegui/cegui.mk
+@@ -10,7 +10,8 @@ CEGUI_LICENSE = MIT
+ CEGUI_LICENSE_FILES = COPYING
+ CEGUI_INSTALL_STAGING = YES
+ CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_XERCES=OFF \
+-		   -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF
++		   -DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF \
++		   -DCEGUI_BUILD_RENDERER_OGRE=OFF
+ CEGUI_DEPENDENCIES = glm \
+ 		$(if $(BR2_PACKAGE_LIBGLFW),libglfw) \
+ 		$(if $(BR2_PACKAGE_HAS_LIBGL),libgl) \
+@@ -25,13 +26,6 @@ else
+ CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=OFF
+ endif
  
--GIT_VERSION = 2.26.1
-+GIT_VERSION = 2.26.2
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+-ifeq ($(BR2_PACKAGE_OGRE),y)
+-CEGUI_DEPENDENCIES += ogre
+-CEGUI_CONF_OPTS += -DCEGUI_BUILD_RENDERER_OGRE=ON
+-else
+-CEGUI_CONF_OPTS += -DCEGUI_BUILD_RENDERER_OGRE=OFF
+-endif
+-
+ ifeq ($(BR2_PACKAGE_EXPAT),y)
+ CEGUI_DEPENDENCIES += expat
+ CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_EXPAT=ON
