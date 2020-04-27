@@ -1,78 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Apr 2020 22:55:37 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain/toolchain-external: install
- ldd on the target
-In-Reply-To: <20200422153442.31989-1-sebastien.szymanski@armadeus.com>
-References: <20200422153442.31989-1-sebastien.szymanski@armadeus.com>
-Message-ID: <20200427205537.GD11346@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Apr 2020 22:59:23 +0200
+Subject: [Buildroot] [PATCH] package/ibm-sw-tpm2: add patch to fix build
+ issues on several architectures
+In-Reply-To: <20200427204127.GB11346@scaer>
+References: <20200427054649.1666163-1-thomas.petazzoni@bootlin.com>
+ <20200427204127.GB11346@scaer>
+Message-ID: <20200427225923.6eeba14a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-S?bastien, All,
+On Mon, 27 Apr 2020 22:41:27 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On 2020-04-22 17:34 +0200, S?bastien Szymanski spake thusly:
-> From: Julien Boibessot <julien.boibessot@armadeus.com>
-> 
-> From: Julien Boibessot <julien.boibessot@armadeus.com>
-> 
-> It could be usefull to have ldd on the target so install it.
-> 
-> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-> [S?bastien: add commit message]
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+> I know this upstream is on sourceforge, but could you try the extra
+> effort to push them this patch? ;-]
 
-I was not too fond of it, but it looks like we do install it for an
-internal glibc-based toolchain, so meh...
+This project has no Git repository, no mailing list. So I used the
+Sourceforge Ticket system, otherwise known as the "/dev/null of the
+Internet". Here is my contribution to feed the /dev/null of the
+Internet:
 
-Applied to master, thanks.
+  https://sourceforge.net/p/ibmswtpm2/tickets/13/
 
-Regards,
-Yann E. MORIN.
+Cheers ! :-)
 
-> ---
->  toolchain/toolchain-external/pkg-toolchain-external.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index 8667d7ddf6..6d91cb5d1e 100644
-> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -499,6 +499,12 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
->  	fi
->  endef
->  
-> +define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LDD
-> +	$(Q)if test -f $(STAGING_DIR)/usr/bin/ldd ; then \
-> +		$(INSTALL) -D $(STAGING_DIR)/usr/bin/ldd $(TARGET_DIR)/usr/bin/ldd ; \
-> +		$(SED) 's:.*/bin/bash:#!/bin/sh:' $(TARGET_DIR)/usr/bin/ldd ; \
-> +	fi
-> +endef
->  
->  ################################################################################
->  # inner-toolchain-external-package -- defines the generic installation rules
-> @@ -593,6 +599,7 @@ define $(2)_INSTALL_TARGET_CMDS
->  	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
->  	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER)
->  	$$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
-> +	$$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LDD)
->  endef
->  
->  # Call the generic package infrastructure to generate the necessary
-> -- 
-> 2.25.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
