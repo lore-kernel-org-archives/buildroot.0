@@ -1,48 +1,41 @@
-From: Tom Marcuzzi <tom.marcuzzi@orolia.com>
-Date: Tue, 28 Apr 2020 10:56:01 +0200
-Subject: [Buildroot] [PATCH] package/php: add FFI support
-Message-ID: <20200428085601.15825-1-tom.marcuzzi@orolia.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 28 Apr 2020 03:31:39 -0600
+Subject: [Buildroot] [PATCH 1/1] package/apcupsd: pass additional libusb
+ libs for static build
+Message-ID: <20200428093139.115983-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/php/Config.ext | 6 ++++++
- package/php/php.mk     | 5 +++++
- 2 files changed, 11 insertions(+)
+By default apcupsd only passes libs for libusb-compat, this is not
+sufficient for static builds which also require libusb libs.
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 66ee935cf0..fc28a523e1 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -425,4 +425,10 @@ config BR2_PACKAGE_PHP_EXT_XSL
- 	help
- 	  XSL transformation support
+Fixes:
+http://autobuild.buildroot.net/results/747/7472fec82983f5b9c2f92578b2b20b746a8d20ae/build-end.log
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/apcupsd/apcupsd.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
+index ff9cc9242f..a0fda19cf3 100644
+--- a/package/apcupsd/apcupsd.mk
++++ b/package/apcupsd/apcupsd.mk
+@@ -10,8 +10,11 @@ APCUPSD_LICENSE = GPL-2.0
+ APCUPSD_LICENSE_FILES = COPYING
+ APCUPSD_CONF_OPTS = --disable-test
  
-+config BR2_PACKAGE_PHP_EXT_FFI
-+	bool "FFI"
-+	select BR2_PACKAGE_LIBFFI
-+	help
-+	  Foreign Function Interface support
-+
- endmenu
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 4d2f1b8f63..fd78b36b51 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -333,6 +333,11 @@ PHP_CONF_OPTS += \
- PHP_DEPENDENCIES += jpeg libpng freetype zlib
+-ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
++ifneq ($(BR2_PACKAGE_APCUPSD_MODBUS_USB)$(BR2_PACKAGE_APCUPSD_USB),)
+ APCUPSD_CONF_ENV = ac_cv_path_usbcfg=$(STAGING_DIR)/usr/bin/libusb-config
++ifeq ($(BR2_STATIC_LIBS),y)
++APCUPSD_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libusb`"
++endif
  endif
  
-+ifeq ($(BR2_PACKAGE_PHP_EXT_FFI),y)
-+PHP_CONF_OPTS += --with-ffi
-+PHP_DEPENDENCIES += libffi
-+endif
-+
- ifeq ($(BR2_PACKAGE_PHP_SAPI_FPM),y)
- define PHP_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 $(@D)/sapi/fpm/init.d.php-fpm \
+ ifeq ($(BR2_PACKAGE_APCUPSD_APCSMART),y)
 -- 
-2.17.1
+2.20.1
