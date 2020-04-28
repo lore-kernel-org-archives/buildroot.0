@@ -1,113 +1,50 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Tue, 28 Apr 2020 08:42:24 +0200
-Subject: [Buildroot] [PATCH v3] package/matio: new package
-Message-ID: <20200428064224.21475-1-gwenj@trabucayre.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 28 Apr 2020 08:48:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson.mk: set correct
+ pkgconfig for native dependencies
+In-Reply-To: <20200428073214.6b598767@windsurf.home>
+References: <20200428040638.122494-1-james.hilliard1@gmail.com>
+ <20200428072202.5889620f@windsurf.home>
+ <CADvTj4oPoCyiZLt+h7Wft6eF27E-pRtOzO+68M=o5276NDRWCw@mail.gmail.com>
+ <20200428073214.6b598767@windsurf.home>
+Message-ID: <299ae928-75b1-fb95-d70a-e099bec45e67@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-matio is an C library for reading and writing MATLAB MAT files.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
-Changes v2 -> v3:
- * locally sha256 not mandatory (Thomas)
- * since extended-sparse takes 2KB, enable this feature and drop option (Yann)
- * add comment about mat73 (Yann)
- * enableXX=yes/no -> enable-XX/disable-XX (Yann, Thomas)
-Changes v1 -> v2:
- * add one blank line befor URL (Heiko)
- * drop blank lines around MATIO_DEPENDENCIES and MATIO_INSTALL_STAGING (Heiko)
- * drop comment about STAGING (Heiko)
- * += -> + for MATIO_CONF_ENV (Heiko)
----
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/matio/Config.in  |  8 ++++++++
- package/matio/matio.hash |  4 ++++
- package/matio/matio.mk   | 20 ++++++++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/matio/Config.in
- create mode 100644 package/matio/matio.hash
- create mode 100644 package/matio/matio.mk
+On 28/04/2020 07:32, Thomas Petazzoni wrote:
+> On Mon, 27 Apr 2020 23:28:05 -0600
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+> 
+>>> Could you have a look at the patch below? My understanding is that your
+>>> commit 4e0bc29993376613d200e892d491e31ea5a49622 should have made this
+>>> unnecessary. Could you comment ?  
+>> I've confirmed with upstream that this option can only be passed via
+>> command line
+>> and not via cross-compilation.conf at the moment so I'm fairly confident that
+>> 4e0bc29993376613d200e892d491e31ea5a49622 would not fix this issue.
+> 
+> But then I wonder what is the point of
+> 4e0bc29993376613d200e892d491e31ea5a49622 and how it can have worked ?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fd584bb6e4..23cde66082 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1104,6 +1104,7 @@ F:	package/gnuradio/
- F:	package/gqrx/
- F:	package/gr-osmosdr/
- F:	package/libusbgx/
-+F:	package/matio/
- F:	package/python-cheetah/
- F:	package/python-markdown/
- F:	package/python-remi/
-diff --git a/package/Config.in b/package/Config.in
-index bf02870ea2..53c8ce0e29 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1871,6 +1871,7 @@ endif
- 	source "package/liquid-dsp/Config.in"
- 	source "package/llvm/Config.in"
- 	source "package/lttng-libust/Config.in"
-+	source "package/matio/Config.in"
- 	source "package/mpc/Config.in"
- 	source "package/mpdecimal/Config.in"
- 	source "package/mpfr/Config.in"
-diff --git a/package/matio/Config.in b/package/matio/Config.in
-new file mode 100644
-index 0000000000..9e2ea6800b
---- /dev/null
-+++ b/package/matio/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_MATIO
-+	bool "matio"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  matio is an C library for reading and writing MATLAB MAT
-+	  files.
-+
-+	  https://sourceforge.net/projects/matio
-diff --git a/package/matio/matio.hash b/package/matio/matio.hash
-new file mode 100644
-index 0000000000..65da53a6f2
---- /dev/null
-+++ b/package/matio/matio.hash
-@@ -0,0 +1,4 @@
-+# From https://sourceforge.net/projects/matio/files/matio/1.5.17/
-+sha512  af8ff11c7c44fea9ea6886e381f49ef9186946f3def98ad9695f2d5d1df045c35e8f4ceac12a44be397f7bbd708b4803762b5ce54c45b60a9f446d551c04f5d2  matio-1.5.17.tar.gz
-+# Locally computed
-+sha256  62a0cab69eeadb3697a2249d5a869915b89e62b59b794dd70802c2b8624ed374  COPYING
-diff --git a/package/matio/matio.mk b/package/matio/matio.mk
-new file mode 100644
-index 0000000000..8af39ce22c
---- /dev/null
-+++ b/package/matio/matio.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# matio
-+#
-+################################################################################
-+
-+MATIO_VERSION = 1.5.17
-+MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
-+MATIO_LICENSE = BSD-2-Clause
-+MATIO_LICENSE_FILES = COPYING
-+MATIO_DEPENDENCIES = zlib
-+MATIO_INSTALL_STAGING = YES
-+
-+# va_copy()
-+MATIO_CONF_ENV = ac_cv_va_copy=yes
-+
-+# mat73 require hdf5 (not available), extented-sparse take 2KB
-+MATIO_CONF_OPTS = --disable-mat73 --enable-extended-sparse
-+
-+$(eval $(autotools-package))
--- 
-2.26.2
+ That commit also added sys_root to cross-compilation.conf. It's very well
+possible that for the single thing that was tested with it (goi), the sys_root
+change was sufficient to make it pass. I don't remember if I double-checked if
+the pkg_config_libdir was taken into account. It was purely based on reading the
+meson source code.
+
+
+ Regards,
+ Arnout
+
+> 
+> Or is it necessary *in* addition to passing -Dbuild.pkg_config_path ?
+> 
+> Thanks,
+> 
+> Thomas
+> 
