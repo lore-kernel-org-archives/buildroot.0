@@ -1,73 +1,113 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 28 Apr 2020 08:34:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: fix build on uclibc or
- musl
-Message-ID: <20200428063417.350351-1-fontaine.fabrice@gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Tue, 28 Apr 2020 08:42:24 +0200
+Subject: [Buildroot] [PATCH v3] package/matio: new package
+Message-ID: <20200428064224.21475-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/4beb96d43180813906578b42875a1c3d4a905ed7
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+matio is an C library for reading and writing MATLAB MAT files.
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- ...ists.txt-fix-build-on-uclibc-or-musl.patch | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch
+Changes v2 -> v3:
+ * locally sha256 not mandatory (Thomas)
+ * since extended-sparse takes 2KB, enable this feature and drop option (Yann)
+ * add comment about mat73 (Yann)
+ * enableXX=yes/no -> enable-XX/disable-XX (Yann, Thomas)
+Changes v1 -> v2:
+ * add one blank line befor URL (Heiko)
+ * drop blank lines around MATIO_DEPENDENCIES and MATIO_INSTALL_STAGING (Heiko)
+ * drop comment about STAGING (Heiko)
+ * += -> + for MATIO_CONF_ENV (Heiko)
+---
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/matio/Config.in  |  8 ++++++++
+ package/matio/matio.hash |  4 ++++
+ package/matio/matio.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 34 insertions(+)
+ create mode 100644 package/matio/Config.in
+ create mode 100644 package/matio/matio.hash
+ create mode 100644 package/matio/matio.mk
 
-diff --git a/package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch b/package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fd584bb6e4..23cde66082 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1104,6 +1104,7 @@ F:	package/gnuradio/
+ F:	package/gqrx/
+ F:	package/gr-osmosdr/
+ F:	package/libusbgx/
++F:	package/matio/
+ F:	package/python-cheetah/
+ F:	package/python-markdown/
+ F:	package/python-remi/
+diff --git a/package/Config.in b/package/Config.in
+index bf02870ea2..53c8ce0e29 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1871,6 +1871,7 @@ endif
+ 	source "package/liquid-dsp/Config.in"
+ 	source "package/llvm/Config.in"
+ 	source "package/lttng-libust/Config.in"
++	source "package/matio/Config.in"
+ 	source "package/mpc/Config.in"
+ 	source "package/mpdecimal/Config.in"
+ 	source "package/mpfr/Config.in"
+diff --git a/package/matio/Config.in b/package/matio/Config.in
 new file mode 100644
-index 0000000000..7989f045b9
+index 0000000000..9e2ea6800b
 --- /dev/null
-+++ b/package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch
-@@ -0,0 +1,45 @@
-+From 517e8659ab566b15cc409490a432e8935b164de8 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 24 Apr 2020 11:55:41 +0200
-+Subject: [PATCH] src/CMakeLists.txt: fix build on uclibc or musl
++++ b/package/matio/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MATIO
++	bool "matio"
++	select BR2_PACKAGE_ZLIB
++	help
++	  matio is an C library for reading and writing MATLAB MAT
++	  files.
 +
-+Build of version 1.3.2 with uclibc or musl fails on:
++	  https://sourceforge.net/projects/matio
+diff --git a/package/matio/matio.hash b/package/matio/matio.hash
+new file mode 100644
+index 0000000000..65da53a6f2
+--- /dev/null
++++ b/package/matio/matio.hash
+@@ -0,0 +1,4 @@
++# From https://sourceforge.net/projects/matio/files/matio/1.5.17/
++sha512  af8ff11c7c44fea9ea6886e381f49ef9186946f3def98ad9695f2d5d1df045c35e8f4ceac12a44be397f7bbd708b4803762b5ce54c45b60a9f446d551c04f5d2  matio-1.5.17.tar.gz
++# Locally computed
++sha256  62a0cab69eeadb3697a2249d5a869915b89e62b59b794dd70802c2b8624ed374  COPYING
+diff --git a/package/matio/matio.mk b/package/matio/matio.mk
+new file mode 100644
+index 0000000000..8af39ce22c
+--- /dev/null
++++ b/package/matio/matio.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# matio
++#
++################################################################################
 +
-+[ 58%] Linking C shared library libpaho-mqtt3c.so
-+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/5.5.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lanl
-+collect2: error: ld returned 1 exit status
++MATIO_VERSION = 1.5.17
++MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
++MATIO_LICENSE = BSD-2-Clause
++MATIO_LICENSE_FILES = COPYING
++MATIO_DEPENDENCIES = zlib
++MATIO_INSTALL_STAGING = YES
 +
-+This is due to commit 21ffebcb749fc8bd8578df85550f03f74e571620 which
-+added a link to anl which is not available on uclibc or musl.
++# va_copy()
++MATIO_CONF_ENV = ac_cv_va_copy=yes
 +
-+Fix this by checking if anl is found on the system before using it
++# mat73 require hdf5 (not available), extented-sparse take 2KB
++MATIO_CONF_OPTS = --disable-mat73 --enable-extended-sparse
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/4beb96d43180813906578b42875a1c3d4a905ed7
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/eclipse/paho.mqtt.c/commit/517e8659ab566b15cc409490a432e8935b164de8]
-+---
-+ src/CMakeLists.txt | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index fb367b37..95fd43e7 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -60,7 +60,13 @@ IF (WIN32)
-+     SET(LIBS_SYSTEM ws2_32 crypt32 RpcRT4)
-+ ELSEIF (UNIX)
-+     IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
-+-        SET(LIBS_SYSTEM c dl pthread anl rt)
-++        SET(LIBS_SYSTEM c dl pthread rt)
-++        # anl is only available with glibc so check if it is found before using
-++        # it or build will fail on uclibc or musl
-++        FIND_LIBRARY(LIB_ANL anl)
-++        IF(LIB_ANL)
-++            SET(LIBS_SYSTEM "${LIBS_SYSTEM} ${LIB_ANL}")
-++        ENDIF()
-+         ADD_DEFINITIONS(-D_GNU_SOURCE -fvisibility=hidden)
-+     ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Android")
-+         SET(LIBS_SYSTEM c dl)
++$(eval $(autotools-package))
 -- 
-2.25.1
+2.26.2
