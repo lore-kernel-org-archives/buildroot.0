@@ -1,70 +1,99 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Apr 2020 21:11:18 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-crontab: bump to version
- 2.4.2
-In-Reply-To: <20200428130748.459546-1-grzegorz@blach.pl>
-References: <20200428130748.459546-1-grzegorz@blach.pl>
-Message-ID: <20200428191118.GH11346@scaer>
+Date: Tue, 28 Apr 2020 21:11:50 +0200
+Subject: [Buildroot] [git commit] package/matio: new package
+Message-ID: <20200428190505.76D6890A5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Grzegorz, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a8da12f0f9f00110d9575515041f0662305844c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-04-28 15:07 +0200, Grzegorz Blach spake thusly:
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+matio is an C library for reading and writing MATLAB MAT files.
 
-Both patches applied to master, thanks.
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/matio/Config.in  |  8 ++++++++
+ package/matio/matio.hash |  4 ++++
+ package/matio/matio.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 34 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/python-crontab/python-crontab.hash | 4 ++--
->  package/python-crontab/python-crontab.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-crontab/python-crontab.hash b/package/python-crontab/python-crontab.hash
-> index f22e782a69..d0e5725708 100644
-> --- a/package/python-crontab/python-crontab.hash
-> +++ b/package/python-crontab/python-crontab.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/python-crontab/json
-> -md5  663bd09882c7caaa18be3c0cc0c7e716  python-crontab-2.4.1.tar.gz
-> -sha256  2366c7aa373118315de7c082401907bacd28e8b1e4e0a6d702334d17b89e71aa  python-crontab-2.4.1.tar.gz
-> +md5  65fe16d44568de2671d334a637e64a3b  python-crontab-2.4.2.tar.gz
-> +sha256  ed9583cff430715d9560cbad28309429ac13f3fdb13051ac2288050e05abc392  python-crontab-2.4.2.tar.gz
->  # Locally computed sha256 checksums
->  sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
-> diff --git a/package/python-crontab/python-crontab.mk b/package/python-crontab/python-crontab.mk
-> index 2abb4eed74..0c6109dd7f 100644
-> --- a/package/python-crontab/python-crontab.mk
-> +++ b/package/python-crontab/python-crontab.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -PYTHON_CRONTAB_VERSION = 2.4.1
-> -PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/09/b1/31d3ccf2ad3d4f7727b325ad7ea77d042e1939c5cacbf1d7478e391cca51
-> +PYTHON_CRONTAB_VERSION = 2.4.2
-> +PYTHON_CRONTAB_SITE = https://files.pythonhosted.org/packages/d1/c2/e92e801a0c504e62899d574a6d281d6e598861797c6798a664556d2bca8c
->  PYTHON_CRONTAB_SETUP_TYPE = setuptools
->  PYTHON_CRONTAB_LICENSE = LGPL-3.0+
->  PYTHON_CRONTAB_LICENSE_FILES = COPYING
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b36c9f561b..cc72b288be 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1098,6 +1098,7 @@ F:	package/gnuradio/
+ F:	package/gqrx/
+ F:	package/gr-osmosdr/
+ F:	package/libusbgx/
++F:	package/matio/
+ F:	package/python-cheetah/
+ F:	package/python-markdown/
+ F:	package/python-remi/
+diff --git a/package/Config.in b/package/Config.in
+index bf02870ea2..53c8ce0e29 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1871,6 +1871,7 @@ endif
+ 	source "package/liquid-dsp/Config.in"
+ 	source "package/llvm/Config.in"
+ 	source "package/lttng-libust/Config.in"
++	source "package/matio/Config.in"
+ 	source "package/mpc/Config.in"
+ 	source "package/mpdecimal/Config.in"
+ 	source "package/mpfr/Config.in"
+diff --git a/package/matio/Config.in b/package/matio/Config.in
+new file mode 100644
+index 0000000000..9e2ea6800b
+--- /dev/null
++++ b/package/matio/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MATIO
++	bool "matio"
++	select BR2_PACKAGE_ZLIB
++	help
++	  matio is an C library for reading and writing MATLAB MAT
++	  files.
++
++	  https://sourceforge.net/projects/matio
+diff --git a/package/matio/matio.hash b/package/matio/matio.hash
+new file mode 100644
+index 0000000000..65da53a6f2
+--- /dev/null
++++ b/package/matio/matio.hash
+@@ -0,0 +1,4 @@
++# From https://sourceforge.net/projects/matio/files/matio/1.5.17/
++sha512  af8ff11c7c44fea9ea6886e381f49ef9186946f3def98ad9695f2d5d1df045c35e8f4ceac12a44be397f7bbd708b4803762b5ce54c45b60a9f446d551c04f5d2  matio-1.5.17.tar.gz
++# Locally computed
++sha256  62a0cab69eeadb3697a2249d5a869915b89e62b59b794dd70802c2b8624ed374  COPYING
+diff --git a/package/matio/matio.mk b/package/matio/matio.mk
+new file mode 100644
+index 0000000000..8af39ce22c
+--- /dev/null
++++ b/package/matio/matio.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# matio
++#
++################################################################################
++
++MATIO_VERSION = 1.5.17
++MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
++MATIO_LICENSE = BSD-2-Clause
++MATIO_LICENSE_FILES = COPYING
++MATIO_DEPENDENCIES = zlib
++MATIO_INSTALL_STAGING = YES
++
++# va_copy()
++MATIO_CONF_ENV = ac_cv_va_copy=yes
++
++# mat73 require hdf5 (not available), extented-sparse take 2KB
++MATIO_CONF_OPTS = --disable-mat73 --enable-extended-sparse
++
++$(eval $(autotools-package))
