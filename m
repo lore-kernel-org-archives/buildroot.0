@@ -1,71 +1,39 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 28 Apr 2020 10:53:46 +0200
-Subject: [Buildroot] [PATCH 1/3] board/freescale/imx: Add helper to
- generate fw binary
-In-Reply-To: <20200427235704.56fcde61@windsurf.home>
-References: <20200427213402.6148-1-xroumegue@gmail.com>
- <20200427235704.56fcde61@windsurf.home>
-Message-ID: <20200428085346.GA183828@p1g2>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 28 Apr 2020 10:57:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson.mk: set correct
+ pkgconfig for native dependencies
+In-Reply-To: <CADvTj4oX9oQTxpHLEyKMACWHwLh4pL13C4nrK=9wVkQebhV5rA@mail.gmail.com>
+References: <20200428040638.122494-1-james.hilliard1@gmail.com>
+ <20200428072202.5889620f@windsurf.home>
+ <d96ae071-26fa-25a4-a508-d52d82daafeb@mind.be>
+ <20200428091022.4c613e80@windsurf.home>
+ <0f40c7ae-22d4-f9fa-80e5-5b81617e8d78@mind.be>
+ <CADvTj4oX9oQTxpHLEyKMACWHwLh4pL13C4nrK=9wVkQebhV5rA@mail.gmail.com>
+Message-ID: <20200428105748.282b13ad@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Xavier,
+On Tue, 28 Apr 2020 02:05:13 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-On Mon, Apr 27, 2020 at 11:57:04PM +0200, Thomas Petazzoni wrote:
-> Hello Xavier,
-> 
-> On Mon, 27 Apr 2020 23:34:00 +0200
-> Xavier Roumegue <xroumegue@gmail.com> wrote:
-> 
-> > This script aims to create an imx compatible boot image embedding
-> > mainline components, using only upstream uboot mkimage tool, avoiding
-> > dependencies on proprietary imx mkimage.
-> > 
-> > Mainline u-boot can generate a bootable image, but SPL soc proprietary
-> > firmware dependencies have to be copied on uboot root dir.
-> > 
-> > This script prevents additional buildroot uboot recipe hacking to handle
-> > custom SoC uboot build process.
-> > 
-> > The script actions summary is:
-> > - Append DDR4 firmware to uboot spl binary
-> > - Generate imx mkimage configuration file, extracting entry points from
-> >   relevant elf files on the fly.
-> > - Generate imx boot image using uboot upstream mkimage tool
-> > 
-> > Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
-> 
-> Thanks for this proposal. Could you share a bit more details about the
-> upstream U-Boot i.MX8 image generation logic? How does it work, how do
-> you trigger it, which FW binaries need to be copied to the U-Boot build
-> directory, etc. ?
+> >  Thanks James and Thomas for correcting me.
+> >
+> >  So in that case, this patch looks good. But the meson.mk change should be a
+> > separate patch, of course.  
+> That would overlap with the weston -Dbuild.pkg_config_path removal.
 
-Same, thanks for this proposal. However I'm not sure adding another
-script to basically do the same thing is the preferred option.
-The main difference being that it uses the U-Boot mkimage instead of
-imx-mkimage.
+You add -Dbuild.pkg_config_path in pkg-meson.mk in a first patch.
 
-Ideally I'd like to be able to use the flash.bin U-Boot target so that
-we get rid of those post-build scripts for good.
+Then in a second patch, you remove it from weston.mk.
 
-Thomas, what U-Boot needs (for imx8m) are the DDR/HDMI firmware files from
-firmware-imx package. The main issue actually is that U-Boot looks for
-those binaries at its root. If we could make it point to $BINARIES_DIR
-instead, we could use 'flash.bin' target with U-Boot custom dependencies
-[1] (if this patch gets accepted) to ensure firmware-imx was built
-beforehand.
+Yes, in between it means it is passed twice, but this is OK, as it
+doesn't break.
 
-Otherwise, if we decide to keep a post-build script, I'd rather have
-only one, preferrably this one as it doesn't depend on imx-mkimage.
-But as Fabio mentioned, it also needs to support 8QXP/8QM, then we could
-replaces imx8-bootloader-prepare.sh and also remove imx-mkimage package.
-
-Let me know your thoughts.
-
-Regards,
-Gary
-
-[1] http://patchwork.ozlabs.org/project/buildroot/patch/20200425000629.2068191-1-heiko at sntech.de/
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
