@@ -1,133 +1,121 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Apr 2020 21:20:52 +0200
-Subject: [Buildroot] [PATCH v3] package/matio: new package
-In-Reply-To: <20200428064224.21475-1-gwenj@trabucayre.com>
-References: <20200428064224.21475-1-gwenj@trabucayre.com>
-Message-ID: <20200428192052.GI11346@scaer>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Tue, 28 Apr 2020 14:20:28 -0500
+Subject: [Buildroot] [PATCH v2] package/cifs-utils: bump to version 6.10
+Message-ID: <20200428192029.30349-1-ryanbarnett3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gwenhael, All,
+In the version bump to 6.10 the following changes were:
 
-On 2020-04-28 08:42 +0200, Gwenhael Goavec-Merou spake thusly:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> matio is an C library for reading and writing MATLAB MAT files.
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ * Fix hash file to two spaces format
+ * Add patch to respect DESTDIR and optionally install man pages for
+   mount.smb3 by utilizing CONFIG_MAN.
+ * Pass -std=gnu11 to fix compile issues found with the sourcery-arm
+   toolchain with C99 style code errors in smbinfo.c and defintion of
+   'struct sa' uisng gnu11 for C11 GNU extensions.
 
-Applied to master, thanks.
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+CC: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+Changes v1 -> v2:
+  - use only -std=c11 (suggested by Yann)
+---
+ ...-installing-mount.smb3-and-optionall.patch | 41 +++++++++++++++++++
+ package/cifs-utils/cifs-utils.hash            |  4 +-
+ package/cifs-utils/cifs-utils.mk              |  7 +++-
+ 3 files changed, 48 insertions(+), 4 deletions(-)
+ create mode 100644 package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v2 -> v3:
->  * locally sha256 not mandatory (Thomas)
->  * since extended-sparse takes 2KB, enable this feature and drop option (Yann)
->  * add comment about mat73 (Yann)
->  * enableXX=yes/no -> enable-XX/disable-XX (Yann, Thomas)
-> Changes v1 -> v2:
->  * add one blank line befor URL (Heiko)
->  * drop blank lines around MATIO_DEPENDENCIES and MATIO_INSTALL_STAGING (Heiko)
->  * drop comment about STAGING (Heiko)
->  * += -> + for MATIO_CONF_ENV (Heiko)
-> ---
->  DEVELOPERS               |  1 +
->  package/Config.in        |  1 +
->  package/matio/Config.in  |  8 ++++++++
->  package/matio/matio.hash |  4 ++++
->  package/matio/matio.mk   | 20 ++++++++++++++++++++
->  5 files changed, 34 insertions(+)
->  create mode 100644 package/matio/Config.in
->  create mode 100644 package/matio/matio.hash
->  create mode 100644 package/matio/matio.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index fd584bb6e4..23cde66082 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1104,6 +1104,7 @@ F:	package/gnuradio/
->  F:	package/gqrx/
->  F:	package/gr-osmosdr/
->  F:	package/libusbgx/
-> +F:	package/matio/
->  F:	package/python-cheetah/
->  F:	package/python-markdown/
->  F:	package/python-remi/
-> diff --git a/package/Config.in b/package/Config.in
-> index bf02870ea2..53c8ce0e29 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1871,6 +1871,7 @@ endif
->  	source "package/liquid-dsp/Config.in"
->  	source "package/llvm/Config.in"
->  	source "package/lttng-libust/Config.in"
-> +	source "package/matio/Config.in"
->  	source "package/mpc/Config.in"
->  	source "package/mpdecimal/Config.in"
->  	source "package/mpfr/Config.in"
-> diff --git a/package/matio/Config.in b/package/matio/Config.in
-> new file mode 100644
-> index 0000000000..9e2ea6800b
-> --- /dev/null
-> +++ b/package/matio/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_MATIO
-> +	bool "matio"
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  matio is an C library for reading and writing MATLAB MAT
-> +	  files.
-> +
-> +	  https://sourceforge.net/projects/matio
-> diff --git a/package/matio/matio.hash b/package/matio/matio.hash
-> new file mode 100644
-> index 0000000000..65da53a6f2
-> --- /dev/null
-> +++ b/package/matio/matio.hash
-> @@ -0,0 +1,4 @@
-> +# From https://sourceforge.net/projects/matio/files/matio/1.5.17/
-> +sha512  af8ff11c7c44fea9ea6886e381f49ef9186946f3def98ad9695f2d5d1df045c35e8f4ceac12a44be397f7bbd708b4803762b5ce54c45b60a9f446d551c04f5d2  matio-1.5.17.tar.gz
-> +# Locally computed
-> +sha256  62a0cab69eeadb3697a2249d5a869915b89e62b59b794dd70802c2b8624ed374  COPYING
-> diff --git a/package/matio/matio.mk b/package/matio/matio.mk
-> new file mode 100644
-> index 0000000000..8af39ce22c
-> --- /dev/null
-> +++ b/package/matio/matio.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# matio
-> +#
-> +################################################################################
-> +
-> +MATIO_VERSION = 1.5.17
-> +MATIO_SITE = http://downloads.sourceforge.net/project/matio/matio/$(MATIO_VERSION)
-> +MATIO_LICENSE = BSD-2-Clause
-> +MATIO_LICENSE_FILES = COPYING
-> +MATIO_DEPENDENCIES = zlib
-> +MATIO_INSTALL_STAGING = YES
-> +
-> +# va_copy()
-> +MATIO_CONF_ENV = ac_cv_va_copy=yes
-> +
-> +# mat73 require hdf5 (not available), extented-sparse take 2KB
-> +MATIO_CONF_OPTS = --disable-mat73 --enable-extended-sparse
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 2.26.2
-> 
-
+diff --git a/package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch b/package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
+new file mode 100644
+index 0000000000..e36ec5b5da
+--- /dev/null
++++ b/package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
+@@ -0,0 +1,41 @@
++From dbb4452787cb966cc74b2015689961875fd5d668 Mon Sep 17 00:00:00 2001
++From: Ryan Barnett <ryanbarnett3@gmail.com>
++Date: Mon, 27 Apr 2020 22:03:25 -0500
++Subject: [PATCH] Use DESTDIR when installing mount.smb3 and optionally install
++ man page
++
++Properly create mount.smb3 symlink by using DESTDIR. Also use
++CONFIG_MAN to optionally install manpage for mount.smb3.
++
++Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
++---
++Upstream: https://marc.info/?l=linux-cifs&m=158804444725745&w=2
++---
++ Makefile.am | 10 ++++++----
++ 1 file changed, 6 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index fe9cd34..e0587f1 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -119,11 +119,13 @@ endif
++ SUBDIRS = contrib
++ 
++ install-exec-hook:
++-	(cd $(ROOTSBINDIR) && ln -sf mount.cifs mount.smb3)
+++	(cd $(DESTDIR)$(ROOTSBINDIR) && ln -sf mount.cifs mount.smb3)
++ 
+++if CONFIG_MAN
++ install-data-hook:
++-	(cd $(man8dir) && ln -sf mount.cifs.8 mount.smb3.8)
+++	(cd $(DESTDIR)$(man8dir) && ln -sf mount.cifs.8 mount.smb3.8)
+++endif
++ 
++ uninstall-hook:
++-	(cd $(ROOTSBINDIR) && rm -f $(ROOTSBINDIR)/mount.smb3)
++-	(cd $(man8dir) && rm -f $(man8dir)/mount.smb3.8)
+++	rm -f $(DESTDIR)$(ROOTSBINDIR)/mount.smb3
+++	rm -f $(DESTDIR)$(man8dir)/mount.smb3.8
++-- 
++2.17.1
++
+diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
+index bbfbc1d8f4..5eaa84f370 100644
+--- a/package/cifs-utils/cifs-utils.hash
++++ b/package/cifs-utils/cifs-utils.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	18d8f1bf92c13c4d611502dbd6759e3a766ddc8467ec8a2eda3f589e40b9ac9c	cifs-utils-6.9.tar.bz2
++sha256  92fc29c8e9039637f3344267500f1fa381e2cccd7d10142f0c1676fa575904a7  cifs-utils-6.10.tar.bz2
+ 
+ # Hash for license file:
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 511e9ccc01..1e08520698 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-CIFS_UTILS_VERSION = 6.9
++CIFS_UTILS_VERSION = 6.10
+ CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPL-3.0+
+ CIFS_UTILS_LICENSE_FILES = COPYING
+-# Missing install-sh in release tarball
++# Missing install-sh in release tarball and patching Makefile.am
+ CIFS_UTILS_AUTORECONF = YES
+ CIFS_UTILS_DEPENDENCIES = host-pkgconf
+ 
+@@ -17,6 +17,9 @@ CIFS_UTILS_DEPENDENCIES = host-pkgconf
+ # the global BR2_RELRO_FULL option.
+ CIFS_UTILS_CONF_OPTS = --disable-pie --disable-man
+ 
++# usese C11 style with smbinfo.c and mtab.c
++CIFS_UTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu11"
++
+ ifeq ($(BR2_PACKAGE_KEYUTILS),y)
+ CIFS_UTILS_DEPENDENCIES += keyutils
+ endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
