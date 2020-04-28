@@ -1,42 +1,53 @@
-From: Stephane Viau <stephane.viau@oss.nxp.com>
-Date: Tue, 28 Apr 2020 09:33:51 +0200
-Subject: [Buildroot] [PATCH 2/4] board/freescale/common/imx: use generic
- ddr_fw.bin name
-In-Reply-To: <1588059233-11467-1-git-send-email-stephane.viau@oss.nxp.com>
-References: <1588059233-11467-1-git-send-email-stephane.viau@oss.nxp.com>
-Message-ID: <1588059233-11467-3-git-send-email-stephane.viau@oss.nxp.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 28 Apr 2020 11:21:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: bump to version
+ 1.3.2
+In-Reply-To: <20200428090923.3841df3f@windsurf.home>
+References: <20200421114849.855332-1-julien.grossholtz@openest.io>
+ <20200428073812.29aa32ee@windsurf.home>
+ <CAPi7W83AsH8BEvr7yiUZAt=JdLnDQg+wL2K_bpbR-FuSM1RiVw@mail.gmail.com>
+ <20200428090923.3841df3f@windsurf.home>
+Message-ID: <CAPi7W80gxxoYj4sNWnpaAMfJKyDCqKkF6i8QXvf2z780qb9OKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some SoCs (i.e.: i.MX8M Nano for now), the DDR training firmware
-in the boot image depends on the type of memory installed on a board
-(LPDDR4, DDR4, etc...). The previous patch makes this firmware name
-agnostic of the DDR type and uses ddr_fw.bin as a generic name. This
-patch makes imx8-bootloader-prepare.sh use this generic name,
-independently of the kind board DDR type.
+Hi,
 
-Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
-Reviewed-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
-Reviewed-by: Julien Olivain <julien.olivain@oss.nxp.com>
----
- board/freescale/common/imx/imx8-bootloader-prepare.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Le mar. 28 avr. 2020 ? 09:09, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Tue, 28 Apr 2020 08:31:35 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > > /home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/8.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: cannot find -lanl
+> > >
+> > > which I believe is only provided by glibc. Not sure what the fix is.
+> > > Making paho-mqtt-c depend on glibc would not be really nice.
+> > I fixed it upstream with:
+> > https://github.com/eclipse/paho.mqtt.c/commit/517e8659ab566b15cc409490a432e8935b164de8.
+> > I'll send a patch.
+>
+> Excellent, thanks!
+>
+> > It should be noted that that upstream has the "interesting" idea of
+> > deleting and recreating git release. For example, 1.3.2 has been
+> > "re-released" 20 hours ago. It could explain why the hash was wrong
+> > when this package was bumped.
+>
+> Gah, very bad. Since you're in touch with upstream, perhaps you could
+> tell them that this is really bad, and why it is really bad?
+Done: https://github.com/eclipse/paho.mqtt.c/pull/861
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-index abf2e43..ad01cde 100755
---- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
-@@ -23,7 +23,7 @@ main ()
- 
- 		${HOST_DIR}/bin/mkimage_imx8 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
- 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN=y$" ${BR2_CONFIG}; then
--		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
-+		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/ddr_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
- 		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot-nodtb.bin ATF_LOAD_ADDR=0x00960000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
- 		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
- 		rm -f ${BINARIES_DIR}/u-boot.its
--- 
-2.7.4
+Fabrice
