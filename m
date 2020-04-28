@@ -1,14 +1,15 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Tue, 28 Apr 2020 12:16:20 -0300
-Subject: [Buildroot] [PATCH] DEVELOPERS: trim Carlos Santos' watch list
-Message-ID: <20200428151620.239416-1-unixmania@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 28 Apr 2020 19:09:34 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: trim Carlos Santos' watch list
+Message-ID: <20200428165507.E375990A38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=1c3ffaed577b40d4213abf681435e4240ec834c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 - I fixed build problems on cups and cups-filters but don't use them.
 
@@ -17,8 +18,7 @@ From: Carlos Santos <unixmania@gmail.com>
   use them neither to the corresponding test infrastructure anymore.
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
-CC: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  DEVELOPERS | 6 ------
  1 file changed, 6 deletions(-)
@@ -46,5 +46,3 @@ index fd584bb6e4..b36c9f561b 100644
  F:	package/skeleton-custom/
  F:	package/skeleton-init-common/
  F:	package/skeleton-init-none/
--- 
-2.18.2
