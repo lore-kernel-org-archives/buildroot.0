@@ -1,36 +1,34 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 27 Apr 2020 23:43:52 -0600
-Subject: [Buildroot] [PATCH 1/1] support/dependencies: set cmake version min
- to 3.15.3
-Message-ID: <20200428054352.110007-1-james.hilliard1@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 28 Apr 2020 07:45:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: add valgrind support
+In-Reply-To: <20200428052225.121426-1-james.hilliard1@gmail.com>
+References: <20200428052225.121426-1-james.hilliard1@gmail.com>
+Message-ID: <20200428074521.1142454c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is required by uvw.
+On Mon, 27 Apr 2020 23:22:25 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/ab6/ab6954a65fd6d43c0674cb7a38a941102cb0dfe3/build-end.log
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/mesa3d/mesa3d.mk | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- support/dependencies/check-host-cmake.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Speaking of mesa3d/valgrind, we have this:
 
-diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-index 01f38da376..b0a704c0f2 100644
---- a/support/dependencies/check-host-cmake.mk
-+++ b/support/dependencies/check-host-cmake.mk
-@@ -3,7 +3,7 @@
- # package is bumped or a new one added, and it requires a higher
- # version, our cmake infra will catch it and build its own.
- #
--BR2_CMAKE_VERSION_MIN = 3.10
-+BR2_CMAKE_VERSION_MIN = 3.15.3
- 
- BR2_CMAKE_CANDIDATES ?= cmake cmake3
- BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+  http://autobuild.buildroot.net/results/1b5/1b58d73ecbbe1af2c3e140563d696cf32d1c4a5a/build-end.log
+
+Seems like mesa3d is trying to link with some static libraries from
+valgrind, which are not built with -fPIC. Have you looked into this?
+
+Thanks!
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
