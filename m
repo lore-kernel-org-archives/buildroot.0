@@ -1,41 +1,25 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 28 Apr 2020 03:31:39 -0600
-Subject: [Buildroot] [PATCH 1/1] package/apcupsd: pass additional libusb
- libs for static build
-Message-ID: <20200428093139.115983-1-james.hilliard1@gmail.com>
+From: Slydder <slydder101@gmail.com>
+Date: Tue, 28 Apr 2020 13:51:35 +0300
+Subject: [Buildroot] [PATCH v4 1/3] package/environment-setup: new
+ package
+In-Reply-To: <CA+TH9V=-7jwQSQvoLoAwNvDe4OtHf9N442FHW=HGBX78a4CivA@mail.gmail.com>
+References: <20200425124836.122729-1-angelo@amarulasolutions.com>
+ <96aada93-1fbf-19c5-ad8e-e293b121468a@bitdefender.com>
+ <CA+TH9V=-7jwQSQvoLoAwNvDe4OtHf9N442FHW=HGBX78a4CivA@mail.gmail.com>
+Message-ID: <0591f3e8-888e-e683-318e-349dae5ecc3f@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default apcupsd only passes libs for libusb-compat, this is not
-sufficient for static builds which also require libusb libs.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/747/7472fec82983f5b9c2f92578b2b20b746a8d20ae/build-end.log
+> If the PS1 thing is so bothering we can remove it, but I strongly
+> disagree. 
+Please drop it. If somebody wants to change PS1, than it can be moved to 
+a wrapper script. But keep in the environment script only the strict 
+necessary.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/apcupsd/apcupsd.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
-index ff9cc9242f..a0fda19cf3 100644
---- a/package/apcupsd/apcupsd.mk
-+++ b/package/apcupsd/apcupsd.mk
-@@ -10,8 +10,11 @@ APCUPSD_LICENSE = GPL-2.0
- APCUPSD_LICENSE_FILES = COPYING
- APCUPSD_CONF_OPTS = --disable-test
- 
--ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
-+ifneq ($(BR2_PACKAGE_APCUPSD_MODBUS_USB)$(BR2_PACKAGE_APCUPSD_USB),)
- APCUPSD_CONF_ENV = ac_cv_path_usbcfg=$(STAGING_DIR)/usr/bin/libusb-config
-+ifeq ($(BR2_STATIC_LIBS),y)
-+APCUPSD_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libusb`"
-+endif
- endif
- 
- ifeq ($(BR2_PACKAGE_APCUPSD_APCSMART),y)
--- 
-2.20.1
+Best regards,
+Slydder
