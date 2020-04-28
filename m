@@ -1,60 +1,44 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 28 Apr 2020 02:05:13 -0600
-Subject: [Buildroot] [PATCH 1/1] package/pkg-meson.mk: set correct
- pkgconfig for native dependencies
-In-Reply-To: <0f40c7ae-22d4-f9fa-80e5-5b81617e8d78@mind.be>
-References: <20200428040638.122494-1-james.hilliard1@gmail.com>
- <20200428072202.5889620f@windsurf.home>
- <d96ae071-26fa-25a4-a508-d52d82daafeb@mind.be>
- <20200428091022.4c613e80@windsurf.home>
- <0f40c7ae-22d4-f9fa-80e5-5b81617e8d78@mind.be>
-Message-ID: <CADvTj4oX9oQTxpHLEyKMACWHwLh4pL13C4nrK=9wVkQebhV5rA@mail.gmail.com>
+From: Stephane Viau <stephane.viau@oss.nxp.com>
+Date: Tue, 28 Apr 2020 09:33:49 +0200
+Subject: [Buildroot] [PATCH 0/4] imx: add i.MX8M Nano EVK board support
+Message-ID: <1588059233-11467-1-git-send-email-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 28, 2020 at 1:55 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 28/04/2020 09:10, Thomas Petazzoni wrote:
-> > On Tue, 28 Apr 2020 08:50:43 +0200
-> > Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> >> On 28/04/2020 07:22, Thomas Petazzoni wrote:
-> >>> +++ b/package/pkg-meson.mk
-> >>> @@ -87,6 +87,7 @@ define $(2)_CONFIGURE_CMDS
-> >>>             --default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
-> >>>             --buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
-> >>>             --cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
-> >>> +           -Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
-> >>
-> >>  This can't be right. Here you're setting the pkg_config_path to the one for
-> >> native build. It may work in the specific case of wayland-scanner where you
-> >> actually want the native one, but it will break anything that requires the cross
-> >> package config.
-> >
-> > Isn't the "build." scoping of that property going to make it apply only
-> > for the native parts of the build ?
->
->  Ah, silly me, of course!
->
->  Thanks James and Thomas for correcting me.
->
->  So in that case, this patch looks good. But the meson.mk change should be a
-> separate patch, of course.
-That would overlap with the weston -Dbuild.pkg_config_path removal.
->
->  I also wonder: is the pkg_config_path in cross-compilation.conf that I added in
-> 4e0bc29993376613d200e892d491e31ea5a49622 completely disfunctional? In that case,
-> it should be replaced with a -Dtarget.pkg_config_path instead.
-I think it's still being set for dependencies without native: true.
->
->  If it does function, how is it possible that it works with
-> cross-compilation.conf but not with native-compilation.conf?
-I thought we don't use a conf file for building host packages only target.
->
->  Regards,
->  Arnout
+This series adds support for the NXP i.MX8M Nano EVK board.
+
+Since the i.MX8M Nano CPU was added for the Nitrogen8MNano board, which has a
+type of memory (LPDDR4) different from the NXP reference board (DDR4), the first
+couple of patches introduce the DDR training selection.
+
+The second half of the series adds support for i.MX8M Nano EVK Board with kernel/
+U-Boot based on 4.19.35_1.1.0, which is the current preferred version for all NXP
+reference boards.
+
+BR, 
+Stephane.
+
+Stephane Viau (4):
+  package/freescale-imx/firmware-imx: add choice for DDR training
+    binaries
+  board/freescale/common/imx: use generic ddr_fw.bin name
+  board/freescale/common/imx: add support for i.MX8M Nano
+  configs/freescale_imx8mnevk: new defconfig
+
+ .gitlab-ci.yml                                     |  1 +
+ DEVELOPERS                                         |  4 ++
+ .../common/imx/imx8-bootloader-prepare.sh          |  2 +-
+ board/freescale/common/imx/post-image.sh           |  2 +
+ board/freescale/imx8mnevk/readme.txt               | 74 ++++++++++++++++++++++
+ configs/freescale_imx8mnevk_defconfig              | 43 +++++++++++++
+ package/freescale-imx/firmware-imx/Config.in       | 24 +++++++
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 29 ++++++++-
+ 8 files changed, 177 insertions(+), 2 deletions(-)
+ create mode 100644 board/freescale/imx8mnevk/readme.txt
+ create mode 100644 configs/freescale_imx8mnevk_defconfig
+
+-- 
+2.7.4
