@@ -1,58 +1,53 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue, 28 Apr 2020 16:46:01 +0200
-Subject: [Buildroot] [PATCH v6 4/4] package/environment-setup: adding custom
- PS1
+Date: Tue, 28 Apr 2020 16:46:00 +0200
+Subject: [Buildroot] [PATCH v6 3/4] package/environment-setup: add cmake
+ alias
 In-Reply-To: <1588085161-28104-1-git-send-email-angelo@amarulasolutions.com>
 References: <1588085161-28104-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1588085161-28104-4-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <1588085161-28104-3-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+
 In order to simplify the usage of a buildroot toolchain within
-the buildroot shell, a custom PS1 is optionally available.
-This PS1 will show the sdk version actually loaded, this can
-be useful to not confuse this shell with a normal one.
+the buildroot shell, a "cmake" alias is provided to call cmake
+with the correct toolchain file and options.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/environment-setup/Config.in.host       | 10 ++++++++++
- package/environment-setup/environment-setup.mk |  3 +++
- 2 files changed, 13 insertions(+)
+ package/environment-setup/environment-setup    | 1 +
+ package/environment-setup/environment-setup.mk | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/environment-setup/Config.in.host b/package/environment-setup/Config.in.host
-index 87f460d..1af826e 100644
---- a/package/environment-setup/Config.in.host
-+++ b/package/environment-setup/Config.in.host
-@@ -4,3 +4,13 @@ config BR2_PACKAGE_HOST_ENVIRONMENT_SETUP
- 	  Install an helper script to setup a build environment
- 	  based on buildroot. It's useful when you export an sdk
- 	  and want to use buildroot to build an external project
-+
-+if BR2_PACKAGE_HOST_ENVIRONMENT_SETUP
-+
-+config BR2_PACKAGE_HOST_ENVIRONMENT_SETUP_PS1
-+	bool "export custom PS1"
-+	help
-+	  Whan sourced, the script will replace the PS1 with a
-+	  custom one reporting SDK version in use.
-+
-+endif
+diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
+index db652fe..7c3ddda 100644
+--- a/package/environment-setup/environment-setup
++++ b/package/environment-setup/environment-setup
+@@ -12,6 +12,7 @@ Some tips:
+ * Target configure options are already exported
+ * To configure do "./configure $CONFIGURE_FLAGS"
+ * Alternatively use the alias "configure"
++* A "cmake" alias is available
+ 
+ EOF
+ SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
 diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-index ba85691..b024983 100644
+index 138710c..ba85691 100644
 --- a/package/environment-setup/environment-setup.mk
 +++ b/package/environment-setup/environment-setup.mk
-@@ -34,6 +34,9 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 	printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
+@@ -24,6 +24,9 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
+ 		--program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+ 	printf "alias configure=\"./configure \$${CONFIGURE_FLAGS}\"\n" \
  		>> $(ENVIRONMENT_SETUP_FILE)
- 
-+	$(if $(BR2_PACKAGE_HOST_ENVIRONMENT_SETUP_PS1),\
-+		printf "PS1=\"\[\e[32m\]buildroot-$(BR2_VERSION)\[\e[m\]:\[\e[34m\]\w\[\e[m\]\$$ \"\n" \
-+		>> $(ENVIRONMENT_SETUP_FILE),)
- endef
- 
- $(eval $(host-generic-package))
++	printf "alias cmake=\"cmake \
++		-DCMAKE_TOOLCHAIN_FILE=$(HOST_DIR)/share/buildroot/toolchainfile.cmake \
++		-DCMAKE_INSTALL_PREFIX=/usr\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+ 	$(SED) $(ENVIRONMENT_SETUP_HOST_BIN_DIR_SED_EXP) \
+ 		-e $(ENVIRONMENT_SETUP_HOST_DIR_SED_EXP) \
+ 		-e '/^export "PATH=/c\' \
 -- 
 2.7.4
