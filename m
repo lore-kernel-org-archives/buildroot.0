@@ -1,44 +1,110 @@
 From: Stephane Viau <stephane.viau@oss.nxp.com>
-Date: Tue, 28 Apr 2020 09:33:49 +0200
-Subject: [Buildroot] [PATCH 0/4] imx: add i.MX8M Nano EVK board support
-Message-ID: <1588059233-11467-1-git-send-email-stephane.viau@oss.nxp.com>
+Date: Tue, 28 Apr 2020 09:33:50 +0200
+Subject: [Buildroot] [PATCH 1/4] package/freescale-imx/firmware-imx: add
+ choice for DDR training binaries
+In-Reply-To: <1588059233-11467-1-git-send-email-stephane.viau@oss.nxp.com>
+References: <1588059233-11467-1-git-send-email-stephane.viau@oss.nxp.com>
+Message-ID: <1588059233-11467-2-git-send-email-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series adds support for the NXP i.MX8M Nano EVK board.
+i.MX 8M Nano support many DDR types (LPDDR4, DDR4, DDR3L). Some boards
+have LPDDR4 (e.g.: nitrogen8mn) and some others have the DDR4 (e.g.:
+NXP's reference board EVK). This patch allows the selection of either
+of the binaries used to train the DDR.
 
-Since the i.MX8M Nano CPU was added for the Nitrogen8MNano board, which has a
-type of memory (LPDDR4) different from the NXP reference board (DDR4), the first
-couple of patches introduce the DDR training selection.
+Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+Reviewed-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
+Reviewed-by: Julien Olivain <julien.olivain@oss.nxp.com>
+---
+ package/freescale-imx/firmware-imx/Config.in       | 24 ++++++++++++++++++
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 29 +++++++++++++++++++++-
+ 2 files changed, 52 insertions(+), 1 deletion(-)
 
-The second half of the series adds support for i.MX8M Nano EVK Board with kernel/
-U-Boot based on 4.19.35_1.1.0, which is the current preferred version for all NXP
-reference boards.
-
-BR, 
-Stephane.
-
-Stephane Viau (4):
-  package/freescale-imx/firmware-imx: add choice for DDR training
-    binaries
-  board/freescale/common/imx: use generic ddr_fw.bin name
-  board/freescale/common/imx: add support for i.MX8M Nano
-  configs/freescale_imx8mnevk: new defconfig
-
- .gitlab-ci.yml                                     |  1 +
- DEVELOPERS                                         |  4 ++
- .../common/imx/imx8-bootloader-prepare.sh          |  2 +-
- board/freescale/common/imx/post-image.sh           |  2 +
- board/freescale/imx8mnevk/readme.txt               | 74 ++++++++++++++++++++++
- configs/freescale_imx8mnevk_defconfig              | 43 +++++++++++++
- package/freescale-imx/firmware-imx/Config.in       | 24 +++++++
- package/freescale-imx/firmware-imx/firmware-imx.mk | 29 ++++++++-
- 8 files changed, 177 insertions(+), 2 deletions(-)
- create mode 100644 board/freescale/imx8mnevk/readme.txt
- create mode 100644 configs/freescale_imx8mnevk_defconfig
-
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index 56d5b80..e6ae993 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -8,3 +8,27 @@ config BR2_PACKAGE_FIRMWARE_IMX
+ 
+ 	  This library is provided by Freescale as-is and doesn't have
+ 	  an upstream.
++
++if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
++
++choice
++	bool "DDR training binaries"
++	default BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4
++	help
++	  Choose the DDR training binaries to be used depending on the
++	  kind of memory that is available on the target board (DDR4,
++	  LPDDR4, etc...).
++
++config BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4
++	bool "lpddr4"
++	help
++	  Use LPDDR4 binaries (i.e.: lpddr4_pmu_train_*.bin)
++
++config BR2_PACKAGE_FIRMWARE_DDRFW_DDR4
++	bool "DDR4"
++	help
++	  Use DDR4 binaries (i.e.: ddr4_*_201810.bin).
++
++endchoice # DDR training FW
++
++endif
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index cd0dafb..33ee4bb 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -18,7 +18,7 @@ define FIRMWARE_IMX_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(FIRMWARE_IMX_DL_DIR)/$(FIRMWARE_IMX_SOURCE))
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN),y)
++ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM)$(BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4),y)
+ FIRMWARE_IMX_INSTALL_IMAGES = YES
+ FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+ define FIRMWARE_IMX_PREPARE_LPDDR4_FW
+@@ -42,9 +42,36 @@ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+ 	cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_1d_fw.bin \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
+ 		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
++	ln -sf $(BINARIES_DIR)/lpddr4_pmu_train_fw.bin $(BINARIES_DIR)/ddr_fw.bin
+ 	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
+ 		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
+ endef
++else ifeq ($(BR2_PACKAGE_FIRMWARE_DDRFW_DDR4),y)
++FIRMWARE_IMX_INSTALL_IMAGES = YES
++FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
++define FIRMWARE_IMX_PREPARE_DDR4_FW
++	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
++		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810.bin \
++		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810_pad.bin
++	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
++		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810.bin \
++		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810_pad.bin
++	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810_pad.bin \
++		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810_pad.bin > \
++		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_$(1)_201810_fw.bin
++endef
++
++define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
++	# Create padded versions of ddr4_* and generate ddr4_fw.bin.
++	# ddr4_fw.bin is needed when generating imx8-boot-sd.bin
++	# which is done in post-image script.
++	$(call FIRMWARE_IMX_PREPARE_DDR4_FW,1d)
++	$(call FIRMWARE_IMX_PREPARE_DDR4_FW,2d)
++	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_1d_201810_fw.bin \
++		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
++		$(BINARIES_DIR)/ddr4_201810_fw.bin
++	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
++endef
+ else ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X),y)
+ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/firmware/vpu/vpu_fw_imx8_dec.bin \
 -- 
 2.7.4
