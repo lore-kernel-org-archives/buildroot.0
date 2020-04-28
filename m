@@ -1,13 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Apr 2020 08:48:21 +0200
+Date: Tue, 28 Apr 2020 08:50:43 +0200
 Subject: [Buildroot] [PATCH 1/1] package/pkg-meson.mk: set correct
  pkgconfig for native dependencies
-In-Reply-To: <20200428073214.6b598767@windsurf.home>
+In-Reply-To: <20200428072202.5889620f@windsurf.home>
 References: <20200428040638.122494-1-james.hilliard1@gmail.com>
  <20200428072202.5889620f@windsurf.home>
- <CADvTj4oPoCyiZLt+h7Wft6eF27E-pRtOzO+68M=o5276NDRWCw@mail.gmail.com>
- <20200428073214.6b598767@windsurf.home>
-Message-ID: <299ae928-75b1-fb95-d70a-e099bec45e67@mind.be>
+Message-ID: <d96ae071-26fa-25a4-a508-d52d82daafeb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,35 +14,23 @@ To: buildroot@busybox.net
 
 
 
-On 28/04/2020 07:32, Thomas Petazzoni wrote:
-> On Mon, 27 Apr 2020 23:28:05 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
-> 
->>> Could you have a look at the patch below? My understanding is that your
->>> commit 4e0bc29993376613d200e892d491e31ea5a49622 should have made this
->>> unnecessary. Could you comment ?  
->> I've confirmed with upstream that this option can only be passed via
->> command line
->> and not via cross-compilation.conf at the moment so I'm fairly confident that
->> 4e0bc29993376613d200e892d491e31ea5a49622 would not fix this issue.
-> 
-> But then I wonder what is the point of
-> 4e0bc29993376613d200e892d491e31ea5a49622 and how it can have worked ?
+On 28/04/2020 07:22, Thomas Petazzoni wrote:
+> +++ b/package/pkg-meson.mk
+> @@ -87,6 +87,7 @@ define $(2)_CONFIGURE_CMDS
+>  		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+>  		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+>  		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+> +		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
 
- That commit also added sys_root to cross-compilation.conf. It's very well
-possible that for the single thing that was tested with it (goi), the sys_root
-change was sufficient to make it pass. I don't remember if I double-checked if
-the pkg_config_libdir was taken into account. It was purely based on reading the
-meson source code.
+ This can't be right. Here you're setting the pkg_config_path to the one for
+native build. It may work in the specific case of wayland-scanner where you
+actually want the native one, but it will break anything that requires the cross
+package config.
 
+ (Of course, this statement is just from reading the code, I could be wrong.)
 
  Regards,
  Arnout
 
-> 
-> Or is it necessary *in* addition to passing -Dbuild.pkg_config_path ?
-> 
-> Thanks,
-> 
-> Thomas
-> 
+>  		$$($$(PKG)_CONF_OPTS) \
+>  		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
