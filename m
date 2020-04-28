@@ -1,47 +1,43 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 28 Apr 2020 01:00:47 -0600
-Subject: [Buildroot] [PATCH 1/1] package/pkg-meson.mk: set correct
- pkgconfig for native dependencies
-In-Reply-To: <CADvTj4omJYTytg_nmqAUg1jQqFgQvzFbA0=3kog-Bj0DQp_BSg@mail.gmail.com>
-References: <20200428040638.122494-1-james.hilliard1@gmail.com>
- <20200428072202.5889620f@windsurf.home>
- <d96ae071-26fa-25a4-a508-d52d82daafeb@mind.be>
- <CADvTj4omJYTytg_nmqAUg1jQqFgQvzFbA0=3kog-Bj0DQp_BSg@mail.gmail.com>
-Message-ID: <CADvTj4qgx3z=quJPSWPKS_ommCZAvmwdKayM4PgHZkctYzBt+Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 28 Apr 2020 09:09:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: bump to version
+ 1.3.2
+In-Reply-To: <CAPi7W83AsH8BEvr7yiUZAt=JdLnDQg+wL2K_bpbR-FuSM1RiVw@mail.gmail.com>
+References: <20200421114849.855332-1-julien.grossholtz@openest.io>
+ <20200428073812.29aa32ee@windsurf.home>
+ <CAPi7W83AsH8BEvr7yiUZAt=JdLnDQg+wL2K_bpbR-FuSM1RiVw@mail.gmail.com>
+Message-ID: <20200428090923.3841df3f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 28, 2020 at 12:55 AM James Hilliard
-<james.hilliard1@gmail.com> wrote:
->
-> On Tue, Apr 28, 2020 at 12:50 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+On Tue, 28 Apr 2020 08:31:35 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> > /home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/8.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: cannot find -lanl
 > >
-> >
-> >
-> > On 28/04/2020 07:22, Thomas Petazzoni wrote:
-> > > +++ b/package/pkg-meson.mk
-> > > @@ -87,6 +87,7 @@ define $(2)_CONFIGURE_CMDS
-> > >               --default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
-> > >               --buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
-> > >               --cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
-> > > +             -Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
-> >
-> >  This can't be right. Here you're setting the pkg_config_path to the one for
-> > native build. It may work in the specific case of wayland-scanner where you
-> > actually want the native one, but it will break anything that requires the cross
-> > package config.
-> We've essentially already been using this exact option for weston so I'm pretty
-> sure it's correct. This option should only override pkgconfig for native: true
-> dependencies.
-See documentation here: https://mesonbuild.com/Builtin-options.html#core-options
-> >
-> >  (Of course, this statement is just from reading the code, I could be wrong.)
-> >
-> >  Regards,
-> >  Arnout
-> >
-> > >               $$($$(PKG)_CONF_OPTS) \
-> > >               $$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+> > which I believe is only provided by glibc. Not sure what the fix is.
+> > Making paho-mqtt-c depend on glibc would not be really nice.  
+> I fixed it upstream with:
+> https://github.com/eclipse/paho.mqtt.c/commit/517e8659ab566b15cc409490a432e8935b164de8.
+> I'll send a patch.
+
+Excellent, thanks!
+
+> It should be noted that that upstream has the "interesting" idea of
+> deleting and recreating git release. For example, 1.3.2 has been
+> "re-released" 20 hours ago. It could explain why the hash was wrong
+> when this package was bumped.
+
+Gah, very bad. Since you're in touch with upstream, perhaps you could
+tell them that this is really bad, and why it is really bad?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
