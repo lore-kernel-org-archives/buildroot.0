@@ -1,53 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 28 Apr 2020 11:21:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: bump to version
- 1.3.2
-In-Reply-To: <20200428090923.3841df3f@windsurf.home>
-References: <20200421114849.855332-1-julien.grossholtz@openest.io>
- <20200428073812.29aa32ee@windsurf.home>
- <CAPi7W83AsH8BEvr7yiUZAt=JdLnDQg+wL2K_bpbR-FuSM1RiVw@mail.gmail.com>
- <20200428090923.3841df3f@windsurf.home>
-Message-ID: <CAPi7W80gxxoYj4sNWnpaAMfJKyDCqKkF6i8QXvf2z780qb9OKQ@mail.gmail.com>
+From: Tom Marcuzzi <tom.marcuzzi@orolia.com>
+Date: Tue, 28 Apr 2020 10:56:01 +0200
+Subject: [Buildroot] [PATCH] package/php: add FFI support
+Message-ID: <20200428085601.15825-1-tom.marcuzzi@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+---
+ package/php/Config.ext | 6 ++++++
+ package/php/php.mk     | 5 +++++
+ 2 files changed, 11 insertions(+)
 
-Le mar. 28 avr. 2020 ? 09:09, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Tue, 28 Apr 2020 08:31:35 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > > /home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/8.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: cannot find -lanl
-> > >
-> > > which I believe is only provided by glibc. Not sure what the fix is.
-> > > Making paho-mqtt-c depend on glibc would not be really nice.
-> > I fixed it upstream with:
-> > https://github.com/eclipse/paho.mqtt.c/commit/517e8659ab566b15cc409490a432e8935b164de8.
-> > I'll send a patch.
->
-> Excellent, thanks!
->
-> > It should be noted that that upstream has the "interesting" idea of
-> > deleting and recreating git release. For example, 1.3.2 has been
-> > "re-released" 20 hours ago. It could explain why the hash was wrong
-> > when this package was bumped.
->
-> Gah, very bad. Since you're in touch with upstream, perhaps you could
-> tell them that this is really bad, and why it is really bad?
-Done: https://github.com/eclipse/paho.mqtt.c/pull/861
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
-
-Fabrice
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 66ee935cf0..fc28a523e1 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -425,4 +425,10 @@ config BR2_PACKAGE_PHP_EXT_XSL
+ 	help
+ 	  XSL transformation support
+ 
++config BR2_PACKAGE_PHP_EXT_FFI
++	bool "FFI"
++	select BR2_PACKAGE_LIBFFI
++	help
++	  Foreign Function Interface support
++
+ endmenu
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 4d2f1b8f63..fd78b36b51 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -333,6 +333,11 @@ PHP_CONF_OPTS += \
+ PHP_DEPENDENCIES += jpeg libpng freetype zlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PHP_EXT_FFI),y)
++PHP_CONF_OPTS += --with-ffi
++PHP_DEPENDENCIES += libffi
++endif
++
+ ifeq ($(BR2_PACKAGE_PHP_SAPI_FPM),y)
+ define PHP_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 $(@D)/sapi/fpm/init.d.php-fpm \
+-- 
+2.17.1
