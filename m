@@ -1,117 +1,141 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Tue, 28 Apr 2020 09:15:04 -0500
-Subject: [Buildroot] [PATCH] package/cifs-utils: bump to version 6.10
-Message-ID: <20200428141505.23883-1-ryanbarnett3@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 28 Apr 2020 16:28:25 +0200
+Subject: [Buildroot] [PATCH] package/openssh: allow separate selection
+ of client, server, keyutils
+In-Reply-To: <20200406135622.7645-1-patrickdepinguin@gmail.com>
+References: <20200406135622.7645-1-patrickdepinguin@gmail.com>
+Message-ID: <CAAXf6LUBTd55GrgBwFCoHCv23faRxGd6Hqpu4bxrS6hxjxVqKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the version bump to 6.10 the following changes were:
+El lun., 6 abr. 2020 a las 15:56, Thomas De Schampheleire
+(<patrickdepinguin@gmail.com>) escribi?:
+>
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>
+> The openssh package comprises three separate entities: the SSH client, SSH
+> server, and some SSH key utilities. One may want the client but not the
+> server, the server but not the client, or maybe only the key utilities.
+>
+> Add separate options for each entity and update the files installed on
+> target accordingly.
+>
+> On an ARM Cortex-A53 configuration, size of stripped binaries are:
+>
+> Client programs: 2213118 bytes (2161 KB)
+> usr/bin/ssh,657180
+> usr/bin/scp,99836
+> usr/bin/ssh-add,312800
+> usr/bin/ssh-agent,296428
+> usr/libexec/ssh-keysign,398908
+> usr/libexec/ssh-pkcs11-helper,292316
+> usr/bin/sftp,144992
+> usr/bin/ssh-copy-id,10658
+>
+> Server programs: 806840 bytes (787 KB)
+> usr/libexec/sftp-server,112140
+> usr/sbin/sshd,694168
+> etc/init.d/S50sshd,532
+>
+> Key utilities: 789648 bytes (771 KB)
+> usr/bin/ssh-keygen,398924
+> usr/bin/ssh-keyscan,390724
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  package/openssh/Config.in  | 23 +++++++++++++++++++++++
+>  package/openssh/openssh.mk | 31 ++++++++++++++++++++++++++++++-
+>  2 files changed, 53 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/openssh/Config.in b/package/openssh/Config.in
+> index 683a9c0e51..cc5998742e 100644
+> --- a/package/openssh/Config.in
+> +++ b/package/openssh/Config.in
+> @@ -9,3 +9,26 @@ config BR2_PACKAGE_OPENSSH
+>           friends.
+>
+>           http://www.openssh.com/
+> +
+> +if BR2_PACKAGE_OPENSSH
+> +
+> +config BR2_PACKAGE_OPENSSH_CLIENT
+> +       bool "client"
+> +       default y
+> +       help
+> +         Client programs: ssh, scp, sftp, ssh-agent, ssh-add,
+> +         ssh-copy-id.
+> +
+> +config BR2_PACKAGE_OPENSSH_SERVER
+> +       bool "server"
+> +       default y
+> +       help
+> +         Server programs: sshd, sftp-server
+> +
+> +config BR2_PACKAGE_OPENSSH_KEY_UTILS
+> +       bool "key utilities"
+> +       default y
+> +       help
+> +         Key utilities: ssh-keygen, ssh-keyscan.
+> +
+> +endif
+> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+> index d50572128a..b0259de7dd 100644
+> --- a/package/openssh/openssh.mk
+> +++ b/package/openssh/openssh.mk
+> @@ -82,10 +82,39 @@ define OPENSSH_INSTALL_INIT_SYSV
+>                 $(TARGET_DIR)/etc/init.d/S50sshd
+>  endef
+>
+> +ifeq ($(BR2_PACKAGE_OPENSSH_CLIENT),y)
+>  define OPENSSH_INSTALL_SSH_COPY_ID
+>         $(INSTALL) -D -m 755 $(@D)/contrib/ssh-copy-id $(TARGET_DIR)/usr/bin/ssh-copy-id
+>  endef
+> -
+>  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SSH_COPY_ID
+> +else
+> +define OPENSSH_REMOVE_CLIENT
+> +       for i in ssh scp sftp ssh-agent ssh-add ; do \
+> +               rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+> +       done
+> +       for i in ssh-keysign ssh-pkcs11-helper ; do \
+> +               rm -f $(TARGET_DIR)/usr/libexec/$$i ; \
+> +       done
+> +endef
+> +OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_REMOVE_CLIENT
+> +endif
 
- * Fix hash file to two spaces format
- * Add patch to respect DESTDIR and optionally install man pages for
-   mount.smb3 by utilizing CONFIG_MAN.
- * Pass -std=c99 and -std=gnu11 to fix compile issues found with the
-   sourcery-arm toolchain with C99 style code errors in smbinfo.c and
-   defintion of 'struct sa' uisng gnu11 for C11 GNU extensions.
 
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
----
- ...-installing-mount.smb3-and-optionall.patch | 41 +++++++++++++++++++
- package/cifs-utils/cifs-utils.hash            |  4 +-
- package/cifs-utils/cifs-utils.mk              |  7 +++-
- 3 files changed, 48 insertions(+), 4 deletions(-)
- create mode 100644 package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
+I discovered a problem with this approach: if dropbear is selected,
+and openssh without its 'client', then the dropbear tools ssh and scp
+will also be removed (assuming dropbear was built before openssh).
 
-diff --git a/package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch b/package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
-new file mode 100644
-index 0000000000..e36ec5b5da
---- /dev/null
-+++ b/package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
-@@ -0,0 +1,41 @@
-+From dbb4452787cb966cc74b2015689961875fd5d668 Mon Sep 17 00:00:00 2001
-+From: Ryan Barnett <ryanbarnett3@gmail.com>
-+Date: Mon, 27 Apr 2020 22:03:25 -0500
-+Subject: [PATCH] Use DESTDIR when installing mount.smb3 and optionally install
-+ man page
-+
-+Properly create mount.smb3 symlink by using DESTDIR. Also use
-+CONFIG_MAN to optionally install manpage for mount.smb3.
-+
-+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-+---
-+Upstream: https://marc.info/?l=linux-cifs&m=158804444725745&w=2
-+---
-+ Makefile.am | 10 ++++++----
-+ 1 file changed, 6 insertions(+), 4 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index fe9cd34..e0587f1 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -119,11 +119,13 @@ endif
-+ SUBDIRS = contrib
-+ 
-+ install-exec-hook:
-+-	(cd $(ROOTSBINDIR) && ln -sf mount.cifs mount.smb3)
-++	(cd $(DESTDIR)$(ROOTSBINDIR) && ln -sf mount.cifs mount.smb3)
-+ 
-++if CONFIG_MAN
-+ install-data-hook:
-+-	(cd $(man8dir) && ln -sf mount.cifs.8 mount.smb3.8)
-++	(cd $(DESTDIR)$(man8dir) && ln -sf mount.cifs.8 mount.smb3.8)
-++endif
-+ 
-+ uninstall-hook:
-+-	(cd $(ROOTSBINDIR) && rm -f $(ROOTSBINDIR)/mount.smb3)
-+-	(cd $(man8dir) && rm -f $(man8dir)/mount.smb3.8)
-++	rm -f $(DESTDIR)$(ROOTSBINDIR)/mount.smb3
-++	rm -f $(DESTDIR)$(man8dir)/mount.smb3.8
-+-- 
-+2.17.1
-+
-diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
-index bbfbc1d8f4..5eaa84f370 100644
---- a/package/cifs-utils/cifs-utils.hash
-+++ b/package/cifs-utils/cifs-utils.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	18d8f1bf92c13c4d611502dbd6759e3a766ddc8467ec8a2eda3f589e40b9ac9c	cifs-utils-6.9.tar.bz2
-+sha256  92fc29c8e9039637f3344267500f1fa381e2cccd7d10142f0c1676fa575904a7  cifs-utils-6.10.tar.bz2
- 
- # Hash for license file:
--sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 511e9ccc01..d9d590342e 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--CIFS_UTILS_VERSION = 6.9
-+CIFS_UTILS_VERSION = 6.10
- CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
- CIFS_UTILS_LICENSE = GPL-3.0+
- CIFS_UTILS_LICENSE_FILES = COPYING
--# Missing install-sh in release tarball
-+# Missing install-sh in release tarball and patching Makefile.am
- CIFS_UTILS_AUTORECONF = YES
- CIFS_UTILS_DEPENDENCIES = host-pkgconf
- 
-@@ -17,6 +17,9 @@ CIFS_UTILS_DEPENDENCIES = host-pkgconf
- # the global BR2_RELRO_FULL option.
- CIFS_UTILS_CONF_OPTS = --disable-pie --disable-man
- 
-+# uses C99 code in smbinfo.c but forgets to pass -std=c99 and c11 with mtab.c
-+CIFS_UTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99 -std=gnu11"
-+
- ifeq ($(BR2_PACKAGE_KEYUTILS),y)
- CIFS_UTILS_DEPENDENCIES += keyutils
- endif
--- 
-2.17.1
+I need to think about a good solution, basically not copying the files
+to the target dir in the first place. But it means a custom install
+rule.
+
+> +
+> +ifneq ($(BR2_PACKAGE_OPENSSH_SERVER),y)
+> +define OPENSSH_REMOVE_SERVER
+> +       rm -f $(TARGET_DIR)/usr/sbin/sshd
+> +       rm -f $(TARGET_DIR)/usr/libexec/sftp-server
+> +       rm -f $(TARGET_DIR)/etc/init.d/S50sshd
+> +endef
+> +OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_REMOVE_SERVER
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_OPENSSH_KEY_UTILS),y)
+> +define OPENSSH_REMOVE_KEY_UTILS
+> +       for i in ssh-keygen ssh-keyscan ; do \
+> +               rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+> +       done
+> +endef
+> +OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_REMOVE_KEY_UTILS
+> +endif
+>
+>  $(eval $(autotools-package))
+> --
+> 2.24.1
+>
