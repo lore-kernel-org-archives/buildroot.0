@@ -1,53 +1,50 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue, 28 Apr 2020 16:46:00 +0200
-Subject: [Buildroot] [PATCH v6 3/4] package/environment-setup: add cmake
- alias
-In-Reply-To: <1588085161-28104-1-git-send-email-angelo@amarulasolutions.com>
-References: <1588085161-28104-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1588085161-28104-3-git-send-email-angelo@amarulasolutions.com>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Tue, 28 Apr 2020 12:16:20 -0300
+Subject: [Buildroot] [PATCH] DEVELOPERS: trim Carlos Santos' watch list
+Message-ID: <20200428151620.239416-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
 
-In order to simplify the usage of a buildroot toolchain within
-the buildroot shell, a "cmake" alias is provided to call cmake
-with the correct toolchain file and options.
+- I fixed build problems on cups and cups-filters but don't use them.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+- gtest, libpam-radius-auth, libpam-tacplus and perl-file-util were
+  used in my previous job. I don't have access to the packages that
+  use them neither to the corresponding test infrastructure anymore.
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
- package/environment-setup/environment-setup    | 1 +
- package/environment-setup/environment-setup.mk | 3 +++
- 2 files changed, 4 insertions(+)
+CC: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+---
+ DEVELOPERS | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
-index db652fe..7c3ddda 100644
---- a/package/environment-setup/environment-setup
-+++ b/package/environment-setup/environment-setup
-@@ -12,6 +12,7 @@ Some tips:
- * Target configure options are already exported
- * To configure do "./configure $CONFIGURE_FLAGS"
- * Alternatively use the alias "configure"
-+* A "cmake" alias is available
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fd584bb6e4..b36c9f561b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -506,18 +506,12 @@ F:	package/sunxi-boards/
  
- EOF
- SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
-diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-index 138710c..ba85691 100644
---- a/package/environment-setup/environment-setup.mk
-+++ b/package/environment-setup/environment-setup.mk
-@@ -24,6 +24,9 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 		--program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
- 	printf "alias configure=\"./configure \$${CONFIGURE_FLAGS}\"\n" \
- 		>> $(ENVIRONMENT_SETUP_FILE)
-+	printf "alias cmake=\"cmake \
-+		-DCMAKE_TOOLCHAIN_FILE=$(HOST_DIR)/share/buildroot/toolchainfile.cmake \
-+		-DCMAKE_INSTALL_PREFIX=/usr\"\n" >> $(ENVIRONMENT_SETUP_FILE)
- 	$(SED) $(ENVIRONMENT_SETUP_HOST_BIN_DIR_SED_EXP) \
- 		-e $(ENVIRONMENT_SETUP_HOST_DIR_SED_EXP) \
- 		-e '/^export "PATH=/c\' \
+ N:	Carlos Santos <unixmania@gmail.com>
+ F:	package/busybox/
+-F:	package/cups/
+-F:	package/cups-filters/
+-F:	package/gtest/
+ F:	package/initscripts/
+ F:	package/intel-microcode/
+-F:	package/libpam-radius-auth/
+-F:	package/libpam-tacplus/
+ F:	package/liburiparser/
+ F:	package/modem-manager/
+ F:	package/pamtester/
+ F:	package/pcm-tools/
+-F:	package/perl-file-util/
+ F:	package/skeleton-custom/
+ F:	package/skeleton-init-common/
+ F:	package/skeleton-init-none/
 -- 
-2.7.4
+2.18.2
