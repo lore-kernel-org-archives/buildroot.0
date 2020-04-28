@@ -1,47 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Apr 2020 07:39:10 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: add valgrind support
-Message-ID: <20200428052428.677E190A06@busybox.osuosl.org>
+Date: Tue, 28 Apr 2020 07:38:54 +0200
+Subject: [Buildroot] [git commit] package/wlroots: bump to version 0.10.1
+Message-ID: <20200428052428.5E5F890A06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6d1876d7a357e3bef5cc3e5ad4982a5230a1ba5
+commit: https://git.buildroot.net/buildroot/commit/?id=49fb04eb555bce8007d92d9dbffccad8086d8e7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+wlroots dropped RDP backend support in:
+https://github.com/swaywm/wlroots/commit/ebdbe177d62d3c8bab04f77b86326804ff185bef
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d/mesa3d.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/wlroots/Config.in    | 6 ------
+ package/wlroots/wlroots.hash | 6 +++---
+ package/wlroots/wlroots.mk   | 9 +--------
+ 3 files changed, 4 insertions(+), 17 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 22eff24c56..ab10194a6a 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -25,8 +25,7 @@ MESA3D_DEPENDENCIES = \
+diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
+index 37261d0ca6..eb4c4725ac 100644
+--- a/package/wlroots/Config.in
++++ b/package/wlroots/Config.in
+@@ -33,12 +33,6 @@ config BR2_PACKAGE_WLROOTS
  
- MESA3D_CONF_OPTS = \
- 	-Dgallium-omx=disabled \
--	-Dpower8=false \
--	-Dvalgrind=false
-+	-Dpower8=false
+ if BR2_PACKAGE_WLROOTS
  
- ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
- MESA3D_DEPENDENCIES += host-llvm llvm
-@@ -242,6 +241,13 @@ else
- MESA3D_CONF_OPTS += -Dgallium-xvmc=false
+-config BR2_PACKAGE_WLROOTS_RDP
+-	bool "RDP backend"
+-	depends on BR2_PACKAGE_FREERDP
+-	help
+-	  Support Wayland sessions served using the RDP protocol
+-
+ config BR2_PACKAGE_WLROOTS_X11
+ 	bool "X11 backend"
+ 	depends on BR2_PACKAGE_XORG7
+diff --git a/package/wlroots/wlroots.hash b/package/wlroots/wlroots.hash
+index 6056a81ba5..20f7313bba 100644
+--- a/package/wlroots/wlroots.hash
++++ b/package/wlroots/wlroots.hash
+@@ -1,5 +1,5 @@
+-# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.8.1/wlroots-0.8.1.tar.gz.sig
+-sha256 202b86e0e21699b6660bbda56afc2e3358db7252f83ff69c89f01926b4900d98  wlroots-0.8.1.tar.gz
++# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.10.1/wlroots-0.10.1.tar.gz.sig
++sha256  b84baefbaff7bb04b3d2c43cbacef1a433e2cd65111f8fbf4bfc5faaa4b34b08  wlroots-0.10.1.tar.gz
+ 
+ # Hashes for license files:
+-sha256 ffd3737a478b83a8b51b42757d3bf909ef36694508355879722e11fc1fa6736b  LICENSE
++sha256  ffd3737a478b83a8b51b42757d3bf909ef36694508355879722e11fc1fa6736b  LICENSE
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index 52bc4c30e8..136dc2bfcd 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WLROOTS_VERSION = 0.8.1
++WLROOTS_VERSION = 0.10.1
+ WLROOTS_SITE = https://github.com/swaywm/wlroots/releases/download/$(WLROOTS_VERSION)
+ WLROOTS_LICENSE = MIT
+ WLROOTS_INSTALL_STAGING = YES
+@@ -44,13 +44,6 @@ else
+ WLROOTS_CONF_OPTS += -Dlogind=disabled
  endif
  
-+ifeq ($(BR2_PACKAGE_VALGRIND),y)
-+MESA3D_CONF_OPTS += -Dvalgrind=true
-+MESA3D_DEPENDENCIES += valgrind
-+else
-+MESA3D_CONF_OPTS += -Dvalgrind=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- MESA3D_CONF_OPTS += -Dlibunwind=true
- MESA3D_DEPENDENCIES += libunwind
+-ifeq ($(BR2_PACKAGE_WLROOTS_RDP),y)
+-WLROOTS_CONF_OPTS += -Dfreerdp=enabled
+-WLROOTS_DEPENDENCIES += freerdp
+-else
+-WLROOTS_CONF_OPTS += -Dfreerdp=disabled
+-endif
+-
+ ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
+ WLROOTS_CONF_OPTS += -Dx11-backend=enabled
+ WLROOTS_DEPENDENCIES += xlib_libX11
