@@ -1,38 +1,37 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Tue, 28 Apr 2020 14:22:16 -0500
-Subject: [Buildroot] [PATCH] package/cifs-utils: bump to version 6.10
-In-Reply-To: <20200428171720.GF11346@scaer>
-References: <20200428141505.23883-1-ryanbarnett3@gmail.com>
- <20200428171720.GF11346@scaer>
-Message-ID: <CALq67GA-UbLfvxvz6=WybDQCAM0zQ2djUeRVxC4+f0SgqAkg+A@mail.gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Tue, 28 Apr 2020 21:58:43 +0200
+Subject: [Buildroot] [PATCH 1/2] package/cegui: force libglew when libepoxy
+ is also enabled
+Message-ID: <20200428195844.48124-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Cegui doesn't allow to have enabled both opengl libraries so disable
+libepoxy when both are enabled.
 
-On Tue, Apr 28, 2020 at 12:17 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Ryan, All,
->
-> On 2020-04-28 09:15 -0500, Ryan Barnett spake thusly:
+Fixes:
+  - http://autobuild.buildroot.net/results/2881bbcc2dcfcaa5ed663817ff39f7574430ba5a/build-end.log
 
-[...]
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+ package/cegui/cegui.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > +# uses C99 code in smbinfo.c but forgets to pass -std=c99 and c11 with mtab.c
-> > +CIFS_UTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99 -std=gnu11"
->
-> Doesn't the last -std value win over the previous ones? In that case,
-> gnu11 would win.
->
-> Care to check that, please?
-
-Yes - that works. Kind of got excited with fixing issues as they came
-up and just kept appending :)
-
-v2 incoming
-
-Thanks,
--Ryan
+diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+index 434201b1f8..0e3d015948 100644
+--- a/package/cegui/cegui.mk
++++ b/package/cegui/cegui.mk
+@@ -18,7 +18,7 @@ CEGUI_DEPENDENCIES = glm \
+ 		$(if $(BR2_PACKAGE_LIBGLEW),libglew) \
+ 		$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
+-ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
++ifeq ($(BR2_PACKAGE_LIBEPOXY)$(BR2_PACKAGE_LIBGLEW),y)
+ CEGUI_DEPENDENCIES += libepoxy
+ CEGUI_CONF_OPTS += -DCEGUI_USE_EPOXY=ON
+ else
+-- 
+2.26.2
