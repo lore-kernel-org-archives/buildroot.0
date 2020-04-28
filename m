@@ -1,82 +1,97 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 27 Apr 2020 22:09:43 -0600
-Subject: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.18.0
-In-Reply-To: <ed014e8f-4aa1-1577-7bad-d2068a625dc1@mind.be>
-References: <20200303230943.24334-1-james.hilliard1@gmail.com>
- <20200305210537.42d4c081@windsurf>
- <CADvTj4p7bNSX6C+Y6Lo_cuHMT+4ifdJgckm2mEPX1tvyFyMTdQ@mail.gmail.com>
- <0b0b94ef-53a8-3f93-2cc6-09be6b5d318f@mind.be>
- <CADvTj4rWcE615eLkeWeLW-BvXu+4Ruebo-xVLVQRVx=XJKKW6w@mail.gmail.com>
- <ed014e8f-4aa1-1577-7bad-d2068a625dc1@mind.be>
-Message-ID: <CADvTj4qqBC9QMqyxvKKVO0+yn7CsG36hSqvf1vu7CEzshaJe2Q@mail.gmail.com>
+Date: Mon, 27 Apr 2020 22:33:38 -0600
+Subject: [Buildroot] [PATCH 1/1] package/wlroots: bump to version 0.10.1
+Message-ID: <20200428043338.117932-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 25, 2020 at 2:02 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 24/03/2020 19:19, James Hilliard wrote:
-> > On Mon, Mar 9, 2020 at 2:12 AM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>
-> >>
-> >>
-> >> On 05/03/2020 21:23, James Hilliard wrote:
-> >>> On Thu, Mar 5, 2020 at 1:05 PM Thomas Petazzoni
-> >>> <thomas.petazzoni@bootlin.com> wrote:
-> >>>>
-> >>>> Hello James,
-> >>>>
-> >>>> +Arnout, as there is a meson/pkg-config question.
-> >>>>
-> >>>> Thanks for the patch. Two questions below.
-> >>>>
-> >>>> On Tue,  3 Mar 2020 16:09:43 -0700
-> >>>> James Hilliard <james.hilliard1@gmail.com> wrote:
-> >>>>
-> >>>>> diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-> >>>>> index e325c6d752..6de92f63d9 100644
-> >>>>> --- a/package/wayland/wayland.mk
-> >>>>> +++ b/package/wayland/wayland.mk
-> >>>>> @@ -4,7 +4,7 @@
-> >>>>>  #
-> >>>>>  ################################################################################
-> >>>>>
-> >>>>> -WAYLAND_VERSION = 1.17.0
-> >>>>> +WAYLAND_VERSION = 1.18.0
-> >>>>>  WAYLAND_SITE = http://wayland.freedesktop.org/releases
-> >>>>>  WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
-> >>>>>  WAYLAND_LICENSE = MIT
-> >>>>> @@ -13,12 +13,12 @@ WAYLAND_INSTALL_STAGING = YES
-> >>>>>  WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
-> >>>>>  HOST_WAYLAND_DEPENDENCIES = host-pkgconf host-expat host-libffi host-libxml2
-> >>>>>
-> >>>>> -# 0002-configure-add-option-to-disable-tests.patch
-> >>>>> -WAYLAND_AUTORECONF = YES
-> >>>>> +WAYLAND_CONF_OPTS = \
-> >>>>> +     -Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
-> >>>>
-> >>>> Are you sure this is needed since commit
-> >>>> 4e0bc29993376613d200e892d491e31ea5a49622 ? Indeed, with this commit,
-> >>>> meson is properly able to use pkg-config either for native builds or
-> >>>> cross builds.
-> >>> It was failing for me without this.
-> >>
-> >>  That means something is wrong with commit 4e0bc29933.
-> > From what I can tell that change is for fixing a different issue.
->
->  Right! I forgot - commit 4e0bc29933 was only handling it for target. For host,
-> we would need a native-compilation.conf. I had started on that but didn't finish
-> it because I had no package to test it with. Hm, apparently I never even posted
-> the WIP on the mailing list...
-I managed to get it working properly here:
-https://patchwork.ozlabs.org/project/buildroot/patch/20200428040638.122494-1-james.hilliard1 at gmail.com/
->
->  Anyway, good to now that I can test it with weston and wayland packages now.
-> When I have time (yeah, right) I can properly test that series.
->
->  Regards,
->  Arnout
+wlroots dropped RDP backend support in:
+https://github.com/swaywm/wlroots/commit/ebdbe177d62d3c8bab04f77b86326804ff185bef
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ Config.in.legacy             | 6 ++++++
+ package/wlroots/Config.in    | 6 ------
+ package/wlroots/wlroots.hash | 6 +++---
+ package/wlroots/wlroots.mk   | 9 +--------
+ 4 files changed, 10 insertions(+), 17 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index c92023310d..20e7f99bb6 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2020.05"
+ 
++config BR2_PACKAGE_WLROOTS_RDP
++	bool "rdp support in wlroots was removed"
++	select BR2_LEGACY
++	help
++	  Support for rdp was removed by wlroots.
++
+ config BR2_PACKAGE_COLLECTD_LVM
+ 	bool "lvm support in collectd was removed"
+ 	select BR2_LEGACY
+diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
+index 37261d0ca6..eb4c4725ac 100644
+--- a/package/wlroots/Config.in
++++ b/package/wlroots/Config.in
+@@ -33,12 +33,6 @@ config BR2_PACKAGE_WLROOTS
+ 
+ if BR2_PACKAGE_WLROOTS
+ 
+-config BR2_PACKAGE_WLROOTS_RDP
+-	bool "RDP backend"
+-	depends on BR2_PACKAGE_FREERDP
+-	help
+-	  Support Wayland sessions served using the RDP protocol
+-
+ config BR2_PACKAGE_WLROOTS_X11
+ 	bool "X11 backend"
+ 	depends on BR2_PACKAGE_XORG7
+diff --git a/package/wlroots/wlroots.hash b/package/wlroots/wlroots.hash
+index 6056a81ba5..20f7313bba 100644
+--- a/package/wlroots/wlroots.hash
++++ b/package/wlroots/wlroots.hash
+@@ -1,5 +1,5 @@
+-# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.8.1/wlroots-0.8.1.tar.gz.sig
+-sha256 202b86e0e21699b6660bbda56afc2e3358db7252f83ff69c89f01926b4900d98  wlroots-0.8.1.tar.gz
++# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.10.1/wlroots-0.10.1.tar.gz.sig
++sha256  b84baefbaff7bb04b3d2c43cbacef1a433e2cd65111f8fbf4bfc5faaa4b34b08  wlroots-0.10.1.tar.gz
+ 
+ # Hashes for license files:
+-sha256 ffd3737a478b83a8b51b42757d3bf909ef36694508355879722e11fc1fa6736b  LICENSE
++sha256  ffd3737a478b83a8b51b42757d3bf909ef36694508355879722e11fc1fa6736b  LICENSE
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index 52bc4c30e8..136dc2bfcd 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WLROOTS_VERSION = 0.8.1
++WLROOTS_VERSION = 0.10.1
+ WLROOTS_SITE = https://github.com/swaywm/wlroots/releases/download/$(WLROOTS_VERSION)
+ WLROOTS_LICENSE = MIT
+ WLROOTS_INSTALL_STAGING = YES
+@@ -44,13 +44,6 @@ else
+ WLROOTS_CONF_OPTS += -Dlogind=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WLROOTS_RDP),y)
+-WLROOTS_CONF_OPTS += -Dfreerdp=enabled
+-WLROOTS_DEPENDENCIES += freerdp
+-else
+-WLROOTS_CONF_OPTS += -Dfreerdp=disabled
+-endif
+-
+ ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
+ WLROOTS_CONF_OPTS += -Dx11-backend=enabled
+ WLROOTS_DEPENDENCIES += xlib_libX11
+-- 
+2.20.1
