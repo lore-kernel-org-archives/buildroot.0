@@ -1,65 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 28 Apr 2020 19:10:35 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: trim Carlos Santos' watch list
-In-Reply-To: <20200428151620.239416-1-unixmania@gmail.com>
-References: <20200428151620.239416-1-unixmania@gmail.com>
-Message-ID: <20200428171035.GE11346@scaer>
+Date: Tue, 28 Apr 2020 19:17:20 +0200
+Subject: [Buildroot] [PATCH] package/cifs-utils: bump to version 6.10
+In-Reply-To: <20200428141505.23883-1-ryanbarnett3@gmail.com>
+References: <20200428141505.23883-1-ryanbarnett3@gmail.com>
+Message-ID: <20200428171720.GF11346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+Ryan, All,
 
-On 2020-04-28 12:16 -0300, unixmania at gmail.com spake thusly:
-> From: Carlos Santos <unixmania@gmail.com>
+On 2020-04-28 09:15 -0500, Ryan Barnett spake thusly:
+> In the version bump to 6.10 the following changes were:
 > 
-> - I fixed build problems on cups and cups-filters but don't use them.
+>  * Fix hash file to two spaces format
+>  * Add patch to respect DESTDIR and optionally install man pages for
+>    mount.smb3 by utilizing CONFIG_MAN.
+>  * Pass -std=c99 and -std=gnu11 to fix compile issues found with the
+>    sourcery-arm toolchain with C99 style code errors in smbinfo.c and
+>    defintion of 'struct sa' uisng gnu11 for C11 GNU extensions.
 > 
-> - gtest, libpam-radius-auth, libpam-tacplus and perl-file-util were
->   used in my previous job. I don't have access to the packages that
->   use them neither to the corresponding test infrastructure anymore.
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+> ---
+[--SNIP--]
+> diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+> index 511e9ccc01..d9d590342e 100644
+> --- a/package/cifs-utils/cifs-utils.mk
+> +++ b/package/cifs-utils/cifs-utils.mk
+> @@ -4,12 +4,12 @@
+>  #
+>  ################################################################################
+>  
+> -CIFS_UTILS_VERSION = 6.9
+> +CIFS_UTILS_VERSION = 6.10
+>  CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+>  CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+>  CIFS_UTILS_LICENSE = GPL-3.0+
+>  CIFS_UTILS_LICENSE_FILES = COPYING
+> -# Missing install-sh in release tarball
+> +# Missing install-sh in release tarball and patching Makefile.am
+>  CIFS_UTILS_AUTORECONF = YES
+>  CIFS_UTILS_DEPENDENCIES = host-pkgconf
+>  
+> @@ -17,6 +17,9 @@ CIFS_UTILS_DEPENDENCIES = host-pkgconf
+>  # the global BR2_RELRO_FULL option.
+>  CIFS_UTILS_CONF_OPTS = --disable-pie --disable-man
+>  
+> +# uses C99 code in smbinfo.c but forgets to pass -std=c99 and c11 with mtab.c
+> +CIFS_UTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99 -std=gnu11"
 
-Thank you for shepherding those packages all that time! :-)
+Doesn't the last -std value win over the previous ones? In that case,
+gnu11 would win.
 
-Applied to master, thanks.
+Care to check that, please?
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
-> CC: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-> ---
->  DEVELOPERS | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index fd584bb6e4..b36c9f561b 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -506,18 +506,12 @@ F:	package/sunxi-boards/
->  
->  N:	Carlos Santos <unixmania@gmail.com>
->  F:	package/busybox/
-> -F:	package/cups/
-> -F:	package/cups-filters/
-> -F:	package/gtest/
->  F:	package/initscripts/
->  F:	package/intel-microcode/
-> -F:	package/libpam-radius-auth/
-> -F:	package/libpam-tacplus/
->  F:	package/liburiparser/
->  F:	package/modem-manager/
->  F:	package/pamtester/
->  F:	package/pcm-tools/
-> -F:	package/perl-file-util/
->  F:	package/skeleton-custom/
->  F:	package/skeleton-init-common/
->  F:	package/skeleton-init-none/
+>  ifeq ($(BR2_PACKAGE_KEYUTILS),y)
+>  CIFS_UTILS_DEPENDENCIES += keyutils
+>  endif
 > -- 
-> 2.18.2
+> 2.17.1
 > 
 > _______________________________________________
 > buildroot mailing list
