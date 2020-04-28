@@ -1,55 +1,47 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 27 Apr 2020 23:38:03 -0600
-Subject: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.18.0
-In-Reply-To: <20200428072438.2f7f2b0e@windsurf.home>
-References: <20200303230943.24334-1-james.hilliard1@gmail.com>
- <20200305210537.42d4c081@windsurf>
- <CADvTj4p7bNSX6C+Y6Lo_cuHMT+4ifdJgckm2mEPX1tvyFyMTdQ@mail.gmail.com>
- <0b0b94ef-53a8-3f93-2cc6-09be6b5d318f@mind.be>
- <CADvTj4rWcE615eLkeWeLW-BvXu+4Ruebo-xVLVQRVx=XJKKW6w@mail.gmail.com>
- <ed014e8f-4aa1-1577-7bad-d2068a625dc1@mind.be>
- <CADvTj4qqBC9QMqyxvKKVO0+yn7CsG36hSqvf1vu7CEzshaJe2Q@mail.gmail.com>
- <20200428072438.2f7f2b0e@windsurf.home>
-Message-ID: <CADvTj4oDezmswNsKRcnUvOaid7KVbwvMPJGRKq-1f5FDL1KB6w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 28 Apr 2020 07:39:10 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: add valgrind support
+Message-ID: <20200428052428.677E190A06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 27, 2020 at 11:24 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon, 27 Apr 2020 22:09:43 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > > >>  That means something is wrong with commit 4e0bc29933.
-> > > > From what I can tell that change is for fixing a different issue.
-> > >
-> > >  Right! I forgot - commit 4e0bc29933 was only handling it for target. For host,
-> > > we would need a native-compilation.conf. I had started on that but didn't finish
-> > > it because I had no package to test it with. Hm, apparently I never even posted
-> > > the WIP on the mailing list...
-> > I managed to get it working properly here:
-> > https://patchwork.ozlabs.org/project/buildroot/patch/20200428040638.122494-1-james.hilliard1 at gmail.com/
->
-> I think Arnout wanted a native-compilation.conf instead of passing an
-> extra argument so that it also works with people building stuff outside
-> of Buildroot.
-That apparently isn't really possible at the moment, although it looks
-like meson is
-working on adding a config option for cross-compilation.conf in the future.
->
-> However, I don't get how this would have solved the problem as take
-> here: the issues we are seeing are with *target* packages, which are
-> looking at using the host pkg-config. Which is exactly what
-> 4e0bc29993376613d200e892d491e31ea5a49622 was supposed to fix. So I'm
-> really confused.
-That commit seems to only set the the pkg-config binary for the target package
-dependencies with native: true but not the proper host PKG_CONFIG_PATH.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+commit: https://git.buildroot.net/buildroot/commit/?id=b6d1876d7a357e3bef5cc3e5ad4982a5230a1ba5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d/mesa3d.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 22eff24c56..ab10194a6a 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -25,8 +25,7 @@ MESA3D_DEPENDENCIES = \
+ 
+ MESA3D_CONF_OPTS = \
+ 	-Dgallium-omx=disabled \
+-	-Dpower8=false \
+-	-Dvalgrind=false
++	-Dpower8=false
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
+ MESA3D_DEPENDENCIES += host-llvm llvm
+@@ -242,6 +241,13 @@ else
+ MESA3D_CONF_OPTS += -Dgallium-xvmc=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_VALGRIND),y)
++MESA3D_CONF_OPTS += -Dvalgrind=true
++MESA3D_DEPENDENCIES += valgrind
++else
++MESA3D_CONF_OPTS += -Dvalgrind=false
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ MESA3D_CONF_OPTS += -Dlibunwind=true
+ MESA3D_DEPENDENCIES += libunwind
