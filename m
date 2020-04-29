@@ -1,47 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Apr 2020 23:03:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: add optional dependency
- to libxcb
-In-Reply-To: <20200405145207.1258663-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 5 Apr 2020 16:52:07 +0200")
-References: <20200405145207.1258663-1-bernd.kuhls@t-online.de>
-Message-ID: <87imhi80ni.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 29 Apr 2020 23:05:02 +0200
+Subject: [Buildroot] [PATCH] package/php: add FFI support
+In-Reply-To: <20200428085601.15825-1-tom.marcuzzi@orolia.com>
+References: <20200428085601.15825-1-tom.marcuzzi@orolia.com>
+Message-ID: <20200429230502.1c5a65fa@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Hello Tom,
 
- > ffmpeg 3.3 added optional support for libxcb:
- > https://git.ffmpeg.org/gitweb/ffmpeg.git/blob/HEAD:/Changelog#l282
+On Tue, 28 Apr 2020 10:56:01 +0200
+Tom Marcuzzi <tom.marcuzzi@orolia.com> wrote:
 
- > This patch ensures a reproducable build of libavdevice.so:
+> ---
+>  package/php/Config.ext | 6 ++++++
+>  package/php/php.mk     | 5 +++++
+>  2 files changed, 11 insertions(+)
 
- > $ readelf -a output/target/usr/lib/libavdevice.so | grep NEEDED
- >  0x0000000000000001 (NEEDED)             Shared library: [libavfilter.so.7]
- >  0x0000000000000001 (NEEDED)             Shared library: [libavformat.so.58]
- >  0x0000000000000001 (NEEDED)             Shared library: [libavcodec.so.58]
- >  0x0000000000000001 (NEEDED)             Shared library: [libavutil.so.56]
- >  0x0000000000000001 (NEEDED)             Shared library: [libxcb.so.1]
- >  0x0000000000000001 (NEEDED)             Shared library: [libxcb-shm.so.0]
- >  0x0000000000000001 (NEEDED)             Shared library: [libxcb-shape.so.0]
- >  0x0000000000000001 (NEEDED)             Shared library: [libxcb-xfixes.so.0]
- >  0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
+Thanks, this looks good. Could you just resend with your Signed-off-by
+added to the commit log ?
 
- > compared to
+Best regards,
 
- > $ readelf -a output/target/usr/lib/libavdevice.so | grep NEEDED
- >  0x0000000000000001 (NEEDED)             Shared library: [libavfilter.so.7]
- >  0x0000000000000001 (NEEDED)             Shared library: [libavformat.so.58]
- >  0x0000000000000001 (NEEDED)             Shared library: [libavcodec.so.58]
- >  0x0000000000000001 (NEEDED)             Shared library: [libavutil.so.56]
- >  0x0000000000000001 (NEEDED)             Shared library: [libc.so.0]
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed to 2020.02.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
