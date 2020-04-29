@@ -1,40 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Apr 2020 22:39:49 +0200
-Subject: [Buildroot] [PATCH v2] package/cifs-utils: bump to version 6.10
-In-Reply-To: <20200428192029.30349-1-ryanbarnett3@gmail.com>
-References: <20200428192029.30349-1-ryanbarnett3@gmail.com>
-Message-ID: <20200429223949.14fdc578@windsurf.home>
+Date: Wed, 29 Apr 2020 22:48:25 +0200
+Subject: [Buildroot] [PATCH v2 0/5] imx: add i.MX8M Nano EVK board
+ support
+In-Reply-To: <DB8PR04MB5755633B75DCC14E68014295A7AD0@DB8PR04MB5755.eurprd04.prod.outlook.com>
+References: <1588151545-9346-1-git-send-email-stephane.viau@oss.nxp.com>
+ <20200429222241.3ca00696@windsurf.home>
+ <DB8PR04MB5755633B75DCC14E68014295A7AD0@DB8PR04MB5755.eurprd04.prod.outlook.com>
+Message-ID: <20200429224825.4e472ac4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 28 Apr 2020 14:20:28 -0500
-Ryan Barnett <ryanbarnett3@gmail.com> wrote:
+On Wed, 29 Apr 2020 20:36:31 +0000
+"Stephane Viau (OSS)" <stephane.viau@oss.nxp.com> wrote:
 
-> In the version bump to 6.10 the following changes were:
+> >Thanks for this new iteration. It was in our patchwork patch tracking
+> >system, and it just disappeared. Has anyone removed these patches? You
+> >Stephane? Someone else?  
 > 
->  * Fix hash file to two spaces format
->  * Add patch to respect DESTDIR and optionally install man pages for
->    mount.smb3 by utilizing CONFIG_MAN.
->  * Pass -std=gnu11 to fix compile issues found with the sourcery-arm
->    toolchain with C99 style code errors in smbinfo.c and defintion of
->    'struct sa' uisng gnu11 for C11 GNU extensions.
-> 
-> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-> CC: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
-> Changes v1 -> v2:
->   - use only -std=c11 (suggested by Yann)
-> ---
->  ...-installing-mount.smb3-and-optionall.patch | 41 +++++++++++++++++++
->  package/cifs-utils/cifs-utils.hash            |  4 +-
->  package/cifs-utils/cifs-utils.mk              |  7 +++-
->  3 files changed, 48 insertions(+), 4 deletions(-)
->  create mode 100644 package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
+> Yeah, sorry about that. It should be back now ; can you please check?
 
-Applied to master, thanks.
+Confirmed, thanks!
 
 Thomas
 -- 
