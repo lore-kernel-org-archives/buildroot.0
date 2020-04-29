@@ -1,58 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Apr 2020 22:14:09 +0200
-Subject: [Buildroot] [PATCH 1/1] support/testing: add
- package/test_mender.py
-In-Reply-To: <20200429131954.GA18375@P-NAN-EREVAN-mikbou>
-References: <20200429131954.GA18375@P-NAN-EREVAN-mikbou>
-Message-ID: <20200429221409.62eb04bd@windsurf.home>
+Date: Wed, 29 Apr 2020 22:19:08 +0200
+Subject: [Buildroot] [PATCH] package/openssh: Add option to populate
+ keys on build
+In-Reply-To: <20200429124138.180628-1-rfried.dev@gmail.com>
+References: <20200429124138.180628-1-rfried.dev@gmail.com>
+Message-ID: <20200429221908.08cb5112@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mikael,
+Hello,
 
-I'd be really interested to have some feedback from Angelo and/or Adam
-(who work with/use Mender).
+On Wed, 29 Apr 2020 15:41:38 +0300
+Ramon Fried <rfried.dev@gmail.com> wrote:
 
-On Wed, 29 Apr 2020 15:19:54 +0200
-Mikael Bourhis-Cloarec <mikael.bourhis@smile.fr> wrote:
+> During development phase and on targets with read-only
+> file systems, generating SSH keys on boot is not an option.
+> 
+> Add option to generate and populate SSH keys during build.
+> 
+> Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
 
-> +class TestMender(infra.basetest.BRTest):
-> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-> +        """
-> +        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+I don't really have a very well formed opinion on whether we want this
+or not. Feedback from other developers/contributors might be useful.
 
-Is this needed ?
-
-> +        BR2_PACKAGE_MENDER=y
-> +        BR2_TARGET_ROOTFS_CPIO=y
-> +        BR2_ROOTFS_OVERLAY="{}"
-> +        """.format(
-> +           # overlay to add a fake 'fw_printenv', used by Mender
-> +           infra.filepath("tests/package/test_mender/rootfs-overlay"))
+> +if BR2_PACKAGE_OPENSSH
 > +
-> +    def test_run(self):
-> +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-> +        self.emulator.boot(arch="armv5",
-> +                           kernel="builtin",
-> +                           options=["-initrd", cpio_file])
-> +        self.emulator.login()
+> +config BR2_PACKAGE_OPENSSH_POPULATE_KEYS
+> +	bool "Populate device keys"
+
+	bool "Generate host keys during build"
+
+Perhaps.
+
+> +	help
+> +	  Populate the image with device keys instead
+> +		of generating them on each boot.
+> +		This option has security implications, and
+> +		should be only used in development or on target
+> +		with read-only root file-system.
+
+Please fix the indentation: it should be one tab + two spaces, and the
+line should try to use the 72-characters width as much as possible. Run
+"make check-package" to check for such coding style issues.
+
+> +endif
+> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+> index d50572128a..908eccf6cd 100644
+> --- a/package/openssh/openssh.mk
+> +++ b/package/openssh/openssh.mk
+> @@ -86,6 +86,17 @@ define OPENSSH_INSTALL_SSH_COPY_ID
+>  	$(INSTALL) -D -m 755 $(@D)/contrib/ssh-copy-id $(TARGET_DIR)/usr/bin/ssh-copy-id
+>  endef
+>  
+> +define OPENSSH_POPULATE_KEYS
+
+Should be defined within the ifeq
+($(BR2_PACKAGE_OPENSSH_POPULATE_KEYS),y) condition.
+
+> +	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_rsa_key -N '' -t rsa
+> +	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa
+> +	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_dsa_key -N '' -t dsa
+> +	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_ed25519_key -N '' -t ed25519
+
+Use $(...) to reference make variable instead of ${...}. Also, perhaps
+a small loop makes sense:
+
+	$(foreach type,rsa ecdsa dsa ed25519,\
+		ssh-keygen -q -f $(TARGET_DIR)/etc/ssh/ssh_host_$(type)_key -N '' -t $(type)
+	)
+
+But wait: where is ssh-keygen coming from? We're not building it, so
+you're relying on the one available on your build machine. This is not
+acceptable for Buildroot, as we don't expect ssh-keygen to be available
+on the host machine. So if we want to do what you propose, we would
+need to build ssh-keygen for the host machine, using a host-openssh
+package.
+
+> +endef
 > +
-> +        # Check if the 'mender' binaries are correctly installed
-> +        self.assertRunOk("ls /usr/bin/mender")
-> +        self.assertRunOk("ls /etc/mender/mender.conf")
-> +        self.assertRunOk("ls /etc/init.d/S42mender")
+> +ifeq ($(BR2_PACKAGE_OPENSSH_POPULATE_KEYS),y)
+> +OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_POPULATE_KEYS
+> +endif
+> +
+>  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SSH_COPY_ID
 
-I am not sure these particular checks are really that useful. Checking
-that Mender is started and works is IMO enough.
+Please keep this hook registration next to its definition.
 
-So overall, I have pretty minor comments, the test looks good to me. It
-would obviously be nicer to have a more complete test, but this is
-much, much more difficult to implement.
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
