@@ -1,32 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Apr 2020 23:05:02 +0200
-Subject: [Buildroot] [PATCH] package/php: add FFI support
-In-Reply-To: <20200428085601.15825-1-tom.marcuzzi@orolia.com>
-References: <20200428085601.15825-1-tom.marcuzzi@orolia.com>
-Message-ID: <20200429230502.1c5a65fa@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Apr 2020 23:11:05 +0200
+Subject: [Buildroot] [Patch for 2020.02.x v2] package/qt5: bump latest
+ version to 5.12.8
+In-Reply-To: <20200411223421.16269-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 12 Apr 2020 00:34:21 +0200")
+References: <20200411223421.16269-1-ps.report@gmx.net>
+Message-ID: <87ees680ba.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Tom,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-On Tue, 28 Apr 2020 10:56:01 +0200
-Tom Marcuzzi <tom.marcuzzi@orolia.com> wrote:
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ > Changes v1 -> v2:
+ >   - really base on the 2020.02.x branch
 
-> ---
->  package/php/Config.ext | 6 ++++++
->  package/php/php.mk     | 5 +++++
->  2 files changed, 11 insertions(+)
+Committed to 2020.02.x, thanks.
 
-Thanks, this looks good. Could you just resend with your Signed-off-by
-added to the commit log ?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
