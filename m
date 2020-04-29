@@ -1,66 +1,53 @@
-From: Ramon Fried <rfried.dev@gmail.com>
-Date: Wed, 29 Apr 2020 15:41:38 +0300
-Subject: [Buildroot] [PATCH] package/openssh: Add option to populate keys on
- build
-Message-ID: <20200429124138.180628-1-rfried.dev@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 29 Apr 2020 14:48:19 +0200
+Subject: [Buildroot] When building the net-next kernel,
+ buildroot is asking for all the kernel config options one by one to
+ enable
+In-Reply-To: <1588163575379-0.post@n4.nabble.com>
+References: <1588163575379-0.post@n4.nabble.com>
+Message-ID: <20200429144819.74adf0b0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During development phase and on targets with read-only
-file systems, generating SSH keys on boot is not an option.
+On Wed, 29 Apr 2020 07:32:55 -0500 (CDT)
+Ganesh <ganesh45in@gmail.com> wrote:
 
-Add option to generate and populate SSH keys during build.
+> My board is an SAMA5D3 (ARM ) board.
+> 
+> I have done the following steps before starting the kernel build:
+> 
+> 1. Put my defconfig inside the kernel/arch/arm/config 
+> 2. Go to buildroot directory, make <my_project_defconfig>
+> 3. make 
+> 
+> my_project_defconfig has the following lines of concern:
+> 
+> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="<kernel path of the defconfig>"
+> BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME="My_dts.dts"
+> 
+> After giving the make, am getting a series of prompts from the buildroot
+> like enabling drivers for a specific product, starting with the GCC thing
+> and most of which I do not know .
+> What I expected was that I have already specified the defconfig and that
+> buildroot should be able to enable the necessary things automatically.
+> 
+> Can anyone tell me where I have gone wrong?
 
-Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
----
- package/openssh/Config.in  | 12 ++++++++++++
- package/openssh/openssh.mk | 11 +++++++++++
- 2 files changed, 23 insertions(+)
+This simply means that your kernel configuration file is not
+"up-to-date" with the kernel version you're using. Due to this, some
+options exist in the kernel for which the values are not specified in
+the kernel configuration file you are providing. So the kernel has to
+ask you whether you want to enable or disable those options.
 
-diff --git a/package/openssh/Config.in b/package/openssh/Config.in
-index 683a9c0e51..21bdd40435 100644
---- a/package/openssh/Config.in
-+++ b/package/openssh/Config.in
-@@ -9,3 +9,15 @@ config BR2_PACKAGE_OPENSSH
- 	  friends.
- 
- 	  http://www.openssh.com/
-+
-+if BR2_PACKAGE_OPENSSH
-+
-+config BR2_PACKAGE_OPENSSH_POPULATE_KEYS
-+	bool "Populate device keys"
-+	help
-+	  Populate the image with device keys instead
-+		of generating them on each boot.
-+		This option has security implications, and
-+		should be only used in development or on target
-+		with read-only root file-system.
-+endif
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index d50572128a..908eccf6cd 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -86,6 +86,17 @@ define OPENSSH_INSTALL_SSH_COPY_ID
- 	$(INSTALL) -D -m 755 $(@D)/contrib/ssh-copy-id $(TARGET_DIR)/usr/bin/ssh-copy-id
- endef
- 
-+define OPENSSH_POPULATE_KEYS
-+	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_rsa_key -N '' -t rsa
-+	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa
-+	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_dsa_key -N '' -t dsa
-+	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_ed25519_key -N '' -t ed25519
-+endef
-+
-+ifeq ($(BR2_PACKAGE_OPENSSH_POPULATE_KEYS),y)
-+OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_POPULATE_KEYS
-+endif
-+
- OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SSH_COPY_ID
- 
- $(eval $(autotools-package))
+Best regards,
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
