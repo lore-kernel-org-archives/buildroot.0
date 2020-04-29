@@ -1,265 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Apr 2020 23:49:57 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/p7zip: fix
- CVE-2018-5996
-Message-ID: <20200429213633.E0A0490B57@busybox.osuosl.org>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Thu, 30 Apr 2020 00:26:09 +0200
+Subject: [Buildroot] [PATCH] package/netdata: bump to 1.21.1
+Message-ID: <20200429222609.2453988-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bfb7d72d5b8faed886756146a879de76dd4ce5e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
-
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 02dfcda54a56e42d96a2f7ad2448654435e7c850)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/p7zip/0003-CVE-2018-5996.patch | 223 +++++++++++++++++++++++++++++++++
- package/p7zip/p7zip.mk                 |   2 +
- 2 files changed, 225 insertions(+)
+ package/netdata/netdata.hash | 2 +-
+ package/netdata/netdata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/p7zip/0003-CVE-2018-5996.patch b/package/p7zip/0003-CVE-2018-5996.patch
-new file mode 100644
-index 0000000000..dc3e90ad3a
---- /dev/null
-+++ b/package/p7zip/0003-CVE-2018-5996.patch
-@@ -0,0 +1,223 @@
-+From: Robert Luberda <robert@debian.org>
-+Date: Sun, 28 Jan 2018 23:47:40 +0100
-+Subject: CVE-2018-5996
-+
-+Hopefully fix Memory Corruptions via RAR PPMd (CVE-2018-5996) by
-+applying a few changes from 7Zip 18.00-beta.
-+
-+Bug-Debian: https://bugs.debian.org/#888314
-+
-+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-+---
-+ CPP/7zip/Compress/Rar1Decoder.cpp | 13 +++++++++----
-+ CPP/7zip/Compress/Rar1Decoder.h   |  1 +
-+ CPP/7zip/Compress/Rar2Decoder.cpp | 10 +++++++++-
-+ CPP/7zip/Compress/Rar2Decoder.h   |  1 +
-+ CPP/7zip/Compress/Rar3Decoder.cpp | 23 ++++++++++++++++++++---
-+ CPP/7zip/Compress/Rar3Decoder.h   |  2 ++
-+ 6 files changed, 42 insertions(+), 8 deletions(-)
-+
-+diff --git a/CPP/7zip/Compress/Rar1Decoder.cpp b/CPP/7zip/Compress/Rar1Decoder.cpp
-+index 1aaedcc..68030c7 100644
-+--- a/CPP/7zip/Compress/Rar1Decoder.cpp
-++++ b/CPP/7zip/Compress/Rar1Decoder.cpp
-+@@ -29,7 +29,7 @@ public:
-+ };
-+ */
-+ 
-+-CDecoder::CDecoder(): m_IsSolid(false) { }
-++CDecoder::CDecoder(): m_IsSolid(false), _errorMode(false) { }
-+ 
-+ void CDecoder::InitStructures()
-+ {
-+@@ -406,9 +406,14 @@ HRESULT CDecoder::CodeReal(ISequentialInStream *inStream, ISequentialOutStream *
-+   InitData();
-+   if (!m_IsSolid)
-+   {
-++    _errorMode = false;
-+     InitStructures();
-+     InitHuff();
-+   }
-++
-++  if (_errorMode)
-++    return S_FALSE;
-++
-+   if (m_UnpackSize > 0)
-+   {
-+     GetFlagsBuf();
-+@@ -477,9 +482,9 @@ STDMETHODIMP CDecoder::Code(ISequentialInStream *inStream, ISequentialOutStream
-+     const UInt64 *inSize, const UInt64 *outSize, ICompressProgressInfo *progress)
-+ {
-+   try { return CodeReal(inStream, outStream, inSize, outSize, progress); }
-+-  catch(const CInBufferException &e) { return e.ErrorCode; }
-+-  catch(const CLzOutWindowException &e) { return e.ErrorCode; }
-+-  catch(...) { return S_FALSE; }
-++  catch(const CInBufferException &e) { _errorMode = true; return e.ErrorCode; }
-++  catch(const CLzOutWindowException &e) { _errorMode = true; return e.ErrorCode; }
-++  catch(...) { _errorMode = true; return S_FALSE; }
-+ }
-+ 
-+ STDMETHODIMP CDecoder::SetDecoderProperties2(const Byte *data, UInt32 size)
-+diff --git a/CPP/7zip/Compress/Rar1Decoder.h b/CPP/7zip/Compress/Rar1Decoder.h
-+index 630f089..01b606b 100644
-+--- a/CPP/7zip/Compress/Rar1Decoder.h
-++++ b/CPP/7zip/Compress/Rar1Decoder.h
-+@@ -39,6 +39,7 @@ public:
-+ 
-+   Int64 m_UnpackSize;
-+   bool m_IsSolid;
-++  bool _errorMode;
-+ 
-+   UInt32 ReadBits(int numBits);
-+   HRESULT CopyBlock(UInt32 distance, UInt32 len);
-+diff --git a/CPP/7zip/Compress/Rar2Decoder.cpp b/CPP/7zip/Compress/Rar2Decoder.cpp
-+index b3f2b4b..0580c8d 100644
-+--- a/CPP/7zip/Compress/Rar2Decoder.cpp
-++++ b/CPP/7zip/Compress/Rar2Decoder.cpp
-+@@ -80,7 +80,8 @@ static const UInt32 kHistorySize = 1 << 20;
-+ static const UInt32 kWindowReservSize = (1 << 22) + 256;
-+ 
-+ CDecoder::CDecoder():
-+-  m_IsSolid(false)
-++  m_IsSolid(false),
-++  m_TablesOK(false)
-+ {
-+ }
-+ 
-+@@ -100,6 +101,8 @@ UInt32 CDecoder::ReadBits(unsigned numBits) { return m_InBitStream.ReadBits(numB
-+ 
-+ bool CDecoder::ReadTables(void)
-+ {
-++  m_TablesOK = false;
-++
-+   Byte levelLevels[kLevelTableSize];
-+   Byte newLevels[kMaxTableSize];
-+   m_AudioMode = (ReadBits(1) == 1);
-+@@ -170,6 +173,8 @@ bool CDecoder::ReadTables(void)
-+   }
-+   
-+   memcpy(m_LastLevels, newLevels, kMaxTableSize);
-++  m_TablesOK = true;
-++
-+   return true;
-+ }
-+ 
-+@@ -344,6 +349,9 @@ HRESULT CDecoder::CodeReal(ISequentialInStream *inStream, ISequentialOutStream *
-+       return S_FALSE;
-+   }
-+ 
-++  if (!m_TablesOK)
-++    return S_FALSE;
-++
-+   UInt64 startPos = m_OutWindowStream.GetProcessedSize();
-+   while (pos < unPackSize)
-+   {
-+diff --git a/CPP/7zip/Compress/Rar2Decoder.h b/CPP/7zip/Compress/Rar2Decoder.h
-+index 3a0535c..0e9005f 100644
-+--- a/CPP/7zip/Compress/Rar2Decoder.h
-++++ b/CPP/7zip/Compress/Rar2Decoder.h
-+@@ -139,6 +139,7 @@ class CDecoder :
-+ 
-+   UInt64 m_PackSize;
-+   bool m_IsSolid;
-++  bool m_TablesOK;
-+ 
-+   void InitStructures();
-+   UInt32 ReadBits(unsigned numBits);
-+diff --git a/CPP/7zip/Compress/Rar3Decoder.cpp b/CPP/7zip/Compress/Rar3Decoder.cpp
-+index 3bf2513..6cb8a6a 100644
-+--- a/CPP/7zip/Compress/Rar3Decoder.cpp
-++++ b/CPP/7zip/Compress/Rar3Decoder.cpp
-+@@ -92,7 +92,8 @@ CDecoder::CDecoder():
-+   _writtenFileSize(0),
-+   _vmData(0),
-+   _vmCode(0),
-+-  m_IsSolid(false)
-++  m_IsSolid(false),
-++  _errorMode(false)
-+ {
-+   Ppmd7_Construct(&_ppmd);
-+ }
-+@@ -545,6 +546,9 @@ HRESULT CDecoder::ReadTables(bool &keepDecompressing)
-+     return InitPPM();
-+   }
-+ 
-++  TablesRead = false;
-++  TablesOK = false;
-++
-+   _lzMode = true;
-+   PrevAlignBits = 0;
-+   PrevAlignCount = 0;
-+@@ -606,6 +610,9 @@ HRESULT CDecoder::ReadTables(bool &keepDecompressing)
-+       }
-+     }
-+   }
-++  if (InputEofError())
-++    return S_FALSE;
-++
-+   TablesRead = true;
-+ 
-+   // original code has check here:
-+@@ -623,6 +630,9 @@ HRESULT CDecoder::ReadTables(bool &keepDecompressing)
-+   RIF(m_LenDecoder.Build(&newLevels[kMainTableSize + kDistTableSize + kAlignTableSize]));
-+ 
-+   memcpy(m_LastLevels, newLevels, kTablesSizesSum);
-++
-++  TablesOK = true;
-++
-+   return S_OK;
-+ }
-+ 
-+@@ -824,7 +834,12 @@ HRESULT CDecoder::CodeReal(ICompressProgressInfo *progress)
-+     PpmEscChar = 2;
-+     PpmError = true;
-+     InitFilters();
-++    _errorMode = false;
-+   }
-++
-++  if (_errorMode)
-++    return S_FALSE;
-++
-+   if (!m_IsSolid || !TablesRead)
-+   {
-+     bool keepDecompressing;
-+@@ -838,6 +853,8 @@ HRESULT CDecoder::CodeReal(ICompressProgressInfo *progress)
-+     bool keepDecompressing;
-+     if (_lzMode)
-+     {
-++      if (!TablesOK)
-++        return S_FALSE;
-+       RINOK(DecodeLZ(keepDecompressing))
-+     }
-+     else
-+@@ -901,8 +918,8 @@ STDMETHODIMP CDecoder::Code(ISequentialInStream *inStream, ISequentialOutStream
-+     _unpackSize = outSize ? *outSize : (UInt64)(Int64)-1;
-+     return CodeReal(progress);
-+   }
-+-  catch(const CInBufferException &e)  { return e.ErrorCode; }
-+-  catch(...) { return S_FALSE; }
-++  catch(const CInBufferException &e)  { _errorMode = true; return e.ErrorCode; }
-++  catch(...) { _errorMode = true; return S_FALSE; }
-+   // CNewException is possible here. But probably CNewException is caused
-+   // by error in data stream.
-+ }
-+diff --git a/CPP/7zip/Compress/Rar3Decoder.h b/CPP/7zip/Compress/Rar3Decoder.h
-+index c130cec..2f72d7d 100644
-+--- a/CPP/7zip/Compress/Rar3Decoder.h
-++++ b/CPP/7zip/Compress/Rar3Decoder.h
-+@@ -192,6 +192,7 @@ class CDecoder:
-+   UInt32 _lastFilter;
-+ 
-+   bool m_IsSolid;
-++  bool _errorMode;
-+ 
-+   bool _lzMode;
-+   bool _unsupportedFilter;
-+@@ -200,6 +201,7 @@ class CDecoder:
-+   UInt32 PrevAlignCount;
-+ 
-+   bool TablesRead;
-++  bool TablesOK;
-+ 
-+   CPpmd7 _ppmd;
-+   int PpmEscChar;
-diff --git a/package/p7zip/p7zip.mk b/package/p7zip/p7zip.mk
-index be95995bab..59cd9b7e95 100644
---- a/package/p7zip/p7zip.mk
-+++ b/package/p7zip/p7zip.mk
-@@ -14,6 +14,8 @@ P7ZIP_LICENSE_FILES = DOC/License.txt
- P7ZIP_IGNORE_CVES += CVE-2016-9296
- # 0002-CVE-2017-17969.patch
- P7ZIP_IGNORE_CVES += CVE-2017-17969
-+# 0003-CVE-2018-5996.patch
-+P7ZIP_IGNORE_CVES += CVE-2018-5996
+diff --git a/package/netdata/netdata.hash b/package/netdata/netdata.hash
+index 2d6bd2a9a8..8d5ce51fca 100644
+--- a/package/netdata/netdata.hash
++++ b/package/netdata/netdata.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b6a80ac1e86d8a8d6fa16bba2ad15e8a8e5a89e3437cb7f30c538d11b95b5325  netdata-1.21.0.tar.gz
++sha256 60cdde3f1f8bd9035fef6a566053c0a7195d1714b5da6814473263e85382b4a8  netdata-1.21.1.tar.gz
+ sha256 0e5fd9d833efe9b79f784d1903281554af82d1b4261af67d35455728e5572aa6  LICENSE
+diff --git a/package/netdata/netdata.mk b/package/netdata/netdata.mk
+index 34d6d53d0f..1c20c49dee 100644
+--- a/package/netdata/netdata.mk
++++ b/package/netdata/netdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # p7zip buildsystem is a mess: it plays dirty tricks with CFLAGS and
- # CXXFLAGS, so we can't pass them. Instead, it accepts ALLFLAGS_C
+-NETDATA_VERSION = 1.21.0
++NETDATA_VERSION = 1.21.1
+ NETDATA_SITE = $(call github,netdata,netdata,v$(NETDATA_VERSION))
+ NETDATA_LICENSE = GPL-3.0+
+ NETDATA_LICENSE_FILES = LICENSE
+-- 
+2.26.2
