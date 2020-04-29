@@ -1,46 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 29 Apr 2020 18:08:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-vfs-rar: bump version to 2.3.1
-Message-ID: <20200429160848.251676-1-bernd.kuhls@t-online.de>
+Date: Wed, 29 Apr 2020 19:29:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
+ 4.11.8
+Message-ID: <20200429172904.973038-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hashes.
+Reformatted hash.
+
+Fixes CVE 2020-10700 & CVE 2020-10704.
+
+Release notes: https://www.samba.org/samba/history/samba-4.11.8.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-vfs-rar/kodi-vfs-rar.hash | 6 +++---
- package/kodi-vfs-rar/kodi-vfs-rar.mk   | 2 +-
+ package/samba4/samba4.hash | 6 +++---
+ package/samba4/samba4.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-index 592b82f878..0fcf7f795b 100644
---- a/package/kodi-vfs-rar/kodi-vfs-rar.hash
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 07ab4a4e5f2ad9e6c7e15badb3474d3f4d9d5e1405c4ff82815cc44452177e3b  kodi-vfs-rar-2.3.0-Leia.tar.gz
-+sha256  0ca45226b071d50595f2c06471761713765a83484bb2b9629c694d4b310007c1  kodi-vfs-rar-2.3.1-Leia.tar.gz
- # License files
--sha256 6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  lib/UnrarXLib/license.txt
--sha256 310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-+sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  lib/UnrarXLib/license.txt
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
-index 3bbe7be95d..315a77903e 100644
---- a/package/kodi-vfs-rar/kodi-vfs-rar.mk
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 8948c41ea6..f2ae8b5b58 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.11.7.tar.asc
+-sha256 79b6f9ebc357373f885153e2d5d26dc6def9f4511ee4bcbe8a8e2622acc42143  samba-4.11.7.tar.gz
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++# https://download.samba.org/pub/samba/stable/samba-4.11.8.tar.asc
++sha256  bb140caa37d2bbbb1f15f849aa86b1d5f787729443099139936f0ea06a5100ca  samba-4.11.8.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 582b30bcd5..9ec4c1eabe 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VFS_RAR_VERSION = 2.3.0-Leia
-+KODI_VFS_RAR_VERSION = 2.3.1-Leia
- KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
- KODI_VFS_RAR_LICENSE = unrar, GPL-2.0+
- KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt LICENSE.md
+-SAMBA4_VERSION = 4.11.7
++SAMBA4_VERSION = 4.11.8
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
 2.26.2
