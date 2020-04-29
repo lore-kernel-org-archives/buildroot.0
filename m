@@ -1,74 +1,66 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Wed, 29 Apr 2020 07:37:37 -0500
-Subject: [Buildroot] [PATCH] package/cunit: switch to maintain fork
- version 3.2.6
-In-Reply-To: <20200428221018.1317-1-ryan.barnett@rockwellcollins.com>
-References: <20200428221018.1317-1-ryan.barnett@rockwellcollins.com>
-Message-ID: <CAMQcK5L1raaxnJGOkU7tO+w9Uf7UaOPcNx8udrvGk2R4ySURkQ@mail.gmail.com>
+From: Ramon Fried <rfried.dev@gmail.com>
+Date: Wed, 29 Apr 2020 15:41:38 +0300
+Subject: [Buildroot] [PATCH] package/openssh: Add option to populate keys on
+ build
+Message-ID: <20200429124138.180628-1-rfried.dev@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+During development phase and on targets with read-only
+file systems, generating SSH keys on boot is not an option.
 
-On Tue, Apr 28, 2020 at 5:10 PM Ryan Barnett
-<ryan.barnett@rockwellcollins.com> wrote:
->
-> The CUnit project on Sourgeforce has not been maintained since 2014.
-> Switch to forked version on Gitlab which is under active development
-> at:
->
->   https://gitlab.com/cunity/cunit#new-releases-of-cunit-2018-08-onwards
->
-> Changes which were made to the package include:
->
->  * Switch to CMake build system
->  * Requires BR2_USE_MMU for '-rdynamic' (CMake test)
->  * Requires C++ for CUnit/Sources/wxWidget/wxWidget.cpp
->  * Update hash format to two spaces
->  * Add patch to resolve issue with unused variable with assert to
->    allow compiling with GCC 8
->  * Add patch to optionally build test and examples (turn off for
->    buildroot)
->  * Add myself to DEVELOPERS for this package
->
-> Tested with ./utils/test-pkg -c cunit.config -p cunit:
->
->                              br-arm-full [1/6]: OK
->                   br-arm-cortex-a9-glibc [2/6]: OK
->                    br-arm-cortex-m4-full [3/6]: SKIPPED
->                           br-x86-64-musl [4/6]: OK
->                       br-arm-full-static [5/6]: OK
->                             sourcery-arm [6/6]: OK
-> 6 builds, 1 skipped, 0 build failed, 0 legal-info failed
->
-> Checked with check-package:
->
-> $ ./utils/check-package package/cunit/*
-> 192 lines processed
-> 0 warnings generated
->
-> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> ---
->  DEVELOPERS                                    |   1 +
->  ...n-remove-variable-only-used-in-asser.patch |  45 +++++++
->  ...dd-optional-builds-of-tests-examples.patch | 114 ++++++++++++++++++
->  package/cunit/Config.in                       |  10 +-
->  package/cunit/cunit.hash                      |   4 +-
->  package/cunit/cunit.mk                        |  15 +--
->  6 files changed, 178 insertions(+), 11 deletions(-)
->  create mode 100644 package/cunit/0001-Framework-TestRun-remove-variable-only-used-in-asser.patch
->  create mode 100644 package/cunit/0002-CMakeLists-add-optional-builds-of-tests-examples.patch
+Add option to generate and populate SSH keys during build.
 
-I'm going to mark these as changes requested as it appears that
-upstream is going to make more changes in regards to supporting
-building without tests or examples:
+Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
+---
+ package/openssh/Config.in  | 12 ++++++++++++
+ package/openssh/openssh.mk | 11 +++++++++++
+ 2 files changed, 23 insertions(+)
 
-https://gitlab.com/cunity/cunit/-/merge_requests/58
-
-Will send v2 when these changes are merged.
-
-Thanks,
--Ryan
+diff --git a/package/openssh/Config.in b/package/openssh/Config.in
+index 683a9c0e51..21bdd40435 100644
+--- a/package/openssh/Config.in
++++ b/package/openssh/Config.in
+@@ -9,3 +9,15 @@ config BR2_PACKAGE_OPENSSH
+ 	  friends.
+ 
+ 	  http://www.openssh.com/
++
++if BR2_PACKAGE_OPENSSH
++
++config BR2_PACKAGE_OPENSSH_POPULATE_KEYS
++	bool "Populate device keys"
++	help
++	  Populate the image with device keys instead
++		of generating them on each boot.
++		This option has security implications, and
++		should be only used in development or on target
++		with read-only root file-system.
++endif
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index d50572128a..908eccf6cd 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -86,6 +86,17 @@ define OPENSSH_INSTALL_SSH_COPY_ID
+ 	$(INSTALL) -D -m 755 $(@D)/contrib/ssh-copy-id $(TARGET_DIR)/usr/bin/ssh-copy-id
+ endef
+ 
++define OPENSSH_POPULATE_KEYS
++	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_rsa_key -N '' -t rsa
++	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa
++	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_dsa_key -N '' -t dsa
++	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_ed25519_key -N '' -t ed25519
++endef
++
++ifeq ($(BR2_PACKAGE_OPENSSH_POPULATE_KEYS),y)
++OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_POPULATE_KEYS
++endif
++
+ OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SSH_COPY_ID
+ 
+ $(eval $(autotools-package))
+-- 
+2.26.2
