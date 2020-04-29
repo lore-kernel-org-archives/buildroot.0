@@ -1,74 +1,119 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Apr 2020 22:55:21 +0200
-Subject: [Buildroot] [git commit] package/paho-mqtt-c: fix build on uclibc
- or musl
-Message-ID: <20200429204115.C8F6590AE9@busybox.osuosl.org>
+From: Ramon Fried <rfried.dev@gmail.com>
+Date: Wed, 29 Apr 2020 23:56:25 +0300
+Subject: [Buildroot] [PATCH] package/openssh: Add option to populate
+ keys on build
+In-Reply-To: <20200429221908.08cb5112@windsurf.home>
+References: <20200429124138.180628-1-rfried.dev@gmail.com>
+ <20200429221908.08cb5112@windsurf.home>
+Message-ID: <CAGi-RUJ_UL=5+=Tgif8eWs44QAzQ7-cx27_h4-CqtV68wXfZYQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91beea442a6b0e2d339b0d6cfb4ca91cbf6b30d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, Apr 29, 2020 at 11:19 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Wed, 29 Apr 2020 15:41:38 +0300
+> Ramon Fried <rfried.dev@gmail.com> wrote:
+>
+> > During development phase and on targets with read-only
+> > file systems, generating SSH keys on boot is not an option.
+> >
+> > Add option to generate and populate SSH keys during build.
+> >
+> > Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
+>
+> I don't really have a very well formed opinion on whether we want this
+> or not. Feedback from other developers/contributors might be useful.
+This is a real world scenario, I can understand if it doesn't fit upstream.
+But I saw several projects during the years that generated keys in the
+build time
+either by this method, or just by putting them in fs-overlay.
 
-Fixes:
- - http://autobuild.buildroot.org/results/4beb96d43180813906578b42875a1c3d4a905ed7
+>
+> > +if BR2_PACKAGE_OPENSSH
+> > +
+> > +config BR2_PACKAGE_OPENSSH_POPULATE_KEYS
+> > +     bool "Populate device keys"
+>
+>         bool "Generate host keys during build"
+ok.
+>
+> Perhaps.
+>
+> > +     help
+> > +       Populate the image with device keys instead
+> > +             of generating them on each boot.
+> > +             This option has security implications, and
+> > +             should be only used in development or on target
+> > +             with read-only root file-system.
+>
+> Please fix the indentation: it should be one tab + two spaces, and the
+> line should try to use the 72-characters width as much as possible. Run
+> "make check-package" to check for such coding style issues.
+Sure
+>
+> > +endif
+> > diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+> > index d50572128a..908eccf6cd 100644
+> > --- a/package/openssh/openssh.mk
+> > +++ b/package/openssh/openssh.mk
+> > @@ -86,6 +86,17 @@ define OPENSSH_INSTALL_SSH_COPY_ID
+> >       $(INSTALL) -D -m 755 $(@D)/contrib/ssh-copy-id $(TARGET_DIR)/usr/bin/ssh-copy-id
+> >  endef
+> >
+> > +define OPENSSH_POPULATE_KEYS
+>
+> Should be defined within the ifeq
+> ($(BR2_PACKAGE_OPENSSH_POPULATE_KEYS),y) condition.
+>
+> > +     ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_rsa_key -N '' -t rsa
+> > +     ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa
+> > +     ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_dsa_key -N '' -t dsa
+> > +     ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_ed25519_key -N '' -t ed25519
+>
+ok.
+> Use $(...) to reference make variable instead of ${...}. Also, perhaps
+> a small loop makes sense:
+>
+>         $(foreach type,rsa ecdsa dsa ed25519,\
+>                 ssh-keygen -q -f $(TARGET_DIR)/etc/ssh/ssh_host_$(type)_key -N '' -t $(type)
+>         )
+>
+Sure.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...MakeLists.txt-fix-build-on-uclibc-or-musl.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
-
-diff --git a/package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch b/package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch
-new file mode 100644
-index 0000000000..7989f045b9
---- /dev/null
-+++ b/package/paho-mqtt-c/0001-src-CMakeLists.txt-fix-build-on-uclibc-or-musl.patch
-@@ -0,0 +1,45 @@
-+From 517e8659ab566b15cc409490a432e8935b164de8 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 24 Apr 2020 11:55:41 +0200
-+Subject: [PATCH] src/CMakeLists.txt: fix build on uclibc or musl
-+
-+Build of version 1.3.2 with uclibc or musl fails on:
-+
-+[ 58%] Linking C shared library libpaho-mqtt3c.so
-+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/5.5.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lanl
-+collect2: error: ld returned 1 exit status
-+
-+This is due to commit 21ffebcb749fc8bd8578df85550f03f74e571620 which
-+added a link to anl which is not available on uclibc or musl.
-+
-+Fix this by checking if anl is found on the system before using it
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/4beb96d43180813906578b42875a1c3d4a905ed7
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/eclipse/paho.mqtt.c/commit/517e8659ab566b15cc409490a432e8935b164de8]
-+---
-+ src/CMakeLists.txt | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index fb367b37..95fd43e7 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -60,7 +60,13 @@ IF (WIN32)
-+     SET(LIBS_SYSTEM ws2_32 crypt32 RpcRT4)
-+ ELSEIF (UNIX)
-+     IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
-+-        SET(LIBS_SYSTEM c dl pthread anl rt)
-++        SET(LIBS_SYSTEM c dl pthread rt)
-++        # anl is only available with glibc so check if it is found before using
-++        # it or build will fail on uclibc or musl
-++        FIND_LIBRARY(LIB_ANL anl)
-++        IF(LIB_ANL)
-++            SET(LIBS_SYSTEM "${LIBS_SYSTEM} ${LIB_ANL}")
-++        ENDIF()
-+         ADD_DEFINITIONS(-D_GNU_SOURCE -fvisibility=hidden)
-+     ELSEIF (CMAKE_SYSTEM_NAME MATCHES "Android")
-+         SET(LIBS_SYSTEM c dl)
+> But wait: where is ssh-keygen coming from? We're not building it, so
+> you're relying on the one available on your build machine. This is not
+> acceptable for Buildroot, as we don't expect ssh-keygen to be available
+> on the host machine. So if we want to do what you propose, we would
+> need to build ssh-keygen for the host machine, using a host-openssh
+> package.
+I was wondering this myself as well, I think it's huge overhead to
+compile the entire openssh
+just to generate keys. Most linux distros have it already installed,
+nevertheless, we can document that under
+https://buildroot.org/downloads/manual/manual.html#requirement-optional
+Right ?
+>
+> > +endef
+> > +
+> > +ifeq ($(BR2_PACKAGE_OPENSSH_POPULATE_KEYS),y)
+> > +OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_POPULATE_KEYS
+> > +endif
+> > +
+> >  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SSH_COPY_ID
+>
+> Please keep this hook registration next to its definition.
+ok.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
