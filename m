@@ -1,50 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 29 Apr 2020 19:29:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
- 4.11.8
-Message-ID: <20200429172904.973038-1-bernd.kuhls@t-online.de>
+From: Alexey Lukyanchuk <skif@skif-web.ru>
+Date: Wed, 29 Apr 2020 20:41:09 +0300
+Subject: [Buildroot] [PATCH 1/1] package/zabbix: new package
+In-Reply-To: <20200423214513.25b7f19d@windsurf.home>
+References: <20200423071752.23893-1-skif@skif-web.ru>
+ <20200423214513.25b7f19d@windsurf.home>
+Message-ID: <296531588182024@mail.yandex.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hash.
+No changes. Is the previous version considered? Does it need corrections?
 
-Fixes CVE 2020-10700 & CVE 2020-10704.
+Also, please see the patches for cups, cups filters, qpdf and ghostscript. They really need
 
-Release notes: https://www.samba.org/samba/history/samba-4.11.8.html
+--?
+Regards,
+Alexey Lukyanchuk
+skif at skif-web.ru
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/samba4/samba4.hash | 6 +++---
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 8948c41ea6..f2ae8b5b58 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.11.7.tar.asc
--sha256 79b6f9ebc357373f885153e2d5d26dc6def9f4511ee4bcbe8a8e2622acc42143  samba-4.11.7.tar.gz
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+# https://download.samba.org/pub/samba/stable/samba-4.11.8.tar.asc
-+sha256  bb140caa37d2bbbb1f15f849aa86b1d5f787729443099139936f0ea06a5100ca  samba-4.11.8.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 582b30bcd5..9ec4c1eabe 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.11.7
-+SAMBA4_VERSION = 4.11.8
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
--- 
-2.26.2
+23.04.2020, 22:45, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>:
+> Hello,
+>
+> On Thu, 23 Apr 2020 10:17:52 +0300
+> Alexey Lukyanchuk <skif@skif-web.ru> wrote:
+>
+>> ?Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+>
+> Is this a v9 ? What are the changes compared to the v8 you posted some
+> time ago ?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
