@@ -1,45 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Apr 2020 23:13:10 +0200
-Subject: [Buildroot] [git commit] package/apcupsd: pass additional libusb
- libs for static build
-Message-ID: <20200429205843.2143190B3F@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 29 Apr 2020 23:18:40 +0200
+Subject: [Buildroot] [PATCH v2] package/apparmor: skip docs building
+Message-ID: <20200429211840.215032-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3c9a41462a9a2a614978157ae4f2cbd26d66b21
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-By default apcupsd only passes libs for libusb-compat, this is not
-sufficient for static builds which also require libusb libs.
+When pod2man and pod2html are missing, building now exits with an
+error.
+Building of man pages and documentation should be skipped in buildroot,
+setting both executables to the "true" command it's sufficient to skip
+them.
 
 Fixes:
-http://autobuild.buildroot.net/results/747/7472fec82983f5b9c2f92578b2b20b746a8d20ae/build-end.log
+http://autobuild.buildroot.net/results/ca8d3071d888b5c1cfa3e275afaf05415e19627f
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/apcupsd/apcupsd.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Changelog:
+v1->v2:
+ * "echo" to "true" (Thomas P.)
 
-diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
-index ff9cc9242f..410bce9aec 100644
---- a/package/apcupsd/apcupsd.mk
-+++ b/package/apcupsd/apcupsd.mk
-@@ -10,8 +10,12 @@ APCUPSD_LICENSE = GPL-2.0
- APCUPSD_LICENSE_FILES = COPYING
- APCUPSD_CONF_OPTS = --disable-test
+ package/apparmor/apparmor.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
+index f1b765ce42..f667966082 100644
+--- a/package/apparmor/apparmor.mk
++++ b/package/apparmor/apparmor.mk
+@@ -15,7 +15,7 @@ APPARMOR_LICENSE_FILES = LICENSE parser/COPYING.GPL
+ APPARMOR_DEPENDENCIES = libapparmor
  
--ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
--APCUPSD_CONF_ENV = ac_cv_path_usbcfg=$(STAGING_DIR)/usr/bin/libusb-config
-+ifneq ($(BR2_PACKAGE_APCUPSD_MODBUS_USB)$(BR2_PACKAGE_APCUPSD_USB),)
-+APCUPSD_CONF_ENV += ac_cv_path_usbcfg=$(STAGING_DIR)/usr/bin/libusb-config
-+ifeq ($(BR2_STATIC_LIBS),y)
-+APCUPSD_DEPENDENCIES += host-pkgconf
-+APCUPSD_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libusb`"
-+endif
- endif
+ APPARMOR_TOOLS = parser
+-APPARMOR_MAKE_OPTS = USE_SYSTEM=1 DISTRO=unknown
++APPARMOR_MAKE_OPTS = USE_SYSTEM=1 DISTRO=unknown POD2MAN=true POD2HTML=true
  
- ifeq ($(BR2_PACKAGE_APCUPSD_APCSMART),y)
+ ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
+ APPARMOR_DEPENDENCIES += gettext
+-- 
+2.25.1
