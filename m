@@ -1,117 +1,179 @@
-From: Mikael Bourhis-Cloarec <mikael.bourhis@smile.fr>
-Date: Wed, 29 Apr 2020 15:19:54 +0200
-Subject: [Buildroot] [PATCH 1/1] support/testing: add package/test_mender.py
-Message-ID: <20200429131954.GA18375@P-NAN-EREVAN-mikbou>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 29 Apr 2020 15:53:46 +0200
+Subject: [Buildroot] [PATCH v3 01/10] package/pkg-cargo.mk: Introduce
+ the cargo package infrastructure.
+In-Reply-To: <20200220160119.3407-1-patrick.havelange@essensium.com>
+References: <20200220160119.3407-1-patrick.havelange@essensium.com>
+Message-ID: <237f0fc8-f47e-ec49-6da2-b955cef4b893@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Create a test to check Mender client at runtime.
+Hi Patrick, Arnout, All,
 
-The aim of this test is:
-  - to check the correct execution of simple Mender commands,
-    in a minimal environment;
-  - to validate there is no missing dependencies for runtime.
+Le 20/02/2020 ? 17:01, Patrick Havelange a ?crit?:
+> In order to be package agnostic, the install phase is now using
+> cargo instead of install.
+> TARGET_CONFIGURE_OPTS is now also set when running cargo in order
+> to support cross compiling C code within cargo.
+> 
+> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+> 
+> ---
+> changes:
+> v2 -> v3 (Sam Voss)
+>  - set TARGET_CONFIGURE_OPTS when running cargo
+> 
+> This is the V3 of the previously posted series :
+> http://patchwork.ozlabs.org/project/buildroot/list/?series=156166&state=%2A&archive=both
+> 
+> A lot of changes following the buildroot developer meeting's
+> decisions from February 2020.
+> 
+> Needs to be applied on top of the rust 1.40 bump
+> ---
+>  package/Makefile.in  |  1 +
+>  package/pkg-cargo.mk | 92 ++++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 93 insertions(+)
+>  create mode 100644 package/pkg-cargo.mk
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 285e2837ef..650d7c166e 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -426,3 +426,4 @@ include package/pkg-kernel-module.mk
+>  include package/pkg-waf.mk
+>  include package/pkg-golang.mk
+>  include package/pkg-meson.mk
+> +include package/pkg-cargo.mk
+> diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+> new file mode 100644
+> index 0000000000..35f7c15ad9
+> --- /dev/null
+> +++ b/package/pkg-cargo.mk
+> @@ -0,0 +1,92 @@
+> +################################################################################
+> +# Cargo package infrastructure
+> +#
+> +# This file implements an infrastructure that eases development of package
+> +# .mk files for Cargo packages. It should be used for all packages that use
+> +# Cargo as their build system.
+> +#
+> +# See the Buildroot documentation for details on the usage of this
+> +# infrastructure
+> +#
+> +# In terms of implementation, this Cargo infrastructure requires the .mk file
+> +# to only specify metadata information about the package: name, version,
+> +# download URL, etc.
+> +#
+> +# We still allow the package .mk file to override what the different steps
+> +# are doing, if needed. For example, if <PKG>_BUILD_CMDS is already defined,
+> +# it is used as the list of commands to perform to build the package,
+> +# instead of the default Cargo behaviour. The package can also define some
+> +# post operation hooks.
+> +#
+> +################################################################################
+> +
+> +################################################################################
+> +# inner-cargo-package -- defines how the configuration, compilation and
+> +# installation of a cargo package should be done, implements a few hooks
+> +# to tune the build process for cargo specifities and calls the generic
+> +# package infrastructure to generate the necessary make targets
+> +#
+> +#  argument 1 is the lowercase package name
+> +#  argument 2 is the uppercase package name, including a HOST_ prefix
+> +#             for host packages
+> +#  argument 3 is the uppercase package name, without the HOST_ prefix
+> +#             for host packages
+> +#  argument 4 is the type (target or host)
+> +################################################################################
+> +
+> +define inner-cargo-package
+> +
+> +# We need host-rustc to run cargo
+> +$(2)_DEPENDENCIES += host-rustc
+> +
+> +$(2)_CARGO_ENV = \
+> +	CARGO_HOME=$(HOST_DIR)/share/cargo \
+> +	$(TARGET_CONFIGURE_OPTS)
 
-This test is not a board integration test for Mender,
-including well-configured bootloader, partitioning, ...
+Like other package infrastructure, it would be useful to define $(2)_CONF_ENV to
+allow cargo based packages to modify cargo environment.
 
-Check:
-  - the daemon is started;
-  - the current 'artifact name' (name of the image or update) of the active
-    partition is read, without error.
+For example, we need to add PKG_CONFIG_ALLOW_CROSS=1 to use pkg-config while
+cross-compiling.
 
-For that, we need to fake (see the 'overlay' directory):
-  - some bootloader environment variables;
-  - the name of an update.
+https://github.com/rust-embedded/cross/issues/250
 
-Signed-off-by: Mikael Bourhis-Cloarec <mikael.bourhis@smile.fr>
----
- .gitlab-ci.yml                                |  1 +
- support/testing/tests/package/test_mender.py  | 38 +++++++++++++++++++
- .../rootfs-overlay/etc/mender/artifact_info   |  1 +
- .../rootfs-overlay/usr/bin/fw_printenv        |  6 +++
- 4 files changed, 46 insertions(+)
- create mode 100644 support/testing/tests/package/test_mender.py
- create mode 100644 support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artifact_info
- create mode 100755 support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_printenv
+> +
+> +$(2)_CARGO_MODE = $(if $(BR2_ENABLE_DEBUG),debug,release)
+> +
+> +ifeq ($(4),target)
+> +    $(2)_CARGO_TARGET_OPT = --target $$(RUSTC_TARGET_NAME)
+> +endif
+> +
+> +#
+> +# Build step. Only define it if not already defined by the package .mk
+> +# file.
+> +#
+> +ifndef $(2)_BUILD_CMDS
+> +define $(2)_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $$($(2)_CARGO_ENV) \
+> +		cargo build \
+> +			--$$($(2)_CARGO_MODE) \
+> +			$$($(2)_CARGO_TARGET_OPT) \
+> +			--manifest-path $$(@D)/Cargo.toml
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index fa8e077a07..029a8d00aa 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -520,6 +520,7 @@ tests.package.test_rust.TestRustBin: { extends: .runtime_test }
- tests.package.test_syslog_ng.TestSyslogNg: { extends: .runtime_test }
- tests.package.test_tmux.TestTmux: { extends: .runtime_test }
- tests.package.test_turbolua.TestLuajitTurbolua: { extends: .runtime_test }
-+tests.package.test_mender.TestMender: { extends: .runtime_test }
- tests.toolchain.test_external.TestExternalToolchainBuildrootMusl: { extends: .runtime_test }
- tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc: { extends: .runtime_test }
- tests.toolchain.test_external.TestExternalToolchainCCache: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/test_mender.py b/support/testing/tests/package/test_mender.py
-new file mode 100644
-index 0000000000..b0d565c5dc
---- /dev/null
-+++ b/support/testing/tests/package/test_mender.py
-@@ -0,0 +1,38 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestMender(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+        BR2_PACKAGE_MENDER=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_ROOTFS_OVERLAY="{}"
-+        """.format(
-+           # overlay to add a fake 'fw_printenv', used by Mender
-+           infra.filepath("tests/package/test_mender/rootfs-overlay"))
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # Check if the 'mender' binaries are correctly installed
-+        self.assertRunOk("ls /usr/bin/mender")
-+        self.assertRunOk("ls /etc/mender/mender.conf")
-+        self.assertRunOk("ls /etc/init.d/S42mender")
-+
-+        # Check if the Daemon is running
-+        self.assertRunOk("ls /var/run/mender.pid")
-+        self.assertRunOk("ps aux | egrep [m]ender")
-+
-+        # Check if a simple Mender command is correctly executed
-+        self.assertRunOk("mender -log-level debug -show-artifact")
-+        self.assertRunOk("mender -log-level debug -show-artifact | grep 'RUNTIME_TEST_ARTIFACT_NAME'")
-+        cmd = "mender -show-artifact 2>&1 | grep -i 'err'"  # Check if no 'error' among the traces
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 1)
-diff --git a/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artifact_info b/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artifact_info
-new file mode 100644
-index 0000000000..4d54b8f89c
---- /dev/null
-+++ b/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artifact_info
-@@ -0,0 +1 @@
-+artifact_name=RUNTIME_TEST_ARTIFACT_NAME
-diff --git a/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_printenv b/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_printenv
-new file mode 100755
-index 0000000000..c002a0f2b8
---- /dev/null
-+++ b/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_printenv
-@@ -0,0 +1,6 @@
-+#!/bin/sh
-+
-+# Fake 'fw_printenv' because UBoot is not installed: print some plausible 'key-value'
-+echo "bootcount=0"
-+echo "mender_boot_part=rootfs"
-+echo "upgrade_available=0"
--- 
-2.20.1
+cargo support -q (quiet) option that can be added to BUILD_CMDS and
+INSTALL_TARGET_CMDS.
+
+> +endef
+> +endif
+> +
+> +#
+> +# Target installation step. Only define it if not already defined by
+> +# the package .mk file.
+> +#
+> +ifndef $(2)_INSTALL_TARGET_CMDS
+> +define $(2)_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $$($(2)_CARGO_ENV) \
+> +		cargo install \
+> +			--root $(TARGET_DIR)/usr/ \
+> +			--bins \
+> +			--path $$(@D) \
+> +			$$($(2)_CARGO_TARGET_OPT) \
+> +			--force
+
+While testing this infra with opcua [1], I get this error :
+"found a virtual manifest at `path/Cargo.toml` instead of a package manifest"
+
+We need to customize "cargo --path ./" to a package subdirectory containing
+another Cargo.toml with a package manifest.
+
+But it seems we can provide only one path to cargo command line, but I need to
+install binaries from several subdirectories. We may need a loop here otherwise
+cargo packages should redefine _INSTALL_TARGET_CMDS.
+
+[1] https://github.com/locka99/opcua
+
+Best regards,
+Romain
+
+
+> +endef
+> +endif
+> +
+> +# Call the generic package infrastructure to generate the necessary
+> +# make targets
+> +$(call inner-generic-package,$(1),$(2),$(3),$(4))
+> +
+> +endef
+> +
+> +################################################################################
+> +# cargo-package -- the target generator macro for Cargo packages
+> +################################################################################
+> +
+> +cargo-package = $(call inner-cargo-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
+> 
