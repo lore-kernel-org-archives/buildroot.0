@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Apr 2020 22:19:08 +0200
-Subject: [Buildroot] [PATCH] package/openssh: Add option to populate
- keys on build
-In-Reply-To: <20200429124138.180628-1-rfried.dev@gmail.com>
-References: <20200429124138.180628-1-rfried.dev@gmail.com>
-Message-ID: <20200429221908.08cb5112@windsurf.home>
+Date: Wed, 29 Apr 2020 22:22:41 +0200
+Subject: [Buildroot] [PATCH v2 0/5] imx: add i.MX8M Nano EVK board
+ support
+In-Reply-To: <1588151545-9346-1-git-send-email-stephane.viau@oss.nxp.com>
+References: <1588151545-9346-1-git-send-email-stephane.viau@oss.nxp.com>
+Message-ID: <20200429222241.3ca00696@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,83 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 29 Apr 2020 15:41:38 +0300
-Ramon Fried <rfried.dev@gmail.com> wrote:
+On Wed, 29 Apr 2020 11:12:20 +0200
+Stephane Viau <stephane.viau@oss.nxp.com> wrote:
 
-> During development phase and on targets with read-only
-> file systems, generating SSH keys on boot is not an option.
+> This series adds support for the NXP i.MX8M Nano EVK board.
 > 
-> Add option to generate and populate SSH keys during build.
+> Since the i.MX8M Nano CPU was added for the Nitrogen8MNano board, which has a
+> type of memory (LPDDR4) different from the NXP reference board (DDR4), the first
+> half of the series introduce the DDR training selection for the whole i.MX8 M
+> SoC family.
 > 
-> Signed-off-by: Ramon Fried <rfried.dev@gmail.com>
+> The second half of the series adds support for i.MX8M Nano EVK Board with kernel/
+> U-Boot based on 4.19.35_1.1.0, which is the current preferred version for all NXP
+> reference boards.
 
-I don't really have a very well formed opinion on whether we want this
-or not. Feedback from other developers/contributors might be useful.
+Thanks for this new iteration. It was in our patchwork patch tracking
+system, and it just disappeared. Has anyone removed these patches? You
+Stephane? Someone else?
 
-> +if BR2_PACKAGE_OPENSSH
-> +
-> +config BR2_PACKAGE_OPENSSH_POPULATE_KEYS
-> +	bool "Populate device keys"
-
-	bool "Generate host keys during build"
-
-Perhaps.
-
-> +	help
-> +	  Populate the image with device keys instead
-> +		of generating them on each boot.
-> +		This option has security implications, and
-> +		should be only used in development or on target
-> +		with read-only root file-system.
-
-Please fix the indentation: it should be one tab + two spaces, and the
-line should try to use the 72-characters width as much as possible. Run
-"make check-package" to check for such coding style issues.
-
-> +endif
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index d50572128a..908eccf6cd 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -86,6 +86,17 @@ define OPENSSH_INSTALL_SSH_COPY_ID
->  	$(INSTALL) -D -m 755 $(@D)/contrib/ssh-copy-id $(TARGET_DIR)/usr/bin/ssh-copy-id
->  endef
->  
-> +define OPENSSH_POPULATE_KEYS
-
-Should be defined within the ifeq
-($(BR2_PACKAGE_OPENSSH_POPULATE_KEYS),y) condition.
-
-> +	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_rsa_key -N '' -t rsa
-> +	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa
-> +	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_dsa_key -N '' -t dsa
-> +	ssh-keygen -q -f ${TARGET_DIR}/etc/ssh/ssh_host_ed25519_key -N '' -t ed25519
-
-Use $(...) to reference make variable instead of ${...}. Also, perhaps
-a small loop makes sense:
-
-	$(foreach type,rsa ecdsa dsa ed25519,\
-		ssh-keygen -q -f $(TARGET_DIR)/etc/ssh/ssh_host_$(type)_key -N '' -t $(type)
-	)
-
-But wait: where is ssh-keygen coming from? We're not building it, so
-you're relying on the one available on your build machine. This is not
-acceptable for Buildroot, as we don't expect ssh-keygen to be available
-on the host machine. So if we want to do what you propose, we would
-need to build ssh-keygen for the host machine, using a host-openssh
-package.
-
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_OPENSSH_POPULATE_KEYS),y)
-> +OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_POPULATE_KEYS
-> +endif
-> +
->  OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SSH_COPY_ID
-
-Please keep this hook registration next to its definition.
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
