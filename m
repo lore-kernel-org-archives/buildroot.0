@@ -1,24 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Apr 2020 23:39:10 +0200
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.15.5
-In-Reply-To: <20200411223651.16994-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sun, 12 Apr 2020 00:36:51 +0200")
-References: <20200411223651.16994-1-ps.report@gmx.net>
-Message-ID: <871ro67z0h.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 29 Apr 2020 23:41:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-waf: use host-python3
+In-Reply-To: <20200204215950.28789-1-titouan.christophe@railnova.eu>
+References: <20200204215950.28789-1-titouan.christophe@railnova.eu>
+Message-ID: <c87f5289-25ae-e8d2-b6b8-15fbe8e38654@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+Hi Titouan,All,
 
- > For details see [1].
- > [1] https://lists.freedesktop.org/archives/wayland-devel/2020-April/041400.html
+Le 04/02/2020 ? 22:59, Titouan Christophe a ?crit?:
+> This is the last of an unconsolidated series of patches that
+> removes the need for host-python(2) for all waf-based packages.
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> ---
+> NB: this patch should be merged after the following patches are merged first:
+>  - gst1-imx (https://patchwork.ozlabs.org/patch/1233580/)
+>  - libimxvpuapi (https://patchwork.ozlabs.org/patch/1233460/)
+>  - norm (https://patchwork.ozlabs.org/project/buildroot/list/?series=156705)
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+So now all these patches are merged, this patch is ok for master.
 
-Committed to 2020.02.x given the fixes, thanks.
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
--- 
-Bye, Peter Korsgaard
+Best regards,
+Romain
+
+> 
+> Dear committers, very sorry for that. I wasn't sure to finish on time to make
+> a single waf python3 series.
+> ---
+>  package/pkg-waf.mk | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
+> index a32d5dab33..35e56d3c13 100644
+> --- a/package/pkg-waf.mk
+> +++ b/package/pkg-waf.mk
+> @@ -36,8 +36,8 @@
+>  
+>  define inner-waf-package
+>  
+> -# We need host-python to run waf
+> -$(2)_DEPENDENCIES += host-python
+> +# We need host-python3 to run waf
+> +$(2)_DEPENDENCIES += host-python3
+>  
+>  $(2)_NEEDS_EXTERNAL_WAF ?= NO
+>  
+> @@ -63,7 +63,7 @@ define $(2)_CONFIGURE_CMDS
+>  	cd $$($$(PKG)_SRCDIR) && \
+>  	$$(TARGET_CONFIGURE_OPTS) \
+>  	$$($(2)_CONF_ENV) \
+> -	$$(HOST_DIR)/bin/python2 $$($(2)_WAF) configure \
+> +	$$(HOST_DIR)/bin/python3 $$($(2)_WAF) configure \
+>  		--prefix=/usr \
+>  		--libdir=/usr/lib \
+>  		$$($(2)_CONF_OPTS) \
+> @@ -78,7 +78,7 @@ endif
+>  ifndef $(2)_BUILD_CMDS
+>  define $(2)_BUILD_CMDS
+>  	cd $$($$(PKG)_SRCDIR) && \
+> -	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
+> +	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
+>  		build -j $$(PARALLEL_JOBS) $$($(2)_BUILD_OPTS) \
+>  		$$($(2)_WAF_OPTS)
+>  endef
+> @@ -91,7 +91,7 @@ endif
+>  ifndef $(2)_INSTALL_STAGING_CMDS
+>  define $(2)_INSTALL_STAGING_CMDS
+>  	cd $$($$(PKG)_SRCDIR) && \
+> -	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
+> +	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
+>  		install --destdir=$$(STAGING_DIR) \
+>  		$$($(2)_INSTALL_STAGING_OPTS) \
+>  		$$($(2)_WAF_OPTS)
+> @@ -105,7 +105,7 @@ endif
+>  ifndef $(2)_INSTALL_TARGET_CMDS
+>  define $(2)_INSTALL_TARGET_CMDS
+>  	cd $$($$(PKG)_SRCDIR) && \
+> -	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
+> +	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
+>  		install --destdir=$$(TARGET_DIR) \
+>  		$$($(2)_INSTALL_TARGET_OPTS) \
+>  		$$($(2)_WAF_OPTS)
+> 
