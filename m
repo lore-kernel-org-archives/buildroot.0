@@ -1,142 +1,148 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 29 Apr 2020 10:27:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/luajit: bump to version 2.2.0
-In-Reply-To: <20200428110101.11716-1-titouan.christophe@railnova.eu>
-References: <20200428110101.11716-1-titouan.christophe@railnova.eu>
-Message-ID: <CAB0FRsshdtxxWBjQo4=LqE9Kx4QMv25TVs5kxzFKK75sMAFGkw@mail.gmail.com>
+From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
+Date: Wed, 29 Apr 2020 09:57:51 +0200
+Subject: [Buildroot] [PATCH 1/4] package/freescale-imx/firmware-imx: add
+ choice for DDR training binaries
+In-Reply-To: <20200428082111.GA183066@p1g2>
+References: <1588059233-11467-1-git-send-email-stephane.viau@oss.nxp.com>
+ <1588059233-11467-2-git-send-email-stephane.viau@oss.nxp.com>
+ <20200428082111.GA183066@p1g2>
+Message-ID: <d2040b96-2f3b-34ca-1de0-c3216d640f11@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mar. 28 avr. 2020 ? 13:01, Titouan Christophe <
-titouan.christophe@railnova.eu> a ?crit :
 
-> Version 2.2.0 introduces Lua 5.3 and extends Lua 5.2 extensions, see
-> https://github.com/moonjit/moonjit/releases/tag/2.2.0
+> Hi Stephane,
+Hi Gary,
 >
-> Moonjit 2.2.0 replaced references to "LuaJIT" by "moonjit", which
-> introduces some changes in the Makefile and COPYRIGHT.
+> Thanks for this patch, it would indeed be nice to support several DDR
+> options. However I have a few remarks, see below.
+Thanks for your review.
 >
-> Also update the hash file to the new 2 spaces convention
->
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
->
+> On Tue, Apr 28, 2020 at 09:33:50AM +0200, Stephane Viau wrote:
+>> i.MX 8M Nano support many DDR types (LPDDR4, DDR4, DDR3L). Some boards
+> This is not i.MX8M Nano specific, this actually applies to the whole
+> i.MX8M family. You can have a i.MX8MQ platform with DDR4 too.
 
-moonjit is one fork of LuaJIT.
-moonjit serie 2.1 stay close to LuaJIT 2.1.0 beta3 (only latest fixes from
-Mike Pall)
-moonjit serie 2.2 not, and moonjit 2.2.0 (the first one) has some issues :
-    - https://github.com/moonjit/moonjit/issues/85
-    - https://github.com/moonjit/moonjit/issues/86 (my fault)
+Agreed. Will extend the comment to i.MX8 (e.g.: 8M, 8MM, 8MN).
 
-in my point of view, the switch to moonjit is temporary,
-I still hope an official reiease of LuaJIT 2.1
+>
+>> have LPDDR4 (e.g.: nitrogen8mn) and some others have the DDR4 (e.g.:
+>> NXP's reference board EVK). This patch allows the selection of either
+>> of the binaries used to train the DDR.
+>>
+>> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+>> Reviewed-by: Maeva Manuel <maeva.manuel@oss.nxp.com>
+>> Reviewed-by: Julien Olivain <julien.olivain@oss.nxp.com>
+>> ---
+>>   package/freescale-imx/firmware-imx/Config.in       | 24 ++++++++++++++++++
+>>   package/freescale-imx/firmware-imx/firmware-imx.mk | 29 +++++++++++++++++++++-
+>>   2 files changed, 52 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+>> index 56d5b80..e6ae993 100644
+>> --- a/package/freescale-imx/firmware-imx/Config.in
+>> +++ b/package/freescale-imx/firmware-imx/Config.in
+>> @@ -8,3 +8,27 @@ config BR2_PACKAGE_FIRMWARE_IMX
+>>   
+>>   	  This library is provided by Freescale as-is and doesn't have
+>>   	  an upstream.
+>> +
+>> +if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
+> Please do not limit to IMX8MN
 
-see also some old discussions:
-http://buildroot-busybox.2317881.n4.nabble.com/PATCH-package-luajit-bump-to-version-2-1-x-developpment-version-td219875.html
-http://buildroot-busybox.2317881.n4.nabble.com/PATCH-package-luajit-switch-to-moonjit-fork-td241218.html
+Upcoming v2 will extend this feature to the whole 8M family,
+introducing a BR2_PACKAGE_FREESCALE_IMX_NEED_DDR_FW symbol.
 
-Fran?ois
+>
+>> +choice
+>> +	bool "DDR training binaries"
+>> +	default BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4
+> Good that default is LPDDR4 for backward compatibility, thanks.
+you're welcome :-)
+>
+>> +	help
+>> +	  Choose the DDR training binaries to be used depending on the
+>> +	  kind of memory that is available on the target board (DDR4,
+>> +	  LPDDR4, etc...).
+>> +
+>> +config BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4
+>> +	bool "lpddr4"
+>> +	help
+>> +	  Use LPDDR4 binaries (i.e.: lpddr4_pmu_train_*.bin)
+>> +
+>> +config BR2_PACKAGE_FIRMWARE_DDRFW_DDR4
+>> +	bool "DDR4"
+>> +	help
+>> +	  Use DDR4 binaries (i.e.: ddr4_*_201810.bin).
+> Where is the DDR3 option?
+Even though 8M Nano supports DDR3, we do not have any reference board 
+with this type of DDR afaik, nor do I know if there is a need for a 
+specific firmware.
+>
+>> +endchoice # DDR training FW
+>> +
+>> +endif
+>> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+>> index cd0dafb..33ee4bb 100644
+>> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
+>> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+>> @@ -18,7 +18,7 @@ define FIRMWARE_IMX_EXTRACT_CMDS
+>>   	$(call FREESCALE_IMX_EXTRACT_HELPER,$(FIRMWARE_IMX_DL_DIR)/$(FIRMWARE_IMX_SOURCE))
+>>   endef
+>>   
+>> -ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN),y)
+>> +ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M)$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM)$(BR2_PACKAGE_FIRMWARE_DDRFW_LPDDR4),y)
+>>   FIRMWARE_IMX_INSTALL_IMAGES = YES
+>>   FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+>>   define FIRMWARE_IMX_PREPARE_LPDDR4_FW
+>> @@ -42,9 +42,36 @@ define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+>>   	cat $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_1d_fw.bin \
+>>   		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
+>>   		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
+>> +	ln -sf $(BINARIES_DIR)/lpddr4_pmu_train_fw.bin $(BINARIES_DIR)/ddr_fw.bin
+>>   	cp $(@D)/firmware/hdmi/cadence/signed_hdmi_imx8m.bin \
+>>   		$(BINARIES_DIR)/signed_hdmi_imx8m.bin
+>>   endef
+>> +else ifeq ($(BR2_PACKAGE_FIRMWARE_DDRFW_DDR4),y)
+>> +FIRMWARE_IMX_INSTALL_IMAGES = YES
+>> +FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+>> +define FIRMWARE_IMX_PREPARE_DDR4_FW
+>> +	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
+>> +		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810.bin \
+>> +		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810_pad.bin
+>> +	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
+>> +		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810.bin \
+>> +		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810_pad.bin
+>> +	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_imem_$(1)_201810_pad.bin \
+>> +		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_dmem_$(1)_201810_pad.bin > \
+>> +		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_$(1)_201810_fw.bin
+>> +endef
+>> +
+>> +define FIRMWARE_IMX_INSTALL_IMAGES_CMDS
+>> +	# Create padded versions of ddr4_* and generate ddr4_fw.bin.
+>> +	# ddr4_fw.bin is needed when generating imx8-boot-sd.bin
+>> +	# which is done in post-image script.
+>> +	$(call FIRMWARE_IMX_PREPARE_DDR4_FW,1d)
+>> +	$(call FIRMWARE_IMX_PREPARE_DDR4_FW,2d)
+>> +	cat $(FIRMWARE_IMX_DDRFW_DIR)/ddr4_1d_201810_fw.bin \
+>> +		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
+>> +		$(BINARIES_DIR)/ddr4_201810_fw.bin
+>> +	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
+>> +endef
+> Can you tell me the difference between ddr4_dmem_Xd_201810.bin and ddr4_dmem_Xd.bin?
 
+Not sure ; probably an update of the latter by the former. I'll let you 
+know if I get more info on this.
 
-> ---
->  package/luajit/0001-no-bin-symlink.patch | 6 ++++--
->  package/luajit/0002-install-inc.patch    | 6 ++++--
->  package/luajit/luajit.hash               | 4 ++--
->  package/luajit/luajit.mk                 | 2 +-
->  4 files changed, 11 insertions(+), 7 deletions(-)
+BR,
+Stephane.
+
 >
-> diff --git a/package/luajit/0001-no-bin-symlink.patch
-> b/package/luajit/0001-no-bin-symlink.patch
-> index d32ec5ad60..3d45d51bb3 100644
-> --- a/package/luajit/0001-no-bin-symlink.patch
-> +++ b/package/luajit/0001-no-bin-symlink.patch
-> @@ -1,6 +1,8 @@
->  Do not use a symlink for the binary, simply name it luajit
->
->  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +[Titouan: update for 2.2.0]
-> +Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
->
->  Index: b/Makefile
->  ===================================================================
-> @@ -10,13 +12,13 @@ Index: b/Makefile
->   INSTALL_MAN= $(INSTALL_SHARE)/man/man1
->   INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
->
-> --INSTALL_TNAME= luajit-$(VERSION)
-> +-INSTALL_TNAME= moonjit-$(VERSION)
->  -INSTALL_TSYMNAME= luajit
->  +INSTALL_TNAME= luajit
->   INSTALL_ANAME= libluajit-$(ABIVER).a
->   INSTALL_SOSHORT1= libluajit-$(ABIVER).so
->   INSTALL_SOSHORT2= libluajit-$(ABIVER).so.$(MAJVER)
-> -@@ -60,7 +59,6 @@
-> +@@ -60,7 +59,6 @@ INSTALL_DYN= $(INSTALL_LIB)/$(INSTALL_SONAME)
->   INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT1)
->   INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT2)
->   INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
-> diff --git a/package/luajit/0002-install-inc.patch
-> b/package/luajit/0002-install-inc.patch
-> index 5f6547fc3f..d3c9f9431f 100644
-> --- a/package/luajit/0002-install-inc.patch
-> +++ b/package/luajit/0002-install-inc.patch
-> @@ -1,6 +1,8 @@
->  Install includes like lua's ones
->
->  Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> +[Titouan: update for 2.2.0]
-> +Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
->
->  Index: b/Makefile
->  ===================================================================
-> @@ -10,8 +12,8 @@ Index: b/Makefile
->   INSTALL_BIN=   $(DPREFIX)/bin
->   INSTALL_LIB=   $(DPREFIX)/$(MULTILIB)
->   INSTALL_SHARE= $(DPREFIX)/share
-> --INSTALL_INC=   $(DPREFIX)/include/luajit-$(MAJVER).$(MINVER)
-> +-INSTALL_INC=   $(DPREFIX)/include/moonjit-$(MAJVER).$(MINVER)
->  +INSTALL_INC=   $(DPREFIX)/include
->
-> - INSTALL_LJLIBD= $(INSTALL_SHARE)/luajit-$(VERSION)
-> + INSTALL_LJLIBD= $(INSTALL_SHARE)/moonjit-$(VERSION)
->   INSTALL_JITLIB= $(INSTALL_LJLIBD)/jit
-> diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-> index 532ec0b294..9d41b85ef8 100644
-> --- a/package/luajit/luajit.hash
-> +++ b/package/luajit/luajit.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated
-> -sha256 c3de8e29aa617fc594c043f57636ab9ad71af2b4a3a513932b05f5cdaa4320b2
-> luajit-2.1.2.tar.gz
-> +sha256  83deb2c880488dfe7dd8ebf09e3b1e7613ef4b8420de53de6f712f01aabca2b6
-> luajit-2.2.0.tar.gz
->
->  # Locally calculated
-> -sha256 aa64a7706ded773011b933f4230d7b35ba662598197f82ac2c7bca62abdaa4d7
-> COPYRIGHT
-> +sha256  8773ee802066bf8559b5d101cc096c1aff363cf9c53a1117268fe90eb09a16fb
-> COPYRIGHT
-> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-> index 68e6af4f5e..569f9e446d 100644
-> --- a/package/luajit/luajit.mk
-> +++ b/package/luajit/luajit.mk
-> @@ -4,7 +4,7 @@
->  #
->
->  ################################################################################
->
-> -LUAJIT_VERSION = 2.1.2
-> +LUAJIT_VERSION = 2.2.0
->  LUAJIT_SITE = $(call github,moonjit,moonjit,$(LUAJIT_VERSION))
->  LUAJIT_LICENSE = MIT
->  LUAJIT_LICENSE_FILES = COPYRIGHT
-> --
-> 2.25.3
->
->
+> Regards,
+> Gary
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200429/cddff064/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200429/36ed5e77/attachment-0001.html>
