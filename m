@@ -1,106 +1,78 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Thu, 30 Apr 2020 00:42:25 +0200
-Subject: [Buildroot] [PATCH 4/4] support/testing: add pytest test
-In-Reply-To: <20200429224225.2454330-1-m.niestroj@grinn-global.com>
-References: <20200429224225.2454330-1-m.niestroj@grinn-global.com>
-Message-ID: <20200429224225.2454330-5-m.niestroj@grinn-global.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 30 Apr 2020 00:56:54 +0200
+Subject: [Buildroot] [PATCH] package/qemu: disable curl for the host variant
+Message-ID: <20200429225654.1864957-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- .gitlab-ci.yml                                |  1 +
- DEVELOPERS                                    |  2 ++
- .../tests/package/sample_python_pytest.py     | 25 +++++++++++++++++++
- .../tests/package/test_python_pytest.py       | 19 ++++++++++++++
- 4 files changed, 47 insertions(+)
- create mode 100644 support/testing/tests/package/sample_python_pytest.py
- create mode 100644 support/testing/tests/package/test_python_pytest.py
+Under certain circumstances (host distribution, openssl version),
+the qemu-system binary fail to start:
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index fa8e077a07..12930dd849 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -497,6 +497,7 @@ tests.package.test_python_pexpect.TestPythonPy2Pexpect: { extends: .runtime_test
- tests.package.test_python_pexpect.TestPythonPy3Pexpect: { extends: .runtime_test }
- tests.package.test_python_pynacl.TestPythonPy2Pynacl: { extends: .runtime_test }
- tests.package.test_python_pynacl.TestPythonPy3Pynacl: { extends: .runtime_test }
-+tests.package.test_python_pytest.TestPythonPy3Pytest: { extends: .runtime_test }
- tests.package.test_python_pyyaml.TestPythonPy2Pyyaml: { extends: .runtime_test }
- tests.package.test_python_pyyaml.TestPythonPy3Pyyaml: { extends: .runtime_test }
- tests.package.test_python_service_identity.TestPythonPy2ServiceIdentity: { extends: .runtime_test }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2e14053559..5175798e76 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1603,7 +1603,9 @@ F:	package/python-pluggy/
- F:	package/python-pytest/
- F:	package/rs485conf/
- F:	package/turbolua/
-+F:	support/testing/tests/package/sample_python_pytest.py
- F:	support/testing/tests/package/test_netdata.py
-+F:	support/testing/tests/package/test_python_pytest.py
- 
- N:	Marcus Folkesson <marcus.folkesson@gmail.com>
- F:	package/libostree/
-diff --git a/support/testing/tests/package/sample_python_pytest.py b/support/testing/tests/package/sample_python_pytest.py
-new file mode 100644
-index 0000000000..870cc8512b
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_pytest.py
-@@ -0,0 +1,25 @@
-+import pytest
-+
-+
-+x = 1
-+
-+
-+ at pytest.fixture()
-+def f1():
-+    global x
-+    x = 2
-+    yield 15
-+    x = 3
-+
-+
-+def test_1():
-+    assert x == 1
-+
-+
-+def test_2(f1):
-+    assert x == 2
-+    assert f1 == 15
-+
-+
-+def test_3():
-+    assert x == 3
-diff --git a/support/testing/tests/package/test_python_pytest.py b/support/testing/tests/package/test_python_pytest.py
-new file mode 100644
-index 0000000000..7fa7e44018
---- /dev/null
-+++ b/support/testing/tests/package/test_python_pytest.py
-@@ -0,0 +1,19 @@
-+import os
-+
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Pytest(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_PYTEST=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_pytest.py"]
-+
-+    def run_sample_scripts(self):
-+        for script in self.sample_scripts:
-+            cmd = self.interpreter + " -m pytest " + os.path.basename(script)
-+            _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
-+            self.assertEqual(exit_code, 0)
+qemu-system-aarch64: symbol lookup error: /lib64/libssh.so.4: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
+
+There is no problem when only host-qemu is built, but it's linked with /lib64/libcurl.so.4
+$ make host-qemu
+$ ldd output/host/bin/qemu-system-aarch64
+        [...]
+	libcurl.so.4 => /lib64/libcurl.so.4 (0x00007fb21cb57000)
+	libssh.so.4 => /lib64/libssh.so.4 (0x00007fb21c35d000)
+	libpsl.so.5 => /lib64/libpsl.so.5 (0x00007fb21c34a000)
+	libssl.so.1.1 => /lib64/libssl.so.1.1 (0x00007fb21c2b4000)
+
+Note: /lib64/libcurl.so.4 is linked with libssh and libssl:
+$ ldd /lib64/libcurl.so.4
+	[...]
+	libssh.so.4 => /lib64/libssh.so.4 (0x00007f90d8efd000)
+	libpsl.so.5 => /lib64/libpsl.so.5 (0x00007f90d8eea000)
+	libssl.so.1.1 => /lib64/libssl.so.1.1 (0x00007f90d8e54000)
+
+Continue the build.
+$ make
+
+We can notice that qemu_aarch64_virt_defconfig set
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+
+So host-openssl package is built and this is the problem:
+
+$ ldd output/host/bin/qemu-system-aarch64
+	[...]
+	libcurl.so.4 => /lib64/libcurl.so.4 (0x00007f3adb444000)
+	libssh.so.4 => /lib64/libssh.so.4 (0x00007f3adac4a000)
+	libpsl.so.5 => /lib64/libpsl.so.5 (0x00007f3adac37000)
+	libssl.so.1.1 => /home/naourr/buildroot/test/qemu_aarch64_virt_defconfig-master/host/lib/libssl.so.1.1 (0x00007f3adaba8000)
+
+qemu-system-aarch64: symbol lookup error: /lib64/libssh.so.4: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
+
+This is due to the build system trying to find libcurl using
+pkg-config or curl-config.
+
+libcurl is used by the QEMU Block driver for CURL images and
+elf2dmp tool which is not needed.
+Instead of adding host-libcurl dependency, we can disable it
+entierely.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+There are a lot more build options that are not handled by
+the qemu package...
+---
+ package/qemu/qemu.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index e8b43d3b36..0bb29f9369 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -305,6 +305,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 		--extra-ldflags="$(HOST_LDFLAGS)" \
+ 		--python=$(HOST_DIR)/bin/python3 \
+ 		--disable-bzip2 \
++		--disable-curl \
+ 		--disable-libssh \
+ 		--disable-sdl \
+ 		--disable-vnc-jpeg \
 -- 
-2.26.2
+2.25.4
