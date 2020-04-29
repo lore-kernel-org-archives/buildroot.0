@@ -1,39 +1,54 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 29 Apr 2020 22:49:11 +0200
-Subject: [Buildroot] [PATCH] package/apparmor: skip docs building
-Message-ID: <1588193351-30086-1-git-send-email-angelo@amarulasolutions.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 29 Apr 2020 22:50:42 +0200
+Subject: [Buildroot] [PATCH 1/2] package/cegui: force libglew when
+ libepoxy is also enabled
+In-Reply-To: <20200428195844.48124-1-b.bilas@grinn-global.com>
+References: <20200428195844.48124-1-b.bilas@grinn-global.com>
+Message-ID: <20200429225042.65fcccd0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When pod2man and pod2html are missing, building now exits with an
-error.
-Building of man pages and documentation should be skipped in buildroot,
-setting both executables to the "echo" command it's sufficient to skip
-them.
+On Tue, 28 Apr 2020 21:58:43 +0200
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/ca8d3071d888b5c1cfa3e275afaf05415e19627f
+> Cegui doesn't allow to have enabled both opengl libraries so disable
+> libepoxy when both are enabled.
+> 
+> Fixes:
+>   - http://autobuild.buildroot.net/results/2881bbcc2dcfcaa5ed663817ff39f7574430ba5a/build-end.log
+> 
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> ---
+>  package/cegui/cegui.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
+> index 434201b1f8..0e3d015948 100644
+> --- a/package/cegui/cegui.mk
+> +++ b/package/cegui/cegui.mk
+> @@ -18,7 +18,7 @@ CEGUI_DEPENDENCIES = glm \
+>  		$(if $(BR2_PACKAGE_LIBGLEW),libglew) \
+>  		$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+>  
+> -ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
+> +ifeq ($(BR2_PACKAGE_LIBEPOXY)$(BR2_PACKAGE_LIBGLEW),y)
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/apparmor/apparmor.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This way of solving the problem doesn't work: if BR2_PACKAGE_LIBEPOXY
+is false, but BR2_PACKAGE_LIBGLEW=y, then the condition is true, and we
+add a dependency on libepoxy. Not what we want. So I've replaced with
 
-diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-index f1b765c..a525b40 100644
---- a/package/apparmor/apparmor.mk
-+++ b/package/apparmor/apparmor.mk
-@@ -15,7 +15,7 @@ APPARMOR_LICENSE_FILES = LICENSE parser/COPYING.GPL
- APPARMOR_DEPENDENCIES = libapparmor
- 
- APPARMOR_TOOLS = parser
--APPARMOR_MAKE_OPTS = USE_SYSTEM=1 DISTRO=unknown
-+APPARMOR_MAKE_OPTS = USE_SYSTEM=1 DISTRO=unknown POD2MAN=echo POD2HTML=echo
- 
- ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
- APPARMOR_DEPENDENCIES += gettext
++# libepoxy support cannot be enabled together with libglew
++ifeq ($(BR2_PACKAGE_LIBEPOXY):$(BR2_PACKAGE_LIBGLEW),y:)
+
+instead.
+
+Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
