@@ -1,36 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Apr 2020 22:27:56 +0200
-Subject: [Buildroot] [PATCH] package/gauche: bump to version 0.9.9
-In-Reply-To: <20200429030745.16892-1-ryanbarnett3@gmail.com>
-References: <20200429030745.16892-1-ryanbarnett3@gmail.com>
-Message-ID: <20200429222756.5ce644af@windsurf.home>
+From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
+Date: Wed, 29 Apr 2020 20:36:31 +0000
+Subject: [Buildroot] [PATCH v2 0/5] imx: add i.MX8M Nano EVK board
+ support
+In-Reply-To: <20200429222241.3ca00696@windsurf.home>
+References: <1588151545-9346-1-git-send-email-stephane.viau@oss.nxp.com>,
+ <20200429222241.3ca00696@windsurf.home>
+Message-ID: <DB8PR04MB5755633B75DCC14E68014295A7AD0@DB8PR04MB5755.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 28 Apr 2020 22:07:45 -0500
-Ryan Barnett <ryanbarnett3@gmail.com> wrote:
 
-> * Update hash file to two space format
-> * COPYING hash updated due to copyright year
-> 
-> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-> ---
->  package/gauche/0001-fix-so-suffix.patch | 32 -------------------------
->  package/gauche/gauche.hash              |  8 +++----
->  package/gauche/gauche.mk                |  2 +-
->  3 files changed, 5 insertions(+), 37 deletions(-)
->  delete mode 100644 package/gauche/0001-fix-so-suffix.patch
+>
+>Hello,
+>
+>On Wed, 29 Apr 2020 11:12:20 +0200
+>Stephane Viau <stephane.viau@oss.nxp.com> wrote:
+>
+>> This series adds support for the NXP i.MX8M Nano EVK board.
+>>
+>> Since the i.MX8M Nano CPU was added for the Nitrogen8MNano board, which has a
+>> type of memory (LPDDR4) different from the NXP reference board (DDR4), the first
+>> half of the series introduce the DDR training selection for the whole i.MX8 M
+>> SoC family.
+>>
+>> The second half of the series adds support for i.MX8M Nano EVK Board with kernel/
+>> U-Boot based on 4.19.35_1.1.0, which is the current preferred version for all NXP
+>> reference boards.
+>
+>Thanks for this new iteration. It was in our patchwork patch tracking
+>system, and it just disappeared. Has anyone removed these patches? You
+>Stephane? Someone else?
 
-You had not explained what had happened with the patch, so I expanded
-the commit log when applying.
+Hi Thomas, 
 
-Applied to master, thanks!
+Yeah, sorry about that. It should be back now ; can you please check?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards, 
+Stephane.
+
+>
+>Thanks,
+>
+>Thomas
+>--
+>Thomas Petazzoni, CTO, Bootlin
+>Embedded Linux and Kernel engineering
+>https://bootlin.com
+>
