@@ -1,62 +1,44 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Wed, 29 Apr 2020 11:12:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/luajit: bump to version 2.2.0
-In-Reply-To: <CAB0FRsshdtxxWBjQo4=LqE9Kx4QMv25TVs5kxzFKK75sMAFGkw@mail.gmail.com>
-References: <20200428110101.11716-1-titouan.christophe@railnova.eu>
- <CAB0FRsshdtxxWBjQo4=LqE9Kx4QMv25TVs5kxzFKK75sMAFGkw@mail.gmail.com>
-Message-ID: <e85ff399-434c-97be-6567-8b07186be42e@railnova.eu>
+From: Stephane Viau <stephane.viau@oss.nxp.com>
+Date: Wed, 29 Apr 2020 11:12:20 +0200
+Subject: [Buildroot] [PATCH v2 0/5] imx: add i.MX8M Nano EVK board support
+Message-ID: <1588151545-9346-1-git-send-email-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
-On 29/04/20 10:27, Fran?ois Perrad wrote:
-> 
-> 
-> Le?mar. 28 avr. 2020 ??13:01, Titouan Christophe 
-> <titouan.christophe at railnova.eu <mailto:titouan.christophe@railnova.eu>> 
-> a ?crit?:
-> 
->     Version 2.2.0 introduces Lua 5.3 and extends Lua 5.2 extensions, see
->     https://github.com/moonjit/moonjit/releases/tag/2.2.0
-> 
->     Moonjit 2.2.0 replaced references to "LuaJIT" by "moonjit", which
->     introduces some changes in the Makefile and COPYRIGHT.
-> 
->     Also update the hash file to the new 2 spaces convention
-> 
->     Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu
->     <mailto:titouan.christophe@railnova.eu>>
-> 
-> 
-> moonjit is one fork of LuaJIT.
-> moonjit serie 2.1 stay close to LuaJIT 2.1.0 beta3 (only latest fixes 
-> from Mike Pall)
-> moonjit serie 2.2 not, and moonjit 2.2.0 (the first one) has some issues :
->  ? ? - https://github.com/moonjit/moonjit/issues/85
->  ? ? - https://github.com/moonjit/moonjit/issues/86 (my fault)
+This series adds support for the NXP i.MX8M Nano EVK board.
 
-I guess I'll mark the patch as rejected for now then.
+Since the i.MX8M Nano CPU was added for the Nitrogen8MNano board, which has a
+type of memory (LPDDR4) different from the NXP reference board (DDR4), the first
+half of the series introduce the DDR training selection for the whole i.MX8 M
+SoC family.
 
-> 
-> in my point of view, the switch to moonjit is temporary,
-> I still hope an official reiease of LuaJIT 2.1
+The second half of the series adds support for i.MX8M Nano EVK Board with kernel/
+U-Boot based on 4.19.35_1.1.0, which is the current preferred version for all NXP
+reference boards.
 
-Thank you for the information.
+Stephane Viau (5):
+  package/freescale-imx: Add option for DDR FW need
+  package/freescale-imx/firmware-imx: add choice for DDR training
+    binaries
+  board/freescale/common/imx: use generic ddr_fw.bin name
+  board/freescale/common/imx: add support for i.MX8M Nano
+  configs/freescale_imx8mnevk: new defconfig
 
-I thought MoonJIT was to replace LuaJIT "forever", since there's no 
-update on LuaJIT for nearly 3 years, while MoonJIT is under active 
-development.
+ .gitlab-ci.yml                                     |  1 +
+ DEVELOPERS                                         |  4 ++
+ .../common/imx/imx8-bootloader-prepare.sh          |  6 +-
+ board/freescale/common/imx/post-image.sh           |  2 +
+ board/freescale/imx8mnevk/readme.txt               | 74 ++++++++++++++++++++++
+ configs/freescale_imx8mnevk_defconfig              | 43 +++++++++++++
+ package/freescale-imx/Config.in                    |  7 ++
+ package/freescale-imx/firmware-imx/Config.in       | 24 +++++++
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 29 ++++++++-
+ 9 files changed, 186 insertions(+), 4 deletions(-)
+ create mode 100644 board/freescale/imx8mnevk/readme.txt
+ create mode 100644 configs/freescale_imx8mnevk_defconfig
 
-> 
-> see also some old discussions:
-> http://buildroot-busybox.2317881.n4.nabble.com/PATCH-package-luajit-bump-to-version-2-1-x-developpment-version-td219875.html
-> http://buildroot-busybox.2317881.n4.nabble.com/PATCH-package-luajit-switch-to-moonjit-fork-td241218.html >
-> Fran?ois
-> 
-
-Regards,
-
-Titouan
+-- 
+2.7.4
