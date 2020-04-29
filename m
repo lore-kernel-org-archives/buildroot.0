@@ -1,77 +1,117 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Wed, 29 Apr 2020 08:15:51 -0500
-Subject: [Buildroot] [PATCH] package/cunit: switch to maintain fork
- version 3.2.6
-In-Reply-To: <20200429150827.20ac5a0d@windsurf.home>
-References: <20200428221018.1317-1-ryan.barnett@rockwellcollins.com>
- <20200429150827.20ac5a0d@windsurf.home>
-Message-ID: <CAMQcK5JsFiCKtD9A2uQM4OuSfeEy6wA5hojOUBowLC5+dEAA6Q@mail.gmail.com>
+From: Mikael Bourhis-Cloarec <mikael.bourhis@smile.fr>
+Date: Wed, 29 Apr 2020 15:19:54 +0200
+Subject: [Buildroot] [PATCH 1/1] support/testing: add package/test_mender.py
+Message-ID: <20200429131954.GA18375@P-NAN-EREVAN-mikbou>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas/All,
+Create a test to check Mender client at runtime.
 
-On Wed, Apr 29, 2020 at 8:09 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Tue, 28 Apr 2020 17:10:18 -0500
-> Ryan Barnett <ryan.barnett@rockwellcollins.com> wrote:
->
-> > Changes which were made to the package include:
-> >
-> >  * Switch to CMake build system
-> >  * Requires BR2_USE_MMU for '-rdynamic' (CMake test)
->
-> -rdynamic is more related to shared libraries than MMU support. You can
-> have a pure static library system on a MMU-capable system, and some
-> no-MMU platforms support shared libraries.
+The aim of this test is:
+  - to check the correct execution of simple Mender commands,
+    in a minimal environment;
+  - to validate there is no missing dependencies for runtime.
 
-That is what I'm gather based on the feedback from upstream in my
-issue that I created:
+This test is not a board integration test for Mender,
+including well-configured bootloader, partitioning, ...
 
-https://gitlab.com/cunity/cunit/-/issues/39
+Check:
+  - the daemon is started;
+  - the current 'artifact name' (name of the image or update) of the active
+    partition is read, without error.
 
-> > diff --git a/package/cunit/Config.in b/package/cunit/Config.in
-> > index 8bcfa2a4ec..53d8be2307 100644
-> > --- a/package/cunit/Config.in
-> > +++ b/package/cunit/Config.in
-> > @@ -1,6 +1,12 @@
-> >  config BR2_PACKAGE_CUNIT
-> >       bool "cunit"
-> > +     depends on BR2_INSTALL_LIBSTDCPP
-> > +     depends on BR2_USE_MMU
-> >       help
-> > -       An automated testing framework in 'C'.
-> > +       An automated testing framework in 'C' forked from the
-> > +       Sourceforge CUnit which is currently unmaintained.
-> >
-> > -       http://cunit.sourceforge.net/
-> > +       https://gitlab.com/cunity/cunit
-> > +
-> > +comment "cunit needs a toolchain w/ C++"
-> > +     depends on !BR2_INSTALL_LIBSTDCPP
->
-> This comment would have required a "depends on BR2_USE_MMU". But most
-> likely, it will be a !BR2_STATIC_LIBS dependency instead.
+For that, we need to fake (see the 'overlay' directory):
+  - some bootloader environment variables;
+  - the name of an update.
 
-Do you have any suggestions in regards to the feedback that Ian Norton
-(maintainer of forked cunit) of how we could handle this properly?
+Signed-off-by: Mikael Bourhis-Cloarec <mikael.bourhis@smile.fr>
+---
+ .gitlab-ci.yml                                |  1 +
+ support/testing/tests/package/test_mender.py  | 38 +++++++++++++++++++
+ .../rootfs-overlay/etc/mender/artifact_info   |  1 +
+ .../rootfs-overlay/usr/bin/fw_printenv        |  6 +++
+ 4 files changed, 46 insertions(+)
+ create mode 100644 support/testing/tests/package/test_mender.py
+ create mode 100644 support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artifact_info
+ create mode 100755 support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_printenv
 
-Feedback from Ian:
-
-   Hi Ryan, that error is complaining about the linker not supporting -rdynamic.
-
-   I think you can make this go away by setting a newer cmake policy -
-   https://cmake.org/cmake/help/v3.6/policy/CMP0065.html
-
-   Or by overriding the cmake shared library flags to be empty perhaps?
-
-   -DCMAKE_SHARED_LIBRARY_LINK_C_FLAGS=""
-
-Thanks,
--Ryan
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index fa8e077a07..029a8d00aa 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -520,6 +520,7 @@ tests.package.test_rust.TestRustBin: { extends: .runtime_test }
+ tests.package.test_syslog_ng.TestSyslogNg: { extends: .runtime_test }
+ tests.package.test_tmux.TestTmux: { extends: .runtime_test }
+ tests.package.test_turbolua.TestLuajitTurbolua: { extends: .runtime_test }
++tests.package.test_mender.TestMender: { extends: .runtime_test }
+ tests.toolchain.test_external.TestExternalToolchainBuildrootMusl: { extends: .runtime_test }
+ tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc: { extends: .runtime_test }
+ tests.toolchain.test_external.TestExternalToolchainCCache: { extends: .runtime_test }
+diff --git a/support/testing/tests/package/test_mender.py b/support/testing/tests/package/test_mender.py
+new file mode 100644
+index 0000000000..b0d565c5dc
+--- /dev/null
++++ b/support/testing/tests/package/test_mender.py
+@@ -0,0 +1,38 @@
++import os
++
++import infra.basetest
++
++
++class TestMender(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_MENDER=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_ROOTFS_OVERLAY="{}"
++        """.format(
++           # overlay to add a fake 'fw_printenv', used by Mender
++           infra.filepath("tests/package/test_mender/rootfs-overlay"))
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check if the 'mender' binaries are correctly installed
++        self.assertRunOk("ls /usr/bin/mender")
++        self.assertRunOk("ls /etc/mender/mender.conf")
++        self.assertRunOk("ls /etc/init.d/S42mender")
++
++        # Check if the Daemon is running
++        self.assertRunOk("ls /var/run/mender.pid")
++        self.assertRunOk("ps aux | egrep [m]ender")
++
++        # Check if a simple Mender command is correctly executed
++        self.assertRunOk("mender -log-level debug -show-artifact")
++        self.assertRunOk("mender -log-level debug -show-artifact | grep 'RUNTIME_TEST_ARTIFACT_NAME'")
++        cmd = "mender -show-artifact 2>&1 | grep -i 'err'"  # Check if no 'error' among the traces
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 1)
+diff --git a/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artifact_info b/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artifact_info
+new file mode 100644
+index 0000000000..4d54b8f89c
+--- /dev/null
++++ b/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artifact_info
+@@ -0,0 +1 @@
++artifact_name=RUNTIME_TEST_ARTIFACT_NAME
+diff --git a/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_printenv b/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_printenv
+new file mode 100755
+index 0000000000..c002a0f2b8
+--- /dev/null
++++ b/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_printenv
+@@ -0,0 +1,6 @@
++#!/bin/sh
++
++# Fake 'fw_printenv' because UBoot is not installed: print some plausible 'key-value'
++echo "bootcount=0"
++echo "mender_boot_part=rootfs"
++echo "upgrade_available=0"
+-- 
+2.20.1
