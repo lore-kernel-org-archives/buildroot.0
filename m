@@ -1,46 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Apr 2020 23:33:48 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mc: fix typo
- BR2_PACKAGE_GMP -> BR2_PACKAGE_GPM
-Message-ID: <20200429213633.9C73690AF2@busybox.osuosl.org>
+Date: Wed, 29 Apr 2020 23:44:31 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/kodi-pvr-vuplus:
+ needs gcc >= 4.9
+Message-ID: <20200429213633.BD94390B57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9aad0c80a8d25ff9c78a2317561b44948a3ecc46
+commit: https://git.buildroot.net/buildroot/commit/?id=91e4578ad0ad11d86d2a05ce259d7ca65473aded
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Commit 9cae8f557b9d3f18ccf3694155f452d6b55de5f6 introduced an optional
-dependency on GPM, but got the name of the option wrong, and used
-GMP. In fact, even the commit title was wrong.
+Since commit 2cc2ae83fca29e3f70a42759a105bb1495831e7e, kodi-pvr-vuplus
+has a dependency on json-for-modern-cpp, but the dependency of
+json-for-modern-cpp on gcc >= 4.9 was not propagated. Let's fix that.
 
-This causes a build failure:
-
-Makefile:578: *** gpm is in the dependency chain of mc that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/52fb92ae7dd55cba7d19862bb6cd89c80da9a4b6/
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 52d10583b3003764263b907acc0a58f1ee1766e6)
+(cherry picked from commit 76c2914703166eeb179c9392740ee2301235eb02)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mc/mc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kodi-pvr-vuplus/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index 52b3a4b48f..47091be2a7 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -11,7 +11,7 @@ MC_LICENSE = GPL-3.0+
- MC_LICENSE_FILES = COPYING
- MC_DEPENDENCIES = libglib2 host-pkgconf
+diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
+index 96320f6fcb..b6a03e843f 100644
+--- a/package/kodi-pvr-vuplus/Config.in
++++ b/package/kodi-pvr-vuplus/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_VUPLUS
+ 	bool "kodi-pvr-vuplus"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # json-for-modern-cpp
+ 	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
+ 	select BR2_PACKAGE_TINYXML
+@@ -7,3 +8,6 @@ config BR2_PACKAGE_KODI_PVR_VUPLUS
+ 	  VuPlus PVR client addon for Kodi
  
--ifeq ($(BR2_PACKAGE_GMP),y)
-+ifeq ($(BR2_PACKAGE_GPM),y)
- MC_CONF_OPTS += --with-gpm-mouse
- MC_DEPENDENCIES += gpm
- else
+ 	  https://github.com/kodi-pvr/pvr.vuplus
++
++comment "kodi-pvr-vuplus needs a toolchain w/ gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
