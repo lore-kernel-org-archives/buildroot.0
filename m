@@ -1,43 +1,55 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 29 Apr 2020 23:18:40 +0200
-Subject: [Buildroot] [PATCH v2] package/apparmor: skip docs building
-Message-ID: <20200429211840.215032-1-angelo@amarulasolutions.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 29 Apr 2020 23:20:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apcupsd: pass additional libusb
+ libs for static build
+In-Reply-To: <20200428093139.115983-1-james.hilliard1@gmail.com>
+References: <20200428093139.115983-1-james.hilliard1@gmail.com>
+Message-ID: <20200429232030.782805a0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When pod2man and pod2html are missing, building now exits with an
-error.
-Building of man pages and documentation should be skipped in buildroot,
-setting both executables to the "true" command it's sufficient to skip
-them.
+On Tue, 28 Apr 2020 03:31:39 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/ca8d3071d888b5c1cfa3e275afaf05415e19627f
+> By default apcupsd only passes libs for libusb-compat, this is not
+> sufficient for static builds which also require libusb libs.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/747/7472fec82983f5b9c2f92578b2b20b746a8d20ae/build-end.log
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/apcupsd/apcupsd.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/apcupsd/apcupsd.mk b/package/apcupsd/apcupsd.mk
+> index ff9cc9242f..a0fda19cf3 100644
+> --- a/package/apcupsd/apcupsd.mk
+> +++ b/package/apcupsd/apcupsd.mk
+> @@ -10,8 +10,11 @@ APCUPSD_LICENSE = GPL-2.0
+>  APCUPSD_LICENSE_FILES = COPYING
+>  APCUPSD_CONF_OPTS = --disable-test
+>  
+> -ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
+> +ifneq ($(BR2_PACKAGE_APCUPSD_MODBUS_USB)$(BR2_PACKAGE_APCUPSD_USB),)
+>  APCUPSD_CONF_ENV = ac_cv_path_usbcfg=$(STAGING_DIR)/usr/bin/libusb-config
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +APCUPSD_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libusb`"
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
-Changelog:
-v1->v2:
- * "echo" to "true" (Thomas P.)
+You're using pkg-config here, but the package didn't had any dependency
+on host-pkgconf, so I've added that, and applied.
 
- package/apparmor/apparmor.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+However, could you tweak the upstream configure.in to directly use
+pkg-config to detect libusb ? It already uses pkg-config to detect
+another library. This would simplify things quite a bit.
 
-diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-index f1b765ce42..f667966082 100644
---- a/package/apparmor/apparmor.mk
-+++ b/package/apparmor/apparmor.mk
-@@ -15,7 +15,7 @@ APPARMOR_LICENSE_FILES = LICENSE parser/COPYING.GPL
- APPARMOR_DEPENDENCIES = libapparmor
- 
- APPARMOR_TOOLS = parser
--APPARMOR_MAKE_OPTS = USE_SYSTEM=1 DISTRO=unknown
-+APPARMOR_MAKE_OPTS = USE_SYSTEM=1 DISTRO=unknown POD2MAN=true POD2HTML=true
- 
- ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
- APPARMOR_DEPENDENCIES += gettext
+Thanks!
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
