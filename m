@@ -1,51 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Apr 2020 22:50:42 +0200
-Subject: [Buildroot] [PATCH 1/2] package/cegui: force libglew when
- libepoxy is also enabled
-In-Reply-To: <20200428195844.48124-1-b.bilas@grinn-global.com>
+Date: Wed, 29 Apr 2020 22:53:15 +0200
+Subject: [Buildroot] [PATCH 2/2] package/cegui: select libglu when libgl
+ is detected
+In-Reply-To: <20200428195844.48124-2-b.bilas@grinn-global.com>
 References: <20200428195844.48124-1-b.bilas@grinn-global.com>
-Message-ID: <20200429225042.65fcccd0@windsurf.home>
+ <20200428195844.48124-2-b.bilas@grinn-global.com>
+Message-ID: <20200429225315.5d39a390@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 28 Apr 2020 21:58:43 +0200
+Hello,
+
+Adding Bernd for libglew/libglu questions.
+
+On Tue, 28 Apr 2020 21:58:44 +0200
 Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-> Cegui doesn't allow to have enabled both opengl libraries so disable
-> libepoxy when both are enabled.
-> 
 > Fixes:
->   - http://autobuild.buildroot.net/results/2881bbcc2dcfcaa5ed663817ff39f7574430ba5a/build-end.log
+>   include/GL/glew.h:1205:14: fatal error: GL/glu.h: No such file or directory
 > 
 > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> ---
->  package/cegui/cegui.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
-> index 434201b1f8..0e3d015948 100644
-> --- a/package/cegui/cegui.mk
-> +++ b/package/cegui/cegui.mk
-> @@ -18,7 +18,7 @@ CEGUI_DEPENDENCIES = glm \
->  		$(if $(BR2_PACKAGE_LIBGLEW),libglew) \
->  		$(if $(BR2_PACKAGE_LIBICONV),libiconv)
->  
-> -ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
-> +ifeq ($(BR2_PACKAGE_LIBEPOXY)$(BR2_PACKAGE_LIBGLEW),y)
 
-This way of solving the problem doesn't work: if BR2_PACKAGE_LIBEPOXY
-is false, but BR2_PACKAGE_LIBGLEW=y, then the condition is true, and we
-add a dependency on libepoxy. Not what we want. So I've replaced with
+This should not be solved inside cegui: it's the glew.h header that
+includes GL/glu.h, so from the look of it, glew should depend on glu.
 
-+# libepoxy support cannot be enabled together with libglew
-+ifeq ($(BR2_PACKAGE_LIBEPOXY):$(BR2_PACKAGE_LIBGLEW),y:)
+However, it turns out that glew has a GLEW_NO_GLU flag:
 
-instead.
+#ifndef GLEW_NO_GLU
+/* this is where we can safely include GLU */
+#  if defined(__APPLE__) && defined(__MACH__)
+#    include <OpenGL/glu.h>
+#  else
+#    include <GL/glu.h>
+#  endif
+#endif
 
-Thanks!
+I'm not sure how we should use that GLEW_NO_GLU flag. Should it be the
+responsibility of the package using glew to define it?
+
+Could you do a bit of research on this?
+
+Thanks,
 
 Thomas
 -- 
