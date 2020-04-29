@@ -1,9 +1,9 @@
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Thu, 30 Apr 2020 00:42:24 +0200
-Subject: [Buildroot] [PATCH 3/4] package/python-pytest: new package
+Date: Thu, 30 Apr 2020 00:42:25 +0200
+Subject: [Buildroot] [PATCH 4/4] support/testing: add pytest test
 In-Reply-To: <20200429224225.2454330-1-m.niestroj@grinn-global.com>
 References: <20200429224225.2454330-1-m.niestroj@grinn-global.com>
-Message-ID: <20200429224225.2454330-4-m.niestroj@grinn-global.com>
+Message-ID: <20200429224225.2454330-5-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,93 +12,95 @@ To: buildroot@busybox.net
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-pytest/Config.in          | 16 ++++++++++++++++
- package/python-pytest/python-pytest.hash |  5 +++++
- package/python-pytest/python-pytest.mk   | 15 +++++++++++++++
- 5 files changed, 38 insertions(+)
- create mode 100644 package/python-pytest/Config.in
- create mode 100644 package/python-pytest/python-pytest.hash
- create mode 100644 package/python-pytest/python-pytest.mk
+ .gitlab-ci.yml                                |  1 +
+ DEVELOPERS                                    |  2 ++
+ .../tests/package/sample_python_pytest.py     | 25 +++++++++++++++++++
+ .../tests/package/test_python_pytest.py       | 19 ++++++++++++++
+ 4 files changed, 47 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_pytest.py
+ create mode 100644 support/testing/tests/package/test_python_pytest.py
 
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index fa8e077a07..12930dd849 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -497,6 +497,7 @@ tests.package.test_python_pexpect.TestPythonPy2Pexpect: { extends: .runtime_test
+ tests.package.test_python_pexpect.TestPythonPy3Pexpect: { extends: .runtime_test }
+ tests.package.test_python_pynacl.TestPythonPy2Pynacl: { extends: .runtime_test }
+ tests.package.test_python_pynacl.TestPythonPy3Pynacl: { extends: .runtime_test }
++tests.package.test_python_pytest.TestPythonPy3Pytest: { extends: .runtime_test }
+ tests.package.test_python_pyyaml.TestPythonPy2Pyyaml: { extends: .runtime_test }
+ tests.package.test_python_pyyaml.TestPythonPy3Pyyaml: { extends: .runtime_test }
+ tests.package.test_python_service_identity.TestPythonPy2ServiceIdentity: { extends: .runtime_test }
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ea53c55d41..2e14053559 100644
+index 2e14053559..5175798e76 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1600,6 +1600,7 @@ F:	package/murata-cyw-fw/
- F:	package/netdata/
- F:	package/python-packaging/
- F:	package/python-pluggy/
-+F:	package/python-pytest/
+@@ -1603,7 +1603,9 @@ F:	package/python-pluggy/
+ F:	package/python-pytest/
  F:	package/rs485conf/
  F:	package/turbolua/
++F:	support/testing/tests/package/sample_python_pytest.py
  F:	support/testing/tests/package/test_netdata.py
-diff --git a/package/Config.in b/package/Config.in
-index 14334e450d..24ad43d36a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1111,6 +1111,7 @@ menu "External python modules"
- 	source "package/python-pysocks/Config.in"
- 	source "package/python-pytablereader/Config.in"
- 	source "package/python-pytablewriter/Config.in"
-+	source "package/python-pytest/Config.in"
- 	source "package/python-pytrie/Config.in"
- 	source "package/python-pytz/Config.in"
- 	source "package/python-pyudev/Config.in"
-diff --git a/package/python-pytest/Config.in b/package/python-pytest/Config.in
++F:	support/testing/tests/package/test_python_pytest.py
+ 
+ N:	Marcus Folkesson <marcus.folkesson@gmail.com>
+ F:	package/libostree/
+diff --git a/support/testing/tests/package/sample_python_pytest.py b/support/testing/tests/package/sample_python_pytest.py
 new file mode 100644
-index 0000000000..a655a9e901
+index 0000000000..870cc8512b
 --- /dev/null
-+++ b/package/python-pytest/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_PYTHON_PYTEST
-+	bool "python-pytest"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-+	select BR2_PACKAGE_PYTHON_COLORAMA # runtime
-+	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
-+	select BR2_PACKAGE_PYTHON_PLUGGY # runtime
-+	select BR2_PACKAGE_PYTHON_PY # runtime
-+	select BR2_PACKAGE_PYTHON_WCWIDTH # runtime
-+	help
-+	  pytest is a framework that makes building simple and scalable
-+	  tests easy. Tests are expressive and readable?no boilerplate
-+	  code required.
++++ b/support/testing/tests/package/sample_python_pytest.py
+@@ -0,0 +1,25 @@
++import pytest
 +
-+	  https://docs.pytest.org/en/latest/
-diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
++
++x = 1
++
++
++ at pytest.fixture()
++def f1():
++    global x
++    x = 2
++    yield 15
++    x = 3
++
++
++def test_1():
++    assert x == 1
++
++
++def test_2(f1):
++    assert x == 2
++    assert f1 == 15
++
++
++def test_3():
++    assert x == 3
+diff --git a/support/testing/tests/package/test_python_pytest.py b/support/testing/tests/package/test_python_pytest.py
 new file mode 100644
-index 0000000000..ebcac1f910
+index 0000000000..7fa7e44018
 --- /dev/null
-+++ b/package/python-pytest/python-pytest.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pytest/json
-+md5	f0d3c0e6f71cfe53e24c736c4ceb7725  pytest-5.4.1.tar.gz
-+sha256	84dde37075b8805f3d1f392cc47e38a0e59518fb46a431cfdaf7cf1ce805f970  pytest-5.4.1.tar.gz
-+# Locally computer sha256
-+sha256	7898b9b164d4f93fd9a562fd0f592935518b48c4745303964110eb7f7fe64faf  LICENSE
-diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
-new file mode 100644
-index 0000000000..9d3f271540
---- /dev/null
-+++ b/package/python-pytest/python-pytest.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-pytest
-+#
-+################################################################################
++++ b/support/testing/tests/package/test_python_pytest.py
+@@ -0,0 +1,19 @@
++import os
 +
-+PYTHON_PYTEST_VERSION = 5.4.1
-+PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
-+PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/6d/4e/572aed20422dee7fa2bd27995b2a53a32de90c1826e5531c9df6d3ea77ed
-+PYTHON_PYTEST_SETUP_TYPE = setuptools
-+PYTHON_PYTEST_LICENSE = MIT
-+PYTHON_PYTEST_LICENSE_FILES = LICENSE
-+PYTHON_PYTEST_DEPENDENCIES = host-python-setuptools-scm
++from tests.package.test_python import TestPythonPackageBase
 +
-+$(eval $(python-package))
++
++class TestPythonPy3Pytest(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_PYTEST=y
++        """
++    sample_scripts = ["tests/package/sample_python_pytest.py"]
++
++    def run_sample_scripts(self):
++        for script in self.sample_scripts:
++            cmd = self.interpreter + " -m pytest " + os.path.basename(script)
++            _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
++            self.assertEqual(exit_code, 0)
 -- 
 2.26.2
