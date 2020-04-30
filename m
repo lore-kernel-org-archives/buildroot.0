@@ -1,70 +1,142 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 30 Apr 2020 22:13:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-meson.mk: set correct
- pkgconfig for native dependencies
-In-Reply-To: <CADvTj4ofOtmzMiVPHS1OJXYZZvcMFUU30=3=j7uweMkS-+XsFA@mail.gmail.com>
-References: <20200428040638.122494-1-james.hilliard1@gmail.com>
- <20200428072202.5889620f@windsurf.home>
- <d96ae071-26fa-25a4-a508-d52d82daafeb@mind.be>
- <20200428091022.4c613e80@windsurf.home>
- <0f40c7ae-22d4-f9fa-80e5-5b81617e8d78@mind.be>
- <CADvTj4oX9oQTxpHLEyKMACWHwLh4pL13C4nrK=9wVkQebhV5rA@mail.gmail.com>
- <20200428105748.282b13ad@windsurf.home>
- <CADvTj4ofOtmzMiVPHS1OJXYZZvcMFUU30=3=j7uweMkS-+XsFA@mail.gmail.com>
-Message-ID: <20200430201338.GP11346@scaer>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu, 30 Apr 2020 14:37:09 -0600
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: use pkgconf to find
+ host libraries.
+In-Reply-To: <b3e489a7-0c62-aed2-c896-f41c9a10d757@mind.be>
+References: <20200130084734.20100-1-nicolas.cavallari@green-communications.fr>
+ <b3e489a7-0c62-aed2-c896-f41c9a10d757@mind.be>
+Message-ID: <CADvTj4qPu97L0h+okgWgKxf6dtWKQUpv_AwSgO+QW79aavZhXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
-
-On 2020-04-30 14:06 -0600, James Hilliard spake thusly:
-> On Tue, Apr 28, 2020 at 2:57 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
+On Sun, Feb 2, 2020 at 2:47 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>  Hi Nicolas,
+>
+>  Looks good to me, but...
+>
+> On 30/01/2020 09:47, Nicolas Cavallari wrote:
+> > meson makes a distinction between 'native' (i.e. host) dependencies
+> > and 'host' (i.e. target) dependencies and can use a different pkg-config
+> > binary for each case.
 > >
-> > On Tue, 28 Apr 2020 02:05:13 -0600
-> > James Hilliard <james.hilliard1@gmail.com> wrote:
+> > Currently, pkg-meson only pass the target pkg-config and meson
+> > automatically guesses the host pkg-config by searching PATH, which finds
+> > host/bin/pkg-config, which is the target pkg-config wrapper script.
 > >
-> > > >  Thanks James and Thomas for correcting me.
-> > > >
-> > > >  So in that case, this patch looks good. But the meson.mk change should be a
-> > > > separate patch, of course.
-> > > That would overlap with the weston -Dbuild.pkg_config_path removal.
+> > As a result, meson uses the target pkg-config to find host dependencies,
+> > with possibly incorrect results.
 > >
-> > You add -Dbuild.pkg_config_path in pkg-meson.mk in a first patch.
-> https://patchwork.ozlabs.org/project/buildroot/patch/20200428122213.63826-1-james.hilliard1 at gmail.com/
+> > This patch causes meson to use host/bin/pkgconf directly to find host
+> > dependencies, using the apparently recommended method[1] of
+> > specifing the PKG_CONFIG environment variable.  pkgconf does not know
+> > about the target sysroot, so only finds host dependencies.
+>
+>  In HOST_MAKE_ENV we also set
+>
+> PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
+>
+> Don't we still need that to make sure it will indeed find our own .pc files? Or
+> is that anyway the default for pkgconf due to our --prefix in the configure step?
+Meson provides a command line flag to correctly set the pkg-config
+libdir path for
+only dependencies with native: true, this would not do that correctly from my
+understanding as the PKG_CONFIG_LIBDIR would need to be scoped to
+dependencies with native: true.
+See my patch here fixing this:
+https://patchwork.ozlabs.org/project/buildroot/patch/20200428122213.63826-1-james.hilliard1 at gmail.com/
+>
+>  Similar for
+>
+> PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+> PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+>
+> although for those I do think they're not needed.
+>
+>  Regardless, I think it would be cleaner to create a
+> $(HOST_DIR)/bin/host-pkg-config wrapper that sets the environment correctly for
+> the host.
+Since we set pkgconfig = '@HOST_DIR@/bin/pkgconf' in our cross-compilation.conf
+we only need to set the host libdir for building native: true
+dependencies, my patch
+fixes that issue properly so this sort of workaround should not be necessary.
+>
+>
+>  Regards,
+>  Arnout
+>
 > >
-> > Then in a second patch, you remove it from weston.mk.
-> https://patchwork.ozlabs.org/project/buildroot/patch/20200428122213.63826-2-james.hilliard1 at gmail.com/
+> > [1] https://github.com/mesonbuild/meson/issues/1849
 > >
-> > Yes, in between it means it is passed twice, but this is OK, as it
-> > doesn't break.
-> Ok, I've sent the moving of -Dbuild.pkg_config_path from weston.mk
-> to pkg-meson.mk as a 2 patch series, I'll follow up with the removal of
-> the other workarounds after those are merged.
-
-Have seen them, thanks.
-
-However, I am not sure I followed what is still needed about this meson
-stuff: care to heck the status of each patch and seris on patchwork, nad
-mark as rejected or not-applicable those that no longer make sense,
-please?
-
-Regards,
-Yann E. MORIN.
-
-> > Thomas
+> > Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 > > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> >
+> > This meson.build snippet:
+> >
+> > ----------------------------
+> > host_glib = dependency('glib-2.0', native: true, method: 'pkg-config')
+> > gdbus_codegen = find_program(host_glib.get_pkgconfig_variable('bindir')
+> >                              + '/gdbus-codegen')
+> > ----------------------------
+> >
+> > Without the patch, it uses the target .pc file with a prefix of /usr,
+> > and finds /usr/bin/gdbus-codegen from the host :
+> >
+> > Found pkg-config: $OUTPUT/host/bin/pkg-config (1.6.1)
+> > Build-time dependency glib-2.0 found: YES 2.62.4
+> > Program /usr/bin/gdbus-codegen found: YES (/usr/bin/gdbus-codegen)
+> >
+> > For a complete dummy example, use this dummy package:
+> >
+> > base64 -d << EOF | tar -xJv
+> > /Td6WFoAAATm1rRGAgAhARwAAAAQz1jM4Cf/AsJdADgYSJnNF3UkZpejSZiTToh3TmWwjd6v7C8E
+> > PXLCFsW1o1RD4pKzYIacUzj5A1VS6TvDBN4+ynQO837jjfHvz6kgAyGryHKoSq7OI71xqrwiX/4W
+> > E6a5fnuXGGuPAScuqHa/u88SKGfAOmh1xE5guv5qZcgyhDIB5H5nIQwzyb1trdobmRqUMFT1rT5T
+> > sON0C/SB59IEbKITx5ItzheQu7D5erkFYrjhcBV1xNCh0J7uwF5XXF9qVHhlvQyp5AJFF9lSUJB2
+> > eTX5ORhCpcGvO/AAhnnlf4DU8C9a7CFVfTfhP+sgs5T7aC1ymojylvBL5TmkAKCna5hN6Ckzr9qH
+> > jKYDXAhwJTuMPZkgSFS8OVXkgKnxDS5vG9Ssg0ueb3G7tIEhxt2ehjMgDPK5N/blHnE1t/ZjXe2Q
+> > g/TV83LE/MpUKiTQO7JwZ5+tWmT2WWgxK6fG8ckuhlwXhZmVkjWCw+1uxs0C8FrfZFH1ms5MhEyS
+> > 6Zgi0803KfOamnH/k6PtEPVB5G7BCWf/b+6Wfo/ZvPSgSYrpcDMJs5j+3KkUjnfpgCuXYXE5TSmE
+> > DcrINQHDLYq3hHWklV0n7bFwS3loEWcti/OKQkjeu/3c4E5c/+IWyJFTeLoKEbrNIPtLOYAvsRf+
+> > FJHYzqQyEWoqgAejX6K/XWclKrFAePkjKTouj10ppv9WENd+KCnK7JErZp2zqKwJeGZcOlHsFJ9C
+> > dUTWFgOU3VzsWiYMnxuPHnvYt3uXr6XlFQHA818kZdcJIMvfUPLRNhrBwR893vTd5aw6/tb4EPeR
+> > HacNklguWar6H9w69r8KY2yqk9cepySCDkomVGFqmi5gPH9anFGfEKEUJhKNdjMqF44jx76odAOZ
+> > ijoW+F9h6qHVQFGSLhxchqcMWgA+0aBVz9My+PoRzIsXEmH+21W9ucie9zPCw3QWVVPxgAAAAACQ
+> > pqAPsaqrpAAB3gWAUAAAeb5korHEZ/sCAAAAAARZWg==
+> > EOF
+> >
+> > I tested that the following packages still compile:
+> > - libglib2
+> > - gst1-plugins-bad
+> > - gst1-plugins-base
+> > - gst1-plugins-good
+> > - gst1-plugins-ugly
+> > - gstreamer1
+> > - libdrm
+> > - mesa3d
+> > ---
+> >  package/pkg-meson.mk | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> > index e7eea2aa58..349da39369 100644
+> > --- a/package/pkg-meson.mk
+> > +++ b/package/pkg-meson.mk
+> > @@ -84,7 +84,8 @@ define $(2)_CONFIGURE_CMDS
+> >           ) \
+> >           package/meson/cross-compilation.conf.in \
+> >           > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+> > -     PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+> > +     PATH=$$(BR_PATH) PKG_CONFIG=$(HOST_DIR)/bin/pkgconf \
+> > +     $$($$(PKG)_CONF_ENV) $$(MESON) \
+> >               --prefix=/usr \
+> >               --libdir=lib \
+> >               --default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
