@@ -1,55 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Apr 2020 15:03:44 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/apache: atomic creation of
- pid file.
-In-Reply-To: <20200413140923.1574d726@windsurf.home> (Thomas Petazzoni's
- message of "Mon, 13 Apr 2020 14:09:23 +0200")
-References: <20190923074708.9269-1-nicolas.carrier@orolia.com>
- <20200413140923.1574d726@windsurf.home>
-Message-ID: <87imhh3z2n.fsf@dell.be.48ers.dk>
+Date: Thu, 30 Apr 2020 14:45:35 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/nginx: bump
+ version to 1.17.9
+Message-ID: <20200430124925.AB77481544@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c56cd5c7af0c016370ff32dd0cbd32557acf8e53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > On Mon, 23 Sep 2019 07:47:27 +0000
- > Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
+Changelog: http://nginx.org/en/CHANGES
 
- >> The original pattern for creating the pid file was:
- >> open_create(pid_file)
- >> write(pid_file, pid)
- >> close(pid_file)
- >> 
- >> But if a power outage occurs between open_create and write, the file will
- >> be empty and httpd will refuse to start afterwards unless the corrupt pid
- >> file is removed.
- >> 
- >> This patch uses the pattern:
- >> open_create(temp_pid_file)
- >> write(temp_pid_file)
- >> close(temp_pid_file)
- >> rename(temp_pid_file, pid_file)
- >> which is guaranteed to be atomic, provided that temp_pid_file and pid_file
- >> are located in the same file system, which this patch does by creating
- >> a temporary file name with the pattern:
- >> pid_file_name + random_suffix
- >> 
- >> This patch has been submitted upstream, but did receive no answer at all:
- >> https://bz.apache.org/bugzilla/show_bug.cgi?id=63140
- >> 
- >> 
- >> Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
- >> ---
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7a4517d874a4ce9e16bf574ab27fe59957d6b0a9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nginx/nginx.hash | 2 +-
+ package/nginx/nginx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Your patch has been merged in upstream Apache, in a slightly different
- > form, but is not yet part of a released version of Apache. So I've
- > applied your commit, but replaced your change by the one that was
- > ultimately applied in upstream Apache.
-
-Committed to 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 8c5b80f80e..3ec7ff2444 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	b62756842807e5693b794e5d0ae289bd8ae5b098e66538b2a91eb80f25c591ff	nginx-1.17.7.tar.gz
++sha256	7dd65d405c753c41b7fdab9415cfb4bdbaf093ec6d9f7432072d52cb7bcbb689	nginx-1.17.9.tar.gz
+ # License files, locally calculated
+ sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 5c828d3bb0..9bbb3fc201 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NGINX_VERSION = 1.17.7
++NGINX_VERSION = 1.17.9
+ NGINX_SITE = http://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
