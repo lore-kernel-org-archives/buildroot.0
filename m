@@ -1,44 +1,70 @@
 From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Wed, 29 Apr 2020 20:37:00 -0500
-Subject: [Buildroot] [PATCH] package/iptables: bump to version 1.8.4
-Message-ID: <20200430013700.23556-1-ryanbarnett3@gmail.com>
+Date: Wed, 29 Apr 2020 21:25:05 -0500
+Subject: [Buildroot] [PATCH] package/json-c: bump to version 0.14
+Message-ID: <20200430022505.6767-1-ryanbarnett3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update hash file to two space format.
+* Switch to cmake infrastructure
+* Update hash file to two space format
+
+Results of test-pkg:
+
+  $ ./utils/test-pkg -c json-c.config -p json-c
+                             br-arm-full [1/6]: OK
+                  br-arm-cortex-a9-glibc [2/6]: OK
+                   br-arm-cortex-m4-full [3/6]: OK
+                          br-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: OK
+  6 builds, 0 skipped, 0 build failed, 0 legal-info failed
 
 Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 ---
- package/iptables/iptables.hash | 4 ++--
- package/iptables/iptables.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/json-c/json-c.hash |  4 ++--
+ package/json-c/json-c.mk   | 14 +++-----------
+ 2 files changed, 5 insertions(+), 13 deletions(-)
 
-diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
-index 2e149aa11b..2811daf5e3 100644
---- a/package/iptables/iptables.hash
-+++ b/package/iptables/iptables.hash
+diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
+index 0e03007476..28715418e5 100644
+--- a/package/json-c/json-c.hash
++++ b/package/json-c/json-c.hash
 @@ -1,4 +1,4 @@
- # From https://netfilter.org/projects/iptables/downloads.html
--sha256 a23cac034181206b4545f4e7e730e76e08b5f3dd78771ba9645a6756de9cdd80  iptables-1.8.3.tar.bz2
-+sha256  993a3a5490a544c2cbf2ef15cf7e7ed21af1845baf228318d5c36ef8827e157c  iptables-1.8.4.tar.bz2
+ # From https://github.com/json-c/json-c/wiki
+-sha256 b87e608d4d3f7bfdd36ef78d56d53c74e66ab278d318b71e6002a369d36f4873  json-c-0.13.1.tar.gz
++sha256  b377de08c9b23ca3b37d9a9828107dff1de5ce208ff4ebb35005a794f30c6870  json-c-0.14.tar.gz
  # Locally calculated
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index ae5cf4ddd3..40db76376e 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -4,7 +4,7 @@
+-sha256 74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
++sha256  74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
+diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
+index 2788fe563b..3e17effdad 100644
+--- a/package/json-c/json-c.mk
++++ b/package/json-c/json-c.mk
+@@ -4,19 +4,11 @@
  #
  ################################################################################
  
--IPTABLES_VERSION = 1.8.3
-+IPTABLES_VERSION = 1.8.4
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = https://netfilter.org/projects/iptables/files
- IPTABLES_INSTALL_STAGING = YES
+-JSON_C_VERSION = 0.13.1
++JSON_C_VERSION = 0.14
+ JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
+ JSON_C_INSTALL_STAGING = YES
+ JSON_C_LICENSE = MIT
+ JSON_C_LICENSE_FILES = COPYING
+ 
+-# update config.h.in timestamp to avoid autoheader run
+-define JSON_C_UPDATE_CONFIG_TIMESTAMP
+-	touch $(@D)/config.h.in
+-endef
+-
+-JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
+-HOST_JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.17.1
