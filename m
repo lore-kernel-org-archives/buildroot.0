@@ -1,48 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Apr 2020 14:45:35 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/nginx: bump
- version to 1.17.9
-Message-ID: <20200430124925.AB77481544@busybox.osuosl.org>
+Date: Thu, 30 Apr 2020 14:55:25 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/vnstat: bump
+ version to 2.6
+Message-ID: <20200430124925.CFAD08F06E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c56cd5c7af0c016370ff32dd0cbd32557acf8e53
+commit: https://git.buildroot.net/buildroot/commit/?id=0b90f3e0f358d7be81b7127de79a680b5aa40dc9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Changelog: http://nginx.org/en/CHANGES
+Changelog: https://humdi.net/vnstat/CHANGES
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7a4517d874a4ce9e16bf574ab27fe59957d6b0a9)
+(cherry picked from commit e4b188e1d40f99cf66eb5690a9edcc90b1c693d1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
+ package/vnstat/vnstat.hash | 2 +-
+ package/vnstat/vnstat.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 8c5b80f80e..3ec7ff2444 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	b62756842807e5693b794e5d0ae289bd8ae5b098e66538b2a91eb80f25c591ff	nginx-1.17.7.tar.gz
-+sha256	7dd65d405c753c41b7fdab9415cfb4bdbaf093ec6d9f7432072d52cb7bcbb689	nginx-1.17.9.tar.gz
- # License files, locally calculated
- sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 5c828d3bb0..9bbb3fc201 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
+diff --git a/package/vnstat/vnstat.hash b/package/vnstat/vnstat.hash
+index 94b4adc40b..6934c569b2 100644
+--- a/package/vnstat/vnstat.hash
++++ b/package/vnstat/vnstat.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 a0955999abd56d5463d257ffdccc9b1e9ad9ea504de81e64ba4c197f1245abaa  vnstat-2.4.tar.gz
++sha256 89276e0a7281943edb554b874078278ad947dc312938a2451e03eb80679f7ff7  vnstat-2.6.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
+index f0ef1cc69d..be1b75a6b3 100644
+--- a/package/vnstat/vnstat.mk
++++ b/package/vnstat/vnstat.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGINX_VERSION = 1.17.7
-+NGINX_VERSION = 1.17.9
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+-VNSTAT_VERSION = 2.4
++VNSTAT_VERSION = 2.6
+ VNSTAT_SITE = http://humdi.net/vnstat
+ VNSTAT_LICENSE = GPL-2.0
+ VNSTAT_LICENSE_FILES = COPYING
