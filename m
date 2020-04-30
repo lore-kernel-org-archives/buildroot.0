@@ -1,64 +1,129 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Apr 2020 15:02:33 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/apache: security
- bump to version 2.4.43
-Message-ID: <20200430124925.E85698E1E3@busybox.osuosl.org>
+Date: Thu, 30 Apr 2020 15:03:25 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/apache: atomic
+ creation of pid file.
+Message-ID: <20200430124925.F41CD7FE2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6f78222878881d9d0e7216e04d2d005aedd95a8
+commit: https://git.buildroot.net/buildroot/commit/?id=88666e0fbb303ed2a1ebe68727dccd6c9f1a215d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes the following security issues:
+The original pattern for creating the pid file was:
+open_create(pid_file)
+write(pid_file, pid)
+close(pid_file)
 
-  *) SECURITY: CVE-2020-1934 (cve.mitre.org)
-     mod_proxy_ftp: Use of uninitialized value with malicious backend FTP
-     server. [Eric Covener]
+But if a power outage occurs between open_create and write, the file will
+be empty and httpd will refuse to start afterwards unless the corrupt pid
+file is removed.
 
-  *) SECURITY: CVE-2020-1927 (cve.mitre.org)
-     rewrite, core: Set PCRE_DOTALL flag by default to avoid unpredictable
-     matches and substitutions with encoded line break characters.
-     The fix for CVE-2019-10098 was not effective.  [Ruediger Pluem]
+This patch uses the pattern:
+open_create(temp_pid_file)
+write(temp_pid_file)
+close(temp_pid_file)
+rename(temp_pid_file, pid_file)
+which is guaranteed to be atomic, provided that temp_pid_file and pid_file
+are located in the same file system, which this patch does by creating
+a temporary file name with the pattern:
+    pid_file_name + random_suffix
 
-The LICENSE file has been updated to fix a s/waranties/warranties/ typo, so
-update the hash to match and adjust the spacing to match recent agreements:
+Patch is upstream as of
+https://github.com/apache/httpd/commit/dd10a9352e87a868ad527022bbafdc3b82cc6d0a,
+which will be in the next 2.5.x version.
 
--This software is provided "as is" and any express or implied waranties,
-+This software is provided "as is" and any express or implied warranties,
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2bf40ad66b16744972443127e9ee6f8d8f32c476)
+Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+[Thomas: update to use upstreamed patch.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 67fbb903b60ad4832431d6c47161e312144365a0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 6 +++---
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...c-ap_log_pid-Use-a-temporary-file-then-re.patch | 77 ++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 24c00eb94c..7b0e4ad8e7 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,4 +1,4 @@
--# From http://archive.apache.org/dist/httpd/httpd-2.4.41.tar.bz2.sha256
--sha256 133d48298fe5315ae9366a0ec66282fa4040efa5d566174481077ade7d18ea40 httpd-2.4.41.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.43.tar.bz2.sha256
-+sha256  a497652ab3fc81318cdc2a203090a999150d86461acff97c1065dc910fe10f43  httpd-2.4.43.tar.bz2
- # Locally computed
--sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-+sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 5fcb9e5371..48a64eae0e 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APACHE_VERSION = 2.4.41
-+APACHE_VERSION = 2.4.43
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+diff --git a/package/apache/0004-server-log.c-ap_log_pid-Use-a-temporary-file-then-re.patch b/package/apache/0004-server-log.c-ap_log_pid-Use-a-temporary-file-then-re.patch
+new file mode 100644
+index 0000000000..af3cd47a30
+--- /dev/null
++++ b/package/apache/0004-server-log.c-ap_log_pid-Use-a-temporary-file-then-re.patch
+@@ -0,0 +1,77 @@
++From 5b95d256387b45fbe33f7ee7890ae35afdd5c371 Mon Sep 17 00:00:00 2001
++From: Joe Orton <jorton@apache.org>
++Date: Fri, 13 Mar 2020 14:34:18 +0000
++Subject: [PATCH] * server/log.c (ap_log_pid): Use a temporary file, then
++ rename once   successfully written; also add error checking.  Avoids startup 
++  failures if a previous httpd invocation crashed while writing the   pidfile.
++
++Submitted by: Nicolas Carrier <carrier.nicolas0 gmail.com>, jorton
++Github: closes #100, closes #69
++PR: 63140
++
++git-svn-id: https://svn.apache.org/repos/asf/httpd/httpd/trunk at 1875153 13f79535-47bb-0310-9956-ffa450edef68
++Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
++---
++ server/log.c | 33 ++++++++++++++++++++++++++-------
++ 1 file changed, 26 insertions(+), 7 deletions(-)
++
++diff --git a/server/log.c b/server/log.c
++index f0bde6e4b8..8d54b4e057 100644
++--- a/server/log.c
+++++ b/server/log.c
++@@ -1598,6 +1598,9 @@ AP_DECLARE(void) ap_log_pid(apr_pool_t *p, const char *filename)
++     pid_t mypid;
++     apr_status_t rv;
++     const char *fname;
+++    char *temp_fname;
+++    apr_fileperms_t perms;
+++    char pidstr[64];
++ 
++     if (!filename) {
++         return;
++@@ -1626,19 +1629,35 @@ AP_DECLARE(void) ap_log_pid(apr_pool_t *p, const char *filename)
++                       fname);
++     }
++ 
++-    if ((rv = apr_file_open(&pid_file, fname,
++-                            APR_WRITE | APR_CREATE | APR_TRUNCATE,
++-                            APR_UREAD | APR_UWRITE | APR_GREAD | APR_WREAD, p))
++-        != APR_SUCCESS) {
+++    temp_fname = apr_pstrcat(p, fname, ".XXXXXX", NULL);
+++    rv = apr_file_mktemp(&pid_file, temp_fname,
+++                         APR_FOPEN_WRITE | APR_FOPEN_CREATE | APR_FOPEN_TRUNCATE, p);
+++    if (rv != APR_SUCCESS) {
++         ap_log_error(APLOG_MARK, APLOG_ERR, rv, NULL, APLOGNO(00099)
++-                     "could not create %s", fname);
+++                     "could not create %s", temp_fname);
++         ap_log_error(APLOG_MARK, APLOG_ERR, 0, NULL, APLOGNO(00100)
++                      "%s: could not log pid to file %s",
++                      ap_server_argv0, fname);
++         exit(1);
++     }
++-    apr_file_printf(pid_file, "%" APR_PID_T_FMT APR_EOL_STR, mypid);
++-    apr_file_close(pid_file);
+++
+++    apr_snprintf(pidstr, sizeof pidstr, "%" APR_PID_T_FMT APR_EOL_STR, mypid);
+++
+++    perms = APR_UREAD | APR_UWRITE | APR_GREAD | APR_WREAD;
+++    rv = apr_file_perms_set(temp_fname, perms);    
+++    if (rv == APR_SUCCESS)
+++        rv = apr_file_write_full(pid_file, pidstr, strlen(pidstr), NULL);
+++    if (rv == APR_SUCCESS)
+++        rv = apr_file_close(pid_file);
+++    if (rv == APR_SUCCESS)
+++        rv = apr_file_rename(temp_fname, fname, p);
+++    if (rv != APR_SUCCESS) {
+++        ap_log_error(APLOG_MARK, APLOG_ERR, rv, NULL, APLOGNO(10231)
+++                     "%s: Failed creating pid file %s",
+++                     ap_server_argv0, temp_fname);
+++        exit(1);
+++    }
+++
++     saved_pid = mypid;
++ }
++ 
++-- 
++2.25.2
++
