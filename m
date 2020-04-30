@@ -1,125 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 30 Apr 2020 11:52:47 +0200
-Subject: [Buildroot] [PATCH 10/11] support/testing/tests: add test for
- check_bin_arch
+Date: Thu, 30 Apr 2020 11:52:46 +0200
+Subject: [Buildroot] [PATCH 09/11] support/testing/infra: add
+ log_file_path() function
 In-Reply-To: <20200430095249.782597-1-thomas.petazzoni@bootlin.com>
 References: <20200430095249.782597-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200430095249.782597-11-thomas.petazzoni@bootlin.com>
+Message-ID: <20200430095249.782597-10-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This tests build a bogus package that installs a binary built for the
-host architecture into $(TARGET_DIR), which should cause a build
-failure, at least as long as the host architecture isn't ARM.
+Some tests will need to grep through the build log to verify that some
+features are working are expected. In order to allow them to open the
+build log, we provide a new function called log_file_path(), which
+returns the path to the log file if available.
+
+We also use this function in open_log_file().
+
+Note that open_log_file() cannot be used directly to grep through the
+log file at the end of a build: because it opens in "a+" mode, it
+greps starting from the end of the file.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                                |  1 +
- .../br2-external/detect-bad-arch/Config.in    |  1 +
- .../detect-bad-arch/external.desc             |  1 +
- .../br2-external/detect-bad-arch/external.mk  |  1 +
- .../package/detect-bad-arch/Config.in         |  4 ++++
- .../detect-bad-arch/detect-bad-arch.mk        | 15 +++++++++++++++
- support/testing/tests/core/test_bad_arch.py   | 19 +++++++++++++++++++
- 7 files changed, 42 insertions(+)
- create mode 100644 support/testing/tests/core/br2-external/detect-bad-arch/Config.in
- create mode 100644 support/testing/tests/core/br2-external/detect-bad-arch/external.desc
- create mode 100644 support/testing/tests/core/br2-external/detect-bad-arch/external.mk
- create mode 100644 support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/Config.in
- create mode 100644 support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/detect-bad-arch.mk
- create mode 100644 support/testing/tests/core/test_bad_arch.py
+ support/testing/infra/__init__.py | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index fa8e077a07..dd69fb9d50 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -354,6 +354,7 @@ tests.boot.test_syslinux.TestSysLinuxX86EFI: { extends: .runtime_test }
- tests.boot.test_syslinux.TestSysLinuxX86LegacyBios: { extends: .runtime_test }
- tests.boot.test_syslinux.TestSysLinuxX86_64EFI: { extends: .runtime_test }
- tests.boot.test_syslinux.TestSysLinuxX86_64LegacyBios: { extends: .runtime_test }
-+tests.core.test_bad_arch.DetectBadArchTest: { extends: .runtime_test }
- tests.core.test_file_capabilities.TestFileCapabilities: { extends: .runtime_test }
- tests.core.test_hardening.TestFortifyConserv: { extends: .runtime_test }
- tests.core.test_hardening.TestFortifyNone: { extends: .runtime_test }
-diff --git a/support/testing/tests/core/br2-external/detect-bad-arch/Config.in b/support/testing/tests/core/br2-external/detect-bad-arch/Config.in
-new file mode 100644
-index 0000000000..530c077bbe
---- /dev/null
-+++ b/support/testing/tests/core/br2-external/detect-bad-arch/Config.in
-@@ -0,0 +1 @@
-+source "$BR2_EXTERNAL_DETECT_BAD_ARCH_PATH/package/detect-bad-arch/Config.in"
-diff --git a/support/testing/tests/core/br2-external/detect-bad-arch/external.desc b/support/testing/tests/core/br2-external/detect-bad-arch/external.desc
-new file mode 100644
-index 0000000000..3c4232c90d
---- /dev/null
-+++ b/support/testing/tests/core/br2-external/detect-bad-arch/external.desc
-@@ -0,0 +1 @@
-+name: DETECT_BAD_ARCH
-diff --git a/support/testing/tests/core/br2-external/detect-bad-arch/external.mk b/support/testing/tests/core/br2-external/detect-bad-arch/external.mk
-new file mode 100644
-index 0000000000..71b9821ddc
---- /dev/null
-+++ b/support/testing/tests/core/br2-external/detect-bad-arch/external.mk
-@@ -0,0 +1 @@
-+include $(sort $(wildcard $(BR2_EXTERNAL_DETECT_BAD_ARCH_PATH)/package/*/*.mk))
-diff --git a/support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/Config.in b/support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/Config.in
-new file mode 100644
-index 0000000000..9893e9afc1
---- /dev/null
-+++ b/support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_DETECT_BAD_ARCH
-+	bool
-+	default y
-+
-diff --git a/support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/detect-bad-arch.mk b/support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/detect-bad-arch.mk
-new file mode 100644
-index 0000000000..5e78c55f1f
---- /dev/null
-+++ b/support/testing/tests/core/br2-external/detect-bad-arch/package/detect-bad-arch/detect-bad-arch.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# detect-bad-arch
-+#
-+################################################################################
-+
-+define DETECT_BAD_ARCH_BUILD_CMDS
-+	echo "int main(void) { return 0; }" | $(HOSTCC) -x c -o $(@D)/foo -
-+endef
-+
-+define DETECT_BAD_ARCH_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/foo $(TARGET_DIR)/usr/bin/foo
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/core/test_bad_arch.py b/support/testing/tests/core/test_bad_arch.py
-new file mode 100644
-index 0000000000..8f4bd57b0e
---- /dev/null
-+++ b/support/testing/tests/core/test_bad_arch.py
-@@ -0,0 +1,19 @@
-+import infra
-+import infra.basetest
-+import subprocess
+diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
+index 6392aa679b..aaee055ee6 100644
+--- a/support/testing/infra/__init__.py
++++ b/support/testing/infra/__init__.py
+@@ -10,14 +10,23 @@ ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"
+ BASE_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), "../../.."))
+ 
+ 
++def log_file_path(builddir, stage, logtofile=True):
++    """Return path to log file"""
++    if logtofile:
++        return "{}-{}.log".format(builddir, stage)
++    else:
++        return None
 +
 +
-+class DetectBadArchTest(infra.basetest.BRConfigTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + infra.basetest.MINIMAL_CONFIG
-+    br2_external = [infra.filepath("tests/core/br2-external/detect-bad-arch")]
-+
-+    def test_run(self):
-+        with self.assertRaises(SystemError):
-+            self.b.build()
-+        logf_path = infra.log_file_path(self.b.builddir, "build",
-+                                        infra.basetest.BRConfigTest.logtofile)
-+        if logf_path:
-+            s = 'ERROR: architecture for "/usr/bin/foo" is "Advanced Micro Devices X86-64", should be "ARM"'
-+            logf = open(logf_path, "r")
-+            ret = subprocess.call(["grep", "-q", s], stdin=logf)
-+            self.assertEqual(ret, 0)
+ def open_log_file(builddir, stage, logtofile=True):
+     """
+     Open a file for logging and return its handler.
+     If logtofile is True, returns sys.stdout. Otherwise opens a file
+     with a suitable name in the build directory.
+     """
+-    if logtofile:
+-        fhandle = open("{}-{}.log".format(builddir, stage), 'a+')
++    logf = log_file_path(builddir, stage, logtofile)
++    if logf:
++        fhandle = open(logf, 'a+')
+     else:
+         fhandle = sys.stdout
+     return fhandle
 -- 
 2.25.4
