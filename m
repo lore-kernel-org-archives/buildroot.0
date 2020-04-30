@@ -1,130 +1,41 @@
-From: Cody Guldner <cody.guldner@rockwellcollins.com>
-Date: Thu, 30 Apr 2020 15:58:11 -0500
-Subject: [Buildroot] [PATCH 1/1] ne10: bump to v1.2.1
-Message-ID: <20200430205812.130906-1-cody.guldner@rockwellcollins.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Thu, 30 Apr 2020 18:03:27 -0300
+Subject: [Buildroot] [PATCH] package/stella: bump to version 6.1.2
+Message-ID: <20200430210327.31784-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Cody Guldner <cody.guldner@rockwellcollins.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
- ...on-t-hard-code-thumb-code-generation.patch | 30 +++++++++----------
- package/ne10/Config.in                        | 16 ++++++----
- package/ne10/ne10.hash                        |  2 +-
- package/ne10/ne10.mk                          |  4 +--
- 4 files changed, 28 insertions(+), 24 deletions(-)
+ package/stella/stella.hash | 2 +-
+ package/stella/stella.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch b/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch
-index f140a60441..470f76c4fe 100644
---- a/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch
-+++ b/package/ne10/0001-CMakeLists-don-t-hard-code-thumb-code-generation.patch
-@@ -1,29 +1,29 @@
--From 9ff39800cec5f1dabba246b253794582d611bc6d Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Fri, 20 Feb 2015 10:44:15 -0600
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-+From: Cody Guldner <cody.guldner@rockwellcollins.com>
-+Date: Tue, 14 Apr 2020 09:12:01 -0500
- Subject: [PATCH] CMakeLists: don't hard code thumb code generation
- 
--Migrating to version 1.2.0
-+Migrating to version 1.2.1
- 
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+Signed-off-by: Cody Guldner <cody.guldner@rockwellcollins.com>
- ---
-  CMakeLists.txt | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index fdf01ec..34ae26e 100644
-+index fc2a5e3..25da215 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -84,7 +84,7 @@ if(ANDROID_PLATFORM)
--     ${ANDROID_TOOLCHAIN_PATH}/arm-linux-androideabi-ar
--     ${ANDROID_TOOLCHAIN_PATH}/arm-linux-androideabi-ranlib")
-+@@ -135,7 +135,7 @@ if(ANDROID_PLATFORM)
-+     ${CMAKE_C_FLAGS}")
-  elseif(GNULINUX_PLATFORM)
---    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -mthumb -march=armv7-a -mfpu=vfp3")
--+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -march=armv7-a -mfpu=vfp3")
--     set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -mthumb -march=armv7-a -mfpu=neon")
-- elseif(IOS_PLATFORM)
--     #set minimal target ios version.If not provided this option, Xcode
-+     if(${NE10_TARGET_ARCH} STREQUAL "armv7")
-+-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -mthumb -march=armv7-a -mfpu=vfp3 -funsafe-math-optimizations")
-++      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -march=armv7-a -mfpu=vfp3 -funsafe-math-optimizations")
-+       set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -mthumb -march=armv7-a -mfpu=neon")
-+       # Turn on asm optimization for Linux on ARM v7.
-+       set(NE10_ASM_OPTIMIZATION on)
- -- 
--1.9.1
-+2.23.0
- 
-diff --git a/package/ne10/Config.in b/package/ne10/Config.in
-index 8d375793db..60fd1f98fe 100644
---- a/package/ne10/Config.in
-+++ b/package/ne10/Config.in
-@@ -1,17 +1,21 @@
- config BR2_PACKAGE_NE10
- 	bool "ne10"
--	depends on BR2_arm
--	depends on BR2_ARM_FPU_NEON || BR2_ARM_FPU_NEON_VFPV4
-+	depends on BR2_PACKAGE_NE10_ARCH_SUPPORTS
- 	help
- 	  The Ne10 project has been set up to provide a set of common,
- 	  useful functions which have been heavily optimized for the
--	  ARM Architecture and provide consistent well tested behavior
--	  that can be easily incorporated into applications. C
--	  interfaces to the functions are provided for both assembler
--	  and NEON implementations.
-+	  ARM and AArch64 Architecture and provide consistent well
-+	  tested behavior that can be easily incorporated into
-+	  applications. C interfaces to the functions are provided for
-+	  both assembler and NEON implementations.
- 
- 	  http://projectne10.github.io/Ne10/
- 
- comment "ne10 needs a toolchain w/ neon"
- 	depends on BR2_arm
- 	depends on !(BR2_ARM_FPU_NEON || BR2_ARM_FPU_NEON_VFPV4)
-+
-+config BR2_PACKAGE_NE10_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_aarch64
-+	default y if BR2_arm && (BR2_ARM_FPU_NEON || BR2_ARM_FPU_NEON_VFPV4)
-diff --git a/package/ne10/ne10.hash b/package/ne10/ne10.hash
-index 2c56215c1c..cbf0162cdd 100644
---- a/package/ne10/ne10.hash
-+++ b/package/ne10/ne10.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  450dac5bb3a2351019ae23792e97c3bf965d16a21c0598b73cea9fbc3b3a56af  ne10-1.2.0.tar.gz
-+sha256  dd1a96610c0692cc80154ae123edd5d25e6e0a3f81d0c16a96425f3ef57b9929  ne10-v1.2.1.tar.gz
- sha256  eb48041c8e0ad556cf72f2a6eff89c893aa5702bba4e163ca7798cce07e6c55e  doc/LICENSE
-diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
-index 2af664be39..26c616e624 100644
---- a/package/ne10/ne10.mk
-+++ b/package/ne10/ne10.mk
-@@ -4,13 +4,13 @@
+diff --git a/package/stella/stella.hash b/package/stella/stella.hash
+index fb7c598a2c78..0b50636a00e5 100644
+--- a/package/stella/stella.hash
++++ b/package/stella/stella.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  ddf53bb782c63c97c4e5d0fefa9eb256c62e0d5a328c78cc18f06eea45ba7369  stella-6.1.1-src.tar.xz
++sha256  8086e57c231625f0b840ca361f493969247d20476cbb53609d778d37bda17c34  stella-6.1.2-src.tar.xz
+ sha256  d207ee9e563fdd062582df8cbb6c8303b9879bd107692c0db2a32477e47dfa35  Copyright.txt
+ sha256  58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
+diff --git a/package/stella/stella.mk b/package/stella/stella.mk
+index 74c131e72d86..53a1050cd8fa 100644
+--- a/package/stella/stella.mk
++++ b/package/stella/stella.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NE10_VERSION = 1.2.0
-+NE10_VERSION = 1.2.1
- NE10_SITE = $(call github,projectNe10,Ne10,v$(NE10_VERSION))
- NE10_LICENSE = BSD-3-Clause or Apache-2.0
- NE10_LICENSE_FILES = doc/LICENSE
- NE10_INSTALL_STAGING = YES
- 
--NE10_CONF_OPTS = -DGNULINUX_PLATFORM=ON
-+NE10_CONF_OPTS = -DGNULINUX_PLATFORM=ON -DNE10_LINUX_TARGET_ARCH=$(ARCH)
- 
- ifeq ($(BR2_STATIC_LIBS),)
- NE10_CONF_OPTS += \
+-STELLA_VERSION = 6.1.1
++STELLA_VERSION = 6.1.2
+ STELLA_SOURCE = stella-$(STELLA_VERSION)-src.tar.xz
+ STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VERSION)
+ STELLA_LICENSE = GPL-2.0+
 -- 
-2.23.0
+2.17.1
