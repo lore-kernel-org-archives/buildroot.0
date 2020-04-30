@@ -1,135 +1,196 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 30 Apr 2020 21:42:45 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libhtp: security bump to version
- 0.5.33
-Message-ID: <20200430194246.2076437-1-fontaine.fabrice@gmail.com>
+Date: Thu, 30 Apr 2020 21:42:46 +0200
+Subject: [Buildroot] [PATCH 2/2] package/suricata: security bump to version
+ 4.1.8
+In-Reply-To: <20200430194246.2076437-1-fontaine.fabrice@gmail.com>
+References: <20200430194246.2076437-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200430194246.2076437-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- ChangeLog:
-  - compression bomb protection
-  - memory handling issue found by Oss-Fuzz
-  - improve handling of anomalies in traffic
-- Drop first patch (already in version)
+- This is the first release after Suricata joined the Oss-Fuzz program,
+  leading to discovery of a number of (potential) security issues:
+  https://suricata-ids.org/2020/04/28/suricata-4-1-8-released
+- Drop first, second and fourth patches (already in version)
 - Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-fix-build-without-GNU-libiconv.patch | 60 -------------------
- ...01-htp.pc.in-add-lz-to-Libs.private.patch} |  2 +-
- package/libhtp/libhtp.hash                    |  4 +-
- package/libhtp/libhtp.mk                      |  2 +-
- 4 files changed, 4 insertions(+), 64 deletions(-)
- delete mode 100644 package/libhtp/0001-fix-build-without-GNU-libiconv.patch
- rename package/libhtp/{0002-htp.pc.in-add-lz-to-Libs.private.patch => 0001-htp.pc.in-add-lz-to-Libs.private.patch} (93%)
+ ...figure.ac-fix-static-build-with-pcap.patch | 29 --------------
+ ...re-proper-shabang-on-python-scripts.patch} |  0
+ .../0002-configure.ac-fix-disable-geoip.patch | 33 ---------------
+ ...004-stream-reject-broken-ACK-packets.patch | 40 -------------------
+ package/suricata/suricata.hash                |  6 +--
+ package/suricata/suricata.mk                  |  7 +---
+ 6 files changed, 5 insertions(+), 110 deletions(-)
+ delete mode 100644 package/suricata/0001-configure.ac-fix-static-build-with-pcap.patch
+ rename package/suricata/{0003-python-ensure-proper-shabang-on-python-scripts.patch => 0001-python-ensure-proper-shabang-on-python-scripts.patch} (100%)
+ delete mode 100644 package/suricata/0002-configure.ac-fix-disable-geoip.patch
+ delete mode 100644 package/suricata/0004-stream-reject-broken-ACK-packets.patch
 
-diff --git a/package/libhtp/0001-fix-build-without-GNU-libiconv.patch b/package/libhtp/0001-fix-build-without-GNU-libiconv.patch
+diff --git a/package/suricata/0001-configure.ac-fix-static-build-with-pcap.patch b/package/suricata/0001-configure.ac-fix-static-build-with-pcap.patch
 deleted file mode 100644
-index 8f6cddf2da..0000000000
---- a/package/libhtp/0001-fix-build-without-GNU-libiconv.patch
+index 3312550620..0000000000
+--- a/package/suricata/0001-configure.ac-fix-static-build-with-pcap.patch
 +++ /dev/null
-@@ -1,60 +0,0 @@
--From 1531a8e9b91b567979a2a0d7fd6a4c2e9126b01c Mon Sep 17 00:00:00 2001
+@@ -1,29 +0,0 @@
+-From 2660123b0c16d7f6a49747711be676c4119561c9 Mon Sep 17 00:00:00 2001
 -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 6 Mar 2019 23:06:54 +0100
--Subject: [PATCH] fix build without GNU libiconv
+-Date: Wed, 24 Apr 2019 20:35:20 +0200
+-Subject: [PATCH] configure.ac: fix static build with pcap
 -
--iconvctl is only defined in GNU libiconv so check for the availability
--of this function before using it
+-pcap can depends on nl-3 so use pkg-config to find these dependencies
+-otherwise all AC_CHECK_LIB calls will fail when building statically
 -
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/OISF/libhtp/pull/193]
+-[Upstream status: not sent yet]
 ----
-- configure.ac         | 18 ++++++++++++++++++
-- htp/htp_transcoder.c |  2 +-
-- 2 files changed, 19 insertions(+), 1 deletion(-)
+- configure.ac | 1 +
+- 1 file changed, 1 insertion(+)
 -
 -diff --git a/configure.ac b/configure.ac
--index 7f0a58d..388ec7b 100644
+-index ee59c9d8e..5ec341231 100644
 ---- a/configure.ac
 -+++ b/configure.ac
--@@ -155,6 +155,24 @@ sinclude(m4/lib-link.m4)
-- sinclude(m4/lib-prefix.m4)
-- AM_ICONV
+-@@ -1331,6 +1331,7 @@
+-     AC_CHECK_HEADERS([pcap.h pcap/pcap.h pcap/bpf.h])
 - 
--+# iconvctl is not standard, it is defined only in GNU libiconv
--+AC_MSG_CHECKING(for iconvctl)
--+TMPLIBS="${LIBS}"
--+LIBS="${LIBS} ${LIBICONV}"
--+
--+AC_TRY_LINK([#include <stdlib.h>
--+             #include <iconv.h>],
--+            [int iconv_param = 0;
--+             iconv_t cd = iconv_open("","");
--+             iconvctl(cd, ICONV_SET_DISCARD_ILSEQ, &iconv_param);
--+             iconv_close(cd);],
--+            [ac_cv_func_iconvctl=yes])
--+AC_MSG_RESULT($ac_cv_func_iconvctl)
--+if test "$ac_cv_func_iconvctl" == yes; then
--+    AC_DEFINE(HAVE_ICONVCTL,1,"Define to 1 if you have the `iconvctl' function.")
--+fi
--+LIBS="${TMPLIBS}"
--+
-- dnl -----------------------------------------------
-- dnl Check and enable the GCC opts we want to use.
-- dnl We may need to add more checks
--diff --git a/htp/htp_transcoder.c b/htp/htp_transcoder.c
--index 57ff74c..d8e8280 100644
----- a/htp/htp_transcoder.c
--+++ b/htp/htp_transcoder.c
--@@ -64,7 +64,7 @@ int htp_transcode_params(htp_connp_t *connp, htp_table_t **params, int destroy_o
--         return HTP_ERROR;
+-     LIBPCAP=""
+-+    PKG_CHECK_MODULES([PCAP],libpcap,[CPPFLAGS="${CPPFLAGS} ${PCAP_CFLAGS}" LIBS="${LIBS} ${PCAP_LIBS}"],[])
+-     AC_CHECK_LIB(${PCAP_LIB_NAME}, pcap_open_live,, LIBPCAP="no")
+-     if test "$LIBPCAP" = "no"; then
+-         echo
+--- 
+-2.20.1
+-
+diff --git a/package/suricata/0003-python-ensure-proper-shabang-on-python-scripts.patch b/package/suricata/0001-python-ensure-proper-shabang-on-python-scripts.patch
+similarity index 100%
+rename from package/suricata/0003-python-ensure-proper-shabang-on-python-scripts.patch
+rename to package/suricata/0001-python-ensure-proper-shabang-on-python-scripts.patch
+diff --git a/package/suricata/0002-configure.ac-fix-disable-geoip.patch b/package/suricata/0002-configure.ac-fix-disable-geoip.patch
+deleted file mode 100644
+index 7dae57a875..0000000000
+--- a/package/suricata/0002-configure.ac-fix-disable-geoip.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 4e8b006cdd30e43f3ab11296710170488fd5b5de Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 6 Oct 2019 09:53:23 +0200
+-Subject: [PATCH] configure.ac: fix --disable-geoip
+-
+-$enableval should be used to know if the user has passed --enable-geoip
+-or --disable-geoip
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/a7a34f760ae5fe0922fdb720b8234dbcd85ed222
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream status: https://github.com/OISF/suricata/pull/4278
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 3df576d54..fa671024d 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -2143,7 +2143,7 @@
+-   # libmaxminddb
+-     AC_ARG_ENABLE(geoip,
+- 	        AS_HELP_STRING([--enable-geoip],[Enable GeoIP support]),
+--	        [ enable_geoip="yes"],
+-+	        [ enable_geoip="$enableval"],
+- 	        [ enable_geoip="no"])
+-     AC_ARG_ENABLE(libgeoip,
+-     AS_HELP_STRING([--disable-libgeoip], [Disable libgeoip support]),
+--- 
+-2.23.0
+-
+diff --git a/package/suricata/0004-stream-reject-broken-ACK-packets.patch b/package/suricata/0004-stream-reject-broken-ACK-packets.patch
+deleted file mode 100644
+index 9670d73158..0000000000
+--- a/package/suricata/0004-stream-reject-broken-ACK-packets.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 1c63d3905852f746ccde7e2585600b2199cefb4b Mon Sep 17 00:00:00 2001
+-From: Victor Julien <victor@inliniac.net>
+-Date: Thu, 21 Nov 2019 16:10:21 +0100
+-Subject: [PATCH] stream: reject broken ACK packets
+-
+-Fix evasion posibility by rejecting packets with a broken ACK field.
+-These packets have a non-0 ACK field, but do not have a ACK flag set.
+-
+-Bug #3324.
+-
+-Reported-by: Nicolas Adba
+-(cherry picked from commit fa692df37a796c3330c81988d15ef1a219afc006)
+-[Retrieved from:
+-https://github.com/OISF/suricata/commit/1c63d3905852f746ccde7e2585600b2199cefb4b]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/stream-tcp.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/stream-tcp.c b/src/stream-tcp.c
+-index 35e489acba..8653d670c6 100644
+---- a/src/stream-tcp.c
+-+++ b/src/stream-tcp.c
+-@@ -4759,6 +4759,7 @@ int StreamTcpPacket (ThreadVars *tv, Packet *p, StreamTcpThread *stt,
+-     /* broken TCP http://ask.wireshark.org/questions/3183/acknowledgment-number-broken-tcp-the-acknowledge-field-is-nonzero-while-the-ack-flag-is-not-set */
+-     if (!(p->tcph->th_flags & TH_ACK) && TCP_GET_ACK(p) != 0) {
+-         StreamTcpSetEvent(p, STREAM_PKT_BROKEN_ACK);
+-+        goto error;
 -     }
 - 
---    #if (_LIBICONV_VERSION >= 0x0108)
--+    #if (_LIBICONV_VERSION >= 0x0108 && HAVE_ICONVCTL)
--     int iconv_param = 0;
--     iconvctl(cd, ICONV_SET_TRANSLITERATE, &iconv_param);
--     iconv_param = 1;
---- 
--2.14.1
--
-diff --git a/package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch b/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
-similarity index 93%
-rename from package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch
-rename to package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
-index f79a9ebb3a..b21ea6053a 100644
---- a/package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch
-+++ b/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
-@@ -7,7 +7,7 @@ zlib is a mandatory dependency so add it to Libs.private otherwise
- static linking of packages linking with htp (e.g. suricata) will fail.
- 
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: not sent yet]
-+[Upstream status: https://github.com/OISF/libhtp/pull/294]
- ---
-  htp.pc.in | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
-index b3775c3ad3..765acd5bf9 100644
---- a/package/libhtp/libhtp.hash
-+++ b/package/libhtp/libhtp.hash
-@@ -1,3 +1,3 @@
+-     /* If we are on IPS mode, and got a drop action triggered from
+-@@ -6883,7 +6884,7 @@ static int StreamTcpTest10 (void)
+- 
+-     tcph.th_win = htons(5480);
+-     tcph.th_seq = htonl(10);
+--    tcph.th_ack = htonl(11);
+-+    tcph.th_ack = 0;
+-     tcph.th_flags = TH_SYN;
+-     p->tcph = &tcph;
+- 
+diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+index dc52999a9d..05e3593c3b 100644
+--- a/package/suricata/suricata.hash
++++ b/package/suricata/suricata.hash
+@@ -1,6 +1,6 @@
  # Locally computed:
--sha256	a6a6f3b3f1fb6e8b8a1dae02db8a0090c438f0d057102dd8e52208224868c4e4	libhtp-0.5.32.tar.gz
--sha256	87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15	LICENSE
-+sha256  953651fdfe828805bb82dc1aa8b56187b0e2f80781727343e68ccf8afd6a9122  libhtp-0.5.33.tar.gz
-+sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
-diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
-index 577b700953..b77d8715f9 100644
---- a/package/libhtp/libhtp.mk
-+++ b/package/libhtp/libhtp.mk
-@@ -4,7 +4,7 @@
+-sha256 cee5f6535cd7fe63fddceab62eb3bc66a63fc464466c88ec7a41b7a1331ac74b  suricata-4.1.5.tar.gz
++sha256  c8a83a05f57cedc0ef81d833ddcfdbbfdcdb6f459a91b1b15dc2d5671f1aecbb  suricata-4.1.8.tar.gz
+ 
+ # Hash for license files:
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index 48a6205eed..8dd23bf2f5 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
+@@ -4,16 +4,13 @@
  #
  ################################################################################
  
--LIBHTP_VERSION = 0.5.32
-+LIBHTP_VERSION = 0.5.33
- LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
- LIBHTP_LICENSE = BSD-3-Clause
- LIBHTP_LICENSE_FILES = LICENSE
+-SURICATA_VERSION = 4.1.5
++SURICATA_VERSION = 4.1.8
+ SURICATA_SITE = https://www.openinfosecfoundation.org/download
+ SURICATA_LICENSE = GPL-2.0
+ SURICATA_LICENSE_FILES = COPYING LICENSE
+-# We're patching configure.ac
++# We're patching python/Makefile.am
+ SURICATA_AUTORECONF = YES
+ 
+-# 0004-stream-reject-broken-ACK-packets.patch
+-SURICATA_IGNORE_CVES += CVE-2019-18792
+-
+ SURICATA_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_JANSSON),jansson) \
 -- 
 2.26.2
