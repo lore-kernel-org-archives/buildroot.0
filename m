@@ -1,58 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Apr 2020 14:38:32 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libid3tag: needs
- host-gperf
-Message-ID: <20200430124925.75E71811F3@busybox.osuosl.org>
+Date: Thu, 30 Apr 2020 15:02:33 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/apache: security
+ bump to version 2.4.43
+Message-ID: <20200430124925.E85698E1E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c83d14b8cd830697e5ea31c4bb4201417fc65bf
+commit: https://git.buildroot.net/buildroot/commit/?id=a6f78222878881d9d0e7216e04d2d005aedd95a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Since switch to debian in commit
-210ccaef5784011bc035d0ae13611cb4e76f389f, host-gperf is needed to
-generate frametype.c because debian/patches/add-m4-directory.patch
-patches Makefile.am. As a side effect, libid3tag tries to generate
-frametype.c from frametype.gperf due to following rule:
+Fixes the following security issues:
 
-$(srcdir)/frametype.c: $(srcdir)/frametype.gperf Makefile.am
-        cd $(srcdir) &&  \
-        gperf -tCcTonD -K id -N id3_frametype_lookup -s -3 -k '*'  \
-                frametype.gperf |  \
-        sed -e 's/\(struct id3_frametype\);/\1/' |  \
-        sed -e '/\$$''Id: /s/\$$//g' >frametype.c
+  *) SECURITY: CVE-2020-1934 (cve.mitre.org)
+     mod_proxy_ftp: Use of uninitialized value with malicious backend FTP
+     server. [Eric Covener]
 
-If host-gperf is not available, frametype.c will be empty and build with
-madplay will fail on:
+  *) SECURITY: CVE-2020-1927 (cve.mitre.org)
+     rewrite, core: Set PCRE_DOTALL flag by default to avoid unpredictable
+     matches and substitutions with encoded line break characters.
+     The fix for CVE-2019-10098 was not effective.  [Ruediger Pluem]
 
-configure:17243: checking for snd_pcm_open in -lasound
-configure:17268: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/powerpc64-linux-gcc -o conftest -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=1  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lid3tag  >&5
-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/8.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libid3tag.so: undefined reference to `id3_frametype_lookup'
+The LICENSE file has been updated to fix a s/waranties/warranties/ typo, so
+update the hash to match and adjust the spacing to match recent agreements:
 
-Fixes:
- - http://autobuild.buildroot.org/results/15a8c7f6e34b26446179c04383719ea71495403e
+-This software is provided "as is" and any express or implied waranties,
++This software is provided "as is" and any express or implied warranties,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7ecd0e4edf9f42795ef70097a8f205b2aaa67a6d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 2bf40ad66b16744972443127e9ee6f8d8f32c476)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libid3tag/libid3tag.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/apache/apache.hash | 6 +++---
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libid3tag/libid3tag.mk b/package/libid3tag/libid3tag.mk
-index 14a7f3f938..5d7b219bb1 100644
---- a/package/libid3tag/libid3tag.mk
-+++ b/package/libid3tag/libid3tag.mk
-@@ -12,7 +12,7 @@ LIBID3TAG_SITE = \
- LIBID3TAG_LICENSE = GPL-2.0+
- LIBID3TAG_LICENSE_FILES = COPYING COPYRIGHT
- LIBID3TAG_INSTALL_STAGING = YES
--LIBID3TAG_DEPENDENCIES = zlib
-+LIBID3TAG_DEPENDENCIES = host-gperf zlib
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 24c00eb94c..7b0e4ad8e7 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,4 +1,4 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.41.tar.bz2.sha256
+-sha256 133d48298fe5315ae9366a0ec66282fa4040efa5d566174481077ade7d18ea40 httpd-2.4.41.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.43.tar.bz2.sha256
++sha256  a497652ab3fc81318cdc2a203090a999150d86461acff97c1065dc910fe10f43  httpd-2.4.43.tar.bz2
+ # Locally computed
+-sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
++sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 5fcb9e5371..48a64eae0e 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # debian/patches/10_utf16.dpatch
- LIBID3TAG_IGNORE_CVES += CVE-2004-2779 CVE-2017-11551
+-APACHE_VERSION = 2.4.41
++APACHE_VERSION = 2.4.43
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
