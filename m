@@ -1,47 +1,44 @@
 From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Wed, 29 Apr 2020 20:16:56 -0500
-Subject: [Buildroot] [PATCH 2/2] package/ser2net: bump to version 4.1.7
-In-Reply-To: <20200430011657.21582-1-ryanbarnett3@gmail.com>
-References: <20200430011657.21582-1-ryanbarnett3@gmail.com>
-Message-ID: <20200430011657.21582-2-ryanbarnett3@gmail.com>
+Date: Wed, 29 Apr 2020 20:37:00 -0500
+Subject: [Buildroot] [PATCH] package/iptables: bump to version 1.8.4
+Message-ID: <20200430013700.23556-1-ryanbarnett3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Update hash file to two space format.
+
 Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 ---
- package/ser2net/ser2net.hash | 6 +++---
- package/ser2net/ser2net.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/iptables/iptables.hash | 4 ++--
+ package/iptables/iptables.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index 1eaad2c584..91d97e74fc 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5  96498fab618ff23ae2791eefc86a5066  ser2net-4.1.6.tar.gz
--sha1  3b31fbbbdab2c658bb0dc19ed93c7d8474ecdd25  ser2net-4.1.6.tar.gz
-+md5  504345864f6110d5b6b63ad1f2ba3ed9  ser2net-4.1.7.tar.gz
-+sha1  8268c2f7937152a7bbbac6d2f289c257d11deb69  ser2net-4.1.7.tar.gz
- # Locally computed:
--sha256  757505db9afc21a448cb008a3b9a9040cdc17c348ef42a55c9e672d4ccf71e9f  ser2net-4.1.6.tar.gz
-+sha256  55bbeeed58eda7514ba7a52d14a930e57e1e5c6fd785a84ca0dd7c3b5615e0a5  ser2net-4.1.7.tar.gz
- sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index da0aa6c156..1f29e2950e 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
+diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
+index 2e149aa11b..2811daf5e3 100644
+--- a/package/iptables/iptables.hash
++++ b/package/iptables/iptables.hash
+@@ -1,4 +1,4 @@
+ # From https://netfilter.org/projects/iptables/downloads.html
+-sha256 a23cac034181206b4545f4e7e730e76e08b5f3dd78771ba9645a6756de9cdd80  iptables-1.8.3.tar.bz2
++sha256  993a3a5490a544c2cbf2ef15cf7e7ed21af1845baf228318d5c36ef8827e157c  iptables-1.8.4.tar.bz2
+ # Locally calculated
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index ae5cf4ddd3..40db76376e 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SER2NET_VERSION = 4.1.6
-+SER2NET_VERSION = 4.1.7
- SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPL-2.0+
- SER2NET_LICENSE_FILES = COPYING
+-IPTABLES_VERSION = 1.8.3
++IPTABLES_VERSION = 1.8.4
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = https://netfilter.org/projects/iptables/files
+ IPTABLES_INSTALL_STAGING = YES
 -- 
 2.17.1
