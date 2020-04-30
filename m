@@ -1,49 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Apr 2020 14:52:17 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/msgpack: bump
- version to 3.2.1
-Message-ID: <20200430124925.C52658F06E@busybox.osuosl.org>
+Date: Thu, 30 Apr 2020 14:42:03 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/ogre: fix build
+ with RELRO
+Message-ID: <20200430124925.9DE37811F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b51bf6d3b869f7f36836f6e393d1c46faab9110
+commit: https://git.buildroot.net/buildroot/commit/?id=f642f563badf1cb6ec5d7dbcccf65e23a34ce414
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Changelog:
-https://github.com/msgpack/msgpack-c/blob/master/CHANGELOG.md
+Fixes:
+ - http://autobuild.buildroot.org/results/b64dfcd8e576666e8a4a52da81a2f5a92b779dc7
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9b25b54af369de9fe67ed16f89f2db352cd2d8f1)
+(cherry picked from commit 506740c0306b04de2ce3f5dc79d116f0e5631917)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/msgpack/msgpack.hash | 2 +-
- package/msgpack/msgpack.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-PrecompiledHeader.cmake-Add-c-argument-t.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/package/msgpack/msgpack.hash b/package/msgpack/msgpack.hash
-index 6b3a7ef134..3829a70222 100644
---- a/package/msgpack/msgpack.hash
-+++ b/package/msgpack/msgpack.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  ff865a36bad5c72b8e7ebc4b7cf5f27a820fce4faff9c571c1791e3728355a39  msgpack-3.2.0.tar.gz
-+sha256  464f46744a6be778626d11452c4db3c2d09461080c6db42e358e21af19d542f6  msgpack-3.2.1.tar.gz
- sha256  664550b43996452a5a2c7471bb0ff77185a58c69ccafa60f983dc4c162e1ee22  COPYING
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-diff --git a/package/msgpack/msgpack.mk b/package/msgpack/msgpack.mk
-index 1e13464ca1..81670deddc 100644
---- a/package/msgpack/msgpack.mk
-+++ b/package/msgpack/msgpack.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MSGPACK_VERSION = 3.2.0
-+MSGPACK_VERSION = 3.2.1
- MSGPACK_SITE = $(call github,msgpack,msgpack-c,cpp-$(MSGPACK_VERSION))
- MSGPACK_LICENSE = BSL-1.0
- MSGPACK_LICENSE_FILES = COPYING LICENSE_1_0.txt
+diff --git a/package/ogre/0001-CMake-Utils-PrecompiledHeader.cmake-Add-c-argument-t.patch b/package/ogre/0001-CMake-Utils-PrecompiledHeader.cmake-Add-c-argument-t.patch
+new file mode 100644
+index 0000000000..97f4e24890
+--- /dev/null
++++ b/package/ogre/0001-CMake-Utils-PrecompiledHeader.cmake-Add-c-argument-t.patch
+@@ -0,0 +1,57 @@
++From f480ac538eb69086d4b7db855c2a457d5d6420d4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 10 Feb 2020 14:05:12 +0100
++Subject: [PATCH] CMake/Utils/PrecompiledHeader.cmake: Add -c argument to build
++ precompiled headers
++
++Add "-c" argument when building precompiled headers to fix build with
++RELRO.
++
++More information on a similar issue with domoticz can be found here:
++https://patchwork.ozlabs.org/patch/1187328:
++
++"The problem AFAICS is that if no -c or similar option is given, GCC
++decides what needs to be done based on the rest of the arguments. If the
++rest of the arguments include a -Wl,... option, it decides that linking
++needs to be done. If the rest of the arguments are just header files, it
++decides to create a precompiled header."
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8fabf8d270b9257c3a9db6a2f17f1c08ec9428d3
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream: https://github.com/OGRECave/ogre/commit/de4d5c920e23e1e2b21dc5c8192ef74ba6210cca]
++---
++ CMake/Utils/PrecompiledHeader.cmake | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/CMake/Utils/PrecompiledHeader.cmake b/CMake/Utils/PrecompiledHeader.cmake
++index a02d99acd..bfb0059db 100644
++--- a/CMake/Utils/PrecompiledHeader.cmake
+++++ b/CMake/Utils/PrecompiledHeader.cmake
++@@ -133,11 +133,11 @@ MACRO(_PCH_GET_COMPILE_COMMAND out_command _input _output)
++             STRING(REGEX REPLACE "^ +" "" pchsupport_compiler_cxx_arg1 ${CMAKE_CXX_COMPILER_ARG1})
++ 
++             SET(${out_command}
++-              ${CMAKE_CXX_COMPILER} ${pchsupport_compiler_cxx_arg1} ${_compile_FLAGS} -x c++-header -o ${_output} ${_input}
+++              ${CMAKE_CXX_COMPILER} ${pchsupport_compiler_cxx_arg1} ${_compile_FLAGS} -x c++-header -c -o ${_output} ${_input}
++               )
++         ELSE(CMAKE_CXX_COMPILER_ARG1)
++             SET(${out_command}
++-              ${CMAKE_CXX_COMPILER}  ${_compile_FLAGS} -x c++-header -o ${_output} ${_input}
+++              ${CMAKE_CXX_COMPILER}  ${_compile_FLAGS} -x c++-header -c -o ${_output} ${_input}
++               )
++         ENDIF(CMAKE_CXX_COMPILER_ARG1)
++     ELSE(CMAKE_COMPILER_IS_GNUCXX)
++@@ -291,7 +291,7 @@ MACRO(ADD_PRECOMPILED_HEADER _targetName _input)
++     set_target_properties(${_targetName}_pch_dephelp PROPERTIES INCLUDE_DIRECTORIES "${DIRINC}")
++ 
++     #MESSAGE("_compile_FLAGS: ${_compile_FLAGS}")
++-    #message("COMMAND ${CMAKE_CXX_COMPILER}	${_compile_FLAGS} -x c++-header -o ${_output} ${_input}")
+++    #message("COMMAND ${CMAKE_CXX_COMPILER}	${_compile_FLAGS} -x c++-header -c -o ${_output} ${_input}")
++ 
++     ADD_CUSTOM_COMMAND(
++       OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${_name}"
++-- 
++2.24.1
++
