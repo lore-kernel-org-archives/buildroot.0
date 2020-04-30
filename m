@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Apr 2020 14:41:26 +0200
-Subject: [Buildroot] [git commit] package/mariadb: patch mariadb_config
- to add sysroot path
-In-Reply-To: <20200412200827.B951B8E840@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sun, 12 Apr 2020 22:22:31 +0200")
-References: <20200412200827.B951B8E840@busybox.osuosl.org>
-Message-ID: <87h7x15eo9.fsf@dell.be.48ers.dk>
+Date: Thu, 30 Apr 2020 14:42:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ogre: fix build with RELRO
+In-Reply-To: <20200412224911.65d47f8b@windsurf.home> (Thomas Petazzoni's
+ message of "Sun, 12 Apr 2020 22:49:11 +0200")
+References: <20200210174511.719351-1-fontaine.fabrice@gmail.com>
+ <20200412224911.65d47f8b@windsurf.home>
+Message-ID: <87d07p5emt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +14,17 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=905e4f2890e92d7b417d9c219fa8d4394cd1c159
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > On Mon, 10 Feb 2020 18:45:11 +0100
+ > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
- > This patch adds @CMAKE_SYSROOT@ to mariadb_config.c.in. Without it,
- > mariadb_config and mysql_config incorrectly returns host paths for
- > include paths and library paths.
-
- > The patch has been accepted upstream at
- > https://github.com/mariadb-corporation/mariadb-connector-c/commit/b787c0d69cc00af98cd4ee5bc205e1c7ddaf427a
-
- > Reported-by: Alexey Lukyanchuk <skif@skif-web.ru>
- > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/b64dfcd8e576666e8a4a52da81a2f5a92b779dc7
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> ---
+ >> ...ompiledHeader.cmake-Add-c-argument-t.patch | 57 +++++++++++++++++++
+ >> 1 file changed, 57 insertions(+)
+ >> create mode 100644 package/ogre/0001-CMake-Utils-PrecompiledHeader.cmake-Add-c-argument-t.patch
 
 Committed to 2020.02.x, thanks.
 
