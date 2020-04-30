@@ -1,118 +1,117 @@
-From: Mikael Bourhis-Cloarec <mikael.bourhis@smile.fr>
-Date: Thu, 30 Apr 2020 16:09:06 +0200
-Subject: [Buildroot] [PATCH v2 1/1] support/testing: add
- package/test_mender.py
-Message-ID: <20200430140906.GA10544@P-NAN-EREVAN-mikbou>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Thu, 30 Apr 2020 16:44:41 +0200
+Subject: [Buildroot] [PATCH v3] package/frotz: new package
+Message-ID: <20200430144441.25470-1-huth@tuxfamily.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Create a test to check Mender client at runtime.
+Frotz is an interpreter for old Infocom adventures and other Z-code games.
 
-The aim of this test is:
-  - to check the correct execution of simple Mender commands,
-    in a minimal environment;
-  - to validate there is no missing dependencies for runtime.
-
-This test is not a board integration test for Mender,
-including well-configured bootloader, partitioning, ...
-
-Check:
-  - the daemon is started;
-  - the current 'artifact name' (name of the image or update) of the active
-    partition is read, without error.
-
-For that, we need to fake (see the 'overlay' directory):
-  - some bootloader environment variables;
-  - the name of an update.
-
-Signed-off-by: Mikael Bourhis-Cloarec <mikael.bourhis@smile.fr>
+Signed-off-by: Thomas Huth <huth@tuxfamily.org>
 ---
-Changes v1 -> v2:
-  - Update the test by removing unnecessary 'build' option (Thomas P.)
-  - Remove a useless test case (Thomas P.)
+ v3: Updated patch from Frotz v2.44 to Frotz v2.51
 
-Signed-off-by: Mikael Bourhis-Cloarec <mikael.bourhis@smile.fr>
----
- .gitlab-ci.yml                                |  1 +
- support/testing/tests/package/test_mender.py  | 32 +++++++++++++++++++
- .../rootfs-overlay/etc/mender/artifact_info   |  1 +
- .../rootfs-overlay/usr/bin/fw_printenv        |  6 ++++
- 4 files changed, 40 insertions(+)
- create mode 100644 support/testing/tests/package/test_mender.py
- create mode 100644 support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artifact_info
- create mode 100755 support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_printenv
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/frotz/Config.in  | 10 ++++++++++
+ package/frotz/frotz.hash |  5 +++++
+ package/frotz/frotz.mk   | 32 ++++++++++++++++++++++++++++++++
+ 5 files changed, 49 insertions(+)
+ create mode 100644 package/frotz/Config.in
+ create mode 100644 package/frotz/frotz.hash
+ create mode 100644 package/frotz/frotz.mk
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index fa8e077a07..029a8d00aa 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -520,6 +520,7 @@ tests.package.test_rust.TestRustBin: { extends: .runtime_test }
- tests.package.test_syslog_ng.TestSyslogNg: { extends: .runtime_test }
- tests.package.test_tmux.TestTmux: { extends: .runtime_test }
- tests.package.test_turbolua.TestLuajitTurbolua: { extends: .runtime_test }
-+tests.package.test_mender.TestMender: { extends: .runtime_test }
- tests.toolchain.test_external.TestExternalToolchainBuildrootMusl: { extends: .runtime_test }
- tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc: { extends: .runtime_test }
- tests.toolchain.test_external.TestExternalToolchainCCache: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/test_mender.py b/support/testing/tests/package/test_mender.py
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cc72b288be..f875cb54cb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2488,6 +2488,7 @@ F:	toolchain/
+ 
+ N:	Thomas Huth <huth@tuxfamily.org>
+ F:	package/ascii-invaders/
++F:	package/frotz/
+ 
+ N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ F:	arch/Config.in.arm
+diff --git a/package/Config.in b/package/Config.in
+index 53c8ce0e29..0992dd77e2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -258,6 +258,7 @@ menu "Games"
+ 	source "package/doom-wad/Config.in"
+ 	source "package/flare-engine/Config.in"
+ 	source "package/flare-game/Config.in"
++	source "package/frotz/Config.in"
+ 	source "package/gnuchess/Config.in"
+ 	source "package/lbreakout2/Config.in"
+ 	source "package/ltris/Config.in"
+diff --git a/package/frotz/Config.in b/package/frotz/Config.in
 new file mode 100644
-index 0000000000..8b5200b609
+index 0000000000..59b6d0007d
 --- /dev/null
-+++ b/support/testing/tests/package/test_mender.py
++++ b/package/frotz/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_FROTZ
++	bool "frotz"
++	select BR2_PACKAGE_NCURSES
++	help
++	  Frotz is an interpreter for old Infocom adventure games and
++	  other Z-code games. Note that frotz can not be run as root.
++	  You must add a normal user to your buildroot configuration to
++	  be able to use it.
++
++	  https://661.org/proj/if/frotz/
+diff --git a/package/frotz/frotz.hash b/package/frotz/frotz.hash
+new file mode 100644
+index 0000000000..b2fb02dbad
+--- /dev/null
++++ b/package/frotz/frotz.hash
+@@ -0,0 +1,5 @@
++# Locally calculated
++sha512 a95d09a8d949c5193c0b9b016f4ef5b00483bfd5a9dd5b82aa015b543c72f03411fc8e22471828efe95fe0baa978966ac547a45dca727e1faf58ea819fa6aa34  frotz-2.51.tar.bz2
++
++# Hash for license file
++sha512 aee80b1f9f7f4a8a00dcf6e6ce6c41988dcaedc4de19d9d04460cbfb05d99829ffe8f9d038468eabbfba4d65b38e8dbef5ecf5eb8a1b891d9839cda6c48ee957  COPYING
+diff --git a/package/frotz/frotz.mk b/package/frotz/frotz.mk
+new file mode 100644
+index 0000000000..baeaa8abed
+--- /dev/null
++++ b/package/frotz/frotz.mk
 @@ -0,0 +1,32 @@
-+import os
++################################################################################
++#
++# Frotz
++#
++################################################################################
 +
-+import infra.basetest
++FROTZ_VERSION = 2.51
++FROTZ_SOURCE = frotz-$(FROTZ_VERSION).tar.bz2
++FROTZ_SITE = https://gitlab.com/DavidGriffith/frotz/-/archive/$(FROTZ_VERSION)
++FROTZ_DEPENDENCIES = host-pkgconf ncurses
++FROTZ_LICENSE = GPL-2.0+
++FROTZ_LICENSE_FILES = COPYING
 +
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++FROTZ_CURSES="ncursesw"
++FROTZ_UTF8=yes
++else
++FROTZ_CURSES="ncurses"
++FROTZ_UTF8=
++endif
 +
-+class TestMender(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_MENDER=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_ROOTFS_OVERLAY="{}"
-+        """.format(
-+           # overlay to add a fake 'fw_printenv', used by Mender
-+           infra.filepath("tests/package/test_mender/rootfs-overlay"))
++define FROTZ_BUILD_CMDS
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) PREFIX=/usr CONFIG_DIR=/etc \
++		SOUND_TYPE=none CURSES=$(FROTZ_CURSES) USE_UTF8=$(FROTZ_UTF8) \
++		CFLAGS="$(TARGET_CFLAGS) -std=c99"
++endef
 +
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
++define FROTZ_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/frotz $(TARGET_DIR)/usr/bin/frotz
++endef
 +
-+        # Check if the Daemon is running
-+        self.assertRunOk("ls /var/run/mender.pid")
-+        self.assertRunOk("ps aux | egrep [m]ender")
-+
-+        # Check if a simple Mender command is correctly executed
-+        self.assertRunOk("mender -log-level debug -show-artifact")
-+        self.assertRunOk("mender -log-level debug -show-artifact | grep 'RUNTIME_TEST_ARTIFACT_NAME'")
-+        cmd = "mender -show-artifact 2>&1 | grep -i 'err'"  # Check if no 'error' among the traces
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 1)
-diff --git a/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artifact_info b/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artifact_info
-new file mode 100644
-index 0000000000..4d54b8f89c
---- /dev/null
-+++ b/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/artifact_info
-@@ -0,0 +1 @@
-+artifact_name=RUNTIME_TEST_ARTIFACT_NAME
-diff --git a/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_printenv b/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_printenv
-new file mode 100755
-index 0000000000..c002a0f2b8
---- /dev/null
-+++ b/support/testing/tests/package/test_mender/rootfs-overlay/usr/bin/fw_printenv
-@@ -0,0 +1,6 @@
-+#!/bin/sh
-+
-+# Fake 'fw_printenv' because UBoot is not installed: print some plausible 'key-value'
-+echo "bootcount=0"
-+echo "mender_boot_part=rootfs"
-+echo "upgrade_available=0"
++$(eval $(generic-package))
 -- 
-2.20.1
+2.21.1
