@@ -1,39 +1,40 @@
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Date: Thu, 30 Apr 2020 11:53:32 +0200
-Subject: [Buildroot] [PATCH] package/openlayers: bump to version 6.3.1
-Message-ID: <20200430095332.98544-1-thomas.claveirole@green-communications.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 30 Apr 2020 14:15:40 +0200
+Subject: [Buildroot] [git commit] package/jpeg: properly indent in
+ menuconfig
+In-Reply-To: <20200412131657.02FE08E6E3@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sun, 12 Apr 2020 15:30:58 +0200")
+References: <20200412131657.02FE08E6E3@busybox.osuosl.org>
+Message-ID: <87bln96ufn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
----
- package/openlayers/openlayers.hash | 2 +-
- package/openlayers/openlayers.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
-index f1678507d7..e652fa2571 100644
---- a/package/openlayers/openlayers.hash
-+++ b/package/openlayers/openlayers.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	e133a2ad952f4a31002b1a3217f6b4b68bc9f02bcf6c0b9970638a2627887101	v6.2.1-dist.zip
-+sha256	587ec16666e16abc5804b37ae11d3d6c14c3b51883cb2a2057191d1101da54b9	v6.3.1-dist.zip
-diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
-index 65a1fe00fa..ab2c8b371d 100644
---- a/package/openlayers/openlayers.mk
-+++ b/package/openlayers/openlayers.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENLAYERS_VERSION = 6.2.1
-+OPENLAYERS_VERSION = 6.3.1
- OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
- OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
- OPENLAYERS_LICENSE = BSD-2-Clause
+ > commit: https://git.buildroot.net/buildroot/commit/?id=7a48ac725f1829660641c348c062159d07519b45
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+ > Since there is a variable definition between the definition of
+ > BR2_PACKAGE_JPEG and the choice depending on it, the choice is
+ > not indented bewlo the "jpeg support" prompt, like we like to
+ > have:
+
+ >     [*] jpeg support
+ >         jpeg variant (jpeg-turbo)  --->
+
+ > Move the BR2_PACKAGE_JPEG right before the choice (really, move
+ > BR2_PACKAGE_JPEG_SIMD_SUPPORT before BR2_PACKAGE_JPEG, but diff
+ > finds the move of BR2_PACKAGE_JPEG is smaller to display):
+
+ >     [*] jpeg support
+ >           jpeg variant (jpeg-turbo)  --->
+
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2020.02.x, thanks.
+
 -- 
-2.26.2
+Bye, Peter Korsgaard
