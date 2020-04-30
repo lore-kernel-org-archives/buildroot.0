@@ -1,9 +1,9 @@
 From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-Date: Thu, 30 Apr 2020 15:13:04 +0200
-Subject: [Buildroot] [PATCH] package/python-packaging: new package
-In-Reply-To: <20200430130305.2475879-1-m.niestroj@grinn-global.com>
-References: <20200430130305.2475879-1-m.niestroj@grinn-global.com>
-Message-ID: <87imhh86cf.fsf@grinn-global.com>
+Date: Thu, 30 Apr 2020 15:13:12 +0200
+Subject: [Buildroot] [PATCH] package/python-ansicolors: new package
+In-Reply-To: <20200430130213.2475791-1-m.niestroj@grinn-global.com>
+References: <20200430130213.2475791-1-m.niestroj@grinn-global.com>
+Message-ID: <87ftcl86c7.fsf@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,85 +16,87 @@ Marcin Niestroj <m.niestroj@grinn-global.com> writes:
 
 > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->  DEVELOPERS                                     |  1 +
->  package/Config.in                              |  1 +
->  package/python-packaging/Config.in             |  8 ++++++++
->  package/python-packaging/python-packaging.hash |  7 +++++++
->  package/python-packaging/python-packaging.mk   | 14 ++++++++++++++
->  5 files changed, 31 insertions(+)
->  create mode 100644 package/python-packaging/Config.in
->  create mode 100644 package/python-packaging/python-packaging.hash
->  create mode 100644 package/python-packaging/python-packaging.mk
+>  DEVELOPERS                                    |  1 +
+>  package/Config.in                             |  1 +
+>  package/python-ansicolors/Config.in           |  6 ++++++
+>  .../python-ansicolors/python-ansicolors.hash  |  5 +++++
+>  .../python-ansicolors/python-ansicolors.mk    | 20 +++++++++++++++++++
+>  5 files changed, 33 insertions(+)
+>  create mode 100644 package/python-ansicolors/Config.in
+>  create mode 100644 package/python-ansicolors/python-ansicolors.hash
+>  create mode 100644 package/python-ansicolors/python-ansicolors.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 0665c78a07..499285f4d0 100644
+> index 545d3a407e..0665c78a07 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -1601,6 +1601,7 @@ F:	package/luaossl/
+> @@ -1600,6 +1600,7 @@ F:	package/lua-stdlib/
+>  F:	package/luaossl/
 >  F:	package/murata-cyw-fw/
 >  F:	package/netdata/
->  F:	package/python-ansicolors/
-> +F:	package/python-packaging/
+> +F:	package/python-ansicolors/
 >  F:	package/python-xmodem/
 >  F:	package/rs485conf/
 >  F:	package/turbolua/
 > diff --git a/package/Config.in b/package/Config.in
-> index d005a6d8eb..0d450db061 100644
+> index 49671993ed..d005a6d8eb 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -1041,6 +1041,7 @@ menu "External python modules"
->  	source "package/python-nfc/Config.in"
->  	source "package/python-numpy/Config.in"
->  	source "package/python-oauthlib/Config.in"
-> +	source "package/python-packaging/Config.in"
->  	source "package/python-paho-mqtt/Config.in"
->  	source "package/python-pam/Config.in"
->  	source "package/python-paramiko/Config.in"
-> diff --git a/package/python-packaging/Config.in b/package/python-packaging/Config.in
+> @@ -870,6 +870,7 @@ menu "External python modules"
+>  	source "package/python-aiosignal/Config.in"
+>  	source "package/python-aiozipkin/Config.in"
+>  	source "package/python-alsaaudio/Config.in"
+> +	source "package/python-ansicolors/Config.in"
+>  	source "package/python-argh/Config.in"
+>  	source "package/python-argon2-cffi/Config.in"
+>  	source "package/python-arrow/Config.in"
+> diff --git a/package/python-ansicolors/Config.in b/package/python-ansicolors/Config.in
 > new file mode 100644
-> index 0000000000..5a8135cd57
+> index 0000000000..78da50dfc2
 > --- /dev/null
-> +++ b/package/python-packaging/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_PACKAGING
-> +	bool "python-packaging"
-> +	select BR2_PACKAGE_PYTHON_PYPARSING # runtime
-> +	select BR2_PACKAGE_PYTHON_SIX # runtime
+> +++ b/package/python-ansicolors/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_ANSICOLORS
+> +	bool "python-ansicolors"
 > +	help
-> +	  Core utilities for Python packages.
+> +	  ANSI colors for Python.
 > +
-> +	  https://github.com/pypa/packaging
-> diff --git a/package/python-packaging/python-packaging.hash b/package/python-packaging/python-packaging.hash
+> +	  http://github.com/jonathaneunice/colors/
+> diff --git a/package/python-ansicolors/python-ansicolors.hash b/package/python-ansicolors/python-ansicolors.hash
 > new file mode 100644
-> index 0000000000..112bc695f6
+> index 0000000000..9fb51eb5d1
 > --- /dev/null
-> +++ b/package/python-packaging/python-packaging.hash
-> @@ -0,0 +1,7 @@
-> +# md5, sha256 from https://pypi.org/pypi/packaging/json
-> +md5  19e0d1f82a9007b448650ccfeffd0a26  packaging-20.3.tar.gz
-> +sha256  3c292b474fda1671ec57d46d739d072bfd495a4f51ad01a055121d81e952b7a3  packaging-20.3.tar.gz
+> +++ b/package/python-ansicolors/python-ansicolors.hash
+> @@ -0,0 +1,5 @@
+> +# md5, sha256 from https://pypi.org/pypi/ansicolors/json
+> +md5  9ca7e2396ffa2e20af023c6b83ab7b14  ansicolors-1.1.8.zip
+> +sha256  99f94f5e3348a0bcd43c82e5fc4414013ccc19d70bd939ad71e0133ce9c372e0  ansicolors-1.1.8.zip
 > +# Locally computed sha256 checksums
-> +sha256  cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48  LICENSE
-> +sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.APACHE
-> +sha256  b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5  LICENSE.BSD
-> diff --git a/package/python-packaging/python-packaging.mk b/package/python-packaging/python-packaging.mk
+> +sha256  71a13496c621f01b454f9aa54fa608a712f58eb253e6dd2c91027fe78340c773  LICENSE
+> diff --git a/package/python-ansicolors/python-ansicolors.mk b/package/python-ansicolors/python-ansicolors.mk
 > new file mode 100644
-> index 0000000000..bd5177e8e5
+> index 0000000000..787ce8c40b
 > --- /dev/null
-> +++ b/package/python-packaging/python-packaging.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/python-ansicolors/python-ansicolors.mk
+> @@ -0,0 +1,20 @@
 > +################################################################################
 > +#
-> +# python-packaging
+> +# python-ansicolors
 > +#
 > +################################################################################
 > +
-> +PYTHON_PACKAGING_VERSION = 20.3
-> +PYTHON_PACKAGING_SOURCE = packaging-$(PYTHON_PACKAGING_VERSION).tar.gz
-> +PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/65/37/83e3f492eb52d771e2820e88105f605335553fe10422cba9d256faeb1702
-> +PYTHON_PACKAGING_SETUP_TYPE = setuptools
-> +PYTHON_PACKAGING_LICENSE = Apache-2.0 or BSD-2-Clause
-> +PYTHON_PACKAGING_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+> +PYTHON_ANSICOLORS_VERSION = 1.1.8
+> +PYTHON_ANSICOLORS_SOURCE = ansicolors-$(PYTHON_ANSICOLORS_VERSION).zip
+> +PYTHON_ANSICOLORS_SITE = https://files.pythonhosted.org/packages/76/31/7faed52088732704523c259e24c26ce6f2f33fbeff2ff59274560c27628e
+> +PYTHON_ANSICOLORS_SETUP_TYPE = setuptools
+> +PYTHON_ANSICOLORS_LICENSE = ISC
+> +PYTHON_ANSICOLORS_LICENSE_FILES = LICENSE
+> +
+> +define PYTHON_ANSICOLORS_EXTRACT_CMDS
+> +	unzip $(PYTHON_ANSICOLORS_DL_DIR)/$(PYTHON_ANSICOLORS_SOURCE) -d $(@D)
+> +	mv $(@D)/ansicolors-$(PYTHON_ANSICOLORS_VERSION)/* $(@D)
+> +	$(RM) -r $(@D)/ansicolors-$(PYTHON_ANSICOLORS_VERSION)
+> +endef
 > +
 > +$(eval $(python-package))
 
