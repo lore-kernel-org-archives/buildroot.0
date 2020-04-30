@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Apr 2020 14:39:02 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/libid3tag: needs host-gperf
-In-Reply-To: <20200415203631.11960-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 15 Apr 2020 22:36:31 +0200")
-References: <20200415203631.11960-1-fontaine.fabrice@gmail.com>
-Message-ID: <87tv115es9.fsf@dell.be.48ers.dk>
+Date: Thu, 30 Apr 2020 14:39:26 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libid3tag: switch to debian to
+ fix CVEs
+In-Reply-To: <20200412101845.1013976-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 12 Apr 2020 12:18:44 +0200")
+References: <20200412101845.1013976-1-fontaine.fabrice@gmail.com>
+Message-ID: <87pnbp5erl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +14,22 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Since switch to debian in commit
- > 210ccaef5784011bc035d0ae13611cb4e76f389f, host-gperf is needed to
- > generate frametype.c because debian/patches/add-m4-directory.patch
- > patches Makefile.am. As a side effect, libid3tag tries to generate
- > frametype.c from frametype.gperf due to following rule:
+ > Upstream libid3tag is dead since 2004 so switch to debian to get two
+ > patches that fix the following CVEs:
+ >  - CVE-2004-2779: id3_utf16_deserialize() in utf16.c in libid3tag
+ >    through 0.15.1b misparses ID3v2 tags encoded in UTF-16 with an odd
+ >    number of bytes, triggering an endless loop allocating memory until
+ >    an OOM condition is reached, leading to denial-of-service (DoS).
+ >  - CVE-2017-11550: The id3_ucs4_length function in ucs4.c in libid3tag
+ >    0.15.1b allows remote attackers to cause a denial of service (NULL
+ >    Pointer Dereference and application crash) via a crafted mp3 file.
+ >  - CVE-2017-11551: The id3_field_parse function in field.c in libid3tag
+ >    0.15.1b allows remote attackers to cause a denial of service (OOM)
+ >    via a crafted MP3 file.
 
- > $(srcdir)/frametype.c: $(srcdir)/frametype.gperf Makefile.am
- >         cd $(srcdir) &&  \
- >         gperf -tCcTonD -K id -N id3_frametype_lookup -s -3 -k '*'  \
- >                 frametype.gperf |  \
- >         sed -e 's/\(struct id3_frametype\);/\1/' |  \
- >         sed -e '/\$$''Id: /s/\$$//g' >frametype.c
-
- > If host-gperf is not available, frametype.c will be empty and build with
- > madplay will fail on:
-
- > configure:17243: checking for snd_pcm_open in -lasound
- > configure:17268: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/powerpc64-linux-gcc -o conftest -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=1  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lasound  -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib -lid3tag  >&5
- > /home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/8.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: /home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libid3tag.so: undefined reference to `id3_frametype_lookup'
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/15a8c7f6e34b26446179c04383719ea71495403e
+ > Moreover, drop patch (replaced by add-m4-directory.patch debian patch)
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Thomas Petazzoni):
- >  - Fix commit message
 
 Committed to 2020.02.x, thanks.
 
