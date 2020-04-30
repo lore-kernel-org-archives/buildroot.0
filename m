@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Apr 2020 14:20:22 +0200
-Subject: [Buildroot] [git commit] package/meson: make pkg-config
- --static aware
-In-Reply-To: <20200412185803.38F848E7BE@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sun, 12 Apr 2020 21:03:57 +0200")
-References: <20200412185803.38F848E7BE@busybox.osuosl.org>
-Message-ID: <87368l6u7t.fsf@dell.be.48ers.dk>
+Date: Thu, 30 Apr 2020 14:37:38 +0200
+Subject: [Buildroot] [git commit] package/libcoap: properly enable DTLS
+ support
+In-Reply-To: <20200412200439.6473B8E82F@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sun, 12 Apr 2020 22:08:47 +0200")
+References: <20200412200439.6473B8E82F@busybox.osuosl.org>
+Message-ID: <87y2qd5eul.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,18 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=cf75d7da98596580eee5a9b5e1a3e156ad832099
+ > commit: https://git.buildroot.net/buildroot/commit/?id=8b14f6b49b962d4d8f7135d85afa15658ea8f94b
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Our pkg-config wrapper is not used since commit
- > 4e0bc29993376613d200e892d491e31ea5a49622, this raise static build
- > failures with libglib2 because --static is not passed anymore to
- > pkg-config so add a patch to get back the old behaviour.
+ > The DTLS support needs either gnutls or openssl, so let's have these
+ > packages as optional dependencies. We prefer gnutls over openssl as
+ > done by upstream in their configure.ac when the user does not provide
+ > any option (which is the case currently)
 
- > The patch was proposed upstream
- > https://github.com/mesonbuild/meson/pull/6629, and the feedback was
- > not very positive. However, we need a solution that works for
- > Buildroot now, and this proposal is simple enough.
-
- > Fixes:
-
- >   http://autobuild.buildroot.org/results/0d36952def63cb69628697fa6408aeb6ce10cb5b
+ > While there is support for tinydtls, and Buildroot has a tinydtls
+ > package, libcoap is only able to use its own internal library, and
+ > only when static linking is enabled, so we simply disable the use of
+ > tinydtls altogether.
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
