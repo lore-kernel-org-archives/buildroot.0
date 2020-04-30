@@ -1,116 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Apr 2020 14:18:40 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/meson: make
- pkg-config --static aware
-Message-ID: <20200430124925.55BB488441@busybox.osuosl.org>
+Date: Thu, 30 Apr 2020 14:49:50 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/openldap: bump
+ version to 2.4.49
+Message-ID: <20200430124925.B97C18E8B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b19d8aa68844f9015a87ce87da1f35c6de8a863
+commit: https://git.buildroot.net/buildroot/commit/?id=a43d2b418ee1f504ffb804e4a58f88d1c7b34241
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Our pkg-config wrapper is not used since commit
-4e0bc29993376613d200e892d491e31ea5a49622, this raise static build
-failures with libglib2 because --static is not passed anymore to
-pkg-config so add a patch to get back the old behaviour.
+Release notes:
+https://lists.openldap.org/hyperkitty/list/openldap-announce at openldap.org/thread/VMMBUCQHEDF6QA4CDOONP2CDQEOR5YQA/
 
-The patch was proposed upstream
-https://github.com/mesonbuild/meson/pull/6629, and the feedback was
-not very positive. However, we need a solution that works for
-Buildroot now, and this proposal is simple enough.
+Switched _SITE to https.
 
-Fixes:
-
-  http://autobuild.buildroot.org/results/0d36952def63cb69628697fa6408aeb6ce10cb5b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cf75d7da98596580eee5a9b5e1a3e156ad832099)
+(cherry picked from commit 8961000fe8ae1129bacf44adf219d9c4e4307d77)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...dependencies-base.py-add-pkg_config_stati.patch | 38 ++++++++++++++++++++++
- package/meson/cross-compilation.conf.in            |  1 +
- package/pkg-meson.mk                               |  2 ++
- 3 files changed, 41 insertions(+)
+ package/openldap/openldap.hash | 10 +++++-----
+ package/openldap/openldap.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-new file mode 100644
-index 0000000000..7bb00f3fba
---- /dev/null
-+++ b/package/meson/0004-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-@@ -0,0 +1,38 @@
-+From 3a4962ede0d12bac66b38e0843f6e2ea75b03d50 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 15 Feb 2020 15:13:59 +0100
-+Subject: [PATCH] mesonbuild/dependencies/base.py: add pkg_config_static
-+
-+Allow the user to always call pkg-config with --static thanks to a
-+pkg_config_static property. This will allow to fix static build failures
-+with libglib2:
-+
-+FAILED: gio/gio
-+/home/naourr/work/instance-0/output-1/host/bin/arm-linux-gcc  -o gio/gio 'gio/6ae6c9e@@gio at exe/gio-tool.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-cat.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-copy.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-info.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-list.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-mime.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-mkdir.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-monitor.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-mount.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-move.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-open.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-rename.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-remove.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-save.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-set.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-trash.c.o' 'gio/6ae6c9e@@gio at exe/gio-tool-tree.c.o' -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -static -Wl,--start-group gio/libgio-2.0.a glib/libglib-2.0.a gobject/libgobject-2.0.a gmodule/libgmodule-2.0.a -pthread /home/naourr/work/instance-0/output-1/host/arm-build
- root-lin
- ux-uclibcgnueabi/sysroot/usr/lib/libz.a /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmount.a /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libpcre.a -lm /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libffi.a -Wl,--end-group '-Wl,-rpath,$ORIGIN/:$ORIGIN/../glib:$ORIGIN/../gobject:$ORIGIN/../gmodule' -Wl,-rpath-link,/home/naourr/work/instance-0/output-1/build/libglib2-2.62.4/build/gio -Wl,-rpath-link,/home/naourr/work/instance-0/output-1/build/libglib2-2.62.4/build/glib -Wl,-rpath-link,/home/naourr/work/instance-0/output-1/build/libglib2-2.62.4/build/gobject -Wl,-rpath-link,/home/naourr/work/instance-0/output-1/build/libglib2-2.62.4/build/gmodule
-+/home/naourr/work/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/naourr/work/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmount.a(la-fs.o): in function `__mnt_fs_set_source_ptr':
-+fs.c:(.text+0x5ec): undefined reference to `blkid_parse_tag_string'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/0d36952def63cb69628697fa6408aeb6ce10cb5b
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ mesonbuild/dependencies/base.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
-+index a83e3d6c..913bff6b 100644
-+--- a/mesonbuild/dependencies/base.py
-++++ b/mesonbuild/dependencies/base.py
-+@@ -840,7 +840,7 @@ class PkgConfigDependency(ExternalDependency):
-+     def _set_libs(self):
-+         env = None
-+         libcmd = [self.name, '--libs']
-+-        if self.static:
-++        if self.static or self.env.properties[self.for_machine].get('pkg_config_static', False):
-+             libcmd.append('--static')
-+         # Force pkg-config to output -L fields even if they are system
-+         # paths so we can do manual searching with cc.find_library() later.
-+-- 
-+2.24.1
-+
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index 369e225b3e..d80c472de6 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -18,6 +18,7 @@ cpp_args = [@TARGET_CXXFLAGS@]
- cpp_link_args = [@TARGET_LDFLAGS@]
- sys_root = '@STAGING_DIR@'
- pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
-+pkg_config_static = '@STATIC@'
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 9ea1e7a55d..7f159cb6d0 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,7 +1,7 @@
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.48.md5
+-md5 0729a0711fe096831dedc159e0bbe73f  openldap-2.4.48.tgz
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.48.sha1
+-sha1 c1984e80f6db038b317bf931866adb38e5537dcd  openldap-2.4.48.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.49.md5
++md5 2a47a6bb4319357ea7b032c45283e79e  openldap-2.4.49.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.49.sha1
++sha1 f0caeca122e6f90e6ac5cc8ba36fe9cec13826da  openldap-2.4.49.tgz
+ # Locally computed
+-sha256 d9523ffcab5cd14b709fcf3cb4d04e8bc76bb8970113255f372bc74954c6074d  openldap-2.4.48.tgz
++sha256 e3b117944b4180f23befe87d0dcf47f29de775befbc469dcf4ac3dab3311e56e  openldap-2.4.49.tgz
+ sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 4417bb659b..a5f6067494 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- [host_machine]
- system = 'linux'
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 835098b85c..97129d808e 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -76,6 +76,7 @@ define $(2)_CONFIGURE_CMDS
- 	    -e 's%@TARGET_CXXFLAGS@%$$(call make-comma-list,$$($(2)_CXXFLAGS))%g' \
- 	    -e 's%@HOST_DIR@%$$(HOST_DIR)%g' \
- 	    -e 's%@STAGING_DIR@%$$(STAGING_DIR)%g' \
-+	    -e 's%@STATIC@%$$(if $$(BR2_STATIC_LIBS),true,false)%g' \
- 	    -e "/^\[binaries\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES),\n$$(x)):" \
- 	    package/meson/cross-compilation.conf.in \
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
-@@ -192,6 +193,7 @@ define PKG_MESON_INSTALL_CROSS_CONF
- 	    -e 's%@TARGET_CXXFLAGS@%$(call make-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g' \
- 	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
- 	    -e 's%@STAGING_DIR@%$(STAGING_DIR)%g' \
-+	    -e 's%@STATIC@%$$(if $$(BR2_STATIC_LIBS),true,false)%g' \
- 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
- 	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
+-OPENLDAP_VERSION = 2.4.48
++OPENLDAP_VERSION = 2.4.49
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+-OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
++OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
+ OPENLDAP_LICENSE_FILES = LICENSE
+ OPENLDAP_INSTALL_STAGING = YES
