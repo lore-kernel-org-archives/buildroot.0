@@ -1,155 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 30 Apr 2020 11:52:48 +0200
-Subject: [Buildroot] [PATCH 11/11] support/testing/tests: add test for file
- overwrite detection
-In-Reply-To: <20200430095249.782597-1-thomas.petazzoni@bootlin.com>
-References: <20200430095249.782597-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200430095249.782597-12-thomas.petazzoni@bootlin.com>
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Date: Thu, 30 Apr 2020 11:53:32 +0200
+Subject: [Buildroot] [PATCH] package/openlayers: bump to version 6.3.1
+Message-ID: <20200430095332.98544-1-thomas.claveirole@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 ---
- .gitlab-ci.yml                                |  2 +
- .../br2-external/detect-overwrite/Config.in   |  1 +
- .../detect-overwrite/external.desc            |  1 +
- .../br2-external/detect-overwrite/external.mk |  1 +
- .../package/detect-overwrite/Config.in        |  5 ++
- .../detect-overwrite/detect-overwrite.mk      | 19 ++++++++
- .../testing/tests/core/test_file_overwrite.py | 47 +++++++++++++++++++
- 7 files changed, 76 insertions(+)
- create mode 100644 support/testing/tests/core/br2-external/detect-overwrite/Config.in
- create mode 100644 support/testing/tests/core/br2-external/detect-overwrite/external.desc
- create mode 100644 support/testing/tests/core/br2-external/detect-overwrite/external.mk
- create mode 100644 support/testing/tests/core/br2-external/detect-overwrite/package/detect-overwrite/Config.in
- create mode 100644 support/testing/tests/core/br2-external/detect-overwrite/package/detect-overwrite/detect-overwrite.mk
- create mode 100644 support/testing/tests/core/test_file_overwrite.py
+ package/openlayers/openlayers.hash | 2 +-
+ package/openlayers/openlayers.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index dd69fb9d50..64266d8783 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -356,6 +356,8 @@ tests.boot.test_syslinux.TestSysLinuxX86_64EFI: { extends: .runtime_test }
- tests.boot.test_syslinux.TestSysLinuxX86_64LegacyBios: { extends: .runtime_test }
- tests.core.test_bad_arch.DetectBadArchTest: { extends: .runtime_test }
- tests.core.test_file_capabilities.TestFileCapabilities: { extends: .runtime_test }
-+tests.core.test_file_overwrite.DetectHostFileOverwriteTest: { extends: .runtime_test }
-+tests.core.test_file_overwrite.DetectTargetFileOverwriteTest: { extends: .runtime_test }
- tests.core.test_hardening.TestFortifyConserv: { extends: .runtime_test }
- tests.core.test_hardening.TestFortifyNone: { extends: .runtime_test }
- tests.core.test_hardening.TestRelro: { extends: .runtime_test }
-diff --git a/support/testing/tests/core/br2-external/detect-overwrite/Config.in b/support/testing/tests/core/br2-external/detect-overwrite/Config.in
-new file mode 100644
-index 0000000000..b5514510bd
---- /dev/null
-+++ b/support/testing/tests/core/br2-external/detect-overwrite/Config.in
-@@ -0,0 +1 @@
-+source "$BR2_EXTERNAL_DETECT_OVERWRITE_PATH/package/detect-overwrite/Config.in"
-diff --git a/support/testing/tests/core/br2-external/detect-overwrite/external.desc b/support/testing/tests/core/br2-external/detect-overwrite/external.desc
-new file mode 100644
-index 0000000000..6fedc276e8
---- /dev/null
-+++ b/support/testing/tests/core/br2-external/detect-overwrite/external.desc
-@@ -0,0 +1 @@
-+name: DETECT_OVERWRITE
-diff --git a/support/testing/tests/core/br2-external/detect-overwrite/external.mk b/support/testing/tests/core/br2-external/detect-overwrite/external.mk
-new file mode 100644
-index 0000000000..90927b33ef
---- /dev/null
-+++ b/support/testing/tests/core/br2-external/detect-overwrite/external.mk
-@@ -0,0 +1 @@
-+include $(sort $(wildcard $(BR2_EXTERNAL_DETECT_OVERWRITE_PATH)/package/*/*.mk))
-diff --git a/support/testing/tests/core/br2-external/detect-overwrite/package/detect-overwrite/Config.in b/support/testing/tests/core/br2-external/detect-overwrite/package/detect-overwrite/Config.in
-new file mode 100644
-index 0000000000..fff8b0320f
---- /dev/null
-+++ b/support/testing/tests/core/br2-external/detect-overwrite/package/detect-overwrite/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_DETECT_OVERWRITE
-+	bool "detect-overwrite"
-+
-+config BR2_PACKAGE_HOST_DETECT_OVERWRITE
-+	bool "host-detect-overwrite"
-diff --git a/support/testing/tests/core/br2-external/detect-overwrite/package/detect-overwrite/detect-overwrite.mk b/support/testing/tests/core/br2-external/detect-overwrite/package/detect-overwrite/detect-overwrite.mk
-new file mode 100644
-index 0000000000..c6df2a339d
---- /dev/null
-+++ b/support/testing/tests/core/br2-external/detect-overwrite/package/detect-overwrite/detect-overwrite.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# detect-overwrite
-+#
-+################################################################################
-+
-+define DETECT_OVERWRITE_INSTALL_TARGET_CMDS
-+	grep -q "^foo" $(TARGET_DIR)/etc/passwd || \
-+		echo "foo" >> $(TARGET_DIR)/etc/passwd
-+endef
-+
-+HOST_DETECT_OVERWRITE_DEPENDENCIES = host-pkgconf
-+
-+define HOST_DETECT_OVERWRITE_INSTALL_CMDS
-+	$(SED) 's/manipulating/tweaking/' $(HOST_DIR)/lib/pkgconfig/libpkgconf.pc
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
-diff --git a/support/testing/tests/core/test_file_overwrite.py b/support/testing/tests/core/test_file_overwrite.py
-new file mode 100644
-index 0000000000..526ed55e43
---- /dev/null
-+++ b/support/testing/tests/core/test_file_overwrite.py
-@@ -0,0 +1,47 @@
-+import infra
-+import infra.basetest
-+import subprocess
-+
-+
-+class DetectTargetFileOverwriteTest(infra.basetest.BRConfigTest):
-+    config = \
-+        infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        infra.basetest.MINIMAL_CONFIG + \
-+        """
-+        BR2_PER_PACKAGE_DIRECTORIES=y
-+        BR2_PACKAGE_DETECT_OVERWRITE=y
-+        """
-+    br2_external = [infra.filepath("tests/core/br2-external/detect-overwrite")]
-+
-+    def test_run(self):
-+        with self.assertRaises(SystemError):
-+            self.b.build()
-+        logf_path = infra.log_file_path(self.b.builddir, "build",
-+                                        infra.basetest.BRConfigTest.logtofile)
-+        if logf_path:
-+            s = './etc/passwd: FAILED'
-+            logf = open(logf_path, "r")
-+            ret = subprocess.call(["grep", "-q", s], stdin=logf)
-+            self.assertEqual(ret, 0)
-+
-+
-+class DetectHostFileOverwriteTest(infra.basetest.BRConfigTest):
-+    config = \
-+        infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        infra.basetest.MINIMAL_CONFIG + \
-+        """
-+        BR2_PER_PACKAGE_DIRECTORIES=y
-+        BR2_PACKAGE_HOST_DETECT_OVERWRITE=y
-+        """
-+    br2_external = [infra.filepath("tests/core/br2-external/detect-overwrite")]
-+
-+    def test_run(self):
-+        with self.assertRaises(SystemError):
-+            self.b.build()
-+        logf_path = infra.log_file_path(self.b.builddir, "build",
-+                                        infra.basetest.BRConfigTest.logtofile)
-+        if logf_path:
-+            s = './lib/pkgconfig/libpkgconf.pc: FAILED'
-+            logf = open(logf_path, "r")
-+            ret = subprocess.call(["grep", "-q", s], stdin=logf)
-+            self.assertEqual(ret, 0)
+diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
+index f1678507d7..e652fa2571 100644
+--- a/package/openlayers/openlayers.hash
++++ b/package/openlayers/openlayers.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	e133a2ad952f4a31002b1a3217f6b4b68bc9f02bcf6c0b9970638a2627887101	v6.2.1-dist.zip
++sha256	587ec16666e16abc5804b37ae11d3d6c14c3b51883cb2a2057191d1101da54b9	v6.3.1-dist.zip
+diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
+index 65a1fe00fa..ab2c8b371d 100644
+--- a/package/openlayers/openlayers.mk
++++ b/package/openlayers/openlayers.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENLAYERS_VERSION = 6.2.1
++OPENLAYERS_VERSION = 6.3.1
+ OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
+ OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
+ OPENLAYERS_LICENSE = BSD-2-Clause
 -- 
-2.25.4
+2.26.2
