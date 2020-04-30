@@ -1,122 +1,66 @@
-From: Thomas Huth <huth@tuxfamily.org>
-Date: Thu, 30 Apr 2020 08:54:45 +0200
-Subject: [Buildroot] [PATCH v3] package/xorcurses: new package
-Message-ID: <20200430065445.3482-1-huth@tuxfamily.org>
+From: Tom Marcuzzi <tom.marcuzzi@orolia.com>
+Date: Thu, 30 Apr 2020 10:07:36 +0200
+Subject: [Buildroot] [PATCH] package/php: add FFI support
+In-Reply-To: <20200429230502.1c5a65fa@windsurf.home>
+References: <20200428085601.15825-1-tom.marcuzzi@orolia.com>
+ <20200429230502.1c5a65fa@windsurf.home>
+Message-ID: <45c60d55-e45e-1c63-543b-10ca25e9455e@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-XorCurses is a remake of the 8-bit game 'Xor' by Astral Software.
-Your task is to roam around a series of mazes where you have to collect
-all blue masks before finding the exit. You have two 'shields' (players)
-and you can use either one at any time and switch between them. While
-the first level is simply a matter of navigation, the following levels
-introduce further objects like bombs and teleports, which have to be
-used right to solve the puzzles.
+On 4/29/20 11:05 PM, Thomas Petazzoni wrote:
+> Hello Tom,
+> 
+> On Tue, 28 Apr 2020 10:56:01 +0200
+> Tom Marcuzzi <tom.marcuzzi@orolia.com> wrote:
+> 
+>> ---
+>>   package/php/Config.ext | 6 ++++++
+>>   package/php/php.mk     | 5 +++++
+>>   2 files changed, 11 insertions(+)
+> 
+> Thanks, this looks good. Could you just resend with your Signed-off-by
+> added to the commit log ?
 
-Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+Signed-off-by: Tom Marcuzzi <tom.marcuzzi@orolia.com>
 ---
- v3:
- - Add entry to the DEVELOPERS file
- - Break some long lines into two
+  package/php/Config.ext | 6 ++++++
+  package/php/php.mk     | 5 +++++
+  2 files changed, 11 insertions(+)
 
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/xorcurses/Config.in      | 11 +++++++++++
- package/xorcurses/xorcurses.hash |  5 +++++
- package/xorcurses/xorcurses.mk   | 28 ++++++++++++++++++++++++++++
- 5 files changed, 46 insertions(+)
- create mode 100644 package/xorcurses/Config.in
- create mode 100644 package/xorcurses/xorcurses.hash
- create mode 100644 package/xorcurses/xorcurses.mk
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 66ee935cf0..fc28a523e1 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -425,4 +425,10 @@ config BR2_PACKAGE_PHP_EXT_XSL
+  	help
+  	  XSL transformation support
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cc72b288be..b9e405c2d4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2488,6 +2488,7 @@ F:	toolchain/
- 
- N:	Thomas Huth <huth@tuxfamily.org>
- F:	package/ascii-invaders/
-+F:	package/xorcurses/
- 
- N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- F:	arch/Config.in.arm
-diff --git a/package/Config.in b/package/Config.in
-index 53c8ce0e29..ae193967f5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -273,6 +273,7 @@ menu "Games"
- 	source "package/stella/Config.in"
- 	source "package/supertux/Config.in"
- 	source "package/supertuxkart/Config.in"
-+	source "package/xorcurses/Config.in"
- endmenu
- 
- menu "Graphic libraries and applications (graphic/text)"
-diff --git a/package/xorcurses/Config.in b/package/xorcurses/Config.in
-new file mode 100644
-index 0000000000..f0b1a7898c
---- /dev/null
-+++ b/package/xorcurses/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_XORCURSES
-+	bool "xorcurses"
-+	select BR2_PACKAGE_NCURSES
++config BR2_PACKAGE_PHP_EXT_FFI
++	bool "FFI"
++	select BR2_PACKAGE_LIBFFI
 +	help
-+	  XorCurses is a game remake of the 8-bit game 'Xor'. Your task
-+	  is to roam around a series of mazes where you have to collect
-+	  all blue masks before finding the exit. Note that the game
-+	  needs a terminal with colors, i.e. make sure that the TERM
-+	  environment variable is set to "linux" ("vt100" won't work).
++	  Foreign Function Interface support
 +
-+	  http://jwm-art.net/?p=XorCurses
-diff --git a/package/xorcurses/xorcurses.hash b/package/xorcurses/xorcurses.hash
-new file mode 100644
-index 0000000000..38c1c001c1
---- /dev/null
-+++ b/package/xorcurses/xorcurses.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha512 1782ebf6ae8798b32e0a8e5e20e6d0b44eb619f6e7f015735c6e86205bd545da108c36bff1c9cfc9e9b44dee8f90bacb9df70436991f57f51c2c87e94b3a4725  XorCurses-0.2.2.tar.bz2
+  endmenu
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 4d2f1b8f63..fd78b36b51 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -333,6 +333,11 @@ PHP_CONF_OPTS += \
+  PHP_DEPENDENCIES += jpeg libpng freetype zlib
+  endif
+
++ifeq ($(BR2_PACKAGE_PHP_EXT_FFI),y)
++PHP_CONF_OPTS += --with-ffi
++PHP_DEPENDENCIES += libffi
++endif
 +
-+# License information is only mentioned in the README file
-+sha512 1878313f74d10e97aea8560ca9b28981b7ccf83ade81275eb982684cea006bc55776b6d029d1eca7a7ae20756aed0cfb4f63424634e0b5ad15d052dca3d2eee9  README
-diff --git a/package/xorcurses/xorcurses.mk b/package/xorcurses/xorcurses.mk
-new file mode 100644
-index 0000000000..b6f4ce96f6
---- /dev/null
-+++ b/package/xorcurses/xorcurses.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# XorCurses
-+#
-+################################################################################
-+
-+XORCURSES_VERSION = 0.2.2
-+XORCURSES_SOURCE = XorCurses-$(XORCURSES_VERSION).tar.bz2
-+XORCURSES_SITE = http://www.jwm-art.net/art/archive
-+XORCURSES_DEPENDENCIES = ncurses
-+XORCURSES_LICENSE = GPL-3.0
-+XORCURSES_LICENSE_FILES = README
-+
-+define XORCURSES_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 \
-+			-DDATADIR='\"/usr/share/xorcurses\"' \
-+			-DVERSION='\"$(XORCURSES_VERSION)\"'"
-+endef
-+
-+define XORCURSES_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/xorcurses $(TARGET_DIR)/usr/bin/xorcurses
-+	mkdir -p $(TARGET_DIR)/usr/share/xorcurses/maps
-+	$(INSTALL) -D -m 0644 $(@D)/maps/*.xcm \
-+		$(TARGET_DIR)/usr/share/xorcurses/maps/
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.21.1
+  ifeq ($(BR2_PACKAGE_PHP_SAPI_FPM),y)
+  define PHP_INSTALL_INIT_SYSV
+  	$(INSTALL) -D -m 0755 $(@D)/sapi/fpm/init.d.php-fpm \
+--
+2.17.1
