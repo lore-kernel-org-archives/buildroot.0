@@ -1,83 +1,60 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Fri, 1 May 2020 12:18:52 -0500
-Subject: [Buildroot] [PATCH 1/1] package/ibm-sw-tpm2: fix patch to
- address musl builds
-In-Reply-To: <20200430194421.5530-1-vfazio@xes-inc.com>
-References: <20200430194421.5530-1-vfazio@xes-inc.com>
-Message-ID: <02b01d55-1e90-189b-7983-cd1e7122bb06@xes-inc.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  1 May 2020 20:19:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 20.0.6
+Message-ID: <20200501181922.181906-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Note, if we don't like this option i've also seen other packages do 
-something akin to:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-#if ULONG_MAX == 0xffffffff
-#define RADIX_BITS 32
-#elif ULONG_MAX == 0xffffffffffffffff
-#define RADIX_BITS 64
-#else
-#error "Unsupported radix size"
-#endif
-
-
-Vincent Fazio
-Embedded Software Engineer - Linux
-Extreme Engineering Solutions, Inc
-http://www.xes-inc.com
-
-On 4/30/20 2:44 PM, Vincent Fazio wrote:
-> From: Vincent Fazio <vfazio@gmail.com>
->
-> Previously, __WORDSIZE was being used to define RADIX_BITS.
->
-> __WORDSIZE is not defined consistently via limits.h across all libc
-> variants, so use LONG_BIT instead.
->
-> Fixes:
->
->    http://autobuild.buildroot.net/results/b5cb347a98dc64f77982633c0fc48d14030aa5b6/
->
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-> ---
->   ...TS.patch => 0001-Use-LONG_BIT-to-define-RADIX_BITS.patch} | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
->   rename package/ibm-sw-tpm2/{0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch => 0001-Use-LONG_BIT-to-define-RADIX_BITS.patch} (91%)
->
-> diff --git a/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch b/package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch
-> similarity index 91%
-> rename from package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch
-> rename to package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch
-> index a19160f68c..3a7e02ba7a 100644
-> --- a/package/ibm-sw-tpm2/0001-Use-__WORDSIZE-to-define-RADIX_BITS.patch
-> +++ b/package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch
-> @@ -1,12 +1,13 @@
->   From 24a352fc99ebde22235b05b18615817ef7f4263c Mon Sep 17 00:00:00 2001
->   From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->   Date: Sun, 26 Apr 2020 15:33:39 +0200
-> -Subject: [PATCH] Use __WORDSIZE to define RADIX_BITS
-> +Subject: [PATCH] Use LONG_BIT to define RADIX_BITS
->   
->   This allows to avoid having to support each CPU architecture
->   individually.
->   
->   Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +Signed-off-by: Vincent Fazio <vfazio@gmail.com>
->   ---
->    src/LibSupport.h | 17 +++--------------
->    1 file changed, 3 insertions(+), 14 deletions(-)
-> @@ -35,7 +36,7 @@ index b2e6a51..f064d20 100644
->   -#endif // RADIX_BITS
->   +#include <limits.h>
->   +
-> -+#define RADIX_BITS __WORDSIZE
-> ++#define RADIX_BITS LONG_BIT
->    
->    // These macros use the selected libraries to the proper include files.
->    #define LIB_QUOTE(_STRING_) #_STRING_
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200501/df20f264/attachment.html>
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index b12dad7bd0..c1686aa6fd 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 20.0.5
++MESA3D_HEADERS_VERSION = 20.0.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 598d59429b..dec022c1e9 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2020-April/000578.html
+-sha256  2c56a82a28cc924e40ea49752abdf1d701c9952481f53cbc7a080271597f572e  mesa-20.0.5.tar.xz
+-sha512  6f5780f7574400fea54978b40eb97faca35826a8a7bed96362d7bebcda78e2cadd44585ef8dd7dc126e0cc62cff61bee9b2ea360fedcc09a1fbb4c1f20c6aa08  mesa-20.0.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2020-April/000579.html
++sha256  30b5d8e9201a01a0e88e18bb79850e67b1d28443b34c4c5cacad4bd10f668b96  mesa-20.0.6.tar.xz
++sha512  a93dc3ed57ed7469b7c60cdbdcf4f29c5da4ec3986171c7b534e009e136ca21fec16207ffab38a6747437a9b1060e2e6c4b74c4e5cdc168b9aba0fc1940b5e90  mesa-20.0.6.tar.xz
+ 
+ # License
+ sha256  1ddae7da415352a5b5360ff3a9d7ecf23ba81408f62eeecce0011f32e3ef9da6  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index ab10194a6a..e1fc2511a2 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 20.0.5
++MESA3D_VERSION = 20.0.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.26.2
