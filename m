@@ -1,51 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 May 2020 15:50:28 +0200
-Subject: [Buildroot] [git commit] package/intel-micro-code: bear the kernel
+Date: Fri, 1 May 2020 15:50:29 +0200
+Subject: [Buildroot] [git commit] package/libselinux: bear the kernel
  options munging
-Message-ID: <20200501133530.DF14390D04@busybox.osuosl.org>
+Message-ID: <20200501133531.44C2E90D04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af43d0aa34ad515d60f7176f47f5268795c715eb
+commit: https://git.buildroot.net/buildroot/commit/?id=49bf417618a5c9699ebcdfde82f8cb9ccbd5a00a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Carlos Santos <unixmania@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Adam Duskett <aduskett@gmail.com>
+Tested-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/linux.mk                             | 3 ---
- package/intel-microcode/intel-microcode.mk | 5 +++++
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ linux/linux.mk                   |  8 --------
+ package/libselinux/libselinux.mk | 10 ++++++++++
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index e0a69444eb..25443c608e 100644
+index 71495de143..6e2006836e 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -355,9 +355,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NET))
--	$(if $(BR2_PACKAGE_INTEL_MICROCODE),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL))
- 	$(if $(BR2_PACKAGE_KTAP),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS)
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 0492ace69e..f3d05d5f58 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -27,4 +27,9 @@ else
- INTEL_MICROCODE_INSTALL_TARGET = NO
- endif
+@@ -370,14 +370,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_APPARMOR)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_APPARMOR))
+-	$(if $(BR2_PACKAGE_LIBSELINUX),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX))
+ 	$(PACKAGES_LINUX_CONFIG_FIXUPS)
+ endef
  
-+define INTEL_MICROCODE_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL)
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 258065b79d..d0e7b66241 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -103,5 +103,15 @@ define HOST_LIBSELINUX_INSTALL_CMDS
+ 		$(HOST_LIBSELINUX_MAKE_OPTS) install-pywrap
+ endef
+ 
++define LIBSELINUX_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX)
 +endef
 +
  $(eval $(generic-package))
+ $(eval $(host-generic-package))
