@@ -1,50 +1,223 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 May 2020 15:50:29 +0200
-Subject: [Buildroot] [git commit] package/sunxi-mali-mainline-driver: bear
- the kernel options munging
-Message-ID: <20200501133531.1D63590D04@busybox.osuosl.org>
+Date: Fri, 1 May 2020 15:50:28 +0200
+Subject: [Buildroot] [git commit] linux: don't specify .config to munge
+Message-ID: <20200501133530.C03AE90D04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b4a2bd8e402a3b0936cdc6094d93fb2a068a603
+commit: https://git.buildroot.net/buildroot/commit/?id=d321c092d3d2a753d371ea53c9159a5915010fc7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/linux.mk                                                   | 3 ---
- package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk | 5 +++++
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ linux/linux.mk | 148 ++++++++++++++++++++++++++++-----------------------------
+ 1 file changed, 74 insertions(+), 74 deletions(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index ca5dd692d7..8867be44f7 100644
+index 68c1121c4b..9a618db0e0 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -357,9 +357,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NET))
+@@ -304,40 +304,40 @@ LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
+ # option will be thrown away and ignored if it doesn't exist.
+ ifeq ($(BR2_ENDIAN),"BIG")
+ define LINUX_FIXUP_CONFIG_ENDIANNESS
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_CPU_BIG_ENDIAN,$(@D)/.config)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CPU_BIG_ENDIAN)
+ endef
+ else
+ define LINUX_FIXUP_CONFIG_ENDIANNESS
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_CPU_LITTLE_ENDIAN,$(@D)/.config)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CPU_LITTLE_ENDIAN)
+ endef
+ endif
+ 
+ define LINUX_KCONFIG_FIXUP_CMDS
+ 	$(if $(LINUX_NEEDS_MODULES),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_MODULES,$(@D)/.config))
+-	$(call KCONFIG_ENABLE_OPT,$(strip $(LINUX_COMPRESSION_OPT_y)),$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_MODULES))
++	$(call KCONFIG_ENABLE_OPT,$(strip $(LINUX_COMPRESSION_OPT_y)))
+ 	$(foreach opt, $(LINUX_COMPRESSION_OPT_),
+-		$(call KCONFIG_DISABLE_OPT,$(opt),$(@D)/.config)
++		$(call KCONFIG_DISABLE_OPT,$(opt))
+ 	)
+ 	$(LINUX_FIXUP_CONFIG_ENDIANNESS)
+ 	$(if $(BR2_arm)$(BR2_armeb),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI))
+ 	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR))
+ 	$(if $(BR2_ARC_PAGE_SIZE_4K),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K,$(@D)/.config)
+-		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K,$(@D)/.config)
+-		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K)
++		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K)
++		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K))
+ 	$(if $(BR2_ARC_PAGE_SIZE_8K),
+-		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K,$(@D)/.config)
+-		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K,$(@D)/.config))
++		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K)
++		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K))
+ 	$(if $(BR2_ARC_PAGE_SIZE_16K),
+-		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K,$(@D)/.config)
+-		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K,$(@D)/.config))
++		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_4K)
++		$(call KCONFIG_DISABLE_OPT,CONFIG_ARC_PAGE_SIZE_8K)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_ARC_PAGE_SIZE_16K))
+ 	$(if $(BR2_TARGET_ROOTFS_CPIO),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD))
+ 	# As the kernel gets compiled before root filesystems are
+ 	# built, we create a fake cpio file. It'll be
+ 	# replaced later by the real cpio archive, and the kernel will be
+@@ -345,82 +345,82 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
+ 		mkdir -p $(BINARIES_DIR)
+ 		touch $(BINARIES_DIR)/rootfs.cpio
+-		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
+-		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
+-		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
++		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio")
++		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0)
++		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NET))
+ 	$(if $(BR2_PACKAGE_AUDIT),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT))
+ 	$(if $(BR2_PACKAGE_INTEL_MICROCODE),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL))
+ 	$(if $(BR2_PACKAGE_KTAP),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER))
  	$(if $(BR2_PACKAGE_LINUX_TOOLS_PERF),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS))
--	$(if $(BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_CMA)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_DMA_CMA))
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS))
+ 	$(if $(BR2_PACKAGE_PCM_TOOLS),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_X86_MSR,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_X86_MSR))
+ 	$(if $(BR2_PACKAGE_SYSTEMD),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_XATTR,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_XATTR))
+ 	$(if $(BR2_PACKAGE_SMACK),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SMACK,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SMACK)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK))
+ 	$(if $(BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_CMA,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_DMA_CMA,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_CMA)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_DMA_CMA))
  	$(if $(BR2_PACKAGE_IPTABLES),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-index 0edcdee4d6..40ea450b31 100644
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-@@ -32,4 +32,9 @@ define SUNXI_MALI_MAINLINE_DRIVER_INSTALL_TARGET_CMDS
- 		$(SHELL) ./build.sh -r $(SUNXI_MALI_MAINLINE_REV) -j $(PARALLEL_JOBS) -i
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES))
+ 	$(if $(BR2_PACKAGE_XTABLES_ADDONS),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_NAT))
+ 	$(if $(BR2_PACKAGE_WIREGUARD_LINUX_COMPAT),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_INET,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NET_FOU,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MANAGER,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NET_FOU)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MANAGER))
+ 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB))
+ 	$(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
+-		$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV,$(@D)/.config))
++		$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV))
+ 	$(if $(LINUX_KERNEL_CUSTOM_LOGO_PATH),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_FB,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_FB)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224))
+ 	$(if $(BR2_PACKAGE_LIBAPPARMOR),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_APPARMOR,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_APPARMOR,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_APPARMOR)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_APPARMOR))
+ 	$(if $(BR2_PACKAGE_LIBSELINUX),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_INET,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX,$(@D)/.config))
++		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_SECURITY_SELINUX)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX))
  endef
  
-+define SUNXI_MALI_MAINLINE_DRIVER_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CMA)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_DMA_CMA)
-+endef
-+
- $(eval $(generic-package))
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
