@@ -1,73 +1,59 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  1 May 2020 12:50:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: fix build without C++
-Message-ID: <20200501105024.2170906-1-fontaine.fabrice@gmail.com>
+Date: Fri,  1 May 2020 14:05:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jbig2dec: security bump to version
+ 0.18
+Message-ID: <20200501120507.2197851-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/831ecc34b51ee2be82a3c25f5ec94f0dd2103655
+- Fix CVE-2020-12268: jbig2_image_compose in jbig2_image.c in Artifex
+  jbig2dec before 0.18 has a heap-based buffer overflow.
+- Add JBIG2DEC_AUTORECONF=YES otherwise build will fail because
+  install-sh has been removed from the tarball
+- Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...X-language-to-support-using-Generate.patch | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/paho-mqtt-c/0002-Revert-Enable-CXX-language-to-support-using-Generate.patch
+ package/jbig2dec/jbig2dec.hash | 6 +++---
+ package/jbig2dec/jbig2dec.mk   | 6 ++++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/paho-mqtt-c/0002-Revert-Enable-CXX-language-to-support-using-Generate.patch b/package/paho-mqtt-c/0002-Revert-Enable-CXX-language-to-support-using-Generate.patch
-new file mode 100644
-index 0000000000..ee4c2307ef
---- /dev/null
-+++ b/package/paho-mqtt-c/0002-Revert-Enable-CXX-language-to-support-using-Generate.patch
-@@ -0,0 +1,46 @@
-+From 342b3824d261f552a7be5dac7a242c263d9b9fd4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 1 May 2020 12:41:59 +0200
-+Subject: [PATCH] Revert "Enable CXX language to support using
-+ GenerateExportHeader"
-+
-+This reverts commit 23d68e8c798d29309a277fb3c869c23f9cac2bbf. Indeed,
-+GenerateExportHeader has been removed with commit
-+db5a2c216b122c57dc281aea2f3b7afa210dc0fc and ENABLE_LANGUAGE(CXX) will
-+raise the following build failure if no C++ compiler is found:
-+
-+CMake Error at CMakeLists.txt:34 (ENABLE_LANGUAGE):
-+  The CMAKE_CXX_COMPILER:
-+
-+    /home/buildroot/autobuild/instance-1/output-1/host/bin/arm-linux-g++
-+
-+  is not a full path to an existing compiler tool.
-+
-+  Tell CMake where to find the compiler by setting either the environment
-+  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
-+  to the compiler, or to the compiler name if it is in the PATH.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/831ecc34b51ee2be82a3c25f5ec94f0dd2103655
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/eclipse/paho.mqtt.c/pull/872]
-+---
-+ CMakeLists.txt | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index c52a42e..a290730 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -31,7 +31,6 @@ file(READ version.minor PAHO_VERSION_MINOR)
-+ file(READ version.patch PAHO_VERSION_PATCH)
-+ SET(CLIENT_VERSION ${PAHO_VERSION_MAJOR}.${PAHO_VERSION_MINOR}.${PAHO_VERSION_PATCH})
-+ 
-+-ENABLE_LANGUAGE(CXX)
-+ INCLUDE(GNUInstallDirs)
-+ 
-+ STRING(TIMESTAMP BUILD_TIMESTAMP UTC)
-+-- 
-+2.26.2
-+
+diff --git a/package/jbig2dec/jbig2dec.hash b/package/jbig2dec/jbig2dec.hash
+index eb2b674443..86584b19a6 100644
+--- a/package/jbig2dec/jbig2dec.hash
++++ b/package/jbig2dec/jbig2dec.hash
+@@ -1,7 +1,7 @@
+-# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/MD5SUMS
++# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/MD5SUMS
+ # and SHA512SUMS are missing the hashes for this file.
+ # Locally computed:
+-sha256 a4f6bf15d217e7816aa61b92971597c801e81f0a63f9fe1daee60fb88e0f0602  jbig2dec-0.16.tar.gz
++sha256  9e19775237350e299c422b7b91b0c045e90ffa4ba66abf28c8fb5eb005772f5e  jbig2dec-0.18.tar.gz
+ 
+ # Hash for license files:
+-sha256 1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
++sha256  1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
+diff --git a/package/jbig2dec/jbig2dec.mk b/package/jbig2dec/jbig2dec.mk
+index 5ac5b87a72..08ef89bfcb 100644
+--- a/package/jbig2dec/jbig2dec.mk
++++ b/package/jbig2dec/jbig2dec.mk
+@@ -4,10 +4,12 @@
+ #
+ ################################################################################
+ 
+-JBIG2DEC_VERSION = 0.16
+-JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927
++JBIG2DEC_VERSION = 0.18
++JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952
+ JBIG2DEC_LICENSE = AGPL-3.0+
+ JBIG2DEC_LICENSE_FILES = LICENSE
+ JBIG2DEC_INSTALL_STAGING = YES
++# tarball is missing install-sh, install.sh, or shtool
++JBIG2DEC_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
 -- 
 2.26.2
