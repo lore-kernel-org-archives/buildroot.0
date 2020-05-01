@@ -1,59 +1,100 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 14:41:34 +0200
-Subject: [Buildroot] [PATCH] package/wolfssl: bump version to 4.4.0
-In-Reply-To: <20200501101305.3066-1-sergio.prado@e-labworks.com>
-References: <20200501101305.3066-1-sergio.prado@e-labworks.com>
-Message-ID: <20200501124134.GX11346@scaer>
+Date: Fri, 1 May 2020 14:50:26 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/ghostscript: add cups support
+In-Reply-To: <20200501082617.14510-1-skif@skif-web.ru>
+References: <20200501082617.14510-1-skif@skif-web.ru>
+Message-ID: <20200501125026.GY11346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergio, All,
+Alexey, All,
 
-On 2020-05-01 07:13 -0300, Sergio Prado spake thusly:
-> Also change the hash file to separate the fields by two spaces.
+On 2020-05-01 11:26 +0300, Alexey Lukyanchuk spake thusly:
+> Ghostscript can be used for cups printing.
 > 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> In current version it's disabled, but may be needed for some customers.
+> 
+> This patch add cups support if cups enabled.
+> Also patch fix configure.ac for cross-compilation.
 
-Applied to master, thanks.
+
+
+> Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+> 
+> ---
+> Changes v1 -> v2:
+>  - use $(STAGING_DIR) for GHOSTSCRIPT_CUPS_CONFIG_FIX
+> ---
+>  .../ghostscript/0002-add-cups-support.patch   | 54 +++++++++++++++++++
+>  package/ghostscript/ghostscript.mk            | 13 +++++
+>  2 files changed, 67 insertions(+)
+>  create mode 100644 package/ghostscript/0002-add-cups-support.patch
+> 
+> diff --git a/package/ghostscript/0002-add-cups-support.patch b/package/ghostscript/0002-add-cups-support.patch
+> new file mode 100644
+> index 0000000000..262a06c102
+> --- /dev/null
+> +++ b/package/ghostscript/0002-add-cups-support.patch
+
+This patch must have a subject and a commit log, and must bear your SoB
+line as well. And sicne ghostscript is hosted in a git repository, thios
+patch should be a proper git commit exported with 'git format-patch'.
+
+[--SNIP--]
+> +@@ -1473,7 +1443,6 @@
+> +                 else
+> +                   CUPSDATA="`$CUPSCONFIG --datadir`"
+> +                 fi
+> +-
+
+This hunk is most probably useless...
+
+> +                 CUPSINCLUDE="include $srcdir/cups/cups.mak"
+> +                 CUPSDEV="cups"
+> + 
+> diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+> index 1d6f8d04a0..b515d8987a 100644
+> --- a/package/ghostscript/ghostscript.mk
+> +++ b/package/ghostscript/ghostscript.mk
+> @@ -10,6 +10,7 @@ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+>  GHOSTSCRIPT_LICENSE = AGPL-3.0
+>  GHOSTSCRIPT_LICENSE_FILES = LICENSE
+>  # 0001-Fix-cross-compilation-issue.patch
+> +GHOSTSCRIPT_INSTALL_STAGING = YES
+>  GHOSTSCRIPT_AUTORECONF = YES
+>  GHOSTSCRIPT_DEPENDENCIES = \
+>  	host-lcms2 \
+> @@ -68,6 +69,18 @@ else
+>  GHOSTSCRIPT_CONF_OPTS += --disable-openjpeg
+>  endif
+>  
+> +define GHOSTSCRIPT_CUPS_CONFIG_FIX
+> +cp $(STAGING_DIR)/usr/bin/cups-config  $(HOST_DIR)/usr/bin/
+> +endef
+
+You must not do that; instead pass:
+
+    GHOSTSCRIPT_CONF_OPTS += \
+        CUPSCONFIG=$(STAGING_DIR)/usr/bin/cups-config \
+        --enable-cups
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/wolfssl/wolfssl.hash | 6 +++---
->  package/wolfssl/wolfssl.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-> index 5509552ca4e3..4a1aeebe7d71 100644
-> --- a/package/wolfssl/wolfssl.hash
-> +++ b/package/wolfssl/wolfssl.hash
-> @@ -1,6 +1,6 @@
->  # Locally computed:
-> -sha256 6896f8ad6c44aff3e583006eeee839600848a0e37118ebbb7514eca9409ae08b  wolfssl-4.3.0-stable.tar.gz
-> +sha256  7f854804c8ae0ca49cc77809e38e9a3b5a8c91ba7855ea928e6d6651b0d35f18  wolfssl-4.4.0-stable.tar.gz
->  
->  # Hash for license files:
-> -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> -sha256 74adaaef40b96c71378b6daa3feb8ccd4a1bfd9b76debf3f3f29cf3a0e86c9a0  LICENSING
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> +sha256  74adaaef40b96c71378b6daa3feb8ccd4a1bfd9b76debf3f3f29cf3a0e86c9a0  LICENSING
-> diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-> index 8834a0f46826..e3062c39b599 100644
-> --- a/package/wolfssl/wolfssl.mk
-> +++ b/package/wolfssl/wolfssl.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -WOLFSSL_VERSION = 4.3.0-stable
-> +WOLFSSL_VERSION = 4.4.0-stable
->  WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION))
->  WOLFSSL_INSTALL_STAGING = YES
->  
+> +ifeq ($(BR2_PACKAGE_CUPS),y)
+> +GHOSTSCRIPT_DEPENDENCIES += cups
+> +GHOSTSCRIPT_PRE_CONFIGURE_HOOKS += GHOSTSCRIPT_CUPS_CONFIG_FIX
+> +GHOSTSCRIPT_CONF_OPTS += --enable-cups
+> +else
+> +GHOSTSCRIPT_CONF_OPTS += --disable-cups
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+>  GHOSTSCRIPT_DEPENDENCIES += xlib_libX11
+>  GHOSTSCRIPT_CONF_OPTS += --with-x
 > -- 
 > 2.17.1
 > 
