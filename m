@@ -1,65 +1,178 @@
-From: Michele C. <comick@gmail.com>
-Date: Fri, 1 May 2020 22:31:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: enable gnutls if selected
-In-Reply-To: <20200501192302.GB3687@scaer>
-References: <3b8dd3bb-8ae8-3c7b-2e79-b3f7dc111c12@gmail.com>
- <20200501192302.GB3687@scaer>
-Message-ID: <ce712012-ee24-45c4-d4e0-915033c12f53@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 May 2020 22:44:41 +0200
+Subject: [Buildroot] [PATCH 05/11] package/pkg-generic.mk: rework
+ pkg_size logic with the "installed" step
+In-Reply-To: <20200430095249.782597-6-thomas.petazzoni@bootlin.com>
+References: <20200430095249.782597-1-thomas.petazzoni@bootlin.com>
+ <20200430095249.782597-6-thomas.petazzoni@bootlin.com>
+Message-ID: <20200501204441.GA15673@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks! Will go for git send-email next time.
+On 2020-04-30 11:52 +0200, Thomas Petazzoni spake thusly:
+> This commits reworks the pkg_size logic to no longer use the
+> GLOBAL_INSTRUMENTATION_HOOKS mechanism, but instead be directly
+> implemented within the configure step and install step.
+> 
+> The problem with the current implementation in the
+> GLOBAL_INSTRUMENTATION_HOOKS is that we only capture what is installed
+> in $(HOST_DIR) during the "host installation step", what is installed
+> in $(TARGET_DIR) during the "target installation step" and what is
+> installed in "$(STAGING_DIR)" during the staging installation step.
+> 
+> While this seems reasonable in principle, it is in fact not completely
+> true. For example, "toolchain", which is a target package, installs
+> tons of files in $(HOST_DIR). "qt5base", which is also a target
+> package, also installs things in $(HOST_DIR). Same with the "syslinux"
+> package.
+> 
+> The idea behind this patch is pretty simple:
+> 
+>  - At the beginning of the configure step, right after the per-package
+>    directories have been populated (if BR2_PER_PACKAGE_DIRECTORIES=y),
+>    we capture the state of the HOST_DIR, TARGET_DIR and STAGING_DIR.
+> 
+>  - At the end of all install steps (which is possible thanks to the
+>    newly introduced "install" step), we capture again the state of
+>    HOST_DIR, TARGET_DIR and STAGING_DIR, and compare it to what we
+>    have saved at the configure step.
+
+I don't understand wy tht can't be achieved in the instrumentation hooks
+mechanism:
+
+    $(if $(filter start-configure,$(1)-$(2)),\
+        $(call step_pkg_size_before,$(TARGET_DIR))\
+        $(call step_pkg_size_before,$(STAGING_DIR),-staging)\
+        $(call step_pkg_size_before,$(HOST_DIR),-host))
+
+    $(if $(filter end-install,$(1)-$(2)),\
+        $(call step_pkg_size_after,$(TARGET_DIR))\
+        $(call step_pkg_size_after,$(STAGING_DIR),-staging)\
+        $(call step_pkg_size_after,$(HOST_DIR),-host))
+
+Of course, it means you have to add a call the instrumentation hooks
+from the new 'install' step.
+
+> So regardless of whether a file has been installed in $(HOST_DIR)
+> during the target or staging installation steps of a target package,
+> or if a host package has installed a file in $(TARGET_DIR), we will
+> detect it.
+> 
+> The pkg_size_before and pkg_size_after macros are intentionally left
+> where they are (even if they now fall in the middle of the
+> GLOBAL_INSTRUMENTATION_HOOKS implementations) to minimize the diffstat
+> and facilitate review.
+> 
+> Note that we also have to change check_bin_arch to be explicitly
+> called from the install step rather than through a
+> GLOBAL_INSTRUMENTATION_HOOKS as it depends on the .files-list.txt file
+> produced by the pkg_size_after function.
+
+And that would solve this as well.
 
 Regards,
-Michele
+Yann E. MORIN.
 
-Il 01/05/20 21:23, Yann E. MORIN ha scritto:
-> Michele, All,
->
-> On 2020-05-01 18:50 +0200, Michele Comignano spake thusly:
->>  From 6a9cccb28174dc25a3f74bc3a33b0e13eecbfd6e Mon Sep 17 00:00:00 2001
->> From: Michele Comignano <comick@gmail.com>
->> Date: Wed, 8 Apr 2020 21:48:33 +0200
->> Subject: [PATCH 1/1] package/vlc: enable gnutls if selected
->>
->> Signed-off-by: Michele Comignano <comick@gmail.com>
-> Applied to master, thanks!
->
-> MNote: your patch was weirdly formatted; be sure to use 'git send-email'
-> to send your patches, as this prepares correct mails.
->
-> Regards,
-> Yann E. MORIN.
->
->> ---
->>   package/vlc/vlc.mk | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
->> index 4b1cd68d8b..1f2af878eb 100644
->> --- a/package/vlc/vlc.mk
->> +++ b/package/vlc/vlc.mk
->> @@ -567,4 +567,11 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
->>   VLC_DEPENDENCIES += zlib
->>   endif
->>   
->> +ifeq ($(BR2_PACKAGE_GNUTLS),y)
->> +VLC_CONF_OPTS += --enable-gnutls
->> +VLC_DEPENDENCIES += gnutls
->> +else
->> +VLC_CONF_OPTS += --disable-gnutls
->> +endif
->> +
->>   $(eval $(autotools-package))
->> -- 
->> 2.17.1
->>
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/pkg-generic.mk | 42 ++++++++++++++----------------------------
+>  1 file changed, 14 insertions(+), 28 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index efdc32e355..3fb1e5f8c3 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -59,7 +59,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+>  
+>  # $(1): base directory to search in
+>  # $(2): suffix of file (optional)
+> -define step_pkg_size_before
+> +define pkg_size_before
+>  	cd $(1); \
+>  	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+>  		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).before
+> @@ -67,7 +67,7 @@ endef
+>  
+>  # $(1): base directory to search in
+>  # $(2): suffix of file (optional)
+> -define step_pkg_size_after
+> +define pkg_size_after
+>  	cd $(1); \
+>  	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+>  		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after
+> @@ -80,35 +80,14 @@ define step_pkg_size_after
+>  	rm -f $($(PKG)_DIR)/.files-list$(2).after
+>  endef
+>  
+> -define step_pkg_size
+> -	$(if $(filter start-install-target,$(1)-$(2)),\
+> -		$(call step_pkg_size_before,$(TARGET_DIR)))
+> -	$(if $(filter start-install-staging,$(1)-$(2)),\
+> -		$(call step_pkg_size_before,$(STAGING_DIR),-staging))
+> -	$(if $(filter start-install-host,$(1)-$(2)),\
+> -		$(call step_pkg_size_before,$(HOST_DIR),-host))
+> -
+> -	$(if $(filter end-install-target,$(1)-$(2)),\
+> -		$(call step_pkg_size_after,$(TARGET_DIR)))
+> -	$(if $(filter end-install-staging,$(1)-$(2)),\
+> -		$(call step_pkg_size_after,$(STAGING_DIR),-staging))
+> -	$(if $(filter end-install-host,$(1)-$(2)),\
+> -		$(call step_pkg_size_after,$(HOST_DIR),-host))
+> -endef
+> -GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
+> -
+> -# Relies on step_pkg_size, so must be after
+>  define check_bin_arch
+> -	$(if $(filter end-install-target,$(1)-$(2)),\
+> -		support/scripts/check-bin-arch -p $(3) \
+> -			-l $($(PKG)_DIR)/.files-list.txt \
+> -			$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
+> -			-r $(TARGET_READELF) \
+> -			-a $(BR2_READELF_ARCH_NAME))
+> +	support/scripts/check-bin-arch -p $($(PKG)_NAME) \
+> +		-l $($(PKG)_DIR)/.files-list.txt \
+> +		$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
+> +		-r $(TARGET_READELF) \
+> +		-a $(BR2_READELF_ARCH_NAME)
+>  endef
+>  
+> -GLOBAL_INSTRUMENTATION_HOOKS += check_bin_arch
+> -
+>  # This hook checks that host packages that need libraries that we build
+>  # have a proper DT_RPATH or DT_RUNPATH tag
+>  define check_host_rpath
+> @@ -253,6 +232,9 @@ $(BUILD_DIR)/%/.stamp_configured:
+>  	@$(call step_start,configure)
+>  	@$(call MESSAGE,"Configuring")
+>  	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
+> +	@$(call pkg_size_before,$(TARGET_DIR))
+> +	@$(call pkg_size_before,$(STAGING_DIR),-staging)
+> +	@$(call pkg_size_before,$(HOST_DIR),-host)
+>  	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
+>  	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+>  	$($(PKG)_CONFIGURE_CMDS)
+> @@ -374,6 +356,10 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+>  # Final installation step, completed when all installation steps
+>  # (host, images, staging, target) have completed
+>  $(BUILD_DIR)/%/.stamp_installed:
+> +	@$(call pkg_size_after,$(TARGET_DIR))
+> +	@$(call pkg_size_after,$(STAGING_DIR),-staging)
+> +	@$(call pkg_size_after,$(HOST_DIR),-host)
+> +	@$(call check_bin_arch)
+>  	$(Q)touch $@
+>  
+>  # Remove package sources
+> -- 
+> 2.25.4
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
