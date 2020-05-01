@@ -1,68 +1,444 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 21:23:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: enable gnutls if selected
-In-Reply-To: <3b8dd3bb-8ae8-3c7b-2e79-b3f7dc111c12@gmail.com>
-References: <3b8dd3bb-8ae8-3c7b-2e79-b3f7dc111c12@gmail.com>
-Message-ID: <20200501192302.GB3687@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 1 May 2020 21:25:21 +0200
+Subject: [Buildroot] [PATCH] package/binutils: fix XTENSA_NDIFF handling
+ for PR ld/25861
+In-Reply-To: <20200430050822.32017-1-jcmvbkbc@gmail.com>
+References: <20200430050822.32017-1-jcmvbkbc@gmail.com>
+Message-ID: <bfdb477a-cf89-21d4-c42c-e5a405b2edf3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michele, All,
+Hi Max,
 
-On 2020-05-01 18:50 +0200, Michele Comignano spake thusly:
-> From 6a9cccb28174dc25a3f74bc3a33b0e13eecbfd6e Mon Sep 17 00:00:00 2001
-> From: Michele Comignano <comick@gmail.com>
-> Date: Wed, 8 Apr 2020 21:48:33 +0200
-> Subject: [PATCH 1/1] package/vlc: enable gnutls if selected
+Le 30/04/2020 ? 07:08, Max Filippov a ?crit?:
+> Fix for xtensa PR ld/25861 introduced a regression in handling negative
+> symbol differences resulting in linker performing incorrect relaxation
+> or failing to link. Fix XTENSA_NDIFF relocation handling.
 > 
-> Signed-off-by: Michele Comignano <comick@gmail.com>
+> Backported from:
+> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=d548f47df4d2e3d117d504a4c9977982c78a0556
+> 
+> Fixes: f0291ef4aba0 ("package/binutils: fix xtensa PR ld/25861")
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 
-Applied to master, thanks!
+Tested-by: Romain Naour <romain.naour@gmail.com>
 
-MNote: your patch was weirdly formatted; be sure to use 'git send-email'
-to send your patches, as this prepares correct mails.
+Best regards,
+Romain
 
-Regards,
-Yann E. MORIN.
 
 > ---
->  package/vlc/vlc.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  ...TENSA_NDIFF-handling-for-PR-ld-25861.patch | 128 ++++++++++++++++++
+>  ...TENSA_NDIFF-handling-for-PR-ld-25861.patch | 128 ++++++++++++++++++
+>  ...TENSA_NDIFF-handling-for-PR-ld-25861.patch | 128 ++++++++++++++++++
+>  3 files changed, 384 insertions(+)
+>  create mode 100644 package/binutils/2.31.1/0020-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+>  create mode 100644 package/binutils/2.32/0009-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+>  create mode 100644 package/binutils/2.33.1/0006-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
 > 
-> diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-> index 4b1cd68d8b..1f2af878eb 100644
-> --- a/package/vlc/vlc.mk
-> +++ b/package/vlc/vlc.mk
-> @@ -567,4 +567,11 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
->  VLC_DEPENDENCIES += zlib
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_GNUTLS),y)
-> +VLC_CONF_OPTS += --enable-gnutls
-> +VLC_DEPENDENCIES += gnutls
-> +else
-> +VLC_CONF_OPTS += --disable-gnutls
-> +endif
+> diff --git a/package/binutils/2.31.1/0020-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch b/package/binutils/2.31.1/0020-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+> new file mode 100644
+> index 000000000000..ebb08fd7dffe
+> --- /dev/null
+> +++ b/package/binutils/2.31.1/0020-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+> @@ -0,0 +1,128 @@
+> +From 735321812435ae278d3766a3371f55937dc776d6 Mon Sep 17 00:00:00 2001
+> +From: Max Filippov <jcmvbkbc@gmail.com>
+> +Date: Sat, 25 Apr 2020 00:40:25 -0700
+> +Subject: [PATCH] xtensa: fix XTENSA_NDIFF handling for PR ld/25861
 > +
->  $(eval $(autotools-package))
-> -- 
-> 2.17.1
+> +Fields marked with XTENSA_NDIFF relocations are not negated, they only
+> +have sign bits removed. Don't negate their values when relaxation is
+> +performed. Don't add sign bits when the value is zero. Report overflow
+> +when the result has negative sign but all significant bits are zero.
+> +
+> +2020-04-29  Max Filippov  <jcmvbkbc@gmail.com>
+> +bfd/
+> +	* elf32-xtensa.c (relax_section): Don't negate diff_value for
+> +	XTENSA_NDIFF relocations. Don't add sign bits whe diff_value
+> +	equals 0. Report overflow when the result has negative sign but
+> +	all significant bits are zero.
+> +
+> +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> +---
+> +Backported from: d548f47df4d2e3d117d504a4c9977982c78a0556
+> +
+> + bfd/elf32-xtensa.c                   | 26 +++++++++++++++-----------
+> + 1 file changed, 15 insertions(+), 11 deletions(-)
+> +
+> +diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+> +index fded42d52a9a..4327b027911f 100644
+> +--- a/bfd/elf32-xtensa.c
+> ++++ b/bfd/elf32-xtensa.c
+> +@@ -9670,37 +9670,44 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+> + 		  switch (r_type)
+> + 		    {
+> + 		    case R_XTENSA_DIFF8:
+> ++		      diff_mask = 0x7f;
+> + 		      diff_value =
+> + 			bfd_get_signed_8 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_DIFF16:
+> ++		      diff_mask = 0x7fff;
+> + 		      diff_value =
+> + 			bfd_get_signed_16 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_DIFF32:
+> ++		      diff_mask = 0x7fffffff;
+> + 		      diff_value =
+> + 			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF8:
+> + 		    case R_XTENSA_NDIFF8:
+> ++		      diff_mask = 0xff;
+> + 		      diff_value =
+> + 			bfd_get_8 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF16:
+> + 		    case R_XTENSA_NDIFF16:
+> ++		      diff_mask = 0xffff;
+> + 		      diff_value =
+> + 			bfd_get_16 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF32:
+> + 		    case R_XTENSA_NDIFF32:
+> ++		      diff_mask = 0xffffffff;
+> + 		      diff_value =
+> + 			bfd_get_32 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    }
+> + 
+> + 		  if (r_type >= R_XTENSA_NDIFF8
+> +-		      && r_type <= R_XTENSA_NDIFF32)
+> +-		    diff_value = -diff_value;
+> ++		      && r_type <= R_XTENSA_NDIFF32
+> ++		      && diff_value)
+> ++		    diff_value |= ~diff_mask;
+> + 
+> + 		  new_end_offset = offset_with_removed_text_map
+> + 		    (&target_relax_info->action_list,
+> +@@ -9710,43 +9717,40 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+> + 		  switch (r_type)
+> + 		    {
+> + 		    case R_XTENSA_DIFF8:
+> +-		      diff_mask = 0x7f;
+> + 		      bfd_put_signed_8 (abfd, diff_value,
+> + 				 &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_DIFF16:
+> +-		      diff_mask = 0x7fff;
+> + 		      bfd_put_signed_16 (abfd, diff_value,
+> + 				  &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_DIFF32:
+> +-		      diff_mask = 0x7fffffff;
+> + 		      bfd_put_signed_32 (abfd, diff_value,
+> + 				  &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF8:
+> + 		    case R_XTENSA_NDIFF8:
+> +-		      diff_mask = 0xff;
+> + 		      bfd_put_8 (abfd, diff_value,
+> + 				 &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF16:
+> + 		    case R_XTENSA_NDIFF16:
+> +-		      diff_mask = 0xffff;
+> + 		      bfd_put_16 (abfd, diff_value,
+> + 				  &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF32:
+> + 		    case R_XTENSA_NDIFF32:
+> +-		      diff_mask = 0xffffffff;
+> + 		      bfd_put_32 (abfd, diff_value,
+> + 				  &contents[old_source_offset]);
+> + 		      break;
+> + 		    }
+> + 
+> +-		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+> +-		  if ((diff_value & ~diff_mask) != 0 &&
+> +-		      (diff_value & ~diff_mask) != (-1 & ~diff_mask))
+> ++		  /* Check for overflow. Sign bits must be all zeroes or
+> ++		     all ones.  When sign bits are all ones diff_value
+> ++		     may not be zero.  */
+> ++		  if (((diff_value & ~diff_mask) != 0
+> ++		       && (diff_value & ~diff_mask) != ~diff_mask)
+> ++		      || (diff_value && (bfd_vma) diff_value == ~diff_mask))
+> + 		    {
+> + 		      (*link_info->callbacks->reloc_dangerous)
+> + 			(link_info, _("overflow after relaxation"),
+> +-- 
+> +2.20.1
+> +
+> diff --git a/package/binutils/2.32/0009-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch b/package/binutils/2.32/0009-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+> new file mode 100644
+> index 000000000000..ebb08fd7dffe
+> --- /dev/null
+> +++ b/package/binutils/2.32/0009-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+> @@ -0,0 +1,128 @@
+> +From 735321812435ae278d3766a3371f55937dc776d6 Mon Sep 17 00:00:00 2001
+> +From: Max Filippov <jcmvbkbc@gmail.com>
+> +Date: Sat, 25 Apr 2020 00:40:25 -0700
+> +Subject: [PATCH] xtensa: fix XTENSA_NDIFF handling for PR ld/25861
+> +
+> +Fields marked with XTENSA_NDIFF relocations are not negated, they only
+> +have sign bits removed. Don't negate their values when relaxation is
+> +performed. Don't add sign bits when the value is zero. Report overflow
+> +when the result has negative sign but all significant bits are zero.
+> +
+> +2020-04-29  Max Filippov  <jcmvbkbc@gmail.com>
+> +bfd/
+> +	* elf32-xtensa.c (relax_section): Don't negate diff_value for
+> +	XTENSA_NDIFF relocations. Don't add sign bits whe diff_value
+> +	equals 0. Report overflow when the result has negative sign but
+> +	all significant bits are zero.
+> +
+> +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> +---
+> +Backported from: d548f47df4d2e3d117d504a4c9977982c78a0556
+> +
+> + bfd/elf32-xtensa.c                   | 26 +++++++++++++++-----------
+> + 1 file changed, 15 insertions(+), 11 deletions(-)
+> +
+> +diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+> +index fded42d52a9a..4327b027911f 100644
+> +--- a/bfd/elf32-xtensa.c
+> ++++ b/bfd/elf32-xtensa.c
+> +@@ -9670,37 +9670,44 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+> + 		  switch (r_type)
+> + 		    {
+> + 		    case R_XTENSA_DIFF8:
+> ++		      diff_mask = 0x7f;
+> + 		      diff_value =
+> + 			bfd_get_signed_8 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_DIFF16:
+> ++		      diff_mask = 0x7fff;
+> + 		      diff_value =
+> + 			bfd_get_signed_16 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_DIFF32:
+> ++		      diff_mask = 0x7fffffff;
+> + 		      diff_value =
+> + 			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF8:
+> + 		    case R_XTENSA_NDIFF8:
+> ++		      diff_mask = 0xff;
+> + 		      diff_value =
+> + 			bfd_get_8 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF16:
+> + 		    case R_XTENSA_NDIFF16:
+> ++		      diff_mask = 0xffff;
+> + 		      diff_value =
+> + 			bfd_get_16 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF32:
+> + 		    case R_XTENSA_NDIFF32:
+> ++		      diff_mask = 0xffffffff;
+> + 		      diff_value =
+> + 			bfd_get_32 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    }
+> + 
+> + 		  if (r_type >= R_XTENSA_NDIFF8
+> +-		      && r_type <= R_XTENSA_NDIFF32)
+> +-		    diff_value = -diff_value;
+> ++		      && r_type <= R_XTENSA_NDIFF32
+> ++		      && diff_value)
+> ++		    diff_value |= ~diff_mask;
+> + 
+> + 		  new_end_offset = offset_with_removed_text_map
+> + 		    (&target_relax_info->action_list,
+> +@@ -9710,43 +9717,40 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+> + 		  switch (r_type)
+> + 		    {
+> + 		    case R_XTENSA_DIFF8:
+> +-		      diff_mask = 0x7f;
+> + 		      bfd_put_signed_8 (abfd, diff_value,
+> + 				 &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_DIFF16:
+> +-		      diff_mask = 0x7fff;
+> + 		      bfd_put_signed_16 (abfd, diff_value,
+> + 				  &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_DIFF32:
+> +-		      diff_mask = 0x7fffffff;
+> + 		      bfd_put_signed_32 (abfd, diff_value,
+> + 				  &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF8:
+> + 		    case R_XTENSA_NDIFF8:
+> +-		      diff_mask = 0xff;
+> + 		      bfd_put_8 (abfd, diff_value,
+> + 				 &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF16:
+> + 		    case R_XTENSA_NDIFF16:
+> +-		      diff_mask = 0xffff;
+> + 		      bfd_put_16 (abfd, diff_value,
+> + 				  &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF32:
+> + 		    case R_XTENSA_NDIFF32:
+> +-		      diff_mask = 0xffffffff;
+> + 		      bfd_put_32 (abfd, diff_value,
+> + 				  &contents[old_source_offset]);
+> + 		      break;
+> + 		    }
+> + 
+> +-		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+> +-		  if ((diff_value & ~diff_mask) != 0 &&
+> +-		      (diff_value & ~diff_mask) != (-1 & ~diff_mask))
+> ++		  /* Check for overflow. Sign bits must be all zeroes or
+> ++		     all ones.  When sign bits are all ones diff_value
+> ++		     may not be zero.  */
+> ++		  if (((diff_value & ~diff_mask) != 0
+> ++		       && (diff_value & ~diff_mask) != ~diff_mask)
+> ++		      || (diff_value && (bfd_vma) diff_value == ~diff_mask))
+> + 		    {
+> + 		      (*link_info->callbacks->reloc_dangerous)
+> + 			(link_info, _("overflow after relaxation"),
+> +-- 
+> +2.20.1
+> +
+> diff --git a/package/binutils/2.33.1/0006-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch b/package/binutils/2.33.1/0006-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+> new file mode 100644
+> index 000000000000..ebb08fd7dffe
+> --- /dev/null
+> +++ b/package/binutils/2.33.1/0006-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+> @@ -0,0 +1,128 @@
+> +From 735321812435ae278d3766a3371f55937dc776d6 Mon Sep 17 00:00:00 2001
+> +From: Max Filippov <jcmvbkbc@gmail.com>
+> +Date: Sat, 25 Apr 2020 00:40:25 -0700
+> +Subject: [PATCH] xtensa: fix XTENSA_NDIFF handling for PR ld/25861
+> +
+> +Fields marked with XTENSA_NDIFF relocations are not negated, they only
+> +have sign bits removed. Don't negate their values when relaxation is
+> +performed. Don't add sign bits when the value is zero. Report overflow
+> +when the result has negative sign but all significant bits are zero.
+> +
+> +2020-04-29  Max Filippov  <jcmvbkbc@gmail.com>
+> +bfd/
+> +	* elf32-xtensa.c (relax_section): Don't negate diff_value for
+> +	XTENSA_NDIFF relocations. Don't add sign bits whe diff_value
+> +	equals 0. Report overflow when the result has negative sign but
+> +	all significant bits are zero.
+> +
+> +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> +---
+> +Backported from: d548f47df4d2e3d117d504a4c9977982c78a0556
+> +
+> + bfd/elf32-xtensa.c                   | 26 +++++++++++++++-----------
+> + 1 file changed, 15 insertions(+), 11 deletions(-)
+> +
+> +diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+> +index fded42d52a9a..4327b027911f 100644
+> +--- a/bfd/elf32-xtensa.c
+> ++++ b/bfd/elf32-xtensa.c
+> +@@ -9670,37 +9670,44 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+> + 		  switch (r_type)
+> + 		    {
+> + 		    case R_XTENSA_DIFF8:
+> ++		      diff_mask = 0x7f;
+> + 		      diff_value =
+> + 			bfd_get_signed_8 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_DIFF16:
+> ++		      diff_mask = 0x7fff;
+> + 		      diff_value =
+> + 			bfd_get_signed_16 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_DIFF32:
+> ++		      diff_mask = 0x7fffffff;
+> + 		      diff_value =
+> + 			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF8:
+> + 		    case R_XTENSA_NDIFF8:
+> ++		      diff_mask = 0xff;
+> + 		      diff_value =
+> + 			bfd_get_8 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF16:
+> + 		    case R_XTENSA_NDIFF16:
+> ++		      diff_mask = 0xffff;
+> + 		      diff_value =
+> + 			bfd_get_16 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF32:
+> + 		    case R_XTENSA_NDIFF32:
+> ++		      diff_mask = 0xffffffff;
+> + 		      diff_value =
+> + 			bfd_get_32 (abfd, &contents[old_source_offset]);
+> + 		      break;
+> + 		    }
+> + 
+> + 		  if (r_type >= R_XTENSA_NDIFF8
+> +-		      && r_type <= R_XTENSA_NDIFF32)
+> +-		    diff_value = -diff_value;
+> ++		      && r_type <= R_XTENSA_NDIFF32
+> ++		      && diff_value)
+> ++		    diff_value |= ~diff_mask;
+> + 
+> + 		  new_end_offset = offset_with_removed_text_map
+> + 		    (&target_relax_info->action_list,
+> +@@ -9710,43 +9717,40 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+> + 		  switch (r_type)
+> + 		    {
+> + 		    case R_XTENSA_DIFF8:
+> +-		      diff_mask = 0x7f;
+> + 		      bfd_put_signed_8 (abfd, diff_value,
+> + 				 &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_DIFF16:
+> +-		      diff_mask = 0x7fff;
+> + 		      bfd_put_signed_16 (abfd, diff_value,
+> + 				  &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_DIFF32:
+> +-		      diff_mask = 0x7fffffff;
+> + 		      bfd_put_signed_32 (abfd, diff_value,
+> + 				  &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF8:
+> + 		    case R_XTENSA_NDIFF8:
+> +-		      diff_mask = 0xff;
+> + 		      bfd_put_8 (abfd, diff_value,
+> + 				 &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF16:
+> + 		    case R_XTENSA_NDIFF16:
+> +-		      diff_mask = 0xffff;
+> + 		      bfd_put_16 (abfd, diff_value,
+> + 				  &contents[old_source_offset]);
+> + 		      break;
+> + 		    case R_XTENSA_PDIFF32:
+> + 		    case R_XTENSA_NDIFF32:
+> +-		      diff_mask = 0xffffffff;
+> + 		      bfd_put_32 (abfd, diff_value,
+> + 				  &contents[old_source_offset]);
+> + 		      break;
+> + 		    }
+> + 
+> +-		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+> +-		  if ((diff_value & ~diff_mask) != 0 &&
+> +-		      (diff_value & ~diff_mask) != (-1 & ~diff_mask))
+> ++		  /* Check for overflow. Sign bits must be all zeroes or
+> ++		     all ones.  When sign bits are all ones diff_value
+> ++		     may not be zero.  */
+> ++		  if (((diff_value & ~diff_mask) != 0
+> ++		       && (diff_value & ~diff_mask) != ~diff_mask)
+> ++		      || (diff_value && (bfd_vma) diff_value == ~diff_mask))
+> + 		    {
+> + 		      (*link_info->callbacks->reloc_dangerous)
+> + 			(link_info, _("overflow after relaxation"),
+> +-- 
+> +2.20.1
+> +
 > 
-> 
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
