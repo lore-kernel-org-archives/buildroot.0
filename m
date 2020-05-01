@@ -1,15 +1,19 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  1 May 2020 20:19:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 May 2020 21:13:06 +0200
+Subject: [Buildroot] [git commit] package/{mesa3d,
  mesa3d-headers}: bump version to 20.0.6
-Message-ID: <20200501181922.181906-1-bernd.kuhls@t-online.de>
+Message-ID: <20200501185901.2C0AF90D27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=b0059dabfd9504900496300c2fd52cac5e1bf08b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
  package/mesa3d/mesa3d.hash               | 6 +++---
@@ -56,5 +60,3 @@ index ab10194a6a..e1fc2511a2 100644
  MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
  MESA3D_SITE = https://mesa.freedesktop.org/archive
  MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.26.2
