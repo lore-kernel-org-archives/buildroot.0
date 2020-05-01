@@ -1,74 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 14:39:35 +0200
-Subject: [Buildroot] [git commit] package/paho-mqtt-c: fix build without C++
-Message-ID: <20200501122436.2B9AD90C8D@busybox.osuosl.org>
+Date: Fri, 1 May 2020 14:40:46 +0200
+Subject: [Buildroot] [git commit] package/wolfssl: bump version to 4.4.0
+Message-ID: <20200501122612.580A190C93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd63d5822d209827b8c1eb6e6c350e0aea21c9b8
+commit: https://git.buildroot.net/buildroot/commit/?id=4b71f00b1e1e7473373036101b5a9242ab1877ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/831ecc34b51ee2be82a3c25f5ec94f0dd2103655
+Also change the hash file to separate the fields by two spaces.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...le-CXX-language-to-support-using-Generate.patch | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ package/wolfssl/wolfssl.hash | 6 +++---
+ package/wolfssl/wolfssl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/paho-mqtt-c/0002-Revert-Enable-CXX-language-to-support-using-Generate.patch b/package/paho-mqtt-c/0002-Revert-Enable-CXX-language-to-support-using-Generate.patch
-new file mode 100644
-index 0000000000..ee4c2307ef
---- /dev/null
-+++ b/package/paho-mqtt-c/0002-Revert-Enable-CXX-language-to-support-using-Generate.patch
-@@ -0,0 +1,46 @@
-+From 342b3824d261f552a7be5dac7a242c263d9b9fd4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 1 May 2020 12:41:59 +0200
-+Subject: [PATCH] Revert "Enable CXX language to support using
-+ GenerateExportHeader"
-+
-+This reverts commit 23d68e8c798d29309a277fb3c869c23f9cac2bbf. Indeed,
-+GenerateExportHeader has been removed with commit
-+db5a2c216b122c57dc281aea2f3b7afa210dc0fc and ENABLE_LANGUAGE(CXX) will
-+raise the following build failure if no C++ compiler is found:
-+
-+CMake Error at CMakeLists.txt:34 (ENABLE_LANGUAGE):
-+  The CMAKE_CXX_COMPILER:
-+
-+    /home/buildroot/autobuild/instance-1/output-1/host/bin/arm-linux-g++
-+
-+  is not a full path to an existing compiler tool.
-+
-+  Tell CMake where to find the compiler by setting either the environment
-+  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
-+  to the compiler, or to the compiler name if it is in the PATH.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/831ecc34b51ee2be82a3c25f5ec94f0dd2103655
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/eclipse/paho.mqtt.c/pull/872]
-+---
-+ CMakeLists.txt | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index c52a42e..a290730 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -31,7 +31,6 @@ file(READ version.minor PAHO_VERSION_MINOR)
-+ file(READ version.patch PAHO_VERSION_PATCH)
-+ SET(CLIENT_VERSION ${PAHO_VERSION_MAJOR}.${PAHO_VERSION_MINOR}.${PAHO_VERSION_PATCH})
-+ 
-+-ENABLE_LANGUAGE(CXX)
-+ INCLUDE(GNUInstallDirs)
-+ 
-+ STRING(TIMESTAMP BUILD_TIMESTAMP UTC)
-+-- 
-+2.26.2
-+
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index 5509552ca4..4a1aeebe7d 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,6 +1,6 @@
+ # Locally computed:
+-sha256 6896f8ad6c44aff3e583006eeee839600848a0e37118ebbb7514eca9409ae08b  wolfssl-4.3.0-stable.tar.gz
++sha256  7f854804c8ae0ca49cc77809e38e9a3b5a8c91ba7855ea928e6d6651b0d35f18  wolfssl-4.4.0-stable.tar.gz
+ 
+ # Hash for license files:
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-sha256 74adaaef40b96c71378b6daa3feb8ccd4a1bfd9b76debf3f3f29cf3a0e86c9a0  LICENSING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  74adaaef40b96c71378b6daa3feb8ccd4a1bfd9b76debf3f3f29cf3a0e86c9a0  LICENSING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 8834a0f468..e3062c39b5 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WOLFSSL_VERSION = 4.3.0-stable
++WOLFSSL_VERSION = 4.4.0-stable
+ WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION))
+ WOLFSSL_INSTALL_STAGING = YES
+ 
