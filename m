@@ -1,49 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 May 2020 14:09:42 +0200
-Subject: [Buildroot] [git commit] package/gawk: bump to version 5.1.0
-Message-ID: <20200501115500.7E84090C67@busybox.osuosl.org>
+Date: Fri, 1 May 2020 14:10:42 +0200
+Subject: [Buildroot] [PATCH] package/gawk: bump to version 5.1.0
+In-Reply-To: <20200430004333.15221-1-ryanbarnett3@gmail.com>
+References: <20200430004333.15221-1-ryanbarnett3@gmail.com>
+Message-ID: <20200501141042.634cddaf@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ce5255b9d159d2f967fb01b28f3cc36d67f86f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 29 Apr 2020 19:43:33 -0500
+Ryan Barnett <ryanbarnett3@gmail.com> wrote:
 
-* Update hash file to two space format
+> * Update hash file to two space format
+> 
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+> ---
+>  package/gawk/gawk.hash | 6 +++---
+>  package/gawk/gawk.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gawk/gawk.hash | 6 +++---
- package/gawk/gawk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
-index f80f2b202a..91e506607e 100644
---- a/package/gawk/gawk.hash
-+++ b/package/gawk/gawk.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/gawk/gawk-5.0.1.tar.xz.sig
-+# https://ftp.gnu.org/gnu/gawk/gawk-5.1.0.tar.xz.sig
- # Primary key fingerprint: D196 7C63 7887 1317 7D86  1ED7 DF59 7815 937E C0D2
--sha256 8e4e86f04ed789648b66f757329743a0d6dfb5294c3b91b756a474f1ce05a794 gawk-5.0.1.tar.xz
-+sha256  cf5fea4ac5665fd5171af4716baab2effc76306a9572988d5ba1078f196382bd  gawk-5.1.0.tar.xz
- # Locally calculated
--sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 1a5f87f603..16906f6f93 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GAWK_VERSION = 5.0.1
-+GAWK_VERSION = 5.1.0
- GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
- GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
- GAWK_DEPENDENCIES = host-gawk
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
