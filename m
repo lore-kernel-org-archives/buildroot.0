@@ -1,121 +1,112 @@
-From: Alexey Lukyanchuk <skif@skif-web.ru>
-Date: Fri,  1 May 2020 11:26:17 +0300
-Subject: [Buildroot] [PATCH v2 1/1] package/ghostscript: add cups support
-Message-ID: <20200501082617.14510-1-skif@skif-web.ru>
+From: Thomas Ruschival <thomas@ruschival.de>
+Date: Fri,  1 May 2020 11:22:26 +0200
+Subject: [Buildroot] [PATCH v2] package/pistache: new package
+In-Reply-To: <20200426135842.2125143-2-thomas@ruschival.de>
+References: <20200426135842.2125143-2-thomas@ruschival.de>
+Message-ID: <20200501092226.316943-1-thomas@ruschival.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ghostscript can be used for cups printing.
+The upstream project http://pistache.io/ does not provide release
+tarballs at https://github.com/oktal/pistache/. I have been using the
+commit 73f248acd6db4c53 successfully for some time now for a buildroot
+project.
 
-In current version it's disabled, but may be needed for some customers.
+The use of BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 is for C++14 support.
+Tested it with gcc-linaro-4.9-2016.02-x86_64_arm-linux-gnueabi
+and buildroot's ./utils/test-pkg
 
-This patch add cups support if cups enabled.
-Also patch fix configure.ac for cross-compilation.
+Pistache does not build with uClibc, the macro RUSAGE_THREAD for
+getrusage() is not properly declared. This is an upstream issue:
+https://github.com/oktal/pistache/issues/175
+Hence the dependecy !BR2_TOOLCHAIN_USES_UCLIBC
 
-Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
-
+Signed-off-by: Thomas Ruschival <thomas@ruschival.de>
 ---
-Changes v1 -> v2:
- - use $(STAGING_DIR) for GHOSTSCRIPT_CUPS_CONFIG_FIX
----
- .../ghostscript/0002-add-cups-support.patch   | 54 +++++++++++++++++++
- package/ghostscript/ghostscript.mk            | 13 +++++
- 2 files changed, 67 insertions(+)
- create mode 100644 package/ghostscript/0002-add-cups-support.patch
+ package/Config.in              |  1 +
+ package/pistache/Config.in     | 20 ++++++++++++++++++++
+ package/pistache/pistache.hash |  2 ++
+ package/pistache/pistache.mk   | 21 +++++++++++++++++++++
+ 4 files changed, 44 insertions(+)
+ create mode 100644 package/pistache/Config.in
+ create mode 100644 package/pistache/pistache.hash
+ create mode 100644 package/pistache/pistache.mk
 
-diff --git a/package/ghostscript/0002-add-cups-support.patch b/package/ghostscript/0002-add-cups-support.patch
+diff --git a/package/Config.in b/package/Config.in
+index 53c8ce0e29..c12676d859 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1754,6 +1754,7 @@ menu "Networking"
+ 	source "package/ortp/Config.in"
+ 	source "package/paho-mqtt-c/Config.in"
+ 	source "package/paho-mqtt-cpp/Config.in"
++	source "package/pistache/Config.in"
+ 	source "package/qdecoder/Config.in"
+ 	source "package/qpid-proton/Config.in"
+ 	source "package/rabbitmq-c/Config.in"
+diff --git a/package/pistache/Config.in b/package/pistache/Config.in
 new file mode 100644
-index 0000000000..262a06c102
+index 0000000000..64d6340827
 --- /dev/null
-+++ b/package/ghostscript/0002-add-cups-support.patch
-@@ -0,0 +1,54 @@
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -199,30 +199,6 @@
-+ 
-+ dnl pkg-config is used for several tests now...
-+ AC_PATH_TOOL(PKGCONFIG, pkg-config)
-+-
-+-# this is an unpleasant hack
-+-# but if we are cross compiling, and there isn't a matching
-+-# pkconfig for the --host setting, then don't use the 'local'
-+-# pkconfig at all
-+-if test x"$cross_compiling" = x"yes"; then
-+-  AC_PATH_PROG(BUILD_PKGCONFIG, pkg-config)
-+-  if test x"$BUILD_PKGCONFIG" = x"$PKGCONFIG" ; then
-+-    PKGCONFIG=
-+-  fi
-+-fi
-+-
-+-AC_PATH_TOOL(STRIP_XE, strip)
-+-
-+-# this is an unpleasant hack
-+-# but if we are cross compiling, and there isn't a matching
-+-# pkconfig for the --host setting, then don't use the 'local'
-+-# pkconfig at all
-+-if test x"$cross_compiling" = x"yes"; then
-+-  AC_PATH_PROG(BUILD_STRIP_XE, strip)
-+-  if test x"$BUILD_STRIP_XE" = x"$STRIP_XE" ; then
-+-    STRIP_XE=
-+-  fi
-+-fi
-+ 
-+ dnl --------------------------------------------------  
-+ dnl Allow excluding the contributed drivers
-+@@ -1432,12 +1408,6 @@
-+         if test x$with_local_cups != xyes; then
-+             if test x"$CUPSCONFIG" = x""; then
-+               AC_PATH_TOOL(CUPSCONFIG,cups-config)
-+-              if test x"$cross_compiling" = x"yes"; then
-+-                AC_PATH_PROG(BUILD_CUPSCONFIG, cups-config)
-+-                if test x"$BUILD_CUPSCONFIG" = x"$CUPSCONFIG" ; then
-+-                  CUPSCONFIG=
-+-                fi
-+-              fi
-+             fi
-+             # check for a libcups header
-+             AC_CHECK_HEADER([cups/cups.h],[],[CUPSCONFIG=""])
-+@@ -1473,7 +1443,6 @@
-+                 else
-+                   CUPSDATA="`$CUPSCONFIG --datadir`"
-+                 fi
-+-
-+                 CUPSINCLUDE="include $srcdir/cups/cups.mak"
-+                 CUPSDEV="cups"
-+ 
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 1d6f8d04a0..b515d8987a 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -10,6 +10,7 @@ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
- GHOSTSCRIPT_LICENSE = AGPL-3.0
- GHOSTSCRIPT_LICENSE_FILES = LICENSE
- # 0001-Fix-cross-compilation-issue.patch
-+GHOSTSCRIPT_INSTALL_STAGING = YES
- GHOSTSCRIPT_AUTORECONF = YES
- GHOSTSCRIPT_DEPENDENCIES = \
- 	host-lcms2 \
-@@ -68,6 +69,18 @@ else
- GHOSTSCRIPT_CONF_OPTS += --disable-openjpeg
- endif
- 
-+define GHOSTSCRIPT_CUPS_CONFIG_FIX
-+cp $(STAGING_DIR)/usr/bin/cups-config  $(HOST_DIR)/usr/bin/
-+endef
++++ b/package/pistache/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_PISTACHE
++	bool "pistache"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	help
++	  Pistache is a modern and elegant HTTP and REST framework
++	  for C++. It is entirely written in pure C++14 and provides
++	  a clear and pleasant API.
 +
-+ifeq ($(BR2_PACKAGE_CUPS),y)
-+GHOSTSCRIPT_DEPENDENCIES += cups
-+GHOSTSCRIPT_PRE_CONFIGURE_HOOKS += GHOSTSCRIPT_CUPS_CONFIG_FIX
-+GHOSTSCRIPT_CONF_OPTS += --enable-cups
++	  https://github.com/oktal/pistache
++
++comment "pistache needs a glibc toolchain w/ C++, gcc >= 4.9, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++	BR2_TOOLCHAIN_USES_UCLIBC || \
++	!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++	!BR2_TOOLCHAIN_HAS_THREADS || \
++	!BR2_USE_WCHAR
+diff --git a/package/pistache/pistache.hash b/package/pistache/pistache.hash
+new file mode 100644
+index 0000000000..f81ee8a5b2
+--- /dev/null
++++ b/package/pistache/pistache.hash
+@@ -0,0 +1,2 @@
++#locally computed
++sha256 bcc7640eb4ae4b178e504f18ebf29dd0a6f8189710cdc0fa4703fa27728145e4  pistache-73f248acd6db4c53e6604577b7e13fd5e756f96f.tar.gz
+diff --git a/package/pistache/pistache.mk b/package/pistache/pistache.mk
+new file mode 100644
+index 0000000000..7b30621b74
+--- /dev/null
++++ b/package/pistache/pistache.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# pistache
++#
++################################################################################
++
++PISTACHE_VERSION = 73f248acd6db4c53e6604577b7e13fd5e756f96f
++PISTACHE_SITE = $(call github,oktal,pistache,$(PISTACHE_VERSION))
++PISTACHE_LICENSE = Apache-2.0
++PISTACHE_LICENSE_FILE = LICENSE
++
++PISTACHE_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++PISTACHE_DEPENDENCIES += openssl
++PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=ON
 +else
-+GHOSTSCRIPT_CONF_OPTS += --disable-cups
++PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
- GHOSTSCRIPT_DEPENDENCIES += xlib_libX11
- GHOSTSCRIPT_CONF_OPTS += --with-x
++$(eval $(cmake-package))
 -- 
-2.17.1
+2.26.2
