@@ -1,59 +1,115 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  1 May 2020 14:05:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jbig2dec: security bump to version
- 0.18
-Message-ID: <20200501120507.2197851-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 May 2020 14:04:51 +0200
+Subject: [Buildroot] [git commit] package/pistache: new package
+Message-ID: <20200501115132.79FB490C55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2020-12268: jbig2_image_compose in jbig2_image.c in Artifex
-  jbig2dec before 0.18 has a heap-based buffer overflow.
-- Add JBIG2DEC_AUTORECONF=YES otherwise build will fail because
-  install-sh has been removed from the tarball
-- Update indentation of hash file (two spaces)
+commit: https://git.buildroot.net/buildroot/commit/?id=65d891efc2fb069f9cf707f47302776f7076b80c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The upstream project http://pistache.io/ does not provide release
+tarballs. However, commit 73f248acd6db4c53 has been successfully
+used for some time now.
+
+The use of BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 is for C++14 support.
+Tested it with gcc-linaro-4.9-2016.02-x86_64_arm-linux-gnueabi
+and buildroot's ./utils/test-pkg
+
+Pistache does not build with uClibc, the macro RUSAGE_THREAD for
+getrusage() is not properly declared. This is an upstream issue:
+https://github.com/oktal/pistache/issues/175
+Hence the dependecy !BR2_TOOLCHAIN_USES_UCLIBC
+
+Signed-off-by: Thomas Ruschival <thomas@ruschival.de>
+[yann.morin.1998 at free.fr:
+  - fix PISTACHE_LICENSE_FILES (missing trailing 'S')
+  - add hash for license file
+  - two spaces in license file
+  - tweaks in commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/jbig2dec/jbig2dec.hash | 6 +++---
- package/jbig2dec/jbig2dec.mk   | 6 ++++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/Config.in              |  1 +
+ package/pistache/Config.in     | 20 ++++++++++++++++++++
+ package/pistache/pistache.hash |  3 +++
+ package/pistache/pistache.mk   | 21 +++++++++++++++++++++
+ 4 files changed, 45 insertions(+)
 
-diff --git a/package/jbig2dec/jbig2dec.hash b/package/jbig2dec/jbig2dec.hash
-index eb2b674443..86584b19a6 100644
---- a/package/jbig2dec/jbig2dec.hash
-+++ b/package/jbig2dec/jbig2dec.hash
-@@ -1,7 +1,7 @@
--# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/MD5SUMS
-+# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/MD5SUMS
- # and SHA512SUMS are missing the hashes for this file.
- # Locally computed:
--sha256 a4f6bf15d217e7816aa61b92971597c801e81f0a63f9fe1daee60fb88e0f0602  jbig2dec-0.16.tar.gz
-+sha256  9e19775237350e299c422b7b91b0c045e90ffa4ba66abf28c8fb5eb005772f5e  jbig2dec-0.18.tar.gz
- 
- # Hash for license files:
--sha256 1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
-+sha256  1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
-diff --git a/package/jbig2dec/jbig2dec.mk b/package/jbig2dec/jbig2dec.mk
-index 5ac5b87a72..08ef89bfcb 100644
---- a/package/jbig2dec/jbig2dec.mk
-+++ b/package/jbig2dec/jbig2dec.mk
-@@ -4,10 +4,12 @@
- #
- ################################################################################
- 
--JBIG2DEC_VERSION = 0.16
--JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927
-+JBIG2DEC_VERSION = 0.18
-+JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952
- JBIG2DEC_LICENSE = AGPL-3.0+
- JBIG2DEC_LICENSE_FILES = LICENSE
- JBIG2DEC_INSTALL_STAGING = YES
-+# tarball is missing install-sh, install.sh, or shtool
-+JBIG2DEC_AUTORECONF = YES
- 
- $(eval $(autotools-package))
--- 
-2.26.2
+diff --git a/package/Config.in b/package/Config.in
+index 53c8ce0e29..c12676d859 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1754,6 +1754,7 @@ menu "Networking"
+ 	source "package/ortp/Config.in"
+ 	source "package/paho-mqtt-c/Config.in"
+ 	source "package/paho-mqtt-cpp/Config.in"
++	source "package/pistache/Config.in"
+ 	source "package/qdecoder/Config.in"
+ 	source "package/qpid-proton/Config.in"
+ 	source "package/rabbitmq-c/Config.in"
+diff --git a/package/pistache/Config.in b/package/pistache/Config.in
+new file mode 100644
+index 0000000000..64d6340827
+--- /dev/null
++++ b/package/pistache/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_PISTACHE
++	bool "pistache"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	help
++	  Pistache is a modern and elegant HTTP and REST framework
++	  for C++. It is entirely written in pure C++14 and provides
++	  a clear and pleasant API.
++
++	  https://github.com/oktal/pistache
++
++comment "pistache needs a glibc toolchain w/ C++, gcc >= 4.9, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++	BR2_TOOLCHAIN_USES_UCLIBC || \
++	!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++	!BR2_TOOLCHAIN_HAS_THREADS || \
++	!BR2_USE_WCHAR
+diff --git a/package/pistache/pistache.hash b/package/pistache/pistache.hash
+new file mode 100644
+index 0000000000..63597b4149
+--- /dev/null
++++ b/package/pistache/pistache.hash
+@@ -0,0 +1,3 @@
++#locally computed
++sha256  bcc7640eb4ae4b178e504f18ebf29dd0a6f8189710cdc0fa4703fa27728145e4  pistache-73f248acd6db4c53e6604577b7e13fd5e756f96f.tar.gz
++sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  LICENSE
+diff --git a/package/pistache/pistache.mk b/package/pistache/pistache.mk
+new file mode 100644
+index 0000000000..c182754cee
+--- /dev/null
++++ b/package/pistache/pistache.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# pistache
++#
++################################################################################
++
++PISTACHE_VERSION = 73f248acd6db4c53e6604577b7e13fd5e756f96f
++PISTACHE_SITE = $(call github,oktal,pistache,$(PISTACHE_VERSION))
++PISTACHE_LICENSE = Apache-2.0
++PISTACHE_LICENSE_FILES = LICENSE
++
++PISTACHE_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++PISTACHE_DEPENDENCIES += openssl
++PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=ON
++else
++PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=OFF
++endif
++
++$(eval $(cmake-package))
