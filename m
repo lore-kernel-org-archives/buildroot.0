@@ -1,36 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 May 2020 14:25:37 +0200
-Subject: [Buildroot] [PATCH 0/2] tz: bump to version 2020a
-In-Reply-To: <20200427202555.GA11346@scaer> (Yann E. MORIN's message of "Mon, 
- 27 Apr 2020 22:25:55 +0200")
-References: <20200427071144.30237-1-post@lespocky.de>
- <20200427202555.GA11346@scaer>
-Message-ID: <87ees34zb2.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 1 May 2020 14:32:14 +0200
+Subject: [Buildroot] [git commit] package/python-numpy: add missing
+ dependency on Config.in comment
+Message-ID: <20200501121740.CFFFD90C71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0dd30a591fc561cbf8abb78988282c9ffec5a490
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Alexander, All,
- > On 2020-04-27 09:11 +0200, Alexander Dahl spake thusly:
- >> Hello everyone,
- >> 
- >> the 2020a release of the timezone database tz code and data is
- >> available ? announcement here:
+The python-numpy Config.in comment was missing a dependency on
+BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS.
 
- > Series applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-numpy/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- >> https://mm.icann.org/pipermail/tz-announce/2020-April/000058.html
- >> 
- >> Nice to have for stable.
-
- > This will ahve to be picked up by Peter, if he sees fit...
-
-Yes, I believe we discussed timezone updates earlier and how they should
-also be backported. I will get it when I sync 2020.02.x with master.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index 757f73e8bf..23dcbc7986 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -30,4 +30,5 @@ config BR2_PACKAGE_PYTHON_NUMPY
+ 
+ comment "python-numpy needs glibc or musl"
+ 	depends on BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
