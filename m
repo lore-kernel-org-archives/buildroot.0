@@ -1,56 +1,51 @@
-From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Fri,  1 May 2020 10:43:40 -0500
-Subject: [Buildroot] [PATCH v1 1/1] package/xerces: add disable network
- option
-Message-ID: <20200501154340.27763-1-jared.bents@rockwellcollins.com>
+From: Alexey Lukyanchuk <skif@skif-web.ru>
+Date: Fri,  1 May 2020 18:49:50 +0300
+Subject: [Buildroot] [PATCH 1/1] package/ghostscript: add cups support
+Message-ID: <20200501154950.3790-1-skif@skif-web.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to add the option to compile xerces without network
-support.
+Ghostscript can be used for cups printing.
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+In current version it's disabled, but may be needed for some customers.
+
+This patch add cups support if cups enabled.
+
+Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
 ---
- package/xerces/Config.in | 9 +++++++++
- package/xerces/xerces.mk | 4 +++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ package/ghostscript/ghostscript.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/xerces/Config.in b/package/xerces/Config.in
-index 2edc4346b5..bc5c725799 100644
---- a/package/xerces/Config.in
-+++ b/package/xerces/Config.in
-@@ -6,5 +6,14 @@ config BR2_PACKAGE_XERCES
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 1d6f8d04a0..7d12195f17 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -39,7 +39,6 @@ GHOSTSCRIPT_CONF_ENV = \
  
- 	  http://xerces.apache.org/xerces-c/
- 
-+if BR2_PACKAGE_XERCES
-+
-+config BR2_PACKAGE_XERCES_DISABLE_NETWORK
-+	bool "Disable network support"
-+	help
-+	  Disable network support in xerces
-+
-+endif
-+
- comment "xerces-c++ needs a toolchain w/ C++, wchar"
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index c75a8b0d35..f98b1066a4 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -31,7 +31,9 @@ XERCES_CONF_ENV += LIBS=-liconv
- XERCES_DEPENDENCIES += libiconv
+ GHOSTSCRIPT_CONF_OPTS = \
+ 	--disable-compile-inits \
+-	--disable-cups \
+ 	--enable-fontconfig \
+ 	--with-fontpath=/usr/share/fonts \
+ 	--enable-freetype \
+@@ -68,6 +67,15 @@ else
+ GHOSTSCRIPT_CONF_OPTS += --disable-openjpeg
  endif
  
--ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+ifeq ($(BR2_PACKAGE_XERCES_DISABLE_NETWORK),y)
-+XERCES_CONF_OPTS += -Dnetwork:BOOL=OFF
-+else ifeq ($(BR2_PACKAGE_LIBCURL),y)
- XERCES_CONF_OPTS += -Dnetwork-accessor=curl
- XERCES_DEPENDENCIES += libcurl
- else
++ifeq ($(BR2_PACKAGE_CUPS),y)
++GHOSTSCRIPT_DEPENDENCIES += cups
++GHOSTSCRIPT_CONF_OPTS  += \
++	CUPSCONFIG=$(STAGING_DIR)/usr/bin/cups-config \
++	--enable-cups
++else
++GHOSTSCRIPT_CONF_OPTS += --disable-cups
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+ GHOSTSCRIPT_DEPENDENCIES += xlib_libX11
+ GHOSTSCRIPT_CONF_OPTS += --with-x
 -- 
 2.17.1
