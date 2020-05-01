@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 May 2020 16:01:34 +0200
-Subject: [Buildroot] [git commit] package/weston: drop pkgconfig workaround
-Message-ID: <20200501134643.D0EB290D1F@busybox.osuosl.org>
+Date: Fri, 1 May 2020 16:01:29 +0200
+Subject: [Buildroot] [git commit] package/pkg-meson.mk: set correct
+ pkgconfig for native dependencies
+Message-ID: <20200501134643.C790B90D1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=535db2a4509c1f567282ca7888003ae320d20314
+commit: https://git.buildroot.net/buildroot/commit/?id=5cff3a8bdfba92e9f61d0984df08f1ecd205c072
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We no longer need this package specific pkconfig workaround as it is
-now applied to all meson packages automatically.
+This sets the correct build.pkg_config_path for all meson packages so
+that dependencies with native: true will properly use the the host
+pkgconfig instead of the target pkgconfig.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/weston/weston.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/pkg-meson.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index b22e685948..541c6ba024 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -14,7 +14,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
- 	libxkbcommon pixman libpng jpeg udev cairo libinput libdrm
- 
- WESTON_CONF_OPTS = \
--	-Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
- 	-Dbackend-headless=false \
- 	-Dcolor-management-colord=false \
- 	-Dremoting=false
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 2ba10f30ed..0a4ab2194c 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -87,6 +87,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+ 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+ 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
++		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+ endef
