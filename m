@@ -1,112 +1,99 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 14:50:26 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/ghostscript: add cups support
-In-Reply-To: <20200501082617.14510-1-skif@skif-web.ru>
-References: <20200501082617.14510-1-skif@skif-web.ru>
-Message-ID: <20200501125026.GY11346@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  1 May 2020 14:59:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kexec: fix i386 build
+Message-ID: <20200501125920.2225818-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexey, All,
+Fixes:
+ - http://autobuild.buildroot.org/results/905178cd793dc2b9b26814f7736186b33b468741
 
-On 2020-05-01 11:26 +0300, Alexey Lukyanchuk spake thusly:
-> Ghostscript can be used for cups printing.
-> 
-> In current version it's disabled, but may be needed for some customers.
-> 
-> This patch add cups support if cups enabled.
-> Also patch fix configure.ac for cross-compilation.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...0001-kexec-build-multiboot2-for-i386.patch | 72 +++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/kexec/0001-kexec-build-multiboot2-for-i386.patch
 
-
-
-> Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
-> 
-> ---
-> Changes v1 -> v2:
->  - use $(STAGING_DIR) for GHOSTSCRIPT_CUPS_CONFIG_FIX
-> ---
->  .../ghostscript/0002-add-cups-support.patch   | 54 +++++++++++++++++++
->  package/ghostscript/ghostscript.mk            | 13 +++++
->  2 files changed, 67 insertions(+)
->  create mode 100644 package/ghostscript/0002-add-cups-support.patch
-> 
-> diff --git a/package/ghostscript/0002-add-cups-support.patch b/package/ghostscript/0002-add-cups-support.patch
-> new file mode 100644
-> index 0000000000..262a06c102
-> --- /dev/null
-> +++ b/package/ghostscript/0002-add-cups-support.patch
-
-This patch must have a subject and a commit log, and must bear your SoB
-line as well. And sicne ghostscript is hosted in a git repository, thios
-patch should be a proper git commit exported with 'git format-patch'.
-
-[--SNIP--]
-> +@@ -1473,7 +1443,6 @@
-> +                 else
-> +                   CUPSDATA="`$CUPSCONFIG --datadir`"
-> +                 fi
-> +-
-
-This hunk is most probably useless...
-
-> +                 CUPSINCLUDE="include $srcdir/cups/cups.mak"
-> +                 CUPSDEV="cups"
-> + 
-> diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-> index 1d6f8d04a0..b515d8987a 100644
-> --- a/package/ghostscript/ghostscript.mk
-> +++ b/package/ghostscript/ghostscript.mk
-> @@ -10,6 +10,7 @@ GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
->  GHOSTSCRIPT_LICENSE = AGPL-3.0
->  GHOSTSCRIPT_LICENSE_FILES = LICENSE
->  # 0001-Fix-cross-compilation-issue.patch
-> +GHOSTSCRIPT_INSTALL_STAGING = YES
->  GHOSTSCRIPT_AUTORECONF = YES
->  GHOSTSCRIPT_DEPENDENCIES = \
->  	host-lcms2 \
-> @@ -68,6 +69,18 @@ else
->  GHOSTSCRIPT_CONF_OPTS += --disable-openjpeg
->  endif
->  
-> +define GHOSTSCRIPT_CUPS_CONFIG_FIX
-> +cp $(STAGING_DIR)/usr/bin/cups-config  $(HOST_DIR)/usr/bin/
-> +endef
-
-You must not do that; instead pass:
-
-    GHOSTSCRIPT_CONF_OPTS += \
-        CUPSCONFIG=$(STAGING_DIR)/usr/bin/cups-config \
-        --enable-cups
-
-Regards,
-Yann E. MORIN.
-
-> +ifeq ($(BR2_PACKAGE_CUPS),y)
-> +GHOSTSCRIPT_DEPENDENCIES += cups
-> +GHOSTSCRIPT_PRE_CONFIGURE_HOOKS += GHOSTSCRIPT_CUPS_CONFIG_FIX
-> +GHOSTSCRIPT_CONF_OPTS += --enable-cups
-> +else
-> +GHOSTSCRIPT_CONF_OPTS += --disable-cups
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
->  GHOSTSCRIPT_DEPENDENCIES += xlib_libX11
->  GHOSTSCRIPT_CONF_OPTS += --with-x
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/kexec/0001-kexec-build-multiboot2-for-i386.patch b/package/kexec/0001-kexec-build-multiboot2-for-i386.patch
+new file mode 100644
+index 0000000000..c67da98ce7
+--- /dev/null
++++ b/package/kexec/0001-kexec-build-multiboot2-for-i386.patch
+@@ -0,0 +1,72 @@
++From 2c9f26ed20a791a7df0182ba82e93abb52f5a615 Mon Sep 17 00:00:00 2001
++From: Chris Packham <chris.packham@alliedtelesis.co.nz>
++Date: Mon, 18 Nov 2019 12:52:15 +1300
++Subject: kexec: build multiboot2 for i386
++
++This addresses the following compilation issues when building for i386.
++
++ kexec/arch/i386/kexec-x86.c:39:22: error: 'multiboot2_x86_probe' undeclared here (not in a function); did you mean 'multiboot_x86_probe'?
++   { "multiboot2-x86", multiboot2_x86_probe, multiboot2_x86_load,
++                       ^~~~~~~~~~~~~~~~~~~~
++                       multiboot_x86_probe
++ kexec/arch/i386/kexec-x86.c:39:44: error: 'multiboot2_x86_load' undeclared here (not in a function); did you mean 'multiboot_x86_load'?
++   { "multiboot2-x86", multiboot2_x86_probe, multiboot2_x86_load,
++                                             ^~~~~~~~~~~~~~~~~~~
++                                             multiboot_x86_load
++ kexec/arch/i386/kexec-x86.c:40:4: error: 'multiboot2_x86_usage' undeclared here (not in a function); did you mean 'multiboot_x86_usage'?
++     multiboot2_x86_usage },
++     ^~~~~~~~~~~~~~~~~~~~
++     multiboot_x86_usage
++ make: *** [Makefile:114: kexec/arch/i386/kexec-x86.o] Error 1
++ make: *** Waiting for unfinished jobs....
++
++Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
++Signed-off-by: Simon Horman <horms@verge.net.au>
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=2c9f26ed20a791a7df0182ba82e93abb52f5a615]
++---
++ kexec/arch/i386/Makefile    | 2 +-
++ kexec/arch/i386/kexec-x86.h | 5 +++++
++ 2 files changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/kexec/arch/i386/Makefile b/kexec/arch/i386/Makefile
++index 105cefd..f486103 100644
++--- a/kexec/arch/i386/Makefile
+++++ b/kexec/arch/i386/Makefile
++@@ -7,6 +7,7 @@ i386_KEXEC_SRCS += kexec/arch/i386/kexec-elf-x86.c
++ i386_KEXEC_SRCS += kexec/arch/i386/kexec-elf-rel-x86.c
++ i386_KEXEC_SRCS += kexec/arch/i386/kexec-bzImage.c
++ i386_KEXEC_SRCS += kexec/arch/i386/kexec-multiboot-x86.c
+++i386_KEXEC_SRCS += kexec/arch/i386/kexec-mb2-x86.c
++ i386_KEXEC_SRCS += kexec/arch/i386/kexec-beoboot-x86.c
++ i386_KEXEC_SRCS += kexec/arch/i386/kexec-nbi.c
++ i386_KEXEC_SRCS += kexec/arch/i386/x86-linux-setup.c
++@@ -14,7 +15,6 @@ i386_KEXEC_SRCS += kexec/arch/i386/crashdump-x86.c
++ 
++ dist += kexec/arch/i386/Makefile $(i386_KEXEC_SRCS)			\
++ 	kexec/arch/i386/crashdump-x86.h					\
++-	kexec/arch/i386/kexec-mb2-x86.c					\
++ 	kexec/arch/i386/kexec-x86.h					\
++ 	kexec/arch/i386/x86-linux-setup.h				\
++ 	kexec/arch/i386/include/arch/options.h
++diff --git a/kexec/arch/i386/kexec-x86.h b/kexec/arch/i386/kexec-x86.h
++index 1b58c3b..0f941df 100644
++--- a/kexec/arch/i386/kexec-x86.h
+++++ b/kexec/arch/i386/kexec-x86.h
++@@ -60,6 +60,11 @@ int multiboot_x86_load(int argc, char **argv, const char *buf, off_t len,
++ 	struct kexec_info *info);
++ void multiboot_x86_usage(void);
++ 
+++int multiboot2_x86_load(int argc, char **argv, const char *buf, off_t len,
+++			struct kexec_info *info);
+++void multiboot2_x86_usage(void);
+++int multiboot2_x86_probe(const char *buf, off_t buf_len);
+++
++ int elf_x86_probe(const char *buf, off_t len);
++ int elf_x86_load(int argc, char **argv, const char *buf, off_t len,
++ 	struct kexec_info *info);
++-- 
++cgit 1.2-0.3.lf.el7
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
