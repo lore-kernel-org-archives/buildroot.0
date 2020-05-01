@@ -1,45 +1,68 @@
-From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Fri,  1 May 2020 08:10:15 -0500
-Subject: [Buildroot] [PATCH 1/1] package/ibm-sw-tpm2: needs threads
-Message-ID: <20200501131015.29498-1-vfazio@xes-inc.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  1 May 2020 15:14:02 +0200
+Subject: [Buildroot] [PATCH 1/2] package/proj: bump to version 7.0.1
+Message-ID: <20200501131403.2439357-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vincent Fazio <vfazio@gmail.com>
+- curl and tiff are optional dependencies since version 7.0.0 and
+  https://github.com/OSGeo/PROJ/commit/db31b6dfa9c8fe37d5706d95ce81012b8db3c3b9
+- Update indentation of hash file (two spaces)
 
-The server process leverages threads, so add the dependency.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/7cce8b7ad19a48b36a38ef8fd88b96fad30f05c4/
-
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ibm-sw-tpm2/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/proj/proj.hash |  8 ++++----
+ package/proj/proj.mk   | 16 +++++++++++++++-
+ 2 files changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/package/ibm-sw-tpm2/Config.in b/package/ibm-sw-tpm2/Config.in
-index dc5630490f..5c915c7e84 100644
---- a/package/ibm-sw-tpm2/Config.in
-+++ b/package/ibm-sw-tpm2/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_IBM_SW_TPM2
- 	bool "ibm-sw-tpm2"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # ibm-sw-tpm2
- 	select BR2_PACKAGE_OPENSSL
- 	# libressl is not supported
-@@ -12,5 +13,5 @@ config BR2_PACKAGE_IBM_SW_TPM2
+diff --git a/package/proj/proj.hash b/package/proj/proj.hash
+index ade9502b67..ac3d12b271 100644
+--- a/package/proj/proj.hash
++++ b/package/proj/proj.hash
+@@ -1,5 +1,5 @@
+-# Fetched from http://download.osgeo.org/proj/proj-6.3.0.tar.gz.md5
+-md5 09243feb4f243a2bdd455035a2007384 proj-6.3.0.tar.gz
++# Fetched from http://download.osgeo.org/proj/proj-7.0.1.tar.gz.md5
++md5  5ba7536b579a6c9e0ad822dbdd455985  proj-7.0.1.tar.gz
+ # Locally calculated
+-sha256 68ce9ba0005d442c2c1d238a3b9bc6654c358159b4af467b91e8d5b407c79c77 proj-6.3.0.tar.gz
+-sha256 2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6 COPYING
++sha256  a7026d39c9c80d51565cfc4b33d22631c11e491004e19020b3ff5a0791e1779f  proj-7.0.1.tar.gz
++sha256  2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6  COPYING
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index 2be0004023..1c8f3f77c5 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://sourceforge.net/projects/ibmswtpm2/
+-PROJ_VERSION = 6.3.0
++PROJ_VERSION = 7.0.1
+ PROJ_SITE = http://download.osgeo.org/proj
+ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
+@@ -23,4 +23,18 @@ PROJ_CONF_ENV = \
+ 	CFLAGS="$(PROJ_CFLAGS)" \
+ 	CXXFLAGS="$(PROJ_CXXFLAGS)"
  
--comment "ibm-sw-tpm2 needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "ibm-sw-tpm2 needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS ||BR2_STATIC_LIBS
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++PROJ_DEPENDENCIES += libcurl
++PROJ_CONF_OPTS += --with-curl=$(STAGING_DIR)/usr/bin/curl-config
++else
++PROJ_CONF_OPTS += --without-curl
++endif
++
++ifeq ($(BR2_PACKAGE_TIFF),y)
++PROJ_DEPENDENCIES += tiff
++PROJ_CONF_OPTS += --enable-tiff
++else
++PROJ_CONF_OPTS += --disable-tiff
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.26.2
