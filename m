@@ -1,141 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 14:07:22 +0200
-Subject: [Buildroot] [PATCH v2] package/pistache: new package
-In-Reply-To: <20200501092226.316943-1-thomas@ruschival.de>
-References: <20200501092226.316943-1-thomas@ruschival.de>
-Message-ID: <20200501120722.GT11346@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 1 May 2020 14:09:53 +0200
+Subject: [Buildroot] [git commit] package/ser2net: bump to version 4.1.7
+Message-ID: <20200501115500.99DF490C68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f2575170cfd478595cb63dbe450238e7f5259c63
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-05-01 11:22 +0200, Thomas Ruschival spake thusly:
-> The upstream project http://pistache.io/ does not provide release
-> tarballs at https://github.com/oktal/pistache/. I have been using the
-> commit 73f248acd6db4c53 successfully for some time now for a buildroot
-> project.
-> 
-> The use of BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 is for C++14 support.
-> Tested it with gcc-linaro-4.9-2016.02-x86_64_arm-linux-gnueabi
-> and buildroot's ./utils/test-pkg
-> 
-> Pistache does not build with uClibc, the macro RUSAGE_THREAD for
-> getrusage() is not properly declared. This is an upstream issue:
-> https://github.com/oktal/pistache/issues/175
-> Hence the dependecy !BR2_TOOLCHAIN_USES_UCLIBC
-> 
-> Signed-off-by: Thomas Ruschival <thomas@ruschival.de>
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ser2net/ser2net.hash | 6 +++---
+ package/ser2net/ser2net.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, with the following changes:
-
-  - fix PISTACHE_LICENSE_FILES (missing trailing 'S')
-  - add hash for license file
-  - two spaces in license file
-  - tweaks in commit log
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/Config.in              |  1 +
->  package/pistache/Config.in     | 20 ++++++++++++++++++++
->  package/pistache/pistache.hash |  2 ++
->  package/pistache/pistache.mk   | 21 +++++++++++++++++++++
->  4 files changed, 44 insertions(+)
->  create mode 100644 package/pistache/Config.in
->  create mode 100644 package/pistache/pistache.hash
->  create mode 100644 package/pistache/pistache.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 53c8ce0e29..c12676d859 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1754,6 +1754,7 @@ menu "Networking"
->  	source "package/ortp/Config.in"
->  	source "package/paho-mqtt-c/Config.in"
->  	source "package/paho-mqtt-cpp/Config.in"
-> +	source "package/pistache/Config.in"
->  	source "package/qdecoder/Config.in"
->  	source "package/qpid-proton/Config.in"
->  	source "package/rabbitmq-c/Config.in"
-> diff --git a/package/pistache/Config.in b/package/pistache/Config.in
-> new file mode 100644
-> index 0000000000..64d6340827
-> --- /dev/null
-> +++ b/package/pistache/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_PISTACHE
-> +	bool "pistache"
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-> +	depends on BR2_USE_WCHAR
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-> +	help
-> +	  Pistache is a modern and elegant HTTP and REST framework
-> +	  for C++. It is entirely written in pure C++14 and provides
-> +	  a clear and pleasant API.
-> +
-> +	  https://github.com/oktal/pistache
-> +
-> +comment "pistache needs a glibc toolchain w/ C++, gcc >= 4.9, threads, wchar"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || \
-> +	BR2_TOOLCHAIN_USES_UCLIBC || \
-> +	!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-> +	!BR2_TOOLCHAIN_HAS_THREADS || \
-> +	!BR2_USE_WCHAR
-> diff --git a/package/pistache/pistache.hash b/package/pistache/pistache.hash
-> new file mode 100644
-> index 0000000000..f81ee8a5b2
-> --- /dev/null
-> +++ b/package/pistache/pistache.hash
-> @@ -0,0 +1,2 @@
-> +#locally computed
-> +sha256 bcc7640eb4ae4b178e504f18ebf29dd0a6f8189710cdc0fa4703fa27728145e4  pistache-73f248acd6db4c53e6604577b7e13fd5e756f96f.tar.gz
-> diff --git a/package/pistache/pistache.mk b/package/pistache/pistache.mk
-> new file mode 100644
-> index 0000000000..7b30621b74
-> --- /dev/null
-> +++ b/package/pistache/pistache.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# pistache
-> +#
-> +################################################################################
-> +
-> +PISTACHE_VERSION = 73f248acd6db4c53e6604577b7e13fd5e756f96f
-> +PISTACHE_SITE = $(call github,oktal,pistache,$(PISTACHE_VERSION))
-> +PISTACHE_LICENSE = Apache-2.0
-> +PISTACHE_LICENSE_FILE = LICENSE
-> +
-> +PISTACHE_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +PISTACHE_DEPENDENCIES += openssl
-> +PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=ON
-> +else
-> +PISTACHE_CONF_OPTS += -DPISTACHE_USE_SSL=OFF
-> +endif
-> +
-> +$(eval $(cmake-package))
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
+index 1eaad2c584..91d97e74fc 100644
+--- a/package/ser2net/ser2net.hash
++++ b/package/ser2net/ser2net.hash
+@@ -1,6 +1,6 @@
+ # From https://sourceforge.net/projects/ser2net/files/ser2net/
+-md5  96498fab618ff23ae2791eefc86a5066  ser2net-4.1.6.tar.gz
+-sha1  3b31fbbbdab2c658bb0dc19ed93c7d8474ecdd25  ser2net-4.1.6.tar.gz
++md5  504345864f6110d5b6b63ad1f2ba3ed9  ser2net-4.1.7.tar.gz
++sha1  8268c2f7937152a7bbbac6d2f289c257d11deb69  ser2net-4.1.7.tar.gz
+ # Locally computed:
+-sha256  757505db9afc21a448cb008a3b9a9040cdc17c348ef42a55c9e672d4ccf71e9f  ser2net-4.1.6.tar.gz
++sha256  55bbeeed58eda7514ba7a52d14a930e57e1e5c6fd785a84ca0dd7c3b5615e0a5  ser2net-4.1.7.tar.gz
+ sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
+diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+index da0aa6c156..1f29e2950e 100644
+--- a/package/ser2net/ser2net.mk
++++ b/package/ser2net/ser2net.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SER2NET_VERSION = 4.1.6
++SER2NET_VERSION = 4.1.7
+ SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ SER2NET_LICENSE = GPL-2.0+
+ SER2NET_LICENSE_FILES = COPYING
