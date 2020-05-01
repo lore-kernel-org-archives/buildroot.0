@@ -1,84 +1,123 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 22:57:58 +0200
-Subject: [Buildroot] [PATCH 06/11] package/pkg-generic.mk: exclude the
- staging sub-directory
-In-Reply-To: <20200430095249.782597-7-thomas.petazzoni@bootlin.com>
+Date: Fri, 1 May 2020 23:01:34 +0200
+Subject: [Buildroot] [PATCH 07/11] package/pkg-generic.mk: move
+ pkg_size_{before, after} and check_bin_arch functions
+In-Reply-To: <20200430095249.782597-8-thomas.petazzoni@bootlin.com>
 References: <20200430095249.782597-1-thomas.petazzoni@bootlin.com>
- <20200430095249.782597-7-thomas.petazzoni@bootlin.com>
-Message-ID: <20200501205758.GB15673@scaer>
+ <20200430095249.782597-8-thomas.petazzoni@bootlin.com>
+Message-ID: <20200501210134.GC15673@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, All,
+
 On 2020-04-30 11:52 +0200, Thomas Petazzoni spake thusly:
-> Now that we are checking the host directory changes throughout all
-> installation steps and not just during the "host installation step",
-> it means that changes done within the staging directory (which is a
-> subdir of the host directory) are also visible in the
-> .files-list-host.txt file.
-> 
-> Note that this problem already potentially occurs if a host package is
-> installing files in the staging directory: they would be listed in
-> .files-list-host.txt even without the changes in this series.
-> 
-> To fix this up, we simply exclude files that are beneath the
-> $(STAGING_SUBDIR). Note that we do that in all cases, so when
-> searching $(HOST_DIR), $(HOST_DIR)/$(STAGING_SUBDIR) is excluded, but
-> when searching $(TARGET_DIR), $(TARGET_DIR)/$(STAGING_SUBDIR) is
-> excluded, and when search $(STAGING_DIR),
-> $(STAGING_DIR)/$(STAGING_SUBDIR) is excluded. This is not a problem in
-> practice since $(TARGET_DIR)/$(STAGING_SUBDIR) and
-> $(STAGING_DIR)/$(STAGING_SUBDIR) don't exist, but it's not very
-> nice. However, it allows to keep the code simple.
+> These functions are no longer using the GLOBAL_INSTRUMENTATION_HOOKS
+> mechanism, so it doesn't make much sense for them to be in the section
+> of pkg-generic.mk related to those hooks.
 
-I think this might be an error, as we would be missing the detection of
-files installed in $(DESTDIR)/$(PREFIX) or such...
+I think this would no longer be the case if you do as I suggested in
+patch 5...
 
-However, I think we can do a bit better, see below...
-
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/pkg-generic.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 3fb1e5f8c3..2ae269bb3d 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -61,7 +61,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
->  # $(2): suffix of file (optional)
->  define pkg_size_before
->  	cd $(1); \
-> -	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
-> +	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
->  		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).before
-
-Without the 'cd', and only ever ignoring staging:
-
-    find $(1) -not -path '$(1)/$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%P\n' \
-
-Notice the %P format specifier (upper-case 'P') instead of the previous
-one (lower-case 'p').
-
-Of course, totally untested (but would have the nice side-effect of
-getting rid of the leadin ./ on all file names...
+I'd like to keep the instrumentation, well, instrumentation...
 
 Regards,
 Yann E. MORIN.
 
+> Move them to the "Helper functions" section.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/pkg-generic.mk | 66 +++++++++++++++++++++---------------------
+>  1 file changed, 33 insertions(+), 33 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 2ae269bb3d..6e06d735ad 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -55,39 +55,6 @@ define step_time
 >  endef
+>  GLOBAL_INSTRUMENTATION_HOOKS += step_time
 >  
-> @@ -69,7 +69,7 @@ endef
->  # $(2): suffix of file (optional)
->  define pkg_size_after
->  	cd $(1); \
-> -	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+> -# Hooks to collect statistics about installed files
+> -
+> -# $(1): base directory to search in
+> -# $(2): suffix of file (optional)
+> -define pkg_size_before
+> -	cd $(1); \
+> -	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+> -		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).before
+> -endef
+> -
+> -# $(1): base directory to search in
+> -# $(2): suffix of file (optional)
+> -define pkg_size_after
+> -	cd $(1); \
+> -	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+> -		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after
+> -	LC_ALL=C comm -13 \
+> -		$($(PKG)_DIR)/.files-list$(2).before \
+> -		$($(PKG)_DIR)/.files-list$(2).after \
+> -		| sed -r -e 's/^[^,]+/$($(PKG)_NAME)/' \
+> -		> $($(PKG)_DIR)/.files-list$(2).txt
+> -	rm -f $($(PKG)_DIR)/.files-list$(2).before
+> -	rm -f $($(PKG)_DIR)/.files-list$(2).after
+> -endef
+> -
+> -define check_bin_arch
+> -	support/scripts/check-bin-arch -p $($(PKG)_NAME) \
+> -		-l $($(PKG)_DIR)/.files-list.txt \
+> -		$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
+> -		-r $(TARGET_READELF) \
+> -		-a $(BR2_READELF_ARCH_NAME)
+> -endef
+> -
+>  # This hook checks that host packages that need libraries that we build
+>  # have a proper DT_RPATH or DT_RUNPATH tag
+>  define check_host_rpath
+> @@ -135,6 +102,39 @@ define fixup-libtool-files
+>  endef
+>  endif
+>  
+> +# Functions to collect statistics about installed files
+> +
+> +# $(1): base directory to search in
+> +# $(2): suffix of file (optional)
+> +define pkg_size_before
+> +	cd $(1); \
 > +	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
->  		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after
->  	LC_ALL=C comm -13 \
->  		$($(PKG)_DIR)/.files-list$(2).before \
+> +		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).before
+> +endef
+> +
+> +# $(1): base directory to search in
+> +# $(2): suffix of file (optional)
+> +define pkg_size_after
+> +	cd $(1); \
+> +	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+> +		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after
+> +	LC_ALL=C comm -13 \
+> +		$($(PKG)_DIR)/.files-list$(2).before \
+> +		$($(PKG)_DIR)/.files-list$(2).after \
+> +		| sed -r -e 's/^[^,]+/$($(PKG)_NAME)/' \
+> +		> $($(PKG)_DIR)/.files-list$(2).txt
+> +	rm -f $($(PKG)_DIR)/.files-list$(2).before
+> +	rm -f $($(PKG)_DIR)/.files-list$(2).after
+> +endef
+> +
+> +define check_bin_arch
+> +	support/scripts/check-bin-arch -p $($(PKG)_NAME) \
+> +		-l $($(PKG)_DIR)/.files-list.txt \
+> +		$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
+> +		-r $(TARGET_READELF) \
+> +		-a $(BR2_READELF_ARCH_NAME)
+> +endef
+> +
+>  ################################################################################
+>  # Implicit targets -- produce a stamp file for each step of a package build
+>  ################################################################################
 > -- 
 > 2.25.4
 > 
