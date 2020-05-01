@@ -1,159 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 12:00:39 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libhtp: security bump to
- version 0.5.33
-In-Reply-To: <20200430194246.2076437-1-fontaine.fabrice@gmail.com>
-References: <20200430194246.2076437-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200501100039.GS11346@scaer>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Fri,  1 May 2020 07:13:05 -0300
+Subject: [Buildroot] [PATCH] package/wolfssl: bump version to 4.4.0
+Message-ID: <20200501101305.3066-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Also change the hash file to separate the fields by two spaces.
 
-On 2020-04-30 21:42 +0200, Fabrice Fontaine spake thusly:
-> - ChangeLog:
->   - compression bomb protection
->   - memory handling issue found by Oss-Fuzz
->   - improve handling of anomalies in traffic
-> - Drop first patch (already in version)
-> - Update indentation of hash file (two spaces)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/wolfssl/wolfssl.hash | 6 +++---
+ package/wolfssl/wolfssl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Both patches applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../0001-fix-build-without-GNU-libiconv.patch | 60 -------------------
->  ...01-htp.pc.in-add-lz-to-Libs.private.patch} |  2 +-
->  package/libhtp/libhtp.hash                    |  4 +-
->  package/libhtp/libhtp.mk                      |  2 +-
->  4 files changed, 4 insertions(+), 64 deletions(-)
->  delete mode 100644 package/libhtp/0001-fix-build-without-GNU-libiconv.patch
->  rename package/libhtp/{0002-htp.pc.in-add-lz-to-Libs.private.patch => 0001-htp.pc.in-add-lz-to-Libs.private.patch} (93%)
-> 
-> diff --git a/package/libhtp/0001-fix-build-without-GNU-libiconv.patch b/package/libhtp/0001-fix-build-without-GNU-libiconv.patch
-> deleted file mode 100644
-> index 8f6cddf2da..0000000000
-> --- a/package/libhtp/0001-fix-build-without-GNU-libiconv.patch
-> +++ /dev/null
-> @@ -1,60 +0,0 @@
-> -From 1531a8e9b91b567979a2a0d7fd6a4c2e9126b01c Mon Sep 17 00:00:00 2001
-> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Wed, 6 Mar 2019 23:06:54 +0100
-> -Subject: [PATCH] fix build without GNU libiconv
-> -
-> -iconvctl is only defined in GNU libiconv so check for the availability
-> -of this function before using it
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status: https://github.com/OISF/libhtp/pull/193]
-> ----
-> - configure.ac         | 18 ++++++++++++++++++
-> - htp/htp_transcoder.c |  2 +-
-> - 2 files changed, 19 insertions(+), 1 deletion(-)
-> -
-> -diff --git a/configure.ac b/configure.ac
-> -index 7f0a58d..388ec7b 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -155,6 +155,24 @@ sinclude(m4/lib-link.m4)
-> - sinclude(m4/lib-prefix.m4)
-> - AM_ICONV
-> - 
-> -+# iconvctl is not standard, it is defined only in GNU libiconv
-> -+AC_MSG_CHECKING(for iconvctl)
-> -+TMPLIBS="${LIBS}"
-> -+LIBS="${LIBS} ${LIBICONV}"
-> -+
-> -+AC_TRY_LINK([#include <stdlib.h>
-> -+             #include <iconv.h>],
-> -+            [int iconv_param = 0;
-> -+             iconv_t cd = iconv_open("","");
-> -+             iconvctl(cd, ICONV_SET_DISCARD_ILSEQ, &iconv_param);
-> -+             iconv_close(cd);],
-> -+            [ac_cv_func_iconvctl=yes])
-> -+AC_MSG_RESULT($ac_cv_func_iconvctl)
-> -+if test "$ac_cv_func_iconvctl" == yes; then
-> -+    AC_DEFINE(HAVE_ICONVCTL,1,"Define to 1 if you have the `iconvctl' function.")
-> -+fi
-> -+LIBS="${TMPLIBS}"
-> -+
-> - dnl -----------------------------------------------
-> - dnl Check and enable the GCC opts we want to use.
-> - dnl We may need to add more checks
-> -diff --git a/htp/htp_transcoder.c b/htp/htp_transcoder.c
-> -index 57ff74c..d8e8280 100644
-> ---- a/htp/htp_transcoder.c
-> -+++ b/htp/htp_transcoder.c
-> -@@ -64,7 +64,7 @@ int htp_transcode_params(htp_connp_t *connp, htp_table_t **params, int destroy_o
-> -         return HTP_ERROR;
-> -     }
-> - 
-> --    #if (_LIBICONV_VERSION >= 0x0108)
-> -+    #if (_LIBICONV_VERSION >= 0x0108 && HAVE_ICONVCTL)
-> -     int iconv_param = 0;
-> -     iconvctl(cd, ICONV_SET_TRANSLITERATE, &iconv_param);
-> -     iconv_param = 1;
-> --- 
-> -2.14.1
-> -
-> diff --git a/package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch b/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
-> similarity index 93%
-> rename from package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch
-> rename to package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
-> index f79a9ebb3a..b21ea6053a 100644
-> --- a/package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch
-> +++ b/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
-> @@ -7,7 +7,7 @@ zlib is a mandatory dependency so add it to Libs.private otherwise
->  static linking of packages linking with htp (e.g. suricata) will fail.
->  
->  Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status: not sent yet]
-> +[Upstream status: https://github.com/OISF/libhtp/pull/294]
->  ---
->   htp.pc.in | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
-> index b3775c3ad3..765acd5bf9 100644
-> --- a/package/libhtp/libhtp.hash
-> +++ b/package/libhtp/libhtp.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256	a6a6f3b3f1fb6e8b8a1dae02db8a0090c438f0d057102dd8e52208224868c4e4	libhtp-0.5.32.tar.gz
-> -sha256	87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15	LICENSE
-> +sha256  953651fdfe828805bb82dc1aa8b56187b0e2f80781727343e68ccf8afd6a9122  libhtp-0.5.33.tar.gz
-> +sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
-> diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
-> index 577b700953..b77d8715f9 100644
-> --- a/package/libhtp/libhtp.mk
-> +++ b/package/libhtp/libhtp.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBHTP_VERSION = 0.5.32
-> +LIBHTP_VERSION = 0.5.33
->  LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
->  LIBHTP_LICENSE = BSD-3-Clause
->  LIBHTP_LICENSE_FILES = LICENSE
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index 5509552ca4e3..4a1aeebe7d71 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,6 +1,6 @@
+ # Locally computed:
+-sha256 6896f8ad6c44aff3e583006eeee839600848a0e37118ebbb7514eca9409ae08b  wolfssl-4.3.0-stable.tar.gz
++sha256  7f854804c8ae0ca49cc77809e38e9a3b5a8c91ba7855ea928e6d6651b0d35f18  wolfssl-4.4.0-stable.tar.gz
+ 
+ # Hash for license files:
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-sha256 74adaaef40b96c71378b6daa3feb8ccd4a1bfd9b76debf3f3f29cf3a0e86c9a0  LICENSING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  74adaaef40b96c71378b6daa3feb8ccd4a1bfd9b76debf3f3f29cf3a0e86c9a0  LICENSING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 8834a0f46826..e3062c39b599 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WOLFSSL_VERSION = 4.3.0-stable
++WOLFSSL_VERSION = 4.4.0-stable
+ WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION))
+ WOLFSSL_INSTALL_STAGING = YES
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
