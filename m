@@ -1,65 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 11:54:30 +0200
-Subject: [Buildroot] [PATCH] package/stella: bump to version 6.1.2
-In-Reply-To: <20200430210327.31784-1-sergio.prado@e-labworks.com>
-References: <20200430210327.31784-1-sergio.prado@e-labworks.com>
-Message-ID: <20200501095430.GR11346@scaer>
+From: Andreas Ziegler <br015@umbiko.net>
+Date: Fri, 01 May 2020 09:51:11 +0000
+Subject: [Buildroot] When building the net-next kernel,
+ buildroot is asking for all the kernel config options one by one to
+ enable
+In-Reply-To: <mailman.9169.1588194216.91065.buildroot@busybox.net>
+References: <mailman.9169.1588194216.91065.buildroot@busybox.net>
+Message-ID: <d2386527cdcc0e718a0ecaa1abd5ecdf@umbiko.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergio, All,
+> Message: 3
+> Date: Wed, 29 Apr 2020 07:32:55 -0500 (CDT)
+> From: Ganesh <ganesh45in@gmail.com>
+> To: buildroot at busybox.net
+> Subject: [Buildroot] When building the net-next kernel, buildroot is
+> 	asking for all the kernel config options one by one to enable
 
-On 2020-04-30 18:03 -0300, Sergio Prado spake thusly:
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Hi Ganesh,
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/stella/stella.hash | 2 +-
->  package/stella/stella.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> I have done the following steps before starting the kernel build:
 > 
-> diff --git a/package/stella/stella.hash b/package/stella/stella.hash
-> index fb7c598a2c78..0b50636a00e5 100644
-> --- a/package/stella/stella.hash
-> +++ b/package/stella/stella.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed:
-> -sha256  ddf53bb782c63c97c4e5d0fefa9eb256c62e0d5a328c78cc18f06eea45ba7369  stella-6.1.1-src.tar.xz
-> +sha256  8086e57c231625f0b840ca361f493969247d20476cbb53609d778d37bda17c34  stella-6.1.2-src.tar.xz
->  sha256  d207ee9e563fdd062582df8cbb6c8303b9879bd107692c0db2a32477e47dfa35  Copyright.txt
->  sha256  58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
-> diff --git a/package/stella/stella.mk b/package/stella/stella.mk
-> index 74c131e72d86..53a1050cd8fa 100644
-> --- a/package/stella/stella.mk
-> +++ b/package/stella/stella.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -STELLA_VERSION = 6.1.1
-> +STELLA_VERSION = 6.1.2
->  STELLA_SOURCE = stella-$(STELLA_VERSION)-src.tar.xz
->  STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VERSION)
->  STELLA_LICENSE = GPL-2.0+
-> -- 
-> 2.17.1
+> 1. Put my defconfig inside the kernel/arch/arm/config
+> 2. Go to buildroot directory, make <my_project_defconfig>
+> 3. make
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> my_project_defconfig has the following lines of concern:
+> 
+> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="<kernel path of the defconfig>"
+> BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME="My_dts.dts"
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Just some remarks about your project configuration:
+
+1. Ideally, you should not copy your kernel defconfig to the kernel tree 
+manually, it might get overwritten by the rsync() command. Just 
+configure the external location in Buildroot via 
+"BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE". File locations are relative to 
+the Buildroot directory or absolute and may use BR2_* environment 
+variables.
+
+2. The rsync() for the kernel tree will copy any existing .config* files 
+into the build location, which may be responsible for your strange 
+issue. Remove configuration fragments from your source tree or modify 
+the rsync() command.
+
+2. To verify that the correct kernel config is picked up, run
+   # make linux-nconfig
+from the Buildroot directory and check the configuration.
+
+3. An in-tree DTS name is relative to the dts directory 
+(arch/arm/boot/dts) and without the file extension (.dts).
+
+Kind regards,
+Andreas
