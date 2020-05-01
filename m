@@ -1,56 +1,94 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 May 2020 08:57:49 +0200
-Subject: [Buildroot] [PATCH 1/1] libuv, uvw: bump to versions 1.37.0,
- 2.5.0_libuv-v1.37
-In-Reply-To: <CALFsTFXDXoJ5OAzMUOrOdvtPZ5K8O909aRWxg64sEA58QzytAA@mail.gmail.com>
-References: <20200425142239.444381-1-asafka7@gmail.com>
- <20200429215631.786c9de5@windsurf.home>
- <CALFsTFXDXoJ5OAzMUOrOdvtPZ5K8O909aRWxg64sEA58QzytAA@mail.gmail.com>
-Message-ID: <20200501085749.7f4f4cc0@windsurf.home>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Fri, 1 May 2020 09:20:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: use pkgconf to find
+ host libraries.
+In-Reply-To: <CADvTj4qPu97L0h+okgWgKxf6dtWKQUpv_AwSgO+QW79aavZhXw@mail.gmail.com>
+References: <20200130084734.20100-1-nicolas.cavallari@green-communications.fr>
+ <b3e489a7-0c62-aed2-c896-f41c9a10d757@mind.be>
+ <CADvTj4qPu97L0h+okgWgKxf6dtWKQUpv_AwSgO+QW79aavZhXw@mail.gmail.com>
+Message-ID: <725af016-a8a9-01d3-63c4-14557827f907@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 1 May 2020 09:42:31 +0300
-Asaf Kahlon <asafka7@gmail.com> wrote:
+On 30/04/2020 22:37, James Hilliard wrote:
+> On Sun, Feb 2, 2020 at 2:47 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>  Hi Nicolas,
+>>
+>>  Looks good to me, but...
+>>
+>> On 30/01/2020 09:47, Nicolas Cavallari wrote:
+>>> meson makes a distinction between 'native' (i.e. host) dependencies
+>>> and 'host' (i.e. target) dependencies and can use a different pkg-config
+>>> binary for each case.
+>>>
+>>> Currently, pkg-meson only pass the target pkg-config and meson
+>>> automatically guesses the host pkg-config by searching PATH, which finds
+>>> host/bin/pkg-config, which is the target pkg-config wrapper script.
+>>>
+>>> As a result, meson uses the target pkg-config to find host dependencies,
+>>> with possibly incorrect results.
+>>>
+>>> This patch causes meson to use host/bin/pkgconf directly to find host
+>>> dependencies, using the apparently recommended method[1] of
+>>> specifing the PKG_CONFIG environment variable.  pkgconf does not know
+>>> about the target sysroot, so only finds host dependencies.
+>>
+>>  In HOST_MAKE_ENV we also set
+>>
+>> PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
+>>
+>> Don't we still need that to make sure it will indeed find our own .pc files? Or
+>> is that anyway the default for pkgconf due to our --prefix in the configure step?
+> Meson provides a command line flag to correctly set the pkg-config
+> libdir path for
+> only dependencies with native: true, this would not do that correctly from my
+> understanding as the PKG_CONFIG_LIBDIR would need to be scoped to
+> dependencies with native: true.
+> See my patch here fixing this:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20200428122213.63826-1-james.hilliard1 at gmail.com/
 
-> > This update of libuv is causing a build regression in nodejs:
-> >
-> >   https://bugs.busybox.net/show_bug.cgi?id=12826
-> >
-> > See also:
-> >
-> >   http://autobuild.buildroot.net/?reason=nodejs%
-> >
-> > Could you have a look ?
-> >  
-> 
-> Something with the nodejs autobuild failure looks strange to me.
-> I'm not sure the recent bump of libuv/uvw is the reason for that
-> failure, as I see
-> it's broken for the same reason for a very long time.
-> For example, this failure from the beginning of the month is the same:
-> http://autobuild.buildroot.net/results/af8/af82fd236b536bf1415e5992ca749cd640abd7e9/build-end.log
-> In addition, there's no build failure of nodejs since April 20.
-> Moreover, I've managed to build nodejs with the same configuration
-> stated in the issue.
+This patch is quite old. A v2 version was posted a while ago. And then
+Arnout committed its own fix after bumping meson to a version with more
+options, then the v2 (which used a host pkg-config wrapper) was
+rejected. Things were different when this patch was posted. So this is
+quite the necropost.
 
-My statement was mainly based on the bug report at
-https://bugs.busybox.net/show_bug.cgi?id=12826 where the reporter
-claimed that reverting commit 7d9ed0a19d8e88b56b389187c38b44563e33e5ab
-fixed the issue.
+IIRC, to find the pkg-config/configuration to use, meson does, in order:
+1. For native dependencies, search the cross-file or command line, but
+only options for the host machine. Back then, the cross file options
+were limited, IIRC.
+2. For target dependencies, search the cross-file or command line, but
+only options for the target.
+3. use the PKG_CONFIG env variable
+4. search 'pkg-config' in PATH
 
-> > By the way, could you create an account on our bug tracker so that we
-> > can assign issues to you when relevant ?  
-> 
-> Yes, I've opened an account.
+Before my patch, buildroot set the target pkgconfig to
+usr/bin/pkg-config in the cross file and didn't use any host option. So
+it would work for target dependencies, but for native dependencies,
+there wasn't
+any option so meson would fall back to searching PATH and find
+usr/bin/pkg-config that way, which is obviously incorrect.
 
-Thanks!
+My patch merely set PKG_CONFIG to pkgconf, which is already correctly
+configured to find host packages. the v2 version would set PKG_CONFIG to
+a host-pkg-config wrapper, which didn't do much more than the raw
+pkgconf, except replicate the HOST_MAKE_ENV options that probably were
+already the default.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Then i slapped a MY_PRIVATE_PACKAGE_CONF_OPTS =
+--build.pkg-config-path=$(HOST_DIR)/lib/pkgconfig/ in my private package
+as a crude workaround (this sets a PKG_CONFIG_PATH to use with the
+target pkg-config wrapper !) and mostly forgot about the issue.
+
+Meanwhile, Arnout changed things and i assumed that it should have fixed
+it. I didn't try removing my hack in my private package.  apparently the
+cross-file now uses pkgconf and sets pkg-config options by itself.
+Looking at the patch, i don't understand how that fixes things for
+native dependencies.
+
+Meanwhile, didn't meson gained an option to specify the native
+pkg-config to use in the cross-file ?
