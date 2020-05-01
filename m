@@ -1,57 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 May 2020 15:50:29 +0200
-Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bear the
- kernel options munging
-Message-ID: <20200501133531.39C3590D04@busybox.osuosl.org>
+Date: Fri, 1 May 2020 15:50:27 +0200
+Subject: [Buildroot] [git commit] boot/uboot: don't specify .config to munge
+Message-ID: <20200501133530.9870690D04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b294165e01f9982b39405a9e00753883088d2c5f
+commit: https://git.buildroot.net/buildroot/commit/?id=1dff5aa64d4f2558cf2c778bf3fc7e1056cebad4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/linux.mk                                           | 6 ------
- package/wireguard-linux-compat/wireguard-linux-compat.mk | 8 ++++++++
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ boot/uboot/uboot.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index e10e2a466b..71495de143 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -357,12 +357,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NET))
- 	$(if $(BR2_PACKAGE_LINUX_TOOLS_PERF),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS))
--	$(if $(BR2_PACKAGE_WIREGUARD_LINUX_COMPAT),
--		$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_NET_FOU)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MANAGER))
- 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB))
- 	$(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 27f5981ae3..6d90245bd2 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -11,5 +11,13 @@ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
- WIREGUARD_LINUX_COMPAT_LICENSE_FILES = COPYING
- WIREGUARD_LINUX_COMPAT_MODULE_SUBDIRS = src
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 2bfa50779b..7bd9cbae52 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -347,8 +347,7 @@ UBOOT_ZYNQMP_PMUFW_PATH = $(shell readlink -f $(UBOOT_ZYNQMP_PMUFW))
+ endif
  
-+define WIREGUARD_LINUX_COMPAT_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_FOU)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_MANAGER)
-+endef
-+
- $(eval $(kernel-module))
- $(eval $(generic-package))
+ define UBOOT_ZYNQMP_KCONFIG_PMUFW
+-	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_PATH)", \
+-	       $(@D)/.config)
++	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_PATH)")
+ endef
+ 
+ UBOOT_ZYNQMP_PSU_INIT = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE))
+@@ -356,8 +355,7 @@ UBOOT_ZYNQMP_PSU_INIT_PATH = $(shell readlink -f $(UBOOT_ZYNQMP_PSU_INIT))
+ 
+ ifneq ($(UBOOT_ZYNQMP_PSU_INIT),)
+ define UBOOT_ZYNQMP_KCONFIG_PSU_INIT
+-	$(call KCONFIG_SET_OPT,CONFIG_XILINX_PS_INIT_FILE,"$(UBOOT_ZYNQMP_PSU_INIT_PATH)", \
+-		$(@D)/.config)
++	$(call KCONFIG_SET_OPT,CONFIG_XILINX_PS_INIT_FILE,"$(UBOOT_ZYNQMP_PSU_INIT_PATH)")
+ endef
+ endif
+ 
