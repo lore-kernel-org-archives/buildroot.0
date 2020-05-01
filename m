@@ -1,105 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 15:23:36 +0200
-Subject: [Buildroot] [PATCH] package/grantlee: bump to 5.2.0,
- use github upstream, remove obsolete patch
-In-Reply-To: <20200113115512.20589-1-zgyarmati@zgyarmati.de>
-References: <20200113115512.20589-1-zgyarmati@zgyarmati.de>
-Message-ID: <20200501132336.GB11346@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  1 May 2020 15:32:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-msgfy: bump to version 0.1.0
+Message-ID: <20200501133250.2594726-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Zoltan, All,
+- python 2 support has been dropped since version 0.1.0 and
+  https://github.com/thombashi/msgfy/commit/8ddfd20132b8d4825214252189a65570b562619f
+- Update indentation of hash file (two spaces)
 
-On 2020-01-13 12:55 +0100, Zoltan Gyarmati spake thusly:
-> Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-msgfy/Config.in         | 1 +
+ package/python-msgfy/python-msgfy.hash | 6 +++---
+ package/python-msgfy/python-msgfy.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../0001-Remove-vestigial-ansi-flag.patch     | 27 -------------------
->  package/grantlee/grantlee.hash                |  4 +--
->  package/grantlee/grantlee.mk                  |  4 +--
->  3 files changed, 4 insertions(+), 31 deletions(-)
->  delete mode 100644 package/grantlee/0001-Remove-vestigial-ansi-flag.patch
-> 
-> diff --git a/package/grantlee/0001-Remove-vestigial-ansi-flag.patch b/package/grantlee/0001-Remove-vestigial-ansi-flag.patch
-> deleted file mode 100644
-> index 250463c2fd..0000000000
-> --- a/package/grantlee/0001-Remove-vestigial-ansi-flag.patch
-> +++ /dev/null
-> @@ -1,27 +0,0 @@
-> -From c989fcf192d01d26866faf6405a28ba4fdce64c3 Mon Sep 17 00:00:00 2001
-> -From: Stephen Kelly <steveire@gmail.com>
-> -Date: Sun, 21 Jul 2019 16:00:41 +0100
-> -Subject: [PATCH] Remove vestigial -ansi flag
-> -
-> -This causes the compiler to not operate in C++11 mode, meaning that
-> -headers such as <type_traits> issue errors.
-> -[Retrieved from:
-> -https://github.com/steveire/grantlee/commit/c989fcf192d01d26866faf6405a28ba4fdce64c3]
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ----
-> - CMakeLists.txt | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/CMakeLists.txt b/CMakeLists.txt
-> -index 6d51110..9172213 100644
-> ---- a/CMakeLists.txt
-> -+++ b/CMakeLists.txt
-> -@@ -59,7 +59,7 @@ endif()
-> - 
-> - if (CMAKE_COMPILER_IS_GNUCXX)
-> -   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
-> --  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common ")
-> -+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common ")
-> - 
-> -   if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
-> -     # Needed on 64 bit
-> diff --git a/package/grantlee/grantlee.hash b/package/grantlee/grantlee.hash
-> index 2be423bd95..f93380bd96 100644
-> --- a/package/grantlee/grantlee.hash
-> +++ b/package/grantlee/grantlee.hash
-> @@ -1,5 +1,5 @@
-> -# Locally calculated after checking pgp signature
-> -sha256  ea2e402466c74bb533eee2c7252209ec61cd93a5d236fecd625b4a0eb13a1478    grantlee-5.1.0.tar.gz
-> +# Locally calculated
-> +sha256  139acee5746b957bdf1327ec0d97c604d4c0b9be42aec5d584297cb5ed6a990a    grantlee-5.2.0.tar.gz
->  
->  # Hash for license file
->  sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861    COPYING.LIB
-> diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
-> index 575b63fef5..7079679ca4 100644
-> --- a/package/grantlee/grantlee.mk
-> +++ b/package/grantlee/grantlee.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -GRANTLEE_VERSION = 5.1.0
-> -GRANTLEE_SITE = http://downloads.grantlee.org
-> +GRANTLEE_VERSION = 5.2.0
-> +GRANTLEE_SITE = $(call github,steveire,grantlee,v$(GRANTLEE_VERSION))
->  GRANTLEE_INSTALL_STAGING = YES
->  GRANTLEE_LICENSE = LGPL-2.1+
->  GRANTLEE_LICENSE_FILES = COPYING.LIB
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/python-msgfy/Config.in b/package/python-msgfy/Config.in
+index 7875379e9e..f5a471633a 100644
+--- a/package/python-msgfy/Config.in
++++ b/package/python-msgfy/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_MSGFY
+ 	bool "python-msgfy"
++	depends on BR2_PACKAGE_PYTHON3
+ 	help
+ 	  msgfy is a Python library for convert Exception instance to
+ 	  a human-readable error message.
+diff --git a/package/python-msgfy/python-msgfy.hash b/package/python-msgfy/python-msgfy.hash
+index 8f664ec2e5..c795f7fa5e 100644
+--- a/package/python-msgfy/python-msgfy.hash
++++ b/package/python-msgfy/python-msgfy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/msgfy/json
+-md5	3a94f49d7b31cc7bca21e0a9bfadf767  msgfy-0.0.7.tar.gz
+-sha256	370c54bb036d3728af8004e750b7cd7bc5a4ac25f9cdb8be13b7865cae3c73ee  msgfy-0.0.7.tar.gz
++md5  4a3d8ac9908acd5f661a58b12f9e0d17  msgfy-0.1.0.tar.gz
++sha256  474c08302cd56ccee1300ac7976a01ebd1e42716fc9bcd947d39a311a15b7012  msgfy-0.1.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
++sha256  fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
+diff --git a/package/python-msgfy/python-msgfy.mk b/package/python-msgfy/python-msgfy.mk
+index 0a642b4344..c187061d41 100644
+--- a/package/python-msgfy/python-msgfy.mk
++++ b/package/python-msgfy/python-msgfy.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MSGFY_VERSION = 0.0.7
++PYTHON_MSGFY_VERSION = 0.1.0
+ PYTHON_MSGFY_SOURCE = msgfy-$(PYTHON_MSGFY_VERSION).tar.gz
+-PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/23/82/b61a8353c36e60c2c8291c56ad7d00aa37918ef56811727510acada09f7f
++PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/24/b5/7cc6ba75b6489245f9b75f11a85202b934fa92f6c99a4fa1c639f08d68e8
+ PYTHON_MSGFY_SETUP_TYPE = setuptools
+ PYTHON_MSGFY_LICENSE = MIT
+ PYTHON_MSGFY_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
