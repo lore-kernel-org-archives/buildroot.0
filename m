@@ -1,67 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 14:11:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkcs11-helper: fix build
- without threads
-In-Reply-To: <20200501102758.2136958-1-fontaine.fabrice@gmail.com>
-References: <20200501102758.2136958-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200501121149.GU11346@scaer>
+Date: Fri, 1 May 2020 14:14:18 +0200
+Subject: [Buildroot] [git commit] package/jbig2dec: security bump to version
+ 0.18
+Message-ID: <20200501120016.B1D2A90C72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=50ed3c13a8dbf2f53948eb89105cf7ceeab6f208
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-05-01 12:27 +0200, Fabrice Fontaine spake thusly:
-> Use --{en,dis}able-{threading,slotevent} to fix build without threads
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/d6eefca3ab1fb86e148e998238eed1df2310775f
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- Fix CVE-2020-12268: jbig2_image_compose in jbig2_image.c in Artifex
+  jbig2dec before 0.18 has a heap-based buffer overflow.
+- Add JBIG2DEC_AUTORECONF=YES otherwise build will fail because
+  install-sh has been removed from the tarball
+- Update indentation of hash file (two spaces)
 
-Applied to master, with two little changes: move earlier; use
-single-line assignments. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/jbig2dec/jbig2dec.hash | 6 +++---
+ package/jbig2dec/jbig2dec.mk   | 6 ++++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkcs11-helper/pkcs11-helper.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/package/pkcs11-helper/pkcs11-helper.mk b/package/pkcs11-helper/pkcs11-helper.mk
-> index a95340daf7..4d0974dd0f 100644
-> --- a/package/pkcs11-helper/pkcs11-helper.mk
-> +++ b/package/pkcs11-helper/pkcs11-helper.mk
-> @@ -48,4 +48,14 @@ PKCS11_HELPER_CONF_OPTS += \
->  	--disable-crypto-engine-openssl
->  endif
->  
-> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> +PKCS11_HELPER_CONF_OPTS += \
-> +	--enable-slotevent \
-> +	--enable-threading
-> +else
-> +PKCS11_HELPER_CONF_OPTS += \
-> +	--disable-slotevent \
-> +	--disable-threading
-> +endif
-> +
->  $(eval $(autotools-package))
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/jbig2dec/jbig2dec.hash b/package/jbig2dec/jbig2dec.hash
+index eb2b674443..86584b19a6 100644
+--- a/package/jbig2dec/jbig2dec.hash
++++ b/package/jbig2dec/jbig2dec.hash
+@@ -1,7 +1,7 @@
+-# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/MD5SUMS
++# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/MD5SUMS
+ # and SHA512SUMS are missing the hashes for this file.
+ # Locally computed:
+-sha256 a4f6bf15d217e7816aa61b92971597c801e81f0a63f9fe1daee60fb88e0f0602  jbig2dec-0.16.tar.gz
++sha256  9e19775237350e299c422b7b91b0c045e90ffa4ba66abf28c8fb5eb005772f5e  jbig2dec-0.18.tar.gz
+ 
+ # Hash for license files:
+-sha256 1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
++sha256  1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
+diff --git a/package/jbig2dec/jbig2dec.mk b/package/jbig2dec/jbig2dec.mk
+index 5ac5b87a72..08ef89bfcb 100644
+--- a/package/jbig2dec/jbig2dec.mk
++++ b/package/jbig2dec/jbig2dec.mk
+@@ -4,10 +4,12 @@
+ #
+ ################################################################################
+ 
+-JBIG2DEC_VERSION = 0.16
+-JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927
++JBIG2DEC_VERSION = 0.18
++JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952
+ JBIG2DEC_LICENSE = AGPL-3.0+
+ JBIG2DEC_LICENSE_FILES = LICENSE
+ JBIG2DEC_INSTALL_STAGING = YES
++# tarball is missing install-sh, install.sh, or shtool
++JBIG2DEC_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
