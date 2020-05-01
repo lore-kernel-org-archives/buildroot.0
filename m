@@ -1,76 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 May 2020 15:50:27 +0200
-Subject: [Buildroot] [git commit] package/pkg-utils.mk: rationalise kconfig
- option mangling
-Message-ID: <20200501133530.7D39D90D04@busybox.osuosl.org>
+Date: Fri, 1 May 2020 15:50:28 +0200
+Subject: [Buildroot] [git commit] package/audit: bear the kernel options
+ munging
+Message-ID: <20200501133530.D48AA90D04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=653afb764a3a571b1357953b3c7e24261c9f4a41
+commit: https://git.buildroot.net/buildroot/commit/?id=ad42b7f6f0be57926f0def3f6363b3bab05b7861
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, we have three macros that may mangle a .config file. All
-three are modeled after the same pattern: removing the existing option
-from the .config file, then adding the new definition for that option;
-all three also implement that pattern with the same commands: sed and
-echo.
-
-This is all good so far, because it was simple enough, and they always
-worked on a file passed in parameter.
-
-However, we're soon going to change this file parameter to make it
-optional, so that the file will then be auto-deduced for the current
-package. In that case, the file to sed and echo into will be a more
-complex structure than just the parameter.
-
-As such, move the actual mangling down to a helper macro, that is called
-from the three existing ones.
-
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-utils.mk | 26 ++++++++++++--------------
- 1 file changed, 12 insertions(+), 14 deletions(-)
+ linux/linux.mk         | 3 ---
+ package/audit/audit.mk | 5 +++++
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 66504d0be2..e1f3eafd62 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -11,20 +11,18 @@
- # package, and more.
- #
+diff --git a/linux/linux.mk b/linux/linux.mk
+index eb13920d57..e0a69444eb 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -355,9 +355,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_NET))
+-	$(if $(BR2_PACKAGE_AUDIT),
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT))
+ 	$(if $(BR2_PACKAGE_INTEL_MICROCODE),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_MICROCODE_INTEL))
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 03967ee650..652e0fcd56 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -54,6 +54,11 @@ define AUDIT_INSTALL_CLEANUP
+ endef
+ AUDIT_POST_INSTALL_TARGET_HOOKS += AUDIT_INSTALL_CLEANUP
  
--define KCONFIG_ENABLE_OPT # (option, file)
--	$(SED) "/\\<$(1)\\>/d" $(2)
--	echo '$(1)=y' >> $(2)
--endef
--
--define KCONFIG_SET_OPT # (option, value, file)
--	$(SED) "/\\<$(1)\\>/d" $(3)
--	echo '$(1)=$(2)' >> $(3)
--endef
--
--define KCONFIG_DISABLE_OPT # (option, file)
--	$(SED) "/\\<$(1)\\>/d" $(2)
--	echo '# $(1) is not set' >> $(2)
--endef
-+# KCONFIG_MUNGE_DOT_CONFIG (option, newline, file)
-+define KCONFIG_MUNGE_DOT_CONFIG
-+	$(SED) "/\\<$(strip $(1))\\>/d" $(strip $(3))
-+	echo '$(strip $(2))' >> $(strip $(3))
++define AUDIT_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT)
 +endef
 +
-+# KCONFIG_ENABLE_OPT (option, file)
-+KCONFIG_ENABLE_OPT  = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=y, $(2))
-+# KCONFIG_SET_OPT (option, value, file)
-+KCONFIG_SET_OPT     = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(1)=$(2), $(3))
-+# KCONFIG_DISABLE_OPT  (option, file)
-+KCONFIG_DISABLE_OPT = $(call KCONFIG_MUNGE_DOT_CONFIG, $(1), $(SHARP_SIGN) $(1) is not set, $(2))
- 
- # Helper functions to determine the name of a package and its
- # directory from its makefile directory, using the $(MAKEFILE_LIST)
+ HOST_AUDIT_CONF_OPTS = \
+ 	--without-python \
+ 	--without-python3 \
