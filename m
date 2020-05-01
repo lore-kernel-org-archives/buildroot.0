@@ -1,119 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 23:36:13 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/xerces: add disable network
- option
-In-Reply-To: <20200501213454.GF15673@scaer>
-References: <20200501154340.27763-1-jared.bents@rockwellcollins.com>
- <20200501213454.GF15673@scaer>
-Message-ID: <20200501213613.GG15673@scaer>
+Date: Fri, 1 May 2020 23:25:23 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: adjust e-mail address for
+ Davide Viti
+Message-ID: <20200501212219.1B6BB90D7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jared, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3d1583729cc4a499c8c64602ae5bed688f1d5238
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-05-01 23:34 +0200, Yann E. MORIN spake thusly:
-> On 2020-05-01 10:43 -0500, Jared Bents spake thusly:
-> > Update to add the option to compile xerces without network
-> > support.
-> > 
-> > Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-> > ---
-> >  package/xerces/Config.in | 9 +++++++++
-> >  package/xerces/xerces.mk | 4 +++-
-> >  2 files changed, 12 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/package/xerces/Config.in b/package/xerces/Config.in
-> > index 2edc4346b5..bc5c725799 100644
-> > --- a/package/xerces/Config.in
-> > +++ b/package/xerces/Config.in
-> > @@ -6,5 +6,14 @@ config BR2_PACKAGE_XERCES
-> >  
-> >  	  http://xerces.apache.org/xerces-c/
-> >  
-> > +if BR2_PACKAGE_XERCES
-> > +
-> > +config BR2_PACKAGE_XERCES_DISABLE_NETWORK
-> > +	bool "Disable network support"
-> > +	help
-> > +	  Disable network support in xerces
-> 
-> We prefer positive logic, so:
-> 
->     config BR2_PACKAGE_XERCES_NETWORK
->         bool "network support"
->         help
->           Enable network support
+Previous address is still valid but not used as primary address any
+longer
 
-I forgot to add: it should 'default y' to keep existing behaviour.
+Signed-off-by: Davide Viti <zinosat@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> > +endif
-> > +
-> >  comment "xerces-c++ needs a toolchain w/ C++, wchar"
-> >  	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
-> > diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-> > index c75a8b0d35..f98b1066a4 100644
-> > --- a/package/xerces/xerces.mk
-> > +++ b/package/xerces/xerces.mk
-> > @@ -31,7 +31,9 @@ XERCES_CONF_ENV += LIBS=-liconv
-> >  XERCES_DEPENDENCIES += libiconv
-> >  endif
-> >  
-> > -ifeq ($(BR2_PACKAGE_LIBCURL),y)
-> > +ifeq ($(BR2_PACKAGE_XERCES_DISABLE_NETWORK),y)
-> > +XERCES_CONF_OPTS += -Dnetwork:BOOL=OFF
-> > +else ifeq ($(BR2_PACKAGE_LIBCURL),y)
-> >  XERCES_CONF_OPTS += -Dnetwork-accessor=curl
-> >  XERCES_DEPENDENCIES += libcurl
-> >  else
-> 
-> And here you'd have something like:
-> 
->     ifeq ($(BR2_PACKAGE_XERCES_NETWORK),y)
->     ifeq ($(BR2_PACKAGE_LIBCURL),y)
->     XERCES_CONF_OPTS += -Dnetwork-accessor=curl
->     XERCES_DEPENDENCIES += libcurl
->     else
->     XERCES_CONF_OPTS += -Dnetwork-accessor=socket
->     endif
->     else
->     XERCES_CONF_OPTS += -Dnetwork:BOOL=OFF
->     endif
-> 
-> Note: why -Dnetwork:BOOL=OFF while we traditionally use -Dnetwork=OFF ?
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > -- 
-> > 2.17.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cc72b288be..e427ab15d4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -693,7 +693,7 @@ F:	linux/linux-ext-ev3dev-linux-drivers.mk
+ F:	package/brickd/
+ F:	package/ev3dev-linux-drivers/
+ 
+-N:	Davide Viti <zinosat@tiscali.it>
++N:	Davide Viti <zinosat@gmail.com>
+ F:	board/friendlyarm/nanopi-r1/
+ F:	configs/nanopi_r1_defconfig
+ F:	package/flann/
