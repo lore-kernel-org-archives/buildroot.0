@@ -1,36 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 May 2020 14:35:39 +0200
-Subject: [Buildroot] [git commit] package/opencv3: properly propagate
- Config.in comment dependencies
-Message-ID: <20200501122126.7BA7990C89@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 May 2020 14:37:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jbig2dec: security bump to
+ version 0.18
+In-Reply-To: <20200501120507.2197851-1-fontaine.fabrice@gmail.com>
+References: <20200501120507.2197851-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200501123702.GV11346@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ada75f3dc9a0cd56d2454b90778dbda5316b188f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Python support in OpenCV3 indeed requires a glibc or musl toolchain,
-but is only available if Python 3.x is enabled, and if we're on an
-architecture with Numpy support.
+On 2020-05-01 14:05 +0200, Fabrice Fontaine spake thusly:
+> - Fix CVE-2020-12268: jbig2_image_compose in jbig2_image.c in Artifex
+>   jbig2dec before 0.18 has a heap-based buffer overflow.
+> - Add JBIG2DEC_AUTORECONF=YES otherwise build will fail because
+>   install-sh has been removed from the tarball
+> - Update indentation of hash file (two spaces)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/opencv3/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index 18c390c515..f45d678d22 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -165,6 +165,8 @@ config BR2_PACKAGE_OPENCV3_LIB_PYTHON
- 	  python example is installed.
- 
- comment "python support needs glibc or musl"
-+	depends on BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
- 
- config BR2_PACKAGE_OPENCV3_LIB_SHAPE
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/jbig2dec/jbig2dec.hash | 6 +++---
+>  package/jbig2dec/jbig2dec.mk   | 6 ++++--
+>  2 files changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/jbig2dec/jbig2dec.hash b/package/jbig2dec/jbig2dec.hash
+> index eb2b674443..86584b19a6 100644
+> --- a/package/jbig2dec/jbig2dec.hash
+> +++ b/package/jbig2dec/jbig2dec.hash
+> @@ -1,7 +1,7 @@
+> -# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/MD5SUMS
+> +# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/MD5SUMS
+>  # and SHA512SUMS are missing the hashes for this file.
+>  # Locally computed:
+> -sha256 a4f6bf15d217e7816aa61b92971597c801e81f0a63f9fe1daee60fb88e0f0602  jbig2dec-0.16.tar.gz
+> +sha256  9e19775237350e299c422b7b91b0c045e90ffa4ba66abf28c8fb5eb005772f5e  jbig2dec-0.18.tar.gz
+>  
+>  # Hash for license files:
+> -sha256 1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
+> +sha256  1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
+> diff --git a/package/jbig2dec/jbig2dec.mk b/package/jbig2dec/jbig2dec.mk
+> index 5ac5b87a72..08ef89bfcb 100644
+> --- a/package/jbig2dec/jbig2dec.mk
+> +++ b/package/jbig2dec/jbig2dec.mk
+> @@ -4,10 +4,12 @@
+>  #
+>  ################################################################################
+>  
+> -JBIG2DEC_VERSION = 0.16
+> -JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927
+> +JBIG2DEC_VERSION = 0.18
+> +JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952
+>  JBIG2DEC_LICENSE = AGPL-3.0+
+>  JBIG2DEC_LICENSE_FILES = LICENSE
+>  JBIG2DEC_INSTALL_STAGING = YES
+> +# tarball is missing install-sh, install.sh, or shtool
+> +JBIG2DEC_AUTORECONF = YES
+>  
+>  $(eval $(autotools-package))
+> -- 
+> 2.26.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
