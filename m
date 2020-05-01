@@ -1,61 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 14:14:18 +0200
-Subject: [Buildroot] [git commit] package/jbig2dec: security bump to version
- 0.18
-Message-ID: <20200501120016.B1D2A90C72@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 01 May 2020 14:25:37 +0200
+Subject: [Buildroot] [PATCH 0/2] tz: bump to version 2020a
+In-Reply-To: <20200427202555.GA11346@scaer> (Yann E. MORIN's message of "Mon, 
+ 27 Apr 2020 22:25:55 +0200")
+References: <20200427071144.30237-1-post@lespocky.de>
+ <20200427202555.GA11346@scaer>
+Message-ID: <87ees34zb2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50ed3c13a8dbf2f53948eb89105cf7ceeab6f208
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-- Fix CVE-2020-12268: jbig2_image_compose in jbig2_image.c in Artifex
-  jbig2dec before 0.18 has a heap-based buffer overflow.
-- Add JBIG2DEC_AUTORECONF=YES otherwise build will fail because
-  install-sh has been removed from the tarball
-- Update indentation of hash file (two spaces)
+ > Alexander, All,
+ > On 2020-04-27 09:11 +0200, Alexander Dahl spake thusly:
+ >> Hello everyone,
+ >> 
+ >> the 2020a release of the timezone database tz code and data is
+ >> available ? announcement here:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/jbig2dec/jbig2dec.hash | 6 +++---
- package/jbig2dec/jbig2dec.mk   | 6 ++++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ > Series applied to master, thanks.
 
-diff --git a/package/jbig2dec/jbig2dec.hash b/package/jbig2dec/jbig2dec.hash
-index eb2b674443..86584b19a6 100644
---- a/package/jbig2dec/jbig2dec.hash
-+++ b/package/jbig2dec/jbig2dec.hash
-@@ -1,7 +1,7 @@
--# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/MD5SUMS
-+# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/MD5SUMS
- # and SHA512SUMS are missing the hashes for this file.
- # Locally computed:
--sha256 a4f6bf15d217e7816aa61b92971597c801e81f0a63f9fe1daee60fb88e0f0602  jbig2dec-0.16.tar.gz
-+sha256  9e19775237350e299c422b7b91b0c045e90ffa4ba66abf28c8fb5eb005772f5e  jbig2dec-0.18.tar.gz
- 
- # Hash for license files:
--sha256 1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
-+sha256  1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
-diff --git a/package/jbig2dec/jbig2dec.mk b/package/jbig2dec/jbig2dec.mk
-index 5ac5b87a72..08ef89bfcb 100644
---- a/package/jbig2dec/jbig2dec.mk
-+++ b/package/jbig2dec/jbig2dec.mk
-@@ -4,10 +4,12 @@
- #
- ################################################################################
- 
--JBIG2DEC_VERSION = 0.16
--JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927
-+JBIG2DEC_VERSION = 0.18
-+JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952
- JBIG2DEC_LICENSE = AGPL-3.0+
- JBIG2DEC_LICENSE_FILES = LICENSE
- JBIG2DEC_INSTALL_STAGING = YES
-+# tarball is missing install-sh, install.sh, or shtool
-+JBIG2DEC_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+ >> https://mm.icann.org/pipermail/tz-announce/2020-April/000058.html
+ >> 
+ >> Nice to have for stable.
+
+ > This will ahve to be picked up by Peter, if he sees fit...
+
+Yes, I believe we discussed timezone updates earlier and how they should
+also be backported. I will get it when I sync 2020.02.x with master.
+
+-- 
+Bye, Peter Korsgaard
