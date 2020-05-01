@@ -1,178 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 22:44:41 +0200
-Subject: [Buildroot] [PATCH 05/11] package/pkg-generic.mk: rework
- pkg_size logic with the "installed" step
-In-Reply-To: <20200430095249.782597-6-thomas.petazzoni@bootlin.com>
-References: <20200430095249.782597-1-thomas.petazzoni@bootlin.com>
- <20200430095249.782597-6-thomas.petazzoni@bootlin.com>
-Message-ID: <20200501204441.GA15673@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 1 May 2020 22:44:49 +0200
+Subject: [Buildroot] [PATCH 1/1] libuv, uvw: bump to versions 1.37.0,
+ 2.5.0_libuv-v1.37
+In-Reply-To: <CALFsTFXDXoJ5OAzMUOrOdvtPZ5K8O909aRWxg64sEA58QzytAA@mail.gmail.com>
+References: <20200425142239.444381-1-asafka7@gmail.com>
+ <20200429215631.786c9de5@windsurf.home>
+ <CALFsTFXDXoJ5OAzMUOrOdvtPZ5K8O909aRWxg64sEA58QzytAA@mail.gmail.com>
+Message-ID: <20200501224449.2cb2dd03@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-04-30 11:52 +0200, Thomas Petazzoni spake thusly:
-> This commits reworks the pkg_size logic to no longer use the
-> GLOBAL_INSTRUMENTATION_HOOKS mechanism, but instead be directly
-> implemented within the configure step and install step.
-> 
-> The problem with the current implementation in the
-> GLOBAL_INSTRUMENTATION_HOOKS is that we only capture what is installed
-> in $(HOST_DIR) during the "host installation step", what is installed
-> in $(TARGET_DIR) during the "target installation step" and what is
-> installed in "$(STAGING_DIR)" during the staging installation step.
-> 
-> While this seems reasonable in principle, it is in fact not completely
-> true. For example, "toolchain", which is a target package, installs
-> tons of files in $(HOST_DIR). "qt5base", which is also a target
-> package, also installs things in $(HOST_DIR). Same with the "syslinux"
-> package.
-> 
-> The idea behind this patch is pretty simple:
-> 
->  - At the beginning of the configure step, right after the per-package
->    directories have been populated (if BR2_PER_PACKAGE_DIRECTORIES=y),
->    we capture the state of the HOST_DIR, TARGET_DIR and STAGING_DIR.
-> 
->  - At the end of all install steps (which is possible thanks to the
->    newly introduced "install" step), we capture again the state of
->    HOST_DIR, TARGET_DIR and STAGING_DIR, and compare it to what we
->    have saved at the configure step.
+Hello Asaf, Thomas,
 
-I don't understand wy tht can't be achieved in the instrumentation hooks
-mechanism:
+On Fri, 1 May 2020 09:42:31 +0300, Asaf Kahlon <asafka7@gmail.com> wrote:
 
-    $(if $(filter start-configure,$(1)-$(2)),\
-        $(call step_pkg_size_before,$(TARGET_DIR))\
-        $(call step_pkg_size_before,$(STAGING_DIR),-staging)\
-        $(call step_pkg_size_before,$(HOST_DIR),-host))
+> Hello Thomas,
+>
+> On Wed, Apr 29, 2020 at 10:56 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > Hello,
+> >
+> > On Sat, 25 Apr 2020 17:22:39 +0300
+> > Asaf Kahlon <asafka7@gmail.com> wrote:
+> >
+> > > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> > > ---
+> > >  package/libuv/libuv.hash | 2 +-
+> > >  package/libuv/libuv.mk   | 2 +-
+> > >  package/uvw/uvw.hash     | 2 +-
+> > >  package/uvw/uvw.mk       | 2 +-
+> > >  4 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > This update of libuv is causing a build regression in nodejs:
+> >
+> >   https://bugs.busybox.net/show_bug.cgi?id=12826
+> >
+> > See also:
+> >
+> >   http://autobuild.buildroot.net/?reason=nodejs%
+> >
+> > Could you have a look ?
+> >
+>
+> Something with the nodejs autobuild failure looks strange to me.
+> I'm not sure the recent bump of libuv/uvw is the reason for that
+> failure, as I see
+> it's broken for the same reason for a very long time.
+> For example, this failure from the beginning of the month is the same:
+> http://autobuild.buildroot.net/results/af8/af82fd236b536bf1415e5992ca749cd640abd7e9/build-end.log
+> In addition, there's no build failure of nodejs since April 20.
+> Moreover, I've managed to build nodejs with the same configuration
+> stated in the issue.
 
-    $(if $(filter end-install,$(1)-$(2)),\
-        $(call step_pkg_size_after,$(TARGET_DIR))\
-        $(call step_pkg_size_after,$(STAGING_DIR),-staging)\
-        $(call step_pkg_size_after,$(HOST_DIR),-host))
+All the build failures are on branch 2010.11.x...., with libuv-1.33.1
+(predating uv_sleep() support)....
 
-Of course, it means you have to add a call the instrumentation hooks
-from the new 'install' step.
+	$ find . -name uv.h | xargs md5sum
+9b7749f33952c1fd11e57aeb719712a8  ./node-v12.16.1/deps/uv/include/uv.h
+9b7749f33952c1fd11e57aeb719712a8  ./build/host-nodejs-12.16.1/deps/uv/include/uv.h
+ff13d2ec9cf4d064bc8254771b7fdae1  ./build/libuv-1.33.1/include/uv.h
+9b7749f33952c1fd11e57aeb719712a8  ./build/nodejs-12.16.1/deps/uv/include/uv.h
+9b7749f33952c1fd11e57aeb719712a8  ./host/include/node/uv.h
+ff13d2ec9cf4d064bc8254771b7fdae1  ./host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/uv.h
+ff13d2ec9cf4d064bc8254771b7fdae1  ./target/usr/include/uv.h
 
-> So regardless of whether a file has been installed in $(HOST_DIR)
-> during the target or staging installation steps of a target package,
-> or if a host package has installed a file in $(TARGET_DIR), we will
-> detect it.
-> 
-> The pkg_size_before and pkg_size_after macros are intentionally left
-> where they are (even if they now fall in the middle of the
-> GLOBAL_INSTRUMENTATION_HOOKS implementations) to minimize the diffstat
-> and facilitate review.
-> 
-> Note that we also have to change check_bin_arch to be explicitly
-> called from the install step rather than through a
-> GLOBAL_INSTRUMENTATION_HOOKS as it depends on the .files-list.txt file
-> produced by the pkg_size_after function.
+Seems in sysroot (and target) the libuv-1.33.1 header file is installed, but in
+host/include/node the one from host-nodejs-12.16.1...
 
-And that would solve this as well.
+Could not reproduce the failure from bug 12826 on 2020.02.1/2020.02.x nor master...
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/pkg-generic.mk | 42 ++++++++++++++----------------------------
->  1 file changed, 14 insertions(+), 28 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index efdc32e355..3fb1e5f8c3 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -59,7 +59,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
->  
->  # $(1): base directory to search in
->  # $(2): suffix of file (optional)
-> -define step_pkg_size_before
-> +define pkg_size_before
->  	cd $(1); \
->  	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
->  		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).before
-> @@ -67,7 +67,7 @@ endef
->  
->  # $(1): base directory to search in
->  # $(2): suffix of file (optional)
-> -define step_pkg_size_after
-> +define pkg_size_after
->  	cd $(1); \
->  	LC_ALL=C find . \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
->  		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after
-> @@ -80,35 +80,14 @@ define step_pkg_size_after
->  	rm -f $($(PKG)_DIR)/.files-list$(2).after
->  endef
->  
-> -define step_pkg_size
-> -	$(if $(filter start-install-target,$(1)-$(2)),\
-> -		$(call step_pkg_size_before,$(TARGET_DIR)))
-> -	$(if $(filter start-install-staging,$(1)-$(2)),\
-> -		$(call step_pkg_size_before,$(STAGING_DIR),-staging))
-> -	$(if $(filter start-install-host,$(1)-$(2)),\
-> -		$(call step_pkg_size_before,$(HOST_DIR),-host))
-> -
-> -	$(if $(filter end-install-target,$(1)-$(2)),\
-> -		$(call step_pkg_size_after,$(TARGET_DIR)))
-> -	$(if $(filter end-install-staging,$(1)-$(2)),\
-> -		$(call step_pkg_size_after,$(STAGING_DIR),-staging))
-> -	$(if $(filter end-install-host,$(1)-$(2)),\
-> -		$(call step_pkg_size_after,$(HOST_DIR),-host))
-> -endef
-> -GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
-> -
-> -# Relies on step_pkg_size, so must be after
->  define check_bin_arch
-> -	$(if $(filter end-install-target,$(1)-$(2)),\
-> -		support/scripts/check-bin-arch -p $(3) \
-> -			-l $($(PKG)_DIR)/.files-list.txt \
-> -			$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
-> -			-r $(TARGET_READELF) \
-> -			-a $(BR2_READELF_ARCH_NAME))
-> +	support/scripts/check-bin-arch -p $($(PKG)_NAME) \
-> +		-l $($(PKG)_DIR)/.files-list.txt \
-> +		$(foreach i,$($(PKG)_BIN_ARCH_EXCLUDE),-i "$(i)") \
-> +		-r $(TARGET_READELF) \
-> +		-a $(BR2_READELF_ARCH_NAME)
->  endef
->  
-> -GLOBAL_INSTRUMENTATION_HOOKS += check_bin_arch
-> -
->  # This hook checks that host packages that need libraries that we build
->  # have a proper DT_RPATH or DT_RUNPATH tag
->  define check_host_rpath
-> @@ -253,6 +232,9 @@ $(BUILD_DIR)/%/.stamp_configured:
->  	@$(call step_start,configure)
->  	@$(call MESSAGE,"Configuring")
->  	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
-> +	@$(call pkg_size_before,$(TARGET_DIR))
-> +	@$(call pkg_size_before,$(STAGING_DIR),-staging)
-> +	@$(call pkg_size_before,$(HOST_DIR),-host)
->  	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
->  	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
->  	$($(PKG)_CONFIGURE_CMDS)
-> @@ -374,6 +356,10 @@ $(BUILD_DIR)/%/.stamp_target_installed:
->  # Final installation step, completed when all installation steps
->  # (host, images, staging, target) have completed
->  $(BUILD_DIR)/%/.stamp_installed:
-> +	@$(call pkg_size_after,$(TARGET_DIR))
-> +	@$(call pkg_size_after,$(STAGING_DIR),-staging)
-> +	@$(call pkg_size_after,$(HOST_DIR),-host)
-> +	@$(call check_bin_arch)
->  	$(Q)touch $@
->  
->  # Remove package sources
-> -- 
-> 2.25.4
-> 
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> > By the way, could you create an account on our bug tracker so that we
+> > can assign issues to you when relevant ?
+>
+> Yes, I've opened an account.
+>
+> >
+> > Thanks a lot!
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+>
+> Regards,
+> Asaf.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
