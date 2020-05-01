@@ -1,39 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 May 2020 21:33:04 +0200
-Subject: [Buildroot] [git commit] package/qpdf: fix 'no such file' exeption
-Message-ID: <20200501191952.5B2B690D33@busybox.osuosl.org>
+Date: Fri, 1 May 2020 21:36:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qpdf: fix 'no such file'
+ exeption
+In-Reply-To: <20200501155139.4380-1-skif@skif-web.ru>
+References: <20200501155139.4380-1-skif@skif-web.ru>
+Message-ID: <20200501193606.GC3687@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69dfbbd33b2afab0814c5674b0bc7f5464941fbc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Alexey, All,
 
-Without a source for randomness, qpdf will crash with 'no such file'
-error. It's can me tested by command like 'qpd some_pdf.pdf -'.
-This problem breaks cups printing.
+On 2020-05-01 18:51 +0300, Alexey Lukyanchuk spake thusly:
+> Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
 
-This patch change configure options to '--with-random=/dev/urandom'
+Your previous iteration had a good commit log, so I took it for this
+commit, reworded it a bit, and applied to master, thanks.
 
-Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
-[yann.morin.1998 at free.fr: reword commit log]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/qpdf/qpdf.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-index ac703d716e..fd31140b0c 100644
---- a/package/qpdf/qpdf.mk
-+++ b/package/qpdf/qpdf.mk
-@@ -11,7 +11,7 @@ QPDF_LICENSE = Apache-2.0 or Artistic-2.0
- QPDF_LICENSE_FILES = LICENSE.txt Artistic-2.0
- QPDF_DEPENDENCIES = host-pkgconf zlib jpeg
- 
--QPDF_CONF_OPTS = --without-random
-+QPDF_CONF_OPTS = --with-random=/dev/urandom
- 
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- QPDF_CONF_OPTS += --enable-crypto-gnutls
+> ---
+>  package/qpdf/qpdf.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+> index ac703d716e..fd31140b0c 100644
+> --- a/package/qpdf/qpdf.mk
+> +++ b/package/qpdf/qpdf.mk
+> @@ -11,7 +11,7 @@ QPDF_LICENSE = Apache-2.0 or Artistic-2.0
+>  QPDF_LICENSE_FILES = LICENSE.txt Artistic-2.0
+>  QPDF_DEPENDENCIES = host-pkgconf zlib jpeg
+>  
+> -QPDF_CONF_OPTS = --without-random
+> +QPDF_CONF_OPTS = --with-random=/dev/urandom
+>  
+>  ifeq ($(BR2_PACKAGE_GNUTLS),y)
+>  QPDF_CONF_OPTS += --enable-crypto-gnutls
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
