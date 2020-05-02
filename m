@@ -1,29 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 02 May 2020 13:20:55 +0000
-Subject: [Buildroot] [Bug 12831] RPI-firmware package: DTB-overlay dependency
-In-Reply-To: <bug-12831-163@https.bugs.busybox.net/>
-References: <bug-12831-163@https.bugs.busybox.net/>
-Message-ID: <bug-12831-163-To7uKyQF1N@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  2 May 2020 15:52:04 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libcap-ng: add host variant
+Message-ID: <20200502135205.1084120-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12831
+Qemu 5.0.0 recently switched to libcap-ng [1].
+Add the host variant for host-qemu package.
 
---- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
-Right and wrong at the same time, in principle your are right, but the
-raspberrypi linux-kernel 32-bit seems to enable the overlay support
-auto-magical,
-only for the 64-bit versions an explicit BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT
-is needed (did not test with mainline kernels)..., see e.g. [1], [2] and [3]
+[1] https://git.qemu.org/?p=qemu.git;a=commit;h=7e46261368d129c5ee8be927f5bcadc7ecd800d7
 
-[1] http://lists.busybox.net/pipermail/buildroot/2019-November/265550.html
-[2] http://lists.busybox.net/pipermail/buildroot/2019-November/265772.html
-[3]
-https://git.buildroot.net/buildroot/commit/?id=2aa92335cdc5f71c2d09391dc49fcf3c7627d6f0
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/libcap-ng/libcap-ng.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+index 0f29ef0972..102b472d1a 100644
+--- a/package/libcap-ng/libcap-ng.mk
++++ b/package/libcap-ng/libcap-ng.mk
+@@ -15,4 +15,8 @@ LIBCAP_NG_AUTORECONF = YES
+ LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
+ LIBCAP_NG_CONF_OPTS = --without-python
+ 
++HOST_LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
++HOST_LIBCAP_NG_CONF_OPTS = --without-python
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.25.4
