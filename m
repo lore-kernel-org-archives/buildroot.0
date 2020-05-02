@@ -1,43 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  2 May 2020 23:28:12 +0200
-Subject: [Buildroot] [PATCH 6/6] configs/nanopi_neo4: fix U-Boot dependencies
-In-Reply-To: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
-References: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200502212812.51219-7-thomas.petazzoni@bootlin.com>
+Date: Sat, 2 May 2020 23:34:09 +0200
+Subject: [Buildroot] [PATCH] configs/orangepi_rk3399: new defconfig
+In-Reply-To: <1588444408-20285-1-git-send-email-sunil@amarulasolutions.com>
+References: <1588444408-20285-1-git-send-email-sunil@amarulasolutions.com>
+Message-ID: <20200502233409.4a90d4b2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In fact, nanopi_neo4 does not need pylibfdt or pyelftools, but only a
-host Python interpreter, to run
-./arch/arm/mach-rockchip/make_fit_atf.py.
+Hello,
 
-Since upstream U-Boot commit f05d5743567984b4fff6a862fc0f42760ff135da,
-this script no longer needs pyelftools. However, since upstream commit
-6d06ea34239ab5099783ce588ad4aead96e1fccb (merged in U-Boot 2020.01),
-it requires Python 3.x.
+On Sun,  3 May 2020 00:03:28 +0530
+sunil at amarulasolutions.com wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/nanopi_neo4_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>  N:	Suniel Mahesh <sunil@amarulasolutions.com>
+>  F:	board/firefly/
+> +F:	board/orangepi/
 
-diff --git a/configs/nanopi_neo4_defconfig b/configs/nanopi_neo4_defconfig
-index 6e507235cf..b79ee1ae79 100644
---- a/configs/nanopi_neo4_defconfig
-+++ b/configs/nanopi_neo4_defconfig
-@@ -22,8 +22,8 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi-neo4-rk3399"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+This puts you a contact for all board/orangepi/ boards, not just this
+one. Is this expected?
+
+> +# Bootloader
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi-rk3399"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+> +BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
+
+Are you sure these two options are needed? In fact the others rk3399
+defconfigs are wrong, and all what they need is Python 3.x. Could you
+check my series at:
+
+  http://patchwork.ozlabs.org/project/buildroot/list/?series=174258
+
+Thanks,
+
+Thomas
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
