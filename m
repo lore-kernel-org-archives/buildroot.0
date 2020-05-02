@@ -1,28 +1,56 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 02 May 2020 21:40:37 +0000
-Subject: [Buildroot] [Bug 12836] libunwind: package does not show up in
- menuconfig for aarch64 target
-In-Reply-To: <bug-12836-163@https.bugs.busybox.net/>
-References: <bug-12836-163@https.bugs.busybox.net/>
-Message-ID: <bug-12836-163-KetPPc6d4X@https.bugs.busybox.net/>
+From: =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Date: Sat, 2 May 2020 23:58:17 +0200
+Subject: [Buildroot] [PATCH 4/6] configs/beelink_gs1: use Python 3.x
+In-Reply-To: <20200502212812.51219-5-thomas.petazzoni@bootlin.com>
+References: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
+ <20200502212812.51219-5-thomas.petazzoni@bootlin.com>
+Message-ID: <CAJiuCcffCasBTc+q2_tqm=zdhTidGsFZDd9njCsgnM982tLWhw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12836
+Hi Thomas,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Sat, 2 May 2020 at 23:28, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Since the bump to U-Boot 2020.01 in commit
+> e210080d2ab4d77862c42d2b318e21fab461f127, it needs Python 3.x on the
+> host.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |thomas.petazzoni at free-elect
-                   |.org                        |rons.com
+Thanks for the fix, I thought there will be a patch to fix this
+dependency automatically.
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Thanks for your bug report, I'll look into this.
+Acked-by: Cl?ment P?ron <peron.clem@gmail.com>
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards,
+Clement
+
+>
+> Fixes:
+>
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/535054357
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  configs/beelink_gs1_defconfig | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
+> index 04c8b544ea..2fe89bf747 100644
+> --- a/configs/beelink_gs1_defconfig
+> +++ b/configs/beelink_gs1_defconfig
+> @@ -34,6 +34,8 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+>  BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
+>  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="beelink_gs1"
+>  BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_PYTHON=y
+> +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+>  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+>  BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+>  BR2_TARGET_UBOOT_SPL=y
+> --
+> 2.26.2
+>
