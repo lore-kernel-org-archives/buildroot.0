@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2020 18:48:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-msgfy: bump to version
- 0.1.0
-In-Reply-To: <20200501133250.2594726-1-fontaine.fabrice@gmail.com>
-References: <20200501133250.2594726-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200502164816.GM15673@scaer>
+Date: Sat, 2 May 2020 18:51:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-jedi: bump to version
+ 0.17.0
+In-Reply-To: <20200501132033.2478334-1-fontaine.fabrice@gmail.com>
+References: <20200501132033.2478334-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200502165145.GN15673@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,64 +13,60 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2020-05-01 15:32 +0200, Fabrice Fontaine spake thusly:
-> - python 2 support has been dropped since version 0.1.0 and
->   https://github.com/thombashi/msgfy/commit/8ddfd20132b8d4825214252189a65570b562619f
-> - Update indentation of hash file (two spaces)
-> 
+On 2020-05-01 15:20 +0200, Fabrice Fontaine spake thusly:
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Applied to master, thanks.
+    $ make python-jedi-legal-info
+    [...]
+    >>> python-jedi 0.17.0 Collecting legal info
+    LICENSE.txt: OK (sha256: 78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412)
+    sha256sum: /home/ymorin/dev/buildroot/O/build/python-jedi-0.17.0/docs/_themes/flask/LICENSE: No such file or directory
+    ERROR: docs/_themes/flask/LICENSE has wrong sha256 hash:
+    ERROR: expected: 9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e
+    ERROR: got     :
+    ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+    make[1]: *** [package/python-jedi/python-jedi.mk:17: python-jedi-legal-info] Error 1
+    make: *** [Makefile:23: _all] Error 2
+
+Care to check the licensing info and resubmit, please?
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/python-msgfy/Config.in         | 1 +
->  package/python-msgfy/python-msgfy.hash | 6 +++---
->  package/python-msgfy/python-msgfy.mk   | 4 ++--
->  3 files changed, 6 insertions(+), 5 deletions(-)
+>  package/python-jedi/python-jedi.hash | 4 ++--
+>  package/python-jedi/python-jedi.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/python-msgfy/Config.in b/package/python-msgfy/Config.in
-> index 7875379e9e..f5a471633a 100644
-> --- a/package/python-msgfy/Config.in
-> +++ b/package/python-msgfy/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_MSGFY
->  	bool "python-msgfy"
-> +	depends on BR2_PACKAGE_PYTHON3
->  	help
->  	  msgfy is a Python library for convert Exception instance to
->  	  a human-readable error message.
-> diff --git a/package/python-msgfy/python-msgfy.hash b/package/python-msgfy/python-msgfy.hash
-> index 8f664ec2e5..c795f7fa5e 100644
-> --- a/package/python-msgfy/python-msgfy.hash
-> +++ b/package/python-msgfy/python-msgfy.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/msgfy/json
-> -md5	3a94f49d7b31cc7bca21e0a9bfadf767  msgfy-0.0.7.tar.gz
-> -sha256	370c54bb036d3728af8004e750b7cd7bc5a4ac25f9cdb8be13b7865cae3c73ee  msgfy-0.0.7.tar.gz
-> +md5  4a3d8ac9908acd5f661a58b12f9e0d17  msgfy-0.1.0.tar.gz
-> +sha256  474c08302cd56ccee1300ac7976a01ebd1e42716fc9bcd947d39a311a15b7012  msgfy-0.1.0.tar.gz
+> diff --git a/package/python-jedi/python-jedi.hash b/package/python-jedi/python-jedi.hash
+> index 77af6e79f3..5d6fdf1f21 100644
+> --- a/package/python-jedi/python-jedi.hash
+> +++ b/package/python-jedi/python-jedi.hash
+> @@ -1,6 +1,6 @@
+>  # md5, sha256 from https://pypi.org/pypi/jedi/json
+> -md5  ba88266caac41988ffb4fd6041a3c354  jedi-0.15.1.tar.gz
+> -sha256  ba859c74fa3c966a22f2aeebe1b74ee27e2a462f56d3f5f7ca4a59af61bfe42e  jedi-0.15.1.tar.gz
+> +md5  d6a8e5832939c51dceda474b720696f6  jedi-0.17.0.tar.gz
+> +sha256  df40c97641cb943661d2db4c33c2e1ff75d491189423249e989bcea4464f3030  jedi-0.17.0.tar.gz
 >  # Locally computed sha256 checksums
-> -sha256	fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
-> +sha256  fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
-> diff --git a/package/python-msgfy/python-msgfy.mk b/package/python-msgfy/python-msgfy.mk
-> index 0a642b4344..c187061d41 100644
-> --- a/package/python-msgfy/python-msgfy.mk
-> +++ b/package/python-msgfy/python-msgfy.mk
+>  sha256  78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412  LICENSE.txt
+>  sha256  9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
+> diff --git a/package/python-jedi/python-jedi.mk b/package/python-jedi/python-jedi.mk
+> index 4e756a709c..719f3de03e 100644
+> --- a/package/python-jedi/python-jedi.mk
+> +++ b/package/python-jedi/python-jedi.mk
 > @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_MSGFY_VERSION = 0.0.7
-> +PYTHON_MSGFY_VERSION = 0.1.0
->  PYTHON_MSGFY_SOURCE = msgfy-$(PYTHON_MSGFY_VERSION).tar.gz
-> -PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/23/82/b61a8353c36e60c2c8291c56ad7d00aa37918ef56811727510acada09f7f
-> +PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/24/b5/7cc6ba75b6489245f9b75f11a85202b934fa92f6c99a4fa1c639f08d68e8
->  PYTHON_MSGFY_SETUP_TYPE = setuptools
->  PYTHON_MSGFY_LICENSE = MIT
->  PYTHON_MSGFY_LICENSE_FILES = LICENSE
+> -PYTHON_JEDI_VERSION = 0.15.1
+> +PYTHON_JEDI_VERSION = 0.17.0
+>  PYTHON_JEDI_SOURCE = jedi-$(PYTHON_JEDI_VERSION).tar.gz
+> -PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/85/03/cd5a6e44a5753b4d539288d9d1f9645caac889c17dd2950292a8818f86b2
+> +PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/e3/5b/65ff9c102d92bf719dfaeff57bc8074d68f26ea480005704a956da995799
+>  PYTHON_JEDI_SETUP_TYPE = setuptools
+>  PYTHON_JEDI_LICENSE = MIT, BSD-3-Clause (flask theme), Apache-2.0 (typeshed)
+>  PYTHON_JEDI_LICENSE_FILES = \
 > -- 
 > 2.26.2
 > 
