@@ -1,53 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 02 May 2020 13:51:10 +0200
-Subject: [Buildroot] [PATCH 1/3] package/qemu: Bump to version 4.2.0
-In-Reply-To: <0eff2140-f84d-3a66-47a2-bc4ad726a3f3@gmail.com> (Romain Naour's
- message of "Sat, 2 May 2020 12:01:45 +0200")
-References: <20200206190416.48560-1-aduskett@gmail.com>
- <87lfp2e30g.fsf@dell.be.48ers.dk>
- <0eff2140-f84d-3a66-47a2-bc4ad726a3f3@gmail.com>
-Message-ID: <87a72q4ksx.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 2 May 2020 14:32:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gobject-introspection: fix host
+ version of .pc file for wrapper
+In-Reply-To: <20200502060435.23004-1-james.hilliard1@gmail.com>
+References: <20200502060435.23004-1-james.hilliard1@gmail.com>
+Message-ID: <20200502143243.4e2b3ef3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+On Sat,  2 May 2020 00:04:35 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
- > Hi Peter, Adam, Guo,
- > Le 16/02/2020 ? 20:38, Peter Korsgaard a ?crit?:
- >>>>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
- >> 
- >> > From: Adam Duskett <Aduskett@gmail.com>
- >> > Other changes:
- >> >   - Remove upstream patches
- >> >   - Update COPYING.LIB hash as upstream updated the file to match the new LGPL
- >> >     2.1 license from upstream. See:
- >> >     https://github.com/qemu/qemu/commit/f0d44cc4462f112bce5ec556e87eff4eec682e39
- >> 
- >> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
- >> 
- >> Committed after fixing the libssh2/libssh change, thanks.
- >> 
+> diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+> index eefb2c83f7..d98eaf945a 100644
+> --- a/package/gobject-introspection/gobject-introspection.mk
+> +++ b/package/gobject-introspection/gobject-introspection.mk
+> @@ -136,6 +136,36 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
+>  endef
+>  GOBJECT_INTROSPECTION_POST_INSTALL_STAGING_HOOKS += GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
+>  
+> +define HOST_GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
+> +	# Set prefix to /usr because pkg-config appends the sysroot directory
+> +	$(SED) "s%^prefix=.*%prefix=\/usr%g" \
+> +		$(HOST_DIR)/usr/lib/pkgconfig/gobject-introspection-1.0.pc
 
- > I just noticed that we have a qemu fork for csky cpus [1] but since this version
- > bump and libssh2/libssh change the build is broken.
+No, the host variant of pkg-config should not append the sysroot
+directory. If it does, then it is wrong.
 
- > The fork is based on Qemu 3.0.0 and I'm not sure we want to support all old
- > options. Note the github repository has been removed [2], so the only remaining
- > archive is located on http://sources.buildroot.net...
-
- > What do we do ? Remove the csky fork ? Nobody noticed the problem with 2020.02...
-
- > [1]
- > https://git.buildroot.net/buildroot/commit/?id=f816e5b276f1ef15840bec6667f1e8219717ab7d
- > [2] https://github.com/c-sky/qemu
-
-Yes, if it causes problems and isn't actively maintained, then I would
-prefer to remove it.
-
-C-SKY people, what do you say?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
