@@ -1,70 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2020 18:34:30 +0200
-Subject: [Buildroot] [git commit] package/proj: bump to version 7.0.1
-Message-ID: <20200502163126.1DF4090D15@busybox.osuosl.org>
+Date: Sat, 2 May 2020 18:45:51 +0200
+Subject: [Buildroot] [git commit] package/python-msgfy: bump to version 0.1.0
+Message-ID: <20200502163126.3CC4190D15@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81ac873097ea052c7fe11e88e6cefd6117ea39b9
+commit: https://git.buildroot.net/buildroot/commit/?id=205557a2879cfedf1b499dc834c902e1db52a7a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- curl and tiff are optional dependencies since version 7.0.0 and
-  https://github.com/OSGeo/PROJ/commit/db31b6dfa9c8fe37d5706d95ce81012b8db3c3b9
+- python 2 support has been dropped since version 0.1.0 and
+  https://github.com/thombashi/msgfy/commit/8ddfd20132b8d4825214252189a65570b562619f
 - Update indentation of hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/proj/proj.hash |  8 ++++----
- package/proj/proj.mk   | 16 +++++++++++++++-
- 2 files changed, 19 insertions(+), 5 deletions(-)
+ package/python-msgfy/Config.in         | 1 +
+ package/python-msgfy/python-msgfy.hash | 6 +++---
+ package/python-msgfy/python-msgfy.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/proj/proj.hash b/package/proj/proj.hash
-index ade9502b67..ac3d12b271 100644
---- a/package/proj/proj.hash
-+++ b/package/proj/proj.hash
+diff --git a/package/python-msgfy/Config.in b/package/python-msgfy/Config.in
+index 7875379e9e..f5a471633a 100644
+--- a/package/python-msgfy/Config.in
++++ b/package/python-msgfy/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_MSGFY
+ 	bool "python-msgfy"
++	depends on BR2_PACKAGE_PYTHON3
+ 	help
+ 	  msgfy is a Python library for convert Exception instance to
+ 	  a human-readable error message.
+diff --git a/package/python-msgfy/python-msgfy.hash b/package/python-msgfy/python-msgfy.hash
+index 8f664ec2e5..c795f7fa5e 100644
+--- a/package/python-msgfy/python-msgfy.hash
++++ b/package/python-msgfy/python-msgfy.hash
 @@ -1,5 +1,5 @@
--# Fetched from http://download.osgeo.org/proj/proj-6.3.0.tar.gz.md5
--md5 09243feb4f243a2bdd455035a2007384 proj-6.3.0.tar.gz
-+# Fetched from http://download.osgeo.org/proj/proj-7.0.1.tar.gz.md5
-+md5  5ba7536b579a6c9e0ad822dbdd455985  proj-7.0.1.tar.gz
- # Locally calculated
--sha256 68ce9ba0005d442c2c1d238a3b9bc6654c358159b4af467b91e8d5b407c79c77 proj-6.3.0.tar.gz
--sha256 2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6 COPYING
-+sha256  a7026d39c9c80d51565cfc4b33d22631c11e491004e19020b3ff5a0791e1779f  proj-7.0.1.tar.gz
-+sha256  2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6  COPYING
-diff --git a/package/proj/proj.mk b/package/proj/proj.mk
-index 2be0004023..1c8f3f77c5 100644
---- a/package/proj/proj.mk
-+++ b/package/proj/proj.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/msgfy/json
+-md5	3a94f49d7b31cc7bca21e0a9bfadf767  msgfy-0.0.7.tar.gz
+-sha256	370c54bb036d3728af8004e750b7cd7bc5a4ac25f9cdb8be13b7865cae3c73ee  msgfy-0.0.7.tar.gz
++md5  4a3d8ac9908acd5f661a58b12f9e0d17  msgfy-0.1.0.tar.gz
++sha256  474c08302cd56ccee1300ac7976a01ebd1e42716fc9bcd947d39a311a15b7012  msgfy-0.1.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
++sha256  fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
+diff --git a/package/python-msgfy/python-msgfy.mk b/package/python-msgfy/python-msgfy.mk
+index 0a642b4344..c187061d41 100644
+--- a/package/python-msgfy/python-msgfy.mk
++++ b/package/python-msgfy/python-msgfy.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PROJ_VERSION = 6.3.0
-+PROJ_VERSION = 7.0.1
- PROJ_SITE = http://download.osgeo.org/proj
- PROJ_LICENSE = MIT
- PROJ_LICENSE_FILES = COPYING
-@@ -23,4 +23,18 @@ PROJ_CONF_ENV = \
- 	CFLAGS="$(PROJ_CFLAGS)" \
- 	CXXFLAGS="$(PROJ_CXXFLAGS)"
- 
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+PROJ_DEPENDENCIES += libcurl
-+PROJ_CONF_OPTS += --with-curl=$(STAGING_DIR)/usr/bin/curl-config
-+else
-+PROJ_CONF_OPTS += --without-curl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TIFF),y)
-+PROJ_DEPENDENCIES += tiff
-+PROJ_CONF_OPTS += --enable-tiff
-+else
-+PROJ_CONF_OPTS += --disable-tiff
-+endif
-+
- $(eval $(autotools-package))
+-PYTHON_MSGFY_VERSION = 0.0.7
++PYTHON_MSGFY_VERSION = 0.1.0
+ PYTHON_MSGFY_SOURCE = msgfy-$(PYTHON_MSGFY_VERSION).tar.gz
+-PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/23/82/b61a8353c36e60c2c8291c56ad7d00aa37918ef56811727510acada09f7f
++PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/24/b5/7cc6ba75b6489245f9b75f11a85202b934fa92f6c99a4fa1c639f08d68e8
+ PYTHON_MSGFY_SETUP_TYPE = setuptools
+ PYTHON_MSGFY_LICENSE = MIT
+ PYTHON_MSGFY_LICENSE_FILES = LICENSE
