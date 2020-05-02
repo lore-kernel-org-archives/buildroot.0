@@ -1,83 +1,34 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  2 May 2020 22:07:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvncserver: fix CVE-2019-20788
-Message-ID: <20200502200747.3438774-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat,  2 May 2020 23:53:46 +0300
+Subject: [Buildroot] [PATCH] package/ne10: correct cpu feature comment
+ dependency
+Message-ID: <77367b20073754b0d2f7e9bfd7e0ecab44922ef8.1588452826.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libvncclient/cursor.c in LibVNCServer through 0.9.12 has a
-HandleCursorShape integer overflow and heap-based buffer overflow via a
-large height or width value. NOTE: this may overlap CVE-2019-15690.
+Commit e845f9364c2b8 ("ne10: bump to v1.2.1") removed arm arch
+dependency from the comment. This comment is only relevant to arm.
+Restore the arm arch dependency.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Cody Guldner <cody.guldner@rockwellcollins.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...rsor-limit-width-height-input-values.patch | 40 +++++++++++++++++++
- package/libvncserver/libvncserver.mk          |  3 ++
- 2 files changed, 43 insertions(+)
- create mode 100644 package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch
+ package/ne10/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch b/package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch
-new file mode 100644
-index 0000000000..c389f2ecfb
---- /dev/null
-+++ b/package/libvncserver/0006-libvncclient-cursor-limit-width-height-input-values.patch
-@@ -0,0 +1,40 @@
-+From 54220248886b5001fbbb9fa73c4e1a2cb9413fed Mon Sep 17 00:00:00 2001
-+From: Christian Beier <dontmind@freeshell.org>
-+Date: Sun, 17 Nov 2019 17:18:35 +0100
-+Subject: [PATCH] libvncclient/cursor: limit width/height input values
-+
-+Avoids a possible heap overflow reported by Pavel Cheremushkin
-+<Pavel.Cheremushkin@kaspersky.com>.
-+
-+re #275
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/LibVNC/libvncserver/commit/54220248886b5001fbbb9fa73c4e1a2cb9413fed]
-+---
-+ libvncclient/cursor.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/libvncclient/cursor.c b/libvncclient/cursor.c
-+index 67f45726..40ffb3b0 100644
-+--- a/libvncclient/cursor.c
-++++ b/libvncclient/cursor.c
-+@@ -28,6 +28,8 @@
-+ #define OPER_SAVE     0
-+ #define OPER_RESTORE  1
-+ 
-++#define MAX_CURSOR_SIZE 1024
-++
-+ #define RGB24_TO_PIXEL(bpp,r,g,b)                                       \
-+    ((((uint##bpp##_t)(r) & 0xFF) * client->format.redMax + 127) / 255             \
-+     << client->format.redShift |                                              \
-+@@ -54,6 +56,9 @@ rfbBool HandleCursorShape(rfbClient* client,int xhot, int yhot, int width, int h
-+   if (width * height == 0)
-+     return TRUE;
-+ 
-++  if (width >= MAX_CURSOR_SIZE || height >= MAX_CURSOR_SIZE)
-++    return FALSE;
-++
-+   /* Allocate memory for pixel data and temporary mask data. */
-+   if(client->rcSource)
-+     free(client->rcSource);
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index 5b8648fa6d..890672d04b 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -19,6 +19,9 @@ LIBVNCSERVER_IGNORE_CVES += CVE-2018-20750
- # 0004-rfbserver-don-t-leak-stack-memory-to-the-remote.patch
- LIBVNCSERVER_IGNORE_CVES += CVE-2019-15681
+diff --git a/package/ne10/Config.in b/package/ne10/Config.in
+index 68cb7f4cb389..0e5a595dbed2 100644
+--- a/package/ne10/Config.in
++++ b/package/ne10/Config.in
+@@ -17,4 +17,5 @@ config BR2_PACKAGE_NE10
+ 	  http://projectne10.github.io/Ne10/
  
-+# 0006-libvncclient-cursor-limit-width-height-input-values.patch
-+LIBVNCSERVER_IGNORE_CVES += CVE-2019-20788
-+
- # only used for examples
- LIBVNCSERVER_CONF_OPTS += \
- 	-DWITH_FFMPEG=OFF \
+ comment "ne10 needs a toolchain w/ neon"
++	depends on BR2_arm
+ 	depends on !BR2_PACKAGE_NE10_ARCH_SUPPORTS
 -- 
 2.26.2
