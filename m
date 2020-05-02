@@ -1,73 +1,40 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri,  1 May 2020 18:32:54 -0600
-Subject: [Buildroot] [PATCH 1/1] package/wlroots: drop pkgconfig workaround
-Message-ID: <20200502003254.28369-1-james.hilliard1@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 02 May 2020 02:52:42 +0000
+Subject: [Buildroot] [Bug 12831] New: RPI-firmware package: DTB-overlay
+ dependency
+Message-ID: <bug-12831-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This workaround is not needed as of commit
-5cff3a8bdfba92e9f61d0984df08f1ecd205c072 which properly sets the
-PKG_CONFIG_LIBDIR for native: true dependencies.
+https://bugs.busybox.net/show_bug.cgi?id=12831
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- ...onfig-to-find-wayland-scanner-when-c.patch | 45 -------------------
- 1 file changed, 45 deletions(-)
- delete mode 100644 package/wlroots/0001-Do-not-use-pkg-config-to-find-wayland-scanner-when-c.patch
+            Bug ID: 12831
+           Summary: RPI-firmware package: DTB-overlay dependency
+           Product: buildroot
+           Version: 2020.02.1
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: melanie at trash-mail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/wlroots/0001-Do-not-use-pkg-config-to-find-wayland-scanner-when-c.patch b/package/wlroots/0001-Do-not-use-pkg-config-to-find-wayland-scanner-when-c.patch
-deleted file mode 100644
-index 898506a0dc..0000000000
---- a/package/wlroots/0001-Do-not-use-pkg-config-to-find-wayland-scanner-when-c.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 72138a67c8e6b0154aadc1b5fcb3d661033fbcd3 Mon Sep 17 00:00:00 2001
--From: Adrian Perez de Castro <aperez@igalia.com>
--Date: Thu, 13 Jun 2019 02:13:47 +0300
--Subject: [PATCH] Do not use pkg-config to find wayland-scanner when cross
-- building
--
--When cross-compiling it is still needed to run a native wayland-scanner,
--but many tools for the task will still have pkg-config return the
--location of wayland-scanner for the target in some location which may
--be the same as for some native installation of wayland-scanner; but
--which is not the copy of the program that the compilation system wants
--packages to use (which are typically in a "host tools" directory
--elsewhere).
--
--This disables usage of pkg-config to find wayland-scanner when
--cross-compiling because most tools for the job will set $PATH in a way
--that the correct installation of the tool will be found first.
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--[Upstream status: https://github.com/swaywm/wlroots/pull/1722]
--
-----
-- protocol/meson.build | 7 ++++++-
-- 1 file changed, 6 insertions(+), 1 deletion(-)
--
--diff --git a/protocol/meson.build b/protocol/meson.build
--index 7cc10320..73c06b24 100644
----- a/protocol/meson.build
--+++ b/protocol/meson.build
--@@ -1,6 +1,11 @@
-- wl_protocol_dir = wayland_protos.get_pkgconfig_variable('pkgdatadir')
-- 
---wayland_scanner_dep = dependency('wayland-scanner', required: false, native: true)
--+if meson.is_cross_build()
--+	wayland_scanner_dep = disabler()
--+else
--+	wayland_scanner_dep = dependency('wayland-scanner', required: false, native: true)
--+endif
--+
-- if wayland_scanner_dep.found()
-- 	wayland_scanner = find_program(
-- 		wayland_scanner_dep.get_pkgconfig_variable('wayland_scanner'),
---- 
--2.22.0
--
+The config option 'BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS' currently
+depends on 'BR2_LINUX_KERNEL_DTS_SUPPORT'.
+
+In my opinion this dependency should be changed from
+'BR2_LINUX_KERNEL_DTS_SUPPORT' to 'BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT'.
+
+This change would make sure that the DTB-overlays are downloaded/installed only
+if DTB-overlay support has been selected for the target system.
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
