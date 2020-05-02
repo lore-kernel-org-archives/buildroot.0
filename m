@@ -1,10 +1,11 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 2 May 2020 10:54:23 +0300
-Subject: [Buildroot] [PATCH] package/python-xmodem: new package
-In-Reply-To: <87d07p85mm.fsf@grinn-global.com>
-References: <20200430132020.2476465-1-m.niestroj@grinn-global.com>
- <87d07p85mm.fsf@grinn-global.com>
-Message-ID: <CALFsTFW=hMQH1sYJEDNPg_=QGeh9iRkMF+m5myR2BE1pv4oGrw@mail.gmail.com>
+Date: Sat, 2 May 2020 11:27:28 +0300
+Subject: [Buildroot] [PATCH 1/1] support/dependencies: set cmake version
+ min to 3.15.3
+In-Reply-To: <20200428080328.4a06266b@windsurf.home>
+References: <20200428054352.110007-1-james.hilliard1@gmail.com>
+ <20200428080328.4a06266b@windsurf.home>
+Message-ID: <CALFsTFUYwj6ROx6kziiM2eCxjwD-4Qhtk+kNKHmga5OAbfOR=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,48 +14,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, Apr 30, 2020 at 4:28 PM Marcin Niestr?j
-<m.niestroj@grinn-global.com> wrote:
+On Tue, Apr 28, 2020 at 9:04 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> Hi All!
+> On Mon, 27 Apr 2020 23:43:52 -0600
+> James Hilliard <james.hilliard1@gmail.com> wrote:
 >
-> The problem with this package is that there is no license file when we
-> download from pypi. But there is one on github. Question is: what should
-> we do about it?
-
-We already have some python packages which don't include the license
-on the tarball, although it exists in the repo.
-Most of the times, it's because the maintainer of the package didn't add
-the license file in MANIFEST.in (which seems to be your case too).
-On those cases, PKG-INFO is mostly used, but it's not the preferred
-solution, so I suggest to send a PR for adding the license to
-MANIFEST.in
-You can see an example from snmpclitools here:
-https://github.com/etingof/snmpclitools/commit/d93597050f7e4708ce875cc47274c39a9e63da11
-
->
-> Marcin Niestroj <m.niestroj@grinn-global.com> writes:
->
-> > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> > ---
-> >  DEVELOPERS                               |  1 +
-> >  package/Config.in                        |  1 +
-> >  package/python-xmodem/Config.in          |  6 ++++++
-> >  package/python-xmodem/python-xmodem.hash |  3 +++
-> >  package/python-xmodem/python-xmodem.mk   | 13 +++++++++++++
-> >  5 files changed, 24 insertions(+)
-> >  create mode 100644 package/python-xmodem/Config.in
-> >  create mode 100644 package/python-xmodem/python-xmodem.hash
-> >  create mode 100644 package/python-xmodem/python-xmodem.mk
+> > This is required by uvw.
 > >
-> > [snip]
+> > Fixes:
+> > http://autobuild.buildroot.net/results/ab6/ab6954a65fd6d43c0674cb7a38a941102cb0dfe3/build-end.log
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 >
+> The CMake version required by uvw was suddenly bumped from 3.2 to
+> 3.15.3 in upstream commit 55d7782af5654cde8bba89071e13d240fd27ff3b.
+>
+> From a quick look of it, I don't really see why it was bumped "so
+> high". Could you instead try to revert to a minimum CMake version of
+> 3.10 in uvw, and see if it builds ?
+
+I tried to build the package with CMake 3.10 and it failed with:
+CMake Error at CMakeLists.txt:22 (project):
+  No CMAKE_HOMEPAGE_URL_COMPILER could be found.
+
+  Tell CMake where to find the compiler by setting the CMake cache entry
+  CMAKE_HOMEPAGE_URL_COMPILER to the full path to the compiler, or to the
+  compiler name if it is in the PATH.
+
+
+The minimum version I managed to compile with is 3.12
+>
+> Thanks,
+>
+> Thomas
 > --
-> Marcin Niestr?j
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 
-Best regards,
+Regards,
 Asaf.
