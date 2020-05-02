@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2020 18:47:38 +0200
-Subject: [Buildroot] [PATCH 1/2] package/proj: bump to version 7.0.1
-In-Reply-To: <20200501131403.2439357-1-fontaine.fabrice@gmail.com>
-References: <20200501131403.2439357-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200502164738.GK15673@scaer>
+Date: Sat, 2 May 2020 18:48:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-parso: bump to version
+ 0.7.0
+In-Reply-To: <20200501131932.2478175-1-fontaine.fabrice@gmail.com>
+References: <20200501131932.2478175-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200502164800.GL15673@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,69 +13,54 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2020-05-01 15:14 +0200, Fabrice Fontaine spake thusly:
-> - curl and tiff are optional dependencies since version 7.0.0 and
->   https://github.com/OSGeo/PROJ/commit/db31b6dfa9c8fe37d5706d95ce81012b8db3c3b9
-> - Update indentation of hash file (two spaces)
+On 2020-05-01 15:19 +0200, Fabrice Fontaine spake thusly:
+> Update indentation of hash file (two spaces)
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Both (proj and libgeotiff) applied to master, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/proj/proj.hash |  8 ++++----
->  package/proj/proj.mk   | 16 +++++++++++++++-
->  2 files changed, 19 insertions(+), 5 deletions(-)
+>  package/python-parso/python-parso.hash | 10 +++++-----
+>  package/python-parso/python-parso.mk   |  4 ++--
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/proj/proj.hash b/package/proj/proj.hash
-> index ade9502b67..ac3d12b271 100644
-> --- a/package/proj/proj.hash
-> +++ b/package/proj/proj.hash
-> @@ -1,5 +1,5 @@
-> -# Fetched from http://download.osgeo.org/proj/proj-6.3.0.tar.gz.md5
-> -md5 09243feb4f243a2bdd455035a2007384 proj-6.3.0.tar.gz
-> +# Fetched from http://download.osgeo.org/proj/proj-7.0.1.tar.gz.md5
-> +md5  5ba7536b579a6c9e0ad822dbdd455985  proj-7.0.1.tar.gz
->  # Locally calculated
-> -sha256 68ce9ba0005d442c2c1d238a3b9bc6654c358159b4af467b91e8d5b407c79c77 proj-6.3.0.tar.gz
-> -sha256 2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6 COPYING
-> +sha256  a7026d39c9c80d51565cfc4b33d22631c11e491004e19020b3ff5a0791e1779f  proj-7.0.1.tar.gz
-> +sha256  2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6  COPYING
-> diff --git a/package/proj/proj.mk b/package/proj/proj.mk
-> index 2be0004023..1c8f3f77c5 100644
-> --- a/package/proj/proj.mk
-> +++ b/package/proj/proj.mk
-> @@ -4,7 +4,7 @@
+> diff --git a/package/python-parso/python-parso.hash b/package/python-parso/python-parso.hash
+> index e687c437c4..ab2e20943f 100644
+> --- a/package/python-parso/python-parso.hash
+> +++ b/package/python-parso/python-parso.hash
+> @@ -1,7 +1,7 @@
+>  # md5, sha256 from https://pypi.org/pypi/parso/json
+> -md5	cfdc0d7ce446ac3984cd7ef3e5850354  parso-0.5.1.tar.gz
+> -sha256	666b0ee4a7a1220f65d367617f2cd3ffddff3e205f3f16a0284df30e774c2a9c  parso-0.5.1.tar.gz
+> +md5  d3a892fb4d9a0ffed838b0a3416145bf  parso-0.7.0.tar.gz
+> +sha256  908e9fae2144a076d72ae4e25539143d40b8e3eafbaeae03c1bfe226f4cdf12c  parso-0.7.0.tar.gz
+>  # Locally computed sha256 checksums
+> -sha256	fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
+> -sha256	9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
+> -sha256	368780dd953e09148834e8d8c6cc1b09b3d621e77dbd1c4f5e8873561acda873  test/normalizer_issue_files/LICENSE
+> +sha256  fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
+> +sha256  9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
+> +sha256  368780dd953e09148834e8d8c6cc1b09b3d621e77dbd1c4f5e8873561acda873  test/normalizer_issue_files/LICENSE
+> diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
+> index 28f699d641..a0b6af8732 100644
+> --- a/package/python-parso/python-parso.mk
+> +++ b/package/python-parso/python-parso.mk
+> @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >  
-> -PROJ_VERSION = 6.3.0
-> +PROJ_VERSION = 7.0.1
->  PROJ_SITE = http://download.osgeo.org/proj
->  PROJ_LICENSE = MIT
->  PROJ_LICENSE_FILES = COPYING
-> @@ -23,4 +23,18 @@ PROJ_CONF_ENV = \
->  	CFLAGS="$(PROJ_CFLAGS)" \
->  	CXXFLAGS="$(PROJ_CXXFLAGS)"
->  
-> +ifeq ($(BR2_PACKAGE_LIBCURL),y)
-> +PROJ_DEPENDENCIES += libcurl
-> +PROJ_CONF_OPTS += --with-curl=$(STAGING_DIR)/usr/bin/curl-config
-> +else
-> +PROJ_CONF_OPTS += --without-curl
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_TIFF),y)
-> +PROJ_DEPENDENCIES += tiff
-> +PROJ_CONF_OPTS += --enable-tiff
-> +else
-> +PROJ_CONF_OPTS += --disable-tiff
-> +endif
-> +
->  $(eval $(autotools-package))
+> -PYTHON_PARSO_VERSION = 0.5.1
+> +PYTHON_PARSO_VERSION = 0.7.0
+>  PYTHON_PARSO_SOURCE = parso-$(PYTHON_PARSO_VERSION).tar.gz
+> -PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/21/40/615957db4d178b7504c87b1a5b85fa5945b0b4fa5f5a845e31fc7aad6018
+> +PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/fe/24/c30eb4be8a24b965cfd6e2e6b41180131789b44042112a16f9eb10c80f6e
+>  PYTHON_PARSO_SETUP_TYPE = setuptools
+>  PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
+>  PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
 > -- 
 > 2.26.2
 > 
