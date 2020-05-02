@@ -1,66 +1,20 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2020 19:08:46 +0200
-Subject: [Buildroot] [PATCH] package/qemu: disable curl for the host
- variant
-In-Reply-To: <20200429225654.1864957-1-romain.naour@gmail.com>
-References: <20200429225654.1864957-1-romain.naour@gmail.com>
-Message-ID: <20200502170846.GP15673@scaer>
+Date: Sat, 2 May 2020 19:13:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rtl8723bu: bump version to
+ c9549d172a4f9d6ccf6d528682640246a41c2f0c
+In-Reply-To: <20200430125817.2982-1-mf@go-sys.de>
+References: <20200430125817.2982-1-mf@go-sys.de>
+Message-ID: <20200502171324.GQ15673@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Michael, All,
 
-On 2020-04-30 00:56 +0200, Romain Naour spake thusly:
-> Under certain circumstances (host distribution, openssl version),
-> the qemu-system binary fail to start:
-> 
-> qemu-system-aarch64: symbol lookup error: /lib64/libssh.so.4: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
-> 
-> There is no problem when only host-qemu is built, but it's linked with /lib64/libcurl.so.4
-> $ make host-qemu
-> $ ldd output/host/bin/qemu-system-aarch64
->         [...]
-> 	libcurl.so.4 => /lib64/libcurl.so.4 (0x00007fb21cb57000)
-> 	libssh.so.4 => /lib64/libssh.so.4 (0x00007fb21c35d000)
-> 	libpsl.so.5 => /lib64/libpsl.so.5 (0x00007fb21c34a000)
-> 	libssl.so.1.1 => /lib64/libssl.so.1.1 (0x00007fb21c2b4000)
-> 
-> Note: /lib64/libcurl.so.4 is linked with libssh and libssl:
-> $ ldd /lib64/libcurl.so.4
-> 	[...]
-> 	libssh.so.4 => /lib64/libssh.so.4 (0x00007f90d8efd000)
-> 	libpsl.so.5 => /lib64/libpsl.so.5 (0x00007f90d8eea000)
-> 	libssl.so.1.1 => /lib64/libssl.so.1.1 (0x00007f90d8e54000)
-> 
-> Continue the build.
-> $ make
-> 
-> We can notice that qemu_aarch64_virt_defconfig set
-> BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> 
-> So host-openssl package is built and this is the problem:
-> 
-> $ ldd output/host/bin/qemu-system-aarch64
-> 	[...]
-> 	libcurl.so.4 => /lib64/libcurl.so.4 (0x00007f3adb444000)
-> 	libssh.so.4 => /lib64/libssh.so.4 (0x00007f3adac4a000)
-> 	libpsl.so.5 => /lib64/libpsl.so.5 (0x00007f3adac37000)
-> 	libssl.so.1.1 => /home/naourr/buildroot/test/qemu_aarch64_virt_defconfig-master/host/lib/libssl.so.1.1 (0x00007f3adaba8000)
-> 
-> qemu-system-aarch64: symbol lookup error: /lib64/libssh.so.4: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
-> 
-> This is due to the build system trying to find libcurl using
-> pkg-config or curl-config.
-> 
-> libcurl is used by the QEMU Block driver for CURL images and
-> elf2dmp tool which is not needed.
-> Instead of adding host-libcurl dependency, we can disable it
-> entierely.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+On 2020-04-30 14:58 +0200, Michael Fischer spake thusly:
+> Signed-off-by: Michael Fischer <mf@go-sys.de>
 
 Applied to master, thanks.
 
@@ -68,26 +22,33 @@ Regards,
 Yann E. MORIN.
 
 > ---
-> There are a lot more build options that are not handled by
-> the qemu package...
-> ---
->  package/qemu/qemu.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/rtl8723bu/rtl8723bu.hash | 2 +-
+>  package/rtl8723bu/rtl8723bu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index e8b43d3b36..0bb29f9369 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -305,6 +305,7 @@ define HOST_QEMU_CONFIGURE_CMDS
->  		--extra-ldflags="$(HOST_LDFLAGS)" \
->  		--python=$(HOST_DIR)/bin/python3 \
->  		--disable-bzip2 \
-> +		--disable-curl \
->  		--disable-libssh \
->  		--disable-sdl \
->  		--disable-vnc-jpeg \
+> diff --git a/package/rtl8723bu/rtl8723bu.hash b/package/rtl8723bu/rtl8723bu.hash
+> index ef4eddaa63..3a5e0152cc 100644
+> --- a/package/rtl8723bu/rtl8723bu.hash
+> +++ b/package/rtl8723bu/rtl8723bu.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256 da04cffc306d9738abdc67d234b8948db6ca97ed77760c68d99d18817839a513 rtl8723bu-b922079a090dcaad58179d478442ff97f18521c9.tar.gz
+> +sha256 19dae2b8b2c14b1f428c34ddb343fa41ddf9ae79bdefcb7c5baa65d357ca5a45 rtl8723bu-c9549d172a4f9d6ccf6d528682640246a41c2f0c.tar.gz
+> diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
+> index 942b13bbf6..c54b2ef0da 100644
+> --- a/package/rtl8723bu/rtl8723bu.mk
+> +++ b/package/rtl8723bu/rtl8723bu.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -RTL8723BU_VERSION = b922079a090dcaad58179d478442ff97f18521c9
+> +RTL8723BU_VERSION = c9549d172a4f9d6ccf6d528682640246a41c2f0c
+>  RTL8723BU_SITE = $(call github,lwfinger,rtl8723bu,$(RTL8723BU_VERSION))
+>  RTL8723BU_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
+>  
 > -- 
-> 2.25.4
+> 2.26.1
 > 
 > _______________________________________________
 > buildroot mailing list
