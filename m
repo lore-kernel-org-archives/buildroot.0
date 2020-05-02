@@ -1,47 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 May 2020 23:34:09 +0200
-Subject: [Buildroot] [PATCH] configs/orangepi_rk3399: new defconfig
-In-Reply-To: <1588444408-20285-1-git-send-email-sunil@amarulasolutions.com>
-References: <1588444408-20285-1-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <20200502233409.4a90d4b2@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 02 May 2020 21:40:37 +0000
+Subject: [Buildroot] [Bug 12836] libunwind: package does not show up in
+ menuconfig for aarch64 target
+In-Reply-To: <bug-12836-163@https.bugs.busybox.net/>
+References: <bug-12836-163@https.bugs.busybox.net/>
+Message-ID: <bug-12836-163-KetPPc6d4X@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=12836
 
-On Sun,  3 May 2020 00:03:28 +0530
-sunil at amarulasolutions.com wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
->  N:	Suniel Mahesh <sunil@amarulasolutions.com>
->  F:	board/firefly/
-> +F:	board/orangepi/
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Assignee|unassigned at buildroot.uclibc |thomas.petazzoni at free-elect
+                   |.org                        |rons.com
 
-This puts you a contact for all board/orangepi/ boards, not just this
-one. Is this expected?
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks for your bug report, I'll look into this.
 
-> +# Bootloader
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi-rk3399"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-> +BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
-
-Are you sure these two options are needed? In fact the others rk3399
-defconfigs are wrong, and all what they need is Python 3.x. Could you
-check my series at:
-
-  http://patchwork.ozlabs.org/project/buildroot/list/?series=174258
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
