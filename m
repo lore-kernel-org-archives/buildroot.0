@@ -1,37 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 May 2020 14:32:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gobject-introspection: fix host
- version of .pc file for wrapper
-In-Reply-To: <20200502060435.23004-1-james.hilliard1@gmail.com>
-References: <20200502060435.23004-1-james.hilliard1@gmail.com>
-Message-ID: <20200502143243.4e2b3ef3@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 02 May 2020 13:20:55 +0000
+Subject: [Buildroot] [Bug 12831] RPI-firmware package: DTB-overlay dependency
+In-Reply-To: <bug-12831-163@https.bugs.busybox.net/>
+References: <bug-12831-163@https.bugs.busybox.net/>
+Message-ID: <bug-12831-163-To7uKyQF1N@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  2 May 2020 00:04:35 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12831
 
-> diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-> index eefb2c83f7..d98eaf945a 100644
-> --- a/package/gobject-introspection/gobject-introspection.mk
-> +++ b/package/gobject-introspection/gobject-introspection.mk
-> @@ -136,6 +136,36 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
->  endef
->  GOBJECT_INTROSPECTION_POST_INSTALL_STAGING_HOOKS += GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
->  
-> +define HOST_GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
-> +	# Set prefix to /usr because pkg-config appends the sysroot directory
-> +	$(SED) "s%^prefix=.*%prefix=\/usr%g" \
-> +		$(HOST_DIR)/usr/lib/pkgconfig/gobject-introspection-1.0.pc
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+Right and wrong at the same time, in principle your are right, but the
+raspberrypi linux-kernel 32-bit seems to enable the overlay support
+auto-magical,
+only for the 64-bit versions an explicit BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT
+is needed (did not test with mainline kernels)..., see e.g. [1], [2] and [3]
 
-No, the host variant of pkg-config should not append the sysroot
-directory. If it does, then it is wrong.
+[1] http://lists.busybox.net/pipermail/buildroot/2019-November/265550.html
+[2] http://lists.busybox.net/pipermail/buildroot/2019-November/265772.html
+[3]
+https://git.buildroot.net/buildroot/commit/?id=2aa92335cdc5f71c2d09391dc49fcf3c7627d6f0
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
