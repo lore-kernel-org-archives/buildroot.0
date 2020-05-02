@@ -1,48 +1,33 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 2 May 2020 16:13:56 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-05-01
-In-Reply-To: <20200502062833.CE3152049B@silver.osuosl.org>
-References: <20200502062833.CE3152049B@silver.osuosl.org>
-Message-ID: <b97e02a3-2929-d8db-415e-7756121ca69f@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 May 2020 18:14:13 +0200
+Subject: [Buildroot] [git commit] package/libfm-extra: fix dependency comment
+Message-ID: <20200502155920.4846E90B8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=08935f2a8610abaf3104eb62bc504221e572871d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 02/05/2020 ? 08:28, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> Autobuild statistics for 2020-05-01
-> ===============================
-> 
->       branch |  OK | NOK | TIM | TOT |
->   2020.02.x  | 28  | 16  |  0  | 44  |
->     master   | 209 | 139 |  0  | 348 |
-> 
-> Results for branch 'master'
-> ===========================
-> 
-> Classification of failures by reason
-> ------------------------------------
-> 
->              host-libsepol-3.0 | 9 
->              host-gnupg-1.4.23 | 4 
->               host-erlang-22.2 | 3 
->            host-nodejs-12.16.1 | 3 
->                host-efl-1.22.3 | 2 
->               host-grpc-1.25.0 | 2 
->              host-pango-1.44.6 | 2 
->              host-squashfs-4.4 | 2 
+According to the depends used the package does not need C++.
 
-I've updated my autobuilder to Fedora 32 that use gcc 10 (prerelease).
-Using gcc 10 trigger new issues related to the new default -fno-common:
-https://gcc.gnu.org/gcc-10/porting_to.html
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libfm-extra/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It seems too bleeding-edge for now :)
-
-Best regards,
-Romain
+diff --git a/package/libfm-extra/Config.in b/package/libfm-extra/Config.in
+index eefc022c4e..60e6fda30f 100644
+--- a/package/libfm-extra/Config.in
++++ b/package/libfm-extra/Config.in
+@@ -10,6 +10,6 @@ config BR2_PACKAGE_LIBFM_EXTRA
+ 
+ 	  http://wiki.lxde.org/en/Libfm
+ 
+-comment "libfm-extra needs a toolchain w/ wchar, threads, C++"
++comment "libfm-extra needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
