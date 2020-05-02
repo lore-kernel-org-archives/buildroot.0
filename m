@@ -1,46 +1,53 @@
-From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-Date: Sat, 02 May 2020 12:39:33 +0200
-Subject: [Buildroot] [PATCH] package/python-xmodem: new package
-In-Reply-To: <CALFsTFW=hMQH1sYJEDNPg_=QGeh9iRkMF+m5myR2BE1pv4oGrw@mail.gmail.com>
-References: <20200430132020.2476465-1-m.niestroj@grinn-global.com>
- <87d07p85mm.fsf@grinn-global.com>
- <CALFsTFW=hMQH1sYJEDNPg_=QGeh9iRkMF+m5myR2BE1pv4oGrw@mail.gmail.com>
-Message-ID: <87tv0y62oq.fsf@grinn-global.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 02 May 2020 13:51:10 +0200
+Subject: [Buildroot] [PATCH 1/3] package/qemu: Bump to version 4.2.0
+In-Reply-To: <0eff2140-f84d-3a66-47a2-bc4ad726a3f3@gmail.com> (Romain Naour's
+ message of "Sat, 2 May 2020 12:01:45 +0200")
+References: <20200206190416.48560-1-aduskett@gmail.com>
+ <87lfp2e30g.fsf@dell.be.48ers.dk>
+ <0eff2140-f84d-3a66-47a2-bc4ad726a3f3@gmail.com>
+Message-ID: <87a72q4ksx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Asaf,
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Asaf Kahlon <asafka7@gmail.com> writes:
+ > Hi Peter, Adam, Guo,
+ > Le 16/02/2020 ? 20:38, Peter Korsgaard a ?crit?:
+ >>>>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
+ >> 
+ >> > From: Adam Duskett <Aduskett@gmail.com>
+ >> > Other changes:
+ >> >   - Remove upstream patches
+ >> >   - Update COPYING.LIB hash as upstream updated the file to match the new LGPL
+ >> >     2.1 license from upstream. See:
+ >> >     https://github.com/qemu/qemu/commit/f0d44cc4462f112bce5ec556e87eff4eec682e39
+ >> 
+ >> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+ >> 
+ >> Committed after fixing the libssh2/libssh change, thanks.
+ >> 
 
-> Hello,
->
-> On Thu, Apr 30, 2020 at 4:28 PM Marcin Niestr?j
-> <m.niestroj@grinn-global.com> wrote:
->>
->> Hi All!
->>
->> The problem with this package is that there is no license file when we
->> download from pypi. But there is one on github. Question is: what should
->> we do about it?
->
-> We already have some python packages which don't include the license
-> on the tarball, although it exists in the repo.
-> Most of the times, it's because the maintainer of the package didn't add
-> the license file in MANIFEST.in (which seems to be your case too).
-> On those cases, PKG-INFO is mostly used, but it's not the preferred
-> solution, so I suggest to send a PR for adding the license to
-> MANIFEST.in
-> You can see an example from snmpclitools here:
-> https://github.com/etingof/snmpclitools/commit/d93597050f7e4708ce875cc47274c39a9e63da11
+ > I just noticed that we have a qemu fork for csky cpus [1] but since this version
+ > bump and libssh2/libssh change the build is broken.
 
-Thanks for hints! If it takes reasonable time to merge, then I will post
-v2 with LICENSE. If not, then I will try PKG-INFO for the time before
-next package release.
+ > The fork is based on Qemu 3.0.0 and I'm not sure we want to support all old
+ > options. Note the github repository has been removed [2], so the only remaining
+ > archive is located on http://sources.buildroot.net...
+
+ > What do we do ? Remove the csky fork ? Nobody noticed the problem with 2020.02...
+
+ > [1]
+ > https://git.buildroot.net/buildroot/commit/?id=f816e5b276f1ef15840bec6667f1e8219717ab7d
+ > [2] https://github.com/c-sky/qemu
+
+Yes, if it causes problems and isn't actively maintained, then I would
+prefer to remove it.
+
+C-SKY people, what do you say?
 
 -- 
-Regards,
-Marcin Niestr?j
+Bye, Peter Korsgaard
