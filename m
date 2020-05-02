@@ -1,250 +1,123 @@
-From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
-Date: Sun,  3 May 2020 00:03:28 +0530
-Subject: [Buildroot] [PATCH] configs/orangepi_rk3399: new defconfig
-Message-ID: <1588444408-20285-1-git-send-email-sunil@amarulasolutions.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 May 2020 21:31:21 +0200
+Subject: [Buildroot] [git commit] package/exim: fix parallel build
+Message-ID: <20200502191617.72F6D90DAA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Suniel Mahesh <sunil@amarulasolutions.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=8c75f95e0a3d2600015be5564ee9fe9393d95ebc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add initial support for Orangepi RK3399 target with below features:
+exim does build in parallel correctly, but has a concurrency bug in
+generating version info files which happens either in the build step or in
+the install step.
 
-  - U-Boot 2020.04
-  - Linux 5.4.35
-  - Default packages from buildroot
+Add a patch to fix the bug.
 
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
+Fixes:
+  http://autobuild.buildroot.net/results/ebf/ebfccad007e216564889645a07f5487747116331//
+  http://autobuild.buildroot.net/results/56a/56a8457efcb32579ad6da99a769b6438dd0db267//
+  http://autobuild.buildroot.net/results/6a1/6a1f8a352649baf767b094cb6bbe2a7397fa7fac//
+  http://autobuild.buildroot.net/results/5ed/5ed1c42b3d33198f32d1267e5cc2b1fa1211495a//
+  http://autobuild.buildroot.net/results/b30/b304569948fd481ce33ecd052a1036153c5d459e//
+  http://autobuild.buildroot.net/results/d2c/d2c7abfe08672e53ff890127f787f8d2e84860f4//
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .gitlab-ci.yml                               |  1 +
- DEVELOPERS                                   |  2 +
- board/orangepi/orangepi-rk3399/extlinux.conf |  4 ++
- board/orangepi/orangepi-rk3399/genimage.cfg  | 39 +++++++++++++++++++
- board/orangepi/orangepi-rk3399/post-build.sh |  5 +++
- board/orangepi/orangepi-rk3399/readme.txt    | 54 +++++++++++++++++++++++++++
- configs/orangepi_rk3399_defconfig            | 56 ++++++++++++++++++++++++++++
- 7 files changed, 161 insertions(+)
- create mode 100644 board/orangepi/orangepi-rk3399/extlinux.conf
- create mode 100644 board/orangepi/orangepi-rk3399/genimage.cfg
- create mode 100755 board/orangepi/orangepi-rk3399/post-build.sh
- create mode 100644 board/orangepi/orangepi-rk3399/readme.txt
- create mode 100644 configs/orangepi_rk3399_defconfig
+ ...se-fix-version.-h-sh-generation-with-para.patch | 84 ++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 32c3247..d7a8c4a 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -258,6 +258,7 @@ orangepi_pc_plus_defconfig: { extends: .defconfig }
- orangepi_plus_defconfig: { extends: .defconfig }
- orangepi_prime_defconfig: { extends: .defconfig }
- orangepi_r1_defconfig: { extends: .defconfig }
-+orangepi_rk3399_defconfig: { extends: .defconfig }
- orangepi_win_defconfig: { extends: .defconfig }
- orangepi_zero_defconfig: { extends: .defconfig }
- orangepi_zero_plus2_defconfig: { extends: .defconfig }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index dc8ceb7..d58528a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2425,7 +2425,9 @@ F:	package/powertop/
- 
- N:	Suniel Mahesh <sunil@amarulasolutions.com>
- F:	board/firefly/
-+F:	board/orangepi/
- F:	board/pine64/
-+F:	configs/orangepi_rk3399_defconfig
- F:	configs/roc_pc_rk3399_defconfig
- F:	configs/rockpro64_defconfig
- F:	package/arm-gnu-a-toolchain/
-diff --git a/board/orangepi/orangepi-rk3399/extlinux.conf b/board/orangepi/orangepi-rk3399/extlinux.conf
+diff --git a/package/exim/0007-Makefile-Base-fix-version.-h-sh-generation-with-para.patch b/package/exim/0007-Makefile-Base-fix-version.-h-sh-generation-with-para.patch
 new file mode 100644
-index 0000000..46ae1d6
+index 0000000000..e97bd78a6a
 --- /dev/null
-+++ b/board/orangepi/orangepi-rk3399/extlinux.conf
-@@ -0,0 +1,4 @@
-+label OrangePi_RK3399 linux
-+  kernel /Image
-+  devicetree /rk3399-orangepi.dtb
-+  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rw rootwait
-diff --git a/board/orangepi/orangepi-rk3399/genimage.cfg b/board/orangepi/orangepi-rk3399/genimage.cfg
-new file mode 100644
-index 0000000..9d63e30
---- /dev/null
-+++ b/board/orangepi/orangepi-rk3399/genimage.cfg
-@@ -0,0 +1,39 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"Image",
-+			"rk3399-orangepi.dtb",
-+			"extlinux"
-+		}
-+	}
-+	size = 112M
-+}
++++ b/package/exim/0007-Makefile-Base-fix-version.-h-sh-generation-with-para.patch
+@@ -0,0 +1,84 @@
++From 19f6e36d3473ddba1a211e7af9352a10febb7270 Mon Sep 17 00:00:00 2001
++From: Luca Ceresoli <luca@lucaceresoli.net>
++Date: Fri, 1 May 2020 16:27:48 +0200
++Subject: [PATCH] Makefile-Base: fix version.{h,sh} generation with parallel
++ build
 +
-+image sdcard.img {
++When using parallel make (make -j<N>) the build sometimes fails either
++during 'make' or during 'make install'.
 +
-+	hdimage {
-+		gpt = true
-+	}
++Error messages look either like:
 +
-+	partition loader1 {
-+		image = "idbloader.img"
-+		offset = 32K
-+	}
++  make[1]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/exim-4.93.0.4'
++  /bin/sh scripts/source_checks
++  `Makefile' is up to date.
 +
-+	partition loader2 {
-+		image = "u-boot.itb"
-+		offset = 8M
-+	}
++  make[2]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/exim-4.93.0.4/build-br'
++  /bin/sh ../scripts/Configure-os.c
++  ../scripts/reversion: Your copy of Exim lacks any version information.
++  Makefile:785: recipe for target 'version.sh' failed
 +
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+		offset = 16M
-+	}
++or like:
 +
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/orangepi/orangepi-rk3399/post-build.sh b/board/orangepi/orangepi-rk3399/post-build.sh
-new file mode 100755
-index 0000000..ba29375
---- /dev/null
-+++ b/board/orangepi/orangepi-rk3399/post-build.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
++  DESTDIR=/home/buildroot/autobuild/instance-2/output-1/target INSTALL_ARG="-no_chown -no_symlink" build=br /usr/bin/make -j4 -C /home/buildroot/autobuild/instance-2/output-1/build/exim-4.93.0.4  CFLAGS="-std=c99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  " install
++  make[1]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/exim-4.93.0.4'
++  /bin/sh scripts/source_checks
++  `Makefile' is up to date.
 +
-+BOARD_DIR="$(dirname $0)"
++  make[2]: Entering directory '/home/buildroot/autobuild/instance-2/output-1/build/exim-4.93.0.4/build-br'
++  /home/buildroot/autobuild/instance-2/output-1/host/bin/i586-linux-gcc version.c
++  version.c: In function 'version_init':
++  version.c:32:1: error: expected expression before ';' token
++   ;
++   ^
 +
-+install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/orangepi/orangepi-rk3399/readme.txt b/board/orangepi/orangepi-rk3399/readme.txt
-new file mode 100644
-index 0000000..b0fd382
---- /dev/null
-+++ b/board/orangepi/orangepi-rk3399/readme.txt
-@@ -0,0 +1,54 @@
-+Orangepi RK3399
-+================
-+http://www.orangepi.org/Orange%20Pi%20RK3399/
++This is due to the rule:
 +
-+Build:
-+======
-+  $ make orangepi_rk3399_defconfig
-+  $ make
++  version.h version.sh::
++ 	@../scripts/reversion
 +
-+Files created in output directory
-+=================================
++that executes reversion twice, once to satisfy the version.h target and
++once for version.sh. This is unnecessary because reversion generates both
++files anyway, but harmless without parallel build. When using parallel make
++however reversion is sporadically run in a time sequence such that the
++generated files are being used by other rules while they are being
++rewritten by the second reversion instance.
 +
-+output/images
++Fix by making only one of the two targets run reversion, and the other one
++depend on it.
 +
-+????????? bl31.elf
-+????????? boot.vfat
-+????????? extlinux
-+????????? idbloader.img
-+????????? Image
-+????????? rk3399-orangepi.dtb
-+????????? rootfs.ext2
-+????????? rootfs.ext4 -> rootfs.ext2
-+????????? rootfs.tar
-+????????? sdcard.img
-+????????? u-boot.bin
-+????????? u-boot.itb
++Fixes builds found by the Buildroot autobuilders:
++  http://autobuild.buildroot.net/results/ebf/ebfccad007e216564889645a07f5487747116331//
++  http://autobuild.buildroot.net/results/56a/56a8457efcb32579ad6da99a769b6438dd0db267//
++  http://autobuild.buildroot.net/results/6a1/6a1f8a352649baf767b094cb6bbe2a7397fa7fac//
++  http://autobuild.buildroot.net/results/5ed/5ed1c42b3d33198f32d1267e5cc2b1fa1211495a//
++  http://autobuild.buildroot.net/results/b30/b304569948fd481ce33ecd052a1036153c5d459e//
++  http://autobuild.buildroot.net/results/d2c/d2c7abfe08672e53ff890127f787f8d2e84860f4//
 +
-+Creating bootable SD card:
-+==========================
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++Upstream-status: patch submitted (https://bugs.exim.org/show_bug.cgi?id=2566)
 +
-+Simply invoke (as root)
++---
++ OS/Makefile-Base | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
++diff --git a/OS/Makefile-Base b/OS/Makefile-Base
++index b66678bee4de..4966c25b5359 100644
++--- a/OS/Makefile-Base
+++++ b/OS/Makefile-Base
++@@ -664,9 +664,11 @@ PHDRS = ../config.h \
++ 
++ # Update Exim's version information and build the version object.
++ 
++-version.h version.sh::
+++version.sh::
++ 	@../scripts/reversion
++ 
+++version.h: version.sh
+++
++ cnumber.h: version.h
++ 
++ version.o: $(HDRS) cnumber.h version.h version.c
++-- 
++2.26.2
 +
-+Where X is your SD card device.
-+
-+Booting:
-+========
-+Orangepi-RK3399 by default boots from emmc. For SD card boot to
-+happen, emmc should be empty. If emmc happens to have any bootable
-+image then erase emmc so that bootrom will look for a proper image in SD.
-+
-+emmc can be erased once after booted into linux as shown in below link.
-+
-+https://wiki.amarulasolutions.com/bsp/setup/rockchip/rk3399_emmc.html
-+
-+Serial console:
-+---------------
-+
-+Baudrate for this board is 1500000.
-+
-+Login:
-+------
-+Enter 'root' as login user, and the prompt is ready.
-diff --git a/configs/orangepi_rk3399_defconfig b/configs/orangepi_rk3399_defconfig
-new file mode 100644
-index 0000000..768c60c
---- /dev/null
-+++ b/configs/orangepi_rk3399_defconfig
-@@ -0,0 +1,56 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_cortex_a72_a53=y
-+
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+
-+# Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="11a0a46a899fcc3b1fdb214b382f3d7495d88eca"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi-rk3399"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.35"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-orangepi"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem
-+BR2_TARGET_GENERIC_HOSTNAME="orangepi-rk3399"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to ORANGEPI-RK3399"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-rk3399/genimage.cfg"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-rk3399/post-build.sh"
--- 
-2.7.4
