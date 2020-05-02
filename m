@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2020 18:48:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-parso: bump to version
- 0.7.0
-In-Reply-To: <20200501131932.2478175-1-fontaine.fabrice@gmail.com>
-References: <20200501131932.2478175-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200502164800.GL15673@scaer>
+Date: Sat, 2 May 2020 18:48:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-msgfy: bump to version
+ 0.1.0
+In-Reply-To: <20200501133250.2594726-1-fontaine.fabrice@gmail.com>
+References: <20200501133250.2594726-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200502164816.GM15673@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,10 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2020-05-01 15:19 +0200, Fabrice Fontaine spake thusly:
-> Update indentation of hash file (two spaces)
+On 2020-05-01 15:32 +0200, Fabrice Fontaine spake thusly:
+> - python 2 support has been dropped since version 0.1.0 and
+>   https://github.com/thombashi/msgfy/commit/8ddfd20132b8d4825214252189a65570b562619f
+> - Update indentation of hash file (two spaces)
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -24,43 +26,51 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/python-parso/python-parso.hash | 10 +++++-----
->  package/python-parso/python-parso.mk   |  4 ++--
->  2 files changed, 7 insertions(+), 7 deletions(-)
+>  package/python-msgfy/Config.in         | 1 +
+>  package/python-msgfy/python-msgfy.hash | 6 +++---
+>  package/python-msgfy/python-msgfy.mk   | 4 ++--
+>  3 files changed, 6 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/python-parso/python-parso.hash b/package/python-parso/python-parso.hash
-> index e687c437c4..ab2e20943f 100644
-> --- a/package/python-parso/python-parso.hash
-> +++ b/package/python-parso/python-parso.hash
-> @@ -1,7 +1,7 @@
->  # md5, sha256 from https://pypi.org/pypi/parso/json
-> -md5	cfdc0d7ce446ac3984cd7ef3e5850354  parso-0.5.1.tar.gz
-> -sha256	666b0ee4a7a1220f65d367617f2cd3ffddff3e205f3f16a0284df30e774c2a9c  parso-0.5.1.tar.gz
-> +md5  d3a892fb4d9a0ffed838b0a3416145bf  parso-0.7.0.tar.gz
-> +sha256  908e9fae2144a076d72ae4e25539143d40b8e3eafbaeae03c1bfe226f4cdf12c  parso-0.7.0.tar.gz
+> diff --git a/package/python-msgfy/Config.in b/package/python-msgfy/Config.in
+> index 7875379e9e..f5a471633a 100644
+> --- a/package/python-msgfy/Config.in
+> +++ b/package/python-msgfy/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_PYTHON_MSGFY
+>  	bool "python-msgfy"
+> +	depends on BR2_PACKAGE_PYTHON3
+>  	help
+>  	  msgfy is a Python library for convert Exception instance to
+>  	  a human-readable error message.
+> diff --git a/package/python-msgfy/python-msgfy.hash b/package/python-msgfy/python-msgfy.hash
+> index 8f664ec2e5..c795f7fa5e 100644
+> --- a/package/python-msgfy/python-msgfy.hash
+> +++ b/package/python-msgfy/python-msgfy.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/msgfy/json
+> -md5	3a94f49d7b31cc7bca21e0a9bfadf767  msgfy-0.0.7.tar.gz
+> -sha256	370c54bb036d3728af8004e750b7cd7bc5a4ac25f9cdb8be13b7865cae3c73ee  msgfy-0.0.7.tar.gz
+> +md5  4a3d8ac9908acd5f661a58b12f9e0d17  msgfy-0.1.0.tar.gz
+> +sha256  474c08302cd56ccee1300ac7976a01ebd1e42716fc9bcd947d39a311a15b7012  msgfy-0.1.0.tar.gz
 >  # Locally computed sha256 checksums
-> -sha256	fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
-> -sha256	9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
-> -sha256	368780dd953e09148834e8d8c6cc1b09b3d621e77dbd1c4f5e8873561acda873  test/normalizer_issue_files/LICENSE
-> +sha256  fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
-> +sha256  9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
-> +sha256  368780dd953e09148834e8d8c6cc1b09b3d621e77dbd1c4f5e8873561acda873  test/normalizer_issue_files/LICENSE
-> diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
-> index 28f699d641..a0b6af8732 100644
-> --- a/package/python-parso/python-parso.mk
-> +++ b/package/python-parso/python-parso.mk
+> -sha256	fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
+> +sha256  fcfe96f8fb1bf3478a51c828e7f7afee01500ce1c2d4345d052edb858be05227  LICENSE
+> diff --git a/package/python-msgfy/python-msgfy.mk b/package/python-msgfy/python-msgfy.mk
+> index 0a642b4344..c187061d41 100644
+> --- a/package/python-msgfy/python-msgfy.mk
+> +++ b/package/python-msgfy/python-msgfy.mk
 > @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_PARSO_VERSION = 0.5.1
-> +PYTHON_PARSO_VERSION = 0.7.0
->  PYTHON_PARSO_SOURCE = parso-$(PYTHON_PARSO_VERSION).tar.gz
-> -PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/21/40/615957db4d178b7504c87b1a5b85fa5945b0b4fa5f5a845e31fc7aad6018
-> +PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/fe/24/c30eb4be8a24b965cfd6e2e6b41180131789b44042112a16f9eb10c80f6e
->  PYTHON_PARSO_SETUP_TYPE = setuptools
->  PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
->  PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
+> -PYTHON_MSGFY_VERSION = 0.0.7
+> +PYTHON_MSGFY_VERSION = 0.1.0
+>  PYTHON_MSGFY_SOURCE = msgfy-$(PYTHON_MSGFY_VERSION).tar.gz
+> -PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/23/82/b61a8353c36e60c2c8291c56ad7d00aa37918ef56811727510acada09f7f
+> +PYTHON_MSGFY_SITE = https://files.pythonhosted.org/packages/24/b5/7cc6ba75b6489245f9b75f11a85202b934fa92f6c99a4fa1c639f08d68e8
+>  PYTHON_MSGFY_SETUP_TYPE = setuptools
+>  PYTHON_MSGFY_LICENSE = MIT
+>  PYTHON_MSGFY_LICENSE_FILES = LICENSE
 > -- 
 > 2.26.2
 > 
