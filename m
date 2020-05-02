@@ -1,9 +1,10 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 2 May 2020 10:41:28 +0300
-Subject: [Buildroot] [PATCH v2] package/python-ansicolors: new package
-In-Reply-To: <20200430131103.2476210-1-m.niestroj@grinn-global.com>
-References: <20200430131103.2476210-1-m.niestroj@grinn-global.com>
-Message-ID: <CALFsTFUnurHcLeU2N05FzjZtXqiFFyjRZSs8A=QidYaQFXjRaQ@mail.gmail.com>
+Date: Sat, 2 May 2020 10:54:23 +0300
+Subject: [Buildroot] [PATCH] package/python-xmodem: new package
+In-Reply-To: <87d07p85mm.fsf@grinn-global.com>
+References: <20200430132020.2476465-1-m.niestroj@grinn-global.com>
+ <87d07p85mm.fsf@grinn-global.com>
+Message-ID: <CALFsTFW=hMQH1sYJEDNPg_=QGeh9iRkMF+m5myR2BE1pv4oGrw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,103 +13,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, Apr 30, 2020 at 4:11 PM Marcin Niestroj
+On Thu, Apr 30, 2020 at 4:28 PM Marcin Niestr?j
 <m.niestroj@grinn-global.com> wrote:
 >
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
->  DEVELOPERS                                    |  1 +
->  package/Config.in                             |  1 +
->  package/python-ansicolors/Config.in           |  6 ++++++
->  .../python-ansicolors/python-ansicolors.hash  |  5 +++++
->  .../python-ansicolors/python-ansicolors.mk    | 20 +++++++++++++++++++
->  5 files changed, 33 insertions(+)
->  create mode 100644 package/python-ansicolors/Config.in
->  create mode 100644 package/python-ansicolors/python-ansicolors.hash
->  create mode 100644 package/python-ansicolors/python-ansicolors.mk
+> Hi All!
 >
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index cc72b288be..6d529d05e0 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1598,6 +1598,7 @@ F:        package/lua-stdlib/
->  F:     package/luaossl/
->  F:     package/murata-cyw-fw/
->  F:     package/netdata/
-> +F:     package/python-ansicolors/
->  F:     package/rs485conf/
->  F:     package/turbolua/
->  F:     support/testing/tests/package/test_netdata.py
-> diff --git a/package/Config.in b/package/Config.in
-> index 53c8ce0e29..84555dc5e0 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -870,6 +870,7 @@ menu "External python modules"
->         source "package/python-aiosignal/Config.in"
->         source "package/python-aiozipkin/Config.in"
->         source "package/python-alsaaudio/Config.in"
-> +       source "package/python-ansicolors/Config.in"
->         source "package/python-argh/Config.in"
->         source "package/python-argon2-cffi/Config.in"
->         source "package/python-arrow/Config.in"
-> diff --git a/package/python-ansicolors/Config.in b/package/python-ansicolors/Config.in
-> new file mode 100644
-> index 0000000000..78da50dfc2
-> --- /dev/null
-> +++ b/package/python-ansicolors/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_ANSICOLORS
-> +       bool "python-ansicolors"
-> +       help
-> +         ANSI colors for Python.
-> +
-> +         http://github.com/jonathaneunice/colors/
-> diff --git a/package/python-ansicolors/python-ansicolors.hash b/package/python-ansicolors/python-ansicolors.hash
-> new file mode 100644
-> index 0000000000..9fb51eb5d1
-> --- /dev/null
-> +++ b/package/python-ansicolors/python-ansicolors.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/ansicolors/json
-> +md5  9ca7e2396ffa2e20af023c6b83ab7b14  ansicolors-1.1.8.zip
-> +sha256  99f94f5e3348a0bcd43c82e5fc4414013ccc19d70bd939ad71e0133ce9c372e0  ansicolors-1.1.8.zip
-> +# Locally computed sha256 checksums
-> +sha256  71a13496c621f01b454f9aa54fa608a712f58eb253e6dd2c91027fe78340c773  LICENSE
-> diff --git a/package/python-ansicolors/python-ansicolors.mk b/package/python-ansicolors/python-ansicolors.mk
-> new file mode 100644
-> index 0000000000..787ce8c40b
-> --- /dev/null
-> +++ b/package/python-ansicolors/python-ansicolors.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# python-ansicolors
-> +#
-> +################################################################################
-> +
-> +PYTHON_ANSICOLORS_VERSION = 1.1.8
-> +PYTHON_ANSICOLORS_SOURCE = ansicolors-$(PYTHON_ANSICOLORS_VERSION).zip
-> +PYTHON_ANSICOLORS_SITE = https://files.pythonhosted.org/packages/76/31/7faed52088732704523c259e24c26ce6f2f33fbeff2ff59274560c27628e
-> +PYTHON_ANSICOLORS_SETUP_TYPE = setuptools
-> +PYTHON_ANSICOLORS_LICENSE = ISC
-> +PYTHON_ANSICOLORS_LICENSE_FILES = LICENSE
-> +
-> +define PYTHON_ANSICOLORS_EXTRACT_CMDS
-> +       unzip $(PYTHON_ANSICOLORS_DL_DIR)/$(PYTHON_ANSICOLORS_SOURCE) -d $(@D)
-> +       mv $(@D)/ansicolors-$(PYTHON_ANSICOLORS_VERSION)/* $(@D)
-> +       $(RM) -r $(@D)/ansicolors-$(PYTHON_ANSICOLORS_VERSION)
-> +endef
-> +
-> +$(eval $(python-package))
+> The problem with this package is that there is no license file when we
+> download from pypi. But there is one on github. Question is: what should
+> we do about it?
+
+We already have some python packages which don't include the license
+on the tarball, although it exists in the repo.
+Most of the times, it's because the maintainer of the package didn't add
+the license file in MANIFEST.in (which seems to be your case too).
+On those cases, PKG-INFO is mostly used, but it's not the preferred
+solution, so I suggest to send a PR for adding the license to
+MANIFEST.in
+You can see an example from snmpclitools here:
+https://github.com/etingof/snmpclitools/commit/d93597050f7e4708ce875cc47274c39a9e63da11
+
+>
+> Marcin Niestroj <m.niestroj@grinn-global.com> writes:
+>
+> > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> > ---
+> >  DEVELOPERS                               |  1 +
+> >  package/Config.in                        |  1 +
+> >  package/python-xmodem/Config.in          |  6 ++++++
+> >  package/python-xmodem/python-xmodem.hash |  3 +++
+> >  package/python-xmodem/python-xmodem.mk   | 13 +++++++++++++
+> >  5 files changed, 24 insertions(+)
+> >  create mode 100644 package/python-xmodem/Config.in
+> >  create mode 100644 package/python-xmodem/python-xmodem.hash
+> >  create mode 100644 package/python-xmodem/python-xmodem.mk
+> >
+> > [snip]
+>
 > --
-> 2.26.2
->
+> Marcin Niestr?j
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 
-Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
-
-Regards,
+Best regards,
 Asaf.
