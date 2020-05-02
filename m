@@ -1,14 +1,14 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2020 18:19:51 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: drop pkgconfig workaround
-Message-ID: <20200502161509.B45B190B5C@busybox.osuosl.org>
+Date: Sat, 2 May 2020 18:16:57 +0200
+Subject: [Buildroot] [git commit] package/wlroots: drop pkgconfig workaround
+Message-ID: <20200502161509.A961D90C0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72fb9b2fb80633880049c9a2c2ff9486c027a33a
+commit: https://git.buildroot.net/buildroot/commit/?id=05bbb1d2e3bf56c4efc2e4b794b2f2802c825e71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This workaround is not needed as of commit
@@ -18,77 +18,57 @@ PKG_CONFIG_LIBDIR for native: true dependencies.
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ayland-scanner-provided-by-wayland-scanne.patch | 52 ----------------------
- package/mesa3d/mesa3d.mk                           |  1 -
- 2 files changed, 53 deletions(-)
+ ...pkg-config-to-find-wayland-scanner-when-c.patch | 45 ----------------------
+ 1 file changed, 45 deletions(-)
 
-diff --git a/package/mesa3d/0002-meson-use-wayland-scanner-provided-by-wayland-scanne.patch b/package/mesa3d/0002-meson-use-wayland-scanner-provided-by-wayland-scanne.patch
+diff --git a/package/wlroots/0001-Do-not-use-pkg-config-to-find-wayland-scanner-when-c.patch b/package/wlroots/0001-Do-not-use-pkg-config-to-find-wayland-scanner-when-c.patch
 deleted file mode 100644
-index 784b27c4a2..0000000000
---- a/package/mesa3d/0002-meson-use-wayland-scanner-provided-by-wayland-scanne.patch
+index 898506a0dc..0000000000
+--- a/package/wlroots/0001-Do-not-use-pkg-config-to-find-wayland-scanner-when-c.patch
 +++ /dev/null
-@@ -1,52 +0,0 @@
--From 0e107f7bac8d84d8fb2bb5b83bfb4474348a82c1 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@smile.fr>
--Date: Wed, 17 Apr 2019 22:47:05 +0200
--Subject: [PATCH] meson: use wayland-scanner provided by wayland-scanner-path
+@@ -1,45 +0,0 @@
+-From 72138a67c8e6b0154aadc1b5fcb3d661033fbcd3 Mon Sep 17 00:00:00 2001
+-From: Adrian Perez de Castro <aperez@igalia.com>
+-Date: Thu, 13 Jun 2019 02:13:47 +0300
+-Subject: [PATCH] Do not use pkg-config to find wayland-scanner when cross
+- building
 -
--When cross-compiling the .pc file might point to the wrong
--wayland-scanner binary (target rather than host) resulting in a
--non-executable and wrong scanner.
--First try by using the path provided by wayland-scanner-path,
--and if that fails fall back into pkg-config.
+-When cross-compiling it is still needed to run a native wayland-scanner,
+-but many tools for the task will still have pkg-config return the
+-location of wayland-scanner for the target in some location which may
+-be the same as for some native installation of wayland-scanner; but
+-which is not the copy of the program that the compilation system wants
+-packages to use (which are typically in a "host tools" directory
+-elsewhere).
 -
--Based on the patch for autotools provided by Gustavo Zacarias.
+-This disables usage of pkg-config to find wayland-scanner when
+-cross-compiling because most tools for the job will set $PATH in a way
+-that the correct installation of the tool will be found first.
 -
--Signed-off-by: Romain Naour <romain.naour@smile.fr>
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-[Upstream status: https://github.com/swaywm/wlroots/pull/1722]
+-
 ----
-- meson.build       | 5 ++++-
-- meson_options.txt | 6 ++++++
-- 2 files changed, 10 insertions(+), 1 deletion(-)
+- protocol/meson.build | 7 ++++++-
+- 1 file changed, 6 insertions(+), 1 deletion(-)
 -
--diff --git a/meson.build b/meson.build
--index 6c4f1508855..ef0532b2cfb 100644
----- a/meson.build
--+++ b/meson.build
--@@ -1319,7 +1319,10 @@ endif
+-diff --git a/protocol/meson.build b/protocol/meson.build
+-index 7cc10320..73c06b24 100644
+---- a/protocol/meson.build
+-+++ b/protocol/meson.build
+-@@ -1,6 +1,11 @@
+- wl_protocol_dir = wayland_protos.get_pkgconfig_variable('pkgdatadir')
 - 
-- if with_platform_wayland
--   dep_wl_scanner = dependency('wayland-scanner', native: true)
---  prog_wl_scanner = find_program(dep_wl_scanner.get_pkgconfig_variable('wayland_scanner'))
--+  prog_wl_scanner = get_option('wayland-scanner-path')
--+  if prog_wl_scanner == ''
--+    prog_wl_scanner = find_program(dep_wl_scanner.get_pkgconfig_variable('wayland_scanner'))
--+  endif
--   if dep_wl_scanner.version().version_compare('>= 1.15')
--     wl_scanner_arg = 'private-code'
--   else
--diff --git a/meson_options.txt b/meson_options.txt
--index ccf70659ff7..59ff8df8337 100644
----- a/meson_options.txt
--+++ b/meson_options.txt
--@@ -324,3 +324,9 @@ option(
--   value : true,
--   description : 'Enable direct rendering in GLX and EGL for DRI',
-- )
--+option(
--+  'wayland-scanner-path',
--+  type : 'string',
--+  value : '',
--+  description : 'Locations to wayland-scanner binary. Default: use path from pkg-config'
--+)
+--wayland_scanner_dep = dependency('wayland-scanner', required: false, native: true)
+-+if meson.is_cross_build()
+-+	wayland_scanner_dep = disabler()
+-+else
+-+	wayland_scanner_dep = dependency('wayland-scanner', required: false, native: true)
+-+endif
+-+
+- if wayland_scanner_dep.found()
+- 	wayland_scanner = find_program(
+- 		wayland_scanner_dep.get_pkgconfig_variable('wayland_scanner'),
 --- 
--2.20.1
+-2.22.0
 -
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index e1fc2511a2..531dcf5b81 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -192,7 +192,6 @@ endif
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
- MESA3D_DEPENDENCIES += wayland wayland-protocols
- MESA3D_PLATFORMS += wayland
--MESA3D_CONF_OPTS += -Dwayland-scanner-path=$(HOST_DIR)/bin/wayland-scanner
- endif
- ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_X11),y)
- MESA3D_DEPENDENCIES += \
