@@ -1,72 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 02 May 2020 20:02:23 +0000
-Subject: [Buildroot] [Bug 12841] New: util-linux/sfdisk 2.35.1 fails on
- sector-size header
-Message-ID: <bug-12841-163@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  2 May 2020 22:04:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: fix build on musl
+Message-ID: <20200502200444.3390908-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12841
+Set PAHO_HIGH_PERFORMANCE to disable free redefiniton as suggested by
+upstream in https://github.com/eclipse/paho.mqtt.c/issues/846.
 
-            Bug ID: 12841
-           Summary: util-linux/sfdisk 2.35.1 fails on sector-size header
-           Product: buildroot
-           Version: 2020.02.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: sebaroth at gmx.de
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+This will avoid the following build failure on musl:
 
-Hi,
+/tmp/instance-1/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/sched.h:80:17: error: expected declaration specifiers or '...' before string constant
+ void free(void *);
+                 ^
+/tmp/instance-1/output-1/host/x86_64-buildroot-linux-musl/sysroot/usr/include/sched.h:80:17: error: expected declaration specifiers or '...' before numeric constant
+ void free(void *);
+                 ^
+[ 35%] Building C object src/CMakeFiles/common_obj.dir/Base64.c.o
+[ 36%] Building C object src/CMakeFiles/common_obj.dir/SHA1.c.o
+make[3]: *** [src/CMakeFiles/common_obj.dir/build.make:284: src/CMakeFiles/common_obj.dir/MQTTReasonCodes.c.o] Error 1
 
-using sfdisk to print out and re-deploy the partition layout fails in version
-2.35 and 2.35.1:
+Fixes:
+ - http://autobuild.buildroot.org/results//fbe57a1602fed331ddff3ff3560dce02573816ff
 
-# sfdisk -v
-sfdisk from util-linux 2.35.1
-# sfdisk --dump /dev/sda > sda.partitions
-# sfdisk /dev/sda < sda.partitions
-...
->>> Script header accepted.
->>> line 5: unsupported command
-...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/paho-mqtt-c/paho-mqtt-c.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Some more details can be found in this bugreport:
-https://gitlab.alpinelinux.org/alpine/aports/issues/11200 (I know Alpine is
-unrelated but it's got all the details in there)
-
-Seems like this is fixed upstream already:
-https://github.com/karelzak/util-linux/commit/d8c68b52cc939a16f04ec976648a37f5f5de718c
-
-I am wondering if buildroot wants to add a patch to fix this while waiting for
-the next util-linux version to be released. Suggested fix:
-
---- a/libfdisk/src/script.c
-+++ b/libfdisk/src/script.c
-@@ -837,6 +837,7 @@
-                   || strcmp(name, "grain") == 0
-                   || strcmp(name, "first-lba") == 0
-                   || strcmp(name, "last-lba") == 0
-+                  || strcmp(name, "sector-size") == 0
-                   || strcmp(name, "table-length") == 0) {
-                ;                                       /* whatever is possible
-*/
-        } else
-
-
-Thanks in advance!
-
-Sebastian
-
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index 6a6b5f3d64..c7ecf412cd 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+@@ -12,7 +12,8 @@ PAHO_MQTT_C_INSTALL_STAGING = YES
+ 
+ PAHO_MQTT_C_CONF_OPTS = \
+ 	-DPAHO_ENABLE_TESTING=FALSE \
+-	-DPAHO_ENABLE_CPACK=FALSE
++	-DPAHO_ENABLE_CPACK=FALSE \
++	-DPAHO_HIGH_PERFORMANCE=TRUE
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ PAHO_MQTT_C_DEPENDENCIES += openssl
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.26.2
