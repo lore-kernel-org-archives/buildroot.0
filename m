@@ -1,30 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 May 2020 16:11:08 +0200
-Subject: [Buildroot] [PATCH 2/2] package/qemu: bump to 5.0.0
-In-Reply-To: <20200502161031.4d93faf2@windsurf.home>
-References: <20200502135205.1084120-1-romain.naour@gmail.com>
- <20200502135205.1084120-2-romain.naour@gmail.com>
- <20200502161031.4d93faf2@windsurf.home>
-Message-ID: <20200502161108.741738d0@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 2 May 2020 16:13:56 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-05-01
+In-Reply-To: <20200502062833.CE3152049B@silver.osuosl.org>
+References: <20200502062833.CE3152049B@silver.osuosl.org>
+Message-ID: <b97e02a3-2929-d8db-415e-7756121ca69f@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 2 May 2020 16:10:31 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Hello,
 
-> We don't have any host-libcap-ng package, we only have the target
-> variant for libcap-ng, so I don't think this can build.
+Le 02/05/2020 ? 08:28, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> Autobuild statistics for 2020-05-01
+> ===============================
+> 
+>       branch |  OK | NOK | TIM | TOT |
+>   2020.02.x  | 28  | 16  |  0  | 44  |
+>     master   | 209 | 139 |  0  | 348 |
+> 
+> Results for branch 'master'
+> ===========================
+> 
+> Classification of failures by reason
+> ------------------------------------
+> 
+>              host-libsepol-3.0 | 9 
+>              host-gnupg-1.4.23 | 4 
+>               host-erlang-22.2 | 3 
+>            host-nodejs-12.16.1 | 3 
+>                host-efl-1.22.3 | 2 
+>               host-grpc-1.25.0 | 2 
+>              host-pango-1.44.6 | 2 
+>              host-squashfs-4.4 | 2 
 
-Of course, scratch that. When a patch series has two patches, I should
-read the first patch of the series before the second patch.
+I've updated my autobuilder to Fedora 32 that use gcc 10 (prerelease).
+Using gcc 10 trigger new issues related to the new default -fno-common:
+https://gcc.gnu.org/gcc-10/porting_to.html
 
-Sorry for the noise :-/
+It seems too bleeding-edge for now :)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards,
+Romain
