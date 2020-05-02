@@ -1,70 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  2 May 2020 23:28:07 +0200
-Subject: [Buildroot] [PATCH 1/6] package/python3-pyelftools: new package
+Date: Sat,  2 May 2020 23:28:09 +0200
+Subject: [Buildroot] [PATCH 3/6] configs/olimex_a20_olinuxino_lime{,
+ 2}: use Python 3.x
 In-Reply-To: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
 References: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200502212812.51219-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20200502212812.51219-4-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We will need this Python 3.x variant of the host-python-pyelftools
-package to be able to build some recent versions of U-Boot (>=
-2020.01).
+The olimex_a20_olinuxino_lime{,2}_defconfig uses U-Boot 2020.04 since
+commit 6b805c3ab70b5ee63c7dcd3a4aa48a999a8a43c3. This new U-Boot
+version needs Python 3.x for pylibfdt.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/535054468
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/535054466
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyelftools/python-pyelftools.mk  |  1 +
- .../python3-pyelftools/python3-pyelftools.hash  |  1 +
- .../python3-pyelftools/python3-pyelftools.mk    | 17 +++++++++++++++++
- 3 files changed, 19 insertions(+)
- create mode 120000 package/python3-pyelftools/python3-pyelftools.hash
- create mode 100644 package/python3-pyelftools/python3-pyelftools.mk
+ configs/olimex_a20_olinuxino_lime2_defconfig | 2 ++
+ configs/olimex_a20_olinuxino_lime_defconfig  | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/python-pyelftools/python-pyelftools.mk b/package/python-pyelftools/python-pyelftools.mk
-index 21b9e409be..71ad49f20c 100644
---- a/package/python-pyelftools/python-pyelftools.mk
-+++ b/package/python-pyelftools/python-pyelftools.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+# Please keep in sync with package/python3-pyelftools/python3-pyelftools.mk
- PYTHON_PYELFTOOLS_VERSION = 0.25
- PYTHON_PYELFTOOLS_SOURCE = pyelftools-$(PYTHON_PYELFTOOLS_VERSION).tar.gz
- PYTHON_PYELFTOOLS_SITE = https://files.pythonhosted.org/packages/fa/9a/0674cb1725196568bdbca98304f2efb17368b57af1a4bb3fc772c026f474
-diff --git a/package/python3-pyelftools/python3-pyelftools.hash b/package/python3-pyelftools/python3-pyelftools.hash
-new file mode 120000
-index 0000000000..e8eebeda9f
---- /dev/null
-+++ b/package/python3-pyelftools/python3-pyelftools.hash
-@@ -0,0 +1 @@
-+../python-pyelftools/python-pyelftools.hash
-\ No newline at end of file
-diff --git a/package/python3-pyelftools/python3-pyelftools.mk b/package/python3-pyelftools/python3-pyelftools.mk
-new file mode 100644
-index 0000000000..ea79aef66d
---- /dev/null
-+++ b/package/python3-pyelftools/python3-pyelftools.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# python3-pyelftools
-+#
-+################################################################################
-+
-+# Please keep in sync with package/python-pyelftools/python-pyelftools.mk
-+PYTHON3_PYELFTOOLS_VERSION = 0.25
-+PYTHON3_PYELFTOOLS_SOURCE = pyelftools-$(PYTHON_PYELFTOOLS_VERSION).tar.gz
-+PYTHON3_PYELFTOOLS_SITE = https://files.pythonhosted.org/packages/fa/9a/0674cb1725196568bdbca98304f2efb17368b57af1a4bb3fc772c026f474
-+PYTHON3_PYELFTOOLS_LICENSE = Public domain
-+PYTHON3_PYELFTOOLS_LICENSE_FILES = LICENSE
-+PYTHON3_PYELFTOOLS_SETUP_TYPE = setuptools
-+HOST_PYTHON3_PYELFTOOLS_DL_SUBDIR = python-pyelftools
-+HOST_PYTHON3_PYELFTOOLS_NEEDS_HOST_PYTHON = python3
-+
-+$(eval $(host-python-package))
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index eb6a82c2f6..6e27383a1c 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -46,6 +46,8 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 740fd4357a..415fbfc066 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -46,6 +46,8 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
 -- 
 2.26.2
