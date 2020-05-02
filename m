@@ -1,153 +1,92 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 May 2020 18:34:32 +0200
-Subject: [Buildroot] [git commit] package/libgeotiff: bump to version 1.6.0
-Message-ID: <20200502163126.2700590C09@busybox.osuosl.org>
+Date: Sat, 2 May 2020 18:47:38 +0200
+Subject: [Buildroot] [PATCH 1/2] package/proj: bump to version 7.0.1
+In-Reply-To: <20200501131403.2439357-1-fontaine.fabrice@gmail.com>
+References: <20200501131403.2439357-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200502164738.GK15673@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7cf6d5d65e5abc8351f2fb1016907d22e4fb0315
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-- Drop patches (already in version) and so AUTORECONF
-- Update indentation in hash file (two spaces)
+On 2020-05-01 15:14 +0200, Fabrice Fontaine spake thusly:
+> - curl and tiff are optional dependencies since version 7.0.0 and
+>   https://github.com/OSGeo/PROJ/commit/db31b6dfa9c8fe37d5706d95ce81012b8db3c3b9
+> - Update indentation of hash file (two spaces)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...0001-Use-pkg-config-for-libtiff-detection.patch | 49 ----------------------
- ...ac-use-pkg-config-to-find-proj-dependency.patch | 37 ----------------
- package/libgeotiff/libgeotiff.hash                 |  4 +-
- package/libgeotiff/libgeotiff.mk                   |  4 +-
- 4 files changed, 3 insertions(+), 91 deletions(-)
+Both (proj and libgeotiff) applied to master, thanks.
 
-diff --git a/package/libgeotiff/0001-Use-pkg-config-for-libtiff-detection.patch b/package/libgeotiff/0001-Use-pkg-config-for-libtiff-detection.patch
-deleted file mode 100644
-index e2ce26e97c..0000000000
---- a/package/libgeotiff/0001-Use-pkg-config-for-libtiff-detection.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 2fbae8298d7cc976d7c0f329fc26dafe57fb0fc4 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 1 Apr 2019 08:04:39 +0200
--Subject: [PATCH] Use pkg-config for libtiff detection
--
--Using pkg-config allows proper behavior in static-only contexts: the
--libtiff library might depend on libz and libjpeg.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Patch retrieved (and slightly updated) from:
--https://git.buildroot.net/buildroot/tree/package/libgeotiff/0001-use-pkg-config.patch]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved (and slightly updated) from:
--https://github.com/OSGeo/libgeotiff/commit/2fbae8298d7cc976d7c0f329fc26dafe57fb0fc4]
-----
-- libgeotiff/configure.ac | 18 ++++++++++--------
-- 1 file changed, 10 insertions(+), 8 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index aa38af4..c3395d5 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -211,16 +211,18 @@ if test "$with_libtiff" != "" ; then
-- libgeotiff. Please upgrade or use an older version of libgeotiff.]),-lm)
--   LIBS="$LIBS_SAVED"
-- else
---  AC_CHECK_LIB(tiff,TIFFOpen,[TIFF_CONFIG=yes],
---               AC_MSG_ERROR([You will need to substantially rewrite libxtiff to
--+  PKG_CHECK_MODULES(LIBTIFF, libtiff-4,
--+                    [TIFF_INC="$LIBTIFF_CFLAGS" LIBS="$LIBS $LIBTIFF_LIBS" TIFF_CONFIG="yes"],
--+                    [AC_CHECK_LIB(tiff,TIFFOpen,[TIFF_CONFIG=yes],
--+                                  AC_MSG_ERROR([You will need to substantially rewrite libxtiff to
-- build libgeotiff without libtiff]),-lm)
---  LIBS_SAVED="$LIBS"
---  AC_CHECK_LIB(tiff,TIFFMergeFieldInfo,[TIFF_CONFIG=yes],
---               AC_MSG_ERROR([Libtiff 3.6.0 Beta or later required for this version of
--+                    LIBS_SAVED="$LIBS"
--+                    AC_CHECK_LIB(tiff,TIFFMergeFieldInfo,[TIFF_CONFIG=yes],
--+                                 AC_MSG_ERROR([Libtiff 3.6.0 Beta or later required for this version of
-- libgeotiff. Please upgrade libtiff or use an older version of libgeotiff.]),-lm)
---  LIBS="$LIBS -ltiff"
---  TIFF_INC=
---  TIFF_CONFIG="yes"
--+                    LIBS="$LIBS -ltiff"
--+                    TIFF_INC=
--+                    TIFF_CONFIG="yes"])
-- fi
-- 
-- 
-diff --git a/package/libgeotiff/0002-configure.ac-use-pkg-config-to-find-proj-dependency.patch b/package/libgeotiff/0002-configure.ac-use-pkg-config-to-find-proj-dependency.patch
-deleted file mode 100644
-index faf409cd5e..0000000000
---- a/package/libgeotiff/0002-configure.ac-use-pkg-config-to-find-proj-dependency.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 33937e2861fda87dc314378bf87db2c766c37a6b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 9 Oct 2019 15:11:34 +0200
--Subject: [PATCH] configure.ac: use pkg-config to find proj dependency
--
--Use pkg-config to retrieve proj and its static dependencies such as
---lstdc++
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/OSGeo/libgeotiff/pull/24]
-----
-- libgeotiff/configure.ac | 9 ++++++---
-- 1 file changed, 6 insertions(+), 3 deletions(-)
--
--diff --git a/configure.ac b/libgeotiff/configure.ac
--index c3395d5..f7a8f28 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -246,9 +246,12 @@ if test "x$with_proj" = "xno" ; then
-- else
-- 
--   if test "x$with_proj" = "xyes" -o "x$with_proj" = "x"; then
---    ORIG_LIBS="$LIBS"
---    LIBS="-lproj $ORIG_LIBS"
---    AC_CHECK_LIB(proj,proj_create_from_wkt,PROJ_FOUND=yes,PROJ_FOUND=no,)
--+    PKG_CHECK_MODULES(PROJ, proj, [LIBS="$LIBS $PROJ_LIBS" PROJ_FOUND=yes], [PROJ_FOUND=no])
--+    if test "$PROJ_FOUND" = "no"; then
--+        ORIG_LIBS="$LIBS"
--+        LIBS="-lproj $ORIG_LIBS"
--+        AC_CHECK_LIB(proj,proj_create_from_wkt,PROJ_FOUND=yes,PROJ_FOUND=no,)
--+    fi
--     if test "$PROJ_FOUND" = "no"; then
--         AC_CHECK_LIB(proj,internal_proj_create_from_wkt,PROJ_FOUND=yes,PROJ_FOUND=no,)
--         if test "$PROJ_FOUND" = "yes"; then
---- 
--2.23.0
--
-diff --git a/package/libgeotiff/libgeotiff.hash b/package/libgeotiff/libgeotiff.hash
-index 12d3b2a166..51adcc2843 100644
---- a/package/libgeotiff/libgeotiff.hash
-+++ b/package/libgeotiff/libgeotiff.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 f9e99733c170d11052f562bcd2c7cb4de53ed405f7acdde4f16195cd3ead612c libgeotiff-1.5.1.tar.gz
--sha256 6a22340b8293c50a34ce8e95589489bd3ec65bcb8b93e61cbda3daaafe498375 LICENSE
-+sha256  9311017e5284cffb86f2c7b7a9df1fb5ebcdc61c30468fb2e6bca36e4272ebca  libgeotiff-1.6.0.tar.gz
-+sha256  6a22340b8293c50a34ce8e95589489bd3ec65bcb8b93e61cbda3daaafe498375  LICENSE
-diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/libgeotiff.mk
-index c196b804a2..c6fb61b4a2 100644
---- a/package/libgeotiff/libgeotiff.mk
-+++ b/package/libgeotiff/libgeotiff.mk
-@@ -4,14 +4,12 @@
- #
- ################################################################################
- 
--LIBGEOTIFF_VERSION = 1.5.1
-+LIBGEOTIFF_VERSION = 1.6.0
- LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
- LIBGEOTIFF_LICENSE = X11-style, public domain
- LIBGEOTIFF_LICENSE_FILES = LICENSE
- LIBGEOTIFF_DEPENDENCIES = proj tiff host-pkgconf
- LIBGEOTIFF_INSTALL_STAGING = YES
--# We're patching configure.ac
--LIBGEOTIFF_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- LIBGEOTIFF_DEPENDENCIES += zlib
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/proj/proj.hash |  8 ++++----
+>  package/proj/proj.mk   | 16 +++++++++++++++-
+>  2 files changed, 19 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/proj/proj.hash b/package/proj/proj.hash
+> index ade9502b67..ac3d12b271 100644
+> --- a/package/proj/proj.hash
+> +++ b/package/proj/proj.hash
+> @@ -1,5 +1,5 @@
+> -# Fetched from http://download.osgeo.org/proj/proj-6.3.0.tar.gz.md5
+> -md5 09243feb4f243a2bdd455035a2007384 proj-6.3.0.tar.gz
+> +# Fetched from http://download.osgeo.org/proj/proj-7.0.1.tar.gz.md5
+> +md5  5ba7536b579a6c9e0ad822dbdd455985  proj-7.0.1.tar.gz
+>  # Locally calculated
+> -sha256 68ce9ba0005d442c2c1d238a3b9bc6654c358159b4af467b91e8d5b407c79c77 proj-6.3.0.tar.gz
+> -sha256 2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6 COPYING
+> +sha256  a7026d39c9c80d51565cfc4b33d22631c11e491004e19020b3ff5a0791e1779f  proj-7.0.1.tar.gz
+> +sha256  2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6  COPYING
+> diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+> index 2be0004023..1c8f3f77c5 100644
+> --- a/package/proj/proj.mk
+> +++ b/package/proj/proj.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -PROJ_VERSION = 6.3.0
+> +PROJ_VERSION = 7.0.1
+>  PROJ_SITE = http://download.osgeo.org/proj
+>  PROJ_LICENSE = MIT
+>  PROJ_LICENSE_FILES = COPYING
+> @@ -23,4 +23,18 @@ PROJ_CONF_ENV = \
+>  	CFLAGS="$(PROJ_CFLAGS)" \
+>  	CXXFLAGS="$(PROJ_CXXFLAGS)"
+>  
+> +ifeq ($(BR2_PACKAGE_LIBCURL),y)
+> +PROJ_DEPENDENCIES += libcurl
+> +PROJ_CONF_OPTS += --with-curl=$(STAGING_DIR)/usr/bin/curl-config
+> +else
+> +PROJ_CONF_OPTS += --without-curl
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_TIFF),y)
+> +PROJ_DEPENDENCIES += tiff
+> +PROJ_CONF_OPTS += --enable-tiff
+> +else
+> +PROJ_CONF_OPTS += --disable-tiff
+> +endif
+> +
+>  $(eval $(autotools-package))
+> -- 
+> 2.26.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
