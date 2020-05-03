@@ -1,65 +1,76 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 03 May 2020 14:47:28 +0300
-Subject: [Buildroot] Issue compiling on Ubuntu under WSL
-In-Reply-To: <CA+1XQn=Np1jRm6A+drXhFaWrzUHR2yfHcXTvNFL6HHhJUTy5JQ@mail.gmail.com>
-References: <CA+1XQnkaNvzxb2gyse=UOR1AvE=uxCks7KuLmPmbmdgusDd+GQ@mail.gmail.com>
- <CA+1XQn=Np1jRm6A+drXhFaWrzUHR2yfHcXTvNFL6HHhJUTy5JQ@mail.gmail.com>
-Message-ID: <87bln5grzj.fsf@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 3 May 2020 13:48:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gobject-introspection: fix host
+ version of .pc file for wrapper
+In-Reply-To: <CADvTj4oM52ZaAVbC3pUjTPf5ezKj36SF76Udz1c7uBsryXMdRw@mail.gmail.com>
+References: <20200502060435.23004-1-james.hilliard1@gmail.com>
+ <20200502143243.4e2b3ef3@windsurf.home>
+ <CADvTj4oM52ZaAVbC3pUjTPf5ezKj36SF76Udz1c7uBsryXMdRw@mail.gmail.com>
+Message-ID: <20200503134807.4e709fe4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Renato,
+Hello James,
 
-On Sun, May 03 2020, Renato Moutinho wrote:
-> Hi there,
->
->     I've been trying to compile buildroot on Unbuntu running under WSL. I
-> assume this isn't a supported configuration but my intention is to provide
-> additional information for an issue opened on WSL's github.
->
-> Ultimately, the build fails with the error reported below. What I wanted to
-> do is prefix this last *mv *command with an *strace *so I can submit
-> additional information to the WSL dev team but I'm unable to find the *Makefile
-> *responsible for this command specifically. Can anyone help me with this?
+On Sat, 2 May 2020 13:36:04 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-See the TOOLCHAIN_EXTERNAL_MOVE macro in
-toolchain/toolchain-external/pkg-toolchain-external.mk.
+> > > +define HOST_GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
+> > > +     # Set prefix to /usr because pkg-config appends the sysroot directory
+> > > +     $(SED) "s%^prefix=.*%prefix=\/usr%g" \
+> > > +             $(HOST_DIR)/usr/lib/pkgconfig/gobject-introspection-1.0.pc  
+> >
+> > No, the host variant of pkg-config should not append the sysroot
+> > directory. If it does, then it is wrong.  
+> Well this was when building the target package that uses the host
+> pkgconfig libdir.
 
-baruch
+And? According to 4e0bc29993376613d200e892d491e31ea5a49622, Meson has
+some understanding of when it is using pkg-config to find libraries to
+build native code or to build target code.
 
-> xzcat
-> /home/moutinho/buildroot-labs/buildroot/dl/toolchain-external-arm-arm/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz
-> | tar --strip-components=1 -C
-> /home/moutinho/buildroot-labs/buildroot/output/build/toolchain-external-arm-arm-2019.12
-> --exclude='usr/lib/locale/*'   -xf -
-> rm -rf /home/moutinho/buildroot-labs/buildroot/output/host/opt/ext-toolchain
-> mkdir -p
-> /home/moutinho/buildroot-labs/buildroot/output/host/opt/ext-toolchain
-> mv
-> /home/moutinho/buildroot-labs/buildroot/output/build/toolchain-external-arm-arm-2019.12/*
-> /home/moutinho/buildroot-labs/buildroot/output/host/opt/ext-toolchain/
-> mv: cannot move
-> '/home/moutinho/buildroot-labs/buildroot/output/build/toolchain-external-arm-arm-2019.12/arm-none-linux-gnueabihf'
-> to
-> '/home/moutinho/buildroot-labs/buildroot/output/host/opt/ext-toolchain/arm-none-linux-gnueabihf':
-> Permission denied
-> package/pkg-generic.mk:193: recipe for target
-> '/home/moutinho/buildroot-labs/buildroot/output/build/toolchain-external-arm-arm-2019.12/.stamp_extracted'
-> failed
-> make[1]: ***
-> [/home/moutinho/buildroot-labs/buildroot/output/build/toolchain-external-arm-arm-2019.12/.stamp_extracted]
-> Error 1
-> Makefile:84: recipe for target '_all' failed
-> make: *** [_all] Error 2
->
-> Best regards,
->
-> Renato
+As you can see in this commit:
 
+-pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
++pkgconfig = '@HOST_DIR@/bin/pkgconf'
+
+Meson is no longer going through our pkg-config wrapper that passes the
+right environment variables to ensure pkg-config returns values valid
+for building target code.
+
+Since Meson goes through $(HOST_DIR)/bin/pkgconf directly, we do not
+pass any specific sysroot argument to pkg-config. It is up to Meson to
+pass the appropriate sysroot value when working with target code, and
+to not pass any sysroot value when working on native code.
+
+See the commit log of 4e0bc29993376613d200e892d491e31ea5a49622:
+
+    meson is able to distinguish between host (= native) and target (=
+    cross) compilation. It will explicitly pass different options to
+    pkg-config to distinguish them. Therefore, we don't need to use the
+    pkg-config wrapper when using meson, and can instead pass the pkg-config
+    settings through the cross-compilation.conf.
+    
+    This is important because in some situations (e.g. for the Python
+    configuration), meson sets the PKG_CONFIG_LIBDIR variable to a different
+    value before calling pkg-config. Relying on our wrapper script doesn't
+    work in that case (except if the script would unconditionally set
+    PKG_CONFIG_LIBDIR, which it doesn't do at the moment).
+    
+    Add the sys_root and pkg_config_lib settings to cross-compilation.conf
+    and use pkgconf directly instead of the wrapper.
+    
+    Note that this requires us to substitute STAGING_DIR as well, with an
+    absolute path. This is not a big deal since cross-compilation.conf is
+    regenerated for every package.
+
+Best regards,
+
+Thomas
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
