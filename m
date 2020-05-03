@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  3 May 2020 19:12:25 +0200
-Subject: [Buildroot] [PATCH 2/4] package/supertux: remove libglu dependency
+Date: Sun,  3 May 2020 19:12:26 +0200
+Subject: [Buildroot] [PATCH 3/4] package/libglew: do not depend on libglu
 In-Reply-To: <20200503171227.1411086-1-bernd.kuhls@t-online.de>
 References: <20200503171227.1411086-1-bernd.kuhls@t-online.de>
-Message-ID: <20200503171227.1411086-2-bernd.kuhls@t-online.de>
+Message-ID: <20200503171227.1411086-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,48 +15,48 @@ To: buildroot@busybox.net
  -DGLEW_NO_GLU since GLU is rarely seen in modern codebases nowadays."
 https://github.com/nigels-com/glew/issues/192#issuecomment-411641657
 
-Each package using glew.h has to decide whether to use the opt-out for
-glu or not. Since supertux does not need libglu we can safely remove
-the dependency by adding -DGLEW_NO_GLU to TARGET_CXXFLAGS.
+This patch prevents libglu being added to the "Requires:" section of
+glew.pc fixing libglew detection in the supertuxkart package
+
+-- Checking for module 'glew>=2.1'
+--   Package 'glu', required by 'glew', not found
+
+after libglu is removed as dependency of supertuxkart.
+
+Supertuxkart already uses -DGLEW_NO_GLU:
+https://github.com/supertuxkart/stk-code/blob/master/CMakeLists.txt#L224
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/supertux/Config.in   | 1 -
- package/supertux/supertux.mk | 3 ++-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libglew/libglew.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/supertux/Config.in b/package/supertux/Config.in
-index c77d1ae2bd..5cacdd658e 100644
---- a/package/supertux/Config.in
-+++ b/package/supertux/Config.in
-@@ -17,7 +17,6 @@ config BR2_PACKAGE_SUPERTUX
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBGLEW
--	select BR2_PACKAGE_LIBGLU # GL/glu.h
- 	select BR2_PACKAGE_LIBOGG
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_LIBVORBIS
-diff --git a/package/supertux/supertux.mk b/package/supertux/supertux.mk
-index 5842b17ba4..e4a4630918 100644
---- a/package/supertux/supertux.mk
-+++ b/package/supertux/supertux.mk
-@@ -15,7 +15,7 @@ SUPERTUX_LICENSE_FILES = LICENSE.txt data/AUTHORS
+diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
+index 8a07170e99..fa26292567 100644
+--- a/package/libglew/libglew.mk
++++ b/package/libglew/libglew.mk
+@@ -15,6 +15,7 @@ LIBGLEW_DEPENDENCIES = libgl xlib_libX11 xlib_libXext xlib_libXi xlib_libXmu
+ # using $TARGET_CONFIGURE_OPTS breaks compilation
+ define LIBGLEW_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_NO_GLU="-DGLEW_NO_GLU" \
+ 		GLEW_DEST="/usr" LIBDIR="/usr/lib" \
+ 		AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
+ 		LD="$(TARGET_CC)" STRIP="$(TARGET_STRIP)" \
+@@ -23,12 +24,14 @@ endef
  
- # Use bundled squirrel, tinygettext sexp-cpp packages which are hardcoded in
- # the CMake build system.
--SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew libglu \
-+SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew \
- 	libogg libpng libvorbis openal physfs sdl2 sdl2_image
+ define LIBGLEW_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_NO_GLU="-DGLEW_NO_GLU" \
+ 		GLEW_DEST="$(STAGING_DIR)/usr" LIBDIR="$(STAGING_DIR)/usr/lib" \
+ 		$(TARGET_CONFIGURE_OPTS) install
+ endef
  
- # CMAKE_BUILD_TYPE=Release: disable profiling code (-pg)
-@@ -30,6 +30,7 @@ SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew libglu
- # ENABLE_OPENGLES2=OFF: Disable opengles2 for now.
- SUPERTUX_CONF_OPTS += \
- 	-DCMAKE_BUILD_TYPE=Release \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DGLEW_NO_GLU" \
- 	-DENABLE_BOOST_STATIC_LIBS=OFF \
- 	-DBUILD_DOCUMENTATION=OFF \
- 	-DENABLE_OPENGL=ON \
+ define LIBGLEW_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_NO_GLU="-DGLEW_NO_GLU" \
+ 		GLEW_DEST="$(TARGET_DIR)/usr" LIBDIR="$(TARGET_DIR)/usr/lib" \
+ 		$(TARGET_CONFIGURE_OPTS) install
+ endef
 -- 
 2.26.2
