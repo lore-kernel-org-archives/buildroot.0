@@ -1,100 +1,151 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 May 2020 09:54:01 +0200
-Subject: [Buildroot] [PATCH] package/kmod - fix host build dependecies
-In-Reply-To: <20200503065110.7609-1-lucianbuga@gmail.com>
-References: <20200503065110.7609-1-lucianbuga@gmail.com>
-Message-ID: <20200503075401.GU15673@scaer>
+Date: Sun, 3 May 2020 10:02:31 +0200
+Subject: [Buildroot] [PATCH 2/6] boot/uboot: support building U-Boot
+ with Python 3.x
+In-Reply-To: <20200502212812.51219-3-thomas.petazzoni@bootlin.com>
+References: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
+ <20200502212812.51219-3-thomas.petazzoni@bootlin.com>
+Message-ID: <20200503080231.GV15673@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lucian, All,
+Thomas, All,
 
-+Thomas +Peter: question for you.
-
-On 2020-05-03 09:51 +0300, Lucian Buga spake thusly:
-> When kernel is configured with CONFIG_MODULE_COMPRESS, host-kmod must
-> be built with zlib / xz support to be able to properly generate
-> dependency files for target.
+On 2020-05-02 23:28 +0200, Thomas Petazzoni spake thusly:
+> U-Boot versions newer than 2020.01 use Python 3.x instead of Python
+> 2.x in various scripts.
 > 
-> Signed-off-by: Lucian Buga <lucianbuga@gmail.com>
+> We already had the BR2_TARGET_UBOOT_NEEDS_PYLIBFDT and
+> BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS options, but depending on the U-Boot
+> version, we now need to indicate if Python 2.x or Python 3.x should be
+> used.
+> 
+> In addition, it turns out that some U-Boot configurations need a
+> Python interpreter, without needing pylibfdt or pyelftools. Some of
+> our defconfigs were abusing the BR2_TARGET_UBOOT_NEEDS_PYLIBFDT option
+> to make sure a Python interpreter was built.
+> 
+> To solve both issues, we add a new option
+> BR2_TARGET_UBOOT_NEEDS_PYTHON, which itself has a choice to choose
+> between Python 2.x and Python 3.x. It defaults to Python 2.x to
+> preserve backward compatibility.
+> 
+> The existing BR2_TARGET_UBOOT_NEEDS_PYLIBFDT and
+> BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS options select
+> BR2_TARGET_UBOOT_NEEDS_PYTHON.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/kmod/kmod.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  boot/uboot/Config.in | 29 +++++++++++++++++++++++++++++
+>  boot/uboot/uboot.mk  | 12 +++++++++++-
+>  2 files changed, 40 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-> index e2dfea5c7b..7149658ac7 100644
-> --- a/package/kmod/kmod.mk
-> +++ b/package/kmod/kmod.mk
-> @@ -35,11 +35,15 @@ endif
->  ifeq ($(BR2_PACKAGE_ZLIB),y)
->  KMOD_DEPENDENCIES += zlib
->  KMOD_CONF_OPTS += --with-zlib
-> +HOST_KMOD_DEPENDENCIES += host-zlib
-> +HOST_KMOD_CONF_OPTS += --with-zlib
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index 7a6f5053fd..e10166a113 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -147,14 +147,43 @@ config BR2_TARGET_UBOOT_NEEDS_DTC
+>  	  Select this option if your U-Boot board configuration
+>  	  requires the Device Tree compiler to be available.
+>  
+> +config BR2_TARGET_UBOOT_NEEDS_PYTHON
+> +	bool "U-Boot needs host Python"
+> +
+> +if BR2_TARGET_UBOOT_NEEDS_PYTHON
+> +
+> +choice
+> +	prompt "Python version"
+> +	default BR2_TARGET_UBOOT_NEEDS_PYTHON2
+> +
+> +config BR2_TARGET_UBOOT_NEEDS_PYTHON2
+> +	bool "python 2.x"
+> +	help
+> +	  Select this option if U-Boot needs a host Python 2.x
+> +	  interpreter. This is the case for some U-Boot
+> +	  configurations, prior to U-Boot 2020.01.
+> +
+> +config BR2_TARGET_UBOOT_NEEDS_PYTHON3
+> +	bool "python 3.x"
+> +	help
+> +	  Select this option if U-Boot needs a host Python 3.x
+> +	  interpreter. This is the case for some U-Boot
+> +	  configurations, after U-Boot 2020.01.
+> +
+> +endchoice
 
-At first, I was going to say that this was incorrect, because support
-for gz/xz on the target should not mandate whether the host variant has
-such support of not.
+I don't like it much that construct, where a boolean hides a choice.
+Instead, we can siumply use a choice (options names abbreviated as I'm
+lazy to type them full):
 
-However, it is my understanding that the uncompressing of modules is
-done by the modprobe/insmod, and the uncompressed blurb is handled to
-the kernel.
+    choice
+        "Python support needed"
 
-If that is true, then indeed, this patch makes sense:
+    config UBOOT_PY_NONE
+        "none"
 
-  - if the target variant does not have compression support, then it
-    will not be able to load compresed modules, so it would be useless
-    or the host variant to have compression support,
+    config UBOOT_PY2
+        "python2"
 
-  - if the target variant has compression support, then it may have to
-    handle compressed modules, and thus the host variant must have
-    ompression support.
+    config UBOOT_PY3
+        "python3"
 
-So this patch kinda makes sense in the end.
+    endchoice
 
-However, there is still a gotcha: the kernel can be configured to
-compress modules on installation, and that is (in Buildroot) orthogonal
-with the selection of BR2_PACKAGE_ZLIB or BR2_PACKAGE_XZ.
+> +endif
+> +
+>  config BR2_TARGET_UBOOT_NEEDS_PYLIBFDT
+>  	bool "U-Boot needs pylibfdt"
+> +	select BR2_TARGET_UBOOT_NEEDS_PYTHON
+>  	help
+>  	  Select this option if your U-Boot board configuration
+>  	  requires the Python libfdt library to be available.
+>  
+>  config BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS
+>  	bool "U-Boot needs pyelftools"
+> +	select BR2_TARGET_UBOOT_NEEDS_PYTHON
 
-So, it would be invaliud, but possible to have a Buildroot configuration
-that contains:
-
-    # BR2_PACKAGE_ZLIB is not set
-    # BR2_PACKAGE_XZ is not set
-
-while at the same time having a kernel configuration that contains:
-
-    CONFIG_MODULE_COMPRESS=y
-    CONFIG_MODULE_COMPRESS_GZIP=y  (or XZ, you get the point)
-
-To address this problem, I did a 6-patch series two years ago:
-    https://git.buildroot.org/~ymorin/git/buildroot/log?h=yem/host-kmod
-
-I just rebased it, but I did not pursue this endeavour much further than
-just posting it once...
-
-I think your patch is good, but I'd like some feedback from Thomas or
-Peter. Or any other that can confirm who is responsible for
-uncompressing kernel modules on load...
+Of course here (both pylibfdt and pyelftools), you'd have to switch to a
+depends-on, but that does not change much afterall.
 
 Regards,
 Yann E. MORIN.
 
+>  	help
+>  	  Select this option if your U-Boot board configuration
+>  	  requires the Python pyelftools library to be available.
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 7bd9cbae52..1d50e72846 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -159,12 +159,22 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
+>  UBOOT_DEPENDENCIES += host-dtc
 >  endif
 >  
->  ifeq ($(BR2_PACKAGE_XZ),y)
->  KMOD_DEPENDENCIES += xz
->  KMOD_CONF_OPTS += --with-xz
-> +HOST_KMOD_DEPENDENCIES += host-xz
-> +HOST_KMOD_CONF_OPTS += --with-xz
+> +ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON2),y)
+> +UBOOT_DEPENDENCIES += host-python
+> +else ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
+> +UBOOT_DEPENDENCIES += host-python3
+> +endif
+> +
+>  ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)
+> -UBOOT_DEPENDENCIES += host-python host-swig
+> +UBOOT_DEPENDENCIES += host-swig
 >  endif
 >  
->  ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
+>  ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS),y)
+> +ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON2),y)
+>  UBOOT_DEPENDENCIES += host-python-pyelftools
+> +else ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
+> +UBOOT_DEPENDENCIES += host-python3-pyelftools
+> +endif
+>  endif
+>  
+>  ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSSL),y)
 > -- 
-> 2.17.1
+> 2.26.2
 > 
 > _______________________________________________
 > buildroot mailing list
