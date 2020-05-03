@@ -1,75 +1,52 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  3 May 2020 19:12:24 +0200
-Subject: [Buildroot] [PATCH 1/4] package/ogre: remove libglu dependency
-Message-ID: <20200503171227.1411086-1-bernd.kuhls@t-online.de>
+Date: Sun, 03 May 2020 19:15:23 +0200
+Subject: [Buildroot] [PATCH 2/2] package/cegui: select libglu when libgl
+ is detected
+References: <20200428195844.48124-1-b.bilas@grinn-global.com>
+ <20200428195844.48124-2-b.bilas@grinn-global.com>
+ <20200429225315.5d39a390@windsurf.home>
+ <605471f7-f313-6c79-af48-a36b928013f3@grinn-global.com>
+Message-ID: <bqa3ogxjat.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"The inclusion of GLU is historical. [...] I'd recommend using
- -DGLEW_NO_GLU since GLU is rarely seen in modern codebases nowadays."
-https://github.com/nigels-com/glew/issues/192#issuecomment-411641657
+Hi,
 
-Add -DGLEW_NO_GLU to get rid of the libglu dependency.
+Am Thu, 30 Apr 2020 21:54:15 +0200 schrieb Bartosz Bilas:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ogre/Config.in | 1 -
- package/ogre/ogre.mk   | 9 ++++++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
+> Are you sure? There is a couple of packages which have similar fix such
+> as:
+> 
+> package/ogre/Config.in:??? select BR2_PACKAGE_LIBGLU # GL/glu.h
 
-diff --git a/package/ogre/Config.in b/package/ogre/Config.in
-index b5475a7cb6..1d7784714d 100644
---- a/package/ogre/Config.in
-+++ b/package/ogre/Config.in
-@@ -10,7 +10,6 @@ config BR2_PACKAGE_OGRE
- 	depends on BR2_USE_WCHAR # use wchar_t
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_LIBFREEIMAGE
--	select BR2_PACKAGE_LIBGLU # GL/glu.h
- 	select BR2_PACKAGE_SDL2
- 	select BR2_PACKAGE_SDL2_OPENGL
- 	select BR2_PACKAGE_SDL2_X11 # use wmInfo.info.x11
-diff --git a/package/ogre/ogre.mk b/package/ogre/ogre.mk
-index 253e022a73..3387230445 100644
---- a/package/ogre/ogre.mk
-+++ b/package/ogre/ogre.mk
-@@ -15,7 +15,6 @@ OGRE_DEPENDENCIES = host-pkgconf \
- 	freetype \
- 	libfreeimage \
- 	libgl \
--	libglu \
- 	sdl2 \
- 	xlib_libX11 \
- 	xlib_libXaw \
-@@ -23,12 +22,16 @@ OGRE_DEPENDENCIES = host-pkgconf \
- 	xlib_libXrandr \
- 	zziplib
- 
-+OGRE_CXX_FLAGS = $(TARGET_CXXFLAGS) -DGLEW_NO_GLU
-+
- # Unbundle freetype and zziplib.
- # Disable java and nvidia cg support.
- OGRE_CONF_OPTS = -DOGRE_BUILD_DEPENDENCIES=OFF \
- 	-DOGRE_BUILD_COMPONENT_JAVA=OFF \
- 	-DOGRE_BUILD_PLUGIN_CG=OFF \
--	-DOGRE_INSTALL_DOCS=OFF
-+	-DOGRE_INSTALL_DOCS=OFF \
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -DGLEW_NO_GLU" \
-+	-DCMAKE_CXX_FLAGS="$(OGRE_CXX_FLAGS)"
- 
- # Enable optional python component if python interpreter is present on the target.
- ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-@@ -41,7 +44,7 @@ endif
- 
- # Uses __atomic_fetch_add_8
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--OGRE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-+OGRE_CXXFLAGS += -latomic
- endif
- 
- $(eval $(cmake-package))
--- 
-2.26.2
+sent http://patchwork.ozlabs.org/project/buildroot/patch/
+20200503171227.1411086-1-bernd.kuhls at t-online.de/
+
+which removes the libglu dependency coming from upstream-included glew.h.
+
+> package/supertux/Config.in:??? select BR2_PACKAGE_LIBGLU # GL/glu.h
+
+dito, sent http://patchwork.ozlabs.org/project/buildroot/patch/
+20200503171227.1411086-2-bernd.kuhls at t-online.de/
+
+> package/lugaru/Config.in:?? ?select BR2_PACKAGE_LIBGLU # GL/glu.h
+
+This package directly includes GL/glu.h:
+
+https://bitbucket.org/osslugaru/lugaru/src/
+f6049187585733143f2fb2d688097cc711e15cf0/Source/gamegl.h#lines-42
+
+and does not make use of libglew at all.
+
+Cegui also directly includes GL/glu.h:
+
+https://github.com/cegui/cegui/blob/master/cegui/include/CEGUI/
+RendererModules/OpenGL/GL.h#L49
+
+which makes libglu a hard dependency for this package even when
+-DGLEW_NO_GLU was added to CXXFLAGS.
+
+Regards, Bernd
