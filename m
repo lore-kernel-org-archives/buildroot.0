@@ -1,56 +1,74 @@
-From: =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date: Sat, 2 May 2020 23:58:17 +0200
-Subject: [Buildroot] [PATCH 4/6] configs/beelink_gs1: use Python 3.x
-In-Reply-To: <20200502212812.51219-5-thomas.petazzoni@bootlin.com>
-References: <20200502212812.51219-1-thomas.petazzoni@bootlin.com>
- <20200502212812.51219-5-thomas.petazzoni@bootlin.com>
-Message-ID: <CAJiuCcffCasBTc+q2_tqm=zdhTidGsFZDd9njCsgnM982tLWhw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 03 May 2020 05:09:07 +0000
+Subject: [Buildroot] [Bug 12846] New: SAMA5D3-Xplained Default configuration
+ can't start U-Boot
+Message-ID: <bug-12846-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=12846
 
-On Sat, 2 May 2020 at 23:28, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Since the bump to U-Boot 2020.01 in commit
-> e210080d2ab4d77862c42d2b318e21fab461f127, it needs Python 3.x on the
-> host.
+            Bug ID: 12846
+           Summary: SAMA5D3-Xplained Default configuration can't start
+                    U-Boot
+           Product: buildroot
+           Version: 2020.02.1
+          Hardware: Other
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: therealergo at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Thanks for the fix, I thought there will be a patch to fix this
-dependency automatically.
+OS: Ubuntu 20.04 LTS
 
-Acked-by: Cl?ment P?ron <peron.clem@gmail.com>
+Following the instructions in board/atmel/readme.txt for the SAMA5D3-Xplained
+boot from NAND with either atmel_sama5d3_xplained_defconfig or
+atmel_sama5d3_xplained_dev_defconfig, the image does not boot past
+AT91Bootstrap.
 
-Regards,
-Clement
+Only the following is output from the board:
 
->
-> Fixes:
->
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/535054357
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  configs/beelink_gs1_defconfig | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/configs/beelink_gs1_defconfig b/configs/beelink_gs1_defconfig
-> index 04c8b544ea..2fe89bf747 100644
-> --- a/configs/beelink_gs1_defconfig
-> +++ b/configs/beelink_gs1_defconfig
-> @@ -34,6 +34,8 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="beelink_gs1"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYTHON=y
-> +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
->  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
->  BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
->  BR2_TARGET_UBOOT_SPL=y
-> --
-> 2.26.2
->
+  RomBOOT
+
+  AT91Bootstrap 3.9.0 (Sat 02 May 2020 09:50:11 PM CDT)
+
+  ACT8865: Set REG1/REG2/REG3 Power-saving mode
+  ACT8865: Disable ACT8865's I2C interface
+  NAND: ONFI flash detected
+  NAND: Manufacturer ID: 0x2c Chip ID: 0xda
+  NAND: Page Bytes: 2048, Spare Bytes: 64
+  NAND: ECC Correctability Bits: 4, ECC Sector Bytes: 512
+  NAND: Disable On-Die ECC
+  NAND: Initialize PMECC params, cap: 4, sector: 512
+  NAND: Image: Copy 0xc0000 bytes from 0x40000 to 0x26f00000
+  NAND: Done to load image
+
+However, when the U-Boot version is changed to "linux4sam_5.5" by changing the
+"U-Boot Version" from "Custom tarball" to "Custon Git Repository," changing
+"URL of custom repository" to "https://github.com/linux4sam/u-boot-at91.git"
+and changing "Custom repository version" to "801b789," the image boots
+successfully.
+
+I've done the debugging that I can, and I'm certain that AT91Bootstrap is
+copying the U-Boot image into RAM and jumping to it, but I haven't been able to
+narrow down the issue any further.
+
+Steps to reproduce:
+> make atmel_sama5d3_xplained_defconfig
+> make
+> Put board into RomBOOT (open JP5, power up, close JP5)
+> ./board/atmel/flasher.sh ./output /dev/ttyACM0 sama5d3_xplained
+> (flash completes successfully)
+> Restart board
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
