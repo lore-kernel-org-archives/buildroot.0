@@ -1,42 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 May 2020 14:37:48 +0200
-Subject: [Buildroot] [PATCH] package/kmod - fix host build dependecies
-In-Reply-To: <20200503122019.GY15673@scaer>
-References: <20200503075401.GU15673@scaer>
- <D9E5771A-69D4-4D5F-98AB-8E408976E4CB@gmail.com>
- <20200503121101.GX15673@scaer> <20200503122019.GY15673@scaer>
-Message-ID: <20200503123748.GZ15673@scaer>
+Date: Sun,  3 May 2020 15:09:58 +0200
+Subject: [Buildroot] [PATCH 0/3 v2] package/kmod: add support for compressed
+ modules (branch yem/host-kmod-z)
+Message-ID: <cover.1588511382.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lucian, All,
+Hello All!
 
-On 2020-05-03 14:20 +0200, Yann E. MORIN spake thusly:
-> On 2020-05-03 14:11 +0200, Yann E. MORIN spake thusly:
-> > On 2020-05-03 12:13 +0300, Lucian Buga spake thusly:
-> > > To be more precise, the patch fixes the host depmod utility from kmod
-> > > package. 
-> [--SNIP--]
-> > Please, could you have a look at the branch I linked to earlier, to see
-> > if it would fir your needs:
-> >     https://git.buildroot.org/~ymorin/git/buildroot/log?h=yem/host-kmod
-> 
-> In fact I just thought of a much simpler solution. I'll send a patch
-> series shortly...
+This series adds conditional compression support to the host-kmod,
+so that we correctly handle compressed kernel modules.
 
-I'll have to test this a bit, but you can already have a peek at the
-2-patch series:
-    https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/host-kmod-z
-
-I'll be doing better commit logs, and will push that later today after I
-test it further. But you may still have a look and provide some feedback
-(if you want to test on your side too).
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit de70d9b933c23b88b7b6f07561a62fd813274e9c
+
+  package/ne10: drop arch-related comment (2020-05-03 10:07:05 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to d66d07fe82ae1c515eb9a010f1df2cbcc10f1a87
+
+  package/lmod: add compression support for the host variant (2020-05-03 15:06:48 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/kmod: explicitly disable compression when not enabled
+      package/kmod: add option for host variant
+      package/lmod: add compression support for the host variant
+
+ linux/Config.in             |  1 +
+ package/Config.in.host      |  1 +
+ package/kmod/Config.in.host | 16 ++++++++++++++++
+ package/kmod/kmod.mk        | 18 ++++++++++++++++++
+ 4 files changed, 36 insertions(+)
+ create mode 100644 package/kmod/Config.in.host
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
