@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 May 2020 14:20:19 +0200
+Date: Sun, 3 May 2020 14:37:48 +0200
 Subject: [Buildroot] [PATCH] package/kmod - fix host build dependecies
-In-Reply-To: <20200503121101.GX15673@scaer>
+In-Reply-To: <20200503122019.GY15673@scaer>
 References: <20200503075401.GU15673@scaer>
  <D9E5771A-69D4-4D5F-98AB-8E408976E4CB@gmail.com>
- <20200503121101.GX15673@scaer>
-Message-ID: <20200503122019.GY15673@scaer>
+ <20200503121101.GX15673@scaer> <20200503122019.GY15673@scaer>
+Message-ID: <20200503123748.GZ15673@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +14,26 @@ To: buildroot@busybox.net
 
 Lucian, All,
 
-On 2020-05-03 14:11 +0200, Yann E. MORIN spake thusly:
-> On 2020-05-03 12:13 +0300, Lucian Buga spake thusly:
-> > To be more precise, the patch fixes the host depmod utility from kmod
-> > package. 
-[--SNIP--]
-> Please, could you have a look at the branch I linked to earlier, to see
-> if it would fir your needs:
->     https://git.buildroot.org/~ymorin/git/buildroot/log?h=yem/host-kmod
+On 2020-05-03 14:20 +0200, Yann E. MORIN spake thusly:
+> On 2020-05-03 14:11 +0200, Yann E. MORIN spake thusly:
+> > On 2020-05-03 12:13 +0300, Lucian Buga spake thusly:
+> > > To be more precise, the patch fixes the host depmod utility from kmod
+> > > package. 
+> [--SNIP--]
+> > Please, could you have a look at the branch I linked to earlier, to see
+> > if it would fir your needs:
+> >     https://git.buildroot.org/~ymorin/git/buildroot/log?h=yem/host-kmod
+> 
+> In fact I just thought of a much simpler solution. I'll send a patch
+> series shortly...
 
-In fact I just thought of a much simpler solution. I'll send a patch
-series shortly...
+I'll have to test this a bit, but you can already have a peek at the
+2-patch series:
+    https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/host-kmod-z
+
+I'll be doing better commit logs, and will push that later today after I
+test it further. But you may still have a look and provide some feedback
+(if you want to test on your side too).
 
 Regards,
 Yann E. MORIN.
