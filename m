@@ -1,100 +1,97 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 3 May 2020 02:56:12 -0600
-Subject: [Buildroot] [PATCH 1/1] package/gobject-introspection: fix host
- version of .pc file for wrapper
-In-Reply-To: <a3d55b63-c34b-0dd7-f8da-f863617ffd7c@green-communications.fr>
-References: <20200502060435.23004-1-james.hilliard1@gmail.com>
- <20200502143243.4e2b3ef3@windsurf.home>
- <a3d55b63-c34b-0dd7-f8da-f863617ffd7c@green-communications.fr>
-Message-ID: <CADvTj4r0UzBRHEgezme70-CktDxfoZjEi9PdgG8e2v_tJRV_OA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  3 May 2020 11:01:09 +0200
+Subject: [Buildroot] [PATCH 1/3] package/at-spi2-core: bump to version 2.36.0
+Message-ID: <20200503090111.331775-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, May 3, 2020 at 2:36 AM Nicolas Cavallari
-<nicolas.cavallari@green-communications.fr> wrote:
->
-> On 02/05/2020 14:32, Thomas Petazzoni wrote:
-> > On Sat,  2 May 2020 00:04:35 -0600
-> > James Hilliard <james.hilliard1@gmail.com> wrote:
-> >
-> >> diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-> >> index eefb2c83f7..d98eaf945a 100644
-> >> --- a/package/gobject-introspection/gobject-introspection.mk
-> >> +++ b/package/gobject-introspection/gobject-introspection.mk
-> >> @@ -136,6 +136,36 @@ define GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
-> >>  endef
-> >>  GOBJECT_INTROSPECTION_POST_INSTALL_STAGING_HOOKS += GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
-> >>
-> >> +define HOST_GOBJECT_INTROSPECTION_INSTALL_WRAPPERS
-> >> +    # Set prefix to /usr because pkg-config appends the sysroot directory
-> >> +    $(SED) "s%^prefix=.*%prefix=\/usr%g" \
-> >> +            $(HOST_DIR)/usr/lib/pkgconfig/gobject-introspection-1.0.pc
-> >
-> > No, the host variant of pkg-config should not append the sysroot
-> > directory. If it does, then it is wrong.
->
-> That's because meson currently uses the target pkg-config with
-> PKG_CONFIG_PATH=$(HOST_DIR)/lib/pkgconfig to find host packages.
-Right, so native: true dependencies like g-ir-scanner are searched for in the
-$(HOST_DIR)/lib/pkgconfig while we currently only have a working wrapper
-that can be found by looking in the target pkg-config libdir.
->
-> from build/meson-logs/meson-log.txt:
->
-> Pkg-config binary for MachineChoice.BUILD is not cached.
-> None of 'PKG_CONFIG_FOR_BUILD' are defined in the environment, not
-> changing global flags.
-> Pkg-config binary missing from cross or native file, or env var undefined.
-> Trying a default Pkg-config fallback at pkg-config
-> Trying pkg-config binary pkg-config for machine MachineChoice.BUILD at
-> ['/home/cavallar/br-test-pkg/br-arm-full/host/bin/pkg-config']
-> Found pkg-config:
-> /home/cavallar/br-test-pkg/br-arm-full/host/bin/pkg-config (1.6.1)
-> Determining dependency 'glib-2.0' with pkg-config executable
-> '/home/cavallar/br-test-pkg/br-arm-full/host/bin/pkg-config'
-> PKG_CONFIG_PATH: /home/cavallar/br-test-pkg/br-arm-full/host/lib/pkgconfig
-> Called `/home/cavallar/br-test-pkg/br-arm-full/host/bin/pkg-config
-> --modversion glib-2.0` -> 0
-> 2.64.2
-> PKG_CONFIG_PATH: /home/cavallar/br-test-pkg/br-arm-full/host/lib/pkgconfig
-> Called `/home/cavallar/br-test-pkg/br-arm-full/host/bin/pkg-config
-> --cflags glib-2.0` -> 0
-> -I/home/cavallar/br-test-pkg/br-arm-full/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/home/cavallar/br-test-pkg/br-arm-full/host/include/glib-2.0
-> -I/home/cavallar/br-test-pkg/br-arm-full/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/home/cavallar/br-test-pkg/br-arm-full/host/lib/glib-2.0/include
-> -I/home/cavallar/br-test-pkg/br-arm-full/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/home/cavallar/br-test-pkg/br-arm-full/host/include
->
->
-> Compared to the target pkg-config, which is found correctly:
-Yeah, so basically what I was trying to do here was make the host
-gobject pc file
-identical to the target version since different packages/build systems look for
-that in different places.
->
->
-> Pkg-config binary for MachineChoice.HOST is not cached.
-> Pkg-config binary for MachineChoice.HOST specified from cross file,
-> native file, or env var as
-> ['/home/cavallar/br-test-pkg/br-arm-full/host/bin/pkgconf']
-> Trying pkg-config binary pkgconfig for machine MachineChoice.HOST at
-> ['/home/cavallar/br-test-pkg/br-arm-full/host/bin/pkgconf']
-> Found pkg-config:
-> /home/cavallar/br-test-pkg/br-arm-full/host/bin/pkgconf (1.6.1)
-> Determining dependency 'glib-2.0' with pkg-config executable
-> '/home/cavallar/br-test-pkg/br-arm-full/host/bin/pkgconf'
-> PKG_CONFIG_PATH:
-> PKG_CONFIG_LIBDIR:
-> /home/cavallar/br-test-pkg/br-arm-full/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/pkgconfig:/home/cavallar/br-test-pkg/br-arm-full/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/pkgconfig
-> Called `/home/cavallar/br-test-pkg/br-arm-full/host/bin/pkgconf
-> --modversion glib-2.0` -> 0
-> 2.64.2
-> PKG_CONFIG_PATH:
-> PKG_CONFIG_LIBDIR:
-> /home/cavallar/br-test-pkg/br-arm-full/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/pkgconfig:/home/cavallar/br-test-pkg/br-arm-full/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/share/pkgconfig
-> Called `/home/cavallar/br-test-pkg/br-arm-full/host/bin/pkgconf --cflags
-> glib-2.0` -> 0
-> -I/home/cavallar/br-test-pkg/br-arm-full/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/glib-2.0
-> -I/home/cavallar/br-test-pkg/br-arm-full/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/glib-2.0/include
-> -I/home/cavallar/br-test-pkg/br-arm-full/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include
+- Drop patch (already in version)
+- Add upstream link on sha256
+- License is LGPL-2.1+ since
+  https://gitlab.gnome.org/GNOME/at-spi2-core/-/commit/1256988c433cf8b9e0780c13d66374cb057f7329
+- Update indentation of hash file (two spaces)
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...001-Fix-meson.build-for-meson-0.50.0.patch | 35 -------------------
+ package/at-spi2-core/at-spi2-core.hash        |  6 ++--
+ package/at-spi2-core/at-spi2-core.mk          |  4 +--
+ 3 files changed, 6 insertions(+), 39 deletions(-)
+ delete mode 100644 package/at-spi2-core/0001-Fix-meson.build-for-meson-0.50.0.patch
+
+diff --git a/package/at-spi2-core/0001-Fix-meson.build-for-meson-0.50.0.patch b/package/at-spi2-core/0001-Fix-meson.build-for-meson-0.50.0.patch
+deleted file mode 100644
+index 154d7010d3..0000000000
+--- a/package/at-spi2-core/0001-Fix-meson.build-for-meson-0.50.0.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 3b154996a27ede1c94cbc590e2db3858389d18c2 Mon Sep 17 00:00:00 2001
+-From: Tobias Stoeckmann <tobias@stoeckmann.org>
+-Date: Tue, 12 Mar 2019 11:46:24 +0100
+-Subject: [PATCH] Fix meson.build for meson 0.50.0.
+-
+-Since meson 0.50.0 it is not possible anymore to specify an
+-absolute directory for subdir. To keep current functionality,
+-use install_dir instead.
+-
+-atspi/meson.build:60:0: ERROR: Subdir keyword must not be an absolute path.
+-
+-Signed-off-by: Tobias Stoeckmann <tobias@stoeckmann.org>
+-
+-Upstream: https://github.com/GNOME/at-spi2-core/commit/44a812ea51223d82f21a098a2d45fcc5c329ce7a.patch
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- atspi/meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/atspi/meson.build b/atspi/meson.build
+-index 17bfc45..2e44ffd 100644
+---- a/atspi/meson.build
+-+++ b/atspi/meson.build
+-@@ -57,7 +57,7 @@ atspi_headers = [
+-
+- atspi_includedir = join_paths(get_option('prefix'), get_option('includedir'), 'at-spi-2.0', 'atspi')
+-
+--install_headers(atspi_headers, subdir: atspi_includedir)
+-+install_headers(atspi_headers, install_dir: atspi_includedir)
+-
+- atspi_enums = gnome.mkenums('atspi-enum-types',
+-                             sources: [ 'atspi-constants.h', 'atspi-types.h' ],
+---
+-2.21.0
+-
+diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
+index 9c96da312b..e2cc403e71 100644
+--- a/package/at-spi2-core/at-spi2-core.hash
++++ b/package/at-spi2-core/at-spi2-core.hash
+@@ -1,3 +1,5 @@
++# From http://ftp.acc.umu.se/pub/gnome/sources/at-spi2-core/2.36/at-spi2-core-2.36.0.sha256sum
++sha256  88da57de0a7e3c60bc341a974a80fdba091612db3547c410d6deab039ca5c05a  at-spi2-core-2.36.0.tar.xz
++
+ # locally calculated
+-sha256 42a2487ab11ce43c288e73b2668ef8b1ab40a0e2b4f94e80fca04ad27b6f1c87  at-spi2-core-2.28.0.tar.xz
+-sha256 c6105b34ab6829ff5c70eba234f40053215fa9f8383ced271b0e370a1923624b  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
+index 3a5197eb03..cf7fdd297c 100644
+--- a/package/at-spi2-core/at-spi2-core.mk
++++ b/package/at-spi2-core/at-spi2-core.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-AT_SPI2_CORE_VERSION_MAJOR = 2.28
++AT_SPI2_CORE_VERSION_MAJOR = 2.36
+ AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
+ AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
+ AT_SPI2_CORE_SITE = http://ftp.gnome.org/pub/gnome/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
+-AT_SPI2_CORE_LICENSE = LGPL-2.0+
++AT_SPI2_CORE_LICENSE = LGPL-2.1+
+ AT_SPI2_CORE_LICENSE_FILES = COPYING
+ AT_SPI2_CORE_INSTALL_STAGING = YES
+ AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 xlib_libXtst \
+-- 
+2.26.2
