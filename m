@@ -1,82 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 May 2020 21:52:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cage: bump to latest upstream
- version
-In-Reply-To: <20200503144356.275259-1-gilles.talis@gmail.com>
-References: <20200503144356.275259-1-gilles.talis@gmail.com>
-Message-ID: <20200503195210.GD12536@scaer>
+Date: Sun, 3 May 2020 21:57:44 +0200
+Subject: [Buildroot] [git commit] package/pkg-waf: use host-python3
+Message-ID: <20200503194257.1850D90E2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3d070040ba9cddbae5321090266aadf1e2ae98f9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-05-03 16:43 +0200, Gilles Talis spake thusly:
-> cage v0.1.1 can't build with wlroots 0.10.1, as it uses
-> a set of wlroots API that are no longer available.
-> 
-> Moving to latest upstream version fixes the issue.
-> 
-> Also:
-> - added license file information
-> - updated license file hash
-> 
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+This is the last of an unconsolidated series of patches that
+removes the need for host-python(2) for all waf-based packages.
 
-Applied to master, thanks.
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-waf.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/cage/cage.hash | 6 +++---
->  package/cage/cage.mk   | 5 +++--
->  2 files changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/cage/cage.hash b/package/cage/cage.hash
-> index 49b84f98af..3177474960 100644
-> --- a/package/cage/cage.hash
-> +++ b/package/cage/cage.hash
-> @@ -1,5 +1,5 @@
-> -# Generated locally, after checking https://github.com/Hjdskes/cage/releases/download/v0.1.1/cage-0.1.1.tar.gz.sig
-> -sha256 63efbe96cf307381f2bedf9b80153343e255970a70d612515da7dc325dd49478  cage-0.1.1.tar.gz
-> +# Generated locally
-> +sha256 2f9bc2bd3c61cddb0d3b406754c4906eabf5a5d1aade26eb361dffccff2601e3  cage-6eb693c05b5b34d4ed5ad8234a9f79a14ac8e07d.tar.gz
->  
->  # Hashes for license files:
-> -sha256 1fd28695090b961ed2846627365489228d84f784bff60a90e933febcedaeb65d  LICENSE
-> +sha256 e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
-> diff --git a/package/cage/cage.mk b/package/cage/cage.mk
-> index 6a9c067735..3d259912cc 100644
-> --- a/package/cage/cage.mk
-> +++ b/package/cage/cage.mk
-> @@ -4,9 +4,10 @@
->  #
->  ################################################################################
->  
-> -CAGE_VERSION = 0.1.1
-> -CAGE_SITE = $(call github,Hjdskes,cage,v$(CAGE_VERSION))
-> +CAGE_VERSION = 6eb693c05b5b34d4ed5ad8234a9f79a14ac8e07d
-> +CAGE_SITE = $(call github,Hjdskes,cage,$(CAGE_VERSION))
->  CAGE_LICENSE = MIT
-> +CAGE_LICENSE_FILES = LICENSE
->  CAGE_DEPENDENCIES = host-pkgconf wlroots
->  
->  ifeq ($(BR2_PACKAGE_XORG7),y)
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
+index a32d5dab33..35e56d3c13 100644
+--- a/package/pkg-waf.mk
++++ b/package/pkg-waf.mk
+@@ -36,8 +36,8 @@
+ 
+ define inner-waf-package
+ 
+-# We need host-python to run waf
+-$(2)_DEPENDENCIES += host-python
++# We need host-python3 to run waf
++$(2)_DEPENDENCIES += host-python3
+ 
+ $(2)_NEEDS_EXTERNAL_WAF ?= NO
+ 
+@@ -63,7 +63,7 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && \
+ 	$$(TARGET_CONFIGURE_OPTS) \
+ 	$$($(2)_CONF_ENV) \
+-	$$(HOST_DIR)/bin/python2 $$($(2)_WAF) configure \
++	$$(HOST_DIR)/bin/python3 $$($(2)_WAF) configure \
+ 		--prefix=/usr \
+ 		--libdir=/usr/lib \
+ 		$$($(2)_CONF_OPTS) \
+@@ -78,7 +78,7 @@ endif
+ ifndef $(2)_BUILD_CMDS
+ define $(2)_BUILD_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
++	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
+ 		build -j $$(PARALLEL_JOBS) $$($(2)_BUILD_OPTS) \
+ 		$$($(2)_WAF_OPTS)
+ endef
+@@ -91,7 +91,7 @@ endif
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
++	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
+ 		install --destdir=$$(STAGING_DIR) \
+ 		$$($(2)_INSTALL_STAGING_OPTS) \
+ 		$$($(2)_WAF_OPTS)
+@@ -105,7 +105,7 @@ endif
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && \
+-	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python2 $$($(2)_WAF) \
++	$$(TARGET_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
+ 		install --destdir=$$(TARGET_DIR) \
+ 		$$($(2)_INSTALL_TARGET_OPTS) \
+ 		$$($(2)_WAF_OPTS)
