@@ -1,48 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 3 May 2020 21:45:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gobject-introspection: fix host
- version of .pc file for wrapper
-In-Reply-To: <7340e836-134f-a02f-9b3a-528c322517d8@green-communications.fr>
-References: <20200502060435.23004-1-james.hilliard1@gmail.com>
- <20200502143243.4e2b3ef3@windsurf.home>
- <CADvTj4oM52ZaAVbC3pUjTPf5ezKj36SF76Udz1c7uBsryXMdRw@mail.gmail.com>
- <20200503134807.4e709fe4@windsurf.home>
- <7340e836-134f-a02f-9b3a-528c322517d8@green-communications.fr>
-Message-ID: <20200503214545.71eaf817@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 3 May 2020 21:51:05 +0200
+Subject: [Buildroot] [git commit] package/cage: bump to latest upstream
+ version
+Message-ID: <20200503193637.881E690E28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9a366a15fd4b800926aaaaf67dff4c63f22d1db8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 3 May 2020 19:10:36 +0200
-Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
+cage v0.1.1 can't build with wlroots 0.10.1, as it uses
+a set of wlroots API that are no longer available.
 
-> > Since Meson goes through $(HOST_DIR)/bin/pkgconf directly, we do not
-> > pass any specific sysroot argument to pkg-config. It is up to Meson to
-> > pass the appropriate sysroot value when working with target code, and
-> > to not pass any sysroot value when working on native code.  
-> 
-> Look at the logs i posted in this thread. meson uses the 'pkgconfig' in
-> the cross-file only when finding target libraries. It does not use it
-> when finding native libraries.
-> 
-> Instead, for native libraries, it expects a native-file, which we don't
-> provide. As a fallback, it searches for $PKG_CONFIG_FOR_BUILD,
-> $PKG_CONFIG, or for a 'pkg-config' in $PATH. And we have a pkg-config in
-> $PATH, it is the target pkgconf wrapper.
-> 
-> The fix in 4e0bc29993376613d200e892d491e31ea5a49622 does not work.
-> Meson still uses the pkg-config wrapper when working with native code.
+Moving to latest upstream version fixes the issue.
 
-Indeed, all what you explain here seems to contradict exactly what
-4e0bc29993376613d200e892d491e31ea5a49622 claims. Arnout, do you have
-the time to discuss this with us ?
+Also:
+- added license file information
+- updated license file hash
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/cage/cage.hash | 6 +++---
+ package/cage/cage.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/package/cage/cage.hash b/package/cage/cage.hash
+index 49b84f98af..3177474960 100644
+--- a/package/cage/cage.hash
++++ b/package/cage/cage.hash
+@@ -1,5 +1,5 @@
+-# Generated locally, after checking https://github.com/Hjdskes/cage/releases/download/v0.1.1/cage-0.1.1.tar.gz.sig
+-sha256 63efbe96cf307381f2bedf9b80153343e255970a70d612515da7dc325dd49478  cage-0.1.1.tar.gz
++# Generated locally
++sha256 2f9bc2bd3c61cddb0d3b406754c4906eabf5a5d1aade26eb361dffccff2601e3  cage-6eb693c05b5b34d4ed5ad8234a9f79a14ac8e07d.tar.gz
+ 
+ # Hashes for license files:
+-sha256 1fd28695090b961ed2846627365489228d84f784bff60a90e933febcedaeb65d  LICENSE
++sha256 e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
+diff --git a/package/cage/cage.mk b/package/cage/cage.mk
+index 6a9c067735..3d259912cc 100644
+--- a/package/cage/cage.mk
++++ b/package/cage/cage.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-CAGE_VERSION = 0.1.1
+-CAGE_SITE = $(call github,Hjdskes,cage,v$(CAGE_VERSION))
++CAGE_VERSION = 6eb693c05b5b34d4ed5ad8234a9f79a14ac8e07d
++CAGE_SITE = $(call github,Hjdskes,cage,$(CAGE_VERSION))
+ CAGE_LICENSE = MIT
++CAGE_LICENSE_FILES = LICENSE
+ CAGE_DEPENDENCIES = host-pkgconf wlroots
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
