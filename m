@@ -1,102 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun,  3 May 2020 23:26:39 +0200
-Subject: [Buildroot] [PATCH] package/libunwind: enable on AArch64
-Message-ID: <20200503212640.189571-1-thomas.petazzoni@bootlin.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 3 May 2020 16:10:25 -0600
+Subject: [Buildroot] [PATCH 1/1] support/dependencies: set cmake version
+ min to 3.15.3
+In-Reply-To: <CALFsTFUYwj6ROx6kziiM2eCxjwD-4Qhtk+kNKHmga5OAbfOR=Q@mail.gmail.com>
+References: <20200428054352.110007-1-james.hilliard1@gmail.com>
+ <20200428080328.4a06266b@windsurf.home>
+ <CALFsTFUYwj6ROx6kziiM2eCxjwD-4Qhtk+kNKHmga5OAbfOR=Q@mail.gmail.com>
+Message-ID: <CADvTj4obwekwgr+cx70MQ=+87ZuVtqNiqmocPgGzDTEzceo7QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 1.2, libunwind has support for the AArch64 architecture.
-
-It builds fine on glibc, needs a small patch on musl, but doesn't
-build with uClibc (stack_t undefined).
-
-Fixes:
-
-  https://bugs.busybox.net/show_bug.cgi?id=12836
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...t_t-instead-of-__sigset_t-on-AArch64.patch | 46 +++++++++++++++++++
- package/libunwind/Config.in                   |  7 +--
- 2 files changed, 50 insertions(+), 3 deletions(-)
- create mode 100644 package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch
-
-diff --git a/package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch b/package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch
-new file mode 100644
-index 0000000000..035bdae803
---- /dev/null
-+++ b/package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch
-@@ -0,0 +1,46 @@
-+From b9627ed74ab1f58be0de075be68d5cd2e96b8750 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 3 May 2020 23:08:54 +0200
-+Subject: [PATCH] Use sigset_t instead of __sigset_t on AArch64
-+
-+This fixes the build with the musl C library. sigset_t is the
-+documented type exposed by <signal.h>.
-+
-+This fix comes from Alpine Linux:
-+
-+  https://git.alpinelinux.org/aports/plain/main/libunwind/fix-aarch64-sigset_t.patch
-+
-+It was authored by Leo <thinkabit.ukim@gmail.com>.
-+
-+The issue has been reported upstream at
-+https://github.com/libunwind/libunwind/issues/176.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ include/libunwind-aarch64.h | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/include/libunwind-aarch64.h b/include/libunwind-aarch64.h
-+index 778b4362..926fbbc0 100644
-+--- a/include/libunwind-aarch64.h
-++++ b/include/libunwind-aarch64.h
-+@@ -34,6 +34,7 @@ extern "C" {
-+ #include <inttypes.h>
-+ #include <stddef.h>
-+ #include <ucontext.h>
-++#include <signal.h>
-+ 
-+ #define UNW_TARGET      aarch64
-+ #define UNW_TARGET_AARCH64      1
-+@@ -192,7 +193,7 @@ typedef struct
-+ 	unsigned long uc_flags;
-+ 	struct ucontext *uc_link;
-+ 	stack_t uc_stack;
-+-	__sigset_t uc_sigmask;
-++	sigset_t uc_sigmask;
-+ 	struct unw_sigcontext uc_mcontext;
-+   } unw_tdep_context_t;
-+ 
-+-- 
-+2.26.2
-+
-diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-index be576d13c4..5284b5864c 100644
---- a/package/libunwind/Config.in
-+++ b/package/libunwind/Config.in
-@@ -10,13 +10,14 @@
- config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_TOOLCHAIN_USES_GLIBC && \
--		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || BR2_mips64 || \
--		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_i386 || BR2_x86_64)
-+		(BR2_ARM_CPU_HAS_ARM || BR2_aarch64 || BR2_mips || BR2_mipsel || \
-+		 BR2_mips64 || BR2_mips64el || BR2_powerpc || BR2_sh || \
-+		 BR2_i386 || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
- 		(BR2_ARM_CPU_HAS_ARM || BR2_mips || BR2_mipsel || \
- 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_MUSL && \
--		(BR2_ARM_CPU_HAS_ARM || BR2_x86_64)
-+		(BR2_ARM_CPU_HAS_ARM || BR2_aarch64 || BR2_x86_64)
- 
- config BR2_PACKAGE_LIBUNWIND
- 	bool "libunwind"
--- 
-2.26.2
+On Sat, May 2, 2020 at 2:27 AM Asaf Kahlon <asafka7@gmail.com> wrote:
+>
+> Hello,
+>
+> On Tue, Apr 28, 2020 at 9:04 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > On Mon, 27 Apr 2020 23:43:52 -0600
+> > James Hilliard <james.hilliard1@gmail.com> wrote:
+> >
+> > > This is required by uvw.
+> > >
+> > > Fixes:
+> > > http://autobuild.buildroot.net/results/ab6/ab6954a65fd6d43c0674cb7a38a941102cb0dfe3/build-end.log
+> > >
+> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> >
+> > The CMake version required by uvw was suddenly bumped from 3.2 to
+> > 3.15.3 in upstream commit 55d7782af5654cde8bba89071e13d240fd27ff3b.
+> >
+> > From a quick look of it, I don't really see why it was bumped "so
+> > high". Could you instead try to revert to a minimum CMake version of
+> > 3.10 in uvw, and see if it builds ?
+>
+> I tried to build the package with CMake 3.10 and it failed with:
+> CMake Error at CMakeLists.txt:22 (project):
+>   No CMAKE_HOMEPAGE_URL_COMPILER could be found.
+>
+>   Tell CMake where to find the compiler by setting the CMake cache entry
+>   CMAKE_HOMEPAGE_URL_COMPILER to the full path to the compiler, or to the
+>   compiler name if it is in the PATH.
+>
+>
+> The minimum version I managed to compile with is 3.12
+Upstream seems to think the minimum is 3.13 see discussion here:
+https://github.com/skypjack/uvw/issues/194
+> >
+> > Thanks,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> Regards,
+> Asaf.
