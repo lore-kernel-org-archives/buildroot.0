@@ -1,261 +1,118 @@
-From: sunil at amarulasolutions.com <sunil@amarulasolutions.com>
-Date: Sun,  3 May 2020 14:41:17 +0530
-Subject: [Buildroot] [PATCH v2 2/2] configs/orangepi_rk3399: new defconfig
-In-Reply-To: <1588497077-27220-1-git-send-email-sunil@amarulasolutions.com>
-References: <20200502233409.4a90d4b2@windsurf.home>
- <1588497077-27220-1-git-send-email-sunil@amarulasolutions.com>
-Message-ID: <1588497077-27220-3-git-send-email-sunil@amarulasolutions.com>
+From: Lucian Buga <lucianbuga@gmail.com>
+Date: Sun, 3 May 2020 12:13:13 +0300
+Subject: [Buildroot] [PATCH] package/kmod - fix host build dependecies
+In-Reply-To: <20200503075401.GU15673@scaer>
+References: <20200503075401.GU15673@scaer>
+Message-ID: <D9E5771A-69D4-4D5F-98AB-8E408976E4CB@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Suniel Mahesh <sunil@amarulasolutions.com>
+Yann, All,
 
-Add initial support for Orangepi RK3399 target with below features:
+To be more precise, the patch fixes the host depmod utility from kmod package. 
 
-  - U-Boot 2020.04
-  - Linux 5.4.35
-  - Default packages from buildroot
+Host depmod runs in target-finalize and in will create emty modules.dep if not buit with compression support.
 
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
----
-Changes for v2:
-- change contact for just only orangepi-rk3399.
-- As suggested by Thomas Pettazzoni, rk3399 targets does not need
-  pylibfdt or pyelftools, but only a host Python interpreter. Remove
-  them and add python, python3 in defconfig.
----
- .gitlab-ci.yml                               |  1 +
- DEVELOPERS                                   |  2 +
- board/orangepi/orangepi-rk3399/extlinux.conf |  4 ++
- board/orangepi/orangepi-rk3399/genimage.cfg  | 39 +++++++++++++++++++
- board/orangepi/orangepi-rk3399/post-build.sh |  5 +++
- board/orangepi/orangepi-rk3399/readme.txt    | 56 ++++++++++++++++++++++++++++
- configs/orangepi_rk3399_defconfig            | 56 ++++++++++++++++++++++++++++
- 7 files changed, 163 insertions(+)
- create mode 100644 board/orangepi/orangepi-rk3399/extlinux.conf
- create mode 100644 board/orangepi/orangepi-rk3399/genimage.cfg
- create mode 100755 board/orangepi/orangepi-rk3399/post-build.sh
- create mode 100644 board/orangepi/orangepi-rk3399/readme.txt
- create mode 100644 configs/orangepi_rk3399_defconfig
+So the issue is not insmod/modprobe on target. 
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 32c3247..d7a8c4a 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -258,6 +258,7 @@ orangepi_pc_plus_defconfig: { extends: .defconfig }
- orangepi_plus_defconfig: { extends: .defconfig }
- orangepi_prime_defconfig: { extends: .defconfig }
- orangepi_r1_defconfig: { extends: .defconfig }
-+orangepi_rk3399_defconfig: { extends: .defconfig }
- orangepi_win_defconfig: { extends: .defconfig }
- orangepi_zero_defconfig: { extends: .defconfig }
- orangepi_zero_plus2_defconfig: { extends: .defconfig }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2b562d5..b9ace0e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2425,7 +2425,9 @@ F:	package/powertop/
- 
- N:	Suniel Mahesh <sunil@amarulasolutions.com>
- F:	board/firefly/
-+F:	board/orangepi/orangepi-rk3399
- F:	board/pine64/rockpro64
-+F:	configs/orangepi_rk3399_defconfig
- F:	configs/roc_pc_rk3399_defconfig
- F:	configs/rockpro64_defconfig
- F:	package/arm-gnu-a-toolchain/
-diff --git a/board/orangepi/orangepi-rk3399/extlinux.conf b/board/orangepi/orangepi-rk3399/extlinux.conf
-new file mode 100644
-index 0000000..81a325a
---- /dev/null
-+++ b/board/orangepi/orangepi-rk3399/extlinux.conf
-@@ -0,0 +1,4 @@
-+label ORANGEPI_RK3399 linux
-+  kernel /Image
-+  devicetree /rk3399-orangepi.dtb
-+  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rw rootwait
-diff --git a/board/orangepi/orangepi-rk3399/genimage.cfg b/board/orangepi/orangepi-rk3399/genimage.cfg
-new file mode 100644
-index 0000000..9d63e30
---- /dev/null
-+++ b/board/orangepi/orangepi-rk3399/genimage.cfg
-@@ -0,0 +1,39 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"Image",
-+			"rk3399-orangepi.dtb",
-+			"extlinux"
-+		}
-+	}
-+	size = 112M
-+}
-+
-+image sdcard.img {
-+
-+	hdimage {
-+		gpt = true
-+	}
-+
-+	partition loader1 {
-+		image = "idbloader.img"
-+		offset = 32K
-+	}
-+
-+	partition loader2 {
-+		image = "u-boot.itb"
-+		offset = 8M
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+		offset = 16M
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/orangepi/orangepi-rk3399/post-build.sh b/board/orangepi/orangepi-rk3399/post-build.sh
-new file mode 100755
-index 0000000..ba29375
---- /dev/null
-+++ b/board/orangepi/orangepi-rk3399/post-build.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+
-+install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/orangepi/orangepi-rk3399/readme.txt b/board/orangepi/orangepi-rk3399/readme.txt
-new file mode 100644
-index 0000000..8f9ac1a
---- /dev/null
-+++ b/board/orangepi/orangepi-rk3399/readme.txt
-@@ -0,0 +1,56 @@
-+OrangePI RK3399
-+================
-+http://www.orangepi.org/Orange%20Pi%20RK3399/
-+
-+Build:
-+======
-+  $ make orangepi_rk3399_defconfig
-+  $ make
-+
-+Files created in output directory
-+=================================
-+
-+output/images
-+
-+????????? bl31.elf
-+????????? boot.vfat
-+????????? extlinux
-+????????? idbloader.img
-+????????? Image
-+????????? rk3399-orangepi.dtb
-+????????? rootfs.ext2
-+????????? rootfs.ext4 -> rootfs.ext2
-+????????? rootfs.tar
-+????????? sdcard.img
-+????????? u-boot.bin
-+????????? u-boot.itb
-+
-+Creating bootable SD card:
-+==========================
-+
-+Simply invoke (as root)
-+
-+sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
-+
-+Where X is your SD card device.
-+
-+Booting:
-+========
-+Orangepi-RK3399 by default boots from emmc. For SD card boot to
-+happen, emmc should be empty. If emmc happens to have any bootable
-+image then erase emmc so that bootrom will look for a proper image in SD.
-+
-+emmc can be erased once after booted into linux as shown in below link.
-+
-+https://wiki.amarulasolutions.com/bsp/setup/rockchip/rk3399_emmc.html
-+
-+Serial console:
-+---------------
-+
-+Baudrate for this board is 1500000.
-+
-+Login:
-+------
-+Enter 'root' as login user, and the prompt is ready.
-+
-+https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/orangepi.html
-diff --git a/configs/orangepi_rk3399_defconfig b/configs/orangepi_rk3399_defconfig
-new file mode 100644
-index 0000000..cd6a9db
---- /dev/null
-+++ b/configs/orangepi_rk3399_defconfig
-@@ -0,0 +1,56 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_cortex_a72_a53=y
-+
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+
-+# Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="11a0a46a899fcc3b1fdb214b382f3d7495d88eca"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi-rk3399"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.35"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-orangepi"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem
-+BR2_TARGET_GENERIC_HOSTNAME="orangepi-rk3399"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to ORANGEPI-RK3399..!!"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-rk3399/genimage.cfg"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi-rk3399/post-build.sh"
--- 
-2.7.4
+Regards,
+Lucian
+
+> On 3 May 2020, at 10:54, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> 
+> ?Lucian, All,
+> 
+> +Thomas +Peter: question for you.
+> 
+> On 2020-05-03 09:51 +0300, Lucian Buga spake thusly:
+>> When kernel is configured with CONFIG_MODULE_COMPRESS, host-kmod must
+>> be built with zlib / xz support to be able to properly generate
+>> dependency files for target.
+>> Signed-off-by: Lucian Buga <lucianbuga@gmail.com>
+>> ---
+>> package/kmod/kmod.mk | 4 ++++
+>> 1 file changed, 4 insertions(+)
+>> diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+>> index e2dfea5c7b..7149658ac7 100644
+>> --- a/package/kmod/kmod.mk
+>> +++ b/package/kmod/kmod.mk
+>> @@ -35,11 +35,15 @@ endif
+>> ifeq ($(BR2_PACKAGE_ZLIB),y)
+>> KMOD_DEPENDENCIES += zlib
+>> KMOD_CONF_OPTS += --with-zlib
+>> +HOST_KMOD_DEPENDENCIES += host-zlib
+>> +HOST_KMOD_CONF_OPTS += --with-zlib
+> 
+> At first, I was going to say that this was incorrect, because support
+> for gz/xz on the target should not mandate whether the host variant has
+> such support of not.
+> 
+> However, it is my understanding that the uncompressing of modules is
+> done by the modprobe/insmod, and the uncompressed blurb is handled to
+> the kernel.
+> 
+> If that is true, then indeed, this patch makes sense:
+> 
+> - if the target variant does not have compression support, then it
+>   will not be able to load compresed modules, so it would be useless
+>   or the host variant to have compression support,
+> 
+> - if the target variant has compression support, then it may have to
+>   handle compressed modules, and thus the host variant must have
+>   ompression support.
+> 
+> So this patch kinda makes sense in the end.
+> 
+> However, there is still a gotcha: the kernel can be configured to
+> compress modules on installation, and that is (in Buildroot) orthogonal
+> with the selection of BR2_PACKAGE_ZLIB or BR2_PACKAGE_XZ.
+> 
+> So, it would be invaliud, but possible to have a Buildroot configuration
+> that contains:
+> 
+>   # BR2_PACKAGE_ZLIB is not set
+>   # BR2_PACKAGE_XZ is not set
+> 
+> while at the same time having a kernel configuration that contains:
+> 
+>   CONFIG_MODULE_COMPRESS=y
+>   CONFIG_MODULE_COMPRESS_GZIP=y  (or XZ, you get the point)
+> 
+> To address this problem, I did a 6-patch series two years ago:
+>   https://git.buildroot.org/~ymorin/git/buildroot/log?h=yem/host-kmod
+> 
+> I just rebased it, but I did not pursue this endeavour much further than
+> just posting it once...
+> 
+> I think your patch is good, but I'd like some feedback from Thomas or
+> Peter. Or any other that can confirm who is responsible for
+> uncompressing kernel modules on load...
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> endif
+>> ifeq ($(BR2_PACKAGE_XZ),y)
+>> KMOD_DEPENDENCIES += xz
+>> KMOD_CONF_OPTS += --with-xz
+>> +HOST_KMOD_DEPENDENCIES += host-xz
+>> +HOST_KMOD_CONF_OPTS += --with-xz
+>> endif
+>> ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
+>> --
+>> 2.17.1
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
