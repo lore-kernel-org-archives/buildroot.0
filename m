@@ -1,66 +1,62 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 3 May 2020 16:10:25 -0600
-Subject: [Buildroot] [PATCH 1/1] support/dependencies: set cmake version
- min to 3.15.3
-In-Reply-To: <CALFsTFUYwj6ROx6kziiM2eCxjwD-4Qhtk+kNKHmga5OAbfOR=Q@mail.gmail.com>
-References: <20200428054352.110007-1-james.hilliard1@gmail.com>
- <20200428080328.4a06266b@windsurf.home>
- <CALFsTFUYwj6ROx6kziiM2eCxjwD-4Qhtk+kNKHmga5OAbfOR=Q@mail.gmail.com>
-Message-ID: <CADvTj4obwekwgr+cx70MQ=+87ZuVtqNiqmocPgGzDTEzceo7QQ@mail.gmail.com>
+Date: Sun, 3 May 2020 16:53:30 -0600
+Subject: [Buildroot] [PATCH 1/1] package/gobject-introspection: fix host
+ version of .pc file for wrapper
+In-Reply-To: <20200503214545.71eaf817@windsurf.home>
+References: <20200502060435.23004-1-james.hilliard1@gmail.com>
+ <20200502143243.4e2b3ef3@windsurf.home>
+ <CADvTj4oM52ZaAVbC3pUjTPf5ezKj36SF76Udz1c7uBsryXMdRw@mail.gmail.com>
+ <20200503134807.4e709fe4@windsurf.home>
+ <7340e836-134f-a02f-9b3a-528c322517d8@green-communications.fr>
+ <20200503214545.71eaf817@windsurf.home>
+Message-ID: <CADvTj4pT_8z8yucXzWrGM6x6xchjNKfYcSzap9n7XssRz5V-Kg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, May 2, 2020 at 2:27 AM Asaf Kahlon <asafka7@gmail.com> wrote:
+On Sun, May 3, 2020 at 1:45 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
 > Hello,
 >
-> On Tue, Apr 28, 2020 at 9:04 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > On Mon, 27 Apr 2020 23:43:52 -0600
-> > James Hilliard <james.hilliard1@gmail.com> wrote:
-> >
-> > > This is required by uvw.
-> > >
-> > > Fixes:
-> > > http://autobuild.buildroot.net/results/ab6/ab6954a65fd6d43c0674cb7a38a941102cb0dfe3/build-end.log
-> > >
-> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> >
-> > The CMake version required by uvw was suddenly bumped from 3.2 to
-> > 3.15.3 in upstream commit 55d7782af5654cde8bba89071e13d240fd27ff3b.
-> >
-> > From a quick look of it, I don't really see why it was bumped "so
-> > high". Could you instead try to revert to a minimum CMake version of
-> > 3.10 in uvw, and see if it builds ?
+> On Sun, 3 May 2020 19:10:36 +0200
+> Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
 >
-> I tried to build the package with CMake 3.10 and it failed with:
-> CMake Error at CMakeLists.txt:22 (project):
->   No CMAKE_HOMEPAGE_URL_COMPILER could be found.
->
->   Tell CMake where to find the compiler by setting the CMake cache entry
->   CMAKE_HOMEPAGE_URL_COMPILER to the full path to the compiler, or to the
->   compiler name if it is in the PATH.
->
->
-> The minimum version I managed to compile with is 3.12
-Upstream seems to think the minimum is 3.13 see discussion here:
-https://github.com/skypjack/uvw/issues/194
+> > > Since Meson goes through $(HOST_DIR)/bin/pkgconf directly, we do not
+> > > pass any specific sysroot argument to pkg-config. It is up to Meson to
+> > > pass the appropriate sysroot value when working with target code, and
+> > > to not pass any sysroot value when working on native code.
 > >
-> > Thanks,
+> > Look at the logs i posted in this thread. meson uses the 'pkgconfig' in
+> > the cross-file only when finding target libraries. It does not use it
+> > when finding native libraries.
 > >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+> > Instead, for native libraries, it expects a native-file, which we don't
+> > provide. As a fallback, it searches for $PKG_CONFIG_FOR_BUILD,
+> > $PKG_CONFIG, or for a 'pkg-config' in $PATH. And we have a pkg-config in
+> > $PATH, it is the target pkgconf wrapper.
+> >
+> > The fix in 4e0bc29993376613d200e892d491e31ea5a49622 does not work.
+> > Meson still uses the pkg-config wrapper when working with native code.
 >
-> Regards,
-> Asaf.
+> Indeed, all what you explain here seems to contradict exactly what
+> 4e0bc29993376613d200e892d491e31ea5a49622 claims. Arnout, do you have
+> the time to discuss this with us ?
+I don't think this problem is related to that at all, what happened
+was the fix in
+5cff3a8bdfba92e9f61d0984df08f1ecd205c072 triggered this issue because
+the gobject-introspection wrappers are only found by meson for native: false
+pkgconfig search paths, while the meson gnome module looks for them only
+under native: true pkgconfig search paths. I see 2 ways of fixing
+this, basically
+override the search path for the wrappers specifically or make it so that the
+native: true pkgconfig search paths find valid wrappers in the same way as
+the native: false search path does.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
