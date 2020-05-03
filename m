@@ -1,15 +1,14 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 May 2020 19:53:11 +0200
-Subject: [Buildroot] [git commit] package/supertuxkart: remove libglu
- dependency
-Message-ID: <20200503173843.3CF02814E6@busybox.osuosl.org>
+Date: Sun, 3 May 2020 19:46:12 +0200
+Subject: [Buildroot] [git commit] package/supertux: remove libglu dependency
+Message-ID: <20200503173843.237AC814E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88017c295c7c0607ef7a8e0eae1d4f5373df425d
+commit: https://git.buildroot.net/buildroot/commit/?id=adfc272376afa4b672e80b66a495f41a96d972e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 "The inclusion of GLU is historical. [...] It's not needed for GLEW to
@@ -17,40 +16,47 @@ branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
  -DGLEW_NO_GLU since GLU is rarely seen in modern codebases nowadays."
 https://github.com/nigels-com/glew/issues/192#issuecomment-411641657
 
-Supertuxkart already uses -DGLEW_NO_GLU:
-https://github.com/supertuxkart/stk-code/blob/master/CMakeLists.txt#L224
-
-This patch only removes the dependency to libglu and depends on the
-previous patch of this series which removes glu from glew.pc.
+Each package using glew.h has to decide whether to use the opt-out for
+glu or not. Since supertux does not need libglu we can safely remove
+the dependency by adding -DGLEW_NO_GLU to TARGET_CXXFLAGS.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/supertuxkart/Config.in       | 1 -
- package/supertuxkart/supertuxkart.mk | 1 -
- 2 files changed, 2 deletions(-)
+ package/supertux/Config.in   | 1 -
+ package/supertux/supertux.mk | 3 ++-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
-index fcb27445da..e00d98d2a4 100644
---- a/package/supertuxkart/Config.in
-+++ b/package/supertuxkart/Config.in
-@@ -16,7 +16,6 @@ config BR2_PACKAGE_SUPERTUXKART
+diff --git a/package/supertux/Config.in b/package/supertux/Config.in
+index c77d1ae2bd..5cacdd658e 100644
+--- a/package/supertux/Config.in
++++ b/package/supertux/Config.in
+@@ -17,7 +17,6 @@ config BR2_PACKAGE_SUPERTUX
+ 	select BR2_PACKAGE_FREETYPE
  	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBFRIBIDI
  	select BR2_PACKAGE_LIBGLEW
--	select BR2_PACKAGE_LIBGLU
+-	select BR2_PACKAGE_LIBGLU # GL/glu.h
  	select BR2_PACKAGE_LIBOGG
  	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_LIBSQUISH
-diff --git a/package/supertuxkart/supertuxkart.mk b/package/supertuxkart/supertuxkart.mk
-index 4427ddd1ee..97cd2a40b8 100644
---- a/package/supertuxkart/supertuxkart.mk
-+++ b/package/supertuxkart/supertuxkart.mk
-@@ -24,7 +24,6 @@ SUPERTUXKART_DEPENDENCIES = \
- 	libfribidi \
- 	libgl \
- 	libglew \
--	libglu \
- 	libogg \
- 	libpng \
- 	libsquish \
+ 	select BR2_PACKAGE_LIBVORBIS
+diff --git a/package/supertux/supertux.mk b/package/supertux/supertux.mk
+index 5842b17ba4..e4a4630918 100644
+--- a/package/supertux/supertux.mk
++++ b/package/supertux/supertux.mk
+@@ -15,7 +15,7 @@ SUPERTUX_LICENSE_FILES = LICENSE.txt data/AUTHORS
+ 
+ # Use bundled squirrel, tinygettext sexp-cpp packages which are hardcoded in
+ # the CMake build system.
+-SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew libglu \
++SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew \
+ 	libogg libpng libvorbis openal physfs sdl2 sdl2_image
+ 
+ # CMAKE_BUILD_TYPE=Release: disable profiling code (-pg)
+@@ -30,6 +30,7 @@ SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew libglu
+ # ENABLE_OPENGLES2=OFF: Disable opengles2 for now.
+ SUPERTUX_CONF_OPTS += \
+ 	-DCMAKE_BUILD_TYPE=Release \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DGLEW_NO_GLU" \
+ 	-DENABLE_BOOST_STATIC_LIBS=OFF \
+ 	-DBUILD_DOCUMENTATION=OFF \
+ 	-DENABLE_OPENGL=ON \
