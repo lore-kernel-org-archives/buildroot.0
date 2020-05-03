@@ -1,32 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 May 2020 21:22:55 +0200
-Subject: [Buildroot] [git commit] package/wlroots: add license file
+Date: Sun, 3 May 2020 21:25:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wlroots: add license file
  information
-Message-ID: <20200503190925.CF04C90E16@busybox.osuosl.org>
+In-Reply-To: <20200503144356.275259-2-gilles.talis@gmail.com>
+References: <20200503144356.275259-1-gilles.talis@gmail.com>
+ <20200503144356.275259-2-gilles.talis@gmail.com>
+Message-ID: <20200503192502.GC12536@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c97f28a04d1b61c2c9392eaf7227a9b44a4688e9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Gilles, All,
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/wlroots/wlroots.mk | 1 +
- 1 file changed, 1 insertion(+)
+On 2020-05-03 16:43 +0200, Gilles Talis spake thusly:
+> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 
-diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
-index 136dc2bfcd..988643485f 100644
---- a/package/wlroots/wlroots.mk
-+++ b/package/wlroots/wlroots.mk
-@@ -7,6 +7,7 @@
- WLROOTS_VERSION = 0.10.1
- WLROOTS_SITE = https://github.com/swaywm/wlroots/releases/download/$(WLROOTS_VERSION)
- WLROOTS_LICENSE = MIT
-+WLROOTS_LICENSE_FILES = LICENSE
- WLROOTS_INSTALL_STAGING = YES
- 
- WLROOTS_DEPENDENCIES = \
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/wlroots/wlroots.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+> index 136dc2bfcd..988643485f 100644
+> --- a/package/wlroots/wlroots.mk
+> +++ b/package/wlroots/wlroots.mk
+> @@ -7,6 +7,7 @@
+>  WLROOTS_VERSION = 0.10.1
+>  WLROOTS_SITE = https://github.com/swaywm/wlroots/releases/download/$(WLROOTS_VERSION)
+>  WLROOTS_LICENSE = MIT
+> +WLROOTS_LICENSE_FILES = LICENSE
+>  WLROOTS_INSTALL_STAGING = YES
+>  
+>  WLROOTS_DEPENDENCIES = \
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
