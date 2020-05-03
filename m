@@ -1,76 +1,58 @@
-From: Lucian Buga <lucianbuga@gmail.com>
-Date: Sun, 3 May 2020 17:02:46 +0300
-Subject: [Buildroot] [PATCH] package/kmod - fix host build dependecies
-In-Reply-To: <20200503123748.GZ15673@scaer>
-References: <20200503075401.GU15673@scaer>
- <D9E5771A-69D4-4D5F-98AB-8E408976E4CB@gmail.com>
- <20200503121101.GX15673@scaer> <20200503122019.GY15673@scaer>
- <20200503123748.GZ15673@scaer>
-Message-ID: <CABaB-BJO5=H3VchcjVNT-LfEgxmmJsgp-+iHghk3oLckQViELA@mail.gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sun,  3 May 2020 16:43:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cage: bump to latest upstream
+ version
+Message-ID: <20200503144356.275259-1-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+cage v0.1.1 can't build with wlroots 0.10.1, as it uses
+a set of wlroots API that are no longer available.
 
->
-> I'll have to test this a bit, but you can already have a peek at the
-> 2-patch series:
->     https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/host-kmod-z
->
+Moving to latest upstream version fixes the issue.
 
-I think your suggested patches will fix the issue.
+Also:
+- added license file information
+- updated license file hash
 
-Thank you and regards,
-Lucian Buga
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ package/cage/cage.hash | 6 +++---
+ package/cage/cage.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-
-On Sun, May 3, 2020 at 3:37 PM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
-
-> Lucian, All,
->
-> On 2020-05-03 14:20 +0200, Yann E. MORIN spake thusly:
-> > On 2020-05-03 14:11 +0200, Yann E. MORIN spake thusly:
-> > > On 2020-05-03 12:13 +0300, Lucian Buga spake thusly:
-> > > > To be more precise, the patch fixes the host depmod utility from kmod
-> > > > package.
-> > [--SNIP--]
-> > > Please, could you have a look at the branch I linked to earlier, to see
-> > > if it would fir your needs:
-> > >
-> https://git.buildroot.org/~ymorin/git/buildroot/log?h=yem/host-kmod
-> >
-> > In fact I just thought of a much simpler solution. I'll send a patch
-> > series shortly...
->
-> I'll have to test this a bit, but you can already have a peek at the
-> 2-patch series:
->     https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/host-kmod-z
->
-> I'll be doing better commit logs, and will push that later today after I
-> test it further. But you may still have a look and provide some feedback
-> (if you want to test on your side too).
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200503/40177d2e/attachment.html>
+diff --git a/package/cage/cage.hash b/package/cage/cage.hash
+index 49b84f98af..3177474960 100644
+--- a/package/cage/cage.hash
++++ b/package/cage/cage.hash
+@@ -1,5 +1,5 @@
+-# Generated locally, after checking https://github.com/Hjdskes/cage/releases/download/v0.1.1/cage-0.1.1.tar.gz.sig
+-sha256 63efbe96cf307381f2bedf9b80153343e255970a70d612515da7dc325dd49478  cage-0.1.1.tar.gz
++# Generated locally
++sha256 2f9bc2bd3c61cddb0d3b406754c4906eabf5a5d1aade26eb361dffccff2601e3  cage-6eb693c05b5b34d4ed5ad8234a9f79a14ac8e07d.tar.gz
+ 
+ # Hashes for license files:
+-sha256 1fd28695090b961ed2846627365489228d84f784bff60a90e933febcedaeb65d  LICENSE
++sha256 e117104073335dbaf78596fb1bedf89dda63c71f60f0b665947b2d369c77ecee  LICENSE
+diff --git a/package/cage/cage.mk b/package/cage/cage.mk
+index 6a9c067735..3d259912cc 100644
+--- a/package/cage/cage.mk
++++ b/package/cage/cage.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-CAGE_VERSION = 0.1.1
+-CAGE_SITE = $(call github,Hjdskes,cage,v$(CAGE_VERSION))
++CAGE_VERSION = 6eb693c05b5b34d4ed5ad8234a9f79a14ac8e07d
++CAGE_SITE = $(call github,Hjdskes,cage,$(CAGE_VERSION))
+ CAGE_LICENSE = MIT
++CAGE_LICENSE_FILES = LICENSE
+ CAGE_DEPENDENCIES = host-pkgconf wlroots
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+-- 
+2.25.1
