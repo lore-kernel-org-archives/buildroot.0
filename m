@@ -1,77 +1,41 @@
-From: Koen Martens <gmc@sonologic.nl>
-Date: Sun, 3 May 2020 08:37:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/capnproto: bump version to 1.8.0
-Message-ID: <20200503063730.GA1839@coltrane>
+From: Lucian Buga <lucianbuga@gmail.com>
+Date: Sun,  3 May 2020 09:51:10 +0300
+Subject: [Buildroot] [PATCH] package/kmod - fix host build dependecies
+Message-ID: <20200503065110.7609-1-lucianbuga@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The new version requires two extra features in the
-toolchain, therefore two new toolchain options are
-added as dependencies:
+When kernel is configured with CONFIG_MODULE_COMPRESS, host-kmod must
+be built with zlib / xz support to be able to properly generate
+dependency files for target.
 
-* BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-* BR2_TOOLCHAIN_HAS_UCONTEXT
-
-Signed-off-by: Koen Martens <gmc@sonologic.nl>
+Signed-off-by: Lucian Buga <lucianbuga@gmail.com>
 ---
- package/capnproto/Config.in      | 9 +++++++--
- package/capnproto/capnproto.hash | 2 +-
- package/capnproto/capnproto.mk   | 2 +-
- 3 files changed, 9 insertions(+), 4 deletions(-)
+ package/kmod/kmod.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/capnproto/Config.in b/package/capnproto/Config.in
-index cd9cb647af..9ca8ba0593 100644
---- a/package/capnproto/Config.in
-+++ b/package/capnproto/Config.in
-@@ -6,6 +6,8 @@ config BR2_PACKAGE_CAPNPROTO
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-+	depends on BR2_TOOLCHAIN_HAS_UCONTEXT
- 	help
- 	  Cap'n Proto is an insanely fast data interchange format
- 	  and capability-based RPC system. Think JSON, except
-@@ -15,10 +17,13 @@ config BR2_PACKAGE_CAPNPROTO
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index e2dfea5c7b..7149658ac7 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -35,11 +35,15 @@ endif
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ KMOD_DEPENDENCIES += zlib
+ KMOD_CONF_OPTS += --with-zlib
++HOST_KMOD_DEPENDENCIES += host-zlib
++HOST_KMOD_CONF_OPTS += --with-zlib
+ endif
  
- 	  https://capnproto.org/index.html
+ ifeq ($(BR2_PACKAGE_XZ),y)
+ KMOD_DEPENDENCIES += xz
+ KMOD_CONF_OPTS += --with-xz
++HOST_KMOD_DEPENDENCIES += host-xz
++HOST_KMOD_CONF_OPTS += --with-xz
+ endif
  
--comment "capnproto needs host and target gcc >= 5 w/ C++14, threads, atomic"
-+comment "capnproto needs host and target gcc >= 5 w/ C++14, threads, atomic (always lock free), ucontext"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_HOST_GCC_AT_LEAST_5 || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
- 		!BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HAS_ATOMIC
-+		!BR2_TOOLCHAIN_HAS_ATOMIC || \
-+		!BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS || \
-+		!BR2_TOOLCHAIN_HAS_UCONTEXT
-+
-diff --git a/package/capnproto/capnproto.hash b/package/capnproto/capnproto.hash
-index 98467f8634..d4500e0aad 100644
---- a/package/capnproto/capnproto.hash
-+++ b/package/capnproto/capnproto.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	76c7114a3d142ad08b7208b3964a26e72a6320ee81331d3f0b87569fc9c47a28  capnproto-0.7.0.tar.gz
-+sha256	6d8b43a7ec2a764b4dfe4139a7cdd070ad9057f106898050d9f4db3754b98820  capnproto-0.8.0.tar.gz
- sha256	9564998c8d7f270a61a8b89869a8d17a9d5e3783b64027788b5e339ec8479e10  LICENSE
-diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
-index 34fb885914..e9e89dff07 100644
---- a/package/capnproto/capnproto.mk
-+++ b/package/capnproto/capnproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CAPNPROTO_VERSION = 0.7.0
-+CAPNPROTO_VERSION = 0.8.0
- CAPNPROTO_SITE = $(call github,capnproto,capnproto,v$(CAPNPROTO_VERSION))
- CAPNPROTO_LICENSE = MIT
- CAPNPROTO_LICENSE_FILES = LICENSE
+ ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
 -- 
 2.17.1
