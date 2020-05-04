@@ -1,121 +1,141 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  4 May 2020 23:51:07 +0200
-Subject: [Buildroot] [PATCH v1] package/libv4l: fix input_event related
- compile failure
-Message-ID: <20200504215107.27069-1-ps.report@gmx.net>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Mon, 4 May 2020 23:58:47 +0200
+Subject: [Buildroot] [V3 PATCH 1/1] cukinia: new package
+In-Reply-To: <20200504091158.13268-2-shyam.saini@savoirfairelinux.com>
+References: <20200504091158.13268-1-shyam.saini@savoirfairelinux.com>
+ <20200504091158.13268-2-shyam.saini@savoirfairelinux.com>
+Message-ID: <CA+_SqVaNQpE5kxdQCunDb_KY_bgLu=xwUvUwGB=WCp2kHvOPdA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add two upstream patches fixing input_event time related
-compile failures.
-
-Fixes:
-
- - http://autobuild.buildroot.net/results/3883a948e30cfd235cfca1fb8646fe8032f5e18d
-
-  keytable.c: In function 'test_event':
-  keytable.c:1536:11: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
-       ev[i].time.tv_sec, ev[i].time.tv_usec,
-             ^~~~
-             type
-  keytable.c:1536:30: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
-       ev[i].time.tv_sec, ev[i].time.tv_usec,
-                                ^~~~
-                                type
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...02-keytable-use-input_event-properly.patch | 36 +++++++++++++++++++
- ...dd-compatibility-for-input_event_sec.patch | 35 ++++++++++++++++++
- 2 files changed, 71 insertions(+)
- create mode 100644 package/libv4l/0002-keytable-use-input_event-properly.patch
- create mode 100644 package/libv4l/0003-keytable-add-compatibility-for-input_event_sec.patch
-
-diff --git a/package/libv4l/0002-keytable-use-input_event-properly.patch b/package/libv4l/0002-keytable-use-input_event-properly.patch
-new file mode 100644
-index 0000000000..980100455f
---- /dev/null
-+++ b/package/libv4l/0002-keytable-use-input_event-properly.patch
-@@ -0,0 +1,36 @@
-+From a84fc5d02ffd7119b3e38b72339f5760991d14da Mon Sep 17 00:00:00 2001
-+From: Rosen Penev <rosenp@gmail.com>
-+Date: Mon, 30 Mar 2020 14:24:34 -0700
-+Subject: [PATCH 2/3] keytable: use input_event properly
-+
-+It does not use time_t under musl when time_t is 64-bit. The struct has
-+compatibility defines. Instead of using time_t directly, use those
-+defines.
-+
-+Fixes compilation under musl 1.2.0 under 32-bit OSes.
-+
-+Signed-off-by: Rosen Penev <rosenp@gmail.com>
-+Signed-off-by: Sean Young <sean@mess.org>
-+
-+[Upstream: https://git.linuxtv.org/v4l-utils.git/patch/?id=38f4ce74275ae4625463f7eec78764715a0b6246]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ utils/keytable/keytable.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
-+index 6cb0217..318c064 100644
-+--- a/utils/keytable/keytable.c
-++++ b/utils/keytable/keytable.c
-+@@ -1533,7 +1533,7 @@ static void test_event(struct rc_device *rc_dev, int fd)
-+ 
-+ 		for (i = 0; i < rd / sizeof(struct input_event); i++) {
-+ 			printf(_("%ld.%06ld: event type %s(0x%02x)"),
-+-				ev[i].time.tv_sec, ev[i].time.tv_usec,
-++				ev[i].input_event_sec, ev[i].input_event_usec,
-+ 				get_event_name(events_type, ev[i].type), ev[i].type);
-+ 
-+ 			switch (ev[i].type) {
-+-- 
-+2.26.2
-+
-diff --git a/package/libv4l/0003-keytable-add-compatibility-for-input_event_sec.patch b/package/libv4l/0003-keytable-add-compatibility-for-input_event_sec.patch
-new file mode 100644
-index 0000000000..cfc44d0fd8
---- /dev/null
-+++ b/package/libv4l/0003-keytable-add-compatibility-for-input_event_sec.patch
-@@ -0,0 +1,35 @@
-+From 986345e5673b1e68db513a4f72e6e79c74512a3b Mon Sep 17 00:00:00 2001
-+From: Rosen Penev <rosenp@gmail.com>
-+Date: Tue, 7 Apr 2020 18:13:44 -0700
-+Subject: [PATCH 3/3] keytable: add compatibility for input_event_sec
-+
-+Linux 4.16 added support for this macro. When it is not available,
-+define it back to the previous value.
-+
-+Signed-off-by: Rosen Penev <rosenp@gmail.com>
-+Signed-off-by: Sean Young <sean@mess.org>
-+
-+[Upstream: https://git.linuxtv.org/v4l-utils.git/patch/?id=8b7e6ce9367fe09ca9398b5f3cc75bba2598b162]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ utils/keytable/keytable.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
-+index 318c064..705867c 100644
-+--- a/utils/keytable/keytable.c
-++++ b/utils/keytable/keytable.c
-+@@ -62,6 +62,10 @@ struct input_keymap_entry_v2 {
-+ 	u_int8_t  scancode[32];
-+ };
-+ 
-++#ifndef input_event_sec
-++#define input_event_sec time.tv_sec
-++#define input_event_usec time.tv_usec
-++#endif
-+ 
-+ #define IR_PROTOCOLS_USER_DIR IR_KEYTABLE_USER_DIR "/protocols"
-+ #define IR_PROTOCOLS_SYSTEM_DIR IR_KEYTABLE_SYSTEM_DIR "/protocols"
-+-- 
-+2.26.2
-+
--- 
-2.26.2
+On Mon, May 4, 2020 at 11:12 AM Shyam Saini <mayhs11saini@gmail.com> wrote:
+>
+> Cukinia is a test framework designed to help Linux-based embedded
+> systems developers run simple system-level validation tests on their
+> firmware.
+>
+> It is designed to integrate well with embedded Linux systems
+> generation tools, and can be run manually (providing a quick
+> colourized summary to eye-catch regressions), or any of continuous
+> available integration framework, by generating Junit-XML or CSV test
+> reports.
+>
+> Signed-off-by: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
+> Signed-off-by: Shyam Saini <shyam.saini@savoirfairelinux.com>
+Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  DEVELOPERS                   |  3 +++
+>  package/Config.in            |  1 +
+>  package/cukinia/Config.in    | 15 +++++++++++++++
+>  package/cukinia/cukinia.conf |  4 ++++
+>  package/cukinia/cukinia.hash |  4 ++++
+>  package/cukinia/cukinia.mk   | 20 ++++++++++++++++++++
+>  6 files changed, 47 insertions(+)
+>  create mode 100644 package/cukinia/Config.in
+>  create mode 100644 package/cukinia/cukinia.conf
+>  create mode 100644 package/cukinia/cukinia.hash
+>  create mode 100644 package/cukinia/cukinia.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index d6557f1143ed..0eeac69d1c64 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2345,6 +2345,9 @@ F:        package/tunctl/
+>  F:     package/ubus/
+>  F:     package/wolfssl/
+>
+> +N:     Shyam Saini <shyam.saini@savoirfairelinux.com>
+> +F:     package/cukinia/
+> +
+>  N:     Simon Dawson <spdawson@gmail.com>
+>  F:     boot/at91bootstrap3/
+>  F:     package/cppzmq/
+> diff --git a/package/Config.in b/package/Config.in
+> index 6c55c5bc4290..2cf35f46fcdd 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -153,6 +153,7 @@ menu "Development tools"
+>         source "package/check/Config.in"
+>         source "package/cmake/Config.in"
+>         source "package/cppunit/Config.in"
+> +       source "package/cukinia/Config.in"
+>         source "package/cunit/Config.in"
+>         source "package/cvs/Config.in"
+>         source "package/cxxtest/Config.in"
+> diff --git a/package/cukinia/Config.in b/package/cukinia/Config.in
+> new file mode 100644
+> index 000000000000..37373e9a08e4
+> --- /dev/null
+> +++ b/package/cukinia/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_CUKINIA
+> +       bool "cukinia"
+> +       select BR2_PACKAGE_GAWK if !BR2_PACKAGE_BUSYBOX
+> +       help
+> +         Cukinia is designed to help Linux-based embedded firmware
+> +         developers run system-level validation tests on their product.
+> +         It provides a simple POSIX shell overlay, and primitives to
+> +         make sure system integrations and features keep behaving the
+> +         way they should.
+> +
+> +         By default, cukinia reports colorized test results on stdout,
+> +         but can also report them as CSV and JUnit-XML for easy
+> +         integration with CI systems such as Jenkins.
+> +
+> +         https://github.com/savoirfairelinux/cukinia
+> diff --git a/package/cukinia/cukinia.conf b/package/cukinia/cukinia.conf
+> new file mode 100644
+> index 000000000000..e5f304d39fd1
+> --- /dev/null
+> +++ b/package/cukinia/cukinia.conf
+> @@ -0,0 +1,4 @@
+> +# Note: Cukinia will produce colorized output if the TERM environment
+> +# variable matches vt220, xterm or linux.
+> +cukinia_log $(_colorize blue "############# Cukinia tests ##############")
+> +cukinia_user root
+> diff --git a/package/cukinia/cukinia.hash b/package/cukinia/cukinia.hash
+> new file mode 100644
+> index 000000000000..e6fdbbb9a990
+> --- /dev/null
+> +++ b/package/cukinia/cukinia.hash
+> @@ -0,0 +1,4 @@
+> +# locally computed
+> +sha256  7737cf2b4b00eb29bf5c42905da5c96c6683e182645dc72e3cdecf1d569c14b4  cukinia-0.5.0.tar.gz
+> +sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+> +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPLv3
+> diff --git a/package/cukinia/cukinia.mk b/package/cukinia/cukinia.mk
+> new file mode 100644
+> index 000000000000..75eb67f23d61
+> --- /dev/null
+> +++ b/package/cukinia/cukinia.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# cukinia
+> +#
+> +################################################################################
+> +
+> +CUKINIA_VERSION = 0.5.0
+> +CUKINIA_SITE = $(call github,savoirfairelinux,cukinia,v$(CUKINIA_VERSION))
+> +CUKINIA_LICENSE = Apache-2.0 or GPL-3.0
+> +CUKINIA_LICENSE_FILES = LICENSE LICENSE.GPLv3
+> +
+> +define CUKINIA_INSTALL_TARGET_CMDS
+> +        $(INSTALL) -D -m 0755 $(@D)/cukinia \
+> +                $(TARGET_DIR)/usr/bin/cukinia
+> +
+> +        $(INSTALL) -D -m 0644 $(CUKINIA_PKGDIR)/cukinia.conf \
+> +                $(TARGET_DIR)/etc/cukinia/cukinia.conf
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
