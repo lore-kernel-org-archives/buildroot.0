@@ -1,211 +1,121 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon,  4 May 2020 13:15:51 +0200
-Subject: [Buildroot] [PATCH 2/2] utils/source-check: new script
-In-Reply-To: <20200504111551.15920-1-patrickdepinguin@gmail.com>
-References: <20200504111551.15920-1-patrickdepinguin@gmail.com>
-Message-ID: <20200504111551.15920-3-patrickdepinguin@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  4 May 2020 14:01:32 +0200
+Subject: [Buildroot] [PATCH] package/piglit: bump version
+Message-ID: <20200504120132.3161950-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Remove upstream patch [1].
 
-This source-check script is a replacement for 'make source-check' that
-existed earlier.
+This version bump contain a patch removing EGL_NO_CONFIG_MESA [2] that
+trigger a build issue with recent Mesa version.
 
-It takes as input a list of defconfigs, and then efficiently determines
-whether all files needed can be downloaded.
+Update indentation of hash file (two spaces).
 
-The settings of BR2_PRIMARY_SITE, BR2_PRIMARY_SITE_ONLY and
-BR2_PRIMARY_SITE_ONLY_EXTENDED_DOMAINS will be used as specified in the
-respective defconfigs.
+Fixes:
+http://autobuild.buildroot.net/results/8ed/8ede89a673f83896745f90fd51458cac5fe7bb8f
 
-Current limitations:
-- only covers scp and hg URIs, not git or others.
+[1] https://gitlab.freedesktop.org/mesa/piglit/-/commit/8417ca1725d523493d8f6782699273dc056888ac
+[2] https://gitlab.freedesktop.org/mesa/piglit/-/commit/1fe351e533a1c8b88551b06e6d76e5c2bf8228bc
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- utils/source-check | 170 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 170 insertions(+)
- create mode 100755 utils/source-check
+Maybe we should also bump piglit package for each mesa version bump since
+there is no official release: https://piglit.freedesktop.org
+---
+ ...tests-fix-test-build-requiring-gles3.patch | 49 -------------------
+ package/piglit/piglit.hash                    | 10 ++--
+ package/piglit/piglit.mk                      |  2 +-
+ 3 files changed, 6 insertions(+), 55 deletions(-)
+ delete mode 100644 package/piglit/0001-tests-fix-test-build-requiring-gles3.patch
 
-diff --git a/utils/source-check b/utils/source-check
-new file mode 100755
-index 0000000000..a387f71d33
---- /dev/null
-+++ b/utils/source-check
-@@ -0,0 +1,170 @@
-+#!/usr/bin/env python3
-+
-+import json
-+import multiprocessing
-+import os
-+import shutil
-+import subprocess
-+import sys
-+
-+# example input:
-+# 'rsync': {'dependencies': ['host-ccache',
-+#                            'host-skeleton',
-+#                            'host-tar',
-+#                            'popt',
-+#                            'skeleton',
-+#                            'toolchain',
-+#                            'zlib'],
-+#           'dl_dir': 'rsync',
-+#           'downloads': [{'source': 'rsync-3.1.3.tar.gz',
-+#                          'uris': ['scp|urlencode+scp://xxx at mirror.example.com/rsync',
-+#                                   'scp|urlencode+scp://xxx at mirror.example.com',
-+#                                   'http+http://rsync.samba.org/ftp/rsync/src',
-+#                                   'http|urlencode+http://sources.buildroot.net/rsync',
-+#                                   'http|urlencode+http://sources.buildroot.net']}],
-+#           'install_images': False,
-+#           'install_staging': False,
-+#           'install_target': True,
-+#           'licenses': 'GPL-3.0+',
-+#           'reverse_dependencies': [],
-+#           'type': 'target',
-+#           'version': '3.1.3',
-+#           'virtual': False},
-+#
-+
-+def get_files_to_check_one_defconfig(defconfig):
-+    outputdir = 'sourcecheck_%s' % defconfig
-+    subprocess.check_call(['make', '--no-print-directory', '-s', defconfig, 'O=%s' % outputdir])
-+    # Note: set suitable-host-package to empty to pretend no suitable tools are
-+    # present on the host, and thus force all potentially-needed sources in the
-+    # list (e.g. cmake, gzip, ...)
-+    output = subprocess.check_output(['make', '--no-print-directory', '-s', 'show-info', 'O=%s' % outputdir, 'suitable-host-package='])
-+    info = json.loads(output)
-+
-+    files_to_check = set()
-+
-+    for pkg in info:
-+        if not 'downloads' in info[pkg]:
-+            sys.stderr.write("Warning: %s: no downloads for package '%s'\n" % (defconfig, pkg))
-+            continue
-+        if not info[pkg]['downloads']:
-+            sys.stderr.write("Warning: %s: empty downloads for package '%s'\n" % (defconfig, pkg))
-+            continue
-+        for download in info[pkg]['downloads']:
-+            if not 'source' in download:
-+                sys.stderr.write("Warning: %s: no source filename found for package '%s'\n" % (defconfig, pkg))
-+                continue
-+            if not 'uris' in download:
-+                sys.stderr.write("Warning: %s: no uri's found for package '%s'\n" % (defconfig, pkg))
-+                continue
-+
-+            # tuple: (pkg, version, filename, uris)
-+            # Note: host packages have the same sources as for target, so strip
-+            # the 'host-' prefix. Because we are using a set, this will remove
-+            # duplicate entries.
-+            pkgname = pkg[5:] if pkg.startswith('host-') else pkg
-+            files_to_check.add((
-+                pkgname,
-+                info[pkg]['version'],
-+                download['source'],
-+                tuple([uri for uri in download['uris']]),
-+            ))
-+
-+    shutil.rmtree(outputdir)
-+    return files_to_check
-+
-+def get_files_to_check(defconfigs):
-+    total_files_to_check = set()
-+
-+    num_processes = multiprocessing.cpu_count() * 2
-+    print('Dispatching over %s processes' % num_processes)
-+    with multiprocessing.Pool(processes=num_processes) as pool:
-+        result_objs = [
-+            pool.apply_async(get_files_to_check_one_defconfig, (defconfig,))
-+            for defconfig in defconfigs
-+        ]
-+        results = [p.get() for p in result_objs]
-+
-+    for result in results:
-+        total_files_to_check |= result
-+
-+    return total_files_to_check
-+
-+def sourcecheck_one_uri(pkg, version, filename, uri):
-+
-+    def sourcecheck_scp(pkg, version, filename, uri):
-+        real_uri = uri.split('+', 1)[1] + '/' + filename
-+        if real_uri.startswith('scp://'):
-+            real_uri = real_uri[6:]
-+        domain, path = real_uri.split(':', 1)
-+        with open(os.devnull, 'w') as devnull:
-+            ret = subprocess.call(['ssh', domain, 'test', '-f', path], stderr=devnull)
-+        return ret == 0
-+
-+    def sourcecheck_hg(pkg, version, filename, uri):
-+        real_uri = uri.split('+', 1)[1]
-+        with open(os.devnull, 'w') as devnull:
-+            ret = subprocess.call(['hg', 'identify', '--rev', version, real_uri], stdout=devnull, stderr=devnull)
-+        return ret == 0
-+
-+    if uri.startswith('scp'):
-+        handler = sourcecheck_scp
-+    elif uri.startswith('hg'):
-+        handler = sourcecheck_hg
-+    else:
-+        raise Exception("Cannot handle unknown URI type: '%s' for package '%s'" % (uri, pkg))
-+
-+    return handler(pkg, version, filename, uri)
-+
-+def sourcecheck_one_file(pkg, version, filename, uris):
-+    result = any(sourcecheck_one_uri(pkg, version, filename, uri) for uri in uris)
-+    return pkg, version, filename, result
-+
-+def sourcecheck(files_to_check):
-+
-+    def process_result(result):
-+        pkg, version, filename, success = result
-+        if success:
-+            print(' OK: pkg %s, filename %s' % (pkg, filename))
-+        else:
-+            sys.stderr.write('NOK: pkg %s, filename %s -- ERROR!\n' % (pkg, filename))
-+
-+    num_processes = multiprocessing.cpu_count() * 2
-+    print('Dispatching over %s processes' % num_processes)
-+    with multiprocessing.Pool(processes=num_processes) as pool:
-+        result_objs = [
-+            pool.apply_async(sourcecheck_one_file, entry, callback=process_result)
-+            for entry in files_to_check
-+        ]
-+        results = [p.get() for p in result_objs]
-+
-+    succeeded = [(pkg, version, filename, success) for (pkg, version, filename, success) in results if success]
-+    failed = [(pkg, version, filename, success) for (pkg, version, filename, success) in results if not success]
-+
-+    print('\nSummary: %s OK, %s NOK, %s total' % (len(succeeded), len(failed), len(results)))
-+
-+    if len(failed):
-+        print('\nFAILED FILES')
-+        for pkg, version, filename, success in sorted(failed):
-+            print('pkg: %s, version: %s, file: %s/%s' % (pkg, version, pkg, filename))
-+
-+    return len(failed) == 0
-+
-+def main():
-+    # - run 'make show-info' for each defconfig
-+    # - determine the unique urls to check (take into account that one package
-+    #       can have multiple urls)
-+    # - check each unique url
-+
-+    defconfigs = sys.argv[1:]
-+    if not defconfigs:
-+        sys.stderr.write('Error: pass list of defconfigs as arguments\n')
-+        sys.exit(1)
-+
-+    total_files_to_check = get_files_to_check(defconfigs)
-+    return sourcecheck(total_files_to_check)
-+
-+if __name__ == '__main__':
-+    ret = main()
-+    if not ret:
-+        sys.exit(1)
+diff --git a/package/piglit/0001-tests-fix-test-build-requiring-gles3.patch b/package/piglit/0001-tests-fix-test-build-requiring-gles3.patch
+deleted file mode 100644
+index 4183f23432..0000000000
+--- a/package/piglit/0001-tests-fix-test-build-requiring-gles3.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From 8417ca1725d523493d8f6782699273dc056888ac Mon Sep 17 00:00:00 2001
+-From: Lionel Landwerlin <lionel.g.landwerlin@intel.com>
+-Date: Thu, 1 Aug 2019 20:51:55 +0300
+-Subject: [PATCH] tests: fix test build requiring gles3
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-This should be built only on gles3.
+-
+-Signed-off-by: Lionel Landwerlin <lionel.g.landwerlin@intel.com>
+-Reported-by: Krzysztof Raszkowski <krzysztof.raszkowski@intel.com>
+-Fixes: ef761094be ("tests: Reproducer for 110796")
+-Reviewed-by: Tapani P??lli <tapani.palli@intel.com>
+-[Retrieved from:
+-https://gitlab.freedesktop.org/mesa/piglit/commit/8417ca1725d523493d8f6782699273dc056888ac]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- tests/shaders/CMakeLists.gl.txt    | 1 -
+- tests/shaders/CMakeLists.gles3.txt | 1 +
+- 2 files changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/tests/shaders/CMakeLists.gl.txt b/tests/shaders/CMakeLists.gl.txt
+-index f1512f9cf..a299001cb 100644
+---- a/tests/shaders/CMakeLists.gl.txt
+-+++ b/tests/shaders/CMakeLists.gl.txt
+-@@ -43,7 +43,6 @@ IF (UNIX)
+- ENDIF (UNIX)
+- piglit_add_executable (glsl-arb-fragment-coord-conventions glsl-arb-fragment-coord-conventions.c)
+- piglit_add_executable (glsl-bindattriblocation glsl-bindattriblocation.c)
+--piglit_add_executable (glsl-bug-110796 glsl-bug-110796.c)
+- piglit_add_executable (glsl-bug-22603 glsl-bug-22603.c)
+- piglit_add_executable (glsl-dlist-getattriblocation glsl-dlist-getattriblocation.c)
+- piglit_add_executable (glsl-explicit-location-01 glsl-explicit-location-01.c)
+-diff --git a/tests/shaders/CMakeLists.gles3.txt b/tests/shaders/CMakeLists.gles3.txt
+-index 18b8c3534..c8ccfad42 100644
+---- a/tests/shaders/CMakeLists.gles3.txt
+-+++ b/tests/shaders/CMakeLists.gles3.txt
+-@@ -3,6 +3,7 @@ link_libraries(
+- )
+- 
+- piglit_add_executable (built-in-constants_${piglit_target_api} built-in-constants.c parser_utils.c)
+-+piglit_add_executable (glsl-bug-110796 glsl-bug-110796.c)
+- piglit_add_executable(shader_runner_${piglit_target_api} shader_runner.c parser_utils.c)
+- 
+- # vim: ft=cmake:
+--- 
+-2.24.1
+-
+diff --git a/package/piglit/piglit.hash b/package/piglit/piglit.hash
+index 8cfd04f7e0..1a0011850e 100644
+--- a/package/piglit/piglit.hash
++++ b/package/piglit/piglit.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated
+-sha256 4eba46520df1c47b0aea5446c302ff51d52f905a63d1ba29230866fc6c952a2e  piglit-ef761094be04d14e258ad7706e7295f80d4411f2.tar.gz
+-sha256 dcc398730859aee7cc1d6aa57f526f8d181b47bb3a49830e85b5723d5bc2c3bc  COPYING
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licences/GPL-2
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  licences/GPL-3
+-sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  licences/LGPL-2
++sha256  0d42dc46295a6b3ecfeb379887bd78128ce7938242ae56d58d5e9b3dea8c98b6  piglit-2affee53f3ad7a96f5b397a2b6d6408af8a374b0.tar.gz
++sha256  dcc398730859aee7cc1d6aa57f526f8d181b47bb3a49830e85b5723d5bc2c3bc  COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licences/GPL-2
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  licences/GPL-3
++sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  licences/LGPL-2
+diff --git a/package/piglit/piglit.mk b/package/piglit/piglit.mk
+index cfbaca008f..099bffebe3 100644
+--- a/package/piglit/piglit.mk
++++ b/package/piglit/piglit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PIGLIT_VERSION = ef761094be04d14e258ad7706e7295f80d4411f2
++PIGLIT_VERSION = 2affee53f3ad7a96f5b397a2b6d6408af8a374b0
+ PIGLIT_SITE = https://gitlab.freedesktop.org/mesa/piglit.git
+ PIGLIT_SITE_METHOD = git
+ PIGLIT_LICENSE = MIT (code), \
 -- 
-2.26.2
+2.25.4
