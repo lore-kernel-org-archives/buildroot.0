@@ -1,33 +1,47 @@
-From: Ganesh <ganesh45in@gmail.com>
-Date: Mon, 4 May 2020 03:45:19 -0500 (CDT)
-Subject: [Buildroot] When building the net-next kernel,
- buildroot is asking for all the kernel config options one by one to
- enable
-In-Reply-To: <1588163575379-0.post@n4.nabble.com>
-References: <1588163575379-0.post@n4.nabble.com>
-Message-ID: <1588581919728-0.post@n4.nabble.com>
+From: Shyam Saini <mayhs11saini@gmail.com>
+Date: Mon,  4 May 2020 14:41:57 +0530
+Subject: [Buildroot] [V3 PATCH 0/1] cukinia: new package
+Message-ID: <20200504091158.13268-1-shyam.saini@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+After an initial proposal[1] to include Cukinia back in 2017, the
+project has since gained in versatility and established a growing userbase.
 
-This issue is resolved by installing gcc plugins in my host system.
+Following Angelo Compagnucci's call[2] earlier on the mailing list,
+here is a second and updated submission.
 
-s*udo apt-get install -y gcc-7-plugin-dev*
+ [1] https://patchwork.ozlabs.org/project/buildroot/patch/20170425135814.8787-1-alexandre.leblanc at savoirfairelinux.com/
+ [2] http://lists.busybox.net/pipermail/buildroot/2020-April/281338.html
 
-After this, buildroot does not ask 
+Changelog:
+V2->V3
+ - Adjust Config.in as per Thomas's suggestion
+ - Use simplest cukinia.conf file i.e, just check root user
 
-GCC plugins (GCC_PLUGINS) [Y/n/?] (NEW)
+V1->V2
+ - It is not recommended to run it at boot time so remove init SZZcukinia script
+   file and, remove BR2_PACKAGE_CUKINIA_BOOT option and all related configs 
+ - Extend cukinia.conf file to include more example use cases.
+ - Add cukinia.hash file and likewise add CUKINIA_LICENSE_FILES optionA.
 
-and the kernel build is proceeding as expected.
+Shyam Saini (1):
+  cukinia: new package
 
-But am not sure how this is helping in resolving the issue. Can anyone
-explain how installing the gcc plugins in the host system helps ?
+ DEVELOPERS                   |  3 +++
+ package/Config.in            |  1 +
+ package/cukinia/Config.in    | 15 +++++++++++++++
+ package/cukinia/cukinia.conf |  4 ++++
+ package/cukinia/cukinia.hash |  4 ++++
+ package/cukinia/cukinia.mk   | 20 ++++++++++++++++++++
+ 6 files changed, 47 insertions(+)
+ create mode 100644 package/cukinia/Config.in
+ create mode 100644 package/cukinia/cukinia.conf
+ create mode 100644 package/cukinia/cukinia.hash
+ create mode 100644 package/cukinia/cukinia.mk
 
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+-- 
+2.20.1
