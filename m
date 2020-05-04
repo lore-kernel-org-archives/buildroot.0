@@ -1,7 +1,7 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  4 May 2020 15:09:06 +0200
-Subject: [Buildroot] [PATCH 0/2] efl version bump to 1.24.0
-Message-ID: <20200504130908.3164058-1-romain.naour@gmail.com>
+Date: Mon,  4 May 2020 15:20:02 +0200
+Subject: [Buildroot] [PATCH v2 0/2] efl version bump to 1.24.0
+Message-ID: <20200504132004.3166916-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
