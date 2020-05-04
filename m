@@ -1,163 +1,119 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  4 May 2020 23:45:52 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5base: fix input_event related
+Date: Mon,  4 May 2020 23:51:07 +0200
+Subject: [Buildroot] [PATCH v1] package/libv4l: fix input_event related
  compile failure
-Message-ID: <20200504214552.26570-1-ps.report@gmx.net>
+Message-ID: <20200504215107.27069-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add two upstream patches fixing input_event time related
+compile failures.
+
 Fixes:
 
-  - http://autobuild.buildroot.net/results/af76190876656252eb6f60220cdb1d627a03b7c3
+ - http://autobuild.buildroot.net/results/3883a948e30cfd235cfca1fb8646fe8032f5e18d
 
-  evdevkeyboard/qevdevkeyboardhandler.cpp: In member function ?void QEvdevKeyboardHandler::switchLed(int, bool)?:
-  evdevkeyboard/qevdevkeyboardhandler.cpp:153:28: error: ?struct input_event? has no member named ?time?; did you mean ?type??
-       ::gettimeofday(&led_ie.time, 0);
-                              ^~~~
-                              type
-
-  evdevtouch/qevdevtouchhandler.cpp: In member function ?void QEvdevTouchScreenData::processInputEvent(input_event*)?:
-  evdevtouch/qevdevtouchhandler.cpp:579:29: error: ?struct input_event? has no member named ?time?; did you mean ?type??
-           m_timeStamp = data->time.tv_sec + data->time.tv_usec / 1000000.0;
-                               ^~~~
-                               type
-  evdevtouch/qevdevtouchhandler.cpp:579:49: error: ?struct input_event? has no member named ?time?; did you mean ?type??
-           m_timeStamp = data->time.tv_sec + data->time.tv_usec / 1000000.0;
-                                                   ^~~~
-                                                   type
+  keytable.c: In function 'test_event':
+  keytable.c:1536:11: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
+       ev[i].time.tv_sec, ev[i].time.tv_usec,
+             ^~~~
+             type
+  keytable.c:1536:30: error: 'struct input_event' has no member named 'time'; did you mean 'type'?
+       ev[i].time.tv_sec, ev[i].time.tv_usec,
+                                ^~~~
+                                type
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...fix-input_event-time-related-compile.patch | 56 +++++++++++++++++++
- ...fix-input_event-time-related-compile.patch | 56 +++++++++++++++++++
- 2 files changed, 112 insertions(+)
- create mode 100644 package/qt5/qt5base/0005-evdevkeyboard-fix-input_event-time-related-compile.patch
- create mode 100644 package/qt5/qt5base/0006-evdevtouch-fix-input_event-time-related-compile.patch
+ ...02-keytable-use-input_event-properly.patch | 36 +++++++++++++++++++
+ ...dd-compatibility-for-input_event_sec.patch | 35 ++++++++++++++++++
+ 2 files changed, 71 insertions(+)
+ create mode 100644 package/libv4l/0002-keytable-use-input_event-properly.patch
+ create mode 100644 package/libv4l/0003-keytable-add-compatibility-for-input_event_sec.patch
 
-diff --git a/package/qt5/qt5base/0005-evdevkeyboard-fix-input_event-time-related-compile.patch b/package/qt5/qt5base/0005-evdevkeyboard-fix-input_event-time-related-compile.patch
+diff --git a/package/libv4l/0002-keytable-use-input_event-properly.patch b/package/libv4l/0002-keytable-use-input_event-properly.patch
 new file mode 100644
-index 0000000000..b1f64660eb
+index 0000000000..980100455f
 --- /dev/null
-+++ b/package/qt5/qt5base/0005-evdevkeyboard-fix-input_event-time-related-compile.patch
-@@ -0,0 +1,56 @@
-+From e3821efb37d64d599760b82beac024804188b824 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 4 May 2020 23:17:45 +0200
-+Subject: [PATCH 5/6] evdevkeyboard: fix input_event time related compile
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/libv4l/0002-keytable-use-input_event-properly.patch
+@@ -0,0 +1,36 @@
++From a84fc5d02ffd7119b3e38b72339f5760991d14da Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Mon, 30 Mar 2020 14:24:34 -0700
++Subject: [PATCH 2/3] keytable: use input_event properly
 +
-+Fixes:
++It does not use time_t under musl when time_t is 64-bit. The struct has
++compatibility defines. Instead of using time_t directly, use those
++defines.
 +
-+  evdevkeyboard/qevdevkeyboardhandler.cpp: In member function ?void QEvdevKeyboardHandler::switchLed(int, bool)?:
-+  evdevkeyboard/qevdevkeyboardhandler.cpp:153:28: error: ?struct input_event? has no member named ?time?; did you mean ?type??
-+       ::gettimeofday(&led_ie.time, 0);
-+                              ^~~~
-+                              type
++Fixes compilation under musl 1.2.0 under 32-bit OSes.
 +
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
++Signed-off-by: Sean Young <sean@mess.org>
++
++[Upstream: https://git.linuxtv.org/v4l-utils.git/patch/?id=38f4ce74275ae4625463f7eec78764715a0b6246]
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ .../input/evdevkeyboard/qevdevkeyboardhandler.cpp   | 13 ++++++++++++-
-+ 1 file changed, 12 insertions(+), 1 deletion(-)
++ utils/keytable/keytable.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/platformsupport/input/evdevkeyboard/qevdevkeyboardhandler.cpp b/src/platformsupport/input/evdevkeyboard/qevdevkeyboardhandler.cpp
-+index 3555763b..de37f5e2 100644
-+--- a/src/platformsupport/input/evdevkeyboard/qevdevkeyboardhandler.cpp
-++++ b/src/platformsupport/input/evdevkeyboard/qevdevkeyboardhandler.cpp
-+@@ -58,6 +58,14 @@
-+ #include <linux/input.h>
-+ #endif
++diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
++index 6cb0217..318c064 100644
++--- a/utils/keytable/keytable.c
+++++ b/utils/keytable/keytable.c
++@@ -1533,7 +1533,7 @@ static void test_event(struct rc_device *rc_dev, int fd)
 + 
-++#ifndef input_event_sec
-++#define input_event_sec time.tv_sec
-++#endif
-++
-++#ifndef input_event_usec
-++#define input_event_usec time.tv_usec
-++#endif
-++
-+ QT_BEGIN_NAMESPACE
++ 		for (i = 0; i < rd / sizeof(struct input_event); i++) {
++ 			printf(_("%ld.%06ld: event type %s(0x%02x)"),
++-				ev[i].time.tv_sec, ev[i].time.tv_usec,
+++				ev[i].input_event_sec, ev[i].input_event_usec,
++ 				get_event_name(events_type, ev[i].type), ev[i].type);
 + 
-+ Q_LOGGING_CATEGORY(qLcEvdevKey, "qt.qpa.input")
-+@@ -149,8 +157,11 @@ void QEvdevKeyboardHandler::switchLed(int led, bool state)
-+ {
-+     qCDebug(qLcEvdevKey, "switchLed %d %d", led, int(state));
-+ 
-++    struct timeval tv;
-++    ::gettimeofday(&tv, 0);
-+     struct ::input_event led_ie;
-+-    ::gettimeofday(&led_ie.time, 0);
-++    led_ie.input_event_sec = tv.tv_sec;
-++    led_ie.input_event_usec = tv.tv_usec;
-+     led_ie.type = EV_LED;
-+     led_ie.code = led;
-+     led_ie.value = state;
++ 			switch (ev[i].type) {
 +-- 
 +2.26.2
 +
-diff --git a/package/qt5/qt5base/0006-evdevtouch-fix-input_event-time-related-compile.patch b/package/qt5/qt5base/0006-evdevtouch-fix-input_event-time-related-compile.patch
+diff --git a/package/libv4l/0003-keytable-add-compatibility-for-input_event_sec.patch b/package/libv4l/0003-keytable-add-compatibility-for-input_event_sec.patch
 new file mode 100644
-index 0000000000..8acbb905c5
+index 0000000000..cfc44d0fd8
 --- /dev/null
-+++ b/package/qt5/qt5base/0006-evdevtouch-fix-input_event-time-related-compile.patch
-@@ -0,0 +1,56 @@
-+From c9adb999cdb21f991f2c70b1d3b40e16d4fed2c0 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 4 May 2020 23:19:25 +0200
-+Subject: [PATCH 6/6] evdevtouch: fix input_event time related compile
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/libv4l/0003-keytable-add-compatibility-for-input_event_sec.patch
+@@ -0,0 +1,35 @@
++From 986345e5673b1e68db513a4f72e6e79c74512a3b Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Tue, 7 Apr 2020 18:13:44 -0700
++Subject: [PATCH 3/3] keytable: add compatibility for input_event_sec
 +
-+Fixes:
++Linux 4.16 added support for this macro. When it is not available,
++define it back to the previous value.
 +
-+  evdevtouch/qevdevtouchhandler.cpp: In member function ?void QEvdevTouchScreenData::processInputEvent(input_event*)?:
-+  evdevtouch/qevdevtouchhandler.cpp:579:29: error: ?struct input_event? has no member named ?time?; did you mean ?type??
-+           m_timeStamp = data->time.tv_sec + data->time.tv_usec / 1000000.0;
-+                               ^~~~
-+                               type
-+  evdevtouch/qevdevtouchhandler.cpp:579:49: error: ?struct input_event? has no member named ?time?; did you mean ?type??
-+           m_timeStamp = data->time.tv_sec + data->time.tv_usec / 1000000.0;
-+                                                   ^~~~
-+                                                   type
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
++Signed-off-by: Sean Young <sean@mess.org>
 +
++[Upstream: https://git.linuxtv.org/v4l-utils.git/patch/?id=8b7e6ce9367fe09ca9398b5f3cc75bba2598b162]
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ .../input/evdevtouch/qevdevtouchhandler.cpp            | 10 +++++++++-
-+ 1 file changed, 9 insertions(+), 1 deletion(-)
++ utils/keytable/keytable.c | 4 ++++
++ 1 file changed, 4 insertions(+)
 +
-+diff --git a/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp b/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp
-+index c51db59e..94a9b103 100644
-+--- a/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp
-++++ b/src/platformsupport/input/evdevtouch/qevdevtouchhandler.cpp
-+@@ -58,6 +58,14 @@
-+ #include <linux/input.h>
-+ #endif
++diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
++index 318c064..705867c 100644
++--- a/utils/keytable/keytable.c
+++++ b/utils/keytable/keytable.c
++@@ -62,6 +62,10 @@ struct input_keymap_entry_v2 {
++ 	u_int8_t  scancode[32];
++ };
 + 
 ++#ifndef input_event_sec
 ++#define input_event_sec time.tv_sec
-++#endif
-++
-++#ifndef input_event_usec
 ++#define input_event_usec time.tv_usec
 ++#endif
-++
-+ #include <math.h>
 + 
-+ #if QT_CONFIG(mtdev)
-+@@ -576,7 +584,7 @@ void QEvdevTouchScreenData::processInputEvent(input_event *data)
-+ 
-+         // update timestamps
-+         m_lastTimeStamp = m_timeStamp;
-+-        m_timeStamp = data->time.tv_sec + data->time.tv_usec / 1000000.0;
-++        m_timeStamp = data->input_event_sec + data->input_event_usec / 1000000.0;
-+ 
-+         m_lastTouchPoints = m_touchPoints;
-+         m_touchPoints.clear();
++ #define IR_PROTOCOLS_USER_DIR IR_KEYTABLE_USER_DIR "/protocols"
++ #define IR_PROTOCOLS_SYSTEM_DIR IR_KEYTABLE_SYSTEM_DIR "/protocols"
 +-- 
 +2.26.2
 +
