@@ -1,229 +1,632 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon,  4 May 2020 17:10:36 +0200
-Subject: [Buildroot] [PATCH v2] package/libnss: bump version to 3.52
-Message-ID: <20200504151036.122311-1-giulio.benetti@benettiengineering.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon,  4 May 2020 10:41:07 -0500
+Subject: [Buildroot] [PATCH] package/libsepol: fix -fno-common build faiures
+Message-ID: <20200504154107.52309-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version to 3.52 and drop all patches since they've all been
-upstreamed.
+ Add upstream patch for
+    libsepol: remove leftovers of cil_mem_error_handler
+    libsepol: fix CIL_KEY_* build errors with -fno-common
 
-Release notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.52_release_notes
+Fixes:
+http://autobuild.buildroot.net/results/3d133ce6e83833f0c70a91270d0c49304c3413f6/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
-V1->V2:
-* improve commit log
----
- ...troduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch | 132 ------------------
- ...t-force-ARMv7-for-gcm-arm32-neon-r-j.patch |  30 ----
- package/libnss/libnss.hash                    |   4 +-
- package/libnss/libnss.mk                      |   2 +-
- 4 files changed, 3 insertions(+), 165 deletions(-)
- delete mode 100644 package/libnss/0001-Bug-1620799-Introduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch
- delete mode 100644 package/libnss/0002-Bug-1624864-Don-t-force-ARMv7-for-gcm-arm32-neon-r-j.patch
+ ...IL_KEY_-build-errors-with-fno-common.patch | 528 ++++++++++++++++++
+ ...e-leftovers-of-cil_mem_error_handler.patch |  63 +++
+ 2 files changed, 591 insertions(+)
+ create mode 100644 package/libsepol/0002-libsepol-fix-CIL_KEY_-build-errors-with-fno-common.patch
+ create mode 100644 package/libsepol/0003-libsepol-remove-leftovers-of-cil_mem_error_handler.patch
 
-diff --git a/package/libnss/0001-Bug-1620799-Introduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch b/package/libnss/0001-Bug-1620799-Introduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch
-deleted file mode 100644
-index db19a53c32..0000000000
---- a/package/libnss/0001-Bug-1620799-Introduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch
-+++ /dev/null
-@@ -1,132 +0,0 @@
--From 38e497b3d9e0bff3da7a1a5d4c0760661ded4b6f Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Wed, 1 Apr 2020 09:39:45 -0700
--Subject: [PATCH] Bug 1620799 - Introduce NSS_DISABLE_ARM32_NEON r=jcj
--
--Only some Arm32 supports neon, so let's introduce NSS_DISABLE_ARM32_NEON
--to allow disabling Neon acceleration when building for Arm32.
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
--
----HG--
--extra : rebase_source : c6e3d22ef43ac5012af69214499616f868f4c5b2
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- nss/coreconf/config.gypi  |  1 +
-- nss/coreconf/config.mk    |  5 +++++
-- nss/lib/freebl/Makefile   |  4 ++++
-- nss/lib/freebl/freebl.gyp | 14 ++++++++++++--
-- nss/lib/freebl/gcm.c      |  3 ++-
-- 5 files changed, 24 insertions(+), 3 deletions(-)
--
--diff --git a/nss/coreconf/config.gypi b/nss/coreconf/config.gypi
--index 2a730398b..f67dd7f13 100644
----- a/nss/coreconf/config.gypi
--+++ b/nss/coreconf/config.gypi
--@@ -103,6 +103,7 @@
--     'disable_libpkix%': 1,
--     'disable_werror%': 0,
--     'disable_altivec%': 0,
--+    'disable_arm32_neon%': 0,
--     'mozilla_client%': 0,
--     'comm_client%': 0,
--     'moz_fold_libs%': 0,
--diff --git a/nss/coreconf/config.mk b/nss/coreconf/config.mk
--index 4eda497a2..b751ead5d 100644
----- a/nss/coreconf/config.mk
--+++ b/nss/coreconf/config.mk
--@@ -200,6 +200,11 @@ DEFINES += -DPKIX_OBJECT_LEAK_TEST
-- endif
-- endif
-- 
--+# Avoid building with Neon acceleration on Arm32
--+ifdef NSS_DISABLE_ARM32_NEON
--+DEFINES += -DNSS_DISABLE_ARM32_NEON
--+endif
--+
-- # Avoid building with PowerPC's Altivec acceleration
-- ifdef NSS_DISABLE_ALTIVEC
-- DEFINES += -DNSS_DISABLE_ALTIVEC
--diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
--index 32da68301..a03c0d108 100644
----- a/nss/lib/freebl/Makefile
--+++ b/nss/lib/freebl/Makefile
--@@ -124,7 +124,9 @@ ifeq ($(CPU_ARCH),aarch64)
--     EXTRA_SRCS += aes-armv8.c gcm-aarch64.c
-- endif
-- ifeq ($(CPU_ARCH),arm)
--+ifndef NSS_DISABLE_ARM32_NEON
--     EXTRA_SRCS += gcm-arm32-neon.c
--+endif
--     ifdef CC_IS_CLANG
--         DEFINES += -DUSE_HW_AES
--         EXTRA_SRCS += aes-armv8.c
--@@ -778,8 +780,10 @@ ifeq ($(CPU_ARCH),arm)
-- # Confusingly, __SOFTFP__ is the name of the define for the softfloat ABI, not for the softfp ABI.
-- USES_SOFTFLOAT_ABI := $(shell $(CC) -o - -E -dM - $(CFLAGS) < /dev/null | grep __SOFTFP__ > /dev/null && echo 1)
-- $(OBJDIR)/$(PROG_PREFIX)aes-armv8$(OBJ_SUFFIX): CFLAGS += -march=armv8-a -mfpu=crypto-neon-fp-armv8$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
--+ifndef NSS_DISABLE_ARM32_NEON
-- $(OBJDIR)/$(PROG_PREFIX)gcm-arm32-neon$(OBJ_SUFFIX): CFLAGS += -march=armv7 -mfpu=neon$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
-- endif
--+endif
-- ifeq ($(CPU_ARCH),aarch64)
-- $(OBJDIR)/$(PROG_PREFIX)aes-armv8$(OBJ_SUFFIX): CFLAGS += -march=armv8-a+crypto
-- $(OBJDIR)/$(PROG_PREFIX)gcm-aarch64$(OBJ_SUFFIX): CFLAGS += -march=armv8-a+crypto
--diff --git a/nss/lib/freebl/freebl.gyp b/nss/lib/freebl/freebl.gyp
--index 8f3ddd978..5975b76cd 100644
----- a/nss/lib/freebl/freebl.gyp
--+++ b/nss/lib/freebl/freebl.gyp
--@@ -337,11 +337,16 @@
--             'armv8_c_lib'
--           ],
--         }],
---        [ 'target_arch=="arm"', {
--+        [ 'disable_arm32_neon==0 and target_arch=="arm"', {
--           'dependencies': [
--             'gcm-aes-arm32-neon_c_lib',
--           ],
--         }],
--+        [ 'disable_arm32_neon==1 and target_arch=="arm"', {
--+          'defines!': [
--+            'NSS_DISABLE_ARM32_NEON',
--+          ],
--+        }],
--         [ 'target_arch=="arm64" or target_arch=="aarch64"', {
--           'dependencies': [
--             'gcm-aes-aarch64_c_lib',
--@@ -399,11 +404,16 @@
--             'armv8_c_lib',
--           ],
--         }],
---        [ 'target_arch=="arm"', {
--+        [ 'disable_arm32_neon==0 and target_arch=="arm"', {
--           'dependencies': [
--             'gcm-aes-arm32-neon_c_lib',
--           ],
--         }],
--+        [ 'disable_arm32_neon==1 and target_arch=="arm"', {
--+          'defines!': [
--+            'NSS_DISABLE_ARM32_NEON',
--+          ],
--+        }],
--         [ 'target_arch=="arm64" or target_arch=="aarch64"', {
--           'dependencies': [
--             'gcm-aes-aarch64_c_lib',
--diff --git a/nss/lib/freebl/gcm.c b/nss/lib/freebl/gcm.c
--index e5742b9b8..5065197ef 100644
----- a/nss/lib/freebl/gcm.c
--+++ b/nss/lib/freebl/gcm.c
--@@ -22,7 +22,8 @@
-- #if defined(__aarch64__) && defined(IS_LITTLE_ENDIAN) && \
--     (defined(__clang__) || defined(__GNUC__) && __GNUC__ > 6)
-- #define USE_ARM_GCM
---#elif defined(__arm__) && defined(IS_LITTLE_ENDIAN)
--+#elif defined(__arm__) && defined(IS_LITTLE_ENDIAN) && \
--+      !defined(NSS_DISABLE_ARM32_NEON)
-- /* We don't test on big endian platform, so disable this on big endian. */
-- #define USE_ARM_GCM
-- #endif
---- 
--2.20.1
--
-diff --git a/package/libnss/0002-Bug-1624864-Don-t-force-ARMv7-for-gcm-arm32-neon-r-j.patch b/package/libnss/0002-Bug-1624864-Don-t-force-ARMv7-for-gcm-arm32-neon-r-j.patch
-deleted file mode 100644
-index bfecbb2202..0000000000
---- a/package/libnss/0002-Bug-1624864-Don-t-force-ARMv7-for-gcm-arm32-neon-r-j.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From ab8d2425728f37b1f21dbff712daf4a767c82149 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Wed, 1 Apr 2020 09:41:08 -0700
--Subject: [PATCH] Bug 1624864 - Don't force ARMv7 for gcm-arm32-neon r=jcj
--
----HG--
--extra : rebase_source : e046bbe45276b8cdf686c4f61006aff08865f1c0
--
--[Upstream: https://hg.mozilla.org/projects/nss/rev/8582092359720d052288cad2dc13f37aad783dc3]
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- nss/lib/freebl/Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
--index a03c0d108..898a0b9e0 100644
----- a/nss/lib/freebl/Makefile
--+++ b/nss/lib/freebl/Makefile
--@@ -781,7 +781,7 @@ ifeq ($(CPU_ARCH),arm)
-- USES_SOFTFLOAT_ABI := $(shell $(CC) -o - -E -dM - $(CFLAGS) < /dev/null | grep __SOFTFP__ > /dev/null && echo 1)
-- $(OBJDIR)/$(PROG_PREFIX)aes-armv8$(OBJ_SUFFIX): CFLAGS += -march=armv8-a -mfpu=crypto-neon-fp-armv8$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
-- ifndef NSS_DISABLE_ARM32_NEON
---$(OBJDIR)/$(PROG_PREFIX)gcm-arm32-neon$(OBJ_SUFFIX): CFLAGS += -march=armv7 -mfpu=neon$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
--+$(OBJDIR)/$(PROG_PREFIX)gcm-arm32-neon$(OBJ_SUFFIX): CFLAGS += -mfpu=neon$(if $(USES_SOFTFLOAT_ABI), -mfloat-abi=softfp)
-- endif
-- endif
-- ifeq ($(CPU_ARCH),aarch64)
---- 
--2.20.1
--
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index dfeae24278..425f5da515 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_51_1_RTM/src/SHA256SUMS
--sha256	085c5eaceef040eddea639e2e068e70f0e368f840327a678ef74ae3d6c15ca78  nss-3.51.1.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_52_RTM/src/SHA256SUMS
-+sha256	0a0aeb0cdda65ddcb64f746223df58b150f6803f4bfa1a4e876bbe6f9c4c1561  nss-3.52.tar.gz
- # Locally calculated
- sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 81ebb7ad03..020cf212d4 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.51.1
-+LIBNSS_VERSION = 3.52
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+diff --git a/package/libsepol/0002-libsepol-fix-CIL_KEY_-build-errors-with-fno-common.patch b/package/libsepol/0002-libsepol-fix-CIL_KEY_-build-errors-with-fno-common.patch
+new file mode 100644
+index 0000000000..6876751ee0
+--- /dev/null
++++ b/package/libsepol/0002-libsepol-fix-CIL_KEY_-build-errors-with-fno-common.patch
+@@ -0,0 +1,528 @@
++From a96e8c59ecac84096d870b42701a504791a8cc8c Mon Sep 17 00:00:00 2001
++From: Ondrej Mosnacek <omosnace@redhat.com>
++Date: Thu, 23 Jan 2020 13:57:13 +0100
++Subject: [PATCH] libsepol: fix CIL_KEY_* build errors with -fno-common
++
++GCC 10 comes with -fno-common enabled by default - fix the CIL_KEY_*
++global variables to be defined only once in cil.c and declared in the
++header file correctly with the 'extern' keyword, so that other units
++including the file don't generate duplicate definitions.
++
++Upstream: https://github.com/SELinuxProject/selinux/commit/a96e8c59ecac84096d870b42701a504791a8cc8c
++
++Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
++Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
++---
++ cil/src/cil.c          | 162 ++++++++++++++++
++ cil/src/cil_internal.h | 322 ++++++++++++++++----------------
++ 2 files changed, 323 insertions(+), 161 deletions(-)
++
++diff --git a/cil/src/cil.c b/cil/src/cil.c
++index de729cf8..d222ad3a 100644
++--- a/cil/src/cil.c
+++++ b/cil/src/cil.c
++@@ -77,6 +77,168 @@ int cil_sym_sizes[CIL_SYM_ARRAY_NUM][CIL_SYM_NUM] = {
++ 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
++ };
++ 
+++char *CIL_KEY_CONS_T1;
+++char *CIL_KEY_CONS_T2;
+++char *CIL_KEY_CONS_T3;
+++char *CIL_KEY_CONS_R1;
+++char *CIL_KEY_CONS_R2;
+++char *CIL_KEY_CONS_R3;
+++char *CIL_KEY_CONS_U1;
+++char *CIL_KEY_CONS_U2;
+++char *CIL_KEY_CONS_U3;
+++char *CIL_KEY_CONS_L1;
+++char *CIL_KEY_CONS_L2;
+++char *CIL_KEY_CONS_H1;
+++char *CIL_KEY_CONS_H2;
+++char *CIL_KEY_AND;
+++char *CIL_KEY_OR;
+++char *CIL_KEY_NOT;
+++char *CIL_KEY_EQ;
+++char *CIL_KEY_NEQ;
+++char *CIL_KEY_CONS_DOM;
+++char *CIL_KEY_CONS_DOMBY;
+++char *CIL_KEY_CONS_INCOMP;
+++char *CIL_KEY_CONDTRUE;
+++char *CIL_KEY_CONDFALSE;
+++char *CIL_KEY_SELF;
+++char *CIL_KEY_OBJECT_R;
+++char *CIL_KEY_STAR;
+++char *CIL_KEY_TCP;
+++char *CIL_KEY_UDP;
+++char *CIL_KEY_DCCP;
+++char *CIL_KEY_SCTP;
+++char *CIL_KEY_AUDITALLOW;
+++char *CIL_KEY_TUNABLEIF;
+++char *CIL_KEY_ALLOW;
+++char *CIL_KEY_DONTAUDIT;
+++char *CIL_KEY_TYPETRANSITION;
+++char *CIL_KEY_TYPECHANGE;
+++char *CIL_KEY_CALL;
+++char *CIL_KEY_TUNABLE;
+++char *CIL_KEY_XOR;
+++char *CIL_KEY_ALL;
+++char *CIL_KEY_RANGE;
+++char *CIL_KEY_GLOB;
+++char *CIL_KEY_FILE;
+++char *CIL_KEY_DIR;
+++char *CIL_KEY_CHAR;
+++char *CIL_KEY_BLOCK;
+++char *CIL_KEY_SOCKET;
+++char *CIL_KEY_PIPE;
+++char *CIL_KEY_SYMLINK;
+++char *CIL_KEY_ANY;
+++char *CIL_KEY_XATTR;
+++char *CIL_KEY_TASK;
+++char *CIL_KEY_TRANS;
+++char *CIL_KEY_TYPE;
+++char *CIL_KEY_ROLE;
+++char *CIL_KEY_USER;
+++char *CIL_KEY_USERATTRIBUTE;
+++char *CIL_KEY_USERATTRIBUTESET;
+++char *CIL_KEY_SENSITIVITY;
+++char *CIL_KEY_CATEGORY;
+++char *CIL_KEY_CATSET;
+++char *CIL_KEY_LEVEL;
+++char *CIL_KEY_LEVELRANGE;
+++char *CIL_KEY_CLASS;
+++char *CIL_KEY_IPADDR;
+++char *CIL_KEY_MAP_CLASS;
+++char *CIL_KEY_CLASSPERMISSION;
+++char *CIL_KEY_BOOL;
+++char *CIL_KEY_STRING;
+++char *CIL_KEY_NAME;
+++char *CIL_KEY_SOURCE;
+++char *CIL_KEY_TARGET;
+++char *CIL_KEY_LOW;
+++char *CIL_KEY_HIGH;
+++char *CIL_KEY_LOW_HIGH;
+++char *CIL_KEY_GLBLUB;
+++char *CIL_KEY_HANDLEUNKNOWN;
+++char *CIL_KEY_HANDLEUNKNOWN_ALLOW;
+++char *CIL_KEY_HANDLEUNKNOWN_DENY;
+++char *CIL_KEY_HANDLEUNKNOWN_REJECT;
+++char *CIL_KEY_MACRO;
+++char *CIL_KEY_IN;
+++char *CIL_KEY_MLS;
+++char *CIL_KEY_DEFAULTRANGE;
+++char *CIL_KEY_BLOCKINHERIT;
+++char *CIL_KEY_BLOCKABSTRACT;
+++char *CIL_KEY_CLASSORDER;
+++char *CIL_KEY_CLASSMAPPING;
+++char *CIL_KEY_CLASSPERMISSIONSET;
+++char *CIL_KEY_COMMON;
+++char *CIL_KEY_CLASSCOMMON;
+++char *CIL_KEY_SID;
+++char *CIL_KEY_SIDCONTEXT;
+++char *CIL_KEY_SIDORDER;
+++char *CIL_KEY_USERLEVEL;
+++char *CIL_KEY_USERRANGE;
+++char *CIL_KEY_USERBOUNDS;
+++char *CIL_KEY_USERPREFIX;
+++char *CIL_KEY_SELINUXUSER;
+++char *CIL_KEY_SELINUXUSERDEFAULT;
+++char *CIL_KEY_TYPEATTRIBUTE;
+++char *CIL_KEY_TYPEATTRIBUTESET;
+++char *CIL_KEY_EXPANDTYPEATTRIBUTE;
+++char *CIL_KEY_TYPEALIAS;
+++char *CIL_KEY_TYPEALIASACTUAL;
+++char *CIL_KEY_TYPEBOUNDS;
+++char *CIL_KEY_TYPEPERMISSIVE;
+++char *CIL_KEY_RANGETRANSITION;
+++char *CIL_KEY_USERROLE;
+++char *CIL_KEY_ROLETYPE;
+++char *CIL_KEY_ROLETRANSITION;
+++char *CIL_KEY_ROLEALLOW;
+++char *CIL_KEY_ROLEATTRIBUTE;
+++char *CIL_KEY_ROLEATTRIBUTESET;
+++char *CIL_KEY_ROLEBOUNDS;
+++char *CIL_KEY_BOOLEANIF;
+++char *CIL_KEY_NEVERALLOW;
+++char *CIL_KEY_TYPEMEMBER;
+++char *CIL_KEY_SENSALIAS;
+++char *CIL_KEY_SENSALIASACTUAL;
+++char *CIL_KEY_CATALIAS;
+++char *CIL_KEY_CATALIASACTUAL;
+++char *CIL_KEY_CATORDER;
+++char *CIL_KEY_SENSITIVITYORDER;
+++char *CIL_KEY_SENSCAT;
+++char *CIL_KEY_CONSTRAIN;
+++char *CIL_KEY_MLSCONSTRAIN;
+++char *CIL_KEY_VALIDATETRANS;
+++char *CIL_KEY_MLSVALIDATETRANS;
+++char *CIL_KEY_CONTEXT;
+++char *CIL_KEY_FILECON;
+++char *CIL_KEY_IBPKEYCON;
+++char *CIL_KEY_IBENDPORTCON;
+++char *CIL_KEY_PORTCON;
+++char *CIL_KEY_NODECON;
+++char *CIL_KEY_GENFSCON;
+++char *CIL_KEY_NETIFCON;
+++char *CIL_KEY_PIRQCON;
+++char *CIL_KEY_IOMEMCON;
+++char *CIL_KEY_IOPORTCON;
+++char *CIL_KEY_PCIDEVICECON;
+++char *CIL_KEY_DEVICETREECON;
+++char *CIL_KEY_FSUSE;
+++char *CIL_KEY_POLICYCAP;
+++char *CIL_KEY_OPTIONAL;
+++char *CIL_KEY_DEFAULTUSER;
+++char *CIL_KEY_DEFAULTROLE;
+++char *CIL_KEY_DEFAULTTYPE;
+++char *CIL_KEY_ROOT;
+++char *CIL_KEY_NODE;
+++char *CIL_KEY_PERM;
+++char *CIL_KEY_ALLOWX;
+++char *CIL_KEY_AUDITALLOWX;
+++char *CIL_KEY_DONTAUDITX;
+++char *CIL_KEY_NEVERALLOWX;
+++char *CIL_KEY_PERMISSIONX;
+++char *CIL_KEY_IOCTL;
+++char *CIL_KEY_UNORDERED;
+++char *CIL_KEY_SRC_INFO;
+++char *CIL_KEY_SRC_CIL;
+++char *CIL_KEY_SRC_HLL;
+++
++ static void cil_init_keys(void)
++ {
++ 	/* Initialize CIL Keys into strpool */
++diff --git a/cil/src/cil_internal.h b/cil/src/cil_internal.h
++index 30fab649..9bdcbdd0 100644
++--- a/cil/src/cil_internal.h
+++++ b/cil/src/cil_internal.h
++@@ -74,167 +74,167 @@ enum cil_pass {
++ /*
++ 	Keywords
++ */
++-char *CIL_KEY_CONS_T1;
++-char *CIL_KEY_CONS_T2;
++-char *CIL_KEY_CONS_T3;
++-char *CIL_KEY_CONS_R1;
++-char *CIL_KEY_CONS_R2;
++-char *CIL_KEY_CONS_R3;
++-char *CIL_KEY_CONS_U1;
++-char *CIL_KEY_CONS_U2;
++-char *CIL_KEY_CONS_U3;
++-char *CIL_KEY_CONS_L1;
++-char *CIL_KEY_CONS_L2;
++-char *CIL_KEY_CONS_H1;
++-char *CIL_KEY_CONS_H2;
++-char *CIL_KEY_AND;
++-char *CIL_KEY_OR;
++-char *CIL_KEY_NOT;
++-char *CIL_KEY_EQ;
++-char *CIL_KEY_NEQ;
++-char *CIL_KEY_CONS_DOM;
++-char *CIL_KEY_CONS_DOMBY;
++-char *CIL_KEY_CONS_INCOMP;
++-char *CIL_KEY_CONDTRUE;
++-char *CIL_KEY_CONDFALSE;
++-char *CIL_KEY_SELF;
++-char *CIL_KEY_OBJECT_R;
++-char *CIL_KEY_STAR;
++-char *CIL_KEY_TCP;
++-char *CIL_KEY_UDP;
++-char *CIL_KEY_DCCP;
++-char *CIL_KEY_SCTP;
++-char *CIL_KEY_AUDITALLOW;
++-char *CIL_KEY_TUNABLEIF;
++-char *CIL_KEY_ALLOW;
++-char *CIL_KEY_DONTAUDIT;
++-char *CIL_KEY_TYPETRANSITION;
++-char *CIL_KEY_TYPECHANGE;
++-char *CIL_KEY_CALL;
++-char *CIL_KEY_TUNABLE;
++-char *CIL_KEY_XOR;
++-char *CIL_KEY_ALL;
++-char *CIL_KEY_RANGE;
++-char *CIL_KEY_GLOB;
++-char *CIL_KEY_FILE;
++-char *CIL_KEY_DIR;
++-char *CIL_KEY_CHAR;
++-char *CIL_KEY_BLOCK;
++-char *CIL_KEY_SOCKET;
++-char *CIL_KEY_PIPE;
++-char *CIL_KEY_SYMLINK;
++-char *CIL_KEY_ANY;
++-char *CIL_KEY_XATTR;
++-char *CIL_KEY_TASK;
++-char *CIL_KEY_TRANS;
++-char *CIL_KEY_TYPE;
++-char *CIL_KEY_ROLE;
++-char *CIL_KEY_USER;
++-char *CIL_KEY_USERATTRIBUTE;
++-char *CIL_KEY_USERATTRIBUTESET;
++-char *CIL_KEY_SENSITIVITY;
++-char *CIL_KEY_CATEGORY;
++-char *CIL_KEY_CATSET;
++-char *CIL_KEY_LEVEL;
++-char *CIL_KEY_LEVELRANGE;
++-char *CIL_KEY_CLASS;
++-char *CIL_KEY_IPADDR;
++-char *CIL_KEY_MAP_CLASS;
++-char *CIL_KEY_CLASSPERMISSION;
++-char *CIL_KEY_BOOL;
++-char *CIL_KEY_STRING;
++-char *CIL_KEY_NAME;
++-char *CIL_KEY_SOURCE;
++-char *CIL_KEY_TARGET;
++-char *CIL_KEY_LOW;
++-char *CIL_KEY_HIGH;
++-char *CIL_KEY_LOW_HIGH;
++-char *CIL_KEY_GLBLUB;
++-char *CIL_KEY_HANDLEUNKNOWN;
++-char *CIL_KEY_HANDLEUNKNOWN_ALLOW;
++-char *CIL_KEY_HANDLEUNKNOWN_DENY;
++-char *CIL_KEY_HANDLEUNKNOWN_REJECT;
++-char *CIL_KEY_MACRO;
++-char *CIL_KEY_IN;
++-char *CIL_KEY_MLS;
++-char *CIL_KEY_DEFAULTRANGE;
++-char *CIL_KEY_BLOCKINHERIT;
++-char *CIL_KEY_BLOCKABSTRACT;
++-char *CIL_KEY_CLASSORDER;
++-char *CIL_KEY_CLASSMAPPING;
++-char *CIL_KEY_CLASSPERMISSIONSET;
++-char *CIL_KEY_COMMON;
++-char *CIL_KEY_CLASSCOMMON;
++-char *CIL_KEY_SID;
++-char *CIL_KEY_SIDCONTEXT;
++-char *CIL_KEY_SIDORDER;
++-char *CIL_KEY_USERLEVEL;
++-char *CIL_KEY_USERRANGE;
++-char *CIL_KEY_USERBOUNDS;
++-char *CIL_KEY_USERPREFIX;
++-char *CIL_KEY_SELINUXUSER;
++-char *CIL_KEY_SELINUXUSERDEFAULT;
++-char *CIL_KEY_TYPEATTRIBUTE;
++-char *CIL_KEY_TYPEATTRIBUTESET;
++-char *CIL_KEY_EXPANDTYPEATTRIBUTE;
++-char *CIL_KEY_TYPEALIAS;
++-char *CIL_KEY_TYPEALIASACTUAL;
++-char *CIL_KEY_TYPEBOUNDS;
++-char *CIL_KEY_TYPEPERMISSIVE;
++-char *CIL_KEY_RANGETRANSITION;
++-char *CIL_KEY_USERROLE;
++-char *CIL_KEY_ROLETYPE;
++-char *CIL_KEY_ROLETRANSITION;
++-char *CIL_KEY_ROLEALLOW;
++-char *CIL_KEY_ROLEATTRIBUTE;
++-char *CIL_KEY_ROLEATTRIBUTESET;
++-char *CIL_KEY_ROLEBOUNDS;
++-char *CIL_KEY_BOOLEANIF;
++-char *CIL_KEY_NEVERALLOW;
++-char *CIL_KEY_TYPEMEMBER;
++-char *CIL_KEY_SENSALIAS;
++-char *CIL_KEY_SENSALIASACTUAL;
++-char *CIL_KEY_CATALIAS;
++-char *CIL_KEY_CATALIASACTUAL;
++-char *CIL_KEY_CATORDER;
++-char *CIL_KEY_SENSITIVITYORDER;
++-char *CIL_KEY_SENSCAT;
++-char *CIL_KEY_CONSTRAIN;
++-char *CIL_KEY_MLSCONSTRAIN;
++-char *CIL_KEY_VALIDATETRANS;
++-char *CIL_KEY_MLSVALIDATETRANS;
++-char *CIL_KEY_CONTEXT;
++-char *CIL_KEY_FILECON;
++-char *CIL_KEY_IBPKEYCON;
++-char *CIL_KEY_IBENDPORTCON;
++-char *CIL_KEY_PORTCON;
++-char *CIL_KEY_NODECON;
++-char *CIL_KEY_GENFSCON;
++-char *CIL_KEY_NETIFCON;
++-char *CIL_KEY_PIRQCON;
++-char *CIL_KEY_IOMEMCON;
++-char *CIL_KEY_IOPORTCON;
++-char *CIL_KEY_PCIDEVICECON;
++-char *CIL_KEY_DEVICETREECON;
++-char *CIL_KEY_FSUSE;
++-char *CIL_KEY_POLICYCAP;
++-char *CIL_KEY_OPTIONAL;
++-char *CIL_KEY_DEFAULTUSER;
++-char *CIL_KEY_DEFAULTROLE;
++-char *CIL_KEY_DEFAULTTYPE;
++-char *CIL_KEY_ROOT;
++-char *CIL_KEY_NODE;
++-char *CIL_KEY_PERM;
++-char *CIL_KEY_ALLOWX;
++-char *CIL_KEY_AUDITALLOWX;
++-char *CIL_KEY_DONTAUDITX;
++-char *CIL_KEY_NEVERALLOWX;
++-char *CIL_KEY_PERMISSIONX;
++-char *CIL_KEY_IOCTL;
++-char *CIL_KEY_UNORDERED;
++-char *CIL_KEY_SRC_INFO;
++-char *CIL_KEY_SRC_CIL;
++-char *CIL_KEY_SRC_HLL;
+++extern char *CIL_KEY_CONS_T1;
+++extern char *CIL_KEY_CONS_T2;
+++extern char *CIL_KEY_CONS_T3;
+++extern char *CIL_KEY_CONS_R1;
+++extern char *CIL_KEY_CONS_R2;
+++extern char *CIL_KEY_CONS_R3;
+++extern char *CIL_KEY_CONS_U1;
+++extern char *CIL_KEY_CONS_U2;
+++extern char *CIL_KEY_CONS_U3;
+++extern char *CIL_KEY_CONS_L1;
+++extern char *CIL_KEY_CONS_L2;
+++extern char *CIL_KEY_CONS_H1;
+++extern char *CIL_KEY_CONS_H2;
+++extern char *CIL_KEY_AND;
+++extern char *CIL_KEY_OR;
+++extern char *CIL_KEY_NOT;
+++extern char *CIL_KEY_EQ;
+++extern char *CIL_KEY_NEQ;
+++extern char *CIL_KEY_CONS_DOM;
+++extern char *CIL_KEY_CONS_DOMBY;
+++extern char *CIL_KEY_CONS_INCOMP;
+++extern char *CIL_KEY_CONDTRUE;
+++extern char *CIL_KEY_CONDFALSE;
+++extern char *CIL_KEY_SELF;
+++extern char *CIL_KEY_OBJECT_R;
+++extern char *CIL_KEY_STAR;
+++extern char *CIL_KEY_TCP;
+++extern char *CIL_KEY_UDP;
+++extern char *CIL_KEY_DCCP;
+++extern char *CIL_KEY_SCTP;
+++extern char *CIL_KEY_AUDITALLOW;
+++extern char *CIL_KEY_TUNABLEIF;
+++extern char *CIL_KEY_ALLOW;
+++extern char *CIL_KEY_DONTAUDIT;
+++extern char *CIL_KEY_TYPETRANSITION;
+++extern char *CIL_KEY_TYPECHANGE;
+++extern char *CIL_KEY_CALL;
+++extern char *CIL_KEY_TUNABLE;
+++extern char *CIL_KEY_XOR;
+++extern char *CIL_KEY_ALL;
+++extern char *CIL_KEY_RANGE;
+++extern char *CIL_KEY_GLOB;
+++extern char *CIL_KEY_FILE;
+++extern char *CIL_KEY_DIR;
+++extern char *CIL_KEY_CHAR;
+++extern char *CIL_KEY_BLOCK;
+++extern char *CIL_KEY_SOCKET;
+++extern char *CIL_KEY_PIPE;
+++extern char *CIL_KEY_SYMLINK;
+++extern char *CIL_KEY_ANY;
+++extern char *CIL_KEY_XATTR;
+++extern char *CIL_KEY_TASK;
+++extern char *CIL_KEY_TRANS;
+++extern char *CIL_KEY_TYPE;
+++extern char *CIL_KEY_ROLE;
+++extern char *CIL_KEY_USER;
+++extern char *CIL_KEY_USERATTRIBUTE;
+++extern char *CIL_KEY_USERATTRIBUTESET;
+++extern char *CIL_KEY_SENSITIVITY;
+++extern char *CIL_KEY_CATEGORY;
+++extern char *CIL_KEY_CATSET;
+++extern char *CIL_KEY_LEVEL;
+++extern char *CIL_KEY_LEVELRANGE;
+++extern char *CIL_KEY_CLASS;
+++extern char *CIL_KEY_IPADDR;
+++extern char *CIL_KEY_MAP_CLASS;
+++extern char *CIL_KEY_CLASSPERMISSION;
+++extern char *CIL_KEY_BOOL;
+++extern char *CIL_KEY_STRING;
+++extern char *CIL_KEY_NAME;
+++extern char *CIL_KEY_SOURCE;
+++extern char *CIL_KEY_TARGET;
+++extern char *CIL_KEY_LOW;
+++extern char *CIL_KEY_HIGH;
+++extern char *CIL_KEY_LOW_HIGH;
+++extern char *CIL_KEY_GLBLUB;
+++extern char *CIL_KEY_HANDLEUNKNOWN;
+++extern char *CIL_KEY_HANDLEUNKNOWN_ALLOW;
+++extern char *CIL_KEY_HANDLEUNKNOWN_DENY;
+++extern char *CIL_KEY_HANDLEUNKNOWN_REJECT;
+++extern char *CIL_KEY_MACRO;
+++extern char *CIL_KEY_IN;
+++extern char *CIL_KEY_MLS;
+++extern char *CIL_KEY_DEFAULTRANGE;
+++extern char *CIL_KEY_BLOCKINHERIT;
+++extern char *CIL_KEY_BLOCKABSTRACT;
+++extern char *CIL_KEY_CLASSORDER;
+++extern char *CIL_KEY_CLASSMAPPING;
+++extern char *CIL_KEY_CLASSPERMISSIONSET;
+++extern char *CIL_KEY_COMMON;
+++extern char *CIL_KEY_CLASSCOMMON;
+++extern char *CIL_KEY_SID;
+++extern char *CIL_KEY_SIDCONTEXT;
+++extern char *CIL_KEY_SIDORDER;
+++extern char *CIL_KEY_USERLEVEL;
+++extern char *CIL_KEY_USERRANGE;
+++extern char *CIL_KEY_USERBOUNDS;
+++extern char *CIL_KEY_USERPREFIX;
+++extern char *CIL_KEY_SELINUXUSER;
+++extern char *CIL_KEY_SELINUXUSERDEFAULT;
+++extern char *CIL_KEY_TYPEATTRIBUTE;
+++extern char *CIL_KEY_TYPEATTRIBUTESET;
+++extern char *CIL_KEY_EXPANDTYPEATTRIBUTE;
+++extern char *CIL_KEY_TYPEALIAS;
+++extern char *CIL_KEY_TYPEALIASACTUAL;
+++extern char *CIL_KEY_TYPEBOUNDS;
+++extern char *CIL_KEY_TYPEPERMISSIVE;
+++extern char *CIL_KEY_RANGETRANSITION;
+++extern char *CIL_KEY_USERROLE;
+++extern char *CIL_KEY_ROLETYPE;
+++extern char *CIL_KEY_ROLETRANSITION;
+++extern char *CIL_KEY_ROLEALLOW;
+++extern char *CIL_KEY_ROLEATTRIBUTE;
+++extern char *CIL_KEY_ROLEATTRIBUTESET;
+++extern char *CIL_KEY_ROLEBOUNDS;
+++extern char *CIL_KEY_BOOLEANIF;
+++extern char *CIL_KEY_NEVERALLOW;
+++extern char *CIL_KEY_TYPEMEMBER;
+++extern char *CIL_KEY_SENSALIAS;
+++extern char *CIL_KEY_SENSALIASACTUAL;
+++extern char *CIL_KEY_CATALIAS;
+++extern char *CIL_KEY_CATALIASACTUAL;
+++extern char *CIL_KEY_CATORDER;
+++extern char *CIL_KEY_SENSITIVITYORDER;
+++extern char *CIL_KEY_SENSCAT;
+++extern char *CIL_KEY_CONSTRAIN;
+++extern char *CIL_KEY_MLSCONSTRAIN;
+++extern char *CIL_KEY_VALIDATETRANS;
+++extern char *CIL_KEY_MLSVALIDATETRANS;
+++extern char *CIL_KEY_CONTEXT;
+++extern char *CIL_KEY_FILECON;
+++extern char *CIL_KEY_IBPKEYCON;
+++extern char *CIL_KEY_IBENDPORTCON;
+++extern char *CIL_KEY_PORTCON;
+++extern char *CIL_KEY_NODECON;
+++extern char *CIL_KEY_GENFSCON;
+++extern char *CIL_KEY_NETIFCON;
+++extern char *CIL_KEY_PIRQCON;
+++extern char *CIL_KEY_IOMEMCON;
+++extern char *CIL_KEY_IOPORTCON;
+++extern char *CIL_KEY_PCIDEVICECON;
+++extern char *CIL_KEY_DEVICETREECON;
+++extern char *CIL_KEY_FSUSE;
+++extern char *CIL_KEY_POLICYCAP;
+++extern char *CIL_KEY_OPTIONAL;
+++extern char *CIL_KEY_DEFAULTUSER;
+++extern char *CIL_KEY_DEFAULTROLE;
+++extern char *CIL_KEY_DEFAULTTYPE;
+++extern char *CIL_KEY_ROOT;
+++extern char *CIL_KEY_NODE;
+++extern char *CIL_KEY_PERM;
+++extern char *CIL_KEY_ALLOWX;
+++extern char *CIL_KEY_AUDITALLOWX;
+++extern char *CIL_KEY_DONTAUDITX;
+++extern char *CIL_KEY_NEVERALLOWX;
+++extern char *CIL_KEY_PERMISSIONX;
+++extern char *CIL_KEY_IOCTL;
+++extern char *CIL_KEY_UNORDERED;
+++extern char *CIL_KEY_SRC_INFO;
+++extern char *CIL_KEY_SRC_CIL;
+++extern char *CIL_KEY_SRC_HLL;
++ 
++ /*
++ 	Symbol Table Array Indices
++-- 
++2.17.1
++
+diff --git a/package/libsepol/0003-libsepol-remove-leftovers-of-cil_mem_error_handler.patch b/package/libsepol/0003-libsepol-remove-leftovers-of-cil_mem_error_handler.patch
+new file mode 100644
+index 0000000000..a1b016121f
+--- /dev/null
++++ b/package/libsepol/0003-libsepol-remove-leftovers-of-cil_mem_error_handler.patch
+@@ -0,0 +1,63 @@
++From 3d32fc24d6aff360a538c63dad08ca5c957551b0 Mon Sep 17 00:00:00 2001
++From: Ondrej Mosnacek <omosnace@redhat.com>
++Date: Thu, 23 Jan 2020 13:57:14 +0100
++Subject: [PATCH] libsepol: remove leftovers of cil_mem_error_handler
++
++Commit 4459d635b8f1 ("libsepol: Remove cil_mem_error_handler() function
++pointer") replaced cil_mem_error_handler usage with inline contents of
++the default handler. However, it left over the header declaration and
++two callers. Convert these as well and remove the header declaration.
++
++This also fixes a build failure with -fno-common.
++
++Upstream: https://github.com/SELinuxProject/selinux/commit/3d32fc24d6aff360a538c63dad08ca5c957551b0
++
++Fixes: 4459d635b8f1 ("libsepol: Remove cil_mem_error_handler() function pointer")
++Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
++Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
++---
++ cil/src/cil_mem.h     | 1 -
++ cil/src/cil_strpool.c | 8 ++++----
++ 2 files changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/cil/src/cil_mem.h b/cil/src/cil_mem.h
++index 902ce131..794f02a3 100644
++--- a/cil/src/cil_mem.h
+++++ b/cil/src/cil_mem.h
++@@ -36,7 +36,6 @@ void *cil_calloc(size_t num_elements, size_t element_size);
++ void *cil_realloc(void *ptr, size_t size);
++ char *cil_strdup(const char *str);
++ int cil_asprintf(char **strp, const char *fmt, ...);
++-void (*cil_mem_error_handler)(void);
++ 
++ #endif /* CIL_MEM_H_ */
++ 
++diff --git a/cil/src/cil_strpool.c b/cil/src/cil_strpool.c
++index 97d4c4b9..2598bbf3 100644
++--- a/cil/src/cil_strpool.c
+++++ b/cil/src/cil_strpool.c
++@@ -80,8 +80,8 @@ char *cil_strpool_add(const char *str)
++ 		int rc = hashtab_insert(cil_strpool_tab, (hashtab_key_t)strpool_ref->str, strpool_ref);
++ 		if (rc != SEPOL_OK) {
++ 			pthread_mutex_unlock(&cil_strpool_mutex);
++-			(*cil_mem_error_handler)();
++-			pthread_mutex_lock(&cil_strpool_mutex);
+++			cil_log(CIL_ERR, "Failed to allocate memory\n");
+++			exit(1);
++ 		}
++ 	}
++ 
++@@ -104,8 +104,8 @@ void cil_strpool_init(void)
++ 		cil_strpool_tab = hashtab_create(cil_strpool_hash, cil_strpool_compare, CIL_STRPOOL_TABLE_SIZE);
++ 		if (cil_strpool_tab == NULL) {
++ 			pthread_mutex_unlock(&cil_strpool_mutex);
++-			(*cil_mem_error_handler)();
++-			return;
+++			cil_log(CIL_ERR, "Failed to allocate memory\n");
+++			exit(1);
++ 		}
++ 	}
++ 	cil_strpool_readers++;
++-- 
++2.17.1
++
 -- 
-2.20.1
+2.17.1
