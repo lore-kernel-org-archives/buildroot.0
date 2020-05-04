@@ -1,141 +1,91 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 4 May 2020 23:58:47 +0200
-Subject: [Buildroot] [V3 PATCH 1/1] cukinia: new package
-In-Reply-To: <20200504091158.13268-2-shyam.saini@savoirfairelinux.com>
-References: <20200504091158.13268-1-shyam.saini@savoirfairelinux.com>
- <20200504091158.13268-2-shyam.saini@savoirfairelinux.com>
-Message-ID: <CA+_SqVaNQpE5kxdQCunDb_KY_bgLu=xwUvUwGB=WCp2kHvOPdA@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 5 May 2020 00:06:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uclibc: Patch to fix check_as
+ macro in Rules.mak
+In-Reply-To: <AM0P194MB06448CBCB64FBB28F3240C118BD00@AM0P194MB0644.EURP194.PROD.OUTLOOK.COM>
+References: <AM0P194MB06448CBCB64FBB28F3240C118BD00@AM0P194MB0644.EURP194.PROD.OUTLOOK.COM>
+Message-ID: <71697bf3-3641-ff09-d2ac-f507c4059089@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 4, 2020 at 11:12 AM Shyam Saini <mayhs11saini@gmail.com> wrote:
->
-> Cukinia is a test framework designed to help Linux-based embedded
-> systems developers run simple system-level validation tests on their
-> firmware.
->
-> It is designed to integrate well with embedded Linux systems
-> generation tools, and can be run manually (providing a quick
-> colourized summary to eye-catch regressions), or any of continuous
-> available integration framework, by generating Junit-XML or CSV test
-> reports.
->
-> Signed-off-by: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
-> Signed-off-by: Shyam Saini <shyam.saini@savoirfairelinux.com>
-Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Hi Marcel,
+
+Le 24/04/2020 ? 14:47, Patzlaff, Marcel a ?crit?:
+> This introduces a patch for uClibc to fix a feature check macro which
+> does not work when building with binutils 2.31.x or higher. Without
+> this fix, all binaries of uClibc will always request an executable
+> stack and thus all other binaries that link to it!
+> 
+> See also https://bugs.busybox.net/show_bug.cgi?id=12801
+
+Your patch is now upstream :
+https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=25751e796e83a75e0d443f96694e539ffbf4687a
+
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+[Build tested, between a toolchain with binutils 2.30 and 2.31]
+Tested-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+
+> 
+> Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
 > ---
->  DEVELOPERS                   |  3 +++
->  package/Config.in            |  1 +
->  package/cukinia/Config.in    | 15 +++++++++++++++
->  package/cukinia/cukinia.conf |  4 ++++
->  package/cukinia/cukinia.hash |  4 ++++
->  package/cukinia/cukinia.mk   | 20 ++++++++++++++++++++
->  6 files changed, 47 insertions(+)
->  create mode 100644 package/cukinia/Config.in
->  create mode 100644 package/cukinia/cukinia.conf
->  create mode 100644 package/cukinia/cukinia.hash
->  create mode 100644 package/cukinia/cukinia.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index d6557f1143ed..0eeac69d1c64 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2345,6 +2345,9 @@ F:        package/tunctl/
->  F:     package/ubus/
->  F:     package/wolfssl/
->
-> +N:     Shyam Saini <shyam.saini@savoirfairelinux.com>
-> +F:     package/cukinia/
-> +
->  N:     Simon Dawson <spdawson@gmail.com>
->  F:     boot/at91bootstrap3/
->  F:     package/cppzmq/
-> diff --git a/package/Config.in b/package/Config.in
-> index 6c55c5bc4290..2cf35f46fcdd 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -153,6 +153,7 @@ menu "Development tools"
->         source "package/check/Config.in"
->         source "package/cmake/Config.in"
->         source "package/cppunit/Config.in"
-> +       source "package/cukinia/Config.in"
->         source "package/cunit/Config.in"
->         source "package/cvs/Config.in"
->         source "package/cxxtest/Config.in"
-> diff --git a/package/cukinia/Config.in b/package/cukinia/Config.in
+>  ...heck_as-for-recent-binutils-versions.patch | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch
+> 
+> diff --git a/package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch b/package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch
 > new file mode 100644
-> index 000000000000..37373e9a08e4
+> index 0000000000..1e8ca1e682
 > --- /dev/null
-> +++ b/package/cukinia/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_CUKINIA
-> +       bool "cukinia"
-> +       select BR2_PACKAGE_GAWK if !BR2_PACKAGE_BUSYBOX
-> +       help
-> +         Cukinia is designed to help Linux-based embedded firmware
-> +         developers run system-level validation tests on their product.
-> +         It provides a simple POSIX shell overlay, and primitives to
-> +         make sure system integrations and features keep behaving the
-> +         way they should.
+> +++ b/package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch
+> @@ -0,0 +1,42 @@
+> +From 9c0a3c5c80cd9dbd1aa7b04dd7ad2d8ea98b244e Mon Sep 17 00:00:00 2001
+> +From: Marcel Patzlaff <m.patzlaff@pilz.de>
+> +Date: Fri, 24 Apr 2020 14:09:23 +0200
+> +Subject: [PATCH 1/1] Rules.mak: Fix check_as for recent binutils versions
 > +
-> +         By default, cukinia reports colorized test results on stdout,
-> +         but can also report them as CSV and JUnit-XML for easy
-> +         integration with CI systems such as Jenkins.
+> +As described in https://bugs.busybox.net/show_bug.cgi?id=12801 the
+> +check for '-Wa,--noexecstack' is not working since binutils 2.31.x.
 > +
-> +         https://github.com/savoirfairelinux/cukinia
-> diff --git a/package/cukinia/cukinia.conf b/package/cukinia/cukinia.conf
-> new file mode 100644
-> index 000000000000..e5f304d39fd1
-> --- /dev/null
-> +++ b/package/cukinia/cukinia.conf
-> @@ -0,0 +1,4 @@
-> +# Note: Cukinia will produce colorized output if the TERM environment
-> +# variable matches vt220, xterm or linux.
-> +cukinia_log $(_colorize blue "############# Cukinia tests ##############")
-> +cukinia_user root
-> diff --git a/package/cukinia/cukinia.hash b/package/cukinia/cukinia.hash
-> new file mode 100644
-> index 000000000000..e6fdbbb9a990
-> --- /dev/null
-> +++ b/package/cukinia/cukinia.hash
-> @@ -0,0 +1,4 @@
-> +# locally computed
-> +sha256  7737cf2b4b00eb29bf5c42905da5c96c6683e182645dc72e3cdecf1d569c14b4  cukinia-0.5.0.tar.gz
-> +sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-> +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPLv3
-> diff --git a/package/cukinia/cukinia.mk b/package/cukinia/cukinia.mk
-> new file mode 100644
-> index 000000000000..75eb67f23d61
-> --- /dev/null
-> +++ b/package/cukinia/cukinia.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# cukinia
-> +#
-> +################################################################################
+> +This fix adapts the approach already taken with check_ld and uses a
+> +temporary file. Further, check_gcc is also adapted to avoid future
+> +problems.
 > +
-> +CUKINIA_VERSION = 0.5.0
-> +CUKINIA_SITE = $(call github,savoirfairelinux,cukinia,v$(CUKINIA_VERSION))
-> +CUKINIA_LICENSE = Apache-2.0 or GPL-3.0
-> +CUKINIA_LICENSE_FILES = LICENSE LICENSE.GPLv3
+> +Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
+> +---
+> + Rules.mak | 10 ++++++----
+> + 1 file changed, 6 insertions(+), 4 deletions(-)
 > +
-> +define CUKINIA_INSTALL_TARGET_CMDS
-> +        $(INSTALL) -D -m 0755 $(@D)/cukinia \
-> +                $(TARGET_DIR)/usr/bin/cukinia
+> +diff --git a/Rules.mak b/Rules.mak
+> +index 6a9f5cbca..a10518c03 100644
+> +--- a/Rules.mak
+> ++++ b/Rules.mak
+> +@@ -189,11 +189,13 @@ endif
+> + 
+> + # A nifty macro to make testing gcc features easier
+> + check_gcc=$(shell \
+> +-	if $(CC) $(1) -S -o /dev/null -xc /dev/null > /dev/null 2>&1; \
+> +-	then echo "$(1)"; else echo "$(2)"; fi)
+> ++	tf="/tmp/cgccucl$$$$.o"; \
+> ++	if $(CC) $(1) -S -o $$tf -xc /dev/null > /dev/null 2>&1; \
+> ++	then echo "$(1)"; else echo "$(2)"; fi; rm -f $$tf )
+> + check_as=$(shell \
+> +-	if $(CC) -Wa,$(1) -Wa,-Z -c -o /dev/null -xassembler /dev/null > /dev/null 2>&1; \
+> +-	then echo "-Wa,$(1)"; fi)
+> ++	tf="/tmp/casucl$$$$.o"; \
+> ++	if $(CC) -Wa,$(1) -Wa,-Z -c -o $$tf -xassembler /dev/null > /dev/null 2>&1; \
+> ++	then echo "-Wa,$(1)"; fi; rm -f $$tf )
+> + check_ld=$(shell \
+> + 	tf="/tmp/clducl$$$$.c"; echo "int _start(){return 0;}int main(){return 0;}" >$$tf; \
+> + 	if $(CC) $(LDFLAG-fuse-ld) $(CFLAG_-Wl--no-warn-mismatch) -Wl,$(1) $(CFLAG_-nostdlib) -o /dev/null $$tf > /dev/null 2>&1; \
+> +-- 
+> +2.20.1
 > +
-> +        $(INSTALL) -D -m 0644 $(CUKINIA_PKGDIR)/cukinia.conf \
-> +                $(TARGET_DIR)/etc/cukinia/cukinia.conf
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
-> 2.20.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
