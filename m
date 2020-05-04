@@ -1,72 +1,40 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  4 May 2020 01:07:54 +0200
-Subject: [Buildroot] [PATCH 4/4] package/irrlicht: disable bundled libpng
- NEON support
-In-Reply-To: <20200503230754.3071098-1-romain.naour@gmail.com>
-References: <20200503230754.3071098-1-romain.naour@gmail.com>
-Message-ID: <20200503230754.3071098-4-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 May 2020 07:18:29 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/wayland: bump to version
+ 1.18.0
+In-Reply-To: <20200503230743.112719-1-james.hilliard1@gmail.com>
+References: <20200503230743.112719-1-james.hilliard1@gmail.com>
+Message-ID: <20200504071829.07c2ed9f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
-While linking an application with libIrrlicht.so, we get an undefined reference to
-png_init_filter_functions_neon.
-Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c [1],
-so disable NEON support completely.
+Hello James,
 
-This can be reproduced by building minetest using this defconfig for aarch64:
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_MINETEST=y
-BR2_PACKAGE_MINETEST_CLIENT=y
-BR2_PACKAGE_MINETEST_SERVER=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_XORG7=y
+Thanks for this update. One comment below.
 
-Or for ARM with NEON FPU support:
-BR2_arm=y
-BR2_cortex_a15=y
-BR2_ARM_FPU_NEON=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_MINETEST=y
-BR2_PACKAGE_MINETEST_CLIENT=y
-BR2_PACKAGE_MINETEST_SERVER=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-BR2_PACKAGE_XORG7=y
 
-[1] https://github.com/glennrp/libpng/tree/v1.6.37/arm
+On Sun,  3 May 2020 17:07:43 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-This issue is not related to the minetest version bump (5.2.0).
----
- package/irrlicht/irrlicht.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+> -# 0002-configure-add-option-to-disable-tests.patch
+> -WAYLAND_AUTORECONF = YES
+> -
+> -# wayland-scanner is only needed for building, not on the target
+> -WAYLAND_CONF_OPTS = --with-host-scanner --disable-tests
+> -HOST_WAYLAND_CONF_OPTS = --disable-tests
+> +WAYLAND_CONF_OPTS = -Dtests=false -Ddocumentation=false
+> +HOST_WAYLAND_CONF_OPTS = $(WAYLAND_CONF_OPTS)
 
-diff --git a/package/irrlicht/irrlicht.mk b/package/irrlicht/irrlicht.mk
-index a1e190d98d..bd82815cde 100644
---- a/package/irrlicht/irrlicht.mk
-+++ b/package/irrlicht/irrlicht.mk
-@@ -38,6 +38,13 @@ ifeq ($(BR2_STATIC_LIBS),)
- IRRLICHT_CONF_OPTS += sharedlib
- endif
- 
-+# Irrlicht fail to detect properly the NEON support on aarch64 or ARM with NEON FPU support.
-+# While linking an application with libIrrlicht.so, we get an undefined reference to
-+# png_init_filter_functions_neon.
-+# Some files are missing in the libpng bundled in Irrlicht, in particular arm/arm_init.c,
-+# so disable NEON support completely.
-+IRRLICHT_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DPNG_ARM_NEON_OPT=0"
-+
- define IRRLICHT_BUILD_CMDS
- 	$(TARGET_MAKE_ENV)
- 		$(MAKE) -C $(@D)/$(IRRLICHT_SUBDIR) $(IRRLICHT_CONF_OPTS)
+This is too dangerous: yes today, the CONF_OPTS are the same between
+target/host, but with this construct, it is easy in the future to
+change the target CONF_OPTS and not realize they affect the host
+variant as well.
+
+Thomas
 -- 
-2.25.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
