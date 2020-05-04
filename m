@@ -1,91 +1,47 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 5 May 2020 00:06:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uclibc: Patch to fix check_as
- macro in Rules.mak
-In-Reply-To: <AM0P194MB06448CBCB64FBB28F3240C118BD00@AM0P194MB0644.EURP194.PROD.OUTLOOK.COM>
-References: <AM0P194MB06448CBCB64FBB28F3240C118BD00@AM0P194MB0644.EURP194.PROD.OUTLOOK.COM>
-Message-ID: <71697bf3-3641-ff09-d2ac-f507c4059089@gmail.com>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Mon,  4 May 2020 20:33:02 +0200
+Subject: [Buildroot] [PATCH] package/python-redis: Bump to version 3.5.0
+Message-ID: <20200504183306.4305-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Marcel,
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ package/python-redis/python-redis.hash | 6 +++---
+ package/python-redis/python-redis.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Le 24/04/2020 ? 14:47, Patzlaff, Marcel a ?crit?:
-> This introduces a patch for uClibc to fix a feature check macro which
-> does not work when building with binutils 2.31.x or higher. Without
-> this fix, all binaries of uClibc will always request an executable
-> stack and thus all other binaries that link to it!
-> 
-> See also https://bugs.busybox.net/show_bug.cgi?id=12801
-
-Your patch is now upstream :
-https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=25751e796e83a75e0d443f96694e539ffbf4687a
-
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-[Build tested, between a toolchain with binutils 2.30 and 2.31]
-Tested-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-
-> 
-> Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
-> ---
->  ...heck_as-for-recent-binutils-versions.patch | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch
-> 
-> diff --git a/package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch b/package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch
-> new file mode 100644
-> index 0000000000..1e8ca1e682
-> --- /dev/null
-> +++ b/package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch
-> @@ -0,0 +1,42 @@
-> +From 9c0a3c5c80cd9dbd1aa7b04dd7ad2d8ea98b244e Mon Sep 17 00:00:00 2001
-> +From: Marcel Patzlaff <m.patzlaff@pilz.de>
-> +Date: Fri, 24 Apr 2020 14:09:23 +0200
-> +Subject: [PATCH 1/1] Rules.mak: Fix check_as for recent binutils versions
-> +
-> +As described in https://bugs.busybox.net/show_bug.cgi?id=12801 the
-> +check for '-Wa,--noexecstack' is not working since binutils 2.31.x.
-> +
-> +This fix adapts the approach already taken with check_ld and uses a
-> +temporary file. Further, check_gcc is also adapted to avoid future
-> +problems.
-> +
-> +Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
-> +---
-> + Rules.mak | 10 ++++++----
-> + 1 file changed, 6 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/Rules.mak b/Rules.mak
-> +index 6a9f5cbca..a10518c03 100644
-> +--- a/Rules.mak
-> ++++ b/Rules.mak
-> +@@ -189,11 +189,13 @@ endif
-> + 
-> + # A nifty macro to make testing gcc features easier
-> + check_gcc=$(shell \
-> +-	if $(CC) $(1) -S -o /dev/null -xc /dev/null > /dev/null 2>&1; \
-> +-	then echo "$(1)"; else echo "$(2)"; fi)
-> ++	tf="/tmp/cgccucl$$$$.o"; \
-> ++	if $(CC) $(1) -S -o $$tf -xc /dev/null > /dev/null 2>&1; \
-> ++	then echo "$(1)"; else echo "$(2)"; fi; rm -f $$tf )
-> + check_as=$(shell \
-> +-	if $(CC) -Wa,$(1) -Wa,-Z -c -o /dev/null -xassembler /dev/null > /dev/null 2>&1; \
-> +-	then echo "-Wa,$(1)"; fi)
-> ++	tf="/tmp/casucl$$$$.o"; \
-> ++	if $(CC) -Wa,$(1) -Wa,-Z -c -o $$tf -xassembler /dev/null > /dev/null 2>&1; \
-> ++	then echo "-Wa,$(1)"; fi; rm -f $$tf )
-> + check_ld=$(shell \
-> + 	tf="/tmp/clducl$$$$.c"; echo "int _start(){return 0;}int main(){return 0;}" >$$tf; \
-> + 	if $(CC) $(LDFLAG-fuse-ld) $(CFLAG_-Wl--no-warn-mismatch) -Wl,$(1) $(CFLAG_-nostdlib) -o /dev/null $$tf > /dev/null 2>&1; \
-> +-- 
-> +2.20.1
-> +
-> 
+diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
+index 02ec3bde5e..b30942311b 100644
+--- a/package/python-redis/python-redis.hash
++++ b/package/python-redis/python-redis.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/redis/json
+-md5	c2062a26ea12b69e0d39a23451c89998  redis-3.4.1.tar.gz
+-sha256	0dcfb335921b88a850d461dc255ff4708294943322bd55de6cfd68972490ca1f  redis-3.4.1.tar.gz
++md5  5b432eff77163a353c520737d057e494  redis-3.5.0.tar.gz
++sha256  7378105cd8ea20c4edc49f028581e830c01ad5f00be851def0f4bc616a83cd89  redis-3.5.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
++sha256  790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
+diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
+index a93ccfe020..273f55748b 100644
+--- a/package/python-redis/python-redis.mk
++++ b/package/python-redis/python-redis.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_REDIS_VERSION = 3.4.1
++PYTHON_REDIS_VERSION = 3.5.0
+ PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
+-PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/ef/2e/2c0f59891db7db087a7eeaa79bc7c7f2c039e71a2b5b0a41391e9d462926
++PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/05/5e/5e9a329ba600244f2d37f86131ccec19936d41cba0887240086b44cf4f54
+ PYTHON_REDIS_SETUP_TYPE = setuptools
+ PYTHON_REDIS_LICENSE = MIT
+ PYTHON_REDIS_LICENSE_FILES = LICENSE
+-- 
+2.26.2
