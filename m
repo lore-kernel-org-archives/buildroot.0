@@ -1,7 +1,7 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon,  4 May 2020 07:30:03 -0500
-Subject: [Buildroot] [PATCH] package/libcurl: bump to 7.70.0
-Message-ID: <20200504123003.37958-1-matthew.weber@rockwellcollins.com>
+Date: Mon,  4 May 2020 07:36:24 -0500
+Subject: [Buildroot] [PATCH] package/rsyslog: bump to 8.2004.0
+Message-ID: <20200504123624.41821-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/rsyslog/rsyslog.hash | 2 +-
+ package/rsyslog/rsyslog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 69cf7b5398..2157f3d2d2 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index 0ed50f8199..50edaa64cd 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,5 +1,5 @@
+ # From http://www.rsyslog.com/downloads/download-v8-stable/
+-sha256  fe86c14d860da1202c76616feac0539ea5a40a4ad182d74b7d6d2419cc2381f8  rsyslog-8.2002.0.tar.gz
++sha256  5fc3d7b775f0879a40606d960491812a602e22f62e006ce027ed7bcf4c9f27d9  rsyslog-8.2004.0.tar.gz
+ 
  # Locally calculated
--sha256 03c7d5e6697f7b7e40ada1b2256e565a555657398e6c1fcfa4cb251ccd819d4f  curl-7.69.1.tar.xz
--sha256 db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
-+sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
-+sha256  032f43f2674008c761af19bf536374128c16241fb234699a55f9fb603fcfbae7  curl-7.70.0.tar.xz
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 7a29634c68..cc2ca0aa65 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+ sha256  054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083  COPYING
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 27d482fdec..90f21559f8 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.69.1
-+LIBCURL_VERSION = 7.70.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-RSYSLOG_VERSION = 8.2002.0
++RSYSLOG_VERSION = 8.2004.0
+ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
+ RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
+ RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
 -- 
 2.17.1
