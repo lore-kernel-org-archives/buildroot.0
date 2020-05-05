@@ -1,200 +1,74 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Tue, 5 May 2020 21:16:34 +0200
-Subject: [Buildroot] [PATCH v6 1/4] package/environment-setup: new
- package
-In-Reply-To: <1588085161-28104-1-git-send-email-angelo@amarulasolutions.com>
-References: <1588085161-28104-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <CAOf5uwm6Ep-PwVuQUgZJmWcfA9z=BDRvop3CPhKCfx6v001Q7w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 May 2020 21:37:31 +0200
+Subject: [Buildroot] [git commit] package/solarus: bump to version 1.6.4
+Message-ID: <20200505192211.87A2090E69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all
+commit: https://git.buildroot.net/buildroot/commit/?id=7753a96380570e780bb98fadba933467ff969c20
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Apr 28, 2020 at 4:46 PM Angelo Compagnucci
-<angelo@amarulasolutions.com> wrote:
->
-> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->
-> Install an helper script to setup a build environment based on buildroot.
-> It's useful when a developer wants to use a buildroot generated sdk to
-> build an external project.
->
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Add glm dependency since the bundled version is gone [1].
 
-Tested-by: Michael Trimarchi <michael@amarulasolutions.com>
+Update indentation of hash file (two spaces).
 
-I have merged today in some customers project and I think that is
-really nice to have feature
+[1] https://gitlab.com/solarus-games/solarus/commit/5285c8e1afa538bbcd4c8654f9bbfb270cc7f52
 
-Michael
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/solarus/Config.in    | 1 +
+ package/solarus/solarus.hash | 4 ++--
+ package/solarus/solarus.mk   | 6 +++---
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-> ---
-> Changelog:
-> v1->v2:
->  * Moved from echo to printf (Yann)
->  * removed sh extension (Yann)
->  * Adding missing script
-> v2->v3:
->  * Split the patch
-> v3->v4:
->  * Better handling of SDK_PATH dir (Mircea Gliga)
-> v4->v5:
->  * Cleaning the script using SDK_PATH where possible (Mircea Gliga)
-> v5->v6:
->  * Removed unused sed expressione (Mircea Gliga)
->  * Moved to be an host package
->  * fix PATH leaking: before path from the current user
->    can leak into the script
->  * Removed PS1
->
-> Some of the reason I kept several things the way I originally planned:
->
->  * I kept it being a package because it doesn't fit in any other tool:
->    indeed this script changes your current PATH and exports some
->    variables that can be used for anything.
->    Think of qmake or cmake or a package that doesn't have any
->    build system at all. It has some features geared
->    also towards autotools software but I keep planning others.
->  * I kept looping in TARGET_CONFIGURE_OPTS, indeed it produces a more
->    clean environment script at the end.
->    For the problem raised by Yann: variables in
->    TARGET_CONFIGURE_OPTS _are_ properly escaped, indeed if not, they
->    were a big source of problems on each ./configure invocation
->    due to the fact they are injected on the
->    ./configure commandline invocation.
->  * I kept the manual entry: I think that the most documentation the
->    better.
->
->  docs/manual/using-buildroot-toolchain.txt      |  8 ++++++
->  package/Config.in.host                         |  1 +
->  package/environment-setup/Config.in.host       |  6 +++++
->  package/environment-setup/environment-setup    | 16 ++++++++++++
->  package/environment-setup/environment-setup.mk | 34 ++++++++++++++++++++++++++
->  5 files changed, 65 insertions(+)
->  create mode 100644 package/environment-setup/Config.in.host
->  create mode 100644 package/environment-setup/environment-setup
->  create mode 100644 package/environment-setup/environment-setup.mk
->
-> diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
-> index 0c0c35f..98dae6c 100644
-> --- a/docs/manual/using-buildroot-toolchain.txt
-> +++ b/docs/manual/using-buildroot-toolchain.txt
-> @@ -27,6 +27,14 @@ Upon extracting the SDK tarball, the user must run the script
->  +relocate-sdk.sh+ (located at the top directory of the SDK), to make
->  sure all paths are updated with the new location.
->
-> +For your convenience, by selecting the host package
-> +BR2_PACKAGE_HOST_ENVIRONMENT_SETUP, you can have a +setup-environment+ script
-> +installed in +output/host/+.
-> +This script can be sourced with +. your/sdk/path/environment-setup+ to launch
-> +the buildroot shell. Inside this shell, you will find an environment already
-> +set up with the correct PATH and the complete list of +target configure
-> +options+.
-> +
->  Alternatively, if you just want to prepare the SDK without generating
->  the tarball (e.g. because you will just be moving the +host+ directory,
->  or will be generating the tarball on your own), Buildroot also allows
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index f1246c7..ba1dcb7 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -18,6 +18,7 @@ menu "Host utilities"
->         source "package/dtc/Config.in.host"
->         source "package/e2fsprogs/Config.in.host"
->         source "package/e2tools/Config.in.host"
-> +       source "package/environment-setup/Config.in.host"
->         source "package/erofs-utils/Config.in.host"
->         source "package/eudev/Config.in.host"
->         source "package/exfatprogs/Config.in.host"
-> diff --git a/package/environment-setup/Config.in.host b/package/environment-setup/Config.in.host
-> new file mode 100644
-> index 0000000..87f460d
-> --- /dev/null
-> +++ b/package/environment-setup/Config.in.host
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_HOST_ENVIRONMENT_SETUP
-> +       bool "Environment setup"
-> +       help
-> +         Install an helper script to setup a build environment
-> +         based on buildroot. It's useful when you export an sdk
-> +         and want to use buildroot to build an external project
-> diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
-> new file mode 100644
-> index 0000000..b48f197
-> --- /dev/null
-> +++ b/package/environment-setup/environment-setup
-> @@ -0,0 +1,16 @@
-> +cat <<'EOF'
-> + _           _ _     _                 _
-> +| |__  _   _(_) | __| |_ __ ___   ___ | |_
-> +| '_ \| | | | | |/ _` | '__/ _ \ / _ \| __|
-> +| |_) | |_| | | | (_| | | | (_) | (_) | |_
-> +|_.__/ \__,_|_|_|\__,_|_|  \___/ \___/ \__| shell
-> +
-> +       Making embedded Linux easy!
-> +
-> +Some tips:
-> +* PATH is now pointing to the HOST_DIR path
-> +* Target configure options are already exported
-> +* To configure do "./configure $CONFIGURE_FLAGS"
-> +
-> +EOF
-> +SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
-> diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-> new file mode 100644
-> index 0000000..6d2396f
-> --- /dev/null
-> +++ b/package/environment-setup/environment-setup.mk
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# environment-setup
-> +#
-> +################################################################################
-> +
-> +ENVIRONMENT_SETUP_FILE = $(HOST_DIR)/environment-setup
-> +ENVIRONMENT_SETUP_HOST_DIR_SED_EXP = 's+$(HOST_DIR)+\$$SDK_PATH+g'
-> +ENVIRONMENT_SETUP_HOST_BIN_DIR_SED_EXP = 's+$(HOST_DIR)/bin/++g'
-> +
-> +define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
-> +       cp package/environment-setup/environment-setup $(ENVIRONMENT_SETUP_FILE)
-> +       for var in $(TARGET_CONFIGURE_OPTS); do \
-> +               printf "export \"$$var\"\n" >> $(ENVIRONMENT_SETUP_FILE); \
-> +       done
-> +       printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-> +       printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
-> +               --host=$(GNU_TARGET_NAME) \
-> +               --build=$(GNU_HOST_NAME) \
-> +               --prefix=/usr \
-> +               --exec-prefix=/usr \
-> +               --sysconfdir=/etc \
-> +               --localstatedir=/var \
-> +               --program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-> +       $(SED) $(ENVIRONMENT_SETUP_HOST_BIN_DIR_SED_EXP) \
-> +               -e $(ENVIRONMENT_SETUP_HOST_DIR_SED_EXP) \
-> +               -e '/^export "PATH=/c\' \
-> +               $(ENVIRONMENT_SETUP_FILE)
-> +       printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
-> +               >> $(ENVIRONMENT_SETUP_FILE)
-> +
-> +endef
-> +
-> +$(eval $(host-generic-package))
-> --
-> 2.7.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
--- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+diff --git a/package/solarus/Config.in b/package/solarus/Config.in
+index 6bed38a6f5..5d15342f3a 100644
+--- a/package/solarus/Config.in
++++ b/package/solarus/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_SOLARUS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+ 	depends on !BR2_STATIC_LIBS # SDL2
+ 	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_GLM
+ 	select BR2_PACKAGE_LIBMODPLUG
+ 	select BR2_PACKAGE_LIBOGG
+ 	select BR2_PACKAGE_LIBPNG # runtime
+diff --git a/package/solarus/solarus.hash b/package/solarus/solarus.hash
+index 3092b13507..8400bfd135 100644
+--- a/package/solarus/solarus.hash
++++ b/package/solarus/solarus.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 c14cd97bad6e12310b938d90abd4e8ebdd0abb403cdcc015d5add82dfc5a085b  solarus-v1.6.2.tar.bz2
++sha256  b2e00a7df8953903ba022a8f392038e86f675cee714da19cf9a5f8535c42f349  solarus-v1.6.4.tar.bz2
+ 
+-sha256 309875d925041d909bc705473d6c4b7905272aea15c1c2389088c26c161bae1f  license.txt
++sha256  309875d925041d909bc705473d6c4b7905272aea15c1c2389088c26c161bae1f  license.txt
+diff --git a/package/solarus/solarus.mk b/package/solarus/solarus.mk
+index 6f5853e909..92e849ef02 100644
+--- a/package/solarus/solarus.mk
++++ b/package/solarus/solarus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SOLARUS_VERSION = 1.6.2
++SOLARUS_VERSION = 1.6.4
+ SOLARUS_SITE = \
+ 	https://gitlab.com/solarus-games/solarus/-/archive/v$(SOLARUS_VERSION)
+ SOLARUS_SOURCE = solarus-v$(SOLARUS_VERSION).tar.bz2
+@@ -16,8 +16,8 @@ SOLARUS_LICENSE_FILES = license.txt
+ # Install libsolarus.so
+ SOLARUS_INSTALL_STAGING = YES
+ 
+-SOLARUS_DEPENDENCIES = libgl libmodplug libogg libvorbis openal physfs sdl2 \
+-	sdl2_image sdl2_ttf
++SOLARUS_DEPENDENCIES = glm libgl libmodplug libogg libvorbis openal physfs \
++	sdl2 sdl2_image sdl2_ttf
+ 
+ # Disable launcher GUI (requires Qt5)
+ SOLARUS_CONF_OPTS = \
