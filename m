@@ -1,47 +1,52 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Mon,  4 May 2020 20:33:02 +0200
-Subject: [Buildroot] [PATCH] package/python-redis: Bump to version 3.5.0
-Message-ID: <20200504183306.4305-1-grzegorz@blach.pl>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue,  5 May 2020 07:11:19 +0300
+Subject: [Buildroot] [PATCH] package/netsniff-ng: bump to version 0.6.7
+Message-ID: <20200505041119.632318-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
- package/python-redis/python-redis.hash | 6 +++---
- package/python-redis/python-redis.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+From: Vadym Kochan <vadim4j@gmail.com>
 
-diff --git a/package/python-redis/python-redis.hash b/package/python-redis/python-redis.hash
-index 02ec3bde5e..b30942311b 100644
---- a/package/python-redis/python-redis.hash
-+++ b/package/python-redis/python-redis.hash
+1. trafgen: reset errno before calling sscanf in str2mac (@troglobit, #213)
+2. ifpps: fix iface stat parsing if interface name contains uppercase
+   characters (@bganne, #215)
+3. mausezahn: fix display of missing argument error (@micrictor, #217)
+4. mausezahn: support -R to set packet priority (@pmachata)
+5. netsniff-ng: handle various malformed packets in protocol dissectors
+   (@nathaniellives, #221)
+
+Signed-off-by: Vadym Kochan <vadim4j@gmail.com>
+---
+ package/netsniff-ng/netsniff-ng.hash | 2 +-
+ package/netsniff-ng/netsniff-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
+index c9408ccbdb..80736f85c2 100644
+--- a/package/netsniff-ng/netsniff-ng.hash
++++ b/package/netsniff-ng/netsniff-ng.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/redis/json
--md5	c2062a26ea12b69e0d39a23451c89998  redis-3.4.1.tar.gz
--sha256	0dcfb335921b88a850d461dc255ff4708294943322bd55de6cfd68972490ca1f  redis-3.4.1.tar.gz
-+md5  5b432eff77163a353c520737d057e494  redis-3.5.0.tar.gz
-+sha256  7378105cd8ea20c4edc49f028581e830c01ad5f00be851def0f4bc616a83cd89  redis-3.5.0.tar.gz
- # Locally computed sha256 checksums
--sha256	790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
-+sha256  790148d8c12f8a38b2707a74be2343316bad126995ff54801a181b8b231ba124  LICENSE
-diff --git a/package/python-redis/python-redis.mk b/package/python-redis/python-redis.mk
-index a93ccfe020..273f55748b 100644
---- a/package/python-redis/python-redis.mk
-+++ b/package/python-redis/python-redis.mk
-@@ -4,9 +4,9 @@
+ # Locally calculated after checking signature
+-sha256  7949d38eb5b507700ea0f3c87e9f804d87b43f86ea5de0e961451044c2d3dba2  netsniff-ng-0.6.6.tar.xz
++sha256  96d85f2d216abcf6ba0ff610809b62c3a6430e21cbdd7bfef48cd9bde074848f  netsniff-ng-0.6.7.tar.xz
+ # Locally computed
+ sha256  b353349ba51e0d4b59cf2f188f0c285296e154ce8c58954bc5e0dc0282a4db2d  README
+ sha256  8f6d85366f3763557d6ddd0637988b9ba11edef354e3c9302fff4262a235c387  COPYING
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index 283ecaf245..46f1b3d152 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_REDIS_VERSION = 3.4.1
-+PYTHON_REDIS_VERSION = 3.5.0
- PYTHON_REDIS_SOURCE = redis-$(PYTHON_REDIS_VERSION).tar.gz
--PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/ef/2e/2c0f59891db7db087a7eeaa79bc7c7f2c039e71a2b5b0a41391e9d462926
-+PYTHON_REDIS_SITE = https://files.pythonhosted.org/packages/05/5e/5e9a329ba600244f2d37f86131ccec19936d41cba0887240086b44cf4f54
- PYTHON_REDIS_SETUP_TYPE = setuptools
- PYTHON_REDIS_LICENSE = MIT
- PYTHON_REDIS_LICENSE_FILES = LICENSE
+-NETSNIFF_NG_VERSION = 0.6.6
++NETSNIFF_NG_VERSION = 0.6.7
+ NETSNIFF_NG_SITE = http://pub.netsniff-ng.org/netsniff-ng
+ NETSNIFF_NG_SOURCE = netsniff-ng-$(NETSNIFF_NG_VERSION).tar.xz
+ NETSNIFF_NG_LICENSE = GPL-2.0
 -- 
 2.26.2
