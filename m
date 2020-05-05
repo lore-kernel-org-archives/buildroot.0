@@ -1,47 +1,35 @@
 From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Tue,  5 May 2020 14:07:20 +0200
-Subject: [Buildroot] [PATCH] package/modem-manager: test for the used
- packages, not for the MM option
-Message-ID: <20200505120720.258993-1-aleksander@aleksander.es>
+Date: Tue,  5 May 2020 14:06:06 +0200
+Subject: [Buildroot] [PATCH] package/network-manager: don't explicitly
+ select QMI/MBIM support
+Message-ID: <20200505120606.258656-1-aleksander@aleksander.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This allows user to either explicitly select the libraries it
-needs (e.g. libqmi and/or libmbim) and otherwise explicitly configure
-to request the QMI/MBIM features in ModemManager.
-
-This simplifies the build logic, and we avoid possible issues where a
-user that did select the library forgot to select the MM feature.
+When NetworkManager is built with ModemManager support, it should only
+require the generic ModemManager dependency; it shouldn't configure
+which features ModemManager provides.
 
 Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
 ---
- package/modem-manager/modem-manager.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/network-manager/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 75fc5811db..6b4e9b6250 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -13,7 +13,7 @@ MODEM_MANAGER_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
- MODEM_MANAGER_INSTALL_STAGING = YES
- MODEM_MANAGER_CONF_OPTS = --disable-more-warnings
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index e6a3f5f04f..7d44768460 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -40,8 +40,6 @@ config BR2_PACKAGE_NETWORK_MANAGER_TUI
+ config BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER
+ 	bool "modem-manager support"
+ 	select BR2_PACKAGE_MODEM_MANAGER
+-	select BR2_PACKAGE_MODEM_MANAGER_LIBMBIM
+-	select BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+ 	help
+ 	  This option enables support for ModemManager
  
--ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
-+ifeq ($(BR2_PACKAGE_LIBQMI),y)
- MODEM_MANAGER_DEPENDENCIES += libqmi
- MODEM_MANAGER_CONF_OPTS += --with-qmi
- else
-@@ -27,7 +27,7 @@ else
- MODEM_MANAGER_CONF_OPTS += --without-udev
- endif
- 
--ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBMBIM),y)
-+ifeq ($(BR2_PACKAGE_LIBMBIM),y)
- MODEM_MANAGER_DEPENDENCIES += libmbim
- MODEM_MANAGER_CONF_OPTS += --with-mbim
- else
 -- 
 2.26.1
