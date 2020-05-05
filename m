@@ -1,39 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 May 2020 23:05:34 +0200
-Subject: [Buildroot] [PATCH] package/zziplib: bump to version 0.13.71
-In-Reply-To: <20200504145212.3205471-1-romain.naour@gmail.com>
-References: <20200504145212.3205471-1-romain.naour@gmail.com>
-Message-ID: <20200505230534.6ea3d695@windsurf.home>
+Date: Tue, 5 May 2020 23:05:39 +0200
+Subject: [Buildroot] [PATCH v2] package/libnss: bump version to 3.52
+In-Reply-To: <20200504151036.122311-1-giulio.benetti@benettiengineering.com>
+References: <20200504151036.122311-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20200505230539.47012d8b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 May 2020 16:52:12 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+On Mon,  4 May 2020 17:10:36 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> Remove upstream patches and CVE tags.
+> Bump version to 3.52 and drop all patches since they've all been
+> upstreamed.
 > 
-> Switch the dependency to python3 added by [1].
+> Release notes:
+> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.52_release_notes
 > 
-> Update indentation of hash file (two spaces).
-> 
-> [1] https://github.com/gdraheim/zziplib/commit/a144bec8d06302e7be11f0f46e02947b0becf574
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
->  ...eak-from-__zzip_parse_root_directory.patch |  74 ----
->  ...k-from-__zzip_parse_root_directory-2.patch |  53 ---
->  ...3-One-more-free-to-avoid-memory-leak.patch |  25 --
->  ...omponents-from-pathnames-of-extracte.patch | 344 ------------------
->  package/zziplib/zziplib.hash                  |   8 +-
->  package/zziplib/zziplib.mk                    |  15 +-
->  6 files changed, 7 insertions(+), 512 deletions(-)
->  delete mode 100644 package/zziplib/0001-Avoid-memory-leak-from-__zzip_parse_root_directory.patch
->  delete mode 100644 package/zziplib/0002-Avoid-memory-leak-from-__zzip_parse_root_directory-2.patch
->  delete mode 100644 package/zziplib/0003-One-more-free-to-avoid-memory-leak.patch
->  delete mode 100644 package/zziplib/0004-Fix-issue-62-Remove-any-components-from-pathnames-of-extracte.patch
+> V1->V2:
+> * improve commit log
+> ---
+>  ...troduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch | 132 ------------------
+>  ...t-force-ARMv7-for-gcm-arm32-neon-r-j.patch |  30 ----
+>  package/libnss/libnss.hash                    |   4 +-
+>  package/libnss/libnss.mk                      |   2 +-
+>  4 files changed, 3 insertions(+), 165 deletions(-)
+>  delete mode 100644 package/libnss/0001-Bug-1620799-Introduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch
+>  delete mode 100644 package/libnss/0002-Bug-1624864-Don-t-force-ARMv7-for-gcm-arm32-neon-r-j.patch
 
 Applied to master, thanks.
 
