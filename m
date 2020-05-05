@@ -1,55 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 5 May 2020 18:54:57 +0200
-Subject: [Buildroot] [2020.02.x] package/libsepol: fix -fno-common build
- failures
-In-Reply-To: <20200505125546.4207-1-matthew.weber@rockwellcollins.com>
-References: <20200505125546.4207-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20200505165457.GE12536@scaer>
+Date: Tue, 5 May 2020 18:55:20 +0200
+Subject: [Buildroot] [PATCH] package/libsepol: fix -fno-common build
+ faiures
+In-Reply-To: <20200504154107.52309-1-matthew.weber@rockwellcollins.com>
+References: <20200504154107.52309-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20200505165520.GF12536@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+MAtthew, All,
 
-This patch from Matthew is a backport-with-modifications of the patch of
-the same title that went on master:
-
-    17e71b34621 package/libsepol: fix -fno-common build faiures
-
-So, do not cherry-pick the patch on master, but apply this one. ;-)
-
-Regards,
-Yann E. MORIN.
-
-On 2020-05-05 07:55 -0500, Matt Weber spake thusly:
->  GCC10 as a host complier has started to trigger these failures
-> 
+On 2020-05-04 10:41 -0500, Matt Weber spake thusly:
 >  Add upstream patch for
 >     libsepol: remove leftovers of cil_mem_error_handler
 >     libsepol: fix CIL_KEY_* build errors with -fno-common
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/1ebeed4bb1b0f5bca493ff687f879367eaeaf868
+> http://autobuild.buildroot.net/results/3d133ce6e83833f0c70a91270d0c49304c3413f6/
 > 
 > Cc: Romain Naour <romain.naour@gmail.com>
 > Cc: Adam Duskett <aduskett@gmail.com>
 > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
 > ---
->  ...IL_KEY_-build-errors-with-fno-common.patch | 525 ++++++++++++++++++
+>  ...IL_KEY_-build-errors-with-fno-common.patch | 528 ++++++++++++++++++
 >  ...e-leftovers-of-cil_mem_error_handler.patch |  63 +++
->  2 files changed, 588 insertions(+)
+>  2 files changed, 591 insertions(+)
 >  create mode 100644 package/libsepol/0002-libsepol-fix-CIL_KEY_-build-errors-with-fno-common.patch
 >  create mode 100644 package/libsepol/0003-libsepol-remove-leftovers-of-cil_mem_error_handler.patch
 > 
 > diff --git a/package/libsepol/0002-libsepol-fix-CIL_KEY_-build-errors-with-fno-common.patch b/package/libsepol/0002-libsepol-fix-CIL_KEY_-build-errors-with-fno-common.patch
 > new file mode 100644
-> index 0000000000..af13036884
+> index 0000000000..6876751ee0
 > --- /dev/null
 > +++ b/package/libsepol/0002-libsepol-fix-CIL_KEY_-build-errors-with-fno-common.patch
-> @@ -0,0 +1,525 @@
-> +From 6a30b31d31fb175f808ccedec1564943b9e91e78 Mon Sep 17 00:00:00 2001
+> @@ -0,0 +1,528 @@
+> +From a96e8c59ecac84096d870b42701a504791a8cc8c Mon Sep 17 00:00:00 2001
 > +From: Ondrej Mosnacek <omosnace@redhat.com>
 > +Date: Thu, 23 Jan 2020 13:57:13 +0100
 > +Subject: [PATCH] libsepol: fix CIL_KEY_* build errors with -fno-common
@@ -64,15 +58,15 @@ On 2020-05-05 07:55 -0500, Matt Weber spake thusly:
 > +Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
 > +Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 > +---
-> + cil/src/cil.c          | 161 +++++++++++++++++++++
-> + cil/src/cil_internal.h | 320 ++++++++++++++++++++---------------------
-> + 2 files changed, 321 insertions(+), 160 deletions(-)
+> + cil/src/cil.c          | 162 ++++++++++++++++
+> + cil/src/cil_internal.h | 322 ++++++++++++++++----------------
+> + 2 files changed, 323 insertions(+), 161 deletions(-)
 > +
 > +diff --git a/cil/src/cil.c b/cil/src/cil.c
-> +index 2a7ec06..14bd443 100644
+> +index de729cf8..d222ad3a 100644
 > +--- a/cil/src/cil.c
 > ++++ b/cil/src/cil.c
-> +@@ -77,6 +77,167 @@ int cil_sym_sizes[CIL_SYM_ARRAY_NUM][CIL_SYM_NUM] = {
+> +@@ -77,6 +77,168 @@ int cil_sym_sizes[CIL_SYM_ARRAY_NUM][CIL_SYM_NUM] = {
 > + 	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 > + };
 > + 
@@ -151,6 +145,7 @@ On 2020-05-05 07:55 -0500, Matt Weber spake thusly:
 > ++char *CIL_KEY_LOW;
 > ++char *CIL_KEY_HIGH;
 > ++char *CIL_KEY_LOW_HIGH;
+> ++char *CIL_KEY_GLBLUB;
 > ++char *CIL_KEY_HANDLEUNKNOWN;
 > ++char *CIL_KEY_HANDLEUNKNOWN_ALLOW;
 > ++char *CIL_KEY_HANDLEUNKNOWN_DENY;
@@ -241,10 +236,10 @@ On 2020-05-05 07:55 -0500, Matt Weber spake thusly:
 > + {
 > + 	/* Initialize CIL Keys into strpool */
 > +diff --git a/cil/src/cil_internal.h b/cil/src/cil_internal.h
-> +index 6ff3228..b07c068 100644
+> +index 30fab649..9bdcbdd0 100644
 > +--- a/cil/src/cil_internal.h
 > ++++ b/cil/src/cil_internal.h
-> +@@ -74,166 +74,166 @@ enum cil_pass {
+> +@@ -74,167 +74,167 @@ enum cil_pass {
 > + /*
 > + 	Keywords
 > + */
@@ -323,6 +318,7 @@ On 2020-05-05 07:55 -0500, Matt Weber spake thusly:
 > +-char *CIL_KEY_LOW;
 > +-char *CIL_KEY_HIGH;
 > +-char *CIL_KEY_LOW_HIGH;
+> +-char *CIL_KEY_GLBLUB;
 > +-char *CIL_KEY_HANDLEUNKNOWN;
 > +-char *CIL_KEY_HANDLEUNKNOWN_ALLOW;
 > +-char *CIL_KEY_HANDLEUNKNOWN_DENY;
@@ -483,6 +479,7 @@ On 2020-05-05 07:55 -0500, Matt Weber spake thusly:
 > ++extern char *CIL_KEY_LOW;
 > ++extern char *CIL_KEY_HIGH;
 > ++extern char *CIL_KEY_LOW_HIGH;
+> ++extern char *CIL_KEY_GLBLUB;
 > ++extern char *CIL_KEY_HANDLEUNKNOWN;
 > ++extern char *CIL_KEY_HANDLEUNKNOWN_ALLOW;
 > ++extern char *CIL_KEY_HANDLEUNKNOWN_DENY;
@@ -576,11 +573,11 @@ On 2020-05-05 07:55 -0500, Matt Weber spake thusly:
 > +
 > diff --git a/package/libsepol/0003-libsepol-remove-leftovers-of-cil_mem_error_handler.patch b/package/libsepol/0003-libsepol-remove-leftovers-of-cil_mem_error_handler.patch
 > new file mode 100644
-> index 0000000000..57ead4d7b4
+> index 0000000000..a1b016121f
 > --- /dev/null
 > +++ b/package/libsepol/0003-libsepol-remove-leftovers-of-cil_mem_error_handler.patch
 > @@ -0,0 +1,63 @@
-> +From 5f5f0dce25d46af57ddabd8713e548480f2460ab Mon Sep 17 00:00:00 2001
+> +From 3d32fc24d6aff360a538c63dad08ca5c957551b0 Mon Sep 17 00:00:00 2001
 > +From: Ondrej Mosnacek <omosnace@redhat.com>
 > +Date: Thu, 23 Jan 2020 13:57:14 +0100
 > +Subject: [PATCH] libsepol: remove leftovers of cil_mem_error_handler
@@ -603,7 +600,7 @@ On 2020-05-05 07:55 -0500, Matt Weber spake thusly:
 > + 2 files changed, 4 insertions(+), 5 deletions(-)
 > +
 > +diff --git a/cil/src/cil_mem.h b/cil/src/cil_mem.h
-> +index 902ce13..794f02a 100644
+> +index 902ce131..794f02a3 100644
 > +--- a/cil/src/cil_mem.h
 > ++++ b/cil/src/cil_mem.h
 > +@@ -36,7 +36,6 @@ void *cil_calloc(size_t num_elements, size_t element_size);
@@ -615,7 +612,7 @@ On 2020-05-05 07:55 -0500, Matt Weber spake thusly:
 > + #endif /* CIL_MEM_H_ */
 > + 
 > +diff --git a/cil/src/cil_strpool.c b/cil/src/cil_strpool.c
-> +index 97d4c4b..2598bbf 100644
+> +index 97d4c4b9..2598bbf3 100644
 > +--- a/cil/src/cil_strpool.c
 > ++++ b/cil/src/cil_strpool.c
 > +@@ -80,8 +80,8 @@ char *cil_strpool_add(const char *str)
