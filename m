@@ -1,36 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 May 2020 23:05:39 +0200
-Subject: [Buildroot] [PATCH v2] package/libnss: bump version to 3.52
-In-Reply-To: <20200504151036.122311-1-giulio.benetti@benettiengineering.com>
-References: <20200504151036.122311-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200505230539.47012d8b@windsurf.home>
+Date: Tue, 5 May 2020 23:05:45 +0200
+Subject: [Buildroot] [PATCH] package/python-redis: Bump to version 3.5.0
+In-Reply-To: <20200504183306.4305-1-grzegorz@blach.pl>
+References: <20200504183306.4305-1-grzegorz@blach.pl>
+Message-ID: <20200505230545.643f05cc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 May 2020 17:10:36 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On Mon,  4 May 2020 20:33:02 +0200
+Grzegorz Blach <grzegorz@blach.pl> wrote:
 
-> Bump version to 3.52 and drop all patches since they've all been
-> upstreamed.
-> 
-> Release notes:
-> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.52_release_notes
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 > ---
-> V1->V2:
-> * improve commit log
-> ---
->  ...troduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch | 132 ------------------
->  ...t-force-ARMv7-for-gcm-arm32-neon-r-j.patch |  30 ----
->  package/libnss/libnss.hash                    |   4 +-
->  package/libnss/libnss.mk                      |   2 +-
->  4 files changed, 3 insertions(+), 165 deletions(-)
->  delete mode 100644 package/libnss/0001-Bug-1620799-Introduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch
->  delete mode 100644 package/libnss/0002-Bug-1624864-Don-t-force-ARMv7-for-gcm-arm32-neon-r-j.patch
+>  package/python-redis/python-redis.hash | 6 +++---
+>  package/python-redis/python-redis.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
