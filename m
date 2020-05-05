@@ -1,43 +1,133 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Tue,  5 May 2020 14:07:35 +0200
-Subject: [Buildroot] [PATCH] package/modem-manager: update to release 1.12.8
-Message-ID: <20200505120735.259125-1-aleksander@aleksander.es>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  5 May 2020 18:36:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mbuffer: do not force c99 mode
+Message-ID: <20200505163657.45865-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://lists.freedesktop.org/archives/modemmanager-devel/2020-March/007729.html
+Do not force c99 mode to be able to remove both patches and because it
+does not seem to be motivated. Indeed, even if the second patch was
+sucessfully upstreamed. The first one can't be upstreamed as it raises
+the following build falure on Solaris 11 (due to mixing c99 and
+_POSIX_C_SOURCE):
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+ #if defined(STDC_C99) && (defined(_XOPEN_OR_POSIX) && !defined(XPG6))
+ #error "Compiler or options invalid for pre-UNIX 03 X/Open applications \
+ and pre-2001 POSIX applications"
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...perly-get-struct-timespec-definition.patch | 38 -------------------
+ ...gure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch | 38 -------------------
+ package/mbuffer/mbuffer.mk                    |  3 --
+ 3 files changed, 79 deletions(-)
+ delete mode 100644 package/mbuffer/0001-globals.c-properly-get-struct-timespec-definition.patch
+ delete mode 100644 package/mbuffer/0002-configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index f9d790cd0c..2fb10368c8 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  2eb3353ee5518005c51d429308695c69d8c38cf2fd9102b04f785c03a0cc624c  ModemManager-1.12.6.tar.xz
-+sha256  68b53d0615ba0d3e2bbf386ed029dfe644a6a30a79ab8d85523527bb4e713aff  ModemManager-1.12.8.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 6b4e9b6250..1d854840c3 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mbuffer/0001-globals.c-properly-get-struct-timespec-definition.patch b/package/mbuffer/0001-globals.c-properly-get-struct-timespec-definition.patch
+deleted file mode 100644
+index fd14a5d759..0000000000
+--- a/package/mbuffer/0001-globals.c-properly-get-struct-timespec-definition.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 1fc7ac1e29eb6a0311d2d4c209f55adb92740d50 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Mon, 13 Apr 2020 09:56:16 +0200
+-Subject: [PATCH] globals.c: properly get 'struct timespec' definition
+-
+-'struct timespec' is defined in <time.h>, and according to man
+-nanosleep(2), only available if _POSIX_C_SOURCE >= 199309L.
+-
+-Fixes:
+-
+-globals.c:90:2: error: storage size of 'Starttime' isn't known
+-  Starttime;
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- globals.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/globals.c b/globals.c
+-index 5c10312..1c0ce80 100644
+---- a/globals.c
+-+++ b/globals.c
+-@@ -17,10 +17,11 @@
+-  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-  */
+- 
+-+#define _POSIX_C_SOURCE 199309L
+- #include "dest.h"
+- #include "globals.h"
+- #include <fcntl.h>
+--#include <sys/time.h>
+-+#include <time.h>
+- 
+- dest_t *Dest = 0;
+- 
+--- 
+-2.25.2
+-
+diff --git a/package/mbuffer/0002-configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch b/package/mbuffer/0002-configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch
+deleted file mode 100644
+index 661586ce02..0000000000
+--- a/package/mbuffer/0002-configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 03db384ff0413d003de271355f59aba8c3f815a1 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 21 Apr 2020 14:30:20 +0200
+-Subject: [PATCH] configure.in: set AC_USE_SYSTEM_EXTENSIONS
+-
+-Set AC_USE_SYSTEM_EXTENSIONS so _POSIX_SOURCE will be defined and the
+-following build failure will be avoided when building in c89 or c99
+-mode:
+-
+-log.c: In function 'infomsg':
+-log.c:123:12: error: 'PIPE_BUF' undeclared (first use in this function)
+-   if (s <= PIPE_BUF) {
+-            ^~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/5f4e9079b3377a869ec7002a8138b80eb6194bbb
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: sent to thomas at maier-komor.de]
+----
+- configure.in | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/configure.in b/configure.in
+-index 02921c2..aba4af0 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -3,6 +3,7 @@ AC_CONFIG_HEADER(config.h)
+- 
+- AC_CANONICAL_SYSTEM
+- AC_EXEEXT
+-+AC_USE_SYSTEM_EXTENSIONS
+- 
+- PACKAGE=mbuffer
+- VERSION=20140310
+--- 
+-2.25.1
+-
+diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
+index 324780fe69..f87b2b114f 100644
+--- a/package/mbuffer/mbuffer.mk
++++ b/package/mbuffer/mbuffer.mk
+@@ -10,9 +10,6 @@ MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
+ MBUFFER_LICENSE = GPL-3.0+
+ MBUFFER_LICENSE_FILES = LICENSE
+ MBUFFER_CONF_OPTS = --disable-debug
+-MBUFFER_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
+-# We're patching configure.in
+-MBUFFER_AUTORECONF = YES
  
--MODEM_MANAGER_VERSION = 1.12.6
-+MODEM_MANAGER_VERSION = 1.12.8
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+ # we don't need tests & co. so we specify a target
+ # so that the others don't get built, e.g idev.so
 -- 
-2.26.1
+2.26.2
