@@ -1,135 +1,43 @@
-From: Shyam Saini <mayhs11saini@gmail.com>
-Date: Tue,  5 May 2020 09:22:43 -0400
-Subject: [Buildroot] [V4 PATCH 1/1] cukinia: new package
-In-Reply-To: <20200505132243.16773-1-shyam.saini@savoirfairelinux.com>
-References: <20200505132243.16773-1-shyam.saini@savoirfairelinux.com>
-Message-ID: <20200505132243.16773-2-shyam.saini@savoirfairelinux.com>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Tue,  5 May 2020 14:07:35 +0200
+Subject: [Buildroot] [PATCH] package/modem-manager: update to release 1.12.8
+Message-ID: <20200505120735.259125-1-aleksander@aleksander.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Shyam Saini <mayhs11saini@gmail.com>
+https://lists.freedesktop.org/archives/modemmanager-devel/2020-March/007729.html
 
-Cukinia is a test framework designed to help Linux-based embedded
-systems developers run simple system-level validation tests on their
-firmware.
-
-It is designed to integrate well with embedded Linux systems
-generation tools, and can be run manually (providing a quick
-colourized summary to eye-catch regressions), or any of continuous
-available integration framework, by generating Junit-XML or CSV test
-reports.
-
-Signed-off-by: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
-Signed-off-by: Shyam Saini <shyam.saini@savoirfairelinux.com>
-Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
 ---
- DEVELOPERS                   |  3 +++
- package/Config.in            |  1 +
- package/cukinia/Config.in    | 15 +++++++++++++++
- package/cukinia/cukinia.conf |  4 ++++
- package/cukinia/cukinia.hash |  4 ++++
- package/cukinia/cukinia.mk   | 20 ++++++++++++++++++++
- 6 files changed, 47 insertions(+)
- create mode 100644 package/cukinia/Config.in
- create mode 100644 package/cukinia/cukinia.conf
- create mode 100644 package/cukinia/cukinia.hash
- create mode 100644 package/cukinia/cukinia.mk
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e427ab15d4..a207d76cdc 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2342,6 +2342,9 @@ F:	package/tunctl/
- F:	package/ubus/
- F:	package/wolfssl/
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index f9d790cd0c..2fb10368c8 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  2eb3353ee5518005c51d429308695c69d8c38cf2fd9102b04f785c03a0cc624c  ModemManager-1.12.6.tar.xz
++sha256  68b53d0615ba0d3e2bbf386ed029dfe644a6a30a79ab8d85523527bb4e713aff  ModemManager-1.12.8.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 6b4e9b6250..1d854840c3 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+N:	Shyam Saini <shyam.saini@savoirfairelinux.com>
-+F:	package/cukinia/
-+
- N:	Simon Dawson <spdawson@gmail.com>
- F:	boot/at91bootstrap3/
- F:	package/cppzmq/
-diff --git a/package/Config.in b/package/Config.in
-index c12676d859..4d41af667b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -153,6 +153,7 @@ menu "Development tools"
- 	source "package/check/Config.in"
- 	source "package/cmake/Config.in"
- 	source "package/cppunit/Config.in"
-+	source "package/cukinia/Config.in"
- 	source "package/cunit/Config.in"
- 	source "package/cvs/Config.in"
- 	source "package/cxxtest/Config.in"
-diff --git a/package/cukinia/Config.in b/package/cukinia/Config.in
-new file mode 100644
-index 0000000000..37373e9a08
---- /dev/null
-+++ b/package/cukinia/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_CUKINIA
-+	bool "cukinia"
-+	select BR2_PACKAGE_GAWK if !BR2_PACKAGE_BUSYBOX
-+	help
-+	  Cukinia is designed to help Linux-based embedded firmware
-+	  developers run system-level validation tests on their product.
-+	  It provides a simple POSIX shell overlay, and primitives to
-+	  make sure system integrations and features keep behaving the
-+	  way they should.
-+
-+	  By default, cukinia reports colorized test results on stdout,
-+	  but can also report them as CSV and JUnit-XML for easy
-+	  integration with CI systems such as Jenkins.
-+
-+	  https://github.com/savoirfairelinux/cukinia
-diff --git a/package/cukinia/cukinia.conf b/package/cukinia/cukinia.conf
-new file mode 100644
-index 0000000000..e5f304d39f
---- /dev/null
-+++ b/package/cukinia/cukinia.conf
-@@ -0,0 +1,4 @@
-+# Note: Cukinia will produce colorized output if the TERM environment
-+# variable matches vt220, xterm or linux.
-+cukinia_log $(_colorize blue "############# Cukinia tests ##############")
-+cukinia_user root
-diff --git a/package/cukinia/cukinia.hash b/package/cukinia/cukinia.hash
-new file mode 100644
-index 0000000000..e6ae602011
---- /dev/null
-+++ b/package/cukinia/cukinia.hash
-@@ -0,0 +1,4 @@
-+# locally computed
-+sha256  b867ec63e448e7fa0a9276f6844a8b3a8f92d99e63e8518fe24e9debd32679b5  cukinia-0.5.1.tar.gz
-+sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPLv3
-diff --git a/package/cukinia/cukinia.mk b/package/cukinia/cukinia.mk
-new file mode 100644
-index 0000000000..097dbdd5f6
---- /dev/null
-+++ b/package/cukinia/cukinia.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# cukinia
-+#
-+################################################################################
-+
-+CUKINIA_VERSION = 0.5.1
-+CUKINIA_SITE = $(call github,savoirfairelinux,cukinia,v$(CUKINIA_VERSION))
-+CUKINIA_LICENSE = Apache-2.0 or GPL-3.0
-+CUKINIA_LICENSE_FILES = LICENSE LICENSE.GPLv3
-+
-+define CUKINIA_INSTALL_TARGET_CMDS
-+        $(INSTALL) -D -m 0755 $(@D)/cukinia \
-+                $(TARGET_DIR)/usr/bin/cukinia
-+
-+        $(INSTALL) -D -m 0644 $(CUKINIA_PKGDIR)/cukinia.conf \
-+                $(TARGET_DIR)/etc/cukinia/cukinia.conf
-+endef
-+
-+$(eval $(generic-package))
+-MODEM_MANAGER_VERSION = 1.12.6
++MODEM_MANAGER_VERSION = 1.12.8
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
 -- 
-2.20.1
+2.26.1
