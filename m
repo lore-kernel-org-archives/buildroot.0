@@ -1,24 +1,88 @@
-From: Kunal Chauhan <atkunalchauhan@gmail.com>
-Date: Tue, 5 May 2020 22:29:10 +0530
-Subject: [Buildroot] Help: to understand build root
-In-Reply-To: <CACEFAc0DRGJW8ghzBVudK-cqd0Lx-hhgQ6GgiaPdeCLzLn21NQ@mail.gmail.com>
-References: <CACEFAc1QeQku=aibzMQe=2HFBvyzwPOgShZTUoV17SHtCVXOPA@mail.gmail.com>
- <CACEFAc01hFsebRqH5diNd2_8J6AGHczkBB3EJgh93OB139WWug@mail.gmail.com>
- <CACEFAc3T1xqV8iUhOokt1cWUNY=TOoEWR+ULE8h9YXKGWew1KA@mail.gmail.com>
- <CACEFAc0DRGJW8ghzBVudK-cqd0Lx-hhgQ6GgiaPdeCLzLn21NQ@mail.gmail.com>
-Message-ID: <CACEFAc0JjWhwwEavK7o8-4bckY+rdpnK3kXb4w9rHPop6SpjVw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 5 May 2020 19:06:53 +0200
+Subject: [Buildroot] [PATCH] package/modem-manager: use libqmi and
+ libmbim if they are selected
+In-Reply-To: <20200419230056.7df2d309@windsurf.home>
+References: <20191104124844.8112-1-unixmania@gmail.com>
+ <20200419230056.7df2d309@windsurf.home>
+Message-ID: <20200505170653.GG12536@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Team,
+Thomas, Aleksander, All,
 
-Q1.As busybox is a small flavour of linux os.if i am not wrong?
+On 2020-04-19 23:00 +0200, Thomas Petazzoni spake thusly:
+> Hello Carlos, Aleksander, Yegor,
+> 
+> On Mon,  4 Nov 2019 09:48:44 -0300
+> unixmania at gmail.com wrote:
+> 
+> > If we have a cnfiguration like this
+> > 
+> >     BR2_PACKAGE_MODEM_MANAGER=y
+> >     # BR2_PACKAGE_MODEM_MANAGER_LIBMBIM is not set
+> >     BR2_PACKAGE_MODEM_MANAGER_LIBQMI=y
+> >     [...]
+> >     BR2_PACKAGE_LIBMBIM=y
+> 
+> I had a new look at this. We need a new iteration of this patch, since
+> the build issue doesn't exist anymore.
+> 
+> However, I would suggest to take a simpler approach:
+> 
+>  - Keep the BR2_PACKAGE_MODEM_MANAGER_LIBMBIM and
+>    BR2_PACKAGE_MODEM_MANAGER_LIBQMI options.
+> 
+>  - Change modem-manager.mk to test BR2_PACKAGE_LIBMBIM and
+>    BR2_PACKAGE_QMI instead of BR2_PACKAGE_MODEM_MANAGER_LIBMBIM and
+>    BR2_PACKAGE_MODEM_MANAGER_LIBQMI.
 
-Q2. What is concept of build-root. As i have seen code base compiled and
-create build-root folder .
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200505/9a41868a/attachment.html>
+Sorry, but I disagree here: a user who elects to not enable 'MBIM
+support' in modem-manager, but otherwise has libmbim enabled (for
+whatever reason) will in fact get a modem-mamanger that has support for
+MBIM. This is definitely counter-intuitive.
+
+Ditto libqmi.
+
+So I would rather agree with the original patch from Carlos (except for
+the legacy handling, which is indeed not needed).
+
+> Also, as was pointed out during the discussion, it would be good to
+> change the network-manager package to not force the modem-manager
+> MBIM/QMI support when modem-manager support is enabled. I.e, remove the
+> following lines:
+> 
+>         select BR2_PACKAGE_MODEM_MANAGER_LIBMBIM
+>         select BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+> 
+> from package/network-manager/Config.in
+
+I do agree with that too, which must be done in a separate patch.
+
+Regards,
+Yann E. MORIN.
+
+> Could one of you have a look ?
+> 
+> Thanks a lot!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
