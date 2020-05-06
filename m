@@ -1,58 +1,83 @@
-From: Johan Derycke <johanderycke@gmail.com>
-Date: Wed, 6 May 2020 16:33:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump to
- v1.1.1g
-In-Reply-To: <20200421222954.3781cc2a@windsurf.home>
-References: <20200421133651.6921-1-titouan.christophe@railnova.eu>
- <20200421222954.3781cc2a@windsurf.home>
-Message-ID: <CAKHhJn1v32s9ZtbFBxF=-hrCvxpnoEx1JJV6x_kkudVL6X4E8w@mail.gmail.com>
+From: michal.lyszczek at bofc.pl <michal.lyszczek@bofc.pl>
+Date: Wed, 06 May 2020 17:06:55 +0200
+Subject: [Buildroot] [PATCH] configs/rockpro64: new defconfig
+In-Reply-To: <20200503201501.brpmmjezpgfcxqif@marchewa.redembedded.pl>
+References: <1588372460-5296-1-git-send-email-sunil@amarulasolutions.com>
+ <379680d1-7ba1-fb36-cdf4-e5f7985c4cd4@gmail.com>
+ <CAM+7aWsjaOtzdLiubXjkx2JDcKd67NJgGif9ZkB=0UdvrW34kg@mail.gmail.com>
+ <eecc3083-2c9e-161c-d886-0b92bba79eb0@gmail.com>
+ <20200503201501.brpmmjezpgfcxqif@marchewa.redembedded.pl>
+Message-ID: <20200506150655.uqbqekv3mlanj3cc@marchewa.redembedded.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 2020-05-03 22:15:01, michal.lyszczek at bofc.pl wrote:
+> On 2020-05-03 11:54:07, Romain Naour wrote:
+> > >     Not related to this patch but our rock64 defconfig is currently broken [1] since
+> > >     a while due to incompatibility between uboot-2017.09-rockchip-ayufan fork and
+> > >     pylibfdt. Even with the latest version [2], it doesn't build.
+> > > 
+> > >     Do you think we can update to rock64 uboot to 2020.04 and use
+> > >     rock64-rk3328_defconfig ?
+> > > 
+> > >     [1] https://gitlab.com/buildroot.org/buildroot/-/jobs/535054620
+> > >     [2]
+> > >     https://github.com/ayufan-rock64/linux-u-boot/releases/tag/2017.09-rockchip-ayufan-1065-g95f6152134
+> > > 
+> > >     Thanks!
+> > > 
+> > > 
+> > > Yes you can try that, also you can bump up kernel and ATF versions. Hope that works.
+> > 
+> > I changed those lines:
+> > 
+> > -BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> > -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ayufan-rock64/linux-u-boot.git"
+> > -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="2017.09-rockchip-ayufan-1035-gd646df03ac"
+> > +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
+> > 
+> > Indeed it build correctly but I can't do a runtime test, I don't have the board.
+> > 
+> > Micha?: At some point the defconfig will be removed if nobody is able to test.
+> 
+> Hi,
+> 
+> Don't remember the reason, but official uboot was not working for me, and
+> that's the reason why I used uboot from ayufan. Maybe things will be
+> different in 2020.04.
+> 
+> I still have my rock64 board so I will look into this next week.
 
-Can this be applied to 2020.2.x, please?
+Ok, I've chcked this.
 
-Thanks,
+ayufan repo did not compile for me, I tried to fix it, but nothing really
+worked, and I do not fully understand what is going on there. Also
+ayufan repo seems to be dead now, last commit almost 2 years ago.
 
-Johan
 
-Op di 21 apr. 2020 om 22:30 schreef Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> On Tue, 21 Apr 2020 15:36:51 +0200
-> Titouan Christophe <titouan.christophe@railnova.eu> wrote:
->
-> > This fixes CVE-2020-1967:
-> > Server or client applications that call the SSL_check_chain() function during
-> > or after a TLS 1.3 handshake may crash due to a NULL pointer dereference as a
-> > result of incorrect handling of the "signature_algorithms_cert" TLS extension.
-> > The crash occurs if an invalid or unrecognised signature algorithm is received
-> > from the peer. This could be exploited by a malicious peer in a Denial of
-> > Service attack. OpenSSL version 1.1.1d, 1.1.1e, and 1.1.1f are affected by this
-> > issue. This issue did not affect OpenSSL versions prior to 1.1.1d.
-> >
-> > See https://www.openssl.org/news/secadv/20200421.txt
-> >
-> > Also update the hash file to the new two spaces convention
-> >
-> > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> > ---
-> >  package/libopenssl/libopenssl.hash | 6 +++---
-> >  package/libopenssl/libopenssl.mk   | 2 +-
-> >  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> Applied to master, thanks.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+uboot from rockchip does not build, gcc complains about unrecognized
+-mabi=aapcs-linux option.
+
+
+official uboot builds, but it won't boot due to error while reading
+mmc block (mmc_load_image_raw_sector: mmc block read error)
+
+
+This would take me quite some time to figure this out and I really don't
+want to waste my time on that board. Especially now that we have
+raspberry pi 4.
+
+So, for me, that board can be removed. If someone wants to patch
+libftd in ayufan repo (so that the code compiles) I can take it
+and test on the hardware.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 488 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200506/5dc7f06a/attachment.asc>
