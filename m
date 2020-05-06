@@ -1,49 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 May 2020 09:39:40 +0200
-Subject: [Buildroot] [PATCH] packages/exim: enable parallel make
-In-Reply-To: <26ba2f56-3ac7-3364-848c-4d0cd3a8c9a3@lucaceresoli.net> (Luca
- Ceresoli's message of "Wed, 6 May 2020 09:09:39 +0200")
-References: <20200420163645.17803-1-luca@lucaceresoli.net>
- <87wo5pbo14.fsf@dell.be.48ers.dk>
- <26ba2f56-3ac7-3364-848c-4d0cd3a8c9a3@lucaceresoli.net>
-Message-ID: <87o8r1bjgj.fsf@dell.be.48ers.dk>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Wed, 6 May 2020 05:56:43 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-05-03
+In-Reply-To: <5eafb5ae.1c69fb81.42e5e.0beeSMTPIN_ADDED_MISSING@mx.google.com>
+References: <5eafb5ae.1c69fb81.42e5e.0beeSMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <CANu7NGt1otOuWrPo_g5UqZkV7r2GFvEMLg5Ffddv53B2w--CBQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+Hi Thomas, all,
 
- > Hi Peter,
- > On 06/05/20 08:00, Peter Korsgaard wrote:
- >>>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
- >> 
- >> > Parallel make used to be broken in exim, as reported in its docs. Now that
- >> > line has disappeared from the docs, and parallel make is actually working.
- >> 
- >> > Tested with 'make exim-dirclean ; time make BR2_JLEVEL=999 exim': builds
- >> > still succeed and the build time decreases from 34 to 11 seconds on my
- >> > host.
- >> 
- >> > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
- >> > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
- >> 
- >> Committed to 2020.02.x, thanks.
+Em seg., 4 de mai. de 2020 ?s 03:26, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> escreveu:
+>
+> Hello,
+>
+> Outdated packages
+> =================
+>
+> This is the list of packages for which a new version has been detected
+> and for which you are a registered developer. Please help us improving
+> the quality of Buildroot by bumping these packages to their latest
+> version. Thanks!
+>
+>              name              | found by |        link to
+release-monitoring.org        |   version    |   upstream
+>
+-------------------------------+----------+----------------------------------------------+--------------+--------------
+>                            daq |  DISTRO  |
+https://release-monitoring.org/project/13264 | 2.0.6        | 2.0.7
+>                     libgdiplus |  DISTRO  |
+https://release-monitoring.org/project/06440 | 5.6          | 6.0.5
 
- > Does this patch really belong to a stable branch?
+I sent a patch to bump libgdiplus but it is not showing up in the
+patchwork. Last week I sent an email to the list notifying this issue and
+then I received an automatic answer saying that "my message awaits
+moderator approval" because "Message body is too big: 387213 bytes with a
+limit of 300 KB". Maybe that's the reason the patch is not showing up in
+the patchwork?
 
-I agree that it is a gray zone. Given that there weren't any followup
-fixups on master since then (or so I thought, it turned out my tree was
-not uptodate) I found it "safe".
+Thanks,
 
- > If it does, then you should also apply [0] or we'll start seeing
- > parallel build failures on 2020.02.x too.
-
- > [0]
- > https://git.busybox.net/buildroot/commit/?id=8c75f95e0a3d2600015be5564ee9fe9393d95ebc
-
-I'll do so later today. Yann also pointed that out to me.
-
--- 
-Bye, Peter Korsgaard
+Sergio Prado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200506/9f6b0fd7/attachment.html>
