@@ -1,54 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 07:03:24 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libssh: security
- bump to version 0.9.4
-Message-ID: <20200506051931.37D707FD28@busybox.osuosl.org>
+Date: Wed, 6 May 2020 07:13:37 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/mbedtls: security
+ bump to version 2.16.6
+Message-ID: <20200506051931.7EC02821B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c16f29ee1228fef87ee0f621d95d0e6705b5ac9
+commit: https://git.buildroot.net/buildroot/commit/?id=47c67ff56a40e242438d4bbb67fced4ad9d762c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes CVE-2020-1730: Possible DoS in client and server when handling
-AES-CTR keys with OpenSSL.
+- Fix CVE-2020-10932: fix side channel in ECC code that allowed an
+  adversary with access to precise enough timing and memory access
+  information (typically an untrusted operating system attacking a
+  secure enclave) to fully recover an ECDSA private key.
+- Fix a potentially remotely exploitable buffer overread in a DTLS
+  client when parsing the Hello Verify Request message.
+- Fix bug in DTLS handling of new associations with the same parameters
+  (RFC 6347 section 4.2.8): after sending its HelloVerifyRequest, the
+  server would end up with corrupted state and only send invalid records
+  to the client. An attacker able to send forged UDP packets to the
+  server could use that to obtain a Denial of Service. This could only
+  happen when MBEDTLS_SSL_DTLS_CLIENT_PORT_REUSE was enabled in
+  config.h (which it is by default).
 
-Format hash file with two spaces delimiter.
-
-Cc: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6b8a47e29252908b294bda0d089fab443db99903)
+(cherry picked from commit b5704f8869dc1f82790816e38de52aac6d709ffe)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libssh/libssh.hash | 4 ++--
- package/libssh/libssh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mbedtls/mbedtls.hash | 6 +++---
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index ca296701bf..62b860300a 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 92e7d35a64..17ac18bb25 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
- # https://www.libssh.org/files/0.9/libssh-0.9.3.tar.xz.asc
- # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
--sha256 2c8b5f894dced58b3d629f16f3afa6562c20b4bdc894639163cf657833688f0c  libssh-0.9.3.tar.xz
--sha256 1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
-+sha256  150897a569852ac05aac831dc417a7ba8e610c86ca2e0154a99c6ade2486226b  libssh-0.9.4.tar.xz
-+sha256  1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 52517a5dd0..abc9aec9a3 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.5-and-2.7.14-released
+-sha1  c36962183e05467aa1dadafcaacf90216a737866  mbedtls-2.16.5-apache.tgz
+-sha256  65b4c6cec83e048fd1c675e9a29a394ea30ad0371d37b5742453f74084e7b04d  mbedtls-2.16.5-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.6-and-2.7.15-released
++sha1  3cb5b681597a5bd798d31038c129c0dc911d8a2c  mbedtls-2.16.6-apache.tgz
++sha256  66455e23a6190a30142cdc1113f7418158839331a9d8e6b0778631d077281770  mbedtls-2.16.6-apache.tgz
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 5d0dd87339..50121fa6c7 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- LIBSSH_VERSION_MAJOR = 0.9
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).3
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).4
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.16.5
++MBEDTLS_VERSION = 2.16.6
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
