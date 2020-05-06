@@ -1,25 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 May 2020 07:20:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to
- 7.4.5
-In-Reply-To: <20200416174135.1632869-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 16 Apr 2020 19:41:35 +0200")
-References: <20200416174135.1632869-1-bernd.kuhls@t-online.de>
-Message-ID: <87a72lfxlj.fsf@dell.be.48ers.dk>
+Date: Wed, 06 May 2020 07:21:38 +0200
+Subject: [Buildroot] [PATCH] package/python-dpkt: remove Python2 only
+ dependency
+In-Reply-To: <20200416052754.2628-1-yegorslists@googlemail.com> (yegorslists's
+ message of "Thu, 16 Apr 2020 07:27:54 +0200")
+References: <20200416052754.2628-1-yegorslists@googlemail.com>
+Message-ID: <875zd9fxjx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
- > Changelog: https://www.php.net/ChangeLog-7.php#7.4.5
- > Fixes CVE-2020-7067.
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > python-dpkt supports both Python flavors.
 
- > Removed patch applied upstream.
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Committed to 2020.02.x, thanks.
 
