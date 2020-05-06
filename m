@@ -1,38 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 07:00:40 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] board/udoo/neo: create
- boot.scr in TARGET_DIR/boot
-Message-ID: <20200506051931.252908D59C@busybox.osuosl.org>
+Date: Wed, 6 May 2020 07:28:07 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/php: fix zip
+ support
+Message-ID: <20200506051932.44684882AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52bfa18f8fd112ef1f9adef2e3941f2214cbe52c
+commit: https://git.buildroot.net/buildroot/commit/?id=ab30ce809cde5643cf11c6fb6adcb97eade0abea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-There is no reason to create boot.scr in board/udoo/neo and later
-install it in TARGET_DIR/boot, leaving a stale file behind.
+since php7.4, --enable-zip becomes --with-zip due to
+migration to pkg-config.
 
+Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2306339d1fe8d5ea2d9e17641f78a374f612f45e)
+(cherry picked from commit ac2b371732b20bacce9c79b7f3b824bd68b94242)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/udoo/neo/post-build.sh | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/php/php.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/udoo/neo/post-build.sh b/board/udoo/neo/post-build.sh
-index 43e091c5d7..6ccd87fafd 100755
---- a/board/udoo/neo/post-build.sh
-+++ b/board/udoo/neo/post-build.sh
-@@ -2,7 +2,6 @@
- 
- BOARD_DIR="$(dirname $0)"
- 
-+install -d -m 755 $TARGET_DIR/boot
- $HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
---n "boot script" -d $BOARD_DIR/boot.scr.txt $BOARD_DIR/boot.scr
--
--install -m 0644 -D $BOARD_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-+	-n "boot script" -d $BOARD_DIR/boot.scr.txt $TARGET_DIR/boot/boot.scr
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 91f82dbf31..8282bb1cc7 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -113,7 +113,7 @@ PHP_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_PHP_EXT_SYSVMSG),--enable-sysvmsg) \
+ 	$(if $(BR2_PACKAGE_PHP_EXT_SYSVSEM),--enable-sysvsem) \
+ 	$(if $(BR2_PACKAGE_PHP_EXT_SYSVSHM),--enable-sysvshm) \
+-	$(if $(BR2_PACKAGE_PHP_EXT_ZIP),--enable-zip) \
++	$(if $(BR2_PACKAGE_PHP_EXT_ZIP),--with-zip) \
+ 	$(if $(BR2_PACKAGE_PHP_EXT_CTYPE),--enable-ctype) \
+ 	$(if $(BR2_PACKAGE_PHP_EXT_FILTER),--enable-filter) \
+ 	$(if $(BR2_PACKAGE_PHP_EXT_CALENDAR),--enable-calendar) \
