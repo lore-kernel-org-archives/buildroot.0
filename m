@@ -1,42 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 07:52:04 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/haproxy: fix
- build on m68k
-Message-ID: <20200506055036.B2C2490EAF@busybox.osuosl.org>
+Date: Wed, 6 May 2020 07:50:31 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/lvm2: install
+ systemd units and generators
+Message-ID: <20200506055036.A209790EB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2328b9dc6b2b15ae9b36a5ba590a85701a1ead1a
+commit: https://git.buildroot.net/buildroot/commit/?id=f65af19271c1520ad913b3bf94dbf172d74bdb5f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-When threads are enabled, haproxy expects that pthread_getcpuclockid is
-available which is not the case on m68k. Fix this by enabling threads
-support only if NPTL is available.
-
-Fixes:
- - http://autobuild.buildroot.org/results/52cc4b1fcac2a4fc84ab15ec4c692d2cd9b6d8bd
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fb7fd98774b94d7c50f381ae4e2d005db21afb3e)
+(cherry picked from commit cb0ce03ba636c610f52c6446fc3ad176fbc6c03c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haproxy/haproxy.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lvm2/lvm2.mk | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 6752367fac..e59896b485 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -19,7 +19,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- HAPROXY_LIBS += -latomic
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 43370b03bf..02c758ea08 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -31,6 +31,9 @@ LVM2_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
+ # package/readline is GPL-3.0+, so not license compatible
+ LVM2_CONF_OPTS += --disable-readline
+ 
++LVM2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR)
++LVM2_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR)
++
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ LVM2_CONF_OPTS += --enable-udev_rules
+ endif
+@@ -44,8 +47,11 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),)
+ LVM2_MAKE_OPTS = device-mapper
+-LVM2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install_device-mapper
+-LVM2_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install_device-mapper
++LVM2_INSTALL_STAGING_OPTS += install_device-mapper
++LVM2_INSTALL_TARGET_OPTS += install_device-mapper
++else
++LVM2_INSTALL_STAGING_OPTS += install
++LVM2_INSTALL_TARGET_OPTS += install
  endif
  
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
- # threads uses atomics on gcc >= 4.7 and sync otherwise (see
- # include/common/hathreads.h)
- ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7):$(BR2_TOOLCHAIN_HAS_ATOMIC),y:y)
+ ifeq ($(BR2_PACKAGE_LVM2_APP_LIBRARY),y)
+@@ -54,6 +60,10 @@ else
+ LVM2_CONF_OPTS += --disable-applib
+ endif
+ 
++ifeq ($(BR2_INIT_SYSTEMD),y)
++LVM2_INSTALL_TARGET_OPTS += install_systemd_units install_systemd_generators
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+ LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
+ endif
