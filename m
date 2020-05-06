@@ -1,41 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 07:15:01 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-iptables:
- add explicit dependency on dynamic libs
-Message-ID: <20200506051931.924CC811F5@busybox.osuosl.org>
+Date: Wed, 6 May 2020 07:00:34 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] board/solidrun/mx6cubox:
+ create boot.scr in TARGET_DIR/boot
+Message-ID: <20200506051931.15A368D59C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6d45c45cb0e0e0a7080350dadb2eccefdaa8b0f
+commit: https://git.buildroot.net/buildroot/commit/?id=6569f398eede2efde7c9dacf66fc5e0868c27bcb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-The package uses ctypes.CDLL extensively which only makes sense when dynamic
-libraries are available.
+There is no reason to create boot.scr in board/solidrun/mx6cubox and
+later install it in TARGET_DIR/boot, leaving a stale file behind.
 
-Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 21b85bc56cdcf030cced57dea0f78cdce59912b8)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9ddbd11620b5a01945a438085d45ef2131bad35f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-iptables/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ board/solidrun/mx6cubox/post-build.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-iptables/Config.in b/package/python-iptables/Config.in
-index e55359963e..a35577bad3 100644
---- a/package/python-iptables/Config.in
-+++ b/package/python-iptables/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_PYTHON_IPTABLES
- 	bool "python-iptables"
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_IPTABLES # runtime dependency
- 	help
- 	  Python bindings for iptables.
+diff --git a/board/solidrun/mx6cubox/post-build.sh b/board/solidrun/mx6cubox/post-build.sh
+index 43e091c5d7..6ddc113702 100755
+--- a/board/solidrun/mx6cubox/post-build.sh
++++ b/board/solidrun/mx6cubox/post-build.sh
+@@ -2,7 +2,7 @@
  
- 	  https://github.com/ldx/python-iptables
-+
-+comment "python-iptables needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
+ BOARD_DIR="$(dirname $0)"
+ 
+-$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
+--n "boot script" -d $BOARD_DIR/boot.scr.txt $BOARD_DIR/boot.scr
++install -d -m 755 $TARGET_DIR/boot
+ 
+-install -m 0644 -D $BOARD_DIR/boot.scr $TARGET_DIR/boot/boot.scr
++$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
++	-n "boot script" -d $BOARD_DIR/boot.scr.txt $TARGET_DIR/boot/boot.scr
