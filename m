@@ -1,60 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 07:26:52 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/polkit: add
- upstream memory leak fix
-Message-ID: <20200506051932.243637FFD0@busybox.osuosl.org>
+Date: Wed, 6 May 2020 07:00:27 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ board/wandboard/post-build.sh: create boot.scr at TARGET_DIR/boot
+Message-ID: <20200506051931.057EB8D59C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=148f82ca0bcbf162a3c69001b31adba81a49e140
+commit: https://git.buildroot.net/buildroot/commit/?id=52b01679eac36f4408e950687e2e002708ca3190
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-This patch fixes two small memory leaks.
+There is no reason to create boot.scr at board/wandboard and later
+install it at TARGET_DIR/boot, leaving a stale file behind.
 
-Upstream commit: 28e3a6653d8c3777b07e0128a0d97d46e586e311
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ba70e29fea9fd76ffafd77401073d2142cbdfd21)
+(cherry picked from commit f14e95b3ff76a4a052a1d1a3fa6ac67fd5a3e911)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/polkit/0002-jsauthority-memleak.patch | 28 +++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ board/wandboard/post-build.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/polkit/0002-jsauthority-memleak.patch b/package/polkit/0002-jsauthority-memleak.patch
-new file mode 100644
-index 0000000000..4f0733185c
---- /dev/null
-+++ b/package/polkit/0002-jsauthority-memleak.patch
-@@ -0,0 +1,28 @@
-+From 28e3a6653d8c3777b07e0128a0d97d46e586e311 Mon Sep 17 00:00:00 2001
-+From: Jan Rybar <jrybar@redhat.com>
-+Date: Tue, 8 Oct 2019 13:28:18 +0000
-+Subject: [PATCH] jsauthority: Fix two minor memory leaks
-+
-+(cherry picked from commit 28e3a6653d8c3777b07e0128a0d97d46e586e311)
-+Signed-off-by: Jan Rybar <jrybar@redhat.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ src/polkitbackend/polkitbackendjsauthority.cpp | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/polkitbackend/polkitbackendjsauthority.cpp b/src/polkitbackend/polkitbackendjsauthority.cpp
-+index 9b752d1..e97b8aa 100644
-+--- a/src/polkitbackend/polkitbackendjsauthority.cpp
-++++ b/src/polkitbackend/polkitbackendjsauthority.cpp
-+@@ -567,6 +567,8 @@ polkit_backend_js_authority_finalize (GObject *object)
-+   g_strfreev (authority->priv->rules_dirs);
-+ 
-+   delete authority->priv->ac;
-++  delete authority->priv->js_global;
-++  delete authority->priv->js_polkit;
-+ 
-+   JS_DestroyContext (authority->priv->cx);
-+   /* JS_ShutDown (); */
-+-- 
-+2.24.1
-+
+diff --git a/board/wandboard/post-build.sh b/board/wandboard/post-build.sh
+index 43e091c5d7..6ddc113702 100755
+--- a/board/wandboard/post-build.sh
++++ b/board/wandboard/post-build.sh
+@@ -2,7 +2,7 @@
+ 
+ BOARD_DIR="$(dirname $0)"
+ 
+-$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
+--n "boot script" -d $BOARD_DIR/boot.scr.txt $BOARD_DIR/boot.scr
++install -d -m 755 $TARGET_DIR/boot
+ 
+-install -m 0644 -D $BOARD_DIR/boot.scr $TARGET_DIR/boot/boot.scr
++$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
++	-n "boot script" -d $BOARD_DIR/boot.scr.txt $TARGET_DIR/boot/boot.scr
