@@ -1,80 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 07:03:34 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libssh: add patch
- to fix regression
-Message-ID: <20200506051931.5845F825FB@busybox.osuosl.org>
+Date: Wed, 6 May 2020 07:15:36 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/python-iptables:
+ account for platform tag in extensions
+Message-ID: <20200506051931.B4A7F811F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d177afefce7b655f7a240c7c85cbccddab6d0df
+commit: https://git.buildroot.net/buildroot/commit/?id=d853d927ff64d0f6d70d856e4ca48032522c0c02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-The libssh server is used by libnetconf2. With libssh version 0.9.4 a
-regression was introduced that wrongly leads to session closed after the
-poll timeout.
+EXT_SUFFIX in Python versions > 3.5 contains a platform tag which only applies
+to cpython extensions. Given that ctypes.util.find_library does not work on the
+target due to the absence of the underlying tools '.so' needs to be added as a
+possible suffix for libraries to enable python-iptables to find the iptables
+shared libraries.
 
-The patch comes from upstrem:
-https://git.libssh.org/projects/libssh.git/commit/?id=6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 39099153d9404cd6f107f0fd92ce8686bbd1beb2)
+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 52276cdda34aa986410626592031560bf64d788b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...oid-returning-SSH_AGAIN-from-ssh_channel_.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ ...dd-.so-as-additional-shared-object-suffix.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch b/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
+diff --git a/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch b/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
 new file mode 100644
-index 0000000000..9cc9389479
+index 0000000000..41d49fc1e6
 --- /dev/null
-+++ b/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
-@@ -0,0 +1,45 @@
-+From 6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4 Mon Sep 17 00:00:00 2001
-+From: Jakub Jelen <jjelen@redhat.com>
-+Date: Thu, 16 Apr 2020 11:13:34 +0200
-+Subject: [PATCH] channels: Avoid returning SSH_AGAIN from
-+ ssh_channel_poll_timeout()
++++ b/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
+@@ -0,0 +1,57 @@
++From 899d25c511c6ce779b7153e9ae2e41055b30b9c5 Mon Sep 17 00:00:00 2001
++From: Frank Vanbever <frank.vanbever@essensium.com>
++Date: Mon, 9 Mar 2020 12:36:47 +0100
++Subject: [PATCH] Add '.so' as additional shared object suffix
 +
-+This addresses a regression introduced in 3bad0607, partially fixed in 022409e9,
-+but the function was still able to return SSH_AGAIN, which was not expected by
-+callers.
++EXT_SUFFIX includes a platform information tag starting from Python 3.5 [0]
++For example:
 +
-+Based on discussion in [1] and [2]
++    >>> sysconfig.get_config_var("EXT_SUFFIX")
++    '.cpython-38-aarch64-linux-gnu.so'
 +
-+[1] https://gitlab.com/libssh/libssh-mirror/-/merge_requests/101
-+[2] https://www.libssh.org/archive/libssh/2020-03/0000029.html
++This suffix only applies to cpython extensions i.e. not to the iptables shared
++objects.
 +
-+Signed-off-by: Jakub Jelen <jjelen@redhat.com>
-+Reviewed-by: Anderson Toshiyuki Sasaki <ansasaki@redhat.com>
++Adding '.so' as an additional suffix for shared objects fixes the issue.
 +
-+[Backport from upstream commit:
-+6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4]
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++Fixes: Issue #301
++
++Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
++
++Backported from: 899d25c511c6ce779b7153e9ae2e41055b30b9c5
++
++[0]: https://docs.python.org/3/whatsnew/3.5.html#build-and-c-api-changes
 +---
-+ src/channels.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
++ iptc/util.py | 13 ++++++++++---
++ 1 file changed, 10 insertions(+), 3 deletions(-)
 +
-+diff --git a/src/channels.c b/src/channels.c
-+index bcc1c207..9fe309d0 100644
-+--- a/src/channels.c
-++++ b/src/channels.c
-+@@ -3116,6 +3116,12 @@ int ssh_channel_poll_timeout(ssh_channel channel, int timeout, int is_stderr)
-+         session->session_state == SSH_SESSION_STATE_ERROR) {
-+         rc = SSH_ERROR;
-+         goto out;
-++    } else if (rc == SSH_AGAIN) {
-++        /* If the above timeout expired, it is ok and we do not need to
-++         * attempt to check the read buffer. The calling functions do not
-++         * expect us to return SSH_AGAIN either here. */
-++        rc = SSH_OK;
-++        goto out;
-+     }
-+     len = ssh_buffer_get_len(stdbuf);
-+     if (len > 0) {
++diff --git a/iptc/util.py b/iptc/util.py
++index e6b1649..04fe905 100644
++--- a/iptc/util.py
+++++ b/iptc/util.py
++@@ -80,12 +80,19 @@ def _do_find_library(name):
++ 
++ 
++ def _find_library(*names):
+++    exts = []
++     if version_info >= (3, 3):
++-        ext = get_config_var("EXT_SUFFIX")
+++        exts.append(get_config_var("EXT_SUFFIX"))
++     else:
++-        ext = get_config_var('SO')
+++        exts.append(get_config_var('SO'))
+++
+++    if version_info >= (3, 5):
+++        exts.append('.so')
+++
++     for name in names:
++-        libnames = [name, "lib" + name, name + ext, "lib" + name + ext]
+++        libnames = [name, "lib" + name]
+++        for ext in exts:
+++            libnames += [name + ext, "lib" + name + ext]
++         libdir = os.environ.get('IPTABLES_LIBDIR', None)
++         if libdir is not None:
++             libdirs = libdir.split(':')
 +-- 
 +2.20.1
 +
