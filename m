@@ -1,38 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 May 2020 07:46:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/efl: fix build with poppler and
- gcc 5
-In-Reply-To: <20200404213245.1519848-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 4 Apr 2020 23:32:45 +0200")
-References: <20200404213245.1519848-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pnbhd39o.fsf@dell.be.48ers.dk>
+Date: Wed, 06 May 2020 07:48:34 +0200
+Subject: [Buildroot] [PATCH v1 1/6] package/qt5: bump minimum gcc
+ requirement to 5.0
+In-Reply-To: <20200418225906.17514-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 19 Apr 2020 00:59:01 +0200")
+References: <20200418225906.17514-1-ps.report@gmx.net>
+Message-ID: <87lfm5d365.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > -std=c++11 is needed to avoid the following build failure with poppler
- > and gcc 5:
+ > As a side effect of avoiding gcc bug 57694 ([1]) through commit
+ > 'GCC: revoke constexpr before 5.0' ([2]) for qtbase the minimum
+ > gcc requirement was lifted to 5.0 ([3], [4]), so bump the
+ > buildroot determined one too.
 
- > /home/naourr/work/instance-0/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/poppler/cpp/poppler-page.h:40:37: note: C++11 'noexcept' only available with -std=c++11 or -std=gnu++11
- > /home/naourr/work/instance-0/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/poppler/cpp/poppler-page.h:70:10: error: 'unique_ptr' in namespace 'std' does not name a template type
- >      std::unique_ptr<text_box_data> m_data;
- >           ^
+ > Adjust the two packages (pinentry, wireshark) which are brave enough
+ > to do a 'select BR2_PACKAGE_QT5' accordingly.
+
  > Fixes:
- >  - http://autobuild.buildroot.org/results/3428b9017168db9239756dc06cdaa5ae004cab97
+ >   http://autobuild.buildroot.net/results/74f5249d1ee14c1269685af53a65055da7dc2ee6
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >   ../../include/QtCore/../../src/corelib/thread/qbasicatomic.h:61:4: error: #error "Qt requires C++11 support"
+ >    #  error "Qt requires C++11 support"
 
-Committed to 2020.02.x, thanks.
+ > [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=57694
+ > [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=c61cedcc5475a77fb94ed12788f61039835f8079
+ > [3] https://codereview.qt-project.org/c/qt/qtbase/+/285582
+ > [4] https://bugreports.qt.io/browse/QTBUG-81761
 
-I initially worried if older gcc versions (efl only requires 4.7+)
-support the -std=c++11 option, but according to the release notes it was
-added in 4.7:
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-https://gcc.gnu.org/gcc-4.7/changes.html
+Does this also apply to the qt5 version we have in 2020.02.x
+(E.G. 5.12.8)?
 
 -- 
 Bye, Peter Korsgaard
