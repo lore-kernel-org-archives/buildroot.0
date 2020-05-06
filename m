@@ -1,164 +1,107 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 6 May 2020 15:04:51 +0200
-Subject: [Buildroot] [PATCH] uclibc: update to 1.0.34
-Message-ID: <20200506130451.zo4gk6g3h7udqcsp@waldemar-brodkorb.de>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Wed,  6 May 2020 15:05:04 +0200
+Subject: [Buildroot] [PATCH 1/2] package/fakeroot: bump version to 1.24
+Message-ID: <20200506130506.409662-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-patches applied upstream.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- ...lude-ctype.h-drop-is-_l-macro-definitions.patch | 72 ----------------------
- ...de-ctype.h-restore-__isctype_l-definition.patch | 32 ----------
- package/uclibc/uclibc.hash                         |  4 +-
- package/uclibc/uclibc.mk                           |  2 +-
- 4 files changed, 3 insertions(+), 107 deletions(-)
- delete mode 100644 package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
- delete mode 100644 package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
+ ...02-Select-TCP-when-lack-of-SYSV-IPC.patch} |  0
+ ...nicate-check-return-status-of-msgrcv.patch | 46 -------------------
+ package/fakeroot/fakeroot.hash                |  6 +--
+ package/fakeroot/fakeroot.mk                  |  6 +--
+ 4 files changed, 5 insertions(+), 53 deletions(-)
+ rename package/fakeroot/{0003-Select-TCP-when-lack-of-SYSV-IPC.patch => 0002-Select-TCP-when-lack-of-SYSV-IPC.patch} (100%)
+ delete mode 100644 package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
 
-diff --git a/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch b/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
+diff --git a/package/fakeroot/0003-Select-TCP-when-lack-of-SYSV-IPC.patch b/package/fakeroot/0002-Select-TCP-when-lack-of-SYSV-IPC.patch
+similarity index 100%
+rename from package/fakeroot/0003-Select-TCP-when-lack-of-SYSV-IPC.patch
+rename to package/fakeroot/0002-Select-TCP-when-lack-of-SYSV-IPC.patch
+diff --git a/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch b/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
 deleted file mode 100644
-index 5557a9c1e7..0000000000
---- a/package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
+index 4e81b49122..0000000000
+--- a/package/fakeroot/0002-communicate-check-return-status-of-msgrcv.patch
 +++ /dev/null
-@@ -1,72 +0,0 @@
--From d1a3ca7ca56630fddde7311a0474eed4a21335a7 Mon Sep 17 00:00:00 2001
--From: Max Filippov <jcmvbkbc@gmail.com>
--Date: Mon, 3 Feb 2020 13:57:32 -0800
--Subject: [PATCH] include/ctype.h: drop is*_l macro definitions
+@@ -1,46 +0,0 @@
+-From a853f21633693f9eefc4949660253a5328d2d2f3 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sun, 13 Aug 2017 23:21:54 +0200
+-Subject: [PATCH] communicate: check return status of msgrcv()
 -
--ctype locale-specific macro definitions are broken because they result
--in dereference of pointer to structure of incomplete type.
--Drop these macros since they are optional and let applications use
--functions with the same names.
+-msgrcv can return with -1 to indicate an error condition.
+-One such error is to have been interrupted by a signal.
 -
--This change fixes parted-3.3 build with uClibc-ng:
--  http://autobuild.buildroot.net/results/b7ba1210d5aa184b133f0171da621d2b0083ec39/build-end.log
+-Being interrupted by a signal is very rare in this code, except in a
+-very special condition: a highly-parallel (1000 jobs!) mksquashfs on
+-a filesystem with extended attributes, where we see errors like (those
+-are mksquashfs errors):
+-    llistxattr for titi/603/883 failed in read_attrs, because Unknown
+-    error 1716527536
 -
--Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+-See: https://bugs.busybox.net/show_bug.cgi?id=10141
+-
+-In this case, we just have to retry the call to msgrcv().
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ----
-- include/ctype.h | 33 ---------------------------------
-- 1 file changed, 33 deletions(-)
+- communicate.c | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
 -
--diff --git a/include/ctype.h b/include/ctype.h
--index ecd5e730886a..e934cf3321a6 100644
----- a/include/ctype.h
--+++ b/include/ctype.h
--@@ -350,46 +350,13 @@ libc_hidden_proto(tolower_l)
-- /* Return the uppercase version of C.  */
-- extern int toupper_l (int __c, __locale_t __l) __THROW;
+-diff --git a/communicate.c b/communicate.c
+-index 293f404..787bb63 100644
+---- a/communicate.c
+-+++ b/communicate.c
+-@@ -553,10 +553,13 @@ void send_get_fakem(struct fake_msg *buf)
+-       l=msgrcv(msg_get,
+-                (struct my_msgbuf*)buf,
+-                sizeof(*buf)-sizeof(buf->mtype),0,0);
+--    while((buf->serial!=serial)||buf->pid!=pid);
+-+    while(((l==-1)&&(errno==EINTR))||(buf->serial!=serial)||buf->pid!=pid);
 - 
---# if __GNUC__ >= 2 && defined __OPTIMIZE__ && !defined __cplusplus
---#  define tolower_l(c, locale) __tobody(c, tolower_l, (locale)->__ctype_tolower, (c, locale))
---#  define toupper_l(c, locale) __tobody(c, toupper_l, (locale)->__ctype_toupper, (c, locale))
---# endif	/* Optimizing gcc */
---
---
---# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] & (__ctype_mask_t) type)
-- # ifndef __NO_CTYPE
---#  define __isalnum_l(c,l)	__isctype_l((c), _ISalnum, (l))
---#  define __isalpha_l(c,l)	__isctype_l((c), _ISalpha, (l))
---#  define __iscntrl_l(c,l)	__isctype_l((c), _IScntrl, (l))
---#  define __isdigit_l(c,l)	__isctype_l((c), _ISdigit, (l))
---#  define __islower_l(c,l)	__isctype_l((c), _ISlower, (l))
---#  define __isgraph_l(c,l)	__isctype_l((c), _ISgraph, (l))
---#  define __isprint_l(c,l)	__isctype_l((c), _ISprint, (l))
---#  define __ispunct_l(c,l)	__isctype_l((c), _ISpunct, (l))
---#  define __isspace_l(c,l)	__isctype_l((c), _ISspace, (l))
---#  define __isupper_l(c,l)	__isctype_l((c), _ISupper, (l))
---#  define __isxdigit_l(c,l)	__isctype_l((c), _ISxdigit, (l))
---#  define __isblank_l(c,l)	__isctype_l((c), _ISblank, (l))
---
-- #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-- 	&& defined __UCLIBC_SUSV4_LEGACY__
-- #   define __isascii_l(c,l)	((l), __isascii (c))
-- #   define __toascii_l(c,l)	((l), __toascii (c))
-- #  endif
+-     semaphore_down();
 - 
---#  define isalnum_l(c,l)	__isalnum_l ((c), (l))
---#  define isalpha_l(c,l)	__isalpha_l ((c), (l))
---#  define iscntrl_l(c,l)	__iscntrl_l ((c), (l))
---#  define isdigit_l(c,l)	__isdigit_l ((c), (l))
---#  define islower_l(c,l)	__islower_l ((c), (l))
---#  define isgraph_l(c,l)	__isgraph_l ((c), (l))
---#  define isprint_l(c,l)	__isprint_l ((c), (l))
---#  define ispunct_l(c,l)	__ispunct_l ((c), (l))
---#  define isspace_l(c,l)	__isspace_l ((c), (l))
---#  define isupper_l(c,l)	__isupper_l ((c), (l))
---#  define isxdigit_l(c,l)	__isxdigit_l ((c), (l))
---#  define isblank_l(c,l)	__isblank_l ((c), (l))
---
-- #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-- 	&& defined __UCLIBC_SUSV4_LEGACY__
-- #   define isascii_l(c,l)	__isascii_l ((c), (l))
+-+    if(l==-1)
+-+      buf->xattr.flags_rc=errno;
+-+
+-     /*
+-     (nah, may be wrong, due to allignment)
+- 
 --- 
--2.20.1
+-2.11.0
 -
-diff --git a/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch b/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
-deleted file mode 100644
-index a0e115c763..0000000000
---- a/package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 7a9a3e4b36955e8530756823d3443f6822562c56 Mon Sep 17 00:00:00 2001
--From: Max Filippov <jcmvbkbc@gmail.com>
--Date: Sun, 9 Feb 2020 22:29:53 +0100
--Subject: [PATCH] include/ctype.h: restore __isctype_l definition
--
--Recent is*_l fix broke uclibc build because removed __isctype_l
--definition was used in libc/misc/ctype/ctype.c. Restore it.
--
--Fixes: d1a3ca7ca566 ("include/ctype.h: drop is*_l macro definitions")
--Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-----
--Upstream status:
--https://mailman.uclibc-ng.org/pipermail/devel/2020-February/001940.html
-----
-- include/ctype.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/include/ctype.h b/include/ctype.h
--index e934cf332..05f21c553 100644
----- a/include/ctype.h
--+++ b/include/ctype.h
--@@ -350,6 +350,7 @@ libc_hidden_proto(tolower_l)
-- /* Return the uppercase version of C.  */
-- extern int toupper_l (int __c, __locale_t __l) __THROW;
-- 
--+# define __isctype_l(c, type, locale) ((locale)->__ctype_b[(int) (c)] & (__ctype_mask_t) type)
-- # ifndef __NO_CTYPE
-- #  if (defined __USE_SVID || defined __USE_MISC || defined __USE_XOPEN) \
-- 	&& defined __UCLIBC_SUSV4_LEGACY__
---- 
--2.20.1
--
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index c1f161fa15..e54f127690 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.32/uClibc-ng-1.0.32.tar.xz.sha256
--sha256  891b5e4573855e4c11e51d3a518f89a82e490d9aa73280c05ce3e4d7e739a370  uClibc-ng-1.0.32.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.34/uClibc-ng-1.0.34.tar.xz.sha256
-+sha256  e6776229eee8d3f5a1cd29fb4286630e3cb9e97dded4e8f4a3a9bb4fa8c0d5e3  uClibc-ng-1.0.34.tar.xz
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index cdbafe6231..3ba4589672 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
+index d1d959df6f..633bda0cb9 100644
+--- a/package/fakeroot/fakeroot.hash
++++ b/package/fakeroot/fakeroot.hash
+@@ -1,6 +1,4 @@
+-# From http://snapshot.debian.org/package/fakeroot/1.20.2-1/
+-sha1	367040df07043edb630942b21939e493f3fad888	fakeroot_1.20.2.orig.tar.bz2
+-# Calculated based on the hash above
+-sha256	7c0a164d19db3efa9e802e0fc7cdfeff70ec6d26cdbdc4338c9c2823c5ea230c	fakeroot_1.20.2.orig.tar.bz2
++# From http://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.24-1.dsc
++sha256	2e045b3160370b8ab4d44d1f8d267e5d1d555f1bb522d650e7167b09477266ed	fakeroot_1.24.orig.tar.gz
+ # License files, locally calculated
+ sha256	fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7	COPYING
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index 1be99071bf..39a6906182 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--UCLIBC_VERSION = 1.0.32
-+UCLIBC_VERSION = 1.0.34
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+-FAKEROOT_VERSION = 1.20.2
+-FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
+-FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141005T221953Z/pool/main/f/fakeroot
++FAKEROOT_VERSION = 1.24
++FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.gz
++FAKEROOT_SITE = http://deb.debian.org/debian/pool/main/f/fakeroot
+ 
+ HOST_FAKEROOT_DEPENDENCIES = host-acl
+ # Force capabilities detection off
 -- 
-2.11.0
+2.26.2
