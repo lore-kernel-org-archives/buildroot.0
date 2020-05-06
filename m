@@ -1,40 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 07:00:27 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- board/wandboard/post-build.sh: create boot.scr at TARGET_DIR/boot
-Message-ID: <20200506051931.057EB8D59C@busybox.osuosl.org>
+Date: Wed, 6 May 2020 06:57:51 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/azure-iot-sdk-c:
+ create function for library installation
+Message-ID: <20200506051930.C36E28D7AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52b01679eac36f4408e950687e2e002708ca3190
+commit: https://git.buildroot.net/buildroot/commit/?id=0bb747c981ce17be2b259afc0ece848e5025f1c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-There is no reason to create boot.scr at board/wandboard and later
-install it at TARGET_DIR/boot, leaving a stale file behind.
+As a preparation for adding the creation of some symlinks, let's
+factor the library installation into a function.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f14e95b3ff76a4a052a1d1a3fa6ac67fd5a3e911)
+(cherry picked from commit 43822bb6db8851df4d6568622b58196895028f91)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/wandboard/post-build.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/board/wandboard/post-build.sh b/board/wandboard/post-build.sh
-index 43e091c5d7..6ddc113702 100755
---- a/board/wandboard/post-build.sh
-+++ b/board/wandboard/post-build.sh
-@@ -2,7 +2,7 @@
+diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+index e6345104eb..6781da4177 100644
+--- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+@@ -44,18 +44,20 @@ AZURE_IOT_SDK_C_LIBS += \
+ 	umqtt/libumqtt.so
+ endif
  
- BOARD_DIR="$(dirname $0)"
+-define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
++define AZURE_IOT_SDK_C_INSTALL_LIBS
+ 	$(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
+-		$(INSTALL) -D -m 0755 $(@D)/$(l) $(STAGING_DIR)/usr/lib/$(notdir $(l))
++		$(INSTALL) -D -m 0755 $(@D)/$(l) $(1)/usr/lib/$(notdir $(l))
+ 	)
++endef
++
++define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
++	$(call AZURE_IOT_SDK_C_INSTALL_LIBS,$(STAGING_DIR))
+ 	cp -a $(@D)/c-utility/inc/* $(STAGING_DIR)/usr/include/
+ 	cp -a $(@D)/iothub_client/inc/* $(STAGING_DIR)/usr/include/
+ endef
  
--$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
---n "boot script" -d $BOARD_DIR/boot.scr.txt $BOARD_DIR/boot.scr
-+install -d -m 755 $TARGET_DIR/boot
+ define AZURE_IOT_SDK_C_INSTALL_TARGET_CMDS
+-	$(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
+-		$(INSTALL) -D -m 0755 $(@D)/$(l) $(TARGET_DIR)/usr/lib/$(notdir $(l))
+-	)
++	$(call AZURE_IOT_SDK_C_INSTALL_LIBS,$(TARGET_DIR))
+ endef
  
--install -m 0644 -D $BOARD_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-+$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
-+	-n "boot script" -d $BOARD_DIR/boot.scr.txt $TARGET_DIR/boot/boot.scr
+ $(eval $(cmake-package))
