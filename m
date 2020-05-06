@@ -1,45 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 07:45:14 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/efl: fix build
- with poppler and gcc 5
-Message-ID: <20200506055036.761CF90EAF@busybox.osuosl.org>
+Date: Wed, 6 May 2020 07:52:04 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/haproxy: fix
+ build on m68k
+Message-ID: <20200506055036.B2C2490EAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a474a68632048773e5367d50489d58fda5803d2f
+commit: https://git.buildroot.net/buildroot/commit/?id=2328b9dc6b2b15ae9b36a5ba590a85701a1ead1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
--std=c++11 is needed to avoid the following build failure with poppler
-and gcc 5:
+When threads are enabled, haproxy expects that pthread_getcpuclockid is
+available which is not the case on m68k. Fix this by enabling threads
+support only if NPTL is available.
 
-/home/naourr/work/instance-0/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/poppler/cpp/poppler-page.h:40:37: note: C++11 'noexcept' only available with -std=c++11 or -std=gnu++11
-/home/naourr/work/instance-0/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/poppler/cpp/poppler-page.h:70:10: error: 'unique_ptr' in namespace 'std' does not name a template type
-     std::unique_ptr<text_box_data> m_data;
-          ^
 Fixes:
- - http://autobuild.buildroot.org/results/3428b9017168db9239756dc06cdaa5ae004cab97
+ - http://autobuild.buildroot.org/results/52cc4b1fcac2a4fc84ab15ec4c692d2cd9b6d8bd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d9a4208f6288829494f7727127c2dc19df8fb5cd)
+(cherry picked from commit fb7fd98774b94d7c50f381ae4e2d005db21afb3e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efl/efl.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/haproxy/haproxy.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index f1e69f8a23..d8364ed76f 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -257,6 +257,8 @@ EFL_CONF_OPTS += --disable-image-loader-webp
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 6752367fac..e59896b485 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -19,7 +19,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ HAPROXY_LIBS += -latomic
  endif
  
- ifeq ($(BR2_PACKAGE_POPPLER),y)
-+# poppler needs c++11
-+EFL_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
- EFL_DEPENDENCIES += poppler
- EFL_CONF_OPTS += --enable-poppler
- else
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
+ # threads uses atomics on gcc >= 4.7 and sync otherwise (see
+ # include/common/hathreads.h)
+ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7):$(BR2_TOOLCHAIN_HAS_ATOMIC),y:y)
