@@ -1,91 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 07:15:36 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-iptables:
- account for platform tag in extensions
-Message-ID: <20200506051931.B4A7F811F5@busybox.osuosl.org>
+Date: Wed, 6 May 2020 07:10:40 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/exim: fix log and
+ pid file paths
+Message-ID: <20200506051931.6D204821B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d853d927ff64d0f6d70d856e4ca48032522c0c02
+commit: https://git.buildroot.net/buildroot/commit/?id=9f79ad93cf3961981a1aa0bbd29b41baa6eb8474
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-EXT_SUFFIX in Python versions > 3.5 contains a platform tag which only applies
-to cpython extensions. Given that ctypes.util.find_library does not work on the
-target due to the absence of the underlying tools '.so' needs to be added as a
-possible suffix for libraries to enable python-iptables to find the iptables
-shared libraries.
+By default, exim stores its PID file in /var/spool/exim, and its log
+file in /var/spool/exim/log, but it makes a lot more sense to have the
+logs in /var/log/exim and the PID file in /var/run/exim.
 
-Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 52276cdda34aa986410626592031560bf64d788b)
+Using binary name subdirectory in both cases allows for the use of
+systemd's LogsDirectory and RuntimeDirectory statements
+
+Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 754341460b7aa751164d7d7ec9b67908c2792fe2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...dd-.so-as-additional-shared-object-suffix.patch | 57 ++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ package/exim/S86exim      | 10 +++++++++-
+ package/exim/exim.mk      |  2 ++
+ package/exim/exim.service |  4 ++++
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch b/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
-new file mode 100644
-index 0000000000..41d49fc1e6
---- /dev/null
-+++ b/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
-@@ -0,0 +1,57 @@
-+From 899d25c511c6ce779b7153e9ae2e41055b30b9c5 Mon Sep 17 00:00:00 2001
-+From: Frank Vanbever <frank.vanbever@essensium.com>
-+Date: Mon, 9 Mar 2020 12:36:47 +0100
-+Subject: [PATCH] Add '.so' as additional shared object suffix
-+
-+EXT_SUFFIX includes a platform information tag starting from Python 3.5 [0]
-+For example:
-+
-+    >>> sysconfig.get_config_var("EXT_SUFFIX")
-+    '.cpython-38-aarch64-linux-gnu.so'
-+
-+This suffix only applies to cpython extensions i.e. not to the iptables shared
-+objects.
-+
-+Adding '.so' as an additional suffix for shared objects fixes the issue.
-+
-+Fixes: Issue #301
-+
-+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-+
-+Backported from: 899d25c511c6ce779b7153e9ae2e41055b30b9c5
-+
-+[0]: https://docs.python.org/3/whatsnew/3.5.html#build-and-c-api-changes
-+---
-+ iptc/util.py | 13 ++++++++++---
-+ 1 file changed, 10 insertions(+), 3 deletions(-)
-+
-+diff --git a/iptc/util.py b/iptc/util.py
-+index e6b1649..04fe905 100644
-+--- a/iptc/util.py
-++++ b/iptc/util.py
-+@@ -80,12 +80,19 @@ def _do_find_library(name):
-+ 
-+ 
-+ def _find_library(*names):
-++    exts = []
-+     if version_info >= (3, 3):
-+-        ext = get_config_var("EXT_SUFFIX")
-++        exts.append(get_config_var("EXT_SUFFIX"))
-+     else:
-+-        ext = get_config_var('SO')
-++        exts.append(get_config_var('SO'))
-++
-++    if version_info >= (3, 5):
-++        exts.append('.so')
-++
-+     for name in names:
-+-        libnames = [name, "lib" + name, name + ext, "lib" + name + ext]
-++        libnames = [name, "lib" + name]
-++        for ext in exts:
-++            libnames += [name + ext, "lib" + name + ext]
-+         libdir = os.environ.get('IPTABLES_LIBDIR', None)
-+         if libdir is not None:
-+             libdirs = libdir.split(':')
-+-- 
-+2.20.1
-+
+diff --git a/package/exim/S86exim b/package/exim/S86exim
+index bec88fc222..0d09361f65 100644
+--- a/package/exim/S86exim
++++ b/package/exim/S86exim
+@@ -3,11 +3,19 @@
+ # Start/stop exim
+ #
+ 
+-PIDFILE=/var/lock/exim/exim-daemon.pid
++PIDFILE=/var/run/exim/exim.pid
+ 
+ case "$1" in
+   start)
+ 	echo "Starting exim..."
++	if [ ! -d /var/log/exim ]; then
++	  mkdir -p /var/log/exim
++	  chown exim:mail /var/log/exim
++	fi
++	if [ ! -d /var/run/exim ]; then
++	  mkdir -p /var/run/exim
++	  chown root:mail /var/run/exim
++	fi
+ 	start-stop-daemon -S -x exim -- -bd
+ 	;;
+   stop)
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index e4b0bfc1b4..8d5b6e415b 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -39,6 +39,8 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
+ 	$(INSTALL) -m 0644 $(@D)/src/EDITME $(@D)/Local/Makefile
+ 	$(call exim-config-change,BIN_DIRECTORY,/usr/sbin)
+ 	$(call exim-config-change,CONFIGURE_FILE,/etc/exim/configure)
++	$(call exim-config-change,LOG_FILE_PATH,/var/log/exim/exim_%slog)
++	$(call exim-config-change,PID_FILE_PATH,/var/run/exim/exim.pid)
+ 	$(call exim-config-change,EXIM_USER,ref:exim)
+ 	$(call exim-config-change,EXIM_GROUP,mail)
+ 	$(call exim-config-change,TRANSPORT_LMTP,yes)
+diff --git a/package/exim/exim.service b/package/exim/exim.service
+index fe97727ab5..ac3f067de4 100644
+--- a/package/exim/exim.service
++++ b/package/exim/exim.service
+@@ -3,6 +3,10 @@ Description=Exim MTA
+ After=syslog.target network.target
+ 
+ [Service]
++User=exim
++Group=mail
++LogsDirectory=exim
++RuntimeDirectory=exim
+ ExecStart=/usr/sbin/exim -bdf
+ Restart=always
+ 
