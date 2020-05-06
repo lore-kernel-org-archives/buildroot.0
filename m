@@ -1,84 +1,126 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 07:10:40 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/exim: fix log and
- pid file paths
-Message-ID: <20200506051931.6D204821B9@busybox.osuosl.org>
+Date: Wed, 6 May 2020 07:15:10 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/python-iptables:
+ try known libc instead of find_library()
+Message-ID: <20200506051931.A3BB1811F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f79ad93cf3961981a1aa0bbd29b41baa6eb8474
+commit: https://git.buildroot.net/buildroot/commit/?id=c121494d169b81adf53e73c522a5abbc79a700dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-By default, exim stores its PID file in /var/spool/exim, and its log
-file in /var/spool/exim/log, but it makes a lot more sense to have the
-logs in /var/log/exim and the PID file in /var/run/exim.
+ctypes.util.find_library() depends on gcc and friends to detect the location of
+a given shared library. Given that these are not available on the target and
+that python-iptables depends on this functionality we need to work around this.
+The SONAMEs of the libc are well known so we try the known ones for glibc,
+uClibc and musl.
 
-Using binary name subdirectory in both cases allows for the use of
-systemd's LogsDirectory and RuntimeDirectory statements
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=12271
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 754341460b7aa751164d7d7ec9b67908c2792fe2)
+Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 90c18ab269c600ee7643f69212713ee3b74c38bd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exim/S86exim      | 10 +++++++++-
- package/exim/exim.mk      |  2 ++
- package/exim/exim.service |  4 ++++
- 3 files changed, 15 insertions(+), 1 deletion(-)
+ .../0001-Add-separate-mechanism-to-load-libc.patch | 90 ++++++++++++++++++++++
+ 1 file changed, 90 insertions(+)
 
-diff --git a/package/exim/S86exim b/package/exim/S86exim
-index bec88fc222..0d09361f65 100644
---- a/package/exim/S86exim
-+++ b/package/exim/S86exim
-@@ -3,11 +3,19 @@
- # Start/stop exim
- #
- 
--PIDFILE=/var/lock/exim/exim-daemon.pid
-+PIDFILE=/var/run/exim/exim.pid
- 
- case "$1" in
-   start)
- 	echo "Starting exim..."
-+	if [ ! -d /var/log/exim ]; then
-+	  mkdir -p /var/log/exim
-+	  chown exim:mail /var/log/exim
-+	fi
-+	if [ ! -d /var/run/exim ]; then
-+	  mkdir -p /var/run/exim
-+	  chown root:mail /var/run/exim
-+	fi
- 	start-stop-daemon -S -x exim -- -bd
- 	;;
-   stop)
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index e4b0bfc1b4..8d5b6e415b 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -39,6 +39,8 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
- 	$(INSTALL) -m 0644 $(@D)/src/EDITME $(@D)/Local/Makefile
- 	$(call exim-config-change,BIN_DIRECTORY,/usr/sbin)
- 	$(call exim-config-change,CONFIGURE_FILE,/etc/exim/configure)
-+	$(call exim-config-change,LOG_FILE_PATH,/var/log/exim/exim_%slog)
-+	$(call exim-config-change,PID_FILE_PATH,/var/run/exim/exim.pid)
- 	$(call exim-config-change,EXIM_USER,ref:exim)
- 	$(call exim-config-change,EXIM_GROUP,mail)
- 	$(call exim-config-change,TRANSPORT_LMTP,yes)
-diff --git a/package/exim/exim.service b/package/exim/exim.service
-index fe97727ab5..ac3f067de4 100644
---- a/package/exim/exim.service
-+++ b/package/exim/exim.service
-@@ -3,6 +3,10 @@ Description=Exim MTA
- After=syslog.target network.target
- 
- [Service]
-+User=exim
-+Group=mail
-+LogsDirectory=exim
-+RuntimeDirectory=exim
- ExecStart=/usr/sbin/exim -bdf
- Restart=always
- 
+diff --git a/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch b/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
+new file mode 100644
+index 0000000000..2a344c2f55
+--- /dev/null
++++ b/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
+@@ -0,0 +1,90 @@
++From e3557528d7cdcdc2c579212be8837bc9b54635a4 Mon Sep 17 00:00:00 2001
++From: Frank Vanbever <frank.vanbever@essensium.com>
++Date: Thu, 20 Feb 2020 12:14:08 +0100
++Subject: [PATCH] Add separate mechanism to load libc
++
++ctypes.util.find_library() always returns None for systems which do not have the
++tools installed to determine the location of a given shared library (i.e.
++ldconfig, gcc, objdump). If find_libary() fails attempt to load known libc by
++SONAME.
++
++Upstream: https://github.com/ldx/python-iptables/commit/e3557528d7cdcdc2c579212be8837bc9b54635a4
++
++Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
++---
++ iptc/ip4tc.py   |  4 ++--
++ iptc/util.py    | 16 ++++++++++++++++
++ iptc/xtables.py |  4 ++--
++ 3 files changed, 20 insertions(+), 4 deletions(-)
++
++diff --git a/iptc/ip4tc.py b/iptc/ip4tc.py
++index 4c5d690..4ddd2dc 100644
++--- a/iptc/ip4tc.py
+++++ b/iptc/ip4tc.py
++@@ -9,7 +9,7 @@ import socket
++ import struct
++ import weakref
++ 
++-from .util import find_library, load_kernel
+++from .util import find_library, load_kernel, find_libc
++ from .xtables import (XT_INV_PROTO, NFPROTO_IPV4, XTablesError, xtables,
++                       xt_align, xt_counters, xt_entry_target, xt_entry_match)
++ 
++@@ -26,7 +26,7 @@ if not hasattr(socket, 'IPPROTO_SCTP'):
++ 
++ _IFNAMSIZ = 16
++ 
++-_libc = ct.CDLL("libc.so.6")
+++_libc = find_libc()
++ _get_errno_loc = _libc.__errno_location
++ _get_errno_loc.restype = ct.POINTER(ct.c_int)
++ _malloc = _libc.malloc
++diff --git a/iptc/util.py b/iptc/util.py
++index ae5fb9b..e6b1649 100644
++--- a/iptc/util.py
+++++ b/iptc/util.py
++@@ -109,3 +109,19 @@ def find_library(*names):
++             major = int(m.group(1))
++         return lib, major
++     return None, None
+++
+++
+++def find_libc():
+++    lib = ctypes.util.find_library('c')
+++    if lib is not None:
+++        return ctypes.CDLL(lib, mode=ctypes.RTLD_GLOBAL)
+++
+++    libnames = ['libc.so.6', 'libc.so.0', 'libc.so']
+++    for name in libnames:
+++        try:
+++            lib = ctypes.CDLL(name, mode=ctypes.RTLD_GLOBAL)
+++            return lib
+++        except:
+++            pass
+++
+++    return None
++diff --git a/iptc/xtables.py b/iptc/xtables.py
++index 93bc080..cf21029 100644
++--- a/iptc/xtables.py
+++++ b/iptc/xtables.py
++@@ -6,7 +6,7 @@ import sys
++ import weakref
++ 
++ from . import version
++-from .util import find_library
+++from .util import find_library, find_libc
++ from .errors import *
++ 
++ XT_INV_PROTO = 0x40  # invert the sense of PROTO
++@@ -792,7 +792,7 @@ class xtables_target(ct.Union):
++                 ("v12", _xtables_target_v12)]
++ 
++ 
++-_libc, _ = find_library("c")
+++_libc = find_libc()
++ _optind = ct.c_long.in_dll(_libc, "optind")
++ _optarg = ct.c_char_p.in_dll(_libc, "optarg")
++ 
++-- 
++2.20.1
++
