@@ -1,9 +1,9 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Fri, 1 May 2020 05:36:44 -0300
-Subject: [Buildroot] [PATCH] package/libgdiplus: bump version to 6.0.5
-In-Reply-To: <20200420225508.4391-1-sergio.prado@e-labworks.com>
-References: <20200420225508.4391-1-sergio.prado@e-labworks.com>
-Message-ID: <CANu7NGsVccDtsdA+_M+417nioSZS9HuuQxM=tNH8mgqcD-h40A@mail.gmail.com>
+From: Kunal Chauhan <atkunalchauhan@gmail.com>
+Date: Wed, 6 May 2020 12:24:57 +0530
+Subject: [Buildroot] Help: to understand build root (Andreas Ziegler)
+In-Reply-To: <mailman.1828.1588743310.59095.buildroot@busybox.net>
+References: <mailman.1828.1588743310.59095.buildroot@busybox.net>
+Message-ID: <CACEFAc2MZRPhuct4xF++93nUXjDs5La74Jkb-3fwN1=SFJepbw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,3861 +12,3668 @@ To: buildroot@busybox.net
 
 Hi,
 
-This patch to bump libgdiplus version is not showing in patchwork.
+1.Team just gone through the url given but still I am confused what is the
+main purpose of making build_root directory, when we can compile our source
+in different way.
+2. May be I am not understanding the concept as I am  new to
+firmware concept. but question is also how the code is built and test as a
+developer
 
-Should I resend it?
-
-Sergio Prado
-Embedded Labworks
+please elaborate ? or help me to understand
 
 
-Em seg., 20 de abr. de 2020 ?s 19:55, Sergio Prado <
-sergio.prado@e-labworks.com> escreveu:
 
-> Remove patches already applied upstream.
+Thanks
+kunal
+
+On Wed, May 6, 2020 at 11:06 AM <buildroot-request@busybox.net> wrote:
+
+> Send buildroot mailing list submissions to
+>         buildroot at busybox.net
 >
-> Apply upstream patch to fix build error of test tools without libjpeg/tiff.
+> To subscribe or unsubscribe via the World Wide Web, visit
+>         http://lists.busybox.net/mailman/listinfo/buildroot
+> or, via email, send a message with subject or body 'help' to
+>         buildroot-request at busybox.net
 >
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
->  ...e-texts-in-LICENSE-like-on-Mono-repo.patch | 1863 -----------------
->  ...-test-build-without-libjpeg-tiff-597.patch |   92 +
->  ...o-match-the-headers-of-the-source-fi.patch | 1018 ---------
->  ...de-copy-of-GifQuantizeBuffer-functio.patch |  414 ----
->  package/libgdiplus/libgdiplus.hash            |    4 +-
->  package/libgdiplus/libgdiplus.mk              |    2 +-
->  6 files changed, 95 insertions(+), 3298 deletions(-)
->  delete mode 100644
-> package/libgdiplus/0001-Embed-the-license-texts-in-LICENSE-like-on-Mono-repo.patch
->  create mode 100644
-> package/libgdiplus/0001-Fix-test-build-without-libjpeg-tiff-597.patch
->  delete mode 100644
-> package/libgdiplus/0002-Update-LICENSE-to-match-the-headers-of-the-source-fi.patch
->  delete mode 100644
-> package/libgdiplus/0003-gifcodec.c-Include-copy-of-GifQuantizeBuffer-functio.patch
+> You can reach the person managing the list at
+>         buildroot-owner at busybox.net
 >
-> diff --git
-> a/package/libgdiplus/0001-Embed-the-license-texts-in-LICENSE-like-on-Mono-repo.patch
-> b/package/libgdiplus/0001-Embed-the-license-texts-in-LICENSE-like-on-Mono-repo.patch
-> deleted file mode 100644
-> index 02efc972dc0e..000000000000
-> ---
-> a/package/libgdiplus/0001-Embed-the-license-texts-in-LICENSE-like-on-Mono-repo.patch
-> +++ /dev/null
-> @@ -1,1863 +0,0 @@
-> -From 850660e11ab302961aaf5ef336ed02451ade9f5b Mon Sep 17 00:00:00 2001
-> -From: =?UTF-8?q?Alexander=20K=C3=B6plinger?= <alex.koeplinger@outlook.com
+> When replying, please edit your Subject line so it is more specific
+> than "Re: Contents of buildroot digest..."
+>
+>
+> Today's Topics:
+>
+>    1. Re: [PATCH v5 1/3] package/environment-setup: new package
+>       (Angelo Compagnucci)
+>    2. [PATCH] hsdk/linux: Fix USB regression (Evgeniy Didin)
+>    3. [git commit] CHANGES: start updating for 2020.05-rc1 release
+>       (Thomas Petazzoni)
+>    4. Re: [PATCH] package/solarus: bump to version 1.6.4
+>       (Thomas Petazzoni)
+>    5. Re: [PATCH] package/zziplib: bump to version 0.13.71
+>       (Thomas Petazzoni)
+>    6. Re: [PATCH v2] package/libnss: bump version to 3.52
+>       (Thomas Petazzoni)
+>    7. Re: [PATCH] package/python-redis: Bump to version 3.5.0
+>       (Thomas Petazzoni)
+>    8. Re: Help: to understand build root (Andreas Ziegler)
+>    9. Re: [PATCH] azure-iot-sdk-c: fix missing libraries
+>       (Peter Korsgaard)
+>   10. Re: [PATCH] board/wandboard/post-build.sh: create boot.scr at
+>       TARGET_DIR/boot (Peter Korsgaard)
+>   11. Re: [PATCH] package/libssh: security bump to version 0.9.4
+>       (Peter Korsgaard)
+>   12. Re: [PATCH 1/1] package/libssh: add patch to fix reported
+>       version (Peter Korsgaard)
+>   13. Re: [PATCH] package/libssh: add patch to fix regression
+>       (Peter Korsgaard)
+>   14. Re: [PATCH] package/exim: fix log and pid file paths
+>       (Peter Korsgaard)
+>   15. Re: [PATCH 1/1] package/mbedtls: security bump to version
+>       2.16.6 (Peter Korsgaard)
+>   16. Re: [git commit] package/python-iptables: add explicit
+>       dependency on dynamic libs (Peter Korsgaard)
+>   17. Re: [git commit] package/python-iptables: account for
+>       platform tag in extensions (Peter Korsgaard)
+>   18. Re: [git commit] package/python-iptables: try known libc
+>       instead of find_library() (Peter Korsgaard)
+>   19. Re: [PATCH 1/1] package/php: security bump version to 7.4.5
+>       (Peter Korsgaard)
+>   20. Re: [PATCH] package/python-dpkt: remove Python2 only
+>       dependency (Peter Korsgaard)
+>   21. Re: [git commit] package/libsepol: fix help text for
+>       BR2_PACKAGE_LIBSEPOL_POLICY_VERSION (Peter Korsgaard)
+>   22. Re: [PATCH] package/polkit: properly autoreconf (Peter Korsgaard)
+>   23. Re: [PATCH 1/4] package/polkit: install service file
+>       (Peter Korsgaard)
+>   24. Re: [PATCH 2/4] package/polkit: add upstream memory leak fix
+>       (Peter Korsgaard)
+>   25. Re: [PATCH 3/4] package/polkit: add upstream fix for SIGTTOU
+>       (Peter Korsgaard)
+>   26. Re: [PATCH 1/2] package/php: fix zip support (Peter Korsgaard)
+>   27. Re: [PATCH 2/2] package/php: fix gd dependencies (Peter Korsgaard)
+>   28. Re: [PATCH v2] package/netsnmp: unix domain socket transport
+>       (Peter Korsgaard)
+>   29. Re: [PATCH 1/1] package/openvpn: security bump version to
+>       2.4.9 (Peter Korsgaard)
+>   30. [git commit branch/2020.02.x] package/azure-iot-sdk-c: fix
+>       installation of libumqtt (Peter Korsgaard)
+>   31. [git commit branch/2020.02.x] package/azure-iot-sdk-c: format
+>       the libraries list with one lib per line (Peter Korsgaard)
+>   32. [git commit branch/2020.02.x] package/azure-iot-sdk-c: also
+>       install libparson (Peter Korsgaard)
+>   33. [git commit branch/2020.02.x] package/polkit: add upstream
+>       memory leak fix (Peter Korsgaard)
+>   34. [git commit branch/2020.02.x] board/wandboard/post-build.sh:
+>       create boot.scr at TARGET_DIR/boot (Peter Korsgaard)
+>   35. [git commit branch/2020.02.x] package/azure-iot-sdk-c: create
+>       function for library installation (Peter Korsgaard)
+>   36. [git commit branch/2020.02.x] package/libssh: add patch to
+>       fix reported version (Peter Korsgaard)
+>   37. [git commit branch/2020.02.x] board/udoo/neo: create boot.scr
+>       in TARGET_DIR/boot (Peter Korsgaard)
+>   38. [git commit branch/2020.02.x] package/php: fix zip support
+>       (Peter Korsgaard)
+>   39. [git commit branch/2020.02.x] package/php: fix gd extension
+>       dependencies and options (Peter Korsgaard)
+>   40. [git commit branch/2020.02.x] package/python-iptables: add
+>       explicit dependency on dynamic libs (Peter Korsgaard)
+>   41. [git commit branch/2020.02.x] board/solidrun/mx6cubox: create
+>       boot.scr in TARGET_DIR/boot (Peter Korsgaard)
+>   42. [git commit branch/2020.02.x] package/libssh: security bump
+>       to version 0.9.4 (Peter Korsgaard)
+>   43. [git commit branch/2020.02.x] package/mbedtls: security bump
+>       to version 2.16.6 (Peter Korsgaard)
+>   44. [git commit branch/2020.02.x] package/libssh: add patch to
+>       fix regression (Peter Korsgaard)
+>   45. [git commit branch/2020.02.x] package/python-iptables:
+>       account for platform tag in extensions (Peter Korsgaard)
+>   46. [git commit branch/2020.02.x] package/exim: fix log and pid
+>       file paths (Peter Korsgaard)
+>   47. [git commit branch/2020.02.x] package/python-iptables: try
+>       known libc instead of find_library() (Peter Korsgaard)
+>   48. [git commit branch/2020.02.x] package/python-dpkt: remove
+>       Python2 only dependency (Peter Korsgaard)
+>   49. [git commit branch/2020.02.x] package/libsepol: fix help text
+>       for BR2_PACKAGE_LIBSEPOL_POLICY_VERSION (Peter Korsgaard)
+>   50. [git commit branch/2020.02.x] package/azure-iot-sdk-c: use
+>       full destination path for $(INSTALL) (Peter Korsgaard)
+>   51. [git commit branch/2020.02.x] package/polkit: add upstream
+>       fix for SIGTTOU (Peter Korsgaard)
+>   52. [git commit branch/2020.02.x] package/php: security bump
+>       version to 7.4.5 (Peter Korsgaard)
+>   53. [git commit branch/2020.02.x] package/netsnmp: unix domain
+>       socket transport (Peter Korsgaard)
+>   54. [git commit branch/2020.02.x] package/polkit: properly
+>       autoreconf (Peter Korsgaard)
+>
+>
+> ----------------------------------------------------------------------
+>
+> Message: 1
+> Date: Tue, 5 May 2020 22:43:20 +0200
+> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> To: Mircea GLIGA <mgliga@bitdefender.com>
+> Cc: Angelo Compagnucci <angelo@amarulasolutions.com>,  Buildroot
+>         Mailing List <buildroot@buildroot.org>
+> Subject: Re: [Buildroot] [PATCH v5 1/3] package/environment-setup: new
+>         package
+> Message-ID:
+>         <
+> CA+TH9VmTLkxGqrGTeVmv2yMz-01EmsxpeQ_3DmXAGGD285tPWA at mail.gmail.com>
+> Content-Type: text/plain; charset="UTF-8"
+>
+> Hi Mircea,
+>
+> Il giorno mar 28 apr 2020 alle ore 13:04 Mircea GLIGA
+> <mgliga@bitdefender.com> ha scritto:
 > >
-> -Date: Thu, 21 Sep 2017 12:50:21 +0200
-> -Subject: [PATCH] Embed the license texts in LICENSE like on Mono repo
-> -
-> -Remove the MPL-1.1.html file.
-> -
-> -Upstream: ad0fb6f0a5e3e11f7e474456d53cc660f7808aed
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ----
-> - LICENSE      | 980 +++++++++++++++++++++++++++++++++++++++++++++++++++
-> - MPL-1.1.html | 840 -------------------------------------------
-> - Makefile.am  |   2 +-
-> - 3 files changed, 981 insertions(+), 841 deletions(-)
-> - delete mode 100644 MPL-1.1.html
-> -
-> -diff --git a/LICENSE b/LICENSE
-> -index f5b62b7..b3164bb 100644
-> ---- a/LICENSE
-> -+++ b/LICENSE
-> -@@ -2,3 +2,983 @@ Libgdiplus is licensed under the terms of the GNU
-> Library GPL or the
-> - Mozilla Public License 1.1.
-> -
-> -
-> -+The Licenses
-> -+============
-> -+
-> -+### GNU Library GPL
-> -+
-> -+                  GNU LESSER GENERAL PUBLIC LICENSE
-> -+                       Version 2.1, February 1999
-> -+
-> -+ Copyright (C) 1991, 1999 Free Software Foundation, Inc.
-> -+ 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-> -+ Everyone is permitted to copy and distribute verbatim copies
-> -+ of this license document, but changing it is not allowed.
-> -+
-> -+[This is the first released version of the Lesser GPL.  It also counts
-> -+ as the successor of the GNU Library Public License, version 2, hence
-> -+ the version number 2.1.]
-> -+
-> -+                            Preamble
-> -+
-> -+  The licenses for most software are designed to take away your
-> -+freedom to share and change it.  By contrast, the GNU General Public
-> -+Licenses are intended to guarantee your freedom to share and change
-> -+free software--to make sure the software is free for all its users.
-> -+
-> -+  This license, the Lesser General Public License, applies to some
-> -+specially designated software packages--typically libraries--of the
-> -+Free Software Foundation and other authors who decide to use it.  You
-> -+can use it too, but we suggest you first think carefully about whether
-> -+this license or the ordinary General Public License is the better
-> -+strategy to use in any particular case, based on the explanations below.
-> -+
-> -+  When we speak of free software, we are referring to freedom of use,
-> -+not price.  Our General Public Licenses are designed to make sure that
-> -+you have the freedom to distribute copies of free software (and charge
-> -+for this service if you wish); that you receive source code or can get
-> -+it if you want it; that you can change the software and use pieces of
-> -+it in new free programs; and that you are informed that you can do
-> -+these things.
-> -+
-> -+  To protect your rights, we need to make restrictions that forbid
-> -+distributors to deny you these rights or to ask you to surrender these
-> -+rights.  These restrictions translate to certain responsibilities for
-> -+you if you distribute copies of the library or if you modify it.
-> -+
-> -+  For example, if you distribute copies of the library, whether gratis
-> -+or for a fee, you must give the recipients all the rights that we gave
-> -+you.  You must make sure that they, too, receive or can get the source
-> -+code.  If you link other code with the library, you must provide
-> -+complete object files to the recipients, so that they can relink them
-> -+with the library after making changes to the library and recompiling
-> -+it.  And you must show them these terms so they know their rights.
-> -+
-> -+  We protect your rights with a two-step method: (1) we copyright the
-> -+library, and (2) we offer you this license, which gives you legal
-> -+permission to copy, distribute and/or modify the library.
-> -+
-> -+  To protect each distributor, we want to make it very clear that
-> -+there is no warranty for the free library.  Also, if the library is
-> -+modified by someone else and passed on, the recipients should know
-> -+that what they have is not the original version, so that the original
-> -+author's reputation will not be affected by problems that might be
-> -+introduced by others.
-> -+
-> -+  Finally, software patents pose a constant threat to the existence of
-> -+any free program.  We wish to make sure that a company cannot
-> -+effectively restrict the users of a free program by obtaining a
-> -+restrictive license from a patent holder.  Therefore, we insist that
-> -+any patent license obtained for a version of the library must be
-> -+consistent with the full freedom of use specified in this license.
-> -+
-> -+  Most GNU software, including some libraries, is covered by the
-> -+ordinary GNU General Public License.  This license, the GNU Lesser
-> -+General Public License, applies to certain designated libraries, and
-> -+is quite different from the ordinary General Public License.  We use
-> -+this license for certain libraries in order to permit linking those
-> -+libraries into non-free programs.
-> -+
-> -+  When a program is linked with a library, whether statically or using
-> -+a shared library, the combination of the two is legally speaking a
-> -+combined work, a derivative of the original library.  The ordinary
-> -+General Public License therefore permits such linking only if the
-> -+entire combination fits its criteria of freedom.  The Lesser General
-> -+Public License permits more lax criteria for linking other code with
-> -+the library.
-> -+
-> -+  We call this license the "Lesser" General Public License because it
-> -+does Less to protect the user's freedom than the ordinary General
-> -+Public License.  It also provides other free software developers Less
-> -+of an advantage over competing non-free programs.  These disadvantages
-> -+are the reason we use the ordinary General Public License for many
-> -+libraries.  However, the Lesser license provides advantages in certain
-> -+special circumstances.
-> -+
-> -+  For example, on rare occasions, there may be a special need to
-> -+encourage the widest possible use of a certain library, so that it
-> becomes
-> -+a de-facto standard.  To achieve this, non-free programs must be
-> -+allowed to use the library.  A more frequent case is that a free
-> -+library does the same job as widely used non-free libraries.  In this
-> -+case, there is little to gain by limiting the free library to free
-> -+software only, so we use the Lesser General Public License.
-> -+
-> -+  In other cases, permission to use a particular library in non-free
-> -+programs enables a greater number of people to use a large body of
-> -+free software.  For example, permission to use the GNU C Library in
-> -+non-free programs enables many more people to use the whole GNU
-> -+operating system, as well as its variant, the GNU/Linux operating
-> -+system.
-> -+
-> -+  Although the Lesser General Public License is Less protective of the
-> -+users' freedom, it does ensure that the user of a program that is
-> -+linked with the Library has the freedom and the wherewithal to run
-> -+that program using a modified version of the Library.
-> -+
-> -+  The precise terms and conditions for copying, distribution and
-> -+modification follow.  Pay close attention to the difference between a
-> -+"work based on the library" and a "work that uses the library".  The
-> -+former contains code derived from the library, whereas the latter must
-> -+be combined with the library in order to run.
-> -+
-> -+                  GNU LESSER GENERAL PUBLIC LICENSE
-> -+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
-> -+
-> -+  0. This License Agreement applies to any software library or other
-> -+program which contains a notice placed by the copyright holder or
-> -+other authorized party saying it may be distributed under the terms of
-> -+this Lesser General Public License (also called "this License").
-> -+Each licensee is addressed as "you".
-> -+
-> -+  A "library" means a collection of software functions and/or data
-> -+prepared so as to be conveniently linked with application programs
-> -+(which use some of those functions and data) to form executables.
-> -+
-> -+  The "Library", below, refers to any such software library or work
-> -+which has been distributed under these terms.  A "work based on the
-> -+Library" means either the Library or any derivative work under
-> -+copyright law: that is to say, a work containing the Library or a
-> -+portion of it, either verbatim or with modifications and/or translated
-> -+straightforwardly into another language.  (Hereinafter, translation is
-> -+included without limitation in the term "modification".)
-> -+
-> -+  "Source code" for a work means the preferred form of the work for
-> -+making modifications to it.  For a library, complete source code means
-> -+all the source code for all modules it contains, plus any associated
-> -+interface definition files, plus the scripts used to control compilation
-> -+and installation of the library.
-> -+
-> -+  Activities other than copying, distribution and modification are not
-> -+covered by this License; they are outside its scope.  The act of
-> -+running a program using the Library is not restricted, and output from
-> -+such a program is covered only if its contents constitute a work based
-> -+on the Library (independent of the use of the Library in a tool for
-> -+writing it).  Whether that is true depends on what the Library does
-> -+and what the program that uses the Library does.
-> -+
-> -+  1. You may copy and distribute verbatim copies of the Library's
-> -+complete source code as you receive it, in any medium, provided that
-> -+you conspicuously and appropriately publish on each copy an
-> -+appropriate copyright notice and disclaimer of warranty; keep intact
-> -+all the notices that refer to this License and to the absence of any
-> -+warranty; and distribute a copy of this License along with the
-> -+Library.
-> -+
-> -+  You may charge a fee for the physical act of transferring a copy,
-> -+and you may at your option offer warranty protection in exchange for a
-> -+fee.
-> -+
-> -+  2. You may modify your copy or copies of the Library or any portion
-> -+of it, thus forming a work based on the Library, and copy and
-> -+distribute such modifications or work under the terms of Section 1
-> -+above, provided that you also meet all of these conditions:
-> -+
-> -+    a) The modified work must itself be a software library.
-> -+
-> -+    b) You must cause the files modified to carry prominent notices
-> -+    stating that you changed the files and the date of any change.
-> -+
-> -+    c) You must cause the whole of the work to be licensed at no
-> -+    charge to all third parties under the terms of this License.
-> -+
-> -+    d) If a facility in the modified Library refers to a function or a
-> -+    table of data to be supplied by an application program that uses
-> -+    the facility, other than as an argument passed when the facility
-> -+    is invoked, then you must make a good faith effort to ensure that,
-> -+    in the event an application does not supply such function or
-> -+    table, the facility still operates, and performs whatever part of
-> -+    its purpose remains meaningful.
-> -+
-> -+    (For example, a function in a library to compute square roots has
-> -+    a purpose that is entirely well-defined independent of the
-> -+    application.  Therefore, Subsection 2d requires that any
-> -+    application-supplied function or table used by this function must
-> -+    be optional: if the application does not supply it, the square
-> -+    root function must still compute square roots.)
-> -+
-> -+These requirements apply to the modified work as a whole.  If
-> -+identifiable sections of that work are not derived from the Library,
-> -+and can be reasonably considered independent and separate works in
-> -+themselves, then this License, and its terms, do not apply to those
-> -+sections when you distribute them as separate works.  But when you
-> -+distribute the same sections as part of a whole which is a work based
-> -+on the Library, the distribution of the whole must be on the terms of
-> -+this License, whose permissions for other licensees extend to the
-> -+entire whole, and thus to each and every part regardless of who wrote
-> -+it.
-> -+
-> -+Thus, it is not the intent of this section to claim rights or contest
-> -+your rights to work written entirely by you; rather, the intent is to
-> -+exercise the right to control the distribution of derivative or
-> -+collective works based on the Library.
-> -+
-> -+In addition, mere aggregation of another work not based on the Library
-> -+with the Library (or with a work based on the Library) on a volume of
-> -+a storage or distribution medium does not bring the other work under
-> -+the scope of this License.
-> -+
-> -+  3. You may opt to apply the terms of the ordinary GNU General Public
-> -+License instead of this License to a given copy of the Library.  To do
-> -+this, you must alter all the notices that refer to this License, so
-> -+that they refer to the ordinary GNU General Public License, version 2,
-> -+instead of to this License.  (If a newer version than version 2 of the
-> -+ordinary GNU General Public License has appeared, then you can specify
-> -+that version instead if you wish.)  Do not make any other change in
-> -+these notices.
-> -+
-> -+  Once this change is made in a given copy, it is irreversible for
-> -+that copy, so the ordinary GNU General Public License applies to all
-> -+subsequent copies and derivative works made from that copy.
-> -+
-> -+  This option is useful when you wish to copy part of the code of
-> -+the Library into a program that is not a library.
-> -+
-> -+  4. You may copy and distribute the Library (or a portion or
-> -+derivative of it, under Section 2) in object code or executable form
-> -+under the terms of Sections 1 and 2 above provided that you accompany
-> -+it with the complete corresponding machine-readable source code, which
-> -+must be distributed under the terms of Sections 1 and 2 above on a
-> -+medium customarily used for software interchange.
-> -+
-> -+  If distribution of object code is made by offering access to copy
-> -+from a designated place, then offering equivalent access to copy the
-> -+source code from the same place satisfies the requirement to
-> -+distribute the source code, even though third parties are not
-> -+compelled to copy the source along with the object code.
-> -+
-> -+  5. A program that contains no derivative of any portion of the
-> -+Library, but is designed to work with the Library by being compiled or
-> -+linked with it, is called a "work that uses the Library".  Such a
-> -+work, in isolation, is not a derivative work of the Library, and
-> -+therefore falls outside the scope of this License.
-> -+
-> -+  However, linking a "work that uses the Library" with the Library
-> -+creates an executable that is a derivative of the Library (because it
-> -+contains portions of the Library), rather than a "work that uses the
-> -+library".  The executable is therefore covered by this License.
-> -+Section 6 states terms for distribution of such executables.
-> -+
-> -+  When a "work that uses the Library" uses material from a header file
-> -+that is part of the Library, the object code for the work may be a
-> -+derivative work of the Library even though the source code is not.
-> -+Whether this is true is especially significant if the work can be
-> -+linked without the Library, or if the work is itself a library.  The
-> -+threshold for this to be true is not precisely defined by law.
-> -+
-> -+  If such an object file uses only numerical parameters, data
-> -+structure layouts and accessors, and small macros and small inline
-> -+functions (ten lines or less in length), then the use of the object
-> -+file is unrestricted, regardless of whether it is legally a derivative
-> -+work.  (Executables containing this object code plus portions of the
-> -+Library will still fall under Section 6.)
-> -+
-> -+  Otherwise, if the work is a derivative of the Library, you may
-> -+distribute the object code for the work under the terms of Section 6.
-> -+Any executables containing that work also fall under Section 6,
-> -+whether or not they are linked directly with the Library itself.
-> -+
-> -+  6. As an exception to the Sections above, you may also combine or
-> -+link a "work that uses the Library" with the Library to produce a
-> -+work containing portions of the Library, and distribute that work
-> -+under terms of your choice, provided that the terms permit
-> -+modification of the work for the customer's own use and reverse
-> -+engineering for debugging such modifications.
-> -+
-> -+  You must give prominent notice with each copy of the work that the
-> -+Library is used in it and that the Library and its use are covered by
-> -+this License.  You must supply a copy of this License.  If the work
-> -+during execution displays copyright notices, you must include the
-> -+copyright notice for the Library among them, as well as a reference
-> -+directing the user to the copy of this License.  Also, you must do one
-> -+of these things:
-> -+
-> -+    a) Accompany the work with the complete corresponding
-> -+    machine-readable source code for the Library including whatever
-> -+    changes were used in the work (which must be distributed under
-> -+    Sections 1 and 2 above); and, if the work is an executable linked
-> -+    with the Library, with the complete machine-readable "work that
-> -+    uses the Library", as object code and/or source code, so that the
-> -+    user can modify the Library and then relink to produce a modified
-> -+    executable containing the modified Library.  (It is understood
-> -+    that the user who changes the contents of definitions files in the
-> -+    Library will not necessarily be able to recompile the application
-> -+    to use the modified definitions.)
-> -+
-> -+    b) Use a suitable shared library mechanism for linking with the
-> -+    Library.  A suitable mechanism is one that (1) uses at run time a
-> -+    copy of the library already present on the user's computer system,
-> -+    rather than copying library functions into the executable, and (2)
-> -+    will operate properly with a modified version of the library, if
-> -+    the user installs one, as long as the modified version is
-> -+    interface-compatible with the version that the work was made with.
-> -+
-> -+    c) Accompany the work with a written offer, valid for at
-> -+    least three years, to give the same user the materials
-> -+    specified in Subsection 6a, above, for a charge no more
-> -+    than the cost of performing this distribution.
-> -+
-> -+    d) If distribution of the work is made by offering access to copy
-> -+    from a designated place, offer equivalent access to copy the above
-> -+    specified materials from the same place.
-> -+
-> -+    e) Verify that the user has already received a copy of these
-> -+    materials or that you have already sent this user a copy.
-> -+
-> -+  For an executable, the required form of the "work that uses the
-> -+Library" must include any data and utility programs needed for
-> -+reproducing the executable from it.  However, as a special exception,
-> -+the materials to be distributed need not include anything that is
-> -+normally distributed (in either source or binary form) with the major
-> -+components (compiler, kernel, and so on) of the operating system on
-> -+which the executable runs, unless that component itself accompanies
-> -+the executable.
-> -+
-> -+  It may happen that this requirement contradicts the license
-> -+restrictions of other proprietary libraries that do not normally
-> -+accompany the operating system.  Such a contradiction means you cannot
-> -+use both them and the Library together in an executable that you
-> -+distribute.
-> -+
-> -+  7. You may place library facilities that are a work based on the
-> -+Library side-by-side in a single library together with other library
-> -+facilities not covered by this License, and distribute such a combined
-> -+library, provided that the separate distribution of the work based on
-> -+the Library and of the other library facilities is otherwise
-> -+permitted, and provided that you do these two things:
-> -+
-> -+    a) Accompany the combined library with a copy of the same work
-> -+    based on the Library, uncombined with any other library
-> -+    facilities.  This must be distributed under the terms of the
-> -+    Sections above.
-> -+
-> -+    b) Give prominent notice with the combined library of the fact
-> -+    that part of it is a work based on the Library, and explaining
-> -+    where to find the accompanying uncombined form of the same work.
-> -+
-> -+  8. You may not copy, modify, sublicense, link with, or distribute
-> -+the Library except as expressly provided under this License.  Any
-> -+attempt otherwise to copy, modify, sublicense, link with, or
-> -+distribute the Library is void, and will automatically terminate your
-> -+rights under this License.  However, parties who have received copies,
-> -+or rights, from you under this License will not have their licenses
-> -+terminated so long as such parties remain in full compliance.
-> -+
-> -+  9. You are not required to accept this License, since you have not
-> -+signed it.  However, nothing else grants you permission to modify or
-> -+distribute the Library or its derivative works.  These actions are
-> -+prohibited by law if you do not accept this License.  Therefore, by
-> -+modifying or distributing the Library (or any work based on the
-> -+Library), you indicate your acceptance of this License to do so, and
-> -+all its terms and conditions for copying, distributing or modifying
-> -+the Library or works based on it.
-> -+
-> -+  10. Each time you redistribute the Library (or any work based on the
-> -+Library), the recipient automatically receives a license from the
-> -+original licensor to copy, distribute, link with or modify the Library
-> -+subject to these terms and conditions.  You may not impose any further
-> -+restrictions on the recipients' exercise of the rights granted herein.
-> -+You are not responsible for enforcing compliance by third parties with
-> -+this License.
-> -+
-> -+  11. If, as a consequence of a court judgment or allegation of patent
-> -+infringement or for any other reason (not limited to patent issues),
-> -+conditions are imposed on you (whether by court order, agreement or
-> -+otherwise) that contradict the conditions of this License, they do not
-> -+excuse you from the conditions of this License.  If you cannot
-> -+distribute so as to satisfy simultaneously your obligations under this
-> -+License and any other pertinent obligations, then as a consequence you
-> -+may not distribute the Library at all.  For example, if a patent
-> -+license would not permit royalty-free redistribution of the Library by
-> -+all those who receive copies directly or indirectly through you, then
-> -+the only way you could satisfy both it and this License would be to
-> -+refrain entirely from distribution of the Library.
-> -+
-> -+If any portion of this section is held invalid or unenforceable under any
-> -+particular circumstance, the balance of the section is intended to apply,
-> -+and the section as a whole is intended to apply in other circumstances.
-> -+
-> -+It is not the purpose of this section to induce you to infringe any
-> -+patents or other property right claims or to contest validity of any
-> -+such claims; this section has the sole purpose of protecting the
-> -+integrity of the free software distribution system which is
-> -+implemented by public license practices.  Many people have made
-> -+generous contributions to the wide range of software distributed
-> -+through that system in reliance on consistent application of that
-> -+system; it is up to the author/donor to decide if he or she is willing
-> -+to distribute software through any other system and a licensee cannot
-> -+impose that choice.
-> -+
-> -+This section is intended to make thoroughly clear what is believed to
-> -+be a consequence of the rest of this License.
-> -+
-> -+  12. If the distribution and/or use of the Library is restricted in
-> -+certain countries either by patents or by copyrighted interfaces, the
-> -+original copyright holder who places the Library under this License may
-> add
-> -+an explicit geographical distribution limitation excluding those
-> countries,
-> -+so that distribution is permitted only in or among countries not thus
-> -+excluded.  In such case, this License incorporates the limitation as if
-> -+written in the body of this License.
-> -+
-> -+  13. The Free Software Foundation may publish revised and/or new
-> -+versions of the Lesser General Public License from time to time.
-> -+Such new versions will be similar in spirit to the present version,
-> -+but may differ in detail to address new problems or concerns.
-> -+
-> -+Each version is given a distinguishing version number.  If the Library
-> -+specifies a version number of this License which applies to it and
-> -+"any later version", you have the option of following the terms and
-> -+conditions either of that version or of any later version published by
-> -+the Free Software Foundation.  If the Library does not specify a
-> -+license version number, you may choose any version ever published by
-> -+the Free Software Foundation.
-> -+
-> -+  14. If you wish to incorporate parts of the Library into other free
-> -+programs whose distribution conditions are incompatible with these,
-> -+write to the author to ask for permission.  For software which is
-> -+copyrighted by the Free Software Foundation, write to the Free
-> -+Software Foundation; we sometimes make exceptions for this.  Our
-> -+decision will be guided by the two goals of preserving the free status
-> -+of all derivatives of our free software and of promoting the sharing
-> -+and reuse of software generally.
-> -+
-> -+                            NO WARRANTY
-> -+
-> -+  15. BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO
-> -+WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
-> -+EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR
-> -+OTHER PARTIES PROVIDE THE LIBRARY "AS IS" WITHOUT WARRANTY OF ANY
-> -+KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
-> -+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-> -+PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE
-> -+LIBRARY IS WITH YOU.  SHOULD THE LIBRARY PROVE DEFECTIVE, YOU ASSUME
-> -+THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
-> -+
-> -+  16. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN
-> -+WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY
-> -+AND/OR REDISTRIBUTE THE LIBRARY AS PERMITTED ABOVE, BE LIABLE TO YOU
-> -+FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR
-> -+CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
-> -+LIBRARY (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
-> -+RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
-> -+FAILURE OF THE LIBRARY TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
-> -+SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
-> -+DAMAGES.
-> -+
-> -+                     END OF TERMS AND CONDITIONS
-> -+
-> -+           How to Apply These Terms to Your New Libraries
-> -+
-> -+  If you develop a new library, and you want it to be of the greatest
-> -+possible use to the public, we recommend making it free software that
-> -+everyone can redistribute and change.  You can do so by permitting
-> -+redistribution under these terms (or, alternatively, under the terms of
+> > Hi Angelo
+> >
+> > See my comment below.
+> >
+> > BR
+> > Mircea
+> >
+> > On 4/28/20 11:42 AM, Angelo Compagnucci wrote:
+> > > On Tue, Apr 28, 2020 at 9:42 AM Mircea GLIGA <mgliga@bitdefender.com>
+> wrote:
+> > >>
+> > >> Hi Angelo,
+> > >>
+> > >> Thanks for applying my suggestions, see my comments below.
+> > >> Order of the `sed` expressions is important, changing the order broke
 > the
-> -+ordinary General Public License).
-> -+
-> -+  To apply these terms, attach the following notices to the library.  It
-> is
-> -+safest to attach them to the start of each source file to most
-> effectively
-> -+convey the exclusion of warranty; and each file should have at least the
-> -+"copyright" line and a pointer to where the full notice is found.
-> -+
-> -+    <one line to give the library's name and a brief idea of what it
-> does.>
-> -+    Copyright (C) <year>  <name of author>
-> -+
-> -+    This library is free software; you can redistribute it and/or
-> -+    modify it under the terms of the GNU Lesser General Public
-> -+    License as published by the Free Software Foundation; either
-> -+    version 2.1 of the License, or (at your option) any later version.
-> -+
-> -+    This library is distributed in the hope that it will be useful,
-> -+    but WITHOUT ANY WARRANTY; without even the implied warranty of
-> -+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> -+    Lesser General Public License for more details.
-> -+
-> -+    You should have received a copy of the GNU Lesser General Public
-> -+    License along with this library; if not, write to the Free Software
-> -+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-> 02110-1301  USA
-> -+
-> -+Also add information on how to contact you by electronic and paper mail.
-> -+
-> -+You should also get your employer (if you work as a programmer) or your
-> -+school, if any, to sign a "copyright disclaimer" for the library, if
-> -+necessary.  Here is a sample; alter the names:
-> -+
-> -+  Yoyodyne, Inc., hereby disclaims all copyright interest in the
-> -+  library `Frob' (a library for tweaking knobs) written by James Random
-> Hacker.
-> -+
-> -+  <signature of Ty Coon>, 1 April 1990
-> -+  Ty Coon, President of Vice
-> -+
-> -+That's all there is to it!
-> -+
-> -+
-> -+### Mozilla Public License 1.1
-> -+
-> -+                          MOZILLA PUBLIC LICENSE
-> -+                                Version 1.1
-> -+
-> -+                              ---------------
-> -+
-> -+1. Definitions.
-> -+
-> -+     1.0.1. "Commercial Use" means distribution or otherwise making the
-> -+     Covered Code available to a third party.
-> -+
-> -+     1.1. "Contributor" means each entity that creates or contributes to
-> -+     the creation of Modifications.
-> -+
-> -+     1.2. "Contributor Version" means the combination of the Original
-> -+     Code, prior Modifications used by a Contributor, and the
-> Modifications
-> -+     made by that particular Contributor.
-> -+
-> -+     1.3. "Covered Code" means the Original Code or Modifications or the
-> -+     combination of the Original Code and Modifications, in each case
-> -+     including portions thereof.
-> -+
-> -+     1.4. "Electronic Distribution Mechanism" means a mechanism generally
-> -+     accepted in the software development community for the electronic
-> -+     transfer of data.
-> -+
-> -+     1.5. "Executable" means Covered Code in any form other than Source
-> -+     Code.
-> -+
-> -+     1.6. "Initial Developer" means the individual or entity identified
-> -+     as the Initial Developer in the Source Code notice required by
-> Exhibit
-> -+     A.
-> -+
-> -+     1.7. "Larger Work" means a work which combines Covered Code or
-> -+     portions thereof with code not governed by the terms of this
-> License.
-> -+
-> -+     1.8. "License" means this document.
-> -+
-> -+     1.8.1. "Licensable" means having the right to grant, to the maximum
-> -+     extent possible, whether at the time of the initial grant or
-> -+     subsequently acquired, any and all of the rights conveyed herein.
-> -+
-> -+     1.9. "Modifications" means any addition to or deletion from the
-> -+     substance or structure of either the Original Code or any previous
-> -+     Modifications. When Covered Code is released as a series of files, a
-> -+     Modification is:
-> -+          A. Any addition to or deletion from the contents of a file
-> -+          containing Original Code or previous Modifications.
-> -+
-> -+          B. Any new file that contains any part of the Original Code or
-> -+          previous Modifications.
-> -+
-> -+     1.10. "Original Code" means Source Code of computer software code
-> -+     which is described in the Source Code notice required by Exhibit A
-> as
-> -+     Original Code, and which, at the time of its release under this
-> -+     License is not already Covered Code governed by this License.
-> -+
-> -+     1.10.1. "Patent Claims" means any patent claim(s), now owned or
-> -+     hereafter acquired, including without limitation,  method, process,
-> -+     and apparatus claims, in any patent Licensable by grantor.
-> -+
-> -+     1.11. "Source Code" means the preferred form of the Covered Code for
-> -+     making modifications to it, including all modules it contains, plus
-> -+     any associated interface definition files, scripts used to control
-> -+     compilation and installation of an Executable, or source code
-> -+     differential comparisons against either the Original Code or another
-> -+     well known, available Covered Code of the Contributor's choice. The
-> -+     Source Code can be in a compressed or archival form, provided the
-> -+     appropriate decompression or de-archiving software is widely
-> available
-> -+     for no charge.
-> -+
-> -+     1.12. "You" (or "Your")  means an individual or a legal entity
-> -+     exercising rights under, and complying with all of the terms of,
-> this
-> -+     License or a future version of this License issued under Section
-> 6.1.
-> -+     For legal entities, "You" includes any entity which controls, is
-> -+     controlled by, or is under common control with You. For purposes of
-> -+     this definition, "control" means (a) the power, direct or indirect,
-> -+     to cause the direction or management of such entity, whether by
-> -+     contract or otherwise, or (b) ownership of more than fifty percent
-> -+     (50%) of the outstanding shares or beneficial ownership of such
-> -+     entity.
-> -+
-> -+2. Source Code License.
-> -+
-> -+     2.1. The Initial Developer Grant.
-> -+     The Initial Developer hereby grants You a world-wide, royalty-free,
-> -+     non-exclusive license, subject to third party intellectual property
-> -+     claims:
-> -+          (a)  under intellectual property rights (other than patent or
-> -+          trademark) Licensable by Initial Developer to use, reproduce,
-> -+          modify, display, perform, sublicense and distribute the
-> Original
-> -+          Code (or portions thereof) with or without Modifications,
-> and/or
-> -+          as part of a Larger Work; and
-> -+
-> -+          (b) under Patents Claims infringed by the making, using or
-> -+          selling of Original Code, to make, have made, use, practice,
-> -+          sell, and offer for sale, and/or otherwise dispose of the
-> -+          Original Code (or portions thereof).
-> -+
-> -+          (c) the licenses granted in this Section 2.1(a) and (b) are
-> -+          effective on the date Initial Developer first distributes
-> -+          Original Code under the terms of this License.
-> -+
-> -+          (d) Notwithstanding Section 2.1(b) above, no patent license is
-> -+          granted: 1) for code that You delete from the Original Code; 2)
-> -+          separate from the Original Code;  or 3) for infringements
-> caused
-> -+          by: i) the modification of the Original Code or ii) the
-> -+          combination of the Original Code with other software or
-> devices.
-> -+
-> -+     2.2. Contributor Grant.
-> -+     Subject to third party intellectual property claims, each
-> Contributor
-> -+     hereby grants You a world-wide, royalty-free, non-exclusive license
-> -+
-> -+          (a)  under intellectual property rights (other than patent or
-> -+          trademark) Licensable by Contributor, to use, reproduce,
-> modify,
-> -+          display, perform, sublicense and distribute the Modifications
-> -+          created by such Contributor (or portions thereof) either on an
-> -+          unmodified basis, with other Modifications, as Covered Code
-> -+          and/or as part of a Larger Work; and
-> -+
-> -+          (b) under Patent Claims infringed by the making, using, or
-> -+          selling of  Modifications made by that Contributor either alone
-> -+          and/or in combination with its Contributor Version (or portions
-> -+          of such combination), to make, use, sell, offer for sale, have
-> -+          made, and/or otherwise dispose of: 1) Modifications made by
-> that
-> -+          Contributor (or portions thereof); and 2) the combination of
-> -+          Modifications made by that Contributor with its Contributor
-> -+          Version (or portions of such combination).
-> -+
-> -+          (c) the licenses granted in Sections 2.2(a) and 2.2(b) are
-> -+          effective on the date Contributor first makes Commercial Use of
-> -+          the Covered Code.
-> -+
-> -+          (d)    Notwithstanding Section 2.2(b) above, no patent license
-> is
-> -+          granted: 1) for any code that Contributor has deleted from the
-> -+          Contributor Version; 2)  separate from the Contributor Version;
-> -+          3)  for infringements caused by: i) third party modifications
-> of
-> -+          Contributor Version or ii)  the combination of Modifications
-> made
-> -+          by that Contributor with other software  (except as part of the
-> -+          Contributor Version) or other devices; or 4) under Patent
-> Claims
-> -+          infringed by Covered Code in the absence of Modifications made
-> by
-> -+          that Contributor.
-> -+
-> -+3. Distribution Obligations.
-> -+
-> -+     3.1. Application of License.
-> -+     The Modifications which You create or to which You contribute are
-> -+     governed by the terms of this License, including without limitation
-> -+     Section 2.2. The Source Code version of Covered Code may be
-> -+     distributed only under the terms of this License or a future version
-> -+     of this License released under Section 6.1, and You must include a
-> -+     copy of this License with every copy of the Source Code You
-> -+     distribute. You may not offer or impose any terms on any Source Code
-> -+     version that alters or restricts the applicable version of this
-> -+     License or the recipients' rights hereunder. However, You may
-> include
-> -+     an additional document offering the additional rights described in
-> -+     Section 3.5.
-> -+
-> -+     3.2. Availability of Source Code.
-> -+     Any Modification which You create or to which You contribute must be
-> -+     made available in Source Code form under the terms of this License
-> -+     either on the same media as an Executable version or via an accepted
-> -+     Electronic Distribution Mechanism to anyone to whom you made an
-> -+     Executable version available; and if made available via Electronic
-> -+     Distribution Mechanism, must remain available for at least twelve
-> (12)
-> -+     months after the date it initially became available, or at least six
-> -+     (6) months after a subsequent version of that particular
-> Modification
-> -+     has been made available to such recipients. You are responsible for
-> -+     ensuring that the Source Code version remains available even if the
-> -+     Electronic Distribution Mechanism is maintained by a third party.
-> -+
-> -+     3.3. Description of Modifications.
-> -+     You must cause all Covered Code to which You contribute to contain a
-> -+     file documenting the changes You made to create that Covered Code
-> and
-> -+     the date of any change. You must include a prominent statement that
-> -+     the Modification is derived, directly or indirectly, from Original
-> -+     Code provided by the Initial Developer and including the name of the
-> -+     Initial Developer in (a) the Source Code, and (b) in any notice in
-> an
-> -+     Executable version or related documentation in which You describe
-> the
-> -+     origin or ownership of the Covered Code.
-> -+
-> -+     3.4. Intellectual Property Matters
-> -+          (a) Third Party Claims.
-> -+          If Contributor has knowledge that a license under a third
-> party's
-> -+          intellectual property rights is required to exercise the rights
-> -+          granted by such Contributor under Sections 2.1 or 2.2,
-> -+          Contributor must include a text file with the Source Code
-> -+          distribution titled "LEGAL" which describes the claim and the
-> -+          party making the claim in sufficient detail that a recipient
-> will
-> -+          know whom to contact. If Contributor obtains such knowledge
-> after
-> -+          the Modification is made available as described in Section 3.2,
-> -+          Contributor shall promptly modify the LEGAL file in all copies
-> -+          Contributor makes available thereafter and shall take other
-> steps
-> -+          (such as notifying appropriate mailing lists or newsgroups)
-> -+          reasonably calculated to inform those who received the Covered
-> -+          Code that new knowledge has been obtained.
-> -+
-> -+          (b) Contributor APIs.
-> -+          If Contributor's Modifications include an application
-> programming
-> -+          interface and Contributor has knowledge of patent licenses
-> which
-> -+          are reasonably necessary to implement that API, Contributor
-> must
-> -+          also include this information in the LEGAL file.
-> -+
-> -+               (c)    Representations.
-> -+          Contributor represents that, except as disclosed pursuant to
-> -+          Section 3.4(a) above, Contributor believes that Contributor's
-> -+          Modifications are Contributor's original creation(s) and/or
-> -+          Contributor has sufficient rights to grant the rights conveyed
-> by
-> -+          this License.
-> -+
-> -+     3.5. Required Notices.
-> -+     You must duplicate the notice in Exhibit A in each file of the
-> Source
-> -+     Code.  If it is not possible to put such notice in a particular
-> Source
-> -+     Code file due to its structure, then You must include such notice
-> in a
-> -+     location (such as a relevant directory) where a user would be likely
-> -+     to look for such a notice.  If You created one or more
-> Modification(s)
-> -+     You may add your name as a Contributor to the notice described in
-> -+     Exhibit A.  You must also duplicate this License in any
-> documentation
-> -+     for the Source Code where You describe recipients' rights or
-> ownership
-> -+     rights relating to Covered Code.  You may choose to offer, and to
-> -+     charge a fee for, warranty, support, indemnity or liability
-> -+     obligations to one or more recipients of Covered Code. However, You
-> -+     may do so only on Your own behalf, and not on behalf of the Initial
-> -+     Developer or any Contributor. You must make it absolutely clear than
-> -+     any such warranty, support, indemnity or liability obligation is
-> -+     offered by You alone, and You hereby agree to indemnify the Initial
-> -+     Developer and every Contributor for any liability incurred by the
-> -+     Initial Developer or such Contributor as a result of warranty,
-> -+     support, indemnity or liability terms You offer.
-> -+
-> -+     3.6. Distribution of Executable Versions.
-> -+     You may distribute Covered Code in Executable form only if the
-> -+     requirements of Section 3.1-3.5 have been met for that Covered Code,
-> -+     and if You include a notice stating that the Source Code version of
-> -+     the Covered Code is available under the terms of this License,
-> -+     including a description of how and where You have fulfilled the
-> -+     obligations of Section 3.2. The notice must be conspicuously
-> included
-> -+     in any notice in an Executable version, related documentation or
-> -+     collateral in which You describe recipients' rights relating to the
-> -+     Covered Code. You may distribute the Executable version of Covered
-> -+     Code or ownership rights under a license of Your choice, which may
-> -+     contain terms different from this License, provided that You are in
-> -+     compliance with the terms of this License and that the license for
-> the
-> -+     Executable version does not attempt to limit or alter the
-> recipient's
-> -+     rights in the Source Code version from the rights set forth in this
-> -+     License. If You distribute the Executable version under a different
-> -+     license You must make it absolutely clear that any terms which
-> differ
-> -+     from this License are offered by You alone, not by the Initial
-> -+     Developer or any Contributor. You hereby agree to indemnify the
-> -+     Initial Developer and every Contributor for any liability incurred
-> by
-> -+     the Initial Developer or such Contributor as a result of any such
-> -+     terms You offer.
-> -+
-> -+     3.7. Larger Works.
-> -+     You may create a Larger Work by combining Covered Code with other
-> code
-> -+     not governed by the terms of this License and distribute the Larger
-> -+     Work as a single product. In such a case, You must make sure the
-> -+     requirements of this License are fulfilled for the Covered Code.
-> -+
-> -+4. Inability to Comply Due to Statute or Regulation.
-> -+
-> -+     If it is impossible for You to comply with any of the terms of this
-> -+     License with respect to some or all of the Covered Code due to
-> -+     statute, judicial order, or regulation then You must: (a) comply
-> with
-> -+     the terms of this License to the maximum extent possible; and (b)
-> -+     describe the limitations and the code they affect. Such description
-> -+     must be included in the LEGAL file described in Section 3.4 and must
-> -+     be included with all distributions of the Source Code. Except to the
-> -+     extent prohibited by statute or regulation, such description must be
-> -+     sufficiently detailed for a recipient of ordinary skill to be able
+> > >> usage of the CROSS_COMPILE variable. The AR, AS, CC etc are not using
+> > >> that variable anymore.
+> > >> Order should be:
+> > >> * replace TARGET_CROSS with $CROSS_COMPILE
+> > >> * make use of the PATH variable, remove paths already in PATH
+> > >> * replace HOST_DIR with $SDK_PATH
+> > >
+> > > I don't think it's strictly necessary to have ${CROSS_COMPILE}
+> > > everywhere. I prefer to have the executable name in $AR, $AS and so
+> > > on.
+> > >
+> >
+> > Ok, then you should drop the `ENVIRONMENT_SETUP_CROSS_COMPILE_SED_EXP`
+> > expression and remove it from the `sed` command because it will not
+> > match anything.
+>
+> Had you time to have a look and test the patch v6?
+>
+> https://patchwork.ozlabs.org/project/buildroot/list/?series=173257
+>
+> Thanks!
+>
+> >
+> > > Anyway, for CROSS_COMPILE, only the prefix is used to compose the
+> > > executable name, so
+> > >
+> > > $ which ${CROSS_COMPILE}gcc
+> > > /FULLPATH/host/bin/arm-linux-gnueabihf-gcc
+> > > $ which ${CC}
+> > > /FULLPATH/host/bin/arm-linux-gnueabihf-gcc
+> > >
+> > >>
+> > >> Best regards
+> > >> Mircea
+> > >>
+> > >> See the output diff:
+> > >>
+> > >> --- environment-setup   2020-04-28 09:55:19.927381470 +0300
+> > >> +++ environment-setup_v5        2020-04-28 10:01:45.387944589 +0300
+> > >> @@ -14,23 +14,22 @@
+> > >>
+> > >>    EOF
+> > >>    SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
+> > >> -export "CROSS_COMPILE=armeb-buildroot-linux-uclibcgnueabi-"
+> > >>    export
+> > >>
+> "PATH=$SDK_PATH/bin:$SDK_PATH/sbin:/home/mgliga/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
+> > >> -export "AR=${CROSS_COMPILE}ar"
+> > >> -export "AS=${CROSS_COMPILE}as"
+> > >> -export "LD=${CROSS_COMPILE}ld"
+> > >> -export "NM=${CROSS_COMPILE}nm"
+> > >> -export "CC=${CROSS_COMPILE}gcc"
+> > >> -export "GCC=${CROSS_COMPILE}gcc"
+> > >> -export "CPP=${CROSS_COMPILE}cpp"
+> > >> -export "CXX=${CROSS_COMPILE}g++"
+> > >> -export "FC=${CROSS_COMPILE}gfortran"
+> > >> -export "F77=${CROSS_COMPILE}gfortran"
+> > >> -export "RANLIB=${CROSS_COMPILE}ranlib"
+> > >> -export "READELF=${CROSS_COMPILE}readelf"
+> > >> -export "STRIP=${CROSS_COMPILE}strip"
+> > >> -export "OBJCOPY=${CROSS_COMPILE}objcopy"
+> > >> -export "OBJDUMP=${CROSS_COMPILE}objdump"
+> > >> +export "AR=armeb-buildroot-linux-uclibcgnueabi-ar"
+> > >> +export "AS=armeb-buildroot-linux-uclibcgnueabi-as"
+> > >> +export "LD=armeb-buildroot-linux-uclibcgnueabi-ld"
+> > >> +export "NM=armeb-buildroot-linux-uclibcgnueabi-nm"
+> > >> +export "CC=armeb-buildroot-linux-uclibcgnueabi-gcc"
+> > >> +export "GCC=armeb-buildroot-linux-uclibcgnueabi-gcc"
+> > >> +export "CPP=armeb-buildroot-linux-uclibcgnueabi-cpp"
+> > >> +export "CXX=armeb-buildroot-linux-uclibcgnueabi-g++"
+> > >> +export "FC=armeb-buildroot-linux-uclibcgnueabi-gfortran"
+> > >> +export "F77=armeb-buildroot-linux-uclibcgnueabi-gfortran"
+> > >> +export "RANLIB=armeb-buildroot-linux-uclibcgnueabi-ranlib"
+> > >> +export "READELF=armeb-buildroot-linux-uclibcgnueabi-readelf"
+> > >> +export "STRIP=armeb-buildroot-linux-uclibcgnueabi-strip"
+> > >> +export "OBJCOPY=armeb-buildroot-linux-uclibcgnueabi-objcopy"
+> > >> +export "OBJDUMP=armeb-buildroot-linux-uclibcgnueabi-objdump"
+> > >>    export "AR_FOR_BUILD=/usr/bin/ar"
+> > >>    export "AS_FOR_BUILD=/usr/bin/as"
+> > >>    export "CC_FOR_BUILD=ccache /usr/bin/gcc"
+> > >> @@ -42,8 +41,8 @@
+> > >>    export "CXXFLAGS_FOR_BUILD=-O2 -I$SDK_PATH/include"
+> > >>    export "LDFLAGS_FOR_BUILD=-L$SDK_PATH/lib -Wl,-rpath,$SDK_PATH/lib"
+> > >>    export "FCFLAGS_FOR_BUILD="
+> > >> -export "DEFAULT_ASSEMBLER=${CROSS_COMPILE}as"
+> > >> -export "DEFAULT_LINKER=${CROSS_COMPILE}ld"
+> > >> +export "DEFAULT_ASSEMBLER=armeb-buildroot-linux-uclibcgnueabi-as"
+> > >> +export "DEFAULT_LINKER=armeb-buildroot-linux-uclibcgnueabi-ld"
+> > >>    export "CPPFLAGS=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> > >> -D_FILE_OFFSET_BITS=64"
+> > >>    export "CFLAGS=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> > >> -D_FILE_OFFSET_BITS=64  -Os  "
+> > >>    export "CXXFLAGS=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> > >> -D_FILE_OFFSET_BITS=64  -Os  "
+> > >> @@ -53,5 +52,6 @@
+> > >>    export "PKG_CONFIG=pkg-config"
+> > >>    export
+> "STAGING_DIR=$SDK_PATH/armeb-buildroot-linux-uclibcgnueabi/sysroot"
+> > >>    export "INTLTOOL_PERL=/usr/bin/perl"
+> > >> +export "CROSS_COMPILE=armeb-buildroot-linux-uclibcgnueabi-"
+> > >>    export
+> "CONFIGURE_FLAGS=--target=armeb-buildroot-linux-uclibcgnueabi
+> > >> --host=armeb-buildroot-linux-uclibcgnueabi --build=x86_64-pc-linux-gnu
+> > >> --prefix=/usr --exec-prefix=/usr --sysconfdir=/etc
+> --localstatedir=/var
+> > >> --program-prefix="
+> > >>    PS1="\[\]buildroot-2020.02\[\]:\[\]\w\[\]$ "
+> > >>
+> > >>
+> > >>
+> > >> On 4/27/20 11:36 PM, Angelo Compagnucci wrote:
+> > >>> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> > >>>
+> > >>> Install an helper script to setup a build environment based on
+> buildroot.
+> > >>> It's useful when a developer wants to use a buildroot generated sdk
 > to
-> -+     understand it.
-> -+
-> -+5. Application of this License.
-> -+
-> -+     This License applies to code to which the Initial Developer has
-> -+     attached the notice in Exhibit A and to related Covered Code.
-> -+
-> -+6. Versions of the License.
-> -+
-> -+     6.1. New Versions.
-> -+     Netscape Communications Corporation ("Netscape") may publish revised
-> -+     and/or new versions of the License from time to time. Each version
-> -+     will be given a distinguishing version number.
-> -+
-> -+     6.2. Effect of New Versions.
-> -+     Once Covered Code has been published under a particular version of
-> the
-> -+     License, You may always continue to use it under the terms of that
-> -+     version. You may also choose to use such Covered Code under the
-> terms
-> -+     of any subsequent version of the License published by Netscape. No
-> one
-> -+     other than Netscape has the right to modify the terms applicable to
-> -+     Covered Code created under this License.
-> -+
-> -+     6.3. Derivative Works.
-> -+     If You create or use a modified version of this License (which you
-> may
-> -+     only do in order to apply it to code which is not already Covered
-> Code
-> -+     governed by this License), You must (a) rename Your license so that
-> -+     the phrases "Mozilla", "MOZILLAPL", "MOZPL", "Netscape",
-> -+     "MPL", "NPL" or any confusingly similar phrase do not appear in your
-> -+     license (except to note that your license differs from this License)
-> -+     and (b) otherwise make it clear that Your version of the license
-> -+     contains terms which differ from the Mozilla Public License and
-> -+     Netscape Public License. (Filling in the name of the Initial
-> -+     Developer, Original Code or Contributor in the notice described in
-> -+     Exhibit A shall not of themselves be deemed to be modifications of
-> -+     this License.)
-> -+
-> -+7. DISCLAIMER OF WARRANTY.
-> -+
-> -+     COVERED CODE IS PROVIDED UNDER THIS LICENSE ON AN "AS IS" BASIS,
-> -+     WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
-> INCLUDING,
-> -+     WITHOUT LIMITATION, WARRANTIES THAT THE COVERED CODE IS FREE OF
-> -+     DEFECTS, MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE OR
-> NON-INFRINGING.
-> -+     THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE COVERED
-> CODE
-> -+     IS WITH YOU. SHOULD ANY COVERED CODE PROVE DEFECTIVE IN ANY RESPECT,
-> -+     YOU (NOT THE INITIAL DEVELOPER OR ANY OTHER CONTRIBUTOR) ASSUME THE
-> -+     COST OF ANY NECESSARY SERVICING, REPAIR OR CORRECTION. THIS
-> DISCLAIMER
-> -+     OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS LICENSE. NO USE OF
-> -+     ANY COVERED CODE IS AUTHORIZED HEREUNDER EXCEPT UNDER THIS
-> DISCLAIMER.
-> -+
-> -+8. TERMINATION.
-> -+
-> -+     8.1.  This License and the rights granted hereunder will terminate
-> -+     automatically if You fail to comply with terms herein and fail to
-> cure
-> -+     such breach within 30 days of becoming aware of the breach. All
-> -+     sublicenses to the Covered Code which are properly granted shall
-> -+     survive any termination of this License. Provisions which, by their
-> -+     nature, must remain in effect beyond the termination of this License
-> -+     shall survive.
-> -+
-> -+     8.2.  If You initiate litigation by asserting a patent infringement
-> -+     claim (excluding declatory judgment actions) against Initial
-> Developer
-> -+     or a Contributor (the Initial Developer or Contributor against whom
-> -+     You file such action is referred to as "Participant")  alleging
-> that:
-> -+
-> -+     (a)  such Participant's Contributor Version directly or indirectly
-> -+     infringes any patent, then any and all rights granted by such
-> -+     Participant to You under Sections 2.1 and/or 2.2 of this License
-> -+     shall, upon 60 days notice from Participant terminate prospectively,
-> -+     unless if within 60 days after receipt of notice You either: (i)
-> -+     agree in writing to pay Participant a mutually agreeable reasonable
-> -+     royalty for Your past and future use of Modifications made by such
-> -+     Participant, or (ii) withdraw Your litigation claim with respect to
-> -+     the Contributor Version against such Participant.  If within 60 days
-> -+     of notice, a reasonable royalty and payment arrangement are not
-> -+     mutually agreed upon in writing by the parties or the litigation
-> claim
-> -+     is not withdrawn, the rights granted by Participant to You under
-> -+     Sections 2.1 and/or 2.2 automatically terminate at the expiration of
-> -+     the 60 day notice period specified above.
-> -+
-> -+     (b)  any software, hardware, or device, other than such
-> Participant's
-> -+     Contributor Version, directly or indirectly infringes any patent,
-> then
-> -+     any rights granted to You by such Participant under Sections 2.1(b)
-> -+     and 2.2(b) are revoked effective as of the date You first made,
-> used,
-> -+     sold, distributed, or had made, Modifications made by that
-> -+     Participant.
-> -+
-> -+     8.3.  If You assert a patent infringement claim against Participant
-> -+     alleging that such Participant's Contributor Version directly or
-> -+     indirectly infringes any patent where such claim is resolved (such
-> as
-> -+     by license or settlement) prior to the initiation of patent
-> -+     infringement litigation, then the reasonable value of the licenses
-> -+     granted by such Participant under Sections 2.1 or 2.2 shall be taken
-> -+     into account in determining the amount or value of any payment or
-> -+     license.
-> -+
-> -+     8.4.  In the event of termination under Sections 8.1 or 8.2 above,
-> -+     all end user license agreements (excluding distributors and
-> resellers)
-> -+     which have been validly granted by You or any distributor hereunder
-> -+     prior to termination shall survive termination.
-> -+
-> -+9. LIMITATION OF LIABILITY.
-> -+
-> -+     UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, WHETHER TORT
-> -+     (INCLUDING NEGLIGENCE), CONTRACT, OR OTHERWISE, SHALL YOU, THE
-> INITIAL
-> -+     DEVELOPER, ANY OTHER CONTRIBUTOR, OR ANY DISTRIBUTOR OF COVERED
-> CODE,
-> -+     OR ANY SUPPLIER OF ANY OF SUCH PARTIES, BE LIABLE TO ANY PERSON FOR
-> -+     ANY INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY
-> -+     CHARACTER INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF
-> GOODWILL,
-> -+     WORK STOPPAGE, COMPUTER FAILURE OR MALFUNCTION, OR ANY AND ALL OTHER
-> -+     COMMERCIAL DAMAGES OR LOSSES, EVEN IF SUCH PARTY SHALL HAVE BEEN
-> -+     INFORMED OF THE POSSIBILITY OF SUCH DAMAGES. THIS LIMITATION OF
-> -+     LIABILITY SHALL NOT APPLY TO LIABILITY FOR DEATH OR PERSONAL INJURY
-> -+     RESULTING FROM SUCH PARTY'S NEGLIGENCE TO THE EXTENT APPLICABLE LAW
-> -+     PROHIBITS SUCH LIMITATION. SOME JURISDICTIONS DO NOT ALLOW THE
-> -+     EXCLUSION OR LIMITATION OF INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO
-> -+     THIS EXCLUSION AND LIMITATION MAY NOT APPLY TO YOU.
-> -+
-> -+10. U.S. GOVERNMENT END USERS.
-> -+
-> -+     The Covered Code is a "commercial item," as that term is defined in
-> -+     48 C.F.R. 2.101 (Oct. 1995), consisting of "commercial computer
-> -+     software" and "commercial computer software documentation," as such
-> -+     terms are used in 48 C.F.R. 12.212 (Sept. 1995). Consistent with 48
-> -+     C.F.R. 12.212 and 48 C.F.R. 227.7202-1 through 227.7202-4 (June
-> 1995),
-> -+     all U.S. Government End Users acquire Covered Code with only those
-> -+     rights set forth herein.
-> -+
-> -+11. MISCELLANEOUS.
-> -+
-> -+     This License represents the complete agreement concerning subject
-> -+     matter hereof. If any provision of this License is held to be
-> -+     unenforceable, such provision shall be reformed only to the extent
-> -+     necessary to make it enforceable. This License shall be governed by
-> -+     California law provisions (except to the extent applicable law, if
-> -+     any, provides otherwise), excluding its conflict-of-law provisions.
-> -+     With respect to disputes in which at least one party is a citizen
-> of,
-> -+     or an entity chartered or registered to do business in the United
-> -+     States of America, any litigation relating to this License shall be
-> -+     subject to the jurisdiction of the Federal Courts of the Northern
-> -+     District of California, with venue lying in Santa Clara County,
-> -+     California, with the losing party responsible for costs, including
-> -+     without limitation, court costs and reasonable attorneys' fees and
-> -+     expenses. The application of the United Nations Convention on
-> -+     Contracts for the International Sale of Goods is expressly excluded.
-> -+     Any law or regulation which provides that the language of a contract
-> -+     shall be construed against the drafter shall not apply to this
-> -+     License.
-> -+
-> -+12. RESPONSIBILITY FOR CLAIMS.
-> -+
-> -+     As between Initial Developer and the Contributors, each party is
-> -+     responsible for claims and damages arising, directly or indirectly,
-> -+     out of its utilization of rights under this License and You agree to
-> -+     work with Initial Developer and Contributors to distribute such
-> -+     responsibility on an equitable basis. Nothing herein is intended or
-> -+     shall be deemed to constitute any admission of liability.
-> -+
-> -+13. MULTIPLE-LICENSED CODE.
-> -+
-> -+     Initial Developer may designate portions of the Covered Code as
-> -+     "Multiple-Licensed".  "Multiple-Licensed" means that the Initial
-> -+     Developer permits you to utilize portions of the Covered Code under
-> -+     Your choice of the NPL or the alternative licenses, if any,
-> specified
-> -+     by the Initial Developer in the file described in Exhibit A.
-> -+
-> -+EXHIBIT A -Mozilla Public License.
-> -+
-> -+     ``The contents of this file are subject to the Mozilla Public
-> License
-> -+     Version 1.1 (the "License"); you may not use this file except in
-> -+     compliance with the License. You may obtain a copy of the License at
-> -+     http://www.mozilla.org/MPL/
-> -+
-> -+     Software distributed under the License is distributed on an "AS IS"
-> -+     basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-> the
-> -+     License for the specific language governing rights and limitations
-> -+     under the License.
-> -+
-> -+     The Original Code is ______________________________________.
-> -+
-> -+     The Initial Developer of the Original Code is
-> ________________________.
-> -+     Portions created by ______________________ are Copyright (C) ______
-> -+     _______________________. All Rights Reserved.
-> -+
-> -+     Contributor(s): ______________________________________.
-> -+
-> -+     Alternatively, the contents of this file may be used under the terms
-> -+     of the _____ license (the  "[___] License"), in which case the
-> -+     provisions of [______] License are applicable instead of those
-> -+     above.  If you wish to allow use of your version of this file only
-> -+     under the terms of the [____] License and not to allow others to use
-> -+     your version of this file under the MPL, indicate your decision by
-> -+     deleting  the provisions above and replace  them with the notice and
-> -+     other provisions required by the [___] License.  If you do not
-> delete
-> -+     the provisions above, a recipient may use your version of this file
-> -+     under either the MPL or the [___] License."
-> -+
-> -+     [NOTE: The text of this Exhibit A may differ slightly from the text
-> of
-> -+     the notices in the Source Code files of the Original Code. You
-> should
-> -+     use the text of this Exhibit A rather than the text found in the
-> -+     Original Code Source Code for Your Modifications.]
-> -diff --git a/MPL-1.1.html b/MPL-1.1.html
-> -deleted file mode 100644
-> -index 7729f6c..0000000
-> ---- a/MPL-1.1.html
-> -+++ /dev/null
-> -@@ -1,840 +0,0 @@
-> --<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
-> --
-> --<html>
-> --
-> --<head>
-> --
-> --   <meta http-equiv="Content-Type" content="text/html;
-> charset=iso-8859-1">
-> --
-> --   <meta name="GENERATOR" content="Mozilla/4.5 [en]C-NSCP  (Win95; U)
-> [Netscape]">
-> --
-> --   <title>Mozilla Public License version 1.1</title>
-> --
-> --</head>
-> --
-> --<body text="#000000" bgcolor="#FFFFFF" link="#0000EE" vlink="#551A8B"
-> alink="#FF0000">
-> --
-> --
-> --
-> --<center><b><font size=+2>MOZILLA PUBLIC LICENSE</font></b>
-> --
-> --<br><b>Version 1.1</b>
-> --
-> --<p>
-> --
-> --<hr WIDTH="20%"></center>
-> --
-> --
-> --<a name="1"></a>
-> --<p><b>1. Definitions.</b>
-> --
-> --<a name="1.0.1"></a>
-> --<ul><b>1.0.1. "Commercial Use" </b>means distribution or otherwise making
-> --
-> --the Covered Code available to a third party.
-> --
-> --<a name="1.1"></a>
-> --<p><b>1.1. ''Contributor''</b> means each entity that creates or
-> contributes
-> --
-> --to the creation of Modifications.
-> --
-> --<a name="1.2"></a>
-> --<p><b>1.2. ''Contributor Version''</b> means the combination of the
-> Original
-> --
-> --Code, prior Modifications used by a Contributor, and the Modifications
-> --
-> --made by that particular Contributor.
-> --
-> --<a name="1.3"></a>
-> --<p><b>1.3. ''Covered Code''</b> means the Original Code or Modifications
-> --
-> --or the combination of the Original Code and Modifications, in each case
-> --
-> --including portions thereof<b>.</b>
-> --
-> --<a name="1.4"></a>
-> --<p><b>1.4. ''Electronic Distribution Mechanism''</b> means a mechanism
-> --
-> --generally accepted in the software development community for the
-> electronic
-> --
-> --transfer of data.
-> --
-> --<a name="1.5"></a>
-> --<p><b>1.5. ''Executable''</b> means Covered Code in any form other than
-> --
-> --Source Code.
-> --
-> --<a name="1.6"></a>
-> --<p><b>1.6. ''Initial Developer''</b> means the individual or entity
-> identified
-> --
-> --as the Initial Developer in the Source Code notice required by <b>Exhibit
-> --
-> --A</b>.
-> --
-> --<a name="1.7"></a>
-> --<p><b>1.7. ''Larger Work''</b> means a work which combines Covered Code
-> --
-> --or portions thereof with code not governed by the terms of this License.
-> --
-> --<a name="1.8"></a>
-> --<p><b>1.8. ''License''</b> means this document.
-> --
-> --<a name="1.8.1"></a>
-> --<p><b>1.8.1. "Licensable"</b> means having the right to grant, to the
-> maximum
-> --
-> --extent possible, whether at the time of the initial grant or subsequently
-> --
-> --acquired, any and all of the rights conveyed herein.
-> --
-> --<a name="1.9"></a>
-> --<p><b>1.9. ''Modifications''</b> means any addition to or deletion from
-> --
-> --the substance or structure of either the Original Code or any previous
-> --
-> --Modifications. When Covered Code is released as a series of files, a
-> Modification
-> --
-> --is:
-> --
-> --<ul><b>A.</b> Any addition to or deletion from the contents of a file
-> containing
-> --
-> --Original Code or previous Modifications.
-> --
-> --<p><b>B.</b> Any new file that contains any part of the Original Code or
-> --
-> --previous Modifications.
-> --
-> --<br>&nbsp;</ul>
-> --
-> --<a name="1.10"></a>
-> --<b>1.10. ''Original Code''</b> means Source Code of computer software
-> code
-> --
-> --which is described in the Source Code notice required by <b>Exhibit A</b>
-> --
-> --as Original Code, and which, at the time of its release under this
-> License
-> --
-> --is not already Covered Code governed by this License.
-> --
-> --<a name="1.10.1"></a>
-> --<p><b>1.10.1. "Patent Claims"</b> means any patent claim(s), now owned
-> --
-> --or hereafter acquired, including without limitation,&nbsp; method,
-> process,
-> --
-> --and apparatus claims, in any patent Licensable by grantor.
-> --
-> --<a name="1.11"></a>
-> --<p><b>1.11. ''Source Code''</b> means the preferred form of the Covered
-> --
-> --Code for making modifications to it, including all modules it contains,
-> --
-> --plus any associated interface definition files, scripts used to control
-> --
-> --compilation and installation of an Executable, or source code
-> differential
-> --
-> --comparisons against either the Original Code or another well known,
-> available
-> --
-> --Covered Code of the Contributor's choice. The Source Code can be in a
-> compressed
-> --
-> --or archival form, provided the appropriate decompression or de-archiving
-> --
-> --software is widely available for no charge.
-> --
-> --<a name="1.12"></a>
-> --<p><b>1.12. "You'' (or "Your")&nbsp;</b> means an individual or a legal
-> --
-> --entity exercising rights under, and complying with all of the terms of,
-> --
-> --this License or a future version of this License issued under Section
-> 6.1.
-> --
-> --For legal entities, "You'' includes any entity which controls, is
-> controlled
-> --
-> --by, or is under common control with You. For purposes of this definition,
-> --
-> --"control'' means (a) the power, direct or indirect, to cause the
-> direction
-> --
-> --or management of such entity, whether by contract or otherwise, or (b)
-> --
-> --ownership of more than fifty percent (50%) of the outstanding shares or
-> --
-> --beneficial ownership of such entity.</ul>
-> --
-> --<a name="2"></a>
-> --<b>2. Source Code License.</b>
-> --
-> --<a name="2.1"></a>
-> --<ul><b>2.1. The Initial Developer Grant.</b>
-> --
-> --<br>The Initial Developer hereby grants You a world-wide, royalty-free,
-> --
-> --non-exclusive license, subject to third party intellectual property
-> claims:
-> --
-> --<ul><b>(a)</b>&nbsp;<b> </b>under intellectual property rights (other
-> than
-> --
-> --patent or trademark) Licensable by Initial Developer to use, reproduce,
-> --
-> --modify, display, perform, sublicense and distribute the Original Code (or
-> --
-> --portions thereof) with or without Modifications, and/or as part of a
-> Larger
-> --
-> --Work; and
-> --
-> --<p><b>(b)</b> under Patents Claims infringed by the making, using or
-> selling
-> --
-> --of Original Code, to make, have made, use, practice, sell, and offer for
-> --
-> --sale, and/or otherwise dispose of the Original Code (or portions
-> thereof).
-> --
-> --<ul>
-> --
-> --<ul>&nbsp;</ul>
-> --
-> --</ul>
-> --
-> --<b>(c) </b>the licenses granted in this Section 2.1(a) and (b) are
-> effective
-> --
-> --on the date Initial Developer first distributes Original Code under the
-> --
-> --terms of this License.
-> --
-> --<p><b>(d) </b>Notwithstanding Section 2.1(b) above, no patent license is
-> --
-> --granted: 1) for code that You delete from the Original Code; 2) separate
-> --
-> --from the Original Code;&nbsp; or 3) for infringements caused by: i) the
-> --
-> --modification of the Original Code or ii) the combination of the Original
-> --
-> --Code with other software or devices.
-> --
-> --<br>&nbsp;</ul>
-> --
-> --<a name="2.2"></a>
-> --<b>2.2. Contributor Grant.</b>
-> --
-> --<br>Subject to third party intellectual property claims, each Contributor
-> --
-> --hereby grants You a world-wide, royalty-free, non-exclusive license
-> --
-> --<ul>&nbsp;
-> --
-> --<br><b>(a)</b>&nbsp;<b> </b>under intellectual property rights (other
-> than
-> --
-> --patent or trademark) Licensable by Contributor, to use, reproduce,
-> modify,
-> --
-> --display, perform, sublicense and distribute the Modifications created by
-> --
-> --such Contributor (or portions thereof) either on an unmodified basis,
-> with
-> --
-> --other Modifications, as Covered Code and/or as part of a Larger Work; and
-> --
-> --<p><b>(b)</b> under Patent Claims infringed by the making, using, or
-> selling
-> --
-> --of&nbsp; Modifications made by that Contributor either alone and/or
-> in<font color="#000000">
-> --
-> --combination with its Contributor Version (or portions of such
-> combination),
-> --
-> --to make, use, sell, offer for sale, have made, and/or otherwise dispose
-> --
-> --of: 1) Modifications made by that Contributor (or portions thereof); and
-> --
-> --2) the combination of&nbsp; Modifications made by that Contributor with
-> --
-> --its Contributor Version (or portions of such combination).</font>
-> --
-> --<p><b>(c) </b>the licenses granted in Sections 2.2(a) and 2.2(b) are
-> effective
-> --
-> --on the date Contributor first makes Commercial Use of the Covered Code.
-> --
-> --<p><b>(d)&nbsp;</b>&nbsp;&nbsp; Notwithstanding Section 2.2(b) above, no
-> --
-> --patent license is granted: 1) for any code that Contributor has deleted
-> --
-> --from the Contributor Version; 2)&nbsp; separate from the Contributor
-> Version;&nbsp;
-> --
-> --3)&nbsp; for infringements caused by: i) third party modifications of
-> Contributor
-> --
-> --Version or ii)&nbsp; the combination of Modifications made by that
-> Contributor
-> --
-> --with other software&nbsp; (except as part of the Contributor Version) or
-> --
-> --other devices; or 4) under Patent Claims infringed by Covered Code in the
-> --
-> --absence of Modifications made by that Contributor.</ul>
-> --
-> --</ul>
-> --
-> --
-> --
-> --<a name="3"></a>
-> --<p><br><b>3. Distribution Obligations.</b>
-> --
-> --<a name="3.1"></a>
-> --<ul><b>3.1. Application of License.</b>
-> --
-> --<br>The Modifications which You create or to which You contribute are
-> governed
-> --
-> --by the terms of this License, including without limitation Section
-> <b>2.2</b>.
-> --
-> --The Source Code version of Covered Code may be distributed only under the
-> --
-> --terms of this License or a future version of this License released under
-> --
-> --Section <b>6.1</b>, and You must include a copy of this License with
-> every
-> --
-> --copy of the Source Code You distribute. You may not offer or impose any
-> --
-> --terms on any Source Code version that alters or restricts the applicable
-> --
-> --version of this License or the recipients' rights hereunder. However, You
-> --
-> --may include an additional document offering the additional rights
-> described
-> --
-> --in Section <b>3.5</b>.
-> --
-> --<a name="3.2"></a>
-> --<p><b>3.2. Availability of Source Code.</b>
-> --
-> --<br>Any Modification which You create or to which You contribute must be
-> --
-> --made available in Source Code form under the terms of this License either
-> --
-> --on the same media as an Executable version or via an accepted Electronic
-> --
-> --Distribution Mechanism to anyone to whom you made an Executable version
-> --
-> --available; and if made available via Electronic Distribution Mechanism,
-> --
-> --must remain available for at least twelve (12) months after the date it
-> --
-> --initially became available, or at least six (6) months after a subsequent
-> --
-> --version of that particular Modification has been made available to such
-> --
-> --recipients. You are responsible for ensuring that the Source Code version
-> --
-> --remains available even if the Electronic Distribution Mechanism is
-> maintained
-> --
-> --by a third party.
-> --
-> --<a name="3.3"></a>
-> --<p><b>3.3. Description of Modifications.</b>
-> --
-> --<br>You must cause all Covered Code to which You contribute to contain
-> --
-> --a file documenting the changes You made to create that Covered Code and
-> --
-> --the date of any change. You must include a prominent statement that the
-> --
-> --Modification is derived, directly or indirectly, from Original Code
-> provided
-> --
-> --by the Initial Developer and including the name of the Initial Developer
-> --
-> --in (a) the Source Code, and (b) in any notice in an Executable version
-> --
-> --or related documentation in which You describe the origin or ownership
-> --
-> --of the Covered Code.
-> --
-> --<a name="3.4"></a>
-> --<p><b>3.4. Intellectual Property Matters</b>
-> --
-> --<ul><b>(a) Third Party Claims</b>.
-> --
-> --<br>If Contributor has knowledge that a license under a third party's
-> intellectual
-> --
-> --property rights is required to exercise the rights granted by such
-> Contributor
-> --
-> --under Sections 2.1 or 2.2, Contributor must include a text file with the
-> --
-> --Source Code distribution titled "LEGAL'' which describes the claim and
-> --
-> --the party making the claim in sufficient detail that a recipient will
-> know
-> --
-> --whom to contact. If Contributor obtains such knowledge after the
-> Modification
-> --
-> --is made available as described in Section 3.2, Contributor shall promptly
-> --
-> --modify the LEGAL file in all copies Contributor makes available
-> thereafter
-> --
-> --and shall take other steps (such as notifying appropriate mailing lists
-> --
-> --or newsgroups) reasonably calculated to inform those who received the
-> Covered
-> --
-> --Code that new knowledge has been obtained.
-> --
-> --<p><b>(b) Contributor APIs</b>.
-> --
-> --<br>If Contributor's Modifications include an application programming
-> interface
-> --
-> --and Contributor has knowledge of patent licenses which are reasonably
-> necessary
-> --
-> --to implement that API, Contributor must also include this information in
-> --
-> --the LEGAL file.
-> --
-> --<br>&nbsp;</ul>
-> --
-> --&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-> <b>(c)&nbsp;&nbsp;&nbsp;
-> --
-> --Representations.</b>
-> --
-> --<ul>Contributor represents that, except as disclosed pursuant to Section
-> --
-> --3.4(a) above, Contributor believes that Contributor's Modifications are
-> --
-> --Contributor's original creation(s) and/or Contributor has sufficient
-> rights
-> --
-> --to grant the rights conveyed by this License.</ul>
-> --
-> --
-> --
-> --<a name="3.5"></a>
-> --<p><br><b>3.5. Required Notices.</b>
-> --
-> --<br>You must duplicate the notice in <b>Exhibit A</b> in each file of the
-> --
-> --Source Code.&nbsp; If it is not possible to put such notice in a
-> particular
-> --
-> --Source Code file due to its structure, then You must include such notice
-> --
-> --in a location (such as a relevant directory) where a user would be likely
-> --
-> --to look for such a notice.&nbsp; If You created one or more
-> Modification(s)
-> --
-> --You may add your name as a Contributor to the notice described in
-> <b>Exhibit
-> --
-> --A</b>.&nbsp; You must also duplicate this License in any documentation
-> --
-> --for the Source Code where You describe recipients' rights or ownership
-> --
-> --rights relating to Covered Code.&nbsp; You may choose to offer, and to
-> --
-> --charge a fee for, warranty, support, indemnity or liability obligations
-> --
-> --to one or more recipients of Covered Code. However, You may do so only
-> --
-> --on Your own behalf, and not on behalf of the Initial Developer or any
-> Contributor.
-> --
-> --You must make it absolutely clear than any such warranty, support,
-> indemnity
-> --
-> --or liability obligation is offered by You alone, and You hereby agree to
-> --
-> --indemnify the Initial Developer and every Contributor for any liability
-> --
-> --incurred by the Initial Developer or such Contributor as a result of
-> warranty,
-> --
-> --support, indemnity or liability terms You offer.
-> --
-> --<a name="3.6"></a>
-> --<p><b>3.6. Distribution of Executable Versions.</b>
-> --
-> --<br>You may distribute Covered Code in Executable form only if the
-> requirements
-> --
-> --of Section <b>3.1-3.5</b> have been met for that Covered Code, and if You
-> --
-> --include a notice stating that the Source Code version of the Covered Code
-> --
-> --is available under the terms of this License, including a description of
-> --
-> --how and where You have fulfilled the obligations of Section <b>3.2</b>.
-> --
-> --The notice must be conspicuously included in any notice in an Executable
-> --
-> --version, related documentation or collateral in which You describe
-> recipients'
-> --
-> --rights relating to the Covered Code. You may distribute the Executable
-> --
-> --version of Covered Code or ownership rights under a license of Your
-> choice,
-> --
-> --which may contain terms different from this License, provided that You
-> --
-> --are in compliance with the terms of this License and that the license for
-> --
-> --the Executable version does not attempt to limit or alter the recipient's
-> --
-> --rights in the Source Code version from the rights set forth in this
-> License.
-> --
-> --If You distribute the Executable version under a different license You
-> --
-> --must make it absolutely clear that any terms which differ from this
-> License
-> --
-> --are offered by You alone, not by the Initial Developer or any
-> Contributor.
-> --
-> --You hereby agree to indemnify the Initial Developer and every Contributor
-> --
-> --for any liability incurred by the Initial Developer or such Contributor
-> --
-> --as a result of any such terms You offer.
-> --
-> --<a name="3.7"></a>
-> --<p><b>3.7. Larger Works.</b>
-> --
-> --<br>You may create a Larger Work by combining Covered Code with other
-> code
-> --
-> --not governed by the terms of this License and distribute the Larger Work
-> --
-> --as a single product. In such a case, You must make sure the requirements
-> --
-> --of this License are fulfilled for the Covered Code.</ul>
-> --
-> --<a name="4"></a>
-> --<b>4. Inability to Comply Due to Statute or Regulation.</b>
-> --
-> --<ul>If it is impossible for You to comply with any of the terms of this
-> --
-> --License with respect to some or all of the Covered Code due to statute,
-> --
-> --judicial order, or regulation then You must: (a) comply with the terms
-> --
-> --of this License to the maximum extent possible; and (b) describe the
-> limitations
-> --
-> --and the code they affect. Such description must be included in the LEGAL
-> --
-> --file described in Section <b>3.4</b> and must be included with all
-> distributions
-> --
-> --of the Source Code. Except to the extent prohibited by statute or
-> regulation,
-> --
-> --such description must be sufficiently detailed for a recipient of
-> ordinary
-> --
-> --skill to be able to understand it.</ul>
-> --
-> --<a name="5"></a>
-> --<b>5. Application of this License.</b>
-> --
-> --<ul>This License applies to code to which the Initial Developer has
-> attached
-> --
-> --the notice in <b>Exhibit A</b> and to related Covered Code.</ul>
-> --
-> --<a name="6"></a>
-> --<b>6. Versions of the License.</b>
-> --
-> --<a name="6.1"></a>
-> --<ul><b>6.1. New Versions</b>.
-> --
-> --<br>Netscape Communications Corporation (''Netscape'') may publish
-> revised
-> --
-> --and/or new versions of the License from time to time. Each version will
-> --
-> --be given a distinguishing version number.
-> --
-> --<a name="6.2"></a>
-> --<p><b>6.2. Effect of New Versions</b>.
-> --
-> --<br>Once Covered Code has been published under a particular version of
-> --
-> --the License, You may always continue to use it under the terms of that
-> --
-> --version. You may also choose to use such Covered Code under the terms of
-> --
-> --any subsequent version of the License published by Netscape. No one other
-> --
-> --than Netscape has the right to modify the terms applicable to Covered
-> Code
-> --
-> --created under this License.
-> --
-> --<a name="6.3"></a>
-> --<p><b>6.3. Derivative Works</b>.
-> --
-> --<br>If You create or use a modified version of this License (which you
-> --
-> --may only do in order to apply it to code which is not already Covered
-> Code
-> --
-> --governed by this License), You must (a) rename Your license so that the
-> --
-> --phrases ''Mozilla'', ''MOZILLAPL'', ''MOZPL'', ''Netscape'', "MPL",
-> ''NPL''
-> --
-> --or any confusingly similar phrase do not appear in your license (except
-> --
-> --to note that your license differs from this License) and (b) otherwise
-> --
-> --make it clear that Your version of the license contains terms which
-> differ
-> --
-> --from the Mozilla Public License and Netscape Public License. (Filling in
-> --
-> --the name of the Initial Developer, Original Code or Contributor in the
-> --
-> --notice described in <b>Exhibit A</b> shall not of themselves be deemed
-> --
-> --to be modifications of this License.)</ul>
-> --
-> --<a name="7"></a>
-> --<b>7. DISCLAIMER OF WARRANTY.</b>
-> --
-> --<ul>COVERED CODE IS PROVIDED UNDER THIS LICENSE ON AN "AS IS'' BASIS,
-> WITHOUT
-> --
-> --WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, WITHOUT
-> LIMITATION,
-> --
-> --WARRANTIES THAT THE COVERED CODE IS FREE OF DEFECTS, MERCHANTABLE, FIT
-> --
-> --FOR A PARTICULAR PURPOSE OR NON-INFRINGING. THE ENTIRE RISK AS TO THE
-> QUALITY
-> --
-> --AND PERFORMANCE OF THE COVERED CODE IS WITH YOU. SHOULD ANY COVERED CODE
-> --
-> --PROVE DEFECTIVE IN ANY RESPECT, YOU (NOT THE INITIAL DEVELOPER OR ANY
-> OTHER
-> --
-> --CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY SERVICING, REPAIR OR
-> CORRECTION.
-> --
-> --THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS
-> LICENSE.
-> --
-> --NO USE OF ANY COVERED CODE IS AUTHORIZED HEREUNDER EXCEPT UNDER THIS
-> DISCLAIMER.</ul>
-> --
-> --<a name="8"></a>
-> --<b>8. TERMINATION.</b>
-> --
-> --<a name="8.1"></a>
-> --<ul><b>8.1.&nbsp; </b>This License and the rights granted hereunder will
-> --
-> --terminate automatically if You fail to comply with terms herein and fail
-> --
-> --to cure such breach within 30 days of becoming aware of the breach. All
-> --
-> --sublicenses to the Covered Code which are properly granted shall survive
-> --
-> --any termination of this License. Provisions which, by their nature, must
-> --
-> --remain in effect beyond the termination of this License shall survive.
-> --
-> --<a name="8.2"></a>
-> --<p><b>8.2.&nbsp; </b>If You initiate litigation by asserting a patent
-> infringement
-> --
-> --claim (excluding declatory judgment actions) against Initial Developer
-> --
-> --or a Contributor (the Initial Developer or Contributor against whom You
-> --
-> --file such action is referred to as "Participant")&nbsp; alleging that:
-> --
-> --<p><b>(a)&nbsp; </b>such Participant's Contributor Version directly or
-> --
-> --indirectly infringes any patent, then any and all rights granted by such
-> --
-> --Participant to You under Sections 2.1 and/or 2.2 of this License shall,
-> --
-> --upon 60 days notice from Participant terminate prospectively, unless if
-> --
-> --within 60 days after receipt of notice You either: (i)&nbsp; agree in
-> writing
-> --
-> --to pay Participant a mutually agreeable reasonable royalty for Your past
-> --
-> --and future use of Modifications made by such Participant, or (ii)
-> withdraw
-> --
-> --Your litigation claim with respect to the Contributor Version against
-> such
-> --
-> --Participant.&nbsp; If within 60 days of notice, a reasonable royalty and
-> --
-> --payment arrangement are not mutually agreed upon in writing by the
-> parties
-> --
-> --or the litigation claim is not withdrawn, the rights granted by
-> Participant
-> --
-> --to You under Sections 2.1 and/or 2.2 automatically terminate at the
-> expiration
-> --
-> --of the 60 day notice period specified above.
-> --
-> --<p><b>(b)</b>&nbsp; any software, hardware, or device, other than such
-> --
-> --Participant's Contributor Version, directly or indirectly infringes any
-> --
-> --patent, then any rights granted to You by such Participant under Sections
-> --
-> --2.1(b) and 2.2(b) are revoked effective as of the date You first made,
-> --
-> --used, sold, distributed, or had made, Modifications made by that
-> Participant.
-> --
-> --<a name="8.3"></a>
-> --<p><b>8.3.&nbsp; </b>If You assert a patent infringement claim against
-> --
-> --Participant alleging that such Participant's Contributor Version directly
-> --
-> --or indirectly infringes any patent where such claim is resolved (such as
-> --
-> --by license or settlement) prior to the initiation of patent infringement
-> --
-> --litigation, then the reasonable value of the licenses granted by such
-> Participant
-> --
-> --under Sections 2.1 or 2.2 shall be taken into account in determining the
-> --
-> --amount or value of any payment or license.
-> --
-> --<a name="8.4"></a>
-> --<p><b>8.4.</b>&nbsp; In the event of termination under Sections 8.1 or
-> --
-> --8.2 above,&nbsp; all end user license agreements (excluding distributors
-> --
-> --and resellers) which have been validly granted by You or any distributor
-> --
-> --hereunder prior to termination shall survive termination.</ul>
-> --
-> --<a name="9"></a>
-> --<b>9. LIMITATION OF LIABILITY.</b>
-> --
-> --<ul>UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, WHETHER TORT
-> (INCLUDING
-> --
-> --NEGLIGENCE), CONTRACT, OR OTHERWISE, SHALL YOU, THE INITIAL DEVELOPER,
-> --
-> --ANY OTHER CONTRIBUTOR, OR ANY DISTRIBUTOR OF COVERED CODE, OR ANY
-> SUPPLIER
-> --
-> --OF ANY OF SUCH PARTIES, BE LIABLE TO ANY PERSON FOR ANY INDIRECT,
-> SPECIAL,
-> --
-> --INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY CHARACTER INCLUDING, WITHOUT
-> --
-> --LIMITATION, DAMAGES FOR LOSS OF GOODWILL, WORK STOPPAGE, COMPUTER FAILURE
-> --
-> --OR MALFUNCTION, OR ANY AND ALL OTHER COMMERCIAL DAMAGES OR LOSSES, EVEN
-> --
-> --IF SUCH PARTY SHALL HAVE BEEN INFORMED OF THE POSSIBILITY OF SUCH
-> DAMAGES.
-> --
-> --THIS LIMITATION OF LIABILITY SHALL NOT APPLY TO LIABILITY FOR DEATH OR
-> --
-> --PERSONAL INJURY RESULTING FROM SUCH PARTY'S NEGLIGENCE TO THE EXTENT
-> APPLICABLE
-> --
-> --LAW PROHIBITS SUCH LIMITATION. SOME JURISDICTIONS DO NOT ALLOW THE
-> EXCLUSION
-> --
-> --OR LIMITATION OF INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THIS EXCLUSION
-> --
-> --AND LIMITATION MAY NOT APPLY TO YOU.</ul>
-> --
-> --<a name="10"></a>
-> --<b>10. U.S. GOVERNMENT END USERS.</b>
-> --
-> --<ul>The Covered Code is a ''commercial item,'' as that term is defined
-> --
-> --in 48 C.F.R. 2.101 (Oct. 1995), consisting of ''commercial computer
-> software''
-> --
-> --and ''commercial computer software documentation,'' as such terms are
-> used
-> --
-> --in 48 C.F.R. 12.212 (Sept. 1995). Consistent with 48 C.F.R. 12.212 and
-> --
-> --48 C.F.R. 227.7202-1 through 227.7202-4 (June 1995), all U.S. Government
-> --
-> --End Users acquire Covered Code with only those rights set forth
-> herein.</ul>
-> --
-> --<a name="11"></a>
-> --<b>11. MISCELLANEOUS.</b>
-> --
-> --<ul>This License represents the complete agreement concerning subject
-> matter
-> --
-> --hereof. If any provision of this License is held to be unenforceable,
-> such
-> --
-> --provision shall be reformed only to the extent necessary to make it
-> enforceable.
-> --
-> --This License shall be governed by California law provisions (except to
-> --
-> --the extent applicable law, if any, provides otherwise), excluding its
-> conflict-of-law
-> --
-> --provisions. With respect to disputes in which at least one party is a
-> citizen
-> --
-> --of, or an entity chartered or registered to do business in the United
-> States
-> --
-> --of America, any litigation relating to this License shall be subject to
-> --
-> --the jurisdiction of the Federal Courts of the Northern District of
-> California,
-> --
-> --with venue lying in Santa Clara County, California, with the losing party
-> --
-> --responsible for costs, including without limitation, court costs and
-> reasonable
-> --
-> --attorneys' fees and expenses. The application of the United Nations
-> Convention
-> --
-> --on Contracts for the International Sale of Goods is expressly excluded.
-> --
-> --Any law or regulation which provides that the language of a contract
-> shall
-> --
-> --be construed against the drafter shall not apply to this License.</ul>
-> --
-> --<a name="12"></a>
-> --<b>12. RESPONSIBILITY FOR CLAIMS.</b>
-> --
-> --<ul>As between Initial Developer and the Contributors, each party is
-> responsible
-> --
-> --for claims and damages arising, directly or indirectly, out of its
-> utilization
-> --
-> --of rights under this License and You agree to work with Initial Developer
-> --
-> --and Contributors to distribute such responsibility on an equitable basis.
-> --
-> --Nothing herein is intended or shall be deemed to constitute any admission
-> --
-> --of liability.</ul>
-> --
-> --<a name="13"></a>
-> --<b>13. MULTIPLE-LICENSED CODE.</b>
-> --
-> --<ul>Initial Developer may designate portions of the Covered Code as
-> ?Multiple-Licensed?.&nbsp;
-> --
-> --?Multiple-Licensed? means that the Initial Developer permits you to
-> utilize
-> --
-> --portions of the Covered Code under Your choice of the MPL or the
-> alternative
-> --
-> --licenses, if any, specified by the Initial Developer in the file
-> described
-> --
-> --in Exhibit A.</ul>
-> --
-> --
-> --
-> --<a name="EXHIBIT-A"></a>
-> --<p><br><b>EXHIBIT A -Mozilla Public License.</b>
-> --
-> --<ul>``The contents of this file are subject to the Mozilla Public License
-> --
-> --Version 1.1 (the "License"); you may not use this file except in
-> compliance
-> --
-> --with the License. You may obtain a copy of the License at
-> --
-> --<br>http://www.mozilla.org/MPL/
-> --
-> --<p>Software distributed under the License is distributed on an "AS IS"
-> --
-> --basis, WITHOUT WARRANTY OF
-> --
-> --<br>ANY KIND, either express or implied. See the License for the specific
-> --
-> --language governing rights and
-> --
-> --<br>limitations under the License.
-> --
-> --<p>The Original Code is ______________________________________.
-> --
-> --<p>The Initial Developer of the Original Code is
-> ________________________.
-> --
-> --Portions created by
-> --
-> --<br>&nbsp;______________________ are Copyright (C) ______
-> _______________________.
-> --
-> --All Rights
-> --
-> --<br>Reserved.
-> --
-> --<p>Contributor(s): ______________________________________.
-> --
-> --<p>Alternatively, the contents of this file may be used under the terms
-> --
-> --of the _____ license (the&nbsp; ?[___] License?), in which case the
-> provisions
-> --
-> --of [______] License are applicable&nbsp; instead of those above.&nbsp;
-> --
-> --If you wish to allow use of your version of this file only under the
-> terms
-> --
-> --of the [____] License and not to allow others to use your version of this
-> --
-> --file under the MPL, indicate your decision by deleting&nbsp; the
-> provisions
-> --
-> --above and replace&nbsp; them with the notice and other provisions
-> required
-> --
-> --by the [___] License.&nbsp; If you do not delete the provisions above,
-> --
-> --a recipient may use your version of this file under either the MPL or the
-> --
-> --[___] License."
-> --
-> --<p>[NOTE: The text of this Exhibit A may differ slightly from the text
-> --
-> --of the notices in the Source Code files of the Original Code. You should
-> --
-> --use the text of this Exhibit A rather than the text found in the Original
-> --
-> --Code Source Code for Your Modifications.]
-> --
-> --<p>
-> --
-> --</body>
-> --
-> --</html>
-> --
-> -diff --git a/Makefile.am b/Makefile.am
-> -index bb89e98..34a01d3 100644
-> ---- a/Makefile.am
-> -+++ b/Makefile.am
-> -@@ -7,4 +7,4 @@ pkgconfig_DATA= libgdiplus.pc
-> -
-> - DISTCLEANFILES= libgdiplus.pc
-> -
-> --EXTRA_DIST = libgdiplus.pc.in LICENSE MPL-1.1.html
-> -+EXTRA_DIST = libgdiplus.pc.in LICENSE
+> > >>> build an external project.
+> > >>> Due to the nature of the intrusiveness of this script, a new PS1 is
+> > >>> installed to let the user understand that the current running shell
+> is
+> > >>> not a normal shell.
+> > >>>
+> > >>> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> > >>> ---
+> > >>> Changelog:
+> > >>> v1->v2:
+> > >>>    * Moved from echo to printf (Yann)
+> > >>>    * removed sh extension (Yann)
+> > >>>    * Adding missing script
+> > >>> v2->v3:
+> > >>>    * Split the patch
+> > >>> v3->v4:
+> > >>>    * Better handling of SDK_PATH dir (Mircea Gliga)
+> > >>> v4->v5:
+> > >>>    * Cleaning the script using SDK_PATH where possible (Mircea Gliga)
+> > >>>
+> > >>> Some of the reason I kept several things the way I originally
+> planned:
+> > >>>
+> > >>>    * I kept it being a package because it doesn't fit in any other
+> tool:
+> > >>>      indeed this script changes your curent PATH and exports some
+> variables
+> > >>>      that can be used for anything. Think of qmake or cmake or a
+> package
+> > >>>      that doesn't have any build system at all. It has some features
+> geared
+> > >>>      also towards autotools software but I keep planning others.
+> > >>>    * I kept the script being installed in host root: other build
+> system does that
+> > >>>      and I want this script to mimic other build systems.
+> > >>>    * I kept looping in TARGET_CONFIGURE_OPTS, indeed it produces a
+> more clean
+> > >>>      environment script at the end. For the problem arised by Yann:
+> variables in
+> > >>>      TARGET_CONFIGURE_OPTS _are_ properly escaped, indeed if not,
+> they were a
+> > >>>      big source of problems on each ./configure invocation due to
+> the fact they
+> > >>>      are injected on the ./configure commandline invocation.
+> > >>>    * I kept the PS1: this script heavily mess with the path, it is
+> expected by the
+> > >>>      user running it, but it can be very confusing being on a shell
+> that
+> > >>>      doesn't behaves like your normal shell. So having a different
+> PS1 helps
+> > >>>      remembering you are running into the buildroot shell and not
+> into an ordinary
+> > >>>      one (other build systems does the same).
+> > >>>    * I kept the manual entry: I think that the most documentation
+> the better.
+> > >>>
+> > >>>    docs/manual/using-buildroot-toolchain.txt     |  7 ++++
+> > >>>    package/Config.in                             |  1 +
+> > >>>    package/environment-setup/Config.in           |  6 ++++
+> > >>>    package/environment-setup/environment-setup   | 16 +++++++++
+> > >>>    .../environment-setup/environment-setup.mk    | 34
+> +++++++++++++++++++
+> > >>>    5 files changed, 64 insertions(+)
+> > >>>    create mode 100644 package/environment-setup/Config.in
+> > >>>    create mode 100644 package/environment-setup/environment-setup
+> > >>>    create mode 100644 package/environment-setup/environment-setup.mk
+> > >>>
+> > >>> diff --git a/docs/manual/using-buildroot-toolchain.txt
+> b/docs/manual/using-buildroot-toolchain.txt
+> > >>> index 0c0c35fced..7b2de4bdfa 100644
+> > >>> --- a/docs/manual/using-buildroot-toolchain.txt
+> > >>> +++ b/docs/manual/using-buildroot-toolchain.txt
+> > >>> @@ -27,6 +27,13 @@ Upon extracting the SDK tarball, the user must
+> run the script
+> > >>>    +relocate-sdk.sh+ (located at the top directory of the SDK), to
+> make
+> > >>>    sure all paths are updated with the new location.
+> > >>>
+> > >>> +For your convenience, by selecting the package
+> BR2_PACKAGE_ENVIRONMENT_SETUP,
+> > >>> +you can have a +setup-environment+ script installed in
+> +output/host/+.
+> > >>> +This script can be sourced with +. your/sdk/path/environment-setup+
+> to launch
+> > >>> +the buildroot shell. Inside this shell, you will find an
+> environment already
+> > >>> +set up with the correct PATH and the complete list of +target
+> configure
+> > >>> +options+.
+> > >>> +
+> > >>>    Alternatively, if you just want to prepare the SDK without
+> generating
+> > >>>    the tarball (e.g. because you will just be moving the +host+
+> directory,
+> > >>>    or will be generating the tarball on your own), Buildroot also
+> allows
+> > >>> diff --git a/package/Config.in b/package/Config.in
+> > >>> index bf02870ea2..b698d6f184 100644
+> > >>> --- a/package/Config.in
+> > >>> +++ b/package/Config.in
+> > >>> @@ -1955,6 +1955,7 @@ menu "Miscellaneous"
+> > >>>        source "package/collectl/Config.in"
+> > >>>        source "package/domoticz/Config.in"
+> > >>>        source "package/empty/Config.in"
+> > >>> +     source "package/environment-setup/Config.in"
+> > >>>        source "package/gnuradio/Config.in"
+> > >>>        source "package/googlefontdirectory/Config.in"
+> > >>>        source "package/gqrx/Config.in"
+> > >>> diff --git a/package/environment-setup/Config.in
+> b/package/environment-setup/Config.in
+> > >>> new file mode 100644
+> > >>> index 0000000000..f0fcc7d0f8
+> > >>> --- /dev/null
+> > >>> +++ b/package/environment-setup/Config.in
+> > >>> @@ -0,0 +1,6 @@
+> > >>> +config BR2_PACKAGE_ENVIRONMENT_SETUP
+> > >>> +     bool "Environment setup"
+> > >>> +     help
+> > >>> +       Install an helper script to setup a build environment
+> > >>> +       based on buildroot. It's useful when you export an sdk
+> > >>> +       and want to use buildroot to build an external project
+> > >>> diff --git a/package/environment-setup/environment-setup
+> b/package/environment-setup/environment-setup
+> > >>> new file mode 100644
+> > >>> index 0000000000..b48f1979d6
+> > >>> --- /dev/null
+> > >>> +++ b/package/environment-setup/environment-setup
+> > >>> @@ -0,0 +1,16 @@
+> > >>> +cat <<'EOF'
+> > >>> + _           _ _     _                 _
+> > >>> +| |__  _   _(_) | __| |_ __ ___   ___ | |_
+> > >>> +| '_ \| | | | | |/ _` | '__/ _ \ / _ \| __|
+> > >>> +| |_) | |_| | | | (_| | | | (_) | (_) | |_
+> > >>> +|_.__/ \__,_|_|_|\__,_|_|  \___/ \___/ \__| shell
+> > >>> +
+> > >>> +       Making embedded Linux easy!
+> > >>> +
+> > >>> +Some tips:
+> > >>> +* PATH is now pointing to the HOST_DIR path
+> > >>> +* Target configure options are already exported
+> > >>> +* To configure do "./configure $CONFIGURE_FLAGS"
+> > >>> +
+> > >>> +EOF
+> > >>> +SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
+> > >>> diff --git a/package/environment-setup/environment-setup.mk
+> b/package/environment-setup/environment-setup.mk
+> > >>> new file mode 100644
+> > >>> index 0000000000..7c6e352bde
+> > >>> --- /dev/null
+> > >>> +++ b/package/environment-setup/environment-setup.mk
+> > >>> @@ -0,0 +1,34 @@
+> > >>>
+> +################################################################################
+> > >>> +#
+> > >>> +# environment-setup
+> > >>> +#
+> > >>>
+> +################################################################################
+> > >>> +
+> > >>> +ENVIRONMENT_SETUP_FILE = $(HOST_DIR)/environment-setup
+> > >>> +ENVIRONMENT_SETUP_HOST_DIR_SED_EXP = 's+$(HOST_DIR)+\$$SDK_PATH+g'
+> > >>> +ENVIRONMENT_SETUP_HOST_BIN_DIR_SED_EXP = 's+$(HOST_DIR)/bin/++g'
+> > >>> +ENVIRONMENT_SETUP_CROSS_COMPILE_SED_EXP =
+> 's+$(TARGET_CROSS)+\$${CROSS_COMPILE}+g'
+> > >>> +
+> > >>> +define ENVIRONMENT_SETUP_INSTALL_TARGET_CMDS
+> > >>> +     cp package/environment-setup/environment-setup
+> $(ENVIRONMENT_SETUP_FILE)
+> > >>> +     for var in $(TARGET_CONFIGURE_OPTS); do \
+> > >>> +             printf "export \"$$var\"\n" >>
+> $(ENVIRONMENT_SETUP_FILE); \
+> > >>> +     done
+> > >>> +     printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >>
+> $(ENVIRONMENT_SETUP_FILE)
+> > >>> +     printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
+> > >>> +             --host=$(GNU_TARGET_NAME) \
+> > >>> +             --build=$(GNU_HOST_NAME) \
+> > >>> +             --prefix=/usr \
+> > >>> +             --exec-prefix=/usr \
+> > >>> +             --sysconfdir=/etc \
+> > >>> +             --localstatedir=/var \
+> > >>> +             --program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+> > >>> +     $(SED) $(ENVIRONMENT_SETUP_HOST_BIN_DIR_SED_EXP) \
+> > >>> +             -e $(ENVIRONMENT_SETUP_HOST_DIR_SED_EXP) \
+> > >>> +             -e $(ENVIRONMENT_SETUP_CROSS_COMPILE_SED_EXP) \
+> > >>> +             $(ENVIRONMENT_SETUP_FILE)
+> > >>> +     printf
+> "PS1=\"\[\e[32m\]buildroot-$(BR2_VERSION)\[\e[m\]:\[\e[34m\]\w\[\e[m\]\$$
+> \"\n" \
+> > >>> +             >> $(ENVIRONMENT_SETUP_FILE)
+> > >>> +endef
+> > >>> +
+> > >>> +$(eval $(generic-package))
+> > >>>
+> > >
+> > > ________________________
+> > > This email was scanned by Bitdefender
+> > >
+>
+>
+>
+> --
+> Profile: http://it.linkedin.com/in/compagnucciangelo
+>
+>
+> ------------------------------
+>
+> Message: 2
+> Date: Tue,  5 May 2020 23:49:30 +0300
+> From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+> To: buildroot at busybox.net
+> Cc: Evgeniy Didin <Evgeniy.Didin@synopsys.com>, Thomas Petazzoni
+>         <thomas.petazzoni@bootlin.com>, Eugeniy Paltsev
+>         <Eugeniy.Paltsev@synopsys.com>, arc-buildroot at synopsys.com
+> Subject: [Buildroot] [PATCH] hsdk/linux: Fix USB regression
+> Message-ID: <20200505204930.10522-1-Evgeniy.Didin@synopsys.com>
+>
+> With this patch we enable CONFIG_USB for HSDK, which is not explicitly
+> selected by UDL since the commit
+> 5d50bd440bc2 ("drm/udl: Make udl driver depend on CONFIG_USB").
+> Commit 4c13ca86dcf8 ("ARC: [plat-hsdk]: fix USB regression")
+> is not yet backported to Linux kernel 5.6.x, so we enable this
+> option in fragment file for HSDK.
+>
+> Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
+> Cc: arc-buildroot at synopsys.com
 > ---
-> -2.19.2
-> -
-> diff --git
-> a/package/libgdiplus/0001-Fix-test-build-without-libjpeg-tiff-597.patch
-> b/package/libgdiplus/0001-Fix-test-build-without-libjpeg-tiff-597.patch
+> Note! This patch is a replacement of next patch:
+>
+> https://patchwork.ozlabs.org/project/buildroot/patch/20200430163713.11290-1-Evgeniy.Didin at synopsys.com/
+>
+>  board/synopsys/hsdk/linux.fragment | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/board/synopsys/hsdk/linux.fragment
+> b/board/synopsys/hsdk/linux.fragment
+> index 45d6c69af5..aaca08e015 100644
+> --- a/board/synopsys/hsdk/linux.fragment
+> +++ b/board/synopsys/hsdk/linux.fragment
+> @@ -1,2 +1,3 @@
+>  CONFIG_INITRAMFS_SOURCE=""
+>  CONFIG_ARC_UBOOT_SUPPORT=y
+> +CONFIG_USB=y
+> --
+> 2.16.2
+>
+>
+>
+> ------------------------------
+>
+> Message: 3
+> Date: Tue, 5 May 2020 22:56:09 +0200
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit] CHANGES: start updating for
+>         2020.05-rc1 release
+> Message-ID: <20200505204103.5E91B90044@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=1025d09f9503179a19ef8119a814515d48d4c4c8
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  CHANGES | 61 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>
+> diff --git a/CHANGES b/CHANGES
+> index 60177304b3..5a2f2d20fd 100644
+> --- a/CHANGES
+> +++ b/CHANGES
+> @@ -1,3 +1,64 @@
+> +2020.05-rc1, to be released
+> +
+> +       Addition of support for gobject-introspection: both the
+> +       gobject-introspection package itself, but also introspection
+> +       support was enabled in a number of other packages.
+> +
+> +       Support for Qt 5.6 was dropped as its support was dropped
+> +       upstream, only one version of Qt is supported at the moment:
+> +       Qt 5.14.2.
+> +
+> +       Addition of support for the apparmor Linux security module, by
+> +       adding the necessary user-space packages.
+> +
+> +       Addition of a qmake package infrastructure, now used by most
+> +       Qt-related packages.
+> +
+> +       The Luarocks package infrastructure has been extended to
+> +       support build host packages.
+> +
+> +       The package infrastructure was improved to allow each package
+> +       to indicate the Linux kernel configuration options it needs.
+> +
+> +       Addition of support for generating filesystem images using the
+> +       EROFS filesystem.
+> +
+> +       The logic that calculates the list of files installed by each
+> +       package was reworked to be compatible with the top-level
+> +       parallel build functionality.
+> +
+> +       Addition of a package for a pre-compiled ARM32 bare-metal
+> +       toolchain, which can be used to build ARM32 code in ARM64
+> +       configurations, such as firmware/bootloader code.
+> +
+> +       The Qemu defconfigs are now boot-tested in Qemu as part of the
+> +       Gitlab continuous integration.
+> +
+> +       Toolchain: gcc 9.x bumped to 9.3.0, gcc 8.x bumped to 8.4.0,
+> +       gdb bumped to 8.3.1.
+> +
+> +       New packages: apcupsd, apparmor, arm-gnu-a-toolchain, bearssl,
+> +       belle-sip, belr, cage, chartjs, erofs-utils, exfatprogs,
+> +       gobject-introspection, ibm-sw-tpm2, imx-seco, jbig2dec,
+> +       libapparmor, libiberty, libfuse3, libtextstyle, libudfread,
+> +       libuhttpd, libuwsc, lua-lyaml, matio, mbuffer, netdata,
+> +       openfpgaloader, perl-i18n, perl-locale-maketext-lexicon,
+> +       perl-lwp-protocol-https,
+> +       perl-mojolicious-plugin-authorization,
+> +       perl-mojolicious-plugin-cspheader,
+> +       perl-mojolicious-plugin-i18n,
+> +       perl-mojolicious-plugin-securityheader, perl-mozilla-ca,
+> +       perl-path-class, pistache, pkcs11-helper, prelink-cross,
+> +       python-argon2-cffi, python-canopen, python-cbor2,
+> +       python-filelock, python-flatbuffers, python-greenlet,
+> +       python-modbus-tk, python-pyalsa, python-pysftp, python-regex,
+> +       python-snappy, rtty, tinyproxy, udev-gentoo-scripts, unbound,
+> +       vuejs, wlroots.
+> +
+> +       New defconfigs: freescale_imx6ullevk, freescale_imx8qmmek,
+> +       nanopi_neo4, nanopi_r1, nitrogen8mm, nitrogen8mn, olpc_xo1,
+> +       olpc_xo175, roc_rk3399_pc, stm32mp157a_dk1, zynq_qmtech
+> +
+>  2020.02.1, released April 10th, 2020
+>
+>         Important / security related fixes.
+>
+>
+> ------------------------------
+>
+> Message: 4
+> Date: Tue, 5 May 2020 23:05:28 +0200
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> To: Romain Naour <romain.naour@gmail.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH] package/solarus: bump to version
+>         1.6.4
+> Message-ID: <20200505230528.320a6358@windsurf.home>
+> Content-Type: text/plain; charset=US-ASCII
+>
+> On Mon,  4 May 2020 16:37:42 +0200
+> Romain Naour <romain.naour@gmail.com> wrote:
+>
+> > Add glm dependency since the bundled version is gone [1].
+> >
+> > Update indentation of hash file (two spaces).
+> >
+> > [1]
+> https://gitlab.com/solarus-games/solarus/commit/5285c8e1afa538bbcd4c8654f9bbfb270cc7f52
+> >
+> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> > ---
+> >  package/solarus/Config.in    | 1 +
+> >  package/solarus/solarus.hash | 4 ++--
+> >  package/solarus/solarus.mk   | 6 +++---
+> >  3 files changed, 6 insertions(+), 5 deletions(-)
+>
+> Applied to master, thanks.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+>
+> ------------------------------
+>
+> Message: 5
+> Date: Tue, 5 May 2020 23:05:34 +0200
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> To: Romain Naour <romain.naour@gmail.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH] package/zziplib: bump to version
+>         0.13.71
+> Message-ID: <20200505230534.6ea3d695@windsurf.home>
+> Content-Type: text/plain; charset=US-ASCII
+>
+> On Mon,  4 May 2020 16:52:12 +0200
+> Romain Naour <romain.naour@gmail.com> wrote:
+>
+> > Remove upstream patches and CVE tags.
+> >
+> > Switch the dependency to python3 added by [1].
+> >
+> > Update indentation of hash file (two spaces).
+> >
+> > [1]
+> https://github.com/gdraheim/zziplib/commit/a144bec8d06302e7be11f0f46e02947b0becf574
+> >
+> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> > ---
+> >  ...eak-from-__zzip_parse_root_directory.patch |  74 ----
+> >  ...k-from-__zzip_parse_root_directory-2.patch |  53 ---
+> >  ...3-One-more-free-to-avoid-memory-leak.patch |  25 --
+> >  ...omponents-from-pathnames-of-extracte.patch | 344 ------------------
+> >  package/zziplib/zziplib.hash                  |   8 +-
+> >  package/zziplib/zziplib.mk                    |  15 +-
+> >  6 files changed, 7 insertions(+), 512 deletions(-)
+> >  delete mode 100644
+> package/zziplib/0001-Avoid-memory-leak-from-__zzip_parse_root_directory.patch
+> >  delete mode 100644
+> package/zziplib/0002-Avoid-memory-leak-from-__zzip_parse_root_directory-2.patch
+> >  delete mode 100644
+> package/zziplib/0003-One-more-free-to-avoid-memory-leak.patch
+> >  delete mode 100644
+> package/zziplib/0004-Fix-issue-62-Remove-any-components-from-pathnames-of-extracte.patch
+>
+> Applied to master, thanks.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+>
+> ------------------------------
+>
+> Message: 6
+> Date: Tue, 5 May 2020 23:05:39 +0200
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Cc: buildroot at buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>
+> Subject: Re: [Buildroot] [PATCH v2] package/libnss: bump version to
+>         3.52
+> Message-ID: <20200505230539.47012d8b@windsurf.home>
+> Content-Type: text/plain; charset=US-ASCII
+>
+> On Mon,  4 May 2020 17:10:36 +0200
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+>
+> > Bump version to 3.52 and drop all patches since they've all been
+> > upstreamed.
+> >
+> > Release notes:
+> >
+> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.52_release_notes
+> >
+> > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> > ---
+> > V1->V2:
+> > * improve commit log
+> > ---
+> >  ...troduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch | 132 ------------------
+> >  ...t-force-ARMv7-for-gcm-arm32-neon-r-j.patch |  30 ----
+> >  package/libnss/libnss.hash                    |   4 +-
+> >  package/libnss/libnss.mk                      |   2 +-
+> >  4 files changed, 3 insertions(+), 165 deletions(-)
+> >  delete mode 100644
+> package/libnss/0001-Bug-1620799-Introduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch
+> >  delete mode 100644
+> package/libnss/0002-Bug-1624864-Don-t-force-ARMv7-for-gcm-arm32-neon-r-j.patch
+>
+> Applied to master, thanks.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+>
+> ------------------------------
+>
+> Message: 7
+> Date: Tue, 5 May 2020 23:05:45 +0200
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> To: Grzegorz Blach <grzegorz@blach.pl>
+> Cc: buildroot at buildroot.org, Asaf Kahlon <asafka7@gmail.com>
+> Subject: Re: [Buildroot] [PATCH] package/python-redis: Bump to version
+>         3.5.0
+> Message-ID: <20200505230545.643f05cc@windsurf.home>
+> Content-Type: text/plain; charset=US-ASCII
+>
+> On Mon,  4 May 2020 20:33:02 +0200
+> Grzegorz Blach <grzegorz@blach.pl> wrote:
+>
+> > Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+> > ---
+> >  package/python-redis/python-redis.hash | 6 +++---
+> >  package/python-redis/python-redis.mk   | 4 ++--
+> >  2 files changed, 5 insertions(+), 5 deletions(-)
+>
+> Applied to master, thanks.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+>
+> ------------------------------
+>
+> Message: 8
+> Date: Wed, 06 May 2020 04:58:06 +0000
+> From: Andreas Ziegler <br015@umbiko.net>
+> To: buildroot at busybox.net
+> Cc: atkunalchauhan at gmail.com
+> Subject: Re: [Buildroot] Help: to understand build root
+> Message-ID: <121ecb5d43fff1ec9fd9e65f6f99e9ac@umbiko.net>
+> Content-Type: text/plain; charset=US-ASCII; format=flowed
+>
+> Hi Kunal,
+>
+> > Message: 12
+> > Date: Tue, 5 May 2020 22:29:10 +0530
+> > From: Kunal Chauhan <atkunalchauhan@gmail.com>
+> > To: buildroot at busybox.net
+> > Subject: [Buildroot] Help: to understand build root
+>
+> > Q1.As busybox is a small flavour of linux os.if i am not wrong?
+> >
+> > Q2. What is concept of build-root. As i have seen code base compiled
+> > and
+> > create build-root folder .
+>
+> Buildroot is a build system for embedded systems. It is comparable to
+> e.g. Yocto and helps you to create a GNU/Linux based image, containing
+> Linux kernel, init system and root filesystem, which can then be
+> transferred to a target system. Think of firmware for IoT, a router, a
+> media player, or a robot in manufacturing.
+>
+> Buildroot images are static, you cannot install software after
+> deployment.
+>
+> Buildroot images can be small, production images are counted in MiB, not
+> GiB.
+>
+> Buildroot handles cross-compiling. Build and target system can have
+> completely different architectures.
+>
+> Buildroot recipes (see configs/*_defconfig) are meant as starting point
+> for your own project(s). They bring a system up and make it responsive
+> (console, network), the rest is up to you.
+>
+> In case you have not seen it before, the Buildroot manual is here:
+>
+>    https://buildroot.org/downloads/manual/manual.html#_about_buildroot
+>
+> Kind regards,
+> Andreas
+>
+>
+> ------------------------------
+>
+> Message: 9
+> Date: Wed, 06 May 2020 06:59:13 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: <stephan.hoffmann@ext.grandcentrix.net>, Andr?  Hentschel
+>         <nerv@dawncrow.de>,  buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH] azure-iot-sdk-c: fix missing
+>         libraries
+> Message-ID: <87h7wthd5q.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>
+>  > On Mon, 23 Sep 2019 13:52:06 +0200
+>  > <stephan.hoffmann@ext.grandcentrix.net> wrote:
+>
+>  >> From: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
+>  >>
+>  >> libparson.so and libumqtt.so.1 are missing.
+>  >>
+>  >> The package builds libparson, but does not install it.
+>  >> It also does not install the symlinks for libumqtt.so.1.1.11.
+>  >>
+>  >> Signed-off-by: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net
+> >
+>  >> ---
+>  >> package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 24 +++++++++++++++++-----
+>  >> 1 file changed, 19 insertions(+), 5 deletions(-)
+>
+>  > So I finally applied this, but after doing quite a bit of rework. For
+>  > example, your patch was not correct as it was creating the .so symlinks
+>  > unconditionally, even when BR2_STATIC_LIBS=y, i.e even when static
+>  > libraries are used. Another issue is that you were reformatting the
+>  > list of libraries to have one per-line, in the same patch. And you were
+>  > fixing the libparson and libumqtt issues in the same patch.
+>
+>  > So, I first applied three preparation commits:
+>
+>  >
+> https://git.buildroot.org/buildroot/commit/?id=c71030f0fab49be4061fb999a8eabe4190f1f18d
+>  >
+> https://git.buildroot.org/buildroot/commit/?id=59de11b0476699ddeb2cbcd30a524b849249956a
+>  >
+> https://git.buildroot.org/buildroot/commit/?id=43822bb6db8851df4d6568622b58196895028f91
+>
+>  > Then, I applied your fix for libumqtt.so:
+>
+>  >
+> https://git.buildroot.org/buildroot/commit/?id=570dd0c31b2149cd913866eb6777caa4a1b05a56
+>
+>  > And your fix for libparson.so:
+>
+>  >
+> https://git.buildroot.org/buildroot/commit/?id=94120fd7c71881e7b3963d5db27802241d9eeed2
+>
+> The same set of commits have now been cherry-picked for 2020.02.x,
+> thanks!
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 10
+> Date: Wed, 06 May 2020 07:02:17 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: unixmania at gmail.com,  buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH] board/wandboard/post-build.sh: create
+>         boot.scr at TARGET_DIR/boot
+> Message-ID: <87d07hhd0m.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>
+>  > Hello Carlos,
+>  > On Sat, 12 Oct 2019 20:30:41 -0300
+>  > unixmania at gmail.com wrote:
+>
+>  >> From: Carlos Santos <unixmania@gmail.com>
+>  >>
+>  >> There is no reason to create boot.scr at board/wandboard and later
+>  >> install it at TARGET_DIR/boot, leaving a stale file behind.
+>  >>
+>  >> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+>  >> ---
+>  >> board/wandboard/post-build.sh | 6 ++++--
+>  >> 1 file changed, 4 insertions(+), 2 deletions(-)
+>
+>  > Applied to master after dropping the additional chmod 644 on the file,
+>  > as suggested by Arnout. Also, the same issue was present for other
+>  > boards, so I also did the following commits:
+>
+>  > 2306339d1fe8d5ea2d9e17641f78a374f612f45e board/udoo/neo: create
+> boot.scr in TARGET_DIR/boot
+>  > 9ddbd11620b5a01945a438085d45ef2131bad35f board/solidrun/mx6cubox:
+> create boot.scr in TARGET_DIR/boot
+>
+>  > What would perhaps be good is to use the BR2_TARGET_UBOOT_BOOT_SCRIPT
+>  > feature, which would automatically run mkimage and install boot.src in
+>  > $(BINARIES_DIR). The post-build script would then only have to copy it
+>  > to $TARGET_DIR/boot/.
+>
+> The same set of commits now cherry-picked to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 11
+> Date: Wed, 06 May 2020 07:03:52 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Baruch Siach <baruch@tkos.co.il>
+> Cc: buildroot at busybox.net,  Scott Fan <fancp2007@gmail.com>
+> Subject: Re: [Buildroot] [PATCH] package/libssh: security bump to
+>         version 0.9.4
+> Message-ID: <878si5hcxz.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>
+>  > Fixes CVE-2020-1730: Possible DoS in client and server when handling
+>  > AES-CTR keys with OpenSSL.
+>
+>  > Format hash file with two spaces delimiter.
+>
+>  > Cc: Scott Fan <fancp2007@gmail.com>
+>  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 12
+> Date: Wed, 06 May 2020 07:04:05 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Heiko Thiery <heiko.thiery@gmail.com>
+> Cc: buildroot at buildroot.org,  Scott Fan <fancp2007@gmail.com>
+> Subject: Re: [Buildroot] [PATCH 1/1] package/libssh: add patch to fix
+>         reported version
+> Message-ID: <874ksthcxm.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
+>
+>  > The released libssh package does wrongly reports the previous version.
+>  > This patch fixes the version field in the lib.
+>
+>  > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 13
+> Date: Wed, 06 May 2020 07:04:24 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Heiko Thiery <heiko.thiery@gmail.com>
+> Cc: buildroot at buildroot.org,  Scott Fan <fancp2007@gmail.com>
+> Subject: Re: [Buildroot] [PATCH] package/libssh: add patch to fix
+>         regression
+> Message-ID: <87zhalfycn.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
+>
+>  > The libssh server is used by libnetconf2. With libssh version 0.9.4 a
+>  > regression was introduced that wrongly leads to session closed after the
+>  > poll timeout.
+>
+>  > The patch comes from upstrem:
+>  >
+> https://git.libssh.org/projects/libssh.git/commit/?id=6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4
+>
+>  > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 14
+> Date: Wed, 06 May 2020 07:10:59 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Pascal de Bruijn <p.debruijn@unilogic.nl>,  buildroot at busybox.net
+> Subject: Re: [Buildroot] [PATCH] package/exim: fix log and pid file
+>         paths
+> Message-ID: <87v9l9fy1o.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>
+>  > On Mon,  2 Mar 2020 11:19:02 +0100
+>  > Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
+>
+>  >> both the logs and pid should not be placed in /var/spool
+>  >>
+>  >> we place the log in /var/log/exim and
+>  >> we place the pid in /var/run/exim
+>  >>
+>  >> using binary name subdirectory in both cases allows for the
+>  >> use of systemd's LogsDirectory and RuntimeDirectory statements
+>  >>
+>  >> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+>
+>  > Applied with an improved commit log. It would however be nice to
+>  > convert the exim init script to the "new" init script template, for
+>  > higher consistency.
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 15
+> Date: Wed, 06 May 2020 07:13:50 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH 1/1] package/mbedtls: security bump to
+>         version 2.16.6
+> Message-ID: <87r1vxfxwx.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+>  > - Fix CVE-2020-10932: fix side channel in ECC code that allowed an
+>  >   adversary with access to precise enough timing and memory access
+>  >   information (typically an untrusted operating system attacking a
+>  >   secure enclave) to fully recover an ECDSA private key.
+>  > - Fix a potentially remotely exploitable buffer overread in a DTLS
+>  >   client when parsing the Hello Verify Request message.
+>  > - Fix bug in DTLS handling of new associations with the same parameters
+>  >   (RFC 6347 section 4.2.8): after sending its HelloVerifyRequest, the
+>  >   server would end up with corrupted state and only send invalid records
+>  >   to the client. An attacker able to send forged UDP packets to the
+>  >   server could use that to obtain a Denial of Service. This could only
+>  >   happen when MBEDTLS_SSL_DTLS_CLIENT_PORT_REUSE was enabled in
+>  >   config.h (which it is by default).
+>
+>  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 16
+> Date: Wed, 06 May 2020 07:16:07 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [git commit] package/python-iptables: add
+>         explicit dependency on dynamic libs
+> Message-ID: <87mu6lfxt4.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>
+>  > commit:
+> https://git.buildroot.net/buildroot/commit/?id=21b85bc56cdcf030cced57dea0f78cdce59912b8
+>  > branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+>  > The package uses ctypes.CDLL extensively which only makes sense when
+> dynamic
+>  > libraries are available.
+>
+>  > Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+>  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 17
+> Date: Wed, 06 May 2020 07:16:12 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [git commit] package/python-iptables: account
+>         for platform tag in extensions
+> Message-ID: <87imh9fxsz.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>
+>  > commit:
+> https://git.buildroot.net/buildroot/commit/?id=52276cdda34aa986410626592031560bf64d788b
+>  > branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+>  > EXT_SUFFIX in Python versions > 3.5 contains a platform tag which only
+> applies
+>  > to cpython extensions. Given that ctypes.util.find_library does not
+> work on the
+>  > target due to the absence of the underlying tools '.so' needs to be
+> added as a
+>  > possible suffix for libraries to enable python-iptables to find the
+> iptables
+>  > shared libraries.
+>
+>  > Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+>  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 18
+> Date: Wed, 06 May 2020 07:16:19 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [git commit] package/python-iptables: try
+>         known libc instead of find_library()
+> Message-ID: <87eerxfxss.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>
+>  > commit:
+> https://git.buildroot.net/buildroot/commit/?id=90c18ab269c600ee7643f69212713ee3b74c38bd
+>  > branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+>  > ctypes.util.find_library() depends on gcc and friends to detect the
+> location of
+>  > a given shared library. Given that these are not available on the
+> target and
+>  > that python-iptables depends on this functionality we need to work
+> around this.
+>  > The SONAMEs of the libc are well known so we try the known ones for
+> glibc,
+>  > uClibc and musl.
+>
+>  > Fixes: https://bugs.busybox.net/show_bug.cgi?id=12271
+>
+>  > Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+>  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 19
+> Date: Wed, 06 May 2020 07:20:40 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Cc: buildroot at buildroot.org,  Adam Duskett <aduskett@gmail.com>
+> Subject: Re: [Buildroot] [PATCH 1/1] package/php: security bump
+>         version to 7.4.5
+> Message-ID: <87a72lfxlj.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>
+>  > Changelog: https://www.php.net/ChangeLog-7.php#7.4.5
+>  > Fixes CVE-2020-7067.
+>
+>  > Removed patch applied upstream.
+>
+>  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 20
+> Date: Wed, 06 May 2020 07:21:38 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: yegorslists at googlemail.com
+> Cc: buildroot at buildroot.org,  Asaf Kahlon <asafka7@gmail.com>
+> Subject: Re: [Buildroot] [PATCH] package/python-dpkt: remove Python2
+>         only dependency
+> Message-ID: <875zd9fxjx.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>
+>  > From: Yegor Yefremov <yegorslists@googlemail.com>
+>  > python-dpkt supports both Python flavors.
+>
+>  > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 21
+> Date: Wed, 06 May 2020 07:23:36 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [git commit] package/libsepol: fix help text
+>         for BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
+> Message-ID: <871rnxfxgn.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>
+>  > commit:
+> https://git.buildroot.net/buildroot/commit/?id=67d7705a9aa58886e8a8777fe4c95746c1fb5c96
+>  > branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+>  > The help text was wrong, as it didn't match the actual default values
+>  > we were specifying. Indeed, when we specify:
+>
+>  >         default 31 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+>  >         default 30 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+>
+>  > It means that the policy version 30 is supported starting from Linux
+>  > 4.3 included, and that 31 is supported from Linux 4.13 included.
+>
+>  > So we shouldn't have:
+>
+>  >> 4.3 <= 4.13    30
+>  >> 4.13           31
+>
+>  > but:
+>
+>  >> = 4.3 < 4.13    30
+>  >> = 4.13          31
+>
+>  > This patch fixes that for all versions.
+>
+>  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 22
+> Date: Wed, 06 May 2020 07:26:13 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Buildroot List <buildroot@uclibc.org>, Marek Belisko
+>         <marek.belisko@open-nandra.com>, "Yann E. MORIN"
+>         <yann.morin.1998@free.fr>, Adam Duskett <aduskett@gmail.com>
+> Subject: Re: [Buildroot] [PATCH] package/polkit: properly autoreconf
+> Message-ID: <87wo5peiru.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>
+>  > 0001-make-netgroup-support-optional.patch patches configure.ac, but we
+>  > don't autoreconf the package, which is not good.
+>
+>  > However, simply adding AUTORECONF = YES is not sufficient: polkit
+>  > Makefile.am use the automake conditional HAVE_INTROSPECTION, which is
+>  > "available" only when the gobject-introspection m4 file is installed.
+>
+>  > Since we don't want to make gobject-introspection a mandatory
+>  > dependency of polkit, we take a simpler route: add a copy of
+>  > introspection.m4 into the polkit source tree. This is only a 142 lines
+>  > file, and it can be dropped when
+>  > 0001-make-netgroup-support-optional.patch is merged upstream.
+>
+>  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 23
+> Date: Wed, 06 May 2020 07:27:17 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: aduskett at gmail.com
+> Cc: buildroot at buildroot.org,  Marek Belisko
+>         <marek.belisko@open-nandra.com>
+> Subject: Re: [Buildroot] [PATCH 1/4] package/polkit: install service
+>         file
+> Message-ID: <87sggdeiq2.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
+>
+>  > From: Adam Duskett <Aduskett@gmail.com>
+>  > The default installed service file is missing a target, which causes
+> preset-all
+>  > to not enable the service.
+>
+>  > Add the service file to package/polkit with the addition of:
+>
+>  > [Install]
+>  > WantedBy=multi-user.target
+>
+>  > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 24
+> Date: Wed, 06 May 2020 07:27:23 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: aduskett at gmail.com
+> Cc: buildroot at buildroot.org,  Marek Belisko
+>         <marek.belisko@open-nandra.com>
+> Subject: Re: [Buildroot] [PATCH 2/4] package/polkit: add upstream
+>         memory leak fix
+> Message-ID: <87o8r1eipw.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
+>
+>  > From: Adam Duskett <Aduskett@gmail.com>
+>  > This patch fixes two small memory leaks.
+>
+>  > Upstream commit: 28e3a6653d8c3777b07e0128a0d97d46e586e311
+>
+>  > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 25
+> Date: Wed, 06 May 2020 07:27:28 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: aduskett at gmail.com
+> Cc: buildroot at buildroot.org,  Marek Belisko
+>         <marek.belisko@open-nandra.com>
+> Subject: Re: [Buildroot] [PATCH 3/4] package/polkit: add upstream fix
+>         for SIGTTOU
+> Message-ID: <87k11peipr.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
+>
+>  > From: Adam Duskett <Aduskett@gmail.com>
+>  > If tty_handler() resets terminal while pkttyagent is run in background
+> job,
+>  > the process gets stopped by SIGTTOU. This impacts systemctl, hence it
+> must
+>  > be blocked for a while and then the process gets killed anyway.
+>
+>  > Upstream commit: 28e3a6653d8c3777b07e0128a0d97d46e586e311
+>
+>  > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 26
+> Date: Wed, 06 May 2020 07:28:39 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Louis Aussedat <aussedat.louis@gmail.com>
+> Cc: buildroot at buildroot.org,  Adam Duskett <aduskett@gmail.com>
+> Subject: Re: [Buildroot] [PATCH 1/2] package/php: fix zip support
+> Message-ID: <87ftcdeins.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Louis" == Louis Aussedat <aussedat.louis@gmail.com> writes:
+>
+>  > since php7.4, --enable-zip becomes --with-zip due to
+>  > migration to pkg-config.
+>
+>  > Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 27
+> Date: Wed, 06 May 2020 07:28:45 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Louis Aussedat <aussedat.louis@gmail.com>
+> Cc: buildroot at buildroot.org,  Adam Duskett <aduskett@gmail.com>
+> Subject: Re: [Buildroot] [PATCH 2/2] package/php: fix gd dependencies
+> Message-ID: <87bln1einm.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Louis" == Louis Aussedat <aussedat.louis@gmail.com> writes:
+>
+>  > Due to migration to pkg-config in php 7.4, the detection of
+>  > library dependencies has been changed.
+>
+>  > source from php.net:
+>  > --with-gd becomes --enable-gd
+>  > --with-png-dir has been removed. libpng is required.
+>  > --with-zlib-dir has been removed. zlib is required.
+>  > --with-freetype-dir becomes --with-freetype
+>  > --with-jpeg-dir becomes --with-jpeg
+>
+>  > Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 28
+> Date: Wed, 06 May 2020 07:30:04 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Matt Weber <matthew.weber@rockwellcollins.com>, Ryan Steffens
+>         <ryan.steffens@rockwellcollins.com>, buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH v2] package/netsnmp: unix domain
+>         socket transport
+> Message-ID: <877dxpeilf.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>
+>  > On Tue, 14 Apr 2020 12:55:00 -0500
+>  > Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+>
+>  >> From: Ryan Steffens <ryan.steffens@rockwellcollins.com>
+>  >>
+>  >> Adds support for connecting unix socket based AgentX subagents
+>  >>
+>  >> Signed-off-by: Ryan Steffens <ryan.steffens@rockwellcollins.com>
+>  >> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+>  >> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+>
+>  > I have further extended the commit log, and applied. Especially, it is
+>  > always useful to go back in the history of the package and try to
+>  > figure out the reason why something was done in a given way, and now
+>  > needs to be done differently.
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 29
+> Date: Wed, 06 May 2020 07:31:37 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH 1/1] package/openvpn: security bump
+>         version to 2.4.9
+> Message-ID: <87368deiiu.fsf@dell.be.48ers.dk>
+> Content-Type: text/plain
+>
+> >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>
+>  > Changelog:
+>  > https://github.com/OpenVPN/openvpn/blob/release/2.4/ChangeLog
+>
+>  > Fixes CVE-2020-11810.
+>
+>  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>
+> Committed to 2020.02.x, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+>
+>
+> ------------------------------
+>
+> Message: 30
+> Date: Wed, 6 May 2020 06:58:04 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x]
+>         package/azure-iot-sdk-c: fix installation of libumqtt
+> Message-ID: <20200506051930.D6FA88D7AA@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=f4150265b1b6152b6f65960bf3c93deb1d0217d5
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> Unlike the other libraries built by azure-iot-sdk-c, libumqtt follows
+> a regular versioning scheme. It has a libumqtt.so.1 SONAME, with
+> libumqtt.so.1 being a symlink to libumqtt.so.1.1.11.
+>
+> However, we currently install the library itself as libumqtt.so to the
+> target filesystem, which is not its SONAME, which means it cannot be
+> found by any other library/program linked against it.
+>
+> This commit fixes that by installing the library as
+> libumqtt.so.1.1.11, and creating the appropriate symlinks. The static
+> library installation is not modified.
+>
+> Signed-off-by: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 570dd0c31b2149cd913866eb6777caa4a1b05a56)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> index 6781da4177..35ddb672fb 100644
+> --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> @@ -41,13 +41,19 @@ AZURE_IOT_SDK_C_LIBS += \
+>         iothub_client/libiothub_client_mqtt_transport.so \
+>         iothub_service_client/libiothub_service_client.so \
+>         serializer/libserializer.so \
+> -       umqtt/libumqtt.so
+> +       umqtt/libumqtt.so.1.1.11
+> +
+> +define AZURE_IOT_SDK_C_CREATE_SYMLINKS
+> +       ln -sf libumqtt.so.1.1.11 $(1)/usr/lib/libumqtt.so.1
+> +       ln -sf libumqtt.so.1.1.11 $(1)/usr/lib/libumqtt.so
+> +endef
+>  endif
+>
+>  define AZURE_IOT_SDK_C_INSTALL_LIBS
+>         $(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
+>                 $(INSTALL) -D -m 0755 $(@D)/$(l) $(1)/usr/lib/$(notdir
+> $(l))
+>         )
+> +       $(call AZURE_IOT_SDK_C_CREATE_SYMLINKS,$(1))
+>  endef
+>
+>  define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
+>
+>
+> ------------------------------
+>
+> Message: 31
+> Date: Wed, 6 May 2020 06:57:38 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x]
+>         package/azure-iot-sdk-c: format the libraries list with one lib per
+>         line
+> Message-ID: <20200506051930.9E9318D7AA@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=8a768ad62edf8d49bb523c5e4d7e6e5531246527
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> This makes it easier to review patches modifying these lists of
+> libraries, such as:
+>
+>
+> http://patchwork.ozlabs.org/project/buildroot/patch/20190923115206.4468-1-stephan.hoffmann at ext.grandcentrix.net/
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit c71030f0fab49be4061fb999a8eabe4190f1f18d)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 22 ++++++++++++++++------
+>  1 file changed, 16 insertions(+), 6 deletions(-)
+>
+> diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> index 8b3f670399..b194bf9a4c 100644
+> --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> @@ -17,21 +17,31 @@ AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
+>  # The project only supports building one kind of library.
+>  # Further the install target installs the wrong files, so we do it here:
+>  ifeq ($(BR2_STATIC_LIBS),y)
+> -AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.a c-utility/libaziotsharedutil.a \
+> -       iothub_client/libiothub_client.a
+> iothub_client/libiothub_client_mqtt_ws_transport.a \
+> +AZURE_IOT_SDK_C_LIBS += \
+> +       uamqp/libuamqp.a \
+> +       c-utility/libaziotsharedutil.a \
+> +       iothub_client/libiothub_client.a \
+> +       iothub_client/libiothub_client_mqtt_ws_transport.a \
+>         iothub_client/libiothub_client_amqp_ws_transport.a \
+>         iothub_client/libiothub_client_http_transport.a \
+>         iothub_client/libiothub_client_amqp_transport.a \
+>         iothub_client/libiothub_client_mqtt_transport.a \
+> -       iothub_service_client/libiothub_service_client.a
+> serializer/libserializer.a umqtt/libumqtt.a
+> +       iothub_service_client/libiothub_service_client.a \
+> +       serializer/libserializer.a \
+> +       umqtt/libumqtt.a
+>  else
+> -AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.so c-utility/libaziotsharedutil.so
+> \
+> -       iothub_client/libiothub_client.so
+> iothub_client/libiothub_client_mqtt_ws_transport.so \
+> +AZURE_IOT_SDK_C_LIBS += \
+> +       uamqp/libuamqp.so \
+> +       c-utility/libaziotsharedutil.so \
+> +       iothub_client/libiothub_client.so \
+> +       iothub_client/libiothub_client_mqtt_ws_transport.so \
+>         iothub_client/libiothub_client_amqp_ws_transport.so \
+>         iothub_client/libiothub_client_http_transport.so \
+>         iothub_client/libiothub_client_amqp_transport.so \
+>         iothub_client/libiothub_client_mqtt_transport.so \
+> -       iothub_service_client/libiothub_service_client.so
+> serializer/libserializer.so umqtt/libumqtt.so
+> +       iothub_service_client/libiothub_service_client.so \
+> +       serializer/libserializer.so \
+> +       umqtt/libumqtt.so
+>  endif
+>
+>  define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
+>
+>
+> ------------------------------
+>
+> Message: 32
+> Date: Wed, 6 May 2020 06:58:26 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x]
+>         package/azure-iot-sdk-c: also install libparson
+> Message-ID: <20200506051930.E9A738D7AA@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=bd389b52fb9ed025192d49bfd5c3c84e97cd318e
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> The package builds libparson, but does not install it, let's fix this.
+>
+> Signed-off-by: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 94120fd7c71881e7b3963d5db27802241d9eeed2)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> index 35ddb672fb..f63297844d 100644
+> --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> @@ -28,7 +28,8 @@ AZURE_IOT_SDK_C_LIBS += \
+>         iothub_client/libiothub_client_mqtt_transport.a \
+>         iothub_service_client/libiothub_service_client.a \
+>         serializer/libserializer.a \
+> -       umqtt/libumqtt.a
+> +       umqtt/libumqtt.a \
+> +       libparson.a
+>  else
+>  AZURE_IOT_SDK_C_LIBS += \
+>         uamqp/libuamqp.so \
+> @@ -41,7 +42,8 @@ AZURE_IOT_SDK_C_LIBS += \
+>         iothub_client/libiothub_client_mqtt_transport.so \
+>         iothub_service_client/libiothub_service_client.so \
+>         serializer/libserializer.so \
+> -       umqtt/libumqtt.so.1.1.11
+> +       umqtt/libumqtt.so.1.1.11 \
+> +       libparson.so
+>
+>  define AZURE_IOT_SDK_C_CREATE_SYMLINKS
+>         ln -sf libumqtt.so.1.1.11 $(1)/usr/lib/libumqtt.so.1
+>
+>
+> ------------------------------
+>
+> Message: 33
+> Date: Wed, 6 May 2020 07:26:52 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/polkit: add
+>         upstream memory leak fix
+> Message-ID: <20200506051932.243637FFD0@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=148f82ca0bcbf162a3c69001b31adba81a49e140
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> This patch fixes two small memory leaks.
+>
+> Upstream commit: 28e3a6653d8c3777b07e0128a0d97d46e586e311
+>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit ba70e29fea9fd76ffafd77401073d2142cbdfd21)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/polkit/0002-jsauthority-memleak.patch | 28
+> +++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>
+> diff --git a/package/polkit/0002-jsauthority-memleak.patch
+> b/package/polkit/0002-jsauthority-memleak.patch
 > new file mode 100644
-> index 000000000000..f499e2530717
+> index 0000000000..4f0733185c
 > --- /dev/null
-> +++ b/package/libgdiplus/0001-Fix-test-build-without-libjpeg-tiff-597.patch
-> @@ -0,0 +1,92 @@
-> +From 49d5360096f0015313b54f3d758b7c0249c44218 Mon Sep 17 00:00:00 2001
-> +From: bkuhls <bkuhls@users.noreply.github.com>
-> +Date: Mon, 30 Sep 2019 16:37:58 +0200
-> +Subject: [PATCH] Fix test build without libjpeg/tiff (#597)
+> +++ b/package/polkit/0002-jsauthority-memleak.patch
+> @@ -0,0 +1,28 @@
+> +From 28e3a6653d8c3777b07e0128a0d97d46e586e311 Mon Sep 17 00:00:00 2001
+> +From: Jan Rybar <jrybar@redhat.com>
+> +Date: Tue, 8 Oct 2019 13:28:18 +0000
+> +Subject: [PATCH] jsauthority: Fix two minor memory leaks
 > +
-> +* testjpegcodec depends on libjpeg
-> +
-> +* testtiffcodec depends on tiff
+> +(cherry picked from commit 28e3a6653d8c3777b07e0128a0d97d46e586e311)
+> +Signed-off-by: Jan Rybar <jrybar@redhat.com>
+> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
 > +---
-> + configure.ac      |  2 ++
-> + tests/Makefile.am | 21 +++++++++++++++++----
-> + 2 files changed, 19 insertions(+), 4 deletions(-)
+> + src/polkitbackend/polkitbackendjsauthority.cpp | 2 ++
+> + 1 file changed, 2 insertions(+)
 > +
-> +diff --git a/configure.ac b/configure.ac
-> +index 5726c20e0b2e..71b0edef603f 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -292,6 +292,7 @@ if test x$JPEG != x; then
-> + else
-> +   jpeg_ok="no (Get it from http://freshmeat.net/projects/libjpeg)"
-> + fi
-> ++AM_CONDITIONAL(HAVE_LIBJPEG, test x$JPEG != x)
+> +diff --git a/src/polkitbackend/polkitbackendjsauthority.cpp
+> b/src/polkitbackend/polkitbackendjsauthority.cpp
+> +index 9b752d1..e97b8aa 100644
+> +--- a/src/polkitbackend/polkitbackendjsauthority.cpp
+> ++++ b/src/polkitbackend/polkitbackendjsauthority.cpp
+> +@@ -567,6 +567,8 @@ polkit_backend_js_authority_finalize (GObject *object)
+> +   g_strfreev (authority->priv->rules_dirs);
 > +
-> + dnl Test for libtiff
-> + AC_ARG_WITH([libtiff],
-> +@@ -327,6 +328,7 @@ if test x$TIFF != x; then
-> + else
-> +   tiff_ok="no (Get it from http://www.libtiff.org/)"
-> + fi
-> ++AM_CONDITIONAL(HAVE_LIBTIFF, test x$TIFF != x)
+> +   delete authority->priv->ac;
+> ++  delete authority->priv->js_global;
+> ++  delete authority->priv->js_polkit;
 > +
-> + dnl Test for libgif or libungif
-> + AC_ARG_WITH([libgif],
-> +diff --git a/tests/Makefile.am b/tests/Makefile.am
-> +index 67c197c3a6f5..6a27f328d5ed 100644
-> +--- a/tests/Makefile.am
-> ++++ b/tests/Makefile.am
-> +@@ -35,15 +35,22 @@ noinst_PROGRAMS =                  \
-> +       testhatchbrush \
-> +       testicocodec \
-> +       testimageattributes \
-> +-      testjpegcodec testlineargradientbrush \
-> ++      testlineargradientbrush \
-> +       testmatrix testmetafile testpathgradientbrush \
-> +       testpen testpng testpngcodec testregion testreversepath
-> testsolidbrush \
-> +       teststringformat \
-> +       testtext \
-> +       testtexturebrush \
-> +-      testtiffcodec \
-> +       testwmfcodec
-> +
-> ++if HAVE_LIBJPEG
-> ++noinst_PROGRAMS += testjpegcodec
-> ++endif HAVE_LIBJPEG
-> ++
-> ++if HAVE_LIBTIFF
-> ++noinst_PROGRAMS += testtiffcodec
-> ++endif HAVE_LIBTIFF
-> ++
-> + #if HAVE_X11
-> + #noinst_PROGRAMS += testgdi
-> + #
-> +@@ -347,7 +354,6 @@ TESTS = \
-> +       testhatchbrush \
-> +       testicocodec \
-> +       testimageattributes \
-> +-      testjpegcodec \
-> +       testlineargradientbrush \
-> +       testmatrix \
-> +       testmetafile \
-> +@@ -361,10 +367,17 @@ TESTS = \
-> +       teststringformat \
-> +       testtexturebrush \
-> +       testtext \
-> +-      testtiffcodec \
-> +       testwmfcodec \
-> +       $(NULL)
-> +
-> ++if HAVE_LIBJPEG
-> ++TESTS += testjpegcodec
-> ++endif HAVE_LIBJPEG
-> ++
-> ++if HAVE_LIBTIFF
-> ++TESTS += testtiffcodec
-> ++endif HAVE_LIBTIFF
-> ++
-> + if HAVE_X11
-> + # TESTS += testgdi
-> + endif
+> +   JS_DestroyContext (authority->priv->cx);
+> +   /* JS_ShutDown (); */
 > +--
-> +2.17.1
+> +2.24.1
 > +
-> diff --git
-> a/package/libgdiplus/0002-Update-LICENSE-to-match-the-headers-of-the-source-fi.patch
-> b/package/libgdiplus/0002-Update-LICENSE-to-match-the-headers-of-the-source-fi.patch
-> deleted file mode 100644
-> index 3ddfe7c37c90..000000000000
+>
+>
+> ------------------------------
+>
+> Message: 34
+> Date: Wed, 6 May 2020 07:00:27 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x]
+>         board/wandboard/post-build.sh: create boot.scr at TARGET_DIR/boot
+> Message-ID: <20200506051931.057EB8D59C@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=52b01679eac36f4408e950687e2e002708ca3190
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> There is no reason to create boot.scr at board/wandboard and later
+> install it at TARGET_DIR/boot, leaving a stale file behind.
+>
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit f14e95b3ff76a4a052a1d1a3fa6ac67fd5a3e911)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
-> a/package/libgdiplus/0002-Update-LICENSE-to-match-the-headers-of-the-source-fi.patch
-> +++ /dev/null
-> @@ -1,1018 +0,0 @@
-> -From 7ac3970c792ffbbf53e4168e086fae33fab39ce3 Mon Sep 17 00:00:00 2001
-> -From: Frederik Carlier <frederik.carlier@quamotion.mobi>
-> -Date: Tue, 17 Jul 2018 23:24:51 +0200
-> -Subject: [PATCH] Update LICENSE to match the headers of the source files
+>  board/wandboard/post-build.sh | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/board/wandboard/post-build.sh b/board/wandboard/post-build.sh
+> index 43e091c5d7..6ddc113702 100755
+> --- a/board/wandboard/post-build.sh
+> +++ b/board/wandboard/post-build.sh
+> @@ -2,7 +2,7 @@
+>
+>  BOARD_DIR="$(dirname $0)"
+>
+> -$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
+> --n "boot script" -d $BOARD_DIR/boot.scr.txt $BOARD_DIR/boot.scr
+> +install -d -m 755 $TARGET_DIR/boot
+>
+> -install -m 0644 -D $BOARD_DIR/boot.scr $TARGET_DIR/boot/boot.scr
+> +$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
+> +       -n "boot script" -d $BOARD_DIR/boot.scr.txt
+> $TARGET_DIR/boot/boot.scr
+>
+>
+> ------------------------------
+>
+> Message: 35
+> Date: Wed, 6 May 2020 06:57:51 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x]
+>         package/azure-iot-sdk-c: create function for library installation
+> Message-ID: <20200506051930.C36E28D7AA@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=0bb747c981ce17be2b259afc0ece848e5025f1c3
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> As a preparation for adding the creation of some symlinks, let's
+> factor the library installation into a function.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 43822bb6db8851df4d6568622b58196895028f91)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> index e6345104eb..6781da4177 100644
+> --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> @@ -44,18 +44,20 @@ AZURE_IOT_SDK_C_LIBS += \
+>         umqtt/libumqtt.so
+>  endif
+>
+> -define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
+> +define AZURE_IOT_SDK_C_INSTALL_LIBS
+>         $(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
+> -               $(INSTALL) -D -m 0755 $(@D)/$(l)
+> $(STAGING_DIR)/usr/lib/$(notdir $(l))
+> +               $(INSTALL) -D -m 0755 $(@D)/$(l) $(1)/usr/lib/$(notdir
+> $(l))
+>         )
+> +endef
+> +
+> +define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
+> +       $(call AZURE_IOT_SDK_C_INSTALL_LIBS,$(STAGING_DIR))
+>         cp -a $(@D)/c-utility/inc/* $(STAGING_DIR)/usr/include/
+>         cp -a $(@D)/iothub_client/inc/* $(STAGING_DIR)/usr/include/
+>  endef
+>
+>  define AZURE_IOT_SDK_C_INSTALL_TARGET_CMDS
+> -       $(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
+> -               $(INSTALL) -D -m 0755 $(@D)/$(l)
+> $(TARGET_DIR)/usr/lib/$(notdir $(l))
+> -       )
+> +       $(call AZURE_IOT_SDK_C_INSTALL_LIBS,$(TARGET_DIR))
+>  endef
+>
+>  $(eval $(cmake-package))
+>
+>
+> ------------------------------
+>
+> Message: 36
+> Date: Wed, 6 May 2020 07:03:29 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/libssh: add
+>         patch to fix reported version
+> Message-ID: <20200506051931.48717825FB@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=de1490e2a52eff1f81a728def85e57a09ada3ffc
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> The released libssh package does wrongly reports the previous version.
+> This patch fixes the version field in the lib.
+>
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit a7db921da5ac57e29efeb1ac37c131d589d12664)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  .../0001-libssh.h-bump-to-version-0.9.4.patch      | 29
+> ++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>
+> diff --git a/package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch
+> b/package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch
+> new file mode 100644
+> index 0000000000..d6ec50509e
+> --- /dev/null
+> +++ b/package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch
+> @@ -0,0 +1,29 @@
+> +From 8d8428cbbc2c00d078cfbc967e4e6fee7ff7bf0b Mon Sep 17 00:00:00 2001
+> +From: Heiko Thiery <heiko.thiery@gmail.com>
+> +Date: Wed, 15 Apr 2020 11:57:29 +0200
+> +Subject: [PATCH] libssh.h: bump to version 0.9.4
+> +
+> +In the released version of libssh the version bump was not done
+> +properly. Therefore the current release 0.9.4 reports 0.9.3.
+> +
+> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> +---
+> + include/libssh/libssh.h | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/include/libssh/libssh.h b/include/libssh/libssh.h
+> +index 79030131..e2a8d991 100644
+> +--- a/include/libssh/libssh.h
+> ++++ b/include/libssh/libssh.h
+> +@@ -79,7 +79,7 @@
+> + /* libssh version */
+> + #define LIBSSH_VERSION_MAJOR  0
+> + #define LIBSSH_VERSION_MINOR  9
+> +-#define LIBSSH_VERSION_MICRO  3
+> ++#define LIBSSH_VERSION_MICRO  4
+> +
+> + #define LIBSSH_VERSION_INT SSH_VERSION_INT(LIBSSH_VERSION_MAJOR, \
+> +                                            LIBSSH_VERSION_MINOR, \
+> +--
+> +2.20.1
+> +
+>
+>
+> ------------------------------
+>
+> Message: 37
+> Date: Wed, 6 May 2020 07:00:40 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] board/udoo/neo:
+>         create boot.scr in TARGET_DIR/boot
+> Message-ID: <20200506051931.252908D59C@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=52bfa18f8fd112ef1f9adef2e3941f2214cbe52c
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> There is no reason to create boot.scr in board/udoo/neo and later
+> install it in TARGET_DIR/boot, leaving a stale file behind.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 2306339d1fe8d5ea2d9e17641f78a374f612f45e)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  board/udoo/neo/post-build.sh | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/board/udoo/neo/post-build.sh b/board/udoo/neo/post-build.sh
+> index 43e091c5d7..6ccd87fafd 100755
+> --- a/board/udoo/neo/post-build.sh
+> +++ b/board/udoo/neo/post-build.sh
+> @@ -2,7 +2,6 @@
+>
+>  BOARD_DIR="$(dirname $0)"
+>
+> +install -d -m 755 $TARGET_DIR/boot
+>  $HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
+> --n "boot script" -d $BOARD_DIR/boot.scr.txt $BOARD_DIR/boot.scr
 > -
-> -Upstream: 947e525d1025200623f686d8efe4c0094c5d2380
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ----
-> - LICENSE | 998 +-------------------------------------------------------
-> - 1 file changed, 14 insertions(+), 984 deletions(-)
-> -
-> -diff --git a/LICENSE b/LICENSE
-> -index b3164bb..2342cc9 100644
-> ---- a/LICENSE
-> -+++ b/LICENSE
-> -@@ -1,984 +1,14 @@
-> --Libgdiplus is licensed under the terms of the GNU Library GPL or the
-> --Mozilla Public License 1.1.
-> --
-> --
-> --The Licenses
-> --============
-> --
-> --### GNU Library GPL
-> --
-> --                  GNU LESSER GENERAL PUBLIC LICENSE
-> --                       Version 2.1, February 1999
-> --
-> -- Copyright (C) 1991, 1999 Free Software Foundation, Inc.
-> -- 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-> -- Everyone is permitted to copy and distribute verbatim copies
-> -- of this license document, but changing it is not allowed.
-> --
-> --[This is the first released version of the Lesser GPL.  It also counts
-> -- as the successor of the GNU Library Public License, version 2, hence
-> -- the version number 2.1.]
-> --
-> --                            Preamble
-> --
-> --  The licenses for most software are designed to take away your
-> --freedom to share and change it.  By contrast, the GNU General Public
-> --Licenses are intended to guarantee your freedom to share and change
-> --free software--to make sure the software is free for all its users.
-> --
-> --  This license, the Lesser General Public License, applies to some
-> --specially designated software packages--typically libraries--of the
-> --Free Software Foundation and other authors who decide to use it.  You
-> --can use it too, but we suggest you first think carefully about whether
-> --this license or the ordinary General Public License is the better
-> --strategy to use in any particular case, based on the explanations below.
-> --
-> --  When we speak of free software, we are referring to freedom of use,
-> --not price.  Our General Public Licenses are designed to make sure that
-> --you have the freedom to distribute copies of free software (and charge
-> --for this service if you wish); that you receive source code or can get
-> --it if you want it; that you can change the software and use pieces of
-> --it in new free programs; and that you are informed that you can do
-> --these things.
-> --
-> --  To protect your rights, we need to make restrictions that forbid
-> --distributors to deny you these rights or to ask you to surrender these
-> --rights.  These restrictions translate to certain responsibilities for
-> --you if you distribute copies of the library or if you modify it.
-> --
-> --  For example, if you distribute copies of the library, whether gratis
-> --or for a fee, you must give the recipients all the rights that we gave
-> --you.  You must make sure that they, too, receive or can get the source
-> --code.  If you link other code with the library, you must provide
-> --complete object files to the recipients, so that they can relink them
-> --with the library after making changes to the library and recompiling
-> --it.  And you must show them these terms so they know their rights.
-> --
-> --  We protect your rights with a two-step method: (1) we copyright the
-> --library, and (2) we offer you this license, which gives you legal
-> --permission to copy, distribute and/or modify the library.
-> --
-> --  To protect each distributor, we want to make it very clear that
-> --there is no warranty for the free library.  Also, if the library is
-> --modified by someone else and passed on, the recipients should know
-> --that what they have is not the original version, so that the original
-> --author's reputation will not be affected by problems that might be
-> --introduced by others.
-> --
-> --  Finally, software patents pose a constant threat to the existence of
-> --any free program.  We wish to make sure that a company cannot
-> --effectively restrict the users of a free program by obtaining a
-> --restrictive license from a patent holder.  Therefore, we insist that
-> --any patent license obtained for a version of the library must be
-> --consistent with the full freedom of use specified in this license.
-> --
-> --  Most GNU software, including some libraries, is covered by the
-> --ordinary GNU General Public License.  This license, the GNU Lesser
-> --General Public License, applies to certain designated libraries, and
-> --is quite different from the ordinary General Public License.  We use
-> --this license for certain libraries in order to permit linking those
-> --libraries into non-free programs.
-> --
-> --  When a program is linked with a library, whether statically or using
-> --a shared library, the combination of the two is legally speaking a
-> --combined work, a derivative of the original library.  The ordinary
-> --General Public License therefore permits such linking only if the
-> --entire combination fits its criteria of freedom.  The Lesser General
-> --Public License permits more lax criteria for linking other code with
-> --the library.
-> --
-> --  We call this license the "Lesser" General Public License because it
-> --does Less to protect the user's freedom than the ordinary General
-> --Public License.  It also provides other free software developers Less
-> --of an advantage over competing non-free programs.  These disadvantages
-> --are the reason we use the ordinary General Public License for many
-> --libraries.  However, the Lesser license provides advantages in certain
-> --special circumstances.
-> --
-> --  For example, on rare occasions, there may be a special need to
-> --encourage the widest possible use of a certain library, so that it
-> becomes
-> --a de-facto standard.  To achieve this, non-free programs must be
-> --allowed to use the library.  A more frequent case is that a free
-> --library does the same job as widely used non-free libraries.  In this
-> --case, there is little to gain by limiting the free library to free
-> --software only, so we use the Lesser General Public License.
-> --
-> --  In other cases, permission to use a particular library in non-free
-> --programs enables a greater number of people to use a large body of
-> --free software.  For example, permission to use the GNU C Library in
-> --non-free programs enables many more people to use the whole GNU
-> --operating system, as well as its variant, the GNU/Linux operating
-> --system.
-> --
-> --  Although the Lesser General Public License is Less protective of the
-> --users' freedom, it does ensure that the user of a program that is
-> --linked with the Library has the freedom and the wherewithal to run
-> --that program using a modified version of the Library.
-> --
-> --  The precise terms and conditions for copying, distribution and
-> --modification follow.  Pay close attention to the difference between a
-> --"work based on the library" and a "work that uses the library".  The
-> --former contains code derived from the library, whereas the latter must
-> --be combined with the library in order to run.
-> --
-> --                  GNU LESSER GENERAL PUBLIC LICENSE
-> --   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
-> --
-> --  0. This License Agreement applies to any software library or other
-> --program which contains a notice placed by the copyright holder or
-> --other authorized party saying it may be distributed under the terms of
-> --this Lesser General Public License (also called "this License").
-> --Each licensee is addressed as "you".
-> --
-> --  A "library" means a collection of software functions and/or data
-> --prepared so as to be conveniently linked with application programs
-> --(which use some of those functions and data) to form executables.
-> --
-> --  The "Library", below, refers to any such software library or work
-> --which has been distributed under these terms.  A "work based on the
-> --Library" means either the Library or any derivative work under
-> --copyright law: that is to say, a work containing the Library or a
-> --portion of it, either verbatim or with modifications and/or translated
-> --straightforwardly into another language.  (Hereinafter, translation is
-> --included without limitation in the term "modification".)
-> --
-> --  "Source code" for a work means the preferred form of the work for
-> --making modifications to it.  For a library, complete source code means
-> --all the source code for all modules it contains, plus any associated
-> --interface definition files, plus the scripts used to control compilation
-> --and installation of the library.
-> --
-> --  Activities other than copying, distribution and modification are not
-> --covered by this License; they are outside its scope.  The act of
-> --running a program using the Library is not restricted, and output from
-> --such a program is covered only if its contents constitute a work based
-> --on the Library (independent of the use of the Library in a tool for
-> --writing it).  Whether that is true depends on what the Library does
-> --and what the program that uses the Library does.
-> --
-> --  1. You may copy and distribute verbatim copies of the Library's
-> --complete source code as you receive it, in any medium, provided that
-> --you conspicuously and appropriately publish on each copy an
-> --appropriate copyright notice and disclaimer of warranty; keep intact
-> --all the notices that refer to this License and to the absence of any
-> --warranty; and distribute a copy of this License along with the
-> --Library.
-> --
-> --  You may charge a fee for the physical act of transferring a copy,
-> --and you may at your option offer warranty protection in exchange for a
-> --fee.
-> --
-> --  2. You may modify your copy or copies of the Library or any portion
-> --of it, thus forming a work based on the Library, and copy and
-> --distribute such modifications or work under the terms of Section 1
-> --above, provided that you also meet all of these conditions:
-> --
-> --    a) The modified work must itself be a software library.
-> --
-> --    b) You must cause the files modified to carry prominent notices
-> --    stating that you changed the files and the date of any change.
-> --
-> --    c) You must cause the whole of the work to be licensed at no
-> --    charge to all third parties under the terms of this License.
-> --
-> --    d) If a facility in the modified Library refers to a function or a
-> --    table of data to be supplied by an application program that uses
-> --    the facility, other than as an argument passed when the facility
-> --    is invoked, then you must make a good faith effort to ensure that,
-> --    in the event an application does not supply such function or
-> --    table, the facility still operates, and performs whatever part of
-> --    its purpose remains meaningful.
-> --
-> --    (For example, a function in a library to compute square roots has
-> --    a purpose that is entirely well-defined independent of the
-> --    application.  Therefore, Subsection 2d requires that any
-> --    application-supplied function or table used by this function must
-> --    be optional: if the application does not supply it, the square
-> --    root function must still compute square roots.)
-> --
-> --These requirements apply to the modified work as a whole.  If
-> --identifiable sections of that work are not derived from the Library,
-> --and can be reasonably considered independent and separate works in
-> --themselves, then this License, and its terms, do not apply to those
-> --sections when you distribute them as separate works.  But when you
-> --distribute the same sections as part of a whole which is a work based
-> --on the Library, the distribution of the whole must be on the terms of
-> --this License, whose permissions for other licensees extend to the
-> --entire whole, and thus to each and every part regardless of who wrote
-> --it.
-> --
-> --Thus, it is not the intent of this section to claim rights or contest
-> --your rights to work written entirely by you; rather, the intent is to
-> --exercise the right to control the distribution of derivative or
-> --collective works based on the Library.
-> --
-> --In addition, mere aggregation of another work not based on the Library
-> --with the Library (or with a work based on the Library) on a volume of
-> --a storage or distribution medium does not bring the other work under
-> --the scope of this License.
-> --
-> --  3. You may opt to apply the terms of the ordinary GNU General Public
-> --License instead of this License to a given copy of the Library.  To do
-> --this, you must alter all the notices that refer to this License, so
-> --that they refer to the ordinary GNU General Public License, version 2,
-> --instead of to this License.  (If a newer version than version 2 of the
-> --ordinary GNU General Public License has appeared, then you can specify
-> --that version instead if you wish.)  Do not make any other change in
-> --these notices.
-> --
-> --  Once this change is made in a given copy, it is irreversible for
-> --that copy, so the ordinary GNU General Public License applies to all
-> --subsequent copies and derivative works made from that copy.
-> --
-> --  This option is useful when you wish to copy part of the code of
-> --the Library into a program that is not a library.
-> --
-> --  4. You may copy and distribute the Library (or a portion or
-> --derivative of it, under Section 2) in object code or executable form
-> --under the terms of Sections 1 and 2 above provided that you accompany
-> --it with the complete corresponding machine-readable source code, which
-> --must be distributed under the terms of Sections 1 and 2 above on a
-> --medium customarily used for software interchange.
-> --
-> --  If distribution of object code is made by offering access to copy
-> --from a designated place, then offering equivalent access to copy the
-> --source code from the same place satisfies the requirement to
-> --distribute the source code, even though third parties are not
-> --compelled to copy the source along with the object code.
-> --
-> --  5. A program that contains no derivative of any portion of the
-> --Library, but is designed to work with the Library by being compiled or
-> --linked with it, is called a "work that uses the Library".  Such a
-> --work, in isolation, is not a derivative work of the Library, and
-> --therefore falls outside the scope of this License.
-> --
-> --  However, linking a "work that uses the Library" with the Library
-> --creates an executable that is a derivative of the Library (because it
-> --contains portions of the Library), rather than a "work that uses the
-> --library".  The executable is therefore covered by this License.
-> --Section 6 states terms for distribution of such executables.
-> --
-> --  When a "work that uses the Library" uses material from a header file
-> --that is part of the Library, the object code for the work may be a
-> --derivative work of the Library even though the source code is not.
-> --Whether this is true is especially significant if the work can be
-> --linked without the Library, or if the work is itself a library.  The
-> --threshold for this to be true is not precisely defined by law.
-> --
-> --  If such an object file uses only numerical parameters, data
-> --structure layouts and accessors, and small macros and small inline
-> --functions (ten lines or less in length), then the use of the object
-> --file is unrestricted, regardless of whether it is legally a derivative
-> --work.  (Executables containing this object code plus portions of the
-> --Library will still fall under Section 6.)
-> --
-> --  Otherwise, if the work is a derivative of the Library, you may
-> --distribute the object code for the work under the terms of Section 6.
-> --Any executables containing that work also fall under Section 6,
-> --whether or not they are linked directly with the Library itself.
-> --
-> --  6. As an exception to the Sections above, you may also combine or
-> --link a "work that uses the Library" with the Library to produce a
-> --work containing portions of the Library, and distribute that work
-> --under terms of your choice, provided that the terms permit
-> --modification of the work for the customer's own use and reverse
-> --engineering for debugging such modifications.
-> --
-> --  You must give prominent notice with each copy of the work that the
-> --Library is used in it and that the Library and its use are covered by
-> --this License.  You must supply a copy of this License.  If the work
-> --during execution displays copyright notices, you must include the
-> --copyright notice for the Library among them, as well as a reference
-> --directing the user to the copy of this License.  Also, you must do one
-> --of these things:
-> --
-> --    a) Accompany the work with the complete corresponding
-> --    machine-readable source code for the Library including whatever
-> --    changes were used in the work (which must be distributed under
-> --    Sections 1 and 2 above); and, if the work is an executable linked
-> --    with the Library, with the complete machine-readable "work that
-> --    uses the Library", as object code and/or source code, so that the
-> --    user can modify the Library and then relink to produce a modified
-> --    executable containing the modified Library.  (It is understood
-> --    that the user who changes the contents of definitions files in the
-> --    Library will not necessarily be able to recompile the application
-> --    to use the modified definitions.)
-> --
-> --    b) Use a suitable shared library mechanism for linking with the
-> --    Library.  A suitable mechanism is one that (1) uses at run time a
-> --    copy of the library already present on the user's computer system,
-> --    rather than copying library functions into the executable, and (2)
-> --    will operate properly with a modified version of the library, if
-> --    the user installs one, as long as the modified version is
-> --    interface-compatible with the version that the work was made with.
-> --
-> --    c) Accompany the work with a written offer, valid for at
-> --    least three years, to give the same user the materials
-> --    specified in Subsection 6a, above, for a charge no more
-> --    than the cost of performing this distribution.
-> --
-> --    d) If distribution of the work is made by offering access to copy
-> --    from a designated place, offer equivalent access to copy the above
-> --    specified materials from the same place.
-> --
-> --    e) Verify that the user has already received a copy of these
-> --    materials or that you have already sent this user a copy.
-> --
-> --  For an executable, the required form of the "work that uses the
-> --Library" must include any data and utility programs needed for
-> --reproducing the executable from it.  However, as a special exception,
-> --the materials to be distributed need not include anything that is
-> --normally distributed (in either source or binary form) with the major
-> --components (compiler, kernel, and so on) of the operating system on
-> --which the executable runs, unless that component itself accompanies
-> --the executable.
-> --
-> --  It may happen that this requirement contradicts the license
-> --restrictions of other proprietary libraries that do not normally
-> --accompany the operating system.  Such a contradiction means you cannot
-> --use both them and the Library together in an executable that you
-> --distribute.
-> --
-> --  7. You may place library facilities that are a work based on the
-> --Library side-by-side in a single library together with other library
-> --facilities not covered by this License, and distribute such a combined
-> --library, provided that the separate distribution of the work based on
-> --the Library and of the other library facilities is otherwise
-> --permitted, and provided that you do these two things:
-> --
-> --    a) Accompany the combined library with a copy of the same work
-> --    based on the Library, uncombined with any other library
-> --    facilities.  This must be distributed under the terms of the
-> --    Sections above.
-> --
-> --    b) Give prominent notice with the combined library of the fact
-> --    that part of it is a work based on the Library, and explaining
-> --    where to find the accompanying uncombined form of the same work.
-> --
-> --  8. You may not copy, modify, sublicense, link with, or distribute
-> --the Library except as expressly provided under this License.  Any
-> --attempt otherwise to copy, modify, sublicense, link with, or
-> --distribute the Library is void, and will automatically terminate your
-> --rights under this License.  However, parties who have received copies,
-> --or rights, from you under this License will not have their licenses
-> --terminated so long as such parties remain in full compliance.
-> --
-> --  9. You are not required to accept this License, since you have not
-> --signed it.  However, nothing else grants you permission to modify or
-> --distribute the Library or its derivative works.  These actions are
-> --prohibited by law if you do not accept this License.  Therefore, by
-> --modifying or distributing the Library (or any work based on the
-> --Library), you indicate your acceptance of this License to do so, and
-> --all its terms and conditions for copying, distributing or modifying
-> --the Library or works based on it.
-> --
-> --  10. Each time you redistribute the Library (or any work based on the
-> --Library), the recipient automatically receives a license from the
-> --original licensor to copy, distribute, link with or modify the Library
-> --subject to these terms and conditions.  You may not impose any further
-> --restrictions on the recipients' exercise of the rights granted herein.
-> --You are not responsible for enforcing compliance by third parties with
-> --this License.
-> --
-> --  11. If, as a consequence of a court judgment or allegation of patent
-> --infringement or for any other reason (not limited to patent issues),
-> --conditions are imposed on you (whether by court order, agreement or
-> --otherwise) that contradict the conditions of this License, they do not
-> --excuse you from the conditions of this License.  If you cannot
-> --distribute so as to satisfy simultaneously your obligations under this
-> --License and any other pertinent obligations, then as a consequence you
-> --may not distribute the Library at all.  For example, if a patent
-> --license would not permit royalty-free redistribution of the Library by
-> --all those who receive copies directly or indirectly through you, then
-> --the only way you could satisfy both it and this License would be to
-> --refrain entirely from distribution of the Library.
-> --
-> --If any portion of this section is held invalid or unenforceable under any
-> --particular circumstance, the balance of the section is intended to apply,
-> --and the section as a whole is intended to apply in other circumstances.
-> --
-> --It is not the purpose of this section to induce you to infringe any
-> --patents or other property right claims or to contest validity of any
-> --such claims; this section has the sole purpose of protecting the
-> --integrity of the free software distribution system which is
-> --implemented by public license practices.  Many people have made
-> --generous contributions to the wide range of software distributed
-> --through that system in reliance on consistent application of that
-> --system; it is up to the author/donor to decide if he or she is willing
-> --to distribute software through any other system and a licensee cannot
-> --impose that choice.
-> --
-> --This section is intended to make thoroughly clear what is believed to
-> --be a consequence of the rest of this License.
-> --
-> --  12. If the distribution and/or use of the Library is restricted in
-> --certain countries either by patents or by copyrighted interfaces, the
-> --original copyright holder who places the Library under this License may
-> add
-> --an explicit geographical distribution limitation excluding those
-> countries,
-> --so that distribution is permitted only in or among countries not thus
-> --excluded.  In such case, this License incorporates the limitation as if
-> --written in the body of this License.
-> --
-> --  13. The Free Software Foundation may publish revised and/or new
-> --versions of the Lesser General Public License from time to time.
-> --Such new versions will be similar in spirit to the present version,
-> --but may differ in detail to address new problems or concerns.
-> --
-> --Each version is given a distinguishing version number.  If the Library
-> --specifies a version number of this License which applies to it and
-> --"any later version", you have the option of following the terms and
-> --conditions either of that version or of any later version published by
-> --the Free Software Foundation.  If the Library does not specify a
-> --license version number, you may choose any version ever published by
-> --the Free Software Foundation.
-> --
-> --  14. If you wish to incorporate parts of the Library into other free
-> --programs whose distribution conditions are incompatible with these,
-> --write to the author to ask for permission.  For software which is
-> --copyrighted by the Free Software Foundation, write to the Free
-> --Software Foundation; we sometimes make exceptions for this.  Our
-> --decision will be guided by the two goals of preserving the free status
-> --of all derivatives of our free software and of promoting the sharing
-> --and reuse of software generally.
-> --
-> --                            NO WARRANTY
-> --
-> --  15. BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO
-> --WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
-> --EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR
-> --OTHER PARTIES PROVIDE THE LIBRARY "AS IS" WITHOUT WARRANTY OF ANY
-> --KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
-> --IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-> --PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE
-> --LIBRARY IS WITH YOU.  SHOULD THE LIBRARY PROVE DEFECTIVE, YOU ASSUME
-> --THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
-> --
-> --  16. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN
-> --WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY
-> --AND/OR REDISTRIBUTE THE LIBRARY AS PERMITTED ABOVE, BE LIABLE TO YOU
-> --FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR
-> --CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
-> --LIBRARY (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
-> --RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
-> --FAILURE OF THE LIBRARY TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
-> --SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
-> --DAMAGES.
-> --
-> --                     END OF TERMS AND CONDITIONS
-> --
-> --           How to Apply These Terms to Your New Libraries
-> --
-> --  If you develop a new library, and you want it to be of the greatest
-> --possible use to the public, we recommend making it free software that
-> --everyone can redistribute and change.  You can do so by permitting
-> --redistribution under these terms (or, alternatively, under the terms of
-> the
-> --ordinary General Public License).
-> --
-> --  To apply these terms, attach the following notices to the library.  It
-> is
-> --safest to attach them to the start of each source file to most
-> effectively
-> --convey the exclusion of warranty; and each file should have at least the
-> --"copyright" line and a pointer to where the full notice is found.
-> --
-> --    <one line to give the library's name and a brief idea of what it
-> does.>
-> --    Copyright (C) <year>  <name of author>
-> --
-> --    This library is free software; you can redistribute it and/or
-> --    modify it under the terms of the GNU Lesser General Public
-> --    License as published by the Free Software Foundation; either
-> --    version 2.1 of the License, or (at your option) any later version.
-> --
-> --    This library is distributed in the hope that it will be useful,
-> --    but WITHOUT ANY WARRANTY; without even the implied warranty of
-> --    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> --    Lesser General Public License for more details.
-> --
-> --    You should have received a copy of the GNU Lesser General Public
-> --    License along with this library; if not, write to the Free Software
-> --    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-> 02110-1301  USA
-> --
-> --Also add information on how to contact you by electronic and paper mail.
-> --
-> --You should also get your employer (if you work as a programmer) or your
-> --school, if any, to sign a "copyright disclaimer" for the library, if
-> --necessary.  Here is a sample; alter the names:
-> --
-> --  Yoyodyne, Inc., hereby disclaims all copyright interest in the
-> --  library `Frob' (a library for tweaking knobs) written by James Random
-> Hacker.
-> --
-> --  <signature of Ty Coon>, 1 April 1990
-> --  Ty Coon, President of Vice
-> --
-> --That's all there is to it!
-> --
-> --
-> --### Mozilla Public License 1.1
-> --
-> --                          MOZILLA PUBLIC LICENSE
-> --                                Version 1.1
-> --
-> --                              ---------------
-> --
-> --1. Definitions.
-> --
-> --     1.0.1. "Commercial Use" means distribution or otherwise making the
-> --     Covered Code available to a third party.
-> --
-> --     1.1. "Contributor" means each entity that creates or contributes to
-> --     the creation of Modifications.
-> --
-> --     1.2. "Contributor Version" means the combination of the Original
-> --     Code, prior Modifications used by a Contributor, and the
-> Modifications
-> --     made by that particular Contributor.
-> --
-> --     1.3. "Covered Code" means the Original Code or Modifications or the
-> --     combination of the Original Code and Modifications, in each case
-> --     including portions thereof.
-> --
-> --     1.4. "Electronic Distribution Mechanism" means a mechanism generally
-> --     accepted in the software development community for the electronic
-> --     transfer of data.
-> --
-> --     1.5. "Executable" means Covered Code in any form other than Source
-> --     Code.
-> --
-> --     1.6. "Initial Developer" means the individual or entity identified
-> --     as the Initial Developer in the Source Code notice required by
-> Exhibit
-> --     A.
-> --
-> --     1.7. "Larger Work" means a work which combines Covered Code or
-> --     portions thereof with code not governed by the terms of this
-> License.
-> --
-> --     1.8. "License" means this document.
-> --
-> --     1.8.1. "Licensable" means having the right to grant, to the maximum
-> --     extent possible, whether at the time of the initial grant or
-> --     subsequently acquired, any and all of the rights conveyed herein.
-> --
-> --     1.9. "Modifications" means any addition to or deletion from the
-> --     substance or structure of either the Original Code or any previous
-> --     Modifications. When Covered Code is released as a series of files, a
-> --     Modification is:
-> --          A. Any addition to or deletion from the contents of a file
-> --          containing Original Code or previous Modifications.
-> --
-> --          B. Any new file that contains any part of the Original Code or
-> --          previous Modifications.
-> --
-> --     1.10. "Original Code" means Source Code of computer software code
-> --     which is described in the Source Code notice required by Exhibit A
-> as
-> --     Original Code, and which, at the time of its release under this
-> --     License is not already Covered Code governed by this License.
-> --
-> --     1.10.1. "Patent Claims" means any patent claim(s), now owned or
-> --     hereafter acquired, including without limitation,  method, process,
-> --     and apparatus claims, in any patent Licensable by grantor.
-> --
-> --     1.11. "Source Code" means the preferred form of the Covered Code for
-> --     making modifications to it, including all modules it contains, plus
-> --     any associated interface definition files, scripts used to control
-> --     compilation and installation of an Executable, or source code
-> --     differential comparisons against either the Original Code or another
-> --     well known, available Covered Code of the Contributor's choice. The
-> --     Source Code can be in a compressed or archival form, provided the
-> --     appropriate decompression or de-archiving software is widely
-> available
-> --     for no charge.
-> --
-> --     1.12. "You" (or "Your")  means an individual or a legal entity
-> --     exercising rights under, and complying with all of the terms of,
-> this
-> --     License or a future version of this License issued under Section
-> 6.1.
-> --     For legal entities, "You" includes any entity which controls, is
-> --     controlled by, or is under common control with You. For purposes of
-> --     this definition, "control" means (a) the power, direct or indirect,
-> --     to cause the direction or management of such entity, whether by
-> --     contract or otherwise, or (b) ownership of more than fifty percent
-> --     (50%) of the outstanding shares or beneficial ownership of such
-> --     entity.
-> --
-> --2. Source Code License.
-> --
-> --     2.1. The Initial Developer Grant.
-> --     The Initial Developer hereby grants You a world-wide, royalty-free,
-> --     non-exclusive license, subject to third party intellectual property
-> --     claims:
-> --          (a)  under intellectual property rights (other than patent or
-> --          trademark) Licensable by Initial Developer to use, reproduce,
-> --          modify, display, perform, sublicense and distribute the
-> Original
-> --          Code (or portions thereof) with or without Modifications,
-> and/or
-> --          as part of a Larger Work; and
-> --
-> --          (b) under Patents Claims infringed by the making, using or
-> --          selling of Original Code, to make, have made, use, practice,
-> --          sell, and offer for sale, and/or otherwise dispose of the
-> --          Original Code (or portions thereof).
-> --
-> --          (c) the licenses granted in this Section 2.1(a) and (b) are
-> --          effective on the date Initial Developer first distributes
-> --          Original Code under the terms of this License.
-> --
-> --          (d) Notwithstanding Section 2.1(b) above, no patent license is
-> --          granted: 1) for code that You delete from the Original Code; 2)
-> --          separate from the Original Code;  or 3) for infringements
-> caused
-> --          by: i) the modification of the Original Code or ii) the
-> --          combination of the Original Code with other software or
-> devices.
-> --
-> --     2.2. Contributor Grant.
-> --     Subject to third party intellectual property claims, each
-> Contributor
-> --     hereby grants You a world-wide, royalty-free, non-exclusive license
-> --
-> --          (a)  under intellectual property rights (other than patent or
-> --          trademark) Licensable by Contributor, to use, reproduce,
-> modify,
-> --          display, perform, sublicense and distribute the Modifications
-> --          created by such Contributor (or portions thereof) either on an
-> --          unmodified basis, with other Modifications, as Covered Code
-> --          and/or as part of a Larger Work; and
-> --
-> --          (b) under Patent Claims infringed by the making, using, or
-> --          selling of  Modifications made by that Contributor either alone
-> --          and/or in combination with its Contributor Version (or portions
-> --          of such combination), to make, use, sell, offer for sale, have
-> --          made, and/or otherwise dispose of: 1) Modifications made by
-> that
-> --          Contributor (or portions thereof); and 2) the combination of
-> --          Modifications made by that Contributor with its Contributor
-> --          Version (or portions of such combination).
-> --
-> --          (c) the licenses granted in Sections 2.2(a) and 2.2(b) are
-> --          effective on the date Contributor first makes Commercial Use of
-> --          the Covered Code.
-> --
-> --          (d)    Notwithstanding Section 2.2(b) above, no patent license
-> is
-> --          granted: 1) for any code that Contributor has deleted from the
-> --          Contributor Version; 2)  separate from the Contributor Version;
-> --          3)  for infringements caused by: i) third party modifications
-> of
-> --          Contributor Version or ii)  the combination of Modifications
-> made
-> --          by that Contributor with other software  (except as part of the
-> --          Contributor Version) or other devices; or 4) under Patent
-> Claims
-> --          infringed by Covered Code in the absence of Modifications made
-> by
-> --          that Contributor.
-> --
-> --3. Distribution Obligations.
-> --
-> --     3.1. Application of License.
-> --     The Modifications which You create or to which You contribute are
-> --     governed by the terms of this License, including without limitation
-> --     Section 2.2. The Source Code version of Covered Code may be
-> --     distributed only under the terms of this License or a future version
-> --     of this License released under Section 6.1, and You must include a
-> --     copy of this License with every copy of the Source Code You
-> --     distribute. You may not offer or impose any terms on any Source Code
-> --     version that alters or restricts the applicable version of this
-> --     License or the recipients' rights hereunder. However, You may
-> include
-> --     an additional document offering the additional rights described in
-> --     Section 3.5.
-> --
-> --     3.2. Availability of Source Code.
-> --     Any Modification which You create or to which You contribute must be
-> --     made available in Source Code form under the terms of this License
-> --     either on the same media as an Executable version or via an accepted
-> --     Electronic Distribution Mechanism to anyone to whom you made an
-> --     Executable version available; and if made available via Electronic
-> --     Distribution Mechanism, must remain available for at least twelve
-> (12)
-> --     months after the date it initially became available, or at least six
-> --     (6) months after a subsequent version of that particular
-> Modification
-> --     has been made available to such recipients. You are responsible for
-> --     ensuring that the Source Code version remains available even if the
-> --     Electronic Distribution Mechanism is maintained by a third party.
-> --
-> --     3.3. Description of Modifications.
-> --     You must cause all Covered Code to which You contribute to contain a
-> --     file documenting the changes You made to create that Covered Code
+> -install -m 0644 -D $BOARD_DIR/boot.scr $TARGET_DIR/boot/boot.scr
+> +       -n "boot script" -d $BOARD_DIR/boot.scr.txt
+> $TARGET_DIR/boot/boot.scr
+>
+>
+> ------------------------------
+>
+> Message: 38
+> Date: Wed, 6 May 2020 07:28:07 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/php: fix
+>         zip support
+> Message-ID: <20200506051932.44684882AE@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=ab30ce809cde5643cf11c6fb6adcb97eade0abea
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> since php7.4, --enable-zip becomes --with-zip due to
+> migration to pkg-config.
+>
+> Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit ac2b371732b20bacce9c79b7f3b824bd68b94242)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/php/php.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index 91f82dbf31..8282bb1cc7 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -113,7 +113,7 @@ PHP_CONF_OPTS += \
+>         $(if $(BR2_PACKAGE_PHP_EXT_SYSVMSG),--enable-sysvmsg) \
+>         $(if $(BR2_PACKAGE_PHP_EXT_SYSVSEM),--enable-sysvsem) \
+>         $(if $(BR2_PACKAGE_PHP_EXT_SYSVSHM),--enable-sysvshm) \
+> -       $(if $(BR2_PACKAGE_PHP_EXT_ZIP),--enable-zip) \
+> +       $(if $(BR2_PACKAGE_PHP_EXT_ZIP),--with-zip) \
+>         $(if $(BR2_PACKAGE_PHP_EXT_CTYPE),--enable-ctype) \
+>         $(if $(BR2_PACKAGE_PHP_EXT_FILTER),--enable-filter) \
+>         $(if $(BR2_PACKAGE_PHP_EXT_CALENDAR),--enable-calendar) \
+>
+>
+> ------------------------------
+>
+> Message: 39
+> Date: Wed, 6 May 2020 07:28:14 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/php: fix gd
+>         extension dependencies and options
+> Message-ID: <20200506051932.52AF8882AE@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=236f809c252647a0864c1a68ac7ca679ac1b797c
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> Due to migration to pkg-config in php 7.4, the detection of
+> library dependencies has been changed.
+>
+> source from php.net:
+> --with-gd becomes --enable-gd
+> --with-png-dir has been removed. libpng is required.
+> --with-zlib-dir has been removed. zlib is required.
+> --with-freetype-dir becomes --with-freetype
+> --with-jpeg-dir becomes --with-jpeg
+>
+> Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 31c5fd8f4b1ee26881ac37e55b0967bed0c6ebd2)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/php/Config.ext |  1 +
+>  package/php/php.mk     | 10 ++++------
+>  2 files changed, 5 insertions(+), 6 deletions(-)
+>
+> diff --git a/package/php/Config.ext b/package/php/Config.ext
+> index 193bc1bd03..66ee935cf0 100644
+> --- a/package/php/Config.ext
+> +++ b/package/php/Config.ext
+> @@ -256,6 +256,7 @@ config BR2_PACKAGE_PHP_EXT_GD
+>         select BR2_PACKAGE_FREETYPE
+>         select BR2_PACKAGE_JPEG
+>         select BR2_PACKAGE_LIBPNG
+> +       select BR2_PACKAGE_ZLIB
+>         help
+>           GD support
+>
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index 8282bb1cc7..4d2f1b8f63 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -327,12 +327,10 @@ endif
+>
+>  ifeq ($(BR2_PACKAGE_PHP_EXT_GD),y)
+>  PHP_CONF_OPTS += \
+> -       --with-gd \
+> -       --with-jpeg-dir=$(STAGING_DIR)/usr \
+> -       --with-png-dir=$(STAGING_DIR)/usr \
+> -       --with-zlib-dir=$(STAGING_DIR)/usr \
+> -       --with-freetype-dir=$(STAGING_DIR)/usr
+> -PHP_DEPENDENCIES += jpeg libpng freetype
+> +       --enable-gd \
+> +       --with-jpeg \
+> +       --with-freetype
+> +PHP_DEPENDENCIES += jpeg libpng freetype zlib
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_PHP_SAPI_FPM),y)
+>
+>
+> ------------------------------
+>
+> Message: 40
+> Date: Wed, 6 May 2020 07:15:01 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x]
+>         package/python-iptables: add explicit dependency on dynamic libs
+> Message-ID: <20200506051931.924CC811F5@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=b6d45c45cb0e0e0a7080350dadb2eccefdaa8b0f
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> The package uses ctypes.CDLL extensively which only makes sense when
+> dynamic
+> libraries are available.
+>
+> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> (cherry picked from commit 21b85bc56cdcf030cced57dea0f78cdce59912b8)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/python-iptables/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/package/python-iptables/Config.in
+> b/package/python-iptables/Config.in
+> index e55359963e..a35577bad3 100644
+> --- a/package/python-iptables/Config.in
+> +++ b/package/python-iptables/Config.in
+> @@ -1,7 +1,11 @@
+>  config BR2_PACKAGE_PYTHON_IPTABLES
+>         bool "python-iptables"
+> +       depends on !BR2_STATIC_LIBS
+>         select BR2_PACKAGE_IPTABLES # runtime dependency
+>         help
+>           Python bindings for iptables.
+>
+>           https://github.com/ldx/python-iptables
+> +
+> +comment "python-iptables needs a toolchain w/ dynamic library"
+> +       depends on BR2_STATIC_LIBS
+>
+>
+> ------------------------------
+>
+> Message: 41
+> Date: Wed, 6 May 2020 07:00:34 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x]
+>         board/solidrun/mx6cubox: create boot.scr in TARGET_DIR/boot
+> Message-ID: <20200506051931.15A368D59C@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=6569f398eede2efde7c9dacf66fc5e0868c27bcb
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> There is no reason to create boot.scr in board/solidrun/mx6cubox and
+> later install it in TARGET_DIR/boot, leaving a stale file behind.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 9ddbd11620b5a01945a438085d45ef2131bad35f)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  board/solidrun/mx6cubox/post-build.sh | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/board/solidrun/mx6cubox/post-build.sh
+> b/board/solidrun/mx6cubox/post-build.sh
+> index 43e091c5d7..6ddc113702 100755
+> --- a/board/solidrun/mx6cubox/post-build.sh
+> +++ b/board/solidrun/mx6cubox/post-build.sh
+> @@ -2,7 +2,7 @@
+>
+>  BOARD_DIR="$(dirname $0)"
+>
+> -$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
+> --n "boot script" -d $BOARD_DIR/boot.scr.txt $BOARD_DIR/boot.scr
+> +install -d -m 755 $TARGET_DIR/boot
+>
+> -install -m 0644 -D $BOARD_DIR/boot.scr $TARGET_DIR/boot/boot.scr
+> +$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
+> +       -n "boot script" -d $BOARD_DIR/boot.scr.txt
+> $TARGET_DIR/boot/boot.scr
+>
+>
+> ------------------------------
+>
+> Message: 42
+> Date: Wed, 6 May 2020 07:03:24 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/libssh:
+>         security bump to version 0.9.4
+> Message-ID: <20200506051931.37D707FD28@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=4c16f29ee1228fef87ee0f621d95d0e6705b5ac9
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> Fixes CVE-2020-1730: Possible DoS in client and server when handling
+> AES-CTR keys with OpenSSL.
+>
+> Format hash file with two spaces delimiter.
+>
+> Cc: Scott Fan <fancp2007@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 6b8a47e29252908b294bda0d089fab443db99903)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/libssh/libssh.hash | 4 ++--
+>  package/libssh/libssh.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
+> index ca296701bf..62b860300a 100644
+> --- a/package/libssh/libssh.hash
+> +++ b/package/libssh/libssh.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated after checking pgp signature
+>  # https://www.libssh.org/files/0.9/libssh-0.9.3.tar.xz.asc
+>  # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
+> -sha256 2c8b5f894dced58b3d629f16f3afa6562c20b4bdc894639163cf657833688f0c
+> libssh-0.9.3.tar.xz
+> -sha256 1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a
+> COPYING
+> +sha256  150897a569852ac05aac831dc417a7ba8e610c86ca2e0154a99c6ade2486226b
+> libssh-0.9.4.tar.xz
+> +sha256  1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a
+> COPYING
+> diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+> index 52517a5dd0..abc9aec9a3 100644
+> --- a/package/libssh/libssh.mk
+> +++ b/package/libssh/libssh.mk
+> @@ -5,7 +5,7 @@
+>
+>  ################################################################################
+>
+>  LIBSSH_VERSION_MAJOR = 0.9
+> -LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).3
+> +LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).4
+>  LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
+>  LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
+>  LIBSSH_LICENSE = LGPL-2.1
+>
+>
+> ------------------------------
+>
+> Message: 43
+> Date: Wed, 6 May 2020 07:13:37 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/mbedtls:
+>         security bump to version 2.16.6
+> Message-ID: <20200506051931.7EC02821B9@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=47c67ff56a40e242438d4bbb67fced4ad9d762c0
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> - Fix CVE-2020-10932: fix side channel in ECC code that allowed an
+>   adversary with access to precise enough timing and memory access
+>   information (typically an untrusted operating system attacking a
+>   secure enclave) to fully recover an ECDSA private key.
+> - Fix a potentially remotely exploitable buffer overread in a DTLS
+>   client when parsing the Hello Verify Request message.
+> - Fix bug in DTLS handling of new associations with the same parameters
+>   (RFC 6347 section 4.2.8): after sending its HelloVerifyRequest, the
+>   server would end up with corrupted state and only send invalid records
+>   to the client. An attacker able to send forged UDP packets to the
+>   server could use that to obtain a Denial of Service. This could only
+>   happen when MBEDTLS_SSL_DTLS_CLIENT_PORT_REUSE was enabled in
+>   config.h (which it is by default).
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit b5704f8869dc1f82790816e38de52aac6d709ffe)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/mbedtls/mbedtls.hash | 6 +++---
+>  package/mbedtls/mbedtls.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+> index 92e7d35a64..17ac18bb25 100644
+> --- a/package/mbedtls/mbedtls.hash
+> +++ b/package/mbedtls/mbedtls.hash
+> @@ -1,5 +1,5 @@
+> -# From
+> https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.5-and-2.7.14-released
+> -sha1
+> <https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.5-and-2.7.14-released-sha1>
+> c36962183e05467aa1dadafcaacf90216a737866  mbedtls-2.16.5-apache.tgz
+> -sha256  65b4c6cec83e048fd1c675e9a29a394ea30ad0371d37b5742453f74084e7b04d
+> mbedtls-2.16.5-apache.tgz
+> +# From
+> https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.6-and-2.7.15-released
+> +sha1
+> <https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.6-and-2.7.15-released+sha1>
+> 3cb5b681597a5bd798d31038c129c0dc911d8a2c  mbedtls-2.16.6-apache.tgz
+> +sha256  66455e23a6190a30142cdc1113f7418158839331a9d8e6b0778631d077281770
+> mbedtls-2.16.6-apache.tgz
+>  # Locally calculated
+>  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
+> apache-2.0.txt
+> diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+> index 5d0dd87339..50121fa6c7 100644
+> --- a/package/mbedtls/mbedtls.mk
+> +++ b/package/mbedtls/mbedtls.mk
+> @@ -5,7 +5,7 @@
+>
+>  ################################################################################
+>
+>  MBEDTLS_SITE = https://tls.mbed.org/code/releases
+> -MBEDTLS_VERSION = 2.16.5
+> +MBEDTLS_VERSION = 2.16.6
+>  MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+>  MBEDTLS_CONF_OPTS = \
+>         -DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+>
+>
+> ------------------------------
+>
+> Message: 44
+> Date: Wed, 6 May 2020 07:03:34 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/libssh: add
+>         patch to fix regression
+> Message-ID: <20200506051931.5845F825FB@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=1d177afefce7b655f7a240c7c85cbccddab6d0df
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> The libssh server is used by libnetconf2. With libssh version 0.9.4 a
+> regression was introduced that wrongly leads to session closed after the
+> poll timeout.
+>
+> The patch comes from upstrem:
+>
+> https://git.libssh.org/projects/libssh.git/commit/?id=6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4
+>
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 39099153d9404cd6f107f0fd92ce8686bbd1beb2)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  ...oid-returning-SSH_AGAIN-from-ssh_channel_.patch | 45
+> ++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>
+> diff --git
+> a/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
+> b/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
+> new file mode 100644
+> index 0000000000..9cc9389479
+> --- /dev/null
+> +++
+> b/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
+> @@ -0,0 +1,45 @@
+> +From 6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4 Mon Sep 17 00:00:00 2001
+> +From: Jakub Jelen <jjelen@redhat.com>
+> +Date: Thu, 16 Apr 2020 11:13:34 +0200
+> +Subject: [PATCH] channels: Avoid returning SSH_AGAIN from
+> + ssh_channel_poll_timeout()
+> +
+> +This addresses a regression introduced in 3bad0607, partially fixed in
+> 022409e9,
+> +but the function was still able to return SSH_AGAIN, which was not
+> expected by
+> +callers.
+> +
+> +Based on discussion in [1] and [2]
+> +
+> +[1] https://gitlab.com/libssh/libssh-mirror/-/merge_requests/101
+> +[2] https://www.libssh.org/archive/libssh/2020-03/0000029.html
+> +
+> +Signed-off-by: Jakub Jelen <jjelen@redhat.com>
+> +Reviewed-by: Anderson Toshiyuki Sasaki <ansasaki@redhat.com>
+> +
+> +[Backport from upstream commit:
+> +6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4]
+> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> +---
+> + src/channels.c | 6 ++++++
+> + 1 file changed, 6 insertions(+)
+> +
+> +diff --git a/src/channels.c b/src/channels.c
+> +index bcc1c207..9fe309d0 100644
+> +--- a/src/channels.c
+> ++++ b/src/channels.c
+> +@@ -3116,6 +3116,12 @@ int ssh_channel_poll_timeout(ssh_channel channel,
+> int timeout, int is_stderr)
+> +         session->session_state == SSH_SESSION_STATE_ERROR) {
+> +         rc = SSH_ERROR;
+> +         goto out;
+> ++    } else if (rc == SSH_AGAIN) {
+> ++        /* If the above timeout expired, it is ok and we do not need to
+> ++         * attempt to check the read buffer. The calling functions do not
+> ++         * expect us to return SSH_AGAIN either here. */
+> ++        rc = SSH_OK;
+> ++        goto out;
+> +     }
+> +     len = ssh_buffer_get_len(stdbuf);
+> +     if (len > 0) {
+> +--
+> +2.20.1
+> +
+>
+>
+> ------------------------------
+>
+> Message: 45
+> Date: Wed, 6 May 2020 07:15:36 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x]
+>         package/python-iptables: account for platform tag in extensions
+> Message-ID: <20200506051931.B4A7F811F5@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=d853d927ff64d0f6d70d856e4ca48032522c0c02
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> EXT_SUFFIX in Python versions > 3.5 contains a platform tag which only
+> applies
+> to cpython extensions. Given that ctypes.util.find_library does not work
+> on the
+> target due to the absence of the underlying tools '.so' needs to be added
+> as a
+> possible suffix for libraries to enable python-iptables to find the
+> iptables
+> shared libraries.
+>
+> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> (cherry picked from commit 52276cdda34aa986410626592031560bf64d788b)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  ...dd-.so-as-additional-shared-object-suffix.patch | 57
+> ++++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>
+> diff --git
+> a/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
+> b/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
+> new file mode 100644
+> index 0000000000..41d49fc1e6
+> --- /dev/null
+> +++
+> b/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
+> @@ -0,0 +1,57 @@
+> +From 899d25c511c6ce779b7153e9ae2e41055b30b9c5 Mon Sep 17 00:00:00 2001
+> +From: Frank Vanbever <frank.vanbever@essensium.com>
+> +Date: Mon, 9 Mar 2020 12:36:47 +0100
+> +Subject: [PATCH] Add '.so' as additional shared object suffix
+> +
+> +EXT_SUFFIX includes a platform information tag starting from Python 3.5
+> [0]
+> +For example:
+> +
+> +    >>> sysconfig.get_config_var("EXT_SUFFIX")
+> +    '.cpython-38-aarch64-linux-gnu.so'
+> +
+> +This suffix only applies to cpython extensions i.e. not to the iptables
+> shared
+> +objects.
+> +
+> +Adding '.so' as an additional suffix for shared objects fixes the issue.
+> +
+> +Fixes: Issue #301
+> +
+> +Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+> +
+> +Backported from: 899d25c511c6ce779b7153e9ae2e41055b30b9c5
+> +
+> +[0]: https://docs.python.org/3/whatsnew/3.5.html#build-and-c-api-changes
+> +---
+> + iptc/util.py | 13 ++++++++++---
+> + 1 file changed, 10 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/iptc/util.py b/iptc/util.py
+> +index e6b1649..04fe905 100644
+> +--- a/iptc/util.py
+> ++++ b/iptc/util.py
+> +@@ -80,12 +80,19 @@ def _do_find_library(name):
+> +
+> +
+> + def _find_library(*names):
+> ++    exts = []
+> +     if version_info >= (3, 3):
+> +-        ext = get_config_var("EXT_SUFFIX")
+> ++        exts.append(get_config_var("EXT_SUFFIX"))
+> +     else:
+> +-        ext = get_config_var('SO')
+> ++        exts.append(get_config_var('SO'))
+> ++
+> ++    if version_info >= (3, 5):
+> ++        exts.append('.so')
+> ++
+> +     for name in names:
+> +-        libnames = [name, "lib" + name, name + ext, "lib" + name + ext]
+> ++        libnames = [name, "lib" + name]
+> ++        for ext in exts:
+> ++            libnames += [name + ext, "lib" + name + ext]
+> +         libdir = os.environ.get('IPTABLES_LIBDIR', None)
+> +         if libdir is not None:
+> +             libdirs = libdir.split(':')
+> +--
+> +2.20.1
+> +
+>
+>
+> ------------------------------
+>
+> Message: 46
+> Date: Wed, 6 May 2020 07:10:40 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/exim: fix
+>         log and pid file paths
+> Message-ID: <20200506051931.6D204821B9@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=9f79ad93cf3961981a1aa0bbd29b41baa6eb8474
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> By default, exim stores its PID file in /var/spool/exim, and its log
+> file in /var/spool/exim/log, but it makes a lot more sense to have the
+> logs in /var/log/exim and the PID file in /var/run/exim.
+>
+> Using binary name subdirectory in both cases allows for the use of
+> systemd's LogsDirectory and RuntimeDirectory statements
+>
+> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 754341460b7aa751164d7d7ec9b67908c2792fe2)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/exim/S86exim      | 10 +++++++++-
+>  package/exim/exim.mk      |  2 ++
+>  package/exim/exim.service |  4 ++++
+>  3 files changed, 15 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/exim/S86exim b/package/exim/S86exim
+> index bec88fc222..0d09361f65 100644
+> --- a/package/exim/S86exim
+> +++ b/package/exim/S86exim
+> @@ -3,11 +3,19 @@
+>  # Start/stop exim
+>  #
+>
+> -PIDFILE=/var/lock/exim/exim-daemon.pid
+> +PIDFILE=/var/run/exim/exim.pid
+>
+>  case "$1" in
+>    start)
+>         echo "Starting exim..."
+> +       if [ ! -d /var/log/exim ]; then
+> +         mkdir -p /var/log/exim
+> +         chown exim:mail /var/log/exim
+> +       fi
+> +       if [ ! -d /var/run/exim ]; then
+> +         mkdir -p /var/run/exim
+> +         chown root:mail /var/run/exim
+> +       fi
+>         start-stop-daemon -S -x exim -- -bd
+>         ;;
+>    stop)
+> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+> index e4b0bfc1b4..8d5b6e415b 100644
+> --- a/package/exim/exim.mk
+> +++ b/package/exim/exim.mk
+> @@ -39,6 +39,8 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
+>         $(INSTALL) -m 0644 $(@D)/src/EDITME $(@D)/Local/Makefile
+>         $(call exim-config-change,BIN_DIRECTORY,/usr/sbin)
+>         $(call exim-config-change,CONFIGURE_FILE,/etc/exim/configure)
+> +       $(call exim-config-change,LOG_FILE_PATH,/var/log/exim/exim_%slog)
+> +       $(call exim-config-change,PID_FILE_PATH,/var/run/exim/exim.pid)
+>         $(call exim-config-change,EXIM_USER,ref:exim)
+>         $(call exim-config-change,EXIM_GROUP,mail)
+>         $(call exim-config-change,TRANSPORT_LMTP,yes)
+> diff --git a/package/exim/exim.service b/package/exim/exim.service
+> index fe97727ab5..ac3f067de4 100644
+> --- a/package/exim/exim.service
+> +++ b/package/exim/exim.service
+> @@ -3,6 +3,10 @@ Description=Exim MTA
+>  After=syslog.target network.target
+>
+>  [Service]
+> +User=exim
+> +Group=mail
+> +LogsDirectory=exim
+> +RuntimeDirectory=exim
+>  ExecStart=/usr/sbin/exim -bdf
+>  Restart=always
+>
+>
+>
+> ------------------------------
+>
+> Message: 47
+> Date: Wed, 6 May 2020 07:15:10 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x]
+>         package/python-iptables: try known libc instead of find_library()
+> Message-ID: <20200506051931.A3BB1811F5@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=c121494d169b81adf53e73c522a5abbc79a700dc
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> ctypes.util.find_library() depends on gcc and friends to detect the
+> location of
+> a given shared library. Given that these are not available on the target
 > and
-> --     the date of any change. You must include a prominent statement that
-> --     the Modification is derived, directly or indirectly, from Original
-> --     Code provided by the Initial Developer and including the name of the
-> --     Initial Developer in (a) the Source Code, and (b) in any notice in
-> an
-> --     Executable version or related documentation in which You describe
-> the
-> --     origin or ownership of the Covered Code.
-> --
-> --     3.4. Intellectual Property Matters
-> --          (a) Third Party Claims.
-> --          If Contributor has knowledge that a license under a third
-> party's
-> --          intellectual property rights is required to exercise the rights
-> --          granted by such Contributor under Sections 2.1 or 2.2,
-> --          Contributor must include a text file with the Source Code
-> --          distribution titled "LEGAL" which describes the claim and the
-> --          party making the claim in sufficient detail that a recipient
-> will
-> --          know whom to contact. If Contributor obtains such knowledge
-> after
-> --          the Modification is made available as described in Section 3.2,
-> --          Contributor shall promptly modify the LEGAL file in all copies
-> --          Contributor makes available thereafter and shall take other
-> steps
-> --          (such as notifying appropriate mailing lists or newsgroups)
-> --          reasonably calculated to inform those who received the Covered
-> --          Code that new knowledge has been obtained.
-> --
-> --          (b) Contributor APIs.
-> --          If Contributor's Modifications include an application
-> programming
-> --          interface and Contributor has knowledge of patent licenses
-> which
-> --          are reasonably necessary to implement that API, Contributor
-> must
-> --          also include this information in the LEGAL file.
-> --
-> --               (c)    Representations.
-> --          Contributor represents that, except as disclosed pursuant to
-> --          Section 3.4(a) above, Contributor believes that Contributor's
-> --          Modifications are Contributor's original creation(s) and/or
-> --          Contributor has sufficient rights to grant the rights conveyed
-> by
-> --          this License.
-> --
-> --     3.5. Required Notices.
-> --     You must duplicate the notice in Exhibit A in each file of the
-> Source
-> --     Code.  If it is not possible to put such notice in a particular
-> Source
-> --     Code file due to its structure, then You must include such notice
-> in a
-> --     location (such as a relevant directory) where a user would be likely
-> --     to look for such a notice.  If You created one or more
-> Modification(s)
-> --     You may add your name as a Contributor to the notice described in
-> --     Exhibit A.  You must also duplicate this License in any
-> documentation
-> --     for the Source Code where You describe recipients' rights or
-> ownership
-> --     rights relating to Covered Code.  You may choose to offer, and to
-> --     charge a fee for, warranty, support, indemnity or liability
-> --     obligations to one or more recipients of Covered Code. However, You
-> --     may do so only on Your own behalf, and not on behalf of the Initial
-> --     Developer or any Contributor. You must make it absolutely clear than
-> --     any such warranty, support, indemnity or liability obligation is
-> --     offered by You alone, and You hereby agree to indemnify the Initial
-> --     Developer and every Contributor for any liability incurred by the
-> --     Initial Developer or such Contributor as a result of warranty,
-> --     support, indemnity or liability terms You offer.
-> --
-> --     3.6. Distribution of Executable Versions.
-> --     You may distribute Covered Code in Executable form only if the
-> --     requirements of Section 3.1-3.5 have been met for that Covered Code,
-> --     and if You include a notice stating that the Source Code version of
-> --     the Covered Code is available under the terms of this License,
-> --     including a description of how and where You have fulfilled the
-> --     obligations of Section 3.2. The notice must be conspicuously
-> included
-> --     in any notice in an Executable version, related documentation or
-> --     collateral in which You describe recipients' rights relating to the
-> --     Covered Code. You may distribute the Executable version of Covered
-> --     Code or ownership rights under a license of Your choice, which may
-> --     contain terms different from this License, provided that You are in
-> --     compliance with the terms of this License and that the license for
-> the
-> --     Executable version does not attempt to limit or alter the
-> recipient's
-> --     rights in the Source Code version from the rights set forth in this
-> --     License. If You distribute the Executable version under a different
-> --     license You must make it absolutely clear that any terms which
-> differ
-> --     from this License are offered by You alone, not by the Initial
-> --     Developer or any Contributor. You hereby agree to indemnify the
-> --     Initial Developer and every Contributor for any liability incurred
-> by
-> --     the Initial Developer or such Contributor as a result of any such
-> --     terms You offer.
-> --
-> --     3.7. Larger Works.
-> --     You may create a Larger Work by combining Covered Code with other
-> code
-> --     not governed by the terms of this License and distribute the Larger
-> --     Work as a single product. In such a case, You must make sure the
-> --     requirements of this License are fulfilled for the Covered Code.
-> --
-> --4. Inability to Comply Due to Statute or Regulation.
-> --
-> --     If it is impossible for You to comply with any of the terms of this
-> --     License with respect to some or all of the Covered Code due to
-> --     statute, judicial order, or regulation then You must: (a) comply
-> with
-> --     the terms of this License to the maximum extent possible; and (b)
-> --     describe the limitations and the code they affect. Such description
-> --     must be included in the LEGAL file described in Section 3.4 and must
-> --     be included with all distributions of the Source Code. Except to the
-> --     extent prohibited by statute or regulation, such description must be
-> --     sufficiently detailed for a recipient of ordinary skill to be able
-> to
-> --     understand it.
-> --
-> --5. Application of this License.
-> --
-> --     This License applies to code to which the Initial Developer has
-> --     attached the notice in Exhibit A and to related Covered Code.
-> --
-> --6. Versions of the License.
-> --
-> --     6.1. New Versions.
-> --     Netscape Communications Corporation ("Netscape") may publish revised
-> --     and/or new versions of the License from time to time. Each version
-> --     will be given a distinguishing version number.
-> --
-> --     6.2. Effect of New Versions.
-> --     Once Covered Code has been published under a particular version of
-> the
-> --     License, You may always continue to use it under the terms of that
-> --     version. You may also choose to use such Covered Code under the
-> terms
-> --     of any subsequent version of the License published by Netscape. No
-> one
-> --     other than Netscape has the right to modify the terms applicable to
-> --     Covered Code created under this License.
-> --
-> --     6.3. Derivative Works.
-> --     If You create or use a modified version of this License (which you
-> may
-> --     only do in order to apply it to code which is not already Covered
-> Code
-> --     governed by this License), You must (a) rename Your license so that
-> --     the phrases "Mozilla", "MOZILLAPL", "MOZPL", "Netscape",
-> --     "MPL", "NPL" or any confusingly similar phrase do not appear in your
-> --     license (except to note that your license differs from this License)
-> --     and (b) otherwise make it clear that Your version of the license
-> --     contains terms which differ from the Mozilla Public License and
-> --     Netscape Public License. (Filling in the name of the Initial
-> --     Developer, Original Code or Contributor in the notice described in
-> --     Exhibit A shall not of themselves be deemed to be modifications of
-> --     this License.)
-> --
-> --7. DISCLAIMER OF WARRANTY.
-> --
-> --     COVERED CODE IS PROVIDED UNDER THIS LICENSE ON AN "AS IS" BASIS,
-> --     WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
-> INCLUDING,
-> --     WITHOUT LIMITATION, WARRANTIES THAT THE COVERED CODE IS FREE OF
-> --     DEFECTS, MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE OR
-> NON-INFRINGING.
-> --     THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE COVERED
-> CODE
-> --     IS WITH YOU. SHOULD ANY COVERED CODE PROVE DEFECTIVE IN ANY RESPECT,
-> --     YOU (NOT THE INITIAL DEVELOPER OR ANY OTHER CONTRIBUTOR) ASSUME THE
-> --     COST OF ANY NECESSARY SERVICING, REPAIR OR CORRECTION. THIS
-> DISCLAIMER
-> --     OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS LICENSE. NO USE OF
-> --     ANY COVERED CODE IS AUTHORIZED HEREUNDER EXCEPT UNDER THIS
-> DISCLAIMER.
-> --
-> --8. TERMINATION.
-> --
-> --     8.1.  This License and the rights granted hereunder will terminate
-> --     automatically if You fail to comply with terms herein and fail to
-> cure
-> --     such breach within 30 days of becoming aware of the breach. All
-> --     sublicenses to the Covered Code which are properly granted shall
-> --     survive any termination of this License. Provisions which, by their
-> --     nature, must remain in effect beyond the termination of this License
-> --     shall survive.
-> --
-> --     8.2.  If You initiate litigation by asserting a patent infringement
-> --     claim (excluding declatory judgment actions) against Initial
-> Developer
-> --     or a Contributor (the Initial Developer or Contributor against whom
-> --     You file such action is referred to as "Participant")  alleging
-> that:
-> --
-> --     (a)  such Participant's Contributor Version directly or indirectly
-> --     infringes any patent, then any and all rights granted by such
-> --     Participant to You under Sections 2.1 and/or 2.2 of this License
-> --     shall, upon 60 days notice from Participant terminate prospectively,
-> --     unless if within 60 days after receipt of notice You either: (i)
-> --     agree in writing to pay Participant a mutually agreeable reasonable
-> --     royalty for Your past and future use of Modifications made by such
-> --     Participant, or (ii) withdraw Your litigation claim with respect to
-> --     the Contributor Version against such Participant.  If within 60 days
-> --     of notice, a reasonable royalty and payment arrangement are not
-> --     mutually agreed upon in writing by the parties or the litigation
-> claim
-> --     is not withdrawn, the rights granted by Participant to You under
-> --     Sections 2.1 and/or 2.2 automatically terminate at the expiration of
-> --     the 60 day notice period specified above.
-> --
-> --     (b)  any software, hardware, or device, other than such
-> Participant's
-> --     Contributor Version, directly or indirectly infringes any patent,
-> then
-> --     any rights granted to You by such Participant under Sections 2.1(b)
-> --     and 2.2(b) are revoked effective as of the date You first made,
-> used,
-> --     sold, distributed, or had made, Modifications made by that
-> --     Participant.
-> --
-> --     8.3.  If You assert a patent infringement claim against Participant
-> --     alleging that such Participant's Contributor Version directly or
-> --     indirectly infringes any patent where such claim is resolved (such
-> as
-> --     by license or settlement) prior to the initiation of patent
-> --     infringement litigation, then the reasonable value of the licenses
-> --     granted by such Participant under Sections 2.1 or 2.2 shall be taken
-> --     into account in determining the amount or value of any payment or
-> --     license.
-> --
-> --     8.4.  In the event of termination under Sections 8.1 or 8.2 above,
-> --     all end user license agreements (excluding distributors and
-> resellers)
-> --     which have been validly granted by You or any distributor hereunder
-> --     prior to termination shall survive termination.
-> --
-> --9. LIMITATION OF LIABILITY.
-> --
-> --     UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, WHETHER TORT
-> --     (INCLUDING NEGLIGENCE), CONTRACT, OR OTHERWISE, SHALL YOU, THE
-> INITIAL
-> --     DEVELOPER, ANY OTHER CONTRIBUTOR, OR ANY DISTRIBUTOR OF COVERED
-> CODE,
-> --     OR ANY SUPPLIER OF ANY OF SUCH PARTIES, BE LIABLE TO ANY PERSON FOR
-> --     ANY INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY
-> --     CHARACTER INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF
-> GOODWILL,
-> --     WORK STOPPAGE, COMPUTER FAILURE OR MALFUNCTION, OR ANY AND ALL OTHER
-> --     COMMERCIAL DAMAGES OR LOSSES, EVEN IF SUCH PARTY SHALL HAVE BEEN
-> --     INFORMED OF THE POSSIBILITY OF SUCH DAMAGES. THIS LIMITATION OF
-> --     LIABILITY SHALL NOT APPLY TO LIABILITY FOR DEATH OR PERSONAL INJURY
-> --     RESULTING FROM SUCH PARTY'S NEGLIGENCE TO THE EXTENT APPLICABLE LAW
-> --     PROHIBITS SUCH LIMITATION. SOME JURISDICTIONS DO NOT ALLOW THE
-> --     EXCLUSION OR LIMITATION OF INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO
-> --     THIS EXCLUSION AND LIMITATION MAY NOT APPLY TO YOU.
-> --
-> --10. U.S. GOVERNMENT END USERS.
-> --
-> --     The Covered Code is a "commercial item," as that term is defined in
-> --     48 C.F.R. 2.101 (Oct. 1995), consisting of "commercial computer
-> --     software" and "commercial computer software documentation," as such
-> --     terms are used in 48 C.F.R. 12.212 (Sept. 1995). Consistent with 48
-> --     C.F.R. 12.212 and 48 C.F.R. 227.7202-1 through 227.7202-4 (June
-> 1995),
-> --     all U.S. Government End Users acquire Covered Code with only those
-> --     rights set forth herein.
-> --
-> --11. MISCELLANEOUS.
-> --
-> --     This License represents the complete agreement concerning subject
-> --     matter hereof. If any provision of this License is held to be
-> --     unenforceable, such provision shall be reformed only to the extent
-> --     necessary to make it enforceable. This License shall be governed by
-> --     California law provisions (except to the extent applicable law, if
-> --     any, provides otherwise), excluding its conflict-of-law provisions.
-> --     With respect to disputes in which at least one party is a citizen
-> of,
-> --     or an entity chartered or registered to do business in the United
-> --     States of America, any litigation relating to this License shall be
-> --     subject to the jurisdiction of the Federal Courts of the Northern
-> --     District of California, with venue lying in Santa Clara County,
-> --     California, with the losing party responsible for costs, including
-> --     without limitation, court costs and reasonable attorneys' fees and
-> --     expenses. The application of the United Nations Convention on
-> --     Contracts for the International Sale of Goods is expressly excluded.
-> --     Any law or regulation which provides that the language of a contract
-> --     shall be construed against the drafter shall not apply to this
-> --     License.
-> --
-> --12. RESPONSIBILITY FOR CLAIMS.
-> --
-> --     As between Initial Developer and the Contributors, each party is
-> --     responsible for claims and damages arising, directly or indirectly,
-> --     out of its utilization of rights under this License and You agree to
-> --     work with Initial Developer and Contributors to distribute such
-> --     responsibility on an equitable basis. Nothing herein is intended or
-> --     shall be deemed to constitute any admission of liability.
-> --
-> --13. MULTIPLE-LICENSED CODE.
-> --
-> --     Initial Developer may designate portions of the Covered Code as
-> --     "Multiple-Licensed".  "Multiple-Licensed" means that the Initial
-> --     Developer permits you to utilize portions of the Covered Code under
-> --     Your choice of the NPL or the alternative licenses, if any,
-> specified
-> --     by the Initial Developer in the file described in Exhibit A.
-> --
-> --EXHIBIT A -Mozilla Public License.
-> --
-> --     ``The contents of this file are subject to the Mozilla Public
-> License
-> --     Version 1.1 (the "License"); you may not use this file except in
-> --     compliance with the License. You may obtain a copy of the License at
-> --     http://www.mozilla.org/MPL/
-> --
-> --     Software distributed under the License is distributed on an "AS IS"
-> --     basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-> the
-> --     License for the specific language governing rights and limitations
-> --     under the License.
-> --
-> --     The Original Code is ______________________________________.
-> --
-> --     The Initial Developer of the Original Code is
-> ________________________.
-> --     Portions created by ______________________ are Copyright (C) ______
-> --     _______________________. All Rights Reserved.
-> --
-> --     Contributor(s): ______________________________________.
-> --
-> --     Alternatively, the contents of this file may be used under the terms
-> --     of the _____ license (the  "[___] License"), in which case the
-> --     provisions of [______] License are applicable instead of those
-> --     above.  If you wish to allow use of your version of this file only
-> --     under the terms of the [____] License and not to allow others to use
-> --     your version of this file under the MPL, indicate your decision by
-> --     deleting  the provisions above and replace  them with the notice and
-> --     other provisions required by the [___] License.  If you do not
-> delete
-> --     the provisions above, a recipient may use your version of this file
-> --     under either the MPL or the [___] License."
-> --
-> --     [NOTE: The text of this Exhibit A may differ slightly from the text
-> of
-> --     the notices in the Source Code files of the Original Code. You
-> should
-> --     use the text of this Exhibit A rather than the text found in the
-> --     Original Code Source Code for Your Modifications.]
-> -+Permission is hereby granted, free of charge, to any person obtaining a
-> copy of this software
-> -+and associated documentation files (the "Software"), to deal in the
-> Software without restriction,
-> -+including without limitation the rights to use, copy, modify, merge,
-> publish, distribute, sublicense,
-> -+and/or sell copies of the Software, and to permit persons to whom the
-> Software is furnished to do so,
-> -+subject to the following conditions:
-> -+
-> -+The above copyright notice and this permission notice shall be included
-> in all copies or substantial
-> -+portions of the Software.
-> -+
-> -+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-> OR IMPLIED, INCLUDING BUT
-> -+NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-> PARTICULAR PURPOSE AND NONINFRINGEMENT.
-> -+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-> CLAIM, DAMAGES OR OTHER LIABILITY,
-> -+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
-> OF OR IN CONNECTION WITH THE SOFTWARE
-> -+OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-> -\ No newline at end of file
+> that python-iptables depends on this functionality we need to work around
+> this.
+> The SONAMEs of the libc are well known so we try the known ones for glibc,
+> uClibc and musl.
+>
+> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12271
+>
+> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> (cherry picked from commit 90c18ab269c600ee7643f69212713ee3b74c38bd)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
-> -2.19.2
-> -
+>  .../0001-Add-separate-mechanism-to-load-libc.patch | 90
+> ++++++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>
 > diff --git
-> a/package/libgdiplus/0003-gifcodec.c-Include-copy-of-GifQuantizeBuffer-functio.patch
-> b/package/libgdiplus/0003-gifcodec.c-Include-copy-of-GifQuantizeBuffer-functio.patch
+> a/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
+> b/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
+> new file mode 100644
+> index 0000000000..2a344c2f55
+> --- /dev/null
+> +++
+> b/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
+> @@ -0,0 +1,90 @@
+> +From e3557528d7cdcdc2c579212be8837bc9b54635a4 Mon Sep 17 00:00:00 2001
+> +From: Frank Vanbever <frank.vanbever@essensium.com>
+> +Date: Thu, 20 Feb 2020 12:14:08 +0100
+> +Subject: [PATCH] Add separate mechanism to load libc
+> +
+> +ctypes.util.find_library() always returns None for systems which do not
+> have the
+> +tools installed to determine the location of a given shared library (i.e.
+> +ldconfig, gcc, objdump). If find_libary() fails attempt to load known
+> libc by
+> +SONAME.
+> +
+> +Upstream:
+> https://github.com/ldx/python-iptables/commit/e3557528d7cdcdc2c579212be8837bc9b54635a4
+> +
+> +Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
+> +---
+> + iptc/ip4tc.py   |  4 ++--
+> + iptc/util.py    | 16 ++++++++++++++++
+> + iptc/xtables.py |  4 ++--
+> + 3 files changed, 20 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/iptc/ip4tc.py b/iptc/ip4tc.py
+> +index 4c5d690..4ddd2dc 100644
+> +--- a/iptc/ip4tc.py
+> ++++ b/iptc/ip4tc.py
+> +@@ -9,7 +9,7 @@ import socket
+> + import struct
+> + import weakref
+> +
+> +-from .util import find_library, load_kernel
+> ++from .util import find_library, load_kernel, find_libc
+> + from .xtables import (XT_INV_PROTO, NFPROTO_IPV4, XTablesError, xtables,
+> +                       xt_align, xt_counters, xt_entry_target,
+> xt_entry_match)
+> +
+> +@@ -26,7 +26,7 @@ if not hasattr(socket, 'IPPROTO_SCTP'):
+> +
+> + _IFNAMSIZ = 16
+> +
+> +-_libc = ct.CDLL("libc.so.6")
+> ++_libc = find_libc()
+> + _get_errno_loc = _libc.__errno_location
+> + _get_errno_loc.restype = ct.POINTER(ct.c_int)
+> + _malloc = _libc.malloc
+> +diff --git a/iptc/util.py b/iptc/util.py
+> +index ae5fb9b..e6b1649 100644
+> +--- a/iptc/util.py
+> ++++ b/iptc/util.py
+> +@@ -109,3 +109,19 @@ def find_library(*names):
+> +             major = int(m.group(1))
+> +         return lib, major
+> +     return None, None
+> ++
+> ++
+> ++def find_libc():
+> ++    lib = ctypes.util.find_library('c')
+> ++    if lib is not None:
+> ++        return ctypes.CDLL(lib, mode=ctypes.RTLD_GLOBAL)
+> ++
+> ++    libnames = ['libc.so.6', 'libc.so.0', 'libc.so']
+> ++    for name in libnames:
+> ++        try:
+> ++            lib = ctypes.CDLL(name, mode=ctypes.RTLD_GLOBAL)
+> ++            return lib
+> ++        except:
+> ++            pass
+> ++
+> ++    return None
+> +diff --git a/iptc/xtables.py b/iptc/xtables.py
+> +index 93bc080..cf21029 100644
+> +--- a/iptc/xtables.py
+> ++++ b/iptc/xtables.py
+> +@@ -6,7 +6,7 @@ import sys
+> + import weakref
+> +
+> + from . import version
+> +-from .util import find_library
+> ++from .util import find_library, find_libc
+> + from .errors import *
+> +
+> + XT_INV_PROTO = 0x40  # invert the sense of PROTO
+> +@@ -792,7 +792,7 @@ class xtables_target(ct.Union):
+> +                 ("v12", _xtables_target_v12)]
+> +
+> +
+> +-_libc, _ = find_library("c")
+> ++_libc = find_libc()
+> + _optind = ct.c_long.in_dll(_libc, "optind")
+> + _optarg = ct.c_char_p.in_dll(_libc, "optarg")
+> +
+> +--
+> +2.20.1
+> +
+>
+>
+> ------------------------------
+>
+> Message: 48
+> Date: Wed, 6 May 2020 07:21:21 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x]
+>         package/python-dpkt: remove Python2 only dependency
+> Message-ID: <20200506051931.D56598B7AF@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=7f882e9942ff70d054ccf4c11657f743dd530629
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> python-dpkt supports both Python flavors.
+>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 12ccb92fce1ecb4215ff1071656292a5b9d4313d)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/python-dpkt/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/python-dpkt/Config.in b/package/python-dpkt/Config.in
+> index d8e3388d7e..9bd7a98d26 100644
+> --- a/package/python-dpkt/Config.in
+> +++ b/package/python-dpkt/Config.in
+> @@ -1,7 +1,7 @@
+>  config BR2_PACKAGE_PYTHON_DPKT
+>         bool "python-dpkt"
+> -       depends on BR2_PACKAGE_PYTHON
+> -       select BR2_PACKAGE_PYTHON_ZLIB
+> +       select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+> +       select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+>         help
+>           Fast, simple packet creation / parsing, with definitions
+>           for the basic TCP/IP protocols.
+>
+>
+> ------------------------------
+>
+> Message: 49
+> Date: Wed, 6 May 2020 07:22:52 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/libsepol:
+>         fix help text for BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
+> Message-ID: <20200506051931.E603B8B7AF@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=7c6cc0dd7dc12b8d6d7026ce17fa3586cd30ba5e
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> The help text was wrong, as it didn't match the actual default values
+> we were specifying. Indeed, when we specify:
+>
+>         default 31 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+>         default 30 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+>
+> It means that the policy version 30 is supported starting from Linux
+> 4.3 included, and that 31 is supported from Linux 4.13 included.
+>
+> So we shouldn't have:
+>
+>           > 4.3 <= 4.13    30
+>           > 4.13           31
+>
+> but:
+>
+>           >= 4.3 < 4.13    30
+>           >= 4.13          31
+>
+> This patch fixes that for all versions.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 67d7705a9aa58886e8a8777fe4c95746c1fb5c96)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/libsepol/Config.in | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
+> index 21d4d7865c..21d9e96179 100644
+> --- a/package/libsepol/Config.in
+> +++ b/package/libsepol/Config.in
+> @@ -22,12 +22,12 @@ config BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
+>
+>           Here's a handy table to help you choose:
+>           kernel version   SElinux policy max version
+> -         <= 2.6.x         25
+> -         > 2.6 <= 3.5     26
+> -         > 3.5 <= 3.14    28 (27 and 28 were added@the same time)
+> -         > 3.14 <= 4.3    29
+> -         > 4.3 <= 4.13    30
+> -         > 4.13           31
+> +         < 2.6.x          25
+> +         >= 2.6 < 3.5     26
+> +         >= 3.5 < 3.14    28 (27 and 28 were added@the same time)
+> +         >= 3.14 < 4.3    29
+> +         >= 4.3 < 4.13    30
+> +         >= 4.13          31
+>
+>  endif
+>
+>
+>
+> ------------------------------
+>
+> Message: 50
+> Date: Wed, 6 May 2020 06:57:45 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x]
+>         package/azure-iot-sdk-c: use full destination path for $(INSTALL)
+> Message-ID: <20200506051930.ACB7281027@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=42687ce6750ae972de0b478233cfa6edbd4bf20d
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> The canonical way to use $(INSTALL) is to have a full destination
+> path, that includes the file name.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 59de11b0476699ddeb2cbcd30a524b849249956a)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> index b194bf9a4c..e6345104eb 100644
+> --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+> @@ -46,7 +46,7 @@ endif
+>
+>  define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
+>         $(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
+> -               $(INSTALL) -D -m 0755 $(@D)/$(l) $(STAGING_DIR)/usr/lib/
+> +               $(INSTALL) -D -m 0755 $(@D)/$(l)
+> $(STAGING_DIR)/usr/lib/$(notdir $(l))
+>         )
+>         cp -a $(@D)/c-utility/inc/* $(STAGING_DIR)/usr/include/
+>         cp -a $(@D)/iothub_client/inc/* $(STAGING_DIR)/usr/include/
+> @@ -54,7 +54,7 @@ endef
+>
+>  define AZURE_IOT_SDK_C_INSTALL_TARGET_CMDS
+>         $(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
+> -               $(INSTALL) -D -m 0755 $(@D)/$(l) $(TARGET_DIR)/usr/lib/
+> +               $(INSTALL) -D -m 0755 $(@D)/$(l)
+> $(TARGET_DIR)/usr/lib/$(notdir $(l))
+>         )
+>  endef
+>
+>
+>
+> ------------------------------
+>
+> Message: 51
+> Date: Wed, 6 May 2020 07:26:58 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/polkit: add
+>         upstream fix for SIGTTOU
+> Message-ID: <20200506051932.33D04882AE@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=bad149c07ca996f5dca8dfca20cd2feaa91cfa8e
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> If tty_handler() resets terminal while pkttyagent is run in background job,
+> the process gets stopped by SIGTTOU. This impacts systemctl, hence it must
+> be blocked for a while and then the process gets killed anyway.
+>
+> Upstream commit: 28e3a6653d8c3777b07e0128a0d97d46e586e311
+>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 0d749be3e1c144ed711908da49dac9f274bfc996)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  ...03-polkit-0.116-pkttyagent-sigttou-bg-job.patch | 34
+> ++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>
+> diff --git
+> a/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
+> b/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
+> new file mode 100644
+> index 0000000000..fb41df3af2
+> --- /dev/null
+> +++ b/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
+> @@ -0,0 +1,34 @@
+> +From 76aae4fce586b400f5fe08df31497db19d624609 Mon Sep 17 00:00:00 2001
+> +From: Jan Rybar <jrybar@redhat.com>
+> +Date: Thu, 1 Aug 2019 06:46:10 +0000
+> +Subject: [PATCH] pkttyagent: process stopped by SIGTTOU if run in
+> background
+> + job
+> +
+> +
+> +(cherry picked from commit 76aae4fce586b400f5fe08df31497db19d624609)
+> +Signed-off-by: Jan Rybar <jrybar@redhat.com>
+> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> +---
+> + src/programs/pkttyagent.c | 6 ++++++
+> + 1 file changed, 6 insertions(+)
+> +
+> +diff --git a/src/programs/pkttyagent.c b/src/programs/pkttyagent.c
+> +index 3c8d502..13879a2 100644
+> +--- a/src/programs/pkttyagent.c
+> ++++ b/src/programs/pkttyagent.c
+> +@@ -264,6 +264,12 @@ main (int argc, char *argv[])
+> +
+> +   memset (&sa, 0, sizeof (sa));
+> +   sa.sa_handler = &tty_handler;
+> ++/* If tty_handler() resets terminal while pkttyagent is run in
+> background job,
+> ++   the process gets stopped by SIGTTOU. This impacts systemctl, hence it
+> must
+> ++   be blocked for a while and then the process gets killed anyway.
+> ++ */
+> ++  sigemptyset(&sa.sa_mask);
+> ++  sigaddset(&sa.sa_mask, SIGTTOU);
+> +   sigaction (SIGTERM, &sa, &savesigterm);
+> +   sigaction (SIGINT, &sa, &savesigint);
+> +   sigaction (SIGTSTP, &sa, &savesigtstp);
+> +--
+> +2.24.1
+> +
+>
+>
+> ------------------------------
+>
+> Message: 52
+> Date: Wed, 6 May 2020 07:20:29 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/php:
+>         security bump version to 7.4.5
+> Message-ID: <20200506051931.C57F08B7AF@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=5d5694d36d0bb36d79cc1ae37cedbef8a2a092f1
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> Changelog: https://www.php.net/ChangeLog-7.php#7.4.5
+>
+> Fixes CVE-2020-7067.
+>
+> Removed patch applied upstream.
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit db52b57c3dc625fc06d4408242252129ca47b026)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  ...0005-Check-for-sys-auxv.h-before-using-it.patch | 60
+> ----------------------
+>  package/php/php.hash                               |  2 +-
+>  package/php/php.mk                                 |  2 +-
+>  3 files changed, 2 insertions(+), 62 deletions(-)
+>
+> diff --git a/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
+> b/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
 > deleted file mode 100644
-> index 80e944f07c98..000000000000
-> ---
-> a/package/libgdiplus/0003-gifcodec.c-Include-copy-of-GifQuantizeBuffer-functio.patch
+> index 559c64db8a..0000000000
+> --- a/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
 > +++ /dev/null
-> @@ -1,414 +0,0 @@
-> -From afde9145030ff4989f0d7933389c20244eaf8039 Mon Sep 17 00:00:00 2001
-> -From: =?UTF-8?q?Alexander=20K=C3=B6plinger?= <alex.koeplinger@outlook.com
-> >
-> -Date: Thu, 1 Aug 2019 17:08:36 +0200
-> -Subject: [PATCH] gifcodec.c: Include copy of GifQuantizeBuffer function
-> from
-> - giflib (#575)
+> @@ -1,60 +0,0 @@
+> -From f150702d5ab72878d45b722b6d7d4194db92c44a Mon Sep 17 00:00:00 2001
+> -From: Peter Seiderer <ps.report@gmx.net>
+> -Date: Mon, 9 Mar 2020 15:36:48 +0100
+> -Subject: [PATCH] Check for sys/auxv.h before using it.
 > -
-> -It was removed upstream so we need to include a copy of it.
-> -The upstream code is licensed as MIT.
+> -Fixes aarch64 compile wiht uclibc-ng (does not provide
+> -sys/auxv.h header file).
 > -
-> -Fixes https://github.com/mono/libgdiplus/issues/546
-> -
-> -Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> -Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> -Upstream:
+> https://github.com/php/php-src/commit/f73528f0e0d59ac744ccb4a94a3a9d7b9f0fba1b
 > ----
-> - src/gifcodec.c | 377 +++++++++++++++++++++++++++++++++++++++++++++++--
-> - 1 file changed, 369 insertions(+), 8 deletions(-)
+> - configure.ac         | 1 +
+> - ext/standard/crc32.c | 9 +++++++--
+> - 2 files changed, 8 insertions(+), 2 deletions(-)
 > -
-> -diff --git a/src/gifcodec.c b/src/gifcodec.c
-> -index 6f8dedb..29a9899 100644
-> ---- a/src/gifcodec.c
-> -+++ b/src/gifcodec.c
-> -@@ -40,6 +40,374 @@ GUID gdip_gif_image_format_guid = {0xb96b3cb0U,
-> 0x0728U, 0x11d3U, {0x9d, 0x7b, 0
-> - #include "gifcodec.h"
+> -diff --git a/configure.ac b/configure.ac
+> -index 5219a5f2..caf62302 100644
+> ---- a/configure.ac
+> -+++ b/configure.ac
+> -@@ -440,6 +440,7 @@ resolv.h \
+> - strings.h \
+> - syslog.h \
+> - sysexits.h \
+> -+sys/auxv.h \
+> - sys/ioctl.h \
+> - sys/file.h \
+> - sys/mman.h \
+> -diff --git a/ext/standard/crc32.c b/ext/standard/crc32.c
+> -index c3ca5903..e59ab45f 100644
+> ---- a/ext/standard/crc32.c
+> -+++ b/ext/standard/crc32.c
+> -@@ -17,10 +17,15 @@
+> - */
 > -
+> - #include "php.h"
+> -+#ifdef PHP_WIN32
+> -+#include "config.w32.h"
+> -+#else
+> -+#include <php_config.h>
+> -+#endif
+> - #include "basic_functions.h"
+> - #include "crc32.h"
 > -
-> -+/* START GifQuantizeBuffer copy from giflib
-> -+
-> -+The giflib 5.2.0 release notes mention:
-> -+
-> -+> The undocumented and deprecated GifQuantizeBuffer() entry point
-> -+> has been moved to the util library to reduce libgif size and attack
-> -+> surface. Applications needing this function are couraged to link the
-> -+> util library or make their own copy.
-> -+
-> -+Since the util library doesn't get installed in most distros we can't
-> -+link against it and need to make our own copy called
-> LibgdiplusGifQuantizeBuffer.
-> -+This is taken from giflib 52b62de83d5facbbbde042b85bf3f61182e3bebd.
-> -+
-> -+> The GIFLIB distribution is Copyright (c) 1997  Eric S. Raymond
-> -+>
-> -+> Permission is hereby granted, free of charge, to any person obtaining
-> a copy
-> -+> of this software and associated documentation files (the "Software"),
-> to deal
-> -+> in the Software without restriction, including without limitation the
-> rights
-> -+> to use, copy, modify, merge, publish, distribute, sublicense, and/or
-> sell
-> -+> copies of the Software, and to permit persons to whom the Software is
-> -+> furnished to do so, subject to the following conditions:
-> -+>
-> -+> The above copyright notice and this permission notice shall be
-> included in
-> -+> all copies or substantial portions of the Software.
-> -+>
-> -+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-> EXPRESS OR
-> -+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-> MERCHANTABILITY,
-> -+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT
-> SHALL THE
-> -+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> -+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-> ARISING FROM,
-> -+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-> IN
-> -+> THE SOFTWARE.
-> -+
-> -+*/
-> -+
->
-> -+/*****************************************************************************
-> -+
-> -+ quantize.c - quantize a high resolution image into lower one
-> -+
-> -+ Based on: "Color Image Quantization for frame buffer Display", by
-> -+ Paul Heckbert SIGGRAPH 1982 page 297-307.
-> -+
-> -+ This doesn't really belong in the core library, was undocumented,
-> -+ and was removed in 4.2.  Then it turned out some client apps were
-> -+ actually using it, so it was restored in 5.0.
-> -+
-> -+SPDX-License-Identifier: MIT
-> -+
->
-> -+******************************************************************************/
-> -+
-> -+#include <stdlib.h>
-> -+#include <stdio.h>
-> -+#include "gif_lib.h"
-> -+//#include "gif_lib_private.h"
-> -+
-> -+//#define ABS(x)    ((x) > 0 ? (x) : (-(x)))
-> -+
-> -+#define COLOR_ARRAY_SIZE 32768
-> -+#define BITS_PER_PRIM_COLOR 5
-> -+#define MAX_PRIM_COLOR      0x1f
-> -+
-> -+static int SortRGBAxis;
-> -+
-> -+typedef struct QuantizedColorType {
-> -+    GifByteType RGB[3];
-> -+    GifByteType NewColorIndex;
-> -+    long Count;
-> -+    struct QuantizedColorType *Pnext;
-> -+} QuantizedColorType;
-> -+
-> -+typedef struct NewColorMapType {
-> -+    GifByteType RGBMin[3], RGBWidth[3];
-> -+    unsigned int NumEntries; /* # of QuantizedColorType in linked list
-> below */
-> -+    unsigned long Count; /* Total number of pixels in all the entries */
-> -+    QuantizedColorType *QuantizedColors;
-> -+} NewColorMapType;
-> -+
-> -+static int SubdivColorMap(NewColorMapType * NewColorSubdiv,
-> -+                          unsigned int ColorMapSize,
-> -+                          unsigned int *NewColorMapSize);
-> -+static int SortCmpRtn(const void *Entry1, const void *Entry2);
-> -+
->
-> -+/******************************************************************************
-> -+ Quantize high resolution image into lower one. Input image consists of a
-> -+ 2D array for each of the RGB colors with size Width by Height. There is
-> no
-> -+ Color map for the input. Output is a quantized image with 2D array of
-> -+ indexes into the output color map.
-> -+   Note input image can be 24 bits at the most (8 for red/green/blue) and
-> -+ the output has 256 colors at the most (256 entries in the color map.).
-> -+ ColorMapSize specifies size of color map up to 256 and will be updated
-> to
-> -+ real size before returning.
-> -+   Also non of the parameter are allocated by this routine.
-> -+   This function returns GIF_OK if successful, GIF_ERROR otherwise.
->
-> -+******************************************************************************/
-> -+int
-> -+LibgdiplusGifQuantizeBuffer(unsigned int Width,
-> -+               unsigned int Height,
-> -+               int *ColorMapSize,
-> -+               GifByteType * RedInput,
-> -+               GifByteType * GreenInput,
-> -+               GifByteType * BlueInput,
-> -+               GifByteType * OutputBuffer,
-> -+               GifColorType * OutputColorMap) {
-> -+
-> -+    unsigned int Index, NumOfEntries;
-> -+    int i, j, MaxRGBError[3];
-> -+    unsigned int NewColorMapSize;
-> -+    long Red, Green, Blue;
-> -+    NewColorMapType NewColorSubdiv[256];
-> -+    QuantizedColorType *ColorArrayEntries, *QuantizedColor;
-> -+
-> -+    ColorArrayEntries = (QuantizedColorType *)malloc(
-> -+                           sizeof(QuantizedColorType) *
-> COLOR_ARRAY_SIZE);
-> -+    if (ColorArrayEntries == NULL) {
-> -+        return GIF_ERROR;
-> -+    }
-> -+
-> -+    for (i = 0; i < COLOR_ARRAY_SIZE; i++) {
-> -+        ColorArrayEntries[i].RGB[0] = i >> (2 * BITS_PER_PRIM_COLOR);
-> -+        ColorArrayEntries[i].RGB[1] = (i >> BITS_PER_PRIM_COLOR) &
-> -+           MAX_PRIM_COLOR;
-> -+        ColorArrayEntries[i].RGB[2] = i & MAX_PRIM_COLOR;
-> -+        ColorArrayEntries[i].Count = 0;
-> -+    }
-> -+
-> -+    /* Sample the colors and their distribution: */
-> -+    for (i = 0; i < (int)(Width * Height); i++) {
-> -+        Index = ((RedInput[i] >> (8 - BITS_PER_PRIM_COLOR)) <<
-> -+                  (2 * BITS_PER_PRIM_COLOR)) +
-> -+                ((GreenInput[i] >> (8 - BITS_PER_PRIM_COLOR)) <<
-> -+                  BITS_PER_PRIM_COLOR) +
-> -+                (BlueInput[i] >> (8 - BITS_PER_PRIM_COLOR));
-> -+        ColorArrayEntries[Index].Count++;
-> -+    }
-> -+
-> -+    /* Put all the colors in the first entry of the color map, and call
-> the
-> -+     * recursive subdivision process.  */
-> -+    for (i = 0; i < 256; i++) {
-> -+        NewColorSubdiv[i].QuantizedColors = NULL;
-> -+        NewColorSubdiv[i].Count = NewColorSubdiv[i].NumEntries = 0;
-> -+        for (j = 0; j < 3; j++) {
-> -+            NewColorSubdiv[i].RGBMin[j] = 0;
-> -+            NewColorSubdiv[i].RGBWidth[j] = 255;
-> -+        }
-> -+    }
-> -+
-> -+    /* Find the non empty entries in the color table and chain them: */
-> -+    for (i = 0; i < COLOR_ARRAY_SIZE; i++)
-> -+        if (ColorArrayEntries[i].Count > 0)
-> -+            break;
-> -+    QuantizedColor = NewColorSubdiv[0].QuantizedColors =
-> &ColorArrayEntries[i];
-> -+    NumOfEntries = 1;
-> -+    while (++i < COLOR_ARRAY_SIZE)
-> -+        if (ColorArrayEntries[i].Count > 0) {
-> -+            QuantizedColor->Pnext = &ColorArrayEntries[i];
-> -+            QuantizedColor = &ColorArrayEntries[i];
-> -+            NumOfEntries++;
-> -+        }
-> -+    QuantizedColor->Pnext = NULL;
-> -+
-> -+    NewColorSubdiv[0].NumEntries = NumOfEntries; /* Different sampled
-> colors */
-> -+    NewColorSubdiv[0].Count = ((long)Width) * Height; /* Pixels */
-> -+    NewColorMapSize = 1;
-> -+    if (SubdivColorMap(NewColorSubdiv, *ColorMapSize, &NewColorMapSize)
-> !=
-> -+       GIF_OK) {
-> -+        free((char *)ColorArrayEntries);
-> -+        return GIF_ERROR;
-> -+    }
-> -+    if (NewColorMapSize < *ColorMapSize) {
-> -+        /* And clear rest of color map: */
-> -+        for (i = NewColorMapSize; i < *ColorMapSize; i++)
-> -+            OutputColorMap[i].Red = OutputColorMap[i].Green =
-> -+                OutputColorMap[i].Blue = 0;
-> -+    }
-> -+
-> -+    /* Average the colors in each entry to be the color to be used in the
-> -+     * output color map, and plug it into the output color map itself. */
-> -+    for (i = 0; i < NewColorMapSize; i++) {
-> -+        if ((j = NewColorSubdiv[i].NumEntries) > 0) {
-> -+            QuantizedColor = NewColorSubdiv[i].QuantizedColors;
-> -+            Red = Green = Blue = 0;
-> -+            while (QuantizedColor) {
-> -+                QuantizedColor->NewColorIndex = i;
-> -+                Red += QuantizedColor->RGB[0];
-> -+                Green += QuantizedColor->RGB[1];
-> -+                Blue += QuantizedColor->RGB[2];
-> -+                QuantizedColor = QuantizedColor->Pnext;
-> -+            }
-> -+            OutputColorMap[i].Red = (Red << (8 - BITS_PER_PRIM_COLOR)) /
-> j;
-> -+            OutputColorMap[i].Green = (Green << (8 -
-> BITS_PER_PRIM_COLOR)) / j;
-> -+            OutputColorMap[i].Blue = (Blue << (8 - BITS_PER_PRIM_COLOR))
-> / j;
-> -+        }
-> -+    }
-> -+
-> -+    /* Finally scan the input buffer again and put the mapped index in
-> the
-> -+     * output buffer.  */
-> -+    MaxRGBError[0] = MaxRGBError[1] = MaxRGBError[2] = 0;
-> -+    for (i = 0; i < (int)(Width * Height); i++) {
-> -+        Index = ((RedInput[i] >> (8 - BITS_PER_PRIM_COLOR)) <<
-> -+                 (2 * BITS_PER_PRIM_COLOR)) +
-> -+                ((GreenInput[i] >> (8 - BITS_PER_PRIM_COLOR)) <<
-> -+                 BITS_PER_PRIM_COLOR) +
-> -+                (BlueInput[i] >> (8 - BITS_PER_PRIM_COLOR));
-> -+        Index = ColorArrayEntries[Index].NewColorIndex;
-> -+        OutputBuffer[i] = Index;
-> -+        if (MaxRGBError[0] < ABS(OutputColorMap[Index].Red -
-> RedInput[i]))
-> -+            MaxRGBError[0] = ABS(OutputColorMap[Index].Red -
-> RedInput[i]);
-> -+        if (MaxRGBError[1] < ABS(OutputColorMap[Index].Green -
-> GreenInput[i]))
-> -+            MaxRGBError[1] = ABS(OutputColorMap[Index].Green -
-> GreenInput[i]);
-> -+        if (MaxRGBError[2] < ABS(OutputColorMap[Index].Blue -
-> BlueInput[i]))
-> -+            MaxRGBError[2] = ABS(OutputColorMap[Index].Blue -
-> BlueInput[i]);
-> -+    }
-> -+
-> -+#ifdef DEBUG
-> -+    fprintf(stderr,
-> -+            "Quantization L(0) errors: Red = %d, Green = %d, Blue =
-> %d.\n",
-> -+            MaxRGBError[0], MaxRGBError[1], MaxRGBError[2]);
-> -+#endif /* DEBUG */
-> -+
-> -+    free((char *)ColorArrayEntries);
-> -+
-> -+    *ColorMapSize = NewColorMapSize;
-> -+
-> -+    return GIF_OK;
-> -+}
-> -+
->
-> -+/******************************************************************************
-> -+ Routine to subdivide the RGB space recursively using median cut in each
-> -+ axes alternatingly until ColorMapSize different cubes exists.
-> -+ The biggest cube in one dimension is subdivide unless it has only one
-> entry.
-> -+ Returns GIF_ERROR if failed, otherwise GIF_OK.
->
-> -+*******************************************************************************/
-> -+static int
-> -+SubdivColorMap(NewColorMapType * NewColorSubdiv,
-> -+               unsigned int ColorMapSize,
-> -+               unsigned int *NewColorMapSize) {
-> -+
-> -+    unsigned int i, j, Index = 0;
-> -+    QuantizedColorType *QuantizedColor, **SortArray;
-> -+
-> -+    while (ColorMapSize > *NewColorMapSize) {
-> -+        /* Find candidate for subdivision: */
-> -+      long Sum, Count;
-> -+        int MaxSize = -1;
-> -+      unsigned int NumEntries, MinColor, MaxColor;
-> -+        for (i = 0; i < *NewColorMapSize; i++) {
-> -+            for (j = 0; j < 3; j++) {
-> -+                if ((((int)NewColorSubdiv[i].RGBWidth[j]) > MaxSize) &&
-> -+                      (NewColorSubdiv[i].NumEntries > 1)) {
-> -+                    MaxSize = NewColorSubdiv[i].RGBWidth[j];
-> -+                    Index = i;
-> -+                    SortRGBAxis = j;
-> -+                }
-> -+            }
-> -+        }
-> -+
-> -+        if (MaxSize == -1)
-> -+            return GIF_OK;
-> -+
-> -+        /* Split the entry Index into two along the axis SortRGBAxis: */
-> -+
-> -+        /* Sort all elements in that entry along the given axis and
-> split at
-> -+         * the median.  */
-> -+        SortArray = (QuantizedColorType **)malloc(
-> -+                      sizeof(QuantizedColorType *) *
-> -+                      NewColorSubdiv[Index].NumEntries);
-> -+        if (SortArray == NULL)
-> -+            return GIF_ERROR;
-> -+        for (j = 0, QuantizedColor =
-> NewColorSubdiv[Index].QuantizedColors;
-> -+             j < NewColorSubdiv[Index].NumEntries && QuantizedColor !=
-> NULL;
-> -+             j++, QuantizedColor = QuantizedColor->Pnext)
-> -+            SortArray[j] = QuantizedColor;
-> -+
-> -+      /*
-> -+       * Because qsort isn't stable, this can produce differing
-> -+       * results for the order of tuples depending on platform
-> -+       * details of how qsort() is implemented.
-> -+       *
-> -+       * We mitigate this problem by sorting on all three axes rather
-> -+       * than only the one specied by SortRGBAxis; that way the
-> instability
-> -+       * can only become an issue if there are multiple color indices
-> -+       * referring to identical RGB tuples.  Older versions of this
-> -+       * sorted on only the one axis.
-> -+       */
-> -+        qsort(SortArray, NewColorSubdiv[Index].NumEntries,
-> -+              sizeof(QuantizedColorType *), SortCmpRtn);
-> -+
-> -+        /* Relink the sorted list into one: */
-> -+        for (j = 0; j < NewColorSubdiv[Index].NumEntries - 1; j++)
-> -+            SortArray[j]->Pnext = SortArray[j + 1];
-> -+        SortArray[NewColorSubdiv[Index].NumEntries - 1]->Pnext = NULL;
-> -+        NewColorSubdiv[Index].QuantizedColors = QuantizedColor =
-> SortArray[0];
-> -+        free((char *)SortArray);
-> -+
-> -+        /* Now simply add the Counts until we have half of the Count: */
-> -+        Sum = NewColorSubdiv[Index].Count / 2 - QuantizedColor->Count;
-> -+        NumEntries = 1;
-> -+        Count = QuantizedColor->Count;
-> -+        while (QuantizedColor->Pnext != NULL &&
-> -+             (Sum -= QuantizedColor->Pnext->Count) >= 0 &&
-> -+               QuantizedColor->Pnext->Pnext != NULL) {
-> -+            QuantizedColor = QuantizedColor->Pnext;
-> -+            NumEntries++;
-> -+            Count += QuantizedColor->Count;
-> -+        }
-> -+        /* Save the values of the last color of the first half, and first
-> -+         * of the second half so we can update the Bounding Boxes later.
-> -+         * Also as the colors are quantized and the BBoxes are full
-> 0..255,
-> -+         * they need to be rescaled.
-> -+         */
-> -+        MaxColor = QuantizedColor->RGB[SortRGBAxis]; /* Max. of first
-> half */
-> -+      /* coverity[var_deref_op] */
-> -+        MinColor = QuantizedColor->Pnext->RGB[SortRGBAxis]; /* of second
-> */
-> -+        MaxColor <<= (8 - BITS_PER_PRIM_COLOR);
-> -+        MinColor <<= (8 - BITS_PER_PRIM_COLOR);
-> -+
-> -+        /* Partition right here: */
-> -+        NewColorSubdiv[*NewColorMapSize].QuantizedColors =
-> -+           QuantizedColor->Pnext;
-> -+        QuantizedColor->Pnext = NULL;
-> -+        NewColorSubdiv[*NewColorMapSize].Count = Count;
-> -+        NewColorSubdiv[Index].Count -= Count;
-> -+        NewColorSubdiv[*NewColorMapSize].NumEntries =
-> -+           NewColorSubdiv[Index].NumEntries - NumEntries;
-> -+        NewColorSubdiv[Index].NumEntries = NumEntries;
-> -+        for (j = 0; j < 3; j++) {
-> -+            NewColorSubdiv[*NewColorMapSize].RGBMin[j] =
-> -+               NewColorSubdiv[Index].RGBMin[j];
-> -+            NewColorSubdiv[*NewColorMapSize].RGBWidth[j] =
-> -+               NewColorSubdiv[Index].RGBWidth[j];
-> -+        }
-> -+        NewColorSubdiv[*NewColorMapSize].RGBWidth[SortRGBAxis] =
-> -+           NewColorSubdiv[*NewColorMapSize].RGBMin[SortRGBAxis] +
-> -+           NewColorSubdiv[*NewColorMapSize].RGBWidth[SortRGBAxis] -
-> MinColor;
-> -+        NewColorSubdiv[*NewColorMapSize].RGBMin[SortRGBAxis] = MinColor;
-> -+
-> -+        NewColorSubdiv[Index].RGBWidth[SortRGBAxis] =
-> -+           MaxColor - NewColorSubdiv[Index].RGBMin[SortRGBAxis];
-> -+
-> -+        (*NewColorMapSize)++;
-> -+    }
-> -+
-> -+    return GIF_OK;
-> -+}
-> -+
->
-> -+/****************************************************************************
-> -+ Routine called by qsort to compare two entries.
->
-> -+*****************************************************************************/
-> -+
-> -+static int
-> -+SortCmpRtn(const void *Entry1,
-> -+           const void *Entry2) {
-> -+         QuantizedColorType *entry1 = (*((QuantizedColorType **)
-> Entry1));
-> -+         QuantizedColorType *entry2 = (*((QuantizedColorType **)
-> Entry2));
-> -+
-> -+         /* sort on all axes of the color space! */
-> -+         int hash1 = entry1->RGB[SortRGBAxis] * 256 * 256
-> -+                              + entry1->RGB[(SortRGBAxis+1) % 3] * 256
-> -+                              + entry1->RGB[(SortRGBAxis+2) % 3];
-> -+         int hash2 = entry2->RGB[SortRGBAxis] * 256 * 256
-> -+                              + entry2->RGB[(SortRGBAxis+1) % 3] * 256
-> -+                              + entry2->RGB[(SortRGBAxis+2) % 3];
-> -+
-> -+    return hash1 - hash2;
-> -+}
-> -+
-> -+/* END GifQuantizeBuffer copy from giflib */
-> -+
-> - /* Data structure used for callback */
-> - typedef struct
-> - {
-> -@@ -851,14 +1219,7 @@ gdip_save_gif_image (void *stream, GpImage *image,
-> BOOL from_file)
-> -                                               v += 4;
-> -                                       }
-> -                               }
-> --                              if (
-> --#if GIFLIB_MAJOR >= 5
-> --                              GifQuantizeBuffer(
-> --#else
-> --                              QuantizeBuffer(
-> --#endif
-> --                                              bitmap_data->width,
-> bitmap_data->height, &cmap_size,
-> --                                              red,  green, blue, pixbuf,
-> cmap->Colors) == GIF_ERROR) {
-> -+                              if
-> (LibgdiplusGifQuantizeBuffer(bitmap_data->width, bitmap_data->height,
-> &cmap_size, red,  green, blue, pixbuf, cmap->Colors) == GIF_ERROR) {
-> -                                       goto error;
-> -                               }
-> -                       }
+> --#if defined(__aarch64__)
+> -+#if defined(__aarch64__) && defined(HAVE_SYS_AUXV_H)
+> - # include <arm_acle.h>
+> - # if defined(__linux__)
+> - #  include <sys/auxv.h>
+> -@@ -85,7 +90,7 @@ PHP_NAMED_FUNCTION(php_if_crc32)
+> -
+> -       crc = crcinit^0xFFFFFFFF;
+> -
+> --#if defined(__aarch64__)
+> -+#if defined(__aarch64__) && defined(HAVE_SYS_AUXV_H)
+> -       if (has_crc32_insn()) {
+> -               crc = crc32_aarch64(crc, p, nr);
+> -               RETURN_LONG(crc^0xFFFFFFFF);
 > ---
-> -2.20.1
+> -2.25.1
 > -
-> diff --git a/package/libgdiplus/libgdiplus.hash
-> b/package/libgdiplus/libgdiplus.hash
-> index d89b352d2667..11cacc13f6de 100644
-> --- a/package/libgdiplus/libgdiplus.hash
-> +++ b/package/libgdiplus/libgdiplus.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256 6a75e4a476695cd6a1475fd6b989423ecf73978fd757673669771d8a6e13f756
-> libgdiplus-5.6.tar.gz
-> -sha256 81317bf837e02a116dc20b032fa1d0cbf9ec357621f141ff2c2daf26c17cbb5d
+> diff --git a/package/php/php.hash b/package/php/php.hash
+> index 4584524f1c..a0b8fd4688 100644
+> --- a/package/php/php.hash
+> +++ b/package/php/php.hash
+> @@ -1,5 +1,5 @@
+>  # From https://www.php.net/downloads.php
+> -sha256 1873c4cefdd3df9a78dcffb2198bba5c2f0464f55c9c960720c84df483fca74c
+> php-7.4.4.tar.xz
+> +sha256 d059fd7f55bdc4d2eada15a00a2976697010d3631ef6f83149cc5289e1f23c2c
+> php-7.4.5.tar.xz
+>
+>  # License file
+>  sha256 0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7
 > LICENSE
-> +sha256  1fd034f4b636214cc24e94c563cd10b3f3444d9f0660927b60e63fd4131d97fa
-> libgdiplus-6.0.5.tar.gz
-> +sha256  81317bf837e02a116dc20b032fa1d0cbf9ec357621f141ff2c2daf26c17cbb5d
-> LICENSE
-> diff --git a/package/libgdiplus/libgdiplus.mk b/package/libgdiplus/
-> libgdiplus.mk
-> index d120f6a3149a..be4a9168f907 100644
-> --- a/package/libgdiplus/libgdiplus.mk
-> +++ b/package/libgdiplus/libgdiplus.mk
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index f62204c2a5..91f82dbf31 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
 > @@ -4,7 +4,7 @@
 >  #
 >
 >  ################################################################################
 >
-> -LIBGDIPLUS_VERSION = 5.6
-> +LIBGDIPLUS_VERSION = 6.0.5
->  LIBGDIPLUS_SITE = $(call github,mono,libgdiplus,$(LIBGDIPLUS_VERSION))
->
->  LIBGDIPLUS_LICENSE = MIT
-> --
-> 2.17.1
+> -PHP_VERSION = 7.4.4
+> +PHP_VERSION = 7.4.5
+>  PHP_SITE = http://www.php.net/distributions
+>  PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+>  PHP_INSTALL_STAGING = YES
 >
 >
+> ------------------------------
+>
+> Message: 53
+> Date: Wed, 6 May 2020 07:29:39 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/netsnmp:
+>         unix domain socket transport
+> Message-ID: <20200506051932.6519D882AE@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=8f14e3c883aef1c81e45a020f36bb3c03f0c914b
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> The support for Unix domain socket transport was disabled as part of
+> the bump of netsnmp from 5.5 to 5.6 in commit
+> de642c9904b13914017af6f10db144d559d6bd0c, but with no apparent reason.
+>
+> This support is needed to allow Unix socket based AgentX subagents to
+> connect to netsnmp, so let's re-enable it.
+>
+> Signed-off-by: Ryan Steffens <ryan.steffens@rockwellcollins.com>
+> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 8aef2d3a5b1e56c82d4d61deded1a742899b1a1c)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/netsnmp/netsnmp.mk | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+> index ed573c51e3..904279d1fb 100644
+> --- a/package/netsnmp/netsnmp.mk
+> +++ b/package/netsnmp/netsnmp.mk
+> @@ -30,7 +30,6 @@ NETSNMP_CONF_OPTS = \
+>         --with-sys-location="Unknown" \
+>         --with-mib-modules="$(call
+> qstrip,$(BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES))" \
+>         --with-out-mib-modules="$(call
+> qstrip,$(BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES))" \
+> -       --with-out-transports="Unix" \
+>         --disable-manuals
+>  NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR)
+> LIB_LDCONFIG_CMD=true install
+>  NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true
+> install
+>
+>
+> ------------------------------
+>
+> Message: 54
+> Date: Wed, 6 May 2020 07:25:31 +0200
+> From: Peter Korsgaard <peter@korsgaard.com>
+> To: buildroot at buildroot.org
+> Subject: [Buildroot] [git commit branch/2020.02.x] package/polkit:
+>         properly autoreconf
+> Message-ID: <20200506051932.025F390EA9@busybox.osuosl.org>
+>
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=0919c67bb665c7f474a1848ec69a5972c8126d06
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> 0001-make-netgroup-support-optional.patch patches configure.ac, but we
+> don't autoreconf the package, which is not good.
+>
+> However, simply adding AUTORECONF = YES is not sufficient: polkit
+> Makefile.am use the automake conditional HAVE_INTROSPECTION, which is
+> "available" only when the gobject-introspection m4 file is installed.
+>
+> Since we don't want to make gobject-introspection a mandatory
+> dependency of polkit, we take a simpler route: add a copy of
+> introspection.m4 into the polkit source tree. This is only a 142 lines
+> file, and it can be dropped when
+> 0001-make-netgroup-support-optional.patch is merged upstream.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> (cherry picked from commit 8edcb8473001032e3ea6f162784b2f24db88decc)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  .../0001-make-netgroup-support-optional.patch      | 211
+> +++++++++++++++++++--
+>  package/polkit/polkit.mk                           |   2 +-
+>  2 files changed, 192 insertions(+), 21 deletions(-)
+>
+> diff --git a/package/polkit/0001-make-netgroup-support-optional.patch
+> b/package/polkit/0001-make-netgroup-support-optional.patch
+> index f96738c910..86916aba34 100644
+> --- a/package/polkit/0001-make-netgroup-support-optional.patch
+> +++ b/package/polkit/0001-make-netgroup-support-optional.patch
+> @@ -1,4 +1,4 @@
+> -From 21aa2747e8f0048759aab184b07dd6389666d5e6 Mon Sep 17 00:00:00 2001
+> +From 1b854ef4bb15032091a33fed587e5ba6f3e582eb Mon Sep 17 00:00:00 2001
+>  From: Khem Raj <raj.khem@gmail.com>
+>  Date: Wed, 22 May 2019 13:18:55 -0700
+>  Subject: [PATCH] make netgroup support optional
+> @@ -17,20 +17,174 @@ Fixes bug 50145.
+>  Signed-off-by: A. Wilcox <AWilcox@Wilcox-Tech.com>
+>  Signed-off-by: Khem Raj <raj.khem@gmail.com>
+>  Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> +[Thomas: add introspection.m4.]
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>  ---
+> - configure.ac                                     |  2 +-
+> - src/polkit/polkitidentity.c                      | 16 ++++++++++++++++
+> - src/polkit/polkitunixnetgroup.c                  |  3 +++
+> - .../polkitbackendinteractiveauthority.c          | 14 ++++++++------
+> - src/polkitbackend/polkitbackendjsauthority.cpp   |  2 ++
+> - test/polkit/polkitidentitytest.c                 |  9 ++++++++-
+> - test/polkit/polkitunixnetgrouptest.c             |  3 +++
+> - .../test-polkitbackendjsauthority.c              |  2 ++
+> - 8 files changed, 43 insertions(+), 8 deletions(-)
+> + buildutil/introspection.m4                    | 142 ++++++++++++++++++
+> + configure.ac                                  |   2 +-
+> + src/polkit/polkitidentity.c                   |  16 ++
+> + src/polkit/polkitunixnetgroup.c               |   3 +
+> + .../polkitbackendinteractiveauthority.c       |  14 +-
+> + .../polkitbackendjsauthority.cpp              |   2 +
+> + test/polkit/polkitidentitytest.c              |   9 +-
+> + test/polkit/polkitunixnetgrouptest.c          |   3 +
+> + .../test-polkitbackendjsauthority.c           |   2 +
+> + 9 files changed, 185 insertions(+), 8 deletions(-)
+> + create mode 100644 buildutil/introspection.m4
+>
+> +diff --git a/buildutil/introspection.m4 b/buildutil/introspection.m4
+> +new file mode 100644
+> +index 0000000..b0ccd68
+> +--- /dev/null
+> ++++ b/buildutil/introspection.m4
+> +@@ -0,0 +1,142 @@
+> ++dnl -*- mode: autoconf -*-
+> ++dnl Copyright 2009 Johan Dahlin
+> ++dnl
+> ++dnl This file is free software; the author(s) gives unlimited
+> ++dnl permission to copy and/or distribute it, with or without
+> ++dnl modifications, as long as this notice is preserved.
+> ++dnl
+> ++
+> ++# serial 1
+> ++
+> ++dnl This is a copy of AS_AC_EXPAND
+> ++dnl
+> ++dnl (C) 2003, 2004, 2005 Thomas Vander Stichele <thomas@apestaart dot
+> org>
+> ++dnl Copying and distribution of this file, with or without modification,
+> ++dnl are permitted in any medium without royalty provided the copyright
+> ++dnl notice and this notice are preserved.
+> ++m4_define([_GOBJECT_INTROSPECTION_AS_AC_EXPAND],
+> ++[
+> ++  EXP_VAR=[$1]
+> ++  FROM_VAR=[$2]
+> ++
+> ++  dnl first expand prefix and exec_prefix if necessary
+> ++  prefix_save=$prefix
+> ++  exec_prefix_save=$exec_prefix
+> ++
+> ++  dnl if no prefix given, then use /usr/local, the default prefix
+> ++  if test "x$prefix" = "xNONE"; then
+> ++    prefix="$ac_default_prefix"
+> ++  fi
+> ++  dnl if no exec_prefix given, then use prefix
+> ++  if test "x$exec_prefix" = "xNONE"; then
+> ++    exec_prefix=$prefix
+> ++  fi
+> ++
+> ++  full_var="$FROM_VAR"
+> ++  dnl loop until it doesn't change anymore
+> ++  while true; do
+> ++    new_full_var="`eval echo $full_var`"
+> ++    if test "x$new_full_var" = "x$full_var"; then break; fi
+> ++    full_var=$new_full_var
+> ++  done
+> ++
+> ++  dnl clean up
+> ++  full_var=$new_full_var
+> ++  AC_SUBST([$1], "$full_var")
+> ++
+> ++  dnl restore prefix and exec_prefix
+> ++  prefix=$prefix_save
+> ++  exec_prefix=$exec_prefix_save
+> ++])
+> ++
+> ++m4_define([_GOBJECT_INTROSPECTION_CHECK_INTERNAL],
+> ++[
+> ++    AC_BEFORE([AC_PROG_LIBTOOL],[$0])dnl setup libtool first
+> ++    AC_BEFORE([AM_PROG_LIBTOOL],[$0])dnl setup libtool first
+> ++    AC_BEFORE([LT_INIT],[$0])dnl setup libtool first
+> ++
+> ++    dnl enable/disable introspection
+> ++    m4_if([$2], [require],
+> ++    [dnl
+> ++        enable_introspection=yes
+> ++    ],[dnl
+> ++        AC_ARG_ENABLE(introspection,
+> ++
+> AS_HELP_STRING([--enable-introspection[=@<:@no/auto/yes@:>@]],
+> ++                                 [Enable introspection for this
+> build]),,
+> ++                                 [enable_introspection=auto])
+> ++    ])dnl
+> ++
+> ++    AC_MSG_CHECKING([for gobject-introspection])
+> ++
+> ++    dnl presence/version checking
+> ++    AS_CASE([$enable_introspection],
+> ++    [no], [dnl
+> ++        found_introspection="no (disabled, use --enable-introspection to
+> enable)"
+> ++    ],dnl
+> ++    [yes],[dnl
+> ++        PKG_CHECK_EXISTS([gobject-introspection-1.0],,
+> ++                         AC_MSG_ERROR([gobject-introspection-1.0 is not
+> installed]))
+> ++        PKG_CHECK_EXISTS([gobject-introspection-1.0 >= $1],
+> ++                         found_introspection=yes,
+> ++                         AC_MSG_ERROR([You need to have
+> gobject-introspection >= $1 installed to build AC_PACKAGE_NAME]))
+> ++    ],dnl
+> ++    [auto],[dnl
+> ++        PKG_CHECK_EXISTS([gobject-introspection-1.0 >= $1],
+> found_introspection=yes, found_introspection=no)
+> ++      dnl Canonicalize enable_introspection
+> ++      enable_introspection=$found_introspection
+> ++    ],dnl
+> ++    [dnl
+> ++        AC_MSG_ERROR([invalid argument passed to --enable-introspection,
+> should be one of @<:@no/auto/yes@:>@])
+> ++    ])dnl
+> ++
+> ++    AC_MSG_RESULT([$found_introspection])
+> ++
+> ++    dnl expand datadir/libdir so we can pass them to pkg-config
+> ++    dnl and get paths relative to our target directories
+> ++    _GOBJECT_INTROSPECTION_AS_AC_EXPAND(_GI_EXP_DATADIR, "$datadir")
+> ++    _GOBJECT_INTROSPECTION_AS_AC_EXPAND(_GI_EXP_LIBDIR, "$libdir")
+> ++
+> ++    INTROSPECTION_SCANNER=
+> ++    INTROSPECTION_COMPILER=
+> ++    INTROSPECTION_GENERATE=
+> ++    INTROSPECTION_GIRDIR=
+> ++    INTROSPECTION_TYPELIBDIR=
+> ++    if test "x$found_introspection" = "xyes"; then
+> ++       INTROSPECTION_SCANNER=$PKG_CONFIG_SYSROOT_DIR`$PKG_CONFIG
+> --variable=g_ir_scanner gobject-introspection-1.0`
+> ++       INTROSPECTION_COMPILER=$PKG_CONFIG_SYSROOT_DIR`$PKG_CONFIG
+> --variable=g_ir_compiler gobject-introspection-1.0`
+> ++       INTROSPECTION_GENERATE=$PKG_CONFIG_SYSROOT_DIR`$PKG_CONFIG
+> --variable=g_ir_generate gobject-introspection-1.0`
+> ++       INTROSPECTION_GIRDIR=`$PKG_CONFIG
+> --define-variable=datadir="${_GI_EXP_DATADIR}" --variable=girdir
+> gobject-introspection-1.0`
+> ++       INTROSPECTION_TYPELIBDIR="$($PKG_CONFIG
+> --define-variable=libdir="${_GI_EXP_LIBDIR}" --variable=typelibdir
+> gobject-introspection-1.0)"
+> ++       INTROSPECTION_CFLAGS=`$PKG_CONFIG --cflags
+> gobject-introspection-1.0`
+> ++       INTROSPECTION_LIBS=`$PKG_CONFIG --libs gobject-introspection-1.0`
+> ++       INTROSPECTION_MAKEFILE=$PKG_CONFIG_SYSROOT_DIR`$PKG_CONFIG
+> --variable=datadir
+> gobject-introspection-1.0`/gobject-introspection-1.0/Makefile.introspection
+> ++    fi
+> ++    AC_SUBST(INTROSPECTION_SCANNER)
+> ++    AC_SUBST(INTROSPECTION_COMPILER)
+> ++    AC_SUBST(INTROSPECTION_GENERATE)
+> ++    AC_SUBST(INTROSPECTION_GIRDIR)
+> ++    AC_SUBST(INTROSPECTION_TYPELIBDIR)
+> ++    AC_SUBST(INTROSPECTION_CFLAGS)
+> ++    AC_SUBST(INTROSPECTION_LIBS)
+> ++    AC_SUBST(INTROSPECTION_MAKEFILE)
+> ++
+> ++    AM_CONDITIONAL(HAVE_INTROSPECTION, test "x$found_introspection" =
+> "xyes")
+> ++])
+> ++
+> ++
+> ++dnl Usage:
+> ++dnl   GOBJECT_INTROSPECTION_CHECK([minimum-g-i-version])
+> ++
+> ++AC_DEFUN([GOBJECT_INTROSPECTION_CHECK],
+> ++[
+> ++  _GOBJECT_INTROSPECTION_CHECK_INTERNAL([$1])
+> ++])
+> ++
+> ++dnl Usage:
+> ++dnl   GOBJECT_INTROSPECTION_REQUIRE([minimum-g-i-version])
+> ++
+> ++
+> ++AC_DEFUN([GOBJECT_INTROSPECTION_REQUIRE],
+> ++[
+> ++  _GOBJECT_INTROSPECTION_CHECK_INTERNAL([$1], [require])
+> ++])
+> +diff --git a/configure.ac b/configure.ac
+> +index 5cedb4e..87aa0ad 100644
+>  --- a/configure.ac
+>  +++ b/configure.ac
+> -@@ -99,7 +99,7 @@ AC_CHECK_LIB(expat,XML_ParserCreate,[EXP
+> +@@ -99,7 +99,7 @@
+> AC_CHECK_LIB(expat,XML_ParserCreate,[EXPAT_LIBS="-lexpat"],
+>              [AC_MSG_ERROR([Can't find expat library. Please install
+> expat.])])
+>   AC_SUBST(EXPAT_LIBS)
+>
+> @@ -39,9 +193,11 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>
+>   if test "x$GCC" = "xyes"; then
+>     LDFLAGS="-Wl,--as-needed $LDFLAGS"
+> +diff --git a/src/polkit/polkitidentity.c b/src/polkit/polkitidentity.c
+> +index 3aa1f7f..10e9c17 100644
+>  --- a/src/polkit/polkitidentity.c
+>  +++ b/src/polkit/polkitidentity.c
+> -@@ -182,7 +182,15 @@ polkit_identity_from_string  (const gcha
+> +@@ -182,7 +182,15 @@ polkit_identity_from_string  (const gchar   *str,
+>       }
+>     else if (g_str_has_prefix (str, "unix-netgroup:"))
+>       {
+> @@ -57,7 +213,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>       }
+>
+>     if (identity == NULL && (error != NULL && *error == NULL))
+> -@@ -344,6 +352,13 @@ polkit_identity_new_for_gvariant (GVaria
+> +@@ -344,6 +352,13 @@ polkit_identity_new_for_gvariant (GVariant  *variant,
+>         GVariant *v;
+>         const char *name;
+>
+> @@ -71,7 +227,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>         v = lookup_asv (details_gvariant, "name", G_VARIANT_TYPE_STRING,
+> error);
+>         if (v == NULL)
+>           {
+> -@@ -353,6 +368,7 @@ polkit_identity_new_for_gvariant (GVaria
+> +@@ -353,6 +368,7 @@ polkit_identity_new_for_gvariant (GVariant  *variant,
+>         name = g_variant_get_string (v, NULL);
+>         ret = polkit_unix_netgroup_new (name);
+>         g_variant_unref (v);
+> @@ -79,9 +235,11 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>       }
+>     else
+>       {
+> +diff --git a/src/polkit/polkitunixnetgroup.c
+> b/src/polkit/polkitunixnetgroup.c
+> +index 8a2b369..83f8d4a 100644
+>  --- a/src/polkit/polkitunixnetgroup.c
+>  +++ b/src/polkit/polkitunixnetgroup.c
+> -@@ -194,6 +194,9 @@ polkit_unix_netgroup_set_name (PolkitUni
+> +@@ -194,6 +194,9 @@ polkit_unix_netgroup_set_name (PolkitUnixNetgroup
+> *group,
+>   PolkitIdentity *
+>   polkit_unix_netgroup_new (const gchar *name)
+>   {
+> @@ -91,9 +249,11 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>     g_return_val_if_fail (name != NULL, NULL);
+>     return POLKIT_IDENTITY (g_object_new (POLKIT_TYPE_UNIX_NETGROUP,
+>                                          "name", name,
+> +diff --git a/src/polkitbackend/polkitbackendinteractiveauthority.c
+> b/src/polkitbackend/polkitbackendinteractiveauthority.c
+> +index 056d9a8..36c2f3d 100644
+>  --- a/src/polkitbackend/polkitbackendinteractiveauthority.c
+>  +++ b/src/polkitbackend/polkitbackendinteractiveauthority.c
+> -@@ -2233,25 +2233,26 @@ get_users_in_net_group (PolkitIdentity
+> +@@ -2233,25 +2233,26 @@ get_users_in_net_group (PolkitIdentity
+>         *group,
+>     GList *ret;
+>
+>     ret = NULL;
+> @@ -126,7 +286,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>         PolkitIdentity *user;
+>         GError *error = NULL;
+>
+> -@@ -2282,6 +2283,7 @@ get_users_in_net_group (PolkitIdentity
+> +@@ -2282,6 +2283,7 @@ get_users_in_net_group (PolkitIdentity
+>       *group,
+>
+>    out:
+>     endnetgrent ();
+> @@ -134,9 +294,11 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>     return ret;
+>   }
+>
+> +diff --git a/src/polkitbackend/polkitbackendjsauthority.cpp
+> b/src/polkitbackend/polkitbackendjsauthority.cpp
+> +index 9b752d1..09b2878 100644
+>  --- a/src/polkitbackend/polkitbackendjsauthority.cpp
+>  +++ b/src/polkitbackend/polkitbackendjsauthority.cpp
+> -@@ -1502,6 +1502,7 @@ js_polkit_user_is_in_netgroup (JSContext
+> +@@ -1502,6 +1502,7 @@ js_polkit_user_is_in_netgroup (JSContext  *cx,
+>
+>     JS::CallArgs args = JS::CallArgsFromVp (argc, vp);
+>
+> @@ -144,7 +306,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>     JS::RootedString usrstr (authority->priv->cx);
+>     usrstr = args[0].toString();
+>     user = JS_EncodeStringToUTF8 (cx, usrstr);
+> -@@ -1519,6 +1520,7 @@ js_polkit_user_is_in_netgroup (JSContext
+> +@@ -1519,6 +1520,7 @@ js_polkit_user_is_in_netgroup (JSContext  *cx,
+>
+>     JS_free (cx, netgroup);
+>     JS_free (cx, user);
+> @@ -152,6 +314,8 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>
+>     ret = true;
+>
+> +diff --git a/test/polkit/polkitidentitytest.c
+> b/test/polkit/polkitidentitytest.c
+> +index e91967b..e829aaa 100644
+>  --- a/test/polkit/polkitidentitytest.c
+>  +++ b/test/polkit/polkitidentitytest.c
+>  @@ -19,6 +19,7 @@
+> @@ -162,7 +326,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>   #include "glib.h"
+>   #include <polkit/polkit.h>
+>   #include <polkit/polkitprivate.h>
+> -@@ -145,11 +146,15 @@ struct ComparisonTestData comparison_tes
+> +@@ -145,11 +146,15 @@ struct ComparisonTestData comparison_test_data [] =
+> {
+>     {"unix-group:root", "unix-group:jane", FALSE},
+>     {"unix-group:jane", "unix-group:jane", TRUE},
+>
+> @@ -193,6 +357,8 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>
+>     add_comparison_tests ();
+>
+> +diff --git a/test/polkit/polkitunixnetgrouptest.c
+> b/test/polkit/polkitunixnetgrouptest.c
+> +index 3701ba1..e3352eb 100644
+>  --- a/test/polkit/polkitunixnetgrouptest.c
+>  +++ b/test/polkit/polkitunixnetgrouptest.c
+>  @@ -19,6 +19,7 @@
+> @@ -213,6 +379,8 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>  +#endif
+>     return g_test_run ();
+>   }
+> +diff --git a/test/polkitbackend/test-polkitbackendjsauthority.c
+> b/test/polkitbackend/test-polkitbackendjsauthority.c
+> +index 71aad23..fdd28f3 100644
+>  --- a/test/polkitbackend/test-polkitbackendjsauthority.c
+>  +++ b/test/polkitbackend/test-polkitbackendjsauthority.c
+>  @@ -137,12 +137,14 @@ test_get_admin_identities (void)
+> @@ -230,3 +398,6 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>     };
+>     guint n;
+>
+> +--
+> +2.25.1
+> +
+> diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
+> index 4e7cda943c..8572d8b9ba 100644
+> --- a/package/polkit/polkit.mk
+> +++ b/package/polkit/polkit.mk
+> @@ -8,7 +8,7 @@ POLKIT_VERSION = 0.116
+>  POLKIT_SITE = http://www.freedesktop.org/software/polkit/releases
+>  POLKIT_LICENSE = GPL-2.0
+>  POLKIT_LICENSE_FILES = COPYING
+> -
+> +POLKIT_AUTORECONF = YES
+>  POLKIT_INSTALL_STAGING = YES
+>
+>  POLKIT_DEPENDENCIES = \
+>
+>
+> ------------------------------
+>
+> Subject: Digest Footer
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+> ------------------------------
+>
+> End of buildroot Digest, Vol 167, Issue 12
+> ******************************************
+>
+
+
+-- 
+*Thanks with Regards!*
+
+*Kunal Chauhan*
+*Mob:09813614826*
+*Mob:08860397903*
+
+*E-mail:atkunalchauhan at gmail.com <E-mail%3Aatkunalchauhan@gmail.com>*
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200501/e3da7d29/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200506/d4262865/attachment-0001.html>
