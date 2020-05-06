@@ -1,61 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 07:50:31 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/lvm2: install
- systemd units and generators
-Message-ID: <20200506055036.A209790EB0@busybox.osuosl.org>
+Date: Wed, 6 May 2020 08:00:40 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] packages/exim: enable
+ parallel make
+Message-ID: <20200506055036.D5D1F90EAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f65af19271c1520ad913b3bf94dbf172d74bdb5f
+commit: https://git.buildroot.net/buildroot/commit/?id=e38e29575afa4f3851044ea03b128bb38041da95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cb0ce03ba636c610f52c6446fc3ad176fbc6c03c)
+Parallel make used to be broken in exim, as reported in its docs. Now that
+line has disappeared from the docs, and parallel make is actually working.
+
+Tested with 'make exim-dirclean ; time make BR2_JLEVEL=999 exim': builds
+still succeed and the build time decreases from 34 to 11 seconds on my
+host.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 153b78ee2640938db328edb64e6c40e064154957)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/lvm2.mk | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ package/exim/exim.mk | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 43370b03bf..02c758ea08 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -31,6 +31,9 @@ LVM2_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
- # package/readline is GPL-3.0+, so not license compatible
- LVM2_CONF_OPTS += --disable-readline
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 8d5b6e415b..dc445c6d93 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -120,16 +120,14 @@ endif
  
-+LVM2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR)
-+LVM2_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR)
-+
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- LVM2_CONF_OPTS += --enable-udev_rules
- endif
-@@ -44,8 +47,11 @@ endif
+ # We need the host version of macro_predef during the build, before
+ # building it we need to prepare the makefile.
+-# "The -j (parallel) flag must not be used with make"
+-# (http://www.exim.org/exim-html-current/doc/html/spec_html/ch04.html)
+ define EXIM_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) makefile
+-	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)/build-br macro_predef \
++	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) makefile
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/build-br macro_predef \
+ 		CC=$(HOSTCC) \
+ 		LNCC=$(HOSTCC) \
+ 		CFLAGS="-std=c99 $(HOST_CFLAGS)" \
+ 		LFLAGS="-fPIC $(HOST_LDFLAGS)"
+-	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS) \
++	$(TARGET_MAKE_ENV) build=br $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
+ 		CFLAGS="-std=c99 $(TARGET_CFLAGS)"
+ endef
  
- ifeq ($(BR2_PACKAGE_LVM2_STANDARD_INSTALL),)
- LVM2_MAKE_OPTS = device-mapper
--LVM2_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install_device-mapper
--LVM2_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install_device-mapper
-+LVM2_INSTALL_STAGING_OPTS += install_device-mapper
-+LVM2_INSTALL_TARGET_OPTS += install_device-mapper
-+else
-+LVM2_INSTALL_STAGING_OPTS += install
-+LVM2_INSTALL_TARGET_OPTS += install
- endif
- 
- ifeq ($(BR2_PACKAGE_LVM2_APP_LIBRARY),y)
-@@ -54,6 +60,10 @@ else
- LVM2_CONF_OPTS += --disable-applib
- endif
- 
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+LVM2_INSTALL_TARGET_OPTS += install_systemd_units install_systemd_generators
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
- endif
+@@ -137,7 +135,7 @@ endef
+ # something when installing...
+ define EXIM_INSTALL_TARGET_CMDS
+ 	DESTDIR=$(TARGET_DIR) INSTALL_ARG="-no_chown -no_symlink" build=br \
+-	  $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS) \
++	  $(MAKE) -C $(@D) $(EXIM_STATIC_FLAGS) \
+ 		CFLAGS="-std=c99 $(TARGET_CFLAGS)" \
+ 		install
+ 	chmod u+s $(TARGET_DIR)/usr/sbin/exim
