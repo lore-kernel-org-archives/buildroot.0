@@ -1,50 +1,70 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Wed, 6 May 2020 05:56:43 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-05-03
-In-Reply-To: <5eafb5ae.1c69fb81.42e5e.0beeSMTPIN_ADDED_MISSING@mx.google.com>
-References: <5eafb5ae.1c69fb81.42e5e.0beeSMTPIN_ADDED_MISSING@mx.google.com>
-Message-ID: <CANu7NGt1otOuWrPo_g5UqZkV7r2GFvEMLg5Ffddv53B2w--CBQ@mail.gmail.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Wed,  6 May 2020 15:38:44 +0530
+Subject: [Buildroot] [PATCH 1/2] uboot: add support for bundling OpenSBI
+ FW_DYNAMIC into U-Boot
+Message-ID: <20200506100845.4356-1-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Some RISC-V platforms (such as SiFive FU540) have a boot process
+where U-Boot encapsulates the FW_DYNAMIC part of the ARM trusted
+firmware. For such platforms, we need to build OpenSBI before U-Boot,
+and pass a OPENSBI variable pointing to OpenSBI bl31.bin to the
+U-Boot build process.
 
-Em seg., 4 de mai. de 2020 ?s 03:26, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> escreveu:
->
-> Hello,
->
-> Outdated packages
-> =================
->
-> This is the list of packages for which a new version has been detected
-> and for which you are a registered developer. Please help us improving
-> the quality of Buildroot by bumping these packages to their latest
-> version. Thanks!
->
->              name              | found by |        link to
-release-monitoring.org        |   version    |   upstream
->
--------------------------------+----------+----------------------------------------------+--------------+--------------
->                            daq |  DISTRO  |
-https://release-monitoring.org/project/13264 | 2.0.6        | 2.0.7
->                     libgdiplus |  DISTRO  |
-https://release-monitoring.org/project/06440 | 5.6          | 6.0.5
+This commit introduces a BR2_TARGET_UBOOT_NEEDS_OPENSBI_FW_DYNAMIC
+variable to achieve this.
 
-I sent a patch to bump libgdiplus but it is not showing up in the
-patchwork. Last week I sent an email to the list notifying this issue and
-then I received an automatic answer saying that "my message awaits
-moderator approval" because "Message body is too big: 387213 bytes with a
-limit of 300 KB". Maybe that's the reason the patch is not showing up in
-the patchwork?
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+---
+ boot/uboot/Config.in | 15 +++++++++++++++
+ boot/uboot/uboot.mk  |  5 +++++
+ 2 files changed, 20 insertions(+)
 
-Thanks,
-
-Sergio Prado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200506/9f6b0fd7/attachment.html>
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index ffc441d670..670df42c4e 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -202,6 +202,21 @@ config BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF
+ 
+ endchoice
+ 
++config BR2_TARGET_UBOOT_NEEDS_OPENSBI_FW_DYNAMIC
++	bool "U-Boot needs OpenSBI fw_dynamic"
++	depends on BR2_TARGET_OPENSBI
++	help
++	  A fw_dynamic firmware is particularly useful when the
++	  booting stage executed prior to OpenSBI firmware is
++	  capable of loading both the OpenSBI firmware and the
++	  booting stage binary to follow OpenSBI firmware.
++
++	  Some RISC-V platforms (such as SiFive FU540) encapsulate
++	  the fw_dynamic part of OpenSBI inside U-Boot. This option
++	  makes sure OpenSBI gets built prior to U-Boot, and that
++	  the OPENSBI variable pointing to OpenSBI's fw_dynamic
++	  binary, is passed during the Buildroot build.
++
+ menu "U-Boot binary format"
+ 
+ config BR2_TARGET_UBOOT_FORMAT_AIS
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 2bfa50779b..f339186b65 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -155,6 +155,11 @@ UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.bin
+ endif
+ endif
+ 
++ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSBI_FW_DYNAMIC),y)
++UBOOT_DEPENDENCIES += opensbi
++UBOOT_MAKE_OPTS += OPENSBI=$(BINARIES_DIR)/fw_dynamic.bin
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
+ UBOOT_DEPENDENCIES += host-dtc
+ endif
+-- 
+2.17.1
