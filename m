@@ -1,30 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 May 2020 07:28:45 +0200
-Subject: [Buildroot] [PATCH 2/2] package/php: fix gd dependencies
-In-Reply-To: <20200418090343.140078-2-aussedat.louis@gmail.com> (Louis
- Aussedat's message of "Sat, 18 Apr 2020 11:03:43 +0200")
-References: <20200418090343.140078-1-aussedat.louis@gmail.com>
- <20200418090343.140078-2-aussedat.louis@gmail.com>
-Message-ID: <87bln1einm.fsf@dell.be.48ers.dk>
+Date: Wed, 06 May 2020 07:30:04 +0200
+Subject: [Buildroot] [PATCH v2] package/netsnmp: unix domain socket
+ transport
+In-Reply-To: <20200418182228.083489da@windsurf.home> (Thomas Petazzoni's
+ message of "Sat, 18 Apr 2020 18:22:28 +0200")
+References: <20200414175500.28891-1-matthew.weber@rockwellcollins.com>
+ <20200418182228.083489da@windsurf.home>
+Message-ID: <877dxpeilf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Louis" == Louis Aussedat <aussedat.louis@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Due to migration to pkg-config in php 7.4, the detection of
- > library dependencies has been changed.
+ > On Tue, 14 Apr 2020 12:55:00 -0500
+ > Matt Weber <matthew.weber@rockwellcollins.com> wrote:
 
- > source from php.net:
- > --with-gd becomes --enable-gd
- > --with-png-dir has been removed. libpng is required.
- > --with-zlib-dir has been removed. zlib is required.
- > --with-freetype-dir becomes --with-freetype
- > --with-jpeg-dir becomes --with-jpeg
+ >> From: Ryan Steffens <ryan.steffens@rockwellcollins.com>
+ >> 
+ >> Adds support for connecting unix socket based AgentX subagents
+ >> 
+ >> Signed-off-by: Ryan Steffens <ryan.steffens@rockwellcollins.com>
+ >> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+ >> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
- > Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
+ > I have further extended the commit log, and applied. Especially, it is
+ > always useful to go back in the history of the package and try to
+ > figure out the reason why something was done in a given way, and now
+ > needs to be done differently.
 
 Committed to 2020.02.x, thanks.
 
