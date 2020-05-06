@@ -1,68 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 06:57:38 +0200
+Date: Wed, 6 May 2020 06:58:26 +0200
 Subject: [Buildroot] [git commit branch/2020.02.x] package/azure-iot-sdk-c:
- format the libraries list with one lib per line
-Message-ID: <20200506051930.9E9318D7AA@busybox.osuosl.org>
+ also install libparson
+Message-ID: <20200506051930.E9A738D7AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a768ad62edf8d49bb523c5e4d7e6e5531246527
+commit: https://git.buildroot.net/buildroot/commit/?id=bd389b52fb9ed025192d49bfd5c3c84e97cd318e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-This makes it easier to review patches modifying these lists of
-libraries, such as:
+The package builds libparson, but does not install it, let's fix this.
 
-  http://patchwork.ozlabs.org/project/buildroot/patch/20190923115206.4468-1-stephan.hoffmann at ext.grandcentrix.net/
-
+Signed-off-by: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c71030f0fab49be4061fb999a8eabe4190f1f18d)
+(cherry picked from commit 94120fd7c71881e7b3963d5db27802241d9eeed2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+ package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index 8b3f670399..b194bf9a4c 100644
+index 35ddb672fb..f63297844d 100644
 --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
 +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -17,21 +17,31 @@ AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
- # The project only supports building one kind of library.
- # Further the install target installs the wrong files, so we do it here:
- ifeq ($(BR2_STATIC_LIBS),y)
--AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.a c-utility/libaziotsharedutil.a \
--	iothub_client/libiothub_client.a iothub_client/libiothub_client_mqtt_ws_transport.a \
-+AZURE_IOT_SDK_C_LIBS += \
-+	uamqp/libuamqp.a \
-+	c-utility/libaziotsharedutil.a \
-+	iothub_client/libiothub_client.a \
-+	iothub_client/libiothub_client_mqtt_ws_transport.a \
- 	iothub_client/libiothub_client_amqp_ws_transport.a \
- 	iothub_client/libiothub_client_http_transport.a \
- 	iothub_client/libiothub_client_amqp_transport.a \
+@@ -28,7 +28,8 @@ AZURE_IOT_SDK_C_LIBS += \
  	iothub_client/libiothub_client_mqtt_transport.a \
--	iothub_service_client/libiothub_service_client.a serializer/libserializer.a umqtt/libumqtt.a
-+	iothub_service_client/libiothub_service_client.a \
-+	serializer/libserializer.a \
-+	umqtt/libumqtt.a
+ 	iothub_service_client/libiothub_service_client.a \
+ 	serializer/libserializer.a \
+-	umqtt/libumqtt.a
++	umqtt/libumqtt.a \
++	libparson.a
  else
--AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.so c-utility/libaziotsharedutil.so \
--	iothub_client/libiothub_client.so iothub_client/libiothub_client_mqtt_ws_transport.so \
-+AZURE_IOT_SDK_C_LIBS += \
-+	uamqp/libuamqp.so \
-+	c-utility/libaziotsharedutil.so \
-+	iothub_client/libiothub_client.so \
-+	iothub_client/libiothub_client_mqtt_ws_transport.so \
- 	iothub_client/libiothub_client_amqp_ws_transport.so \
- 	iothub_client/libiothub_client_http_transport.so \
- 	iothub_client/libiothub_client_amqp_transport.so \
+ AZURE_IOT_SDK_C_LIBS += \
+ 	uamqp/libuamqp.so \
+@@ -41,7 +42,8 @@ AZURE_IOT_SDK_C_LIBS += \
  	iothub_client/libiothub_client_mqtt_transport.so \
--	iothub_service_client/libiothub_service_client.so serializer/libserializer.so umqtt/libumqtt.so
-+	iothub_service_client/libiothub_service_client.so \
-+	serializer/libserializer.so \
-+	umqtt/libumqtt.so
- endif
+ 	iothub_service_client/libiothub_service_client.so \
+ 	serializer/libserializer.so \
+-	umqtt/libumqtt.so.1.1.11
++	umqtt/libumqtt.so.1.1.11 \
++	libparson.so
  
- define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
+ define AZURE_IOT_SDK_C_CREATE_SYMLINKS
+ 	ln -sf libumqtt.so.1.1.11 $(1)/usr/lib/libumqtt.so.1
