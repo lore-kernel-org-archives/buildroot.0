@@ -1,59 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 06:58:04 +0200
+Date: Wed, 6 May 2020 06:57:38 +0200
 Subject: [Buildroot] [git commit branch/2020.02.x] package/azure-iot-sdk-c:
- fix installation of libumqtt
-Message-ID: <20200506051930.D6FA88D7AA@busybox.osuosl.org>
+ format the libraries list with one lib per line
+Message-ID: <20200506051930.9E9318D7AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4150265b1b6152b6f65960bf3c93deb1d0217d5
+commit: https://git.buildroot.net/buildroot/commit/?id=8a768ad62edf8d49bb523c5e4d7e6e5531246527
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Unlike the other libraries built by azure-iot-sdk-c, libumqtt follows
-a regular versioning scheme. It has a libumqtt.so.1 SONAME, with
-libumqtt.so.1 being a symlink to libumqtt.so.1.1.11.
+This makes it easier to review patches modifying these lists of
+libraries, such as:
 
-However, we currently install the library itself as libumqtt.so to the
-target filesystem, which is not its SONAME, which means it cannot be
-found by any other library/program linked against it.
+  http://patchwork.ozlabs.org/project/buildroot/patch/20190923115206.4468-1-stephan.hoffmann at ext.grandcentrix.net/
 
-This commit fixes that by installing the library as
-libumqtt.so.1.1.11, and creating the appropriate symlinks. The static
-library installation is not modified.
-
-Signed-off-by: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 570dd0c31b2149cd913866eb6777caa4a1b05a56)
+(cherry picked from commit c71030f0fab49be4061fb999a8eabe4190f1f18d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
 diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index 6781da4177..35ddb672fb 100644
+index 8b3f670399..b194bf9a4c 100644
 --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
 +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -41,13 +41,19 @@ AZURE_IOT_SDK_C_LIBS += \
+@@ -17,21 +17,31 @@ AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
+ # The project only supports building one kind of library.
+ # Further the install target installs the wrong files, so we do it here:
+ ifeq ($(BR2_STATIC_LIBS),y)
+-AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.a c-utility/libaziotsharedutil.a \
+-	iothub_client/libiothub_client.a iothub_client/libiothub_client_mqtt_ws_transport.a \
++AZURE_IOT_SDK_C_LIBS += \
++	uamqp/libuamqp.a \
++	c-utility/libaziotsharedutil.a \
++	iothub_client/libiothub_client.a \
++	iothub_client/libiothub_client_mqtt_ws_transport.a \
+ 	iothub_client/libiothub_client_amqp_ws_transport.a \
+ 	iothub_client/libiothub_client_http_transport.a \
+ 	iothub_client/libiothub_client_amqp_transport.a \
+ 	iothub_client/libiothub_client_mqtt_transport.a \
+-	iothub_service_client/libiothub_service_client.a serializer/libserializer.a umqtt/libumqtt.a
++	iothub_service_client/libiothub_service_client.a \
++	serializer/libserializer.a \
++	umqtt/libumqtt.a
+ else
+-AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.so c-utility/libaziotsharedutil.so \
+-	iothub_client/libiothub_client.so iothub_client/libiothub_client_mqtt_ws_transport.so \
++AZURE_IOT_SDK_C_LIBS += \
++	uamqp/libuamqp.so \
++	c-utility/libaziotsharedutil.so \
++	iothub_client/libiothub_client.so \
++	iothub_client/libiothub_client_mqtt_ws_transport.so \
+ 	iothub_client/libiothub_client_amqp_ws_transport.so \
+ 	iothub_client/libiothub_client_http_transport.so \
+ 	iothub_client/libiothub_client_amqp_transport.so \
  	iothub_client/libiothub_client_mqtt_transport.so \
- 	iothub_service_client/libiothub_service_client.so \
- 	serializer/libserializer.so \
--	umqtt/libumqtt.so
-+	umqtt/libumqtt.so.1.1.11
-+
-+define AZURE_IOT_SDK_C_CREATE_SYMLINKS
-+	ln -sf libumqtt.so.1.1.11 $(1)/usr/lib/libumqtt.so.1
-+	ln -sf libumqtt.so.1.1.11 $(1)/usr/lib/libumqtt.so
-+endef
+-	iothub_service_client/libiothub_service_client.so serializer/libserializer.so umqtt/libumqtt.so
++	iothub_service_client/libiothub_service_client.so \
++	serializer/libserializer.so \
++	umqtt/libumqtt.so
  endif
- 
- define AZURE_IOT_SDK_C_INSTALL_LIBS
- 	$(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
- 		$(INSTALL) -D -m 0755 $(@D)/$(l) $(1)/usr/lib/$(notdir $(l))
- 	)
-+	$(call AZURE_IOT_SDK_C_CREATE_SYMLINKS,$(1))
- endef
  
  define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
