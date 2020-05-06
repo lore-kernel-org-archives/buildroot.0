@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 May 2020 07:51:00 +0200
-Subject: [Buildroot] [PATCH 1/2] package/lvm2: install systemd units and
- generators
-In-Reply-To: <20200419224121.0056cf4a@windsurf.home> (Thomas Petazzoni's
- message of "Sun, 19 Apr 2020 22:41:21 +0200")
-References: <20200302074915.4620-1-p.debruijn@unilogic.nl>
- <20200419224121.0056cf4a@windsurf.home>
-Message-ID: <87a72ld323.fsf@dell.be.48ers.dk>
+Date: Wed, 06 May 2020 07:52:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: fix build on m68k
+In-Reply-To: <20200419225038.1be1de14@windsurf.home> (Thomas Petazzoni's
+ message of "Sun, 19 Apr 2020 22:50:38 +0200")
+References: <20191101111005.21389-1-fontaine.fabrice@gmail.com>
+ <20200419225038.1be1de14@windsurf.home>
+Message-ID: <875zd9d300.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,13 +14,20 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > On Mon,  2 Mar 2020 08:49:15 +0100
- > Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
+ > On Fri,  1 Nov 2019 12:10:05 +0100
+ > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
- >> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+ >> When threads are enabled, haproxy expects that pthread_getcpuclockid is
+ >> available which is not the case on m68k. Fix this by enabling threads
+ >> support only if NPTL is available.
+ >> 
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/52cc4b1fcac2a4fc84ab15ec4c692d2cd9b6d8bd
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  >> ---
- >> package/lvm2/lvm2.mk | 14 ++++++++++++--
- >> 1 file changed, 12 insertions(+), 2 deletions(-)
+ >> package/haproxy/haproxy.mk | 2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
 
 Committed to 2020.02.x, thanks.
 
