@@ -1,68 +1,120 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 May 2020 07:26:58 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/polkit: add
- upstream fix for SIGTTOU
-Message-ID: <20200506051932.33D04882AE@busybox.osuosl.org>
+Date: Wed, 6 May 2020 07:20:29 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/php: security
+ bump version to 7.4.5
+Message-ID: <20200506051931.C57F08B7AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bad149c07ca996f5dca8dfca20cd2feaa91cfa8e
+commit: https://git.buildroot.net/buildroot/commit/?id=5d5694d36d0bb36d79cc1ae37cedbef8a2a092f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-If tty_handler() resets terminal while pkttyagent is run in background job,
-the process gets stopped by SIGTTOU. This impacts systemctl, hence it must
-be blocked for a while and then the process gets killed anyway.
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.5
 
-Upstream commit: 28e3a6653d8c3777b07e0128a0d97d46e586e311
+Fixes CVE-2020-7067.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Removed patch applied upstream.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0d749be3e1c144ed711908da49dac9f274bfc996)
+(cherry picked from commit db52b57c3dc625fc06d4408242252129ca47b026)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...03-polkit-0.116-pkttyagent-sigttou-bg-job.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ ...0005-Check-for-sys-auxv.h-before-using-it.patch | 60 ----------------------
+ package/php/php.hash                               |  2 +-
+ package/php/php.mk                                 |  2 +-
+ 3 files changed, 2 insertions(+), 62 deletions(-)
 
-diff --git a/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch b/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
-new file mode 100644
-index 0000000000..fb41df3af2
---- /dev/null
-+++ b/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
-@@ -0,0 +1,34 @@
-+From 76aae4fce586b400f5fe08df31497db19d624609 Mon Sep 17 00:00:00 2001
-+From: Jan Rybar <jrybar@redhat.com>
-+Date: Thu, 1 Aug 2019 06:46:10 +0000
-+Subject: [PATCH] pkttyagent: process stopped by SIGTTOU if run in background
-+ job
-+
-+
-+(cherry picked from commit 76aae4fce586b400f5fe08df31497db19d624609)
-+Signed-off-by: Jan Rybar <jrybar@redhat.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ src/programs/pkttyagent.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/src/programs/pkttyagent.c b/src/programs/pkttyagent.c
-+index 3c8d502..13879a2 100644
-+--- a/src/programs/pkttyagent.c
-++++ b/src/programs/pkttyagent.c
-+@@ -264,6 +264,12 @@ main (int argc, char *argv[])
-+ 
-+   memset (&sa, 0, sizeof (sa));
-+   sa.sa_handler = &tty_handler;
-++/* If tty_handler() resets terminal while pkttyagent is run in background job,
-++   the process gets stopped by SIGTTOU. This impacts systemctl, hence it must
-++   be blocked for a while and then the process gets killed anyway.
-++ */
-++  sigemptyset(&sa.sa_mask);
-++  sigaddset(&sa.sa_mask, SIGTTOU);
-+   sigaction (SIGTERM, &sa, &savesigterm);
-+   sigaction (SIGINT, &sa, &savesigint);
-+   sigaction (SIGTSTP, &sa, &savesigtstp);
-+-- 
-+2.24.1
-+
+diff --git a/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch b/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
+deleted file mode 100644
+index 559c64db8a..0000000000
+--- a/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From f150702d5ab72878d45b722b6d7d4194db92c44a Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Mon, 9 Mar 2020 15:36:48 +0100
+-Subject: [PATCH] Check for sys/auxv.h before using it.
+-
+-Fixes aarch64 compile wiht uclibc-ng (does not provide
+-sys/auxv.h header file).
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+-Upstream: https://github.com/php/php-src/commit/f73528f0e0d59ac744ccb4a94a3a9d7b9f0fba1b
+----
+- configure.ac         | 1 +
+- ext/standard/crc32.c | 9 +++++++--
+- 2 files changed, 8 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 5219a5f2..caf62302 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -440,6 +440,7 @@ resolv.h \
+- strings.h \
+- syslog.h \
+- sysexits.h \
+-+sys/auxv.h \
+- sys/ioctl.h \
+- sys/file.h \
+- sys/mman.h \
+-diff --git a/ext/standard/crc32.c b/ext/standard/crc32.c
+-index c3ca5903..e59ab45f 100644
+---- a/ext/standard/crc32.c
+-+++ b/ext/standard/crc32.c
+-@@ -17,10 +17,15 @@
+- */
+- 
+- #include "php.h"
+-+#ifdef PHP_WIN32
+-+#include "config.w32.h"
+-+#else
+-+#include <php_config.h>
+-+#endif
+- #include "basic_functions.h"
+- #include "crc32.h"
+- 
+--#if defined(__aarch64__)
+-+#if defined(__aarch64__) && defined(HAVE_SYS_AUXV_H)
+- # include <arm_acle.h>
+- # if defined(__linux__)
+- #  include <sys/auxv.h>
+-@@ -85,7 +90,7 @@ PHP_NAMED_FUNCTION(php_if_crc32)
+- 
+- 	crc = crcinit^0xFFFFFFFF;
+- 
+--#if defined(__aarch64__)
+-+#if defined(__aarch64__) && defined(HAVE_SYS_AUXV_H)
+- 	if (has_crc32_insn()) {
+- 		crc = crc32_aarch64(crc, p, nr);
+- 		RETURN_LONG(crc^0xFFFFFFFF);
+--- 
+-2.25.1
+-
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 4584524f1c..a0b8fd4688 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256 1873c4cefdd3df9a78dcffb2198bba5c2f0464f55c9c960720c84df483fca74c  php-7.4.4.tar.xz
++sha256 d059fd7f55bdc4d2eada15a00a2976697010d3631ef6f83149cc5289e1f23c2c  php-7.4.5.tar.xz
+ 
+ # License file
+ sha256 0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index f62204c2a5..91f82dbf31 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.4
++PHP_VERSION = 7.4.5
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
