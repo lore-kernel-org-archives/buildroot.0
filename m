@@ -1,93 +1,133 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 7 May 2020 23:28:07 +0200
-Subject: [Buildroot] [PATCH] configs/rockpro64: new defconfig
-In-Reply-To: <20200506150655.uqbqekv3mlanj3cc@marchewa.redembedded.pl>
-References: <1588372460-5296-1-git-send-email-sunil@amarulasolutions.com>
- <379680d1-7ba1-fb36-cdf4-e5f7985c4cd4@gmail.com>
- <CAM+7aWsjaOtzdLiubXjkx2JDcKd67NJgGif9ZkB=0UdvrW34kg@mail.gmail.com>
- <eecc3083-2c9e-161c-d886-0b92bba79eb0@gmail.com>
- <20200503201501.brpmmjezpgfcxqif@marchewa.redembedded.pl>
- <20200506150655.uqbqekv3mlanj3cc@marchewa.redembedded.pl>
-Message-ID: <aaf2b969-f280-754c-a550-7101a73b9773@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 7 May 2020 23:28:27 +0200
+Subject: [Buildroot] [git commit] package/mbuffer: do not force c99 mode
+Message-ID: <20200507211258.F097290F1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michal,
+commit: https://git.buildroot.net/buildroot/commit/?id=b7e1103d1a82a35e8f593eedfda658d73844122f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 06/05/2020 ? 17:06, michal.lyszczek at bofc.pl a ?crit?:
-> On 2020-05-03 22:15:01, michal.lyszczek at bofc.pl wrote:
->> On 2020-05-03 11:54:07, Romain Naour wrote:
->>>>     Not related to this patch but our rock64 defconfig is currently broken [1] since
->>>>     a while due to incompatibility between uboot-2017.09-rockchip-ayufan fork and
->>>>     pylibfdt. Even with the latest version [2], it doesn't build.
->>>>
->>>>     Do you think we can update to rock64 uboot to 2020.04 and use
->>>>     rock64-rk3328_defconfig ?
->>>>
->>>>     [1] https://gitlab.com/buildroot.org/buildroot/-/jobs/535054620
->>>>     [2]
->>>>     https://github.com/ayufan-rock64/linux-u-boot/releases/tag/2017.09-rockchip-ayufan-1065-g95f6152134
->>>>
->>>>     Thanks!
->>>>
->>>>
->>>> Yes you can try that, also you can bump up kernel and ATF versions. Hope that works.
->>>
->>> I changed those lines:
->>>
->>> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
->>> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ayufan-rock64/linux-u-boot.git"
->>> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="2017.09-rockchip-ayufan-1035-gd646df03ac"
->>> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->>> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
->>>
->>> Indeed it build correctly but I can't do a runtime test, I don't have the board.
->>>
->>> Micha?: At some point the defconfig will be removed if nobody is able to test.
->>
->> Hi,
->>
->> Don't remember the reason, but official uboot was not working for me, and
->> that's the reason why I used uboot from ayufan. Maybe things will be
->> different in 2020.04.
->>
->> I still have my rock64 board so I will look into this next week.
-> 
-> Ok, I've chcked this.
-> 
-> ayufan repo did not compile for me, I tried to fix it, but nothing really
-> worked, and I do not fully understand what is going on there. Also
-> ayufan repo seems to be dead now, last commit almost 2 years ago.
-> 
-> 
-> uboot from rockchip does not build, gcc complains about unrecognized
-> -mabi=aapcs-linux option.
-> 
-> 
-> official uboot builds, but it won't boot due to error while reading
-> mmc block (mmc_load_image_raw_sector: mmc block read error)
+Do not force c99 mode to be able to remove both patches and because it
+does not seem to be motivated. Indeed, even if the second patch was
+sucessfully upstreamed. The first one can't be upstreamed as it raises
+the following build falure on Solaris 11 (due to mixing c99 and
+_POSIX_C_SOURCE):
 
-Thank for your time!
+ #if defined(STDC_C99) && (defined(_XOPEN_OR_POSIX) && !defined(XPG6))
+ #error "Compiler or options invalid for pre-UNIX 03 X/Open applications \
+ and pre-2001 POSIX applications"
 
-It seems a problem at spl boot stage...
-If you have some more time, you may send a report to the uboot mailing list.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...c-properly-get-struct-timespec-definition.patch | 38 ----------------------
+ ...configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch | 38 ----------------------
+ package/mbuffer/mbuffer.mk                         |  3 --
+ 3 files changed, 79 deletions(-)
 
-We usually we drop defconfig that doesn't work just before the release, but
-still have some time before 2020.05 final release,
-
-Best regards,
-Romain
-
-> 
-> 
-> This would take me quite some time to figure this out and I really don't
-> want to waste my time on that board. Especially now that we have
-> raspberry pi 4.
-> 
-> So, for me, that board can be removed. If someone wants to patch
-> libftd in ayufan repo (so that the code compiles) I can take it
-> and test on the hardware.
-> 
+diff --git a/package/mbuffer/0001-globals.c-properly-get-struct-timespec-definition.patch b/package/mbuffer/0001-globals.c-properly-get-struct-timespec-definition.patch
+deleted file mode 100644
+index fd14a5d759..0000000000
+--- a/package/mbuffer/0001-globals.c-properly-get-struct-timespec-definition.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 1fc7ac1e29eb6a0311d2d4c209f55adb92740d50 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Mon, 13 Apr 2020 09:56:16 +0200
+-Subject: [PATCH] globals.c: properly get 'struct timespec' definition
+-
+-'struct timespec' is defined in <time.h>, and according to man
+-nanosleep(2), only available if _POSIX_C_SOURCE >= 199309L.
+-
+-Fixes:
+-
+-globals.c:90:2: error: storage size of 'Starttime' isn't known
+-  Starttime;
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- globals.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/globals.c b/globals.c
+-index 5c10312..1c0ce80 100644
+---- a/globals.c
+-+++ b/globals.c
+-@@ -17,10 +17,11 @@
+-  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-  */
+- 
+-+#define _POSIX_C_SOURCE 199309L
+- #include "dest.h"
+- #include "globals.h"
+- #include <fcntl.h>
+--#include <sys/time.h>
+-+#include <time.h>
+- 
+- dest_t *Dest = 0;
+- 
+--- 
+-2.25.2
+-
+diff --git a/package/mbuffer/0002-configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch b/package/mbuffer/0002-configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch
+deleted file mode 100644
+index 661586ce02..0000000000
+--- a/package/mbuffer/0002-configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 03db384ff0413d003de271355f59aba8c3f815a1 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 21 Apr 2020 14:30:20 +0200
+-Subject: [PATCH] configure.in: set AC_USE_SYSTEM_EXTENSIONS
+-
+-Set AC_USE_SYSTEM_EXTENSIONS so _POSIX_SOURCE will be defined and the
+-following build failure will be avoided when building in c89 or c99
+-mode:
+-
+-log.c: In function 'infomsg':
+-log.c:123:12: error: 'PIPE_BUF' undeclared (first use in this function)
+-   if (s <= PIPE_BUF) {
+-            ^~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/5f4e9079b3377a869ec7002a8138b80eb6194bbb
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: sent to thomas at maier-komor.de]
+----
+- configure.in | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/configure.in b/configure.in
+-index 02921c2..aba4af0 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -3,6 +3,7 @@ AC_CONFIG_HEADER(config.h)
+- 
+- AC_CANONICAL_SYSTEM
+- AC_EXEEXT
+-+AC_USE_SYSTEM_EXTENSIONS
+- 
+- PACKAGE=mbuffer
+- VERSION=20140310
+--- 
+-2.25.1
+-
+diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
+index 324780fe69..f87b2b114f 100644
+--- a/package/mbuffer/mbuffer.mk
++++ b/package/mbuffer/mbuffer.mk
+@@ -10,9 +10,6 @@ MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
+ MBUFFER_LICENSE = GPL-3.0+
+ MBUFFER_LICENSE_FILES = LICENSE
+ MBUFFER_CONF_OPTS = --disable-debug
+-MBUFFER_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
+-# We're patching configure.in
+-MBUFFER_AUTORECONF = YES
+ 
+ # we don't need tests & co. so we specify a target
+ # so that the others don't get built, e.g idev.so
