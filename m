@@ -1,293 +1,181 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Thu,  7 May 2020 18:17:20 +0200
-Subject: [Buildroot] [PATCH] package/uhd: new package
-Message-ID: <20200507161720.444799-1-gwenj@trabucayre.com>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Thu,  7 May 2020 18:45:19 +0200
+Subject: [Buildroot] [PATCH v2] configs/bananapi_m2_zero: new defconfig
+In-Reply-To: <20200413171831.12079-1-vincent.stehle@laposte.net>
+References: <20200413171831.12079-1-vincent.stehle@laposte.net>
+Message-ID: <20200507164520.8299-1-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+The Banana Pi M2 Zero [1] is a board from Sinovoip, based on the Allwinner
+H2+ SoC.
 
-Universal Software Radio Peripheral (USRP) Hardware Driver
+It is similar to the other Banana Pi M2* boards, from which this
+configuration is inspired.
 
-This patch is a subset of all options.
+[1]: http://www.banana-pi.org/m2z.html
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- ...add-boost-unit_test_framework-requir.patch | 40 ++++++++
- package/uhd/Config.in                         | 75 +++++++++++++++
- package/uhd/uhd.hash                          |  4 +
- package/uhd/uhd.mk                            | 94 +++++++++++++++++++
- 6 files changed, 215 insertions(+)
- create mode 100644 package/uhd/0001-host-CMakeLists-add-boost-unit_test_framework-requir.patch
- create mode 100644 package/uhd/Config.in
- create mode 100644 package/uhd/uhd.hash
- create mode 100644 package/uhd/uhd.mk
+
+Changes since v1:
+- Bump Linux version
+
+ DEVELOPERS                                   |  2 ++
+ board/bananapi/bananapi-m2-zero/boot.cmd     |  7 ++++
+ board/bananapi/bananapi-m2-zero/genimage.cfg | 33 +++++++++++++++++++
+ board/bananapi/bananapi-m2-zero/readme.txt   | 34 ++++++++++++++++++++
+ configs/bananapi_m2_zero_defconfig           | 31 ++++++++++++++++++
+ 5 files changed, 107 insertions(+)
+ create mode 100644 board/bananapi/bananapi-m2-zero/boot.cmd
+ create mode 100644 board/bananapi/bananapi-m2-zero/genimage.cfg
+ create mode 100644 board/bananapi/bananapi-m2-zero/readme.txt
+ create mode 100644 configs/bananapi_m2_zero_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index e427ab15d4..97abe3d61b 100644
+index e427ab15d4..ef450c3ad9 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1103,6 +1103,7 @@ F:	package/python-cheetah/
- F:	package/python-markdown/
- F:	package/python-remi/
- F:	package/python-sip/
-+F:	package/uhd/
+@@ -2592,6 +2592,8 @@ F:	package/nss-myhostname/
+ F:	package/utp_com/
  
- N:	Heiko Thiery <heiko.thiery@gmail.com>
- F:	package/libnetconf2/
-diff --git a/package/Config.in b/package/Config.in
-index c12676d859..a21625b8d2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1522,6 +1522,7 @@ menu "Hardware handling"
- 	source "package/owfs/Config.in"
- 	source "package/pcsc-lite/Config.in"
- 	source "package/tslib/Config.in"
-+	source "package/uhd/Config.in"
- 	source "package/urg/Config.in"
- 	source "package/wiringpi/Config.in"
- endmenu
-diff --git a/package/uhd/0001-host-CMakeLists-add-boost-unit_test_framework-requir.patch b/package/uhd/0001-host-CMakeLists-add-boost-unit_test_framework-requir.patch
+ N:	Vincent Stehl? <vincent.stehle@laposte.net>
++F:	board/bananapi/bananapi-m2-zero/
++F:	configs/bananapi_m2_zero_defconfig
+ F:	package/i7z/
+ F:	package/msr-tools/
+ F:	package/pixz/
+diff --git a/board/bananapi/bananapi-m2-zero/boot.cmd b/board/bananapi/bananapi-m2-zero/boot.cmd
 new file mode 100644
-index 0000000000..a79b650bed
+index 0000000000..081450935b
 --- /dev/null
-+++ b/package/uhd/0001-host-CMakeLists-add-boost-unit_test_framework-requir.patch
-@@ -0,0 +1,40 @@
-+From 881705ec581ab7cd61c8e4fe134db8854a83ec4e Mon Sep 17 00:00:00 2001
-+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+Date: Tue, 28 Apr 2020 16:56:29 +0200
-+Subject: [PATCH] host: CMakeLists: add boost unit_test_framework required only
-+ when ENABLE_TESTS=ON
++++ b/board/bananapi/bananapi-m2-zero/boot.cmd
+@@ -0,0 +1,7 @@
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
 +
-+By default, boost unit_test_framework is always required, but only use
-+when ENABLE_TESTS=ON.
-+This PR suppress unit_test_framework to the default list and append
-+UHD_BOOST_REQUIRED_COMPONENTS when this library is needed
++mmc dev 0
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun8i-h2-plus-bananapi-m2-zero.dtb
 +
-+[backported from https://github.com/EttusResearch/uhd/pull/341]
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+ host/CMakeLists.txt | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/host/CMakeLists.txt b/host/CMakeLists.txt
-+index 8f72ece76..a7731ffbd 100644
-+--- a/host/CMakeLists.txt
-++++ b/host/CMakeLists.txt
-+@@ -291,10 +291,14 @@ set(UHD_BOOST_REQUIRED_COMPONENTS
-+     filesystem
-+     program_options
-+     system
-+-    unit_test_framework
-+     serialization
-+     thread
-+ )
-++
-++if(ENABLE_TESTS)
-++    list(APPEND UHD_BOOST_REQUIRED_COMPONENTS unit_test_framework)
-++endif(ENABLE_TESTS)
-++
-+ include(UHDBoost)
-+ 
-+ include_directories(${Boost_INCLUDE_DIRS})
-+-- 
-+2.26.2
-+
-diff --git a/package/uhd/Config.in b/package/uhd/Config.in
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/bananapi/bananapi-m2-zero/genimage.cfg b/board/bananapi/bananapi-m2-zero/genimage.cfg
 new file mode 100644
-index 0000000000..a9664a4f90
+index 0000000000..e41f1f9392
 --- /dev/null
-+++ b/package/uhd/Config.in
-@@ -0,0 +1,75 @@
-+comment "uhd needs a toolchain w/ C++, NPTL, wchar, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++++ b/board/bananapi/bananapi-m2-zero/genimage.cfg
+@@ -0,0 +1,33 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun8i-h2-plus-bananapi-m2-zero.dtb",
++			"boot.scr"
++		}
++	}
++	size = 64M
++}
 +
-+config BR2_PACKAGE_UHD
-+	bool "uhd"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_USE_MMU # use fork()
-+	depends on BR2_USE_WCHAR # boost
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_CHRONO
-+	select BR2_PACKAGE_BOOST_DATE_TIME
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_BOOST_REGEX
-+	select BR2_PACKAGE_BOOST_SERIALIZATION
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	select BR2_PACKAGE_BOOST_ATOMIC
-+	help
-+	  Universal Software Radio Peripheral (USRP) Hardware Driver
++image sdcard.img {
++	hdimage {
++	}
 +
-+	  https://kb.etthus.com
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
 +
-+if BR2_PACKAGE_UHD
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
 +
-+config BR2_PACKAGE_UHD_B100
-+	bool "b100 support"
-+	select BR2_PACKAGE_UHD_USB
-+	help
-+	  enable B100 support
-+
-+config BR2_PACKAGE_UHD_B200
-+	bool "b200 support"
-+	select BR2_PACKAGE_UHD_USB
-+	help
-+	  enable B200 support
-+
-+config BR2_PACKAGE_UHD_E300
-+	bool "E300 support"
-+	select BR2_PACKAGE_UHD_MPMD
-+	help
-+	  enable E300 support
-+
-+config BR2_PACKAGE_UHD_E320
-+	bool "E320 support"
-+	select BR2_PACKAGE_UHD_MPMD
-+	help
-+	  enable E320 support
-+
-+config BR2_PACKAGE_UHD_EXAMPLES
-+	bool "uhd-examples"
-+	help
-+	  Examples
-+
-+config BR2_PACKAGE_UHD_MPMD
-+	bool "MPMD support"
-+	help
-+	  enable MPMD support
-+
-+config BR2_PACKAGE_UHD_RFNOC
-+	bool "RFNoC support"
-+	help
-+	  enable RFNoC support
-+
-+config BR2_PACKAGE_UHD_USB
-+	bool "USB support"
-+	select BR2_PACKAGE_LIBUSB
-+	help
-+	  enable UHD USB support
-+
-+endif
-diff --git a/package/uhd/uhd.hash b/package/uhd/uhd.hash
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/bananapi/bananapi-m2-zero/readme.txt b/board/bananapi/bananapi-m2-zero/readme.txt
 new file mode 100644
-index 0000000000..cfd1f3f641
+index 0000000000..9edd477f11
 --- /dev/null
-+++ b/package/uhd/uhd.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated:
-+sha256  eed4a77d75faafff56be78985950039f8d9d1eb9fcbd58b8862e481dd49825cd  uhd-3.15.0.0.tar.gz
-+sha256  8fc99820c2419d0de6bbbd319ff935d54960b37b716d0b4bb1c75de493f3e1fd  LICENSE.md
-+sha256  70bf7e79c8cd73a81f97ce81745ea0719a617eebe299a61868165daeae71fff2  host/LICENSE
-diff --git a/package/uhd/uhd.mk b/package/uhd/uhd.mk
++++ b/board/bananapi/bananapi-m2-zero/readme.txt
+@@ -0,0 +1,34 @@
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++Buildroot environment for the Bananapi M2 Zero. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++Bananapi M2 Zero link:
++http://www.banana-pi.org/m2z.html
++
++This configuration uses U-Boot mainline and kernel mainline.
++
++How to build
++============
++
++  $ make bananapi_m2_zero_defconfig
++  $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sync
++
++Insert the micro SDcard in your Bananapi M2 Zero and power it up. The console
++is on the Debug UART on the CON3 header, with serial settings 115200 8N1.
+diff --git a/configs/bananapi_m2_zero_defconfig b/configs/bananapi_m2_zero_defconfig
 new file mode 100644
-index 0000000000..74faf5d48c
+index 0000000000..4711cb70db
 --- /dev/null
-+++ b/package/uhd/uhd.mk
-@@ -0,0 +1,94 @@
-+################################################################################
-+#
-+# uhd
-+#
-+################################################################################
-+
-+UHD_VERSION = 3.15.0.0
-+UHD_SITE = $(call github,EttusResearch,uhd,v$(UHD_VERSION))
-+UHD_LICENSE = GPL-3.0+
-+UHD_LICENSE_FILES = LICENSE.md output/LICENSE
-+
-+UHD_SUPPORTS_IN_SOURCE_BUILD = NO
-+UHD_SUBDIR = host
-+UHD_INSTALL_STAGING = YES
-+
-+UHD_DEPENDENCIES = \
-+	boost \
-+	$(if $(BR2_PACKAGE_PYTHON),host-python,host-python3) \
-+	$(if $(BR2_PACKAGE_PYTHON),host-python-mako,host-python3-mako)
-+
-+UHD_CONF_OPTS = \
-+	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python \
-+	-DRUNTIME_PYTHON_EXECUTABLE=/usr/bin/python \
-+	-DENABLE_C_API=ON \
-+	-DENABLE_DOXYGEN=OFF \
-+	-DENABLE_DPKD=OFF \
-+	-DENABLE_LIBUHD=ON \
-+	-DENABLE_N230=OFF \
-+	-DENABLE_N300=OFF \
-+	-DENABLE_N320=OFF \
-+	-DENABLE_MANUAL=OFF \
-+	-DENABLE_MAN_PAGES=OFF \
-+	-DENABLE_OCTOCLOCK=OFF \
-+	-DENABLE_PYTHON_API=OFF \
-+	-DENABLE_TESTS=OFF \
-+	-DENABLE_USRP1=OFF \
-+	-DENABLE_USRP2=OFF \
-+	-DENABLE_UTILS=OFF \
-+	-DENABLE_X300=OFF
-+
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+UHD_DEPENDENCIES += orc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_B100),y)
-+UHD_CONF_OPTS += -DENABLE_B100=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_B100=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_B200),y)
-+UHD_CONF_OPTS += -DENABLE_B200=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_B200=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_E300),y)
-+UHD_CONF_OPTS += -DENABLE_E300=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_E300=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_E320),y)
-+UHD_CONF_OPTS += -DENABLE_E320=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_E320=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_EXAMPLES),y)
-+UHD_CONF_OPTS += -DENABLE_EXAMPLES=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_EXAMPLES=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_MPMD),y)
-+UHD_CONF_OPTS += -DENABLE_MPMD=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_MPMD=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_RFNOC),y)
-+UHD_CONF_OPTS += -DENABLE_RFNOC=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_RFNOC=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_USB),y)
-+UHD_DEPENDENCIES += libusb
-+UHD_CONF_OPTS += -DENABLE_USB=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_USB=OFF
-+endif
-+
-+$(eval $(cmake-package))
++++ b/configs/bananapi_m2_zero_defconfig
+@@ -0,0 +1,31 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_NEON_VFPV4=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Bananapi M2 Zero"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2-zero/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.7"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-bananapi-m2-zero"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="bananapi_m2_zero"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m2-zero/boot.cmd"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++# U-boot needs python3
++BR2_PACKAGE_HOST_PYTHON3=y
 -- 
 2.26.2
