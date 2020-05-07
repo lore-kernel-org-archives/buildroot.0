@@ -1,41 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 May 2020 23:54:59 +0200
+Date: Thu, 7 May 2020 22:47:30 +0200
 Subject: [Buildroot] [git commit branch/2020.02.x]
- configs/qemu_ppc_virtex_ml507_defconfig: select BR2_POWERPC_SOFT_FLOAT
-Message-ID: <20200507214107.C12FC8FEFC@busybox.osuosl.org>
+ toolchain/toolchain-buildroot: PPC64(LE) support in musl requires ALTIVEC
+Message-ID: <20200507214107.6230290F65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bb12abb33c09d72d6e884180129ddadcf1abfbb
+commit: https://git.buildroot.net/buildroot/commit/?id=7ae1cf0b19e6110459274f40b5f9252b9e2339ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-The BR2_SOFT_FLOAT option is lost while loading the defconfig with:
-make qemu_ppc_virtex_ml507_defconfig
+musl currently assumes all PPC64(LE) CPUs support ALTIVEC instructions.
 
-On powerpc, BR2_POWERPC_SOFT_FLOAT must be used to enable soft
-floating point support.
+However, there are exceptions (such as the e5500) for which musl builds
+ultimately generate illegal instructions for the targets.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b6245ed49b9db4e0f94cb58be1fc48628c78347b)
+Disable musl if the PPC64(LE) CPU does not support ALTIVEC instructions.
+
+This patch addresses the issues seen here:
+  https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092743
+  https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092744
+
+musl mailing list thread:
+  https://www.openwall.com/lists/musl/2020/02/03/10
+
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 20c267f2e9a9664a87a1804555dd4703e9a3665c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/qemu_ppc_virtex_ml507_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ toolchain/toolchain-buildroot/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
-index c7c324d5e8..8b105cf7e7 100644
---- a/configs/qemu_ppc_virtex_ml507_defconfig
-+++ b/configs/qemu_ppc_virtex_ml507_defconfig
-@@ -10,7 +10,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- 
- # Use soft float
--BR2_SOFT_FLOAT=y
-+BR2_POWERPC_SOFT_FLOAT=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index a980f766ac..8c33b2b4dd 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -86,6 +86,7 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
+ 		   BR2_powerpc64le || BR2_RISCV_64 || BR2_sh   || BR2_x86_64
+ 	depends on !BR2_powerpc_SPE # not supported, build breaks
++	depends on !(BR2_powerpc64 || BR2_powerpc64le) || BR2_POWERPC_CPU_HAS_ALTIVEC
+ 	# sh2 nommu is supported by musl, but we don't have support
+ 	# for it in Buildroot.
+ 	depends on BR2_USE_MMU
