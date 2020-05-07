@@ -1,125 +1,136 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu,  7 May 2020 14:39:01 -0600
-Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: only enable
- sse2 when supported
-Message-ID: <20200507203901.97715-1-james.hilliard1@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 7 May 2020 22:26:18 +0200
+Subject: [Buildroot] [git commit] Update for 2020.05-rc1
+Message-ID: <20200507202919.D4A4B90EE9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need to backport a commit so that we can enable/disable sse2 using
-the ARGON2_CFFI_USE_SSE2 env variable.
+commit: https://git.buildroot.net/buildroot/commit/?id=4ec35a7a25c8a2c7d450b91a72108f0204dcf40a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/030/0306d66d081dd0807c577edd50d39075a46d0dd9/build-end.log
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-ARGON2_CFFI_USE_SSE2-to-override-ss.patch | 78 +++++++++++++++++++
- .../python-argon2-cffi/python-argon2-cffi.mk  |  6 ++
- 2 files changed, 84 insertions(+)
- create mode 100644 package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch
+ CHANGES                    |  2 +-
+ Makefile                   |  4 ++--
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ 4 files changed, 35 insertions(+), 14 deletions(-)
 
-diff --git a/package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch b/package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch
-new file mode 100644
-index 0000000000..670d9b3d40
---- /dev/null
-+++ b/package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch
-@@ -0,0 +1,78 @@
-+From 098890ed36d54a7c8beb8c01428c78de7ab77b05 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Wed, 6 May 2020 23:40:11 -0600
-+Subject: [PATCH] Add env variable ARGON2_CFFI_USE_SSE2 to override sse2
-+ optimizations (#61)
-+
-+This is useful for cross compiling since platform.machine() is broken
-+for cross builds.
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+[james.hilliard1 at gmail.com: backport from upstream commit
-+098890ed36d54a7c8beb8c01428c78de7ab77b05]
-+---
-+ CHANGELOG.rst         |  2 +-
-+ docs/installation.rst | 10 ++++++++++
-+ setup.py              | 12 +++++++++---
-+ 3 files changed, 20 insertions(+), 4 deletions(-)
-+
-+diff --git a/CHANGELOG.rst b/CHANGELOG.rst
-+index 9fa2bf0..4405297 100644
-+--- a/CHANGELOG.rst
-++++ b/CHANGELOG.rst
-+@@ -26,7 +26,7 @@ Deprecations:
-+ Changes:
-+ ^^^^^^^^
-+ 
-+-*none*
-++- Added ``ARGON2_CFFI_USE_SSE2`` env variable to override SSE2 autodetection.
-+ 
-+ 
-+ ----
-+diff --git a/docs/installation.rst b/docs/installation.rst
-+index 3ee9ccd..563c891 100644
-+--- a/docs/installation.rst
-++++ b/docs/installation.rst
-+@@ -57,6 +57,16 @@ This approach can lead to problems around your build chain and you can run into
-+ **It is your own responsibility to deal with these risks if you choose this path.**
-+ 
-+ 
-++Override Automatic SSE2 Detection
-++------------------------------------------
-++
-++If you set ``ARGON2_CFFI_USE_SSE2`` to ``1`` (and *only* ``1``), ``argon2-cffi`` will build with sse2 support.
-++
-++If you set ``ARGON2_CFFI_USE_SSE2`` to ``0`` (and *only* ``0``), ``argon2-cffi`` will build without sse2 support.
-++
-++This should generally only be used if the sse2 autodetection causes a compilation failure or if you are cross compiling.
-++
-++
-+ .. _SSE2: https://en.wikipedia.org/wiki/SSE2
-+ .. _PyPI: https://pypi.org/project/argon2-cffi/
-+ .. _CFFI environment: https://cffi.readthedocs.io/en/latest/installation.html
-+diff --git a/setup.py b/setup.py
-+index e91e73a..c26a691 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -19,9 +19,15 @@ from setuptools.command.install import install
-+ NAME = "argon2-cffi"
-+ PACKAGES = find_packages(where="src")
-+ 
-+-# Optimized version requires SSE2 extensions.  They have been around since
-+-# 2001 so we try to compile it on every recent-ish x86.
-+-optimized = platform.machine() in ("i686", "x86", "x86_64", "AMD64")
-++use_sse2 = os.environ.get("ARGON2_CFFI_USE_SSE2", None)
-++if use_sse2 == "1":
-++    optimized = True
-++elif use_sse2 == "0":
-++    optimized = False
-++else:
-++    # Optimized version requires SSE2 extensions.  They have been around since
-++    # 2001 so we try to compile it on every recent-ish x86.
-++    optimized = platform.machine() in ("i686", "x86", "x86_64", "AMD64")
-+ 
-+ CFFI_MODULES = ["src/argon2/_ffi_build.py:ffi"]
-+ lib_base = os.path.join("extras", "libargon2", "src")
-+-- 
-+2.20.1
-+
-diff --git a/package/python-argon2-cffi/python-argon2-cffi.mk b/package/python-argon2-cffi/python-argon2-cffi.mk
-index 099574e9c3..df1c1d51c6 100644
---- a/package/python-argon2-cffi/python-argon2-cffi.mk
-+++ b/package/python-argon2-cffi/python-argon2-cffi.mk
-@@ -12,4 +12,10 @@ PYTHON_ARGON2_CFFI_LICENSE = MIT
- PYTHON_ARGON2_CFFI_LICENSE_FILES = LICENSE
- PYTHON_ARGON2_CFFI_DEPENDENCIES = host-python-cffi
+diff --git a/CHANGES b/CHANGES
+index 75d3f61232..ff9bec5b73 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,4 @@
+-2020.05-rc1, to be released
++2020.05-rc1, released May 7th 2020
  
-+ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
-+PYTHON_ARGON2_CFFI_ENV = ARGON2_CFFI_USE_SSE2=1
-+else
-+PYTHON_ARGON2_CFFI_ENV = ARGON2_CFFI_USE_SSE2=0
-+endif
+ 	Addition of support for gobject-introspection: both the
+ 	gobject-introspection package itself, but also introspection
+diff --git a/Makefile b/Makefile
+index ae29b042ec..3aa4ba4532 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2020.05-git
++export BR2_VERSION := 2020.05-rc1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1583701800
++BR2_VERSION_EPOCH = 1588882900
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 51ec042a6a..edbe747f1c 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -75,41 +75,41 @@
+ 	  <p><a href="/downloads/buildroot-2019.11.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
+-      <h3 style="text-align: center;">Latest release candidate: <b>2020.02-rc3</b></h3>
++-->
++      <h3 style="text-align: center;">Latest release candidate: <b>2020.05-rc1</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.02-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.02-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.02-rc3.tar.gz">buildroot-2020.02-rc3.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.02-rc3.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.05-rc1.tar.gz">buildroot-2020.05-rc1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2020.05-rc1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.02-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.05-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.02-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.05-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.02-rc3.tar.bz2">buildroot-2020.02-rc3.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.02-rc3.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.05-rc1.tar.bz2">buildroot-2020.05-rc1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2020.05-rc1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+--->
 +
- $(eval $(python-package))
--- 
-2.20.1
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 7d1508c53c..ce6bcdbd96 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.05-rc1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 April 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>We have a new release candidate! Lots of changes all over the tree, see the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05-rc1">CHANGES</a>
++	  file for more details.</p>
++
++	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.05-rc1.tar.bz2">2020.05-rc1
++	  release</a>, and report any problems found to the
++         <a href="support.html">mailing list</a> or
++         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
