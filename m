@@ -1,52 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 May 2020 23:55:13 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] configs/qemu_riscv*:
- remove BR2_TARGET_OPENSBI_USE_PLAT
-Message-ID: <20200507214107.C9C7B8FEFC@busybox.osuosl.org>
+Date: Thu, 7 May 2020 22:53:37 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/paho-mqtt-c: fix
+ bump to version 1.3.2
+Message-ID: <20200507214107.76E3190F65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0749eaf94dd95511213798b5a5793d4204495b3b
+commit: https://git.buildroot.net/buildroot/commit/?id=0bde7aafbec5e1a56baa09cb2d7f93788feeff49
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-This option never existed in opensbi package.
+Commit e69b8ddd43292b03b8f30f748ee2279b8df64c47 bumped paho-mqtt-c to
+version 1.3.2 but hash was wrong moreover licence has changed to EPL-2.0
+since
+https://github.com/eclipse/paho.mqtt.c/commit/1e91229cb6403e3a9b02dfdc11c71b04c0518cff
 
-This fixes the new defconfig check.
+So fix that and add LICENSE to the list of license files
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Alistair Francis <alistair.francis@wdc.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/7ea1791778053613e9ef6b146dbd1992a0f63dc6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8dd067ef3ae92eda4d883dd002c4b48b60dd4e8c)
+(cherry picked from commit 7a078ef054896758ad90abb7619be2347fef062c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/qemu_riscv32_virt_defconfig | 1 -
- configs/qemu_riscv64_virt_defconfig | 1 -
- 2 files changed, 2 deletions(-)
+ package/paho-mqtt-c/paho-mqtt-c.hash | 5 +++--
+ package/paho-mqtt-c/paho-mqtt-c.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-index 914eada004..242cc69e56 100644
---- a/configs/qemu_riscv32_virt_defconfig
-+++ b/configs/qemu_riscv32_virt_defconfig
-@@ -23,7 +23,6 @@ BR2_LINUX_KERNEL_IMAGE=y
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
+index 80231c762a..8f6ca61480 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.hash
++++ b/package/paho-mqtt-c/paho-mqtt-c.hash
+@@ -1,4 +1,5 @@
+ # Locally computed:
+-sha256  c2d74a37c8e23d6eef229db0e04cb8e511571562668808e02d836e82d5bbd0ae  paho-mqtt-c-1.3.2.tar.gz
++sha256  c426334c2ffc9f7a230e3de5162bdbc1762f8f60ffe27460e553edb74c7e0681  paho-mqtt-c-1.3.2.tar.gz
+ sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
+-sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
++sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
++sha256  99d3a5c5cc2812f0593a85ec7c1b6dd83e8477b5090c01d9de0d49d49f367a4a  LICENSE
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index 49d5be3777..7cace9a607 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+@@ -6,8 +6,8 @@
  
- # Bootloader
- BR2_TARGET_OPENSBI=y
--BR2_TARGET_OPENSBI_USE_PLAT=y
- BR2_TARGET_OPENSBI_PLAT="qemu/virt"
+ PAHO_MQTT_C_VERSION = 1.3.2
+ PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
+-PAHO_MQTT_C_LICENSE = EPL-1.0 or BSD-3-Clause
+-PAHO_MQTT_C_LICENSE_FILES = epl-v10 edl-v10
++PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
++PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+ PAHO_MQTT_C_INSTALL_STAGING = YES
  
- # host-qemu for gitlab testing
-diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-index 5c52f7a0f8..10d7899480 100644
---- a/configs/qemu_riscv64_virt_defconfig
-+++ b/configs/qemu_riscv64_virt_defconfig
-@@ -22,7 +22,6 @@ BR2_LINUX_KERNEL_IMAGE=y
- 
- # Bootloader
- BR2_TARGET_OPENSBI=y
--BR2_TARGET_OPENSBI_USE_PLAT=y
- BR2_TARGET_OPENSBI_PLAT="qemu/virt"
- 
- # host-qemu for gitlab testing
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
