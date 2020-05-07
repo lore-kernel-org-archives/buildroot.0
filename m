@@ -1,37 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 May 2020 22:48:43 +0200
-Subject: [Buildroot] [PATCH v2] package/apparmor: skip docs building
-In-Reply-To: <20200429211840.215032-1-angelo@amarulasolutions.com>
-References: <20200429211840.215032-1-angelo@amarulasolutions.com>
-Message-ID: <20200507224843.76a15b3b@windsurf.home>
+Date: Thu, 7 May 2020 22:48:59 +0200
+Subject: [Buildroot] [git commit branch/next] package/pigpio: bump to
+ version 76
+Message-ID: <20200507203331.0C0F390F04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 29 Apr 2020 23:18:40 +0200
-Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ccec21b3b0f05297a73704ef86892f3a81555b4d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> When pod2man and pod2html are missing, building now exits with an
-> error.
-> Building of man pages and documentation should be skipped in buildroot,
-> setting both executables to the "true" command it's sufficient to skip
-> them.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/ca8d3071d888b5c1cfa3e275afaf05415e19627f
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
-> Changelog:
-> v1->v2:
->  * "echo" to "true" (Thomas P.)
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pigpio/pigpio.hash | 4 ++--
+ package/pigpio/pigpio.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
+index 5b87acf082..b29e71c139 100644
+--- a/package/pigpio/pigpio.hash
++++ b/package/pigpio/pigpio.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	dfec8d06075a9336433d96a8e2f86810f3332d616cf0d6253d98ad78094aa15a  pigpio-75.tar.gz
+-sha256	6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
++sha256  871677cf94152e1caf43088047c3b3eec6b325e568b2e3017d60af2463e5ebd6  pigpio-76.tar.gz
++sha256  6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
+diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
+index 89d8deb9ea..4b7abf7c20 100644
+--- a/package/pigpio/pigpio.mk
++++ b/package/pigpio/pigpio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PIGPIO_VERSION = 75
++PIGPIO_VERSION = 76
+ PIGPIO_SITE = $(call github,joan2937,pigpio,v$(PIGPIO_VERSION))
+ PIGPIO_LICENSE = Unlicense
+ PIGPIO_LICENSE_FILES = UNLICENCE
