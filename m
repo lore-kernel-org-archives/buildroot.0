@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 May 2020 23:19:09 +0200
-Subject: [Buildroot] [PATCH] uclibc: update to 1.0.34
-In-Reply-To: <20200506130451.zo4gk6g3h7udqcsp@waldemar-brodkorb.de>
-References: <20200506130451.zo4gk6g3h7udqcsp@waldemar-brodkorb.de>
-Message-ID: <20200507231909.2f4ba25f@windsurf.home>
+Date: Thu, 7 May 2020 23:20:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uclibc: Patch to fix check_as
+ macro in Rules.mak
+In-Reply-To: <AM0P194MB06448CBCB64FBB28F3240C118BD00@AM0P194MB0644.EURP194.PROD.OUTLOOK.COM>
+References: <AM0P194MB06448CBCB64FBB28F3240C118BD00@AM0P194MB0644.EURP194.PROD.OUTLOOK.COM>
+Message-ID: <20200507232002.274fd3d2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 6 May 2020 15:04:51 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+On Fri, 24 Apr 2020 12:47:04 +0000
+"Patzlaff, Marcel" <m.patzlaff@pilz.de> wrote:
 
-> patches applied upstream.
+> This introduces a patch for uClibc to fix a feature check macro which
+> does not work when building with binutils 2.31.x or higher. Without
+> this fix, all binaries of uClibc will always request an executable
+> stack and thus all other binaries that link to it!
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> See also https://bugs.busybox.net/show_bug.cgi?id=12801
+> 
+> Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
 > ---
->  ...lude-ctype.h-drop-is-_l-macro-definitions.patch | 72 ----------------------
->  ...de-ctype.h-restore-__isctype_l-definition.patch | 32 ----------
->  package/uclibc/uclibc.hash                         |  4 +-
->  package/uclibc/uclibc.mk                           |  2 +-
->  4 files changed, 3 insertions(+), 107 deletions(-)
->  delete mode 100644 package/uclibc/0001-include-ctype.h-drop-is-_l-macro-definitions.patch
->  delete mode 100644 package/uclibc/0002-include-ctype.h-restore-__isctype_l-definition.patch
+>  ...heck_as-for-recent-binutils-versions.patch | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/uclibc/0003-Rules.mak-Fix-check_as-for-recent-binutils-versions.patch
 
-We're past -rc1, so we normally don't take version bumps. But really
-1.0.32..1.0.34 only contains bug fixes in uclibc-ng, so I applied to
-master.
+In the mean time, your patch was merged in upstream uClibc-ng, version
+1.0.34 was released, and we just applied a patch for Buildroot that
+updates to use uClibc-ng 1.0.34.
 
 Thanks!
 
