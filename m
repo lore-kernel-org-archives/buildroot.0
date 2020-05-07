@@ -1,136 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 May 2020 22:26:18 +0200
-Subject: [Buildroot] [git commit] Update for 2020.05-rc1
-Message-ID: <20200507202919.D4A4B90EE9@busybox.osuosl.org>
+Date: Thu, 7 May 2020 22:47:16 +0200
+Subject: [Buildroot] [git commit] package/apparmor: skip docs building
+Message-ID: <20200507203150.D306690EFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ec35a7a25c8a2c7d450b91a72108f0204dcf40a
+commit: https://git.buildroot.net/buildroot/commit/?id=047832a1f2f4a00a314b16289e73757f7978b2f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+When pod2man and pod2html are missing, building now exits with an
+error.
+Building of man pages and documentation should be skipped in buildroot,
+setting both executables to the "true" command it's sufficient to skip
+them.
+
+Fixes:
+http://autobuild.buildroot.net/results/ca8d3071d888b5c1cfa3e275afaf05415e19627f
+
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- CHANGES                    |  2 +-
- Makefile                   |  4 ++--
- docs/website/download.html | 22 +++++++++++-----------
- docs/website/news.html     | 21 +++++++++++++++++++++
- 4 files changed, 35 insertions(+), 14 deletions(-)
+ package/apparmor/apparmor.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/CHANGES b/CHANGES
-index 75d3f61232..ff9bec5b73 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,4 +1,4 @@
--2020.05-rc1, to be released
-+2020.05-rc1, released May 7th 2020
+diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
+index f1b765ce42..f667966082 100644
+--- a/package/apparmor/apparmor.mk
++++ b/package/apparmor/apparmor.mk
+@@ -15,7 +15,7 @@ APPARMOR_LICENSE_FILES = LICENSE parser/COPYING.GPL
+ APPARMOR_DEPENDENCIES = libapparmor
  
- 	Addition of support for gobject-introspection: both the
- 	gobject-introspection package itself, but also introspection
-diff --git a/Makefile b/Makefile
-index ae29b042ec..3aa4ba4532 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
+ APPARMOR_TOOLS = parser
+-APPARMOR_MAKE_OPTS = USE_SYSTEM=1 DISTRO=unknown
++APPARMOR_MAKE_OPTS = USE_SYSTEM=1 DISTRO=unknown POD2MAN=true POD2HTML=true
  
- # Set and export the version string
--export BR2_VERSION := 2020.05-git
-+export BR2_VERSION := 2020.05-rc1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1583701800
-+BR2_VERSION_EPOCH = 1588882900
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 51ec042a6a..edbe747f1c 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -75,41 +75,41 @@
- 	  <p><a href="/downloads/buildroot-2019.11.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--
--      <h3 style="text-align: center;">Latest release candidate: <b>2020.02-rc3</b></h3>
-+-->
-+      <h3 style="text-align: center;">Latest release candidate: <b>2020.05-rc1</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.02-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.02-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.02-rc3.tar.gz">buildroot-2020.02-rc3.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.02-rc3.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.05-rc1.tar.gz">buildroot-2020.05-rc1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.05-rc1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.02-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.02-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.05-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.02-rc3.tar.bz2">buildroot-2020.02-rc3.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.02-rc3.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.05-rc1.tar.bz2">buildroot-2020.05-rc1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.05-rc1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
---->
-+
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 7d1508c53c..ce6bcdbd96 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,27 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.05-rc1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 April 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>We have a new release candidate! Lots of changes all over the tree, see the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05-rc1">CHANGES</a>
-+	  file for more details.</p>
-+
-+	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.05-rc1.tar.bz2">2020.05-rc1
-+	  release</a>, and report any problems found to the
-+         <a href="support.html">mailing list</a> or
-+         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
+ APPARMOR_DEPENDENCIES += gettext
