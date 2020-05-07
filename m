@@ -1,41 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 May 2020 23:28:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mbuffer: do not force c99 mode
-In-Reply-To: <20200505163657.45865-1-fontaine.fabrice@gmail.com>
-References: <20200505163657.45865-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200507232846.1a11376d@windsurf.home>
+Date: Thu, 7 May 2020 23:29:04 +0200
+Subject: [Buildroot] [git commit branch/next] package/samba4: bump version
+ to 4.11.9
+Message-ID: <20200507211336.9087590F22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  5 May 2020 18:36:57 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ab86c3fa11cae4574c08b6257f19d51fb2ee5bc2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Do not force c99 mode to be able to remove both patches and because it
-> does not seem to be motivated. Indeed, even if the second patch was
-> sucessfully upstreamed. The first one can't be upstreamed as it raises
-> the following build falure on Solaris 11 (due to mixing c99 and
-> _POSIX_C_SOURCE):
-> 
->  #if defined(STDC_C99) && (defined(_XOPEN_OR_POSIX) && !defined(XPG6))
->  #error "Compiler or options invalid for pre-UNIX 03 X/Open applications \
->  and pre-2001 POSIX applications"
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...perly-get-struct-timespec-definition.patch | 38 -------------------
->  ...gure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch | 38 -------------------
->  package/mbuffer/mbuffer.mk                    |  3 --
->  3 files changed, 79 deletions(-)
->  delete mode 100644 package/mbuffer/0001-globals.c-properly-get-struct-timespec-definition.patch
->  delete mode 100644 package/mbuffer/0002-configure.in-set-AC_USE_SYSTEM_EXTENSIONS.patch
+Release notes: https://www.samba.org/samba/history/samba-4.11.9.html
 
-Applied to master. Thanks!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index f2ae8b5b58..ad34489317 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.11.8.tar.asc
+-sha256  bb140caa37d2bbbb1f15f849aa86b1d5f787729443099139936f0ea06a5100ca  samba-4.11.8.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.11.9.tar.asc
++sha256  ad8cef354cf3f3a8835b04c896906b839270bee763d941db52af037ab5ec8dcc  samba-4.11.9.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 9ec4c1eabe..4124032264 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.11.8
++SAMBA4_VERSION = 4.11.9
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
