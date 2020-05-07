@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu,  7 May 2020 16:14:54 -0700
-Subject: [Buildroot] [PATCH/next v4 2/5] package/python-slip-dbus: new
- package
+Date: Thu,  7 May 2020 16:14:57 -0700
+Subject: [Buildroot] [PATCH/next v4 5/5] support/testing: add firewalld test
+ case
 In-Reply-To: <20200507231457.2093052-1-aduskett@gmail.com>
 References: <20200507231457.2093052-1-aduskett@gmail.com>
-Message-ID: <20200507231457.2093052-2-aduskett@gmail.com>
+Message-ID: <20200507231457.2093052-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,132 +13,152 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-This package provides a dbus.service.Object derivative that ends
-itself after a certain time without being used and/or if there
-are no clients anymore on the message bus.
+This test case runs firewalld using both system and sysvinit.
 
-The package also provides a set of convenience functions and decorators for
-integrating a dbus service with PolicyKit.
-
-Firewalld depends on this package.
+The tests perform the following tasks:
+  - Start and login
+  - run `firewalld-cmd --state` with the expected output of "running" and a
+    return code of 0.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v1 -> v2:
-  - Combine dependency comment (Yann)
-  - Add a more detailed commit message. (Yann)
-  - Add an explination for the PYTHON_SLIP_DBUS_APPEND_VERSION hook. (Yann)
+Changes v1 -> v4:
+  - Add this patch to the series
 
-Changes v3 -> v4:
-  - Clean up sed logic (Yann)
-  - Switch to using the tar.bz2 package from github (Yann)
-  - Add a missing dependency on wchar (Yann)
-
+ .gitlab-ci.yml                                |  2 +
  DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/python-slip-dbus/Config.in            | 28 +++++++++++++++++++
- .../python-slip-dbus/python-slip-dbus.hash    |  3 ++
- package/python-slip-dbus/python-slip-dbus.mk  | 23 +++++++++++++++
- 5 files changed, 56 insertions(+)
- create mode 100644 package/python-slip-dbus/Config.in
- create mode 100644 package/python-slip-dbus/python-slip-dbus.hash
- create mode 100644 package/python-slip-dbus/python-slip-dbus.mk
+ .../testing/tests/package/test_firewalld.py   | 98 +++++++++++++++++++
+ 3 files changed, 101 insertions(+)
+ create mode 100644 support/testing/tests/package/test_firewalld.py
 
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index fa8e077a07..68785f32b8 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -402,6 +402,8 @@ tests.package.test_crudini.TestCrudiniPy2: { extends: .runtime_test }
+ tests.package.test_crudini.TestCrudiniPy3: { extends: .runtime_test }
+ tests.package.test_docker_compose.TestDockerCompose: { extends: .runtime_test }
+ tests.package.test_dropbear.TestDropbear: { extends: .runtime_test }
++tests.package.test_firewalld.TestFirewalldSystemd: { extends: .runtime_test }
++tests.package.test_firewalld.TestFirewalldSysVInit: { extends: .runtime_test }
+ tests.package.test_glxinfo.TestGlxinfo: { extends: .runtime_test }
+ tests.package.test_gst1_python.TestGst1Python: { extends: .runtime_test }
+ tests.package.test_ipython.TestIPythonPy3: { extends: .runtime_test }
 diff --git a/DEVELOPERS b/DEVELOPERS
-index e427ab15d4..906dfb92b3 100644
+index 474306fc77..74bea58942 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -75,6 +75,7 @@ F:	package/python-nested-dict/
- F:	package/python-pbr/
- F:	package/python-pip/
- F:	package/python-psycopg2/
-+F:	package/python-slip-dbus/
- F:	package/python-smmap2/
- F:	package/python-sqlalchemy/
- F:	package/python-sqlparse/
-diff --git a/package/Config.in b/package/Config.in
-index c12676d859..206a73f168 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1151,6 +1151,7 @@ menu "External python modules"
- 	source "package/python-singledispatch/Config.in"
- 	source "package/python-sip/Config.in"
- 	source "package/python-six/Config.in"
-+	source "package/python-slip-dbus/Config.in"
- 	source "package/python-slob/Config.in"
- 	source "package/python-smbus-cffi/Config.in"
- 	source "package/python-smmap2/Config.in"
-diff --git a/package/python-slip-dbus/Config.in b/package/python-slip-dbus/Config.in
+@@ -89,6 +89,7 @@ F:	package/setools/
+ F:	package/sngrep/
+ F:	package/spidermonkey/
+ F:	package/systemd/
++F:	support/testing/tests/package/test_firewalld.py
+ F:	support/testing/tests/package/test_gst1_python.py
+ F:	support/testing/tests/package/test_python_gobject.py
+ 
+diff --git a/support/testing/tests/package/test_firewalld.py b/support/testing/tests/package/test_firewalld.py
 new file mode 100644
-index 0000000000..25854f2708
+index 0000000000..4fbccfacfa
 --- /dev/null
-+++ b/package/python-slip-dbus/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_PYTHON_SLIP_DBUS
-+	bool "python-slip-dbus"
-+	depends on BR2_USE_MMU # libglib2, gobject-introspection
-+	depends on BR2_USE_WCHAR # dbus-python
-+	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS # gobject-introspection
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gobject-introspection
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, dbus-python, python3
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
-+	depends on BR2_PACKAGE_PYTHON3 # gobject-introspection, python-gobject
-+	select BR2_PACKAGE_DBUS # runtime
-+	select BR2_PACKAGE_DBUS_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_DECORATOR  # runtime
-+	select BR2_PACKAGE_PYTHON_GOBJECT  # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  A dbus.service.Object derivative that ends
-+	  itself after a certain time without being used and/or if there
-+	  are no clients anymore on the message bus, as well as
-+	  convenience functions and decorators for integrating a dbus
-+	  service with PolicyKit.
++++ b/support/testing/tests/package/test_firewalld.py
+@@ -0,0 +1,98 @@
++"""Test firewalld for both systemd and sysvinit."""
++import os
++from tests.package.test_python import TestPythonPackageBase
 +
-+	  https://github.com/nphilipp/python-slip
 +
-+comment "python-slip-dbus needs python3, and a glibc toolchain w/ gcc >= 4.9, wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_USES_GLIBC \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_PYTHON3
-diff --git a/package/python-slip-dbus/python-slip-dbus.hash b/package/python-slip-dbus/python-slip-dbus.hash
-new file mode 100644
-index 0000000000..2dd3658396
---- /dev/null
-+++ b/package/python-slip-dbus/python-slip-dbus.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  c726c086f0dd93a0ac7a0176f383a12af91b6657b78a301e3f5b25d9f8d4d10b  python-slip-0.6.5.tar.bz2
-+sha256  1ca3e8f71b7de618968e7ea9fe47822d9e704dc476aef8544033abedec355225  COPYING
-diff --git a/package/python-slip-dbus/python-slip-dbus.mk b/package/python-slip-dbus/python-slip-dbus.mk
-new file mode 100644
-index 0000000000..a587c351aa
---- /dev/null
-+++ b/package/python-slip-dbus/python-slip-dbus.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# python-slip-dbus
-+#
-+################################################################################
++class TestFirewalldSystemd(TestPythonPackageBase):
++    """Build the kernel as firewalld requires all of the nftable options."""
 +
-+PYTHON_SLIP_DBUS_VERSION = 0.6.5
-+PYTHON_SLIP_DBUS_SOURCE = python-slip-$(PYTHON_SLIP_DBUS_VERSION).tar.bz2
-+PYTHON_SLIP_DBUS_SITE = https://github.com/nphilipp/python-slip/releases/download/python-slip-$(PYTHON_SLIP_DBUS_VERSION)
-+PYTHON_SLIP_DBUS_LICENSE = GPL-2.0+
-+PYTHON_SLIP_DBUS_LICENSE_FILES = COPYING
-+PYTHON_SLIP_DBUS_SETUP_TYPE = distutils
-+PYTHON_SLIP_DBUS_DEPENDENCIES = python-gobject
++    __test__ = True
++    config = \
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.39"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_INIT_SYSTEMD=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_FIREWALLD=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
-+# Python-slip-dbus only packages a setup.py.in file with a @VERSION@ variable,
-+# so we must create the file ourselves and sed the appropriate version number.
-+define PYTHON_SLIP_DBUS_APPEND_VERSION
-+	sed -e 's/@VERSION@/$(PYTHON_SLIP_DBUS_VERSION)/g' \
-+		$(@D)/setup.py.in >$(@D)/setup.py
-+endef
-+PYTHON_SLIP_DBUS_PRE_CONFIGURE_HOOKS += PYTHON_SLIP_DBUS_APPEND_VERSION
++    def wait_boot(self):
++        """Boot time is longer than the default multiplier."""
++        self.emulator.timeout_multiplier *= 10
++        self.emulator.login()
 +
-+$(eval $(python-package))
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        kernel_file = os.path.join(self.builddir, "images", "zImage")
++        dtb_file = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
++        self.emulator.boot(arch="armv7",
++                           kernel=kernel_file,
++                           kernel_cmdline=["console=ttyAMA0,115200"],
++                           options=[
++                               "-initrd", cpio_file,
++                               "-dtb", dtb_file,
++                               "-M", "vexpress-a9"
++                           ])
++        self.wait_boot()
++        cmd = "firewall-cmd --state"
++        output, exit_code = self.emulator.run(cmd, timeout=10)
++        self.assertIn("running", output[0])
++        self.assertEqual(exit_code, 0)
++
++
++class TestFirewalldSysVInit(TestPythonPackageBase):
++    """Build the kernel as firewalld requires all of the nftable options."""
++
++    __test__ = True
++    config = \
++        """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.39"
++        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
++        BR2_LINUX_KERNEL_DTS_SUPPORT=y
++        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_FIREWALLD=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def wait_boot(self):
++        """Boot time is longer than the default multiplier."""
++        self.emulator.timeout_multiplier *= 10
++        self.emulator.login()
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        kernel_file = os.path.join(self.builddir, "images", "zImage")
++        dtb_file = os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")
++        self.emulator.boot(arch="armv7",
++                           kernel=kernel_file,
++                           kernel_cmdline=["console=ttyAMA0,115200"],
++                           options=[
++                               "-initrd", cpio_file,
++                               "-dtb", dtb_file,
++                               "-M", "vexpress-a9"
++                           ])
++        self.wait_boot()
++        cmd = "firewall-cmd --state"
++        output, exit_code = self.emulator.run(cmd, timeout=10)
++        self.assertIn("running", output[0])
++        self.assertEqual(exit_code, 0)
 -- 
 2.26.2
