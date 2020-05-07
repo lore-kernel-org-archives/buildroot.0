@@ -1,49 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 May 2020 22:47:30 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- toolchain/toolchain-buildroot: PPC64(LE) support in musl requires ALTIVEC
-Message-ID: <20200507214107.6230290F65@busybox.osuosl.org>
+Date: Thu, 7 May 2020 23:00:38 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] configs: fix typo
+ BR2_TARGET_ROOTFS_EXT2_4
+Message-ID: <20200507214107.8B5D390EAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ae1cf0b19e6110459274f40b5f9252b9e2339ff
+commit: https://git.buildroot.net/buildroot/commit/?id=80f3c1f49d5238eac94f37136c6537c7e087326b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-musl currently assumes all PPC64(LE) CPUs support ALTIVEC instructions.
+The ext4 option is BR2_TARGET_ROOTFS_EXT2_4 not
+BR2_TARGET_ROOTFS_EXT_4.
 
-However, there are exceptions (such as the e5500) for which musl builds
-ultimately generate illegal instructions for the targets.
+This fixes the new defconfig check.
 
-Disable musl if the PPC64(LE) CPU does not support ALTIVEC instructions.
-
-This patch addresses the issues seen here:
-  https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092743
-  https://gitlab.com/kubu93/toolchains-builder/-/jobs/418092744
-
-musl mailing list thread:
-  https://www.openwall.com/lists/musl/2020/02/03/10
-
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 20c267f2e9a9664a87a1804555dd4703e9a3665c)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Fabio Estevam <fabio.estevam@nxp.com>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a3704cd8c927401e89089b9a3d6b0ecf649f217c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-buildroot/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ configs/freescale_imx28evk_defconfig      | 2 +-
+ configs/imx23evk_defconfig                | 2 +-
+ configs/olimex_imx233_olinuxino_defconfig | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index a980f766ac..8c33b2b4dd 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -86,6 +86,7 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
- 		   BR2_powerpc64le || BR2_RISCV_64 || BR2_sh   || BR2_x86_64
- 	depends on !BR2_powerpc_SPE # not supported, build breaks
-+	depends on !(BR2_powerpc64 || BR2_powerpc64le) || BR2_POWERPC_CPU_HAS_ALTIVEC
- 	# sh2 nommu is supported by musl, but we don't have support
- 	# for it in Buildroot.
- 	depends on BR2_USE_MMU
+diff --git a/configs/freescale_imx28evk_defconfig b/configs/freescale_imx28evk_defconfig
+index b0a0c15ef8..520c63f673 100644
+--- a/configs/freescale_imx28evk_defconfig
++++ b/configs/freescale_imx28evk_defconfig
+@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT_FORMAT_SD=y
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT4=y
++BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+ # To generate SD Image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/imx23evk_defconfig b/configs/imx23evk_defconfig
+index 87610d1b72..b5bfc849b4 100644
+--- a/configs/imx23evk_defconfig
++++ b/configs/imx23evk_defconfig
+@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT_FORMAT_SD=y
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT4=y
++BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+ # To generate SD card image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
+index 26e5ad1393..275dd98afe 100644
+--- a/configs/olimex_imx233_olinuxino_defconfig
++++ b/configs/olimex_imx233_olinuxino_defconfig
+@@ -33,7 +33,7 @@ BR2_PACKAGE_ZD1211_FIRMWARE=y
+ 
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT4=y
++BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+ # U-Boot
