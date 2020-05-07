@@ -1,60 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 May 2020 22:53:37 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/paho-mqtt-c: fix
- bump to version 1.3.2
-Message-ID: <20200507214107.76E3190F65@busybox.osuosl.org>
+Date: Thu, 7 May 2020 22:59:38 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ configs/amarula_a64_relic: add missing BR2_PACKAGE_HOST_ANDROID_TOOLS=y
+Message-ID: <20200507214107.81B0F90EAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bde7aafbec5e1a56baa09cb2d7f93788feeff49
+commit: https://git.buildroot.net/buildroot/commit/?id=cf929584c71fbc964d5b5181ea279945eac7410f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Commit e69b8ddd43292b03b8f30f748ee2279b8df64c47 bumped paho-mqtt-c to
-version 1.3.2 but hash was wrong moreover licence has changed to EPL-2.0
-since
-https://github.com/eclipse/paho.mqtt.c/commit/1e91229cb6403e3a9b02dfdc11c71b04c0518cff
+board/amarula/a64-relic/readme.txt makes use the host fastboot utility
+to flash the board. However, BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT
+(which is enabled in the defconfig) has a dependency on
+BR2_PACKAGE_HOST_ANDROID_TOOLS, which is not enabled in the
+defconfig. Due to this, BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT=y is
+lost when loading the defconfig.
 
-So fix that and add LICENSE to the list of license files
-
-Fixes:
- - http://autobuild.buildroot.org/results/7ea1791778053613e9ef6b146dbd1992a0f63dc6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+[Thomas: change to add BR2_PACKAGE_HOST_ANDROID_TOOLS=y]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7a078ef054896758ad90abb7619be2347fef062c)
+(cherry picked from commit 016a1d80eab41f6f3e7b0a6b23aec250a7a1933f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/paho-mqtt-c/paho-mqtt-c.hash | 5 +++--
- package/paho-mqtt-c/paho-mqtt-c.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ configs/amarula_a64_relic_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 80231c762a..8f6ca61480 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,4 +1,5 @@
- # Locally computed:
--sha256  c2d74a37c8e23d6eef229db0e04cb8e511571562668808e02d836e82d5bbd0ae  paho-mqtt-c-1.3.2.tar.gz
-+sha256  c426334c2ffc9f7a230e3de5162bdbc1762f8f60ffe27460e553edb74c7e0681  paho-mqtt-c-1.3.2.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
--sha256  44277b2bec6093e4ac313afec251a4de599d24c4e768f8574d95b13a9d2d97b5  epl-v10
-+sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
-+sha256  99d3a5c5cc2812f0593a85ec7c1b6dd83e8477b5090c01d9de0d49d49f367a4a  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index 49d5be3777..7cace9a607 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -6,8 +6,8 @@
- 
- PAHO_MQTT_C_VERSION = 1.3.2
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
--PAHO_MQTT_C_LICENSE = EPL-1.0 or BSD-3-Clause
--PAHO_MQTT_C_LICENSE_FILES = epl-v10 edl-v10
-+PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
-+PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
- PAHO_MQTT_C_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+diff --git a/configs/amarula_a64_relic_defconfig b/configs/amarula_a64_relic_defconfig
+index f2e7e7f965..304a3ef824 100644
+--- a/configs/amarula_a64_relic_defconfig
++++ b/configs/amarula_a64_relic_defconfig
+@@ -40,6 +40,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Amarula A64-Relic"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_PACKAGE_HOST_ANDROID_TOOLS=y
+ BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
