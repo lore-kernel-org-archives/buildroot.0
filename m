@@ -1,48 +1,125 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 May 2020 22:15:33 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with list of issues fixed
- in 2020.05-rc1
-Message-ID: <20200507200007.B9B3690EDD@busybox.osuosl.org>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Thu,  7 May 2020 14:39:01 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-argon2-cffi: only enable
+ sse2 when supported
+Message-ID: <20200507203901.97715-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e7bb67fc8dbdd0cea9effff077e262fbc607f00
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+We need to backport a commit so that we can enable/disable sse2 using
+the ARGON2_CFFI_USE_SSE2 env variable.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes:
+http://autobuild.buildroot.net/results/030/0306d66d081dd0807c577edd50d39075a46d0dd9/build-end.log
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- CHANGES | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ ...-ARGON2_CFFI_USE_SSE2-to-override-ss.patch | 78 +++++++++++++++++++
+ .../python-argon2-cffi/python-argon2-cffi.mk  |  6 ++
+ 2 files changed, 84 insertions(+)
+ create mode 100644 package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch
 
-diff --git a/CHANGES b/CHANGES
-index 5a2f2d20fd..75d3f61232 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -59,6 +59,24 @@
- 	nanopi_neo4, nanopi_r1, nitrogen8mm, nitrogen8mn, olpc_xo1,
- 	olpc_xo175, roc_rk3399_pc, stm32mp157a_dk1, zynq_qmtech
- 
-+	Issues resolved (http://bugs.uclibc.org):
+diff --git a/package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch b/package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch
+new file mode 100644
+index 0000000000..670d9b3d40
+--- /dev/null
++++ b/package/python-argon2-cffi/0001-Add-env-variable-ARGON2_CFFI_USE_SSE2-to-override-ss.patch
+@@ -0,0 +1,78 @@
++From 098890ed36d54a7c8beb8c01428c78de7ab77b05 Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Wed, 6 May 2020 23:40:11 -0600
++Subject: [PATCH] Add env variable ARGON2_CFFI_USE_SSE2 to override sse2
++ optimizations (#61)
 +
-+	#10386: Add an option to put all compiled executables that
-+		show up on target/ in staging/ as well
-+	#11866: iniramfs file system fails to boot using  Grub on EFI x86_64
-+	#12666: Doesn't pick up a custom bash profile
-+	#12696: Uboot 2020.01 Problem loading Linux kernel  on Nano PI NEO
-+	#12701: [patch] wpa_supplicant must depend on  openssl
-+	#12711: host-localedef 2.30-20 fails to compile on  fedora 32 (gcc 10.0.1)
-+	#12716: bio.h not found
-+	#12726: systemctl preset-all failed for	 ctrl-alt-del.target
-+	#12731: rtl8188eu not buildung for banana pi M1	 (glib, systemd, 4.18.12)
-+	#12746: "sysdig" package description points to
-+		http://sysdig.org, which bounces to malware site
-+	#12751: OpenJdk package installation issues on	target
-+	#12796: Update OpenSSL to Version 1.1.1g to patch  CVE-2020-1967
-+	#12811: bootstrap stuck and no login prompt
++This is useful for cross compiling since platform.machine() is broken
++for cross builds.
 +
- 2020.02.1, released April 10th, 2020
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1 at gmail.com: backport from upstream commit
++098890ed36d54a7c8beb8c01428c78de7ab77b05]
++---
++ CHANGELOG.rst         |  2 +-
++ docs/installation.rst | 10 ++++++++++
++ setup.py              | 12 +++++++++---
++ 3 files changed, 20 insertions(+), 4 deletions(-)
++
++diff --git a/CHANGELOG.rst b/CHANGELOG.rst
++index 9fa2bf0..4405297 100644
++--- a/CHANGELOG.rst
+++++ b/CHANGELOG.rst
++@@ -26,7 +26,7 @@ Deprecations:
++ Changes:
++ ^^^^^^^^
++ 
++-*none*
+++- Added ``ARGON2_CFFI_USE_SSE2`` env variable to override SSE2 autodetection.
++ 
++ 
++ ----
++diff --git a/docs/installation.rst b/docs/installation.rst
++index 3ee9ccd..563c891 100644
++--- a/docs/installation.rst
+++++ b/docs/installation.rst
++@@ -57,6 +57,16 @@ This approach can lead to problems around your build chain and you can run into
++ **It is your own responsibility to deal with these risks if you choose this path.**
++ 
++ 
+++Override Automatic SSE2 Detection
+++------------------------------------------
+++
+++If you set ``ARGON2_CFFI_USE_SSE2`` to ``1`` (and *only* ``1``), ``argon2-cffi`` will build with sse2 support.
+++
+++If you set ``ARGON2_CFFI_USE_SSE2`` to ``0`` (and *only* ``0``), ``argon2-cffi`` will build without sse2 support.
+++
+++This should generally only be used if the sse2 autodetection causes a compilation failure or if you are cross compiling.
+++
+++
++ .. _SSE2: https://en.wikipedia.org/wiki/SSE2
++ .. _PyPI: https://pypi.org/project/argon2-cffi/
++ .. _CFFI environment: https://cffi.readthedocs.io/en/latest/installation.html
++diff --git a/setup.py b/setup.py
++index e91e73a..c26a691 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -19,9 +19,15 @@ from setuptools.command.install import install
++ NAME = "argon2-cffi"
++ PACKAGES = find_packages(where="src")
++ 
++-# Optimized version requires SSE2 extensions.  They have been around since
++-# 2001 so we try to compile it on every recent-ish x86.
++-optimized = platform.machine() in ("i686", "x86", "x86_64", "AMD64")
+++use_sse2 = os.environ.get("ARGON2_CFFI_USE_SSE2", None)
+++if use_sse2 == "1":
+++    optimized = True
+++elif use_sse2 == "0":
+++    optimized = False
+++else:
+++    # Optimized version requires SSE2 extensions.  They have been around since
+++    # 2001 so we try to compile it on every recent-ish x86.
+++    optimized = platform.machine() in ("i686", "x86", "x86_64", "AMD64")
++ 
++ CFFI_MODULES = ["src/argon2/_ffi_build.py:ffi"]
++ lib_base = os.path.join("extras", "libargon2", "src")
++-- 
++2.20.1
++
+diff --git a/package/python-argon2-cffi/python-argon2-cffi.mk b/package/python-argon2-cffi/python-argon2-cffi.mk
+index 099574e9c3..df1c1d51c6 100644
+--- a/package/python-argon2-cffi/python-argon2-cffi.mk
++++ b/package/python-argon2-cffi/python-argon2-cffi.mk
+@@ -12,4 +12,10 @@ PYTHON_ARGON2_CFFI_LICENSE = MIT
+ PYTHON_ARGON2_CFFI_LICENSE_FILES = LICENSE
+ PYTHON_ARGON2_CFFI_DEPENDENCIES = host-python-cffi
  
- 	Important / security related fixes.
++ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
++PYTHON_ARGON2_CFFI_ENV = ARGON2_CFFI_USE_SSE2=1
++else
++PYTHON_ARGON2_CFFI_ENV = ARGON2_CFFI_USE_SSE2=0
++endif
++
+ $(eval $(python-package))
+-- 
+2.20.1
