@@ -1,40 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 May 2020 18:28:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/brltty: add host-gawk dependency
-Message-ID: <20200508162803.2151838-1-fontaine.fabrice@gmail.com>
+From: Nicola Di Lieto <nicola.dilieto@gmail.com>
+Date: Fri, 8 May 2020 18:39:51 +0200
+Subject: [Buildroot] [PATCH] package/uacme: bump version to 1.2.3
+In-Reply-To: <87mu6isv6z.fsf@dell.be.48ers.dk>
+References: <20200423055104.lljafbjugkwzbzhm@einstein.dilieto.eu>
+ <87mu6isv6z.fsf@dell.be.48ers.dk>
+Message-ID: <20200508163951.5hf2clb4cysufywb@einstein.dilieto.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-gawk is used by brltty to build brlapi_constants.h, the build will
-fail if mawk is used instead of gawk
+On Fri, May 08, 2020 at 10:11:00AM +0200, Peter Korsgaard wrote:
+>Does that also affect the 1.0.21 version we have in 2020.02.x? If so,
+>what is the impact? Do we need to update to 1.2.3 or cherry pick a
+>patch?
+>
 
-Fixes:
- - http://autobuild.buildroot.org/results/4c77f03cbc7ab9e5ae9f24fe6eead1d76c50c743
+Yes, all versions prior to 1.2.3 are affected. The impact for the moment 
+is only with pebble (the non-production standalone let's encrypt testing 
+server, https://github.com/letsencrypt/pebble).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/brltty/brltty.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+The production let's encrypt server runs a different software (boulder) 
+which doesn't trigger this bug, however this may change and I have no 
+control over whether or when this will happen.
 
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index e34b9b2b76..4f40e65fc6 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -12,7 +12,11 @@ BRLTTY_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
- BRLTTY_LICENSE = LGPL-2.1+
- BRLTTY_LICENSE_FILES = LICENSE-LGPL README
- 
--BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
-+BRLTTY_DEPENDENCIES = \
-+	$(TARGET_NLS_DEPENDENCIES) \
-+	host-autoconf \
-+	host-gawk \
-+	host-pkgconf \
- 	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
- 
- BRLTTY_CONF_ENV = \
--- 
-2.26.2
+Therefore I recommend updating to a newer version. Also note that I 
+released 1.3 about one hour ago which has a few more small fixes and 
+enhancements, see https://github.com/ndilieto/uacme/blob/master/NEWS
+
+Kind regards,
+Nicola
