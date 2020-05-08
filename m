@@ -1,66 +1,39 @@
-From: Mark Corbin <mark@dibsco.co.uk>
-Date: Fri,  8 May 2020 11:33:37 +0100
-Subject: [Buildroot] [PATCH 1/2] toolchain/toolchain-buildroot: enable
- uclibc for riscv64
-Message-ID: <20200508103338.16391-1-mark@dibsco.co.uk>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 8 May 2020 06:38:34 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-05-07 [host-checkpolicy failure]
+In-Reply-To: <20200508062902.E3F9D21543@silver.osuosl.org>
+References: <20200508062902.E3F9D21543@silver.osuosl.org>
+Message-ID: <CANQCQpbv8Y3iy1SoJF=8cDMit_7qayJnPVfj+rAOpZXbv3_WMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We can enable uclibc for RISC-V 64 bit now that it has been
-bumped from v1.0.32 to v1.0.34.
+On Fri, May 8, 2020 at 1:31 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Autobuild statistics for 2020-05-07
+> ===============================
+>
+>       branch |  OK | NOK | TIM | TOT |
+>   2020.02.x  | 16  |  3  |  0  | 19  |
+>     master   | 197 | 129 |  1  | 327 |
+>
+> Results for branch 'master'
+> ===========================
+>
+> Classification of failures by reason
+> ------------------------------------
+>
+>               exfatprogs-1.0.2 | 11
+>                        unknown | 8
+>                     atk-2.33.3 | 7
+>           host-checkpolicy-3.0 | 7
 
-Uclibc has had basic support for RISC-V 64 bit since v1.0.31, but
-shared library and TLS/NPTL support has only been available since
-v1.0.33.
+http://patchwork.ozlabs.org/project/buildroot/patch/20200506122101.48925-1-matthew.weber at rockwellcollins.com/
 
-This update has been tested using qemu_riscv64_virt_defconfig and
-the Buildroot host QEMU.
-
-Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
----
- package/uclibc/Config.in                |  1 +
- toolchain/toolchain-buildroot/Config.in | 14 ++++++++------
- 2 files changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index de2885bc92..f8c9955bc8 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -101,6 +101,7 @@ config BR2_UCLIBC_TARGET_ARCH
- 	default "mips"	   if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	default "or1k"     if BR2_or1k
- 	default "powerpc"  if BR2_powerpc
-+	default "riscv64"  if BR2_riscv && BR2_ARCH_IS_64
- 	default "sh"	   if BR2_sh
- 	default "sparc"	   if BR2_sparc
- 	default "xtensa"   if BR2_xtensa
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 8c33b2b4dd..8ae7358526 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -27,12 +27,14 @@ choice
- 
- config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 	bool "uClibc-ng"
--	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle   || BR2_arceb  || \
--		   BR2_arm     || BR2_armeb    || \
--		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
--		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
--		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
--		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
-+	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle      || BR2_arceb    || \
-+		   BR2_arm     || BR2_armeb      || \
-+		   BR2_i386    || BR2_m68k       || BR2_microblaze || \
-+		   BR2_mips    || BR2_mipsel     || BR2_mips64     || BR2_mips64el || \
-+		   BR2_or1k    || BR2_powerpc    || BR2_riscv      || \
-+		   BR2_sh2a    || BR2_sh4	 || BR2_sh4eb      || BR2_sparc    || \
-+		   BR2_xtensa  || BR2_x86_64
-+	depends on BR2_ARCH_IS_64 || !BR2_riscv
- 	select BR2_TOOLCHAIN_USES_UCLIBC
- 	help
- 	  This option selects uClibc-ng as the C library for the
--- 
-2.20.1
+Same patch needs applied to 2020.02.x
