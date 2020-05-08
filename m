@@ -1,77 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 May 2020 22:26:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/brltty: add host-gawk dependency
-In-Reply-To: <20200508162803.2151838-1-fontaine.fabrice@gmail.com>
-References: <20200508162803.2151838-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200508202653.GQ12536@scaer>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Fri,  8 May 2020 23:27:34 +0200
+Subject: [Buildroot] [PATCH/next] package/genimage: bump to version 13
+Message-ID: <1588973254-20636-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Also update hash file formatting (2 spaces)
 
-On 2020-05-08 18:28 +0200, Fabrice Fontaine spake thusly:
-> host-gawk is used by brltty to build brlapi_constants.h, the build will
-> fail if mawk is used instead of gawk
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/4c77f03cbc7ab9e5ae9f24fe6eead1d76c50c743
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/genimage/genimage.hash | 4 ++--
+ package/genimage/genimage.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-It seemed like a simple patch, but I can't reproduce the error with mawk
-on my machine:
-
-    $ update-alternatives --get-selections |grep awk
-    awk                            manual   /usr/bin/mawk
-    $ awk --version
-    awk: not an option: --version
-    $ wget -O .config http://autobuild.buildroot.org/results/4c77f03cbc7ab9e5ae9f24fe6eead1d76c50c743/config
-    $ make olddefconfig
-    $ make brltty
-
-Success...
-
-So, there is something else lurking in the darkness... :-/
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/brltty/brltty.mk | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-> index e34b9b2b76..4f40e65fc6 100644
-> --- a/package/brltty/brltty.mk
-> +++ b/package/brltty/brltty.mk
-> @@ -12,7 +12,11 @@ BRLTTY_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
->  BRLTTY_LICENSE = LGPL-2.1+
->  BRLTTY_LICENSE_FILES = LICENSE-LGPL README
->  
-> -BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
-> +BRLTTY_DEPENDENCIES = \
-> +	$(TARGET_NLS_DEPENDENCIES) \
-> +	host-autoconf \
-> +	host-gawk \
-> +	host-pkgconf \
->  	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
->  
->  BRLTTY_CONF_ENV = \
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
+index fb5d235..fbec5ce 100644
+--- a/package/genimage/genimage.hash
++++ b/package/genimage/genimage.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	2e9b43d1288f4e216d6c79de2a0c53ce1bd41f93cec750d8ab057aa2d0b0ee4a	genimage-12.tar.xz
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
++sha256  4206e253226a384386c01591251f2ed1ea3485ef63f1e696db03600e1213db79  genimage-13.tar.xz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 8960393..dde8f8b 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GENIMAGE_VERSION = 12
++GENIMAGE_VERSION = 13
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+ HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
