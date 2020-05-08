@@ -1,56 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 May 2020 09:23:03 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/openjdk: copy all
- directories and files when installing
-Message-ID: <20200508080227.6E99A90FE4@busybox.osuosl.org>
+Date: Fri, 8 May 2020 09:15:43 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libglib2: restore
+ use of system printf
+Message-ID: <20200508080227.554CD90F63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0282033f42d4360b0f379cf01f12c1155d957f0d
+commit: https://git.buildroot.net/buildroot/commit/?id=6808e122f6ae9cca3966877e865e35b8922a9e9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Several directories and files are currently not installed during the
-target installation, these include:
-  - conf
-    Several configuration files, including security configuration files which
-    may be necessary for running various java applications.
+Prior to commit 4102db0f7a ("package/libglib2: bump to version 2.60.3")
+which converted libglib2 to meson, Buildroot used to set a range of
+autoconf options to bypass tests that require running binaries.
 
-  - legal
-    This directory contains legal notices that some java applications may
-    require, as they may print legal information and will throw exceptions at
-    runtime if the legal files are not present on the system.
+The meson version of libglib2's build system has many fewer of these
+checks, but there are still some and these can be fed the "correct"
+answer by adding properties to cross-compilation.conf.
 
-  - release
-    This file contains a list of modules included in the image.
+Add the necessary properties to indicate that we have C99 compliant
+print functions to avoid pulling in the gnulib fallback.
 
-Because these directories take up less than of megabyte extra, it is not an
-issue to install all of them.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Reviewed-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Tested-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 63b576095b1dbabaf15a6eee7ceabed6d868a707)
+Signed-off-by: John Keeping <john@metanate.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4f91198f0d878adee4f3fd6c6991879c1255951a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openjdk/openjdk.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/libglib2/libglib2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index e58757b2ed..1f906517fe 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -123,9 +123,7 @@ endef
- # which makes manual installation necessary.
- define OPENJDK_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)$(OPENJDK_INSTALL_BASE)
--	cp -dpfr $(@D)/build/linux-*-release/images/jre/bin/ \
--		$(TARGET_DIR)$(OPENJDK_INSTALL_BASE)/
--	cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/ \
-+	cp -dpfr $(@D)/build/linux-*-release/images/jre/* \
- 		$(TARGET_DIR)$(OPENJDK_INSTALL_BASE)/
- 	cd $(TARGET_DIR)/usr/bin && ln -snf ../..$(OPENJDK_INSTALL_BASE)/bin/* .
- endef
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index f00818f69c..a206639f74 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -52,6 +52,11 @@ LIBGLIB2_CONF_OPTS = \
+ 	-Dinstalled_tests=false \
+ 	-Doss_fuzz=disabled
+ 
++LIBGLIB2_MESON_EXTRA_PROPERTIES = \
++	have_c99_vsnprintf=true \
++	have_c99_snprintf=true \
++	have_unix98_printf=true
++
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ LIBGLIB2_DEPENDENCIES += libiconv
+ endif
