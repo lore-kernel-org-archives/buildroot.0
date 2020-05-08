@@ -1,118 +1,122 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri,  8 May 2020 19:31:52 +0200
-Subject: [Buildroot] [PATCH] package/uclibc: fix mips uclibc toolchain with
- gcc 10
-Message-ID: <20200508173152.1994935-1-romain.naour@gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Fri,  8 May 2020 13:13:04 -0500
+Subject: [Buildroot] [PATCH] package/uboot-tools: add option to build env bin
+Message-ID: <20200508181304.52228-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From [1]
-"GCC 10 (PR 91233) won't silently allow registers that are not architecturally
-available to be present in the clobber list anymore, resulting in build failure
-for mips*r6 targets in form of:
-...
-.../sysdep.h:146:2: error: the register ?lo? cannot be clobbered in ?asm? for the current target
-  146 |  __asm__ volatile (      \
-      |  ^~~~~~~
+Add an option to allow the creation of a u-boot environment binary
+from a set of provided source file(s) when the defconfig being built
+does not offer the option via the u-boot package.
 
-This is because base R6 ISA doesn't define hi and lo registers w/o DSP extension.
-This patch provides the alternative definitions of __SYSCALL_CLOBBERS for r6
-targets that won't include those registers."
+This feature requires environment source files unlike the u-boot
+package equivalent that can build the default environment based
+on the specific u-boot source tree and configuration.
 
-Fixes:
-https://gitlab.com/kubu93/buildroot/-/jobs/543923030
-
-Note:
-The kernel 5.4.35 fail to build later due to a similar issue while
-building lib/vdso/gettimeofday.c [2]. The issue is still present in kernel
-5.7-rc4.
-
-[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/arch/mips/include/asm/vdso/gettimeofday.h?h=v5.7-rc4#n38
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- ...ude-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100644 package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch
 
-diff --git a/package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch b/package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch
-new file mode 100644
-index 0000000000..cc8b9d9c0b
---- /dev/null
-+++ b/package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch
-@@ -0,0 +1,68 @@
-+From aad6cdbcff0f5411a09ac524637fea62652786a3 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Fri, 8 May 2020 18:39:45 +0200
-+Subject: [PATCH] mips: Do not include hi and lo in __SYSCALL_CLOBBERS for R6
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
+I did not add conditions to force the user to use the u-boot pkg
+option if that is available.  Seemed unnecessary as this would
+still work in that case.
+---
+ package/uboot-tools/Config.in.host | 54 ++++++++++++++++++++++++++++--
+ package/uboot-tools/uboot-tools.mk | 13 +++++++
+ 2 files changed, 65 insertions(+), 2 deletions(-)
+
+diff --git a/package/uboot-tools/Config.in.host b/package/uboot-tools/Config.in.host
+index 52a4c2ec30..fccd40e4e4 100644
+--- a/package/uboot-tools/Config.in.host
++++ b/package/uboot-tools/Config.in.host
+@@ -37,6 +37,56 @@ config BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
+ 	  public key is stored in a non-volatile place, any image can
+ 	  be verified in this way.
+ 
+-endif
++endif # BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT
+ 
+-endif
++config BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE
++	bool "Environment image"
++	help
++	  Generate a valid binary environment image from a text file
++	  describing the key=value pairs of the environment.
 +
-+From [1]
-+"GCC 10 (PR 91233) won't silently allow registers that are not architecturally
-+available to be present in the clobber list anymore, resulting in build failure
-+for mips*r6 targets in form of:
-+...
-+.../sysdep.h:146:2: error: the register ?lo? cannot be clobbered in ?asm? for the current target
-+  146 |  __asm__ volatile (      \
-+      |  ^~~~~~~
++	  This option can be useful to build enviornment configurations
++	  as part of a Linux / rootfs only defconfig instead of using
++	  post scripts. This supports a hardware use case of a single
++	  bootloader only defconfig but multiple Linux / rootfs
++	  defconfigs with different boot environments.
 +
-+This is because base R6 ISA doesn't define hi and lo registers w/o DSP extension.
-+This patch provides the alternative definitions of __SYSCALL_CLOBBERS for r6
-+targets that won't include those registers."
++	  The environment image will be called uboot-env.bin.
 +
-+[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
++if BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE
 +
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+Cc: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ libc/sysdeps/linux/mips/bits/syscalls.h | 18 ++++++++++++++----
-+ 1 file changed, 14 insertions(+), 4 deletions(-)
++config BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE
++	string "Source files for environment"
++	help
++	  Text files describing the environment. Files should have
++	  lines of the form var=value, one per line. Blank lines and
++	  lines starting with a # are ignored.
 +
-+diff --git a/libc/sysdeps/linux/mips/bits/syscalls.h b/libc/sysdeps/linux/mips/bits/syscalls.h
-+index b8f80597e..13728ac55 100644
-+--- a/libc/sysdeps/linux/mips/bits/syscalls.h
-++++ b/libc/sysdeps/linux/mips/bits/syscalls.h
-+@@ -270,8 +270,13 @@
-+ 	_sys_result;							\
-+ })
-+ 
-+-#define __SYSCALL_CLOBBERS "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13", \
-+-	"$14", "$15", "$24", "$25", "hi", "lo", "memory"
-++#if __mips_isa_rev >= 6
-++# define __SYSCALL_CLOBBERS "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13", \
-++	 "$14", "$15", "$24", "$25", "memory"
-++#else
-++# define __SYSCALL_CLOBBERS "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13", \
-++	 "$14", "$15", "$24", "$25", "hi", "lo", "memory"
-++#endif
-+ 
-+ #else /* N32 || N64 */
-+ 
-+@@ -327,8 +332,13 @@
-+ 	_sys_result;							\
-+ })
-+ 
-+-#define __SYSCALL_CLOBBERS "$1", "$3", "$10", "$11", "$12", "$13", \
-+-	"$14", "$15", "$24", "$25", "hi", "lo", "memory"
-++#if __mips_isa_rev >= 6
-++# define __SYSCALL_CLOBBERS "$1", "$3", "$10", "$11", "$12", "$13", \
-++	 "$14", "$15", "$24", "$25", "memory"
-++#else
-++# define __SYSCALL_CLOBBERS "$1", "$3", "$10", "$11", "$12", "$13", \
-++	 "$14", "$15", "$24", "$25", "hi", "lo", "memory"
-++#endif
-+ 
-+ #endif
-+ 
-+-- 
-+2.25.4
++	  Multiple source files are concatenated in the order listed.
 +
++	  Unlike the U-Boot package, the source files must be provided
++	  as there is no uboot configured to define the compiled-in env.
++
++config BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE
++	string "Size of environment"
++	help
++	  Size of envronment, can be prefixed with 0x for hexadecimal
++	  values.
++
++config BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_REDUNDANT
++	bool "Environment has two copies"
++	help
++	  Some platforms define in their U-Boot configuration that the
++	  U-Boot environment should be duplicated in two locations (for
++	  extra safety). Check your U-Boot configuration for the
++	  CONFIG_ENV_ADDR_REDUND and CONFIG_ENV_SIZE_REDUND settings to
++	  see if this is the case for your platform.
++
++	  If it is the case, then you should enable this option to
++	  ensure that the U-Boot environment image generated by
++	  Buildroot is compatible with the "redundant environment"
++	  mechanism of U-Boot.
++
++endif # BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE
++
++endif # BR2_PACKAGE_HOST_UBOOT_TOOLS
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 55d1123bc8..de665e8fbf 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -112,10 +112,23 @@ define HOST_UBOOT_TOOLS_BUILD_CMDS
+ 	$(BR2_MAKE1) -C $(@D) $(HOST_UBOOT_TOOLS_MAKE_OPTS) tools-only
+ endef
+ 
++ifneq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE),)
++UBOOT_TOOLS_GENERATE_ENV_FILE = $(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE))
++define UBOOT_TOOLS_GENERATE_ENV_IMAGE
++	cat $(UBOOT_TOOLS_GENERATE_ENV_FILE) > $(@D)/buildroot-env.txt
++	$(HOST_DIR)/bin/mkenvimage -s $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE) \
++		$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_REDUNDANT),-r) \
++		$(if $(filter "BIG",$(BR2_ENDIAN)),-b) \
++		-o $(BINARIES_DIR)/uboot-env.bin \
++		$(@D)/buildroot-env.txt
++endef
++endif
++
+ define HOST_UBOOT_TOOLS_INSTALL_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/bin/mkimage
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/mkenvimage $(HOST_DIR)/bin/mkenvimage
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/dumpimage $(HOST_DIR)/bin/dumpimage
++	$(UBOOT_TOOLS_GENERATE_ENV_IMAGE)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-2.25.4
+2.17.1
