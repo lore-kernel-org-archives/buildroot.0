@@ -1,31 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 May 2020 11:49:07 +0200
-Subject: [Buildroot] [PATCH] package/apache: fixing apxs path mangling
-In-Reply-To: <1587717119-16710-1-git-send-email-angelo@amarulasolutions.com>
- (Angelo Compagnucci's message of "Fri, 24 Apr 2020 10:31:59 +0200")
-References: <1587717119-16710-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <87wo5mrc30.fsf@dell.be.48ers.dk>
+Date: Fri, 08 May 2020 11:51:09 +0200
+Subject: [Buildroot] [git commit] package/wireguard-linux-compat: depend
+ on headers < 5.6
+In-Reply-To: <20200424122241.994F08FEC1@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Fri, 24 Apr 2020 14:37:03 +0200")
+References: <20200424122241.994F08FEC1@busybox.osuosl.org>
+Message-ID: <87sggarbzm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Latest version of Apache introduce a new apxs with a slightly modified
- > path handling logic. In order to simplify the crosscompilation, the
- > software removes the common prefix from bin install dir and build
- > install dir, but for this to work they both should have a common
- > prefix. So we introduce a new regexp to fix /usr/bin to staging dir,
- > the regexps are also fixed to replace only the exact path between
- > double quotes.a
+ > commit: https://git.buildroot.net/buildroot/commit/?id=da5afc10a45d1e1b5ab7ab6f9230ed7ba44581e7
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > http://autobuild.buildroot.net/results/c41f31566974209897a3a1ec35afe2536fb248cc
- > http://autobuild.buildroot.net/results/b93f19976ce96e79ea159c25ed74a7377c78f334
+ > Since wireguard is built into kernels 5.6 and later we can't build
+ > wireguard-linux-compat on them, so we need to depend on
+ > !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6.
 
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2020.02.x, thanks.
 
