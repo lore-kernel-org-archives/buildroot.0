@@ -1,36 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 May 2020 10:15:40 +0200
-Subject: [Buildroot] [git commit] package/domoticz: set WITH_LIBUSB
-Message-ID: <20200508080012.A140B90FD4@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 08 May 2020 10:17:42 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/freescale-imx/imx-gpu-g2d:
+ fix the file name
+In-Reply-To: <1587640005-22386-1-git-send-email-timo.ketola@exertus.fi> (Timo
+ Ketola's message of "Thu, 23 Apr 2020 14:06:45 +0300")
+References: <1587617509-15087-1-git-send-email-timo.ketola@exertus.fi>
+ <1587640005-22386-1-git-send-email-timo.ketola@exertus.fi>
+Message-ID: <87imh6suvt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a896be19de9e6e7845b24af497fead6f522ef67d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Timo" == Timo Ketola <timo.ketola@exertus.fi> writes:
 
-Use WITH_LIBUSB which is available since version 4.9700 and
-https://github.com/domoticz/domoticz/commit/f53817577a834ed0c3fc16458c374aea490be49e
+ > NXP apparently changed file naming convention for this particular file.
+ > Fixes:
+ > 1d0ea8d433 (package/freescale-imx/imx-gpu-g2d: bump to version 6.4.0.p1.0)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/domoticz/domoticz.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ > Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+ > ---
+ > Changes v1 -> v2:
 
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index 5efe86a784..0ceaab87b4 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -38,6 +38,9 @@ DOMOTICZ_CONF_OPTS += \
- 
- ifeq ($(BR2_PACKAGE_LIBUSB),y)
- DOMOTICZ_DEPENDENCIES += libusb
-+DOMOTICZ_CONF_OPTS += -DWITH_LIBUSB=ON
-+else
-+DOMOTICZ_CONF_OPTS += -DWITH_LIBUSB=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENZWAVE),y)
+ >  - Add 'Fixes:' line as suggested by Gary
+
+Committed to 2020.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
