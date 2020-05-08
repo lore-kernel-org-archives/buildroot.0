@@ -1,37 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 08 May 2020 15:47:16 +0000
-Subject: [Buildroot] [Bug 12691] host-rust build fails
-In-Reply-To: <bug-12691-163@https.bugs.busybox.net/>
-References: <bug-12691-163@https.bugs.busybox.net/>
-Message-ID: <bug-12691-163-2PsbYHXL8W@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  8 May 2020 17:49:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/matchbox: add hash for license file
+Message-ID: <20200508154933.1826414-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12691
+Add hash for license file, add sha256 for tarball and update indentation
+for hash file (two spaces)
 
---- Comment #4 from romain.naour at gmail.com ---
-Hi Eyal, Alex,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/matchbox/matchbox.hash | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-As a short therm solution, I suggested a patch that disable host-rust package
-when the target architecture is not supported by rust [1].
-
-I'm not sure how upstream rust project is testing/supporting uClibc-ng or musl.
-
-Note: The current rust version available in Buildroot is old, there is a patch
-series adding a Cargo package infrastructure and an update to rust 1.40 (1.43.1
-is already available).
-
-Feel free to send a followup patch to enable host-rust for uclibc target.
-
-[1]
-http://patchwork.ozlabs.org/project/buildroot/patch/20200508152739.1625844-1-romain.naour at gmail.com/
-
-Best regards,
-Romain
-
+diff --git a/package/matchbox/matchbox.hash b/package/matchbox/matchbox.hash
+index f00ed4e4f3..fdb8f7d119 100644
+--- a/package/matchbox/matchbox.hash
++++ b/package/matchbox/matchbox.hash
+@@ -1,2 +1,6 @@
+ # From http://downloads.yoctoproject.org/releases/matchbox/matchbox-window-manager/1.2/matchbox-window-manager-1.2.tar.bz2.md5
+-md5	3e158dcf57823b55c926d95b245500fb	matchbox-window-manager-1.2.tar.bz2
++md5  3e158dcf57823b55c926d95b245500fb  matchbox-window-manager-1.2.tar.bz2
++
++# Locally computed
++sha256  81a23a4af797cf350759fd5ac738797015a66dd5dba2f3d9f3c6908506c1ceff  matchbox-window-manager-1.2.tar.bz2
++sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.26.2
