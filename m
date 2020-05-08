@@ -1,39 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 May 2020 11:52:55 +0200
-Subject: [Buildroot] [PATCH 1/1] fs/cpio: make initramfs init script
- survive 'console=' kernel argument
-In-Reply-To: <20200425120825.GP5035@scaer> (Yann E. MORIN's message of "Sat,
- 25 Apr 2020 14:08:25 +0200")
-References: <80e3e080-0af3-99de-ff8f-9de5e3dca8a6@exertus.fi>
- <20200425120825.GP5035@scaer>
-Message-ID: <87k11mrbwo.fsf@dell.be.48ers.dk>
+Date: Fri, 8 May 2020 11:50:34 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ package/wireguard-linux-compat: tweak kernel-headers < 5.6 logic
+Message-ID: <20200508093729.D38B491054@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0b3ca0be160ae5a2b1ee5da26772f02d7f130f6a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Timo, All,
- > On 2019-09-23 10:58 +0000, Timo Ketola spake thusly:
- >> When booting with 'console=<empty>' in the kernel command line (as e.g.
- >> U-Boot does with silent flags in effect), opening /dev/console fails.
- >> That is fatal in the /init script and kernel will panic. It is also
- >> needless, because the kernel tries to open it anyway (well, as long as
- >> we have console node in initramfs /dev; cpio.mk creates that alright).
- >> 
- >> Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+The reason why the external wireguard kernel module is not allowed with
+kernel headers >= 5.6 is that wireguard is included in the upstream kernel
+since 5.6 rather than some kind of (fixable) incompatibility issue.  Adjust
+the comment to make that clear.
 
- > I've applied to master, after extending the commit log with all the gory
- > details explaininng why we can indeed safely remove those redisrections
- > now.
+While we're at it, drop the redundant !5.6 dependency on the kernel headers
+dependency comment.  If headers are older than 3.10, then they are also
+older than 5.6, so the statement is redundant.
 
- > Thank you for the patience on this patch.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 74a865b1fc85352b814d032fa8725ace13f27eca)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard-linux-compat/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
- > Thanks also to Peter for helping on IRC about this research.
-
-Committed to 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wireguard-linux-compat/Config.in b/package/wireguard-linux-compat/Config.in
+index 6e41a0951b..5a323a35e5 100644
+--- a/package/wireguard-linux-compat/Config.in
++++ b/package/wireguard-linux-compat/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+ 	depends on BR2_LINUX_KERNEL
+ 	# kernel module requires 3.10+
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+-	# kernel module incompatible with 5.6+
++	# kernel module in upstream linux since 5.6
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+ 	help
+ 	  WireGuard is an extremely simple yet fast and modern VPN
+@@ -23,5 +23,4 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+ 
+ comment "wireguard-linux-compat needs a toolchain w/ headers >= 3.10"
+ 	depends on BR2_LINUX_KERNEL
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
