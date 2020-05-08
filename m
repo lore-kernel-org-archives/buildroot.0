@@ -1,92 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 May 2020 16:42:09 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mesa3d-headers:
- fix install of dri.pc
-Message-ID: <20200508143236.757899108D@busybox.osuosl.org>
+Date: Fri, 8 May 2020 12:38:50 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/paho-mqtt-c:
+ disable tests and cpack docs
+Message-ID: <20200508143236.694B191051@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81e3284ac402dcfd3d86a095f2d2a0d96b87860d
+commit: https://git.buildroot.net/buildroot/commit/?id=ea288b517d16d176d969c3d9f2c7a1eb604de68f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-mesa3d-headers is a little bit special: it uses the same sources as
-the mesa3d package, named just 'mesa' upstream. mesa uses the meson
-buildsystem, an that is what we use in the mesa3d package.
+paho-mqtt-c by default enables the building of test materials and
+install of CPack documentation:
 
-However, mesa3d-headers does not install the whole of mesa; it only
-installs a select set of headers for those binary blobs that do not
-provide them.
+PAHO_ENABLE_TESTING - "Build tests and run"
+PAHO_ENABLE_CPACK - "Enable CPack"
 
-mesa does not provide such a feature (only installing headers) with
-its meson buildsystem. As a consequence, we've made mesa3d-headers a
-generic package, that basically only copies headers over.
+Let's disable these to save a couple megabytes and time.  This is
+in keeping with the generic settings in pkg-cmake.mk.
 
-Additionally, mesa3d-headers also provides the dri.pc file for when
-Xorg is enabled; see 7468b60e7c (package/mesa3d-headers: also install
-dri header and .pc file).
-
-We used to manually generate that file from a .in template that was
-present in mesa source code at the time it was still using autotools.
-But when they switched over to using meson, the template was dropped
-[0], and the dri.pc is now entirely generated using meson internals
-[1].
-
-So we now have no template present in the source code, so we must
-come up with our own. This simplifies the replacement pattern to
-just inject the version string.
-
-[0] https://cgit.freedesktop.org/mesa/mesa/commit/?id=158758618264eac113025a86a360dc305ed4498b
-[1] https://cgit.freedesktop.org/mesa/mesa/tree/src/mesa/drivers/dri/meson.build?h=19.2#n93
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Tested-by: Vincent Fazio <vfazio@xes-inc.com>
-[yann.morin.1998 at free.fr:
-  - entirely rework the commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9014c21cac83b3bb6a038ad7dd4b06cde136d3ae)
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 5686d69eef4cb5d789dade22039937eef445b071)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/dri.pc            | 10 ++++++++++
- package/mesa3d-headers/mesa3d-headers.mk |  9 ++-------
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ package/paho-mqtt-c/paho-mqtt-c.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mesa3d-headers/dri.pc b/package/mesa3d-headers/dri.pc
-new file mode 100644
-index 0000000000..bd9a33b6c6
---- /dev/null
-+++ b/package/mesa3d-headers/dri.pc
-@@ -0,0 +1,10 @@
-+prefix=/usr
-+libdir=${prefix}/lib
-+includedir=${prefix}/include
-+
-+dridriverdir=/usr/lib/dri
-+
-+Name: dri
-+Description: Direct Rendering Infrastructure
-+Version: @VERSION@
-+Cflags: -I${includedir}
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 7d428f2322..6af6e8843f 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -34,13 +34,8 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
- # Not using $(SED) because we do not want to work in-place, and $(SED)
- # contains -i.
- define MESA3D_HEADERS_BUILD_DRI_PC
--	sed -e 's:@\(exec_\)\?prefix@:/usr:' \
--	    -e 's:@libdir@:$${exec_prefix}/lib:' \
--	    -e 's:@includedir@:$${prefix}/include:' \
--	    -e 's:@DRI_DRIVER_INSTALL_DIR@:$${libdir}/dri:' \
--	    -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
--	    -e 's:@DRI_PC_REQ_PRIV@::' \
--	    $(@D)/src/mesa/drivers/dri/dri.pc.in \
-+	sed -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
-+	    package/mesa3d-headers/dri.pc \
- 	    >$(@D)/src/mesa/drivers/dri/dri.pc
- endef
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index 7cace9a607..6a6b5f3d64 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+@@ -10,6 +10,10 @@ PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
+ PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+ PAHO_MQTT_C_INSTALL_STAGING = YES
  
++PAHO_MQTT_C_CONF_OPTS = \
++	-DPAHO_ENABLE_TESTING=FALSE \
++	-DPAHO_ENABLE_CPACK=FALSE
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ PAHO_MQTT_C_DEPENDENCIES += openssl
+ PAHO_MQTT_C_CONF_OPTS += -DPAHO_WITH_SSL=TRUE
