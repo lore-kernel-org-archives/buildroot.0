@@ -1,32 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 May 2020 11:51:42 +0200
-Subject: [Buildroot] [git commit] package/wireguard-linux-compat: tweak
- kernel-headers < 5.6 logic
-In-Reply-To: <20200425094139.9C1168FEFF@busybox.osuosl.org> (Peter Korsgaard's
- message of "Sat, 25 Apr 2020 11:56:03 +0200")
-References: <20200425094139.9C1168FEFF@busybox.osuosl.org>
-Message-ID: <87o8qyrbyp.fsf@dell.be.48ers.dk>
+Date: Fri, 08 May 2020 11:52:55 +0200
+Subject: [Buildroot] [PATCH 1/1] fs/cpio: make initramfs init script
+ survive 'console=' kernel argument
+In-Reply-To: <20200425120825.GP5035@scaer> (Yann E. MORIN's message of "Sat,
+ 25 Apr 2020 14:08:25 +0200")
+References: <80e3e080-0af3-99de-ff8f-9de5e3dca8a6@exertus.fi>
+ <20200425120825.GP5035@scaer>
+Message-ID: <87k11mrbwo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=74a865b1fc85352b814d032fa8725ace13f27eca
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Timo, All,
+ > On 2019-09-23 10:58 +0000, Timo Ketola spake thusly:
+ >> When booting with 'console=<empty>' in the kernel command line (as e.g.
+ >> U-Boot does with silent flags in effect), opening /dev/console fails.
+ >> That is fatal in the /init script and kernel will panic. It is also
+ >> needless, because the kernel tries to open it anyway (well, as long as
+ >> we have console node in initramfs /dev; cpio.mk creates that alright).
+ >> 
+ >> Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
 
- > The reason why the external wireguard kernel module is not allowed with
- > kernel headers >= 5.6 is that wireguard is included in the upstream kernel
- > since 5.6 rather than some kind of (fixable) incompatibility issue.  Adjust
- > the comment to make that clear.
+ > I've applied to master, after extending the commit log with all the gory
+ > details explaininng why we can indeed safely remove those redisrections
+ > now.
 
- > While we're at it, drop the redundant !5.6 dependency on the kernel headers
- > dependency comment.  If headers are older than 3.10, then they are also
- > older than 5.6, so the statement is redundant.
+ > Thank you for the patience on this patch.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Thanks also to Peter for helping on IRC about this research.
 
 Committed to 2020.02.x, thanks.
 
