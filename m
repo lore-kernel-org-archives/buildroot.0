@@ -1,9 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu,  7 May 2020 18:59:56 -0700
-Subject: [Buildroot] [PATCH 5/5] package/systemd: add support for apparmor
+Date: Thu,  7 May 2020 18:59:55 -0700
+Subject: [Buildroot] [PATCH 4/5] package/apparmor: add a dependency on
+ net-tools if utils is selected
 In-Reply-To: <20200508015956.3270405-1-aduskett@gmail.com>
 References: <20200508015956.3270405-1-aduskett@gmail.com>
-Message-ID: <20200508015956.3270405-5-aduskett@gmail.com>
+Message-ID: <20200508015956.3270405-4-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +13,30 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-If libapparmor is selected, depend on libapparmor and set -Dapparmor=true
+aa-unconfied requires the full version of netstat provided by the net-tools
+package. Without the full version, running aa-unconfined will result in the
+error:
+netstat: invalid option -- 'p'
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/systemd/systemd.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/apparmor/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 9f5429fd19..50398e747e 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -49,6 +49,13 @@ else
- SYSTEMD_CONF_OPTS += -Dacl=false
- endif
+diff --git a/package/apparmor/Config.in b/package/apparmor/Config.in
+index b0d2e44ff7..481317ac7b 100644
+--- a/package/apparmor/Config.in
++++ b/package/apparmor/Config.in
+@@ -31,8 +31,10 @@ comment "utils need python3"
  
-+ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
-+SYSTEMD_DEPENDENCIES += libapparmor
-+SYSTEMD_CONF_OPTS += -Dapparmor=true
-+else
-+SYSTEMD_CONF_OPTS += -Dapparmor=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_AUDIT),y)
- SYSTEMD_DEPENDENCIES += audit
- SYSTEMD_CONF_OPTS += -Daudit=true
+ config BR2_PACKAGE_APPARMOR_UTILS
+ 	bool "utils"
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON3_READLINE
++	select BR2_PACKAGE_NET_TOOLS # aa-unconfined
+ 	help
+ 	  A set of utilities (written in python):
+ 	    aa-audit          aa-disable      aa-logprof
 -- 
 2.26.2
