@@ -1,56 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 May 2020 10:06:52 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python: bump
- version to 2.7.18
-Message-ID: <20200508080227.976C690FE3@busybox.osuosl.org>
+Date: Fri, 8 May 2020 10:06:22 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/python-jedi: add
+ missing license
+Message-ID: <20200508080227.8D5D990FE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6105fcaca3445fd1c69c3f80ec85017dbdb136c1
+commit: https://git.buildroot.net/buildroot/commit/?id=279eddff6515c00e9633342895684f7540c365a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Release notes:
-https://pythoninsider.blogspot.com/2020/04/python-2718-last-release-of-python-2.html
+python-jedi bundles its own copy of typeshed since version 0.14.0 and
+https://github.com/davidhalter/jedi/commit/7d2b7bb3c1c4f79f325ccbde9d2b2734aa872312
 
-Updated license hash due to upstream commit:
-https://github.com/python/cpython/commit/aa5b196c180d4c1dbe5a8593e55066e630d38c09
+So add it to the license files (and update indentation of hash file to
+two spaces while at it)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3586b0703fa9a8b4138ac4bf9e274c7f1bef2e6c)
+(cherry picked from commit ab98c1ffb65b10ede668356014481f63ac9a72e6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python/python.hash | 8 ++++----
- package/python/python.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-jedi/python-jedi.hash | 9 +++++----
+ package/python-jedi/python-jedi.mk   | 5 +++--
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/python/python.hash b/package/python/python.hash
-index aa809b9a61..f5e51d9638 100644
---- a/package/python/python.hash
-+++ b/package/python/python.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-2717/
--md5 b3b6d2c92f42a60667814358ab9f0cfd Python-2.7.17.tar.xz
-+# From https://www.python.org/downloads/release/python-2718/
-+md5  fd6cc8ec0a78c44036f825e739f36e5a Python-2.7.18.tar.xz
- # Locally calculated
--sha256 4d43f033cdbd0aa7b7023c81b0e986fd11e653b5248dac9144d508f11812ba41  Python-2.7.17.tar.xz
--sha256 a77d71d6be6f9032e6b6e5d2cf6da68f9eeab9036edfbc043633c8979cd5e82c  LICENSE
-+sha256  b62c0e7937551d0cc02b8fd5cb0f544f9405bafc9a54d3808ed4594812edef43  Python-2.7.18.tar.xz
-+sha256  de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23  LICENSE
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 1c393b255d..532c372dee 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/python-jedi/python-jedi.hash b/package/python-jedi/python-jedi.hash
+index 1fc3a3da50..77af6e79f3 100644
+--- a/package/python-jedi/python-jedi.hash
++++ b/package/python-jedi/python-jedi.hash
+@@ -1,6 +1,7 @@
+ # md5, sha256 from https://pypi.org/pypi/jedi/json
+-md5	ba88266caac41988ffb4fd6041a3c354  jedi-0.15.1.tar.gz
+-sha256	ba859c74fa3c966a22f2aeebe1b74ee27e2a462f56d3f5f7ca4a59af61bfe42e  jedi-0.15.1.tar.gz
++md5  ba88266caac41988ffb4fd6041a3c354  jedi-0.15.1.tar.gz
++sha256  ba859c74fa3c966a22f2aeebe1b74ee27e2a462f56d3f5f7ca4a59af61bfe42e  jedi-0.15.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412  LICENSE.txt
+-sha256	9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
++sha256  78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412  LICENSE.txt
++sha256  9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
++sha256  b41b78f562a2e65b75cab44354335f6f435d4ef73065509600ac910cf4e22fe0  jedi/third_party/typeshed/LICENSE
+diff --git a/package/python-jedi/python-jedi.mk b/package/python-jedi/python-jedi.mk
+index e11146def7..4e756a709c 100644
+--- a/package/python-jedi/python-jedi.mk
++++ b/package/python-jedi/python-jedi.mk
+@@ -8,7 +8,8 @@ PYTHON_JEDI_VERSION = 0.15.1
+ PYTHON_JEDI_SOURCE = jedi-$(PYTHON_JEDI_VERSION).tar.gz
+ PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/85/03/cd5a6e44a5753b4d539288d9d1f9645caac889c17dd2950292a8818f86b2
+ PYTHON_JEDI_SETUP_TYPE = setuptools
+-PYTHON_JEDI_LICENSE = MIT, BSD-3-Clause (flask theme)
+-PYTHON_JEDI_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE
++PYTHON_JEDI_LICENSE = MIT, BSD-3-Clause (flask theme), Apache-2.0 (typeshed)
++PYTHON_JEDI_LICENSE_FILES = \
++	LICENSE.txt docs/_themes/flask/LICENSE jedi/third_party/typeshed/LICENSE
  
- PYTHON_VERSION_MAJOR = 2.7
--PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).17
-+PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).18
- PYTHON_SOURCE = Python-$(PYTHON_VERSION).tar.xz
- PYTHON_SITE = https://python.org/ftp/python/$(PYTHON_VERSION)
- PYTHON_LICENSE = Python-2.0, others
+ $(eval $(python-package))
