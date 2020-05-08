@@ -1,69 +1,51 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Fri, 8 May 2020 09:59:29 -0400
-Subject: [Buildroot] [PATCH] release: don't include temp files
-In-Reply-To: <20200508083220.18927-1-yann.morin.1998@free.fr>
-References: <20200508083220.18927-1-yann.morin.1998@free.fr>
-Message-ID: <CANxTyt633VUb9bREaU8mq6wPwxXtMA2CkZwtkNufzH75fCK5gA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  8 May 2020 16:26:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mbuffer: bump to version 20200505
+Message-ID: <20200508142639.1586652-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+This bump will fix a build failure with gcc 4.8
 
-On Fri, May 8, 2020 at 4:32 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> When we prepare the release, we generate the manual in various formats,
-> so that it can be consulted locally without needing the miriads of tools
-> needed to generate it.
->
-> However, this creates the temporary .br2-external.* files in the output
-> directory, and those end up in the release tarball.
->
-> This is not a problem in practice, but is not clean.
->
-> Run 'distclean' in the output directory, to get rid of everything but
-> the generated documentation.
->
-> Reported-by: Danomi Manchego <danomimanchego123@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index 3aa4ba4532..2da34b5305 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1190,7 +1190,7 @@ release: OUT = buildroot-$(BR2_VERSION)
->  release:
->         git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
->         $(MAKE) O=$(OUT) manual-html manual-text manual-pdf
-> -       $(MAKE) O=$(OUT) clean
-> +       $(MAKE) O=$(OUT) distclean
+Fixes:
+ - http://autobuild.buildroot.org/results/1a7fe7ac8cbe9997bc5d1e9ade24bc2ee6ac6abe
 
-I downloaded the latest rc1, just to do "make distclean", see the
-files disappear, and add my Tested-by - but I found that the files
-were not deleted.  The distclean target does this:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mbuffer/mbuffer.hash | 4 ++--
+ package/mbuffer/mbuffer.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-    rm -rf $(TOPDIR)/dl $(BR2_CONFIG) $(CONFIG_DIR)/.config.old
-$(CONFIG_DIR)/..config.tmp \
-        $(CONFIG_DIR)/.auto.deps $(BASE_DIR)/.br2-external.*
-
-And BASE_DIR is set to $(CANONICAL_O) - but the .br2-external.* are
-*not* in the output directory, they are the buildroot directory
-itself.  Maybe it should delete $(CONFIG_DIR)/.br2-external.* instead
-(or also)?
-
-Danomi -
-
-
-
->         tar rf $(OUT).tar $(OUT)
->         gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
->         bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
-> --
-> 2.20.1
->
+diff --git a/package/mbuffer/mbuffer.hash b/package/mbuffer/mbuffer.hash
+index 105fe29fe7..688ada6900 100644
+--- a/package/mbuffer/mbuffer.hash
++++ b/package/mbuffer/mbuffer.hash
+@@ -1,8 +1,8 @@
+ # From http://www.maier-komor.de/mbuffer.html
+-md5  e4acaa1e6a9a879e7394f04e02e1ae83  mbuffer-20191016.tgz
++md5  df39047654456f260665d66711cabcc5  mbuffer-20200505.tgz
+ 
+ # Locally computed after checking signature upstream
+-sha256  8dc210454765c18901074bc16e126c655135a486e73d69855caf74a157ddbe17  mbuffer-20191016.tgz
++sha256  cc046183149e51814c23b9f83fd748cc1625a88ee128651ea500aa7bd5f01f0b  mbuffer-20200505.tgz
+ 
+ # Hash for license file
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
+index f87b2b114f..6aaf29c9ca 100644
+--- a/package/mbuffer/mbuffer.mk
++++ b/package/mbuffer/mbuffer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MBUFFER_VERSION = 20191016
++MBUFFER_VERSION = 20200505
+ MBUFFER_SOURCE = mbuffer-$(MBUFFER_VERSION).tgz
+ MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
+ MBUFFER_LICENSE = GPL-3.0+
+-- 
+2.26.2
