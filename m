@@ -1,8 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu,  7 May 2020 18:59:52 -0700
-Subject: [Buildroot] [PATCH 1/5] package/apparmor: replace deprecated egrep
- with grep -E
-Message-ID: <20200508015956.3270405-1-aduskett@gmail.com>
+Date: Thu,  7 May 2020 18:59:53 -0700
+Subject: [Buildroot] [PATCH 2/5] package/apparmor: fix compatibility with
+ busybox grep
+In-Reply-To: <20200508015956.3270405-1-aduskett@gmail.com>
+References: <20200508015956.3270405-1-aduskett@gmail.com>
+Message-ID: <20200508015956.3270405-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,45 +13,66 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Upstream commit: 5f46dedd6e8109d845af118b36039a5d7dd05af9
+The following regex string in rc.apparmor.functions
+"^/.*[ \t]+flags[ \t]*=[ \t]*\([ \t]*complain[ \t]*\)[ \t]+{" is broken due to
+the unescaped { at the end of the regex pattern.
+GNU grep ignors the error. However, the Busybox grep does not and throws the
+error "unescaped character {"
+
+Escape the "{" character to fix this issue.
+
+Note: Upstream has rewritten large sections of the rc.apparmor.functions file
+and the function this patch fixes will no longer be necessary after the next
+version is released. However, it is not possible to easily backport the
+upstream patches as the rewrite comes with new features that would not be
+possible with a simple patch such as this one.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- ...replace-deprecated-egrep-with-grep-e.patch | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/apparmor/0002-replace-deprecated-egrep-with-grep-e.patch
+ ...apparmor.functions-to-work-with-busy.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/apparmor/0003-fix-regex-in-rc.apparmor.functions-to-work-with-busy.patch
 
-diff --git a/package/apparmor/0002-replace-deprecated-egrep-with-grep-e.patch b/package/apparmor/0002-replace-deprecated-egrep-with-grep-e.patch
+diff --git a/package/apparmor/0003-fix-regex-in-rc.apparmor.functions-to-work-with-busy.patch b/package/apparmor/0003-fix-regex-in-rc.apparmor.functions-to-work-with-busy.patch
 new file mode 100644
-index 0000000000..4caefe447b
+index 0000000000..54afcd43a8
 --- /dev/null
-+++ b/package/apparmor/0002-replace-deprecated-egrep-with-grep-e.patch
-@@ -0,0 +1,28 @@
-+From 5f46dedd6e8109d845af118b36039a5d7dd05af9 Mon Sep 17 00:00:00 2001
-+From: Christian Boltz <apparmor@cboltz.de>
-+Date: Mon, 18 Mar 2019 19:17:16 +0100
-+Subject: [PATCH] replace deprecated egrep with grep -e
++++ b/package/apparmor/0003-fix-regex-in-rc.apparmor.functions-to-work-with-busy.patch
+@@ -0,0 +1,37 @@
++From 12764faa0a01bcc4e0ffc92ce308985dbad0d954 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <Aduskett@gmail.com>
++Date: Thu, 7 May 2020 18:25:29 -0700
++Subject: [PATCH] fix regex in rc.apparmor.functions to work with busybox
 +
-+(cherry picked from commit 5f46dedd6e8109d845af118b36039a5d7dd05af9)
-+Signed-off-by: Christian Boltz <apparmor@cboltz.de>
++The following regex string in rc.apparmor.functions
++"^/.*[ \t]+flags[ \t]*=[ \t]*\([ \t]*complain[ \t]*\)[ \t]+{" is broken due to
++the unescaped {. GNU grep ignores the error. However, the Busybox grep does
++not and throws the error "unescaped character {"
++
++Escape the "{" character to fix this issue.
++
++Note: Upstream has rewritten large sections of the rc.apparmor.functions file
++and the function this patch fixes will no longer be necessary after the next
++version is released.
++
 +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 +---
 + parser/rc.apparmor.functions | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/parser/rc.apparmor.functions b/parser/rc.apparmor.functions
-+index 22e8367..f3108f8 100644
++index f3108f8..db0697c 100644
 +--- a/parser/rc.apparmor.functions
 ++++ b/parser/rc.apparmor.functions
-+@@ -129,7 +129,7 @@ skip_profile() {
-+ 	     "${profile%.pacnew}" != "${profile}" ] ; then
-+ 		return 2
-+ 	fi
-+-	if echo "${profile}" | egrep -q '^.+\.new-[0-9\.]+_[0-9]+$'; then
-++	if echo "${profile}" | grep -E -q '^.+\.new-[0-9\.]+_[0-9]+$'; then
-+ 		return 2
-+ 	fi
++@@ -140,7 +140,7 @@ force_complain() {
++ 	local profile=$1
 + 
++ 	# if profile not in complain mode
++-	if ! egrep -q "^/.*[ \t]+flags[ \t]*=[ \t]*\([ \t]*complain[ \t]*\)[ \t]+{" $profile ; then
+++	if ! grep -E -q "^/.*[ \t]+flags[ \t]*=[ \t]*\([ \t]*complain[ \t]*\)[ \t]+\{" $profile ; then
++ 		local link="${PROFILE_DIR}/force-complain/`basename ${profile}`"
++ 		if [ -e "$link" ] ; then
++ 			aa_log_warning_msg "found $link, forcing complain mode"
 +-- 
 +2.26.2
 +
