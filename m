@@ -1,33 +1,118 @@
-From: Nicola Di Lieto <nicola.dilieto@gmail.com>
-Date: Fri, 8 May 2020 18:39:51 +0200
-Subject: [Buildroot] [PATCH] package/uacme: bump version to 1.2.3
-In-Reply-To: <87mu6isv6z.fsf@dell.be.48ers.dk>
-References: <20200423055104.lljafbjugkwzbzhm@einstein.dilieto.eu>
- <87mu6isv6z.fsf@dell.be.48ers.dk>
-Message-ID: <20200508163951.5hf2clb4cysufywb@einstein.dilieto.eu>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri,  8 May 2020 19:31:52 +0200
+Subject: [Buildroot] [PATCH] package/uclibc: fix mips uclibc toolchain with
+ gcc 10
+Message-ID: <20200508173152.1994935-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 08, 2020 at 10:11:00AM +0200, Peter Korsgaard wrote:
->Does that also affect the 1.0.21 version we have in 2020.02.x? If so,
->what is the impact? Do we need to update to 1.2.3 or cherry pick a
->patch?
->
+From [1]
+"GCC 10 (PR 91233) won't silently allow registers that are not architecturally
+available to be present in the clobber list anymore, resulting in build failure
+for mips*r6 targets in form of:
+...
+.../sysdep.h:146:2: error: the register ?lo? cannot be clobbered in ?asm? for the current target
+  146 |  __asm__ volatile (      \
+      |  ^~~~~~~
 
-Yes, all versions prior to 1.2.3 are affected. The impact for the moment 
-is only with pebble (the non-production standalone let's encrypt testing 
-server, https://github.com/letsencrypt/pebble).
+This is because base R6 ISA doesn't define hi and lo registers w/o DSP extension.
+This patch provides the alternative definitions of __SYSCALL_CLOBBERS for r6
+targets that won't include those registers."
 
-The production let's encrypt server runs a different software (boulder) 
-which doesn't trigger this bug, however this may change and I have no 
-control over whether or when this will happen.
+Fixes:
+https://gitlab.com/kubu93/buildroot/-/jobs/543923030
 
-Therefore I recommend updating to a newer version. Also note that I 
-released 1.3 about one hour ago which has a few more small fixes and 
-enhancements, see https://github.com/ndilieto/uacme/blob/master/NEWS
+Note:
+The kernel 5.4.35 fail to build later due to a similar issue while
+building lib/vdso/gettimeofday.c [2]. The issue is still present in kernel
+5.7-rc4.
 
-Kind regards,
-Nicola
+[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/arch/mips/include/asm/vdso/gettimeofday.h?h=v5.7-rc4#n38
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+---
+ ...ude-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch
+
+diff --git a/package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch b/package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch
+new file mode 100644
+index 0000000000..cc8b9d9c0b
+--- /dev/null
++++ b/package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch
+@@ -0,0 +1,68 @@
++From aad6cdbcff0f5411a09ac524637fea62652786a3 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Fri, 8 May 2020 18:39:45 +0200
++Subject: [PATCH] mips: Do not include hi and lo in __SYSCALL_CLOBBERS for R6
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++From [1]
++"GCC 10 (PR 91233) won't silently allow registers that are not architecturally
++available to be present in the clobber list anymore, resulting in build failure
++for mips*r6 targets in form of:
++...
++.../sysdep.h:146:2: error: the register ?lo? cannot be clobbered in ?asm? for the current target
++  146 |  __asm__ volatile (      \
++      |  ^~~~~~~
++
++This is because base R6 ISA doesn't define hi and lo registers w/o DSP extension.
++This patch provides the alternative definitions of __SYSCALL_CLOBBERS for r6
++targets that won't include those registers."
++
++[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Cc: Waldemar Brodkorb <wbx@openadk.org>
++---
++ libc/sysdeps/linux/mips/bits/syscalls.h | 18 ++++++++++++++----
++ 1 file changed, 14 insertions(+), 4 deletions(-)
++
++diff --git a/libc/sysdeps/linux/mips/bits/syscalls.h b/libc/sysdeps/linux/mips/bits/syscalls.h
++index b8f80597e..13728ac55 100644
++--- a/libc/sysdeps/linux/mips/bits/syscalls.h
+++++ b/libc/sysdeps/linux/mips/bits/syscalls.h
++@@ -270,8 +270,13 @@
++ 	_sys_result;							\
++ })
++ 
++-#define __SYSCALL_CLOBBERS "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13", \
++-	"$14", "$15", "$24", "$25", "hi", "lo", "memory"
+++#if __mips_isa_rev >= 6
+++# define __SYSCALL_CLOBBERS "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13", \
+++	 "$14", "$15", "$24", "$25", "memory"
+++#else
+++# define __SYSCALL_CLOBBERS "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13", \
+++	 "$14", "$15", "$24", "$25", "hi", "lo", "memory"
+++#endif
++ 
++ #else /* N32 || N64 */
++ 
++@@ -327,8 +332,13 @@
++ 	_sys_result;							\
++ })
++ 
++-#define __SYSCALL_CLOBBERS "$1", "$3", "$10", "$11", "$12", "$13", \
++-	"$14", "$15", "$24", "$25", "hi", "lo", "memory"
+++#if __mips_isa_rev >= 6
+++# define __SYSCALL_CLOBBERS "$1", "$3", "$10", "$11", "$12", "$13", \
+++	 "$14", "$15", "$24", "$25", "memory"
+++#else
+++# define __SYSCALL_CLOBBERS "$1", "$3", "$10", "$11", "$12", "$13", \
+++	 "$14", "$15", "$24", "$25", "hi", "lo", "memory"
+++#endif
++ 
++ #endif
++ 
++-- 
++2.25.4
++
+-- 
+2.25.4
