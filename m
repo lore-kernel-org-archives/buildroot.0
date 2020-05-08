@@ -1,45 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 May 2020 09:26:06 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/openjdk: Remove
- sparc support
-Message-ID: <20200508080227.789D090FE3@busybox.osuosl.org>
+Date: Fri, 8 May 2020 09:23:03 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/openjdk: copy all
+ directories and files when installing
+Message-ID: <20200508080227.6E99A90FE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e00fb250616937d92d1735c398c14e301c462107
+commit: https://git.buildroot.net/buildroot/commit/?id=0282033f42d4360b0f379cf01f12c1155d957f0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Sparc support is deprecated and may be removed in future releases. There are
-two choices to fix this issue:
+Several directories and files are currently not installed during the
+target installation, these include:
+  - conf
+    Several configuration files, including security configuration files which
+    may be necessary for running various java applications.
 
-1) Set --enable-deprecated-ports=yes in the CONF_OPTS to supress the error.
-2) Remove support for Sparc.
+  - legal
+    This directory contains legal notices that some java applications may
+    require, as they may print legal information and will throw exceptions at
+    runtime if the legal files are not present on the system.
 
-Because this port is deprecated, it's safer to remove support alltogether.
+  - release
+    This file contains a list of modules included in the image.
 
-Fixes:
-    http://autobuild.buildroot.net/results/692820b4b6d4da42cd557fa7badbbd11806bbeba/
+Because these directories take up less than of megabyte extra, it is not an
+issue to install all of them.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Reviewed-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Tested-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6ee7de3d2f0a9c33622008a10b65db019e2cfa3d)
+(cherry picked from commit 63b576095b1dbabaf15a6eee7ceabed6d868a707)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openjdk/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/openjdk/openjdk.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
-index 61294ec49f..df769bbb35 100644
---- a/package/openjdk/Config.in
-+++ b/package/openjdk/Config.in
-@@ -11,7 +11,6 @@ config BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
- 	default y if BR2_m68k
- 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
- 	default y if BR2_sh
--	default y if BR2_sparc || BR2_sparc64
- 
- config BR2_PACKAGE_OPENJDK
- 	bool "openjdk"
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index e58757b2ed..1f906517fe 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -123,9 +123,7 @@ endef
+ # which makes manual installation necessary.
+ define OPENJDK_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)$(OPENJDK_INSTALL_BASE)
+-	cp -dpfr $(@D)/build/linux-*-release/images/jre/bin/ \
+-		$(TARGET_DIR)$(OPENJDK_INSTALL_BASE)/
+-	cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/ \
++	cp -dpfr $(@D)/build/linux-*-release/images/jre/* \
+ 		$(TARGET_DIR)$(OPENJDK_INSTALL_BASE)/
+ 	cd $(TARGET_DIR)/usr/bin && ln -snf ../..$(OPENJDK_INSTALL_BASE)/bin/* .
+ endef
