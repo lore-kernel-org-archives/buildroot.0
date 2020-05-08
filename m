@@ -1,82 +1,69 @@
-From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Fri, 8 May 2020 15:40:25 +0300
-Subject: [Buildroot] [PATCH] package/gcc9: Fix parallel build problem
- (xgcc not found)
-In-Reply-To: <20200507215817.48d744be@windsurf.home>
-References: <b60c5da0-cf8e-3f5b-d271-659345733aff@inbox.ru>
- <20200507215817.48d744be@windsurf.home>
-Message-ID: <1d1703f1-65b3-a17a-c6aa-2d7be1647af3@inbox.ru>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Fri, 8 May 2020 09:59:29 -0400
+Subject: [Buildroot] [PATCH] release: don't include temp files
+In-Reply-To: <20200508083220.18927-1-yann.morin.1998@free.fr>
+References: <20200508083220.18927-1-yann.morin.1998@free.fr>
+Message-ID: <CANxTyt633VUb9bREaU8mq6wPwxXtMA2CkZwtkNufzH75fCK5gA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Yann,
+
+On Fri, May 8, 2020 at 4:32 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> When we prepare the release, we generate the manual in various formats,
+> so that it can be consulted locally without needing the miriads of tools
+> needed to generate it.
+>
+> However, this creates the temporary .br2-external.* files in the output
+> directory, and those end up in the release tarball.
+>
+> This is not a problem in practice, but is not clean.
+>
+> Run 'distclean' in the output directory, to get rid of everything but
+> the generated documentation.
+>
+> Reported-by: Danomi Manchego <danomimanchego123@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 3aa4ba4532..2da34b5305 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1190,7 +1190,7 @@ release: OUT = buildroot-$(BR2_VERSION)
+>  release:
+>         git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
+>         $(MAKE) O=$(OUT) manual-html manual-text manual-pdf
+> -       $(MAKE) O=$(OUT) clean
+> +       $(MAKE) O=$(OUT) distclean
+
+I downloaded the latest rc1, just to do "make distclean", see the
+files disappear, and add my Tested-by - but I found that the files
+were not deleted.  The distclean target does this:
+
+    rm -rf $(TOPDIR)/dl $(BR2_CONFIG) $(CONFIG_DIR)/.config.old
+$(CONFIG_DIR)/..config.tmp \
+        $(CONFIG_DIR)/.auto.deps $(BASE_DIR)/.br2-external.*
+
+And BASE_DIR is set to $(CANONICAL_O) - but the .br2-external.* are
+*not* in the output directory, they are the buildroot directory
+itself.  Maybe it should delete $(CONFIG_DIR)/.br2-external.* instead
+(or also)?
+
+Danomi -
 
 
 
-07.05.2020 22:58, Thomas Petazzoni wrote:
- > On Thu, 7 May 2020 02:04:44 +0300
- > Maxim Kochetkov <fido_max@inbox.ru> wrote:
- >
- >> Some times gcc 9.2.0, 9.3.0 failed to build with a message: "xgcc: No
- >> such file or directory"
- >>
- >> When it fails, it's trying to execute selftests.
- >>
- >> So to fix this problem we can disable selftests.
- >>
- >> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
- >
- > Do you have more details about this failure? Does it happen in our
- > autobuilders? In which context?
-
-Similar issue described here: 
-https://github.com/cirosantilli/linux-kernel-module-cheat/issues/108
-
-I don't know about your autobuilder.
-In my config I use CCACHE for build (try 3.6, 3.7.9 with the same 
-result). May be it affect some timings/delay in build sequence.
-
-It fails for gcc-final (9.2 and 9.3):
-/builds/kochetkov.m/buildroot/output/build/host-gcc-final-9.3.0/build/./gcc/xgcc 
--B/builds/kochetkov.m/buildroot/output/build/host-gcc-final-9.3.0/build/./gcc/ 
--xc -nostdinc /dev/null -S -o /dev/null 
--fself-test=../../gcc/testsuite/selftests
-/bin/bash: 
-/builds/kochetkov.m/buildroot/output/build/host-gcc-final-9.3.0/build/./gcc/xgcc: 
-No such file or directory
-
-gcc build systems is trying to test compiled executables (xgcc xg++ ....)
-
-If I try to 'make' it again (without clean) - it passes.
-If I use 'make clean' then 'make' (without cleaning ccache files) - it 
-passes.
-
-So this is parallel/dependency problem in gcc makefiles. I think make 
-execute 'selftests' and 'xgcc' targets in parallel.
-
- >> diff --git a/package/gcc/9.3.0/0001-disable-selftest.patch
- >> b/package/gcc/9.3.0/0001-disable-selftest.patch
- >> new file mode 100644
- >> index 0000000000..d7150b0fb1
- >> --- /dev/null
- >> +++ b/package/gcc/9.3.0/0001-disable-selftest.patch
- >
- > We need all patches to have a description and a Signed-off-by line.
- > Also, they should ideally be upstreamable, which is not the case here.
- >
-I will try.
-
- > Could you work on an improved version of this patch, with some more
- > extensive description, and hopefully a solution that can be accepted by
- > upstream gcc ?
-
-I have no idea how to fix it in upstream gcc. I guess in buildroot is 
-enough just to disable selftests for successful build.
-
- >
- > Best regards,
- >
- > Thomas
- >
+>         tar rf $(OUT).tar $(OUT)
+>         gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
+>         bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
+> --
+> 2.20.1
+>
