@@ -1,99 +1,104 @@
-From: DATACOM - Joao <joao@datacom.com.br>
-Date: Fri, 8 May 2020 16:57:16 -0300
-Subject: [Buildroot] Help: build-root compile and debug
-In-Reply-To: <CACEFAc0VbotiJs4W0JeZXJK5JsUPBFHYbSjDdjFfgezs1xfHhQ@mail.gmail.com>
-References: <CACEFAc0u58WHf7=ke1iAKP1+ftvr52yEnq8DHiufdJy4rNKKwQ@mail.gmail.com>
- <CACEFAc1TJwomj5_GN+rmxDZ5VKHoTkAF19r4tJJTQQ_VeeHMaw@mail.gmail.com>
- <CACEFAc0BAoQM_zPxCU17GQzca23fV8QtKe8yFryHWj1K1xYu9Q@mail.gmail.com>
- <CACEFAc0v5298rW08semTtB82ozxyv-gq9dmCOUeD8uU53m6ang@mail.gmail.com>
- <CACEFAc2_WcHo-VKKf-Z4fx=VyKzMCC+XSNZ=zApimtjFGxMtrQ@mail.gmail.com>
- <CACEFAc2YQvotkjCmRZJHaETQoEK7OYW4oqqq_mpM_6YEJzZFgQ@mail.gmail.com>
- <CACEFAc3xWYYLMmxcJYfSqwHmpWwf4hKSPOG5UGgwr9OHmtgY6g@mail.gmail.com>
- <CACEFAc1m9d5+d3DrmOQLFPmQZ_4btapSU05vaAOSLTbM6HVrRQ@mail.gmail.com>
- <CACEFAc21hKusY2LPZojBJe+HBYws5EKy=_ar4Lm7k-b7W1vRxg@mail.gmail.com>
- <0105e61a-28bf-9d72-ecd3-f285102fcbfa@datacom.com.br>
- <CACEFAc0VbotiJs4W0JeZXJK5JsUPBFHYbSjDdjFfgezs1xfHhQ@mail.gmail.com>
-Message-ID: <4d077e3c-eb31-bfe0-b6b4-7396df019355@datacom.com.br>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 8 May 2020 21:59:03 +0200
+Subject: [Buildroot] [PATCH] release: don't include temp files
+In-Reply-To: <CANxTyt633VUb9bREaU8mq6wPwxXtMA2CkZwtkNufzH75fCK5gA@mail.gmail.com>
+References: <20200508083220.18927-1-yann.morin.1998@free.fr>
+ <CANxTyt633VUb9bREaU8mq6wPwxXtMA2CkZwtkNufzH75fCK5gA@mail.gmail.com>
+Message-ID: <20200508195903.GO12536@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Kunal.
+Danomi, All,
 
-Em 08/05/2020 14:17, Kunal Chauhan escreveu:
-> 1.Busy box is one of the package this line is not clear to me.
- From buildroot tree there is a directory called package/busybox which 
-defines recipe and how busybox shall be installed. Try to build some 
-existing defconfig that contains busybox 
-(qemu_arm_versatile_nommu_defconfig maybe) and keep an eye on output so 
-you will see how it goes.
->
-> 2. I consider a scenerio please guide on same as below
-> Like I have some code repo and a build.sh script , this script creates 
-> some build_root folder under which some folder is like, LINUX , 
-> package etc.
-> I am not understood exactly the usage ?
+On 2020-05-08 09:59 -0400, Danomi Manchego spake thusly:
+> On Fri, May 8, 2020 at 4:32 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > When we prepare the release, we generate the manual in various formats,
+> > so that it can be consulted locally without needing the miriads of tools
+> > needed to generate it.
+> >
+> > However, this creates the temporary .br2-external.* files in the output
+> > directory, and those end up in the release tarball.
+> >
+> > This is not a problem in practice, but is not clean.
+> >
+> > Run 'distclean' in the output directory, to get rid of everything but
+> > the generated documentation.
+> >
+> > Reported-by: Danomi Manchego <danomimanchego123@gmail.com>
+> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > Cc: Peter Korsgaard <peter@korsgaard.com>
+> > ---
+> >  Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/Makefile b/Makefile
+> > index 3aa4ba4532..2da34b5305 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -1190,7 +1190,7 @@ release: OUT = buildroot-$(BR2_VERSION)
+> >  release:
+> >         git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
+> >         $(MAKE) O=$(OUT) manual-html manual-text manual-pdf
+> > -       $(MAKE) O=$(OUT) clean
+> > +       $(MAKE) O=$(OUT) distclean
+> 
+> I downloaded the latest rc1,
 
-I suggest you to take a look on package directory and its various 
-packages. Refer to 
-https://buildroot.org/downloads/manual/manual.html#adding-packages , it 
-is simpler than it looks on first glance. :)
+2020.02-rc1 does not have the fix.
 
-Trying to explain a little more is just a question of defining build 
-commands (to call build.sh somehow) and install commands so buildroot 
-can copy binaries that really matters from your build tree into target 
-filesystem.
+> just to do "make distclean", see the
+> files disappear, and add my Tested-by - but I found that the files
+> were not deleted.  The distclean target does this:
+> 
+>     rm -rf $(TOPDIR)/dl $(BR2_CONFIG) $(CONFIG_DIR)/.config.old
+> $(CONFIG_DIR)/..config.tmp \
+>         $(CONFIG_DIR)/.auto.deps $(BASE_DIR)/.br2-external.*
+> 
+> And BASE_DIR is set to $(CANONICAL_O) - but the .br2-external.* are
+> *not* in the output directory, they are the buildroot directory
+> itself.  Maybe it should delete $(CONFIG_DIR)/.br2-external.* instead
+> (or also)?
 
-Again, using an existing defconfig is the best primer you can get to see 
-all the concepts applied.
+If you want to test, you should not use a released tarball; instead, you
+should try to generate one:
 
->
->
-> On 8 May 2020 10:11 p.m., "DATACOM - Joao" <joao@datacom.com.br 
-> <mailto:joao@datacom.com.br>> wrote:
->
->     Hello Kunal.
->
->     I will try to help you out.
->
->     Em 08/05/2020 13:19, Kunal Chauhan escreveu:
->>     Hi Team,,
->>
->>     1. What is the realtion between build root and busy box. ? Not
->>     clear to me
->
->     Buildroot is a buildsystem. Its output comprises a Linux kernel
->     and a collection of packages which are instructions on how to
->     build different binaries to archieve a coherent Linux system.
->
->     Busybox happens to be one of these packages.
->
->>     2.As we compile whole linux some build output comes in case of
->>     busy box also if am not wrong.
->
->     I would say firmware image as you stated below instead of Linux
->     but you got the point here.
->
->>     So will it be ?a firmware image , if yes then ?will it can
->>     ?contain multiple ?binaries.
->     Yes!
->>
->>     3. If point 2 is yes , if one of user binary crash what will be
->>     the way to find crash point in that binaries.
->     You shall use the same strategies on debugging userspace binaries
->     on a PC (e.g. gdb, printf, log files and so). Buildroot is
->     responsible to help you out defining buildtime dependencies - it
->     is up to the user make it work. :)
->>
->>
->>
->>
->>     Thanks
->>     Kunal
->>
-(...)
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200508/673fd077/attachment.html>
+    $ make relase
+    $ tar tzf buildroot-2020.05-rc1.tar.gz |grep -E '\.br2-external'
+    [empty]
+
+So the temporary files will no longer be part of the next releases.
+
+As for 2020.05-rc1, distclean does not remove them, because they are not
+created where they appear in the release. In the release, they appear at
+the top of buildroot's directory, becasue when we make the release, we
+use a hack to include the generated documentatio in the archive; see the
+rule used to generate the release:
+
+    https://git.buildroot.org/buildroot/tree/Makefile#n1186
+
+and subsequent lines...
+
+Regards,
+Yann E. MORIN.
+
+> Danomi -
+> 
+> 
+> 
+> >         tar rf $(OUT).tar $(OUT)
+> >         gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
+> >         bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
+> > --
+> > 2.20.1
+> >
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
