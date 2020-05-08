@@ -1,12 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 May 2020 09:25:28 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package/openjdk: copy all
- directories and files when installing
-In-Reply-To: <20200418190701.2629613-2-aduskett@gmail.com> (aduskett's message
- of "Sat, 18 Apr 2020 12:07:00 -0700")
-References: <20200418190701.2629613-1-aduskett@gmail.com>
- <20200418190701.2629613-2-aduskett@gmail.com>
-Message-ID: <878si2ubvb.fsf@dell.be.48ers.dk>
+Date: Fri, 08 May 2020 09:26:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openjdk: Remove sparc support
+In-Reply-To: <20200422170108.3161301-1-aduskett@gmail.com> (aduskett's message
+ of "Wed, 22 Apr 2020 10:01:08 -0700")
+References: <20200422170108.3161301-1-aduskett@gmail.com>
+Message-ID: <874ksqubtl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,27 +14,15 @@ To: buildroot@busybox.net
 >>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
 
  > From: Adam Duskett <Aduskett@gmail.com>
- > Several directories and files are currently not installed during the
- > target installation, these include:
- >   - conf
- >     Several configuration files, including security configuration files which
- >     may be necessary for running various java applications.
+ > Sparc support is deprecated and may be removed in future releases. There are
+ > two choices to fix this issue:
 
- >   - legal
- >     This directory contains legal notices that some java applications may
- >     require, as they may print legal information and will throw exceptions at
- >     runtime if the legal files are not present on the system.
+ > 1) Set --enable-deprecated-ports=yes in the CONF_OPTS to supress the error.
+ > 2) Remove support for Sparc.
 
- >   - release
- >     This file contains a list of modules included in the image.
-
- > Because these directories take up less than of megabyte extra, it is not an
- > issue to install all of them.
+ > Because this port is deprecated, it's safer to remove support alltogether.
 
  > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
- > ---
- > Changes v1 -> v2:
- >   - Added a better explination for why the legal directory is necessary.
 
 Committed to 2020.02.x, thanks.
 
