@@ -1,40 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 May 2020 16:56:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/matchbox: add missing expat
- dependency
-Message-ID: <20200508145641.1716629-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri,  8 May 2020 17:27:39 +0200
+Subject: [Buildroot] [PATCH] package/rustc: RUSTC_TARGET_NAME is needed to
+ build host-rust
+Message-ID: <20200508152739.1625844-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-matchbox selects expat but does not add it to its dependency resulting
-in the following build failure:
+As reported on bugzilla [1], the host-rust package fail when
+the target architecture or the target libc is not supported.
 
-configure: error: cannot find expat library
-make: *** [/home/buildroot/autobuild/run/instance-2/output-1/build/matchbox-1.2/.stamp_configured] Error 1
+The error is the following:
+failed to parse TOML configuration 'config.toml': expected a table key, found a right bracket at line 15
+
+In such case BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is
+not set thus RUSTC_TARGET_NAME is also not set [2].
+
+But RUSTC_TARGET_NAME is needed to generate the file config.toml [3]
+
+Add BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS in the host-rust
+dependency.
+
+The commit [4] that allowed to select host-rust when the target
+architecture or the target libc is not supported, should have
+allowed to select only host-rustc-bin.
 
 Fixes:
- - http://autobuild.buildroot.org/results/37021f1d7fcfd890011068a28ce6181dc509e746
+Bug #12691
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[1] https://bugs.busybox.net/show_bug.cgi?id=12691
+[2] https://git.buildroot.net/buildroot/tree/package/rustc/rustc.mk?h=2020.05-rc1#n10
+[3] https://git.buildroot.net/buildroot/tree/package/rust/rust.mk?h=2020.05-rc1#n41
+[4] 025b863e6facb7b219b82ee6ee7a7916c2c3c47e
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Sam Voss <sam.voss@gmail.com>
 ---
- package/matchbox/matchbox.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rustc/Config.in.host | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-index c0a2778b67..4d30a42ca3 100644
---- a/package/matchbox/matchbox.mk
-+++ b/package/matchbox/matchbox.mk
-@@ -10,7 +10,7 @@ MATCHBOX_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-win
- MATCHBOX_LICENSE = GPL-2.0+
- MATCHBOX_LICENSE_FILES = COPYING
+diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
+index d595efbc6f..1df25ae326 100644
+--- a/package/rustc/Config.in.host
++++ b/package/rustc/Config.in.host
+@@ -49,6 +49,9 @@ choice
  
--MATCHBOX_DEPENDENCIES = matchbox-lib
-+MATCHBOX_DEPENDENCIES = expat matchbox-lib
- MATCHBOX_CONF_OPTS = \
- 	--enable-expat \
- 	--disable-gconf \
+ config BR2_PACKAGE_HOST_RUST
+ 	bool "host rust"
++	# RUSTC_TARGET_NAME must be set for building host-rust
++	# otherwise config.toml is broken.
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	# triggers ICE on trunc_int_for_mode, at explow.c:56
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_aarch64
+ 	help
 -- 
-2.26.2
+2.25.4
