@@ -1,47 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 May 2020 10:27:13 +0200
-Subject: [Buildroot] .br2-external files
-In-Reply-To: <CANxTyt45hu0Apyctnoc9a5n25FTwFrddcNta0u-9e7Tw4AjLnQ@mail.gmail.com>
-References: <CANxTyt45hu0Apyctnoc9a5n25FTwFrddcNta0u-9e7Tw4AjLnQ@mail.gmail.com>
-Message-ID: <20200508082713.GL12536@scaer>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 8 May 2020 01:31:32 -0700
+Subject: [Buildroot] [PATCH] package/binutils: fix XTENSA_NDIFF handling
+ for PR ld/25861
+In-Reply-To: <74b3c3ee-67e4-d3e0-0cf8-82e064ebfb00@gmail.com>
+References: <20200430050822.32017-1-jcmvbkbc@gmail.com>
+ <bfdb477a-cf89-21d4-c42c-e5a405b2edf3@gmail.com>
+ <74b3c3ee-67e4-d3e0-0cf8-82e064ebfb00@gmail.com>
+Message-ID: <CAMo8BfKCYu9aSMn-3F2Cy8Sj7nJvGo4eHzM=gx2QgUmQjGNTyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Danomi, All,
+Hi Romain,
 
-On 2020-05-04 17:04 -0400, Danomi Manchego spake thusly:
-> Hi all,
-> 
-> I noticed that the
-> https://buildroot.org/downloads/buildroot-2020.02.1.tar.bz2 has these
-> files in it:
-> 
-> $ ls -1 .br2*
-> .br2-external.in.jpeg
-> .br2-external.in.menus
-> .br2-external.in.openssl
-> .br2-external.in.paths
-> .br2-external.in.toolchains
-> .br2-external.mk
-> 
-> But when I look at the 2020.02.x tag in git, those files are not there.
-> These are derived files, yes?  Are they expected to be in the release tarball?
+On Thu, May 7, 2020 at 2:10 PM Romain Naour <romain.naour@gmail.com> wrote:
+> It seems elf2flt used by qemu_xtensa_lx60_nommu_defconfig doesn't support
+> R_XTENSA_PDIFF32:
+>
+>   elf2flt: 267 bad relocs
+>
+> https://gitlab.com/kubu93/buildroot/-/jobs/543293510
 
-Indeed they should not be there. They should not be a problem in
-practice, but this is not clean. I'll send a patch.
-
-Thanks for the feedback,
-
-Regards,
-Yann E. MORIN.
+Thanks for the report. Proposed fix:
+https://github.com/uclinux-dev/elf2flt/pull/18
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks.
+-- Max
