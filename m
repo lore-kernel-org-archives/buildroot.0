@@ -1,34 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 May 2020 22:02:49 +0200
-Subject: [Buildroot] [git commit] package/matchbox: add hash for license file
-Message-ID: <20200508194816.62A467FE23@busybox.osuosl.org>
+Date: Fri, 8 May 2020 22:02:48 +0200
+Subject: [Buildroot] [git commit] package/matchbox: add missing expat
+ dependency
+Message-ID: <20200508194816.54C68910D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f59e2c01a78c99c933df49ee681cdd3e11f4b07
+commit: https://git.buildroot.net/buildroot/commit/?id=3a784f49eb93cd75111f510a1d366f6ecaa2791f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file, add sha256 for tarball and update indentation
-for hash file (two spaces)
+matchbox selects expat but does not add it to its dependency resulting
+in the following build failure:
+
+configure: error: cannot find expat library
+make: *** [/home/buildroot/autobuild/run/instance-2/output-1/build/matchbox-1.2/.stamp_configured] Error 1
+
+Fixes:
+ - http://autobuild.buildroot.org/results/37021f1d7fcfd890011068a28ce6181dc509e746
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/matchbox/matchbox.hash | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/matchbox/matchbox.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/matchbox/matchbox.hash b/package/matchbox/matchbox.hash
-index f00ed4e4f3..fdb8f7d119 100644
---- a/package/matchbox/matchbox.hash
-+++ b/package/matchbox/matchbox.hash
-@@ -1,2 +1,6 @@
- # From http://downloads.yoctoproject.org/releases/matchbox/matchbox-window-manager/1.2/matchbox-window-manager-1.2.tar.bz2.md5
--md5	3e158dcf57823b55c926d95b245500fb	matchbox-window-manager-1.2.tar.bz2
-+md5  3e158dcf57823b55c926d95b245500fb  matchbox-window-manager-1.2.tar.bz2
-+
-+# Locally computed
-+sha256  81a23a4af797cf350759fd5ac738797015a66dd5dba2f3d9f3c6908506c1ceff  matchbox-window-manager-1.2.tar.bz2
-+sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index c0a2778b67..4d30a42ca3 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -10,7 +10,7 @@ MATCHBOX_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-win
+ MATCHBOX_LICENSE = GPL-2.0+
+ MATCHBOX_LICENSE_FILES = COPYING
+ 
+-MATCHBOX_DEPENDENCIES = matchbox-lib
++MATCHBOX_DEPENDENCIES = expat matchbox-lib
+ MATCHBOX_CONF_OPTS = \
+ 	--enable-expat \
+ 	--disable-gconf \
