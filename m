@@ -1,64 +1,422 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri,  8 May 2020 10:34:33 +0200
-Subject: [Buildroot] [PATCH] package/gcc: remove powerpc conditional patch
-Message-ID: <20200508083433.1313246-1-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  8 May 2020 11:01:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/c-icap: fix musl build
+Message-ID: <20200508090108.315450-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We lost track the powerpc conditional patch that was added for gcc 4.3.3 [1]
-and present up to gcc 4.9 (gcc 4.9 removed by [2]). But the code in gcc.mk
-is still present.
+Commit cb5df2fea516d4861af3c0629f49df697ee4f70e wrongly removed the
+first patch which is not in version 0.5.6. So add it back and update it
+so that it applies cleanly.
 
-The patch was dropped starting gcc 5.1 [3] but it's know to be useful for
-gcc 4.7.3 [4].
+Fixes:
+ - http://autobuild.buildroot.org/results/ddb57462945c5c2340cc375aa6fe2848d13d7001
 
-Since we used to have a patch directory (package/gcc/$(GCC_VERSION)) for
-every gcc version available in Buildroot, the apply-patches.sh script
-doesn't error out even if 1000-powerpc-link-with-math-lib.patch.conditional
-is missing.
-
-But with gcc 10, we don't need (for the moment) to apply any patch, so the
-patch directory doesn't exist. apply-patches.sh break the build since
-the patch directory is missing:
-
-  Aborting.  'package/gcc/10.1.0' is not a directory.
-
-Since we removed gcc 4.9 last year [2], we can safely remove this code.
-
-Tested using qemu_ppc_virtex_ml507_defconfig.
-
-[1] bb1f42e4426c432af60fc80da45c6daf7e31c1a0
-[2] baf177502214a67619d9d0d6d0a780458e4d652d
-[3] 4deb2d93c5ab317b6addf4e1e132571ba8dac031
-[4] 197006a41c1a0450bf6350d5742e186b5b0c69de
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gcc/gcc.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ ...ixes-to-compile-and-run-under-cygwin.patch | 391 ++++++++++++++++++
+ 1 file changed, 391 insertions(+)
+ create mode 100644 package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 50f2a3fcb7..af25d268a7 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -32,14 +32,6 @@ endef
- # Apply patches
- #
- 
--ifeq ($(ARCH),powerpc)
--ifneq ($(BR2_SOFT_FLOAT),)
--define HOST_GCC_APPLY_POWERPC_PATCH
--	$(APPLY_PATCHES) $(@D) package/gcc/$(GCC_VERSION) 1000-powerpc-link-with-math-lib.patch.conditional
--endef
--endif
--endif
--
- # gcc is a special package, not named gcc, but gcc-initial and
- # gcc-final, but patches are nonetheless stored in package/gcc in the
- # tree, and potentially in BR2_GLOBAL_PATCH_DIR directories as well.
+diff --git a/package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch b/package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch
+new file mode 100644
+index 0000000000..6f886c9b72
+--- /dev/null
++++ b/package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch
+@@ -0,0 +1,391 @@
++From 1631a6c1f50e152b8a45d8279c96086e5636795b Mon Sep 17 00:00:00 2001
++From: Christos Tsantilas <christos@chtsanti.net>
++Date: Fri, 25 Jan 2019 06:42:22 -0800
++Subject: [PATCH] Required fixes to compile and run under cygwin
++
++[Retrieved (and backported) from:
++https://github.com/c-icap/c-icap-server/commit/1631a6c1f50e152b8a45d8279c96086e5636795b,
++which has the side effect of fixing the build with the musl C library]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile.am                 |  2 +-
++ configure.ac                | 10 +++++++---
++ header.c                    | 34 ----------------------------------
++ include/header.h            |  8 --------
++ modules/Makefile.am         | 34 ++++++++++++++++++++--------------
++ modules/bdb_tables.c        | 17 +++++++++++++++--
++ modules/shared_cache.c      | 12 ++++++++++++
++ modules/sys_logger.c        | 13 +++++++++++++
++ services/echo/Makefile.am   | 10 ++++++++--
++ services/ex-206/Makefile.am | 10 ++++++++--
++ utils/c-icap-mkbdb.c        |  8 ++++----
++ 11 files changed, 88 insertions(+), 70 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 4c34033..ab80f4f 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -53,7 +53,7 @@ c_icap_SOURCES = aserver.c request.c cfg_param.c \
++ libicapapi_la_CFLAGS= $(INVISIBILITY_CFLAG) -I$(srcdir)/include/ -Iinclude/ @ZLIB_ADD_FLAG@ @OPENSSL_ADD_FLAG@ @BZLIB_ADD_FLAG@ @BROTLI_ADD_FLAG@ @PCRE_ADD_FLAG@ -DCI_BUILD_LIB
++ 
++ libicapapi_la_LIBADD = @ZLIB_ADD_LDADD@ @BZLIB_ADD_LDADD@ @BROTLI_ADD_LDADD@ @PCRE_ADD_LDADD@ @DL_ADD_FLAG@ @THREADS_LDADD@ @OPENSSL_ADD_LDADD@
++-libicapapi_la_LDFLAGS= -shared -version-info @CICAPLIB_VERSION@ @THREADS_LDFLAGS@
+++libicapapi_la_LDFLAGS= -shared -version-info @CICAPLIB_VERSION@ @LIBS_LDFLAGS@ @THREADS_LDFLAGS@
++ 
++ export EXT_PROGRAMS_MKLIB = @ZLIB_LNDIR_LDADD@ @BZLIB_LNDIR_LDADD@ @BROTLI_LNDIR_LDADD@ @PCRE_LNDIR_LDADD@ @OPENSSL_LNDIR_LDADD@
++ 
++diff --git a/configure.ac b/configure.ac
++index 405571b..8059cb7 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -45,12 +45,14 @@ case "$host_os" in
++ 	CFLAGS="-D_REENTRANT $CFLAGS"
++ 	THREADS_LDADD="-lpthread"
++ 	THREADS_LDFLAGS=""
+++	LIBS_LDFLAGS=""
++      ;;
++      solaris2.*)
++      	  CFLAGS="-D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS $CFLAGS"
++           LIBS="-lsocket -lnsl -lrt $LIBS"
++ 	  THREADS_LDADD="-lpthread"
++ 	  THREADS_LDFLAGS=""
+++	  LIBS_LDFLAGS=""
++       ;;
++       freebsd5*)
++ ## If I understand how all those threading models works correctly
++@@ -69,6 +71,7 @@ case "$host_os" in
++       	CFLAGS="-pthread -D_THREAD_SAFE  $CFLAGS"
++ 	THREADS_LDADD="-XCClinker -lc_r"
++ 	THREADS_LDFLAGS=""
+++	LIBS_LDFLAGS=""
++ ## FreeBSD has pthreads rwlocks from version 3 (I think)
++ #	AC_DEFINE(HAVE_PTHREADS_RWLOCK,1,[Define HAVE_PTHREADS_RWLOCK if pthreads library supports rwlocks])
++ ##   1:1 threads
++@@ -82,24 +85,28 @@ case "$host_os" in
++         CFLAGS="-D_THREAD_SAFE  $CFLAGS"
++         THREADS_LDADD="-XCClinker -lthr"
++         THREADS_LDFLAGS=""
+++	LIBS_LDFLAGS=""
++       ;;
++ 
++       cygwin*)
++ 	CFLAGS="-D_REENTRANT $CFLAGS"
++ 	THREADS_LDADD="-lpthread"
++ 	THREADS_LDFLAGS="";
+++	LIBS_LDFLAGS="-no-undefined"
++ 	iscygwin="yes"
++       ;;
++       *)
++       	CFLAGS="-D_REENTRANT $CFLAGS"
++ 	THREADS_LDADD="-lpthread"
++ 	THREADS_LDFLAGS=""
+++	LIBS_LDFLAGS=""
++       ;;
++ esac
++ 
++ TEST_LIBS="$TEST_LIBS $THREADS_LDADD"
++ AC_SUBST(THREADS_LDADD)
++ AC_SUBST(THREADS_LDFLAGS)
+++AC_SUBST(LIBS_LDFLAGS)
++ 
++ AC_DEFINE_UNQUOTED(C_ICAP_CONFIGURE_OPTIONS, "$ac_configure_args",
++                    [configure command line used to configure c-icap])
++@@ -984,9 +991,6 @@ LIBS="$LIBS $EXTRALIBS"
++ 
++ #Configure common flags
++ MODULES_LIBADD=""
++-if test a"$iscygwin" != a; then
++-     MODULES_LIBADD="-L../../ -licapapi"
++-fi
++ MODULES_CFLAGS="$INVISIBILITY_CFLAG -DCI_BUILD_MODULE"
++ AC_SUBST(MODULES_LIBADD)
++ AC_SUBST(MODULES_CFLAGS)
++diff --git a/header.c b/header.c
++index 807a2e0..266b958 100644
++--- a/header.c
+++++ b/header.c
++@@ -110,21 +110,6 @@ const struct ci_error_code ci_error_codes[] = {
++     {505, "Unsupported version"}       /*ICAP version not supported by server. */
++ };
++ 
++-/*
++-#ifdef __CYGWIN__
++-int ci_error_code(int ec){
++-     return (ec >= EC_100 && ec < EC_MAX ? ci_error_codes[ec].code:1000);
++-}
++-
++-const char *unknownerrorcode = "UNKNOWN ERROR CODE";
++-
++-const char *ci_error_code_string(int ec){
++-     return (ec >= EC_100 && ec < EC_MAX?ci_error_codes[ec].str:unknownerrorcode);
++-}
++-#endif
++-*/
++-
++-
++ const char *ci_encaps_entities[] = {
++     "req-hdr",
++     "res-hdr",
++@@ -134,25 +119,6 @@ const char *ci_encaps_entities[] = {
++     "opt-body"
++ };
++ 
++-#ifdef __CYGWIN__
++-
++-const char *unknownentity = "UNKNOWN";
++-const char *unknownmethod = "UNKNOWN";
++-
++-const char *ci_method_string(int method)
++-{
++-    return (method <= ICAP_RESPMOD
++-            && method >= ICAP_OPTIONS ? CI_Methods[method] : unknownmethod);
++-}
++-
++-
++-const char *ci_encaps_entity_string(int e)
++-{
++-    return (e <= ICAP_OPT_BODY
++-            && e >= ICAP_REQ_HDR ? CI_EncapsEntities[e] : unknownentity);
++-}
++-#endif
++-
++ ci_headers_list_t *ci_headers_create()
++ {
++     ci_headers_list_t *h;
++diff --git a/include/header.h b/include/header.h
++index 4cab365..ed2de88 100644
++--- a/include/header.h
+++++ b/include/header.h
++@@ -52,16 +52,8 @@ enum ci_encapsulated_entities {ICAP_REQ_HDR, ICAP_RES_HDR,
++                               };
++ CI_DECLARE_DATA extern const char *ci_encaps_entities[];
++ 
++-#ifdef __CYGWIN__
++-
++-const char *ci_encaps_entity_string(int e);
++-
++-#else
++-
++ #define ci_encaps_entity_string(e) (e <= ICAP_OPT_BODY && e >= ICAP_REQ_HDR?ci_encaps_entities[e]:"UNKNOWN")
++ 
++-#endif
++-
++ /**
++  \typedef ci_headers_list_t
++  \ingroup HEADERS
++diff --git a/modules/Makefile.am b/modules/Makefile.am
++index e6e9270..2d43a60 100644
++--- a/modules/Makefile.am
+++++ b/modules/Makefile.am
++@@ -21,38 +21,44 @@ endif
++ 
++ AM_CPPFLAGS=-I$(top_srcdir)/ -I$(top_srcdir)/include/ -I$(top_builddir)/include/
++ 
++-sys_logger_la_LIBADD = @MODULES_LIBADD@
+++if ISCYGWIN
+++MODS_LIB_ADD=$(top_builddir)/libicapapi.la
+++else
+++MODS_LIB_ADD=
+++endif
+++
+++sys_logger_la_LIBADD = $(MODS_LIB_ADD)
++ sys_logger_la_CFLAGS=  @MODULES_CFLAGS@ @OPENSSL_ADD_FLAG@
++-sys_logger_la_LDFLAGS= -module -avoid-version
+++sys_logger_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
++ sys_logger_la_SOURCES = sys_logger.c
++ 
++-dnsbl_tables_la_LIBADD = @MODULES_LIBADD@
+++dnsbl_tables_la_LIBADD = $(MODS_LIB_ADD)
++ dnsbl_tables_la_CFLAGS=  @MODULES_CFLAGS@ @OPENSSL_ADD_FLAG@
++-dnsbl_tables_la_LDFLAGS= -module -avoid-version
+++dnsbl_tables_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
++ dnsbl_tables_la_SOURCES = dnsbl_tables.c
++ 
++-perl_handler_la_LIBADD = @MODULES_LIBADD@ @perllib@  -L at perlcore@ -lperl
+++perl_handler_la_LIBADD = $(MODS_LIB_ADD) @perllib@  -L at perlcore@ -lperl
++ perl_handler_la_CFLAGS=  @MODULES_CFLAGS@ @perlccflags@ -I at perlcore@
++-perl_handler_la_LDFLAGS= -module -avoid-version @perlldflags@
+++perl_handler_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@ @perlldflags@
++ perl_handler_la_SOURCES = perl_handler.c
++ 
++ 
++-bdb_tables_la_LIBADD = @MODULES_LIBADD@ @BDB_ADD_LDADD@
+++bdb_tables_la_LIBADD = $(MODS_LIB_ADD) @BDB_ADD_LDADD@
++ bdb_tables_la_CFLAGS=  @MODULES_CFLAGS@ @BDB_ADD_FLAG@
++-bdb_tables_la_LDFLAGS= -module -avoid-version
+++bdb_tables_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
++ bdb_tables_la_SOURCES = bdb_tables.c
++ 
++-ldap_module_la_LIBADD = @MODULES_LIBADD@ @LDAP_ADD_LDADD@ $(top_builddir)/libicapapi.la
+++ldap_module_la_LIBADD = $(MODS_LIB_ADD) @LDAP_ADD_LDADD@
++ ldap_module_la_CFLAGS=  @MODULES_CFLAGS@ @LDAP_ADD_FLAG@
++-ldap_module_la_LDFLAGS= -module -avoid-version
+++ldap_module_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
++ ldap_module_la_SOURCES = ldap_module.c
++ 
++-memcached_cache_la_LIBADD=  @MODULES_LIBADD@ @MEMCACHED_ADD_LDADD@
+++memcached_cache_la_LIBADD=  $(MODS_LIB_ADD) @MEMCACHED_ADD_LDADD@
++ memcached_cache_la_CFLAGS=  @MODULES_CFLAGS@ @MEMCACHED_ADD_FLAG@
++-memcached_cache_la_LDFLAGS= -module -avoid-version
+++memcached_cache_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
++ memcached_cache_la_SOURCES= memcached.c
++ 
++-shared_cache_la_LIBADD= @MODULES_LIBADD@
+++shared_cache_la_LIBADD= $(MODS_LIB_ADD)
++ shared_cache_la_CFLAGS= @OPENSSL_ADD_FLAG@
++-shared_cache_la_LDFLAGS= -module -avoid-version
+++shared_cache_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
++ shared_cache_la_SOURCES= shared_cache.c
++diff --git a/modules/bdb_tables.c b/modules/bdb_tables.c
++index b8459be..1e908a9 100644
++--- a/modules/bdb_tables.c
+++++ b/modules/bdb_tables.c
++@@ -176,8 +176,8 @@ void *bdb_table_open(struct ci_lookup_table *table)
++ 
++     /*We can not fork a Berkeley DB table, so we have to
++       open bdb tables for every child, on childs start-up procedure*/
++-    register_command_extend("openBDBtable", CHILD_START_CMD, table,
++-                            command_real_open_table);
+++    ci_command_register_action("openBDBtable", CHILD_START_CMD, table,
+++			       command_real_open_table);
++ 
++     return table->data;
++ }
++@@ -257,3 +257,16 @@ void  bdb_table_release_result(struct ci_lookup_table *table,void **val)
++ {
++     ci_buffer_free(val);
++ }
+++
+++ #ifdef __CYGWIN__
+++#include <w32api/windows.h>
+++void ci_command_register_action(const char *name, int type, void *data,
+++				void (*command_action) (const char *name, int type, void *data))
+++ {
+++   typedef void (*RA)(const char *, int, void *, void(*)(const char *, int, void *));
+++   RA fn;
+++   fn = (RA)GetProcAddress(GetModuleHandle(NULL), "ci_command_register_action");
+++   if (fn)
+++     (*fn)(name, type, data, command_action);
+++ }
+++#endif
++diff --git a/modules/shared_cache.c b/modules/shared_cache.c
++index 103b760..a79d51a 100644
++--- a/modules/shared_cache.c
+++++ b/modules/shared_cache.c
++@@ -345,3 +345,15 @@ void ci_shared_cache_destroy(struct ci_cache *cache)
++         ci_shared_mem_detach(&data->id);
++ }
++ 
+++#ifdef __CYGWIN__
+++#include <w32api/windows.h>
+++void ci_command_register_action(const char *name, int type, void *data,
+++				void (*command_action) (const char *name, int type, void *data))
+++ {
+++   typedef void (*RA)(const char *, int, void *, void(*)(const char *, int, void *));
+++   RA fn;
+++   fn = (RA)GetProcAddress(GetModuleHandle(NULL), "ci_command_register_action");
+++   if (fn)
+++     (*fn)(name, type, data, command_action);
+++ }
+++#endif
++diff --git a/modules/sys_logger.c b/modules/sys_logger.c
++index 1c47753..1764b0d 100644
++--- a/modules/sys_logger.c
+++++ b/modules/sys_logger.c
++@@ -60,7 +60,20 @@ int cfg_syslog_access(const char *directive, const char **argv, void *setdata);
++    functions declared in log.c. This file is not included in c-icap library
++    but defined in primary c-icap binary.
++ */
+++#ifdef __CYGWIN__
+++#include <w32api/windows.h>
+++char *logformat_fmt(const char *name)
+++{
+++  typedef char* (*LF_FMT)(const char *);
+++  LF_FMT fn;
+++  fn = (LF_FMT)GetProcAddress(GetModuleHandle(NULL), "logformat_fmt");
+++  if (fn)
+++    return (*fn)(name);
+++  return NULL;
+++}
+++#else
++ extern char *logformat_fmt(const char *name);
+++#endif
++ 
++ /*Configuration Table .....*/
++ static struct ci_conf_entry conf_variables[] = {
++diff --git a/services/echo/Makefile.am b/services/echo/Makefile.am
++index 402c8f9..7d701b1 100644
++--- a/services/echo/Makefile.am
+++++ b/services/echo/Makefile.am
++@@ -3,9 +3,15 @@ pkglib_LTLIBRARIES=srv_echo.la
++ 
++ AM_CPPFLAGS=-I$(top_srcdir)/ -I$(top_srcdir)/include/ -I$(top_builddir)/include/
++ 
++-srv_echo_la_LIBADD = @MODULES_LIBADD@
+++if ISCYGWIN
+++MODS_LIB_ADD=$(top_builddir)/libicapapi.la
+++else
+++MODS_LIB_ADD=
+++endif
+++
+++srv_echo_la_LIBADD = $(MODS_LIB_ADD)
++ srv_echo_la_CFLAGS=  @MODULES_CFLAGS@ @OPENSSL_ADD_FLAG@
++-srv_echo_la_LDFLAGS= -module -avoid-version
+++srv_echo_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
++ srv_echo_la_SOURCES = srv_echo.c
++ 
++ 
++diff --git a/services/ex-206/Makefile.am b/services/ex-206/Makefile.am
++index 44bbf21..ff73399 100644
++--- a/services/ex-206/Makefile.am
+++++ b/services/ex-206/Makefile.am
++@@ -3,8 +3,14 @@ pkglib_LTLIBRARIES=srv_ex206.la
++ 
++ AM_CPPFLAGS=-I$(top_srcdir)/ -I$(top_srcdir)/include/ -I$(top_builddir)/include/
++ 
++-srv_ex206_la_LIBADD = @MODULES_LIBADD@
+++if ISCYGWIN
+++MODS_LIB_ADD=$(top_builddir)/libicapapi.la
+++else
+++MODS_LIB_ADD=
+++endif
+++
+++srv_ex206_la_LIBADD = $(MODS_LIB_ADD)
++ srv_ex206_la_CFLAGS=  @MODULES_CFLAGS@ @OPENSSL_ADD_FLAG@
++-srv_ex206_la_LDFLAGS= -module -avoid-version
+++srv_ex206_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
++ srv_ex206_la_SOURCES = srv_ex206.c
++ 
++diff --git a/utils/c-icap-mkbdb.c b/utils/c-icap-mkbdb.c
++index c29a46f..326ee1c 100644
++--- a/utils/c-icap-mkbdb.c
+++++ b/utils/c-icap-mkbdb.c
++@@ -23,7 +23,7 @@ char *dbfile = NULL;
++ int DUMP_MODE = 0;
++ int VERSION_MODE = 0;
++ int USE_DBTREE = 0;
++-long int PAGE_SIZE;
+++long int DB_PAGE_SIZE;
++ 
++ ci_mem_allocator_t *allocator = NULL;
++ int cfg_set_type(const char *directive, const char **argv, void *setdata);
++@@ -52,7 +52,7 @@ static struct ci_options_entry options[] = {
++         "The type of values"
++     },
++     {
++-        "-p", "page_size", &PAGE_SIZE, ci_cfg_size_long,
+++        "-p", "page_size", &DB_PAGE_SIZE, ci_cfg_size_long,
++         "The page size to use for the database"
++     },
++     {
++@@ -107,8 +107,8 @@ int open_db(char *path)
++         return 0;
++     }
++ 
++-    if (PAGE_SIZE > 512 && PAGE_SIZE <= 64*1024)
++-        db->set_pagesize(db, (uint32_t)PAGE_SIZE);
+++    if (DB_PAGE_SIZE > 512 && DB_PAGE_SIZE <= 64*1024)
+++        db->set_pagesize(db, (uint32_t)DB_PAGE_SIZE);
++ 
++     if ((ret = db->open(db, NULL, path, NULL,
++                         (USE_DBTREE ? DB_BTREE : DB_HASH),
 -- 
-2.25.4
+2.26.2
