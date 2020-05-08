@@ -1,31 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 May 2020 10:17:42 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/freescale-imx/imx-gpu-g2d:
- fix the file name
-In-Reply-To: <1587640005-22386-1-git-send-email-timo.ketola@exertus.fi> (Timo
- Ketola's message of "Thu, 23 Apr 2020 14:06:45 +0300")
-References: <1587617509-15087-1-git-send-email-timo.ketola@exertus.fi>
- <1587640005-22386-1-git-send-email-timo.ketola@exertus.fi>
-Message-ID: <87imh6suvt.fsf@dell.be.48ers.dk>
+Date: Fri, 8 May 2020 09:13:34 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/midori: needs gcc
+ >= 7
+Message-ID: <20200508080227.4B9DE90FE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Timo" == Timo Ketola <timo.ketola@exertus.fi> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fbc2f26d06e3f45c2fe316c6fad0fc18a275e9d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > NXP apparently changed file naming convention for this particular file.
- > Fixes:
- > 1d0ea8d433 (package/freescale-imx/imx-gpu-g2d: bump to version 6.4.0.p1.0)
+Commit ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4 forgot to propagate
+gcc >= 7 dependency to midori
 
- > Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
- > ---
- > Changes v1 -> v2:
+Fixes:
+ - http://autobuild.buildroot.org/results/736a99dcaa72fba3f06775d08c4395f506fce944
 
- >  - Add 'Fixes:' line as suggested by Gary
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit de5a74193b270e4bff19a45a4b82a70fb70857fa)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/midori/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Committed to 2020.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/midori/Config.in b/package/midori/Config.in
+index 64139ce49e..089f36ced8 100644
+--- a/package/midori/Config.in
++++ b/package/midori/Config.in
+@@ -1,7 +1,7 @@
+-comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6"
++comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 7"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_6 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+ 		!BR2_TOOLCHAIN_USES_GLIBC
+ 
+ config BR2_PACKAGE_MIDORI
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_MIDORI
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt, gcr, gnupg2
+ 	depends on BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # webkitgtk
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # webkitgtk
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	# GCR can only be used with the X11 backend
