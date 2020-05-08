@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 May 2020 11:38:30 +0200
-Subject: [Buildroot] [PATCH] package/binutils: fix xtensa PR ld/25861
-In-Reply-To: <20200423031145.18873-1-jcmvbkbc@gmail.com> (Max Filippov's
- message of "Wed, 22 Apr 2020 20:11:45 -0700")
-References: <20200423031145.18873-1-jcmvbkbc@gmail.com>
-Message-ID: <87a72isr55.fsf@dell.be.48ers.dk>
+Date: Fri, 08 May 2020 11:38:46 +0200
+Subject: [Buildroot] [PATCH] package/binutils: fix XTENSA_NDIFF handling
+ for PR ld/25861
+In-Reply-To: <20200430050822.32017-1-jcmvbkbc@gmail.com> (Max Filippov's
+ message of "Wed, 29 Apr 2020 22:08:22 -0700")
+References: <20200430050822.32017-1-jcmvbkbc@gmail.com>
+Message-ID: <875zd6sr4p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
 
- > Handle link-time relaxation of full 16-bit difference values correctly
- > in xtensa linker. This fixes the following kind of build errors:
-
- > .../five-point.cpp:338:(.debug_line+0x3b12):
- >        	dangerous relocation: overflow after relaxation
+ > Fix for xtensa PR ld/25861 introduced a regression in handling negative
+ > symbol differences resulting in linker performing incorrect relaxation
+ > or failing to link. Fix XTENSA_NDIFF relocation handling.
 
  > Backported from:
- > https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=30ce8e47fad9b057b6d7af9e1d43061126d34d20
- > Fixes:
- > http://autobuild.buildroot.net/results/67a5545779bbe8ca2b21da1f3ff2002053710ce1/
- > http://autobuild.buildroot.net/results/87f38998d2d60b6bce3128589973187ef9596e28/
+ > https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=d548f47df4d2e3d117d504a4c9977982c78a0556
 
+ > Fixes: f0291ef4aba0 ("package/binutils: fix xtensa PR ld/25861")
  > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 
 Committed to 2020.02.x, thanks.
