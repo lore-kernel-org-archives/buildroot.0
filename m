@@ -1,25 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 May 2020 09:13:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/midori: needs gcc >= 7
-In-Reply-To: <20200421172632.4124853-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 21 Apr 2020 19:26:32 +0200")
-References: <20200421172632.4124853-1-fontaine.fabrice@gmail.com>
-Message-ID: <87lfm2ucep.fsf@dell.be.48ers.dk>
+Date: Fri, 08 May 2020 09:15:58 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/libglib2: restore use of
+ system printf
+In-Reply-To: <20200421225131.5411a02a@windsurf.home> (Thomas Petazzoni's
+ message of "Tue, 21 Apr 2020 22:51:31 +0200")
+References: <20200311112256.2849174-1-john@metanate.com>
+ <20200311112256.2849174-2-john@metanate.com>
+ <20200421225131.5411a02a@windsurf.home>
+Message-ID: <87h7wqucb5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Commit ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4 forgot to propagate
- > gcc >= 7 dependency to midori
+ > On Wed, 11 Mar 2020 11:22:56 +0000
+ > John Keeping <john@metanate.com> wrote:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/736a99dcaa72fba3f06775d08c4395f506fce944
+ >> Prior to commit 4102db0f7a ("package/libglib2: bump to version 2.60.3")
+ >> which converted libglib2 to meson, Buildroot used to set a range of
+ >> autoconf options to bypass tests that require running binaries.
+ >> 
+ >> The meson version of libglib2's build system has many fewer of these
+ >> checks, but there are still some and these can be fed the "correct"
+ >> answer by adding properties to cross-compilation.conf.
+ >> 
+ >> Add the necessary properties to indicate that we have C99 compliant
+ >> print functions to avoid pulling in the gnulib fallback.
+ >> 
+ >> Signed-off-by: John Keeping <john@metanate.com>
+ >> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+ >> ---
+ >> v2:
+ >> - Add Peter's reviewed-by - thanks!
+ >> ---
+ >> package/libglib2/libglib2.mk | 5 +++++
+ >> 1 file changed, 5 insertions(+)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Applied to master, thanks.
 
 Committed to 2020.02.x, thanks.
 
