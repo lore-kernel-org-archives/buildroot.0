@@ -1,31 +1,44 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 8 May 2020 01:31:32 -0700
-Subject: [Buildroot] [PATCH] package/binutils: fix XTENSA_NDIFF handling
- for PR ld/25861
-In-Reply-To: <74b3c3ee-67e4-d3e0-0cf8-82e064ebfb00@gmail.com>
-References: <20200430050822.32017-1-jcmvbkbc@gmail.com>
- <bfdb477a-cf89-21d4-c42c-e5a405b2edf3@gmail.com>
- <74b3c3ee-67e4-d3e0-0cf8-82e064ebfb00@gmail.com>
-Message-ID: <CAMo8BfKCYu9aSMn-3F2Cy8Sj7nJvGo4eHzM=gx2QgUmQjGNTyw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  8 May 2020 10:32:20 +0200
+Subject: [Buildroot] [PATCH] release: don't include temp files
+Message-ID: <20200508083220.18927-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+When we prepare the release, we generate the manual in various formats,
+so that it can be consulted locally without needing the miriads of tools
+needed to generate it.
 
-On Thu, May 7, 2020 at 2:10 PM Romain Naour <romain.naour@gmail.com> wrote:
-> It seems elf2flt used by qemu_xtensa_lx60_nommu_defconfig doesn't support
-> R_XTENSA_PDIFF32:
->
->   elf2flt: 267 bad relocs
->
-> https://gitlab.com/kubu93/buildroot/-/jobs/543293510
+However, this creates the temporary .br2-external.* files in the output
+directory, and those end up in the release tarball.
 
-Thanks for the report. Proposed fix:
-https://github.com/uclinux-dev/elf2flt/pull/18
+This is not a problem in practice, but is not clean.
 
+Run 'distclean' in the output directory, to get rid of everything but
+the generated documentation.
+
+Reported-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 3aa4ba4532..2da34b5305 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1190,7 +1190,7 @@ release: OUT = buildroot-$(BR2_VERSION)
+ release:
+ 	git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
+ 	$(MAKE) O=$(OUT) manual-html manual-text manual-pdf
+-	$(MAKE) O=$(OUT) clean
++	$(MAKE) O=$(OUT) distclean
+ 	tar rf $(OUT).tar $(OUT)
+ 	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
+ 	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
 -- 
-Thanks.
--- Max
+2.20.1
