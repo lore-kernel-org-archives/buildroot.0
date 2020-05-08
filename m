@@ -1,45 +1,92 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 May 2020 12:02:02 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/docker-engine:
- bump version to 19.03.7
-Message-ID: <20200508143236.19C7E8D4D8@busybox.osuosl.org>
+Date: Fri, 8 May 2020 16:42:09 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/mesa3d-headers:
+ fix install of dri.pc
+Message-ID: <20200508143236.757899108D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97a6aeea814ba863d9baef9e0755de1c9d8c2a71
+commit: https://git.buildroot.net/buildroot/commit/?id=81e3284ac402dcfd3d86a095f2d2a0d96b87860d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e505bc4777a61407115fb3fb918f29e62b3caa88)
+mesa3d-headers is a little bit special: it uses the same sources as
+the mesa3d package, named just 'mesa' upstream. mesa uses the meson
+buildsystem, an that is what we use in the mesa3d package.
+
+However, mesa3d-headers does not install the whole of mesa; it only
+installs a select set of headers for those binary blobs that do not
+provide them.
+
+mesa does not provide such a feature (only installing headers) with
+its meson buildsystem. As a consequence, we've made mesa3d-headers a
+generic package, that basically only copies headers over.
+
+Additionally, mesa3d-headers also provides the dri.pc file for when
+Xorg is enabled; see 7468b60e7c (package/mesa3d-headers: also install
+dri header and .pc file).
+
+We used to manually generate that file from a .in template that was
+present in mesa source code at the time it was still using autotools.
+But when they switched over to using meson, the template was dropped
+[0], and the dri.pc is now entirely generated using meson internals
+[1].
+
+So we now have no template present in the source code, so we must
+come up with our own. This simplifies the replacement pattern to
+just inject the version string.
+
+[0] https://cgit.freedesktop.org/mesa/mesa/commit/?id=158758618264eac113025a86a360dc305ed4498b
+[1] https://cgit.freedesktop.org/mesa/mesa/tree/src/mesa/drivers/dri/meson.build?h=19.2#n93
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: Vincent Fazio <vfazio@xes-inc.com>
+[yann.morin.1998 at free.fr:
+  - entirely rework the commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 9014c21cac83b3bb6a038ad7dd4b06cde136d3ae)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mesa3d-headers/dri.pc            | 10 ++++++++++
+ package/mesa3d-headers/mesa3d-headers.mk |  9 ++-------
+ 2 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 1f1643d377..4c031574af 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	bc5d1ac503e44593be8003ed0ad9c75bf0da535db19837a9338429c438bd4637  docker-engine-19.03.5.tar.gz
-+sha256	6621da5b75cecd1f6f57389a4611d3dd00eeedd8765db63ae5538122fdac27da  docker-engine-19.03.7.tar.gz
- sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index eb3a7fd29f..df27cb17b5 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mesa3d-headers/dri.pc b/package/mesa3d-headers/dri.pc
+new file mode 100644
+index 0000000000..bd9a33b6c6
+--- /dev/null
++++ b/package/mesa3d-headers/dri.pc
+@@ -0,0 +1,10 @@
++prefix=/usr
++libdir=${prefix}/lib
++includedir=${prefix}/include
++
++dridriverdir=/usr/lib/dri
++
++Name: dri
++Description: Direct Rendering Infrastructure
++Version: @VERSION@
++Cflags: -I${includedir}
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 7d428f2322..6af6e8843f 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -34,13 +34,8 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
+ # Not using $(SED) because we do not want to work in-place, and $(SED)
+ # contains -i.
+ define MESA3D_HEADERS_BUILD_DRI_PC
+-	sed -e 's:@\(exec_\)\?prefix@:/usr:' \
+-	    -e 's:@libdir@:$${exec_prefix}/lib:' \
+-	    -e 's:@includedir@:$${prefix}/include:' \
+-	    -e 's:@DRI_DRIVER_INSTALL_DIR@:$${libdir}/dri:' \
+-	    -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
+-	    -e 's:@DRI_PC_REQ_PRIV@::' \
+-	    $(@D)/src/mesa/drivers/dri/dri.pc.in \
++	sed -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
++	    package/mesa3d-headers/dri.pc \
+ 	    >$(@D)/src/mesa/drivers/dri/dri.pc
+ endef
  
--DOCKER_ENGINE_VERSION = 19.03.5
-+DOCKER_ENGINE_VERSION = 19.03.7
- DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
