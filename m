@@ -1,99 +1,79 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Fri, 8 May 2020 08:32:29 +0200
-Subject: [Buildroot] [PATCH 2/5] package/apparmor: fix compatibility
- with busybox grep
-In-Reply-To: <20200508015956.3270405-2-aduskett@gmail.com>
-References: <20200508015956.3270405-1-aduskett@gmail.com>
- <20200508015956.3270405-2-aduskett@gmail.com>
-Message-ID: <CA+_SqVYbrj10_Os90XQ-YhT1JLC28j37F2B5v5Q1n3PPxrxrGw@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 8 May 2020 09:49:18 +0300
+Subject: [Buildroot] [PATCH 1/1] support/dependencies: set cmake version
+ min to 3.15.3
+In-Reply-To: <CADvTj4obwekwgr+cx70MQ=+87ZuVtqNiqmocPgGzDTEzceo7QQ@mail.gmail.com>
+References: <20200428054352.110007-1-james.hilliard1@gmail.com>
+ <20200428080328.4a06266b@windsurf.home>
+ <CALFsTFUYwj6ROx6kziiM2eCxjwD-4Qhtk+kNKHmga5OAbfOR=Q@mail.gmail.com>
+ <CADvTj4obwekwgr+cx70MQ=+87ZuVtqNiqmocPgGzDTEzceo7QQ@mail.gmail.com>
+Message-ID: <CALFsTFUydsNYCrArOS6WfQBRfd4v-wKqC31AUZi1MzvAqQ+6oA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Hello,
 
-On Fri, May 8, 2020 at 4:00 AM <aduskett@gmail.com> wrote:
+On Mon, May 4, 2020 at 1:10 AM James Hilliard <james.hilliard1@gmail.com> wrote:
 >
-> From: Adam Duskett <Aduskett@gmail.com>
->
-> The following regex string in rc.apparmor.functions
-> "^/.*[ \t]+flags[ \t]*=[ \t]*\([ \t]*complain[ \t]*\)[ \t]+{" is broken due to
-> the unescaped { at the end of the regex pattern.
-> GNU grep ignors the error. However, the Busybox grep does not and throws the
-> error "unescaped character {"
+> On Sat, May 2, 2020 at 2:27 AM Asaf Kahlon <asafka7@gmail.com> wrote:
+> >
+> > Hello,
+> >
+> > On Tue, Apr 28, 2020 at 9:04 AM Thomas Petazzoni
+> > <thomas.petazzoni@bootlin.com> wrote:
+> > >
+> > > On Mon, 27 Apr 2020 23:43:52 -0600
+> > > James Hilliard <james.hilliard1@gmail.com> wrote:
+> > >
+> > > > This is required by uvw.
+> > > >
+> > > > Fixes:
+> > > > http://autobuild.buildroot.net/results/ab6/ab6954a65fd6d43c0674cb7a38a941102cb0dfe3/build-end.log
+> > > >
+> > > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > >
+> > > The CMake version required by uvw was suddenly bumped from 3.2 to
+> > > 3.15.3 in upstream commit 55d7782af5654cde8bba89071e13d240fd27ff3b.
+> > >
+> > > From a quick look of it, I don't really see why it was bumped "so
+> > > high". Could you instead try to revert to a minimum CMake version of
+> > > 3.10 in uvw, and see if it builds ?
+> >
+> > I tried to build the package with CMake 3.10 and it failed with:
+> > CMake Error at CMakeLists.txt:22 (project):
+> >   No CMAKE_HOMEPAGE_URL_COMPILER could be found.
+> >
+> >   Tell CMake where to find the compiler by setting the CMake cache entry
+> >   CMAKE_HOMEPAGE_URL_COMPILER to the full path to the compiler, or to the
+> >   compiler name if it is in the PATH.
+> >
+> >
+> > The minimum version I managed to compile with is 3.12
+> Upstream seems to think the minimum is 3.13 see discussion here:
+> https://github.com/skypjack/uvw/issues/194
+According to this issue, uvw needs at least 3.12 and for some features
+even 3.13.
+Anyway, it seems like we have to bump our minimal required version in
+order to make sure
+uvw builds correctly.
 
-Indeed, my original series had:
-
-select BR2_PACKAGE_GREP
-
-to overcome this issue but it went somewhat missing.
-
-
-
->
-> Escape the "{" character to fix this issue.
->
-> Note: Upstream has rewritten large sections of the rc.apparmor.functions file
-> and the function this patch fixes will no longer be necessary after the next
-> version is released. However, it is not possible to easily backport the
-> upstream patches as the rewrite comes with new features that would not be
-> possible with a simple patch such as this one.
->
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  ...apparmor.functions-to-work-with-busy.patch | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/apparmor/0003-fix-regex-in-rc.apparmor.functions-to-work-with-busy.patch
->
-> diff --git a/package/apparmor/0003-fix-regex-in-rc.apparmor.functions-to-work-with-busy.patch b/package/apparmor/0003-fix-regex-in-rc.apparmor.functions-to-work-with-busy.patch
-> new file mode 100644
-> index 0000000000..54afcd43a8
-> --- /dev/null
-> +++ b/package/apparmor/0003-fix-regex-in-rc.apparmor.functions-to-work-with-busy.patch
-> @@ -0,0 +1,37 @@
-> +From 12764faa0a01bcc4e0ffc92ce308985dbad0d954 Mon Sep 17 00:00:00 2001
-> +From: Adam Duskett <Aduskett@gmail.com>
-> +Date: Thu, 7 May 2020 18:25:29 -0700
-> +Subject: [PATCH] fix regex in rc.apparmor.functions to work with busybox
-> +
-> +The following regex string in rc.apparmor.functions
-> +"^/.*[ \t]+flags[ \t]*=[ \t]*\([ \t]*complain[ \t]*\)[ \t]+{" is broken due to
-> +the unescaped {. GNU grep ignores the error. However, the Busybox grep does
-> +not and throws the error "unescaped character {"
-> +
-> +Escape the "{" character to fix this issue.
-> +
-> +Note: Upstream has rewritten large sections of the rc.apparmor.functions file
-> +and the function this patch fixes will no longer be necessary after the next
-> +version is released.
-> +
-> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> +---
-> + parser/rc.apparmor.functions | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/parser/rc.apparmor.functions b/parser/rc.apparmor.functions
-> +index f3108f8..db0697c 100644
-> +--- a/parser/rc.apparmor.functions
-> ++++ b/parser/rc.apparmor.functions
-> +@@ -140,7 +140,7 @@ force_complain() {
-> +       local profile=$1
-> +
-> +       # if profile not in complain mode
-> +-      if ! egrep -q "^/.*[ \t]+flags[ \t]*=[ \t]*\([ \t]*complain[ \t]*\)[ \t]+{" $profile ; then
-> ++      if ! grep -E -q "^/.*[ \t]+flags[ \t]*=[ \t]*\([ \t]*complain[ \t]*\)[ \t]+\{" $profile ; then
-> +               local link="${PROFILE_DIR}/force-complain/`basename ${profile}`"
-> +               if [ -e "$link" ] ; then
-> +                       aa_log_warning_msg "found $link, forcing complain mode"
-> +--
-> +2.26.2
-> +
-> --
-> 2.26.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> > >
+> > > Thanks,
+> > >
+> > > Thomas
+> > > --
+> > > Thomas Petazzoni, CTO, Bootlin
+> > > Embedded Linux and Kernel engineering
+> > > https://bootlin.com
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> > Regards,
+> > Asaf.
+Regards,
+Asaf.
