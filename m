@@ -1,53 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 May 2020 12:05:56 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libarchive: add
- zstd optional dependency
-Message-ID: <20200508143236.34C1891051@busybox.osuosl.org>
+Date: Fri, 8 May 2020 12:01:11 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ package/docker-containerd: bump version to 1.2.13
+Message-ID: <20200508143236.0A0B19108D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beb89fd77f2425b68bb89ee56463041ddbb43570
+commit: https://git.buildroot.net/buildroot/commit/?id=763f05b818d180b5f5c1d6634dbd111dec2db5c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-zstd is available since version 3.3.3 and
-https://github.com/libarchive/libarchive/commit/26838cf5c17642f57192753cc5c3880b16b65ba3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4bcc34446485d27efd41de70a86355a0e3798838)
+(cherry picked from commit 93fecb7ed559efff5631ee9505d9b11306af9498)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libarchive/libarchive.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/docker-containerd/docker-containerd.hash | 2 +-
+ package/docker-containerd/docker-containerd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index b98ec32af1..99360eaf3c 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -111,6 +111,13 @@ else
- LIBARCHIVE_CONF_OPTS += --without-zlib
- endif
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index a4acc17710..95288be58b 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256 318886ea1efdec36f088fd6a0a0fe2b2f0ebdfd0066bdb4bd284bad12abc0a41  docker-containerd-1.2.12.tar.gz
++sha256	0811057ab67b78ce911416e793edaeb14b3f1e105d67b8e67b6302e0eab572e4  docker-containerd-1.2.13.tar.gz
+ sha256 4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index 67de8d7468..5a44489065 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+LIBARCHIVE_CONF_OPTS += --with-zstd
-+LIBARCHIVE_DEPENDENCIES += zstd
-+else
-+LIBARCHIVE_CONF_OPTS += --without-zstd
-+endif
-+
- # libarchive requires LZMA with thread support in the toolchain
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_PACKAGE_XZ),yy)
- LIBARCHIVE_DEPENDENCIES += xz
-@@ -136,7 +143,8 @@ HOST_LIBARCHIVE_CONF_OPTS = \
- 	--without-mbedtls \
- 	--without-nettle \
- 	--without-openssl \
--	--without-lzma
-+	--without-lzma \
-+	--without-zstd
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-DOCKER_CONTAINERD_VERSION = 1.2.12
++DOCKER_CONTAINERD_VERSION = 1.2.13
+ DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
