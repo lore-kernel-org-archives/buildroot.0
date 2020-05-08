@@ -1,10 +1,11 @@
 From: Alistair Francis <alistair23@gmail.com>
-Date: Fri, 8 May 2020 12:44:04 -0700
-Subject: [Buildroot] [PATCH 1/2] toolchain/toolchain-buildroot: enable
- uclibc for riscv64
-In-Reply-To: <20200508103338.16391-1-mark@dibsco.co.uk>
+Date: Fri, 8 May 2020 12:44:31 -0700
+Subject: [Buildroot] [PATCH 2/2] support/config-fragments: add RISC-V
+ 64-bit uclibc autobuild config
+In-Reply-To: <20200508103338.16391-2-mark@dibsco.co.uk>
 References: <20200508103338.16391-1-mark@dibsco.co.uk>
-Message-ID: <CAKmqyKNCTx4R9tgKRLZF8NQ3h1fvLEX1KqFUAxWTrSY_6_ZOCg@mail.gmail.com>
+ <20200508103338.16391-2-mark@dibsco.co.uk>
+Message-ID: <CAKmqyKOC3ExztKPyJ6K-sm=u2aoNwYxN9=ncGRY5QnT4HiqpLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +14,9 @@ To: buildroot@busybox.net
 
 On Fri, May 8, 2020 at 3:41 AM Mark Corbin <mark@dibsco.co.uk> wrote:
 >
-> We can enable uclibc for RISC-V 64 bit now that it has been
-> bumped from v1.0.32 to v1.0.34.
->
-> Uclibc has had basic support for RISC-V 64 bit since v1.0.31, but
-> shared library and TLS/NPTL support has only been available since
-> v1.0.33.
->
-> This update has been tested using qemu_riscv64_virt_defconfig and
-> the Buildroot host QEMU.
+> Now that RISC-V 64 bit can use uclibc, glibc and musl we can add
+> uclibc to the autobuild internal toolchain configurations by
+> removing the musl specific config file and adding a generic one.
 >
 > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 
@@ -30,47 +25,35 @@ Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Alistair
 
 > ---
->  package/uclibc/Config.in                |  1 +
->  toolchain/toolchain-buildroot/Config.in | 14 ++++++++------
->  2 files changed, 9 insertions(+), 6 deletions(-)
+>  ...v64-internal-musl.config => br-riscv64-full-internal.config} | 1 -
+>  support/config-fragments/autobuild/toolchain-configs.csv        | 2 +-
+>  2 files changed, 1 insertion(+), 2 deletions(-)
+>  rename support/config-fragments/autobuild/{br-riscv64-internal-musl.config => br-riscv64-full-internal.config} (57%)
 >
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index de2885bc92..f8c9955bc8 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -101,6 +101,7 @@ config BR2_UCLIBC_TARGET_ARCH
->         default "mips"     if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
->         default "or1k"     if BR2_or1k
->         default "powerpc"  if BR2_powerpc
-> +       default "riscv64"  if BR2_riscv && BR2_ARCH_IS_64
->         default "sh"       if BR2_sh
->         default "sparc"    if BR2_sparc
->         default "xtensa"   if BR2_xtensa
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 8c33b2b4dd..8ae7358526 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -27,12 +27,14 @@ choice
->
->  config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->         bool "uClibc-ng"
-> -       depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle   || BR2_arceb  || \
-> -                  BR2_arm     || BR2_armeb    || \
-> -                  BR2_i386    || BR2_m68k   || BR2_microblaze || \
-> -                  BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-> -                  BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4     || \
-> -                  BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
-> +       depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle      || BR2_arceb    || \
-> +                  BR2_arm     || BR2_armeb      || \
-> +                  BR2_i386    || BR2_m68k       || BR2_microblaze || \
-> +                  BR2_mips    || BR2_mipsel     || BR2_mips64     || BR2_mips64el || \
-> +                  BR2_or1k    || BR2_powerpc    || BR2_riscv      || \
-> +                  BR2_sh2a    || BR2_sh4        || BR2_sh4eb      || BR2_sparc    || \
-> +                  BR2_xtensa  || BR2_x86_64
-> +       depends on BR2_ARCH_IS_64 || !BR2_riscv
->         select BR2_TOOLCHAIN_USES_UCLIBC
->         help
->           This option selects uClibc-ng as the C library for the
+> diff --git a/support/config-fragments/autobuild/br-riscv64-internal-musl.config b/support/config-fragments/autobuild/br-riscv64-full-internal.config
+> similarity index 57%
+> rename from support/config-fragments/autobuild/br-riscv64-internal-musl.config
+> rename to support/config-fragments/autobuild/br-riscv64-full-internal.config
+> index 89e7afb276..c729eb55e9 100644
+> --- a/support/config-fragments/autobuild/br-riscv64-internal-musl.config
+> +++ b/support/config-fragments/autobuild/br-riscv64-full-internal.config
+> @@ -1,3 +1,2 @@
+>  BR2_riscv=y
+> -BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+>  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+> index 9b41e2173b..88b0e72ab3 100644
+> --- a/support/config-fragments/autobuild/toolchain-configs.csv
+> +++ b/support/config-fragments/autobuild/toolchain-configs.csv
+> @@ -53,7 +53,7 @@ support/config-fragments/autobuild/br-powerpc-e500mc-full.config,x86_64
+>  support/config-fragments/autobuild/br-powerpc-internal-full.config,any
+>  support/config-fragments/autobuild/br-riscv32.config,x86_64
+>  support/config-fragments/autobuild/br-riscv64.config,x86_64
+> -support/config-fragments/autobuild/br-riscv64-internal-musl.config,any
+> +support/config-fragments/autobuild/br-riscv64-full-internal.config,any
+>  support/config-fragments/autobuild/br-sh4-full.config,x86_64
+>  support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
+>  support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
 > --
 > 2.20.1
 >
