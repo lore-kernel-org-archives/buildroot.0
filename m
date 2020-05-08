@@ -1,3679 +1,3406 @@
-From: Kunal Chauhan <atkunalchauhan@gmail.com>
-Date: Wed, 6 May 2020 12:24:57 +0530
-Subject: [Buildroot] Help: to understand build root (Andreas Ziegler)
-In-Reply-To: <mailman.1828.1588743310.59095.buildroot@busybox.net>
-References: <mailman.1828.1588743310.59095.buildroot@busybox.net>
-Message-ID: <CACEFAc2MZRPhuct4xF++93nUXjDs5La74Jkb-3fwN1=SFJepbw@mail.gmail.com>
+From: DATACOM - Joao <joao@datacom.com.br>
+Date: Fri, 8 May 2020 14:06:59 -0300
+Subject: [Buildroot] Help: build-root compile and debug
+In-Reply-To: <0105e61a-28bf-9d72-ecd3-f285102fcbfa@datacom.com.br>
+References: <0105e61a-28bf-9d72-ecd3-f285102fcbfa@datacom.com.br>
+Message-ID: <e5b6944e-a783-346f-d904-89d2691105cb@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Kunal.
 
-1.Team just gone through the url given but still I am confused what is the
-main purpose of making build_root directory, when we can compile our source
-in different way.
-2. May be I am not understanding the concept as I am  new to
-firmware concept. but question is also how the code is built and test as a
-developer
+I will try to help you out.
 
-please elaborate ? or help me to understand
+Em 08/05/2020 13:19, Kunal Chauhan escreveu:
+> Hi Team,,
+>
+> 1. What is the realtion between build root and busy box. ? Not clear to me
 
+Buildroot is a buildsystem. Its output comprises a Linux kernel and a 
+collection of packages which are instructions on how to build different 
+binaries to archieve a coherent Linux system.
 
+Busybox happens to be one of these packages.
 
-Thanks
-kunal
+> 2.As we compile whole linux some build output comes in case of busy 
+> box also if am not wrong.
 
-On Wed, May 6, 2020 at 11:06 AM <buildroot-request@busybox.net> wrote:
+I would say firmware image as you stated below instead of Linux but you 
+got the point here.
 
-> Send buildroot mailing list submissions to
->         buildroot at busybox.net
->
-> To subscribe or unsubscribe via the World Wide Web, visit
->         http://lists.busybox.net/mailman/listinfo/buildroot
-> or, via email, send a message with subject or body 'help' to
->         buildroot-request at busybox.net
->
-> You can reach the person managing the list at
->         buildroot-owner at busybox.net
->
-> When replying, please edit your Subject line so it is more specific
-> than "Re: Contents of buildroot digest..."
->
->
-> Today's Topics:
->
->    1. Re: [PATCH v5 1/3] package/environment-setup: new package
->       (Angelo Compagnucci)
->    2. [PATCH] hsdk/linux: Fix USB regression (Evgeniy Didin)
->    3. [git commit] CHANGES: start updating for 2020.05-rc1 release
->       (Thomas Petazzoni)
->    4. Re: [PATCH] package/solarus: bump to version 1.6.4
->       (Thomas Petazzoni)
->    5. Re: [PATCH] package/zziplib: bump to version 0.13.71
->       (Thomas Petazzoni)
->    6. Re: [PATCH v2] package/libnss: bump version to 3.52
->       (Thomas Petazzoni)
->    7. Re: [PATCH] package/python-redis: Bump to version 3.5.0
->       (Thomas Petazzoni)
->    8. Re: Help: to understand build root (Andreas Ziegler)
->    9. Re: [PATCH] azure-iot-sdk-c: fix missing libraries
->       (Peter Korsgaard)
->   10. Re: [PATCH] board/wandboard/post-build.sh: create boot.scr at
->       TARGET_DIR/boot (Peter Korsgaard)
->   11. Re: [PATCH] package/libssh: security bump to version 0.9.4
->       (Peter Korsgaard)
->   12. Re: [PATCH 1/1] package/libssh: add patch to fix reported
->       version (Peter Korsgaard)
->   13. Re: [PATCH] package/libssh: add patch to fix regression
->       (Peter Korsgaard)
->   14. Re: [PATCH] package/exim: fix log and pid file paths
->       (Peter Korsgaard)
->   15. Re: [PATCH 1/1] package/mbedtls: security bump to version
->       2.16.6 (Peter Korsgaard)
->   16. Re: [git commit] package/python-iptables: add explicit
->       dependency on dynamic libs (Peter Korsgaard)
->   17. Re: [git commit] package/python-iptables: account for
->       platform tag in extensions (Peter Korsgaard)
->   18. Re: [git commit] package/python-iptables: try known libc
->       instead of find_library() (Peter Korsgaard)
->   19. Re: [PATCH 1/1] package/php: security bump version to 7.4.5
->       (Peter Korsgaard)
->   20. Re: [PATCH] package/python-dpkt: remove Python2 only
->       dependency (Peter Korsgaard)
->   21. Re: [git commit] package/libsepol: fix help text for
->       BR2_PACKAGE_LIBSEPOL_POLICY_VERSION (Peter Korsgaard)
->   22. Re: [PATCH] package/polkit: properly autoreconf (Peter Korsgaard)
->   23. Re: [PATCH 1/4] package/polkit: install service file
->       (Peter Korsgaard)
->   24. Re: [PATCH 2/4] package/polkit: add upstream memory leak fix
->       (Peter Korsgaard)
->   25. Re: [PATCH 3/4] package/polkit: add upstream fix for SIGTTOU
->       (Peter Korsgaard)
->   26. Re: [PATCH 1/2] package/php: fix zip support (Peter Korsgaard)
->   27. Re: [PATCH 2/2] package/php: fix gd dependencies (Peter Korsgaard)
->   28. Re: [PATCH v2] package/netsnmp: unix domain socket transport
->       (Peter Korsgaard)
->   29. Re: [PATCH 1/1] package/openvpn: security bump version to
->       2.4.9 (Peter Korsgaard)
->   30. [git commit branch/2020.02.x] package/azure-iot-sdk-c: fix
->       installation of libumqtt (Peter Korsgaard)
->   31. [git commit branch/2020.02.x] package/azure-iot-sdk-c: format
->       the libraries list with one lib per line (Peter Korsgaard)
->   32. [git commit branch/2020.02.x] package/azure-iot-sdk-c: also
->       install libparson (Peter Korsgaard)
->   33. [git commit branch/2020.02.x] package/polkit: add upstream
->       memory leak fix (Peter Korsgaard)
->   34. [git commit branch/2020.02.x] board/wandboard/post-build.sh:
->       create boot.scr at TARGET_DIR/boot (Peter Korsgaard)
->   35. [git commit branch/2020.02.x] package/azure-iot-sdk-c: create
->       function for library installation (Peter Korsgaard)
->   36. [git commit branch/2020.02.x] package/libssh: add patch to
->       fix reported version (Peter Korsgaard)
->   37. [git commit branch/2020.02.x] board/udoo/neo: create boot.scr
->       in TARGET_DIR/boot (Peter Korsgaard)
->   38. [git commit branch/2020.02.x] package/php: fix zip support
->       (Peter Korsgaard)
->   39. [git commit branch/2020.02.x] package/php: fix gd extension
->       dependencies and options (Peter Korsgaard)
->   40. [git commit branch/2020.02.x] package/python-iptables: add
->       explicit dependency on dynamic libs (Peter Korsgaard)
->   41. [git commit branch/2020.02.x] board/solidrun/mx6cubox: create
->       boot.scr in TARGET_DIR/boot (Peter Korsgaard)
->   42. [git commit branch/2020.02.x] package/libssh: security bump
->       to version 0.9.4 (Peter Korsgaard)
->   43. [git commit branch/2020.02.x] package/mbedtls: security bump
->       to version 2.16.6 (Peter Korsgaard)
->   44. [git commit branch/2020.02.x] package/libssh: add patch to
->       fix regression (Peter Korsgaard)
->   45. [git commit branch/2020.02.x] package/python-iptables:
->       account for platform tag in extensions (Peter Korsgaard)
->   46. [git commit branch/2020.02.x] package/exim: fix log and pid
->       file paths (Peter Korsgaard)
->   47. [git commit branch/2020.02.x] package/python-iptables: try
->       known libc instead of find_library() (Peter Korsgaard)
->   48. [git commit branch/2020.02.x] package/python-dpkt: remove
->       Python2 only dependency (Peter Korsgaard)
->   49. [git commit branch/2020.02.x] package/libsepol: fix help text
->       for BR2_PACKAGE_LIBSEPOL_POLICY_VERSION (Peter Korsgaard)
->   50. [git commit branch/2020.02.x] package/azure-iot-sdk-c: use
->       full destination path for $(INSTALL) (Peter Korsgaard)
->   51. [git commit branch/2020.02.x] package/polkit: add upstream
->       fix for SIGTTOU (Peter Korsgaard)
->   52. [git commit branch/2020.02.x] package/php: security bump
->       version to 7.4.5 (Peter Korsgaard)
->   53. [git commit branch/2020.02.x] package/netsnmp: unix domain
->       socket transport (Peter Korsgaard)
->   54. [git commit branch/2020.02.x] package/polkit: properly
->       autoreconf (Peter Korsgaard)
->
->
-> ----------------------------------------------------------------------
->
-> Message: 1
-> Date: Tue, 5 May 2020 22:43:20 +0200
-> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> To: Mircea GLIGA <mgliga@bitdefender.com>
-> Cc: Angelo Compagnucci <angelo@amarulasolutions.com>,  Buildroot
->         Mailing List <buildroot@buildroot.org>
-> Subject: Re: [Buildroot] [PATCH v5 1/3] package/environment-setup: new
->         package
-> Message-ID:
->         <
-> CA+TH9VmTLkxGqrGTeVmv2yMz-01EmsxpeQ_3DmXAGGD285tPWA at mail.gmail.com>
-> Content-Type: text/plain; charset="UTF-8"
->
-> Hi Mircea,
->
-> Il giorno mar 28 apr 2020 alle ore 13:04 Mircea GLIGA
-> <mgliga@bitdefender.com> ha scritto:
-> >
-> > Hi Angelo
-> >
-> > See my comment below.
-> >
-> > BR
-> > Mircea
-> >
-> > On 4/28/20 11:42 AM, Angelo Compagnucci wrote:
-> > > On Tue, Apr 28, 2020 at 9:42 AM Mircea GLIGA <mgliga@bitdefender.com>
-> wrote:
-> > >>
-> > >> Hi Angelo,
-> > >>
-> > >> Thanks for applying my suggestions, see my comments below.
-> > >> Order of the `sed` expressions is important, changing the order broke
-> the
-> > >> usage of the CROSS_COMPILE variable. The AR, AS, CC etc are not using
-> > >> that variable anymore.
-> > >> Order should be:
-> > >> * replace TARGET_CROSS with $CROSS_COMPILE
-> > >> * make use of the PATH variable, remove paths already in PATH
-> > >> * replace HOST_DIR with $SDK_PATH
-> > >
-> > > I don't think it's strictly necessary to have ${CROSS_COMPILE}
-> > > everywhere. I prefer to have the executable name in $AR, $AS and so
-> > > on.
-> > >
-> >
-> > Ok, then you should drop the `ENVIRONMENT_SETUP_CROSS_COMPILE_SED_EXP`
-> > expression and remove it from the `sed` command because it will not
-> > match anything.
->
-> Had you time to have a look and test the patch v6?
->
-> https://patchwork.ozlabs.org/project/buildroot/list/?series=173257
->
-> Thanks!
->
-> >
-> > > Anyway, for CROSS_COMPILE, only the prefix is used to compose the
-> > > executable name, so
-> > >
-> > > $ which ${CROSS_COMPILE}gcc
-> > > /FULLPATH/host/bin/arm-linux-gnueabihf-gcc
-> > > $ which ${CC}
-> > > /FULLPATH/host/bin/arm-linux-gnueabihf-gcc
-> > >
-> > >>
-> > >> Best regards
-> > >> Mircea
-> > >>
-> > >> See the output diff:
-> > >>
-> > >> --- environment-setup   2020-04-28 09:55:19.927381470 +0300
-> > >> +++ environment-setup_v5        2020-04-28 10:01:45.387944589 +0300
-> > >> @@ -14,23 +14,22 @@
-> > >>
-> > >>    EOF
-> > >>    SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
-> > >> -export "CROSS_COMPILE=armeb-buildroot-linux-uclibcgnueabi-"
-> > >>    export
-> > >>
-> "PATH=$SDK_PATH/bin:$SDK_PATH/sbin:/home/mgliga/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
-> > >> -export "AR=${CROSS_COMPILE}ar"
-> > >> -export "AS=${CROSS_COMPILE}as"
-> > >> -export "LD=${CROSS_COMPILE}ld"
-> > >> -export "NM=${CROSS_COMPILE}nm"
-> > >> -export "CC=${CROSS_COMPILE}gcc"
-> > >> -export "GCC=${CROSS_COMPILE}gcc"
-> > >> -export "CPP=${CROSS_COMPILE}cpp"
-> > >> -export "CXX=${CROSS_COMPILE}g++"
-> > >> -export "FC=${CROSS_COMPILE}gfortran"
-> > >> -export "F77=${CROSS_COMPILE}gfortran"
-> > >> -export "RANLIB=${CROSS_COMPILE}ranlib"
-> > >> -export "READELF=${CROSS_COMPILE}readelf"
-> > >> -export "STRIP=${CROSS_COMPILE}strip"
-> > >> -export "OBJCOPY=${CROSS_COMPILE}objcopy"
-> > >> -export "OBJDUMP=${CROSS_COMPILE}objdump"
-> > >> +export "AR=armeb-buildroot-linux-uclibcgnueabi-ar"
-> > >> +export "AS=armeb-buildroot-linux-uclibcgnueabi-as"
-> > >> +export "LD=armeb-buildroot-linux-uclibcgnueabi-ld"
-> > >> +export "NM=armeb-buildroot-linux-uclibcgnueabi-nm"
-> > >> +export "CC=armeb-buildroot-linux-uclibcgnueabi-gcc"
-> > >> +export "GCC=armeb-buildroot-linux-uclibcgnueabi-gcc"
-> > >> +export "CPP=armeb-buildroot-linux-uclibcgnueabi-cpp"
-> > >> +export "CXX=armeb-buildroot-linux-uclibcgnueabi-g++"
-> > >> +export "FC=armeb-buildroot-linux-uclibcgnueabi-gfortran"
-> > >> +export "F77=armeb-buildroot-linux-uclibcgnueabi-gfortran"
-> > >> +export "RANLIB=armeb-buildroot-linux-uclibcgnueabi-ranlib"
-> > >> +export "READELF=armeb-buildroot-linux-uclibcgnueabi-readelf"
-> > >> +export "STRIP=armeb-buildroot-linux-uclibcgnueabi-strip"
-> > >> +export "OBJCOPY=armeb-buildroot-linux-uclibcgnueabi-objcopy"
-> > >> +export "OBJDUMP=armeb-buildroot-linux-uclibcgnueabi-objdump"
-> > >>    export "AR_FOR_BUILD=/usr/bin/ar"
-> > >>    export "AS_FOR_BUILD=/usr/bin/as"
-> > >>    export "CC_FOR_BUILD=ccache /usr/bin/gcc"
-> > >> @@ -42,8 +41,8 @@
-> > >>    export "CXXFLAGS_FOR_BUILD=-O2 -I$SDK_PATH/include"
-> > >>    export "LDFLAGS_FOR_BUILD=-L$SDK_PATH/lib -Wl,-rpath,$SDK_PATH/lib"
-> > >>    export "FCFLAGS_FOR_BUILD="
-> > >> -export "DEFAULT_ASSEMBLER=${CROSS_COMPILE}as"
-> > >> -export "DEFAULT_LINKER=${CROSS_COMPILE}ld"
-> > >> +export "DEFAULT_ASSEMBLER=armeb-buildroot-linux-uclibcgnueabi-as"
-> > >> +export "DEFAULT_LINKER=armeb-buildroot-linux-uclibcgnueabi-ld"
-> > >>    export "CPPFLAGS=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> > >> -D_FILE_OFFSET_BITS=64"
-> > >>    export "CFLAGS=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> > >> -D_FILE_OFFSET_BITS=64  -Os  "
-> > >>    export "CXXFLAGS=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> > >> -D_FILE_OFFSET_BITS=64  -Os  "
-> > >> @@ -53,5 +52,6 @@
-> > >>    export "PKG_CONFIG=pkg-config"
-> > >>    export
-> "STAGING_DIR=$SDK_PATH/armeb-buildroot-linux-uclibcgnueabi/sysroot"
-> > >>    export "INTLTOOL_PERL=/usr/bin/perl"
-> > >> +export "CROSS_COMPILE=armeb-buildroot-linux-uclibcgnueabi-"
-> > >>    export
-> "CONFIGURE_FLAGS=--target=armeb-buildroot-linux-uclibcgnueabi
-> > >> --host=armeb-buildroot-linux-uclibcgnueabi --build=x86_64-pc-linux-gnu
-> > >> --prefix=/usr --exec-prefix=/usr --sysconfdir=/etc
-> --localstatedir=/var
-> > >> --program-prefix="
-> > >>    PS1="\[\]buildroot-2020.02\[\]:\[\]\w\[\]$ "
-> > >>
-> > >>
-> > >>
-> > >> On 4/27/20 11:36 PM, Angelo Compagnucci wrote:
-> > >>> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> > >>>
-> > >>> Install an helper script to setup a build environment based on
-> buildroot.
-> > >>> It's useful when a developer wants to use a buildroot generated sdk
-> to
-> > >>> build an external project.
-> > >>> Due to the nature of the intrusiveness of this script, a new PS1 is
-> > >>> installed to let the user understand that the current running shell
-> is
-> > >>> not a normal shell.
-> > >>>
-> > >>> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> > >>> ---
-> > >>> Changelog:
-> > >>> v1->v2:
-> > >>>    * Moved from echo to printf (Yann)
-> > >>>    * removed sh extension (Yann)
-> > >>>    * Adding missing script
-> > >>> v2->v3:
-> > >>>    * Split the patch
-> > >>> v3->v4:
-> > >>>    * Better handling of SDK_PATH dir (Mircea Gliga)
-> > >>> v4->v5:
-> > >>>    * Cleaning the script using SDK_PATH where possible (Mircea Gliga)
-> > >>>
-> > >>> Some of the reason I kept several things the way I originally
-> planned:
-> > >>>
-> > >>>    * I kept it being a package because it doesn't fit in any other
-> tool:
-> > >>>      indeed this script changes your curent PATH and exports some
-> variables
-> > >>>      that can be used for anything. Think of qmake or cmake or a
-> package
-> > >>>      that doesn't have any build system at all. It has some features
-> geared
-> > >>>      also towards autotools software but I keep planning others.
-> > >>>    * I kept the script being installed in host root: other build
-> system does that
-> > >>>      and I want this script to mimic other build systems.
-> > >>>    * I kept looping in TARGET_CONFIGURE_OPTS, indeed it produces a
-> more clean
-> > >>>      environment script at the end. For the problem arised by Yann:
-> variables in
-> > >>>      TARGET_CONFIGURE_OPTS _are_ properly escaped, indeed if not,
-> they were a
-> > >>>      big source of problems on each ./configure invocation due to
-> the fact they
-> > >>>      are injected on the ./configure commandline invocation.
-> > >>>    * I kept the PS1: this script heavily mess with the path, it is
-> expected by the
-> > >>>      user running it, but it can be very confusing being on a shell
-> that
-> > >>>      doesn't behaves like your normal shell. So having a different
-> PS1 helps
-> > >>>      remembering you are running into the buildroot shell and not
-> into an ordinary
-> > >>>      one (other build systems does the same).
-> > >>>    * I kept the manual entry: I think that the most documentation
-> the better.
-> > >>>
-> > >>>    docs/manual/using-buildroot-toolchain.txt     |  7 ++++
-> > >>>    package/Config.in                             |  1 +
-> > >>>    package/environment-setup/Config.in           |  6 ++++
-> > >>>    package/environment-setup/environment-setup   | 16 +++++++++
-> > >>>    .../environment-setup/environment-setup.mk    | 34
-> +++++++++++++++++++
-> > >>>    5 files changed, 64 insertions(+)
-> > >>>    create mode 100644 package/environment-setup/Config.in
-> > >>>    create mode 100644 package/environment-setup/environment-setup
-> > >>>    create mode 100644 package/environment-setup/environment-setup.mk
-> > >>>
-> > >>> diff --git a/docs/manual/using-buildroot-toolchain.txt
-> b/docs/manual/using-buildroot-toolchain.txt
-> > >>> index 0c0c35fced..7b2de4bdfa 100644
-> > >>> --- a/docs/manual/using-buildroot-toolchain.txt
-> > >>> +++ b/docs/manual/using-buildroot-toolchain.txt
-> > >>> @@ -27,6 +27,13 @@ Upon extracting the SDK tarball, the user must
-> run the script
-> > >>>    +relocate-sdk.sh+ (located at the top directory of the SDK), to
-> make
-> > >>>    sure all paths are updated with the new location.
-> > >>>
-> > >>> +For your convenience, by selecting the package
-> BR2_PACKAGE_ENVIRONMENT_SETUP,
-> > >>> +you can have a +setup-environment+ script installed in
-> +output/host/+.
-> > >>> +This script can be sourced with +. your/sdk/path/environment-setup+
-> to launch
-> > >>> +the buildroot shell. Inside this shell, you will find an
-> environment already
-> > >>> +set up with the correct PATH and the complete list of +target
-> configure
-> > >>> +options+.
-> > >>> +
-> > >>>    Alternatively, if you just want to prepare the SDK without
-> generating
-> > >>>    the tarball (e.g. because you will just be moving the +host+
-> directory,
-> > >>>    or will be generating the tarball on your own), Buildroot also
-> allows
-> > >>> diff --git a/package/Config.in b/package/Config.in
-> > >>> index bf02870ea2..b698d6f184 100644
-> > >>> --- a/package/Config.in
-> > >>> +++ b/package/Config.in
-> > >>> @@ -1955,6 +1955,7 @@ menu "Miscellaneous"
-> > >>>        source "package/collectl/Config.in"
-> > >>>        source "package/domoticz/Config.in"
-> > >>>        source "package/empty/Config.in"
-> > >>> +     source "package/environment-setup/Config.in"
-> > >>>        source "package/gnuradio/Config.in"
-> > >>>        source "package/googlefontdirectory/Config.in"
-> > >>>        source "package/gqrx/Config.in"
-> > >>> diff --git a/package/environment-setup/Config.in
-> b/package/environment-setup/Config.in
-> > >>> new file mode 100644
-> > >>> index 0000000000..f0fcc7d0f8
-> > >>> --- /dev/null
-> > >>> +++ b/package/environment-setup/Config.in
-> > >>> @@ -0,0 +1,6 @@
-> > >>> +config BR2_PACKAGE_ENVIRONMENT_SETUP
-> > >>> +     bool "Environment setup"
-> > >>> +     help
-> > >>> +       Install an helper script to setup a build environment
-> > >>> +       based on buildroot. It's useful when you export an sdk
-> > >>> +       and want to use buildroot to build an external project
-> > >>> diff --git a/package/environment-setup/environment-setup
-> b/package/environment-setup/environment-setup
-> > >>> new file mode 100644
-> > >>> index 0000000000..b48f1979d6
-> > >>> --- /dev/null
-> > >>> +++ b/package/environment-setup/environment-setup
-> > >>> @@ -0,0 +1,16 @@
-> > >>> +cat <<'EOF'
-> > >>> + _           _ _     _                 _
-> > >>> +| |__  _   _(_) | __| |_ __ ___   ___ | |_
-> > >>> +| '_ \| | | | | |/ _` | '__/ _ \ / _ \| __|
-> > >>> +| |_) | |_| | | | (_| | | | (_) | (_) | |_
-> > >>> +|_.__/ \__,_|_|_|\__,_|_|  \___/ \___/ \__| shell
-> > >>> +
-> > >>> +       Making embedded Linux easy!
-> > >>> +
-> > >>> +Some tips:
-> > >>> +* PATH is now pointing to the HOST_DIR path
-> > >>> +* Target configure options are already exported
-> > >>> +* To configure do "./configure $CONFIGURE_FLAGS"
-> > >>> +
-> > >>> +EOF
-> > >>> +SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
-> > >>> diff --git a/package/environment-setup/environment-setup.mk
-> b/package/environment-setup/environment-setup.mk
-> > >>> new file mode 100644
-> > >>> index 0000000000..7c6e352bde
-> > >>> --- /dev/null
-> > >>> +++ b/package/environment-setup/environment-setup.mk
-> > >>> @@ -0,0 +1,34 @@
-> > >>>
-> +################################################################################
-> > >>> +#
-> > >>> +# environment-setup
-> > >>> +#
-> > >>>
-> +################################################################################
-> > >>> +
-> > >>> +ENVIRONMENT_SETUP_FILE = $(HOST_DIR)/environment-setup
-> > >>> +ENVIRONMENT_SETUP_HOST_DIR_SED_EXP = 's+$(HOST_DIR)+\$$SDK_PATH+g'
-> > >>> +ENVIRONMENT_SETUP_HOST_BIN_DIR_SED_EXP = 's+$(HOST_DIR)/bin/++g'
-> > >>> +ENVIRONMENT_SETUP_CROSS_COMPILE_SED_EXP =
-> 's+$(TARGET_CROSS)+\$${CROSS_COMPILE}+g'
-> > >>> +
-> > >>> +define ENVIRONMENT_SETUP_INSTALL_TARGET_CMDS
-> > >>> +     cp package/environment-setup/environment-setup
-> $(ENVIRONMENT_SETUP_FILE)
-> > >>> +     for var in $(TARGET_CONFIGURE_OPTS); do \
-> > >>> +             printf "export \"$$var\"\n" >>
-> $(ENVIRONMENT_SETUP_FILE); \
-> > >>> +     done
-> > >>> +     printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >>
-> $(ENVIRONMENT_SETUP_FILE)
-> > >>> +     printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
-> > >>> +             --host=$(GNU_TARGET_NAME) \
-> > >>> +             --build=$(GNU_HOST_NAME) \
-> > >>> +             --prefix=/usr \
-> > >>> +             --exec-prefix=/usr \
-> > >>> +             --sysconfdir=/etc \
-> > >>> +             --localstatedir=/var \
-> > >>> +             --program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-> > >>> +     $(SED) $(ENVIRONMENT_SETUP_HOST_BIN_DIR_SED_EXP) \
-> > >>> +             -e $(ENVIRONMENT_SETUP_HOST_DIR_SED_EXP) \
-> > >>> +             -e $(ENVIRONMENT_SETUP_CROSS_COMPILE_SED_EXP) \
-> > >>> +             $(ENVIRONMENT_SETUP_FILE)
-> > >>> +     printf
-> "PS1=\"\[\e[32m\]buildroot-$(BR2_VERSION)\[\e[m\]:\[\e[34m\]\w\[\e[m\]\$$
-> \"\n" \
-> > >>> +             >> $(ENVIRONMENT_SETUP_FILE)
-> > >>> +endef
-> > >>> +
-> > >>> +$(eval $(generic-package))
-> > >>>
-> > >
-> > > ________________________
-> > > This email was scanned by Bitdefender
-> > >
->
->
->
-> --
-> Profile: http://it.linkedin.com/in/compagnucciangelo
->
->
-> ------------------------------
->
-> Message: 2
-> Date: Tue,  5 May 2020 23:49:30 +0300
-> From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-> To: buildroot at busybox.net
-> Cc: Evgeniy Didin <Evgeniy.Didin@synopsys.com>, Thomas Petazzoni
->         <thomas.petazzoni@bootlin.com>, Eugeniy Paltsev
->         <Eugeniy.Paltsev@synopsys.com>, arc-buildroot at synopsys.com
-> Subject: [Buildroot] [PATCH] hsdk/linux: Fix USB regression
-> Message-ID: <20200505204930.10522-1-Evgeniy.Didin@synopsys.com>
->
-> With this patch we enable CONFIG_USB for HSDK, which is not explicitly
-> selected by UDL since the commit
-> 5d50bd440bc2 ("drm/udl: Make udl driver depend on CONFIG_USB").
-> Commit 4c13ca86dcf8 ("ARC: [plat-hsdk]: fix USB regression")
-> is not yet backported to Linux kernel 5.6.x, so we enable this
-> option in fragment file for HSDK.
->
-> Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
-> Cc: arc-buildroot at synopsys.com
-> ---
-> Note! This patch is a replacement of next patch:
->
-> https://patchwork.ozlabs.org/project/buildroot/patch/20200430163713.11290-1-Evgeniy.Didin at synopsys.com/
->
->  board/synopsys/hsdk/linux.fragment | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/board/synopsys/hsdk/linux.fragment
-> b/board/synopsys/hsdk/linux.fragment
-> index 45d6c69af5..aaca08e015 100644
-> --- a/board/synopsys/hsdk/linux.fragment
-> +++ b/board/synopsys/hsdk/linux.fragment
-> @@ -1,2 +1,3 @@
->  CONFIG_INITRAMFS_SOURCE=""
->  CONFIG_ARC_UBOOT_SUPPORT=y
-> +CONFIG_USB=y
-> --
-> 2.16.2
->
->
->
-> ------------------------------
->
-> Message: 3
-> Date: Tue, 5 May 2020 22:56:09 +0200
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit] CHANGES: start updating for
->         2020.05-rc1 release
-> Message-ID: <20200505204103.5E91B90044@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=1025d09f9503179a19ef8119a814515d48d4c4c8
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  CHANGES | 61 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 61 insertions(+)
->
-> diff --git a/CHANGES b/CHANGES
-> index 60177304b3..5a2f2d20fd 100644
-> --- a/CHANGES
-> +++ b/CHANGES
-> @@ -1,3 +1,64 @@
-> +2020.05-rc1, to be released
-> +
-> +       Addition of support for gobject-introspection: both the
-> +       gobject-introspection package itself, but also introspection
-> +       support was enabled in a number of other packages.
-> +
-> +       Support for Qt 5.6 was dropped as its support was dropped
-> +       upstream, only one version of Qt is supported at the moment:
-> +       Qt 5.14.2.
-> +
-> +       Addition of support for the apparmor Linux security module, by
-> +       adding the necessary user-space packages.
-> +
-> +       Addition of a qmake package infrastructure, now used by most
-> +       Qt-related packages.
-> +
-> +       The Luarocks package infrastructure has been extended to
-> +       support build host packages.
-> +
-> +       The package infrastructure was improved to allow each package
-> +       to indicate the Linux kernel configuration options it needs.
-> +
-> +       Addition of support for generating filesystem images using the
-> +       EROFS filesystem.
-> +
-> +       The logic that calculates the list of files installed by each
-> +       package was reworked to be compatible with the top-level
-> +       parallel build functionality.
-> +
-> +       Addition of a package for a pre-compiled ARM32 bare-metal
-> +       toolchain, which can be used to build ARM32 code in ARM64
-> +       configurations, such as firmware/bootloader code.
-> +
-> +       The Qemu defconfigs are now boot-tested in Qemu as part of the
-> +       Gitlab continuous integration.
-> +
-> +       Toolchain: gcc 9.x bumped to 9.3.0, gcc 8.x bumped to 8.4.0,
-> +       gdb bumped to 8.3.1.
-> +
-> +       New packages: apcupsd, apparmor, arm-gnu-a-toolchain, bearssl,
-> +       belle-sip, belr, cage, chartjs, erofs-utils, exfatprogs,
-> +       gobject-introspection, ibm-sw-tpm2, imx-seco, jbig2dec,
-> +       libapparmor, libiberty, libfuse3, libtextstyle, libudfread,
-> +       libuhttpd, libuwsc, lua-lyaml, matio, mbuffer, netdata,
-> +       openfpgaloader, perl-i18n, perl-locale-maketext-lexicon,
-> +       perl-lwp-protocol-https,
-> +       perl-mojolicious-plugin-authorization,
-> +       perl-mojolicious-plugin-cspheader,
-> +       perl-mojolicious-plugin-i18n,
-> +       perl-mojolicious-plugin-securityheader, perl-mozilla-ca,
-> +       perl-path-class, pistache, pkcs11-helper, prelink-cross,
-> +       python-argon2-cffi, python-canopen, python-cbor2,
-> +       python-filelock, python-flatbuffers, python-greenlet,
-> +       python-modbus-tk, python-pyalsa, python-pysftp, python-regex,
-> +       python-snappy, rtty, tinyproxy, udev-gentoo-scripts, unbound,
-> +       vuejs, wlroots.
-> +
-> +       New defconfigs: freescale_imx6ullevk, freescale_imx8qmmek,
-> +       nanopi_neo4, nanopi_r1, nitrogen8mm, nitrogen8mn, olpc_xo1,
-> +       olpc_xo175, roc_rk3399_pc, stm32mp157a_dk1, zynq_qmtech
-> +
->  2020.02.1, released April 10th, 2020
->
->         Important / security related fixes.
->
->
-> ------------------------------
->
-> Message: 4
-> Date: Tue, 5 May 2020 23:05:28 +0200
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> To: Romain Naour <romain.naour@gmail.com>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH] package/solarus: bump to version
->         1.6.4
-> Message-ID: <20200505230528.320a6358@windsurf.home>
-> Content-Type: text/plain; charset=US-ASCII
->
-> On Mon,  4 May 2020 16:37:42 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
->
-> > Add glm dependency since the bundled version is gone [1].
-> >
-> > Update indentation of hash file (two spaces).
-> >
-> > [1]
-> https://gitlab.com/solarus-games/solarus/commit/5285c8e1afa538bbcd4c8654f9bbfb270cc7f52
-> >
-> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> > ---
-> >  package/solarus/Config.in    | 1 +
-> >  package/solarus/solarus.hash | 4 ++--
-> >  package/solarus/solarus.mk   | 6 +++---
-> >  3 files changed, 6 insertions(+), 5 deletions(-)
->
-> Applied to master, thanks.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
->
-> ------------------------------
->
-> Message: 5
-> Date: Tue, 5 May 2020 23:05:34 +0200
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> To: Romain Naour <romain.naour@gmail.com>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH] package/zziplib: bump to version
->         0.13.71
-> Message-ID: <20200505230534.6ea3d695@windsurf.home>
-> Content-Type: text/plain; charset=US-ASCII
->
-> On Mon,  4 May 2020 16:52:12 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
->
-> > Remove upstream patches and CVE tags.
-> >
-> > Switch the dependency to python3 added by [1].
-> >
-> > Update indentation of hash file (two spaces).
-> >
-> > [1]
-> https://github.com/gdraheim/zziplib/commit/a144bec8d06302e7be11f0f46e02947b0becf574
-> >
-> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> > ---
-> >  ...eak-from-__zzip_parse_root_directory.patch |  74 ----
-> >  ...k-from-__zzip_parse_root_directory-2.patch |  53 ---
-> >  ...3-One-more-free-to-avoid-memory-leak.patch |  25 --
-> >  ...omponents-from-pathnames-of-extracte.patch | 344 ------------------
-> >  package/zziplib/zziplib.hash                  |   8 +-
-> >  package/zziplib/zziplib.mk                    |  15 +-
-> >  6 files changed, 7 insertions(+), 512 deletions(-)
-> >  delete mode 100644
-> package/zziplib/0001-Avoid-memory-leak-from-__zzip_parse_root_directory.patch
-> >  delete mode 100644
-> package/zziplib/0002-Avoid-memory-leak-from-__zzip_parse_root_directory-2.patch
-> >  delete mode 100644
-> package/zziplib/0003-One-more-free-to-avoid-memory-leak.patch
-> >  delete mode 100644
-> package/zziplib/0004-Fix-issue-62-Remove-any-components-from-pathnames-of-extracte.patch
->
-> Applied to master, thanks.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
->
-> ------------------------------
->
-> Message: 6
-> Date: Tue, 5 May 2020 23:05:39 +0200
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Cc: buildroot at buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>
-> Subject: Re: [Buildroot] [PATCH v2] package/libnss: bump version to
->         3.52
-> Message-ID: <20200505230539.47012d8b@windsurf.home>
-> Content-Type: text/plain; charset=US-ASCII
->
-> On Mon,  4 May 2020 17:10:36 +0200
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
->
-> > Bump version to 3.52 and drop all patches since they've all been
-> > upstreamed.
-> >
-> > Release notes:
-> >
-> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.52_release_notes
-> >
-> > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> > ---
-> > V1->V2:
-> > * improve commit log
-> > ---
-> >  ...troduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch | 132 ------------------
-> >  ...t-force-ARMv7-for-gcm-arm32-neon-r-j.patch |  30 ----
-> >  package/libnss/libnss.hash                    |   4 +-
-> >  package/libnss/libnss.mk                      |   2 +-
-> >  4 files changed, 3 insertions(+), 165 deletions(-)
-> >  delete mode 100644
-> package/libnss/0001-Bug-1620799-Introduce-NSS_DISABLE_ARM32_NEON-r-jcj.patch
-> >  delete mode 100644
-> package/libnss/0002-Bug-1624864-Don-t-force-ARMv7-for-gcm-arm32-neon-r-j.patch
->
-> Applied to master, thanks.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
->
-> ------------------------------
->
-> Message: 7
-> Date: Tue, 5 May 2020 23:05:45 +0200
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> To: Grzegorz Blach <grzegorz@blach.pl>
-> Cc: buildroot at buildroot.org, Asaf Kahlon <asafka7@gmail.com>
-> Subject: Re: [Buildroot] [PATCH] package/python-redis: Bump to version
->         3.5.0
-> Message-ID: <20200505230545.643f05cc@windsurf.home>
-> Content-Type: text/plain; charset=US-ASCII
->
-> On Mon,  4 May 2020 20:33:02 +0200
-> Grzegorz Blach <grzegorz@blach.pl> wrote:
->
-> > Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> > ---
-> >  package/python-redis/python-redis.hash | 6 +++---
-> >  package/python-redis/python-redis.mk   | 4 ++--
-> >  2 files changed, 5 insertions(+), 5 deletions(-)
->
-> Applied to master, thanks.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
->
-> ------------------------------
->
-> Message: 8
-> Date: Wed, 06 May 2020 04:58:06 +0000
-> From: Andreas Ziegler <br015@umbiko.net>
-> To: buildroot at busybox.net
-> Cc: atkunalchauhan at gmail.com
-> Subject: Re: [Buildroot] Help: to understand build root
-> Message-ID: <121ecb5d43fff1ec9fd9e65f6f99e9ac@umbiko.net>
-> Content-Type: text/plain; charset=US-ASCII; format=flowed
->
-> Hi Kunal,
->
-> > Message: 12
-> > Date: Tue, 5 May 2020 22:29:10 +0530
-> > From: Kunal Chauhan <atkunalchauhan@gmail.com>
-> > To: buildroot at busybox.net
-> > Subject: [Buildroot] Help: to understand build root
->
-> > Q1.As busybox is a small flavour of linux os.if i am not wrong?
-> >
-> > Q2. What is concept of build-root. As i have seen code base compiled
-> > and
-> > create build-root folder .
->
-> Buildroot is a build system for embedded systems. It is comparable to
-> e.g. Yocto and helps you to create a GNU/Linux based image, containing
-> Linux kernel, init system and root filesystem, which can then be
-> transferred to a target system. Think of firmware for IoT, a router, a
-> media player, or a robot in manufacturing.
->
-> Buildroot images are static, you cannot install software after
-> deployment.
->
-> Buildroot images can be small, production images are counted in MiB, not
-> GiB.
->
-> Buildroot handles cross-compiling. Build and target system can have
-> completely different architectures.
->
-> Buildroot recipes (see configs/*_defconfig) are meant as starting point
-> for your own project(s). They bring a system up and make it responsive
-> (console, network), the rest is up to you.
->
-> In case you have not seen it before, the Buildroot manual is here:
->
->    https://buildroot.org/downloads/manual/manual.html#_about_buildroot
->
-> Kind regards,
-> Andreas
->
->
-> ------------------------------
->
-> Message: 9
-> Date: Wed, 06 May 2020 06:59:13 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: <stephan.hoffmann@ext.grandcentrix.net>, Andr?  Hentschel
->         <nerv@dawncrow.de>,  buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH] azure-iot-sdk-c: fix missing
->         libraries
-> Message-ID: <87h7wthd5q.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
->
->  > On Mon, 23 Sep 2019 13:52:06 +0200
->  > <stephan.hoffmann@ext.grandcentrix.net> wrote:
->
->  >> From: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
->  >>
->  >> libparson.so and libumqtt.so.1 are missing.
->  >>
->  >> The package builds libparson, but does not install it.
->  >> It also does not install the symlinks for libumqtt.so.1.1.11.
->  >>
->  >> Signed-off-by: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net
-> >
->  >> ---
->  >> package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 24 +++++++++++++++++-----
->  >> 1 file changed, 19 insertions(+), 5 deletions(-)
->
->  > So I finally applied this, but after doing quite a bit of rework. For
->  > example, your patch was not correct as it was creating the .so symlinks
->  > unconditionally, even when BR2_STATIC_LIBS=y, i.e even when static
->  > libraries are used. Another issue is that you were reformatting the
->  > list of libraries to have one per-line, in the same patch. And you were
->  > fixing the libparson and libumqtt issues in the same patch.
->
->  > So, I first applied three preparation commits:
->
->  >
-> https://git.buildroot.org/buildroot/commit/?id=c71030f0fab49be4061fb999a8eabe4190f1f18d
->  >
-> https://git.buildroot.org/buildroot/commit/?id=59de11b0476699ddeb2cbcd30a524b849249956a
->  >
-> https://git.buildroot.org/buildroot/commit/?id=43822bb6db8851df4d6568622b58196895028f91
->
->  > Then, I applied your fix for libumqtt.so:
->
->  >
-> https://git.buildroot.org/buildroot/commit/?id=570dd0c31b2149cd913866eb6777caa4a1b05a56
->
->  > And your fix for libparson.so:
->
->  >
-> https://git.buildroot.org/buildroot/commit/?id=94120fd7c71881e7b3963d5db27802241d9eeed2
->
-> The same set of commits have now been cherry-picked for 2020.02.x,
-> thanks!
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 10
-> Date: Wed, 06 May 2020 07:02:17 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: unixmania at gmail.com,  buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH] board/wandboard/post-build.sh: create
->         boot.scr at TARGET_DIR/boot
-> Message-ID: <87d07hhd0m.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
->
->  > Hello Carlos,
->  > On Sat, 12 Oct 2019 20:30:41 -0300
->  > unixmania at gmail.com wrote:
->
->  >> From: Carlos Santos <unixmania@gmail.com>
->  >>
->  >> There is no reason to create boot.scr at board/wandboard and later
->  >> install it at TARGET_DIR/boot, leaving a stale file behind.
->  >>
->  >> Signed-off-by: Carlos Santos <unixmania@gmail.com>
->  >> ---
->  >> board/wandboard/post-build.sh | 6 ++++--
->  >> 1 file changed, 4 insertions(+), 2 deletions(-)
->
->  > Applied to master after dropping the additional chmod 644 on the file,
->  > as suggested by Arnout. Also, the same issue was present for other
->  > boards, so I also did the following commits:
->
->  > 2306339d1fe8d5ea2d9e17641f78a374f612f45e board/udoo/neo: create
-> boot.scr in TARGET_DIR/boot
->  > 9ddbd11620b5a01945a438085d45ef2131bad35f board/solidrun/mx6cubox:
-> create boot.scr in TARGET_DIR/boot
->
->  > What would perhaps be good is to use the BR2_TARGET_UBOOT_BOOT_SCRIPT
->  > feature, which would automatically run mkimage and install boot.src in
->  > $(BINARIES_DIR). The post-build script would then only have to copy it
->  > to $TARGET_DIR/boot/.
->
-> The same set of commits now cherry-picked to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 11
-> Date: Wed, 06 May 2020 07:03:52 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Baruch Siach <baruch@tkos.co.il>
-> Cc: buildroot at busybox.net,  Scott Fan <fancp2007@gmail.com>
-> Subject: Re: [Buildroot] [PATCH] package/libssh: security bump to
->         version 0.9.4
-> Message-ID: <878si5hcxz.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
->
->  > Fixes CVE-2020-1730: Possible DoS in client and server when handling
->  > AES-CTR keys with OpenSSL.
->
->  > Format hash file with two spaces delimiter.
->
->  > Cc: Scott Fan <fancp2007@gmail.com>
->  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 12
-> Date: Wed, 06 May 2020 07:04:05 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Heiko Thiery <heiko.thiery@gmail.com>
-> Cc: buildroot at buildroot.org,  Scott Fan <fancp2007@gmail.com>
-> Subject: Re: [Buildroot] [PATCH 1/1] package/libssh: add patch to fix
->         reported version
-> Message-ID: <874ksthcxm.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
->
->  > The released libssh package does wrongly reports the previous version.
->  > This patch fixes the version field in the lib.
->
->  > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 13
-> Date: Wed, 06 May 2020 07:04:24 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Heiko Thiery <heiko.thiery@gmail.com>
-> Cc: buildroot at buildroot.org,  Scott Fan <fancp2007@gmail.com>
-> Subject: Re: [Buildroot] [PATCH] package/libssh: add patch to fix
->         regression
-> Message-ID: <87zhalfycn.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
->
->  > The libssh server is used by libnetconf2. With libssh version 0.9.4 a
->  > regression was introduced that wrongly leads to session closed after the
->  > poll timeout.
->
->  > The patch comes from upstrem:
->  >
-> https://git.libssh.org/projects/libssh.git/commit/?id=6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4
->
->  > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 14
-> Date: Wed, 06 May 2020 07:10:59 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Pascal de Bruijn <p.debruijn@unilogic.nl>,  buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH] package/exim: fix log and pid file
->         paths
-> Message-ID: <87v9l9fy1o.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
->
->  > On Mon,  2 Mar 2020 11:19:02 +0100
->  > Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
->
->  >> both the logs and pid should not be placed in /var/spool
->  >>
->  >> we place the log in /var/log/exim and
->  >> we place the pid in /var/run/exim
->  >>
->  >> using binary name subdirectory in both cases allows for the
->  >> use of systemd's LogsDirectory and RuntimeDirectory statements
->  >>
->  >> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
->
->  > Applied with an improved commit log. It would however be nice to
->  > convert the exim init script to the "new" init script template, for
->  > higher consistency.
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 15
-> Date: Wed, 06 May 2020 07:13:50 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH 1/1] package/mbedtls: security bump to
->         version 2.16.6
-> Message-ID: <87r1vxfxwx.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > - Fix CVE-2020-10932: fix side channel in ECC code that allowed an
->  >   adversary with access to precise enough timing and memory access
->  >   information (typically an untrusted operating system attacking a
->  >   secure enclave) to fully recover an ECDSA private key.
->  > - Fix a potentially remotely exploitable buffer overread in a DTLS
->  >   client when parsing the Hello Verify Request message.
->  > - Fix bug in DTLS handling of new associations with the same parameters
->  >   (RFC 6347 section 4.2.8): after sending its HelloVerifyRequest, the
->  >   server would end up with corrupted state and only send invalid records
->  >   to the client. An attacker able to send forged UDP packets to the
->  >   server could use that to obtain a Denial of Service. This could only
->  >   happen when MBEDTLS_SSL_DTLS_CLIENT_PORT_REUSE was enabled in
->  >   config.h (which it is by default).
->
->  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 16
-> Date: Wed, 06 May 2020 07:16:07 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [git commit] package/python-iptables: add
->         explicit dependency on dynamic libs
-> Message-ID: <87mu6lfxt4.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->
->  > commit:
-> https://git.buildroot.net/buildroot/commit/?id=21b85bc56cdcf030cced57dea0f78cdce59912b8
->  > branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
->  > The package uses ctypes.CDLL extensively which only makes sense when
-> dynamic
->  > libraries are available.
->
->  > Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
->  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 17
-> Date: Wed, 06 May 2020 07:16:12 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [git commit] package/python-iptables: account
->         for platform tag in extensions
-> Message-ID: <87imh9fxsz.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->
->  > commit:
-> https://git.buildroot.net/buildroot/commit/?id=52276cdda34aa986410626592031560bf64d788b
->  > branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
->  > EXT_SUFFIX in Python versions > 3.5 contains a platform tag which only
-> applies
->  > to cpython extensions. Given that ctypes.util.find_library does not
-> work on the
->  > target due to the absence of the underlying tools '.so' needs to be
-> added as a
->  > possible suffix for libraries to enable python-iptables to find the
-> iptables
->  > shared libraries.
->
->  > Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
->  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 18
-> Date: Wed, 06 May 2020 07:16:19 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [git commit] package/python-iptables: try
->         known libc instead of find_library()
-> Message-ID: <87eerxfxss.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->
->  > commit:
-> https://git.buildroot.net/buildroot/commit/?id=90c18ab269c600ee7643f69212713ee3b74c38bd
->  > branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
->  > ctypes.util.find_library() depends on gcc and friends to detect the
-> location of
->  > a given shared library. Given that these are not available on the
-> target and
->  > that python-iptables depends on this functionality we need to work
-> around this.
->  > The SONAMEs of the libc are well known so we try the known ones for
-> glibc,
->  > uClibc and musl.
->
->  > Fixes: https://bugs.busybox.net/show_bug.cgi?id=12271
->
->  > Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
->  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 19
-> Date: Wed, 06 May 2020 07:20:40 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Cc: buildroot at buildroot.org,  Adam Duskett <aduskett@gmail.com>
-> Subject: Re: [Buildroot] [PATCH 1/1] package/php: security bump
->         version to 7.4.5
-> Message-ID: <87a72lfxlj.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
->
->  > Changelog: https://www.php.net/ChangeLog-7.php#7.4.5
->  > Fixes CVE-2020-7067.
->
->  > Removed patch applied upstream.
->
->  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 20
-> Date: Wed, 06 May 2020 07:21:38 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: yegorslists at googlemail.com
-> Cc: buildroot at buildroot.org,  Asaf Kahlon <asafka7@gmail.com>
-> Subject: Re: [Buildroot] [PATCH] package/python-dpkt: remove Python2
->         only dependency
-> Message-ID: <875zd9fxjx.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
->
->  > From: Yegor Yefremov <yegorslists@googlemail.com>
->  > python-dpkt supports both Python flavors.
->
->  > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 21
-> Date: Wed, 06 May 2020 07:23:36 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [git commit] package/libsepol: fix help text
->         for BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
-> Message-ID: <871rnxfxgn.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
->
->  > commit:
-> https://git.buildroot.net/buildroot/commit/?id=67d7705a9aa58886e8a8777fe4c95746c1fb5c96
->  > branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
->  > The help text was wrong, as it didn't match the actual default values
->  > we were specifying. Indeed, when we specify:
->
->  >         default 31 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
->  >         default 30 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
->
->  > It means that the policy version 30 is supported starting from Linux
->  > 4.3 included, and that 31 is supported from Linux 4.13 included.
->
->  > So we shouldn't have:
->
->  >> 4.3 <= 4.13    30
->  >> 4.13           31
->
->  > but:
->
->  >> = 4.3 < 4.13    30
->  >> = 4.13          31
->
->  > This patch fixes that for all versions.
->
->  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 22
-> Date: Wed, 06 May 2020 07:26:13 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Buildroot List <buildroot@uclibc.org>, Marek Belisko
->         <marek.belisko@open-nandra.com>, "Yann E. MORIN"
->         <yann.morin.1998@free.fr>, Adam Duskett <aduskett@gmail.com>
-> Subject: Re: [Buildroot] [PATCH] package/polkit: properly autoreconf
-> Message-ID: <87wo5peiru.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
->
->  > 0001-make-netgroup-support-optional.patch patches configure.ac, but we
->  > don't autoreconf the package, which is not good.
->
->  > However, simply adding AUTORECONF = YES is not sufficient: polkit
->  > Makefile.am use the automake conditional HAVE_INTROSPECTION, which is
->  > "available" only when the gobject-introspection m4 file is installed.
->
->  > Since we don't want to make gobject-introspection a mandatory
->  > dependency of polkit, we take a simpler route: add a copy of
->  > introspection.m4 into the polkit source tree. This is only a 142 lines
->  > file, and it can be dropped when
->  > 0001-make-netgroup-support-optional.patch is merged upstream.
->
->  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 23
-> Date: Wed, 06 May 2020 07:27:17 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: aduskett at gmail.com
-> Cc: buildroot at buildroot.org,  Marek Belisko
->         <marek.belisko@open-nandra.com>
-> Subject: Re: [Buildroot] [PATCH 1/4] package/polkit: install service
->         file
-> Message-ID: <87sggdeiq2.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
->
->  > From: Adam Duskett <Aduskett@gmail.com>
->  > The default installed service file is missing a target, which causes
-> preset-all
->  > to not enable the service.
->
->  > Add the service file to package/polkit with the addition of:
->
->  > [Install]
->  > WantedBy=multi-user.target
->
->  > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 24
-> Date: Wed, 06 May 2020 07:27:23 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: aduskett at gmail.com
-> Cc: buildroot at buildroot.org,  Marek Belisko
->         <marek.belisko@open-nandra.com>
-> Subject: Re: [Buildroot] [PATCH 2/4] package/polkit: add upstream
->         memory leak fix
-> Message-ID: <87o8r1eipw.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
->
->  > From: Adam Duskett <Aduskett@gmail.com>
->  > This patch fixes two small memory leaks.
->
->  > Upstream commit: 28e3a6653d8c3777b07e0128a0d97d46e586e311
->
->  > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 25
-> Date: Wed, 06 May 2020 07:27:28 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: aduskett at gmail.com
-> Cc: buildroot at buildroot.org,  Marek Belisko
->         <marek.belisko@open-nandra.com>
-> Subject: Re: [Buildroot] [PATCH 3/4] package/polkit: add upstream fix
->         for SIGTTOU
-> Message-ID: <87k11peipr.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
->
->  > From: Adam Duskett <Aduskett@gmail.com>
->  > If tty_handler() resets terminal while pkttyagent is run in background
-> job,
->  > the process gets stopped by SIGTTOU. This impacts systemctl, hence it
-> must
->  > be blocked for a while and then the process gets killed anyway.
->
->  > Upstream commit: 28e3a6653d8c3777b07e0128a0d97d46e586e311
->
->  > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 26
-> Date: Wed, 06 May 2020 07:28:39 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Louis Aussedat <aussedat.louis@gmail.com>
-> Cc: buildroot at buildroot.org,  Adam Duskett <aduskett@gmail.com>
-> Subject: Re: [Buildroot] [PATCH 1/2] package/php: fix zip support
-> Message-ID: <87ftcdeins.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Louis" == Louis Aussedat <aussedat.louis@gmail.com> writes:
->
->  > since php7.4, --enable-zip becomes --with-zip due to
->  > migration to pkg-config.
->
->  > Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 27
-> Date: Wed, 06 May 2020 07:28:45 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Louis Aussedat <aussedat.louis@gmail.com>
-> Cc: buildroot at buildroot.org,  Adam Duskett <aduskett@gmail.com>
-> Subject: Re: [Buildroot] [PATCH 2/2] package/php: fix gd dependencies
-> Message-ID: <87bln1einm.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Louis" == Louis Aussedat <aussedat.louis@gmail.com> writes:
->
->  > Due to migration to pkg-config in php 7.4, the detection of
->  > library dependencies has been changed.
->
->  > source from php.net:
->  > --with-gd becomes --enable-gd
->  > --with-png-dir has been removed. libpng is required.
->  > --with-zlib-dir has been removed. zlib is required.
->  > --with-freetype-dir becomes --with-freetype
->  > --with-jpeg-dir becomes --with-jpeg
->
->  > Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 28
-> Date: Wed, 06 May 2020 07:30:04 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>, Ryan Steffens
->         <ryan.steffens@rockwellcollins.com>, buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH v2] package/netsnmp: unix domain
->         socket transport
-> Message-ID: <877dxpeilf.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
->
->  > On Tue, 14 Apr 2020 12:55:00 -0500
->  > Matt Weber <matthew.weber@rockwellcollins.com> wrote:
->
->  >> From: Ryan Steffens <ryan.steffens@rockwellcollins.com>
->  >>
->  >> Adds support for connecting unix socket based AgentX subagents
->  >>
->  >> Signed-off-by: Ryan Steffens <ryan.steffens@rockwellcollins.com>
->  >> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
->  >> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
->
->  > I have further extended the commit log, and applied. Especially, it is
->  > always useful to go back in the history of the package and try to
->  > figure out the reason why something was done in a given way, and now
->  > needs to be done differently.
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 29
-> Date: Wed, 06 May 2020 07:31:37 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH 1/1] package/openvpn: security bump
->         version to 2.4.9
-> Message-ID: <87368deiiu.fsf@dell.be.48ers.dk>
-> Content-Type: text/plain
->
-> >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
->
->  > Changelog:
->  > https://github.com/OpenVPN/openvpn/blob/release/2.4/ChangeLog
->
->  > Fixes CVE-2020-11810.
->
->  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->
-> Committed to 2020.02.x, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
->
-> ------------------------------
->
-> Message: 30
-> Date: Wed, 6 May 2020 06:58:04 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x]
->         package/azure-iot-sdk-c: fix installation of libumqtt
-> Message-ID: <20200506051930.D6FA88D7AA@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=f4150265b1b6152b6f65960bf3c93deb1d0217d5
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> Unlike the other libraries built by azure-iot-sdk-c, libumqtt follows
-> a regular versioning scheme. It has a libumqtt.so.1 SONAME, with
-> libumqtt.so.1 being a symlink to libumqtt.so.1.1.11.
->
-> However, we currently install the library itself as libumqtt.so to the
-> target filesystem, which is not its SONAME, which means it cannot be
-> found by any other library/program linked against it.
->
-> This commit fixes that by installing the library as
-> libumqtt.so.1.1.11, and creating the appropriate symlinks. The static
-> library installation is not modified.
->
-> Signed-off-by: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 570dd0c31b2149cd913866eb6777caa4a1b05a56)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> index 6781da4177..35ddb672fb 100644
-> --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> @@ -41,13 +41,19 @@ AZURE_IOT_SDK_C_LIBS += \
->         iothub_client/libiothub_client_mqtt_transport.so \
->         iothub_service_client/libiothub_service_client.so \
->         serializer/libserializer.so \
-> -       umqtt/libumqtt.so
-> +       umqtt/libumqtt.so.1.1.11
-> +
-> +define AZURE_IOT_SDK_C_CREATE_SYMLINKS
-> +       ln -sf libumqtt.so.1.1.11 $(1)/usr/lib/libumqtt.so.1
-> +       ln -sf libumqtt.so.1.1.11 $(1)/usr/lib/libumqtt.so
-> +endef
->  endif
->
->  define AZURE_IOT_SDK_C_INSTALL_LIBS
->         $(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
->                 $(INSTALL) -D -m 0755 $(@D)/$(l) $(1)/usr/lib/$(notdir
-> $(l))
->         )
-> +       $(call AZURE_IOT_SDK_C_CREATE_SYMLINKS,$(1))
->  endef
->
->  define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
->
->
-> ------------------------------
->
-> Message: 31
-> Date: Wed, 6 May 2020 06:57:38 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x]
->         package/azure-iot-sdk-c: format the libraries list with one lib per
->         line
-> Message-ID: <20200506051930.9E9318D7AA@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=8a768ad62edf8d49bb523c5e4d7e6e5531246527
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> This makes it easier to review patches modifying these lists of
-> libraries, such as:
->
->
-> http://patchwork.ozlabs.org/project/buildroot/patch/20190923115206.4468-1-stephan.hoffmann at ext.grandcentrix.net/
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit c71030f0fab49be4061fb999a8eabe4190f1f18d)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 22 ++++++++++++++++------
->  1 file changed, 16 insertions(+), 6 deletions(-)
->
-> diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> index 8b3f670399..b194bf9a4c 100644
-> --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> @@ -17,21 +17,31 @@ AZURE_IOT_SDK_C_CONF_OPTS = -Dskip_samples=ON
->  # The project only supports building one kind of library.
->  # Further the install target installs the wrong files, so we do it here:
->  ifeq ($(BR2_STATIC_LIBS),y)
-> -AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.a c-utility/libaziotsharedutil.a \
-> -       iothub_client/libiothub_client.a
-> iothub_client/libiothub_client_mqtt_ws_transport.a \
-> +AZURE_IOT_SDK_C_LIBS += \
-> +       uamqp/libuamqp.a \
-> +       c-utility/libaziotsharedutil.a \
-> +       iothub_client/libiothub_client.a \
-> +       iothub_client/libiothub_client_mqtt_ws_transport.a \
->         iothub_client/libiothub_client_amqp_ws_transport.a \
->         iothub_client/libiothub_client_http_transport.a \
->         iothub_client/libiothub_client_amqp_transport.a \
->         iothub_client/libiothub_client_mqtt_transport.a \
-> -       iothub_service_client/libiothub_service_client.a
-> serializer/libserializer.a umqtt/libumqtt.a
-> +       iothub_service_client/libiothub_service_client.a \
-> +       serializer/libserializer.a \
-> +       umqtt/libumqtt.a
->  else
-> -AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.so c-utility/libaziotsharedutil.so
-> \
-> -       iothub_client/libiothub_client.so
-> iothub_client/libiothub_client_mqtt_ws_transport.so \
-> +AZURE_IOT_SDK_C_LIBS += \
-> +       uamqp/libuamqp.so \
-> +       c-utility/libaziotsharedutil.so \
-> +       iothub_client/libiothub_client.so \
-> +       iothub_client/libiothub_client_mqtt_ws_transport.so \
->         iothub_client/libiothub_client_amqp_ws_transport.so \
->         iothub_client/libiothub_client_http_transport.so \
->         iothub_client/libiothub_client_amqp_transport.so \
->         iothub_client/libiothub_client_mqtt_transport.so \
-> -       iothub_service_client/libiothub_service_client.so
-> serializer/libserializer.so umqtt/libumqtt.so
-> +       iothub_service_client/libiothub_service_client.so \
-> +       serializer/libserializer.so \
-> +       umqtt/libumqtt.so
->  endif
->
->  define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
->
->
-> ------------------------------
->
-> Message: 32
-> Date: Wed, 6 May 2020 06:58:26 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x]
->         package/azure-iot-sdk-c: also install libparson
-> Message-ID: <20200506051930.E9A738D7AA@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=bd389b52fb9ed025192d49bfd5c3c84e97cd318e
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> The package builds libparson, but does not install it, let's fix this.
->
-> Signed-off-by: Stephan Hoffmann <stephan.hoffmann@ext.grandcentrix.net>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 94120fd7c71881e7b3963d5db27802241d9eeed2)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> index 35ddb672fb..f63297844d 100644
-> --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> @@ -28,7 +28,8 @@ AZURE_IOT_SDK_C_LIBS += \
->         iothub_client/libiothub_client_mqtt_transport.a \
->         iothub_service_client/libiothub_service_client.a \
->         serializer/libserializer.a \
-> -       umqtt/libumqtt.a
-> +       umqtt/libumqtt.a \
-> +       libparson.a
->  else
->  AZURE_IOT_SDK_C_LIBS += \
->         uamqp/libuamqp.so \
-> @@ -41,7 +42,8 @@ AZURE_IOT_SDK_C_LIBS += \
->         iothub_client/libiothub_client_mqtt_transport.so \
->         iothub_service_client/libiothub_service_client.so \
->         serializer/libserializer.so \
-> -       umqtt/libumqtt.so.1.1.11
-> +       umqtt/libumqtt.so.1.1.11 \
-> +       libparson.so
->
->  define AZURE_IOT_SDK_C_CREATE_SYMLINKS
->         ln -sf libumqtt.so.1.1.11 $(1)/usr/lib/libumqtt.so.1
->
->
-> ------------------------------
->
-> Message: 33
-> Date: Wed, 6 May 2020 07:26:52 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/polkit: add
->         upstream memory leak fix
-> Message-ID: <20200506051932.243637FFD0@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=148f82ca0bcbf162a3c69001b31adba81a49e140
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> This patch fixes two small memory leaks.
->
-> Upstream commit: 28e3a6653d8c3777b07e0128a0d97d46e586e311
->
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit ba70e29fea9fd76ffafd77401073d2142cbdfd21)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/polkit/0002-jsauthority-memleak.patch | 28
-> +++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
->
-> diff --git a/package/polkit/0002-jsauthority-memleak.patch
-> b/package/polkit/0002-jsauthority-memleak.patch
-> new file mode 100644
-> index 0000000000..4f0733185c
-> --- /dev/null
-> +++ b/package/polkit/0002-jsauthority-memleak.patch
-> @@ -0,0 +1,28 @@
-> +From 28e3a6653d8c3777b07e0128a0d97d46e586e311 Mon Sep 17 00:00:00 2001
-> +From: Jan Rybar <jrybar@redhat.com>
-> +Date: Tue, 8 Oct 2019 13:28:18 +0000
-> +Subject: [PATCH] jsauthority: Fix two minor memory leaks
-> +
-> +(cherry picked from commit 28e3a6653d8c3777b07e0128a0d97d46e586e311)
-> +Signed-off-by: Jan Rybar <jrybar@redhat.com>
-> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> +---
-> + src/polkitbackend/polkitbackendjsauthority.cpp | 2 ++
-> + 1 file changed, 2 insertions(+)
-> +
-> +diff --git a/src/polkitbackend/polkitbackendjsauthority.cpp
-> b/src/polkitbackend/polkitbackendjsauthority.cpp
-> +index 9b752d1..e97b8aa 100644
-> +--- a/src/polkitbackend/polkitbackendjsauthority.cpp
-> ++++ b/src/polkitbackend/polkitbackendjsauthority.cpp
-> +@@ -567,6 +567,8 @@ polkit_backend_js_authority_finalize (GObject *object)
-> +   g_strfreev (authority->priv->rules_dirs);
-> +
-> +   delete authority->priv->ac;
-> ++  delete authority->priv->js_global;
-> ++  delete authority->priv->js_polkit;
-> +
-> +   JS_DestroyContext (authority->priv->cx);
-> +   /* JS_ShutDown (); */
-> +--
-> +2.24.1
-> +
->
->
-> ------------------------------
->
-> Message: 34
-> Date: Wed, 6 May 2020 07:00:27 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x]
->         board/wandboard/post-build.sh: create boot.scr at TARGET_DIR/boot
-> Message-ID: <20200506051931.057EB8D59C@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=52b01679eac36f4408e950687e2e002708ca3190
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> There is no reason to create boot.scr at board/wandboard and later
-> install it at TARGET_DIR/boot, leaving a stale file behind.
->
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit f14e95b3ff76a4a052a1d1a3fa6ac67fd5a3e911)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  board/wandboard/post-build.sh | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/board/wandboard/post-build.sh b/board/wandboard/post-build.sh
-> index 43e091c5d7..6ddc113702 100755
-> --- a/board/wandboard/post-build.sh
-> +++ b/board/wandboard/post-build.sh
-> @@ -2,7 +2,7 @@
->
->  BOARD_DIR="$(dirname $0)"
->
-> -$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
-> --n "boot script" -d $BOARD_DIR/boot.scr.txt $BOARD_DIR/boot.scr
-> +install -d -m 755 $TARGET_DIR/boot
->
-> -install -m 0644 -D $BOARD_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-> +$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
-> +       -n "boot script" -d $BOARD_DIR/boot.scr.txt
-> $TARGET_DIR/boot/boot.scr
->
->
-> ------------------------------
->
-> Message: 35
-> Date: Wed, 6 May 2020 06:57:51 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x]
->         package/azure-iot-sdk-c: create function for library installation
-> Message-ID: <20200506051930.C36E28D7AA@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=0bb747c981ce17be2b259afc0ece848e5025f1c3
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> As a preparation for adding the creation of some symlinks, let's
-> factor the library installation into a function.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 43822bb6db8851df4d6568622b58196895028f91)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
->
-> diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> index e6345104eb..6781da4177 100644
-> --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> @@ -44,18 +44,20 @@ AZURE_IOT_SDK_C_LIBS += \
->         umqtt/libumqtt.so
->  endif
->
-> -define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
-> +define AZURE_IOT_SDK_C_INSTALL_LIBS
->         $(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
-> -               $(INSTALL) -D -m 0755 $(@D)/$(l)
-> $(STAGING_DIR)/usr/lib/$(notdir $(l))
-> +               $(INSTALL) -D -m 0755 $(@D)/$(l) $(1)/usr/lib/$(notdir
-> $(l))
->         )
-> +endef
-> +
-> +define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
-> +       $(call AZURE_IOT_SDK_C_INSTALL_LIBS,$(STAGING_DIR))
->         cp -a $(@D)/c-utility/inc/* $(STAGING_DIR)/usr/include/
->         cp -a $(@D)/iothub_client/inc/* $(STAGING_DIR)/usr/include/
->  endef
->
->  define AZURE_IOT_SDK_C_INSTALL_TARGET_CMDS
-> -       $(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
-> -               $(INSTALL) -D -m 0755 $(@D)/$(l)
-> $(TARGET_DIR)/usr/lib/$(notdir $(l))
-> -       )
-> +       $(call AZURE_IOT_SDK_C_INSTALL_LIBS,$(TARGET_DIR))
->  endef
->
->  $(eval $(cmake-package))
->
->
-> ------------------------------
->
-> Message: 36
-> Date: Wed, 6 May 2020 07:03:29 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/libssh: add
->         patch to fix reported version
-> Message-ID: <20200506051931.48717825FB@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=de1490e2a52eff1f81a728def85e57a09ada3ffc
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> The released libssh package does wrongly reports the previous version.
-> This patch fixes the version field in the lib.
->
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit a7db921da5ac57e29efeb1ac37c131d589d12664)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  .../0001-libssh.h-bump-to-version-0.9.4.patch      | 29
-> ++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->
-> diff --git a/package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch
-> b/package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch
-> new file mode 100644
-> index 0000000000..d6ec50509e
-> --- /dev/null
-> +++ b/package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch
-> @@ -0,0 +1,29 @@
-> +From 8d8428cbbc2c00d078cfbc967e4e6fee7ff7bf0b Mon Sep 17 00:00:00 2001
-> +From: Heiko Thiery <heiko.thiery@gmail.com>
-> +Date: Wed, 15 Apr 2020 11:57:29 +0200
-> +Subject: [PATCH] libssh.h: bump to version 0.9.4
-> +
-> +In the released version of libssh the version bump was not done
-> +properly. Therefore the current release 0.9.4 reports 0.9.3.
-> +
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +---
-> + include/libssh/libssh.h | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/include/libssh/libssh.h b/include/libssh/libssh.h
-> +index 79030131..e2a8d991 100644
-> +--- a/include/libssh/libssh.h
-> ++++ b/include/libssh/libssh.h
-> +@@ -79,7 +79,7 @@
-> + /* libssh version */
-> + #define LIBSSH_VERSION_MAJOR  0
-> + #define LIBSSH_VERSION_MINOR  9
-> +-#define LIBSSH_VERSION_MICRO  3
-> ++#define LIBSSH_VERSION_MICRO  4
-> +
-> + #define LIBSSH_VERSION_INT SSH_VERSION_INT(LIBSSH_VERSION_MAJOR, \
-> +                                            LIBSSH_VERSION_MINOR, \
-> +--
-> +2.20.1
-> +
->
->
-> ------------------------------
->
-> Message: 37
-> Date: Wed, 6 May 2020 07:00:40 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] board/udoo/neo:
->         create boot.scr in TARGET_DIR/boot
-> Message-ID: <20200506051931.252908D59C@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=52bfa18f8fd112ef1f9adef2e3941f2214cbe52c
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> There is no reason to create boot.scr in board/udoo/neo and later
-> install it in TARGET_DIR/boot, leaving a stale file behind.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 2306339d1fe8d5ea2d9e17641f78a374f612f45e)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  board/udoo/neo/post-build.sh | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/board/udoo/neo/post-build.sh b/board/udoo/neo/post-build.sh
-> index 43e091c5d7..6ccd87fafd 100755
-> --- a/board/udoo/neo/post-build.sh
-> +++ b/board/udoo/neo/post-build.sh
-> @@ -2,7 +2,6 @@
->
->  BOARD_DIR="$(dirname $0)"
->
-> +install -d -m 755 $TARGET_DIR/boot
->  $HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
-> --n "boot script" -d $BOARD_DIR/boot.scr.txt $BOARD_DIR/boot.scr
-> -
-> -install -m 0644 -D $BOARD_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-> +       -n "boot script" -d $BOARD_DIR/boot.scr.txt
-> $TARGET_DIR/boot/boot.scr
->
->
-> ------------------------------
->
-> Message: 38
-> Date: Wed, 6 May 2020 07:28:07 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/php: fix
->         zip support
-> Message-ID: <20200506051932.44684882AE@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=ab30ce809cde5643cf11c6fb6adcb97eade0abea
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> since php7.4, --enable-zip becomes --with-zip due to
-> migration to pkg-config.
->
-> Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit ac2b371732b20bacce9c79b7f3b824bd68b94242)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/php/php.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index 91f82dbf31..8282bb1cc7 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -113,7 +113,7 @@ PHP_CONF_OPTS += \
->         $(if $(BR2_PACKAGE_PHP_EXT_SYSVMSG),--enable-sysvmsg) \
->         $(if $(BR2_PACKAGE_PHP_EXT_SYSVSEM),--enable-sysvsem) \
->         $(if $(BR2_PACKAGE_PHP_EXT_SYSVSHM),--enable-sysvshm) \
-> -       $(if $(BR2_PACKAGE_PHP_EXT_ZIP),--enable-zip) \
-> +       $(if $(BR2_PACKAGE_PHP_EXT_ZIP),--with-zip) \
->         $(if $(BR2_PACKAGE_PHP_EXT_CTYPE),--enable-ctype) \
->         $(if $(BR2_PACKAGE_PHP_EXT_FILTER),--enable-filter) \
->         $(if $(BR2_PACKAGE_PHP_EXT_CALENDAR),--enable-calendar) \
->
->
-> ------------------------------
->
-> Message: 39
-> Date: Wed, 6 May 2020 07:28:14 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/php: fix gd
->         extension dependencies and options
-> Message-ID: <20200506051932.52AF8882AE@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=236f809c252647a0864c1a68ac7ca679ac1b797c
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> Due to migration to pkg-config in php 7.4, the detection of
-> library dependencies has been changed.
->
-> source from php.net:
-> --with-gd becomes --enable-gd
-> --with-png-dir has been removed. libpng is required.
-> --with-zlib-dir has been removed. zlib is required.
-> --with-freetype-dir becomes --with-freetype
-> --with-jpeg-dir becomes --with-jpeg
->
-> Signed-off-by: Louis Aussedat <aussedat.louis@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 31c5fd8f4b1ee26881ac37e55b0967bed0c6ebd2)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/php/Config.ext |  1 +
->  package/php/php.mk     | 10 ++++------
->  2 files changed, 5 insertions(+), 6 deletions(-)
->
-> diff --git a/package/php/Config.ext b/package/php/Config.ext
-> index 193bc1bd03..66ee935cf0 100644
-> --- a/package/php/Config.ext
-> +++ b/package/php/Config.ext
-> @@ -256,6 +256,7 @@ config BR2_PACKAGE_PHP_EXT_GD
->         select BR2_PACKAGE_FREETYPE
->         select BR2_PACKAGE_JPEG
->         select BR2_PACKAGE_LIBPNG
-> +       select BR2_PACKAGE_ZLIB
->         help
->           GD support
->
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index 8282bb1cc7..4d2f1b8f63 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -327,12 +327,10 @@ endif
->
->  ifeq ($(BR2_PACKAGE_PHP_EXT_GD),y)
->  PHP_CONF_OPTS += \
-> -       --with-gd \
-> -       --with-jpeg-dir=$(STAGING_DIR)/usr \
-> -       --with-png-dir=$(STAGING_DIR)/usr \
-> -       --with-zlib-dir=$(STAGING_DIR)/usr \
-> -       --with-freetype-dir=$(STAGING_DIR)/usr
-> -PHP_DEPENDENCIES += jpeg libpng freetype
-> +       --enable-gd \
-> +       --with-jpeg \
-> +       --with-freetype
-> +PHP_DEPENDENCIES += jpeg libpng freetype zlib
->  endif
->
->  ifeq ($(BR2_PACKAGE_PHP_SAPI_FPM),y)
->
->
-> ------------------------------
->
-> Message: 40
-> Date: Wed, 6 May 2020 07:15:01 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x]
->         package/python-iptables: add explicit dependency on dynamic libs
-> Message-ID: <20200506051931.924CC811F5@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=b6d45c45cb0e0e0a7080350dadb2eccefdaa8b0f
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> The package uses ctypes.CDLL extensively which only makes sense when
-> dynamic
-> libraries are available.
->
-> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> (cherry picked from commit 21b85bc56cdcf030cced57dea0f78cdce59912b8)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/python-iptables/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/package/python-iptables/Config.in
-> b/package/python-iptables/Config.in
-> index e55359963e..a35577bad3 100644
-> --- a/package/python-iptables/Config.in
-> +++ b/package/python-iptables/Config.in
-> @@ -1,7 +1,11 @@
->  config BR2_PACKAGE_PYTHON_IPTABLES
->         bool "python-iptables"
-> +       depends on !BR2_STATIC_LIBS
->         select BR2_PACKAGE_IPTABLES # runtime dependency
->         help
->           Python bindings for iptables.
->
->           https://github.com/ldx/python-iptables
-> +
-> +comment "python-iptables needs a toolchain w/ dynamic library"
-> +       depends on BR2_STATIC_LIBS
->
->
-> ------------------------------
->
-> Message: 41
-> Date: Wed, 6 May 2020 07:00:34 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x]
->         board/solidrun/mx6cubox: create boot.scr in TARGET_DIR/boot
-> Message-ID: <20200506051931.15A368D59C@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=6569f398eede2efde7c9dacf66fc5e0868c27bcb
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> There is no reason to create boot.scr in board/solidrun/mx6cubox and
-> later install it in TARGET_DIR/boot, leaving a stale file behind.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 9ddbd11620b5a01945a438085d45ef2131bad35f)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  board/solidrun/mx6cubox/post-build.sh | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/board/solidrun/mx6cubox/post-build.sh
-> b/board/solidrun/mx6cubox/post-build.sh
-> index 43e091c5d7..6ddc113702 100755
-> --- a/board/solidrun/mx6cubox/post-build.sh
-> +++ b/board/solidrun/mx6cubox/post-build.sh
-> @@ -2,7 +2,7 @@
->
->  BOARD_DIR="$(dirname $0)"
->
-> -$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
-> --n "boot script" -d $BOARD_DIR/boot.scr.txt $BOARD_DIR/boot.scr
-> +install -d -m 755 $TARGET_DIR/boot
->
-> -install -m 0644 -D $BOARD_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-> +$HOST_DIR/bin/mkimage -A arm -O linux -T script -C none  \
-> +       -n "boot script" -d $BOARD_DIR/boot.scr.txt
-> $TARGET_DIR/boot/boot.scr
->
->
-> ------------------------------
->
-> Message: 42
-> Date: Wed, 6 May 2020 07:03:24 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/libssh:
->         security bump to version 0.9.4
-> Message-ID: <20200506051931.37D707FD28@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=4c16f29ee1228fef87ee0f621d95d0e6705b5ac9
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> Fixes CVE-2020-1730: Possible DoS in client and server when handling
-> AES-CTR keys with OpenSSL.
->
-> Format hash file with two spaces delimiter.
->
-> Cc: Scott Fan <fancp2007@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 6b8a47e29252908b294bda0d089fab443db99903)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/libssh/libssh.hash | 4 ++--
->  package/libssh/libssh.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-> index ca296701bf..62b860300a 100644
-> --- a/package/libssh/libssh.hash
-> +++ b/package/libssh/libssh.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature
->  # https://www.libssh.org/files/0.9/libssh-0.9.3.tar.xz.asc
->  # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
-> -sha256 2c8b5f894dced58b3d629f16f3afa6562c20b4bdc894639163cf657833688f0c
-> libssh-0.9.3.tar.xz
-> -sha256 1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a
-> COPYING
-> +sha256  150897a569852ac05aac831dc417a7ba8e610c86ca2e0154a99c6ade2486226b
-> libssh-0.9.4.tar.xz
-> +sha256  1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a
-> COPYING
-> diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-> index 52517a5dd0..abc9aec9a3 100644
-> --- a/package/libssh/libssh.mk
-> +++ b/package/libssh/libssh.mk
-> @@ -5,7 +5,7 @@
->
->  ################################################################################
->
->  LIBSSH_VERSION_MAJOR = 0.9
-> -LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).3
-> +LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).4
->  LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
->  LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
->  LIBSSH_LICENSE = LGPL-2.1
->
->
-> ------------------------------
->
-> Message: 43
-> Date: Wed, 6 May 2020 07:13:37 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/mbedtls:
->         security bump to version 2.16.6
-> Message-ID: <20200506051931.7EC02821B9@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=47c67ff56a40e242438d4bbb67fced4ad9d762c0
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> - Fix CVE-2020-10932: fix side channel in ECC code that allowed an
->   adversary with access to precise enough timing and memory access
->   information (typically an untrusted operating system attacking a
->   secure enclave) to fully recover an ECDSA private key.
-> - Fix a potentially remotely exploitable buffer overread in a DTLS
->   client when parsing the Hello Verify Request message.
-> - Fix bug in DTLS handling of new associations with the same parameters
->   (RFC 6347 section 4.2.8): after sending its HelloVerifyRequest, the
->   server would end up with corrupted state and only send invalid records
->   to the client. An attacker able to send forged UDP packets to the
->   server could use that to obtain a Denial of Service. This could only
->   happen when MBEDTLS_SSL_DTLS_CLIENT_PORT_REUSE was enabled in
->   config.h (which it is by default).
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit b5704f8869dc1f82790816e38de52aac6d709ffe)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/mbedtls/mbedtls.hash | 6 +++---
->  package/mbedtls/mbedtls.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-> index 92e7d35a64..17ac18bb25 100644
-> --- a/package/mbedtls/mbedtls.hash
-> +++ b/package/mbedtls/mbedtls.hash
-> @@ -1,5 +1,5 @@
-> -# From
-> https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.5-and-2.7.14-released
-> -sha1
-> <https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.5-and-2.7.14-released-sha1>
-> c36962183e05467aa1dadafcaacf90216a737866  mbedtls-2.16.5-apache.tgz
-> -sha256  65b4c6cec83e048fd1c675e9a29a394ea30ad0371d37b5742453f74084e7b04d
-> mbedtls-2.16.5-apache.tgz
-> +# From
-> https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.6-and-2.7.15-released
-> +sha1
-> <https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.6-and-2.7.15-released+sha1>
-> 3cb5b681597a5bd798d31038c129c0dc911d8a2c  mbedtls-2.16.6-apache.tgz
-> +sha256  66455e23a6190a30142cdc1113f7418158839331a9d8e6b0778631d077281770
-> mbedtls-2.16.6-apache.tgz
->  # Locally calculated
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
-> apache-2.0.txt
-> diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-> index 5d0dd87339..50121fa6c7 100644
-> --- a/package/mbedtls/mbedtls.mk
-> +++ b/package/mbedtls/mbedtls.mk
-> @@ -5,7 +5,7 @@
->
->  ################################################################################
->
->  MBEDTLS_SITE = https://tls.mbed.org/code/releases
-> -MBEDTLS_VERSION = 2.16.5
-> +MBEDTLS_VERSION = 2.16.6
->  MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
->  MBEDTLS_CONF_OPTS = \
->         -DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
->
->
-> ------------------------------
->
-> Message: 44
-> Date: Wed, 6 May 2020 07:03:34 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/libssh: add
->         patch to fix regression
-> Message-ID: <20200506051931.5845F825FB@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=1d177afefce7b655f7a240c7c85cbccddab6d0df
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> The libssh server is used by libnetconf2. With libssh version 0.9.4 a
-> regression was introduced that wrongly leads to session closed after the
-> poll timeout.
->
-> The patch comes from upstrem:
->
-> https://git.libssh.org/projects/libssh.git/commit/?id=6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4
->
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 39099153d9404cd6f107f0fd92ce8686bbd1beb2)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...oid-returning-SSH_AGAIN-from-ssh_channel_.patch | 45
-> ++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
->
-> diff --git
-> a/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
-> b/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
-> new file mode 100644
-> index 0000000000..9cc9389479
-> --- /dev/null
-> +++
-> b/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
-> @@ -0,0 +1,45 @@
-> +From 6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4 Mon Sep 17 00:00:00 2001
-> +From: Jakub Jelen <jjelen@redhat.com>
-> +Date: Thu, 16 Apr 2020 11:13:34 +0200
-> +Subject: [PATCH] channels: Avoid returning SSH_AGAIN from
-> + ssh_channel_poll_timeout()
-> +
-> +This addresses a regression introduced in 3bad0607, partially fixed in
-> 022409e9,
-> +but the function was still able to return SSH_AGAIN, which was not
-> expected by
-> +callers.
-> +
-> +Based on discussion in [1] and [2]
-> +
-> +[1] https://gitlab.com/libssh/libssh-mirror/-/merge_requests/101
-> +[2] https://www.libssh.org/archive/libssh/2020-03/0000029.html
-> +
-> +Signed-off-by: Jakub Jelen <jjelen@redhat.com>
-> +Reviewed-by: Anderson Toshiyuki Sasaki <ansasaki@redhat.com>
-> +
-> +[Backport from upstream commit:
-> +6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4]
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +---
-> + src/channels.c | 6 ++++++
-> + 1 file changed, 6 insertions(+)
-> +
-> +diff --git a/src/channels.c b/src/channels.c
-> +index bcc1c207..9fe309d0 100644
-> +--- a/src/channels.c
-> ++++ b/src/channels.c
-> +@@ -3116,6 +3116,12 @@ int ssh_channel_poll_timeout(ssh_channel channel,
-> int timeout, int is_stderr)
-> +         session->session_state == SSH_SESSION_STATE_ERROR) {
-> +         rc = SSH_ERROR;
-> +         goto out;
-> ++    } else if (rc == SSH_AGAIN) {
-> ++        /* If the above timeout expired, it is ok and we do not need to
-> ++         * attempt to check the read buffer. The calling functions do not
-> ++         * expect us to return SSH_AGAIN either here. */
-> ++        rc = SSH_OK;
-> ++        goto out;
-> +     }
-> +     len = ssh_buffer_get_len(stdbuf);
-> +     if (len > 0) {
-> +--
-> +2.20.1
-> +
->
->
-> ------------------------------
->
-> Message: 45
-> Date: Wed, 6 May 2020 07:15:36 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x]
->         package/python-iptables: account for platform tag in extensions
-> Message-ID: <20200506051931.B4A7F811F5@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=d853d927ff64d0f6d70d856e4ca48032522c0c02
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> EXT_SUFFIX in Python versions > 3.5 contains a platform tag which only
-> applies
-> to cpython extensions. Given that ctypes.util.find_library does not work
-> on the
-> target due to the absence of the underlying tools '.so' needs to be added
-> as a
-> possible suffix for libraries to enable python-iptables to find the
-> iptables
-> shared libraries.
->
-> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> (cherry picked from commit 52276cdda34aa986410626592031560bf64d788b)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...dd-.so-as-additional-shared-object-suffix.patch | 57
-> ++++++++++++++++++++++
->  1 file changed, 57 insertions(+)
->
-> diff --git
-> a/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
-> b/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
-> new file mode 100644
-> index 0000000000..41d49fc1e6
-> --- /dev/null
-> +++
-> b/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
-> @@ -0,0 +1,57 @@
-> +From 899d25c511c6ce779b7153e9ae2e41055b30b9c5 Mon Sep 17 00:00:00 2001
-> +From: Frank Vanbever <frank.vanbever@essensium.com>
-> +Date: Mon, 9 Mar 2020 12:36:47 +0100
-> +Subject: [PATCH] Add '.so' as additional shared object suffix
-> +
-> +EXT_SUFFIX includes a platform information tag starting from Python 3.5
-> [0]
-> +For example:
-> +
-> +    >>> sysconfig.get_config_var("EXT_SUFFIX")
-> +    '.cpython-38-aarch64-linux-gnu.so'
-> +
-> +This suffix only applies to cpython extensions i.e. not to the iptables
-> shared
-> +objects.
-> +
-> +Adding '.so' as an additional suffix for shared objects fixes the issue.
-> +
-> +Fixes: Issue #301
-> +
-> +Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-> +
-> +Backported from: 899d25c511c6ce779b7153e9ae2e41055b30b9c5
-> +
-> +[0]: https://docs.python.org/3/whatsnew/3.5.html#build-and-c-api-changes
-> +---
-> + iptc/util.py | 13 ++++++++++---
-> + 1 file changed, 10 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/iptc/util.py b/iptc/util.py
-> +index e6b1649..04fe905 100644
-> +--- a/iptc/util.py
-> ++++ b/iptc/util.py
-> +@@ -80,12 +80,19 @@ def _do_find_library(name):
-> +
-> +
-> + def _find_library(*names):
-> ++    exts = []
-> +     if version_info >= (3, 3):
-> +-        ext = get_config_var("EXT_SUFFIX")
-> ++        exts.append(get_config_var("EXT_SUFFIX"))
-> +     else:
-> +-        ext = get_config_var('SO')
-> ++        exts.append(get_config_var('SO'))
-> ++
-> ++    if version_info >= (3, 5):
-> ++        exts.append('.so')
-> ++
-> +     for name in names:
-> +-        libnames = [name, "lib" + name, name + ext, "lib" + name + ext]
-> ++        libnames = [name, "lib" + name]
-> ++        for ext in exts:
-> ++            libnames += [name + ext, "lib" + name + ext]
-> +         libdir = os.environ.get('IPTABLES_LIBDIR', None)
-> +         if libdir is not None:
-> +             libdirs = libdir.split(':')
-> +--
-> +2.20.1
-> +
->
->
-> ------------------------------
->
-> Message: 46
-> Date: Wed, 6 May 2020 07:10:40 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/exim: fix
->         log and pid file paths
-> Message-ID: <20200506051931.6D204821B9@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=9f79ad93cf3961981a1aa0bbd29b41baa6eb8474
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> By default, exim stores its PID file in /var/spool/exim, and its log
-> file in /var/spool/exim/log, but it makes a lot more sense to have the
-> logs in /var/log/exim and the PID file in /var/run/exim.
->
-> Using binary name subdirectory in both cases allows for the use of
-> systemd's LogsDirectory and RuntimeDirectory statements
->
-> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 754341460b7aa751164d7d7ec9b67908c2792fe2)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/exim/S86exim      | 10 +++++++++-
->  package/exim/exim.mk      |  2 ++
->  package/exim/exim.service |  4 ++++
->  3 files changed, 15 insertions(+), 1 deletion(-)
->
-> diff --git a/package/exim/S86exim b/package/exim/S86exim
-> index bec88fc222..0d09361f65 100644
-> --- a/package/exim/S86exim
-> +++ b/package/exim/S86exim
-> @@ -3,11 +3,19 @@
->  # Start/stop exim
->  #
->
-> -PIDFILE=/var/lock/exim/exim-daemon.pid
-> +PIDFILE=/var/run/exim/exim.pid
->
->  case "$1" in
->    start)
->         echo "Starting exim..."
-> +       if [ ! -d /var/log/exim ]; then
-> +         mkdir -p /var/log/exim
-> +         chown exim:mail /var/log/exim
-> +       fi
-> +       if [ ! -d /var/run/exim ]; then
-> +         mkdir -p /var/run/exim
-> +         chown root:mail /var/run/exim
-> +       fi
->         start-stop-daemon -S -x exim -- -bd
->         ;;
->    stop)
-> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-> index e4b0bfc1b4..8d5b6e415b 100644
-> --- a/package/exim/exim.mk
-> +++ b/package/exim/exim.mk
-> @@ -39,6 +39,8 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
->         $(INSTALL) -m 0644 $(@D)/src/EDITME $(@D)/Local/Makefile
->         $(call exim-config-change,BIN_DIRECTORY,/usr/sbin)
->         $(call exim-config-change,CONFIGURE_FILE,/etc/exim/configure)
-> +       $(call exim-config-change,LOG_FILE_PATH,/var/log/exim/exim_%slog)
-> +       $(call exim-config-change,PID_FILE_PATH,/var/run/exim/exim.pid)
->         $(call exim-config-change,EXIM_USER,ref:exim)
->         $(call exim-config-change,EXIM_GROUP,mail)
->         $(call exim-config-change,TRANSPORT_LMTP,yes)
-> diff --git a/package/exim/exim.service b/package/exim/exim.service
-> index fe97727ab5..ac3f067de4 100644
-> --- a/package/exim/exim.service
-> +++ b/package/exim/exim.service
-> @@ -3,6 +3,10 @@ Description=Exim MTA
->  After=syslog.target network.target
->
->  [Service]
-> +User=exim
-> +Group=mail
-> +LogsDirectory=exim
-> +RuntimeDirectory=exim
->  ExecStart=/usr/sbin/exim -bdf
->  Restart=always
->
->
->
-> ------------------------------
->
-> Message: 47
-> Date: Wed, 6 May 2020 07:15:10 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x]
->         package/python-iptables: try known libc instead of find_library()
-> Message-ID: <20200506051931.A3BB1811F5@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=c121494d169b81adf53e73c522a5abbc79a700dc
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> ctypes.util.find_library() depends on gcc and friends to detect the
-> location of
-> a given shared library. Given that these are not available on the target
-> and
-> that python-iptables depends on this functionality we need to work around
-> this.
-> The SONAMEs of the libc are well known so we try the known ones for glibc,
-> uClibc and musl.
->
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12271
->
-> Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> (cherry picked from commit 90c18ab269c600ee7643f69212713ee3b74c38bd)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  .../0001-Add-separate-mechanism-to-load-libc.patch | 90
-> ++++++++++++++++++++++
->  1 file changed, 90 insertions(+)
->
-> diff --git
-> a/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
-> b/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
-> new file mode 100644
-> index 0000000000..2a344c2f55
-> --- /dev/null
-> +++
-> b/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
-> @@ -0,0 +1,90 @@
-> +From e3557528d7cdcdc2c579212be8837bc9b54635a4 Mon Sep 17 00:00:00 2001
-> +From: Frank Vanbever <frank.vanbever@essensium.com>
-> +Date: Thu, 20 Feb 2020 12:14:08 +0100
-> +Subject: [PATCH] Add separate mechanism to load libc
-> +
-> +ctypes.util.find_library() always returns None for systems which do not
-> have the
-> +tools installed to determine the location of a given shared library (i.e.
-> +ldconfig, gcc, objdump). If find_libary() fails attempt to load known
-> libc by
-> +SONAME.
-> +
-> +Upstream:
-> https://github.com/ldx/python-iptables/commit/e3557528d7cdcdc2c579212be8837bc9b54635a4
-> +
-> +Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-> +---
-> + iptc/ip4tc.py   |  4 ++--
-> + iptc/util.py    | 16 ++++++++++++++++
-> + iptc/xtables.py |  4 ++--
-> + 3 files changed, 20 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/iptc/ip4tc.py b/iptc/ip4tc.py
-> +index 4c5d690..4ddd2dc 100644
-> +--- a/iptc/ip4tc.py
-> ++++ b/iptc/ip4tc.py
-> +@@ -9,7 +9,7 @@ import socket
-> + import struct
-> + import weakref
-> +
-> +-from .util import find_library, load_kernel
-> ++from .util import find_library, load_kernel, find_libc
-> + from .xtables import (XT_INV_PROTO, NFPROTO_IPV4, XTablesError, xtables,
-> +                       xt_align, xt_counters, xt_entry_target,
-> xt_entry_match)
-> +
-> +@@ -26,7 +26,7 @@ if not hasattr(socket, 'IPPROTO_SCTP'):
-> +
-> + _IFNAMSIZ = 16
-> +
-> +-_libc = ct.CDLL("libc.so.6")
-> ++_libc = find_libc()
-> + _get_errno_loc = _libc.__errno_location
-> + _get_errno_loc.restype = ct.POINTER(ct.c_int)
-> + _malloc = _libc.malloc
-> +diff --git a/iptc/util.py b/iptc/util.py
-> +index ae5fb9b..e6b1649 100644
-> +--- a/iptc/util.py
-> ++++ b/iptc/util.py
-> +@@ -109,3 +109,19 @@ def find_library(*names):
-> +             major = int(m.group(1))
-> +         return lib, major
-> +     return None, None
-> ++
-> ++
-> ++def find_libc():
-> ++    lib = ctypes.util.find_library('c')
-> ++    if lib is not None:
-> ++        return ctypes.CDLL(lib, mode=ctypes.RTLD_GLOBAL)
-> ++
-> ++    libnames = ['libc.so.6', 'libc.so.0', 'libc.so']
-> ++    for name in libnames:
-> ++        try:
-> ++            lib = ctypes.CDLL(name, mode=ctypes.RTLD_GLOBAL)
-> ++            return lib
-> ++        except:
-> ++            pass
-> ++
-> ++    return None
-> +diff --git a/iptc/xtables.py b/iptc/xtables.py
-> +index 93bc080..cf21029 100644
-> +--- a/iptc/xtables.py
-> ++++ b/iptc/xtables.py
-> +@@ -6,7 +6,7 @@ import sys
-> + import weakref
-> +
-> + from . import version
-> +-from .util import find_library
-> ++from .util import find_library, find_libc
-> + from .errors import *
-> +
-> + XT_INV_PROTO = 0x40  # invert the sense of PROTO
-> +@@ -792,7 +792,7 @@ class xtables_target(ct.Union):
-> +                 ("v12", _xtables_target_v12)]
-> +
-> +
-> +-_libc, _ = find_library("c")
-> ++_libc = find_libc()
-> + _optind = ct.c_long.in_dll(_libc, "optind")
-> + _optarg = ct.c_char_p.in_dll(_libc, "optarg")
-> +
-> +--
-> +2.20.1
-> +
->
->
-> ------------------------------
->
-> Message: 48
-> Date: Wed, 6 May 2020 07:21:21 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x]
->         package/python-dpkt: remove Python2 only dependency
-> Message-ID: <20200506051931.D56598B7AF@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=7f882e9942ff70d054ccf4c11657f743dd530629
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> python-dpkt supports both Python flavors.
->
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 12ccb92fce1ecb4215ff1071656292a5b9d4313d)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/python-dpkt/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/python-dpkt/Config.in b/package/python-dpkt/Config.in
-> index d8e3388d7e..9bd7a98d26 100644
-> --- a/package/python-dpkt/Config.in
-> +++ b/package/python-dpkt/Config.in
-> @@ -1,7 +1,7 @@
->  config BR2_PACKAGE_PYTHON_DPKT
->         bool "python-dpkt"
-> -       depends on BR2_PACKAGE_PYTHON
-> -       select BR2_PACKAGE_PYTHON_ZLIB
-> +       select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-> +       select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
->         help
->           Fast, simple packet creation / parsing, with definitions
->           for the basic TCP/IP protocols.
->
->
-> ------------------------------
->
-> Message: 49
-> Date: Wed, 6 May 2020 07:22:52 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/libsepol:
->         fix help text for BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
-> Message-ID: <20200506051931.E603B8B7AF@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=7c6cc0dd7dc12b8d6d7026ce17fa3586cd30ba5e
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> The help text was wrong, as it didn't match the actual default values
-> we were specifying. Indeed, when we specify:
->
->         default 31 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
->         default 30 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
->
-> It means that the policy version 30 is supported starting from Linux
-> 4.3 included, and that 31 is supported from Linux 4.13 included.
->
-> So we shouldn't have:
->
->           > 4.3 <= 4.13    30
->           > 4.13           31
->
-> but:
->
->           >= 4.3 < 4.13    30
->           >= 4.13          31
->
-> This patch fixes that for all versions.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 67d7705a9aa58886e8a8777fe4c95746c1fb5c96)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/libsepol/Config.in | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
-> index 21d4d7865c..21d9e96179 100644
-> --- a/package/libsepol/Config.in
-> +++ b/package/libsepol/Config.in
-> @@ -22,12 +22,12 @@ config BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
->
->           Here's a handy table to help you choose:
->           kernel version   SElinux policy max version
-> -         <= 2.6.x         25
-> -         > 2.6 <= 3.5     26
-> -         > 3.5 <= 3.14    28 (27 and 28 were added@the same time)
-> -         > 3.14 <= 4.3    29
-> -         > 4.3 <= 4.13    30
-> -         > 4.13           31
-> +         < 2.6.x          25
-> +         >= 2.6 < 3.5     26
-> +         >= 3.5 < 3.14    28 (27 and 28 were added@the same time)
-> +         >= 3.14 < 4.3    29
-> +         >= 4.3 < 4.13    30
-> +         >= 4.13          31
->
->  endif
->
->
->
-> ------------------------------
->
-> Message: 50
-> Date: Wed, 6 May 2020 06:57:45 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x]
->         package/azure-iot-sdk-c: use full destination path for $(INSTALL)
-> Message-ID: <20200506051930.ACB7281027@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=42687ce6750ae972de0b478233cfa6edbd4bf20d
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> The canonical way to use $(INSTALL) is to have a full destination
-> path, that includes the file name.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 59de11b0476699ddeb2cbcd30a524b849249956a)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/azure-iot-sdk-c/azure-iot-sdk-c.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> index b194bf9a4c..e6345104eb 100644
-> --- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> +++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-> @@ -46,7 +46,7 @@ endif
->
->  define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
->         $(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
-> -               $(INSTALL) -D -m 0755 $(@D)/$(l) $(STAGING_DIR)/usr/lib/
-> +               $(INSTALL) -D -m 0755 $(@D)/$(l)
-> $(STAGING_DIR)/usr/lib/$(notdir $(l))
->         )
->         cp -a $(@D)/c-utility/inc/* $(STAGING_DIR)/usr/include/
->         cp -a $(@D)/iothub_client/inc/* $(STAGING_DIR)/usr/include/
-> @@ -54,7 +54,7 @@ endef
->
->  define AZURE_IOT_SDK_C_INSTALL_TARGET_CMDS
->         $(foreach l,$(AZURE_IOT_SDK_C_LIBS), \
-> -               $(INSTALL) -D -m 0755 $(@D)/$(l) $(TARGET_DIR)/usr/lib/
-> +               $(INSTALL) -D -m 0755 $(@D)/$(l)
-> $(TARGET_DIR)/usr/lib/$(notdir $(l))
->         )
->  endef
->
->
->
-> ------------------------------
->
-> Message: 51
-> Date: Wed, 6 May 2020 07:26:58 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/polkit: add
->         upstream fix for SIGTTOU
-> Message-ID: <20200506051932.33D04882AE@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=bad149c07ca996f5dca8dfca20cd2feaa91cfa8e
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> If tty_handler() resets terminal while pkttyagent is run in background job,
-> the process gets stopped by SIGTTOU. This impacts systemctl, hence it must
-> be blocked for a while and then the process gets killed anyway.
->
-> Upstream commit: 28e3a6653d8c3777b07e0128a0d97d46e586e311
->
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 0d749be3e1c144ed711908da49dac9f274bfc996)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...03-polkit-0.116-pkttyagent-sigttou-bg-job.patch | 34
-> ++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
->
-> diff --git
-> a/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
-> b/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
-> new file mode 100644
-> index 0000000000..fb41df3af2
-> --- /dev/null
-> +++ b/package/polkit/0003-polkit-0.116-pkttyagent-sigttou-bg-job.patch
-> @@ -0,0 +1,34 @@
-> +From 76aae4fce586b400f5fe08df31497db19d624609 Mon Sep 17 00:00:00 2001
-> +From: Jan Rybar <jrybar@redhat.com>
-> +Date: Thu, 1 Aug 2019 06:46:10 +0000
-> +Subject: [PATCH] pkttyagent: process stopped by SIGTTOU if run in
-> background
-> + job
-> +
-> +
-> +(cherry picked from commit 76aae4fce586b400f5fe08df31497db19d624609)
-> +Signed-off-by: Jan Rybar <jrybar@redhat.com>
-> +Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> +---
-> + src/programs/pkttyagent.c | 6 ++++++
-> + 1 file changed, 6 insertions(+)
-> +
-> +diff --git a/src/programs/pkttyagent.c b/src/programs/pkttyagent.c
-> +index 3c8d502..13879a2 100644
-> +--- a/src/programs/pkttyagent.c
-> ++++ b/src/programs/pkttyagent.c
-> +@@ -264,6 +264,12 @@ main (int argc, char *argv[])
-> +
-> +   memset (&sa, 0, sizeof (sa));
-> +   sa.sa_handler = &tty_handler;
-> ++/* If tty_handler() resets terminal while pkttyagent is run in
-> background job,
-> ++   the process gets stopped by SIGTTOU. This impacts systemctl, hence it
-> must
-> ++   be blocked for a while and then the process gets killed anyway.
-> ++ */
-> ++  sigemptyset(&sa.sa_mask);
-> ++  sigaddset(&sa.sa_mask, SIGTTOU);
-> +   sigaction (SIGTERM, &sa, &savesigterm);
-> +   sigaction (SIGINT, &sa, &savesigint);
-> +   sigaction (SIGTSTP, &sa, &savesigtstp);
-> +--
-> +2.24.1
-> +
->
->
-> ------------------------------
->
-> Message: 52
-> Date: Wed, 6 May 2020 07:20:29 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/php:
->         security bump version to 7.4.5
-> Message-ID: <20200506051931.C57F08B7AF@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=5d5694d36d0bb36d79cc1ae37cedbef8a2a092f1
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> Changelog: https://www.php.net/ChangeLog-7.php#7.4.5
->
-> Fixes CVE-2020-7067.
->
-> Removed patch applied upstream.
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit db52b57c3dc625fc06d4408242252129ca47b026)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...0005-Check-for-sys-auxv.h-before-using-it.patch | 60
-> ----------------------
->  package/php/php.hash                               |  2 +-
->  package/php/php.mk                                 |  2 +-
->  3 files changed, 2 insertions(+), 62 deletions(-)
->
-> diff --git a/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
-> b/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
-> deleted file mode 100644
-> index 559c64db8a..0000000000
-> --- a/package/php/0005-Check-for-sys-auxv.h-before-using-it.patch
-> +++ /dev/null
-> @@ -1,60 +0,0 @@
-> -From f150702d5ab72878d45b722b6d7d4194db92c44a Mon Sep 17 00:00:00 2001
-> -From: Peter Seiderer <ps.report@gmx.net>
-> -Date: Mon, 9 Mar 2020 15:36:48 +0100
-> -Subject: [PATCH] Check for sys/auxv.h before using it.
-> -
-> -Fixes aarch64 compile wiht uclibc-ng (does not provide
-> -sys/auxv.h header file).
-> -
-> -Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> -Upstream:
-> https://github.com/php/php-src/commit/f73528f0e0d59ac744ccb4a94a3a9d7b9f0fba1b
-> ----
-> - configure.ac         | 1 +
-> - ext/standard/crc32.c | 9 +++++++--
-> - 2 files changed, 8 insertions(+), 2 deletions(-)
-> -
-> -diff --git a/configure.ac b/configure.ac
-> -index 5219a5f2..caf62302 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -440,6 +440,7 @@ resolv.h \
-> - strings.h \
-> - syslog.h \
-> - sysexits.h \
-> -+sys/auxv.h \
-> - sys/ioctl.h \
-> - sys/file.h \
-> - sys/mman.h \
-> -diff --git a/ext/standard/crc32.c b/ext/standard/crc32.c
-> -index c3ca5903..e59ab45f 100644
-> ---- a/ext/standard/crc32.c
-> -+++ b/ext/standard/crc32.c
-> -@@ -17,10 +17,15 @@
-> - */
-> -
-> - #include "php.h"
-> -+#ifdef PHP_WIN32
-> -+#include "config.w32.h"
-> -+#else
-> -+#include <php_config.h>
-> -+#endif
-> - #include "basic_functions.h"
-> - #include "crc32.h"
-> -
-> --#if defined(__aarch64__)
-> -+#if defined(__aarch64__) && defined(HAVE_SYS_AUXV_H)
-> - # include <arm_acle.h>
-> - # if defined(__linux__)
-> - #  include <sys/auxv.h>
-> -@@ -85,7 +90,7 @@ PHP_NAMED_FUNCTION(php_if_crc32)
-> -
-> -       crc = crcinit^0xFFFFFFFF;
-> -
-> --#if defined(__aarch64__)
-> -+#if defined(__aarch64__) && defined(HAVE_SYS_AUXV_H)
-> -       if (has_crc32_insn()) {
-> -               crc = crc32_aarch64(crc, p, nr);
-> -               RETURN_LONG(crc^0xFFFFFFFF);
-> ---
-> -2.25.1
-> -
-> diff --git a/package/php/php.hash b/package/php/php.hash
-> index 4584524f1c..a0b8fd4688 100644
-> --- a/package/php/php.hash
-> +++ b/package/php/php.hash
-> @@ -1,5 +1,5 @@
->  # From https://www.php.net/downloads.php
-> -sha256 1873c4cefdd3df9a78dcffb2198bba5c2f0464f55c9c960720c84df483fca74c
-> php-7.4.4.tar.xz
-> +sha256 d059fd7f55bdc4d2eada15a00a2976697010d3631ef6f83149cc5289e1f23c2c
-> php-7.4.5.tar.xz
->
->  # License file
->  sha256 0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7
-> LICENSE
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index f62204c2a5..91f82dbf31 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -4,7 +4,7 @@
->  #
->
->  ################################################################################
->
-> -PHP_VERSION = 7.4.4
-> +PHP_VERSION = 7.4.5
->  PHP_SITE = http://www.php.net/distributions
->  PHP_SOURCE = php-$(PHP_VERSION).tar.xz
->  PHP_INSTALL_STAGING = YES
->
->
-> ------------------------------
->
-> Message: 53
-> Date: Wed, 6 May 2020 07:29:39 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/netsnmp:
->         unix domain socket transport
-> Message-ID: <20200506051932.6519D882AE@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=8f14e3c883aef1c81e45a020f36bb3c03f0c914b
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> The support for Unix domain socket transport was disabled as part of
-> the bump of netsnmp from 5.5 to 5.6 in commit
-> de642c9904b13914017af6f10db144d559d6bd0c, but with no apparent reason.
->
-> This support is needed to allow Unix socket based AgentX subagents to
-> connect to netsnmp, so let's re-enable it.
->
-> Signed-off-by: Ryan Steffens <ryan.steffens@rockwellcollins.com>
-> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 8aef2d3a5b1e56c82d4d61deded1a742899b1a1c)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/netsnmp/netsnmp.mk | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-> index ed573c51e3..904279d1fb 100644
-> --- a/package/netsnmp/netsnmp.mk
-> +++ b/package/netsnmp/netsnmp.mk
-> @@ -30,7 +30,6 @@ NETSNMP_CONF_OPTS = \
->         --with-sys-location="Unknown" \
->         --with-mib-modules="$(call
-> qstrip,$(BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES))" \
->         --with-out-mib-modules="$(call
-> qstrip,$(BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES))" \
-> -       --with-out-transports="Unix" \
->         --disable-manuals
->  NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR)
-> LIB_LDCONFIG_CMD=true install
->  NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true
-> install
->
->
-> ------------------------------
->
-> Message: 54
-> Date: Wed, 6 May 2020 07:25:31 +0200
-> From: Peter Korsgaard <peter@korsgaard.com>
-> To: buildroot at buildroot.org
-> Subject: [Buildroot] [git commit branch/2020.02.x] package/polkit:
->         properly autoreconf
-> Message-ID: <20200506051932.025F390EA9@busybox.osuosl.org>
->
-> commit:
-> https://git.buildroot.net/buildroot/commit/?id=0919c67bb665c7f474a1848ec69a5972c8126d06
-> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
->
-> 0001-make-netgroup-support-optional.patch patches configure.ac, but we
-> don't autoreconf the package, which is not good.
->
-> However, simply adding AUTORECONF = YES is not sufficient: polkit
-> Makefile.am use the automake conditional HAVE_INTROSPECTION, which is
-> "available" only when the gobject-introspection m4 file is installed.
->
-> Since we don't want to make gobject-introspection a mandatory
-> dependency of polkit, we take a simpler route: add a copy of
-> introspection.m4 into the polkit source tree. This is only a 142 lines
-> file, and it can be dropped when
-> 0001-make-netgroup-support-optional.patch is merged upstream.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> (cherry picked from commit 8edcb8473001032e3ea6f162784b2f24db88decc)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  .../0001-make-netgroup-support-optional.patch      | 211
-> +++++++++++++++++++--
->  package/polkit/polkit.mk                           |   2 +-
->  2 files changed, 192 insertions(+), 21 deletions(-)
->
-> diff --git a/package/polkit/0001-make-netgroup-support-optional.patch
-> b/package/polkit/0001-make-netgroup-support-optional.patch
-> index f96738c910..86916aba34 100644
-> --- a/package/polkit/0001-make-netgroup-support-optional.patch
-> +++ b/package/polkit/0001-make-netgroup-support-optional.patch
-> @@ -1,4 +1,4 @@
-> -From 21aa2747e8f0048759aab184b07dd6389666d5e6 Mon Sep 17 00:00:00 2001
-> +From 1b854ef4bb15032091a33fed587e5ba6f3e582eb Mon Sep 17 00:00:00 2001
->  From: Khem Raj <raj.khem@gmail.com>
->  Date: Wed, 22 May 2019 13:18:55 -0700
->  Subject: [PATCH] make netgroup support optional
-> @@ -17,20 +17,174 @@ Fixes bug 50145.
->  Signed-off-by: A. Wilcox <AWilcox@Wilcox-Tech.com>
->  Signed-off-by: Khem Raj <raj.khem@gmail.com>
->  Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> +[Thomas: add introspection.m4.]
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->  ---
-> - configure.ac                                     |  2 +-
-> - src/polkit/polkitidentity.c                      | 16 ++++++++++++++++
-> - src/polkit/polkitunixnetgroup.c                  |  3 +++
-> - .../polkitbackendinteractiveauthority.c          | 14 ++++++++------
-> - src/polkitbackend/polkitbackendjsauthority.cpp   |  2 ++
-> - test/polkit/polkitidentitytest.c                 |  9 ++++++++-
-> - test/polkit/polkitunixnetgrouptest.c             |  3 +++
-> - .../test-polkitbackendjsauthority.c              |  2 ++
-> - 8 files changed, 43 insertions(+), 8 deletions(-)
-> + buildutil/introspection.m4                    | 142 ++++++++++++++++++
-> + configure.ac                                  |   2 +-
-> + src/polkit/polkitidentity.c                   |  16 ++
-> + src/polkit/polkitunixnetgroup.c               |   3 +
-> + .../polkitbackendinteractiveauthority.c       |  14 +-
-> + .../polkitbackendjsauthority.cpp              |   2 +
-> + test/polkit/polkitidentitytest.c              |   9 +-
-> + test/polkit/polkitunixnetgrouptest.c          |   3 +
-> + .../test-polkitbackendjsauthority.c           |   2 +
-> + 9 files changed, 185 insertions(+), 8 deletions(-)
-> + create mode 100644 buildutil/introspection.m4
->
-> +diff --git a/buildutil/introspection.m4 b/buildutil/introspection.m4
-> +new file mode 100644
-> +index 0000000..b0ccd68
-> +--- /dev/null
-> ++++ b/buildutil/introspection.m4
-> +@@ -0,0 +1,142 @@
-> ++dnl -*- mode: autoconf -*-
-> ++dnl Copyright 2009 Johan Dahlin
-> ++dnl
-> ++dnl This file is free software; the author(s) gives unlimited
-> ++dnl permission to copy and/or distribute it, with or without
-> ++dnl modifications, as long as this notice is preserved.
-> ++dnl
-> ++
-> ++# serial 1
-> ++
-> ++dnl This is a copy of AS_AC_EXPAND
-> ++dnl
-> ++dnl (C) 2003, 2004, 2005 Thomas Vander Stichele <thomas@apestaart dot
-> org>
-> ++dnl Copying and distribution of this file, with or without modification,
-> ++dnl are permitted in any medium without royalty provided the copyright
-> ++dnl notice and this notice are preserved.
-> ++m4_define([_GOBJECT_INTROSPECTION_AS_AC_EXPAND],
-> ++[
-> ++  EXP_VAR=[$1]
-> ++  FROM_VAR=[$2]
-> ++
-> ++  dnl first expand prefix and exec_prefix if necessary
-> ++  prefix_save=$prefix
-> ++  exec_prefix_save=$exec_prefix
-> ++
-> ++  dnl if no prefix given, then use /usr/local, the default prefix
-> ++  if test "x$prefix" = "xNONE"; then
-> ++    prefix="$ac_default_prefix"
-> ++  fi
-> ++  dnl if no exec_prefix given, then use prefix
-> ++  if test "x$exec_prefix" = "xNONE"; then
-> ++    exec_prefix=$prefix
-> ++  fi
-> ++
-> ++  full_var="$FROM_VAR"
-> ++  dnl loop until it doesn't change anymore
-> ++  while true; do
-> ++    new_full_var="`eval echo $full_var`"
-> ++    if test "x$new_full_var" = "x$full_var"; then break; fi
-> ++    full_var=$new_full_var
-> ++  done
-> ++
-> ++  dnl clean up
-> ++  full_var=$new_full_var
-> ++  AC_SUBST([$1], "$full_var")
-> ++
-> ++  dnl restore prefix and exec_prefix
-> ++  prefix=$prefix_save
-> ++  exec_prefix=$exec_prefix_save
-> ++])
-> ++
-> ++m4_define([_GOBJECT_INTROSPECTION_CHECK_INTERNAL],
-> ++[
-> ++    AC_BEFORE([AC_PROG_LIBTOOL],[$0])dnl setup libtool first
-> ++    AC_BEFORE([AM_PROG_LIBTOOL],[$0])dnl setup libtool first
-> ++    AC_BEFORE([LT_INIT],[$0])dnl setup libtool first
-> ++
-> ++    dnl enable/disable introspection
-> ++    m4_if([$2], [require],
-> ++    [dnl
-> ++        enable_introspection=yes
-> ++    ],[dnl
-> ++        AC_ARG_ENABLE(introspection,
-> ++
-> AS_HELP_STRING([--enable-introspection[=@<:@no/auto/yes@:>@]],
-> ++                                 [Enable introspection for this
-> build]),,
-> ++                                 [enable_introspection=auto])
-> ++    ])dnl
-> ++
-> ++    AC_MSG_CHECKING([for gobject-introspection])
-> ++
-> ++    dnl presence/version checking
-> ++    AS_CASE([$enable_introspection],
-> ++    [no], [dnl
-> ++        found_introspection="no (disabled, use --enable-introspection to
-> enable)"
-> ++    ],dnl
-> ++    [yes],[dnl
-> ++        PKG_CHECK_EXISTS([gobject-introspection-1.0],,
-> ++                         AC_MSG_ERROR([gobject-introspection-1.0 is not
-> installed]))
-> ++        PKG_CHECK_EXISTS([gobject-introspection-1.0 >= $1],
-> ++                         found_introspection=yes,
-> ++                         AC_MSG_ERROR([You need to have
-> gobject-introspection >= $1 installed to build AC_PACKAGE_NAME]))
-> ++    ],dnl
-> ++    [auto],[dnl
-> ++        PKG_CHECK_EXISTS([gobject-introspection-1.0 >= $1],
-> found_introspection=yes, found_introspection=no)
-> ++      dnl Canonicalize enable_introspection
-> ++      enable_introspection=$found_introspection
-> ++    ],dnl
-> ++    [dnl
-> ++        AC_MSG_ERROR([invalid argument passed to --enable-introspection,
-> should be one of @<:@no/auto/yes@:>@])
-> ++    ])dnl
-> ++
-> ++    AC_MSG_RESULT([$found_introspection])
-> ++
-> ++    dnl expand datadir/libdir so we can pass them to pkg-config
-> ++    dnl and get paths relative to our target directories
-> ++    _GOBJECT_INTROSPECTION_AS_AC_EXPAND(_GI_EXP_DATADIR, "$datadir")
-> ++    _GOBJECT_INTROSPECTION_AS_AC_EXPAND(_GI_EXP_LIBDIR, "$libdir")
-> ++
-> ++    INTROSPECTION_SCANNER=
-> ++    INTROSPECTION_COMPILER=
-> ++    INTROSPECTION_GENERATE=
-> ++    INTROSPECTION_GIRDIR=
-> ++    INTROSPECTION_TYPELIBDIR=
-> ++    if test "x$found_introspection" = "xyes"; then
-> ++       INTROSPECTION_SCANNER=$PKG_CONFIG_SYSROOT_DIR`$PKG_CONFIG
-> --variable=g_ir_scanner gobject-introspection-1.0`
-> ++       INTROSPECTION_COMPILER=$PKG_CONFIG_SYSROOT_DIR`$PKG_CONFIG
-> --variable=g_ir_compiler gobject-introspection-1.0`
-> ++       INTROSPECTION_GENERATE=$PKG_CONFIG_SYSROOT_DIR`$PKG_CONFIG
-> --variable=g_ir_generate gobject-introspection-1.0`
-> ++       INTROSPECTION_GIRDIR=`$PKG_CONFIG
-> --define-variable=datadir="${_GI_EXP_DATADIR}" --variable=girdir
-> gobject-introspection-1.0`
-> ++       INTROSPECTION_TYPELIBDIR="$($PKG_CONFIG
-> --define-variable=libdir="${_GI_EXP_LIBDIR}" --variable=typelibdir
-> gobject-introspection-1.0)"
-> ++       INTROSPECTION_CFLAGS=`$PKG_CONFIG --cflags
-> gobject-introspection-1.0`
-> ++       INTROSPECTION_LIBS=`$PKG_CONFIG --libs gobject-introspection-1.0`
-> ++       INTROSPECTION_MAKEFILE=$PKG_CONFIG_SYSROOT_DIR`$PKG_CONFIG
-> --variable=datadir
-> gobject-introspection-1.0`/gobject-introspection-1.0/Makefile.introspection
-> ++    fi
-> ++    AC_SUBST(INTROSPECTION_SCANNER)
-> ++    AC_SUBST(INTROSPECTION_COMPILER)
-> ++    AC_SUBST(INTROSPECTION_GENERATE)
-> ++    AC_SUBST(INTROSPECTION_GIRDIR)
-> ++    AC_SUBST(INTROSPECTION_TYPELIBDIR)
-> ++    AC_SUBST(INTROSPECTION_CFLAGS)
-> ++    AC_SUBST(INTROSPECTION_LIBS)
-> ++    AC_SUBST(INTROSPECTION_MAKEFILE)
-> ++
-> ++    AM_CONDITIONAL(HAVE_INTROSPECTION, test "x$found_introspection" =
-> "xyes")
-> ++])
-> ++
-> ++
-> ++dnl Usage:
-> ++dnl   GOBJECT_INTROSPECTION_CHECK([minimum-g-i-version])
-> ++
-> ++AC_DEFUN([GOBJECT_INTROSPECTION_CHECK],
-> ++[
-> ++  _GOBJECT_INTROSPECTION_CHECK_INTERNAL([$1])
-> ++])
-> ++
-> ++dnl Usage:
-> ++dnl   GOBJECT_INTROSPECTION_REQUIRE([minimum-g-i-version])
-> ++
-> ++
-> ++AC_DEFUN([GOBJECT_INTROSPECTION_REQUIRE],
-> ++[
-> ++  _GOBJECT_INTROSPECTION_CHECK_INTERNAL([$1], [require])
-> ++])
-> +diff --git a/configure.ac b/configure.ac
-> +index 5cedb4e..87aa0ad 100644
->  --- a/configure.ac
->  +++ b/configure.ac
-> -@@ -99,7 +99,7 @@ AC_CHECK_LIB(expat,XML_ParserCreate,[EXP
-> +@@ -99,7 +99,7 @@
-> AC_CHECK_LIB(expat,XML_ParserCreate,[EXPAT_LIBS="-lexpat"],
->              [AC_MSG_ERROR([Can't find expat library. Please install
-> expat.])])
->   AC_SUBST(EXPAT_LIBS)
->
-> @@ -39,9 +193,11 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->
->   if test "x$GCC" = "xyes"; then
->     LDFLAGS="-Wl,--as-needed $LDFLAGS"
-> +diff --git a/src/polkit/polkitidentity.c b/src/polkit/polkitidentity.c
-> +index 3aa1f7f..10e9c17 100644
->  --- a/src/polkit/polkitidentity.c
->  +++ b/src/polkit/polkitidentity.c
-> -@@ -182,7 +182,15 @@ polkit_identity_from_string  (const gcha
-> +@@ -182,7 +182,15 @@ polkit_identity_from_string  (const gchar   *str,
->       }
->     else if (g_str_has_prefix (str, "unix-netgroup:"))
->       {
-> @@ -57,7 +213,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->       }
->
->     if (identity == NULL && (error != NULL && *error == NULL))
-> -@@ -344,6 +352,13 @@ polkit_identity_new_for_gvariant (GVaria
-> +@@ -344,6 +352,13 @@ polkit_identity_new_for_gvariant (GVariant  *variant,
->         GVariant *v;
->         const char *name;
->
-> @@ -71,7 +227,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->         v = lookup_asv (details_gvariant, "name", G_VARIANT_TYPE_STRING,
-> error);
->         if (v == NULL)
->           {
-> -@@ -353,6 +368,7 @@ polkit_identity_new_for_gvariant (GVaria
-> +@@ -353,6 +368,7 @@ polkit_identity_new_for_gvariant (GVariant  *variant,
->         name = g_variant_get_string (v, NULL);
->         ret = polkit_unix_netgroup_new (name);
->         g_variant_unref (v);
-> @@ -79,9 +235,11 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->       }
->     else
->       {
-> +diff --git a/src/polkit/polkitunixnetgroup.c
-> b/src/polkit/polkitunixnetgroup.c
-> +index 8a2b369..83f8d4a 100644
->  --- a/src/polkit/polkitunixnetgroup.c
->  +++ b/src/polkit/polkitunixnetgroup.c
-> -@@ -194,6 +194,9 @@ polkit_unix_netgroup_set_name (PolkitUni
-> +@@ -194,6 +194,9 @@ polkit_unix_netgroup_set_name (PolkitUnixNetgroup
-> *group,
->   PolkitIdentity *
->   polkit_unix_netgroup_new (const gchar *name)
->   {
-> @@ -91,9 +249,11 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->     g_return_val_if_fail (name != NULL, NULL);
->     return POLKIT_IDENTITY (g_object_new (POLKIT_TYPE_UNIX_NETGROUP,
->                                          "name", name,
-> +diff --git a/src/polkitbackend/polkitbackendinteractiveauthority.c
-> b/src/polkitbackend/polkitbackendinteractiveauthority.c
-> +index 056d9a8..36c2f3d 100644
->  --- a/src/polkitbackend/polkitbackendinteractiveauthority.c
->  +++ b/src/polkitbackend/polkitbackendinteractiveauthority.c
-> -@@ -2233,25 +2233,26 @@ get_users_in_net_group (PolkitIdentity
-> +@@ -2233,25 +2233,26 @@ get_users_in_net_group (PolkitIdentity
->         *group,
->     GList *ret;
->
->     ret = NULL;
-> @@ -126,7 +286,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->         PolkitIdentity *user;
->         GError *error = NULL;
->
-> -@@ -2282,6 +2283,7 @@ get_users_in_net_group (PolkitIdentity
-> +@@ -2282,6 +2283,7 @@ get_users_in_net_group (PolkitIdentity
->       *group,
->
->    out:
->     endnetgrent ();
-> @@ -134,9 +294,11 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->     return ret;
->   }
->
-> +diff --git a/src/polkitbackend/polkitbackendjsauthority.cpp
-> b/src/polkitbackend/polkitbackendjsauthority.cpp
-> +index 9b752d1..09b2878 100644
->  --- a/src/polkitbackend/polkitbackendjsauthority.cpp
->  +++ b/src/polkitbackend/polkitbackendjsauthority.cpp
-> -@@ -1502,6 +1502,7 @@ js_polkit_user_is_in_netgroup (JSContext
-> +@@ -1502,6 +1502,7 @@ js_polkit_user_is_in_netgroup (JSContext  *cx,
->
->     JS::CallArgs args = JS::CallArgsFromVp (argc, vp);
->
-> @@ -144,7 +306,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->     JS::RootedString usrstr (authority->priv->cx);
->     usrstr = args[0].toString();
->     user = JS_EncodeStringToUTF8 (cx, usrstr);
-> -@@ -1519,6 +1520,7 @@ js_polkit_user_is_in_netgroup (JSContext
-> +@@ -1519,6 +1520,7 @@ js_polkit_user_is_in_netgroup (JSContext  *cx,
->
->     JS_free (cx, netgroup);
->     JS_free (cx, user);
-> @@ -152,6 +314,8 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->
->     ret = true;
->
-> +diff --git a/test/polkit/polkitidentitytest.c
-> b/test/polkit/polkitidentitytest.c
-> +index e91967b..e829aaa 100644
->  --- a/test/polkit/polkitidentitytest.c
->  +++ b/test/polkit/polkitidentitytest.c
->  @@ -19,6 +19,7 @@
-> @@ -162,7 +326,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->   #include "glib.h"
->   #include <polkit/polkit.h>
->   #include <polkit/polkitprivate.h>
-> -@@ -145,11 +146,15 @@ struct ComparisonTestData comparison_tes
-> +@@ -145,11 +146,15 @@ struct ComparisonTestData comparison_test_data [] =
-> {
->     {"unix-group:root", "unix-group:jane", FALSE},
->     {"unix-group:jane", "unix-group:jane", TRUE},
->
-> @@ -193,6 +357,8 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->
->     add_comparison_tests ();
->
-> +diff --git a/test/polkit/polkitunixnetgrouptest.c
-> b/test/polkit/polkitunixnetgrouptest.c
-> +index 3701ba1..e3352eb 100644
->  --- a/test/polkit/polkitunixnetgrouptest.c
->  +++ b/test/polkit/polkitunixnetgrouptest.c
->  @@ -19,6 +19,7 @@
-> @@ -213,6 +379,8 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->  +#endif
->     return g_test_run ();
->   }
-> +diff --git a/test/polkitbackend/test-polkitbackendjsauthority.c
-> b/test/polkitbackend/test-polkitbackendjsauthority.c
-> +index 71aad23..fdd28f3 100644
->  --- a/test/polkitbackend/test-polkitbackendjsauthority.c
->  +++ b/test/polkitbackend/test-polkitbackendjsauthority.c
->  @@ -137,12 +137,14 @@ test_get_admin_identities (void)
-> @@ -230,3 +398,6 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->     };
->     guint n;
->
-> +--
-> +2.25.1
-> +
-> diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-> index 4e7cda943c..8572d8b9ba 100644
-> --- a/package/polkit/polkit.mk
-> +++ b/package/polkit/polkit.mk
-> @@ -8,7 +8,7 @@ POLKIT_VERSION = 0.116
->  POLKIT_SITE = http://www.freedesktop.org/software/polkit/releases
->  POLKIT_LICENSE = GPL-2.0
->  POLKIT_LICENSE_FILES = COPYING
-> -
-> +POLKIT_AUTORECONF = YES
->  POLKIT_INSTALL_STAGING = YES
->
->  POLKIT_DEPENDENCIES = \
->
->
-> ------------------------------
->
-> Subject: Digest Footer
+> So will it be ?a firmware image , if yes then ?will it can ?contain 
+> multiple ?binaries.
+Yes!
+>
+> 3. If point 2 is yes , if one of user binary crash what will be the 
+> way to find crash point in that binaries.
+You shall use the same strategies on debugging userspace binaries on a 
+PC (e.g. gdb, printf, log files and so). Buildroot is responsible to 
+help you out defining buildtime dependencies - it is up to the user make 
+it work. :)
+>
+>
+>
+>
+> Thanks
+> Kunal
+>
+>
+> On 8 May 2020 15:24, <buildroot-request@busybox.net 
+> <mailto:buildroot-request@busybox.net>> wrote:
+>
+>     Send buildroot mailing list submissions to
+>     buildroot at busybox.net <mailto:buildroot@busybox.net>
+>
+>     To subscribe or unsubscribe via the World Wide Web, visit
+>     http://lists.busybox.net/mailman/listinfo/buildroot
+>     <http://lists.busybox.net/mailman/listinfo/buildroot>
+>     or, via email, send a message with subject or body 'help' to
+>     buildroot-request at busybox.net <mailto:buildroot-request@busybox.net>
+>
+>     You can reach the person managing the list at
+>     buildroot-owner at busybox.net <mailto:buildroot-owner@busybox.net>
+>
+>     When replying, please edit your Subject line so it is more specific
+>     than "Re: Contents of buildroot digest..."
+>
+>
+>     Today's Topics:
+>
+>     ? ?1. [git commit] package/apparmor: replace deprecated egrep with
+>     ? ? ? grep -E (Yann E. MORIN)
+>     ? ?2. Re: [PATCH] package/uacme: bump version to 1.2.3 (Peter
+>     Korsgaard)
+>     ? ?3. Re: [PATCH 2/5] package/apparmor: fix compatibility with
+>     ? ? ? busybox grep (Yann E. MORIN)
+>     ? ?4. Re: [PATCH 1/5] package/apparmor: replace deprecated egrep
+>     ? ? ? with grep -E (Yann E. MORIN)
+>     ? ?5. [git commit] package/domoticz: set WITH_LIBUSB (Yann E. MORIN)
+>     ? ?6. Re: [PATCH v2 1/1] package/freescale-imx/imx-gpu-g2d: fix the
+>     ? ? ? file name (Peter Korsgaard)
+>     ? ?7. [git commit branch/2020.02.x] package/midori: needs gcc >= 7
+>     ? ? ? (Peter Korsgaard)
+>     ? ?8. [git commit branch/2020.02.x] {linux, linux-headers}: bump
+>     ? ? ? 4.{4, 9, 14, 19}.x / 5.{4, 5, 6}.x series (Peter Korsgaard)
+>     ? ?9. [git commit branch/2020.02.x] package/python: bump version to
+>     ? ? ? 2.7.18 (Peter Korsgaard)
+>     ? 10. [git commit branch/2020.02.x] package/python-jedi: add
+>     ? ? ? missing license (Peter Korsgaard)
+>     ? 11. [git commit branch/2020.02.x]
+>     ? ? ? package/freescale-imx/imx-gpu-g2d: fix the file name for ARM
+>     ? ? ? (Peter Korsgaard)
+>     ? 12. [git commit branch/2020.02.x] package/openjdk: Remove sparc
+>     ? ? ? support (Peter Korsgaard)
+>     ? 13. [git commit branch/2020.02.x] package/openjdk: copy all
+>     ? ? ? directories and files when installing (Peter Korsgaard)
+>     ? 14. [git commit branch/2020.02.x] package/libglib2: restore use
+>     ? ? ? of system printf (Peter Korsgaard)
+>     ? 15. [git commit branch/2020.02.x] package/openjdk: fix
+>     ? ? ? installation with merged usr directories (Peter Korsgaard)
+>     ? 16. Re: .br2-external files (Yann E. MORIN)
+>     ? 17. Re: [PATCH] package/binutils: fix XTENSA_NDIFF handling for
+>     ? ? ? PR ld/25861 (Max Filippov)
+>     ? 18. [PATCH] release: don't include temp files (Yann E. MORIN)
+>     ? 19. Re: [PATCH 1/1] package/domoticz: set WITH_LIBUSB (Yann E.
+>     MORIN)
+>     ? 20. [PATCH] package/gcc: remove powerpc conditional patch
+>     ? ? ? (Romain Naour)
+>     ? 21. [PATCH 1/1] package/c-icap: fix musl build (Fabrice Fontaine)
+>     ? 22. [Bug 12841] util-linux/sfdisk 2.35.1 fails on sector-size
+>     ? ? ? header (bugzilla at busybox.net <mailto:bugzilla@busybox.net>)
+>     ? 23. Re: [PATCH] release: don't include temp files (Peter Korsgaard)
+>     ? 24. [git commit] release: don't include temp files (Peter Korsgaard)
+>     ? 25. Re: [PATCH] package/binutils: fix xtensa PR ld/25861
+>     ? ? ? (Peter Korsgaard)
+>     ? 26. Re: [PATCH] package/binutils: fix XTENSA_NDIFF handling for
+>     ? ? ? PR ld/25861 (Peter Korsgaard)
+>     ? 27. Re: [PATCH 1/1] package/evtest: switch to Gitlab (Peter
+>     Korsgaard)
+>     ? 28. [PATCH 1/1] configs/globalscale_espressobin: new defconfig
+>     ? ? ? (Joachim Nilsson)
+>     ? 29. Re: [PATCH] package/apache: fixing apxs path mangling
+>     ? ? ? (Peter Korsgaard)
+>     ? 30. Re: [git commit] package/wireguard-linux-compat: depend on
+>     ? ? ? headers < 5.6 (Peter Korsgaard)
+>     ? 31. Re: [git commit] package/wireguard-linux-compat: tweak
+>     ? ? ? kernel-headers < 5.6 logic (Peter Korsgaard)
+>     ? 32. Re: [PATCH 1/1] fs/cpio: make initramfs init script survive
+>     ? ? ? 'console=' kernel argument (Peter Korsgaard)
+>     ? 33. [git commit branch/2020.02.x] package/wireguard-linux-compat:
+>     ? ? ? tweak kernel-headers < 5.6 logic (Peter Korsgaard)
+>     ? 34. [git commit branch/2020.02.x] package/apache: fixing apxs
+>     ? ? ? path mangling (Peter Korsgaard)
+>     ? 35. [git commit branch/2020.02.x] package/wireguard-linux-compat:
+>     ? ? ? depend on headers < 5.6 (Peter Korsgaard)
+>     ? 36. [git commit branch/2020.02.x] package/binutils: fix
+>     ? ? ? XTENSA_NDIFF handling for PR ld/25861 (Peter Korsgaard)
+>     ? 37. [git commit branch/2020.02.x] package/evtest: switch to
+>     ? ? ? Gitlab (Peter Korsgaard)
+>     ? 38. [git commit branch/2020.02.x] fs/cpio: make initramfs init
+>     ? ? ? script survive 'console=' kernel argument (Peter Korsgaard)
+>     ? 39. [git commit branch/2020.02.x] package/binutils: fix xtensa PR
+>     ? ? ? ld/25861 (Peter Korsgaard)
+>
+>
+>     ----------------------------------------------------------------------
+>
+>     Message: 1
+>     Date: Fri, 8 May 2020 09:58:22 +0200
+>     From: Yann E. MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit] package/apparmor: replace deprecated
+>     ? ? ? ? egrep with grep -E
+>     Message-ID: <20200508075218.CC7D690FD0@busybox.osuosl.org
+>     <mailto:20200508075218.CC7D690FD0@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=6569d76aeaf4726359166b429bf42e54ec9ce71e
+>     <https://git.buildroot.net/buildroot/commit/?id=6569d76aeaf4726359166b429bf42e54ec9ce71e>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/master>
+>
+>     Upstream commit: 5f46dedd6e8109d845af118b36039a5d7dd05af9
+>
+>     Signed-off-by: Adam Duskett <Aduskett@gmail.com
+>     <mailto:Aduskett@gmail.com>>
+>     Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     ---
+>     ?...0002-replace-deprecated-egrep-with-grep-e.patch | 28
+>     ++++++++++++++++++++++
+>     ?1 file changed, 28 insertions(+)
+>
+>     diff --git
+>     a/package/apparmor/0002-replace-deprecated-egrep-with-grep-e.patch
+>     b/package/apparmor/0002-replace-deprecated-egrep-with-grep-e.patch
+>     new file mode 100644
+>     index 0000000000..4caefe447b
+>     --- /dev/null
+>     +++ b/package/apparmor/0002-replace-deprecated-egrep-with-grep-e.patch
+>     @@ -0,0 +1,28 @@
+>     +From 5f46dedd6e8109d845af118b36039a5d7dd05af9 Mon Sep 17 00:00:00
+>     2001
+>     +From: Christian Boltz <apparmor@cboltz.de
+>     <mailto:apparmor@cboltz.de>>
+>     +Date: Mon, 18 Mar 2019 19:17:16 +0100
+>     +Subject: [PATCH] replace deprecated egrep with grep -e
+>     +
+>     +(cherry picked from commit 5f46dedd6e8109d845af118b36039a5d7dd05af9)
+>     +Signed-off-by: Christian Boltz <apparmor@cboltz.de
+>     <mailto:apparmor@cboltz.de>>
+>     +Signed-off-by: Adam Duskett <Aduskett@gmail.com
+>     <mailto:Aduskett@gmail.com>>
+>     +---
+>     + parser/rc.apparmor.functions | 2 +-
+>     + 1 file changed, 1 insertion(+), 1 deletion(-)
+>     +
+>     +diff --git a/parser/rc.apparmor.functions
+>     b/parser/rc.apparmor.functions
+>     +index 22e8367..f3108f8 100644
+>     +--- a/parser/rc.apparmor.functions
+>     ++++ b/parser/rc.apparmor.functions
+>     +@@ -129,7 +129,7 @@ skip_profile() {
+>     +? ? ? ? ? ? "${profile%.pacnew}" != "${profile}" ] ; then
+>     +? ? ? ? ? ? ? ?return 2
+>     +? ? ? ?fi
+>     +-? ? ? if echo "${profile}" | egrep -q
+>     '^.+\.new-[0-9\.]+_[0-9]+$'; then
+>     ++? ? ? if echo "${profile}" | grep -E -q
+>     '^.+\.new-[0-9\.]+_[0-9]+$'; then
+>     +? ? ? ? ? ? ? ?return 2
+>     +? ? ? ?fi
+>     +
+>     +--
+>     +2.26.2
+>     +
+>
+>
+>     ------------------------------
+>
+>     Message: 2
+>     Date: Fri, 08 May 2020 10:11:00 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: Nicola Di Lieto <nicola.dilieto@gmail.com
+>     <mailto:nicola.dilieto@gmail.com>>
+>     Cc: buildroot at busybox.net <mailto:buildroot@busybox.net>
+>     Subject: Re: [Buildroot] [PATCH] package/uacme: bump version to 1.2.3
+>     Message-ID: <87mu6isv6z.fsf@dell.be.48ers.dk
+>     <mailto:87mu6isv6z.fsf@dell.be.48ers.dk>>
+>     Content-Type: text/plain
+>
+>     >>>>> "Nicola" == Nicola Di Lieto <nicola.dilieto@gmail.com
+>     <mailto:nicola.dilieto@gmail.com>> writes:
+>
+>     ?> This version fixes https://github.com/ndilieto/uacme/issues/22
+>     <https://github.com/ndilieto/uacme/issues/22>
+>     ?> Signed-off-by: Nicola Di Lieto <nicola.dilieto@gmail.com
+>     <mailto:nicola.dilieto@gmail.com>>
+>
+>     Does that also affect the 1.0.21 version we have in 2020.02.x? If so,
+>     what is the impact? Do we need to update to 1.2.3 or cherry pick a
+>     patch?
+>
+>     -- 
+>     Bye, Peter Korsgaard
+>
+>
+>     ------------------------------
+>
+>     Message: 3
+>     Date: Fri, 8 May 2020 10:11:37 +0200
+>     From: "Yann E. MORIN" <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     To: Angelo Compagnucci <angelo@amarulasolutions.com
+>     <mailto:angelo@amarulasolutions.com>>
+>     Cc: Adam Duskett <aduskett at gmail.com <mailto:aduskett@gmail.com>>,
+>     Buildroot Mailing List
+>     ? ? ? ? <buildroot@buildroot.org
+>     <mailto:buildroot@buildroot.org>>, Angelo Compagnucci
+>     ? ? ? ? <angelo.compagnucci@gmail.com
+>     <mailto:angelo.compagnucci@gmail.com>>, Maxime Hadjinlian
+>     ? ? ? ? <maxime.hadjinlian@gmail.com
+>     <mailto:maxime.hadjinlian@gmail.com>>
+>     Subject: Re: [Buildroot] [PATCH 2/5] package/apparmor: fix
+>     ? ? ? ? compatibility with busybox grep
+>     Message-ID: <20200508081137.GJ12536@scaer>
+>     Content-Type: text/plain; charset=utf-8
+>
+>     Adam, Angelo, All,
+>
+>     On 2020-05-08 08:32 +0200, Angelo Compagnucci spake thusly:
+>     > On Fri, May 8, 2020 at 4:00 AM <aduskett@gmail.com
+>     <mailto:aduskett@gmail.com>> wrote:
+>     > >
+>     > > From: Adam Duskett <Aduskett@gmail.com
+>     <mailto:Aduskett@gmail.com>>
+>     > >
+>     > > The following regex string in rc.apparmor.functions
+>     > > "^/.*[ \t]+flags[ \t]*=[ \t]*\([ \t]*complain[ \t]*\)[ \t]+{"
+>     is broken due to
+>     > > the unescaped { at the end of the regex pattern.
+>     > > GNU grep ignors the error. However, the Busybox grep does not
+>     and throws the
+>     > > error "unescaped character {"
+>     >
+>     > Indeed, my original series had:
+>     > select BR2_PACKAGE_GREP
+>     > to overcome this issue but it went somewhat missing.
+>
+>     I dropped it in my rework of the series, because there was no
+>     explanations why it was needed.
+>
+>     In the end, I did apply Adam's patch, because:
+>     ? - it is simple enough and correct,
+>     ? - we will notice it no longer applies when we bump the version,
+>     and so
+>     ? ? can drop it.
+>
+>     If we 'd have gone for selecting the full grep, we would not have
+>     noticed that it would no longer needed when we update, later.
+>
+>     Thanks.
+>
+>     Regards,
+>     Yann E. MORIN.
+>
+>     > > Escape the "{" character to fix this issue.
+>     > >
+>     > > Note: Upstream has rewritten large sections of the
+>     rc.apparmor.functions file
+>     > > and the function this patch fixes will no longer be necessary
+>     after the next
+>     > > version is released. However, it is not possible to easily
+>     backport the
+>     > > upstream patches as the rewrite comes with new features that
+>     would not be
+>     > > possible with a simple patch such as this one.
+>     > >
+>     > > Signed-off-by: Adam Duskett <Aduskett@gmail.com
+>     <mailto:Aduskett@gmail.com>>
+>     > > ---
+>     > >? ...apparmor.functions-to-work-with-busy.patch | 37
+>     +++++++++++++++++++
+>     > >? 1 file changed, 37 insertions(+)
+>     > >? create mode 100644
+>     package/apparmor/0003-fix-regex-in-rc.apparmor.functions-to-work-with-busy.patch
+>     > >
+>     > > diff --git
+>     a/package/apparmor/0003-fix-regex-in-rc.apparmor.functions-to-work-with-busy.patch
+>     b/package/apparmor/0003-fix-regex-in-rc.apparmor.functions-to-work-with-busy.patch
+>     > > new file mode 100644
+>     > > index 0000000000..54afcd43a8
+>     > > --- /dev/null
+>     > > +++
+>     b/package/apparmor/0003-fix-regex-in-rc.apparmor.functions-to-work-with-busy.patch
+>     > > @@ -0,0 +1,37 @@
+>     > > +From 12764faa0a01bcc4e0ffc92ce308985dbad0d954 Mon Sep 17
+>     00:00:00 2001
+>     > > +From: Adam Duskett <Aduskett@gmail.com
+>     <mailto:Aduskett@gmail.com>>
+>     > > +Date: Thu, 7 May 2020 18:25:29 -0700
+>     > > +Subject: [PATCH] fix regex in rc.apparmor.functions to work
+>     with busybox
+>     > > +
+>     > > +The following regex string in rc.apparmor.functions
+>     > > +"^/.*[ \t]+flags[ \t]*=[ \t]*\([ \t]*complain[ \t]*\)[ \t]+{"
+>     is broken due to
+>     > > +the unescaped {. GNU grep ignores the error. However, the
+>     Busybox grep does
+>     > > +not and throws the error "unescaped character {"
+>     > > +
+>     > > +Escape the "{" character to fix this issue.
+>     > > +
+>     > > +Note: Upstream has rewritten large sections of the
+>     rc.apparmor.functions file
+>     > > +and the function this patch fixes will no longer be necessary
+>     after the next
+>     > > +version is released.
+>     > > +
+>     > > +Signed-off-by: Adam Duskett <Aduskett@gmail.com
+>     <mailto:Aduskett@gmail.com>>
+>     > > +---
+>     > > + parser/rc.apparmor.functions | 2 +-
+>     > > + 1 file changed, 1 insertion(+), 1 deletion(-)
+>     > > +
+>     > > +diff --git a/parser/rc.apparmor.functions
+>     b/parser/rc.apparmor.functions
+>     > > +index f3108f8..db0697c 100644
+>     > > +--- a/parser/rc.apparmor.functions
+>     > > ++++ b/parser/rc.apparmor.functions
+>     > > +@@ -140,7 +140,7 @@ force_complain() {
+>     > > +? ? ? ?local profile=$1
+>     > > +
+>     > > +? ? ? ?# if profile not in complain mode
+>     > > +-? ? ? if ! egrep -q "^/.*[ \t]+flags[ \t]*=[ \t]*\([
+>     \t]*complain[ \t]*\)[ \t]+{" $profile ; then
+>     > > ++? ? ? if ! grep -E -q "^/.*[ \t]+flags[ \t]*=[ \t]*\([
+>     \t]*complain[ \t]*\)[ \t]+\{" $profile ; then
+>     > > +? ? ? ? ? ? ? ?local
+>     link="${PROFILE_DIR}/force-complain/`basename ${profile}`"
+>     > > +? ? ? ? ? ? ? ?if [ -e "$link" ] ; then
+>     > > +? ? ? ? ? ? ? ? ? ? ? ?aa_log_warning_msg "found $link,
+>     forcing complain mode"
+>     > > +--
+>     > > +2.26.2
+>     > > +
+>     > > --
+>     > > 2.26.2
+>     > >
+>     > > _______________________________________________
+>     > > buildroot mailing list
+>     > > buildroot at busybox.net <mailto:buildroot@busybox.net>
+>     > > http://lists.busybox.net/mailman/listinfo/buildroot
+>     <http://lists.busybox.net/mailman/listinfo/buildroot>
+>
+>     -- 
+>     .-----------------.--------------------.------------------.--------------------.
+>     |? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+>     conspiracy: |
+>     | +33 662 376 056 | Software? Designer | \ / CAMPAIGN ? ?|? ___? ?
+>     ? ? ? ? ? ?|
+>     | +33 561 099 427 `------------.-------:? X? AGAINST ? ? |? \e/?
+>     There is no? |
+>     | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL? ? |? ?v?
+>     ?conspiracy.? |
+>     '------------------------------^-------^------------------^--------------------'
+>
+>
+>     ------------------------------
+>
+>     Message: 4
+>     Date: Fri, 8 May 2020 10:14:49 +0200
+>     From: "Yann E. MORIN" <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     To: aduskett at gmail.com <mailto:aduskett@gmail.com>
+>     Cc: buildroot at buildroot.org <mailto:buildroot@buildroot.org>,
+>     Maxime Hadjinlian
+>     ? ? ? ? <maxime.hadjinlian@gmail.com
+>     <mailto:maxime.hadjinlian@gmail.com>>, Angelo Compagnucci
+>     ? ? ? ? <angelo.compagnucci@gmail.com
+>     <mailto:angelo.compagnucci@gmail.com>>
+>     Subject: Re: [Buildroot] [PATCH 1/5] package/apparmor: replace
+>     ? ? ? ? deprecated egrep with grep -E
+>     Message-ID: <20200508081449.GK12536@scaer>
+>     Content-Type: text/plain; charset=utf-8
+>
+>     Adam, All,
+>
+>     On 2020-05-07 18:59 -0700, aduskett at gmail.com
+>     <mailto:aduskett@gmail.com> spake thusly:
+>     > From: Adam Duskett <Aduskett at gmail.com <mailto:Aduskett@gmail.com>>
+>     >
+>     > Upstream commit: 5f46dedd6e8109d845af118b36039a5d7dd05af9
+>     >
+>     > Signed-off-by: Adam Duskett <Aduskett@gmail.com
+>     <mailto:Aduskett@gmail.com>>
+>
+>     Patches 1-4 applied to master, thanks. See a few replies to patch
+>     2 and 4.
+>
+>     I've not (yet) applied patch 5, because it is sitting somewhere
+>     between
+>     being a feature-patch and being a fix. If is a feature-patch
+>     because it
+>     allows building systemnd with apparmor support, while it is a fix
+>     because it guarantees build ordering now... So saying I'm torn onthat
+>     one is a bit strong, but still I am not sure either...
+>
+>     Regards,
+>     Yann E. MORIN.
+>
+>     > ---
+>     >? ...replace-deprecated-egrep-with-grep-e.patch | 28
+>     +++++++++++++++++++
+>     >? 1 file changed, 28 insertions(+)
+>     >? create mode 100644
+>     package/apparmor/0002-replace-deprecated-egrep-with-grep-e.patch
+>     >
+>     > diff --git
+>     a/package/apparmor/0002-replace-deprecated-egrep-with-grep-e.patch
+>     b/package/apparmor/0002-replace-deprecated-egrep-with-grep-e.patch
+>     > new file mode 100644
+>     > index 0000000000..4caefe447b
+>     > --- /dev/null
+>     > +++
+>     b/package/apparmor/0002-replace-deprecated-egrep-with-grep-e.patch
+>     > @@ -0,0 +1,28 @@
+>     > +From 5f46dedd6e8109d845af118b36039a5d7dd05af9 Mon Sep 17
+>     00:00:00 2001
+>     > +From: Christian Boltz <apparmor@cboltz.de
+>     <mailto:apparmor@cboltz.de>>
+>     > +Date: Mon, 18 Mar 2019 19:17:16 +0100
+>     > +Subject: [PATCH] replace deprecated egrep with grep -e
+>     > +
+>     > +(cherry picked from commit
+>     5f46dedd6e8109d845af118b36039a5d7dd05af9)
+>     > +Signed-off-by: Christian Boltz <apparmor@cboltz.de
+>     <mailto:apparmor@cboltz.de>>
+>     > +Signed-off-by: Adam Duskett <Aduskett@gmail.com
+>     <mailto:Aduskett@gmail.com>>
+>     > +---
+>     > + parser/rc.apparmor.functions | 2 +-
+>     > + 1 file changed, 1 insertion(+), 1 deletion(-)
+>     > +
+>     > +diff --git a/parser/rc.apparmor.functions
+>     b/parser/rc.apparmor.functions
+>     > +index 22e8367..f3108f8 100644
+>     > +--- a/parser/rc.apparmor.functions
+>     > ++++ b/parser/rc.apparmor.functions
+>     > +@@ -129,7 +129,7 @@ skip_profile() {
+>     > +? ? ? ? ? "${profile%.pacnew}" != "${profile}" ] ; then
+>     > +? ? ? ? ? ? ?return 2
+>     > +? ? ?fi
+>     > +-? ? if echo "${profile}" | egrep -q
+>     '^.+\.new-[0-9\.]+_[0-9]+$'; then
+>     > ++? ? if echo "${profile}" | grep -E -q
+>     '^.+\.new-[0-9\.]+_[0-9]+$'; then
+>     > +? ? ? ? ? ? ?return 2
+>     > +? ? ?fi
+>     > +
+>     > +--
+>     > +2.26.2
+>     > +
+>     > --
+>     > 2.26.2
+>     >
+>
+>     -- 
+>     .-----------------.--------------------.------------------.--------------------.
+>     |? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+>     conspiracy: |
+>     | +33 662 376 056 | Software? Designer | \ / CAMPAIGN ? ?|? ___? ?
+>     ? ? ? ? ? ?|
+>     | +33 561 099 427 `------------.-------:? X? AGAINST ? ? |? \e/?
+>     There is no? |
+>     | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL? ? |? ?v?
+>     ?conspiracy.? |
+>     '------------------------------^-------^------------------^--------------------'
+>
+>
+>     ------------------------------
+>
+>     Message: 5
+>     Date: Fri, 8 May 2020 10:15:40 +0200
+>     From: Yann E. MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit] package/domoticz: set WITH_LIBUSB
+>     Message-ID: <20200508080012.A140B90FD4@busybox.osuosl.org
+>     <mailto:20200508080012.A140B90FD4@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=a896be19de9e6e7845b24af497fead6f522ef67d
+>     <https://git.buildroot.net/buildroot/commit/?id=a896be19de9e6e7845b24af497fead6f522ef67d>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/master>
+>
+>     Use WITH_LIBUSB which is available since version 4.9700 and
+>     https://github.com/domoticz/domoticz/commit/f53817577a834ed0c3fc16458c374aea490be49e
+>     <https://github.com/domoticz/domoticz/commit/f53817577a834ed0c3fc16458c374aea490be49e>
+>
+>     Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com
+>     <mailto:fontaine.fabrice@gmail.com>>
+>     Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     ---
+>     ?package/domoticz/domoticz.mk <http://domoticz.mk> | 3 +++
+>     ?1 file changed, 3 insertions(+)
+>
+>     diff --git a/package/domoticz/domoticz.mk <http://domoticz.mk>
+>     b/package/domoticz/domoticz.mk <http://domoticz.mk>
+>     index 5efe86a784..0ceaab87b4 100644
+>     --- a/package/domoticz/domoticz.mk <http://domoticz.mk>
+>     +++ b/package/domoticz/domoticz.mk <http://domoticz.mk>
+>     @@ -38,6 +38,9 @@ DOMOTICZ_CONF_OPTS += \
+>
+>     ?ifeq ($(BR2_PACKAGE_LIBUSB),y)
+>     ?DOMOTICZ_DEPENDENCIES += libusb
+>     +DOMOTICZ_CONF_OPTS += -DWITH_LIBUSB=ON
+>     +else
+>     +DOMOTICZ_CONF_OPTS += -DWITH_LIBUSB=OFF
+>     ?endif
+>
+>     ?ifeq ($(BR2_PACKAGE_OPENZWAVE),y)
+>
+>
+>     ------------------------------
+>
+>     Message: 6
+>     Date: Fri, 08 May 2020 10:17:42 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: Timo Ketola <timo.ketola@exertus.fi
+>     <mailto:timo.ketola@exertus.fi>>
+>     Cc: buildroot at buildroot.org <mailto:buildroot@buildroot.org>, Gary
+>     Bisson <bisson.gary at gmail.com <mailto:bisson.gary@gmail.com>>,
+>     ? ? ? ? Refik Tuzakli <tuzakli.refik@gmail.com
+>     <mailto:tuzakli.refik@gmail.com>>
+>     Subject: Re: [Buildroot] [PATCH v2 1/1]
+>     ? ? ? ? package/freescale-imx/imx-gpu-g2d: fix the file name
+>     Message-ID: <87imh6suvt.fsf@dell.be.48ers.dk
+>     <mailto:87imh6suvt.fsf@dell.be.48ers.dk>>
+>     Content-Type: text/plain
+>
+>     >>>>> "Timo" == Timo Ketola <timo.ketola@exertus.fi
+>     <mailto:timo.ketola@exertus.fi>> writes:
+>
+>     ?> NXP apparently changed file naming convention for this
+>     particular file.
+>     ?> Fixes:
+>     ?> 1d0ea8d433 (package/freescale-imx/imx-gpu-g2d: bump to version
+>     6.4.0.p1.0)
+>
+>     ?> Signed-off-by: Timo Ketola <timo.ketola@exertus.fi
+>     <mailto:timo.ketola@exertus.fi>>
+>     ?> ---
+>     ?> Changes v1 -> v2:
+>
+>     ?>? - Add 'Fixes:' line as suggested by Gary
+>
+>     Committed to 2020.02.x, thanks.
+>
+>     -- 
+>     Bye, Peter Korsgaard
+>
+>
+>     ------------------------------
+>
+>     Message: 7
+>     Date: Fri, 8 May 2020 09:13:34 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x] package/midori:
+>     ? ? ? ? needs gcc >= 7
+>     Message-ID: <20200508080227.4B9DE90FE3@busybox.osuosl.org
+>     <mailto:20200508080227.4B9DE90FE3@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=fbc2f26d06e3f45c2fe316c6fad0fc18a275e9d8
+>     <https://git.buildroot.net/buildroot/commit/?id=fbc2f26d06e3f45c2fe316c6fad0fc18a275e9d8>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     Commit ec1ff802df9a0f17dd2b734ba536a5e206aa5aa4 forgot to propagate
+>     gcc >= 7 dependency to midori
+>
+>     Fixes:
+>     ?-
+>     http://autobuild.buildroot.org/results/736a99dcaa72fba3f06775d08c4395f506fce944
+>     <http://autobuild.buildroot.org/results/736a99dcaa72fba3f06775d08c4395f506fce944>
+>
+>     Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com
+>     <mailto:fontaine.fabrice@gmail.com>>
+>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     (cherry picked from commit de5a74193b270e4bff19a45a4b82a70fb70857fa)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?package/midori/Config.in | 6 +++---
+>     ?1 file changed, 3 insertions(+), 3 deletions(-)
+>
+>     diff --git a/package/midori/Config.in b/package/midori/Config.in
+>     index 64139ce49e..089f36ced8 100644
+>     --- a/package/midori/Config.in
+>     +++ b/package/midori/Config.in
+>     @@ -1,7 +1,7 @@
+>     -comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 6"
+>     +comment "midori needs libgtk3 and a glibc toolchain w/ C++, gcc >= 7"
+>     ? ? ? ? depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+>     ? ? ? ? depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 || \
+>     -? ? ? ? ? ? ? ?!BR2_TOOLCHAIN_GCC_AT_LEAST_6 || \
+>     +? ? ? ? ? ? ? ?!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+>     ? ? ? ? ? ? ? ? !BR2_TOOLCHAIN_USES_GLIBC
+>
+>     ?config BR2_PACKAGE_MIDORI
+>     @@ -9,7 +9,7 @@ config BR2_PACKAGE_MIDORI
+>     ? ? ? ? depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS #
+>     libgcrypt, gcr, gnupg2
+>     ? ? ? ? depends on BR2_PACKAGE_LIBGTK3
+>     ? ? ? ? depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
+>     -? ? ? ?depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # webkitgtk
+>     +? ? ? ?depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # webkitgtk
+>     ? ? ? ? depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
+>     ? ? ? ? depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+>     ? ? ? ? # GCR can only be used with the X11 backend
+>
+>
+>     ------------------------------
+>
+>     Message: 8
+>     Date: Fri, 8 May 2020 10:05:03 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x] {linux,
+>     ? ? ? ? linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 5, 6}.x series
+>     Message-ID: <20200508080227.8328B90FE4@busybox.osuosl.org
+>     <mailto:20200508080227.8328B90FE4@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=3788e762d802ed6d61f65e7bf757f046592b627b
+>     <https://git.buildroot.net/buildroot/commit/?id=3788e762d802ed6d61f65e7bf757f046592b627b>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     Notice: 5.5.x is now EOL, so should be dropped at the next version
+>     bump.
+>
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     [Peter: drop 5.5.x / 5.6.x bump]
+>     (cherry picked from commit 72a6e50da9585d632e70c3f668857f45601088fc)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?linux/Config.in? ? ? ? ? ? ? ? ? ? ? |? 2 +-
+>     ?linux/linux.hash? ? ? ? ? ? ? ? ? ? ?| 10 +++++-----
+>     ?package/linux-headers/Config.in.host | 10 +++++-----
+>     ?3 files changed, 11 insertions(+), 11 deletions(-)
+>
+>     diff --git a/linux/Config.in b/linux/Config.in
+>     index c367b33378..bdf3c26326 100644
+>     --- a/linux/Config.in
+>     +++ b/linux/Config.in
+>     @@ -128,7 +128,7 @@ endif
+>
+>     ?config BR2_LINUX_KERNEL_VERSION
+>     ? ? ? ? string
+>     -? ? ? ?default "5.4.31" if BR2_LINUX_KERNEL_LATEST_VERSION
+>     +? ? ? ?default "5.4.35" if BR2_LINUX_KERNEL_LATEST_VERSION
+>     ? ? ? ? default "4.19.98-cip19" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+>     ? ? ? ? default "4.19.98-cip19-rt7" if
+>     BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+>     ? ? ? ? default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+>     diff --git a/linux/linux.hash b/linux/linux.hash
+>     index f6bad5c8ec..3226a2fafb 100644
+>     --- a/linux/linux.hash
+>     +++ b/linux/linux.hash
+>     @@ -1,10 +1,10 @@
+>     ?# From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+>     -sha256
+>     <https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc-sha256>?
+>     a11083f8f809887f6a0f8d4467532385b99418f17998fe6e837807491c276eeb
+>     linux-5.4.31.tar.xz
+>     +sha256?
+>     e16bd5f7284a80a41328bf712e1136b0adf5b71cc0bd263efa7cac75539806d4
+>     linux-5.4.35.tar.xz
+>     ?# From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+>     -sha256
+>     <https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc-sha256>?
+>     ea68cb8e9fa255bb1d0402c5aa8f26984f9b1c8607ff3bed5d3284109167f063
+>     linux-4.4.218.tar.xz
+>     -sha256?
+>     df3a6e615ec4c57b04775e9c018c67045223ac662e696d28fd37baa5114349cd
+>     linux-4.9.218.tar.xz
+>     -sha256?
+>     cb440ac5d20071dcb482e5062958514064b0c5a8375c92653062ea201ae0222c
+>     linux-4.14.175.tar.xz
+>     -sha256?
+>     1e40a0dc6afc95a259f97b80d5f5ef8f89e2ee49e993ba6844e2bc55de361f0e
+>     linux-4.19.114.tar.xz
+>     +sha256?
+>     4e98b51c2e3a8fd069dc941b9cb68594f84ea767c2927e93255e1151c5c2fdd6
+>     linux-4.4.219.tar.xz
+>     +sha256?
+>     6b17238cced3e1c2753d6d5b4f662bd347d4651f07c35506b849eb10aea7bc44
+>     linux-4.9.219.tar.xz
+>     +sha256?
+>     bcae0956baaeb55dab5bad0401873fbc5baaa7fbe957ea6d27a5ab241cec5ca2
+>     linux-4.14.176.tar.xz
+>     +sha256?
+>     89749365f9dafa6c62cc5e920a7e532ed4aad9ab766fb436423b153ffbc08c96
+>     linux-4.19.118.tar.xz
+>     ?# Locally computed
+>     ?sha256?
+>     18f9ddba0b777d1942d6c81877ba97c4bcd08488e2c409e57dcce866b9de5fc2
+>     linux-cip-4.19.98-cip19.tar.gz
+>     ?sha256?
+>     7d5aeb67da41dc66ef28621ef994ef4403e8b1f5c3df38b1843da20972444280
+>     linux-cip-4.19.98-cip19-rt7.tar.gz
+>     diff --git a/package/linux-headers/Config.in.host
+>     b/package/linux-headers/Config.in.host
+>     index fde769e6a3..598d5a8853 100644
+>     --- a/package/linux-headers/Config.in.host
+>     +++ b/package/linux-headers/Config.in.host
+>     @@ -318,11 +318,11 @@ endchoice
+>
+>     ?config BR2_DEFAULT_KERNEL_HEADERS
+>     ? ? ? ? string
+>     -? ? ? ?default "4.4.218"? ? ? ?if BR2_KERNEL_HEADERS_4_4
+>     -? ? ? ?default "4.9.218"? ? ? ?if BR2_KERNEL_HEADERS_4_9
+>     -? ? ? ?default "4.14.175"? ? ? if BR2_KERNEL_HEADERS_4_14
+>     -? ? ? ?default "4.19.114"? ? ? if BR2_KERNEL_HEADERS_4_19
+>     -? ? ? ?default "5.4.31"? ? ? ? if BR2_KERNEL_HEADERS_5_4
+>     +? ? ? ?default "4.4.219"? ? ? ?if BR2_KERNEL_HEADERS_4_4
+>     +? ? ? ?default "4.9.219"? ? ? ?if BR2_KERNEL_HEADERS_4_9
+>     +? ? ? ?default "4.14.176"? ? ? if BR2_KERNEL_HEADERS_4_14
+>     +? ? ? ?default "4.19.118"? ? ? if BR2_KERNEL_HEADERS_4_19
+>     +? ? ? ?default "5.4.35"? ? ? ? if BR2_KERNEL_HEADERS_5_4
+>     ? ? ? ? default BR2_DEFAULT_KERNEL_VERSION if
+>     BR2_KERNEL_HEADERS_VERSION
+>     ? ? ? ? default "custom"? ? ? ? if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+>     ? ? ? ? default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+>
+>
+>     ------------------------------
+>
+>     Message: 9
+>     Date: Fri, 8 May 2020 10:06:52 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x] package/python:
+>     ? ? ? ? bump version to 2.7.18
+>     Message-ID: <20200508080227.976C690FE3@busybox.osuosl.org
+>     <mailto:20200508080227.976C690FE3@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=6105fcaca3445fd1c69c3f80ec85017dbdb136c1
+>     <https://git.buildroot.net/buildroot/commit/?id=6105fcaca3445fd1c69c3f80ec85017dbdb136c1>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     Release notes:
+>     https://pythoninsider.blogspot.com/2020/04/python-2718-last-release-of-python-2.html
+>     <https://pythoninsider.blogspot.com/2020/04/python-2718-last-release-of-python-2.html>
+>
+>     Updated license hash due to upstream commit:
+>     https://github.com/python/cpython/commit/aa5b196c180d4c1dbe5a8593e55066e630d38c09
+>     <https://github.com/python/cpython/commit/aa5b196c180d4c1dbe5a8593e55066e630d38c09>
+>
+>     Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de
+>     <mailto:bernd.kuhls@t-online.de>>
+>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     (cherry picked from commit 3586b0703fa9a8b4138ac4bf9e274c7f1bef2e6c)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?package/python/python.hash | 8 ++++----
+>     ?package/python/python.mk <http://python.mk>? ?| 2 +-
+>     ?2 files changed, 5 insertions(+), 5 deletions(-)
+>
+>     diff --git a/package/python/python.hash b/package/python/python.hash
+>     index aa809b9a61..f5e51d9638 100644
+>     --- a/package/python/python.hash
+>     +++ b/package/python/python.hash
+>     @@ -1,5 +1,5 @@
+>     -# From https://www.python.org/downloads/release/python-2717/
+>     <https://www.python.org/downloads/release/python-2717/>
+>     -md5 b3b6d2c92f42a60667814358ab9f0cfd Python-2.7.17.tar.xz
+>     +# From https://www.python.org/downloads/release/python-2718/
+>     <https://www.python.org/downloads/release/python-2718/>
+>     +md5? fd6cc8ec0a78c44036f825e739f36e5a Python-2.7.18.tar.xz
+>     ?# Locally calculated
+>     -sha256
+>     4d43f033cdbd0aa7b7023c81b0e986fd11e653b5248dac9144d508f11812ba41
+>     Python-2.7.17.tar.xz
+>     -sha256
+>     a77d71d6be6f9032e6b6e5d2cf6da68f9eeab9036edfbc043633c8979cd5e82c
+>     LICENSE
+>     +sha256?
+>     b62c0e7937551d0cc02b8fd5cb0f544f9405bafc9a54d3808ed4594812edef43
+>     Python-2.7.18.tar.xz
+>     +sha256?
+>     de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23
+>     LICENSE
+>     diff --git a/package/python/python.mk <http://python.mk>
+>     b/package/python/python.mk <http://python.mk>
+>     index 1c393b255d..532c372dee 100644
+>     --- a/package/python/python.mk <http://python.mk>
+>     +++ b/package/python/python.mk <http://python.mk>
+>     @@ -5,7 +5,7 @@
+>     ?################################################################################
+>
+>     ?PYTHON_VERSION_MAJOR = 2.7
+>     -PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).17
+>     +PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).18
+>     ?PYTHON_SOURCE = Python-$(PYTHON_VERSION).tar.xz
+>     ?PYTHON_SITE = https://python.org/ftp/python/$(PYTHON_VERSION)
+>     <https://python.org/ftp/python/$(PYTHON_VERSION)>
+>     ?PYTHON_LICENSE = Python-2.0, others
+>
+>
+>     ------------------------------
+>
+>     Message: 10
+>     Date: Fri, 8 May 2020 10:06:22 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x]
+>     ? ? ? ? package/python-jedi: add missing license
+>     Message-ID: <20200508080227.8D5D990FE3@busybox.osuosl.org
+>     <mailto:20200508080227.8D5D990FE3@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=279eddff6515c00e9633342895684f7540c365a3
+>     <https://git.buildroot.net/buildroot/commit/?id=279eddff6515c00e9633342895684f7540c365a3>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     python-jedi bundles its own copy of typeshed since version 0.14.0 and
+>     https://github.com/davidhalter/jedi/commit/7d2b7bb3c1c4f79f325ccbde9d2b2734aa872312
+>     <https://github.com/davidhalter/jedi/commit/7d2b7bb3c1c4f79f325ccbde9d2b2734aa872312>
+>
+>     So add it to the license files (and update indentation of hash file to
+>     two spaces while at it)
+>
+>     Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com
+>     <mailto:fontaine.fabrice@gmail.com>>
+>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     (cherry picked from commit ab98c1ffb65b10ede668356014481f63ac9a72e6)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?package/python-jedi/python-jedi.hash | 9 +++++----
+>     ?package/python-jedi/python-jedi.mk <http://python-jedi.mk>? ?| 5
+>     +++--
+>     ?2 files changed, 8 insertions(+), 6 deletions(-)
+>
+>     diff --git a/package/python-jedi/python-jedi.hash
+>     b/package/python-jedi/python-jedi.hash
+>     index 1fc3a3da50..77af6e79f3 100644
+>     --- a/package/python-jedi/python-jedi.hash
+>     +++ b/package/python-jedi/python-jedi.hash
+>     @@ -1,6 +1,7 @@
+>     ?# md5, sha256 from https://pypi.org/pypi/jedi/json
+>     <https://pypi.org/pypi/jedi/json>
+>     -md5? ? ba88266caac41988ffb4fd6041a3c354 jedi-0.15.1.tar.gz
+>     -sha256
+>     ba859c74fa3c966a22f2aeebe1b74ee27e2a462f56d3f5f7ca4a59af61bfe42e
+>     jedi-0.15.1.tar.gz
+>     +md5? ba88266caac41988ffb4fd6041a3c354 jedi-0.15.1.tar.gz
+>     +sha256?
+>     ba859c74fa3c966a22f2aeebe1b74ee27e2a462f56d3f5f7ca4a59af61bfe42e
+>     jedi-0.15.1.tar.gz
+>     ?# Locally computed sha256 checksums
+>     -sha256
+>     78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412
+>     LICENSE.txt
+>     -sha256
+>     9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e
+>     docs/_themes/flask/LICENSE
+>     +sha256?
+>     78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412
+>     LICENSE.txt
+>     +sha256?
+>     9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e
+>     docs/_themes/flask/LICENSE
+>     +sha256?
+>     b41b78f562a2e65b75cab44354335f6f435d4ef73065509600ac910cf4e22fe0
+>     jedi/third_party/typeshed/LICENSE
+>     diff --git a/package/python-jedi/python-jedi.mk
+>     <http://python-jedi.mk> b/package/python-jedi/python-jedi.mk
+>     <http://python-jedi.mk>
+>     index e11146def7..4e756a709c 100644
+>     --- a/package/python-jedi/python-jedi.mk <http://python-jedi.mk>
+>     +++ b/package/python-jedi/python-jedi.mk <http://python-jedi.mk>
+>     @@ -8,7 +8,8 @@ PYTHON_JEDI_VERSION = 0.15.1
+>     ?PYTHON_JEDI_SOURCE = jedi-$(PYTHON_JEDI_VERSION).tar.gz
+>     ?PYTHON_JEDI_SITE =
+>     https://files.pythonhosted.org/packages/85/03/cd5a6e44a5753b4d539288d9d1f9645caac889c17dd2950292a8818f86b2
+>     <https://files.pythonhosted.org/packages/85/03/cd5a6e44a5753b4d539288d9d1f9645caac889c17dd2950292a8818f86b2>
+>     ?PYTHON_JEDI_SETUP_TYPE = setuptools
+>     -PYTHON_JEDI_LICENSE = MIT, BSD-3-Clause (flask theme)
+>     -PYTHON_JEDI_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE
+>     +PYTHON_JEDI_LICENSE = MIT, BSD-3-Clause (flask theme), Apache-2.0
+>     (typeshed)
+>     +PYTHON_JEDI_LICENSE_FILES = \
+>     +? ? ? ?LICENSE.txt docs/_themes/flask/LICENSE
+>     jedi/third_party/typeshed/LICENSE
+>
+>     ?$(eval $(python-package))
+>
+>
+>     ------------------------------
+>
+>     Message: 11
+>     Date: Fri, 8 May 2020 10:17:23 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x]
+>     ? ? ? ? package/freescale-imx/imx-gpu-g2d: fix the file name for ARM
+>     Message-ID: <20200508080227.A896A90F63@busybox.osuosl.org
+>     <mailto:20200508080227.A896A90F63@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=1ac9faa318ea2dd6b82d0ea95a446ed74647edc6
+>     <https://git.buildroot.net/buildroot/commit/?id=1ac9faa318ea2dd6b82d0ea95a446ed74647edc6>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     NXP apparently changed file naming convention for this particular
+>     file.
+>
+>     Fixes: 1d0ea8d433 (package/freescale-imx/imx-gpu-g2d: bump to
+>     version 6.4.0.p1.0)
+>     Signed-off-by: Timo Ketola <timo.ketola@exertus.fi
+>     <mailto:timo.ketola@exertus.fi>>
+>     Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com
+>     <mailto:gary.bisson@boundarydevices.com>>
+>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     (cherry picked from commit cd3dc5b4fa59bdb14c3b5f1b46b9a4466982b03b)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash | 2 +-
+>     ?package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
+>     <http://imx-gpu-g2d.mk> ?| 2 +-
+>     ?2 files changed, 2 insertions(+), 2 deletions(-)
+>
+>     diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
+>     b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
+>     index 8ecfbfe40f..98ca7fbe7e 100644
+>     --- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
+>     +++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
+>     @@ -1,5 +1,5 @@
+>     ?# Locally calculated
+>     -sha256
+>     6d6d02d035d988cbdb2014794f2efe970a3f5ac277202882bbf553bb7fd789d2
+>     imx-gpu-g2d-6.4.0.p1.0-aarch32.bin
+>     +sha256
+>     6d6d02d035d988cbdb2014794f2efe970a3f5ac277202882bbf553bb7fd789d2
+>     imx-gpu-g2d-6.4.0.p1.0-arm.bin
+>     ?sha256
+>     35885f435dbe951d2c0f439a376ed8a59a50b67a1b7e1e14fa2ab03995abb1ad
+>     imx-gpu-g2d-6.4.0.p1.0-aarch64.bin
+>     ?sha256
+>     d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561
+>     COPYING
+>     ?sha256
+>     9665930f69c0b6f4a4c055d7fe2b8ee563e771efbc83892abb1955e61492cdf7 EULA
+>     diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
+>     <http://imx-gpu-g2d.mk>
+>     b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
+>     <http://imx-gpu-g2d.mk>
+>     index 6598e4c32b..7700170970 100644
+>     --- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
+>     <http://imx-gpu-g2d.mk>
+>     +++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
+>     <http://imx-gpu-g2d.mk>
+>     @@ -7,7 +7,7 @@
+>     ?ifeq ($(BR2_aarch64),y)
+>     ?IMX_GPU_G2D_VERSION = 6.4.0.p1.0-aarch64
+>     ?else
+>     -IMX_GPU_G2D_VERSION = 6.4.0.p1.0-aarch32
+>     +IMX_GPU_G2D_VERSION = 6.4.0.p1.0-arm
+>     ?endif
+>     ?IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
+>     ?IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
+>
+>
+>     ------------------------------
+>
+>     Message: 12
+>     Date: Fri, 8 May 2020 09:26:06 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x] package/openjdk:
+>     ? ? ? ? Remove sparc support
+>     Message-ID: <20200508080227.789D090FE3@busybox.osuosl.org
+>     <mailto:20200508080227.789D090FE3@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=e00fb250616937d92d1735c398c14e301c462107
+>     <https://git.buildroot.net/buildroot/commit/?id=e00fb250616937d92d1735c398c14e301c462107>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     Sparc support is deprecated and may be removed in future releases.
+>     There are
+>     two choices to fix this issue:
+>
+>     1) Set --enable-deprecated-ports=yes in the CONF_OPTS to supress
+>     the error.
+>     2) Remove support for Sparc.
+>
+>     Because this port is deprecated, it's safer to remove support
+>     alltogether.
+>
+>     Fixes:
+>     http://autobuild.buildroot.net/results/692820b4b6d4da42cd557fa7badbbd11806bbeba/
+>     <http://autobuild.buildroot.net/results/692820b4b6d4da42cd557fa7badbbd11806bbeba/>
+>
+>     Signed-off-by: Adam Duskett <Aduskett@gmail.com
+>     <mailto:Aduskett@gmail.com>>
+>     Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     (cherry picked from commit 6ee7de3d2f0a9c33622008a10b65db019e2cfa3d)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?package/openjdk/Config.in | 1 -
+>     ?1 file changed, 1 deletion(-)
+>
+>     diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
+>     index 61294ec49f..df769bbb35 100644
+>     --- a/package/openjdk/Config.in
+>     +++ b/package/openjdk/Config.in
+>     @@ -11,7 +11,6 @@ config BR2_PACKAGE_OPENJDK_ARCH_SUPPORTS
+>     ? ? ? ? default y if BR2_m68k
+>     ? ? ? ? default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+>     ? ? ? ? default y if BR2_sh
+>     -? ? ? ?default y if BR2_sparc || BR2_sparc64
+>
+>     ?config BR2_PACKAGE_OPENJDK
+>     ? ? ? ? bool "openjdk"
+>
+>
+>     ------------------------------
+>
+>     Message: 13
+>     Date: Fri, 8 May 2020 09:23:03 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x] package/openjdk:
+>     ? ? ? ? copy all directories and files when installing
+>     Message-ID: <20200508080227.6E99A90FE4@busybox.osuosl.org
+>     <mailto:20200508080227.6E99A90FE4@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=0282033f42d4360b0f379cf01f12c1155d957f0d
+>     <https://git.buildroot.net/buildroot/commit/?id=0282033f42d4360b0f379cf01f12c1155d957f0d>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     Several directories and files are currently not installed during the
+>     target installation, these include:
+>     ? - conf
+>     ? ? Several configuration files, including security configuration
+>     files which
+>     ? ? may be necessary for running various java applications.
+>
+>     ? - legal
+>     ? ? This directory contains legal notices that some java
+>     applications may
+>     ? ? require, as they may print legal information and will throw
+>     exceptions at
+>     ? ? runtime if the legal files are not present on the system.
+>
+>     ? - release
+>     ? ? This file contains a list of modules included in the image.
+>
+>     Because these directories take up less than of megabyte extra, it
+>     is not an
+>     issue to install all of them.
+>
+>     Signed-off-by: Adam Duskett <Aduskett@gmail.com
+>     <mailto:Aduskett@gmail.com>>
+>     Reviewed-by: Ryan Barnett <ryan.barnett@rockwellcollins.com
+>     <mailto:ryan.barnett@rockwellcollins.com>>
+>     Tested-by: Ryan Barnett <ryan.barnett@rockwellcollins.com
+>     <mailto:ryan.barnett@rockwellcollins.com>>
+>     Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     (cherry picked from commit 63b576095b1dbabaf15a6eee7ceabed6d868a707)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?package/openjdk/openjdk.mk <http://openjdk.mk> | 4 +---
+>     ?1 file changed, 1 insertion(+), 3 deletions(-)
+>
+>     diff --git a/package/openjdk/openjdk.mk <http://openjdk.mk>
+>     b/package/openjdk/openjdk.mk <http://openjdk.mk>
+>     index e58757b2ed..1f906517fe 100644
+>     --- a/package/openjdk/openjdk.mk <http://openjdk.mk>
+>     +++ b/package/openjdk/openjdk.mk <http://openjdk.mk>
+>     @@ -123,9 +123,7 @@ endef
+>     ?# which makes manual installation necessary.
+>     ?define OPENJDK_INSTALL_TARGET_CMDS
+>     ? ? ? ? mkdir -p $(TARGET_DIR)$(OPENJDK_INSTALL_BASE)
+>     -? ? ? ?cp -dpfr $(@D)/build/linux-*-release/images/jre/bin/ \
+>     -? ? ? ? ? ? ? ?$(TARGET_DIR)$(OPENJDK_INSTALL_BASE)/
+>     -? ? ? ?cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/ \
+>     +? ? ? ?cp -dpfr $(@D)/build/linux-*-release/images/jre/* \
+>     ? ? ? ? ? ? ? ? $(TARGET_DIR)$(OPENJDK_INSTALL_BASE)/
+>     ? ? ? ? cd $(TARGET_DIR)/usr/bin && ln -snf
+>     ../..$(OPENJDK_INSTALL_BASE)/bin/* .
+>     ?endef
+>
+>
+>     ------------------------------
+>
+>     Message: 14
+>     Date: Fri, 8 May 2020 09:15:43 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x] package/libglib2:
+>     ? ? ? ? restore use of system printf
+>     Message-ID: <20200508080227.554CD90F63@busybox.osuosl.org
+>     <mailto:20200508080227.554CD90F63@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=6808e122f6ae9cca3966877e865e35b8922a9e9a
+>     <https://git.buildroot.net/buildroot/commit/?id=6808e122f6ae9cca3966877e865e35b8922a9e9a>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     Prior to commit 4102db0f7a ("package/libglib2: bump to version
+>     2.60.3")
+>     which converted libglib2 to meson, Buildroot used to set a range of
+>     autoconf options to bypass tests that require running binaries.
+>
+>     The meson version of libglib2's build system has many fewer of these
+>     checks, but there are still some and these can be fed the "correct"
+>     answer by adding properties to cross-compilation.conf.
+>
+>     Add the necessary properties to indicate that we have C99 compliant
+>     print functions to avoid pulling in the gnulib fallback.
+>
+>     Signed-off-by: John Keeping <john@metanate.com
+>     <mailto:john@metanate.com>>
+>     Reviewed-by: Peter Seiderer <ps.report@gmx.net
+>     <mailto:ps.report@gmx.net>>
+>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     (cherry picked from commit 4f91198f0d878adee4f3fd6c6991879c1255951a)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?package/libglib2/libglib2.mk <http://libglib2.mk> | 5 +++++
+>     ?1 file changed, 5 insertions(+)
+>
+>     diff --git a/package/libglib2/libglib2.mk <http://libglib2.mk>
+>     b/package/libglib2/libglib2.mk <http://libglib2.mk>
+>     index f00818f69c..a206639f74 100644
+>     --- a/package/libglib2/libglib2.mk <http://libglib2.mk>
+>     +++ b/package/libglib2/libglib2.mk <http://libglib2.mk>
+>     @@ -52,6 +52,11 @@ LIBGLIB2_CONF_OPTS = \
+>     ? ? ? ? -Dinstalled_tests=false \
+>     ? ? ? ? -Doss_fuzz=disabled
+>
+>     +LIBGLIB2_MESON_EXTRA_PROPERTIES = \
+>     +? ? ? ?have_c99_vsnprintf=true \
+>     +? ? ? ?have_c99_snprintf=true \
+>     +? ? ? ?have_unix98_printf=true
+>     +
+>     ?ifneq ($(BR2_ENABLE_LOCALE),y)
+>     ?LIBGLIB2_DEPENDENCIES += libiconv
+>     ?endif
+>
+>
+>     ------------------------------
+>
+>     Message: 15
+>     Date: Fri, 8 May 2020 09:21:12 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x] package/openjdk:
+>     ? ? ? ? fix installation with merged usr directories
+>     Message-ID: <20200508080227.60EBF90FE3@busybox.osuosl.org
+>     <mailto:20200508080227.60EBF90FE3@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=f61ae433703711952dc3a230e71532d110c4e899
+>     <https://git.buildroot.net/buildroot/commit/?id=f61ae433703711952dc3a230e71532d110c4e899>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     Currently, Buildroot installs the jre libraries using
+>     cp -dprf /build/linux-*-release/images/jre/lib/*
+>     $(TARGET_DIR)/usr/lib/
+>
+>     However, if a system has a merged /usr directory, and there is a
+>     built kernel
+>     before installing OpenJDK, the installation fails because jre/lib
+>     has binary
+>     modules file, which causes the following error: cp: cannot
+>     overwrite directory
+>     '/usr/lib/modules with non-directory
+>
+>     The obvious fix is to install the modules to /usr/lib/jvm/ and set the
+>     appropriate rpaths via the --with-extra-ldflags conf option.
+>     However, this fix
+>     does not work because the built binaries themselves do not link
+>     against
+>     libjava.so
+>
+>     Indeed, running readelf on the built java binary reports the
+>     following:
+>     "(RUNPATH) Library runpath: [/usr/lib/jvm]" and
+>     /usr/lib/jvm/libjava.so exists.
+>     However, when running the Java binary on the target, the following
+>     error
+>     occurs: "Error: could not find libjava.so."
+>
+>     The following is the result of "strace java" ran on the target:
+>     faccessat(AT_FDCWD, "/usr/lib/libjava.so", F_OK) = -1 ENOENT
+>     faccessat(AT_FDCWD, "/usr/jre/lib/libjava.so", F_OK) = -1 ENOENT
+>     newfstatat(AT_FDCWD, "/usr/lib/libjava.so", 0x7ffe7b4af8, 0) = -1
+>     ENOENT
+>     newfstatat(AT_FDCWD, "/usr/lib/jvm/libjli.so", [sic]
+>     AT_SYMLINK_NOFOLLOW) = 0
+>
+>     As seen above, the java binary searches for libjli.so in /usr/lib/jvm,
+>     which demonstrates that the java binary searches for some of the
+>     DT_NEEDED libraries using the correct rpath. But libjava.so is not
+>     searched from the rpath; it is instead dl-opened manually, looked
+>     for in
+>     the search paths hardcoded to the following directories:
+>     ? - /usr/lib/
+>     ? - /usr/jre/lib/
+>     ? - $(dirname $0)/../lib/
+>
+>     The reason behind the hardcoded paths given by the maintainers is
+>     due to
+>     historical purposes for the need to support several java versions
+>     at the
+>     same time on a single system, and that changing the above behavior
+>     is not
+>     likely to ever happen.
+>
+>     As such, most distributions such as Redhat do the following:
+>     ? - Create the directory /usr/lib/jvm/java-$(JAVA_VERSION)/
+>     ? - Install all directories and files found in images/jre to that
+>     directory.
+>     ? - Symlink the binaries to in
+>     /usr/lib/jvm/java-$(JAVA_VERSION)/bin to
+>     ? ? /usr/bin.
+>
+>     However, because Buildroot does not need to support multiple
+>     versions of java
+>     concurrently, there is no need for the additional java-$(JAVA_VERSION)
+>     directory.
+>
+>     To fix the above issue, the following changes are performed:
+>     ? - Introduce the variable "OPENJDK_INSTALL_BASE" which points to
+>     /usr/lib/jvm
+>     ? - Set the --with-extra-ldflags conf_opt to
+>     ? ? ? "-Wl,-rpath,$(OPENJDK_INSTALL_BASE)/lib,-rpath,
+>     ? ? ? $(OPENJDK_INSTALL_BASE)/lib/$(OPENJDK_JVM_VARIANT)"
+>     ? - Run "mkdir -p $(TARGET_DIR)/usr/lib/jvm/" in the
+>     INSTALL_TARGET_CMDS step.
+>     ? - Copy both the lib and bin directories to /usr/lib/jvm/
+>     ? - Symlink the binaries in /usr/lib/jvm/bin/ to /usr/bin.
+>
+>     Fixes: https://bugs.busybox.net/show_bug.cgi?id=12751
+>     <https://bugs.busybox.net/show_bug.cgi?id=12751>
+>
+>     Signed-off-by: Adam Duskett <Aduskett@gmail.com
+>     <mailto:Aduskett@gmail.com>>
+>     Reviewed-by: Ryan Barnett <ryan.barnett@rockwellcollins.com
+>     <mailto:ryan.barnett@rockwellcollins.com>>
+>     Tested-by: Ryan Barnett <ryan.barnett@rockwellcollins.com
+>     <mailto:ryan.barnett@rockwellcollins.com>>
+>     [yann.morin.1998 at free.fr <mailto:yann.morin.1998@free.fr>: fix two
+>     remaining mis-placed '/']
+>     Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     (cherry picked from commit 3edb915709dec21158542b15e62f1560b8dc2fa2)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?package/openjdk/openjdk.mk <http://openjdk.mk> | 16 ++++++++++++++--
+>     ?1 file changed, 14 insertions(+), 2 deletions(-)
+>
+>     diff --git a/package/openjdk/openjdk.mk <http://openjdk.mk>
+>     b/package/openjdk/openjdk.mk <http://openjdk.mk>
+>     index 030a205228..e58757b2ed 100644
+>     --- a/package/openjdk/openjdk.mk <http://openjdk.mk>
+>     +++ b/package/openjdk/openjdk.mk <http://openjdk.mk>
+>     @@ -46,6 +46,13 @@ OPENJDK_JVM_VARIANT = zero
+>     ?OPENJDK_DEPENDENCIES += libffi
+>     ?endif
+>
+>     +# OpenJDK installs a file named 'modules' in jre/lib, which gets
+>     installed as
+>     +# /usr/lib/modules. However, with a merged /usr, this conflicts
+>     with the
+>     +# directory named 'modules' installed by the kernel. If OpenJDK
+>     gets built
+>     +# after the kernel, this manifests itself with: "cp: cannot overwrite
+>     +# directory '/usr/lib/modules with non-directory."
+>     +OPENJDK_INSTALL_BASE = /usr/lib/jvm
+>     +
+>     ?# OpenJDK ignores some variables unless passed via the environment.
+>     ?# These variables are PATH, LD, CC, CXX, and CPP.
+>     ?# OpenJDK defaults ld to the ld binary but passes -Xlinker and -z as
+>     @@ -75,6 +82,7 @@ OPENJDK_CONF_OPTS = \
+>     ? ? ? ? --with-devkit=$(HOST_DIR) \
+>     ? ? ? ? --with-extra-cflags="$(TARGET_CFLAGS)" \
+>     ? ? ? ? --with-extra-cxxflags="$(TARGET_CXXFLAGS)" \
+>     +? ? ?
+>     ?--with-extra-ldflags="-Wl,-rpath,$(OPENJDK_INSTALL_BASE)/lib,-rpath,$(OPENJDK_INSTALL_BASE)/lib/$(OPENJDK_JVM_VARIANT)"
+>     \
+>     ? ? ? ? --with-giflib=system \
+>     ? ? ? ? --with-jobs=$(PARALLEL_JOBS) \
+>     ? ? ? ? --with-jvm-variants=$(OPENJDK_JVM_VARIANT) \
+>     @@ -114,8 +122,12 @@ endef
+>     ?# Calling make install always builds and installs the JDK instead
+>     of the JRE,
+>     ?# which makes manual installation necessary.
+>     ?define OPENJDK_INSTALL_TARGET_CMDS
+>     -? ? ? ?cp -dpfr $(@D)/build/linux-*-release/images/jre/bin/*
+>     $(TARGET_DIR)/usr/bin/
+>     -? ? ? ?cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/*
+>     $(TARGET_DIR)/usr/lib/
+>     +? ? ? ?mkdir -p $(TARGET_DIR)$(OPENJDK_INSTALL_BASE)
+>     +? ? ? ?cp -dpfr $(@D)/build/linux-*-release/images/jre/bin/ \
+>     +? ? ? ? ? ? ? ?$(TARGET_DIR)$(OPENJDK_INSTALL_BASE)/
+>     +? ? ? ?cp -dpfr $(@D)/build/linux-*-release/images/jre/lib/ \
+>     +? ? ? ? ? ? ? ?$(TARGET_DIR)$(OPENJDK_INSTALL_BASE)/
+>     +? ? ? ?cd $(TARGET_DIR)/usr/bin && ln -snf
+>     ../..$(OPENJDK_INSTALL_BASE)/bin/* .
+>     ?endef
+>
+>     ?$(eval $(generic-package))
+>
+>
+>     ------------------------------
+>
+>     Message: 16
+>     Date: Fri, 8 May 2020 10:27:13 +0200
+>     From: "Yann E. MORIN" <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     To: Danomi Manchego <danomimanchego123@gmail.com
+>     <mailto:danomimanchego123@gmail.com>>
+>     Cc: buildroot <buildroot@buildroot.org
+>     <mailto:buildroot@buildroot.org>>
+>     Subject: Re: [Buildroot] .br2-external files
+>     Message-ID: <20200508082713.GL12536@scaer>
+>     Content-Type: text/plain; charset=utf-8
+>
+>     Danomi, All,
+>
+>     On 2020-05-04 17:04 -0400, Danomi Manchego spake thusly:
+>     > Hi all,
+>     >
+>     > I noticed that the
+>     > https://buildroot.org/downloads/buildroot-2020.02.1.tar.bz2
+>     <https://buildroot.org/downloads/buildroot-2020.02.1.tar.bz2> has
+>     these
+>     > files in it:
+>     >
+>     > $ ls -1 .br2*
+>     > .br2-external.in.jpeg
+>     > .br2-external.in.menus
+>     > .br2-external.in.openssl
+>     > .br2-external.in.paths
+>     > .br2-external.in.toolchains
+>     > .br2-external.mk <http://br2-external.mk>
+>     >
+>     > But when I look at the 2020.02.x tag in git, those files are not
+>     there.
+>     > These are derived files, yes?? Are they expected to be in the
+>     release tarball?
+>
+>     Indeed they should not be there. They should not be a problem in
+>     practice, but this is not clean. I'll send a patch.
+>
+>     Thanks for the feedback,
+>
+>     Regards,
+>     Yann E. MORIN.
+>
+>     -- 
+>     .-----------------.--------------------.------------------.--------------------.
+>     |? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+>     conspiracy: |
+>     | +33 662 376 056 | Software? Designer | \ / CAMPAIGN ? ?|? ___? ?
+>     ? ? ? ? ? ?|
+>     | +33 561 099 427 `------------.-------:? X? AGAINST ? ? |? \e/?
+>     There is no? |
+>     | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL? ? |? ?v?
+>     ?conspiracy.? |
+>     '------------------------------^-------^------------------^--------------------'
+>
+>
+>     ------------------------------
+>
+>     Message: 17
+>     Date: Fri, 8 May 2020 01:31:32 -0700
+>     From: Max Filippov <jcmvbkbc at gmail.com <mailto:jcmvbkbc@gmail.com>>
+>     To: Romain Naour <romain.naour@gmail.com
+>     <mailto:romain.naour@gmail.com>>
+>     Cc: buildroot <buildroot@buildroot.org
+>     <mailto:buildroot@buildroot.org>>, Thomas Petazzoni
+>     ? ? ? ? <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     Subject: Re: [Buildroot] [PATCH] package/binutils: fix XTENSA_NDIFF
+>     ? ? ? ? handling for PR ld/25861
+>     Message-ID:
+>     ? ? ? ?
+>     <CAMo8BfKCYu9aSMn-3F2Cy8Sj7nJvGo4eHzM=gx2QgUmQjGNTyw@mail.gmail.com
+>     <mailto:gx2QgUmQjGNTyw@mail.gmail.com>>
+>     Content-Type: text/plain; charset="UTF-8"
+>
+>     Hi Romain,
+>
+>     On Thu, May 7, 2020 at 2:10 PM Romain Naour
+>     <romain.naour at gmail.com <mailto:romain.naour@gmail.com>> wrote:
+>     > It seems elf2flt used by qemu_xtensa_lx60_nommu_defconfig
+>     doesn't support
+>     > R_XTENSA_PDIFF32:
+>     >
+>     >? ?elf2flt: 267 bad relocs
+>     >
+>     > https://gitlab.com/kubu93/buildroot/-/jobs/543293510
+>     <https://gitlab.com/kubu93/buildroot/-/jobs/543293510>
+>
+>     Thanks for the report. Proposed fix:
+>     https://github.com/uclinux-dev/elf2flt/pull/18
+>     <https://github.com/uclinux-dev/elf2flt/pull/18>
+>
+>     -- 
+>     Thanks.
+>     -- Max
+>
+>
+>     ------------------------------
+>
+>     Message: 18
+>     Date: Fri,? 8 May 2020 10:32:20 +0200
+>     From: "Yann E. MORIN" <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Cc: "Yann E. MORIN" <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>, Danomi Manchego
+>     ? ? ? ? <danomimanchego123@gmail.com
+>     <mailto:danomimanchego123@gmail.com>>, Peter Korsgaard
+>     <peter at korsgaard.com <mailto:peter@korsgaard.com>>
+>     Subject: [Buildroot] [PATCH] release: don't include temp files
+>     Message-ID: <20200508083220.18927-1-yann.morin.1998@free.fr
+>     <mailto:20200508083220.18927-1-yann.morin.1998@free.fr>>
+>
+>     When we prepare the release, we generate the manual in various
+>     formats,
+>     so that it can be consulted locally without needing the miriads of
+>     tools
+>     needed to generate it.
+>
+>     However, this creates the temporary .br2-external.* files in the
+>     output
+>     directory, and those end up in the release tarball.
+>
+>     This is not a problem in practice, but is not clean.
+>
+>     Run 'distclean' in the output directory, to get rid of everything but
+>     the generated documentation.
+>
+>     Reported-by: Danomi Manchego <danomimanchego123@gmail.com
+>     <mailto:danomimanchego123@gmail.com>>
+>     Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     Cc: Peter Korsgaard <peter at korsgaard.com <mailto:peter@korsgaard.com>>
+>     ---
+>     ?Makefile | 2 +-
+>     ?1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>     diff --git a/Makefile b/Makefile
+>     index 3aa4ba4532..2da34b5305 100644
+>     --- a/Makefile
+>     +++ b/Makefile
+>     @@ -1190,7 +1190,7 @@ release: OUT = buildroot-$(BR2_VERSION)
+>     ?release:
+>     ? ? ? ? git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
+>     ? ? ? ? $(MAKE) O=$(OUT) manual-html manual-text manual-pdf
+>     -? ? ? ?$(MAKE) O=$(OUT) clean
+>     +? ? ? ?$(MAKE) O=$(OUT) distclean
+>     ? ? ? ? tar rf $(OUT).tar $(OUT)
+>     ? ? ? ? gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
+>     ? ? ? ? bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
+>     -- 
+>     2.20.1
+>
+>
+>
+>     ------------------------------
+>
+>     Message: 19
+>     Date: Fri, 8 May 2020 10:33:07 +0200
+>     From: "Yann E. MORIN" <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     To: Fabrice Fontaine <fontaine.fabrice@gmail.com
+>     <mailto:fontaine.fabrice@gmail.com>>
+>     Cc: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: Re: [Buildroot] [PATCH 1/1] package/domoticz: set WITH_LIBUSB
+>     Message-ID: <20200508083307.GM12536@scaer>
+>     Content-Type: text/plain; charset=utf-8
+>
+>     Fabrice, All,
+>
+>     On 2020-05-08 00:37 +0200, Fabrice Fontaine spake thusly:
+>     > Use WITH_LIBUSB which is available since version 4.9700 and
+>     >
+>     https://github.com/domoticz/domoticz/commit/f53817577a834ed0c3fc16458c374aea490be49e
+>     <https://github.com/domoticz/domoticz/commit/f53817577a834ed0c3fc16458c374aea490be49e>
+>     >
+>     > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com
+>     <mailto:fontaine.fabrice@gmail.com>>
+>
+>     Applied to master, thanks.
+>
+>     Regards,
+>     Yann E. MORIN.
+>
+>     > ---
+>     >? package/domoticz/domoticz.mk <http://domoticz.mk> | 3 +++
+>     >? 1 file changed, 3 insertions(+)
+>     >
+>     > diff --git a/package/domoticz/domoticz.mk <http://domoticz.mk>
+>     b/package/domoticz/domoticz.mk <http://domoticz.mk>
+>     > index 5efe86a784..0ceaab87b4 100644
+>     > --- a/package/domoticz/domoticz.mk <http://domoticz.mk>
+>     > +++ b/package/domoticz/domoticz.mk <http://domoticz.mk>
+>     > @@ -38,6 +38,9 @@ DOMOTICZ_CONF_OPTS += \
+>     >
+>     >? ifeq ($(BR2_PACKAGE_LIBUSB),y)
+>     >? DOMOTICZ_DEPENDENCIES += libusb
+>     > +DOMOTICZ_CONF_OPTS += -DWITH_LIBUSB=ON
+>     > +else
+>     > +DOMOTICZ_CONF_OPTS += -DWITH_LIBUSB=OFF
+>     >? endif
+>     >
+>     >? ifeq ($(BR2_PACKAGE_OPENZWAVE),y)
+>     > --
+>     > 2.26.2
+>     >
+>     > _______________________________________________
+>     > buildroot mailing list
+>     > buildroot at busybox.net <mailto:buildroot@busybox.net>
+>     > http://lists.busybox.net/mailman/listinfo/buildroot
+>     <http://lists.busybox.net/mailman/listinfo/buildroot>
+>
+>     -- 
+>     .-----------------.--------------------.------------------.--------------------.
+>     |? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+>     conspiracy: |
+>     | +33 662 376 056 | Software? Designer | \ / CAMPAIGN ? ?|? ___? ?
+>     ? ? ? ? ? ?|
+>     | +33 561 099 427 `------------.-------:? X? AGAINST ? ? |? \e/?
+>     There is no? |
+>     | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL? ? |? ?v?
+>     ?conspiracy.? |
+>     '------------------------------^-------^------------------^--------------------'
+>
+>
+>     ------------------------------
+>
+>     Message: 20
+>     Date: Fri,? 8 May 2020 10:34:33 +0200
+>     From: Romain Naour <romain.naour@gmail.com
+>     <mailto:romain.naour@gmail.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Cc: Romain Naour <romain.naour@gmail.com
+>     <mailto:romain.naour@gmail.com>>, Thomas Petazzoni
+>     ? ? ? ? <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     Subject: [Buildroot] [PATCH] package/gcc: remove powerpc conditional
+>     ? ? ? ? patch
+>     Message-ID: <20200508083433.1313246-1-romain.naour@gmail.com
+>     <mailto:20200508083433.1313246-1-romain.naour@gmail.com>>
+>
+>     We lost track the powerpc conditional patch that was added for gcc
+>     4.3.3 [1]
+>     and present up to gcc 4.9 (gcc 4.9 removed by [2]). But the code
+>     in gcc.mk <http://gcc.mk>
+>     is still present.
+>
+>     The patch was dropped starting gcc 5.1 [3] but it's know to be
+>     useful for
+>     gcc 4.7.3 [4].
+>
+>     Since we used to have a patch directory
+>     (package/gcc/$(GCC_VERSION)) for
+>     every gcc version available in Buildroot, the apply-patches.sh script
+>     doesn't error out even if
+>     1000-powerpc-link-with-math-lib.patch.conditional
+>     is missing.
+>
+>     But with gcc 10, we don't need (for the moment) to apply any
+>     patch, so the
+>     patch directory doesn't exist. apply-patches.sh break the build since
+>     the patch directory is missing:
+>
+>     ? Aborting.? 'package/gcc/10.1.0' is not a directory.
+>
+>     Since we removed gcc 4.9 last year [2], we can safely remove this
+>     code.
+>
+>     Tested using qemu_ppc_virtex_ml507_defconfig.
+>
+>     [1] bb1f42e4426c432af60fc80da45c6daf7e31c1a0
+>     [2] baf177502214a67619d9d0d6d0a780458e4d652d
+>     [3] 4deb2d93c5ab317b6addf4e1e132571ba8dac031
+>     [4] 197006a41c1a0450bf6350d5742e186b5b0c69de
+>
+>     Signed-off-by: Romain Naour <romain.naour@gmail.com
+>     <mailto:romain.naour@gmail.com>>
+>     Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     ---
+>     ?package/gcc/gcc.mk <http://gcc.mk> | 8 --------
+>     ?1 file changed, 8 deletions(-)
+>
+>     diff --git a/package/gcc/gcc.mk <http://gcc.mk>
+>     b/package/gcc/gcc.mk <http://gcc.mk>
+>     index 50f2a3fcb7..af25d268a7 100644
+>     --- a/package/gcc/gcc.mk <http://gcc.mk>
+>     +++ b/package/gcc/gcc.mk <http://gcc.mk>
+>     @@ -32,14 +32,6 @@ endef
+>     ?# Apply patches
+>     ?#
+>
+>     -ifeq ($(ARCH),powerpc)
+>     -ifneq ($(BR2_SOFT_FLOAT),)
+>     -define HOST_GCC_APPLY_POWERPC_PATCH
+>     -? ? ? ?$(APPLY_PATCHES) $(@D) package/gcc/$(GCC_VERSION)
+>     1000-powerpc-link-with-math-lib.patch.conditional
+>     -endef
+>     -endif
+>     -endif
+>     -
+>     ?# gcc is a special package, not named gcc, but gcc-initial and
+>     ?# gcc-final, but patches are nonetheless stored in package/gcc in the
+>     ?# tree, and potentially in BR2_GLOBAL_PATCH_DIR directories as well.
+>     -- 
+>     2.25.4
+>
+>
+>
+>     ------------------------------
+>
+>     Message: 21
+>     Date: Fri,? 8 May 2020 11:01:08 +0200
+>     From: Fabrice Fontaine <fontaine.fabrice@gmail.com
+>     <mailto:fontaine.fabrice@gmail.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Cc: Guillaume Gardet <guillaume.gardet@oliseo.fr
+>     <mailto:guillaume.gardet@oliseo.fr>>, Fabrice Fontaine
+>     ? ? ? ? <fontaine.fabrice@gmail.com
+>     <mailto:fontaine.fabrice@gmail.com>>
+>     Subject: [Buildroot] [PATCH 1/1] package/c-icap: fix musl build
+>     Message-ID: <20200508090108.315450-1-fontaine.fabrice@gmail.com
+>     <mailto:20200508090108.315450-1-fontaine.fabrice@gmail.com>>
+>
+>     Commit cb5df2fea516d4861af3c0629f49df697ee4f70e wrongly removed the
+>     first patch which is not in version 0.5.6. So add it back and
+>     update it
+>     so that it applies cleanly.
+>
+>     Fixes:
+>     ?-
+>     http://autobuild.buildroot.org/results/ddb57462945c5c2340cc375aa6fe2848d13d7001
+>     <http://autobuild.buildroot.org/results/ddb57462945c5c2340cc375aa6fe2848d13d7001>
+>
+>     Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com
+>     <mailto:fontaine.fabrice@gmail.com>>
+>     ---
+>     ?...ixes-to-compile-and-run-under-cygwin.patch | 391
+>     ++++++++++++++++++
+>     ?1 file changed, 391 insertions(+)
+>     ?create mode 100644
+>     package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch
+>
+>     diff --git
+>     a/package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch
+>     b/package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch
+>     new file mode 100644
+>     index 0000000000..6f886c9b72
+>     --- /dev/null
+>     +++
+>     b/package/c-icap/0001-Required-fixes-to-compile-and-run-under-cygwin.patch
+>     @@ -0,0 +1,391 @@
+>     +From 1631a6c1f50e152b8a45d8279c96086e5636795b Mon Sep 17 00:00:00
+>     2001
+>     +From: Christos Tsantilas <christos@chtsanti.net
+>     <mailto:christos@chtsanti.net>>
+>     +Date: Fri, 25 Jan 2019 06:42:22 -0800
+>     +Subject: [PATCH] Required fixes to compile and run under cygwin
+>     +
+>     +[Retrieved (and backported) from:
+>     +https://github.com/c-icap/c-icap-server/commit/1631a6c1f50e152b8a45d8279c96086e5636795b
+>     <https://github.com/c-icap/c-icap-server/commit/1631a6c1f50e152b8a45d8279c96086e5636795b>,
+>     +which has the side effect of fixing the build with the musl C
+>     library]
+>     +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com
+>     <mailto:fontaine.fabrice@gmail.com>>
+>     +---
+>     + Makefile.am? ? ? ? ? ? ? ? ?|? 2 +-
+>     + configure.ac <http://configure.ac> ? ? ? ? ? ? ? | 10 +++++++---
+>     + header.c? ? ? ? ? ? ? ? ? ? | 34 ----------------------------------
+>     + include/header.h? ? ? ? ? ? |? 8 --------
+>     + modules/Makefile.am? ? ? ? ?| 34 ++++++++++++++++++++--------------
+>     + modules/bdb_tables.c? ? ? ? | 17 +++++++++++++++--
+>     + modules/shared_cache.c? ? ? | 12 ++++++++++++
+>     + modules/sys_logger.c? ? ? ? | 13 +++++++++++++
+>     + services/echo/Makefile.am? ?| 10 ++++++++--
+>     + services/ex-206/Makefile.am | 10 ++++++++--
+>     + utils/c-icap-mkbdb.c? ? ? ? |? 8 ++++----
+>     + 11 files changed, 88 insertions(+), 70 deletions(-)
+>     +
+>     +diff --git a/Makefile.am b/Makefile.am
+>     +index 4c34033..ab80f4f 100644
+>     +--- a/Makefile.am
+>     ++++ b/Makefile.am
+>     +@@ -53,7 +53,7 @@ c_icap_SOURCES = aserver.c request.c cfg_param.c \
+>     + libicapapi_la_CFLAGS= $(INVISIBILITY_CFLAG) -I$(srcdir)/include/
+>     -Iinclude/ @ZLIB_ADD_FLAG@ @OPENSSL_ADD_FLAG@ @BZLIB_ADD_FLAG@
+>     @BROTLI_ADD_FLAG@ @PCRE_ADD_FLAG@ -DCI_BUILD_LIB
+>     +
+>     + libicapapi_la_LIBADD = @ZLIB_ADD_LDADD@ @BZLIB_ADD_LDADD@
+>     @BROTLI_ADD_LDADD@ @PCRE_ADD_LDADD@ @DL_ADD_FLAG@ @THREADS_LDADD@
+>     @OPENSSL_ADD_LDADD@
+>     +-libicapapi_la_LDFLAGS= -shared -version-info @CICAPLIB_VERSION@
+>     @THREADS_LDFLAGS@
+>     ++libicapapi_la_LDFLAGS= -shared -version-info @CICAPLIB_VERSION@
+>     @LIBS_LDFLAGS@ @THREADS_LDFLAGS@
+>     +
+>     + export EXT_PROGRAMS_MKLIB = @ZLIB_LNDIR_LDADD@
+>     @BZLIB_LNDIR_LDADD@ @BROTLI_LNDIR_LDADD@ @PCRE_LNDIR_LDADD@
+>     @OPENSSL_LNDIR_LDADD@
+>     +
+>     +diff --git a/configure.ac <http://configure.ac> b/configure.ac
+>     <http://configure.ac>
+>     +index 405571b..8059cb7 100644
+>     +--- a/configure.ac <http://configure.ac>
+>     ++++ b/configure.ac <http://configure.ac>
+>     +@@ -45,12 +45,14 @@ case "$host_os" in
+>     +? ? ? ?CFLAGS="-D_REENTRANT $CFLAGS"
+>     +? ? ? ?THREADS_LDADD="-lpthread"
+>     +? ? ? ?THREADS_LDFLAGS=""
+>     ++? ? ? LIBS_LDFLAGS=""
+>     +? ? ? ;;
+>     +? ? ? solaris2.*)
+>     +? ? ? ? ?CFLAGS="-D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS $CFLAGS"
+>     +? ? ? ? ? ?LIBS="-lsocket -lnsl -lrt $LIBS"
+>     +? ? ? ? ?THREADS_LDADD="-lpthread"
+>     +? ? ? ? ?THREADS_LDFLAGS=""
+>     ++? ? ? ? LIBS_LDFLAGS=""
+>     +? ? ? ?;;
+>     +? ? ? ?freebsd5*)
+>     + ## If I understand how all those threading models works correctly
+>     +@@ -69,6 +71,7 @@ case "$host_os" in
+>     +? ? ? ? ? ? ? ?CFLAGS="-pthread -D_THREAD_SAFE $CFLAGS"
+>     +? ? ? ?THREADS_LDADD="-XCClinker -lc_r"
+>     +? ? ? ?THREADS_LDFLAGS=""
+>     ++? ? ? LIBS_LDFLAGS=""
+>     + ## FreeBSD has pthreads rwlocks from version 3 (I think)
+>     + #? ? ?AC_DEFINE(HAVE_PTHREADS_RWLOCK,1,[Define
+>     HAVE_PTHREADS_RWLOCK if pthreads library supports rwlocks])
+>     + ##? ?1:1 threads
+>     +@@ -82,24 +85,28 @@ case "$host_os" in
+>     +? ? ? ? ?CFLAGS="-D_THREAD_SAFE? $CFLAGS"
+>     +? ? ? ? ?THREADS_LDADD="-XCClinker -lthr"
+>     +? ? ? ? ?THREADS_LDFLAGS=""
+>     ++? ? ? LIBS_LDFLAGS=""
+>     +? ? ? ?;;
+>     +
+>     +? ? ? ?cygwin*)
+>     +? ? ? ?CFLAGS="-D_REENTRANT $CFLAGS"
+>     +? ? ? ?THREADS_LDADD="-lpthread"
+>     +? ? ? ?THREADS_LDFLAGS="";
+>     ++? ? ? LIBS_LDFLAGS="-no-undefined"
+>     +? ? ? ?iscygwin="yes"
+>     +? ? ? ?;;
+>     +? ? ? ?*)
+>     +? ? ? ? ? ? ? ?CFLAGS="-D_REENTRANT $CFLAGS"
+>     +? ? ? ?THREADS_LDADD="-lpthread"
+>     +? ? ? ?THREADS_LDFLAGS=""
+>     ++? ? ? LIBS_LDFLAGS=""
+>     +? ? ? ?;;
+>     + esac
+>     +
+>     + TEST_LIBS="$TEST_LIBS $THREADS_LDADD"
+>     + AC_SUBST(THREADS_LDADD)
+>     + AC_SUBST(THREADS_LDFLAGS)
+>     ++AC_SUBST(LIBS_LDFLAGS)
+>     +
+>     + AC_DEFINE_UNQUOTED(C_ICAP_CONFIGURE_OPTIONS, "$ac_configure_args",
+>     +? ? ? ? ? ? ? ? ? ? [configure command line used to configure
+>     c-icap])
+>     +@@ -984,9 +991,6 @@ LIBS="$LIBS $EXTRALIBS"
+>     +
+>     + #Configure common flags
+>     + MODULES_LIBADD=""
+>     +-if test a"$iscygwin" != a; then
+>     +-? ? ?MODULES_LIBADD="-L../../ -licapapi"
+>     +-fi
+>     + MODULES_CFLAGS="$INVISIBILITY_CFLAG -DCI_BUILD_MODULE"
+>     + AC_SUBST(MODULES_LIBADD)
+>     + AC_SUBST(MODULES_CFLAGS)
+>     +diff --git a/header.c b/header.c
+>     +index 807a2e0..266b958 100644
+>     +--- a/header.c
+>     ++++ b/header.c
+>     +@@ -110,21 +110,6 @@ const struct ci_error_code ci_error_codes[] = {
+>     +? ? ?{505, "Unsupported version"}? ? ? ?/*ICAP version not
+>     supported by server. */
+>     + };
+>     +
+>     +-/*
+>     +-#ifdef __CYGWIN__
+>     +-int ci_error_code(int ec){
+>     +-? ? ?return (ec >= EC_100 && ec < EC_MAX ?
+>     ci_error_codes[ec].code:1000);
+>     +-}
+>     +-
+>     +-const char *unknownerrorcode = "UNKNOWN ERROR CODE";
+>     +-
+>     +-const char *ci_error_code_string(int ec){
+>     +-? ? ?return (ec >= EC_100 && ec <
+>     EC_MAX?ci_error_codes[ec].str:unknownerrorcode);
+>     +-}
+>     +-#endif
+>     +-*/
+>     +-
+>     +-
+>     + const char *ci_encaps_entities[] = {
+>     +? ? ?"req-hdr",
+>     +? ? ?"res-hdr",
+>     +@@ -134,25 +119,6 @@ const char *ci_encaps_entities[] = {
+>     +? ? ?"opt-body"
+>     + };
+>     +
+>     +-#ifdef __CYGWIN__
+>     +-
+>     +-const char *unknownentity = "UNKNOWN";
+>     +-const char *unknownmethod = "UNKNOWN";
+>     +-
+>     +-const char *ci_method_string(int method)
+>     +-{
+>     +-? ? return (method <= ICAP_RESPMOD
+>     +-? ? ? ? ? ? && method >= ICAP_OPTIONS ? CI_Methods[method] :
+>     unknownmethod);
+>     +-}
+>     +-
+>     +-
+>     +-const char *ci_encaps_entity_string(int e)
+>     +-{
+>     +-? ? return (e <= ICAP_OPT_BODY
+>     +-? ? ? ? ? ? && e >= ICAP_REQ_HDR ? CI_EncapsEntities[e] :
+>     unknownentity);
+>     +-}
+>     +-#endif
+>     +-
+>     + ci_headers_list_t *ci_headers_create()
+>     + {
+>     +? ? ?ci_headers_list_t *h;
+>     +diff --git a/include/header.h b/include/header.h
+>     +index 4cab365..ed2de88 100644
+>     +--- a/include/header.h
+>     ++++ b/include/header.h
+>     +@@ -52,16 +52,8 @@ enum ci_encapsulated_entities {ICAP_REQ_HDR,
+>     ICAP_RES_HDR,
+>     +? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?};
+>     + CI_DECLARE_DATA extern const char *ci_encaps_entities[];
+>     +
+>     +-#ifdef __CYGWIN__
+>     +-
+>     +-const char *ci_encaps_entity_string(int e);
+>     +-
+>     +-#else
+>     +-
+>     + #define ci_encaps_entity_string(e) (e <= ICAP_OPT_BODY && e >=
+>     ICAP_REQ_HDR?ci_encaps_entities[e]:"UNKNOWN")
+>     +
+>     +-#endif
+>     +-
+>     + /**
+>     +? \typedef ci_headers_list_t
+>     +? \ingroup HEADERS
+>     +diff --git a/modules/Makefile.am b/modules/Makefile.am
+>     +index e6e9270..2d43a60 100644
+>     +--- a/modules/Makefile.am
+>     ++++ b/modules/Makefile.am
+>     +@@ -21,38 +21,44 @@ endif
+>     +
+>     + AM_CPPFLAGS=-I$(top_srcdir)/ -I$(top_srcdir)/include/
+>     -I$(top_builddir)/include/
+>     +
+>     +-sys_logger_la_LIBADD = @MODULES_LIBADD@
+>     ++if ISCYGWIN
+>     ++MODS_LIB_ADD=$(top_builddir)/libicapapi.la <http://libicapapi.la>
+>     ++else
+>     ++MODS_LIB_ADD=
+>     ++endif
+>     ++
+>     ++sys_logger_la_LIBADD = $(MODS_LIB_ADD)
+>     + sys_logger_la_CFLAGS=? @MODULES_CFLAGS@ @OPENSSL_ADD_FLAG@
+>     +-sys_logger_la_LDFLAGS= -module -avoid-version
+>     ++sys_logger_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
+>     + sys_logger_la_SOURCES = sys_logger.c
+>     +
+>     +-dnsbl_tables_la_LIBADD = @MODULES_LIBADD@
+>     ++dnsbl_tables_la_LIBADD = $(MODS_LIB_ADD)
+>     + dnsbl_tables_la_CFLAGS=? @MODULES_CFLAGS@ @OPENSSL_ADD_FLAG@
+>     +-dnsbl_tables_la_LDFLAGS= -module -avoid-version
+>     ++dnsbl_tables_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
+>     + dnsbl_tables_la_SOURCES = dnsbl_tables.c
+>     +
+>     +-perl_handler_la_LIBADD = @MODULES_LIBADD@ @perllib@ -L at perlcore@
+>     -lperl
+>     ++perl_handler_la_LIBADD = $(MODS_LIB_ADD) @perllib@ -L at perlcore@
+>     -lperl
+>     + perl_handler_la_CFLAGS=? @MODULES_CFLAGS@ @perlccflags@ -I at perlcore@
+>     +-perl_handler_la_LDFLAGS= -module -avoid-version @perlldflags@
+>     ++perl_handler_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
+>     @perlldflags@
+>     + perl_handler_la_SOURCES = perl_handler.c
+>     +
+>     +
+>     +-bdb_tables_la_LIBADD = @MODULES_LIBADD@ @BDB_ADD_LDADD@
+>     ++bdb_tables_la_LIBADD = $(MODS_LIB_ADD) @BDB_ADD_LDADD@
+>     + bdb_tables_la_CFLAGS=? @MODULES_CFLAGS@ @BDB_ADD_FLAG@
+>     +-bdb_tables_la_LDFLAGS= -module -avoid-version
+>     ++bdb_tables_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
+>     + bdb_tables_la_SOURCES = bdb_tables.c
+>     +
+>     +-ldap_module_la_LIBADD = @MODULES_LIBADD@ @LDAP_ADD_LDADD@
+>     $(top_builddir)/libicapapi.la <http://libicapapi.la>
+>     ++ldap_module_la_LIBADD = $(MODS_LIB_ADD) @LDAP_ADD_LDADD@
+>     + ldap_module_la_CFLAGS=? @MODULES_CFLAGS@ @LDAP_ADD_FLAG@
+>     +-ldap_module_la_LDFLAGS= -module -avoid-version
+>     ++ldap_module_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
+>     + ldap_module_la_SOURCES = ldap_module.c
+>     +
+>     +-memcached_cache_la_LIBADD=? @MODULES_LIBADD@ @MEMCACHED_ADD_LDADD@
+>     ++memcached_cache_la_LIBADD=? $(MODS_LIB_ADD) @MEMCACHED_ADD_LDADD@
+>     + memcached_cache_la_CFLAGS=? @MODULES_CFLAGS@ @MEMCACHED_ADD_FLAG@
+>     +-memcached_cache_la_LDFLAGS= -module -avoid-version
+>     ++memcached_cache_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
+>     + memcached_cache_la_SOURCES= memcached.c
+>     +
+>     +-shared_cache_la_LIBADD= @MODULES_LIBADD@
+>     ++shared_cache_la_LIBADD= $(MODS_LIB_ADD)
+>     + shared_cache_la_CFLAGS= @OPENSSL_ADD_FLAG@
+>     +-shared_cache_la_LDFLAGS= -module -avoid-version
+>     ++shared_cache_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
+>     + shared_cache_la_SOURCES= shared_cache.c
+>     +diff --git a/modules/bdb_tables.c b/modules/bdb_tables.c
+>     +index b8459be..1e908a9 100644
+>     +--- a/modules/bdb_tables.c
+>     ++++ b/modules/bdb_tables.c
+>     +@@ -176,8 +176,8 @@ void *bdb_table_open(struct ci_lookup_table
+>     *table)
+>     +
+>     +? ? ?/*We can not fork a Berkeley DB table, so we have to
+>     +? ? ? ?open bdb tables for every child, on childs start-up
+>     procedure*/
+>     +-? ? register_command_extend("openBDBtable", CHILD_START_CMD, table,
+>     +- command_real_open_table);
+>     ++? ? ci_command_register_action("openBDBtable", CHILD_START_CMD,
+>     table,
+>     ++ ?command_real_open_table);
+>     +
+>     +? ? ?return table->data;
+>     + }
+>     +@@ -257,3 +257,16 @@ void bdb_table_release_result(struct
+>     ci_lookup_table *table,void **val)
+>     + {
+>     +? ? ?ci_buffer_free(val);
+>     + }
+>     ++
+>     ++ #ifdef __CYGWIN__
+>     ++#include <w32api/windows.h>
+>     ++void ci_command_register_action(const char *name, int type, void
+>     *data,
+>     ++? ? ? ? ? ? ? ? ? ? ? ? ? ? ? void (*command_action) (const char
+>     *name, int type, void *data))
+>     ++ {
+>     ++? ?typedef void (*RA)(const char *, int, void *, void(*)(const
+>     char *, int, void *));
+>     ++? ?RA fn;
+>     ++? ?fn = (RA)GetProcAddress(GetModuleHandle(NULL),
+>     "ci_command_register_action");
+>     ++? ?if (fn)
+>     ++? ? ?(*fn)(name, type, data, command_action);
+>     ++ }
+>     ++#endif
+>     +diff --git a/modules/shared_cache.c b/modules/shared_cache.c
+>     +index 103b760..a79d51a 100644
+>     +--- a/modules/shared_cache.c
+>     ++++ b/modules/shared_cache.c
+>     +@@ -345,3 +345,15 @@ void ci_shared_cache_destroy(struct ci_cache
+>     *cache)
+>     +? ? ? ? ?ci_shared_mem_detach(&data->id);
+>     + }
+>     +
+>     ++#ifdef __CYGWIN__
+>     ++#include <w32api/windows.h>
+>     ++void ci_command_register_action(const char *name, int type, void
+>     *data,
+>     ++? ? ? ? ? ? ? ? ? ? ? ? ? ? ? void (*command_action) (const char
+>     *name, int type, void *data))
+>     ++ {
+>     ++? ?typedef void (*RA)(const char *, int, void *, void(*)(const
+>     char *, int, void *));
+>     ++? ?RA fn;
+>     ++? ?fn = (RA)GetProcAddress(GetModuleHandle(NULL),
+>     "ci_command_register_action");
+>     ++? ?if (fn)
+>     ++? ? ?(*fn)(name, type, data, command_action);
+>     ++ }
+>     ++#endif
+>     +diff --git a/modules/sys_logger.c b/modules/sys_logger.c
+>     +index 1c47753..1764b0d 100644
+>     +--- a/modules/sys_logger.c
+>     ++++ b/modules/sys_logger.c
+>     +@@ -60,7 +60,20 @@ int cfg_syslog_access(const char *directive,
+>     const char **argv, void *setdata);
+>     +? ? functions declared in log.c. This file is not included in
+>     c-icap library
+>     +? ? but defined in primary c-icap binary.
+>     + */
+>     ++#ifdef __CYGWIN__
+>     ++#include <w32api/windows.h>
+>     ++char *logformat_fmt(const char *name)
+>     ++{
+>     ++? typedef char* (*LF_FMT)(const char *);
+>     ++? LF_FMT fn;
+>     ++? fn = (LF_FMT)GetProcAddress(GetModuleHandle(NULL),
+>     "logformat_fmt");
+>     ++? if (fn)
+>     ++? ? return (*fn)(name);
+>     ++? return NULL;
+>     ++}
+>     ++#else
+>     + extern char *logformat_fmt(const char *name);
+>     ++#endif
+>     +
+>     + /*Configuration Table .....*/
+>     + static struct ci_conf_entry conf_variables[] = {
+>     +diff --git a/services/echo/Makefile.am b/services/echo/Makefile.am
+>     +index 402c8f9..7d701b1 100644
+>     +--- a/services/echo/Makefile.am
+>     ++++ b/services/echo/Makefile.am
+>     +@@ -3,9 +3,15 @@ pkglib_LTLIBRARIES=srv_echo.la <http://srv_echo.la>
+>     +
+>     + AM_CPPFLAGS=-I$(top_srcdir)/ -I$(top_srcdir)/include/
+>     -I$(top_builddir)/include/
+>     +
+>     +-srv_echo_la_LIBADD = @MODULES_LIBADD@
+>     ++if ISCYGWIN
+>     ++MODS_LIB_ADD=$(top_builddir)/libicapapi.la <http://libicapapi.la>
+>     ++else
+>     ++MODS_LIB_ADD=
+>     ++endif
+>     ++
+>     ++srv_echo_la_LIBADD = $(MODS_LIB_ADD)
+>     + srv_echo_la_CFLAGS=? @MODULES_CFLAGS@ @OPENSSL_ADD_FLAG@
+>     +-srv_echo_la_LDFLAGS= -module -avoid-version
+>     ++srv_echo_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
+>     + srv_echo_la_SOURCES = srv_echo.c
+>     +
+>     +
+>     +diff --git a/services/ex-206/Makefile.am
+>     b/services/ex-206/Makefile.am
+>     +index 44bbf21..ff73399 100644
+>     +--- a/services/ex-206/Makefile.am
+>     ++++ b/services/ex-206/Makefile.am
+>     +@@ -3,8 +3,14 @@ pkglib_LTLIBRARIES=srv_ex206.la
+>     <http://srv_ex206.la>
+>     +
+>     + AM_CPPFLAGS=-I$(top_srcdir)/ -I$(top_srcdir)/include/
+>     -I$(top_builddir)/include/
+>     +
+>     +-srv_ex206_la_LIBADD = @MODULES_LIBADD@
+>     ++if ISCYGWIN
+>     ++MODS_LIB_ADD=$(top_builddir)/libicapapi.la <http://libicapapi.la>
+>     ++else
+>     ++MODS_LIB_ADD=
+>     ++endif
+>     ++
+>     ++srv_ex206_la_LIBADD = $(MODS_LIB_ADD)
+>     + srv_ex206_la_CFLAGS=? @MODULES_CFLAGS@ @OPENSSL_ADD_FLAG@
+>     +-srv_ex206_la_LDFLAGS= -module -avoid-version
+>     ++srv_ex206_la_LDFLAGS= -module -avoid-version @LIBS_LDFLAGS@
+>     + srv_ex206_la_SOURCES = srv_ex206.c
+>     +
+>     +diff --git a/utils/c-icap-mkbdb.c b/utils/c-icap-mkbdb.c
+>     +index c29a46f..326ee1c 100644
+>     +--- a/utils/c-icap-mkbdb.c
+>     ++++ b/utils/c-icap-mkbdb.c
+>     +@@ -23,7 +23,7 @@ char *dbfile = NULL;
+>     + int DUMP_MODE = 0;
+>     + int VERSION_MODE = 0;
+>     + int USE_DBTREE = 0;
+>     +-long int PAGE_SIZE;
+>     ++long int DB_PAGE_SIZE;
+>     +
+>     + ci_mem_allocator_t *allocator = NULL;
+>     + int cfg_set_type(const char *directive, const char **argv, void
+>     *setdata);
+>     +@@ -52,7 +52,7 @@ static struct ci_options_entry options[] = {
+>     +? ? ? ? ?"The type of values"
+>     +? ? ?},
+>     +? ? ?{
+>     +-? ? ? ? "-p", "page_size", &PAGE_SIZE, ci_cfg_size_long,
+>     ++? ? ? ? "-p", "page_size", &DB_PAGE_SIZE, ci_cfg_size_long,
+>     +? ? ? ? ?"The page size to use for the database"
+>     +? ? ?},
+>     +? ? ?{
+>     +@@ -107,8 +107,8 @@ int open_db(char *path)
+>     +? ? ? ? ?return 0;
+>     +? ? ?}
+>     +
+>     +-? ? if (PAGE_SIZE > 512 && PAGE_SIZE <= 64*1024)
+>     +-? ? ? ? db->set_pagesize(db, (uint32_t)PAGE_SIZE);
+>     ++? ? if (DB_PAGE_SIZE > 512 && DB_PAGE_SIZE <= 64*1024)
+>     ++? ? ? ? db->set_pagesize(db, (uint32_t)DB_PAGE_SIZE);
+>     +
+>     +? ? ?if ((ret = db->open(db, NULL, path, NULL,
+>     +? ? ? ? ? ? ? ? ? ? ? ? ?(USE_DBTREE ? DB_BTREE : DB_HASH),
+>     -- 
+>     2.26.2
+>
+>
+>
+>     ------------------------------
+>
+>     Message: 22
+>     Date: Fri, 08 May 2020 09:10:41 +0000
+>     From: bugzilla at busybox.net <mailto:bugzilla@busybox.net>
+>     To: buildroot at uclibc.org <mailto:buildroot@uclibc.org>
+>     Subject: [Buildroot] [Bug 12841] util-linux/sfdisk 2.35.1 fails on
+>     ? ? ? ? sector-size header
+>     Message-ID: <bug-12841-163-UUAiJL3FjH@https.bugs.busybox.net/
+>     <http://bug-12841-163-UUAiJL3FjH@https.bugs.busybox.net/>>
+>     Content-Type: text/plain; charset="UTF-8"
+>
+>     https://bugs.busybox.net/show_bug.cgi?id=12841
+>     <https://bugs.busybox.net/show_bug.cgi?id=12841>
+>
+>     --- Comment #1 from Fabrice Fontaine <fontaine.fabrice@gmail.com
+>     <mailto:fontaine.fabrice@gmail.com>> ---
+>     Hi,
+>
+>     Instead of adding a custom patch, I retrieved the upstream patch:
+>     https://patchwork.ozlabs.org/project/buildroot/patch/20200507224150.242211-2-fontaine.fabrice at gmail.com
+>     <https://patchwork.ozlabs.org/project/buildroot/patch/20200507224150.242211-2-fontaine.fabrice@gmail.com>
+>
+>     Can you confirm that the patch above fixes your issue?
+>
+>     Best Regards,
+>
+>     Fabrice
+>
+>     -- 
+>     You are receiving this mail because:
+>     You are on the CC list for the bug.
+>
+>     ------------------------------
+>
+>     Message: 23
+>     Date: Fri, 08 May 2020 11:34:13 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: "Yann E. MORIN" <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     Cc: buildroot at buildroot.org <mailto:buildroot@buildroot.org>,
+>     Danomi Manchego
+>     ? ? ? ? <danomimanchego123@gmail.com
+>     <mailto:danomimanchego123@gmail.com>>
+>     Subject: Re: [Buildroot] [PATCH] release: don't include temp files
+>     Message-ID: <87eerusrca.fsf@dell.be.48ers.dk
+>     <mailto:87eerusrca.fsf@dell.be.48ers.dk>>
+>     Content-Type: text/plain
+>
+>     >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>> writes:
+>
+>     ?> When we prepare the release, we generate the manual in various
+>     formats,
+>     ?> so that it can be consulted locally without needing the miriads
+>     of tools
+>     ?> needed to generate it.
+>
+>     ?> However, this creates the temporary .br2-external.* files in
+>     the output
+>     ?> directory, and those end up in the release tarball.
+>
+>     ?> This is not a problem in practice, but is not clean.
+>
+>     ?> Run 'distclean' in the output directory, to get rid of
+>     everything but
+>     ?> the generated documentation.
+>
+>     ?> Reported-by: Danomi Manchego <danomimanchego123@gmail.com
+>     <mailto:danomimanchego123@gmail.com>>
+>     ?> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     ?> Cc: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>
+>     I am a bit surprised that our 'make distclean' doesn't delete the
+>     generated documentation, but OK - Here it is handy.
+>
+>     Committed, thanks.
+>
+>     -- 
+>     Bye, Peter Korsgaard
+>
+>
+>     ------------------------------
+>
+>     Message: 24
+>     Date: Fri, 8 May 2020 11:33:31 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit] release: don't include temp files
+>     Message-ID: <20200508091917.38AF691046@busybox.osuosl.org
+>     <mailto:20200508091917.38AF691046@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=bee47598aa1f853df14f7edb51d8a7cadcfa9939
+>     <https://git.buildroot.net/buildroot/commit/?id=bee47598aa1f853df14f7edb51d8a7cadcfa9939>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/master>
+>
+>     When we prepare the release, we generate the manual in various
+>     formats,
+>     so that it can be consulted locally without needing the miriads of
+>     tools
+>     needed to generate it.
+>
+>     However, this creates the temporary .br2-external.* files in the
+>     output
+>     directory, and those end up in the release tarball.
+>
+>     This is not a problem in practice, but is not clean.
+>
+>     Run 'distclean' in the output directory, to get rid of everything but
+>     the generated documentation.
+>
+>     Reported-by: Danomi Manchego <danomimanchego123@gmail.com
+>     <mailto:danomimanchego123@gmail.com>>
+>     Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     Cc: Peter Korsgaard <peter at korsgaard.com <mailto:peter@korsgaard.com>>
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?Makefile | 2 +-
+>     ?1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>     diff --git a/Makefile b/Makefile
+>     index 3aa4ba4532..2da34b5305 100644
+>     --- a/Makefile
+>     +++ b/Makefile
+>     @@ -1190,7 +1190,7 @@ release: OUT = buildroot-$(BR2_VERSION)
+>     ?release:
+>     ? ? ? ? git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
+>     ? ? ? ? $(MAKE) O=$(OUT) manual-html manual-text manual-pdf
+>     -? ? ? ?$(MAKE) O=$(OUT) clean
+>     +? ? ? ?$(MAKE) O=$(OUT) distclean
+>     ? ? ? ? tar rf $(OUT).tar $(OUT)
+>     ? ? ? ? gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
+>     ? ? ? ? bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
+>
+>
+>     ------------------------------
+>
+>     Message: 25
+>     Date: Fri, 08 May 2020 11:38:30 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: Max Filippov <jcmvbkbc at gmail.com <mailto:jcmvbkbc@gmail.com>>
+>     Cc: buildroot at buildroot.org <mailto:buildroot@buildroot.org>,
+>     Thomas Petazzoni
+>     ? ? ? ? <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     Subject: Re: [Buildroot] [PATCH] package/binutils: fix xtensa PR
+>     ? ? ? ? ld/25861
+>     Message-ID: <87a72isr55.fsf@dell.be.48ers.dk
+>     <mailto:87a72isr55.fsf@dell.be.48ers.dk>>
+>     Content-Type: text/plain
+>
+>     >>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com
+>     <mailto:jcmvbkbc@gmail.com>> writes:
+>
+>     ?> Handle link-time relaxation of full 16-bit difference values
+>     correctly
+>     ?> in xtensa linker. This fixes the following kind of build errors:
+>
+>     ?> .../five-point.cpp:338:(.debug_line+0x3b12):
+>     ?>? ? ? ? ? ? ? dangerous relocation: overflow after relaxation
+>
+>     ?> Backported from:
+>     ?>
+>     https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=30ce8e47fad9b057b6d7af9e1d43061126d34d20
+>     <https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=30ce8e47fad9b057b6d7af9e1d43061126d34d20>
+>     ?> Fixes:
+>     ?>
+>     http://autobuild.buildroot.net/results/67a5545779bbe8ca2b21da1f3ff2002053710ce1/
+>     <http://autobuild.buildroot.net/results/67a5545779bbe8ca2b21da1f3ff2002053710ce1/>
+>     ?>
+>     http://autobuild.buildroot.net/results/87f38998d2d60b6bce3128589973187ef9596e28/
+>     <http://autobuild.buildroot.net/results/87f38998d2d60b6bce3128589973187ef9596e28/>
+>
+>     ?> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com
+>     <mailto:jcmvbkbc@gmail.com>>
+>
+>     Committed to 2020.02.x, thanks.
+>
+>     -- 
+>     Bye, Peter Korsgaard
+>
+>
+>     ------------------------------
+>
+>     Message: 26
+>     Date: Fri, 08 May 2020 11:38:46 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: Max Filippov <jcmvbkbc at gmail.com <mailto:jcmvbkbc@gmail.com>>
+>     Cc: buildroot at buildroot.org <mailto:buildroot@buildroot.org>,
+>     Romain Naour <romain.naour at gmail.com <mailto:romain.naour@gmail.com>>,
+>     ? ? ? ? Thomas Petazzoni <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     Subject: Re: [Buildroot] [PATCH] package/binutils: fix XTENSA_NDIFF
+>     ? ? ? ? handling for PR ld/25861
+>     Message-ID: <875zd6sr4p.fsf@dell.be.48ers.dk
+>     <mailto:875zd6sr4p.fsf@dell.be.48ers.dk>>
+>     Content-Type: text/plain
+>
+>     >>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com
+>     <mailto:jcmvbkbc@gmail.com>> writes:
+>
+>     ?> Fix for xtensa PR ld/25861 introduced a regression in handling
+>     negative
+>     ?> symbol differences resulting in linker performing incorrect
+>     relaxation
+>     ?> or failing to link. Fix XTENSA_NDIFF relocation handling.
+>
+>     ?> Backported from:
+>     ?>
+>     https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=d548f47df4d2e3d117d504a4c9977982c78a0556
+>     <https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=d548f47df4d2e3d117d504a4c9977982c78a0556>
+>
+>     ?> Fixes: f0291ef4aba0 ("package/binutils: fix xtensa PR ld/25861")
+>     ?> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com
+>     <mailto:jcmvbkbc@gmail.com>>
+>
+>     Committed to 2020.02.x, thanks.
+>
+>     -- 
+>     Bye, Peter Korsgaard
+>
+>
+>     ------------------------------
+>
+>     Message: 27
+>     Date: Fri, 08 May 2020 11:39:37 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: S?bastien Szymanski <sebastien.szymanski@armadeus.com
+>     <mailto:sebastien.szymanski@armadeus.com>>
+>     Cc: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: Re: [Buildroot] [PATCH 1/1] package/evtest: switch to Gitlab
+>     Message-ID: <871rnusr3a.fsf@dell.be.48ers.dk
+>     <mailto:871rnusr3a.fsf@dell.be.48ers.dk>>
+>     Content-Type: text/plain; charset=utf-8
+>
+>     >>>>> "S?bastien" == S?bastien Szymanski
+>     <sebastien.szymanski@armadeus.com
+>     <mailto:sebastien.szymanski@armadeus.com>> writes:
+>
+>     ?> Downloading from the cgit repo is now broken and it is a mirror
+>     of the
+>     ?> Gitlab repo so use the Gitlab repo.
+>
+>     ?> Signed-off-by: S?bastien Szymanski
+>     <sebastien.szymanski@armadeus.com
+>     <mailto:sebastien.szymanski@armadeus.com>>
+>
+>     Committed to 2020.02.x, thanks.
+>
+>     -- 
+>     Bye, Peter Korsgaard
+>
+>
+>     ------------------------------
+>
+>     Message: 28
+>     Date: Fri,? 8 May 2020 11:45:09 +0200
+>     From: Joachim Nilsson <troglobit@gmail.com
+>     <mailto:troglobit@gmail.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Cc: Joachim Nilsson <troglobit at gmail.com <mailto:troglobit@gmail.com>>
+>     Subject: [Buildroot] [PATCH 1/1] configs/globalscale_espressobin: new
+>     ? ? ? ? defconfig
+>     Message-ID: <20200508094509.2574240-1-troglobit@gmail.com
+>     <mailto:20200508094509.2574240-1-troglobit@gmail.com>>
+>
+>     Basic support for the Marvell ESPRESSObin, by Globalscale
+>     Technologies.
+>
+>     http://espressobin.net
+>
+>     The kernel config has been extended with a fragment to enable
+>     switchcore
+>     support, DSA drivers, and VLAN filtering in the bridge.? To make
+>     use of
+>     this you need a custom libnl based application, or the iproute2 suite
+>     rather than the brctl tools, which don't support the VLAN filtering.
+>
+>     Signed-off-by: Joachim Nilsson <troglobit@gmail.com
+>     <mailto:troglobit@gmail.com>>
+>     ---
+>     ?.gitlab-ci.yml? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? |? 1 +
+>     ?DEVELOPERS? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? |? 4 +
+>     ?board/globalscale/espressobin/genimage.cfg? ? | 11 +++
+>     ?.../espressobin/linux-extras.config? ? ? ? ? ?| 14 +++
+>     ?board/globalscale/espressobin/readme.txt? ? ? | 90
+>     +++++++++++++++++++
+>     ?configs/globalscale_espressobin_defconfig? ? ?| 26 ++++++
+>     ?6 files changed, 146 insertions(+)
+>     ?create mode 100644 board/globalscale/espressobin/genimage.cfg
+>     ?create mode 100644 board/globalscale/espressobin/linux-extras.config
+>     ?create mode 100644 board/globalscale/espressobin/readme.txt
+>     ?create mode 100644 configs/globalscale_espressobin_defconfig
+>
+>     diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+>     index fa8e077a07..071d76974a 100644
+>     --- a/.gitlab-ci.yml
+>     +++ b/.gitlab-ci.yml
+>     @@ -197,6 +197,7 @@ friendlyarm_nanopi_a64_defconfig: { extends:
+>     .defconfig }
+>     ?friendlyarm_nanopi_neo2_defconfig: { extends: .defconfig }
+>     ?friendlyarm_nanopi_neo_plus2_defconfig: { extends: .defconfig }
+>     ?galileo_defconfig: { extends: .defconfig }
+>     +globalscale_espressobin_defconfig: { extends: .defconfig }
+>     ?grinn_chiliboard_defconfig: { extends: .defconfig }
+>     ?grinn_liteboard_defconfig: { extends: .defconfig }
+>     ?hifive_unleashed_defconfig: { extends: .defconfig }
+>     diff --git a/DEVELOPERS b/DEVELOPERS
+>     index e427ab15d4..e926174797 100644
+>     --- a/DEVELOPERS
+>     +++ b/DEVELOPERS
+>     @@ -1291,6 +1291,10 @@ F:? ? ? ?package/libuhttpd/
+>     ?F:? ? ?package/libuwsc/
+>     ?F:? ? ?package/rtty/
+>
+>     +N:? ? ?Joachim Nilsson <troglobit@gmail.com
+>     <mailto:troglobit@gmail.com>>
+>     +F:? ? ?configs/globalscale_espressobin_defconfig
+>     +F:? ? ?board/globalscale/espressobin/
+>     +
+>     ?N:? ? ?Joao Pinto <jpinto at synopsys.com <mailto:jpinto@synopsys.com>>
+>     ?F:? ? ?board/synopsys/vdk/
+>     ?F:? ? ?configs/snps_aarch64_vdk_defconfig
+>     diff --git a/board/globalscale/espressobin/genimage.cfg
+>     b/board/globalscale/espressobin/genimage.cfg
+>     new file mode 100644
+>     index 0000000000..360c8f098f
+>     --- /dev/null
+>     +++ b/board/globalscale/espressobin/genimage.cfg
+>     @@ -0,0 +1,11 @@
+>     +# Minimal image, no U-boot since v3/v5 cannot boot from sdcard, see
+>     +# readme.txt for details on configuring the on-board u-boot.
+>     +image sdcard.img {
+>     +? ? ? ?hdimage {
+>     +? ? ? ?}
+>     +
+>     +? ? ? ?partition rootfs {
+>     +? ? ? ? ? ? ? ?partition-type = 0x83
+>     +? ? ? ? ? ? ? ?image = "rootfs.ext4"
+>     +? ? ? ?}
+>     +}
+>     diff --git a/board/globalscale/espressobin/linux-extras.config
+>     b/board/globalscale/espressobin/linux-extras.config
+>     new file mode 100644
+>     index 0000000000..7ce0a495c1
+>     --- /dev/null
+>     +++ b/board/globalscale/espressobin/linux-extras.config
+>     @@ -0,0 +1,14 @@
+>     +#
+>     +# The Espressobin has a switchcore with full support in the kernel.
+>     +# This fragment enables DSA and its drivers, inclding VLAN aware
+>     bridge
+>     +# support to allow users to easily set up a LAN switch + WAN
+>     interface.
+>     +#
+>     +CONFIG_NET_DSA=m
+>     +CONFIG_VLAN_8021Q=y
+>     +
+>     +CONFIG_BRIDGE=m
+>     +CONFIG_BRIDGE_IGMP_SNOOPING=y
+>     +CONFIG_BRIDGE_VLAN_FILTERING=y
+>     +
+>     +CONFIG_NET_DSA_MV88E6XXX=m
+>     +CONFIG_NET_DSA_MV88E6XXX_PTP=y
+>     diff --git a/board/globalscale/espressobin/readme.txt
+>     b/board/globalscale/espressobin/readme.txt
+>     new file mode 100644
+>     index 0000000000..e519b1e1f4
+>     --- /dev/null
+>     +++ b/board/globalscale/espressobin/readme.txt
+>     @@ -0,0 +1,90 @@
+>     +Marvell ESPRESSObin
+>     +===================
+>     +
+>     +This default configuration allows you to quickly get up and
+>     running with
+>     +the Marvell ESPRESSObin board by Globalscale Technologies Inc.
+>     +
+>     +The ESPRESSObin is based on the Marvell Armada 88F3720 SoC,
+>     coupled with
+>     +a Marvell 88E6341 switch core "Topaz", with three exposed gigabit
+>     ports.
+>     +
+>     +? ? ?_________________________
+>     +? ? |#? U? ? ?W? ?L? L? ? U? #|
+>     +? ? |#? S? ? ?A? ?A? A? ? S? #|
+>     +? ? |#? B? ? ?N? ?N? N? ? B? #|
+>     +? ? |#? ? ? ? ? ? 0? 1? ? ? ?#|
+>     +? ? |#? ? ? Mini? ? ? ? ? ? ?#|
+>     +? ? |#? ? ? -PCI? ? ? ? ? ? ?#|
+>     +? ? |#? ? ? ? ? ? ? ? ? ? ? ?#|
+>     +? ? |#? 5? ? ? ? ? ? ? ? ? ? #|
+>     +? ? |#__V___usb_PWR_SATA__SW_#|
+>     +
+>     +? ? Fig 1: Overview of board
+>     +
+>     +Notice difference in Ethernet port layout compared to the Globalscale
+>     +docs.? They order the ports; LAN2, LAN1, WAN (left to right in figure
+>     +above).? For more information, see http://espressobin.net
+>     +
+>     +
+>     +Building
+>     +--------
+>     +
+>     +? ? $ make globalscale_espressobin_defconfig
+>     +? ? $ make
+>     +
+>     +This generates the kernel image, the devicetree binary, the
+>     rootfs as a
+>     +tar.gz, and a filesystem image containing everything.
+>     +
+>     +All build artifacts are located in `output/images/`
+>     +
+>     +
+>     +Booting
+>     +-------
+>     +
+>     +To boot, you need a UART connection, using the on-board micro USB
+>     port
+>     +set to 115200 8N1.
+>     +
+>     +By default, the ESPRESSObin comes with a pre-flashed U-Boot set up to
+>     +load the kernel, device-tree and rootfs from SPI NOR flash.? The
+>     board
+>     +jumpers can be changed to boot from different sources, see the quick
+>     +start guide for each board revision for details:
+>     +
+>     +-
+>     ftp://downloads.globalscaletechnologies.com/Downloads/Espressobin/ESPRESSObin%20V5/
+>     <ftp://downloads.globalscaletechnologies.com/Downloads/Espressobin/ESPRESSObin%20V5/>
+>     +-
+>     ftp://downloads.globalscaletechnologies.com/Downloads/Espressobin/ESPRESSObin%20V7/
+>     <ftp://downloads.globalscaletechnologies.com/Downloads/Espressobin/ESPRESSObin%20V7/>
+>     +
+>     +Note: the v5, and earlier, cannot boot from sdcard, so you have
+>     to set
+>     +up the factory U-Boot to boot into Buildroot:
+>     +
+>     +1. Flash rootfs image to sdcard drive, your `of=` device may differ:
+>     +
+>     +? ? ? ? $ sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 bs=1M
+>     +? ? ? ? $ sync
+>     +
+>     +2. Boot board from SPI NOR, interrupt boot by pressing any key ...
+>     +3. Check with `printenv` that the default setup is OK, otherwise
+>     ensure
+>     +? ?the following are set, and define `bootcmd` for automatic boot:
+>     +
+>     +? ? ? ?> setenv kernel_addr 0x5000000
+>     +? ? ? ? > setenv fdt_addr 0x1800000
+>     +? ? ? ? > setenv fdt_name boot/armada-3720-espressobin.dtb
+>     +? ? ? ?> setenv console console=ttyMV0,115200
+>     earlycon=ar3700_uart,0xd0012000
+>     +? ? ? ? > setenv bootcmd 'mmc dev 0; ext4load mmc 0:1
+>     $kernel_addr $image_name;ext4load mmc 0:1 $fdt_addr
+>     $fdt_name;setenv bootargs $console root=/dev/mmcblk0p1 rw
+>     rootwait; booti $kernel_addr - $fdt_addr'
+>     +
+>     +4. Call the boot command, or `reset` the board to start:
+>     +
+>     +? ? ? ? > run bootcmd
+>     +
+>     +
+>     +Networking
+>     +----------
+>     +
+>     +To enable Ethernet networking, load the `mv88e6xxx` kernel
+>     module, and
+>     +bring up each respective interface needed:
+>     +
+>     +? ? # modprobe mv88e6xxx
+>     +? ? # ifconfig wan up
+>     +
+>     +A more advanced scenario is setting up switching between the
+>     ports using
+>     +the Linux bridge.? The kernel switchdev layer, and DSA driver, ensure
+>     +switch functions are "offloaded" to the HW switch, i.e., all traffic
+>     +between LAN ports never reach the CPU.? For this you need the
+>     iproute2
+>     +suite of tools.
+>     diff --git a/configs/globalscale_espressobin_defconfig
+>     b/configs/globalscale_espressobin_defconfig
+>     new file mode 100644
+>     index 0000000000..c0b9f69559
+>     --- /dev/null
+>     +++ b/configs/globalscale_espressobin_defconfig
+>     @@ -0,0 +1,26 @@
+>     +BR2_aarch64=y
+>     +BR2_cortex_a53=y
+>     +BR2_ARM_FPU_VFPV4=y
+>     +
+>     +# Linux headers same as kernel, a 5.6 series
+>     +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+>     +
+>     +# Kernel
+>     +BR2_LINUX_KERNEL=y
+>     +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>     +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.11"
+>     +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+>     +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/globalscale/espressobin/linux-extras.config"
+>     +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>     +BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-3720-espressobin
+>     marvell/armada-3720-espressobin-emmc
+>     marvell/armada-3720-espressobin-v7
+>     marvell/armada-3720-espressobin-v7-emmc"
+>     +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+>     +
+>     +# Filesystem
+>     +BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Marvell
+>     ESPRESSObin"
+>     +BR2_TARGET_ROOTFS_EXT2=y
+>     +BR2_TARGET_ROOTFS_EXT2_4=y
+>     +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>     +BR2_TARGET_ROOTFS_TAR_GZIP=y
+>     +BR2_PACKAGE_HOST_GENIMAGE=y
+>     +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>     +BR2_ROOTFS_POST_SCRIPT_ARGS="-c
+>     board/globalscale/espressobin/genimage.cfg"
+>     -- 
+>     2.25.1
+>
+>
+>
+>     ------------------------------
+>
+>     Message: 29
+>     Date: Fri, 08 May 2020 11:49:07 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: Angelo Compagnucci <angelo@amarulasolutions.com
+>     <mailto:angelo@amarulasolutions.com>>
+>     Cc: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: Re: [Buildroot] [PATCH] package/apache: fixing apxs path
+>     ? ? ? ? mangling
+>     Message-ID: <87wo5mrc30.fsf@dell.be.48ers.dk
+>     <mailto:87wo5mrc30.fsf@dell.be.48ers.dk>>
+>     Content-Type: text/plain
+>
+>     >>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com
+>     <mailto:angelo@amarulasolutions.com>> writes:
+>
+>     ?> Latest version of Apache introduce a new apxs with a slightly
+>     modified
+>     ?> path handling logic. In order to simplify the crosscompilation, the
+>     ?> software removes the common prefix from bin install dir and build
+>     ?> install dir, but for this to work they both should have a common
+>     ?> prefix. So we introduce a new regexp to fix /usr/bin to staging
+>     dir,
+>     ?> the regexps are also fixed to replace only the exact path between
+>     ?> double quotes.a
+>
+>     ?> Fixes:
+>     ?>
+>     http://autobuild.buildroot.net/results/c41f31566974209897a3a1ec35afe2536fb248cc
+>     <http://autobuild.buildroot.net/results/c41f31566974209897a3a1ec35afe2536fb248cc>
+>     ?>
+>     http://autobuild.buildroot.net/results/b93f19976ce96e79ea159c25ed74a7377c78f334
+>     <http://autobuild.buildroot.net/results/b93f19976ce96e79ea159c25ed74a7377c78f334>
+>
+>     ?> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com
+>     <mailto:angelo@amarulasolutions.com>>
+>
+>     Committed to 2020.02.x, thanks.
+>
+>     -- 
+>     Bye, Peter Korsgaard
+>
+>
+>     ------------------------------
+>
+>     Message: 30
+>     Date: Fri, 08 May 2020 11:51:09 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: Thomas Petazzoni <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     Cc: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: Re: [Buildroot] [git commit] package/wireguard-linux-compat:
+>     ? ? ? ? depend on headers < 5.6
+>     Message-ID: <87sggarbzm.fsf@dell.be.48ers.dk
+>     <mailto:87sggarbzm.fsf@dell.be.48ers.dk>>
+>     Content-Type: text/plain
+>
+>     >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>> writes:
+>
+>     ?> commit:
+>     https://git.buildroot.net/buildroot/commit/?id=da5afc10a45d1e1b5ab7ab6f9230ed7ba44581e7
+>     <https://git.buildroot.net/buildroot/commit/?id=da5afc10a45d1e1b5ab7ab6f9230ed7ba44581e7>
+>     ?> branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/master>
+>
+>     ?> Since wireguard is built into kernels 5.6 and later we can't build
+>     ?> wireguard-linux-compat on them, so we need to depend on
+>     ?> !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6.
+>
+>     ?> Signed-off-by: James Hilliard <james.hilliard1@gmail.com
+>     <mailto:james.hilliard1@gmail.com>>
+>     ?> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>
+>     Committed to 2020.02.x, thanks.
+>
+>     -- 
+>     Bye, Peter Korsgaard
+>
+>
+>     ------------------------------
+>
+>     Message: 31
+>     Date: Fri, 08 May 2020 11:51:42 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: Re: [Buildroot] [git commit] package/wireguard-linux-compat:
+>     ? ? ? ? tweak kernel-headers < 5.6 logic
+>     Message-ID: <87o8qyrbyp.fsf@dell.be.48ers.dk
+>     <mailto:87o8qyrbyp.fsf@dell.be.48ers.dk>>
+>     Content-Type: text/plain
+>
+>     >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>> writes:
+>
+>     ?> commit:
+>     https://git.buildroot.net/buildroot/commit/?id=74a865b1fc85352b814d032fa8725ace13f27eca
+>     <https://git.buildroot.net/buildroot/commit/?id=74a865b1fc85352b814d032fa8725ace13f27eca>
+>     ?> branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/master>
+>
+>     ?> The reason why the external wireguard kernel module is not
+>     allowed with
+>     ?> kernel headers >= 5.6 is that wireguard is included in the
+>     upstream kernel
+>     ?> since 5.6 rather than some kind of (fixable) incompatibility
+>     issue.? Adjust
+>     ?> the comment to make that clear.
+>
+>     ?> While we're at it, drop the redundant !5.6 dependency on the
+>     kernel headers
+>     ?> dependency comment.? If headers are older than 3.10, then they
+>     are also
+>     ?> older than 5.6, so the statement is redundant.
+>
+>     ?> Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>
+>     Committed to 2020.02.x, thanks.
+>
+>     -- 
+>     Bye, Peter Korsgaard
+>
+>
+>     ------------------------------
+>
+>     Message: 32
+>     Date: Fri, 08 May 2020 11:52:55 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: "Yann E. MORIN" <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     Cc: Timo Ketola <Timo.Ketola@exertus.fi
+>     <mailto:Timo.Ketola@exertus.fi>>, "buildroot\@buildroot.org
+>     <http://buildroot.org>"
+>     ? ? ? ? <buildroot at buildroot.org <mailto:buildroot@buildroot.org>>
+>     Subject: Re: [Buildroot] [PATCH 1/1] fs/cpio: make initramfs init
+>     ? ? ? ? script survive 'console=' kernel argument
+>     Message-ID: <87k11mrbwo.fsf@dell.be.48ers.dk
+>     <mailto:87k11mrbwo.fsf@dell.be.48ers.dk>>
+>     Content-Type: text/plain
+>
+>     >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>> writes:
+>
+>     ?> Timo, All,
+>     ?> On 2019-09-23 10:58 +0000, Timo Ketola spake thusly:
+>     ?>> When booting with 'console=<empty>' in the kernel command line
+>     (as e.g.
+>     ?>> U-Boot does with silent flags in effect), opening /dev/console
+>     fails.
+>     ?>> That is fatal in the /init script and kernel will panic. It is
+>     also
+>     ?>> needless, because the kernel tries to open it anyway (well, as
+>     long as
+>     ?>> we have console node in initramfs /dev; cpio.mk
+>     <http://cpio.mk> creates that alright).
+>     ?>>
+>     ?>> Signed-off-by: Timo Ketola <timo.ketola@exertus.fi
+>     <mailto:timo.ketola@exertus.fi>>
+>
+>     ?> I've applied to master, after extending the commit log with all
+>     the gory
+>     ?> details explaininng why we can indeed safely remove those
+>     redisrections
+>     ?> now.
+>
+>     ?> Thank you for the patience on this patch.
+>
+>     ?> Thanks also to Peter for helping on IRC about this research.
+>
+>     Committed to 2020.02.x, thanks.
+>
+>     -- 
+>     Bye, Peter Korsgaard
+>
+>
+>     ------------------------------
+>
+>     Message: 33
+>     Date: Fri, 8 May 2020 11:50:34 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x]
+>     ? ? ? ? package/wireguard-linux-compat: tweak kernel-headers < 5.6
+>     logic
+>     Message-ID: <20200508093729.D38B491054@busybox.osuosl.org
+>     <mailto:20200508093729.D38B491054@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=0b3ca0be160ae5a2b1ee5da26772f02d7f130f6a
+>     <https://git.buildroot.net/buildroot/commit/?id=0b3ca0be160ae5a2b1ee5da26772f02d7f130f6a>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     The reason why the external wireguard kernel module is not allowed
+>     with
+>     kernel headers >= 5.6 is that wireguard is included in the
+>     upstream kernel
+>     since 5.6 rather than some kind of (fixable) incompatibility
+>     issue.? Adjust
+>     the comment to make that clear.
+>
+>     While we're at it, drop the redundant !5.6 dependency on the
+>     kernel headers
+>     dependency comment.? If headers are older than 3.10, then they are
+>     also
+>     older than 5.6, so the statement is redundant.
+>
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     (cherry picked from commit 74a865b1fc85352b814d032fa8725ace13f27eca)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?package/wireguard-linux-compat/Config.in | 3 +--
+>     ?1 file changed, 1 insertion(+), 2 deletions(-)
+>
+>     diff --git a/package/wireguard-linux-compat/Config.in
+>     b/package/wireguard-linux-compat/Config.in
+>     index 6e41a0951b..5a323a35e5 100644
+>     --- a/package/wireguard-linux-compat/Config.in
+>     +++ b/package/wireguard-linux-compat/Config.in
+>     @@ -3,7 +3,7 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+>     ? ? ? ? depends on BR2_LINUX_KERNEL
+>     ? ? ? ? # kernel module requires 3.10+
+>     ? ? ? ? depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+>     -? ? ? ?# kernel module incompatible with 5.6+
+>     +? ? ? ?# kernel module in upstream linux since 5.6
+>     ? ? ? ? depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+>     ? ? ? ? help
+>     ? ? ? ? ? WireGuard is an extremely simple yet fast and modern VPN
+>     @@ -23,5 +23,4 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+>
+>     ?comment "wireguard-linux-compat needs a toolchain w/ headers >= 3.10"
+>     ? ? ? ? depends on BR2_LINUX_KERNEL
+>     -? ? ? ?depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+>     ? ? ? ? depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+>
+>
+>     ------------------------------
+>
+>     Message: 34
+>     Date: Fri, 8 May 2020 11:41:46 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x] package/apache:
+>     ? ? ? ? fixing apxs path mangling
+>     Message-ID: <20200508093729.B977391052@busybox.osuosl.org
+>     <mailto:20200508093729.B977391052@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=b9580c835b9cb36ef3264ebee82fca2c6fe4ce60
+>     <https://git.buildroot.net/buildroot/commit/?id=b9580c835b9cb36ef3264ebee82fca2c6fe4ce60>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     Latest version of Apache introduce a new apxs with a slightly modified
+>     path handling logic. In order to simplify the crosscompilation, the
+>     software removes the common prefix from bin install dir and build
+>     install dir, but for this to work they both should have a common
+>     prefix.
+>
+>     So we introduce a new regexp to fix /usr/bin to staging dir, the
+>     regexps
+>     are also fixed to replace only the exact path between double
+>     quotes, to
+>     avoid replacing the she-bang line.
+>
+>     Fixes:
+>     http://autobuild.buildroot.net/results/c41f31566974209897a3a1ec35afe2536fb248cc
+>     <http://autobuild.buildroot.net/results/c41f31566974209897a3a1ec35afe2536fb248cc>
+>     http://autobuild.buildroot.net/results/b93f19976ce96e79ea159c25ed74a7377c78f334
+>     <http://autobuild.buildroot.net/results/b93f19976ce96e79ea159c25ed74a7377c78f334>
+>
+>     Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com
+>     <mailto:angelo@amarulasolutions.com>>
+>     [yann.morin.1998 at free.fr <mailto:yann.morin.1998@free.fr>:
+>     ? - add the last few words about the she-bang blurb
+>     ? - do not use quotes in the existing /sur/bin regexp
+>     ]
+>     Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     (cherry picked from commit aa04edab77c75bc04ffb52755430bcdeb19c6d74)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?package/apache/apache.mk <http://apache.mk> | 1 +
+>     ?1 file changed, 1 insertion(+)
+>
+>     diff --git a/package/apache/apache.mk <http://apache.mk>
+>     b/package/apache/apache.mk <http://apache.mk>
+>     index 48a64eae0e..068f36e325 100644
+>     --- a/package/apache/apache.mk <http://apache.mk>
+>     +++ b/package/apache/apache.mk <http://apache.mk>
+>     @@ -99,6 +99,7 @@ APACHE_CONF_OPTS += --disable-deflate
+>     ?endif
+>
+>     ?define APACHE_FIX_STAGING_APACHE_CONFIG
+>     +? ? ? ?$(SED) 's%"/usr/bin"%"$(STAGING_DIR)/usr/bin"%'
+>     $(STAGING_DIR)/usr/bin/apxs
+>     ? ? ? ? $(SED) 's%/usr/build%$(STAGING_DIR)/usr/build%'
+>     $(STAGING_DIR)/usr/bin/apxs
+>     ? ? ? ? $(SED) 's%^prefix =.*%prefix = $(STAGING_DIR)/usr%'
+>     $(STAGING_DIR)/usr/build/config_vars.mk <http://config_vars.mk>
+>     ?endef
+>
+>
+>     ------------------------------
+>
+>     Message: 35
+>     Date: Fri, 8 May 2020 11:50:29 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x]
+>     ? ? ? ? package/wireguard-linux-compat: depend on headers < 5.6
+>     Message-ID: <20200508093729.C96C391052@busybox.osuosl.org
+>     <mailto:20200508093729.C96C391052@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=50f63e027172070358a1af5ec08a1b9d880ac767
+>     <https://git.buildroot.net/buildroot/commit/?id=50f63e027172070358a1af5ec08a1b9d880ac767>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     Since wireguard is built into kernels 5.6 and later we can't build
+>     wireguard-linux-compat on them, so we need to depend on
+>     !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6.
+>
+>     Signed-off-by: James Hilliard <james.hilliard1@gmail.com
+>     <mailto:james.hilliard1@gmail.com>>
+>     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com
+>     <mailto:thomas.petazzoni@bootlin.com>>
+>     (cherry picked from commit da5afc10a45d1e1b5ab7ab6f9230ed7ba44581e7)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?package/wireguard-linux-compat/Config.in | 6 +++++-
+>     ?1 file changed, 5 insertions(+), 1 deletion(-)
+>
+>     diff --git a/package/wireguard-linux-compat/Config.in
+>     b/package/wireguard-linux-compat/Config.in
+>     index 4ee214be63..6e41a0951b 100644
+>     --- a/package/wireguard-linux-compat/Config.in
+>     +++ b/package/wireguard-linux-compat/Config.in
+>     @@ -3,6 +3,8 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+>     ? ? ? ? depends on BR2_LINUX_KERNEL
+>     ? ? ? ? # kernel module requires 3.10+
+>     ? ? ? ? depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+>     +? ? ? ?# kernel module incompatible with 5.6+
+>     +? ? ? ?depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+>     ? ? ? ? help
+>     ? ? ? ? ? WireGuard is an extremely simple yet fast and modern VPN
+>     ? ? ? ? ? that utilizes state-of-the-art cryptography. It aims to be
+>     @@ -20,4 +22,6 @@ config BR2_PACKAGE_WIREGUARD_LINUX_COMPAT
+>     https://www.wireguard.com
+>
+>     ?comment "wireguard-linux-compat needs a toolchain w/ headers >= 3.10"
+>     -? ? ? ?depends on BR2_LINUX_KERNEL &&
+>     !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+>     +? ? ? ?depends on BR2_LINUX_KERNEL
+>     +? ? ? ?depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+>     +? ? ? ?depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+>
+>
+>     ------------------------------
+>
+>     Message: 36
+>     Date: Fri, 8 May 2020 11:37:44 +0200
+>     From: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>     Subject: [Buildroot] [git commit branch/2020.02.x] package/binutils:
+>     ? ? ? ? fix XTENSA_NDIFF handling for PR ld/25861
+>     Message-ID: <20200508093729.9AE7B90FE2@busybox.osuosl.org
+>     <mailto:20200508093729.9AE7B90FE2@busybox.osuosl.org>>
+>
+>     commit:
+>     https://git.buildroot.net/buildroot/commit/?id=05e9d76c1271628abd138227f9063c5942e720ba
+>     <https://git.buildroot.net/buildroot/commit/?id=05e9d76c1271628abd138227f9063c5942e720ba>
+>     branch:
+>     https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>     <https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x>
+>
+>     Fix for xtensa PR ld/25861 introduced a regression in handling
+>     negative
+>     symbol differences resulting in linker performing incorrect relaxation
+>     or failing to link. Fix XTENSA_NDIFF relocation handling.
+>
+>     Backported from:
+>     https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=d548f47df4d2e3d117d504a4c9977982c78a0556
+>     <https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=d548f47df4d2e3d117d504a4c9977982c78a0556>
+>
+>     Fixes: f0291ef4aba0 ("package/binutils: fix xtensa PR ld/25861")
+>     Signed-off-by: Max Filippov <jcmvbkbc@gmail.com
+>     <mailto:jcmvbkbc@gmail.com>>
+>     Tested-by: Romain Naour <romain.naour@gmail.com
+>     <mailto:romain.naour@gmail.com>>
+>     Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr
+>     <mailto:yann.morin.1998@free.fr>>
+>     (cherry picked from commit f31db17a8d3accc7367e262c326f467f7dc879a2)
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com
+>     <mailto:peter@korsgaard.com>>
+>     ---
+>     ?...fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch | 128
+>     +++++++++++++++++++++
+>     ?...fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch | 128
+>     +++++++++++++++++++++
+>     ?...fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch | 128
+>     +++++++++++++++++++++
+>     ?3 files changed, 384 insertions(+)
+>
+>     diff --git
+>     a/package/binutils/2.31.1/0020-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+>     b/package/binutils/2.31.1/0020-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+>     new file mode 100644
+>     index 0000000000..28f17d7c56
+>     --- /dev/null
+>     +++
+>     b/package/binutils/2.31.1/0020-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+>     @@ -0,0 +1,128 @@
+>     +From 735321812435ae278d3766a3371f55937dc776d6 Mon Sep 17 00:00:00
+>     2001
+>     +From: Max Filippov <jcmvbkbc at gmail.com <mailto:jcmvbkbc@gmail.com>>
+>     +Date: Sat, 25 Apr 2020 00:40:25 -0700
+>     +Subject: [PATCH] xtensa: fix XTENSA_NDIFF handling for PR ld/25861
+>     +
+>     +Fields marked with XTENSA_NDIFF relocations are not negated, they
+>     only
+>     +have sign bits removed. Don't negate their values when relaxation is
+>     +performed. Don't add sign bits when the value is zero. Report
+>     overflow
+>     +when the result has negative sign but all significant bits are zero.
+>     +
+>     +2020-04-29? Max Filippov? <jcmvbkbc@gmail.com
+>     <mailto:jcmvbkbc@gmail.com>>
+>     +bfd/
+>     +? ? ? ?* elf32-xtensa.c (relax_section): Don't negate diff_value for
+>     +? ? ? ?XTENSA_NDIFF relocations. Don't add sign bits whe diff_value
+>     +? ? ? ?equals 0. Report overflow when the result has negative
+>     sign but
+>     +? ? ? ?all significant bits are zero.
+>     +
+>     +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com
+>     <mailto:jcmvbkbc@gmail.com>>
+>     +Backported from: d548f47df4d2e3d117d504a4c9977982c78a0556
+>     +---
+>     +
+>     + bfd/elf32-xtensa.c? ? ? ? ? ? ? ? ? ?| 26 +++++++++++++++-----------
+>     + 1 file changed, 15 insertions(+), 11 deletions(-)
+>     +
+>     +diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+>     +index fded42d52a9a..4327b027911f 100644
+>     +--- a/bfd/elf32-xtensa.c
+>     ++++ b/bfd/elf32-xtensa.c
+>     +@@ -9670,37 +9670,44 @@ relax_section (bfd *abfd, asection *sec,
+>     struct bfd_link_info *link_info)
+>     +? ? ? ? ? ? ? ? ?switch (r_type)
+>     +? ? ? ? ? ? ? ? ? ?{
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_DIFF8:
+>     ++? ? ? ? ? ? ? ? ? ? diff_mask = 0x7f;
+>     +? ? ? ? ? ? ? ? ? ? ?diff_value =
+>     +? ? ? ? ? ? ? ? ? ? ? ?bfd_get_signed_8 (abfd,
+>     &contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_DIFF16:
+>     ++? ? ? ? ? ? ? ? ? ? diff_mask = 0x7fff;
+>     +? ? ? ? ? ? ? ? ? ? ?diff_value =
+>     +? ? ? ? ? ? ? ? ? ? ? ?bfd_get_signed_16 (abfd,
+>     &contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_DIFF32:
+>     ++? ? ? ? ? ? ? ? ? ? diff_mask = 0x7fffffff;
+>     +? ? ? ? ? ? ? ? ? ? ?diff_value =
+>     +? ? ? ? ? ? ? ? ? ? ? ?bfd_get_signed_32 (abfd,
+>     &contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_PDIFF8:
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_NDIFF8:
+>     ++? ? ? ? ? ? ? ? ? ? diff_mask = 0xff;
+>     +? ? ? ? ? ? ? ? ? ? ?diff_value =
+>     +? ? ? ? ? ? ? ? ? ? ? ?bfd_get_8 (abfd,
+>     &contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_PDIFF16:
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_NDIFF16:
+>     ++? ? ? ? ? ? ? ? ? ? diff_mask = 0xffff;
+>     +? ? ? ? ? ? ? ? ? ? ?diff_value =
+>     +? ? ? ? ? ? ? ? ? ? ? ?bfd_get_16 (abfd,
+>     &contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_PDIFF32:
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_NDIFF32:
+>     ++? ? ? ? ? ? ? ? ? ? diff_mask = 0xffffffff;
+>     +? ? ? ? ? ? ? ? ? ? ?diff_value =
+>     +? ? ? ? ? ? ? ? ? ? ? ?bfd_get_32 (abfd,
+>     &contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?}
+>     +
+>     +? ? ? ? ? ? ? ? ?if (r_type >= R_XTENSA_NDIFF8
+>     +-? ? ? ? ? ? ? ? ? ? && r_type <= R_XTENSA_NDIFF32)
+>     +-? ? ? ? ? ? ? ? ? diff_value = -diff_value;
+>     ++? ? ? ? ? ? ? ? ? ? && r_type <= R_XTENSA_NDIFF32
+>     ++? ? ? ? ? ? ? ? ? ? && diff_value)
+>     ++? ? ? ? ? ? ? ? ? diff_value |= ~diff_mask;
+>     +
+>     +? ? ? ? ? ? ? ? ?new_end_offset = offset_with_removed_text_map
+>     + ?(&target_relax_info->action_list,
+>     +@@ -9710,43 +9717,40 @@ relax_section (bfd *abfd, asection *sec,
+>     struct bfd_link_info *link_info)
+>     +? ? ? ? ? ? ? ? ?switch (r_type)
+>     +? ? ? ? ? ? ? ? ? ?{
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_DIFF8:
+>     +-? ? ? ? ? ? ? ? ? ? diff_mask = 0x7f;
+>     +? ? ? ? ? ? ? ? ? ? ?bfd_put_signed_8 (abfd, diff_value,
+>     + &contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_DIFF16:
+>     +-? ? ? ? ? ? ? ? ? ? diff_mask = 0x7fff;
+>     +? ? ? ? ? ? ? ? ? ? ?bfd_put_signed_16 (abfd, diff_value,
+>     + ?&contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_DIFF32:
+>     +-? ? ? ? ? ? ? ? ? ? diff_mask = 0x7fffffff;
+>     +? ? ? ? ? ? ? ? ? ? ?bfd_put_signed_32 (abfd, diff_value,
+>     + ?&contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_PDIFF8:
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_NDIFF8:
+>     +-? ? ? ? ? ? ? ? ? ? diff_mask = 0xff;
+>     +? ? ? ? ? ? ? ? ? ? ?bfd_put_8 (abfd, diff_value,
+>     + &contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_PDIFF16:
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_NDIFF16:
+>     +-? ? ? ? ? ? ? ? ? ? diff_mask = 0xffff;
+>     +? ? ? ? ? ? ? ? ? ? ?bfd_put_16 (abfd, diff_value,
+>     + ?&contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_PDIFF32:
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_NDIFF32:
+>     +-? ? ? ? ? ? ? ? ? ? diff_mask = 0xffffffff;
+>     +? ? ? ? ? ? ? ? ? ? ?bfd_put_32 (abfd, diff_value,
+>     + ?&contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?}
+>     +
+>     +-? ? ? ? ? ? ? ? /* Check for overflow. Sign bits must be all
+>     zeroes or all ones */
+>     +-? ? ? ? ? ? ? ? if ((diff_value & ~diff_mask) != 0 &&
+>     +-? ? ? ? ? ? ? ? ? ? (diff_value & ~diff_mask) != (-1 & ~diff_mask))
+>     ++? ? ? ? ? ? ? ? /* Check for overflow. Sign bits must be all
+>     zeroes or
+>     ++? ? ? ? ? ? ? ? ? ?all ones.? When sign bits are all ones diff_value
+>     ++? ? ? ? ? ? ? ? ? ?may not be zero.? */
+>     ++? ? ? ? ? ? ? ? if (((diff_value & ~diff_mask) != 0
+>     ++? ? ? ? ? ? ? ? ? ? ?&& (diff_value & ~diff_mask) != ~diff_mask)
+>     ++? ? ? ? ? ? ? ? ? ? || (diff_value && (bfd_vma) diff_value ==
+>     ~diff_mask))
+>     +? ? ? ? ? ? ? ? ? ?{
+>     +? ? ? ? ? ? ? ? ? ? ?(*link_info->callbacks->reloc_dangerous)
+>     +? ? ? ? ? ? ? ? ? ? ? ?(link_info, _("overflow after relaxation"),
+>     +--
+>     +2.20.1
+>     +
+>     diff --git
+>     a/package/binutils/2.32/0009-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+>     b/package/binutils/2.32/0009-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+>     new file mode 100644
+>     index 0000000000..28f17d7c56
+>     --- /dev/null
+>     +++
+>     b/package/binutils/2.32/0009-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+>     @@ -0,0 +1,128 @@
+>     +From 735321812435ae278d3766a3371f55937dc776d6 Mon Sep 17 00:00:00
+>     2001
+>     +From: Max Filippov <jcmvbkbc at gmail.com <mailto:jcmvbkbc@gmail.com>>
+>     +Date: Sat, 25 Apr 2020 00:40:25 -0700
+>     +Subject: [PATCH] xtensa: fix XTENSA_NDIFF handling for PR ld/25861
+>     +
+>     +Fields marked with XTENSA_NDIFF relocations are not negated, they
+>     only
+>     +have sign bits removed. Don't negate their values when relaxation is
+>     +performed. Don't add sign bits when the value is zero. Report
+>     overflow
+>     +when the result has negative sign but all significant bits are zero.
+>     +
+>     +2020-04-29? Max Filippov? <jcmvbkbc@gmail.com
+>     <mailto:jcmvbkbc@gmail.com>>
+>     +bfd/
+>     +? ? ? ?* elf32-xtensa.c (relax_section): Don't negate diff_value for
+>     +? ? ? ?XTENSA_NDIFF relocations. Don't add sign bits whe diff_value
+>     +? ? ? ?equals 0. Report overflow when the result has negative
+>     sign but
+>     +? ? ? ?all significant bits are zero.
+>     +
+>     +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com
+>     <mailto:jcmvbkbc@gmail.com>>
+>     +Backported from: d548f47df4d2e3d117d504a4c9977982c78a0556
+>     +---
+>     +
+>     + bfd/elf32-xtensa.c? ? ? ? ? ? ? ? ? ?| 26 +++++++++++++++-----------
+>     + 1 file changed, 15 insertions(+), 11 deletions(-)
+>     +
+>     +diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+>     +index fded42d52a9a..4327b027911f 100644
+>     +--- a/bfd/elf32-xtensa.c
+>     ++++ b/bfd/elf32-xtensa.c
+>     +@@ -9670,37 +9670,44 @@ relax_section (bfd *abfd, asection *sec,
+>     struct bfd_link_info *link_info)
+>     +? ? ? ? ? ? ? ? ?switch (r_type)
+>     +? ? ? ? ? ? ? ? ? ?{
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_DIFF8:
+>     ++? ? ? ? ? ? ? ? ? ? diff_mask = 0x7f;
+>     +? ? ? ? ? ? ? ? ? ? ?diff_value =
+>     +? ? ? ? ? ? ? ? ? ? ? ?bfd_get_signed_8 (abfd,
+>     &contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_DIFF16:
+>     ++? ? ? ? ? ? ? ? ? ? diff_mask = 0x7fff;
+>     +? ? ? ? ? ? ? ? ? ? ?diff_value =
+>     +? ? ? ? ? ? ? ? ? ? ? ?bfd_get_signed_16 (abfd,
+>     &contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     +? ? ? ? ? ? ? ? ? ?case R_XTENSA_DIFF32:
+>     ++? ? ? ? ? ? ? ? ? ? diff_mask = 0x7fffffff;
+>     +? ? ? ? ? ? ? ? ? ? ?diff_value =
+>     +? ? ? ? ? ? ? ? ? ? ? ?bfd_get_signed_32 (abfd,
+>     &contents[old_source_offset]);
+>     +? ? ? ? ? ? ? ? ? ? ?break;
+>     ...
+>
+>
 >
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
->
->
-> ------------------------------
->
-> End of buildroot Digest, Vol 167, Issue 12
-> ******************************************
->
-
-
--- 
-*Thanks with Regards!*
-
-*Kunal Chauhan*
-*Mob:09813614826*
-*Mob:08860397903*
-
-*E-mail:atkunalchauhan at gmail.com <E-mail%3Aatkunalchauhan@gmail.com>*
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200506/d4262865/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200508/297dfa16/attachment-0001.html>
