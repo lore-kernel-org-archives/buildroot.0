@@ -1,34 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 May 2020 23:35:02 +0200
-Subject: [Buildroot] [PATCH 1/3] package/at-spi2-core: bump to version
- 2.36.0
-In-Reply-To: <20200503090111.331775-1-fontaine.fabrice@gmail.com>
-References: <20200503090111.331775-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200509233502.69a7c550@windsurf.home>
+Date: Sat, 9 May 2020 23:41:40 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/fakeroot: bump version to
+ 1.24
+In-Reply-To: <CADYdroP1VRGH5DcZMgO5ON_JK8+UVMHMyS6JpAJxdPyUJZ=BmQ@mail.gmail.com>
+References: <20200506131130.410171-1-nolange79@gmail.com>
+ <20200506131130.410171-2-nolange79@gmail.com>
+ <20200509185010.25c376ea@windsurf.home>
+ <CADYdroP1VRGH5DcZMgO5ON_JK8+UVMHMyS6JpAJxdPyUJZ=BmQ@mail.gmail.com>
+Message-ID: <20200509234140.54562aba@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  3 May 2020 11:01:09 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 9 May 2020 23:29:22 +0200
+Norbert Lange <nolange79@gmail.com> wrote:
 
-> - Drop patch (already in version)
-> - Add upstream link on sha256
-> - License is LGPL-2.1+ since
->   https://gitlab.gnome.org/GNOME/at-spi2-core/-/commit/1256988c433cf8b9e0780c13d66374cb057f7329
-> - Update indentation of hash file (two spaces)
+> > What happened to 0002-communicate-check-return-status-of-msgrcv.patch ?
+> > It is removed by your patch. Why?  
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...001-Fix-meson.build-for-meson-0.50.0.patch | 35 -------------------
->  package/at-spi2-core/at-spi2-core.hash        |  6 ++--
->  package/at-spi2-core/at-spi2-core.mk          |  4 +--
->  3 files changed, 6 insertions(+), 39 deletions(-)
->  delete mode 100644 package/at-spi2-core/0001-Fix-meson.build-for-meson-0.50.0.patch
+> Cause its included in that version
 
-Series applied to next. Thanks!
+OK.
+
+> > Could you clarify if the fchownat/fchmodat issue happens with the
+> > current version of fakeroot in Buildroot (1.20) ? Or only with the
+> > updated version 1.24 ? Can it be fixed with fakeroot 1.20 ?  
+> 
+> issue exist with both, could certainly be fixed in 1.20 separately,
+> I just don't take much interest in fixing ~ 4 year versions by default.
+
+In the general case, I agree. But here we have already tagged -rc1, and
+we try to not merge version bumps so close to the release. And in the
+context of Buildroot, fakeroot is used by *everybody*, so any
+regression can cause issues to a significant number of users.
+
+So I'd prefer to see the problem fixed for 1.20, so that we can apply
+the fix on master, and then have the version bump to 1.24 in next.
+
+Thanks!
 
 Thomas
 -- 
